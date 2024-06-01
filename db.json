@@ -1,0 +1,57 @@
+{
+	"companies": [
+		{
+			"id": 1,
+			"company_code": "GL1",
+			"company_name": "GL1",
+			"departments": [
+				{
+					"id": 1,
+					"department_code": "GL1_PRODUCTION_1_1",
+					"department_name": "PRODUCTION_1_1"
+				},
+				{
+					"id": 2,
+					"department_code": "GL1_PRODUCTION_1_2",
+					"department_name": "PRODUCTION_1_2"
+				},
+				{
+					"id": 3,
+					"department_code": "GL1_PRODUCTION_1_3",
+					"department_name": "PRODUCTION_1_3"
+				}
+			]
+		},
+		{
+			"id": 2,
+			"company_code": "GL2",
+			"company_name": "GL2",
+			"departments": [
+				{
+					"id": 4,
+					"department_code": "GL2_PRODUCTION_2_1",
+					"department_name": "PRODUCTION_2_1"
+				},
+				{
+					"id": 5,
+					"department_code": "GL1_PRODUCTION_2_2",
+					"department_name": "PRODUCTION_2_2"
+				},
+				{
+					"id": 6,
+					"department_code": "GL1_PRODUCTION_2_3",
+					"department_name": "PRODUCTION_2_3"
+				}
+			]
+		}
+	],
+	"users": [
+		{
+			"email": "employee01@greenland.com",
+			"password": "$2a$10$EI.bkziFgWMQ5x0MY8jlneQLI5DQg6ra7CAcc3HQvlKOxb9Zq3DTy",
+			"display_name": "Employee 01",
+			"has_accessibility": true,
+			"id": 1
+		}
+	]
+}

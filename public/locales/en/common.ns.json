@@ -1,0 +1,17 @@
+{
+	"actions": {
+		"add": "Add",
+		"update": "Update",
+		"delete": "Delete",
+		"save": "Save",
+		"cancel": "Cancel",
+		"submit": "Submit",
+		"continue": "Continue",
+		"back": "Back",
+		"close": " Close"
+	},
+	"navigation": {
+		"warehouse_management_system": "Hệ thống quản lý kho",
+		"base_docs": "Tài liệu cơ bản"
+	}
+}

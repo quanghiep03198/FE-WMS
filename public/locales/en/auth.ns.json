@@ -1,0 +1,12 @@
+{
+	"email": "Email",
+	"password": "Password",
+	"login_title": "Sign in to your account",
+	"login_description": "Enter your account, password and select company and department you are working in to access to the system",
+	"login_remember_account_label": "Remember me",
+	"login_forgot_password_label": "Forgot your password?",
+	"validate_require_account": "Enter your account",
+	"validate_require_password": "Enter your password",
+	"validate_require_company": "Select company/factory",
+	"validate_require_department": "Select department"
+}

@@ -1,0 +1,17 @@
+{
+	"actions": {
+		"add": "添加",
+		"update": "修改",
+		"delete": "删除",
+		"save": "保存",
+		"cancel": "取消",
+		"submit": "确认",
+		"continue": "继续",
+		"back": "返回",
+		"close": "关闭"
+	},
+	"navigation": {
+		"warehouse_management_system": "倉庫管理系統",
+		"base_docs": "基礎資料"
+	}
+}
