@@ -4,7 +4,7 @@ import { cn } from '@/common/utils/cn';
 import { Button, Icon, Swap } from '@/components/ui';
 import { memo, useMemo } from 'react';
 
-const ThemeToggle: React.FunctionComponent = () => {
+const ThemeToggle: React.FC = () => {
 	const { theme, setTheme } = useTheme();
 
 	const darkTheme = useMemo<boolean>(() => theme === Theme.DARK, [theme]);

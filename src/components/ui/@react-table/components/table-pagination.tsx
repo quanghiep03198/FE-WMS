@@ -1,6 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params';
 import { Table } from '@tanstack/react-table';
-import { Box, Button, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../..';
+import { Div, Button, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Typography } from '../..';
 import Tooltip from '../../@override/tooltip';
 
 type DataTablePaginationProps<TData> = {
@@ -10,57 +10,60 @@ type DataTablePaginationProps<TData> = {
 
 export default function TablePagination<TData>({
 	table,
-	manualPagination,
-	hasNextPage,
-	hasPrevPage,
-	page,
+	manualPagination = false,
+	hasNextPage = false,
+	hasPrevPage = false,
+	page = 1,
 	totalPages = 1,
-	limit,
-	totalDocs
+	limit = 10,
+	totalDocs = 0
 }: DataTablePaginationProps<TData>) {
+	const { setParams } = useQueryParams();
+
 	const canNextPage = manualPagination ? hasNextPage : table.getCanNextPage();
 	const canPreviousPage = manualPagination ? hasPrevPage : table.getCanPreviousPage();
 	const pageCount = manualPagination ? totalPages : table.getPageCount();
 	const pageSize = manualPagination ? limit : table.getState().pagination.pageSize;
 	const pageIndex = manualPagination ? page : table.getState().pagination.pageIndex + 1;
-	const [params, setParams] = useQueryParams();
 
 	const gotoFirstPage = () => {
 		table.setPageIndex(0);
-		setParams('page', 1);
+		setParams({ page: 1 });
 	};
 
 	const gotoPreviousPage = () => {
 		table.previousPage();
-		setParams('page', pageIndex - 1);
+		setParams({ page: pageIndex - 1 });
 	};
 
 	const gotoNextPage = () => {
 		table.nextPage();
-		setParams('page', pageIndex + 1);
+		setParams({ page: pageIndex + 1 });
 	};
 
 	const gotoLastPage = () => {
 		table.setPageIndex(table.getPageCount() - 1);
-		setParams('page', totalPages);
+		setParams({ page: totalPages });
 	};
 
 	const changePageSize = (value: number) => {
 		if (value! > totalDocs) {
 			gotoFirstPage();
 		}
-		setParams('limit', value);
+		setParams({ limit: value });
 		if (!manualPagination) table.setPageSize(value);
 	};
 
 	return (
-		<Box className='flex items-center justify-between sm:justify-end'>
-			<Box className='flex-1 text-sm text-muted-foreground sm:hidden'>
+		<Div className='flex items-center justify-between sm:justify-end'>
+			<Div className='flex-1 text-sm text-muted-foreground sm:hidden'>
 				{table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} hàng được chọn.
-			</Box>
-			<Box className='flex items-center space-x-6 lg:space-x-8'>
-				<Box className='flex items-center space-x-2'>
-					<p className='text-sm font-medium'>Hiển thị</p>
+			</Div>
+			<Div className='flex items-center space-x-6 lg:space-x-8'>
+				<Div className='flex items-center space-x-2'>
+					<Typography variant='small' className='font-medium'>
+						Hiển thị
+					</Typography>
 					<Select
 						value={pageSize?.toString()}
 						onValueChange={(value) => {
@@ -77,11 +80,11 @@ export default function TablePagination<TData>({
 							))}
 						</SelectContent>
 					</Select>
-				</Box>
-				<Box className='flex w-[100px] items-center justify-center text-sm font-medium'>
+				</Div>
+				<Div className='flex w-[100px] items-center justify-center text-sm font-medium'>
 					Trang {pageIndex} / {pageCount}
-				</Box>
-				<Box className='flex items-center space-x-1'>
+				</Div>
+				<Div className='flex items-center space-x-1'>
 					<Tooltip content='Trang đầu'>
 						<Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoFirstPage} disabled={!canPreviousPage}>
 							<Icon name='ChevronsLeft' />
@@ -102,9 +105,9 @@ export default function TablePagination<TData>({
 							<Icon name='ChevronsRight' />
 						</Button>
 					</Tooltip>
-				</Box>
-			</Box>
-		</Box>
+				</Div>
+			</Div>
+		</Div>
 	);
 }
 

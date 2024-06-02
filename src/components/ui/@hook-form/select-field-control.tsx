@@ -1,9 +1,9 @@
 import { cn } from '@/common/utils/cn';
 import React, { useId } from 'react';
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form';
-import { FormDescription, FormField, FormItem, FormLabel, FormMessage, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '..';
-import { BaseFieldControl } from './types/hook-form';
+import { FormDescription, FormField, FormItem, FormMessage, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '..';
 import FormTooltipLabel from './form-tooltip-label';
+import { BaseFieldControl } from './types/hook-form';
 
 export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {
@@ -43,6 +43,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 						})}>
 						<FormTooltipLabel htmlFor={id} labelText={String(label)} messageMode={messageMode} />
 						<Select
+							value={field.value}
 							defaultValue={field.value}
 							onValueChange={(value) => {
 								field.onChange(value);
@@ -70,7 +71,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							</SelectContent>
 						</Select>
 						{props.description && <FormDescription>{props.description}</FormDescription>}
-						{messageMode === 'text' && <FormMessage />}
+						{messageMode === 'default' && <FormMessage />}
 					</FormItem>
 				);
 			}}

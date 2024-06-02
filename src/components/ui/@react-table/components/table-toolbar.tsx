@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/react-table';
 import React, { useContext } from 'react';
-import { Box, Button, Icon, Toggle } from '../..';
+import { Div, Button, Icon, Toggle } from '../..';
 import Tooltip from '../../@override/tooltip';
 import { TableContext } from '../context/table.context';
 import { GlobalFilter, GlobalFilterPopover } from './global-filter';
@@ -22,18 +22,18 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 	const { isFilterOpened, setIsFilterOpened } = useContext(TableContext);
 
 	return (
-		<Box className='flex items-center justify-between sm:justify-end'>
+		<Div className='flex items-center justify-between sm:justify-end'>
 			<GlobalFilter table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
 
-			<Box className='grid grid-flow-col items-center gap-x-1'>
+			<Div className='grid grid-flow-col items-center gap-x-1'>
 				<Tooltip content='Xóa lọc'>
 					<Button variant='destructive' size='icon' onClick={onClearAllFilters} className={cn('h-8 w-8', !isFiltered && 'hidden')}>
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
-				<Box className='hidden sm:block'>
+				<Div className='hidden sm:block'>
 					<GlobalFilterPopover table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
-				</Box>
+				</Div>
 				<Tooltip content={isFilterOpened ? 'Đóng bộ lọc' : 'Mở bộ lọc'}>
 					<Toggle
 						variant='outline'
@@ -46,7 +46,7 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 				</Tooltip>
 				<TableViewOptions table={table} />
 				{slot}
-			</Box>
-		</Box>
+			</Div>
+		</Div>
 	);
 }

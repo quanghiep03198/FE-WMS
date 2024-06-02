@@ -1,4 +1,4 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Box, Typography } from '@/components/ui';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui';
 import { memo, useRef } from 'react';
 import { useScrollIntoView } from '..';
 
@@ -33,7 +33,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	useScrollIntoView({ hashMatch: 'faqs', target: sectionRef.current });
 
 	return (
-		<Box ref={sectionRef} as='section' className='relative mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
+		<Div ref={sectionRef} as='section' className='relative mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
 			<Typography variant='h3'>Frequently asked questions</Typography>
 
 			<Accordion type='multiple' className='w-full max-w-4xl'>
@@ -44,7 +44,7 @@ const FAQsSection: React.FunctionComponent = () => {
 					</AccordionItem>
 				))}
 			</Accordion>
-		</Box>
+		</Div>
 	);
 };
 

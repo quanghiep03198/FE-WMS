@@ -8,25 +8,27 @@ type TAuthState = {
 	accessToken: string | null;
 };
 type TAuthContext = {
-	persistedAuthState: TAuthState | undefined;
+	authenticated: boolean;
+	user: IUser | null;
+	accessToken: string | null;
 	setAuthState: React.Dispatch<TAuthState | undefined>;
 	removeAuthState: () => void;
 };
 
 const initialState: TAuthState = {
-	authenticated: true,
+	authenticated: false,
 	user: null,
 	accessToken: null
 };
 
-const AuthContext = createContext<TAuthContext>({
-	persistedAuthState: initialState,
+export const AuthContext = createContext<TAuthContext>({
+	...initialState,
 	setAuthState: () => {},
 	removeAuthState: () => {}
 });
 
-export default function AuthProvider(props: React.PropsWithChildren) {
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [persistedAuthState, setAuthState, removeAuthState] = useLocalStorage<TAuthState>('auth', initialState);
 
-	return <AuthContext.Provider value={{ persistedAuthState, setAuthState, removeAuthState }}>{props.children}</AuthContext.Provider>;
-}
+	return <AuthContext.Provider value={{ ...persistedAuthState!, setAuthState, removeAuthState }}>{children}</AuthContext.Provider>;
+};

@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/react-table';
-import { Box, Button, Icon, Popover, PopoverContent, PopoverTrigger } from '../..';
+import { Div, Button, Icon, Popover, PopoverContent, PopoverTrigger } from '../..';
 import Tooltip from '../../@override/tooltip';
 import { DebouncedInput } from './debounced-input';
 
@@ -12,7 +12,7 @@ type GlobalFilterProps<T> = {
 export function GlobalFilter<T>(props: GlobalFilterProps<T>) {
 	return (
 		<>
-			<Box className='relative w-fit sm:hidden'>
+			<Div className='relative w-fit sm:hidden'>
 				<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
 				<DebouncedInput
 					value={props.globalFilter ?? ''}
@@ -21,7 +21,7 @@ export function GlobalFilter<T>(props: GlobalFilterProps<T>) {
 					placeholder='Tìm kiếm ...'
 					type='search'
 				/>
-			</Box>
+			</Div>
 		</>
 	);
 }
@@ -37,7 +37,7 @@ export function GlobalFilterPopover<T>(props: GlobalFilterProps<T>) {
 				</PopoverTrigger>
 			</Tooltip>
 			<PopoverContent align='center' side='left' sideOffset={4} className='w-fit border-none p-0'>
-				<Box className='relative w-fit'>
+				<Div className='relative w-fit'>
 					<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
 					<DebouncedInput
 						value={props.globalFilter ?? ''}
@@ -46,7 +46,7 @@ export function GlobalFilterPopover<T>(props: GlobalFilterProps<T>) {
 						placeholder='Tìm kiếm ...'
 						type='search'
 					/>
-				</Box>
+				</Div>
 			</PopoverContent>
 		</Popover>
 	);

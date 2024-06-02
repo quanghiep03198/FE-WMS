@@ -1,12 +1,12 @@
 import { cn } from '@/common/utils/cn';
-import { Box, Icon, Typography, buttonVariants } from '@/components/ui';
+import { Div, Icon, Typography, buttonVariants } from '@/components/ui';
 import { Link } from '@tanstack/react-router';
 
 export default function HeroSection() {
 	return (
-		<Box as='section' className='relative flex min-h-[calc(100vh-4rem)] flex-grow items-center justify-center px-6 sm:px-4'>
-			<Box className='mx-auto max-w-7xl space-y-6'>
-				<Box className='text-center'>
+		<Div as='section' className='relative flex min-h-[calc(100vh-4rem)] flex-grow items-center justify-center px-6 sm:px-4'>
+			<Div className='mx-auto max-w-7xl space-y-6'>
+				<Div className='text-center'>
 					<Typography variant='h2' className='mb-6 leading-tight'>
 						Simplify Warehouse Management with i-WMS
 					</Typography>
@@ -16,7 +16,7 @@ export default function HeroSection() {
 						<br className='sm:hidden md:hidden' /> Our comprehensive system provides the tools you need to manage your warehouse effortlessly.
 					</Typography>
 
-					<Box className='flex items-center justify-center gap-x-1'>
+					<Div className='flex items-center justify-center gap-x-1'>
 						<Link to='/login' className={cn(buttonVariants())}>
 							Get started
 						</Link>
@@ -28,9 +28,9 @@ export default function HeroSection() {
 							})}>
 							Learn more <Icon name='ArrowRight' size={12} />
 						</Link>
-					</Box>
-				</Box>
-			</Box>
-		</Box>
+					</Div>
+				</Div>
+			</Div>
+		</Div>
 	);
 }

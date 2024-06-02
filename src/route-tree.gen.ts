@@ -14,6 +14,7 @@ import { Route as rootRoute } from './app/__root'
 import { Route as LayoutImport } from './app/_layout'
 import { Route as publicIndexImport } from './app/(public)/index'
 import { Route as featuresLayoutWarehousesIndexImport } from './app/(features)/_layout.warehouses/index'
+import { Route as featuresLayoutDashboardIndexImport } from './app/(features)/_layout.dashboard/index'
 import { Route as authLayoutLoginIndexImport } from './app/(auth)/_layout.login/index'
 
 // Create/Update Routes
@@ -31,6 +32,12 @@ const publicIndexRoute = publicIndexImport.update({
 const featuresLayoutWarehousesIndexRoute =
   featuresLayoutWarehousesIndexImport.update({
     path: '/warehouses/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
+const featuresLayoutDashboardIndexRoute =
+  featuresLayoutDashboardIndexImport.update({
+    path: '/dashboard/',
     getParentRoute: () => rootRoute,
   } as any)
 
@@ -64,6 +71,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLayoutLoginIndexImport
       parentRoute: typeof rootRoute
     }
+    '/(features)/_layout/dashboard/': {
+      id: '/_layout/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof featuresLayoutDashboardIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/(features)/_layout/warehouses/': {
       id: '/_layout/warehouses/'
       path: '/warehouses'
@@ -79,6 +93,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   publicIndexRoute,
   authLayoutLoginIndexRoute,
+  featuresLayoutDashboardIndexRoute,
   featuresLayoutWarehousesIndexRoute,
 })
 
@@ -93,6 +108,7 @@ export const routeTree = rootRoute.addChildren({
         "/_layout",
         "/",
         "/_layout/login/",
+        "/_layout/dashboard/",
         "/_layout/warehouses/"
       ]
     },
@@ -104,6 +120,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_layout/login/": {
       "filePath": "(auth)/_layout.login/index.tsx"
+    },
+    "/_layout/dashboard/": {
+      "filePath": "(features)/_layout.dashboard/index.tsx"
     },
     "/_layout/warehouses/": {
       "filePath": "(features)/_layout.warehouses/index.tsx"

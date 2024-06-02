@@ -3,7 +3,7 @@ import React, { forwardRef, useRef } from 'react';
 
 type TBoxProps = { as?: React.ElementType } & React.PropsWithChildren & React.ComponentProps<React.ElementType>;
 
-export const Box: React.ForwardRefExoticComponent<TBoxProps> = forwardRef((props, ref) => {
+export const Div: React.ForwardRefExoticComponent<TBoxProps> = forwardRef((props, ref) => {
 	const { as: Component = 'div', className, style, children, ...restProps } = props;
 
 	const localRef = useRef(null);

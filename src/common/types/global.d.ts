@@ -1,3 +1,15 @@
 export declare global {
-	type Language = 'vi' | 'en' | 'cn';
+	type AnonymousFunction = (...args: any[]) => any;
+
+	type Locale = 'vi' | 'en' | 'cn';
+
+	type Pagination<T> = {
+		docs: Array<T>;
+		hasNextPage: boolean;
+		hasPrevPage: boolean;
+		limit: number;
+		page: number;
+		totalDocs: number;
+		totalPages: number;
+	};
 }

@@ -13,7 +13,7 @@ export const DataTableRowActions: React.FC<DataTableRowActionsProps> = (props) =
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant='ghost' size='icon'>
-					<Icon name='MoreHorizontal' />
+					<Icon name='EllipsisVertical' />
 					<span className='sr-only'>Open menu</span>
 				</Button>
 			</DropdownMenuTrigger>

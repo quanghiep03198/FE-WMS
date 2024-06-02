@@ -3,7 +3,7 @@ import { Table as TableType, flexRender } from '@tanstack/react-table';
 import { useContext } from 'react';
 import tw from 'tailwind-styled-components';
 import { DataTableProps } from '.';
-import { Box, Icon, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..';
+import { Div, Icon, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..';
 import { TableContext } from '../context/table.context';
 import ColumnResizer from './column-resizer';
 import { TableBodyLoading } from './table-body-loading';
@@ -69,11 +69,11 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 				<ScrollBar orientation='horizontal' />
 			</ScrollArea>
 			{!loading && table.getRowModel().rows.length === 0 && (
-				<Box className='flex h-[25vh] w-full items-center justify-center'>
-					<Box className='flex items-center justify-center gap-x-2 text-muted-foreground'>
+				<Div className='flex h-[25vh] w-full items-center justify-center'>
+					<Div className='flex items-center justify-center gap-x-2 text-muted-foreground'>
 						<Icon name='PackageOpen' strokeWidth={1} size={32} /> Không có dữ liệu
-					</Box>
-				</Box>
+					</Div>
+				</Div>
 			)}
 		</TableWrapper>
 	);

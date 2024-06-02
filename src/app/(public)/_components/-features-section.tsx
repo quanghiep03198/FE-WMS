@@ -1,4 +1,4 @@
-import { Box, Icon, TIconProps, Typography } from '@/components/ui';
+import { Div, Icon, TIconProps, Typography } from '@/components/ui';
 import { useRef } from 'react';
 import { useScrollIntoView } from '..';
 
@@ -37,12 +37,12 @@ const FeaturesSection: React.FunctionComponent = () => {
 	});
 
 	return (
-		<Box
+		<Div
 			ref={sectionRef}
 			as='section'
 			className='xxl:max-w-8xl relative mx-auto flex max-w-4xl flex-grow items-center justify-center px-6 sm:px-4 xl:max-w-7xl'>
-			<Box className='space-y-20'>
-				<Box className='max-w-4xl text-left'>
+			<Div className='space-y-20'>
+				<Div className='max-w-4xl text-left'>
 					<Typography color='primary' variant='small' className='mb-2 !text-base font-medium'>
 						No more paperwork
 					</Typography>
@@ -50,31 +50,31 @@ const FeaturesSection: React.FunctionComponent = () => {
 						Comprehensive solutions for Warehouse Management
 					</Typography>
 					<Typography variant='p' className='text-lg'></Typography>
-				</Box>
+				</Div>
 
-				<Box className='grid flex-col items-start gap-6 xl:grid-cols-3'>
+				<Div className='grid flex-col items-start gap-6 xl:grid-cols-3'>
 					{mainFeatures.map((item, index) => (
 						<FeatureItem {...item} key={index} />
 					))}
-				</Box>
-			</Box>
-		</Box>
+				</Div>
+			</Div>
+		</Div>
 	);
 };
 
 const FeatureItem: React.FC<FeatureItemProps> = (props) => {
 	return (
-		<Box className='flex items-start gap-x-4'>
-			<Box className='inline-flex items-center justify-center rounded-full bg-primary/10 p-3'>
+		<Div className='flex items-start gap-x-4'>
+			<Div className='inline-flex items-center justify-center rounded-full bg-primary/10 p-3'>
 				<Icon name={props.icon} strokeWidth={1.5} className='inline-flex h-6 w-6 stroke-primary' />
-			</Box>
-			<Box className='space-y-2'>
+			</Div>
+			<Div className='space-y-2'>
 				<Typography className='font-medium'>{props.title}</Typography>
 				<Typography variant='small' color='muted'>
 					{props.description}
 				</Typography>
-			</Box>
-		</Box>
+			</Div>
+		</Div>
 	);
 };
 

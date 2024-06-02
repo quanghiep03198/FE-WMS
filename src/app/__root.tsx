@@ -1,4 +1,4 @@
-import AuthProvider from '@/components/providers/auth-provider';
+import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { Toaster } from '@/components/ui/@shadcn/sonner';
 import { Outlet, createRootRoute } from '@tanstack/react-router';

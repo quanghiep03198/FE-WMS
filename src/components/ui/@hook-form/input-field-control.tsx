@@ -1,10 +1,11 @@
 import { cn } from '@/common/utils/cn';
 import React, { forwardRef, memo, useEffect, useId, useRef, useState } from 'react';
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form';
-import { Box, FormControl, FormDescription, FormField, FormItem, FormMessage } from '..';
+import { Div, FormControl, FormDescription, FormField, FormItem, FormMessage } from '..';
 import { Input, InputProps } from '../@shadcn/input';
 import FormTooltipLabel from './form-tooltip-label';
 import { BaseFieldControl } from './types/hook-form';
+import { omit } from 'lodash';
 
 export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & InputProps;
 
@@ -29,6 +30,7 @@ export function InputFieldControl<T extends FieldValues>(
 			field.onChange(e);
 		}
 	};
+
 	return (
 		<FormField
 			control={control}
@@ -47,9 +49,10 @@ export function InputFieldControl<T extends FieldValues>(
 						<FormTooltipLabel htmlFor={id} labelText={String(label)} messageMode={messageMode} />
 
 						<FormControl>
-							<Box className='relative'>
+							<Div className='relative'>
 								<Input
-									{...field}
+									{...omit(field, ['onChange'])}
+									{...restProps}
 									id={id}
 									value={value}
 									placeholder={placeholder}
@@ -65,12 +68,11 @@ export function InputFieldControl<T extends FieldValues>(
 									className={cn(className, {
 										'border-destructive focus:!border-destructive': !!getFieldState(name).error
 									})}
-									{...restProps}
 								/>
-							</Box>
+							</Div>
 						</FormControl>
 						<FormDescription>{description}</FormDescription>
-						{messageMode === 'text' && <FormMessage />}
+						{messageMode === 'default' && <FormMessage />}
 					</FormItem>
 				);
 			}}

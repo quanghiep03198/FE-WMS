@@ -6,7 +6,7 @@ import ThemeToggle from '@/app/_components/_shared/-theme-toggle';
 import { cn } from '@/common/utils/cn';
 import {
 	Badge,
-	Box,
+	Div,
 	Button,
 	DropdownMenu,
 	DropdownMenuContent,
@@ -38,19 +38,19 @@ const navigationLinks = [
 
 const Header: React.FunctionComponent = () => {
 	return (
-		<Box className='sticky top-0 z-50 h-16 bg-opacity-85 backdrop-blur-xl'>
-			<Box as='nav' className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4' aria-label='Global'>
+		<Div className='sticky top-0 z-50 h-16 bg-opacity-85 backdrop-blur-xl'>
+			<Div as='nav' className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4' aria-label='Global'>
 				<MenuDropdown />
-				<Box className='flex items-center gap-x-2 sm:hidden md:hidden'>
+				<Div className='flex items-center gap-x-2 sm:hidden md:hidden'>
 					<Link to='/' className='text-xs font-bold transition-colors duration-200 hover:text-primary'>
 						i-WMS
 					</Link>
 					<Badge variant='default' className='select-none'>
 						{import.meta.env.VITE_APP_VERSION}
 					</Badge>
-				</Box>
+				</Div>
 
-				<Box className='flex flex-1 items-center justify-center gap-x-2 rounded-full text-sm font-medium sm:hidden md:hidden'>
+				<Div className='flex flex-1 items-center justify-center gap-x-2 rounded-full text-sm font-medium sm:hidden md:hidden'>
 					{navigationLinks.map((item, index) => (
 						<Link
 							resetScroll={false}
@@ -65,9 +65,9 @@ const Header: React.FunctionComponent = () => {
 							{item.title}
 						</Link>
 					))}
-				</Box>
+				</Div>
 
-				<Box className='flex items-center justify-end gap-x-1 self-center'>
+				<Div className='flex items-center justify-end gap-x-1 self-center'>
 					<ThemeToggle />
 					<LanguagesDropdownMenu />
 					<Link
@@ -79,9 +79,9 @@ const Header: React.FunctionComponent = () => {
 						Log in
 						<Icon name='ArrowRight' size={12} className='translate-y-px' />
 					</Link>
-				</Box>
-			</Box>
-		</Box>
+				</Div>
+			</Div>
+		</Div>
 	);
 };
 

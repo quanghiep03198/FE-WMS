@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn';
 import { Column } from '@tanstack/react-table';
 import { useContext, useMemo } from 'react';
-import { Box, DropdownSelect, Icon, buttonVariants } from '../..';
+import { Div, DropdownSelect, Icon, buttonVariants } from '../..';
 import { TableContext } from '../context/table.context';
 import { ComboboxFilter } from './combobox-filter';
 import { DebouncedInput } from './debounced-input';
@@ -12,7 +12,7 @@ type ColumnFilterProps<TData, TValue> = {
 };
 
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
-	const { isScrolling, areAllFiltersCleared } = useContext(TableContext);
+	const { isScrolling, hasNoFilter: areAllFiltersCleared } = useContext(TableContext);
 
 	const filterType = column.columnDef.filterFn;
 	const columnFilterValue = column.getFilterValue();
@@ -25,17 +25,17 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 	if (!column.columnDef.enableColumnFilter)
 		return (
 			<Tooltip content='Bộ lọc không được áp dụng'>
-				<Box className='cursor- flex h-9 select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
+				<Div className='cursor- flex h-9 select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
 					<Icon name='Minus' />
-				</Box>
+				</Div>
 			</Tooltip>
 		);
 
 	switch (filterType) {
 		case 'inNumberRange':
 			return (
-				<Box>
-					<Box className='flex items-stretch'>
+				<Div>
+					<Div className='flex items-stretch'>
 						<DebouncedInput
 							type='number'
 							className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground')}
@@ -54,8 +54,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 							onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
 							placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
 						/>
-					</Box>
-				</Box>
+					</Div>
+				</Div>
 			);
 
 		case 'equals':

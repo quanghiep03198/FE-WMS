@@ -7,10 +7,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../@sh
 type FormTooltipLabelProps = {
 	labelText: string;
 	htmlFor?: string;
-	messageMode: 'tooltip' | 'text';
+	messageMode: 'default' | 'tooltip';
 };
 
-const FormTooltipLabel: React.FC<FormTooltipLabelProps> = ({ labelText, htmlFor, messageMode }) => {
+const FormTooltipLabel: React.FC<FormTooltipLabelProps> = ({ labelText, htmlFor, messageMode: messageMode }) => {
 	const { error } = useFormField();
 
 	return (

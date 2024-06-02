@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useRef, useState } from 'react';
 
 type TableProviderProps = {
-	areAllFiltersCleared: boolean;
+	hasNoFilter: boolean;
 } & PropsWithChildren;
 
 type TableContext = {
@@ -9,17 +9,17 @@ type TableContext = {
 	isFilterOpened: boolean;
 	handleScroll: () => void;
 	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>;
-} & Pick<TableProviderProps, 'areAllFiltersCleared'>;
+} & Pick<TableProviderProps, 'hasNoFilter'>;
 
 export const TableContext = createContext<TableContext>({
 	isScrolling: false,
 	isFilterOpened: false,
-	areAllFiltersCleared: false,
+	hasNoFilter: false,
 	setIsFilterOpened: () => {},
 	handleScroll: () => {}
 });
 
-export const TableProvider: React.FC<TableProviderProps> = ({ areAllFiltersCleared, children }) => {
+export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, children }) => {
 	const [isScrolling, setIsScrolling] = useState(false);
 	const [isFilterOpened, setIsFilterOpened] = useState(false);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -36,7 +36,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ areAllFiltersClear
 		<TableContext.Provider
 			value={{
 				isScrolling,
-				areAllFiltersCleared,
+				hasNoFilter,
 				isFilterOpened,
 				setIsFilterOpened,
 				handleScroll

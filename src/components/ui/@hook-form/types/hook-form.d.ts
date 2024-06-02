@@ -10,5 +10,5 @@ export interface BaseFieldControl<T extends FieldValues> {
 	defaultValue?: string;
 	className?: string;
 	layout?: 'vertical' | 'horizontal';
-	messageMode?: 'tooltip' | 'text';
+	messageMode?: 'default' | 'tooltip';
 }

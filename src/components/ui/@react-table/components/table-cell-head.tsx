@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn';
 import { Header, SortDirection, Table, flexRender } from '@tanstack/react-table';
 import { useContext } from 'react';
-import { Box, Collapsible, CollapsibleContent, Icon } from '../..';
+import { Div, Collapsible, CollapsibleContent, Icon } from '../..';
 import { TableContext } from '../context/table.context';
 import { ColumnFilter } from './column-filter';
 
@@ -19,7 +19,7 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
 
 	return (
 		<Collapsible open={isFilterCollapsed} onOpenChange={setIsFilterCollapsed} className={cn('flex flex-col items-stretch divide-y divide-border')}>
-			<Box
+			<Div
 				className={cn('relative inline-flex cursor-auto touch-none select-none items-center gap-x-2 py-2', {
 					'cursor-pointer hover:text-foreground': header.column.columnDef.enableSorting,
 					'cursor-col-resize': header.column.getIsResizing()
@@ -31,7 +31,7 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
 				}}>
 				{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 				<SortStatus enableSorting={header.column.columnDef.enableSorting} isSorted={header.column.getIsSorted()} />
-			</Box>
+			</Div>
 			<CollapsibleContent className='w-full'>
 				<ColumnFilter column={header.column} />
 			</CollapsibleContent>

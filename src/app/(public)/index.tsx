@@ -1,6 +1,6 @@
 import { createFileRoute, useRouterState } from '@tanstack/react-router';
 import Header from './_components/-header';
-import { Box } from '@/components/ui';
+import { Div } from '@/components/ui';
 import GridBackground from './_components/-grid-background';
 import Footer from './_components/-footer';
 import HeroSection from './_components/-hero-section';
@@ -16,18 +16,18 @@ export const Route = createFileRoute('/(public)/')({
 
 export default function HomePage() {
 	return (
-		<Box className='scrollbar-none relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased'>
+		<Div className='relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none'>
 			<Header />
 			<Spotlight className='fixed -top-[20%] left-[10%] z-0' />
 			<GridBackground />
-			<Box className='mb-20 space-y-64'>
+			<Div className='mb-20 space-y-64'>
 				<HeroSection />
 				<FeaturesSection />
 				<SupportSection />
 				<FAQsSection />
-			</Box>
+			</Div>
 			<Footer />
-		</Box>
+		</Div>
 	);
 }
 
