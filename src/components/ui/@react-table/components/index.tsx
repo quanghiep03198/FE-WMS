@@ -85,7 +85,8 @@ function DataTable<TData, TValue>({
 	}, []);
 
 	useEffect(() => {
-		if (onRowsSelectionChange && typeof onRowsSelectionChange === 'function') onRowsSelectionChange(table.getSelectedRowModel().flatRows);
+		if (onRowsSelectionChange && typeof onRowsSelectionChange === 'function')
+			onRowsSelectionChange(table.getSelectedRowModel().flatRows);
 	}, [table.getSelectedRowModel().flatRows]);
 
 	useEffect(() => {

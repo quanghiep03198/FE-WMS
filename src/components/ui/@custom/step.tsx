@@ -59,7 +59,7 @@ const initialState: TStepState = { data: [], currentStep: 1, canNextStep: false,
 
 export const StepContext = createContext<TStepContext>({ steps: initialState, dispatch: () => {} });
 
-export const StepsProvider: React.FC<{ data: TStep[] } & React.PropsWithChildren> = ({ data, children }) => {
+export const StepProvider: React.FC<{ data: TStep[] } & React.PropsWithChildren> = ({ data, children }) => {
 	const [steps, dispatch] = useReducer(reducer, {
 		...initialState,
 		data: data.map((step: TStep, index: number) => ({ ...step, index: index + 1 }))
@@ -73,7 +73,7 @@ export const StepsProvider: React.FC<{ data: TStep[] } & React.PropsWithChildren
 	);
 };
 
-export const Steps: React.FC = () => {
+const Steps: React.FC = () => {
 	const {
 		steps: { data }
 	} = useContext(StepContext);
@@ -116,8 +116,19 @@ export const Steps: React.FC = () => {
 							)}
 							{step.index !== data.length ? (
 								<Div className='absolute right-0 top-0 h-full w-5 translate-x-1/2 sm:hidden' aria-hidden='true'>
-									<Div as='svg' className='h-full w-full text-border' viewBox='0 0 22 80' fill='none' preserveAspectRatio='none'>
-										<Div as='path' d='M0 -2L20 40L0 82' vectorEffect='non-scaling-stroke' stroke='currentcolor' strokeLinejoin='round' />
+									<Div
+										as='svg'
+										className='h-full w-full text-border'
+										viewBox='0 0 22 80'
+										fill='none'
+										preserveAspectRatio='none'>
+										<Div
+											as='path'
+											d='M0 -2L20 40L0 82'
+											vectorEffect='non-scaling-stroke'
+											stroke='currentcolor'
+											strokeLinejoin='round'
+										/>
 									</Div>
 								</Div>
 							) : null}
@@ -129,7 +140,7 @@ export const Steps: React.FC = () => {
 	);
 };
 
-export const StepPanel: React.FC<{ value: TStep['index'] } & React.PropsWithChildren> = ({ value, children }) => {
+const StepPanel: React.FC<{ value: TStep['index'] } & React.PropsWithChildren> = ({ value, children }) => {
 	const {
 		steps: { currentStep }
 	} = useContext(StepContext);
@@ -137,5 +148,10 @@ export const StepPanel: React.FC<{ value: TStep['index'] } & React.PropsWithChil
 	return currentStep === value ? children : null;
 };
 
+export const Stepper = {
+	Panel: StepPanel,
+	Provider: StepProvider
+};
+
 const StepList = tw.ol`grid grid-flow-col sm:grid-flow-row auto-cols-fr isolate divide-y-0 divide-border rounded-md border sm:grid-cols-1 sm:divide-y`;
-const Step = tw.li`flex items-center py-4 text-sm font-medium relative hover:opacity-80 px-4 whitespace-nowrap font-medium`;
+const Step = tw.li`flex items-center py-4 text-sm relative hover:opacity-80 px-4 whitespace-nowrap font-medium`;

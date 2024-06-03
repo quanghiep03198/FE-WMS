@@ -38,6 +38,8 @@ export class JsonHandler {
 	 * @returns
 	 */
 	public static safeStringify(value: any): string {
-		return typeof value === 'string' ? value : JSON.stringify(value, (_k: string, value: any) => (typeof value === 'undefined' ? null : value));
+		return typeof value === 'string'
+			? value
+			: JSON.stringify(value, (_k: string, value: any) => (typeof value === 'undefined' ? null : value));
 	}
 }

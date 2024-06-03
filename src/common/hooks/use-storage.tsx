@@ -1,7 +1,11 @@
-import { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { JsonHandler } from '../utils/json-handler';
 
-function useStorage<T>(key: string, defaultValue: T, storageObject: Storage): [T | undefined, React.Dispatch<T | undefined>, () => void] {
+function useStorage<T>(
+	key: string,
+	defaultValue: T,
+	storageObject: Storage
+): [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>, () => void] {
 	const [value, setValue] = useState<T | undefined>(() => {
 		const storedValue = storageObject.getItem(key);
 		if (typeof window === 'undefined') return defaultValue;

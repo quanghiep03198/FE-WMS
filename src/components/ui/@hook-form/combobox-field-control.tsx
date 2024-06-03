@@ -35,7 +35,20 @@ type ComboboxFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
 };
 
 export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxFieldControlProps<T>) {
-	const { form, name, control, options, label, description, placeholder, layout, hidden, messageMode = 'tooltip', onInput, onSelect } = props;
+	const {
+		form,
+		name,
+		control,
+		options,
+		label,
+		description,
+		placeholder,
+		layout,
+		hidden,
+		messageMode = 'tooltip',
+		onInput,
+		onSelect
+	} = props;
 
 	const id = useId();
 
@@ -60,9 +73,14 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 											size='sm'
 											id={id}
 											role='combobox'
-											className={cn('w-full justify-between hover:bg-background', !field.value && 'text-muted-foreground')}>
+											className={cn(
+												'w-full justify-between hover:bg-background',
+												!field.value && 'text-muted-foreground'
+											)}>
 											<Typography variant='small' className='line-clamp-1'>
-												{field.value ? options.find((option) => option.value === field.value)?.label : placeholder}
+												{field.value
+													? options.find((option) => option.value === field.value)?.label
+													: placeholder}
 											</Typography>
 											<Icon name='ChevronsUpDown' />
 										</Button>
@@ -92,7 +110,10 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 														<Typography variant='small' className='flex-1'>
 															{option.label}
 														</Typography>
-														<Icon name='Check' className={cn(option.value === field.value ? 'opacity-100' : 'opacity-0')} />
+														<Icon
+															name='Check'
+															className={cn(option.value === field.value ? 'opacity-100' : 'opacity-0')}
+														/>
 													</CommandItem>
 												))}
 											</ScrollArea>

@@ -26,10 +26,13 @@ const SupportSection: React.FunctionComponent = () => {
 							Bug reports
 						</Typography>
 						<Typography variant='p' color='muted' className='mb-3 leading-7'>
-							Notice something not working right? Please let us know about any bugs you find so we can fix them promptly.
+							Notice something not working right? Please let us know about any bugs you find so we can fix them
+							promptly.
 						</Typography>
 
-						<Link href='/' className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
+						<Link
+							href='/'
+							className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
 							Report a bug <Icon name='ArrowRight' size={12} />
 						</Link>
 					</Div>
@@ -43,9 +46,12 @@ const SupportSection: React.FunctionComponent = () => {
 							Technical support
 						</Typography>
 						<Typography variant='p' color='muted' className='mb-3 leading-7'>
-							For additional technical assistance, our support team is here to help. Contact us for any technical issues or questions.
+							For additional technical assistance, our support team is here to help. Contact us for any technical
+							issues or questions.
 						</Typography>
-						<Link href='/' className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
+						<Link
+							href='/'
+							className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
 							Join our WeChat <Icon name='ArrowRight' size={12} />
 						</Link>
 					</Div>

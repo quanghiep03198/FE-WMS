@@ -57,7 +57,8 @@ export default function TablePagination<TData>({
 	return (
 		<Div className='flex items-center justify-between sm:justify-end'>
 			<Div className='flex-1 text-sm text-muted-foreground sm:hidden'>
-				{table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} hàng được chọn.
+				{table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} hàng được
+				chọn.
 			</Div>
 			<Div className='flex items-center space-x-6 lg:space-x-8'>
 				<Div className='flex items-center space-x-2'>
@@ -86,22 +87,42 @@ export default function TablePagination<TData>({
 				</Div>
 				<Div className='flex items-center space-x-1'>
 					<Tooltip content='Trang đầu'>
-						<Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoFirstPage} disabled={!canPreviousPage}>
+						<Button
+							variant='outline'
+							size='icon'
+							className='h-8 w-8'
+							onClick={gotoFirstPage}
+							disabled={!canPreviousPage}>
 							<Icon name='ChevronsLeft' />
 						</Button>
 					</Tooltip>
 					<Tooltip content='Trang trước'>
-						<Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoPreviousPage} disabled={!canPreviousPage}>
+						<Button
+							variant='outline'
+							size='icon'
+							className='h-8 w-8'
+							onClick={gotoPreviousPage}
+							disabled={!canPreviousPage}>
 							<Icon name='ChevronLeft' />
 						</Button>
 					</Tooltip>
 					<Tooltip content='Trang tiếp'>
-						<Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoNextPage} disabled={!canNextPage}>
+						<Button
+							variant='outline'
+							size='icon'
+							className='h-8 w-8'
+							onClick={gotoNextPage}
+							disabled={!canNextPage}>
 							<Icon name='ChevronRight' />
 						</Button>
 					</Tooltip>
 					<Tooltip content='Trang cuối'>
-						<Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoLastPage} disabled={!canNextPage}>
+						<Button
+							variant='outline'
+							size='icon'
+							className='h-8 w-8'
+							onClick={gotoLastPage}
+							disabled={!canNextPage}>
 							<Icon name='ChevronsRight' />
 						</Button>
 					</Tooltip>

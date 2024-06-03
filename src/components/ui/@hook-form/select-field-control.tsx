@@ -1,7 +1,17 @@
 import { cn } from '@/common/utils/cn';
 import React, { useId } from 'react';
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form';
-import { FormDescription, FormField, FormItem, FormMessage, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '..';
+import {
+	FormDescription,
+	FormField,
+	FormItem,
+	FormMessage,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from '..';
 import FormTooltipLabel from './form-tooltip-label';
 import { BaseFieldControl } from './types/hook-form';
 
@@ -54,7 +64,8 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							{...restProps}>
 							<SelectTrigger
 								className={cn('bg-background', className, {
-									'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive': !!getFieldState(name).error
+									'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive':
+										!!getFieldState(name).error
 								})}
 								ref={(e) => field.ref(e)}
 								id={id}>

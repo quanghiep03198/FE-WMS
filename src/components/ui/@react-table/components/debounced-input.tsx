@@ -7,7 +7,12 @@ type DebouncedInputProps = {
 	debounce?: number;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>;
 
-export const DebouncedInput: React.FC<DebouncedInputProps> = ({ value: initialValue, onChange, debounce, ...props }) => {
+export const DebouncedInput: React.FC<DebouncedInputProps> = ({
+	value: initialValue,
+	onChange,
+	debounce,
+	...props
+}) => {
 	const [value, setValue] = useState(initialValue);
 
 	useEffect(() => {

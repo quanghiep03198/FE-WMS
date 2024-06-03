@@ -10,7 +10,11 @@ const ThemeToggle: React.FC = () => {
 	const darkTheme = useMemo<boolean>(() => theme === Theme.DARK, [theme]);
 
 	return (
-		<Button variant='ghost' size='icon' className='relative' onClick={() => (darkTheme ? setTheme(Theme.LIGHT) : setTheme(Theme.DARK))}>
+		<Button
+			variant='ghost'
+			size='icon'
+			className='relative'
+			onClick={() => (darkTheme ? setTheme(Theme.LIGHT) : setTheme(Theme.DARK))}>
 			<Icon
 				name='Sun'
 				className={cn(

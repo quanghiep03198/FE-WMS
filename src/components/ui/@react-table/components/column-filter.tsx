@@ -38,7 +38,10 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					<Div className='flex items-stretch'>
 						<DebouncedInput
 							type='number'
-							className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground')}
+							className={cn(
+								buttonVariants({ variant: 'ghost' }),
+								'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground'
+							)}
 							min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 							max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
 							value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
@@ -47,7 +50,10 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 						/>
 						<DebouncedInput
 							type='number'
-							className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground')}
+							className={cn(
+								buttonVariants({ variant: 'ghost' }),
+								'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground'
+							)}
 							min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 							max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
 							value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}

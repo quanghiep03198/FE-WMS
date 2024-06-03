@@ -1,5 +1,16 @@
 import { cn } from '@/common/utils/cn';
-import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '@/components/ui';
+import {
+	Button,
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	ScrollArea
+} from '@/components/ui';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 import { ComboboxProps } from '../../@shadcn/combobox';
@@ -9,7 +20,14 @@ interface ComboboxFilterProps extends ComboboxProps {
 	areAllFiltersCleared: boolean;
 }
 
-export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeholder, className, onChange, forceClose, areAllFiltersCleared }) => {
+export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({
+	options,
+	placeholder,
+	className,
+	onChange,
+	forceClose,
+	areAllFiltersCleared
+}) => {
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState('');
 
@@ -51,7 +69,9 @@ export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeho
 										setOpen(false);
 									}}>
 									{option.label}
-									<CheckIcon className={cn('ml-auto h-4 w-4', value === option.value ? 'opacity-100' : 'opacity-0')} />
+									<CheckIcon
+										className={cn('ml-auto h-4 w-4', value === option.value ? 'opacity-100' : 'opacity-0')}
+									/>
 								</CommandItem>
 							))}
 						</ScrollArea>

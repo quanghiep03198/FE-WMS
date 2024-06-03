@@ -10,27 +10,31 @@ type TSwapButtonProps = React.ClassAttributes<HTMLLabelElement> &
 		swapOff: React.ReactNode;
 	};
 
-export const Swap = forwardRef<React.Ref<HTMLInputElement>, TSwapButtonProps>(({ checked, swapOn, swapOff, onChange, ...rest }: TSwapButtonProps, ref) => {
-	const id = useId();
-	const localRef = useRef(null);
-	const resolvedRef = (ref || localRef) as React.MutableRefObject<any>;
+export const Swap = forwardRef<React.Ref<HTMLInputElement>, TSwapButtonProps>(
+	({ checked, swapOn, swapOff, onChange, ...rest }: TSwapButtonProps, ref) => {
+		const id = useId();
+		const localRef = useRef(null);
+		const resolvedRef = (ref || localRef) as React.MutableRefObject<any>;
 
-	return (
-		<Label htmlFor={id} {...rest}>
-			<Toggler
-				id={id}
-				type='checkbox'
-				checked={checked}
-				ref={resolvedRef}
-				onChange={(e) => {
-					if (onChange) onChange(e);
-				}}
-			/>
-			<SwapLabel className='opacity-0 peer-checked:-rotate-45 peer-checked:opacity-100 peer-indeterminate:opacity-0'>{swapOn}</SwapLabel>
-			<SwapLabel className='opacity-100 peer-checked:-rotate-45 peer-checked:opacity-0'>{swapOff}</SwapLabel>
-		</Label>
-	);
-});
+		return (
+			<Label htmlFor={id} {...rest}>
+				<Toggler
+					id={id}
+					type='checkbox'
+					checked={checked}
+					ref={resolvedRef}
+					onChange={(e) => {
+						if (onChange) onChange(e);
+					}}
+				/>
+				<SwapLabel className='opacity-0 peer-checked:-rotate-45 peer-checked:opacity-100 peer-indeterminate:opacity-0'>
+					{swapOn}
+				</SwapLabel>
+				<SwapLabel className='opacity-100 peer-checked:-rotate-45 peer-checked:opacity-0'>{swapOff}</SwapLabel>
+			</Label>
+		);
+	}
+);
 const Label = tw.label`
 	inline-grid 
 	items-center

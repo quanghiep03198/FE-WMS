@@ -22,7 +22,9 @@ const Tooltip: React.FC<TooltipProps> = ({
 				<TooltipTrigger asChild={asChild} type='button'>
 					{children}
 				</TooltipTrigger>
-				<TooltipContent {...tooltipContentProps} className={cn('z-50 whitespace-nowrap', tooltipContentProps.className)}>
+				<TooltipContent
+					{...tooltipContentProps}
+					className={cn('z-50 whitespace-nowrap', tooltipContentProps.className)}>
 					{content}
 				</TooltipContent>
 			</TooltipWrapper>

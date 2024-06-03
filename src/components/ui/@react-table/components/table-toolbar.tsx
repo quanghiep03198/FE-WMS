@@ -27,12 +27,20 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 
 			<Div className='grid grid-flow-col items-center gap-x-1'>
 				<Tooltip content='Xóa lọc'>
-					<Button variant='destructive' size='icon' onClick={onClearAllFilters} className={cn('h-8 w-8', !isFiltered && 'hidden')}>
+					<Button
+						variant='destructive'
+						size='icon'
+						onClick={onClearAllFilters}
+						className={cn('h-8 w-8', !isFiltered && 'hidden')}>
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
 				<Div className='hidden sm:block'>
-					<GlobalFilterPopover table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
+					<GlobalFilterPopover
+						table={table}
+						globalFilter={globalFilter}
+						onGlobalFilterChange={onGlobalFilterChange}
+					/>
 				</Div>
 				<Tooltip content={isFilterOpened ? 'Đóng bộ lọc' : 'Mở bộ lọc'}>
 					<Toggle

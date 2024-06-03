@@ -20,7 +20,12 @@ const FormTooltipLabel: React.FC<FormTooltipLabelProps> = ({ labelText, htmlFor,
 					<Icon name='TriangleAlert' size={16} className={cn('stroke-destructive', { hidden: !error })} />
 					<FormLabel htmlFor={htmlFor}>{labelText}</FormLabel>
 				</TooltipTrigger>
-				<TooltipContent side='right' align='end' sideOffset={8} hidden={messageMode !== 'tooltip' || !error} className='bg-destructive'>
+				<TooltipContent
+					side='right'
+					align='end'
+					sideOffset={8}
+					hidden={messageMode !== 'tooltip' || !error}
+					className='bg-destructive'>
 					{String(error?.message)}
 				</TooltipContent>
 			</Tooltip>

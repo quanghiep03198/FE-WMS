@@ -1,7 +1,18 @@
 import { cn } from '@/common/utils/cn';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '..';
+import {
+	Button,
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	ScrollArea
+} from '..';
 
 export type ComboboxProps = {
 	placeholder?: string;
@@ -50,7 +61,12 @@ export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, classN
 										setOpen(false);
 									}}>
 									{option.label}
-									<CheckIcon className={cn('ml-auto h-4 w-4', currentValue === option.value ? 'opacity-100' : 'opacity-0')} />
+									<CheckIcon
+										className={cn(
+											'ml-auto h-4 w-4',
+											currentValue === option.value ? 'opacity-100' : 'opacity-0'
+										)}
+									/>
 								</CommandItem>
 							))}
 						</ScrollArea>

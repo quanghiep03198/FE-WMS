@@ -5,7 +5,8 @@ import { useScrollIntoView } from '..';
 const faqs = [
 	{
 		question: 'How can I get account to access to the application ?',
-		answer: 'Use your company email and password to log in. If you encounter any issues, please contact the IT department for assistance.'
+		answer:
+			'Use your company email and password to log in. If you encounter any issues, please contact the IT department for assistance.'
 	},
 	{
 		question: ' What should I do if I forget my password?',
@@ -23,7 +24,8 @@ const faqs = [
 	},
 	{
 		question: 'How do I report a bug or suggest a feature?',
-		answer: 'Go to the "Feedback" section and select either "Report a Bug" or "Suggest a Feature." Fill out the form with detailed information and submit it.'
+		answer:
+			'Go to the "Feedback" section and select either "Report a Bug" or "Suggest a Feature." Fill out the form with detailed information and submit it.'
 	}
 ];
 
@@ -33,7 +35,10 @@ const FAQsSection: React.FunctionComponent = () => {
 	useScrollIntoView({ hashMatch: 'faqs', target: sectionRef.current });
 
 	return (
-		<Div ref={sectionRef} as='section' className='relative mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
+		<Div
+			ref={sectionRef}
+			as='section'
+			className='relative mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
 			<Typography variant='h3'>Frequently asked questions</Typography>
 
 			<Accordion type='multiple' className='w-full max-w-4xl'>

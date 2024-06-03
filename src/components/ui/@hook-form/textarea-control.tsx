@@ -12,7 +12,21 @@ function TextareaFieldControl<T extends FieldValues>(
 	props: TextareaFieldControlProps<T> & React.PropsWithoutRef<T> & React.RefAttributes<T>,
 	ref: React.ForwardedRef<HTMLTextAreaElement>
 ) {
-	const { label, name, className, disabled, type, control, placeholder, description, hidden, layout, messageMode = 'tooltip', onChange, ...restProps } = props;
+	const {
+		label,
+		name,
+		className,
+		disabled,
+		type,
+		control,
+		placeholder,
+		description,
+		hidden,
+		layout,
+		messageMode = 'tooltip',
+		onChange,
+		...restProps
+	} = props;
 	const localRef = useRef<typeof Textarea.prototype>(null);
 	const resolvedRef = (ref ?? localRef) as typeof localRef;
 	const id = useId();

@@ -24,7 +24,8 @@ const mainFeatures: Array<FeatureItemProps> = [
 	{
 		icon: 'FileText',
 		title: 'Reporting and Analytics',
-		description: 'i-WMS allows warehouse managers to monitor performance, identify bottlenecks and performance gaps, and supply insights for optimization.'
+		description:
+			'i-WMS allows warehouse managers to monitor performance, identify bottlenecks and performance gaps, and supply insights for optimization.'
 	}
 ];
 

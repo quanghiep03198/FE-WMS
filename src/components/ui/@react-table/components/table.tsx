@@ -9,7 +9,9 @@ import ColumnResizer from './column-resizer';
 import { TableBodyLoading } from './table-body-loading';
 import { TableCellHead } from './table-cell-head';
 
-interface TableProps<TData, TValue> extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>, React.AllHTMLAttributes<HTMLTableElement> {
+interface TableProps<TData, TValue>
+	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
+		React.AllHTMLAttributes<HTMLTableElement> {
 	table: TableType<TData>;
 }
 
@@ -44,7 +46,9 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 											}
 										}}>
 										<TableCellHead table={table} header={header} />
-										{index !== headerGroup.headers.length - 1 && table.options.enableColumnResizing && <ColumnResizer header={header} />}
+										{index !== headerGroup.headers.length - 1 && table.options.enableColumnResizing && (
+											<ColumnResizer header={header} />
+										)}
 									</TableHead>
 								))}
 							</TableRow>
@@ -58,7 +62,9 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 								<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
-											<span className='line-clamp-1'>{flexRender(cell.column.columnDef.cell, cell.getContext())}</span>
+											<span className='line-clamp-1'>
+												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											</span>
 										</TableCell>
 									))}
 								</TableRow>

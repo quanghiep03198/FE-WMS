@@ -13,7 +13,21 @@ export function InputFieldControl<T extends FieldValues>(
 	props: InputFieldControlProps<T> & React.PropsWithRef<T> & React.RefAttributes<T>,
 	ref?: React.ForwardedRef<HTMLInputElement>
 ) {
-	const { label, name, className, disabled, control, placeholder, description, type, hidden, layout, messageMode = 'tooltip', onChange, ...restProps } = props;
+	const {
+		label,
+		name,
+		className,
+		disabled,
+		control,
+		placeholder,
+		description,
+		type,
+		hidden,
+		layout,
+		messageMode = 'tooltip',
+		onChange,
+		...restProps
+	} = props;
 
 	const id = useId();
 	const [value, setValue] = useState<string>('');
@@ -21,7 +35,10 @@ export function InputFieldControl<T extends FieldValues>(
 	const localRef = useRef<typeof Input.prototype>(null);
 	const resolvedRef = (ref ?? localRef) as typeof localRef;
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: ControllerRenderProps<FieldValues, Path<FieldValues>>) => {
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		field: ControllerRenderProps<FieldValues, Path<FieldValues>>
+	) => {
 		setValue(e.target.value);
 		if (onChange) onChange(e);
 		if (type === 'file') {
@@ -82,4 +99,6 @@ export function InputFieldControl<T extends FieldValues>(
 
 InputFieldControl.displayName = 'InputFieldControl';
 
-export const ForwardedRefInputFieldControl = memo(forwardRef<HTMLInputElement, InputFieldControlProps<any>>(InputFieldControl));
+export const ForwardedRefInputFieldControl = memo(
+	forwardRef<HTMLInputElement, InputFieldControlProps<any>>(InputFieldControl)
+);

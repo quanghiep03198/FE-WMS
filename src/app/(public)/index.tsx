@@ -9,6 +9,7 @@ import FeaturesSection from './_components/-features-section';
 import FAQsSection from './_components/-faq-section';
 import SupportSection from './_components/-support-section';
 import Spotlight from './_components/-spotlight';
+import { Helmet } from 'react-helmet';
 
 export const Route = createFileRoute('/(public)/')({
 	component: HomePage
@@ -16,18 +17,24 @@ export const Route = createFileRoute('/(public)/')({
 
 export default function HomePage() {
 	return (
-		<Div className='relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none'>
-			<Header />
-			<Spotlight className='fixed -top-[20%] left-[10%] z-0' />
-			<GridBackground />
-			<Div className='mb-20 space-y-64'>
-				<HeroSection />
-				<FeaturesSection />
-				<SupportSection />
-				<FAQsSection />
+		<>
+			<Helmet
+				title='GL Warehouse Management System'
+				meta={[{ name: 'description', content: 'Greenland Warehouse Management System' }]}
+			/>
+			<Div className='relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none'>
+				<Header />
+				<Spotlight className='fixed -top-[20%] left-[10%] z-0' />
+				<GridBackground />
+				<Div className='mb-20 space-y-64'>
+					<HeroSection />
+					<FeaturesSection />
+					<SupportSection />
+					<FAQsSection />
+				</Div>
+				<Footer />
 			</Div>
-			<Footer />
-		</Div>
+		</>
 	);
 }
 

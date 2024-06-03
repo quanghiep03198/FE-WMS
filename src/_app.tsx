@@ -46,7 +46,9 @@ const queryClient = new QueryClient({
 
 export default function App() {
 	return (
-		<PersistQueryClientProvider client={queryClient} persistOptions={{ persister: localStoragePersister, maxAge: Infinity }}>
+		<PersistQueryClientProvider
+			client={queryClient}
+			persistOptions={{ persister: localStoragePersister, maxAge: Infinity }}>
 			<I18nextProvider i18n={i18n}>
 				<RouterProvider router={router} />
 				<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-left' />
