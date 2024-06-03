@@ -53,10 +53,6 @@ export function InputFieldControl<T extends FieldValues>(
 			control={control}
 			name={name}
 			render={({ field }) => {
-				useEffect(() => {
-					setValue(field.value);
-				}, [field.value]);
-
 				return (
 					<FormItem
 						className={cn({

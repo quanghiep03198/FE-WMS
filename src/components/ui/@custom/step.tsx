@@ -21,11 +21,12 @@ type TStepContext = {
 
 const reducer: React.Reducer<TStepState, TStepAction> = (state, action) => {
 	switch (action.type) {
-		case 'PREV_STEP':
+		case 'PREV_STEP': {
 			if (!state.canPrevStep) return state;
 			return { ...state, currentStep: state.currentStep - 1 };
+		}
 
-		case 'NEXT_STEP':
+		case 'NEXT_STEP': {
 			const currentStep = state.currentStep + 1;
 			if (state.currentStep == state.data.length) return state;
 
@@ -40,8 +41,9 @@ const reducer: React.Reducer<TStepState, TStepAction> = (state, action) => {
 					else return step;
 				})
 			};
+		}
 
-		case 'COMPLETE':
+		case 'COMPLETE': {
 			return {
 				...state,
 				currentStep: state.data.length,
@@ -49,9 +51,11 @@ const reducer: React.Reducer<TStepState, TStepAction> = (state, action) => {
 				canPrevStep: true,
 				data: state.data.map((step) => ({ ...step, status: 'completed' }))
 			};
+		}
 
-		default:
+		default: {
 			throw new Error('Invalid step action');
+		}
 	}
 };
 

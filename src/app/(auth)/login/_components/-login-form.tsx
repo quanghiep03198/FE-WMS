@@ -32,7 +32,7 @@ const LoginForm: React.FC = () => {
 
 	const handleToggleSaveAccount = useCallback((checked: boolean) => {
 		if (checked) {
-			if (!!form.getValues('email')) setAccountToSave(form.getValues('email'));
+			if (form.getValues('email')) setAccountToSave(form.getValues('email'));
 		} else removeSavedAccount();
 	}, []);
 
