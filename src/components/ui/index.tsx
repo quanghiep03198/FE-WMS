@@ -1,5 +1,6 @@
-// #region Shadcn UI
+// eslint-disable react-refresh/only-export-components
 
+// #region Shadcn UI
 export * from './@shadcn/button';
 export * from './@shadcn/checkbox';
 export * from './@shadcn/icon';
