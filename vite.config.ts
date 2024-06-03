@@ -20,6 +20,6 @@ export default defineConfig({
 	server: {
 		port: 5000,
 		host: true,
-		open: true
+		open: false
 	}
 });

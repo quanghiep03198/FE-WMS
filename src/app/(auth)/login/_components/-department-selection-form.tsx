@@ -1,19 +1,23 @@
-import { AuthContext } from '@/components/providers/auth-provider';
+import { AuthContext, TAuthState } from '@/components/providers/auth-provider';
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui';
+import { StepContext } from '@/components/ui/@custom/step';
 import { CompanyService } from '@/services/company.service';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import tw from 'tailwind-styled-components';
-import { LoginContext } from '../_context/-login-context';
+
+type FormValue = { company_code: string; department_code: string };
 
 const DepartmentSelectionForm: React.FC = () => {
-	const { authenticated } = useContext(AuthContext);
-	const { t } = useTranslation('company.ns');
-	const form = useForm({});
+	const { authenticated, setAuthState } = useContext(AuthContext);
+	const { dispatch } = useContext(StepContext);
+	const { t } = useTranslation();
+	const form = useForm<FormValue>();
 	const watchFields = form.watch(['company_code', 'department_code']);
-	const { setSteps } = useContext(LoginContext);
+	const navigate = useNavigate();
 
 	const { data, isFetching } = useQuery({
 		enabled: authenticated,
@@ -34,22 +38,29 @@ const DepartmentSelectionForm: React.FC = () => {
 
 	useEffect(() => {
 		if (Array.isArray(departmentOptions) && departmentOptions.length > 0) form.setValue('department_code', departmentOptions[0].value);
-		if (watchFields.every((field) => !!field)) setSteps((prev) => prev.map((step) => ({ ...step, status: 'completed' })));
+		if (watchFields.every((field) => !!field)) dispatch({ type: 'COMPLETE' });
 	}, [...watchFields, departmentOptions]);
+
+	const handleCompleteLogin = (data: FormValue) => {
+		setAuthState((prev) => {
+			return { ...(prev as TAuthState), ...data };
+		});
+		navigate({ to: '/dashboard' });
+	};
 
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit((data) => console.log(data))}>
-				<SelectFieldControl label={t('company')} name='company_code' options={companyOptions} disabled={isFetching} control={form.control} />
+			<Form onSubmit={form.handleSubmit(handleCompleteLogin)}>
+				<SelectFieldControl label={t('ns_company:company')} name='company_code' options={companyOptions} disabled={isFetching} control={form.control} />
 				<SelectFieldControl
-					label={t('department')}
+					label={t('ns_company:department')}
 					name='department_code'
 					options={departmentOptions}
 					disabled={isFetching || !watchFields[0]}
 					control={form.control}
 				/>
 				<Button className='gap-x-2' disabled={!watchFields.every((field) => !!field)}>
-					Go to dashboard <Icon name='ArrowRight' />
+					{t('ns_auth:action_go_to_dashboard')} <Icon name='ArrowRight' />
 				</Button>
 			</Form>
 		</FormProvider>

@@ -7,6 +7,7 @@
 		"dev": "vite",
 		"start:dev": "concurrently \"npm run dev\" \"npm run api:serve\"",
 		"build": "tsc && vite build",
+		"tsr:refresh": "rm -rf ./src/route-tree.gent.ts && npx tsr generate",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"format": "prettier --write ./src/**/*.{js,jsx,ts,tsx,css}",
 		"preview": "vite preview",

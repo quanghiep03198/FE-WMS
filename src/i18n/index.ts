@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import ChainedBackend from 'i18next-chained-backend';
 import HttpBackend from 'i18next-http-backend';
-import FsBackend from 'i18next-fs-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 import { initReactI18next } from 'react-i18next';
 
 type LocaleOptions = Array<{ value: Language; label: string }>;
@@ -21,7 +21,7 @@ i18n
 	.use(LanguageDetector)
 	.init({
 		backend: {
-			backends: [HttpBackend, FsBackend],
+			backends: [HttpBackend, LocalStorageBackend],
 			backendOptions: [
 				{
 					expirationTime: 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -31,19 +31,20 @@ i18n
 				}
 			]
 		},
-		defaultNS: 'common.ns',
+		defaultNS: 'ns_common',
 		preload: Object.values(Language),
-		ns: ['common.ns', 'auth.ns', 'company.ns'],
+		// ns: ['ns_common', 'ns_auth', 'ns_company'],
 		lng: (() => {
 			try {
-				const currentLang = localStorage.getItem('i18nextLng');
-				return JsonHandler.isValid(currentLang) ? JsonHandler.safeParse<any>(currentLang) : Language.EN;
+				const persistedLng = localStorage.getItem('i18nextLng');
+				console.log(persistedLng);
+				return JsonHandler.isValid(persistedLng) ? JsonHandler.safeParse<any>(persistedLng) : Language.EN;
 			} catch {
 				return undefined;
 			}
 		})(),
 		fallbackLng: Language.VI,
-		fallbackNS: ['common', 'home'],
+		// fallbackNS: ['common.ns'],
 		saveMissing: true,
 		appendNamespaceToMissingKey: true,
 		debug: false,

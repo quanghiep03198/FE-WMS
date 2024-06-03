@@ -7,14 +7,13 @@ import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import FormSection from './_components/-form-section';
 import tw from 'tailwind-styled-components';
-import { LoginProvider } from './_context/-login-context';
 
-export const Route = createFileRoute('/(auth)/_layout/login/')({
+export const Route = createFileRoute('/(auth)/login/')({
 	component: LoginPage
 });
 
-export default function LoginPage() {
-	const { t } = useTranslation(['common.ns', 'company.ns', 'auth.ns']);
+function LoginPage() {
+	const { t } = useTranslation();
 
 	return (
 		<>
@@ -34,16 +33,14 @@ export default function LoginPage() {
 					{/* Page heading/description */}
 					<Div className='w-full max-w-lg space-y-1 text-center'>
 						<Typography variant='h5' className='whitespace-nowrap text-center font-bold'>
-							{t('auth.ns:login_title')}
+							{t('ns_auth:login_title')}
 						</Typography>
 						<Typography variant='small' color='muted'>
-							{t('auth.ns:login_description')}
+							{t('ns_auth:login_description')}
 						</Typography>
 					</Div>
 					{/* Form section */}
-					<LoginProvider>
-						<FormSection />
-					</LoginProvider>
+					<FormSection />
 					{/* Language selector */}
 					<Div className='flex w-full items-center justify-center gap-x-2'>
 						<Label className='inline-flex items-center gap-x-2'>
