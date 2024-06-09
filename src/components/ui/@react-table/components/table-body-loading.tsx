@@ -1,13 +1,13 @@
-import { Skeleton, TableCell, TableRow } from '../..';
+import { Skeleton, TableCell, TableRow } from '../..'
 
 type DataTableLoading = {
-	prepareRows: number;
-	prepareCols: number;
-};
+	prepareRows: number
+	prepareCols: number
+}
 
 export function TableBodyLoading({ prepareRows, prepareCols }: DataTableLoading) {
-	const preRenderCells = Array.apply(null, Array(prepareCols)).map((_, i) => i);
-	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, j) => j);
+	const preRenderCells = Array.apply(null, Array(prepareCols)).map((_, i) => i)
+	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, j) => j)
 	return preRenderRows.map((_, i) => (
 		<TableRow key={i}>
 			{preRenderCells.map((_, j) => (
@@ -16,5 +16,5 @@ export function TableBodyLoading({ prepareRows, prepareCols }: DataTableLoading)
 				</TableCell>
 			))}
 		</TableRow>
-	));
+	))
 }

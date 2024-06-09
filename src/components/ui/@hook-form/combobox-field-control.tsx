@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn';
-import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
+import { cn } from '@/common/utils/cn'
+import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import {
 	Button,
 	Command,
@@ -19,20 +19,20 @@ import {
 	PopoverTrigger,
 	ScrollArea,
 	Typography
-} from '..';
-import { BaseFieldControl } from './types/hook-form';
-import FormTooltipLabel from './form-tooltip-label';
-import { useId } from 'react';
+} from '..'
+import { BaseFieldControl } from '../../../common/types/hook-form'
+import FormLabel from './alternative-form-label'
+import { useId } from 'react'
 
 type ComboboxFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
-	form: UseFormReturn<T>;
-	onInput?: (value: string) => unknown;
-	onSelect?: (value: string) => unknown;
+	form: UseFormReturn<T>
+	onInput?: (value: string) => unknown
+	onSelect?: (value: string) => unknown
 	options: Array<{
-		label: string;
-		value: PathValue<T, Path<T>>;
-	}>;
-};
+		label: string
+		value: PathValue<T, Path<T>>
+	}>
+}
 
 export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxFieldControlProps<T>) {
 	const {
@@ -43,14 +43,14 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 		label,
 		description,
 		placeholder,
-		layout,
+		orientation,
 		hidden,
-		messageMode = 'tooltip',
+		messageType = 'alternative',
 		onInput,
 		onSelect
-	} = props;
+	} = props
 
-	const id = useId();
+	const id = useId()
 
 	return (
 		<FormField
@@ -61,9 +61,9 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 					<FormItem
 						className={cn({
 							hidden,
-							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': layout === 'horizontal'
+							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormTooltipLabel htmlFor={id} labelText={String(label)} messageMode={messageMode} />
+						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
 						<FormControl>
 							<Popover>
 								<PopoverTrigger asChild>
@@ -92,7 +92,7 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 											placeholder={placeholder}
 											className='h-9'
 											onInput={(e) => {
-												if (onInput) onInput(e.currentTarget.value);
+												if (onInput) onInput(e.currentTarget.value)
 											}}
 										/>
 										<CommandEmpty>Không có dữ liệu</CommandEmpty>
@@ -104,8 +104,8 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 														value={option.label}
 														className='line-clamp-1 flex items-center gap-x-4'
 														onSelect={() => {
-															form.setValue(name, option.value);
-															if (onSelect) onSelect(option.value);
+															form.setValue(name, option.value)
+															if (onSelect) onSelect(option.value)
 														}}>
 														<Typography variant='small' className='flex-1'>
 															{option.label}
@@ -123,12 +123,12 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 							</Popover>
 						</FormControl>
 						{description && <FormDescription>{description}</FormDescription>}
-						{messageMode === 'tooltip' && <FormMessage />}
+						{messageType === 'alternative' && <FormMessage />}
 					</FormItem>
-				);
+				)
 			}}
 		/>
-	);
+	)
 }
 
-export default ComboboxFieldControl;
+export default ComboboxFieldControl

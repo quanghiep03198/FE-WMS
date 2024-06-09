@@ -1,14 +1,14 @@
-import { LucideProps, icons } from 'lucide-react';
+import { LucideProps, icons } from 'lucide-react'
 
 export type TIconProps = {
-	name: keyof typeof icons;
-	color?: string;
-	size?: number;
+	name: keyof typeof icons
+	color?: string
+	size?: number
 } & React.HTMLAttributes<HTMLOrSVGElement> &
-	LucideProps;
+	LucideProps
 
 export const Icon: React.FC<TIconProps> = ({ name, color, size = 16, ...props }) => {
-	const LucideIcon = icons[name];
+	const LucideIcon = icons[name]
 
-	return <LucideIcon color={color} size={size} {...props} />;
-};
+	return <LucideIcon color={color} size={size} {...props} />
+}

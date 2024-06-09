@@ -1,4 +1,4 @@
-import { Table } from '@tanstack/react-table';
+import { Table } from '@tanstack/react-table'
 import {
 	Button,
 	DropdownMenu,
@@ -7,12 +7,12 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-	Icon
-} from '../..';
-import Tooltip from '../../@override/tooltip';
+	Icon,
+	Tooltip
+} from '../..'
 
 interface DataTableViewOptionsProps<TData> {
-	table: Table<TData>;
+	table: Table<TData>
 }
 
 export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
@@ -20,7 +20,7 @@ export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TDa
 		<DropdownMenu>
 			<Tooltip content='View'>
 				<DropdownMenuTrigger asChild>
-					<Button variant='outline' size='icon' className='h-8 w-8'>
+					<Button variant='outline' size='icon'>
 						<Icon name='SlidersHorizontal' />
 					</Button>
 				</DropdownMenuTrigger>
@@ -40,9 +40,9 @@ export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TDa
 								onCheckedChange={(value) => column.toggleVisibility(!!value)}>
 								{column.columnDef.header?.toString()}
 							</DropdownMenuCheckboxItem>
-						);
+						)
 					})}
 			</DropdownMenuContent>
 		</DropdownMenu>
-	);
+	)
 }

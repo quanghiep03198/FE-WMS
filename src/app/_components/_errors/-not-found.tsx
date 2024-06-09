@@ -1,5 +1,5 @@
-import { Div, Typography, Icon, buttonVariants } from '@/components/ui';
-import { Link } from '@tanstack/react-router';
+import { Div, Icon, Typography, buttonVariants } from '@/components/ui'
+import { Link } from '@tanstack/react-router'
 
 export default function NotFoundPage() {
 	return (
@@ -19,7 +19,7 @@ export default function NotFoundPage() {
 						Go back home
 					</Link>
 					<Link
-						href='/'
+						to='/'
 						className={buttonVariants({
 							variant: 'link',
 							className: 'gap-x-2 text-foreground'
@@ -29,5 +29,5 @@ export default function NotFoundPage() {
 				</Div>
 			</Div>
 		</Div>
-	);
+	)
 }

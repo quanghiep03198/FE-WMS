@@ -1,6 +1,6 @@
-import { cn } from '@/common/utils/cn';
-import React, { useId } from 'react';
-import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form';
+import { cn } from '@/common/utils/cn'
+import React, { useId } from 'react'
+import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import {
 	FormDescription,
 	FormField,
@@ -11,17 +11,17 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue
-} from '..';
-import FormTooltipLabel from './form-tooltip-label';
-import { BaseFieldControl } from './types/hook-form';
+} from '..'
+import FormLabel from './alternative-form-label'
+import { BaseFieldControl } from '../../../common/types/hook-form'
 
 export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {
 		options: Array<{
-			label: string;
-			value: PathValue<T, Path<T>>;
-		}>;
-	};
+			label: string
+			value: PathValue<T, Path<T>>
+		}>
+	}
 
 export function SelectFieldControl<T extends FieldValues>(props: SelectFieldControlProps<T>) {
 	const {
@@ -29,16 +29,16 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 		name,
 		hidden,
 		label,
-		layout,
+		orientation,
 		className,
 		defaultValue,
 		placeholder = 'Select ...',
-		messageMode = 'tooltip',
+		messageType: messageMode = 'alternative',
 		onValueChange,
 		...restProps
-	} = props;
-	const id = useId();
-	const { getFieldState } = useFormContext();
+	} = props
+	const id = useId()
+	const { getFieldState } = useFormContext()
 
 	return (
 		<FormField
@@ -49,16 +49,16 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 					<FormItem
 						className={cn({
 							hidden,
-							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': layout === 'horizontal'
+							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormTooltipLabel htmlFor={id} labelText={String(label)} messageMode={messageMode} />
+						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageMode} />
 						<Select
 							value={field.value}
 							defaultValue={field.value}
 							onValueChange={(value) => {
-								field.onChange(value);
+								field.onChange(value)
 								if (onValueChange) {
-									onValueChange(value);
+									onValueChange(value)
 								}
 							}}
 							{...restProps}>
@@ -84,10 +84,10 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 						{props.description && <FormDescription>{props.description}</FormDescription>}
 						{messageMode === 'default' && <FormMessage />}
 					</FormItem>
-				);
+				)
 			}}
 		/>
-	);
+	)
 }
 
-SelectFieldControl.displayName = 'SelectFieldControl';
+SelectFieldControl.displayName = 'SelectFieldControl'

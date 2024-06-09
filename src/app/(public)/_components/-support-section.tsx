@@ -1,12 +1,13 @@
-import { Div, Icon, Typography } from '@/components/ui';
-import { Link } from '@tanstack/react-router';
-import { memo, useRef } from 'react';
-import { useScrollIntoView } from '..';
+import { Div, Icon, Typography } from '@/components/ui'
+import { Link } from '@tanstack/react-router'
+import { memo, useRef } from 'react'
+import { useScrollIntoView } from '..'
+import env from '@/common/utils/env'
 
 const SupportSection: React.FunctionComponent = () => {
-	const sectionRef = useRef<HTMLDivElement>(null);
+	const sectionRef = useRef<HTMLDivElement>(null)
 
-	useScrollIntoView({ hashMatch: 'support', target: sectionRef.current });
+	useScrollIntoView({ hashMatch: 'support', target: sectionRef.current })
 
 	return (
 		<Div ref={sectionRef} as='section' className='relative flex flex-grow items-center justify-center px-6 sm:px-4'>
@@ -30,11 +31,12 @@ const SupportSection: React.FunctionComponent = () => {
 							promptly.
 						</Typography>
 
-						<Link
-							href='/'
+						<a
+							href={env('VITE_REPORT_BUG_URL')}
+							target='_blank'
 							className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
 							Report a bug <Icon name='ArrowRight' size={12} />
-						</Link>
+						</a>
 					</Div>
 				</Div>
 				<Div className='flex gap-x-6'>
@@ -58,7 +60,7 @@ const SupportSection: React.FunctionComponent = () => {
 				</Div>
 			</Div>
 		</Div>
-	);
-};
+	)
+}
 
-export default memo(SupportSection);
+export default memo(SupportSection)

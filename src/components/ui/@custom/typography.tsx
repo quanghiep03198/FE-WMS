@@ -1,12 +1,12 @@
-import { cn } from '@/common/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, useRef } from 'react';
+import { cn } from '@/common/utils/cn'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { forwardRef, useRef } from 'react'
 
 type TypographyProps = {
-	as?: React.ElementType;
+	as?: React.ElementType
 } & React.HTMLAttributes<HTMLElement> &
 	VariantProps<typeof typographyVariants> &
-	React.PropsWithChildren;
+	React.PropsWithChildren
 
 export const typographyVariants = cva('', {
 	variants: {
@@ -24,7 +24,7 @@ export const typographyVariants = cva('', {
 			small: 'text-sm leading-snug'
 		},
 		color: {
-			default: 'text-foreground',
+			default: 'text-[inherit]',
 			primary: 'text-primary',
 			accent: 'accent',
 			secondary: 'text-secondary',
@@ -37,19 +37,19 @@ export const typographyVariants = cva('', {
 		variant: 'default',
 		color: 'default'
 	}
-});
+})
 
 export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) => {
-	const { as = 'p', className, children, color, variant, ...restProps } = props;
+	const { as = 'p', className, children, color, variant, ...restProps } = props
 
-	const localRef = useRef(null);
-	const resolvedRef = ref ?? localRef;
+	const localRef = useRef(null)
+	const resolvedRef = ref ?? localRef
 
-	const Element = !variant || variant === 'default' || as ? as : (variant as React.ElementType);
+	const Element = !variant || variant === 'default' || as ? as : (variant as React.ElementType)
 
 	return (
 		<Element ref={resolvedRef} className={cn(typographyVariants({ variant, color, className }))} {...restProps}>
 			{children}
 		</Element>
-	);
-});
+	)
+})

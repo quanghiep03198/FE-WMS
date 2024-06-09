@@ -1,25 +1,18 @@
-import { AuthProvider } from '@/components/providers/auth-provider';
-import { ThemeProvider } from '@/components/providers/theme-provider';
-import { Toaster } from '@/components/ui/@shadcn/sonner';
-import { Outlet, createRootRoute } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import NotFoundPage from './_components/_errors/-not-found';
+import { QueryClient } from '@tanstack/react-query'
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { Fragment } from 'react'
+import NotFoundPage from './_components/_errors/-not-found'
+import Loading from '@/components/shared/loading'
 
-export const Route = createRootRoute({
-	component: RootRouter,
-	notFoundComponent: NotFoundPage
-});
-
-function RootRouter() {
-	return (
-		<>
-			<AuthProvider>
-				<ThemeProvider>
-					<Outlet />
-					<Toaster />
-				</ThemeProvider>
-			</AuthProvider>
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient; isAuthenticated: boolean }>()({
+	component: () => (
+		<Fragment>
+			<Outlet />
 			<TanStackRouterDevtools position='bottom-right' initialIsOpen={false} />
-		</>
-	);
-}
+		</Fragment>
+	),
+	wrapInSuspense: true,
+	notFoundComponent: NotFoundPage,
+	pendingComponent: () => <Loading className='h-screen' />
+})

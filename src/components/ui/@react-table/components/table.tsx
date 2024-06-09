@@ -1,30 +1,28 @@
-import { cn } from '@/common/utils/cn';
-import { Table as TableType, flexRender } from '@tanstack/react-table';
-import { useContext } from 'react';
-import tw from 'tailwind-styled-components';
-import { DataTableProps } from '.';
-import { Div, Icon, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..';
-import { TableContext } from '../context/table.context';
-import ColumnResizer from './column-resizer';
-import { TableBodyLoading } from './table-body-loading';
-import { TableCellHead } from './table-cell-head';
+import { cn } from '@/common/utils/cn'
+import { Table as TableType, flexRender } from '@tanstack/react-table'
+import { useContext } from 'react'
+import tw from 'tailwind-styled-components'
+import { DataTableProps } from '.'
+import { Div, Icon, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
+import { TableContext } from '../context/table.context'
+import ColumnResizer from './column-resizer'
+import { TableBodyLoading } from './table-body-loading'
+import { TableCellHead } from './table-cell-head'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
 		React.AllHTMLAttributes<HTMLTableElement> {
-	table: TableType<TData>;
+	table: TableType<TData>
 }
 
 export default function TableDataGrid<TData, TValue>({ table, columns, loading, ...props }: TableProps<TData, TValue>) {
-	const { handleScroll, isFilterOpened } = useContext(TableContext);
+	const { handleScroll } = useContext(TableContext)
 
 	return (
 		<TableWrapper className='group w-full shadow'>
 			<ScrollArea
-				className={cn({
-					'h-[60vh]': table.getRowModel().rows.length >= 10
-				})}
-				onWheel={handleScroll}>
+				onWheel={handleScroll}
+				className={cn('relative', { 'h-[60vh]': table.getRowModel().rows.length >= 10 })}>
 				<Table
 					className='border-separate border-spacing-0'
 					style={{
@@ -32,7 +30,7 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 						minWidth: '100%'
 					}}
 					{...props}>
-					<TableHeader className='sticky top-0 z-10 border-b'>
+					<TableHeader className='sticky top-0 z-10 border-b bg-opacity-90 backdrop-blur'>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id} className='sticky top-0 hover:bg-background'>
 								{headerGroup.headers.map((header, index) => (
@@ -82,9 +80,9 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 				</Div>
 			)}
 		</TableWrapper>
-	);
+	)
 }
 
-const TableWrapper = tw.div`relative flex flex-col items-stretch h-full max-w-full mx-auto overflow-clip border rounded-lg`;
+const TableWrapper = tw.div`relative flex flex-col items-stretch h-full max-w-full mx-auto overflow-clip border rounded-lg`
 
-TableDataGrid.displayName = 'DataTable';
+TableDataGrid.displayName = 'DataTable'

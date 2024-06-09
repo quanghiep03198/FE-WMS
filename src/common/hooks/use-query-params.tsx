@@ -1,19 +1,24 @@
-import { useNavigate, useSearch } from '@tanstack/react-router';
-import _ from 'lodash';
+import { useNavigate, useSearch } from '@tanstack/react-router'
+import _ from 'lodash'
+import qs from 'qs'
+import { useMemo } from 'react'
 
-export default function useQueryParams() {
-	const searchParams = useSearch({
+export default function useQueryParams(fallbackParams?: Record<string, any>) {
+	const params = useSearch({
 		strict: false,
-		select(search) {
-			return Object.fromEntries(new URLSearchParams(search));
-		}
-	});
+		select: (search) => Object.fromEntries(new URLSearchParams(qs.stringify(search)))
+	})
 
-	const navigate = useNavigate();
+	const searchParams = useMemo(() => {
+		const fallback = fallbackParams ?? params
+		return Object.keys(params).length === 0 && Object.keys(fallback).length > 0 ? fallback : params
+	}, [params, fallbackParams])
 
-	const setParams = (params: Record<string, any>) => navigate({ search: (prev) => ({ ...prev, ...params }) });
+	const navigate = useNavigate()
 
-	const removeParam = (key: string) => navigate({ search: (prev) => _.omit(prev, [key]) });
+	const setParams = (params: Record<string, any>) => navigate({ search: (prev) => ({ ...prev, ...params }) })
 
-	return { searchParams, setParams, removeParam };
+	const removeParam = (key: string) => navigate({ search: (prev) => _.omit(prev, [key]) })
+
+	return { searchParams, setParams, removeParam }
 }

@@ -6,10 +6,10 @@ export class JsonHandler {
 	 */
 	public static isValid(arg: string | null) {
 		try {
-			if (!arg) return false;
-			return !!JSON.parse(arg);
+			if (!arg) return false
+			return !!JSON.parse(arg)
 		} catch (error) {
-			return false;
+			return false
 		}
 	}
 
@@ -19,16 +19,15 @@ export class JsonHandler {
 	 * @returns
 	 */
 	public static safeParse<T>(value: any): T | null | undefined | string {
-		if (typeof value !== 'string') {
-			console.warn(`Cannot safe json parse value of type "${typeof value}"`);
-			return null;
-		}
 		try {
-			if (!JsonHandler.isValid(value)) return value;
-			return JSON.parse(value);
+			if (typeof value !== 'string') {
+				throw new Error(`Cannot safe json parse value of type "${typeof value}"`)
+			}
+			if (!JsonHandler.isValid(value)) return value
+			return JSON.parse(value)
 		} catch (error) {
-			console.warn((error as Error).message);
-			return null;
+			console.log((error as Error).message)
+			return null
 		}
 	}
 
@@ -40,6 +39,6 @@ export class JsonHandler {
 	public static safeStringify(value: any): string {
 		return typeof value === 'string'
 			? value
-			: JSON.stringify(value, (_k: string, value: any) => (typeof value === 'undefined' ? null : value));
+			: JSON.stringify(value, (_k: string, value: any) => (typeof value === 'undefined' ? null : value))
 	}
 }

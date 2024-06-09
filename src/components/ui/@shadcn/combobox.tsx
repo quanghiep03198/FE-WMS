@@ -1,6 +1,6 @@
-import { cn } from '@/common/utils/cn';
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
+import { cn } from '@/common/utils/cn'
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
+import { useState } from 'react'
 import {
 	Button,
 	Command,
@@ -12,19 +12,19 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	ScrollArea
-} from '..';
+} from '..'
 
 export type ComboboxProps = {
-	placeholder?: string;
-	className?: string;
-	options: Array<Record<'label' | 'value', any>>;
-	value?: string;
-	onChange?: (value: string) => void;
-} & React.ComponentProps<typeof PopoverContent>;
+	placeholder?: string
+	className?: string
+	options: Array<Record<'label' | 'value', any>>
+	value?: string
+	onChange?: (value: string) => void
+} & React.ComponentProps<typeof PopoverContent>
 
 export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, className, value, onChange, ...props }) => {
-	const [open, setOpen] = useState(false);
-	const [currentValue, setCurrentValue] = useState(value ?? '');
+	const [open, setOpen] = useState(false)
+	const [currentValue, setCurrentValue] = useState(value ?? '')
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -56,9 +56,9 @@ export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, classN
 									key={option.value}
 									value={option.value}
 									onSelect={(val: (typeof options)[number]['value']) => {
-										setCurrentValue(val === currentValue ? '' : currentValue);
-										if (onChange) onChange(val === currentValue ? '' : currentValue);
-										setOpen(false);
+										setCurrentValue(val === currentValue ? '' : currentValue)
+										if (onChange) onChange(val === currentValue ? '' : currentValue)
+										setOpen(false)
 									}}>
 									{option.label}
 									<CheckIcon
@@ -74,9 +74,9 @@ export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, classN
 				</Command>
 			</PopoverContent>
 		</Popover>
-	);
-};
+	)
+}
 
 Combobox.defaultProps = {
 	placeholder: 'Search ...'
-};
+}

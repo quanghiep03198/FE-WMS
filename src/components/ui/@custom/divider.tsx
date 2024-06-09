@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react'
 
 export const Divider: React.FC<PropsWithChildren> = ({ children }) => {
 	return (
@@ -10,5 +10,5 @@ export const Divider: React.FC<PropsWithChildren> = ({ children }) => {
 				<span className='bg-background px-6 text-xs uppercase text-muted-foreground'>{children}</span>
 			</div>
 		</div>
-	);
-};
+	)
+}

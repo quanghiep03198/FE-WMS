@@ -1,5 +1,7 @@
-import { cn } from '@/common/utils/cn';
-import { format } from 'date-fns';
+import { cn } from '@/common/utils/cn'
+import { format } from 'date-fns'
+import { useId } from 'react'
+import { FieldValues } from 'react-hook-form'
 import {
 	Button,
 	Calendar,
@@ -7,23 +9,20 @@ import {
 	FormDescription,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 	Icon,
 	Popover,
 	PopoverContent,
 	PopoverTrigger
-} from '..';
-import { FieldValues } from 'react-hook-form';
-import { BaseFieldControl } from './types/hook-form';
-import FormTooltipLabel from './form-tooltip-label';
-import { useId } from 'react';
+} from '..'
+import { BaseFieldControl } from '../../../common/types/hook-form'
+import FormLabel from './alternative-form-label'
 
-type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T>;
+type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T>
 
 export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerFieldControlProps<T>) {
-	const { control, name, description, label, layout, hidden, messageMode = 'tooltip' } = props;
-	const id = useId();
+	const { control, name, description, label, orientation, hidden, messageType = 'alternative' } = props
+	const id = useId()
 
 	return (
 		<FormField
@@ -33,9 +32,9 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 				<FormItem
 					className={cn({
 						hidden,
-						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': layout === 'horizontal'
+						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 					})}>
-					<FormTooltipLabel htmlFor={id} labelText={String(label)} messageMode={messageMode} />
+					<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
 					<Popover>
 						<PopoverTrigger asChild>
 							<FormControl>
@@ -62,11 +61,11 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 						</PopoverContent>
 					</Popover>
 					{description && <FormDescription>{description}</FormDescription>}
-					{messageMode === 'text' && <FormMessage />}
+					{messageType === 'default' && <FormMessage />}
 				</FormItem>
 			)}
 		/>
-	);
+	)
 }
 
-DatePickerFieldControl.displayName = 'DatePickerFieldControl';
+DatePickerFieldControl.displayName = 'DatePickerFieldControl'

@@ -14,12 +14,12 @@ export default defineConfig({
 	esbuild: {
 		drop: ['console', 'debugger']
 	},
+
+	server: {
+		port: 5000,
+		host: true
+	},
 	preview: {
 		port: 3000
 	},
-	server: {
-		port: 5000,
-		host: true,
-		open: false
-	}
 });

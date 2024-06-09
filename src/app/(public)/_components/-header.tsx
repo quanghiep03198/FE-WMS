@@ -1,9 +1,8 @@
-import AppLogo from '@/app/_components/_shared/-app-logo';
-import LanguagesDropdownMenu from '@/app/_components/_shared/-languages-dropdown-menu';
-
-import ThemeToggle from '@/app/_components/_shared/-theme-toggle';
-
-import { cn } from '@/common/utils/cn';
+import AppLogo from '@/app/_components/_shared/-app-logo'
+import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
+import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
+import { cn } from '@/common/utils/cn'
+import { AuthContext } from '@/components/providers/auth-provider'
 import {
 	Badge,
 	Div,
@@ -17,9 +16,9 @@ import {
 	Icon,
 	Typography,
 	buttonVariants
-} from '@/components/ui';
-import { Link } from '@tanstack/react-router';
-import { memo } from 'react';
+} from '@/components/ui'
+import { Link } from '@tanstack/react-router'
+import { memo, useContext } from 'react'
 
 const navigationLinks = [
 	{
@@ -34,14 +33,16 @@ const navigationLinks = [
 		title: 'FAQs',
 		href: 'faqs'
 	}
-];
+]
 
 const Header: React.FunctionComponent = () => {
+	const { user } = useContext(AuthContext)
+
 	return (
-		<Div className='sticky top-0 z-50 h-16 bg-opacity-85 backdrop-blur-xl'>
+		<Div className='sticky top-0 z-10 h-16 border-b border-border bg-background/90 backdrop-blur-sm'>
 			<Div
 				as='nav'
-				className='xxl:max-w-8xl mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4'
+				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
 				aria-label='Global'>
 				<MenuDropdown />
 				<Div className='flex items-center gap-x-2 sm:hidden md:hidden'>
@@ -72,21 +73,33 @@ const Header: React.FunctionComponent = () => {
 
 				<Div className='flex items-center justify-end gap-x-1 self-center'>
 					<ThemeToggle />
-					<LanguagesDropdownMenu />
-					<Link
-						to='/login'
-						className={buttonVariants({
-							variant: 'ghost',
-							className: 'gap-x-2'
-						})}>
-						Log in
-						<Icon name='ArrowRight' size={12} className='translate-y-px' />
-					</Link>
+					<LanguageDropdown />
+					{user ? (
+						<Link
+							to='/dashboard'
+							className={buttonVariants({
+								variant: 'ghost',
+								className: 'gap-x-2'
+							})}>
+							Dashboard
+							<Icon name='ArrowRight' size={12} />
+						</Link>
+					) : (
+						<Link
+							to='/login'
+							className={buttonVariants({
+								variant: 'ghost',
+								className: 'gap-x-2'
+							})}>
+							Log in
+							<Icon name='ArrowRight' size={12} />
+						</Link>
+					)}
 				</Div>
 			</Div>
 		</Div>
-	);
-};
+	)
+}
 
 function MenuDropdown() {
 	return (
@@ -110,7 +123,7 @@ function MenuDropdown() {
 				))}
 			</DropdownMenuContent>
 		</DropdownMenu>
-	);
+	)
 }
 
-export default memo(Header);
+export default memo(Header)

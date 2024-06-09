@@ -1,15 +1,15 @@
-import { PropsWithChildren, createContext, useRef, useState } from 'react';
+import { PropsWithChildren, createContext, useRef, useState } from 'react'
 
 type TableProviderProps = {
-	hasNoFilter: boolean;
-} & PropsWithChildren;
+	hasNoFilter: boolean
+} & PropsWithChildren
 
 type TableContext = {
-	isScrolling: boolean;
-	isFilterOpened: boolean;
-	handleScroll: () => void;
-	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>;
-} & Pick<TableProviderProps, 'hasNoFilter'>;
+	isScrolling: boolean
+	isFilterOpened: boolean
+	handleScroll: () => void
+	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>
+} & Pick<TableProviderProps, 'hasNoFilter'>
 
 export const TableContext = createContext<TableContext>({
 	isScrolling: false,
@@ -17,20 +17,20 @@ export const TableContext = createContext<TableContext>({
 	hasNoFilter: false,
 	setIsFilterOpened: () => {},
 	handleScroll: () => {}
-});
+})
 
 export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, children }) => {
-	const [isScrolling, setIsScrolling] = useState(false);
-	const [isFilterOpened, setIsFilterOpened] = useState(false);
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const [isScrolling, setIsScrolling] = useState(false)
+	const [isFilterOpened, setIsFilterOpened] = useState(false)
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
 	const handleScroll = () => {
-		if (timeoutRef.current) clearTimeout(timeoutRef.current!);
-		setIsScrolling(true);
+		if (timeoutRef.current) clearTimeout(timeoutRef.current!)
+		setIsScrolling(true)
 		timeoutRef.current = setTimeout(() => {
-			setIsScrolling(false);
-		}, 100);
-	};
+			setIsScrolling(false)
+		}, 100)
+	}
 
 	return (
 		<TableContext.Provider
@@ -43,5 +43,5 @@ export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, child
 			}}>
 			{children}
 		</TableContext.Provider>
-	);
-};
+	)
+}

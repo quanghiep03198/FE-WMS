@@ -1,12 +1,12 @@
-import { Div, Icon, TIconProps, Typography } from '@/components/ui';
-import { useRef } from 'react';
-import { useScrollIntoView } from '..';
+import { Div, Icon, TIconProps, Typography } from '@/components/ui'
+import { useRef } from 'react'
+import { useScrollIntoView } from '..'
 
 type FeatureItemProps = {
-	icon: TIconProps['name'];
-	title: string;
-	description: string;
-};
+	icon: TIconProps['name']
+	title: string
+	description: string
+}
 
 const mainFeatures: Array<FeatureItemProps> = [
 	{
@@ -27,21 +27,21 @@ const mainFeatures: Array<FeatureItemProps> = [
 		description:
 			'i-WMS allows warehouse managers to monitor performance, identify bottlenecks and performance gaps, and supply insights for optimization.'
 	}
-];
+]
 
 const FeaturesSection: React.FunctionComponent = () => {
-	const sectionRef = useRef<HTMLDivElement>(null);
+	const sectionRef = useRef<HTMLDivElement>(null)
 
 	useScrollIntoView({
 		hashMatch: 'outstanding-features',
 		target: sectionRef.current
-	});
+	})
 
 	return (
 		<Div
 			ref={sectionRef}
 			as='section'
-			className='xxl:max-w-8xl relative mx-auto flex max-w-4xl flex-grow items-center justify-center px-6 sm:px-4 xl:max-w-7xl'>
+			className='relative mx-auto flex max-w-4xl flex-grow items-center justify-center px-6 sm:px-4 xl:max-w-7xl xxl:max-w-8xl'>
 			<Div className='space-y-20'>
 				<Div className='max-w-4xl text-left'>
 					<Typography color='primary' variant='small' className='mb-2 !text-base font-medium'>
@@ -60,8 +60,8 @@ const FeaturesSection: React.FunctionComponent = () => {
 				</Div>
 			</Div>
 		</Div>
-	);
-};
+	)
+}
 
 const FeatureItem: React.FC<FeatureItemProps> = (props) => {
 	return (
@@ -76,7 +76,7 @@ const FeatureItem: React.FC<FeatureItemProps> = (props) => {
 				</Typography>
 			</Div>
 		</Div>
-	);
-};
+	)
+}
 
-export default FeaturesSection;
+export default FeaturesSection

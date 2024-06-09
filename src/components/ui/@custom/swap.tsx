@@ -1,20 +1,20 @@
-import { forwardRef, useId, useRef } from 'react';
-import tw from 'tailwind-styled-components';
-import { Button } from '..';
+import { forwardRef, useId, useRef } from 'react'
+import tw from 'tailwind-styled-components'
+import { Button } from '..'
 
 type TSwapButtonProps = React.ClassAttributes<HTMLLabelElement> &
 	React.LabelHTMLAttributes<HTMLLabelElement> & {
-		checked?: boolean;
-		onChange?: React.ChangeEventHandler<HTMLInputElement>;
-		swapOn: React.ReactNode;
-		swapOff: React.ReactNode;
-	};
+		checked?: boolean
+		onChange?: React.ChangeEventHandler<HTMLInputElement>
+		swapOn: React.ReactNode
+		swapOff: React.ReactNode
+	}
 
 export const Swap = forwardRef<React.Ref<HTMLInputElement>, TSwapButtonProps>(
 	({ checked, swapOn, swapOff, onChange, ...rest }: TSwapButtonProps, ref) => {
-		const id = useId();
-		const localRef = useRef(null);
-		const resolvedRef = (ref || localRef) as React.MutableRefObject<any>;
+		const id = useId()
+		const localRef = useRef(null)
+		const resolvedRef = (ref || localRef) as React.MutableRefObject<any>
 
 		return (
 			<Label htmlFor={id} {...rest}>
@@ -24,7 +24,7 @@ export const Swap = forwardRef<React.Ref<HTMLInputElement>, TSwapButtonProps>(
 					checked={checked}
 					ref={resolvedRef}
 					onChange={(e) => {
-						if (onChange) onChange(e);
+						if (onChange) onChange(e)
 					}}
 				/>
 				<SwapLabel className='opacity-0 peer-checked:-rotate-45 peer-checked:opacity-100 peer-indeterminate:opacity-0'>
@@ -32,9 +32,9 @@ export const Swap = forwardRef<React.Ref<HTMLInputElement>, TSwapButtonProps>(
 				</SwapLabel>
 				<SwapLabel className='opacity-100 peer-checked:-rotate-45 peer-checked:opacity-0'>{swapOff}</SwapLabel>
 			</Label>
-		);
+		)
 	}
-);
+)
 const Label = tw.label`
 	inline-grid 
 	items-center
@@ -58,14 +58,14 @@ const Label = tw.label`
 	h-9 w-9
 
 
-`;
+`
 
 const Toggler = tw.input`
 	peer
 	appearance-none
 	absolute
 	inset-0
-`;
+`
 const SwapLabel = tw.div`
 	cursor-pointer
 	select-none
@@ -75,4 +75,4 @@ const SwapLabel = tw.div`
 	align-middle
 	transition-all 
 	duration-300
-`;
+`

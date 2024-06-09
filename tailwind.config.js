@@ -12,6 +12,14 @@ module.exports = {
 			}
 		},
 		extend: {
+			maxWidth: {
+				'8xl': '1440px'
+			},
+			transitionProperty: {
+				height: 'height',
+				width: 'width',
+				spacing: 'margin, padding'
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -91,9 +99,15 @@ module.exports = {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				spotlight: 'spotlight 1.5s ease 0.5s forwards'
+				spotlight: 'spotlight 1.5s ease 0.5s forwards',
+				loader: 'loader 1.5s infinite'
 			}
 		}
 	},
-	plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar'), require('@tailwindcss/container-queries'), require('@tailwindcss/typography')]
-};
+	plugins: [
+		require('tailwindcss-animate'),
+		require('tailwind-scrollbar'),
+		require('@tailwindcss/container-queries'),
+		require('@tailwindcss/typography')
+	]
+}

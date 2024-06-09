@@ -1,15 +1,17 @@
-import { Table } from '@tanstack/react-table';
-import { Div, Button, Icon, Popover, PopoverContent, PopoverTrigger } from '../..';
-import Tooltip from '../../@override/tooltip';
-import { DebouncedInput } from './debounced-input';
+import { Table } from '@tanstack/react-table'
+import { Div, Button, Icon, Popover, PopoverContent, PopoverTrigger, Tooltip } from '../..'
+import { DebouncedInput } from './debounced-input'
+import { useTranslation } from 'react-i18next'
 
 type GlobalFilterProps<T> = {
-	table: Table<T>;
-	globalFilter: string | undefined;
-	onGlobalFilterChange: React.Dispatch<React.SetStateAction<string>>;
-};
+	table: Table<T>
+	globalFilter: string | undefined
+	onGlobalFilterChange: React.Dispatch<React.SetStateAction<string>>
+}
 
 export function GlobalFilter<T>(props: GlobalFilterProps<T>) {
+	const { t } = useTranslation('ns_common', { keyPrefix: 'actions' })
+
 	return (
 		<>
 			<Div className='relative w-fit sm:hidden'>
@@ -17,13 +19,13 @@ export function GlobalFilter<T>(props: GlobalFilterProps<T>) {
 				<DebouncedInput
 					value={props.globalFilter ?? ''}
 					onChange={(value) => props.onGlobalFilterChange(String(value))}
-					className='font-lg h-8 w-full border p-2 pl-8 shadow'
-					placeholder='Tìm kiếm ...'
+					className='font-lg w-full border p-2 pl-8 shadow'
+					placeholder={t('search') + ' ... '}
 					type='search'
 				/>
 			</Div>
 		</>
-	);
+	)
 }
 
 export function GlobalFilterPopover<T>(props: GlobalFilterProps<T>) {
@@ -49,5 +51,5 @@ export function GlobalFilterPopover<T>(props: GlobalFilterProps<T>) {
 				</Div>
 			</PopoverContent>
 		</Popover>
-	);
+	)
 }

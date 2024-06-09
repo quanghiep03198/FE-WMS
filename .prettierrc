@@ -9,6 +9,6 @@
 	"bracketSameLine": true,
 	"bracketSpacing": true,
 	"arrowParens": "always",
-	"semi": true,
+	"semi": false,
 	"plugins": ["prettier-plugin-tailwindcss"]
 }

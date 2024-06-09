@@ -1,35 +1,36 @@
-import { cn } from '@/common/utils/cn';
-import { Column } from '@tanstack/react-table';
-import { useContext, useMemo } from 'react';
-import { Div, DropdownSelect, Icon, buttonVariants } from '../..';
-import { TableContext } from '../context/table.context';
-import { ComboboxFilter } from './combobox-filter';
-import { DebouncedInput } from './debounced-input';
-import Tooltip from '../../@override/tooltip';
+import { cn } from '@/common/utils/cn'
+import { Column } from '@tanstack/react-table'
+import { useContext, useMemo } from 'react'
+import { Div, DropdownSelect, Icon, buttonVariants, Tooltip } from '../..'
+import { TableContext } from '../context/table.context'
+import { ComboboxFilter } from './combobox-filter'
+import { DebouncedInput } from './debounced-input'
+import { useTranslation } from 'react-i18next'
 
 type ColumnFilterProps<TData, TValue> = {
-	column: Column<TData, TValue>;
-};
+	column: Column<TData, TValue>
+}
 
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
-	const { isScrolling, hasNoFilter: areAllFiltersCleared } = useContext(TableContext);
+	const { isScrolling, hasNoFilter } = useContext(TableContext)
+	const { t } = useTranslation()
 
-	const filterType = column.columnDef.filterFn;
-	const columnFilterValue = column.getFilterValue();
+	const filterType = column.columnDef.filterFn
+	const columnFilterValue = column.getFilterValue()
 
 	const sortedUniqueValues = useMemo(
 		() => (filterType === 'inNumberRange' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()),
 		[column.getFacetedUniqueValues()]
-	);
+	)
 
 	if (!column.columnDef.enableColumnFilter)
 		return (
-			<Tooltip content='Bộ lọc không được áp dụng'>
+			<Tooltip content={t('ns_common:table.no_filter_applied')}>
 				<Div className='cursor- flex h-9 select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
 					<Icon name='Minus' />
 				</Div>
 			</Tooltip>
-		);
+		)
 
 	switch (filterType) {
 		case 'inNumberRange':
@@ -44,7 +45,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 							)}
 							min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 							max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-							value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
+							value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
 							onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
 							placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
 						/>
@@ -56,13 +57,13 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 							)}
 							min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 							max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-							value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
+							value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
 							onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
 							placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
 						/>
 					</Div>
 				</Div>
-			);
+			)
 
 		case 'equals':
 			return (
@@ -80,16 +81,15 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 						}))}
 					onValueChange={(value) => column.setFilterValue(value)}
 				/>
-			);
+			)
 
 		default:
 			return (
 				<ComboboxFilter
-					areAllFiltersCleared={areAllFiltersCleared}
+					hasNoFilter={hasNoFilter}
 					placeholder='Tìm kiếm trong cột ...'
 					forceClose={isScrolling}
 					options={sortedUniqueValues
-						.slice(0, 1000)
 						.filter((value) => Boolean(value))
 						.map((value: any) => ({
 							label: value,
@@ -98,6 +98,6 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					className='h-9 w-full rounded-none border-none pl-2 text-xs shadow-none'
 					onChange={(value) => column.setFilterValue(value)}
 				/>
-			);
+			)
 	}
 }

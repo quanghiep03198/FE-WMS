@@ -1,6 +1,6 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui';
-import { memo, useRef } from 'react';
-import { useScrollIntoView } from '..';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui'
+import { useRef } from 'react'
+import { useScrollIntoView } from '..'
 
 const faqs = [
 	{
@@ -27,12 +27,12 @@ const faqs = [
 		answer:
 			'Go to the "Feedback" section and select either "Report a Bug" or "Suggest a Feature." Fill out the form with detailed information and submit it.'
 	}
-];
+]
 
 const FAQsSection: React.FunctionComponent = () => {
-	const sectionRef = useRef<HTMLDivElement>(null);
+	const sectionRef = useRef<HTMLDivElement>(null)
 
-	useScrollIntoView({ hashMatch: 'faqs', target: sectionRef.current });
+	useScrollIntoView({ hashMatch: 'faqs', target: sectionRef.current })
 
 	return (
 		<Div
@@ -50,7 +50,7 @@ const FAQsSection: React.FunctionComponent = () => {
 				))}
 			</Accordion>
 		</Div>
-	);
-};
+	)
+}
 
-export default FAQsSection;
+export default FAQsSection

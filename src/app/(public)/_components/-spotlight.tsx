@@ -1,9 +1,9 @@
-import { cn } from '@/common/utils/cn';
+import { cn } from '@/common/utils/cn'
 
 type SpotlightProps = {
-	className?: string;
-	fill?: string;
-};
+	className?: string
+	fill?: string
+}
 
 export default function Spotlight({ className, fill }: SpotlightProps) {
 	return (
@@ -51,5 +51,5 @@ export default function Spotlight({ className, fill }: SpotlightProps) {
 				</filter>
 			</defs>
 		</svg>
-	);
+	)
 }

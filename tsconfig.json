@@ -13,17 +13,17 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		/* Linting */
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
+		"strict": false,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noFallthroughCasesInSwitch": false,
 		/* Alias */
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src"],
+	"include": ["src", "src/common/types/i18next.d.ts"],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"

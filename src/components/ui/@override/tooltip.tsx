@@ -1,35 +1,29 @@
-import React from 'react';
-import { Tooltip as TooltipWrapper, TooltipProvider, TooltipTrigger, TooltipContent } from '../@shadcn/tooltip';
-import { cn } from '@/common/utils/cn';
+import React from 'react'
+import { Tooltip as TooltipWrapper, TooltipProvider, TooltipTrigger, TooltipContent } from '../@shadcn/tooltip'
+import { cn } from '@/common/utils/cn'
 
 type TooltipProps = {
-	content: string;
-	asChild?: boolean;
-	tooltipProviderProps?: React.ComponentProps<typeof TooltipProvider>;
-	tooltipContentProps?: React.ComponentProps<typeof TooltipContent>;
-} & React.PropsWithChildren;
+	content: string
+	triggerProps?: React.ComponentProps<typeof TooltipTrigger>
+	providerProps?: React.ComponentProps<typeof TooltipProvider>
+	contentProps?: React.ComponentProps<typeof TooltipContent>
+} & React.PropsWithChildren
 
-const Tooltip: React.FC<TooltipProps> = ({
-	asChild = true,
+export const Tooltip: React.FC<TooltipProps> = ({
 	children,
 	content,
-	tooltipProviderProps = { delayDuration: 0 },
-	tooltipContentProps = { side: 'top' }
+	triggerProps = { type: 'button', asChild: false },
+	providerProps = { delayDuration: 0 },
+	contentProps = { side: 'top' }
 }) => {
 	return (
-		<TooltipProvider {...tooltipProviderProps}>
+		<TooltipProvider {...providerProps}>
 			<TooltipWrapper>
-				<TooltipTrigger asChild={asChild} type='button'>
-					{children}
-				</TooltipTrigger>
-				<TooltipContent
-					{...tooltipContentProps}
-					className={cn('z-50 whitespace-nowrap', tooltipContentProps.className)}>
+				<TooltipTrigger {...triggerProps}>{children}</TooltipTrigger>
+				<TooltipContent {...contentProps} className={cn('z-50 whitespace-nowrap', contentProps.className)}>
 					{content}
 				</TooltipContent>
 			</TooltipWrapper>
 		</TooltipProvider>
-	);
-};
-
-export default Tooltip;
+	)
+}

@@ -1,9 +1,8 @@
-import Resources from './resources';
-import { defaultNS } from '../i18n';
+import { Resources, defaultNS } from '../../i18n'
 
-declare module 'i18next' {
+export declare module 'i18next' {
 	interface CustomTypeOptions {
-		defaultNS: typeof defaultNS;
-		resources: Resources;
+		resources: Resources
 	}
+	// Helper type to extract keys from a namespace
 }

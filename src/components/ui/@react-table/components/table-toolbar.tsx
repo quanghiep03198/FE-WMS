@@ -1,25 +1,25 @@
-import { Table } from '@tanstack/react-table';
-import React, { useContext } from 'react';
-import { Div, Button, Icon, Toggle } from '../..';
-import Tooltip from '../../@override/tooltip';
-import { TableContext } from '../context/table.context';
-import { GlobalFilter, GlobalFilterPopover } from './global-filter';
-import { TableViewOptions } from './table-view-options';
-import { cn } from '@/common/utils/cn';
+import { Table } from '@tanstack/react-table'
+import React, { useContext } from 'react'
+import { Div, Button, Icon, Toggle, Tooltip } from '../..'
+import { TableContext } from '../context/table.context'
+import { GlobalFilter, GlobalFilterPopover } from './global-filter'
+import { TableViewOptions } from './table-view-options'
+import { cn } from '@/common/utils/cn'
+import { useTranslation } from 'react-i18next'
 
 type TableToolbarProps<TData> = {
-	table: Table<TData>;
-	globalFilter: string;
-	isFiltered: boolean;
-	onGlobalFilterChange: React.Dispatch<React.SetStateAction<string>>;
-	onClearAllFilters: () => void;
-
-	slot?: React.ReactNode;
-};
+	table: Table<TData>
+	globalFilter: string
+	isFilterDirty: boolean
+	onGlobalFilterChange: React.Dispatch<React.SetStateAction<string>>
+	onResetFilters: () => void
+	slot?: React.ReactNode
+}
 
 export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
-	const { table, globalFilter, isFiltered, slot, onGlobalFilterChange, onClearAllFilters } = props;
-	const { isFilterOpened, setIsFilterOpened } = useContext(TableContext);
+	const { table, globalFilter, isFilterDirty, slot, onGlobalFilterChange, onResetFilters: onClearAllFilters } = props
+	const { isFilterOpened, setIsFilterOpened } = useContext(TableContext)
+	const { t } = useTranslation('ns_common')
 
 	return (
 		<Div className='flex items-center justify-between sm:justify-end'>
@@ -31,7 +31,7 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 						variant='destructive'
 						size='icon'
 						onClick={onClearAllFilters}
-						className={cn('h-8 w-8', !isFiltered && 'hidden')}>
+						className={cn(!isFilterDirty && 'hidden')}>
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
@@ -42,19 +42,18 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 						onGlobalFilterChange={onGlobalFilterChange}
 					/>
 				</Div>
-				<Tooltip content={isFilterOpened ? 'Đóng bộ lọc' : 'Mở bộ lọc'}>
-					<Toggle
-						variant='outline'
-						pressed={isFilterOpened}
-						onPressedChange={() => setIsFilterOpened(!isFilterOpened)}
+				<Tooltip content={t('ns_common:table.filter')}>
+					<Button
+						variant={isFilterOpened ? 'secondary' : 'outline'}
+						onClick={() => setIsFilterOpened(!isFilterOpened)}
 						disabled={!table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter)}
-						size='sm'>
-						<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
-					</Toggle>
+						size='icon'>
+						<Icon className='size-4' name={isFilterOpened ? 'FilterX' : 'Filter'} />
+					</Button>
 				</Tooltip>
 				<TableViewOptions table={table} />
 				{slot}
 			</Div>
 		</Div>
-	);
+	)
 }

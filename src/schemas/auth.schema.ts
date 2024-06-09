@@ -1,8 +1,9 @@
-import z from 'zod';
+import { i18n } from '@/i18n'
+import z from 'zod'
 
 export const loginSchema = z.object({
-	email: z.string({ required_error: 'Enter your email' }),
-	password: z.string({ required_error: 'Enter your password' })
-});
+	username: z.string({ required_error: i18n.t('ns_auth:validation.require_account') }),
+	password: z.string({ required_error: i18n.t('ns_auth:validation.require_password') })
+})
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>

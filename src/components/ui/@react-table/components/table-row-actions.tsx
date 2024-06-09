@@ -1,26 +1,20 @@
-import {
-	Button,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-	Icon
-} from '@/components/ui';
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 
 type DataTableRowActionsProps = {
-	enableDeleting?: boolean;
-	enableEditing?: boolean;
-	slot?: React.ReactNode;
-	onDelete?: AnonymousFunction;
-	onEdit?: AnonymousFunction;
-};
+	enableDeleting?: boolean
+	enableEditing?: boolean
+	slot?: React.ReactNode
+	onDelete?: AnonymousFunction
+	onEdit?: AnonymousFunction
+}
 
 export const DataTableRowActions: React.FC<DataTableRowActionsProps> = (props) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button variant='ghost' size='icon'>
-					<Icon name='EllipsisVertical' />
+					<DotsHorizontalIcon />
 					<span className='sr-only'>Open menu</span>
 				</Button>
 			</DropdownMenuTrigger>
@@ -30,7 +24,7 @@ export const DataTableRowActions: React.FC<DataTableRowActionsProps> = (props) =
 					disabled={!props.enableEditing}
 					className='flex items-center gap-x-3'
 					onClick={() => {
-						if (props.onEdit) props.onEdit();
+						if (props.onEdit) props.onEdit()
 					}}>
 					<Icon name='Pencil' />
 					Cập nhật
@@ -40,12 +34,12 @@ export const DataTableRowActions: React.FC<DataTableRowActionsProps> = (props) =
 					disabled={!props.enableDeleting}
 					className='flex items-center gap-x-3'
 					onClick={() => {
-						if (props.onDelete) props.onDelete();
+						if (props.onDelete) props.onDelete()
 					}}>
 					<Icon name='Trash2' />
 					Xóa
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
-	);
-};
+	)
+}
