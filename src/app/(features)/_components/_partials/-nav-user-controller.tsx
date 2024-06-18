@@ -39,7 +39,7 @@ const NavUserControl: React.FC = () => {
 				</Avatar>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' sideOffset={8} className='w-64'>
-				<DropdownMenuLabel>{user?.display_name}</DropdownMenuLabel>
+				<DropdownMenuLabel className='capitalize'>{user?.display_name ?? 'Unknown'}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{navigationConfig
 					.filter((item) => item.type === 'preference' && item.path !== '/keybindings')

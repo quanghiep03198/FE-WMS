@@ -7,50 +7,43 @@ import { useNavigate, useRouter } from '@tanstack/react-router'
 import React, { useContext, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
-type FormValue = { company_code: string }
+type FormValues = { company_code: string }
 
 const WorkplaceSelectionForm: React.FC = () => {
-	const { isAuthenticated: authenticated, setUserCompany } = useAuth()
-	const navigate = useNavigate()
+	const { isAuthenticated, setUserCompany } = useAuth()
 	const { dispatch } = useContext(StepContext)
 	const { t } = useTranslation(['ns_auth', 'ns_company'])
-	const form = useForm<FormValue>()
+	const form = useForm<FormValues>()
 	const companyCode = form.watch('company_code')
 	const router = useRouter()
 
 	const { data, isFetching } = useQuery({
-		queryKey: ['companies', authenticated],
-		queryFn: CompanyService.getCompanies,
-		enabled: Boolean(authenticated),
-		select(data) {
-			return data.metadata
+		queryKey: ['companies'],
+		queryFn: () => CompanyService.getCompanies(),
+		enabled: isAuthenticated,
+		select: (data) => {
+			return Array.isArray(data.metadata)
+				? data.metadata.map((company) => ({ value: company.company_code, label: company.display_name }))
+				: []
 		}
 	})
-
-	const companyOptions = useMemo(() => {
-		return Array.isArray(data)
-			? data.map((company) => ({ value: company.company_code, label: company.display_name }))
-			: []
-	}, [data])
 
 	useEffect(() => {
 		if (companyCode) dispatch({ type: 'COMPLETE' })
 	}, [companyCode])
 
-	const handleCompleteLogin = ({ company_code }: FormValue) => {
-		router.invalidate().finally(() => setUserCompany(company_code))
-	}
-
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit(handleCompleteLogin)}>
+			<Form
+				onSubmit={form.handleSubmit(({ company_code }) => {
+					router.invalidate().finally(() => setUserCompany(company_code))
+				})}>
 				<SelectFieldControl
 					label={t('ns_company:company')}
 					name='company_code'
-					options={companyOptions}
+					options={data}
 					disabled={isFetching}
 					control={form.control}
 				/>

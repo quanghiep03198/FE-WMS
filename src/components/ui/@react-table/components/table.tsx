@@ -1,88 +1,118 @@
-import { cn } from '@/common/utils/cn'
-import { Table as TableType, flexRender } from '@tanstack/react-table'
-import { useContext } from 'react'
-import tw from 'tailwind-styled-components'
+import { Row, flexRender, type Table as TTable } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { CSSProperties, useContext, useRef } from 'react'
 import { DataTableProps } from '.'
-import { Div, Icon, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
+import { Div, Icon, Separator, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '../..'
 import { TableContext } from '../context/table.context'
 import ColumnResizer from './column-resizer'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
+import { cn } from '@/common/utils/cn'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
-		React.AllHTMLAttributes<HTMLTableElement> {
-	table: TableType<TData>
+		React.AllHTMLAttributes<HTMLTableElement>,
+		Pick<React.ComponentProps<'div'>, 'style'> {
+	table: TTable<TData>
 }
 
-export default function TableDataGrid<TData, TValue>({ table, columns, loading, ...props }: TableProps<TData, TValue>) {
+export default function TableDataGrid<TData, TValue>({
+	containerProps = { style: { height: '500px' } },
+	table,
+	loading
+}: TableProps<TData, TValue>) {
 	const { handleScroll } = useContext(TableContext)
 
+	//The virtualizer needs to know the scrollable container element
+	const { rows } = table.getRowModel()
+	const containerRef = useRef<HTMLDivElement>(null)
+
+	const virtualizer = useVirtualizer({
+		count: rows.length,
+		getScrollElement: () => containerRef.current,
+		estimateSize: () => 52,
+		measureElement:
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
+				? (element) => element?.getBoundingClientRect().height
+				: undefined,
+		overscan: 1,
+		indexAttribute: 'data-index'
+	})
+
 	return (
-		<TableWrapper className='group w-full shadow'>
-			<ScrollArea
-				onWheel={handleScroll}
-				className={cn('relative', { 'h-[60vh]': table.getRowModel().rows.length >= 10 })}>
-				<Table
-					className='border-separate border-spacing-0'
-					style={{
-						width: table.getCenterTotalSize(),
-						minWidth: '100%'
-					}}
-					{...props}>
-					<TableHeader className='sticky top-0 z-10 border-b bg-opacity-90 backdrop-blur'>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id} className='sticky top-0 hover:bg-background'>
-								{headerGroup.headers.map((header, index) => (
-									<TableHead
-										className='relative whitespace-nowrap border-b px-4'
-										{...{
-											key: header.id,
-											colSpan: header.colSpan,
-											style: {
-												width: header.getSize()
-											}
-										}}>
-										<TableCellHead table={table} header={header} />
-										{index !== headerGroup.headers.length - 1 && table.options.enableColumnResizing && (
-											<ColumnResizer header={header} />
-										)}
-									</TableHead>
-								))}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{loading ? (
-							<TableBodyLoading prepareRows={10} prepareCols={columns.length} />
-						) : (
-							table.getRowModel().rows.map((row) => (
-								<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+		<Div
+			ref={containerRef}
+			onWheel={handleScroll}
+			className='z-0 w-full overflow-auto rounded-sm border bg-secondary/50 shadow scrollbar'
+			{...containerProps}>
+			<Table className='relative top-0' style={{ minWidth: table.getTotalSize() }}>
+				<TableHeader className='sticky top-0 z-20'>
+					{table.getHeaderGroups().map((headerGroup) => (
+						<TableRow key={headerGroup.id}>
+							{headerGroup.headers.map((header, index) => (
+								<TableHead
+									key={header.id}
+									colSpan={header.colSpan}
+									data-sticky={header.column.columnDef?.meta?.sticky}
+									style={{ position: 'relative', width: header.getSize() }}>
+									<TableCellHead table={table} header={header} />
+									{index === headerGroup.headers.length - 1 ? null : header.column.getCanResize() ? (
+										<ColumnResizer header={header} />
+									) : (
+										<Separator
+											orientation='vertical'
+											className='absolute right-0 top-1/2 h-3/5 w-1 -translate-y-1/2 bg-muted'
+										/>
+									)}
+								</TableHead>
+							))}
+						</TableRow>
+					))}
+				</TableHeader>
+				<TableBody>
+					{loading ? (
+						<TableBodyLoading table={table} prepareRows={10} />
+					) : (
+						virtualizer.getVirtualItems().map((virtualRow, index) => {
+							const row = rows[virtualRow.index] as Row<TData>
+							const translateY = (offset: number): CSSProperties['transform'] => `translateY(${offset}px)`
+							return (
+								<TableRow
+									key={row.id}
+									data-index={virtualRow.index}
+									ref={(node) => virtualizer.measureElement(node)}
+									style={{ transform: translateY(virtualRow.start - index * virtualRow.size) }}>
 									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											<span className='line-clamp-1'>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
-											</span>
+										<TableCell
+											key={cell.id}
+											data-sticky={cell.column.columnDef?.meta?.sticky}
+											data-state={row.getIsSelected() && 'selected'}
+											style={{ width: cell.column.getSize() }}>
+											{cell.getContext()?.cell ? (
+												<Typography className='line-clamp-1'>
+													{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												</Typography>
+											) : (
+												flexRender(cell.column.columnDef.cell, cell.getContext())
+											)}
 										</TableCell>
 									))}
 								</TableRow>
-							))
-						)}
-					</TableBody>
-				</Table>
-				<ScrollBar orientation='horizontal' />
-			</ScrollArea>
+							)
+						})
+					)}
+				</TableBody>
+			</Table>
+
 			{!loading && table.getRowModel().rows.length === 0 && (
-				<Div className='flex h-[25vh] w-full items-center justify-center'>
+				<Div className='flex h-full w-full items-center justify-center bg-background'>
 					<Div className='flex items-center justify-center gap-x-2 text-muted-foreground'>
-						<Icon name='PackageOpen' strokeWidth={1} size={32} /> Không có dữ liệu
+						<Icon name='PackageOpen' strokeWidth={1} size={32} /> No data
 					</Div>
 				</Div>
 			)}
-		</TableWrapper>
+		</Div>
 	)
 }
-
-const TableWrapper = tw.div`relative flex flex-col items-stretch h-full max-w-full mx-auto overflow-clip border rounded-lg`
 
 TableDataGrid.displayName = 'DataTable'

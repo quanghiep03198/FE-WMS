@@ -47,7 +47,7 @@ const ImportExportOverview: React.FC = () => {
 							<Line
 								type='monotone'
 								dataKey='export'
-								stroke='hsl(var(--destructive))'
+								stroke='hsl(var(--foreground))'
 								strokeWidth={1}
 								activeDot={{ r: 4 }}
 							/>

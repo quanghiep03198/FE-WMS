@@ -16,8 +16,8 @@ function KeybindingsPage() {
 	const { t } = useTranslation<'ns_common', undefined>('ns_common')
 
 	const navigationCommands = navigationConfig
-		.map((item) => ({
-			..._.pick(item, ['id', 'title', 'keybinding']),
+		.map((item, index) => ({
+			id: String(index + 1),
 			title: t(item.title, { defaultValue: item.title }),
 			keybinding: String(item.keybinding).split('.').join('+')
 		}))
@@ -32,7 +32,7 @@ function KeybindingsPage() {
 			title: t('actions.logout', { defaultValue: null }),
 			keybinding: 'ctrl+q'
 		}
-	].map((item, index) => ({ ...item, id: navigationConfig.length + index + 1 })) as CommandList
+	].map((item, index) => ({ ...item, id: String(navigationConfig.length + index + 1) })) as CommandList
 
 	const columnHelper = createColumnHelper<Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>>()
 
@@ -40,19 +40,23 @@ function KeybindingsPage() {
 		columnHelper.accessor('id', {
 			header: 'ID',
 			enableSorting: true,
-			maxSize: 64
+			enableResizing: false,
+			size: 64
 		}),
 		columnHelper.accessor('title', {
 			header: t('ns_common:function'),
 			enableSorting: true,
 			enableColumnFilter: true,
-			filterFn: 'equals'
+			filterFn: 'equals',
+			minSize: 240
 		}),
 		columnHelper.accessor('keybinding', {
 			header: t('ns_common:navigation.keyboard_shortcut'),
 			enableSorting: true,
 			enableColumnFilter: true,
+			enableResizing: true,
 			filterFn: 'weakEquals',
+			minSize: 240,
 			cell: ({ getValue }) => (
 				<Badge variant='secondary' className='font-mono'>
 					{getValue()}

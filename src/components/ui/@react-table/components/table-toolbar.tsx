@@ -26,7 +26,7 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 			<GlobalFilter table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
 
 			<Div className='grid grid-flow-col items-center gap-x-1'>
-				<Tooltip content='Xóa lọc'>
+				<Tooltip message={t('ns_common:actions.clear_filter')}>
 					<Button
 						variant='destructive'
 						size='icon'
@@ -35,20 +35,19 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
-				<Div className='hidden sm:block'>
-					<GlobalFilterPopover
-						table={table}
-						globalFilter={globalFilter}
-						onGlobalFilterChange={onGlobalFilterChange}
-					/>
-				</Div>
-				<Tooltip content={t('ns_common:table.filter')}>
+
+				<GlobalFilterPopover
+					table={table}
+					globalFilter={globalFilter}
+					onGlobalFilterChange={onGlobalFilterChange}
+				/>
+				<Tooltip message={t('ns_common:table.filter')}>
 					<Button
 						variant={isFilterOpened ? 'secondary' : 'outline'}
 						onClick={() => setIsFilterOpened(!isFilterOpened)}
 						disabled={!table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter)}
 						size='icon'>
-						<Icon className='size-4' name={isFilterOpened ? 'FilterX' : 'Filter'} />
+						<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
 					</Button>
 				</Tooltip>
 				<TableViewOptions table={table} />

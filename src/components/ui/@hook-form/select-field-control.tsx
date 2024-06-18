@@ -14,6 +14,7 @@ import {
 } from '..'
 import FormLabel from './alternative-form-label'
 import { BaseFieldControl } from '../../../common/types/hook-form'
+import { useTranslation } from 'react-i18next'
 
 export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {
@@ -24,6 +25,9 @@ export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T>
 	}
 
 export function SelectFieldControl<T extends FieldValues>(props: SelectFieldControlProps<T>) {
+	const { getFieldState, getValues } = useFormContext()
+	const { t } = useTranslation()
+
 	const {
 		control,
 		name,
@@ -32,13 +36,14 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 		orientation,
 		className,
 		defaultValue,
-		placeholder = 'Select ...',
+		placeholder = t('ns_common:actions.search') + ' ... ',
 		messageType: messageMode = 'alternative',
 		onValueChange,
 		...restProps
 	} = props
 	const id = useId()
-	const { getFieldState } = useFormContext()
+
+	console.log(getValues(name))
 
 	return (
 		<FormField
@@ -54,7 +59,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageMode} />
 						<Select
 							value={field.value}
-							defaultValue={field.value}
+							defaultValue={field.value ?? getValues(name)}
 							onValueChange={(value) => {
 								field.onChange(value)
 								if (onValueChange) {

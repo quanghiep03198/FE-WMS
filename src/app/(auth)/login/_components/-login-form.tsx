@@ -62,7 +62,7 @@ const LoginForm: React.FC = () => {
 	useEffect(() => {
 		if (persistAccountCheckboxRef.current?.checked && !_.isEmpty(username)) setPersistedAccount(username)
 		else setPersistedAccount(undefined)
-	}, [username, persistAccountCheckboxRef.current])
+	}, [username, persistedAccount, persistAccountCheckboxRef.current])
 
 	return (
 		<FormProvider {...form}>

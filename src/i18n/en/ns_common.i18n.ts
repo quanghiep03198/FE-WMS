@@ -21,6 +21,8 @@ export default {
 		login: 'Log in',
 		logout: 'Log out',
 		search: 'Search',
+		detail: 'Detail',
+		clear_filter: 'Clear filters',
 		toggle_sidebar: 'Toggle Primary Side Bar',
 		toggle_theme: 'Toggle Theme'
 	},
@@ -29,7 +31,10 @@ export default {
 		page: 'Page {{page}}',
 		display: 'Display',
 		filter: 'Filter',
-		no_filter_applied: 'No filter is applied'
+		no_filter_applied: 'No filter is applied',
+		no_data: 'No data',
+		search_in_column: 'Search in column',
+		no_match_result: 'No results found.'
 	},
 	pagination: {
 		next_page: 'Next page',
@@ -44,18 +49,24 @@ export default {
 		account: 'Account',
 		keyboard_shortcut: 'Keyboard shortcut',
 		wh_dashboard: 'Dashboard',
+		wh_inbound_outbound: 'Import/Export commands',
 		wh_management: 'Warehouse management',
 		wh_import_management: 'Import management',
 		wh_export_management: 'Export management',
 		wh_transfer_managment: 'Transfer management',
 		wh_inventory_management: 'Inventory',
-		wh_exchange_n_return_management: 'Exchange & Return',
+		wh_receiving_checking_management: 'Receiving checking management',
 		wh_report_management: 'Report'
 	},
 	notification: {
 		processing_request: 'Processing request ...',
 		success: 'Successfully !',
 		error: 'Something went wrong !'
+	},
+	confirmation: {
+		delete_title: 'Delete selected record(s)',
+		delete_description:
+			'Are you sure you want to delete the selected record(s)? The data will be irrecoverable. This action cannot be undone.'
 	},
 	errors: {
 		'404': 'Page Not Found',

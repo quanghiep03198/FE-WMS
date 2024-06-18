@@ -38,7 +38,7 @@ const FAQsSection: React.FunctionComponent = () => {
 		<Div
 			ref={sectionRef}
 			as='section'
-			className='relative mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
+			className='relative z-0 mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
 			<Typography variant='h3'>Frequently asked questions</Typography>
 
 			<Accordion type='multiple' className='w-full max-w-4xl'>

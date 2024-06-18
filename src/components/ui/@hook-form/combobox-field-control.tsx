@@ -1,10 +1,11 @@
 import { cn } from '@/common/utils/cn'
-import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
+import { CommandGroup, CommandList } from 'cmdk'
+import { useId, useRef } from 'react'
+import { Field, FieldValue, FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import {
 	Button,
 	Command,
 	CommandEmpty,
-	CommandGroup,
 	CommandInput,
 	CommandItem,
 	FormControl,
@@ -13,7 +14,6 @@ import {
 	FormItem,
 	FormMessage,
 	Icon,
-	Label,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
@@ -22,35 +22,43 @@ import {
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 import FormLabel from './alternative-form-label'
-import { useId } from 'react'
+import { useTranslation } from 'react-i18next'
 
-type ComboboxFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
+type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = BaseFieldControl<T> & {
 	form: UseFormReturn<T>
+	data: Array<D>
+	labelField: keyof D
+	valueField: keyof D
+	template?: React.FC<{ data: D }>
 	onInput?: (value: string) => unknown
 	onSelect?: (value: string) => unknown
-	options: Array<{
-		label: string
-		value: PathValue<T, Path<T>>
-	}>
 }
 
-export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxFieldControlProps<T>) {
+export function ComboboxFieldControl<T extends FieldValues, D extends Record<string, any>>(
+	props: ComboboxFieldControlProps<T, D>
+) {
+	const { t } = useTranslation()
+
 	const {
 		form,
 		name,
 		control,
-		options,
+		data,
+		labelField,
+		valueField,
 		label,
 		description,
-		placeholder,
+		placeholder = t('ns_common:actions.search') + ' ... ',
 		orientation,
 		hidden,
+		template: CommandItemTemplate,
 		messageType = 'alternative',
 		onInput,
 		onSelect
 	} = props
 
 	const id = useId()
+	const triggerRef = useRef<typeof Button.prototype>(null)
 
 	return (
 		<FormField
@@ -69,24 +77,28 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 								<PopoverTrigger asChild>
 									<FormControl>
 										<Button
+											role='combobox'
 											variant='outline'
 											size='sm'
 											id={id}
-											role='combobox'
+											ref={triggerRef}
 											className={cn(
 												'w-full justify-between hover:bg-background',
 												!field.value && 'text-muted-foreground'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
 												{field.value
-													? options.find((option) => option.value === field.value)?.label
+													? data?.find((option) => option[valueField] === field.value)?.[labelField]
 													: placeholder}
 											</Typography>
-											<Icon name='ChevronsUpDown' />
+											<Icon name='ChevronsUpDown' className='ml-auto' />
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent className='w-full p-0' align='start'>
+								<PopoverContent
+									className='w-full p-0'
+									style={{ width: triggerRef.current?.offsetWidth }}
+									align='start'>
 									<Command>
 										<CommandInput
 											placeholder={placeholder}
@@ -96,28 +108,40 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
 											}}
 										/>
 										<CommandEmpty>Không có dữ liệu</CommandEmpty>
-										<CommandGroup>
-											<ScrollArea className='flex h-56 flex-col items-stretch gap-y-px'>
-												{options.map((option) => (
-													<CommandItem
-														key={option.value}
-														value={option.label}
-														className='line-clamp-1 flex items-center gap-x-4'
-														onSelect={() => {
-															form.setValue(name, option.value)
-															if (onSelect) onSelect(option.value)
-														}}>
-														<Typography variant='small' className='flex-1'>
-															{option.label}
-														</Typography>
-														<Icon
-															name='Check'
-															className={cn(option.value === field.value ? 'opacity-100' : 'opacity-0')}
-														/>
-													</CommandItem>
-												))}
-											</ScrollArea>
-										</CommandGroup>
+
+										<CommandList>
+											<CommandGroup>
+												<ScrollArea className='h-56' onWheel={(e) => e.stopPropagation()}>
+													{Array.isArray(data) &&
+														data.map((option) => (
+															<CommandItem
+																key={option[valueField]}
+																value={option[valueField]}
+																className='line-clamp-1 flex items-center gap-x-4'
+																onSelect={() => {
+																	form.setValue(name, option[valueField])
+																	if (onSelect && typeof onSelect === 'function')
+																		onSelect(option[valueField])
+																}}>
+																{CommandItemTemplate ? (
+																	<CommandItemTemplate data={option} />
+																) : (
+																	<Typography variant='small' className='line-clamp-1 flex-1'>
+																		{option[labelField]}
+																	</Typography>
+																)}
+																<Icon
+																	name='Check'
+																	className={cn(
+																		'ml-auto',
+																		option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
+																	)}
+																/>
+															</CommandItem>
+														))}
+												</ScrollArea>
+											</CommandGroup>
+										</CommandList>
 									</Command>
 								</PopoverContent>
 							</Popover>

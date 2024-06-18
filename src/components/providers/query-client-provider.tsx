@@ -22,8 +22,10 @@ export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			staleTime: 1000 * 60 * 60,
-			refetchOnWindowFocus: false,
-			refetchOnMount: false
+			networkMode: 'always'
+		},
+		mutations: {
+			networkMode: 'always'
 		}
 	}
 })

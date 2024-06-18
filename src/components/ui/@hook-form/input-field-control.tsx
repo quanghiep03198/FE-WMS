@@ -1,10 +1,11 @@
 import { cn } from '@/common/utils/cn'
-import React, { forwardRef, memo, useId, useRef, useState } from 'react'
+import React, { forwardRef, memo, useEffect, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormMessage } from '..'
 import { Input, InputProps } from '../@shadcn/input'
 import FormLabel from './alternative-form-label'
 import { BaseFieldControl } from '../../../common/types/hook-form'
+import { useDeepCompareEffect } from 'ahooks'
 
 export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & InputProps
 
@@ -12,6 +13,7 @@ export function InputFieldControl<T extends FieldValues>(
 	props: InputFieldControlProps<T> & React.PropsWithRef<T> & React.RefAttributes<T>,
 	ref?: React.ForwardedRef<HTMLInputElement>
 ) {
+	const { getFieldState, getValues } = useFormContext()
 	const {
 		label,
 		name,
@@ -23,13 +25,12 @@ export function InputFieldControl<T extends FieldValues>(
 		type,
 		hidden,
 		orientation,
-		defaultValue,
+		defaultValue = getValues(name),
 		messageType = 'alternative',
 		...restProps
 	} = props
 
 	const id = useId()
-	const { getFieldState } = useFormContext()
 	const [value, setValue] = useState<string>(defaultValue)
 	const localRef = useRef<typeof Input.prototype>(null)
 	const resolvedRef = (ref ?? localRef) as typeof localRef
@@ -51,6 +52,7 @@ export function InputFieldControl<T extends FieldValues>(
 		<FormField
 			control={control}
 			name={name}
+			defaultValue={defaultValue}
 			render={({ field }) => {
 				return (
 					<FormItem

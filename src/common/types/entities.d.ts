@@ -1,5 +1,8 @@
+import { WarehouseTypes } from '../constants/constants'
+
 export interface IBaseEntity {
 	id: string
+	[key: string]: any
 }
 
 export interface IUser extends IBaseEntity {
@@ -20,16 +23,18 @@ export interface ICompany extends IBaseEntity {
 }
 
 export interface IDepartment extends IBaseEntity {
-	department_code: string
-	department_name: string
+	ERP_dept_code: string
+	MES_dept_name: string
+	company_code: string
+	dept_code_upper: string
 }
 
 export interface IWarehouse extends IBaseEntity {
 	company_code: string
 	warehouse_num: string
 	warehouse_name: string
-	type_warehouse: 'A' | 'B' | 'C' | 'D' | 'E'
-	area: string | number
+	type_warehouse: keyof typeof WarehouseTypes & string
+	area: string
 	dept_code: string
 	dept_name: string
 	remark: string | null
@@ -37,4 +42,27 @@ export interface IWarehouse extends IBaseEntity {
 	is_default: boolean
 	employee_code: string | null
 	employee_name: string | null
+}
+
+export interface IEmployee extends IBaseEntity {
+	id: number
+	employee_name: string
+	employee_code: string
+}
+
+export interface IProduction extends IBaseEntity {
+	company_code
+	date
+	no
+	ship_order
+	container
+	seal_number
+	car_number
+	total_boxes
+	dept_name
+	employee_name
+	updated
+	remark
+	status_approve
+	month_close: string
 }

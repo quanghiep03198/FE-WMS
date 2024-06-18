@@ -65,8 +65,8 @@ export const recentExports = [
 	}
 ]
 export const transactionOverview = [
-	{ name: 'Pending', value: 150, color: '#a3a3a3' },
-	{ name: 'Completed', value: 400, color: '#737373' },
+	{ name: 'Pending', value: 150, color: 'hsl(var(--accent))' },
+	{ name: 'Completed', value: 400, color: 'hsl(var(--primary))' },
 	{ name: 'Cancelled', value: 100, color: 'hsl(var(--destructive))' }
 ]
 

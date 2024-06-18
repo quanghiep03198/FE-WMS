@@ -1,20 +1,35 @@
-import { Skeleton, TableCell, TableRow } from '../..'
+import { Table } from '@tanstack/react-table'
+import { TableCell, TableRow } from '../..'
+import { cn } from '@/common/utils/cn'
+import Skeleton from '../../@custom/skeleton'
 
-type DataTableLoading = {
+type DataTableLoading<TData> = {
+	table: Table<TData>
 	prepareRows: number
-	prepareCols: number
 }
 
-export function TableBodyLoading({ prepareRows, prepareCols }: DataTableLoading) {
-	const preRenderCells = Array.apply(null, Array(prepareCols)).map((_, i) => i)
-	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, j) => j)
-	return preRenderRows.map((_, i) => (
-		<TableRow key={i}>
-			{preRenderCells.map((_, j) => (
-				<TableCell key={j} className='py-4'>
-					<Skeleton className='h-3 w-full bg-muted' />
-				</TableCell>
-			))}
+export function TableBodyLoading<T = unknown>({ prepareRows, table }: DataTableLoading<T>) {
+	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, index) => index)
+	const preRenderColumns = table.getAllColumns()
+
+	return preRenderRows.map((row) => (
+		<TableRow key={row}>
+			{preRenderColumns.map((column) => {
+				const isStickyLeft = column?.columnDef.meta?.sticky === 'left'
+				const isStickyRight = column?.columnDef.meta?.sticky === 'right'
+				const key = crypto.randomUUID()
+				return (
+					<TableCell
+						key={key}
+						style={{ width: column.getSize() }}
+						className={cn({
+							'sticky left-0 z-10': isStickyLeft,
+							'sticky right-0 z-10': isStickyRight
+						})}>
+						<Skeleton />
+					</TableCell>
+				)
+			})}
 		</TableRow>
 	))
 }

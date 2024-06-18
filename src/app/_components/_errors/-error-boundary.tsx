@@ -45,7 +45,7 @@ const ErrorFallback: React.FC<{ error: Error }> = ({ error }) => {
 							color='muted'>
 							{error.stack}
 						</Typography>
-						<Button variant='link' className='px-0' onClick={() => setOpen(!open)}>
+						<Button variant='link' className='px-0 text-foreground' onClick={() => setOpen(!open)}>
 							{open ? 'Show less' : 'Show more'}
 						</Button>
 					</Div>

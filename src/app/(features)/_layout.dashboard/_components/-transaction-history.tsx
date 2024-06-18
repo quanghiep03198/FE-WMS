@@ -32,6 +32,7 @@ const TransactionHistory: React.FC = () => {
 			columnHelper.accessor('sale_representator', {
 				header: 'Sale Representative',
 				enableSorting: true,
+				size: 180,
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return (
@@ -44,11 +45,12 @@ const TransactionHistory: React.FC = () => {
 			columnHelper.accessor('company_name', {
 				header: 'Company Name',
 				enableSorting: true,
-				maxSize: 80
+				size: 200
 			}),
 			columnHelper.accessor('amount', {
 				header: 'Amount',
-				enableSorting: true
+				enableSorting: true,
+				size: 200
 			})
 		],
 		[]
@@ -70,6 +72,7 @@ const TransactionHistory: React.FC = () => {
 						paginationProps={{ hidden: true }}
 						toolbarProps={{ hidden: true }}
 						enableColumnResizing={true}
+						containerProps={{ style: { height: '320px' } }}
 					/>
 				</Div>
 			</Div>

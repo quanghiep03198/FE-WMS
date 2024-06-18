@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
@@ -34,15 +34,15 @@ export const NavBreadcrumb: React.FC = () => {
 				</BreadcrumbItem>
 				<BreadcrumbSeparator />
 				{breadcrumb.length > 3 ? (
-					<React.Fragment>
+					<Fragment>
 						<DropdownMenu>
 							<DropdownMenuTrigger className='flex items-center gap-1'>
 								<BreadcrumbEllipsis className='h-4 w-4' />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='start'>
-								{breadcrumb.slice(0, 3).map((item) => (
+								{breadcrumb.slice(0, 3).map((item, index) => (
 									<DropdownMenuItem asChild>
-										<Link to={item.href} className='font-semibold'>
+										<Link to={item.href} className='font-semibold' key={index}>
 											{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 										</Link>
 									</DropdownMenuItem>
@@ -55,11 +55,11 @@ export const NavBreadcrumb: React.FC = () => {
 								{t(breadcrumb.at(-1)?.title, { ns: 'ns_common', defaultValue: breadcrumb.at(-1)?.title })}
 							</Link>
 						</BreadcrumbLink>
-					</React.Fragment>
+					</Fragment>
 				) : (
 					breadcrumb.map((item, index) => (
-						<>
-							<BreadcrumbItem key={item.href}>
+						<Fragment key={index}>
+							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
 									<Link to={item.href} className='font-medium' activeProps={{ className: 'text-foreground' }}>
 										{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
@@ -67,7 +67,7 @@ export const NavBreadcrumb: React.FC = () => {
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 							{index < breadcrumb.length - 1 && <BreadcrumbSeparator />}
-						</>
+						</Fragment>
 					))
 				)}
 			</BreadcrumbList>

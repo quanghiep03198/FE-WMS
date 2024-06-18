@@ -14,7 +14,7 @@ export function GlobalFilter<T>(props: GlobalFilterProps<T>) {
 
 	return (
 		<>
-			<Div className='relative w-fit sm:hidden'>
+			<Div className='relative sm:hidden xl:basis-1/4'>
 				<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
 				<DebouncedInput
 					value={props.globalFilter ?? ''}
@@ -29,11 +29,13 @@ export function GlobalFilter<T>(props: GlobalFilterProps<T>) {
 }
 
 export function GlobalFilterPopover<T>(props: GlobalFilterProps<T>) {
+	const { t } = useTranslation()
+
 	return (
 		<Popover>
-			<Tooltip content='Tìm kiếm'>
+			<Tooltip message={t('ns_common:actions.search')}>
 				<PopoverTrigger asChild>
-					<Button variant='outline' size='icon' className='h-8 w-8'>
+					<Button variant='outline' size='icon' className='hidden sm:inline-flex'>
 						<Icon name='Search' />
 					</Button>
 				</PopoverTrigger>

@@ -1,7 +1,11 @@
+import ErrorBoundary from '@/app/_components/_errors/-error-boundary'
 import useQueryParams from '@/common/hooks/use-query-params'
+import env from '@/common/utils/env'
 import {
 	ColumnDef,
 	ColumnFiltersState,
+	OnChangeFn,
+	RowSelectionState,
 	SortingState,
 	TableOptions,
 	getCoreRowModel,
@@ -12,16 +16,15 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from '@tanstack/react-table'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useDeepCompareEffect } from 'ahooks'
+import _ from 'lodash'
+import { memo, useCallback, useState } from 'react'
 import { Div } from '../..'
 import { TableProvider } from '../context/table.context'
 import { fuzzyFilter } from '../utils/fuzzy-filter.util'
 import TableDataGrid from './table'
 import TablePagination from './table-pagination'
 import TableToolbar from './table-toolbar'
-import env from '@/common/utils/env'
-import _ from 'lodash'
-import ErrorBoundary from '@/app/_components/_errors/-error-boundary'
 
 type ConditionalPaginationProps<TData, T extends boolean> = T extends true
 	? Required<Omit<Pagination<TData>, 'docs'>>
@@ -29,7 +32,7 @@ type ConditionalPaginationProps<TData, T extends boolean> = T extends true
 
 type PaginationProps<TData, T extends boolean = false> = ConditionalPaginationProps<TData, T> & {
 	hidden?: boolean
-	manualPagination?: T
+	manualPagination?: boolean
 }
 
 export interface DataTableProps<TData, TValue> extends Partial<TableOptions<TData | any>> {
@@ -38,20 +41,23 @@ export interface DataTableProps<TData, TValue> extends Partial<TableOptions<TDat
 	loading?: boolean
 	manualFilter?: boolean
 	enableColumnResizing?: boolean
+	containerProps?: React.ComponentProps<'div'>
 	toolbarProps?: { hidden?: boolean; ltr?: boolean; slot?: React.ReactNode }
 	selectedRows?: Array<any>
 	paginationProps?: PaginationProps<TData>
-	onRowsSelectionChange?: (...args: any) => void
+	onRowsSelectionChange?: (...args: any[]) => void | OnChangeFn<RowSelectionState>
 }
 
 function DataTable<TData, TValue>({
 	data,
 	columns,
 	loading,
-	selectedRows,
+	containerProps,
 	paginationProps = { hidden: false, manualPagination: false },
 	toolbarProps = { hidden: false },
-	enableColumnResizing = false,
+	selectedRows,
+	enableColumnResizing = true,
+	enableRowSelection = false,
 	enableColumnFilters = true,
 	enableSorting = true,
 	enableExpanding = true,
@@ -62,6 +68,7 @@ function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [sorting, setSorting] = useState<SortingState>([])
+	const [rowSelection, setRowSelection] = useState({})
 	const [globalFilter, setGlobalFilter] = useState<string>('')
 	const { searchParams } = useQueryParams()
 	const pagination = {
@@ -72,7 +79,7 @@ function DataTable<TData, TValue>({
 	const table = useReactTable({
 		data: data ?? [],
 		columns,
-		initialState: { pagination },
+		initialState: { globalFilter: '', columnFilters: [], pagination },
 		state: {
 			sorting,
 			columnFilters,
@@ -86,7 +93,7 @@ function DataTable<TData, TValue>({
 		enableGlobalFilter,
 		enableColumnResizing,
 		columnResizeMode: 'onChange',
-		debugTable: env('VITE_NODE_ENV') === 'development',
+		debugAll: false,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		onGlobalFilterChange: setGlobalFilter,
@@ -99,37 +106,41 @@ function DataTable<TData, TValue>({
 		...props
 	} as TableOptions<TData>)
 
-	const clearAllFilter = useCallback(() => {
-		setGlobalFilter('')
-		setColumnFilters([])
+	const resetAllFilters = useCallback(() => {
+		table.resetGlobalFilter(table.initialState.globalFilter)
+		table.resetColumnFilters(true)
 	}, [])
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (onRowsSelectionChange && typeof onRowsSelectionChange === 'function')
 			onRowsSelectionChange(table.getSelectedRowModel().flatRows)
 	}, [table.getSelectedRowModel().flatRows])
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (Array.isArray(selectedRows) && selectedRows.length === 0) table.resetRowSelection()
 	}, [selectedRows])
 
 	return (
 		<ErrorBoundary>
 			<TableProvider hasNoFilter={columnFilters.length === 0 && globalFilter.length === 0}>
-				<Div className='flex h-full flex-col items-stretch gap-y-4'>
+				<Div className='flex h-full flex-col items-stretch gap-y-3'>
 					{toolbarProps.hidden ? null : (
 						<TableToolbar
 							table={table}
 							isFilterDirty={globalFilter.length !== 0 || columnFilters.length !== 0}
 							globalFilter={globalFilter}
 							onGlobalFilterChange={setGlobalFilter}
-							onResetFilters={clearAllFilter}
+							onResetFilters={resetAllFilters}
 							slot={toolbarProps.slot}
 						/>
 					)}
-					<TableDataGrid table={table} columns={columns} loading={loading} />
+					<TableDataGrid containerProps={containerProps} table={table} columns={columns} loading={loading} />
 					{paginationProps.hidden ? null : (
-						<TablePagination table={table} {..._.omit(paginationProps, 'hidden')} />
+						<TablePagination
+							table={table}
+							enableRowSelection={enableRowSelection as boolean}
+							{..._.omit(paginationProps, 'hidden')}
+						/>
 					)}
 				</Div>
 			</TableProvider>

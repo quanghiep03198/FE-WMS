@@ -42,7 +42,6 @@ function Layout() {
 			<LayoutComposition.Heading />
 			<LayoutComposition.MainSection as='section'>
 				<LayoutComposition.Sidebar />
-
 				<LayoutComposition.OutletWrapper>
 					<Outlet />
 				</LayoutComposition.OutletWrapper>

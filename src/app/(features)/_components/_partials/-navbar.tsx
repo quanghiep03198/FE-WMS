@@ -1,12 +1,12 @@
 import { Badge, Button, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
 import NavUserControl from './-nav-user-controller'
 import SearchDialog from './-search-dialog'
 import ThemeToggle from '../../../_components/_shared/-theme-toggle'
 import { NavBreadcrumb } from './-nav-breadcrumb'
+import NavDrawerSidebar from './-nav-drawer-sidebar'
 
 type NavbarProps = {
 	isCollapsed: boolean
@@ -19,12 +19,12 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 
 	return (
 		<>
-			<Div as='header' className='sticky top-0 z-50 h-20 bg-background/80 p-3 backdrop-blur-sm'>
-				<Div
-					as='nav'
-					className='flex items-center justify-between rounded border border-border bg-inherit px-3 py-2'>
+			<Div as='nav' className='sticky top-0 z-50 h-20 bg-background/80 p-3 backdrop-blur-sm'>
+				<Div className='flex items-center justify-between rounded border border-border bg-inherit px-3 py-2'>
 					<Div className='flex items-center gap-x-4'>
-						<Tooltip content={`${t('ns_common:theme')} (ctrl+b)`} contentProps={{ side: 'right' }}>
+						<Tooltip
+							message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}
+							contentProps={{ side: 'bottom', align: 'start' }}>
 							<Button size='icon' variant='outline' onClick={() => onCollapseStateChange(!isCollapsed)}>
 								<Icon name='Menu' />
 							</Button>
@@ -46,17 +46,14 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 						</Button>
 
 						<LanguageDropdown triggerProps={{ variant: 'outline' }} />
-						<Tooltip
-							content={`${t('ns_common:theme')} (ctrl+alt+t)`}
-							triggerProps={{ asChild: false }}
-							contentProps={{ side: 'bottom' }}>
+						<Tooltip message={t('ns_common:actions.toggle_theme')} triggerProps={{ className: 'size-9' }}>
 							<ThemeToggle variant='outline' />
 						</Tooltip>
-
 						<NavUserControl />
 					</Div>
 				</Div>
 			</Div>
+			<NavDrawerSidebar open={isCollapsed} onOpenStateChange={onCollapseStateChange} />
 			<SearchDialog open={open} onOpenChange={setOpen} />
 		</>
 	)

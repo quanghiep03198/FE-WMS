@@ -3,7 +3,7 @@ import { Tooltip as TooltipWrapper, TooltipProvider, TooltipTrigger, TooltipCont
 import { cn } from '@/common/utils/cn'
 
 type TooltipProps = {
-	content: string
+	message: string
 	triggerProps?: React.ComponentProps<typeof TooltipTrigger>
 	providerProps?: React.ComponentProps<typeof TooltipProvider>
 	contentProps?: React.ComponentProps<typeof TooltipContent>
@@ -11,7 +11,7 @@ type TooltipProps = {
 
 export const Tooltip: React.FC<TooltipProps> = ({
 	children,
-	content,
+	message,
 	triggerProps = { type: 'button', asChild: false },
 	providerProps = { delayDuration: 0 },
 	contentProps = { side: 'top' }
@@ -21,7 +21,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 			<TooltipWrapper>
 				<TooltipTrigger {...triggerProps}>{children}</TooltipTrigger>
 				<TooltipContent {...contentProps} className={cn('z-50 whitespace-nowrap', contentProps.className)}>
-					{content}
+					{message}
 				</TooltipContent>
 			</TooltipWrapper>
 		</TooltipProvider>

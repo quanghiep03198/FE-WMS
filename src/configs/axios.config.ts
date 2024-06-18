@@ -3,47 +3,31 @@ import { IUser } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { JsonHandler } from '@/common/utils/json-handler'
 import { AuthService } from '@/services/auth.service'
+import { StorageService } from '@/services/storage.service'
 import axios, { AxiosInstance, HttpStatusCode } from 'axios'
 import _ from 'lodash'
 import qs from 'qs'
+import { toast } from 'sonner'
 
 let retry = 0
 const controller = new AbortController()
 
 const axiosInstance: AxiosInstance = axios.create({
 	baseURL: env('VITE_API_BASE_URL'),
-	paramsSerializer: (params) => qs.stringify(params),
-	timeout: 10000
+	signal: controller.signal,
+	timeout: 5000,
+	paramsSerializer: function (params) {
+		return qs.stringify(params, { arrayFormat: 'brackets' })
+	}
 })
-
-axiosInstance.getLocale = function () {
-	const locale = localStorage.getItem('i18nextLng')
-	return (JsonHandler.safeParse(locale) ?? Locale.EN) as Locale
-}
-axiosInstance.getUser = function () {
-	const locale = localStorage.getItem('user')
-	return (JsonHandler.safeParse(locale) ?? Locale.EN) as Locale
-}
-
-axiosInstance.getAccessToken = function (): string | null {
-	const accessToken = JsonHandler.safeParse<string>(localStorage.getItem('accessToken'))
-	return _.isNil(accessToken) ? null : `Bearer ${accessToken}`
-}
-axiosInstance.setAccessToken = function (refreshToken: string): void {
-	localStorage.setItem('accessToken', JSON.stringify(refreshToken))
-}
-
-axiosInstance.logout = function () {
-	localStorage.removeItem('user')
-	localStorage.removeItem('accessToken')
-	localStorage.removeItem('userCompany')
-}
 
 axiosInstance.interceptors.request.use(
 	(config) => {
-		const accessToken = axiosInstance.getAccessToken()
-		const locale = axiosInstance.getLocale()
+		const accessToken = StorageService.getAccessToken()
+		const locale = StorageService.getLocale()
+		const userCompany = StorageService.getUserCompany()
 		if (accessToken) config.headers['Authorization'] = accessToken
+		if (userCompany) config.headers['X-User-Company'] = userCompany
 		config.headers['Accept-Language'] = locale
 		return config
 	},
@@ -56,14 +40,15 @@ axiosInstance.interceptors.response.use(
 		if (error.response?.status === HttpStatusCode.Unauthorized) {
 			retry++
 			console.error('[ERROR] ::: Log in session has expired.')
-			const persistedUser = localStorage.getItem('user')
+			const persistedUser = StorageService.getUser()
 			if (!persistedUser) {
 				return Promise.reject(error)
 			}
 			const user = JsonHandler.safeParse<IUser>(persistedUser) as IUser
 			if (retry > 1) {
 				controller.abort()
-				axiosInstance.logout()
+				StorageService.logout()
+				toast.error('Log in session has expired.')
 				return Promise.reject(new Error('Failed to get refresh token'))
 			}
 			if (retry === 1) {

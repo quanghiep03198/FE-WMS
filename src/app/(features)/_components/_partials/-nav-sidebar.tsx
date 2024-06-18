@@ -43,25 +43,21 @@ const NavSidebar: React.FC<SidebarProps> = ({ isCollapsed, onCollapsedChange: to
 		<Div
 			as='aside'
 			className={cn(
-				'flex h-screen w-[inherit] flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
-				isCollapsed ? 'w-16 items-center' : 'w-80 items-stretch xl:max-w-96'
+				'z-30 flex h-screen flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
+				isCollapsed ? 'w-16 items-center' : 'w-80 items-stretch'
 			)}>
 			<Link
 				to='/dashboard'
-				className={cn('flex h-20 items-center py-8', {
-					'gap-x-3 xl:px-5': !isCollapsed,
-					'justify-center': isCollapsed
-				})}>
-				<Icon name='Box' size={32} strokeWidth={1.5} />
+				className={cn('flex h-20 items-center', !isCollapsed ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
+				<Icon name='Boxes' size={32} stroke='hsl(var(--primary))' className='size-8' strokeWidth={1} />
 				<Div
 					className={cn(
 						'transition-[width_opacity]',
-						isCollapsed ? 'w-0  opacity-0 duration-100' : 'w-full opacity-100 duration-300'
+						isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
 				</Div>
 			</Link>
-
 			<Menu>
 				{navigationConfig
 					.filter((item) => item.type === 'main')
@@ -73,10 +69,9 @@ const NavSidebar: React.FC<SidebarProps> = ({ isCollapsed, onCollapsedChange: to
 				<Separator className='my-4' />
 				{navigationConfig
 					.filter((item) => {
-						const matches = ['/account', '/account']
+						const matches = ['/account', '/profile']
 						return item.type === 'preference' && !matches.includes(item.path)
 					})
-
 					.map((item) => (
 						<MenuItem key={item.id}>
 							<NavLink isCollapsed={isCollapsed} {...item} />
@@ -92,8 +87,7 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 
 	return (
 		<Tooltip
-			content={title}
-			triggerProps={{ asChild: true }}
+			message={t(title, { defaultValue: title })}
 			contentProps={{ side: 'right', hidden: !isCollapsed, sideOffset: 8 }}>
 			<Link
 				to={path}
@@ -102,18 +96,15 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 					buttonVariants({
 						variant: 'ghost',
 						size: isCollapsed ? 'icon' : 'default',
-						className: 'flex w-full px-2 text-base font-normal'
+						className: 'flex px-2 text-base font-normal'
 					}),
-					!isCollapsed && 'justify-start ',
-					isCollapsed && 'aspect-square'
+					!isCollapsed ? 'justify-start gap-x-3' : 'aspect-square size-9'
 				)}>
-				<Icon name={icon} size={20} className={cn(isCollapsed ? 'basis-full' : 'basis-1/6')} />
+				<Icon name={icon} size={20} />
 				<Typography
 					className={cn(
-						'transition-[width_opacity]',
-						isCollapsed
-							? 'w-0 basis-0 opacity-0 duration-200'
-							: 'w-full flex-1 basis-5/6 opacity-100 duration-300'
+						'text-left font-medium transition-[width_opacity]',
+						isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-300'
 					)}>
 					{t(title, { defaultValue: title })}
 				</Typography>

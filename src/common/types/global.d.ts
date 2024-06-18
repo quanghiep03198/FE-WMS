@@ -17,7 +17,7 @@ export declare global {
 
 	type Locale = 'vi' | 'en' | 'cn'
 
-	type Pagination<T> = {
+	type Pagination<T = unknown> = {
 		data: Array<T>
 		hasNextPage: boolean
 		hasPrevPage: boolean

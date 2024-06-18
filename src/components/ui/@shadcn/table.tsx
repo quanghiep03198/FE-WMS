@@ -10,14 +10,21 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
 Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-	({ className, ...props }, ref) => <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
+	({ className, ...props }, ref) => (
+		<thead
+			ref={ref}
+			className={cn(
+				'sticky h-10 whitespace-nowrap data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 [&_tr]:border-b',
+				className
+			)}
+			{...props}
+		/>
+	)
 )
 TableHeader.displayName = 'TableHeader'
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-	({ className, ...props }, ref) => (
-		<tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />
-	)
+	({ className, ...props }, ref) => <tbody ref={ref} className={cn('divide-y divide-border', className)} {...props} />
 )
 TableBody.displayName = 'TableBody'
 
@@ -25,7 +32,7 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribut
 	({ className, ...props }, ref) => (
 		<tfoot
 			ref={ref}
-			className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
+			className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0 ', className)}
 			{...props}
 		/>
 	)
@@ -33,13 +40,7 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribut
 TableFooter.displayName = 'TableFooter'
 
 const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
-	({ className, ...props }, ref) => (
-		<tr
-			ref={ref}
-			className={cn('border-b transition-colors data-[state=selected]:bg-muted hover:bg-muted/50', className)}
-			{...props}
-		/>
-	)
+	({ className, ...props }, ref) => <tr ref={ref} className={cn('[&_td]:border-b', className)} {...props} />
 )
 TableRow.displayName = 'TableRow'
 
@@ -47,8 +48,9 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
 	({ className, ...props }, ref) => (
 		<th
 			ref={ref}
+			style={{ position: 'inherit' }}
 			className={cn(
-				'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+				'line w-full bg-background px-4 font-semibold text-muted-foreground group-hover:bg-secondary/20 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10',
 				className
 			)}
 			{...props}
@@ -62,7 +64,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'px-4 py-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+				'bg-background px-4 py-2 align-middle group-hover:bg-secondary data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[state=selected]:bg-muted data-[state=selected]:text-muted-foreground [&:has([role=checkbox])]:pr-0',
 				className
 			)}
 			{...props}

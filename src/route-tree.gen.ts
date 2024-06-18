@@ -35,9 +35,10 @@ const featuresLayoutWarehouseExportIndexLazyImport = createFileRoute('/(features
 const featuresLayoutTransferManagementIndexLazyImport = createFileRoute('/(features)/_layout/transfer-management/')()
 const featuresLayoutReportIndexLazyImport = createFileRoute('/(features)/_layout/report/')()
 const featuresLayoutInventoryIndexLazyImport = createFileRoute('/(features)/_layout/inventory/')()
+const featuresLayoutInOutCommandsIndexLazyImport = createFileRoute('/(features)/_layout/in-out-commands/')()
 const featuresLayoutExchangeReturnIndexLazyImport = createFileRoute('/(features)/_layout/exchange-return/')()
-const featuresLayoutWarehouseLayoutWarehouseWhnumIndexLazyImport = createFileRoute(
-	'/(features)/_layout/warehouse/_layout/warehouse/$wh_num/'
+const featuresLayoutWarehouseLayoutWarehouseIdIndexLazyImport = createFileRoute(
+	'/(features)/_layout/warehouse/_layout/warehouse/$id/'
 )()
 
 // Create/Update Routes
@@ -142,6 +143,13 @@ const featuresLayoutInventoryIndexLazyRoute = featuresLayoutInventoryIndexLazyIm
 	} as any)
 	.lazy(() => import('./app/(features)/_layout.inventory/index.lazy').then((d) => d.Route))
 
+const featuresLayoutInOutCommandsIndexLazyRoute = featuresLayoutInOutCommandsIndexLazyImport
+	.update({
+		path: '/in-out-commands/',
+		getParentRoute: () => featuresLayoutRoute
+	} as any)
+	.lazy(() => import('./app/(features)/_layout.in-out-commands/index.lazy').then((d) => d.Route))
+
 const featuresLayoutExchangeReturnIndexLazyRoute = featuresLayoutExchangeReturnIndexLazyImport
 	.update({
 		path: '/exchange-return/',
@@ -154,15 +162,12 @@ const featuresLayoutDashboardIndexRoute = featuresLayoutDashboardIndexImport.upd
 	getParentRoute: () => featuresLayoutRoute
 } as any)
 
-const featuresLayoutWarehouseLayoutWarehouseWhnumIndexLazyRoute =
-	featuresLayoutWarehouseLayoutWarehouseWhnumIndexLazyImport
-		.update({
-			path: '/warehouse/warehouse/$wh_num/',
-			getParentRoute: () => featuresLayoutRoute
-		} as any)
-		.lazy(() =>
-			import('./app/(features)/_layout.warehouse/_layout.warehouse.$wh_num/index.lazy').then((d) => d.Route)
-		)
+const featuresLayoutWarehouseLayoutWarehouseIdIndexLazyRoute = featuresLayoutWarehouseLayoutWarehouseIdIndexLazyImport
+	.update({
+		path: '/warehouse/warehouse/$id/',
+		getParentRoute: () => featuresLayoutRoute
+	} as any)
+	.lazy(() => import('./app/(features)/_layout.warehouse/_layout.warehouse.$id/index.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -222,6 +227,13 @@ declare module '@tanstack/react-router' {
 			path: '/exchange-return'
 			fullPath: '/exchange-return'
 			preLoaderRoute: typeof featuresLayoutExchangeReturnIndexLazyImport
+			parentRoute: typeof featuresLayoutImport
+		}
+		'/(features)/_layout/in-out-commands/': {
+			id: '/_layout/in-out-commands/'
+			path: '/in-out-commands'
+			fullPath: '/in-out-commands'
+			preLoaderRoute: typeof featuresLayoutInOutCommandsIndexLazyImport
 			parentRoute: typeof featuresLayoutImport
 		}
 		'/(features)/_layout/inventory/': {
@@ -294,11 +306,11 @@ declare module '@tanstack/react-router' {
 			preLoaderRoute: typeof preferencesLayoutProfileIndexLazyImport
 			parentRoute: typeof preferencesLayoutImport
 		}
-		'/(features)/_layout/warehouse/_layout/warehouse/$wh_num/': {
-			id: '/_layout/warehouse/_layout/warehouse/$wh_num/'
-			path: '/warehouse/warehouse/$wh_num'
-			fullPath: '/warehouse/warehouse/$wh_num'
-			preLoaderRoute: typeof featuresLayoutWarehouseLayoutWarehouseWhnumIndexLazyImport
+		'/(features)/_layout/warehouse/_layout/warehouse/$id/': {
+			id: '/_layout/warehouse/_layout/warehouse/$id/'
+			path: '/warehouse/warehouse/$id'
+			fullPath: '/warehouse/warehouse/$id'
+			preLoaderRoute: typeof featuresLayoutWarehouseLayoutWarehouseIdIndexLazyImport
 			parentRoute: typeof featuresLayoutImport
 		}
 	}
@@ -311,13 +323,14 @@ export const routeTree = rootRoute.addChildren({
 		featuresLayoutRoute: featuresLayoutRoute.addChildren({
 			featuresLayoutDashboardIndexRoute,
 			featuresLayoutExchangeReturnIndexLazyRoute,
+			featuresLayoutInOutCommandsIndexLazyRoute,
 			featuresLayoutInventoryIndexLazyRoute,
 			featuresLayoutReportIndexLazyRoute,
 			featuresLayoutTransferManagementIndexLazyRoute,
 			featuresLayoutWarehouseExportIndexLazyRoute,
 			featuresLayoutWarehouseImportIndexLazyRoute,
 			featuresLayoutWarehouseIndexLazyRoute,
-			featuresLayoutWarehouseLayoutWarehouseWhnumIndexLazyRoute
+			featuresLayoutWarehouseLayoutWarehouseIdIndexLazyRoute
 		})
 	}),
 	preferencesRoute: preferencesRoute.addChildren({
@@ -370,6 +383,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "(features)/_layout.exchange-return/index.lazy.tsx",
       "parent": "/_layout"
     },
+    "/_layout/in-out-commands/": {
+      "filePath": "(features)/_layout.in-out-commands/index.lazy.tsx",
+      "parent": "/_layout"
+    },
     "/_layout/inventory/": {
       "filePath": "(features)/_layout.inventory/index.lazy.tsx",
       "parent": "/_layout"
@@ -410,8 +427,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "(preferences)/_layout.profile/index.lazy.tsx",
       "parent": "/_layout"
     },
-    "/_layout/warehouse/_layout/warehouse/$wh_num/": {
-      "filePath": "(features)/_layout.warehouse/_layout.warehouse.$wh_num/index.lazy.tsx",
+    "/_layout/warehouse/_layout/warehouse/$id/": {
+      "filePath": "(features)/_layout.warehouse/_layout.warehouse.$id/index.lazy.tsx",
       "parent": "/_layout"
     }
   }

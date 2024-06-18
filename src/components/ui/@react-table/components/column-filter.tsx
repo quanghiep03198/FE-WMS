@@ -25,11 +25,9 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 
 	if (!column.columnDef.enableColumnFilter)
 		return (
-			<Tooltip content={t('ns_common:table.no_filter_applied')}>
-				<Div className='cursor- flex h-9 select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
-					<Icon name='Minus' />
-				</Div>
-			</Tooltip>
+			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
+				<Icon name='Minus' />
+			</Div>
 		)
 
 	switch (filterType) {

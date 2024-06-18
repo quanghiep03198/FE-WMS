@@ -10,7 +10,7 @@ type DebouncedInputProps = {
 export const DebouncedInput: React.FC<DebouncedInputProps> = ({
 	value: initialValue,
 	onChange,
-	debounce,
+	debounce = 200,
 	...props
 }) => {
 	const [value, setValue] = useState(initialValue)
@@ -28,8 +28,4 @@ export const DebouncedInput: React.FC<DebouncedInputProps> = ({
 	}, [value])
 
 	return <Input {...props} value={value} onChange={(e) => setValue(e.target.value)} />
-}
-
-DebouncedInput.defaultProps = {
-	debounce: 500
 }

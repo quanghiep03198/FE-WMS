@@ -57,7 +57,7 @@ export const LanguageDropdown: React.FC<{ triggerProps?: ButtonProps }> = ({ tri
 
 	return (
 		<DropdownMenu>
-			<Tooltip content={t('ns_common:language')}>
+			<Tooltip message={t('ns_common:language')} triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger asChild>
 					<Button {...triggerProps} size='icon' type='button'>
 						<Icon name='Languages' />

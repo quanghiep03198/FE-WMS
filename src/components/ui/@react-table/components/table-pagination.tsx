@@ -1,5 +1,5 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { Table } from '@tanstack/react-table'
+import { Row, Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
@@ -11,16 +11,21 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Tooltip,
-	Typography
+	Typography,
+	buttonVariants
 } from '../..'
+import { Link } from '@tanstack/react-router'
+import { cn } from '@/common/utils/cn'
 
 type DataTablePaginationProps<TData> = {
 	table: Table<TData>
 	manualPagination?: boolean
+	enableRowSelection: boolean
 } & Partial<Pagination<TData>>
 
 export default function TablePagination<TData>({
 	table,
+	enableRowSelection,
 	manualPagination = false,
 	hasNextPage = false,
 	hasPrevPage = false,
@@ -72,8 +77,8 @@ export default function TablePagination<TData>({
 	}
 
 	return (
-		<Div className='flex items-center justify-between sm:justify-end'>
-			<Div className='flex-1 text-sm text-muted-foreground sm:hidden'>
+		<Div className={cn('flex items-center', enableRowSelection ? 'justify-between sm:justify-end' : 'justify-end')}>
+			<Div className={cn('flex-1 text-sm text-muted-foreground sm:hidden', !enableRowSelection && 'hidden')}>
 				{t('ns_common:table.selected_rows', {
 					selectedRows: selectedRowsCtx,
 					defaultValue: selectedRowsCtx
@@ -89,11 +94,11 @@ export default function TablePagination<TData>({
 						onValueChange={(value) => {
 							changePageSize(+value)
 						}}>
-						<SelectTrigger className='h-8 w-[70px]'>
+						<SelectTrigger className='w-20'>
 							<SelectValue placeholder={pageSize} />
 						</SelectTrigger>
 						<SelectContent side='top'>
-							{[10, 20, 30, 40, 50].map((pageSize) => (
+							{[10, 20, 50, 100].map((pageSize) => (
 								<SelectItem key={pageSize} value={`${pageSize}`}>
 									{pageSize}
 								</SelectItem>
@@ -109,45 +114,57 @@ export default function TablePagination<TData>({
 					})}
 				</Div>
 				<Div className='flex items-center space-x-1'>
-					<Tooltip content={t('pagination.first_page', { defaultValue: 'First page' })}>
-						<Button
-							variant='outline'
-							size='icon'
-							className='h-8 w-8'
-							onClick={gotoFirstPage}
-							disabled={!canPreviousPage}>
+					<Tooltip message={t('pagination.first_page', { defaultValue: 'First page' })}>
+						<Link
+							disabled={!canPreviousPage}
+							search={{ page: 1 }}
+							onClick={table.firstPage}
+							className={buttonVariants({
+								variant: 'outline',
+								size: 'icon',
+								className: cn(!canPreviousPage && '!pointer-events-none !bg-muted !text-muted-foreground')
+							})}>
 							<Icon name='ChevronsLeft' />
-						</Button>
+						</Link>
 					</Tooltip>
-					<Tooltip content={t('pagination.previous_page', { defaultValue: 'Previous page' })}>
-						<Button
-							variant='outline'
-							size='icon'
-							className='h-8 w-8'
-							onClick={gotoPreviousPage}
-							disabled={!canPreviousPage}>
+					<Tooltip message={t('pagination.previous_page', { defaultValue: 'Previous page' })}>
+						<Link
+							disabled={!canPreviousPage}
+							search={{ page: pageIndex - 1 }}
+							onClick={table.previousPage}
+							className={buttonVariants({
+								variant: 'outline',
+								size: 'icon',
+								className: cn(!canPreviousPage && '!pointer-events-none !bg-muted !text-muted-foreground')
+							})}>
 							<Icon name='ChevronLeft' />
-						</Button>
+						</Link>
 					</Tooltip>
-					<Tooltip content={t('pagination.next_page', { defaultValue: 'Next page' })}>
-						<Button
-							variant='outline'
-							size='icon'
-							className='h-8 w-8'
-							onClick={gotoNextPage}
-							disabled={!canNextPage}>
+					<Tooltip message={t('pagination.next_page', { defaultValue: 'Next page' })}>
+						<Link
+							disabled={!canNextPage}
+							search={{ page: pageIndex + 1 }}
+							onClick={table.nextPage}
+							className={buttonVariants({
+								variant: 'outline',
+								size: 'icon',
+								className: cn(!canNextPage && '!pointer-events-none !bg-muted !text-muted-foreground')
+							})}>
 							<Icon name='ChevronRight' />
-						</Button>
+						</Link>
 					</Tooltip>
-					<Tooltip content={t('pagination.last_page', { defaultValue: 'Last page' })}>
-						<Button
-							variant='outline'
-							size='icon'
-							className='h-8 w-8'
-							onClick={gotoLastPage}
-							disabled={!canNextPage}>
+					<Tooltip message={t('pagination.last_page', { defaultValue: 'Last page' })}>
+						<Link
+							disabled={!canNextPage}
+							search={{ page: pageCount }}
+							onClick={table.lastPage}
+							className={buttonVariants({
+								variant: 'outline',
+								size: 'icon',
+								className: cn(!canNextPage && '!pointer-events-none !bg-muted !text-muted-foreground')
+							})}>
 							<Icon name='ChevronsRight' />
-						</Button>
+						</Link>
 					</Tooltip>
 				</Div>
 			</Div>

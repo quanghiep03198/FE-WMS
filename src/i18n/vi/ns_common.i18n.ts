@@ -12,15 +12,17 @@ export default {
 		add: 'Thêm mới',
 		update: 'Chỉnh sửa',
 		delete: 'Xóa',
+		back: 'Quay lại',
+		close: 'Đóng',
+		continue: 'Tiếp tuc',
 		save: 'Lưu',
 		cancel: 'Hủy',
 		submit: 'Xác nhận',
-		continue: 'Tiếp tuc',
-		back: 'Quay lại',
-		close: 'Đóng',
+		detail: 'Chi tiết',
 		login: 'Đăng nhập',
 		logout: 'Đăng xuất',
 		search: 'Tìm kiếm',
+		clear_filter: 'Xóa lọc',
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
 		toggle_theme: 'Chuyển đổi chế độ nền'
 	},
@@ -29,7 +31,10 @@ export default {
 		page: 'Trang {{page}}',
 		display: 'Hiển thị',
 		filter: 'Bộ lọc',
-		no_filter_applied: 'Bộ lọc không được áp dụng'
+		no_filter_applied: 'Bộ lọc không được áp dụng',
+		no_data: 'Không có dữ liệu',
+		search_in_column: 'Tìm kiếm trong cột',
+		no_match_result: 'Không có kết quả.'
 	},
 	pagination: {
 		next_page: 'Trang sau',
@@ -44,18 +49,24 @@ export default {
 		account: 'Tài khoản',
 		keyboard_shortcut: 'Phím tắt',
 		wh_dashboard: 'Màn hình chính',
+		wh_inbound_outbound: 'Thao tác nhập/xuất kho',
 		wh_management: 'Quản lý kho',
 		wh_import_management: 'Quản lý nhập hàng',
 		wh_export_management: 'Quản lý xuất hàng',
 		wh_transfer_managment: 'Quản lý chuyển giao',
 		wh_inventory_management: 'Quản lý tồn kho',
-		wh_exchange_n_return_management: 'Quản lý nhận trả hàng',
+		wh_receiving_checking_management: 'Quản lý nghiệm thu hàng vào',
 		wh_report_management: 'Báo biểu'
 	},
 	notification: {
 		processing_request: 'Đang xử lý yêu cầu ...',
 		success: 'Thành công !',
 		error: 'Đã có lỗi xảy ra !'
+	},
+	confirmation: {
+		delete_title: 'Xóa (các) bản ghi đã chọn',
+		delete_description:
+			'Bạn chắc chắn muốn xóa các bạn ghi đã chọn? Dữ liệu sẽ bị xóa hoàn toàn và không thể khôi phục'
 	},
 	errors: {
 		'404': 'Không Tìm Thấy Trang.',

@@ -33,9 +33,9 @@ i18n
 		preload: Object.values(Locale),
 		lng: (() => {
 			const persistedLng = localStorage.getItem('i18nextLng')
-			return JsonHandler.safeParse<Locale>(persistedLng) ?? Locale.EN
+			return JsonHandler.safeParse<Locale>(persistedLng) ?? Locale.CN
 		})(),
-		fallbackLng: Locale.EN,
+		fallbackLng: Locale.CN,
 		interpolation: {
 			escapeValue: false,
 			defaultVariables: {}

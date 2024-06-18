@@ -26,7 +26,6 @@ export class JsonHandler {
 			if (!JsonHandler.isValid(value)) return value
 			return JSON.parse(value)
 		} catch (error) {
-			console.log((error as Error).message)
 			return null
 		}
 	}

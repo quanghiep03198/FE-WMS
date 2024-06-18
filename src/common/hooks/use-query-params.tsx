@@ -1,24 +1,44 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useNavigate, useRouter, useSearch } from '@tanstack/react-router'
+import { useDeepCompareEffect } from 'ahooks'
 import _ from 'lodash'
-import qs from 'qs'
-import { useMemo } from 'react'
+import { useCallback } from 'react'
 
-export default function useQueryParams(fallbackParams?: Record<string, any>) {
-	const params = useSearch({
-		strict: false,
-		select: (search) => Object.fromEntries(new URLSearchParams(qs.stringify(search)))
-	})
-
-	const searchParams = useMemo(() => {
-		const fallback = fallbackParams ?? params
-		return Object.keys(params).length === 0 && Object.keys(fallback).length > 0 ? fallback : params
-	}, [params, fallbackParams])
-
+export default function useQueryParams(defaultParams?: Record<string, any>) {
+	const router = useRouter()
 	const navigate = useNavigate()
 
-	const setParams = (params: Record<string, any>) => navigate({ search: (prev) => ({ ...prev, ...params }) })
+	const searchParams = useSearch({
+		strict: false,
+		select: (): Record<string, any> => Object.fromEntries(new URLSearchParams(window.location.search))
+	})
 
-	const removeParam = (key: string) => navigate({ search: (prev) => _.omit(prev, [key]) })
+	/**
+	 * Set search params from URL
+	 * @param { Record<string, any> } params
+	 * @returns {Promise<void>}
+	 */
+	const setParams = useCallback((params: Record<string, any>) => {
+		navigate({ search: (prev) => ({ ...prev, ...params }) })
+	}, [])
 
-	return { searchParams, setParams, removeParam }
+	/**
+	 * Remove search params from URL
+	 * @param { string } key
+	 * @returns {Promise<void>}
+	 */
+	const removeParam = useCallback((key: string) => {
+		navigate({ search: (prev) => _.omit(prev, [key]) })
+	}, [])
+
+	useDeepCompareEffect(() => {
+		if (!Object.keys(searchParams).length && Boolean(defaultParams) && Object.keys(defaultParams).length > 0) {
+			router.invalidate().finally(() => navigate({ search: defaultParams }))
+		}
+	}, [])
+
+	return {
+		searchParams,
+		setParams,
+		removeParam
+	}
 }

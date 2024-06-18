@@ -10,7 +10,7 @@ export default {
 	},
 	actions: {
 		add: '添加',
-		update: '修改',
+		update: '編輯',
 		delete: '删除',
 		save: '保存',
 		cancel: '取消',
@@ -21,6 +21,8 @@ export default {
 		login: '登入',
 		logout: '登出',
 		search: '查詢',
+		detail: '细节',
+		clear_filter: '删除过滤',
 		toggle_sidebar: '切换主侧边栏',
 		toggle_theme: '切换主题'
 	},
@@ -29,7 +31,10 @@ export default {
 		page: '第 {{page}} 页',
 		display: '展示',
 		filter: '过滤',
-		no_filter_applied: '不应用过滤器'
+		no_filter_applied: '不应用过滤器',
+		no_data: '没有数据',
+		search_in_column: '在栏目中搜索',
+		no_match_result: '未找到结果.'
 	},
 	pagination: {
 		next_page: '下页',
@@ -44,18 +49,23 @@ export default {
 		account: '账户管理',
 		keyboard_shortcut: '快捷键',
 		wh_dashboard: '儲位管理',
+		wh_inbound_outbound: '倉庫出入庫作業',
 		wh_management: '倉庫管理',
 		wh_import_management: '入庫管理',
 		wh_export_management: '出庫管理',
 		wh_transfer_managment: '調撥管理',
 		wh_inventory_management: '盤點管理',
-		wh_exchange_n_return_management: '進貨驗收作業管理',
+		wh_receiving_checking_management: '進貨驗收作業管理',
 		wh_report_management: '報表管理'
 	},
 	notification: {
 		processing_request: '正在处理请求 ...',
 		success: '成功 !',
 		error: '失败 !'
+	},
+	confirmation: {
+		delete_title: '删除所以记录已选择',
+		delete_description: '你确定想删除你的记录? 质料会完全删除并不可恢复'
 	},
 	errors: {
 		'404': '不找到页面.',

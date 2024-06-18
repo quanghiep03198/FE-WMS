@@ -18,7 +18,7 @@ interface DataTableViewOptionsProps<TData> {
 export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
 	return (
 		<DropdownMenu>
-			<Tooltip content='View'>
+			<Tooltip message='View'>
 				<DropdownMenuTrigger asChild>
 					<Button variant='outline' size='icon'>
 						<Icon name='SlidersHorizontal' />

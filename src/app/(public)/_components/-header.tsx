@@ -1,12 +1,12 @@
 import AppLogo from '@/app/_components/_shared/-app-logo'
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
+import useAuth from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
-import { AuthContext } from '@/components/providers/auth-provider'
 import {
 	Badge,
-	Div,
 	Button,
+	Div,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
@@ -14,11 +14,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon,
-	Typography,
 	buttonVariants
 } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
-import { memo, useContext } from 'react'
+import { memo } from 'react'
 
 const navigationLinks = [
 	{
@@ -36,10 +35,10 @@ const navigationLinks = [
 ]
 
 const Header: React.FunctionComponent = () => {
-	const { user } = useContext(AuthContext)
+	const { isAuthenticated } = useAuth()
 
 	return (
-		<Div className='sticky top-0 z-10 h-16 border-b border-border bg-background/90 backdrop-blur-sm'>
+		<Div className='sticky top-0 z-20 h-16 border-b border-border bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
 			<Div
 				as='nav'
 				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
@@ -74,7 +73,7 @@ const Header: React.FunctionComponent = () => {
 				<Div className='flex items-center justify-end gap-x-1 self-center'>
 					<ThemeToggle />
 					<LanguageDropdown />
-					{user ? (
+					{isAuthenticated ? (
 						<Link
 							to='/dashboard'
 							className={buttonVariants({

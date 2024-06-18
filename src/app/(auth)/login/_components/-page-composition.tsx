@@ -24,10 +24,7 @@ const ThemeSelector: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 	return (
 		<Div className='fixed right-2 top-2 z-50'>
-			<Tooltip
-				content={`${t('ns_common:theme')} (ctrl+alt+t)`}
-				triggerProps={{ asChild: false }}
-				contentProps={{ side: 'left' }}>
+			<Tooltip message={`${t('ns_common:theme')} (ctrl+alt+t)`} contentProps={{ side: 'left' }}>
 				<ThemeToggle />
 			</Tooltip>
 		</Div>
@@ -36,13 +33,13 @@ const ThemeSelector: React.FC = () => {
 
 const HomeNavigator: React.FC = () => {
 	return (
-		<Tooltip content='Home' contentProps={{ side: 'right' }} triggerProps={{ asChild: true }}>
-			<Link
-				to='/'
-				className={cn(buttonVariants({ variant: 'ghost', size: 'icon', className: '!fixed left-2 top-2 z-10' }))}>
-				<Icon name='ArrowLeft' />
-			</Link>
-		</Tooltip>
+		<Div className='!fixed left-2 top-2 z-10'>
+			<Tooltip message='Home' contentProps={{ side: 'right' }}>
+				<Link to='/' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}>
+					<Icon name='ArrowLeft' />
+				</Link>
+			</Tooltip>
+		</Div>
 	)
 }
 
