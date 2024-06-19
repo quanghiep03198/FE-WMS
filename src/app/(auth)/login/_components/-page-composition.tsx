@@ -8,6 +8,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import LoginForm from './-login-form'
 import WorkplaceSelectionForm from './-workplace-selection-form'
+import tw from 'tailwind-styled-components'
 
 const steps: TStep[] = [
 	{
@@ -19,6 +20,9 @@ const steps: TStep[] = [
 		status: 'upcoming'
 	}
 ]
+
+const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 xxl:grid-cols-2 scrollbar`
+const Section = tw.div`mx-auto flex h-full w-full max-w-lg flex-1 flex-grow flex-col items-center justify-center gap-y-6 overflow-y-auto px-2 sm:py-10 md:py-10`
 
 const ThemeSelector: React.FC = () => {
 	const { t } = useTranslation('ns_common')
@@ -56,14 +60,16 @@ const FormSection: React.FC = () => {
 	)
 }
 
-const FormHeading: React.FC<{ title: string; description: string }> = ({ title, description }) => {
+const FormHeading: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
 		<Div className='w-full max-w-lg space-y-1 text-center'>
 			<Typography variant='h5' className='whitespace-nowrap text-center font-bold'>
-				{title}
+				{t('ns_auth:texts.title')}
 			</Typography>
 			<Typography variant='small' color='muted'>
-				{description}
+				{t('ns_auth:texts.description')}
 			</Typography>
 		</Div>
 	)
@@ -85,19 +91,21 @@ const LanguageSelector: React.FC = () => {
 
 const SideImage: React.FC = () => {
 	return (
-		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex'>
+		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex xxl:flex'>
 			<Div
 				as='img'
 				src={GlobalTransportImage}
 				alt='Global Transport'
 				loading='eager'
-				className='sticky top-0 mx-auto hidden w-full @xl:max-w-xl @3xl:max-w-3xl xl:block'
+				className='sticky top-0 mx-auto hidden w-full @xl:max-w-xl @3xl:max-w-3xl xl:block xxl:block'
 			/>
 		</Div>
 	)
 }
 
 export default {
+	Container,
+	Section,
 	FormHeading,
 	FormSection,
 	SideImage,

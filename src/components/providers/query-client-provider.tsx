@@ -22,10 +22,12 @@ export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			staleTime: 1000 * 60 * 60,
-			networkMode: 'always'
+			networkMode: 'online', //In this mode, Queries and Mutations will not fire unless you have network connection.
+			retry: 1
 		},
 		mutations: {
-			networkMode: 'always'
+			networkMode: 'online',
+			retry: 1
 		}
 	}
 })
@@ -33,7 +35,7 @@ export const queryClient = new QueryClient({
 export const QueryClientProvider: React.FC<React.PropsWithChildren> = ({ children }) => (
 	<PersistQueryClientProvider
 		client={queryClient}
-		persistOptions={{ persister: localStoragePersister, maxAge: env('VITE_DEFAULT_TTL', 30000) }}>
+		persistOptions={{ persister: localStoragePersister, maxAge: env('VITE_DEFAULT_TTL', Infinity) }}>
 		{children}
 		<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-left' />
 	</PersistQueryClientProvider>

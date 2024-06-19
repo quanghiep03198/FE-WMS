@@ -14,7 +14,7 @@ export class AuthService extends BaseAbstractService {
 	}
 
 	static async logout() {
-		return await axiosInstance.post('/logout').finally(StorageService.logout)
+		return await axiosInstance.post('/logout')
 	}
 
 	static async refreshToken(id: IUser['user_code'], requestConfig: Pick<AxiosRequestConfig, 'signal'>) {

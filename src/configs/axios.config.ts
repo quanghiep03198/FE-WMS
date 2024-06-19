@@ -1,4 +1,3 @@
-import { Locale } from '@/common/constants/enums'
 import { IUser } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { JsonHandler } from '@/common/utils/json-handler'
@@ -16,8 +15,13 @@ const axiosInstance: AxiosInstance = axios.create({
 	baseURL: env('VITE_API_BASE_URL'),
 	signal: controller.signal,
 	timeout: 5000,
-	paramsSerializer: function (params) {
-		return qs.stringify(params, { arrayFormat: 'brackets' })
+	paramsSerializer: (params) => {
+		return qs.stringify(params, {
+			arrayFormat: 'brackets',
+			skipNulls: true,
+			strictNullHandling: true,
+			filter: (_prefix, value) => !_.isEmpty(value)
+		})
 	}
 })
 

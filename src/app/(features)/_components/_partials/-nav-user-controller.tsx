@@ -14,21 +14,12 @@ import {
 } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
-import { ResourceKeys } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 const NavUserControl: React.FC = () => {
 	const { user, logout } = useAuth()
 	const { t } = useTranslation(['ns_common', 'ns_auth'])
-
-	const handleLogout = () => {
-		toast.promise(logout, {
-			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_auth:notification.logout_success'),
-			error: t('ns_auth:notification.logout_failed')
-		})
-	}
 
 	return (
 		<DropdownMenu>
@@ -53,7 +44,7 @@ const NavUserControl: React.FC = () => {
 					))}
 
 				<DropdownMenuSeparator />
-				<DropdownMenuItem onClick={handleLogout}>
+				<DropdownMenuItem onClick={() => logout()}>
 					<Icon name='LogOut' className='mr-2' /> {t('ns_common:actions.logout')}
 					<DropdownMenuShortcut>{'ctrl+q'}</DropdownMenuShortcut>
 				</DropdownMenuItem>

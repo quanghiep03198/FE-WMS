@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import _ from 'lodash'
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -16,7 +16,6 @@ import tw from 'tailwind-styled-components'
 const LoginForm: React.FC = () => {
 	const { steps, dispatch } = useContext(StepContext)
 	const { t } = useTranslation()
-	const persistAccountCheckboxRef = useRef<typeof Checkbox.prototype>(null)
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true
@@ -59,10 +58,13 @@ const LoginForm: React.FC = () => {
 		if (isSuccess || Boolean(accessToken)) dispatch({ type: 'NEXT_STEP' })
 	}, [steps.currentStep, isSuccess, persistedAccount])
 
-	useEffect(() => {
-		if (persistAccountCheckboxRef.current?.checked && !_.isEmpty(username)) setPersistedAccount(username)
-		else setPersistedAccount(undefined)
-	}, [username, persistedAccount, persistAccountCheckboxRef.current])
+	const handlePersistAccount = useCallback(
+		(checked: boolean) => {
+			const persistValue = checked && !_.isEmpty(username) ? username : undefined
+			setPersistedAccount(persistValue)
+		},
+		[username]
+	)
 
 	return (
 		<FormProvider {...form}>
@@ -71,12 +73,14 @@ const LoginForm: React.FC = () => {
 					label={t('ns_auth:labels.username')}
 					placeholder={t('ns_auth:labels.username')}
 					name='username'
+					autoComplete='username'
 					defaultValue={persistedAccount}
 					control={form.control}
 				/>
 				<InputFieldControl
 					label={t('ns_auth:labels.password')}
 					placeholder='********'
+					autoComplete='current-password'
 					type='password'
 					name='password'
 					control={form.control}
@@ -84,12 +88,12 @@ const LoginForm: React.FC = () => {
 				<Div className='flex items-center justify-between'>
 					<Div className='flex items-center space-x-2'>
 						<Checkbox
-							ref={persistAccountCheckboxRef}
 							type='button'
-							id='remember-checkbox'
+							id='persist-account-checkbox'
+							onCheckedChange={handlePersistAccount}
 							defaultChecked={Boolean(persistedAccount)}
 						/>
-						<Label htmlFor='remember-checkbox'>{t('ns_auth:labels.remember_account')}</Label>
+						<Label htmlFor='persist-account-checkbox'>{t('ns_auth:labels.remember_account')}</Label>
 					</Div>
 					<Button variant='link' asChild className='px-0'>
 						<Link to='/'>{t('ns_auth:labels.forgot_password')}</Link>

@@ -1,14 +1,16 @@
 import { generateAvatar } from '@/common/utils/generate-avatar'
 import { AuthService } from '@/services/auth.service'
-import { UseMutateAsyncFunction, keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
-import { useDeepCompareEffect, useEventListener, useLocalStorageState } from 'ahooks'
+import { StorageService } from '@/services/storage.service'
+import { UseMutateAsyncFunction, useMutation, useQuery } from '@tanstack/react-query'
+import { useDeepCompareLayoutEffect, useEventListener, useLocalStorageState } from 'ahooks'
 import { SetState } from 'ahooks/lib/createUseStorageState'
 import { AxiosError, AxiosResponse } from 'axios'
 import { isNil } from 'lodash'
-import React, { createContext, useEffect, useState } from 'react'
-import { IUser } from '../../common/types/entities'
-import axiosInstance from '@/configs/axios.config'
+import { compress, decompress } from 'lz-string'
+import React, { createContext, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { IUser } from '../../common/types/entities'
 
 type TAuthContext = {
 	isAuthenticated: boolean
@@ -29,47 +31,59 @@ export const AuthContext = createContext<TAuthContext>({
 })
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [user, setUser] = useLocalStorageState<Partial<IUser>>('user', {
+	const [user, setUser] = useLocalStorageState<Partial<IUser>>(StorageService.USER_KEY, {
+		defaultValue: undefined,
+		listenStorageChange: true,
+		serializer: (data) => compress(JSON.stringify(data)),
+		deserializer: (data) => JSON.parse(decompress(data))
+	})
+
+	const [accessToken, setAccessToken] = useLocalStorageState<string>(StorageService.ACCESS_TOKEN_KEY, {
 		defaultValue: undefined,
 		listenStorageChange: true
 	})
 
-	const [accessToken] = useLocalStorageState<string>('accessToken', {
+	const [userCompany, setUserCompany] = useLocalStorageState<string>(StorageService.USER_COMPANY_KEY, {
 		defaultValue: undefined,
 		listenStorageChange: true
 	})
 
-	const [userCompany, setUserCompany] = useLocalStorageState<string>('userCompany', {
-		defaultValue: undefined,
-		listenStorageChange: true
-	})
-
-	const [isAuthenticated, setIsAuthenticated] = useState([user, accessToken].every((value) => !isNil(value)))
+	const { t } = useTranslation()
 
 	const { mutateAsync: logout } = useMutation({
 		mutationKey: ['auth', accessToken],
-		mutationFn: AuthService.logout
+		mutationFn: AuthService.logout,
+		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onSettled: (_data, _error, _variabled, context) => {
+			setUserCompany(undefined)
+			StorageService.logout()
+			toast.success(t('ns_auth:notification.logout_success'), { id: context })
+		}
 	})
 
 	// Get user profile after login successfully
 	const { data, isSuccess, isError } = useQuery({
 		queryKey: ['auth', accessToken],
 		queryFn: AuthService.profile,
-		enabled: !!accessToken,
 		staleTime: 5 * 60 * 1000,
+		enabled: Boolean(accessToken),
 		select: (data) => data.metadata
 	})
 
 	// Check authenticated status every time get profile query is triggered
-	useEffect(() => {
-		if (data && isSuccess) {
-			setUser({ ...data, picture: generateAvatar({ name: data?.display_name }) })
-			setIsAuthenticated(true)
-		}
+	useDeepCompareLayoutEffect(() => {
+		if (data && isSuccess) setUser({ ...data, picture: generateAvatar({ name: data.display_name }) })
+		if (isError) StorageService.logout()
 	}, [data, isSuccess, isError])
 
 	// Listen log out event
-	useEventListener('logout', () => setIsAuthenticated(false))
+	useEventListener('logout', () => {
+		setUser(undefined)
+		setAccessToken(undefined)
+		setUserCompany(undefined)
+	})
+
+	const isAuthenticated = useMemo(() => Boolean(user) && Boolean(accessToken), [user, accessToken])
 
 	return (
 		<AuthContext.Provider

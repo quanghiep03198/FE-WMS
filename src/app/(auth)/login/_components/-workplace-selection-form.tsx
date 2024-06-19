@@ -3,8 +3,8 @@ import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/compon
 import { StepContext } from '@/components/ui/@custom/step'
 import { CompanyService } from '@/services/company.service'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useRouter } from '@tanstack/react-router'
-import React, { useContext, useEffect, useMemo } from 'react'
+import { useRouter } from '@tanstack/react-router'
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -30,24 +30,23 @@ const WorkplaceSelectionForm: React.FC = () => {
 		}
 	})
 
-	useEffect(() => {
-		if (companyCode) dispatch({ type: 'COMPLETE' })
-	}, [companyCode])
-
 	return (
 		<FormProvider {...form}>
 			<Form
 				onSubmit={form.handleSubmit(({ company_code }) => {
+					console.log(company_code)
 					router.invalidate().finally(() => setUserCompany(company_code))
 				})}>
 				<SelectFieldControl
 					label={t('ns_company:company')}
 					name='company_code'
+					placeholder={isFetching ? 'Loading ...' : '-- Select --'}
 					options={data}
+					onValueChange={() => dispatch({ type: 'COMPLETE' })}
 					disabled={isFetching}
 					control={form.control}
 				/>
-				<Button className='gap-x-2' disabled={!companyCode}>
+				<Button type='submit' className='gap-x-2' disabled={!companyCode}>
 					{t('ns_auth:actions.go_to_dashboard')} <Icon name='ArrowRight' />
 				</Button>
 			</Form>

@@ -1,5 +1,4 @@
 import useAuth from '@/common/hooks/use-auth'
-import Loading from '@/components/shared/loading'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useState } from 'react'
@@ -12,40 +11,29 @@ import NavSidebar from './_components/_partials/-nav-sidebar'
 import Navbar from './_components/_partials/-navbar'
 
 export const Route = createFileRoute('/(features)/_layout')({
-	component: () => (
-		<AuthGuard>
-			<Layout />
-		</AuthGuard>
-	),
-	beforeLoad: ({ context }) => {
-		if (!context.isAuthenticated)
+	component: Layout,
+	beforeLoad: ({ context: { isAuthenticated } }) => {
+		if (!isAuthenticated)
 			throw redirect({
 				to: '/login'
 			})
-	},
-	wrapInSuspense: true,
-	pendingComponent: () => <Loading className='h-screen' />
+	}
 })
 
-const Layout: React.FC = () => {
+function Layout() {
 	const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
-	const { t } = useTranslation()
 	const { logout } = useAuth()
 
 	useKeyPress('ctrl.q', (e) => {
 		e.preventDefault()
-		toast.promise(logout, {
-			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_auth:notification.logout_success'),
-			error: t('ns_auth:notification.logout_failed')
-		})
+		logout()
 	})
 
 	return (
-		<>
+		<AuthGuard>
 			<LayoutComposition.Container>
 				<NavSidebar isCollapsed={isCollapsed} onCollapsedChange={setIsCollapsed} />
-				<LayoutComposition.Main>
+				<LayoutComposition.Main as='main'>
 					<Navbar isCollapsed={isCollapsed} onCollapseStateChange={setIsCollapsed} />
 					<LayoutComposition.OutletWrapper as='section'>
 						<ErrorBoundary>
@@ -54,6 +42,6 @@ const Layout: React.FC = () => {
 					</LayoutComposition.OutletWrapper>
 				</LayoutComposition.Main>
 			</LayoutComposition.Container>
-		</>
+		</AuthGuard>
 	)
 }
