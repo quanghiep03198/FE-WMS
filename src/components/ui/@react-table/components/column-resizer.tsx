@@ -15,7 +15,7 @@ export default function ColumnResizer<TData, TValue>({ header }: ColumnResizerPr
 			onTouchStart={header.getResizeHandler()}
 			onTouchMove={header.getResizeHandler()}
 			className={cn(
-				'absolute right-0 top-1/2 z-10 h-3/5 w-1 -translate-y-1/2 !cursor-col-resize bg-border opacity-50 transition-opacity hover:opacity-100',
+				'absolute right-0 top-1/2 z-10 h-1/2 w-1 -translate-y-1/2 !cursor-col-resize bg-border opacity-50 transition-opacity hover:opacity-100',
 				header.column.columnDef.enableResizing && header.column.getCanResize() && 'hover:bg-primary',
 				header.column.getIsResizing() && 'bg-primary !opacity-100'
 			)}

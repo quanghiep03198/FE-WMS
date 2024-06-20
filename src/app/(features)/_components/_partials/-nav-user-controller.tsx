@@ -15,7 +15,6 @@ import {
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 
 const NavUserControl: React.FC = () => {
 	const { user, logout } = useAuth()

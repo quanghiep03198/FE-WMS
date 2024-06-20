@@ -49,7 +49,7 @@ export default {
 		account: '账户管理',
 		keyboard_shortcut: '快捷键',
 		wh_dashboard: '儲位管理',
-		wh_inbound_outbound: '倉庫出入庫作業',
+		wh_in_out_commands: '倉庫出入庫作業',
 		wh_management: '倉庫管理',
 		wh_import_management: '入庫管理',
 		wh_export_management: '出庫管理',

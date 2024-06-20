@@ -49,13 +49,13 @@ export default {
 		account: 'Account',
 		keyboard_shortcut: 'Keyboard shortcut',
 		wh_dashboard: 'Dashboard',
-		wh_inbound_outbound: 'Import/Export commands',
+		wh_in_out_commands: 'Import/Export commands',
 		wh_management: 'Warehouse management',
 		wh_import_management: 'Import management',
 		wh_export_management: 'Export management',
 		wh_transfer_managment: 'Transfer management',
 		wh_inventory_management: 'Inventory',
-		wh_receiving_checking_management: 'Receiving checking management',
+		wh_receiving_checking_management: 'Product Incoming Inspection',
 		wh_report_management: 'Report'
 	},
 	notification: {

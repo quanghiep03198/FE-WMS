@@ -49,7 +49,7 @@ export default {
 		account: 'Tài khoản',
 		keyboard_shortcut: 'Phím tắt',
 		wh_dashboard: 'Màn hình chính',
-		wh_inbound_outbound: 'Thao tác nhập/xuất kho',
+		wh_in_out_commands: 'Thao tác nhập/xuất kho',
 		wh_management: 'Quản lý kho',
 		wh_import_management: 'Quản lý nhập hàng',
 		wh_export_management: 'Quản lý xuất hàng',

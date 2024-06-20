@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Header, SortDirection, Table, flexRender } from '@tanstack/react-table'
 import { useContext } from 'react'
-import { Div, Collapsible, CollapsibleContent, Icon, Separator } from '../..'
+import { Div, Collapsible, CollapsibleContent, Icon, Separator, Typography } from '../..'
 import { TableContext } from '../context/table.context'
 import { ColumnFilter } from './column-filter'
 
@@ -25,7 +25,7 @@ function TableCellHead<TData, TValue>({ header, ...props }: TableCellHeadProps<T
 			onOpenChange={setIsFilterOpened}
 			className={cn('grid auto-rows-fr grid-cols-1 items-stretch divide-y divide-border')}>
 			<Div
-				className={cn('relative inline-flex cursor-auto touch-none select-none items-center py-2', {
+				className={cn('relative line-clamp-1 inline-flex cursor-auto touch-none select-none items-center py-2', {
 					'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
 					'cursor-col-resize': getIsResizing()
 				})}
@@ -34,7 +34,9 @@ function TableCellHead<TData, TValue>({ header, ...props }: TableCellHeadProps<T
 						toggleSorting(getIsSorted() === 'asc')
 					}
 				}}>
-				{header.isPlaceholder ? null : flexRender(columnDef.header, header.getContext())}
+				<Typography variant='small' className='line-clamp-1 text-inherit'>
+					{header.isPlaceholder ? null : flexRender(columnDef.header, header.getContext())}
+				</Typography>
 				<SortStatus enableSorting={columnDef.enableSorting} isSorted={getIsSorted()} />
 			</Div>
 			<CollapsibleContent>

@@ -60,12 +60,7 @@
 		@apply bg-background text-foreground;
 	}
 	.scrollbar {
-		@apply !scrollbar-thin scrollbar-track-neutral-200/20 scrollbar-thumb-neutral-200 dark:scrollbar-track-neutral-800/10 dark:scrollbar-thumb-neutral-800;
-	}
-	.noto-sans-sc {
-		font-family: 'Noto Sans SC', sans-serif;
-		font-optical-sizing: auto;
-		font-style: normal;
+		@apply !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-neutral-200 dark:scrollbar-track-transparent dark:scrollbar-thumb-neutral-800;
 	}
 }
 

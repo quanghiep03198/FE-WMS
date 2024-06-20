@@ -16,7 +16,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
-import { WarehouseFormValue, warehouseFormSchema } from '@/schemas/warehouse.schema'
+import { PartialWarehouseFormValue, WarehouseFormValue, warehouseFormSchema } from '@/schemas/warehouse.schema'
 import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -28,11 +28,13 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { FormAction } from './-warehouse-list'
-import { useBlocker } from '@tanstack/react-router'
+import { FormAction } from '../index.lazy'
+import { CommonActions } from '@/common/constants/enums'
 
 type WarehouseFormDialogProps = { onFormActionChange: React.Dispatch<FormAction> } & FormAction['payload'] &
 	Required<Pick<React.ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'>>
+
+type FormValues<T> = T extends CommonActions.CREATE ? WarehouseFormValue : PartialWarehouseFormValue
 
 const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 	open,
@@ -77,30 +79,25 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 	const { searchParams } = useQueryParams()
 
 	const { mutateAsync } = useMutation({
-		mutationKey: ['warehouse', Object.values(searchParams)],
-		mutationFn: (data: WarehouseFormValue) => {
+		mutationKey: ['warehouse'],
+		mutationFn: (payload: FormValues<typeof type>) => {
 			switch (type) {
-				case 'add':
-					return WarehouseService.createWarehouse(data)
-				case 'update':
-					console.log(type)
-					return WarehouseService.updateWarehouse(defaultValues.id, data)
+				case CommonActions.CREATE:
+					return WarehouseService.createWarehouse(payload)
+				case CommonActions.UPDATE:
+					return WarehouseService.updateWarehouse(defaultValues.id, payload)
 				default:
 					throw new Error('Invalid actions')
 			}
 		},
-		onMutate: () => {
-			const id = crypto.randomUUID()
-			toast.loading(t('ns_common:notification.processing_request'), { id })
-			return { id }
-		},
-		onSuccess: (_data, _vars, { id }) => {
-			toast.success(t('ns_common:notification.success'), { id })
+		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onSuccess: (_data, _variables, context) => {
 			onOpenChange(!open)
 			onFormActionChange({ type: undefined })
+			toast.success(t('ns_common:notification.success'), { id: context })
 			return queryClient.invalidateQueries({ queryKey: ['warehouses'] })
 		},
-		onError: (_data, _vars, { id }) => toast.error(t('ns_common:notification.success'), { id })
+		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
 	const handleOpenStateChange = (open) => {

@@ -18,9 +18,7 @@ const axiosInstance: AxiosInstance = axios.create({
 	paramsSerializer: (params) => {
 		return qs.stringify(params, {
 			arrayFormat: 'brackets',
-			skipNulls: true,
-			strictNullHandling: true,
-			filter: (_prefix, value) => !_.isEmpty(value)
+			skipNulls: true
 		})
 	}
 })

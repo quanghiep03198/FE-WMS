@@ -6,7 +6,7 @@ export default {
 		storage_position: 'Storage position',
 		is_disable: 'Disabled',
 		is_default: 'Default',
-		area: 'Area',
+		area: 'Area (m²)',
 		manager: 'Manager'
 	},
 	// created_at: 'Created at',
@@ -20,5 +20,9 @@ export default {
 	form: {
 		add_warehouse_title: 'Create New Warehouse',
 		update_warehouse_title: 'Update Warehouse'
+	},
+	headings: {
+		warehouse_list_title: 'Warehouse management',
+		warehouse_list_description: "The table below show list of all warehouses's information"
 	}
 } as const

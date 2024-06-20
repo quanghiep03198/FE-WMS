@@ -25,7 +25,7 @@ export default function HomePage() {
 				title='GL Warehouse Management System'
 				meta={[{ name: 'description', content: 'Greenland Warehouse Management System' }]}
 			/>
-			<Spotlight fill='hsl(var(--primary))' className='fixed left-1/3 z-20 xl:left-1/4' />
+			{/* <Spotlight fill='hsl(var(--primary))' className='fixed left-1/3 z-20 xl:left-1/4' /> */}
 			<Div className='relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none'>
 				<Header />
 				<GridBackground />

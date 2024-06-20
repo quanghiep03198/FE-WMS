@@ -1,3 +1,4 @@
+import { useBreadcrumb } from '@/common/hooks/use-breadcrumb'
 import { cn } from '@/common/utils/cn'
 import {
 	Div,
@@ -14,8 +15,6 @@ import {
 	SelectFieldControl,
 	Typography
 } from '@/components/ui'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -37,11 +36,10 @@ export const Route = createLazyFileRoute('/(features)/_layout/in-out-commands/')
 
 function InOutCommandsPage() {
 	const { t } = useTranslation()
+	useBreadcrumb([{ href: '/dashboard', title: t('ns_common:navigation.wh_in_out_commands') }])
 	const [action, setAction] = useState('import')
 	const form = useForm()
 	const [EPCData, setEPCData] = useState([])
-
-	const queryClient = useQueryClient()
 
 	return (
 		<Div className='grid h-full grid-cols-2 gap-10'>
@@ -51,9 +49,9 @@ function InOutCommandsPage() {
 					<Typography variant='h6'>EPC CODE</Typography>
 				</Div>
 				{EPCData.length === 0 ? (
-					<Div className='flex basis-full items-center justify-center gap-x-2'>
-						<Icon name='PackageOpen' className='stroke-muted-foreground' size={32} strokeWidth={1} />
-						<Typography color='muted'>No data</Typography>
+					<Div className='flex basis-full items-center justify-center gap-x-4'>
+						<Icon name='TicketX' stroke='hsl(var(--muted-foreground))' size={40} strokeWidth={1} />
+						<Typography color='muted'>Empty</Typography>
 					</Div>
 				) : (
 					<ScrollArea className='flex flex-1 basis-full flex-col items-stretch p-1'>

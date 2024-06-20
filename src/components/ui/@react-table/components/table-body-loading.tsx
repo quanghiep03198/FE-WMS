@@ -2,6 +2,7 @@ import { Table } from '@tanstack/react-table'
 import { TableCell, TableRow } from '../..'
 import { cn } from '@/common/utils/cn'
 import Skeleton from '../../@custom/skeleton'
+import { ESTIMATE_SIZE } from './table'
 
 type DataTableLoading<TData> = {
 	table: Table<TData>
@@ -21,7 +22,7 @@ export function TableBodyLoading<T = unknown>({ prepareRows, table }: DataTableL
 				return (
 					<TableCell
 						key={key}
-						style={{ width: column.getSize() }}
+						style={{ width: column.getSize(), height: ESTIMATE_SIZE }}
 						className={cn({
 							'sticky left-0 z-10': isStickyLeft,
 							'sticky right-0 z-10': isStickyRight

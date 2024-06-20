@@ -21,13 +21,12 @@ const localStoragePersister = createSyncStoragePersister({
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			staleTime: 1000 * 60 * 60,
+			staleTime: 1000 * 60 * 5,
 			networkMode: 'online', //In this mode, Queries and Mutations will not fire unless you have network connection.
-			retry: 1
+			retry: false
 		},
 		mutations: {
-			networkMode: 'online',
-			retry: 1
+			networkMode: 'online'
 		}
 	}
 })

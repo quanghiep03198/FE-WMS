@@ -38,7 +38,7 @@ const Header: React.FunctionComponent = () => {
 	const { isAuthenticated } = useAuth()
 
 	return (
-		<Div className='sticky top-0 z-20 h-16 border-b border-border bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
+		<Div className='sticky top-0 z-20 h-16 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
 			<Div
 				as='nav'
 				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'

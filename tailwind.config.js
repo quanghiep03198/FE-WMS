@@ -20,6 +20,12 @@ module.exports = {
 				width: 'width',
 				spacing: 'margin, padding'
 			},
+			width: {
+				88: '22rem'
+			},
+			fontFamily: {
+				noto: 'Noto Sans SC, sans-serif '
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -68,7 +74,7 @@ module.exports = {
 					min: '1024px',
 					max: '1365px'
 				},
-				xl: { min: '1366px' },
+				xl: { min: '1366px', max: '1919px' },
 				xxl: { min: '1920px' }
 			},
 			borderRadius: {

@@ -6,7 +6,7 @@ export default {
 		storage_position: '位置',
 		is_disable: '是否禁用',
 		is_default: '是否默认',
-		area: '面積(m²)',
+		area: '面積 (m²)',
 		manager: '管理人'
 	},
 	warehouse_types: {
@@ -19,5 +19,9 @@ export default {
 	form: {
 		add_warehouse_title: '创建新仓库',
 		update_warehouse_title: '更新仓库'
+	},
+	headings: {
+		warehouse_list_title: '倉庫管理',
+		warehouse_list_description: '下表显示了所有仓库的信息列表'
 	}
 } as const

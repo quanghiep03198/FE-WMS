@@ -2,12 +2,23 @@ import { Row, flexRender, type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { CSSProperties, useContext, useRef } from 'react'
 import { DataTableProps } from '.'
-import { Div, Icon, Separator, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '../..'
+import {
+	Div,
+	Icon,
+	ScrollArea,
+	Separator,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Typography
+} from '../..'
 import { TableContext } from '../context/table.context'
 import ColumnResizer from './column-resizer'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
-import { cn } from '@/common/utils/cn'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
@@ -16,26 +27,26 @@ interface TableProps<TData, TValue>
 	table: TTable<TData>
 }
 
+export const ESTIMATE_SIZE = 48 as const
+
 export default function TableDataGrid<TData, TValue>({
-	containerProps = { style: { height: '500px' } },
+	containerProps = { style: { height: screen.availHeight / 2 } },
 	table,
 	loading
 }: TableProps<TData, TValue>) {
-	const { handleScroll } = useContext(TableContext)
-
-	//The virtualizer needs to know the scrollable container element
 	const { rows } = table.getRowModel()
-	const containerRef = useRef<HTMLDivElement>(null)
-
+	const containerRef = useRef<HTMLDivElement>()
+	const headerRef = useRef<HTMLTableSectionElement>(null)
+	const { handleScroll } = useContext(TableContext)
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		getScrollElement: () => containerRef.current,
-		estimateSize: () => 52,
+		estimateSize: () => ESTIMATE_SIZE,
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? (element) => element?.getBoundingClientRect().height
 				: undefined,
-		overscan: 1,
+		overscan: 5,
 		indexAttribute: 'data-index'
 	})
 
@@ -43,10 +54,10 @@ export default function TableDataGrid<TData, TValue>({
 		<Div
 			ref={containerRef}
 			onWheel={handleScroll}
-			className='z-0 w-full overflow-auto rounded-sm border bg-secondary/50 shadow scrollbar'
+			className='relative z-0 w-full overflow-auto rounded-[var(--radius)] border bg-secondary/50 shadow scrollbar'
 			{...containerProps}>
-			<Table className='relative top-0' style={{ minWidth: table.getTotalSize() }}>
-				<TableHeader className='sticky top-0 z-20'>
+			<Table className='relative top-0 border-separate border-spacing-0' style={{ minWidth: table.getTotalSize() }}>
+				<TableHeader className='sticky top-0 z-20' ref={headerRef}>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header, index) => (
@@ -61,7 +72,7 @@ export default function TableDataGrid<TData, TValue>({
 									) : (
 										<Separator
 											orientation='vertical'
-											className='absolute right-0 top-1/2 h-3/5 w-1 -translate-y-1/2 bg-muted'
+											className='absolute right-0 top-1/2 h-1/2 w-1 -translate-y-1/2 bg-muted'
 										/>
 									)}
 								</TableHead>
@@ -87,9 +98,9 @@ export default function TableDataGrid<TData, TValue>({
 											key={cell.id}
 											data-sticky={cell.column.columnDef?.meta?.sticky}
 											data-state={row.getIsSelected() && 'selected'}
-											style={{ width: cell.column.getSize() }}>
+											style={{ width: cell.column.getSize(), height: virtualRow.size }}>
 											{cell.getContext()?.cell ? (
-												<Typography className='line-clamp-1'>
+												<Typography variant='small' className='line-clamp-1'>
 													{flexRender(cell.column.columnDef.cell, cell.getContext())}
 												</Typography>
 											) : (
@@ -103,11 +114,12 @@ export default function TableDataGrid<TData, TValue>({
 					)}
 				</TableBody>
 			</Table>
-
 			{!loading && table.getRowModel().rows.length === 0 && (
-				<Div className='flex h-full w-full items-center justify-center bg-background'>
+				<Div
+					className='sticky left-0 right-auto top-0 flex h-full w-full items-center justify-center bg-background'
+					style={{ height: `calc(100% - ${headerRef.current?.offsetHeight}px)` }}>
 					<Div className='flex items-center justify-center gap-x-2 text-muted-foreground'>
-						<Icon name='PackageOpen' strokeWidth={1} size={32} /> No data
+						<Icon name='Database' strokeWidth={1} size={32} /> No data
 					</Div>
 				</Div>
 			)}

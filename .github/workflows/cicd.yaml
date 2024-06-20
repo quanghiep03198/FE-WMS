@@ -1,11 +1,11 @@
 on:
    push:
       branches:
-         - dev
+         - develop
 
 jobs:
    build-and-deploy:
-      runs-on: ubuntu-latest
+      runs-on: windows-latest
       steps:
          - uses: actions/checkout@v2
          - uses: actions/setup-node@v2
@@ -14,13 +14,12 @@ jobs:
          - run: npm ci
          - run: npm run build
          - name: Deploy to production
-           uses: appleboy/ssh-action@dev
            with:
               host: ${{ secrets.HOST }}
               username: ${{ secrets.USERNAME }}
               password: ${{ secrets.PASSWORD }}
               script: |
-                 cd C:/Users/Administrator/fe-wms
-                 git pull origin dev
+                 cd C:/Users/Administrator/i-wms/client
+                 git pull origin develop
                  npm install && npm run build
                  pm2 reload all

@@ -1,4 +1,6 @@
 import { TIconProps } from '@/components/ui'
+import { routeTree } from '@/route-tree.gen'
+import { ParseRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { ResourceKeys } from 'i18next'
@@ -7,7 +9,7 @@ export type NavigationConfig = {
 	id: string
 	icon: TIconProps['name']
 	title: ResourceKeys['ns_common']
-	path: React.ComponentProps<typeof Link>['to']
+	path: ParseRoute<typeof routeTree>['fullPath']
 	type: 'main' | 'preference' | 'auth'
 	keybinding: KeyType
 }
@@ -24,7 +26,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '2',
 		icon: 'GitCompareArrows',
-		title: 'navigation.wh_inbound_outbound',
+		title: 'navigation.wh_in_out_commands',
 		path: '/in-out-commands',
 		type: 'main',
 		keybinding: 'ctrl.alt.2'
@@ -73,7 +75,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: '8',
 		icon: 'PackageCheck',
 		title: 'navigation.wh_receiving_checking_management',
-		path: '/exchange-return',
+		path: '/product-incoming-inspection',
 		type: 'main',
 		keybinding: 'ctrl.alt.8'
 	},

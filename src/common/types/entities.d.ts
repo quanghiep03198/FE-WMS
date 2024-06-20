@@ -38,8 +38,8 @@ export interface IWarehouse extends IBaseEntity {
 	dept_code: string
 	dept_name: string
 	remark: string | null
-	is_disable: boolean
-	is_default: boolean
+	is_disable: boolean | number
+	is_default: boolean | number
 	employee_code: string | null
 	employee_name: string | null
 }

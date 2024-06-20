@@ -4,10 +4,10 @@ export enum Theme {
 	SYSTEM = 'system'
 }
 
-export enum Locale {
-	VI = 'vi',
-	EN = 'en',
-	CN = 'cn'
+export enum Languages {
+	VIETNAMESE = 'vi',
+	ENGLISH = 'en',
+	CHINESE = 'cn'
 }
 
 export enum BreakPoints {
@@ -16,4 +16,11 @@ export enum BreakPoints {
 	LARGE = '(min-width: 1024px) and (max-width: 1365px)',
 	EXTRA_LARGE = '(min-width: 1366px)',
 	ULTIMATE_LARGE = '(min-width: 1920px)'
+}
+
+export enum CommonActions {
+	CREATE = 'CREATE',
+	READ = 'READ',
+	UPDATE = 'UPDATE',
+	DELETE = 'DELETE'
 }

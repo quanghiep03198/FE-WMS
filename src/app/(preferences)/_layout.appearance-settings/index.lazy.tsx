@@ -1,4 +1,4 @@
-import { Locale, Theme } from '@/common/constants/enums'
+import { Languages, Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
 import {
 	Button,
@@ -39,7 +39,7 @@ function Page() {
 	const form = useForm<AppearanceFormValues>({
 		resolver: zodResolver(appearanceFormSchema),
 		defaultValues: {
-			language: i18n.language as Locale,
+			language: i18n.language as Languages,
 			font: 'inter',
 			theme: theme
 		}

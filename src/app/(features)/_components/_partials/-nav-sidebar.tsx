@@ -44,7 +44,7 @@ const NavSidebar: React.FC<SidebarProps> = ({ isCollapsed, onCollapsedChange: to
 			as='aside'
 			className={cn(
 				'z-30 flex h-screen flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
-				isCollapsed ? 'w-16 items-center' : 'w-80 items-stretch'
+				isCollapsed ? 'w-16 items-center' : 'w-88 items-stretch'
 			)}>
 			<Link
 				to='/dashboard'
@@ -100,11 +100,11 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 					}),
 					!isCollapsed ? 'justify-start gap-x-3' : 'aspect-square size-9'
 				)}>
-				<Icon name={icon} size={20} />
+				<Icon name={icon} size={20} className='size-5 basis-5' />
 				<Typography
 					className={cn(
 						'text-left font-medium transition-[width_opacity]',
-						isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-300'
+						isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto flex-1 opacity-100 duration-150'
 					)}>
 					{t(title, { defaultValue: title })}
 				</Typography>

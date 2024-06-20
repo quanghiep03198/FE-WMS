@@ -1,21 +1,16 @@
+import useAuth from '@/common/hooks/use-auth'
 import Loading from '@/components/shared/loading'
-import { Div, Separator } from '@/components/ui'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { useKeyPress } from 'ahooks'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
-import useAuth from '@/common/hooks/use-auth'
-import { useKeyPress } from 'ahooks'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/(preferences)/_layout')({
-	component: () => (
-		<AuthGuard>
-			<Layout />
-		</AuthGuard>
-	),
-	beforeLoad: ({ context }) => {
-		if (!context.isAuthenticated)
+	component: Layout,
+	beforeLoad: ({ context: { isAuthenticated } }) => {
+		if (!isAuthenticated)
 			throw redirect({
 				to: '/login'
 			})
@@ -38,14 +33,16 @@ function Layout() {
 	})
 
 	return (
-		<LayoutComposition.Container>
-			<LayoutComposition.Heading />
-			<LayoutComposition.MainSection as='section'>
-				<LayoutComposition.Sidebar />
-				<LayoutComposition.OutletWrapper>
-					<Outlet />
-				</LayoutComposition.OutletWrapper>
-			</LayoutComposition.MainSection>
-		</LayoutComposition.Container>
+		<AuthGuard>
+			<LayoutComposition.Container>
+				<LayoutComposition.Heading />
+				<LayoutComposition.MainSection as='section'>
+					<LayoutComposition.Sidebar />
+					<LayoutComposition.OutletWrapper>
+						<Outlet />
+					</LayoutComposition.OutletWrapper>
+				</LayoutComposition.MainSection>
+			</LayoutComposition.Container>
+		</AuthGuard>
 	)
 }

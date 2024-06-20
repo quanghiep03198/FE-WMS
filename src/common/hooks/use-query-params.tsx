@@ -9,9 +9,8 @@ export default function useQueryParams(defaultParams?: Record<string, any>) {
 
 	const searchParams = useSearch({
 		strict: false,
-		select: (): Record<string, any> => Object.fromEntries(new URLSearchParams(window.location.search))
+		select: (search) => search as Record<string, any>
 	})
-
 	/**
 	 * Set search params from URL
 	 * @param { Record<string, any> } params

@@ -6,7 +6,7 @@ export default {
 		storage_position: 'Vị trí',
 		is_disable: 'Đã hủy',
 		is_default: 'Đánh dấu là mặc định',
-		area: 'Diện tích(m²)',
+		area: 'Diện tích (m²)',
 		manager: 'Người quản lý'
 	},
 	warehouse_types: {
@@ -19,5 +19,9 @@ export default {
 	form: {
 		add_warehouse_title: 'Tạo mới kho',
 		update_warehouse_title: 'Cập nhật mới kho'
+	},
+	headings: {
+		warehouse_list_title: 'Quản lý kho',
+		warehouse_list_description: 'Bảng dưới đây hiển thị danh sách thông tin của tất cả các kho hàng'
 	}
 } as const

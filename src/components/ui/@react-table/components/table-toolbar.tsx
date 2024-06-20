@@ -25,7 +25,7 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 		<Div className='flex items-center justify-between sm:justify-end'>
 			<GlobalFilter table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
 
-			<Div className='grid grid-flow-col items-center gap-x-1'>
+			<Div className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				<Tooltip message={t('ns_common:actions.clear_filter')}>
 					<Button
 						variant='destructive'
@@ -35,12 +35,13 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
-
+				{slot}
 				<GlobalFilterPopover
 					table={table}
 					globalFilter={globalFilter}
 					onGlobalFilterChange={onGlobalFilterChange}
 				/>
+
 				<Tooltip message={t('ns_common:table.filter')}>
 					<Button
 						variant={isFilterOpened ? 'secondary' : 'outline'}
@@ -51,7 +52,6 @@ export default function TableToolbar<TData>(props: TableToolbarProps<TData>) {
 					</Button>
 				</Tooltip>
 				<TableViewOptions table={table} />
-				{slot}
 			</Div>
 		</Div>
 	)

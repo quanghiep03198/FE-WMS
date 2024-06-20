@@ -1,7 +1,4 @@
-import { Fragment } from 'react'
-import { HomeIcon } from '@radix-ui/react-icons'
-import { Link, useRouterState } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
+import { BreadcrumbContext } from '@/components/providers/breadcrumbs-provider'
 import {
 	Breadcrumb,
 	BreadcrumbEllipsis,
@@ -14,13 +11,15 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/components/ui'
-import { breadcrumbs } from '@/configs/breadcrumb.config'
+import { HomeIcon } from '@radix-ui/react-icons'
+import { Link, useRouterState } from '@tanstack/react-router'
+import { Fragment, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const NavBreadcrumb: React.FC = () => {
 	const { t } = useTranslation(['ns_common'])
 	const router = useRouterState()
-
-	const breadcrumb = breadcrumbs[router.location.pathname] ?? []
+	const { breadcrumb } = useContext(BreadcrumbContext)
 
 	return (
 		<Breadcrumb>
