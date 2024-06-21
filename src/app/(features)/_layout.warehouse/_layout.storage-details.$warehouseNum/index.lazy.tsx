@@ -6,6 +6,7 @@ import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams, useRouter } from '@tanstack/react-router'
 import { useContext, useLayoutEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/')({
 	component: WarehouseStorageDetail,
@@ -15,10 +16,10 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/
 function WarehouseStorageDetail() {
 	const { warehouseNum } = useParams({ strict: false })
 	const { searchParams } = useQueryParams({ page: 1, limit: 20 })
-	const { setBreadcrumb } = useContext(BreadcrumbContext)
+	const { t } = useTranslation()
 
 	useBreadcrumb([
-		{ href: '/warehouse', title: 'navigation.wh_management' },
+		{ href: '/warehouse', title: t('ns_common:navigation.wh_management') },
 		{ href: '/warehouse/storage-details/$warehouseNum', title: warehouseNum, params: { warehouseNum } }
 	])
 

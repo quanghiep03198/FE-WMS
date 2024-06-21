@@ -8,9 +8,7 @@ const AppLogo: React.FC = () => {
 			<Typography variant='small' className='whitespace-nowrap text-xs font-bold tracking-widest'>
 				i-WMS
 			</Typography>
-			<Badge variant='default' className='font-mono tracking-wide'>
-				{env('VITE_APP_VERSION')}
-			</Badge>
+			<Badge variant='default'>{env('VITE_APP_VERSION')}</Badge>
 		</Div>
 	)
 }

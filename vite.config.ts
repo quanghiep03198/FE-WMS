@@ -15,9 +15,8 @@ export default defineConfig({
 	esbuild: {
 		drop: ['console', 'debugger']
 	},
-
 	server: {
-		port: 5000,
+		port: 3000,
 		host: true,
 		proxy: {
 			'/api': {
@@ -28,6 +27,6 @@ export default defineConfig({
 		}
 	},
 	preview: {
-		port: 3000
+		port: 4000
 	}
 })

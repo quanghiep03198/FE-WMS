@@ -27,6 +27,7 @@
 		--input: 0 0% 89.8%;
 		--ring: 160 84% 39%;
 		--radius: 0.5rem;
+		--pseudo-height: 0px;
 	}
 
 	.dark {
@@ -60,7 +61,7 @@
 		@apply bg-background text-foreground;
 	}
 	.scrollbar {
-		@apply !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-neutral-200 dark:scrollbar-track-transparent dark:scrollbar-thumb-neutral-800;
+		@apply !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-800;
 	}
 }
 
@@ -74,4 +75,17 @@
 	input[type='number']::-webkit-outer-spin-button {
 		-webkit-appearance: none;
 	}
+
+	/* .virtual-table::after {
+		content: '';
+		display: block;
+		height: var(--pseudo-height);
+	} */
+
+	/* .virtual-table-sticky-header {
+		position: sticky;
+		top: 0;
+		z-index: 99;
+		background-color: hsl(var(--background));
+	} */
 }

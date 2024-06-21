@@ -5,7 +5,7 @@ export default function NotFoundPage() {
 	return (
 		<Div className='grid min-h-screen place-items-center px-6 py-24 sm:py-32 xl:px-8'>
 			<Div className='text-center'>
-				<Typography variant='p' color='primary' className='text-base font-semibold'>
+				<Typography variant='code' color='primary' className='text-base font-semibold'>
 					404
 				</Typography>
 				<Typography variant='h2' className='mt-4'>

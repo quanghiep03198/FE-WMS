@@ -13,15 +13,15 @@ export function TableBodyLoading<T = unknown>({ prepareRows, table }: DataTableL
 	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, index) => index)
 	const preRenderColumns = table.getAllColumns()
 
-	return preRenderRows.map((row) => (
-		<TableRow key={row}>
-			{preRenderColumns.map((column) => {
+	return preRenderRows.map((rowIndex) => (
+		<TableRow key={rowIndex}>
+			{preRenderColumns.map((column, columnIndex) => {
 				const isStickyLeft = column?.columnDef.meta?.sticky === 'left'
 				const isStickyRight = column?.columnDef.meta?.sticky === 'right'
-				const key = crypto.randomUUID()
+
 				return (
 					<TableCell
-						key={key}
+						key={`${rowIndex}-${columnIndex}`}
 						style={{ width: column.getSize(), height: ESTIMATE_SIZE }}
 						className={cn({
 							'sticky left-0 z-10': isStickyLeft,

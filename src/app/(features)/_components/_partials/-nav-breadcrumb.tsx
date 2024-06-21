@@ -17,8 +17,6 @@ import { Fragment, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const NavBreadcrumb: React.FC = () => {
-	const { t } = useTranslation(['ns_common'])
-	const router = useRouterState()
 	const { breadcrumb } = useContext(BreadcrumbContext)
 
 	return (
@@ -42,7 +40,7 @@ export const NavBreadcrumb: React.FC = () => {
 								{breadcrumb.slice(0, 3).map((item, index) => (
 									<DropdownMenuItem asChild>
 										<Link to={item.href} className='font-semibold' key={index}>
-											{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
+											{item.title}
 										</Link>
 									</DropdownMenuItem>
 								))}
@@ -51,7 +49,7 @@ export const NavBreadcrumb: React.FC = () => {
 						<BreadcrumbSeparator />
 						<BreadcrumbLink asChild>
 							<Link to={breadcrumb[breadcrumb.length - 1].href} activeProps={{ className: 'text-foreground' }}>
-								{t(breadcrumb.at(-1)?.title, { ns: 'ns_common', defaultValue: breadcrumb.at(-1)?.title })}
+								{breadcrumb.at(-1)?.title}
 							</Link>
 						</BreadcrumbLink>
 					</Fragment>
@@ -61,7 +59,7 @@ export const NavBreadcrumb: React.FC = () => {
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
 									<Link to={item.href} className='font-medium' activeProps={{ className: 'text-foreground' }}>
-										{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
+										{item.title}
 									</Link>
 								</BreadcrumbLink>
 							</BreadcrumbItem>

@@ -35,6 +35,7 @@ import { CommonActions } from '@/common/constants/enums'
 import { BreadcrumbContext } from '@/components/providers/breadcrumbs-provider'
 import { useDeepCompareLayoutEffect } from 'ahooks'
 import { useBreadcrumb } from '@/common/hooks/use-breadcrumb'
+import { warehouses } from '@/mocks/warehouse.data'
 // #endregion
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/')({
@@ -76,6 +77,7 @@ function Page() {
 	const queryClient = useQueryClient()
 	const { data, isLoading } = useQuery(warehouseQuery(searchParams))
 	const [isSingleDelete, setIsSingleDelete] = useState<boolean>(false)
+
 	useBreadcrumb([{ href: '/warehouse', title: t('ns_common:navigation.wh_management') }])
 
 	// Delete warehouse query
@@ -98,12 +100,12 @@ function Page() {
 		mutationKey: ['warehouses'],
 		mutationFn: (payload: { id: string; data: Partial<IWarehouse> }) =>
 			WarehouseService.updateWarehouse(payload.id, payload.data),
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		// onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
+			// toast.success(t('ns_common:notification.success'), { id: context })
 			return queryClient.invalidateQueries({ queryKey: ['warehouses'] })
-		},
-		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
+		}
+		// onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
 	const handleCancelDelete = useCallback(() => {
@@ -268,7 +270,6 @@ function Page() {
 									</Button>
 								</Tooltip>
 							)}
-							<Link to=''></Link>
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 								<Button
 									variant='outline'

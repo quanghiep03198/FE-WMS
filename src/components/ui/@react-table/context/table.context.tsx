@@ -7,7 +7,7 @@ type TableProviderProps = {
 type TableContext = {
 	isScrolling: boolean
 	isFilterOpened: boolean
-	handleScroll: WheelEventHandler
+	handleMouseWheel: WheelEventHandler
 	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>
 } & Pick<TableProviderProps, 'hasNoFilter'>
 
@@ -16,7 +16,7 @@ export const TableContext = createContext<TableContext>({
 	isFilterOpened: false,
 	hasNoFilter: false,
 	setIsFilterOpened: () => {},
-	handleScroll: () => undefined
+	handleMouseWheel: () => undefined
 })
 
 export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, children }) => {
@@ -24,7 +24,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, child
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-	const handleScroll: WheelEventHandler = (e) => {
+	const handleMouseWheel: WheelEventHandler = (e) => {
 		e.stopPropagation()
 		if (timeoutRef.current) clearTimeout(timeoutRef.current!)
 		setIsScrolling(true)
@@ -40,7 +40,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, child
 				hasNoFilter,
 				isFilterOpened,
 				setIsFilterOpened,
-				handleScroll
+				handleMouseWheel
 			}}>
 			{children}
 		</TableContext.Provider>
