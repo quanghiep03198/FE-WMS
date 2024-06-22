@@ -1,19 +1,15 @@
+import useAuth from '@/common/hooks/use-auth'
 import { routeTree } from '@/route-tree.gen'
 import { RouterProvider as TanstackRouterProvider, createRouter } from '@tanstack/react-router'
 import Loading from '../shared/loading'
 import { queryClient } from './query-client-provider'
-import useAuth from '@/common/hooks/use-auth'
-import env from '@/common/utils/env'
+import { AuthProvider } from './auth-provider'
 
 // Set up a Router instance
 const router = createRouter({
 	routeTree,
 	context: { queryClient, isAuthenticated: undefined },
-	defaultPreload: 'intent',
-	defaultPreloadDelay: 0,
-	defaultPreloadStaleTime: env('VITE_DEFAULT_TTL'),
-	defaultStaleTime: env('VITE_DEFAULT_TTL'),
-	defaultViewTransition: false,
+
 	defaultPendingComponent: () => <Loading className='h-screen' />
 })
 

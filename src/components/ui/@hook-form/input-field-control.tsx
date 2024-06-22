@@ -1,11 +1,10 @@
 import { cn } from '@/common/utils/cn'
-import React, { forwardRef, memo, useEffect, useId, useRef, useState } from 'react'
+import React, { forwardRef, memo, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormMessage } from '..'
+import { BaseFieldControl } from '../../../common/types/hook-form'
 import { Input, InputProps } from '../@shadcn/input'
 import FormLabel from './alternative-form-label'
-import { BaseFieldControl } from '../../../common/types/hook-form'
-import { useDeepCompareEffect } from 'ahooks'
 
 export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & InputProps
 

@@ -29,6 +29,8 @@ export declare global {
 
 	type AnonymousFunction = (...args: any[]) => any
 
+	type RowDeletionType = 'single' | 'multiple' | undefined
+
 	type FirstParameter<T> = T extends (first: infer FirstArgument, ...args: any[]) => infer T ? FirstArgument : never
 
 	type Parameter<T> = T extends (param: infer Argument) => infer T ? Argument : never

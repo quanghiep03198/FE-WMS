@@ -1,4 +1,4 @@
-import { useBreadcrumb } from '@/common/hooks/use-breadcrumb'
+import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import { Div } from '@/components/ui'
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
@@ -14,7 +14,7 @@ export const Route = createFileRoute('/(features)/_layout/dashboard/')({
 
 function Dashboard() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ href: '/dashboard', title: t('ns_common:navigation.wh_dashboard') }])
+	useBreadcrumb([{ to: '/dashboard', title: t('ns_common:navigation.wh_dashboard') }])
 
 	return (
 		<Fragment>

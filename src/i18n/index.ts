@@ -25,12 +25,12 @@ i18n
 		resources: resources,
 		defaultNS: 'ns_common',
 		fallbackLng: Languages.CHINESE,
-		debug: env('VITE_NODE_ENV') === 'development',
+		debug: false,
 		cleanCode: true,
 		saveMissing: true,
-		updateMissing: false,
+		updateMissing: true,
 		missingKeyHandler(lngs, ns, key, fallbackValue, updateMissing, options) {
-			return key
+			return fallbackValue
 		},
 		missingKeyNoValueFallbackToKey: true,
 		appendNamespaceToMissingKey: true,

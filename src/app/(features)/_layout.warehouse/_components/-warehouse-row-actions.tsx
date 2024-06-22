@@ -1,21 +1,38 @@
 import { IWarehouse } from '@/common/types/entities'
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
+import { EmployeeService } from '@/services/employee.service'
+import { WarehouseService } from '@/services/warehouse.service'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { Link } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 type WarehouseRowActionsProps = {
 	row: Row<IWarehouse>
-	enableEditing: boolean
-	enableDeleting: boolean
 	onEdit: () => void
 	onDelete: () => void
 }
 
-const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
+const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, onDelete }) => {
 	const { t } = useTranslation()
+	const router = useRouter()
+	const queryClient = useQueryClient()
+
+	// Prefetch warehouse storage detail before navigating
+	const prefetchWarehouseDetail = (warehouseNum: string) =>
+		queryClient.prefetchQuery({
+			queryKey: ['warehouse', warehouseNum],
+			queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum)
+		})
+
+	// Prefetch employee before opening update form dialog
+	const prefetchEmployee = (departmentCode: string, employeeCode: string) =>
+		queryClient.prefetchQuery({
+			queryKey: ['employee', departmentCode, employeeCode],
+			queryFn: () => EmployeeService.searchEmployee({ dept_code: departmentCode, search: employeeCode })
+		})
 
 	return (
 		<DropdownMenu>
@@ -26,29 +43,36 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-40'>
-				<DropdownMenuItem asChild className='flex items-center gap-x-3'>
-					<Link
-						to={`/warehouse/storage-details/$warehouseNum`}
-						params={{ warehouseNum: props.row.original?.warehouse_num }}>
-						<Icon name='SquareDashedMousePointer' />
-						{t('ns_common:actions.detail')}
-					</Link>
+				<DropdownMenuItem
+					className='flex items-center gap-x-3'
+					onMouseEnter={() => prefetchWarehouseDetail(row.original?.warehouse_num)}
+					onClick={() =>
+						router.invalidate().finally(() =>
+							router.navigate({
+								to: '/warehouse/storage-details/$warehouseNum',
+								params: {
+									warehouseNum: row.original?.warehouse_num
+								}
+							})
+						)
+					}>
+					<Icon name='SquareDashedMousePointer' />
+					{t('ns_common:actions.detail')}
 				</DropdownMenuItem>
 				<DropdownMenuItem
-					disabled={!props.enableEditing}
 					className='flex items-center gap-x-3'
+					onMouseEnter={() => prefetchEmployee(row.original.dept_code, row.original?.manager_code)}
 					onClick={() => {
-						if (props.onEdit && typeof props.onEdit === 'function') props.onEdit()
+						if (typeof onEdit === 'function') onEdit()
 					}}>
 					<Icon name='Pencil' />
 					{t('ns_common:actions.update')}
 				</DropdownMenuItem>
 
 				<DropdownMenuItem
-					disabled={!props.enableDeleting}
 					className='flex items-center gap-x-3'
 					onClick={() => {
-						if (props.onDelete && typeof props.onDelete === 'function') props.onDelete()
+						if (typeof onDelete === 'function') onDelete()
 					}}>
 					<Icon name='Trash2' />
 					{t('ns_common:actions.delete')}

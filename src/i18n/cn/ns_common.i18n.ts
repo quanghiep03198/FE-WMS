@@ -1,7 +1,13 @@
 export default {
-	language: '语言',
-	theme: '主题',
-	function: '功能名称',
+	settings: {
+		language: '语言',
+		theme: '主题',
+		function: '功能名称'
+	},
+	specialized_vocabs: {
+		warehouse: '仓库',
+		storage_area: '库位'
+	},
 	common_fields: {
 		created_at: '创建日期',
 		updated_at: '编辑日期',
@@ -15,6 +21,7 @@ export default {
 		save: '保存',
 		cancel: '取消',
 		submit: '确认',
+		confirm: '确认',
 		continue: '继续',
 		back: '返回',
 		close: '关闭',
@@ -51,6 +58,7 @@ export default {
 		wh_dashboard: '儲位管理',
 		wh_in_out_commands: '倉庫出入庫作業',
 		wh_management: '倉庫管理',
+		wh_storage_detail: '仓库存储详情',
 		wh_import_management: '入庫管理',
 		wh_export_management: '出庫管理',
 		wh_transfer_managment: '調撥管理',
@@ -74,5 +82,9 @@ export default {
 		'403_message': '你不许访问页面.',
 		'503': '功能不可用',
 		'503_message': '功能正在开发/维护中。请稍后再试'
+	},
+	common_form_titles: {
+		create: '加新{{object}}',
+		update: '編輯{{object}}'
 	}
 } as const

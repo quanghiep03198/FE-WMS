@@ -64,6 +64,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 			)
 
 		case 'equals':
+			console.log(column.getFacetedRowModel())
+
 			return (
 				<DropdownSelect
 					selectTriggerProps={{

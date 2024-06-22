@@ -7,7 +7,10 @@ export default {
 		is_disable: 'Disabled',
 		is_default: 'Default',
 		area: 'Area (m²)',
-		manager: 'Manager'
+		manager: 'Manager',
+		storage_num: 'Storage code',
+		storage_name: 'Storage name',
+		type_storage: 'Storage type'
 	},
 	// created_at: 'Created at',
 	warehouse_types: {
@@ -17,12 +20,19 @@ export default {
 		finished_production_warehouse: 'Finished production warehouse',
 		scrap_production_warehouse: 'Scrap production warehouse'
 	},
+	storage_types: {
+		main_area: 'Main area',
+		finished_production_area: 'Finished production area',
+		inspection_holding_area: 'Product inspection area',
+		outbound_staging_area: 'Outbound staging area',
+		inbound_staging_area: 'Inbound staging area'
+	},
 	form: {
 		add_warehouse_title: 'Create New Warehouse',
 		update_warehouse_title: 'Update Warehouse'
 	},
 	headings: {
 		warehouse_list_title: 'Warehouse management',
-		warehouse_list_description: "The table below show list of all warehouses's information"
+		warehouse_detail_title: 'Warehouse storage location details'
 	}
 } as const

@@ -55,6 +55,11 @@ export default function TablePagination<TData>({
 		if (!manualPagination) table.setPageSize(value)
 	}
 
+	const handlePrefetch = (params: Record<string, any>) => {
+		if (!manualPagination || typeof prefetch !== 'function') return
+		prefetch(params)
+	}
+
 	return (
 		<Div className='ml-auto flex items-center space-x-6 lg:space-x-8'>
 			<Div className='flex items-center space-x-2'>
@@ -71,7 +76,10 @@ export default function TablePagination<TData>({
 					</SelectTrigger>
 					<SelectContent side='top'>
 						{[10, 20, 50, 100].map((pageSize) => (
-							<SelectItem key={pageSize} value={`${pageSize}`}>
+							<SelectItem
+								key={pageSize}
+								value={`${pageSize}`}
+								onMouseEnter={() => handlePrefetch({ ...searchParams, limit: pageSize })}>
 								{pageSize}
 							</SelectItem>
 						))}
@@ -93,14 +101,14 @@ export default function TablePagination<TData>({
 						disabled={!canPreviousPage}
 						search={{ ...searchParams, limit: pageSize, page: 1 }}
 						onClick={table.firstPage}
-						onMouseEnter={() => {
-							if (prefetch && typeof prefetch === 'function') prefetch({ ...searchParams, page: 1 })
-						}}
-						className={buttonVariants({
-							variant: 'outline',
-							size: 'icon',
-							className: cn(!canPreviousPage && '!pointer-events-none !bg-muted !text-muted-foreground')
-						})}>
+						onMouseEnter={() => handlePrefetch({ ...searchParams, page: 1 })}
+						className={cn(
+							buttonVariants({
+								variant: 'outline',
+								size: 'icon'
+							}),
+							!canPreviousPage && 'pointer-events-none bg-muted text-muted-foreground'
+						)}>
 						<Icon name='ChevronsLeft' />
 					</Link>
 				</Tooltip>
@@ -109,14 +117,14 @@ export default function TablePagination<TData>({
 						disabled={!canPreviousPage}
 						search={{ ...searchParams, limit: pageSize, page: pageIndex - 1 }}
 						onClick={table.previousPage}
-						onMouseEnter={() => {
-							if (prefetch && typeof prefetch === 'function') prefetch({ ...searchParams, page: pageIndex - 1 })
-						}}
-						className={buttonVariants({
-							variant: 'outline',
-							size: 'icon',
-							className: cn(!canPreviousPage && '!pointer-events-none !bg-muted !text-muted-foreground')
-						})}>
+						onMouseEnter={() => handlePrefetch({ ...searchParams, page: pageIndex - 1 })}
+						className={cn(
+							buttonVariants({
+								variant: 'outline',
+								size: 'icon'
+							}),
+							!canPreviousPage && 'pointer-events-none bg-muted text-muted-foreground'
+						)}>
 						<Icon name='ChevronLeft' />
 					</Link>
 				</Tooltip>
@@ -125,14 +133,14 @@ export default function TablePagination<TData>({
 						disabled={!canNextPage}
 						search={{ ...searchParams, page: pageIndex + 1 }}
 						onClick={table.nextPage}
-						onMouseEnter={() => {
-							if (prefetch && typeof prefetch === 'function') prefetch({ ...searchParams, page: pageIndex + 1 })
-						}}
-						className={buttonVariants({
-							variant: 'outline',
-							size: 'icon',
-							className: cn(!canNextPage && '!pointer-events-none !bg-muted !text-muted-foreground')
-						})}>
+						onMouseEnter={() => handlePrefetch({ ...searchParams, page: pageIndex + 1 })}
+						className={cn(
+							buttonVariants({
+								variant: 'outline',
+								size: 'icon'
+							}),
+							!canNextPage && 'pointer-events-none bg-muted text-muted-foreground'
+						)}>
 						<Icon name='ChevronRight' />
 					</Link>
 				</Tooltip>
@@ -141,14 +149,14 @@ export default function TablePagination<TData>({
 						disabled={!canNextPage}
 						search={{ ...searchParams, page: pageCount }}
 						onClick={table.lastPage}
-						onMouseEnter={() => {
-							if (prefetch && typeof prefetch === 'function') prefetch({ ...searchParams, page: pageCount })
-						}}
-						className={buttonVariants({
-							variant: 'outline',
-							size: 'icon',
-							className: cn(!canNextPage && '!pointer-events-none !bg-muted !text-muted-foreground')
-						})}>
+						onMouseEnter={() => handlePrefetch({ ...searchParams, page: pageCount })}
+						className={cn(
+							buttonVariants({
+								variant: 'outline',
+								size: 'icon'
+							}),
+							!canNextPage && 'pointer-events-none bg-muted text-muted-foreground'
+						)}>
 						<Icon name='ChevronsRight' />
 					</Link>
 				</Tooltip>

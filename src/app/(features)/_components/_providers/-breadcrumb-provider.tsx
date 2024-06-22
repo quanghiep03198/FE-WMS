@@ -1,11 +1,10 @@
 import { routeTree } from '@/route-tree.gen'
-import { AnyPathParams, ParsePathParams, ParseRoute } from '@tanstack/react-router'
-import { ResourceKeys } from 'i18next'
+import { AnyPathParams, ParseRoute } from '@tanstack/react-router'
 import React, { createContext, useState } from 'react'
 
 export type TBreadcrumb = {
-	href: ParseRoute<typeof routeTree>['fullPath']
-	title?: string
+	to: ParseRoute<typeof routeTree>['fullPath']
+	title: string
 	params?: AnyPathParams
 }
 

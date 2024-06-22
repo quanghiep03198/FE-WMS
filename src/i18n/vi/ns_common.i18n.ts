@@ -1,7 +1,13 @@
 export default {
-	language: 'Ngôn ngữ',
-	theme: 'Chế độ nền',
-	function: 'Chức năng',
+	settings: {
+		language: 'Ngôn ngữ',
+		theme: 'Chế độ nền',
+		function: 'Chức năng'
+	},
+	specialized_vocabs: {
+		warehouse: 'Kho',
+		storage_area: 'Khu vực lưu trữ'
+	},
 	common_fields: {
 		created_at: 'Ngày tạo',
 		updated_at: 'Ngày cập nhật',
@@ -18,6 +24,7 @@ export default {
 		save: 'Lưu',
 		cancel: 'Hủy',
 		submit: 'Xác nhận',
+		confirm: 'Xác nhận',
 		detail: 'Chi tiết',
 		login: 'Đăng nhập',
 		logout: 'Đăng xuất',
@@ -51,6 +58,7 @@ export default {
 		wh_dashboard: 'Màn hình chính',
 		wh_in_out_commands: 'Thao tác nhập/xuất kho',
 		wh_management: 'Quản lý kho',
+		wh_storage_detail: 'Chi tiết vị trí lưu kho',
 		wh_import_management: 'Quản lý nhập hàng',
 		wh_export_management: 'Quản lý xuất hàng',
 		wh_transfer_managment: 'Quản lý chuyển giao',
@@ -75,5 +83,9 @@ export default {
 		'403_message': 'Bạn không được phép truy cập trang này.',
 		'503': 'Tính Năng Không Khả Dụng',
 		'503_message': 'Tính năng đang trong quá trình phát triển / bảo trì. Vui lòng thử lại sau'
+	},
+	common_form_titles: {
+		create: 'Thêm mới {{object}}',
+		update: 'Cập nhật {{object}}'
 	}
 } as const

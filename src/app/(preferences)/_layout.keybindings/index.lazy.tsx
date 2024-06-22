@@ -44,7 +44,7 @@ function KeybindingsPage() {
 			size: 64
 		}),
 		columnHelper.accessor('title', {
-			header: t('ns_common:function'),
+			header: t('ns_common:settings.function'),
 			enableSorting: true,
 			enableColumnFilter: true,
 			filterFn: 'equals',

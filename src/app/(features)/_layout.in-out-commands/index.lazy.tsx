@@ -1,4 +1,4 @@
-import { useBreadcrumb } from '@/common/hooks/use-breadcrumb'
+import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import { cn } from '@/common/utils/cn'
 import {
 	Div,
@@ -36,7 +36,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/in-out-commands/')
 
 function InOutCommandsPage() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ href: '/dashboard', title: t('ns_common:navigation.wh_in_out_commands') }])
+	useBreadcrumb([{ to: '/in-out-commands', title: t('ns_common:navigation.wh_in_out_commands') }])
 	const [action, setAction] = useState('import')
 	const form = useForm()
 	const [EPCData, setEPCData] = useState([])

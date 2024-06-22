@@ -9,16 +9,19 @@ import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 import NavSidebar from './_components/_partials/-nav-sidebar'
 import Navbar from './_components/_partials/-navbar'
-import { BreadcrumbProvider } from '@/components/providers/breadcrumbs-provider'
+import Loading from '@/components/shared/loading'
+import { BreadcrumbProvider } from './_components/_providers/-breadcrumb-provider'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
-	beforeLoad: ({ context: { isAuthenticated } }) => {
-		if (!isAuthenticated)
-			throw redirect({
-				to: '/login'
-			})
-	}
+	wrapInSuspense: true,
+	pendingComponent: () => <Loading className='h-screen' />
+	// beforeLoad: ({ context: { isAuthenticated } }) => {
+	// 	if (!isAuthenticated)
+	// 		throw redirect({
+	// 			to: '/login'
+	// 		})
+	// }
 })
 
 function Layout() {
@@ -37,7 +40,7 @@ function Layout() {
 				<LayoutComposition.Main as='main'>
 					<BreadcrumbProvider>
 						<Navbar isCollapsed={isCollapsed} onCollapseStateChange={setIsCollapsed} />
-						<LayoutComposition.OutletWrapper as='section'>
+						<LayoutComposition.OutletWrapper>
 							<ErrorBoundary>
 								<Outlet />
 							</ErrorBoundary>

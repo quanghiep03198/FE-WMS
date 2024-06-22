@@ -9,14 +9,14 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
 
-type SidebarProps = {
+type NavSidebarProps = {
 	isCollapsed: boolean
 	onCollapsedChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type NavLinkProps = { isCollapsed: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
-const NavSidebar: React.FC<SidebarProps> = ({ isCollapsed, onCollapsedChange: toggleCollapseSidebar }) => {
+const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange: toggleCollapseSidebar }) => {
 	const navigate = useNavigate()
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
@@ -92,6 +92,7 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 			<Link
 				to={path}
 				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}
+				preload={false}
 				className={cn(
 					buttonVariants({
 						variant: 'ghost',

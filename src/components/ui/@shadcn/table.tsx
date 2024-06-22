@@ -73,7 +73,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'bg-background px-4 py-2 align-middle text-sm group-hover:bg-secondary data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[disabled=true]:bg-muted data-[state=selected]:bg-accent [&:has([role=checkbox])]:pr-0',
+				'bg-background px-4 py-2 align-middle text-sm group-hover:bg-secondary data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[disabled=true]:bg-muted data-[state=selected]:bg-accent [&:has([role=checkbox])]:min-w-4',
 				className
 			)}
 			{...props}

@@ -1,5 +1,5 @@
 import { Badge, Button, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
 import NavUserControl from './-nav-user-controller'
@@ -18,8 +18,8 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 	const { t } = useTranslation()
 
 	return (
-		<>
-			<Div as='nav' className='sticky top-0 z-50 h-20 bg-background/80 p-3 backdrop-blur-sm'>
+		<Fragment>
+			<Div as='nav' className='sticky top-0 z-50 bg-background/80 p-4 backdrop-blur-sm'>
 				<Div className='flex items-center justify-between rounded border border-border bg-inherit px-3 py-2'>
 					<Div className='flex items-center gap-x-4'>
 						<Tooltip
@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 			</Div>
 			<NavDrawerSidebar open={isCollapsed} onOpenStateChange={onCollapseStateChange} />
 			<SearchDialog open={open} onOpenChange={setOpen} />
-		</>
+		</Fragment>
 	)
 }
 

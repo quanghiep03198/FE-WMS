@@ -1,16 +1,14 @@
 import { Div } from '@/components/ui'
 import { createFileRoute, useRouterState } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useDeepCompareEffect } from 'ahooks'
 import { Helmet } from 'react-helmet'
+import HeroSection from './_components/-cta-section'
 import FAQsSection from './_components/-faq-section'
 import FeaturesSection from './_components/-features-section'
 import Footer from './_components/-footer'
 import GridBackground from './_components/-grid-background'
 import Header from './_components/-header'
-import HeroSection from './_components/-cta-section'
 import SupportSection from './_components/-support-section'
-import Loading from '@/components/shared/loading'
-import Spotlight from './_components/-spotlight'
 
 export const Route = createFileRoute('/(public)/')({
 	component: HomePage,
@@ -52,7 +50,7 @@ export function useScrollIntoView({
 }) {
 	const { location } = useRouterState()
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (target && location.hash === hashMatch) {
 			target.scrollIntoView({
 				block: block,

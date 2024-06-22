@@ -28,7 +28,7 @@ const ThemeSelector: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 	return (
 		<Div className='fixed right-2 top-2 z-50'>
-			<Tooltip message={`${t('ns_common:theme')} (ctrl+alt+t)`} contentProps={{ side: 'left' }}>
+			<Tooltip message={`${t('ns_common:settings.theme')} (ctrl+alt+t)`} contentProps={{ side: 'left' }}>
 				<ThemeToggle />
 			</Tooltip>
 		</Div>

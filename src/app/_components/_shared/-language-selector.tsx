@@ -17,27 +17,13 @@ import {
 	Tooltip
 } from '@/components/ui'
 import { locales } from '@/i18n'
-import { useLocalStorageState } from 'ahooks'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-function useTranslate() {
-	const { i18n } = useTranslation()
-	const [i18nextLng, setI18nextLng] = useLocalStorageState('i18nextLng', { defaultValue: i18n.language })
-
-	useEffect(() => setI18nextLng(i18n.language), [i18n.language])
-
-	return {
-		i18n,
-		i18nextLng
-	}
-}
-
 export const LanguageSelect: React.FC = () => {
-	const { i18n, i18nextLng } = useTranslate()
+	const { i18n } = useTranslation()
 
 	return (
-		<Select onValueChange={(value) => i18n.changeLanguage(value)} defaultValue={i18nextLng}>
+		<Select onValueChange={(value) => i18n.changeLanguage(value)} defaultValue={i18n.language}>
 			<SelectTrigger>
 				<SelectValue placeholder='Choose language' />
 			</SelectTrigger>
@@ -57,7 +43,7 @@ export const LanguageDropdown: React.FC<{ triggerProps?: ButtonProps }> = ({ tri
 
 	return (
 		<DropdownMenu>
-			<Tooltip message={t('ns_common:language')} triggerProps={{ asChild: true }}>
+			<Tooltip message={t('ns_common:settings.language')} triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger asChild>
 					<Button {...triggerProps} size='icon' type='button'>
 						<Icon name='Languages' />

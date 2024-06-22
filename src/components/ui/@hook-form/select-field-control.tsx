@@ -37,7 +37,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 		className,
 		defaultValue,
 		placeholder = t('ns_common:actions.search') + ' ... ',
-		messageType: messageMode = 'alternative',
+		messageType = 'alternative',
 		onValueChange,
 		...restProps
 	} = props
@@ -56,10 +56,10 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							hidden,
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageMode} />
+						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
 						<Select
-							value={field.value}
-							defaultValue={field.value ?? getValues(name)}
+							value={field.value ?? getValues(name)}
+							defaultValue={field.value}
 							onValueChange={(value) => {
 								field.onChange(value)
 								if (onValueChange) {
@@ -68,12 +68,12 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							}}
 							{...restProps}>
 							<SelectTrigger
+								id={id}
+								ref={(e) => field.ref(e)}
 								className={cn('bg-background', className, {
 									'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive':
 										!!getFieldState(name).error
-								})}
-								ref={(e) => field.ref(e)}
-								id={id}>
+								})}>
 								<SelectValue placeholder={placeholder} />
 							</SelectTrigger>
 
@@ -87,7 +87,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							</SelectContent>
 						</Select>
 						{props.description && <FormDescription>{props.description}</FormDescription>}
-						{messageMode === 'default' && <FormMessage />}
+						{messageType === 'default' && <FormMessage />}
 					</FormItem>
 				)
 			}}

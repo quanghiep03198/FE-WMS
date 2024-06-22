@@ -1,7 +1,13 @@
 export default {
-	language: 'Language',
-	theme: 'Theme',
-	function: 'Function',
+	settings: {
+		language: 'Language',
+		theme: 'Theme',
+		function: 'Function'
+	},
+	specialized_vocabs: {
+		warehouse: 'Warehouse',
+		storage_area: 'Storage area'
+	},
 	common_fields: {
 		created_at: 'Created at',
 		updated_at: 'Updated at',
@@ -15,6 +21,7 @@ export default {
 		save: 'Save',
 		cancel: 'Cancel',
 		submit: 'Submit',
+		confirm: 'Confirm',
 		continue: 'Continue',
 		back: 'Back',
 		close: ' Close',
@@ -51,6 +58,7 @@ export default {
 		wh_dashboard: 'Dashboard',
 		wh_in_out_commands: 'Import/Export commands',
 		wh_management: 'Warehouse management',
+		wh_storage_detail: 'Storage details',
 		wh_import_management: 'Import management',
 		wh_export_management: 'Export management',
 		wh_transfer_managment: 'Transfer management',
@@ -75,5 +83,9 @@ export default {
 		'403_message': "You don't have permission to access this page.",
 		'503': 'Service Unavailable',
 		'503_message': 'This feature is currently under development/maintenance. Please try again later.'
+	},
+	common_form_titles: {
+		create: 'Create new {{object}}',
+		update: 'Update {{object}}'
 	}
 } as const

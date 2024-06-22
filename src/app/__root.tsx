@@ -4,12 +4,15 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Fragment } from 'react'
 import NotFoundPage from './_components/_errors/-not-found'
 import Loading from '@/components/shared/loading'
+import env from '@/common/utils/env'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient; isAuthenticated: boolean }>()({
 	component: () => (
 		<Fragment>
 			<Outlet />
-			<TanStackRouterDevtools position='bottom-right' initialIsOpen={false} />
+			{env('VITE_NODE_ENV') === 'development' && (
+				<TanStackRouterDevtools position='bottom-right' initialIsOpen={false} />
+			)}
 		</Fragment>
 	),
 	wrapInSuspense: true,

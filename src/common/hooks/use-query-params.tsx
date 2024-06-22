@@ -5,7 +5,6 @@ import { useCallback } from 'react'
 
 export default function useQueryParams(defaultParams?: Record<string, any>) {
 	const router = useRouter()
-	const navigate = useNavigate()
 
 	const searchParams = useSearch({
 		strict: false,
@@ -17,7 +16,7 @@ export default function useQueryParams(defaultParams?: Record<string, any>) {
 	 * @returns {Promise<void>}
 	 */
 	const setParams = useCallback((params: Record<string, any>) => {
-		navigate({ search: (prev) => ({ ...prev, ...params }) })
+		router.invalidate().finally(() => router.navigate({ search: (prev) => ({ ...prev, ...params }) }))
 	}, [])
 
 	/**
@@ -26,12 +25,12 @@ export default function useQueryParams(defaultParams?: Record<string, any>) {
 	 * @returns {Promise<void>}
 	 */
 	const removeParam = useCallback((key: string) => {
-		navigate({ search: (prev) => _.omit(prev, [key]) })
+		router.invalidate().finally(() => router.navigate({ search: (prev) => _.omit(prev, [key]) }))
 	}, [])
 
 	useDeepCompareEffect(() => {
 		if (!Object.keys(searchParams).length && Boolean(defaultParams) && Object.keys(defaultParams).length > 0) {
-			router.invalidate().finally(() => navigate({ search: defaultParams }))
+			router.invalidate().finally(() => router.navigate({ search: defaultParams }))
 		}
 	}, [])
 

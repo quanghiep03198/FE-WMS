@@ -29,6 +29,8 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 	data: Array<D>
 	labelField: keyof D
 	valueField: keyof D
+	triggerProps?: React.ComponentProps<typeof Button>
+	disabled?: boolean
 	template?: React.FC<{ data: D }>
 	onInput?: (value: string) => unknown
 	onSelect?: (value: string) => unknown
@@ -48,10 +50,12 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		valueField,
 		label,
 		description,
-		placeholder = t('ns_common:actions.search') + ' ... ',
 		orientation,
+		triggerProps,
+		disabled,
 		hidden,
 		template: CommandItemTemplate,
+		placeholder = t('ns_common:actions.search') + ' ... ',
 		messageType = 'alternative',
 		onInput,
 		onSelect
@@ -79,17 +83,18 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										<Button
 											role='combobox'
 											variant='outline'
-											size='sm'
 											id={id}
 											ref={triggerRef}
+											disabled={disabled}
+											{...triggerProps}
 											className={cn(
 												'w-full justify-between hover:bg-background',
 												!field.value && 'text-muted-foreground'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
-												{field.value
-													? data?.find((option) => option[valueField] === field.value)?.[labelField]
-													: placeholder}
+												{data?.find((option) => option[valueField] === field.value)?.[labelField] ??
+													field.value ??
+													placeholder}
 											</Typography>
 											<Icon name='ChevronsUpDown' className='ml-auto' />
 										</Button>
@@ -108,7 +113,6 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 											}}
 										/>
 										<CommandEmpty>Không có dữ liệu</CommandEmpty>
-
 										<CommandList>
 											<CommandGroup>
 												<ScrollArea className='h-56' onWheel={(e) => e.stopPropagation()}>

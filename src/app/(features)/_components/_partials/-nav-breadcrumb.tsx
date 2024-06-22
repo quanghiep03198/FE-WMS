@@ -1,4 +1,6 @@
-import { BreadcrumbContext } from '@/components/providers/breadcrumbs-provider'
+import { Fragment, useContext } from 'react'
+import { HomeIcon } from '@radix-ui/react-icons'
+import { Link } from '@tanstack/react-router'
 import {
 	Breadcrumb,
 	BreadcrumbEllipsis,
@@ -11,16 +13,13 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/components/ui'
-import { HomeIcon } from '@radix-ui/react-icons'
-import { Link, useRouterState } from '@tanstack/react-router'
-import { Fragment, useContext } from 'react'
-import { useTranslation } from 'react-i18next'
+import { BreadcrumbContext } from '../_providers/-breadcrumb-provider'
 
 export const NavBreadcrumb: React.FC = () => {
 	const { breadcrumb } = useContext(BreadcrumbContext)
 
 	return (
-		<Breadcrumb>
+		<Breadcrumb className='sm:hidden md:hidden lg:hidden'>
 			<BreadcrumbList>
 				<BreadcrumbItem className=''>
 					<BreadcrumbLink asChild>
@@ -39,7 +38,7 @@ export const NavBreadcrumb: React.FC = () => {
 							<DropdownMenuContent align='start'>
 								{breadcrumb.slice(0, 3).map((item, index) => (
 									<DropdownMenuItem asChild>
-										<Link to={item.href} className='font-semibold' key={index}>
+										<Link to={item.to} className='font-semibold' key={index}>
 											{item.title}
 										</Link>
 									</DropdownMenuItem>
@@ -48,7 +47,7 @@ export const NavBreadcrumb: React.FC = () => {
 						</DropdownMenu>
 						<BreadcrumbSeparator />
 						<BreadcrumbLink asChild>
-							<Link to={breadcrumb[breadcrumb.length - 1].href} activeProps={{ className: 'text-foreground' }}>
+							<Link to={breadcrumb[breadcrumb.length - 1].to} activeProps={{ className: 'text-foreground' }}>
 								{breadcrumb.at(-1)?.title}
 							</Link>
 						</BreadcrumbLink>
@@ -58,7 +57,7 @@ export const NavBreadcrumb: React.FC = () => {
 						<Fragment key={index}>
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
-									<Link to={item.href} className='font-medium' activeProps={{ className: 'text-foreground' }}>
+									<Link to={item.to} className='font-medium' activeProps={{ className: 'text-foreground' }}>
 										{item.title}
 									</Link>
 								</BreadcrumbLink>

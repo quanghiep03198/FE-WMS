@@ -1,4 +1,4 @@
-import { WarehouseTypes } from '../constants/constants'
+import { warehouseTypes } from '../constants/constants'
 
 export interface IBaseEntity {
 	id: string
@@ -33,15 +33,23 @@ export interface IWarehouse extends IBaseEntity {
 	company_code: string
 	warehouse_num: string
 	warehouse_name: string
-	type_warehouse: keyof typeof WarehouseTypes & string
-	area: string
+	type_warehouse: keyof typeof warehouseTypes & string
+	area: number
 	dept_code: string
 	dept_name: string
 	remark: string | null
-	is_disable: boolean | number
-	is_default: boolean | number
+	is_disable: boolean
+	is_default: boolean
 	employee_code: string | null
 	employee_name: string | null
+}
+
+export interface IWarehouseStorageArea
+	extends IBaseEntity,
+		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
+	storage_name: string
+	storage_num: string
+	type_storage: string
 }
 
 export interface IEmployee extends IBaseEntity {

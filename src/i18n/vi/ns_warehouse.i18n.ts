@@ -7,7 +7,10 @@ export default {
 		is_disable: 'Đã hủy',
 		is_default: 'Đánh dấu là mặc định',
 		area: 'Diện tích (m²)',
-		manager: 'Người quản lý'
+		manager: 'Người quản lý',
+		storage_num: 'Mã vị trí lưu kho',
+		storage_name: 'Tên vị trí lữu kho',
+		type_storage: 'Loại hình lưu kho'
 	},
 	warehouse_types: {
 		production_warehouse: 'Kho hàng gia công',
@@ -16,12 +19,19 @@ export default {
 		finished_production_warehouse: 'Kho thành phẩm',
 		scrap_production_warehouse: 'Kho phế phẩm'
 	},
+	storage_types: {
+		main_area: 'Khu vực bãi chính',
+		finished_production_area: 'Khu vực thành phẩm',
+		inspection_holding_area: 'Khu vực đợi kiểm tra',
+		outbound_staging_area: 'Khu vực chờ hàng xuất',
+		inbound_staging_area: 'Khu vực chờ hàng nhập'
+	},
 	form: {
 		add_warehouse_title: 'Tạo mới kho',
 		update_warehouse_title: 'Cập nhật mới kho'
 	},
 	headings: {
 		warehouse_list_title: 'Quản lý kho',
-		warehouse_list_description: 'Bảng dưới đây hiển thị danh sách thông tin của tất cả các kho hàng'
+		warehouse_detail_title: 'Danh sách vị trí lưu kho chi tiết'
 	}
 } as const

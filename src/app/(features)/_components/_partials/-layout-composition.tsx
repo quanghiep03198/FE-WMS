@@ -6,9 +6,9 @@ const Container = tw(Div)<TDivProps>`
 	`
 
 const Main = tw(Div)<TDivProps>`
-	relative flex max-w-full flex-1 flex-col overflow-y-auto bg-background transition-width duration-200 ease-in-out scrollbar scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-thumb-secondary
+	relative flex max-w-full flex-1 gap-y-4 flex-col overflow-y-auto bg-background transition-width duration-200 ease-in-out scrollbar scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-thumb-secondary
 `
-const OutletWrapper = tw(Div)<TDivProps>`flex-1 p-6 sm:p-2`
+const OutletWrapper = tw(Div)<TDivProps>`flex-1 p-4`
 
 export default {
 	Container,

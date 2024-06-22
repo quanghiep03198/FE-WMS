@@ -20,25 +20,36 @@ type ConfirmDialogProps = {
 	onCancel?: (...args: any[]) => unknown
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+	open,
+	title,
+	description,
+	onOpenChange,
+	onConfirm,
+	onCancel
+}) => {
 	const { t } = useTranslation()
 
 	return (
-		<AlertDialog open={props.open} onOpenChange={props.onOpenChange}>
+		<AlertDialog open={open} onOpenChange={onOpenChange}>
 			<AlertDialogContent>
 				<AlertDialogHeader className='text-left'>
-					<AlertDialogTitle>{props.title}</AlertDialogTitle>
-					<AlertDialogDescription>{props.description}</AlertDialogDescription>
+					<AlertDialogTitle>{title}</AlertDialogTitle>
+					<AlertDialogDescription>{description}</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={() => props.onOpenChange(!props.open)}>
+					<AlertDialogCancel
+						onClick={() => {
+							onOpenChange(!open)
+							if (onCancel && typeof onCancel === 'function') onCancel()
+						}}>
 						{t('ns_common:actions.cancel')}
 					</AlertDialogCancel>
 					<AlertDialogAction
 						onClick={() => {
-							if (props.onConfirm) props.onConfirm()
+							if (onConfirm) onConfirm()
 						}}>
-						{t('ns_common:actions.submit')}
+						{t('ns_common:actions.confirm')}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

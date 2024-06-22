@@ -1,7 +1,7 @@
-import { WarehouseTypes } from '@/common/constants/constants'
+import { warehouseTypes } from '@/common/constants/constants'
+import { CommonActions } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
-import useQueryParams from '@/common/hooks/use-query-params'
-import { IEmployee } from '@/common/types/entities'
+import { IEmployee, IWarehouse } from '@/common/types/entities'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -16,59 +16,61 @@ import {
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
-import { PartialWarehouseFormValue, WarehouseFormValue, warehouseFormSchema } from '@/schemas/warehouse.schema'
+import {
+	warehouseFormSchema,
+	type PartialWarehouseFormValue,
+	type WarehouseFormValue
+} from '@/schemas/warehouse.schema'
 import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
 import _ from 'lodash'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { FormAction } from '../index.lazy'
-import { CommonActions } from '@/common/constants/enums'
+import { type TAction, type TFormAction } from '../_reducers/-form.reducer'
 
-type WarehouseFormDialogProps = { onFormActionChange: React.Dispatch<FormAction> } & FormAction['payload'] &
-	Required<Pick<React.ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'>>
+export type TFormValues<T> = (T extends CommonActions.CREATE
+	? WarehouseFormValue
+	: T extends CommonActions.UPDATE
+		? PartialWarehouseFormValue
+		: {}) &
+	Pick<IWarehouse, 'id'>
 
-type FormValues<T> = T extends CommonActions.CREATE ? WarehouseFormValue : PartialWarehouseFormValue
+type FormAction = TFormAction<TFormValues<TAction>>
 
-const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
-	open,
-	title,
-	type,
-	defaultValues,
-	onOpenChange,
-	onFormActionChange
+const WarehouseFormDialog = (props: {
+	open: boolean
+	title: string
+	type: TAction
+	defaultValues: TFormValues<typeof props.type>
+	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+	onFormActionChange: React.Dispatch<FormAction>
 }) => {
+	const { open, title, type, defaultValues, onOpenChange, onFormActionChange } = props
+
 	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
 	const { userCompany } = useAuth()
-	const form = useForm<WarehouseFormValue>({
+	const form = useForm<TFormValues<typeof type>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
 
 	const queryClient = useQueryClient()
 
-	const { data: departmentOptions } = useQuery({
+	const { data: departments } = useQuery({
 		queryKey: ['departments', userCompany],
 		queryFn: () => WarehouseService.getWarehouseDepartments(userCompany),
-		select: (data) => {
-			return Array.isArray(data?.metadata)
-				? data.metadata.map((dept) => ({
-						label: dept.MES_dept_name,
-						value: dept.ERP_dept_code
-					}))
-				: []
-		}
+		select: (data) => (Array.isArray(data.metadata) ? data.metadata : [])
 	})
 
 	const { data: employees } = useQuery({
 		queryKey: ['employees', employeeSearchTerm],
-		queryFn: () => EmployeeService.searchEmployee({ search: employeeSearchTerm }),
+		queryFn: () => EmployeeService.searchEmployee({ dept_code: form.watch('dept_code'), search: employeeSearchTerm }),
 		select: (data) => data?.metadata
 	})
 
@@ -76,16 +78,14 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 		form.reset({ ...defaultValues, company_code: userCompany })
 	}, [type, defaultValues, open])
 
-	const { searchParams } = useQueryParams()
-
 	const { mutateAsync } = useMutation({
 		mutationKey: ['warehouse'],
-		mutationFn: (payload: FormValues<typeof type>) => {
+		mutationFn: (payload: TFormValues<typeof type>) => {
 			switch (type) {
 				case CommonActions.CREATE:
 					return WarehouseService.createWarehouse(payload)
 				case CommonActions.UPDATE:
-					return WarehouseService.updateWarehouse(defaultValues.id, payload)
+					return WarehouseService.updateWarehouse((defaultValues as TFormValues<CommonActions.UPDATE>).id, payload)
 				default:
 					throw new Error('Invalid actions')
 			}
@@ -107,7 +107,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenStateChange}>
-			<DialogContent className='w-full max-w-2xl bg-popover'>
+			<DialogContent className='w-full max-w-3xl bg-popover'>
 				<DialogHeader>
 					<DialogTitle>{t(title, { ns: 'ns_warehouse', defaultValue: title })}</DialogTitle>
 				</DialogHeader>
@@ -123,7 +123,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 						</FormItem>
 						<FormItem>
 							<SelectFieldControl
-								options={Object.entries(WarehouseTypes).map(([key, value]) => ({
+								options={Object.entries(warehouseTypes).map(([key, value]) => ({
 									label: t(value, { ns: 'ns_warehouse', defaultValue: value }),
 									value: key
 								}))}
@@ -143,11 +143,15 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 							/>
 						</FormItem>
 						<FormItem>
-							<SelectFieldControl
+							<ComboboxFieldControl
 								label={t('ns_company:department')}
-								name='dept_code'
-								options={departmentOptions}
+								form={form}
 								control={form.control}
+								name='dept_code'
+								placeholder='Search department ...'
+								data={departments}
+								labelField='MES_dept_name'
+								valueField='ERP_dept_code'
 							/>
 						</FormItem>
 						<FormItem>
@@ -168,6 +172,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 								placeholder='Search employee ...'
 								onInput={_.debounce((value) => setEmployeeSearchTerm(value), 500)}
 								data={employees}
+								disabled={!form.watch('dept_code')}
 								labelField='employee_name'
 								valueField='employee_code'
 								template={({ data }: { data: IEmployee }) => (
@@ -186,7 +191,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 								type='button'
 								variant='outline'
 								onClick={() => {
-									onFormActionChange({ type: null })
+									onFormActionChange({ type: undefined })
 									onOpenChange(false)
 								}}>
 								{t('ns_common:actions.cancel')}
@@ -203,4 +208,4 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 const FormItem = tw.div`col-span-1 sm:col-span-full md:col-span-full`
 
-export default WarehouseFormDialog
+export default memo(WarehouseFormDialog)

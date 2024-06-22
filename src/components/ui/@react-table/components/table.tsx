@@ -1,5 +1,6 @@
 import { Row, flexRender, type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
+import { useDeepCompareEffect } from 'ahooks'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { DataTableProps } from '.'
 import { Div, Icon, Separator, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '../..'
@@ -9,13 +10,13 @@ import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
 
 interface TableProps<TData, TValue>
-	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
-		React.AllHTMLAttributes<HTMLTableElement>,
+	extends Omit<DataTableProps<TData, TValue>, 'slot'>,
+		Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'>,
 		Pick<React.ComponentProps<'div'>, 'style'> {
 	table: TTable<TData>
 }
 
-export const ESTIMATE_SIZE = 52 as const
+export const ESTIMATE_SIZE = 52
 
 const adjustTableHeight = (tableRef, virtualHeight) => {
 	if (!tableRef.current) return
@@ -68,7 +69,7 @@ export default function TableDataGrid<TData, TValue>({
 		}
 	}, [containerRef, virtualSize])
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		const scrollable = containerRef.current
 		if (scrollable) scrollable.addEventListener('scroll', handleScroll)
 		handlePseudoResize()
@@ -77,7 +78,7 @@ export default function TableDataGrid<TData, TValue>({
 		}
 	}, [data, handleScroll, handlePseudoResize])
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (isScrollNearBottom) handlePseudoResize()
 	}, [isScrollNearBottom, virtualItems.length, handlePseudoResize])
 
@@ -136,13 +137,9 @@ export default function TableDataGrid<TData, TValue>({
 												data-sticky={cell.column.columnDef?.meta?.sticky}
 												data-state={row.getIsSelected() && 'selected'}
 												style={{ width: cell.column.getSize(), height: virtualItem.size }}>
-												{cell.getContext()?.cell ? (
-													<Typography variant='small' className='line-clamp-1'>
-														{flexRender(cell.column.columnDef.cell, cell.getContext())}
-													</Typography>
-												) : (
-													flexRender(cell.column.columnDef.cell, cell.getContext())
-												)}
+												<Div className='line-clamp-1'>
+													{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												</Div>
 											</TableCell>
 										))}
 									</TableRow>
