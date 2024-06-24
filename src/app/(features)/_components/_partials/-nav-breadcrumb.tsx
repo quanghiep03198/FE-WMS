@@ -38,8 +38,13 @@ export const NavBreadcrumb: React.FC = () => {
 							<DropdownMenuContent align='start'>
 								{breadcrumb.slice(0, 3).map((item, index) => (
 									<DropdownMenuItem asChild>
-										<Link to={item.to} className='font-semibold' key={index}>
-											{item.title}
+										<Link
+											to={item.to}
+											params={item.params}
+											search={item.search}
+											className='font-semibold'
+											key={index}>
+											{item.text}
 										</Link>
 									</DropdownMenuItem>
 								))}
@@ -47,8 +52,12 @@ export const NavBreadcrumb: React.FC = () => {
 						</DropdownMenu>
 						<BreadcrumbSeparator />
 						<BreadcrumbLink asChild>
-							<Link to={breadcrumb[breadcrumb.length - 1].to} activeProps={{ className: 'text-foreground' }}>
-								{breadcrumb.at(-1)?.title}
+							<Link
+								to={breadcrumb[breadcrumb.length - 1].to}
+								params={breadcrumb[breadcrumb.length - 1].params}
+								search={breadcrumb[breadcrumb.length - 1].search}
+								activeProps={{ className: 'text-foreground' }}>
+								{breadcrumb.at(-1)?.text}
 							</Link>
 						</BreadcrumbLink>
 					</Fragment>
@@ -57,8 +66,13 @@ export const NavBreadcrumb: React.FC = () => {
 						<Fragment key={index}>
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
-									<Link to={item.to} className='font-medium' activeProps={{ className: 'text-foreground' }}>
-										{item.title}
+									<Link
+										to={item.to}
+										params={item.params}
+										search={item.search}
+										className='font-medium'
+										activeProps={{ className: 'text-foreground' }}>
+										{item.text}
 									</Link>
 								</BreadcrumbLink>
 							</BreadcrumbItem>

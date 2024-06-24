@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next'
 import { AuthProvider } from './components/providers/auth-provider'
 import { QueryClientProvider } from './components/providers/query-client-provider'
 import { ThemeProvider } from './components/providers/theme-provider'
-import { Toaster } from './components/ui/@shadcn/sonner'
+import { Toaster } from './components/ui/@core/sonner'
 import { i18n } from './i18n'
 
 export default function App() {

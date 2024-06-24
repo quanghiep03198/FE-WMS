@@ -2,8 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { Div, Icon, Typography, buttonVariants } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import { useRef } from 'react'
-import HeroImage from '@/assets/images/hero-image.svg'
-import tw from 'tailwind-styled-components'
 
 export default function HeroSection() {
 	const sectionRef = useRef<HTMLDivElement>(null)
@@ -12,7 +10,7 @@ export default function HeroSection() {
 		<Div
 			ref={sectionRef}
 			as='section'
-			id='introduction'
+			id='cta'
 			className='relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-6xl flex-grow flex-col items-center justify-center px-6 text-center sm:px-4'>
 			<Typography variant='h2' className='mb-4 leading-tight sm:text-3xl'>
 				Simplify Warehouse Management <br className='block xl:hidden xxl:hidden' /> with i-WMS

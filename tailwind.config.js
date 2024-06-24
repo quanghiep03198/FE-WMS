@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ['class'],
@@ -124,5 +125,6 @@ module.exports = {
 		require('tailwind-scrollbar'),
 		require('@tailwindcss/container-queries'),
 		require('@tailwindcss/typography')
+		// require('@tailwindcss/forms')
 	]
 }

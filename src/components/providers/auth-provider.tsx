@@ -2,10 +2,10 @@ import { generateAvatar } from '@/common/utils/generate-avatar'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
 import { UseMutateAsyncFunction, useMutation, useQuery } from '@tanstack/react-query'
-import { useDeepCompareLayoutEffect, useEventListener, useLocalStorageState } from 'ahooks'
+import { useCookieState, useDeepCompareLayoutEffect, useEventListener, useLocalStorageState } from 'ahooks'
 import { SetState } from 'ahooks/lib/createUseStorageState'
 import { AxiosError, AxiosResponse } from 'axios'
-import { isNil } from 'lodash'
+import _, { isNil } from 'lodash'
 import { compress, decompress } from 'lz-string'
 import React, { createContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -55,9 +55,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		mutationFn: AuthService.logout,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSettled: (_data, _error, _variabled, context) => {
-			setUserCompany(undefined)
-			StorageService.logout()
-			toast.success(t('ns_auth:notification.logout_success'), { id: context })
+			AuthService.revokeAuthSession().finally(() =>
+				toast.success(t('ns_auth:notification.logout_success'), { id: context })
+			)
 		}
 	})
 
@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	// Check authenticated status every time get profile query is triggered
 	useDeepCompareLayoutEffect(() => {
 		if (data && isSuccess) setUser({ ...data, picture: generateAvatar({ name: data.display_name }) })
-		if (isError) StorageService.logout()
+		if (isError) AuthService.revokeAuthSession()
 	}, [data, isSuccess, isError])
 
 	// Listen log out event
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		setUserCompany(undefined)
 	})
 
-	const isAuthenticated = useMemo(() => Boolean(user) && Boolean(accessToken), [user, accessToken])
+	const isAuthenticated = useMemo(() => [user, accessToken].every((item) => !_.isNil(item)), [user, accessToken])
 
 	return (
 		<AuthContext.Provider

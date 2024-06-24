@@ -1,4 +1,5 @@
-import { Div } from '@/components/ui'
+import { Fragment } from 'react'
+import { Div, TDivProps } from '@/components/ui'
 import { createFileRoute, useRouterState } from '@tanstack/react-router'
 import { useDeepCompareEffect } from 'ahooks'
 import { Helmet } from 'react-helmet'
@@ -9,35 +10,38 @@ import Footer from './_components/-footer'
 import GridBackground from './_components/-grid-background'
 import Header from './_components/-header'
 import SupportSection from './_components/-support-section'
+import tw from 'tailwind-styled-components'
 
 export const Route = createFileRoute('/(public)/')({
-	component: HomePage,
-	staleTime: Infinity,
-	preloadStaleTime: Infinity
+	component: Page
 })
 
-export default function HomePage() {
+export default function Page() {
 	return (
-		<>
+		<Fragment>
 			<Helmet
 				title='GL Warehouse Management System'
 				meta={[{ name: 'description', content: 'Greenland Warehouse Management System' }]}
 			/>
-			{/* <Spotlight fill='hsl(var(--primary))' className='fixed left-1/3 z-20 xl:left-1/4' /> */}
-			<Div className='relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none'>
+			<Container>
 				<Header />
 				<GridBackground />
-				<Div className='mb-20 space-y-64'>
+				<Main>
 					<HeroSection />
 					<FeaturesSection />
 					<SupportSection />
 					<FAQsSection />
-				</Div>
+				</Main>
 				<Footer />
-			</Div>
-		</>
+			</Container>
+		</Fragment>
 	)
 }
+
+const Container = tw(
+	Div
+)<TDivProps>`relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none`
+const Main = tw(Div)<TDivProps>`mb-20 space-y-64`
 
 export function useScrollIntoView({
 	hashMatch,

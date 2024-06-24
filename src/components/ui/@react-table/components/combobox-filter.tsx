@@ -14,34 +14,27 @@ import {
 	ScrollArea,
 	Typography
 } from '@/components/ui'
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { useEffect, useRef, useState } from 'react'
-import { ComboboxProps } from '../../@shadcn/combobox'
+import { CaretSortIcon } from '@radix-ui/react-icons'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ComboboxProps } from '../../@core/combobox'
+import { TableContext } from '../context/table.context'
 
-interface ComboboxFilterProps extends ComboboxProps {
-	forceClose: boolean
-	hasNoFilter: boolean
-}
-
-export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({
-	options,
-	className = '',
-	forceClose,
-	hasNoFilter,
-	onChange
-}) => {
+export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '', onChange }) => {
 	const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
 	const triggerRef = useRef<typeof Button.prototype>(null)
 	const { t } = useTranslation()
+	const { isScrolling, columnFilters, globalFilter } = useContext(TableContext)
+
+	const hasNoFilter = useMemo(() => columnFilters.length === 0 && globalFilter.length === 0, [])
 
 	const placeholder = t('ns_common:table.search_in_column')
 
 	useEffect(() => {
-		if (forceClose === true) setOpen(false)
+		if (isScrolling) setOpen(false)
 		if (hasNoFilter) setValue(placeholder)
-	}, [forceClose, hasNoFilter])
+	}, [isScrolling, hasNoFilter])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -51,10 +44,9 @@ export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({
 					variant='outline'
 					role='combobox'
 					aria-expanded={open}
-					className={cn('justify-between text-muted-foreground/50 hover:bg-transparent', className)}>
-					<Typography variant='small' className='line-clamp-1'>
-						{value || placeholder}
-					</Typography>
+					className={cn('justify-between text-xs text-muted-foreground/50 hover:bg-transparent', className)}>
+					{value || placeholder}
+
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 				</Button>
 			</PopoverTrigger>
@@ -65,7 +57,7 @@ export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({
 						<CommandEmpty className='whitespace-nowrap py-6 text-center text-sm text-muted-foreground'>
 							{t('ns_common:table.no_match_result')}
 						</CommandEmpty>
-						<ScrollArea className='max-h-64 w-full'>
+						<ScrollArea className='max-h-64 w-full' onWheel={(e) => e.stopPropagation()}>
 							<CommandGroup className='w-full'>
 								{Array.isArray(options) &&
 									options.map((option) => (

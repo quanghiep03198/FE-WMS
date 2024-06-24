@@ -4,8 +4,9 @@ import React, { createContext, useState } from 'react'
 
 export type TBreadcrumb = {
 	to: ParseRoute<typeof routeTree>['fullPath']
-	title: string
+	text: string
 	params?: AnyPathParams
+	search?: Record<string, any>
 }
 
 export const BreadcrumbContext = createContext<{

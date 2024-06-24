@@ -1,9 +1,9 @@
 import { Row, flexRender, type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useDeepCompareEffect } from 'ahooks'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { DataTableProps } from '.'
-import { Div, Icon, Separator, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '../..'
+import { WheelEventHandler, useCallback, useContext, useRef, useState } from 'react'
+import { DataTableProps } from '..'
+import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
 import { TableContext } from '../context/table.context'
 import ColumnResizer from './column-resizer'
 import { TableBodyLoading } from './table-body-loading'
@@ -31,16 +31,16 @@ const adjustTableHeight = (tableRef, virtualHeight) => {
 export default function TableDataGrid<TData, TValue>({
 	containerProps = { style: { height: screen.availHeight / 2 } },
 	table,
-	data,
 	loading
 }: TableProps<TData, TValue>) {
 	const { rows } = table.getRowModel()
-	const containerRef = useRef<HTMLDivElement>()
+	const containerRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLTableSectionElement>(null)
 	const scrollableRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
-	const [isScrollNearBottom, setIsScrollNearBottom] = useState(false)
-	const { handleMouseWheel } = useContext(TableContext)
+	const [isScrollNearBottom, setIsScrollNearBottom] = useState<boolean>(false)
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const { isScrolling, setIsScrolling } = useContext(TableContext)
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
@@ -50,7 +50,7 @@ export default function TableDataGrid<TData, TValue>({
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? (element) => element?.getBoundingClientRect().height
 				: undefined,
-		overscan: 5,
+		overscan: 1,
 		indexAttribute: 'data-index'
 	})
 
@@ -76,11 +76,21 @@ export default function TableDataGrid<TData, TValue>({
 		return () => {
 			if (scrollable) scrollable.removeEventListener('scroll', handleScroll)
 		}
-	}, [data, handleScroll, handlePseudoResize])
+	}, [handleScroll, handlePseudoResize])
 
 	useDeepCompareEffect(() => {
 		if (isScrollNearBottom) handlePseudoResize()
 	}, [isScrollNearBottom, virtualItems.length, handlePseudoResize])
+
+	// Close all
+	const handleMouseWheel: WheelEventHandler = (e) => {
+		e.stopPropagation()
+		if (timeoutRef.current) clearTimeout(timeoutRef.current!)
+		setIsScrolling(!isScrolling)
+		timeoutRef.current = setTimeout(() => {
+			setIsScrolling(!isScrolling)
+		}, 0)
+	}
 
 	return (
 		<Div
@@ -101,6 +111,7 @@ export default function TableDataGrid<TData, TValue>({
 										key={header.id}
 										colSpan={header.colSpan}
 										data-sticky={header.column.columnDef?.meta?.sticky}
+										className='group'
 										style={{
 											width: header.getSize(),
 											position: 'relative'
@@ -108,12 +119,7 @@ export default function TableDataGrid<TData, TValue>({
 										<TableCellHead table={table} header={header} />
 										{index === headerGroup.headers.length - 1 ? null : header.column.getCanResize() ? (
 											<ColumnResizer header={header} />
-										) : (
-											<Separator
-												orientation='vertical'
-												className='absolute right-0 top-1/2 h-1/2 w-1 -translate-y-1/2 bg-muted'
-											/>
-										)}
+										) : null}
 									</TableHead>
 								))}
 							</TableRow>

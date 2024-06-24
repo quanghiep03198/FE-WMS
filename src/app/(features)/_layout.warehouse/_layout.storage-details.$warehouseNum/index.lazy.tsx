@@ -1,64 +1,86 @@
 // #region Modules
-import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
-import { warehouseStorageTypes } from '@/common/constants/constants'
-import { CommonActions } from '@/common/constants/enums'
-import { IWarehouseStorageArea } from '@/common/types/entities'
-import Loading from '@/components/shared/loading'
-import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
-import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { IndeterminateCheckbox } from '@/components/ui/@react-table/components/indeterminate-checkbox'
-import { RowSelectionCheckbox } from '@/components/ui/@react-table/components/row-selection-checkbox'
-import { PartialStorageFormValue } from '@/schemas/warehouse.schema'
-import { WarehouseStorageService } from '@/services/warehouse-storage.service'
+import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
+import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Row, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { Fragment, useCallback, useMemo, useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { formReducer } from '../_reducers/-form.reducer'
-import WarehouseStorageFormDialog, { FormValues } from './_components/-storage-form'
+import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
+import { warehouseStorageTypes } from '@/common/constants/constants'
+import { CommonActions } from '@/common/constants/enums'
+import useQueryParams from '@/common/hooks/use-query-params'
+import { IWarehouseStorageArea } from '@/common/types/entities'
+import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
+import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { PartialStorageFormValue } from '@/schemas/warehouse.schema'
+import { WarehouseStorageService } from '@/services/warehouse-storage.service'
+import { WAREHOUSE_STORAGE_LIST_KEY } from '../../_constants/-query-key'
+import { PageContext, PageProvider } from '../_contexts/-page-context'
+import WarehouseStorageFormDialog from './_components/-storage-form'
 import StorageRowActions from './_components/-storage-row-actions'
 // #endregion
 
+// #region Router declaration
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/')({
-	component: Page,
-	pendingComponent: Loading
+	component: () => (
+		<PageProvider>
+			<Page />
+		</PageProvider>
+	)
 })
+// #endregion
 
+// #region Page component
 function Page() {
 	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouseStorageArea>[]>([])
-	const [rowDeletionType, setRowDeletionType, resetRowDeletionType] = useResetState<RowDeletionType>(undefined)
+	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [formDialogOpenState, setFormDialogOpenState] = useState<boolean>(false)
 	const { warehouseNum } = useParams({ strict: false })
 	const { t, i18n } = useTranslation(['ns_common'])
 	const queryClient = useQueryClient()
+	const { dispatch } = useContext(PageContext)
+	const { searchParams } = useQueryParams()
 
 	useBreadcrumb([
 		{
-			to: '/warehouse',
-			title: t('ns_common:navigation.wh_management')
+			text: t('ns_common:navigation.warehouse_commands'),
+			to: '/warehouse'
 		},
 		{
+			text: t('ns_common:navigation.storage_detail'),
 			to: '/warehouse/storage-details/$warehouseNum',
-			title: t('ns_common:navigation.wh_storage_detail'),
-			params: { warehouseNum }
+			params: { warehouseNum },
+			search: searchParams
 		},
 		{
+			text: warehouseNum,
 			to: '/warehouse/storage-details/$warehouseNum',
-			title: warehouseNum,
-			params: { warehouseNum }
+			params: { warehouseNum },
+			search: searchParams
 		}
 	])
 
+	const handleResetAllRowSelection = useCallback(() => {
+		resetSelectedRow()
+		resetRowSelectionType()
+	}, [])
+
+	const getOriginalStorageType = useCallback(
+		(translatedValue: string) => {
+			return Object.keys(warehouseStorageTypes).find((key) => t(warehouseStorageTypes[key]) === translatedValue)
+		},
+		[i18n.language]
+	)
+
 	const { data, isLoading } = useQuery({
-		queryKey: ['warehouse-storage', warehouseNum],
+		queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
 		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
-		select: (response) =>
-			Array.isArray(response.metadata)
+		select: (response: ResponseBody<IWarehouseStorageArea[]>) => {
+			return Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({
 						...item,
 						created: format(item.created, 'yyyy-MM-dd'),
@@ -68,47 +90,84 @@ function Page() {
 						})
 					}))
 				: []
+		}
 	})
 
 	const { mutateAsync: updateWarehouseStorage } = useMutation({
-		mutationKey: ['warehouse-storage', warehouseNum],
+		mutationKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
 		mutationFn: (data: { storageNum: string; payload: PartialStorageFormValue }) =>
 			WarehouseStorageService.updateWarehouseStorage(data.storageNum, data.payload),
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: ['warehouse-storage', warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
 	const { mutateAsync: deleteWarehouseStorage } = useMutation({
-		mutationKey: ['warehouse-storage', warehouseNum],
+		mutationKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
 		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: ['warehouse-storage', warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => {
 			toast.error(t('ns_common:notification.error'), { id: context })
 		},
-		onSettled: () => {
-			resetRowDeletionType()
-			resetSelectedRow()
-		}
+		onSettled: handleResetAllRowSelection
 	})
-
-	const [formStates, dispatch] = useReducer(formReducer, { title: null, defaultValues: null, type: undefined })
 
 	const columnHelper = createColumnHelper<IWarehouseStorageArea>()
 
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor('keyid', {
-				id: 'row_selection_column',
-				header: IndeterminateCheckbox,
-				cell: (props) => <RowSelectionCheckbox onCheckedChange={() => setRowDeletionType('multiple')} {...props} />,
+				id: 'row-selection-column',
+				header: ({ table }) => {
+					const checked =
+						table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+
+					return (
+						<Checkbox
+							role='checkbox'
+							checked={checked as CheckedState}
+							onCheckedChange={(checkedState) => {
+								table.toggleAllPageRowsSelected(!!checkedState)
+								if (!checkedState) {
+									handleResetAllRowSelection()
+									return
+								}
+								setRowSelectionType('multiple')
+								setSelectedRows(table.getPreSelectedRowModel().flatRows)
+							}}
+						/>
+					)
+				},
+				cell: ({ row }) => (
+					<Checkbox
+						aria-label='Select row'
+						role='checkbox'
+						checked={row.getIsSelected()}
+						onCheckedChange={(checkedState) => {
+							row.toggleSelected(Boolean(checkedState))
+							if (!checkedState) {
+								setSelectedRows((prev) => {
+									const filtered = prev.filter((selectedRow) => selectedRow.id !== row.id)
+									if (filtered.length === 0) handleResetAllRowSelection()
+									return filtered
+								})
+								return
+							}
+
+							setSelectedRows((prev) => {
+								setRowSelectionType('multiple')
+								return [...prev, row]
+							})
+						}}
+					/>
+				),
 				meta: { sticky: 'left' },
 				size: 50,
 				enableSorting: false,
@@ -155,7 +214,7 @@ function Page() {
 									storageNum: original.storage_num,
 									payload: {
 										is_disable: Boolean(checked),
-										is_default: Boolean(checked) ? false : Boolean(original.is_default)
+										is_default: checked ? false : Boolean(original.is_default)
 									}
 								})
 							}
@@ -209,21 +268,19 @@ function Page() {
 							onDelete={() => {
 								setConfirmDialogOpen(!confirmDialogOpen)
 								setSelectedRows((prev) => [...prev, row])
-								setRowDeletionType('single')
+								setRowSelectionType('single')
 							}}
 							onEdit={() => {
 								setFormDialogOpenState(true)
 								dispatch({
 									type: CommonActions.UPDATE,
 									payload: {
-										title: t('ns_common:common_form_titles.update', {
+										dialogTitle: t('ns_common:common_form_titles.update', {
 											object: t('ns_common:specialized_vocabs.storage_area')
 										}),
-										defaultValues: {
+										defaultFormValues: {
 											...row.original,
-											type_storage: Object.keys(warehouseStorageTypes).find(
-												(key) => t(warehouseStorageTypes[key]) === row.original.type_storage
-											)
+											type_storage: getOriginalStorageType(row.original.type_storage)
 										}
 									}
 								})
@@ -235,11 +292,6 @@ function Page() {
 		],
 		[i18n.language]
 	)
-
-	const handleCancelDelete = useCallback(() => {
-		resetSelectedRow()
-		resetRowDeletionType()
-	}, [])
 
 	return (
 		<Fragment>
@@ -253,7 +305,7 @@ function Page() {
 				toolbarProps={{
 					slot: (
 						<Fragment>
-							{selectedRows.length > 0 && rowDeletionType === 'multiple' && (
+							{selectedRows.length > 0 && rowSelectionType === 'multiple' && (
 								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 									<Button
 										variant='destructive'
@@ -270,9 +322,9 @@ function Page() {
 									onClick={() => {
 										setFormDialogOpenState(true)
 										dispatch({
-											type: CommonActions.CREATE,
+											type: 'CREATE',
 											payload: {
-												title: t('ns_common:common_form_titles.create', {
+												dialogTitle: t('ns_common:common_form_titles.create', {
 													object: t('ns_common:specialized_vocabs.storage_area')
 												})
 											}
@@ -285,23 +337,14 @@ function Page() {
 					)
 				}}
 			/>
-
-			<WarehouseStorageFormDialog
-				open={formDialogOpenState}
-				onOpenChange={setFormDialogOpenState}
-				onFormActionChange={dispatch}
-				{...{
-					...formStates,
-					defaultValues: formStates.defaultValues as unknown as FormValues<typeof formStates.type>
-				}}
-			/>
+			<WarehouseStorageFormDialog open={formDialogOpenState} onOpenChange={setFormDialogOpenState} />
 			<ConfirmDialog
 				open={confirmDialogOpen}
 				onOpenChange={setConfirmDialogOpen}
 				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
 				onConfirm={() => deleteWarehouseStorage(selectedRows.map((item) => item.original?.keyid))}
-				onCancel={handleCancelDelete}
+				onCancel={handleResetAllRowSelection}
 			/>
 		</Fragment>
 	)

@@ -1,6 +1,6 @@
 import { ColumnDefBase } from '@tanstack/react-table'
 import React from 'react'
-import { Checkbox } from '../../@shadcn/checkbox'
+import { Checkbox } from '../../@core/checkbox'
 
 type RowSelectionCheckboxProps<TData> = Partial<Parameter<ColumnDefBase<TData>['cell']>> &
 	React.ComponentProps<typeof Checkbox>
@@ -16,7 +16,7 @@ export function RowSelectionCheckbox<TData>({
 			aria-label='Select row'
 			role='checkbox'
 			disabled={disabled}
-			checked={checked ?? row.getIsSelected()}
+			checked={checked || row.getIsSelected()}
 			onCheckedChange={(checked) => {
 				row.toggleSelected(Boolean(checked))
 				if (typeof onCheckedChange === 'function') onCheckedChange(checked)

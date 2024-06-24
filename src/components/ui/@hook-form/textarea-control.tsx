@@ -1,7 +1,7 @@
 import { forwardRef, useId, useRef } from 'react'
 import { FormControl, FormDescription, FormField, FormItem, FormMessage, Textarea } from '..'
 import { FieldValues } from 'react-hook-form'
-import { TextareaProps } from '../@shadcn/textarea'
+import { TextareaProps } from '../@core/textarea'
 import { cn } from '@/common/utils/cn'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 import FormLabel from './alternative-form-label'
@@ -17,7 +17,6 @@ function TextareaFieldControl<T extends FieldValues>(
 		name,
 		className,
 		disabled,
-		type,
 		control,
 		placeholder,
 		description,
@@ -37,8 +36,8 @@ function TextareaFieldControl<T extends FieldValues>(
 			name={name}
 			render={({ field }) => (
 				<FormItem
-					className={cn({
-						hidden,
+					className={cn(className, {
+						hidden: hidden,
 						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 					})}>
 					<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
@@ -48,6 +47,7 @@ function TextareaFieldControl<T extends FieldValues>(
 							id={id}
 							placeholder={placeholder}
 							value={field.value}
+							disabled={disabled}
 							onChange={(e) => {
 								field.onChange(e)
 								if (onChange) onChange(e)

@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/product-incoming-i
 function Page() {
 	const { t } = useTranslation()
 	useBreadcrumb([
-		{ to: '/product-incoming-inspection', title: t('ns_common:navigation.wh_receiving_checking_management') }
+		{ to: '/product-incoming-inspection', text: t('ns_common:navigation.receiving_checking_management') }
 	])
 
 	return <FallbackPage />

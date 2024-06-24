@@ -33,6 +33,11 @@ export default {
 		toggle_sidebar: '切换主侧边栏',
 		toggle_theme: '切换主题'
 	},
+	form_placeholder: {
+		select: '-- Select {{object}} --',
+		fill: 'Fill in {{object}}...',
+		search: 'Search by {{object}} ...'
+	},
 	table: {
 		selected_rows: '已选择 {{selectedRows}} 行',
 		page: '第 {{page}} 页',
@@ -55,16 +60,16 @@ export default {
 		profile: '个人信息',
 		account: '账户管理',
 		keyboard_shortcut: '快捷键',
-		wh_dashboard: '儲位管理',
-		wh_in_out_commands: '倉庫出入庫作業',
-		wh_management: '倉庫管理',
-		wh_storage_detail: '仓库存储详情',
-		wh_import_management: '入庫管理',
-		wh_export_management: '出庫管理',
-		wh_transfer_managment: '調撥管理',
-		wh_inventory_management: '盤點管理',
-		wh_receiving_checking_management: '進貨驗收作業管理',
-		wh_report_management: '報表管理'
+		dashboard: '儲位管理',
+		in_out_commands: '倉庫出入庫作業',
+		warehouse_commands: '倉庫管理',
+		storage_detail: '仓库存储详情',
+		import_management: '入庫管理',
+		export_management: '出庫管理',
+		transfer_managment: '調撥管理',
+		inventory_management: '盤點管理',
+		receiving_checking_management: '進貨驗收作業管理',
+		report_management: '報表管理'
 	},
 	notification: {
 		processing_request: '正在处理请求 ...',

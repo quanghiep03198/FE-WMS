@@ -16,7 +16,7 @@ export const Route = createFileRoute('/(preferences)/_layout')({
 			})
 	},
 	wrapInSuspense: true,
-	pendingComponent: () => <Loading className='h-screen' />
+	pendingComponent: Loading
 })
 
 function Layout() {

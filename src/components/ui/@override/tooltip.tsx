@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tooltip as TooltipWrapper, TooltipProvider, TooltipTrigger, TooltipContent } from '../@shadcn/tooltip'
+import { Tooltip as TooltipWrapper, TooltipProvider, TooltipTrigger, TooltipContent } from '../@core/tooltip'
 import { cn } from '@/common/utils/cn'
 
 type TooltipProps = {

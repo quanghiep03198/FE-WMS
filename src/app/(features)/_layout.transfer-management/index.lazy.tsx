@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/transfer-managemen
 
 function Page() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ to: '/transfer-management', title: t('ns_common:navigation.wh_transfer_managment') }])
+	useBreadcrumb([{ to: '/transfer-management', text: t('ns_common:navigation.transfer_managment') }])
 
 	return <FallbackPage />
 }

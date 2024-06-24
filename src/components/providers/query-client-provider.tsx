@@ -1,4 +1,5 @@
 import env from '@/common/utils/env'
+import { StorageService } from '@/services/storage.service'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -21,9 +22,9 @@ const localStoragePersister = createSyncStoragePersister({
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			staleTime: 1000 * 60 * 5,
+			staleTime: 1000 * 60 * 15,
 			networkMode: 'online', //In this mode, Queries and Mutations will not fire unless you have network connection.
-			retry: false
+			enabled: !!StorageService.getAccessToken()
 		},
 		mutations: {
 			networkMode: 'online'

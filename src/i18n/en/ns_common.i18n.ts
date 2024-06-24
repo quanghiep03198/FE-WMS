@@ -43,6 +43,11 @@ export default {
 		search_in_column: 'Search in column',
 		no_match_result: 'No results found.'
 	},
+	form_placeholder: {
+		select: '-- Select {{object}} --',
+		fill: 'Fill in {{object}}...',
+		search: 'Search by {{object}} ...'
+	},
 	pagination: {
 		next_page: 'Next page',
 		previous_page: 'Previous page',
@@ -55,16 +60,16 @@ export default {
 		profile: 'Profile',
 		account: 'Account',
 		keyboard_shortcut: 'Keyboard shortcut',
-		wh_dashboard: 'Dashboard',
-		wh_in_out_commands: 'Import/Export commands',
-		wh_management: 'Warehouse management',
-		wh_storage_detail: 'Storage details',
-		wh_import_management: 'Import management',
-		wh_export_management: 'Export management',
-		wh_transfer_managment: 'Transfer management',
-		wh_inventory_management: 'Inventory',
-		wh_receiving_checking_management: 'Product Incoming Inspection',
-		wh_report_management: 'Report'
+		dashboard: 'Dashboard',
+		in_out_commands: 'Import/Export commands',
+		warehouse_commands: 'Warehouse management',
+		storage_detail: 'Storage details',
+		import_management: 'Import management',
+		export_management: 'Export management',
+		transfer_managment: 'Transfer management',
+		inventory_management: 'Inventory',
+		receiving_checking_management: 'Product Incoming Inspection',
+		report_management: 'Report'
 	},
 	notification: {
 		processing_request: 'Processing request ...',

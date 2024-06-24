@@ -1,8 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { Icon } from '@/components/ui'
 import React from 'react'
-import { FormLabel as BaseFormLabel, useFormField } from '../@shadcn/form'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../@shadcn/tooltip'
+import { FormLabel as BaseFormLabel, useFormField } from '../@core/form'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../@core/tooltip'
 
 type AlternativeFormLabelProps = {
 	labelText: string

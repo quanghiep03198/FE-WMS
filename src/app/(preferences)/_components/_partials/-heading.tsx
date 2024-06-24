@@ -15,7 +15,7 @@ const Heading: React.FC = () => {
 				<Typography color='muted'>Manage your account settings and set e-mail preferences.</Typography>
 			</Div>
 			<Tooltip
-				message={t('ns_common:navigation.wh_dashboard')}
+				message={t('ns_common:navigation.dashboard')}
 				triggerProps={{ asChild: true }}
 				contentProps={{ side: 'left' }}>
 				<Button variant='ghost' size='icon' asChild>

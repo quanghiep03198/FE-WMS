@@ -30,6 +30,4 @@ export class StorageService {
 	static setAccessToken = (refreshToken: string): void => {
 		localStorage.setItem('accessToken', JSON.stringify(refreshToken))
 	}
-
-	static logout = () => window.dispatchEvent(new Event('logout'))
 }

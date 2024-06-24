@@ -1,13 +1,19 @@
-import { Div, Icon, TDivProps } from '../ui'
-import { cn } from '@/common/utils/cn'
+import nProgress from 'nprogress'
+import { useEffect } from 'react'
 
-const Loading: React.FC<TDivProps> = ({ className, ...props }) => {
-	return (
-		<Div className={cn('flex h-full w-full items-center justify-center bg-background', className)} {...props}>
-			{/* <Div className='relative -left-24 size-3 animate-loader rounded-[50%] text-muted-foreground' /> */}
-			<Icon name='LoaderCircle' size={24} className='animate-spin' />
-		</Div>
-	)
+const Loading: React.FunctionComponent = () => {
+	nProgress.configure({
+		showSpinner: false
+	})
+	useEffect(() => {
+		nProgress.start()
+
+		return () => {
+			nProgress.done()
+		}
+	}, [])
+
+	return null
 }
 
 export default Loading

@@ -4,43 +4,54 @@ import { CommonActions } from '@/common/constants/enums'
 import { IWarehouse } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { IndeterminateCheckbox } from '@/components/ui/@react-table/components/indeterminate-checkbox'
-import { RowSelectionCheckbox } from '@/components/ui/@react-table/components/row-selection-checkbox'
-import { PartialWarehouseFormValue } from '@/schemas/warehouse.schema'
 import { WarehouseService } from '@/services/warehouse.service'
+import { CheckedState } from '@radix-ui/react-checkbox'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Row, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
-import { Fragment, useCallback, useMemo, useReducer, useState } from 'react'
+import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
-import WarehouseFormDialog, { TFormValues } from './_components/-warehouse-form'
+import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
-import { formReducer } from './_reducers/-form.reducer'
+import { PageContext, PageProvider } from './_contexts/-page-context'
+import { WAREHOUSE_LIST_QUERY_KEY } from '../_constants/-query-key'
+import useAuth from '@/common/hooks/use-auth'
 // #endregion
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/')({
-	component: Page
+	component: () => (
+		<PageProvider>
+			<Page />
+		</PageProvider>
+	)
 })
 
 function Page() {
 	const { t, i18n } = useTranslation()
 	const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false)
-	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouse>[]>([])
-	const [rowDeletionType, setRowDeletionType, resetRowDeletionType] = useResetState<RowDeletionType>(undefined)
+	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
+	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouse>[]>([])
 	const queryClient = useQueryClient()
+	const { dispatch } = useContext(PageContext)
 
-	// Set page breadcrumb
-	useBreadcrumb([{ to: '/warehouse', title: t('ns_common:navigation.wh_management') }])
+	// Set breadcrumb navigation
+	useBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_commands') }])
+
+	// Handle reset row deletion
+	const handleResetAllRowSelection = useCallback(() => {
+		resetSelectedRow()
+		resetRowSelectionType()
+	}, [])
 
 	// Get warehouse data
 	const { data, isLoading } = useQuery({
-		queryKey: ['warehouses'],
-		queryFn: () => WarehouseService.getWarehouseList(),
-		select: (response) => {
+		queryKey: [WAREHOUSE_LIST_QUERY_KEY],
+		queryFn: WarehouseService.getWarehouseList,
+		select: (response: ResponseBody<IWarehouse[]>) => {
 			const { metadata } = response
 			return Array.isArray(metadata)
 				? metadata.map((item) => ({
@@ -59,79 +70,113 @@ function Page() {
 
 	// Delete warehouse
 	const { mutateAsync: deleteWarehouseAsync } = useMutation({
-		mutationKey: ['warehouses'],
+		mutationKey: [WAREHOUSE_LIST_QUERY_KEY],
 		mutationFn: WarehouseService.deleteWarehouse,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
-			resetSelectedRow()
-			resetRowDeletionType()
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: ['warehouses'] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_LIST_QUERY_KEY] })
 		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
+		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context }),
+		onSettled: () => handleResetAllRowSelection()
 	})
 
 	// Update warehouse
 	const { mutateAsync: updateWarehouse } = useMutation({
-		mutationKey: ['warehouses'],
-		mutationFn: (payload: { id: string; data: PartialWarehouseFormValue }) =>
-			WarehouseService.updateWarehouse(payload.id, payload.data),
+		mutationKey: [WAREHOUSE_LIST_QUERY_KEY],
+		mutationFn: WarehouseService.updateWarehouse,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: ['warehouses'] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_LIST_QUERY_KEY] })
 		},
 		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
 	})
-
-	const handleCancelDelete = useCallback(() => {
-		resetSelectedRow()
-		resetRowDeletionType()
-	}, [])
-
-	const [formStates, dispatch] = useReducer(formReducer, { title: undefined, defaultValues: {}, type: undefined })
 
 	const columnHelper = createColumnHelper<IWarehouse>()
 
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor('id', {
-				id: 'row_selection_column',
-				header: IndeterminateCheckbox,
+				id: 'row-selection-column',
+				header: ({ table }) => {
+					const checked =
+						table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+
+					return (
+						<Checkbox
+							role='checkbox'
+							checked={checked as CheckedState}
+							onCheckedChange={(checkedState) => {
+								table.toggleAllPageRowsSelected(!!checkedState)
+								if (!checkedState) {
+									handleResetAllRowSelection()
+									return
+								}
+								setRowSelectionType('multiple')
+								setSelectedRows(table.getPreSelectedRowModel().flatRows)
+							}}
+						/>
+					)
+				},
 				cell: ({ row }) => (
-					<RowSelectionCheckbox row={row} onCheckedChange={() => setRowDeletionType('multiple')} />
+					<Checkbox
+						aria-label='Select row'
+						role='checkbox'
+						checked={row.getIsSelected()}
+						onCheckedChange={(checkedState) => {
+							row.toggleSelected(Boolean(checkedState))
+							if (!checkedState) {
+								setSelectedRows((prev) => {
+									const filtered = prev.filter((selectedRow) => selectedRow.id !== row.id)
+									if (filtered.length === 0) handleResetAllRowSelection()
+									return filtered
+								})
+								return
+							}
+
+							setSelectedRows((prev) => {
+								setRowSelectionType('multiple')
+								return [...prev, row]
+							})
+						}}
+					/>
 				),
 				meta: { sticky: 'left' },
-				size: 56,
+				size: 50,
 				enableSorting: false,
 				enableHiding: false,
 				enableResizing: false
 			}),
 			columnHelper.accessor('warehouse_num', {
 				header: t('ns_warehouse:fields.warehouse_num'),
-				minSize: 160,
+				minSize: 150,
 				enableColumnFilter: true,
 				enableResizing: true,
-				enableSorting: true,
-				cell: ({ getValue }) => String(getValue()).toUpperCase()
-			}),
-			columnHelper.accessor('warehouse_name', {
-				header: t('ns_warehouse:fields.warehouse_name'),
-				minSize: 256,
-				enableResizing: true,
-				enableColumnFilter: true,
 				enableSorting: true,
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
 			columnHelper.accessor('type_warehouse', {
 				header: t('ns_warehouse:fields.type_warehouse'),
-				minSize: 256,
+				minSize: 250,
 				enableColumnFilter: true,
 				filterFn: 'equals'
 			}),
+			columnHelper.accessor('warehouse_name', {
+				header: t('ns_warehouse:fields.warehouse_name'),
+				minSize: 250,
+				enableResizing: true,
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: ({ getValue }) => String(getValue()).toUpperCase()
+			}),
+
 			columnHelper.accessor('area', {
 				header: t('ns_warehouse:fields.area'),
 				minSize: 150,
+				filterFn: 'inNumberRange',
+				enableColumnFilter: true,
+				enableGlobalFilter: false,
 				enableResizing: true,
 				enableSorting: true,
 				cell: ({ getValue }) => new Intl.NumberFormat('en-US', { minimumSignificantDigits: 3 }).format(getValue())
@@ -148,9 +193,9 @@ function Page() {
 							onCheckedChange={(checked) =>
 								updateWarehouse({
 									id: original.id,
-									data: {
+									payload: {
 										is_disable: Boolean(checked),
-										is_default: Boolean(checked) ? false : original.is_default
+										is_default: checked ? false : original.is_default
 									}
 								})
 							}
@@ -171,7 +216,7 @@ function Page() {
 							onCheckedChange={(checked) =>
 								updateWarehouse({
 									id: original.id,
-									data: { is_default: Boolean(checked) }
+									payload: { is_default: Boolean(checked) }
 								})
 							}
 						/>
@@ -189,7 +234,7 @@ function Page() {
 					)
 			}),
 			columnHelper.accessor('id', {
-				id: 'actions_column',
+				id: 'actions-column',
 				header: t('ns_common:common_fields.actions'),
 				maxSize: 100,
 				enableResizing: false,
@@ -200,16 +245,16 @@ function Page() {
 						row={row}
 						onDelete={() => {
 							setConfirmDialogOpen(!confirmDialogOpen)
+							setRowSelectionType('single')
 							setSelectedRows((prev) => [...prev, row])
-							setRowDeletionType('single')
 						}}
 						onEdit={() => {
 							setFormDialogOpen(true)
 							dispatch({
 								type: CommonActions.UPDATE,
 								payload: {
-									title: t('ns_warehouse:form.update_warehouse_title'),
-									defaultValues: {
+									dialogTitle: t('ns_warehouse:form.update_warehouse_title'),
+									defaultFormValues: {
 										...row.original,
 										type_warehouse: Object.keys(warehouseTypes).find(
 											(key) => t(warehouseTypes[key], { ns: 'ns_warehouse' }) === row.original.type_warehouse
@@ -233,17 +278,17 @@ function Page() {
 				loading={isLoading}
 				enableColumnResizing={true}
 				enableRowSelection={true}
-				rowSelectionState={selectedRows}
-				onRowSelectionStateChange={setSelectedRows}
 				toolbarProps={{
 					slot: (
 						<Fragment>
-							{selectedRows.length > 0 && rowDeletionType == 'multiple' && (
+							{selectedRows.length > 0 && rowSelectionType == 'multiple' && (
 								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 									<Button
 										variant='destructive'
 										size='icon'
-										onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
+										onClick={() => {
+											setConfirmDialogOpen(!confirmDialogOpen)
+										}}>
 										<Icon name='Trash' />
 									</Button>
 								</Tooltip>
@@ -256,7 +301,7 @@ function Page() {
 										setFormDialogOpen(true)
 										dispatch({
 											type: CommonActions.CREATE,
-											payload: { title: t('ns_warehouse:form.add_warehouse_title') }
+											payload: { dialogTitle: t('ns_warehouse:form.add_warehouse_title') }
 										})
 									}}>
 									<Icon name='Plus' />
@@ -266,22 +311,14 @@ function Page() {
 					)
 				}}
 			/>
-			<WarehouseFormDialog
-				open={formDialogOpen}
-				onOpenChange={setFormDialogOpen}
-				onFormActionChange={dispatch}
-				{...{
-					...formStates,
-					defaultValues: formStates.defaultValues as unknown as TFormValues<typeof formStates.type>
-				}}
-			/>
+			<WarehouseFormDialog open={formDialogOpen} onOpenChange={setFormDialogOpen} />
 			<ConfirmDialog
 				open={confirmDialogOpen}
 				onOpenChange={setConfirmDialogOpen}
 				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
-				onConfirm={() => deleteWarehouseAsync(selectedRows.map((item) => item.original?.id))}
-				onCancel={handleCancelDelete}
+				onConfirm={() => deleteWarehouseAsync(selectedRows.map((item) => item.original.id))}
+				onCancel={handleResetAllRowSelection}
 			/>
 		</Fragment>
 	)

@@ -17,11 +17,16 @@ export default {
 		login_failed: 'Đăng nhập thất bại',
 		logout_failed: 'Đăng xuất thất bại'
 	},
-	actions: { go_to_dashboard: 'Đi đến màn hình chính' },
+	actions: {
+		go_to_dashboard: 'Đi đến màn hình chính'
+	},
 	validation: {
 		require_account: 'Vui lòng nhập tài khoản',
 		require_password: 'Vui lòng nhập mật khẩu',
 		require_company: 'Vui lòng chọn đơn vị công tác'
 	},
-	steps: { verify_account: 'Xác thực tài khoản', select_department: 'Chọn đơn vị công tác' }
+	steps: {
+		verify_account: 'Xác thực tài khoản',
+		select_department: 'Chọn đơn vị công tác'
+	}
 } as const

@@ -1,8 +1,10 @@
 import { useContext, useEffect } from 'react'
 import { BreadcrumbContext, TBreadcrumb } from '../_components/_providers/-breadcrumb-provider'
+import { useRouterState } from '@tanstack/react-router'
 
-export function useBreadcrumb(breadcrumbs: TBreadcrumb[]) {
+export function useBreadcrumb(data: TBreadcrumb[]) {
 	const { setBreadcrumb } = useContext(BreadcrumbContext)
+	const router = useRouterState()
 
-	useEffect(() => setBreadcrumb(breadcrumbs), [])
+	useEffect(() => setBreadcrumb(data), [router])
 }

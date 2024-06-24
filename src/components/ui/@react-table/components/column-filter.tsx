@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Column } from '@tanstack/react-table'
 import { useContext, useMemo } from 'react'
-import { Div, DropdownSelect, Icon, buttonVariants, Tooltip } from '../..'
+import { Div, DropdownSelect, Icon, buttonVariants, Tooltip, Separator } from '../..'
 import { TableContext } from '../context/table.context'
 import { ComboboxFilter } from './combobox-filter'
 import { DebouncedInput } from './debounced-input'
@@ -12,7 +12,7 @@ type ColumnFilterProps<TData, TValue> = {
 }
 
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
-	const { isScrolling, hasNoFilter } = useContext(TableContext)
+	const { columnFilters, globalFilter } = useContext(TableContext)
 	const { t } = useTranslation()
 
 	const filterType = column.columnDef.filterFn
@@ -22,6 +22,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		() => (filterType === 'inNumberRange' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()),
 		[column.getFacetedUniqueValues()]
 	)
+
+	const hasNoFilter = useMemo(() => columnFilters.length === 0 && globalFilter.length === 0, [])
 
 	if (!column.columnDef.enableColumnFilter)
 		return (
@@ -33,46 +35,37 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 	switch (filterType) {
 		case 'inNumberRange':
 			return (
-				<Div>
-					<Div className='flex items-stretch'>
-						<DebouncedInput
-							type='number'
-							className={cn(
-								buttonVariants({ variant: 'ghost' }),
-								'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground'
-							)}
-							min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-							max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-							value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
-							onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
-							placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
-						/>
-						<DebouncedInput
-							type='number'
-							className={cn(
-								buttonVariants({ variant: 'ghost' }),
-								'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground'
-							)}
-							min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-							max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-							value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
-							onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
-							placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
-						/>
-					</Div>
+				<Div className='flex items-center'>
+					<DebouncedInput
+						type='number'
+						className='rounded-none border-none px-3 text-xs placeholder:text-muted-foreground/50 hover:text-foreground'
+						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
+						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
+						value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
+						onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
+						placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
+					/>
+					<Separator orientation='vertical' className='h-6' />
+					<DebouncedInput
+						type='number'
+						className='rounded-none border-none px-3 text-xs placeholder:text-muted-foreground/50 hover:text-foreground'
+						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
+						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
+						value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
+						onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
+						placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
+					/>
 				</Div>
 			)
 
 		case 'equals':
-			console.log(column.getFacetedRowModel())
-
 			return (
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'h-9 min-w-[8rem] rounded-none border-none text-xs font-medium text-muted-foreground/50 shadow-none hover:text-foreground focus:border-none'
+							'min-w-[8rem] rounded-none border-none text-xs font-medium text-muted-foreground/50 shadow-none hover:text-foreground focus:border-none ring-0'
 					}}
-					placeholder='Chọn ...'
+					placeholder={t('ns_common:table.search_in_column')}
 					options={sortedUniqueValues
 						.filter((value) => Boolean(value))
 						.map((value: any) => ({
@@ -86,17 +79,15 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		default:
 			return (
 				<ComboboxFilter
-					hasNoFilter={hasNoFilter}
 					placeholder='Tìm kiếm trong cột ...'
-					forceClose={isScrolling}
+					className='h-9 w-full rounded-none border-none pl-2 text-xs shadow-none'
+					onChange={(value) => column.setFilterValue(value)}
 					options={sortedUniqueValues
 						.filter((value) => Boolean(value))
 						.map((value: any) => ({
 							label: value,
 							value: value
 						}))}
-					className='h-9 w-full rounded-none border-none pl-2 text-xs shadow-none'
-					onChange={(value) => column.setFilterValue(value)}
 				/>
 			)
 	}

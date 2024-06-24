@@ -30,7 +30,7 @@ export class WarehouseService extends BaseAbstractService {
 		)
 	}
 
-	static async updateWarehouse(id: string, payload: PartialWarehouseFormValue) {
+	static async updateWarehouse({ id, payload }: { id: string; payload: PartialWarehouseFormValue }) {
 		return axiosInstance.patch<PartialWarehouseFormValue, ResponseBody<null>>(
 			this.createEndpoint(WarehouseService.BASE_WAREHOUSE_ENDPOINT, id),
 			payload

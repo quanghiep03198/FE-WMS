@@ -16,7 +16,7 @@ import {
 	Icon,
 	buttonVariants
 } from '@/components/ui'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouteContext } from '@tanstack/react-router'
 import { memo } from 'react'
 
 const navigationLinks = [
@@ -35,7 +35,8 @@ const navigationLinks = [
 ]
 
 const Header: React.FunctionComponent = () => {
-	const { isAuthenticated } = useAuth()
+	const { isAuthenticated } = useRouteContext({ from: '/' })
+	// const { isAuthenticated } = useAuth()
 
 	return (
 		<Div className='sticky top-0 z-20 h-16 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>

@@ -35,7 +35,6 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 		label,
 		orientation,
 		className,
-		defaultValue,
 		placeholder = t('ns_common:actions.search') + ' ... ',
 		messageType = 'alternative',
 		onValueChange,
@@ -43,11 +42,10 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 	} = props
 	const id = useId()
 
-	console.log(getValues(name))
-
 	return (
 		<FormField
 			name={name!}
+			defaultValue={getValues(name)}
 			control={control}
 			render={({ field }) => {
 				return (
@@ -58,7 +56,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 						})}>
 						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
 						<Select
-							value={field.value ?? getValues(name)}
+							value={field.value}
 							defaultValue={field.value}
 							onValueChange={(value) => {
 								field.onChange(value)
@@ -70,20 +68,30 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							<SelectTrigger
 								id={id}
 								ref={(e) => field.ref(e)}
-								className={cn('bg-background', className, {
-									'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive':
-										!!getFieldState(name).error
-								})}>
+								className={cn(
+									'bg-background',
+									className,
+									Boolean(getFieldState(name).error) &&
+										'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive'
+								)}>
 								<SelectValue placeholder={placeholder} />
 							</SelectTrigger>
 
 							<SelectContent>
-								{Array.isArray(props.options) &&
+								{Array.isArray(props.options) && props.options.length > 0 ? (
 									props.options.map((option) => (
 										<SelectItem key={option?.value} value={String(option?.value)}>
 											{option?.label}
 										</SelectItem>
-									))}
+									))
+								) : (
+									<SelectItem
+										value={null}
+										disabled
+										className='flex items-center justify-center text-center text-xs font-medium'>
+										No option
+									</SelectItem>
+								)}
 							</SelectContent>
 						</Select>
 						{props.description && <FormDescription>{props.description}</FormDescription>}

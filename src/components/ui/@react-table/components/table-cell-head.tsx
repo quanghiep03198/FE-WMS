@@ -14,7 +14,7 @@ type ColumnSortingProps = {
 	enableSorting?: boolean
 }
 
-function TableCellHead<TData, TValue>({ header, ...props }: TableCellHeadProps<TData, TValue>) {
+function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
 	const { isFilterOpened, setIsFilterOpened } = useContext(TableContext)
 
 	const { columnDef, getIsResizing, toggleSorting, getIsSorted } = header.column

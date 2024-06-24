@@ -49,13 +49,13 @@ axiosInstance.interceptors.response.use(
 			const user = JsonHandler.safeParse<IUser>(persistedUser) as IUser
 			if (retry > 1) {
 				controller.abort()
-				StorageService.logout()
 				toast.error('Log in session has expired.')
+				window.dispatchEvent(new Event('logout'))
 				return Promise.reject(new Error('Failed to get refresh token'))
 			}
 			if (retry === 1) {
 				await AuthService.refreshToken(user?.user_code, { signal: controller.signal })
-					.then(({ metadata: refreshToken }) => axiosInstance.setAccessToken(refreshToken))
+					.then(({ metadata: refreshToken }) => StorageService.setAccessToken(refreshToken))
 					.catch(() => {
 						retry++
 						controller.abort()
@@ -65,7 +65,7 @@ axiosInstance.interceptors.response.use(
 					.request<void, ResponseBody<string>>({ ...error.config, signal: controller.signal })
 					.then((response) => {
 						retry--
-						axiosInstance.setAccessToken(response.metadata)
+						StorageService.setAccessToken(response.metadata)
 						return response
 					})
 					.catch(() => {

@@ -22,6 +22,7 @@ export default {
 		close: 'Đóng',
 		continue: 'Tiếp tuc',
 		save: 'Lưu',
+		select: 'Chọn',
 		cancel: 'Hủy',
 		submit: 'Xác nhận',
 		confirm: 'Xác nhận',
@@ -43,6 +44,11 @@ export default {
 		search_in_column: 'Tìm kiếm trong cột',
 		no_match_result: 'Không có kết quả.'
 	},
+	form_placeholder: {
+		select: '-- Chọn {{object}} --',
+		fill: 'Nhập {{object}}...',
+		search: 'Tìm kiếm {{object}} ...'
+	},
 	pagination: {
 		next_page: 'Trang sau',
 		previous_page: 'Trang trước',
@@ -55,16 +61,16 @@ export default {
 		profile: 'Thông tin cá nhân',
 		account: 'Tài khoản',
 		keyboard_shortcut: 'Phím tắt',
-		wh_dashboard: 'Màn hình chính',
-		wh_in_out_commands: 'Thao tác nhập/xuất kho',
-		wh_management: 'Quản lý kho',
-		wh_storage_detail: 'Chi tiết vị trí lưu kho',
-		wh_import_management: 'Quản lý nhập hàng',
-		wh_export_management: 'Quản lý xuất hàng',
-		wh_transfer_managment: 'Quản lý chuyển giao',
-		wh_inventory_management: 'Quản lý tồn kho',
-		wh_receiving_checking_management: 'Quản lý nghiệm thu hàng vào',
-		wh_report_management: 'Báo biểu'
+		dashboard: 'Màn hình chính',
+		in_out_commands: 'Thao tác nhập/xuất kho',
+		warehouse_commands: 'Quản lý kho',
+		storage_detail: 'Chi tiết vị trí lưu kho',
+		import_management: 'Quản lý nhập hàng',
+		export_management: 'Quản lý xuất hàng',
+		transfer_managment: 'Quản lý chuyển giao',
+		inventory_management: 'Quản lý tồn kho',
+		receiving_checking_management: 'Quản lý nghiệm thu hàng vào',
+		report_management: 'Báo biểu'
 	},
 	notification: {
 		processing_request: 'Đang xử lý yêu cầu ...',

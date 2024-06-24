@@ -22,7 +22,9 @@ export enum CommonActions {
 	CREATE = 'CREATE',
 	READ = 'READ',
 	UPDATE = 'UPDATE',
-	DELETE = 'DELETE'
+	DELETE = 'DELETE',
+	IMPORT = 'IMPORT',
+	EXPORT = 'EXPORT'
 }
 
 export enum WarehouseTypesEnum {

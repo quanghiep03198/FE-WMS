@@ -16,100 +16,100 @@ import {
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
-import {
-	warehouseFormSchema,
-	type PartialWarehouseFormValue,
-	type WarehouseFormValue
-} from '@/schemas/warehouse.schema'
+import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '@/schemas/warehouse.schema'
 import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
 import _ from 'lodash'
-import { memo, useState } from 'react'
+import { memo, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { type TAction, type TFormAction } from '../_reducers/-form.reducer'
+import { PageContext } from '../_contexts/-page-context'
+import { WAREHOUSE_LIST_QUERY_KEY } from '../../_constants/-query-key'
 
-export type TFormValues<T> = (T extends CommonActions.CREATE
-	? WarehouseFormValue
-	: T extends CommonActions.UPDATE
-		? PartialWarehouseFormValue
-		: {}) &
+export type FormValues<T> = (T extends CommonActions.CREATE
+	? Required<WarehouseFormValue>
+	: PartialWarehouseFormValue) &
 	Pick<IWarehouse, 'id'>
 
-type FormAction = TFormAction<TFormValues<TAction>>
-
-const WarehouseFormDialog = (props: {
+type WarehouseFormDialogProps = {
 	open: boolean
-	title: string
-	type: TAction
-	defaultValues: TFormValues<typeof props.type>
 	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-	onFormActionChange: React.Dispatch<FormAction>
-}) => {
-	const { open, title, type, defaultValues, onOpenChange, onFormActionChange } = props
+}
 
+const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenChange }) => {
+	const {
+		dialogFormState: { actionType, dialogTitle, defaultFormValues },
+		dispatch
+	} = useContext(PageContext)
 	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
 	const { userCompany } = useAuth()
-	const form = useForm<TFormValues<typeof type>>({
+	const form = useForm<FormValues<typeof actionType>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
-
+	const department = form.watch('dept_code')
 	const queryClient = useQueryClient()
 
+	// Get department field values
 	const { data: departments } = useQuery({
 		queryKey: ['departments', userCompany],
 		queryFn: () => WarehouseService.getWarehouseDepartments(userCompany),
 		select: (data) => (Array.isArray(data.metadata) ? data.metadata : [])
 	})
 
+	// Get employee field values
 	const { data: employees } = useQuery({
 		queryKey: ['employees', employeeSearchTerm],
-		queryFn: () => EmployeeService.searchEmployee({ dept_code: form.watch('dept_code'), search: employeeSearchTerm }),
+		queryFn: () => EmployeeService.searchEmployee({ dept_code: department, search: employeeSearchTerm }),
 		select: (data) => data?.metadata
 	})
 
-	useDeepCompareEffect(() => {
-		form.reset({ ...defaultValues, company_code: userCompany })
-	}, [type, defaultValues, open])
-
-	const { mutateAsync } = useMutation({
-		mutationKey: ['warehouse'],
-		mutationFn: (payload: TFormValues<typeof type>) => {
-			switch (type) {
-				case CommonActions.CREATE:
+	// Create/Update action
+	const { mutateAsync, isPending } = useMutation({
+		mutationKey: [WAREHOUSE_LIST_QUERY_KEY],
+		mutationFn: (payload: any) => {
+			switch (actionType) {
+				case CommonActions.CREATE: {
 					return WarehouseService.createWarehouse(payload)
-				case CommonActions.UPDATE:
-					return WarehouseService.updateWarehouse((defaultValues as TFormValues<CommonActions.UPDATE>).id, payload)
-				default:
+				}
+				case CommonActions.UPDATE: {
+					const id = defaultFormValues.id
+					return WarehouseService.updateWarehouse({ id, payload })
+				}
+				default: {
 					throw new Error('Invalid actions')
+				}
 			}
 		},
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			onOpenChange(!open)
-			onFormActionChange({ type: undefined })
+			dispatch({ type: 'RESET' })
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: ['warehouses'] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_LIST_QUERY_KEY] })
 		},
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
-	const handleOpenStateChange = (open) => {
-		if (!open) onFormActionChange({ type: undefined })
-		onOpenChange(open)
-	}
+	useDeepCompareEffect(() => {
+		form.reset({ ...defaultFormValues, company_code: userCompany })
+	}, [actionType, defaultFormValues, open])
 
 	return (
-		<Dialog open={open} onOpenChange={handleOpenStateChange}>
+		<Dialog
+			open={open}
+			onOpenChange={(open) => {
+				if (!open) dispatch({ type: 'RESET' })
+				onOpenChange(open)
+			}}>
 			<DialogContent className='w-full max-w-3xl bg-popover'>
 				<DialogHeader>
-					<DialogTitle>{t(title, { ns: 'ns_warehouse', defaultValue: title })}</DialogTitle>
+					<DialogTitle>{t(dialogTitle, { ns: 'ns_warehouse', defaultValue: dialogTitle })}</DialogTitle>
 				</DialogHeader>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
@@ -123,13 +123,13 @@ const WarehouseFormDialog = (props: {
 						</FormItem>
 						<FormItem>
 							<SelectFieldControl
+								name='type_warehouse'
+								label={t('ns_warehouse:fields.type_warehouse')}
+								control={form.control}
 								options={Object.entries(warehouseTypes).map(([key, value]) => ({
 									label: t(value, { ns: 'ns_warehouse', defaultValue: value }),
 									value: key
 								}))}
-								name='type_warehouse'
-								control={form.control}
-								label={t('ns_warehouse:fields.type_warehouse')}
 							/>
 						</FormItem>
 						<FormItem>
@@ -144,11 +144,10 @@ const WarehouseFormDialog = (props: {
 						</FormItem>
 						<FormItem>
 							<ComboboxFieldControl
-								label={t('ns_company:department')}
-								form={form}
-								control={form.control}
 								name='dept_code'
 								placeholder='Search department ...'
+								label={t('ns_company:department')}
+								form={form}
 								data={departments}
 								labelField='MES_dept_name'
 								valueField='ERP_dept_code'
@@ -165,16 +164,15 @@ const WarehouseFormDialog = (props: {
 						</FormItem>
 						<FormItem>
 							<ComboboxFieldControl
-								label={t('ns_warehouse:fields.manager')}
-								form={form}
-								control={form.control}
 								name='employee_code'
 								placeholder='Search employee ...'
-								onInput={_.debounce((value) => setEmployeeSearchTerm(value), 500)}
+								label={t('ns_warehouse:fields.manager')}
+								form={form}
 								data={employees}
-								disabled={!form.watch('dept_code')}
+								disabled={!department}
 								labelField='employee_name'
 								valueField='employee_code'
+								onInput={_.debounce((value) => setEmployeeSearchTerm(value), 500)}
 								template={({ data }: { data: IEmployee }) => (
 									<Div className='space-y-1'>
 										<Typography className='line-clamp-1'>{data.employee_name}</Typography>
@@ -191,12 +189,14 @@ const WarehouseFormDialog = (props: {
 								type='button'
 								variant='outline'
 								onClick={() => {
-									onFormActionChange({ type: undefined })
+									dispatch({ type: 'RESET' })
 									onOpenChange(false)
 								}}>
 								{t('ns_common:actions.cancel')}
 							</Button>
-							<Button type='submit'>{t('ns_common:actions.submit')}</Button>
+							<Button type='submit' disabled={isPending}>
+								{t('ns_common:actions.submit')}
+							</Button>
 						</DialogFooter>
 					</Form>
 				</FormProvider>

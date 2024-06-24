@@ -7,7 +7,6 @@ type DropdownSelectProps = {
 	placeholder?: string
 	options: Record<'label' | 'value', string>[]
 	onValueChange?: (value: string) => any | AnonymousFunction
-
 	selectProps?: SelectProps
 	selectTriggerProps?: SelectTriggerProps
 }

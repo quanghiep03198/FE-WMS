@@ -17,7 +17,7 @@ import {
 } from '../..'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/common/utils/cn'
-import { PaginationProps } from '.'
+import { PaginationProps } from '..'
 
 type DataTablePaginationProps<TData> = {
 	table: Table<TData>
@@ -75,7 +75,7 @@ export default function TablePagination<TData>({
 						<SelectValue placeholder={pageSize} />
 					</SelectTrigger>
 					<SelectContent side='top'>
-						{[10, 20, 50, 100].map((pageSize) => (
+						{[10, 20, 50, 100, 1000].map((pageSize) => (
 							<SelectItem
 								key={pageSize}
 								value={`${pageSize}`}

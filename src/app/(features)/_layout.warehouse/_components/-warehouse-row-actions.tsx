@@ -4,7 +4,7 @@ import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,13 +17,13 @@ type WarehouseRowActionsProps = {
 
 const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, onDelete }) => {
 	const { t } = useTranslation()
-	const router = useRouter()
+	const navigate = useNavigate()
 	const queryClient = useQueryClient()
 
 	// Prefetch warehouse storage detail before navigating
 	const prefetchWarehouseDetail = (warehouseNum: string) =>
 		queryClient.prefetchQuery({
-			queryKey: ['warehouse', warehouseNum],
+			queryKey: ['warehouse-storage', warehouseNum],
 			queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum)
 		})
 
@@ -45,16 +45,12 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem
 					className='flex items-center gap-x-3'
-					onMouseEnter={() => prefetchWarehouseDetail(row.original?.warehouse_num)}
+					onMouseEnter={() => prefetchWarehouseDetail(row.original.warehouse_num)}
 					onClick={() =>
-						router.invalidate().finally(() =>
-							router.navigate({
-								to: '/warehouse/storage-details/$warehouseNum',
-								params: {
-									warehouseNum: row.original?.warehouse_num
-								}
-							})
-						)
+						navigate({
+							to: '/warehouse/storage-details/$warehouseNum',
+							params: { warehouseNum: row.original.warehouse_num }
+						})
 					}>
 					<Icon name='SquareDashedMousePointer' />
 					{t('ns_common:actions.detail')}

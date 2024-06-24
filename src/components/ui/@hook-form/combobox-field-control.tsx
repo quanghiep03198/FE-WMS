@@ -24,12 +24,14 @@ import { BaseFieldControl } from '../../../common/types/hook-form'
 import FormLabel from './alternative-form-label'
 import { useTranslation } from 'react-i18next'
 
-type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = BaseFieldControl<T> & {
+type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
+	BaseFieldControl<T>,
+	'control'
+> & {
 	form: UseFormReturn<T>
 	data: Array<D>
 	labelField: keyof D
 	valueField: keyof D
-	triggerProps?: React.ComponentProps<typeof Button>
 	disabled?: boolean
 	template?: React.FC<{ data: D }>
 	onInput?: (value: string) => unknown
@@ -44,14 +46,12 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	const {
 		form,
 		name,
-		control,
 		data,
 		labelField,
 		valueField,
 		label,
 		description,
 		orientation,
-		triggerProps,
 		disabled,
 		hidden,
 		template: CommandItemTemplate,
@@ -67,12 +67,12 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	return (
 		<FormField
 			name={name}
-			control={control}
+			control={form.control}
 			render={({ field }) => {
 				return (
 					<FormItem
 						className={cn({
-							hidden,
+							hidden: hidden,
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
 						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
@@ -81,12 +81,11 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 								<PopoverTrigger asChild>
 									<FormControl>
 										<Button
-											role='combobox'
-											variant='outline'
 											id={id}
 											ref={triggerRef}
+											role='combobox'
+											variant='outline'
 											disabled={disabled}
-											{...triggerProps}
 											className={cn(
 												'w-full justify-between hover:bg-background',
 												!field.value && 'text-muted-foreground'

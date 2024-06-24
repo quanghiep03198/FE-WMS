@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/inventory/')({
 
 function Page() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ to: '/inventory', title: t('ns_common:navigation.wh_inventory_management') }])
+	useBreadcrumb([{ to: '/inventory', text: t('ns_common:navigation.inventory_management') }])
 
 	return <FallbackPage />
 }

@@ -3,14 +3,13 @@ import { routeTree } from '@/route-tree.gen'
 import { RouterProvider as TanstackRouterProvider, createRouter } from '@tanstack/react-router'
 import Loading from '../shared/loading'
 import { queryClient } from './query-client-provider'
-import { AuthProvider } from './auth-provider'
 
 // Set up a Router instance
 const router = createRouter({
 	routeTree,
 	context: { queryClient, isAuthenticated: undefined },
-
-	defaultPendingComponent: () => <Loading className='h-screen' />
+	defaultPreload: 'intent',
+	defaultPendingComponent: Loading
 })
 
 // Register things for typesafety

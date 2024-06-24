@@ -1,48 +1,30 @@
-import { PropsWithChildren, WheelEventHandler, createContext, useRef, useState } from 'react'
-
-type TableProviderProps = {
-	hasNoFilter: boolean
-} & PropsWithChildren
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import { createContext } from 'react'
 
 type TableContext = {
+	globalFilter: string
+	columnFilters: ColumnFiltersState
+	hasNoFilter: boolean
+	sorting: SortingState
 	isScrolling: boolean
 	isFilterOpened: boolean
-	handleMouseWheel: WheelEventHandler
 	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>
-} & Pick<TableProviderProps, 'hasNoFilter'>
+	setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
+	setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
+	setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+	setIsScrolling: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 export const TableContext = createContext<TableContext>({
+	globalFilter: '',
+	columnFilters: [],
+	sorting: [],
 	isScrolling: false,
 	isFilterOpened: false,
 	hasNoFilter: false,
-	setIsFilterOpened: () => {},
-	handleMouseWheel: () => undefined
+	setIsFilterOpened: () => undefined,
+	setIsScrolling: () => undefined,
+	setGlobalFilter: () => undefined,
+	setColumnFilters: () => undefined,
+	setSorting: () => undefined
 })
-
-export const TableProvider: React.FC<TableProviderProps> = ({ hasNoFilter, children }) => {
-	const [isScrolling, setIsScrolling] = useState(false)
-	const [isFilterOpened, setIsFilterOpened] = useState(false)
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-	const handleMouseWheel: WheelEventHandler = (e) => {
-		e.stopPropagation()
-		if (timeoutRef.current) clearTimeout(timeoutRef.current!)
-		setIsScrolling(true)
-		timeoutRef.current = setTimeout(() => {
-			setIsScrolling(false)
-		}, 100)
-	}
-
-	return (
-		<TableContext.Provider
-			value={{
-				isScrolling,
-				hasNoFilter,
-				isFilterOpened,
-				setIsFilterOpened,
-				handleMouseWheel
-			}}>
-			{children}
-		</TableContext.Provider>
-	)
-}

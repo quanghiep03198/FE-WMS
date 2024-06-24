@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/report/')({
 
 function Page() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ to: '/report', title: t('ns_common:navigation.wh_report_management') }])
+	useBreadcrumb([{ to: '/report', text: t('ns_common:navigation.report_management') }])
 
 	return <FallbackPage />
 }

@@ -18,7 +18,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '1',
 		icon: 'LayoutDashboard',
-		title: 'navigation.wh_dashboard',
+		title: 'navigation.dashboard',
 		path: '/dashboard',
 		type: 'main',
 		keybinding: 'ctrl.alt.1'
@@ -26,7 +26,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '2',
 		icon: 'GitCompareArrows',
-		title: 'navigation.wh_in_out_commands',
+		title: 'navigation.in_out_commands',
 		path: '/in-out-commands',
 		type: 'main',
 		keybinding: 'ctrl.alt.2'
@@ -34,7 +34,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '3',
 		icon: 'Warehouse',
-		title: 'navigation.wh_management',
+		title: 'navigation.warehouse_commands',
 		path: '/warehouse',
 		type: 'main',
 		keybinding: 'ctrl.alt.3'
@@ -42,7 +42,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '4',
 		icon: 'GitPullRequestArrow',
-		title: 'navigation.wh_import_management',
+		title: 'navigation.import_management',
 		path: '/warehouse-import',
 		type: 'main',
 		keybinding: 'ctrl.alt.4'
@@ -50,7 +50,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '5',
 		icon: 'GitBranch',
-		title: 'navigation.wh_export_management',
+		title: 'navigation.export_management',
 		path: '/warehouse-export',
 		type: 'main',
 		keybinding: 'ctrl.alt.5'
@@ -58,7 +58,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '6',
 		icon: 'ArrowRightLeft',
-		title: 'navigation.wh_transfer_managment',
+		title: 'navigation.transfer_managment',
 		path: '/transfer-management',
 		type: 'main',
 		keybinding: 'ctrl.alt.6'
@@ -66,7 +66,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '7',
 		icon: 'Container',
-		title: 'navigation.wh_inventory_management',
+		title: 'navigation.inventory_management',
 		path: '/inventory',
 		type: 'main',
 		keybinding: 'ctrl.alt.7'
@@ -74,7 +74,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '8',
 		icon: 'PackageCheck',
-		title: 'navigation.wh_receiving_checking_management',
+		title: 'navigation.receiving_checking_management',
 		path: '/product-incoming-inspection',
 		type: 'main',
 		keybinding: 'ctrl.alt.8'
@@ -82,7 +82,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '9',
 		icon: 'FileText',
-		title: 'navigation.wh_report_management',
+		title: 'navigation.report_management',
 		path: '/report',
 		type: 'main',
 		keybinding: 'ctrl.alt.9'

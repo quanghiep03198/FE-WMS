@@ -9,12 +9,12 @@ import Statistics from './_components/-statistics'
 import TransactionHistory from './_components/-transaction-history'
 
 export const Route = createFileRoute('/(features)/_layout/dashboard/')({
-	component: Dashboard
+	component: Page
 })
 
-function Dashboard() {
+function Page() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ to: '/dashboard', title: t('ns_common:navigation.wh_dashboard') }])
+	useBreadcrumb([{ to: '/dashboard', text: t('ns_common:navigation.dashboard') }])
 
 	return (
 		<Fragment>
