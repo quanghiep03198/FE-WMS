@@ -13,13 +13,13 @@ export class WarehouseService extends BaseAbstractService {
 
 	static getWarehouseByNum(warehouseNum: string) {
 		return axiosInstance.get<string, ResponseBody<IWarehouse>>(
-			this.createEndpoint(WarehouseService.BASE_WAREHOUSE_ENDPOINT, warehouseNum)
+			WarehouseService.BASE_WAREHOUSE_ENDPOINT + '/' + warehouseNum
 		)
 	}
 
 	static async getWarehouseDepartments(companyCode: string) {
 		return await axiosInstance.get<string, ResponseBody<IDepartment[]>>(
-			this.createEndpoint(WarehouseService.BASE_WAREHOUSE_ENDPOINT, 'departments', companyCode)
+			WarehouseService.BASE_WAREHOUSE_ENDPOINT + '/' + 'departments' + '/' + companyCode
 		)
 	}
 
@@ -32,7 +32,7 @@ export class WarehouseService extends BaseAbstractService {
 
 	static async updateWarehouse({ id, payload }: { id: string; payload: PartialWarehouseFormValue }) {
 		return axiosInstance.patch<PartialWarehouseFormValue, ResponseBody<null>>(
-			this.createEndpoint(WarehouseService.BASE_WAREHOUSE_ENDPOINT, id),
+			WarehouseService.BASE_WAREHOUSE_ENDPOINT + '/' + id,
 			payload
 		)
 	}

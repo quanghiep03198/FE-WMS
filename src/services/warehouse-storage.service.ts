@@ -13,7 +13,7 @@ export class WarehouseStorageService extends BaseAbstractService {
 	 */
 	static async getWarehouseStorages(warehouseNum: string) {
 		return await axiosInstance.get<string, ResponseBody<IWarehouseStorageArea[]>>(
-			this.createEndpoint(WarehouseStorageService.BASE_ENDPOINT, warehouseNum)
+			WarehouseStorageService.BASE_ENDPOINT + '/' + warehouseNum
 		)
 	}
 
@@ -27,7 +27,7 @@ export class WarehouseStorageService extends BaseAbstractService {
 	static async updateWarehouseStorage(storageNum: string, payload: PartialStorageFormValue) {
 		console.log(storageNum)
 		return axiosInstance.patch<PartialStorageFormValue, ResponseBody<null>>(
-			this.createEndpoint(WarehouseStorageService.BASE_ENDPOINT, storageNum),
+			WarehouseStorageService.BASE_ENDPOINT + '/' + storageNum,
 			payload
 		)
 	}

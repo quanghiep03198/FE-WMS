@@ -1,7 +1,7 @@
 // #region Modules
 import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Row, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
@@ -90,7 +90,8 @@ function Page() {
 						})
 					}))
 				: []
-		}
+		},
+		placeholderData: keepPreviousData
 	})
 
 	const { mutateAsync: updateWarehouseStorage } = useMutation({
