@@ -68,7 +68,7 @@ function DataTable<TData, TValue>(
 	const [isScrolling, setIsScrolling] = useState(false)
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const hasNoFilter = useMemo(
-		() => columnFilters.length === 0 && globalFilter.length === 0,
+		() => [columnFilters].length === 0 && globalFilter.length === 0,
 		[globalFilter, columnFilters]
 	)
 
@@ -78,8 +78,14 @@ function DataTable<TData, TValue>(
 		limit: 10
 	})
 
+	/**
+	 * Avoid infinite loop if data is empty
+	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github}
+	 */
+	const _data = useMemo(() => (Array.isArray(data) ? data : []), [data])
+
 	const table = useReactTable({
-		data: data ?? [],
+		data: _data,
 		columns,
 		initialState: {
 			globalFilter: '',
@@ -122,8 +128,6 @@ function DataTable<TData, TValue>(
 
 	if (ref && typeof ref !== 'function') ref.current = table
 
-	console.log(1)
-
 	return (
 		<TableContext.Provider
 			value={{
@@ -141,13 +145,7 @@ function DataTable<TData, TValue>(
 			}}>
 			<Div className='flex h-full flex-col items-stretch gap-y-3'>
 				{toolbarProps.hidden ? null : <TableToolbar table={table} slot={toolbarProps.slot} />}
-				<TableDataGrid
-					containerProps={containerProps}
-					data={data}
-					table={table}
-					columns={columns}
-					loading={loading}
-				/>
+				<TableDataGrid containerProps={containerProps} table={table} columns={columns} loading={loading} />
 				<Div className='flex items-center'>
 					{enableRowSelection && (
 						<Typography className='text-sm font-medium sm:hidden'>

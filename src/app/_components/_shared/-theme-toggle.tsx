@@ -1,7 +1,7 @@
 import { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
-import { Button, Icon, buttonVariants } from '@/components/ui'
+import { Button, Div, Icon, buttonVariants } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
 import { VariantProps } from 'class-variance-authority'
 import { ClassProp } from 'class-variance-authority/types'
@@ -9,7 +9,7 @@ import { memo, useMemo } from 'react'
 
 type ThemeToggleProps = VariantProps<typeof buttonVariants> & ClassProp
 
-const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'ghost', className, ...props }) => {
+const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'ghost', size = 'icon', className, ...props }) => {
 	const { theme, setTheme } = useTheme()
 	const darkTheme = useMemo<boolean>(() => theme === Theme.DARK, [theme])
 	const toggleTheme = () => (darkTheme ? setTheme(Theme.LIGHT) : setTheme(Theme.DARK))
@@ -20,7 +20,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'ghost', className,
 	})
 
 	return (
-		<Button onClick={toggleTheme} className='relative' variant={variant} {...props}>
+		<Div role='button' onClick={toggleTheme} className='relative' {...props}>
 			<Icon
 				name='Sun'
 				className={cn(
@@ -35,7 +35,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'ghost', className,
 					darkTheme ? 'rotate-0 opacity-100' : 'rotate-45 opacity-0'
 				)}
 			/>
-		</Button>
+		</Div>
 	)
 }
 

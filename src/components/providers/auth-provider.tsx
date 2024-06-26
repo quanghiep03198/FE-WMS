@@ -1,7 +1,7 @@
 import { generateAvatar } from '@/common/utils/generate-avatar'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
-import { UseMutateAsyncFunction, useMutation, useQuery } from '@tanstack/react-query'
+import { UseMutateAsyncFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCookieState, useDeepCompareLayoutEffect, useEventListener, useLocalStorageState } from 'ahooks'
 import { SetState } from 'ahooks/lib/createUseStorageState'
 import { AxiosError, AxiosResponse } from 'axios'
@@ -31,6 +31,8 @@ export const AuthContext = createContext<TAuthContext>({
 })
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+	const queryClient = useQueryClient()
+
 	const [user, setUser] = useLocalStorageState<Partial<IUser>>(StorageService.USER_KEY, {
 		defaultValue: undefined,
 		listenStorageChange: true,
@@ -52,12 +54,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
 	const { mutateAsync: logout } = useMutation({
 		mutationKey: ['auth', accessToken],
-		mutationFn: AuthService.logout,
+		mutationFn: AuthService.revokeAccessToken,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSettled: (_data, _error, _variabled, context) => {
-			AuthService.revokeAuthSession().finally(() =>
-				toast.success(t('ns_auth:notification.logout_success'), { id: context })
-			)
+			AuthService.logout().finally(() => toast.success(t('ns_auth:notification.logout_success'), { id: context }))
 		}
 	})
 
@@ -73,11 +73,12 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	// Check authenticated status every time get profile query is triggered
 	useDeepCompareLayoutEffect(() => {
 		if (data && isSuccess) setUser({ ...data, picture: generateAvatar({ name: data.display_name }) })
-		if (isError) AuthService.revokeAuthSession()
+		if (isError) AuthService.logout()
 	}, [data, isSuccess, isError])
 
 	// Listen log out event
 	useEventListener('logout', () => {
+		queryClient.clear()
 		setUser(undefined)
 		setAccessToken(undefined)
 		setUserCompany(undefined)

@@ -34,6 +34,7 @@ export enum WarehouseTypesEnum {
 	FINISHED_PRODUCTION_WAREHOUSE = 'D',
 	SCRAP_PRODUCTION_WAREHOUSE = 'E'
 }
+
 export enum WarehouseStorageTypeEnum {
 	MAIN_AREA = 'A',
 	FINISHED_PRODUCTION_AREA = 'B',
@@ -41,3 +42,5 @@ export enum WarehouseStorageTypeEnum {
 	OUTBOUND_STAGING_AREA = 'D',
 	INBOUND_STAGING_AREA = 'E'
 }
+
+export enum InOutBoundActionsEnum {}

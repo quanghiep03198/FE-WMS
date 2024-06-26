@@ -2,6 +2,7 @@ import { warehouseTypes } from '../constants/constants'
 
 export interface IBaseEntity {
 	id: string
+	keyid?: string
 	[key: string]: any
 }
 
@@ -44,12 +45,13 @@ export interface IWarehouse extends IBaseEntity {
 	employee_name: string | null
 }
 
-export interface IWarehouseStorageArea
+export interface IWarehouseStorage
 	extends IBaseEntity,
 		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
 	storage_name: string
 	storage_num: string
-	type_storage: string
+	type_storage: WarehouseStorageTypeEnum | string
+	created: Date | string
 }
 
 export interface IEmployee extends IBaseEntity {
@@ -73,4 +75,13 @@ export interface IProduction extends IBaseEntity {
 	remark
 	status_approve
 	month_close: string
+}
+
+export interface IElectronicProductCode {
+	record_time: Date
+	epc_code: string
+	mo_no: string
+	rfid_status: 'A' | 'B' | null
+	rfid_use: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | null
+	storage: any
 }

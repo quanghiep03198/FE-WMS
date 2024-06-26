@@ -20,7 +20,11 @@ export default {
 		delete: 'Xóa',
 		back: 'Quay lại',
 		close: 'Đóng',
-		continue: 'Tiếp tuc',
+		start: 'Bắt đầu',
+		continue: 'Tiếp tục',
+		stop: 'Dừng',
+		reset: 'Đặt lại',
+		finish: 'Hoàn thành',
 		save: 'Lưu',
 		select: 'Chọn',
 		cancel: 'Hủy',
@@ -30,6 +34,7 @@ export default {
 		login: 'Đăng nhập',
 		logout: 'Đăng xuất',
 		search: 'Tìm kiếm',
+		reload: 'Tải lại',
 		clear_filter: 'Xóa lọc',
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
 		toggle_theme: 'Chuyển đổi chế độ nền'
@@ -93,5 +98,8 @@ export default {
 	common_form_titles: {
 		create: 'Thêm mới {{object}}',
 		update: 'Cập nhật {{object}}'
+	},
+	status: {
+		stopped: 'Đã dừng'
 	}
 } as const

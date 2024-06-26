@@ -22,12 +22,17 @@ export default {
 		cancel: '取消',
 		submit: '确认',
 		confirm: '确认',
+		start: '开始',
+		stop: '停止',
 		continue: '继续',
+		reset: '重置',
+		finish: '完成',
 		back: '返回',
 		close: '关闭',
 		login: '登入',
 		logout: '登出',
 		search: '查詢',
+		reload: '重新加载',
 		detail: '细节',
 		clear_filter: '删除过滤',
 		toggle_sidebar: '切换主侧边栏',
@@ -91,5 +96,8 @@ export default {
 	common_form_titles: {
 		create: '加新{{object}}',
 		update: '編輯{{object}}'
+	},
+	status: {
+		stopped: '己停'
 	}
 } as const

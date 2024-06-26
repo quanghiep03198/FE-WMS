@@ -6,19 +6,18 @@ import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/compon
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { WarehouseService } from '@/services/warehouse.service'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Row, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { WAREHOUSE_PROVIDE_TAG, useGetWarehouseQuery } from '../_composables/-warehouse.composable'
 import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
 import { PageContext, PageProvider } from './_contexts/-page-context'
-import { WAREHOUSE_LIST_QUERY_KEY } from '../_constants/-query-key'
-import useAuth from '@/common/hooks/use-auth'
 // #endregion
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/')({
@@ -48,10 +47,8 @@ function Page() {
 	}, [])
 
 	// Get warehouse data
-	const { data, isLoading } = useQuery({
-		queryKey: [WAREHOUSE_LIST_QUERY_KEY],
-		queryFn: WarehouseService.getWarehouseList,
-		select: (response: ResponseBody<IWarehouse[]>) => {
+	const { data, isLoading, refetch } = useGetWarehouseQuery<IWarehouse[]>({
+		select: (response) => {
 			const { metadata } = response
 			return Array.isArray(metadata)
 				? metadata.map((item) => ({
@@ -64,18 +61,17 @@ function Page() {
 						})
 					}))
 				: []
-		},
-		placeholderData: keepPreviousData
+		}
 	})
 
 	// Delete warehouse
 	const { mutateAsync: deleteWarehouseAsync } = useMutation({
-		mutationKey: [WAREHOUSE_LIST_QUERY_KEY],
+		mutationKey: [WAREHOUSE_PROVIDE_TAG],
 		mutationFn: WarehouseService.deleteWarehouse,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_LIST_QUERY_KEY] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_PROVIDE_TAG] })
 		},
 		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context }),
 		onSettled: () => handleResetAllRowSelection()
@@ -83,12 +79,12 @@ function Page() {
 
 	// Update warehouse
 	const { mutateAsync: updateWarehouse } = useMutation({
-		mutationKey: [WAREHOUSE_LIST_QUERY_KEY],
+		mutationKey: [WAREHOUSE_PROVIDE_TAG],
 		mutationFn: WarehouseService.updateWarehouse,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_LIST_QUERY_KEY] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_PROVIDE_TAG] })
 		},
 		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
 	})
@@ -305,6 +301,11 @@ function Page() {
 										})
 									}}>
 									<Icon name='Plus' />
+								</Button>
+							</Tooltip>
+							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
+								<Button variant='outline' size='icon' onClick={() => refetch()}>
+									<Icon name='RotateCw' />
 								</Button>
 							</Tooltip>
 						</Fragment>

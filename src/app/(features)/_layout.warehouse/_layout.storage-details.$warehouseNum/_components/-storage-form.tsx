@@ -1,8 +1,9 @@
 // #region Modules
+import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_composables/-warehouse-storage.composable'
 import { warehouseStorageTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
-import { IWarehouseStorageArea } from '@/common/types/entities'
+import { IWarehouseStorage } from '@/common/types/entities'
 import {
 	Button,
 	Dialog,
@@ -29,11 +30,10 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { PageContext } from '../../_contexts/-page-context'
-import { WAREHOUSE_STORAGE_LIST_KEY } from '../../../_constants/-query-key'
 // #endregion
 
 // #region Type declarations
-export type FormValues<T> = Pick<IWarehouseStorageArea, 'storage_num'> &
+export type FormValues<T> = Pick<IWarehouseStorage, 'storage_num'> &
 	(T extends CommonActions.CREATE ? Required<StorageFormValue> : PartialStorageFormValue)
 
 type WarehouseStorageFormDialogProps = {
@@ -48,10 +48,10 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 	const { t } = useTranslation()
 	const { userCompany } = useAuth()
 	const {
-		dialogFormState: { actionType, dialogTitle, defaultFormValues },
+		dialogFormState: { type, dialogTitle, defaultFormValues },
 		dispatch
 	} = useContext(PageContext)
-	const form = useForm<FormValues<typeof actionType>>({
+	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(storageFormSchema)
 	})
 
@@ -72,9 +72,9 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 	}, [dialogTitle, defaultFormValues, open, warehouse])
 
 	const { mutateAsync, isPending } = useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
-		mutationFn: (payload: FormValues<typeof actionType>) => {
-			switch (actionType) {
+		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		mutationFn: (payload: FormValues<typeof type>) => {
+			switch (type) {
 				case CommonActions.CREATE: {
 					return WarehouseStorageService.createWarehouseStorage(payload)
 				}
@@ -91,7 +91,7 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 			onOpenChange(!open)
 			dispatch({ type: undefined })
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => {
 			toast.error(t('ns_common:notification.error'), { id: context })

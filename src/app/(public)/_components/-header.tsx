@@ -14,10 +14,12 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon,
+	Tooltip,
 	buttonVariants
 } from '@/components/ui'
 import { Link, useRouteContext } from '@tanstack/react-router'
 import { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const navigationLinks = [
 	{
@@ -35,8 +37,8 @@ const navigationLinks = [
 ]
 
 const Header: React.FunctionComponent = () => {
-	const { isAuthenticated } = useRouteContext({ from: '/' })
-	// const { isAuthenticated } = useAuth()
+	const { isAuthenticated } = useAuth()
+	const { t } = useTranslation()
 
 	return (
 		<Div className='sticky top-0 z-20 h-16 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
@@ -72,8 +74,14 @@ const Header: React.FunctionComponent = () => {
 				</Div>
 
 				<Div className='flex items-center justify-end gap-x-1 self-center'>
-					<ThemeToggle />
+					<Tooltip
+						message={t('ns_common:actions.toggle_theme')}
+						triggerProps={{ className: buttonVariants({ size: 'icon', variant: 'ghost' }) }}>
+						<ThemeToggle variant='outline' />
+					</Tooltip>
+
 					<LanguageDropdown />
+
 					{isAuthenticated ? (
 						<Link
 							to='/dashboard'

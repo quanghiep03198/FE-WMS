@@ -1,4 +1,4 @@
-import { IWarehouseStorageArea } from '@/common/types/entities'
+import { IWarehouseStorage } from '@/common/types/entities'
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
@@ -6,7 +6,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 type WarehouseRowActionsProps = {
-	row: Row<IWarehouseStorageArea>
+	row: Row<IWarehouseStorage>
 	onEdit: () => void
 	onDelete: () => void
 }

@@ -1,5 +1,8 @@
 export default {
-	warehouse_input_output_number: 'Warehouse input/output number',
+	counter_box: {
+		label: 'Scanned EPCs',
+		caption: 'EPC codes data is automatically synchronized every {{value}} seconds.'
+	},
 	action_types: {
 		warehouse_input: 'Warehouse input',
 		warehouse_output: 'Warehouse output'
@@ -9,7 +12,7 @@ export default {
 		imp_archive_warehouse: 'Archived warehouse',
 		imp_location: 'Storage location'
 	},
-	inoutbound_reasons: {
+	inoutbound_actions: {
 		normal_import: 'Normally import',
 		normal_export: 'Normally export',
 		scrap: 'Scrap',
@@ -17,5 +20,8 @@ export default {
 		transfer_inbound: 'Transfer inbound',
 		recycling: 'Recycling',
 		return_for_repair: 'Return for Repair'
+	},
+	notification: {
+		conflict_mono: 'There are up to 2 monos being read at this time, please check again!'
 	}
 }

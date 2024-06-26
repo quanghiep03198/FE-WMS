@@ -56,8 +56,8 @@ const featuresLayoutProductIncomingInspectionIndexLazyImport = createFileRoute(
 const featuresLayoutInventoryIndexLazyImport = createFileRoute(
   '/(features)/_layout/inventory/',
 )()
-const featuresLayoutInOutCommandsIndexLazyImport = createFileRoute(
-  '/(features)/_layout/in-out-commands/',
+const featuresLayoutInoutboundIndexLazyImport = createFileRoute(
+  '/(features)/_layout/inoutbound/',
 )()
 const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport =
   createFileRoute(
@@ -225,14 +225,14 @@ const featuresLayoutInventoryIndexLazyRoute =
       ),
     )
 
-const featuresLayoutInOutCommandsIndexLazyRoute =
-  featuresLayoutInOutCommandsIndexLazyImport
+const featuresLayoutInoutboundIndexLazyRoute =
+  featuresLayoutInoutboundIndexLazyImport
     .update({
-      path: '/in-out-commands/',
+      path: '/inoutbound/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout.in-out-commands/index.lazy').then(
+      import('./app/(features)/_layout.inoutbound/index.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -308,11 +308,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutDashboardIndexImport
       parentRoute: typeof featuresLayoutImport
     }
-    '/(features)/_layout/in-out-commands/': {
-      id: '/_layout/in-out-commands/'
-      path: '/in-out-commands'
-      fullPath: '/in-out-commands'
-      preLoaderRoute: typeof featuresLayoutInOutCommandsIndexLazyImport
+    '/(features)/_layout/inoutbound/': {
+      id: '/_layout/inoutbound/'
+      path: '/inoutbound'
+      fullPath: '/inoutbound'
+      preLoaderRoute: typeof featuresLayoutInoutboundIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/inventory/': {
@@ -408,7 +408,7 @@ export const routeTree = rootRoute.addChildren({
   featuresRoute: featuresRoute.addChildren({
     featuresLayoutRoute: featuresLayoutRoute.addChildren({
       featuresLayoutDashboardIndexRoute,
-      featuresLayoutInOutCommandsIndexLazyRoute,
+      featuresLayoutInoutboundIndexLazyRoute,
       featuresLayoutInventoryIndexLazyRoute,
       featuresLayoutProductIncomingInspectionIndexLazyRoute,
       featuresLayoutReportIndexLazyRoute,
@@ -465,8 +465,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "(features)/_layout.dashboard/index.tsx",
       "parent": "/_layout"
     },
-    "/_layout/in-out-commands/": {
-      "filePath": "(features)/_layout.in-out-commands/index.lazy.tsx",
+    "/_layout/inoutbound/": {
+      "filePath": "(features)/_layout.inoutbound/index.lazy.tsx",
       "parent": "/_layout"
     },
     "/_layout/inventory/": {

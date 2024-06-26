@@ -1,12 +1,11 @@
-import { CommonActions } from '@/common/constants/enums'
 import { createContext, useReducer } from 'react'
 
-type TAction = 'CREATE' | 'UPDATE' | 'RESET' | undefined
+export type TAction = 'CREATE' | 'UPDATE' | 'RESET' | undefined
 
 type DialogFormActionPayload<TValue = any> = {
 	dialogTitle: string | undefined
 	defaultFormValues?: TValue | {}
-	actionType?: TAction
+	type?: TAction
 }
 
 type FormContext = {
@@ -17,21 +16,14 @@ type FormContext = {
 	}>
 }
 
-const initialState: DialogFormActionPayload = { actionType: undefined, dialogTitle: undefined, defaultFormValues: {} }
+const initialState: DialogFormActionPayload = { type: undefined, dialogTitle: undefined, defaultFormValues: {} }
 
 const reducer = (_state, action: { type: TAction; payload?: DialogFormActionPayload }) => {
 	switch (action.type) {
 		case 'CREATE':
-			return {
-				...action.payload,
-				actionType: action.type,
-				defaultFormValues: {}
-			}
+			return { ...action.payload, type: action.type, defaultFormValues: {} }
 		case 'UPDATE':
-			return {
-				...action.payload,
-				actionType: action.type
-			}
+			return { ...action.payload, type: action.type }
 		case 'RESET':
 			return initialState
 		default:
@@ -40,7 +32,7 @@ const reducer = (_state, action: { type: TAction; payload?: DialogFormActionPayl
 }
 
 export const PageContext = createContext<FormContext>({
-	dialogFormState: { actionType: undefined, dialogTitle: undefined, defaultFormValues: {} },
+	dialogFormState: { type: undefined, dialogTitle: undefined, defaultFormValues: {} },
 	dispatch: () => undefined
 })
 

@@ -12,15 +12,18 @@ import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import { warehouseStorageTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IWarehouseStorageArea } from '@/common/types/entities'
+import { IWarehouseStorage } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { PartialStorageFormValue } from '@/schemas/warehouse.schema'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
-import { WAREHOUSE_STORAGE_LIST_KEY } from '../../_constants/-query-key'
 import { PageContext, PageProvider } from '../_contexts/-page-context'
 import WarehouseStorageFormDialog from './_components/-storage-form'
 import StorageRowActions from './_components/-storage-row-actions'
+import {
+	WAREHOUSE_STORAGE_PROVIDE_TAG,
+	useGetWarehouseStorageQuery
+} from '../../_composables/-warehouse-storage.composable'
 // #endregion
 
 // #region Router declaration
@@ -35,7 +38,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/
 
 // #region Page component
 function Page() {
-	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouseStorageArea>[]>([])
+	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouseStorage>[]>([])
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [formDialogOpenState, setFormDialogOpenState] = useState<boolean>(false)
@@ -76,10 +79,8 @@ function Page() {
 		[i18n.language]
 	)
 
-	const { data, isLoading } = useQuery({
-		queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
-		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
-		select: (response: ResponseBody<IWarehouseStorageArea[]>) => {
+	const { data, isLoading, refetch } = useGetWarehouseStorageQuery<IWarehouseStorage[]>(warehouseNum, {
+		select: (response: ResponseBody<IWarehouseStorage[]>): IWarehouseStorage[] => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({
 						...item,
@@ -90,29 +91,28 @@ function Page() {
 						})
 					}))
 				: []
-		},
-		placeholderData: keepPreviousData
+		}
 	})
 
 	const { mutateAsync: updateWarehouseStorage } = useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
+		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 		mutationFn: (data: { storageNum: string; payload: PartialStorageFormValue }) =>
 			WarehouseStorageService.updateWarehouseStorage(data.storageNum, data.payload),
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
 	const { mutateAsync: deleteWarehouseStorage } = useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum],
+		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_LIST_KEY, warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => {
 			toast.error(t('ns_common:notification.error'), { id: context })
@@ -120,7 +120,7 @@ function Page() {
 		onSettled: handleResetAllRowSelection
 	})
 
-	const columnHelper = createColumnHelper<IWarehouseStorageArea>()
+	const columnHelper = createColumnHelper<IWarehouseStorage>()
 
 	const columns = useMemo(
 		() => [
@@ -332,6 +332,11 @@ function Page() {
 										})
 									}}>
 									<Icon name='Plus' />
+								</Button>
+							</Tooltip>
+							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
+								<Button variant='outline' size='icon' onClick={() => refetch()}>
+									<Icon name='RotateCw' />
 								</Button>
 							</Tooltip>
 						</Fragment>

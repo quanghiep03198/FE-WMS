@@ -10,7 +10,7 @@ import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
 
 interface TableProps<TData, TValue>
-	extends Omit<DataTableProps<TData, TValue>, 'slot'>,
+	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
 		Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'>,
 		Pick<React.ComponentProps<'div'>, 'style'> {
 	table: TTable<TData>

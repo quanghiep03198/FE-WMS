@@ -1,6 +1,6 @@
 import axiosInstance from '@/configs/axios.config'
 import { BaseAbstractService } from './base.abstract.service'
-import { IWarehouseStorageArea } from '@/common/types/entities'
+import { IWarehouseStorage } from '@/common/types/entities'
 import { PartialStorageFormValue, StorageFormValue } from '@/schemas/warehouse.schema'
 
 export class WarehouseStorageService extends BaseAbstractService {
@@ -12,7 +12,7 @@ export class WarehouseStorageService extends BaseAbstractService {
 	 * @returns
 	 */
 	static async getWarehouseStorages(warehouseNum: string) {
-		return await axiosInstance.get<string, ResponseBody<IWarehouseStorageArea[]>>(
+		return await axiosInstance.get<string, ResponseBody<IWarehouseStorage[]>>(
 			WarehouseStorageService.BASE_ENDPOINT + '/' + warehouseNum
 		)
 	}

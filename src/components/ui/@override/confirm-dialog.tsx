@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -15,7 +15,7 @@ type ConfirmDialogProps = {
 	open: boolean
 	title: string
 	description: string
-	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+	onOpenChange?: React.Dispatch<React.SetStateAction<boolean>>
 	onConfirm: (...args: any[]) => unknown
 	onCancel?: (...args: any[]) => unknown
 }
@@ -29,9 +29,19 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 	onCancel
 }) => {
 	const { t } = useTranslation()
+	const [_open, setOpen] = useState<boolean>(open)
+
+	useEffect(() => {
+		setOpen(open)
+	}, [open])
 
 	return (
-		<AlertDialog open={open} onOpenChange={onOpenChange}>
+		<AlertDialog
+			open={open}
+			onOpenChange={(open) => {
+				if (typeof onOpenChange === 'function') onOpenChange(open)
+				setOpen(open)
+			}}>
 			<AlertDialogContent>
 				<AlertDialogHeader className='text-left'>
 					<AlertDialogTitle>{title}</AlertDialogTitle>

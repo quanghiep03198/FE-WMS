@@ -27,7 +27,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: '2',
 		icon: 'GitCompareArrows',
 		title: 'navigation.in_out_commands',
-		path: '/in-out-commands',
+		path: '/inoutbound',
 		type: 'main',
 		keybinding: 'ctrl.alt.2'
 	},

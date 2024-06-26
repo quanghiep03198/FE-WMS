@@ -19,12 +19,11 @@ export class AuthService extends BaseAbstractService {
 		return await axiosInstance.get<void, ResponseBody<IUser>>('/profile')
 	}
 
-	static async revokeAuthSession() {
-		queryClient.clear()
+	static async logout() {
 		window.dispatchEvent(new Event('logout'))
 	}
 
-	static async logout() {
+	static async revokeAccessToken() {
 		return await axiosInstance.post('/logout')
 	}
 

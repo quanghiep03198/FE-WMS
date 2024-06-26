@@ -28,8 +28,9 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { useGetDepartmentQuery } from '../../_composables/-department.composable'
+import { WAREHOUSE_PROVIDE_TAG } from '../../_composables/-warehouse.composable'
 import { PageContext } from '../_contexts/-page-context'
-import { WAREHOUSE_LIST_QUERY_KEY } from '../../_constants/-query-key'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
 	? Required<WarehouseFormValue>
@@ -42,25 +43,21 @@ type WarehouseFormDialogProps = {
 }
 
 const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenChange }) => {
+	const queryClient = useQueryClient()
 	const {
-		dialogFormState: { actionType, dialogTitle, defaultFormValues },
+		dialogFormState: { type, dialogTitle, defaultFormValues },
 		dispatch
 	} = useContext(PageContext)
 	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
 	const { userCompany } = useAuth()
-	const form = useForm<FormValues<typeof actionType>>({
+	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
 	const department = form.watch('dept_code')
-	const queryClient = useQueryClient()
 
 	// Get department field values
-	const { data: departments } = useQuery({
-		queryKey: ['departments', userCompany],
-		queryFn: () => WarehouseService.getWarehouseDepartments(userCompany),
-		select: (data) => (Array.isArray(data.metadata) ? data.metadata : [])
-	})
+	const { data: departments } = useGetDepartmentQuery(userCompany)
 
 	// Get employee field values
 	const { data: employees } = useQuery({
@@ -71,9 +68,9 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 
 	// Create/Update action
 	const { mutateAsync, isPending } = useMutation({
-		mutationKey: [WAREHOUSE_LIST_QUERY_KEY],
-		mutationFn: (payload: any) => {
-			switch (actionType) {
+		mutationKey: [WAREHOUSE_PROVIDE_TAG],
+		mutationFn: (payload: FormValues<typeof type>) => {
+			switch (type) {
 				case CommonActions.CREATE: {
 					return WarehouseService.createWarehouse(payload)
 				}
@@ -90,15 +87,15 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 		onSuccess: (_data, _variables, context) => {
 			onOpenChange(!open)
 			dispatch({ type: 'RESET' })
-			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_LIST_QUERY_KEY] })
+			queryClient.invalidateQueries({ queryKey: [WAREHOUSE_PROVIDE_TAG] })
+			return toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
 	useDeepCompareEffect(() => {
 		form.reset({ ...defaultFormValues, company_code: userCompany })
-	}, [actionType, defaultFormValues, open])
+	}, [type, defaultFormValues, open])
 
 	return (
 		<Dialog

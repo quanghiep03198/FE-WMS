@@ -1,4 +1,4 @@
-import { Badge, Button, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
+import { Badge, Button, Div, Icon, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
@@ -25,7 +25,11 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 						<Tooltip
 							message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}
 							contentProps={{ side: 'bottom', align: 'start' }}>
-							<Button size='icon' variant='outline' onClick={() => onCollapseStateChange(!isCollapsed)}>
+							<Button
+								size='icon'
+								variant='outline'
+								aria-expanded={isCollapsed}
+								onClick={() => onCollapseStateChange(!isCollapsed)}>
 								<Icon name='Menu' />
 							</Button>
 						</Tooltip>
@@ -34,7 +38,11 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 					</Div>
 
 					<Div className='flex flex-1 items-center justify-end gap-x-2'>
-						<Button variant='outline' className='basis-48 justify-between px-1' onClick={() => setOpen(!open)}>
+						<Button
+							variant='outline'
+							aria-modal={open}
+							className='basis-48 justify-between px-1'
+							onClick={() => setOpen(!open)}>
 							<Typography variant='small' className='inline-flex flex-1 items-center gap-x-2 px-2'>
 								<Icon name='Search' />
 								Search ...
@@ -46,7 +54,9 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 						</Button>
 
 						<LanguageDropdown triggerProps={{ variant: 'outline' }} />
-						<Tooltip message={t('ns_common:actions.toggle_theme')} triggerProps={{ className: 'size-9' }}>
+						<Tooltip
+							message={t('ns_common:actions.toggle_theme')}
+							triggerProps={{ className: buttonVariants({ size: 'icon', variant: 'outline' }) }}>
 							<ThemeToggle variant='outline' />
 						</Tooltip>
 						<NavUserControl />

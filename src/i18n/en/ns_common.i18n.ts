@@ -22,12 +22,17 @@ export default {
 		cancel: 'Cancel',
 		submit: 'Submit',
 		confirm: 'Confirm',
+		start: 'Start',
 		continue: 'Continue',
+		stop: 'Stop',
+		reset: 'Reset',
+		finish: 'Finish',
 		back: 'Back',
 		close: ' Close',
 		login: 'Log in',
 		logout: 'Log out',
 		search: 'Search',
+		reload: 'Reload',
 		detail: 'Detail',
 		clear_filter: 'Clear filters',
 		toggle_sidebar: 'Toggle Primary Side Bar',
@@ -92,5 +97,8 @@ export default {
 	common_form_titles: {
 		create: 'Create new {{object}}',
 		update: 'Update {{object}}'
+	},
+	status: {
+		stopped: 'Stopped'
 	}
 } as const
