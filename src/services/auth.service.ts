@@ -4,7 +4,6 @@ import { LoginFormValues } from '@/schemas/auth.schema'
 import { AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
 import { BaseAbstractService } from './base.abstract.service'
-import { queryClient } from '@/components/providers/query-client-provider'
 
 export class AuthService extends BaseAbstractService {
 	public static readonly USER_KEY = 'user'
