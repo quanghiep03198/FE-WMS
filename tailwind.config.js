@@ -75,7 +75,7 @@ module.exports = {
 					min: '1024px',
 					max: '1365px'
 				},
-				xl: { min: '1366px', max: '1919px' },
+				xl: { min: '1366px' },
 				xxl: { min: '1920px' }
 			},
 			borderRadius: {
