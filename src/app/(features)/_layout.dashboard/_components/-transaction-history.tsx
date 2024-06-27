@@ -1,10 +1,9 @@
-import { Badge, DataTable, Div, Icon, Typography, buttonVariants } from '@/components/ui'
-import ActiveShapePieChart from '@/components/ui/@custom/active-shape-pie-chart'
+import { Badge, Div, Icon, Typography, buttonVariants, DataTable } from '@/components/ui'
 import { recentExports, transactionOverview } from '@/mocks/dashboard.data'
 import { Link } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts'
 
 const TransactionHistory: React.FC = () => {
 	const columnHelper = createColumnHelper<any>()

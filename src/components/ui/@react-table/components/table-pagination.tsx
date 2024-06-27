@@ -15,7 +15,7 @@ import {
 	Typography,
 	buttonVariants
 } from '../..'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { cn } from '@/common/utils/cn'
 import { PaginationProps } from '..'
 
@@ -98,6 +98,9 @@ export default function TablePagination<TData>({
 			<Div className='flex items-center space-x-1'>
 				<Tooltip message={t('pagination.first_page', { defaultValue: 'First page' })}>
 					<Link
+						role='button'
+						aria-disabled={!canPreviousPage}
+						aria-label='First page'
 						disabled={!canPreviousPage}
 						search={{ ...searchParams, limit: pageSize, page: 1 }}
 						onClick={table.firstPage}
@@ -114,6 +117,9 @@ export default function TablePagination<TData>({
 				</Tooltip>
 				<Tooltip message={t('pagination.previous_page', { defaultValue: 'Previous page' })}>
 					<Link
+						role='button'
+						aria-disabled={!canPreviousPage}
+						aria-label='Previous page'
 						disabled={!canPreviousPage}
 						search={{ ...searchParams, limit: pageSize, page: pageIndex - 1 }}
 						onClick={table.previousPage}
@@ -130,6 +136,9 @@ export default function TablePagination<TData>({
 				</Tooltip>
 				<Tooltip message={t('pagination.next_page', { defaultValue: 'Next page' })}>
 					<Link
+						role='button'
+						aria-disabled={!canNextPage}
+						aria-label='Next page'
 						disabled={!canNextPage}
 						search={{ ...searchParams, page: pageIndex + 1 }}
 						onClick={table.nextPage}
@@ -146,6 +155,9 @@ export default function TablePagination<TData>({
 				</Tooltip>
 				<Tooltip message={t('pagination.last_page', { defaultValue: 'Last page' })}>
 					<Link
+						role='button'
+						aria-disabled={!canNextPage}
+						aria-label='Last page'
 						disabled={!canNextPage}
 						search={{ ...searchParams, page: pageCount }}
 						onClick={table.lastPage}

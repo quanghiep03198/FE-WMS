@@ -11,7 +11,7 @@ export const GlobalFilter: React.FC = () => {
 
 	return (
 		<>
-			<Div className='relative sm:hidden xl:basis-1/4'>
+			<Div className='relative basis-1/3 sm:hidden xl:basis-1/4'>
 				<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
 				<DebouncedInput
 					value={globalFilter}

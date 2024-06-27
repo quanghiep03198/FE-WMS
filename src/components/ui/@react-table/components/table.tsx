@@ -103,7 +103,7 @@ export default function TableDataGrid<TData, TValue>({
 					ref={tableRef}
 					className='border-separate border-spacing-0 after:block after:h-[var(--pseudo-height)] after:[content:""]'
 					style={{ minWidth: table.getTotalSize() }}>
-					<TableHeader className='sticky top-0 z-50 bg-background' ref={headerRef}>
+					<TableHeader className='sticky top-0 z-20 bg-background' ref={headerRef}>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header, index) => (

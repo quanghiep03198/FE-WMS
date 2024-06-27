@@ -7,6 +7,9 @@ import SearchDialog from './-search-dialog'
 import ThemeToggle from '../../../_components/_shared/-theme-toggle'
 import { NavBreadcrumb } from './-nav-breadcrumb'
 import NavDrawerSidebar from './-nav-drawer-sidebar'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { BreakPoints } from '@/common/constants/enums'
+import { useResponsive } from 'ahooks'
 
 type NavbarProps = {
 	isCollapsed: boolean
@@ -16,10 +19,12 @@ type NavbarProps = {
 const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) => {
 	const [open, setOpen] = React.useState(false)
 	const { t } = useTranslation()
+	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
+	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
 
 	return (
 		<Fragment>
-			<Div as='nav' className='sticky top-0 z-50 bg-background/80 p-4 backdrop-blur-sm'>
+			<Div as='nav' role='navigation' className='sticky top-0 z-50 bg-background/80 p-4 backdrop-blur-sm'>
 				<Div className='flex items-center justify-between rounded border border-border bg-inherit px-3 py-2'>
 					<Div className='flex items-center gap-x-4'>
 						<Tooltip
@@ -27,28 +32,29 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 							contentProps={{ side: 'bottom', align: 'start' }}>
 							<Button
 								size='icon'
+								role='searchbox'
 								variant='outline'
+								disabled={isLargeScreen}
 								aria-expanded={isCollapsed}
 								onClick={() => onCollapseStateChange(!isCollapsed)}>
 								<Icon name='Menu' />
 							</Button>
 						</Tooltip>
-						<Separator orientation='vertical' className='h-5 w-1' />
+						<Separator orientation='vertical' className='h-5 w-1 sm:hidden md:hidden' />
 						<NavBreadcrumb />
 					</Div>
 
 					<Div className='flex flex-1 items-center justify-end gap-x-2'>
 						<Button
 							variant='outline'
-							aria-modal={open}
-							className='basis-48 justify-between px-1'
+							size={isSmallScreen ? 'icon' : 'default'}
+							className='basis-52 gap-x-2 px-1 sm:basis-auto'
 							onClick={() => setOpen(!open)}>
-							<Typography variant='small' className='inline-flex flex-1 items-center gap-x-2 px-2'>
-								<Icon name='Search' />
+							<Icon name='Search' />
+							<Typography variant='small' className='sm:hidden'>
 								Search ...
 							</Typography>
-
-							<Badge variant='secondary' className='font-mono font-normal tracking-widest'>
+							<Badge variant='secondary' className='ml-auto font-mono font-normal tracking-widest sm:hidden'>
 								ctrl+k
 							</Badge>
 						</Button>
@@ -57,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 						<Tooltip
 							message={t('ns_common:actions.toggle_theme')}
 							triggerProps={{ className: buttonVariants({ size: 'icon', variant: 'outline' }) }}>
-							<ThemeToggle variant='outline' />
+							<ThemeToggle />
 						</Tooltip>
 						<NavUserControl />
 					</Div>

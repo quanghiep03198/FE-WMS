@@ -1,9 +1,8 @@
-import ErrorBoundary from '@/app/_components/_errors/-error-boundary'
-import { Badge, DataTable, Div, Separator, Typography } from '@/components/ui'
+import { Badge, Div, Separator, Typography } from '@/components/ui'
+import DataTable from '@/components/ui/@react-table'
 import { NavigationConfig, navigationConfig } from '@/configs/navigation.config'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
-import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 type CommandList = Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>[]

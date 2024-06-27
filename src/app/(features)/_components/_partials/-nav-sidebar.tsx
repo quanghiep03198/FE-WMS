@@ -1,8 +1,10 @@
+import { BreakPoints } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
-import { Link, Route, ToPathOption, redirect, useNavigate } from '@tanstack/react-router'
-import { useKeyPress } from 'ahooks'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useEventListener, useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +20,9 @@ type NavLinkProps = { isCollapsed: boolean } & Pick<NavigationConfig, 'path' | '
 
 const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange: toggleCollapseSidebar }) => {
 	const navigate = useNavigate()
+	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
+	const isMediumScreen = useMediaQuery(BreakPoints.MEDIUM)
+	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
@@ -33,17 +38,22 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 		}),
 		[isCollapsed]
 	)
-
 	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
 		e.preventDefault()
 		keyCallbackMap[key]()
 	})
 
+	useEventListener('resize', () => {
+		toggleCollapseSidebar(isLargeScreen)
+	})
+
+	if (isSmallScreen || isMediumScreen) return null
+
 	return (
 		<Div
 			as='aside'
 			className={cn(
-				'z-30 flex h-screen flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
+				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
 				isCollapsed ? 'w-16 items-center' : 'w-88 items-stretch'
 			)}>
 			<Link
@@ -58,7 +68,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 					<AppLogo />
 				</Div>
 			</Link>
-			<Menu>
+			<Menu aria-expanded={isCollapsed} role='menu'>
 				{navigationConfig
 					.filter((item) => item.type === 'main')
 					.map((item) => (
@@ -73,7 +83,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 						return item.type === 'preference' && !matches.includes(item.path)
 					})
 					.map((item) => (
-						<MenuItem key={item.id}>
+						<MenuItem role='menuItem' tabIndex={0} key={item.id}>
 							<NavLink isCollapsed={isCollapsed} {...item} />
 						</MenuItem>
 					))}
@@ -88,9 +98,10 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 	return (
 		<Tooltip
 			message={t(title, { defaultValue: title })}
-			contentProps={{ side: 'right', hidden: !isCollapsed, sideOffset: 8 }}>
+			contentProps={{ side: 'right', hidden: !isCollapsed, sideOffset: 8, className: 'z-50' }}>
 			<Link
 				to={path}
+				role='link'
 				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}
 				preload={false}
 				className={cn(

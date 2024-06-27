@@ -11,6 +11,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Row, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { WAREHOUSE_PROVIDE_TAG, useGetWarehouseQuery } from '../_composables/-warehouse.composable'
@@ -18,6 +19,7 @@ import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
 import { PageContext, PageProvider } from './_contexts/-page-context'
+
 // #endregion
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/')({
@@ -38,7 +40,7 @@ function Page() {
 	const { dispatch } = useContext(PageContext)
 
 	// Set breadcrumb navigation
-	useBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_commands') }])
+	useBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
 
 	// Handle reset row deletion
 	const handleResetAllRowSelection = useCallback(() => {
@@ -268,6 +270,8 @@ function Page() {
 
 	return (
 		<Fragment>
+			<Helmet title={t('ns_common:navigation.warehouse_management')} />
+
 			<DataTable
 				data={data}
 				columns={columns}

@@ -44,6 +44,6 @@ const ScannedEPCsList: React.FC = () => {
 
 const List = tw.div`flex max-h-full flex-1 basis-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar`
 const ListItem = tw.div`px-4 py-2 flex justify-between uppercase transition-all duration-200 rounded`
-const EmptyList = tw.div`flex basis-full items-center justify-center gap-x-4`
+const EmptyList = tw.div`flex basis-full items-center justify-center gap-x-4 min-h-64`
 
 export default ScannedEPCsList

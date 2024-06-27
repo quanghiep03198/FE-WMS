@@ -1,3 +1,5 @@
+import { locales } from '@/common/constants/constants'
+import { Languages } from '@/common/constants/enums'
 import {
 	Button,
 	ButtonProps,
@@ -16,7 +18,7 @@ import {
 	SelectValue,
 	Tooltip
 } from '@/components/ui'
-import { locales } from '@/i18n'
+
 import { useTranslation } from 'react-i18next'
 
 export const LanguageSelect: React.FC = () => {

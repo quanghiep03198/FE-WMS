@@ -77,7 +77,7 @@ const Header: React.FunctionComponent = () => {
 					<Tooltip
 						message={t('ns_common:actions.toggle_theme')}
 						triggerProps={{ className: buttonVariants({ size: 'icon', variant: 'ghost' }) }}>
-						<ThemeToggle variant='outline' />
+						<ThemeToggle />
 					</Tooltip>
 
 					<LanguageDropdown />

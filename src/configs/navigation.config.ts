@@ -26,7 +26,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '2',
 		icon: 'GitCompareArrows',
-		title: 'navigation.in_out_commands',
+		title: 'navigation.inoutbound_commands',
 		path: '/inoutbound',
 		type: 'main',
 		keybinding: 'ctrl.alt.2'
@@ -34,7 +34,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '3',
 		icon: 'Warehouse',
-		title: 'navigation.warehouse_commands',
+		title: 'navigation.warehouse_management',
 		path: '/warehouse',
 		type: 'main',
 		keybinding: 'ctrl.alt.3'
@@ -74,7 +74,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: '8',
 		icon: 'PackageCheck',
-		title: 'navigation.receiving_checking_management',
+		title: 'navigation.production_incoming_inspection',
 		path: '/product-incoming-inspection',
 		type: 'main',
 		keybinding: 'ctrl.alt.8'

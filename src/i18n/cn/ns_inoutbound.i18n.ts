@@ -22,6 +22,8 @@ export default {
 		return_for_repair: '返修'
 	},
 	notification: {
-		conflict_mono: '这批资料有两个指令进去 请再次读取'
+		conflict_mono: '这批资料有两个指令进去 请再次读取',
+		navigation_blocked_message: '现在停读 ?',
+		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?'
 	}
 }

@@ -67,14 +67,14 @@ export default {
 		account: 'Tài khoản',
 		keyboard_shortcut: 'Phím tắt',
 		dashboard: 'Màn hình chính',
-		in_out_commands: 'Thao tác nhập/xuất kho',
-		warehouse_commands: 'Quản lý kho',
+		inoutbound_commands: 'Thao tác nhập/xuất kho',
+		warehouse_management: 'Quản lý kho',
 		storage_detail: 'Chi tiết vị trí lưu kho',
 		import_management: 'Quản lý nhập hàng',
 		export_management: 'Quản lý xuất hàng',
 		transfer_managment: 'Quản lý chuyển giao',
 		inventory_management: 'Quản lý tồn kho',
-		receiving_checking_management: 'Quản lý nghiệm thu hàng vào',
+		production_incoming_inspection: 'Quản lý nghiệm thu hàng vào',
 		report_management: 'Báo biểu'
 	},
 	notification: {

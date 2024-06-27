@@ -22,6 +22,8 @@ export default {
 		return_for_repair: 'Return for Repair'
 	},
 	notification: {
-		conflict_mono: 'There are up to 2 monos being read at this time, please check again!'
+		conflict_mono: 'There are up to 2 monos being read at this time, please check again!',
+		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
+		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?'
 	}
 }

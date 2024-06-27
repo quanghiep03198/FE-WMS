@@ -66,14 +66,14 @@ export default {
 		account: 'Account',
 		keyboard_shortcut: 'Keyboard shortcut',
 		dashboard: 'Dashboard',
-		in_out_commands: 'Import/Export commands',
-		warehouse_commands: 'Warehouse management',
+		inoutbound_commands: 'Import/Export commands',
+		warehouse_management: 'Warehouse management',
 		storage_detail: 'Storage details',
 		import_management: 'Import management',
 		export_management: 'Export management',
 		transfer_managment: 'Transfer management',
 		inventory_management: 'Inventory',
-		receiving_checking_management: 'Product Incoming Inspection',
+		production_incoming_inspection: 'Product Incoming Inspection',
 		report_management: 'Report'
 	},
 	notification: {

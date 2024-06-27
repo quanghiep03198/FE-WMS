@@ -110,7 +110,7 @@ const InOutBoundForm: React.FC = () => {
 										<FormLabel
 											htmlFor={FormActionEnum.IMPORT}
 											className={cn(
-												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200',
+												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200 sm:px-4',
 												field.value === FormActionEnum.IMPORT && 'bg-primary text-primary-foreground'
 											)}>
 											<FormControl>
@@ -135,7 +135,7 @@ const InOutBoundForm: React.FC = () => {
 										<FormLabel
 											htmlFor='2'
 											className={cn(
-												'flex cursor-pointer select-none items-center rounded-[var(--radius)]  border p-6 font-medium transition-all duration-200',
+												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-all duration-200 sm:px-4',
 												field.value == FormActionEnum.EXPORT && 'bg-primary text-primary-foreground'
 											)}>
 											<FormControl>
@@ -169,7 +169,7 @@ const InOutBoundForm: React.FC = () => {
 
 				{inoutboundType === FormActionEnum.IMPORT && (
 					<Fragment>
-						<Div className='col-span-1'>
+						<Div className='col-span-1 sm:col-span-full'>
 							{/*  */}
 							<SelectFieldControl
 								disabled={isLoading}
@@ -179,7 +179,7 @@ const InOutBoundForm: React.FC = () => {
 								options={warehouseOptions}
 							/>
 						</Div>
-						<Div className='col-span-1'>
+						<Div className='col-span-1 sm:col-span-full'>
 							<SelectFieldControl
 								disabled={warehouseOptions?.length === 0}
 								control={form.control}
@@ -192,7 +192,7 @@ const InOutBoundForm: React.FC = () => {
 				)}
 
 				<Div className='col-span-full'>
-					<Button type='submit' className='gap-x-2' disabled={scanningStatus !== 'finished'}>
+					<Button type='submit' className='gap-x-2 sm:w-full' disabled={scanningStatus !== 'finished'}>
 						<Icon name='Check' /> {t('ns_common:actions.save')}
 					</Button>
 				</Div>

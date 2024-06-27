@@ -38,7 +38,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				<Div className='flex items-center'>
 					<DebouncedInput
 						type='number'
-						className='rounded-none border-none px-3 text-xs placeholder:text-muted-foreground/50 hover:text-foreground'
+						className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-muted-foreground/50 hover:text-foreground'
 						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
 						value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
@@ -48,7 +48,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					<Separator orientation='vertical' className='h-6' />
 					<DebouncedInput
 						type='number'
-						className='rounded-none border-none px-3 text-xs placeholder:text-muted-foreground/50 hover:text-foreground'
+						className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-muted-foreground/50 hover:text-foreground'
 						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
 						value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}

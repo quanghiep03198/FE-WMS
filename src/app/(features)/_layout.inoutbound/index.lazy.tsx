@@ -14,6 +14,7 @@ import ScannedEPCsCounter from './_components/-scanned-epc-counter'
 import ScannedEPCsList from './_components/-scanned-epc-list'
 import ScanningActions from './_components/-scanning-actions'
 import { PageContext, PageProvider } from './_context/-page-context'
+import { Helmet } from 'react-helmet'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
 	component: () => (
@@ -28,7 +29,7 @@ function Page() {
 	const { scanningStatus: readingStatus } = useContext(PageContext)
 
 	// Set page breadcrumb
-	useBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.in_out_commands') }])
+	useBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.inoutbound_commands') }])
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
@@ -41,17 +42,20 @@ function Page() {
 
 	return (
 		<Fragment>
+			<Helmet title={t('ns_common:navigation.inoutbound_commands')} />
+
 			<PageComposition.Container>
 				<ScanningActions />
 				<PageComposition.Main>
+					{/* Scanned EPCs List */}
 					<PageComposition.ListBoxPanel>
 						<ScannedEPCsList />
 					</PageComposition.ListBoxPanel>
-
+					{/* Scanned EPCs counter */}
 					<PageComposition.CounterPanel>
 						<ScannedEPCsCounter />
 					</PageComposition.CounterPanel>
-
+					{/* In-out-bound Form */}
 					<PageComposition.FormPanel>
 						<InOutBoundForm />
 					</PageComposition.FormPanel>

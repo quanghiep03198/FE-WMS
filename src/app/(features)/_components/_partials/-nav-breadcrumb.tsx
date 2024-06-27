@@ -15,11 +15,13 @@ import {
 } from '@/components/ui'
 import { BreadcrumbContext } from '../_providers/-breadcrumb-provider'
 
+const THREADS_HOLD = 3 as const
+
 export const NavBreadcrumb: React.FC = () => {
 	const { breadcrumb } = useContext(BreadcrumbContext)
 
 	return (
-		<Breadcrumb className='sm:hidden md:hidden lg:hidden'>
+		<Breadcrumb className='sm:hidden md:hidden'>
 			<BreadcrumbList>
 				<BreadcrumbItem className=''>
 					<BreadcrumbLink asChild>
@@ -29,21 +31,16 @@ export const NavBreadcrumb: React.FC = () => {
 					</BreadcrumbLink>
 				</BreadcrumbItem>
 				<BreadcrumbSeparator />
-				{breadcrumb.length > 3 ? (
+				{breadcrumb.length > THREADS_HOLD ? (
 					<Fragment>
 						<DropdownMenu>
 							<DropdownMenuTrigger className='flex items-center gap-1'>
 								<BreadcrumbEllipsis className='h-4 w-4' />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='start'>
-								{breadcrumb.slice(0, 3).map((item, index) => (
-									<DropdownMenuItem asChild>
-										<Link
-											to={item.to}
-											params={item.params}
-											search={item.search}
-											className='font-semibold'
-											key={index}>
+								{breadcrumb.slice(0, THREADS_HOLD).map((item, index) => (
+									<DropdownMenuItem key={index} asChild={true}>
+										<Link to={item.to} params={item.params} search={item.search} className='font-semibold'>
 											{item.text}
 										</Link>
 									</DropdownMenuItem>
@@ -65,7 +62,7 @@ export const NavBreadcrumb: React.FC = () => {
 					breadcrumb.map((item, index) => (
 						<Fragment key={index}>
 							<BreadcrumbItem>
-								<BreadcrumbLink asChild>
+								<BreadcrumbLink key={index} asChild={true}>
 									<Link
 										to={item.to}
 										params={item.params}

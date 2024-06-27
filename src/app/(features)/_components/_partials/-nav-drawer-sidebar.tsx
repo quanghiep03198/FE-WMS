@@ -1,11 +1,12 @@
 import AppLogo from '@/app/_components/_shared/-app-logo'
-import { BreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
+import { createBreakpoint } from '@/common/utils/create-breakpoint'
 import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
-import React, { useMemo } from 'react'
+import { useEventListener } from 'ahooks'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
@@ -14,19 +15,19 @@ type DrawerSidebarProps = {
 	onOpenStateChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const NavDrawerSidebar: React.FC<DrawerSidebarProps> = (props) => {
-	const { t } = useTranslation('ns_common')
-	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
-	const isExtraLargeScreen = useMediaQuery(BreakPoints.EXTRA_LARGE)
+const NavDrawerSidebar: React.FC<DrawerSidebarProps> = ({ open, onOpenStateChange }) => {
+	const { t } = useTranslation()
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 
-	const open = useMemo(() => {
-		if (isLargeScreen || isExtraLargeScreen) return false
-		return props.open
-	}, [props.open, isLargeScreen, isExtraLargeScreen])
+	useEventListener('resize', () => {
+		onOpenStateChange(false) // prevent open drawer sidebar on resizing window
+	})
+
+	if (isLargeScreen) return null
 
 	return (
-		<Sheet open={open} onOpenChange={props.onOpenStateChange}>
-			<SheetContent className='w-full max-w-xs' side='left'>
+		<Sheet open={open} onOpenChange={onOpenStateChange}>
+			<SheetContent className={cn('w-full max-w-xs', isLargeScreen && 'hidden')} side='left'>
 				<Div className='h-16 px-4'>
 					<AppLogo />
 				</Div>
@@ -36,7 +37,7 @@ const NavDrawerSidebar: React.FC<DrawerSidebarProps> = (props) => {
 						.filter((item) => item.type === 'main')
 						.map((item) => {
 							return (
-								<MenuItem key={item.id} onClick={() => props.onOpenStateChange(false)}>
+								<MenuItem key={item.id} onClick={() => onOpenStateChange(false)}>
 									<Link
 										to={item.path}
 										activeProps={{ className: 'text-primary hover:text-primary' }}
@@ -55,7 +56,7 @@ const NavDrawerSidebar: React.FC<DrawerSidebarProps> = (props) => {
 						.reverse()
 						.map((item) => {
 							return (
-								<MenuItem key={item.id} onClick={() => props.onOpenStateChange(false)}>
+								<MenuItem key={item.id} onClick={() => onOpenStateChange(false)}>
 									<Link
 										to={item.path}
 										activeProps={{ className: 'text-primary hover:text-primary' }}
@@ -63,7 +64,8 @@ const NavDrawerSidebar: React.FC<DrawerSidebarProps> = (props) => {
 											buttonVariants({ variant: 'ghost' }),
 											'w-full justify-start gap-x-2 text-base font-normal'
 										)}>
-										<Icon name={item.icon!} size={18} /> {t(item.title, { defaultValue: item.title })}
+										<Icon name={item.icon!} size={18} />
+										{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 									</Link>
 								</MenuItem>
 							)

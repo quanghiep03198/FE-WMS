@@ -1,13 +1,4 @@
 // #region Modules
-import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
-import { CheckedState } from '@radix-ui/react-checkbox'
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createLazyFileRoute, useParams } from '@tanstack/react-router'
-import { Row, createColumnHelper } from '@tanstack/react-table'
-import { useResetState } from 'ahooks'
-import { format } from 'date-fns'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import { warehouseStorageTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
@@ -17,13 +8,23 @@ import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/compon
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { PartialStorageFormValue } from '@/schemas/warehouse.schema'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
-import { PageContext, PageProvider } from '../_contexts/-page-context'
-import WarehouseStorageFormDialog from './_components/-storage-form'
-import StorageRowActions from './_components/-storage-row-actions'
+import { CheckedState } from '@radix-ui/react-checkbox'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createLazyFileRoute, useParams } from '@tanstack/react-router'
+import { Row, createColumnHelper } from '@tanstack/react-table'
+import { useResetState } from 'ahooks'
+import { format } from 'date-fns'
+import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import {
 	WAREHOUSE_STORAGE_PROVIDE_TAG,
 	useGetWarehouseStorageQuery
 } from '../../_composables/-warehouse-storage.composable'
+import { PageContext, PageProvider } from '../_contexts/-page-context'
+import WarehouseStorageFormDialog from './_components/-storage-form'
+import StorageRowActions from './_components/-storage-row-actions'
 // #endregion
 
 // #region Router declaration
@@ -50,7 +51,7 @@ function Page() {
 
 	useBreadcrumb([
 		{
-			text: t('ns_common:navigation.warehouse_commands'),
+			text: t('ns_common:navigation.warehouse_management'),
 			to: '/warehouse'
 		},
 		{
@@ -296,6 +297,8 @@ function Page() {
 
 	return (
 		<Fragment>
+			<Helmet title={t('ns_common:navigation.warehouse_management')} />
+
 			<DataTable
 				data={data}
 				loading={isLoading}

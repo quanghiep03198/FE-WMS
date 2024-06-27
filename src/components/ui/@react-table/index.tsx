@@ -14,7 +14,7 @@ import {
 	useReactTable
 } from '@tanstack/react-table'
 import _ from 'lodash'
-import { forwardRef, memo, useMemo, useState } from 'react'
+import { forwardRef, memo, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, Typography } from '..'
 import TableDataGrid from './components/table'
@@ -22,6 +22,7 @@ import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
+import { useDeepCompareEffect } from 'ahooks'
 
 export type PaginationProps<TData> = {
 	hidden?: boolean
@@ -89,7 +90,11 @@ function DataTable<TData, TValue>(
 		columns,
 		initialState: {
 			globalFilter: '',
-			columnFilters: []
+			columnFilters: [],
+			pagination: {
+				pageIndex: Number(searchParams.page) - 1,
+				pageSize: Number(searchParams.limit)
+			}
 		},
 		state: {
 			sorting,
@@ -111,6 +116,7 @@ function DataTable<TData, TValue>(
 		enableColumnResizing,
 		columnResizeMode: 'onChange',
 		debugAll: false,
+		// onPaginationChange: () => undefined,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		onGlobalFilterChange: setGlobalFilter,

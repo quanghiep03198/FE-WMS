@@ -28,6 +28,24 @@ export default defineConfig({
 	},
 	preview: {
 		port: 4000,
-		host: true,
+		host: true
+	},
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks(id: string) {
+					if (id.includes('node_modules')) {
+						return 'vendor'
+					}
+					// creating a chunk to react routes deps. Reducing the vendor chunk size
+					if (id.includes('react-router')) {
+						return '@tanstack/react-router'
+					}
+					if (id.includes('@react-table')) {
+						return 'src/components/ui/@react-table/index.tsx'
+					}
+				}
+			}
+		}
 	}
 })
