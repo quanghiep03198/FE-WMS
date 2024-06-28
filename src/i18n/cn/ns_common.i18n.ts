@@ -2,7 +2,8 @@ export default {
 	settings: {
 		language: '语言',
 		theme: '主题',
-		function: '功能名称'
+		function: '功能名称',
+		font: '字体'
 	},
 	specialized_vocabs: {
 		warehouse: '仓库',

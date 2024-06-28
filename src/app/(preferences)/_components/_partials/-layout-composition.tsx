@@ -1,4 +1,4 @@
-import { Div, ScrollArea, TDivProps } from '@/components/ui'
+import { Div, TDivProps } from '@/components/ui'
 import tw from 'tailwind-styled-components'
 import Heading from './-heading'
 import Sidebar from './-navbar'

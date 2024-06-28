@@ -1,7 +1,6 @@
 import { TIconProps } from '@/components/ui'
 import { routeTree } from '@/route-tree.gen'
 import { ParseRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { ResourceKeys } from 'i18next'
 
@@ -29,7 +28,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.warehouse_management',
 		path: '/warehouse',
 		type: 'main',
-		keybinding: 'ctrl.alt.3'
+		keybinding: 'ctrl.alt.2'
 	},
 	{
 		id: '3',
@@ -37,7 +36,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.inoutbound_commands',
 		path: '/inoutbound',
 		type: 'main',
-		keybinding: 'ctrl.alt.2'
+		keybinding: 'ctrl.alt.3'
 	},
 	{
 		id: '4',

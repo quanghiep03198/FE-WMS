@@ -67,9 +67,9 @@ function KeybindingsPage() {
 	return (
 		<Div className='space-y-6'>
 			<Div className='space-y-2'>
-				<Typography variant='h5'>Keybindings</Typography>
+				<Typography variant='h5'>{t('ns_common:navigation.keyboard_shortcut')}</Typography>
 				<Typography variant='small' color='muted'>
-					Manage your keybindings
+					{t('ns_preference:captions.keybindings')}
 				</Typography>
 			</Div>
 			<Separator />

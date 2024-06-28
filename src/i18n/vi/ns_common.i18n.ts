@@ -2,7 +2,8 @@ export default {
 	settings: {
 		language: 'Ngôn ngữ',
 		theme: 'Chế độ nền',
-		function: 'Chức năng'
+		function: 'Chức năng',
+		font: 'Phông chữ'
 	},
 	specialized_vocabs: {
 		warehouse: 'Kho',

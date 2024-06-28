@@ -12,7 +12,7 @@ const Heading: React.FC = () => {
 				<Typography variant='h3' className='font-bold tracking-tight'>
 					{t('ns_common:navigation.settings')}
 				</Typography>
-				<Typography color='muted'>Manage your account settings and set e-mail preferences.</Typography>
+				<Typography color='muted'>{t('ns_preference:captions.header')}</Typography>
 			</Div>
 			<Tooltip
 				message={t('ns_common:navigation.dashboard')}

@@ -2,7 +2,8 @@ export default {
 	settings: {
 		language: 'Language',
 		theme: 'Theme',
-		function: 'Function'
+		function: 'Function',
+		font: 'Font'
 	},
 	specialized_vocabs: {
 		warehouse: 'Warehouse',

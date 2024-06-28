@@ -35,7 +35,7 @@ const fontOptions = [
 ]
 function Page() {
 	const { theme, setTheme } = useTheme()
-	const { i18n } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const form = useForm<AppearanceFormValues>({
 		resolver: zodResolver(appearanceFormSchema),
 		defaultValues: {
@@ -47,15 +47,15 @@ function Page() {
 
 	const handleSaveSettings = (data: AppearanceFormValues) => {
 		console.log('settings changed :>>>', data)
-		toast.success('Settings saved successfully!')
+		toast.success('Saved your change')
 	}
 
 	return (
 		<Div className='space-y-6'>
 			<Div className='space-y-2'>
-				<Typography variant='h5'>Settings</Typography>
+				<Typography variant='h5'>{t('ns_common:navigation.settings')}</Typography>
 				<Typography variant='small' color='muted'>
-					Customize the appearance, language of the app. Automatically switch between day and night themes.
+					{t('ns_preference:captions.appearance')}
 				</Typography>
 			</Div>
 			<Separator />
@@ -64,7 +64,7 @@ function Page() {
 					<SelectFieldControl name='font' label='Font' control={form.control} options={fontOptions} />
 					<SelectFieldControl
 						name='language'
-						label='Language'
+						label={t('ns_common:settings.language')}
 						control={form.control}
 						options={locales}
 						onValueChange={(value) => i18n.changeLanguage(value)}
@@ -74,8 +74,8 @@ function Page() {
 						name='theme'
 						render={({ field }) => (
 							<FormItem className='space-y-1'>
-								<FormLabel>Theme</FormLabel>
-								<FormDescription>Select the theme for the dashboard.</FormDescription>
+								<FormLabel>{t('ns_common:settings.language')}</FormLabel>
+								<FormDescription>{t('ns_preference:captions.theme_selection')}</FormDescription>
 								<FormMessage />
 								<RadioGroup
 									onValueChange={(value) => {
