@@ -5,12 +5,10 @@
 
 #nprogress .bar {
 	background: hsl(var(--primary));
-
 	position: fixed;
 	z-index: 1031;
 	top: 0;
 	left: 0;
-
 	width: 100%;
 	height: 3px;
 }
@@ -45,12 +43,10 @@
 	width: 18px;
 	height: 18px;
 	box-sizing: border-box;
-
 	border: solid 2px transparent;
 	border-top-color: hsl(var(--primary));
 	border-left-color: hsl(var(--primary));
 	border-radius: 50%;
-
 	-webkit-animation: nprogress-spinner 400ms linear infinite;
 	animation: nprogress-spinner 400ms linear infinite;
 }
