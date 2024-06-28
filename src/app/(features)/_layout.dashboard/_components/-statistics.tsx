@@ -33,6 +33,13 @@ const Statistics: React.FC = () => {
 				comparision: 25
 			},
 			{
+				category: t('ns_dashboard:statistic.inventory_number'),
+				dataField: 'inventory_number',
+				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
+				icon: 'Container',
+				comparision: 25
+			},
+			{
 				category: t('ns_dashboard:statistic.wh_import_receipt_number'),
 				dataField: 'import_number',
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
@@ -51,7 +58,7 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='grid grid-cols-3 gap-4 sm:grid-cols-1'>
+		<Div className='grid grid-cols-4 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2'>
 			{statistics.map((stats) => (
 				<Card className='rounded-lg border border-border shadow'>
 					<CardHeader className='flex flex-row items-center justify-between space-y-0 p-4'>

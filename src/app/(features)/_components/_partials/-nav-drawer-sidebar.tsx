@@ -1,11 +1,10 @@
 import AppLogo from '@/app/_components/_shared/-app-logo'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { createBreakpoint } from '@/common/utils/create-breakpoint'
+import { $mediaQuery } from '@/common/utils/media-query'
 import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
-import { useEventListener } from 'ahooks'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -17,17 +16,13 @@ type DrawerSidebarProps = {
 
 const NavDrawerSidebar: React.FC<DrawerSidebarProps> = ({ open, onOpenStateChange }) => {
 	const { t } = useTranslation()
-	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
-
-	useEventListener('resize', () => {
-		onOpenStateChange(false) // prevent open drawer sidebar on resizing window
-	})
+	const isLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1024 }))
 
 	if (isLargeScreen) return null
 
 	return (
-		<Sheet open={open} onOpenChange={onOpenStateChange}>
-			<SheetContent className={cn('w-full max-w-xs', isLargeScreen && 'hidden')} side='left'>
+		<Sheet open={!open} defaultOpen={false} onOpenChange={onOpenStateChange}>
+			<SheetContent className='w-full max-w-xs' side='left'>
 				<Div className='h-16 px-4'>
 					<AppLogo />
 				</Div>

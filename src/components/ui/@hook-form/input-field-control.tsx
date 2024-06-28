@@ -83,7 +83,7 @@ export function InputFieldControl<T extends FieldValues>(
 							</Div>
 						</FormControl>
 						<FormDescription>{description}</FormDescription>
-						{messageType === 'default' && <FormMessage />}
+						{messageType === 'standard' && <FormMessage />}
 					</FormItem>
 				)
 			}}

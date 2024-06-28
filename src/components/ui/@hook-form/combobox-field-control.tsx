@@ -150,7 +150,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 							</Popover>
 						</FormControl>
 						{description && <FormDescription>{description}</FormDescription>}
-						{messageType === 'alternative' && <FormMessage />}
+						{messageType === 'standard' && <FormMessage />}
 					</FormItem>
 				)
 			}}

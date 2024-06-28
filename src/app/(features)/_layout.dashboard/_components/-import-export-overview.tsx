@@ -1,11 +1,26 @@
-import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Typography } from '@/components/ui'
-import { annuallIPStatistics } from '@/mocks/dashboard.data'
+import {
+	Div,
+	Icon,
+	ScrollArea,
+	ScrollBar,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+	Typography
+} from '@/components/ui'
+import { annuallIPStatistics, transactionOverview } from '@/mocks/dashboard.data'
+import { curveCardinal } from 'd3-shape'
 import _ from 'lodash'
+import { Area, AreaChart, Cell, Pie, PieChart } from 'recharts'
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+
+const cardinal = curveCardinal.tension(0.2)
 
 const ImportExportOverview: React.FC = () => {
 	return (
-		<Div className='rounded-lg border border-border'>
+		<Div className=''>
 			<Div className='flex items-center justify-between p-6'>
 				<Typography className='font-medium'>Import/Export Overview</Typography>
 				<Div className='inline-flex items-center gap-x-3'>
@@ -23,36 +38,38 @@ const ImportExportOverview: React.FC = () => {
 				</Div>
 			</Div>
 			<Div>
-				<Div className='h-96 w-full p-6'>
-					<ResponsiveContainer width='100%' height='100%'>
-						<LineChart data={annuallIPStatistics}>
+				<Div className='h-[400px] w-full p-6 sm:p-2'>
+					<ResponsiveContainer width='100%' height='100%' minWidth='100%'>
+						<AreaChart
+							width={500}
+							height={400}
+							data={annuallIPStatistics}
+							margin={{
+								top: 0,
+								right: 0,
+								left: 0,
+								bottom: 0
+							}}>
 							<CartesianGrid strokeDasharray='1 1' stroke='hsl(var(--border))' />
 							<XAxis dataKey='name' stroke='hsl(var(--muted-foreground))' className='capitalize' />
 							<YAxis stroke='hsl(var(--muted-foreground))' />
-							<Tooltip
-								contentStyle={{
-									backgroundColor: 'hsl(var(--popover))',
-									border: '1px solid hsl(var(--border))',
-									textTransform: 'capitalize'
-								}}
-							/>
-							<Line
+							<Tooltip />
+							<Area
 								type='monotone'
 								dataKey='import'
-								className='stroke-primary/50'
-								stroke='hsl(var(--primary))'
-								strokeWidth={1}
-								activeDot={{ r: 4 }}
+								stroke='hsl(var(--foreground)/0.3)'
+								fill='hsl(var(--foreground))'
+								fillOpacity={0.1}
 							/>
-							<Line
-								type='monotone'
+							<Area
+								type={cardinal}
 								dataKey='export'
-								stroke='hsl(var(--foreground))'
-								strokeWidth={1}
-								activeDot={{ r: 4 }}
+								stroke='hsl(var(--primary))'
+								fill='hsl(var(--primary))'
+								fillOpacity={0.3}
 							/>
-							<Legend align='center' margin={{ top: 32 }} formatter={(value) => _.capitalize(value)} />
-						</LineChart>
+							<Legend align='center' margin={{ top: 80 }} formatter={(value) => _.capitalize(value)} />
+						</AreaChart>
 					</ResponsiveContainer>
 				</Div>
 			</Div>

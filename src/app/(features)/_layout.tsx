@@ -1,15 +1,11 @@
-import useAuth from '@/common/hooks/use-auth'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { useKeyPress } from 'ahooks'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 import NavSidebar from './_components/_partials/-nav-sidebar'
 import Navbar from './_components/_partials/-navbar'
 import { BreadcrumbProvider } from './_components/_providers/-breadcrumb-provider'
-import useMediaQuery from '@/common/hooks/use-media-query'
-import { BreakPoints } from '@/common/constants/enums'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
@@ -20,17 +16,6 @@ export const Route = createFileRoute('/(features)/_layout')({
 
 function Layout() {
 	const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
-	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
-	const { logout } = useAuth()
-
-	useKeyPress('ctrl.q', (e) => {
-		e.preventDefault()
-		logout()
-	})
-
-	useEffect(() => {
-		if (isLargeScreen) setIsCollapsed(isLargeScreen)
-	}, [isLargeScreen])
 
 	return (
 		<AuthGuard>

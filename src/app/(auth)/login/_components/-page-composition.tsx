@@ -21,8 +21,8 @@ const steps: TStep[] = [
 	}
 ]
 
-const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 xxl:grid-cols-2 scrollbar`
-const Section = tw.div`mx-auto flex h-full w-full max-w-lg flex-1 flex-grow flex-col items-center justify-center gap-y-6 overflow-y-auto px-2 sm:py-10 md:py-10`
+const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 scrollbar`
+const Section = tw.div`mx-auto flex h-full w-full max-w-xl flex-1 flex-grow flex-col items-center justify-center gap-y-6 overflow-y-auto px-2 sm:py-10 md:py-10`
 
 const ThemeSelector: React.FC = () => {
 	const { t } = useTranslation('ns_common')
@@ -30,9 +30,7 @@ const ThemeSelector: React.FC = () => {
 		<Div className='fixed right-2 top-2 z-50'>
 			<Tooltip
 				message={`${t('ns_common:settings.theme')} (ctrl+alt+t)`}
-				triggerProps={{
-					className: buttonVariants({ size: 'icon', variant: 'ghost', className: 'fixed right-2 top-2 z-10' })
-				}}
+				triggerProps={{ className: buttonVariants({ variant: 'ghost', size: 'icon' }) }}
 				contentProps={{ side: 'left' }}>
 				<ThemeToggle />
 			</Tooltip>
@@ -99,6 +97,7 @@ const SideImage: React.FC = () => {
 		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex xxl:flex'>
 			<Div
 				as='img'
+				role='banner'
 				src={GlobalTransportImage}
 				alt='Global Transport'
 				loading='eager'

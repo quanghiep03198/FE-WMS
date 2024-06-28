@@ -11,7 +11,7 @@ export default function HeroSection() {
 			ref={sectionRef}
 			as='section'
 			id='cta'
-			className='relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-6xl flex-grow flex-col items-center justify-center px-6 text-center sm:px-4'>
+			className='relative mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-7xl flex-grow flex-col items-center justify-center px-6 text-center sm:px-4'>
 			<Typography variant='h2' className='mb-4 leading-tight sm:text-3xl'>
 				Simplify Warehouse Management <br className='block xl:hidden xxl:hidden' /> with i-WMS
 			</Typography>
@@ -26,7 +26,7 @@ export default function HeroSection() {
 					Get started
 				</Link>
 				<Link
-					hash='#outstanding-features'
+					hash='outstanding-features'
 					className={buttonVariants({
 						variant: 'link',
 						className: 'items-center gap-x-2 !text-foreground'

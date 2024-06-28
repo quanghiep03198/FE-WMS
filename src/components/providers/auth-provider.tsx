@@ -21,6 +21,8 @@ type TAuthContext = {
 	logout: UseMutateAsyncFunction<AxiosResponse<any, any>, AxiosError<unknown, any>, void, string | number>
 }
 
+const AUTH_PROVIDE_TAG = 'AUTH'
+
 export const AuthContext = createContext<TAuthContext>({
 	isAuthenticated: false,
 	user: undefined,
@@ -53,7 +55,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	const { t } = useTranslation()
 
 	const { mutateAsync: logout } = useMutation({
-		mutationKey: ['auth', accessToken],
+		mutationKey: [AUTH_PROVIDE_TAG, accessToken],
 		mutationFn: AuthService.revokeAccessToken,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSettled: (_data, _error, _variabled, context) => {

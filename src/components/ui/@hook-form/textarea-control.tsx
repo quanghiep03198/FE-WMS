@@ -60,7 +60,7 @@ function TextareaFieldControl<T extends FieldValues>(
 						/>
 					</FormControl>
 					{description && <FormDescription>{description}</FormDescription>}
-					{messageType === 'alternative' && <FormMessage />}
+					{messageType === 'standard' && <FormMessage />}
 				</FormItem>
 			)}
 		/>

@@ -95,7 +95,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							</SelectContent>
 						</Select>
 						{props.description && <FormDescription>{props.description}</FormDescription>}
-						{messageType === 'default' && <FormMessage />}
+						{messageType === 'standard' && <FormMessage />}
 					</FormItem>
 				)
 			}}

@@ -10,5 +10,5 @@ export interface BaseFieldControl<T extends FieldValues> {
 	defaultValue?: string
 	className?: string
 	orientation?: 'vertical' | 'horizontal'
-	messageType?: 'default' | 'alternative'
+	messageType?: 'standard' | 'alternative'
 }

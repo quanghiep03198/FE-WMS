@@ -10,7 +10,7 @@ const ScannedEPCsCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex flex-col items-center justify-center gap-y-3 rounded-[var(--radius)] border p-4 text-center'>
+		<Div className='relative flex h-full flex-col items-center justify-center gap-y-3 rounded-[var(--radius)] border p-4 text-center'>
 			{scanningStatus === 'scanning' && <Skeleton className='absolute inset-0 z-0 h-full' />}
 			<Typography variant='h6' className='relative z-10'>
 				{t('ns_inoutbound:counter_box.label')}

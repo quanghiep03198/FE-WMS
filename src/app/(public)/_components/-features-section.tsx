@@ -41,7 +41,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 		<Div
 			ref={sectionRef}
 			as='section'
-			className='relative mx-auto flex max-w-4xl flex-grow items-center justify-center px-6 sm:px-4 xl:max-w-6xl xxl:max-w-6xl'>
+			className='relative mx-auto flex max-w-7xl flex-grow items-center justify-center px-6 sm:px-4'>
 			<Div className='space-y-20'>
 				<Div className='max-w-4xl text-left'>
 					<Typography color='primary' variant='small' className='mb-2 !text-base font-medium'>

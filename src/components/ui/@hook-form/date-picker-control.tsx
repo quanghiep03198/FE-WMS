@@ -61,7 +61,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 						</PopoverContent>
 					</Popover>
 					{description && <FormDescription>{description}</FormDescription>}
-					{messageType === 'default' && <FormMessage />}
+					{messageType === 'standard' && <FormMessage />}
 				</FormItem>
 			)}
 		/>

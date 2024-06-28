@@ -21,8 +21,8 @@ function Page() {
 			<Helmet title='Warehouse Management' />
 			<Div className='space-y-6'>
 				<Statistics />
-				<TransactionHistory />
 				<ImportExportOverview />
+				<TransactionHistory />
 			</Div>
 		</Fragment>
 	)

@@ -47,8 +47,10 @@ const Header: React.FunctionComponent = () => {
 				className='mx-auto flex h-full max-w-6xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
 				aria-label='Global'>
 				<MenuDropdown />
-				<Div className='flex items-center gap-x-2 sm:hidden md:hidden'>
-					<Link to='/' className='text-xs font-bold transition-colors duration-200 hover:text-primary'>
+				<Div className='flex items-center gap-x-3 sm:hidden md:hidden'>
+					<Link
+						to='/'
+						className='inline-flex items-center gap-x-3 text-xs font-bold transition-colors duration-200 hover:text-primary'>
 						i-WMS
 					</Link>
 					<Badge variant='default' className='select-none'>
@@ -119,7 +121,8 @@ function MenuDropdown() {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='start' className='w-60'>
 				<DropdownMenuLabel asChild>
-					<Link to='/'>
+					<Link to='/' className='inline-flex items-center gap-x-3'>
+						<Icon name='Boxes' strokeWidth={1} stroke='hsl(var(--primary))' size={28} />
 						<AppLogo />
 					</Link>
 				</DropdownMenuLabel>

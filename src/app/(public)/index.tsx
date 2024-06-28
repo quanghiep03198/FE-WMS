@@ -40,7 +40,7 @@ export default function Page() {
 
 const Container = tw(
 	Div
-)<TDivProps>`relative min-h-screen scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar-none`
+)<TDivProps>`relative h-screen overflow-y-auto scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar`
 const Main = tw(Div)<TDivProps>`mb-20 space-y-64`
 
 export function useScrollIntoView({

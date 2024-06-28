@@ -1,4 +1,4 @@
-import { Badge, Div, Icon, Typography, buttonVariants, DataTable } from '@/components/ui'
+import { Badge, DataTable, Div, Icon, Typography, buttonVariants } from '@/components/ui'
 import { recentExports, transactionOverview } from '@/mocks/dashboard.data'
 import { Link } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -71,7 +71,7 @@ const TransactionHistory: React.FC = () => {
 						paginationProps={{ hidden: true }}
 						toolbarProps={{ hidden: true }}
 						enableColumnResizing={true}
-						containerProps={{ style: { height: '320px' } }}
+						containerProps={{ style: { height: screen.availHeight / 2.95 } }}
 					/>
 				</Div>
 			</Div>

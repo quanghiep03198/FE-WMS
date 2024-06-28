@@ -7,10 +7,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../@co
 type AlternativeFormLabelProps = {
 	labelText: string
 	htmlFor?: string
-	messageType: 'default' | 'alternative'
+	messageType: 'standard' | 'alternative'
 }
 
-const FormLabel: React.FC<AlternativeFormLabelProps> = ({ labelText, htmlFor, messageType: messageMode }) => {
+const FormLabel: React.FC<AlternativeFormLabelProps> = ({ labelText, htmlFor, messageType }) => {
 	const { error } = useFormField()
 
 	return (
@@ -24,7 +24,7 @@ const FormLabel: React.FC<AlternativeFormLabelProps> = ({ labelText, htmlFor, me
 					side='right'
 					align='end'
 					sideOffset={8}
-					hidden={messageMode !== 'alternative' || !error}
+					hidden={messageType !== 'alternative' || !error}
 					className='bg-destructive'>
 					{String(error?.message)}
 				</TooltipContent>

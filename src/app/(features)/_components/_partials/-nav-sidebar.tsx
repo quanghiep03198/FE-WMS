@@ -1,10 +1,10 @@
 import { BreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { Div, Icon, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
+import { Badge, Div, Icon, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { Link, useNavigate } from '@tanstack/react-router'
-import { useEventListener, useKeyPress } from 'ahooks'
+import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -38,14 +38,16 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 		}),
 		[isCollapsed]
 	)
+
 	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
 		e.preventDefault()
 		keyCallbackMap[key]()
 	})
 
-	useEventListener('resize', () => {
-		toggleCollapseSidebar(isLargeScreen)
-	})
+	/**
+	 * @private
+	 */
+	const _isCollapsed = useMemo(() => isCollapsed || isLargeScreen, [isCollapsed, isLargeScreen])
 
 	if (isSmallScreen || isMediumScreen) return null
 
@@ -54,26 +56,26 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 			as='aside'
 			className={cn(
 				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
-				isCollapsed ? 'w-16 items-center' : 'w-88 items-stretch'
+				_isCollapsed ? 'w-16 items-center' : 'w-88 items-stretch'
 			)}>
 			<Link
 				to='/dashboard'
-				className={cn('flex h-20 items-center', !isCollapsed ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
+				className={cn('flex h-20 items-center', !_isCollapsed ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
 				<Icon name='Boxes' size={32} stroke='hsl(var(--primary))' className='size-8' strokeWidth={1} />
 				<Div
 					className={cn(
 						'transition-[width_opacity]',
-						isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
+						_isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
 				</Div>
 			</Link>
-			<Menu aria-expanded={isCollapsed} role='menu'>
+			<Menu aria-expanded={_isCollapsed} role='menu'>
 				{navigationConfig
 					.filter((item) => item.type === 'main')
 					.map((item) => (
 						<MenuItem key={item.id}>
-							<NavLink isCollapsed={isCollapsed} {...item} />
+							<NavLink isCollapsed={_isCollapsed} {...item} />
 						</MenuItem>
 					))}
 				<Separator className='my-4' />
@@ -84,10 +86,14 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 					})
 					.map((item) => (
 						<MenuItem role='menuItem' tabIndex={0} key={item.id}>
-							<NavLink isCollapsed={isCollapsed} {...item} />
+							<NavLink isCollapsed={_isCollapsed} {...item} />
 						</MenuItem>
 					))}
 			</Menu>
+
+			<div className='mt-auto'>
+				<Badge variant='outline'>Logged in with VA1</Badge>
+			</div>
 		</Div>
 	)
 }

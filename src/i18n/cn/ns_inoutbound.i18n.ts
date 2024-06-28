@@ -9,7 +9,7 @@ export default {
 	},
 	labels: {
 		imp_exp_reason: '出入庫類别',
-		imp_archive_warehouse: '档案',
+		imp_archive_warehouse: '仓库别',
 		imp_location: '储位'
 	},
 	inoutbound_actions: {
