@@ -1,8 +1,12 @@
 import { warehouseTypes } from '../constants/constants'
+import { ProductionApproveStatus } from '../constants/enums'
 
 export interface IBaseEntity {
 	id: string
 	keyid?: string
+	updated?: Date | string
+	created?: Date | string
+	remark?: string | null
 	[key: string]: any
 }
 
@@ -51,7 +55,6 @@ export interface IWarehouseStorage
 	storage_name: string
 	storage_num: string
 	type_storage: WarehouseStorageTypeEnum | string
-	created: Date | string
 }
 
 export interface IEmployee extends IBaseEntity {
@@ -84,4 +87,19 @@ export interface IElectronicProductCode {
 	rfid_status: 'A' | 'B' | null
 	rfid_use: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | null
 	storage: any
+}
+
+export interface IInOutBoundOrder extends IBaseEntity {
+	status_approve: ProductionApproveStatus
+	sno_no: string // Order code
+	sno_date: Date | string // Import/Export date
+	sno_car_number: string // Container truck number
+	sno_ship_order: string // shipping order code
+	sno_container: string // Container code
+	sno_seal_number: string
+	sno_qty: string // Import/Export quantity
+	sno_total_boxes: number // Packaging total
+	dept_name: string
+	employee_name: string
+	company_code: string
 }

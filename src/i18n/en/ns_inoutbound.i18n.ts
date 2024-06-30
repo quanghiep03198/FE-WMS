@@ -8,9 +8,9 @@ export default {
 		warehouse_output: 'Warehouse output'
 	},
 	labels: {
-		imp_exp_reason: 'Import/Export reason',
-		imp_archive_warehouse: 'Archived warehouse',
-		imp_location: 'Storage location'
+		io_reason: 'Import/Export reason',
+		io_archive_warehouse: 'Archived warehouse',
+		io_storage_location: 'Storage location'
 	},
 	inoutbound_actions: {
 		normal_import: 'Normally import',

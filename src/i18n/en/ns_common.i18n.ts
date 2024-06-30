@@ -42,7 +42,7 @@ export default {
 	table: {
 		selected_rows: '{{selectedRows}} row(s) selected',
 		page: 'Page {{page}}',
-		display: 'Display',
+		rows_per_page: 'Rows per page',
 		filter: 'Filter',
 		no_filter_applied: 'No filter is applied',
 		no_data: 'No data',

@@ -41,9 +41,6 @@ export default defineConfig({
 					if (id.includes('react-router')) {
 						return '@tanstack/react-router'
 					}
-					if (id.includes('@react-table')) {
-						return 'src/components/ui/@react-table/index.tsx'
-					}
 				}
 			}
 		}

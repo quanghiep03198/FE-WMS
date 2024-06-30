@@ -5,6 +5,8 @@ import { QueryClientProvider } from './components/providers/query-client-provide
 import { ThemeProvider } from './components/providers/theme-provider'
 import { Toaster } from './components/ui/@core/sonner'
 import { i18n } from './i18n'
+import { JsonHandler } from './common/utils/json-handler'
+import { useEffect } from 'react'
 
 export default function App() {
 	return (

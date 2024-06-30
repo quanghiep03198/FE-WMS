@@ -43,7 +43,7 @@ export default {
 	table: {
 		selected_rows: 'Đã chọn {{selectedRows}} dòng',
 		page: 'Trang {{page}}',
-		display: 'Hiển thị',
+		rows_per_page: 'Số hàng mỗi trang',
 		filter: 'Bộ lọc',
 		no_filter_applied: 'Bộ lọc không được áp dụng',
 		no_data: 'Không có dữ liệu',

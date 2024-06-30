@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { LanguageSelect } from '@/app/_components/_shared/-language-selector'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
 import GlobalTransportImage from '@/assets/images/global-transport.svg'
@@ -10,19 +11,9 @@ import LoginForm from './-login-form'
 import WorkplaceSelectionForm from './-workplace-selection-form'
 import tw from 'tailwind-styled-components'
 
-const steps: TStep[] = [
-	{
-		name: 'ns_auth:steps.verify_account',
-		status: 'current'
-	},
-	{
-		name: 'ns_auth:steps.select_department',
-		status: 'upcoming'
-	}
-]
-
 const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 scrollbar`
 const Section = tw.div`mx-auto flex h-full w-full max-w-xl flex-1 flex-grow flex-col items-center justify-center gap-y-6 overflow-y-auto px-2 sm:py-10 md:py-10`
+const Image = tw.img`mx-auto hidden w-full @xl:max-w-xl @3xl:max-w-2xl @5xl:max-w-3xl xl:block xxl:block`
 
 const ThemeSelector: React.FC = () => {
 	const { t } = useTranslation('ns_common')
@@ -51,6 +42,22 @@ const HomeNavigator: React.FC = () => {
 }
 
 const FormSection: React.FC = () => {
+	const { t, i18n } = useTranslation()
+
+	const steps: TStep[] = useMemo(
+		() => [
+			{
+				name: t('ns_auth:steps.verify_account'),
+				status: 'current'
+			},
+			{
+				name: t('ns_auth:steps.select_department'),
+				status: 'upcoming'
+			}
+		],
+		[i18n.language]
+	)
+
 	return (
 		<Stepper.Provider data={steps}>
 			<Stepper.Panel value={1}>
@@ -95,14 +102,7 @@ const LanguageSelector: React.FC = () => {
 const SideImage: React.FC = () => {
 	return (
 		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex xxl:flex'>
-			<Div
-				as='img'
-				role='banner'
-				src={GlobalTransportImage}
-				alt='Global Transport'
-				loading='eager'
-				className='sticky top-0 mx-auto hidden w-full @xl:max-w-xl @3xl:max-w-3xl xl:block xxl:block'
-			/>
+			<Image role='banner' src={GlobalTransportImage} alt='Global Transport' loading='eager' />
 		</Div>
 	)
 }

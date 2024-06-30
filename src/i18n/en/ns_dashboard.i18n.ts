@@ -1,9 +1,10 @@
 export default {
 	statistic: {
+		order_number: 'Total of orders',
 		inventory_number: 'Inventory number',
-		wh_import_receipt_number: 'Import receipt',
-		wh_export_receipt_number: 'Export receipt',
-		wh_defective_rate: 'Defective rate'
+		inbound_number: 'Import receipt',
+		outbound_number: 'Export receipt',
+		defective_rate: 'Defective rate'
 	},
 	compare_from_last_month: '{{value}} from last month'
 } as const

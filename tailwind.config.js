@@ -109,6 +109,15 @@ module.exports = {
 						opacity: 1,
 						transform: 'translate(-50%,-40%) scale(1)'
 					}
+				},
+
+				'scale-y': {
+					'0%': {
+						height: '180px'
+					},
+					'100%': {
+						height: '100px'
+					}
 				}
 			},
 			animation: {
@@ -116,7 +125,8 @@ module.exports = {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
 				shimmer: 'shimmer 2s linear infinite',
-				loader: 'loader 1.5s infinite'
+				loader: 'loader 1.5s infinite',
+				'scale-y': 'scale-y 2s ease infinite'
 			}
 		}
 	},

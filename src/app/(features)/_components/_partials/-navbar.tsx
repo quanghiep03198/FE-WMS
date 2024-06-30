@@ -31,14 +31,11 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 
 	return (
 		<Fragment>
-			<Div
-				as='header'
-				role='menubar'
-				className='sticky top-0 z-50 bg-background/80 px-6 py-4 backdrop-blur-sm sm:px-2'>
+			<Div as='header' role='menubar' className='sticky top-0 z-50 bg-background/80 px-6 py-4 backdrop-blur sm:px-2'>
 				<Div
 					as='nav'
 					role='menu'
-					className='flex items-center justify-between rounded border border-border bg-inherit px-3 py-2'>
+					className='flex items-center justify-between rounded border border-border bg-background px-3 py-2 shadow'>
 					<Div role='group' className='flex items-center gap-x-4'>
 						<Tooltip
 							message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}
@@ -47,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 							<Button
 								size='icon'
 								role='searchbox'
-								variant='outline'
+								variant='ghost'
 								disabled={isLargeScreen}
 								aria-expanded={isCollapsed}
 								onClick={() => onCollapseStateChange(!isCollapsed)}>
@@ -62,7 +59,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 						<Button
 							variant='outline'
 							size={isSmallScreen ? 'icon' : 'default'}
-							className='basis-52 gap-x-2 px-2 sm:basis-auto'
+							className='basis-56 gap-x-2 px-2 sm:basis-auto'
 							onClick={() => setOpen(!open)}>
 							<Icon name='Search' />
 							<Typography variant='small' className='sm:hidden'>
@@ -72,12 +69,8 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 								ctrl+k
 							</Badge>
 						</Button>
-						<LanguageDropdown triggerProps={{ variant: 'outline' }} />
-						<Tooltip
-							message={t('ns_common:actions.toggle_theme')}
-							triggerProps={{ className: buttonVariants({ size: 'icon', variant: 'outline' }) }}>
-							<ThemeToggle />
-						</Tooltip>
+						<LanguageDropdown triggerProps={{ variant: 'ghost' }} />
+						<ThemeToggle />
 						<NavUserControl />
 					</Div>
 				</Div>

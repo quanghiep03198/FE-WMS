@@ -1,11 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle, Div, Icon, Typography } from '@/components/ui'
+import { Div, Icon, TDivProps, Typography } from '@/components/ui'
 import { i18n } from '@/i18n'
 import { ResourceKey, ResourceKeys } from 'i18next'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Area, AreaChart } from 'recharts'
+import { Area, AreaChart, ResponsiveContainer } from 'recharts'
+import tw from 'tailwind-styled-components'
 
 const data = new Array(6).fill(null).map(() => ({
+	order_number: Math.round(Math.random() * 10000),
 	inventory_number: Math.round(Math.random() * 10000),
 	import_number: Math.round(Math.random() * 10000),
 	export_number: Math.round(Math.random() * 10000),
@@ -15,7 +17,7 @@ const data = new Array(6).fill(null).map(() => ({
 type TStatistic = {
 	category: string
 	value: number | string
-	dataField: 'inventory_number' | 'import_number' | 'export_number' | 'defective_rate'
+	dataField: 'order_number' | 'inventory_number' | 'import_number' | 'export_number' | 'defective_rate'
 	icon: React.ComponentProps<typeof Icon>['name']
 	comparision: number
 }
@@ -26,10 +28,10 @@ const Statistics: React.FC = () => {
 	const statistics = useMemo<TStatistic[]>(
 		() => [
 			{
-				category: t('ns_dashboard:statistic.inventory_number'),
-				dataField: 'inventory_number',
+				category: t('ns_dashboard:statistic.order_number'),
+				dataField: 'order_number',
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'Container',
+				icon: 'Receipt',
 				comparision: 25
 			},
 			{
@@ -40,14 +42,14 @@ const Statistics: React.FC = () => {
 				comparision: 25
 			},
 			{
-				category: t('ns_dashboard:statistic.wh_import_receipt_number'),
+				category: t('ns_dashboard:statistic.inbound_number'),
 				dataField: 'import_number',
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
 				icon: 'GitPullRequestCreate',
 				comparision: 5
 			},
 			{
-				category: t('ns_dashboard:statistic.wh_export_receipt_number'),
+				category: t('ns_dashboard:statistic.outbound_number'),
 				dataField: 'export_number',
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
 				icon: 'GitBranchPlus',
@@ -58,25 +60,25 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='grid grid-cols-4 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2'>
-			{statistics.map((stats) => (
-				<Card className='rounded-lg border border-border shadow'>
-					<CardHeader className='flex flex-row items-center justify-between space-y-0 p-4'>
+		<Div className='col-span-full grid grid-cols-2 gap-4 lg:grid-cols-4 xl:col-span-1'>
+			{statistics.map((stats, index) => (
+				<Card key={index}>
+					<CardHeader>
 						<CardTitle className='text-sm font-medium'>{stats.category}</CardTitle>
 						<Icon name={stats.icon} size={18} />
 					</CardHeader>
-					<CardContent className='px-4'>
-						<Div className='flex justify-between gap-x-4'>
-							<Div className='space-y-0.5'>
-								<Typography variant='h5' className='font-bold'>
-									{stats.value}
-								</Typography>
-								<Typography variant='small' color='muted'>
-									{t('ns_dashboard:compare_from_last_month', { value: stats.comparision + '%' })}
-								</Typography>
-							</Div>
+					<CardContent>
+						<Div className='space-y-0.5'>
+							<Typography variant='h5' className='font-bold'>
+								{stats.value}
+							</Typography>
+							<Typography variant='small' color='muted'>
+								{t('ns_dashboard:compare_from_last_month', { value: stats.comparision + '%' })}
+							</Typography>
+						</Div>
 
-							<AreaChart width={16 * 10} height={16 * 4} data={data}>
+						<ResponsiveContainer className='mt-auto' height={48}>
+							<AreaChart data={data}>
 								<defs>
 									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
 										<stop offset='1%' stopColor='hsl(var(--primary))' stopOpacity={0.8} />
@@ -91,12 +93,17 @@ const Statistics: React.FC = () => {
 									fill='url(#colorPv)'
 								/>
 							</AreaChart>
-						</Div>
+						</ResponsiveContainer>
 					</CardContent>
 				</Card>
 			))}
 		</Div>
 	)
 }
+
+const Card = tw.div`rounded-[var(--radius)] p-4 aspect-square flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
+const CardContent = tw.div`flex flex-col gap-6 justify-between flex-1`
+const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
+const CardTitle = tw.h6`font-medium text-sm`
 
 export default Statistics

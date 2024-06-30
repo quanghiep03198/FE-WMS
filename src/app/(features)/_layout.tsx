@@ -19,9 +19,9 @@ function Layout() {
 
 	return (
 		<AuthGuard>
-			<LayoutComposition.Container>
+			<LayoutComposition.Container role='region'>
 				<NavSidebar isCollapsed={isCollapsed} onCollapsedChange={setIsCollapsed} />
-				<LayoutComposition.Main as='main'>
+				<LayoutComposition.Main as='main' role='main'>
 					<BreadcrumbProvider>
 						<Navbar isCollapsed={isCollapsed} onCollapseStateChange={setIsCollapsed} />
 						<LayoutComposition.OutletWrapper>

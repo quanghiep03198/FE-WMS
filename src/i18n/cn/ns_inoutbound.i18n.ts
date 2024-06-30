@@ -8,9 +8,9 @@ export default {
 		warehouse_output: '出庫'
 	},
 	labels: {
-		imp_exp_reason: '出入庫類别',
-		imp_archive_warehouse: '仓库别',
-		imp_location: '储位'
+		io_reason: '出入庫類别',
+		io_archive_warehouse: '仓库别',
+		io_storage_location: '储位'
 	},
 	inoutbound_actions: {
 		normal_import: '正常入庫',

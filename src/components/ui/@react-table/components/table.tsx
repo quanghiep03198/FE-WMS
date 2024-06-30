@@ -44,14 +44,14 @@ export default function TableDataGrid<TData, TValue>({
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
+		indexAttribute: 'data-index',
+
 		getScrollElement: () => containerRef.current,
-		estimateSize: () => ESTIMATE_SIZE,
+		estimateSize: useCallback(() => ESTIMATE_SIZE, []),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? (element) => element?.getBoundingClientRect().height
-				: undefined,
-		overscan: 1,
-		indexAttribute: 'data-index'
+				: undefined
 	})
 
 	const virtualItems = virtualizer.getVirtualItems()
@@ -94,10 +94,10 @@ export default function TableDataGrid<TData, TValue>({
 
 	return (
 		<Div
+			{...containerProps}
 			ref={containerRef}
-			className='relative overflow-auto rounded-[var(--radius)] border bg-secondary/50 shadow scrollbar'
-			onWheel={handleMouseWheel}
-			{...containerProps}>
+			className='relative overflow-auto scroll-smooth rounded-[var(--radius)] border bg-secondary/50 shadow scrollbar'
+			onWheel={handleMouseWheel}>
 			<Div ref={scrollableRef} style={{ position: 'relative', height: virtualSize }}>
 				<Table
 					ref={tableRef}

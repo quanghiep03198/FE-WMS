@@ -1,16 +1,16 @@
-import { Fragment } from 'react'
 import { Div, TDivProps } from '@/components/ui'
 import { createFileRoute, useRouterState } from '@tanstack/react-router'
 import { useDeepCompareEffect } from 'ahooks'
+import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
-import HeroSection from './_components/-cta-section'
+import tw from 'tailwind-styled-components'
+import CTASection from './_components/-cta-section'
 import FAQsSection from './_components/-faq-section'
 import FeaturesSection from './_components/-features-section'
 import Footer from './_components/-footer'
 import GridBackground from './_components/-grid-background'
 import Header from './_components/-header'
 import SupportSection from './_components/-support-section'
-import tw from 'tailwind-styled-components'
 
 export const Route = createFileRoute('/(public)/')({
 	component: Page
@@ -27,7 +27,7 @@ export default function Page() {
 				<Header />
 				<GridBackground />
 				<Main>
-					<HeroSection />
+					<CTASection />
 					<FeaturesSection />
 					<SupportSection />
 					<FAQsSection />

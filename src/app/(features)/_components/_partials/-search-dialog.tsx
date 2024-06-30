@@ -33,10 +33,9 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<DialogContent className='rounded border-none p-0 text-foreground sm:max-w-md'>
+			<DialogContent className='p-0 sm:max-w-md'>
 				<Command className='rounded-lg border !text-foreground'>
 					<CommandInput className='h-12' placeholder='Type a command or search...' />
-
 					<CommandList className='max-h-80 overflow-y-auto scrollbar'>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup heading='Suggestions'>
@@ -69,6 +68,22 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 									<CommandShortcut>ctrl+alt+S</CommandShortcut>
 								</Link>
 							</CommandItem>
+						</CommandGroup>
+					</CommandList>
+					<CommandList hidden>
+						<CommandGroup>
+							{navigationConfig.slice(6, 9).map((item) => (
+								<CommandItem key={item.id} asChild>
+									<Link
+										className='flex items-center gap-x-2'
+										to={item.path}
+										onClick={() => handleOpenChange(false)}>
+										<Icon name={item.icon} />
+										{t(item.title, { defaultValue: item.title })}
+										<CommandShortcut>{String(item.keybinding).split('.').join('+')}</CommandShortcut>
+									</Link>
+								</CommandItem>
+							))}
 						</CommandGroup>
 					</CommandList>
 				</Command>

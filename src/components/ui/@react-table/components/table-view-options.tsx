@@ -1,6 +1,6 @@
+import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import {
-	Button,
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
@@ -8,7 +8,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon,
-	Tooltip
+	Tooltip,
+	buttonVariants
 } from '../..'
 
 interface DataTableViewOptionsProps<TData> {
@@ -18,11 +19,9 @@ interface DataTableViewOptionsProps<TData> {
 export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
 	return (
 		<DropdownMenu>
-			<Tooltip message='View'>
-				<DropdownMenuTrigger asChild>
-					<Button variant='outline' size='icon'>
-						<Icon name='SlidersHorizontal' />
-					</Button>
+			<Tooltip message='View' triggerProps={{ asChild: true }}>
+				<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', size: 'icon' }))}>
+					<Icon name='SlidersHorizontal' />
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent align='end'>

@@ -1,11 +1,11 @@
+import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import React, { Fragment, useCallback, useContext } from 'react'
-import { Div, Button, Icon, Toggle, Tooltip } from '../..'
+import { useTranslation } from 'react-i18next'
+import { Button, Div, Icon, Tooltip } from '../..'
 import { TableContext } from '../context/table.context'
 import { GlobalFilter, GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
-import { cn } from '@/common/utils/cn'
-import { useTranslation } from 'react-i18next'
 
 type TableToolbarProps<TData> = {
 	table: Table<TData>
@@ -31,7 +31,7 @@ export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<T
 			<GlobalFilter />
 
 			<Div className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
-				<Tooltip message={t('ns_common:actions.clear_filter')}>
+				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
 						variant='destructive'
 						size='icon'
@@ -45,7 +45,7 @@ export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<T
 
 				<GlobalFilterPopover />
 
-				<Tooltip message={t('ns_common:table.filter')}>
+				<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 					<Button
 						variant={isFilterOpened ? 'secondary' : 'outline'}
 						onClick={() => setIsFilterOpened(!isFilterOpened)}

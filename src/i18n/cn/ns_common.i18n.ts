@@ -47,7 +47,7 @@ export default {
 	table: {
 		selected_rows: '已选择 {{selectedRows}} 行',
 		page: '第 {{page}} 页',
-		display: '展示',
+		rows_per_page: '展示',
 		filter: '过滤',
 		no_filter_applied: '不应用过滤器',
 		no_data: '没有数据',

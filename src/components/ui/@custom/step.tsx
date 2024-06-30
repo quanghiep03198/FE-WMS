@@ -83,8 +83,6 @@ const Steps: React.FC = () => {
 		steps: { data }
 	} = useContext(StepContext)
 
-	const { t } = useTranslation()
-
 	return (
 		<Div as='nav' aria-label='Progress' className='w-full'>
 			<StepList role='list'>
@@ -97,7 +95,7 @@ const Steps: React.FC = () => {
 										<Icon name='Check' size={20} className='text-primary-foreground' aria-hidden='true' />
 									</Div>
 									<Typography color='primary' className='ml-4 text-sm font-medium'>
-										{t(step.name)}
+										{step.name}
 									</Typography>
 								</Div>
 							) : step.status === 'current' ? (
@@ -106,7 +104,7 @@ const Steps: React.FC = () => {
 										{step.index}
 									</Div>
 									<Typography variant='small' color='primary'>
-										{t(step.name)}
+										{step.name}
 									</Typography>
 								</Div>
 							) : (
@@ -115,7 +113,7 @@ const Steps: React.FC = () => {
 										{step.index}
 									</Div>
 									<Typography color='muted' variant='small'>
-										{t(step.name)}
+										{step.name}
 									</Typography>
 								</Div>
 							)}

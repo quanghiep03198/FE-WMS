@@ -19,6 +19,7 @@ import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
 import { PageContext, PageProvider } from './_contexts/-page-context'
+import { warehouses } from '@/mocks/warehouse.data'
 
 // #endregion
 
@@ -273,7 +274,7 @@ function Page() {
 			<Helmet title={t('ns_common:navigation.warehouse_management')} />
 
 			<DataTable
-				data={data}
+				data={warehouses}
 				columns={columns}
 				loading={isLoading}
 				enableColumnResizing={true}
@@ -289,7 +290,7 @@ function Page() {
 										onClick={() => {
 											setConfirmDialogOpen(!confirmDialogOpen)
 										}}>
-										<Icon name='Trash' />
+										<Icon name='Trash2' />
 									</Button>
 								</Tooltip>
 							)}

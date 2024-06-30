@@ -2,6 +2,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import {
 	ColumnDef,
 	ColumnFiltersState,
+	RowData,
 	SortingState,
 	Table,
 	TableOptions,
@@ -14,7 +15,7 @@ import {
 	useReactTable
 } from '@tanstack/react-table'
 import _ from 'lodash'
-import { forwardRef, memo, useEffect, useMemo, useState } from 'react'
+import { forwardRef, memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, Typography } from '..'
 import TableDataGrid from './components/table'
@@ -22,11 +23,10 @@ import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
-import { useDeepCompareEffect } from 'ahooks'
 
 export type PaginationProps<TData> = {
 	hidden?: boolean
-	prefetch?: (...args: any[]) => void
+	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<TData>, 'data'>>
 
 export type ToolbarProps = { hidden?: boolean; ltr?: boolean; slot?: React.ReactNode }
@@ -116,7 +116,7 @@ function DataTable<TData, TValue>(
 		enableColumnResizing,
 		columnResizeMode: 'onChange',
 		debugAll: false,
-		// onPaginationChange: () => undefined,
+		onPaginationChange: () => undefined,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		onGlobalFilterChange: setGlobalFilter,
@@ -152,7 +152,7 @@ function DataTable<TData, TValue>(
 			<Div className='flex h-full flex-col items-stretch gap-y-3'>
 				{toolbarProps.hidden ? null : <TableToolbar table={table} slot={toolbarProps.slot} />}
 				<TableDataGrid containerProps={containerProps} table={table} columns={columns} loading={loading} />
-				<Div className='flex items-center'>
+				<Div className='flex items-center justify-between'>
 					{enableRowSelection && (
 						<Typography className='text-sm font-medium sm:hidden'>
 							{t('ns_common:table.selected_rows', {

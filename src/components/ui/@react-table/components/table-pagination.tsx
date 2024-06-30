@@ -1,10 +1,13 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { Row, Table } from '@tanstack/react-table'
+import { cn } from '@/common/utils/cn'
+import { Link } from '@tanstack/react-router'
+import { Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
+import { PaginationProps } from '..'
 import {
-	Button,
 	Div,
 	Icon,
+	Label,
 	Select,
 	SelectContent,
 	SelectItem,
@@ -12,12 +15,8 @@ import {
 	SelectValue,
 	Separator,
 	Tooltip,
-	Typography,
 	buttonVariants
 } from '../..'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { cn } from '@/common/utils/cn'
-import { PaginationProps } from '..'
 
 type DataTablePaginationProps<TData> = {
 	table: Table<TData>
@@ -63,9 +62,7 @@ export default function TablePagination<TData>({
 	return (
 		<Div className='ml-auto flex items-center space-x-6 lg:space-x-8'>
 			<Div className='flex items-center space-x-2'>
-				<Typography variant='small' className='font-medium'>
-					{t('ns_common:table.display')}
-				</Typography>
+				<Label className='font-medium'>{t('ns_common:table.rows_per_page')}</Label>
 				<Select
 					value={pageSize?.toString()}
 					onValueChange={(value) => {
@@ -74,8 +71,8 @@ export default function TablePagination<TData>({
 					<SelectTrigger className='w-20'>
 						<SelectValue placeholder={pageSize} />
 					</SelectTrigger>
-					<SelectContent side='top'>
-						{[10, 20, 50, 100, 1000].map((pageSize) => (
+					<SelectContent>
+						{[10, 20, 50, 100].map((pageSize) => (
 							<SelectItem
 								key={pageSize}
 								value={`${pageSize}`}

@@ -7,11 +7,6 @@ export default {
 		warehouse_input: 'Nhập kho',
 		warehouse_output: 'Xuất kho'
 	},
-	labels: {
-		imp_exp_reason: 'Lý do nhập/xuất',
-		imp_archive_warehouse: 'Kho lưu trữ',
-		imp_location: 'Vị trí lưu kho'
-	},
 	inoutbound_actions: {
 		normal_import: 'Nhập kho bình thường',
 		normal_export: 'Xuất kho bình thường',
@@ -23,5 +18,18 @@ export default {
 	},
 	notification: {
 		conflict_mono: 'Đã có lỗi xảy ra ! Có nhiều hơn 1 chỉ lệnh được quét. Hãy kiểm tra lại.'
+	},
+	labels: {
+		// EPC import/export
+		io_reason: 'Lý do nhập/xuất',
+		io_archive_warehouse: 'Kho lưu trữ',
+		io_storage_location: 'Vị trí lưu kho'
+	},
+	fields: {
+		// I/O production
+		status_approve: 'Trạng thái duyệt đơn',
+		sno_no: 'Mã đơn hàng nhập/xuất',
+		approved_by: 'Nhân viên duyệt đơn',
+		sno_date: 'Ngày xuất đơn'
 	}
 }

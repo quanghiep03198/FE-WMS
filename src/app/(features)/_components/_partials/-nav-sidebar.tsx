@@ -55,7 +55,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 		<Div
 			as='aside'
 			className={cn(
-				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden px-3 pb-6 transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
+				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 shadow transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
 				_isCollapsed ? 'w-16 items-center' : 'w-88 items-stretch'
 			)}>
 			<Link

@@ -4,9 +4,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import ImportExportOverview from './_components/-import-export-overview'
+import InoutboundOverview from './_components/-inoutbound-overview'
 import Statistics from './_components/-statistics'
-import TransactionHistory from './_components/-transaction-history'
+import TransactionHistory from './_components/-orders-history'
+import PageComposition from './_components/-page-composition'
+import TransactionOverview from './_components/-order-overview'
 
 export const Route = createFileRoute('/(features)/_layout/dashboard/')({
 	component: Page
@@ -19,11 +21,13 @@ function Page() {
 	return (
 		<Fragment>
 			<Helmet title='Warehouse Management' />
-			<Div className='space-y-6'>
+
+			<PageComposition.Container>
 				<Statistics />
-				<ImportExportOverview />
+				<InoutboundOverview />
 				<TransactionHistory />
-			</Div>
+				<TransactionOverview />
+			</PageComposition.Container>
 		</Fragment>
 	)
 }

@@ -175,7 +175,7 @@ const InOutBoundForm: React.FC = () => {
 								disabled={isLoading}
 								control={form.control}
 								name='warehouse_num'
-								label={t('ns_inoutbound:labels.imp_archive_warehouse')}
+								label={t('ns_inoutbound:labels.io_archive_warehouse')}
 								options={warehouseOptions}
 							/>
 						</Div>
@@ -184,7 +184,7 @@ const InOutBoundForm: React.FC = () => {
 								disabled={warehouseOptions?.length === 0}
 								control={form.control}
 								name='storage'
-								label={t('ns_inoutbound:labels.imp_location')}
+								label={t('ns_inoutbound:labels.io_storage_location')}
 								options={storageAreaOptions}
 							/>
 						</Div>
