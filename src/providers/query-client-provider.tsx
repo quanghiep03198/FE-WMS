@@ -1,5 +1,5 @@
+import { useAuthStore } from '@/common/hooks/use-auth'
 import env from '@/common/utils/env'
-import { StorageService } from '@/services/storage.service'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -24,7 +24,7 @@ export const queryClient = new QueryClient({
 		queries: {
 			staleTime: 1000 * 60 * 15,
 			networkMode: 'online', //In this mode, Queries and Mutations will not fire unless you have network connection.
-			enabled: !!StorageService.getAccessToken()
+			enabled: Boolean(useAuthStore.getState().accessToken)
 		},
 		mutations: {
 			networkMode: 'online'

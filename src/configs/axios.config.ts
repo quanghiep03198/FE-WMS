@@ -4,7 +4,6 @@ import { JsonHandler } from '@/common/utils/json-handler'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
 import axios, { AxiosInstance, HttpStatusCode } from 'axios'
-import _ from 'lodash'
 import qs from 'qs'
 import { toast } from 'sonner'
 
@@ -25,12 +24,14 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config) => {
-		const accessToken = StorageService.getAccessToken()
+		const accessToken = AuthService.getAccessToken()
+		const user = AuthService.getUser()
 		const locale = StorageService.getLocale()
-		const userCompany = StorageService.getUserCompany()
+		const userCompany = user?.company_code
 		if (accessToken) config.headers['Authorization'] = accessToken
 		if (userCompany) config.headers['X-User-Company'] = userCompany
 		config.headers['Accept-Language'] = locale
+
 		return config
 	},
 	(error) => Promise.reject(error)
@@ -42,7 +43,7 @@ axiosInstance.interceptors.response.use(
 		if (error.response?.status === HttpStatusCode.Unauthorized) {
 			retry++
 			console.error('[ERROR] ::: Log in session has expired.')
-			const persistedUser = StorageService.getUser()
+			const persistedUser = AuthService.getUser()
 			if (!persistedUser) {
 				return Promise.reject(error)
 			}
@@ -50,12 +51,17 @@ axiosInstance.interceptors.response.use(
 			if (retry > 1) {
 				controller.abort()
 				toast.error('Log in session has expired.')
-				window.dispatchEvent(new Event('logout'))
+				/**
+				 * @deprecated
+				 * window.dispatchEvent(new Event('logout'))
+				 * Migrated to zustand store
+				 */
+				AuthService.logout()
 				return Promise.reject(new Error('Failed to get refresh token'))
 			}
 			if (retry === 1) {
 				await AuthService.refreshToken(user?.user_code, { signal: controller.signal })
-					.then(({ metadata: refreshToken }) => StorageService.setAccessToken(refreshToken))
+					.then(({ metadata: refreshToken }) => AuthService.setAccessToken(refreshToken))
 					.catch(() => {
 						retry++
 						controller.abort()
@@ -65,7 +71,7 @@ axiosInstance.interceptors.response.use(
 					.request<void, ResponseBody<string>>({ ...error.config, signal: controller.signal })
 					.then((response) => {
 						retry--
-						StorageService.setAccessToken(response.metadata)
+						AuthService.setAccessToken(response.metadata)
 						return response
 					})
 					.catch(() => {

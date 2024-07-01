@@ -4,6 +4,8 @@ import { LoginFormValues } from '@/schemas/auth.schema'
 import { AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
 import { BaseAbstractService } from './base.abstract.service'
+import { useAuthStore } from '@/common/hooks/use-auth'
+import { queryClient } from '@/providers/query-client-provider'
 
 export class AuthService extends BaseAbstractService {
 	public static readonly USER_KEY = 'user'
@@ -11,15 +13,14 @@ export class AuthService extends BaseAbstractService {
 	public static readonly ACCESS_TOKEN_KEY = 'accessToken'
 
 	static async login(data: LoginFormValues) {
-		return await axiosInstance.post<LoginFormValues, ResponseBody<{ token: string }>>('/login', data)
+		return await axiosInstance.post<LoginFormValues, ResponseBody<{ token: string; accessToken?: string }>>(
+			'/login',
+			data
+		)
 	}
 
 	static async profile() {
 		return await axiosInstance.get<void, ResponseBody<IUser>>('/profile')
-	}
-
-	static async logout() {
-		window.dispatchEvent(new Event('logout'))
 	}
 
 	static async revokeAccessToken() {
@@ -30,9 +31,21 @@ export class AuthService extends BaseAbstractService {
 		return await axiosInstance.get<void, ResponseBody<string>>(`/refresh-token/${id}`, requestConfig)
 	}
 
-	static getIsAuthenticated() {
-		return [localStorage.getItem(this.USER_KEY), localStorage.getItem(this.ACCESS_TOKEN_KEY)].every(
-			(storedValue) => !_.isNil(storedValue)
-		)
+	static async logout() {
+		localStorage.removeItem('accessToken') // remove persisted accessToken
+		useAuthStore.getState().resetAuthState() // reset auth state
+		queryClient.clear() // clear cached queries
+	}
+
+	static getAccessToken() {
+		return useAuthStore.getState().accessToken
+	}
+
+	static setAccessToken(accessToken: string) {
+		return useAuthStore.getState().setAccessToken(accessToken)
+	}
+
+	static getUser() {
+		return useAuthStore.getState().user
 	}
 }

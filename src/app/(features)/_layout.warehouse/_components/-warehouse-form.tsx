@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
 import { IEmployee, IWarehouse } from '@/common/types/entities'
 import {
 	Button,
@@ -48,16 +48,16 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 		dialogFormState: { type, dialogTitle, defaultFormValues },
 		dispatch
 	} = useContext(PageContext)
+	const { user } = useAuth()
 	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
-	const { userCompany } = useAuth()
 	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
 	const department = form.watch('dept_code')
 
 	// Get department field values
-	const { data: departments } = useGetDepartmentQuery(userCompany)
+	const { data: departments } = useGetDepartmentQuery(user.company_code)
 
 	// Get employee field values
 	const { data: employees } = useQuery({
@@ -94,7 +94,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 	})
 
 	useDeepCompareEffect(() => {
-		form.reset({ ...defaultFormValues, company_code: userCompany })
+		form.reset({ ...defaultFormValues, company_code: user.company_code })
 	}, [type, defaultFormValues, open])
 
 	return (
@@ -136,7 +136,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 								name='company_code'
 								control={form.control}
 								label={t('ns_company:company')}
-								defaultValue={userCompany}
+								defaultValue={user.company_code}
 							/>
 						</FormItem>
 						<FormItem>

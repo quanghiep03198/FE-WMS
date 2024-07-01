@@ -1,3 +1,5 @@
+import { USER_PROVIDE_TAG, useGetUserProfile } from '@/app/_composables/-user.composable'
+import { useAuth, useAuthStore } from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
@@ -7,23 +9,19 @@ import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import _ from 'lodash'
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
 const LoginForm: React.FC = () => {
-	const { steps, dispatch } = useContext(StepContext)
 	const { t } = useTranslation()
+	const { steps, dispatch } = useContext(StepContext)
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true
 	})
-	const [accessToken, setAccessToken] = useLocalStorageState<string>('accessToken', {
-		listenStorageChange: true
-	})
-
 	const form = useForm<LoginFormValues>({
 		resolver: zodResolver(loginSchema),
 		mode: 'onChange',
@@ -33,14 +31,12 @@ const LoginForm: React.FC = () => {
 		}
 	})
 
-	const username = form.watch('username')
+	const { accessToken, setAccessToken, setUserProfile } = useAuthStore()
 
-	const {
-		mutateAsync: login,
-		isPending,
-		isSuccess
-	} = useMutation({
-		mutationKey: ['auth', accessToken],
+	const { data: user } = useGetUserProfile()
+
+	const { mutateAsync: login, isPending } = useMutation({
+		mutationKey: [USER_PROVIDE_TAG],
 		mutationFn: AuthService.login,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request'), { id: 'login' }),
 		onSuccess: (data) => {
@@ -53,10 +49,7 @@ const LoginForm: React.FC = () => {
 		}
 	})
 
-	useEffect(() => {
-		// If user's profile is retrieved successfully, then go to next step
-		if (isSuccess || Boolean(accessToken)) dispatch({ type: 'NEXT_STEP' })
-	}, [steps.currentStep, isSuccess, persistedAccount])
+	const username = form.watch('username')
 
 	const handlePersistAccount = useCallback(
 		(checked: boolean) => {
@@ -65,6 +58,14 @@ const LoginForm: React.FC = () => {
 		},
 		[username]
 	)
+
+	useEffect(() => {
+		// If user's profile is retrieved successfully, then go to next step
+		if ([user, accessToken].every((item) => !_.isNil(item))) {
+			setUserProfile(user)
+			dispatch({ type: 'NEXT_STEP' })
+		}
+	}, [steps.currentStep, user, accessToken])
 
 	return (
 		<FormProvider {...form}>
@@ -99,7 +100,7 @@ const LoginForm: React.FC = () => {
 						<Link to='/'>{t('ns_auth:labels.forgot_password')}</Link>
 					</Button>
 				</Div>
-				<Button type='submit' className='w-full gap-x-2' disabled={isPending}>
+				<Button type='submit' className='w-full gap-x-2' size='lg' disabled={isPending}>
 					<Icon name='LogIn' />
 					{t('ns_common:actions.login')}
 				</Button>

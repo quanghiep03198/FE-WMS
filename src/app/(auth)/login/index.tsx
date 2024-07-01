@@ -1,18 +1,19 @@
-import useAuth from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
 import { Navigate, createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import PageComposition from './_components/-page-composition'
-import { useLocalStorageState } from 'ahooks'
 
 export const Route = createFileRoute('/(auth)/login/')({
 	component: LoginPage
 })
 
 function LoginPage() {
-	const { isAuthenticated, userCompany } = useAuth()
+	const { isAuthenticated, user } = useAuth()
 
-	if (isAuthenticated && userCompany) return <Navigate to={'/dashboard'} />
+	console.log(user)
+
+	if (isAuthenticated && user?.company_code) return <Navigate to={'/dashboard'} />
 
 	return (
 		<Fragment>

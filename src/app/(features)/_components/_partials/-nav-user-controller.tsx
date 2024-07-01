@@ -1,4 +1,4 @@
-import useAuth from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
 import {
 	Avatar,
 	AvatarFallback,

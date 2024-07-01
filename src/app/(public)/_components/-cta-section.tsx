@@ -12,7 +12,7 @@ export default function HeroSection() {
 			ref={sectionRef}
 			as='section'
 			id='cta'
-			className='relative mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-8xl flex-grow flex-col items-center gap-20 px-6 py-20 sm:px-4 xl:flex-row xxl:max-w-8xl'>
+			className='relative mx-auto flex min-h-[calc(100vh-10rem)] w-full max-w-8xl flex-grow flex-col items-center gap-20 px-6 py-20 sm:px-4 xl:flex-row xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center text-center xl:items-start xl:text-left'>
 				<Typography
 					className={cn(

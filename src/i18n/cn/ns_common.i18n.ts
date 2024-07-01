@@ -68,7 +68,7 @@ export default {
 		keyboard_shortcut: '快捷键',
 		dashboard: '首頁',
 		inoutbound_commands: '倉庫出入庫作業',
-		warehouse_management: '储位管理',
+		warehouse_management: '倉庫管理',
 		storage_detail: '仓库存储详情',
 		import_management: '入庫管理',
 		export_management: '出庫管理',

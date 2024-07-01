@@ -1,21 +1,22 @@
-import { Fragment } from 'react'
+import env from '@/common/utils/env'
 import { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { Fragment } from 'react'
 import NotFoundPage from './_components/_errors/-not-found'
-import Loading from '@/components/shared/loading'
-import env from '@/common/utils/env'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient; isAuthenticated: boolean }>()({
-	component: () => (
+	component: RootRoute,
+	notFoundComponent: NotFoundPage
+})
+
+function RootRoute() {
+	return (
 		<Fragment>
 			<Outlet />
 			{env('VITE_NODE_ENV') === 'development' && (
 				<TanStackRouterDevtools position='bottom-right' initialIsOpen={false} />
 			)}
 		</Fragment>
-	),
-	wrapInSuspense: true,
-	notFoundComponent: NotFoundPage,
-	pendingComponent: Loading
-})
+	)
+}

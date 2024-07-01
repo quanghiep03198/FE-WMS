@@ -1,7 +1,7 @@
 import AppLogo from '@/app/_components/_shared/-app-logo'
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
-import useAuth from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,

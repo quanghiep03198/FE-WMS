@@ -19,7 +19,6 @@ import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
 import { PageContext, PageProvider } from './_contexts/-page-context'
-import { warehouses } from '@/mocks/warehouse.data'
 
 // #endregion
 
@@ -274,7 +273,7 @@ function Page() {
 			<Helmet title={t('ns_common:navigation.warehouse_management')} />
 
 			<DataTable
-				data={warehouses}
+				data={data}
 				columns={columns}
 				loading={isLoading}
 				enableColumnResizing={true}

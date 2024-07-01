@@ -16,6 +16,7 @@ export interface IUser extends IBaseEntity {
 	password: string
 	employee_code: string
 	company_code: string
+	company_name: string
 	picture: string
 	has_accessibility: boolean | null
 	isadmin: boolean | null
@@ -24,7 +25,7 @@ export interface IUser extends IBaseEntity {
 export interface ICompany extends IBaseEntity {
 	company_code: string
 	company_name: string
-	display_name: string
+	factory_code: string
 }
 
 export interface IDepartment extends IBaseEntity {

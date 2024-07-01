@@ -1,7 +1,7 @@
-import useAuth from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
 import { routeTree } from '@/route-tree.gen'
 import { RouterProvider as TanstackRouterProvider, createRouter } from '@tanstack/react-router'
-import Loading from '../shared/loading'
+import Loading from '../components/shared/loading'
 import { queryClient } from './query-client-provider'
 
 // Set up a Router instance

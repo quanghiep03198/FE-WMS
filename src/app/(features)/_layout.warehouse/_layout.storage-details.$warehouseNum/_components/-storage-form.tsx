@@ -2,7 +2,7 @@
 import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_composables/-warehouse-storage.composable'
 import { warehouseStorageTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
 import { IWarehouseStorage } from '@/common/types/entities'
 import {
 	Button,
@@ -46,7 +46,7 @@ type WarehouseStorageFormDialogProps = {
 const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({ open, onOpenChange }) => {
 	const { warehouseNum } = useParams({ strict: false })
 	const { t } = useTranslation()
-	const { userCompany } = useAuth()
+	const { user } = useAuth()
 	const {
 		dialogFormState: { type, dialogTitle, defaultFormValues },
 		dispatch
@@ -65,7 +65,7 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 
 	useDeepCompareEffect(() => {
 		form.reset({
-			company_code: userCompany,
+			company_code: user?.company_code,
 			...defaultFormValues,
 			..._.pick(warehouse, ['warehouse_num', 'warehouse_name'])
 		})

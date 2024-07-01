@@ -3,15 +3,10 @@ import { useCallback, useState } from 'react'
 import tw from 'tailwind-styled-components'
 
 const BrowserMockup: React.FC = () => {
-	const [isLeftSidePlaying, setLeftSidePlaying] = useState<boolean>(true)
-	const [isRightSidePlaying, setIsRightSidePlaying] = useState<boolean>(false)
+	const [isPlaying, setIsPlaying] = useState<boolean>(true)
 
 	setInterval(() => {
-		setLeftSidePlaying(!isLeftSidePlaying)
-	}, 2000)
-
-	setInterval(() => {
-		setIsRightSidePlaying(!isRightSidePlaying)
+		setIsPlaying(!isPlaying)
 	}, 2000)
 
 	const getAnimationPlayState = useCallback((isPlaying: boolean) => (isPlaying ? 'running' : 'paused'), [])
@@ -49,29 +44,29 @@ const BrowserMockup: React.FC = () => {
 						<ContentGridColumn>
 							<AnimatedSection
 								className='direction-alternate'
-								style={{ animationPlayState: getAnimationPlayState(isLeftSidePlaying) }}
+								style={{ animationPlayState: getAnimationPlayState(isPlaying) }}
 							/>
 							<AnimatedSection
 								className='direction-alternate'
-								style={{ animationPlayState: getAnimationPlayState(isLeftSidePlaying) }}
+								style={{ animationPlayState: getAnimationPlayState(isPlaying) }}
 							/>
 							<AnimatedSection
 								className='direction-alternate'
-								style={{ animationPlayState: getAnimationPlayState(isLeftSidePlaying) }}
+								style={{ animationPlayState: getAnimationPlayState(isPlaying) }}
 							/>
 						</ContentGridColumn>
 						<ContentGridColumn>
 							<AnimatedSection
 								className='direction-alternate-reverse'
-								style={{ animationPlayState: getAnimationPlayState(isRightSidePlaying) }}
+								style={{ animationPlayState: getAnimationPlayState(!isPlaying) }}
 							/>
 							<AnimatedSection
 								className='direction-alternate-reverse'
-								style={{ animationPlayState: getAnimationPlayState(isRightSidePlaying) }}
+								style={{ animationPlayState: getAnimationPlayState(!isPlaying) }}
 							/>
 							<AnimatedSection
 								className='direction-alternate-reverse'
-								style={{ animationPlayState: getAnimationPlayState(isRightSidePlaying) }}
+								style={{ animationPlayState: getAnimationPlayState(!isPlaying) }}
 							/>
 						</ContentGridColumn>
 					</ContentGrid>
