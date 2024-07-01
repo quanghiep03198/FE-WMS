@@ -1,14 +1,13 @@
 import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
-import { Div } from '@/components/ui'
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import tw from 'tailwind-styled-components'
 import InoutboundOverview from './_components/-inoutbound-overview'
-import Statistics from './_components/-statistics'
-import TransactionHistory from './_components/-orders-history'
-import PageComposition from './_components/-page-composition'
 import TransactionOverview from './_components/-order-overview'
+import TransactionHistory from './_components/-orders-history'
+import Statistics from './_components/-statistics'
 
 export const Route = createFileRoute('/(features)/_layout/dashboard/')({
 	component: Page
@@ -22,12 +21,14 @@ function Page() {
 		<Fragment>
 			<Helmet title='Warehouse Management' />
 
-			<PageComposition.Container>
+			<Container>
 				<Statistics />
 				<InoutboundOverview />
 				<TransactionHistory />
 				<TransactionOverview />
-			</PageComposition.Container>
+			</Container>
 		</Fragment>
 	)
 }
+
+const Container = tw.div`grid grid-cols-3 gap-x-6 gap-y-10`

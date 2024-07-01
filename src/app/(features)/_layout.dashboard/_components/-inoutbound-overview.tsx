@@ -66,7 +66,7 @@ const InoutboundOverview: React.FC = () => {
 	)
 }
 
-const Card = tw.div`rounded-[var(--radius)] p-6 flex flex-col gap-4 shadow border justify-between bg-background`
+const Card = tw.div`rounded-[var(--radius)] p-4 flex flex-col gap-4 shadow border justify-between bg-background`
 const CardContent = tw.div`flex flex-col gap-6`
 const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
 const CardTitle = tw.h6`font-medium text-sm`

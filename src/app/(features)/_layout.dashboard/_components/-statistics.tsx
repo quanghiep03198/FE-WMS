@@ -60,11 +60,11 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='col-span-full grid grid-cols-2 gap-4 lg:grid-cols-4 xl:col-span-1'>
+		<Div className='col-span-full grid grid-cols-2 gap-2 @container lg:grid-cols-4 xl:col-span-1'>
 			{statistics.map((stats, index) => (
 				<Card key={index}>
-					<CardHeader>
-						<CardTitle className='text-sm font-medium'>{stats.category}</CardTitle>
+					<CardHeader className='@container'>
+						<CardTitle className='@[200px]:text-sm'>{stats.category}</CardTitle>
 						<Icon name={stats.icon} size={18} />
 					</CardHeader>
 					<CardContent>
@@ -72,7 +72,7 @@ const Statistics: React.FC = () => {
 							<Typography variant='h5' className='font-bold'>
 								{stats.value}
 							</Typography>
-							<Typography variant='small' color='muted'>
+							<Typography variant='small' color='muted' className='text-xs'>
 								{t('ns_dashboard:compare_from_last_month', { value: stats.comparision + '%' })}
 							</Typography>
 						</Div>
@@ -101,9 +101,9 @@ const Statistics: React.FC = () => {
 	)
 }
 
-const Card = tw.div`rounded-[var(--radius)] p-4 aspect-square flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
+const Card = tw.div`rounded-[var(--radius)] p-3 aspect-square flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
 const CardContent = tw.div`flex flex-col gap-6 justify-between flex-1`
 const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
-const CardTitle = tw.h6`font-medium text-sm`
+const CardTitle = tw.h6`font-medium text-xs`
 
 export default Statistics
