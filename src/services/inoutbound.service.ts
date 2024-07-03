@@ -5,7 +5,7 @@ import { AxiosRequestConfig } from 'axios'
 export class IOService {
 	static getProduction(params: AxiosRequestConfig['params']) {
 		return axiosInstance.get<AxiosRequestConfig['params'], ResponseBody<Pagination<IInOutBoundOrder>>>(
-			'/production',
+			`/production`,
 			{ params }
 		)
 	}

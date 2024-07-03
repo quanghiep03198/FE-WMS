@@ -1,13 +1,11 @@
+import { useAuthStore } from '@/common/hooks/use-auth'
 import { IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import { queryClient } from '@/providers/query-client-provider'
 import { LoginFormValues } from '@/schemas/auth.schema'
 import { AxiosRequestConfig } from 'axios'
-import _ from 'lodash'
-import { BaseAbstractService } from './base.abstract.service'
-import { useAuthStore } from '@/common/hooks/use-auth'
-import { queryClient } from '@/providers/query-client-provider'
 
-export class AuthService extends BaseAbstractService {
+export class AuthService {
 	public static readonly USER_KEY = 'user'
 	public static readonly USER_COMPANY_KEY = 'userCompany'
 	public static readonly ACCESS_TOKEN_KEY = 'accessToken'

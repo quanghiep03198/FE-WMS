@@ -1,11 +1,8 @@
-import axiosInstance from '@/configs/axios.config'
-import { BaseAbstractService } from './base.abstract.service'
 import { ICompany } from '@/common/types/entities'
+import axiosInstance from '@/configs/axios.config'
 
-export class CompanyService extends BaseAbstractService {
-	protected static readonly BASE_ENDPOINT = '/companies'
-
+export class CompanyService {
 	static async getCompanies() {
-		return await axiosInstance.get<void, ResponseBody<ICompany[]>>(this.BASE_ENDPOINT)
+		return await axiosInstance.get<void, ResponseBody<ICompany[]>>(`/companies`)
 	}
 }

@@ -1,41 +1,31 @@
-import { IDepartment, IWarehouse, IWarehouseStorage } from '@/common/types/entities'
+import { IDepartment, IWarehouse } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { PartialWarehouseFormValue, StorageFormValue, WarehouseFormValue } from '@/schemas/warehouse.schema'
-import { BaseAbstractService } from './base.abstract.service'
+import { PartialWarehouseFormValue, WarehouseFormValue } from '@/schemas/warehouse.schema'
 
-export class WarehouseService extends BaseAbstractService {
-	static BASE_ENDPOINT: string = '/warehouse'
-
-	static getBaseEndpoint() {
-		console.log(WarehouseService.BASE_ENDPOINT)
-	}
-
+export class WarehouseService {
 	static async getWarehouseList() {
-		return await axiosInstance.get<void, ResponseBody<IWarehouse[]>>(WarehouseService.BASE_ENDPOINT)
+		return await axiosInstance.get<void, ResponseBody<IWarehouse[]>>(`/warehouse`)
 	}
 
 	static getWarehouseByNum(warehouseNum: string) {
-		return axiosInstance.get<string, ResponseBody<IWarehouse>>(WarehouseService.BASE_ENDPOINT + '/' + warehouseNum)
+		return axiosInstance.get<string, ResponseBody<IWarehouse>>(`/warehouse/${warehouseNum}`)
 	}
 
 	static async getWarehouseDepartments(companyCode: string) {
-		return await axiosInstance.get<string, ResponseBody<IDepartment[]>>(
-			WarehouseService.BASE_ENDPOINT + '/' + 'departments' + '/' + companyCode
-		)
+		return await axiosInstance.get<string, ResponseBody<IDepartment[]>>(`/warehouse/departments/${companyCode}`)
 	}
 
 	static async createWarehouse(payload: WarehouseFormValue) {
-		return axiosInstance.post<WarehouseFormValue, ResponseBody<null>>(WarehouseService.BASE_ENDPOINT, payload)
+		return axiosInstance.post<WarehouseFormValue, ResponseBody<null>>(`/warehouse`, payload)
 	}
 
 	static async updateWarehouse({ id, payload }: { id: string; payload: PartialWarehouseFormValue }) {
-		return axiosInstance.patch<PartialWarehouseFormValue, ResponseBody<null>>(
-			WarehouseService.BASE_ENDPOINT + '/' + id,
-			payload
-		)
+		return axiosInstance.patch<PartialWarehouseFormValue, ResponseBody<null>>(`/warehouse/${id}`, payload)
 	}
 
 	static async deleteWarehouse(selectedRecords: Array<string>) {
-		return await axiosInstance.delete(WarehouseService.BASE_ENDPOINT, { data: { id: selectedRecords } })
+		return await axiosInstance.delete<{ id: string[] }, ResponseBody<null>>(`/warehouse`, {
+			data: { id: selectedRecords }
+		})
 	}
 }
