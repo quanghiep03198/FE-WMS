@@ -23,7 +23,7 @@ const ScannedEPCsCounter: React.FC = () => {
 	)
 }
 
-const Counter: React.FC = () => {
+const Counter: React.FC = memo(() => {
 	const { data } = useContext(PageContext)
 	const count = useMemo(() => data?.length ?? 0, [data])
 
@@ -42,6 +42,6 @@ const Counter: React.FC = () => {
 			{count}
 		</Typography>
 	)
-}
+})
 
 export default memo(ScannedEPCsCounter)

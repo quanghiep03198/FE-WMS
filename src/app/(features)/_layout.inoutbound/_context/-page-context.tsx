@@ -2,7 +2,7 @@ import { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
 import { useQuery } from '@tanstack/react-query'
 import { useResetState, type ResetState } from 'ahooks'
-import React, { createContext, useEffect, useMemo } from 'react'
+import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -12,24 +12,21 @@ type TPageContext = {
 	scanningStatus: TScanningStatus
 	isScanningError: boolean
 	data: Array<IElectronicProductCode>
+	connection: string
 	currentOrderCode: string | null
+	setConnection: React.Dispatch<React.SetStateAction<string>>
 	setScanningStatus: React.Dispatch<React.SetStateAction<TScanningStatus>>
 	resetScanningStatus: ResetState
 }
 
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
 
-export const PageContext = createContext<TPageContext>({
-	scanningStatus: undefined,
-	isScanningError: false,
-	currentOrderCode: null,
-	setScanningStatus: () => undefined,
-	resetScanningStatus: () => undefined,
-	data: []
-})
+export const PageContext = createContext<TPageContext>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [scanningStatus, setScanningStatus, resetScanningStatus] = useResetState<TScanningStatus>(undefined)
+	const [connection, setConnection] = useState<string>()
+
 	const { t } = useTranslation()
 
 	const { data: scannedEPC } = useQuery({
@@ -88,6 +85,8 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				currentOrderCode,
 				scanningStatus,
 				isScanningError,
+				connection,
+				setConnection,
 				setScanningStatus,
 				resetScanningStatus
 			}}>

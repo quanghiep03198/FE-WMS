@@ -1,3 +1,11 @@
+import { Fragment, useContext, useMemo } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 import { CommonActions } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import {
@@ -17,24 +25,14 @@ import {
 	Typography
 } from '@/components/ui'
 import { FormActionEnum, InOutBoundFormValues, inOutBoundSchema } from '@/schemas/epc-inoutbound.schema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useContext, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import tw from 'tailwind-styled-components'
+import { RFIDService } from '@/services/rfid.service'
 import { useGetWarehouseStorageQuery } from '../../_composables/-warehouse-storage.composable'
 import { useGetWarehouseQuery } from '../../_composables/-warehouse.composable'
 import { PageContext, RFID_EPC_PROVIDE_TAG } from '../_context/-page-context'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { RFIDService } from '@/services/rfid.service'
-import { toast } from 'sonner'
-import _ from 'lodash'
-
-export type InOutBoundPayload = InOutBoundFormValues & { epc_code: string[] }
 
 const InOutBoundForm: React.FC = () => {
 	const queryClient = useQueryClient()
-	const { data, scanningStatus, setScanningStatus } = useContext(PageContext)
+	const { data, scanningStatus, connection, setScanningStatus } = useContext(PageContext)
 	const { t, i18n } = useTranslation()
 	const form = useForm<InOutBoundFormValues>({
 		resolver: zodResolver(inOutBoundSchema),
@@ -88,7 +86,12 @@ const InOutBoundForm: React.FC = () => {
 		<FormProvider {...form}>
 			<Form
 				onSubmit={form.handleSubmit(
-					async (data) => await mutateAsync({ ..._.omit(data, ['warehouse_num']), epc_code: scannedEPCs })
+					async (data) =>
+						await mutateAsync({
+							..._.omit(data, ['warehouse_num']),
+							epc_code: scannedEPCs,
+							connection
+						})
 				)}>
 				<Div className='col-span-full'>
 					<FormField

@@ -118,3 +118,8 @@ export interface IInOutBoundOrder extends IBaseEntity {
 	// "status_approve": "B",
 	// "month_close": "1"
 }
+
+export interface IDatabaseCompatibility {
+	hostname: string
+	ip: string
+}

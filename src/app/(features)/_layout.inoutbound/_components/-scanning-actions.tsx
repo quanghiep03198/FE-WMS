@@ -14,9 +14,11 @@ import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PageContext } from '../_context/-page-context'
+import { useQuery } from '@tanstack/react-query'
+import { RFIDService } from '@/services/rfid.service'
 
 const ScanningActions: React.FC = () => {
-	const { scanningStatus, isScanningError, setScanningStatus, data } = useContext(PageContext)
+	const { scanningStatus, isScanningError, setScanningStatus, data, setConnection } = useContext(PageContext)
 	const { t, i18n } = useTranslation()
 
 	const readingButtonText = useMemo(() => {
@@ -32,20 +34,26 @@ const ScanningActions: React.FC = () => {
 		}
 	}, [scanningStatus, i18n.language])
 
+	const { data: databases, isLoading } = useQuery({
+		queryKey: ['DATABASE_COMPATIBILITY'],
+		queryFn: RFIDService.getDatabaseCompatibility,
+		select: (response) => response.metadata
+	})
+
 	return (
 		<Div className='flex items-center justify-between'>
-			<Div className='inline-flex basis-40 items-center gap-x-3'>
+			<Div className='inline-flex basis-56 items-center gap-x-3'>
 				<Label>
 					<Icon name='Database' size={20} />
 				</Label>
-				<Select>
+				<Select disabled={isLoading} onValueChange={(value) => setConnection(value)}>
 					<SelectTrigger className='w-full'>
-						<SelectValue placeholder='Database' />
+						<SelectValue placeholder={isLoading ? 'Loading ...' : 'Select database'} />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectGroup>
-							<SelectItem value='10.30.0.18'>10.30.0.18</SelectItem>
-							<SelectItem value='10.30.0.21'>10.30.0.21</SelectItem>
+							{Array.isArray(databases) &&
+								databases.map((item) => <SelectItem value={item.hostname}>{item.ip}</SelectItem>)}
 						</SelectGroup>
 					</SelectContent>
 				</Select>
