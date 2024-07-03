@@ -19,12 +19,12 @@ interface DataTableViewOptionsProps<TData> {
 export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
 	return (
 		<DropdownMenu>
-			<Tooltip message='View' triggerProps={{ asChild: true }}>
+			<Tooltip message='Columns' triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', size: 'icon' }))}>
-					<Icon name='SlidersHorizontal' />
+					<Icon name='Columns3' />
 				</DropdownMenuTrigger>
 			</Tooltip>
-			<DropdownMenuContent align='end'>
+			<DropdownMenuContent align='end' className='w-56'>
 				<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{table

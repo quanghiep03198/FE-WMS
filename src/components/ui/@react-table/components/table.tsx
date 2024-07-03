@@ -22,8 +22,7 @@ export default function TableDataGrid<TData, TValue>({
 	table,
 	caption,
 	loading,
-	renderSubComponent,
-	getRowCanExpand
+	renderSubComponent
 }: TableProps<TData, TValue>) {
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -35,7 +34,7 @@ export default function TableDataGrid<TData, TValue>({
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
-		overscan: 0,
+		overscan: table.getState().pagination.pageSize,
 		getScrollElement: () => containerRef.current,
 		estimateSize: useCallback(() => ESTIMATE_SIZE, []),
 		measureElement:
@@ -67,19 +66,24 @@ export default function TableDataGrid<TData, TValue>({
 	}
 
 	return (
-		<Div className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/50 shadow'>
+		<Div
+			role='group'
+			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/25 shadow'>
 			<Div
 				{...containerProps}
 				ref={containerRef}
-				className='relative overflow-auto scroll-smooth scrollbar'
+				role='scrollbar'
+				className='relative flex flex-col items-stretch overflow-auto scroll-smooth scrollbar scrollbar-track-background'
 				onWheel={handleMouseWheel}>
 				<Table
 					ref={tableRef}
-					className='w-full border-separate border-spacing-0'
+					className='w-full table-fixed border-separate border-spacing-0'
 					style={{ minWidth: table.getTotalSize(), height: virtualizer.getTotalSize() }}>
-					<TableCaption aria-labelledby='#caption' className='hidden'>
-						{caption}
-					</TableCaption>
+					{caption && (
+						<TableCaption aria-labelledby='#caption' className='hidden'>
+							{caption}
+						</TableCaption>
+					)}
 					<TableHeader className='sticky top-0 z-20 bg-background' ref={headerRef}>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
@@ -116,7 +120,8 @@ export default function TableDataGrid<TData, TValue>({
 										<Fragment key={row.id}>
 											<TableRow
 												data-index={virtualRow.index}
-												ref={(node) => virtualizer.measureElement(node)}>
+												// ref={(node) => virtualizer.measureElement(node)}
+											>
 												{row.getVisibleCells().map((cell) => (
 													<TableCell
 														key={cell.id}
@@ -131,7 +136,7 @@ export default function TableDataGrid<TData, TValue>({
 											</TableRow>
 
 											{row.getIsExpanded() && (
-												<TableRow className='bg-background' style={{ height: virtualRow.size }}>
+												<TableRow className='bg-background'>
 													<TableCell colSpan={row.getVisibleCells().length}>
 														{typeof renderSubComponent === 'function' && renderSubComponent({ row })}
 													</TableCell>
@@ -150,11 +155,10 @@ export default function TableDataGrid<TData, TValue>({
 						)}
 					</TableBody>
 				</Table>
-
 				{!loading && table.getRowModel().rows.length === 0 && (
 					<Div
-						className='sticky left-0 top-10 flex h-full w-full items-center justify-center bg-background'
-						style={{ top: headerRef.current?.offsetHeight }}>
+						role='contentinfo'
+						className='sticky left-0 top-0 flex h-full w-full flex-1 items-center justify-center bg-background'>
 						<Div className='flex items-center justify-center gap-x-2 text-muted-foreground'>
 							<Icon name='Database' strokeWidth={1} size={32} /> No data
 						</Div>
@@ -162,7 +166,10 @@ export default function TableDataGrid<TData, TValue>({
 				)}
 			</Div>
 			{caption && (
-				<Div id='caption' className='bg-background p-3 text-center text-sm text-muted-foreground'>
+				<Div
+					aria-description={caption}
+					id='caption'
+					className='bg-background p-3 text-center text-sm text-muted-foreground'>
 					{caption}
 				</Div>
 			)}

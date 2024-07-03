@@ -15,16 +15,4 @@ type TableContext = {
 	setIsScrolling: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const TableContext = createContext<TableContext>({
-	globalFilter: '',
-	columnFilters: [],
-	sorting: [],
-	isScrolling: false,
-	isFilterOpened: false,
-	hasNoFilter: false,
-	setIsFilterOpened: () => undefined,
-	setIsScrolling: () => undefined,
-	setGlobalFilter: () => undefined,
-	setColumnFilters: () => undefined,
-	setSorting: () => undefined
-})
+export const TableContext = createContext<TableContext>(null)

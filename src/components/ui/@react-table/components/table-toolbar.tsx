@@ -27,7 +27,7 @@ export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<T
 	}, [])
 
 	return (
-		<Div className='flex items-center justify-between sm:justify-end'>
+		<Div role='toolbar' className='flex items-center justify-between sm:justify-end'>
 			<GlobalFilter />
 
 			<Div className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
@@ -45,15 +45,16 @@ export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<T
 
 				<GlobalFilterPopover />
 
-				<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-					<Button
-						variant={isFilterOpened ? 'secondary' : 'outline'}
-						onClick={() => setIsFilterOpened(!isFilterOpened)}
-						disabled={!table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter)}
-						size='icon'>
-						<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
-					</Button>
-				</Tooltip>
+				{table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
+					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
+						<Button
+							variant={isFilterOpened ? 'secondary' : 'outline'}
+							onClick={() => setIsFilterOpened(!isFilterOpened)}
+							size='icon'>
+							<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
+						</Button>
+					</Tooltip>
+				)}
 				<TableViewOptions table={table} />
 			</Div>
 		</Div>
