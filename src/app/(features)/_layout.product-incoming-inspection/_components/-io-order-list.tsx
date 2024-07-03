@@ -50,15 +50,15 @@ const IOOrderList: React.FC = () => {
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value === ProductionApproveStatus.REVIEWED ? (
-						<Icon
-							name='BadgeCheck'
-							fill='hsl(var(--primary))'
-							stroke='hsl(var(--primary-foreground))'
-							size={20}
-						/>
-					) : (
-						value
-					)
+						<Div className='flex items-center justify-center'>
+							<Icon
+								name='Check'
+								// fill='hsl(var(--primary))'
+								stroke='hsl(var(--primary))'
+								size={20}
+							/>
+						</Div>
+					) : null
 				}
 			}),
 			columnHelper.accessor('sno_date', {
@@ -106,50 +106,86 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 	return (
 		<List role='table'>
 			<ListItem role='row'>
-				<Typography role='cell'>{t('ns_inoutbound:fields.sno_no')}</Typography>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.sno_no')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.container_order_code')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.order_qty')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.order_qty')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.conversion_rate')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.required_date')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_inoutbound:fields.uninspected_qty')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
+			</ListItem>
+			<ListItem role='row'>
+				<Typography className='whitespace-nowrap text-xs'>{t('ns_inoutbound:fields.inspected_qty')}</Typography>
 				<Badge variant='secondary'>-</Badge>
 			</ListItem>
 			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.container_order_code')}</Typography>
-				<Badge variant='secondary'>-</Badge>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_warehouse:fields.type_warehouse')}
+				</Typography>
+				<Badge variant='secondary' role='cell'>
+					-
+				</Badge>
 			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.order_qty')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.order_qty')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.conversion_rate')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.required_date')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.uninspected_qty')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_inoutbound:fields.inspected_qty')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_warehouse:fields.type_warehouse')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography>{t('ns_common:common_fields.remark')}</Typography>
-				<Badge variant='secondary'>-</Badge>
+			<ListItem role='row' className='col-span-full grid-cols-[1fr_5fr] gap-x-0'>
+				<Typography className='whitespace-nowrap text-xs' role='cell'>
+					{t('ns_common:common_fields.remark')}
+				</Typography>
+				<Div className='h-24 rounded-lg border p-2' role='cell'>
+					-
+				</Div>
 			</ListItem>
 		</List>
 	)
 }
 
-const List = tw(Div)<DivProps>`grid grid-cols-5 w-full gap-y-1 gap-x-4 overflow-auto scrollbar-none`
-const ListItem = tw(Div)<DivProps>`grid grid-cols-2 whitespace-nowrap gap-2`
+const List = tw(Div)<DivProps>`grid grid-cols-3 w-full gap-y-2 gap-x-4 overflow-auto scrollbar-none`
+const ListItem = tw(Div)<DivProps>`grid grid-cols-2 whitespace-nowrap gap-x-4`
 
 export default IOOrderList
