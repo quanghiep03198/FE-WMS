@@ -57,7 +57,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 	const department = form.watch('dept_code')
 
 	// Get department field values
-	const { data: departments } = useGetDepartmentQuery(user.company_code)
+	const { data: departments } = useGetDepartmentQuery(user?.company_code)
 
 	// Get employee field values
 	const { data: employees } = useQuery({
@@ -94,7 +94,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 	})
 
 	useDeepCompareEffect(() => {
-		form.reset({ ...defaultFormValues, company_code: user.company_code })
+		form.reset({ ...defaultFormValues, company_code: user?.company_code })
 	}, [type, defaultFormValues, open])
 
 	return (
@@ -136,7 +136,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 								name='company_code'
 								control={form.control}
 								label={t('ns_company:company')}
-								defaultValue={user.company_code}
+								defaultValue={user?.company_code}
 							/>
 						</FormItem>
 						<FormItem>

@@ -1,12 +1,14 @@
 import { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
-import { Button, Div, Icon, Tooltip } from '@/components/ui'
+import { Button, Icon, Tooltip, TooltipProps } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
 import React, { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const ThemeToggle: React.FC<React.ComponentProps<typeof Button.prototype>> = ({ variant = 'ghost' }) => {
+const ThemeToggle: React.FC<
+	React.ComponentProps<typeof Button.prototype> & { tooltipProps: Partial<TooltipProps> }
+> = ({ variant = 'ghost', tooltipProps }) => {
 	const { theme, setTheme } = useTheme()
 	const darkTheme = useMemo<boolean>(() => theme === Theme.DARK, [theme])
 	const { t } = useTranslation()
@@ -18,7 +20,7 @@ const ThemeToggle: React.FC<React.ComponentProps<typeof Button.prototype>> = ({ 
 	})
 
 	return (
-		<Tooltip message={t('ns_common:actions.toggle_theme')} triggerProps={{ asChild: true }}>
+		<Tooltip message={t('ns_common:actions.toggle_theme')} triggerProps={{ asChild: true }} {...tooltipProps}>
 			<Button
 				role='button'
 				variant={variant}

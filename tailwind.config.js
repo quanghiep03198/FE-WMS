@@ -18,6 +18,7 @@ module.exports = {
 			},
 			transitionProperty: {
 				height: 'height',
+				'max-height': 'max-height',
 				width: 'width',
 				spacing: 'margin, padding'
 			},
@@ -111,12 +112,12 @@ module.exports = {
 					}
 				},
 
-				'scale-y': {
+				scale: {
 					'0%': {
-						height: '180px'
+						transform: 'scale(1)'
 					},
 					'100%': {
-						height: '100px'
+						transform: 'scale(3)'
 					}
 				}
 			},
@@ -126,7 +127,7 @@ module.exports = {
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
 				shimmer: 'shimmer 2s linear infinite',
 				loader: 'loader 1.5s infinite',
-				'scale-y': 'scale-y 2s ease infinite'
+				scale: 'scale 2s ease 4s infinite'
 			}
 		}
 	},

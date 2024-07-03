@@ -25,5 +25,26 @@ export default {
 		conflict_mono: '这批资料有两个指令进去 请再次读取',
 		navigation_blocked_message: '现在停读 ?',
 		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?'
+	},
+	fields: {
+		// I/O product inspection
+		status_approve: '審核',
+		sno_no: '驗收單號',
+		sno_date: '驗收日期',
+		sno_sealnumber: '封條號碼',
+		sno_container: '貨櫃號碼',
+		sno_total_boxes: '箱數合計',
+		sno_car_number: '車號',
+		ship_order: '裝貨號碼',
+		dept_name: '更新部門',
+		employee_name: '建檔人姓名',
+		// product inspection details
+		container_order_code: '出櫃單號', //mã đơn xuất công
+		order_qty: '採購數量', //số lượng đơn đặt hàng
+		uninspected_qty: '未驗收量',
+		inspected_qty: '已驗收量',
+		returned_qty: '已退貨量',
+		conversion_rate: '換算率',
+		required_date: '需求日期'
 	}
 }

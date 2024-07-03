@@ -23,6 +23,10 @@ import { useTranslation } from 'react-i18next'
 
 const navigationLinks = [
 	{
+		title: 'Company',
+		href: 'company'
+	},
+	{
 		title: 'Features',
 		href: 'outstanding-features'
 	},
@@ -44,7 +48,7 @@ const Header: React.FunctionComponent = () => {
 		<Div className='sticky top-0 z-20 h-16 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
 			<Div
 				as='nav'
-				className='mx-auto flex h-full max-w-8xl items-center justify-between p-6 sm:p-4'
+				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4'
 				aria-label='Global'>
 				<MenuDropdown />
 				<Div className='flex items-center gap-x-3 sm:hidden md:hidden'>

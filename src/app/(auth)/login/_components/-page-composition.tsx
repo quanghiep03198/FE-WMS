@@ -16,15 +16,9 @@ const Section = tw.div`mx-auto flex h-full w-full max-w-xl flex-1 flex-grow flex
 const Image = tw.img`mx-auto hidden w-full @xl:max-w-xl @3xl:max-w-2xl @5xl:max-w-3xl xl:block xxl:block`
 
 const ThemeSelector: React.FC = () => {
-	const { t } = useTranslation('ns_common')
 	return (
 		<Div className='fixed right-2 top-2 z-50'>
-			<Tooltip
-				message={`${t('ns_common:settings.theme')} (ctrl+alt+t)`}
-				triggerProps={{ className: buttonVariants({ variant: 'ghost', size: 'icon' }) }}
-				contentProps={{ side: 'left' }}>
-				<ThemeToggle />
-			</Tooltip>
+			<ThemeToggle tooltipProps={{ contentProps: { side: 'left' } }} />
 		</Div>
 	)
 }
@@ -74,7 +68,7 @@ const FormHeading: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='w-full max-w-lg space-y-1 text-center'>
+		<Div className='w-full max-w-xl space-y-1 text-center'>
 			<Typography variant='h5' className='whitespace-nowrap text-center font-bold'>
 				{t('ns_auth:texts.title')}
 			</Typography>

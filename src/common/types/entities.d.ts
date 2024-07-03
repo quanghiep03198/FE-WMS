@@ -97,10 +97,24 @@ export interface IInOutBoundOrder extends IBaseEntity {
 	sno_car_number: string // Container truck number
 	sno_ship_order: string // shipping order code
 	sno_container: string // Container code
-	sno_seal_number: string
+	sno_sealnumber: string
 	sno_qty: string // Import/Export quantity
 	sno_total_boxes: number // Packaging total
 	dept_name: string
 	employee_name: string
 	company_code: string
+
+	// "company_code": "VA1",
+	// "sno_date": "2021-01-04",
+	// "sno_no": "SOA21010002",
+	// "ship_order": null,
+	// "sno_container": "CFS",
+	// "sno_sealnumber": null,
+	// "sno_car_number": "15C-311.26",
+	// "sno_total_boxes": "32",
+	// "dept_name": "工程部",
+	// "employee_name": "阿平",
+	// "remark": "YSS import AO21010002",
+	// "status_approve": "B",
+	// "month_close": "1"
 }

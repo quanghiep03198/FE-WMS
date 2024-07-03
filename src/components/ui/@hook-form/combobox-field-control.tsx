@@ -1,7 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { CommandGroup, CommandList } from 'cmdk'
 import { useId, useRef } from 'react'
-import { Field, FieldValue, FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
+import { FieldValues, UseFormReturn } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
 	Button,
 	Command,
@@ -22,7 +23,6 @@ import {
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 import FormLabel from './alternative-form-label'
-import { useTranslation } from 'react-i18next'
 
 type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,
@@ -111,7 +111,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												if (onInput) onInput(e.currentTarget.value)
 											}}
 										/>
-										<CommandEmpty>Không có dữ liệu</CommandEmpty>
+										<CommandEmpty>No result</CommandEmpty>
 										<CommandList>
 											<CommandGroup>
 												<ScrollArea className='h-56' onWheel={(e) => e.stopPropagation()}>
@@ -123,8 +123,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																className='line-clamp-1 flex items-center gap-x-4'
 																onSelect={() => {
 																	form.setValue(name, option[valueField])
-																	if (onSelect && typeof onSelect === 'function')
-																		onSelect(option[valueField])
+																	if (typeof onSelect === 'function') onSelect(option[valueField])
 																}}>
 																{CommandItemTemplate ? (
 																	<CommandItemTemplate data={option} />

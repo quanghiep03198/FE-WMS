@@ -8,8 +8,8 @@ export default {
 		is_default: '是否默认',
 		area: '面積 (m²)',
 		manager: '管理人',
-		storage_num: '庫位編號',
-		storage_name: '庫位名稱',
+		storage_num: '储位编号',
+		storage_name: '储位名称',
 		type_storage: '庫位類型(區位)'
 	},
 	warehouse_types: {

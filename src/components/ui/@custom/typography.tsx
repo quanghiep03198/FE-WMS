@@ -2,7 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { forwardRef, useRef } from 'react'
 
-type TypographyProps = {
+export type TypographyProps = {
 	as?: React.ElementType
 } & React.HTMLAttributes<HTMLElement> &
 	VariantProps<typeof typographyVariants> &

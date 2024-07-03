@@ -14,9 +14,9 @@ function RootRoute() {
 	return (
 		<Fragment>
 			<Outlet />
-			{env('VITE_NODE_ENV') === 'development' && (
+			{/* {env('VITE_NODE_ENV') === 'development' && (
 				<TanStackRouterDevtools position='bottom-right' initialIsOpen={false} />
-			)}
+			)} */}
 		</Fragment>
 	)
 }

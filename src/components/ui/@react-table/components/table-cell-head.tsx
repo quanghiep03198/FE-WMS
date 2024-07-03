@@ -25,10 +25,13 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
 			onOpenChange={setIsFilterOpened}
 			className={cn('grid auto-rows-fr grid-cols-1 items-stretch divide-y divide-border')}>
 			<Div
-				className={cn('relative line-clamp-1 inline-flex cursor-auto touch-none select-none items-center py-2', {
-					'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
-					'cursor-col-resize': getIsResizing()
-				})}
+				className={cn(
+					'relative line-clamp-1 inline-flex cursor-auto touch-none select-none items-center px-4 py-2',
+					{
+						'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
+						'cursor-col-resize': getIsResizing()
+					}
+				)}
 				onClick={() => {
 					if (columnDef.enableSorting) {
 						toggleSorting(getIsSorted() === 'asc')

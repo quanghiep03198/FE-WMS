@@ -1,7 +1,7 @@
 import { BreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { Badge, Div, Icon, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
+import { Badge, Div, Icon, ScrollArea, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
@@ -10,6 +10,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
+import { useAuth } from '@/common/hooks/use-auth'
 
 type NavSidebarProps = {
 	isCollapsed: boolean
@@ -23,6 +24,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 	const isMediumScreen = useMediaQuery(BreakPoints.MEDIUM)
 	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
+	const { user } = useAuth()
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
@@ -55,7 +57,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 		<Div
 			as='aside'
 			className={cn(
-				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 shadow transition-width duration-200 ease-in-out scrollbar-thin sm:hidden md:hidden',
+				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden',
 				_isCollapsed ? 'w-16 items-center' : 'items-stretch xl:w-80 xxl:w-88'
 			)}>
 			<Link
@@ -70,6 +72,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 					<AppLogo />
 				</Div>
 			</Link>
+
 			<Menu aria-expanded={_isCollapsed} role='menu'>
 				{navigationConfig
 					.filter((item) => item.type === 'main')
@@ -91,9 +94,12 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 					))}
 			</Menu>
 
-			<div className='mt-auto'>
-				<Badge variant='outline'>Logged in with VA1</Badge>
-			</div>
+			{!isCollapsed && (
+				<Div className='mt-auto flex items-center gap-x-2 px-2 text-xs text-muted-foreground'>
+					<Icon name='UserCheck' />
+					Logged in {user?.company_name ?? 'Unknown'}
+				</Div>
+			)}
 		</Div>
 	)
 }
@@ -131,7 +137,7 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 	)
 }
 
-const Menu = tw.ul`flex flex-col gap-y-2 items-stretch py-6`
+const Menu = tw.ul`flex flex-col gap-y-2 items-stretch py-6 overflow-x-hidden overflow-y-auto scrollbar-none`
 const MenuItem = tw.li`whitespace-nowrap font-normal w-full [&>:first-child]:w-full`
 
 export default NavSidebar

@@ -1,7 +1,5 @@
-import { Div, Icon, TDivProps, Typography } from '@/components/ui'
-import { i18n } from '@/i18n'
-import { ResourceKey, ResourceKeys } from 'i18next'
-import React, { useMemo, useState } from 'react'
+import { Div, Icon, Typography } from '@/components/ui'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 import tw from 'tailwind-styled-components'
@@ -31,7 +29,7 @@ const Statistics: React.FC = () => {
 				category: t('ns_dashboard:statistic.order_number'),
 				dataField: 'order_number',
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'Receipt',
+				icon: 'ReceiptText',
 				comparision: 25
 			},
 			{

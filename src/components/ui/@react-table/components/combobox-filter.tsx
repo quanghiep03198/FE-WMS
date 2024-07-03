@@ -44,9 +44,12 @@ export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '
 					variant='outline'
 					role='combobox'
 					aria-expanded={open}
-					className={cn('justify-between text-xs text-muted-foreground/50 hover:bg-transparent', className)}>
+					tabIndex={0}
+					className={cn(
+						'justify-between border-none text-xs text-muted-foreground/50 ring-0 hover:bg-transparent',
+						className
+					)}>
 					{value || placeholder}
-
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 				</Button>
 			</PopoverTrigger>

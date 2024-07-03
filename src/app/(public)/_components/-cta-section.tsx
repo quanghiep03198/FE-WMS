@@ -12,9 +12,10 @@ export default function HeroSection() {
 			ref={sectionRef}
 			as='section'
 			id='cta'
-			className='relative mx-auto flex min-h-[calc(100vh-10rem)] w-full max-w-8xl flex-grow flex-col items-center gap-20 px-6 py-20 sm:px-4 xl:flex-row xxl:max-w-8xl'>
+			className='relative mx-auto flex min-h-[calc(100vh-10rem)] w-full max-w-7xl flex-grow flex-col items-center gap-20 px-6 py-20 sm:px-4 xl:flex-row xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center text-center xl:items-start xl:text-left'>
-				<Typography
+				<Link
+					hash='outstanding-features'
 					className={cn(
 						buttonVariants({
 							variant: 'outline',
@@ -24,7 +25,7 @@ export default function HeroSection() {
 					<Icon name='Tags' size={20} />
 					Introducing version 1.0.0
 					<Icon name='ArrowRight' className='ml-auto' />
-				</Typography>
+				</Link>
 
 				<Typography variant='h1' className='mb-4 leading-tight sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl'>
 					Simplify Warehouse Management <br className='block xl:hidden xxl:hidden' /> with i-WMS

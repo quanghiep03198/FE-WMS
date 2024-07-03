@@ -1,5 +1,5 @@
 import { USER_PROVIDE_TAG, useGetUserProfile } from '@/app/_composables/-user.composable'
-import { useAuth, useAuthStore } from '@/common/hooks/use-auth'
+import { useAuthStore } from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
@@ -38,11 +38,11 @@ const LoginForm: React.FC = () => {
 	const { mutateAsync: login, isPending } = useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
 		mutationFn: AuthService.login,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request'), { id: 'login' }),
+		onMutate: () => {
+			return toast.loading(t('ns_common:notification.processing_request'), { id: 'login' })
+		},
 		onSuccess: (data) => {
-			// Store user's access token
-			setAccessToken(data.metadata?.token)
-			toast.success(t('ns_auth:notification.login_success'), { id: 'login' })
+			setAccessToken(data.metadata?.token) // Store user's access token
 		},
 		onError(_err) {
 			toast.error(t('ns_auth:notification.login_failed'), { id: 'login' })
@@ -64,6 +64,7 @@ const LoginForm: React.FC = () => {
 		if ([user, accessToken].every((item) => !_.isNil(item))) {
 			setUserProfile(user)
 			dispatch({ type: 'NEXT_STEP' })
+			toast.success(t('ns_auth:notification.login_success'), { id: 'login' })
 		}
 	}, [steps.currentStep, user, accessToken])
 

@@ -24,3 +24,12 @@ export const warehouseStorageTypes: Record<'A' | 'B' | 'C' | 'D' | 'E', Resource
 	D: 'storage_types.outbound_staging_area',
 	E: 'storage_types.inbound_staging_area'
 } as const
+
+/**
+ *  VA1: 10.30.80.1  | 10.30.80.2  |  10.30.0.21
+ *  CA1: 10.50.5.1  |  10.50.5.251  | 10.30.0.21
+ */
+
+export const DatabaseHosts = {
+	VA1: ['10.30.80.1', '10.30.80.2', '10.30.0.21']
+}

@@ -57,7 +57,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 
 					<Div role='group' className='flex flex-1 items-center justify-end gap-x-2'>
 						<Button
-							variant='outline'
+							variant={isSmallScreen ? 'ghost' : 'outline'}
 							size={isSmallScreen ? 'icon' : 'default'}
 							className='basis-56 gap-x-2 px-2 sm:basis-auto'
 							onClick={() => setOpen(!open)}>

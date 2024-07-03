@@ -29,7 +29,21 @@ export default {
 		// I/O production
 		status_approve: 'Trạng thái duyệt đơn',
 		sno_no: 'Mã đơn hàng nhập/xuất',
-		approved_by: 'Nhân viên duyệt đơn',
-		sno_date: 'Ngày xuất đơn'
+		sno_date: 'Ngày tạo đơn',
+		sno_sealnumber: 'Mã vạch niêm phong container',
+		sno_container: 'Mã container',
+		sno_total_boxes: 'Số lượng đóng thùng',
+		sno_car_number: 'Số xe container',
+		ship_order: 'Mã đóng hàng',
+		dept_name: 'Bộ phận cập nhật',
+		employee_name: 'Nhân viên tạo đơn',
+		// product inspection details
+		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
+		order_qty: 'Số Lượng Đơn Đặt Hàng', // Order Quantity
+		uninspected_qty: 'Số Lượng Chưa Kiểm Tra', // Uninspected Quantity
+		inspected_qty: 'Số Lượng Đã Kiểm Tra', // Inspected Quantity
+		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
+		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
+		required_date: 'Ngày Yêu Cầu' // Required Date
 	}
 }

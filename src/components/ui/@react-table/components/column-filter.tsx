@@ -38,6 +38,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				<Div className='flex items-center'>
 					<DebouncedInput
 						type='number'
+						tabIndex={0}
 						className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-muted-foreground/50 hover:text-foreground'
 						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
@@ -48,6 +49,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					<Separator orientation='vertical' className='h-6' />
 					<DebouncedInput
 						type='number'
+						tabIndex={0}
 						className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-muted-foreground/50 hover:text-foreground'
 						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
 						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
@@ -63,7 +65,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'min-w-[8rem] rounded-none border-none text-xs font-medium text-muted-foreground/50 shadow-none hover:text-foreground focus:border-none ring-0'
+							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground/50 ring-0 shadow-none hover:text-foreground focus:border-none ring-0',
+						tabIndex: 0
 					}}
 					placeholder={t('ns_common:table.search_in_column')}
 					options={sortedUniqueValues
@@ -80,7 +83,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 			return (
 				<ComboboxFilter
 					placeholder='Tìm kiếm trong cột ...'
-					className='h-9 w-full rounded-none border-none pl-2 text-xs shadow-none'
+					className='h-9 w-full rounded-none border-none px-4 text-xs shadow-none ring-0 ring-offset-0 ring-offset-transparent'
 					onChange={(value) => column.setFilterValue(value)}
 					options={sortedUniqueValues
 						.filter((value) => Boolean(value))

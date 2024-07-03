@@ -2,6 +2,7 @@ import { CommonActions } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	ComboboxFieldControl,
 	Div,
 	FormControl,
 	FormField,
@@ -12,7 +13,8 @@ import {
 	Icon,
 	RadioGroup,
 	RadioGroupItem,
-	SelectFieldControl
+	SelectFieldControl,
+	Typography
 } from '@/components/ui'
 import { FormActionEnum, InOutBoundFormValues, inOutBoundSchema } from '@/schemas/epc-inoutbound.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -65,14 +67,7 @@ const InOutBoundForm: React.FC = () => {
 
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
-		select: (response) => {
-			return Array.isArray(response.metadata)
-				? response.metadata.map((item) => ({
-						label: item.storage_name,
-						value: item.storage_num
-					}))
-				: []
-		}
+		select: (response) => response.metadata
 	})
 
 	const scannedEPCs = useMemo(() => [...new Set(data.map((item) => item.epc_code))], [data])
@@ -180,12 +175,24 @@ const InOutBoundForm: React.FC = () => {
 							/>
 						</Div>
 						<Div className='col-span-1 sm:col-span-full'>
-							<SelectFieldControl
+							<ComboboxFieldControl
 								disabled={warehouseOptions?.length === 0}
-								control={form.control}
+								form={form}
 								name='storage'
+								labelField='storage_name'
+								valueField='storage_num'
 								label={t('ns_inoutbound:labels.io_storage_location')}
-								options={storageAreaOptions}
+								template={({ data }) => (
+									<Div className='space-y-0.5'>
+										<Typography variant='small' className='font-medium'>
+											{data.storage_name}
+										</Typography>
+										<Typography variant='small' color='muted'>
+											{data.storage_num}
+										</Typography>
+									</Div>
+								)}
+								data={storageAreaOptions}
 							/>
 						</Div>
 					</Fragment>
