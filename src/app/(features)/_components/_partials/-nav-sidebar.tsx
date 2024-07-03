@@ -1,7 +1,8 @@
 import { BreakPoints } from '@/common/constants/enums'
+import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { Badge, Div, Icon, ScrollArea, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
+import { Div, Icon, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
@@ -10,7 +11,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
-import { useAuth } from '@/common/hooks/use-auth'
 
 type NavSidebarProps = {
 	isCollapsed: boolean
@@ -63,13 +63,16 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 			<Link
 				to='/dashboard'
 				className={cn('flex h-20 items-center', !_isCollapsed ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
-				<Icon name='Boxes' size={32} stroke='hsl(var(--primary))' className='size-8' strokeWidth={1} />
+				<Icon name='Boxes' size={_isCollapsed ? 36 : 44} stroke='hsl(var(--primary))' strokeWidth={0.75} />
 				<Div
 					className={cn(
-						'transition-[width_opacity]',
+						'space-y-1 transition-[width_opacity]',
 						_isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
+					<Typography variant='small' className='mt-auto flex items-center gap-x-2 text-xs text-muted-foreground'>
+						{user?.company_name}
+					</Typography>
 				</Div>
 			</Link>
 
@@ -93,13 +96,6 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 						</MenuItem>
 					))}
 			</Menu>
-
-			{!isCollapsed && (
-				<Div className='mt-auto flex items-center gap-x-2 px-2 text-xs text-muted-foreground'>
-					<Icon name='UserCheck' />
-					Logged in {user?.company_name ?? 'Unknown'}
-				</Div>
-			)}
 		</Div>
 	)
 }

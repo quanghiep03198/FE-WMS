@@ -6,19 +6,16 @@ import LayoutComposition from './_components/_partials/-layout-composition'
 import NavSidebar from './_components/_partials/-nav-sidebar'
 import Navbar from './_components/_partials/-navbar'
 import { BreadcrumbProvider } from './_components/_providers/-breadcrumb-provider'
-import { Icon, Typography } from '@/components/ui'
-import { useAuth } from '@/common/hooks/use-auth'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
-		// if (!isAuthenticated) throw redirect({ to: '/login' })
+		if (!isAuthenticated) throw redirect({ to: '/login' })
 	}
 })
 
 function Layout() {
 	const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
-	const { user } = useAuth()
 
 	return (
 		<AuthGuard>
