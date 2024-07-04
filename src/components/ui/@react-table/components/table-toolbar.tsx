@@ -2,7 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import React, { Fragment, useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Div, Icon, Tooltip } from '../..'
+import { Badge, Button, Div, Icon, Tooltip } from '../..'
 import { TableContext } from '../context/table.context'
 import { GlobalFilter, GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
@@ -13,9 +13,8 @@ type TableToolbarProps<TData> = {
 }
 
 export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<TData>) {
-	const { globalFilter, columnFilters } = useContext(TableContext)
+	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useContext(TableContext)
 
-	const { isFilterOpened, setIsFilterOpened } = useContext(TableContext)
 	const { t } = useTranslation('ns_common')
 
 	const isFilterDirty = globalFilter.length !== 0 || columnFilters.length !== 0
@@ -29,7 +28,6 @@ export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<T
 	return (
 		<Div role='toolbar' className='flex items-center justify-between sm:justify-end'>
 			<GlobalFilter />
-
 			<Div className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
@@ -40,20 +38,22 @@ export default function TableToolbar<TData>({ table, slot }: TableToolbarProps<T
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
-
 				<Fragment>{slot}</Fragment>
-
 				<GlobalFilterPopover />
-
 				{table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
-					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-						<Button
-							variant={isFilterOpened ? 'secondary' : 'outline'}
-							onClick={() => setIsFilterOpened(!isFilterOpened)}
-							size='icon'>
-							<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
-						</Button>
-					</Tooltip>
+					<Div className='relative'>
+						<Badge
+							variant='destructive'
+							className='absolute right-0 top-0 inline-flex size-5 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full text-xs'>
+							{columnFilters.length}
+						</Badge>
+
+						<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
+							<Button variant='outline' onClick={() => setIsFilterOpened(!isFilterOpened)} size='icon'>
+								<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
+							</Button>
+						</Tooltip>
+					</Div>
 				)}
 				<TableViewOptions table={table} />
 			</Div>

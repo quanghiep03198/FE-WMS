@@ -68,7 +68,7 @@ export default function TableDataGrid<TData, TValue>({
 	return (
 		<Div
 			role='group'
-			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/25 shadow'>
+			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/50 shadow'>
 			<Div
 				{...containerProps}
 				ref={containerRef}

@@ -95,8 +95,6 @@ function DataTable<TData, TValue>(
 	 */
 	const _data = useMemo(() => (Array.isArray(data) ? data : []), [data])
 
-	console.log(paginationProps.page)
-
 	const table = useReactTable({
 		data: _data,
 		columns,
