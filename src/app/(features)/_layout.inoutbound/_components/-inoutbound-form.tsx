@@ -90,7 +90,7 @@ const InOutBoundForm: React.FC = () => {
 						await mutateAsync({
 							..._.omit(data, ['warehouse_num']),
 							epc_code: scannedEPCs,
-							connection
+							host: connection
 						})
 				)}>
 				<Div className='col-span-full'>

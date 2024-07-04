@@ -2,6 +2,7 @@ import { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
 import { useQuery } from '@tanstack/react-query'
 import { useResetState, type ResetState } from 'ahooks'
+import { HttpStatusCode } from 'axios'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -31,11 +32,13 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
 	const { data: scannedEPC } = useQuery({
 		queryKey: [RFID_EPC_PROVIDE_TAG],
-		queryFn: RFIDService.getUnscannedEPC,
+		queryFn: () => RFIDService.getUnscannedEPC(connection),
 		enabled: scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
 		select: (response) => response.metadata
 	})
+
+	console.table(scannedEPC)
 
 	const data = useMemo(
 		() => (typeof scanningStatus === 'undefined' ? [] : Array.isArray(scannedEPC) ? scannedEPC : []),

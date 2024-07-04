@@ -31,7 +31,11 @@ const ScannedEPCsList: React.FC = () => {
 										: 'hover:bg-secondary'
 								)}>
 								<Typography className='font-medium'>{item?.epc_code}</Typography>
-								<Typography variant='small' color='muted'>
+								<Typography
+									variant='small'
+									className={cn(
+										item.mo_no !== currentOrderCode ? 'text-destructive-foreground' : 'text-foreground'
+									)}>
 									{item?.mo_no}
 								</Typography>
 							</ListItem>

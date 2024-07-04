@@ -18,10 +18,11 @@ import { useQuery } from '@tanstack/react-query'
 import { RFIDService } from '@/services/rfid.service'
 
 const ScanningActions: React.FC = () => {
-	const { scanningStatus, isScanningError, setScanningStatus, data, setConnection } = useContext(PageContext)
+	const { data, scanningStatus, isScanningError, connection, setScanningStatus, setConnection } =
+		useContext(PageContext)
 	const { t, i18n } = useTranslation()
 
-	const readingButtonText = useMemo(() => {
+	const scanningButtonText = useMemo(() => {
 		switch (true) {
 			case typeof scanningStatus === 'undefined' || scanningStatus === 'finished':
 				return t('ns_common:actions.start')
@@ -42,22 +43,21 @@ const ScanningActions: React.FC = () => {
 
 	return (
 		<Div className='flex items-center justify-between'>
-			<Div className='inline-flex basis-56 items-center gap-x-3'>
-				<Label>
-					<Icon name='Database' size={20} />
-				</Label>
-				<Select disabled={isLoading} onValueChange={(value) => setConnection(value)}>
-					<SelectTrigger className='w-full'>
+			<Select
+				disabled={isLoading || typeof scanningStatus !== 'undefined'}
+				onValueChange={(value) => setConnection(value)}>
+				<SelectTrigger className='w-full max-w-56'>
+					<Div className='flex flex-1 items-center gap-x-3'>
+						<Icon name='Database' size={20} stroke='hsl(var(--primary))' />
 						<SelectValue placeholder={isLoading ? 'Loading ...' : 'Select database'} />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectGroup>
-							{Array.isArray(databases) &&
-								databases.map((item) => <SelectItem value={item.hostname}>{item.ip}</SelectItem>)}
-						</SelectGroup>
-					</SelectContent>
-				</Select>
-			</Div>
+					</Div>
+				</SelectTrigger>
+				<SelectContent>
+					<SelectGroup>
+						{Array.isArray(databases) && databases.map((item) => <SelectItem value={item}>{item}</SelectItem>)}
+					</SelectGroup>
+				</SelectContent>
+			</Select>
 
 			<Div className='flex items-center justify-end gap-x-1'>
 				{isScanningError && (
@@ -73,7 +73,7 @@ const ScanningActions: React.FC = () => {
 				<Button
 					size='sm'
 					className='gap-x-2'
-					disabled={scanningStatus === 'finished' || isScanningError}
+					disabled={scanningStatus === 'finished' || isScanningError || !connection}
 					onClick={() =>
 						setScanningStatus((prev) => {
 							if (typeof prev === 'undefined') return 'scanning'
@@ -83,7 +83,7 @@ const ScanningActions: React.FC = () => {
 					}
 					variant={scanningStatus === 'scanning' ? 'destructive' : 'secondary'}>
 					<Icon name={scanningStatus === 'scanning' ? 'Pause' : 'Play'} fill='currentColor' size={14} />
-					{readingButtonText}
+					{scanningButtonText}
 				</Button>
 				<Button
 					className='gap-x-2'

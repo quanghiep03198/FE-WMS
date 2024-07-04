@@ -2,11 +2,11 @@ import { IDatabaseCompatibility, IElectronicProductCode } from '@/common/types/e
 import axiosInstance from '@/configs/axios.config'
 import { InOutBoundFormValues } from '@/schemas/epc-inoutbound.schema'
 
-type InOutBoundPayload = InOutBoundFormValues & { epc_code: Array<string>; connection: string }
+type InOutBoundPayload = InOutBoundFormValues & { epc_code: Array<string>; host: string }
 
 export class RFIDService {
-	static async getUnscannedEPC() {
-		return axiosInstance.get<void, ResponseBody<IElectronicProductCode[]>>('/rfid/read-epc')
+	static async getUnscannedEPC(host: string) {
+		return axiosInstance.get<void, ResponseBody<IElectronicProductCode[]>>(`/rfid/read-epc/${host}`)
 	}
 
 	static async updateStockMovement(payload: InOutBoundPayload) {
@@ -14,6 +14,6 @@ export class RFIDService {
 	}
 
 	static async getDatabaseCompatibility() {
-		return axiosInstance.get<void, ResponseBody<IDatabaseCompatibility[]>>('/rfid/database-compatibility')
+		return axiosInstance.get<void, ResponseBody<string[]>>('/rfid/database-compatibility')
 	}
 }
