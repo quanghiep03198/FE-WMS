@@ -41,15 +41,15 @@ cd <repository-directory>
 npm install
 ```
 
-### Step 3: Run the application
+### Step 3: Run the application in development mode
 
 ```bash
-npm start
+npm run dev
 ```
 
 ## Usage
 
-1. After running the `npm start` command, open your browser and go to `http://localhost:3000`.
+1. After running the `npm run dev` command, open your browser and go to `http://localhost:3000`.
 2. Log in with your warehouse management account.
 3. Start managing products, tracking inventory, and processing orders.
 
@@ -57,6 +57,7 @@ npm start
 
 ```
 ├── .husky
+├── .storybook
 ├── public
 ├── resources
 │   └── locales
