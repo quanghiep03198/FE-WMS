@@ -1,4 +1,4 @@
-import { IDatabaseCompatibility, IElectronicProductCode } from '@/common/types/entities'
+import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { InOutBoundFormValues } from '@/schemas/epc-inoutbound.schema'
 

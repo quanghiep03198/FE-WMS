@@ -1,11 +1,11 @@
+import { type AxiosRequestConfig } from 'axios'
+import _ from 'lodash'
 import { useAuthStore } from '@/common/hooks/use-auth'
 import { IUser } from '@/common/types/entities'
-import { __JSON__ } from '@/common/helpers/json'
+import { __JSON__ } from '@/common/utils/json'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { LoginFormValues } from '@/schemas/auth.schema'
-import { AxiosRequestConfig } from 'axios'
-import _ from 'lodash'
 import { AppConfigs } from '@/configs/app.config'
 
 export class AuthService {
