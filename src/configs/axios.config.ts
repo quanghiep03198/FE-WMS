@@ -1,6 +1,4 @@
-import { IUser } from '@/common/types/entities'
 import env from '@/common/utils/env'
-import { JsonHandler } from '@/common/utils/json-handler'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
 import axios, { AxiosInstance, HttpStatusCode } from 'axios'
@@ -13,7 +11,7 @@ const controller = new AbortController()
 const axiosInstance: AxiosInstance = axios.create({
 	baseURL: env('VITE_API_BASE_URL'),
 	signal: controller.signal,
-	timeout: 5000,
+	timeout: +env('VITE_REQUEST_TIMEOUT', 5000),
 	paramsSerializer: (params) => {
 		return qs.stringify(params, {
 			arrayFormat: 'brackets',
@@ -24,12 +22,11 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
 	(config) => {
-		const accessToken = AuthService.getAccessToken()
-		const user = AuthService.getUser()
+		const accessToken = AuthService.getAccessToken() // default access token that stored in local storage
 		const locale = StorageService.getLocale()
-		const userCompany = user?.company_code
-		if (accessToken) config.headers['Authorization'] = accessToken
-		if (userCompany) config.headers['X-User-Company'] = userCompany
+		const user = AuthService.getUser()
+		config.headers['Authorization'] = config.headers['Authorization'] ?? accessToken
+		config.headers['X-User-Company'] = user?.company_code
 		config.headers['Accept-Language'] = locale
 
 		return config
@@ -43,13 +40,11 @@ axiosInstance.interceptors.response.use(
 		if (error.response?.status === HttpStatusCode.Unauthorized) {
 			retry++
 			console.error('[ERROR] ::: Log in session has expired.')
-			const persistedUser = AuthService.getUser()
-			if (!persistedUser) {
+			const user = AuthService.getUser()
+			if (!user) {
 				return Promise.reject(error)
 			}
-			const user = JsonHandler.safeParse<IUser>(persistedUser) as IUser
 			if (retry > 1) {
-				controller.abort()
 				toast.error('Log in session has expired.')
 				/**
 				 * @deprecated
@@ -57,6 +52,7 @@ axiosInstance.interceptors.response.use(
 				 * Migrated to zustand store
 				 */
 				AuthService.logout()
+				controller.abort()
 				return Promise.reject(new Error('Failed to get refresh token'))
 			}
 			if (retry === 1) {

@@ -1,10 +1,10 @@
-export class JsonHandler {
+export class __JSON__ {
 	/**
 	 * @description Check if string is valid JSON
 	 * @param arg
 	 * @returns
 	 */
-	public static isValid(arg: string | null) {
+	public static valid(arg: string | null) {
 		try {
 			if (!arg) return false
 			return !!JSON.parse(arg)
@@ -18,12 +18,12 @@ export class JsonHandler {
 	 * @param value
 	 * @returns
 	 */
-	public static safeParse<T>(value: any): T | null | undefined | string {
+	public static parse<T>(value: any): T | null | string {
 		try {
 			if (typeof value !== 'string') {
 				throw new Error(`Cannot safe json parse value of type "${typeof value}"`)
 			}
-			if (!JsonHandler.isValid(value)) return value
+			if (!__JSON__.valid(value)) return value
 			return JSON.parse(value)
 		} catch (error) {
 			return null
@@ -35,7 +35,7 @@ export class JsonHandler {
 	 * @param value
 	 * @returns
 	 */
-	public static safeStringify(value: any): string {
+	public static stringify(value: any): string {
 		return typeof value === 'string'
 			? value
 			: JSON.stringify(value, (_k: string, value: any) => (typeof value === 'undefined' ? null : value))

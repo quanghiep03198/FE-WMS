@@ -8,6 +8,7 @@ export declare global {
 		readonly VITE_API_BASE_URL: string
 		readonly VITE_REPORT_BUG_URL: string
 		readonly VITE_DEFAULT_TTL: string
+		readonly VITE_REQUEST_TIMEOUT: string
 	}
 
 	type ResponseBody<T> = {
