@@ -63,10 +63,10 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 			<Link
 				to='/dashboard'
 				className={cn('flex h-20 items-center', !_isCollapsed ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
-				<Icon name='Boxes' size={_isCollapsed ? 36 : 44} stroke='hsl(var(--primary))' strokeWidth={0.75} />
+				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
 				<Div
 					className={cn(
-						'space-y-1 transition-[width_opacity]',
+						'space-y-0.5 transition-[width_opacity]',
 						_isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
