@@ -52,6 +52,7 @@ npm run dev
 1. After running the `npm run dev` command, open your browser and go to `http://localhost:3000`.
 2. Log in with your warehouse management account.
 3. Start managing products, tracking inventory, and processing orders.
+4. View UI Components documentation by running `npm run storybook`, open your browser then go to `http://localhost:6006`
 
 ## Folder Structure
 
