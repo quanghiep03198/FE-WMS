@@ -17,6 +17,7 @@ import { Route as publicIndexImport } from './app/(public)/index'
 import { Route as preferencesLayoutImport } from './app/(preferences)/_layout'
 import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
+import { Route as authAuthorizationIndexImport } from './app/(auth)/authorization/index'
 import { Route as featuresLayoutDashboardIndexImport } from './app/(features)/_layout.dashboard/index'
 
 // Create Virtual Routes
@@ -93,6 +94,11 @@ const featuresLayoutRoute = featuresLayoutImport.update({
 
 const authLoginIndexRoute = authLoginIndexImport.update({
   path: '/login/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const authAuthorizationIndexRoute = authAuthorizationIndexImport.update({
+  path: '/authorization/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -294,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicIndexImport
       parentRoute: typeof rootRoute
     }
+    '/(auth)/authorization/': {
+      id: '/authorization/'
+      path: '/authorization'
+      fullPath: '/authorization'
+      preLoaderRoute: typeof authAuthorizationIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/(auth)/login/': {
       id: '/login/'
       path: '/login'
@@ -428,6 +441,7 @@ export const routeTree = rootRoute.addChildren({
     }),
   }),
   publicIndexRoute,
+  authAuthorizationIndexRoute,
   authLoginIndexRoute,
 })
 
@@ -442,6 +456,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/",
         "/",
+        "/authorization/",
         "/login/"
       ]
     },
@@ -457,6 +472,9 @@ export const routeTree = rootRoute.addChildren({
         "/_layout/keybindings/",
         "/_layout/profile/"
       ]
+    },
+    "/authorization/": {
+      "filePath": "(auth)/authorization/index.tsx"
     },
     "/login/": {
       "filePath": "(auth)/login/index.tsx"

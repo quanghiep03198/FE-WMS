@@ -102,7 +102,7 @@ export interface IInOutBoundOrder extends IBaseEntity {
 	sno_total_boxes: number // Packaging total
 	dept_name: string
 	employee_name: string
-	company_code: string
+	company_code?: string
 
 	// "company_code": "VA1",
 	// "sno_date": "2021-01-04",

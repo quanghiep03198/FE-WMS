@@ -8,11 +8,9 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { ICompany, IUser } from '../types/entities'
 
-type AuthState = {
+export type AuthState = {
 	user: IUser | null
-	accessToken: string | null
 	isAuthenticated: boolean
-	setAccessToken: (accessToken: string) => void
 	setUserProfile: (profile: IUser) => void
 	setUserCompany: (company: Omit<ICompany, 'factory_code'>) => void
 	resetAuthState: () => void
@@ -24,13 +22,9 @@ export const useAuthStore = create(
 	persist<AuthState>(
 		(set, get) => ({
 			...initialState,
-			setAccessToken: (accessToken: string) => {
-				const state = get()
-				set({ ...state, isAuthenticated: true, accessToken: `Bearer ${accessToken}` })
-			},
 			setUserProfile: (profile: IUser) => {
 				const state = get()
-				set({ ...state, user: { ...state.user, ...profile } })
+				set({ ...state, isAuthenticated: true, user: { ...state.user, ...profile } })
 			},
 			setUserCompany: (company: Omit<ICompany, 'factory_code'>) => {
 				const state = get()
@@ -42,9 +36,9 @@ export const useAuthStore = create(
 			resetAuthState: () => set(initialState)
 		}),
 		{
-			name: 'Auth',
-			serialize: (data) => compress(JSON.stringify(data)),
-			deserialize: (data) => JSON.parse(decompress(data))
+			name: 'Auth'
+			// serialize: (data) => compress(JSON.stringify(data)),
+			// deserialize: (data) => JSON.parse(decompress(data))
 		}
 	)
 )
@@ -55,7 +49,7 @@ export function useAuth() {
 
 	const { mutateAsync: logout } = useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
-		mutationFn: AuthService.revokeAccessToken,
+		mutationFn: AuthService.revokeToken,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSettled: (_data, _error, _variable, context) => {
 			AuthService.logout().finally(() => toast.success(t('ns_auth:notification.logout_success'), { id: context }))

@@ -2,6 +2,7 @@ import { USER_PROVIDE_TAG, useGetUserProfile } from '@/app/_composables/-user.co
 import { useAuthStore } from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
+import { AppConfigs } from '@/configs/app.config'
 import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
 import { AuthService } from '@/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -30,8 +31,11 @@ const LoginForm: React.FC = () => {
 			password: ''
 		}
 	})
-
-	const { accessToken, setAccessToken, setUserProfile } = useAuthStore()
+	const [accessToken, setAccessToken] = useLocalStorageState(AppConfigs.ACCESS_TOKEN_STORAGE_KEY, {
+		defaultValue: null,
+		listenStorageChange: true
+	})
+	const { setUserProfile } = useAuthStore()
 
 	const { data: user } = useGetUserProfile()
 

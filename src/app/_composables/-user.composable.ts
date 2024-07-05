@@ -1,16 +1,17 @@
 import { AuthService } from '@/services/auth.service'
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
+import { AxiosRequestConfig } from 'axios'
 
 export const USER_PROVIDE_TAG = 'USER'
 
-export function useGetUserProfile() {
-	const accessToken = AuthService.getAccessToken()
-
-	return useQuery({
+export const getUserProfileQuery = (config?: AxiosRequestConfig) =>
+	queryOptions({
 		queryKey: [USER_PROVIDE_TAG],
-		queryFn: AuthService.profile,
+		queryFn: () => AuthService.profile(config),
 		staleTime: 1000 * 60,
-		select: (data) => data.metadata,
-		enabled: Boolean(accessToken)
+		select: (data) => data.metadata
 	})
+
+export function useGetUserProfile() {
+	return useQuery(getUserProfileQuery())
 }
