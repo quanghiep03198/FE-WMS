@@ -38,6 +38,9 @@ export default {
 		ship_order: 'Shipping order number',
 		dept_name: 'Department',
 		employee_name: 'Employee',
+		sno_total: 'Total',
+		sno_size: 'Size',
+		sno_type: 'Type',
 		// product inspection details
 		container_order_code: 'Container Order Code',
 		order_qty: 'Order quantity',
