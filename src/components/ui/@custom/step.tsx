@@ -1,7 +1,5 @@
 import { Div, Icon, Typography } from '@/components/ui'
-import { KeysWithReturnObjects, KeysWithoutReturnObjects, ResourceKeys } from 'i18next'
 import React, { createContext, useContext, useReducer } from 'react'
-import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
 export type TStep = {

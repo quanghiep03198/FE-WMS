@@ -1,6 +1,5 @@
 import { forwardRef, useId, useRef } from 'react'
 import tw from 'tailwind-styled-components'
-import { Button } from '..'
 
 type TSwapButtonProps = React.ClassAttributes<HTMLLabelElement> &
 	React.LabelHTMLAttributes<HTMLLabelElement> & {

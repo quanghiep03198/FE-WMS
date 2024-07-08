@@ -23,7 +23,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
 		<Select
 			open={openState}
 			onValueChange={(value) => {
-				if (onValueChange) onValueChange(value)
+				if (typeof onValueChange === 'function') onValueChange(value)
 			}}
 			{...selectProps}>
 			<SelectTrigger {...selectTriggerProps}>
@@ -32,12 +32,20 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>
-					{Array.isArray(options) &&
+					{Array.isArray(options) && options.length > 0 ? (
 						options.map((option) => (
-							<SelectItem key={option.value} value={option.value?.toString()}>
-								{option.label}
+							<SelectItem key={option?.value} value={String(option?.value)}>
+								{option?.label}
 							</SelectItem>
-						))}
+						))
+					) : (
+						<SelectItem
+							value={null}
+							disabled
+							className='flex items-center justify-center text-center text-xs font-medium'>
+							No option
+						</SelectItem>
+					)}
 				</SelectGroup>
 			</SelectContent>
 		</Select>
