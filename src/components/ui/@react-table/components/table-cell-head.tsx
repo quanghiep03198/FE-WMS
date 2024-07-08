@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Header, SortDirection, Table, flexRender } from '@tanstack/react-table'
 import { useContext } from 'react'
-import { Div, Collapsible, CollapsibleContent, Icon, Separator, Typography } from '../..'
+import { Div, Icon } from '../..'
 import { TableContext } from '../context/table.context'
 import { ColumnFilter } from './column-filter'
 
@@ -15,37 +15,32 @@ type ColumnSortingProps = {
 }
 
 function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
-	const { isFilterOpened, setIsFilterOpened } = useContext(TableContext)
-
+	const { isFilterOpened } = useContext(TableContext)
 	const { columnDef, getIsResizing, toggleSorting, getIsSorted } = header.column
 
+	const handleToggleSorting = () => {
+		if (!columnDef.enableSorting) return
+		toggleSorting(getIsSorted() === 'asc', true)
+	}
+
 	return (
-		<Collapsible
-			open={isFilterOpened}
-			onOpenChange={setIsFilterOpened}
-			className={cn('grid auto-rows-fr grid-cols-1 items-stretch divide-y divide-border')}>
+		<Div
+			className={cn(
+				'transtion-height grid h-full auto-rows-fr items-stretch',
+				isFilterOpened ? 'grid-rows-2' : 'grid-rows-1'
+			)}>
 			<Div
-				className={cn(
-					'relative line-clamp-1 inline-flex cursor-auto touch-none select-none items-center px-4 py-2',
-					{
-						'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
-						'cursor-col-resize': getIsResizing()
-					}
-				)}
-				onClick={() => {
-					if (columnDef.enableSorting) {
-						toggleSorting(getIsSorted() === 'asc')
-					}
-				}}>
-				<Typography variant='small' className='line-clamp-1 text-inherit'>
-					{header.isPlaceholder ? null : flexRender(columnDef.header, header.getContext())}
-				</Typography>
+				className={cn('relative line-clamp-1 inline-flex h-full cursor-auto select-none items-center px-4', {
+					'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
+					'cursor-col-resize': getIsResizing(),
+					'border-b': isFilterOpened
+				})}
+				onClick={handleToggleSorting}>
+				{header.isPlaceholder ? null : flexRender(columnDef.header, header.getContext())}
 				<SortStatus enableSorting={columnDef.enableSorting} isSorted={getIsSorted()} />
 			</Div>
-			<CollapsibleContent>
-				{columnDef.meta?.filterComponent ?? <ColumnFilter column={header.column} />}
-			</CollapsibleContent>
-		</Collapsible>
+			{isFilterOpened && <ColumnFilter column={header.column} />}
+		</Div>
 	)
 }
 

@@ -1,6 +1,5 @@
 import { cn } from '@/common/utils/cn'
 import { Header } from '@tanstack/react-table'
-import { Div } from '../../@custom/div'
 import { Separator } from '../../@core/separator'
 
 type ColumnResizerProps<TData, TValue> = {

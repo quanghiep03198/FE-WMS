@@ -1,29 +1,25 @@
-import { cn } from '@/common/utils/cn'
 import { Column } from '@tanstack/react-table'
 import { useContext, useMemo } from 'react'
-import { Div, DropdownSelect, Icon, buttonVariants, Tooltip, Separator } from '../..'
-import { TableContext } from '../context/table.context'
-import { ComboboxFilter } from './combobox-filter'
-import { DebouncedInput } from './debounced-input'
 import { useTranslation } from 'react-i18next'
+import { Div, DropdownSelect, Icon } from '../..'
+import { TableContext } from '../context/table.context'
+import { DebouncedInput } from './debounced-input'
+import { NumberRangeFilter } from './number-range-filter'
 
 type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
 }
 
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
-	const { columnFilters, globalFilter } = useContext(TableContext)
 	const { t } = useTranslation()
-
 	const filterType = column.columnDef.filterFn
-	const columnFilterValue = column.getFilterValue()
+	const { hasNoFilter } = useContext(TableContext)
+	const metaFilterValues = column.columnDef.meta?.facetedUniqueValues
 
 	const sortedUniqueValues = useMemo(
 		() => (filterType === 'inNumberRange' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()),
 		[column.getFacetedUniqueValues()]
 	)
-
-	const hasNoFilter = useMemo(() => columnFilters.length === 0 && globalFilter.length === 0, [])
 
 	if (!column.columnDef.enableColumnFilter)
 		return (
@@ -34,63 +30,37 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 
 	switch (filterType) {
 		case 'inNumberRange':
-			return (
-				<Div className='flex items-center'>
-					<DebouncedInput
-						type='number'
-						tabIndex={0}
-						className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-muted-foreground/50 hover:text-foreground'
-						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-						value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
-						onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
-						placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
-					/>
-					<Separator orientation='vertical' className='h-6' />
-					<DebouncedInput
-						type='number'
-						tabIndex={0}
-						className='rounded-none border-none px-3 text-xs shadow-none placeholder:text-muted-foreground/50 hover:text-foreground'
-						min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-						max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-						value={(hasNoFilter ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
-						onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
-						placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
-					/>
-				</Div>
-			)
+			return <NumberRangeFilter column={column} />
 
 		case 'equals':
 			return (
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground/50 ring-0 shadow-none hover:text-foreground focus:border-none ring-0',
+							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground/80 ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
 						tabIndex: 0
 					}}
 					placeholder={t('ns_common:table.search_in_column')}
-					options={sortedUniqueValues
-						.filter((value) => Boolean(value))
-						.map((value: any) => ({
-							label: value,
-							value: value
-						}))}
 					onValueChange={(value) => column.setFilterValue(value)}
+					options={
+						Array.isArray(metaFilterValues)
+							? metaFilterValues
+							: sortedUniqueValues
+									.filter((value) => Boolean(value))
+									.map((value: any) => ({
+										label: value,
+										value: value
+									}))
+					}
 				/>
 			)
 
 		default:
 			return (
-				<ComboboxFilter
-					placeholder='Tìm kiếm trong cột ...'
-					className='h-9 w-full rounded-none border-none px-4 text-xs shadow-none ring-0 ring-offset-0 ring-offset-transparent'
+				<DebouncedInput
+					value={(hasNoFilter ? '' : (column.getFilterValue() as any)) ?? ''}
+					placeholder={t('ns_common:table.search_in_column')}
 					onChange={(value) => column.setFilterValue(value)}
-					options={sortedUniqueValues
-						.filter((value) => Boolean(value))
-						.map((value: any) => ({
-							label: value,
-							value: value
-						}))}
 				/>
 			)
 	}

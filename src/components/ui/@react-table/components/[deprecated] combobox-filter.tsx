@@ -11,8 +11,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	ScrollArea,
-	Typography
+	ScrollArea
 } from '@/components/ui'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -26,7 +25,6 @@ export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '
 	const triggerRef = useRef<typeof Button.prototype>(null)
 	const { t } = useTranslation()
 	const { isScrolling, columnFilters, globalFilter } = useContext(TableContext)
-
 	const hasNoFilter = useMemo(() => columnFilters.length === 0 && globalFilter.length === 0, [])
 
 	const placeholder = t('ns_common:table.search_in_column')
@@ -46,7 +44,7 @@ export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '
 					aria-expanded={open}
 					tabIndex={0}
 					className={cn(
-						'justify-between border-none text-xs text-muted-foreground/50 ring-0 hover:bg-transparent',
+						'justify-between border-none text-xs text-muted-foreground/80 ring-0 hover:bg-transparent',
 						className
 					)}>
 					{value || placeholder}
@@ -55,13 +53,13 @@ export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '
 			</PopoverTrigger>
 			<PopoverContent className='min-w-56 p-0' style={{ width: triggerRef.current?.offsetWidth }} align='start'>
 				<Command>
-					<CommandInput placeholder={placeholder} className='h-9' />
+					<CommandInput placeholder={placeholder} className='h-8 placeholder:text-xs' />
 					<CommandList>
-						<CommandEmpty className='whitespace-nowrap py-6 text-center text-sm text-muted-foreground'>
+						<CommandEmpty className='whitespace-nowrap p-3 text-center text-xs font-medium text-muted-foreground'>
 							{t('ns_common:table.no_match_result')}
 						</CommandEmpty>
-						<ScrollArea className='max-h-64 w-full' onWheel={(e) => e.stopPropagation()}>
-							<CommandGroup className='w-full'>
+						<CommandGroup>
+							<ScrollArea className='max-h-64 w-full' onWheel={(e) => e.stopPropagation()}>
 								{Array.isArray(options) &&
 									options.map((option) => (
 										<CommandItem
@@ -70,6 +68,7 @@ export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '
 											value={option.value}
 											className='w-full'
 											onSelect={(currentValue: (typeof options)[number]['value']) => {
+												console.log(currentValue)
 												setValue(currentValue === value ? '' : currentValue)
 												onChange(currentValue === value ? '' : currentValue)
 												setOpen(false)
@@ -82,8 +81,8 @@ export const ComboboxFilter: React.FC<ComboboxProps> = ({ options, className = '
 											/>
 										</CommandItem>
 									))}
-							</CommandGroup>
-						</ScrollArea>
+							</ScrollArea>
+						</CommandGroup>
 					</CommandList>
 				</Command>
 			</PopoverContent>

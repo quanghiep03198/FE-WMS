@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Input } from '../..'
+import { cn } from '@/common/utils/cn'
 
 type DebouncedInputProps = {
 	value: string | number
@@ -8,24 +9,38 @@ type DebouncedInputProps = {
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
 
 export const DebouncedInput: React.FC<DebouncedInputProps> = ({
-	value: initialValue,
+	value,
 	onChange,
 	debounce = 200,
+	className,
 	...props
 }) => {
-	const [value, setValue] = useState(initialValue)
+	const [_value, setValue] = useState(value)
+
+	console.log(_value)
 
 	useEffect(() => {
-		setValue(initialValue)
-	}, [initialValue])
+		console.log('value', value)
+		setValue(value)
+	}, [value])
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
-			onChange(value)
+			onChange(_value)
 		}, debounce)
 
 		return () => clearTimeout(timeout)
-	}, [value])
+	}, [_value])
 
-	return <Input {...props} value={value} onChange={(e) => setValue(e.target.value)} />
+	return (
+		<Input
+			{...props}
+			value={_value}
+			onChange={(e) => setValue(e.target.value)}
+			className={cn(
+				'border-none shadow-none outline-none ring-0 ring-offset-transparent placeholder:text-xs',
+				className
+			)}
+		/>
+	)
 }

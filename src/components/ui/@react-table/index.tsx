@@ -1,13 +1,9 @@
 import {
-	type ColumnDef,
 	type ColumnFiltersState,
 	type ExpandedState,
 	type GlobalFilterTableState,
 	type PaginationState,
-	type Row,
 	type SortingState,
-	type Table,
-	type TableOptions,
 	getCoreRowModel,
 	getExpandedRowModel,
 	getFacetedRowModel,
@@ -17,8 +13,9 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from '@tanstack/react-table'
-import _ from 'lodash'
-import { forwardRef, memo, useMemo, useState } from 'react'
+import { useDeepCompareEffect } from 'ahooks'
+import { omit } from 'lodash'
+import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, Typography } from '..'
 import TableDataGrid from './components/table'
@@ -26,66 +23,53 @@ import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
+import { type DataTableProps } from './types'
 
-export type PaginationProps<TData> = {
-	hidden?: boolean
-	prefetch?: (params: Record<string, any>) => void
-} & Partial<Omit<Pagination<TData>, 'data'>>
-
-export type ToolbarProps = { hidden?: boolean; ltr?: boolean; slot?: React.ReactNode }
-
-export interface DataTableProps<TData = any, TValue = any> extends Partial<TableOptions<any>> {
-	data: Array<TData>
-	columns: ColumnDef<TData | any, TValue>[]
-	caption?: string
-	loading?: boolean
-	enableColumnResizing?: boolean
-	containerProps?: React.ComponentProps<'div'>
-	toolbarProps?: ToolbarProps
-	paginationProps?: PaginationProps<TData>
-	renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement
-}
-
-function DataTable<TData, TValue>(
-	{
-		data,
-		caption,
-		columns,
-		loading,
-		containerProps,
-		paginationProps = { hidden: false },
-		toolbarProps = { hidden: false },
-		manualPagination = false,
-		manualSorting = false,
-		manualFiltering = false,
-		enableColumnResizing = true,
-		enableRowSelection = false,
-		enableColumnFilters = true,
-		enableSorting = true,
-		enableExpanding = true,
-		enableGlobalFilter = true,
-		globalFilterFn = fuzzyFilter,
-		renderSubComponent,
-		getRowCanExpand,
-		onPaginationChange,
-		...props
-	}: DataTableProps<TData, TValue>,
-	ref: React.ForwardedRef<Table<TData>>
-) {
+function DataTable<TData, TValue>({
+	data,
+	caption,
+	columns,
+	loading,
+	containerProps,
+	paginationProps = { hidden: false },
+	toolbarProps = { hidden: false },
+	manualPagination = false,
+	manualSorting = false,
+	manualFiltering = false,
+	enableColumnResizing = true,
+	enableRowSelection = false,
+	enableColumnFilters = true,
+	enableSorting = true,
+	enableExpanding = true,
+	enableGlobalFilter = true,
+	globalFilterFn = fuzzyFilter,
+	sorting,
+	columnFilters,
+	globalFilter,
+	onGlobalFilterChange,
+	onColumnFiltersChange,
+	renderSubComponent,
+	getRowCanExpand,
+	onPaginationChange,
+	onGetInstance,
+	onSortingChange,
+	...props
+}: DataTableProps<TData, TValue>) {
 	const [pagination, setPagination] = useState<PaginationState>(() => ({
 		pageIndex: 0,
 		pageSize: 10
 	}))
-	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-	const [sorting, setSorting] = useState<SortingState>([])
-	const [globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
+	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+	const [_sorting, setSorting] = useState<SortingState>([])
+	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
 	const [isScrolling, setIsScrolling] = useState(false)
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
-	const hasNoFilter = useMemo(
-		() => [columnFilters].length === 0 && globalFilter.length === 0,
-		[globalFilter, columnFilters]
-	)
+
+	const hasNoFilter = useMemo(() => {
+		if (manualFiltering) return columnFilters?.length === 0
+		return _columnFilters.length === 0 && _globalFilter.length === 0
+	}, [_globalFilter, _columnFilters, columnFilters])
 
 	const { t } = useTranslation()
 
@@ -107,9 +91,9 @@ function DataTable<TData, TValue>(
 			}
 		},
 		state: {
-			sorting,
-			columnFilters,
-			globalFilter,
+			sorting: manualSorting ? sorting : _sorting,
+			columnFilters: manualFiltering ? columnFilters : _columnFilters,
+			globalFilter: manualFiltering ? globalFilter : _globalFilter,
 			expanded,
 			pagination: manualPagination
 				? {
@@ -130,26 +114,28 @@ function DataTable<TData, TValue>(
 		columnResizeMode: 'onChange',
 		debugAll: false,
 		onPaginationChange: manualPagination ? onPaginationChange : setPagination,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		onGlobalFilterChange: setGlobalFilter,
+		onSortingChange: manualSorting ? onSortingChange : setSorting,
+		onColumnFiltersChange: manualFiltering ? onColumnFiltersChange : setColumnFilters,
+		onGlobalFilterChange: manualFiltering ? onGlobalFilterChange : setGlobalFilter,
 		onExpandedChange: setExpanded,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getExpandedRowModel: getExpandedRowModel(),
-		getRowCanExpand,
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
+		getRowCanExpand,
 		...props
 		// getSubRows: (row) => row.subRows,
-	} as TableOptions<TData>)
+	})
 
 	const rowSelectionCount =
 		String(table.getFilteredSelectedRowModel().rows.length) + '/' + String(table.getFilteredRowModel().rows.length)
 
-	if (ref && typeof ref !== 'function') ref.current = table
+	useDeepCompareEffect(() => {
+		if (typeof onGetInstance === 'function') onGetInstance(table)
+	}, [onGetInstance])
 
 	return (
 		<TableContext.Provider
@@ -158,8 +144,10 @@ function DataTable<TData, TValue>(
 				hasNoFilter,
 				isFilterOpened,
 				sorting,
-				columnFilters,
-				globalFilter,
+				columnFilters: _columnFilters,
+				globalFilter: _globalFilter,
+				enableGlobalFilter,
+				manualSorting,
 				setIsScrolling,
 				setIsFilterOpened,
 				setColumnFilters,
@@ -189,9 +177,10 @@ function DataTable<TData, TValue>(
 					{!paginationProps?.hidden && (
 						<TablePagination
 							table={table}
+							loading={loading}
 							onPaginationChange={onPaginationChange}
 							manualPagination={manualPagination}
-							{..._.omit(paginationProps, ['hidden'])}
+							{...omit(paginationProps, ['hidden'])}
 						/>
 					)}
 				</Div>
@@ -200,4 +189,4 @@ function DataTable<TData, TValue>(
 	)
 }
 
-export default memo(forwardRef(DataTable))
+export default memo(DataTable)

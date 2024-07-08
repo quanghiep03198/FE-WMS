@@ -1,8 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { PaginationState, Table } from '@tanstack/react-table'
-import React, { useCallback, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PaginationProps } from '..'
+
 import {
 	Button,
 	Div,
@@ -16,15 +16,18 @@ import {
 	Separator,
 	Tooltip
 } from '../..'
+import { type PaginationBaseProps } from '../types'
 
 type DataTablePaginationProps<TData> = {
 	table: Table<TData>
 	manualPagination?: boolean
+	loading: boolean
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
-} & PaginationProps<TData>
+} & PaginationBaseProps<TData>
 
 export default function TablePagination<TData>({
 	table,
+	loading,
 	manualPagination,
 	hasNextPage = false,
 	hasPrevPage = false,
@@ -45,8 +48,6 @@ export default function TablePagination<TData>({
 	const pageSize = manualPagination ? limit : table.getState().pagination.pageSize
 	const pageIndex = manualPagination ? page : table.getState().pagination.pageIndex + 1
 	const pageIndexContext = String(pageIndex) + '/' + String(pageCount)
-
-	console.log('page count :>>', pageCount)
 
 	const changePageSize = (value: number) => {
 		if (value > totalDocs) {
@@ -100,7 +101,7 @@ export default function TablePagination<TData>({
 						<SelectValue placeholder={pageSize} />
 					</SelectTrigger>
 					<SelectContent>
-						{[10, 20, 50, 100].map((pageSize) => (
+						{[10, 20, 30, 40, 50].map((pageSize) => (
 							<SelectItem
 								key={pageSize}
 								value={String(pageSize)}
@@ -124,9 +125,9 @@ export default function TablePagination<TData>({
 				<Tooltip message={t('pagination.first_page', { defaultValue: 'First page' })}>
 					<Button
 						role='button'
-						aria-disabled={!canPreviousPage}
+						aria-disabled={!canPreviousPage || loading}
 						aria-label='First page'
-						disabled={!canPreviousPage}
+						disabled={!canPreviousPage || loading}
 						variant='outline'
 						size='icon'
 						onClick={goToFirstPage}
@@ -138,9 +139,9 @@ export default function TablePagination<TData>({
 				<Tooltip message={t('pagination.previous_page', { defaultValue: 'Previous page' })}>
 					<Button
 						role='button'
-						aria-disabled={!canPreviousPage}
+						aria-disabled={!canPreviousPage || loading}
 						aria-label='Previous page'
-						disabled={!canPreviousPage}
+						disabled={!canPreviousPage || loading}
 						variant='outline'
 						size='icon'
 						onClick={table.previousPage}
@@ -152,14 +153,14 @@ export default function TablePagination<TData>({
 				<Tooltip message={t('pagination.next_page', { defaultValue: 'Next page' })}>
 					<Button
 						role='button'
-						aria-disabled={!canNextPage}
+						aria-disabled={!canNextPage || loading}
 						aria-label='Next page'
-						disabled={!canNextPage}
+						disabled={!canNextPage || loading}
 						variant='outline'
 						size='icon'
 						onClick={table.nextPage}
-						onMouseOver={handlePrefetchNextPage}
-						onMouseOut={() => {
+						onMouseEnter={handlePrefetchNextPage}
+						onMouseLeave={() => {
 							clearInterval(timeoutRef.current)
 							prefetchCountRef.current = 0
 						}}
@@ -170,9 +171,9 @@ export default function TablePagination<TData>({
 				<Tooltip message={t('pagination.last_page', { defaultValue: 'Last page' })}>
 					<Button
 						role='button'
-						aria-disabled={!canNextPage}
+						aria-disabled={!canNextPage || loading}
 						aria-label='Last page'
-						disabled={!canNextPage}
+						disabled={!canNextPage || loading}
 						variant='outline'
 						size='icon'
 						onClick={goToLastPage}

@@ -1,7 +1,7 @@
 import { IWarehouse } from '@/common/types/entities'
 import { i18n } from '@/i18n'
 import { warehouses } from '@/mocks/warehouse.data'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { I18nextProvider } from 'react-i18next'
@@ -23,21 +23,19 @@ const meta = {
 		enableColumnFilters: { description: 'Cho phép tìm kiếm dữ liệu theo các cột', defaultValue: false },
 		enableColumnResizing: { description: 'Cho phép tùy chỉnh độ rộng các cột', defaultValue: false },
 		enableSorting: { description: 'Cho phép sort dữ liệu trên bảng' },
+		renderSubComponent: { description: 'Render sub-row component' },
 		manualPagination: {
 			description: 'Xác định sử dụng phân trang mặc định hay không',
-			defaultValue: true,
-			control: 'boolean'
+			control: 'boolean',
+			defaultValue: true
 		},
 		paginationProps: {
 			description: 'State phân trang thủ công, thường sử dụng với server side pagination.',
 			defaultValue: undefined
 		}
 	},
-	// Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
 	args: { data: [], columns: [], loading: false, enableColumnFilters: true, enableColumnResizing: true }
 } satisfies Meta<typeof DataTable>
-
-type Story = StoryObj<typeof meta>
 
 export default meta
 

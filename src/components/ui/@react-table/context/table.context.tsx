@@ -8,6 +8,8 @@ type TableContext = {
 	sorting: SortingState
 	isScrolling: boolean
 	isFilterOpened: boolean
+	enableGlobalFilter: boolean
+	manualSorting: boolean
 	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>
 	setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
 	setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>

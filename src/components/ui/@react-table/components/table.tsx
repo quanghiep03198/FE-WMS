@@ -1,7 +1,7 @@
 import { flexRender, type Row, type Table as TTable } from '@tanstack/react-table'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
 import { Fragment, WheelEventHandler, useCallback, useContext, useRef } from 'react'
-import { type DataTableProps } from '..'
+import { type DataTableProps } from '../types'
 import { Div, Icon, Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../..'
 import { TableContext } from '../context/table.context'
 import ColumnResizer from './column-resizer'
@@ -15,7 +15,7 @@ interface TableProps<TData, TValue>
 	table: TTable<TData>
 }
 
-export const ESTIMATE_SIZE = 52
+export const ESTIMATE_SIZE = 36
 
 export default function TableDataGrid<TData, TValue>({
 	containerProps = { style: { height: screen.height / 2 } },
@@ -34,7 +34,7 @@ export default function TableDataGrid<TData, TValue>({
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
-		overscan: table.getState().pagination.pageSize,
+		overscan: table.getCanSomeRowsExpand() ? table.getExpandedRowModel().flatRows.length : 5,
 		getScrollElement: () => containerRef.current,
 		estimateSize: useCallback(() => ESTIMATE_SIZE, []),
 		measureElement:
@@ -92,7 +92,7 @@ export default function TableDataGrid<TData, TValue>({
 										key={header.id}
 										colSpan={header.colSpan}
 										data-sticky={header.column.columnDef?.meta?.sticky}
-										className='group relative px-0'
+										className='group relative p-0'
 										style={{ width: header.getSize() }}>
 										<TableCellHead table={table} header={header} />
 										{index === headerGroup.headers.length - 1 ? null : header.column.getCanResize() ? (
@@ -113,21 +113,20 @@ export default function TableDataGrid<TData, TValue>({
 										<TableCell colSpan={colSpan} style={{ height: before }} />
 									</TableRow>
 								)}
-
 								{virtualItems.map((virtualRow) => {
 									const row = rows[virtualRow.index] as Row<TData>
 									return (
 										<Fragment key={row.id}>
 											<TableRow
 												data-index={virtualRow.index}
-												// ref={(node) => virtualizer.measureElement(node)}
-											>
+												ref={(node) => virtualizer.measureElement(node)}>
 												{row.getVisibleCells().map((cell) => (
 													<TableCell
 														key={cell.id}
 														data-sticky={cell.column.columnDef?.meta?.sticky}
 														data-state={row.getIsSelected() && 'selected'}
-														style={{ width: cell.column.getSize(), height: virtualRow.size }}>
+														style={{ width: cell.column.getSize(), height: virtualRow.size }}
+														className='py-0'>
 														<Div className='line-clamp-1'>
 															{flexRender(cell.column.columnDef.cell, cell.getContext())}
 														</Div>
@@ -145,7 +144,6 @@ export default function TableDataGrid<TData, TValue>({
 										</Fragment>
 									)
 								})}
-
 								{after > 0 && (
 									<TableRow>
 										<TableCell colSpan={colSpan} style={{ height: after }} />
