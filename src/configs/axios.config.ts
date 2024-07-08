@@ -1,9 +1,9 @@
-import env from '@/common/utils/env'
-import { AuthService } from '@/services/auth.service'
-import { StorageService } from '@/services/storage.service'
 import axios, { AxiosInstance, HttpStatusCode } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
+import env from '@/common/utils/env'
+import { AuthService } from '@/services/auth.service'
+import { StorageService } from '@/services/storage.service'
 
 let retry = 0
 const controller = new AbortController()
@@ -14,8 +14,8 @@ const axiosInstance: AxiosInstance = axios.create({
 	timeout: +env('VITE_REQUEST_TIMEOUT', 5000),
 	paramsSerializer: (params) => {
 		return qs.stringify(params, {
-			arrayFormat: 'brackets',
-			skipNulls: true
+			skipNulls: true,
+			format: 'RFC1738'
 		})
 	}
 })
