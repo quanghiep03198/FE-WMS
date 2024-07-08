@@ -4,7 +4,7 @@ import useTheme from '@/common/hooks/use-theme'
 import {
 	Button,
 	Div,
-	Form,
+	Form as FormProvider,
 	FormControl,
 	FormDescription,
 	FormField,
@@ -23,6 +23,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 
 export const Route = createLazyFileRoute('/(preferences)/_layout/appearance-settings/')({
 	component: Page
@@ -59,8 +60,8 @@ function Page() {
 				</Typography>
 			</Div>
 			<Separator />
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(handleSaveSettings)} className='max-w-sm space-y-8'>
+			<FormProvider {...form}>
+				<Form onSubmit={form.handleSubmit(handleSaveSettings)} className=''>
 					<SelectFieldControl name='font' label='Font' control={form.control} options={fontOptions} />
 					<SelectFieldControl
 						name='language'
@@ -85,51 +86,51 @@ function Page() {
 									defaultValue={field.value}
 									className='grid max-w-md grid-cols-2 gap-8 pt-2'>
 									<FormItem>
-										<FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
+										<FormLabel className='[&:has([data-state=checked])>Div]:border-primary'>
 											<FormControl>
 												<RadioGroupItem value='light' className='sr-only' />
 											</FormControl>
-											<div className='items-center rounded-md border-2 border-muted p-1 hover:border-accent'>
-												<div className='space-y-2 rounded-sm bg-neutral-200 p-2'>
-													<div className='space-y-2 rounded-md bg-white p-2 shadow-sm'>
-														<div className='h-2 w-[80px] rounded-lg bg-neutral-200' />
-														<div className='h-2 w-[100px] rounded-lg bg-neutral-200' />
-													</div>
-													<div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm'>
-														<div className='h-4 w-4 rounded-full bg-neutral-200' />
-														<div className='h-2 w-[100px] rounded-lg bg-neutral-200' />
-													</div>
-													<div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm'>
-														<div className='h-4 w-4 rounded-full bg-neutral-200' />
-														<div className='h-2 w-[100px] rounded-lg bg-neutral-200' />
-													</div>
-												</div>
-											</div>
-											<span className='block w-full p-2 text-center font-normal'>Light</span>
+											<Div className='items-center rounded-md border-2 border-muted p-1 hover:border-accent'>
+												<Div className='space-y-2 rounded-sm bg-neutral-200 p-2'>
+													<Div className='space-y-2 rounded-md bg-white p-2 shadow-sm'>
+														<Div className='h-2 w-[80px] rounded-lg bg-neutral-200' />
+														<Div className='h-2 w-[100px] rounded-lg bg-neutral-200' />
+													</Div>
+													<Div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm'>
+														<Div className='h-4 w-4 rounded-full bg-neutral-200' />
+														<Div className='h-2 w-[100px] rounded-lg bg-neutral-200' />
+													</Div>
+													<Div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm'>
+														<Div className='h-4 w-4 rounded-full bg-neutral-200' />
+														<Div className='h-2 w-[100px] rounded-lg bg-neutral-200' />
+													</Div>
+												</Div>
+											</Div>
+											<Typography className='block w-full p-2 text-center font-normal'>Light</Typography>
 										</FormLabel>
 									</FormItem>
 									<FormItem>
-										<FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
+										<FormLabel className='[&:has([data-state=checked])>Div]:border-primary'>
 											<FormControl>
 												<RadioGroupItem value='dark' className='sr-only' />
 											</FormControl>
-											<div className='items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground'>
-												<div className='space-y-2 rounded-sm bg-neutral-950 p-2'>
-													<div className='space-y-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
-														<div className='h-2 w-[80px] rounded-lg bg-neutral-400' />
-														<div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
-													</div>
-													<div className='flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
-														<div className='h-4 w-4 rounded-full bg-neutral-400' />
-														<div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
-													</div>
-													<div className='flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
-														<div className='h-4 w-4 rounded-full bg-neutral-400' />
-														<div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
-													</div>
-												</div>
-											</div>
-											<span className='block w-full p-2 text-center font-normal'>Dark</span>
+											<Div className='items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground'>
+												<Div className='space-y-2 rounded-sm bg-neutral-950 p-2'>
+													<Div className='space-y-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
+														<Div className='h-2 w-[80px] rounded-lg bg-neutral-400' />
+														<Div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
+													</Div>
+													<Div className='flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
+														<Div className='h-4 w-4 rounded-full bg-neutral-400' />
+														<Div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
+													</Div>
+													<Div className='flex items-center space-x-2 rounded-md bg-neutral-800 p-2 shadow-sm'>
+														<Div className='h-4 w-4 rounded-full bg-neutral-400' />
+														<Div className='h-2 w-[100px] rounded-lg bg-neutral-400' />
+													</Div>
+												</Div>
+											</Div>
+											<Typography className='block w-full p-2 text-center font-normal'>Dark</Typography>
 										</FormLabel>
 									</FormItem>
 								</RadioGroup>
@@ -138,8 +139,10 @@ function Page() {
 					/>
 
 					<Button type='submit'>Update preferences</Button>
-				</form>
-			</Form>
+				</Form>
+			</FormProvider>
 		</Div>
 	)
 }
+
+const Form = tw.form`max-w-sm space-y-8`

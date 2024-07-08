@@ -35,7 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 				<Div
 					as='nav'
 					role='menu'
-					className='flex items-center justify-between rounded border border-border bg-background px-3 py-2 shadow'>
+					className='flex items-center justify-between rounded border border-border bg-background px-3 py-2'>
 					<Div role='group' className='flex items-center gap-x-4'>
 						<Tooltip
 							message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}

@@ -1,10 +1,11 @@
 import { Div, DivProps } from '@/components/ui'
 import tw from 'tailwind-styled-components'
 import Heading from './-heading'
-import Sidebar from './-navbar'
+import Navbar from './-navbar'
 
 const Container = tw(Div)<DivProps>`
-mx-auto h-screen container overflow-y-auto scrollbar max-w-full border-separate border-spacing-0`
+	mx-auto h-screen container overflow-y-auto scrollbar max-w-full border-separate border-spacing-0
+`
 
 const MainSection = tw(Div)<DivProps>`h-full w-full flex-1 xxl:max-w-8xl max-w-7xl mx-auto`
 
@@ -14,6 +15,6 @@ export default {
 	Container,
 	MainSection,
 	OutletWrapper,
-	Sidebar,
+	Navbar,
 	Heading
 }

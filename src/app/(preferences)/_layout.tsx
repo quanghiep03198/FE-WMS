@@ -37,7 +37,7 @@ function Layout() {
 			<LayoutComposition.Container>
 				<LayoutComposition.Heading />
 				<LayoutComposition.MainSection as='section'>
-					<LayoutComposition.Sidebar />
+					<LayoutComposition.Navbar />
 					<LayoutComposition.OutletWrapper>
 						<Outlet />
 					</LayoutComposition.OutletWrapper>

@@ -4,13 +4,13 @@ import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
-const Sidebar: React.FC = () => {
+const Navbar: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 
 	return (
 		<Div
 			as='nav'
-			className='z-20 flex gap-x-1 gap-y-2 bg-background/90 py-6 xl:absolute xl:top-40 xl:w-80 xl:flex-col'>
+			className='z-20 flex gap-x-1 gap-y-2 overflow-auto bg-background/90 py-6 scrollbar-none xl:absolute xl:top-40 xl:w-80 xl:flex-col'>
 			{navigationConfig
 				.filter((item) => item.type === 'preference')
 				.map((item) => (
@@ -28,4 +28,4 @@ const Sidebar: React.FC = () => {
 	)
 }
 
-export default Sidebar
+export default Navbar
