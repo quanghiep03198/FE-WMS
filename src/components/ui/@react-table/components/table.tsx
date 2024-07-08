@@ -7,6 +7,7 @@ import { TableContext } from '../context/table.context'
 import ColumnResizer from './column-resizer'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
+import { TableUtilities } from '../utils/table.util'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
@@ -93,7 +94,14 @@ export default function TableDataGrid<TData, TValue>({
 										colSpan={header.colSpan}
 										data-sticky={header.column.columnDef?.meta?.sticky}
 										className='group relative p-0'
-										style={{ width: header.getSize() }}>
+										style={{
+											width: header.getSize(),
+											...TableUtilities.getStickyOffsetPosition(
+												header.column.columnDef?.meta?.sticky,
+												header.column.getIndex(),
+												table
+											)
+										}}>
 										<TableCellHead table={table} header={header} />
 										{index === headerGroup.headers.length - 1 ? null : header.column.getCanResize() ? (
 											<ColumnResizer header={header} />
@@ -125,7 +133,15 @@ export default function TableDataGrid<TData, TValue>({
 														key={cell.id}
 														data-sticky={cell.column.columnDef?.meta?.sticky}
 														data-state={row.getIsSelected() && 'selected'}
-														style={{ width: cell.column.getSize(), height: virtualRow.size }}
+														style={{
+															width: cell.column.getSize(),
+															height: virtualRow.size,
+															...TableUtilities.getStickyOffsetPosition(
+																cell.column.columnDef?.meta?.sticky,
+																cell.column.getIndex(),
+																table
+															)
+														}}
 														className='py-0'>
 														<Div className='line-clamp-1'>
 															{flexRender(cell.column.columnDef.cell, cell.getContext())}

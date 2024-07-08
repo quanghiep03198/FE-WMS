@@ -1,4 +1,5 @@
-import { ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import { Cell, ColumnFiltersState, ColumnMeta, SortingState, Table } from '@tanstack/react-table'
+import React from 'react'
 
 export class TableUtilities {
 	/**
@@ -25,5 +26,36 @@ export class TableUtilities {
 			accumulator[currentValue?.id] = currentValue.desc ? 'desc' : 'asc'
 			return accumulator
 		}, {})
+	}
+
+	public static getStickyOffsetPosition(
+		columnStickyAlignment: ColumnMeta<any, any>['sticky'],
+		columnIndex: number,
+		instanceTable: Table<any>
+	) {
+		switch (columnStickyAlignment) {
+			case 'left': {
+				const previousColumns = instanceTable
+					.getAllFlatColumns()
+					.filter((column) => column.getIndex() < columnIndex)
+				if (previousColumns.length === 0) return { right: 0 }
+				return {
+					left: previousColumns.reduce((acc, curr) => {
+						return acc + curr.getSize()
+					}, 0)
+				}
+			}
+			case 'right': {
+				const nextColumns = instanceTable.getAllFlatColumns().filter((column) => column.getIndex() > columnIndex)
+				if (nextColumns.length === 0) return { right: 0 }
+				return {
+					right: nextColumns.reduce((acc, curr) => {
+						return acc + curr.getSize()
+					}, 0)
+				}
+			}
+			default:
+				return undefined
+		}
 	}
 }
