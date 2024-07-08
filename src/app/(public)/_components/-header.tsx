@@ -17,7 +17,7 @@ import {
 	Tooltip,
 	buttonVariants
 } from '@/components/ui'
-import { Link, useRouteContext } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 

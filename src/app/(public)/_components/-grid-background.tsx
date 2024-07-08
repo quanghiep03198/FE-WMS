@@ -1,7 +1,7 @@
 const GridBackground: React.FunctionComponent = () => {
 	return (
 		<svg
-			className='absolute inset-0 z-0 h-full w-full stroke-border/50 [mask-image:radial-gradient(100%_100%_at_center_center,hsl(var(--foreground)),transparent)]'
+			className='fixed inset-0 z-0 h-full w-full stroke-border/50 [mask-image:radial-gradient(100%_100%_at_center_center,hsl(var(--foreground)),transparent)]'
 			aria-hidden='true'>
 			<defs>
 				<pattern

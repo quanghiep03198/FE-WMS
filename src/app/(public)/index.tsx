@@ -25,7 +25,6 @@ export default function Page() {
 			/>
 			<Container>
 				<Header />
-				<GridBackground />
 				<Main>
 					<CTASection />
 					<FeaturesSection />
@@ -34,13 +33,14 @@ export default function Page() {
 				</Main>
 				<Footer />
 			</Container>
+			<GridBackground />
 		</Fragment>
 	)
 }
 
 const Container = tw(
 	Div
-)<DivProps>`relative h-screen overflow-y-auto scroll-m-2 scroll-smooth bg-background text-foreground antialiased scrollbar`
+)<DivProps>`relative h-screen z-10 overflow-y-auto scroll-m-2 scroll-smooth text-foreground antialiased scrollbar`
 const Main = tw(Div)<DivProps>`mb-20 space-y-64`
 
 export function useScrollIntoView({
