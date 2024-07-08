@@ -1,18 +1,19 @@
-import useQueryParams from '@/common/hooks/use-query-params'
-import { IInOutBoundOrder } from '@/common/types/entities'
-import { Button, DataTable, Div, Icon, DivProps, Typography, TypographyProps, Badge } from '@/components/ui'
-import { IOService } from '@/services/inoutbound.service'
-import { keepPreviousData, queryOptions, usePrefetchQuery, useQuery, useQueryClient } from '@tanstack/react-query'
-import { PaginationState, createColumnHelper } from '@tanstack/react-table'
-import React, { useEffect, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
+import { AxiosRequestConfig } from 'axios'
+import { isEmpty, omit } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import _ from 'lodash'
-import tw from 'tailwind-styled-components'
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
+import { PaginationState, SortingState, Table, createColumnHelper } from '@tanstack/react-table'
+import { IOSubOrderRow } from './-io-order-detail'
 import { ProductionApproveStatus } from '@/common/constants/enums'
+import { IInOutBoundOrder } from '@/common/types/entities'
+import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import { TableUtilities } from '@/components/ui/@react-table/utils/table.util'
+import { IOService } from '@/services/inoutbound.service'
 
-const IO_PRODUCTION_PROVIDE_TAG = 'production' as const
+const IO_PRODUCTION_PROVIDE_TAG = 'PRODUCTION' as const
 
-const getIOProductionQuery = (searchParams: Record<string, any>) =>
+const getProductionQuery = (searchParams: Record<string, any>) =>
 	queryOptions({
 		queryKey: [IO_PRODUCTION_PROVIDE_TAG, searchParams],
 		queryFn: () => IOService.getProduction(searchParams),
@@ -20,49 +21,68 @@ const getIOProductionQuery = (searchParams: Record<string, any>) =>
 		select: (response) => response.metadata
 	})
 
-const IOOrderList: React.FC = () => {
+const InOutBoundOrderList: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IInOutBoundOrder>()
 	const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
+	const [columnFilters, setColumnFilters] = useState<AxiosRequestConfig['params']>([])
+	const [tableInstance, setTableInstance] = useState<Table<any>>()
+	const [sorting, setSorting] = useState<SortingState>([])
 	const queryClient = useQueryClient()
 
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor('id', {
 				id: 'row-expander',
-				header: null,
-				size: 56,
+				header: ({ table }) => (
+					<Tooltip
+						message={table.getIsAllRowsExpanded() ? t('ns_common:actions.close') : t('ns_common:actions.open')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ side: 'right', sideOffset: 0, alignOffset: 0 }}>
+						<button
+							className='flex w-full items-center justify-center'
+							role='button'
+							onClick={() => table.toggleAllRowsExpanded()}>
+							<Icon name={table.getIsAllRowsExpanded() ? 'FoldVertical' : 'UnfoldVertical'} />
+						</button>
+					</Tooltip>
+				),
+				meta: {
+					sticky: 'left'
+				},
+				size: 64,
+				enableSorting: false,
+				enableHiding: false,
 				enableResizing: false,
 				cell: ({ row }) => {
 					return row.getCanExpand() ? (
-						<button onClick={row.getToggleExpandedHandler()}>
+						<button className='flex w-full items-center justify-center' onClick={row.getToggleExpandedHandler()}>
 							{row.getIsExpanded() ? <Icon name='ChevronDown' /> : <Icon name='ChevronRight' />}
 						</button>
 					) : null
 				}
 			}),
 			columnHelper.accessor('sno_no', {
-				header: t('ns_inoutbound:fields.sno_no')
+				header: t('ns_inoutbound:fields.sno_no'),
+				enableColumnFilter: true,
+				enableSorting: true
 			}),
 			columnHelper.accessor('status_approve', {
 				header: t('ns_inoutbound:fields.status_approve'),
-				size: 64,
+				size: 160,
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value === ProductionApproveStatus.REVIEWED ? (
 						<Div className='flex items-center justify-center'>
-							<Icon
-								name='Check'
-								// fill='hsl(var(--primary))'
-								stroke='hsl(var(--primary))'
-								size={20}
-							/>
+							<Icon name='Check' stroke='hsl(var(--primary))' size={20} />
 						</Div>
 					) : null
 				}
 			}),
 			columnHelper.accessor('sno_date', {
-				header: t('ns_inoutbound:fields.sno_date')
+				header: t('ns_inoutbound:fields.sno_date'),
+				enableSorting: true,
+				sortDescFirst: true
 			}),
 			columnHelper.accessor('ship_order', {
 				header: t('ns_inoutbound:fields.ship_order')
@@ -73,6 +93,9 @@ const IOOrderList: React.FC = () => {
 			columnHelper.accessor('employee_name', {
 				header: t('ns_inoutbound:fields.employee_name')
 			}),
+			columnHelper.accessor('updated', {
+				header: t('ns_common:common_fields.updated_at')
+			}),
 			columnHelper.accessor('remark', {
 				header: t('ns_common:common_fields.remark')
 			})
@@ -80,112 +103,82 @@ const IOOrderList: React.FC = () => {
 		[i18n.language]
 	)
 
-	const { data, isLoading } = useQuery(
-		getIOProductionQuery({ page: pagination.pageIndex + 1, limit: pagination.pageSize })
+	const {
+		data: response,
+		isLoading,
+		refetch
+	} = useQuery(
+		getProductionQuery({
+			page: pagination.pageIndex + 1,
+			limit: pagination.pageSize,
+			search: TableUtilities.getColumnFiltersObject(columnFilters),
+			sort: TableUtilities.getColumnSortingObject(sorting)
+		})
 	)
 
-	const prefetch = (params: { page: number; limit: number }) => queryClient.prefetchQuery(getIOProductionQuery(params))
+	const prefetch = (params: { page: number; limit: number }) =>
+		queryClient.prefetchQuery(
+			getProductionQuery({
+				...params,
+				search: TableUtilities.getColumnFiltersObject(columnFilters),
+				sort: TableUtilities.getColumnSortingObject(sorting)
+			})
+		)
 
 	return (
 		<DataTable
-			data={data?.data}
+			caption='The list of production order'
+			data={response?.data}
 			loading={isLoading}
 			columns={columns}
+			containerProps={{ style: { height: screen.height / 2 } }}
 			manualPagination={true}
-			onPaginationChange={setPagination}
+			manualSorting={true}
+			manualFiltering={true}
+			enableExpanding={true}
+			enableColumnFilters={true}
+			enableGlobalFilter={false}
 			getRowCanExpand={() => true}
+			sorting={sorting}
+			columnFilters={columnFilters}
+			onColumnFiltersChange={setColumnFilters}
+			onSortingChange={setSorting}
+			onPaginationChange={setPagination}
+			onGetInstance={setTableInstance}
 			renderSubComponent={() => <IOSubOrderRow data={{}} />}
-			paginationProps={{ ..._.omit(data, ['data']), prefetch }}
+			paginationProps={{ prefetch, ...omit(response, ['data']) }}
+			toolbarProps={{
+				slot: () => (
+					<Fragment>
+						{Object.values(columnFilters).some((value) => !isEmpty(value)) && (
+							<Tooltip message={t('ns_common:actions.clear_filter')}>
+								<Button
+									variant='destructive'
+									size='icon'
+									onClick={() => {
+										tableInstance.resetColumnFilters()
+									}}>
+									<Icon name='X' />
+								</Button>
+							</Tooltip>
+						)}
+						<Tooltip message={t('ns_common:actions.reload')}>
+							<Button
+								variant='outline'
+								size='icon'
+								onClick={() => {
+									tableInstance.resetColumnFilters()
+									tableInstance.resetSorting()
+									refetch()
+								}}>
+								<Icon name='RotateCw' />
+							</Button>
+						</Tooltip>
+					</Fragment>
+				)
+			}}
 		/>
 	)
 }
 
-const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
-	const { t } = useTranslation()
-
-	return (
-		<List role='table'>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.sno_no')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.container_order_code')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.order_qty')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.order_qty')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.conversion_rate')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.required_date')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_inoutbound:fields.uninspected_qty')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs'>{t('ns_inoutbound:fields.inspected_qty')}</Typography>
-				<Badge variant='secondary'>-</Badge>
-			</ListItem>
-			<ListItem role='row'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_warehouse:fields.type_warehouse')}
-				</Typography>
-				<Badge variant='secondary' role='cell'>
-					-
-				</Badge>
-			</ListItem>
-			<ListItem role='row' className='col-span-full grid-cols-[1fr_5fr] gap-x-0'>
-				<Typography className='whitespace-nowrap text-xs' role='cell'>
-					{t('ns_common:common_fields.remark')}
-				</Typography>
-				<Div className='h-24 rounded-lg border p-2' role='cell'>
-					-
-				</Div>
-			</ListItem>
-		</List>
-	)
-}
-
-const List = tw(Div)<DivProps>`grid grid-cols-3 w-full gap-y-2 gap-x-4 overflow-auto scrollbar-none`
-const ListItem = tw(Div)<DivProps>`grid grid-cols-2 whitespace-nowrap gap-x-4`
-
-export default IOOrderList
+export default InOutBoundOrderList

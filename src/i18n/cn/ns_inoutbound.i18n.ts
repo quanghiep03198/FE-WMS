@@ -38,6 +38,9 @@ export default {
 		ship_order: '裝貨號碼',
 		dept_name: '更新部門',
 		employee_name: '建檔人姓名',
+		sno_total: '數量合計',
+		sno_size: '肥度',
+		sno_type: '左右',
 		// product inspection details
 		container_order_code: '出櫃單號', //mã đơn xuất công
 		order_qty: '採購數量', //số lượng đơn đặt hàng

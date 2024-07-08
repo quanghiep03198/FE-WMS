@@ -37,6 +37,9 @@ export default {
 		ship_order: 'Mã đóng hàng',
 		dept_name: 'Bộ phận cập nhật',
 		employee_name: 'Nhân viên tạo đơn',
+		sno_total: 'Tổng số đôi',
+		sno_size: 'Kích cỡ',
+		sno_type: 'Loại',
 		// product inspection details
 		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
 		order_qty: 'Số Lượng Đơn Đặt Hàng', // Order Quantity
