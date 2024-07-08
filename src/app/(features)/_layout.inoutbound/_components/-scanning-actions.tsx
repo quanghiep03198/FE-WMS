@@ -2,7 +2,6 @@ import {
 	Button,
 	Div,
 	Icon,
-	Label,
 	Select,
 	SelectContent,
 	SelectGroup,
