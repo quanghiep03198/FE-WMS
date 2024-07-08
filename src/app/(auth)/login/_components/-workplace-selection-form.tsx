@@ -1,4 +1,4 @@
-import { useAuth, useAuthStore } from '@/common/hooks/use-auth'
+import { useAuthStore } from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { CompanyService } from '@/services/company.service'

@@ -1,3 +1,13 @@
+import { useCallback, useContext, useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
+import { useLocalStorageState } from 'ahooks'
+import { isEmpty, isNil } from 'lodash'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 import { USER_PROVIDE_TAG, useGetUserProfile } from '@/app/_composables/-user.composable'
 import { useAuthStore } from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
@@ -5,16 +15,6 @@ import { StepContext } from '@/components/ui/@custom/step'
 import { AppConfigs } from '@/configs/app.config'
 import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
 import { AuthService } from '@/services/auth.service'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
-import { useLocalStorageState } from 'ahooks'
-import _ from 'lodash'
-import React, { useCallback, useContext, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import tw from 'tailwind-styled-components'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
@@ -57,7 +57,7 @@ const LoginForm: React.FC = () => {
 
 	const handlePersistAccount = useCallback(
 		(checked: boolean) => {
-			const persistValue = checked && !_.isEmpty(username) ? username : undefined
+			const persistValue = checked && !isEmpty(username) ? username : undefined
 			setPersistedAccount(persistValue)
 		},
 		[username]
@@ -65,10 +65,10 @@ const LoginForm: React.FC = () => {
 
 	useEffect(() => {
 		// If user's profile is retrieved successfully, then go to next step
-		if ([user, accessToken].every((item) => !_.isNil(item))) {
+		if ([user, accessToken].every((item) => !isNil(item))) {
 			setUserProfile(user)
-			dispatch({ type: 'NEXT_STEP' })
 			toast.success(t('ns_auth:notification.login_success'), { id: 'login' })
+			dispatch({ type: 'NEXT_STEP' })
 		}
 	}, [steps.currentStep, user, accessToken])
 
