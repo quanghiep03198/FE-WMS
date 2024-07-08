@@ -12,11 +12,13 @@ const TransactionHistory: React.FC = () => {
 			columnHelper.accessor('company_name', {
 				header: 'Company Name',
 				enableSorting: true,
+				enableMultiSort: true,
 				size: 200
 			}),
 			columnHelper.accessor('sale_representator', {
 				header: 'Sale Representative',
 				enableSorting: true,
+				enableMultiSort: true,
 				size: 180,
 				cell: ({ getValue }) => {
 					const value = getValue()
@@ -50,7 +52,14 @@ const TransactionHistory: React.FC = () => {
 			columnHelper.accessor('amount', {
 				header: 'Amount',
 				enableSorting: true,
-				size: 200
+				enableMultiSort: true,
+				size: 200,
+				cell: ({ getValue }) =>
+					new Intl.NumberFormat(undefined, {
+						style: 'currency',
+						currency: 'VND',
+						minimumIntegerDigits: 3
+					}).format(getValue())
 			})
 		],
 		[]
@@ -71,6 +80,8 @@ const TransactionHistory: React.FC = () => {
 				paginationProps={{ hidden: true }}
 				toolbarProps={{ hidden: true }}
 				enableColumnResizing={true}
+				enableSorting={true}
+				enableMultiSort={true}
 				containerProps={{
 					style: { height: screen.availHeight / 3 }
 				}}

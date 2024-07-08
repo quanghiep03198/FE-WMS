@@ -1,36 +1,71 @@
-import { Div, Typography } from '@/components/ui'
+import {
+	ChartConfig,
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartTooltip,
+	ChartTooltipContent,
+	Div,
+	Typography
+} from '@/components/ui'
 import { transactionOverview } from '@/mocks/dashboard.data'
-import React from 'react'
-import { Cell, Legend, Pie, Tooltip } from 'recharts'
-import { PieChart } from 'recharts'
+import React, { useMemo } from 'react'
+import { Label } from 'recharts'
+import { Pie, PieChart } from 'recharts'
+
+const chartConfig = {
+	pending: {
+		label: 'Pending',
+		color: 'hsl(var(--chart-1))'
+	},
+	completed: {
+		label: 'Completed',
+		color: 'hsl(var(--chart-2))'
+	},
+	cancelled: {
+		label: 'Cancelled',
+		color: 'hsl(var(--chart-3))'
+	}
+} satisfies ChartConfig
 
 const TransactionOverview: React.FC = () => {
+	const totalVisitors = useMemo(() => {
+		return transactionOverview.reduce((acc, curr) => acc + curr.quantity, 0)
+	}, [])
+
 	return (
 		<Div className='col-span-full flex flex-col items-center justify-center space-y-6 lg:col-span-1 xl:col-span-1'>
 			<Typography className='text-center font-medium'>Order Status Overview</Typography>
-			<PieChart width={320} height={240}>
-				<Pie
-					data={transactionOverview}
-					innerRadius={48}
-					outerRadius={96}
-					fill='hsl(var(--primary))'
-					stroke='hsl(var(--border))'
-					paddingAngle={2}
-					dataKey='value'>
-					{transactionOverview.map((item) => (
-						<Cell key={item.name} fill={item.color} />
-					))}
-				</Pie>
-				<Tooltip
-					itemStyle={{ color: 'hsl(var(--popover-foreground))' }}
-					contentStyle={{
-						background: 'hsl(var(--popover))',
-						border: '1px solid hsl(var(--border))',
-						borderRadius: '4px'
-					}}
-				/>
-				<Legend />
-			</PieChart>
+			<ChartContainer className='aspect-square h-full max-h-60' config={chartConfig}>
+				<PieChart>
+					<Pie
+						data={transactionOverview}
+						innerRadius={48}
+						outerRadius={96}
+						paddingAngle={2}
+						nameKey='status'
+						dataKey='quantity'>
+						<Label
+							content={({ viewBox }) => {
+								if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+									return (
+										<text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
+											<tspan x={viewBox.cx} y={viewBox.cy} className='fill-foreground text-3xl font-bold'>
+												{totalVisitors.toLocaleString()}
+											</tspan>
+											<tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className='fill-muted-foreground'>
+												Orders
+											</tspan>
+										</text>
+									)
+								}
+							}}
+						/>
+					</Pie>
+					<ChartTooltip content={<ChartTooltipContent />} />
+					<ChartLegend content={<ChartLegendContent />} />
+				</PieChart>
+			</ChartContainer>
 		</Div>
 	)
 }

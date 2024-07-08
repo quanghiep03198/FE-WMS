@@ -1,17 +1,35 @@
-import useMediaQuery from '@/common/hooks/use-media-query'
-import { $mediaQuery } from '@/common/utils/media-query'
-import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Typography } from '@/components/ui'
-import { annuallIPStatistics } from '@/mocks/dashboard.data'
-import { curveCardinal } from 'd3-shape'
+import {
+	ChartConfig,
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartTooltip,
+	ChartTooltipContent,
+	Div,
+	Icon,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from '@/components/ui'
+import { annuallInOutBoundStatistics } from '@/mocks/dashboard.data'
 import _ from 'lodash'
-import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import tw from 'tailwind-styled-components'
 
-const cardinal = curveCardinal.tension(0.2)
+const chartConfig = {
+	import: {
+		label: 'Import',
+		color: 'hsl(var(--chart-1))'
+	},
+	export: {
+		label: 'Export',
+		color: 'hsl(var(--chart-2))'
+	}
+} satisfies ChartConfig
 
 const InoutboundOverview: React.FC = () => {
-	const isExtraLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1920 }))
-
 	return (
 		<Card className='col-span-full max-h-full xl:col-span-2'>
 			<CardHeader>
@@ -30,37 +48,24 @@ const InoutboundOverview: React.FC = () => {
 					</Select>
 				</Div>
 			</CardHeader>
-			<CardContent>
-				<ResponsiveContainer height={isExtraLargeScreen ? 384 : 288}>
-					<AreaChart
-						data={annuallIPStatistics}
-						margin={{
-							top: 0,
-							right: 0,
-							left: 0,
-							bottom: 0
-						}}>
-						<CartesianGrid strokeDasharray='1 1' stroke='hsl(var(--border))' />
-						<XAxis dataKey='name' stroke='hsl(var(--muted-foreground))' className='capitalize' />
+			<CardContent className='@container-norma @container'>
+				<ChartContainer className='@xs:h-72 @xl:h-80 @3xl:h-96 @5xl:h-[468px]' config={chartConfig}>
+					<BarChart accessibilityLayer data={annuallInOutBoundStatistics}>
+						<CartesianGrid vertical={false} />
+						<XAxis
+							dataKey='month'
+							tickLine={false}
+							tickMargin={10}
+							axisLine={false}
+							tickFormatter={(value) => value.slice(0, 3)}
+						/>
 						<YAxis stroke='hsl(var(--muted-foreground))' />
-						<Tooltip />
-						<defs>
-							<linearGradient id='primary' x1='0' y1='0' x2='0' y2='100%'>
-								<stop offset='1%' stopColor='hsl(var(--primary))' stopOpacity={0.8} />
-								<stop offset='99%' stopColor='hsl(var(--primary))' stopOpacity={0} />
-							</linearGradient>
-						</defs>
-						<defs>
-							<linearGradient id='foreground' x1='0' y1='0' x2='0' y2='100%'>
-								<stop offset='1%' stopColor='hsl(var(--foreground))' stopOpacity={0.3} />
-								<stop offset='99%' stopColor='hsl(var(--foreground))' stopOpacity={0} />
-							</linearGradient>
-						</defs>
-						<Area type='monotone' dataKey='import' stroke='hsl(var(--foreground)/0.3)' fill='url(#foreground)' />
-						<Area type={cardinal} dataKey='export' stroke='hsl(var(--primary))' fill='url(#primary)' />
-						<Legend align='center' margin={{ top: 80 }} formatter={(value) => _.capitalize(value)} />
-					</AreaChart>
-				</ResponsiveContainer>
+						<ChartTooltip content={<ChartTooltipContent />} />
+						<Bar dataKey='import' fill='var(--color-import)' radius={3} />
+						<Bar dataKey='export' fill='var(--color-export)' radius={3} />
+						<ChartLegend content={<ChartLegendContent />} formatter={(value) => _.capitalize(value)} />
+					</BarChart>
+				</ChartContainer>
 			</CardContent>
 		</Card>
 	)

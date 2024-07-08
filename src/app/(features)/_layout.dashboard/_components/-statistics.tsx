@@ -1,21 +1,14 @@
-import { Div, Icon, Typography } from '@/components/ui'
+import { ChartContainer, Div, Icon, Typography } from '@/components/ui'
+import { overalStatistics } from '@/mocks/dashboard.data'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Area, AreaChart, ResponsiveContainer } from 'recharts'
+import { Area, AreaChart } from 'recharts'
 import tw from 'tailwind-styled-components'
-
-const data = new Array(6).fill(null).map(() => ({
-	order_number: Math.round(Math.random() * 10000),
-	inventory_number: Math.round(Math.random() * 10000),
-	import_number: Math.round(Math.random() * 10000),
-	export_number: Math.round(Math.random() * 10000),
-	defective_rate: Math.round(Math.random() * 100)
-}))
 
 type TStatistic = {
 	category: string
 	value: number | string
-	dataField: 'order_number' | 'inventory_number' | 'import_number' | 'export_number' | 'defective_rate'
+	dataField: 'order_number' | 'inventory_number' | 'import_number' | 'export_number'
 	icon: React.ComponentProps<typeof Icon>['name']
 	comparision: number
 }
@@ -57,6 +50,15 @@ const Statistics: React.FC = () => {
 		[t, i18n.language]
 	)
 
+	const chartConfig = useMemo(
+		() =>
+			statistics.reduce((acc, curr) => {
+				acc[curr.dataField] = { color: 'hsl(var(--chart-1))' }
+				return acc
+			}, {}),
+		[statistics]
+	)
+
 	return (
 		<Div className='col-span-full grid grid-cols-2 gap-2 @container lg:grid-cols-4 xl:col-span-1'>
 			{statistics.map((stats, index) => (
@@ -75,23 +77,23 @@ const Statistics: React.FC = () => {
 							</Typography>
 						</Div>
 
-						<ResponsiveContainer className='mt-auto' height={48}>
-							<AreaChart data={data}>
+						<ChartContainer config={chartConfig} className='h-24 xl:h-20 xxl:h-20'>
+							<AreaChart data={overalStatistics}>
 								<defs>
 									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
-										<stop offset='1%' stopColor='hsl(var(--primary))' stopOpacity={0.8} />
-										<stop offset='99%' stopColor='hsl(var(--primary))' stopOpacity={0} />
+										<stop offset='1%' stopColor='hsl(var(--chart-3))' stopOpacity={0.8} />
+										<stop offset='99%' stopColor='hsl(var(--chart-3))' stopOpacity={0} />
 									</linearGradient>
 								</defs>
 								<Area
 									type='monotone'
 									dataKey={stats.dataField}
 									fillOpacity={0.8}
-									stroke='hsl(var(--primary))'
+									stroke='hsl(var(--chart-3))'
 									fill='url(#colorPv)'
 								/>
 							</AreaChart>
-						</ResponsiveContainer>
+						</ChartContainer>
 					</CardContent>
 				</Card>
 			))}
