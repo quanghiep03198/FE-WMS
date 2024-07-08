@@ -1,4 +1,3 @@
-import { warehouseStorageTypes } from '@/common/constants/constants'
 import { WarehouseStorageTypes, WarehouseTypes } from '@/common/constants/enums'
 import { z } from 'zod'
 
@@ -13,7 +12,8 @@ export const warehouseFormSchema = z.object({
 	dept_code: z.string({ required_error: 'This field is required' }),
 	area: z.string({ required_error: 'This field is required' }).min(0, 'Area must be greater than 0'),
 	is_disable: z.boolean().default(false),
-	is_default: z.boolean().default(false)
+	is_default: z.boolean().default(false),
+	remark: z.string().optional()
 })
 
 export const storageFormSchema = z.object({

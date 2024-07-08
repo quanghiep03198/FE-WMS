@@ -13,6 +13,7 @@ import {
 	Div,
 	Form as FormProvider,
 	SelectFieldControl,
+	TextareaFieldControl,
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
@@ -178,6 +179,15 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 										</Typography>
 									</Div>
 								)}
+							/>
+						</FormItem>
+						<FormItem className='col-span-full'>
+							<TextareaFieldControl
+								name='remark'
+								label={t('ns_common:common_fields.remark')}
+								placeholder='Aditional remark ...'
+								control={form.control}
+								rows={5}
 							/>
 						</FormItem>
 						{/* Form actions */}

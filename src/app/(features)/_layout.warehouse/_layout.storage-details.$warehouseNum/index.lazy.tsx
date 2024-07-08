@@ -11,7 +11,7 @@ import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
-import { Row, createColumnHelper } from '@tanstack/react-table'
+import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
@@ -39,16 +39,17 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/
 
 // #region Page component
 function Page() {
-	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouseStorage>[]>([])
-	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
+	const [tableInstance, setTableInstance] = useState<Table<any>>()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [formDialogOpenState, setFormDialogOpenState] = useState<boolean>(false)
+	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const { warehouseNum } = useParams({ strict: false })
 	const { t, i18n } = useTranslation(['ns_common'])
 	const queryClient = useQueryClient()
-	const { dispatch } = useContext(PageContext)
 	const { searchParams } = useQueryParams()
+	const { dispatch } = useContext(PageContext)
 
+	// Set page breadcrumb navigation
 	useBreadcrumb([
 		{
 			text: t('ns_common:navigation.warehouse_management'),
@@ -69,10 +70,16 @@ function Page() {
 	])
 
 	const handleResetAllRowSelection = useCallback(() => {
-		resetSelectedRow()
+		tableInstance.resetRowSelection()
 		resetRowSelectionType()
-	}, [])
+	}, [tableInstance])
 
+	const handleDeleteSelectedRows = useCallback(
+		() => deleteWarehouseStorage(tableInstance.getSelectedRowModel().flatRows.map((item) => item.original?.keyid)),
+		[tableInstance]
+	)
+
+	// Get original storage type value
 	const getOriginalStorageType = useCallback(
 		(translatedValue: string) => {
 			return Object.keys(warehouseStorageTypes).find((key) => t(warehouseStorageTypes[key]) === translatedValue)
@@ -80,6 +87,7 @@ function Page() {
 		[i18n.language]
 	)
 
+	// Get current warehouse's storage locations
 	const { data, isLoading, refetch } = useGetWarehouseStorageQuery<IWarehouseStorage[]>(warehouseNum, {
 		select: (response: ResponseBody<IWarehouseStorage[]>): IWarehouseStorage[] => {
 			return Array.isArray(response.metadata)
@@ -95,6 +103,7 @@ function Page() {
 		}
 	})
 
+	// Update warehouse storage location
 	const { mutateAsync: updateWarehouseStorage } = useMutation({
 		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 		mutationFn: (data: { storageNum: string; payload: PartialStorageFormValue }) =>
@@ -107,6 +116,7 @@ function Page() {
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 
+	// Delete selected warehouse storage locations
 	const { mutateAsync: deleteWarehouseStorage } = useMutation({
 		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
@@ -137,12 +147,7 @@ function Page() {
 							checked={checked as CheckedState}
 							onCheckedChange={(checkedState) => {
 								table.toggleAllPageRowsSelected(!!checkedState)
-								if (!checkedState) {
-									handleResetAllRowSelection()
-									return
-								}
-								setRowSelectionType('multiple')
-								setSelectedRows(table.getPreSelectedRowModel().flatRows)
+								if (checkedState) setRowSelectionType('multiple')
 							}}
 						/>
 					)
@@ -153,20 +158,8 @@ function Page() {
 						role='checkbox'
 						checked={row.getIsSelected()}
 						onCheckedChange={(checkedState) => {
+							if (checkedState) setRowSelectionType('multiple')
 							row.toggleSelected(Boolean(checkedState))
-							if (!checkedState) {
-								setSelectedRows((prev) => {
-									const filtered = prev.filter((selectedRow) => selectedRow.id !== row.id)
-									if (filtered.length === 0) handleResetAllRowSelection()
-									return filtered
-								})
-								return
-							}
-
-							setSelectedRows((prev) => {
-								setRowSelectionType('multiple')
-								return [...prev, row]
-							})
 						}}
 					/>
 				),
@@ -269,7 +262,7 @@ function Page() {
 							row={row}
 							onDelete={() => {
 								setConfirmDialogOpen(!confirmDialogOpen)
-								setSelectedRows((prev) => [...prev, row])
+								row.toggleSelected(true)
 								setRowSelectionType('single')
 							}}
 							onEdit={() => {
@@ -303,22 +296,25 @@ function Page() {
 				data={data}
 				loading={isLoading}
 				columns={columns}
+				onGetInstance={setTableInstance}
 				enableColumnResizing={true}
 				enableColumnFilters={true}
 				enableRowSelection={true}
 				toolbarProps={{
-					slot: (
+					slot: () => (
 						<Fragment>
-							{selectedRows.length > 0 && rowSelectionType === 'multiple' && (
-								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
-									<Button
-										variant='destructive'
-										size='icon'
-										onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
-										<Icon name='Trash' />
-									</Button>
-								</Tooltip>
-							)}
+							{tableInstance &&
+								tableInstance.getSelectedRowModel().flatRows.length > 0 &&
+								rowSelectionType === 'multiple' && (
+									<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
+										<Button
+											variant='destructive'
+											size='icon'
+											onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
+											<Icon name='Trash' />
+										</Button>
+									</Tooltip>
+								)}
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 								<Button
 									variant='outline'
@@ -352,7 +348,7 @@ function Page() {
 				onOpenChange={setConfirmDialogOpen}
 				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
-				onConfirm={() => deleteWarehouseStorage(selectedRows.map((item) => item.original?.keyid))}
+				onConfirm={handleDeleteSelectedRows}
 				onCancel={handleResetAllRowSelection}
 			/>
 		</Fragment>

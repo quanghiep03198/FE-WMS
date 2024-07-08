@@ -3,7 +3,7 @@ import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Row, createColumnHelper } from '@tanstack/react-table'
+import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -36,19 +36,13 @@ function Page() {
 	const { t, i18n } = useTranslation()
 	const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
+	const [tableInstace, getTableInstance] = useState<Table<any>>()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const [selectedRows, setSelectedRows, resetSelectedRow] = useResetState<Row<IWarehouse>[]>([])
 	const queryClient = useQueryClient()
 	const { dispatch } = useContext(PageContext)
 
 	// Set breadcrumb navigation
 	useBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
-
-	// Handle reset row deletion
-	const handleResetAllRowSelection = useCallback(() => {
-		resetSelectedRow()
-		resetRowSelectionType()
-	}, [])
 
 	// Get warehouse data
 	const { data, isLoading, refetch } = useGetWarehouseQuery<IWarehouse[]>({
@@ -93,6 +87,17 @@ function Page() {
 		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
 	})
 
+	// Handle reset row deletion
+	const handleResetAllRowSelection = useCallback(() => {
+		tableInstace.resetRowSelection()
+		resetRowSelectionType()
+	}, [tableInstace])
+
+	// Handle delete selected row(s)
+	const handleDeleteSelectedRows = useCallback(() => {
+		deleteWarehouseAsync(tableInstace.getSelectedRowModel().flatRows.map((item) => item.original.id))
+	}, [tableInstace])
+
 	const columnHelper = createColumnHelper<IWarehouse>()
 
 	const columns = useMemo(
@@ -108,13 +113,8 @@ function Page() {
 							role='checkbox'
 							checked={checked as CheckedState}
 							onCheckedChange={(checkedState) => {
-								table.toggleAllPageRowsSelected(!!checkedState)
-								if (!checkedState) {
-									handleResetAllRowSelection()
-									return
-								}
 								setRowSelectionType('multiple')
-								setSelectedRows(table.getPreSelectedRowModel().flatRows)
+								table.toggleAllPageRowsSelected(!!checkedState)
 							}}
 						/>
 					)
@@ -125,20 +125,8 @@ function Page() {
 						role='checkbox'
 						checked={row.getIsSelected()}
 						onCheckedChange={(checkedState) => {
+							if (checkedState) setRowSelectionType('multiple')
 							row.toggleSelected(Boolean(checkedState))
-							if (!checkedState) {
-								setSelectedRows((prev) => {
-									const filtered = prev.filter((selectedRow) => selectedRow.id !== row.id)
-									if (filtered.length === 0) handleResetAllRowSelection()
-									return filtered
-								})
-								return
-							}
-
-							setSelectedRows((prev) => {
-								setRowSelectionType('multiple')
-								return [...prev, row]
-							})
 						}}
 					/>
 				),
@@ -246,7 +234,7 @@ function Page() {
 						onDelete={() => {
 							setConfirmDialogOpen(!confirmDialogOpen)
 							setRowSelectionType('single')
-							setSelectedRows((prev) => [...prev, row])
+							row.toggleSelected(true)
 						}}
 						onEdit={() => {
 							setFormDialogOpen(true)
@@ -275,27 +263,28 @@ function Page() {
 			<Helmet title={t('ns_common:navigation.warehouse_management')} />
 
 			<DataTable
+				caption='The list of warehouses'
 				data={data}
 				columns={columns}
 				loading={isLoading}
 				enableColumnResizing={true}
 				enableRowSelection={true}
-				caption='The list of warehouses'
+				onGetInstance={getTableInstance}
 				toolbarProps={{
-					slot: (
+					slot: () => (
 						<Fragment>
-							{selectedRows.length > 0 && rowSelectionType == 'multiple' && (
-								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
-									<Button
-										variant='destructive'
-										size='icon'
-										onClick={() => {
-											setConfirmDialogOpen(!confirmDialogOpen)
-										}}>
-										<Icon name='Trash2' />
-									</Button>
-								</Tooltip>
-							)}
+							{tableInstace &&
+								tableInstace.getSelectedRowModel().flatRows.length > 0 &&
+								rowSelectionType == 'multiple' && (
+									<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
+										<Button
+											variant='destructive'
+											size='icon'
+											onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
+											<Icon name='Trash2' />
+										</Button>
+									</Tooltip>
+								)}
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 								<Button
 									variant='outline'
@@ -325,7 +314,7 @@ function Page() {
 				onOpenChange={setConfirmDialogOpen}
 				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
-				onConfirm={() => deleteWarehouseAsync(selectedRows.map((item) => item.original.id))}
+				onConfirm={handleDeleteSelectedRows}
 				onCancel={handleResetAllRowSelection}
 			/>
 		</Fragment>
