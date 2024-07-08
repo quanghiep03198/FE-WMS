@@ -59,7 +59,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
 			ref={ref}
 			style={{ position: 'inherit' }}
 			className={cn(
-				'w-full bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/20 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 [&:has(role=button)]:text-center',
+				'w-full bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/20 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10',
 				className
 			)}
 			{...props}
