@@ -11,7 +11,7 @@ export const Route = createFileRoute('/(auth)/login/')({
 function LoginPage() {
 	const { isAuthenticated, user } = useAuth()
 
-	console.log(user)
+	console.log(isAuthenticated)
 
 	if (isAuthenticated && user?.company_code) return <Navigate to={'/dashboard'} />
 
