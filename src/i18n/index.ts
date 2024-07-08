@@ -1,7 +1,6 @@
 import { Languages } from '@/common/constants/enums'
 import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-import _ from 'lodash'
 import { initReactI18next } from 'react-i18next'
 import { resources, type Resources } from './i18n-resources'
 

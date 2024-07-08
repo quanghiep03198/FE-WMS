@@ -29,6 +29,7 @@ export default {
 		reset: '重置',
 		finish: '完成',
 		back: '返回',
+		open: '打开',
 		close: '关闭',
 		login: '登入',
 		logout: '登出',

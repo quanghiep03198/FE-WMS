@@ -20,6 +20,7 @@ export default {
 		update: 'Chỉnh sửa',
 		delete: 'Xóa',
 		back: 'Quay lại',
+		open: 'Mở',
 		close: 'Đóng',
 		start: 'Bắt đầu',
 		continue: 'Tiếp tục',
