@@ -1,4 +1,3 @@
-import { cn } from '@/common/utils/cn'
 import {
 	Command,
 	CommandEmpty,
@@ -11,7 +10,6 @@ import {
 	Dialog,
 	DialogContent,
 	Icon,
-	ScrollArea,
 	Typography
 } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'

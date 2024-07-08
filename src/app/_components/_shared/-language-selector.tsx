@@ -1,5 +1,4 @@
 import { locales } from '@/common/constants/constants'
-import { Languages } from '@/common/constants/enums'
 import {
 	Button,
 	ButtonProps,

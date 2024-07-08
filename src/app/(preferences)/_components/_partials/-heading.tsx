@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Div, Icon, DivProps, Tooltip, Typography } from '@/components/ui'
+import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 

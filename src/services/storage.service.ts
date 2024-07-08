@@ -1,7 +1,6 @@
 import { Languages } from '@/common/constants/enums'
 import { __JSON__ } from '@/common/utils/json'
 import { AppConfigs } from '@/configs/app.config'
-import _ from 'lodash'
 
 export class StorageService {
 	static getLocale() {

@@ -1,4 +1,3 @@
-import { resources } from '@/i18n/resources.i18n'
 import { HttpStatusCode } from 'axios'
 
 export declare global {
