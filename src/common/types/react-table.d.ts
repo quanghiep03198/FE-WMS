@@ -3,8 +3,7 @@ import { RowData } from '@tanstack/react-table'
 
 declare module '@tanstack/react-table' {
 	interface ColumnMeta<TData extends RowData, TValue> {
-		filterComponent?: React.ReactNode<TData, TValue>
-		sortComponent?: React.ReactNode<TData, TValue>
+		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
 		sticky?: 'left' | 'right'
 	}
 }
