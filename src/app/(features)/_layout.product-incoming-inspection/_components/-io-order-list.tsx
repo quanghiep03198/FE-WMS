@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PaginationState, SortingState, Table, createColumnHelper } from '@tanstack/react-table'
 import { IOSubOrderRow } from './-io-order-detail'
-import { ProductionApproveStatus } from '@/common/constants/enums'
 import { IInOutBoundOrder } from '@/common/types/entities'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { TableUtilities } from '@/components/ui/@react-table/utils/table.util'
 import { IOService } from '@/services/inoutbound.service'
+import { ProductionApprovalStatus } from '../_constants/-production.enum'
 
 const IO_PRODUCTION_PROVIDE_TAG = 'PRODUCTION' as const
 
@@ -72,7 +72,7 @@ const InOutBoundOrderList: React.FC = () => {
 				size: 160,
 				cell: ({ getValue }) => {
 					const value = getValue()
-					return value === ProductionApproveStatus.REVIEWED ? (
+					return value === ProductionApprovalStatus.REVIEWED ? (
 						<Div className='flex items-center justify-center'>
 							<Icon name='Check' stroke='hsl(var(--primary))' size={20} />
 						</Div>

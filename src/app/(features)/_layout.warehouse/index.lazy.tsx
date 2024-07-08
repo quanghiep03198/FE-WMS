@@ -8,7 +8,6 @@ import { useResetState } from 'ahooks'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { warehouseTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import { IWarehouse } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
@@ -19,6 +18,7 @@ import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
 import { PageContext, PageProvider } from './_contexts/-page-context'
+import { warehouseTypes } from './_constants/-warehouse.constant'
 // #endregion
 
 // #region Router declaration

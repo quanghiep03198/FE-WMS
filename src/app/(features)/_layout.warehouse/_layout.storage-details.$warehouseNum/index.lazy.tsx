@@ -1,6 +1,5 @@
 // #region Modules
 import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
-import { warehouseStorageTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IWarehouseStorage } from '@/common/types/entities'
@@ -25,6 +24,7 @@ import {
 import { PageContext, PageProvider } from '../_contexts/-page-context'
 import WarehouseStorageFormDialog from './_components/-storage-form'
 import StorageRowActions from './_components/-storage-row-actions'
+import { warehouseStorageTypes } from '../_constants/-warehouse.constant'
 // #endregion
 
 // #region Router declaration

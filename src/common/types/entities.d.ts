@@ -1,5 +1,5 @@
-import { warehouseTypes } from '../constants/constants'
-import { ProductionApproveStatus } from '../constants/enums'
+import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
+import { ProductionApprovalStatus, TransferOrderApprovalStatus } from '../constants/enums'
 
 export interface IBaseEntity {
 	id: string
@@ -91,7 +91,7 @@ export interface IElectronicProductCode {
 }
 
 export interface IInOutBoundOrder extends IBaseEntity {
-	status_approve: ProductionApproveStatus
+	status_approve: ProductionApprovalStatus
 	sno_no: string // Order code
 	sno_date: Date | string // Import/Export date
 	sno_car_number: string // Container truck number
@@ -119,7 +119,21 @@ export interface IInOutBoundOrder extends IBaseEntity {
 	// "month_close": "1"
 }
 
-export interface IDatabaseCompatibility {
-	hostname: string
-	ip: string
+export interface ITransferOrder {
+	custbrand_id: string
+	brand_name: string
+	warehouse_num: string // need to be rename
+	boxnum: string
+	mo_no: string
+	or_no: string
+	or_custpo: string
+	shoestyle_codefactory: string
+	or_warehouse: string
+	or_location: string
+	al_warehouse: string
+	new_warehouse: string
+	new_al_warehouse: string
+	status_approve: TransferOrderApprovalStatus
+	employee_name_approve: null
+	approve_date: null
 }

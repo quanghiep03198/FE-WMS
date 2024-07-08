@@ -27,26 +27,9 @@ export enum CommonActions {
 	EXPORT = 'EXPORT'
 }
 
-export enum WarehouseTypes {
-	PRODUCTION_WAREHOUSE = 'A',
-	MATERIAL_WAREHOUSE = 'B',
-	HALF_FINISHED_PRODUCTION = 'C',
-	FINISHED_PRODUCTION_WAREHOUSE = 'D',
-	SCRAP_PRODUCTION_WAREHOUSE = 'E'
-}
-
-export enum WarehouseStorageTypes {
-	MAIN_AREA = 'A',
-	FINISHED_PRODUCTION_AREA = 'B',
-	INSPECTION_HOLDING_AREA = 'C',
-	OUTBOUND_STAGING_AREA = 'D',
-	INBOUND_STAGING_AREA = 'E'
-}
-
-export enum ProductionApproveStatus {
-	NOT_REVIEWED = 'A',
-	REVIEWED = 'B',
-	PARTIALLY_REVIEWED = 'C',
-	RE_REVIEW = 'D',
-	REVIEW_CANCELLED = 'E'
+export enum TransferOrderApprovalStatus {
+	INAPPROVED = 'A',
+	APPROVED = 'B',
+	REAPPROVE = 'C',
+	CANCELLED = 'D'
 }

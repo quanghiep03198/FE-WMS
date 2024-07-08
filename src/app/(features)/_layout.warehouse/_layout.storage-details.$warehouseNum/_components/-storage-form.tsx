@@ -1,6 +1,5 @@
 // #region Modules
 import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_composables/-warehouse-storage.composable'
-import { warehouseStorageTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import { IWarehouseStorage } from '@/common/types/entities'
@@ -30,6 +29,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { PageContext } from '../../_contexts/-page-context'
+import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
 // #endregion
 
 // #region Type declarations

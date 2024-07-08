@@ -1,9 +1,9 @@
-import { ProductionApproveStatus } from '@/common/constants/enums'
+import { ProductionApprovalStatus } from '@/app/(features)/_layout.product-incoming-inspection/_constants/-production.enum'
 import { IInOutBoundOrder } from '@/common/types/entities'
 
 export const production: IInOutBoundOrder[] = Array.from(new Array(500)).map((_, index) => ({
 	id: String(index),
-	status_approve: ProductionApproveStatus.REVIEWED,
+	status_approve: ProductionApprovalStatus.REVIEWED,
 	sno_no: crypto.randomUUID(),
 	sno_date: new Date(),
 	sno_car_number: crypto.randomUUID(),

@@ -1,7 +1,6 @@
-import { warehouseTypes } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
-import { IEmployee, IWarehouse } from '@/common/types/entities'
+import { type IEmployee, type IWarehouse } from '@/common/types/entities'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -32,6 +31,7 @@ import tw from 'tailwind-styled-components'
 import { useGetDepartmentQuery } from '../../_composables/-department.composable'
 import { WAREHOUSE_PROVIDE_TAG } from '../../_composables/-warehouse.composable'
 import { PageContext } from '../_contexts/-page-context'
+import { warehouseTypes } from '../_constants/-warehouse.constant'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
 	? Required<WarehouseFormValue>

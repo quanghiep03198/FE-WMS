@@ -1,4 +1,4 @@
-import { WarehouseStorageTypes, WarehouseTypes } from '@/common/constants/enums'
+import { WarehouseStorageTypes, WarehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
 import { z } from 'zod'
 
 export const warehouseFormSchema = z.object({
