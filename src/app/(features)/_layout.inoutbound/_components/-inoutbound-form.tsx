@@ -109,7 +109,7 @@ const InOutBoundForm: React.FC = () => {
 											htmlFor={FormActionEnum.IMPORT}
 											className={cn(
 												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200 sm:px-4',
-												field.value === FormActionEnum.IMPORT && 'bg-primary text-primary-foreground'
+												field.value === FormActionEnum.IMPORT && 'bg-secondary text-secondary-foreground'
 											)}>
 											<FormControl>
 												<RadioGroupItem
@@ -134,7 +134,7 @@ const InOutBoundForm: React.FC = () => {
 											htmlFor='2'
 											className={cn(
 												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-all duration-200 sm:px-4',
-												field.value == FormActionEnum.EXPORT && 'bg-primary text-primary-foreground'
+												field.value == FormActionEnum.EXPORT && 'bg-secondary text-secondary-foreground'
 											)}>
 											<FormControl>
 												<RadioGroupItem id='2' value={FormActionEnum.EXPORT} className='sr-only' />

@@ -1,5 +1,5 @@
 import { Div, Icon, Typography } from '@/components/ui'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext } from 'react'
 import tw from 'tailwind-styled-components'
 import { PageContext } from '../_context/-page-context'
 import { cn } from '@/common/utils/cn'

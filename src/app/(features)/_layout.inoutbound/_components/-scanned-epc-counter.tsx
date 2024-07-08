@@ -1,6 +1,6 @@
 import { Div, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
-import React, { Fragment, memo, useContext, useMemo } from 'react'
+import React, { memo, useContext, useMemo } from 'react'
 import { useCountUp } from 'react-countup'
 import { useTranslation } from 'react-i18next'
 import { PageContext } from '../_context/-page-context'
