@@ -1,5 +1,6 @@
 import { useGetUserProfile } from '@/app/_composables/-user.composable'
-import { useAuth, useAuthStore } from '@/common/hooks/use-auth'
+import { useAuth } from '@/common/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth.store'
 import { generateAvatar } from '@/common/utils/generate-avatar'
 import { AuthService } from '@/services/auth.service'
 import { Navigate } from '@tanstack/react-router'

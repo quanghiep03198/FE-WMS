@@ -1,47 +1,9 @@
 import { USER_PROVIDE_TAG } from '@/app/_composables/-user.composable'
 import { AuthService } from '@/services/auth.service'
+import { useAuthStore } from '@/stores/auth.store'
 import { useMutation } from '@tanstack/react-query'
-import { compress, decompress } from 'lz-string'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { ICompany, IUser } from '../types/entities'
-
-export type AuthState = {
-	user: IUser | null
-	isAuthenticated: boolean
-	setUserProfile: (profile: IUser) => void
-	setUserCompany: (company: Omit<ICompany, 'factory_code'>) => void
-	resetAuthState: () => void
-}
-
-const initialState = { user: null, accessToken: null, isAuthenticated: false }
-
-export const useAuthStore = create(
-	persist<AuthState>(
-		(set, get) => ({
-			...initialState,
-			setUserProfile: (profile: IUser) => {
-				const state = get()
-				set({ ...state, isAuthenticated: true, user: { ...state.user, ...profile } })
-			},
-			setUserCompany: (company: Omit<ICompany, 'factory_code'>) => {
-				const state = get()
-				set({
-					...state,
-					user: { ...state.user, ...company }
-				})
-			},
-			resetAuthState: () => set(initialState)
-		}),
-		{
-			name: 'Auth',
-			serialize: (data) => compress(JSON.stringify(data)),
-			deserialize: (data) => JSON.parse(decompress(data))
-		}
-	)
-)
 
 export function useAuth() {
 	const { t } = useTranslation()

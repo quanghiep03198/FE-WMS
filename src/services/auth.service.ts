@@ -1,6 +1,6 @@
 import { type AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
-import { useAuthStore } from '@/common/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth.store'
 import { IUser } from '@/common/types/entities'
 import { __JSON__ } from '@/common/utils/json'
 import axiosInstance from '@/configs/axios.config'

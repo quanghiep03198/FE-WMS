@@ -1,5 +1,5 @@
 import { getUserProfileQuery } from '@/app/_composables/-user.composable'
-import { useAuthStore } from '@/common/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth.store'
 import { AuthService } from '@/services/auth.service'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Navigate } from '@tanstack/react-router'
