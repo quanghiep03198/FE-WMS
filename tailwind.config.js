@@ -14,7 +14,10 @@ module.exports = {
 		},
 		extend: {
 			maxWidth: {
-				'8xl': '1440px'
+				'8xl': '1440px',
+				'1/4': '25%',
+				'1/2': '50%',
+				'3/4': '75%'
 			},
 			transitionProperty: {
 				height: 'height',
