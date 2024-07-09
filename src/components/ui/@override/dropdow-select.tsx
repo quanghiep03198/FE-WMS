@@ -14,18 +14,11 @@ type DropdownSelectProps = {
 export const DropdownSelect: React.FC<DropdownSelectProps> = ({
 	options,
 	placeholder,
-	openState,
-	onValueChange,
 	selectTriggerProps,
 	selectProps
 }) => {
 	return (
-		<Select
-			open={openState}
-			onValueChange={(value) => {
-				if (typeof onValueChange === 'function') onValueChange(value)
-			}}
-			{...selectProps}>
+		<Select {...selectProps}>
 			<SelectTrigger {...selectTriggerProps}>
 				{selectTriggerProps?.children}
 				<SelectValue placeholder={placeholder} />
