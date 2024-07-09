@@ -16,12 +16,7 @@ type ColumnSortingProps = {
 
 function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
 	const { isFilterOpened } = useContext(TableContext)
-	const { columnDef, getIsResizing, toggleSorting, getIsSorted } = header.column
-
-	const handleToggleSorting = () => {
-		if (!columnDef.enableSorting) return
-		toggleSorting(getIsSorted() === 'asc', true)
-	}
+	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler } = header.column
 
 	return (
 		<Div
@@ -35,7 +30,16 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
 					'cursor-col-resize': getIsResizing(),
 					'border-b': isFilterOpened
 				})}
-				onClick={handleToggleSorting}>
+				title={
+					header.column.getCanSort()
+						? header.column.getNextSortingOrder() === 'asc'
+							? 'Sort ascending'
+							: header.column.getNextSortingOrder() === 'desc'
+								? 'Sort descending'
+								: 'Clear sort'
+						: undefined
+				}
+				onClick={getToggleSortingHandler()}>
 				{header.isPlaceholder ? null : flexRender(columnDef.header, header.getContext())}
 				<SortStatus enableSorting={columnDef.enableSorting} isSorted={getIsSorted()} />
 			</Div>
