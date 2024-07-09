@@ -10,7 +10,13 @@ export default {
 		manager: '管理人',
 		storage_num: '储位编号',
 		storage_name: '储位名称',
-		type_storage: '庫位類型(區位)'
+		type_storage: '庫位類型(區位)',
+		original_warehouse: '原倉庫',
+		original_storage_location: '原庫位',
+		transfered_warehouse: '調撥倉庫',
+		new_warehouse: '新倉庫 ',
+		new_storage_location: '新庫位',
+		allocation_warehouse: '調撥倉庫'
 	},
 	warehouse_types: {
 		production_warehouse: '產品倉庫',

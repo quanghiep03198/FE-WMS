@@ -27,6 +27,10 @@ export default {
 		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?'
 	},
 	fields: {
+		transfer_order_code: 'Transfer order code',
+		mo_no: 'Order',
+		or_no: 'Order code',
+		or_custpo: 'Customer order code',
 		// I/O production
 		status_approve: 'Approval status',
 		sno_no: 'Order code',
@@ -34,6 +38,7 @@ export default {
 		sno_sealnumber: 'Seal number',
 		sno_container: 'Container number',
 		sno_total_boxes: 'Total boxes',
+		packaging_code: 'Packaging number',
 		sno_car_number: 'Container number',
 		ship_order: 'Shipping order number',
 		dept_name: 'Department',

@@ -6,6 +6,8 @@ import vi_ns_dashboard from './vi/ns_dashboard.i18n'
 import vi_ns_warehouse from './vi/ns_warehouse.i18n'
 import vi_ns_inoutbound from './vi/ns_inoutbound.i18n'
 import vi_ns_preference from './vi/ns_preference.i18n'
+import vi_ns_erp from './vi/ns_erp.i18n'
+
 // #endregion
 
 // #region English dictionary
@@ -16,6 +18,7 @@ import en_ns_dashboard from './en/ns_dashboard.i18n'
 import en_ns_warehouse from './en/ns_warehouse.i18n'
 import en_ns_inoutbound from './en/ns_inoutbound.i18n'
 import en_ns_preference from './en/ns_preference.i18n'
+import en_ns_erp from './en/ns_erp.i18n'
 // #endregion
 
 // #region Chinese dictionary
@@ -26,6 +29,7 @@ import cn_ns_dashboard from './cn/ns_dashboard.i18n'
 import cn_ns_warehouse from './cn/ns_warehouse.i18n'
 import cn_ns_inoutbound from './cn/ns_inoutbound.i18n'
 import cn_ns_preference from './cn/ns_preference.i18n'
+import cn_ns_erp from './cn/ns_erp.i18n'
 // #endregion
 
 export const resources = {
@@ -36,7 +40,8 @@ export const resources = {
 		ns_dashboard: vi_ns_dashboard,
 		ns_warehouse: vi_ns_warehouse,
 		ns_inoutbound: vi_ns_inoutbound,
-		ns_preference: vi_ns_preference
+		ns_preference: vi_ns_preference,
+		ns_erp: vi_ns_erp
 	},
 	en: {
 		ns_auth: en_ns_auth,
@@ -45,7 +50,8 @@ export const resources = {
 		ns_dashboard: en_ns_dashboard,
 		ns_warehouse: en_ns_warehouse,
 		ns_inoutbound: en_ns_inoutbound,
-		ns_preference: en_ns_preference
+		ns_preference: en_ns_preference,
+		ns_erp: en_ns_erp
 	},
 	cn: {
 		ns_auth: cn_ns_auth,
@@ -54,7 +60,8 @@ export const resources = {
 		ns_dashboard: cn_ns_dashboard,
 		ns_warehouse: cn_ns_warehouse,
 		ns_inoutbound: cn_ns_inoutbound,
-		ns_preference: cn_ns_preference
+		ns_preference: cn_ns_preference,
+		ns_erp: cn_ns_erp
 	}
 }
 

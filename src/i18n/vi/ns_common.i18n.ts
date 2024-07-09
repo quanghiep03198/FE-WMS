@@ -13,7 +13,9 @@ export default {
 		created_at: 'Ngày tạo',
 		updated_at: 'Ngày cập nhật',
 		actions: 'Thao tác',
-		remark: 'Ghi chú'
+		remark: 'Ghi chú',
+		approver: 'Người phê duyệt',
+		approver_time: 'Thời gian phê duyệt'
 	},
 	actions: {
 		add: 'Thêm mới',

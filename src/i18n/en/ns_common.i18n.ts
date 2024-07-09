@@ -13,7 +13,9 @@ export default {
 		created_at: 'Created at',
 		updated_at: 'Updated at',
 		actions: 'Actions',
-		remark: 'Remark'
+		remark: 'Remark',
+		approver: 'Approver',
+		approver_time: 'Approval time'
 	},
 	actions: {
 		add: 'Add',

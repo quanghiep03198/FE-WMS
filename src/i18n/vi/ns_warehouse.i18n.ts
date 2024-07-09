@@ -10,7 +10,13 @@ export default {
 		manager: 'Người quản lý',
 		storage_num: 'Mã vị trí lưu kho',
 		storage_name: 'Tên vị trí lữu kho',
-		type_storage: 'Loại hình lưu kho'
+		type_storage: 'Loại hình lưu kho',
+		original_warehouse: 'Kho gốc',
+		original_storage_location: 'Vị trí lưu kho gốc',
+		transfered_warehouse: 'Kho chuyển phát',
+		new_warehouse: 'Kho mới',
+		new_storage_location: 'Vị trí lưu kho mới',
+		allocation_warehouse: 'Kho phân bổ'
 	},
 	warehouse_types: {
 		production_warehouse: 'Kho hàng gia công',

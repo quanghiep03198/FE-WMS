@@ -27,6 +27,9 @@ export default {
 		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?'
 	},
 	fields: {
+		mo_no: '指令碼',
+		or_no: '訂單編號',
+		or_custpo: '客戶訂單',
 		// I/O product inspection
 		status_approve: '審核',
 		sno_no: '驗收單號',
@@ -34,6 +37,7 @@ export default {
 		sno_sealnumber: '封條號碼',
 		sno_container: '貨櫃號碼',
 		sno_total_boxes: '箱數合計',
+		packaging_code: '裝箱單號',
 		sno_car_number: '車號',
 		ship_order: '裝貨號碼',
 		dept_name: '更新部門',

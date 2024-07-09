@@ -26,6 +26,10 @@ export default {
 		io_storage_location: 'Vị trí lưu kho'
 	},
 	fields: {
+		transfer_order_code: 'Mã đơn chuyển giao',
+		mo_no: 'Chỉ lệnh',
+		or_no: 'Mã đơn hàng',
+		or_custpo: 'Mã đơn đặt hàng của khách',
 		// I/O production
 		status_approve: 'Trạng thái duyệt đơn',
 		sno_no: 'Mã đơn hàng nhập/xuất',
@@ -33,6 +37,7 @@ export default {
 		sno_sealnumber: 'Mã vạch niêm phong container',
 		sno_container: 'Mã container',
 		sno_total_boxes: 'Số lượng đóng thùng',
+		packaging_code: 'Mã đóng thùng',
 		sno_car_number: 'Số xe container',
 		ship_order: 'Mã đóng hàng',
 		dept_name: 'Bộ phận cập nhật',

@@ -13,7 +13,9 @@ export default {
 		created_at: '创建日期',
 		updated_at: '编辑日期',
 		actions: '操作',
-		remark: '管理人'
+		remark: '管理人',
+		approver: '審核人',
+		approver_time: '審核時間'
 	},
 	actions: {
 		add: '添加',

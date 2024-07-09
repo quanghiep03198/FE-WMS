@@ -10,7 +10,13 @@ export default {
 		manager: 'Manager',
 		storage_num: 'Storage code',
 		storage_name: 'Storage name',
-		type_storage: 'Storage type'
+		type_storage: 'Storage type',
+		original_warehouse: 'Original warehouse',
+		original_storage_location: 'Original storage location',
+		transfered_warehouse: 'Transfered warehouse',
+		new_warehouse: 'New warehouse',
+		new_storage_location: 'New storage location',
+		allocation_warehouse: 'Allocation_warehouse'
 	},
 	// created_at: 'Created at',
 	warehouse_types: {
