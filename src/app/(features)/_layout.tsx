@@ -14,8 +14,6 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
-
 	return (
 		<AuthGuard>
 			<LayoutComposition.Container role='region'>
