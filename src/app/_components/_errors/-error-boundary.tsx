@@ -40,11 +40,14 @@ const ErrorFallback: React.FC<{ error: Error }> = ({ error }) => {
 				</Typography>
 				<Collapsible open={open} onOpenChange={setOpen} className='mb-6'>
 					<CollapsibleTrigger
-						className={cn(buttonVariants({ variant: 'link', className: 'px-0 text-foreground' }))}>
-						{open ? 'Show less' : 'Show more'}
+						className={cn(buttonVariants({ variant: 'link', className: 'gap-x-2 px-0 text-foreground' }))}>
+						<Typography variant='small' className='basis-16'>
+							{open ? 'Hide' : 'Show'}
+						</Typography>
+						<Icon name={open ? 'EyeOff' : 'Eye'} size={24} />
 					</CollapsibleTrigger>
 					<CollapsibleContent>
-						<ScrollArea className='h-64 w-full'>
+						<ScrollArea className='max-h-64 w-full'>
 							<Typography variant='p' color='muted'>
 								{error.stack}
 							</Typography>
