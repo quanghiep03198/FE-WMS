@@ -26,7 +26,7 @@ export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarP
 	}, [])
 
 	return (
-		<Div role='toolbar' className='flex items-center justify-between sm:justify-end'>
+		<Div role='toolbar' className='flex items-center justify-between py-1 sm:justify-end'>
 			<GlobalFilter />
 			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>

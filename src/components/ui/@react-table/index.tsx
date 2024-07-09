@@ -6,6 +6,7 @@ import {
 	type SortingState,
 	getCoreRowModel,
 	getExpandedRowModel,
+	getFacetedMinMaxValues,
 	getFacetedRowModel,
 	getFacetedUniqueValues,
 	getFilteredRowModel,
@@ -24,6 +25,7 @@ import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { type DataTableProps } from './types'
+import { fuzzySort } from './utils/fuzzy-sort.util'
 
 function DataTable<TData, TValue>({
 	data,
@@ -102,7 +104,6 @@ function DataTable<TData, TValue>({
 					}
 				: pagination
 		},
-		globalFilterFn,
 		manualPagination,
 		manualSorting,
 		manualFiltering,
@@ -113,6 +114,13 @@ function DataTable<TData, TValue>({
 		enableColumnResizing,
 		columnResizeMode: 'onChange',
 		debugAll: false,
+		sortingFns: {
+			fuzzy: fuzzySort
+		},
+		filterFns: {
+			fuzzy: fuzzyFilter
+		},
+		globalFilterFn: 'fuzzy',
 		onPaginationChange: manualPagination ? onPaginationChange : setPagination,
 		onSortingChange: manualSorting ? onSortingChange : setSorting,
 		onColumnFiltersChange: manualFiltering ? onColumnFiltersChange : setColumnFilters,
@@ -125,6 +133,7 @@ function DataTable<TData, TValue>({
 		getFilteredRowModel: getFilteredRowModel(),
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
+		getFacetedMinMaxValues: getFacetedMinMaxValues(),
 		getRowCanExpand,
 		...props
 		// getSubRows: (row) => row.subRows,
@@ -154,7 +163,7 @@ function DataTable<TData, TValue>({
 				setSorting,
 				setGlobalFilter
 			}}>
-			<Div className='flex h-full flex-col items-stretch gap-y-3'>
+			<Div className='mx-auto flex h-full w-full max-w-full flex-col items-stretch gap-y-3 overflow-auto scrollbar-none'>
 				{toolbarProps.hidden ? null : <TableToolbar table={table} slot={toolbarProps.slot} />}
 				<TableDataGrid
 					table={table}

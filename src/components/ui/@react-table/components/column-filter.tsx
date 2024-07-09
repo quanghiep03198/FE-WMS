@@ -12,12 +12,12 @@ type ColumnFilterProps<TData, TValue> = {
 
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
-	const filterType = column.columnDef.filterFn
+	const filterVariant = column.columnDef.meta?.filterVariant
 	const { hasNoFilter } = useContext(TableContext)
 	const metaFilterValues = column.columnDef.meta?.facetedUniqueValues
 
 	const sortedUniqueValues = useMemo(
-		() => (filterType === 'inNumberRange' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()),
+		() => (filterVariant === 'range' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()),
 		[column.getFacetedUniqueValues()]
 	)
 
@@ -28,11 +28,11 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 			</Div>
 		)
 
-	switch (filterType) {
-		case 'inNumberRange':
+	switch (filterVariant) {
+		case 'range':
 			return <NumberRangeFilter column={column} />
 
-		case 'equals':
+		case 'select':
 			return (
 				<DropdownSelect
 					selectTriggerProps={{

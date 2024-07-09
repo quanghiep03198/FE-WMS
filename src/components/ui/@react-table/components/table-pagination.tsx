@@ -2,7 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { PaginationState, Table } from '@tanstack/react-table'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-
 import {
 	Button,
 	Div,
@@ -89,7 +88,7 @@ export default function TablePagination<TData>({
 	}
 
 	return (
-		<Div role='navigation' className='ml-auto flex items-center space-x-6 lg:space-x-8'>
+		<Div role='navigation' className='ml-auto flex items-center space-x-6 py-1 lg:space-x-8'>
 			<Div className='flex items-center space-x-2'>
 				<Label className='font-medium'>{t('ns_common:table.rows_per_page')}</Label>
 				<Select

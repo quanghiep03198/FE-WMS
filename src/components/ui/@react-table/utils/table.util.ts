@@ -1,7 +1,6 @@
-import { Cell, ColumnFiltersState, ColumnMeta, SortingState, Table } from '@tanstack/react-table'
-import React from 'react'
+import { ColumnFiltersState, ColumnMeta, SortingState, Table } from '@tanstack/react-table'
 
-export class TableUtilities {
+export class DataTableUtility {
 	/**
 	 * @description Transform column filters from array to object
 	 * @param {SortingState} sorting
@@ -33,12 +32,12 @@ export class TableUtilities {
 		columnIndex: number,
 		instanceTable: Table<any>
 	) {
+		const allLeafColumns = instanceTable.getAllLeafColumns()
+
 		switch (columnStickyAlignment) {
 			case 'left': {
-				const previousColumns = instanceTable
-					.getAllFlatColumns()
-					.filter((column) => column.getIndex() < columnIndex)
-				if (previousColumns.length === 0) return { right: 0 }
+				const previousColumns = allLeafColumns.filter((column) => column.getIndex() < columnIndex)
+				if (columnIndex === 0) return { left: 0 }
 				return {
 					left: previousColumns.reduce((acc, curr) => {
 						return acc + curr.getSize()
@@ -46,8 +45,8 @@ export class TableUtilities {
 				}
 			}
 			case 'right': {
-				const nextColumns = instanceTable.getAllFlatColumns().filter((column) => column.getIndex() > columnIndex)
-				if (nextColumns.length === 0) return { right: 0 }
+				const nextColumns = allLeafColumns.filter((column) => column.getIndex() > columnIndex)
+				if (columnIndex === allLeafColumns.length - 1) return { right: 0 }
 				return {
 					right: nextColumns.reduce((acc, curr) => {
 						return acc + curr.getSize()
