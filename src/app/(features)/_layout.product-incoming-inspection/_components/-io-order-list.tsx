@@ -1,15 +1,15 @@
-import { Fragment, useMemo, useState } from 'react'
-import { AxiosRequestConfig } from 'axios'
-import { isEmpty, omit } from 'lodash'
-import { useTranslation } from 'react-i18next'
-import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
-import { PaginationState, SortingState, Table, createColumnHelper } from '@tanstack/react-table'
-import { IOSubOrderRow } from './-io-order-detail'
 import { IInOutBoundOrder } from '@/common/types/entities'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
-import { TableUtilities } from '@/components/ui/@react-table/utils/table.util'
+import { DataTableUtility } from '@/components/ui/@react-table/utils/table.util'
 import { IOService } from '@/services/inoutbound.service'
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
+import { PaginationState, SortingState, Table, createColumnHelper } from '@tanstack/react-table'
+import { AxiosRequestConfig } from 'axios'
+import { isEmpty, omit } from 'lodash'
+import { Fragment, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ProductionApprovalStatus } from '../_constants/-production.enum'
+import { IOSubOrderRow } from './-io-order-detail'
 
 const IO_PRODUCTION_PROVIDE_TAG = 'PRODUCTION' as const
 
@@ -47,9 +47,7 @@ const InOutBoundOrderList: React.FC = () => {
 						</button>
 					</Tooltip>
 				),
-				meta: {
-					sticky: 'left'
-				},
+				meta: { sticky: 'left' },
 				size: 64,
 				enableSorting: false,
 				enableHiding: false,
@@ -111,8 +109,8 @@ const InOutBoundOrderList: React.FC = () => {
 		getProductionQuery({
 			page: pagination.pageIndex + 1,
 			limit: pagination.pageSize,
-			search: TableUtilities.getColumnFiltersObject(columnFilters),
-			sort: TableUtilities.getColumnSortingObject(sorting)
+			search: DataTableUtility.getColumnFiltersObject(columnFilters),
+			sort: DataTableUtility.getColumnSortingObject(sorting)
 		})
 	)
 
@@ -120,8 +118,8 @@ const InOutBoundOrderList: React.FC = () => {
 		queryClient.prefetchQuery(
 			getProductionQuery({
 				...params,
-				search: TableUtilities.getColumnFiltersObject(columnFilters),
-				sort: TableUtilities.getColumnSortingObject(sorting)
+				search: DataTableUtility.getColumnFiltersObject(columnFilters),
+				sort: DataTableUtility.getColumnSortingObject(sorting)
 			})
 		)
 
@@ -151,7 +149,7 @@ const InOutBoundOrderList: React.FC = () => {
 				slot: () => (
 					<Fragment>
 						{Object.values(columnFilters).some((value) => !isEmpty(value)) && (
-							<Tooltip message={t('ns_common:actions.clear_filter')}>
+							<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 								<Button
 									variant='destructive'
 									size='icon'
@@ -162,7 +160,7 @@ const InOutBoundOrderList: React.FC = () => {
 								</Button>
 							</Tooltip>
 						)}
-						<Tooltip message={t('ns_common:actions.reload')}>
+						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 							<Button
 								variant='outline'
 								size='icon'

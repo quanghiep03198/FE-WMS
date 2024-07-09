@@ -1,4 +1,3 @@
-import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { createLazyFileRoute, useBlocker } from '@tanstack/react-router'
 import { Fragment, useCallback, useContext } from 'react'
@@ -11,6 +10,7 @@ import ScannedEPCsList from './_components/-scanned-epc-list'
 import ScanningActions from './_components/-scanning-actions'
 import { PageContext, PageProvider } from './_context/-page-context'
 import { Helmet } from 'react-helmet'
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
 	component: () => (
@@ -25,7 +25,8 @@ function Page() {
 	const { scanningStatus: readingStatus } = useContext(PageContext)
 
 	// Set page breadcrumb
-	useBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.inoutbound_commands') }])
+	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+	setBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.inoutbound_commands') }])
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({

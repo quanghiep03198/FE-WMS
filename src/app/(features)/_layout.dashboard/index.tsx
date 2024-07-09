@@ -1,4 +1,4 @@
-import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
@@ -15,7 +15,9 @@ export const Route = createFileRoute('/(features)/_layout/dashboard/')({
 
 function Page() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ to: '/dashboard', text: t('ns_common:navigation.dashboard') }])
+	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+
+	setBreadcrumb([{ to: '/dashboard', text: t('ns_common:navigation.dashboard') }])
 
 	return (
 		<Fragment>

@@ -1,6 +1,4 @@
-import { Fragment, useContext } from 'react'
-import { HomeIcon } from '@radix-ui/react-icons'
-import { Link } from '@tanstack/react-router'
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 import {
 	Breadcrumb,
 	BreadcrumbEllipsis,
@@ -13,12 +11,14 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/components/ui'
-import { BreadcrumbContext } from '../_providers/-breadcrumb-provider'
+import { HomeIcon } from '@radix-ui/react-icons'
+import { Link } from '@tanstack/react-router'
+import { Fragment } from 'react'
 
 const THREADS_HOLD = 3 as const
 
 export const NavBreadcrumb: React.FC = () => {
-	const { breadcrumb } = useContext(BreadcrumbContext)
+	const breadcrumb = useLayoutStore((state) => state.breadcrumb)
 
 	return (
 		<Breadcrumb className='sm:hidden md:hidden'>

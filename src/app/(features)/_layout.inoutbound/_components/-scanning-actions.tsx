@@ -53,7 +53,12 @@ const ScanningActions: React.FC = () => {
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup>
-						{Array.isArray(databases) && databases.map((item) => <SelectItem value={item}>{item}</SelectItem>)}
+						{Array.isArray(databases) &&
+							databases.map((item) => (
+								<SelectItem key={item} value={item}>
+									{item}
+								</SelectItem>
+							))}
 					</SelectGroup>
 				</SelectContent>
 			</Select>

@@ -11,16 +11,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
+import { useLayoutStore } from '../../_stores/-layout.store'
 
-type NavSidebarProps = {
-	isCollapsed: boolean
-	onCollapsedChange: React.Dispatch<React.SetStateAction<boolean>>
-}
+type NavLinkProps = { navSidebarOpen: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
-type NavLinkProps = { isCollapsed: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
-
-const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange: toggleCollapseSidebar }) => {
+const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
+	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore()
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 	const isMediumScreen = useMediaQuery(BreakPoints.MEDIUM)
 	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
@@ -29,7 +26,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
 			'ctrl.b': function () {
-				toggleCollapseSidebar(!isCollapsed)
+				toggleNavSidebarOpen()
 			},
 			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
 				acc[String(curr.keybinding)] = function () {
@@ -38,7 +35,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 				return acc
 			}, {})
 		}),
-		[isCollapsed]
+		[navSidebarOpen]
 	)
 
 	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
@@ -49,7 +46,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 	/**
 	 * @private
 	 */
-	const _isCollapsed = useMemo(() => isCollapsed || isLargeScreen, [isCollapsed, isLargeScreen])
+	const _navSidebarOpen = useMemo(() => navSidebarOpen || isLargeScreen, [navSidebarOpen, isLargeScreen])
 
 	if (isSmallScreen || isMediumScreen) return null
 
@@ -58,16 +55,19 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 			as='aside'
 			className={cn(
 				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden',
-				_isCollapsed ? 'w-16 items-center' : 'items-stretch xl:w-80 xxl:w-88'
+				_navSidebarOpen ? 'w-16 items-center' : 'items-stretch xl:w-80 xxl:w-88'
 			)}>
 			<Link
 				to='/dashboard'
-				className={cn('flex h-20 items-center', !_isCollapsed ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
+				className={cn(
+					'flex h-20 items-center',
+					!_navSidebarOpen ? 'gap-x-3 px-2' : 'aspect-square justify-center'
+				)}>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
 				<Div
 					className={cn(
 						'space-y-0.5 transition-[width_opacity]',
-						_isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
+						_navSidebarOpen ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
 					<Typography variant='small' className='mt-auto flex items-center gap-x-2 text-xs text-muted-foreground'>
@@ -76,12 +76,12 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 				</Div>
 			</Link>
 
-			<Menu aria-expanded={_isCollapsed} role='menu'>
+			<Menu aria-expanded={_navSidebarOpen} role='menu'>
 				{navigationConfig
 					.filter((item) => item.type === 'main')
 					.map((item) => (
 						<MenuItem key={item.id}>
-							<NavLink isCollapsed={_isCollapsed} {...item} />
+							<NavLink navSidebarOpen={_navSidebarOpen} {...item} />
 						</MenuItem>
 					))}
 				<Separator className='my-4' />
@@ -92,7 +92,7 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 					})
 					.map((item) => (
 						<MenuItem role='menuItem' tabIndex={0} key={item.id}>
-							<NavLink isCollapsed={_isCollapsed} {...item} />
+							<NavLink navSidebarOpen={_navSidebarOpen} {...item} />
 						</MenuItem>
 					))}
 			</Menu>
@@ -100,13 +100,13 @@ const NavSidebar: React.FC<NavSidebarProps> = ({ isCollapsed, onCollapsedChange:
 	)
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => {
+const NavLink: React.FC<NavLinkProps> = ({ navSidebarOpen, path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
 
 	return (
 		<Tooltip
 			message={t(title, { defaultValue: title })}
-			contentProps={{ side: 'right', hidden: !isCollapsed, sideOffset: 8, className: 'z-50' }}>
+			contentProps={{ side: 'right', hidden: !navSidebarOpen, sideOffset: 8, className: 'z-50' }}>
 			<Link
 				to={path}
 				role='link'
@@ -115,16 +115,16 @@ const NavLink: React.FC<NavLinkProps> = ({ isCollapsed, path, title, icon }) => 
 				className={cn(
 					buttonVariants({
 						variant: 'ghost',
-						size: isCollapsed ? 'icon' : 'default',
+						size: navSidebarOpen ? 'icon' : 'default',
 						className: 'flex px-2 text-base font-normal'
 					}),
-					!isCollapsed ? 'justify-start gap-x-3' : 'aspect-square size-9'
+					!navSidebarOpen ? 'justify-start gap-x-3' : 'aspect-square size-9'
 				)}>
 				<Icon name={icon} size={20} className='size-5 basis-5' />
 				<Typography
 					className={cn(
 						'text-left font-medium transition-[width_opacity]',
-						isCollapsed ? 'w-0 opacity-0 duration-150' : 'w-auto flex-1 opacity-100 duration-150'
+						navSidebarOpen ? 'w-0 opacity-0 duration-150' : 'w-auto flex-1 opacity-100 duration-150'
 					)}>
 					{t(title, { defaultValue: title })}
 				</Typography>

@@ -5,7 +5,6 @@ import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 import NavSidebar from './_components/_partials/-nav-sidebar'
 import Navbar from './_components/_partials/-navbar'
-import { BreadcrumbProvider } from './_components/_providers/-breadcrumb-provider'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
@@ -20,16 +19,14 @@ function Layout() {
 	return (
 		<AuthGuard>
 			<LayoutComposition.Container role='region'>
-				<NavSidebar isCollapsed={isCollapsed} onCollapsedChange={setIsCollapsed} />
+				<NavSidebar />
 				<LayoutComposition.Main as='main' role='main'>
-					<BreadcrumbProvider>
-						<Navbar isCollapsed={isCollapsed} onCollapseStateChange={setIsCollapsed} />
-						<LayoutComposition.OutletWrapper>
-							<ErrorBoundary>
-								<Outlet />
-							</ErrorBoundary>
-						</LayoutComposition.OutletWrapper>
-					</BreadcrumbProvider>
+					<Navbar />
+					<LayoutComposition.OutletWrapper>
+						<ErrorBoundary>
+							<Outlet />
+						</ErrorBoundary>
+					</LayoutComposition.OutletWrapper>
 				</LayoutComposition.Main>
 			</LayoutComposition.Container>
 		</AuthGuard>

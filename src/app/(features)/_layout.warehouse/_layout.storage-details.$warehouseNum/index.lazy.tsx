@@ -1,5 +1,4 @@
 // #region Modules
-import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import { CommonActions } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IWarehouseStorage } from '@/common/types/entities'
@@ -25,6 +24,8 @@ import { PageContext, PageProvider } from '../_contexts/-page-context'
 import WarehouseStorageFormDialog from './_components/-storage-form'
 import StorageRowActions from './_components/-storage-row-actions'
 import { warehouseStorageTypes } from '../_constants/-warehouse.constant'
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 // #endregion
 
 // #region Router declaration
@@ -50,7 +51,8 @@ function Page() {
 	const { dispatch } = useContext(PageContext)
 
 	// Set page breadcrumb navigation
-	useBreadcrumb([
+	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+	setBreadcrumb([
 		{
 			text: t('ns_common:navigation.warehouse_management'),
 			to: '/warehouse'
@@ -173,25 +175,32 @@ function Page() {
 				header: t('ns_warehouse:fields.storage_num'),
 				enableSorting: true,
 				enableColumnFilter: true,
-				enableHiding: false
+				enableHiding: false,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('storage_name', {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableSorting: true,
 				enableColumnFilter: true,
-				enableHiding: false
+				enableHiding: false,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('type_storage', {
 				header: t('ns_warehouse:fields.type_storage'),
 				enableSorting: true,
 				enableColumnFilter: true,
-				enableHiding: false
+				enableHiding: false,
+				meta: { filterVariant: 'select' }
 			}),
 			columnHelper.accessor('warehouse_name', {
 				header: t('ns_warehouse:fields.warehouse_name'),
 				enableSorting: true,
 				enableColumnFilter: true,
-				enableHiding: false
+				enableHiding: false,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('is_disable', {
 				header: t('ns_warehouse:fields.is_disable'),
@@ -241,7 +250,8 @@ function Page() {
 			}),
 			columnHelper.accessor('created', {
 				header: t('ns_common:common_fields.created_at'),
-				enableSorting: true
+				enableSorting: true,
+				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('remark', {
 				header: t('ns_common:common_fields.remark'),

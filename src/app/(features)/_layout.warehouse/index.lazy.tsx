@@ -14,11 +14,12 @@ import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/compon
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { WarehouseService } from '@/services/warehouse.service'
 import { WAREHOUSE_PROVIDE_TAG, useGetWarehouseQuery } from '../_composables/-warehouse.composable'
-import { useBreadcrumb } from '../_hooks/-use-breadcrumb'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
 import { PageContext, PageProvider } from './_contexts/-page-context'
 import { warehouseTypes } from './_constants/-warehouse.constant'
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 // #endregion
 
 // #region Router declaration
@@ -41,8 +42,9 @@ function Page() {
 	const queryClient = useQueryClient()
 	const { dispatch } = useContext(PageContext)
 
-	// Set breadcrumb navigation
-	useBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
+	// Set page breadcrumb navigation
+	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+	setBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
 
 	// Get warehouse data
 	const { data, isLoading, refetch } = useGetWarehouseQuery<IWarehouse[]>({
@@ -142,19 +144,23 @@ function Page() {
 				enableColumnFilter: true,
 				enableResizing: true,
 				enableSorting: true,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
 			columnHelper.accessor('type_warehouse', {
 				header: t('ns_warehouse:fields.type_warehouse'),
 				minSize: 250,
 				enableColumnFilter: true,
-				filterFn: 'equals'
+				meta: { filterVariant: 'select' }
 			}),
 			columnHelper.accessor('warehouse_name', {
 				header: t('ns_warehouse:fields.warehouse_name'),
 				minSize: 250,
 				enableResizing: true,
 				enableColumnFilter: true,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
 				enableSorting: true,
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
@@ -162,11 +168,12 @@ function Page() {
 			columnHelper.accessor('area', {
 				header: t('ns_warehouse:fields.area'),
 				minSize: 150,
-				filterFn: 'inNumberRange',
+				meta: { filterVariant: 'range' },
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
 				enableResizing: true,
 				enableSorting: true,
+				sortingFn: fuzzySort,
 				cell: ({ getValue }) => new Intl.NumberFormat('en-US', { minimumSignificantDigits: 3 }).format(getValue())
 			}),
 			columnHelper.accessor('is_disable', {

@@ -11,13 +11,10 @@ import { NavBreadcrumb } from './-nav-breadcrumb'
 import NavDrawerSidebar from './-nav-drawer-sidebar'
 import NavUserControl from './-nav-user-controller'
 import SearchDialog from './-search-dialog'
+import { useLayoutStore } from '../../_stores/-layout.store'
 
-type NavbarProps = {
-	isCollapsed: boolean
-	onCollapseStateChange: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) => {
+const Navbar: React.FC = () => {
+	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore()
 	const [open, setOpen] = React.useState<boolean>(false)
 	const { t } = useTranslation()
 	const { logout } = useAuth()
@@ -46,8 +43,8 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 								role='searchbox'
 								variant='ghost'
 								disabled={isLargeScreen}
-								aria-expanded={isCollapsed}
-								onClick={() => onCollapseStateChange(!isCollapsed)}>
+								aria-expanded={navSidebarOpen}
+								onClick={() => toggleNavSidebarOpen()}>
 								<Icon name='Menu' />
 							</Button>
 						</Tooltip>
@@ -76,7 +73,7 @@ const Navbar: React.FC<NavbarProps> = ({ isCollapsed, onCollapseStateChange }) =
 				</Div>
 			</Div>
 
-			<NavDrawerSidebar open={!isCollapsed} onOpenStateChange={onCollapseStateChange} />
+			<NavDrawerSidebar open={!navSidebarOpen} onOpenStateChange={toggleNavSidebarOpen} />
 			<SearchDialog open={open} onOpenChange={setOpen} />
 		</Fragment>
 	)
