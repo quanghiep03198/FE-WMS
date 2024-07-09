@@ -1,5 +1,6 @@
 import { Badge, Div, Separator, Typography } from '@/components/ui'
 import DataTable from '@/components/ui/@react-table'
+import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { NavigationConfig, navigationConfig } from '@/configs/navigation.config'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -40,13 +41,15 @@ function KeybindingsPage() {
 			header: 'ID',
 			enableSorting: true,
 			enableResizing: false,
+			sortingFn: fuzzySort,
 			size: 64
 		}),
 		columnHelper.accessor('title', {
 			header: t('ns_common:settings.function'),
 			enableSorting: true,
 			enableColumnFilter: true,
-			filterFn: 'equals',
+			filterFn: 'fuzzy',
+			sortingFn: fuzzySort,
 			minSize: 240
 		}),
 		columnHelper.accessor('keybinding', {
@@ -54,7 +57,8 @@ function KeybindingsPage() {
 			enableSorting: true,
 			enableColumnFilter: true,
 			enableResizing: true,
-			filterFn: 'weakEquals',
+			filterFn: 'fuzzy',
+			sortingFn: fuzzySort,
 			minSize: 240,
 			cell: ({ getValue }) => (
 				<Badge variant='secondary' className='font-mono'>
