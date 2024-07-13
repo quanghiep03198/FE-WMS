@@ -24,7 +24,7 @@ type DataTablePaginationProps<TData> = {
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
 } & PaginationBaseProps<TData>
 
-export default function TablePagination<TData>({
+function TablePagination<TData>({
 	table,
 	loading,
 	manualPagination,
@@ -187,3 +187,5 @@ export default function TablePagination<TData>({
 }
 
 TablePagination.displayName = 'TablePagination'
+
+export default TablePagination

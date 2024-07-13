@@ -1,4 +1,5 @@
-import { ColumnFiltersState, ColumnMeta, SortingState, Table } from '@tanstack/react-table'
+import { Column, ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import { CSSProperties } from 'react'
 
 export class DataTableUtility {
 	/**
@@ -27,34 +28,19 @@ export class DataTableUtility {
 		}, {})
 	}
 
-	public static getStickyOffsetPosition(
-		columnStickyAlignment: ColumnMeta<any, any>['sticky'],
-		columnIndex: number,
-		instanceTable: Table<any>
-	) {
-		const allLeafColumns = instanceTable.getAllLeafColumns()
-
-		switch (columnStickyAlignment) {
-			case 'left': {
-				const previousColumns = allLeafColumns.filter((column) => column.getIndex() < columnIndex)
-				if (columnIndex === 0) return { left: 0 }
-				return {
-					left: previousColumns.reduce((acc, curr) => {
-						return acc + curr.getSize()
-					}, 0)
-				}
-			}
-			case 'right': {
-				const nextColumns = allLeafColumns.filter((column) => column.getIndex() > columnIndex)
-				if (columnIndex === allLeafColumns.length - 1) return { right: 0 }
-				return {
-					right: nextColumns.reduce((acc, curr) => {
-						return acc + curr.getSize()
-					}, 0)
-				}
-			}
+	public static getStickyOffsetPosition<TData = any, TValue = any>(
+		column: Column<TData, TValue>
+	): CSSProperties | undefined {
+		const stickyAlignment = column?.columnDef?.meta?.sticky
+		switch (stickyAlignment) {
+			case 'left':
+				if (column.getIsFirstColumn()) return { position: 'sticky', left: 0 }
+				return { left: column.getStart() }
+			case 'right':
+				if (column.getIsLastColumn()) return { right: 0 }
+				return { position: 'sticky', right: column.getAfter() }
 			default:
-				return undefined
+				return
 		}
 	}
 }

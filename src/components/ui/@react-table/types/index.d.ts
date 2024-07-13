@@ -73,8 +73,10 @@ type SortingProps =
 			onSortingChange?: React.Dispatch<React.SetStateAction<SortingState>>
 	  }
 
+export type RenderSubComponent = (props: { row: Row<TData & any>; table: Table<TData, TValue> }) => React.ReactElement
+
 // #region Datatable prop types
-export type DataTableProps<TData, TValue> = {
+export type DataTableProps<TData = any, TValue = any> = {
 	data: Array<TData>
 	columns: ColumnDef<TData & any, TValue>[]
 	caption?: string
@@ -84,7 +86,7 @@ export type DataTableProps<TData, TValue> = {
 	toolbarProps?: ToolbarProps
 	sorting?: SortingState
 	onGetInstance?: React.Dispatch<React.SetStateAction<Table<TData>>>
-	renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement
+	renderSubComponent?: RenderSubComponent
 } & Partial<TableOptions<any>> &
 	PaginationProps<TData> &
 	ColumnFilterProps &

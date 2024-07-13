@@ -1,13 +1,16 @@
-import { flexRender, type Row, type Table as TTable } from '@tanstack/react-table'
-import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
-import { Fragment, WheelEventHandler, useCallback, useContext, useRef } from 'react'
-import { type DataTableProps } from '../types'
-import { Div, Icon, Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../..'
+import { cn } from '@/common/utils/cn'
+import { type Table as TTable } from '@tanstack/react-table'
+import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
+import { Fragment, useCallback, useContext, useMemo, useRef } from 'react'
+import { Div, Icon, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
 import { TableContext } from '../context/table.context'
+import { type DataTableProps } from '../types'
+import { DataTableUtility } from '../utils/table.util'
+import { ColumnFilter } from './column-filter'
 import ColumnResizer from './column-resizer'
+import { MemorizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
-import { DataTableUtility } from '../utils/table.util'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
@@ -16,70 +19,92 @@ interface TableProps<TData, TValue>
 	table: TTable<TData>
 }
 
-export const ESTIMATE_SIZE = 40
+export const ESTIMATE_SIZE = 36
 
-export default function TableDataGrid<TData, TValue>({
+function easeInOutQuint(t) {
+	return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t
+}
+
+function TableDataGrid<TData, TValue>({
 	containerProps = { style: { height: screen.height / 2 } },
 	table,
 	caption,
 	loading,
 	renderSubComponent
 }: TableProps<TData, TValue>) {
+	const { isFilterOpened, isScrolling, setIsScrolling } = useContext(TableContext)
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLTableSectionElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-	const { isScrolling, setIsScrolling } = useContext(TableContext)
+	const scrollingRef = useRef<number>()
+
+	const scrollToFn: VirtualizerOptions<any, any>['scrollToFn'] = useCallback((offset, canSmooth, instance) => {
+		const duration = 1000
+		const start = containerRef.current.scrollTop
+		const startTime = (scrollingRef.current = Date.now())
+
+		const run = () => {
+			if (scrollingRef.current !== startTime) return
+			const now = Date.now()
+			const elapsed = now - startTime
+			const progress = easeInOutQuint(Math.min(elapsed / duration, 1))
+			const interpolated = start + (offset - start) * progress
+
+			if (elapsed < duration) {
+				elementScroll(interpolated, canSmooth, instance)
+				requestAnimationFrame(run)
+			} else {
+				elementScroll(interpolated, canSmooth, instance)
+			}
+		}
+
+		requestAnimationFrame(run)
+	}, [])
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
-		overscan: table.getCanSomeRowsExpand() ? table.getExpandedRowModel().flatRows.length : 5,
+		overscan:
+			table.getCanSomeRowsExpand() && table.getIsSomeRowsExpanded()
+				? table.getExpandedRowModel().flatRows.length
+				: 5,
 		getScrollElement: () => containerRef.current,
 		estimateSize: useCallback(() => ESTIMATE_SIZE, []),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? (element) => element?.getBoundingClientRect().height
-				: undefined
+				: undefined,
+		scrollToFn
 	})
 
-	const virtualItems = virtualizer.getVirtualItems()
-
-	const [before, after] =
-		virtualItems.length > 0
-			? [
-					notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
-					virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems.length - 1]).end
-				]
-			: [0, 0]
-
-	const colSpan = table.getAllColumns().length
-
-	// Close all
-	const handleMouseWheel: WheelEventHandler = (e) => {
-		e.stopPropagation()
-		if (timeoutRef.current) clearTimeout(timeoutRef.current!)
-		setIsScrolling(!isScrolling)
-		timeoutRef.current = setTimeout(() => {
-			setIsScrolling(!isScrolling)
-		}, 0)
-	}
+	const columnSizeVars = useMemo(() => {
+		const headers = table.getFlatHeaders()
+		const colSizes: { [key: string]: number } = {}
+		for (let i = 0; i < headers.length; i++) {
+			const header = headers[i]!
+			colSizes[`--header-${header.id}-size`] = header.getSize()
+			colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
+		}
+		return colSizes
+	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
 	return (
 		<Div
 			role='group'
-			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/50 shadow'>
+			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/50'>
 			<Div
 				{...containerProps}
 				ref={containerRef}
 				role='scrollbar'
-				className='relative flex flex-col items-stretch overflow-auto scroll-smooth scrollbar scrollbar-track-background'
-				onWheel={handleMouseWheel}>
+				className={cn(
+					'relative flex flex-col items-stretch overflow-auto scroll-smooth scrollbar scrollbar-track-background',
+					containerProps?.className
+				)}>
 				<Table
 					ref={tableRef}
 					className='w-full table-fixed border-separate border-spacing-0'
-					style={{ minWidth: table.getTotalSize(), height: virtualizer.getTotalSize() }}>
+					style={{ ...columnSizeVars, minWidth: table.getTotalSize(), height: virtualizer.getTotalSize() }}>
 					{caption && (
 						<TableCaption aria-labelledby='#caption' className='hidden'>
 							{caption}
@@ -87,87 +112,69 @@ export default function TableDataGrid<TData, TValue>({
 					)}
 					<TableHeader className='sticky top-0 z-20 bg-background' ref={headerRef}>
 						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header, index) => (
-									<TableHead
-										key={header.id}
-										colSpan={header.colSpan}
-										data-sticky={header.column.columnDef?.meta?.sticky}
-										className='group relative p-0'
-										style={{
-											width: header.getSize(),
-											...DataTableUtility.getStickyOffsetPosition(
-												header.column.columnDef?.meta?.sticky,
-												header.column.getIndex(),
-												table
-											)
-										}}>
-										<TableCellHead table={table} header={header} />
-										{index === headerGroup.headers.length - 1 ? null : header.column.getCanResize() ? (
-											<ColumnResizer header={header} />
-										) : null}
-									</TableHead>
-								))}
-							</TableRow>
+							<Fragment key={headerGroup.id}>
+								<TableRow>
+									{headerGroup.headers.map((header) => {
+										const rowSpan = header.column.columnDef.meta?.rowSpan
+										if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
+											return null
+										}
+										return (
+											<TableHead
+												key={header.id}
+												colSpan={header.colSpan}
+												rowSpan={rowSpan}
+												data-sticky={header.column.columnDef?.meta?.sticky}
+												className={cn('group relative')}
+												style={{
+													width: `calc(var(--header-${header?.id}-size) * 1px)`,
+													...DataTableUtility.getStickyOffsetPosition(header.column)
+												}}>
+												<TableCellHead table={table} header={header} />
+												<ColumnResizer header={header} visible={true} />
+											</TableHead>
+										)
+									})}
+								</TableRow>
+								{isFilterOpened &&
+									headerGroup.headers.every((header) => {
+										return header.colSpan === 1
+									}) && (
+										<TableRow>
+											{headerGroup.headers.map((header) => {
+												return (
+													<TableHead
+														key={header.id}
+														colSpan={header.colSpan}
+														data-sticky={header.column.columnDef?.meta?.sticky}
+														className='group relative p-0'
+														style={{
+															width: `calc(var(--header-${header?.id}-size) * 1px)`,
+															...DataTableUtility.getStickyOffsetPosition(header.column)
+														}}>
+														{header.column.columnDef.enableColumnFilter ? (
+															<ColumnFilter column={header.column} />
+														) : (
+															<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
+																<Icon name='Minus' />
+															</Div>
+														)}
+													</TableHead>
+												)
+											})}
+										</TableRow>
+									)}
+							</Fragment>
 						))}
 					</TableHeader>
-					<TableBody>
-						{loading ? (
-							<TableBodyLoading table={table} prepareRows={10} />
-						) : (
-							<Fragment>
-								{before > 0 && (
-									<TableRow>
-										<TableCell colSpan={colSpan} style={{ height: before }} />
-									</TableRow>
-								)}
-								{virtualItems.map((virtualRow) => {
-									const row = rows[virtualRow.index] as Row<TData>
-									return (
-										<Fragment key={row.id}>
-											<TableRow
-												data-index={virtualRow.index}
-												ref={(node) => virtualizer.measureElement(node)}>
-												{row.getVisibleCells().map((cell) => (
-													<TableCell
-														key={cell.id}
-														data-sticky={cell.column.columnDef?.meta?.sticky}
-														data-state={row.getIsSelected() && 'selected'}
-														style={{
-															width: cell.column.getSize(),
-															height: virtualRow.size,
-															...DataTableUtility.getStickyOffsetPosition(
-																cell.column.columnDef?.meta?.sticky,
-																cell.column.getIndex(),
-																table
-															)
-														}}
-														className='py-1'>
-														<Div className='line-clamp-1'>
-															{flexRender(cell.column.columnDef.cell, cell.getContext())}
-														</Div>
-													</TableCell>
-												))}
-											</TableRow>
 
-											{row.getIsExpanded() && (
-												<TableRow className='bg-background'>
-													<TableCell colSpan={row.getVisibleCells().length} className='sticky left-0'>
-														{typeof renderSubComponent === 'function' && renderSubComponent({ row })}
-													</TableCell>
-												</TableRow>
-											)}
-										</Fragment>
-									)
-								})}
-								{after > 0 && (
-									<TableRow>
-										<TableCell colSpan={colSpan} style={{ height: after }} />
-									</TableRow>
-								)}
-							</Fragment>
-						)}
-					</TableBody>
+					{loading ? (
+						<TableBodyLoading table={table} prepareRows={10} />
+					) : table.getState().columnSizingInfo.isResizingColumn ? (
+						<MemorizedTableBody {...{ table, virtualizer, renderSubComponent }} />
+					) : (
+						<TableBody {...{ table, virtualizer, renderSubComponent }} />
+					)}
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && (
 					<Div
@@ -192,3 +199,5 @@ export default function TableDataGrid<TData, TValue>({
 }
 
 TableDataGrid.displayName = 'DataTable'
+
+export default TableDataGrid

@@ -40,7 +40,7 @@ export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarP
 				</Tooltip>
 				{Slot && <Slot table={table} />}
 				<GlobalFilterPopover />
-				{table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
+				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
 					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 						<Button variant='outline' onClick={() => setIsFilterOpened(!isFilterOpened)} size='icon'>
 							<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />

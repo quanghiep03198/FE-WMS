@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
 	type ColumnFiltersState,
 	type ExpandedState,
 	type GlobalFilterTableState,
 	type PaginationState,
 	type SortingState,
+	Table,
 	getCoreRowModel,
 	getExpandedRowModel,
 	getFacetedMinMaxValues,
@@ -16,57 +18,65 @@ import {
 } from '@tanstack/react-table'
 import { useDeepCompareEffect } from 'ahooks'
 import { omit } from 'lodash'
-import { memo, useMemo, useState } from 'react'
+import { forwardRef, memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, Typography } from '..'
 import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
-import { fuzzyFilter } from './utils/fuzzy-filter.util'
+import { useSkipper } from './hooks/use-skipper'
 import { type DataTableProps } from './types'
+import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
 
-function DataTable<TData, TValue>({
-	data,
-	caption,
-	columns,
-	loading,
-	containerProps,
-	paginationProps = { hidden: false },
-	toolbarProps = { hidden: false },
-	manualPagination = false,
-	manualSorting = false,
-	manualFiltering = false,
-	enableColumnResizing = true,
-	enableRowSelection = false,
-	enableColumnFilters = true,
-	enableSorting = true,
-	enableExpanding = true,
-	enableGlobalFilter = true,
-	globalFilterFn = fuzzyFilter,
-	sorting,
-	columnFilters,
-	globalFilter,
-	onGlobalFilterChange,
-	onColumnFiltersChange,
-	renderSubComponent,
-	getRowCanExpand,
-	onPaginationChange,
-	onGetInstance,
-	onSortingChange,
-	...props
-}: DataTableProps<TData, TValue>) {
-	const [pagination, setPagination] = useState<PaginationState>(() => ({
-		pageIndex: 0,
-		pageSize: 10
-	}))
+function DataTable<TData, TValue>(
+	{
+		data,
+		caption,
+		columns,
+		loading,
+		containerProps,
+		paginationProps = { hidden: false },
+		toolbarProps = { hidden: false },
+		manualPagination = false,
+		manualSorting = false,
+		manualFiltering = false,
+		enableColumnResizing = true,
+		enableRowSelection = false,
+		enableColumnFilters = true,
+		enableSorting = true,
+		enableExpanding = true,
+		enableGlobalFilter = true,
+		globalFilterFn = fuzzyFilter,
+		sorting,
+		columnFilters,
+		globalFilter,
+		onGlobalFilterChange,
+		onColumnFiltersChange,
+		renderSubComponent,
+		getRowCanExpand,
+		onPaginationChange,
+		onGetInstance,
+		onSortingChange,
+		...props
+	}: DataTableProps<TData, TValue>,
+	ref: React.MutableRefObject<Table<any>>
+) {
+	const [_data, setData] = useState(() => data ?? [])
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
 	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
 	const [isScrolling, setIsScrolling] = useState(false)
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
+	const [originalData, setOriginalData] = useState(() => data ?? [])
+	const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper()
+	const [editedRows, setEditedRows] = useState({})
+	const [pagination, setPagination] = useState<PaginationState>(() => ({
+		pageIndex: 0,
+		pageSize: 10
+	}))
 
 	const hasNoFilter = useMemo(() => {
 		if (manualFiltering) return columnFilters?.length === 0
@@ -79,11 +89,18 @@ function DataTable<TData, TValue>({
 	 * Avoid infinite loop if data is empty
 	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
 	 */
-	const _data = useMemo(() => (Array.isArray(data) ? data : []), [data])
+	useDeepCompareEffect(() => {
+		setOriginalData(data)
+		setData(data)
+	}, [data])
 
 	const table = useReactTable({
 		data: _data,
 		columns,
+		defaultColumn: {
+			minSize: 60,
+			maxSize: 800
+		},
 		initialState: {
 			globalFilter: '',
 			columnFilters: [],
@@ -135,6 +152,34 @@ function DataTable<TData, TValue>({
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 		getFacetedMinMaxValues: getFacetedMinMaxValues(),
 		getRowCanExpand,
+		autoResetPageIndex,
+		meta: {
+			editedRows,
+			setEditedRows,
+			updateData: (rowIndex, columnId, value) => {
+				// Skip page index reset until after next rerender
+				console.log(value)
+				skipAutoResetPageIndex()
+				setData((old) =>
+					old.map((row, index) => {
+						if (index === rowIndex) {
+							return {
+								...old[rowIndex],
+								[columnId]: value
+							}
+						}
+						return row
+					})
+				)
+			},
+			revertUpdatedData: (rowIndex: number, condition: boolean) => {
+				if (condition) {
+					setData((old) => old.map((row, index) => (index === rowIndex ? originalData[rowIndex] : row)))
+				} else {
+					setOriginalData((old) => old.map((row, index) => (index === rowIndex ? data[rowIndex] : row)))
+				}
+			}
+		},
 		...props
 		// getSubRows: (row) => row.subRows,
 	})
@@ -143,8 +188,8 @@ function DataTable<TData, TValue>({
 		String(table.getFilteredSelectedRowModel().rows.length) + '/' + String(table.getFilteredRowModel().rows.length)
 
 	useDeepCompareEffect(() => {
-		if (typeof onGetInstance === 'function') onGetInstance(table)
-	}, [onGetInstance])
+		if (ref) ref.current = table
+	}, [ref, table.getState()])
 
 	return (
 		<TableContext.Provider
@@ -163,7 +208,7 @@ function DataTable<TData, TValue>({
 				setSorting,
 				setGlobalFilter
 			}}>
-			<Div className='mx-auto flex h-full w-full max-w-full flex-col items-stretch gap-y-3 overflow-auto scrollbar-none'>
+			<Div className='space-y-3'>
 				{toolbarProps.hidden ? null : <TableToolbar table={table} slot={toolbarProps.slot} />}
 				<TableDataGrid
 					table={table}
@@ -198,4 +243,4 @@ function DataTable<TData, TValue>({
 	)
 }
 
-export default memo(DataTable)
+export default memo(forwardRef(DataTable))
