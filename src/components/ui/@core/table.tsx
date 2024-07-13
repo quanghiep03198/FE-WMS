@@ -4,7 +4,7 @@ import { cn } from '@/common/utils/cn'
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
 	({ className, ...props }, ref) => (
-		<table ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
+		<table cellSpacing={0} ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
 	)
 )
 Table.displayName = 'Table'
@@ -44,7 +44,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
 		<tr
 			ref={ref}
 			className={cn(
-				'divide-x divide-border [&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&:not(:last-child)_td]:border-b [&_th]:border-b',
+				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&>*]:border-b',
 				className
 			)}
 			{...props}
@@ -59,7 +59,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
 			ref={ref}
 			style={{ position: 'inherit' }}
 			className={cn(
-				'w-full bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/20 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10',
+				'w-full border-b border-r bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/50 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[sticky=right]:border-l',
 				className
 			)}
 			{...props}
@@ -73,7 +73,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'bg-background px-4 py-2 align-middle text-sm group-hover:bg-secondary data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[disabled=true]:bg-muted data-[state=selected]:bg-accent [&:has([role=checkbox])]:min-w-4',
+				'[&:has([role=checkbox])] border-b border-r bg-background px-4 py-2 align-middle text-sm  group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[sticky=right]:border-l data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
 				className
 			)}
 			{...props}

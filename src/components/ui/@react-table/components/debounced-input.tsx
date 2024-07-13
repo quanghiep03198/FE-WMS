@@ -17,10 +17,7 @@ export const DebouncedInput: React.FC<DebouncedInputProps> = ({
 }) => {
 	const [_value, setValue] = useState(value)
 
-	console.log(_value)
-
 	useEffect(() => {
-		console.log('value', value)
 		setValue(value)
 	}, [value])
 
@@ -38,7 +35,7 @@ export const DebouncedInput: React.FC<DebouncedInputProps> = ({
 			value={_value}
 			onChange={(e) => setValue(e.target.value)}
 			className={cn(
-				'border-none shadow-none outline-none ring-0 ring-offset-transparent placeholder:text-xs',
+				'border-none shadow-none outline-none ring-0 ring-offset-transparent duration-0 placeholder:text-xs',
 				className
 			)}
 		/>

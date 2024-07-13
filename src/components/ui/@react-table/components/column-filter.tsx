@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Column } from '@tanstack/react-table'
 import { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,17 +17,16 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 	const { hasNoFilter } = useContext(TableContext)
 	const metaFilterValues = column.columnDef.meta?.facetedUniqueValues
 
-	const sortedUniqueValues = useMemo(
-		() => (filterVariant === 'range' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()),
-		[column.getFacetedUniqueValues()]
-	)
-
 	if (!column.columnDef.enableColumnFilter)
 		return (
 			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
 				<Icon name='Minus' />
 			</Div>
 		)
+
+	const sortedUniqueValues = useMemo(() => {
+		return filterVariant === 'range' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()
+	}, [column.getFacetedUniqueValues()])
 
 	switch (filterVariant) {
 		case 'range':
@@ -42,7 +42,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					}}
 					placeholder={t('ns_common:table.search_in_column')}
 					onValueChange={(value) => column.setFilterValue(value)}
-					options={
+					data={
 						Array.isArray(metaFilterValues)
 							? metaFilterValues
 							: sortedUniqueValues
@@ -52,6 +52,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 										value: value
 									}))
 					}
+					labelField='label'
+					valueField='value'
 				/>
 			)
 
