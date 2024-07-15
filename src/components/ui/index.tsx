@@ -35,6 +35,7 @@ export * from './@core/textarea'
 export * from './@core/toggle'
 export * from './@core/alert-dialog'
 export * from './@core/chart'
+export * from './@core/hover-card'
 // #endregion
 
 // #region Form field controls

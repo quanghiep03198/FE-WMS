@@ -1,14 +1,16 @@
 import { cn } from '@/common/utils/cn'
-import { CommandGroup, CommandList } from 'cmdk'
-import { useId, useRef } from 'react'
+import { memo, useId, useRef } from 'react'
 import { FieldValues, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
 	Command,
 	CommandEmpty,
+	CommandGroup,
 	CommandInput,
 	CommandItem,
+	CommandList,
+	CommandLoading,
 	FormControl,
 	FormDescription,
 	FormField,
@@ -18,7 +20,6 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	ScrollArea,
 	Typography
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
@@ -30,12 +31,15 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 > & {
 	form: UseFormReturn<T>
 	data: Array<D>
-	labelField: keyof D
-	valueField: keyof D
 	disabled?: boolean
+	loading?: boolean
 	template?: React.FC<{ data: D }>
+	shouldFilter?: boolean
 	onInput?: (value: string) => unknown
 	onSelect?: (value: string) => unknown
+} & {
+	labelField: keyof D
+	valueField: keyof D
 }
 
 export function ComboboxFieldControl<T extends FieldValues, D extends Record<string, any>>(
@@ -54,9 +58,11 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		orientation,
 		disabled,
 		hidden,
-		template: CommandItemTemplate,
 		placeholder = t('ns_common:actions.search') + ' ... ',
 		messageType = 'alternative',
+		shouldFilter, // Determine using manual filtering or automatic filtering
+		loading, // Loading state from server if manual filtering is applied
+		template: CommandItemTemplate, // Custom command item template
 		onInput,
 		onSelect
 	} = props
@@ -75,7 +81,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 							hidden: hidden,
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
+						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
 						<FormControl>
 							<Popover>
 								<PopoverTrigger asChild>
@@ -87,7 +93,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 											variant='outline'
 											disabled={disabled}
 											className={cn(
-												'w-full justify-between hover:bg-background',
+												'w-full justify-between font-normal hover:bg-background',
 												!field.value && 'text-muted-foreground'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
@@ -99,49 +105,45 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent
-									className='w-full p-0'
-									style={{ width: triggerRef.current?.offsetWidth }}
-									align='start'>
-									<Command>
+								<PopoverContent style={{ padding: 0, width: triggerRef.current?.offsetWidth }} align='center'>
+									<Command shouldFilter={shouldFilter}>
 										<CommandInput
 											placeholder={placeholder}
-											className='h-9'
-											onInput={(e) => {
-												if (onInput) onInput(e.currentTarget.value)
+											onValueChange={(value) => {
+												if (typeof onInput === 'function') onInput(value)
 											}}
 										/>
-										<CommandEmpty>No result</CommandEmpty>
-										<CommandList>
+										{loading && <CommandLoading />}
+										{!loading && <CommandEmpty>No result</CommandEmpty>}
+										<CommandList className='scrollbar'>
 											<CommandGroup>
-												<ScrollArea className='h-56' onWheel={(e) => e.stopPropagation()}>
-													{Array.isArray(data) &&
-														data.map((option) => (
-															<CommandItem
-																key={option[valueField]}
-																value={option[valueField]}
-																className='line-clamp-1 flex items-center gap-x-4'
-																onSelect={() => {
-																	form.setValue(name, option[valueField])
-																	if (typeof onSelect === 'function') onSelect(option[valueField])
-																}}>
-																{CommandItemTemplate ? (
-																	<CommandItemTemplate data={option} />
-																) : (
-																	<Typography variant='small' className='line-clamp-1 flex-1'>
-																		{option[labelField]}
-																	</Typography>
+												{data?.map((option) => {
+													return (
+														<CommandItem
+															key={option[valueField]}
+															value={option[valueField]}
+															className='line-clamp-1 flex items-center gap-x-4'
+															onSelect={() => {
+																form.setValue(name, option[valueField])
+																if (typeof onSelect === 'function') onSelect(option[valueField])
+															}}>
+															{CommandItemTemplate ? (
+																<CommandItemTemplate data={option} />
+															) : (
+																<Typography variant='small' className='line-clamp-1 flex-1'>
+																	{option[labelField]}
+																</Typography>
+															)}
+															<Icon
+																name='Check'
+																className={cn(
+																	'ml-auto',
+																	option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
 																)}
-																<Icon
-																	name='Check'
-																	className={cn(
-																		'ml-auto',
-																		option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
-																	)}
-																/>
-															</CommandItem>
-														))}
-												</ScrollArea>
+															/>
+														</CommandItem>
+													)
+												})}
 											</CommandGroup>
 										</CommandList>
 									</Command>
@@ -157,4 +159,4 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	)
 }
 
-export default ComboboxFieldControl
+export default memo(ComboboxFieldControl)

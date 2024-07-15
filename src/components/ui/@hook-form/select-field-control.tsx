@@ -54,7 +54,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 							hidden,
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
+						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
 						<Select
 							value={field.value}
 							defaultValue={field.value}

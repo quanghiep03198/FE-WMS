@@ -1,3 +1,5 @@
+import { OrderStatus } from '@/common/constants/enums'
+
 export default {
 	counter_box: {
 		label: 'Scanned EPCs',
@@ -10,7 +12,9 @@ export default {
 	labels: {
 		io_reason: 'Import/Export reason',
 		io_archive_warehouse: 'Archived warehouse',
-		io_storage_location: 'Storage location'
+		io_storage_location: 'Storage location',
+		order_information: 'Order information',
+		transfer_information: 'Transfer information'
 	},
 	inoutbound_actions: {
 		normal_import: 'Normally import',
@@ -27,10 +31,10 @@ export default {
 		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?'
 	},
 	fields: {
-		transfer_order_code: 'Transfer order code',
 		mo_no: 'Order',
 		or_no: 'Order code',
 		or_custpo: 'Customer order code',
+		transfer_order_code: 'Transfer order code',
 		// I/O production
 		status_approve: 'Approval status',
 		sno_no: 'Order code',
@@ -54,5 +58,11 @@ export default {
 		returned_qty: 'Returned quantity',
 		conversion_rate: 'Conversion rate',
 		required_date: 'Required date'
+	},
+	order_status: {
+		[OrderStatus.NOT_APPROVED]: 'Not approved',
+		[OrderStatus.APPROVED]: 'Approved',
+		[OrderStatus.CANCELLED]: 'Cancelled',
+		[OrderStatus.REAPPROVED]: 'Reapproved'
 	}
 }
