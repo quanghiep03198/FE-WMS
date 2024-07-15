@@ -3,12 +3,12 @@ import { useDeepCompareEffect } from 'ahooks'
 import _ from 'lodash'
 import { useCallback } from 'react'
 
-export default function useQueryParams(defaultParams?: Record<string, any>) {
+export default function useQueryParams<T extends Record<string, any>>(defaultParams?: T) {
 	const navigate = useNavigate()
 
 	const searchParams = useSearch({
 		strict: false,
-		select: (search) => search as Record<string, any>
+		select: (search: T) => search
 	})
 	/**
 	 * Set search params from URL
