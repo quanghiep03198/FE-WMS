@@ -57,12 +57,26 @@ export default {
 		inspected_qty: 'Inspected quantity',
 		returned_qty: 'Returned quantity',
 		conversion_rate: 'Conversion rate',
-		required_date: 'Required date'
+		required_date: 'Required date',
+		//
+		trans_num: 'Number of Boxes Issued',
+		or_qtyperpacking: 'Total Quantity per Box',
+		sno_qty: 'Box Quantity',
+		kg_nostart: 'Starting Box Number',
+		kg_noend: 'Ending Box Number'
 	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: 'Not approved',
 		[OrderStatus.APPROVED]: 'Approved',
 		[OrderStatus.CANCELLED]: 'Cancelled',
 		[OrderStatus.REAPPROVED]: 'Reapproved'
+	},
+	titles: {
+		transfer_order_list: 'Transfer orders list',
+		transfer_order_datalist: 'Transfer order datalist'
+	},
+	description: {
+		transfer_order_list: 'Following and managing transfer orders',
+		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders'
 	}
 }

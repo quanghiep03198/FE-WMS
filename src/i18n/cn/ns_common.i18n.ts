@@ -22,6 +22,8 @@ export default {
 		update: '編輯',
 		delete: '删除',
 		save: '保存',
+		save_changes: '保存更改',
+		revert_changes: '恢复更改',
 		cancel: '取消',
 		submit: '确认',
 		confirm: '确认',
@@ -40,7 +42,10 @@ export default {
 		detail: '细节',
 		clear_filter: '删除过滤',
 		toggle_sidebar: '切换主侧边栏',
-		toggle_theme: '切换主题'
+		toggle_theme: '切换主题',
+		approve: '批准',
+		reapprove: '重新批准',
+		cancel_approve: '取消批准'
 	},
 	form_placeholder: {
 		select: '-- Select {{object}} --',

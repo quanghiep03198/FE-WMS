@@ -57,12 +57,26 @@ export default {
 		inspected_qty: '已驗收量',
 		returned_qty: '已退貨量',
 		conversion_rate: '換算率',
-		required_date: '需求日期'
+		required_date: '需求日期',
+		//
+		trans_num: '調撥箱數',
+		sno_qty: '每箱數量',
+		or_qtyperpacking: '數量小計',
+		kg_nostart: '起始箱號',
+		kg_noend: '結束箱號'
 	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: '未審核',
 		[OrderStatus.APPROVED]: '已審核',
 		[OrderStatus.CANCELLED]: '取消審核 ',
 		[OrderStatus.REAPPROVED]: '重新審核'
+	},
+	titles: {
+		transfer_order_list: '转移订单列表',
+		transfer_order_datalist: '转移订单数据列表'
+	},
+	description: {
+		transfer_order_list: '跟踪和管理转移订单',
+		transfer_order_datalist: '从下面的表格中选择数据以添加新转移订单'
 	}
 }
