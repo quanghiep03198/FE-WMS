@@ -56,12 +56,26 @@ export default {
 		inspected_qty: 'Số Lượng Đã Kiểm Tra', // Inspected Quantity
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
-		required_date: 'Ngày Yêu Cầu' // Required Date
+		required_date: 'Ngày Yêu Cầu', // Required Date
+		//
+		trans_num: 'Lượng thùng đã phát',
+		or_qtyperpacking: 'Tổng số lượng đóng thùng',
+		sno_qty: 'Số lượng đóng thùng',
+		kg_nostart: 'Thứ tự thùng đầu',
+		kg_noend: 'Thứ tự thùng cuối'
 	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: 'Chờ duyệt',
 		[OrderStatus.APPROVED]: 'Đã duyệt',
 		[OrderStatus.CANCELLED]: 'Đã hủy duyệt',
 		[OrderStatus.REAPPROVED]: 'Duyệt lại'
+	},
+	titles: {
+		transfer_order_list: 'Danh sách đơn chuyển kho',
+		transfer_order_datalist: 'Dữ liệu đơn chuyển kho'
+	},
+	description: {
+		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho',
+		transfer_order_datalist: 'Chọn dữ liệu từ bảng dưới để thêm đơn chuyển kho mới'
 	}
 }

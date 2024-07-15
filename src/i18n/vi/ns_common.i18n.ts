@@ -30,6 +30,8 @@ export default {
 		reset: 'Đặt lại',
 		finish: 'Hoàn thành',
 		save: 'Lưu',
+		save_changes: 'Lưu thay đổi',
+		revert_changes: 'Hủy thay đổi',
 		select: 'Chọn',
 		cancel: 'Hủy',
 		submit: 'Xác nhận',
@@ -41,7 +43,10 @@ export default {
 		reload: 'Tải lại',
 		clear_filter: 'Xóa lọc',
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
-		toggle_theme: 'Chuyển đổi chế độ nền'
+		toggle_theme: 'Chuyển đổi chế độ nền',
+		approve: 'Duyệt',
+		reapprove: 'Duyệt lại',
+		cancel_approve: 'Hủy duyệt'
 	},
 	table: {
 		selected_rows: 'Đã chọn {{selectedRows}} dòng',

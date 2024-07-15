@@ -22,6 +22,8 @@ export default {
 		update: 'Update',
 		delete: 'Delete',
 		save: 'Save',
+		save_changes: 'Save changes',
+		revert_changes: 'Revert changes',
 		cancel: 'Cancel',
 		submit: 'Submit',
 		confirm: 'Confirm',
@@ -40,7 +42,10 @@ export default {
 		detail: 'Detail',
 		clear_filter: 'Clear filters',
 		toggle_sidebar: 'Toggle Primary Side Bar',
-		toggle_theme: 'Toggle Theme'
+		toggle_theme: 'Toggle Theme',
+		approve: 'Approve',
+		reapprove: 'Reapprove',
+		cancel_approve: 'Cancel Approval'
 	},
 	table: {
 		selected_rows: '{{selectedRows}} row(s) selected',
