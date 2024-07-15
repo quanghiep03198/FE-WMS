@@ -5,15 +5,19 @@ import { InOutBoundFormValues } from '@/schemas/epc-inoutbound.schema'
 type InOutBoundPayload = InOutBoundFormValues & { epc_code: Array<string>; host: string }
 
 export class RFIDService {
-	static async getUnscannedEPC(host: string) {
-		return axiosInstance.get<void, ResponseBody<IElectronicProductCode[]>>(`/rfid/read-epc/${host}`)
+	static async getUnscannedEpc(host: string) {
+		return await axiosInstance.get<void, ResponseBody<IElectronicProductCode[]>>(`/rfid/read-epc/${host}`)
 	}
 
 	static async updateStockMovement(payload: InOutBoundPayload) {
-		return axiosInstance.patch<InOutBoundPayload, ResponseBody<null>>('/rfid/update-stock-movement', payload)
+		return await axiosInstance.patch<InOutBoundPayload, ResponseBody<null>>('/rfid/update-stock-movement', payload)
 	}
 
 	static async getDatabaseCompatibility() {
-		return axiosInstance.get<void, ResponseBody<string[]>>('/rfid/database-compatibility')
+		return await axiosInstance.get<void, ResponseBody<string[]>>('/rfid/database-compatibility')
+	}
+
+	static async syncEpcOrderCode() {
+		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono')
 	}
 }
