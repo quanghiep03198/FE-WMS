@@ -1,13 +1,10 @@
-import { ITransferOrder } from '@/common/types/entities'
 import { format } from 'date-fns'
 
 const customerBrands = ['UGG', 'Decker']
 
 const cofactoryRefs = ['A', 'B', 'C', 'K']
-const factoryCode = ['VA1', 'VB1', 'VB2', 'CA1']
-const warehouseTypes = ['A', 'B', 'C']
 
-export const transferOrders: ITransferOrder[] = Array.from(new Array(1000)).map((_, index) => ({
+export const transferOrders = Array.from(new Array(1000)).map((_, index) => ({
 	id: String(index + 1),
 	custbrand_id: crypto.randomUUID().split('-').slice(0, 1).join(''),
 	brand_name: customerBrands[Math.floor(Math.random() * customerBrands.length)],
