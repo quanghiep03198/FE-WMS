@@ -1,7 +1,11 @@
-import FallbackPage from '@/app/_components/_errors/-fallback-page'
-import { useBreadcrumb } from '@/app/(features)/_hooks/-use-breadcrumb'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { Fragment, lazy, Suspense } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import { useLayoutStore } from '../_stores/-layout.store'
+const OrderDatalistDialog = lazy(() => import('./_components/-orders-datalist-dialog'))
+const TransferOrdersList = lazy(() => import('./_components/-transfer-orders-list'))
+const TransferOrderDetail = lazy(() => import('./_components/-transfer-order-detail'))
 
 export const Route = createLazyFileRoute('/(features)/_layout/transfer-management/')({
 	component: Page
@@ -9,7 +13,21 @@ export const Route = createLazyFileRoute('/(features)/_layout/transfer-managemen
 
 function Page() {
 	const { t } = useTranslation()
-	useBreadcrumb([{ to: '/transfer-management', text: t('ns_common:navigation.transfer_managment') }])
+	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+	setBreadcrumb([{ to: '/transfer-management', text: t('ns_common:navigation.transfer_managment') }])
 
-	return <FallbackPage />
+	return (
+		<Fragment>
+			<Helmet title={t('ns_common:navigation.transfer_managment')} />
+			<Suspense fallback={null}>
+				<TransferOrdersList />
+			</Suspense>
+			<Suspense fallback={null}>
+				<OrderDatalistDialog />
+			</Suspense>
+			<Suspense fallback={null}>
+				<TransferOrderDetail />
+			</Suspense>
+		</Fragment>
+	)
 }
