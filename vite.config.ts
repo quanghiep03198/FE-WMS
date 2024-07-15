@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { defineConfig } from 'vite'
+import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,9 +34,9 @@ export default defineConfig({
 		rollupOptions: {
 			output: {
 				manualChunks(id: string) {
-					if (id.includes('node_modules')) {
-						return 'vendor'
-					}
+					// if (id.includes('node_modules')) {
+					// 	return 'vendor'
+					// }
 					// creating a chunk to react routes deps. Reducing the vendor chunk size
 					if (id.includes('react-router')) {
 						return '@tanstack/react-router'

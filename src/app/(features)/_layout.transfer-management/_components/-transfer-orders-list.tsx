@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { BreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
+import { ITransferOrder } from '@/common/types/entities'
 import { Button, DataTable, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { type Table } from '@tanstack/react-table'
@@ -14,7 +15,6 @@ import {
 } from '../_composables/-use-transfer-order-api'
 import { useTransferOrderTableColumns } from '../_composables/-use-transfer-order-columns'
 import { usePageStore } from '../_stores/-page-store'
-import { ITransferOrder } from '@/common/types/entities'
 
 const TransferOrdersList: React.FC = () => {
 	const tableRef = useRef<Table<any>>(null)

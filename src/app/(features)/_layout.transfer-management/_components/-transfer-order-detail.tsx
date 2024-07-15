@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useUpdateTransferOrderDetailMutation } from '../_composables/-use-transfer-order-api'
-import { updateTransferOrderDetailSchema, UpdateTransferOrderDetailValues } from '../_schemas/-transfer-order.schema'
+import { UpdateTransferOrderDetailValues, updateTransferOrderDetailSchema } from '../_schemas/-transfer-order.schema'
 import { usePageStore } from '../_stores/-page-store'
 
 const TransferOrderDetail: React.FC = () => {

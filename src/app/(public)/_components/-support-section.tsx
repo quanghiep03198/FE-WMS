@@ -1,8 +1,8 @@
+import env from '@/common/utils/env'
 import { Div, Icon, Typography } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import { memo, useRef } from 'react'
 import { useScrollIntoView } from '..'
-import env from '@/common/utils/env'
 
 const SupportSection: React.FunctionComponent = () => {
 	const sectionRef = useRef<HTMLDivElement>(null)

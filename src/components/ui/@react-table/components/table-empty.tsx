@@ -1,5 +1,5 @@
-import React from 'react'
 import { Div, Icon } from '@/components/ui'
+import React from 'react'
 
 const TableEmpty: React.FC = () => {
 	return (

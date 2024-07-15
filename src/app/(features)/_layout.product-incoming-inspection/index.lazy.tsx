@@ -1,3 +1,4 @@
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
@@ -5,7 +6,6 @@ import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import InOutBoundOrderList from './_components/-io-order-list'
 import InoutBoundSizeRun from './_components/-io-size-run'
-import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 
 export const Route = createLazyFileRoute('/(features)/_layout/product-incoming-inspection/')({
 	component: Page

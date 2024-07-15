@@ -1,6 +1,6 @@
 import { getUserProfileQuery } from '@/app/_composables/-user.composable'
-import { useAuthStore } from '@/stores/auth.store'
 import { AuthService } from '@/services/auth.service'
+import { useAuthStore } from '@/stores/auth.store'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Navigate } from '@tanstack/react-router'
 import _ from 'lodash'

@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import React, { useId } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
 	FormDescription,
 	FormField,
@@ -12,9 +13,8 @@ import {
 	SelectTrigger,
 	SelectValue
 } from '..'
-import FormLabel from './alternative-form-label'
 import { BaseFieldControl } from '../../../common/types/hook-form'
-import { useTranslation } from 'react-i18next'
+import FormLabel from './alternative-form-label'
 
 export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {

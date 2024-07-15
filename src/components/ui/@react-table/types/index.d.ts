@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import {
+	type ColumnDef,
 	type ColumnFiltersState,
 	type GlobalFilterTableState,
-	type ColumnDef,
 	type Row,
 	type SortingState,
 	type Table,

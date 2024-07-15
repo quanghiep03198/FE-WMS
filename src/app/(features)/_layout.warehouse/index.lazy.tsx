@@ -1,25 +1,25 @@
 // #region Modules
-import { Fragment, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { CommonActions } from '@/common/constants/enums'
+import { IWarehouse } from '@/common/types/entities'
+import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
+import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
+import { WarehouseService } from '@/services/warehouse.service'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
+import { Fragment, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { CommonActions } from '@/common/constants/enums'
-import { IWarehouse } from '@/common/types/entities'
-import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
-import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { WarehouseService } from '@/services/warehouse.service'
 import { WAREHOUSE_PROVIDE_TAG, useGetWarehouseQuery } from '../_composables/-warehouse.composable'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseRowActions from './_components/-warehouse-row-actions'
-import { PageContext, PageProvider } from './_contexts/-page-context'
 import { warehouseTypes } from './_constants/-warehouse.constant'
-import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
-import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
+import { PageContext, PageProvider } from './_contexts/-page-context'
 // #endregion
 
 // #region Router declaration
@@ -221,7 +221,6 @@ function Page() {
 			columnHelper.accessor('remark', {
 				header: t('ns_common:common_fields.remark'),
 				enableResizing: true,
-				meta: { sticky: 'right' },
 				cell: ({ getValue }) =>
 					getValue() ?? (
 						<Typography variant='small' color='muted'>

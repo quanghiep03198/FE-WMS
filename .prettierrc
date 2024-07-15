@@ -10,5 +10,5 @@
 	"bracketSpacing": true,
 	"arrowParens": "always",
 	"semi": false,
-	"plugins": ["prettier-plugin-tailwindcss"]
+	"plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"]
 }

@@ -1,5 +1,5 @@
-import React, { memo } from 'react'
 import { Div, DivProps } from '@/components/ui'
+import React, { memo } from 'react'
 
 export const TableHeadCaption: React.FC<DivProps & React.PropsWithChildren> = memo(
 	({ children, ...props }) => {

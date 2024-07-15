@@ -1,6 +1,6 @@
+import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/-transfer-order.schema'
 import { ICustomerBrand, ITransferOrder, ITransferOrderData } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/-transfer-order.schema'
 
 type CreateTransferOrderPayload = Pick<ITransferOrderData, 'mo_no' | 'or_no' | 'or_custpo' | 'shoestyle_codefactory'>[]
 

@@ -1,9 +1,11 @@
 // #region Modules
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 import { CommonActions } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IWarehouseStorage } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { PartialStorageFormValue } from '@/schemas/warehouse.schema'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { CheckedState } from '@radix-ui/react-checkbox'
@@ -20,12 +22,10 @@ import {
 	WAREHOUSE_STORAGE_PROVIDE_TAG,
 	useGetWarehouseStorageQuery
 } from '../../_composables/-warehouse-storage.composable'
+import { warehouseStorageTypes } from '../_constants/-warehouse.constant'
 import { PageContext, PageProvider } from '../_contexts/-page-context'
 import WarehouseStorageFormDialog from './_components/-storage-form'
 import StorageRowActions from './_components/-storage-row-actions'
-import { warehouseStorageTypes } from '../_constants/-warehouse.constant'
-import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
-import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 // #endregion
 
 // #region Router declaration
@@ -41,7 +41,6 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/
 // #region Page component
 function Page() {
 	const tableRef = useRef<Table<any>>()
-	const [tableInstance, setTableInstance] = useState<Table<any>>()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [formDialogOpenState, setFormDialogOpenState] = useState<boolean>(false)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)

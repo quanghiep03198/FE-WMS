@@ -1,8 +1,8 @@
 // eslint-disable react-refresh/only-export-components
 
 // #region Shadcn UI
-export * from './@custom/typography'
 export * from './@core/accordion'
+export * from './@core/alert-dialog'
 export * from './@core/aspect-ratio'
 export * from './@core/avatar'
 export * from './@core/badge'
@@ -10,6 +10,7 @@ export * from './@core/breadcrumb'
 export * from './@core/button'
 export * from './@core/calendar'
 export * from './@core/card'
+export * from './@core/chart'
 export * from './@core/checkbox'
 export * from './@core/collapsible'
 export * from './@core/combobox'
@@ -18,6 +19,7 @@ export * from './@core/context-menu'
 export * from './@core/dialog'
 export * from './@core/dropdown-menu'
 export * from './@core/form'
+export * from './@core/hover-card'
 export * from './@core/icon'
 export * from './@core/input'
 export * from './@core/label'
@@ -33,9 +35,7 @@ export * from './@core/skeleton'
 export * from './@core/table'
 export * from './@core/textarea'
 export * from './@core/toggle'
-export * from './@core/alert-dialog'
-export * from './@core/chart'
-export * from './@core/hover-card'
+export * from './@custom/typography'
 // #endregion
 
 // #region Form field controls

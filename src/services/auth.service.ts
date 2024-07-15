@@ -1,12 +1,12 @@
-import { type AxiosRequestConfig } from 'axios'
-import _ from 'lodash'
-import { useAuthStore } from '@/stores/auth.store'
 import { IUser } from '@/common/types/entities'
 import { __JSON__ } from '@/common/utils/json'
+import { AppConfigs } from '@/configs/app.config'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { LoginFormValues } from '@/schemas/auth.schema'
-import { AppConfigs } from '@/configs/app.config'
+import { useAuthStore } from '@/stores/auth.store'
+import { type AxiosRequestConfig } from 'axios'
+import _ from 'lodash'
 
 export class AuthService {
 	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; token: string }>> {
@@ -23,7 +23,8 @@ export class AuthService {
 	}
 
 	static async profile(config?: AxiosRequestConfig): Promise<ResponseBody<IUser>> {
-		return await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
+		// return await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
+		return await axiosInstance.get<void, ResponseBody<IUser>>('/users/1', config)
 	}
 
 	static getUser() {

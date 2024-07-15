@@ -1,4 +1,5 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
+import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
 import { ProductionApprovalStatus, TransferOrderApprovalStatus } from '../constants/enums'
 
 export interface IBaseEntity {
@@ -36,7 +37,7 @@ export interface IWarehouse extends IBaseEntity {
 	company_code: string
 	warehouse_num: string
 	warehouse_name: string
-	type_warehouse: keyof typeof warehouseTypes & string
+	type_warehouse: keyof typeof warehouseTypes
 	area: number
 	dept_code: string
 	dept_name: string
@@ -52,7 +53,7 @@ export interface IWarehouseStorage
 		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
 	storage_name: string
 	storage_num: string
-	type_storage: WarehouseStorageTypeEnum | string
+	type_storage: WarehouseStorageTypes
 }
 
 export interface IEmployee extends IBaseEntity {

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Tooltip as TooltipWrapper, TooltipProvider, TooltipTrigger, TooltipContent } from '../@core/tooltip'
 import { cn } from '@/common/utils/cn'
+import React from 'react'
+import { TooltipContent, TooltipProvider, TooltipTrigger, Tooltip as TooltipWrapper } from '../@core/tooltip'
 
 export type TooltipProps = {
 	message: string

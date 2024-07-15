@@ -1,6 +1,6 @@
-import React from 'react'
 import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const Heading: React.FC = () => {

@@ -10,7 +10,7 @@ import { DateRange } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { searchFormSchema, SearchFormValues } from '../_schemas/-search-customer-brand.schema'
+import { SearchFormValues, searchFormSchema } from '../_schemas/-search-customer-brand.schema'
 
 const CUSTOMER_BRAND_PROVIDE_TAG = 'CUSTOMER_BRAND' as const
 

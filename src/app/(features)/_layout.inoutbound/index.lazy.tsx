@@ -3,15 +3,15 @@ import { createLazyFileRoute, useBlocker } from '@tanstack/react-router'
 import { Fragment, useCallback, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { Helmet } from 'react-helmet'
 import InOutBoundForm from './_components/-inoutbound-form'
 import PageComposition from './_components/-page-composition'
 import ScannedEPCsCounter from './_components/-scanned-epc-counter'
 import ScannedEPCsList from './_components/-scanned-epc-list'
 import ScanningActions from './_components/-scanning-actions'
-import { PageContext, PageProvider } from './_context/-page-context'
-import { Helmet } from 'react-helmet'
-import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 import { useSyncEpcOrderCodeMutation } from './_composables/-use-rfid-api'
+import { PageContext, PageProvider } from './_context/-page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
 	component: () => (

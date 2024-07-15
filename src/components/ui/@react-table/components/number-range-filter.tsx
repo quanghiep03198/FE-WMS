@@ -1,8 +1,8 @@
-import { useContext } from 'react'
-import { DebouncedInput } from './debounced-input'
-import { TableContext } from '../context/table.context'
-import { Separator, Div } from '@/components/ui'
+import { Div, Separator } from '@/components/ui'
 import { Column } from '@tanstack/react-table'
+import { useContext } from 'react'
+import { TableContext } from '../context/table.context'
+import { DebouncedInput } from './debounced-input'
 
 type NumberRangeFilterProps<TData, TValue> = { column: Column<TData, TValue> }
 

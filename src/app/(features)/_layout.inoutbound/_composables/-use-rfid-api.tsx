@@ -1,8 +1,8 @@
 import { RFIDService } from '@/services/rfid.service'
-import { TScanningStatus } from '../_context/-page-context'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { TScanningStatus } from '../_context/-page-context'
 
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
 export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY' as const

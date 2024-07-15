@@ -1,11 +1,11 @@
-import { Div, Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
-import { DebouncedInput } from './debounced-input'
-import { useTranslation } from 'react-i18next'
-import { useContext } from 'react'
-import { TableContext } from '../context/table.context'
-import { cn } from '@/common/utils/cn'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { BreakPoints } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { cn } from '@/common/utils/cn'
+import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Div, Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
+import { TableContext } from '../context/table.context'
+import { DebouncedInput } from './debounced-input'
 
 export const GlobalFilter: React.FC = () => {
 	const { t } = useTranslation('ns_common', { keyPrefix: 'actions' })

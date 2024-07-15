@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { type TableFooterProps } from '../types'
+import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
 import { Table } from '@tanstack/react-table'
-import { cn } from '@/common/utils/cn'
+import { type TableFooterProps } from '../types'
 
 export function TableFooter<TData>({
 	table,

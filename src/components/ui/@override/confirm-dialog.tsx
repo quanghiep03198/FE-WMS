@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -9,7 +10,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle
 } from '..'
-import { useTranslation } from 'react-i18next'
 
 type ConfirmDialogProps = {
 	open: boolean

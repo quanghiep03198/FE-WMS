@@ -1,5 +1,5 @@
 import { flexRender, type Row as TRow, type Table as TTable } from '@tanstack/react-table'
-import { notUndefined, Virtualizer } from '@tanstack/react-virtual'
+import { Virtualizer, notUndefined } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
 import { TableBody as Body, TableCell as Cell, TableRow as Row } from '../../@core/table'
 import { Div } from '../../@custom/div'

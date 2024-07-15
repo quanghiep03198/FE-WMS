@@ -1,8 +1,8 @@
+import { CheckedState } from '@radix-ui/react-checkbox'
 import { ColumnDefBase, HeaderContext } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
 import React from 'react'
 import { Checkbox } from '../../@core/checkbox'
-import { CheckboxProps, CheckedState } from '@radix-ui/react-checkbox'
-import { useUpdate } from 'ahooks'
 
 type RowSelectionCheckboxProps<TData> = Partial<Parameter<ColumnDefBase<TData>['cell']>> &
 	React.ComponentProps<typeof Checkbox>

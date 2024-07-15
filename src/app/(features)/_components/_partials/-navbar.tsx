@@ -7,11 +7,11 @@ import { useKeyPress } from 'ahooks'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import ThemeToggle from '../../../_components/_shared/-theme-toggle'
+import { useLayoutStore } from '../../_stores/-layout.store'
 import { NavBreadcrumb } from './-nav-breadcrumb'
 import NavDrawerSidebar from './-nav-drawer-sidebar'
 import NavUserControl from './-nav-user-controller'
 import SearchDialog from './-search-dialog'
-import { useLayoutStore } from '../../_stores/-layout.store'
 
 const Navbar: React.FC = () => {
 	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore()

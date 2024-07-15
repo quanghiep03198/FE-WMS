@@ -1,7 +1,7 @@
-import * as React from 'react'
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { cva, type VariantProps } from 'class-variance-authority'
+import * as React from 'react'
 
 import { cn } from '@/common/utils/cn'
 
@@ -94,13 +94,13 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export {
 	Sheet,
-	SheetPortal,
-	SheetOverlay,
-	SheetTrigger,
 	SheetClose,
 	SheetContent,
-	SheetHeader,
+	SheetDescription,
 	SheetFooter,
+	SheetHeader,
+	SheetOverlay,
+	SheetPortal,
 	SheetTitle,
-	SheetDescription
+	SheetTrigger
 }
