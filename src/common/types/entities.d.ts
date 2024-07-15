@@ -10,13 +10,11 @@ export interface IBaseEntity {
 	[key: string]: any
 }
 
-export interface IUser extends IBaseEntity {
+export interface IUser extends IBaseEntity, Pick<ICompany, 'company_code' | 'company_name'> {
 	user_code: string
 	display_name: string
 	password: string
 	employee_code: string
-	company_code: string
-	company_name: string
 	picture: string
 	has_accessibility: boolean | null
 	isadmin: boolean | null
@@ -28,10 +26,9 @@ export interface ICompany extends IBaseEntity {
 	factory_code: string
 }
 
-export interface IDepartment extends IBaseEntity {
+export interface IDepartment extends IBaseEntity, Pick<ICompany, 'company_code'> {
 	ERP_dept_code: string
 	MES_dept_name: string
-	company_code: string
 	dept_code_upper: string
 }
 
@@ -103,37 +100,36 @@ export interface IInOutBoundOrder extends IBaseEntity {
 	dept_name: string
 	employee_name: string
 	company_code?: string
-
-	// "company_code": "VA1",
-	// "sno_date": "2021-01-04",
-	// "sno_no": "SOA21010002",
-	// "ship_order": null,
-	// "sno_container": "CFS",
-	// "sno_sealnumber": null,
-	// "sno_car_number": "15C-311.26",
-	// "sno_total_boxes": "32",
-	// "dept_name": "工程部",
-	// "employee_name": "阿平",
-	// "remark": "YSS import AO21010002",
-	// "status_approve": "B",
-	// "month_close": "1"
 }
 
-export interface ITransferOrder {
+export interface ITransferOrder extends IBaseEntity {
 	custbrand_id: string
 	brand_name: string
-	warehouse_num: string // need to be rename
-	boxnum: string
+	transfer_order_code: string // need to be rename
+	kg_no: string
 	mo_no: string
 	or_no: string
 	or_custpo: string
 	shoestyle_codefactory: string
-	or_warehouse: string
-	or_location: string
-	al_warehouse: string
-	new_warehouse: string
-	new_al_warehouse: string
+	or_warehouse_num: string | null
+	or_warehouse_name: string | null
+	or_storage_num: string | null
+	or_storage_name: string | null
+	new_warehouse_num: string | null
+	new_warehouse_name: string | null
+	new_storage_num: string | null
+	new_storage_name: string | null
 	status_approve: TransferOrderApprovalStatus
-	employee_name_approve: null
-	approve_date: null
+	employee_name_approve: string | null
+	approve_date: Date | null
+	// al_warehouse: string | null
+}
+
+export interface ITransferOrderData extends ITransferOrder {
+	cofactory_code: string
+}
+
+export interface ICustomerBrand {
+	brand_name: string
+	custbrand_id: string
 }
