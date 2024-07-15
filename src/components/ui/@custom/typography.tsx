@@ -11,7 +11,7 @@ export type TypographyProps = {
 export const typographyVariants = cva('', {
 	variants: {
 		variant: {
-			default: 'text-base tracking-tight',
+			default: 'text-base tracking-tight text-inherit',
 			h1: 'text-6xl sm:text-5xl scroll-m-20 font-bold tracking-tight',
 			h2: 'text-5xl sm:text-4xl font-bold scroll-m-20 tracking-tight',
 			h3: 'text-4xl sm:text-3xl font-bold tracking-tight scroll-m-20',

@@ -10,14 +10,20 @@ import {
 } from '@tanstack/react-table'
 import React from 'react'
 
-export type ToolbarProps = {
+export type ToolbarProps<TData = any> = {
 	hidden?: boolean
-	ltr?: boolean
-	slot?: React.FC<{ table: Table<any> }>
+	rtl?: boolean
+	slot?: React.FC<{ table: Table<TData> }>
+}
+
+export type TableFooterProps<TData = any> = {
+	hidden?: boolean
+	rtl?: boolean
+	slot?: React.FC<{ table: Table<TData> }>
 }
 
 // #region Pagination prop types
-type PaginationBaseProps<TData> = {
+type PaginationBaseProps<TData = any> = {
 	hidden?: boolean
 	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<TData>, 'data'>>
@@ -75,7 +81,7 @@ type SortingProps =
 
 export type RenderSubComponent = (props: { row: Row<TData & any>; table: Table<TData, TValue> }) => React.ReactElement
 
-// #region Datatable prop types
+// #region Data table prop types
 export type DataTableProps<TData = any, TValue = any> = {
 	data: Array<TData>
 	columns: ColumnDef<TData & any, TValue>[]
@@ -84,6 +90,7 @@ export type DataTableProps<TData = any, TValue = any> = {
 	enableColumnResizing?: boolean
 	containerProps?: React.ComponentProps<'div'>
 	toolbarProps?: ToolbarProps
+	footerProps?: TableFooterProps
 	sorting?: SortingState
 	onGetInstance?: React.Dispatch<React.SetStateAction<Table<TData>>>
 	renderSubComponent?: RenderSubComponent

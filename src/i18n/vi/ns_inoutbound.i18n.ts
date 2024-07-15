@@ -1,3 +1,5 @@
+import { OrderStatus } from '@/common/constants/enums'
+
 export default {
 	counter_box: {
 		label: 'Số lượng EPC đã quét',
@@ -23,13 +25,15 @@ export default {
 		// EPC import/export
 		io_reason: 'Lý do nhập/xuất',
 		io_archive_warehouse: 'Kho lưu trữ',
-		io_storage_location: 'Vị trí lưu kho'
+		io_storage_location: 'Vị trí lưu kho',
+		order_information: 'Thông tin đơn hàng',
+		transfer_information: 'Thông tin chuyển kho'
 	},
 	fields: {
-		transfer_order_code: 'Mã đơn chuyển giao',
 		mo_no: 'Chỉ lệnh',
 		or_no: 'Mã đơn hàng',
 		or_custpo: 'Mã đơn đặt hàng của khách',
+		transfer_order_code: 'Mã đơn chuyển giao',
 		// I/O production
 		status_approve: 'Trạng thái duyệt đơn',
 		sno_no: 'Mã đơn hàng nhập/xuất',
@@ -53,5 +57,11 @@ export default {
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
 		required_date: 'Ngày Yêu Cầu' // Required Date
+	},
+	order_status: {
+		[OrderStatus.NOT_APPROVED]: 'Chờ duyệt',
+		[OrderStatus.APPROVED]: 'Đã duyệt',
+		[OrderStatus.CANCELLED]: 'Đã hủy duyệt',
+		[OrderStatus.REAPPROVED]: 'Duyệt lại'
 	}
 }

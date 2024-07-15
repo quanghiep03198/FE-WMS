@@ -14,9 +14,7 @@ type TableToolbarProps<TData> = {
 
 export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useContext(TableContext)
-
 	const { t } = useTranslation('ns_common')
-
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
 
 	// Reset all of current filters
@@ -27,8 +25,8 @@ export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarP
 
 	return (
 		<Div role='toolbar' className='flex items-center justify-between py-1 sm:justify-end'>
-			<GlobalFilter />
-			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
+			<Div className='flex flex-1 items-center gap-x-1'>
+				<GlobalFilter />
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
 						variant='destructive'
@@ -38,6 +36,8 @@ export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarP
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
+			</Div>
+			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				{Slot && <Slot table={table} />}
 				<GlobalFilterPopover />
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (

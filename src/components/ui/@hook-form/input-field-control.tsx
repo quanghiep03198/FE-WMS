@@ -42,6 +42,8 @@ export function InputFieldControl<T extends FieldValues>(
 		if (restProps.onChange) restProps.onChange(e)
 		if (type === 'file') {
 			field.onChange(e.target.files)
+		} else if (type === 'number') {
+			field.onChange(+e.target.value)
 		} else {
 			field.onChange(e)
 		}
@@ -59,7 +61,7 @@ export function InputFieldControl<T extends FieldValues>(
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal',
 							hidden: type === 'hidden' || hidden
 						})}>
-						<FormLabel htmlFor={id} labelText={String(label)} messageType={messageType} />
+						{label && <FormLabel htmlFor={id} labelText={label} messageType={messageType} />}
 						<FormControl>
 							<Div className='relative'>
 								<Input

@@ -1,3 +1,5 @@
+import { OrderStatus } from '@/common/constants/enums'
+
 export default {
 	counter_box: {
 		label: '本次出入庫數量',
@@ -10,7 +12,9 @@ export default {
 	labels: {
 		io_reason: '出入庫類别',
 		io_archive_warehouse: '仓库别',
-		io_storage_location: '储位'
+		io_storage_location: '储位',
+		order_information: '订单信息',
+		transfer_information: '转仓信息'
 	},
 	inoutbound_actions: {
 		normal_import: '正常入庫',
@@ -30,6 +34,7 @@ export default {
 		mo_no: '指令碼',
 		or_no: '訂單編號',
 		or_custpo: '客戶訂單',
+		transfer_order_code: '轉撥單號',
 		// I/O product inspection
 		status_approve: '審核',
 		sno_no: '驗收單號',
@@ -53,5 +58,11 @@ export default {
 		returned_qty: '已退貨量',
 		conversion_rate: '換算率',
 		required_date: '需求日期'
+	},
+	order_status: {
+		[OrderStatus.NOT_APPROVED]: '未審核',
+		[OrderStatus.APPROVED]: '已審核',
+		[OrderStatus.CANCELLED]: '取消審核 ',
+		[OrderStatus.REAPPROVED]: '重新審核'
 	}
 }

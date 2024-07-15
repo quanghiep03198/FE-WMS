@@ -8,28 +8,31 @@ import { Button } from './button'
 import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
-type DatePickerWithRangeProps = {
-	value: DateRange
-	onValueChange: React.Dispatch<React.SetStateAction<DateRange>>
+export type DateRangePickerProps = {
+	selected: DateRange
+	onSelect: React.Dispatch<React.SetStateAction<DateRange>>
 	triggerProps?: React.ComponentProps<typeof Button.prototype>
 }
 
-export const DateRangePicker: React.FC<DatePickerWithRangeProps> = ({ value, onValueChange }) => {
+export const DateRangePicker: React.FC<DateRangePickerProps> = ({ selected, onSelect }) => {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button
 					id='date'
 					variant={'outline'}
-					className={cn('w-full max-w-xs justify-start text-left font-normal', !value && 'text-muted-foreground')}>
+					className={cn(
+						'w-full max-w-xs justify-start text-left font-normal',
+						!selected && 'text-muted-foreground'
+					)}>
 					<CalendarIcon className='mr-2 h-4 w-4' />
-					{value?.from ? (
-						value.to ? (
+					{selected?.from ? (
+						selected.to ? (
 							<>
-								{format(value.from, 'LLL dd, y')} - {format(value.to, 'LLL dd, y')}
+								{format(selected.from, 'LLL dd, y')} - {format(selected.to, 'LLL dd, y')}
 							</>
 						) : (
-							format(value.from, 'LLL dd, y')
+							format(selected.from, 'LLL dd, y')
 						)
 					) : (
 						<Typography>Pick a date</Typography>
@@ -40,9 +43,9 @@ export const DateRangePicker: React.FC<DatePickerWithRangeProps> = ({ value, onV
 				<Calendar
 					initialFocus
 					mode='range'
-					defaultMonth={value?.from}
-					selected={value}
-					onSelect={onValueChange}
+					defaultMonth={selected?.from}
+					selected={selected}
+					onSelect={onSelect}
 					numberOfMonths={2}
 				/>
 			</PopoverContent>

@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
-import { Fragment, useCallback, useContext, useMemo, useRef } from 'react'
+import { Fragment, useCallback, useContext, useId, useMemo, useRef } from 'react'
 import { Div, Icon, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
 import { TableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
@@ -11,6 +11,9 @@ import ColumnResizer from './column-resizer'
 import { MemorizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
+import TableEmpty from './table-empty'
+import { TableHeadCaption } from './table-head-caption'
+import { TableFooter } from './table-footer'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
@@ -28,16 +31,18 @@ function easeInOutQuint(t) {
 function TableDataGrid<TData, TValue>({
 	containerProps = { style: { height: screen.height / 2 } },
 	table,
+	footerProps = { hidden: true, slot: null },
 	caption,
 	loading,
 	renderSubComponent
 }: TableProps<TData, TValue>) {
-	const { isFilterOpened, isScrolling, setIsScrolling } = useContext(TableContext)
+	const { isFilterOpened } = useContext(TableContext)
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLTableSectionElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollingRef = useRef<number>()
+	const captionId = useId()
 
 	const scrollToFn: VirtualizerOptions<any, any>['scrollToFn'] = useCallback((offset, canSmooth, instance) => {
 		const duration = 1000
@@ -93,6 +98,7 @@ function TableDataGrid<TData, TValue>({
 		<Div
 			role='group'
 			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/50'>
+			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<Div
 				{...containerProps}
 				ref={containerRef}
@@ -106,7 +112,7 @@ function TableDataGrid<TData, TValue>({
 					className='w-full table-fixed border-separate border-spacing-0'
 					style={{ ...columnSizeVars, minWidth: table.getTotalSize(), height: virtualizer.getTotalSize() }}>
 					{caption && (
-						<TableCaption aria-labelledby='#caption' className='hidden'>
+						<TableCaption aria-labelledby={captionId} className='hidden'>
 							{caption}
 						</TableCaption>
 					)}
@@ -176,24 +182,9 @@ function TableDataGrid<TData, TValue>({
 						<TableBody {...{ table, virtualizer, renderSubComponent }} />
 					)}
 				</Table>
-				{!loading && table.getRowModel().rows.length === 0 && (
-					<Div
-						role='contentinfo'
-						className='sticky left-0 top-0 flex h-full w-full flex-1 items-center justify-center bg-background'>
-						<Div className='flex items-center justify-center gap-x-2 text-muted-foreground'>
-							<Icon name='Database' strokeWidth={1} size={32} /> No data
-						</Div>
-					</Div>
-				)}
+				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</Div>
-			{caption && (
-				<Div
-					aria-description={caption}
-					id='caption'
-					className='bg-background p-3 text-center text-sm text-muted-foreground'>
-					{caption}
-				</Div>
-			)}
+			{footerProps && <TableFooter {...{ table, ...footerProps }} />}
 		</Div>
 	)
 }

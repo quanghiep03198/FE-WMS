@@ -1,39 +1,45 @@
-import { SelectProps, SelectTriggerProps } from '@radix-ui/react-select'
+import { SelectContentProps, SelectProps, SelectTriggerProps } from '@radix-ui/react-select'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '..'
-import React from 'react'
 
-type DropdownSelectProps = {
+export type DropdownSelectProps<T extends Record<string, any>> = {
 	openState?: boolean
 	placeholder?: string
-	options: Record<'label' | 'value', string>[]
+	data: Array<T>
 	onValueChange?: (value: string) => any | AnonymousFunction
 	selectProps?: SelectProps
 	selectTriggerProps?: SelectTriggerProps
+	selectContentProps?: SelectContentProps
+} & {
+	labelField: keyof T
+	valueField: keyof T
 }
 
-export const DropdownSelect: React.FC<DropdownSelectProps> = ({
-	options,
-	placeholder,
+export function DropdownSelect<T>({
+	data,
+	labelField,
+	valueField,
+	placeholder = 'Select',
+	selectProps,
 	selectTriggerProps,
-	selectProps
-}) => {
+	selectContentProps
+}: DropdownSelectProps<T>) {
 	return (
 		<Select {...selectProps}>
 			<SelectTrigger {...selectTriggerProps}>
 				{selectTriggerProps?.children}
 				<SelectValue placeholder={placeholder} />
 			</SelectTrigger>
-			<SelectContent>
+			<SelectContent {...selectContentProps}>
 				<SelectGroup>
-					{Array.isArray(options) && options.length > 0 ? (
-						options.map((option) => (
-							<SelectItem key={option?.value} value={String(option?.value)}>
-								{option?.label}
+					{Array.isArray(data) && data.length > 0 ? (
+						data.map((option, index) => (
+							<SelectItem key={index} value={String(option[valueField])}>
+								{String(option[labelField])}
 							</SelectItem>
 						))
 					) : (
 						<SelectItem
-							value={null}
+							value={undefined}
 							disabled
 							className='flex items-center justify-center text-center text-xs font-medium'>
 							No option

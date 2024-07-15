@@ -38,7 +38,8 @@ function DataTable<TData, TValue>(
 		loading,
 		containerProps,
 		paginationProps = { hidden: false },
-		toolbarProps = { hidden: false },
+		toolbarProps = { hidden: false, slot: null },
+		footerProps = { hidden: true, slot: null },
 		manualPagination = false,
 		manualSorting = false,
 		manualFiltering = false,
@@ -156,9 +157,9 @@ function DataTable<TData, TValue>(
 		meta: {
 			editedRows,
 			setEditedRows,
+
 			updateData: (rowIndex, columnId, value) => {
 				// Skip page index reset until after next rerender
-				console.log(value)
 				skipAutoResetPageIndex()
 				setData((old) =>
 					old.map((row, index) => {
@@ -172,12 +173,18 @@ function DataTable<TData, TValue>(
 					})
 				)
 			},
-			revertUpdatedData: (rowIndex: number, condition: boolean) => {
-				if (condition) {
-					setData((old) => old.map((row, index) => (index === rowIndex ? originalData[rowIndex] : row)))
-				} else {
-					setOriginalData((old) => old.map((row, index) => (index === rowIndex ? data[rowIndex] : row)))
-				}
+			revertDataChanges: (rowIndex: number) => {
+				setData((old) => old.map((row, index) => (index === rowIndex ? originalData[rowIndex] : row)))
+			},
+			revertAllDataChanges: () => {
+				setEditedRows({})
+				setData(originalData)
+			},
+			getUnsavedChanges: (): TData[] => {
+				return table
+					.getRowModel()
+					.flatRows.filter((row) => Object.keys(editedRows).some((id) => id === row.id))
+					.map((row) => row.original)
 			}
 		},
 		...props
@@ -216,6 +223,7 @@ function DataTable<TData, TValue>(
 					loading={loading}
 					caption={caption}
 					containerProps={containerProps}
+					footerProps={footerProps}
 					renderSubComponent={renderSubComponent}
 					getRowCanExpand={getRowCanExpand}
 				/>
