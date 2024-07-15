@@ -22,14 +22,16 @@ export enum CommonActions {
 	CREATE = 'CREATE',
 	READ = 'READ',
 	UPDATE = 'UPDATE',
+	CANCEL = 'CANCEL',
+	SAVE = 'SAVE',
 	DELETE = 'DELETE',
 	IMPORT = 'IMPORT',
 	EXPORT = 'EXPORT'
 }
 
-export enum TransferOrderApprovalStatus {
-	INAPPROVED = 'A',
+export enum OrderStatus {
+	NOT_APPROVED = 'A',
 	APPROVED = 'B',
-	REAPPROVE = 'C',
-	CANCELLED = 'D'
+	REAPPROVED = 'D',
+	CANCELLED = 'E'
 }
