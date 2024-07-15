@@ -14,8 +14,11 @@ declare module '@tanstack/react-table' {
 	interface TableMeta<TData extends RowData> {
 		editedRows: Record<Row<TData>['id'], boolean>
 		setEditedRows: React.Dispatch<React.SetStateAction<Record<Row<TData>['id'], boolean>>>
+		// updateRow: (rowIndex: number) => void
 		updateData: (rowIndex: number, columnId: string, value: unknown) => void
-		revertUpdatedData: (rowIndex: number, condition: boolean) => void
+		revertDataChanges: (rowIndex: number) => void
+		revertAllDataChanges: () => void
+		getUnsavedChanges: () => TData[]
 	}
 
 	//add fuzzy filter to the filterFns
