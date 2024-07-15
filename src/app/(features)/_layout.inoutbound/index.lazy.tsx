@@ -1,6 +1,6 @@
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { createLazyFileRoute, useBlocker } from '@tanstack/react-router'
-import { Fragment, useCallback, useContext } from 'react'
+import { Fragment, useCallback, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import InOutBoundForm from './_components/-inoutbound-form'
@@ -11,6 +11,7 @@ import ScanningActions from './_components/-scanning-actions'
 import { PageContext, PageProvider } from './_context/-page-context'
 import { Helmet } from 'react-helmet'
 import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { useSyncEpcOrderCodeMutation } from './_composables/-use-rfid-api'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
 	component: () => (
@@ -22,7 +23,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
 
 function Page() {
 	const { t } = useTranslation()
-	const { scanningStatus: readingStatus } = useContext(PageContext)
+	const { scanningStatus } = useContext(PageContext)
 
 	// Set page breadcrumb
 	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
@@ -30,8 +31,14 @@ function Page() {
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
-		condition: readingStatus === 'scanning'
+		condition: scanningStatus === 'scanning'
 	})
+
+	const { mutateAsync: syncOrderCodes } = useSyncEpcOrderCodeMutation()
+
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined') syncOrderCodes()
+	}, [scanningStatus])
 
 	// Prevent counter rerendering
 	const handleReset = useCallback(reset, [status])

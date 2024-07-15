@@ -1,6 +1,6 @@
 import { IWarehouseStorage } from '@/common/types/entities'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
-import { UseQueryOptions, keepPreviousData, useQuery } from '@tanstack/react-query'
+import { UseQueryOptions, keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 
 export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE'
@@ -18,3 +18,14 @@ export function useGetWarehouseStorageQuery<TData = ResponseBody<IWarehouseStora
 		...options
 	})
 }
+
+export const getWarehouseStorageQueryOptions = (warehouseNum: string) =>
+	queryOptions({
+		queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
+		placeholderData: keepPreviousData,
+		select: (response) =>
+			Array.isArray(response.metadata)
+				? response.metadata.map((item) => ({ label: item.storage_name, value: item.storage_num }))
+				: []
+	})

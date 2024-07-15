@@ -1,10 +1,9 @@
 import { Fragment, useContext, useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import _ from 'lodash'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { CommonActions } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
@@ -25,10 +24,10 @@ import {
 	Typography
 } from '@/components/ui'
 import { FormActionEnum, InOutBoundFormValues, inOutBoundSchema } from '@/schemas/epc-inoutbound.schema'
-import { RFIDService } from '@/services/rfid.service'
 import { useGetWarehouseStorageQuery } from '../../_composables/-warehouse-storage.composable'
 import { useGetWarehouseQuery } from '../../_composables/-warehouse.composable'
-import { PageContext, RFID_EPC_PROVIDE_TAG } from '../_context/-page-context'
+import { PageContext } from '../_context/-page-context'
+import { useStoreEpcMutation } from '../_composables/-use-rfid-api'
 
 const InOutBoundForm: React.FC = () => {
 	const queryClient = useQueryClient()
@@ -70,17 +69,7 @@ const InOutBoundForm: React.FC = () => {
 
 	const scannedEPCs = useMemo(() => [...new Set(data.map((item) => item.epc_code))], [data])
 
-	const { mutateAsync } = useMutation({
-		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: RFIDService.updateStockMovement,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			setScanningStatus(undefined)
-			return queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
-		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
-	})
+	const { mutateAsync } = useStoreEpcMutation({ onSuccess: setScanningStatus })
 
 	return (
 		<FormProvider {...form}>

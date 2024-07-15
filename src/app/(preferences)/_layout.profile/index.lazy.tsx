@@ -1,6 +1,6 @@
-import FallbackPage from '@/app/_components/_errors/-fallback-page'
+import UnavailableService from '@/app/_components/_errors/-unavailable-service'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/(preferences)/_layout/profile/')({
-	component: FallbackPage
+	component: UnavailableService
 })

@@ -116,7 +116,8 @@ const NavLink: React.FC<NavLinkProps> = ({ navSidebarOpen, path, title, icon }) 
 					buttonVariants({
 						variant: 'ghost',
 						size: navSidebarOpen ? 'icon' : 'default',
-						className: 'flex px-2 text-base font-normal'
+						className:
+							'flex px-2 text-base font-normal duration-0 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-transparent'
 					}),
 					!navSidebarOpen ? 'justify-start gap-x-3' : 'aspect-square size-9'
 				)}>
