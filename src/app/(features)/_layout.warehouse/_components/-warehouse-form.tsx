@@ -147,6 +147,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 								label={t('ns_company:department')}
 								form={form}
 								data={departments}
+								shouldFilter={false}
 								labelField='MES_dept_name'
 								valueField='ERP_dept_code'
 							/>
@@ -168,6 +169,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 								form={form}
 								data={employees}
 								disabled={!department}
+								shouldFilter={false}
 								labelField='employee_name'
 								valueField='employee_code'
 								onInput={_.debounce((value) => setEmployeeSearchTerm(value), 500)}

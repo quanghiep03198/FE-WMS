@@ -12,7 +12,7 @@ import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
+import { Fragment, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -40,6 +40,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/
 
 // #region Page component
 function Page() {
+	const tableRef = useRef<Table<any>>()
 	const [tableInstance, setTableInstance] = useState<Table<any>>()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [formDialogOpenState, setFormDialogOpenState] = useState<boolean>(false)
@@ -72,13 +73,13 @@ function Page() {
 	])
 
 	const handleResetAllRowSelection = useCallback(() => {
-		tableInstance.resetRowSelection()
+		tableRef.current.resetRowSelection()
 		resetRowSelectionType()
-	}, [tableInstance])
+	}, [tableRef])
 
 	const handleDeleteSelectedRows = useCallback(
-		() => deleteWarehouseStorage(tableInstance.getSelectedRowModel().flatRows.map((item) => item.original?.keyid)),
-		[tableInstance]
+		() => deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.keyid)),
+		[tableRef]
 	)
 
 	// Get original storage type value
@@ -303,25 +304,25 @@ function Page() {
 			<Helmet title={t('ns_common:navigation.warehouse_management')} />
 
 			<DataTable
+				ref={tableRef}
 				data={data}
 				loading={isLoading}
 				columns={columns}
-				onGetInstance={setTableInstance}
 				enableColumnResizing={true}
 				enableColumnFilters={true}
 				enableRowSelection={true}
 				toolbarProps={{
 					slot: () => (
 						<Fragment>
-							{tableInstance &&
-								tableInstance.getSelectedRowModel().flatRows.length > 0 &&
+							{tableRef.current &&
+								tableRef.current.getSelectedRowModel().flatRows.length > 0 &&
 								rowSelectionType === 'multiple' && (
 									<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 										<Button
 											variant='destructive'
 											size='icon'
 											onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
-											<Icon name='Trash' />
+											<Icon name='Trash2' />
 										</Button>
 									</Tooltip>
 								)}

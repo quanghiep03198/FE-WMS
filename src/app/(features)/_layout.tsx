@@ -1,5 +1,4 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { useState } from 'react'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
@@ -9,7 +8,7 @@ import Navbar from './_components/_partials/-navbar'
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
-		if (!isAuthenticated) throw redirect({ to: '/login' })
+		if (!isAuthenticated) redirect({ to: '/login' })
 	}
 })
 

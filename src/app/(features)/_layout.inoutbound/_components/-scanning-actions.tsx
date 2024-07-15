@@ -12,9 +12,8 @@ import {
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { useGetDatabaseConnnection } from '../_composables/-use-rfid-api'
 import { PageContext } from '../_context/-page-context'
-import { useQuery } from '@tanstack/react-query'
-import { RFIDService } from '@/services/rfid.service'
 
 const ScanningActions: React.FC = () => {
 	const { data, scanningStatus, isScanningError, connection, setScanningStatus, setConnection } =
@@ -34,11 +33,7 @@ const ScanningActions: React.FC = () => {
 		}
 	}, [scanningStatus, i18n.language])
 
-	const { data: databases, isLoading } = useQuery({
-		queryKey: ['DATABASE_COMPATIBILITY'],
-		queryFn: RFIDService.getDatabaseCompatibility,
-		select: (response) => response.metadata
-	})
+	const { data: databases, isLoading } = useGetDatabaseConnnection()
 
 	return (
 		<Div className='flex items-center justify-between'>

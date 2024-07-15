@@ -1,5 +1,5 @@
 import {
-	Command,
+	CommandDialog,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
@@ -8,7 +8,6 @@ import {
 	CommandSeparator,
 	CommandShortcut,
 	Dialog,
-	DialogContent,
 	Icon,
 	Typography
 } from '@/components/ui'
@@ -16,13 +15,15 @@ import { navigationConfig } from '@/configs/navigation.config'
 import { GearIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
-import React from 'react'
+import { isEmpty } from 'lodash'
+import React, { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type SearchDialogProps = Required<Pick<React.ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'>>
 
 const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleOpenChange }) => {
 	const { t } = useTranslation('ns_common')
+	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	useKeyPress('ctrl.k', (e) => {
 		e.preventDefault()
@@ -30,12 +31,12 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 	})
 
 	return (
-		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<DialogContent className='p-0 sm:max-w-md'>
-				<Command className='rounded-lg border !text-foreground'>
-					<CommandInput className='h-12' placeholder='Type a command or search...' />
-					<CommandList className='max-h-80 overflow-y-auto scrollbar'>
-						<CommandEmpty>No results found.</CommandEmpty>
+		<CommandDialog open={open} onOpenChange={handleOpenChange}>
+			<CommandInput placeholder='Type a command or search...' onValueChange={(value) => setSearchTerm(value)} />
+			<CommandEmpty>No results found.</CommandEmpty>
+			<CommandList className='scrollbar'>
+				{isEmpty(searchTerm) ? (
+					<Fragment>
 						<CommandGroup heading='Suggestions'>
 							{navigationConfig.slice(0, 5).map((item) => (
 								<CommandItem key={item.id} asChild>
@@ -67,10 +68,16 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 								</Link>
 							</CommandItem>
 						</CommandGroup>
-					</CommandList>
-					<CommandList hidden>
-						<CommandGroup>
-							{navigationConfig.slice(6, 9).map((item) => (
+					</Fragment>
+				) : (
+					<CommandGroup heading={`Results`}>
+						{navigationConfig
+							.filter((item) =>
+								String(t(item.title, { defaultValue: item.title }))
+									.toLowerCase()
+									.includes(searchTerm.toLowerCase())
+							)
+							.map((item) => (
 								<CommandItem key={item.id} asChild>
 									<Link
 										className='flex items-center gap-x-2'
@@ -82,11 +89,19 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 									</Link>
 								</CommandItem>
 							))}
-						</CommandGroup>
-					</CommandList>
-				</Command>
-			</DialogContent>
-		</Dialog>
+						<pre>
+							{JSON.stringify(
+								navigationConfig.filter((item) =>
+									String(t(item.title, { defaultValue: item.title }))
+										.toLowerCase()
+										.includes(searchTerm.toLowerCase())
+								)
+							)}
+						</pre>
+					</CommandGroup>
+				)}
+			</CommandList>
+		</CommandDialog>
 	)
 }
 

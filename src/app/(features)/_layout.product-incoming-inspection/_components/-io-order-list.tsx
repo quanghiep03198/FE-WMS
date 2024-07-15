@@ -9,7 +9,7 @@ import { isEmpty, omit } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ProductionApprovalStatus } from '../_constants/-production.enum'
-import { IOSubOrderRow } from './-io-order-detail'
+import IOSubOrderRow from './-io-order-detail'
 
 const IO_PRODUCTION_PROVIDE_TAG = 'PRODUCTION' as const
 

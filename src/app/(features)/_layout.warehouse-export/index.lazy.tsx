@@ -1,4 +1,4 @@
-import FallbackPage from '@/app/_components/_errors/-fallback-page'
+import UnavailableService from '@/app/_components/_errors/-unavailable-service'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
@@ -14,5 +14,5 @@ function Page() {
 	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
 	setBreadcrumb([{ to: '/warehouse-export', text: t('ns_common:navigation.export_management') }])
 
-	return <FallbackPage />
+	return <UnavailableService />
 }

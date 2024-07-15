@@ -2,7 +2,7 @@ import { Div, Typography } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-const FallbackPage: React.FC = () => {
+const UnavailableService: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 
 	return (
@@ -18,4 +18,4 @@ const FallbackPage: React.FC = () => {
 	)
 }
 
-export default FallbackPage
+export default UnavailableService

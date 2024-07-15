@@ -1,5 +1,5 @@
 // #region Modules
-import { Fragment, useCallback, useContext, useMemo, useState } from 'react'
+import { Fragment, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -37,7 +37,7 @@ function Page() {
 	const { t, i18n } = useTranslation()
 	const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
-	const [tableInstace, getTableInstance] = useState<Table<any>>()
+	const tableRef = useRef<Table<any>>()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const queryClient = useQueryClient()
 	const { dispatch } = useContext(PageContext)
@@ -91,14 +91,14 @@ function Page() {
 
 	// Handle reset row deletion
 	const handleResetAllRowSelection = useCallback(() => {
-		tableInstace.resetRowSelection()
+		tableRef.current.resetRowSelection()
 		resetRowSelectionType()
-	}, [tableInstace])
+	}, [tableRef])
 
 	// Handle delete selected row(s)
 	const handleDeleteSelectedRows = useCallback(() => {
-		deleteWarehouseAsync(tableInstace.getSelectedRowModel().flatRows.map((item) => item.original.id))
-	}, [tableInstace])
+		deleteWarehouseAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original.id))
+	}, [tableRef])
 
 	const columnHelper = createColumnHelper<IWarehouse>()
 
@@ -221,6 +221,7 @@ function Page() {
 			columnHelper.accessor('remark', {
 				header: t('ns_common:common_fields.remark'),
 				enableResizing: true,
+				meta: { sticky: 'right' },
 				cell: ({ getValue }) =>
 					getValue() ?? (
 						<Typography variant='small' color='muted'>
@@ -276,12 +277,12 @@ function Page() {
 				loading={isLoading}
 				enableColumnResizing={true}
 				enableRowSelection={true}
-				onGetInstance={getTableInstance}
+				ref={tableRef}
 				toolbarProps={{
 					slot: () => (
 						<Fragment>
-							{tableInstace &&
-								tableInstace.getSelectedRowModel().flatRows.length > 0 &&
+							{tableRef.current &&
+								tableRef.current.getSelectedRowModel().flatRows.length > 0 &&
 								rowSelectionType == 'multiple' && (
 									<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 										<Button

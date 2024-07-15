@@ -1,5 +1,5 @@
 import { IWarehouse } from '@/common/types/entities'
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
 import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
@@ -36,11 +36,9 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant='ghost' size='icon' className='size-8 !border-none !outline-none !ring-0'>
-					<DotsHorizontalIcon />
-					<span className='sr-only'>Open menu</span>
-				</Button>
+			<DropdownMenuTrigger>
+				<DotsHorizontalIcon />
+				<span className='sr-only'>Open menu</span>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem
