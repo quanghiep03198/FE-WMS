@@ -26,7 +26,9 @@
 		--input: 0 0% 89.8%;
 		--ring: 0 0% 3.9%;
 		--radius: 0.5rem;
-		--pseudo-height: 0px;
+		--scrollbar: 0 0% 90%;
+		--row-active: 0 0% 96%;
+		--row-selected: 0 0% 98%;
 		--chart-1: 359 2% 90%;
 		--chart-2: 240 1% 74%;
 		--chart-3: 240 1% 58%;
@@ -49,11 +51,14 @@
 		--muted-foreground: 0 0% 63.9%;
 		--accent: 0 0% 14.9%;
 		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
+		--destructive: 0 84.2% 60.2%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 0 0% 14.9%;
 		--input: 0 0% 14.9%;
 		--ring: 0 0% 83.1%;
+		--scrollbar: 0 0% 15%;
+		--row-active: 0 0% 12%;
+		--row-selected: 0 0% 9%;
 		--chart-1: 359 2% 90%;
 		--chart-2: 240 1% 74%;
 		--chart-3: 240 1% 58%;
@@ -70,7 +75,7 @@
 		@apply bg-background text-foreground;
 	}
 	.scrollbar {
-		@apply !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-800;
+		@apply !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar;
 	}
 }
 
