@@ -21,7 +21,8 @@ import {
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { Table, createColumnHelper } from '@tanstack/react-table'
-import { Fragment, useCallback, useMemo, useRef } from 'react'
+import { useUpdate } from 'ahooks'
+import { Fragment, memo, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useAddTransferOrderMutation, useGetTransferOrderDatalist } from '../_composables/-use-transfer-order-api'
@@ -33,6 +34,7 @@ const OrderDatalistDialog: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 	const tableRef = useRef<Table<any>>(null)
+	const update = useUpdate()
 
 	const columnHelper = createColumnHelper<ITransferOrderData>()
 	const columns = useMemo(
@@ -46,7 +48,10 @@ const OrderDatalistDialog: React.FC = () => {
 						<Checkbox
 							role='checkbox'
 							checked={checked as CheckedState}
-							onCheckedChange={(checkedState) => table.toggleAllPageRowsSelected(!!checkedState)}
+							onCheckedChange={(checkedState) => {
+								update()
+								table.toggleAllPageRowsSelected(!!checkedState)
+							}}
 						/>
 					)
 				},
@@ -55,7 +60,10 @@ const OrderDatalistDialog: React.FC = () => {
 						aria-label='Select row'
 						role='checkbox'
 						checked={row.getIsSelected()}
-						onCheckedChange={(checkedState) => row.toggleSelected(Boolean(checkedState))}
+						onCheckedChange={(checkedState) => {
+							update()
+							row.toggleSelected(Boolean(checkedState))
+						}}
 					/>
 				),
 				meta: { sticky: 'left' },
@@ -200,13 +208,11 @@ const OrderDatalistDialog: React.FC = () => {
 					<Button variant='outline' onClick={handleResetRowSelection}>
 						{t('ns_common:actions.cancel')}
 					</Button>
-					<Button disabled={isPending} onClick={handleAddTransferOrders}>
-						{t('ns_common:actions.add')}
-					</Button>
+					<Button onClick={handleAddTransferOrders}>{t('ns_common:actions.add')}</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	)
 }
 
-export default OrderDatalistDialog
+export default memo(OrderDatalistDialog)

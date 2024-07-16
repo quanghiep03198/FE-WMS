@@ -15,7 +15,7 @@ import {
 } from '@/components/ui'
 import { CellContext } from '@tanstack/react-table'
 import { omit, pick } from 'lodash'
-import { Fragment } from 'react'
+import { Fragment, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { UpdateApprovalStatusValues, UpdateTransferOrderValues } from '../_schemas/-transfer-order.schema'
@@ -45,7 +45,7 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 			[row.id]: !old[row.id]
 		}))
 		if (action === CommonActions.CANCEL) {
-			meta?.revertDataChanges(row.index)
+			meta?.discardChanges(row.index)
 			return
 		}
 		if (action === CommonActions.SAVE) {
@@ -118,7 +118,7 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 				<DropdownMenuSub>
 					<DropdownMenuSubTrigger>
 						<Icon name='TicketCheck' className='mr-2 h-4 w-4' />
-						<Typography variant='small'>Set approval status</Typography>
+						<Typography variant='small'>{t('ns_common:actions.set_approval_status')}</Typography>
 					</DropdownMenuSubTrigger>
 					<DropdownMenuPortal>
 						<DropdownMenuSubContent>
@@ -162,4 +162,4 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 
 const DropdownMenuButton = tw.button`gap-x-3 relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground w-full`
 
-export default TransferOrderRowActions
+export default memo(TransferOrderRowActions)

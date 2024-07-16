@@ -3,10 +3,8 @@ import { Button, ComboboxFieldControl, DatePickerFieldControl, Div, Form as Form
 import { TransferOrderService } from '@/services/transfer-order.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { addMonths } from 'date-fns'
 import { debounce } from 'lodash'
-import { useEffect, useState } from 'react'
-import { DateRange } from 'react-day-picker'
+import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -15,15 +13,12 @@ import { SearchFormValues, searchFormSchema } from '../_schemas/-search-customer
 const CUSTOMER_BRAND_PROVIDE_TAG = 'CUSTOMER_BRAND' as const
 
 const OrderDatalistSearchForm: React.FC = () => {
+	const [customerBrandSearchTerm, setCustomerBrandSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
 	const form = useForm<SearchFormValues>({
 		resolver: zodResolver(searchFormSchema)
 	})
-	const { searchParams, setParams } = useQueryParams<SearchFormValues>({
-		time_range: { from: addMonths(new Date(), -1), to: new Date() } satisfies DateRange
-	})
-
-	const [customerBrandSearchTerm, setCustomerBrandSearchTerm] = useState<string>('')
+	const { searchParams, setParams } = useQueryParams<SearchFormValues>()
 
 	const { data: brands, isLoading } = useQuery({
 		queryKey: [CUSTOMER_BRAND_PROVIDE_TAG, customerBrandSearchTerm],
@@ -71,4 +66,4 @@ const OrderDatalistSearchForm: React.FC = () => {
 
 const Form = tw.form`xl:max-w-1/2 max-w-full grid grid-cols-12 items-end gap-x-2 sm:max-w-full gap-y-3`
 
-export default OrderDatalistSearchForm
+export default memo(OrderDatalistSearchForm)

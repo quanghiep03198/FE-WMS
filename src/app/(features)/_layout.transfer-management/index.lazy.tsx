@@ -1,11 +1,11 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment, lazy, Suspense } from 'react'
+import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useLayoutStore } from '../_stores/-layout.store'
-const OrderDatalistDialog = lazy(() => import('./_components/-orders-datalist-dialog'))
-const TransferOrdersList = lazy(() => import('./_components/-transfer-orders-list'))
-const TransferOrderDetail = lazy(() => import('./_components/-transfer-order-detail'))
+import OrderDatalistDialog from './_components/-orders-datalist-dialog'
+import TransferOrderDetail from './_components/-transfer-order-detail'
+import TransferOrdersList from './_components/-transfer-orders-list'
 
 export const Route = createLazyFileRoute('/(features)/_layout/transfer-management/')({
 	component: Page
@@ -19,15 +19,9 @@ function Page() {
 	return (
 		<Fragment>
 			<Helmet title={t('ns_common:navigation.transfer_managment')} />
-			<Suspense fallback={null}>
-				<TransferOrdersList />
-			</Suspense>
-			<Suspense fallback={null}>
-				<OrderDatalistDialog />
-			</Suspense>
-			<Suspense fallback={null}>
-				<TransferOrderDetail />
-			</Suspense>
+			<TransferOrdersList />
+			<OrderDatalistDialog />
+			<TransferOrderDetail />
 		</Fragment>
 	)
 }

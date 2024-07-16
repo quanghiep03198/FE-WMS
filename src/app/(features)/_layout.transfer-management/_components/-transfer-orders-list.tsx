@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { BreakPoints } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { ITransferOrder } from '@/common/types/entities'
 import { Button, DataTable, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
@@ -19,12 +17,11 @@ import { usePageStore } from '../_stores/-page-store'
 const TransferOrdersList: React.FC = () => {
 	const tableRef = useRef<Table<any>>(null)
 	const { t } = useTranslation()
-	const { toggleDatalistDialogOpen, setCurrentOrder } = usePageStore()
+	const { toggleDatalistDialogOpen } = usePageStore()
 	const [rowSelectionType, setRowSelectionType] = useState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 
-	const { data, refetch } = useGetTransferOrderQuery()
+	const { data, isLoading, refetch } = useGetTransferOrderQuery()
 
 	const { mutateAsync: deleteAsync } = useDeleteTransferOrderMutation()
 	const { mutateAsync: updateMultiAsync } = useUpdateMultiTransferOrderMutation()
@@ -43,6 +40,7 @@ const TransferOrdersList: React.FC = () => {
 	// Handle delete selected row(s)
 	const handleDeleteSelectedRows = useCallback(() => {
 		deleteAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original.transfer_order_code))
+		handleResetAllRowSelection()
 	}, [tableRef])
 
 	return (
@@ -66,7 +64,7 @@ const TransferOrdersList: React.FC = () => {
 				<DataTable
 					ref={tableRef}
 					data={data}
-					loading={false}
+					loading={isLoading}
 					columns={columns}
 					enableColumnFilters={true}
 					enableColumnResizing={true}
@@ -76,7 +74,7 @@ const TransferOrdersList: React.FC = () => {
 						slot: memo(() => (
 							<Fragment>
 								{tableRef.current &&
-									tableRef.current.getSelectedRowModel().flatRows.length > 0 &&
+									tableRef.current?.getSelectedRowModel().flatRows.length > 0 &&
 									rowSelectionType === 'multiple' && (
 										<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 											<Button
@@ -133,7 +131,7 @@ const TransferOrdersList: React.FC = () => {
 											variant='outline'
 											className='gap-x-2'
 											disabled={isDisabled}
-											onClick={() => table.options.meta.revertAllDataChanges()}>
+											onClick={() => table.options.meta.discardChanges()}>
 											<Icon name='Undo2' role='img' arial-label={t('ns_common:actions.revert_changes')} />{' '}
 											{t('ns_common:actions.revert_changes')}
 										</Button>

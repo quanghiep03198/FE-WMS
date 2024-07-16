@@ -1,5 +1,5 @@
 import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/-transfer-order.schema'
-import { ICustomerBrand, ITransferOrder, ITransferOrderData } from '@/common/types/entities'
+import { ICustomerBrand, ITransferOrder, ITransferOrderData, ITransferOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 type CreateTransferOrderPayload = Pick<ITransferOrderData, 'mo_no' | 'or_no' | 'or_custpo' | 'shoestyle_codefactory'>[]
@@ -15,6 +15,12 @@ export class TransferOrderService {
 		})
 	}
 
+	static async getTransferOrderDetail(transferOrderCode: string) {
+		return await axiosInstance.get<void, ResponseBody<ITransferOrderDetail>>(
+			`/transfer-order/detail/${transferOrderCode}`
+		)
+	}
+
 	static async addTransferOrder(payload: CreateTransferOrderPayload) {
 		return await axiosInstance.post<CreateTransferOrderPayload, ResponseBody<ITransferOrderData[]>>(
 			'/transfer-order',
@@ -25,18 +31,15 @@ export class TransferOrderService {
 	static async updateTransferOrder(transferOrderCode: string, payload: Partial<ITransferOrder>) {
 		return await axiosInstance.patch<any, ResponseBody<null>>(`/transfer-order/update/${transferOrderCode}`, payload)
 	}
+
 	static async updateMultiTransferOrder(payload: Partial<ITransferOrder>[]) {
 		return await axiosInstance.patch<any, ResponseBody<null>>(`/transfer-order/update-multi`, { payload })
 	}
 
 	static async deleteTransferOrder(selectedRows) {
 		return await axiosInstance.delete<any, ResponseBody<null>>('/transfer-order', {
-			data: { transferorder: selectedRows }
+			data: { transfer_order_code: selectedRows }
 		})
-	}
-
-	static async getTransferOrderDetail() {
-		return await axiosInstance.get<any, ResponseBody<ITransferOrderData[]>>('/transfer-order')
 	}
 
 	static async updateTransferOrderDetail({

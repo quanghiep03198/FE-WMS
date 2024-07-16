@@ -56,7 +56,7 @@ export const useTransferOrderTableColumns = ({
 							onCheckedChange={(checkedState) => {
 								update()
 								if (checkedState) setRowSelectionType('multiple')
-								table.toggleAllPageRowsSelected(!!checkedState)
+								table.toggleAllRowsSelected(!!checkedState)
 							}}
 						/>
 					)
