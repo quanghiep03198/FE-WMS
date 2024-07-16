@@ -1,20 +1,21 @@
-import { useCallback, useContext, useEffect } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
-import { useLocalStorageState } from 'ahooks'
-import { isEmpty, isNil } from 'lodash'
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import tw from 'tailwind-styled-components'
 import { USER_PROVIDE_TAG, useGetUserProfile } from '@/app/_composables/-user.composable'
-import { useAuthStore } from '@/stores/auth.store'
+import env from '@/common/utils/env'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { AppConfigs } from '@/configs/app.config'
 import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
 import { AuthService } from '@/services/auth.service'
+import { useAuthStore } from '@/stores/auth.store'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
+import { useLocalStorageState } from 'ahooks'
+import { isEmpty, isNil } from 'lodash'
+import { useCallback, useContext, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
@@ -41,12 +42,12 @@ const LoginForm: React.FC = () => {
 
 	const { mutateAsync: login, isPending } = useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
-		mutationFn: AuthService.login,
+		mutationFn: env('VITE_NODE_ENV') === 'test' ? AuthService.fakeLogin : AuthService.login,
 		onMutate: () => {
 			return toast.loading(t('ns_common:notification.processing_request'), { id: 'login' })
 		},
 		onSuccess: (data) => {
-			setAccessToken(data.metadata?.token) // Store user's access token
+			setAccessToken(data?.metadata?.accessToken) // Store user's access token
 		},
 		onError(_err) {
 			toast.error(t('ns_auth:notification.login_failed'), { id: 'login' })
