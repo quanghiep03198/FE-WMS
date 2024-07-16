@@ -123,7 +123,15 @@ export interface ITransferOrder extends IBaseEntity {
 	status_approve: TransferOrderApprovalStatus
 	employee_name_approve: string | null
 	approve_date: Date | null
-	// al_warehouse: string | null
+}
+
+export interface ITransferOrderDetail extends ITransferOrder {
+	seqno: number
+	trans_num: number
+	sno_qty: number
+	or_qtyperpacking: number
+	kg_nostart: number
+	kg_noend: number
 }
 
 export interface ITransferOrderData extends ITransferOrder {
