@@ -10,6 +10,8 @@ type TableContext = {
 	isFilterOpened: boolean
 	enableGlobalFilter: boolean
 	manualSorting: boolean
+	autoResetPageIndex: boolean
+	skipAutoResetPageIndex: React.Dispatch<React.SetStateAction<boolean>>
 	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>
 	setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
 	setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>

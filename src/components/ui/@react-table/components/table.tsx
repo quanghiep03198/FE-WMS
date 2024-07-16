@@ -137,7 +137,7 @@ function TableDataGrid<TData, TValue>({
 													...DataTableUtility.getStickyOffsetPosition(header.column)
 												}}>
 												<TableCellHead table={table} header={header} />
-												<ColumnResizer header={header} visible={true} />
+												<ColumnResizer header={header} />
 											</TableHead>
 										)
 									})}

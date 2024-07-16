@@ -25,7 +25,6 @@ import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
-import { useSkipper } from './hooks/use-skipper'
 import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
@@ -71,13 +70,14 @@ function DataTable<TData, TValue>(
 	const [isScrolling, setIsScrolling] = useState(false)
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
-	const [originalData, setOriginalData] = useState(() => data ?? [])
-	const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper()
+	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
 	const [editedRows, setEditedRows] = useState({})
 	const [pagination, setPagination] = useState<PaginationState>(() => ({
 		pageIndex: 0,
 		pageSize: 10
 	}))
+
+	const originalData = useMemo(() => data ?? [], [data])
 
 	const hasNoFilter = useMemo(() => {
 		if (manualFiltering) return columnFilters?.length === 0
@@ -90,10 +90,7 @@ function DataTable<TData, TValue>(
 	 * Avoid infinite loop if data is empty
 	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
 	 */
-	useDeepCompareEffect(() => {
-		setOriginalData(data)
-		setData(data)
-	}, [data])
+	useDeepCompareEffect(() => setData(data), [data])
 
 	const table = useReactTable({
 		data: _data,
@@ -132,12 +129,8 @@ function DataTable<TData, TValue>(
 		enableColumnResizing,
 		columnResizeMode: 'onChange',
 		debugAll: false,
-		sortingFns: {
-			fuzzy: fuzzySort
-		},
-		filterFns: {
-			fuzzy: fuzzyFilter
-		},
+		sortingFns: { fuzzy: fuzzySort },
+		filterFns: { fuzzy: fuzzyFilter },
 		globalFilterFn: 'fuzzy',
 		onPaginationChange: manualPagination ? onPaginationChange : setPagination,
 		onSortingChange: manualSorting ? onSortingChange : setSorting,
@@ -157,10 +150,9 @@ function DataTable<TData, TValue>(
 		meta: {
 			editedRows,
 			setEditedRows,
-
 			updateData: (rowIndex, columnId, value) => {
 				// Skip page index reset until after next rerender
-				skipAutoResetPageIndex()
+				setAutoResetPageIndex(false)
 				setData((old) =>
 					old.map((row, index) => {
 						if (index === rowIndex) {
@@ -173,12 +165,13 @@ function DataTable<TData, TValue>(
 					})
 				)
 			},
-			revertDataChanges: (rowIndex: number) => {
+			discardChanges: (rowIndex) => {
+				if (!rowIndex) {
+					setEditedRows({})
+					setData(originalData)
+					return
+				}
 				setData((old) => old.map((row, index) => (index === rowIndex ? originalData[rowIndex] : row)))
-			},
-			revertAllDataChanges: () => {
-				setEditedRows({})
-				setData(originalData)
 			},
 			getUnsavedChanges: (): TData[] => {
 				return table
@@ -192,7 +185,9 @@ function DataTable<TData, TValue>(
 	})
 
 	const rowSelectionCount =
-		String(table.getFilteredSelectedRowModel().rows.length) + '/' + String(table.getFilteredRowModel().rows.length)
+		String(table.getFilteredSelectedRowModel().rows?.length ?? 0) +
+		'/' +
+		String(table.getFilteredRowModel().rows?.length ?? 0)
 
 	useDeepCompareEffect(() => {
 		if (ref) ref.current = table
@@ -209,6 +204,8 @@ function DataTable<TData, TValue>(
 				globalFilter: _globalFilter,
 				enableGlobalFilter,
 				manualSorting,
+				autoResetPageIndex,
+				skipAutoResetPageIndex: setAutoResetPageIndex,
 				setIsScrolling,
 				setIsFilterOpened,
 				setColumnFilters,

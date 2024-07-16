@@ -9,15 +9,14 @@ declare module '@tanstack/react-table' {
 		sticky?: 'left' | 'right'
 		rowSpan?: number
 		cellDataType?: 'text' | 'number' | 'date' | 'boolean'
+		validate?: (value: TValue) => boolean
 	}
 
 	interface TableMeta<TData extends RowData> {
 		editedRows: Record<Row<TData>['id'], boolean>
 		setEditedRows: React.Dispatch<React.SetStateAction<Record<Row<TData>['id'], boolean>>>
-		// updateRow: (rowIndex: number) => void
 		updateData: (rowIndex: number, columnId: string, value: unknown) => void
-		revertDataChanges: (rowIndex: number) => void
-		revertAllDataChanges: () => void
+		discardChanges: (rowIndex?: number) => void
 		getUnsavedChanges: () => TData[]
 	}
 
