@@ -9,10 +9,22 @@ import { type AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
 
 export class AuthService {
-	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; token: string }>> {
-		return await axiosInstance.post<LoginFormValues, ResponseBody<{ user: Partial<IUser>; token: string }>>(
+	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; accessToken: string }>> {
+		return await axiosInstance.post<LoginFormValues, ResponseBody<{ user: Partial<IUser>; accessToken: string }>>(
 			'/login',
 			data
+		)
+	}
+
+	/**
+	 * @description Fake login with json server auth
+	 * @param data
+	 * @returns
+	 */
+	static async fakeLogin(data: LoginFormValues) {
+		return await axiosInstance.post<LoginFormValues, ResponseBody<{ user: Partial<IUser>; accessToken: string }>>(
+			'/login',
+			{ email: data.username, password: data.password }
 		)
 	}
 
@@ -23,8 +35,7 @@ export class AuthService {
 	}
 
 	static async profile(config?: AxiosRequestConfig): Promise<ResponseBody<IUser>> {
-		// return await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
-		return await axiosInstance.get<void, ResponseBody<IUser>>('/users/1', config)
+		return await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
 	}
 
 	static getUser() {

@@ -1,7 +1,7 @@
 import { ProductionApprovalStatus } from '@/app/(features)/_layout.product-incoming-inspection/_constants/-production.enum'
 import { IInOutBoundOrder } from '@/common/types/entities'
 
-export const production: IInOutBoundOrder[] = Array.from(new Array(500)).map((_, index) => ({
+export const production: IInOutBoundOrder[] = Array.from(new Array(50)).map((_, index) => ({
 	id: String(index),
 	status_approve: ProductionApprovalStatus.REVIEWED,
 	sno_no: crypto.randomUUID(),

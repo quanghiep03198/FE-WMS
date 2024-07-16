@@ -27,5 +27,9 @@ dist-ssr
 .env.development
 .env.production
 
-
+# Storybook log
 *storybook.log
+
+# JSON server
+_api
+json-server.json
