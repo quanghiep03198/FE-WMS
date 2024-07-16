@@ -43,6 +43,7 @@ export default {
 		clear_filter: '删除过滤',
 		toggle_sidebar: '切换主侧边栏',
 		toggle_theme: '切换主题',
+		set_approval_status: '审核状态设置',
 		approve: '批准',
 		reapprove: '重新批准',
 		cancel_approve: '取消批准'

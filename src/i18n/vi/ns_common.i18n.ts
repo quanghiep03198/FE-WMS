@@ -44,6 +44,7 @@ export default {
 		clear_filter: 'Xóa lọc',
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
 		toggle_theme: 'Chuyển đổi chế độ nền',
+		set_approval_status: 'Đặt trạng thái phê duyệt',
 		approve: 'Duyệt',
 		reapprove: 'Duyệt lại',
 		cancel_approve: 'Hủy duyệt'

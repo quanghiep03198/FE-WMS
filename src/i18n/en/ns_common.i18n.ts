@@ -43,6 +43,7 @@ export default {
 		clear_filter: 'Clear filters',
 		toggle_sidebar: 'Toggle Primary Side Bar',
 		toggle_theme: 'Toggle Theme',
+		set_approval_status: 'Set approval status',
 		approve: 'Approve',
 		reapprove: 'Reapprove',
 		cancel_approve: 'Cancel Approval'
