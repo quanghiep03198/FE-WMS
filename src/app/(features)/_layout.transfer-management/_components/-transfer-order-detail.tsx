@@ -42,7 +42,7 @@ const TransferOrderDetail: React.FC = () => {
 
 	const handleSaveChanges = (data) => {
 		mutateAsync({
-			transferOrderCode: currentOrder.transfer_order_code,
+			transferOrderCode: currentOrder?.transfer_order_code,
 			payload: data
 		}).then(() => toggleSheetPanelFormOpen())
 	}

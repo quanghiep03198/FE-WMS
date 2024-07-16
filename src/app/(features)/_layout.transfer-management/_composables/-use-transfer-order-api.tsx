@@ -99,7 +99,7 @@ export const useUpdateMultiTransferOrderMutation = () => {
 export const useUpdateTransferOrderDetailMutation = () => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
-	const currentOrder = usePageStore((state) => state.currentOrder.transfer_order_code)
+	const currentOrder = usePageStore((state) => state.currentOrder?.transfer_order_code)
 
 	return useMutation({
 		mutationKey: [TRANSFER_ORDER_DETAIL_PROVIDE_TAG, currentOrder],
