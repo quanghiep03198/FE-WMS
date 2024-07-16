@@ -25,7 +25,12 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		)
 
 	const sortedUniqueValues = useMemo(() => {
-		return filterVariant === 'range' ? [] : Array.from(column.getFacetedUniqueValues().keys()).sort()
+		return filterVariant === 'range'
+			? []
+			: Array.from(column.getFacetedUniqueValues().keys()).sort((a, b) => {
+					if (a === b) return 0
+					return a > b ? 1 : -1
+				})
 	}, [column.getFacetedUniqueValues()])
 
 	switch (filterVariant) {
