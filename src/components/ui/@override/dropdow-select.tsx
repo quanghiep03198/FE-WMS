@@ -39,7 +39,7 @@ export function DropdownSelect<T>({
 						))
 					) : (
 						<SelectItem
-							value={undefined}
+							value={null}
 							disabled
 							className='flex items-center justify-center text-center text-xs font-medium'>
 							No option

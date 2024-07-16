@@ -97,9 +97,15 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												!field.value && 'text-muted-foreground'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
-												{data?.find((option) => option[valueField] === field.value)?.[labelField] ??
-													field.value ??
-													placeholder}
+												{(() => {
+													if (Array.isArray(data) && data.length > 0) {
+														return (
+															data?.find((option) => option[valueField] === field.value)?.[labelField] ??
+															placeholder
+														)
+													}
+													return placeholder
+												})()}
 											</Typography>
 											<Icon name='ChevronsUpDown' className='ml-auto' />
 										</Button>
@@ -117,33 +123,34 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										{!loading && <CommandEmpty>No result</CommandEmpty>}
 										<CommandList className='scrollbar'>
 											<CommandGroup>
-												{data?.map((option) => {
-													return (
-														<CommandItem
-															key={option[valueField]}
-															value={option[valueField]}
-															className='line-clamp-1 flex items-center gap-x-4'
-															onSelect={() => {
-																form.setValue(name, option[valueField])
-																if (typeof onSelect === 'function') onSelect(option[valueField])
-															}}>
-															{CommandItemTemplate ? (
-																<CommandItemTemplate data={option} />
-															) : (
-																<Typography variant='small' className='line-clamp-1 flex-1'>
-																	{option[labelField]}
-																</Typography>
-															)}
-															<Icon
-																name='Check'
-																className={cn(
-																	'ml-auto',
-																	option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
+												{Array.isArray(data) &&
+													data?.map((option) => {
+														return (
+															<CommandItem
+																key={option[valueField]}
+																value={option[valueField]}
+																className='line-clamp-1 flex items-center gap-x-4'
+																onSelect={() => {
+																	form.setValue(name, option[valueField])
+																	if (typeof onSelect === 'function') onSelect(option[valueField])
+																}}>
+																{CommandItemTemplate ? (
+																	<CommandItemTemplate data={option} />
+																) : (
+																	<Typography variant='small' className='line-clamp-1 flex-1'>
+																		{option[labelField]}
+																	</Typography>
 																)}
-															/>
-														</CommandItem>
-													)
-												})}
+																<Icon
+																	name='Check'
+																	className={cn(
+																		'ml-auto',
+																		option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
+																	)}
+																/>
+															</CommandItem>
+														)
+													})}
 											</CommandGroup>
 										</CommandList>
 									</Command>

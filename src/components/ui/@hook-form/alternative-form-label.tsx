@@ -26,7 +26,7 @@ const FormLabel: React.FC<AlternativeFormLabelProps> = ({ labelText, htmlFor, me
 						align='end'
 						sideOffset={8}
 						hidden={messageType !== 'alternative' || !error}
-						className='bg-destructive'>
+						className='bg-destructive text-destructive-foreground'>
 						{String(error?.message)}
 					</TooltipContent>
 				</Tooltip>

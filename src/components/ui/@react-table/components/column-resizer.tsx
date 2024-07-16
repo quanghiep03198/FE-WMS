@@ -4,12 +4,11 @@ import { Separator } from '../../@core/separator'
 
 type ColumnResizerProps<TData, TValue> = {
 	header: Header<TData, TValue>
-	visible: boolean
 }
 
-export default function ColumnResizer<TData, TValue>({ header, visible }: ColumnResizerProps<TData, TValue>) {
+export default function ColumnResizer<TData, TValue>({ header }: ColumnResizerProps<TData, TValue>) {
 	return (
-		visible && (
+		!header.column.getIsLastColumn() && (
 			<Separator
 				onDoubleClick={header.column.resetSize}
 				onMouseDown={header.getResizeHandler()}
