@@ -1,4 +1,4 @@
-import { USER_PROVIDE_TAG, useGetUserProfile } from '@/app/_composables/-user.composable'
+import { USER_PROVIDE_TAG, getUserProfileQuery, useGetUserProfile } from '@/app/_composables/-user.composable'
 import env from '@/common/utils/env'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
@@ -7,10 +7,11 @@ import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
+import { compress, decompress } from 'lz-string'
 import { useCallback, useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -18,8 +19,11 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
 const LoginForm: React.FC = () => {
+	const { setUserProfile } = useAuthStore()
+	const queryClient = useQueryClient()
+	const { data: user } = useGetUserProfile()
 	const { t } = useTranslation()
-	const { steps, dispatch } = useContext(StepContext)
+	const { dispatch } = useContext(StepContext)
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true
@@ -34,23 +38,25 @@ const LoginForm: React.FC = () => {
 	})
 	const [accessToken, setAccessToken] = useLocalStorageState(AppConfigs.ACCESS_TOKEN_STORAGE_KEY, {
 		defaultValue: null,
-		listenStorageChange: true
+		listenStorageChange: true,
+		serializer: (data) => compress(JSON.stringify(data)),
+		deserializer: (data) => JSON.parse(decompress(data))
 	})
-	const { setUserProfile } = useAuthStore()
-
-	const { data: user } = useGetUserProfile()
 
 	const { mutateAsync: login, isPending } = useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
 		mutationFn: env('VITE_NODE_ENV') === 'test' ? AuthService.fakeLogin : AuthService.login,
 		onMutate: () => {
-			return toast.loading(t('ns_common:notification.processing_request'), { id: 'login' })
+			return toast.loading(t('ns_common:notification.processing_request'))
 		},
-		onSuccess: (data) => {
+		onSuccess: async (data, _variables, context) => {
 			setAccessToken(data?.metadata?.accessToken) // Store user's access token
+			const response = await queryClient.fetchQuery(getUserProfileQuery())
+			setUserProfile(response.metadata)
+			toast.success(t('ns_common:notification.success'), { id: context })
 		},
-		onError(_err) {
-			toast.error(t('ns_auth:notification.login_failed'), { id: 'login' })
+		onError(_error, _variables, context) {
+			toast.error(t('ns_auth:notification.login_failed'), { id: context })
 		}
 	})
 
@@ -66,12 +72,8 @@ const LoginForm: React.FC = () => {
 
 	useEffect(() => {
 		// If user's profile is retrieved successfully, then go to next step
-		if ([user, accessToken].every((item) => !isNil(item))) {
-			setUserProfile(user)
-			toast.success(t('ns_auth:notification.login_success'), { id: 'login' })
-			dispatch({ type: 'NEXT_STEP' })
-		}
-	}, [steps.currentStep, user, accessToken])
+		if (accessToken && user) dispatch({ type: 'NEXT_STEP' })
+	}, [accessToken, user])
 
 	return (
 		<FormProvider {...form}>

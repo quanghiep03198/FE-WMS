@@ -1,5 +1,5 @@
 import { IUser } from '@/common/types/entities'
-import { __JSON__ } from '@/common/utils/json'
+import { _JSON } from '@/common/utils/json'
 import { AppConfigs } from '@/configs/app.config'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
@@ -7,6 +7,7 @@ import { LoginFormValues } from '@/schemas/auth.schema'
 import { useAuthStore } from '@/stores/auth.store'
 import { type AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
+import { decompress } from 'lz-string'
 
 export class AuthService {
 	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; accessToken: string }>> {
@@ -55,7 +56,8 @@ export class AuthService {
 
 	static getAccessToken(): string | null {
 		if (!AuthService.getHasAccessToken()) return null
-		const accessToken = __JSON__.parse<string>(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY))
+
+		const accessToken = _JSON.parse(decompress(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY)))
 		return `Bearer ${accessToken}`
 	}
 
@@ -64,7 +66,7 @@ export class AuthService {
 	}
 
 	static getHasAccessToken() {
-		const accessToken = __JSON__.parse<string>(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY))
+		const accessToken = _JSON.parse<string>(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY))
 		return !_.isNil(accessToken)
 	}
 }

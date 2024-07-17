@@ -31,7 +31,7 @@ export const useAuthStore = create(
 			resetAuthState: () => set(initialState)
 		}),
 		{
-			name: 'Auth',
+			name: 'user',
 			serialize: (data) => compress(JSON.stringify(data)),
 			deserialize: (data) => JSON.parse(decompress(data))
 		}
