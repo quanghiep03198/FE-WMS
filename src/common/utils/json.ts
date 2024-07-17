@@ -1,4 +1,4 @@
-export class __JSON__ {
+export class _JSON {
 	/**
 	 * @description Check if string is valid JSON
 	 * @param arg
@@ -23,7 +23,7 @@ export class __JSON__ {
 			if (typeof value !== 'string') {
 				throw new Error(`Cannot safe json parse value of type "${typeof value}"`)
 			}
-			if (!__JSON__.valid(value)) return value
+			if (!_JSON.valid(value)) return value
 			return JSON.parse(value)
 		} catch (error) {
 			return null
