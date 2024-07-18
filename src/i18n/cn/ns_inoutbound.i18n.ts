@@ -26,9 +26,13 @@ export default {
 		return_for_repair: '返修'
 	},
 	notification: {
-		conflict_mono: '这批资料有两个指令进去 请再次读取',
+		too_many_mono: '已扫描到超过3个命令. 请重新检查',
 		navigation_blocked_message: '现在停读 ?',
-		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?'
+		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?',
+		confirm_delete_all_mono: {
+			title: '您確定要刪除此命令嗎 ?',
+			description: '如果您刪除它, 則必須重新執行EPC掃描操作.'
+		}
 	},
 	fields: {
 		mo_no: '指令碼',

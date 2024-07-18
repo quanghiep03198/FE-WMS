@@ -26,9 +26,13 @@ export default {
 		return_for_repair: 'Return for Repair'
 	},
 	notification: {
-		conflict_mono: 'There are up to 2 monos being read at this time, please check again!',
-		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
-		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?'
+		too_many_mono: 'There are more than 3 commands scanned. Please check again.',
+		navigation_blocked_message: 'Cancel scanning EPCs anyway ?',
+		navigation_blocked_caption: 'Unsaved tasks. Are you sure you want to leave the page right now?',
+		confirm_delete_all_mono: {
+			title: 'Bạn chắc chắn muốn xóa chỉ lệnh này ?',
+			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
+		}
 	},
 	fields: {
 		mo_no: 'Order',

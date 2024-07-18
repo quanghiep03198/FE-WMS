@@ -19,7 +19,13 @@ export default {
 		return_for_repair: 'Hàng trả về để sửa chữa'
 	},
 	notification: {
-		conflict_mono: 'Đã có lỗi xảy ra ! Có nhiều hơn 1 chỉ lệnh được quét. Hãy kiểm tra lại.'
+		too_many_mono: 'Có nhiều hơn 3 chỉ lệnh được quét. Hãy kiểm tra lại.',
+		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
+		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?',
+		confirm_delete_all_mono: {
+			title: 'Bạn chắc chắn muốn xóa chỉ lệnh này ?',
+			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
+		}
 	},
 	labels: {
 		// EPC import/export
