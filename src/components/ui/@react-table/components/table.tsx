@@ -12,7 +12,7 @@ import { MemorizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
 import TableEmpty from './table-empty'
-import { TableFooter } from './table-footer'
+import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
 
 interface TableProps<TData, TValue>

@@ -35,7 +35,6 @@ export * from './@core/skeleton'
 export * from './@core/table'
 export * from './@core/textarea'
 export * from './@core/toggle'
-export * from './@custom/typography'
 // #endregion
 
 // #region Form field controls
@@ -55,6 +54,7 @@ export * from './@override/tooltip'
 export * from './@custom/div'
 export * from './@custom/divider'
 export * from './@custom/swap'
+export * from './@custom/typography'
 // #endregion
 
 export { default as DataTable } from './@react-table'

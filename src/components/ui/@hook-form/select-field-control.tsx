@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import React, { useId } from 'react'
+import React, { memo, useId } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
@@ -24,7 +24,7 @@ export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T>
 		}>
 	}
 
-export function SelectFieldControl<T extends FieldValues>(props: SelectFieldControlProps<T>) {
+export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFieldControlProps<T>) => {
 	const { getFieldState, getValues } = useFormContext()
 	const { t } = useTranslation()
 
@@ -57,7 +57,7 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
 						<Select
 							value={field.value}
-							defaultValue={field.value}
+							defaultValue={field.value ?? null}
 							onValueChange={(value) => {
 								field.onChange(value)
 								if (onValueChange) {
@@ -101,6 +101,6 @@ export function SelectFieldControl<T extends FieldValues>(props: SelectFieldCont
 			}}
 		/>
 	)
-}
+})
 
 SelectFieldControl.displayName = 'SelectFieldControl'

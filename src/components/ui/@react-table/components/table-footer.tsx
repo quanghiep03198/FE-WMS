@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
 import { Table } from '@tanstack/react-table'
 import { type TableFooterProps } from '../types'
 
-export function TableFooter<TData>({
+function TableFooter({
 	table,
 	hidden,
 	slot: Slot,
 	rtl: rtl
-}: TableFooterProps & { table: Table<TData> & React.PropsWithChildren }) {
+}: TableFooterProps & { table: Table<any> & React.PropsWithChildren }) {
 	if (hidden || !Slot) return null
 
 	return (
@@ -19,3 +19,5 @@ export function TableFooter<TData>({
 		</Div>
 	)
 }
+
+export default memo(TableFooter)
