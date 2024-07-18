@@ -1,27 +1,25 @@
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { TScanningStatus } from '../_context/-page-context'
+import { ScanningStatus } from '../_contexts/-page.context'
 
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
 export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY' as const
 
-export const useGetUnscannedEpc = (params: { connection: string; scanningStatus: TScanningStatus }) => {
+export const useGetUnscannedEPC = (params: { connection: string; scanningStatus: ScanningStatus }) => {
 	return useQuery({
 		queryKey: [RFID_EPC_PROVIDE_TAG],
 		queryFn: () => RFIDService.getUnscannedEpc(params.connection),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
+		initialData: { metadata: [], message: null, statusCode: null },
+		placeholderData: keepPreviousData,
 		select: (response) => response.metadata
 	})
 }
 
-export const useStoreEpcMutation = ({
-	onSuccess
-}: {
-	onSuccess: React.Dispatch<React.SetStateAction<TScanningStatus>>
-}) => {
+export const useStoreEpcMutation = ({ onSuccess }: { onSuccess: () => void }) => {
 	const queryClient = useQueryClient()
 	const { t } = useTranslation()
 
@@ -30,7 +28,7 @@ export const useStoreEpcMutation = ({
 		mutationFn: RFIDService.updateStockMovement,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
-			onSuccess(undefined)
+			onSuccess()
 			queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
 			return toast.success(t('ns_common:notification.success'), { id: context })
 		},

@@ -1,21 +1,21 @@
-import { Div, Typography } from '@/components/ui'
+import { IElectronicProductCode } from '@/common/types/entities'
+import { Badge, Div, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
-import React, { memo, useContext, useMemo } from 'react'
-import { useCountUp } from 'react-countup'
+import { Separator } from '@radix-ui/react-context-menu'
+import { useInterval, useReactive, useResetState } from 'ahooks'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageContext } from '../_context/-page-context'
+import { ScanningStatus, usePageStore } from '../_contexts/-page.context'
 
 const ScannedEPCsCounter: React.FC = () => {
-	const { scanningStatus } = useContext(PageContext)
+	const { scannedEPCs, scanningStatus } = usePageStore()
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex h-full flex-col items-center justify-center gap-y-3 rounded-[var(--radius)] border p-4 text-center'>
+		<Div className='relative flex flex-col justify-center items-center h-full gap-y-4 rounded-[var(--radius)] overflow-clip border p-4'>
 			{scanningStatus === 'scanning' && <Skeleton className='absolute inset-0 z-0 h-full' />}
-			<Typography variant='h6' className='relative z-10'>
-				{t('ns_inoutbound:counter_box.label')}
-			</Typography>
-			<Counter />
+			<ScanningCounter scannedEPCs={scannedEPCs} />
+			<ScanningTimer scanningStatus={scanningStatus} />
 			<Typography variant='small' className='relative z-10 text-xs xl:text-sm' color='muted'>
 				{t('ns_inoutbound:counter_box.caption', { value: 5, defaultValue: null })}
 			</Typography>
@@ -23,25 +23,78 @@ const ScannedEPCsCounter: React.FC = () => {
 	)
 }
 
-const Counter: React.FC = memo(() => {
-	const { data } = useContext(PageContext)
-	const count = useMemo(() => data?.length ?? 0, [data])
+const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = memo(
+	({ scannedEPCs }) => {
+		const { t } = useTranslation()
+		const count = useReactive({ value: 0, duration: undefined })
 
-	useCountUp({
-		ref: 'counter',
-		duration: 1,
-		end: count,
-		useEasing: false,
-		formattingFn(value) {
-			return new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(value)
-		}
-	})
+		useInterval(() => {
+			count.value++
+		}, count.duration)
 
-	return (
-		<Typography id='counter' variant='h2' className='relative z-10'>
-			{count}
-		</Typography>
-	)
-})
+		useEffect(() => {
+			count.duration = scannedEPCs.length > count.value ? 5 : undefined
+		}, [scannedEPCs, count.value])
+
+		return (
+			<Div className='flex items-center justify-between relative z-10 gap-x-3'>
+				<Typography variant='h6' className='inline-flex items-center gap-x-2'>
+					{t('ns_inoutbound:counter_box.label')}
+				</Typography>
+				<Separator className='w-1.5 h-0.5 bg-foreground' />
+				<Typography variant='h6' className='inline-flex gap-x-1 font-bold'>
+					{count.value}
+					<Typography variant='small' className='font-medium text-xs'>
+						pcs
+					</Typography>
+				</Typography>
+			</Div>
+		)
+	},
+	(prev, next) => prev.scannedEPCs === next.scannedEPCs
+)
+
+const ScanningTimer: React.FC<{ scanningStatus: ScanningStatus }> = memo(
+	({ scanningStatus }) => {
+		const duration = useRef<number>(0)
+		const [intervalValue, setIntervalValue] = useState(undefined)
+		const [scannedTime, setScannedTime, resetScannedTime] = useResetState({
+			hours: '00',
+			minutes: '00',
+			seconds: '00'
+		})
+
+		const clear = useInterval(() => {
+			duration.current++
+			const hours = Math.floor((duration.current / (60 * 60)) % 24)
+			const minutes = Math.floor((duration.current / 60) % 60)
+			const seconds = Math.floor(duration.current % 60)
+
+			setScannedTime({
+				hours: String(hours).length > 1 ? String(hours) : `0${hours}`,
+				minutes: String(minutes).length > 1 ? String(minutes) : `0${minutes}`,
+				seconds: String(seconds).length > 1 ? String(seconds) : `0${seconds}`
+			})
+		}, intervalValue)
+
+		useEffect(() => {
+			if (typeof scanningStatus === 'undefined') {
+				setIntervalValue(undefined)
+				resetScannedTime()
+			} else if (scanningStatus === 'finished') {
+				clear()
+			} else {
+				setIntervalValue(1000)
+			}
+		}, [scanningStatus])
+
+		return (
+			<Badge className='relative text-sm z-10'>
+				{scannedTime.hours}:{scannedTime.minutes}:{scannedTime.seconds}
+			</Badge>
+		)
+	},
+	(prev, next) => prev.scanningStatus === next.scanningStatus
+)
 
 export default memo(ScannedEPCsCounter)

@@ -16,24 +16,33 @@ import {
 	SelectFieldControl,
 	Typography
 } from '@/components/ui'
-import { FormActionEnum, InOutBoundFormValues, inOutBoundSchema } from '@/schemas/epc-inoutbound.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
 import _ from 'lodash'
-import { Fragment, useContext, useMemo } from 'react'
+import { Fragment, memo, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useGetWarehouseStorageQuery } from '../../_composables/-warehouse-storage.composable'
 import { useGetWarehouseQuery } from '../../_composables/-warehouse.composable'
 import { useStoreEpcMutation } from '../_composables/-use-rfid-api'
-import { PageContext } from '../_context/-page-context'
+import { usePageStore } from '../_contexts/-page.context'
+import { FormActionEnum, InoutboundFormValues, inOutBoundSchema } from '../_schemas/-epc-inoutbound.schema'
+// import { usePageStore } from '../_stores/-page.store'
 
-const InOutBoundForm: React.FC = () => {
-	const queryClient = useQueryClient()
-	const { data, scanningStatus, connection, setScanningStatus } = useContext(PageContext)
+const InoutboundForm: React.FC = () => {
+	const {
+		scannedEPCs,
+		scanningStatus,
+		connection,
+		scannedOrders,
+		selectedOrder,
+		setScanningStatus,
+		setSelectedOrder,
+		setScannedEPCs,
+		setScannedOrders
+	} = usePageStore()
 	const { t, i18n } = useTranslation()
-	const form = useForm<InOutBoundFormValues>({
+	const form = useForm<InoutboundFormValues>({
 		resolver: zodResolver(inOutBoundSchema),
 		defaultValues: { rfid_status: FormActionEnum.IMPORT }
 	})
@@ -67,9 +76,22 @@ const InOutBoundForm: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const scannedEPCs = useMemo(() => [...new Set(data.map((item) => item.epc_code))], [data])
+	const epc_code = useMemo(
+		() =>
+			Array.isArray(scannedEPCs) && scannedEPCs.length > 0
+				? [...new Set(scannedEPCs.map((item) => item.epc_code))]
+				: [],
+		[scannedEPCs]
+	)
 
-	const { mutateAsync } = useStoreEpcMutation({ onSuccess: setScanningStatus })
+	const { mutateAsync } = useStoreEpcMutation({
+		onSuccess: () => {
+			const filteredOrders = scannedOrders.filter((item) => item.orderCode !== selectedOrder)
+			setScannedOrders(filteredOrders)
+			setScannedEPCs((prev) => prev.filter((item) => filteredOrders.some((order) => order.orderCode === item.mo_no)))
+			setSelectedOrder(scannedOrders[0]?.orderCode ?? null)
+		}
+	})
 
 	return (
 		<FormProvider {...form}>
@@ -78,7 +100,7 @@ const InOutBoundForm: React.FC = () => {
 					async (data) =>
 						await mutateAsync({
 							..._.omit(data, ['warehouse_num']),
-							epc_code: scannedEPCs,
+							epc_code,
 							host: connection
 						})
 				)}>
@@ -157,7 +179,6 @@ const InOutBoundForm: React.FC = () => {
 				{inoutboundType === FormActionEnum.IMPORT && (
 					<Fragment>
 						<Div className='col-span-1 sm:col-span-full'>
-							{/*  */}
 							<SelectFieldControl
 								disabled={isLoading}
 								control={form.control}
@@ -168,6 +189,7 @@ const InOutBoundForm: React.FC = () => {
 						</Div>
 						<Div className='col-span-1 sm:col-span-full'>
 							<ComboboxFieldControl
+								shouldFilter={false}
 								disabled={warehouseOptions?.length === 0}
 								form={form}
 								name='storage'
@@ -191,7 +213,10 @@ const InOutBoundForm: React.FC = () => {
 				)}
 
 				<Div className='col-span-full'>
-					<Button type='submit' className='gap-x-2 sm:w-full' disabled={scanningStatus !== 'finished'}>
+					<Button
+						type='submit'
+						className='gap-x-2 sm:w-full'
+						disabled={scanningStatus !== 'finished' || selectedOrder === 'all'}>
 						<Icon name='Check' /> {t('ns_common:actions.save')}
 					</Button>
 				</Div>
@@ -202,4 +227,4 @@ const InOutBoundForm: React.FC = () => {
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 
-export default InOutBoundForm
+export default memo(InoutboundForm)
