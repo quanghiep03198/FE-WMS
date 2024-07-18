@@ -1,7 +1,3 @@
-import {
-	AppearanceFormValues,
-	appearanceFormSchema
-} from '@/app/(preferences)/_layout.appearance-settings/_schemas/user-preference.schema'
 import { locales } from '@/common/constants/constants'
 import { Languages, Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
@@ -27,6 +23,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { AppearanceFormValues, appearanceFormSchema } from './_schemas/-user-preference.schema'
 
 export const Route = createLazyFileRoute('/(preferences)/_layout/appearance-settings/')({
 	component: Page

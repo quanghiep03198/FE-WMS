@@ -1,7 +1,7 @@
 import {
 	PartialWarehouseFormValue,
 	WarehouseFormValue
-} from '@/app/(features)/_layout.warehouse/_schemas/warehouse.schema'
+} from '@/app/(features)/_layout.warehouse/_schemas/-warehouse.schema'
 import { IDepartment, IWarehouse } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 

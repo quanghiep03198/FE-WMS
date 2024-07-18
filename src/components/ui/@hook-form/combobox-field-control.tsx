@@ -29,7 +29,7 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 	BaseFieldControl<T>,
 	'control'
 > & {
-	form: UseFormReturn<T>
+	form: UseFormReturn<any>
 	data: Array<D>
 	disabled?: boolean
 	loading?: boolean
