@@ -3,7 +3,6 @@ import env from '@/common/utils/env'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { AppConfigs } from '@/configs/app.config'
-import { LoginFormValues, loginSchema } from '@/schemas/auth.schema'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { LoginFormValues, loginSchema } from '../_schemas/-login.schema'
 
 const LoginForm: React.FC = () => {
 	const { setUserProfile } = useAuthStore()

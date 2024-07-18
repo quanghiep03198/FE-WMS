@@ -15,7 +15,6 @@ import {
 	TextareaFieldControl
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
-import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '@/schemas/warehouse.schema'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -30,6 +29,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
 import { PageContext } from '../../_contexts/-page-context'
+import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../_schemas/-warehouse.schema'
 // #endregion
 
 // #region Type declarations

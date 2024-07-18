@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { SearchFormValues } from '../_schemas/-search-customer-brand.schema'
 import { UpdateTransferOrderValues } from '../_schemas/-transfer-order.schema'
-import { usePageStore } from '../_stores/-page-store'
+import { usePageStore } from '../_stores/-page.store'
 
 export const TRANSFER_ORDER_PROVIDE_TAG = 'TRANSFER_ORDER'
 export const TRANSFER_ORDER_DETAIL_PROVIDE_TAG = 'TRANSFER_ORDER_DETAIL'

@@ -5,7 +5,7 @@ import { $mediaQuery } from '@/common/utils/media-query'
 import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
-import React from 'react'
+import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
@@ -74,4 +74,4 @@ const NavDrawerSidebar: React.FC<DrawerSidebarProps> = ({ open, onOpenStateChang
 const Menu = tw.ul`flex flex-col gap-y-2`
 const MenuItem = tw.li`whitespace-nowrap font-normal`
 
-export default NavDrawerSidebar
+export default memo(NavDrawerSidebar)

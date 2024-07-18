@@ -7,7 +7,7 @@ import { navigationConfig, type NavigationConfig } from '@/configs/navigation.co
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
@@ -137,4 +137,4 @@ const NavLink: React.FC<NavLinkProps> = ({ navSidebarOpen, path, title, icon }) 
 const Menu = tw.ul`flex flex-col gap-y-2 items-stretch py-6 overflow-x-hidden overflow-y-auto scrollbar-none`
 const MenuItem = tw.li`whitespace-nowrap font-normal w-full [&>:first-child]:w-full`
 
-export default NavSidebar
+export default memo(NavSidebar)

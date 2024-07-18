@@ -12,7 +12,7 @@ import {
 	useUpdateMultiTransferOrderMutation
 } from '../_composables/-use-transfer-order-api'
 import { useTransferOrderTableColumns } from '../_composables/-use-transfer-order-columns'
-import { usePageStore } from '../_stores/-page-store'
+import { usePageStore } from '../_stores/-page.store'
 
 const TransferOrdersList: React.FC = () => {
 	const tableRef = useRef<Table<any>>(null)

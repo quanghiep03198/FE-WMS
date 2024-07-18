@@ -13,11 +13,11 @@ import {
 } from '@/components/ui'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { Fragment, memo } from 'react'
 
 const THREADS_HOLD = 3 as const
 
-export const NavBreadcrumb: React.FC = () => {
+const NavBreadcrumb: React.FC = () => {
 	const breadcrumb = useLayoutStore((state) => state.breadcrumb)
 
 	return (
@@ -81,3 +81,5 @@ export const NavBreadcrumb: React.FC = () => {
 		</Breadcrumb>
 	)
 }
+
+export default memo(NavBreadcrumb)

@@ -19,7 +19,7 @@ import {
 	useUpdateTransferOrderDetailMutation
 } from '../_composables/-use-transfer-order-api'
 import { UpdateTransferOrderDetailValues, updateTransferOrderDetailSchema } from '../_schemas/-transfer-order.schema'
-import { usePageStore } from '../_stores/-page-store'
+import { usePageStore } from '../_stores/-page.store'
 
 const TransferOrderDetail: React.FC = () => {
 	const { t } = useTranslation()

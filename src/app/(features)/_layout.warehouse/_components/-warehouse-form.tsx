@@ -16,7 +16,6 @@ import {
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
-import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '@/schemas/warehouse.schema'
 import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -32,6 +31,7 @@ import { useGetDepartmentQuery } from '../../_composables/-department.composable
 import { WAREHOUSE_PROVIDE_TAG } from '../../_composables/-warehouse.composable'
 import { warehouseTypes } from '../_constants/-warehouse.constant'
 import { PageContext } from '../_contexts/-page-context'
+import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '../_schemas/-warehouse.schema'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
 	? Required<WarehouseFormValue>

@@ -14,7 +14,7 @@ import { useGetWarehouseQuery } from '../../_composables/-warehouse.composable'
 import TransferOrderRowActions from '../_components/-transfer-order-row-actions'
 import { TransferOrderApprovalStatus } from '../_constants/-transfer-order.enum'
 import { UpdateTransferOrderValues } from '../_schemas/-transfer-order.schema'
-import { usePageStore } from '../_stores/-page-store'
+import { usePageStore } from '../_stores/-page.store'
 import { useUpdateTransferOrderMutation } from './-use-transfer-order-api'
 
 type TransferOrderTableColumnParams = {

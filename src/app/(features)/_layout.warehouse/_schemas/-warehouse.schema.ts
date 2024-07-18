@@ -1,5 +1,5 @@
-import { WarehouseStorageTypes, WarehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
 import { z } from 'zod'
+import { WarehouseStorageTypes, WarehouseTypes } from '../_constants/-warehouse.enum'
 
 export const warehouseFormSchema = z.object({
 	warehouse_name: z.string({ required_error: 'This field is required' }),

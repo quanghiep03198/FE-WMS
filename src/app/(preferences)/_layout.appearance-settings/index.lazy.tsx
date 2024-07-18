@@ -1,3 +1,7 @@
+import {
+	AppearanceFormValues,
+	appearanceFormSchema
+} from '@/app/(preferences)/_layout.appearance-settings/_schemas/user-preference.schema'
 import { locales } from '@/common/constants/constants'
 import { Languages, Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
@@ -17,7 +21,6 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { AppearanceFormValues, appearanceFormSchema } from '@/schemas/user-preference.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'

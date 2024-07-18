@@ -4,11 +4,11 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Badge, Button, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
-import React, { Fragment } from 'react'
+import React, { Fragment, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ThemeToggle from '../../../_components/_shared/-theme-toggle'
 import { useLayoutStore } from '../../_stores/-layout.store'
-import { NavBreadcrumb } from './-nav-breadcrumb'
+import NavBreadcrumb from './-nav-breadcrumb'
 import NavDrawerSidebar from './-nav-drawer-sidebar'
 import NavUserControl from './-nav-user-controller'
 import SearchDialog from './-search-dialog'
@@ -20,7 +20,6 @@ const Navbar: React.FC = () => {
 	const { logout } = useAuth()
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
-
 	useKeyPress('ctrl.q', (e) => {
 		e.preventDefault()
 		logout()
@@ -79,4 +78,4 @@ const Navbar: React.FC = () => {
 	)
 }
 
-export default Navbar
+export default memo(Navbar)
