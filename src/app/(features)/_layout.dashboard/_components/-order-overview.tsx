@@ -8,9 +8,9 @@ import {
 	Div,
 	Typography
 } from '@/components/ui'
-import { transactionOverview } from '@/mocks/dashboard.data'
 import React, { useMemo } from 'react'
 import { Label, Pie, PieChart } from 'recharts'
+import { transactionOverview } from '../_mocks/-dashboard.data'
 
 const chartConfig = {
 	pending: {

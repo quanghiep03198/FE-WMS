@@ -1,8 +1,8 @@
 import { Badge, DataTable, Div, Icon, Typography, buttonVariants } from '@/components/ui'
-import { recentExports } from '@/mocks/dashboard.data'
 import { Link } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { recentExports } from '../_mocks/-dashboard.data'
 
 const TransactionHistory: React.FC = () => {
 	const columnHelper = createColumnHelper<any>()

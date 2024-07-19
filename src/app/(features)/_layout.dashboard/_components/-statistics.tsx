@@ -1,9 +1,9 @@
 import { ChartContainer, Div, Icon, Typography } from '@/components/ui'
-import { overalStatistics } from '@/mocks/dashboard.data'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Area, AreaChart } from 'recharts'
 import tw from 'tailwind-styled-components'
+import { overalStatistics } from '../_mocks/-dashboard.data'
 
 type TStatistic = {
 	category: string

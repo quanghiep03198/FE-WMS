@@ -13,10 +13,10 @@ import {
 	SelectTrigger,
 	SelectValue
 } from '@/components/ui'
-import { annuallInOutBoundStatistics } from '@/mocks/dashboard.data'
 import _ from 'lodash'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import tw from 'tailwind-styled-components'
+import { annuallInOutBoundStatistics } from '../_mocks/-dashboard.data'
 
 const chartConfig = {
 	import: {
