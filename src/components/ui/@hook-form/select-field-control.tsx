@@ -1,7 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import React, { memo, useId } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 import {
 	FormDescription,
 	FormField,
@@ -25,8 +24,8 @@ export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T>
 	}
 
 export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFieldControlProps<T>) => {
-	const { getFieldState, getValues } = useFormContext()
-	const { t } = useTranslation()
+	const { getValues, getFieldState } = useFormContext()
+	const id = useId()
 
 	const {
 		control,
@@ -40,7 +39,6 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 		onValueChange,
 		...restProps
 	} = props
-	const id = useId()
 
 	return (
 		<FormField
@@ -56,17 +54,18 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 						})}>
 						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
 						<Select
+							{...restProps}
 							value={field.value}
 							defaultValue={field.value}
 							onValueChange={(value) => {
 								field.onChange(value)
-								if (onValueChange) {
+								if (typeof onValueChange === 'function') {
 									onValueChange(value)
 								}
-							}}
-							{...restProps}>
+							}}>
 							<SelectTrigger
 								id={id}
+								disabled={field.disabled}
 								className={cn(
 									'bg-background',
 									className,
@@ -84,7 +83,7 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 									))
 								) : (
 									<SelectItem
-										value={undefined}
+										value={''}
 										disabled
 										className='flex items-center justify-center text-center text-xs font-medium'>
 										No option

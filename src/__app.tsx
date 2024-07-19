@@ -10,7 +10,7 @@ const App: React.FC = () => (
 		<I18nextProvider i18n={i18n}>
 			<ThemeProvider>
 				<RouterProvider />
-				<Toaster position='bottom-right' />
+				<Toaster position='bottom-right' closeButton={true} />
 			</ThemeProvider>
 		</I18nextProvider>
 	</QueryClientProvider>

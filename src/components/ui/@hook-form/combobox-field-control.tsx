@@ -2,7 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { memo, useId, useMemo, useRef, useState } from 'react'
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 import {
 	Button,
 	Command,
@@ -45,7 +44,6 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 
 export const ComboboxFieldControl = memo(
 	<T extends FieldValues, D extends Record<string, any>>(props: ComboboxFieldControlProps<T, D>) => {
-		const { t } = useTranslation()
 		const [searchTerm, setSearchTerm] = useState<string>('')
 
 		const {
@@ -119,7 +117,6 @@ export const ComboboxFieldControl = memo(
 												<Typography variant='small' className='line-clamp-1'>
 													{renderCurrentValue(field.value)}
 												</Typography>
-
 												<CaretSortIcon className='h-4 w-4 opacity-50 ml-auto' />
 											</Button>
 										</FormControl>
