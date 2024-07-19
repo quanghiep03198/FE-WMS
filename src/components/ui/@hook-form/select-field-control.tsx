@@ -35,7 +35,7 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 		label,
 		orientation,
 		className,
-		placeholder = t('ns_common:actions.search') + ' ... ',
+		placeholder = 'Select',
 		messageType = 'alternative',
 		onValueChange,
 		...restProps
@@ -57,7 +57,7 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
 						<Select
 							value={field.value}
-							defaultValue={field.value ?? null}
+							defaultValue={field.value}
 							onValueChange={(value) => {
 								field.onChange(value)
 								if (onValueChange) {
@@ -67,7 +67,6 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 							{...restProps}>
 							<SelectTrigger
 								id={id}
-								ref={(e) => field.ref(e)}
 								className={cn(
 									'bg-background',
 									className,
@@ -76,7 +75,6 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 								)}>
 								<SelectValue placeholder={placeholder} />
 							</SelectTrigger>
-
 							<SelectContent>
 								{Array.isArray(props.options) && props.options.length > 0 ? (
 									props.options.map((option) => (
@@ -86,7 +84,7 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 									))
 								) : (
 									<SelectItem
-										value={null}
+										value={undefined}
 										disabled
 										className='flex items-center justify-center text-center text-xs font-medium'>
 										No option

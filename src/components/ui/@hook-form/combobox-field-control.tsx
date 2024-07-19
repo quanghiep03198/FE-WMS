@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { memo, useId, useRef, useState } from 'react'
+import { CaretSortIcon } from '@radix-ui/react-icons'
+import { memo, useId, useMemo, useRef, useState } from 'react'
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
@@ -58,7 +59,7 @@ export const ComboboxFieldControl = memo(
 			orientation,
 			disabled,
 			hidden,
-			placeholder = t('ns_common:actions.search') + ' ... ',
+			placeholder = 'Select',
 			messageType = 'alternative',
 			shouldFilter, // Determine using manual filtering or automatic filtering
 			loading, // Loading state from server if manual filtering is applied
@@ -69,6 +70,25 @@ export const ComboboxFieldControl = memo(
 
 		const id = useId()
 		const triggerRef = useRef<typeof Button.prototype>(null)
+
+		const options = useMemo(() => {
+			if (!Array.isArray(data)) return []
+
+			return data.filter((option) => {
+				if (typeof shouldFilter === 'undefined' || shouldFilter === true) return true
+				return (
+					String(option[labelField]).toLowerCase().includes(searchTerm.toLowerCase()) ||
+					String(option[valueField]).toLowerCase().includes(searchTerm.toLowerCase())
+				)
+			})
+		}, [data, shouldFilter, searchTerm])
+
+		const renderCurrentValue = (value) => {
+			if (Array.isArray(data) && data.length > 0) {
+				return data?.find((option) => option[valueField] === value)?.[labelField] ?? placeholder
+			}
+			return placeholder
+		}
 
 		return (
 			<FormField
@@ -94,22 +114,13 @@ export const ComboboxFieldControl = memo(
 												disabled={disabled}
 												className={cn(
 													'w-full justify-between font-normal hover:bg-background',
-													!field.value && 'text-muted-foreground',
 													form.getFieldState(name).error && 'border-destructive'
 												)}>
 												<Typography variant='small' className='line-clamp-1'>
-													{(() => {
-														if (Array.isArray(data) && data.length > 0) {
-															return (
-																data?.find((option) => option[valueField] === field.value)?.[
-																	labelField
-																] ?? placeholder
-															)
-														}
-														return placeholder
-													})()}
+													{renderCurrentValue(field.value)}
 												</Typography>
-												<Icon name='ChevronsUpDown' className='ml-auto' />
+
+												<CaretSortIcon className='h-4 w-4 opacity-50 ml-auto' />
 											</Button>
 										</FormControl>
 									</PopoverTrigger>
@@ -129,51 +140,37 @@ export const ComboboxFieldControl = memo(
 											<CommandList className='scrollbar'>
 												<CommandGroup>
 													{Array.isArray(data) &&
-														data
-															.filter((option) => {
-																if (typeof shouldFilter === 'undefined' || shouldFilter === true)
-																	return true
-																else
-																	return (
-																		String(option[labelField])
-																			.toLowerCase()
-																			.includes(searchTerm.toLowerCase()) ||
-																		String(option[valueField])
-																			.toLowerCase()
-																			.includes(searchTerm.toLowerCase())
-																	)
-															})
-															?.map((option) => {
-																return (
-																	<CommandItem
-																		key={option[valueField]}
-																		value={option[valueField]}
-																		className='line-clamp-1 flex items-center gap-x-4'
-																		onSelect={(value) => {
-																			form.setValue(name, value as PathValue<T, Path<T>>)
-																			form.setValue(name, option[valueField])
-																			if (typeof onSelect === 'function')
-																				onSelect(option[valueField])
-																		}}>
-																		{CommandItemTemplate ? (
-																			<CommandItemTemplate data={option} />
-																		) : (
-																			<Typography variant='small' className='line-clamp-1 flex-1'>
-																				{option[labelField]}
-																			</Typography>
+														options.map((option) => {
+															return (
+																<CommandItem
+																	key={option[valueField]}
+																	value={option[valueField]}
+																	className='line-clamp-1 flex items-center gap-x-4'
+																	onSelect={(value) => {
+																		form.setValue(name, value as PathValue<T, Path<T>>)
+																		form.setValue(name, option[valueField])
+																		form.clearErrors(name)
+																		if (typeof onSelect === 'function') onSelect(option[valueField])
+																	}}>
+																	{CommandItemTemplate ? (
+																		<CommandItemTemplate data={option} />
+																	) : (
+																		<Typography variant='small' className='line-clamp-1 flex-1'>
+																			{option[labelField]}
+																		</Typography>
+																	)}
+																	<Icon
+																		name='Check'
+																		className={cn(
+																			'ml-auto',
+																			option[valueField] === field.value
+																				? 'opacity-100'
+																				: 'opacity-0'
 																		)}
-																		<Icon
-																			name='Check'
-																			className={cn(
-																				'ml-auto',
-																				option[valueField] === field.value
-																					? 'opacity-100'
-																					: 'opacity-0'
-																			)}
-																		/>
-																	</CommandItem>
-																)
-															})}
+																	/>
+																</CommandItem>
+															)
+														})}
 												</CommandGroup>
 											</CommandList>
 										</Command>
