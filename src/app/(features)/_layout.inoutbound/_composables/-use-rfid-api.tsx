@@ -1,7 +1,5 @@
 import { RFIDService } from '@/services/rfid.service'
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { ScanningStatus } from '../_contexts/-page.context'
 
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
@@ -19,20 +17,10 @@ export const useGetUnscannedEPC = (params: { connection: string; scanningStatus:
 	})
 }
 
-export const useStoreEpcMutation = ({ onSuccess }: { onSuccess: () => void }) => {
-	const queryClient = useQueryClient()
-	const { t } = useTranslation()
-
+export const useStoreEpcMutation = () => {
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: RFIDService.updateStockMovement,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			onSuccess()
-			queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
-			return toast.success(t('ns_common:notification.success'), { id: context })
-		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
+		mutationFn: RFIDService.updateStockMovement
 	})
 }
 

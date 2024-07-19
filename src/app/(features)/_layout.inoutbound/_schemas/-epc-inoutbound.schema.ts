@@ -5,16 +5,17 @@ export enum FormActionEnum {
 	EXPORT = 'B'
 }
 
-export const inOutBoundSchema = z
-	.object({
-		rfid_status: z.nativeEnum(FormActionEnum),
-		rfid_use: z.string({ required_error: 'This field is required' }),
-		warehouse_num: z.string({ required_error: 'This field is required' }).optional(),
-		storage: z.string({ required_error: 'This field is required' }).optional()
-	})
-	.refine((values) => {
-		if (values.rfid_use === FormActionEnum.IMPORT) return values.warehouse_num && values.storage
-		else return true
-	})
+export const inboundSchema = z.object({
+	rfid_status: z.nativeEnum(FormActionEnum),
+	rfid_use: z.string().default(undefined),
+	warehouse_num: z.string().default(undefined),
+	storage: z.string().default(undefined)
+})
 
-export type InoutboundFormValues = z.infer<typeof inOutBoundSchema>
+export const outboundSchema = z.object({
+	rfid_status: z.nativeEnum(FormActionEnum),
+	rfid_use: z.string().default(undefined)
+})
+
+export type InboundFormValues = z.infer<typeof inboundSchema>
+export type OutboundFormValues = z.infer<typeof outboundSchema>

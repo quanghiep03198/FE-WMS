@@ -5,6 +5,9 @@ export default {
 		label: '本次出入庫數量',
 		caption: 'EPC自动更新每 {{value}} 秒'
 	},
+	mo_no_box: {
+		caption: '您可以选择需要导入/导出的指令'
+	},
 	action_types: {
 		warehouse_input: '入庫',
 		warehouse_output: '出庫'

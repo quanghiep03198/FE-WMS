@@ -18,9 +18,9 @@ import { useGetDatabaseConnnection, useSyncEpcOrderCodeMutation } from '../_comp
 import { usePageStore } from '../_contexts/-page.context'
 
 const ScanningActions: React.FC = () => {
+	const { t, i18n } = useTranslation()
 	const { scannedEPCs, scanningStatus, connection, setScanningStatus, setConnection, handleToggleScanning } =
 		usePageStore()
-	const { t, i18n } = useTranslation()
 
 	const { mutateAsync: syncOrderCodes } = useSyncEpcOrderCodeMutation()
 	const { data: databases, isLoading } = useGetDatabaseConnnection()
@@ -52,6 +52,7 @@ const ScanningActions: React.FC = () => {
 		<Fragment>
 			<Div className='flex items-center justify-between'>
 				<Select
+					value={connection}
 					disabled={isLoading || typeof scanningStatus !== 'undefined'}
 					onValueChange={(value) => setConnection(value)}>
 					<SelectTrigger className='w-full max-w-56'>
@@ -97,8 +98,8 @@ const ScanningActions: React.FC = () => {
 			<ConfirmDialog
 				open={status === 'blocked'}
 				onOpenChange={handleReset}
-				title='Stop scanning EPC ?'
-				description='This page contains unsaved actions. Do you still wish to leave now?'
+				title={t('ns_inoutbound:notification.navigation_blocked_message')}
+				description={t('ns_inoutbound:notification.navigation_blocked_caption')}
 				onConfirm={handleProceed}
 				onCancel={handleReset}
 			/>

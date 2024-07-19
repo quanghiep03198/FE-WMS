@@ -5,6 +5,9 @@ export default {
 		label: 'Scanned EPCs',
 		caption: 'EPC codes data is automatically synchronized every {{value}} seconds.'
 	},
+	mo_no_box: {
+		caption: 'You can determine which order should be used to import/export'
+	},
 	action_types: {
 		warehouse_input: 'Warehouse input',
 		warehouse_output: 'Warehouse output'

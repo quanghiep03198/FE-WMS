@@ -1,6 +1,6 @@
 import { IElectronicProductCode } from '@/common/types/entities'
-import { useHistoryTravel, useReactive } from 'ahooks'
-import { createContext, useContext, useState } from 'react'
+import { useHistoryTravel, useResetState } from 'ahooks'
+import { createContext, useContext, useEffect } from 'react'
 
 export type ScanningStatus = 'scanning' | 'stopped' | 'finished' | undefined
 export type ScannedOrder = { orderCode: string; totalEPCs: number }
@@ -19,33 +19,38 @@ type TPageContext = {
 	handleToggleScanning: () => void
 	back: () => void
 	forward: () => void
+	resetScannedOrders: (initialData: Array<ScannedOrder>) => void
+	resetScanningStatus: () => void
 	forwardLength: number
 	backLength: number
-	scannedResult: {
-		scannedEPCs: Array<IElectronicProductCode>
-		scannedOrders: Array<ScannedOrder>
-	}
 }
 
 const PageContext = createContext<TPageContext>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [scanningStatus, setScanningStatus] = useState<ScanningStatus>(undefined)
-	const [connection, setConnection] = useState<string>()
-	const scannedResult = useReactive({
-		scannedEPCs: [],
-		scannedOrders: []
-	})
-	const [scannedEPCs, setScannedEPCs] = useState<IElectronicProductCode[]>([])
+	const [scanningStatus, setScanningStatus, resetScanningStatus] = useResetState<ScanningStatus>(undefined)
+	const [connection, setConnection, resetConnection] = useResetState<string>(undefined)
+	const [scannedEPCs, setScannedEPCs, resetScannedEPCs] = useResetState<IElectronicProductCode[]>([])
 	const {
 		value: scannedOrders,
 		setValue: setScannedOrders,
 		forwardLength,
 		backLength,
 		back,
-		forward
+		forward,
+		reset: resetScannedOrders
 	} = useHistoryTravel<ScannedOrder[]>([])
-	const [selectedOrder, setSelectedOrder] = useState<string>(null)
+	const [selectedOrder, setSelectedOrder, resetSeletedOrder] = useResetState<string>(undefined)
+
+	useEffect(() => {
+		// Reset scanned result on scanning status is reset
+		if (typeof scanningStatus === 'undefined') {
+			resetScannedOrders([])
+			resetScannedEPCs()
+			resetConnection()
+			resetSeletedOrder()
+		}
+	}, [scanningStatus])
 
 	const handleToggleScanning = () => {
 		setScanningStatus((prev) => {
@@ -68,11 +73,12 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				scanningStatus,
 				scannedOrders,
 				selectedOrder,
-				scannedResult,
 				forwardLength,
 				backLength,
 				back,
 				forward,
+				resetScannedOrders,
+				resetScanningStatus,
 				setScannedEPCs,
 				setScannedOrders,
 				setConnection,

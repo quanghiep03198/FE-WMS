@@ -3,6 +3,7 @@ import { Badge, Div, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import { Separator } from '@radix-ui/react-context-menu'
 import { useInterval, useReactive, useResetState } from 'ahooks'
+import { isEqual } from 'lodash'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScanningStatus, usePageStore } from '../_contexts/-page.context'
@@ -16,7 +17,7 @@ const ScannedEPCsCounter: React.FC = () => {
 			{scanningStatus === 'scanning' && <Skeleton className='absolute inset-0 z-0 h-full' />}
 			<ScanningCounter scannedEPCs={scannedEPCs} />
 			<ScanningTimer scanningStatus={scanningStatus} />
-			<Typography variant='small' className='relative z-10 text-xs xl:text-sm' color='muted'>
+			<Typography variant='small' className='relative z-10' color='muted'>
 				{t('ns_inoutbound:counter_box.caption', { value: 5, defaultValue: null })}
 			</Typography>
 		</Div>
@@ -28,12 +29,18 @@ const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = mem
 		const { t } = useTranslation()
 		const count = useReactive({ value: 0, duration: undefined })
 
-		useInterval(() => {
-			count.value++
-		}, count.duration)
+		// Counter increment/decrement effect
+		useInterval(
+			() => {
+				if (scannedEPCs.length > count.value) count.value++
+				if (scannedEPCs.length < count.value) count.value--
+			},
+			count.duration,
+			{ immediate: false }
+		)
 
 		useEffect(() => {
-			count.duration = scannedEPCs.length > count.value ? 5 : undefined
+			count.duration = scannedEPCs.length !== count.value ? 10 : undefined
 		}, [scannedEPCs, count.value])
 
 		return (
@@ -42,7 +49,7 @@ const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = mem
 					{t('ns_inoutbound:counter_box.label')}
 				</Typography>
 				<Separator className='w-1.5 h-0.5 bg-foreground' />
-				<Typography variant='h6' className='inline-flex gap-x-1 font-bold'>
+				<Typography variant='h6' className='inline-flex text-2xl gap-x-1 font-bold'>
 					{count.value}
 					<Typography variant='small' className='font-medium text-xs'>
 						pcs
@@ -51,7 +58,7 @@ const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = mem
 			</Div>
 		)
 	},
-	(prev, next) => prev.scannedEPCs === next.scannedEPCs
+	(prev, next) => isEqual(prev.scannedEPCs, next.scannedEPCs)
 )
 
 const ScanningTimer: React.FC<{ scanningStatus: ScanningStatus }> = memo(
@@ -97,4 +104,4 @@ const ScanningTimer: React.FC<{ scanningStatus: ScanningStatus }> = memo(
 	(prev, next) => prev.scanningStatus === next.scanningStatus
 )
 
-export default memo(ScannedEPCsCounter)
+export default ScannedEPCsCounter

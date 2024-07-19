@@ -1,4 +1,3 @@
-import { CommonActions } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -17,48 +16,57 @@ import {
 	Typography
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import _ from 'lodash'
-import { Fragment, memo, useMemo } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { omit } from 'lodash'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetWarehouseStorageQuery } from '../../_composables/-warehouse-storage.composable'
 import { useGetWarehouseQuery } from '../../_composables/-warehouse.composable'
-import { useStoreEpcMutation } from '../_composables/-use-rfid-api'
+import { RFID_EPC_PROVIDE_TAG, useStoreEpcMutation } from '../_composables/-use-rfid-api'
 import { usePageStore } from '../_contexts/-page.context'
-import { FormActionEnum, InoutboundFormValues, inOutBoundSchema } from '../_schemas/-epc-inoutbound.schema'
-// import { usePageStore } from '../_stores/-page.store'
+import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../_schemas/-epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
+	const [schema, setSchema] = useState<typeof inboundSchema | typeof outboundSchema>(inboundSchema)
 	const {
 		scannedEPCs,
 		scanningStatus,
 		connection,
 		scannedOrders,
 		selectedOrder,
-		setScanningStatus,
+		resetScanningStatus,
 		setSelectedOrder,
-		setScannedEPCs,
-		setScannedOrders
+		resetScannedOrders
 	} = usePageStore()
 	const { t, i18n } = useTranslation()
-	const form = useForm<InoutboundFormValues>({
-		resolver: zodResolver(inOutBoundSchema),
-		defaultValues: { rfid_status: FormActionEnum.IMPORT }
+	const form = useForm<InboundFormValues>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			rfid_status: FormActionEnum.IMPORT,
+			rfid_use: '',
+			warehouse_num: undefined,
+			storage: undefined
+		},
+		mode: 'onChange'
 	})
+	const queryClient = useQueryClient()
 	const warehouseNum = form.watch('warehouse_num')
-	const inoutboundType = form.watch('rfid_status')
+	const action = form.watch('rfid_status')
 
 	const storageTypes = useMemo(
-		() => [
-			{ label: t('ns_inoutbound:inoutbound_actions.normal_import'), type: FormActionEnum.IMPORT, value: 'A' },
-			{ label: t('ns_inoutbound:inoutbound_actions.normal_export'), type: FormActionEnum.EXPORT, value: 'B' },
-			{ label: t('ns_inoutbound:inoutbound_actions.scrap'), type: FormActionEnum.EXPORT, value: 'C' },
-			{ label: t('ns_inoutbound:inoutbound_actions.transfer_inbound'), type: FormActionEnum.IMPORT, value: 'D' },
-			{ label: t('ns_inoutbound:inoutbound_actions.transfer_outbound'), type: FormActionEnum.EXPORT, value: 'E' }, //
-			{ label: t('ns_inoutbound:inoutbound_actions.recycling'), type: FormActionEnum.EXPORT, value: 'F' }
-		],
-		[i18n.language]
+		() =>
+			[
+				{ label: t('ns_inoutbound:inoutbound_actions.normal_import'), type: FormActionEnum.IMPORT, value: 'A' },
+				{ label: t('ns_inoutbound:inoutbound_actions.normal_export'), type: FormActionEnum.EXPORT, value: 'B' },
+				{ label: t('ns_inoutbound:inoutbound_actions.scrap'), type: FormActionEnum.EXPORT, value: 'C' },
+				{ label: t('ns_inoutbound:inoutbound_actions.transfer_inbound'), type: FormActionEnum.IMPORT, value: 'D' },
+				{ label: t('ns_inoutbound:inoutbound_actions.transfer_outbound'), type: FormActionEnum.EXPORT, value: 'E' }, //
+				{ label: t('ns_inoutbound:inoutbound_actions.recycling'), type: FormActionEnum.EXPORT, value: 'F' }
+			].filter((item) => item.type === action),
+		[i18n.language, action]
 	)
 
 	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery<Record<'label' | 'value', string>[]>({
@@ -76,34 +84,39 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const epc_code = useMemo(
-		() =>
-			Array.isArray(scannedEPCs) && scannedEPCs.length > 0
-				? [...new Set(scannedEPCs.map((item) => item.epc_code))]
-				: [],
-		[scannedEPCs]
-	)
+	const { mutateAsync } = useStoreEpcMutation()
 
-	const { mutateAsync } = useStoreEpcMutation({
-		onSuccess: () => {
+	useEffect(() => {
+		setSchema(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema)
+		form.reset({ ...form.getValues(), rfid_use: undefined, warehouse_num: undefined, storage: undefined })
+	}, [action, storageTypes])
+
+	const handleSubmit = async (data: InboundFormValues): Promise<string | number> => {
+		const loading = toast.loading(t('ns_common:notification.processing_request'))
+		try {
+			await mutateAsync({
+				...omit(data, ['warehouse_num']),
+				epc_code: [...new Set(scannedEPCs.map((item) => item.epc_code))],
+				host: connection
+			})
 			const filteredOrders = scannedOrders.filter((item) => item.orderCode !== selectedOrder)
-			setScannedOrders(filteredOrders)
-			setScannedEPCs((prev) => prev.filter((item) => filteredOrders.some((order) => order.orderCode === item.mo_no)))
-			setSelectedOrder(scannedOrders[0]?.orderCode ?? null)
+			if (filteredOrders.length > 0) {
+				setSelectedOrder(filteredOrders[0]?.orderCode)
+				resetScannedOrders(filteredOrders)
+			} else {
+				resetScanningStatus()
+				form.reset()
+			}
+			queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
+			return toast.success(t('ns_common:notification.success'), { id: loading })
+		} catch (error) {
+			return toast.error(t('ns_common:notification.error'), { id: loading })
 		}
-	})
+	}
 
 	return (
 		<FormProvider {...form}>
-			<Form
-				onSubmit={form.handleSubmit(
-					async (data) =>
-						await mutateAsync({
-							..._.omit(data, ['warehouse_num']),
-							epc_code,
-							host: connection
-						})
-				)}>
+			<Form onSubmit={form.handleSubmit(handleSubmit)}>
 				<Div className='col-span-full'>
 					<FormField
 						name='rfid_status'
@@ -114,12 +127,14 @@ const InoutboundForm: React.FC = () => {
 									className='grid grid-cols-2'
 									value={field.value}
 									defaultValue={FormActionEnum.IMPORT}
-									onValueChange={(value: CommonActions) => field.onChange(value)}>
+									onValueChange={(value) => {
+										field.onChange(value)
+									}}>
 									<FormItem>
 										<FormLabel
 											htmlFor={FormActionEnum.IMPORT}
 											className={cn(
-												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200 sm:px-4',
+												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border px-6 py-5 font-medium transition-colors duration-200 sm:px-4',
 												field.value === FormActionEnum.IMPORT && 'bg-secondary text-secondary-foreground'
 											)}>
 											<FormControl>
@@ -142,13 +157,17 @@ const InoutboundForm: React.FC = () => {
 									</FormItem>
 									<FormItem>
 										<FormLabel
-											htmlFor='2'
+											htmlFor={FormActionEnum.EXPORT}
 											className={cn(
-												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-all duration-200 sm:px-4',
+												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border px-6 py-5 font-medium transition-all duration-200 sm:px-4',
 												field.value == FormActionEnum.EXPORT && 'bg-secondary text-secondary-foreground'
 											)}>
 											<FormControl>
-												<RadioGroupItem id='2' value={FormActionEnum.EXPORT} className='sr-only' />
+												<RadioGroupItem
+													id={FormActionEnum.EXPORT}
+													value={FormActionEnum.EXPORT}
+													className='sr-only'
+												/>
 											</FormControl>
 											{t('ns_inoutbound:action_types.warehouse_output')}
 											<Icon
@@ -172,11 +191,10 @@ const InoutboundForm: React.FC = () => {
 						control={form.control}
 						name='rfid_use'
 						label={t('ns_common:common_fields.actions')}
-						options={storageTypes.filter((item) => item.type === inoutboundType)}
+						options={storageTypes}
 					/>
 				</Div>
-
-				{inoutboundType === FormActionEnum.IMPORT && (
+				{action === FormActionEnum.IMPORT && (
 					<Fragment>
 						<Div className='col-span-1 sm:col-span-full'>
 							<SelectFieldControl
@@ -211,7 +229,6 @@ const InoutboundForm: React.FC = () => {
 						</Div>
 					</Fragment>
 				)}
-
 				<Div className='col-span-full'>
 					<Button
 						type='submit'
@@ -227,4 +244,4 @@ const InoutboundForm: React.FC = () => {
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 
-export default memo(InoutboundForm)
+export default InoutboundForm

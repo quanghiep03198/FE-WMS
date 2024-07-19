@@ -1,8 +1,11 @@
-import { InoutboundFormValues } from '@/app/(features)/_layout.inoutbound/_schemas/-epc-inoutbound.schema'
+import {
+	InboundFormValues,
+	OutboundFormValues
+} from '@/app/(features)/_layout.inoutbound/_schemas/-epc-inoutbound.schema'
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
-type InOutBoundPayload = InoutboundFormValues & { epc_code: Array<string>; host: string }
+type InOutBoundPayload = (InboundFormValues | OutboundFormValues) & { epc_code: Array<string>; host: string }
 
 export class RFIDService {
 	static async getUnscannedEpc(host: string) {
