@@ -83,7 +83,7 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 									))
 								) : (
 									<SelectItem
-										value={''}
+										value={null}
 										disabled
 										className='flex items-center justify-center text-center text-xs font-medium'>
 										No option

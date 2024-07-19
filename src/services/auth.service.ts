@@ -7,25 +7,12 @@ import { queryClient } from '@/providers/query-client-provider'
 import { useAuthStore } from '@/stores/auth.store'
 import { type AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
-import { decompress } from 'lz-string'
 
 export class AuthService {
 	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; accessToken: string }>> {
 		return await axiosInstance.post<LoginFormValues, ResponseBody<{ user: Partial<IUser>; accessToken: string }>>(
 			'/login',
 			data
-		)
-	}
-
-	/**
-	 * @description Fake login with json server auth
-	 * @param data
-	 * @returns
-	 */
-	static async fakeLogin(data: LoginFormValues) {
-		return await axiosInstance.post<LoginFormValues, ResponseBody<{ user: Partial<IUser>; accessToken: string }>>(
-			'/login',
-			{ email: data.username, password: data.password }
 		)
 	}
 
@@ -57,7 +44,7 @@ export class AuthService {
 	static getAccessToken(): string | null {
 		if (!AuthService.getHasAccessToken()) return null
 
-		const accessToken = _JSON.parse(decompress(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY)))
+		const accessToken = _JSON.parse(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY))
 		return `Bearer ${accessToken}`
 	}
 
