@@ -20,7 +20,6 @@ module.exports = {
 		'@typescript-eslint/ban-types': 'off',
 		'prefer-spread': 'off',
 		'no-sparse-arrays': 'off',
-		'no-unused-vars': 'off',
 		'@typescript-eslint/ban-ts-comment': 'off',
 		'no-unsafe-optional-chaining': 'warn',
 		'@typescript-eslint/no-explicit-any': 'off',
