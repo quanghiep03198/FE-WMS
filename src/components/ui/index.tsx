@@ -2,6 +2,7 @@
 
 // #region Shadcn UI
 export * from './@core/accordion'
+export * from './@core/alert'
 export * from './@core/alert-dialog'
 export * from './@core/aspect-ratio'
 export * from './@core/avatar'
