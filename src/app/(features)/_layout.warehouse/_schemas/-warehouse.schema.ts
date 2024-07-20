@@ -10,7 +10,7 @@ export const warehouseFormSchema = z.object({
 	}),
 	company_code: z.string({ required_error: 'This field is required' }),
 	dept_code: z.string({ required_error: 'This field is required' }),
-	area: z.string({ required_error: 'This field is required' }).min(0, 'Area must be greater than 0'),
+	area: z.number({ required_error: 'This field is required' }).min(0, 'Area must be greater than 0'),
 	is_disable: z.boolean().default(false),
 	is_default: z.boolean().default(false),
 	remark: z.string().optional()
