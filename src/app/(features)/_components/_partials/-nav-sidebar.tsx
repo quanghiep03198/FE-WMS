@@ -7,9 +7,11 @@ import { navigationConfig, type NavigationConfig } from '@/configs/navigation.co
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
+import { pick } from 'lodash'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { useShallow } from 'zustand/react/shallow'
 import AppLogo from '../../../_components/_shared/-app-logo'
 import { useLayoutStore } from '../../_stores/-layout.store'
 
@@ -17,7 +19,9 @@ type NavLinkProps = { navSidebarOpen: boolean } & Pick<NavigationConfig, 'path' 
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
-	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore()
+	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore(
+		useShallow((state) => pick(state, ['navSidebarOpen', 'toggleNavSidebarOpen']))
+	)
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 	const isMediumScreen = useMediaQuery(BreakPoints.MEDIUM)
 	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
@@ -59,6 +63,7 @@ const NavSidebar: React.FC = () => {
 			)}>
 			<Link
 				to='/dashboard'
+				preload={false}
 				className={cn(
 					'flex h-20 items-center',
 					!_navSidebarOpen ? 'gap-x-3 px-2' : 'aspect-square justify-center'
@@ -70,6 +75,7 @@ const NavSidebar: React.FC = () => {
 						_navSidebarOpen ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
+
 					<Typography variant='small' className='mt-auto flex items-center gap-x-2 text-xs text-muted-foreground'>
 						{user?.company_name}
 					</Typography>

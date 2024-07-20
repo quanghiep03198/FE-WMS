@@ -5,23 +5,29 @@ import { $mediaQuery } from '@/common/utils/media-query'
 import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
+import { pick } from 'lodash'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { useShallow } from 'zustand/react/shallow'
+import { useLayoutStore } from '../../_stores/-layout.store'
 
 type DrawerSidebarProps = {
 	open: boolean
-	onOpenStateChange: React.Dispatch<React.SetStateAction<boolean>>
+	toggleNavSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const NavDrawerSidebar: React.FC<DrawerSidebarProps> = ({ open, onOpenStateChange }) => {
+const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()
+	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore(
+		useShallow((state) => pick(state, ['navSidebarOpen', 'toggleNavSidebarOpen']))
+	)
 	const isLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1024 }))
 
 	if (isLargeScreen) return null
 
 	return (
-		<Sheet open={!open} defaultOpen={false} onOpenChange={onOpenStateChange}>
+		<Sheet defaultOpen={false} open={!navSidebarOpen} onOpenChange={toggleNavSidebarOpen}>
 			<SheetContent className='w-full max-w-xs' side='left'>
 				<Div className='h-16 px-4'>
 					<AppLogo />
@@ -32,7 +38,7 @@ const NavDrawerSidebar: React.FC<DrawerSidebarProps> = ({ open, onOpenStateChang
 						.filter((item) => item.type === 'main')
 						.map((item) => {
 							return (
-								<MenuItem key={item.id} onClick={() => onOpenStateChange(false)}>
+								<MenuItem key={item.id} onClick={() => toggleNavSidebarOpen()}>
 									<Link
 										to={item.path}
 										activeProps={{ className: 'text-primary hover:text-primary' }}
@@ -51,7 +57,7 @@ const NavDrawerSidebar: React.FC<DrawerSidebarProps> = ({ open, onOpenStateChang
 						.reverse()
 						.map((item) => {
 							return (
-								<MenuItem key={item.id} onClick={() => onOpenStateChange(false)}>
+								<MenuItem key={item.id} onClick={() => toggleNavSidebarOpen()}>
 									<Link
 										to={item.path}
 										activeProps={{ className: 'text-primary hover:text-primary' }}

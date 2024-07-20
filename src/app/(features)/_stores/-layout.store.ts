@@ -18,7 +18,7 @@ type LayoutState = {
 
 export const useLayoutStore = create<LayoutState>((set) => ({
 	breadcrumb: [],
-	setBreadcrumb: (data) => set((state) => ({ ...state, breadcrumb: data })),
+	setBreadcrumb: (data) => set(() => ({ breadcrumb: data })),
 	navSidebarOpen: false,
-	toggleNavSidebarOpen: () => set((state) => ({ ...state, navSidebarOpen: !state.navSidebarOpen }))
+	toggleNavSidebarOpen: () => set((state) => ({ navSidebarOpen: !state.navSidebarOpen }))
 }))
