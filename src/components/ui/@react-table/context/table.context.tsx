@@ -1,5 +1,5 @@
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table'
-import { createContext } from 'react'
+import { createContext, useContext } from 'react'
 
 type TableContext = {
 	globalFilter: string
@@ -20,3 +20,5 @@ type TableContext = {
 }
 
 export const TableContext = createContext<TableContext>(null)
+
+export const useTableContext = () => useContext(TableContext)

@@ -1,9 +1,10 @@
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
-import React, { useCallback, useContext } from 'react'
+import React, { memo, useCallback } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
-import { TableContext } from '../context/table.context'
+import { useTableContext } from '../context/table.context'
 import { GlobalFilter, GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
@@ -12,8 +13,8 @@ type TableToolbarProps<TData> = {
 	slot?: React.FC<{ table: Table<TData> }>
 }
 
-export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
-	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useContext(TableContext)
+export function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
+	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useTableContext()
 	const { t } = useTranslation('ns_common')
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
 
@@ -52,3 +53,7 @@ export default function TableToolbar<TData>({ table, slot: Slot }: TableToolbarP
 		</Div>
 	)
 }
+
+export const MemorizedTableToolbar = memo(TableToolbar, (prev, next) =>
+	isEqual(prev.table.options.data, next.table.options.data)
+)

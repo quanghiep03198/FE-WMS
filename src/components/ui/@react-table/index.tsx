@@ -19,11 +19,12 @@ import {
 import { useDeepCompareEffect } from 'ahooks'
 import { omit } from 'lodash'
 import { forwardRef, memo, useMemo, useState } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Div, Typography } from '..'
 import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
-import TableToolbar from './components/table-toolbar'
+import { MemorizedTableToolbar, TableToolbar } from './components/table-toolbar'
 import { TableContext } from './context/table.context'
 import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
@@ -90,7 +91,9 @@ function DataTable<TData, TValue>(
 	 * Avoid infinite loop if data is empty
 	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
 	 */
-	useDeepCompareEffect(() => setData(data), [data])
+	useDeepCompareEffect(() => {
+		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
+	}, [data])
 
 	const table = useReactTable({
 		data: _data,
@@ -191,7 +194,7 @@ function DataTable<TData, TValue>(
 
 	useDeepCompareEffect(() => {
 		if (ref) ref.current = table
-	}, [ref, table.getState()])
+	}, [ref, table])
 
 	return (
 		<TableContext.Provider
@@ -213,7 +216,11 @@ function DataTable<TData, TValue>(
 				setGlobalFilter
 			}}>
 			<Div className='space-y-3'>
-				{toolbarProps.hidden ? null : <TableToolbar table={table} slot={toolbarProps.slot} />}
+				{toolbarProps.hidden ? null : table.getState().columnSizingInfo.isResizingColumn ? (
+					<MemorizedTableToolbar table={table} slot={toolbarProps.slot} />
+				) : (
+					<TableToolbar table={table} slot={toolbarProps.slot} />
+				)}
 				<TableDataGrid
 					table={table}
 					columns={columns}

@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Column } from '@tanstack/react-table'
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
-import { TableContext } from '../context/table.context'
+import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 import { NumberRangeFilter } from './number-range-filter'
 
@@ -14,7 +14,7 @@ type ColumnFilterProps<TData, TValue> = {
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
 	const filterVariant = column.columnDef.meta?.filterVariant
-	const { hasNoFilter } = useContext(TableContext)
+	const { hasNoFilter } = useTableContext()
 	const metaFilterValues = column.columnDef.meta?.facetedUniqueValues
 
 	if (!column.columnDef.enableColumnFilter)

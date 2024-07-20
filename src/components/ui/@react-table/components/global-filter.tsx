@@ -1,15 +1,14 @@
 import { BreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
-import { TableContext } from '../context/table.context'
+import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 
 export const GlobalFilter: React.FC = () => {
 	const { t } = useTranslation('ns_common', { keyPrefix: 'actions' })
-	const { globalFilter, setGlobalFilter, enableGlobalFilter } = useContext(TableContext)
+	const { globalFilter, setGlobalFilter, enableGlobalFilter } = useTableContext()
 
 	if (!enableGlobalFilter) return null
 
@@ -29,7 +28,7 @@ export const GlobalFilter: React.FC = () => {
 
 export const GlobalFilterPopover: React.FC = () => {
 	const { t } = useTranslation()
-	const { globalFilter, setGlobalFilter, enableGlobalFilter } = useContext(TableContext)
+	const { globalFilter, setGlobalFilter, enableGlobalFilter } = useTableContext()
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 
 	if (!enableGlobalFilter) return null

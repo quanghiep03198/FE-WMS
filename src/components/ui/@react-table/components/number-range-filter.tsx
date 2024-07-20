@@ -1,13 +1,12 @@
 import { Div, Separator } from '@/components/ui'
 import { Column } from '@tanstack/react-table'
-import { useContext } from 'react'
-import { TableContext } from '../context/table.context'
+import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 
 type NumberRangeFilterProps<TData, TValue> = { column: Column<TData, TValue> }
 
 export function NumberRangeFilter<TData, TValue>({ column }: NumberRangeFilterProps<TData, TValue>) {
-	const { hasNoFilter } = useContext(TableContext)
+	const { hasNoFilter } = useTableContext()
 
 	return (
 		<Div className='flex items-center'>

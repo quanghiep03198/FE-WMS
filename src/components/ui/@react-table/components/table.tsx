@@ -1,9 +1,9 @@
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
-import { Fragment, useCallback, useContext, useId, useMemo, useRef } from 'react'
-import { Div, Icon, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
-import { TableContext } from '../context/table.context'
+import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
+import { Div, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
+import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { DataTableUtility } from '../utils/table.util'
 import { ColumnFilter } from './column-filter'
@@ -36,7 +36,7 @@ function TableDataGrid<TData, TValue>({
 	loading,
 	renderSubComponent
 }: TableProps<TData, TValue>) {
-	const { isFilterOpened } = useContext(TableContext)
+	const { isFilterOpened } = useTableContext()
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLTableSectionElement>(null)
@@ -86,11 +86,11 @@ function TableDataGrid<TData, TValue>({
 	const columnSizeVars = useMemo(() => {
 		const headers = table.getFlatHeaders()
 		const colSizes: { [key: string]: number } = {}
-		for (let i = 0; i < headers.length; i++) {
-			const header = headers[i]!
+		headers.forEach((header, index) => {
 			colSizes[`--header-${header.id}-size`] = header.getSize()
 			colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
-		}
+		})
+
 		return colSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
@@ -158,13 +158,7 @@ function TableDataGrid<TData, TValue>({
 															width: `calc(var(--header-${header?.id}-size) * 1px)`,
 															...DataTableUtility.getStickyOffsetPosition(header.column)
 														}}>
-														{header.column.columnDef.enableColumnFilter ? (
-															<ColumnFilter column={header.column} />
-														) : (
-															<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
-																<Icon name='Minus' />
-															</Div>
-														)}
+														<ColumnFilter column={header.column} />
 													</TableHead>
 												)
 											})}

@@ -1,6 +1,7 @@
 import { flexRender, type Row as TRow, type Table as TTable } from '@tanstack/react-table'
 import { Virtualizer, notUndefined } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
+import isEqual from 'react-fast-compare'
 import { TableBody as Body, TableCell as Cell, TableRow as Row } from '../../@core/table'
 import { Div } from '../../@custom/div'
 import { RenderSubComponent } from '../types'
@@ -15,6 +16,7 @@ type TableBodyProps = {
 export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
+	console.log(virtualItems)
 
 	const [before, after] =
 		virtualItems.length > 0
@@ -76,4 +78,6 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 	)
 }
 
-export const MemorizedTableBody = memo(TableBody, (prev, next) => prev.table.options.data === next.table.options.data)
+export const MemorizedTableBody = memo(TableBody, (prev, next) =>
+	isEqual(prev.table.options.data, next.table.options.data)
+)
