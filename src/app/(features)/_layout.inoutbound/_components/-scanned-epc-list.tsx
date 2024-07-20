@@ -16,8 +16,8 @@ import {
 	Typography
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { useDeepCompareEffect } from 'ahooks'
-import { Fragment, useState } from 'react'
+import { useDeepCompareEffect, useVirtualList } from 'ahooks'
+import { Fragment, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -26,8 +26,11 @@ import { useGetUnscannedEPC } from '../_composables/-use-rfid-api'
 import { ScannedOrder, usePageStore } from '../_contexts/-page.context'
 
 const matchAllOrders = (item, scannedOrders) => scannedOrders?.some((order) => item.mo_no === order.orderCode)
-const matchWithSpecificOrder = (item, selectedOrder, scannedOrders) =>
+const matchWithSpecificOrder = (item, scannedOrders, selectedOrder) =>
 	item.mo_no === selectedOrder && scannedOrders.some((order) => item.mo_no === order.orderCode)
+
+const VIRTUAL_ITEM_SIZE = 40 as const
+const VIRTUAL_LIST_HEIGHT = 320 as const
 
 const ScannedEPCsList: React.FC = () => {
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
@@ -49,42 +52,47 @@ const ScannedEPCsList: React.FC = () => {
 		setScanningStatus
 	} = usePageStore()
 
+	const containerRef = useRef<HTMLDivElement>(null)
+	const wrapperRef = useRef<HTMLDivElement>(null)
+
 	const { data } = useGetUnscannedEPC({ connection, scanningStatus })
 
+	const originalData = useMemo(() => (Array.isArray(data) ? data : []), [data])
+
+	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useDeepCompareEffect(() => {
-		// Sync scanned result with fetched data from server while scanning is on and previous data is staled
-		if (scanningStatus === 'scanning' && !isEqual(scannedEPCs, data)) {
-			const fetchedOrders = [...new Set(data?.map((item) => item.mo_no))]?.map(
+		if (scanningStatus === 'scanning' && !isEqual(scannedEPCs, originalData)) {
+			const originalOrders = [...new Set(data?.map((item) => item.mo_no))]?.map(
 				(order) =>
 					({
 						orderCode: order,
-						totalEPCs: data.filter((item) => item.mo_no === order).length
+						totalEPCs: originalData.filter((item) => item.mo_no === order)?.length
 					}) satisfies ScannedOrder
 			)
+			setScannedEPCs(originalData)
+			resetScannedOrders(originalOrders)
 			// Alert if there are more than 3 orders scanned
-			if (fetchedOrders.length > 3) toast('Oops !!!', { description: t('ns_inoutbound:notification.too_many_mono') })
-			setScannedEPCs(data)
-			resetScannedOrders(fetchedOrders)
+			if (originalOrders?.length > 3)
+				toast('Oops !!!', { description: t('ns_inoutbound:notification.too_many_mono') })
 		}
 	}, [data, scanningStatus])
 
+	//
 	useDeepCompareEffect(() => {
 		if (scanningStatus === 'stopped' || scanningStatus === 'finished') {
-			const filteredData = data.filter((item) =>
+			const filteredData = originalData.filter((item) =>
 				selectedOrder === 'all'
 					? matchAllOrders(item, scannedOrders)
-					: matchWithSpecificOrder(item, selectedOrder, scannedOrders)
+					: matchWithSpecificOrder(item, scannedOrders, selectedOrder)
 			)
 			setScannedEPCs(filteredData)
-			setSelectedOrder(selectedOrder || (scannedOrders.length > 0 ? 'all' : undefined))
+			setSelectedOrder(selectedOrder || (scannedOrders?.length > 0 ? 'all' : undefined))
 		}
-	}, [data, selectedOrder, scannedOrders])
-
-	console.log('should re-render')
+	}, [originalData, selectedOrder, scannedOrders])
 
 	// Delete unexpected orders
 	const handleDeleteOrder = (selectedOrder: string) => {
-		if (scannedOrders.length === 1) {
+		if (scannedOrders?.length === 1) {
 			setConfirmDialogOpen(true)
 			return
 		}
@@ -93,6 +101,13 @@ const ScannedEPCsList: React.FC = () => {
 		setScannedEPCs((prev) => prev.filter((item) => item.mo_no !== selectedOrder))
 		setSelectedOrder(filteredOrders[1]?.orderCode ?? filteredOrders[0]?.orderCode)
 	}
+
+	const [virtualItems] = useVirtualList(scannedEPCs, {
+		containerTarget: containerRef,
+		wrapperTarget: wrapperRef,
+		itemHeight: VIRTUAL_ITEM_SIZE,
+		overscan: 5
+	})
 
 	return (
 		<Fragment>
@@ -122,9 +137,9 @@ const ScannedEPCsList: React.FC = () => {
 										<SelectItem value='all'>All</SelectItem>
 										{scannedOrders
 											.sort((a, b) => (a.totalEPCs < b.totalEPCs ? 1 : a.totalEPCs === b.totalEPCs ? 0 : -1))
-											.map((order) => (
+											.map((order, index) => (
 												<SelectItem
-													key={order.orderCode}
+													key={index}
 													value={order.orderCode}
 													className='!flex items-center gap-x-2'>
 													{order.orderCode} {`(${order.totalEPCs} pairs)`}
@@ -140,25 +155,34 @@ const ScannedEPCsList: React.FC = () => {
 						</SelectContent>
 					</Select>
 				</Div>
+
 				{/* Scanned EPCs list */}
-				{Array.isArray(scannedEPCs) && scannedEPCs?.length === 0 ? (
-					<EmptyList>
-						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
-						<Typography color='muted'>Empty</Typography>
-					</EmptyList>
-				) : (
-					<List>
-						{Array.isArray(scannedEPCs) &&
-							scannedEPCs.reverse().map((item) => (
-								<ListItem key={item?.epc_code} className={cn('hover:bg-secondary')}>
-									<Typography className='font-medium'>{item?.epc_code}</Typography>
-									<Typography variant='small' className='text-foreground'>
-										{item?.mo_no}
-									</Typography>
-								</ListItem>
-							))}
-					</List>
-				)}
+				<List ref={containerRef} style={{ height: VIRTUAL_LIST_HEIGHT }}>
+					{Array.isArray(scannedEPCs) && scannedEPCs?.length === 0 ? (
+						<EmptyList>
+							<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
+							<Typography color='muted'>Empty</Typography>
+						</EmptyList>
+					) : (
+						<Div ref={wrapperRef}>
+							{Array.isArray(scannedEPCs) &&
+								virtualItems.map((virtualItem) => {
+									return (
+										<ListItem
+											key={virtualItem.index}
+											className={cn('hover:bg-secondary')}
+											style={{ height: VIRTUAL_ITEM_SIZE }}>
+											<Typography className='font-medium'>{virtualItem.data?.epc_code}</Typography>
+											<Typography variant='small' className='text-foreground'>
+												{virtualItem.data?.mo_no}
+											</Typography>
+										</ListItem>
+									)
+								})}
+						</Div>
+					)}
+				</List>
+
 				{/* Scanned orders list */}
 				<Div className='px-4 py-3 flex flex-col'>
 					<Div className='flex justify-between items-center gap-x-2 overflow-x-auto scrollbar-none basis-10'>
@@ -223,7 +247,7 @@ const ScannedEPCsList: React.FC = () => {
 }
 
 const List = tw.div`flex max-h-full flex-1 basis-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar`
-const ListItem = tw.div`px-4 py-2 flex justify-between uppercase transition-all duration-200 rounded`
+const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-200 rounded border-b last:border-none`
 const EmptyList = tw.div`flex basis-full items-center justify-center gap-x-4 min-h-64`
 const BadgeDeleteButton = tw.button`size-4 inline-flex items-center justify-center absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary text-secondary-foreground group-hover:opacity-100 opacity-0 transition-opacity duration-100`
 

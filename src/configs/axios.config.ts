@@ -8,10 +8,12 @@ import { toast } from 'sonner'
 let retry = 0
 const controller = new AbortController()
 
+console.log(env('VITE_REQUEST_TIMEOUT', 60_000))
+
 const axiosInstance: AxiosInstance = axios.create({
 	baseURL: env('VITE_API_BASE_URL'),
 	signal: controller.signal,
-	timeout: +env('VITE_REQUEST_TIMEOUT', 5000),
+	timeout: +env('VITE_REQUEST_TIMEOUT', 60_000),
 	paramsSerializer: (params) => {
 		return qs.stringify(params, {
 			skipNulls: true,

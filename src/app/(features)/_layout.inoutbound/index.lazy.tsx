@@ -25,6 +25,8 @@ function Page() {
 	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
 	setBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.inoutbound_commands') }])
 
+	console.log('re-render')
+
 	return (
 		<Fragment>
 			<Helmet title={t('ns_common:navigation.inoutbound_commands')} />

@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import tw from 'tailwind-styled-components'
 
-const Container = tw.div`space-y-6 flex-1`
+const Container = memo(tw.div`space-y-6 flex-1`)
 const Main = tw.div`grid xl:grid-cols-12 lg:grid-cols-2 xl:grid-rows-3 lg:grid-rows-4 gap-4 xl:h-[75vh] lg:h-[75vh]`
 const ListBoxPanel = tw.div`xl:col-span-7 xl:row-span-full xl:order-1 order-2 lg:col-span-1 lg:row-span-full lg:order-1 lg:max-h-full xl:max-h-full max-h-96`
 const CounterPanel = tw.div`xl:col-span-5 xl:row-span-1 xl:order-2 order-1 lg:col-span-1 lg:row-span-1 lg:order-2`

@@ -11,9 +11,8 @@ export const useGetUnscannedEPC = (params: { connection: string; scanningStatus:
 		queryFn: () => RFIDService.getUnscannedEpc(params.connection),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
-		initialData: { metadata: [], message: null, statusCode: null },
 		placeholderData: keepPreviousData,
-		select: (response) => response.metadata
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }
 

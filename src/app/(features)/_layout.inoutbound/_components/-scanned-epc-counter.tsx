@@ -8,6 +8,8 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScanningStatus, usePageStore } from '../_contexts/-page.context'
 
+const INTERVAL_TIME = 5 as const
+
 const ScannedEPCsCounter: React.FC = () => {
 	const { scannedEPCs, scanningStatus } = usePageStore()
 	const { t } = useTranslation()
@@ -26,22 +28,21 @@ const ScannedEPCsCounter: React.FC = () => {
 
 const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = memo(
 	({ scannedEPCs }) => {
+		const scannedCount = scannedEPCs?.length
 		const { t } = useTranslation()
-		const count = useReactive({ value: 0, duration: undefined })
-
+		const count = useReactive({ value: scannedEPCs?.length, duration: undefined })
 		// Counter increment/decrement effect
-		useInterval(
-			() => {
-				if (scannedEPCs.length > count.value) count.value++
-				if (scannedEPCs.length < count.value) count.value--
-			},
-			count.duration,
-			{ immediate: false }
-		)
+		useInterval(() => {
+			if (scannedCount > count.value) {
+				count.value += Math.min(100, scannedCount - count.value)
+			} else if (scannedCount < count.value) {
+				count.value -= Math.min(100, count.value - scannedCount)
+			}
+		}, count.duration)
 
 		useEffect(() => {
-			count.duration = scannedEPCs.length !== count.value ? 10 : undefined
-		}, [scannedEPCs, count.value])
+			count.duration = scannedCount !== count.value ? INTERVAL_TIME : undefined
+		}, [scannedCount, count.value])
 
 		return (
 			<Div className='flex items-center justify-between relative z-10 gap-x-3'>

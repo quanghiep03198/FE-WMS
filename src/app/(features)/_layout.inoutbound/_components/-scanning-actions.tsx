@@ -85,7 +85,7 @@ const ScanningActions: React.FC = () => {
 					<Button
 						className='gap-x-2'
 						size='sm'
-						disabled={scannedEPCs.length === 0 || scanningStatus === 'finished'}
+						disabled={scannedEPCs?.length === 0 || scanningStatus === 'finished'}
 						onClick={() => {
 							setScanningStatus('finished')
 							toast.info('Finished scanning EPCs')
