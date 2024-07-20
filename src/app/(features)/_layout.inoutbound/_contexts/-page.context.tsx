@@ -47,8 +47,8 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		if (typeof scanningStatus === 'undefined') {
 			resetScannedOrders([])
 			resetScannedEPCs()
-			resetConnection()
 			resetSeletedOrder()
+			// resetConnection()
 		}
 	}, [scanningStatus])
 
