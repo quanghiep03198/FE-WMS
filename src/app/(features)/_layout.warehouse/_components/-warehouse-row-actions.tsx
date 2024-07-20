@@ -8,6 +8,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '../_composables/-use-warehouse-storage-api'
 
 type WarehouseRowActionsProps = {
 	row: Row<IWarehouse>
@@ -23,20 +24,20 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 	// Prefetch warehouse storage detail before navigating
 	const prefetchWarehouseDetail = (warehouseNum: string) =>
 		queryClient.prefetchQuery({
-			queryKey: ['warehouse-storage', warehouseNum],
+			queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 			queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum)
 		})
 
 	// Prefetch employee before opening update form dialog
 	const prefetchEmployee = (departmentCode: string, employeeCode: string) =>
 		queryClient.prefetchQuery({
-			queryKey: ['employee', departmentCode, employeeCode],
+			queryKey: ['EMPLOYEE', departmentCode, employeeCode],
 			queryFn: () => EmployeeService.searchEmployee({ dept_code: departmentCode, search: employeeCode })
 		})
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger>
+			<DropdownMenuTrigger role='button'>
 				<DotsHorizontalIcon />
 				<span className='sr-only'>Open menu</span>
 			</DropdownMenuTrigger>

@@ -1,5 +1,5 @@
 import { IWarehouseStorage } from '@/common/types/entities'
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
 import React from 'react'
@@ -16,11 +16,9 @@ const StorageRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant='ghost' size='icon' className='size-8 !border-none !outline-none !ring-0'>
-					<DotsHorizontalIcon />
-					<span className='sr-only'>Open menu</span>
-				</Button>
+			<DropdownMenuTrigger className='border-none outline-none ring-0 focus-within:outline-none' role='button'>
+				<DotsHorizontalIcon />
+				<span className='sr-only'>Open menu</span>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem

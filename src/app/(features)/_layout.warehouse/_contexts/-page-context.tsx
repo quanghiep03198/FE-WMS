@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'react'
+import { createContext, useContext, useReducer } from 'react'
 
 export type TAction = 'CREATE' | 'UPDATE' | 'RESET' | undefined
 
@@ -41,3 +41,5 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
 	return <PageContext.Provider value={{ dialogFormState, dispatch }}>{children}</PageContext.Provider>
 }
+
+export const usePageContext = () => useContext(PageContext)

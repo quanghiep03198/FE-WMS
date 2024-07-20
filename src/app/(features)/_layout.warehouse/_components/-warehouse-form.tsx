@@ -22,15 +22,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
 import _ from 'lodash'
-import { memo, useContext, useState } from 'react'
+import { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetDepartmentQuery } from '../../_composables/-department.composable'
-import { WAREHOUSE_PROVIDE_TAG } from '../../_composables/-warehouse.composable'
+import { useGetDepartmentQuery } from '../../_composables/-use-department-api'
+import { WAREHOUSE_PROVIDE_TAG } from '../_composables/-use-warehouse-api'
 import { warehouseTypes } from '../_constants/-warehouse.constant'
-import { PageContext } from '../_contexts/-page-context'
+import { usePageContext } from '../_contexts/-page-context'
 import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '../_schemas/-warehouse.schema'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
@@ -48,7 +48,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 	const {
 		dialogFormState: { type, dialogTitle, defaultFormValues },
 		dispatch
-	} = useContext(PageContext)
+	} = usePageContext()
 	const { user } = useAuth()
 	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
 	const { t } = useTranslation()

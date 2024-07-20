@@ -1,5 +1,5 @@
 // #region Modules
-import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_composables/-warehouse-storage.composable'
+import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_layout.warehouse/_composables/-use-warehouse-storage-api'
 import { CommonActions } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import { IWarehouseStorage } from '@/common/types/entities'
@@ -21,14 +21,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { useDeepCompareEffect } from 'ahooks'
-import _ from 'lodash'
-import React, { useContext } from 'react'
+import { pick } from 'lodash'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
-import { PageContext } from '../../_contexts/-page-context'
+import { usePageContext } from '../../_contexts/-page-context'
 import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../_schemas/-warehouse.schema'
 // #endregion
 
@@ -50,7 +50,7 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 	const {
 		dialogFormState: { type, dialogTitle, defaultFormValues },
 		dispatch
-	} = useContext(PageContext)
+	} = usePageContext()
 	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(storageFormSchema)
 	})
@@ -67,7 +67,7 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 		form.reset({
 			company_code: user?.company_code,
 			...defaultFormValues,
-			..._.pick(warehouse, ['warehouse_num', 'warehouse_name'])
+			...pick(warehouse, ['warehouse_num', 'warehouse_name'])
 		})
 	}, [dialogTitle, defaultFormValues, open, warehouse])
 
