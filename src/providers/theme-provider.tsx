@@ -18,16 +18,13 @@ const ThemeProviderContext = createContext<ThemeProviderState>({
 })
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: ThemeProviderProps) => {
-	const [theme, setTheme] = useLocalStorageState<Theme>('theme', { defaultValue: Theme.SYSTEM })
+	const [theme, setTheme] = useLocalStorageState<Theme>('theme', {
+		defaultValue: window.matchMedia('(prefers-color-scheme:dark)').matches ? Theme.DARK : Theme.LIGHT
+	})
 
 	useEffect(() => {
 		const root = window.document.documentElement
-		root.classList.remove('light', 'dark')
-		if (theme === 'system') {
-			const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-			root.classList.add(systemTheme)
-			return
-		}
+		root.classList.remove(Theme.DARK, Theme.LIGHT)
 		root.classList.add(theme as Theme)
 	}, [theme])
 
