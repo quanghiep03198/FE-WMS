@@ -16,7 +16,6 @@ type TableBodyProps = {
 export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
-	console.log(virtualItems)
 
 	const [before, after] =
 		virtualItems.length > 0

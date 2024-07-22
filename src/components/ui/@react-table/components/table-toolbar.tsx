@@ -1,11 +1,10 @@
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import React, { memo, useCallback } from 'react'
-import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { useTableContext } from '../context/table.context'
-import { GlobalFilter, GlobalFilterPopover } from './global-filter'
+import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
 type TableToolbarProps<TData> = {
@@ -13,7 +12,7 @@ type TableToolbarProps<TData> = {
 	slot?: React.FC<{ table: Table<TData> }>
 }
 
-export function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
+function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useTableContext()
 	const { t } = useTranslation('ns_common')
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
@@ -25,9 +24,10 @@ export function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TDa
 	}, [])
 
 	return (
-		<Div role='toolbar' className='flex items-center justify-between py-1 sm:justify-end'>
-			<Div className='flex flex-1 items-center gap-x-1'>
-				<GlobalFilter />
+		<Div className='flex justify-end'>
+			<Div role='toolbar' className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
+				{Slot && <Slot table={table} />}
+				<GlobalFilterPopover />
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
 						variant='destructive'
@@ -37,10 +37,6 @@ export function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TDa
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
-			</Div>
-			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
-				{Slot && <Slot table={table} />}
-				<GlobalFilterPopover />
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
 					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 						<Button variant='outline' onClick={() => setIsFilterOpened(!isFilterOpened)} size='icon'>
@@ -54,6 +50,4 @@ export function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TDa
 	)
 }
 
-export const MemorizedTableToolbar = memo(TableToolbar, (prev, next) =>
-	isEqual(prev.table.options.data, next.table.options.data)
-)
+export default memo(TableToolbar)

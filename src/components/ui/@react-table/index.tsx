@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { Div, Typography } from '..'
 import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
-import { MemorizedTableToolbar, TableToolbar } from './components/table-toolbar'
+import TableToolbar from './components/table-toolbar'
 import { TableContext } from './context/table.context'
 import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
@@ -216,11 +216,7 @@ function DataTable<TData, TValue>(
 				setGlobalFilter
 			}}>
 			<Div className='space-y-3'>
-				{toolbarProps.hidden ? null : table.getState().columnSizingInfo.isResizingColumn ? (
-					<MemorizedTableToolbar table={table} slot={toolbarProps.slot} />
-				) : (
-					<TableToolbar table={table} slot={toolbarProps.slot} />
-				)}
+				{!toolbarProps.hidden && <TableToolbar table={table} slot={toolbarProps.slot} />}
 				<TableDataGrid
 					table={table}
 					columns={columns}

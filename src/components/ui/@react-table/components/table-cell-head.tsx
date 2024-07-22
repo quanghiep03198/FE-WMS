@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Header, Table, flexRender } from '@tanstack/react-table'
-import { Div, Icon } from '../..'
+import { Icon, Typography } from '../..'
 
 type TableCellHeadProps<TData, TValue> = {
 	header: Header<TData, TValue>
@@ -11,14 +11,16 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 
 	return (
-		<Div
-			className={cn('relative line-clamp-1 h-full cursor-auto select-none items-center capitalize', {
-				'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
-				'cursor-col-resize': getIsResizing(),
-				'text-center inline-flex': header.colSpan > 1,
-				'flex text-left': header.colSpan === 1
-			})}
-			onClick={getToggleSortingHandler()}
+		<Typography
+			variant='small'
+			className={cn(
+				'relative line-clamp-1 flex justify-center h-full cursor-auto select-none items-center capitalize text-center',
+				{
+					'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
+					'cursor-col-resize': getIsResizing()
+				}
+			)}
+			onClick={columnDef.enableSorting && getToggleSortingHandler()}
 			title={
 				header.column.getCanSort()
 					? getNextSortingOrder() === 'asc'
@@ -35,6 +37,6 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 					size={16}
 				/>
 			)}
-		</Div>
+		</Typography>
 	)
 }

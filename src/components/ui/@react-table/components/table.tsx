@@ -22,7 +22,7 @@ interface TableProps<TData, TValue>
 	table: TTable<TData>
 }
 
-export const ESTIMATE_SIZE = 36
+export const ESTIMATE_SIZE = 40
 
 function easeInOutQuint(t) {
 	return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t
@@ -86,7 +86,7 @@ function TableDataGrid<TData, TValue>({
 	const columnSizeVars = useMemo(() => {
 		const headers = table.getFlatHeaders()
 		const colSizes: { [key: string]: number } = {}
-		headers.forEach((header, index) => {
+		headers.forEach((header) => {
 			colSizes[`--header-${header.id}-size`] = header.getSize()
 			colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
 		})
@@ -142,28 +142,25 @@ function TableDataGrid<TData, TValue>({
 										)
 									})}
 								</TableRow>
-								{isFilterOpened &&
-									headerGroup.headers.every((header) => {
-										return header.colSpan === 1
-									}) && (
-										<TableRow>
-											{headerGroup.headers.map((header) => {
-												return (
-													<TableHead
-														key={header.id}
-														colSpan={header.colSpan}
-														data-sticky={header.column.columnDef?.meta?.sticky}
-														className='group relative p-0'
-														style={{
-															width: `calc(var(--header-${header?.id}-size) * 1px)`,
-															...DataTableUtility.getStickyOffsetPosition(header.column)
-														}}>
-														<ColumnFilter column={header.column} />
-													</TableHead>
-												)
-											})}
-										</TableRow>
-									)}
+								{isFilterOpened && headerGroup.headers.every((header) => header.colSpan === 1) && (
+									<TableRow>
+										{headerGroup.headers.map((header) => {
+											return (
+												<TableHead
+													key={header.id}
+													colSpan={header.colSpan}
+													data-sticky={header.column.columnDef?.meta?.sticky}
+													className='group relative p-0'
+													style={{
+														width: `calc(var(--header-${header?.id}-size) * 1px)`,
+														...DataTableUtility.getStickyOffsetPosition(header.column)
+													}}>
+													<ColumnFilter column={header.column} />
+												</TableHead>
+											)
+										})}
+									</TableRow>
+								)}
 							</Fragment>
 						))}
 					</TableHeader>

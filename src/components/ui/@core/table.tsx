@@ -14,7 +14,7 @@ const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribut
 		<thead
 			ref={ref}
 			className={cn(
-				'sticky h-10 whitespace-nowrap data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10',
+				'sticky h-10 whitespace-nowrap data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 [&:has([role=checkbox])]:text-center',
 				className
 			)}
 			{...props}
@@ -73,7 +73,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'[&:has([role=checkbox])] border-b border-r bg-background px-4 py-2 align-middle text-sm  group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[sticky=right]:border-l data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
+				'border-b border-r bg-background px-4 py-2 align-middle text-sm  group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[sticky=right]:border-l data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
 				className
 			)}
 			{...props}

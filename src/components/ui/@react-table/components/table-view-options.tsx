@@ -21,14 +21,14 @@ export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TDa
 		<DropdownMenu>
 			<Tooltip message='Columns' triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', size: 'icon' }))}>
-					<Icon name='Columns3' />
+					<Icon name='SlidersHorizontal' />
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent align='end' className='w-56'>
 				<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{table
-					.getAllColumns()
+					.getAllLeafColumns()
 					.filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
 					.map((column) => {
 						return (
