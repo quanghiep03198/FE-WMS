@@ -12,11 +12,6 @@ import tw from 'tailwind-styled-components'
 import { useShallow } from 'zustand/react/shallow'
 import { useLayoutStore } from '../../_stores/-layout.store'
 
-type DrawerSidebarProps = {
-	open: boolean
-	toggleNavSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
 const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()
 	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore(
@@ -27,7 +22,7 @@ const NavDrawerSidebar: React.FC = () => {
 	if (isLargeScreen) return null
 
 	return (
-		<Sheet defaultOpen={false} open={!navSidebarOpen} onOpenChange={toggleNavSidebarOpen}>
+		<Sheet defaultOpen={false} open={navSidebarOpen} onOpenChange={toggleNavSidebarOpen}>
 			<SheetContent className='w-full max-w-xs' side='left'>
 				<Div className='h-16 px-4'>
 					<AppLogo />
