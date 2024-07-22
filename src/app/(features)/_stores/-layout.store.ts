@@ -1,6 +1,7 @@
 import { routeTree } from '@/route-tree.gen'
 import { AnyPathParams, ParseRoute } from '@tanstack/react-router'
 import { create } from 'zustand'
+import { immer } from 'zustand/middleware/immer'
 
 export type TBreadcrumb = {
 	to: ParseRoute<typeof routeTree>['fullPath']
@@ -16,9 +17,11 @@ type LayoutState = {
 	toggleNavSidebarOpen: () => void
 }
 
-export const useLayoutStore = create<LayoutState>((set) => ({
-	breadcrumb: [],
-	setBreadcrumb: (data) => set(() => ({ breadcrumb: data })),
-	navSidebarOpen: false,
-	toggleNavSidebarOpen: () => set((state) => ({ navSidebarOpen: !state.navSidebarOpen }))
-}))
+export const useLayoutStore = create<LayoutState>()(
+	immer((set) => ({
+		breadcrumb: [],
+		setBreadcrumb: (data) => set(() => ({ breadcrumb: data })),
+		navSidebarOpen: false,
+		toggleNavSidebarOpen: () => set((state) => ({ navSidebarOpen: !state.navSidebarOpen }))
+	}))
+)
