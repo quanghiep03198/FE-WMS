@@ -1,4 +1,4 @@
-import { USER_PROVIDE_TAG, getUserProfileQuery, useGetUserProfile } from '@/app/_composables/-user.composable'
+import { USER_PROVIDE_TAG, getUserProfileQuery, useGetUserProfileQuery } from '@/app/(auth)/_composables/-use-auth-api'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { AppConfigs } from '@/configs/app.config'
@@ -19,7 +19,7 @@ import { LoginFormValues, loginSchema } from '../_schemas/-login.schema'
 const LoginForm: React.FC = () => {
 	const { setUserProfile } = useAuthStore()
 	const queryClient = useQueryClient()
-	const { data: user } = useGetUserProfile()
+	const { data: user } = useGetUserProfileQuery()
 	const { t } = useTranslation()
 	const { dispatch } = useContext(StepContext)
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {

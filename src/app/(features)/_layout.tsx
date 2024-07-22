@@ -1,4 +1,5 @@
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { AuthService } from '@/services/auth.service'
+import { Outlet, createFileRoute, redirect, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
@@ -8,6 +9,8 @@ import Navbar from './_components/_partials/-navbar'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
+	loader: AuthService.getUser,
+	errorComponent: AuthenticationError,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated) redirect({ to: '/login' })
 	}
@@ -30,4 +33,15 @@ function Layout() {
 			</LayoutComposition.Container>
 		</AuthGuard>
 	)
+}
+
+function AuthenticationError({ reset }: ErrorComponentProps) {
+	const router = useRouter()
+	router.invalidate().finally(() => {
+		reset()
+		AuthService.logout()
+		// router.navigate({ to: '/login' })
+	})
+
+	return null
 }

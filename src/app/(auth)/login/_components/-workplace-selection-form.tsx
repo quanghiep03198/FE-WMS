@@ -1,7 +1,7 @@
+import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { CompanyService } from '@/services/company.service'
-import { useAuthStore } from '@/stores/auth.store'
 import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
@@ -13,7 +13,9 @@ type FormValues = { company_code: string }
 const COMPANY_PROVIDE_TAG = 'COMPANIES' as const
 
 const WorkplaceSelectionForm: React.FC = () => {
-	const { isAuthenticated, setUserCompany } = useAuthStore()
+	const { isAuthenticated, setUserCompany } = useAuth()
+	console.log(setUserCompany)
+
 	const { dispatch } = useContext(StepContext)
 	const { t } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()

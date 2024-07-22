@@ -1,25 +1,22 @@
-import { useGetUserProfile } from '@/app/_composables/-user.composable'
+import { useGetUserProfileQuery } from '@/app/(auth)/_composables/-use-auth-api'
 import { useAuth } from '@/common/hooks/use-auth'
 import { generateAvatar } from '@/common/utils/generate-avatar'
 import { AuthService } from '@/services/auth.service'
-import { useAuthStore } from '@/stores/auth.store'
 import { Navigate } from '@tanstack/react-router'
-import React, { useEffect } from 'react'
+import { useDeepCompareEffect } from 'ahooks'
+import React from 'react'
 
 const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const { isAuthenticated } = useAuth()
-	const { setUserProfile } = useAuthStore()
+	const { isAuthenticated, setUserProfile } = useAuth()
 
 	// Get user profile after login successfully
-	const { data, isSuccess, isError } = useGetUserProfile()
+	const { data, isSuccess, isError } = useGetUserProfileQuery()
 
 	// Check authenticated status every time get profile query is triggered
-	useEffect(() => {
-		if (data && isSuccess) {
-			setUserProfile({ ...data, picture: generateAvatar({ name: data.display_name }) })
-		}
+	useDeepCompareEffect(() => {
+		if (data && isSuccess) setUserProfile({ ...data, picture: generateAvatar({ name: data.display_name }) })
 		if (isError) AuthService.logout()
-	}, [data, isSuccess, isError])
+	}, [data, , isSuccess, isError])
 
 	if (!isAuthenticated) return <Navigate to='/login' />
 

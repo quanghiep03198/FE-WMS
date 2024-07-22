@@ -8,12 +8,12 @@ export const getUserProfileQuery = (config?: AxiosRequestConfig) => {
 	return queryOptions({
 		queryKey: [USER_PROVIDE_TAG],
 		queryFn: () => AuthService.profile(config),
-		staleTime: 1000 * 60,
+		staleTime: 1000 * 60 * 60,
 		enabled: AuthService.getHasAccessToken(),
 		select: (data) => data.metadata
 	})
 }
 
-export function useGetUserProfile() {
+export function useGetUserProfileQuery() {
 	return useQuery(getUserProfileQuery())
 }

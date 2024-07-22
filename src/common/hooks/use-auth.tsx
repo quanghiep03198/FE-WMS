@@ -1,13 +1,14 @@
-import { USER_PROVIDE_TAG } from '@/app/_composables/-user.composable'
+import { USER_PROVIDE_TAG } from '@/app/(auth)/_composables/-use-auth-api'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { useMutation } from '@tanstack/react-query'
+import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 export function useAuth() {
 	const { t } = useTranslation()
-	const { user, isAuthenticated } = useAuthStore()
+	const authStore = useAuthStore()
 
 	const { mutateAsync: logout } = useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
@@ -18,8 +19,10 @@ export function useAuth() {
 		}
 	})
 
+	const isAuthenticated = !isNil(authStore.user)
+
 	return {
-		user,
+		...authStore,
 		isAuthenticated,
 		logout
 	}

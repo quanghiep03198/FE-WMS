@@ -1,6 +1,7 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import Loading from '@/components/shared/loading'
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { AuthService } from '@/services/auth.service'
+import { ErrorComponentProps, Outlet, createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -9,6 +10,8 @@ import LayoutComposition from './_components/_partials/-layout-composition'
 
 export const Route = createFileRoute('/(preferences)/_layout')({
 	component: Layout,
+	loader: AuthService.getUser,
+	errorComponent: AuthenticationError,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({
@@ -45,4 +48,14 @@ function Layout() {
 			</LayoutComposition.Container>
 		</AuthGuard>
 	)
+}
+
+function AuthenticationError({ reset }: ErrorComponentProps) {
+	const router = useRouter()
+	router.invalidate().finally(() => {
+		reset()
+		AuthService.logout()
+	})
+
+	return null
 }
