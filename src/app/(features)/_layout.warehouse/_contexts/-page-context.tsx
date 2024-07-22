@@ -3,6 +3,7 @@ import { createContext, useContext, useReducer } from 'react'
 export type TAction = 'CREATE' | 'UPDATE' | 'RESET' | undefined
 
 type DialogFormActionPayload<TValue = any> = {
+	open?: boolean
 	dialogTitle: string | undefined
 	defaultFormValues?: TValue | {}
 	type?: TAction
@@ -16,14 +17,19 @@ type FormContext = {
 	}>
 }
 
-const initialState: DialogFormActionPayload = { type: undefined, dialogTitle: undefined, defaultFormValues: {} }
+const initialState: DialogFormActionPayload = {
+	open: false,
+	type: undefined,
+	dialogTitle: undefined,
+	defaultFormValues: {}
+}
 
-const reducer = (_state, action: { type: TAction; payload?: DialogFormActionPayload }) => {
+const reducer = (state, action: { type: TAction; payload?: DialogFormActionPayload }) => {
 	switch (action.type) {
 		case 'CREATE':
-			return { ...action.payload, type: action.type, defaultFormValues: {} }
+			return { ...action.payload, type: action.type, defaultFormValues: {}, open: !state.open }
 		case 'UPDATE':
-			return { ...action.payload, type: action.type }
+			return { ...action.payload, type: action.type, open: !state.open }
 		case 'RESET':
 			return initialState
 		default:
@@ -32,7 +38,7 @@ const reducer = (_state, action: { type: TAction; payload?: DialogFormActionPayl
 }
 
 export const PageContext = createContext<FormContext>({
-	dialogFormState: { type: undefined, dialogTitle: undefined, defaultFormValues: {} },
+	dialogFormState: { open: false, type: undefined, dialogTitle: undefined, defaultFormValues: {} },
 	dispatch: () => undefined
 })
 

@@ -43,12 +43,12 @@ type WarehouseStorageFormDialogProps = {
 // #endregion
 
 // #region Component declaration
-const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({ open, onOpenChange }) => {
+const WarehouseStorageFormDialog: React.FC = () => {
 	const { warehouseNum } = useParams({ strict: false })
 	const { t } = useTranslation()
 	const { user } = useAuth()
 	const {
-		dialogFormState: { type, dialogTitle, defaultFormValues },
+		dialogFormState: { open, type, dialogTitle, defaultFormValues },
 		dispatch
 	} = usePageContext()
 	const form = useForm<FormValues<typeof type>>({
@@ -88,7 +88,6 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 		},
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
-			onOpenChange(!open)
 			dispatch({ type: undefined })
 			toast.success(t('ns_common:notification.success'), { id: context })
 			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
@@ -98,13 +97,12 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 		}
 	})
 
-	const handleOpenStateChange = (open) => {
-		if (!open) dispatch({ type: undefined })
-		onOpenChange(open)
-	}
+	// const handleOpenStateChange = (open) => {
+	// 	if (!open) dispatch({ type: undefined })
+	// }
 
 	return (
-		<Dialog open={open} onOpenChange={handleOpenStateChange}>
+		<Dialog open={open} onOpenChange={() => dispatch({ type: undefined })}>
 			<DialogContent className='w-full max-w-2xl bg-popover'>
 				<DialogHeader>
 					<DialogTitle className='lowercase first-letter:uppercase'>
@@ -137,13 +135,7 @@ const WarehouseStorageFormDialog: React.FC<WarehouseStorageFormDialogProps> = ({
 						/>
 						{/* Form actions */}
 						<DialogFooter className='col-span-full'>
-							<Button
-								type='button'
-								variant='outline'
-								onClick={() => {
-									dispatch({ type: 'RESET' })
-									onOpenChange(false)
-								}}>
+							<Button type='button' variant='outline' onClick={() => dispatch({ type: 'RESET' })}>
 								{t('ns_common:actions.cancel')}
 							</Button>
 							<Button type='submit' disabled={isPending}>

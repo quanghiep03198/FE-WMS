@@ -38,7 +38,9 @@ export default {
 		update_warehouse_title: 'Update Warehouse'
 	},
 	headings: {
-		warehouse_list_title: 'Warehouse management',
-		warehouse_detail_title: 'Warehouse storage location details'
+		warehouse_list_title: 'Warehouse List',
+		warehouse_list_description: 'Manage warehouse information',
+		storage_list_title: 'Storage Location List',
+		storage_list_description: 'Manage storage location information'
 	}
 } as const

@@ -4,18 +4,16 @@ import { IWarehouseStorage } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
-import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { Fragment, memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import {
-	WAREHOUSE_STORAGE_PROVIDE_TAG,
+	useDeleteStorageMutation,
 	useGetWarehouseStorageQuery,
 	useUpdateStorageMutation
 } from '../../_composables/-use-warehouse-storage-api'
@@ -29,7 +27,7 @@ type StorageListProps = {
 	onFormOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const StorageList: React.FC<StorageListProps> = ({ onFormOpenChange }) => {
+const StorageList: React.FC = () => {
 	const { t, i18n } = useTranslation(['ns_common'])
 	const tableRef = useRef<Table<any>>()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
@@ -37,7 +35,7 @@ const StorageList: React.FC<StorageListProps> = ({ onFormOpenChange }) => {
 	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 
-	const { dispatch, dialogFormState } = usePageContext()
+	const { dispatch } = usePageContext()
 
 	// Get original storage type value
 	const getOriginalStorageType = useCallback(
@@ -77,19 +75,10 @@ const StorageList: React.FC<StorageListProps> = ({ onFormOpenChange }) => {
 	)
 
 	// Delete selected warehouse storage locations
-	const { mutateAsync: deleteWarehouseStorage } = useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
-		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
-		onSuccess: (_data, _variables, context) => {
-			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
-		},
-		onError: (_data, _variables, context) => {
-			toast.error(t('ns_common:notification.error'), { id: context })
-		},
-		onSettled: handleResetAllRowSelection
-	})
+	const { mutateAsync: deleteWarehouseStorage } = useDeleteStorageMutation(
+		{ warehouseNum },
+		{ onSettled: handleResetAllRowSelection }
+	)
 
 	const columnHelper = createColumnHelper<IWarehouseStorage>()
 
@@ -234,7 +223,6 @@ const StorageList: React.FC<StorageListProps> = ({ onFormOpenChange }) => {
 								setRowSelectionType('single')
 							}}
 							onEdit={() => {
-								onFormOpenChange(true)
 								dispatch({
 									type: CommonActions.UPDATE,
 									payload: {
@@ -281,24 +269,6 @@ const StorageList: React.FC<StorageListProps> = ({ onFormOpenChange }) => {
 										</Button>
 									</Tooltip>
 								)}
-							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
-								<Button
-									variant='outline'
-									size='icon'
-									onClick={() => {
-										onFormOpenChange(true)
-										dispatch({
-											type: 'CREATE',
-											payload: {
-												dialogTitle: t('ns_common:common_form_titles.create', {
-													object: t('ns_common:specialized_vocabs.storage_area')
-												})
-											}
-										})
-									}}>
-									<Icon name='Plus' />
-								</Button>
-							</Tooltip>
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
 								<Button variant='outline' size='icon' onClick={() => refetch()}>
 									<Icon name='RotateCw' />

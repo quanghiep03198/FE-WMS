@@ -37,7 +37,9 @@ export default {
 		update_warehouse_title: 'Cập nhật mới kho'
 	},
 	headings: {
-		warehouse_list_title: 'Quản lý kho',
-		warehouse_detail_title: 'Danh sách vị trí lưu kho chi tiết'
+		warehouse_list_title: 'Danh sách lý kho',
+		warehouse_list_description: 'Quản lý thông tin các kho',
+		storage_list_title: 'Danh sách vị trí lưu kho',
+		storage_list_description: 'Quản lý thông tin vị trí lưu kho'
 	}
 } as const

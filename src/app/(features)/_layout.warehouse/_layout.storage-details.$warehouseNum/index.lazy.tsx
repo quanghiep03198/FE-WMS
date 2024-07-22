@@ -1,34 +1,32 @@
 // #region Modules
 import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
 import useQueryParams from '@/common/hooks/use-query-params'
+import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import { useShallow } from 'zustand/react/shallow'
 import { PageProvider } from '../_contexts/-page-context'
 import WarehouseStorageFormDialog from './_components/-storage-form'
+import StorageListHeading from './_components/-storage-heading'
 import StorageList from './_components/-storage-list'
 // #endregion
 
 // #region Router declaration
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/')({
-	component: () => (
-		<PageProvider>
-			<Page />
-		</PageProvider>
-	)
+	component: Page
 })
 // #endregion
 
 // #region Page component
 function Page() {
-	const { t, i18n } = useTranslation(['ns_common'])
-	const [formDialogOpenState, setFormDialogOpenState] = useState<boolean>(false)
+	const { t } = useTranslation(['ns_common'])
 	const { warehouseNum } = useParams({ strict: false })
 	const { searchParams } = useQueryParams()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
 	setBreadcrumb([
 		{
 			text: t('ns_common:navigation.warehouse_management'),
@@ -51,9 +49,14 @@ function Page() {
 	return (
 		<Fragment>
 			<Helmet title={t('ns_common:navigation.warehouse_management')} />
-
-			<StorageList onFormOpenChange={setFormDialogOpenState} />
-			<WarehouseStorageFormDialog open={formDialogOpenState} onOpenChange={setFormDialogOpenState} />
+			<PageProvider>
+				<Div className='space-y-6'>
+					<StorageListHeading />
+					<Separator />
+					<StorageList />
+				</Div>
+				<WarehouseStorageFormDialog />
+			</PageProvider>
 		</Fragment>
 	)
 }

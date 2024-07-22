@@ -1,14 +1,15 @@
 import { IWarehouseStorage } from '@/common/types/entities'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import {
-	UseQueryOptions,
 	keepPreviousData,
 	queryOptions,
 	useMutation,
 	useQuery,
-	useQueryClient
+	useQueryClient,
+	type UseMutationOptions,
+	type UseQueryOptions
 } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PartialStorageFormValue } from '../_schemas/-warehouse.schema'
@@ -59,4 +60,31 @@ export const useUpdateStorageMutation = ({ warehouseNum }: { warehouseNum: strin
 	})
 }
 
-export const useDeleteStorageMutation = ({ warehouseNum }: { warehouseNum: string }, { onSettled }) => {}
+export const useDeleteStorageMutation = (
+	{ warehouseNum }: { warehouseNum: string },
+	{
+		onSettled
+	}: UseMutationOptions<
+		AxiosResponse<ResponseBody<null>, unknown>,
+		AxiosError<unknown, unknown>,
+		unknown,
+		string | number
+	>
+) => {
+	const queryClient = useQueryClient()
+	const { t } = useTranslation()
+
+	return useMutation({
+		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
+		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onSuccess: (_data, _variables, context) => {
+			toast.success(t('ns_common:notification.success'), { id: context })
+			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
+		},
+		onError: (_data, _variables, context) => {
+			toast.error(t('ns_common:notification.error'), { id: context })
+		},
+		onSettled: onSettled
+	})
+}

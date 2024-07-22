@@ -1,9 +1,13 @@
 // #region Modules
 import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { memo } from 'react'
+import { Fragment, memo } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseList from './_components/-warehouse-list'
+import WarehouseListHeading from './_components/-warehouse-list-heading'
 import { PageProvider } from './_contexts/-page-context'
 // #endregion
 
@@ -22,8 +26,16 @@ function Page() {
 	setBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
 
 	return (
-		<PageProvider>
-			<WarehouseList />
-		</PageProvider>
+		<Fragment>
+			<Helmet title={t('ns_common:navigation.warehouse_management')} />
+			<PageProvider>
+				<Div className='space-y-6'>
+					<WarehouseListHeading />
+					<Separator />
+					<WarehouseList />
+				</Div>
+				<WarehouseFormDialog />
+			</PageProvider>
+		</Fragment>
 	)
 }

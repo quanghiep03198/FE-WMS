@@ -8,7 +8,6 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import {
 	useDeleteWarehouseMutation,
@@ -17,13 +16,11 @@ import {
 } from '../_composables/-use-warehouse-api'
 import { warehouseTypes } from '../_constants/-warehouse.constant'
 import { usePageContext } from '../_contexts/-page-context'
-import WarehouseFormDialog from './-warehouse-form'
 import WarehouseRowActions from './-warehouse-row-actions'
 // #endregion
 
 const WarehouseList: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const [formDialogOpen, setFormDialogOpen] = useState<boolean>(false)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const tableRef = useRef<Table<any>>()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
@@ -57,8 +54,6 @@ const WarehouseList: React.FC = () => {
 				: []
 		}
 	})
-
-	console.log(data)
 
 	// Delete warehouse
 	const { mutateAsync: deleteWarehouseAsync } = useDeleteWarehouseMutation(handleResetAllRowSelection)
@@ -210,7 +205,6 @@ const WarehouseList: React.FC = () => {
 							row.toggleSelected(true)
 						}}
 						onEdit={() => {
-							setFormDialogOpen(true)
 							dispatch({
 								type: CommonActions.UPDATE,
 								payload: {
@@ -233,10 +227,7 @@ const WarehouseList: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.warehouse_management')} />
-
 			<DataTable
-				caption='The list of warehouses'
 				data={data ?? []}
 				columns={columns}
 				loading={isLoading}
@@ -258,20 +249,7 @@ const WarehouseList: React.FC = () => {
 										</Button>
 									</Tooltip>
 								)}
-							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
-								<Button
-									variant='outline'
-									size='icon'
-									onClick={() => {
-										setFormDialogOpen(true)
-										dispatch({
-											type: CommonActions.CREATE,
-											payload: { dialogTitle: t('ns_warehouse:form.add_warehouse_title') }
-										})
-									}}>
-									<Icon name='Plus' />
-								</Button>
-							</Tooltip>
+
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
 								<Button variant='outline' size='icon' onClick={() => refetch()}>
 									<Icon name='RotateCw' />
@@ -281,7 +259,7 @@ const WarehouseList: React.FC = () => {
 					)
 				}}
 			/>
-			<WarehouseFormDialog open={formDialogOpen} onOpenChange={setFormDialogOpen} />
+
 			<ConfirmDialog
 				open={confirmDialogOpen}
 				onOpenChange={setConfirmDialogOpen}

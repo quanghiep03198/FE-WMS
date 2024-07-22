@@ -37,7 +37,9 @@ export default {
 		update_warehouse_title: '更新仓库'
 	},
 	headings: {
-		warehouse_list_title: '倉庫管理',
-		warehouse_detail_title: '库存位置详情'
+		warehouse_list_title: '仓库列表',
+		warehouse_list_description: '管理仓库信息',
+		storage_list_title: '存储位置列表',
+		storage_list_description: '管理存储位置信息'
 	}
 } as const

@@ -43,10 +43,10 @@ type WarehouseFormDialogProps = {
 	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenChange }) => {
+const WarehouseFormDialog: React.FC = () => {
 	const queryClient = useQueryClient()
 	const {
-		dialogFormState: { type, dialogTitle, defaultFormValues },
+		dialogFormState: { open, type, dialogTitle, defaultFormValues },
 		dispatch
 	} = usePageContext()
 	const { user } = useAuth()
@@ -86,7 +86,6 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 		},
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
-			onOpenChange(!open)
 			dispatch({ type: 'RESET' })
 			queryClient.invalidateQueries({ queryKey: [WAREHOUSE_PROVIDE_TAG] })
 			return toast.success(t('ns_common:notification.success'), { id: context })
@@ -103,7 +102,6 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 			open={open}
 			onOpenChange={(open) => {
 				if (!open) dispatch({ type: 'RESET' })
-				onOpenChange(open)
 			}}>
 			<DialogContent className='w-full max-w-3xl bg-popover'>
 				<DialogHeader>
@@ -194,13 +192,7 @@ const WarehouseFormDialog: React.FC<WarehouseFormDialogProps> = ({ open, onOpenC
 						</FormItem>
 						{/* Form actions */}
 						<DialogFooter className='col-span-full'>
-							<Button
-								type='button'
-								variant='outline'
-								onClick={() => {
-									dispatch({ type: 'RESET' })
-									onOpenChange(false)
-								}}>
+							<Button type='button' variant='outline' onClick={() => dispatch({ type: 'RESET' })}>
 								{t('ns_common:actions.cancel')}
 							</Button>
 							<Button type='submit' disabled={isPending}>
