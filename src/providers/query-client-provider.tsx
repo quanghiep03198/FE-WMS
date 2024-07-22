@@ -1,4 +1,5 @@
 import env from '@/common/utils/env'
+import { AppConfigs } from '@/configs/app.config'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -14,6 +15,7 @@ declare module '@tanstack/react-query' {
 
 const localStoragePersister = createSyncStoragePersister({
 	storage: window.localStorage,
+	key: AppConfigs.QUERY_CLIENT_CACHE_STORAGE_KEY,
 	serialize: (data) => compress(JSON.stringify(data)),
 	deserialize: (data) => JSON.parse(decompress(data))
 })

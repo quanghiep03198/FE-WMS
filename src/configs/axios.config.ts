@@ -8,8 +8,6 @@ import { toast } from 'sonner'
 let retry = 0
 const controller = new AbortController()
 
-console.log(env('VITE_REQUEST_TIMEOUT', 60_000))
-
 const axiosInstance: AxiosInstance = axios.create({
 	baseURL: env('VITE_API_BASE_URL'),
 	signal: controller.signal,
@@ -47,14 +45,9 @@ axiosInstance.interceptors.response.use(
 				return Promise.reject(error)
 			}
 			if (retry > 1) {
-				toast.error('Log in session has expired.')
-				/**
-				 * @deprecated
-				 * window.dispatchEvent(new Event('logout'))
-				 * Migrated to zustand store
-				 */
-				AuthService.logout()
 				controller.abort()
+				AuthService.logout()
+				toast.error('Log in session has expired.')
 				return Promise.reject(new Error('Failed to get refresh token'))
 			}
 			if (retry === 1) {
