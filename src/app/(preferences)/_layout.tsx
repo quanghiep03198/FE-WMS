@@ -1,5 +1,5 @@
 import { useAuth } from '@/common/hooks/use-auth'
-import Loading from '@/components/shared/loading'
+import env from '@/common/utils/env'
 import { AuthService } from '@/services/auth.service'
 import { ErrorComponentProps, Outlet, createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
@@ -10,7 +10,7 @@ import LayoutComposition from './_components/_partials/-layout-composition'
 
 export const Route = createFileRoute('/(preferences)/_layout')({
 	component: Layout,
-	loader: AuthService.getUser,
+	loader: AuthService.profile,
 	errorComponent: AuthenticationError,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/(preferences)/_layout')({
 			})
 	},
 	wrapInSuspense: true,
-	pendingComponent: Loading
+	staleTime: +env('VITE_DEFAULT_TTL', 300_000)
 })
 
 function Layout() {
