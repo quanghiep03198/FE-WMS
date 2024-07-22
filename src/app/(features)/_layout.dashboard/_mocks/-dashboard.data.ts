@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 
 const generateRandomPhone = (prefix = '09') => String(prefix + Math.floor(Math.random() * 100000000))
-const generateRandomDealValue = () =>
+export const generateRandomDealValue = () =>
 	new Intl.NumberFormat(undefined, {
 		style: 'currency',
 		currency: 'VND',
