@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useInViewport, useMemoizedFn } from 'ahooks'
 import { MutableRefObject, createContext, useContext, useRef, useState } from 'react'
 import CTASection from '../_components/-cta-section'
@@ -8,7 +9,7 @@ import SupportSection from '../_components/-support-section'
 type TNavigationLink = {
 	title: string
 	href: 'cta' | 'company' | 'outstanding-features' | 'support' | 'faqs'
-	Component: React.FC
+	SectionComponent: React.FunctionComponent
 }
 
 type TPageContext = {
@@ -23,46 +24,46 @@ export const navigationConfig: TNavigationLink[] = [
 	{
 		title: 'Intro',
 		href: 'cta',
-		Component: CTASection
+		SectionComponent: CTASection
 	},
 	{
 		title: 'Features',
 		href: 'outstanding-features',
-		Component: FeaturesSection
+		SectionComponent: FeaturesSection
 	},
 	{
 		title: 'Support',
 		href: 'support',
-		Component: SupportSection
+		SectionComponent: SupportSection
 	},
 	{
 		title: 'FAQs',
 		href: 'faqs',
-		Component: FAQsSection
+		SectionComponent: FAQsSection
 	}
 ]
 
 const PageContext = createContext<TPageContext>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+	const [activeMenu, setActiveMenu] = useState(navigationConfig[0]?.href)
 	const menuRef = useRef<HTMLDivElement[]>([])
 	const contentScrollRef = useRef<HTMLDivElement>(null)
 	const parentScrollRef = useRef<HTMLDivElement>(null)
-
-	const [activeMenu, setActiveMenu] = useState(navigationConfig[0]?.href)
+	const navigate = useNavigate()
 
 	const callback = useMemoizedFn((entry) => {
 		if (entry.isIntersecting) {
-			const active = entry.target.getAttribute('id') || ''
+			const active = entry.target.getAttribute('id') ?? ''
 			setActiveMenu(active)
+			// navigate({ hash: active })
 		}
 	})
 
 	const handleMenuClick = useMemoizedFn((index) => {
 		const contentEl = contentScrollRef.current
-		const top = menuRef.current[index]?.offsetTop
 		contentEl?.scrollTo({
-			top,
+			top: menuRef.current[index]?.offsetTop,
 			behavior: 'smooth'
 		})
 	})

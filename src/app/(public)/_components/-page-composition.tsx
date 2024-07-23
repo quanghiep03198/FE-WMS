@@ -8,15 +8,15 @@ const PageComposition: React.FC = () => {
 
 	return (
 		<Container
-			ref={(e) => {
-				parentScrollRef.current = e
+			ref={(el: HTMLDivElement) => {
+				parentScrollRef.current = el
 			}}>
 			<Header />
 			<Main
-				ref={(e) => {
-					contentScrollRef.current = e
+				ref={(el: HTMLDivElement) => {
+					contentScrollRef.current = el
 				}}>
-				{navigationConfig.map(({ href, Component }, index) => (
+				{navigationConfig.map(({ href, SectionComponent: Component }, index) => (
 					<Wrapper
 						id={href}
 						key={href}
@@ -27,7 +27,6 @@ const PageComposition: React.FC = () => {
 					</Wrapper>
 				))}
 			</Main>
-
 			<Footer />
 		</Container>
 	)
