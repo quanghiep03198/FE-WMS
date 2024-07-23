@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
 			if (!user) {
 				controller.abort()
 				AuthService.logout()
-				return Promise.reject(new Error('User could not not found'))
+				return Promise.reject(new Error('User could not be found'))
 			}
 			if (retry > 1) {
 				controller.abort()

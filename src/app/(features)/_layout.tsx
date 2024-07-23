@@ -1,4 +1,5 @@
 import env from '@/common/utils/env'
+import Loading from '@/components/shared/loading'
 import { AuthService } from '@/services/auth.service'
 import { Outlet, createFileRoute, redirect, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
@@ -10,10 +11,11 @@ import Navbar from './_components/_partials/-navbar'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
-	loader: AuthService.profile,
+	pendingComponent: Loading,
 	errorComponent: AuthenticationError,
+	loader: AuthService.profile,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
-		if (!isAuthenticated) redirect({ to: '/login' })
+		if (!isAuthenticated) throw redirect({ to: '/login' })
 	},
 	wrapInSuspense: true,
 	staleTime: +env('VITE_DEFAULT_TTL', 300_000)
@@ -40,6 +42,7 @@ function Layout() {
 
 function AuthenticationError({ reset }: ErrorComponentProps) {
 	const router = useRouter()
+
 	router.invalidate().finally(() => {
 		reset()
 		AuthService.logout()

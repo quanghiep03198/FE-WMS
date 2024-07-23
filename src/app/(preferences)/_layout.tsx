@@ -52,6 +52,7 @@ function Layout() {
 
 function AuthenticationError({ reset }: ErrorComponentProps) {
 	const router = useRouter()
+
 	router.invalidate().finally(() => {
 		reset()
 		AuthService.logout()
