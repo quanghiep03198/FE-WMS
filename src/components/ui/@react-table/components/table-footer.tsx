@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
@@ -20,4 +20,4 @@ function TableFooter({
 	)
 }
 
-export default memo(TableFooter)
+export default TableFooter
