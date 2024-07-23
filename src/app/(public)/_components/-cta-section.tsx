@@ -1,17 +1,18 @@
 import { cn } from '@/common/utils/cn'
+import env from '@/common/utils/env'
 import { Div, Icon, Typography, buttonVariants } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import { useRef } from 'react'
 import BrowserMockup from './-browser-mockup'
 
-export default function HeroSection() {
+const CTASection: React.FC = () => {
 	const sectionRef = useRef<HTMLDivElement>(null)
 
 	return (
 		<Div
+			id='cta'
 			ref={sectionRef}
 			as='section'
-			id='cta'
 			className='relative mx-auto flex min-h-[calc(100vh-10rem)] w-full max-w-7xl flex-grow flex-col items-center gap-20 px-6 py-20 sm:px-4 xl:flex-row xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center text-center xl:items-start xl:text-left'>
 				<Link
@@ -23,7 +24,7 @@ export default function HeroSection() {
 						})
 					)}>
 					<Icon name='Tags' size={20} />
-					Introducing version 1.0.0
+					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Link>
 
@@ -33,7 +34,7 @@ export default function HeroSection() {
 
 				<Typography
 					variant='p'
-					className='mx-auto mb-14 max-w-4xl leading-relaxed tracking-wide sm:mb-10 xl:max-w-6xl xl:text-lg'>
+					className='mx-auto mb-10 max-w-4xl leading-relaxed tracking-wide xl:max-w-6xl xl:text-lg'>
 					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 					comprehensive system provides the tools you need to manage your warehouse effortlessly.
 				</Typography>
@@ -56,3 +57,5 @@ export default function HeroSection() {
 		</Div>
 	)
 }
+
+export default CTASection

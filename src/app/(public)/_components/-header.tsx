@@ -20,29 +20,12 @@ import {
 import { Link } from '@tanstack/react-router'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-
-const navigationLinks = [
-	{
-		title: 'Company',
-		href: 'company'
-	},
-	{
-		title: 'Features',
-		href: 'outstanding-features'
-	},
-	{
-		title: 'Support',
-		href: 'support'
-	},
-	{
-		title: 'FAQs',
-		href: 'faqs'
-	}
-]
+import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
 	const { isAuthenticated } = useAuth()
 	const { t } = useTranslation()
+	const { activeMenu, handleMenuClick } = usePageContext()
 
 	return (
 		<Div className='sticky top-0 z-20 h-16 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
@@ -64,12 +47,14 @@ const Header: React.FunctionComponent = () => {
 				</Div>
 
 				<Div className='flex flex-1 items-center justify-center gap-x-2 rounded-full text-sm font-medium sm:hidden md:hidden'>
-					{navigationLinks.map((item, index) => (
+					{navigationConfig.map((item, index) => (
 						<Link
 							resetScroll={false}
 							hash={item.href}
 							key={index}
+							onClick={() => handleMenuClick(index)}
 							className={cn(
+								activeMenu === item.href && 'underline',
 								buttonVariants({
 									variant: 'link',
 									className: 'text-foreground'
@@ -126,13 +111,16 @@ function MenuDropdown() {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='start' className='w-60'>
 				<DropdownMenuLabel asChild>
-					<Link to='/' className='inline-flex items-center gap-x-3'>
+					<Link
+						to='/'
+						activeProps={{ className: 'bg-primary text-primary' }}
+						className='inline-flex items-center gap-x-3'>
 						<Icon name='Boxes' strokeWidth={1} stroke='hsl(var(--primary))' size={28} />
 						<AppLogo />
 					</Link>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{navigationLinks.map((item, index) => (
+				{navigationConfig.map((item, index) => (
 					<DropdownMenuItem asChild key={index}>
 						<Link hash={item.href}>{item.title}</Link>
 					</DropdownMenuItem>

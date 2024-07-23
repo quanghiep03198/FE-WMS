@@ -1,16 +1,11 @@
 import env from '@/common/utils/env'
 import { Div, Icon, Typography } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
-import { memo, useRef } from 'react'
-import { useScrollIntoView } from '..'
+import { memo } from 'react'
 
 const SupportSection: React.FunctionComponent = () => {
-	const sectionRef = useRef<HTMLDivElement>(null)
-
-	useScrollIntoView({ hashMatch: 'support', target: sectionRef.current })
-
 	return (
-		<Div ref={sectionRef} as='section' className='relative flex flex-grow items-center justify-center px-6 sm:px-4'>
+		<Div id='cta' as='section' className='relative flex flex-grow items-center justify-center px-6 sm:px-4'>
 			<Div className='mt-20 max-w-7xl space-y-16'>
 				<Div className='space-y-4 text-center'>
 					<Typography variant='h3'>Contact support</Typography>

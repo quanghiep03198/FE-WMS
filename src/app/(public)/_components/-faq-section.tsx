@@ -1,6 +1,4 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui'
-import { useRef } from 'react'
-import { useScrollIntoView } from '..'
 
 const faqs = [
 	{
@@ -30,13 +28,9 @@ const faqs = [
 ]
 
 const FAQsSection: React.FunctionComponent = () => {
-	const sectionRef = useRef<HTMLDivElement>(null)
-
-	useScrollIntoView({ hashMatch: 'faqs', target: sectionRef.current })
-
 	return (
 		<Div
-			ref={sectionRef}
+			id='faqs'
 			as='section'
 			className='relative z-0 mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
 			<Typography variant='h3'>Frequently asked questions</Typography>

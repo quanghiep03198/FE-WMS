@@ -1,6 +1,4 @@
 import { Div, Icon, TIconProps, Typography } from '@/components/ui'
-import { useRef } from 'react'
-import { useScrollIntoView } from '..'
 
 type FeatureItemProps = {
 	icon: TIconProps['name']
@@ -30,16 +28,9 @@ const mainFeatures: Array<FeatureItemProps> = [
 ]
 
 const FeaturesSection: React.FunctionComponent = () => {
-	const sectionRef = useRef<HTMLDivElement>(null)
-
-	useScrollIntoView({
-		hashMatch: 'outstanding-features',
-		target: sectionRef.current
-	})
-
 	return (
 		<Div
-			ref={sectionRef}
+			id='outstanding-features'
 			as='section'
 			className='relative mx-auto flex max-w-7xl flex-grow items-center justify-center px-6 sm:px-4'>
 			<Div className='space-y-20'>
