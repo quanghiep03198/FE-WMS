@@ -15,7 +15,7 @@ import { useShallow } from 'zustand/react/shallow'
 import AppLogo from '../../../_components/_shared/-app-logo'
 import { useLayoutStore } from '../../_stores/-layout.store'
 
-type NavLinkProps = { navSidebarOpen: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
+type NavLinkProps = { open: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
@@ -50,7 +50,7 @@ const NavSidebar: React.FC = () => {
 	/**
 	 * @private
 	 */
-	const _navSidebarOpen = useMemo(() => navSidebarOpen || isLargeScreen, [navSidebarOpen, isLargeScreen])
+	const open = useMemo(() => navSidebarOpen || isLargeScreen, [navSidebarOpen, isLargeScreen])
 
 	if (isSmallScreen || isMediumScreen) return null
 
@@ -59,20 +59,17 @@ const NavSidebar: React.FC = () => {
 			as='aside'
 			className={cn(
 				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden',
-				_navSidebarOpen ? 'w-16 items-center' : 'items-stretch xl:w-80 xxl:w-88'
+				open ? 'w-16 items-center' : 'items-stretch xl:w-80 xxl:w-88'
 			)}>
 			<Link
 				to='/dashboard'
 				preload={false}
-				className={cn(
-					'flex h-20 items-center',
-					!_navSidebarOpen ? 'gap-x-3 px-2' : 'aspect-square justify-center'
-				)}>
+				className={cn('flex h-20 items-center', !open ? 'gap-x-3 px-2' : 'aspect-square justify-center')}>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
 				<Div
 					className={cn(
 						'space-y-0.5 transition-[width_opacity]',
-						_navSidebarOpen ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
+						open ? 'w-0 opacity-0 duration-150' : 'w-auto opacity-100 duration-200'
 					)}>
 					<AppLogo />
 
@@ -82,12 +79,12 @@ const NavSidebar: React.FC = () => {
 				</Div>
 			</Link>
 
-			<Menu aria-expanded={_navSidebarOpen} role='menu'>
+			<Menu aria-expanded={open} role='menu'>
 				{navigationConfig
 					.filter((item) => item.type === 'main')
 					.map((item) => (
 						<MenuItem key={item.id}>
-							<NavLink navSidebarOpen={_navSidebarOpen} {...item} />
+							<NavLink open={open} {...item} />
 						</MenuItem>
 					))}
 				<Separator className='my-4' />
@@ -98,7 +95,7 @@ const NavSidebar: React.FC = () => {
 					})
 					.map((item) => (
 						<MenuItem role='menuItem' tabIndex={0} key={item.id}>
-							<NavLink navSidebarOpen={_navSidebarOpen} {...item} />
+							<NavLink open={open} {...item} />
 						</MenuItem>
 					))}
 			</Menu>
@@ -106,7 +103,7 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ navSidebarOpen, path, title, icon }) => {
+const NavLink: React.FC<NavLinkProps> = ({ open: navSidebarOpen, path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
 
 	return (
