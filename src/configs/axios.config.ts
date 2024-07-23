@@ -42,7 +42,9 @@ axiosInstance.interceptors.response.use(
 			console.error('[ERROR] ::: Log in session has expired.')
 			const user = AuthService.getUser()
 			if (!user) {
-				return Promise.reject(error)
+				controller.abort()
+				AuthService.logout()
+				return Promise.reject(new Error('User could not not found'))
 			}
 			if (retry > 1) {
 				controller.abort()
