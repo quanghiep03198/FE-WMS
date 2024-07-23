@@ -1,3 +1,4 @@
+import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	Div,
@@ -57,18 +58,34 @@ const ScanningActions: React.FC = () => {
 					onValueChange={(value) => setConnection(value)}>
 					<SelectTrigger className='w-full max-w-56'>
 						<Div className='flex flex-1 items-center gap-x-3'>
-							<Icon name='Database' size={20} stroke='hsl(var(--primary))' />
-							<SelectValue placeholder={isLoading ? 'Loading ...' : 'Select database'} />
+							<Icon
+								name={isLoading ? 'LoaderCircle' : 'Database'}
+								className={cn(isLoading && 'animate-[spin_1.5s_linear_infinite]')}
+								size={18}
+								stroke='hsl(var(--primary))'
+							/>
+							<SelectValue
+								placeholder={
+									isLoading
+										? 'Loading ...'
+										: Array.isArray(databases) && databases.length > 0 && 'Select database'
+								}
+							/>
 						</Div>
 					</SelectTrigger>
 					<SelectContent>
 						<SelectGroup>
-							{Array.isArray(databases) &&
+							{!isLoading && Array.isArray(databases) && databases.length > 0 ? (
 								databases.map((item) => (
 									<SelectItem key={item} value={item}>
 										{item}
 									</SelectItem>
-								))}
+								))
+							) : (
+								<SelectItem disabled value={isLoading ? null : undefined}>
+									No data
+								</SelectItem>
+							)}
 						</SelectGroup>
 					</SelectContent>
 				</Select>

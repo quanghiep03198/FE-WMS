@@ -7,7 +7,7 @@ export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY' as co
 
 export const useGetUnscannedEPC = (params: { connection: string; scanningStatus: ScanningStatus }) => {
 	return useQuery({
-		queryKey: [RFID_EPC_PROVIDE_TAG],
+		queryKey: [RFID_EPC_PROVIDE_TAG, params.connection],
 		queryFn: () => RFIDService.getUnscannedEpc(params.connection),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds

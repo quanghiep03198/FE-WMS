@@ -1,6 +1,8 @@
 import { IElectronicProductCode } from '@/common/types/entities'
-import { useHistoryTravel, useResetState } from 'ahooks'
-import { createContext, useContext, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useDeepCompareEffect, useHistoryTravel, useMemoizedFn, useResetState } from 'ahooks'
+import { createContext, useContext, useState } from 'react'
+import { RFID_EPC_PROVIDE_TAG } from '../_composables/-use-rfid-api'
 
 export type ScanningStatus = 'scanning' | 'stopped' | 'finished' | undefined
 export type ScannedOrder = { orderCode: string; totalEPCs: number }
@@ -28,8 +30,8 @@ type TPageContext = {
 const PageContext = createContext<TPageContext>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [scanningStatus, setScanningStatus, resetScanningStatus] = useResetState<ScanningStatus>(undefined)
-	const [connection, setConnection, resetConnection] = useResetState<string>(undefined)
+	const [scanningStatus, setScanningStatus, resetScanningStatus] = useResetState<ScanningStatus | undefined>(undefined)
+	const [connection, setConnection] = useState<string | undefined>(undefined)
 	const [scannedEPCs, setScannedEPCs, resetScannedEPCs] = useResetState<IElectronicProductCode[]>([])
 	const {
 		value: scannedOrders,
@@ -41,18 +43,20 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		reset: resetScannedOrders
 	} = useHistoryTravel<ScannedOrder[]>([])
 	const [selectedOrder, setSelectedOrder, resetSeletedOrder] = useResetState<string>(undefined)
+	const queryClient = useQueryClient()
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		// Reset scanned result on scanning status is reset
 		if (typeof scanningStatus === 'undefined') {
 			resetScannedOrders([])
 			resetScannedEPCs()
 			resetSeletedOrder()
+			queryClient.removeQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
 			// resetConnection()
 		}
 	}, [scanningStatus])
 
-	const handleToggleScanning = () => {
+	const handleToggleScanning = useMemoizedFn(() => {
 		setScanningStatus((prev) => {
 			switch (true) {
 				case typeof prev === 'undefined':
@@ -63,7 +67,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 					return 'stopped'
 			}
 		})
-	}
+	})
 
 	return (
 		<PageContext.Provider

@@ -30,7 +30,7 @@ const matchWithSpecificOrder = (item, scannedOrders, selectedOrder) =>
 	item.mo_no === selectedOrder && scannedOrders.some((order) => item.mo_no === order.orderCode)
 
 const VIRTUAL_ITEM_SIZE = 40 as const
-const VIRTUAL_LIST_HEIGHT = 320 as const
+const VIRTUAL_LIST_HEIGHT = 384 as const
 
 const ScannedEPCsList: React.FC = () => {
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
@@ -62,13 +62,15 @@ const ScannedEPCsList: React.FC = () => {
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useDeepCompareEffect(() => {
 		if (scanningStatus === 'scanning' && !isEqual(scannedEPCs, originalData)) {
-			const originalOrders = [...new Set(data?.map((item) => item.mo_no))]?.map(
-				(order) =>
-					({
-						orderCode: order,
-						totalEPCs: originalData.filter((item) => item.mo_no === order)?.length
-					}) satisfies ScannedOrder
-			)
+			const originalOrders = [...new Set(data?.map((item) => item.mo_no))]
+				?.map(
+					(order) =>
+						({
+							orderCode: order,
+							totalEPCs: originalData.filter((item) => item.mo_no === order)?.length
+						}) satisfies ScannedOrder
+				)
+				.sort((a, b) => (a.totalEPCs < b.totalEPCs ? 1 : a.totalEPCs === b.totalEPCs ? 0 : -1))
 			setScannedEPCs(originalData)
 			resetScannedOrders(originalOrders)
 			// Alert if there are more than 3 orders scanned
@@ -126,7 +128,7 @@ const ScannedEPCsList: React.FC = () => {
 						onValueChange={(value) => setSelectedOrder(value)}>
 						<SelectTrigger className='basis-52 flex justify-start gap-x-2'>
 							<Icon name='ListFilter' />
-							<SelectValue placeholder='Select' />
+							<SelectValue placeholder={selectedOrder && 'Select'} />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
@@ -147,7 +149,7 @@ const ScannedEPCsList: React.FC = () => {
 											))}
 									</Fragment>
 								) : (
-									<SelectItem disabled value={null}>
+									<SelectItem disabled value={undefined}>
 										No data
 									</SelectItem>
 								)}
