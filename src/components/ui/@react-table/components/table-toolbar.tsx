@@ -26,8 +26,6 @@ function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 	return (
 		<Div className='flex justify-end'>
 			<Div role='toolbar' className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
-				{Slot && <Slot table={table} />}
-				<GlobalFilterPopover />
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
 						variant='destructive'
@@ -37,6 +35,8 @@ function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 						<Icon name='X' />
 					</Button>
 				</Tooltip>
+				{Slot && <Slot table={table} />}
+				<GlobalFilterPopover />
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
 					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 						<Button variant='outline' onClick={() => setIsFilterOpened(!isFilterOpened)} size='icon'>
