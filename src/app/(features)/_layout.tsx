@@ -43,7 +43,7 @@ function AuthenticationError({ reset }: ErrorComponentProps) {
 	router.invalidate().finally(() => {
 		reset()
 		AuthService.logout()
-		// router.navigate({ to: '/login' })
+		router.navigate({ to: '/login' })
 	})
 
 	return null
