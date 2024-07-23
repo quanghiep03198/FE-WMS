@@ -27,7 +27,7 @@ const SupportSection: React.FunctionComponent = () => {
 						</Typography>
 
 						<a
-							href={env('VITE_REPORT_BUG_URL')}
+							href={env('VITE_REPORT_BUG_URL', '#')}
 							target='_blank'
 							className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
 							Report a bug <Icon name='ArrowRight' size={12} />

@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useInViewport, useMemoizedFn } from 'ahooks'
 import { MutableRefObject, createContext, useContext, useRef, useState } from 'react'
 import CTASection from '../_components/-cta-section'
@@ -50,20 +49,18 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	const menuRef = useRef<HTMLDivElement[]>([])
 	const contentScrollRef = useRef<HTMLDivElement>(null)
 	const parentScrollRef = useRef<HTMLDivElement>(null)
-	const navigate = useNavigate()
 
 	const callback = useMemoizedFn((entry) => {
 		if (entry.isIntersecting) {
 			const active = entry.target.getAttribute('id') ?? ''
 			setActiveMenu(active)
-			// navigate({ hash: active })
 		}
 	})
 
 	const handleMenuClick = useMemoizedFn((index) => {
 		const contentEl = contentScrollRef.current
 		contentEl?.scrollTo({
-			top: menuRef.current[index]?.offsetTop,
+			top: menuRef.current[index]?.offsetTop - (window.outerHeight - menuRef.current[index]?.offsetHeight) / 2,
 			behavior: 'smooth'
 		})
 	})

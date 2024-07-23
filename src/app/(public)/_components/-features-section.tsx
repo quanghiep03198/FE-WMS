@@ -32,7 +32,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 		<Div
 			id='outstanding-features'
 			as='section'
-			className='relative mx-auto flex max-w-7xl flex-grow items-center justify-center px-6 sm:px-4'>
+			className='relative mx-auto flex max-w-7xl items-center justify-center px-6 sm:px-4'>
 			<Div className='space-y-20'>
 				<Div className='max-w-4xl text-left'>
 					<Typography color='primary' variant='small' className='mb-2 !text-base font-medium'>

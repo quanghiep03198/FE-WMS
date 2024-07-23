@@ -61,28 +61,17 @@ const NavHeaderMenu: React.FC = memo(() => {
 	return (
 		<Div className='flex flex-1 items-center justify-center gap-x-2 rounded-full text-sm font-medium sm:hidden md:hidden'>
 			{navigationConfig.map((item, index) => (
-				<Link
-					resetScroll={false}
-					hash={item.href}
+				<Button
+					variant='link'
 					key={index}
 					onClick={() => handleMenuClick(index)}
-					className={cn(
-						activeMenu === item.href && 'underline',
-						buttonVariants({
-							variant: 'link',
-							className: 'text-foreground'
-						})
-					)}>
+					className={cn(activeMenu === item.href && 'underline')}>
 					{item.title}
-				</Link>
+				</Button>
 			))}
 		</Div>
 	)
 })
-
-/**
- * browser history
- */
 
 const NavHeaderActions: React.FC = memo(() => {
 	const { isAuthenticated } = useAuth()

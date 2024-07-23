@@ -7,33 +7,27 @@ const PageComposition: React.FC = () => {
 	const { menuRef, parentScrollRef, contentScrollRef } = usePageContext()
 
 	return (
-		<Container
-			ref={(el: HTMLDivElement) => {
-				parentScrollRef.current = el
-			}}>
-			<Header />
-			<Main
-				ref={(el: HTMLDivElement) => {
-					contentScrollRef.current = el
-				}}>
-				{navigationConfig.map(({ href, SectionComponent: Component }, index) => (
+		<Container ref={parentScrollRef}>
+			<Main ref={contentScrollRef}>
+				<Header />
+				{navigationConfig.map(({ href, SectionComponent }, index) => (
 					<Wrapper
 						id={href}
 						key={href}
 						ref={(el: HTMLDivElement) => {
 							menuRef.current[index] = el
 						}}>
-						<Component />
+						<SectionComponent />
 					</Wrapper>
 				))}
+				<Footer />
 			</Main>
-			<Footer />
 		</Container>
 	)
 }
 
-const Container = tw.div`relative h-screen z-10 overflow-y-auto scroll-m-2 scroll-smooth text-foreground antialiased scrollbar`
-const Main = tw.div`mb-20 space-y-64`
-const Wrapper = tw.div`relative h-full w-full`
+const Container = tw.div`relative h-screen z-10 overflow-hidden scroll-m-2 text-foreground antialiased`
+const Main = tw.div`overflow-y-auto h-full scroll-smooth scrollbar-none`
+const Wrapper = tw.div`relative w-full mb-64`
 
 export default PageComposition
