@@ -26,26 +26,35 @@ type TransformResponseFn<T> = UseQueryOptions<
 
 type TQueryFnData = Awaited<Promise<ResponseBody<IWarehouseStorage[]>>>
 
-type UseGetWarehouseStorageQueryOptions<T> = Partial<
-	UseQueryOptions<TQueryFnData, AxiosError<unknown, any>, ReturnType<TransformResponseFn<T>>, TQueryKey>
+type UseGetWarehouseStorageQueryOptions<T> = UseQueryOptions<
+	TQueryFnData,
+	AxiosError<unknown, any>,
+	ReturnType<TransformResponseFn<T>>,
+	TQueryKey
 >
 
-export function getWarehouseStorageOptions<T>(warehouseNum: string, options?: UseGetWarehouseStorageQueryOptions<T>) {
+export function getWarehouseStorageOptions<T>(
+	warehouseNum: string,
+	options?: Partial<UseGetWarehouseStorageQueryOptions<T>>
+) {
 	return {
 		queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
 		placeholderData: keepPreviousData,
 		...options
-	}
+	} as Required<UseGetWarehouseStorageQueryOptions<T>>
 }
 
-export function useGetWarehouseStorageQuery<T>(warehouseNum: string, options?: UseGetWarehouseStorageQueryOptions<T>) {
+export function useGetWarehouseStorageQuery<T>(
+	warehouseNum: string,
+	options?: Partial<UseGetWarehouseStorageQueryOptions<T>>
+) {
 	const defaultOptions = getWarehouseStorageOptions<T>(warehouseNum)
 
 	const queryOptions = {
 		...defaultOptions,
 		...options
-	} as UseQueryOptions<TQueryFnData, AxiosError<unknown, any>, T, TQueryKey>
+	}
 
 	return useQuery(queryOptions)
 }
