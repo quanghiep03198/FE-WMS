@@ -2,7 +2,6 @@ import { IWarehouseStorage } from '@/common/types/entities'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import {
 	keepPreviousData,
-	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -14,36 +13,44 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PartialStorageFormValue } from '../_schemas/-warehouse.schema'
 
-export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE'
+export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE' as const
 
-type TQueryKey = readonly [typeof WAREHOUSE_STORAGE_PROVIDE_TAG, string]
+type TQueryKey = [typeof WAREHOUSE_STORAGE_PROVIDE_TAG, string]
 
-export function useGetWarehouseStorageQuery<TData = ResponseBody<IWarehouseStorage[]>>(
-	warehouseNum: string,
-	options: Partial<UseQueryOptions<ResponseBody<IWarehouseStorage[]>, AxiosError<unknown, any>, TData, TQueryKey>>
-) {
-	return useQuery({
+type TransformResponseFn<T> = UseQueryOptions<
+	ResponseBody<IWarehouseStorage[]>,
+	AxiosError<unknown, any>,
+	T,
+	TQueryKey
+>['select']
+
+type TQueryFnData = Awaited<Promise<ResponseBody<IWarehouseStorage[]>>>
+
+type UseGetWarehouseStorageQueryOptions<T> = Partial<
+	UseQueryOptions<TQueryFnData, AxiosError<unknown, any>, ReturnType<TransformResponseFn<T>>, TQueryKey>
+>
+
+export function getWarehouseStorageOptions<T>(warehouseNum: string, options?: UseGetWarehouseStorageQueryOptions<T>) {
+	return {
 		queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
 		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
-		refetchOnMount: 'always',
 		placeholderData: keepPreviousData,
 		...options
-	})
+	}
 }
 
-export const getWarehouseStorageQueryOptions = (warehouseNum: string) =>
-	queryOptions({
-		queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
-		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
-		placeholderData: keepPreviousData,
-		select: (response) =>
-			Array.isArray(response.metadata)
-				? response.metadata.map((item) => ({ label: item.storage_name, value: item.storage_num }))
-				: []
-	})
+export function useGetWarehouseStorageQuery<T>(warehouseNum: string, options?: UseGetWarehouseStorageQueryOptions<T>) {
+	const defaultOptions = getWarehouseStorageOptions<T>(warehouseNum)
 
-// Update warehouse storage location
-export const useUpdateStorageMutation = ({ warehouseNum }: { warehouseNum: string }) => {
+	const queryOptions = {
+		...defaultOptions,
+		...options
+	} as UseQueryOptions<TQueryFnData, AxiosError<unknown, any>, T, TQueryKey>
+
+	return useQuery(queryOptions)
+}
+
+export function useUpdateStorageMutation({ warehouseNum }: { warehouseNum: string }) {
 	const queryClient = useQueryClient()
 	const { t } = useTranslation()
 
@@ -60,7 +67,7 @@ export const useUpdateStorageMutation = ({ warehouseNum }: { warehouseNum: strin
 	})
 }
 
-export const useDeleteStorageMutation = (
+export function useDeleteStorageMutation(
 	{ warehouseNum }: { warehouseNum: string },
 	{
 		onSettled
@@ -70,7 +77,7 @@ export const useDeleteStorageMutation = (
 		unknown,
 		string | number
 	>
-) => {
+) {
 	const queryClient = useQueryClient()
 	const { t } = useTranslation()
 

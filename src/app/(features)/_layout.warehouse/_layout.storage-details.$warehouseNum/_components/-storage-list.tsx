@@ -5,12 +5,11 @@ import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/compon
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { Fragment, memo, useCallback, useMemo, useRef, useState } from 'react'
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	useDeleteStorageMutation,
@@ -20,19 +19,13 @@ import {
 import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
 import { usePageContext } from '../../_contexts/-page-context'
 import StorageRowActions from './-storage-row-actions'
-
 // #endregion
-
-type StorageListProps = {
-	onFormOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-}
 
 const StorageList: React.FC = () => {
 	const { t, i18n } = useTranslation(['ns_common'])
 	const tableRef = useRef<Table<any>>()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const { warehouseNum } = useParams({ strict: false })
-	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 
 	const { dispatch } = usePageContext()
@@ -47,7 +40,7 @@ const StorageList: React.FC = () => {
 
 	// Get current warehouse's storage locations
 	const { data, isLoading, refetch } = useGetWarehouseStorageQuery<IWarehouseStorage[]>(warehouseNum, {
-		select: (response: ResponseBody<IWarehouseStorage[]>): IWarehouseStorage[] => {
+		select: (response) => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({
 						...item,
@@ -290,4 +283,4 @@ const StorageList: React.FC = () => {
 	)
 }
 
-export default memo(StorageList)
+export default StorageList

@@ -6,8 +6,8 @@ import { IWarehouseStorage } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class WarehouseStorageService {
-	static async getWarehouseStorages(warehouseNum: string) {
-		return await axiosInstance.get<string, ResponseBody<IWarehouseStorage[]>>(
+	static async getWarehouseStorages(warehouseNum: string): Promise<ResponseBody<IWarehouseStorage[]>> {
+		return await axiosInstance.get<void, ResponseBody<IWarehouseStorage[]>>(
 			`/warehouse/storage-detail/${warehouseNum}`
 		)
 	}

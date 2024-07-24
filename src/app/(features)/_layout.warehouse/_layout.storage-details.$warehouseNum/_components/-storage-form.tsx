@@ -27,22 +27,16 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { WAREHOUSE_PROVIDE_TAG } from '../../_composables/-use-warehouse-api'
 import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
 import { usePageContext } from '../../_contexts/-page-context'
 import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../_schemas/-warehouse.schema'
 // #endregion
 
-// #region Type declarations
+// #region Component declaration
 export type FormValues<T> = Pick<IWarehouseStorage, 'storage_num'> &
 	(T extends CommonActions.CREATE ? Required<StorageFormValue> : PartialStorageFormValue)
 
-type WarehouseStorageFormDialogProps = {
-	open: boolean
-	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-}
-// #endregion
-
-// #region Component declaration
 const WarehouseStorageFormDialog: React.FC = () => {
 	const { warehouseNum } = useParams({ strict: false })
 	const { t } = useTranslation()
@@ -58,7 +52,7 @@ const WarehouseStorageFormDialog: React.FC = () => {
 	const queryClient = useQueryClient()
 
 	const { data: warehouse } = useSuspenseQuery({
-		queryKey: ['warehouses', warehouseNum],
+		queryKey: [WAREHOUSE_PROVIDE_TAG, warehouseNum],
 		queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum),
 		select: (response) => response.metadata
 	})
