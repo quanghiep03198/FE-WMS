@@ -114,7 +114,6 @@ const NavLink: React.FC<NavLinkProps> = ({ open: navSidebarOpen, path, title, ic
 				to={path}
 				role='link'
 				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}
-				preload={false}
 				className={cn(
 					buttonVariants({
 						variant: 'ghost',
