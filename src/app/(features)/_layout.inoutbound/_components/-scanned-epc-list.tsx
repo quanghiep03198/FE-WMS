@@ -199,7 +199,7 @@ const ScannedEPCsList: React.FC = () => {
 						<Div className='flex items-center gap-x-2 overflow-x-auto overflow-y-auto scrollbar-none flex-1 h-full'>
 							{typeof scanningStatus !== 'undefined' &&
 								Array.isArray(scannedOrders) &&
-								scannedOrders.reverse().map((item) => (
+								scannedOrders.map((item) => (
 									<Badge key={item.orderCode} variant='secondary' className='relative group cursor-default'>
 										{item.orderCode ?? 'Unknown'}
 										{scanningStatus === 'finished' && (

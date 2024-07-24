@@ -25,7 +25,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetWarehouseQuery } from '../../_layout.warehouse/_composables/-use-warehouse-api'
 import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_composables/-use-warehouse-storage-api'
-import { RFID_EPC_PROVIDE_TAG, useStoreEpcMutation } from '../_composables/-use-rfid-api'
+import { RFID_EPC_PROVIDE_TAG, UNKNOWN_ORDER, useStoreEpcMutation } from '../_composables/-use-rfid-api'
 import { usePageStore } from '../_contexts/-page.context'
 import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../_schemas/-epc-inoutbound.schema'
 
@@ -100,7 +100,7 @@ const InoutboundForm: React.FC = () => {
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
-				mo_no: selectedOrder,
+				mo_no: selectedOrder === UNKNOWN_ORDER ? null : selectedOrder,
 				host: connection
 			})
 			const filteredOrders = scannedOrders.filter((item) => item.orderCode !== selectedOrder)
@@ -117,6 +117,8 @@ const InoutboundForm: React.FC = () => {
 			return toast.error(t('ns_common:notification.error'), { id: loading })
 		}
 	}
+
+	console.log(selectedOrder)
 
 	return (
 		<FormProvider {...form}>

@@ -5,13 +5,18 @@ import { ScanningStatus } from '../_contexts/-page.context'
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
 export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY' as const
 
+export const UNKNOWN_ORDER = 'Unknown' as const
+
 export const useGetUnscannedEPC = (params: { connection: string; scanningStatus: ScanningStatus }) => {
 	return useQuery({
 		queryKey: [RFID_EPC_PROVIDE_TAG, params.connection],
 		queryFn: () => RFIDService.getUnscannedEpc(params.connection),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
-		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
+		select: (response) =>
+			Array.isArray(response.metadata)
+				? response.metadata.map((item) => ({ ...item, mo_no: item.mo_no ?? UNKNOWN_ORDER }))
+				: []
 	})
 }
 
