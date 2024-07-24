@@ -74,8 +74,10 @@ npm run dev
 │       ├── en
 │       └── vi
 │   ├── mocks
-│   ├── schemas
+│   ├── providers
 │   ├── services
+│   ├── stores
+│   ├── stories
 │   ├── styles
 │   ├── _app.tsx
 │   └── main.tsx
