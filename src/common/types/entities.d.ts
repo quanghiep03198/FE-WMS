@@ -12,7 +12,7 @@ export interface IBaseEntity {
 }
 
 export interface IUser extends IBaseEntity, Pick<ICompany, 'company_code' | 'company_name'> {
-	user_code: string
+	username: string
 	display_name: string
 	password: string
 	employee_code: string
@@ -53,7 +53,7 @@ export interface IWarehouseStorage
 		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
 	storage_name: string
 	storage_num: string
-	type_storage: WarehouseStorageTypes
+	type_storage: WarehouseStorageTypes | string
 }
 
 export interface IEmployee extends IBaseEntity {
