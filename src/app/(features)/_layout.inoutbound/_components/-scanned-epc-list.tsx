@@ -25,12 +25,17 @@ import tw from 'tailwind-styled-components'
 import { useGetUnscannedEPC } from '../_composables/-use-rfid-api'
 import { ScannedOrder, usePageStore } from '../_contexts/-page.context'
 
-const matchAllOrders = (item, scannedOrders) => scannedOrders?.some((order) => item.mo_no === order.orderCode)
-const matchWithSpecificOrder = (item, scannedOrders, selectedOrder) =>
-	item.mo_no === selectedOrder && scannedOrders.some((order) => item.mo_no === order.orderCode)
+const matchWithAllOrders = (item, orderList) => {
+	return orderList?.some((order) => item.mo_no === order.orderCode)
+}
+
+const matchWithCurrentOrder = (item, orderList, currentOrder) => {
+	return item.mo_no === currentOrder && orderList.some((order) => item.mo_no === order.orderCode)
+}
 
 const VIRTUAL_ITEM_SIZE = 40 as const
 const VIRTUAL_LIST_HEIGHT = 384 as const
+const PRERENDERED_ITEMS = 5 as const
 
 const ScannedEPCsList: React.FC = () => {
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
@@ -61,13 +66,13 @@ const ScannedEPCsList: React.FC = () => {
 
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useDeepCompareEffect(() => {
-		if (scanningStatus === 'scanning' && !isEqual(scannedEPCs, originalData)) {
-			const originalOrders = [...new Set(data?.map((item) => item.mo_no))]
-				?.map(
+		if (scanningStatus === 'scanning' && Array.isArray(data) && !isEqual(scannedEPCs, originalData)) {
+			const originalOrders = [...new Set(data.map((item) => item.mo_no))]
+				.map(
 					(order) =>
 						({
 							orderCode: order,
-							totalEPCs: originalData.filter((item) => item.mo_no === order)?.length
+							totalEPCs: originalData.filter((item) => item.mo_no === order).length
 						}) satisfies ScannedOrder
 				)
 				.sort((a, b) => (a.totalEPCs < b.totalEPCs ? 1 : a.totalEPCs === b.totalEPCs ? 0 : -1))
@@ -79,13 +84,13 @@ const ScannedEPCsList: React.FC = () => {
 		}
 	}, [data, scanningStatus])
 
-	//
+	// Filter scanned result
 	useDeepCompareEffect(() => {
 		if (scanningStatus === 'stopped' || scanningStatus === 'finished') {
 			const filteredData = originalData.filter((item) =>
 				selectedOrder === 'all'
-					? matchAllOrders(item, scannedOrders)
-					: matchWithSpecificOrder(item, scannedOrders, selectedOrder)
+					? matchWithAllOrders(item, scannedOrders)
+					: matchWithCurrentOrder(item, scannedOrders, selectedOrder)
 			)
 			setScannedEPCs(filteredData)
 			setSelectedOrder(selectedOrder || (scannedOrders?.length > 0 ? 'all' : undefined))
@@ -108,7 +113,7 @@ const ScannedEPCsList: React.FC = () => {
 		containerTarget: containerRef,
 		wrapperTarget: wrapperRef,
 		itemHeight: VIRTUAL_ITEM_SIZE,
-		overscan: 5
+		overscan: PRERENDERED_ITEMS
 	})
 
 	return (
@@ -123,12 +128,12 @@ const ScannedEPCsList: React.FC = () => {
 						EPC Data
 					</Typography>
 					<Select
-						disabled={scanningStatus === 'scanning' || typeof scanningStatus === 'undefined'}
+						disabled={scanningStatus === 'scanning' || typeof scanningStatus === 'undefined'} // Disable selecting connection while scanning
 						value={selectedOrder}
 						onValueChange={(value) => setSelectedOrder(value)}>
 						<SelectTrigger className='basis-52 flex justify-start gap-x-2'>
 							<Icon name='ListFilter' />
-							<SelectValue placeholder={selectedOrder && 'Select'} />
+							<SelectValue placeholder={!selectedOrder && 'Select'} />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
@@ -236,6 +241,7 @@ const ScannedEPCsList: React.FC = () => {
 					</Typography>
 				</Div>
 			</Div>
+
 			{/* Confirm deleting all fetched orders and restart scanning progress */}
 			<ConfirmDialog
 				title={t('ns_inoutbound:notification.confirm_delete_all_mono.title')}

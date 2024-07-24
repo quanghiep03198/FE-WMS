@@ -31,6 +31,7 @@ const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = mem
 		const scannedCount = scannedEPCs?.length
 		const { t } = useTranslation()
 		const count = useReactive({ value: scannedEPCs?.length, duration: undefined })
+
 		// Counter increment/decrement effect
 		useInterval(() => {
 			if (scannedCount > count.value) {

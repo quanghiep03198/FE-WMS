@@ -32,7 +32,6 @@ import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from
 const InoutboundForm: React.FC = () => {
 	const [schema, setSchema] = useState<typeof inboundSchema | typeof outboundSchema>(inboundSchema)
 	const {
-		scannedEPCs,
 		scanningStatus,
 		connection,
 		scannedOrders,
@@ -46,7 +45,7 @@ const InoutboundForm: React.FC = () => {
 		resolver: zodResolver(schema),
 		defaultValues: {
 			rfid_status: FormActionEnum.IMPORT,
-			rfid_use: '',
+			rfid_use: undefined,
 			warehouse_num: undefined,
 			storage: undefined
 		},
@@ -91,12 +90,17 @@ const InoutboundForm: React.FC = () => {
 		form.reset({ ...form.getValues(), rfid_use: undefined, warehouse_num: undefined, storage: undefined })
 	}, [action, storageTypes])
 
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined')
+			form.reset({ ...form.getValues(), rfid_use: undefined, warehouse_num: undefined, storage: undefined })
+	}, [scanningStatus])
+
 	const handleSubmit = async (data: InboundFormValues): Promise<string | number> => {
 		const loading = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
-				epc_code: [...new Set(scannedEPCs.map((item) => item.epc_code))],
+				mo_no: selectedOrder,
 				host: connection
 			})
 			const filteredOrders = scannedOrders.filter((item) => item.orderCode !== selectedOrder)
@@ -146,8 +150,8 @@ const InoutboundForm: React.FC = () => {
 											</FormControl>
 											{t('ns_inoutbound:action_types.warehouse_input')}
 											<Icon
-												name='CircleCheckBig'
-												size={20}
+												name='Check'
+												size={16}
 												className={cn(
 													'ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200',
 													field.value === FormActionEnum.IMPORT && 'scale-100 opacity-100'
@@ -171,8 +175,8 @@ const InoutboundForm: React.FC = () => {
 											</FormControl>
 											{t('ns_inoutbound:action_types.warehouse_output')}
 											<Icon
-												name='CircleCheckBig'
-												size={20}
+												name='Check'
+												size={16}
 												className={cn(
 													'ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200',
 													field.value === FormActionEnum.EXPORT && 'scale-100 opacity-100'

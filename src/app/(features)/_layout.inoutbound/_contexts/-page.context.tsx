@@ -1,7 +1,7 @@
 import { IElectronicProductCode } from '@/common/types/entities'
 import { useQueryClient } from '@tanstack/react-query'
-import { useDeepCompareEffect, useHistoryTravel, useMemoizedFn, useResetState } from 'ahooks'
-import { createContext, useContext, useState } from 'react'
+import { useHistoryTravel, useMemoizedFn, useResetState, useUpdateEffect } from 'ahooks'
+import { createContext, useContext } from 'react'
 import { RFID_EPC_PROVIDE_TAG } from '../_composables/-use-rfid-api'
 
 export type ScanningStatus = 'scanning' | 'stopped' | 'finished' | undefined
@@ -23,6 +23,7 @@ type TPageContext = {
 	forward: () => void
 	resetScannedOrders: (initialData: Array<ScannedOrder>) => void
 	resetScanningStatus: () => void
+	resetConnection: () => void
 	forwardLength: number
 	backLength: number
 }
@@ -31,7 +32,7 @@ const PageContext = createContext<TPageContext>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [scanningStatus, setScanningStatus, resetScanningStatus] = useResetState<ScanningStatus | undefined>(undefined)
-	const [connection, setConnection] = useState<string | undefined>(undefined)
+	const [connection, setConnection, resetConnection] = useResetState<string>('')
 	const [scannedEPCs, setScannedEPCs, resetScannedEPCs] = useResetState<IElectronicProductCode[]>([])
 	const {
 		value: scannedOrders,
@@ -42,17 +43,16 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		forward,
 		reset: resetScannedOrders
 	} = useHistoryTravel<ScannedOrder[]>([])
-	const [selectedOrder, setSelectedOrder, resetSeletedOrder] = useResetState<string>(undefined)
+	const [selectedOrder, setSelectedOrder, resetSeletedOrder] = useResetState<string>('')
 	const queryClient = useQueryClient()
 
-	useDeepCompareEffect(() => {
+	useUpdateEffect(() => {
 		// Reset scanned result on scanning status is reset
 		if (typeof scanningStatus === 'undefined') {
 			resetScannedOrders([])
 			resetScannedEPCs()
 			resetSeletedOrder()
 			queryClient.removeQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
-			// resetConnection()
 		}
 	}, [scanningStatus])
 
@@ -83,6 +83,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				forward,
 				resetScannedOrders,
 				resetScanningStatus,
+				resetConnection,
 				setScannedEPCs,
 				setScannedOrders,
 				setConnection,

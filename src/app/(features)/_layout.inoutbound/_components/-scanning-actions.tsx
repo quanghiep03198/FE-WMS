@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	ButtonProps,
 	Div,
 	Icon,
 	Select,
@@ -11,17 +12,40 @@ import {
 	SelectValue
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
+import { useMemoizedFn } from 'ahooks'
 import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetDatabaseConnnection, useSyncEpcOrderCodeMutation } from '../_composables/-use-rfid-api'
+import {
+	RFID_EPC_PROVIDE_TAG,
+	useGetDatabaseConnnection,
+	useSyncEpcOrderCodeMutation
+} from '../_composables/-use-rfid-api'
 import { usePageStore } from '../_contexts/-page.context'
 
+type TScanningButtonProps = {
+	children: string
+	variant: ButtonProps['variant']
+	icon: React.ComponentProps<typeof Icon>['name']
+	disabled: boolean
+}
+
 const ScanningActions: React.FC = () => {
+	const queryClient = useQueryClient()
 	const { t, i18n } = useTranslation()
-	const { scannedEPCs, scanningStatus, connection, setScanningStatus, setConnection, handleToggleScanning } =
-		usePageStore()
+	const {
+		scannedEPCs,
+		scanningStatus,
+		connection,
+		setSelectedOrder,
+		setScanningStatus,
+		setConnection,
+		handleToggleScanning,
+		resetConnection,
+		resetScanningStatus
+	} = usePageStore()
 
 	const { mutateAsync: syncOrderCodes } = useSyncEpcOrderCodeMutation()
 	const { data: databases, isLoading } = useGetDatabaseConnnection()
@@ -31,14 +55,17 @@ const ScanningActions: React.FC = () => {
 		condition: scanningStatus === 'scanning'
 	})
 
-	const scanningButtonText = useMemo(() => {
+	const scanningButtonProps = useMemo<TScanningButtonProps>(() => {
+		const disabled = scanningStatus === 'finished'
+
 		switch (true) {
 			case typeof scanningStatus === 'undefined' || scanningStatus === 'finished':
-				return t('ns_common:actions.start')
+				return { children: t('ns_common:actions.start'), variant: 'secondary', icon: 'Play', disabled }
 			case scanningStatus === 'scanning':
-				return t('ns_common:actions.stop')
+				return { children: t('ns_common:actions.stop'), variant: 'destructive', icon: 'Pause', disabled }
+
 			case scanningStatus === 'stopped':
-				return t('ns_common:actions.continue')
+				return { children: t('ns_common:actions.continue'), variant: 'secondary', icon: 'Play', disabled }
 		}
 	}, [scanningStatus, i18n.language])
 
@@ -48,6 +75,17 @@ const ScanningActions: React.FC = () => {
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') syncOrderCodes()
 	}, [scanningStatus])
+
+	const handleResetScanning = useMemoizedFn(() => {
+		resetScanningStatus()
+		resetConnection()
+		queryClient.removeQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
+	})
+
+	const handleFinishScanning = useMemoizedFn(() => {
+		setScanningStatus('finished')
+		toast.info('Finished scanning EPCs')
+	})
 
 	return (
 		<Fragment>
@@ -64,13 +102,7 @@ const ScanningActions: React.FC = () => {
 								size={18}
 								stroke='hsl(var(--primary))'
 							/>
-							<SelectValue
-								placeholder={
-									isLoading
-										? 'Loading ...'
-										: Array.isArray(databases) && databases.length > 0 && 'Select database'
-								}
-							/>
+							<SelectValue placeholder={'Select database'} />
 						</Div>
 					</SelectTrigger>
 					<SelectContent>
@@ -82,8 +114,8 @@ const ScanningActions: React.FC = () => {
 									</SelectItem>
 								))
 							) : (
-								<SelectItem disabled value={isLoading ? null : undefined}>
-									No data
+								<SelectItem disabled value={null}>
+									Select connection
 								</SelectItem>
 							)}
 						</SelectGroup>
@@ -91,22 +123,28 @@ const ScanningActions: React.FC = () => {
 				</Select>
 				<Div className='flex items-center justify-end gap-x-1'>
 					<Button
+						className='gap-x-2'
+						size='sm'
+						variant='outline'
+						disabled={scanningStatus === 'scanning'}
+						onClick={handleResetScanning}>
+						<Icon name='Redo' />
+						{t('ns_common:actions.reset')}
+					</Button>
+					<Button
 						size='sm'
 						className='gap-x-2'
-						disabled={scanningStatus === 'finished' || !connection}
-						onClick={() => handleToggleScanning()}
-						variant={scanningStatus === 'scanning' ? 'destructive' : 'secondary'}>
-						<Icon name={scanningStatus === 'scanning' ? 'Pause' : 'Play'} fill='currentColor' size={14} />
-						{scanningButtonText}
+						disabled={scanningButtonProps.disabled || !connection}
+						onClick={handleToggleScanning}
+						variant={scanningButtonProps.variant}>
+						<Icon name={scanningButtonProps.icon} fill='currentColor' size={14} />
+						{scanningButtonProps.children}
 					</Button>
 					<Button
 						className='gap-x-2'
 						size='sm'
 						disabled={scannedEPCs?.length === 0 || scanningStatus === 'finished'}
-						onClick={() => {
-							setScanningStatus('finished')
-							toast.info('Finished scanning EPCs')
-						}}>
+						onClick={handleFinishScanning}>
 						<Icon name='Check' />
 						{t('ns_common:actions.finish')}
 					</Button>

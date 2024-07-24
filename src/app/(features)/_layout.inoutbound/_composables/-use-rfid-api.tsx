@@ -1,5 +1,5 @@
 import { RFIDService } from '@/services/rfid.service'
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { ScanningStatus } from '../_contexts/-page.context'
 
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
@@ -11,7 +11,6 @@ export const useGetUnscannedEPC = (params: { connection: string; scanningStatus:
 		queryFn: () => RFIDService.getUnscannedEpc(params.connection),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
-		placeholderData: keepPreviousData,
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }

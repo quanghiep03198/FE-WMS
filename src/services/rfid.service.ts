@@ -5,7 +5,7 @@ import {
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
-type InOutBoundPayload = (InboundFormValues | OutboundFormValues) & { epc_code: Array<string>; host: string }
+type InOutBoundPayload = (InboundFormValues | OutboundFormValues) & { mo_no: string; host: string }
 
 export class RFIDService {
 	static async getUnscannedEpc(host: string) {
