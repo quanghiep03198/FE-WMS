@@ -19,8 +19,7 @@ export const Route = createFileRoute('/(preferences)/_layout')({
 				to: '/login'
 			})
 	},
-	shouldReload: false,
-	wrapInSuspense: true
+	shouldReload: ({ context: { isAuthenticated } }) => !isAuthenticated
 })
 
 function Layout() {

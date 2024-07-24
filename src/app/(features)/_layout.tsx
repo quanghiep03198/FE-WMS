@@ -13,14 +13,14 @@ export const Route = createFileRoute('/(features)/_layout')({
 	errorComponent: Unauthorized,
 	loader: ({ context: { queryClient }, abortController }) =>
 		queryClient.fetchQuery(getUserProfileQuery({ signal: abortController.signal })),
+
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({
 				to: '/login'
 			})
 	},
-	shouldReload: false,
-	wrapInSuspense: true
+	shouldReload: ({ context: { isAuthenticated } }) => !isAuthenticated
 })
 
 function Layout() {
