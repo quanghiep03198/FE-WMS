@@ -208,7 +208,9 @@ const OrderDatalistDialog: React.FC = () => {
 					<Button variant='outline' onClick={handleResetRowSelection}>
 						{t('ns_common:actions.cancel')}
 					</Button>
-					<Button onClick={handleAddTransferOrders}>{t('ns_common:actions.add')}</Button>
+					<Button onClick={handleAddTransferOrders} disabled={isPending}>
+						{t('ns_common:actions.add')}
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

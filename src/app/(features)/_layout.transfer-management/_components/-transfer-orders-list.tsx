@@ -99,43 +99,38 @@ const TransferOrdersList: React.FC = () => {
 						rtl: true,
 						slot: ({ table }) => {
 							const { editedRows } = table.options.meta
-							const isDisabled =
-								Object.values(editedRows).every((value) => value === false) || isEmpty(editedRows)
+							const disabled = Object.values(editedRows).every((value) => value === false) || isEmpty(editedRows)
 
 							return (
 								<Fragment>
-									<Tooltip message='Save all changes' triggerProps={{ asChild: true }}>
-										<Button
-											size='sm'
-											variant='default'
-											onClick={() => {
-												table.options.meta.setEditedRows({})
-												updateMultiAsync(
-													table.options.meta.getUnsavedChanges().map((item: ITransferOrder) => ({
-														transfer_order_code: item.transfer_order_code,
-														or_warehouse: item.or_warehouse_num,
-														or_location: item.or_storage_num,
-														new_warehouse: item.new_warehouse_num,
-														new_location: item.new_storage_num
-													}))
-												)
-											}}
-											disabled={isDisabled}>
-											<Icon name='SaveAll' role='img' arial-label={t('ns_common:actions.save_changes')} />{' '}
-											{t('ns_common:actions.save_changes')}
-										</Button>
-									</Tooltip>
-									<Tooltip message='Revert all changes' triggerProps={{ asChild: true }}>
-										<Button
-											size='sm'
-											variant='outline'
-											className='gap-x-2'
-											disabled={isDisabled}
-											onClick={() => table.options.meta.discardChanges()}>
-											<Icon name='Undo2' role='img' arial-label={t('ns_common:actions.revert_changes')} />{' '}
-											{t('ns_common:actions.revert_changes')}
-										</Button>
-									</Tooltip>
+									<Button
+										size='sm'
+										variant='ghost'
+										disabled={disabled}
+										onClick={() => {
+											table.options.meta.setEditedRows({})
+											updateMultiAsync(
+												table.options.meta.getUnsavedChanges().map((item: ITransferOrder) => ({
+													transfer_order_code: item.transfer_order_code,
+													or_warehouse: item.or_warehouse_num,
+													or_location: item.or_storage_num,
+													new_warehouse: item.new_warehouse_num,
+													new_location: item.new_storage_num
+												}))
+											)
+										}}>
+										<Icon name='SaveAll' role='img' />
+										{t('ns_common:actions.save')}
+									</Button>
+
+									<Button
+										size='sm'
+										variant='destructive'
+										disabled={disabled}
+										onClick={() => table.options.meta.discardChanges()}>
+										<Icon name='Undo' role='img' />
+										{t('ns_common:actions.revert_changes')}
+									</Button>
 								</Fragment>
 							)
 						}

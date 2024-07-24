@@ -1,16 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { ITransferOrder } from '@/common/types/entities'
+import { ITransferOrder, IWarehouse } from '@/common/types/entities'
 import { Checkbox, Icon, Typography } from '@/components/ui'
-import CellEditor from '@/components/ui/@react-table/components/cell-editor'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useQuery } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetWarehouseQuery } from '../../_layout.warehouse/_composables/-use-warehouse-api'
-import { getWarehouseStorageQueryOptions } from '../../_layout.warehouse/_composables/-use-warehouse-storage-api'
+
+import { StorageCellEditor, WarehouseCellEditor } from '../_components/-cell-editor'
 import TransferOrderRowActions from '../_components/-transfer-order-row-actions'
 import { TransferOrderApprovalStatus } from '../_constants/-transfer-order.enum'
 import { UpdateTransferOrderValues } from '../_schemas/-transfer-order.schema'
@@ -31,12 +30,8 @@ export const useTransferOrderTableColumns = ({
 	const { toggleSheetPanelFormOpen } = usePageStore()
 	const { mutateAsync: updateAsync } = useUpdateTransferOrderMutation()
 
-	const { data: warehouseLists } = useGetWarehouseQuery({
-		select: (response) => {
-			return Array.isArray(response.metadata)
-				? response.metadata.map((item) => ({ label: item.warehouse_name, value: item.warehouse_num }))
-				: []
-		}
+	const { data: warehouseLists } = useGetWarehouseQuery<IWarehouse[]>({
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
 	const columnHelper = createColumnHelper<ITransferOrder>()
@@ -178,32 +173,21 @@ export const useTransferOrderTableColumns = ({
 						header: t('ns_warehouse:fields.original_warehouse'),
 						minSize: 250,
 						cell: (props) => (
-							<CellEditor
-								{...props}
-								transformedValue={props.row.original.or_warehouse_name}
-								cellEditorVariant='select'
-								cellEditorProps={{
-									data: warehouseLists,
-									labelField: 'label',
-									valueField: 'value'
-								}}
-							/>
+							<WarehouseCellEditor {...{ ...props, transformedValue: props.row.original.or_warehouse_name }} />
 						)
 					}),
 					columnHelper.accessor('or_storage_num', {
 						header: t('ns_warehouse:fields.original_storage_location'),
 						minSize: 250,
 						cell: (props) => {
-							const { data } = useQuery(getWarehouseStorageQueryOptions(props.row.original.or_warehouse_num))
+							const rowData = props.row.original
+
 							return (
-								<CellEditor
-									{...props}
-									transformedValue={props.row.original.or_storage_name}
-									cellEditorVariant='select'
-									cellEditorProps={{
-										data,
-										labelField: 'label',
-										valueField: 'value'
+								<StorageCellEditor
+									{...{
+										...props,
+										selectedWarehouse: rowData.or_warehouse_num,
+										transformedValue: rowData.or_storage_name
 									}}
 								/>
 							)
@@ -213,32 +197,21 @@ export const useTransferOrderTableColumns = ({
 						header: t('ns_warehouse:fields.new_warehouse'),
 						minSize: 250,
 						cell: (props) => (
-							<CellEditor
-								{...props}
-								transformedValue={props.row.original.or_warehouse_name}
-								cellEditorVariant='select'
-								cellEditorProps={{
-									data: warehouseLists,
-									labelField: 'label',
-									valueField: 'value'
-								}}
-							/>
+							<WarehouseCellEditor {...{ ...props, transformedValue: props.row.original.new_warehouse_name }} />
 						)
 					}),
 					columnHelper.accessor('new_storage_num', {
 						header: t('ns_warehouse:fields.new_storage_location'),
 						minSize: 250,
 						cell: (props) => {
-							const { data } = useQuery(getWarehouseStorageQueryOptions(props.row.original.new_warehouse_num))
+							const rowData = props.row.original
+
 							return (
-								<CellEditor
-									{...props}
-									transformedValue={props.row.original.new_storage_name}
-									cellEditorVariant='select'
-									cellEditorProps={{
-										data,
-										labelField: 'label',
-										valueField: 'value'
+								<StorageCellEditor
+									{...{
+										...props,
+										selectedWarehouse: rowData.new_warehouse_num,
+										transformedValue: rowData.new_storage_name
 									}}
 								/>
 							)
