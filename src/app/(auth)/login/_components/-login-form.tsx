@@ -1,11 +1,10 @@
-import { USER_PROVIDE_TAG, getUserProfileQuery, useGetUserProfileQuery } from '@/app/(auth)/_composables/-use-auth-api'
+import { USER_PROVIDE_TAG } from '@/app/(auth)/_composables/-use-auth-api'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
-import { useAuthStore } from '@/stores/auth.store'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { isEmpty } from 'lodash'
@@ -17,9 +16,6 @@ import tw from 'tailwind-styled-components'
 import { LoginFormValues, loginSchema } from '../_schemas/-login.schema'
 
 const LoginForm: React.FC = () => {
-	const { setUserProfile } = useAuthStore()
-	const queryClient = useQueryClient()
-	const { data: user } = useGetUserProfileQuery()
 	const { t } = useTranslation()
 	const { dispatch } = useContext(StepContext)
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
@@ -47,8 +43,6 @@ const LoginForm: React.FC = () => {
 		},
 		onSuccess: async (data, _variables, context) => {
 			setAccessToken(data?.metadata?.accessToken) // Store user's access token
-			const response = await queryClient.fetchQuery(getUserProfileQuery())
-			setUserProfile(response.metadata)
 			toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError(_error, _variables, context) {
@@ -68,8 +62,8 @@ const LoginForm: React.FC = () => {
 
 	useEffect(() => {
 		// If user's profile is retrieved successfully, then go to next step
-		if (accessToken && user) dispatch({ type: 'NEXT_STEP' })
-	}, [accessToken, user])
+		if (accessToken) dispatch({ type: 'NEXT_STEP' })
+	}, [accessToken])
 
 	return (
 		<FormProvider {...form}>

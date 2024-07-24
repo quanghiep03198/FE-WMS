@@ -22,8 +22,10 @@ export class AuthService {
 		queryClient.clear() // clear cached queries
 	}
 
-	static async profile(config?: AxiosRequestConfig): Promise<ResponseBody<IUser>> {
-		return await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
+	static async profile(config?: AxiosRequestConfig): Promise<IUser> {
+		const response = await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
+		useAuthStore.getState().setUserProfile(response.metadata)
+		return response.metadata
 	}
 
 	static getUser() {

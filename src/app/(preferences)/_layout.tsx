@@ -1,25 +1,26 @@
 import { useAuth } from '@/common/hooks/use-auth'
-import env from '@/common/utils/env'
-import { AuthService } from '@/services/auth.service'
-import { ErrorComponentProps, Outlet, createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { getUserProfileQuery } from '../(auth)/_composables/-use-auth-api'
+import Unauthorized from '../_components/_errors/-unauthorized'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 
 export const Route = createFileRoute('/(preferences)/_layout')({
 	component: Layout,
-	loader: AuthService.profile,
-	errorComponent: AuthenticationError,
+	errorComponent: Unauthorized,
+	loader: ({ context: { queryClient }, abortController }) =>
+		queryClient.fetchQuery(getUserProfileQuery({ signal: abortController.signal })),
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({
 				to: '/login'
 			})
 	},
-	wrapInSuspense: true,
-	staleTime: +env('VITE_DEFAULT_TTL', 300_000)
+	shouldReload: false,
+	wrapInSuspense: true
 })
 
 function Layout() {
@@ -48,16 +49,4 @@ function Layout() {
 			</LayoutComposition.Container>
 		</AuthGuard>
 	)
-}
-
-function AuthenticationError({ reset }: ErrorComponentProps) {
-	const router = useRouter()
-
-	router.invalidate().finally(() => {
-		reset()
-		AuthService.logout()
-		router.navigate({ to: '/login' })
-	})
-
-	return null
 }

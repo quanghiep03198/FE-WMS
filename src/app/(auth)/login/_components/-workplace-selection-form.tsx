@@ -1,8 +1,10 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { StepContext } from '@/components/ui/@custom/step'
+import { AppConfigs } from '@/configs/app.config'
 import { CompanyService } from '@/services/company.service'
 import { useQuery } from '@tanstack/react-query'
+import { useLocalStorageState } from 'ahooks'
 import React, { useContext, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -13,9 +15,8 @@ type FormValues = { company_code: string }
 const COMPANY_PROVIDE_TAG = 'COMPANIES' as const
 
 const WorkplaceSelectionForm: React.FC = () => {
-	const { isAuthenticated, setUserCompany } = useAuth()
-	console.log(setUserCompany)
-
+	const { setUserCompany } = useAuth()
+	const [accessToken] = useLocalStorageState(AppConfigs.ACCESS_TOKEN_STORAGE_KEY, { listenStorageChange: true })
 	const { dispatch } = useContext(StepContext)
 	const { t } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()
@@ -24,7 +25,7 @@ const WorkplaceSelectionForm: React.FC = () => {
 	const { data, isFetching } = useQuery({
 		queryKey: [COMPANY_PROVIDE_TAG],
 		queryFn: () => CompanyService.getCompanies(),
-		enabled: !!isAuthenticated,
+		enabled: !!accessToken,
 		select: (data) => {
 			return Array.isArray(data.metadata)
 				? data.metadata.map((company) => ({ value: company.company_code, label: company.company_name }))

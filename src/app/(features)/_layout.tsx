@@ -1,8 +1,7 @@
-import env from '@/common/utils/env'
-import Loading from '@/components/shared/loading'
-import { AuthService } from '@/services/auth.service'
-import { Outlet, createFileRoute, redirect, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { getUserProfileQuery } from '../(auth)/_composables/-use-auth-api'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
+import Unauthorized from '../_components/_errors/-unauthorized'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 import NavDrawerSidebar from './_components/_partials/-nav-drawer-sidebar'
@@ -11,14 +10,17 @@ import Navbar from './_components/_partials/-navbar'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
-	pendingComponent: Loading,
-	errorComponent: AuthenticationError,
-	loader: AuthService.profile,
+	errorComponent: Unauthorized,
+	loader: ({ context: { queryClient }, abortController }) =>
+		queryClient.fetchQuery(getUserProfileQuery({ signal: abortController.signal })),
 	beforeLoad: ({ context: { isAuthenticated } }) => {
-		if (!isAuthenticated) throw redirect({ to: '/login' })
+		if (!isAuthenticated)
+			throw redirect({
+				to: '/login'
+			})
 	},
-	wrapInSuspense: true,
-	staleTime: +env('VITE_DEFAULT_TTL', 300_000)
+	shouldReload: false,
+	wrapInSuspense: true
 })
 
 function Layout() {
@@ -38,16 +40,4 @@ function Layout() {
 			</LayoutComposition.Container>
 		</AuthGuard>
 	)
-}
-
-function AuthenticationError({ reset }: ErrorComponentProps) {
-	const router = useRouter()
-
-	router.invalidate().finally(() => {
-		reset()
-		AuthService.logout()
-		router.navigate({ to: '/login' })
-	})
-
-	return null
 }

@@ -1,16 +1,16 @@
+import env from '@/common/utils/env'
 import { AuthService } from '@/services/auth.service'
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import { AxiosRequestConfig } from 'axios'
 
 export const USER_PROVIDE_TAG = 'USER'
 
-export const getUserProfileQuery = (config?: AxiosRequestConfig) => {
+export function getUserProfileQuery(config?: AxiosRequestConfig) {
 	return queryOptions({
 		queryKey: [USER_PROVIDE_TAG],
 		queryFn: () => AuthService.profile(config),
-		staleTime: 1000 * 60 * 60,
-		enabled: AuthService.getHasAccessToken(),
-		select: (data) => data.metadata
+		staleTime: +env('VITE_DEFAULT_TTL', 300_000), // Cache for 5 minutes
+		enabled: AuthService.getHasAccessToken()
 	})
 }
 

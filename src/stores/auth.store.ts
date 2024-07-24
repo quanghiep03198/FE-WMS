@@ -1,11 +1,12 @@
 import { ICompany, IUser } from '@/common/types/entities'
+import { generateAvatar } from '@/common/utils/generate-avatar'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 export type AuthState = {
 	user: IUser | null
-	setUserProfile: (profile: IUser) => void
+	setUserProfile: (profile: Partial<IUser>) => void
 	setUserCompany: (company: Omit<ICompany, 'factory_code'>) => void
 	resetAuthState: () => void
 }
@@ -19,7 +20,7 @@ export const useAuthStore = create(
 				...initialState,
 				setUserProfile: (profile: IUser) => {
 					const state = get()
-					set({ user: { ...state.user, ...profile } })
+					set({ user: { ...state.user, ...profile, picture: generateAvatar({ name: profile.display_name }) } })
 				},
 				setUserCompany: (company: Omit<ICompany, 'factory_code'>) => {
 					const state = get()
