@@ -2,14 +2,14 @@
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 
 	return {
-		plugins: [react(), TanStackRouterVite()],
+		plugins: [react(), splitVendorChunkPlugin(), TanStackRouterVite()],
 		resolve: {
 			alias: {
 				'@': path.resolve(__dirname, './src')
@@ -39,10 +39,6 @@ export default defineConfig(({ mode }) => {
 					manualChunks(id: string) {
 						if (id.includes('node_modules')) {
 							return 'vendor'
-						}
-						// creating a chunk to react routes deps. Reducing the vendor chunk size
-						if (id.includes('react-router')) {
-							return '@tanstack/react-router'
 						}
 					}
 				}
