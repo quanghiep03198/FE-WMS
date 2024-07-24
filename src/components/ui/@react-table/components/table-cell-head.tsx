@@ -10,6 +10,8 @@ type TableCellHeadProps<TData, TValue> = {
 export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 
+	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
+
 	return (
 		<Typography
 			variant='small'
@@ -20,7 +22,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 					'cursor-col-resize': getIsResizing()
 				}
 			)}
-			onClick={columnDef.enableSorting && getToggleSortingHandler()}
+			onClick={toggleSorting}
 			title={
 				header.column.getCanSort()
 					? getNextSortingOrder() === 'asc'

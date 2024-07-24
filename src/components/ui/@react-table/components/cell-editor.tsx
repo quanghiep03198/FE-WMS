@@ -17,9 +17,9 @@ type BaseCellEditorProps =
 			cellEditorProps: ComboboxProps<any>
 	  }
 
-type CellEditorProps = CellContext<any, unknown> & BaseCellEditorProps
+export type CellEditorProps = CellContext<any, unknown> & BaseCellEditorProps & { transformedValue?: any }
 
-const CellEditor: React.FC<CellEditorProps & { transformedValue?: any }> = ({
+const CellEditor: React.FC<CellEditorProps> = ({
 	getValue,
 	transformedValue,
 	column,
