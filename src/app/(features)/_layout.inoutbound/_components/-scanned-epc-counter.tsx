@@ -88,6 +88,7 @@ const ScanningTimer: React.FC<{ scanningStatus: ScanningStatus }> = memo(
 
 		useEffect(() => {
 			if (typeof scanningStatus === 'undefined') {
+				duration.current = 0
 				setIntervalValue(undefined)
 				resetScannedTime()
 			} else if (scanningStatus === 'finished') {
