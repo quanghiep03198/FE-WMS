@@ -46,6 +46,8 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 			defaultValue={getValues(name)}
 			control={control}
 			render={({ field }) => {
+				console.log(field.value)
+
 				return (
 					<FormItem
 						className={cn({
@@ -72,7 +74,7 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 									Boolean(getFieldState(name).error) &&
 										'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive'
 								)}>
-								<SelectValue placeholder={placeholder} />
+								<SelectValue placeholder={!field.value && placeholder} />
 							</SelectTrigger>
 							<SelectContent>
 								{Array.isArray(props.options) && props.options.length > 0 ? (
