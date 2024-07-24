@@ -201,7 +201,7 @@ const ScannedEPCsList: React.FC = () => {
 								Array.isArray(scannedOrders) &&
 								scannedOrders.reverse().map((item) => (
 									<Badge key={item.orderCode} variant='secondary' className='relative group cursor-default'>
-										{item.orderCode}
+										{item.orderCode ?? 'Unknown'}
 										{scanningStatus === 'finished' && (
 											<BadgeDeleteButton
 												onClick={() => {
