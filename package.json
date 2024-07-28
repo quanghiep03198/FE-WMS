@@ -15,7 +15,9 @@
 		"prepare": "husky",
 		"commitlint": "commitlint --edit",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"pm2:serve": "pm2 serve ./dist --port 5000 --name \"wms-client\" --spa",
+		"pm2:restart": "pm2 restart all"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.4.2",
@@ -121,6 +123,7 @@
 		"postcss": "^8.4.38",
 		"prettier": "^3.2.5",
 		"prettier-plugin-tailwindcss": "^0.5.14",
+		"rollup-plugin-visualizer": "^5.12.0",
 		"storybook": "^8.1.11",
 		"tailwind-scrollbar": "^3.1.0",
 		"tailwindcss": "^3.4.3",
