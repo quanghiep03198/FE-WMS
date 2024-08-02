@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { format } from 'date-fns'
-import { Fragment, memo, useId } from 'react'
+import { Fragment, useId } from 'react'
 import { FieldValues } from 'react-hook-form'
 import {
 	Button,
@@ -24,7 +24,7 @@ type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & 
 	calendarProps?: Partial<CalendarProps>
 }
 
-export const DatePickerFieldControl = memo(<T extends FieldValues>(props: DatePickerFieldControlProps<T>) => {
+export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerFieldControlProps<T>) {
 	const {
 		control,
 		name,
@@ -104,6 +104,6 @@ export const DatePickerFieldControl = memo(<T extends FieldValues>(props: DatePi
 			)}
 		/>
 	)
-})
+}
 
 DatePickerFieldControl.displayName = 'DatePickerFieldControl'

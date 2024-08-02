@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import React, { memo, useId } from 'react'
-import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
+import React, { useId } from 'react'
+import { FieldValues, useFormContext } from 'react-hook-form'
 import {
 	FormDescription,
 	FormField,
@@ -15,15 +15,16 @@ import {
 import { BaseFieldControl } from '../../../common/types/hook-form'
 import FormLabel from './alternative-form-label'
 
-export type SelectFieldControlProps<T extends FieldValues> = BaseFieldControl<T> &
+export type SelectFieldControlProps<T extends FieldValues, D = Record<string, any>> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {
-		options: Array<{
-			label: string
-			value: PathValue<T, Path<T>>
-		}>
+		datalist: D[]
+		labelField: keyof D
+		valueField: keyof D
 	}
 
-export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFieldControlProps<T>) => {
+export function SelectFieldControl<T extends FieldValues, D extends Record<string, any>>(
+	props: SelectFieldControlProps<T, D>
+) {
 	const { getValues, getFieldState } = useFormContext()
 	const id = useId()
 
@@ -35,7 +36,10 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 		orientation,
 		className,
 		placeholder = 'Select',
-		messageType = 'alternative',
+		messageType = 'standard',
+		datalist,
+		labelField,
+		valueField,
 		onValueChange,
 		...restProps
 	} = props
@@ -46,8 +50,6 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 			defaultValue={getValues(name)}
 			control={control}
 			render={({ field }) => {
-				console.log(field.value)
-
 				return (
 					<FormItem
 						className={cn({
@@ -77,10 +79,10 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 								<SelectValue placeholder={!field.value && placeholder} />
 							</SelectTrigger>
 							<SelectContent>
-								{Array.isArray(props.options) && props.options.length > 0 ? (
-									props.options.map((option) => (
-										<SelectItem key={option?.value} value={String(option?.value)}>
-											{option?.label}
+								{Array.isArray(datalist) && datalist.length > 0 ? (
+									datalist.map((option) => (
+										<SelectItem key={option[valueField]} value={String(option[valueField])}>
+											{option[labelField]}
 										</SelectItem>
 									))
 								) : (
@@ -100,6 +102,6 @@ export const SelectFieldControl = memo(<T extends FieldValues>(props: SelectFiel
 			}}
 		/>
 	)
-})
+}
 
 SelectFieldControl.displayName = 'SelectFieldControl'

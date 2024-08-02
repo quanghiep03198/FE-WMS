@@ -8,10 +8,10 @@ import FormLabel from './alternative-form-label'
 
 export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & InputProps
 
-export const InputFieldControl = <T extends FieldValues>(
+export function InputFieldControl<T extends FieldValues>(
 	props: InputFieldControlProps<T> & React.PropsWithRef<T> & React.RefAttributes<T>,
 	ref?: React.ForwardedRef<HTMLInputElement>
-) => {
+) {
 	const { getFieldState, getValues } = useFormContext()
 	const {
 		label,
