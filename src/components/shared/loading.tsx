@@ -1,7 +1,8 @@
 import nProgress from 'nprogress'
 import { useEffect } from 'react'
+import { Icon } from '../ui'
 
-const Loading: React.FunctionComponent = () => {
+export default function Loading() {
 	nProgress.configure({
 		showSpinner: false
 	})
@@ -13,7 +14,9 @@ const Loading: React.FunctionComponent = () => {
 		}
 	}, [])
 
-	return null
+	return (
+		<div className='w-screen h-screen grid place-content-center'>
+			<Icon name='LoaderCircle' className='animate-spin' size={18} />
+		</div>
+	)
 }
-
-export default Loading
