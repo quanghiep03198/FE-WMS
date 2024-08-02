@@ -97,6 +97,14 @@ module.exports = {
 					from: { height: 'var(--radix-accordion-content-height)' },
 					to: { height: '0' }
 				},
+				'collapsible-down': {
+					from: { height: '0' },
+					to: { height: 'var(--radix-collapsible-content-height)' }
+				},
+				'collapsible-up': {
+					from: { height: 'var(--radix-collapsible-content-height)' },
+					to: { height: '0' }
+				},
 				shimmer: {
 					from: {
 						backgroundPosition: '0 0'
@@ -110,28 +118,20 @@ module.exports = {
 						opacity: 0,
 						transform: 'translate(-75%, -60%) scale(0.5)'
 					},
+
 					'100%': {
 						opacity: 1,
 						transform: 'translate(-50%,-40%) scale(1)'
-					}
-				},
-
-				scale: {
-					'0%': {
-						transform: 'scale(1)'
-					},
-					'100%': {
-						transform: 'scale(3)'
 					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+				'collapsible-up': 'collapsible-up 0.2s ease-out',
+				'collapsible-down': 'collapsible-down 0.2s ease-out',
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
-				shimmer: 'shimmer 2s linear infinite',
-				loader: 'loader 1.5s infinite',
-				scale: 'scale 2s ease 4s infinite'
+				shimmer: 'shimmer 2s linear infinite'
 			}
 		}
 	},
