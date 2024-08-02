@@ -26,7 +26,7 @@ export const DropdownSelect = memo(
 		selectContentProps
 	}: DropdownSelectProps<T>) => {
 		return (
-			<Select {...selectProps} defaultValue={selectProps?.defaultValue ?? null}>
+			<Select {...selectProps}>
 				<SelectTrigger {...selectTriggerProps}>
 					{selectTriggerProps?.children}
 					<SelectValue placeholder={placeholder} />
