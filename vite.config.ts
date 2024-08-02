@@ -39,7 +39,6 @@ export default defineConfig(({ mode }) => {
 				output: {
 					manualChunks(id: string) {
 						const modules = new Map([
-							['router-provider', /router-provider/],
 							['@tanstack/react-router', /react-router/],
 							['@tanstack/react-table', /react-table/],
 							['@tanstack/react-virtual', /react-virtual/],
