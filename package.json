@@ -16,10 +16,12 @@
 		"commitlint": "commitlint --edit",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
-		"pm2:serve": "pm2 serve ./dist --port 5000 --name \"wms-client\" --spa",
-		"pm2:restart": "pm2 restart all"
+		"pm2:serve": "pm2 serve ./dist --port 3000 --name \"wms-client\" --spa",
+		"pm2:restart": "pm2 restart \"wms-client\" --update-env"
 	},
 	"dependencies": {
+		"@dnd-kit/modifiers": "^7.0.0",
+		"@dnd-kit/sortable": "^8.0.0",
 		"@hookform/resolvers": "^3.4.2",
 		"@radix-ui/react-accordion": "^1.1.2",
 		"@radix-ui/react-alert-dialog": "^1.0.5",
