@@ -1,3 +1,4 @@
+import { IWarehouse } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -23,11 +24,11 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetWarehouseQuery } from '../../_layout.warehouse/_composables/-use-warehouse-api'
-import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_composables/-use-warehouse-storage-api'
-import { RFID_EPC_PROVIDE_TAG, UNKNOWN_ORDER, useStoreEpcMutation } from '../_composables/-use-rfid-api'
-import { usePageStore } from '../_contexts/-page.context'
-import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../_schemas/-epc-inoutbound.schema'
+import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_apis/warehouse-storage.api'
+import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
+import { RFID_EPC_PROVIDE_TAG, UNKNOWN_ORDER, useGetInoutboundDept, useStoreEpcMutation } from '../_apis/rfid.api'
+import { usePageContext } from '../_contexts/-page-context'
+import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const [schema, setSchema] = useState<typeof inboundSchema | typeof outboundSchema>(inboundSchema)
@@ -39,7 +40,7 @@ const InoutboundForm: React.FC = () => {
 		resetScanningStatus,
 		setSelectedOrder,
 		resetScannedOrders
-	} = usePageStore()
+	} = usePageContext()
 	const { t, i18n } = useTranslation()
 	const form = useForm<InboundFormValues>({
 		resolver: zodResolver(schema),
@@ -68,15 +69,11 @@ const InoutboundForm: React.FC = () => {
 		[i18n.language, action]
 	)
 
-	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery<Record<'label' | 'value', string>[]>({
-		select: (response) =>
-			Array.isArray(response.metadata)
-				? response.metadata.map((item) => ({
-						label: item.warehouse_name,
-						value: item.warehouse_num
-					}))
-				: []
+	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery<IWarehouse[]>({
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
+
+	const { data: inoutboundDepts } = useGetInoutboundDept()
 
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
@@ -103,9 +100,9 @@ const InoutboundForm: React.FC = () => {
 				mo_no: selectedOrder === UNKNOWN_ORDER ? null : selectedOrder,
 				host: connection
 			})
-			const filteredOrders = scannedOrders.filter((item) => item.orderCode !== selectedOrder)
+			const filteredOrders = scannedOrders.filter((item) => item.mo_no !== selectedOrder)
 			if (filteredOrders.length > 0) {
-				setSelectedOrder(filteredOrders[0]?.orderCode)
+				setSelectedOrder(filteredOrders[0]?.mo_no)
 				resetScannedOrders(filteredOrders)
 			} else {
 				resetScanningStatus()
@@ -117,8 +114,6 @@ const InoutboundForm: React.FC = () => {
 			return toast.error(t('ns_common:notification.error'), { id: loading })
 		}
 	}
-
-	console.log(selectedOrder)
 
 	return (
 		<FormProvider {...form}>
@@ -191,34 +186,48 @@ const InoutboundForm: React.FC = () => {
 						)}
 					/>
 				</Div>
-
-				<Div className='col-span-full'>
+				<Div className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
 					<SelectFieldControl
 						control={form.control}
 						name='rfid_use'
 						label={t('ns_common:common_fields.actions')}
-						options={storageTypes}
+						datalist={storageTypes}
+						labelField='label'
+						valueField='value'
 					/>
 				</Div>
 				{action === FormActionEnum.IMPORT && (
 					<Fragment>
 						<Div className='col-span-1 sm:col-span-full'>
 							<SelectFieldControl
+								control={form.control}
+								name='dept_code'
+								label={t('ns_company:department')}
+								datalist={inoutboundDepts}
+								labelField='dept_name'
+								valueField='dept_code'
+							/>
+						</Div>
+						<Div className='col-span-1 sm:col-span-full'>
+							<SelectFieldControl
 								disabled={isLoading}
 								control={form.control}
 								name='warehouse_num'
 								label={t('ns_inoutbound:labels.io_archive_warehouse')}
-								options={warehouseOptions}
+								datalist={warehouseOptions}
+								labelField='warehouse_name'
+								valueField='warehouse_num'
 							/>
 						</Div>
 						<Div className='col-span-1 sm:col-span-full'>
 							<ComboboxFieldControl
-								shouldFilter={false}
-								disabled={warehouseOptions?.length === 0}
-								form={form}
 								name='storage'
+								datalist={storageAreaOptions}
 								labelField='storage_name'
 								valueField='storage_num'
+								form={form}
+								shouldFilter={false}
+								disabled={warehouseOptions?.length === 0}
 								label={t('ns_inoutbound:labels.io_storage_location')}
 								template={({ data }) => (
 									<Div className='space-y-0.5'>
@@ -230,7 +239,6 @@ const InoutboundForm: React.FC = () => {
 										</Typography>
 									</Div>
 								)}
-								data={storageAreaOptions}
 							/>
 						</Div>
 					</Fragment>

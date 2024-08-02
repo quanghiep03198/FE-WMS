@@ -6,12 +6,12 @@ import { useInterval, useReactive, useResetState } from 'ahooks'
 import { isEqual } from 'lodash'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScanningStatus, usePageStore } from '../_contexts/-page.context'
+import { ScanningStatus, usePageContext } from '../_contexts/-page-context'
 
 const INTERVAL_TIME = 5 as const
 
 const ScannedEPCsCounter: React.FC = () => {
-	const { scannedEPCs, scanningStatus } = usePageStore()
+	const { scannedEPCs, scanningStatus } = usePageContext()
 	const { t } = useTranslation()
 
 	return (

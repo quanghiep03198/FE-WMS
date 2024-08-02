@@ -18,12 +18,8 @@ import { useMemoizedFn } from 'ahooks'
 import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import {
-	RFID_EPC_PROVIDE_TAG,
-	useGetDatabaseConnnection,
-	useSyncEpcOrderCodeMutation
-} from '../_composables/-use-rfid-api'
-import { usePageStore } from '../_contexts/-page.context'
+import { RFID_EPC_PROVIDE_TAG, useGetDatabaseConnnection, useSyncEpcOrderCodeMutation } from '../_apis/rfid.api'
+import { usePageContext } from '../_contexts/-page-context'
 
 type TScanningButtonProps = {
 	children: string
@@ -45,7 +41,7 @@ const ScanningActions: React.FC = () => {
 		handleToggleScanning,
 		resetConnection,
 		resetScanningStatus
-	} = usePageStore()
+	} = usePageContext()
 
 	const { mutateAsync: syncOrderCodes } = useSyncEpcOrderCodeMutation()
 	const { data: databases, isLoading } = useGetDatabaseConnnection()

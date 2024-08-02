@@ -15,7 +15,8 @@ export default {
 		actions: '操作',
 		remark: '管理人',
 		approver: '審核人',
-		approver_time: '審核時間'
+		approver_time: '審核時間',
+		total: '全部的'
 	},
 	actions: {
 		add: '添加',

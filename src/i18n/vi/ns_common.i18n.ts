@@ -15,7 +15,8 @@ export default {
 		actions: 'Thao tác',
 		remark: 'Ghi chú',
 		approver: 'Người phê duyệt',
-		approver_time: 'Thời gian phê duyệt'
+		approver_time: 'Thời gian phê duyệt',
+		total: 'Tổng cộng'
 	},
 	actions: {
 		add: 'Thêm mới',

@@ -15,7 +15,8 @@ export default {
 		actions: 'Actions',
 		remark: 'Remark',
 		approver: 'Approver',
-		approver_time: 'Approval time'
+		approver_time: 'Approval time',
+		total: 'Total'
 	},
 	actions: {
 		add: 'Add',

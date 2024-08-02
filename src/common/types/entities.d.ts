@@ -28,8 +28,8 @@ export interface ICompany extends IBaseEntity {
 }
 
 export interface IDepartment extends IBaseEntity, Pick<ICompany, 'company_code'> {
-	ERP_dept_code: string
-	MES_dept_name: string
+	dept_code: string
+	dept_name: string
 	dept_code_upper: string
 }
 
