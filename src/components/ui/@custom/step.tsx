@@ -62,6 +62,8 @@ const initialState: TStepState = { data: [], currentStep: 1, canNextStep: false,
 
 export const StepContext = createContext<TStepContext>({ steps: initialState, dispatch: () => {} })
 
+export const useStepContext = () => useContext(StepContext)
+
 export const StepProvider: React.FC<{ data: TStep[] } & React.PropsWithChildren> = ({ data, children }) => {
 	const [steps, dispatch] = useReducer(reducer, {
 		...initialState,
@@ -142,7 +144,7 @@ const Steps: React.FC = () => {
 const StepPanel: React.FC<{ value: TStep['index'] } & React.PropsWithChildren> = ({ value, children }) => {
 	const {
 		steps: { currentStep }
-	} = useContext(StepContext)
+	} = useStepContext()
 
 	return currentStep === value ? children : null
 }
