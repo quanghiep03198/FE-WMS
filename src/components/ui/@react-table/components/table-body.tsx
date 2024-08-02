@@ -1,9 +1,11 @@
+import { cn } from '@/common/utils/cn'
+import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { flexRender, type Row as TRow, type Table as TTable } from '@tanstack/react-table'
 import { Virtualizer, notUndefined } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
 import isEqual from 'react-fast-compare'
-import { TableBody as Body, TableCell as Cell, TableRow as Row } from '../../@core/table'
-import { Div } from '../../@custom/div'
+import { TableCell, TableRow, TableBody as TableRowGroup } from '../../@core/table'
+import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { DataTableUtility } from '../utils/table.util'
 
@@ -14,6 +16,7 @@ type TableBodyProps = {
 }
 
 export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
+	const { tableWrapperRef, columnOrder } = useTableContext()
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
@@ -28,52 +31,69 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 			: [0, 0]
 
 	return (
-		<Body>
+		<TableRowGroup>
 			{before > 0 && (
-				<Row>
-					<Cell colSpan={table.getAllColumns().length} style={{ height: before }} />
-				</Row>
+				<TableRow>
+					<TableCell colSpan={table.getAllColumns().length} style={{ height: before }} />
+				</TableRow>
 			)}
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = rows[virtualRow.index] as TRow<any>
 					return (
 						<Fragment key={row?.id}>
-							<Row data-index={virtualRow.index} className='group'>
-								{row?.getVisibleCells()?.map((cell) => (
-									<Cell
-										key={cell.id}
-										data-sticky={cell.column.columnDef?.meta?.sticky}
-										aria-selected={row.getIsSelected()}
-										className='py-1'
-										style={{
-											width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
-											height: virtualRow.size,
-											...DataTableUtility.getStickyOffsetPosition(cell.column)
-										}}>
-										<Div className='line-clamp-1'>
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
-										</Div>
-									</Cell>
-								))}
-							</Row>
-
-							{row?.getIsExpanded() && (
-								<Row data-index={virtualRow.index}>
-									<Cell colSpan={row.getVisibleCells().length} className='sticky left-0'>
-										{typeof renderSubComponent === 'function' && renderSubComponent({ table, row })}
-									</Cell>
-								</Row>
-							)}
+							<TableRow data-index={virtualRow.index} className='group'>
+								{row?.getVisibleCells()?.map((cell) => {
+									return (
+										<TableCell
+											key={cell.id}
+											aria-selected={row.getIsSelected()}
+											style={{
+												width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
+												height: virtualRow.size,
+												...DataTableUtility.getStickyOffsetPosition(cell.column)
+											}}>
+											<Div
+												className={cn('line-clamp-1', {
+													'block text-left': cell.column.columnDef.meta?.align === 'left',
+													'block text-center': cell.column.columnDef.meta?.align === 'center',
+													'block text-right': cell.column.columnDef.meta?.align === 'right'
+												})}>
+												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											</Div>
+										</TableCell>
+									)
+								})}
+							</TableRow>
+							{/* Sub-component */}
+							<TableRow data-index={virtualRow.index}>
+								<TableCell
+									colSpan={row.getVisibleCells().length}
+									className={cn('p-0', !row.getIsExpanded() ? 'border-none shadow-none' : 'shadow-inner')}>
+									<Collapsible data-state={row.getIsExpanded() ? 'open' : 'closed'} open={row.getIsExpanded()}>
+										<CollapsibleContent
+											style={{
+												position: 'sticky',
+												left: '0',
+												maxWidth: `${tableWrapperRef.current?.getBoundingClientRect().width}px - `
+											}}
+											className='transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+											<Div className='p-4'>
+												{typeof renderSubComponent === 'function' && renderSubComponent({ table, row })}
+											</Div>
+										</CollapsibleContent>
+									</Collapsible>
+								</TableCell>
+							</TableRow>
 						</Fragment>
 					)
 				})}
 			{after > 0 && (
-				<Row ref={(node) => virtualizer.measureElement(node)}>
-					<Cell colSpan={table.getAllColumns().length} style={{ height: after }} />
-				</Row>
+				<TableRow ref={(node) => virtualizer.measureElement(node)}>
+					<TableCell colSpan={table.getAllColumns().length} style={{ height: after }} />
+				</TableRow>
 			)}
-		</Body>
+		</TableRowGroup>
 	)
 }
 

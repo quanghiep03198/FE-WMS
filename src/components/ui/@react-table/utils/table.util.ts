@@ -31,16 +31,21 @@ export class DataTableUtility {
 	public static getStickyOffsetPosition<TData = any, TValue = any>(
 		column: Column<TData, TValue>
 	): CSSProperties | undefined {
-		const stickyAlignment = column?.columnDef?.meta?.sticky
+		const stickyAlignment = column.getIsPinned()
 		switch (stickyAlignment) {
-			case 'left':
-				if (column.getIsFirstColumn()) return { position: 'sticky', left: 0 }
-				return { left: column.getStart() }
-			case 'right':
-				if (column.getIsLastColumn()) return { right: 0 }
-				return { position: 'sticky', right: column.getAfter() }
-			default:
-				return
+			case 'left': {
+				if (column.getIsFirstColumn()) return { position: 'sticky', zIndex: 10, left: 0 }
+				return { position: 'sticky', zIndex: 10, left: column.getStart('left') }
+			}
+			case 'right': {
+				if (column.getIsLastColumn()) return { position: 'sticky', right: 0, zIndex: 10 }
+				return { position: 'sticky', zIndex: 10, right: column.getAfter('right') }
+			}
+			default: {
+				return {
+					position: 'relative'
+				}
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-import { ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import { ColumnFiltersState, ColumnOrderState, SortingState } from '@tanstack/react-table'
 import { createContext, useContext } from 'react'
 
 type TableContext = {
@@ -11,7 +11,9 @@ type TableContext = {
 	enableGlobalFilter: boolean
 	manualSorting: boolean
 	autoResetPageIndex: boolean
-	skipAutoResetPageIndex: React.Dispatch<React.SetStateAction<boolean>>
+	columnOrder: ColumnOrderState
+	tableWrapperRef: React.RefObject<HTMLDivElement>
+	setAutoResetPageIndex: React.Dispatch<React.SetStateAction<boolean>>
 	setIsFilterOpened: React.Dispatch<React.SetStateAction<boolean>>
 	setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
 	setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>

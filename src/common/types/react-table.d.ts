@@ -8,6 +8,7 @@ declare module '@tanstack/react-table' {
 		filterVariant?: 'text' | 'range' | 'select'
 		sticky?: 'left' | 'right'
 		rowSpan?: number
+		align?: 'left' | 'center' | 'right'
 		cellDataType?: 'text' | 'number' | 'date' | 'boolean'
 		validate?: (value: TValue) => boolean
 	}
@@ -15,7 +16,7 @@ declare module '@tanstack/react-table' {
 	interface TableMeta<TData extends RowData> {
 		editedRows: Record<Row<TData>['id'], boolean>
 		setEditedRows: React.Dispatch<React.SetStateAction<Record<Row<TData>['id'], boolean>>>
-		updateData: (rowIndex: number, columnId: string, value: unknown) => void
+		updateRow: (rowIndex: number, columnId: string, value: unknown) => void
 		discardChanges: (rowIndex?: number) => void
 		getUnsavedChanges: () => TData[]
 	}

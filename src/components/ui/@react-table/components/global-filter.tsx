@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { useTranslation } from 'react-i18next'
-import { Div, Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
+import { Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 
@@ -17,17 +17,15 @@ export const GlobalFilterPopover: React.FC = () => {
 					<Icon name='Search' />
 				</PopoverTrigger>
 			</Tooltip>
-			<PopoverContent align='end' side='bottom' sideOffset={4} className='w-fit p-0'>
-				<Div className='relative w-fit'>
-					<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
-					<DebouncedInput
-						value={globalFilter}
-						onChange={(value) => setGlobalFilter(String(value))}
-						className='font-lg border p-2 pl-8'
-						placeholder='Tìm kiếm ...'
-						type='search'
-					/>
-				</Div>
+			<PopoverContent align='end' side='left' sideOffset={4} className='relative p-0 w-64'>
+				<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
+				<DebouncedInput
+					value={globalFilter}
+					onChange={(value) => setGlobalFilter(String(value))}
+					className='font-lg border p-2 pl-8'
+					placeholder='Tìm kiếm ...'
+					type='search'
+				/>
 			</PopoverContent>
 		</Popover>
 	)

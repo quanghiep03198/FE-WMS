@@ -4,27 +4,23 @@ import { cn } from '@/common/utils/cn'
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
 	({ className, ...props }, ref) => (
-		<table cellSpacing={0} ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
+		<table
+			cellSpacing={0}
+			ref={ref}
+			className={cn('w-full caption-bottom text-sm border-separate border-spacing-0', className)}
+			{...props}
+		/>
 	)
 )
 Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-	({ className, ...props }, ref) => (
-		<thead
-			ref={ref}
-			className={cn(
-				'sticky h-10 whitespace-nowrap data-[sticky=left]:left-0 data-[sticky=right]:right-0 data-[sticky=left]:z-10 data-[sticky=right]:z-10 [&:has([role=checkbox])]:text-center',
-				className
-			)}
-			{...props}
-		/>
-	)
+	({ className, ...props }, ref) => <thead ref={ref} className={cn('whitespace-nowrap', className)} {...props} />
 )
 TableHeader.displayName = 'TableHeader'
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-	({ className, ...props }, ref) => <tbody ref={ref} className={cn('divide-y divide-border', className)} {...props} />
+	({ className, ...props }, ref) => <tbody ref={ref} className={cn('[&>tr]:last:border-b-0', className)} {...props} />
 )
 TableBody.displayName = 'TableBody'
 
@@ -32,7 +28,7 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribut
 	({ className, ...props }, ref) => (
 		<tfoot
 			ref={ref}
-			className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0 ', className)}
+			className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
 			{...props}
 		/>
 	)
@@ -44,7 +40,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
 		<tr
 			ref={ref}
 			className={cn(
-				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&>*]:border-b',
+				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&>*]:border-b [&>*]:border-r [&:last-child>td]:border-b-0',
 				className
 			)}
 			{...props}
@@ -59,7 +55,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
 			ref={ref}
 			style={{ position: 'inherit' }}
 			className={cn(
-				'w-full border-b border-r bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/50 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[sticky=right]:border-l',
+				'w-full bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/50 last:border-r-0',
 				className
 			)}
 			{...props}
@@ -73,7 +69,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'border-b border-r bg-background px-4 py-2 align-middle text-sm  group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[sticky=left]:sticky data-[sticky=right]:sticky data-[sticky=left]:z-10 data-[sticky=right]:z-10 data-[sticky=right]:border-l data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
+				'bg-background px-4 py-2 group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0 last:border-r-0',
 				className
 			)}
 			{...props}

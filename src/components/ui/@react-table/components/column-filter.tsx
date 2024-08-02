@@ -42,11 +42,16 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground/80 ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
+							'min-w-[8rem] h-full px-4 rounded-none border-none text-xs font-medium text-muted-foreground/80 ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
 						tabIndex: 0
 					}}
+					selectProps={{
+						defaultValue: '',
+						onValueChange: (value) => {
+							column.setFilterValue(value)
+						}
+					}}
 					placeholder={t('ns_common:table.search_in_column')}
-					onValueChange={(value) => column.setFilterValue(value)}
 					data={
 						Array.isArray(metaFilterValues)
 							? metaFilterValues

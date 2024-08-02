@@ -48,7 +48,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					className='focus-within:ring-offset-transparen h-full rounded-none border-none p-0 px-4 py-0 outline-none ring-0 focus-within:ring-0'
 					onChange={(e) => {
 						setValue(e.target.value)
-						table.options.meta?.updateData(row.index, column.id, value)
+						table.options.meta?.updateRow(row.index, column.id, value)
 					}}
 					value={value as InputProps['value']}
 					{...cellEditorProps}
@@ -61,7 +61,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 						value: (value ?? undefined) as string | undefined,
 						onValueChange: (value) => {
 							setValue(value)
-							table.options.meta?.updateData(row.index, column.id, value)
+							table.options.meta?.updateRow(row.index, column.id, value)
 						}
 					}}
 					selectTriggerProps={{
@@ -79,7 +79,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					value={value as string}
 					onSelect={(value) => {
 						setValue(value)
-						table.options.meta?.updateData(row.index, column.id, value)
+						table.options.meta?.updateRow(row.index, column.id, value)
 					}}
 					triggerProps={{
 						role: 'combobox',

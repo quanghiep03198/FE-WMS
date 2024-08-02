@@ -1,8 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
-import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
-import { Div, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
+import { Fragment, memo, useCallback, useId, useMemo, useRef } from 'react'
+import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { DataTableUtility } from '../utils/table.util'
@@ -14,18 +14,22 @@ import { TableCellHead } from './table-cell-head'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
+// needed for table body level scope DnD setup
+import { type DragEndEvent } from '@dnd-kit/core'
+import tw from 'tailwind-styled-components'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
 		Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'>,
 		Pick<React.ComponentProps<'div'>, 'style'> {
 	table: TTable<TData>
+	onColumnDragEnd?: (event: DragEndEvent) => void
 }
 
 export const ESTIMATE_SIZE = 40
 
 function easeInOutQuint(t) {
-	return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t
+	return t <= 0.5 ? 16 * t ** 5 : 1 + 16 * (--t) ** 5
 }
 
 function TableDataGrid<TData, TValue>({
@@ -39,7 +43,6 @@ function TableDataGrid<TData, TValue>({
 	const { isFilterOpened } = useTableContext()
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
-	const headerRef = useRef<HTMLTableSectionElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollingRef = useRef<number>()
 	const captionId = useId()
@@ -95,18 +98,9 @@ function TableDataGrid<TData, TValue>({
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
 	return (
-		<Div
-			role='group'
-			className='flex flex-col items-stretch divide-y divide-border overflow-clip rounded-[var(--radius)] border bg-secondary/50'>
+		<Wrapper role='group'>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
-			<Div
-				{...containerProps}
-				ref={containerRef}
-				role='scrollbar'
-				className={cn(
-					'relative flex flex-col items-stretch overflow-auto scroll-smooth scrollbar scrollbar-track-background',
-					containerProps?.className
-				)}>
+			<ScrollArea ref={containerRef} role='scrollbar' className={containerProps?.className} {...containerProps}>
 				<Table
 					ref={tableRef}
 					className='w-full table-fixed border-separate border-spacing-0'
@@ -116,7 +110,7 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					<TableHeader className='sticky top-0 z-20 bg-background' ref={headerRef}>
+					<TableHeader className='sticky top-0 z-20 bg-background'>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<Fragment key={headerGroup.id}>
 								<TableRow>
@@ -130,9 +124,9 @@ function TableDataGrid<TData, TValue>({
 												key={header.id}
 												colSpan={header.colSpan}
 												rowSpan={rowSpan}
-												data-sticky={header.column.columnDef?.meta?.sticky}
-												className={cn('group relative')}
+												className='group relative h-10 p-0'
 												style={{
+													height: `${ESTIMATE_SIZE}px`,
 													width: `calc(var(--header-${header?.id}-size) * 1px)`,
 													...DataTableUtility.getStickyOffsetPosition(header.column)
 												}}>
@@ -142,20 +136,28 @@ function TableDataGrid<TData, TValue>({
 										)
 									})}
 								</TableRow>
-								{isFilterOpened && headerGroup.headers.every((header) => header.colSpan === 1) && (
+								{headerGroup.headers.every((header) => header.colSpan === 1) && (
 									<TableRow>
 										{headerGroup.headers.map((header) => {
 											return (
 												<TableHead
 													key={header.id}
 													colSpan={header.colSpan}
-													data-sticky={header.column.columnDef?.meta?.sticky}
-													className='group relative p-0'
+													className={cn(
+														'group relative p-0',
+														isFilterOpened ? 'border-b border-border' : 'border-none'
+													)}
 													style={{
 														width: `calc(var(--header-${header?.id}-size) * 1px)`,
 														...DataTableUtility.getStickyOffsetPosition(header.column)
 													}}>
-													<ColumnFilter column={header.column} />
+													<Collapsible
+														data-state={isFilterOpened ? 'open' : 'closed'}
+														open={isFilterOpened}>
+														<CollapsibleContent className='overflow-hidden h-10 transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+															<ColumnFilter column={header.column} />
+														</CollapsibleContent>
+													</Collapsible>
 												</TableHead>
 											)
 										})}
@@ -174,12 +176,15 @@ function TableDataGrid<TData, TValue>({
 					)}
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
-			</Div>
+			</ScrollArea>
 			{footerProps && <TableFooter {...{ table, ...footerProps }} />}
-		</Div>
+		</Wrapper>
 	)
 }
 
+const Wrapper = tw.div`flex flex-col items-stretch bg-secondary/50 border rounded-[var(--radius)] overflow-clip divide-y divide-border`
+const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll scroll-smooth scrollbar scrollbar-track-background`
+
 TableDataGrid.displayName = 'DataTable'
 
-export default TableDataGrid
+export default memo(TableDataGrid)

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { arrayMove } from '@dnd-kit/sortable'
 import {
 	Table,
 	getCoreRowModel,
@@ -16,12 +17,12 @@ import {
 	type PaginationState,
 	type SortingState
 } from '@tanstack/react-table'
-import { useDeepCompareEffect } from 'ahooks'
+import { useLatest } from 'ahooks'
 import { omit } from 'lodash'
-import { forwardRef, memo, useMemo, useState } from 'react'
+import { forwardRef, memo, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
-import { Div, Typography } from '..'
+import { Typography } from '..'
 import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
@@ -29,6 +30,10 @@ import { TableContext } from './context/table.context'
 import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
+// needed for table body level scope DnD setup
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/common/constants/constants'
+import { type DragEndEvent } from '@dnd-kit/core'
+import tw from 'tailwind-styled-components'
 
 function DataTable<TData, TValue>(
 	{
@@ -48,6 +53,7 @@ function DataTable<TData, TValue>(
 		enableColumnFilters = true,
 		enableSorting = true,
 		enableExpanding = true,
+		enableColumnPinning = true,
 		enableGlobalFilter = true,
 		globalFilterFn = fuzzyFilter,
 		sorting,
@@ -64,6 +70,7 @@ function DataTable<TData, TValue>(
 	}: DataTableProps<TData, TValue>,
 	ref: React.MutableRefObject<Table<any>>
 ) {
+	const { t } = useTranslation()
 	const [_data, setData] = useState(() => data ?? [])
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
@@ -72,29 +79,19 @@ function DataTable<TData, TValue>(
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
+	const [columnOrder, setColumnOrder] = useState<string[]>(() => columns.map((c, index) => c.id))
 	const [editedRows, setEditedRows] = useState({})
 	const [pagination, setPagination] = useState<PaginationState>(() => ({
 		pageIndex: 0,
 		pageSize: 10
 	}))
-
 	const originalData = useMemo(() => data ?? [], [data])
-
 	const hasNoFilter = useMemo(() => {
 		if (manualFiltering) return columnFilters?.length === 0
 		return _columnFilters.length === 0 && _globalFilter.length === 0
 	}, [_globalFilter, _columnFilters, columnFilters])
 
-	const { t } = useTranslation()
-
-	/**
-	 * Avoid infinite loop if data is empty
-	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
-	 */
-	useDeepCompareEffect(() => {
-		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
-	}, [data])
-
+	// * Table declaration
 	const table = useReactTable({
 		data: _data,
 		columns,
@@ -103,6 +100,10 @@ function DataTable<TData, TValue>(
 			maxSize: 800
 		},
 		initialState: {
+			columnPinning: {
+				left: [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID],
+				right: [ROW_ACTIONS_COLUMN_ID]
+			},
 			globalFilter: '',
 			columnFilters: [],
 			pagination: {
@@ -115,6 +116,7 @@ function DataTable<TData, TValue>(
 			columnFilters: manualFiltering ? columnFilters : _columnFilters,
 			globalFilter: manualFiltering ? globalFilter : _globalFilter,
 			expanded,
+			columnOrder,
 			pagination: manualPagination
 				? {
 						pageIndex: paginationProps.page - 1,
@@ -129,6 +131,7 @@ function DataTable<TData, TValue>(
 		enableSorting,
 		enableExpanding,
 		enableGlobalFilter,
+		enableColumnPinning,
 		enableColumnResizing,
 		columnResizeMode: 'onChange',
 		debugAll: false,
@@ -139,6 +142,7 @@ function DataTable<TData, TValue>(
 		onSortingChange: manualSorting ? onSortingChange : setSorting,
 		onColumnFiltersChange: manualFiltering ? onColumnFiltersChange : setColumnFilters,
 		onGlobalFilterChange: manualFiltering ? onGlobalFilterChange : setGlobalFilter,
+		onColumnOrderChange: setColumnOrder,
 		onExpandedChange: setExpanded,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -153,7 +157,7 @@ function DataTable<TData, TValue>(
 		meta: {
 			editedRows,
 			setEditedRows,
-			updateData: (rowIndex, columnId, value) => {
+			updateRow: (rowIndex, columnId, value) => {
 				// Skip page index reset until after next rerender
 				setAutoResetPageIndex(false)
 				setData((old) =>
@@ -186,15 +190,39 @@ function DataTable<TData, TValue>(
 		...props
 		// getSubRows: (row) => row.subRows,
 	})
+	const tableRef = useLatest<Table<TData>>(table)
+	const tableWrapperRef = useRef<HTMLDivElement>(null)
 
+	/**
+	 * * Avoid infinite loop if data is empty
+	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
+	 */
+	useEffect(() => {
+		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
+	}, [data])
+
+	// * Forwarding ref from parent component
+	useEffect(() => {
+		if (ref) ref.current = tableRef.current
+	}, [tableRef.current])
+
+	// * Reorder columns after drag & drop
+	function handleDragEnd(event: DragEndEvent) {
+		const { active, over } = event
+		if (active && over && active.id !== over.id) {
+			setColumnOrder((columnOrder) => {
+				const oldIndex = columnOrder.indexOf(active.id as string)
+				const newIndex = columnOrder.indexOf(over.id as string)
+				return arrayMove(columnOrder, oldIndex, newIndex) //this is just a splice util
+			})
+		}
+	}
+
+	// * Get row selection count
 	const rowSelectionCount =
 		String(table.getFilteredSelectedRowModel().rows?.length ?? 0) +
 		'/' +
 		String(table.getFilteredRowModel().rows?.length ?? 0)
-
-	useDeepCompareEffect(() => {
-		if (ref) ref.current = table
-	}, [ref, table])
 
 	return (
 		<TableContext.Provider
@@ -202,20 +230,22 @@ function DataTable<TData, TValue>(
 				isScrolling,
 				hasNoFilter,
 				isFilterOpened,
+				columnOrder,
 				sorting,
 				columnFilters: _columnFilters,
 				globalFilter: _globalFilter,
 				enableGlobalFilter,
 				manualSorting,
 				autoResetPageIndex,
-				skipAutoResetPageIndex: setAutoResetPageIndex,
+				tableWrapperRef,
+				setAutoResetPageIndex,
 				setIsScrolling,
 				setIsFilterOpened,
 				setColumnFilters,
 				setSorting,
 				setGlobalFilter
 			}}>
-			<Div className='space-y-3'>
+			<DataTableWrapper ref={tableWrapperRef}>
 				{!toolbarProps.hidden && <TableToolbar table={table} slot={toolbarProps.slot} />}
 				<TableDataGrid
 					table={table}
@@ -227,7 +257,7 @@ function DataTable<TData, TValue>(
 					renderSubComponent={renderSubComponent}
 					getRowCanExpand={getRowCanExpand}
 				/>
-				<Div className='flex items-center justify-between'>
+				<FooterGroup>
 					{enableRowSelection && (
 						<Typography className='text-sm font-medium sm:hidden'>
 							{t('ns_common:table.selected_rows', {
@@ -245,10 +275,13 @@ function DataTable<TData, TValue>(
 							{...omit(paginationProps, ['hidden'])}
 						/>
 					)}
-				</Div>
-			</Div>
+				</FooterGroup>
+			</DataTableWrapper>
 		</TableContext.Provider>
 	)
 }
+
+const DataTableWrapper = tw.div`space-y-4`
+const FooterGroup = tw.div`flex items-center justify-between`
 
 export default memo(forwardRef(DataTable))

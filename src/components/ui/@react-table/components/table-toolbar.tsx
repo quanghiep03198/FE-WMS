@@ -39,8 +39,11 @@ function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 				<GlobalFilterPopover />
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
 					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-						<Button variant='outline' onClick={() => setIsFilterOpened(!isFilterOpened)} size='icon'>
-							<Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
+						<Button
+							variant={isFilterOpened ? 'secondary' : 'outline'}
+							size='icon'
+							onClick={() => setIsFilterOpened((prev) => !prev)}>
+							<Icon name='Filter' />
 						</Button>
 					</Tooltip>
 				)}
