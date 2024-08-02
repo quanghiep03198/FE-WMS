@@ -6,7 +6,8 @@ export default {
 		caption: 'EPC codes data is automatically synchronized every {{value}} seconds.'
 	},
 	mo_no_box: {
-		caption: 'You can determine which order should be used to import/export'
+		caption: 'You can determine which order should be used to import/export',
+		order_count: '{{ count }} order(s) found'
 	},
 	action_types: {
 		warehouse_input: 'Warehouse input',

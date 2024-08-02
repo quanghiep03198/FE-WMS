@@ -15,8 +15,6 @@ import {
 	SelectContent,
 	SelectGroup,
 	SelectItem,
-	SelectLabel,
-	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
 	Tooltip,
@@ -75,8 +73,6 @@ const EPCListHeading: React.FC = () => {
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup>
-						<SelectLabel>{t('ns_inoutbound:fields.mo_no')}</SelectLabel>
-						<SelectSeparator />
 						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
 							<Fragment>
 								<SelectItem value='all'>All</SelectItem>
@@ -223,28 +219,30 @@ const OrderDetails: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='px-4 py-2'>
+			<Div className='px-4 py-2 flex justify-between items-center'>
 				<Dialog>
 					<DialogTrigger
 						className={cn(buttonVariants({ variant: 'secondary', size: 'sm', className: 'items-center' }))}>
 						<Icon name='List' role='img' />
-						Orders details
+						{t('ns_common:actions.detail')}
 					</DialogTrigger>
 					<DialogContent className='max-w-4xl'>
 						<DialogHeader>
 							<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 							<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 						</DialogHeader>
-						<Div className='rounded-lg border divide-y divide-border'>
+						<Div className='rounded-lg border divide-y divide-border text-sm'>
 							<ScrollArea className='h-96 w-full'>
 								<Div className='grid divide-y divide-border'>
 									{Array.isArray(scannedOrders) &&
 										scannedOrders.map((order) => {
 											return (
 												<Div className='grid grid-cols-[144px_auto_80px_64px] divide-x divide-border'>
-													<GridCell className='row-span-2 text-center grid place-content-center font-medium'>
-														{order?.mo_no ?? 'Unknown'}
-													</GridCell>
+													<Div className='divide-y divide-border'>
+														<GridCell className='row-span-2 text-center grid place-content-center font-medium p-0 overflow-hidden h-20'>
+															{order?.mo_no ?? 'Unknown'}
+														</GridCell>
+													</Div>
 													<Div
 														className='grid row-span-1 divide-x divide-border'
 														style={{
@@ -252,16 +250,18 @@ const OrderDetails: React.FC = () => {
 														}}>
 														{getSizeByOrder(order.mo_no)?.map((size) => (
 															<Div className='divide-y divide-border'>
-																<GridCell className='bg-secondary text-secondary-foreground font-medium'>
+																<GridCell className='bg-secondary/50 text-secondary-foreground font-medium'>
 																	{size.size_numcode ?? 'Unknown'}
 																</GridCell>
 																<GridCell>{size.count}</GridCell>
 															</Div>
 														))}
 													</Div>
-													<Div className='divide-y divide-border font-medium'>
-														<GridCell className='bg-secondary text-secondary-foreground'>Total</GridCell>
-														<GridCell>{order.count}</GridCell>
+													<Div className='divide-y divide-border'>
+														<GridCell className='bg-secondary/50 text-secondary-foreground'>
+															{t('ns_common:common_fields.total')}
+														</GridCell>
+														<GridCell className='font-medium'>{order.count}</GridCell>
 													</Div>
 													<GridCell className='row-span-2 grid place-content-center'>
 														<Tooltip
@@ -311,6 +311,12 @@ const OrderDetails: React.FC = () => {
 						</Div>
 					</DialogContent>
 				</Dialog>
+				<Typography variant='small' color='muted'>
+					{t('ns_inoutbound:mo_no_box.order_count', {
+						count: scannedOrders?.length ?? 0,
+						defaultValue: null
+					})}
+				</Typography>
 			</Div>
 			{/* Confirm deleting all fetched orders and restart scanning progress */}
 			<ConfirmDialog

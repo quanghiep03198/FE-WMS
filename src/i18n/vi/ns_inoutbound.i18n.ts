@@ -6,7 +6,8 @@ export default {
 		caption: 'Dữ liệu đọc EPC tự động đồng bộ sau mỗi {{value}} giây.'
 	},
 	mo_no_box: {
-		caption: 'Bạn có thể tùy chọn các chỉ lệnh được sủ dụng để thao tác nhập/xuất'
+		caption: 'Bạn có thể tùy chọn các chỉ lệnh được sủ dụng để thao tác nhập/xuất',
+		order_count: 'Đã quét {{ count }} đơn hàng'
 	},
 	action_types: {
 		warehouse_input: 'Nhập kho',

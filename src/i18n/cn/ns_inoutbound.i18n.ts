@@ -6,7 +6,8 @@ export default {
 		caption: 'EPC自动更新每 {{value}} 秒'
 	},
 	mo_no_box: {
-		caption: '您可以选择需要导入/导出的指令'
+		caption: '您可以选择需要导入/导出的指令',
+		order_count: '找到 {{ count }} 个订单'
 	},
 	action_types: {
 		warehouse_input: '入庫',
