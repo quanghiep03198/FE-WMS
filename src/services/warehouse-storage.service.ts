@@ -1,7 +1,4 @@
-import {
-	PartialStorageFormValue,
-	StorageFormValue
-} from '@/app/(features)/_layout.warehouse/_schemas/-warehouse.schema'
+import { PartialStorageFormValue, StorageFormValue } from '@/app/(features)/_layout.warehouse/_schemas/warehouse.schema'
 import { IWarehouseStorage } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 

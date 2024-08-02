@@ -18,8 +18,8 @@ import { omit, pick } from 'lodash'
 import { Fragment, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { UpdateApprovalStatusValues, UpdateTransferOrderValues } from '../_schemas/-transfer-order.schema'
-import { usePageStore } from '../_stores/-page.store'
+import { UpdateApprovalStatusValues, UpdateTransferOrderValues } from '../_schemas/transfer-order.schema'
+import { usePageStore } from '../_stores/page.store'
 
 type TransferOrderRowActionsProps = {
 	cellContext: CellContext<ITransferOrder, unknown>

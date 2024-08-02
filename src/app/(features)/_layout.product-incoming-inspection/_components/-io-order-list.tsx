@@ -1,4 +1,6 @@
+import { ROW_EXPANSION_COLUMN_ID } from '@/common/constants/constants'
 import { IInOutBoundOrder } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { DataTableUtility } from '@/components/ui/@react-table/utils/table.util'
 import { IOService } from '@/services/inoutbound.service'
@@ -8,7 +10,7 @@ import { AxiosRequestConfig } from 'axios'
 import { isEmpty, omit } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ProductionApprovalStatus } from '../_constants/-production.enum'
+import { ProductionApprovalStatus } from '../_constants/production.enum'
 import IOSubOrderRow from './-io-order-detail'
 
 const IO_PRODUCTION_PROVIDE_TAG = 'PRODUCTION' as const
@@ -33,17 +35,17 @@ const InOutBoundOrderList: React.FC = () => {
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor('id', {
-				id: 'row-expander',
+				id: ROW_EXPANSION_COLUMN_ID,
 				header: ({ table }) => (
 					<Tooltip
-						message={table.getIsAllRowsExpanded() ? t('ns_common:actions.close') : t('ns_common:actions.open')}
+						message='Collapse expanded rows'
 						triggerProps={{ asChild: true }}
 						contentProps={{ side: 'right', sideOffset: 0, alignOffset: 0 }}>
 						<button
 							className='flex w-full items-center justify-center'
 							role='button'
-							onClick={() => table.toggleAllRowsExpanded()}>
-							<Icon name={table.getIsAllRowsExpanded() ? 'FoldVertical' : 'UnfoldVertical'} />
+							onClick={() => table.toggleAllRowsExpanded(false)}>
+							<Icon name='SquareMinus' size={18} />
 						</button>
 					</Tooltip>
 				),
@@ -54,8 +56,13 @@ const InOutBoundOrderList: React.FC = () => {
 				enableResizing: false,
 				cell: ({ row }) => {
 					return row.getCanExpand() ? (
-						<button className='flex w-full items-center justify-center' onClick={row.getToggleExpandedHandler()}>
-							{row.getIsExpanded() ? <Icon name='ChevronDown' /> : <Icon name='ChevronRight' />}
+						<button
+							className={cn(
+								'flex w-full items-center justify-center transition-transform duration-150 ease focus:outline-none',
+								row.getIsExpanded() ? 'rotate-90' : 'rotate-0'
+							)}
+							onClick={row.getToggleExpandedHandler()}>
+							<Icon name='ChevronRight' />
 						</button>
 					) : null
 				}

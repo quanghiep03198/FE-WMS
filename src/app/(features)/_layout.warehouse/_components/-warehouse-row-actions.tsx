@@ -7,8 +7,8 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { getWarehouseDetailOptions } from '../_composables/-use-warehouse-api'
-import { getWarehouseStorageOptions } from '../_composables/-use-warehouse-storage-api'
+import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
+import { getWarehouseDetailOptions } from '../_apis/warehouse.api'
 
 type WarehouseRowActionsProps = {
 	row: Row<IWarehouse>

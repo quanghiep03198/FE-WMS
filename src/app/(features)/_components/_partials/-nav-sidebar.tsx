@@ -7,13 +7,13 @@ import { navigationConfig, type NavigationConfig } from '@/configs/navigation.co
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
-import { pick } from 'lodash'
+import { debounce, pick } from 'lodash'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useShallow } from 'zustand/react/shallow'
 import AppLogo from '../../../_components/_shared/-app-logo'
-import { useLayoutStore } from '../../_stores/-layout.store'
+import { useLayoutStore } from '../../_stores/layout.store'
 
 type NavLinkProps = { open: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
@@ -29,9 +29,7 @@ const NavSidebar: React.FC = () => {
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
-			'ctrl.b': function () {
-				toggleNavSidebarOpen()
-			},
+			'ctrl.b': debounce(toggleNavSidebarOpen, 50),
 			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
 				acc[String(curr.keybinding)] = function () {
 					return navigate({ to: curr.path })
@@ -59,7 +57,7 @@ const NavSidebar: React.FC = () => {
 			as='aside'
 			className={cn(
 				'z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden',
-				open ? 'w-16 items-center' : 'items-stretch xl:w-80 xxl:w-88'
+				open ? 'w-16 items-center' : 'items-stretch @xl:w-80 @[1920px]:w-88'
 			)}>
 			<Link
 				to='/dashboard'
@@ -113,13 +111,14 @@ const NavLink: React.FC<NavLinkProps> = ({ open: navSidebarOpen, path, title, ic
 			<Link
 				to={path}
 				role='link'
+				preload='intent'
 				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}
 				className={cn(
 					buttonVariants({
 						variant: 'ghost',
 						size: navSidebarOpen ? 'icon' : 'default',
 						className:
-							'flex px-2 text-base font-normal duration-0 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-transparent'
+							'flex px-2 text-base font-normal duration-0 focus-within:outline-none focus:ring-0 focus:ring-offset-transparent'
 					}),
 					!navSidebarOpen ? 'justify-start gap-x-3' : 'aspect-square size-9'
 				)}>

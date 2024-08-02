@@ -10,7 +10,7 @@ import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useShallow } from 'zustand/react/shallow'
-import { useLayoutStore } from '../../_stores/-layout.store'
+import { useLayoutStore } from '../../_stores/layout.store'
 
 const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()

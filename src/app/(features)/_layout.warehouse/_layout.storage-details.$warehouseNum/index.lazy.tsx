@@ -1,5 +1,5 @@
 // #region Modules
-import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'

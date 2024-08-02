@@ -19,6 +19,7 @@ const WarehouseListHeading: React.FC = () => {
 			</Div>
 
 			<Button
+				size='sm'
 				onClick={() =>
 					dispatch({
 						type: CommonActions.CREATE,

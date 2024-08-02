@@ -7,7 +7,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 	const { t } = useTranslation()
 
 	return (
-		<List role='table'>
+		<List role='subrow'>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
 					{t('ns_inoutbound:fields.sno_no')}
@@ -92,5 +92,5 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 
 export default memo(IOSubOrderRow)
 
-const List = tw(Div)<DivProps>`grid grid-cols-3 w-full gap-y-2 gap-x-4 overflow-auto scrollbar-none p-4`
+const List = tw(Div)<DivProps>`grid grid-cols-3 gap-y-2 gap-x-4 overflow-auto scrollbar-none w-full sticky left-4`
 const ListItem = tw(Div)<DivProps>`grid grid-cols-2 whitespace-nowrap gap-x-4`

@@ -1,4 +1,4 @@
-import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/-transfer-order.schema'
+import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/transfer-order.schema'
 import { ICustomerBrand, ITransferOrder, ITransferOrderData, ITransferOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 

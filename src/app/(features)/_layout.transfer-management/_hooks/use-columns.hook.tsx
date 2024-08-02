@@ -7,14 +7,15 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetWarehouseQuery } from '../../_layout.warehouse/_composables/-use-warehouse-api'
+import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
 
+import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/common/constants/constants'
+import { useUpdateTransferOrderMutation } from '../_apis/-use-transfer-order-api'
 import { StorageCellEditor, WarehouseCellEditor } from '../_components/-cell-editor'
 import TransferOrderRowActions from '../_components/-transfer-order-row-actions'
 import { TransferOrderApprovalStatus } from '../_constants/-transfer-order.enum'
-import { UpdateTransferOrderValues } from '../_schemas/-transfer-order.schema'
-import { usePageStore } from '../_stores/-page.store'
-import { useUpdateTransferOrderMutation } from './-use-transfer-order-api'
+import { UpdateTransferOrderValues } from '../_schemas/transfer-order.schema'
+import { usePageStore } from '../_stores/page.store'
 
 type TransferOrderTableColumnParams = {
 	setConfirmDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -38,8 +39,8 @@ export const useTransferOrderTableColumns = ({
 
 	return useMemo(
 		() => [
-			columnHelper.accessor('row-selection', {
-				id: 'row-selection',
+			columnHelper.accessor('id', {
+				id: ROW_SELECTION_COLUMN_ID,
 				header: ({ table }) => {
 					const checked =
 						table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -49,7 +50,6 @@ export const useTransferOrderTableColumns = ({
 							role='checkbox'
 							checked={checked as CheckedState}
 							onCheckedChange={(checkedState) => {
-								update()
 								if (checkedState) setRowSelectionType('multiple')
 								table.toggleAllRowsSelected(!!checkedState)
 							}}
@@ -62,7 +62,6 @@ export const useTransferOrderTableColumns = ({
 						role='checkbox'
 						checked={row.getIsSelected()}
 						onCheckedChange={(checkedState) => {
-							update()
 							if (checkedState) setRowSelectionType('multiple')
 							row.toggleSelected(Boolean(checkedState))
 						}}
@@ -251,7 +250,7 @@ export const useTransferOrderTableColumns = ({
 			}),
 
 			columnHelper.display({
-				id: 'row-actions',
+				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
 				meta: {
 					sticky: 'right',

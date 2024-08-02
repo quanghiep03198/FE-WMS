@@ -1,15 +1,23 @@
+import { ScannedOrder, ScannedOrderSizing } from '@/app/(features)/_layout.inoutbound/_contexts/-page-context'
 import {
 	InboundFormValues,
 	OutboundFormValues
-} from '@/app/(features)/_layout.inoutbound/_schemas/-epc-inoutbound.schema'
-import { IElectronicProductCode } from '@/common/types/entities'
+} from '@/app/(features)/_layout.inoutbound/_schemas/epc-inoutbound.schema'
+import { IDepartment, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 type InOutBoundPayload = (InboundFormValues | OutboundFormValues) & { mo_no: string; host: string }
 
 export class RFIDService {
-	static async getUnscannedEpc(host: string) {
-		return await axiosInstance.get<void, ResponseBody<IElectronicProductCode[]>>(`/rfid/read-epc/${host}`)
+	static async getScannedEPC(host: string) {
+		return await axiosInstance.get<
+			void,
+			ResponseBody<{
+				datalist: IElectronicProductCode[]
+				orderList: ScannedOrder[]
+				sizing: ScannedOrderSizing[]
+			}>
+		>(`/rfid/read-epc/${host}`)
 	}
 
 	static async updateStockMovement(payload: InOutBoundPayload) {
@@ -18,6 +26,10 @@ export class RFIDService {
 
 	static async getDatabaseCompatibility() {
 		return await axiosInstance.get<void, ResponseBody<string[]>>('/rfid/database-compatibility')
+	}
+
+	static async getInoutboundDept() {
+		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/rfid/inoutbound-dept')
 	}
 
 	static async syncEpcOrderCode() {

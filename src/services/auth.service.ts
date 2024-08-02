@@ -1,4 +1,4 @@
-import { LoginFormValues } from '@/app/(auth)/login/_schemas/-login.schema'
+import { LoginFormValues } from '@/app/(auth)/login/_schemas/login.schema'
 import { IUser } from '@/common/types/entities'
 import { _JSON } from '@/common/utils/json'
 import { AppConfigs } from '@/configs/app.config'

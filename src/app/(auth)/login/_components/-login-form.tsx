@@ -1,6 +1,6 @@
-import { USER_PROVIDE_TAG } from '@/app/(auth)/_composables/-use-auth-api'
+import { USER_PROVIDE_TAG } from '@/app/(auth)/_apis/auth.api'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
-import { StepContext } from '@/components/ui/@custom/step'
+import { useStepContext } from '@/components/ui/@custom/step'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,16 +8,16 @@ import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { isEmpty } from 'lodash'
-import { useCallback, useContext, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { LoginFormValues, loginSchema } from '../_schemas/-login.schema'
+import { LoginFormValues, loginSchema } from '../_schemas/login.schema'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
-	const { dispatch } = useContext(StepContext)
+	const { dispatch } = useStepContext()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true

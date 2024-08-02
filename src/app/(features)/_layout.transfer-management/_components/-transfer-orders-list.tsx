@@ -4,15 +4,15 @@ import { Button, DataTable, Div, Icon, Separator, Tooltip, Typography } from '@/
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { type Table } from '@tanstack/react-table'
 import { isEmpty } from 'lodash'
-import { Fragment, memo, useCallback, useRef, useState } from 'react'
+import { Fragment, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	useDeleteTransferOrderMutation,
 	useGetTransferOrderQuery,
 	useUpdateMultiTransferOrderMutation
-} from '../_composables/-use-transfer-order-api'
-import { useTransferOrderTableColumns } from '../_composables/-use-transfer-order-columns'
-import { usePageStore } from '../_stores/-page.store'
+} from '../_apis/-use-transfer-order-api'
+import { useTransferOrderTableColumns } from '../_hooks/use-columns.hook'
+import { usePageStore } from '../_stores/page.store'
 
 const TransferOrdersList: React.FC = () => {
 	const tableRef = useRef<Table<any>>(null)
@@ -71,7 +71,7 @@ const TransferOrdersList: React.FC = () => {
 					enableGrouping={true}
 					enableRowSelection={true}
 					toolbarProps={{
-						slot: memo(() => (
+						slot: () => (
 							<Fragment>
 								{tableRef.current &&
 									tableRef.current?.getSelectedRowModel().flatRows.length > 0 &&
@@ -93,7 +93,7 @@ const TransferOrdersList: React.FC = () => {
 									</Tooltip>
 								</Fragment>
 							</Fragment>
-						))
+						)
 					}}
 					footerProps={{
 						rtl: true,
@@ -150,4 +150,4 @@ const TransferOrdersList: React.FC = () => {
 	)
 }
 
-export default memo(TransferOrdersList)
+export default TransferOrdersList

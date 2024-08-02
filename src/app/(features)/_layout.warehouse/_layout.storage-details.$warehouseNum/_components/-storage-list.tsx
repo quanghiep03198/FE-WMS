@@ -15,8 +15,8 @@ import {
 	useDeleteStorageMutation,
 	useGetWarehouseStorageQuery,
 	useUpdateStorageMutation
-} from '../../_composables/-use-warehouse-storage-api'
-import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
+} from '../../_apis/warehouse-storage.api'
+import { warehouseStorageTypes } from '../../_constants/warehouse.const'
 import { usePageContext } from '../../_contexts/-page-context'
 import StorageRowActions from './-storage-row-actions'
 // #endregion

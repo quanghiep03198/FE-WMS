@@ -1,5 +1,6 @@
+import { Div } from '@/components/ui'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { getUserProfileQuery } from '../(auth)/_composables/-use-auth-api'
+import { getUserProfileQuery } from '../(auth)/_apis/auth.api'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
 import Unauthorized from '../_components/_errors/-unauthorized'
 import AuthGuard from '../_components/_guard/-auth-guard'
@@ -11,17 +12,16 @@ import Navbar from './_components/_partials/-navbar'
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
 	errorComponent: Unauthorized,
-	loader: ({ context: { queryClient }, abortController }) =>
-		queryClient.fetchQuery(getUserProfileQuery({ signal: abortController.signal })),
-
+	loader: async ({ context: { queryClient }, abortController }) => {
+		return await queryClient.ensureQueryData(getUserProfileQuery({ signal: abortController.signal }))
+	},
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({
 				to: '/login'
 			})
 	},
-	shouldReload: false,
-	wrapInSuspense: true
+	pendingComponent: Pending
 })
 
 function Layout() {
@@ -41,4 +41,8 @@ function Layout() {
 			</LayoutComposition.Container>
 		</AuthGuard>
 	)
+}
+
+function Pending() {
+	return <Div className='w-screen flex items-center justify-center h-screen'>Authenticating ...</Div>
 }

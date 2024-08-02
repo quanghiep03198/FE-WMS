@@ -1,5 +1,5 @@
 // #region Modules
-import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_layout.warehouse/_composables/-use-warehouse-storage-api'
+import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { CommonActions } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import { IWarehouseStorage } from '@/common/types/entities'
@@ -27,10 +27,10 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { WAREHOUSE_PROVIDE_TAG } from '../../_composables/-use-warehouse-api'
-import { warehouseStorageTypes } from '../../_constants/-warehouse.constant'
+import { WAREHOUSE_PROVIDE_TAG } from '../../_apis/warehouse.api'
+import { warehouseStorageTypes } from '../../_constants/warehouse.const'
 import { usePageContext } from '../../_contexts/-page-context'
-import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../_schemas/-warehouse.schema'
+import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../_schemas/warehouse.schema'
 // #endregion
 
 // #region Component declaration
@@ -91,10 +91,6 @@ const WarehouseStorageFormDialog: React.FC = () => {
 		}
 	})
 
-	// const handleOpenStateChange = (open) => {
-	// 	if (!open) dispatch({ type: undefined })
-	// }
-
 	return (
 		<Dialog open={open} onOpenChange={() => dispatch({ type: undefined })}>
 			<DialogContent className='w-full max-w-2xl bg-popover'>
@@ -115,10 +111,12 @@ const WarehouseStorageFormDialog: React.FC = () => {
 							name='type_storage'
 							control={form.control}
 							label={t('ns_warehouse:fields.type_storage')}
-							options={Object.entries(warehouseStorageTypes).map(([key, value]) => ({
+							datalist={Object.entries(warehouseStorageTypes).map(([key, value]) => ({
 								label: t(value, { ns: 'ns_warehouse', defaultValue: value }),
 								value: key
 							}))}
+							labelField='label'
+							valueField='value'
 						/>
 						<TextareaFieldControl
 							name='remark'

@@ -27,21 +27,16 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetDepartmentQuery } from '../../_composables/-use-department-api'
-import { WAREHOUSE_PROVIDE_TAG } from '../_composables/-use-warehouse-api'
-import { warehouseTypes } from '../_constants/-warehouse.constant'
+import { useGetDepartmentQuery } from '../../../(auth)/_apis/department.api'
+import { WAREHOUSE_PROVIDE_TAG } from '../_apis/warehouse.api'
+import { warehouseTypes } from '../_constants/warehouse.const'
 import { usePageContext } from '../_contexts/-page-context'
-import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '../_schemas/-warehouse.schema'
+import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '../_schemas/warehouse.schema'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
 	? Required<WarehouseFormValue>
 	: PartialWarehouseFormValue) &
 	Pick<IWarehouse, 'id'>
-
-type WarehouseFormDialogProps = {
-	open: boolean
-	onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-}
 
 const WarehouseFormDialog: React.FC = () => {
 	const queryClient = useQueryClient()
@@ -59,7 +54,7 @@ const WarehouseFormDialog: React.FC = () => {
 
 	// Get department field values
 	const { data: departments } = useGetDepartmentQuery(user?.company_code)
-
+	console.log(departments)
 	// Get employee field values
 	const { data: employees } = useQuery({
 		queryKey: ['EMPLOYEES', employeeSearchTerm],
@@ -97,6 +92,11 @@ const WarehouseFormDialog: React.FC = () => {
 		form.reset({ ...defaultFormValues, company_code: user?.company_code })
 	}, [type, defaultFormValues, open])
 
+	const warehouseTypeOptions = Object.entries(warehouseTypes).map(([key, value]) => ({
+		label: t(value, { ns: 'ns_warehouse', defaultValue: value }) as string,
+		value: key
+	}))
+
 	return (
 		<Dialog
 			open={open}
@@ -122,10 +122,9 @@ const WarehouseFormDialog: React.FC = () => {
 								name='type_warehouse'
 								label={t('ns_warehouse:fields.type_warehouse')}
 								control={form.control}
-								options={Object.entries(warehouseTypes).map(([key, value]) => ({
-									label: t(value, { ns: 'ns_warehouse', defaultValue: value }),
-									value: key
-								}))}
+								datalist={warehouseTypeOptions}
+								labelField='label'
+								valueField='value'
 							/>
 						</FormItem>
 						<FormItem>
@@ -144,10 +143,10 @@ const WarehouseFormDialog: React.FC = () => {
 								placeholder='Search department ...'
 								label={t('ns_company:department')}
 								form={form}
-								data={departments}
+								datalist={departments}
 								shouldFilter={false}
-								labelField='MES_dept_name'
-								valueField='ERP_dept_code'
+								labelField='dept_name'
+								valueField='dept_code'
 							/>
 						</FormItem>
 						<FormItem>
@@ -165,7 +164,7 @@ const WarehouseFormDialog: React.FC = () => {
 								placeholder='Search employee ...'
 								label={t('ns_warehouse:fields.manager')}
 								form={form}
-								data={employees}
+								datalist={employees}
 								disabled={!department}
 								shouldFilter={false}
 								labelField='employee_name'

@@ -1,4 +1,4 @@
-import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
+import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.enum'
 import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 
 const warehouseTypes = ['A', 'B', 'C', 'D', 'E']

@@ -14,12 +14,9 @@ import React, { memo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import {
-	useGetTransferOrderDetail,
-	useUpdateTransferOrderDetailMutation
-} from '../_composables/-use-transfer-order-api'
-import { UpdateTransferOrderDetailValues, updateTransferOrderDetailSchema } from '../_schemas/-transfer-order.schema'
-import { usePageStore } from '../_stores/-page.store'
+import { useGetTransferOrderDetail, useUpdateTransferOrderDetailMutation } from '../_apis/-use-transfer-order-api'
+import { UpdateTransferOrderDetailValues, updateTransferOrderDetailSchema } from '../_schemas/transfer-order.schema'
+import { usePageStore } from '../_stores/page.store'
 
 const TransferOrderDetail: React.FC = () => {
 	const { t } = useTranslation()

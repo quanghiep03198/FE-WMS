@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { AppearanceFormValues, appearanceFormSchema } from './_schemas/-user-preference.schema'
+import { AppearanceFormValues, appearanceFormSchema } from './_schemas/user-preference.schema'
 
 export const Route = createLazyFileRoute('/(preferences)/_layout/appearance-settings/')({
 	component: Page
@@ -62,12 +62,21 @@ function Page() {
 			<Separator />
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit(handleSaveSettings)} className=''>
-					<SelectFieldControl name='font' label='Font' control={form.control} options={fontOptions} />
+					<SelectFieldControl
+						name='font'
+						label='Font'
+						control={form.control}
+						datalist={fontOptions}
+						labelField='label'
+						valueField='value'
+					/>
 					<SelectFieldControl
 						name='language'
 						label={t('ns_common:settings.language')}
 						control={form.control}
-						options={locales}
+						datalist={locales}
+						labelField='label'
+						valueField='value'
 						onValueChange={(value) => i18n.changeLanguage(value)}
 					/>
 					<FormField

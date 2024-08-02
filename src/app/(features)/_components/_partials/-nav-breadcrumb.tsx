@@ -1,4 +1,4 @@
-import { useLayoutStore } from '@/app/(features)/_stores/-layout.store'
+import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
 import {
 	Breadcrumb,
 	BreadcrumbEllipsis,

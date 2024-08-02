@@ -11,7 +11,7 @@ import {
 import { AxiosError, AxiosResponse } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { PartialStorageFormValue } from '../_schemas/-warehouse.schema'
+import { PartialStorageFormValue } from '../_schemas/warehouse.schema'
 
 export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE' as const
 

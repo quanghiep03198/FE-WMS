@@ -8,7 +8,7 @@ import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { SearchFormValues, searchFormSchema } from '../_schemas/-search-customer-brand.schema'
+import { SearchFormValues, searchFormSchema } from '../_schemas/search-customer-brand.schema'
 
 const CUSTOMER_BRAND_PROVIDE_TAG = 'CUSTOMER_BRAND' as const
 
@@ -46,7 +46,7 @@ const OrderDatalistSearchForm: React.FC = () => {
 					<ComboboxFieldControl
 						name='brand'
 						form={form}
-						data={brands}
+						datalist={brands}
 						loading={isLoading}
 						valueField='custbrand_id'
 						labelField='brand_name'

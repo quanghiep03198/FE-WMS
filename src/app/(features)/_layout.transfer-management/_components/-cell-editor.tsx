@@ -1,8 +1,8 @@
 import { ITransferOrder, IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import CellEditor, { CellEditorProps } from '@/components/ui/@react-table/components/cell-editor'
 import { CellContext } from '@tanstack/react-table'
-import { useGetWarehouseQuery } from '../../_layout.warehouse/_composables/-use-warehouse-api'
-import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_composables/-use-warehouse-storage-api'
+import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_apis/warehouse-storage.api'
+import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
 
 type WarehouseCellEditorProps = CellContext<ITransferOrder, any> & Pick<CellEditorProps, 'transformedValue'>
 
