@@ -1,7 +1,7 @@
 import { USER_PROVIDE_TAG } from '@/app/(auth)/_apis/auth.api'
+import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/step'
-import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -18,6 +18,7 @@ import { LoginFormValues, loginSchema } from '../_schemas/login.schema'
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
 	const { dispatch } = useStepContext()
+	const { accessToken, setAccessToken } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true
@@ -29,10 +30,6 @@ const LoginForm: React.FC = () => {
 			username: persistedAccount,
 			password: ''
 		}
-	})
-	const [accessToken, setAccessToken] = useLocalStorageState(AppConfigs.ACCESS_TOKEN_STORAGE_KEY, {
-		defaultValue: null,
-		listenStorageChange: true
 	})
 
 	const { mutateAsync: login, isPending } = useMutation({

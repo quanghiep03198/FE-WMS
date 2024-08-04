@@ -1,16 +1,18 @@
 import { AuthService } from '@/services/auth.service'
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { AxiosRequestConfig, HttpStatusCode } from 'axios'
+import { AxiosRequestConfig } from 'axios'
 
 export const USER_PROVIDE_TAG = 'USER'
 
 export function getUserProfileQuery(config?: AxiosRequestConfig) {
 	return queryOptions({
 		queryKey: [USER_PROVIDE_TAG],
-		queryFn: () => AuthService.profile({ ...config, validateStatus: (status) => status === HttpStatusCode.Ok }),
+		queryFn: () => AuthService.profile(config),
 		refetchOnMount: 'always',
-		networkMode: 'always',
-		enabled: AuthService.getHasAccessToken()
+		networkMode: 'online',
+		enabled: AuthService.getHasAccessToken(),
+		select: (response) => response.metadata,
+		retry: () => AuthService.getHasAccessToken()
 	})
 }
 
