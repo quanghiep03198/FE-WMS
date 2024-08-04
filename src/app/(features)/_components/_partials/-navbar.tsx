@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
 }
 
 const ToggleSidebarButton = memo(() => {
-	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore(
+	const { toggleNavSidebarOpen } = useLayoutStore(
 		useShallow((state) => pick(state, ['navSidebarOpen', 'toggleNavSidebarOpen']))
 	)
 	const { t } = useTranslation()
@@ -76,13 +76,7 @@ const ToggleSidebarButton = memo(() => {
 			message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}
 			triggerProps={{ asChild: true }}
 			contentProps={{ side: 'bottom', align: 'start' }}>
-			<Button
-				size='icon'
-				role='searchbox'
-				variant='ghost'
-				disabled={isLargeScreen}
-				aria-expanded={navSidebarOpen}
-				onClick={toggleNavSidebarOpen}>
+			<Button size='icon' variant='ghost' disabled={isLargeScreen} onClick={toggleNavSidebarOpen}>
 				<Icon name='Menu' />
 			</Button>
 		</Tooltip>

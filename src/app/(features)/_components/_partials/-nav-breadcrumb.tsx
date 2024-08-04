@@ -25,7 +25,7 @@ const NavBreadcrumb: React.FC = () => {
 			<BreadcrumbList>
 				<BreadcrumbItem className=''>
 					<BreadcrumbLink asChild>
-						<Link to='/dashboard'>
+						<Link to='/dashboard' preload={false}>
 							<HomeIcon className='size-[1.125rem]' />
 						</Link>
 					</BreadcrumbLink>
@@ -40,7 +40,12 @@ const NavBreadcrumb: React.FC = () => {
 							<DropdownMenuContent align='start'>
 								{breadcrumb.slice(0, THREADS_HOLD).map((item, index) => (
 									<DropdownMenuItem key={index} asChild={true}>
-										<Link to={item.to} params={item.params} search={item.search} className='font-semibold'>
+										<Link
+											to={item.to}
+											params={item.params}
+											search={item.search}
+											preload={false}
+											className='font-semibold'>
 											{item.text}
 										</Link>
 									</DropdownMenuItem>
@@ -53,6 +58,7 @@ const NavBreadcrumb: React.FC = () => {
 								to={breadcrumb[breadcrumb.length - 1].to}
 								params={breadcrumb[breadcrumb.length - 1].params}
 								search={breadcrumb[breadcrumb.length - 1].search}
+								preload={false}
 								activeProps={{ className: 'text-foreground' }}>
 								{breadcrumb.at(-1)?.text}
 							</Link>
@@ -67,6 +73,7 @@ const NavBreadcrumb: React.FC = () => {
 										to={item.to}
 										params={item.params}
 										search={item.search}
+										preload={false}
 										className='font-medium'
 										activeProps={{ className: 'text-foreground' }}>
 										{item.text}
