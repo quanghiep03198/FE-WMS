@@ -16,6 +16,7 @@ import { navigationConfig } from '@/configs/navigation.config'
 import { GearIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
+import { debounce } from 'lodash'
 import React, { Fragment, memo, useEffect } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -47,7 +48,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 				<CommandInput
 					placeholder='Type a command or search...'
 					className='h-9 items-center'
-					onValueChange={(value) => setSearchTerm(value)}
+					onValueChange={debounce((value) => setSearchTerm(value), 200)}
 				/>
 				<CommandEmpty>No results found.</CommandEmpty>
 				<CommandList className='scrollbar'>
