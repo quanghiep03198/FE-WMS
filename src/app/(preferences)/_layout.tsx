@@ -3,16 +3,11 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { getUserProfileQuery } from '../(auth)/_apis/auth.api'
-import Unauthorized from '../_components/_errors/-unauthorized'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 
 export const Route = createFileRoute('/(preferences)/_layout')({
 	component: Layout,
-	errorComponent: Unauthorized,
-	loader: ({ context: { queryClient }, abortController }) =>
-		queryClient.ensureQueryData(getUserProfileQuery({ signal: abortController.signal })),
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({

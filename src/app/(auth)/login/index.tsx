@@ -1,17 +1,23 @@
 import { useAuth } from '@/common/hooks/use-auth'
-import { Navigate, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import PageComposition from './_components/-page-composition'
 
 export const Route = createFileRoute('/(auth)/login/')({
-	component: LoginPage
+	component: LoginPage,
+	beforeLoad: ({ context: { isAuthenticated } }) => {
+		if (isAuthenticated)
+			throw redirect({
+				to: '/dashboard'
+			})
+	}
 })
 
 function LoginPage() {
-	const { isAuthenticated, user } = useAuth()
-
-	if (isAuthenticated && user?.company_code) return <Navigate to={'/dashboard'} />
+	const { isAuthenticated } = useAuth()
+	console.log(isAuthenticated)
+	if (isAuthenticated) return <Navigate to='/dashboard' />
 
 	return (
 		<Fragment>

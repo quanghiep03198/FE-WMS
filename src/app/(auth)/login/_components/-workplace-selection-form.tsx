@@ -1,10 +1,8 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/step'
-import { AppConfigs } from '@/configs/app.config'
 import { CompanyService } from '@/services/company.service'
 import { useQuery } from '@tanstack/react-query'
-import { useLocalStorageState } from 'ahooks'
 import { pick } from 'lodash'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,8 +14,7 @@ type FormValues = { company_code: string }
 const COMPANY_PROVIDE_TAG = 'COMPANIES' as const
 
 const WorkplaceSelectionForm: React.FC = () => {
-	const { setUserCompany } = useAuth()
-	const [accessToken] = useLocalStorageState(AppConfigs.ACCESS_TOKEN_STORAGE_KEY, { listenStorageChange: true })
+	const { accessToken, setUserCompany } = useAuth()
 	const { dispatch } = useStepContext()
 	const { t } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()

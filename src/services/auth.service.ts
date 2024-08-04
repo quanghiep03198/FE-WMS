@@ -1,12 +1,10 @@
 import { LoginFormValues } from '@/app/(auth)/login/_schemas/login.schema'
 import { IUser } from '@/common/types/entities'
-import { _JSON } from '@/common/utils/json'
-import { AppConfigs } from '@/configs/app.config'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { useAuthStore } from '@/stores/auth.store'
 import { type AxiosRequestConfig } from 'axios'
-import _ from 'lodash'
+import { isNil } from 'lodash'
 
 export class AuthService {
 	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; accessToken: string }>> {
@@ -17,18 +15,15 @@ export class AuthService {
 	}
 
 	static async logout(): Promise<void> {
-		localStorage.removeItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY) // remove persisted accessToken
-		useAuthStore.getState().resetAuthState() // reset auth state
+		useAuthStore.getState().resetCredentials() // reset auth state
 		queryClient.clear() // clear cached queries
 	}
 
 	static async profile(config?: AxiosRequestConfig): Promise<IUser> {
-		const response = await axiosInstance.get<void, ResponseBody<IUser>>('/profile', config)
-		useAuthStore.getState().setUserProfile(response.metadata)
-		return response.metadata
+		return await axiosInstance.get('/profile', config)
 	}
 
-	static getUser() {
+	static getCredentials() {
 		return useAuthStore.getState().user
 	}
 
@@ -36,26 +31,24 @@ export class AuthService {
 		return await axiosInstance.post<void, ResponseBody<null>>('/logout')
 	}
 
-	static async refreshToken(
-		id: IUser['user_code'],
-		requestConfig: Pick<AxiosRequestConfig, 'signal'>
-	): Promise<ResponseBody<string>> {
-		return await axiosInstance.get<void, ResponseBody<string>>(`/refresh-token/${id}`, requestConfig)
+	static async refreshToken(id: IUser['user_code']) {
+		return await axiosInstance.get<any, ResponseBody<string>>(`/refresh-token/${id}`).then((response) => {
+			console.log('refresh token:>>>', response)
+			return response
+		})
 	}
 
 	static getAccessToken(): string | null {
-		if (!AuthService.getHasAccessToken()) return null
-
-		const accessToken = _JSON.parse(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY))
-		return `Bearer ${accessToken}`
+		const accessToken = useAuthStore.getState().accessToken
+		return isNil(accessToken) ? null : `Bearer ${accessToken}`
 	}
 
-	static setAccessToken(refreshToken: string): void {
-		localStorage.setItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY, JSON.stringify(refreshToken))
+	static setAccessToken(accessToken: string): void {
+		useAuthStore.setState((state) => ({ ...state, accessToken: accessToken }))
 	}
 
 	static getHasAccessToken() {
-		const accessToken = _JSON.parse<string>(localStorage.getItem(AppConfigs.ACCESS_TOKEN_STORAGE_KEY))
-		return !_.isNil(accessToken)
+		const accessToken = useAuthStore.getState().accessToken
+		return !isNil(accessToken)
 	}
 }

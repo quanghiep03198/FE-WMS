@@ -96,7 +96,7 @@ const LanguageSelector: React.FC = () => {
 const SideImage: React.FC = () => {
 	return (
 		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex xxl:flex'>
-			<Image role='banner' src={GlobalTransportImage} alt='Global Transport' loading='eager' />
+			<Image src={GlobalTransportImage} alt='Global Transport' loading='eager' />
 		</Div>
 	)
 }
