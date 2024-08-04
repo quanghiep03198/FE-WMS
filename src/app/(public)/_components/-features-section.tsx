@@ -1,7 +1,7 @@
-import { Div, Icon, TIconProps, Typography } from '@/components/ui'
+import { Div, Icon, IconProps, Typography } from '@/components/ui'
 
 type FeatureItemProps = {
-	icon: TIconProps['name']
+	icon: IconProps['name']
 	title: string
 	description: string
 }
