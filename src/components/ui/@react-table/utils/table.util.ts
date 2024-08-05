@@ -1,4 +1,4 @@
-import { Column, ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import { Column, ColumnFiltersState, SortingState, Table } from '@tanstack/react-table'
 import { CSSProperties } from 'react'
 
 export class DataTableUtility {
@@ -29,21 +29,37 @@ export class DataTableUtility {
 	}
 
 	public static getStickyOffsetPosition<TData = any, TValue = any>(
-		column: Column<TData, TValue>
-	): CSSProperties | undefined {
+		column: Column<TData, TValue>,
+		table?: Table<TData>
+	): CSSProperties {
 		const stickyAlignment = column.getIsPinned()
+
 		switch (stickyAlignment) {
 			case 'left': {
-				if (column.getIsFirstColumn()) return { position: 'sticky', zIndex: 10, left: 0 }
+				if (column.getIsFirstColumn('left')) return { position: 'sticky', zIndex: 10, left: 0 }
 				return { position: 'sticky', zIndex: 10, left: column.getStart('left') }
 			}
 			case 'right': {
-				if (column.getIsLastColumn()) return { position: 'sticky', right: 0, zIndex: 10 }
-				return { position: 'sticky', zIndex: 10, right: column.getAfter('right') }
+				if (column.getIsLastColumn('right'))
+					return {
+						position: 'sticky',
+						right: 0,
+						zIndex: 10,
+						borderRight: 'none',
+						borderLeft: '1px solid hsl(var(--border))'
+					}
+				return {
+					position: 'sticky',
+					zIndex: 10,
+					right: column.getAfter('right'),
+					borderRight: column.getIsLastColumn('right') ? '1px solid hsl(var(--border)) !important' : 'none',
+					borderLeft: '1px solid hsl(var(--border))'
+				}
 			}
 			default: {
 				return {
-					position: 'relative'
+					position: 'relative',
+					borderRight: column.getIsLastColumn('center') ? 'none' : '1px solid hsl(var(--border))'
 				}
 			}
 		}

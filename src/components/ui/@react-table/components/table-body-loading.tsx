@@ -19,10 +19,10 @@ export function TableBodyLoading<T>({ prepareRows, table }: DataTableLoading<T>)
 				return (
 					<TableCell
 						key={`${rowIndex}-${columnIndex}`}
-						data-sticky={column?.columnDef.meta?.sticky}
-						className='py-1'
+						data-sticky={column.getIsPinned()}
+						className='py-1 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:z-10'
 						style={{
-							width: column.getSize(),
+							width: `calc(var(--col-${column?.id}-size) * 1px)`,
 							height: ESTIMATE_SIZE,
 							...DataTableUtility.getStickyOffsetPosition(column)
 						}}>

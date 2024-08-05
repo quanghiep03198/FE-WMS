@@ -15,6 +15,21 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 	const { t } = useTranslation()
 	const filterVariant = column.columnDef.meta?.filterVariant
 	const { hasNoFilter } = useTableContext()
+
+	const sortedUniqueValues = useMemo(() => {
+		if (column && column.getFacetedUniqueValues && column.getFilterValue) {
+			const facedUniqueValue = column.getFacetedUniqueValues() ?? new Map()
+			const uniqueValues = Array.from(facedUniqueValue.keys())
+
+			uniqueValues.sort((a, b) => {
+				if (a === b) return 0
+				return a > b ? 1 : -1
+			})
+
+			return uniqueValues
+		} else return []
+	}, [column])
+
 	const metaFilterValues = column.columnDef.meta?.facetedUniqueValues
 
 	if (!column.columnDef.enableColumnFilter)
@@ -23,15 +38,6 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				<Icon name='Minus' />
 			</Div>
 		)
-
-	const sortedUniqueValues = useMemo(() => {
-		return filterVariant === 'range'
-			? []
-			: Array.from(column.getFacetedUniqueValues().keys()).sort((a, b) => {
-					if (a === b) return 0
-					return a > b ? 1 : -1
-				})
-	}, [column.getFacetedUniqueValues()])
 
 	switch (filterVariant) {
 		case 'range':

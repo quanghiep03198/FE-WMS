@@ -40,7 +40,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
 		<tr
 			ref={ref}
 			className={cn(
-				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&>*]:border-b [&>*]:border-r [&:last-child>td]:border-b-0',
+				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&>*]:border-r [&>*]:border-b [&>*]:border-border [&:last-child>td]:border-b-0',
 				className
 			)}
 			{...props}
@@ -55,7 +55,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttributes<
 			ref={ref}
 			style={{ position: 'inherit' }}
 			className={cn(
-				'w-full bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/50 last:border-r-0',
+				'w-full bg-background px-4 py-2 font-semibold text-muted-foreground group-hover:bg-secondary/50',
 				className
 			)}
 			{...props}
@@ -69,7 +69,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'bg-background px-4 py-2 group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0 last:border-r-0',
+				'bg-background px-4 py-2 group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center  first:border-r first:border-l-0 [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0 last:border-r-0',
 				className
 			)}
 			{...props}

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { arrayMove } from '@dnd-kit/sortable'
 import {
+	ColumnOrderState,
 	Table,
 	getCoreRowModel,
 	getExpandedRowModel,
@@ -31,9 +31,8 @@ import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
 // needed for table body level scope DnD setup
-import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/common/constants/constants'
-import { type DragEndEvent } from '@dnd-kit/core'
 import tw from 'tailwind-styled-components'
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 
 function DataTable<TData, TValue>(
 	{
@@ -71,6 +70,8 @@ function DataTable<TData, TValue>(
 	ref: React.MutableRefObject<Table<any>>
 ) {
 	const { t } = useTranslation()
+
+	// * Table states declaration
 	const [_data, setData] = useState(() => data ?? [])
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
@@ -79,7 +80,7 @@ function DataTable<TData, TValue>(
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
-	const [columnOrder, setColumnOrder] = useState<string[]>(() => columns.map((c, index) => c.id))
+	const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
 	const [editedRows, setEditedRows] = useState({})
 	const [pagination, setPagination] = useState<PaginationState>(() => ({
 		pageIndex: 0,
@@ -104,6 +105,7 @@ function DataTable<TData, TValue>(
 				left: [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID],
 				right: [ROW_ACTIONS_COLUMN_ID]
 			},
+			columnOrder,
 			globalFilter: '',
 			columnFilters: [],
 			pagination: {
@@ -133,6 +135,7 @@ function DataTable<TData, TValue>(
 		enableGlobalFilter,
 		enableColumnPinning,
 		enableColumnResizing,
+		filterFromLeafRows: false,
 		columnResizeMode: 'onChange',
 		debugAll: false,
 		sortingFns: { fuzzy: fuzzySort },
@@ -190,6 +193,8 @@ function DataTable<TData, TValue>(
 		...props
 		// getSubRows: (row) => row.subRows,
 	})
+
+	// * Forwarding refs
 	const tableRef = useLatest<Table<TData>>(table)
 	const tableWrapperRef = useRef<HTMLDivElement>(null)
 
@@ -201,22 +206,12 @@ function DataTable<TData, TValue>(
 		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
 	}, [data])
 
-	// * Forwarding ref from parent component
+	/**
+	 * * Forwarding ref from parent component
+	 */
 	useEffect(() => {
 		if (ref) ref.current = tableRef.current
 	}, [tableRef.current])
-
-	// * Reorder columns after drag & drop
-	function handleDragEnd(event: DragEndEvent) {
-		const { active, over } = event
-		if (active && over && active.id !== over.id) {
-			setColumnOrder((columnOrder) => {
-				const oldIndex = columnOrder.indexOf(active.id as string)
-				const newIndex = columnOrder.indexOf(over.id as string)
-				return arrayMove(columnOrder, oldIndex, newIndex) //this is just a splice util
-			})
-		}
-	}
 
 	// * Get row selection count
 	const rowSelectionCount =

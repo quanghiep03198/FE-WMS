@@ -16,7 +16,7 @@ type TableBodyProps = {
 }
 
 export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
-	const { tableWrapperRef, columnOrder } = useTableContext()
+	const { tableWrapperRef } = useTableContext()
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
@@ -42,12 +42,14 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 					const row = rows[virtualRow.index] as TRow<any>
 					return (
 						<Fragment key={row?.id}>
-							<TableRow data-index={virtualRow.index} className='group'>
+							<TableRow data-index={virtualRow.index} className='group border-spacing-0'>
 								{row?.getVisibleCells()?.map((cell) => {
 									return (
 										<TableCell
 											key={cell.id}
 											aria-selected={row.getIsSelected()}
+											data-sticky={cell.column.getIsPinned()}
+											className='data-[sticky=left]:sticky data-[sticky=right]:sticky'
 											style={{
 												width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
 												height: virtualRow.size,
@@ -75,7 +77,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 											style={{
 												position: 'sticky',
 												left: '0',
-												maxWidth: `${tableWrapperRef.current?.getBoundingClientRect().width}px - `
+												maxWidth: `calc(${tableWrapperRef.current?.clientWidth}px - var(--scrollbar-width, 16px))`
 											}}
 											className='transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 											<Div className='p-4'>

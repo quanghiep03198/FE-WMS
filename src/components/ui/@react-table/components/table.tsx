@@ -97,6 +97,10 @@ function TableDataGrid<TData, TValue>({
 		return colSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
+	const hasSomeGroupedColumn = table
+		.getHeaderGroups()
+		.some((headerGroup) => headerGroup.headers.some((header) => header.colSpan > 1))
+
 	return (
 		<Wrapper role='group'>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
@@ -104,67 +108,74 @@ function TableDataGrid<TData, TValue>({
 				<Table
 					ref={tableRef}
 					className='w-full table-fixed border-separate border-spacing-0'
-					style={{ ...columnSizeVars, minWidth: table.getTotalSize(), height: virtualizer.getTotalSize() }}>
+					style={{
+						...columnSizeVars,
+						minWidth: table.getTotalSize(),
+						height: virtualizer.getTotalSize()
+					}}>
 					{caption && (
 						<TableCaption aria-labelledby={captionId} className='hidden'>
 							{caption}
 						</TableCaption>
 					)}
-					<TableHeader className='sticky top-0 z-20 bg-background'>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<Fragment key={headerGroup.id}>
-								<TableRow>
-									{headerGroup.headers.map((header) => {
-										const rowSpan = header.column.columnDef.meta?.rowSpan
-										if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
-											return null
-										}
-										return (
-											<TableHead
-												key={header.id}
-												colSpan={header.colSpan}
-												rowSpan={rowSpan}
-												className='group relative h-10 p-0'
-												style={{
-													height: `${ESTIMATE_SIZE}px`,
-													width: `calc(var(--header-${header?.id}-size) * 1px)`,
-													...DataTableUtility.getStickyOffsetPosition(header.column)
-												}}>
-												<TableCellHead table={table} header={header} />
-												<ColumnResizer header={header} />
-											</TableHead>
-										)
-									})}
-								</TableRow>
-								{headerGroup.headers.every((header) => header.colSpan === 1) && (
+					<TableHeader className='sticky top-0 z-20 bg-background [&:not(:only-child)>tr:not(:last-child)>th:not(:last-child)]:!border-l-0'>
+						{table.getHeaderGroups().map((headerGroup) => {
+							return (
+								<Fragment key={headerGroup.id}>
 									<TableRow>
 										{headerGroup.headers.map((header) => {
+											const rowSpan = header.column.columnDef.meta?.rowSpan
+											if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
+												return null
+											}
+
 											return (
 												<TableHead
 													key={header.id}
 													colSpan={header.colSpan}
-													className={cn(
-														'group relative p-0',
-														isFilterOpened ? 'border-b border-border' : 'border-none'
-													)}
+													rowSpan={rowSpan}
+													className={cn('group relative h-10 p-0')}
 													style={{
+														height: `${ESTIMATE_SIZE}px`,
 														width: `calc(var(--header-${header?.id}-size) * 1px)`,
-														...DataTableUtility.getStickyOffsetPosition(header.column)
+														...DataTableUtility.getStickyOffsetPosition(header?.column, table)
 													}}>
-													<Collapsible
-														data-state={isFilterOpened ? 'open' : 'closed'}
-														open={isFilterOpened}>
-														<CollapsibleContent className='overflow-hidden h-10 transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
-															<ColumnFilter column={header.column} />
-														</CollapsibleContent>
-													</Collapsible>
+													<TableCellHead table={table} header={header} />
+													<ColumnResizer header={header} />
 												</TableHead>
 											)
 										})}
 									</TableRow>
-								)}
-							</Fragment>
-						))}
+									{headerGroup.headers.every((header) => header.colSpan === 1) && (
+										<TableRow>
+											{headerGroup.headers.map((header) => {
+												return (
+													<TableHead
+														key={header.id}
+														colSpan={header.colSpan}
+														className={cn(
+															'group relative p-0',
+															isFilterOpened ? 'border-b border-border' : 'border-none'
+														)}
+														style={{
+															width: `calc(var(--header-${header?.id}-size) * 1px)`,
+															...DataTableUtility.getStickyOffsetPosition(header?.column)
+														}}>
+														<Collapsible
+															data-state={isFilterOpened ? 'open' : 'closed'}
+															open={isFilterOpened}>
+															<CollapsibleContent className='overflow-hidden h-10 transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+																<ColumnFilter column={header.column} />
+															</CollapsibleContent>
+														</Collapsible>
+													</TableHead>
+												)
+											})}
+										</TableRow>
+									)}
+								</Fragment>
+							)
+						})}
 					</TableHeader>
 
 					{loading ? (
@@ -182,8 +193,8 @@ function TableDataGrid<TData, TValue>({
 	)
 }
 
-const Wrapper = tw.div`flex flex-col items-stretch bg-secondary/50 border rounded-[var(--radius)] overflow-clip divide-y divide-border`
-const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll scroll-smooth scrollbar scrollbar-track-background`
+const Wrapper = tw.div`flex bprder flex-col items-stretch border rounded-[var(--radius)] overflow-clip divide-y divide-border`
+const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll scrollbar-track-scrollbar/20`
 
 TableDataGrid.displayName = 'DataTable'
 

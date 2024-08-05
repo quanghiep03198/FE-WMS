@@ -32,7 +32,7 @@ function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 						size='icon'
 						onClick={resetAllFilters}
 						className={cn(!isFilterDirty && 'hidden')}>
-						<Icon name='X' />
+						<Icon name='FilterX' />
 					</Button>
 				</Tooltip>
 				{Slot && <Slot table={table} />}

@@ -103,7 +103,9 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem
 							checked={header.column.getIsPinned() === ('right' as CheckedState)}
-							onCheckedChange={() => header.column.pin('right')}>
+							onCheckedChange={() => {
+								header.column.pin('right')
+							}}>
 							Pin right
 						</ContextMenuCheckboxItem>
 					</ContextMenuSubContent>
