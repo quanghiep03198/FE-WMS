@@ -1,17 +1,24 @@
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { ScanningStatus } from '../_contexts/-page-context'
 
-export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC' as const
-export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY' as const
-export const INOUTBOUND_DEPT_PROVIDE_TAG = 'INOUTBOUND_DEPT' as const
+export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC'
+export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY'
+export const INOUTBOUND_DEPT_PROVIDE_TAG = 'INOUTBOUND_DEPT'
 
-export const UNKNOWN_ORDER = 'Unknown' as const
+export const UNKNOWN_ORDER = 'Unknown'
 
 export const useGetScannedEPC = (params: { connection: string; scanningStatus: ScanningStatus }) => {
+	const controller = new AbortController()
+
+	useEffect(() => {
+		if (params.scanningStatus !== 'scanning') controller.abort()
+	}, [params.scanningStatus])
+
 	return useQuery({
 		queryKey: [RFID_EPC_PROVIDE_TAG, params.connection],
-		queryFn: () => RFIDService.getScannedEPC(params.connection),
+		queryFn: async () => await RFIDService.getScannedEPC(params.connection, { signal: controller.signal }),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
 		select: (response) => {

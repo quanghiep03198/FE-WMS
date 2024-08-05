@@ -37,24 +37,21 @@ const matchWithCurrentOrder = (item, orderList, currentOrder) => {
 	return item.mo_no === currentOrder && orderList.some((order) => item.mo_no === order.mo_no)
 }
 
-const VIRTUAL_ITEM_SIZE = 40 as const
-const VIRTUAL_LIST_HEIGHT = 384 as const
-const PRERENDERED_ITEMS = 5 as const
+const VIRTUAL_ITEM_SIZE = 40
+const VIRTUAL_LIST_HEIGHT = 384
+const PRERENDERED_ITEMS = 5
 
 const EPCListBox: React.FC = () => {
 	return (
-		<Fragment>
-			<Container>
-				<EPCListHeading />
-				<EPCDatalist />
-				<OrderDetails />
-			</Container>
-		</Fragment>
+		<Container>
+			<EPCListHeading />
+			<EPCDatalist />
+			<OrderDetails />
+		</Container>
 	)
 }
 
 const EPCListHeading: React.FC = () => {
-	const { t } = useTranslation()
 	const { selectedOrder, scanningStatus, scannedOrders, setSelectedOrder } = usePageContext()
 
 	return (
@@ -109,7 +106,7 @@ const EPCDatalist: React.FC = () => {
 		setScannedEPCs
 	} = usePageContext()
 
-	const { data } = useGetScannedEPC({ connection, scanningStatus })
+	const { data, error } = useGetScannedEPC({ connection, scanningStatus })
 
 	const originalData = useMemo(() => (Array.isArray(data?.datalist) ? data.datalist : []), [data?.datalist])
 
@@ -232,12 +229,12 @@ const OrderDetails: React.FC = () => {
 							<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 						</DialogHeader>
 						<Div className='rounded-lg border divide-y divide-border text-sm'>
-							<ScrollArea className='h-96 w-full'>
-								<Div className='grid divide-y divide-border'>
-									{Array.isArray(scannedOrders) &&
-										scannedOrders.map((order) => {
+							<ScrollArea className='h-96 w-full relative'>
+								{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
+									<Div className='divide-y divide-border w-full col-span-full'>
+										{scannedOrders.map((order) => {
 											return (
-												<Div className='grid grid-cols-[144px_auto_80px_64px] divide-x divide-border'>
+												<Div className='grid grid-cols-[144px_auto_128px_64px] divide-x divide-border '>
 													<Div className='divide-y divide-border'>
 														<GridCell className='row-span-2 text-center grid place-content-center font-medium p-0 overflow-hidden h-20'>
 															{order?.mo_no ?? 'Unknown'}
@@ -279,7 +276,13 @@ const OrderDetails: React.FC = () => {
 												</Div>
 											)
 										})}
-								</Div>
+									</Div>
+								) : (
+									<Div className='absolute inset-0 inline-flex items-center justify-center gap-x-2 h-full'>
+										<Icon name='Inbox' size={24} strokeWidth={1} />
+										No data
+									</Div>
+								)}
 							</ScrollArea>
 							<Div className='flex justify-between items-center px-4 py-2'>
 								<Typography variant='small' color='muted'>

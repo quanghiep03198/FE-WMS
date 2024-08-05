@@ -11,6 +11,7 @@ import {
 	FormMessage,
 	Form as FormProvider,
 	Icon,
+	IconProps,
 	RadioGroup,
 	RadioGroupItem,
 	SelectFieldControl,
@@ -18,8 +19,9 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import { useMemoizedFn } from 'ahooks'
 import { omit } from 'lodash'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -82,15 +84,20 @@ const InoutboundForm: React.FC = () => {
 
 	const { mutateAsync } = useStoreEpcMutation()
 
-	useEffect(() => {
-		setSchema(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema)
-		form.reset({ ...form.getValues(), rfid_use: undefined, warehouse_num: undefined, storage: undefined })
-	}, [action, storageTypes])
+	const handleResetForm = useMemoizedFn(() => {
+		form.reset({
+			...form.getValues(),
+			rfid_use: '',
+			dept_code: '',
+			warehouse_num: '',
+			storage: ''
+		})
+	})
 
 	useEffect(() => {
-		if (typeof scanningStatus === 'undefined')
-			form.reset({ ...form.getValues(), rfid_use: undefined, warehouse_num: undefined, storage: undefined })
-	}, [scanningStatus])
+		if (typeof scanningStatus === 'undefined') handleResetForm()
+		setSchema(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema)
+	}, [action, storageTypes, scanningStatus])
 
 	const handleSubmit = async (data: InboundFormValues): Promise<string | number> => {
 		const loading = toast.loading(t('ns_common:notification.processing_request'))
@@ -130,14 +137,12 @@ const InoutboundForm: React.FC = () => {
 									defaultValue={FormActionEnum.IMPORT}
 									onValueChange={(value) => {
 										field.onChange(value)
+										handleResetForm()
 									}}>
 									<FormItem>
-										<FormLabel
-											htmlFor={FormActionEnum.IMPORT}
-											className={cn(
-												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border px-6 py-5 font-medium transition-colors duration-200 sm:px-4',
-												field.value === FormActionEnum.IMPORT && 'bg-secondary text-secondary-foreground'
-											)}>
+										<StyledFormLabel
+											aria-checked={field.value === FormActionEnum.IMPORT}
+											htmlFor={FormActionEnum.IMPORT}>
 											<FormControl>
 												<RadioGroupItem
 													id={FormActionEnum.IMPORT}
@@ -146,23 +151,17 @@ const InoutboundForm: React.FC = () => {
 												/>
 											</FormControl>
 											{t('ns_inoutbound:action_types.warehouse_input')}
-											<Icon
+											<CheckIcon
 												name='Check'
 												size={16}
-												className={cn(
-													'ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200',
-													field.value === FormActionEnum.IMPORT && 'scale-100 opacity-100'
-												)}
+												aria-checked={field.value === FormActionEnum.IMPORT}
 											/>
-										</FormLabel>
+										</StyledFormLabel>
 									</FormItem>
 									<FormItem>
-										<FormLabel
+										<StyledFormLabel
 											htmlFor={FormActionEnum.EXPORT}
-											className={cn(
-												'flex cursor-pointer select-none items-center rounded-[var(--radius)] border px-6 py-5 font-medium transition-all duration-200 sm:px-4',
-												field.value == FormActionEnum.EXPORT && 'bg-secondary text-secondary-foreground'
-											)}>
+											aria-checked={field.value == FormActionEnum.EXPORT}>
 											<FormControl>
 												<RadioGroupItem
 													id={FormActionEnum.EXPORT}
@@ -171,15 +170,12 @@ const InoutboundForm: React.FC = () => {
 												/>
 											</FormControl>
 											{t('ns_inoutbound:action_types.warehouse_output')}
-											<Icon
+											<CheckIcon
 												name='Check'
 												size={16}
-												className={cn(
-													'ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200',
-													field.value === FormActionEnum.EXPORT && 'scale-100 opacity-100'
-												)}
+												aria-checked={field.value === FormActionEnum.EXPORT}
 											/>
-										</FormLabel>
+										</StyledFormLabel>
 									</FormItem>
 								</RadioGroup>
 							</FormItem>
@@ -257,5 +253,11 @@ const InoutboundForm: React.FC = () => {
 }
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
+const StyledFormLabel = tw(FormLabel)<React.ComponentProps<typeof FormLabel>>`
+	flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200 sm:px-4 aria-checked:bg-secondary aria-checked:text-secondary-foreground
+`
+const CheckIcon = tw(Icon)<IconProps>`
+	ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200 aria-checked:opacity-100
+`
 
 export default InoutboundForm

@@ -15,8 +15,12 @@ const ScannedEPCsCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex flex-col justify-center items-center h-full gap-y-4 rounded-[var(--radius)] overflow-clip border p-4'>
-			{scanningStatus === 'scanning' && <Skeleton className='absolute inset-0 z-0 h-full' />}
+		<Div className='relative flex flex-col justify-center items-center h-full gap-y-4 rounded-lg overflow-clip border p-4'>
+			<Div
+				data-status={scanningStatus}
+				className='absolute inset-0 z-0 h-full transition-opacity ease-in-out duration-500 data-[status=scanning]:opacity-100 opacity-0'>
+				<Skeleton className='h-full w-full inset-0' />
+			</Div>
 			<ScanningCounter scannedEPCs={scannedEPCs} />
 			<ScanningTimer scanningStatus={scanningStatus} />
 			<Typography variant='small' className='relative z-10' color='muted'>
@@ -35,9 +39,9 @@ const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = mem
 		// Counter increment/decrement effect
 		useInterval(() => {
 			if (scannedCount > count.value) {
-				count.value += Math.min(100, scannedCount - count.value)
+				count.value += Math.min(10, scannedCount - count.value)
 			} else if (scannedCount < count.value) {
-				count.value -= Math.min(100, count.value - scannedCount)
+				count.value -= Math.min(10, count.value - scannedCount)
 			}
 		}, count.duration)
 
