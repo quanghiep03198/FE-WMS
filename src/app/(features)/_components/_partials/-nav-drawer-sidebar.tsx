@@ -14,8 +14,8 @@ import { useLayoutStore } from '../../_stores/layout.store'
 
 const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()
-	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore(
-		useShallow((state) => pick(state, ['navSidebarOpen', 'toggleNavSidebarOpen']))
+	const { sidebarExpanded: navSidebarOpen, toggleExpandSidebar: toggleNavSidebarOpen } = useLayoutStore(
+		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar']))
 	)
 	const isLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1024 }))
 

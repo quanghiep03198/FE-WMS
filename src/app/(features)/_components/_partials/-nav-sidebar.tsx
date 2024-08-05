@@ -19,8 +19,8 @@ type NavLinkProps = { open: boolean } & Pick<NavigationConfig, 'path' | 'title' 
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
-	const { navSidebarOpen, toggleNavSidebarOpen } = useLayoutStore(
-		useShallow((state) => pick(state, ['navSidebarOpen', 'toggleNavSidebarOpen']))
+	const { sidebarExpanded, toggleExpandSidebar } = useLayoutStore(
+		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar']))
 	)
 	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
 	const isMediumScreen = useMediaQuery(BreakPoints.MEDIUM)
@@ -29,7 +29,7 @@ const NavSidebar: React.FC = () => {
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
-			'ctrl.b': debounce(toggleNavSidebarOpen, 50),
+			'ctrl.b': debounce(toggleExpandSidebar, 50),
 			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
 				acc[String(curr.keybinding)] = function () {
 					return navigate({ to: curr.path })
@@ -37,7 +37,7 @@ const NavSidebar: React.FC = () => {
 				return acc
 			}, {})
 		}),
-		[navSidebarOpen]
+		[sidebarExpanded]
 	)
 
 	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
@@ -56,15 +56,15 @@ const NavSidebar: React.FC = () => {
 		})
 	}, [])
 
-	const expanded = useMemo(() => navSidebarOpen || isLargeScreen, [navSidebarOpen, isLargeScreen])
+	const isExpanded = useMemo(() => sidebarExpanded && !isLargeScreen, [sidebarExpanded, isLargeScreen])
 
 	if (isSmallScreen || isMediumScreen) return null
 
 	return (
-		<Aside aria-expanded={expanded}>
-			<LogoLink to='/dashboard' preload={false} aria-expanded={expanded}>
+		<Aside aria-expanded={isExpanded}>
+			<LogoLink to='/dashboard' preload={false} aria-expanded={isExpanded}>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
-				<LogoWrapper aria-expanded={expanded}>
+				<LogoWrapper aria-expanded={isExpanded}>
 					<AppLogo />
 					<Typography variant='small' className='text-xs text-muted-foreground'>
 						{user?.company_name}
@@ -72,16 +72,16 @@ const NavSidebar: React.FC = () => {
 				</LogoWrapper>
 			</LogoLink>
 
-			<Menu aria-expanded={expanded} role='menu'>
+			<Menu aria-expanded={isExpanded} role='menu'>
 				{mainMenu.map((item) => (
 					<MenuItem key={item.id}>
-						<NavLink open={expanded} {...item} />
+						<NavLink open={isExpanded} {...item} />
 					</MenuItem>
 				))}
 				<Separator className='my-4' />
 				{preferenceMenu.map((item) => (
 					<MenuItem role='menuItem' tabIndex={0} key={item.id}>
-						<NavLink open={expanded} {...item} />
+						<NavLink open={isExpanded} {...item} />
 					</MenuItem>
 				))}
 			</Menu>
@@ -118,11 +118,14 @@ const Menu = tw.ul`flex flex-col gap-y-2 items-stretch py-6 overflow-x-hidden ov
 const MenuItem = tw.li`whitespace-nowrap font-normal w-full [&>:first-child]:w-full`
 const Aside = tw.aside`z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 w-16 items-center shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden aria-expanded:items-stretch aria-expanded:@xl:w-80 aria-expanded:@[1920px]:w-88`
 const NavlinkText = tw.span`text-left font-medium transition-[width_opacity] size-0 opacity-0 aria-expanded:size-auto aria-expanded:flex-1 aria-expanded:opacity-100 duration-150`
-const NavLinkIcon = tw(Icon)<IconProps>`aria-expanded:basis-5 basis-full size-5`
-const MenuLink = tw(Link)<React.ComponentProps<typeof Link>>`
-	group text-base font-normal duration-0 focus-within:outline-none justify-center focus:ring-0 focus:ring-offset-transparent size-9 aria-expanded:flex aria-expanded:size-auto aria-expanded:justify-start aria-expanded:gap-x-3 aria-expanded:aspect-auto aspect-square
-`
 const LogoWrapper = tw.div`space-y-0.5 transition-[width_opacity] aria-expanded:w-auto aria-expanded:opacity-100 w-0 opacity-0 duration-200`
+
+const NavLinkIcon = tw(Icon)<IconProps>`
+	aria-expanded:basis-5 basis-full size-5
+`
+const MenuLink = tw(Link)<React.ComponentProps<typeof Link>>`
+	group font-normal duration-0 focus-within:outline-none justify-center focus:ring-0 focus:ring-offset-transparent size-9 aria-expanded:flex aria-expanded:size-auto aria-expanded:justify-start aria-expanded:gap-x-3 aria-expanded:aspect-auto aspect-square
+`
 const LogoLink = tw(Link)<React.ComponentProps<typeof Link>>`
 	flex h-20 items-center aria-expanded:gap-x-3 aria-expanded:justify-start aria-expanded:aspect-auto px-2 aspect-square justify-center
 `
