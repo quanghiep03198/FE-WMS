@@ -1,4 +1,4 @@
-import { Div, Icon } from '@/components/ui'
+import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
 import AuthGuard from '../_components/_guard/-auth-guard'
@@ -26,20 +26,16 @@ function Layout() {
 				<LayoutComposition.Main>
 					<Navbar />
 					<LayoutComposition.OutletWrapper>
-						<ErrorBoundary>
-							<Outlet />
-						</ErrorBoundary>
+						<QueryErrorResetBoundary>
+							{({ reset }) => (
+								<ErrorBoundary onReset={reset}>
+									<Outlet />
+								</ErrorBoundary>
+							)}
+						</QueryErrorResetBoundary>
 					</LayoutComposition.OutletWrapper>
 				</LayoutComposition.Main>
 			</LayoutComposition.Container>
 		</AuthGuard>
-	)
-}
-
-function Pending() {
-	return (
-		<Div className='w-screen flex items-center justify-center h-screen gap-x-2'>
-			<Icon name='LoaderCircle' className='animate-spin' /> Authenticating ...
-		</Div>
 	)
 }

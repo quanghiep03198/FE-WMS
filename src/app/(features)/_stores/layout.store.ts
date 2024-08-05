@@ -1,3 +1,4 @@
+import { BreakPoints } from '@/common/constants/enums'
 import { routeTree } from '@/route-tree.gen'
 import { AnyPathParams, ParseRoute } from '@tanstack/react-router'
 import { create } from 'zustand'
@@ -12,16 +13,16 @@ export type TBreadcrumb = {
 
 type LayoutState = {
 	breadcrumb: TBreadcrumb[]
-	navSidebarOpen: boolean
+	sidebarExpanded: boolean
 	setBreadcrumb: (data: TBreadcrumb[]) => void
-	toggleNavSidebarOpen: () => void
+	toggleExpandSidebar: () => void
 }
 
 export const useLayoutStore = create<LayoutState>()(
 	immer((set) => ({
 		breadcrumb: [],
 		setBreadcrumb: (data) => set(() => ({ breadcrumb: data })),
-		navSidebarOpen: false,
-		toggleNavSidebarOpen: () => set((state) => ({ navSidebarOpen: !state.navSidebarOpen }))
+		sidebarExpanded: window.matchMedia(BreakPoints.EXTRA_LARGE).matches,
+		toggleExpandSidebar: () => set((state) => ({ sidebarExpanded: !state.sidebarExpanded }))
 	}))
 )
