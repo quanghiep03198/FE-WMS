@@ -12,17 +12,22 @@ import {
 	buttonVariants
 } from '@/components/ui'
 import React, { useState } from 'react'
-import { ErrorBoundary as ReactErrorBoundary, useErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundary as ReactErrorBoundary, useErrorBoundary, type FallbackProps } from 'react-error-boundary'
 
-const ErrorBoundary: React.FC<React.PropsWithChildren> = ({ children }) => {
+export type ErrorBoundaryProps = React.PropsWithChildren & { onReset?: () => void }
+
+const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children, onReset }) => {
 	return (
-		<ReactErrorBoundary FallbackComponent={ErrorFallback} onError={(error, info) => console.log({ error, info })}>
+		<ReactErrorBoundary
+			fallbackRender={(props) => <ErrorFallback {...props} />}
+			onReset={onReset}
+			onError={(error, info) => console.log({ error, info })}>
 			{children}
 		</ReactErrorBoundary>
 	)
 }
 
-const ErrorFallback: React.FC<{ error: Error }> = ({ error }) => {
+const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
 	const { resetBoundary } = useErrorBoundary()
 	const [open, setOpen] = useState<boolean>(true)
 
