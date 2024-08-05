@@ -9,7 +9,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
 
-import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/common/constants/constants'
+import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { useUpdateTransferOrderMutation } from '../_apis/-use-transfer-order-api'
 import { StorageCellEditor, WarehouseCellEditor } from '../_components/-cell-editor'
 import TransferOrderRowActions from '../_components/-transfer-order-row-actions'
@@ -249,11 +249,10 @@ export const useTransferOrderTableColumns = ({
 				]
 			}),
 
-			columnHelper.display({
+			columnHelper.accessor('id', {
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
 				meta: {
-					sticky: 'right',
 					rowSpan: 2
 				},
 				size: 100,
