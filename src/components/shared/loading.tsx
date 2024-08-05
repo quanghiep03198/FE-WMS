@@ -1,6 +1,6 @@
 import nProgress from 'nprogress'
 import { useEffect } from 'react'
-import { Icon } from '../ui'
+import { Div, Icon } from '../ui'
 
 export default function Loading() {
 	nProgress.configure({
@@ -15,8 +15,8 @@ export default function Loading() {
 	}, [])
 
 	return (
-		<div className='w-screen h-screen grid place-content-center'>
+		<Div className='w-screen h-screen grid place-content-center'>
 			<Icon name='LoaderCircle' className='animate-spin' size={18} />
-		</div>
+		</Div>
 	)
 }
