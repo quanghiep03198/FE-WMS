@@ -1,13 +1,19 @@
 import { HttpStatusCode } from 'axios'
 
 export declare global {
-	interface GlobalImportMetaEnv {
+	interface InternalImportMetaEnv {
 		readonly VITE_NODE_ENV: string
 		readonly VITE_APP_VERSION: string
 		readonly VITE_API_BASE_URL: string
 		readonly VITE_REPORT_BUG_URL: string
 		readonly VITE_DEFAULT_TTL: string
 		readonly VITE_REQUEST_TIMEOUT: string
+		readonly VITE_TEST_DB_HOST: string
+		readonly VITE_PRODUCTION_DB_HOST: string
+		readonly VITE_KM_DB_HOST_01: string
+		readonly VITE_KM_DB_HOST_02: string
+		readonly VITE_VN_DB_HOST_01: string
+		readonly VITE_VN_DB_HOST_02: string
 	}
 
 	type ResponseBody<T> = {

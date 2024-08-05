@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-interface ImportMetaEnv extends GlobalImportMetaEnv {
+interface ImportMetaEnv extends InternalImportMetaEnv {
 	// more env variables...
 }
 
