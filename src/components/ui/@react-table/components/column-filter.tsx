@@ -6,6 +6,7 @@ import { Div, DropdownSelect, Icon } from '../..'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 import { NumberRangeFilter } from './number-range-filter'
+import { ESTIMATE_SIZE } from './table'
 
 type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
@@ -48,8 +49,9 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'min-w-[8rem] h-full px-4 rounded-none border-none text-xs font-medium text-muted-foreground/80 ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
-						tabIndex: 0
+							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
+						tabIndex: 0,
+						style: { height: ESTIMATE_SIZE }
 					}}
 					selectProps={{
 						defaultValue: '',
