@@ -3,25 +3,22 @@ import { CommonActions } from '@/common/constants/enums'
 import { IWarehouseStorage } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
+import { UseQueryResult } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
-import { format } from 'date-fns'
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	useDeleteStorageMutation,
-	useGetWarehouseStorageQuery,
-	useUpdateStorageMutation
-} from '../../_apis/warehouse-storage.api'
+import { useDeleteStorageMutation, useUpdateStorageMutation } from '../../_apis/warehouse-storage.api'
 import { warehouseStorageTypes } from '../../_constants/warehouse.const'
 import { usePageContext } from '../../_contexts/-page-context'
 import StorageRowActions from './-storage-row-actions'
 // #endregion
 
-const StorageList: React.FC = () => {
+const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLoading, refetch }) => {
 	const { t, i18n } = useTranslation(['ns_common'])
 	const tableRef = useRef<Table<any>>()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
@@ -37,22 +34,6 @@ const StorageList: React.FC = () => {
 		},
 		[i18n.language]
 	)
-
-	// Get current warehouse's storage locations
-	const { data, isLoading, refetch } = useGetWarehouseStorageQuery<IWarehouseStorage[]>(warehouseNum, {
-		select: (response) => {
-			return Array.isArray(response.metadata)
-				? response.metadata.map((item) => ({
-						...item,
-						created: format(item.created, 'yyyy-MM-dd'),
-						type_storage: t(warehouseStorageTypes[item.type_storage], {
-							ns: 'ns_warehouse',
-							defaultValue: item.type_storage
-						})
-					}))
-				: []
-		}
-	})
 
 	// Update warehouse storage location
 	const { mutateAsync: updateWarehouseStorage } = useUpdateStorageMutation({ warehouseNum })
@@ -78,7 +59,7 @@ const StorageList: React.FC = () => {
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor('keyid', {
-				id: 'row-selection-column',
+				id: ROW_SELECTION_COLUMN_ID,
 				header: ({ table }) => {
 					const checked =
 						table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -105,7 +86,6 @@ const StorageList: React.FC = () => {
 						}}
 					/>
 				),
-				meta: { sticky: 'left' },
 				size: 50,
 				enableSorting: false,
 				enableHiding: false,
@@ -202,9 +182,9 @@ const StorageList: React.FC = () => {
 						</Typography>
 					)
 			}),
-			columnHelper.accessor('keyid', {
+			columnHelper.display({
+				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
-				meta: { sticky: 'right' },
 				size: 100,
 				cell: ({ row }) => {
 					return (

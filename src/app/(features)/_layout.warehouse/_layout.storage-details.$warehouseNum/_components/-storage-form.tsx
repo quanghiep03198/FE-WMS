@@ -2,7 +2,7 @@
 import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { CommonActions } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
-import { IWarehouseStorage } from '@/common/types/entities'
+import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import {
 	Button,
 	Dialog,
@@ -16,18 +16,17 @@ import {
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
-import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { UseQueryResult, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { useDeepCompareEffect } from 'ahooks'
 import { pick } from 'lodash'
-import React from 'react'
+import React, { memo } from 'react'
+import isEqual from 'react-fast-compare'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { WAREHOUSE_PROVIDE_TAG } from '../../_apis/warehouse.api'
 import { warehouseStorageTypes } from '../../_constants/warehouse.const'
 import { usePageContext } from '../../_contexts/-page-context'
 import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../_schemas/warehouse.schema'
@@ -37,7 +36,7 @@ import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '..
 export type FormValues<T> = Pick<IWarehouseStorage, 'storage_num'> &
 	(T extends CommonActions.CREATE ? Required<StorageFormValue> : PartialStorageFormValue)
 
-const WarehouseStorageFormDialog: React.FC = () => {
+const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data: warehouse }) => {
 	const { warehouseNum } = useParams({ strict: false })
 	const { t } = useTranslation()
 	const { user } = useAuth()
@@ -50,12 +49,6 @@ const WarehouseStorageFormDialog: React.FC = () => {
 	})
 
 	const queryClient = useQueryClient()
-
-	const { data: warehouse } = useSuspenseQuery({
-		queryKey: [WAREHOUSE_PROVIDE_TAG, warehouseNum],
-		queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum),
-		select: (response) => response.metadata
-	})
 
 	useDeepCompareEffect(() => {
 		form.reset({
@@ -141,6 +134,5 @@ const WarehouseStorageFormDialog: React.FC = () => {
 	)
 }
 const Form = tw.form`flex flex-col items-stretch gap-6`
-// #endregion
 
-export default WarehouseStorageFormDialog
+export default memo(WarehouseStorageFormDialog, (prev, next) => isEqual(prev, next))

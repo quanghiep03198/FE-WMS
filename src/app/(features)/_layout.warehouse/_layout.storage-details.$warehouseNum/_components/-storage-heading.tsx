@@ -1,5 +1,6 @@
 import { CommonActions } from '@/common/constants/enums'
 import { Button, Div, Icon, Typography } from '@/components/ui'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -17,7 +18,6 @@ const StorageListHeading: React.FC = () => {
 					{t('ns_warehouse:headings.storage_list_description')}
 				</Typography>
 			</Div>
-
 			<Button
 				size='sm'
 				onClick={() =>
@@ -32,4 +32,4 @@ const StorageListHeading: React.FC = () => {
 	)
 }
 
-export default StorageListHeading
+export default memo(StorageListHeading)

@@ -13,9 +13,9 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PartialStorageFormValue } from '../_schemas/warehouse.schema'
 
-export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE' as const
+export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE'
 
-type TQueryKey = [typeof WAREHOUSE_STORAGE_PROVIDE_TAG, string]
+type TQueryKey = ['WAREHOUSE_STORAGE', string]
 
 type TransformResponseFn<T> = UseQueryOptions<
 	ResponseBody<IWarehouseStorage[]>,

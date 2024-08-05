@@ -3,12 +3,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { EmployeeService } from '@/services/employee.service'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
-import React from 'react'
+import React, { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
-import { getWarehouseDetailOptions } from '../_apis/warehouse.api'
 
 type WarehouseRowActionsProps = {
 	row: Row<IWarehouse>
@@ -18,13 +17,11 @@ type WarehouseRowActionsProps = {
 
 const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, onDelete }) => {
 	const { t } = useTranslation()
-	const navigate = useNavigate()
 	const queryClient = useQueryClient()
-
+	const [open, setOpen] = useState(false)
 	// Prefetch warehouse storage detail before navigating
-	const prefetchWarehouseDetail = (warehouseNum: string) => {
-		queryClient.prefetchQuery(getWarehouseDetailOptions(warehouseNum))
-		queryClient.prefetchQuery(getWarehouseStorageOptions(warehouseNum))
+	const prefetchWarehouseDetail = async (warehouseNum: string) => {
+		await queryClient.prefetchQuery(getWarehouseStorageOptions(warehouseNum))
 	}
 
 	// Prefetch employee before opening update form dialog
@@ -34,27 +31,20 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			queryFn: () => EmployeeService.searchEmployee({ dept_code: departmentCode, search: employeeCode })
 		})
 
+	// useUnmount(() => setOpen(false))
+
 	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger role='button'>
+		<DropdownMenu open={open} onOpenChange={setOpen}>
+			<DropdownMenuTrigger>
 				<DotsHorizontalIcon />
 				<span className='sr-only'>Open menu</span>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-40'>
-				<DropdownMenuItem
-					asChild
-					className='flex items-center gap-x-3'
-					onMouseEnter={() => prefetchWarehouseDetail(row.original.warehouse_num)}
-					onClick={() =>
-						navigate({
-							to: '/warehouse/storage-details/$warehouseNum',
-							params: { warehouseNum: row.original.warehouse_num }
-						})
-					}>
+				<DropdownMenuItem asChild={true} className='flex items-center gap-x-3'>
 					<Link
+						preload='intent'
 						to='/warehouse/storage-details/$warehouseNum'
-						params={{ warehouseNum: row.original.warehouse_num }}
-						preload='intent'>
+						params={{ warehouseNum: row.original.warehouse_num }}>
 						<Icon name='SquareDashedMousePointer' />
 						{t('ns_common:actions.detail')}
 					</Link>
@@ -82,4 +72,4 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 	)
 }
 
-export default WarehouseRowActions
+export default memo(WarehouseRowActions)

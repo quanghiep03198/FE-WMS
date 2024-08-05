@@ -12,7 +12,7 @@ import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-export const WAREHOUSE_PROVIDE_TAG = 'WAREHOUSES' as const
+export const WAREHOUSE_PROVIDE_TAG = 'WAREHOUSES'
 
 export function getWarehouseDetailOptions(warehouseNum: string) {
 	return queryOptions({
