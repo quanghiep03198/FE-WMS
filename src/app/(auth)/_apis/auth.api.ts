@@ -9,10 +9,10 @@ export function getUserProfileQuery(config?: AxiosRequestConfig) {
 		queryKey: [USER_PROVIDE_TAG],
 		queryFn: () => AuthService.profile(config),
 		refetchOnMount: 'always',
-		networkMode: 'online',
+		networkMode: 'always',
 		enabled: AuthService.getHasAccessToken(),
 		select: (response) => response.metadata,
-		retry: () => AuthService.getHasAccessToken()
+		retry: (failureCount) => failureCount <= 2 && AuthService.getHasAccessToken()
 	})
 }
 

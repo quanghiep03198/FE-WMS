@@ -11,6 +11,11 @@ export interface IBaseEntity {
 	[key: string]: any
 }
 
+export interface IAccessToken {
+	token: string
+	expires_time: Date
+}
+
 export interface IUser extends IBaseEntity, Pick<ICompany, 'company_code' | 'company_name'> {
 	username: string
 	display_name: string

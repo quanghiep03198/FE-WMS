@@ -1,17 +1,18 @@
 import { LoginFormValues } from '@/app/(auth)/login/_schemas/login.schema'
-import { IUser } from '@/common/types/entities'
+import { IAccessToken, IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { useAuthStore } from '@/stores/auth.store'
 import { type AxiosRequestConfig } from 'axios'
+import { isBefore } from 'date-fns'
 import { isNil } from 'lodash'
 
 export class AuthService {
-	static async login(data: LoginFormValues): Promise<ResponseBody<{ user: Partial<IUser>; accessToken: string }>> {
-		return await axiosInstance.post<LoginFormValues, ResponseBody<{ user: Partial<IUser>; accessToken: string }>>(
-			'/login',
-			data
-		)
+	static async login(data: LoginFormValues) {
+		return await axiosInstance.post<
+			LoginFormValues,
+			ResponseBody<{ user: Partial<IUser>; accessToken: IAccessToken }>
+		>('/login', data)
 	}
 
 	static async logout(): Promise<void> {
@@ -32,18 +33,20 @@ export class AuthService {
 	}
 
 	static async refreshToken(id: IUser['user_code']) {
-		return await axiosInstance.get<any, ResponseBody<string>>(`/refresh-token/${id}`).then((response) => {
-			console.log('refresh token:>>>', response)
-			return response
-		})
+		return await axiosInstance.get<any, ResponseBody<IAccessToken>>(`/refresh-token/${id}`)
 	}
 
 	static getAccessToken(): string | null {
-		const accessToken = useAuthStore.getState().accessToken
+		const accessToken = useAuthStore.getState().accessToken?.token
 		return isNil(accessToken) ? null : `Bearer ${accessToken}`
 	}
 
-	static setAccessToken(accessToken: string): void {
+	static getIsAccessTokenExpired(): boolean {
+		const expiresTime = useAuthStore.getState().accessToken?.expires_time
+		return isBefore(new Date(expiresTime), new Date())
+	}
+
+	static setAccessToken(accessToken: IAccessToken): void {
 		useAuthStore.setState((state) => ({ ...state, accessToken: accessToken }))
 	}
 

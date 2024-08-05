@@ -1,4 +1,4 @@
-import { ICompany, IUser } from '@/common/types/entities'
+import { IAccessToken, ICompany, IUser } from '@/common/types/entities'
 import { generateAvatar } from '@/common/utils/generate-avatar'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -6,10 +6,10 @@ import { immer } from 'zustand/middleware/immer'
 
 export type AuthState = {
 	user: IUser | null
-	accessToken: string | null
+	accessToken: IAccessToken | null
 	setUserProfile: (profile: Partial<IUser>) => void
 	setUserCompany: (company: Omit<ICompany, 'factory_code'>) => void
-	setAccessToken: (accessToken: string) => void
+	setAccessToken: (payload: IAccessToken) => void
 	resetCredentials: () => void
 }
 
@@ -30,15 +30,14 @@ export const useAuthStore = create(
 						}
 					})
 				},
-				setAccessToken: (accessToken: string) => {
-					set({ accessToken })
+				setAccessToken: (payload) => {
+					set({ accessToken: payload })
 				},
 				setUserCompany: (company: Omit<ICompany, 'factory_code'>) => {
 					const state = get()
 					set({ user: { ...state.user, ...company } })
 				},
 				resetCredentials: () => {
-					console.log(1)
 					set({ user: null, accessToken: null })
 				}
 			}),
