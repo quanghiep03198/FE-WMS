@@ -1,5 +1,6 @@
-import { lazy, Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import { I18nextProvider } from 'react-i18next'
+import NetworkDetector from './components/shared/network-detector'
 import { Toaster } from './components/ui/@core/sonner'
 import { i18n } from './i18n'
 import { QueryClientProvider } from './providers/query-client-provider'
@@ -15,6 +16,7 @@ const App: React.FC = () => (
 					<RouterProvider />
 				</Suspense>
 				<Toaster position='bottom-right' closeButton={true} />
+				<NetworkDetector />
 			</ThemeProvider>
 		</I18nextProvider>
 	</QueryClientProvider>
