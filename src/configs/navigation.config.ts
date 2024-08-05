@@ -1,4 +1,4 @@
-import { TIconProps } from '@/components/ui'
+import { IconProps } from '@/components/ui'
 import { routeTree } from '@/route-tree.gen'
 import { ParseRoute } from '@tanstack/react-router'
 import { KeyType } from 'ahooks/lib/useKeyPress'
@@ -6,7 +6,7 @@ import { ResourceKeys } from 'i18next'
 
 export type NavigationConfig = {
 	id: string
-	icon: TIconProps['name']
+	icon: IconProps['name']
 	title: ResourceKeys['ns_common']
 	path: ParseRoute<typeof routeTree>['fullPath']
 	type: 'main' | 'preference' | 'auth'
