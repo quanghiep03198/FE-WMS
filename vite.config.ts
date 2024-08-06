@@ -49,8 +49,10 @@ export default defineConfig(({ mode }) => {
 							['lucide', /lucide-react/],
 							['ahooks', /ahooks/],
 							['zustand', /zustand/],
-							['zod', /zustand/],
+							['immer', /immer/],
+							['zod', /zod/],
 							['lodash', /lodash/],
+							['sonner', /sonner/],
 							['recharts', /recharts/]
 						])
 
