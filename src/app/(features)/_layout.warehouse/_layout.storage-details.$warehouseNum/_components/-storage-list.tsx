@@ -10,7 +10,8 @@ import { UseQueryResult } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
+import { Fragment, memo, useCallback, useMemo, useRef, useState } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { useDeleteStorageMutation, useUpdateStorageMutation } from '../../_apis/warehouse-storage.api'
 import { warehouseStorageTypes } from '../../_constants/warehouse.const'
@@ -263,4 +264,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 	)
 }
 
-export default StorageList
+export default memo(
+	StorageList,
+	(prev, next) => isEqual(prev.data, next.data) && isEqual(prev.isLoading, next.isLoading)
+)

@@ -135,4 +135,4 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 }
 const Form = tw.form`flex flex-col items-stretch gap-6`
 
-export default memo(WarehouseStorageFormDialog, (prev, next) => isEqual(prev, next))
+export default memo(WarehouseStorageFormDialog, (prev, next) => isEqual(prev.data, next.data))

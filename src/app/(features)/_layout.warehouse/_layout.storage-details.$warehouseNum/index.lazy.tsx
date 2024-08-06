@@ -5,9 +5,9 @@ import { IWarehouseStorage } from '@/common/types/entities'
 import { Div, Separator } from '@/components/ui'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { format } from 'date-fns'
-import { Fragment, useCallback, useEffect } from 'react'
+import { Fragment, useCallback } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
@@ -21,7 +21,7 @@ import StorageList from './_components/-storage-list'
 // #endregion
 
 // #region Router declaration
-export const Route = createFileRoute('/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/')({
+export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/')({
 	component: Page
 })
 // #endregion
@@ -31,6 +31,28 @@ function Page() {
 	const { t, i18n } = useTranslation(['ns_common'])
 	const { warehouseNum } = useParams({ strict: false })
 	const { searchParams } = useQueryParams()
+
+	// Set page breadcrumb navigation
+	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
+
+	setBreadcrumb([
+		{
+			text: t('ns_common:navigation.warehouse_management'),
+			to: '/warehouse'
+		},
+		{
+			text: t('ns_common:navigation.storage_detail'),
+			to: '/warehouse/storage-details/$warehouseNum',
+			params: { warehouseNum },
+			search: searchParams
+		},
+		{
+			text: warehouseNum,
+			to: '/warehouse/storage-details/$warehouseNum',
+			params: { warehouseNum },
+			search: searchParams
+		}
+	])
 
 	const transformResponse = useCallback(
 		(response: ResponseBody<IWarehouseStorage[]>) => {
@@ -54,30 +76,6 @@ function Page() {
 		queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum),
 		select: (response) => response.metadata
 	})
-
-	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
-
-	useEffect(() => {
-		setBreadcrumb([
-			{
-				text: t('ns_common:navigation.warehouse_management'),
-				to: '/warehouse'
-			},
-			{
-				text: t('ns_common:navigation.storage_detail'),
-				to: '/warehouse/storage-details/$warehouseNum',
-				params: { warehouseNum },
-				search: searchParams
-			},
-			{
-				text: warehouseNum,
-				to: '/warehouse/storage-details/$warehouseNum',
-				params: { warehouseNum },
-				search: searchParams
-			}
-		])
-	}, [])
 
 	return (
 		<Fragment>
