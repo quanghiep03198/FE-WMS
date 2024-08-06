@@ -5,8 +5,9 @@ import { $mediaQuery } from '@/common/utils/media-query'
 import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
+import { useEventListener } from 'ahooks'
 import { pick } from 'lodash'
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useShallow } from 'zustand/react/shallow'
@@ -14,15 +15,17 @@ import { useLayoutStore } from '../../_stores/layout.store'
 
 const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()
-	const { sidebarExpanded: navSidebarOpen, toggleExpandSidebar: toggleNavSidebarOpen } = useLayoutStore(
-		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar']))
+	const { sidebarExpanded, toggleExpandSidebar, collapseSidebar } = useLayoutStore(
+		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar', 'collapseSidebar']))
 	)
-	const isLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1024 }))
+	const isSmallScreen = useMediaQuery($mediaQuery({ minWidth: 320, maxWidth: 1023 }))
 
-	if (isLargeScreen) return null
+	const isExpanded = useMemo(() => sidebarExpanded && isSmallScreen, [sidebarExpanded, isSmallScreen])
+
+	useEventListener('resize', collapseSidebar)
 
 	return (
-		<Sheet defaultOpen={false} open={navSidebarOpen} onOpenChange={toggleNavSidebarOpen}>
+		<Sheet defaultOpen={false} open={isExpanded} onOpenChange={toggleExpandSidebar}>
 			<SheetContent className='w-full max-w-xs' side='left'>
 				<Div className='h-16 px-4'>
 					<AppLogo />
@@ -33,7 +36,7 @@ const NavDrawerSidebar: React.FC = () => {
 						.filter((item) => item.type === 'main')
 						.map((item) => {
 							return (
-								<MenuItem key={item.id} onClick={() => toggleNavSidebarOpen()}>
+								<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
 									<Link
 										to={item.path}
 										activeProps={{ className: 'text-primary hover:text-primary' }}
@@ -52,7 +55,7 @@ const NavDrawerSidebar: React.FC = () => {
 						.reverse()
 						.map((item) => {
 							return (
-								<MenuItem key={item.id} onClick={() => toggleNavSidebarOpen()}>
+								<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
 									<Link
 										to={item.path}
 										activeProps={{ className: 'text-primary hover:text-primary' }}

@@ -16,6 +16,7 @@ type LayoutState = {
 	sidebarExpanded: boolean
 	setBreadcrumb: (data: TBreadcrumb[]) => void
 	toggleExpandSidebar: () => void
+	collapseSidebar: () => void
 }
 
 export const useLayoutStore = create<LayoutState>()(
@@ -23,6 +24,7 @@ export const useLayoutStore = create<LayoutState>()(
 		breadcrumb: [],
 		setBreadcrumb: (data) => set(() => ({ breadcrumb: data })),
 		sidebarExpanded: window.matchMedia(BreakPoints.EXTRA_LARGE).matches,
-		toggleExpandSidebar: () => set((state) => ({ sidebarExpanded: !state.sidebarExpanded }))
+		toggleExpandSidebar: () => set((state) => ({ sidebarExpanded: !state.sidebarExpanded })),
+		collapseSidebar: () => set(() => ({ sidebarExpanded: false }))
 	}))
 )
