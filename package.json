@@ -6,18 +6,18 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"pm2:serve": "pm2 serve ./dist --port 3000 --name \"wms-client\" --spa",
+		"pm2:restart": "pm2 restart \"wms-client\" --update-env",
 		"tsr:gen": "rm ./src/route-tree.gen.ts && npx tsr generate",
 		"eslint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"eslint:fix": "eslint src --ext ts,tsx --fix",
 		"prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.css)\"",
 		"prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css)\"",
-		"preview": "vite preview",
 		"prepare": "husky",
 		"commitlint": "commitlint --edit",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build",
-		"pm2:serve": "pm2 serve ./dist --port 3000 --name \"wms-client\" --spa",
-		"pm2:restart": "pm2 restart \"wms-client\" --update-env"
+		"build-storybook": "storybook build"
 	},
 	"dependencies": {
 		"@dnd-kit/modifiers": "^7.0.0",
