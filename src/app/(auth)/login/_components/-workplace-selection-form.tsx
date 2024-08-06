@@ -14,7 +14,7 @@ type FormValues = { company_code: string }
 const COMPANY_PROVIDE_TAG = 'COMPANIES' as const
 
 const WorkplaceSelectionForm: React.FC = () => {
-	const { accessToken, setUserCompany } = useAuth()
+	const { token, setUserCompany } = useAuth()
 	const { dispatch } = useStepContext()
 	const { t } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()
@@ -23,7 +23,7 @@ const WorkplaceSelectionForm: React.FC = () => {
 	const { data, isFetching } = useQuery({
 		queryKey: [COMPANY_PROVIDE_TAG],
 		queryFn: () => CompanyService.getCompanies(),
-		enabled: !!accessToken,
+		enabled: !!token,
 		select: (data) => {
 			return Array.isArray(data.metadata) ? data.metadata : []
 		}

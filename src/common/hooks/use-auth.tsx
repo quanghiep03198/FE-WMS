@@ -19,8 +19,7 @@ export function useAuth() {
 		}
 	})
 
-	const isAuthenticated =
-		!isNil(authStore.user) && !isNil(authStore.user?.company_code) && !isNil(authStore.accessToken)
+	const isAuthenticated = !isNil(authStore.user) && !isNil(authStore.user?.company_code) && !isNil(authStore.token)
 
 	return {
 		...authStore,
