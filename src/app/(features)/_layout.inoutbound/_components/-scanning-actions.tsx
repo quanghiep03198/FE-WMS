@@ -49,9 +49,9 @@ const ScanningActions: React.FC = () => {
 
 	const rfidReaderHosts = useMemo(() => {
 		switch (true) {
-			case Regex.VIETNAM_FACTORY_CODE.test(user.company_code):
+			case Regex.VIETNAM_FACTORY_CODE.test(user?.company_code):
 				return RFID_READER_HOSTS.vi
-			case Regex.CAMBODIA_FACTORY_CODE.test(user.company_code):
+			case Regex.CAMBODIA_FACTORY_CODE.test(user?.company_code):
 				return RFID_READER_HOSTS.km
 			// Add more case if there still have other reader hosts
 			default:
@@ -82,7 +82,7 @@ const ScanningActions: React.FC = () => {
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') syncOrderCodes()
-	}, [scanningStatus])
+	}, [])
 
 	const handleResetScanning = useMemoizedFn(() => {
 		resetScanningStatus()
