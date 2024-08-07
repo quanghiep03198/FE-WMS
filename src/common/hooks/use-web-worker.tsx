@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export default function useWebWorker<T>(workerFn: (e: MessageEvent<T>) => any, payload) {
+export default function useWebWorker<T>(workerFn: (e: MessageEvent<T>) => any, payload: any) {
 	const [data, setData] = useState<T>(null)
 	const [loading, setLoading] = useState<boolean>(false)
 	const [error, setError] = useState<Error>(null)
