@@ -158,7 +158,7 @@ const InoutboundForm: React.FC = () => {
 											{t('ns_inoutbound:action_types.warehouse_input')}
 											<CheckIcon
 												name='Check'
-												size={16}
+												size={20}
 												aria-checked={field.value === FormActionEnum.IMPORT}
 											/>
 										</StyledFormLabel>
@@ -177,7 +177,7 @@ const InoutboundForm: React.FC = () => {
 											{t('ns_inoutbound:action_types.warehouse_output')}
 											<CheckIcon
 												name='Check'
-												size={16}
+												size={20}
 												aria-checked={field.value === FormActionEnum.EXPORT}
 											/>
 										</StyledFormLabel>

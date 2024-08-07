@@ -79,7 +79,11 @@ const OrderDetails: React.FC = () => {
 							<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 						</DialogHeader>
 						<Div className='rounded-lg border divide-y divide-border text-sm'>
-							<ScrollArea className='h-96 w-full relative'>
+							<ScrollArea
+								className={cn(
+									'max-h-96 w-full relative',
+									Array.isArray(scannedOrders) && scannedOrders.length === 0 && 'min-h-56'
+								)}>
 								{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
 									<Div className='divide-y divide-border w-full col-span-full'>
 										{scannedOrders.map((order) => {

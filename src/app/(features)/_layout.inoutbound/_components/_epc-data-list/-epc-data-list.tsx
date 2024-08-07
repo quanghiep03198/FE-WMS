@@ -61,7 +61,6 @@ const EPCDatalist: React.FC = () => {
 					)
 				: []
 
-			console.log(data.datalist?.filter((item) => !item.mo_no))
 			setScannedEPCs(filteredData)
 			setSelectedOrder(selectedOrder || (scannedOrders?.length > 0 ? 'all' : undefined))
 		}
