@@ -6,6 +6,9 @@ import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+/**
+ * @summary Custom hook that provides authentication-related functionality.
+ */
 export function useAuth() {
 	const { t } = useTranslation()
 	const authStore = useAuthStore()
@@ -13,9 +16,12 @@ export function useAuth() {
 	const { mutateAsync: logout } = useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
 		mutationFn: AuthService.revokeToken,
-		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
+		onMutate: () => {
+			return toast.loading(t('ns_common:notification.processing_request'))
+		},
 		onSettled: (_data, _error, _variable, context) => {
-			AuthService.logout().finally(() => toast.success(t('ns_auth:notification.logout_success'), { id: context }))
+			AuthService.logout()
+			toast.success(t('ns_auth:notification.logout_success'), { id: context })
 		}
 	})
 

@@ -1,17 +1,21 @@
 import env from '@/common/utils/env'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
-import axios, { HttpStatusCode, type AxiosError, type AxiosInstance } from 'axios'
+import axios, { HttpStatusCode, type AxiosError, type AxiosErrorFilter, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
 
-const API_BASE_URL = env('VITE_API_BASE_URL')
-const REQUEST_TIMEOUT = 60_000
-
 let isRefreshing = false
-let failedQueue: { resolve: (value: unknown) => void; reject: (reason?: any) => void }[] = []
+let failedQueue: Array<AxiosErrorFilter> = []
 
-const processQueue = (error: AxiosError, token: string) => {
+/**
+ * Processes the failed request by resolving or rejecting each promise with the provided token or error.
+ *
+ * @param {AxiosError} error - The error to reject the promises with, or null if the token is valid.
+ * @param {string} token - The token to resolve the promises with.
+ * @return {void}
+ */
+const processRequestQueue = (error: AxiosError, token: string) => {
 	failedQueue.forEach(({ resolve, reject }) => {
 		error ? reject(error) : resolve(token)
 	})
@@ -19,8 +23,8 @@ const processQueue = (error: AxiosError, token: string) => {
 }
 
 const axiosInstance: AxiosInstance = axios.create({
-	baseURL: API_BASE_URL,
-	timeout: REQUEST_TIMEOUT,
+	baseURL: env('VITE_API_BASE_URL'),
+	timeout: env('VITE_API_BASE_URL', 10_000),
 	paramsSerializer: (params) => {
 		return qs.stringify(params, {
 			skipNulls: true,
@@ -53,15 +57,15 @@ axiosInstance.interceptors.response.use(
 		}
 
 		const originalRequest = error.config
-		const responseStatus = error.response?.status
+		const errorResponseStatus = error.response?.status
 
-		if (originalRequest && !originalRequest.retry && responseStatus === HttpStatusCode.Unauthorized) {
+		if (originalRequest && !originalRequest.retry && errorResponseStatus === HttpStatusCode.Unauthorized) {
 			console.error('[ERROR] ::: Log in session has expired.')
 
 			const user = AuthService.getCredentials()
 			if (!user?.id) {
 				AuthService.logout()
-				return Promise.reject(new Error('User could not be found'))
+				return Promise.reject(new Error('Invalid credentials'))
 			}
 
 			if (isRefreshing) {
@@ -72,7 +76,7 @@ axiosInstance.interceptors.response.use(
 						originalRequest.headers['Authorization'] = `Bearer ${token}`
 						return axiosInstance(originalRequest)
 					})
-					.catch((err) => Promise.reject(err))
+					.catch((error) => Promise.reject(error))
 			}
 
 			originalRequest.retry = true
@@ -82,10 +86,10 @@ axiosInstance.interceptors.response.use(
 				const response = await AuthService.refreshToken(user?.id)
 				AuthService.setAccessToken(response.metadata)
 				error.config.headers.Authorization = `Bearer ${response.metadata}`
-				processQueue(null, response.metadata)
+				processRequestQueue(null, response.metadata)
 				return axiosInstance.request(originalRequest)
 			} catch (error) {
-				processQueue(error, null)
+				processRequestQueue(error, null)
 				AuthService.logout()
 				return Promise.reject(error)
 			} finally {

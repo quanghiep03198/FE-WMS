@@ -11,7 +11,7 @@ export class AuthService {
 		return await axiosInstance.post('/login', data)
 	}
 
-	static async logout(): Promise<void> {
+	static logout() {
 		useAuthStore.getState().resetCredentials() // reset auth state
 		queryClient.clear() // clear cached queries
 	}
