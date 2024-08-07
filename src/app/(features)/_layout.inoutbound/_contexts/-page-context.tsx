@@ -1,7 +1,7 @@
 import { IElectronicProductCode } from '@/common/types/entities'
 import { useQueryClient } from '@tanstack/react-query'
 import { useHistoryTravel, useMemoizedFn, useResetState, useUpdateEffect } from 'ahooks'
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 import { RFID_EPC_PROVIDE_TAG } from '../_apis/rfid.api'
 
 export type ScanningStatus = 'scanning' | 'stopped' | 'finished' | undefined
@@ -73,17 +73,33 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		})
 	})
 
+	const memorizedStates = useMemo(
+		() => ({
+			scannedEPCs,
+			connection,
+			scanningStatus,
+			scannedOrders,
+			scannedOrderSizing,
+			selectedOrder,
+			forwardLength,
+			backLength
+		}),
+		[
+			scannedEPCs,
+			connection,
+			scanningStatus,
+			scannedOrders,
+			scannedOrderSizing,
+			selectedOrder,
+			forwardLength,
+			backLength
+		]
+	)
+
 	return (
 		<PageContext.Provider
 			value={{
-				scannedEPCs,
-				connection,
-				scanningStatus,
-				scannedOrders,
-				scannedOrderSizing,
-				selectedOrder,
-				forwardLength,
-				backLength,
+				...memorizedStates,
 				back,
 				forward,
 				resetScannedOrders,

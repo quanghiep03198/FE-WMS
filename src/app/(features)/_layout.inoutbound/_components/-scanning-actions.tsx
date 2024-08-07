@@ -17,7 +17,7 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import { useMemoizedFn } from 'ahooks'
-import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
+import React, { Fragment, useCallback, useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { RFID_EPC_PROVIDE_TAG, useSyncEpcOrderCodeMutation } from '../_apis/rfid.api'
@@ -80,8 +80,8 @@ const ScanningActions: React.FC = () => {
 	const handleReset = useCallback(reset, [status])
 	const handleProceed = useCallback(proceed, [status])
 
-	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') syncOrderCodes()
+	useLayoutEffect(() => {
+		syncOrderCodes()
 	}, [])
 
 	const handleResetScanning = useMemoizedFn(() => {

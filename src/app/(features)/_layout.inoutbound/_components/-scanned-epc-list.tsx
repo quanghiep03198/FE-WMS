@@ -106,7 +106,7 @@ const EPCDatalist: React.FC = () => {
 		setScannedEPCs
 	} = usePageContext()
 
-	const { data, error } = useGetScannedEPC({ connection, scanningStatus })
+	const { data } = useGetScannedEPC({ connection, scanningStatus })
 
 	const originalData = useMemo(() => (Array.isArray(data?.datalist) ? data.datalist : []), [data?.datalist])
 
