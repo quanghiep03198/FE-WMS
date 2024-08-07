@@ -37,8 +37,8 @@ export class AuthService {
 		return isNil(accessToken) ? null : `Bearer ${accessToken}`
 	}
 
-	static setAccessToken(accessToken: string): void {
-		useAuthStore.setState((state) => ({ ...state, accessToken }))
+	static setAccessToken(token: string): void {
+		useAuthStore.getState().setAccessToken(token)
 	}
 
 	static getHasAccessToken(): boolean {
