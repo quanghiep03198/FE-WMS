@@ -10,17 +10,14 @@ import { AxiosRequestConfig } from 'axios'
 type InOutBoundPayload = (InboundFormValues | OutboundFormValues) & { mo_no: string; host: string }
 
 export class RFIDService {
-	static async getScannedEPC(
-		host: string,
-		config: AxiosRequestConfig
-	): Promise<
+	static async getScannedEPC(config: AxiosRequestConfig): Promise<
 		ResponseBody<{
 			datalist: IElectronicProductCode[]
 			orderList: ScannedOrder[]
 			sizing: ScannedOrderSizing[]
 		}>
 	> {
-		return await axiosInstance.get(`/rfid/read-epc/${host}`, config)
+		return await axiosInstance.get(`/rfid/read-epc`, config)
 	}
 
 	static async updateStockMovement(payload: InOutBoundPayload) {
@@ -37,5 +34,9 @@ export class RFIDService {
 
 	static async synchronizeOrderCode() {
 		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono')
+	}
+
+	static async deleteScannedOrder(host: string, orderCode: string) {
+		return await axiosInstance.delete(`/rfid/delete-mono/${orderCode}`, { headers: { ['X-Database-Host']: host } })
 	}
 }

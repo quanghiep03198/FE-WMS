@@ -15,38 +15,46 @@ import {
 	Typography
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { useResetState } from 'ahooks'
 import { Fragment, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { useDeleteOrderMutation } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const OrderDetails: React.FC = () => {
 	const { t } = useTranslation()
 	const {
+		connection,
 		scannedOrders,
 		scannedOrderSizing,
-		backLength,
-		forwardLength,
 		scanningStatus,
-		back,
-		forward,
 		setScannedOrders,
 		setScannedEPCs,
 		setSelectedOrder,
 		setScanningStatus
+		// forwardLength,
+		// back,
+		// forward,
+		// backLength,
 	} = usePageContext()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
+	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 
 	// Delete unexpected orders
-	const handleDeleteOrder = (selectedOrder: string) => {
-		if (scannedOrders?.length === 1) {
-			setConfirmDialogOpen(true)
+	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
+	const handleDeleteOrder = async () => {
+		await deleteOrderAsync({ host: connection, orderCode: orderToDelete })
+		const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderToDelete)
+		if (filteredOrders.length === 0) {
+			setScanningStatus(undefined)
+			resetOrderToDelete()
 			return
 		}
-		const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== selectedOrder)
 		setScannedOrders(filteredOrders)
-		setScannedEPCs((prev) => prev.filter((item) => item.mo_no !== selectedOrder))
+		setScannedEPCs((prev) => prev.filter((item) => item.mo_no !== orderToDelete))
 		setSelectedOrder(filteredOrders[1]?.mo_no ?? filteredOrders[0]?.mo_no)
+		resetOrderToDelete()
 	}
 
 	const getSizeByOrder = useCallback(
@@ -110,7 +118,10 @@ const OrderDetails: React.FC = () => {
 																variant='ghost'
 																size='icon'
 																disabled={scanningStatus !== 'finished'}
-																onClick={() => handleDeleteOrder(order.mo_no)}>
+																onClick={() => {
+																	setConfirmDialogOpen(true)
+																	setOrderToDelete(order.mo_no)
+																}}>
 																<Icon name='Trash2' size={14} />
 															</Button>
 														</Tooltip>
@@ -130,7 +141,7 @@ const OrderDetails: React.FC = () => {
 								<Typography variant='small' color='muted'>
 									{t('ns_inoutbound:mo_no_box.caption')}
 								</Typography>
-								<Div className='flex justify-end gap-x-1'>
+								{/* <Div className='flex justify-end gap-x-1'>
 									<Tooltip message='Undo'>
 										<Button
 											size='icon'
@@ -151,7 +162,7 @@ const OrderDetails: React.FC = () => {
 											<Icon name='Redo2' />
 										</Button>
 									</Tooltip>
-								</Div>
+								</Div> */}
 							</Div>
 						</Div>
 					</DialogContent>
@@ -169,7 +180,7 @@ const OrderDetails: React.FC = () => {
 				description={t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
 				open={confirmDialogOpen}
 				onOpenChange={setConfirmDialogOpen}
-				onConfirm={() => setScanningStatus(undefined)}
+				onConfirm={handleDeleteOrder}
 			/>
 		</Fragment>
 	)

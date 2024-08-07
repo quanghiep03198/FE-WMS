@@ -24,7 +24,11 @@ export const useGetScannedEPCQuery = (params: { connection: string; scanningStat
 
 	return useQuery({
 		queryKey: [RFID_EPC_PROVIDE_TAG, params.connection],
-		queryFn: async () => await RFIDService.getScannedEPC(params.connection, { signal: controllerRef.current.signal }),
+		queryFn: async () =>
+			await RFIDService.getScannedEPC({
+				signal: controllerRef.current.signal,
+				headers: { ['X-Database-Host']: params.connection }
+			}),
 		enabled: params.scanningStatus === 'scanning',
 		refetchInterval: 5000, // refetch every 5 seconds
 		select: (response) => response.metadata
@@ -50,5 +54,13 @@ export const useGetInoutboundDeptQuery = () => {
 		queryKey: [INOUTBOUND_DEPT_PROVIDE_TAG],
 		queryFn: RFIDService.getInoutboundDept,
 		select: (response) => response.metadata
+	})
+}
+
+export const useDeleteOrderMutation = () => {
+	return useMutation({
+		mutationKey: [RFID_EPC_PROVIDE_TAG],
+		mutationFn: ({ host, orderCode }: { host: string; orderCode: string }) =>
+			RFIDService.deleteScannedOrder(host, orderCode)
 	})
 }
