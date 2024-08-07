@@ -35,7 +35,7 @@ export class RFIDService {
 		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/rfid/inoutbound-dept')
 	}
 
-	static async syncEpcOrderCode() {
+	static async synchronizeOrderCode() {
 		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono')
 	}
 }

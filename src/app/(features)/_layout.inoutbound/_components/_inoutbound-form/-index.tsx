@@ -1,3 +1,5 @@
+import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
+import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse.api'
 import { IWarehouse } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -26,11 +28,14 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_apis/warehouse-storage.api'
-import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
-import { RFID_EPC_PROVIDE_TAG, UNKNOWN_ORDER, useGetInoutboundDept, useStoreEpcMutation } from '../_apis/rfid.api'
-import { usePageContext } from '../_contexts/-page-context'
-import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../_schemas/epc-inoutbound.schema'
+import {
+	RFID_EPC_PROVIDE_TAG,
+	UNKNOWN_ORDER,
+	useGetInoutboundDeptQuery,
+	useUpdateEPCMutation
+} from '../../_apis/rfid.api'
+import { usePageContext } from '../../_contexts/-page-context'
+import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const [schema, setSchema] = useState<typeof inboundSchema | typeof outboundSchema>(inboundSchema)
@@ -75,14 +80,14 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
-	const { data: inoutboundDepts } = useGetInoutboundDept()
+	const { data: inoutboundDepts } = useGetInoutboundDeptQuery()
 
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync } = useStoreEpcMutation()
+	const { mutateAsync } = useUpdateEPCMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({

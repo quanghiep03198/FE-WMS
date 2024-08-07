@@ -17,11 +17,11 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import { useMemoizedFn } from 'ahooks'
-import React, { Fragment, useCallback, useLayoutEffect, useMemo } from 'react'
+import React, { Fragment, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { RFID_EPC_PROVIDE_TAG, useSyncEpcOrderCodeMutation } from '../_apis/rfid.api'
-import { usePageContext } from '../_contexts/-page-context'
+import { RFID_EPC_PROVIDE_TAG } from '../../_apis/rfid.api'
+import { usePageContext } from '../../_contexts/-page-context'
 
 type TScanningButtonProps = {
 	children: string
@@ -44,8 +44,6 @@ const ScanningActions: React.FC = () => {
 		resetConnection,
 		resetScanningStatus
 	} = usePageContext()
-
-	const { mutateAsync: syncOrderCodes } = useSyncEpcOrderCodeMutation()
 
 	const rfidReaderHosts = useMemo(() => {
 		switch (true) {
@@ -79,10 +77,6 @@ const ScanningActions: React.FC = () => {
 
 	const handleReset = useCallback(reset, [status])
 	const handleProceed = useCallback(proceed, [status])
-
-	useLayoutEffect(() => {
-		syncOrderCodes()
-	}, [])
 
 	const handleResetScanning = useMemoizedFn(() => {
 		resetScanningStatus()
@@ -159,4 +153,4 @@ const ScanningActions: React.FC = () => {
 	)
 }
 
-export default ScanningActions
+export default memo(ScanningActions)

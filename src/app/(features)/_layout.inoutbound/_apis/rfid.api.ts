@@ -9,7 +9,7 @@ export const DATABASE_COMPATIBILITY_PROVIDE_TAG = 'DATABASE_COMPATIBILITY'
 export const INOUTBOUND_DEPT_PROVIDE_TAG = 'INOUTBOUND_DEPT'
 export const UNKNOWN_ORDER = 'Unknown'
 
-export const useGetScannedEPC = (params: { connection: string; scanningStatus: ScanningStatus }) => {
+export const useGetScannedEPCQuery = (params: { connection: string; scanningStatus: ScanningStatus }) => {
 	const controllerRef = useRef(new AbortController())
 
 	useEffect(() => {
@@ -31,29 +31,21 @@ export const useGetScannedEPC = (params: { connection: string; scanningStatus: S
 	})
 }
 
-export const useStoreEpcMutation = () => {
+export const useUpdateEPCMutation = () => {
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
 		mutationFn: RFIDService.updateStockMovement
 	})
 }
 
-export const useSyncEpcOrderCodeMutation = () => {
+export const useSynchronizeOrderCodeMutation = () => {
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: RFIDService.syncEpcOrderCode
+		mutationFn: RFIDService.synchronizeOrderCode
 	})
 }
 
-export const useGetDatabaseConnnection = () => {
-	return useQuery({
-		queryKey: [DATABASE_COMPATIBILITY_PROVIDE_TAG],
-		queryFn: RFIDService.getDatabaseCompatibility,
-		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
-	})
-}
-
-export const useGetInoutboundDept = () => {
+export const useGetInoutboundDeptQuery = () => {
 	return useQuery({
 		queryKey: [INOUTBOUND_DEPT_PROVIDE_TAG],
 		queryFn: RFIDService.getInoutboundDept,
