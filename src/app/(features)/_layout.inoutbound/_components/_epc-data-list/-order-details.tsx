@@ -10,7 +10,6 @@ import {
 	DialogTrigger,
 	Div,
 	Icon,
-	ScrollArea,
 	Tooltip,
 	Typography
 } from '@/components/ui'
@@ -33,10 +32,6 @@ const OrderDetails: React.FC = () => {
 		setScannedEPCs,
 		setSelectedOrder,
 		setScanningStatus
-		// forwardLength,
-		// back,
-		// forward,
-		// backLength,
 	} = usePageContext()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
@@ -79,9 +74,9 @@ const OrderDetails: React.FC = () => {
 							<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 						</DialogHeader>
 						<Div className='rounded-lg border divide-y divide-border text-sm'>
-							<ScrollArea
+							<Div
 								className={cn(
-									'max-h-96 w-full relative',
+									'max-h-96 w-full relative overflow-y-auto',
 									Array.isArray(scannedOrders) && scannedOrders.length === 0 && 'min-h-56'
 								)}>
 								{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
@@ -140,33 +135,11 @@ const OrderDetails: React.FC = () => {
 										No data
 									</Div>
 								)}
-							</ScrollArea>
-							<Div className='flex justify-between items-center px-4 py-2'>
+							</Div>
+							<Div className='flex justify-between items-center p-4'>
 								<Typography variant='small' color='muted'>
 									{t('ns_inoutbound:mo_no_box.caption')}
 								</Typography>
-								{/* <Div className='flex justify-end gap-x-1'>
-									<Tooltip message='Undo'>
-										<Button
-											size='icon'
-											variant='ghost'
-											className='size-8'
-											disabled={backLength <= 0}
-											onClick={back}>
-											<Icon name='Undo2' />
-										</Button>
-									</Tooltip>
-									<Tooltip message='Redo'>
-										<Button
-											size='icon'
-											variant='ghost'
-											className='size-8'
-											disabled={forwardLength <= 0}
-											onClick={forward}>
-											<Icon name='Redo2' />
-										</Button>
-									</Tooltip>
-								</Div> */}
 							</Div>
 						</Div>
 					</DialogContent>

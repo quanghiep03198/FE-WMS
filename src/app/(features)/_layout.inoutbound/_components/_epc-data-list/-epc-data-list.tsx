@@ -28,7 +28,7 @@ const EPCDatalist: React.FC = () => {
 		connection,
 		scanningStatus,
 		scannedOrders,
-		resetScannedOrders,
+		setScannedOrders,
 		setSelectedOrder,
 		setScannedOrderSizing,
 		setScannedEPCs
@@ -42,7 +42,7 @@ const EPCDatalist: React.FC = () => {
 	useDeepCompareEffect(() => {
 		if (scanningStatus === 'scanning') {
 			setScannedEPCs(originalData)
-			resetScannedOrders(data?.orderList)
+			setScannedOrders(data?.orderList)
 			setScannedOrderSizing(data?.sizing)
 			// Alert if there are more than 3 orders scanned
 			if (data?.orderList?.length > 3)

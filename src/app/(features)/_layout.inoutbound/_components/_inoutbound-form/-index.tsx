@@ -46,7 +46,7 @@ const InoutboundForm: React.FC = () => {
 		selectedOrder,
 		resetScanningStatus,
 		setSelectedOrder,
-		resetScannedOrders
+		setScannedOrders
 	} = usePageContext()
 	const { t, i18n } = useTranslation()
 	const form = useForm<InboundFormValues>({
@@ -115,7 +115,7 @@ const InoutboundForm: React.FC = () => {
 			const filteredOrders = scannedOrders.filter((item) => item.mo_no !== selectedOrder)
 			if (filteredOrders.length > 0) {
 				setSelectedOrder(filteredOrders[0]?.mo_no)
-				resetScannedOrders(filteredOrders)
+				setScannedOrders(filteredOrders)
 			} else {
 				resetScanningStatus()
 				form.reset()

@@ -1,6 +1,6 @@
 import { IElectronicProductCode } from '@/common/types/entities'
 import { useQueryClient } from '@tanstack/react-query'
-import { useHistoryTravel, useMemoizedFn, useResetState, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useResetState, useUpdateEffect } from 'ahooks'
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { RFID_EPC_PROVIDE_TAG } from '../_apis/rfid.api'
 
@@ -22,13 +22,9 @@ type TPageContext = {
 	setScanningStatus: React.Dispatch<React.SetStateAction<ScanningStatus>>
 	setSelectedOrder: React.Dispatch<React.SetStateAction<string>>
 	handleToggleScanning: () => void
-	back: () => void
-	forward: () => void
-	resetScannedOrders: (initialData: Array<ScannedOrder>) => void
+	resetScannedOrders: () => void
 	resetScanningStatus: () => void
 	resetConnection: () => void
-	forwardLength: number
-	backLength: number
 }
 
 const PageContext = createContext<TPageContext>(null)
@@ -38,22 +34,14 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	const [connection, setConnection, resetConnection] = useResetState<string>('')
 	const [scannedEPCs, setScannedEPCs, resetScannedEPCs] = useResetState<IElectronicProductCode[]>([])
 	const [scannedOrderSizing, setScannedOrderSizing] = useState([])
-	const {
-		value: scannedOrders,
-		setValue: setScannedOrders,
-		forwardLength,
-		backLength,
-		back,
-		forward,
-		reset: resetScannedOrders
-	} = useHistoryTravel<ScannedOrder[]>([])
+	const [scannedOrders, setScannedOrders, resetScannedOrders] = useResetState<ScannedOrder[]>([])
 	const [selectedOrder, setSelectedOrder, resetSeletedOrder] = useResetState<string>('')
 	const queryClient = useQueryClient()
 
 	useUpdateEffect(() => {
 		// Reset scanned result on scanning status is reset
 		if (typeof scanningStatus === 'undefined') {
-			resetScannedOrders([])
+			resetScannedOrders()
 			resetScannedEPCs()
 			resetSeletedOrder()
 			queryClient.removeQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
@@ -80,28 +68,15 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 			scanningStatus,
 			scannedOrders,
 			scannedOrderSizing,
-			selectedOrder,
-			forwardLength,
-			backLength
+			selectedOrder
 		}),
-		[
-			scannedEPCs,
-			connection,
-			scanningStatus,
-			scannedOrders,
-			scannedOrderSizing,
-			selectedOrder,
-			forwardLength,
-			backLength
-		]
+		[scannedEPCs, connection, scanningStatus, scannedOrders, scannedOrderSizing, selectedOrder]
 	)
 
 	return (
 		<PageContext.Provider
 			value={{
 				...memorizedStates,
-				back,
-				forward,
 				resetScannedOrders,
 				resetScanningStatus,
 				resetConnection,
