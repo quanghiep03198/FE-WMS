@@ -63,7 +63,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 							: undefined
 					}>
 					{flexRender(columnDef.header, header.getContext())}
-					{columnDef.enableSorting && <Icon name={currentSortingState} size={14} />}
+					{columnDef.enableSorting && <Icon name={currentSortingState} size={14} className='min-w-[14px]' />}
 				</Div>
 			</ContextMenuTrigger>
 			<ContextMenuContent className='w-64'>

@@ -2,6 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
 import { Fragment, memo, useCallback, useId, useMemo, useRef } from 'react'
+import tw from 'tailwind-styled-components'
 import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
@@ -14,16 +15,12 @@ import { TableCellHead } from './table-cell-head'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-// needed for table body level scope DnD setup
-import { type DragEndEvent } from '@dnd-kit/core'
-import tw from 'tailwind-styled-components'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
 		Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'>,
 		Pick<React.ComponentProps<'div'>, 'style'> {
 	table: TTable<TData>
-	onColumnDragEnd?: (event: DragEndEvent) => void
 }
 
 export const ESTIMATE_SIZE = 40
@@ -97,10 +94,6 @@ function TableDataGrid<TData, TValue>({
 		return colSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
-	const hasSomeGroupedColumn = table
-		.getHeaderGroups()
-		.some((headerGroup) => headerGroup.headers.some((header) => header.colSpan > 1))
-
 	return (
 		<Wrapper role='group'>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
@@ -118,7 +111,8 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					<TableHeader className='sticky top-0 z-20 bg-background [&:not(:only-child)>tr:not(:last-child)>th:not(:last-child)]:!border-l-0'>
+					{/* [&:not(:only-child)>tr:not(:last-child)>th:not(:last-child)]:!border-l-0 */}
+					<TableHeader className='sticky top-0 z-20 bg-background'>
 						{table.getHeaderGroups().map((headerGroup) => {
 							return (
 								<Fragment key={headerGroup.id}>
@@ -135,6 +129,7 @@ function TableDataGrid<TData, TValue>({
 													colSpan={header.colSpan}
 													rowSpan={rowSpan}
 													className={cn('group relative h-10 p-0')}
+													align={header.column.columnDef.meta?.align}
 													style={{
 														height: `${ESTIMATE_SIZE}px`,
 														width: `calc(var(--header-${header?.id}-size) * 1px)`,

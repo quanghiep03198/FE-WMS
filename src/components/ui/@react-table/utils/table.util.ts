@@ -36,30 +36,33 @@ export class DataTableUtility {
 
 		switch (stickyAlignment) {
 			case 'left': {
-				if (column.getIsFirstColumn('left')) return { position: 'sticky', zIndex: 10, left: 0 }
-				return { position: 'sticky', zIndex: 10, left: column.getStart('left') }
+				return {
+					position: 'sticky',
+					zIndex: 10,
+					left: column.getStart('left'),
+					borderLeft: 'none',
+					boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined,
+					borderRight: !column.getIsLastColumn('left') ? '1px solid hsl(var(--border))' : undefined
+				}
 			}
 			case 'right': {
 				if (column.getIsLastColumn('right'))
 					return {
 						position: 'sticky',
 						right: 0,
-						zIndex: 10,
-						borderRight: 'none',
-						borderLeft: '1px solid hsl(var(--border))'
+						zIndex: 10
 					}
 				return {
 					position: 'sticky',
 					zIndex: 10,
-					right: column.getAfter('right'),
-					borderRight: column.getIsLastColumn('right') ? '1px solid hsl(var(--border)) !important' : 'none',
-					borderLeft: '1px solid hsl(var(--border))'
+					right: column.getAfter('right')
 				}
 			}
 			default: {
 				return {
 					position: 'relative',
-					borderRight: column.getIsLastColumn('center') ? 'none' : '1px solid hsl(var(--border))'
+					borderLeft: column.getIsFirstColumn() ? 'none' : undefined
+					// borderRight: column.getIsLastColumn('center') ? 'none' : '1px solid hsl(var(--border))'
 				}
 			}
 		}

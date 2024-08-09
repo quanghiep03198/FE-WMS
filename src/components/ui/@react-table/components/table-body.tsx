@@ -48,8 +48,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 										<TableCell
 											key={cell.id}
 											aria-selected={row.getIsSelected()}
-											data-sticky={cell.column.getIsPinned()}
-											className='data-[sticky=left]:sticky data-[sticky=right]:sticky'
+											align={cell.column.columnDef.meta?.align}
 											style={{
 												width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
 												height: virtualRow.size,
