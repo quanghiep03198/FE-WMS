@@ -7,7 +7,7 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"pm2:serve": "pm2 serve ./dist --port 3000 --name \"wms-client\" --spa",
+		"pm2:start": "pm2 start ecosystem.config.json",
 		"pm2:restart": "pm2 restart \"wms-client\" --update-env",
 		"tsr:gen": "rm ./src/route-tree.gen.ts && npx tsr generate",
 		"eslint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
