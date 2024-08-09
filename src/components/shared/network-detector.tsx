@@ -1,32 +1,35 @@
+import env from '@/common/utils/env'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import { useEffect, useRef } from 'react'
-import { Detector } from 'react-detect-offline'
 import { toast } from 'sonner'
 import { Icon } from '../ui'
 
-type NetworkDetectorProps = { online: boolean }
-
 export default function NetworkDetector() {
-	return <Detector render={(props: NetworkDetectorProps) => <NetworkNotification {...props} />} />
-}
+	const toastRef = useRef<string | number | null>(null)
 
-function NetworkNotification({ online }: NetworkDetectorProps) {
-	const id = useRef<string | number | null>(null)
-
+	const { data, isSuccess, isError } = useQuery({
+		queryKey: ['NETWORK_HEALTH_CHECK'],
+		queryFn: async () => axios.get(env('VITE_CHECKING_NETWORK_URL')),
+		refetchInterval: 10_000 // Checking internet connection every 10 seconds
+	})
 	useEffect(() => {
-		if (!online)
-			id.current = toast.error('Network error', {
-				icon: <Icon name='WifiOff' stroke='hsl(var(--destructive-foreground))' />,
+		console.log(isError)
+		if (isError) {
+			console.log(1)
+			toastRef.current = toast.error('Network error', {
+				icon: <Icon name='WifiOff' stroke='hsl(var(--foreground))' />,
 				description: 'You are currently offline.',
 				duration: Infinity
 			})
-		else
-			toast.info('You are back to online', {
-				icon: <Icon name='Wifi' />,
-				id: id.current,
-				description: null,
-				duration: 2000
+		}
+		if (isSuccess)
+			toast.success('You are back to online.', {
+				id: toastRef.current,
+				icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />,
+				duration: 5000
 			})
-	}, [online])
+	}, [isError, isSuccess])
 
 	return null
 }
