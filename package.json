@@ -17,7 +17,8 @@
 		"prepare": "husky",
 		"commitlint": "commitlint --edit",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"generate-pwa-assets": "pwa-assets-generator --preset minimal public/react.svg"
 	},
 	"dependencies": {
 		"@dnd-kit/modifiers": "^7.0.0",
@@ -115,6 +116,7 @@
 		"@types/recharts": "^1.8.29",
 		"@typescript-eslint/eslint-plugin": "^7.2.0",
 		"@typescript-eslint/parser": "^7.2.0",
+		"@vite-pwa/assets-generator": "^0.2.4",
 		"@vitejs/plugin-react-swc": "^3.5.0",
 		"autoprefixer": "^10.4.19",
 		"eslint": "^8.57.0",
@@ -132,6 +134,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"typescript": "^5.2.2",
 		"vite": "^5.2.0",
+		"vite-plugin-pwa": "^0.20.1",
 		"vite-tsconfig-paths": "^4.3.2"
 	}
 }
