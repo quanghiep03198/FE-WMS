@@ -15,12 +15,20 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
 Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-	({ className, ...props }, ref) => <thead ref={ref} className={cn('whitespace-nowrap', className)} {...props} />
+	({ className, ...props }, ref) => (
+		<thead ref={ref} className={cn('whitespace-nowrap [&>tr>th:first-child]:border-l-0', className)} {...props} />
+	)
 )
 TableHeader.displayName = 'TableHeader'
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
-	({ className, ...props }, ref) => <tbody ref={ref} className={cn('[&>tr]:last:border-b-0', className)} {...props} />
+	({ className, ...props }, ref) => (
+		<tbody
+			ref={ref}
+			className={cn('[&>tr]:last:border-b-0 [&>tr>td:first-child]:border-l-0', className)}
+			{...props}
+		/>
+	)
 )
 TableBody.displayName = 'TableBody'
 
