@@ -1,8 +1,7 @@
 import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
 import useEffectOnce from '@/common/hooks/use-effect-once'
-import { RFIDService } from '@/services/rfid.service'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment, useCallback } from 'react'
+import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
@@ -23,14 +22,8 @@ function Page() {
 	// Set page breadcrumb
 	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
 
-	const handleSynchornizeOrderCode = useCallback(async () => await RFIDService.synchronizeOrderCode(), [])
-
 	useEffectOnce(() => {
 		setBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.inoutbound_commands') }])
-	})
-
-	useEffectOnce(() => {
-		handleSynchornizeOrderCode()
 	})
 
 	return (

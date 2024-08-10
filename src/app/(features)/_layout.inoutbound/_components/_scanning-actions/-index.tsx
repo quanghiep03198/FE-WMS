@@ -14,10 +14,11 @@ import {
 	SelectValue
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { RFIDService } from '@/services/rfid.service'
 import { useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import { useMemoizedFn } from 'ahooks'
-import React, { Fragment, memo, useCallback, useMemo } from 'react'
+import React, { Fragment, memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { RFID_EPC_PROVIDE_TAG } from '../../_apis/rfid.api'
@@ -45,13 +46,15 @@ const ScanningActions: React.FC = () => {
 		resetScanningStatus
 	} = usePageContext()
 
+	const synchronizedConnection = useRef<Array<string>>([])
+
 	const rfidReaderHosts = useMemo(() => {
 		switch (true) {
 			case Regex.VIETNAM_FACTORY_CODE.test(user?.company_code):
 				return RFID_READER_HOSTS.vi
 			case Regex.CAMBODIA_FACTORY_CODE.test(user?.company_code):
 				return RFID_READER_HOSTS.km
-			// Add more case if there still have other reader hosts
+			// ? Add more case if there still have other reader hosts
 			default:
 				return []
 		}
@@ -88,6 +91,21 @@ const ScanningActions: React.FC = () => {
 		setScanningStatus('finished')
 		toast.info('Finished scanning EPCs')
 	})
+
+	const handleSynchornizeOrderCode = useCallback(async (connection: string) => {
+		try {
+			await RFIDService.synchronizeOrderCode(connection)
+			synchronizedConnection.current = [...new Set([connection, ...synchronizedConnection.current])]
+		} catch (error) {
+			toast.error('Failed to synchronize EPC order code')
+		}
+	}, [])
+
+	// * Synchronize EPC order code
+	useEffect(() => {
+		if (Boolean(connection) && !synchronizedConnection.current.includes(connection))
+			handleSynchornizeOrderCode(connection)
+	}, [connection])
 
 	return (
 		<Fragment>

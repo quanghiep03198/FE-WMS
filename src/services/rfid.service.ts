@@ -32,8 +32,10 @@ export class RFIDService {
 		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/rfid/inoutbound-dept')
 	}
 
-	static async synchronizeOrderCode() {
-		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono')
+	static async synchronizeOrderCode(host: string) {
+		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono', undefined, {
+			headers: { ['X-Database-Host']: host }
+		})
 	}
 
 	static async deleteScannedOrder(host: string, orderCode: string) {

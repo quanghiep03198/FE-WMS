@@ -10,6 +10,12 @@ import {
 	DialogTrigger,
 	Div,
 	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 	Tooltip,
 	Typography
 } from '@/components/ui'
@@ -17,7 +23,6 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useResetState } from 'ahooks'
 import { Fragment, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import tw from 'tailwind-styled-components'
 import { useDeleteOrderMutation } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -68,67 +73,74 @@ const OrderDetails: React.FC = () => {
 						<Icon name='List' role='img' />
 						{t('ns_common:actions.detail')}
 					</DialogTrigger>
-					<DialogContent className='max-w-4xl'>
+					<DialogContent className='max-w-6xl'>
 						<DialogHeader>
 							<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 							<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 						</DialogHeader>
-						<Div className='rounded-lg border divide-y divide-border text-sm'>
+						<Div className='rounded-lg border divide-y text-sm overflow-clip'>
 							<Div
 								className={cn(
-									'max-h-96 w-full relative overflow-y-auto',
+									'max-h-96 w-full relative overflow-y-auto overflow-x-auto scrollbar-track-scrollbar/20',
 									Array.isArray(scannedOrders) && scannedOrders.length === 0 && 'min-h-56'
 								)}>
 								{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-									<Div className='divide-y divide-border w-full col-span-full'>
-										{scannedOrders.map((order) => {
-											return (
-												<Div className='grid grid-cols-[144px_auto_128px_64px] divide-x divide-border '>
-													<Div className='divide-y divide-border'>
-														<GridCell className='row-span-2 text-center grid place-content-center font-medium p-0 overflow-hidden h-20'>
+									<Table className='border-separate border-spacing-0'>
+										<TableHeader>
+											<TableRow className='sticky top-0 bg-background z-10'>
+												<TableHead className='w-36'>{t('ns_inoutbound:fields.mo_no')}</TableHead>
+												<TableHead>Sizes</TableHead>
+												<TableHead className='w-32'>{t('ns_common:common_fields.total')}</TableHead>
+												<TableHead className='w-20'>-</TableHead>
+											</TableRow>
+										</TableHeader>
+										<TableBody>
+											{scannedOrders.map((order) => {
+												return (
+													<TableRow>
+														<TableCell align='center' className='font-medium'>
 															{order?.mo_no ?? 'Unknown'}
-														</GridCell>
-													</Div>
-													<Div
-														className='grid row-span-1 divide-x divide-border'
-														style={{
-															gridTemplateColumns: `repeat(${getSizeByOrder(order.mo_no).length}, 1fr)`
-														}}>
-														{getSizeByOrder(order.mo_no)?.map((size) => (
-															<Div className='divide-y divide-border'>
-																<GridCell className='bg-secondary/50 text-secondary-foreground font-medium'>
-																	{size.size_numcode ?? 'Unknown'}
-																</GridCell>
-																<GridCell>{size.count}</GridCell>
-															</Div>
-														))}
-													</Div>
-													<Div className='divide-y divide-border'>
-														<GridCell className='bg-secondary/50 text-secondary-foreground'>
-															{t('ns_common:common_fields.total')}
-														</GridCell>
-														<GridCell className='font-medium'>{order.count}</GridCell>
-													</Div>
-													<GridCell className='row-span-2 grid place-content-center'>
-														<Tooltip
-															triggerProps={{ asChild: true }}
-															message={t('ns_common:actions.delete')}>
-															<Button
-																variant='ghost'
-																size='icon'
-																disabled={scanningStatus !== 'finished'}
-																onClick={() => {
-																	setConfirmDialogOpen(true)
-																	setOrderToDelete(order.mo_no)
+														</TableCell>
+														<TableCell align='center' className='p-0'>
+															<Div
+																style={{
+																	display: 'grid',
+																	gridTemplateColumns: `repeat(${getSizeByOrder(order.mo_no).length}, 1fr)`
 																}}>
-																<Icon name='Trash2' size={14} />
-															</Button>
-														</Tooltip>
-													</GridCell>
-												</Div>
-											)
-										})}
-									</Div>
+																{getSizeByOrder(order.mo_no)?.map((size) => (
+																	<Div className='divide-y grid grid-rows-2 text-right'>
+																		<TableCell className='bg-secondary/50 text-secondary-foreground font-medium'>
+																			{size.size_numcode ?? 'Unknown'}
+																		</TableCell>
+																		<TableCell>{size.count}</TableCell>
+																	</Div>
+																))}
+															</Div>
+														</TableCell>
+														<TableCell align='center' className='font-medium'>
+															{order.count}
+														</TableCell>
+														<TableCell align='center'>
+															<Tooltip
+																triggerProps={{ asChild: true }}
+																message={t('ns_common:actions.delete')}>
+																<Button
+																	variant='ghost'
+																	size='icon'
+																	disabled={scanningStatus !== 'finished'}
+																	onClick={() => {
+																		setConfirmDialogOpen(true)
+																		setOrderToDelete(order.mo_no)
+																	}}>
+																	<Icon name='Trash2' size={14} />
+																</Button>
+															</Tooltip>
+														</TableCell>
+													</TableRow>
+												)
+											})}
+										</TableBody>
+									</Table>
 								) : (
 									<Div className='absolute inset-0 inline-flex items-center justify-center gap-x-2 h-full'>
 										<Icon name='Inbox' size={24} strokeWidth={1} />
@@ -162,7 +174,5 @@ const OrderDetails: React.FC = () => {
 		</Fragment>
 	)
 }
-
-const GridCell = tw.div`py-2 px-4`
 
 export default OrderDetails

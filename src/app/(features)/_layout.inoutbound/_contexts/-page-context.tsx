@@ -61,36 +61,29 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		})
 	})
 
-	const memorizedStates = useMemo(
+	const memorizedValues = useMemo(
 		() => ({
 			scannedEPCs,
 			connection,
 			scanningStatus,
 			scannedOrders,
 			scannedOrderSizing,
-			selectedOrder
+			selectedOrder,
+			resetScannedOrders,
+			resetScanningStatus,
+			resetConnection,
+			setScannedEPCs,
+			setScannedOrders,
+			setScannedOrderSizing,
+			setConnection,
+			setScanningStatus,
+			setSelectedOrder,
+			handleToggleScanning
 		}),
 		[scannedEPCs, connection, scanningStatus, scannedOrders, scannedOrderSizing, selectedOrder]
 	)
 
-	return (
-		<PageContext.Provider
-			value={{
-				...memorizedStates,
-				resetScannedOrders,
-				resetScanningStatus,
-				resetConnection,
-				setScannedEPCs,
-				setScannedOrders,
-				setScannedOrderSizing,
-				setConnection,
-				setScanningStatus,
-				setSelectedOrder,
-				handleToggleScanning
-			}}>
-			{children}
-		</PageContext.Provider>
-	)
+	return <PageContext.Provider value={memorizedValues}>{children}</PageContext.Provider>
 }
 
 export const usePageContext = () => useContext(PageContext)

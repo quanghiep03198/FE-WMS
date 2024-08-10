@@ -35,18 +35,21 @@ const EPCDatalist: React.FC = () => {
 	} = usePageContext()
 
 	const { data } = useGetScannedEPCQuery({ connection, scanningStatus })
-
 	const originalData = useMemo(() => (Array.isArray(data?.datalist) ? data.datalist : []), [data?.datalist])
 
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useDeepCompareEffect(() => {
 		if (scanningStatus === 'scanning') {
 			setScannedEPCs(originalData)
-			setScannedOrders(data?.orderList)
-			setScannedOrderSizing(data?.sizing)
+			setScannedOrders(data?.orderList ?? [])
+			setScannedOrderSizing(data?.sizing ?? [])
 			// Alert if there are more than 3 orders scanned
 			if (data?.orderList?.length > 3)
-				toast('Oops !!!', { description: t('ns_inoutbound:notification.too_many_mono') })
+				toast.warning('Oops !!!', {
+					description: t('ns_inoutbound:notification.too_many_mono'),
+					icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
+					closeButton: true
+				})
 		}
 	}, [data, scanningStatus])
 
