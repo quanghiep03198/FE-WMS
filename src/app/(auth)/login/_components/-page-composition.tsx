@@ -1,6 +1,5 @@
 import { LanguageSelect } from '@/app/_components/_shared/-language-selector'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
-import GlobalTransportImage from '@/assets/images/global-transport.svg'
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Label, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { Stepper, type TStep } from '@/components/ui/@custom/step'
@@ -96,7 +95,7 @@ const LanguageSelector: React.FC = () => {
 const SideImage: React.FC = () => {
 	return (
 		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex xxl:flex'>
-			<Image src={GlobalTransportImage} alt='Global Transport' loading='eager' />
+			<Image src='/global-transport.svg' alt='Global Transport' loading='eager' />
 		</Div>
 	)
 }
