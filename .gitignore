@@ -32,4 +32,6 @@ dist-ssr
 
 # JSON server
 _api
-json-server.json
+
+# PWA dev
+dev-dist
