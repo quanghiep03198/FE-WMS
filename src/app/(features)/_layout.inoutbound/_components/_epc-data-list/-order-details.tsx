@@ -101,14 +101,15 @@ const OrderDetails: React.FC = () => {
 														<TableCell align='center' className='font-medium'>
 															{order?.mo_no ?? 'Unknown'}
 														</TableCell>
-														<TableCell align='center' className='p-0'>
+														<TableCell align='left' className='p-0'>
 															<Div
+																className='divide-x'
 																style={{
 																	display: 'grid',
 																	gridTemplateColumns: `repeat(${getSizeByOrder(order.mo_no).length}, 1fr)`
 																}}>
 																{getSizeByOrder(order.mo_no)?.map((size) => (
-																	<Div className='divide-y grid grid-rows-2 text-right'>
+																	<Div className='divide-y grid grid-rows-2'>
 																		<TableCell className='bg-secondary/50 text-secondary-foreground font-medium'>
 																			{size.size_numcode ?? 'Unknown'}
 																		</TableCell>
