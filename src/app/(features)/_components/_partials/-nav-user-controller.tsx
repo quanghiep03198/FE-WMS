@@ -33,7 +33,7 @@ const NavUserControl: React.FC = () => {
 				<DropdownMenuLabel className='capitalize'>{user?.display_name ?? 'Unknown'}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{navigationConfig
-					.filter((item) => item.type === 'preference' && item.path !== '/keybindings')
+					.filter((item) => item.type === 'preference' && item.path !== '/preferences/keybindings')
 					.map((item) => (
 						<DropdownMenuItem asChild key={item.id}>
 							<Link to={item.path} className='whitespace-nowrap'>

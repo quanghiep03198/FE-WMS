@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 type CommandList = Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>[]
 
-export const Route = createLazyFileRoute('/(preferences)/_layout/keybindings/')({
+export const Route = createLazyFileRoute('/(features)/preferences/_layout/keybindings/')({
 	component: KeybindingsPage
 })
 

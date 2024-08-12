@@ -1,3 +1,4 @@
+import NotFoundPage from '@/app/_components/_errors/-not-found'
 import { useAuth } from '@/common/hooks/use-auth'
 import { routeTree } from '@/route-tree.gen'
 import { RouterProvider as BrowserRouter, createRouter } from '@tanstack/react-router'
@@ -10,6 +11,7 @@ const router = createRouter({
 	context: { queryClient, isAuthenticated: undefined },
 	defaultPreload: 'intent',
 	defaultPendingComponent: Loading,
+	defaultNotFoundComponent: NotFoundPage,
 	defaultPreloadStaleTime: 0
 })
 

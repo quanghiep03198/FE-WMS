@@ -10,9 +10,9 @@ import tw from 'tailwind-styled-components'
 import LoginForm from './-login-form'
 import WorkplaceSelectionForm from './-workplace-selection-form'
 
-const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 scrollbar`
-const Section = tw.div`mx-auto flex h-full w-full max-w-xl flex-1 flex-grow flex-col items-center justify-center gap-y-6 overflow-y-auto px-2 sm:py-10 md:py-10`
-const Image = tw.img`mx-auto hidden w-full @xl:max-w-xl @3xl:max-w-2xl @5xl:max-w-3xl xl:block xxl:block`
+const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 xl:gap- overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 scrollbar`
+const FormSection = tw.section`mx-auto flex h-full w-full max-w-xl flex-grow flex-col items-center justify-center gap-y-6 px-2`
+const Image = tw.img`hidden w-full max-w-2xl xl:block flex-1`
 
 const ThemeSelector: React.FC = () => {
 	return (
@@ -34,7 +34,7 @@ const HomeNavigator: React.FC = () => {
 	)
 }
 
-const FormSection: React.FC = () => {
+const FormFieldset: React.FC = () => {
 	const { t, i18n } = useTranslation()
 
 	const steps: TStep[] = useMemo(
@@ -94,19 +94,19 @@ const LanguageSelector: React.FC = () => {
 
 const SideImage: React.FC = () => {
 	return (
-		<Div className='hidden h-full max-h-full flex-grow flex-col items-center justify-center @container xl:flex xxl:flex'>
-			<Image src='/global-transport.svg' alt='Global Transport' loading='eager' />
+		<Div className='hidden h-full flex-grow items-center w-full @container xl:flex justify-center flex-col'>
+			<Image rel='preload' src='/global-transport.svg' />
 		</Div>
 	)
 }
 
 export default {
 	Container,
-	Section,
-	FormHeading,
 	FormSection,
-	SideImage,
+	FormHeading,
+	FormFieldset,
 	HomeNavigator,
 	LanguageSelector,
-	ThemeSelector
+	ThemeSelector,
+	SideImage
 }

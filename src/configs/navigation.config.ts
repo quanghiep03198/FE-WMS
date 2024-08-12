@@ -90,7 +90,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: '10',
 		icon: 'User',
 		title: 'navigation.profile',
-		path: '/profile',
+		path: '/preferences/profile',
 		type: 'preference',
 		keybinding: 'ctrl.alt.p'
 	},
@@ -98,7 +98,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: '11',
 		icon: 'CircleUserRound',
 		title: 'navigation.account',
-		path: '/account',
+		path: '/preferences/account',
 		type: 'preference',
 		keybinding: 'ctrl.alt.a'
 	},
@@ -106,7 +106,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: '12',
 		icon: 'Keyboard',
 		title: 'navigation.keyboard_shortcut',
-		path: '/keybindings',
+		path: '/preferences/keybindings',
 		type: 'preference',
 		keybinding: 'alt.shift.k'
 	},
@@ -114,7 +114,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: '13',
 		icon: 'Settings',
 		title: 'navigation.settings',
-		path: '/appearance-settings',
+		path: '/preferences/appearance-settings',
 		type: 'preference',
 		keybinding: 'ctrl.alt.s'
 	}

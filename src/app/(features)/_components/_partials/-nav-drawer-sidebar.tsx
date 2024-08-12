@@ -4,7 +4,8 @@ import { cn } from '@/common/utils/cn'
 import { $mediaQuery } from '@/common/utils/media-query'
 import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
-import { Link } from '@tanstack/react-router'
+import { routeTree } from '@/route-tree.gen'
+import { Link, ParseRoute } from '@tanstack/react-router'
 import { useEventListener } from 'ahooks'
 import { pick } from 'lodash'
 import React, { memo, useMemo } from 'react'
@@ -19,8 +20,21 @@ const NavDrawerSidebar: React.FC = () => {
 		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar', 'collapseSidebar']))
 	)
 	const isSmallScreen = useMediaQuery($mediaQuery({ minWidth: 320, maxWidth: 1023 }))
-
 	const isExpanded = useMemo(() => sidebarExpanded && isSmallScreen, [sidebarExpanded, isSmallScreen])
+
+	const mainMenu = useMemo(() => {
+		return navigationConfig.filter((item) => item.type === 'main')
+	}, [])
+
+	const preferenceMenu = useMemo(() => {
+		return navigationConfig.filter((item) => {
+			const matches: Array<ParseRoute<typeof routeTree>['fullPath']> = [
+				'/preferences/keybindings',
+				'/preferences/appearance-settings'
+			]
+			return item.type === 'preference' && matches.includes(item.path)
+		})
+	}, [])
 
 	useEventListener('resize', collapseSidebar)
 
@@ -32,43 +46,38 @@ const NavDrawerSidebar: React.FC = () => {
 				</Div>
 				{/* Navigation menu */}
 				<Menu>
-					{navigationConfig
-						.filter((item) => item.type === 'main')
-						.map((item) => {
-							return (
-								<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
-									<Link
-										to={item.path}
-										activeProps={{ className: 'text-primary hover:text-primary' }}
-										className={cn(
-											buttonVariants({ variant: 'ghost' }),
-											'w-full justify-start gap-x-2 text-base font-normal'
-										)}>
-										<Icon name={item.icon!} size={18} /> {t(item.title, { defaultValue: item.title })}
-									</Link>
-								</MenuItem>
-							)
-						})}
+					{mainMenu.map((item) => {
+						return (
+							<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
+								<Link
+									to={item.path}
+									activeProps={{ className: 'text-primary hover:text-primary' }}
+									className={cn(
+										buttonVariants({ variant: 'ghost' }),
+										'w-full justify-start gap-x-2 text-base font-normal'
+									)}>
+									<Icon name={item.icon!} size={18} /> {t(item.title, { defaultValue: item.title })}
+								</Link>
+							</MenuItem>
+						)
+					})}
 					<Separator className='my-4' />
-					{navigationConfig
-						.filter((item) => item.type === 'preference' && item.path != '/profile')
-						.reverse()
-						.map((item) => {
-							return (
-								<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
-									<Link
-										to={item.path}
-										activeProps={{ className: 'text-primary hover:text-primary' }}
-										className={cn(
-											buttonVariants({ variant: 'ghost' }),
-											'w-full justify-start gap-x-2 text-base font-normal'
-										)}>
-										<Icon name={item.icon!} size={18} />
-										{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
-									</Link>
-								</MenuItem>
-							)
-						})}
+					{preferenceMenu.map((item) => {
+						return (
+							<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
+								<Link
+									to={item.path}
+									activeProps={{ className: 'text-primary hover:text-primary' }}
+									className={cn(
+										buttonVariants({ variant: 'ghost' }),
+										'w-full justify-start gap-x-2 text-base font-normal'
+									)}>
+									<Icon name={item.icon!} size={18} />
+									{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
+								</Link>
+							</MenuItem>
+						)
+					})}
 				</Menu>
 			</SheetContent>
 		</Sheet>

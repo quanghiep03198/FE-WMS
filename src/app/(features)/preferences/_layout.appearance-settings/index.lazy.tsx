@@ -25,7 +25,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { AppearanceFormValues, appearanceFormSchema } from './_schemas/user-preference.schema'
 
-export const Route = createLazyFileRoute('/(preferences)/_layout/appearance-settings/')({
+export const Route = createLazyFileRoute('/(features)/preferences/_layout/appearance-settings/')({
 	component: Page
 })
 

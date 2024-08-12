@@ -71,14 +71,14 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 							<CommandSeparator />
 							<CommandGroup heading='Settings'>
 								<CommandItem asChild>
-									<Link to='/profile'>
+									<Link to='/preferences/profile'>
 										<PersonIcon className='mr-2 h-4 w-4' />
 										<Typography variant='small'>{t('ns_common:navigation.profile')}</Typography>
 										<CommandShortcut>ctrl+alt+P</CommandShortcut>
 									</Link>
 								</CommandItem>
 								<CommandItem asChild>
-									<Link to='/appearance-settings'>
+									<Link to='/preferences/appearance-settings'>
 										<GearIcon className='mr-2 h-4 w-4' />
 										<Typography variant='small'>{t('ns_common:navigation.settings')}</Typography>
 										<CommandShortcut>ctrl+alt+S</CommandShortcut>

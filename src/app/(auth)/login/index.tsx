@@ -21,16 +21,20 @@ function LoginPage() {
 
 	return (
 		<Fragment>
-			<Helmet title='Login' meta={[{ name: 'description', content: 'Greenland Warehouse Management System' }]} />
+			<Helmet>
+				<title>Login</title>
+				<meta name='description' content='Warehouse management system authentication' />
+				<link rel='preload' href='/global-transport.svg' as='image' />
+			</Helmet>
 			<PageComposition.Container>
 				<PageComposition.HomeNavigator />
 				<PageComposition.ThemeSelector />
 				<PageComposition.SideImage />
-				<PageComposition.Section>
+				<PageComposition.FormSection>
 					<PageComposition.FormHeading />
-					<PageComposition.FormSection />
+					<PageComposition.FormFieldset />
 					<PageComposition.LanguageSelector />
-				</PageComposition.Section>
+				</PageComposition.FormSection>
 			</PageComposition.Container>
 		</Fragment>
 	)

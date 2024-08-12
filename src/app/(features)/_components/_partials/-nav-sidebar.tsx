@@ -51,8 +51,11 @@ const NavSidebar: React.FC = () => {
 
 	const preferenceMenu = useMemo(() => {
 		return navigationConfig.filter((item) => {
-			const matches: Array<ParseRoute<typeof routeTree>['fullPath']> = ['/account', '/profile']
-			return item.type === 'preference' && !matches.includes(item.path)
+			const matches: Array<ParseRoute<typeof routeTree>['fullPath']> = [
+				'/preferences/keybindings',
+				'/preferences/appearance-settings'
+			]
+			return item.type === 'preference' && matches.includes(item.path)
 		})
 	}, [])
 
@@ -114,7 +117,7 @@ const NavLink: React.FC<NavLinkProps> = ({ open, path, title, icon }) => {
 	)
 }
 
-const Menu = tw.ul`flex flex-col gap-y-2 items-stretch py-6 overflow-x-hidden overflow-y-auto scrollbar-none`
+const Menu = tw.ul`flex flex-col gap-y-2 items-stretch py-6 overflow-x-hidden overflow-y-auto !scrollbar-none`
 const MenuItem = tw.li`whitespace-nowrap font-normal w-full [&>:first-child]:w-full`
 const Aside = tw.aside`z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 w-16 items-center shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden aria-expanded:items-stretch aria-expanded:@xl:w-80 aria-expanded:@[1920px]:w-88`
 const NavlinkText = tw.span`text-left font-medium transition-[width_opacity] size-0 opacity-0 aria-expanded:size-auto aria-expanded:flex-1 aria-expanded:opacity-100 duration-150`
