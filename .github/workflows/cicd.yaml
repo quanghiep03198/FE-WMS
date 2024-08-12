@@ -1,3 +1,5 @@
+name: CI/CD Workflow
+
 on:
    push:
       branches:
@@ -5,21 +7,26 @@ on:
 
 jobs:
    build-and-deploy:
-      runs-on: windows-latest
+      runs-on: self-hosted
+
       steps:
-         - uses: actions/checkout@v2
-         - uses: actions/setup-node@v2
+         - name: Checkout code
+           uses: actions/checkout@v2
+
+         - name: Set up Node.js
+           uses: actions/setup-node@v2
            with:
-              node-version: 20.9.0
-         - run: npm ci
-         - run: npm run build
-         - name: Deploy to production
-           with:
-              host: ${{ secrets.HOST }}
-              username: ${{ secrets.USERNAME }}
-              password: ${{ secrets.PASSWORD }}
-              script: |
-                 cd C:/Users/Administrator/i-wms/client
-                 git pull origin develop
-                 npm install && npm run build
-                 pm2 reload all
+              node-version: '20'
+
+         - name: Install dependencies
+           run: npm ci
+
+         - name: Build project
+           run: npm run build
+
+         - name: Deploy with PM2
+           run: |
+              pm2 restart ecosystem.config.json --env production
+
+         - name: Notify success
+           run: echo "Deployment successful"

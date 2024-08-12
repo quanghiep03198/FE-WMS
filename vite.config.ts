@@ -1,6 +1,5 @@
-// @ts-nocheck
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
-import ViteReact from '@vitejs/plugin-react-swc'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -12,18 +11,18 @@ export default defineConfig(({ mode }) => {
 	return {
 		plugins: [
 			TanStackRouterVite(),
-			ViteReact(),
+			react(),
 			VitePWA({
 				registerType: 'autoUpdate',
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-
 				manifest: {
-					name: 'WMS',
-					short_name: 'i-WMS',
-					description: 'Ứng dụng quản lý kho thành phẩm',
+					name: 'Warehouse Management System',
+					short_name: 'WMS',
+					description: 'Production warehouse management system',
 					start_url: '/login',
 					display: 'fullscreen',
-					theme_color: '#ffffff',
+					theme_color: '#262626',
+					orientation: 'landscape-primary',
 					icons: [
 						{
 							src: 'pwa-64x64.png',
@@ -48,6 +47,10 @@ export default defineConfig(({ mode }) => {
 							purpose: 'maskable'
 						}
 					]
+				},
+				devOptions: {
+					enabled: true,
+					suppressWarnings: true
 				}
 			})
 		],
@@ -75,6 +78,7 @@ export default defineConfig(({ mode }) => {
 			host: true
 		},
 		build: {
+			emptyOutDir: true,
 			chunkSizeWarningLimit: 1024,
 			rollupOptions: {
 				output: {
@@ -97,6 +101,7 @@ export default defineConfig(({ mode }) => {
 							['recharts', /recharts/]
 						])
 
+						// @ts-ignore
 						for (const [key, regex] of modules) {
 							if (id.match(regex)) return key
 						}
