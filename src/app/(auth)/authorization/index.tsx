@@ -44,7 +44,7 @@ function AuthorizationError({ reset }: ErrorComponentProps) {
 
 function Loading() {
 	return (
-		<Div className='h-screen flex items-center justify-center gap-x-2'>
+		<Div className='flex h-screen items-center justify-center gap-x-2'>
 			<Icon name='LoaderCircle' className='animate-spin' /> Authorizing ...
 		</Div>
 	)

@@ -18,9 +18,9 @@ const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 	if (isLoading)
 		return (
-			<Div className='h-screen w-full flex justify-center items-center gap-x-2 antialiased'>
+			<Div className='flex h-screen w-full items-center justify-center gap-x-2 antialiased'>
 				<Icon name='LoaderCircle' size={18} className='animate-[spin_1.5s_linear_infinite]' />
-				<Typography variant='small' className='tracking-wide font-medium'>
+				<Typography variant='small' className='font-medium tracking-wide'>
 					Loading ...
 				</Typography>
 			</Div>

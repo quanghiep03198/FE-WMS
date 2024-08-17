@@ -43,7 +43,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 			<ContextMenuTrigger className='focus:outline-none'>
 				<Div
 					className={cn(
-						'text-sm px-4 py-2 relative line-clamp-1 flex h-full cursor-auto select-none capitalize [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center items-center',
+						'relative line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
 						{
 							'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
 							'cursor-col-resize': getIsResizing(),

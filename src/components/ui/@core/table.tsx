@@ -7,7 +7,7 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
 		<table
 			cellSpacing={0}
 			ref={ref}
-			className={cn('w-full caption-bottom text-sm border-collapse', className)}
+			className={cn('w-full caption-bottom border-collapse text-sm', className)}
 			{...props}
 		/>
 	)
@@ -25,7 +25,7 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes
 	({ className, ...props }, ref) => (
 		<tbody
 			ref={ref}
-			className={cn('[&>tr]:last:border-b-0 [&>tr>td:first-child]:border-l-0', className)}
+			className={cn('[&>tr>td:first-child]:border-l-0 [&>tr]:last:border-b-0', className)}
 			{...props}
 		/>
 	)
@@ -48,7 +48,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
 		<tr
 			ref={ref}
 			className={cn(
-				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&>*]:border-l [&>*]:border-b [&:last-child>td]:border-b-0',
+				'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&:last-child>td]:border-b-0 [&>*]:border-b [&>*]:border-l',
 				className
 			)}
 			{...props}
@@ -77,7 +77,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttributes<
 		<td
 			ref={ref}
 			className={cn(
-				'bg-background px-4 py-2 group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center first:border-l-0 [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0 last:border-r-0',
+				'bg-background px-4 py-2 first:border-l-0 last:border-r-0 group-hover:bg-[hsl(var(--row-active))] aria-selected:bg-[hsl(var(--row-selected))] data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
 				className
 			)}
 			{...props}

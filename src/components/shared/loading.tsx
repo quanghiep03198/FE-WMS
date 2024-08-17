@@ -15,9 +15,9 @@ export default function Loading() {
 	}, [])
 
 	return (
-		<Div className='w-screen h-screen flex justify-center items-center gap-x-2'>
+		<Div className='flex h-screen w-screen items-center justify-center gap-x-2'>
 			<Icon name='LoaderCircle' className='animate-spin' size={18} />
-			<Typography variant='small' className='tracking-wide font-medium'>
+			<Typography variant='small' className='font-medium tracking-wide'>
 				Loading ...
 			</Typography>
 		</Div>

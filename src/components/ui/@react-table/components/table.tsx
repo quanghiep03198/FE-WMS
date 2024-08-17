@@ -159,7 +159,7 @@ function TableDataGrid<TData, TValue>({
 														<Collapsible
 															data-state={isFilterOpened ? 'open' : 'closed'}
 															open={isFilterOpened}>
-															<CollapsibleContent className='overflow-hidden h-10 transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+															<CollapsibleContent className='h-10 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 																<ColumnFilter column={header.column} />
 															</CollapsibleContent>
 														</Collapsible>

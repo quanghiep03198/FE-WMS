@@ -58,7 +58,7 @@ const InOutBoundOrderList: React.FC = () => {
 					return row.getCanExpand() ? (
 						<button
 							className={cn(
-								'flex w-full items-center justify-center transition-transform duration-150 ease focus:outline-none',
+								'ease flex w-full items-center justify-center transition-transform duration-150 focus:outline-none',
 								row.getIsExpanded() ? 'rotate-90' : 'rotate-0'
 							)}
 							onClick={row.getToggleExpandedHandler()}>
