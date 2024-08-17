@@ -4,6 +4,7 @@ import { useId, useMemo, useRef, useState } from 'react'
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import {
 	Button,
+	ButtonProps,
 	Command,
 	CommandEmpty,
 	CommandGroup,
@@ -39,6 +40,8 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 	onSelect?: (value: string) => unknown
 	labelField: keyof D
 	valueField: keyof D
+	triggerProps?: ButtonProps
+	popoverContentProps?: React.ComponentProps<typeof PopoverContent>
 }
 
 export function ComboboxFieldControl<T extends FieldValues, D extends Record<string, any>>(
@@ -58,10 +61,12 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		disabled,
 		hidden,
 		placeholder = 'Select',
-		messageType = 'alternative',
+		messageType = 'standard',
 		shouldFilter, // Determine using manual filtering or automatic filtering
 		loading, // Loading state from server if manual filtering is applied
 		template: CommandItemTemplate, // Custom command item template
+		triggerProps,
+		popoverContentProps = { align: 'center' },
 		onInput,
 		onSelect
 	} = props
@@ -105,23 +110,25 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 								<PopoverTrigger asChild>
 									<FormControl>
 										<Button
+											{...triggerProps}
 											id={id}
 											ref={triggerRef}
 											role='combobox'
 											variant='outline'
 											disabled={disabled}
 											className={cn(
+												triggerProps?.className,
 												'w-full justify-between font-normal hover:bg-background',
 												form.getFieldState(name).error && 'border-destructive'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
 												{renderCurrentValue(field.value)}
 											</Typography>
-											<CaretSortIcon className='h-4 w-4 opacity-50 ml-auto' />
+											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent style={{ padding: 0, width: triggerRef.current?.offsetWidth }} align='center'>
+								<PopoverContent style={{ padding: 0, width: triggerRef.current?.offsetWidth }}>
 									<Command shouldFilter={shouldFilter}>
 										<CommandInput
 											placeholder={placeholder}
