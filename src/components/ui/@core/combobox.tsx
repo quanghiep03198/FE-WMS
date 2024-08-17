@@ -18,7 +18,7 @@ import {
 
 export type ComboboxProps<T extends Record<string, string>> = {
 	placeholder?: string
-	data: Array<T>
+	datalist: Array<T>
 	value?: string
 	onSelect?: (value: string) => void
 	onInput?: (value: string) => void
@@ -30,7 +30,7 @@ export type ComboboxProps<T extends Record<string, string>> = {
 }
 
 export function Combobox<T extends Record<string, any>>({
-	data,
+	datalist,
 	labelField,
 	valueField,
 	placeholder = 'Search ...',
@@ -49,13 +49,13 @@ export function Combobox<T extends Record<string, any>>({
 	const _data = useMemo(
 		() =>
 			!isEmpty(searchTerm)
-				? data.filter(
+				? datalist.filter(
 						(item) =>
 							String(item[labelField]).toLocaleLowerCase().includes(searchTerm) ||
 							String(item[valueField]).toLocaleLowerCase().includes(searchTerm)
 					)
-				: data,
-		[data, searchTerm]
+				: datalist,
+		[datalist, searchTerm]
 	)
 
 	return (
@@ -69,7 +69,7 @@ export function Combobox<T extends Record<string, any>>({
 					aria-expanded={open}
 					onClick={() => setOpen(true)}
 					className={cn('w-full max-w-full justify-between', triggerProps?.className)}>
-					{data.find((option) => option[valueField] === value || option[valueField] === currentValue)?.[
+					{datalist.find((option) => option[valueField] === value || option[valueField] === currentValue)?.[
 						labelField
 					] ?? placeholder}
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
