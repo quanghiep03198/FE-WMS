@@ -1,5 +1,7 @@
+import NetworkDetector from '@/components/shared/network-detector'
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Fragment } from 'react'
 import ErrorBoundary from '../_components/_errors/-error-boundary'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
@@ -19,23 +21,26 @@ export const Route = createFileRoute('/(features)/_layout')({
 
 function Layout() {
 	return (
-		<AuthGuard>
-			<LayoutComposition.Container>
-				<NavSidebar />
-				<NavDrawerSidebar />
-				<LayoutComposition.Main>
-					<Navbar />
-					<LayoutComposition.OutletWrapper>
-						<QueryErrorResetBoundary>
-							{({ reset }) => (
-								<ErrorBoundary onReset={reset}>
-									<Outlet />
-								</ErrorBoundary>
-							)}
-						</QueryErrorResetBoundary>
-					</LayoutComposition.OutletWrapper>
-				</LayoutComposition.Main>
-			</LayoutComposition.Container>
-		</AuthGuard>
+		<Fragment>
+			<AuthGuard>
+				<LayoutComposition.Container>
+					<NavSidebar />
+					<NavDrawerSidebar />
+					<LayoutComposition.Main>
+						<Navbar />
+						<LayoutComposition.OutletWrapper>
+							<QueryErrorResetBoundary>
+								{({ reset }) => (
+									<ErrorBoundary onReset={reset}>
+										<Outlet />
+									</ErrorBoundary>
+								)}
+							</QueryErrorResetBoundary>
+						</LayoutComposition.OutletWrapper>
+					</LayoutComposition.Main>
+				</LayoutComposition.Container>
+			</AuthGuard>
+			<NetworkDetector />
+		</Fragment>
 	)
 }

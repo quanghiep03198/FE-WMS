@@ -1,7 +1,13 @@
-const GridBackground: React.FunctionComponent = () => {
+import { cn } from '@/common/utils/cn'
+import { ClassNameValue } from 'tailwind-merge'
+
+const GridBackground: React.FC<{ className?: ClassNameValue }> = ({ className }) => {
 	return (
 		<svg
-			className='fixed inset-0 z-0 h-full w-full stroke-border/50 [mask-image:radial-gradient(100%_100%_at_center_center,hsl(var(--foreground)),transparent)]'
+			className={cn(
+				'fixed inset-0 z-0 h-full w-full stroke-border/50 [mask-image:radial-gradient(100%_100%_at_bottom_right,white,transparent)]',
+				className
+			)}
 			aria-hidden='true'>
 			<defs>
 				<pattern

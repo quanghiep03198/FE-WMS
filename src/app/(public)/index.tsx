@@ -12,10 +12,10 @@ export const Route = createFileRoute('/(public)/')({
 export default function Page() {
 	return (
 		<Fragment>
-			<Helmet
-				title='GL Warehouse Management System'
-				meta={[{ name: 'description', content: 'Greenland Warehouse Management System' }]}
-			/>
+			<Helmet>
+				<title>Warehouse Management System</title>
+				<meta name='description' content='Greenland Warehouse Management System' />
+			</Helmet>
 			<PageProvider>
 				<PageComposition />
 			</PageProvider>

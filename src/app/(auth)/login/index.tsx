@@ -1,3 +1,4 @@
+import GridBackground from '@/app/(public)/_components/-grid-background'
 import { useAuth } from '@/common/hooks/use-auth'
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
@@ -36,6 +37,7 @@ function LoginPage() {
 					<PageComposition.LanguageSelector />
 				</PageComposition.FormSection>
 			</PageComposition.Container>
+			<GridBackground className='[mask-image:radial-gradient(75%_100%_at_top_left,white,transparent)]' />
 		</Fragment>
 	)
 }

@@ -112,8 +112,8 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: '13',
-		icon: 'Settings',
-		title: 'navigation.settings',
+		icon: 'PictureInPicture',
+		title: 'navigation.appearance',
 		path: '/preferences/appearance-settings',
 		type: 'preference',
 		keybinding: 'ctrl.alt.s'

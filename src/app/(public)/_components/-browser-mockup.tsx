@@ -68,7 +68,7 @@ const BrowserMockup: React.FC = () => {
 	)
 }
 
-const Browser = tw.div`grid xxl:h-[30rem] h-[28rem] overflow-hidden w-full xxl:max-w-2xl max-w-xl grid-rows-[40px_auto] shadow-2xl divide-y divide-border rounded-[var(--radius)] border bg-background relative`
+const Browser = tw.div`grid xxl:h-[30rem] h-[26rem]  overflow-hidden w-full xxl:max-w-2xl max-w-xl grid-rows-[40px_auto] shadow-2xl divide-y divide-border rounded-[var(--radius)] border bg-background relative`
 const BrowserToolbar = tw.div`relative z-10 flex items-center gap-x-2 bg-secondary p-4 h-full`
 const BrowserToolbarButton = tw.div`size-3 rounded-full bg-background relative z-10`
 const Layout = tw.div`grid flex-1 sm:grid-cols-1 grid-cols-[1fr_2.5fr] overflow-hidden items-stretch`

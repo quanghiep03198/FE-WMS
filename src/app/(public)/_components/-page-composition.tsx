@@ -2,12 +2,15 @@ import tw from 'tailwind-styled-components'
 import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 import Footer from './-footer'
 import Header from './-header'
+import Spotlight from './-spotlight'
 
 const PageComposition: React.FC = () => {
 	const { menuRef, parentScrollRef, contentScrollRef } = usePageContext()
 
 	return (
 		<Container ref={parentScrollRef}>
+			<Spotlight fill='white' className='-top-20 left-0 xl:-top-40' />
+
 			<Main ref={contentScrollRef}>
 				<Header />
 				{navigationConfig.map(({ href, SectionComponent }, index) => (

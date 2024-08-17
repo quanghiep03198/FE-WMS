@@ -1,4 +1,6 @@
+import SupportImage from '@/assets/images/svgs/balance-card-dark.svg'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui'
+import tw from 'tailwind-styled-components'
 
 const faqs = [
 	{
@@ -29,22 +31,26 @@ const faqs = [
 
 const FAQsSection: React.FunctionComponent = () => {
 	return (
-		<Div
-			id='faqs'
-			as='section'
-			className='relative z-0 mx-auto flex max-w-4xl flex-grow flex-col items-center justify-center space-y-10 px-6 sm:px-4'>
-			<Typography variant='h3'>Frequently asked questions</Typography>
+		<Div className='relative z-0 mx-auto grid w-full max-w-7xl grid-cols-[1.5fr_1fr] items-start gap-10 px-6 sm:grid-cols-1 sm:px-4 md:grid-cols-1 '>
+			<Div id='faqs' as='section' className='space-y-10 '>
+				<Typography variant='h3'>Frequently asked questions</Typography>
 
-			<Accordion type='multiple' className='w-full max-w-4xl'>
-				{faqs.map((faq, index) => (
-					<AccordionItem key={index} value={index.toString()}>
-						<AccordionTrigger className='py-6 text-base hover:no-underline'>{faq.question}</AccordionTrigger>
-						<AccordionContent className='text-base'>{faq.answer}</AccordionContent>
-					</AccordionItem>
-				))}
-			</Accordion>
+				<Accordion type='multiple'>
+					{faqs.map((faq, index) => (
+						<AccordionItem key={index} value={index.toString()}>
+							<AccordionTrigger className='py-6 text-base hover:no-underline'>{faq.question}</AccordionTrigger>
+							<AccordionContent className='text-base'>{faq.answer}</AccordionContent>
+						</AccordionItem>
+					))}
+				</Accordion>
+			</Div>
+			<Div className='flex w-full flex-grow items-center justify-center'>
+				<Image src={SupportImage} alt='Support' />
+			</Div>
 		</Div>
 	)
 }
+
+const Image = tw.img`max-w-md w-full object-cover object-center sm:hidden md:hidden`
 
 export default FAQsSection

@@ -31,14 +31,14 @@ export const navigationConfig: TNavigationLink[] = [
 		SectionComponent: FeaturesSection
 	},
 	{
-		title: 'Support',
-		href: 'support',
-		SectionComponent: SupportSection
-	},
-	{
 		title: 'FAQs',
 		href: 'faqs',
 		SectionComponent: FAQsSection
+	},
+	{
+		title: 'Support',
+		href: 'support',
+		SectionComponent: SupportSection
 	}
 ]
 

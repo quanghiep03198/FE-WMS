@@ -111,6 +111,8 @@ const NavHeaderActions: React.FC = memo(() => {
 })
 
 const NavHeaderMenuDropdown: React.FC = memo(() => {
+	const { handleMenuClick } = usePageContext()
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -127,8 +129,8 @@ const NavHeaderMenuDropdown: React.FC = memo(() => {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{navigationConfig.map((item, index) => (
-					<DropdownMenuItem asChild key={index}>
-						<Link hash={item.href}>{item.title}</Link>
+					<DropdownMenuItem onClick={() => handleMenuClick(index)} key={index}>
+						{item.title}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>

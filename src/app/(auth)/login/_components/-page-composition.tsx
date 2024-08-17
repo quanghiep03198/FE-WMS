@@ -1,5 +1,6 @@
 import { LanguageSelect } from '@/app/_components/_shared/-language-selector'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
+import GlobalTransportImage from '@/assets/images/svgs/global-transport.svg'
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Label, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { Stepper, type TStep } from '@/components/ui/@custom/step'
@@ -10,9 +11,9 @@ import tw from 'tailwind-styled-components'
 import LoginForm from './-login-form'
 import WorkplaceSelectionForm from './-workplace-selection-form'
 
-const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 xl:gap- overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 scrollbar`
-const FormSection = tw.section`mx-auto flex h-full w-full max-w-xl flex-grow flex-col items-center justify-center gap-y-6 px-2`
-const Image = tw.img`hidden w-full max-w-2xl xl:block flex-1`
+const Container = tw.div`relative grid min-h-screen w-full grid-cols-1 overflow-y-auto bg-background text-foreground scrollbar-none xl:grid-cols-2 scrollbar`
+const FormSection = tw.section`mx-auto flex h-full w-full max-w-xl flex-grow flex-col items-center justify-center gap-y-6 px-2 z-10`
+const Image = tw.img`hidden w-full max-w-xl xxl:max-w-2xl xl:block flex-1`
 
 const ThemeSelector: React.FC = () => {
 	return (
@@ -94,8 +95,8 @@ const LanguageSelector: React.FC = () => {
 
 const SideImage: React.FC = () => {
 	return (
-		<Div className='hidden h-full flex-grow items-center w-full @container xl:flex justify-center flex-col'>
-			<Image rel='preload' src='/global-transport.svg' />
+		<Div className='hidden h-full w-full flex-grow flex-col items-center justify-center @container xl:flex'>
+			<Image rel='preload' src={GlobalTransportImage} />
 		</Div>
 	)
 }
