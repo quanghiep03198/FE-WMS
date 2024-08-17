@@ -5,7 +5,7 @@ import { Row, RowData } from '@tanstack/react-table'
 declare module '@tanstack/react-table' {
 	interface ColumnMeta<TData extends RowData, TValue> {
 		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
-		filterVariant?: 'text' | 'range' | 'select'
+		filterVariant?: 'text' | 'range' | 'select' | 'date'
 		sticky?: 'left' | 'right'
 		rowSpan?: number
 		align?: 'left' | 'center' | 'right'
@@ -24,6 +24,7 @@ declare module '@tanstack/react-table' {
 	//add fuzzy filter to the filterFns
 	interface FilterFns {
 		fuzzy: FilterFn<unknown>
+		inDateRange: FilterFn<any>
 	}
 	interface FilterMeta {
 		itemRank: RankingInfo

@@ -3,6 +3,7 @@ import { Column } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
+import { DateRangePicker } from '../../@core/date-range-picker'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 import { NumberRangeFilter } from './number-range-filter'
@@ -41,10 +42,23 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		)
 
 	switch (filterVariant) {
-		case 'range':
+		case 'range': {
 			return <NumberRangeFilter column={column} />
-
-		case 'select':
+		}
+		case 'date': {
+			return (
+				<DateRangePicker
+					triggerProps={{
+						className: 'border-none shadow-none hover:bg-background flex !text-xs font-medium'
+					}}
+					calendarProps={{
+						selected: column.getFilterValue(),
+						onSelect: (value) => column.setFilterValue(value)
+					}}
+				/>
+			)
+		}
+		case 'select': {
 			return (
 				<DropdownSelect
 					selectTriggerProps={{
@@ -74,8 +88,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					valueField='value'
 				/>
 			)
-
-		default:
+		}
+		default: {
 			return (
 				<DebouncedInput
 					value={(hasNoFilter ? '' : (column.getFilterValue() as any)) ?? ''}
@@ -83,5 +97,6 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					onChange={(value) => column.setFilterValue(value)}
 				/>
 			)
+		}
 	}
 }

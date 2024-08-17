@@ -99,3 +99,5 @@ export type DataTableProps<TData = any, TValue = any> = {
 	ColumnFilterProps &
 	SortingProps &
 	GlobalFilterProps
+
+export type RowSelectionType = 'single' | 'multiple' | undefined

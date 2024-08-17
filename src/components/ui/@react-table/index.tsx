@@ -33,6 +33,7 @@ import { fuzzySort } from './utils/fuzzy-sort.util'
 // needed for table body level scope DnD setup
 import tw from 'tailwind-styled-components'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
+import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
 function DataTable<TData, TValue>(
 	{
@@ -139,7 +140,10 @@ function DataTable<TData, TValue>(
 		columnResizeMode: 'onChange',
 		debugAll: false,
 		sortingFns: { fuzzy: fuzzySort },
-		filterFns: { fuzzy: fuzzyFilter },
+		filterFns: {
+			fuzzy: fuzzyFilter,
+			inDateRange: dateRangeFilter
+		},
 		globalFilterFn: 'fuzzy',
 		onPaginationChange: manualPagination ? onPaginationChange : setPagination,
 		onSortingChange: manualSorting ? onSortingChange : setSorting,
