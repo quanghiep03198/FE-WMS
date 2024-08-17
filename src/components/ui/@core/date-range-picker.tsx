@@ -1,52 +1,61 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
-import { format } from 'date-fns'
-import { DateRange } from 'react-day-picker'
-import { Typography } from '../@custom/typography'
+import { addMonths, format } from 'date-fns'
 import { Button } from './button'
 import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 export type DateRangePickerProps = {
-	selected: DateRange
-	onSelect: React.Dispatch<React.SetStateAction<DateRange>>
+	calendarProps?: React.ComponentProps<typeof Calendar.prototype>
 	triggerProps?: React.ComponentProps<typeof Button.prototype>
 }
 
-export const DateRangePicker: React.FC<DateRangePickerProps> = ({ selected, onSelect }) => {
+export const DateRangePicker: React.FC<DateRangePickerProps> = ({
+	triggerProps,
+	calendarProps = { numberOfMonths: 1, selected: { from: new Date(), to: addMonths(new Date(), 1) } }
+}) => {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button
+					{...triggerProps}
 					id='date'
 					variant={'outline'}
 					className={cn(
 						'w-full max-w-xs justify-start text-left font-normal',
-						!selected && 'text-muted-foreground'
+						!calendarProps.selected && 'text-muted-foreground',
+						triggerProps.className
 					)}>
 					<CalendarIcon className='mr-2 h-4 w-4' />
-					{selected?.from ? (
-						selected.to ? (
+					{calendarProps.selected?.from ? (
+						calendarProps.selected.to ? (
 							<>
-								{format(selected.from, 'LLL dd, y')} - {format(selected.to, 'LLL dd, y')}
+								{format(calendarProps.selected.from, 'LLL dd, y')} {' - '}
+								{format(calendarProps.selected.to, 'LLL dd, y')}
 							</>
 						) : (
-							format(selected.from, 'LLL dd, y')
+							format(calendarProps.selected.from, 'LLL dd, y')
 						)
 					) : (
-						<Typography>Pick a date</Typography>
+						<>Pick a date</>
 					)}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className='sm:max-h-1/2 w-auto overflow-auto p-0 scrollbar-none' align='start'>
 				<Calendar
+					{...calendarProps}
 					initialFocus
 					mode='range'
-					defaultMonth={selected?.from}
-					selected={selected}
-					onSelect={onSelect}
-					numberOfMonths={2}
+					selected={
+						calendarProps.selected ?? {
+							from: new Date(),
+							to: addMonths(new Date(), 1)
+						}
+					}
+					onSelect={(value) => {
+						if (typeof calendarProps.onSelect === 'function') calendarProps.onSelect(value)
+					}}
 				/>
 			</PopoverContent>
 		</Popover>
