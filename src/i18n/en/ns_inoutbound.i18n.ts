@@ -1,3 +1,4 @@
+import { InventoryListType } from '@/app/(features)/_layout.warehouse-import/_constants/warehouse-import.enum'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -78,6 +79,12 @@ export default {
 		[OrderStatus.APPROVED]: 'Approved',
 		[OrderStatus.CANCELLED]: 'Cancelled',
 		[OrderStatus.REAPPROVED]: 'Reapproved'
+	},
+	inventory_list_type: {
+		[InventoryListType.PRODUCTION_WAREHOUSE_EXPORT]: 'Finished Product Delivery Order',
+		[InventoryListType.PRODUCTION_WAREHOUSE_IMPORT]: 'Finished Product Warehouse Import Order',
+		[InventoryListType.WAREHOUSE_EXPORT_TRANSFER]: 'Warehouse Export Transfer Order',
+		[InventoryListType.WAREHOUSE_IMPORT_TRANSFER]: 'Warehouse Import Transfer Order'
 	},
 	titles: {
 		transfer_order_list: 'Transfer orders list',

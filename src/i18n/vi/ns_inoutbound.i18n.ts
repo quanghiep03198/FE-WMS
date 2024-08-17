@@ -1,3 +1,4 @@
+import { InventoryListType } from '@/app/(features)/_layout.warehouse-import/_constants/warehouse-import.enum'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -79,6 +80,12 @@ export default {
 		[OrderStatus.APPROVED]: 'Đã duyệt',
 		[OrderStatus.CANCELLED]: 'Đã hủy duyệt',
 		[OrderStatus.REAPPROVED]: 'Duyệt lại'
+	},
+	inventory_list_type: {
+		[InventoryListType.PRODUCTION_WAREHOUSE_EXPORT]: 'Đơn xuất kho thành phẩm',
+		[InventoryListType.PRODUCTION_WAREHOUSE_IMPORT]: 'Đơn nhập kho thành phẩm',
+		[InventoryListType.WAREHOUSE_EXPORT_TRANSFER]: 'Đơn xuất kho chuyển phát',
+		[InventoryListType.WAREHOUSE_IMPORT_TRANSFER]: 'Đơn nhập kho chuyển phát'
 	},
 	titles: {
 		transfer_order_list: 'Danh sách đơn chuyển kho',

@@ -12,6 +12,7 @@ export default {
 	common_fields: {
 		created_at: 'Ngày tạo',
 		updated_at: 'Ngày cập nhật',
+		user_name_updated: 'Người cập nhật gần nhất',
 		actions: 'Thao tác',
 		remark: 'Ghi chú',
 		approver: 'Người phê duyệt',

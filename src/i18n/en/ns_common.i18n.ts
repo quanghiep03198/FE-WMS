@@ -12,6 +12,7 @@ export default {
 	common_fields: {
 		created_at: 'Created at',
 		updated_at: 'Updated at',
+		user_name_updated: 'Last updated by',
 		actions: 'Actions',
 		remark: 'Remark',
 		approver: 'Approver',

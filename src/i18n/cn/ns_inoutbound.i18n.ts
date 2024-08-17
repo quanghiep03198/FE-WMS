@@ -1,3 +1,4 @@
+import { InventoryListType } from '@/app/(features)/_layout.warehouse-import/_constants/warehouse-import.enum'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -43,7 +44,9 @@ export default {
 		or_no: '訂單編號',
 		or_custpo: '客戶訂單',
 		transfer_order_code: '轉撥單號',
+		dept_code: '成型線',
 		// I/O product inspection
+		active_date: '入库日期',
 		status_approve: '審核',
 		sno_no: '驗收單號',
 		sno_date: '驗收日期',
@@ -58,6 +61,7 @@ export default {
 		sno_total: '數量合計',
 		sno_size: '肥度',
 		sno_type: '左右',
+		sno_location: '存放位置',
 		// product inspection details
 		container_order_code: '出櫃單號', //mã đơn xuất công
 		order_qty: '採購數量', //số lượng đơn đặt hàng
@@ -78,6 +82,12 @@ export default {
 		[OrderStatus.APPROVED]: '已審核',
 		[OrderStatus.CANCELLED]: '取消審核 ',
 		[OrderStatus.REAPPROVED]: '重新審核'
+	},
+	inventory_list_type: {
+		[InventoryListType.PRODUCTION_WAREHOUSE_EXPORT]: '成品出庫單',
+		[InventoryListType.PRODUCTION_WAREHOUSE_IMPORT]: '成品入庫單',
+		[InventoryListType.WAREHOUSE_EXPORT_TRANSFER]: '轉撥出庫單',
+		[InventoryListType.WAREHOUSE_IMPORT_TRANSFER]: '轉撥入庫單'
 	},
 	titles: {
 		transfer_order_list: '转移订单列表',

@@ -12,6 +12,7 @@ export default {
 	common_fields: {
 		created_at: '创建日期',
 		updated_at: '编辑日期',
+		user_name_updated: '更新人員',
 		actions: '操作',
 		remark: '管理人',
 		approver: '審核人',
