@@ -26,7 +26,9 @@ module.exports = {
 				spacing: 'margin, padding'
 			},
 			width: {
-				88: '22rem'
+				88: '22rem',
+				'1/8': `${(1 / 8) * 100}%`,
+				'1/12': `${(1 / 12) * 100}%`
 			},
 			fontFamily: {
 				noto: 'Noto Sans SC, sans-serif '
