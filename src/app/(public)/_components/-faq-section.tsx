@@ -1,4 +1,4 @@
-import SupportImage from '@/assets/images/svgs/balance-card-dark.svg'
+import FAQsImage from '@/assets/images/svgs/faq-card.svg'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui'
 import tw from 'tailwind-styled-components'
 
@@ -31,10 +31,12 @@ const faqs = [
 
 const FAQsSection: React.FunctionComponent = () => {
 	return (
-		<Div className='relative z-0 mx-auto grid w-full max-w-7xl grid-cols-[1.5fr_1fr] items-start gap-10 px-6 sm:grid-cols-1 sm:px-4 md:grid-cols-1 '>
-			<Div id='faqs' as='section' className='space-y-10 '>
+		<Div className='lg:flex-rowm relative z-0 mx-auto flex w-full max-w-7xl flex-col-reverse items-start gap-10 px-6 sm:px-4 lg:flex-row xl:flex-row xl:gap-20 xxl:max-w-8xl'>
+			<Div
+				id='faqs'
+				as='section'
+				className='w-full basis-full space-y-10 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3'>
 				<Typography variant='h3'>Frequently asked questions</Typography>
-
 				<Accordion type='multiple'>
 					{faqs.map((faq, index) => (
 						<AccordionItem key={index} value={index.toString()}>
@@ -44,13 +46,13 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex w-full flex-grow items-center justify-center'>
-				<Image src={SupportImage} alt='Support' />
+			<Div className='flex w-full flex-grow basis-1/3 items-center justify-center sm:basis-full md:basis-full'>
+				<Image src={FAQsImage} alt='Support' />
 			</Div>
 		</Div>
 	)
 }
 
-const Image = tw.img`max-w-md w-full object-cover object-center sm:hidden md:hidden`
+const Image = tw.img`max-w-md sm:max-w-[256px] md:max-w-xs lg:max-w-xs w-full object-cover object-center`
 
 export default FAQsSection

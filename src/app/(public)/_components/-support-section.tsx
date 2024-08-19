@@ -35,7 +35,7 @@ const SupportSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex gap-x-6'>
-					<Div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/20 '>
+					<Div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 '>
 						<Icon name='Computer' size={20} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
 					</Div>
 					<Div>

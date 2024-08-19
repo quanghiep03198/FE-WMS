@@ -48,12 +48,12 @@ const BrowserMockup: React.FC = () => {
 								className='size-16 sm:size-14'
 							/>
 						</ContentGridItem>
-						<ContentGridItem className='col-span-6 grid grid-cols-4 items-center gap-x-2 gap-y-4 p-6 sm:col-span-full sm:gap-x-4 sm:p-4'>
+						<ContentGridItem className='col-span-6 grid grid-cols-4 items-center gap-x-2 gap-y-3 p-6 sm:gap-x-4 sm:p-4'>
 							{Array.from(new Array(12)).map((_, index) => (
 								<Skeleton className='h-1.5 bg-secondary' key={index} />
 							))}
 						</ContentGridItem>
-						<ContentGridItem className='col-span-4 flex items-center justify-center sm:col-span-full'>
+						<ContentGridItem className='col-span-4 flex items-center justify-center'>
 							<Icon
 								name='ChartPie'
 								strokeWidth={0.75}
@@ -75,6 +75,6 @@ const Layout = tw.div`grid flex-1 sm:grid-cols-1 grid-cols-[1fr_2.5fr] overflow-
 const LayoutSidebar = tw.div`flex h-full flex-col gap-4 border-r p-4 transition-height bg-background`
 const LayoutContent = tw.div`flex w-full flex-col items-stretch space-y-2 bg-secondary/20`
 const ContentGridItem = tw.div`relative w-full rounded-lg border fill-mode-both bg-background `
-const ContentGrid = tw.div`grid h-full w-full flex-1 basis-full grid-cols-10 gap-4 sm:gap-3 overflow-hidden p-4`
+const ContentGrid = tw.div`grid h-full w-full flex-1 basis-full grid-cols-10 gap-3 overflow-hidden p-4`
 
 export default BrowserMockup

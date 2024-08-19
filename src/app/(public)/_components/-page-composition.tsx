@@ -9,7 +9,7 @@ const PageComposition: React.FC = () => {
 
 	return (
 		<Container ref={parentScrollRef}>
-			<Spotlight fill='white' className='-top-20 left-0 xl:-top-40' />
+			<Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-top-40' />
 
 			<Main ref={contentScrollRef}>
 				<Header />
@@ -30,7 +30,7 @@ const PageComposition: React.FC = () => {
 }
 
 const Container = tw.div`relative h-screen z-10 overflow-hidden scroll-m-2 text-foreground antialiased`
-const Main = tw.div`overflow-y-auto h-full scroll-smooth scrollbar-none`
+const Main = tw.div`overflow-y-auto h-full scroll-smooth scrollbar-none flex flex-col items-stretch`
 const Wrapper = tw.div`relative w-full mb-64`
 
 export default PageComposition
