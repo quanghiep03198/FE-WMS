@@ -25,12 +25,10 @@ function LoginPage() {
 			<Helmet>
 				<title>Login</title>
 				<meta name='description' content='Warehouse management system authentication' />
-				<link rel='preload' href='/global-transport.svg' as='image' />
 			</Helmet>
 			<PageComposition.Container>
 				<PageComposition.HomeNavigator />
 				<PageComposition.ThemeSelector />
-				<PageComposition.SideImage />
 				<PageComposition.FormSection>
 					<PageComposition.FormHeading />
 					<PageComposition.FormFieldset />
