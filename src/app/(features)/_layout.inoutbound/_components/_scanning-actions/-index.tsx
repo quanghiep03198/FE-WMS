@@ -59,7 +59,7 @@ const ScanningActions: React.FC = () => {
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
-		condition: scanningStatus === 'scanning'
+		condition: typeof scanningStatus !== 'undefined'
 	})
 
 	const scanningButtonProps = useMemo<TScanningButtonProps>(() => {
