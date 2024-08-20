@@ -1,3 +1,4 @@
+import { ClassValue } from 'clsx'
 import { FieldValues } from 'react-hook-form'
 
 export interface BaseFieldControl<T extends FieldValues> {
@@ -8,7 +9,6 @@ export interface BaseFieldControl<T extends FieldValues> {
 	hidden?: boolean
 	placeholder?: string
 	defaultValue?: string
-	className?: string
+	className?: ClassValue
 	orientation?: 'vertical' | 'horizontal'
-	messageType?: 'standard' | 'alternative'
 }

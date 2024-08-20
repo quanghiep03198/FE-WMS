@@ -142,3 +142,17 @@ export interface ICustomerBrand {
 	brand_name: string
 	custbrand_id: string
 }
+
+export interface IProductionImportOrder extends IBaseEntity {
+	active_date: Date | string
+	cofactory_code: string
+	status_approve: boolean
+	type_inventorylist: string
+	sno_no: string
+	dept_code: string
+	dept_name: string
+	warehouse_code: string
+	warehouse_name: string
+	sno_location: string
+	remark: string | null
+}
