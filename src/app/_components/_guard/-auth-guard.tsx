@@ -6,15 +6,18 @@ import { useRouter } from '@tanstack/react-router'
 import React, { useEffect } from 'react'
 
 const AuthGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const { token: accessToken, isAuthenticated, setUserProfile } = useAuth()
+	const { isAuthenticated, setUserProfile } = useAuth()
 	const { data, isLoading, isError } = useGetUserProfileQuery()
 	const router = useRouter()
 
 	useEffect(() => {
 		if (isError) AuthService.logout()
-		if (!isAuthenticated) router.invalidate().finally(() => router.navigate({ to: '/login' }))
 		setUserProfile(data)
-	}, [data, accessToken, isAuthenticated, isError])
+	}, [data, isError])
+
+	useEffect(() => {
+		if (!isAuthenticated) router.invalidate().finally(() => router.navigate({ to: '/login' }))
+	}, [isAuthenticated])
 
 	if (isLoading)
 		return (
