@@ -5,6 +5,8 @@ import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useF
 
 import { cn } from '@/common/utils/cn'
 import { Label } from '@/components/ui/@core/label'
+import { ResourceKey } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 const Form = FormProvider
 
@@ -118,6 +120,8 @@ FormDescription.displayName = 'FormDescription'
 const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
 	({ className, children, ...props }, ref) => {
 		const { error, formMessageId } = useFormField()
+		const { t } = useTranslation()
+
 		const body = error ? String(error?.message) : children
 
 		if (!body) {
@@ -130,7 +134,7 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 				id={formMessageId}
 				className={cn('text-[0.8rem] font-medium text-destructive', className)}
 				{...props}>
-				{body}
+				{t(body as ResourceKey)}
 			</p>
 		)
 	}

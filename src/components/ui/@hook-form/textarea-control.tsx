@@ -1,10 +1,9 @@
 import { cn } from '@/common/utils/cn'
 import { forwardRef, useId, useRef } from 'react'
 import { FieldValues } from 'react-hook-form'
-import { FormControl, FormDescription, FormField, FormItem, FormMessage, Textarea } from '..'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 import { TextareaProps } from '../@core/textarea'
-import FormLabel from './alternative-form-label'
 
 export type TextareaFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & TextareaProps
 
@@ -22,7 +21,6 @@ function TextareaFieldControl<T extends FieldValues>(
 		description,
 		hidden,
 		orientation,
-		messageType = 'alternative',
 		onChange,
 		...restProps
 	} = props
@@ -40,7 +38,7 @@ function TextareaFieldControl<T extends FieldValues>(
 						hidden: hidden,
 						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 					})}>
-					<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
+					{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 					<FormControl>
 						<Textarea
 							{...field}
@@ -60,7 +58,7 @@ function TextareaFieldControl<T extends FieldValues>(
 						/>
 					</FormControl>
 					{description && <FormDescription>{description}</FormDescription>}
-					{messageType === 'standard' && <FormMessage />}
+					<FormMessage />
 				</FormItem>
 			)}
 		/>

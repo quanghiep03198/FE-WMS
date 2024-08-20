@@ -5,6 +5,7 @@ import {
 	FormDescription,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
 	Select,
 	SelectContent,
@@ -13,7 +14,6 @@ import {
 	SelectValue
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
-import FormLabel from './alternative-form-label'
 
 export type SelectFieldControlProps<T extends FieldValues, D = Record<string, any>> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {
@@ -36,7 +36,6 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 		orientation,
 		className,
 		placeholder = 'Select',
-		messageType = 'standard',
 		datalist,
 		labelField,
 		valueField,
@@ -56,7 +55,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 							hidden,
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
+						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 						<Select
 							{...restProps}
 							value={field.value}
@@ -96,7 +95,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 							</SelectContent>
 						</Select>
 						{props.description && <FormDescription>{props.description}</FormDescription>}
-						{messageType === 'standard' && <FormMessage />}
+						<FormMessage />
 					</FormItem>
 				)
 			}}

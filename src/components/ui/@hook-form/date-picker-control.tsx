@@ -10,6 +10,7 @@ import {
 	FormDescription,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
 	Icon,
 	Popover,
@@ -18,7 +19,6 @@ import {
 	Typography
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
-import FormLabel from './alternative-form-label'
 
 type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
 	calendarProps?: Partial<CalendarProps>
@@ -32,7 +32,6 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 		label,
 		orientation,
 		hidden,
-		messageType = 'alternative',
 		calendarProps = {
 			mode: 'single'
 		}
@@ -49,7 +48,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 						hidden,
 						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 					})}>
-					<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
+					{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 					<Popover>
 						<PopoverTrigger asChild>
 							<FormControl>
@@ -99,7 +98,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 						</PopoverContent>
 					</Popover>
 					{description && <FormDescription>{description}</FormDescription>}
-					{messageType === 'standard' && <FormMessage />}
+					<FormMessage />
 				</FormItem>
 			)}
 		/>

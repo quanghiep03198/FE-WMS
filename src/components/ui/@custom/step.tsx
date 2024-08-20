@@ -84,7 +84,7 @@ const Steps: React.FC = () => {
 	} = useContext(StepContext)
 
 	return (
-		<Div as='nav' aria-label='Progress' className='w-full'>
+		<Div as='nav' aria-label='Progress' className='w-full bg-background'>
 			<StepList role='list'>
 				{data.map((step: TStep) => {
 					return (

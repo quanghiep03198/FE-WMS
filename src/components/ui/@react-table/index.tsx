@@ -17,7 +17,7 @@ import {
 	type PaginationState,
 	type SortingState
 } from '@tanstack/react-table'
-import { useLatest } from 'ahooks'
+import { useLatest, useResetState } from 'ahooks'
 import { omit } from 'lodash'
 import { forwardRef, memo, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
@@ -71,9 +71,10 @@ function DataTable<TData, TValue>(
 	ref: React.MutableRefObject<Table<any>>
 ) {
 	const { t } = useTranslation()
+	const originalData = useMemo(() => data ?? [], [data])
 
 	// * Table states declaration
-	const [_data, setData] = useState(() => data ?? [])
+	const [_data, setData, resetData] = useResetState(originalData)
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
 	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
@@ -82,12 +83,11 @@ function DataTable<TData, TValue>(
 	const [expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
 	const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
-	const [editedRows, setEditedRows] = useState({})
+	const [editedRows, setEditedRows, resetEditedRows] = useResetState({})
 	const [pagination, setPagination] = useState<PaginationState>(() => ({
 		pageIndex: 0,
 		pageSize: 10
 	}))
-	const originalData = useMemo(() => data ?? [], [data])
 	const hasNoFilter = useMemo(() => {
 		if (manualFiltering) return columnFilters?.length === 0
 		return _columnFilters.length === 0 && _globalFilter.length === 0
@@ -181,8 +181,8 @@ function DataTable<TData, TValue>(
 			},
 			discardChanges: (rowIndex) => {
 				if (!rowIndex) {
-					setEditedRows({})
-					setData(originalData)
+					resetEditedRows()
+					resetData()
 					return
 				}
 				setData((old) => old.map((row, index) => (index === rowIndex ? originalData[rowIndex] : row)))

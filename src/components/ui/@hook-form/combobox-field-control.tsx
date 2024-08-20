@@ -16,6 +16,7 @@ import {
 	FormDescription,
 	FormField,
 	FormItem,
+	FormLabel,
 	FormMessage,
 	Icon,
 	Popover,
@@ -24,7 +25,6 @@ import {
 	Typography
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
-import FormLabel from './alternative-form-label'
 
 type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,
@@ -61,7 +61,6 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		disabled,
 		hidden,
 		placeholder = 'Select',
-		messageType = 'standard',
 		shouldFilter, // Determine using manual filtering or automatic filtering
 		loading, // Loading state from server if manual filtering is applied
 		template: CommandItemTemplate, // Custom command item template
@@ -104,7 +103,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 							hidden: hidden,
 							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
 						})}>
-						<FormLabel htmlFor={id} labelText={label} messageType={messageType} />
+						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 						<FormControl>
 							<Popover>
 								<PopoverTrigger asChild>
@@ -178,7 +177,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 							</Popover>
 						</FormControl>
 						{description && <FormDescription>{description}</FormDescription>}
-						{messageType === 'standard' && <FormMessage />}
+						<FormMessage />
 					</FormItem>
 				)
 			}}
