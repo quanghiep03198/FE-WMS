@@ -7,8 +7,8 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { Table, createColumnHelper } from '@tanstack/react-table'
-import { useResetState } from 'ahooks'
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
+import { useLatest, useResetState } from 'ahooks'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	useDeleteWarehouseMutation,
@@ -20,23 +20,24 @@ import { usePageContext } from '../_contexts/-page-context'
 import WarehouseRowActions from './-warehouse-row-actions'
 // #endregion
 
+// #region React Component
 const WarehouseList: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const tableRef = useRef<Table<IWarehouse>>(null)
+	const tableRef = useLatest<Table<IWarehouse>>(null)
 	const { dispatch } = usePageContext()
 
 	// Handle reset row deletion
 	const handleResetAllRowSelection = useCallback(() => {
 		tableRef.current.resetRowSelection()
 		resetRowSelectionType()
-	}, [tableRef])
+	}, [])
 
 	// Handle delete selected row(s)
 	const handleDeleteSelectedRows = useCallback(() => {
 		deleteWarehouseAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original.id))
-	}, [tableRef])
+	}, [])
 
 	// Transform warehouse response data
 	const transformResponse = useCallback(
@@ -246,20 +247,18 @@ const WarehouseList: React.FC = () => {
 				containerProps={{ style: { height: (screen.height * 40) / 100 } }}
 				ref={tableRef}
 				toolbarProps={{
-					slot: () => (
+					slot: ({ table }) => (
 						<Fragment>
-							{tableRef.current &&
-								tableRef.current.getSelectedRowModel().flatRows.length > 0 &&
-								rowSelectionType == 'multiple' && (
-									<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
-										<Button
-											variant='destructive'
-											size='icon'
-											onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
-											<Icon name='Trash2' />
-										</Button>
-									</Tooltip>
-								)}
+							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType == 'multiple' && (
+								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
+									<Button
+										variant='destructive'
+										size='icon'
+										onClick={() => setConfirmDialogOpen(!confirmDialogOpen)}>
+										<Icon name='Trash2' />
+									</Button>
+								</Tooltip>
+							)}
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
 								<Button variant='outline' size='icon' onClick={() => refetch()}>
 									<Icon name='RotateCw' />

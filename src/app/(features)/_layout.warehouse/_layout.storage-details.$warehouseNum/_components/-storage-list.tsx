@@ -219,7 +219,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 	)
 
 	return (
-		<>
+		<Fragment>
 			<DataTable
 				ref={tableRef}
 				data={data}
@@ -229,20 +229,18 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				enableColumnFilters={true}
 				enableRowSelection={true}
 				toolbarProps={{
-					slot: () => (
+					slot: ({ table }) => (
 						<Fragment>
-							{tableRef.current &&
-								tableRef.current.getSelectedRowModel().flatRows.length > 0 &&
-								rowSelectionType === 'multiple' && (
-									<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
-										<Button
-											variant='destructive'
-											size='icon'
-											onClick={() => setConfirmDialogOpen((prev) => !prev)}>
-											<Icon name='Trash2' />
-										</Button>
-									</Tooltip>
-								)}
+							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType === 'multiple' && (
+								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
+									<Button
+										variant='destructive'
+										size='icon'
+										onClick={() => setConfirmDialogOpen((prev) => !prev)}>
+										<Icon name='Trash2' />
+									</Button>
+								</Tooltip>
+							)}
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
 								<Button variant='outline' size='icon' onClick={() => refetch()}>
 									<Icon name='RotateCw' />
@@ -260,7 +258,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				onConfirm={handleDeleteSelectedRows}
 				onCancel={handleResetAllRowSelection}
 			/>
-		</>
+		</Fragment>
 	)
 }
 

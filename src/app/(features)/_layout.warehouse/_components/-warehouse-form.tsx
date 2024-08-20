@@ -47,6 +47,7 @@ const WarehouseFormDialog: React.FC = () => {
 	const { user } = useAuth()
 	const [employeeSearchTerm, setEmployeeSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
+
 	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
@@ -54,7 +55,7 @@ const WarehouseFormDialog: React.FC = () => {
 
 	// Get department field values
 	const { data: departments } = useGetDepartmentQuery(user?.company_code)
-	console.log(departments)
+
 	// Get employee field values
 	const { data: employees } = useQuery({
 		queryKey: ['EMPLOYEES', employeeSearchTerm],

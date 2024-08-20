@@ -44,6 +44,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 		dialogFormState: { open, type, dialogTitle, defaultFormValues },
 		dispatch
 	} = usePageContext()
+
 	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(storageFormSchema)
 	})
