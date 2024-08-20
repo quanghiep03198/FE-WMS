@@ -1,18 +1,36 @@
 import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
-import UnavailableService from '@/app/_components/_errors/-unavailable-service'
+import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { Fragment, useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import { useShallow } from 'zustand/react/shallow'
+import ProductionImportHeading from './_components/-warehouse-import-heading'
+import ProductionImportList from './_components/-warehouse-import-list'
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse-import/')({
 	component: Page
 })
 
 function Page() {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
-	setBreadcrumb([{ to: '/warehouse-import', text: t('ns_common:navigation.import_management') }])
+	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
 
-	return <UnavailableService />
+	useEffect(() => {
+		setBreadcrumb([{ to: '/warehouse-import', text: t('ns_common:navigation.import_management') }])
+	}, [i18n.language])
+
+	return (
+		<Fragment>
+			<Helmet title={t('ns_common:navigation.import_management')} />
+
+			<Div className='space-y-6'>
+				<ProductionImportHeading />
+				<Separator />
+				<ProductionImportList />
+			</Div>
+		</Fragment>
+	)
 }
