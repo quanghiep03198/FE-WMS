@@ -18,7 +18,7 @@ const EPCListHeading: React.FC = () => {
 
 	return (
 		<Div className='flex items-center justify-between px-4 py-2 text-center'>
-			<Typography variant='h6' className='relative z-10 inline-flex items-center gap-x-2 text-center text-base px-2'>
+			<Typography variant='h6' className='relative z-10 inline-flex items-center gap-x-2 px-2 text-center text-base'>
 				<Icon name='ScanBarcode' size={20} />
 				EPC Data
 			</Typography>
@@ -26,7 +26,7 @@ const EPCListHeading: React.FC = () => {
 				disabled={scanningStatus === 'scanning' || typeof scanningStatus === 'undefined'} // Disable selecting connection while scanning
 				value={selectedOrder}
 				onValueChange={(value) => setSelectedOrder(value)}>
-				<SelectTrigger className='basis-52 flex justify-start gap-x-2'>
+				<SelectTrigger className='flex basis-52 justify-start gap-x-2'>
 					<Icon name='ListFilter' />
 					<SelectValue placeholder={!selectedOrder && 'Select'} />
 				</SelectTrigger>

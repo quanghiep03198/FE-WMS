@@ -2,6 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { Div, Icon, Typography } from '@/components/ui'
 import { useDeepCompareEffect, useVirtualList } from 'ahooks'
 import { useMemo, useRef } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -39,7 +40,7 @@ const EPCDatalist: React.FC = () => {
 
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useDeepCompareEffect(() => {
-		if (scanningStatus === 'scanning') {
+		if (scanningStatus === 'scanning' && !isEqual(data?.datalist, scannedEPCs)) {
 			setScannedEPCs(originalData)
 			setScannedOrders(data?.orderList ?? [])
 			setScannedOrderSizing(data?.sizing ?? [])
@@ -96,7 +97,7 @@ const EPCDatalist: React.FC = () => {
 									className={cn('hover:bg-secondary')}
 									style={{ height: VIRTUAL_ITEM_SIZE }}>
 									<Typography className='font-medium'>{virtualItem.data?.epc_code}</Typography>
-									<Typography variant='small' className='text-foreground capitalize'>
+									<Typography variant='small' className='capitalize text-foreground'>
 										{virtualItem.data?.mo_no}
 									</Typography>
 								</ListItem>

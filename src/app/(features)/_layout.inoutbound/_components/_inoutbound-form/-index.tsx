@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemoizedFn } from 'ahooks'
 import { omit } from 'lodash'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, memo, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -35,10 +35,15 @@ import {
 	useUpdateEPCMutation
 } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
-import { FormActionEnum, InboundFormValues, inboundSchema, outboundSchema } from '../../_schemas/epc-inoutbound.schema'
+import {
+	FormActionEnum,
+	FormValues,
+	InboundFormValues,
+	inboundSchema,
+	outboundSchema
+} from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const [schema, setSchema] = useState<typeof inboundSchema | typeof outboundSchema>(inboundSchema)
 	const {
 		scanningStatus,
 		connection,
@@ -49,19 +54,22 @@ const InoutboundForm: React.FC = () => {
 		setScannedOrders
 	} = usePageContext()
 	const { t, i18n } = useTranslation()
-	const form = useForm<InboundFormValues>({
-		resolver: zodResolver(schema),
+	const queryClient = useQueryClient()
+	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
+
+	const form = useForm<FormValues>({
+		resolver: zodResolver(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema),
 		defaultValues: {
 			rfid_status: FormActionEnum.IMPORT,
-			rfid_use: undefined,
-			warehouse_num: undefined,
-			storage: undefined
+			rfid_use: '',
+			warehouse_num: '',
+			storage: '',
+			dept_code: ''
 		},
 		mode: 'onChange'
 	})
-	const queryClient = useQueryClient()
+
 	const warehouseNum = form.watch('warehouse_num')
-	const action = form.watch('rfid_status')
 
 	const storageTypes = useMemo(
 		() =>
@@ -100,9 +108,10 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') handleResetForm()
-		setSchema(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema)
-	}, [action, storageTypes, scanningStatus])
+		if (typeof scanningStatus === 'undefined') {
+			handleResetForm()
+		}
+	}, [scanningStatus])
 
 	const handleSubmit = async (data: InboundFormValues): Promise<string | number> => {
 		const loading = toast.loading(t('ns_common:notification.processing_request'))
@@ -142,6 +151,7 @@ const InoutboundForm: React.FC = () => {
 									defaultValue={FormActionEnum.IMPORT}
 									onValueChange={(value) => {
 										field.onChange(value)
+										setAction(value as FormActionEnum)
 										handleResetForm()
 									}}>
 									<FormItem>
@@ -158,7 +168,7 @@ const InoutboundForm: React.FC = () => {
 											{t('ns_inoutbound:action_types.warehouse_input')}
 											<CheckIcon
 												name='Check'
-												size={20}
+												size={24}
 												aria-checked={field.value === FormActionEnum.IMPORT}
 											/>
 										</StyledFormLabel>
@@ -177,7 +187,7 @@ const InoutboundForm: React.FC = () => {
 											{t('ns_inoutbound:action_types.warehouse_output')}
 											<CheckIcon
 												name='Check'
-												size={20}
+												size={24}
 												aria-checked={field.value === FormActionEnum.EXPORT}
 											/>
 										</StyledFormLabel>
@@ -265,4 +275,4 @@ const CheckIcon = tw(Icon)<IconProps>`
 	ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200 aria-checked:opacity-100
 `
 
-export default InoutboundForm
+export default memo(InoutboundForm)

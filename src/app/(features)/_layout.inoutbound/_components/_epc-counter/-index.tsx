@@ -15,11 +15,11 @@ const ScannedEPCsCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex flex-col justify-center items-center h-full gap-y-4 rounded-lg overflow-clip border p-4'>
+		<Div className='relative flex h-full flex-col items-center justify-center gap-y-4 overflow-clip rounded-lg border p-4'>
 			<Div
 				data-status={scanningStatus}
-				className='absolute inset-0 z-0 h-full transition-opacity ease-in-out duration-500 data-[status=scanning]:opacity-100 opacity-0'>
-				<Skeleton className='h-full w-full inset-0' />
+				className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=scanning]:opacity-100'>
+				<Skeleton className='inset-0 h-full w-full' />
 			</Div>
 			<ScanningCounter scannedEPCs={scannedEPCs} />
 			<ScanningTimer scanningStatus={scanningStatus} />
@@ -50,14 +50,14 @@ const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = mem
 		}, [scannedCount, count.value])
 
 		return (
-			<Div className='flex items-center justify-between relative z-10 gap-x-3'>
+			<Div className='relative z-10 flex items-center justify-between gap-x-3'>
 				<Typography variant='h6' className='inline-flex items-center gap-x-2'>
 					{t('ns_inoutbound:counter_box.label')}
 				</Typography>
-				<Separator className='w-1.5 h-0.5 bg-foreground' />
-				<Typography variant='h6' className='inline-flex text-2xl gap-x-1 font-bold'>
+				<Separator className='h-0.5 w-1.5 bg-foreground' />
+				<Typography variant='h6' className='inline-flex gap-x-1 text-2xl font-bold'>
 					{count.value}
-					<Typography variant='small' className='font-medium text-xs'>
+					<Typography variant='small' className='text-xs font-medium'>
 						pcs
 					</Typography>
 				</Typography>
@@ -103,7 +103,7 @@ const ScanningTimer: React.FC<{ scanningStatus: ScanningStatus }> = memo(
 		}, [scanningStatus])
 
 		return (
-			<Badge className='relative text-sm z-10'>
+			<Badge className='relative z-10 text-sm'>
 				{scannedTime.hours}:{scannedTime.minutes}:{scannedTime.seconds}
 			</Badge>
 		)
