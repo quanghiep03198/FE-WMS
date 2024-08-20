@@ -2,10 +2,10 @@ import { OrderStatus } from '@/common/constants/enums'
 import { z } from 'zod'
 
 export const updateTransferOrderSchema = z.object({
-	or_warehouse: z.string(),
-	or_location: z.string(),
-	new_warehouse: z.string(),
-	new_location: z.string()
+	or_warehouse: z.string().trim().min(1, { message: 'ns_validation:required' }),
+	or_location: z.string().trim().min(1, { message: 'ns_validation:required' }),
+	new_warehouse: z.string().trim().min(1, { message: 'ns_validation:required' }),
+	new_location: z.string().trim().min(1, { message: 'ns_validation:required' })
 })
 
 export const updateApprovalStatusSchema = z.object({
@@ -15,12 +15,12 @@ export const updateApprovalStatusSchema = z.object({
 })
 
 export const updateTransferOrderDetailSchema = z.object({
-	or_no: z.string(),
-	trans_num: z.number(),
-	sno_qty: z.number(),
-	or_qtyperpacking: z.number(),
-	kg_nostart: z.number(),
-	kg_noend: z.number()
+	or_no: z.string().trim().min(1, { message: 'ns_validation:required' }),
+	trans_num: z.number({ required_error: 'ns_validation:required' }),
+	sno_qty: z.number({ required_error: 'ns_validation:required' }),
+	or_qtyperpacking: z.number({ required_error: 'ns_validation:required' }),
+	kg_nostart: z.number({ required_error: 'ns_validation:required' }),
+	kg_noend: z.number({ required_error: 'ns_validation:required' })
 })
 
 export type UpdateTransferOrderValues = z.infer<typeof updateTransferOrderSchema>
