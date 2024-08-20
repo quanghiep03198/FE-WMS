@@ -7,7 +7,7 @@ import { IDepartment, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { AxiosRequestConfig } from 'axios'
 
-type InOutBoundPayload = (InboundFormValues | OutboundFormValues) & { mo_no: string; host: string }
+type InoutboundPayload = (InboundFormValues | OutboundFormValues) & { mo_no: string; host: string }
 
 export class RFIDService {
 	static async getScannedEPC(config: AxiosRequestConfig): Promise<
@@ -20,8 +20,10 @@ export class RFIDService {
 		return await axiosInstance.get(`/rfid/read-epc`, config)
 	}
 
-	static async updateStockMovement(payload: InOutBoundPayload) {
-		return await axiosInstance.patch<InOutBoundPayload, ResponseBody<null>>('/rfid/update-stock-movement', payload)
+	static async updateStockMovement(payload: InoutboundPayload) {
+		return await axiosInstance.patch<InoutboundPayload, ResponseBody<null>>('/rfid/update-stock-movement', payload, {
+			headers: { ['X-Database-Host']: payload.host }
+		})
 	}
 
 	static async getDatabaseCompatibility() {
@@ -40,5 +42,18 @@ export class RFIDService {
 
 	static async deleteScannedOrder(host: string, orderCode: string) {
 		return await axiosInstance.delete(`/rfid/delete-mono/${orderCode}`, { headers: { ['X-Database-Host']: host } })
+	}
+
+	static async getCustOrderList(host: string, searchTerm: string) {
+		return await axiosInstance.get<any, ResponseBody<string[]>>('/rfid/cust-mono', {
+			params: { search: searchTerm },
+			headers: { ['X-Database-Host']: host }
+		})
+	}
+
+	static async updateInventoryOrderCode(host: string, orderCode: string, payload: any) {
+		return await axiosInstance.patch(`/rfid/inventory-order/update/${orderCode}`, payload, {
+			headers: { ['X-Database-Host']: host }
+		})
 	}
 }
