@@ -29,26 +29,19 @@ const mainFeatures: Array<FeatureItemProps> = [
 
 const FeaturesSection: React.FunctionComponent = () => {
 	return (
-		<Div
-			id='outstanding-features'
-			as='section'
-			className='relative mx-auto flex max-w-7xl items-center justify-center px-6 sm:px-4 xxl:max-w-8xl'>
-			<Div className='space-y-20'>
-				<Div className='max-w-4xl text-left sm:text-center'>
-					<Typography color='primary' variant='small' className='mb-2 !text-base font-medium'>
-						No more paperwork
-					</Typography>
-					<Typography variant='h3' className='mb-6'>
-						Comprehensive solutions for Warehouse Management
-					</Typography>
-					<Typography variant='p' className='text-lg'></Typography>
-				</Div>
-
-				<Div className='grid flex-col items-start gap-6 xl:grid-cols-3'>
-					{mainFeatures.map((item, index) => (
-						<FeatureItem {...item} key={index} />
-					))}
-				</Div>
+		<Div className='space-y-16 sm:space-y-8' id='outstanding-features' as='section'>
+			<Div className='max-w-4xl space-y-1.5 text-left sm:text-center'>
+				<Typography color='primary' variant='small' className='!text-base font-medium sm:text-sm sm:font-normal'>
+					No more paperwork
+				</Typography>
+				<Typography variant='h3' className='sm:mb-4 sm:text-xl'>
+					Comprehensive solutions for Warehouse Management
+				</Typography>
+			</Div>
+			<Div className='grid flex-col items-start gap-6 xl:grid-cols-3'>
+				{mainFeatures.map((item, index) => (
+					<FeatureItem {...item} key={index} />
+				))}
 			</Div>
 		</Div>
 	)

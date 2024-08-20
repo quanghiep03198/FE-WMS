@@ -11,11 +11,8 @@ const CTASection: React.FC = () => {
 	const { handleMenuClick } = usePageContext()
 
 	return (
-		<Div
-			id='cta'
-			as='section'
-			className='relative mx-auto flex w-full max-w-7xl flex-grow flex-col items-center gap-20 px-6 sm:px-4 lg:flex-row xl:flex-row xxl:max-w-8xl'>
-			<Div className='flex flex-col items-center text-center lg:items-start lg:text-left xl:items-start xl:text-left'>
+		<Div id='cta' as='section' className='flex flex-grow flex-col items-center gap-10 xl:flex-row xl:gap-20'>
+			<Div className='flex flex-col items-center text-center xl:items-start xl:text-left'>
 				<Button
 					onClick={() => handleMenuClick(1)}
 					variant='outline'
@@ -24,16 +21,15 @@ const CTASection: React.FC = () => {
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
-
-				<Typography variant='h3' className='mb-4'>
+				<Typography variant='h3' className='mb-4 sm:text-xl'>
 					Simplify Warehouse Management <br /> with i-WMS
 				</Typography>
-
-				<Typography variant='p' className='mx-auto mb-10 max-w-4xl leading-relaxed tracking-wide xl:max-w-6xl'>
+				<Typography
+					variant='p'
+					className='mx-auto mb-10 max-w-4xl leading-relaxed tracking-wide sm:text-sm xl:max-w-6xl'>
 					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 					comprehensive system provides the tools you need to manage your warehouse effortlessly.
 				</Typography>
-
 				<Div className='flex items-center justify-center gap-x-1'>
 					<Link to='/login' className={cn(buttonVariants())}>
 						Get started
@@ -43,9 +39,8 @@ const CTASection: React.FC = () => {
 					</Button>
 				</Div>
 			</Div>
-
 			<Div className='flex h-full w-full flex-grow flex-col items-center justify-center'>
-				<Image rel='preload' src={GlobalTransportImage} />
+				<Image rel='preload' loading='eager' src={GlobalTransportImage} />
 			</Div>
 		</Div>
 	)

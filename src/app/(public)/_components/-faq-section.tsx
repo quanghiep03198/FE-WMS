@@ -31,17 +31,21 @@ const faqs = [
 
 const FAQsSection: React.FunctionComponent = () => {
 	return (
-		<Div className='lg:flex-rowm relative z-0 mx-auto flex w-full max-w-7xl flex-col-reverse items-start gap-10 px-6 sm:px-4 lg:flex-row xl:flex-row xl:gap-20 xxl:max-w-8xl'>
+		<Div className='flex w-full flex-grow flex-col-reverse items-start gap-10 lg:flex-row xl:flex-row xl:gap-20'>
 			<Div
 				id='faqs'
 				as='section'
-				className='w-full basis-full space-y-10 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3'>
-				<Typography variant='h3'>Frequently asked questions</Typography>
+				className='w-full basis-full space-y-16 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
+				<Typography variant='h3' className='sm:text-xl'>
+					Frequently asked questions
+				</Typography>
 				<Accordion type='multiple'>
 					{faqs.map((faq, index) => (
 						<AccordionItem key={index} value={index.toString()}>
-							<AccordionTrigger className='py-6 text-base hover:no-underline'>{faq.question}</AccordionTrigger>
-							<AccordionContent className='text-base'>{faq.answer}</AccordionContent>
+							<AccordionTrigger className='py-6 text-base hover:no-underline sm:text-sm'>
+								{faq.question}
+							</AccordionTrigger>
+							<AccordionContent className='text-base sm:text-sm'>{faq.answer}</AccordionContent>
 						</AccordionItem>
 					))}
 				</Accordion>
