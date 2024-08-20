@@ -112,7 +112,7 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: '13',
-		icon: 'PictureInPicture',
+		icon: 'Settings',
 		title: 'navigation.appearance',
 		path: '/preferences/appearance-settings',
 		type: 'preference',
