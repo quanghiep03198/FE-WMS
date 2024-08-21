@@ -1,14 +1,29 @@
-name: Deploy React App to Windows Server with PM2
+name: Deploy to Windows Server
 
 on:
    push:
-      branches:
-         - main
+      branches: ['develop']
+   pull_request:
+      branches: ['develop']
+   workflow_dispatch:
 
 jobs:
-   build:
+   sonarcloud:
+      name: SonarCloud
       runs-on: ubuntu-latest
-
+      steps:
+         - uses: actions/checkout@v3
+           with:
+              fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+         - name: SonarCloud Scan
+           uses: SonarSource/sonarcloud-github-action@master
+           env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+   build:
+      runs-on: self-hosted
+      needs: SonarCloud
+      environment: env
       steps:
          - name: Checkout code
            uses: actions/checkout@v3
@@ -16,7 +31,7 @@ jobs:
          - name: Set up Node.js
            uses: actions/setup-node@v3
            with:
-              node-version: '16'
+              node-version: '20'
 
          - name: Install dependencies
            run: npm install
@@ -25,32 +40,35 @@ jobs:
            run: npm run build
 
          - name: Archive production artifacts
-           uses: actions/upload-artifact@v3
+           if: github.ref == 'refs/heads/develop'
+           uses: actions/upload-artifact@v4
            with:
               name: build-artifacts
-              path: build
+              path: dist
 
    deploy:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       needs: build
-
       steps:
          - name: Download build artifacts
-           uses: actions/download-artifact@v3
+           uses: actions/download-artifact@v4
            with:
               name: build-artifacts
-              path: build
+              path: dist
 
          - name: Deploy to Windows Server
-           uses: appleboy/scp-action@v0.1.1
+           uses: appleboy/scp-action@v0.1.4
+           env:
+              host: ${{ secrets.WINDOWS_SERVER_USERNAME }}
+              password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
            with:
               host: 10.30.0.19
-              username: ${{ secrets.YOUR_WINDOWS_SERVER_USERNAME }}
+              username: ${{ secrets.WINDOWS_SERVER_USERNAME }}
               password: ${{ secrets.WINDOWS_SERVER_PASSWORD }}
               source: 'dist/*'
               target: 'C:/Users/Administrator/i-wms/client'
 
          - name: Restart PM2 process
            run: |
-              sshpass -p ${{ secrets.WINDOWS_SERVER_PASSWORD }} ssh ${{ secrets.YOUR_WINDOWS_SERVER_USERNAME }}@10.30.0.19 `
+              sshpass -p ${{ secrets.WINDOWS_SERVER_PASSWORD }} ssh ${{ secrets.WINDOWS_SERVER_USERNAME }}@10.30.0.19 `
               "cd C:/Users/Administrator/i-wms/client && pm2 restart 'wms-client'"
