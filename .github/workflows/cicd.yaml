@@ -21,20 +21,19 @@ jobs:
            env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
               SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-   build:
-      needs: sonarcloud
-      runs-on: self-hosted # Chạy trên self-hosted runner
-      steps:
-         - name: Checkout code
-           uses: actions/checkout@v3
 
-         - name: Set up Node.js
-           uses: actions/setup-node@v3
-           with:
-              node-version: '20'
+   deploy:
+      runs-on: self-hosted
+      needs: sonarcloud
+      steps:
+         - name: Pull latest code from Github
+           run: |
+              cd C:\Users\Administrator\i-wms\client
+              git pull origin develop
 
          - name: Install dependencies
-           run: npm ci
+           run: |
+              npm ci
 
          - name: Generate PWA assets
            run: npm run generate-pwa-assets
@@ -42,29 +41,6 @@ jobs:
          - name: Build the React app
            run: npm run build
 
-         - name: Archive production artifacts
-           uses: actions/upload-artifact@v4
-           with:
-              name: build-artifacts
-              path: dist
-
-   deploy:
-      runs-on: self-hosted # Chạy trên self-hosted runner
-      needs: build # Job deploy sẽ chỉ chạy sau khi job build hoàn thành thành công
-      steps:
-         - name: Download build artifacts
-           uses: actions/download-artifact@v4
-           with:
-              name: build-artifacts
-              path: dist
-
-         # Copy build files to the target directory
-         - name: Deploy to Windows Server
-           run: |
-              echo "Starting deployment ..."
-              xcopy dist C:\Users\Administrator\i-wms\client\dist /E /Y
-              echo "Deployment complete"
-
          - name: Restart PM2 process
            run: |
-              pm2 restart 'wms-client'
+              pm2 restart 'wms-client' --update-env
