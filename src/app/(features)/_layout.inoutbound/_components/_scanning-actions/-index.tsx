@@ -31,7 +31,7 @@ type TScanningButtonProps = {
 }
 
 const ScanningActions: React.FC = () => {
-	const { user } = useAuth()
+	const { user, isAuthenticated } = useAuth()
 	const queryClient = useQueryClient()
 	const { t, i18n } = useTranslation()
 	const {
@@ -48,9 +48,9 @@ const ScanningActions: React.FC = () => {
 	const rfidReaderHosts = useMemo(() => {
 		switch (true) {
 			case Regex.VIETNAM_FACTORY_CODE.test(user?.company_code):
-				return RFID_READER_HOSTS.vi
+				return RFID_READER_HOSTS.VI
 			case Regex.CAMBODIA_FACTORY_CODE.test(user?.company_code):
-				return RFID_READER_HOSTS.km
+				return RFID_READER_HOSTS.KM
 			// * Add more case if there still have other reader hosts
 			default:
 				return []
@@ -59,7 +59,7 @@ const ScanningActions: React.FC = () => {
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
-		condition: typeof scanningStatus !== 'undefined'
+		condition: typeof scanningStatus !== 'undefined' && isAuthenticated
 	})
 
 	const scanningButtonProps = useMemo<TScanningButtonProps>(() => {
