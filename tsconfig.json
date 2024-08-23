@@ -23,7 +23,7 @@
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src", "src/common/types/i18next.d.ts"],
+	"include": ["src", "tests"],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"
