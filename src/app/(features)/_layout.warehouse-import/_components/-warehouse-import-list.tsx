@@ -13,12 +13,9 @@ import { useGetProductionImportListQuery } from '../_apis/use-warehouse-import.a
 
 const ProductionImportList: React.FC = () => {
 	const { t, i18n } = useTranslation()
-
 	const { data, refetch } = useGetProductionImportListQuery()
-	console.log(data)
-
 	const tableInstanceRef = useLatest<Table<IProductionImportOrder>>(null)
-	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowSelectionType>(undefined)
+	const [rowSelectionType, setRowSelectionType] = useResetState<RowSelectionType>(undefined)
 
 	const columnHelper = createColumnHelper()
 
@@ -171,7 +168,7 @@ const ProductionImportList: React.FC = () => {
 			toolbarProps={{
 				slot: ({ table }) => (
 					<Fragment>
-						{!!tableInstanceRef.current && tableInstanceRef.current.getIsSomeRowsSelected() && (
+						{table.getIsSomeRowsSelected() && rowSelectionType == 'multiple' && (
 							<Tooltip message={t('ns_common:actions.delete')} triggerProps={{ asChild: true }}>
 								<Button variant='destructive' size='icon'>
 									<Icon name='Trash2' />
