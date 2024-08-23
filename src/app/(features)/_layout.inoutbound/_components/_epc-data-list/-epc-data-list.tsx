@@ -1,8 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Typography } from '@/components/ui'
 import { useDeepCompareEffect, useVirtualList } from 'ahooks'
-import { useMemo, useRef } from 'react'
-import isEqual from 'react-fast-compare'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -36,23 +35,27 @@ const EPCDatalist: React.FC = () => {
 	} = usePageContext()
 
 	const { data } = useGetScannedEPCQuery({ connection, scanningStatus })
-	const originalData = useMemo(() => (Array.isArray(data?.datalist) ? data.datalist : []), [data?.datalist])
+	const warningRef = useRef<string | number | null>(null)
 
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useDeepCompareEffect(() => {
-		if (scanningStatus === 'scanning' && !isEqual(data?.datalist, scannedEPCs)) {
-			setScannedEPCs(originalData)
+		if (scanningStatus === 'scanning') {
+			setScannedEPCs(data?.datalist ?? [])
 			setScannedOrders(data?.orderList ?? [])
 			setScannedOrderSizing(data?.sizing ?? [])
-			// Alert if there are more than 3 orders scanned
-			if (data?.orderList?.length > 3)
-				toast.warning('Oops !!!', {
-					description: t('ns_inoutbound:notification.too_many_mono'),
-					icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
-					closeButton: true
-				})
 		}
 	}, [data, scanningStatus])
+
+	useEffect(() => {
+		// Alert if there are more than 3 orders scanned
+		if (typeof scanningStatus !== 'undefined' && data?.orderList?.length > 3)
+			warningRef.current = toast.warning('Oops !!!', {
+				description: t('ns_inoutbound:notification.too_many_mono'),
+				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
+				closeButton: true
+			})
+		else toast.dismiss(warningRef.current)
+	}, [data?.orderList, scanningStatus])
 
 	// Filter scanned result
 	useDeepCompareEffect(() => {
