@@ -48,6 +48,7 @@ export const useGetProductionImportDetailsQuery = (orderCode: string) => {
 export const useGetProductionImportDatalistQuery = () => {
 	return useQuery({
 		queryKey: [PRODUCTION_IMPORT_DATALIST_PROVIDE_TAG],
-		queryFn: ProductionImportService.getProductionImportDatalist
+		queryFn: ProductionImportService.getProductionImportDatalist,
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }

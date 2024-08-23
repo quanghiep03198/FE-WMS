@@ -11,6 +11,6 @@ export class ProductionImportService {
 	}
 
 	static async getProductionImportDatalist() {
-		return await axiosInstance.get('/production-import/search-datalist')
+		return await axiosInstance.get<void, ResponseBody<any>>('/production-import/search-datalist')
 	}
 }

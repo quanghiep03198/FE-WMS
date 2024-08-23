@@ -1,4 +1,4 @@
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import {
 	Breadcrumb,
 	BreadcrumbEllipsis,
@@ -18,7 +18,7 @@ import { Fragment, memo } from 'react'
 const THREADS_HOLD = 3 as const
 
 const NavBreadcrumb: React.FC = () => {
-	const breadcrumb = useLayoutStore((state) => state.breadcrumb)
+	const { breadcrumb } = useBreadcrumbContext()
 
 	return (
 		<Breadcrumb className='sm:hidden md:hidden'>

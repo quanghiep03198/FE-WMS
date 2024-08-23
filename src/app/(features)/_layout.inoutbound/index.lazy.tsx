@@ -1,10 +1,8 @@
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
-import useEffectOnce from '@/common/hooks/use-effect-once'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
 import PageComposition from './_components/-page-composition'
 import ScannedEPCsCounter from './_components/_epc-counter/-index'
 import EPCListBox from './_components/_epc-data-list/-index'
@@ -17,14 +15,14 @@ export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
 })
 
 function Page() {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	// Set page breadcrumb
-	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
+	const { setBreadcrumb } = useBreadcrumbContext()
 
-	useEffectOnce(() => {
+	useEffect(() => {
 		setBreadcrumb([{ to: '/inoutbound', text: t('ns_common:navigation.inoutbound_commands') }])
-	})
+	}, [i18n.language])
 
 	return (
 		<Fragment>

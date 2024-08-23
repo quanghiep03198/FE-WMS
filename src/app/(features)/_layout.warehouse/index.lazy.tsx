@@ -1,8 +1,8 @@
 // #region Modules
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import WarehouseFormDialog from './_components/-warehouse-form'
@@ -19,11 +19,14 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/')({
 
 // #region Page component
 function Page() {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
-	setBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
+	const { setBreadcrumb } = useBreadcrumbContext()
+
+	useEffect(() => {
+		setBreadcrumb([{ to: '/warehouse', text: t('ns_common:navigation.warehouse_management') }])
+	}, [i18n.language])
 
 	return (
 		<Fragment>

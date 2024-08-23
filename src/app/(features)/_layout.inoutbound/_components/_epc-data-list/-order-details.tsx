@@ -34,7 +34,7 @@ import {
 	useGetCustOrderListQuery,
 	useUpdateOrderCodeMutation
 } from '../../_apis/rfid.api'
-import { useOrderSizingRowContext } from '../../_contexts/-order-sizing-row-context'
+import { OrderSizingRowProvider, useOrderSizingRowContext } from '../../_contexts/-order-sizing-row-context'
 import { ScannedOrder, usePageContext } from '../../_contexts/-page-context'
 import { UpdateOrderFormValue, updateOrderSchema } from '../../_schemas/order.schema'
 
@@ -90,15 +90,23 @@ const OrderDetails: React.FC = () => {
 									<Table className='border-separate border-spacing-0'>
 										<TableHeader>
 											<TableRow className='sticky top-0 z-10 bg-background'>
-												<TableHead className='w-1/6'>{t('ns_inoutbound:fields.mo_no')}</TableHead>
-												<TableHead className='w-3/4'>Sizes</TableHead>
-												<TableHead className='w-1/6'>{t('ns_common:common_fields.total')}</TableHead>
-												<TableHead>-</TableHead>
+												<TableHead align='left' className='w-[30%]'>
+													{t('ns_inoutbound:fields.mo_no')}
+												</TableHead>
+												<TableHead className='w-[50%]'>Sizes</TableHead>
+												<TableHead align='right' className='w-[10%]'>
+													{t('ns_common:common_fields.total')}
+												</TableHead>
+												<TableHead className='w-[10%]'>-</TableHead>
 											</TableRow>
 										</TableHeader>
 										<TableBody>
 											{scannedOrders.map((order) => {
-												return <OrderSizingRow data={order} onBeforeDelete={handleBeforeDelete} />
+												return (
+													<OrderSizingRowProvider key={order.mo_no}>
+														<OrderSizingRow data={order} onBeforeDelete={handleBeforeDelete} />
+													</OrderSizingRowProvider>
+												)
 											})}
 										</TableBody>
 									</Table>
@@ -141,6 +149,7 @@ const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode
 	onBeforeDelete
 }) => {
 	const { scannedOrderSizing } = usePageContext()
+	const { isEditing, handleToggleEditing } = useOrderSizingRowContext()
 	const { t } = useTranslation()
 
 	const filteredSizeByOrder = useMemo(
@@ -150,7 +159,13 @@ const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode
 
 	return (
 		<TableRow>
-			<TableCell className='font-medium'>{data?.mo_no ?? UNKNOWN_ORDER}</TableCell>
+			<TableCell className='font-medium'>
+				{isEditing ? (
+					<OrderUpdateForm defaultValue={data?.mo_no} />
+				) : (
+					<Fragment>{data?.mo_no ?? UNKNOWN_ORDER}</Fragment>
+				)}
+			</TableCell>
 			<TableCell className='!p-0'>
 				<Div
 					className='divide-x'
@@ -160,7 +175,7 @@ const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode
 					}}>
 					{filteredSizeByOrder?.map((size) => (
 						<Div key={size?.size_numcode} className='grid grid-rows-2 divide-y'>
-							<TableCell className='bg-secondary/50 font-medium text-secondary-foreground'>
+							<TableCell className='bg-secondary/25 font-medium text-secondary-foreground'>
 								{size?.size_numcode ?? UNKNOWN_ORDER}
 							</TableCell>
 							<TableCell>{size?.count}</TableCell>
@@ -172,19 +187,42 @@ const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode
 				{data?.count}
 			</TableCell>
 			<TableCell align='center'>
-				<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.delete')}>
-					<Button type='button' variant='ghost' size='icon' onClick={() => onBeforeDelete(data?.mo_no)}>
-						<Icon name='Trash2' />
-					</Button>
-				</Tooltip>
+				<Div className='flex items-center justify-end'>
+					{isEditing ? (
+						<Fragment>
+							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.save_changes')}>
+								<label
+									className={cn(buttonVariants({ variant: 'outline', size: 'icon' }))}
+									onClick={() => handleToggleEditing()}>
+									<Icon name='Check' className='stroke-blue-500' />
+								</label>
+							</Tooltip>
+							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.cancel')}>
+								<Button type='button' variant='ghost' size='icon' onClick={() => handleToggleEditing()}>
+									<Icon name='X' />
+								</Button>
+							</Tooltip>
+						</Fragment>
+					) : (
+						<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.update')}>
+							<Button type='button' variant='ghost' size='icon' onClick={() => handleToggleEditing()}>
+								<Icon name='Pencil' />
+							</Button>
+						</Tooltip>
+					)}
+					{!isEditing && (
+						<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.delete')}>
+							<Button type='button' variant='ghost' size='icon' onClick={() => onBeforeDelete(data?.mo_no)}>
+								<Icon name='Trash2' className='stroke-destructive' />
+							</Button>
+						</Tooltip>
+					)}
+				</Div>
 			</TableCell>
 		</TableRow>
 	)
 }
 
-/**
- * @deprecated
- */
 const OrderUpdateForm: React.FC<{ defaultValue: string }> = ({ defaultValue }) => {
 	const form = useForm<UpdateOrderFormValue>({
 		resolver: zodResolver(updateOrderSchema),
@@ -197,7 +235,8 @@ const OrderUpdateForm: React.FC<{ defaultValue: string }> = ({ defaultValue }) =
 
 	const { data } = useGetCustOrderListQuery(connection, searchTerm)
 
-	const { mutateAsync, isPending } = useUpdateOrderCodeMutation((variables) => {
+	const { mutateAsync } = useUpdateOrderCodeMutation((variables) => {
+		form.setValue('mo_no', variables)
 		handleToggleEditing()
 	})
 
@@ -218,16 +257,14 @@ const OrderUpdateForm: React.FC<{ defaultValue: string }> = ({ defaultValue }) =
 				<ComboboxFieldControl
 					name='mo_no'
 					form={form}
+					triggerProps={{ className: 'border-none shadow-none w-full !font-medium' }}
 					onInput={debounce((value) => setSearchTerm(value), 200)}
+					shouldFilter={false}
 					datalist={datalist}
 					labelField='label'
 					valueField='value'
-					disabled={isPending}
-					triggerProps={{ className: 'border-none shadow-none w-full' }}
 				/>
-				<button className='sr-only' id={defaultValue}>
-					Save changes
-				</button>
+				<button className='sr-only' id={defaultValue} />
 			</form>
 		</FormProvider>
 	)

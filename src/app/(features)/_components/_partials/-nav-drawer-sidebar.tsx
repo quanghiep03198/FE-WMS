@@ -1,26 +1,16 @@
 import AppLogo from '@/app/_components/_shared/-app-logo'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { $mediaQuery } from '@/common/utils/media-query'
-import { Div, Icon, Separator, Sheet, SheetContent, buttonVariants } from '@/components/ui'
+import { Div, Icon, Separator, Sheet, SheetContent, SheetTrigger, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
 import { Link, ParseRoute } from '@tanstack/react-router'
-import { useEventListener } from 'ahooks'
-import { pick } from 'lodash'
-import React, { memo, useMemo } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useShallow } from 'zustand/react/shallow'
-import { useLayoutStore } from '../../_stores/layout.store'
 
 const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()
-	const { sidebarExpanded, toggleExpandSidebar, collapseSidebar } = useLayoutStore(
-		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar', 'collapseSidebar']))
-	)
-	const isSmallScreen = useMediaQuery($mediaQuery({ minWidth: 320, maxWidth: 1023 }))
-	const isExpanded = useMemo(() => sidebarExpanded && isSmallScreen, [sidebarExpanded, isSmallScreen])
+	const [open, setOpen] = useState(false)
 
 	const mainMenu = useMemo(() => {
 		return navigationConfig.filter((item) => item.type === 'main')
@@ -36,11 +26,13 @@ const NavDrawerSidebar: React.FC = () => {
 		})
 	}, [])
 
-	useEventListener('resize', collapseSidebar)
-
 	return (
-		<Sheet defaultOpen={false} open={isExpanded} onOpenChange={toggleExpandSidebar}>
-			<SheetContent className='w-full max-w-xs' side='left'>
+		<Sheet open={open} onOpenChange={setOpen}>
+			<SheetTrigger
+				className={cn(buttonVariants({ variant: 'ghost', size: 'icon', className: 'lg:hidden xl:hidden' }))}>
+				<Icon name='Menu' />
+			</SheetTrigger>
+			<SheetContent className='w-full max-w-xs lg:hidden xl:hidden' side='left'>
 				<Div className='h-16 px-4'>
 					<AppLogo />
 				</Div>
@@ -48,7 +40,7 @@ const NavDrawerSidebar: React.FC = () => {
 				<Menu>
 					{mainMenu.map((item) => {
 						return (
-							<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
+							<MenuItem key={item.id} onClick={() => setOpen(!open)}>
 								<Link
 									to={item.path}
 									activeProps={{ className: 'text-primary hover:text-primary' }}
@@ -64,7 +56,7 @@ const NavDrawerSidebar: React.FC = () => {
 					<Separator className='my-4' />
 					{preferenceMenu.map((item) => {
 						return (
-							<MenuItem key={item.id} onClick={() => toggleExpandSidebar()}>
+							<MenuItem key={item.id} onClick={() => setOpen(!open)}>
 								<Link
 									to={item.path}
 									activeProps={{ className: 'text-primary hover:text-primary' }}

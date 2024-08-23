@@ -1,35 +1,30 @@
-import { BreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { Icon, IconProps, Separator, Tooltip, Typography, buttonVariants } from '@/components/ui'
+import { $mediaQuery } from '@/common/utils/media-query'
+import { Icon, IconProps, Separator, Tooltip, Typography } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
 import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
-import { debounce, pick } from 'lodash'
-import { memo, useMemo } from 'react'
+import { debounce } from 'lodash'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useShallow } from 'zustand/react/shallow'
 import AppLogo from '../../../_components/_shared/-app-logo'
-import { useLayoutStore } from '../../_stores/layout.store'
 
-type NavLinkProps = { open: boolean } & Pick<NavigationConfig, 'path' | 'title' | 'icon'>
+type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
-	const { sidebarExpanded, toggleExpandSidebar } = useLayoutStore(
-		useShallow((state) => pick(state, ['sidebarExpanded', 'toggleExpandSidebar']))
-	)
-	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
-	const isMediumScreen = useMediaQuery(BreakPoints.MEDIUM)
-	const isLargeScreen = useMediaQuery(BreakPoints.LARGE)
+	const isExtraLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1366 }))
+	const [open, setOpen] = useState<boolean>(isExtraLargeScreen)
+	const checkboxRef = useRef<HTMLInputElement>(null)
 	const { user } = useAuth()
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
-			'ctrl.b': debounce(toggleExpandSidebar, 50),
+			'ctrl.b': debounce(() => setOpen(!open), 50),
 			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
 				acc[String(curr.keybinding)] = function () {
 					return navigate({ to: curr.path })
@@ -37,7 +32,7 @@ const NavSidebar: React.FC = () => {
 				return acc
 			}, {})
 		}),
-		[sidebarExpanded]
+		[open]
 	)
 
 	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
@@ -59,31 +54,39 @@ const NavSidebar: React.FC = () => {
 		})
 	}, [])
 
-	const isExpanded = useMemo(() => sidebarExpanded && !isLargeScreen, [sidebarExpanded, isLargeScreen])
-
-	if (isSmallScreen || isMediumScreen) return null
+	useEffect(() => {
+		setOpen(isExtraLargeScreen)
+	}, [isExtraLargeScreen])
 
 	return (
-		<Aside aria-expanded={isExpanded}>
-			<LogoLink to='/dashboard' preload={false} aria-expanded={isExpanded}>
+		<Aside>
+			<input
+				type='checkbox'
+				id='sidebar-toggle'
+				className='hidden appearance-none'
+				checked={open}
+				ref={checkboxRef}
+				onChange={(e) => setOpen(e.target.checked)}
+			/>
+			<LogoLink to='/dashboard' preload={false}>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
-				<LogoWrapper aria-expanded={isExpanded}>
+				<LogoWrapper>
 					<AppLogo />
 					<Typography variant='small' className='text-xs text-muted-foreground'>
 						{user?.company_name}
 					</Typography>
 				</LogoWrapper>
 			</LogoLink>
-			<Menu aria-expanded={isExpanded} role='menu'>
+			<Menu role='menu'>
 				{mainMenu.map((item) => (
 					<MenuItem key={item.id}>
-						<NavLink open={isExpanded} {...item} />
+						<NavLink {...item} />
 					</MenuItem>
 				))}
 				<Separator className='my-4' />
 				{preferenceMenu.map((item) => (
 					<MenuItem role='menuItem' tabIndex={0} key={item.id}>
-						<NavLink open={isExpanded} {...item} />
+						<NavLink {...item} />
 					</MenuItem>
 				))}
 			</Menu>
@@ -91,26 +94,20 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ open, path, title, icon }) => {
+const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
 
 	return (
 		<Tooltip
 			message={t(title, { defaultValue: title })}
-			contentProps={{ side: 'right', hidden: open === true, sideOffset: 8, className: 'z-50' }}>
+			contentProps={{ side: 'right', sideOffset: 8, className: 'z-50 group-has-[:checked]:hidden' }}>
 			<MenuLink
 				to={path}
 				role='link'
 				preload={false}
-				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}
-				aria-expanded={open}
-				className={buttonVariants({
-					variant: 'ghost',
-					size: open ? 'icon' : 'default',
-					className: 'p-2'
-				})}>
-				<NavLinkIcon size={20} aria-expanded={open} name={icon} />
-				<NavlinkText aria-expanded={open}>{t(title, { defaultValue: title })}</NavlinkText>
+				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}>
+				<NavLinkIcon size={20} name={icon} />
+				<NavlinkText>{t(title, { defaultValue: title })}</NavlinkText>
 			</MenuLink>
 		</Tooltip>
 	)
@@ -118,18 +115,18 @@ const NavLink: React.FC<NavLinkProps> = ({ open, path, title, icon }) => {
 
 const Menu = tw.ul`flex flex-col gap-y-1 items-stretch py-6 overflow-x-hidden overflow-y-auto !scrollbar-none`
 const MenuItem = tw.li`whitespace-nowrap font-normal w-full [&>:first-child]:w-full`
-const Aside = tw.aside`z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 w-16 items-center shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden aria-expanded:items-stretch aria-expanded:@xl:w-80 aria-expanded:@[1920px]:w-88`
-const NavlinkText = tw.span`text-left text-base font-medium transition-[width_opacity] size-0 opacity-0 aria-expanded:size-auto aria-expanded:flex-1 aria-expanded:opacity-100 duration-150`
-const LogoWrapper = tw.div`space-y-0.5 transition-[width_opacity] aria-expanded:w-auto aria-expanded:opacity-100 w-0 opacity-0 duration-200`
+const Aside = tw.aside`group z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 w-16 items-center shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden has-[:checked]:items-stretch has-[:checked]:@xl:w-80 has-[:checked]:@[1920px]:w-88`
+const NavlinkText = tw.span`text-left text-base font-medium transition-[width_opacity] size-0 opacity-0 group-has-[:checked]:size-auto group-has-[:checked]:flex-1 group-has-[:checked]:opacity-100 duration-150`
+const LogoWrapper = tw.div`space-y-0.5 transition-[width_opacity] group-has-[:checked]:w-auto group-has-[:checked]:opacity-100 w-0 opacity-0 duration-200`
 
 const NavLinkIcon = tw(Icon)<IconProps>`
-	aria-expanded:basis-5 basis-full size-5
+	group-has-[:checked]:basis-5 basis-full size-5
 `
 const MenuLink = tw(Link)<React.ComponentProps<typeof Link>>`
-	group font-normal duration-0 focus-within:outline-none justify-center focus:ring-0 focus:ring-offset-transparent size-9 aria-expanded:flex aria-expanded:size-auto aria-expanded:justify-start aria-expanded:gap-x-3 aria-expanded:aspect-auto aspect-square
+	flex py-2 px-2 group-has-[:checked]:px-4 items-center justify-center whitespace-nowrap hover:bg-accent hover:text-accent-foreground rounded-md text-sm font-medium transition-colors duration-0 focus-within:outline-none focus:ring-0 focus:ring-offset-transparent size-9 group-has-[:checked]:flex group-has-[:checked]:size-auto group-has-[:checked]:justify-start group-has-[:checked]:gap-x-3 group-has-[:checked]:aspect-auto aspect-square
 `
 const LogoLink = tw(Link)<React.ComponentProps<typeof Link>>`
-	flex h-20 items-center aria-expanded:gap-x-3 aria-expanded:justify-start aria-expanded:aspect-auto px-2 aspect-square justify-center
+	flex h-20 items-center group-has-[:checked]:gap-x-3 group-has-[:checked]:justify-start group-has-[:checked]:aspect-auto px-2 aspect-square justify-center
 `
 
 export default memo(NavSidebar)

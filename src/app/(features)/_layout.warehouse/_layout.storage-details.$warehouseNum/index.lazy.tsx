@@ -1,5 +1,5 @@
 // #region Modules
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IWarehouseStorage } from '@/common/types/entities'
 import { Div, Separator } from '@/components/ui'
@@ -7,10 +7,9 @@ import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { format } from 'date-fns'
-import { Fragment, useCallback } from 'react'
+import { Fragment, useCallback, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
 import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
 import { WAREHOUSE_PROVIDE_TAG } from '../_apis/warehouse.api'
 import { warehouseStorageTypes } from '../_constants/warehouse.const'
@@ -33,26 +32,28 @@ function Page() {
 	const { searchParams } = useQueryParams()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
+	const { setBreadcrumb } = useBreadcrumbContext()
 
-	setBreadcrumb([
-		{
-			text: t('ns_common:navigation.warehouse_management'),
-			to: '/warehouse'
-		},
-		{
-			text: t('ns_common:navigation.storage_detail'),
-			to: '/warehouse/storage-details/$warehouseNum',
-			params: { warehouseNum },
-			search: searchParams
-		},
-		{
-			text: warehouseNum,
-			to: '/warehouse/storage-details/$warehouseNum',
-			params: { warehouseNum },
-			search: searchParams
-		}
-	])
+	useEffect(() => {
+		setBreadcrumb([
+			{
+				text: t('ns_common:navigation.warehouse_management'),
+				to: '/warehouse'
+			},
+			{
+				text: t('ns_common:navigation.storage_detail'),
+				to: '/warehouse/storage-details/$warehouseNum',
+				params: { warehouseNum },
+				search: searchParams
+			},
+			{
+				text: warehouseNum,
+				to: '/warehouse/storage-details/$warehouseNum',
+				params: { warehouseNum },
+				search: searchParams
+			}
+		])
+	}, [i18n.language])
 
 	const transformResponse = useCallback(
 		(response: ResponseBody<IWarehouseStorage[]>) => {

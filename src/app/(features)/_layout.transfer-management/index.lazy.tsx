@@ -1,8 +1,9 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useLayoutStore } from '../_stores/layout.store'
+
+import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
 import OrderDatalistDialog from './_components/-orders-datalist-dialog'
 import TransferOrderDetail from './_components/-transfer-order-detail'
 import TransferOrdersList from './_components/-transfer-orders-list'
@@ -12,9 +13,12 @@ export const Route = createLazyFileRoute('/(features)/_layout/transfer-managemen
 })
 
 function Page() {
-	const { t } = useTranslation()
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
-	setBreadcrumb([{ to: '/transfer-management', text: t('ns_common:navigation.transfer_managment') }])
+	const { t, i18n } = useTranslation()
+	const { setBreadcrumb } = useBreadcrumbContext()
+
+	useEffect(() => {
+		setBreadcrumb([{ to: '/transfer-management', text: t('ns_common:navigation.transfer_managment') }])
+	}, [i18n.language])
 
 	return (
 		<Fragment>

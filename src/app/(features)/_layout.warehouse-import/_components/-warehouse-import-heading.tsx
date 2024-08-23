@@ -1,5 +1,6 @@
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import { Div, Typography } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
+import ImportDataListDialog from './-warehouse-import-datalist-dialog'
 
 type Props = {}
 
@@ -14,10 +15,7 @@ const ProductionImportHeading = (props: Props) => {
 					Manage list of warehouse production import
 				</Typography>
 			</Div>
-			<Button size='sm'>
-				<Icon name='Plus' role='img' />
-				{t('ns_common:actions.add')}
-			</Button>
+			<ImportDataListDialog />
 		</Div>
 	)
 }

@@ -1,6 +1,7 @@
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import UnavailableService from '@/app/_components/_errors/-unavailable-service'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createLazyFileRoute('/(features)/_layout/warehouse-export/')({
@@ -8,11 +9,14 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse-export/'
 })
 
 function Page() {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
-	setBreadcrumb([{ to: '/warehouse-export', text: t('ns_common:navigation.export_management') }])
+	const { setBreadcrumb } = useBreadcrumbContext()
+
+	useEffect(() => {
+		setBreadcrumb([{ to: '/warehouse-export', text: t('ns_common:navigation.export_management') }])
+	}, [i18n.language])
 
 	return <UnavailableService />
 }

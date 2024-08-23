@@ -1,6 +1,6 @@
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { createFileRoute } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -14,10 +14,12 @@ export const Route = createFileRoute('/(features)/_layout/dashboard/')({
 })
 
 function Page() {
-	const { t } = useTranslation()
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
+	const { t, i18n } = useTranslation()
+	const { setBreadcrumb } = useBreadcrumbContext()
 
-	setBreadcrumb([{ to: '/dashboard', text: t('ns_common:navigation.dashboard') }])
+	useEffect(() => {
+		setBreadcrumb([{ to: '/dashboard', text: t('ns_common:navigation.dashboard') }])
+	}, [i18n.language])
 
 	return (
 		<Fragment>

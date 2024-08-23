@@ -1,10 +1,9 @@
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
 import ProductionImportHeading from './_components/-warehouse-import-heading'
 import ProductionImportList from './_components/-warehouse-import-list'
 
@@ -16,7 +15,7 @@ function Page() {
 	const { t, i18n } = useTranslation()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore(useShallow((state) => state.setBreadcrumb))
+	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
 		setBreadcrumb([{ to: '/warehouse-import', text: t('ns_common:navigation.import_management') }])

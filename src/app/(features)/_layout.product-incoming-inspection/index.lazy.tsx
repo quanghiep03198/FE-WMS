@@ -1,7 +1,7 @@
-import { useLayoutStore } from '@/app/(features)/_stores/layout.store'
+import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import InOutBoundOrderList from './_components/-io-order-list'
@@ -12,13 +12,16 @@ export const Route = createLazyFileRoute('/(features)/_layout/product-incoming-i
 })
 
 function Page() {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	// Set page breadcrumb navigation
-	const setBreadcrumb = useLayoutStore((state) => state.setBreadcrumb)
-	setBreadcrumb([
-		{ to: '/product-incoming-inspection', text: t('ns_common:navigation.production_incoming_inspection') }
-	])
+	const { setBreadcrumb } = useBreadcrumbContext()
+
+	useEffect(() => {
+		setBreadcrumb([
+			{ to: '/product-incoming-inspection', text: t('ns_common:navigation.production_incoming_inspection') }
+		])
+	}, [i18n.language])
 
 	return (
 		<Fragment>
