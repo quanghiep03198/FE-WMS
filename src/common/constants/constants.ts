@@ -10,6 +10,6 @@ export const locales: LocaleOptions = [
 ] as const
 
 export const RFID_READER_HOSTS = {
-	vi: [env('VITE_TEST_DB_HOST'), env('VITE_PRODUCTION_DB_HOST'), env('VITE_VN_DB_HOST_01'), env('VITE_VN_DB_HOST_02')],
-	km: [env('VITE_KM_DB_HOST_01'), env('VITE_KM_DB_HOST_02')]
+	VI: [env('VITE_TEST_DB_HOST'), env('VITE_PRODUCTION_DB_HOST'), env('VITE_VN_DB_HOST_01'), env('VITE_VN_DB_HOST_02')],
+	KM: [env('VITE_KM_DB_HOST_01'), env('VITE_KM_DB_HOST_02')]
 } as const
