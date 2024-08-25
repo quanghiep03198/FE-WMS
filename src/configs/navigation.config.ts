@@ -88,14 +88,6 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: '10',
-		icon: 'User',
-		title: 'navigation.profile',
-		path: '/preferences/profile',
-		type: 'preference',
-		keybinding: 'ctrl.alt.p'
-	},
-	{
-		id: '11',
 		icon: 'CircleUserRound',
 		title: 'navigation.account',
 		path: '/preferences/account',
@@ -103,7 +95,7 @@ export const navigationConfig: NavigationConfig[] = [
 		keybinding: 'ctrl.alt.a'
 	},
 	{
-		id: '12',
+		id: '11',
 		icon: 'Keyboard',
 		title: 'navigation.keyboard_shortcut',
 		path: '/preferences/keybindings',
@@ -111,9 +103,9 @@ export const navigationConfig: NavigationConfig[] = [
 		keybinding: 'alt.shift.k'
 	},
 	{
-		id: '13',
+		id: '12',
 		icon: 'Settings',
-		title: 'navigation.appearance',
+		title: 'navigation.settings',
 		path: '/preferences/appearance-settings',
 		type: 'preference',
 		keybinding: 'ctrl.alt.s'

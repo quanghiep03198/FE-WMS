@@ -1,10 +1,11 @@
-import { Badge, Div, Separator, Typography } from '@/components/ui'
+import { Badge, Div, Separator } from '@/components/ui'
 import DataTable from '@/components/ui/@react-table'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { NavigationConfig, navigationConfig } from '@/configs/navigation.config'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
 
 type CommandList = Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>[]
 
@@ -19,18 +20,18 @@ function KeybindingsPage() {
 		.map((item, index) => ({
 			id: String(index + 1),
 			title: t(item.title, { defaultValue: item.title }),
-			keybinding: String(item.keybinding).split('.').join('+')
+			keybinding: String(item.keybinding).split('.').join(' + ')
 		}))
 		.concat() as CommandList
 
 	const extendedCommands = [
 		{
 			title: t('actions.toggle_theme', { defaultValue: null }),
-			keybinding: 'ctrl+alt+t'
+			keybinding: 'ctrl + alt + t'
 		},
 		{
 			title: t('actions.logout', { defaultValue: null }),
-			keybinding: 'ctrl+q'
+			keybinding: 'ctrl + q'
 		}
 	].map((item, index) => ({ ...item, id: String(navigationConfig.length + index + 1) })) as CommandList
 
@@ -38,7 +39,7 @@ function KeybindingsPage() {
 
 	const columns = [
 		columnHelper.accessor('id', {
-			header: 'ID',
+			header: '#',
 			enableSorting: true,
 			enableResizing: false,
 			sortingFn: fuzzySort,
@@ -61,8 +62,8 @@ function KeybindingsPage() {
 			sortingFn: fuzzySort,
 			minSize: 240,
 			cell: ({ getValue }) => (
-				<Badge variant='secondary' className='font-mono'>
-					{getValue()}
+				<Badge variant='secondary'>
+					<kbd>{getValue()}</kbd>
 				</Badge>
 			)
 		})
@@ -70,12 +71,10 @@ function KeybindingsPage() {
 
 	return (
 		<Div className='space-y-6'>
-			<Div className='space-y-2'>
-				<Typography variant='h5'>{t('ns_common:navigation.keyboard_shortcut')}</Typography>
-				<Typography variant='small' color='muted'>
-					{t('ns_preference:captions.keybindings')}
-				</Typography>
-			</Div>
+			<PageHeader>
+				<PageTitle>{t('ns_common:navigation.keyboard_shortcut')}</PageTitle>
+				<PageDescription>{t('ns_preference:captions.keybindings')}</PageDescription>
+			</PageHeader>
 			<Separator />
 			<DataTable data={navigationCommands.concat(extendedCommands)} enableColumnResizing columns={columns} />
 		</Div>

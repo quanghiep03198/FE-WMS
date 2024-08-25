@@ -48,9 +48,6 @@ const featuresLayoutInventoryIndexLazyImport = createFileRoute(
 const featuresLayoutInoutboundIndexLazyImport = createFileRoute(
   '/(features)/_layout/inoutbound/',
 )()
-const featuresPreferencesLayoutProfileIndexLazyImport = createFileRoute(
-  '/(features)/preferences/_layout/profile/',
-)()
 const featuresPreferencesLayoutKeybindingsIndexLazyImport = createFileRoute(
   '/(features)/preferences/_layout/keybindings/',
 )()
@@ -199,18 +196,6 @@ const featuresLayoutDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => featuresLayoutRoute,
   } as any)
-
-const featuresPreferencesLayoutProfileIndexLazyRoute =
-  featuresPreferencesLayoutProfileIndexLazyImport
-    .update({
-      path: '/profile/',
-      getParentRoute: () => featuresPreferencesLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/preferences/_layout.profile/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
 
 const featuresPreferencesLayoutKeybindingsIndexLazyRoute =
   featuresPreferencesLayoutKeybindingsIndexLazyImport
@@ -397,13 +382,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresPreferencesLayoutKeybindingsIndexLazyImport
       parentRoute: typeof featuresPreferencesLayoutImport
     }
-    '/(features)/preferences/_layout/profile/': {
-      id: '/preferences/_layout/profile/'
-      path: '/profile'
-      fullPath: '/preferences/profile'
-      preLoaderRoute: typeof featuresPreferencesLayoutProfileIndexLazyImport
-      parentRoute: typeof featuresPreferencesLayoutImport
-    }
     '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/': {
       id: '/_layout/warehouse/_layout/storage-details/$warehouseNum/'
       path: '/warehouse/storage-details/$warehouseNum'
@@ -436,7 +414,6 @@ export const routeTree = rootRoute.addChildren({
           featuresPreferencesLayoutAccountIndexLazyRoute,
           featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute,
           featuresPreferencesLayoutKeybindingsIndexLazyRoute,
-          featuresPreferencesLayoutProfileIndexLazyRoute,
         }),
     }),
   }),
@@ -491,8 +468,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/preferences/_layout/account/",
         "/preferences/_layout/appearance-settings/",
-        "/preferences/_layout/keybindings/",
-        "/preferences/_layout/profile/"
+        "/preferences/_layout/keybindings/"
       ]
     },
     "/authorization/": {
@@ -547,10 +523,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/preferences/_layout/keybindings/": {
       "filePath": "(features)/preferences/_layout.keybindings/index.lazy.tsx",
-      "parent": "/preferences/_layout"
-    },
-    "/preferences/_layout/profile/": {
-      "filePath": "(features)/preferences/_layout.profile/index.lazy.tsx",
       "parent": "/preferences/_layout"
     },
     "/_layout/warehouse/_layout/storage-details/$warehouseNum/": {

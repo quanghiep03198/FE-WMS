@@ -23,6 +23,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
 import { AppearanceFormValues, appearanceFormSchema } from './_schemas/user-preference.schema'
 
 export const Route = createLazyFileRoute('/(features)/preferences/_layout/appearance-settings/')({
@@ -53,12 +54,10 @@ function Page() {
 
 	return (
 		<Div className='space-y-6'>
-			<Div className='space-y-2'>
-				<Typography variant='h5'>{t('ns_common:navigation.settings')}</Typography>
-				<Typography variant='small' color='muted'>
-					{t('ns_preference:captions.appearance')}
-				</Typography>
-			</Div>
+			<PageHeader>
+				<PageTitle>{t('ns_common:navigation.settings')}</PageTitle>
+				<PageDescription>{t('ns_preference:captions.appearance')}</PageDescription>
+			</PageHeader>
 			<Separator />
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit(handleSaveSettings)} className=''>

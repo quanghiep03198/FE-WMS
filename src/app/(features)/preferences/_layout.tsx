@@ -8,7 +8,6 @@ import LayoutComposition from './_components/_partials/-layout-composition'
 
 export const Route = createFileRoute('/(features)/preferences/_layout')({
 	component: Layout,
-
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({
