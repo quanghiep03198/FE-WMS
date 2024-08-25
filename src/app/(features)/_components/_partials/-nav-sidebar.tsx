@@ -1,6 +1,6 @@
+import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { $mediaQuery } from '@/common/utils/media-query'
 import { Icon, IconProps, Separator, Tooltip, Typography } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
@@ -8,7 +8,7 @@ import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { debounce } from 'lodash'
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
@@ -17,7 +17,7 @@ type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
-	const isExtraLargeScreen = useMediaQuery($mediaQuery({ minWidth: 1366 }))
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const [open, setOpen] = useState<boolean>(isExtraLargeScreen)
 	const checkboxRef = useRef<HTMLInputElement>(null)
 	const { user } = useAuth()
@@ -54,21 +54,21 @@ const NavSidebar: React.FC = () => {
 		})
 	}, [])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setOpen(isExtraLargeScreen)
 	}, [isExtraLargeScreen])
 
 	return (
 		<Aside>
 			<input
-				type='checkbox'
 				id='sidebar-toggle'
+				type='checkbox'
 				className='hidden appearance-none'
 				checked={open}
 				ref={checkboxRef}
-				onChange={(e) => setOpen(e.target.checked)}
+				onChange={(e) => setOpen(e.currentTarget.checked)}
 			/>
-			<LogoLink to='/dashboard' preload={false}>
+			<LogoLink to='/dashboard' preload='intent'>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
 				<LogoWrapper>
 					<AppLogo />
@@ -104,7 +104,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 			<MenuLink
 				to={path}
 				role='link'
-				preload={false}
+				preload='intent'
 				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}>
 				<NavLinkIcon size={20} name={icon} />
 				<NavlinkText>{t(title, { defaultValue: title })}</NavlinkText>
