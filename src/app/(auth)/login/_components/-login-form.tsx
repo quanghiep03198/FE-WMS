@@ -40,6 +40,7 @@ const LoginForm: React.FC = () => {
 		},
 		onSuccess: async (data, _variables, context) => {
 			setAccessToken(data?.metadata?.token) // Store user's access token
+			console.log(data)
 			toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError(_error, _variables, context) {
