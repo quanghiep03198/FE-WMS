@@ -44,7 +44,7 @@ function Page() {
 							<InoutboundForm />
 						</PageComposition.FormPanel>
 					</PageComposition.Main>
-				</PageComposition.Container>{' '}
+				</PageComposition.Container>
 			</PageProvider>
 		</Fragment>
 	)

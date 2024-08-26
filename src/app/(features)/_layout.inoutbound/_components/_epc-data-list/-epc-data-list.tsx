@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Typography } from '@/components/ui'
-import { useDeepCompareEffect, useVirtualList } from 'ahooks'
+import { useVirtualList } from 'ahooks'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -38,7 +38,7 @@ const EPCDatalist: React.FC = () => {
 	const warningRef = useRef<string | number | null>(null)
 
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
-	useDeepCompareEffect(() => {
+	useEffect(() => {
 		if (scanningStatus === 'scanning') {
 			setScannedEPCs(data?.datalist ?? [])
 			setScannedOrders(data?.orderList ?? [])
@@ -58,7 +58,7 @@ const EPCDatalist: React.FC = () => {
 	}, [data?.orderList, scanningStatus])
 
 	// Filter scanned result
-	useDeepCompareEffect(() => {
+	useEffect(() => {
 		if (scanningStatus === 'stopped' || scanningStatus === 'finished') {
 			const filteredData = Array.isArray(data?.datalist)
 				? data?.datalist?.filter((item) =>

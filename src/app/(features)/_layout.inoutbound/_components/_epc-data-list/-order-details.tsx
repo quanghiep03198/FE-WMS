@@ -111,7 +111,7 @@ const OrderDetails: React.FC = () => {
 										</TableBody>
 									</Table>
 								) : (
-									<Div className='inset-0 flex h-[50dvh] w-full items-center justify-center gap-x-2'>
+									<Div className='inset-0 flex h-full w-full items-center justify-center gap-x-2'>
 										<Icon name='Inbox' size={24} strokeWidth={1} />
 										No data
 									</Div>

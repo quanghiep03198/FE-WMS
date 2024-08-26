@@ -32,9 +32,9 @@ const ScannedEPCsCounter: React.FC = () => {
 
 const ScanningCounter: React.FC<{ scannedEPCs: IElectronicProductCode[] }> = memo(
 	({ scannedEPCs }) => {
-		const scannedCount = scannedEPCs?.length
+		const scannedCount = scannedEPCs?.length ?? 0
 		const { t } = useTranslation()
-		const count = useReactive({ value: scannedEPCs?.length, duration: undefined })
+		const count = useReactive({ value: scannedCount, duration: undefined })
 
 		// Counter increment/decrement effect
 		useInterval(() => {
