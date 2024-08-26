@@ -71,7 +71,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 							<CommandSeparator />
 							<CommandGroup heading='Settings'>
 								<CommandItem asChild>
-									<Link to='/preferences/profile'>
+									<Link to='/preferences/account'>
 										<PersonIcon className='mr-2 h-4 w-4' />
 										<Typography variant='small'>{t('ns_common:navigation.profile')}</Typography>
 										<CommandShortcut>ctrl+alt+P</CommandShortcut>
