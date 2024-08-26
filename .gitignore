@@ -35,3 +35,6 @@ _api
 
 # PWA dev
 dev-dist
+
+# Vitest
+html
