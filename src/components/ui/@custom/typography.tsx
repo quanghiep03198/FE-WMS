@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { forwardRef, memo, useRef } from 'react'
+import { forwardRef, useRef } from 'react'
 
 export type TypographyProps = {
 	as?: React.ElementType
@@ -39,19 +39,17 @@ export const typographyVariants = cva('', {
 	}
 })
 
-export const Typography = memo(
-	forwardRef<HTMLElement, TypographyProps>((props, ref) => {
-		const { as = 'p', className, children, color, variant, ...restProps } = props
+export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) => {
+	const { as = 'p', className, children, color, variant, ...restProps } = props
 
-		const localRef = useRef(null)
-		const resolvedRef = ref ?? localRef
+	const localRef = useRef(null)
+	const resolvedRef = ref ?? localRef
 
-		const Element = !variant || variant === 'default' || as ? as : (variant as React.ElementType)
+	const Element = !variant || variant === 'default' || as ? as : (variant as React.ElementType)
 
-		return (
-			<Element ref={resolvedRef} className={cn(typographyVariants({ variant, color, className }))} {...restProps}>
-				{children}
-			</Element>
-		)
-	})
-)
+	return (
+		<Element ref={resolvedRef} className={cn(typographyVariants({ variant, color, className }))} {...restProps}>
+			{children}
+		</Element>
+	)
+})
