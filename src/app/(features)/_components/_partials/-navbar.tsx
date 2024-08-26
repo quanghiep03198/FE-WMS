@@ -1,5 +1,5 @@
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
-import { BreakPoints } from '@/common/constants/enums'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
 	const [open, setOpen] = React.useState<boolean>(false)
 	const { logout } = useAuth()
 
-	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
 	useKeyPress('ctrl.q', (e) => {
 		e.preventDefault()

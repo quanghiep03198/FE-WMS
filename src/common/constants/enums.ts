@@ -10,7 +10,7 @@ export enum Languages {
 	CHINESE = 'cn'
 }
 
-export enum BreakPoints {
+export enum PresetBreakPoints {
 	SMALL = '(min-width: 320px) and (max-width: 599px)',
 	MEDIUM = '(min-width: 600px) and (max-width: 1023px)',
 	LARGE = '(min-width: 1024px) and (max-width: 1365px)',

@@ -2,7 +2,7 @@ import AppLogo from '@/app/_components/_shared/-app-logo'
 import { LanguageDropdown, LanguageSelect } from '@/app/_components/_shared/-language-selector'
 import ThemeDropdownSelect from '@/app/_components/_shared/-theme-dropdown-select'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
-import { BreakPoints } from '@/common/constants/enums'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -122,7 +122,7 @@ const NavHeaderActions: React.FC = memo(() => {
 const NavHeaderDrawerMenu: React.FC = memo(() => {
 	const { handleMenuClick } = usePageContext()
 	const [open, setOpen] = useState(false)
-	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
 	useEffect(() => {
 		if (!isSmallScreen) setOpen(false)

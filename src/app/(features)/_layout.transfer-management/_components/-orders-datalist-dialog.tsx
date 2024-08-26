@@ -1,4 +1,4 @@
-import { BreakPoints } from '@/common/constants/enums'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { ITransferOrderData } from '@/common/types/entities'
 import {
@@ -32,7 +32,7 @@ import OrderDatalistSearchForm from './-order-datalist-search-form'
 const OrderDatalistDialog: React.FC = () => {
 	const { datalistDialogOpen, toggleDatalistDialogOpen } = usePageStore()
 	const { t, i18n } = useTranslation()
-	const isSmallScreen = useMediaQuery(BreakPoints.SMALL)
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const tableRef = useRef<Table<any>>(null)
 	const update = useUpdate()
 
