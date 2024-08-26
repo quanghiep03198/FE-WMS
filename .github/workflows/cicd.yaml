@@ -47,7 +47,7 @@ jobs:
          - name: Pull latest code from Github
            run: |
               cd C:\Users\Administrator\i-wms\client
-              git pull origin develop
+              git reset --hard origin/develop
 
          - name: Install dependencies
            run: |
