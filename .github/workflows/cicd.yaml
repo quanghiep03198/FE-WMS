@@ -1,4 +1,4 @@
-name: Deploy React App to Windows Server (Self-hosted)
+name: Deploy app to Windows Server (Self-hosted)
 
 on:
    push:
@@ -47,7 +47,12 @@ jobs:
          - name: Pull latest code from Github
            run: |
               cd C:\Users\Administrator\i-wms\client
-              git reset --hard origin/develop
+              try {
+                  git pull origin develop
+              } catch {
+                  Write-Host "Conflict detected, performing hard reset..."
+                  git reset --hard origin/develop
+              }
 
          - name: Install dependencies
            run: |
