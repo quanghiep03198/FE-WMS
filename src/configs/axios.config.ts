@@ -10,19 +10,6 @@ export class AxiosClient {
 	private isRefreshing: boolean = false
 	private failedQueue: Array<AxiosErrorFilter> = []
 
-	/**
-	 * @description Processes the failed request by resolving or rejecting each promise with the provided token or error.
-	 * @param {AxiosError} error - The error to reject the promises with, or null if the token is valid.
-	 * @param {string} token - The token to resolve the promises with.
-	 * @return {void}
-	 */
-	private processRequestQueue = (error: AxiosError, token: string): void => {
-		this.failedQueue.forEach(({ resolve, reject }) => {
-			error ? reject(error) : resolve(token)
-		})
-		this.failedQueue = []
-	}
-
 	constructor(baseURL?: string) {
 		// * Instance configuration
 		this.instance = axios.create({
@@ -66,6 +53,7 @@ export class AxiosClient {
 				const errorResponseStatus = error.response?.status
 
 				if (originalRequest && !originalRequest.retry && errorResponseStatus === HttpStatusCode.Unauthorized) {
+					originalRequest.retry = true
 					console.error('[ERROR] ::: Log in session has expired.')
 
 					const user = AuthService.getCredentials()
@@ -74,6 +62,7 @@ export class AxiosClient {
 						return Promise.reject(new Error('Invalid credentials'))
 					}
 
+					// * Push all failed request due to expired token, then process them one by one
 					if (this.isRefreshing) {
 						return new Promise((resolve, reject) => {
 							this.failedQueue.push({ resolve, reject })
@@ -85,15 +74,13 @@ export class AxiosClient {
 							.catch((error) => Promise.reject(error))
 					}
 
-					originalRequest.retry = true
 					this.isRefreshing = true
-
 					try {
 						const response = await AuthService.refreshToken(user?.id)
-						AuthService.setAccessToken(response.metadata)
-						error.config.headers.Authorization = `Bearer ${response.metadata}`
-						this.processRequestQueue(null, response.metadata)
-						return this.instance.request(originalRequest)
+						const refreshToken = response.metadata
+						AuthService.setAccessToken(refreshToken)
+						originalRequest.headers.Authorization = `Bearer ${refreshToken}`
+						this.processRequestQueue(null, refreshToken)
 					} catch (error) {
 						this.processRequestQueue(error, null)
 						AuthService.logout()
@@ -106,6 +93,20 @@ export class AxiosClient {
 				return Promise.reject(error)
 			}
 		)
+	}
+
+	/**
+	 * @private
+	 * @description Processes the failed request by resolving or rejecting each promise with the provided token or error.
+	 * @param {AxiosError} error - The error to reject the promises with, or null if the token is valid.
+	 * @param {string} token - The token to resolve the promises with.
+	 * @return {void}
+	 */
+	private processRequestQueue = (error: AxiosError, token: string): void => {
+		this.failedQueue.forEach(({ resolve, reject }) => {
+			error ? reject(error) : resolve(token)
+		})
+		this.failedQueue = []
 	}
 }
 
