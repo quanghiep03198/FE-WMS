@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-npm run prettier:fix && npm run eslint:fix && npm run build
+npm run prettier:fix && npm run eslint:fix
