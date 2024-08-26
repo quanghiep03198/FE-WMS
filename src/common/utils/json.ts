@@ -1,13 +1,20 @@
-export class _JSON {
+import { isNil } from 'lodash'
+import { Util } from './util'
+
+/**
+ * JSON strictify handler
+ * @class
+ */
+export class JSONs {
 	/**
 	 * @description Check if string is valid JSON
-	 * @param arg
+	 * @param value
 	 * @returns
 	 */
-	public static valid(arg: string | null) {
+	public static isValid(value: string | null) {
 		try {
-			if (!arg) return false
-			return !!JSON.parse(arg)
+			if (isNil(value)) return false
+			return !!JSON.parse(value)
 		} catch (error) {
 			return false
 		}
@@ -19,15 +26,8 @@ export class _JSON {
 	 * @returns
 	 */
 	public static parse<T>(value: any): T | null | string {
-		try {
-			if (typeof value !== 'string') {
-				throw new Error(`Cannot safe json parse value of type "${typeof value}"`)
-			}
-			if (!_JSON.valid(value)) return value
-			return JSON.parse(value)
-		} catch (error) {
-			return null
-		}
+		if (!JSONs.isValid(value)) return value
+		return JSON.parse(value)
 	}
 
 	/**
@@ -36,8 +36,6 @@ export class _JSON {
 	 * @returns
 	 */
 	public static stringify(value: any): string {
-		return typeof value === 'string'
-			? value
-			: JSON.stringify(value, (_k: string, value: any) => (typeof value === 'undefined' ? null : value))
+		return Util.isPrimitive(value) ? value : JSON.stringify(value)
 	}
 }
