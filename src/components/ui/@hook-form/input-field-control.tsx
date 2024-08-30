@@ -56,16 +56,17 @@ export function InputFieldControl<T extends FieldValues>(
 				return (
 					<FormItem
 						className={cn({
-							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal',
+							'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal',
 							hidden: type === 'hidden' || hidden
 						})}>
 						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 						<FormControl>
 							<Input
 								id={id}
-								className={cn(className, {
-									'border-destructive focus:!border-destructive': !!getFieldState(name).error
-								})}
+								className={cn(
+									className,
+									getFieldState(name).error && 'border-destructive bg-background focus:border-destructive'
+								)}
 								value={value}
 								placeholder={placeholder}
 								ref={(e) => {

@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { forwardRef, useId, useRef } from 'react'
-import { FieldValues } from 'react-hook-form'
+import { FieldValues, useFormContext } from 'react-hook-form'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 import { TextareaProps } from '../@core/textarea'
@@ -11,6 +11,8 @@ function TextareaFieldControl<T extends FieldValues>(
 	props: TextareaFieldControlProps<T> & React.PropsWithoutRef<T> & React.RefAttributes<T>,
 	ref: React.ForwardedRef<HTMLTextAreaElement>
 ) {
+	const { getFieldState, getValues } = useFormContext()
+
 	const {
 		label,
 		name,
@@ -21,6 +23,7 @@ function TextareaFieldControl<T extends FieldValues>(
 		description,
 		hidden,
 		orientation,
+		defaultValue = getValues(name),
 		onChange,
 		...restProps
 	} = props
@@ -34,9 +37,9 @@ function TextareaFieldControl<T extends FieldValues>(
 			name={name}
 			render={({ field }) => (
 				<FormItem
-					className={cn(className, {
-						hidden: hidden,
-						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
+					className={cn({
+						hidden,
+						'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
 					})}>
 					{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 					<FormControl>
@@ -44,6 +47,10 @@ function TextareaFieldControl<T extends FieldValues>(
 							{...field}
 							id={id}
 							placeholder={placeholder}
+							className={cn(
+								className,
+								getFieldState(name).error && 'border-destructive focus:border-destructive'
+							)}
 							value={field.value}
 							disabled={disabled}
 							onChange={(e) => {
@@ -54,8 +61,9 @@ function TextareaFieldControl<T extends FieldValues>(
 								field.ref(e)
 								resolvedRef.current = e
 							}}
-							{...restProps}
-						/>
+							{...restProps}>
+							{defaultValue}
+						</Textarea>
 					</FormControl>
 					{description && <FormDescription>{description}</FormDescription>}
 					<FormMessage />

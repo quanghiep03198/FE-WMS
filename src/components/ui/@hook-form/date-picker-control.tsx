@@ -3,7 +3,6 @@ import { format } from 'date-fns'
 import { Fragment, useId } from 'react'
 import { FieldValues } from 'react-hook-form'
 import {
-	Button,
 	Calendar,
 	CalendarProps,
 	FormControl,
@@ -16,7 +15,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	Typography
+	buttonVariants
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 
@@ -46,20 +45,23 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 				<FormItem
 					className={cn({
 						hidden,
-						'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
+						'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
 					})}>
 					{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 					<Popover>
-						<PopoverTrigger asChild>
+						<PopoverTrigger
+							id={id}
+							className={cn(
+								buttonVariants({
+									variant: 'outline',
+									className:
+										'w-full justify-start text-left font-normal hover:bg-background focus:border-primary'
+								}),
+								!field.value && 'text-muted-foreground'
+							)}>
 							<FormControl>
-								<Button
-									variant={'outline'}
-									id={id}
-									className={cn(
-										'flex w-full items-center justify-start gap-x-2 space-x-2 pl-3 text-left font-normal',
-										!field.value && 'text-muted-foreground'
-									)}>
-									<Icon name='Calendar' />
+								<Fragment>
+									<Icon name='Calendar' role='img' />
 									{calendarProps.mode === 'range' || calendarProps.mode === 'multiple' ? (
 										<Fragment>
 											{field.value?.from ? (
@@ -72,19 +74,13 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 													format(field.value.from, 'LLL dd, y')
 												)
 											) : (
-												<Typography>Pick a date</Typography>
+												'Pick a date'
 											)}
 										</Fragment>
 									) : (
-										<Fragment>
-											{field.value ? (
-												<Typography>{format(field.value, 'PPP')}</Typography>
-											) : (
-												<Typography>Pick a date</Typography>
-											)}
-										</Fragment>
+										<Fragment>{field.value ? format(field.value, 'PPP') : 'Pick a date'}</Fragment>
 									)}
-								</Button>
+								</Fragment>
 							</FormControl>
 						</PopoverTrigger>
 						<PopoverContent className='w-auto p-0' align='start'>

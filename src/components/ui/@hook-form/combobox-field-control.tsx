@@ -1,9 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
-import { useId, useMemo, useRef, useState } from 'react'
+import { Fragment, useId, useMemo, useState } from 'react'
 import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import {
-	Button,
 	ButtonProps,
 	Command,
 	CommandEmpty,
@@ -22,7 +21,8 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	Typography
+	Typography,
+	buttonVariants
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 
@@ -71,7 +71,6 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	} = props
 
 	const id = useId()
-	const triggerRef = useRef<typeof Button.prototype>(null)
 
 	const options = useMemo(() => {
 		if (!Array.isArray(data)) return []
@@ -101,33 +100,34 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 					<FormItem
 						className={cn({
 							hidden: hidden,
-							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
+							'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
 						})}>
 						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 						<FormControl>
 							<Popover>
-								<PopoverTrigger asChild>
+								<PopoverTrigger
+									id={id}
+									disabled={disabled}
+									className={cn(
+										buttonVariants({
+											variant: 'outline',
+											className:
+												'w-full justify-between font-normal hover:bg-background focus:border-primary'
+										}),
+										triggerProps?.className,
+										form.getFieldState(name).error && 'border-destructive focus:border-destructive'
+									)}
+									{...triggerProps}>
 									<FormControl>
-										<Button
-											{...triggerProps}
-											id={id}
-											ref={triggerRef}
-											role='combobox'
-											variant='outline'
-											disabled={disabled}
-											className={cn(
-												triggerProps?.className,
-												'w-full justify-between font-normal hover:bg-background',
-												form.getFieldState(name).error && 'border-destructive'
-											)}>
+										<Fragment>
 											<Typography variant='small' className='line-clamp-1'>
 												{renderCurrentValue(field.value)}
 											</Typography>
 											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
-										</Button>
+										</Fragment>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent style={{ padding: 0, width: triggerRef.current?.offsetWidth }}>
+								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0'>
 									<Command shouldFilter={shouldFilter}>
 										<CommandInput
 											placeholder={placeholder}

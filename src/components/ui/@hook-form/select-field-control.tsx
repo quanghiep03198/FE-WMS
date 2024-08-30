@@ -53,7 +53,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 					<FormItem
 						className={cn({
 							hidden,
-							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal'
+							'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
 						})}>
 						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 						<Select
@@ -70,10 +70,10 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 								id={id}
 								disabled={field.disabled}
 								className={cn(
-									'bg-background',
+									'bg-background focus:border-primary',
 									className,
 									Boolean(getFieldState(name).error) &&
-										'!border-destructive focus:!border-destructive focus:!ring-0 active:!border-destructive'
+										'w-full border-destructive focus:border-destructive active:border-destructive'
 								)}>
 								<SelectValue placeholder={!field.value && placeholder} />
 							</SelectTrigger>
