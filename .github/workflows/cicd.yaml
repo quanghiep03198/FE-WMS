@@ -40,23 +40,56 @@ jobs:
          - name: Unit testing
            run: npm run test
 
+   # build:
+   #    needs: test
+   #    runs-on: self-hosted # Chạy trên self-hosted runner
+   #    steps:
+   #       - name: Checkout code
+   #         uses: actions/checkout@v4
+
+   #       - name: Set up Node.js
+   #         uses: actions/setup-node@v4
+   #         with:
+   #            node-version: '20'
+
+   #       - name: Install dependencies
+   #         run: npm ci
+
+   #       - name: Generate PWA assets
+   #         run: npm run generate-pwa-assets
+
+   #       - name: Build the React app
+   #         run: npm run build
+
+   #       - name: Archive production artifacts
+   #         uses: actions/upload-artifact@v4
+   #         with:
+   #            name: build-artifacts
+   #            path: dist
+
    deploy:
       runs-on: self-hosted
-      needs: test
+      needs: build
       steps:
-         - name: Pull latest code from Github
+         - name: Pull latest code from Github and rebuild
            run: |
-              cd C:/Users/Administrator/i-wms/client
+              cd C:\Users\Administrator\i-wms\client
               git reset --hard origin/develop
+              npm ci
 
          - name: Install dependencies
            run: npm ci
 
-         - name: Generate PWA assets
-           run: npm run generate-pwa-assets
-
          - name: Build the React app
-           run: npm run build
+           run: |
+              npm run build -- --output-path=dist
+              echo "Coppying build files ..."
+              Remove-Item -Recurse -Force C:\Users\Administrator\i-wms\client\dist
+              Copy-Item -Recurse -Force dist C:\Users\Administrator\i-wms\client\dist
+              echo "Coppied build files"
 
-         - name: Restart PM2 process
-           run: pm2 restart 'wms-client' --update-env
+         - name: Deploy to Windows Server
+           run: |
+              echo "Starting deployment ..."
+              pm2 restart 'wms-client' --update-env
+              echo "Deployment complete"
