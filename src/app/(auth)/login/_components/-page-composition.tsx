@@ -51,7 +51,7 @@ const FormFieldset: React.FC = () => {
 	)
 
 	return (
-		<Stepper.Provider data={steps}>
+		<Stepper.Provider data={steps} enableChangeStep={false}>
 			<Stepper.Panel value={1}>
 				<LoginForm />
 			</Stepper.Panel>
