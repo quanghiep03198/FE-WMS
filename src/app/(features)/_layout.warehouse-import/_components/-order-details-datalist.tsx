@@ -13,10 +13,9 @@ import { useGetProductionImportListQuery } from '../_apis/use-warehouse-import.a
 
 const ProductionImportList: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { data, refetch } = useGetProductionImportListQuery()
+	const { data, isLoading, refetch } = useGetProductionImportListQuery()
 	const tableInstanceRef = useLatest<Table<IProductionImportOrder>>(null)
 	const [rowSelectionType, setRowSelectionType] = useResetState<RowSelectionType>(undefined)
-
 	const columnHelper = createColumnHelper()
 
 	const columns = useMemo(
@@ -56,7 +55,7 @@ const ProductionImportList: React.FC = () => {
 			}),
 			columnHelper.accessor('sno_no', {
 				id: 'sno_no',
-				header: t('ns_inoutbound:fields.sno_no'),
+				header: t('ns_erp:fields.sno_no'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
@@ -64,8 +63,7 @@ const ProductionImportList: React.FC = () => {
 			}),
 			columnHelper.accessor('status_approve', {
 				id: 'status_approve',
-
-				header: t('ns_inoutbound:fields.status_approve'),
+				header: t('ns_erp:fields.status_approve'),
 				cell: ({ row }) => (
 					<Checkbox
 						aria-label='Select row'
@@ -85,7 +83,7 @@ const ProductionImportList: React.FC = () => {
 			}),
 			columnHelper.accessor('active_date', {
 				id: 'active_date',
-				header: t('ns_inoutbound:fields.sno_date'),
+				header: t('ns_erp:fields.sno_date'),
 				cell: ({ getValue }) => format(getValue() as Date, 'yyyy/MM/dd'),
 				meta: { filterVariant: 'date' },
 				filterFn: 'inDateRange',
@@ -162,11 +160,13 @@ const ProductionImportList: React.FC = () => {
 	return (
 		<DataTable
 			data={data}
+			loading={isLoading}
 			columns={columns}
 			ref={tableInstanceRef}
 			enableRowSelection={true}
+			containerProps={{ className: 'h-[50vh] xxl:h-[60vh]' }}
 			toolbarProps={{
-				slot: ({ table }) => (
+				slotRight: ({ table }) => (
 					<Fragment>
 						{table.getIsSomeRowsSelected() && rowSelectionType == 'multiple' && (
 							<Tooltip message={t('ns_common:actions.delete')} triggerProps={{ asChild: true }}>

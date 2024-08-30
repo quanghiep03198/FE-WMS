@@ -1,22 +1,25 @@
 import { IProductionImportOrder } from '@/common/types/entities'
-import { ProductionImportService } from '@/services/production-import.service'
+import { ProductionImportResponse, ProductionImportService } from '@/services/production-import.service'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InventoryListType } from '../_constants/warehouse-import.enum'
+import { usePageContext } from '../_contexts/-page-context'
 
 export const PRODUCTION_IMPORT_PROVIDE_TAG = 'PRODUCTION_IMPORT'
 export const PRODUCTION_IMPORT_DATALIST_PROVIDE_TAG = 'PRODUCTION_IMPORT_DATALIST'
 
 export const useGetProductionImportListQuery = () => {
 	const { t, i18n } = useTranslation()
-
+	const { setOrderCount } = usePageContext()
 	// Transform warehouse response data
 	const transformResponse = useCallback(
-		(response: ResponseBody<IProductionImportOrder[]>) => {
-			const { metadata } = response
-			return Array.isArray(metadata)
-				? metadata.map((item) => ({
+		(response: ProductionImportResponse): IProductionImportOrder[] => {
+			const { data, count } = response.metadata
+			setOrderCount(count ?? 0)
+
+			return Array.isArray(data)
+				? data.map((item) => ({
 						...item,
 						status_approve: Boolean(item.is_disable),
 						type_inventorylist: t(InventoryListType[item.type_warehouse], {

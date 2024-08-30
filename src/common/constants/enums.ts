@@ -10,6 +10,13 @@ export enum Languages {
 	CHINESE = 'cn'
 }
 
+export enum CofactoryRef {
+	VA1 = 'A',
+	VB1 = 'B',
+	VB2 = 'C',
+	CA1 = 'K'
+}
+
 export enum PresetBreakPoints {
 	SMALL = '(min-width: 320px) and (max-width: 599px)',
 	MEDIUM = '(min-width: 600px) and (max-width: 1023px)',

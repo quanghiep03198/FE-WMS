@@ -1,8 +1,8 @@
 import { ResourceKeys } from 'i18next'
 
-export const warehouseImportType: Record<'A' | 'B' | 'C' | 'D', ResourceKeys['ns_inoutbound']> = {
-	A: 'inventory_list_type.A',
-	B: 'inventory_list_type.B',
-	C: 'inventory_list_type.C',
-	D: 'inventory_list_type.D'
-} as const
+export const InoutboundOrderTypes = {
+	'inventory_list_type.finished_goods_dispatch': 'A',
+	'inventory_list_type.finished_goods_receipt': 'B',
+	'inventory_list_type.outbound_shipment_receipt': 'C',
+	'inventory_list_type.inbound_shipment_receipt': 'D'
+} as Record<ResourceKeys['ns_erp'], 'A' | 'B' | 'C' | 'D'>

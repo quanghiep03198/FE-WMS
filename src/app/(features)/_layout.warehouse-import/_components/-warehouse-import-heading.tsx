@@ -1,6 +1,7 @@
-import { Div, Typography } from '@/components/ui'
+import { Div } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import ImportDataListDialog from './-warehouse-import-datalist-dialog'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
+import ImportDataListDialog from './-import-order-datalist-dialog'
 
 type Props = {}
 
@@ -9,12 +10,10 @@ const ProductionImportHeading = (props: Props) => {
 
 	return (
 		<Div className='flex justify-between'>
-			<Div className='space-y-1'>
-				<Typography variant='h6'>Production Import List</Typography>
-				<Typography variant='small' color='muted'>
-					Manage list of warehouse production import
-				</Typography>
-			</Div>
+			<PageHeader className='space-y-1'>
+				<PageTitle>Production Import List</PageTitle>
+				<PageDescription>Manage list of warehouse production import</PageDescription>
+			</PageHeader>
 			<ImportDataListDialog />
 		</Div>
 	)
