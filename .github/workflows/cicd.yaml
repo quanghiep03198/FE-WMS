@@ -46,13 +46,8 @@ jobs:
       steps:
          - name: Pull latest code from Github
            run: |
-              cd C:\Users\Administrator\i-wms\client
-              try {
-                  git pull origin develop
-              } catch {
-                  Write-Host "Conflict detected, performing hard reset..."
-                  git reset --hard origin/develop
-              }
+              cd C:/Users/Administrator/i-wms/client
+              git reset --hard origin/develop
 
          - name: Install dependencies
            run: npm ci
