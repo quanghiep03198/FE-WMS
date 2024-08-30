@@ -7,8 +7,8 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { Table, createColumnHelper } from '@tanstack/react-table'
-import { useLatest, useResetState } from 'ahooks'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { useResetState } from 'ahooks'
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	useDeleteWarehouseMutation,
@@ -25,7 +25,7 @@ const WarehouseList: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const tableRef = useLatest<Table<IWarehouse>>(null)
+	const tableRef = useRef<Table<IWarehouse>>(null)
 	const { dispatch } = usePageContext()
 
 	// Handle reset row deletion
@@ -207,6 +207,7 @@ const WarehouseList: React.FC = () => {
 				enableResizing: false,
 				enableHiding: false,
 				enablePinning: false,
+				meta: { align: 'center' },
 				cell: ({ row }) => (
 					<WarehouseRowActions
 						row={row}
@@ -247,7 +248,7 @@ const WarehouseList: React.FC = () => {
 				containerProps={{ style: { height: (screen.height * 40) / 100 } }}
 				ref={tableRef}
 				toolbarProps={{
-					slot: ({ table }) => (
+					slotRight: ({ table }) => (
 						<Fragment>
 							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType == 'multiple' && (
 								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>

@@ -70,7 +70,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 							role='checkbox'
 							checked={checked as CheckedState}
 							onCheckedChange={(checkedState) => {
-								table.toggleAllPageRowsSelected(!!checkedState)
+								table.toggleAllRowsSelected(!!checkedState)
 								if (checkedState) setRowSelectionType('multiple')
 							}}
 						/>
@@ -229,7 +229,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				enableColumnFilters={true}
 				enableRowSelection={true}
 				toolbarProps={{
-					slot: ({ table }) => (
+					slotRight: ({ table }) => (
 						<Fragment>
 							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType === 'multiple' && (
 								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
