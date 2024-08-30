@@ -1,4 +1,3 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Icon, IconProps, Separator, Tooltip, Typography } from '@/components/ui'
@@ -17,7 +16,7 @@ type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
-	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
+	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const [open, setOpen] = useState<boolean>(true)
 	const checkboxRef = useRef<HTMLInputElement>(null)
 	const { user } = useAuth()
@@ -55,15 +54,16 @@ const NavSidebar: React.FC = () => {
 	}, [])
 
 	useLayoutEffect(() => {
-		setOpen(isExtraLargeScreen)
-	}, [isExtraLargeScreen])
+		if (isMobileScreen) {
+			setOpen(false)
+		}
+	}, [isMobileScreen])
 
 	return (
 		<Aside>
-			<input
+			<SidebarToggleTrigger
 				id='sidebar-toggle'
 				type='checkbox'
-				className='hidden appearance-none'
 				checked={open}
 				ref={checkboxRef}
 				onChange={(e) => setOpen(e.currentTarget.checked)}
@@ -118,6 +118,7 @@ const MenuItem = tw.li`whitespace-nowrap font-normal w-full [&>:first-child]:w-f
 const Aside = tw.aside`group z-50 flex h-screen flex-col overflow-y-auto overflow-x-hidden bg-background px-3 pb-6 w-16 items-center shadow transition-width duration-200 ease-in-out scrollbar-none sm:hidden md:hidden has-[:checked]:items-stretch has-[:checked]:@xl:w-80 has-[:checked]:@[1920px]:w-88`
 const NavlinkText = tw.span`text-left text-base font-medium transition-[width_opacity] size-0 opacity-0 group-has-[:checked]:size-auto group-has-[:checked]:flex-1 group-has-[:checked]:opacity-100 duration-150`
 const LogoWrapper = tw.div`space-y-0.5 transition-[width_opacity] group-has-[:checked]:w-auto group-has-[:checked]:opacity-100 w-0 opacity-0 duration-200`
+const SidebarToggleTrigger = tw.input`hidden appearance-none`
 
 const NavLinkIcon = tw(Icon)<IconProps>`
 	group-has-[:checked]:basis-5 basis-full size-5
