@@ -18,7 +18,7 @@ type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
-	const [open, setOpen] = useState<boolean>(isExtraLargeScreen)
+	const [open, setOpen] = useState<boolean>(true)
 	const checkboxRef = useRef<HTMLInputElement>(null)
 	const { user } = useAuth()
 
