@@ -18,12 +18,10 @@ import {
 	SheetContent,
 	SheetHeader,
 	SheetTrigger,
-	Tooltip,
 	buttonVariants
 } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import { memo, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
@@ -80,20 +78,12 @@ const NavHeaderMenu: React.FC = memo(() => {
 
 const NavHeaderActions: React.FC = memo(() => {
 	const { isAuthenticated } = useAuth()
-	const { t } = useTranslation()
+	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	return (
-		<Div className='flex items-center justify-end gap-x-1 self-center'>
-			<Div className='hidden lg:block xl:block'>
-				<Tooltip
-					message={t('ns_common:actions.toggle_theme')}
-					triggerProps={{ className: buttonVariants({ size: 'icon', variant: 'ghost' }) }}>
-					<ThemeToggle />
-				</Tooltip>
-			</Div>
-			<Div className='hidden lg:block xl:block'>
-				<LanguageDropdown />
-			</Div>
+		<Div className='flex items-center justify-end gap-x-1 self-center sm:gap-0 md:gap-0'>
+			{!isSmallScreen && <ThemeToggle />}
+			{!isSmallScreen && <LanguageDropdown />}
 			{isAuthenticated ? (
 				<Link
 					to='/dashboard'

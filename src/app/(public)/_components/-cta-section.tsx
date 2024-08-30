@@ -40,7 +40,7 @@ const CTASection: React.FC = () => {
 				</Div>
 			</Div>
 			<Div className='flex h-full w-full flex-grow flex-col items-center justify-center'>
-				<Image rel='preload' loading='eager' src={GlobalTransportImage} />
+				<Image loading='eager' width='500' height='500' src={GlobalTransportImage} alt='Global transport' />
 			</Div>
 		</Div>
 	)

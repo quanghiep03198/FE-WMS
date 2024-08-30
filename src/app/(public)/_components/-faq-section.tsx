@@ -51,7 +51,7 @@ const FAQsSection: React.FunctionComponent = () => {
 				</Accordion>
 			</Div>
 			<Div className='flex w-full flex-grow basis-1/3 items-center justify-center sm:basis-full md:basis-full'>
-				<Image src={FAQsImage} alt='Support' />
+				<Image src={FAQsImage} alt='Support' width='320' height='320' />
 			</Div>
 		</Div>
 	)
