@@ -26,7 +26,8 @@ export const typographyVariants = cva('', {
 		color: {
 			default: 'text-[inherit]',
 			primary: 'text-primary',
-			accent: 'accent',
+			accent: 'text-accent',
+			active: 'text-active',
 			secondary: 'text-secondary',
 			muted: 'text-muted-foreground',
 			success: 'text-success',
