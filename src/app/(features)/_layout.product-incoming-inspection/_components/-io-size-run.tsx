@@ -11,9 +11,9 @@ const InoutBoundSizeRun: React.FC = () => {
 				<TableCaption>Size run</TableCaption>
 				<TableHeader>
 					<TableRow>
-						<TableHead className='w-20'>{t('ns_inoutbound:fields.sno_size')}</TableHead>
-						<TableHead className='w-40'>{t('ns_inoutbound:fields.sno_type')}</TableHead>
-						<TableHead className='w-40'>{t('ns_inoutbound:fields.sno_total')}</TableHead>
+						<TableHead className='w-20'>{t('ns_erp:fields.sno_size')}</TableHead>
+						<TableHead className='w-40'>{t('ns_erp:fields.sno_type')}</TableHead>
+						<TableHead className='w-40'>{t('ns_erp:fields.sno_total')}</TableHead>
 						<TableHead className='w-16'>38</TableHead>
 						<TableHead className='w-16'>39</TableHead>
 						<TableHead className='w-16'>40</TableHead>

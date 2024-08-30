@@ -10,7 +10,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 		<List role='subrow'>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.sno_no')}
+					{t('ns_erp:fields.sno_no')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -18,7 +18,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.container_order_code')}
+					{t('ns_erp:fields.container_order_code')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -26,7 +26,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.order_qty')}
+					{t('ns_erp:fields.order_qty')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -34,7 +34,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.order_qty')}
+					{t('ns_erp:fields.order_qty')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -42,7 +42,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.conversion_rate')}
+					{t('ns_erp:fields.conversion_rate')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -50,7 +50,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.required_date')}
+					{t('ns_erp:fields.required_date')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -58,7 +58,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium' role='cell'>
-					{t('ns_inoutbound:fields.uninspected_qty')}
+					{t('ns_erp:fields.uninspected_qty')}
 				</Typography>
 				<Badge variant='secondary' role='cell'>
 					-
@@ -66,7 +66,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 			</ListItem>
 			<ListItem role='row'>
 				<Typography className='whitespace-nowrap text-sm font-medium'>
-					{t('ns_inoutbound:fields.inspected_qty')}
+					{t('ns_erp:fields.inspected_qty')}
 				</Typography>
 				<Badge variant='secondary'>-</Badge>
 			</ListItem>

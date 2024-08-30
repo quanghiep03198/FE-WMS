@@ -5,7 +5,7 @@ import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { DataTableUtility } from '@/components/ui/@react-table/utils/table.util'
 import { IOService } from '@/services/inoutbound.service'
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
-import { PaginationState, SortingState, Table, createColumnHelper } from '@tanstack/react-table'
+import { PaginationState, SortingState, createColumnHelper } from '@tanstack/react-table'
 import { AxiosRequestConfig } from 'axios'
 import { isEmpty, omit } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
@@ -28,7 +28,6 @@ const InOutBoundOrderList: React.FC = () => {
 	const columnHelper = createColumnHelper<IInOutBoundOrder>()
 	const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
 	const [columnFilters, setColumnFilters] = useState<AxiosRequestConfig['params']>([])
-	const [tableInstance, setTableInstance] = useState<Table<any>>()
 	const [sorting, setSorting] = useState<SortingState>([])
 	const queryClient = useQueryClient()
 
@@ -68,12 +67,12 @@ const InOutBoundOrderList: React.FC = () => {
 				}
 			}),
 			columnHelper.accessor('sno_no', {
-				header: t('ns_inoutbound:fields.sno_no'),
+				header: t('ns_erp:fields.sno_no'),
 				enableColumnFilter: true,
 				enableSorting: true
 			}),
 			columnHelper.accessor('status_approve', {
-				header: t('ns_inoutbound:fields.status_approve'),
+				header: t('ns_erp:fields.status_approve'),
 				size: 160,
 				cell: ({ getValue }) => {
 					const value = getValue()
@@ -85,18 +84,18 @@ const InOutBoundOrderList: React.FC = () => {
 				}
 			}),
 			columnHelper.accessor('sno_date', {
-				header: t('ns_inoutbound:fields.sno_date'),
+				header: t('ns_erp:fields.sno_date'),
 				enableSorting: true,
 				sortDescFirst: true
 			}),
 			columnHelper.accessor('ship_order', {
-				header: t('ns_inoutbound:fields.ship_order')
+				header: t('ns_erp:fields.ship_order')
 			}),
 			columnHelper.accessor('dept_name', {
-				header: t('ns_inoutbound:fields.dept_name')
+				header: t('ns_erp:fields.dept_name')
 			}),
 			columnHelper.accessor('employee_name', {
-				header: t('ns_inoutbound:fields.employee_name')
+				header: t('ns_erp:fields.employee_name')
 			}),
 			columnHelper.accessor('updated', {
 				header: t('ns_common:common_fields.updated_at')
@@ -149,11 +148,10 @@ const InOutBoundOrderList: React.FC = () => {
 			onColumnFiltersChange={setColumnFilters}
 			onSortingChange={setSorting}
 			onPaginationChange={setPagination}
-			onGetInstance={setTableInstance}
 			renderSubComponent={() => <IOSubOrderRow data={{}} />}
 			paginationProps={{ prefetch, ...omit(response, ['data']) }}
 			toolbarProps={{
-				slot: () => (
+				slotRight: ({ table }) => (
 					<Fragment>
 						{Object.values(columnFilters).some((value) => !isEmpty(value)) && (
 							<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
@@ -161,7 +159,7 @@ const InOutBoundOrderList: React.FC = () => {
 									variant='destructive'
 									size='icon'
 									onClick={() => {
-										tableInstance.resetColumnFilters()
+										table.resetColumnFilters()
 									}}>
 									<Icon name='X' />
 								</Button>
@@ -172,8 +170,8 @@ const InOutBoundOrderList: React.FC = () => {
 								variant='outline'
 								size='icon'
 								onClick={() => {
-									tableInstance.resetColumnFilters()
-									tableInstance.resetSorting()
+									table.resetColumnFilters()
+									table.resetSorting()
 									refetch()
 								}}>
 								<Icon name='RotateCw' />
