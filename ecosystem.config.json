@@ -15,17 +15,5 @@
 				"NODE_ENV": "production"
 			}
 		}
-	],
-	"deploy": {
-		"production": {
-			"user": "administrator",
-			"host": "10.30.0.19",
-			"ref": "origin/develop",
-			"repo": "git@github.com:quanghiep03198/FE-WMS.git",
-			"fetch": "all",
-			"ssh_options": "ForwardAgent=yes !!!",
-			"path": "C:\\Users\\Administrator\\i-wms\\client",
-			"post-deploy": "npm install && pm2 reload ecosystem.config.json --env production"
-		}
-	}
+	]
 }
