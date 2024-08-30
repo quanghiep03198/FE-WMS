@@ -7,6 +7,7 @@ import { cn } from '@/common/utils/cn'
 import { Label } from '@/components/ui/@core/label'
 import { ResourceKey } from 'i18next'
 import { useTranslation } from 'react-i18next'
+import { Icon } from './icon'
 
 const Form = FormProvider
 
@@ -132,8 +133,9 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 			<p
 				ref={ref}
 				id={formMessageId}
-				className={cn('text-[0.8rem] font-medium text-destructive', className)}
+				className={cn('inline-flex items-center gap-x-1 text-[0.8rem] font-medium text-destructive', className)}
 				{...props}>
+				<Icon name='TriangleAlert' />
 				{t(body as ResourceKey)}
 			</p>
 		)
