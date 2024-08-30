@@ -9,10 +9,11 @@ import { TableViewOptions } from './table-view-options'
 
 type TableToolbarProps<TData> = {
 	table: Table<TData>
-	slot?: React.FC<{ table: Table<TData> }>
+	slotLeft?: React.FC<{ table: Table<TData> }>
+	slotRight?: React.FC<{ table: Table<TData> }>
 }
 
-function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
+function TableToolbar<TData>({ table, slotLeft: SlotLeft, slotRight: SlotRight }: TableToolbarProps<TData>) {
 	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useTableContext()
 	const { t } = useTranslation('ns_common')
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
@@ -24,8 +25,9 @@ function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 	}, [])
 
 	return (
-		<Div className='flex justify-end'>
-			<Div role='toolbar' className='grid auto-cols-fr grid-flow-col items-center gap-x-1'>
+		<Div role='toolbar' className='flex items-center justify-between py-0.5'>
+			{SlotLeft && <SlotLeft table={table} />}
+			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 					<Button
 						variant='destructive'
@@ -35,7 +37,8 @@ function TableToolbar<TData>({ table, slot: Slot }: TableToolbarProps<TData>) {
 						<Icon name='FilterX' />
 					</Button>
 				</Tooltip>
-				{Slot && <Slot table={table} />}
+
+				{SlotRight && <SlotRight table={table} />}
 				<GlobalFilterPopover />
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
 					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>

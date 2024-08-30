@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import {
+	TableState,
 	type ColumnDef,
 	type ColumnFiltersState,
 	type GlobalFilterTableState,
@@ -13,7 +14,8 @@ import React from 'react'
 export type ToolbarProps<TData = any> = {
 	hidden?: boolean
 	rtl?: boolean
-	slot?: React.FC<{ table: Table<TData> }>
+	slotLeft?: React.FC<{ table: Table<TData> }>
+	slotRight?: React.FC<{ table: Table<TData> }>
 }
 
 export type TableFooterProps<TData = any> = {
@@ -92,7 +94,8 @@ export type DataTableProps<TData = any, TValue = any> = {
 	toolbarProps?: ToolbarProps
 	footerProps?: TableFooterProps
 	sorting?: SortingState
-	onGetInstance?: React.Dispatch<React.SetStateAction<Table<TData>>>
+	initialState?: Partial<TableState>
+	onStateChange?: (instance: Table<TData, TValue>) => void
 	renderSubComponent?: RenderSubComponent
 } & Partial<TableOptions<any>> &
 	PaginationProps<TData> &

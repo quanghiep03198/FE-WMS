@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
 	ColumnOrderState,
+	RowSelectionState,
 	Table,
 	getCoreRowModel,
 	getExpandedRowModel,
@@ -41,9 +42,10 @@ function DataTable<TData, TValue>(
 		caption,
 		columns,
 		loading,
+		initialState = { rowSelection: {} },
 		containerProps,
 		paginationProps = { hidden: false },
-		toolbarProps = { hidden: false, slot: null },
+		toolbarProps = { hidden: false, slotRight: null },
 		footerProps = { hidden: true, slot: null },
 		manualPagination = false,
 		manualSorting = false,
@@ -64,8 +66,9 @@ function DataTable<TData, TValue>(
 		renderSubComponent,
 		getRowCanExpand,
 		onPaginationChange,
-		onGetInstance,
 		onSortingChange,
+		onStateChange,
+		onRowSelectionChange,
 		...props
 	}: DataTableProps<TData, TValue>,
 	ref: React.MutableRefObject<Table<any>>
@@ -79,9 +82,10 @@ function DataTable<TData, TValue>(
 	const [_sorting, setSorting] = useState<SortingState>([])
 	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
 	const [isScrolling, setIsScrolling] = useState(false)
-	const [isFilterOpened, setIsFilterOpened] = useState(false)
+	const [isFilterOpened, setIsFilterOpened] = useState(true)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>(initialState?.rowSelection ?? {})
 	const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
 	const [editedRows, setEditedRows, resetEditedRows] = useResetState({})
 	const [pagination, setPagination] = useState<PaginationState>(() => ({
@@ -90,7 +94,7 @@ function DataTable<TData, TValue>(
 	}))
 	const hasNoFilter = useMemo(() => {
 		if (manualFiltering) return columnFilters?.length === 0
-		return _columnFilters.length === 0 && _globalFilter.length === 0
+		return _columnFilters?.length === 0 && _globalFilter?.length === 0
 	}, [_globalFilter, _columnFilters, columnFilters])
 
 	// * Table declaration
@@ -112,13 +116,15 @@ function DataTable<TData, TValue>(
 			pagination: {
 				pageIndex: 0,
 				pageSize: 10
-			}
+			},
+			...initialState
 		},
 		state: {
 			sorting: manualSorting ? sorting : _sorting,
 			columnFilters: manualFiltering ? columnFilters : _columnFilters,
 			globalFilter: manualFiltering ? globalFilter : _globalFilter,
 			expanded,
+			rowSelection,
 			columnOrder,
 			pagination: manualPagination
 				? {
@@ -151,6 +157,10 @@ function DataTable<TData, TValue>(
 		onGlobalFilterChange: manualFiltering ? onGlobalFilterChange : setGlobalFilter,
 		onColumnOrderChange: setColumnOrder,
 		onExpandedChange: setExpanded,
+		onRowSelectionChange: (updateFn) => {
+			setRowSelection(updateFn)
+			if (typeof onRowSelectionChange === 'function') onRowSelectionChange(updateFn)
+		},
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getExpandedRowModel: getExpandedRowModel(),
@@ -199,8 +209,8 @@ function DataTable<TData, TValue>(
 	})
 
 	// * Forwarding refs
-	const tableRef = useLatest<Table<TData>>(table)
 	const tableWrapperRef = useRef<HTMLDivElement>(null)
+	const tableRef = useLatest<Table<TData>>(table)
 
 	/**
 	 * * Avoid infinite loop if data is empty
@@ -245,7 +255,9 @@ function DataTable<TData, TValue>(
 				setGlobalFilter
 			}}>
 			<DataTableWrapper ref={tableWrapperRef}>
-				{!toolbarProps.hidden && <TableToolbar table={table} slot={toolbarProps.slot} />}
+				{!toolbarProps.hidden && (
+					<TableToolbar table={table} slotLeft={toolbarProps.slotLeft} slotRight={toolbarProps.slotRight} />
+				)}
 				<TableDataGrid
 					table={table}
 					columns={columns}
@@ -280,7 +292,7 @@ function DataTable<TData, TValue>(
 	)
 }
 
-const DataTableWrapper = tw.div`space-y-4`
+const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden`
 const FooterGroup = tw.div`flex items-center justify-between`
 
 export default memo(forwardRef(DataTable))

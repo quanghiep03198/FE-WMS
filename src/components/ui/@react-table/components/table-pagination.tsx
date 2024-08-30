@@ -88,7 +88,7 @@ function TablePagination<TData>({
 	}
 
 	return (
-		<Div role='navigation' className='ml-auto flex items-center space-x-6 lg:space-x-8'>
+		<Div role='navigation' className='ml-auto flex items-center space-x-6 py-0.5 lg:space-x-8'>
 			<Div className='flex items-center space-x-2'>
 				<Label className='font-medium'>{t('ns_common:table.rows_per_page')}</Label>
 				<Select

@@ -18,21 +18,30 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 	const filterVariant = column.columnDef.meta?.filterVariant
 	const { hasNoFilter } = useTableContext()
 
+	const getFacetedUniqueValues = () => {
+		try {
+			return column.getFacetedUniqueValues()
+		} catch {
+			return new Map()
+		}
+	}
+
 	const sortedUniqueValues = useMemo(() => {
-		if (column && column.getFacetedUniqueValues && column.getFilterValue) {
-			const facedUniqueValue = column.getFacetedUniqueValues() ?? new Map()
-			const uniqueValues = Array.from(facedUniqueValue.keys())
+		const facetedUniqueValues = getFacetedUniqueValues()
+		if (!facetedUniqueValues) return []
 
-			uniqueValues.sort((a, b) => {
-				if (a === b) return 0
-				return a > b ? 1 : -1
-			})
+		const uniqueValues = Array.from(facetedUniqueValues?.keys())
 
-			return uniqueValues
-		} else return []
-	}, [column])
+		uniqueValues.sort((a, b) => {
+			if (a === b) return 0
+			return a > b ? 1 : -1
+		})
 
-	const metaFilterValues = column.columnDef.meta?.facetedUniqueValues
+		return uniqueValues
+	}, [column, filterVariant])
+
+	// * Useful for server side filtering
+	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
 
 	if (!column.columnDef.enableColumnFilter)
 		return (
@@ -75,8 +84,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					}}
 					placeholder={t('ns_common:table.search_in_column')}
 					data={
-						Array.isArray(metaFilterValues)
-							? metaFilterValues
+						Array.isArray(metaUniqueValues)
+							? metaUniqueValues
 							: sortedUniqueValues
 									.filter((value) => Boolean(value))
 									.map((value: any) => ({

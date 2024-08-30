@@ -30,7 +30,7 @@ function easeInOutQuint(t) {
 }
 
 function TableDataGrid<TData, TValue>({
-	containerProps = { style: { height: screen.height / 2 } },
+	containerProps = { className: cn('h-[40vh] xxl:h-[70vh]') },
 	table,
 	footerProps = { hidden: true, slot: null },
 	caption,
@@ -97,7 +97,7 @@ function TableDataGrid<TData, TValue>({
 	return (
 		<Wrapper role='group'>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
-			<ScrollArea ref={containerRef} role='scrollbar' className={containerProps?.className} {...containerProps}>
+			<ScrollArea tabIndex={0} ref={containerRef} role='scrollbar' {...containerProps}>
 				<Table
 					ref={tableRef}
 					className='w-full table-fixed border-separate border-spacing-0'
@@ -111,7 +111,6 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					{/* [&:not(:only-child)>tr:not(:last-child)>th:not(:last-child)]:!border-l-0 */}
 					<TableHeader className='sticky top-0 z-20 bg-background'>
 						{table.getHeaderGroups().map((headerGroup) => {
 							return (
@@ -188,8 +187,8 @@ function TableDataGrid<TData, TValue>({
 	)
 }
 
-const Wrapper = tw.div`flex bprder flex-col items-stretch border rounded-[var(--radius)] overflow-clip divide-y divide-border`
-const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll scrollbar-track-scrollbar/20`
+const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-[var(--radius)] divide-y divide-border`
+const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none ring-0 ring-offset-0 ring-offset-transparent`
 
 TableDataGrid.displayName = 'DataTable'
 

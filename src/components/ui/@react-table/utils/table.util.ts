@@ -8,7 +8,7 @@ export class DataTableUtility {
 	 * @returns {Record<string, any>}
 	 */
 	public static getColumnFiltersObject(columnFilters: ColumnFiltersState) {
-		if (!Array.isArray(columnFilters) || columnFilters.length === 0) return {}
+		if (!Array.isArray(columnFilters) || columnFilters?.length === 0) return {}
 		return columnFilters.reduce((accumulator, currentValue) => {
 			accumulator[currentValue.id] = currentValue.value
 			return accumulator

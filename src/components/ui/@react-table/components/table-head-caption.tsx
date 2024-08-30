@@ -6,7 +6,7 @@ export const TableHeadCaption: React.FC<DivProps & React.PropsWithChildren> = me
 		return (
 			<Div
 				{...props}
-				className='flex h-9 items-center bg-accent px-4 text-center text-sm font-medium text-accent-foreground'>
+				className='flex h-9 items-center rounded-t-[inherit] bg-accent px-4 text-center text-sm font-medium text-accent-foreground'>
 				{props['aria-description']}
 			</Div>
 		)
