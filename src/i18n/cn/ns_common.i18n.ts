@@ -28,6 +28,7 @@ export default {
 		revert_changes: '恢复更改',
 		cancel: '取消',
 		submit: '确认',
+		proceed: '确认',
 		confirm: '确认',
 		start: '开始',
 		stop: '停止',

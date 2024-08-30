@@ -1,4 +1,3 @@
-import { InventoryListType } from '@/app/(features)/_layout.warehouse-import/_constants/warehouse-import.enum'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -39,53 +38,14 @@ export default {
 			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
 		}
 	},
-	fields: {
-		mo_no: 'Order',
-		or_no: 'Order code',
-		or_custpo: 'Customer order code',
-		transfer_order_code: 'Transfer order code',
-		// I/O production
-		status_approve: 'Approval status',
-		sno_no: 'Order code',
-		sno_date: 'Order date',
-		sno_sealnumber: 'Seal number',
-		sno_container: 'Container number',
-		sno_total_boxes: 'Total boxes',
-		packaging_code: 'Packaging number',
-		sno_car_number: 'Container number',
-		ship_order: 'Shipping order number',
-		dept_name: 'Department',
-		employee_name: 'Employee',
-		sno_total: 'Total',
-		sno_size: 'Size',
-		sno_type: 'Type',
-		// product inspection details
-		container_order_code: 'Container Order Code',
-		order_qty: 'Order quantity',
-		uninspected_qty: 'Uninspected quantity',
-		inspected_qty: 'Inspected quantity',
-		returned_qty: 'Returned quantity',
-		conversion_rate: 'Conversion rate',
-		required_date: 'Required date',
-		//
-		trans_num: 'Number of Boxes Issued',
-		or_qtyperpacking: 'Total Quantity per Box',
-		sno_qty: 'Box Quantity',
-		kg_nostart: 'Starting Box Number',
-		kg_noend: 'Ending Box Number'
-	},
+
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: 'Not approved',
 		[OrderStatus.APPROVED]: 'Approved',
 		[OrderStatus.CANCELLED]: 'Cancelled',
 		[OrderStatus.REAPPROVED]: 'Reapproved'
 	},
-	inventory_list_type: {
-		[InventoryListType.PRODUCTION_WAREHOUSE_EXPORT]: 'Finished Product Delivery Order',
-		[InventoryListType.PRODUCTION_WAREHOUSE_IMPORT]: 'Finished Product Warehouse Import Order',
-		[InventoryListType.WAREHOUSE_EXPORT_TRANSFER]: 'Warehouse Export Transfer Order',
-		[InventoryListType.WAREHOUSE_IMPORT_TRANSFER]: 'Warehouse Import Transfer Order'
-	},
+
 	titles: {
 		transfer_order_list: 'Transfer orders list',
 		transfer_order_datalist: 'Transfer order datalist',

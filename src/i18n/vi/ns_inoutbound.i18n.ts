@@ -1,4 +1,3 @@
-import { InventoryListType } from '@/app/(features)/_layout.warehouse-import/_constants/warehouse-import.enum'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -40,53 +39,13 @@ export default {
 		order_information: 'Thông tin đơn hàng',
 		transfer_information: 'Thông tin chuyển kho'
 	},
-	fields: {
-		mo_no: 'Chỉ lệnh',
-		or_no: 'Mã đơn hàng',
-		or_custpo: 'Mã đơn đặt hàng của khách',
-		transfer_order_code: 'Mã đơn chuyển giao',
-		// I/O production
-		status_approve: 'Trạng thái duyệt đơn',
-		sno_no: 'Mã đơn hàng nhập/xuất',
-		sno_date: 'Ngày tạo đơn',
-		sno_sealnumber: 'Mã vạch niêm phong container',
-		sno_container: 'Mã container',
-		sno_total_boxes: 'Số lượng đóng thùng',
-		packaging_code: 'Mã đóng thùng',
-		sno_car_number: 'Số xe container',
-		ship_order: 'Mã đóng hàng',
-		dept_name: 'Bộ phận cập nhật',
-		employee_name: 'Nhân viên tạo đơn',
-		sno_total: 'Tổng số đôi',
-		sno_size: 'Kích cỡ',
-		sno_type: 'Loại',
-		// product inspection details
-		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
-		order_qty: 'Số Lượng Đơn Đặt Hàng', // Order Quantity
-		uninspected_qty: 'Số Lượng Chưa Kiểm Tra', // Uninspected Quantity
-		inspected_qty: 'Số Lượng Đã Kiểm Tra', // Inspected Quantity
-		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
-		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
-		required_date: 'Ngày Yêu Cầu', // Required Date
-		//
-		trans_num: 'Lượng thùng đã phát',
-		or_qtyperpacking: 'Tổng số lượng đóng thùng',
-		sno_qty: 'Số lượng đóng thùng',
-		kg_nostart: 'Thứ tự thùng đầu',
-		kg_noend: 'Thứ tự thùng cuối'
-	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: 'Chờ duyệt',
 		[OrderStatus.APPROVED]: 'Đã duyệt',
 		[OrderStatus.CANCELLED]: 'Đã hủy duyệt',
 		[OrderStatus.REAPPROVED]: 'Duyệt lại'
 	},
-	inventory_list_type: {
-		[InventoryListType.PRODUCTION_WAREHOUSE_EXPORT]: 'Đơn xuất kho thành phẩm',
-		[InventoryListType.PRODUCTION_WAREHOUSE_IMPORT]: 'Đơn nhập kho thành phẩm',
-		[InventoryListType.WAREHOUSE_EXPORT_TRANSFER]: 'Đơn xuất kho chuyển phát',
-		[InventoryListType.WAREHOUSE_IMPORT_TRANSFER]: 'Đơn nhập kho chuyển phát'
-	},
+
 	titles: {
 		transfer_order_list: 'Danh sách đơn chuyển kho',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',

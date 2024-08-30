@@ -37,6 +37,7 @@ export default {
 		select: 'Chọn',
 		cancel: 'Hủy',
 		submit: 'Xác nhận',
+		proceed: 'Tiếp tục',
 		confirm: 'Xác nhận',
 		detail: 'Chi tiết',
 		login: 'Đăng nhập',

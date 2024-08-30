@@ -1,4 +1,3 @@
-import { InventoryListType } from '@/app/(features)/_layout.warehouse-import/_constants/warehouse-import.enum'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -39,56 +38,14 @@ export default {
 			description: '如果您刪除它, 則必須重新執行EPC掃描操作.'
 		}
 	},
-	fields: {
-		mo_no: '指令碼',
-		or_no: '訂單編號',
-		or_custpo: '客戶訂單',
-		transfer_order_code: '轉撥單號',
-		dept_code: '成型線',
-		// I/O product inspection
-		active_date: '入库日期',
-		status_approve: '審核',
-		sno_no: '驗收單號',
-		sno_date: '驗收日期',
-		sno_sealnumber: '封條號碼',
-		sno_container: '貨櫃號碼',
-		sno_total_boxes: '箱數合計',
-		packaging_code: '裝箱單號',
-		sno_car_number: '車號',
-		ship_order: '裝貨號碼',
-		dept_name: '更新部門',
-		employee_name: '建檔人姓名',
-		sno_total: '數量合計',
-		sno_size: '肥度',
-		sno_type: '左右',
-		sno_location: '存放位置',
-		// product inspection details
-		container_order_code: '出櫃單號', //mã đơn xuất công
-		order_qty: '採購數量', //số lượng đơn đặt hàng
-		uninspected_qty: '未驗收量',
-		inspected_qty: '已驗收量',
-		returned_qty: '已退貨量',
-		conversion_rate: '換算率',
-		required_date: '需求日期',
-		//
-		trans_num: '調撥箱數',
-		sno_qty: '每箱數量',
-		or_qtyperpacking: '數量小計',
-		kg_nostart: '起始箱號',
-		kg_noend: '結束箱號'
-	},
+
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: '未審核',
 		[OrderStatus.APPROVED]: '已審核',
 		[OrderStatus.CANCELLED]: '取消審核 ',
 		[OrderStatus.REAPPROVED]: '重新審核'
 	},
-	inventory_list_type: {
-		[InventoryListType.PRODUCTION_WAREHOUSE_EXPORT]: '成品出庫單',
-		[InventoryListType.PRODUCTION_WAREHOUSE_IMPORT]: '成品入庫單',
-		[InventoryListType.WAREHOUSE_EXPORT_TRANSFER]: '轉撥出庫單',
-		[InventoryListType.WAREHOUSE_IMPORT_TRANSFER]: '轉撥入庫單'
-	},
+
 	titles: {
 		transfer_order_list: '转移订单列表',
 		transfer_order_datalist: '转移订单数据列表',
