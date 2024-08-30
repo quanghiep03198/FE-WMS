@@ -51,7 +51,7 @@ export const useTransferOrderTableColumns = ({
 							checked={checked as CheckedState}
 							onCheckedChange={(checkedState) => {
 								if (checkedState) setRowSelectionType('multiple')
-								table.toggleAllRowsSelected(!!checkedState)
+								table.toggleAllPageRowsSelected(!!checkedState)
 							}}
 						/>
 					)
@@ -89,7 +89,7 @@ export const useTransferOrderTableColumns = ({
 						sortingFn: fuzzySort
 					}),
 					columnHelper.accessor('transfer_order_code', {
-						header: t('ns_inoutbound:fields.transfer_order_code'),
+						header: t('ns_erp:fields.transfer_order_code'),
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? String(value).toUpperCase() : '-'
@@ -101,7 +101,7 @@ export const useTransferOrderTableColumns = ({
 						sortingFn: fuzzySort
 					}),
 					columnHelper.accessor('kg_no', {
-						header: t('ns_inoutbound:fields.packaging_code'),
+						header: t('ns_erp:fields.packaging_code'),
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? String(value).toUpperCase() : '-'
@@ -113,7 +113,7 @@ export const useTransferOrderTableColumns = ({
 						sortingFn: fuzzySort
 					}),
 					columnHelper.accessor('mo_no', {
-						header: t('ns_inoutbound:fields.mo_no'),
+						header: t('ns_erp:fields.mo_no'),
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? String(value).toUpperCase() : '-'
@@ -125,7 +125,7 @@ export const useTransferOrderTableColumns = ({
 						sortingFn: fuzzySort
 					}),
 					columnHelper.accessor('or_no', {
-						header: t('ns_inoutbound:fields.or_no'),
+						header: t('ns_erp:fields.or_no'),
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? String(value).toUpperCase() : '-'
@@ -137,7 +137,7 @@ export const useTransferOrderTableColumns = ({
 						sortingFn: fuzzySort
 					}),
 					columnHelper.accessor('or_custpo', {
-						header: t('ns_inoutbound:fields.or_custpo'),
+						header: t('ns_erp:fields.or_custpo'),
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? String(value).toUpperCase() : '-'
@@ -149,7 +149,7 @@ export const useTransferOrderTableColumns = ({
 						sortingFn: fuzzySort
 					}),
 					columnHelper.accessor('shoestyle_codefactory', {
-						header: t('ns_erp:fields.shoes_style_code_factory'),
+						header: t('ns_erp:fields.shoestyle_codefactory'),
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? String(value).toUpperCase() : '-'
@@ -217,7 +217,7 @@ export const useTransferOrderTableColumns = ({
 						}
 					}),
 					columnHelper.accessor('status_approve', {
-						header: t('ns_inoutbound:fields.status_approve'),
+						header: t('ns_erp:fields.status_approve'),
 						cell: ({ getValue }) => {
 							const value = getValue() ?? TransferOrderApprovalStatus.NOT_APPROVED
 							const statusIconMap: Record<

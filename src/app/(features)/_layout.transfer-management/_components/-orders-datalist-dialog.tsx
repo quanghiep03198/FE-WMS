@@ -50,7 +50,7 @@ const OrderDatalistDialog: React.FC = () => {
 							checked={checked as CheckedState}
 							onCheckedChange={(checkedState) => {
 								update()
-								table.toggleAllPageRowsSelected(!!checkedState)
+								table.toggleAllRowsSelected(!!checkedState)
 							}}
 						/>
 					)
@@ -82,7 +82,7 @@ const OrderDatalistDialog: React.FC = () => {
 				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('kg_no', {
-				header: t('ns_inoutbound:fields.packaging_code'),
+				header: t('ns_erp:fields.packaging_code'),
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value ? String(value).toUpperCase() : '-'
@@ -93,7 +93,7 @@ const OrderDatalistDialog: React.FC = () => {
 				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('mo_no', {
-				header: t('ns_inoutbound:fields.mo_no'),
+				header: t('ns_erp:fields.mo_no'),
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value ? String(value).toUpperCase() : '-'
@@ -104,7 +104,7 @@ const OrderDatalistDialog: React.FC = () => {
 				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('or_no', {
-				header: t('ns_inoutbound:fields.or_no'),
+				header: t('ns_erp:fields.or_no'),
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value ? String(value).toUpperCase() : '-'
@@ -115,7 +115,7 @@ const OrderDatalistDialog: React.FC = () => {
 				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('or_custpo', {
-				header: t('ns_inoutbound:fields.or_custpo'),
+				header: t('ns_erp:fields.or_custpo'),
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value ? String(value).toUpperCase() : '-'
@@ -126,7 +126,7 @@ const OrderDatalistDialog: React.FC = () => {
 				sortingFn: fuzzySort
 			}),
 			columnHelper.accessor('shoestyle_codefactory', {
-				header: t('ns_erp:fields.shoes_style_code_factory'),
+				header: t('ns_erp:fields.shoestyle_codefactory'),
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return value ? String(value).toUpperCase() : '-'
@@ -178,7 +178,7 @@ const OrderDatalistDialog: React.FC = () => {
 					enableRowSelection={true}
 					containerProps={{ className: 'h-72' }}
 					toolbarProps={{
-						slot: () => (
+						slotRight: () => (
 							<Fragment>
 								{isSmallScreen && (
 									<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>

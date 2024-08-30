@@ -59,7 +59,7 @@ const TransferOrderDetail: React.FC = () => {
 						<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
 							<Div className='col-span-full'>
 								<InputFieldControl
-									label={t('ns_inoutbound:fields.or_no')}
+									label={t('ns_erp:fields.or_no')}
 									name='or_no'
 									type='text'
 									control={form.control}
@@ -67,7 +67,7 @@ const TransferOrderDetail: React.FC = () => {
 							</Div>
 							<Div className='col-span-2 sm:col-span-full'>
 								<InputFieldControl
-									label={t('ns_inoutbound:fields.trans_num')}
+									label={t('ns_erp:fields.trans_num')}
 									name='trans_num'
 									type='number'
 									control={form.control}
@@ -75,7 +75,7 @@ const TransferOrderDetail: React.FC = () => {
 							</Div>
 							<Div className='col-span-2 sm:col-span-full'>
 								<InputFieldControl
-									label={t('ns_inoutbound:fields.sno_qty')}
+									label={t('ns_erp:fields.sno_qty')}
 									name='sno_qty'
 									type='number'
 									control={form.control}
@@ -83,7 +83,7 @@ const TransferOrderDetail: React.FC = () => {
 							</Div>
 							<Div className='col-span-2 sm:col-span-full'>
 								<InputFieldControl
-									label={t('ns_inoutbound:fields.or_qtyperpacking')}
+									label={t('ns_erp:fields.or_qtyperpacking')}
 									name='or_qtyperpacking'
 									value={transNum * snoQty}
 									type='number'
@@ -92,7 +92,7 @@ const TransferOrderDetail: React.FC = () => {
 							</Div>
 							<Div className='col-span-3 sm:col-span-full'>
 								<InputFieldControl
-									label={t('ns_inoutbound:fields.kg_nostart')}
+									label={t('ns_erp:fields.kg_nostart')}
 									name='kg_nostart'
 									type='number'
 									control={form.control}
@@ -100,7 +100,7 @@ const TransferOrderDetail: React.FC = () => {
 							</Div>
 							<Div className='col-span-3 sm:col-span-full'>
 								<InputFieldControl
-									label={t('ns_inoutbound:fields.kg_noend')}
+									label={t('ns_erp:fields.kg_noend')}
 									name='kg_noend'
 									type='number'
 									control={form.control}

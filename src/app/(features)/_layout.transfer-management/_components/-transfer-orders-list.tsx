@@ -71,7 +71,43 @@ const TransferOrdersList: React.FC = () => {
 					enableGrouping={true}
 					enableRowSelection={true}
 					toolbarProps={{
-						slot: () => (
+						slotLeft: ({ table }) => {
+							const { editedRows } = table.options.meta
+							const disabled = Object.values(editedRows).every((value) => value === false) || isEmpty(editedRows)
+
+							return (
+								<Div className='flex items-center gap-x-1'>
+									<Button
+										size='sm'
+										variant='secondary'
+										disabled={disabled}
+										onClick={() => {
+											table.options.meta.setEditedRows({})
+											updateMultiAsync(
+												table.options.meta.getUnsavedChanges().map((item: ITransferOrder) => ({
+													transfer_order_code: item.transfer_order_code,
+													or_warehouse: item.or_warehouse_num,
+													or_location: item.or_storage_num,
+													new_warehouse: item.new_warehouse_num,
+													new_location: item.new_storage_num
+												}))
+											)
+										}}>
+										<Icon name='SaveAll' role='img' />
+										{t('ns_common:actions.save')}
+									</Button>
+									<Button
+										size='sm'
+										variant='outline'
+										disabled={disabled}
+										onClick={() => table.options.meta.discardChanges()}>
+										<Icon name='Undo' role='img' />
+										{t('ns_common:actions.revert_changes')}
+									</Button>
+								</Div>
+							)
+						},
+						slotRight: () => (
 							<Fragment>
 								{tableRef.current &&
 									tableRef.current?.getSelectedRowModel().flatRows.length > 0 &&
@@ -94,46 +130,6 @@ const TransferOrdersList: React.FC = () => {
 								</Fragment>
 							</Fragment>
 						)
-					}}
-					footerProps={{
-						rtl: true,
-						slot: ({ table }) => {
-							const { editedRows } = table.options.meta
-							const disabled = Object.values(editedRows).every((value) => value === false) || isEmpty(editedRows)
-
-							return (
-								<Fragment>
-									<Button
-										size='sm'
-										variant='ghost'
-										disabled={disabled}
-										onClick={() => {
-											table.options.meta.setEditedRows({})
-											updateMultiAsync(
-												table.options.meta.getUnsavedChanges().map((item: ITransferOrder) => ({
-													transfer_order_code: item.transfer_order_code,
-													or_warehouse: item.or_warehouse_num,
-													or_location: item.or_storage_num,
-													new_warehouse: item.new_warehouse_num,
-													new_location: item.new_storage_num
-												}))
-											)
-										}}>
-										<Icon name='SaveAll' role='img' />
-										{t('ns_common:actions.save')}
-									</Button>
-
-									<Button
-										size='sm'
-										variant='destructive'
-										disabled={disabled}
-										onClick={() => table.options.meta.discardChanges()}>
-										<Icon name='Undo' role='img' />
-										{t('ns_common:actions.revert_changes')}
-									</Button>
-								</Fragment>
-							)
-						}
 					}}
 				/>
 			</Div>
