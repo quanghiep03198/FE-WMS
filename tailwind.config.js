@@ -34,6 +34,9 @@ module.exports = {
 				noto: 'Noto Sans SC, sans-serif '
 			},
 			colors: {
+				active: 'hsl(var(--active))',
+				success: 'hsl(var(--success))',
+				warning: 'hsl(var(--warning))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
