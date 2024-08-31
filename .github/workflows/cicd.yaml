@@ -77,16 +77,32 @@ jobs:
          - name: Set up Node.js
            uses: actions/setup-node@v4
            with:
-              node-version: '20'
+              node-version: '20' # Specify the version of Node.js you want to use
 
          - name: Install dependencies
-           run: npm ci
+           run: npm install
 
          - name: Generate PWA assets
            run: npm run generate-pwa-assets
 
          - name: Build and bundling application
            run: npm run build
+
+         - name: Copy build
+           run: |
+              # Define the path where you want to deploy your app on the server
+              $destinationPath = "C:\inetpub\wwwroot\your-react-app"
+
+              # Create the directory if it doesn't exist
+              if (-Not (Test-Path $destinationPath)) {
+                 New-Item -ItemType Directory -Path $destinationPath
+              }
+
+              # Remove old files
+              Remove-Item -Recurse -Force "$destinationPath\*"
+
+              # Copy the build output to the server's web root
+              Copy-Item -Recurse -Force build\* $destinationPath
 
          - name: Deploy to Windows Server
            run: pm2 restart 'wms-client' --update-env
