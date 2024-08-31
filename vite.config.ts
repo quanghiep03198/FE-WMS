@@ -59,6 +59,7 @@ export default defineConfig(({ mode }) => {
 				'@': path.resolve(__dirname, './src')
 			}
 		},
+		envDir: '.',
 		test: {
 			globals: true,
 			environment: 'jsdom',

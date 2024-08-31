@@ -107,4 +107,5 @@ jobs:
          - name: Deploy to Windows Server
            run: |
               cd C:\Users\Administrator\i-wms\client
-              pm2 restart 'wms-client' --update-env
+              pm2 delete 'wms-client'
+              pm2 serve ./dist --port 3000 --name 'wms-client' --spa
