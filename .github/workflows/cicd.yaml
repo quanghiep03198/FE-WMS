@@ -91,7 +91,7 @@ jobs:
          - name: Copy build
            run: |
               # Define the path where you want to deploy your app on the server
-              $destinationPath = "C:\inetpub\wwwroot\your-react-app"
+              $destinationPath = "C:\Users\Administrator\i-wms\client\dist"
 
               # Create the directory if it doesn't exist
               if (-Not (Test-Path $destinationPath)) {
@@ -102,7 +102,7 @@ jobs:
               Remove-Item -Recurse -Force "$destinationPath\*"
 
               # Copy the build output to the server's web root
-              Copy-Item -Recurse -Force build\* $destinationPath
+              Copy-Item -Recurse -Force dist\* $destinationPath
 
          - name: Deploy to Windows Server
            run: pm2 restart 'wms-client' --update-env
