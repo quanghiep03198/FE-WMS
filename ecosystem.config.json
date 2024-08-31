@@ -4,7 +4,6 @@
 			"name": "wms-client",
 			"script": "serve",
 			"args": "-s build",
-			"watch": true,
 			"env": {
 				"PM2_SERVE_PATH": "./dist",
 				"PM2_SERVE_PORT": 3000,
@@ -15,5 +14,15 @@
 				"NODE_ENV": "production"
 			}
 		}
-	]
+	],
+	"deploy": {
+		"production": {
+			"user": "administrator",
+			"host": ["10.30.0.19"],
+			"ref": "origin/develop",
+			"repo": "https://github.com/quanghiep03198/FE-WMS.git",
+			"path": "C:/Users/Administrator/i-wms/client",
+			"post-deploy": "npm install && npm run generate-pwa-assets && npm run build"
+		}
+	}
 }
