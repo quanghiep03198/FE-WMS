@@ -22,6 +22,4 @@ const App: React.FC = () => {
 	)
 }
 
-console.log(1)
-
 export default App
