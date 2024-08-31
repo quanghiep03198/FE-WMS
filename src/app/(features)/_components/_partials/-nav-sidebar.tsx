@@ -7,7 +7,7 @@ import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { debounce } from 'lodash'
-import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { memo, useLayoutEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
@@ -17,13 +17,14 @@ type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
-	const [open, setOpen] = useState<boolean>(true)
 	const checkboxRef = useRef<HTMLInputElement>(null)
 	const { user } = useAuth()
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
-			'ctrl.b': debounce(() => setOpen(!open), 50),
+			'ctrl.b': debounce(() => {
+				checkboxRef.current.checked = !checkboxRef.current.checked
+			}, 50),
 			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
 				acc[String(curr.keybinding)] = function () {
 					return navigate({ to: curr.path })
@@ -31,7 +32,7 @@ const NavSidebar: React.FC = () => {
 				return acc
 			}, {})
 		}),
-		[open]
+		[checkboxRef.current]
 	)
 
 	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
@@ -55,19 +56,13 @@ const NavSidebar: React.FC = () => {
 
 	useLayoutEffect(() => {
 		if (isMobileScreen) {
-			setOpen(false)
+			checkboxRef.current.checked = false
 		}
 	}, [isMobileScreen])
 
 	return (
 		<Aside>
-			<SidebarToggleTrigger
-				id='sidebar-toggle'
-				type='checkbox'
-				checked={open}
-				ref={checkboxRef}
-				onChange={(e) => setOpen(e.currentTarget.checked)}
-			/>
+			<SidebarToggleTrigger id='sidebar-toggle' type='checkbox' defaultChecked={true} ref={checkboxRef} />
 			<LogoLink to='/dashboard' preload='intent'>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
 				<LogoWrapper>
