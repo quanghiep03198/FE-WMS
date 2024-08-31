@@ -105,4 +105,6 @@ jobs:
               Copy-Item -Recurse -Force dist\* $destinationPath
 
          - name: Deploy to Windows Server
-           run: pm2 restart 'wms-client' --update-env
+           run: |
+              cd C:\Users\Administrator\i-wms\client
+              pm2 restart 'wms-client' --update-env
