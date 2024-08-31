@@ -40,44 +40,14 @@ jobs:
          - name: Unit testing
            run: npm run test
 
-   # build:
-   #    needs: test
-   #    runs-on: self-hosted # Chạy trên self-hosted runner
-   #    steps:
-   #       - name: Checkout code
-   #         uses: actions/checkout@v4
-
-   #       - name: Set up Node.js
-   #         uses: actions/setup-node@v4
-   #         with:
-   #            node-version: '20'
-
-   #       - name: Install dependencies
-   #         run: npm ci
-
-   #       - name: Generate PWA assets
-   #         run: npm run generate-pwa-assets
-
-   #       - name: Build the React app
-   #         run: npm run build
-
-   #       - name: Archive production artifacts
-   #         uses: actions/upload-artifact@v4
-   #         with:
-   #            name: build-artifacts
-   #            path: dist
-
    deploy:
       runs-on: self-hosted
       needs: test
       steps:
-         - name: Checkout code
-           uses: actions/checkout@v4
-
-         - name: Set up Node.js
-           uses: actions/setup-node@v4
-           with:
-              node-version: '20' # Specify the version of Node.js you want to use
+         - name: Pull latest code from Github
+           run: |
+              cd C:/Users/Administrator/i-wms/client
+              git reset --hard origin/develop
 
          - name: Install dependencies
            run: npm install
@@ -88,24 +58,5 @@ jobs:
          - name: Build and bundling application
            run: npm run build
 
-         - name: Copy build
-           run: |
-              # Define the path where you want to deploy your app on the server
-              $destinationPath = "C:\Users\Administrator\i-wms\client\dist"
-
-              # Create the directory if it doesn't exist
-              if (-Not (Test-Path $destinationPath)) {
-                 New-Item -ItemType Directory -Path $destinationPath
-              }
-
-              # Remove old files
-              Remove-Item -Recurse -Force "$destinationPath\*"
-
-              # Copy the build output to the server's web root
-              Copy-Item -Recurse -Force dist\* $destinationPath
-
          - name: Deploy to Windows Server
-           run: |
-              cd C:\Users\Administrator\i-wms\client
-              cp .env.production ./dist/.env
-              pm2 restart 'wms-client' --update-env
+           run: pm2 restart 'wms-client' --update-env
