@@ -59,4 +59,4 @@ jobs:
            run: npm run build
 
          - name: Deploy to Windows Server
-           run: pm2 restart 'wms-client' --update-env
+           run: pm2 restart 'wms-client'
