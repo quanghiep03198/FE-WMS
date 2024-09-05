@@ -148,7 +148,7 @@ const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) =
 							{step.status === 'completed' ? (
 								<StepContent>
 									<StepIndex className='border-success bg-success duration-200 group-hover:bg-success/80'>
-										<Icon name='Check' size={20} className='text-white' aria-hidden='true' />
+										<Icon name='Check' size={20} className='text-success-foreground' aria-hidden='true' />
 									</StepIndex>
 									<Typography variant='small' color='success' className='font-medium'>
 										{step.name}
@@ -178,7 +178,7 @@ const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) =
 	)
 }
 
-const StepList = tw.ol`grid grid-flow-col sm:grid-flow-row auto-cols-fr isolate divide-y-0 divide-border rounded-md border sm:grid-cols-1 sm:divide-y`
+const StepList = tw.ol`grid grid-flow-col sm:grid-flow-row auto-cols-fr isolate divide-y-0 divide-border rounded-md border sm:grid-cols-1 sm:divide-y transition-all`
 const Step = tw.li`flex items-center py-6 text-sm relative hover:opacity-80 px-4 whitespace-nowrap font-medium`
 const StepContent = tw.div`inline-flex items-center justify-center gap-x-4 px-4`
 const StepIndex = tw.div`inline-grid size-9 place-content-center rounded-full border-2 font-semibold`
