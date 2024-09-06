@@ -33,6 +33,7 @@ jobs:
            uses: actions/setup-node@v4
            with:
               node-version: 20
+              cache: npm
 
          - name: Install dependencies
            run: npm ci
@@ -48,6 +49,7 @@ jobs:
            run: |
               cd C:/Users/Administrator/i-wms/client
               ls
+              git reset --hard origin/develop
               git pull origin develop
 
          - name: Install dependencies
