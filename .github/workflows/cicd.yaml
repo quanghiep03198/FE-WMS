@@ -48,5 +48,23 @@ jobs:
          - name: Pull latest code from Github & Re-deploy
            run: |
               cd ${{ env.WORK_DIR}}
-              ls -l
-              sh ./deploy.sh
+              ls
+              git reset --hard origin/develop
+              git pull origin develop
+              npm ci
+              npm run generate-pwa-assets
+              npm run build --ourdir dist
+              pm2 delete 'wms-client'
+              pm2 serve ./dist --name 'wms-client' --port 3000 --env .env.production --spa
+
+         # - name: Install dependencies
+         #   run: npm install
+
+         # - name: Generate PWA assets
+         #   run: npm run generate-pwa-assets
+
+         # - name: Build and bundling application
+         #   run: npm run build
+
+         # - name: Deploy to Windows Server
+         #   run: pm2 restart 'wms-client'

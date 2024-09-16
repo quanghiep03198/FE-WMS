@@ -1,5 +1,5 @@
 #!/bin/bash
-chmod +x "$(basename "$0")"
+chmod +x deploy.sh
 
 APP_NAME="wms-client"             # Tên của ứng dụng trong PM2
 DIST_DIR="dist"                   # Thư mục chứa kết quả build
