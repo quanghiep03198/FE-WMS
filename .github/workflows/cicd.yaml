@@ -47,23 +47,6 @@ jobs:
       steps:
          - name: Pull latest code from Github & Re-deploy
            run: |
-              cd C:/Users/Administrator/i-wms/client
-              ls
-              git reset --hard origin/develop
-              git pull origin develop
-              npm ci
-              npm run generate-pwa-assets
-              npm run build
-              pm2 restart 'wms-client'
-
-         # - name: Install dependencies
-         #   run: npm install
-
-         # - name: Generate PWA assets
-         #   run: npm run generate-pwa-assets
-
-         # - name: Build and bundling application
-         #   run: npm run build
-
-         # - name: Deploy to Windows Server
-         #   run: pm2 restart 'wms-client'
+              cd ${{ env.WORK_DIR}}
+              ls -l
+              sh ./deploy.sh

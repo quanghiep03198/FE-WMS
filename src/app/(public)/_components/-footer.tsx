@@ -29,9 +29,9 @@ const Footer: React.FC = () => {
 					</Div>
 					<Icon name='X' className='stroke-foreground' />
 					<Div className='inline-flex items-center gap-x-1'>
-						<Image src='/laravel.svg' alt='Laravel' className='' />
+						<Image src='/nest.svg' alt='Laravel' className='' />
 						<Typography id='company' variant='small'>
-							Laravel
+							Nest
 						</Typography>
 					</Div>
 				</Div>
