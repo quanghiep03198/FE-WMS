@@ -51,20 +51,28 @@ jobs:
               ls
               git reset --hard origin/develop
               git pull origin develop
-              npm ci
-              npm run generate-pwa-assets
-              npm run build --ourdir dist
+
+         - name: Load environment variables
+           run: |
+              echo "Loading environment variables from .env.production..."
+              export $(cat .env.production | xargs)
+
+         - name: Install dependencies
+           run: npm ci
+
+         - name: Clear npm cache
+           run: npm cache clean --force
+
+         - name: Generate PWA assets
+           run: npm run generate-pwa-assets
+
+         - name: Build the React app
+           run: npm run build
+
+         - name: Set permissions for dist folder
+           run: chmod -R 777 dist
+
+         - name: Restart PM2 process
+           run: |
               pm2 delete 'wms-client'
-              pm2 serve ./dist --name 'wms-client' --port 3000 --env .env.production --spa
-
-         # - name: Install dependencies
-         #   run: npm install
-
-         # - name: Generate PWA assets
-         #   run: npm run generate-pwa-assets
-
-         # - name: Build and bundling application
-         #   run: npm run build
-
-         # - name: Deploy to Windows Server
-         #   run: pm2 restart 'wms-client'
+              pm2 serve ./dist --name 'wms-client' --port 3000 --spa
