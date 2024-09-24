@@ -45,11 +45,8 @@ jobs:
       runs-on: self-hosted
       needs: test
       steps:
-         - name: Pull latest code from Github & Re-deploy
+         - name: Checkout repository
            uses: actions/checkout@v4
-
-         - name: Load environment variables
-           run: echo "${{ secrets.ENV_VARS }}" > .env
 
          - name: Install dependencies
            run: npm ci
@@ -64,3 +61,6 @@ jobs:
            run: |
               pm2 delete 'wms-client'
               npm run pm2:start
+
+         #  - name: Load environment variables
+         #    run: echo "${{ secrets.ENV_VARS }}" > .env
