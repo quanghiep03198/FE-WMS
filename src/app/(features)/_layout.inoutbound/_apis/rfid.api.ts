@@ -1,3 +1,4 @@
+import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useUnmount } from 'ahooks'
@@ -6,9 +7,11 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ScanningStatus } from '../_contexts/-page-context'
 
+// API Query Keys
 export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC'
-export const INOUTBOUND_DEPT_PROVIDE_TAG = 'INOUTBOUND_DEPT'
+export const INOUTBOUND_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
 export const CUST_ORDER_PROVIDE_TAG = 'CUST_ORDER'
+
 export const UNKNOWN_ORDER = 'Unknown'
 
 type GetEPCQueryArgs = { connection: string; scanningStatus: ScanningStatus }
@@ -19,7 +22,7 @@ export const useGetScannedEPCQuery = (params: GetEPCQueryArgs) => {
 
 	useEffect(() => {
 		// Cancel current request if user stop scanning
-		if (params.scanningStatus !== 'scanning') controllerRef.current.abort()
+		if (params.scanningStatus !== 'connected') controllerRef.current.abort()
 		else controllerRef.current = new AbortController()
 	}, [params.scanningStatus])
 
@@ -35,7 +38,7 @@ export const useGetScannedEPCQuery = (params: GetEPCQueryArgs) => {
 				headers: { ['X-Database-Host']: params.connection }
 			})
 		},
-		enabled: params.scanningStatus === 'scanning',
+		enabled: params.scanningStatus === 'connected',
 		refetchInterval: 5000, // refetch every 5 seconds
 		select: (response) => response.metadata
 	})
@@ -58,7 +61,7 @@ export const useSynchronizeOrderCodeMutation = () => {
 export const useGetInoutboundDeptQuery = () => {
 	return useQuery({
 		queryKey: [INOUTBOUND_DEPT_PROVIDE_TAG],
-		queryFn: RFIDService.getInoutboundDept,
+		queryFn: DepartmentService.getShapingDepartments,
 		select: (response) => response.metadata
 	})
 }
@@ -90,8 +93,8 @@ export const useUpdateOrderCodeMutation = (
 
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: async ({ host, previousOrder: prevOrder, payload }: UpdateOrderCodeMutationArgs) => {
-			return await RFIDService.updateInventoryOrderCode(host, prevOrder, payload)
+		mutationFn: async ({ host, previousOrder, payload }: UpdateOrderCodeMutationArgs) => {
+			return await RFIDService.updateInventoryOrderCode(host, previousOrder, payload)
 		},
 		onMutate: () => {
 			return toast.loading(t('ns_common:notification.processing_request'))

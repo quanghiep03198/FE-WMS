@@ -11,6 +11,7 @@ import ThemeToggle from '../../../_components/_shared/-theme-toggle'
 import NavBreadcrumb from './-nav-breadcrumb'
 import NavDrawerSidebar from './-nav-drawer-sidebar'
 import NavUserControl from './-nav-user-controller'
+import Notification from './-notifications'
 import SearchDialog from './-search-dialog'
 
 const Navbar: React.FC = () => {
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div as='header' role='menubar' className='sticky top-0 z-50 bg-background/80 px-6 py-4 backdrop-blur sm:px-2'>
+			<Div as='header' role='menubar' className='sticky top-0 z-50 bg-background/80 px-6 py-4 backdrop-blur sm:px-4'>
 				<Div
 					as='nav'
 					role='menu'
@@ -54,6 +55,7 @@ const Navbar: React.FC = () => {
 						</Button>
 						<LanguageDropdown triggerProps={{ variant: 'ghost' }} />
 						<ThemeToggle />
+						<Notification />
 						<NavUserControl />
 					</Div>
 				</Div>
@@ -64,7 +66,7 @@ const Navbar: React.FC = () => {
 	)
 }
 
-const ToggleSidebarButton = memo(() => {
+const ToggleSidebarButton: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -74,11 +76,13 @@ const ToggleSidebarButton = memo(() => {
 			contentProps={{ side: 'bottom', align: 'start' }}>
 			<label
 				htmlFor='sidebar-toggle'
-				className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'hidden xl:inline-flex')}>
+				className={cn(
+					buttonVariants({ variant: 'ghost', size: 'icon', className: 'hidden cursor-pointer xl:inline-flex' })
+				)}>
 				<Icon name='Menu' />
 			</label>
 		</Tooltip>
 	)
-})
+}
 
 export default memo(Navbar)

@@ -35,6 +35,8 @@ export default {
 		stop: 'Stop',
 		reset: 'Reset',
 		finish: 'Finish',
+		connect: 'Connect',
+		disconnect: 'Disconnect',
 		back: 'Back',
 		open: 'Open',
 		close: 'Close',
@@ -110,8 +112,5 @@ export default {
 	common_form_titles: {
 		create: 'Create new {{object}}',
 		update: 'Update {{object}}'
-	},
-	status: {
-		stopped: 'Stopped'
 	}
 } as const

@@ -35,7 +35,6 @@ export class AxiosClient {
 				config.headers['Authorization'] = config.headers['Authorization'] ?? accessToken
 				config.headers['X-User-Company'] = user?.company_code
 				config.headers['Accept-Language'] = locale
-
 				return config
 			},
 			(error) => Promise.reject(error)

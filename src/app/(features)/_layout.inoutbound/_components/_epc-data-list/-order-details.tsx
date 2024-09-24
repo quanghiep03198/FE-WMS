@@ -1,7 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
-	buttonVariants,
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -9,7 +8,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	Div,
+	Form as FormProvider,
 	Icon,
+	InputFieldControl,
+	Popover,
+	PopoverContent,
+	SelectFieldControl,
 	Table,
 	TableBody,
 	TableCell,
@@ -17,19 +21,30 @@ import {
 	TableHeader,
 	TableRow,
 	Tooltip,
-	Typography
+	Typography,
+	buttonVariants
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { useMemoizedFn, useResetState } from 'ahooks'
+import { RFIDService } from '@/services/rfid.service'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { PopoverTrigger } from '@radix-ui/react-popover'
+import { useMutation } from '@tanstack/react-query'
+import { useMemoizedFn, useResetState, useUnmount } from 'ahooks'
+import { pick, uniqBy } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 import { UNKNOWN_ORDER, useDeleteOrderMutation } from '../../_apis/rfid.api'
-import { ScannedOrder, usePageContext } from '../../_contexts/-page-context'
+import { OrderItem, OrderSize, usePageContext } from '../../_contexts/-page-context'
+import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange-epc.schema'
 
 const OrderDetails: React.FC = () => {
 	const { t } = useTranslation()
-	const { connection, scannedOrders, setScannedOrders, setScannedEPCs, setSelectedOrder, setScanningStatus } =
-		usePageContext()
+	const { connection, scannedOrders, setScannedOrders, setScanningStatus } = usePageContext((state) =>
+		pick(state, ['connection', 'scannedOrders', 'setScannedOrders', 'setScanningStatus'])
+	)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 
@@ -44,8 +59,6 @@ const OrderDetails: React.FC = () => {
 			return
 		}
 		setScannedOrders(filteredOrders)
-		setScannedEPCs((prev) => prev.filter((item) => item.mo_no !== orderToDelete))
-		setSelectedOrder(filteredOrders[1]?.mo_no ?? filteredOrders[0]?.mo_no)
 		resetOrderToDelete()
 	}
 
@@ -56,10 +69,9 @@ const OrderDetails: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='flex items-center justify-between px-4 py-2'>
+			<Div className='z-20 bg-background p-2'>
 				<Dialog>
-					<DialogTrigger
-						className={cn(buttonVariants({ variant: 'secondary', size: 'sm', className: 'items-center' }))}>
+					<DialogTrigger className={cn(buttonVariants({ variant: 'default', className: 'w-full items-center' }))}>
 						<Icon name='List' role='img' />
 						{t('ns_common:actions.detail')}
 					</DialogTrigger>
@@ -109,12 +121,6 @@ const OrderDetails: React.FC = () => {
 						</Div>
 					</DialogContent>
 				</Dialog>
-				<Typography variant='small' color='muted'>
-					{t('ns_inoutbound:mo_no_box.order_count', {
-						count: scannedOrders?.length ?? 0,
-						defaultValue: null
-					})}
-				</Typography>
 			</Div>
 			{/* Confirm deleting all fetched orders and restart scanning progress */}
 			<ConfirmDialog
@@ -128,16 +134,16 @@ const OrderDetails: React.FC = () => {
 	)
 }
 
-const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode: string) => void }> = ({
+const OrderSizingRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCode: string) => void }> = ({
 	data,
 	onBeforeDelete
 }) => {
-	const { scannedOrderSizing } = usePageContext()
+	const { scannedSizes } = usePageContext((state) => pick(state, 'scannedSizes'))
 	const { t } = useTranslation()
 
 	const filteredSizeByOrder = useMemo(
-		() => scannedOrderSizing.filter((size) => size?.mo_no === data?.mo_no),
-		[scannedOrderSizing, data]
+		() => scannedSizes?.filter((size) => size?.mo_no === data?.mo_no),
+		[scannedSizes, data]
 	)
 
 	return (
@@ -151,9 +157,12 @@ const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode
 						gridTemplateColumns: `repeat(${filteredSizeByOrder?.length}, 1fr)`
 					}}>
 					{filteredSizeByOrder?.map((size) => (
-						<Div key={size?.size_numcode} className='grid grid-rows-2 divide-y'>
+						<Div key={size?.size_numcode} className='group/cell grid grid-rows-2 divide-y'>
 							<TableCell className='bg-secondary/25 font-medium text-secondary-foreground'>
-								{size?.size_numcode ?? UNKNOWN_ORDER}
+								<Div className='inline-flex items-center gap-x-6'>
+									{size?.size_numcode ?? UNKNOWN_ORDER}
+									<OrderUpdateForm defaultValues={size} />
+								</Div>
 							</TableCell>
 							<TableCell>{size?.count}</TableCell>
 						</Div>
@@ -174,54 +183,127 @@ const OrderSizingRow: React.FC<{ data: ScannedOrder; onBeforeDelete?: (orderCode
 	)
 }
 
-/**
- * @deprecated
-const OrderUpdateForm: React.FC<{ defaultValue: string }> = ({ defaultValue }) => {
-	const form = useForm<UpdateOrderFormValue>({
-		resolver: zodResolver(updateOrderSchema),
-		defaultValues: { mo_no: defaultValue },
+const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues }) => {
+	const { t } = useTranslation()
+	const { scannedSizes, connection, setScannedSizes } = usePageContext((state) =>
+		pick(state, ['scannedSizes', 'connection', 'setScannedSizes'])
+	)
+	const form = useForm<any>({
+		resolver: zodResolver(exchangeEpcSchema),
+		defaultValues,
 		mode: 'onChange'
 	})
-	const { connection } = usePageContext()
-	const { handleToggleEditing } = useOrderSizingRowContext()
-	const [searchTerm, setSearchTerm] = useState<string>('')
-
-	const { data } = useGetCustOrderListQuery(connection, searchTerm)
-
-	const { mutateAsync } = useUpdateOrderCodeMutation((variables) => {
-		form.setValue('mo_no', variables)
-		handleToggleEditing()
+	console.log(form.getValues())
+	const { isPending, mutateAsync } = useMutation({
+		mutationKey: [],
+		mutationFn: (payload: { connection: string; data: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'> }) =>
+			RFIDService.exchangeEpc(payload.connection, payload.data)
 	})
 
-	const datalist = useMemo(() => {
-		const originalData = Array.isArray(data) ? data : []
-		return [...new Set([...originalData, defaultValue])].map((item) => ({ label: item, value: item }))
-	}, [data])
+	const exchangableOrders = uniqBy(
+		scannedSizes.filter(
+			(item) => item.size_numcode === defaultValues.size_numcode && item.mo_no !== defaultValues.mo_no
+		),
+		'mo_no'
+	)
+
+	const handleExchangeEpc = async (data: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) => {
+		try {
+			console.log(data)
+			await mutateAsync({ connection, data })
+		} catch (error) {
+			toast.error(t('ns_common:notification.error'), {
+				action: {
+					label: 'Retry',
+					onClick: async () => await mutateAsync({ connection, data })
+				}
+			})
+		}
+		// finally {
+		// const transferedOrder = exchangableOrders.find(
+		// 	(item) => item.mo_no === data.mo_no && item.mat_code === data.mat_code
+		// )
+		// console.log('tranfered order :>>', transferedOrder)
+		// transferedOrder.count -= payload.quantity
+		// const receivedOrder = exchangableOrders.find(
+		// 	(item) => item.mo_no === data.mo_no_actual && item.mat_code === data.mat_code
+		// )
+		// console.log('receivied order :>>', receivedOrder)
+		// receivedOrder.count += payload.quantity
+		// setScannedSizes(uniqBy([...scannedSizes, transferedOrder, receivedOrder], 'mo_no'))
+		// }
+	}
+
+	useUnmount(() => {
+		form.reset()
+	})
 
 	return (
-		<FormProvider {...form}>
-			<form
-				className='w-full'
-				onSubmit={form.handleSubmit(async (data) => {
-					await mutateAsync({ host: connection, previousOrder: defaultValue, payload: data }).finally(() =>
-						form.setValue('mo_no', data.mo_no)
-					)
-				})}>
-				<ComboboxFieldControl
-					name='mo_no'
-					form={form}
-					triggerProps={{ className: 'border-none shadow-none w-full !font-medium' }}
-					onInput={debounce((value) => setSearchTerm(value), 200)}
-					shouldFilter={false}
-					datalist={datalist}
-					labelField='label'
-					valueField='value'
-				/>
-				<button className='sr-only' id={defaultValue} />
-			</form>
-		</FormProvider>
+		<Popover>
+			<Tooltip message='Transfer EPC' triggerProps={{ asChild: true }}>
+				<PopoverTrigger className='opacity-0 transition-opacity duration-150 group-hover/cell:opacity-100'>
+					<Icon name='ArrowLeftRight' className='stroke-active' />
+				</PopoverTrigger>
+			</Tooltip>
+			<PopoverContent className='grid w-[384px] gap-6' align='center' alignOffset={4}>
+				<Div className='space-y-2'>
+					<Typography variant='h6' className='text-base font-medium leading-none'>
+						Exchange EPC
+					</Typography>
+					<Typography variant='small' color='muted'>
+						Transfer EPC to another order
+					</Typography>
+				</Div>
+				<FormProvider {...form}>
+					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
+						<InputFieldControl
+							readOnly
+							orientation='horizontal'
+							name='mo_no'
+							control={form.control}
+							label='Order'
+							placeholder='0'
+						/>
+						<InputFieldControl
+							orientation='horizontal'
+							name='size_numcode'
+							control={form.control}
+							label='Size'
+							readOnly
+						/>
+						<InputFieldControl type='hidden' name='mat_code' control={form.control} readOnly placeholder='0' />
+						<SelectFieldControl
+							orientation='horizontal'
+							name='mo_no_actual'
+							control={form.control}
+							label='Actual order'
+							datalist={exchangableOrders}
+							labelField='mo_no'
+							valueField='mo_no'
+						/>
+						<InputFieldControl
+							orientation='horizontal'
+							autoComplete='off'
+							name='quantity'
+							control={form.control}
+							label='Quantity'
+							placeholder='0'
+							type='number'
+							min={1}
+						/>
+						<Button size='sm' disabled={isPending}>
+							{isPending && (
+								<Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' role='img' />
+							)}
+							{isPending ? 'Processing' : 'Confirm'}
+						</Button>
+					</Form>
+				</FormProvider>
+			</PopoverContent>
+		</Popover>
 	)
 }
-*/
+
+const Form = tw.form`flex w-full flex-col items-stretch gap-3`
 
 export default OrderDetails

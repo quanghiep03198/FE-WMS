@@ -54,7 +54,7 @@ const WarehouseFormDialog: React.FC = () => {
 	const department = form.watch('dept_code')
 
 	// Get department field values
-	const { data: departments } = useGetDepartmentQuery(user?.company_code)
+	const { data: departments } = useGetDepartmentQuery()
 
 	// Get employee field values
 	const { data: employees } = useQuery({

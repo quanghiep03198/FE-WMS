@@ -37,7 +37,6 @@ export function InputFieldControl<T extends FieldValues>(
 		field: ControllerRenderProps<FieldValues, Path<FieldValues>>
 	) => {
 		setValue(e.target.value)
-		if (restProps.onChange) restProps.onChange(e)
 		if (type === 'file') {
 			field.onChange(e.target.files)
 		} else if (type === 'number') {
@@ -45,6 +44,7 @@ export function InputFieldControl<T extends FieldValues>(
 		} else {
 			field.onChange(e)
 		}
+		if (typeof restProps.onChange === 'function') restProps.onChange(e)
 	}
 
 	return (
@@ -65,7 +65,8 @@ export function InputFieldControl<T extends FieldValues>(
 								id={id}
 								className={cn(
 									className,
-									getFieldState(name).error && 'border-destructive bg-background focus:border-destructive'
+									getFieldState(name).error && 'border-destructive bg-background focus:border-destructive',
+									orientation === 'horizontal' && 'mb-2 block'
 								)}
 								value={value}
 								placeholder={placeholder}

@@ -35,6 +35,8 @@ export default {
 		continue: '继续',
 		reset: '重置',
 		finish: '完成',
+		connect: '连接',
+		disconnect: '断开',
 		back: '返回',
 		open: '打开',
 		close: '关闭',
@@ -109,8 +111,5 @@ export default {
 	common_form_titles: {
 		create: '加新{{object}}',
 		update: '編輯{{object}}'
-	},
-	status: {
-		stopped: '己停'
 	}
 } as const

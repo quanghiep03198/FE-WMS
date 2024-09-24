@@ -28,7 +28,7 @@ export class AuthService {
 		return await axiosInstance.post<void, ResponseBody<null>>('/logout')
 	}
 
-	static async refreshToken(id: IUser['user_code']): Promise<ResponseBody<string>> {
+	static async refreshToken(id: string): Promise<ResponseBody<string>> {
 		return await axiosInstance.get(`/refresh-token/${id}`)
 	}
 

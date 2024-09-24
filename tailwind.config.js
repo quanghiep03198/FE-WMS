@@ -116,6 +116,14 @@ module.exports = {
 					from: { height: 'var(--radix-collapsible-content-height)' },
 					to: { height: '0' }
 				},
+				'collapsible-up-reverse': {
+					from: { height: '0' },
+					to: { height: 'var(--radix-collapsible-content-height)' }
+				},
+				'collapsible-down-reverse': {
+					from: { height: 'var(--radix-collapsible-content-height)' },
+					to: { height: '0' }
+				},
 				shimmer: {
 					from: {
 						backgroundPosition: '0 0'
@@ -141,8 +149,10 @@ module.exports = {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'collapsible-up': 'collapsible-up 0.2s ease-out',
 				'collapsible-down': 'collapsible-down 0.2s ease-out',
+				'collapsible-up-reverse': 'collapsible-up-reverse 0.2s ease-out',
+				'collapsible-down-reverse': 'collapsible-down-reverse 0.2s ease-out',
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
-				shimmer: 'shimmer 2s linear infinite'
+				shimmer: 'shimmer 1.5s linear infinite'
 			}
 		}
 	},

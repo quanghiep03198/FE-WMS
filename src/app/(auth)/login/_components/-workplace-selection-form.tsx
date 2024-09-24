@@ -25,7 +25,12 @@ const WorkplaceSelectionForm: React.FC = () => {
 		queryFn: () => CompanyService.getCompanies(),
 		enabled: !!token,
 		select: (data) => {
-			return Array.isArray(data.metadata) ? data.metadata : []
+			return Array.isArray(data.metadata)
+				? data.metadata.map((item) => ({
+						...item,
+						company_name: t(`ns_company:factories.${item.factory_code}`, { defaultValue: item.factory_code })
+					}))
+				: []
 		}
 	})
 

@@ -14,6 +14,12 @@ export class WarehouseService {
 		return axiosInstance.get<string, ResponseBody<IWarehouse>>(`/warehouse/${warehouseNum}`)
 	}
 
+	/**
+	 *
+	 * @deprecated
+	 * @param companyCode
+	 * @returns
+	 */
 	static async getWarehouseDepartments(companyCode: string) {
 		return await axiosInstance.get<string, ResponseBody<IDepartment[]>>(`/warehouse/departments/${companyCode}`)
 	}

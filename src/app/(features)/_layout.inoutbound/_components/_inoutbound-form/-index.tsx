@@ -1,5 +1,6 @@
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse.api'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { IWarehouse } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -17,12 +18,13 @@ import {
 	RadioGroup,
 	RadioGroupItem,
 	SelectFieldControl,
+	Separator,
 	Typography
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemoizedFn } from 'ahooks'
-import { omit } from 'lodash'
+import { omit, pick } from 'lodash'
 import React, { Fragment, memo, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -44,18 +46,13 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const {
-		scanningStatus,
-		connection,
-		scannedOrders,
-		selectedOrder,
-		resetScanningStatus,
-		setSelectedOrder,
-		setScannedOrders
-	} = usePageContext()
+	const { selectedOrder, scanningStatus, connection } = usePageContext((state) =>
+		pick(state, ['selectedOrder', 'scanningStatus', 'connection'])
+	)
 	const { t, i18n } = useTranslation()
 	const queryClient = useQueryClient()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
+	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema),
@@ -107,6 +104,7 @@ const InoutboundForm: React.FC = () => {
 		})
 	})
 
+	// Reset form when all actions are reset
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
 			handleResetForm()
@@ -121,14 +119,8 @@ const InoutboundForm: React.FC = () => {
 				mo_no: selectedOrder === UNKNOWN_ORDER ? null : selectedOrder,
 				host: connection
 			})
-			const filteredOrders = scannedOrders.filter((item) => item.mo_no !== selectedOrder)
-			if (filteredOrders.length > 0) {
-				setSelectedOrder(filteredOrders[0]?.mo_no)
-				setScannedOrders(filteredOrders)
-			} else {
-				resetScanningStatus()
-				form.reset()
-			}
+			window.dispatchEvent(new CustomEvent('INOUTBOUND_SUBMISSION', { detail: selectedOrder }))
+
 			queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
 			return toast.success(t('ns_common:notification.success'), { id: loading })
 		} catch (error) {
@@ -138,7 +130,7 @@ const InoutboundForm: React.FC = () => {
 
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit(handleSubmit)}>
+			<Form onSubmit={form.handleSubmit((data) => handleSubmit(data))}>
 				<Div className='col-span-full'>
 					<FormField
 						name='rfid_status'
@@ -254,20 +246,27 @@ const InoutboundForm: React.FC = () => {
 						</Div>
 					</Fragment>
 				)}
-				<Div className='col-span-full'>
+				<Div className='col-span-full flex flex-col items-center justify-between gap-6 lg:flex-row xl:flex-row'>
 					<Button
 						type='submit'
-						className='gap-x-2 sm:w-full'
-						disabled={scanningStatus !== 'finished' || selectedOrder === 'all'}>
+						size={isMobileScreen ? 'lg' : 'default'}
+						className='gap-x-2 sm:w-full md:w-full'
+						disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
 						<Icon name='Check' /> {t('ns_common:actions.save')}
 					</Button>
+				</Div>
+				<Separator className='col-span-full' />
+				<Div className='col-span-full'>
+					<Typography variant='small' className='inline-flex items-center gap-x-2 italic'>
+						<Icon name='BadgeInfo' className='stroke-active' size={18} /> Disconnect before updating stock moves
+					</Typography>
 				</Div>
 			</Form>
 		</FormProvider>
 	)
 }
 
-const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
+const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6 max-h-full`
 const StyledFormLabel = tw(FormLabel)<React.ComponentProps<typeof FormLabel>>`
 	flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200 sm:px-4 aria-checked:bg-secondary aria-checked:text-secondary-foreground
 `

@@ -157,7 +157,6 @@ const BaseDatalistForm: React.FC = () => {
 							)}
 						/>
 					</Div>
-
 					<Div className='col-span-full'>
 						<Button type='submit' className='w-full lg:w-auto xl:w-auto'>
 							{t('ns_common:actions.proceed')}

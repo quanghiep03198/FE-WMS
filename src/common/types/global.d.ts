@@ -17,6 +17,16 @@ export declare global {
 		readonly VITE_VN_DB_HOST_02: string
 	}
 
+	interface Navigator {
+		connection: {
+			downlink: number
+			downlinkMax: number
+			effectiveType: '4g' | '3g' | '2g' | 'slow-2g'
+			rtt: number
+			saveData: boolean
+		}
+	}
+
 	type ResponseBody<T> = {
 		message: string
 		statusCode: HttpStatusCode

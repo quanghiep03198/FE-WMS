@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios'
 
 export class EmployeeService {
 	static searchEmployee(params: AxiosRequestConfig['params']) {
-		return axiosInstance.get<AxiosRequestConfig['params'], ResponseBody<IEmployee[]>>(`/employees`, {
+		return axiosInstance.get<AxiosRequestConfig['params'], ResponseBody<IEmployee[]>>(`/employee`, {
 			params
 		})
 	}

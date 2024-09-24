@@ -1,89 +1,170 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { IElectronicProductCode } from '@/common/types/entities'
-import { useQueryClient } from '@tanstack/react-query'
-import { useMemoizedFn, useResetState, useUpdateEffect } from 'ahooks'
-import React, { createContext, useContext, useMemo, useState } from 'react'
-import { RFID_EPC_PROVIDE_TAG } from '../_apis/rfid.api'
+import { useSessionStorageState } from 'ahooks'
+import React, { createContext, useContext, useRef } from 'react'
+import { StoreApi, create, useStore } from 'zustand'
+import { immer } from 'zustand/middleware/immer'
+import { useShallow } from 'zustand/react/shallow'
 
-export type ScanningStatus = 'scanning' | 'stopped' | 'finished' | undefined
-export type ScannedOrder = { mo_no: string; count: number }
-export type ScannedOrderSizing = ScannedOrder & { size_numcode: string }
+export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
+export type OrderItem = { mo_no: string; count: number }
+export type OrderSize = OrderItem & { size_numcode: string; mat_code: string }
+export type Log = { message: string; timestamp?: Date; type: 'info' | 'error' }
 
-type TPageContext = {
-	scannedEPCs: Array<IElectronicProductCode>
-	scannedOrders: Array<ScannedOrder>
-	scannedOrderSizing: Array<ScannedOrderSizing>
+type PageContextStore = {
+	scannedEpc: Pagination<IElectronicProductCode>
+	scannedOrders: Array<OrderItem>
+	scannedSizes: Array<OrderSize>
 	scanningStatus: ScanningStatus
 	connection: string
-	selectedOrder: string | null
-	setScannedEPCs: React.Dispatch<React.SetStateAction<IElectronicProductCode[]>>
-	setScannedOrders: React.Dispatch<React.SetStateAction<ScannedOrder[]>>
-	setScannedOrderSizing: React.Dispatch<React.SetStateAction<ScannedOrderSizing[]>>
-	setConnection: React.Dispatch<React.SetStateAction<string>>
-	setScanningStatus: React.Dispatch<React.SetStateAction<ScanningStatus>>
-	setSelectedOrder: React.Dispatch<React.SetStateAction<string>>
+	selectedOrder: string | undefined
+	logs: Array<Log>
+	pollingDuration: number
+	setScanningStatus: (status: ScanningStatus) => void
+	setConnection: (value: string) => void
+	setSelectedOrder: (value: string) => void
+	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
+	setScannedOrders: (data: Array<OrderItem>) => void
+	setScannedSizes: (data: Array<OrderSize>) => void
+	setPollingDuration: (data: number) => void
+	writeLog: (data: Omit<Log, 'timestamp'>) => void
+	clearLog: () => void
 	handleToggleScanning: () => void
-	resetScannedOrders: () => void
-	resetScanningStatus: () => void
-	resetConnection: () => void
+	reset: () => void
+}
+export const DEFAULT_PROPS: Pick<
+	PageContextStore,
+	| 'scannedEpc'
+	| 'scannedOrders'
+	| 'scannedSizes'
+	| 'scanningStatus'
+	| 'connection'
+	| 'selectedOrder'
+	| 'logs'
+	| 'pollingDuration'
+> = {
+	scanningStatus: undefined,
+	connection: '',
+	selectedOrder: 'all',
+	logs: [],
+	pollingDuration: 0.5 * 1000,
+	scannedEpc: {
+		data: [],
+		hasNextPage: false,
+		hasPrevPage: false,
+		limit: 100,
+		page: 1,
+		totalDocs: 0,
+		totalPages: 0
+	},
+	scannedOrders: [],
+	scannedSizes: []
 }
 
-const PageContext = createContext<TPageContext>(null)
+const PageContext = createContext(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [scanningStatus, setScanningStatus, resetScanningStatus] = useResetState<ScanningStatus | undefined>(undefined)
-	const [connection, setConnection, resetConnection] = useResetState<string>('')
-	const [scannedEPCs, setScannedEPCs, resetScannedEPCs] = useResetState<IElectronicProductCode[]>([])
-	const [scannedOrderSizing, setScannedOrderSizing] = useState([])
-	const [scannedOrders, setScannedOrders, resetScannedOrders] = useResetState<ScannedOrder[]>([])
-	const [selectedOrder, setSelectedOrder, resetSeletedOrder] = useResetState<string>('')
-	const queryClient = useQueryClient()
+	const storeRef = useRef<StoreApi<PageContextStore>>(null)
 
-	useUpdateEffect(() => {
-		// Reset scanned result on scanning status is reset
-		if (typeof scanningStatus === 'undefined') {
-			resetScannedOrders()
-			resetScannedEPCs()
-			resetSeletedOrder()
-			queryClient.removeQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
-		}
-	}, [scanningStatus])
-
-	const handleToggleScanning = useMemoizedFn(() => {
-		setScanningStatus((prev) => {
-			switch (true) {
-				case typeof prev === 'undefined':
-					return 'scanning'
-				case prev === 'stopped':
-					return 'scanning'
-				case prev === 'scanning':
-					return 'stopped'
-			}
-		})
+	const [isEnablePreserveLog] = useSessionStorageState<boolean>('rfidPreserveLog', {
+		listenStorageChange: true
 	})
 
-	const memorizedValues = useMemo(
-		() => ({
-			scannedEPCs,
-			connection,
-			scanningStatus,
-			scannedOrders,
-			scannedOrderSizing,
-			selectedOrder,
-			resetScannedOrders,
-			resetScanningStatus,
-			resetConnection,
-			setScannedEPCs,
-			setScannedOrders,
-			setScannedOrderSizing,
-			setConnection,
-			setScanningStatus,
-			setSelectedOrder,
-			handleToggleScanning
-		}),
-		[scannedEPCs, connection, scanningStatus, scannedOrders, scannedOrderSizing, selectedOrder]
-	)
+	if (!storeRef.current) {
+		storeRef.current = create<PageContextStore>()(
+			immer((set) => ({
+				...DEFAULT_PROPS,
+				setScanningStatus: (stt) =>
+					set((state) => {
+						state.scanningStatus = stt
+					}),
+				setConnection: (value) => {
+					set((state) => {
+						state.connection = value
+					})
+				},
+				setSelectedOrder: (value) => {
+					set((state) => {
+						state.selectedOrder = value
+					})
+				},
+				setScannedEpc: (data) => {
+					set((state) => {
+						state.scannedEpc = data
+					})
+				},
+				setScannedOrders: (data) => {
+					set((state) => {
+						state.scannedOrders = data
+					})
+				},
+				setScannedSizes: (data) => {
+					set((state) => {
+						state.scannedSizes = data
+					})
+				},
+				setPollingDuration: (data) => {
+					set((state) => {
+						state.pollingDuration = data * 1000
+					})
+				},
+				writeLog: (log) => {
+					set((state) => {
+						state.logs.unshift({ timestamp: new Date(), ...log })
+					})
+				},
+				clearLog: () => {
+					set((state) => {
+						state.logs = []
+					})
+				},
+				handleToggleScanning: () => {
+					set((state) => {
+						switch (true) {
+							case typeof state.scanningStatus === 'undefined': {
+								state.scanningStatus = 'connecting'
+								break
+							}
+							case state.scanningStatus === 'connected': {
+								state.scanningStatus = 'disconnected'
+								break
+							}
+							case state.scanningStatus === 'disconnected': {
+								state.scanningStatus = 'connecting'
+								break
+							}
+						}
+					})
+				},
+				reset: () => {
+					if (!isEnablePreserveLog) {
+						set((state) => {
+							state.logs = DEFAULT_PROPS.logs
+						})
+					}
+					set((state) => {
+						state.connection = DEFAULT_PROPS.connection
+						state.scanningStatus = DEFAULT_PROPS.scanningStatus
+						state.scannedEpc = DEFAULT_PROPS.scannedEpc
+						state.scannedOrders = DEFAULT_PROPS.scannedOrders
+						state.scannedSizes = DEFAULT_PROPS.scannedSizes
+						state.selectedOrder = 'all'
+					})
+				}
+			}))
+		)
+	}
 
-	return <PageContext.Provider value={memorizedValues}>{children}</PageContext.Provider>
+	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }
 
-export const usePageContext = () => useContext(PageContext)
+export const usePageContext = (
+	selector?: (state: PageContextStore) => Partial<PageContextStore>
+): Partial<PageContextStore> => {
+	const store = useContext(PageContext)
+	if (!store) {
+		throw new Error('Missing StoreProvider')
+	}
+	if (typeof selector === 'undefined') return useStore(store)
+	return useStore(store, useShallow(selector))
+}

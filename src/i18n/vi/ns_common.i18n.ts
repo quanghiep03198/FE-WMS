@@ -31,6 +31,8 @@ export default {
 		stop: 'Dừng',
 		reset: 'Đặt lại',
 		finish: 'Hoàn thành',
+		connect: 'Kết nối',
+		disconnect: 'Ngắt kết nối',
 		save: 'Lưu',
 		save_changes: 'Lưu thay đổi',
 		revert_changes: 'Hủy thay đổi',
@@ -111,8 +113,5 @@ export default {
 	common_form_titles: {
 		create: 'Thêm mới {{object}}',
 		update: 'Cập nhật {{object}}'
-	},
-	status: {
-		stopped: 'Đã dừng'
 	}
 } as const

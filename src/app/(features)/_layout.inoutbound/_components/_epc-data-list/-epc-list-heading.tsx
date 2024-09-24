@@ -9,32 +9,58 @@ import {
 	SelectValue,
 	Typography
 } from '@/components/ui'
+import { useEventListener } from 'ahooks'
+import { pick } from 'lodash'
 import { Fragment } from 'react'
 import { UNKNOWN_ORDER } from '../../_apis/rfid.api'
+import { useListBoxContext } from '../../_contexts/-list-box.context'
 import { usePageContext } from '../../_contexts/-page-context'
 
-const EPCListHeading: React.FC = () => {
-	const { selectedOrder, scanningStatus, scannedOrders, setSelectedOrder } = usePageContext()
+const EpcListHeading: React.FC = () => {
+	const { selectedOrder, scannedOrders, setScannedOrders, setSelectedOrder, reset } = usePageContext((state) =>
+		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
+	)
+
+	const { loading, setPage } = useListBoxContext()
+
+	useEventListener('INOUTBOUND_SUBMISSION', (e: CustomEvent<string>) => {
+		const filteredOrders = scannedOrders.filter((item) => item.mo_no !== e.detail)
+		if (filteredOrders.length > 0) {
+			setSelectedOrder(filteredOrders[0]?.mo_no)
+			setScannedOrders(filteredOrders)
+		} else {
+			reset()
+		}
+	})
+
+	const handleChangeOrder = (value: string) => {
+		setSelectedOrder(value)
+		setPage(1)
+	}
 
 	return (
-		<Div className='flex items-center justify-between px-4 py-2 text-center'>
+		<Div className='flex h-fit items-center justify-between px-4 py-2 text-center'>
 			<Typography variant='h6' className='relative z-10 inline-flex items-center gap-x-2 px-2 text-center text-base'>
 				<Icon name='ScanBarcode' size={20} />
 				EPC Data
 			</Typography>
 			<Select
-				disabled={scanningStatus === 'scanning' || typeof scanningStatus === 'undefined'} // Disable selecting connection while scanning
+				// disabled={scanningStatus === 'connected' || typeof scanningStatus === 'undefined'} // Disable selecting connection while scanning
 				value={selectedOrder}
-				onValueChange={(value) => setSelectedOrder(value)}>
+				onValueChange={handleChangeOrder}>
 				<SelectTrigger className='flex basis-52 justify-start gap-x-2'>
-					<Icon name='ListFilter' />
+					{loading ? (
+						<Icon name='LoaderCircle' className='animate-[spin_1.75s_linear_infinite]' />
+					) : (
+						<Icon name='ListFilter' />
+					)}
 					<SelectValue placeholder={!selectedOrder && 'Select'} />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup>
-						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
+						<SelectItem value='all'>All</SelectItem>
+						{Array.isArray(scannedOrders) && scannedOrders.length > 0 && (
 							<Fragment>
-								<SelectItem value='all'>All</SelectItem>
 								{Array.isArray(scannedOrders) &&
 									scannedOrders.map((order, index) => (
 										<SelectItem key={index} value={order.mo_no} className='!flex items-center gap-x-2'>
@@ -42,10 +68,6 @@ const EPCListHeading: React.FC = () => {
 										</SelectItem>
 									))}
 							</Fragment>
-						) : (
-							<SelectItem disabled value={undefined}>
-								No data
-							</SelectItem>
 						)}
 					</SelectGroup>
 				</SelectContent>
@@ -54,4 +76,4 @@ const EPCListHeading: React.FC = () => {
 	)
 }
 
-export default EPCListHeading
+export default EpcListHeading

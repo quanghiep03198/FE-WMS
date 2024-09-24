@@ -51,7 +51,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 					onValueChange={debounce((value) => setSearchTerm(value), 200)}
 				/>
 				<CommandEmpty>No results found.</CommandEmpty>
-				<CommandList className='scrollbar'>
+				<CommandList className='scrollbar sm:max-h-full'>
 					{!searchTerm ? (
 						<Fragment>
 							<CommandGroup heading='Suggestions'>

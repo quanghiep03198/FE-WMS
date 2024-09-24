@@ -32,7 +32,7 @@ const BrowserMockup: React.FC = () => {
 						</Div>
 					</Div>
 					<ContentGrid>
-						<ContentGridItem className='col-span-4 flex items-center justify-center sm:col-span-5 '>
+						<ContentGridItem className='col-span-4 flex items-center justify-center sm:col-span-5'>
 							<Icon
 								name='ScanBarcode'
 								strokeWidth={0.75}

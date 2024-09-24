@@ -4,17 +4,21 @@ export enum Theme {
 	SYSTEM = 'system'
 }
 
+export enum RequestMethod {
+	GET = 'GET',
+	POST = 'POST',
+	PUT = 'PUT',
+	DELETE = 'DELETE',
+	PATCH = 'PATCH',
+	OPTIONS = 'OPTIONS',
+	HEAD = 'HEAD',
+	CONNECT = 'CONNECT'
+}
+
 export enum Languages {
 	VIETNAMESE = 'vi',
 	ENGLISH = 'en',
 	CHINESE = 'cn'
-}
-
-export enum CofactoryRef {
-	VA1 = 'A',
-	VB1 = 'B',
-	VB2 = 'C',
-	CA1 = 'K'
 }
 
 export enum PresetBreakPoints {
@@ -34,6 +38,12 @@ export enum CommonActions {
 	DELETE = 'DELETE',
 	IMPORT = 'IMPORT',
 	EXPORT = 'EXPORT'
+}
+export enum CofactoryRef {
+	VA1 = 'A',
+	VB1 = 'B',
+	VB2 = 'C',
+	CA1 = 'K'
 }
 
 export enum OrderStatus {

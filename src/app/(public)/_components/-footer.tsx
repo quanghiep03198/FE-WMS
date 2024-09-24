@@ -5,20 +5,9 @@ const Footer: React.FC = () => {
 	return (
 		<Div as='footer' className='border-t p-6'>
 			<Div className='mx-auto flex max-w-7xl items-center justify-between xxl:max-w-8xl'>
-				<Div id='company' color='muted' className='inline-flex items-center gap-x-2 text-xs'>
-					<Icon name='Boxes' size={28} strokeWidth={1} />
-
-					<Div className='space-y-1'>
-						<Typography variant='small' className='text-xs font-semibold'>
-							i-WMS
-						</Typography>
-						<Typography variant='small' className='text-xs'>
-							© {new Date().getFullYear()} GreenLand, Inc. All rights reserved.
-						</Typography>
-					</Div>
-				</Div>
+				<Typography variant='small'>© {new Date().getFullYear()} GreenLand, Inc. All rights reserved.</Typography>
 				<Div className='flex items-center justify-center gap-x-3'>
-					<Typography id='company' className='text-sm font-medium'>
+					<Typography id='company' className='text-sm'>
 						Powered by
 					</Typography>
 					<Div className='inline-flex items-center gap-x-1'>

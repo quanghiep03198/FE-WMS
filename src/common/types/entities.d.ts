@@ -4,7 +4,6 @@ import { ProductionApprovalStatus, TransferOrderApprovalStatus } from '../consta
 
 export interface IBaseEntity {
 	id: string
-	keyid?: string
 	updated?: Date | string
 	created?: Date | string
 	remark?: string | null
@@ -81,7 +80,7 @@ export interface IProduction extends IBaseEntity {
 
 export interface IElectronicProductCode {
 	record_time: Date
-	epc_code: string
+	epc: string
 	mo_no: string
 	rfid_status: 'A' | 'B' | null
 	rfid_use: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | null

@@ -81,15 +81,15 @@ const Statistics: React.FC = () => {
 							<AreaChart data={overalStatistics}>
 								<defs>
 									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
-										<stop offset='1%' stopColor='hsl(var(--chart-3))' stopOpacity={0.8} />
-										<stop offset='99%' stopColor='hsl(var(--chart-3))' stopOpacity={0} />
+										<stop offset='1%' stopColor='hsl(var(--chart-1))' stopOpacity={0.8} />
+										<stop offset='99%' stopColor='hsl(var(--chart-1))' stopOpacity={0} />
 									</linearGradient>
 								</defs>
 								<Area
 									type='monotone'
 									dataKey={stats.dataField}
 									fillOpacity={0.8}
-									stroke='hsl(var(--chart-3))'
+									stroke='hsl(var(--chart-1))'
 									fill='url(#colorPv)'
 								/>
 							</AreaChart>
