@@ -44,9 +44,14 @@ jobs:
    deploy:
       runs-on: self-hosted
       needs: test
+      env:
+         ENV_VARS: ${{ secrets.ENV_VARS }}
       steps:
          - name: Checkout repository
-           uses: actions/checkout@v4
+           uses: actions/checkout@v3
+
+         - name: Load environment variables
+           run: echo $ENV_VARS >> .env
 
          - name: Install dependencies
            run: npm ci
@@ -57,10 +62,6 @@ jobs:
          - name: Build the React app
            run: npm run build
 
-         - name: Restart PM2 process
+         - name: Start PM2 process
            run: |
-              pm2 delete 'wms-client'
               npm run pm2:start
-
-         #  - name: Load environment variables
-         #    run: echo "${{ secrets.ENV_VARS }}" > .env
