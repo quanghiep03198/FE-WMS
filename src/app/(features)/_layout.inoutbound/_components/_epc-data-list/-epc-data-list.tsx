@@ -290,7 +290,7 @@ const EpcDataList: React.FC = () => {
 			)}
 		</List>
 	) : (
-		<Div className='z-10 grid h-full max-h-full place-content-center sm:min-h-[50vh] md:min-h-[50dvh]'>
+		<Div className='z-10 grid h-full max-h-full min-h-[50dvh] place-content-center lg:max-h-[70dvh] xl:max-h-[70dvh] xxl:max-h-[65dvh]'>
 			<Div className='inline-flex items-center gap-x-4'>
 				<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 				<Typography color='muted'>Empty</Typography>
@@ -299,7 +299,7 @@ const EpcDataList: React.FC = () => {
 	)
 }
 
-const List = tw.div`flex z-10 h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xl:max-h-[75dvh] max-h-[50dvh]`
+const List = tw.div`flex z-10 h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar lg:max-h-[70dvh] xl:max-h-[70dvh] xxl:max-h-[65dvh] max-h-[50dvh]`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap`
 
 export default EpcDataList

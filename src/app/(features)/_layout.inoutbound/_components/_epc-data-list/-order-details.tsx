@@ -69,59 +69,58 @@ const OrderDetails: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='z-20 bg-background p-2'>
-				<Dialog>
-					<DialogTrigger className={cn(buttonVariants({ variant: 'default', className: 'w-full items-center' }))}>
-						<Icon name='List' role='img' />
-						{t('ns_common:actions.detail')}
-					</DialogTrigger>
-					<DialogContent className='max-w-6xl'>
-						<DialogHeader>
-							<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
-							<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
-						</DialogHeader>
-						<Div className='divide-y overflow-clip rounded-lg border text-sm'>
-							<Div
-								className={cn(
-									'relative max-h-96 w-full overflow-x-auto overflow-y-auto scrollbar-track-scrollbar/20',
-									Array.isArray(scannedOrders) && scannedOrders.length === 0 && 'h-[50dvh]'
-								)}>
-								{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-									<Table className='border-separate border-spacing-0'>
-										<TableHeader>
-											<TableRow className='sticky top-0 z-10 bg-background'>
-												<TableHead align='left' className='w-[15%]'>
-													{t('ns_erp:fields.mo_no')}
-												</TableHead>
-												<TableHead className='w-[75%]'>Sizes</TableHead>
-												<TableHead align='right' className='w-[5%]'>
-													{t('ns_common:common_fields.total')}
-												</TableHead>
-												<TableHead className='w-[5%]'>-</TableHead>
-											</TableRow>
-										</TableHeader>
-										<TableBody>
-											{scannedOrders.map((order) => {
-												return <OrderSizingRow data={order} onBeforeDelete={handleBeforeDelete} />
-											})}
-										</TableBody>
-									</Table>
-								) : (
-									<Div className='inset-0 flex h-full w-full items-center justify-center gap-x-2'>
-										<Icon name='Inbox' size={24} strokeWidth={1} />
-										No data
-									</Div>
-								)}
-							</Div>
-							<Div className='flex items-center justify-between p-4'>
-								<Typography variant='small' color='muted'>
-									{t('ns_inoutbound:mo_no_box.caption')}
-								</Typography>
-							</Div>
+			<Dialog>
+				<DialogTrigger className={cn(buttonVariants({ variant: 'default', className: 'w-full items-center' }))}>
+					<Icon name='List' role='img' />
+					{t('ns_common:actions.detail')}
+				</DialogTrigger>
+				<DialogContent className='max-w-6xl'>
+					<DialogHeader>
+						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
+						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
+					</DialogHeader>
+					<Div className='divide-y overflow-clip rounded-lg border text-sm'>
+						<Div
+							className={cn(
+								'relative max-h-96 w-full overflow-x-auto overflow-y-auto scrollbar-track-scrollbar/20',
+								Array.isArray(scannedOrders) && scannedOrders.length === 0 && 'h-[50dvh]'
+							)}>
+							{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
+								<Table className='border-separate border-spacing-0'>
+									<TableHeader>
+										<TableRow className='sticky top-0 z-10 bg-background'>
+											<TableHead align='left' className='w-[15%]'>
+												{t('ns_erp:fields.mo_no')}
+											</TableHead>
+											<TableHead className='w-[75%]'>Sizes</TableHead>
+											<TableHead align='right' className='w-[5%]'>
+												{t('ns_common:common_fields.total')}
+											</TableHead>
+											<TableHead className='w-[5%]'>-</TableHead>
+										</TableRow>
+									</TableHeader>
+									<TableBody>
+										{scannedOrders.map((order) => {
+											return <OrderSizingRow data={order} onBeforeDelete={handleBeforeDelete} />
+										})}
+									</TableBody>
+								</Table>
+							) : (
+								<Div className='inset-0 flex h-full w-full items-center justify-center gap-x-2'>
+									<Icon name='Inbox' size={24} strokeWidth={1} />
+									No data
+								</Div>
+							)}
 						</Div>
-					</DialogContent>
-				</Dialog>
-			</Div>
+						<Div className='flex items-center justify-between p-4'>
+							<Typography variant='small' color='muted'>
+								{t('ns_inoutbound:mo_no_box.caption')}
+							</Typography>
+						</Div>
+					</Div>
+				</DialogContent>
+			</Dialog>
+
 			{/* Confirm deleting all fetched orders and restart scanning progress */}
 			<ConfirmDialog
 				title={t('ns_inoutbound:notification.confirm_delete_all_mono.title')}

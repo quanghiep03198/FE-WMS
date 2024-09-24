@@ -1,8 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Typography } from '@/components/ui'
-import { useEventListener } from 'ahooks'
+import { useEventListener, useResetState } from 'ahooks'
 import { pick } from 'lodash'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -69,11 +69,17 @@ const TransferDataCalculator: React.FC = () => {
 }
 
 const LatencyInsight: React.FC = () => {
-	const [latency, setLatency] = useState(0)
+	const [latency, setLatency, reset] = useResetState(0)
+	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
 
 	useEventListener('RETRIEVE_LATENCY', (e: CustomEvent<number>) => {
-		setLatency(e.detail < 0 ? 0 : +e.detail.toFixed(2))
+		if (scanningStatus === 'connected') setLatency(e.detail < 0 ? 0 : +e.detail.toFixed(2))
 	})
+
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined') reset()
+	}, [scanningStatus])
+
 	return (
 		<StatusItem>
 			<Typography variant='small'>Latency</Typography>
@@ -89,11 +95,11 @@ const LatencyInsight: React.FC = () => {
 
 const ConnectionInsight: React.FC = () => {
 	return (
-		<Div className='flex flex-grow flex-col gap-y-4'>
-			<Typography variant='h6' className='text-lg'>
+		<Div className='space-y-4'>
+			<Typography variant='h6' className='text-lg sm:text-base md:text-base'>
 				Network status
 			</Typography>
-			<Div className='flex-1 space-y-2'>
+			<Div className='flex-1 space-y-4'>
 				<NetworkInsight />
 				<LatencyInsight />
 				<JobStatus />

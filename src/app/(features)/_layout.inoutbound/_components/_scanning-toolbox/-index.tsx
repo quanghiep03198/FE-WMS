@@ -11,15 +11,17 @@ const ScanningToolbox: React.FC = () => {
 	return (
 		<ToolbarWrapper>
 			<ToolbarHeader>
-				<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg font-semibold'>
+				<Typography
+					variant='h6'
+					className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 					<Icon name='Settings2' size={18} />
 					Toolbar
 				</Typography>
 				<ToolbarToggler />
 			</ToolbarHeader>
 			<ToolbarBody>
-				<ConnectionInsight />
 				<SettingPanel />
+				<ConnectionInsight />
 			</ToolbarBody>
 		</ToolbarWrapper>
 	)
@@ -52,20 +54,21 @@ const ToolbarToggler: React.FC = () => {
 }
 
 const ToolbarWrapper = tw.div`
-	group mt-10 flex flex-col overflow-y-auto rounded-lg border bg-background scrollbar
-	has-[#toggle-pin-toolbar[data-state=on]]:max-h-[70dvh]
-	has-[#toggle-pin-toolbar[data-state=on]]:xxl:max-h-[85dvh]
+	group mt-10 flex flex-col overflow-y-auto rounded-lg border bg-background scrollbar max-h-[60dvh]
+	has-[#toggle-pin-toolbar[data-state=on]]:xl:max-h-[65dvh]
+	has-[#toggle-pin-toolbar[data-state=on]]:xxl:max-h-[75dvh]
 	has-[#toggle-pin-toolbar[data-state=on]]:mt-0 
 	has-[#toggle-pin-toolbar[data-state=on]]:min-h-full
-	has-[#toggle-pin-toolbar[data-state=on]]:z-50
 `
 
 const ToolbarHeader = tw.div`sticky top-0 z-10 flex items-center justify-between gap-x-2 border-b bg-background px-4 py-2`
 
 const ToolbarBody = tw.div`
-	grid basis-full gap-10 p-4 
-	group-has-[#toggle-pin-toolbar[data-state=on]]:grid-cols-1 
-	lg:grid-cols-2 xl:grid-cols-2
-`
+	flex basis-full gap-10 p-4
+	group-has-[#toggle-pin-toolbar[data-state=on]]:flex-col-reverse
+	group-has-[#toggle-pin-toolbar[data-state=on]]:justify-end
+	lg:flex-row xl:flex-row
+	`
+// sm:flex-col md:flex-col
 
 export default ScanningToolbox

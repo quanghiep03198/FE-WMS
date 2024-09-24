@@ -11,11 +11,11 @@ const SettingPanel: React.FC = () => {
 	})
 
 	return (
-		<Div className='flex flex-col gap-y-4 @container'>
-			<Typography variant='h6' className='text-lg'>
+		<Div className='basis-1/2 space-y-4'>
+			<Typography variant='h6' className='text-lg sm:text-base md:text-base'>
 				Settings
 			</Typography>
-			<Div className='flex h-full flex-1 flex-col gap-y-4'>
+			<Div className='flex h-full flex-1 flex-col gap-y-4 @container-normal'>
 				<PollingIntervalSelector defaultValue={[0.5]} />
 				{/*  */}
 				<Div className='grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0'>
@@ -82,7 +82,7 @@ const PollingIntervalSelector: React.FC<PollingIntervalSelectorProps> = ({ defau
 						/>
 					</Div>
 				</HoverCardTrigger>
-				<HoverCardContent align='start' className='z-50 w-64 text-sm' side='right'>
+				<HoverCardContent align='start' className='z-50 w-64 text-sm' side='top'>
 					Controls polling duration: lower value means faster polling however it can cause higher traffic for
 					server
 				</HoverCardContent>

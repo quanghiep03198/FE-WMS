@@ -32,7 +32,7 @@ const LoggerConsole: React.FC = () => {
 
 	return (
 		<Sheet>
-			<SheetTrigger className={cn(buttonVariants({ variant: 'secondary' }))}>
+			<SheetTrigger className={cn(buttonVariants({ variant: 'secondary', className: 'max-w-full' }))}>
 				<Icon name='Terminal' role='img' /> Log
 			</SheetTrigger>
 			<SheetContent side='bottom'>
