@@ -48,7 +48,10 @@ jobs:
          ENV_VARS: ${{ secrets.ENV_VARS }}
       steps:
          - name: Checkout repository
-           uses: actions/checkout@v3
+           uses: actions/checkout@v4
+
+         - name: Clean npm cache
+           run: npm cache clean --force
 
          - name: Load environment variables
            run: echo $ENV_VARS >> .env
@@ -64,4 +67,4 @@ jobs:
 
          - name: Start PM2 process
            run: |
-              npm run pm2:start
+              pm2 serve ./dist --name "wms-client" --port 3000 --env .env --spa
