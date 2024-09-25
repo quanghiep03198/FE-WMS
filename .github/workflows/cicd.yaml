@@ -53,7 +53,7 @@ jobs:
 
          - name: Load environment variables
            run: |
-              echo "${{ secrets.ENV_VARIABLE }}" > .env
+              echo "${{ secrets.ENV_VARIABLE }}" > .env.production
 
          - name: Install dependencies
            run: npm ci
