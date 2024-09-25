@@ -34,7 +34,7 @@ import {
 	RFID_EPC_PROVIDE_TAG,
 	UNKNOWN_ORDER,
 	useGetInoutboundDeptQuery,
-	useUpdateEPCMutation
+	useUpdateEpcMutation
 } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
@@ -92,7 +92,7 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync } = useUpdateEPCMutation()
+	const { mutateAsync } = useUpdateEpcMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({

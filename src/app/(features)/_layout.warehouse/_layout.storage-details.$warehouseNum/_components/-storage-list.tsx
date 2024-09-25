@@ -136,7 +136,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 							checked={value}
 							onCheckedChange={async (checked) =>
 								await updateWarehouseStorage({
-									storageNum: original.storage_num,
+									id: original.id,
 									payload: {
 										is_disable: Boolean(checked),
 										is_default: checked ? false : Boolean(original.is_default)
@@ -159,7 +159,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 							checked={value}
 							onCheckedChange={async (checked) =>
 								await updateWarehouseStorage({
-									storageNum: original.storage_num,
+									id: original.id,
 									payload: {
 										is_default: Boolean(checked)
 									}

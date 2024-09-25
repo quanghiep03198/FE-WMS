@@ -47,7 +47,7 @@ export const DEFAULT_PROPS: Pick<
 	connection: '',
 	selectedOrder: 'all',
 	logs: [],
-	pollingDuration: 0.5 * 1000,
+	pollingDuration: 500,
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,

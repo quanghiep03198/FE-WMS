@@ -44,17 +44,10 @@ export const useGetScannedEPCQuery = (params: GetEPCQueryArgs) => {
 	})
 }
 
-export const useUpdateEPCMutation = () => {
+export const useUpdateEpcMutation = () => {
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
 		mutationFn: RFIDService.updateStockMovement
-	})
-}
-
-export const useSynchronizeOrderCodeMutation = () => {
-	return useMutation({
-		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: RFIDService.synchronizeOrderCode
 	})
 }
 

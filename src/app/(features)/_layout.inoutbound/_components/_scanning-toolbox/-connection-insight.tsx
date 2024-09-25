@@ -1,15 +1,18 @@
 import { cn } from '@/common/utils/cn'
+import { Json } from '@/common/utils/json'
+import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
-import { useEventListener, useResetState } from 'ahooks'
+import { useEventListener, usePrevious, useResetState } from 'ahooks'
 import { pick } from 'lodash'
 import { useEffect, useState } from 'react'
 import tw from 'tailwind-styled-components'
+import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const NetworkInsight: React.FC = () => {
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
 
-	useEventListener('RETRIEVE_NETWORK_CONNECTION', (e: CustomEvent<boolean>) => {
+	useEventListener(NETWORK_CONNECTION_CHANGE, (e: CustomEvent<boolean>) => {
 		setIsNetworkAvailable(e.detail)
 	})
 
@@ -51,34 +54,44 @@ const JobStatus: React.FC = () => {
 }
 
 const TransferDataCalculator: React.FC = () => {
-	const [transferredDataSize, setTransferredDataSize] = useState(0)
+	const [transferredDataSize, setTransferredDataSize] = useState('')
 
-	useEventListener('RETRIEVE_TRANSFERRED_DATA', (e: CustomEvent<number>) => {
-		setTransferredDataSize(e.detail)
+	useEventListener(INCOMING_DATA_CHANGE, (e: CustomEvent<number>) => {
+		console.log(e.detail)
+		setTransferredDataSize((prev) => prev + e.detail)
 	})
+
+	console.log(Json.getContentSize(transferredDataSize))
 
 	return (
 		<StatusItem>
 			<Typography variant='small'>Transferred data</Typography>
 			<StatusItemDetail>
 				<Icon name='FileJson2' size={18} />
-				{transferredDataSize} MB transferred
+				{Json.getContentSize(transferredDataSize)} MB
 			</StatusItemDetail>
 		</StatusItem>
 	)
 }
 
 const LatencyInsight: React.FC = () => {
+	const { pollingDuration } = usePageContext((state) => pick(state, 'pollingDuration'))
+	const [currentTime, setCurrentTime] = useState<number>(performance.now())
+	const previousTime = usePrevious(currentTime)
 	const [latency, setLatency, reset] = useResetState(0)
+
 	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
 
-	useEventListener('RETRIEVE_LATENCY', (e: CustomEvent<number>) => {
-		if (scanningStatus === 'connected') setLatency(e.detail < 0 ? 0 : +e.detail.toFixed(2))
-	})
+	useEventListener(INCOMING_DATA_CHANGE, () => setCurrentTime(performance.now()))
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') reset()
-	}, [scanningStatus])
+		if (scanningStatus === 'connected') {
+			const latency = currentTime - previousTime - pollingDuration
+			console.log(currentTime - previousTime)
+			setLatency(latency > 0 ? +latency.toFixed(2) : 0)
+		}
+	}, [scanningStatus, currentTime, scanningStatus, pollingDuration])
 
 	return (
 		<StatusItem>

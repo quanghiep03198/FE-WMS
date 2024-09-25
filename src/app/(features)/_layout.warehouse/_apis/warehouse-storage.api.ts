@@ -65,8 +65,8 @@ export function useUpdateStorageMutation({ warehouseNum }: { warehouseNum: strin
 
 	return useMutation({
 		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
-		mutationFn: (data: { storageNum: string; payload: PartialStorageFormValue }) =>
-			WarehouseStorageService.updateWarehouseStorage(data.storageNum, data.payload),
+		mutationFn: (data: { id: string; payload: PartialStorageFormValue }) =>
+			WarehouseStorageService.updateWarehouseStorage(data.id, data.payload),
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })

@@ -8,14 +8,16 @@ import { Button, Div, Icon, Typography } from '@/components/ui'
 import axiosInstance from '@/configs/axios.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useRequest, useVirtualList } from 'ahooks'
-import { HttpStatusCode } from 'axios'
+import { FetchQueryOptions, useQueryClient } from '@tanstack/react-query'
+import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useVirtualList } from 'ahooks'
+import { AxiosError, HttpStatusCode } from 'axios'
 import { isNil, omitBy, pick, uniqBy } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
 import { useListBoxContext } from '../../_contexts/-list-box.context'
 import { DEFAULT_PROPS, OrderItem, OrderSize, usePageContext } from '../../_contexts/-page-context'
 
@@ -25,16 +27,17 @@ type StreamEventData = {
 	sizes: OrderSize[]
 }
 
+type FetchEpcQueryKey = ['EPC_DATA_LIST', number, string]
+
 class RetriableError extends Error {}
 class FatalError extends Error {}
-
-//
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 
 const EpcDataList: React.FC = () => {
+	const queryClient = useQueryClient()
 	const { t } = useTranslation()
 	const { user } = useAuth()
 	const {
@@ -66,31 +69,34 @@ const EpcDataList: React.FC = () => {
 			'setSelectedOrder'
 		])
 	)
-	const { page, setPage, setLoading } = useListBoxContext()
+	const previousSelectedOrder = usePrevious(selectedOrder)
+	const { page, setPage, loading, setLoading } = useListBoxContext()
+
 	const ctrlRef = useRef<AbortController>(new AbortController())
-	const streamedDataRef = useRef<string>('')
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
+	const isTooManyOrderFoundIgnoredRef = useRef<boolean>(false)
+
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
 	const previousEpc = usePrevious(incommingEpc)
-	const isTooManyOrderFoundIgnoredRef = useRef<boolean>(false)
 	const [currentTime, setCurrentTime] = useState<number>(performance.now())
 	const previousTime = usePrevious(currentTime)
 
-	const { runAsync, loading } = useRequest(
-		async (): Promise<ResponseBody<StreamEventData>> => {
+	const fetchNextEpcQueryOptions: FetchQueryOptions<
+		any,
+		AxiosError<unknown, any>,
+		ResponseBody<StreamEventData>,
+		FetchEpcQueryKey,
+		any
+	> = {
+		queryKey: ['EPC_DATA_LIST', page, selectedOrder],
+		queryFn: async (): Promise<ResponseBody<StreamEventData>> => {
 			return await axiosInstance.get('/rfid/fetch-next-epc', {
 				headers: { ['X-Database-Host']: connection },
 				params: omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
 			})
-		},
-		{
-			onBefore: () => setLoading(true),
-			onFinally: () => setLoading(false),
-			manual: true,
-			ready: !!page || (selectedOrder !== 'all' && typeof selectedOrder !== 'undefined')
 		}
-	)
+	}
 
 	// Sync scanned result with fetched data from server while scanning is on and previous data is staled
 	useEffect(() => {
@@ -106,13 +112,14 @@ const EpcDataList: React.FC = () => {
 				return
 			}
 			case 'connecting': {
+				toast.loading('Establishing connection ...', { id: 'FETCH_SSE' })
 				ctrlRef.current = new AbortController()
 				fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc', {
 					method: RequestMethod.GET,
 					openWhenHidden: true,
 					headers: {
 						['X-Database-Host']: connection,
-						['X-Polling-duration']: pollingDuration.toString(),
+						['X-Polling-Duration']: pollingDuration.toString(),
 						['Authorization']: AuthService.getAccessToken()
 					},
 					signal: ctrlRef.current.signal,
@@ -123,7 +130,10 @@ const EpcDataList: React.FC = () => {
 							toast.success('Connected', { id: 'FETCH_SSE' })
 							return
 						} else if (response.status === HttpStatusCode.Unauthorized) {
-							AuthService.refreshToken(user.id)
+							const response = await AuthService.refreshToken(user.id)
+							const refreshToken = response.metadata
+							if (refreshToken) AuthService.setAccessToken(refreshToken)
+							else RetriableError
 						} else if (
 							response.status >= HttpStatusCode.BadRequest &&
 							response.status < HttpStatusCode.InternalServerError &&
@@ -140,7 +150,7 @@ const EpcDataList: React.FC = () => {
 					onmessage(e: EventSourceMessage) {
 						try {
 							if (!e.data) return
-							streamedDataRef.current += e.data
+							// streamedDataRef.current += e.data
 							const data = JSON.parse(e.data) as StreamEventData
 							setIncommingEpc(data.epcs)
 							setCurrentTime(performance.now())
@@ -153,11 +163,7 @@ const EpcDataList: React.FC = () => {
 								`
 							})
 
-							window.dispatchEvent(
-								new CustomEvent('RETRIEVE_TRANSFERRED_DATA', {
-									detail: Json.getContentSize(streamedDataRef.current)
-								})
-							)
+							window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: e.data }))
 						} catch (error) {
 							console.log(error.message)
 							return
@@ -172,17 +178,15 @@ const EpcDataList: React.FC = () => {
 					}
 				})
 					.then(() => true)
-					.catch(() => toast('Failed to connect', { id: 'FETCH_SSE' }))
-					.finally(() => {
-						window.removeEventListener('RETRIEVE_TRANSFERRED_DATA', null)
-						toast.info('Disconnected', { id: 'FETCH_SSE' })
-					})
+					.catch((e) => toast('Failed to connect', { id: 'FETCH_SSE', description: e.message }))
+					.finally(() => toast.info('Disconnected', { id: 'FETCH_SSE' }))
 				return
 			}
 		}
 
 		return () => {
 			ctrlRef.current.abort()
+			window.removeEventListener('RETRIEVE_TRANSFERRED_DATA', null)
 		}
 	}, [scanningStatus, connection, pollingDuration])
 
@@ -198,41 +202,49 @@ const EpcDataList: React.FC = () => {
 			setSelectedOrder('all')
 			setScannedEpc(incommingEpc)
 		}
-
-		window.dispatchEvent(
-			new CustomEvent('RETRIEVE_LATENCY', {
-				detail: performance.now() - previousTime - 1000
-			})
-		)
 	}, [incommingEpc, previousEpc, currentTime])
 
-	// * Triggered when page changes
-	useAsyncEffect(async () => {
+	const fetchNextPage = useMemoizedFn(async (page) => {
+		if (!page || !connection) return
 		try {
-			if (page === null) return
-			const { metadata } = await runAsync()
+			setLoading(true)
+			const { metadata } = await queryClient.fetchQuery(fetchNextEpcQueryOptions)
+			const nextFetchedEpc = metadata?.epcs
 			setScannedEpc({
-				...metadata.epcs,
-				data: uniqBy([...scannedEpc.data, ...metadata.epcs.data], 'epc')
+				...nextFetchedEpc,
+				data: uniqBy([...scannedEpc.data, ...nextFetchedEpc.data], 'epc')
 			})
 		} catch {
 			toast.error(t('ns_common:notification.error'))
+		} finally {
+			setLoading(false)
 		}
-	}, [page])
+	})
+
+	const fetchFilteredEpc = useMemoizedFn(async (selectedOrder: string) => {
+		const isFirstMount = typeof previousSelectedOrder === 'undefined'
+		if (!connection || isFirstMount) return
+		try {
+			setLoading(true)
+			const { metadata } = await queryClient.fetchQuery(fetchNextEpcQueryOptions)
+			const previousFilteredEpc = scannedEpc.data.filter((e) => e.mo_no === selectedOrder)
+			const nextFilteredEpc = metadata?.epcs?.data
+			setScannedEpc({
+				...metadata?.epcs,
+				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
+			})
+		} catch {
+			toast.error(t('ns_common:notification.error'))
+		} finally {
+			setLoading(false)
+		}
+	})
+
+	// * Triggered when page changes
+	useAsyncEffect(async () => await fetchNextPage(page), [page, connection])
 
 	// * Triggered when selected order changes
-	useAsyncEffect(async () => {
-		try {
-			const { metadata } = await runAsync()
-			const previousFilteredEpc = scannedEpc.data.filter((e) => e.mo_no === selectedOrder)
-			setScannedEpc({
-				...metadata.epcs,
-				data: uniqBy([...previousFilteredEpc, ...metadata.epcs.data], 'epc')
-			})
-		} catch {
-			toast.error(t('ns_common:notification.error'))
-		}
-	}, [selectedOrder])
+	useAsyncEffect(async () => await fetchFilteredEpc(selectedOrder), [selectedOrder, connection])
 
 	// Only trigger
 	useDeepCompareEffect(() => {
