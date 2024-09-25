@@ -32,7 +32,7 @@ jobs:
          - name: Set up Node.js
            uses: actions/setup-node@v4
            with:
-              node-version: 20
+              node-version: '20.x'
               cache: npm
 
          - name: Install dependencies
@@ -45,13 +45,15 @@ jobs:
       runs-on: self-hosted
       # needs: test
       steps:
-         - name: Post checkout repository
-           run: pm2 stop 'wms-client'
+         - name: Delete previous PM2 process if exists
+           shell: bash
+           run: pm2 delete "${{ secrets.APP_NAME }}" || echo "Process not found. Skipping deletion."
 
-         - name: Checkout repository
+         - name: Checkout code
            uses: actions/checkout@v4
 
          - name: Load environment variables
+           shell: bash
            run: |
               echo "${{ secrets.ENV_VARIABLE }}" > .env.production
               ls
@@ -60,6 +62,7 @@ jobs:
            uses: actions/setup-node@v4
            with:
               node-version: '20.x'
+              cache: npm
 
          - name: Install dependencies
            run: npm ci
@@ -68,7 +71,9 @@ jobs:
            run: npm run generate-pwa-assets
 
          - name: Build the React app
+           shell: bash
            run: npm run build
 
          - name: Restart PM2 process
-           run: pm2 restart wms-client
+           shell: bash
+           run: pm2 serve ./dist --name "${{ secrets.APP_NAME }}" --port ${{ secrets.PORT }} --spa

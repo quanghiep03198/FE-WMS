@@ -5,7 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
+		"build": "vite build",
+		"build:prod": "env-cmd -f ./.env.production npm run-script build",
 		"preview": "vite preview",
 		"pm2:start": "pm2 serve ./dist --name \"wms-client\" --port 3000 --spa",
 		"pm2:restart": "pm2 restart \"wms-client\"",
