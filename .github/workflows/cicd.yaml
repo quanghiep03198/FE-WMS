@@ -45,16 +45,14 @@ jobs:
       runs-on: self-hosted
       # needs: test
       steps:
-         - name: Delete current PM2 process
-           shell: bash
-           run: PM2 delete "wms-client" || echo "Process 'wms-client' does not exist, skipping deletion."
-
          - name: Checkout repository
            uses: actions/checkout@v4
 
          - name: Load environment variables
            run: |
               echo "${{ secrets.ENV_VARIABLE }}" > .env.production
+              ls
+              cat .env.production
 
          - name: Install dependencies
            run: npm ci
@@ -63,8 +61,7 @@ jobs:
            run: npm run generate-pwa-assets
 
          - name: Build the React app
-           shell: bash
-           run: npx dotenv -e .env.production -- npm run build
+           run: npm run build
 
-         - name: Start PM2 process
-           run: npm run pm2:start
+         - name: Restart PM2 process
+           run: pm2 restart "wms-client"
