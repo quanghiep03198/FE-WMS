@@ -7,7 +7,7 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"pm2:start": "pm2 serve ./dist --name \"wms-client\" --port 3000 --env .env.production --spa",
+		"pm2:start": "pm2 serve ./dist --name \"wms-client\" --port 3000 --spa",
 		"pm2:restart": "pm2 restart \"wms-client\"",
 		"test": "vitest --config ./vite.config.ts",
 		"test:report": "npx vite preview --outDir ./html",
