@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
 					<Div className='inline-flex items-center gap-x-1'>
 						<Image src='/nest.svg' alt='Laravel' className='' />
 						<Typography id='company' variant='small'>
-							Nest
+							Nest.js
 						</Typography>
 					</Div>
 				</Div>
