@@ -45,7 +45,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 	}, [tableRef])
 
 	const handleDeleteSelectedRows = useCallback(
-		() => deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.keyid)),
+		() => deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.id)),
 		[tableRef]
 	)
 
@@ -59,7 +59,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 
 	const columns = useMemo(
 		() => [
-			columnHelper.accessor('keyid', {
+			columnHelper.accessor('id', {
 				id: ROW_SELECTION_COLUMN_ID,
 				header: ({ table }) => {
 					const checked =

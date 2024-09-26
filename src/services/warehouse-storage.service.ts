@@ -14,7 +14,6 @@ export class WarehouseStorageService {
 	}
 
 	static async updateWarehouseStorage(id: string | number, payload: PartialStorageFormValue) {
-		console.log(id)
 		return axiosInstance.patch<PartialStorageFormValue, ResponseBody<null>>(
 			`/warehouse/storage-detail/${id}`,
 			payload
