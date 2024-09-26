@@ -190,10 +190,13 @@ const EpcDataList: React.FC = () => {
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {
 		if (isEqual(previousEpc, incommingEpc)) {
+			const previousData = scannedEpc?.data ?? []
+			const newData = incommingEpc?.data ?? []
+
 			setScannedEpc({
 				...scannedEpc,
 				...incommingEpc,
-				data: uniqBy([...incommingEpc.data, ...scannedEpc.data], 'epc')
+				data: uniqBy([...previousData, ...newData], 'epc')
 			})
 		} else {
 			setSelectedOrder('all')
@@ -206,10 +209,12 @@ const EpcDataList: React.FC = () => {
 		try {
 			setLoading(true)
 			const { metadata } = await queryClient.fetchQuery(fetchNextEpcQueryOptions)
-			const nextFetchedEpc = metadata?.epcs
+			const previousData = scannedEpc?.data ?? []
+			const newData = metadata?.epcs?.data ?? []
+			const rest = metadata?.epcs
 			setScannedEpc({
-				...nextFetchedEpc,
-				data: uniqBy([...scannedEpc.data, ...nextFetchedEpc.data], 'epc')
+				...rest,
+				data: uniqBy([...previousData, ...newData], 'epc')
 			})
 		} catch {
 			toast.error(t('ns_common:notification.error'))
@@ -224,7 +229,7 @@ const EpcDataList: React.FC = () => {
 		try {
 			setLoading(true)
 			const { metadata } = await queryClient.fetchQuery(fetchNextEpcQueryOptions)
-			const previousFilteredEpc = scannedEpc.data.filter((e) => e.mo_no === selectedOrder)
+			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
 			const nextFilteredEpc = metadata?.epcs?.data
 			setScannedEpc({
 				...metadata?.epcs,
@@ -263,7 +268,7 @@ const EpcDataList: React.FC = () => {
 		else toast.dismiss('TOO_MANY_ORDERS')
 	}, [scannedOrders, scanningStatus])
 
-	const [virtualItems] = useVirtualList(scannedEpc.data, {
+	const [virtualItems] = useVirtualList(scannedEpc?.data, {
 		containerTarget: containerRef,
 		wrapperTarget: wrapperRef,
 		itemHeight: VIRTUAL_ITEM_SIZE,
