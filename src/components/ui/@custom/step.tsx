@@ -58,7 +58,7 @@ const reducer: React.Reducer<TStepState, TStepAction> = (state, action) => {
 				currentStep: currentStep,
 				canNextStep: currentStep < state.data.length && state.finishedSteps.includes(state.currentStep),
 				canPrevStep: true,
-				finishedSteps: [...new Set([state.currentStep, ...state.finishedSteps])].sort(),
+				finishedSteps: [...new Set([state.currentStep, ...state.finishedSteps])].sort((a, b) => a - b),
 				data: state.data.map((step) => {
 					const status =
 						step.index! < currentStep ? 'completed' : step.index === currentStep ? 'current' : 'upcoming'
@@ -90,7 +90,7 @@ const reducer: React.Reducer<TStepState, TStepAction> = (state, action) => {
 				canNextStep: false,
 				canPrevStep: true,
 				data: state.data.map((step) => ({ ...step, status: 'completed' })),
-				finishedSteps: [...new Set([...state.finishedSteps, state.data.length])].sort()
+				finishedSteps: [...new Set([...state.finishedSteps, state.data.length])].sort((a, b) => a - b)
 			}
 		}
 
