@@ -39,7 +39,7 @@ const DEFAULT_NEXT_CURSOR = 2
 const EpcDataList: React.FC = () => {
 	const queryClient = useQueryClient()
 	const { t } = useTranslation()
-	const { user } = useAuth()
+	const { user, token } = useAuth()
 	const {
 		scannedEpc,
 		connection,
@@ -79,8 +79,6 @@ const EpcDataList: React.FC = () => {
 
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
 	const previousEpc = usePrevious(incommingEpc)
-	const [currentTime, setCurrentTime] = useState<number>(performance.now())
-	const previousTime = usePrevious(currentTime)
 
 	const fetchNextEpcQueryOptions: FetchQueryOptions<
 		any,
@@ -133,7 +131,7 @@ const EpcDataList: React.FC = () => {
 							const response = await AuthService.refreshToken(user.id)
 							const refreshToken = response.metadata
 							if (refreshToken) AuthService.setAccessToken(refreshToken)
-							else RetriableError
+							else throw new FatalError('Server Error')
 						} else if (
 							response.status >= HttpStatusCode.BadRequest &&
 							response.status < HttpStatusCode.InternalServerError &&
@@ -153,7 +151,6 @@ const EpcDataList: React.FC = () => {
 							// streamedDataRef.current += e.data
 							const data = JSON.parse(e.data) as StreamEventData
 							setIncommingEpc(data.epcs)
-							setCurrentTime(performance.now())
 							setScannedOrders(Array.isArray(data?.orders) ? data?.orders : [])
 							setScannedSizes(Array.isArray(data?.sizes) ? data?.sizes : [])
 							writeLog({
@@ -186,9 +183,9 @@ const EpcDataList: React.FC = () => {
 
 		return () => {
 			ctrlRef.current.abort()
-			window.removeEventListener('RETRIEVE_TRANSFERRED_DATA', null)
+			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
-	}, [scanningStatus, connection, pollingDuration])
+	}, [scanningStatus, connection, pollingDuration, token])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {
@@ -202,7 +199,7 @@ const EpcDataList: React.FC = () => {
 			setSelectedOrder('all')
 			setScannedEpc(incommingEpc)
 		}
-	}, [incommingEpc, previousEpc, currentTime])
+	}, [incommingEpc, previousEpc])
 
 	const fetchNextPage = useMemoizedFn(async (page) => {
 		if (!page || !connection) return
