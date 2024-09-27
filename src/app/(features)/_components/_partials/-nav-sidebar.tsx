@@ -1,13 +1,15 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { Icon, IconProps, Separator, Tooltip, Typography } from '@/components/ui'
+import useQuerySelector from '@/common/hooks/useQuerySelector'
+import { cn } from '@/common/utils/cn'
+import { buttonVariants, Div, Icon, IconProps, Separator, Tooltip, Typography } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
 import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { debounce } from 'lodash'
-import { memo, useLayoutEffect, useMemo, useRef } from 'react'
+import { Fragment, memo, useLayoutEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
@@ -93,20 +95,43 @@ const NavSidebar: React.FC = () => {
 
 const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
-
+	const sidebarToggle = useQuerySelector<HTMLInputElement>('#sidebar-toggle')
+	console.log(sidebarToggle)
 	return (
-		<Tooltip
-			message={t(title, { defaultValue: title })}
-			contentProps={{ side: 'right', sideOffset: 8, className: 'z-50 group-has-[:checked]:hidden' }}>
-			<MenuLink
-				to={path}
-				role='link'
-				preload='intent'
-				activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}>
-				<NavLinkIcon size={20} name={icon} />
-				<NavlinkText>{t(title, { defaultValue: title })}</NavlinkText>
-			</MenuLink>
-		</Tooltip>
+		<Fragment>
+			<Div className='block group-has-[:checked]/sidebar:hidden'>
+				<Tooltip
+					message={t(title, { defaultValue: title })}
+					contentProps={{
+						side: 'right',
+						sideOffset: 8,
+						className: 'z-50'
+					}}>
+					<Link
+						to={path}
+						role='link'
+						preload='intent'
+						aria-label={t(title, { defaultValue: title })}
+						className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
+						activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}>
+						<Icon size={20} name={icon} role='img' />
+					</Link>
+				</Tooltip>
+			</Div>
+			<Div className='hidden group-has-[:checked]/sidebar:block'>
+				<Link
+					to={path}
+					role='link'
+					preload='intent'
+					className={cn(buttonVariants({ variant: 'ghost', className: 'w-full' }))}
+					activeProps={{
+						className: 'text-primary hover:text-primary bg-primary/10'
+					}}>
+					<Icon size={20} name={icon} role='img' />
+					<NavlinkText>{t(title, { defaultValue: title })}</NavlinkText>
+				</Link>
+			</Div>
+		</Fragment>
 	)
 }
 
@@ -120,9 +145,7 @@ const SidebarToggleTrigger = tw.input`hidden appearance-none`
 const NavLinkIcon = tw(Icon)<IconProps>`
 	group-has-[:checked]/sidebar:basis-5 basis-full size-5
 `
-const MenuLink = tw(Link)<React.ComponentProps<typeof Link>>`
-	flex py-2 px-2 group-has-[:checked]/sidebar:px-4 items-center justify-center whitespace-nowrap hover:bg-accent hover:text-accent-foreground rounded-md text-sm font-medium transition-colors duration-0 focus-within:outline-none focus:ring-0 focus:ring-offset-transparent size-9 group-has-[:checked]/sidebar:flex group-has-[:checked]/sidebar:size-auto group-has-[:checked]/sidebar:justify-start group-has-[:checked]/sidebar:gap-x-3 group-has-[:checked]/sidebar:aspect-auto aspect-square
-`
+
 const LogoLink = tw(Link)<React.ComponentProps<typeof Link>>`
 	flex h-20 items-center group-has-[:checked]/sidebar:gap-x-3 group-has-[:checked]/sidebar:justify-start group-has-[:checked]/sidebar:aspect-auto px-2 aspect-square justify-center
 `
