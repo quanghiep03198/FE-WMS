@@ -1,6 +1,5 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import useQuerySelector from '@/common/hooks/useQuerySelector'
 import { cn } from '@/common/utils/cn'
 import { buttonVariants, Div, Icon, IconProps, Separator, Tooltip, Typography } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
@@ -9,10 +8,11 @@ import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { debounce } from 'lodash'
-import { Fragment, memo, useLayoutEffect, useMemo, useRef } from 'react'
+import { Fragment, memo, useCallback, useLayoutEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
+import { SIDEBAR_TOGGLE_CHANGE } from '../../_constants/event.const'
 
 type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
@@ -26,6 +26,7 @@ const NavSidebar: React.FC = () => {
 		() => ({
 			'ctrl.b': debounce(() => {
 				checkboxRef.current.checked = !checkboxRef.current.checked
+				dispatchSidebarToggleEvent(checkboxRef.current.checked)
 			}, 50),
 			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
 				acc[String(curr.keybinding)] = function () {
@@ -64,9 +65,20 @@ const NavSidebar: React.FC = () => {
 
 	window['navbarTogglerEl'] = checkboxRef.current
 
+	const dispatchSidebarToggleEvent = useCallback(
+		(value: boolean) => window.dispatchEvent(new CustomEvent(SIDEBAR_TOGGLE_CHANGE, { detail: value })),
+		[]
+	)
+
 	return (
 		<Aside>
-			<SidebarToggleTrigger id='sidebar-toggle' type='checkbox' defaultChecked={true} ref={checkboxRef} />
+			<SidebarToggleTrigger
+				id='sidebar-toggle'
+				type='checkbox'
+				defaultChecked={true}
+				ref={checkboxRef}
+				onChange={(e) => dispatchSidebarToggleEvent(e.target.checked)}
+			/>
 			<LogoLink to='/dashboard' preload='intent'>
 				<Icon name='Boxes' size={36} stroke='hsl(var(--primary))' strokeWidth={1} />
 				<LogoWrapper>
@@ -95,8 +107,7 @@ const NavSidebar: React.FC = () => {
 
 const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
-	const sidebarToggle = useQuerySelector<HTMLInputElement>('#sidebar-toggle')
-	console.log(sidebarToggle)
+
 	return (
 		<Fragment>
 			<Div className='block group-has-[:checked]/sidebar:hidden'>
