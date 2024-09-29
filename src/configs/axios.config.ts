@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 
 export class AxiosClient {
 	public instance: AxiosInstance
-	private retry = 0
 
 	constructor(baseURL?: string) {
 		// * Instance configuration
@@ -30,7 +29,6 @@ export class AxiosClient {
 				const accessToken = AuthService.getAccessToken()
 				const locale = StorageService.getLocale()
 				const user = AuthService.getCredentials()
-
 				config.headers['Authorization'] = config.headers['Authorization'] ?? accessToken
 				config.headers['X-User-Company'] = user?.company_code
 				config.headers['Accept-Language'] = locale
@@ -50,30 +48,19 @@ export class AxiosClient {
 				const originalRequest = error.config
 				const errorStatus = error.response?.status
 
-				if (originalRequest && errorStatus === HttpStatusCode.Unauthorized) {
-					this.retry++
+				if (originalRequest && !originalRequest.retry && errorStatus === HttpStatusCode.Unauthorized) {
 					const user = AuthService.getCredentials()
-
-					if (!user?.id) {
-						AuthService.logout()
-						return Promise.reject(new Error('Invalid credentials'))
-					}
-					if (this.retry === 0 && !originalRequest.retry) {
-						const response = await this.instance.request(originalRequest)
+					if (!user?.id) throw new Error('Failed to refresh token')
+					try {
+						const { metadata: refreshToken } = await AuthService.refreshToken(user.id)
+						AuthService.setAccessToken(refreshToken)
+						originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
+						const response = await this.instance(originalRequest)
 						originalRequest.retry = true
 						return response
-					}
-					if (this.retry > 1) {
-						AuthService.logout()
-						return Promise.reject(new Error('Failed to refresh token'))
-					}
-					try {
-						const response = await AuthService.refreshToken(user.id)
-						const refreshToken = response.metadata
-						AuthService.setAccessToken(refreshToken)
-						this.retry = 0
 					} catch (error) {
-						this.retry++
+						AuthService.logout()
+						throw new Error('Failed to refresh token')
 					}
 				}
 
