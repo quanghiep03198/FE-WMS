@@ -113,5 +113,12 @@ export default {
 	common_form_titles: {
 		create: 'Thêm mới {{object}}',
 		update: 'Cập nhật {{object}}'
+	},
+	status: {
+		connecting: 'Đang kết nối',
+		connected: 'Đã kết nối',
+		disconnected: 'Đã ngắt kết nối',
+		running: 'Đang hoạt động',
+		idle: 'Không hoạt động'
 	}
 } as const

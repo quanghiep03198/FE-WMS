@@ -3,7 +3,7 @@ import { OrderStatus } from '@/common/constants/enums'
 export default {
 	counter_box: {
 		label: 'Số lượng EPC đã quét',
-		caption: 'Dữ liệu đọc EPC tự động đồng bộ sau mỗi {{value}} giây.'
+		caption: 'Dữ liệu EPC được truyền liên tục từ máy chủ khi kết nối được thiết lập.'
 	},
 	mo_no_box: {
 		caption: 'Bạn có thể tùy chọn các chỉ lệnh được sủ dụng để thao tác nhập/xuất',
@@ -45,7 +45,6 @@ export default {
 		[OrderStatus.CANCELLED]: 'Đã hủy duyệt',
 		[OrderStatus.REAPPROVED]: 'Duyệt lại'
 	},
-
 	titles: {
 		transfer_order_list: 'Danh sách đơn chuyển kho',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
@@ -54,6 +53,25 @@ export default {
 	description: {
 		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho',
 		transfer_order_datalist: 'Chọn dữ liệu từ bảng dưới để thêm đơn chuyển kho mới',
-		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh'
+		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',
+		inoutbound_form_note: 'Ngắt kết nối trước khi thao tác nhập/xuất',
+		select_order: 'Chọn chỉ lệnh sản xuất để xem dữ liệu EPC đã quét được và thao tác nhập hoặc xuất kho',
+		select_database:
+			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt'
+	},
+	rfid_toolbox: {
+		network_status: 'Trạng thái kết nối',
+		internet_access: 'Kết nối mạng',
+		latency: 'Độ trễ',
+		cron_job: 'Trạng thái quét',
+		transferred_data: 'Dữ liệu đã chuyển',
+		polling_duration: 'Tần suất',
+		polling_duration_note: 'Chọn tần suất trước khi thao tác quét',
+		polling_duration_description:
+			'Kiểm soát tần suất quét: giá trị thấp hơn có nghĩa là quét nhanh hơn, tuy nhiên nó có thể gây ra lưu lượng truy cập cao hơn cho máy chủ.',
+		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',
+		toggle_fullscreen_note: 'Sử dụng chế độ toàn màn hình để có góc nhìn rộng hơn',
+		preserve_log: 'Giữ log',
+		preserve_log_note: 'Không xóa nhật ký khi thiết lập lại'
 	}
 }

@@ -44,14 +44,14 @@ export const useGetScannedEPCQuery = (params: GetEPCQueryArgs) => {
 	})
 }
 
-export const useUpdateEpcMutation = () => {
+export const useUpdateStockMovementMutation = () => {
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
 		mutationFn: RFIDService.updateStockMovement
 	})
 }
 
-export const useGetInoutboundDeptQuery = () => {
+export const useGetShapingProductLineQuery = () => {
 	return useQuery({
 		queryKey: [INOUTBOUND_DEPT_PROVIDE_TAG],
 		queryFn: DepartmentService.getShapingDepartments,
@@ -62,11 +62,18 @@ export const useGetInoutboundDeptQuery = () => {
 export const useDeleteOrderMutation = () => {
 	return useMutation({
 		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: ({ host, orderCode }: { host: string; orderCode: string }) =>
-			RFIDService.deleteScannedOrder(host, orderCode)
+		mutationFn: async ({ host, orderCode }: { host: string; orderCode: string }) =>
+			await RFIDService.deleteUnexpectedOrder(host, orderCode)
 	})
 }
 
+/**
+ *
+ * @deprecated
+ * @param host
+ * @param searchTerm
+ * @returns
+ */
 export const useGetCustOrderListQuery = (host: string, searchTerm: string) => {
 	return useSuspenseQuery({
 		queryKey: [CUST_ORDER_PROVIDE_TAG, host],
@@ -78,6 +85,12 @@ export const useGetCustOrderListQuery = (host: string, searchTerm: string) => {
 	})
 }
 
+/**
+ *
+ * @deprecated
+ * @param optimisticUpdateHandler
+ * @returns
+ */
 export const useUpdateOrderCodeMutation = (
 	optimisticUpdateHandler: (variables: UpdateOrderCodeMutationArgs['payload']) => void
 ) => {

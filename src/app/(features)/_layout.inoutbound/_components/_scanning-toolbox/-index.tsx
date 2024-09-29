@@ -1,8 +1,10 @@
+import { SIDEBAR_TOGGLE_CHANGE } from '@/app/(features)/_constants/event.const'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQuerySelector from '@/common/hooks/useQuerySelector'
-import { Icon, Toggle, Tooltip, Typography } from '@/components/ui'
-import { useState } from 'react'
+import { Icon, Separator, Toggle, Tooltip, Typography } from '@/components/ui'
+import { useEventListener } from 'ahooks'
+import { useEffect, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import ConnectionInsight from './-connection-insight'
 import SettingPanel from './-setting-panel'
@@ -15,12 +17,17 @@ const ScanningToolbox: React.FC = () => {
 					variant='h6'
 					className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 					<Icon name='Settings2' size={18} />
-					Toolbar
+					Toolbox
 				</Typography>
 				<ToolbarToggler />
 			</ToolbarHeader>
 			<ToolbarBody>
 				<SettingPanel />
+				<Separator className='hidden group-has-[#toggle-pin-toolbar[data-state=on]]:block sm:block md:block' />
+				<Separator
+					orientation='vertical'
+					className='group-has-[#toggle-pin-toolbar[data-state=on]]:hidden sm:hidden md:hidden'
+				/>
 				<ConnectionInsight />
 			</ToolbarBody>
 		</ToolbarWrapper>
@@ -29,8 +36,15 @@ const ScanningToolbox: React.FC = () => {
 
 const ToolbarToggler: React.FC = () => {
 	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	const sidebarTrigger = useQuerySelector<HTMLInputElement>('#sidebar-toggle')
-	const [isToggled, setIsToggled] = useState<boolean>(false)
+	const [isToggled, setIsToggled] = useState<boolean>(isExtraLargeScreen)
+
+	useEventListener(SIDEBAR_TOGGLE_CHANGE, (e: CustomEvent<boolean>) => setIsToggled(!e.detail || isExtraLargeScreen))
+
+	useEffect(() => {
+		if ((!isLargeScreen || !isExtraLargeScreen) && isToggled) setIsToggled(!isToggled)
+	}, [isLargeScreen, isExtraLargeScreen])
 
 	return (
 		isLargeScreen && (
@@ -38,15 +52,15 @@ const ToolbarToggler: React.FC = () => {
 				<Toggle
 					id='toggle-pin-toolbar'
 					size='sm'
-					className='peer/toggle-pin-toolbar group/toggle-pin-toolbar data-[state=on]:bg-transparent hover:text-foreground'
+					pressed={isToggled}
+					className='group/toggle-pin-toolbar data-[state=on]:bg-transparent hover:text-foreground'
 					onPressedChange={(value) => {
-						if (sidebarTrigger && sidebarTrigger.checked) {
-							sidebarTrigger.checked = false
+						if (sidebarTrigger && sidebarTrigger.checked && !isExtraLargeScreen) {
+							sidebarTrigger.checked = !value
 						}
 						setIsToggled(value)
 					}}>
-					<Icon name='Pin' className='block group-data-[state=on]/toggle-pin-toolbar:hidden' />
-					<Icon name='PinOff' className='hidden group-data-[state=on]/toggle-pin-toolbar:block' />
+					<Icon name={isToggled ? 'PinOff' : 'Pin'} />
 				</Toggle>
 			</Tooltip>
 		)
@@ -54,21 +68,21 @@ const ToolbarToggler: React.FC = () => {
 }
 
 const ToolbarWrapper = tw.div`
-	group mt-10 flex flex-col overflow-y-auto rounded-lg border bg-background scrollbar max-h-[60dvh]
-	has-[#toggle-pin-toolbar[data-state=on]]:xl:max-h-[65dvh]
+	group mt-10 flex flex-col rounded-lg border bg-background
+	has-[#toggle-pin-toolbar[data-state=on]]:xl:max-h-[70dvh]
 	has-[#toggle-pin-toolbar[data-state=on]]:xxl:max-h-[75dvh]
+	has-[#toggle-pin-toolbar[data-state=on]]:overflow-y-auto
 	has-[#toggle-pin-toolbar[data-state=on]]:mt-0 
 	has-[#toggle-pin-toolbar[data-state=on]]:min-h-full
 `
 
-const ToolbarHeader = tw.div`sticky top-0 z-10 flex items-center justify-between gap-x-2 border-b bg-background px-4 py-2`
+const ToolbarHeader = tw.div`sticky top-0 z-10 flex items-center justify-between gap-x-2 border-b px-4 py-2 bg-background/80 backdrop-blur-sm rounded-t-lg`
 
 const ToolbarBody = tw.div`
-	flex basis-full gap-10 p-4
+	flex items-stretch flex-grow gap-10 basis-full p-4 lg:flex-row xl:flex-row flex-col-reverse 
 	group-has-[#toggle-pin-toolbar[data-state=on]]:flex-col-reverse
 	group-has-[#toggle-pin-toolbar[data-state=on]]:justify-end
-	lg:flex-row xl:flex-row
-	`
-// sm:flex-col md:flex-col
+	group-has-[#toggle-pin-toolbar[data-state=on]]:max-h-none
+`
 
 export default ScanningToolbox

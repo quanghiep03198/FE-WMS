@@ -10,12 +10,17 @@ import { usePageContext } from '../../_contexts/-page-context'
 const INTERVAL_TIME = 5 as const
 
 const ScannedEPCsCounter: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
 		<Div className='relative flex h-full flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10'>
 			<ScanningSkeleton />
 			<ScanningCounter />
-			<Typography variant='small' className='relative z-10 mb-6' color='muted'>
-				EPC data is streamed continuously from server.
+			<Typography
+				variant='small'
+				className='relative z-10 mb-6 whitespace-nowrap text-center text-xs xxl:text-sm'
+				color='muted'>
+				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
 			<ScanningTimer />
 		</Div>

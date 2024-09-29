@@ -3,7 +3,7 @@ import { OrderStatus } from '@/common/constants/enums'
 export default {
 	counter_box: {
 		label: 'Scanned EPCs',
-		caption: 'EPC codes data is automatically synchronized every {{value}} seconds.'
+		caption: 'Data is streamed continuously from server when connection is established.'
 	},
 	mo_no_box: {
 		caption: 'You can determine which order should be used to import/export',
@@ -54,6 +54,22 @@ export default {
 	description: {
 		transfer_order_list: 'Following and managing transfer orders',
 		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders',
-		order_sizing_list: 'Table below shows the sizing information of the scanned orders'
+		order_sizing_list: 'Table below shows the sizing information of the scanned orders',
+		inoutbound_form_note: 'Disconnect before updating stock moves'
+	},
+	rfid_toolbox: {
+		network_status: 'Network status',
+		internet_access: 'Internet access',
+		latency: 'Latency',
+		cron_job: 'Job status',
+		transferred_data: 'Transferred data',
+		polling_duration: 'Polling duration',
+		polling_duration_note: 'Choose polling duration before scanning',
+		polling_duration_description:
+			'Controls polling duration: lower value means faster polling however it can cause higher traffic for server',
+		toggle_fullscreen: 'Toggle full screen',
+		toggle_fullscreen_note: 'Use full screen mode to have larger view',
+		preserve_log: 'Preserve log',
+		preserve_log_note: 'Do not clear log on reset'
 	}
 }

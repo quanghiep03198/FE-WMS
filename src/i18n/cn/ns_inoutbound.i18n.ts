@@ -3,7 +3,7 @@ import { OrderStatus } from '@/common/constants/enums'
 export default {
 	counter_box: {
 		label: '本次出入庫數量',
-		caption: 'EPC自动更新每 {{value}} 秒'
+		caption: '在连接开启时, EPC 数据会从服务器持续传输.'
 	},
 	mo_no_box: {
 		caption: '您可以选择需要导入/导出的指令',
@@ -54,6 +54,21 @@ export default {
 	description: {
 		transfer_order_list: '跟踪和管理转移订单',
 		transfer_order_datalist: '从下面的表格中选择数据以添加新转移订单',
-		order_sizing_list: '下列表显示这次扫描的指令及尺码'
+		order_sizing_list: '下列表显示这次扫描的指令及尺码',
+		inoutbound_form_note: '更新库存移动之前断开连接'
+	},
+	rfid_toolbox: {
+		network_status: '网络状态',
+		internet_access: '互联网访问',
+		latency: '延迟',
+		cron_job: '计划任务状态',
+		transferred_data: '已传输的数据',
+		polling_duration: '轮询持续时间',
+		polling_duration_note: '扫描前选择轮询持续时间',
+		polling_duration_description: '控制轮询间隔时间：值越低，轮询越快，但可能导致服务器流量增加',
+		toggle_fullscreen: '切换全屏模式',
+		toggle_fullscreen_note: '使用全屏模式以获得更大的视图',
+		preserve_log: '保留日志',
+		preserve_log_note: '重置时不要清除日志'
 	}
 }

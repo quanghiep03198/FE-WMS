@@ -31,7 +31,7 @@ export class RFIDService {
 		return await axiosInstance.get<void, ResponseBody<string[]>>('/rfid/database-compatibility')
 	}
 
-	static async getInoutboundDept() {
+	static async getShapingProductLine() {
 		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/department/shaping-product-line')
 	}
 
@@ -41,7 +41,7 @@ export class RFIDService {
 		})
 	}
 
-	static async deleteScannedOrder(host: string, orderCode: string) {
+	static async deleteUnexpectedOrder(host: string, orderCode: string) {
 		return await axiosInstance.delete(`/rfid/delete-unexpected-order/${orderCode}`, {
 			headers: { ['X-Database-Host']: host }
 		})

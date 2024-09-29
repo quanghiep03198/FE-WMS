@@ -112,5 +112,12 @@ export default {
 	common_form_titles: {
 		create: 'Create new {{object}}',
 		update: 'Update {{object}}'
+	},
+	status: {
+		connecting: 'Connnecting',
+		connected: 'Connected',
+		disconnected: 'Disconnected',
+		running: 'Running',
+		idle: 'Idle'
 	}
 } as const

@@ -5,11 +5,13 @@ import { Div, Icon, Typography } from '@/components/ui'
 import { useEventListener, usePrevious, useResetState } from 'ahooks'
 import { pick } from 'lodash'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const NetworkInsight: React.FC = () => {
+	const { t } = useTranslation()
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
 
 	useEventListener(NETWORK_CONNECTION_CHANGE, (e: CustomEvent<boolean>) => {
@@ -18,25 +20,30 @@ const NetworkInsight: React.FC = () => {
 
 	return (
 		<StatusItem>
-			<Typography variant='small'>Internet access</Typography>
+			<Typography variant='small' className='font-medium'>
+				{t('ns_inoutbound:rfid_toolbox.internet_access')}
+			</Typography>
 			<StatusItemDetail>
 				{isNetworkAvailable ? (
 					<Icon name='Wifi' size={18} className='stroke-success' />
 				) : (
 					<Icon name='WifiOff' size={18} className='stroke-muted-foreground' />
 				)}
-				{isNetworkAvailable ? 'Connected' : 'Disconnected'}
+				{isNetworkAvailable ? t('ns_common:status.connected') : t('ns_common:status.disconnected')}
 			</StatusItemDetail>
 		</StatusItem>
 	)
 }
 
 const JobStatus: React.FC = () => {
+	const { t } = useTranslation()
 	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
 
 	return (
 		<StatusItem>
-			<Typography variant='small'>Job status</Typography>
+			<Typography variant='small' className='font-medium'>
+				{t('ns_inoutbound:rfid_toolbox.cron_job')}
+			</Typography>
 			<StatusItemDetail>
 				<Icon
 					name='Dot'
@@ -47,25 +54,25 @@ const JobStatus: React.FC = () => {
 							: 'bg-warning fill-warning stroke-warning ring-warning/40'
 					)}
 				/>
-				{scanningStatus === 'connected' ? 'Running' : 'Idle'}
+				{scanningStatus === 'connected' ? t('ns_common:status.running') : t('ns_common:status.idle')}
 			</StatusItemDetail>
 		</StatusItem>
 	)
 }
 
 const TransferDataCalculator: React.FC = () => {
+	const { t } = useTranslation()
 	const [transferredDataSize, setTransferredDataSize] = useState('')
 
 	useEventListener(INCOMING_DATA_CHANGE, (e: CustomEvent<number>) => {
-		console.log(e.detail)
 		setTransferredDataSize((prev) => prev + e.detail)
 	})
 
-	console.log(Json.getContentSize(transferredDataSize))
-
 	return (
 		<StatusItem>
-			<Typography variant='small'>Transferred data</Typography>
+			<Typography variant='small' className='font-medium'>
+				{t('ns_inoutbound:rfid_toolbox.transferred_data')}
+			</Typography>
 			<StatusItemDetail>
 				<Icon name='FileJson2' size={18} />
 				{Json.getContentSize(transferredDataSize)} MB
@@ -75,6 +82,7 @@ const TransferDataCalculator: React.FC = () => {
 }
 
 const LatencyInsight: React.FC = () => {
+	const { t } = useTranslation()
 	const { pollingDuration } = usePageContext((state) => pick(state, 'pollingDuration'))
 	const [currentTime, setCurrentTime] = useState<number>(performance.now())
 	const previousTime = usePrevious(currentTime)
@@ -88,14 +96,15 @@ const LatencyInsight: React.FC = () => {
 		if (typeof scanningStatus === 'undefined') reset()
 		if (scanningStatus === 'connected') {
 			const latency = currentTime - previousTime - pollingDuration
-			console.log(currentTime - previousTime)
 			setLatency(latency > 0 ? +latency.toFixed(2) : 0)
 		}
 	}, [scanningStatus, currentTime, scanningStatus, pollingDuration])
 
 	return (
 		<StatusItem>
-			<Typography variant='small'>Latency</Typography>
+			<Typography variant='small' className='font-medium'>
+				{t('ns_inoutbound:rfid_toolbox.latency')}
+			</Typography>
 			<StatusItemDetail>
 				<Icon name='Gauge' size={18} />
 				<Typography variant='small' className={cn(latency / 1000 >= 1 && 'text-warning')}>
@@ -107,12 +116,14 @@ const LatencyInsight: React.FC = () => {
 }
 
 const ConnectionInsight: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
 		<Div className='space-y-4'>
 			<Typography variant='h6' className='text-lg sm:text-base md:text-base'>
-				Network status
+				{t('ns_inoutbound:rfid_toolbox.network_status')}
 			</Typography>
-			<Div className='flex-1 space-y-4'>
+			<Div className='flex-1 space-y-2'>
 				<NetworkInsight />
 				<LatencyInsight />
 				<JobStatus />
@@ -122,7 +133,10 @@ const ConnectionInsight: React.FC = () => {
 	)
 }
 
-const StatusItem = tw.div`grid grid-cols-3 gap-x-6 group-has-[#toggle-pin-toolbar[data-state=on]]:grid-cols-2`
-const StatusItemDetail = tw.div`inline-grid grid-cols-[24px_auto] items-center gap-x-2 group-has-[#toggle-pin-toolbar[data-state=off]]:col-span-2 text-sm`
+const StatusItem = tw.div`
+	grid grid-cols-2 gap-x-20 sm:gap-x-6 
+	group-has-[#toggle-pin-toolbar[data-state=on]]:gap-x-4
+`
+const StatusItemDetail = tw.div`inline-grid grid-cols-[24px_auto] items-center gap-x-2 text-sm`
 
 export default ConnectionInsight

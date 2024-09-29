@@ -18,7 +18,7 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetInoutboundDeptQuery } from '../../_layout.inoutbound/_apis/rfid.api'
+import { useGetShapingProductLineQuery } from '../../_layout.inoutbound/_apis/rfid.api'
 import { useGetWarehouseStorageQuery } from '../../_layout.warehouse/_apis/warehouse-storage.api'
 import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
 import { InoutboundOrderTypes } from '../_constants/warehouse-import.const'
@@ -68,7 +68,7 @@ const BaseDatalistForm: React.FC = () => {
 	})
 
 	// * Get half-finished production departments
-	const { data: inoutboundDepts } = useGetInoutboundDeptQuery()
+	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
 
 	// * Get type inventory list options
 	const inboundOrderTypes = Object.entries(InoutboundOrderTypes).map(([k, v]) => ({

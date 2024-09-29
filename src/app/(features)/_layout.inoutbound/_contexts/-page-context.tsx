@@ -45,7 +45,7 @@ export const DEFAULT_PROPS: Pick<
 > = {
 	scanningStatus: undefined,
 	connection: '',
-	selectedOrder: 'all',
+	selectedOrder: undefined,
 	logs: [],
 	pollingDuration: 500,
 	scannedEpc: {
@@ -90,22 +90,22 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				setScannedEpc: (data) => {
 					set((state) => {
-						state.scannedEpc = data
+						state.scannedEpc = !data ? DEFAULT_PROPS.scannedEpc : data
 					})
 				},
 				setScannedOrders: (data) => {
 					set((state) => {
-						state.scannedOrders = data
+						state.scannedOrders = Array.isArray(data) ? data : []
 					})
 				},
 				setScannedSizes: (data) => {
 					set((state) => {
-						state.scannedSizes = data
+						state.scannedSizes = Array.isArray(data) ? data : []
 					})
 				},
 				setPollingDuration: (data) => {
 					set((state) => {
-						state.pollingDuration = data * 1000
+						state.pollingDuration = data
 					})
 				},
 				writeLog: (log) => {
@@ -148,7 +148,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc
 						state.scannedOrders = DEFAULT_PROPS.scannedOrders
 						state.scannedSizes = DEFAULT_PROPS.scannedSizes
-						state.selectedOrder = 'all'
+						state.selectedOrder = DEFAULT_PROPS.selectedOrder
 					})
 				}
 			}))
@@ -162,9 +162,8 @@ export const usePageContext = (
 	selector?: (state: PageContextStore) => Partial<PageContextStore>
 ): Partial<PageContextStore> => {
 	const store = useContext(PageContext)
-	if (!store) {
-		throw new Error('Missing StoreProvider')
-	}
+	if (!store) throw new Error('Missing StoreProvider')
 	if (typeof selector === 'undefined') return useStore(store)
-	return useStore(store, useShallow(selector))
+	const contextSelector = useShallow(selector)
+	return useStore(store, contextSelector)
 }

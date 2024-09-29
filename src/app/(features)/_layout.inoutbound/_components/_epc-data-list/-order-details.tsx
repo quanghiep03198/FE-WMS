@@ -28,7 +28,6 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { RFIDService } from '@/services/rfid.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverTrigger } from '@radix-ui/react-popover'
-import { useMutation } from '@tanstack/react-query'
 import { useMemoizedFn, useResetState, useUnmount } from 'ahooks'
 import { pick, uniqBy } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
@@ -42,24 +41,41 @@ import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange
 
 const OrderDetails: React.FC = () => {
 	const { t } = useTranslation()
-	const { connection, scannedOrders, setScannedOrders, setScanningStatus } = usePageContext((state) =>
-		pick(state, ['connection', 'scannedOrders', 'setScannedOrders', 'setScanningStatus'])
-	)
+	const { connection, scannedOrders, scannedSizes, setScannedOrders, setScanningStatus, setScannedSizes } =
+		usePageContext((state) =>
+			pick(state, [
+				'connection',
+				'scannedOrders',
+				'scannedSizes',
+				'setScannedOrders',
+				'setScanningStatus',
+				'setScannedSizes'
+			])
+		)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 
 	// Delete unexpected orders
 	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
 	const handleDeleteOrder = async () => {
-		await deleteOrderAsync({ host: connection, orderCode: orderToDelete })
-		const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderToDelete)
-		if (filteredOrders.length === 0) {
-			setScanningStatus(undefined)
+		console.log(1)
+
+		try {
+			const res = await deleteOrderAsync({ host: connection, orderCode: orderToDelete })
+			console.log(res)
+			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderToDelete)
+			if (filteredOrders.length === 0) {
+				setScanningStatus(undefined)
+				resetOrderToDelete()
+				return
+			}
+			setScannedOrders(filteredOrders)
+			setScannedSizes(scannedSizes.filter((item) => item.mo_no !== orderToDelete))
 			resetOrderToDelete()
-			return
+		} catch (e) {
+			console.log(e.message)
+			toast.error(t('ns_common:notification.error'))
 		}
-		setScannedOrders(filteredOrders)
-		resetOrderToDelete()
 	}
 
 	const handleBeforeDelete = useMemoizedFn((orderCode: string) => {
@@ -158,7 +174,7 @@ const OrderSizingRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCode: s
 					{filteredSizeByOrder?.map((size) => (
 						<Div key={size?.size_numcode} className='group/cell grid grid-rows-2 divide-y'>
 							<TableCell className='bg-secondary/25 font-medium text-secondary-foreground'>
-								<Div className='inline-flex items-center gap-x-6'>
+								<Div className='inline-flex items-center gap-x-4'>
 									{size?.size_numcode ?? UNKNOWN_ORDER}
 									<OrderUpdateForm defaultValues={size} />
 								</Div>
@@ -192,12 +208,7 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 		defaultValues,
 		mode: 'onChange'
 	})
-	console.log(form.getValues())
-	const { isPending, mutateAsync } = useMutation({
-		mutationKey: [],
-		mutationFn: (payload: { connection: string; data: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'> }) =>
-			RFIDService.exchangeEpc(payload.connection, payload.data)
-	})
+	const [isPending, setIsPending] = useState<boolean>(false)
 
 	const exchangableOrders = uniqBy(
 		scannedSizes.filter(
@@ -207,35 +218,23 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 	)
 
 	const handleExchangeEpc = async (data: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) => {
+		setIsPending(true)
 		try {
-			console.log(data)
-			await mutateAsync({ connection, data })
+			await RFIDService.exchangeEpc(connection, data)
 		} catch (error) {
 			toast.error(t('ns_common:notification.error'), {
 				action: {
 					label: 'Retry',
-					onClick: async () => await mutateAsync({ connection, data })
+					onClick: async () => await RFIDService.exchangeEpc(connection, data)
 				}
 			})
+		} finally {
+			setIsPending(false)
+			// TODO: optimistic update on success
 		}
-		// finally {
-		// const transferedOrder = exchangableOrders.find(
-		// 	(item) => item.mo_no === data.mo_no && item.mat_code === data.mat_code
-		// )
-		// console.log('tranfered order :>>', transferedOrder)
-		// transferedOrder.count -= payload.quantity
-		// const receivedOrder = exchangableOrders.find(
-		// 	(item) => item.mo_no === data.mo_no_actual && item.mat_code === data.mat_code
-		// )
-		// console.log('receivied order :>>', receivedOrder)
-		// receivedOrder.count += payload.quantity
-		// setScannedSizes(uniqBy([...scannedSizes, transferedOrder, receivedOrder], 'mo_no'))
-		// }
 	}
 
-	useUnmount(() => {
-		form.reset()
-	})
+	useUnmount(() => form.reset())
 
 	return (
 		<Popover>
@@ -306,3 +305,28 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 const Form = tw.form`flex w-full flex-col items-stretch gap-3`
 
 export default OrderDetails
+
+/**
+ * @deprecated
+ * Optimistic update on after exchange EPC
+ 	const transferedOrder = scannedSizes.find((item) => {
+ 		return (
+ 			item.mo_no === data.mo_no && item.mat_code === data.mat_code && item.size_numcode === data.size_numcode
+ 		)
+ 	})
+ 	const receivedOrder = exchangableOrders.find((item) => {
+ 		return (
+ 			item.mo_no === data.mo_no_actual &&
+ 			item.mat_code === data.mat_code &&
+ 			item.size_numcode === data.size_numcode
+ 		)
+ 	})
+ 	scannedSizes.splice(scannedSizes.indexOf(defaultValues), 1)
+ 	if (transferedOrder && receivedOrder) {
+ 		setScannedSizes([
+ 			...scannedSizes,
+ 			{ ...transferedOrder, count: transferedOrder.count - data.quantity },
+ 			{ ...receivedOrder, count: receivedOrder.count + data.quantity }
+ 		])
+ 	}
+*/

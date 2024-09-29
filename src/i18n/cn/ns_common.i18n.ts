@@ -111,5 +111,12 @@ export default {
 	common_form_titles: {
 		create: '加新{{object}}',
 		update: '編輯{{object}}'
+	},
+	status: {
+		connecting: '连接中',
+		connected: '已连接',
+		disconnected: '已断开连接',
+		running: '运行中',
+		idle: '空闲'
 	}
 } as const

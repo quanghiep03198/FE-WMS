@@ -33,8 +33,8 @@ import tw from 'tailwind-styled-components'
 import {
 	RFID_EPC_PROVIDE_TAG,
 	UNKNOWN_ORDER,
-	useGetInoutboundDeptQuery,
-	useUpdateEpcMutation
+	useGetShapingProductLineQuery,
+	useUpdateStockMovementMutation
 } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
@@ -85,14 +85,14 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
-	const { data: inoutboundDepts } = useGetInoutboundDeptQuery()
+	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
 
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync } = useUpdateEpcMutation()
+	const { mutateAsync } = useUpdateStockMovementMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -258,7 +258,8 @@ const InoutboundForm: React.FC = () => {
 				<Separator className='col-span-full' />
 				<Div className='col-span-full'>
 					<Typography variant='small' className='inline-flex items-center gap-x-2 italic'>
-						<Icon name='BadgeInfo' className='stroke-active' size={18} /> Disconnect before updating stock moves
+						<Icon name='BotMessageSquare' size={24} strokeWidth={1.5} />
+						{t('ns_inoutbound:description.inoutbound_form_note')}
 					</Typography>
 				</Div>
 			</Form>

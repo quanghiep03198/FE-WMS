@@ -1,20 +1,25 @@
 import { RFID_READER_HOSTS } from '@/common/constants/constants'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import Regex from '@/common/constants/regex'
 import { useAuth } from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	ButtonProps,
 	Div,
+	HoverCard,
+	HoverCardContent,
 	Icon,
 	Select,
 	SelectContent,
 	SelectGroup,
 	SelectItem,
 	SelectTrigger,
-	SelectValue
+	SelectValue,
+	Typography
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { useQueryClient } from '@tanstack/react-query'
+import { HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { useBlocker } from '@tanstack/react-router'
 import { pick } from 'lodash'
 import React, { Fragment, useCallback, useMemo } from 'react'
@@ -27,7 +32,7 @@ interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'>
 
 const ScanningActions: React.FC = () => {
 	const { user, isAuthenticated } = useAuth()
-	const queryClient = useQueryClient()
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const { t, i18n } = useTranslation()
 	const {
 		scanningStatus,
@@ -80,12 +85,22 @@ const ScanningActions: React.FC = () => {
 					value={connection}
 					disabled={typeof scanningStatus !== 'undefined'}
 					onValueChange={(value) => setConnection(value)}>
-					<SelectTrigger className='w-full max-w-56 sm:max-w-full'>
-						<Div className='flex flex-1 items-center gap-x-3'>
-							<Icon name='Database' size={18} stroke='hsl(var(--primary))' />
-							<SelectValue placeholder={'Select database'} />
-						</Div>
-					</SelectTrigger>
+					<HoverCard openDelay={50} closeDelay={50}>
+						<HoverCardTrigger asChild className='w-full basis-1/5 sm:basis-full'>
+							<SelectTrigger>
+								<Div className='flex flex-1 items-center gap-x-3'>
+									<Icon name='Database' size={18} stroke='hsl(var(--primary))' />
+									<SelectValue placeholder={'Select database'} />
+								</Div>
+							</SelectTrigger>
+						</HoverCardTrigger>
+						<HoverCardContent side={isSmallScreen ? 'top' : 'right'} align='start' sideOffset={8}>
+							<Typography variant='small'>
+								Select database connection to fetch. You can change it if there is no connection is established
+								or disconnected.
+							</Typography>
+						</HoverCardContent>
+					</HoverCard>
 					<SelectContent>
 						<SelectGroup>
 							{rfidReaderHosts.map((item) => (
@@ -96,6 +111,7 @@ const ScanningActions: React.FC = () => {
 						</SelectGroup>
 					</SelectContent>
 				</Select>
+
 				<Div className='grid grid-cols-2 items-center gap-x-1 *:w-full'>
 					<Button
 						className='gap-x-2'

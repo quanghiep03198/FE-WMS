@@ -1,14 +1,13 @@
 import env from '@/common/utils/env'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
-import axios, { HttpStatusCode, type AxiosError, type AxiosErrorFilter, type AxiosInstance } from 'axios'
+import axios, { HttpStatusCode, type AxiosError, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
 
 export class AxiosClient {
 	public instance: AxiosInstance
-	private isRefreshing: boolean = false
-	private failedQueue: Array<AxiosErrorFilter> = []
+	private retry = 0
 
 	constructor(baseURL?: string) {
 		// * Instance configuration
@@ -16,7 +15,7 @@ export class AxiosClient {
 			baseURL: baseURL ?? env('VITE_API_BASE_URL'),
 			timeout: env('VITE_API_BASE_URL', 10_000),
 			headers: {
-				'Content-Type': 'application/json'
+				['Content-Type']: 'application/json'
 			},
 			paramsSerializer: (params) => {
 				return qs.stringify(params, {
@@ -49,63 +48,38 @@ export class AxiosClient {
 				}
 
 				const originalRequest = error.config
-				const errorResponseStatus = error.response?.status
+				const errorStatus = error.response?.status
 
-				if (originalRequest && !originalRequest.retry && errorResponseStatus === HttpStatusCode.Unauthorized) {
-					originalRequest.retry = true
-					console.error('[ERROR] ::: Log in session has expired.')
-
+				if (originalRequest && errorStatus === HttpStatusCode.Unauthorized) {
+					this.retry++
 					const user = AuthService.getCredentials()
+
 					if (!user?.id) {
 						AuthService.logout()
 						return Promise.reject(new Error('Invalid credentials'))
 					}
-
-					// * Push all failed request due to expired token, then process them one by one
-					if (this.isRefreshing) {
-						return new Promise((resolve, reject) => {
-							this.failedQueue.push({ resolve, reject })
-						})
-							.then((token) => {
-								originalRequest.headers['Authorization'] = `Bearer ${token}`
-								return this.instance(originalRequest)
-							})
-							.catch((error) => Promise.reject(error))
+					if (this.retry === 0 && !originalRequest.retry) {
+						const response = await this.instance.request(originalRequest)
+						originalRequest.retry = true
+						return response
 					}
-
-					this.isRefreshing = true
+					if (this.retry > 1) {
+						AuthService.logout()
+						return Promise.reject(new Error('Failed to refresh token'))
+					}
 					try {
-						const response = await AuthService.refreshToken(user?.id)
+						const response = await AuthService.refreshToken(user.id)
 						const refreshToken = response.metadata
 						AuthService.setAccessToken(refreshToken)
-						originalRequest.headers.Authorization = `Bearer ${refreshToken}`
-						this.processRequestQueue(null, refreshToken)
+						this.retry = 0
 					} catch (error) {
-						this.processRequestQueue(error, null)
-						AuthService.logout()
-						return Promise.reject(error)
-					} finally {
-						this.isRefreshing = false
+						this.retry++
 					}
 				}
 
 				return Promise.reject(error)
 			}
 		)
-	}
-
-	/**
-	 * @private
-	 * @description Processes the failed request by resolving or rejecting each promise with the provided token or error.
-	 * @param {AxiosError} error - The error to reject the promises with, or null if the token is valid.
-	 * @param {string} token - The token to resolve the promises with.
-	 * @return {void}
-	 */
-	private processRequestQueue = (error: AxiosError, token: string): void => {
-		this.failedQueue.forEach(({ resolve, reject }) => {
-			error ? reject(error) : resolve(token)
-		})
-		this.failedQueue = []
 	}
 }
 
