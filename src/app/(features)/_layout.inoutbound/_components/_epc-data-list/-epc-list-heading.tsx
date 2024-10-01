@@ -15,11 +15,13 @@ import {
 import { useEventListener } from 'ahooks'
 import { pick } from 'lodash'
 import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 import { UNKNOWN_ORDER } from '../../_apis/rfid.api'
 import { useListBoxContext } from '../../_contexts/-list-box.context'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const EpcListHeading: React.FC = () => {
+	const { t } = useTranslation()
 	const { selectedOrder, scannedOrders, setScannedOrders, setSelectedOrder, reset } = usePageContext((state) =>
 		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
 	)
@@ -63,10 +65,7 @@ const EpcListHeading: React.FC = () => {
 						</SelectTrigger>
 					</HoverCardTrigger>
 					<HoverCardContent asChild sideOffset={8} side='top'>
-						<Typography variant='small'>
-							Select the production order to view its scanned EPC data and perform warehouse inbound or outbound
-							operations.
-						</Typography>
+						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 					</HoverCardContent>
 				</HoverCard>
 				<SelectContent>

@@ -57,7 +57,10 @@ export default {
 		inoutbound_form_note: 'Ngắt kết nối trước khi thao tác nhập/xuất',
 		select_order: 'Chọn chỉ lệnh sản xuất để xem dữ liệu EPC đã quét được và thao tác nhập hoặc xuất kho',
 		select_database:
-			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt'
+			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
+		order_size_detail:
+			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
+		no_exchangable_order: 'Không có đơn hàng nào phù hợp'
 	},
 	rfid_toolbox: {
 		network_status: 'Trạng thái kết nối',

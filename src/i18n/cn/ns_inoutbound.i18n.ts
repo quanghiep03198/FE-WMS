@@ -55,7 +55,11 @@ export default {
 		transfer_order_list: '跟踪和管理转移订单',
 		transfer_order_datalist: '从下面的表格中选择数据以添加新转移订单',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
-		inoutbound_form_note: '更新库存移动之前断开连接'
+		inoutbound_form_note: '更新库存移动之前断开连接',
+		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',
+		select_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
+		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
+		no_exchangable_order: '没有可交换的顺序'
 	},
 	rfid_toolbox: {
 		network_status: '网络状态',

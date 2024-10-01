@@ -55,7 +55,14 @@ export default {
 		transfer_order_list: 'Following and managing transfer orders',
 		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders',
 		order_sizing_list: 'Table below shows the sizing information of the scanned orders',
-		inoutbound_form_note: 'Disconnect before updating stock moves'
+		inoutbound_form_note: 'Disconnect before updating stock moves',
+		select_order:
+			'Select the production order to view its scanned EPC data and perform warehouse inbound or outbound operations.',
+		select_database:
+			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
+		order_size_detail:
+			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
+		no_exchangable_order: 'There is no exchangable order'
 	},
 	rfid_toolbox: {
 		network_status: 'Network status',

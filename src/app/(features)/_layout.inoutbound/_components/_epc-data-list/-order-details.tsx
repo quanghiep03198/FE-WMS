@@ -9,6 +9,9 @@ import {
 	DialogTrigger,
 	Div,
 	Form as FormProvider,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 	Icon,
 	InputFieldControl,
 	Popover,
@@ -86,10 +89,18 @@ const OrderDetails: React.FC = () => {
 	return (
 		<Fragment>
 			<Dialog>
-				<DialogTrigger className={cn(buttonVariants({ variant: 'default', className: 'w-full items-center' }))}>
-					<Icon name='List' role='img' />
-					{t('ns_common:actions.detail')}
-				</DialogTrigger>
+				<HoverCard openDelay={50} closeDelay={50}>
+					<HoverCardTrigger asChild>
+						<DialogTrigger
+							className={cn(buttonVariants({ variant: 'default', className: 'w-full items-center' }))}>
+							<Icon name='List' role='img' />
+							{t('ns_common:actions.detail')}
+						</DialogTrigger>
+					</HoverCardTrigger>
+					<HoverCardContent side='top' align='start' sideOffset={8}>
+						<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
+					</HoverCardContent>
+				</HoverCard>
 				<DialogContent className='max-w-6xl'>
 					<DialogHeader>
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
@@ -212,7 +223,10 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 
 	const exchangableOrders = uniqBy(
 		scannedSizes.filter(
-			(item) => item.size_numcode === defaultValues.size_numcode && item.mo_no !== defaultValues.mo_no
+			(item) =>
+				item.size_numcode === defaultValues.size_numcode &&
+				item.mo_no !== defaultValues.mo_no &&
+				item.mat_code === defaultValues.mat_code
 		),
 		'mo_no'
 	)
@@ -221,6 +235,7 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 		setIsPending(true)
 		try {
 			await RFIDService.exchangeEpc(connection, data)
+			toast.success(t('ns_common:notification.success'))
 		} catch (error) {
 			toast.error(t('ns_common:notification.error'), {
 				action: {
@@ -244,59 +259,76 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 				</PopoverTrigger>
 			</Tooltip>
 			<PopoverContent className='grid w-[384px] gap-6' align='center' alignOffset={4}>
-				<Div className='space-y-2'>
-					<Typography variant='h6' className='text-base font-medium leading-none'>
-						Exchange EPC
-					</Typography>
-					<Typography variant='small' color='muted'>
-						Transfer EPC to another order
-					</Typography>
-				</Div>
-				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
-						<InputFieldControl
-							readOnly
-							orientation='horizontal'
-							name='mo_no'
-							control={form.control}
-							label='Order'
-							placeholder='0'
-						/>
-						<InputFieldControl
-							orientation='horizontal'
-							name='size_numcode'
-							control={form.control}
-							label='Size'
-							readOnly
-						/>
-						<InputFieldControl type='hidden' name='mat_code' control={form.control} readOnly placeholder='0' />
-						<SelectFieldControl
-							orientation='horizontal'
-							name='mo_no_actual'
-							control={form.control}
-							label='Actual order'
-							datalist={exchangableOrders}
-							labelField='mo_no'
-							valueField='mo_no'
-						/>
-						<InputFieldControl
-							orientation='horizontal'
-							autoComplete='off'
-							name='quantity'
-							control={form.control}
-							label='Quantity'
-							placeholder='0'
-							type='number'
-							min={1}
-						/>
-						<Button size='sm' disabled={isPending}>
-							{isPending && (
-								<Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' role='img' />
-							)}
-							{isPending ? 'Processing' : 'Confirm'}
-						</Button>
-					</Form>
-				</FormProvider>
+				{exchangableOrders.length > 0 ? (
+					<Fragment>
+						<Div className='space-y-2'>
+							<Typography variant='h6' className='text-base font-medium leading-none'>
+								Exchange EPC
+							</Typography>
+							<Typography variant='small' color='muted'>
+								Transfer EPC to another order
+							</Typography>
+						</Div>
+						<FormProvider {...form}>
+							<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
+								<InputFieldControl
+									readOnly
+									orientation='horizontal'
+									name='mo_no'
+									control={form.control}
+									label='Order'
+									placeholder='0'
+								/>
+								<InputFieldControl
+									orientation='horizontal'
+									name='size_numcode'
+									control={form.control}
+									label='Size'
+									readOnly
+								/>
+								<InputFieldControl
+									type='hidden'
+									name='mat_code'
+									control={form.control}
+									readOnly
+									placeholder='0'
+								/>
+								<SelectFieldControl
+									orientation='horizontal'
+									name='mo_no_actual'
+									control={form.control}
+									label='Actual order'
+									datalist={exchangableOrders}
+									labelField='mo_no'
+									valueField='mo_no'
+								/>
+								<InputFieldControl
+									orientation='horizontal'
+									autoComplete='off'
+									name='quantity'
+									control={form.control}
+									label='Quantity'
+									placeholder='0'
+									type='number'
+									min={1}
+								/>
+								<Button size='sm' disabled={isPending}>
+									{isPending && (
+										<Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' role='img' />
+									)}
+									{isPending ? 'Processing' : 'Confirm'}
+								</Button>
+							</Form>
+						</FormProvider>
+					</Fragment>
+				) : (
+					<Div className='grid h-32 place-content-center'>
+						<Typography variant='small' color='muted' className='inline-flex flex-col items-center gap-2'>
+							<Icon name='Inbox' size={32} className='stroke-foreground stroke-[1px]' />
+							{t('ns_inoutbound:description.no_exchangable_order')}
+						</Typography>
+					</Div>
+				)}
 			</PopoverContent>
 		</Popover>
 	)

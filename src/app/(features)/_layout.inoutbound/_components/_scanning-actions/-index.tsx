@@ -95,10 +95,7 @@ const ScanningActions: React.FC = () => {
 							</SelectTrigger>
 						</HoverCardTrigger>
 						<HoverCardContent side={isSmallScreen ? 'top' : 'right'} align='start' sideOffset={8}>
-							<Typography variant='small'>
-								Select database connection to fetch. You can change it if there is no connection is established
-								or disconnected.
-							</Typography>
+							<Typography variant='small'>{t('ns_inoutbound:description.select_database')}</Typography>
 						</HoverCardContent>
 					</HoverCard>
 					<SelectContent>
