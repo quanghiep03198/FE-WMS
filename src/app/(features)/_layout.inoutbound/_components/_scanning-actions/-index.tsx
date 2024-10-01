@@ -86,7 +86,7 @@ const ScanningActions: React.FC = () => {
 					disabled={typeof scanningStatus !== 'undefined'}
 					onValueChange={(value) => setConnection(value)}>
 					<HoverCard openDelay={50} closeDelay={50}>
-						<HoverCardTrigger asChild className='w-full basis-1/5 sm:basis-full'>
+						<HoverCardTrigger asChild className='w-full basis-1/5 sm:basis-full md:basis-1/3 lg:basis-1/3'>
 							<SelectTrigger>
 								<Div className='flex flex-1 items-center gap-x-3'>
 									<Icon name='Database' size={18} stroke='hsl(var(--primary))' />

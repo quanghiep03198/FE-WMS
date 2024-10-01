@@ -224,8 +224,8 @@ const OrderUpdateForm: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues
 	const exchangableOrders = uniqBy(
 		scannedSizes.filter(
 			(item) =>
-				item.size_numcode === defaultValues.size_numcode &&
 				item.mo_no !== defaultValues.mo_no &&
+				item.size_numcode === defaultValues.size_numcode &&
 				item.mat_code === defaultValues.mat_code
 		),
 		'mo_no'
