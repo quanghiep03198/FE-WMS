@@ -37,6 +37,7 @@ export * from './@core/skeleton'
 export * from './@core/slider'
 export * from './@core/switch'
 export * from './@core/table'
+export * from './@core/tabs'
 export * from './@core/textarea'
 export * from './@core/toggle'
 // #endregion
