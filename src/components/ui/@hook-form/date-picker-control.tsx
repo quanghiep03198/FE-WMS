@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { format } from 'date-fns'
 import { Fragment, useId } from 'react'
-import { FieldValues } from 'react-hook-form'
+import { FieldValues, useFormContext } from 'react-hook-form'
 import {
 	Calendar,
 	CalendarProps,
@@ -24,8 +24,9 @@ type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & 
 }
 
 export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerFieldControlProps<T>) {
+	const { control } = useFormContext()
+
 	const {
-		control,
 		name,
 		description,
 		label,

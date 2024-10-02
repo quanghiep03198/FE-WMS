@@ -72,7 +72,6 @@ const LoginForm: React.FC = () => {
 					name='username'
 					autoComplete='username'
 					defaultValue={persistedAccount}
-					control={form.control}
 				/>
 				<InputFieldControl
 					label={t('ns_auth:labels.password')}
@@ -80,7 +79,6 @@ const LoginForm: React.FC = () => {
 					autoComplete='current-password'
 					type='password'
 					name='password'
-					control={form.control}
 				/>
 				<Div className='flex items-center justify-between'>
 					<Div className='flex items-center space-x-2'>

@@ -28,9 +28,9 @@ const ProfileForm: React.FC = () => {
 					</Typography>
 
 					<Div className='space-y-6'>
-						<InputFieldControl label='Display name' name='display_name' control={form.control} />
-						<InputFieldControl label='Email' name='email' control={form.control} />
-						<InputFieldControl label='Company' name='company_name' control={form.control} disabled />
+						<InputFieldControl label='Display name' name='display_name' />
+						<InputFieldControl label='Email' name='email' />
+						<InputFieldControl label='Company' name='company_name' disabled />
 						<Button>Save changes</Button>
 					</Div>
 				</Fieldset>

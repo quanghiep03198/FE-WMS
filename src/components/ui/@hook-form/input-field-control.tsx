@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import React, { forwardRef, memo, useId, useRef, useState } from 'react'
+import React, { forwardRef, memo, useEffect, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
@@ -11,13 +11,12 @@ export function InputFieldControl<T extends FieldValues>(
 	props: InputFieldControlProps<T> & React.PropsWithRef<T> & React.RefAttributes<T>,
 	ref?: React.ForwardedRef<HTMLInputElement>
 ) {
-	const { getFieldState, getValues } = useFormContext()
+	const { control, getFieldState, getValues, watch } = useFormContext()
 	const {
 		label,
 		name,
 		className,
 		disabled,
-		control,
 		placeholder,
 		description,
 		type,
@@ -47,6 +46,12 @@ export function InputFieldControl<T extends FieldValues>(
 		if (typeof restProps.onChange === 'function') restProps.onChange(e)
 	}
 
+	const currentValue = watch(name)
+
+	useEffect(() => {
+		setValue(currentValue)
+	}, [currentValue])
+
 	return (
 		<FormField
 			control={control}
@@ -56,7 +61,7 @@ export function InputFieldControl<T extends FieldValues>(
 				return (
 					<FormItem
 						className={cn({
-							'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal',
+							'grid grid-cols-[1fr_2fr] items-center gap-2 space-y-0': orientation === 'horizontal',
 							hidden: type === 'hidden' || hidden
 						})}>
 						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
@@ -82,7 +87,7 @@ export function InputFieldControl<T extends FieldValues>(
 								{...restProps}
 							/>
 						</FormControl>
-						<FormDescription>{description}</FormDescription>
+						{description && <FormDescription>{description}</FormDescription>}
 						<FormMessage />
 					</FormItem>
 				)

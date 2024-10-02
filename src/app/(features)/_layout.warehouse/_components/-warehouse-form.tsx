@@ -114,7 +114,6 @@ const WarehouseFormDialog: React.FC = () => {
 							<InputFieldControl
 								placeholder='Some warehouse name ...'
 								name='warehouse_name'
-								control={form.control}
 								label={t('ns_warehouse:fields.warehouse_name')}
 							/>
 						</FormItem>
@@ -122,7 +121,6 @@ const WarehouseFormDialog: React.FC = () => {
 							<SelectFieldControl
 								name='type_warehouse'
 								label={t('ns_warehouse:fields.type_warehouse')}
-								control={form.control}
 								datalist={warehouseTypeOptions}
 								labelField='label'
 								valueField='value'
@@ -133,7 +131,6 @@ const WarehouseFormDialog: React.FC = () => {
 								disabled
 								placeholder='Some warehouse name ...'
 								name='company_code'
-								control={form.control}
 								label={t('ns_company:company')}
 								defaultValue={user?.company_code}
 							/>

@@ -64,7 +64,6 @@ function Page() {
 					<SelectFieldControl
 						name='font'
 						label='Font'
-						control={form.control}
 						datalist={fontOptions}
 						labelField='label'
 						valueField='value'
@@ -72,14 +71,12 @@ function Page() {
 					<SelectFieldControl
 						name='language'
 						label={t('ns_common:settings.language')}
-						control={form.control}
 						datalist={locales}
 						labelField='label'
 						valueField='value'
 						onValueChange={(value) => i18n.changeLanguage(value)}
 					/>
 					<FormField
-						control={form.control}
 						name='theme'
 						render={({ field }) => (
 							<FormItem className='space-y-1'>

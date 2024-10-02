@@ -98,12 +98,10 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 						<InputFieldControl
 							placeholder='Some storage name ...'
 							name='storage_name'
-							control={form.control}
 							label={t('ns_warehouse:fields.storage_name')}
 						/>
 						<SelectFieldControl
 							name='type_storage'
-							control={form.control}
 							label={t('ns_warehouse:fields.type_storage')}
 							datalist={Object.entries(warehouseStorageTypes).map(([key, value]) => ({
 								label: t(value, { ns: 'ns_warehouse', defaultValue: value }),

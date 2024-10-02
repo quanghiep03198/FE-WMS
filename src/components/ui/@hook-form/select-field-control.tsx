@@ -3,6 +3,7 @@ import React, { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import {
 	Div,
+	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
@@ -26,11 +27,10 @@ export type SelectFieldControlProps<T extends FieldValues, D> = BaseFieldControl
 export function SelectFieldControl<T extends FieldValues, D extends Record<string, any>>(
 	props: SelectFieldControlProps<T, D>
 ) {
-	const { getValues, getFieldState } = useFormContext()
+	const { control, getValues, getFieldState } = useFormContext()
 	const id = useId()
 
 	const {
-		control,
 		name,
 		hidden,
 		label,
@@ -44,6 +44,8 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 		...restProps
 	} = props
 
+	const isError = Boolean(getFieldState(name).error)
+
 	return (
 		<FormField
 			name={name!}
@@ -54,31 +56,39 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 					<FormItem
 						className={cn({
 							hidden,
-							'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
+							'grid grid-cols-[1fr_2fr] grid-rows-4 items-center gap-x-2 space-y-0': orientation === 'horizontal'
 						})}>
-						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-						<Div className={cn(orientation === 'horizontal' && 'flex flex-col space-y-1.5')}>
+						{label && (
+							<FormLabel
+								htmlFor={id}
+								className={cn(orientation === 'horizontal' && (isError ? 'row-span-2' : 'row-span-4'))}>
+								{label}
+							</FormLabel>
+						)}
+						<Div className={cn('space-y-2', orientation === 'horizontal' && 'row-span-4')}>
 							<Select
 								{...restProps}
-								value={field.value}
-								defaultValue={field.value}
+								value={field.value ?? ''}
+								defaultValue={field.value ?? ''}
 								onValueChange={(value) => {
 									field.onChange(value)
 									if (typeof onValueChange === 'function') {
 										onValueChange(value)
 									}
 								}}>
-								<SelectTrigger
-									id={id}
-									disabled={field.disabled}
-									className={cn(
-										'bg-background focus:border-primary',
-										className,
-										Boolean(getFieldState(name).error) &&
-											'w-full border-destructive focus:border-destructive active:border-destructive'
-									)}>
-									<SelectValue placeholder={!field.value && placeholder} />
-								</SelectTrigger>
+								<FormControl>
+									<SelectTrigger
+										id={id}
+										disabled={field.disabled}
+										className={cn(
+											'bg-background focus:border-primary',
+											className,
+											isError &&
+												'w-full border-destructive focus:border-destructive active:border-destructive'
+										)}>
+										<SelectValue placeholder={!field.value && placeholder} />
+									</SelectTrigger>
+								</FormControl>
 								<SelectContent>
 									{Array.isArray(datalist) && datalist.length > 0 ? (
 										datalist.map((option) => (
@@ -97,7 +107,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 								</SelectContent>
 							</Select>
 							{props.description && <FormDescription>{props.description}</FormDescription>}
-							<FormMessage />
+							<FormMessage className={cn(orientation === 'horizontal' && 'row-span-1')} />
 						</Div>
 					</FormItem>
 				)

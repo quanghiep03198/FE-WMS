@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { Fragment, useId, useMemo, useState } from 'react'
-import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
+import { FieldValues, Path, PathValue, UseFormReturn, useFormContext } from 'react-hook-form'
 import {
 	ButtonProps,
 	Command,
@@ -11,6 +11,7 @@ import {
 	CommandItem,
 	CommandList,
 	CommandLoading,
+	Div,
 	FormControl,
 	FormDescription,
 	FormField,
@@ -50,7 +51,6 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	const {
-		form,
 		name,
 		datalist: data,
 		labelField,
@@ -71,7 +71,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	} = props
 
 	const id = useId()
-
+	const { control, getFieldState, setValue, clearErrors } = useFormContext()
 	const options = useMemo(() => {
 		if (!Array.isArray(data)) return []
 
@@ -84,6 +84,8 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		})
 	}, [data, shouldFilter, searchTerm])
 
+	const isError = Boolean(getFieldState(name).error)
+
 	const renderCurrentValue = (value) => {
 		if (Array.isArray(data) && data.length > 0) {
 			return data?.find((option) => option[valueField] === value)?.[labelField] ?? placeholder
@@ -94,16 +96,22 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	return (
 		<FormField
 			name={name}
-			control={form.control}
+			control={control}
 			render={({ field }) => {
 				return (
 					<FormItem
 						className={cn({
 							hidden: hidden,
-							'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
+							'grid grid-cols-[1fr_2fr] grid-rows-4 items-center gap-x-2 space-y-0': orientation === 'horizontal'
 						})}>
-						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-						<FormControl>
+						{label && (
+							<FormLabel
+								htmlFor={id}
+								className={cn(orientation === 'horizontal' && (isError ? 'row-span-2' : 'row-span-4'))}>
+								{label}
+							</FormLabel>
+						)}
+						<Div className={cn('space-y-2', orientation === 'horizontal' && 'row-span-4')}>
 							<Popover>
 								<PopoverTrigger
 									id={id}
@@ -115,7 +123,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												'w-full justify-between font-normal hover:bg-background focus:border-primary'
 										}),
 										triggerProps?.className,
-										form.getFieldState(name).error && 'border-destructive focus:border-destructive'
+										getFieldState(name).error && 'border-destructive focus:border-destructive'
 									)}
 									{...triggerProps}>
 									<FormControl>
@@ -148,9 +156,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																value={option[valueField]}
 																className='line-clamp-1 flex items-center gap-x-4'
 																onSelect={(value) => {
-																	form.setValue(name, value as PathValue<T, Path<T>>)
-																	form.setValue(name, option[valueField])
-																	form.clearErrors(name)
+																	setValue(name, value as PathValue<T, Path<T>>)
+																	setValue(name, option[valueField])
+																	clearErrors(name)
 																	if (typeof onSelect === 'function') onSelect(option[valueField])
 																}}>
 																{CommandItemTemplate ? (
@@ -175,9 +183,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 									</Command>
 								</PopoverContent>
 							</Popover>
-						</FormControl>
-						{description && <FormDescription>{description}</FormDescription>}
-						<FormMessage />
+							{description && <FormDescription>{description}</FormDescription>}
+							<FormMessage />
+						</Div>
 					</FormItem>
 				)
 			}}

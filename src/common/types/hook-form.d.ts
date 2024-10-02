@@ -3,7 +3,6 @@ import { FieldValues } from 'react-hook-form'
 
 export interface BaseFieldControl<T extends FieldValues> {
 	name: Path<T>
-	control: Control<T>
 	label?: string
 	description?: string
 	hidden?: boolean

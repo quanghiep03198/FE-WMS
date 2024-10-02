@@ -52,7 +52,6 @@ const WorkplaceSelectionForm: React.FC = () => {
 					valueField='company_code'
 					onValueChange={() => dispatch({ type: 'COMPLETE' })}
 					disabled={isFetching}
-					control={form.control}
 				/>
 				<Button type='submit' className='gap-x-2' disabled={!companyCode}>
 					{t('ns_auth:actions.go_to_dashboard')} <Icon name='ArrowRight' />

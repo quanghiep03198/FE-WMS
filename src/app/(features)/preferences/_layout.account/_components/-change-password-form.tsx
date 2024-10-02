@@ -17,18 +17,8 @@ const ChangePasswordForm: React.FC = () => {
 					</Typography>
 
 					<Div className='space-y-6'>
-						<InputFieldControl
-							label='Current password'
-							name='currentPassword'
-							control={form.control}
-							placeholder='********'
-						/>
-						<InputFieldControl
-							label='New password'
-							name='newPassword'
-							control={form.control}
-							placeholder='********'
-						/>
+						<InputFieldControl label='Current password' name='currentPassword' placeholder='********' />
+						<InputFieldControl label='New password' name='newPassword' placeholder='********' />
 						<Button>Change password</Button>
 					</Div>
 				</Fieldset>

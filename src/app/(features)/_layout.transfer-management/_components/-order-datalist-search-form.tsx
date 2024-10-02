@@ -40,7 +40,7 @@ const OrderDatalistSearchForm: React.FC = () => {
 					})
 				})}>
 				<Div className='col-span-5 sm:col-span-full'>
-					<DatePickerFieldControl name='time_range' control={form.control} calendarProps={{ mode: 'range' }} />
+					<DatePickerFieldControl name='time_range' calendarProps={{ mode: 'range' }} />
 				</Div>
 				<Div className='col-span-5 sm:col-span-full'>
 					<ComboboxFieldControl

@@ -58,28 +58,13 @@ const TransferOrderDetail: React.FC = () => {
 					<FormProvider {...form}>
 						<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
 							<Div className='col-span-full'>
-								<InputFieldControl
-									label={t('ns_erp:fields.or_no')}
-									name='or_no'
-									type='text'
-									control={form.control}
-								/>
+								<InputFieldControl label={t('ns_erp:fields.or_no')} name='or_no' type='text' />
 							</Div>
 							<Div className='col-span-2 sm:col-span-full'>
-								<InputFieldControl
-									label={t('ns_erp:fields.trans_num')}
-									name='trans_num'
-									type='number'
-									control={form.control}
-								/>
+								<InputFieldControl label={t('ns_erp:fields.trans_num')} name='trans_num' type='number' />
 							</Div>
 							<Div className='col-span-2 sm:col-span-full'>
-								<InputFieldControl
-									label={t('ns_erp:fields.sno_qty')}
-									name='sno_qty'
-									type='number'
-									control={form.control}
-								/>
+								<InputFieldControl label={t('ns_erp:fields.sno_qty')} name='sno_qty' type='number' />
 							</Div>
 							<Div className='col-span-2 sm:col-span-full'>
 								<InputFieldControl
@@ -87,24 +72,13 @@ const TransferOrderDetail: React.FC = () => {
 									name='or_qtyperpacking'
 									value={transNum * snoQty}
 									type='number'
-									control={form.control}
 								/>
 							</Div>
 							<Div className='col-span-3 sm:col-span-full'>
-								<InputFieldControl
-									label={t('ns_erp:fields.kg_nostart')}
-									name='kg_nostart'
-									type='number'
-									control={form.control}
-								/>
+								<InputFieldControl label={t('ns_erp:fields.kg_nostart')} name='kg_nostart' type='number' />
 							</Div>
 							<Div className='col-span-3 sm:col-span-full'>
-								<InputFieldControl
-									label={t('ns_erp:fields.kg_noend')}
-									name='kg_noend'
-									type='number'
-									control={form.control}
-								/>
+								<InputFieldControl label={t('ns_erp:fields.kg_noend')} name='kg_noend' type='number' />
 							</Div>
 							<Div className='col-span-full'>
 								<Button>{t('ns_common:actions.save_changes')}</Button>

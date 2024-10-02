@@ -89,7 +89,6 @@ const BaseDatalistForm: React.FC = () => {
 					<Div className='col-span-1 sm:col-span-full'>
 						<InputFieldControl
 							name='sno_no'
-							control={form.control}
 							label={t('ns_erp:fields.sno_no')}
 							placeholder='SNA24040774'
 							description='Order code is automatically generated'
@@ -99,14 +98,12 @@ const BaseDatalistForm: React.FC = () => {
 					<Div className='col-span-1 sm:col-span-full'>
 						<DatePickerFieldControl
 							name='sno_date'
-							control={form.control}
 							label={t('ns_erp:fields.sno_date')}
 							description='Date of order creation'
 						/>
 					</Div>
 					<Div className='col-span-1 sm:col-span-full'>
 						<SelectFieldControl
-							control={form.control}
 							name='type_inventorylist'
 							label={t('ns_company:department')}
 							datalist={inboundOrderTypes}
@@ -116,7 +113,6 @@ const BaseDatalistForm: React.FC = () => {
 					</Div>
 					<Div className='col-span-1 sm:col-span-full'>
 						<SelectFieldControl
-							control={form.control}
 							name='dept_code'
 							label={t('ns_company:department')}
 							datalist={inoutboundDepts}
@@ -127,7 +123,6 @@ const BaseDatalistForm: React.FC = () => {
 					<Div className='col-span-1 sm:col-span-full'>
 						<SelectFieldControl
 							disabled={isLoading}
-							control={form.control}
 							name='warehouse_num'
 							label={t('ns_inoutbound:labels.io_archive_warehouse')}
 							datalist={warehouseOptions}
