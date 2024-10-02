@@ -72,7 +72,7 @@ const PollingIntervalSelector: React.FC = () => {
 						</Typography>
 					</Div>
 				</HoverCardTrigger>
-				<HoverCardContent className='z-50 w-64 text-sm' side='left' align='start' sideOffset={8}>
+				<HoverCardContent className='z-50 w-64 text-sm' side='top' align='start' sideOffset={8}>
 					{t('ns_inoutbound:rfid_toolbox.polling_duration_description')}
 				</HoverCardContent>
 			</HoverCard>

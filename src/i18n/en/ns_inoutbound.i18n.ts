@@ -62,7 +62,7 @@ export default {
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
-		no_exchangable_order: 'There is no exchangable order'
+		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.'
 	},
 	rfid_toolbox: {
 		network_status: 'Network status',

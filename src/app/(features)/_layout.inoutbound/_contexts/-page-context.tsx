@@ -45,7 +45,7 @@ export const DEFAULT_PROPS: Pick<
 > = {
 	scanningStatus: undefined,
 	connection: '',
-	selectedOrder: undefined,
+	selectedOrder: 'all',
 	logs: [],
 	pollingDuration: 500,
 	scannedEpc: {

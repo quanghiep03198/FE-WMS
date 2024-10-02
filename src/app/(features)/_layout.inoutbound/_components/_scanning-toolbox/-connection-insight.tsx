@@ -62,11 +62,16 @@ const JobStatus: React.FC = () => {
 
 const TransferDataCalculator: React.FC = () => {
 	const { t } = useTranslation()
-	const [transferredDataSize, setTransferredDataSize] = useState('')
+	const [transferredDataSize, setTransferredDataSize, resetTransferredDataSize] = useResetState('')
+	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
 
 	useEventListener(INCOMING_DATA_CHANGE, (e: CustomEvent<number>) => {
-		setTransferredDataSize((prev) => prev + e.detail)
+		if (scanningStatus === 'connected') setTransferredDataSize((prev) => prev + e.detail)
 	})
+
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined') resetTransferredDataSize()
+	}, [scanningStatus])
 
 	return (
 		<StatusItem>

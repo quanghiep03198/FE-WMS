@@ -16,19 +16,19 @@ import { useEventListener } from 'ahooks'
 import { pick } from 'lodash'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { UNKNOWN_ORDER } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
+import { UPDATE_STOCK_SUBMISSION } from '../../_constants/event.const'
 import { useListBoxContext } from '../../_contexts/-list-box.context'
 import { usePageContext } from '../../_contexts/-page-context'
 
-const EpcListHeading: React.FC = () => {
+const ListBoxHeader: React.FC = () => {
 	const { t } = useTranslation()
 	const { selectedOrder, scannedOrders, setScannedOrders, setSelectedOrder, reset } = usePageContext((state) =>
 		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
 	)
-
 	const { loading, setPage } = useListBoxContext()
-
-	useEventListener('INOUTBOUND_SUBMISSION', (e: CustomEvent<string>) => {
+	console.log(selectedOrder)
+	useEventListener(UPDATE_STOCK_SUBMISSION, (e: CustomEvent<string>) => {
 		const filteredOrders = scannedOrders.filter((item) => item.mo_no !== e.detail)
 		if (filteredOrders.length > 0) {
 			setSelectedOrder(filteredOrders[0]?.mo_no)
@@ -44,14 +44,13 @@ const EpcListHeading: React.FC = () => {
 	}
 
 	return (
-		<Div className='flex h-fit items-center justify-between p-2'>
+		<Div className='flex items-center justify-between p-2'>
 			<Typography
 				variant='h6'
 				className='relative z-10 inline-flex items-center gap-x-2 px-2 text-center text-lg sm:text-base md:text-base'>
 				<Icon name='ScanBarcode' size={20} />
 				EPC Data
 			</Typography>
-
 			<Select value={selectedOrder} onValueChange={handleChangeOrder}>
 				<HoverCard openDelay={50} closeDelay={50}>
 					<HoverCardTrigger asChild className='w-full basis-1/2'>
@@ -75,8 +74,11 @@ const EpcListHeading: React.FC = () => {
 							<Fragment>
 								{Array.isArray(scannedOrders) &&
 									scannedOrders.map((order, index) => (
-										<SelectItem key={index} value={order.mo_no} className='!flex items-center gap-x-2'>
-											{order.mo_no ?? UNKNOWN_ORDER} {`(${order.count} pairs)`}
+										<SelectItem
+											key={index}
+											value={order.mo_no ?? FALLBACK_ORDER_VALUE}
+											className='!flex items-center gap-x-2'>
+											{order.mo_no ?? FALLBACK_ORDER_VALUE} {`(${order.count} pairs)`}
 										</SelectItem>
 									))}
 							</Fragment>
@@ -88,4 +90,4 @@ const EpcListHeading: React.FC = () => {
 	)
 }
 
-export default EpcListHeading
+export default ListBoxHeader

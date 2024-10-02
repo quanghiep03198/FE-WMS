@@ -27,3 +27,4 @@ export const inboundSchema = outboundSchema.extend({
 export type InboundFormValues = z.infer<typeof inboundSchema>
 export type OutboundFormValues = z.infer<typeof outboundSchema>
 export type FormValues = InboundFormValues | OutboundFormValues
+export type InoutboundPayload = { mo_no: string } & FormValues

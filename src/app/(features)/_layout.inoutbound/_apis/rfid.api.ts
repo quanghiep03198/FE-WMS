@@ -1,53 +1,41 @@
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { useUnmount } from 'ahooks'
-import { useEffect, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import { ScanningStatus } from '../_contexts/-page-context'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { pick } from 'lodash'
+import { MANUALLY_MUTATE_DATA } from '../_constants/event.const'
+import { useListBoxContext } from '../_contexts/-list-box.context'
+import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
+import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
+import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
 
 // API Query Keys
-export const RFID_EPC_PROVIDE_TAG = 'RFID_EPC'
 export const INOUTBOUND_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
-export const CUST_ORDER_PROVIDE_TAG = 'CUST_ORDER'
+export const ORDER_DETAIL_PROVIDE_TAG = 'ORDER_DETAIL'
+export const EPC_LIST_PROVIDE_TAG = 'EPC_LIST'
+// Fallback order value if it's null
+export const FALLBACK_ORDER_VALUE = 'Unknown'
 
-export const UNKNOWN_ORDER = 'Unknown'
+export type FetchEpcQueryKey = [typeof EPC_LIST_PROVIDE_TAG, number, string]
 
-type GetEPCQueryArgs = { connection: string; scanningStatus: ScanningStatus }
-type UpdateOrderCodeMutationArgs = { host: string; previousOrder: string; payload: any }
-
-export const useGetScannedEPCQuery = (params: GetEPCQueryArgs) => {
-	const controllerRef = useRef(new AbortController())
-
-	useEffect(() => {
-		// Cancel current request if user stop scanning
-		if (params.scanningStatus !== 'connected') controllerRef.current.abort()
-		else controllerRef.current = new AbortController()
-	}, [params.scanningStatus])
-
-	useUnmount(() => {
-		controllerRef.current.abort() // Cancel current request if user wish to leave the page
-	})
+export const useManualFetchEpcQuery = () => {
+	const { page } = useListBoxContext()
+	const { selectedOrder, connection } = usePageContext((state) => pick(state, ['selectedOrder', 'connection']))
 
 	return useQuery({
-		queryKey: [RFID_EPC_PROVIDE_TAG, params.connection],
-		queryFn: async () => {
-			return await RFIDService.getScannedEPC({
-				signal: controllerRef.current.signal,
-				headers: { ['X-Database-Host']: params.connection }
-			})
-		},
-		enabled: params.scanningStatus === 'connected',
-		refetchInterval: 5000, // refetch every 5 seconds
+		queryKey: [EPC_LIST_PROVIDE_TAG, page, selectedOrder],
+		queryFn: async () => RFIDService.fetchEpcManually(connection, page, selectedOrder),
+		enabled: false,
+		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
 	})
 }
 
 export const useUpdateStockMovementMutation = () => {
+	const { connection } = usePageContext((state) => pick(state, 'connection'))
+
 	return useMutation({
-		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: RFIDService.updateStockMovement
+		mutationKey: [ORDER_DETAIL_PROVIDE_TAG],
+		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload)
 	})
 }
 
@@ -60,61 +48,42 @@ export const useGetShapingProductLineQuery = () => {
 }
 
 export const useDeleteOrderMutation = () => {
-	return useMutation({
-		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: async ({ host, orderCode }: { host: string; orderCode: string }) =>
-			await RFIDService.deleteUnexpectedOrder(host, orderCode)
-	})
-}
-
-/**
- *
- * @deprecated
- * @param host
- * @param searchTerm
- * @returns
- */
-export const useGetCustOrderListQuery = (host: string, searchTerm: string) => {
-	return useSuspenseQuery({
-		queryKey: [CUST_ORDER_PROVIDE_TAG, host],
-		queryFn: async () => await RFIDService.getCustOrderList(host, searchTerm),
-		select: (response) => {
-			console.log(response.metadata)
-			return Array.isArray(response.metadata) ? response.metadata : []
-		}
-	})
-}
-
-/**
- *
- * @deprecated
- * @param optimisticUpdateHandler
- * @returns
- */
-export const useUpdateOrderCodeMutation = (
-	optimisticUpdateHandler: (variables: UpdateOrderCodeMutationArgs['payload']) => void
-) => {
 	const queryClient = useQueryClient()
-	const { t } = useTranslation()
+	const { connection, setSelectedOrder } = usePageContext((state) => pick(state, ['connection', 'setSelectedOrder']))
+	const { setPage } = useListBoxContext()
 
 	return useMutation({
-		mutationKey: [RFID_EPC_PROVIDE_TAG],
-		mutationFn: async ({ host, previousOrder, payload }: UpdateOrderCodeMutationArgs) => {
-			return await RFIDService.updateInventoryOrderCode(host, previousOrder, payload)
+		mutationKey: [ORDER_DETAIL_PROVIDE_TAG],
+		mutationFn: async (orderCode: string) => {
+			return await RFIDService.deleteUnexpectedOrder(connection, orderCode)
 		},
-		onMutate: () => {
-			return toast.loading(t('ns_common:notification.processing_request'))
-		},
-		onSuccess: (_data, _variables, context) => {
-			queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
-			toast.success(t('ns_common:notification.success'), { id: context })
-		},
-		onError: (_error, _variables, context) => {
-			queryClient.cancelQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
-			toast.error(t('ns_common:notification.error'), { id: context })
-		},
-		onSettled: (_data, _error, variables) => {
-			optimisticUpdateHandler(variables.payload)
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG] })
+			setPage(1)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			window.dispatchEvent(new Event(MANUALLY_MUTATE_DATA))
 		}
+	})
+}
+
+export const useGetOrderDetail = () => {
+	const { connection, scanningStatus } = usePageContext((state) => pick(state, ['connection', 'scanningStatus']))
+
+	return useQuery({
+		queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
+		queryFn: async () => await RFIDService.getOrderDetail({ headers: { ['X-Database-Host']: connection } }),
+		enabled: scanningStatus === 'disconnected',
+		select: (response) => response.metadata
+	})
+}
+
+export const useExchangeEpcMutation = () => {
+	const { connection } = usePageContext((state) => pick(state, ['connection']))
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
+		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(connection, payload),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
 	})
 }

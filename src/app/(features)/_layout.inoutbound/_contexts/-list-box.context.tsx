@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react'
 
 type TListBoxContext = {
-	page: number
+	page: number | null
 	setPage: React.Dispatch<React.SetStateAction<number>>
 	loading: boolean
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>

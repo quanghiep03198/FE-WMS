@@ -31,11 +31,12 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import {
-	RFID_EPC_PROVIDE_TAG,
-	UNKNOWN_ORDER,
+	FALLBACK_ORDER_VALUE,
+	ORDER_DETAIL_PROVIDE_TAG,
 	useGetShapingProductLineQuery,
 	useUpdateStockMovementMutation
 } from '../../_apis/rfid.api'
+import { UPDATE_STOCK_SUBMISSION } from '../../_constants/event.const'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
 	FormActionEnum,
@@ -116,12 +117,11 @@ const InoutboundForm: React.FC = () => {
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
-				mo_no: selectedOrder === UNKNOWN_ORDER ? null : selectedOrder,
-				host: connection
+				mo_no: selectedOrder === FALLBACK_ORDER_VALUE ? null : selectedOrder
 			})
-			window.dispatchEvent(new CustomEvent('INOUTBOUND_SUBMISSION', { detail: selectedOrder }))
+			window.dispatchEvent(new CustomEvent(UPDATE_STOCK_SUBMISSION, { detail: selectedOrder }))
 
-			queryClient.invalidateQueries({ queryKey: [RFID_EPC_PROVIDE_TAG] })
+			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG] })
 			return toast.success(t('ns_common:notification.success'), { id: loading })
 		} catch (error) {
 			return toast.error(t('ns_common:notification.error'), { id: loading })
@@ -191,7 +191,6 @@ const InoutboundForm: React.FC = () => {
 				</Div>
 				<Div className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
 					<SelectFieldControl
-						control={form.control}
 						name='rfid_use'
 						label={t('ns_common:common_fields.actions')}
 						datalist={storageTypes}
@@ -203,7 +202,6 @@ const InoutboundForm: React.FC = () => {
 					<Fragment>
 						<Div className='col-span-1 sm:col-span-full'>
 							<SelectFieldControl
-								control={form.control}
 								name='dept_code'
 								label={t('ns_company:department')}
 								datalist={inoutboundDepts}
@@ -214,7 +212,6 @@ const InoutboundForm: React.FC = () => {
 						<Div className='col-span-1 sm:col-span-full'>
 							<SelectFieldControl
 								disabled={isLoading}
-								control={form.control}
 								name='warehouse_num'
 								label={t('ns_inoutbound:labels.io_archive_warehouse')}
 								datalist={warehouseOptions}
