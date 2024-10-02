@@ -124,7 +124,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 						preload='intent'
 						aria-label={t(title, { defaultValue: title })}
 						className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
-						activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}>
+						activeProps={{ className: 'text-primary hover:text-primary bg-primary/10 focus-visible:ring-0' }}>
 						<Icon size={20} name={icon} role='img' />
 					</Link>
 				</Tooltip>
@@ -134,7 +134,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 					to={path}
 					role='link'
 					preload='intent'
-					className={cn(buttonVariants({ variant: 'ghost', className: 'w-full' }))}
+					className={cn(buttonVariants({ variant: 'ghost', className: 'w-full focus-visible:ring-0' }))}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
