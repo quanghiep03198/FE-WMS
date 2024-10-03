@@ -18,7 +18,8 @@ export default {
 		io_archive_warehouse: 'Archived warehouse',
 		io_storage_location: 'Storage location',
 		order_information: 'Order information',
-		transfer_information: 'Transfer information'
+		transfer_information: 'Transfer information',
+		exchange_all: 'Exchange all'
 	},
 	inoutbound_actions: {
 		normal_import: 'Normally import',
@@ -49,7 +50,8 @@ export default {
 	titles: {
 		transfer_order_list: 'Transfer orders list',
 		transfer_order_datalist: 'Transfer order datalist',
-		order_sizing_list: 'Order sizing list'
+		order_sizing_list: 'Order sizing list',
+		exchange_epc: 'Exchange EPC'
 	},
 	description: {
 		transfer_order_list: 'Following and managing transfer orders',
@@ -62,7 +64,12 @@ export default {
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
-		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.'
+		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
+		exchange_epc_dialog_desc:
+			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
+		transferred_order: 'The actual order code to be exchanged',
+		exchange_qty: 'Number of exchanged items for the actual order',
+		exchange_all: 'You can exchange the whole EPC belongs to the selected size'
 	},
 	rfid_toolbox: {
 		network_status: 'Network status',

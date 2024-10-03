@@ -103,6 +103,6 @@ const LoginForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`w-full flex flex-col items-stretch gap-y-6`
+const Form = tw.form`flex flex-col items-stretch gap-y-6`
 
 export default LoginForm

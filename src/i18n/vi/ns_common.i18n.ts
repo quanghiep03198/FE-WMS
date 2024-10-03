@@ -17,6 +17,7 @@ export default {
 		remark: 'Ghi chú',
 		approver: 'Người phê duyệt',
 		approver_time: 'Thời gian phê duyệt',
+		quantity: 'Số lượng',
 		total: 'Tổng cộng'
 	},
 	actions: {
@@ -52,7 +53,9 @@ export default {
 		set_approval_status: 'Đặt trạng thái phê duyệt',
 		approve: 'Duyệt',
 		reapprove: 'Duyệt lại',
-		cancel_approve: 'Hủy duyệt'
+		cancel_approve: 'Hủy duyệt',
+		retry: 'Thử lại',
+		load_more: 'Tải thêm'
 	},
 	table: {
 		selected_rows: 'Đã chọn {{selectedRows}} dòng',
@@ -119,6 +122,8 @@ export default {
 		connected: 'Đã kết nối',
 		disconnected: 'Đã ngắt kết nối',
 		running: 'Đang hoạt động',
-		idle: 'Không hoạt động'
+		idle: 'Không hoạt động',
+		processing: 'Đang xử lý',
+		loading: 'Đang tải ...'
 	}
 } as const

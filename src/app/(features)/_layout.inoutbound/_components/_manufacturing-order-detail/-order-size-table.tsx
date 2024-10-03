@@ -111,44 +111,39 @@ const OrderSizeDetailTable: React.FC = () => {
 						<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 					</HoverCardContent>
 				</HoverCard>
-				<DialogContent className='max-w-6xl'>
+				<DialogContent className='max-w-6xl overflow-hidden'>
 					<DialogHeader>
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 					</DialogHeader>
-					<Div className='divide-y overflow-clip rounded-lg border text-sm'>
-						<Div
-							className={cn(
-								'relative max-h-96 w-full overflow-x-auto overflow-y-auto scrollbar-track-scrollbar/20',
-								Array.isArray(scannedOrders) && scannedOrders.length === 0 && 'h-[50dvh]'
-							)}>
-							{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-								<Table className='border-separate border-spacing-0'>
-									<TableHeader>
-										<TableRow className='sticky top-0 z-10 bg-background'>
-											<TableHead align='left' className='w-[15%]'>
-												{t('ns_erp:fields.mo_no')}
-											</TableHead>
-											<TableHead className='w-[75%]'>Sizes</TableHead>
-											<TableHead align='right' className='w-[5%]'>
-												{t('ns_common:common_fields.total')}
-											</TableHead>
-											<TableHead className='w-[5%]'>-</TableHead>
-										</TableRow>
-									</TableHeader>
-									<TableBody>
-										{scannedOrders.map((order) => {
-											return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
-										})}
-									</TableBody>
-								</Table>
-							) : (
-								<Div className='inset-0 flex h-full w-full items-center justify-center gap-x-2'>
-									<Icon name='Inbox' size={24} strokeWidth={1} />
-									No data
-								</Div>
-							)}
-						</Div>
+					<Div className='relative max-h-96 w-full divide-y overflow-clip overflow-x-auto overflow-y-auto rounded-lg border text-sm scrollbar-track-scrollbar/20'>
+						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
+							<Table className='border-separate border-spacing-0'>
+								<TableHeader>
+									<TableRow className='sticky top-0 z-10 bg-background'>
+										<TableHead align='left' className='sticky left-0 z-10 w-[15%]'>
+											{t('ns_erp:fields.mo_no')}
+										</TableHead>
+										<TableHead className='w-[75%]'>Sizes</TableHead>
+										<TableHead align='right' className='sticky right-[5%] w-[5%]'>
+											{t('ns_common:common_fields.total')}
+										</TableHead>
+										<TableHead className='sticky right-0 w-[5%]'>-</TableHead>
+									</TableRow>
+								</TableHeader>
+								<TableBody>
+									{scannedOrders.map((order) => {
+										return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
+									})}
+								</TableBody>
+							</Table>
+						) : (
+							<Div className='inset-0 flex h-full w-full items-center justify-center gap-x-2'>
+								<Icon name='Inbox' size={24} strokeWidth={1} />
+								No data
+							</Div>
+						)}
+
 						<Div className='flex items-center justify-between p-4'>
 							<Typography variant='small' color='muted'>
 								{t('ns_inoutbound:mo_no_box.caption')}

@@ -1,10 +1,13 @@
 export default {
 	fields: {
 		mo_no: '指令碼',
+		mo_no_actual: '實際指令碼',
 		or_no: '訂單編號',
+		mat_code: '成品料号',
 		or_custpoone: '订单编号',
 		or_totalqty: '訂單數量',
 		or_custpo: '客戶訂單',
+
 		transfer_order_code: '轉撥單號',
 		dept_code: '成型線',
 		// I/O product inspection

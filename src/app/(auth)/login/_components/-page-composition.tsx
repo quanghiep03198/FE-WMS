@@ -4,14 +4,13 @@ import { cn } from '@/common/utils/cn'
 import { Div, Icon, Label, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { Stepper, type TStep } from '@/components/ui/@custom/step'
 import { Link } from '@tanstack/react-router'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import LoginForm from './-login-form'
 import WorkplaceSelectionForm from './-workplace-selection-form'
 
-const Container = tw.div`relative grid place-content-center min-h-screen w-full overflow-y-auto bg-background text-foreground scrollbar-none scrollbar`
-const FormSection = tw.section`mx-auto flex w-full max-w-xl flex-grow flex-col items-center justify-center gap-y-6 px-4 z-10`
+const Container = tw.div`relative flex justify-center items-center min-h-screen overflow-y-auto bg-background text-foreground scrollbar-none scrollbar`
+const FormSection = tw.section`mx-auto flex max-w-xl w-full flex-col items-stretch justify-center gap-y-6 px-4 z-10`
 
 const ThemeSelector: React.FC = () => {
 	return (
@@ -34,21 +33,16 @@ const HomeNavigator: React.FC = () => {
 }
 
 const FormFieldset: React.FC = () => {
-	const { t, i18n } = useTranslation()
-
-	const steps: TStep[] = useMemo(
-		() => [
-			{
-				name: t('ns_auth:steps.verify_account'),
-				status: 'current'
-			},
-			{
-				name: t('ns_auth:steps.select_department'),
-				status: 'upcoming'
-			}
-		],
-		[i18n.language]
-	)
+	const steps: TStep[] = [
+		{
+			name: 'ns_auth:steps.verify_account',
+			status: 'current'
+		},
+		{
+			name: 'ns_auth:steps.select_department',
+			status: 'upcoming'
+		}
+	]
 
 	return (
 		<Stepper.Provider data={steps} enableChangeStep={false}>
@@ -66,7 +60,7 @@ const FormHeading: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='w-full max-w-xl space-y-1 text-center'>
+		<Div className='w-full space-y-1 text-center'>
 			<Typography variant='h5' className='whitespace-nowrap text-center font-bold'>
 				{t('ns_auth:texts.title')}
 			</Typography>

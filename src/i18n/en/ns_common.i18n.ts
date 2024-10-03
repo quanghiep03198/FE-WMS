@@ -17,6 +17,7 @@ export default {
 		remark: 'Remark',
 		approver: 'Approver',
 		approver_time: 'Approval time',
+		quantity: 'Quantity',
 		total: 'Total'
 	},
 	actions: {
@@ -51,7 +52,9 @@ export default {
 		set_approval_status: 'Set approval status',
 		approve: 'Approve',
 		reapprove: 'Reapprove',
-		cancel_approve: 'Cancel Approval'
+		cancel_approve: 'Cancel Approval',
+		retry: 'Retry',
+		load_more: 'Load more'
 	},
 	table: {
 		selected_rows: '{{selectedRows}} row(s) selected',
@@ -118,6 +121,8 @@ export default {
 		connected: 'Connected',
 		disconnected: 'Disconnected',
 		running: 'Running',
-		idle: 'Idle'
+		idle: 'Idle',
+		processing: 'Processing ...',
+		loading: 'Loading ...'
 	}
 } as const

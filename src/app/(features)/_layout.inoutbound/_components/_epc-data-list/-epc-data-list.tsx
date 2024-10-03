@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { EPC_LIST_PROVIDE_TAG, ORDER_DETAIL_PROVIDE_TAG, useManualFetchEpcQuery } from '../../_apis/rfid.api'
-import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
+import { INCOMING_DATA_CHANGE, MANUALLY_MUTATE_DATA } from '../../_constants/event.const'
 import { useListBoxContext } from '../../_contexts/-list-box.context'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
@@ -33,6 +33,8 @@ const EpcDataList: React.FC = () => {
 	const queryClient = useQueryClient()
 	const { t } = useTranslation()
 	const { user, setAccessToken } = useAuth()
+	const { page, setPage, loading, setLoading } = useListBoxContext()
+
 	const {
 		scannedEpc,
 		connection,
@@ -62,20 +64,20 @@ const EpcDataList: React.FC = () => {
 			'setSelectedOrder'
 		])
 	)
-	const previousSelectedOrder = usePrevious(selectedOrder)
-	const { page, setPage, loading, setLoading } = useListBoxContext()
-	const previousPage = usePrevious(page)
-	const ctrlRef = useRef<AbortController>(new AbortController())
-	const containerRef = useRef<HTMLDivElement>(null)
-	const wrapperRef = useRef<HTMLDivElement>(null)
-	const isTooManyOrdersIgnoredRef = useRef<boolean>(false)
+
+	const abortControllerRef = useRef<AbortController>(new AbortController())
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
 	const previousEpc = usePrevious(incommingEpc)
+	// * Virtual list refs
+	const containerRef = useRef<HTMLDivElement>(null)
+	const wrapperRef = useRef<HTMLDivElement>(null)
+	// * Ignore too many orders warning
+	const isTooManyOrdersIgnoredRef = useRef<boolean>(false)
 
-	const { refetch: manualFetchEpc } = useManualFetchEpcQuery()
+	const { refetch: manualFetchEpc, isFetching } = useManualFetchEpcQuery()
 
 	const fetchServerEvent = async () => {
-		ctrlRef.current = new AbortController()
+		abortControllerRef.current = new AbortController()
 		toast.loading('Establishing connection ...', { id: SSE_TOAST_ID })
 		try {
 			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc', {
@@ -85,7 +87,7 @@ const EpcDataList: React.FC = () => {
 					['X-Polling-Duration']: pollingDuration.toString(),
 					['Authorization']: AuthService.getAccessToken()
 				},
-				signal: ctrlRef.current.signal,
+				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
 				async onopen(response) {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
@@ -186,7 +188,7 @@ const EpcDataList: React.FC = () => {
 				break
 			}
 			case 'disconnected': {
-				ctrlRef.current.abort()
+				abortControllerRef.current.abort()
 				writeLog({ message: 'Disconnected', type: 'info' })
 				window.removeEventListener(INCOMING_DATA_CHANGE, null)
 				break
@@ -218,18 +220,22 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [incommingEpc, previousEpc])
 
-	// * On page changes
-	useAsyncEffect(async () => await handleFetchNextPage(), [page])
+	// * On page changes and manual fetch epc query is not running
+	useAsyncEffect(async () => {
+		if (!isFetching) await handleFetchNextPage()
+	}, [page])
 
-	// * On selected order changes
-	useAsyncEffect(async () => await handleFetchWithSelectedOrder(), [selectedOrder])
+	// * On selected order changes and manual fetch epc query is not running
+	useAsyncEffect(async () => {
+		if (!isFetching) await handleFetchWithSelectedOrder()
+	}, [selectedOrder])
 
 	// * On refetch data event is triggered
-	useEventListener('REFETCH_MUTATED_DATA', () => manualFetchEpc())
+	useEventListener(MANUALLY_MUTATE_DATA, async () => await manualFetchEpc())
 
 	// * On too many order found
 	useEffect(() => {
-		if (scanningStatus === 'connected' && scannedOrders?.length > 3 && !isTooManyOrdersIgnoredRef.current)
+		if (!isTooManyOrdersIgnoredRef.current && scannedOrders?.length > 3)
 			toast.warning('Oops !!!', {
 				description: t('ns_inoutbound:notification.too_many_mono'),
 				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
@@ -238,14 +244,10 @@ const EpcDataList: React.FC = () => {
 				id: 'TOO_MANY_ORDERS',
 				onDismiss: () => {
 					isTooManyOrdersIgnoredRef.current = true
-				},
-				action: {
-					label: 'Dismiss',
-					onClick: () => toast.dismiss('TOO_MANY_ORDERS')
 				}
 			})
 		else toast.dismiss('TOO_MANY_ORDERS')
-	}, [scannedOrders, scanningStatus])
+	}, [scannedOrders, isTooManyOrdersIgnoredRef])
 
 	const [virtualItems] = useVirtualList(scannedEpc?.data, {
 		containerTarget: containerRef,
@@ -253,8 +255,6 @@ const EpcDataList: React.FC = () => {
 		itemHeight: VIRTUAL_ITEM_SIZE,
 		overscan: PRERENDERED_ITEMS
 	})
-
-	console.log('page', page)
 
 	return Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 		<List ref={containerRef}>

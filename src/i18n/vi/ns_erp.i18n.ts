@@ -1,8 +1,10 @@
 export default {
 	fields: {
 		mo_no: 'Chỉ lệnh',
+		mo_no_actual: 'Chỉ lệnh thực',
 		or_no: 'Mã đơn hàng',
 		or_custpo: 'Mã đơn đặt hàng của khách',
+		mat_code: 'Mã thành phẩm',
 		transfer_order_code: 'Mã đơn chuyển giao',
 		// I/O production
 		status_approve: 'Trạng thái duyệt đơn',

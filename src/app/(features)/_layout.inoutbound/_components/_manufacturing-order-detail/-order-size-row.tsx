@@ -20,31 +20,26 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 
 	return (
 		<TableRow>
-			<TableCell className='font-medium'>{data?.mo_no ?? FALLBACK_ORDER_VALUE}</TableCell>
+			<TableCell className='sticky left-0 font-medium'>{data?.mo_no ?? FALLBACK_ORDER_VALUE}</TableCell>
 			<TableCell className='!p-0'>
-				<Div
-					className='divide-x'
-					style={{
-						display: 'grid',
-						gridTemplateColumns: `repeat(${filteredSizeByOrder?.length}, 1fr)`
-					}}>
+				<Div className='flex flex-grow flex-nowrap divide-x'>
 					{filteredSizeByOrder?.map((size) => (
-						<Div key={size?.size_numcode} className='group/cell grid grid-rows-2 divide-y'>
+						<Div key={size?.size_numcode} className='group/cell inline-grid flex-1 grid-rows-2 divide-y'>
 							<TableCell className='bg-secondary/25 font-medium text-secondary-foreground'>
 								<Div className='inline-flex items-center gap-x-4'>
 									{size?.size_numcode ?? FALLBACK_ORDER_VALUE}
 									<ExchangeEpcDialogTrigger defaultValues={size} />
 								</Div>
 							</TableCell>
-							<TableCell>{size?.count}</TableCell>
+							<TableCell>{size?.count ?? 0}</TableCell>
 						</Div>
 					))}
 				</Div>
 			</TableCell>
-			<TableCell align='right' className='font-medium'>
+			<TableCell align='right' className='sticky right-[5%] font-medium'>
 				{data?.count}
 			</TableCell>
-			<TableCell align='center'>
+			<TableCell align='center' className='sticky right-0 w-[5%]'>
 				<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.delete')}>
 					<Button type='button' variant='ghost' size='icon' onClick={() => onBeforeDelete(data?.mo_no)}>
 						<Icon name='Trash2' className='stroke-destructive' />

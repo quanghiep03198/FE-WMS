@@ -37,7 +37,8 @@ export default {
 		io_archive_warehouse: 'Kho lưu trữ',
 		io_storage_location: 'Vị trí lưu kho',
 		order_information: 'Thông tin đơn hàng',
-		transfer_information: 'Thông tin chuyển kho'
+		transfer_information: 'Thông tin chuyển kho',
+		exchange_all: 'Hoán đổi tất cả'
 	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: 'Chờ duyệt',
@@ -48,7 +49,8 @@ export default {
 	titles: {
 		transfer_order_list: 'Danh sách đơn chuyển kho',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
-		order_sizing_list: 'Danh sách Size theo đơn'
+		order_sizing_list: 'Danh sách Size theo đơn',
+		exchange_epc: 'Hoán đổi EPC'
 	},
 	description: {
 		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho',
@@ -60,7 +62,11 @@ export default {
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
 		order_size_detail:
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
-		no_exchangable_order: 'Không có đơn hàng nào phù hợp'
+		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',
+		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
+		transferred_order: 'Chỉ lệnh thực cần hoán đổi',
+		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
+		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn'
 	},
 	rfid_toolbox: {
 		network_status: 'Trạng thái kết nối',

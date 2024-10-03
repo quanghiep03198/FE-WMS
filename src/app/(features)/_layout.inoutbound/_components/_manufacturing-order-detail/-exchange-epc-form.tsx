@@ -75,6 +75,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 			const payload = omit(data, ['count', 'exchange_all'])
 			await mutateAsync(payload)
 			toast.success(t('ns_common:notification.success'))
+			setOpen(!open)
 		} catch (error) {
 			toast.error(t('ns_common:notification.error'))
 		}
@@ -91,19 +92,20 @@ const ExchangeEpcFormDialog: React.FC = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className='grid max-w-2xl gap-6'>
+			<DialogContent className='grid max-w-3xl gap-6'>
 				<DialogHeader>
-					<DialogTitle>Exchange EPC</DialogTitle>
+					<DialogTitle>{t('ns_inoutbound:titles.exchange_epc')}</DialogTitle>
+					<DialogDescription>{t('ns_inoutbound:description.exchange_epc_dialog_desc')}</DialogDescription>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
 				{exchangableOrders.length > 0 ? (
 					<FormProvider {...form}>
 						<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
 							<Div className='col-span-2'>
-								<InputFieldControl readOnly label='Manufacturing order' name='mo_no' disabled />
+								<InputFieldControl readOnly label={t('ns_erp:fields.mo_no')} name='mo_no' disabled />
 							</Div>
 							<Div className='col-span-2'>
-								<InputFieldControl readOnly label='Production code' name='mat_code' disabled />
+								<InputFieldControl readOnly label={t('ns_erp:fields.mat_code')} name='mat_code' disabled />
 							</Div>
 							<Div className='col-span-2'>
 								<InputFieldControl readOnly label='Size' name='size_numcode' disabled />
@@ -111,41 +113,27 @@ const ExchangeEpcFormDialog: React.FC = () => {
 							<Div className='col-span-3'>
 								<SelectFieldControl
 									name='mo_no_actual'
-									label='Actual order'
+									label={t('ns_erp:fields.mo_no_actual')}
 									datalist={exchangableOrders}
 									labelField='mo_no'
 									valueField='mo_no'
-									description='The actual order code to be exchanged'
+									description={t('ns_inoutbound:description.transferred_order')}
 								/>
 							</Div>
 							<Div className='col-span-3'>
 								<InputFieldControl
 									autoComplete='off'
 									name='quantity'
-									label='Quantity'
-									placeholder='0'
+									label={t('ns_common:common_fields.quantity')}
+									placeholder='1'
 									type='number'
-									// readOnly={isExchangeAll}
-									disabled={isExchangeAll || !actualOrder}
-									description='Number of exchanged items for the actual order'
+									disabled={!actualOrder}
+									readOnly={isExchangeAll}
+									description={t('ns_inoutbound:description.exchange_qty')}
 									min={1}
 								/>
 							</Div>
-							<FormField
-								control={form.control}
-								name='override'
-								render={({ field }) => (
-									<FormItem className='col-span-full flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm'>
-										<FormControl>
-											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-										</FormControl>
-										<Div className='space-y-1.5 leading-none'>
-											<FormLabel>Override</FormLabel>
-											<FormDescription>You can override both exchaged items if exists</FormDescription>
-										</Div>
-									</FormItem>
-								)}
-							/>
+
 							<FormField
 								control={form.control}
 								name='exchange_all'
@@ -155,10 +143,8 @@ const ExchangeEpcFormDialog: React.FC = () => {
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
 										<Div className='space-y-1.5 leading-none'>
-											<FormLabel>Exchange all</FormLabel>
-											<FormDescription>
-												You can exchange the whole EPC belongs to the selected size
-											</FormDescription>
+											<FormLabel>{t('ns_inoutbound:labels.exchange_all')}</FormLabel>
+											<FormDescription>{t('ns_inoutbound:description.exchange_all')}</FormDescription>
 										</Div>
 									</FormItem>
 								)}
@@ -173,7 +159,11 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									{isPending && (
 										<Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' role='img' />
 									)}
-									{isPending ? 'Processing' : isError ? 'Retry' : 'Confirm'}
+									{isPending
+										? t('ns_common:status.processing')
+										: isError
+											? t('ns_common:actions.retry')
+											: t('ns_common:actions.confirm')}
 								</Button>
 							</DialogFooter>
 						</Form>

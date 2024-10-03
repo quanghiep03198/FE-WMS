@@ -18,8 +18,10 @@ export default {
 		io_archive_warehouse: '仓库别',
 		io_storage_location: '储位',
 		order_information: '订单信息',
-		transfer_information: '转仓信息'
+		transfer_information: '转仓信息',
+		exchange_all: '全部交换'
 	},
+
 	inoutbound_actions: {
 		normal_import: '正常入庫',
 		normal_export: '正常出庫',
@@ -49,7 +51,8 @@ export default {
 	titles: {
 		transfer_order_list: '转移订单列表',
 		transfer_order_datalist: '转移订单数据列表',
-		order_sizing_list: '指令及尺码列表'
+		order_sizing_list: '指令及尺码列表',
+		exchange_epc: '交换 EPC'
 	},
 	description: {
 		transfer_order_list: '跟踪和管理转移订单',
@@ -59,7 +62,11 @@ export default {
 		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',
 		select_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
-		no_exchangable_order: '没有可交换的顺序'
+		no_exchangable_order: '没有可交换的顺序',
+		exchange_epc_dialog_desc: '允许用户用新的生产订单替换或更新产品上的 EPC 标签.',
+		transferred_order: '要交换的实际订单代码',
+		exchange_qty: '实际订单的交换商品数量',
+		exchange_all: '您可以交换属于所选尺码的整个 EPC'
 	},
 	rfid_toolbox: {
 		network_status: '网络状态',

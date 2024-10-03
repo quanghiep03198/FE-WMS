@@ -17,6 +17,7 @@ export default {
 		remark: '管理人',
 		approver: '審核人',
 		approver_time: '審核時間',
+		quantity: '數量',
 		total: '全部的'
 	},
 	actions: {
@@ -51,7 +52,9 @@ export default {
 		set_approval_status: '审核状态设置',
 		approve: '批准',
 		reapprove: '重新批准',
-		cancel_approve: '取消批准'
+		cancel_approve: '取消批准',
+		retry: '重试',
+		load_more: '加载更多'
 	},
 	form_placeholder: {
 		select: '-- Select {{object}} --',
@@ -117,6 +120,8 @@ export default {
 		connected: '已连接',
 		disconnected: '已断开连接',
 		running: '运行中',
-		idle: '空闲'
+		idle: '空闲',
+		processing: '处理中 ...',
+		loading: '载入中 ...'
 	}
 } as const

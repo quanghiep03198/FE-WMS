@@ -1,8 +1,10 @@
 export default {
 	fields: {
-		mo_no: 'Order',
-		or_no: 'Order code',
+		mo_no: 'Manufacturing order',
+		mo_no_actual: 'Actual manufacturing order',
+		or_no: 'Sub-manufacturing order',
 		or_custpo: 'Customer order code',
+		mat_code: 'Finished production code',
 		transfer_order_code: 'Transfer order code',
 		// I/O production
 		status_approve: 'Approval status',
