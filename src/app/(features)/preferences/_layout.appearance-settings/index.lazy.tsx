@@ -48,7 +48,6 @@ function Page() {
 	})
 
 	const handleSaveSettings = (data: AppearanceFormValues) => {
-		console.log('settings changed :>>>', data)
 		toast.success('Saved your change')
 	}
 

@@ -31,8 +31,6 @@ const TransferOrderDetail: React.FC = () => {
 	const transNum = form.watch('trans_num')
 	const snoQty = form.watch('sno_qty')
 
-	console.log(data)
-
 	useEffect(() => {
 		form.reset(data)
 	}, [currentOrder, data])

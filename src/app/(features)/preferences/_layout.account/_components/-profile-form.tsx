@@ -15,8 +15,6 @@ const ProfileForm: React.FC = () => {
 		}
 	})
 
-	console.log(user)
-
 	return (
 		<FormProvider {...form}>
 			<Form>
