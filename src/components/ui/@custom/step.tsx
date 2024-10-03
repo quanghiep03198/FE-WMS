@@ -1,11 +1,13 @@
 import { Div, Icon, Typography } from '@/components/ui'
+import { TFunction } from 'i18next'
 import React, { createContext, useContext, useReducer } from 'react'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
 // #region Step types
 export type TStep = {
 	index?: number
-	name: any
+	name: FirstParameter<TFunction<undefined, undefined>>
 	status: 'current' | 'upcoming' | 'completed'
 }
 
@@ -99,10 +101,9 @@ const reducer: React.Reducer<TStepState, TStepAction> = (state, action) => {
 		}
 	}
 }
-
 const initialState: TStepState = { data: [], finishedSteps: [], currentStep: 1, canNextStep: false, canPrevStep: false }
 
-const StepContext = createContext<TStepContext>({ steps: initialState, dispatch: () => {} })
+const StepContext = createContext<TStepContext>(null)
 
 const StepProvider: React.FC<{ data: TStep[]; enableChangeStep?: boolean } & React.PropsWithChildren> = ({
 	data,
@@ -126,9 +127,16 @@ const StepProvider: React.FC<{ data: TStep[]; enableChangeStep?: boolean } & Rea
 // #endregion
 
 // #region Step components
+const StepList = tw.ol`grid grid-flow-col sm:grid-flow-row auto-cols-fr isolate divide-y-0 divide-border rounded-md border sm:grid-cols-1 sm:divide-y transition-all`
+const Step = tw.li`flex items-center py-6 text-sm relative hover:opacity-80 px-4 whitespace-nowrap font-medium`
+const StepContent = tw.div`inline-flex items-center justify-center gap-x-4 px-4`
+const StepIndex = tw.div`inline-grid size-9 place-content-center rounded-full border-2 font-semibold`
+
 const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) => {
+	const { t } = useTranslation()
+
 	const {
-		steps: { data, currentStep, finishedSteps },
+		steps: { data, finishedSteps },
 		dispatch
 	} = useContext(StepContext)
 
@@ -143,6 +151,8 @@ const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) =
 		<Div as='nav' aria-label='Progress' className='w-full bg-background'>
 			<StepList role='list'>
 				{data.map((step: TStep) => {
+					const stepName = t(step.name, { defaultValue: step.name, ns: undefined })
+
 					return (
 						<Step key={step.index} onClick={() => handleChangeStep(step)}>
 							{step.status === 'completed' ? (
@@ -158,18 +168,18 @@ const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) =
 								<StepContent>
 									<StepIndex className='border-success text-success'>{step.index}</StepIndex>
 									<Typography variant='small' color='success'>
-										{step.name}
+										{stepName}
 									</Typography>
 								</StepContent>
 							) : (
 								<StepContent>
 									<StepIndex className='text-muted-foreground'>{step.index}</StepIndex>
 									<Typography variant='small' color='muted'>
-										{step.name}
+										{stepName}
 									</Typography>
 								</StepContent>
 							)}
-							{step.index !== data.length ? <StepSeparator /> : null}
+							{step.index !== data.length && <StepSeparator />}
 						</Step>
 					)
 				})}
@@ -177,11 +187,6 @@ const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) =
 		</Div>
 	)
 }
-
-const StepList = tw.ol`grid grid-flow-col sm:grid-flow-row auto-cols-fr isolate divide-y-0 divide-border rounded-md border sm:grid-cols-1 sm:divide-y transition-all`
-const Step = tw.li`flex items-center py-6 text-sm relative hover:opacity-80 px-4 whitespace-nowrap font-medium`
-const StepContent = tw.div`inline-flex items-center justify-center gap-x-4 px-4`
-const StepIndex = tw.div`inline-grid size-9 place-content-center rounded-full border-2 font-semibold`
 
 const StepSeparator: React.FC = () => (
 	<div className='absolute right-0 top-0 h-full w-5 translate-x-1/2 sm:hidden' aria-hidden='true'>
@@ -196,7 +201,7 @@ const StepPanel: React.FC<{ value: TStep['index'] } & React.PropsWithChildren> =
 		steps: { currentStep }
 	} = useStepContext()
 
-	return currentStep === value ? children : null
+	return currentStep === value && children
 }
 // #endregion
 
