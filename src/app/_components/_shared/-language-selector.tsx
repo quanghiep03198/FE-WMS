@@ -24,7 +24,7 @@ export const LanguageSelect: React.FC = () => {
 	const { i18n } = useTranslation()
 
 	return (
-		<Select onValueChange={(value) => i18n.changeLanguage(value)} defaultValue={i18n.language}>
+		<Select onValueChange={(value) => i18n.changeLanguage(value)} value={i18n.language}>
 			<SelectTrigger>
 				<SelectValue placeholder='Choose language' />
 			</SelectTrigger>
