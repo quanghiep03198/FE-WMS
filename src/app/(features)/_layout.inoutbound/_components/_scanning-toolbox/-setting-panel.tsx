@@ -42,7 +42,7 @@ const PollingIntervalSelector: React.FC = () => {
 	const disabled = scanningStatus === 'connected' || scanningStatus === 'connecting'
 
 	return (
-		<Div className='w-2/3 gap-2 group-has-[#toggle-pin-toolbar[data-state=on]]:w-full'>
+		<Div className='w-2/3 gap-2 group-has-[#toggle-pin-toolbar[data-state=on]]:w-full sm:w-full'>
 			<HoverCard openDelay={50}>
 				<HoverCardTrigger>
 					<Div className='grid gap-2'>

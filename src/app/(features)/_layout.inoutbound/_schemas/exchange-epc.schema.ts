@@ -9,7 +9,7 @@ export const exchangeEpcSchema = z
 		count: z.number().positive(),
 		quantity: z.number().positive(),
 		exchange_all: z.boolean().default(false),
-		override: z.boolean().default(false)
+		multi: z.boolean().default(false)
 	})
 	.refine(
 		(values) => {
@@ -21,5 +21,13 @@ export const exchangeEpcSchema = z
 		}
 	)
 
+export const exchangeOrderSchema = z.object({
+	mo_no: z.string().min(1, { message: 'Please select an order code' }),
+	mo_no_actual: z.string().min(1, { message: 'Please select an order code' }),
+	multi: z.boolean().default(true)
+})
+
 export type ExchangeEpcFormValue = z.infer<typeof exchangeEpcSchema>
 export type ExchangeEpcPayload = Omit<ExchangeEpcFormValue, 'count' | 'exchange_all'>
+
+export type ExchangeOrderFormValue = z.infer<typeof exchangeOrderSchema>

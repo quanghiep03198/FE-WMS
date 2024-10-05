@@ -47,9 +47,7 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { selectedOrder, scanningStatus, connection } = usePageContext((state) =>
-		pick(state, ['selectedOrder', 'scanningStatus', 'connection'])
-	)
+	const { selectedOrder, scanningStatus } = usePageContext((state) => pick(state, ['selectedOrder', 'scanningStatus']))
 	const { t, i18n } = useTranslation()
 	const queryClient = useQueryClient()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)

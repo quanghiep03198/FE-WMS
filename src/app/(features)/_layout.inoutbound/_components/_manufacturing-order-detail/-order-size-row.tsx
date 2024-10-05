@@ -1,4 +1,4 @@
-import { Button, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
+import { Badge, Button, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
 import { pick } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,14 +20,20 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 
 	return (
 		<TableRow>
-			<TableCell className='sticky left-0 font-medium'>{data?.mo_no ?? FALLBACK_ORDER_VALUE}</TableCell>
+			<TableCell className='sticky left-0 z-10 font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
+				<Div className='group/cell inline-flex items-center gap-x-4'>
+					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
+					<ExchangeOrderDialogTrigger defaultValues={data} />
+				</Div>
+			</TableCell>
 			<TableCell className='!p-0'>
 				<Div className='flex flex-grow flex-nowrap divide-x'>
 					{filteredSizeByOrder?.map((size) => (
 						<Div key={size?.size_numcode} className='group/cell inline-grid flex-1 grid-rows-2 divide-y'>
-							<TableCell className='bg-secondary/25 font-medium text-secondary-foreground'>
-								<Div className='inline-flex items-center gap-x-4'>
-									{size?.size_numcode ?? FALLBACK_ORDER_VALUE}
+							<TableCell className='min-w-52 font-medium'>
+								<Div className='flex items-center gap-x-2'>
+									{size?.size_numcode}
+									<Badge variant='outline'>{size?.mat_code}</Badge>
 									<ExchangeEpcDialogTrigger defaultValues={size} />
 								</Div>
 							</TableCell>
@@ -36,11 +42,14 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 					))}
 				</Div>
 			</TableCell>
-			<TableCell align='right' className='sticky right-[5%] font-medium'>
+			<TableCell align='right' className='sticky right-20 font-medium'>
 				{data?.count}
 			</TableCell>
-			<TableCell align='center' className='sticky right-0 w-[5%]'>
-				<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.delete')}>
+			<TableCell align='center' className='sticky right-0 w-20'>
+				<Tooltip
+					triggerProps={{ asChild: true }}
+					contentProps={{ side: 'left' }}
+					message={t('ns_common:actions.delete')}>
 					<Button type='button' variant='ghost' size='icon' onClick={() => onBeforeDelete(data?.mo_no)}>
 						<Icon name='Trash2' className='stroke-destructive' />
 					</Button>
@@ -50,14 +59,35 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 	)
 }
 
-const ExchangeEpcDialogTrigger: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues }) => {
-	const { open, setOpen, setDefaultValues } = useOrderDetailContext((state) =>
-		pick(state, ['open', 'setOpen', 'setDefaultValues'])
+const ExchangeOrderDialogTrigger: React.FC<{ defaultValues: OrderItem }> = ({ defaultValues }) => {
+	const {
+		exchangeOrderDialogOpen: open,
+		setExchangeOrderDialogOpen: setOpen,
+		setDefaultExchangeOrderFormValues: setDefaultValues
+	} = useOrderDetailContext((state) =>
+		pick(state, ['exchangeOrderDialogOpen', 'setExchangeOrderDialogOpen', 'setDefaultExchangeOrderFormValues'])
 	)
 	return (
 		<button
 			onClick={() => {
-				console.log(1)
+				setOpen(!open)
+				setDefaultValues(defaultValues)
+			}}>
+			<Icon name='ArrowLeftRight' className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100' />
+		</button>
+	)
+}
+const ExchangeEpcDialogTrigger: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues }) => {
+	const {
+		exchangeEpcDialogOpen: open,
+		setExchangeEpcDialogOpen: setOpen,
+		setDefaultExchangeEpcFormValues: setDefaultValues
+	} = useOrderDetailContext((state) =>
+		pick(state, ['exchangeEpcDialogOpen', 'setExchangeEpcDialogOpen', 'setDefaultExchangeEpcFormValues'])
+	)
+	return (
+		<button
+			onClick={() => {
 				setOpen(!open)
 				setDefaultValues(defaultValues)
 			}}>

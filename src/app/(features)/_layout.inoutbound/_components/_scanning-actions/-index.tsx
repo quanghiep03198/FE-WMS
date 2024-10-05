@@ -112,7 +112,7 @@ const ScanningActions: React.FC = () => {
 				<Div className='grid grid-cols-2 items-center gap-x-1 *:w-full'>
 					<Button
 						className='gap-x-2'
-						size='sm'
+						size={isSmallScreen ? 'default' : 'sm'}
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
 						onClick={() => resetScanningAction()}>
@@ -120,7 +120,7 @@ const ScanningActions: React.FC = () => {
 						{t('ns_common:actions.reset')}
 					</Button>
 					<Button
-						size='sm'
+						size={isSmallScreen ? 'default' : 'sm'}
 						className='gap-x-2'
 						disabled={!connection}
 						onClick={handleToggleScanning}

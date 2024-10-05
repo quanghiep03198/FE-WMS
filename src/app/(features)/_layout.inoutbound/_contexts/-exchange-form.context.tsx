@@ -3,13 +3,17 @@ import { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
-import { OrderSize } from './-page-context'
+import { OrderItem, OrderSize } from './-page-context'
 
 type TOrderDetailContext = {
-	open: boolean
-	setOpen: (value: boolean) => void
-	defaultValues: OrderSize
-	setDefaultValues: (value: OrderSize) => void
+	exchangeEpcDialogOpen: boolean
+	setExchangeEpcDialogOpen: (value: boolean) => void
+	exchangeOrderDialogOpen: boolean
+	setExchangeOrderDialogOpen: (value: boolean) => void
+	defaultExchangeEpcFormValues: OrderSize
+	setDefaultExchangeEpcFormValues: (value: OrderSize) => void
+	defaultExchangeOrderFormValues: OrderItem
+	setDefaultExchangeOrderFormValues: (value: OrderItem) => void
 }
 
 const OrderDetailContext = createContext<StoreApi<TOrderDetailContext>>(null)
@@ -19,16 +23,30 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 	if (!storeRef.current)
 		storeRef.current = create<TOrderDetailContext>()(
 			immer((set) => ({
-				open: false,
-				defaultValues: null,
-				setOpen: (value) =>
+				exchangeEpcDialogOpen: false,
+				exchangeOrderDialogOpen: false,
+				defaultExchangeEpcFormValues: null,
+				defaultExchangeOrderFormValues: null,
+				setExchangeEpcDialogOpen: (value) => {
 					set((state) => {
-						state.open = value
-					}),
-				setDefaultValues: (value) =>
-					set((state) => {
-						state.defaultValues = value
+						state.exchangeEpcDialogOpen = value
 					})
+				},
+				setExchangeOrderDialogOpen: (value) => {
+					set((state) => {
+						state.exchangeOrderDialogOpen = value
+					})
+				},
+				setDefaultExchangeEpcFormValues: (value) => {
+					set((state) => {
+						state.defaultExchangeEpcFormValues = value
+					})
+				},
+				setDefaultExchangeOrderFormValues: (value) => {
+					set((state) => {
+						state.defaultExchangeOrderFormValues = value
+					})
+				}
 			}))
 		)
 

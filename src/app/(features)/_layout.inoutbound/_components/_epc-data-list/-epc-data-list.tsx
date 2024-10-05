@@ -285,7 +285,7 @@ const EpcDataList: React.FC = () => {
 			)}
 		</List>
 	) : (
-		<Div className='z-10 grid h-full max-h-[65dvh] place-content-center sm:max-h-[50dvh] md:max-h-[50dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:max-h-[75dvh]'>
+		<Div className='z-10 grid h-[65dvh] min-h-full place-content-center sm:h-[50dvh] md:h-[50dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:h-[75dvh]'>
 			<Div className='inline-flex items-center gap-x-4'>
 				<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 				<Typography color='muted'>Empty</Typography>

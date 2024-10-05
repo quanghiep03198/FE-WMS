@@ -27,7 +27,7 @@ const ListBoxHeader: React.FC = () => {
 		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
 	)
 	const { loading, setPage } = useListBoxContext()
-	console.log(selectedOrder)
+
 	useEventListener(UPDATE_STOCK_SUBMISSION, (e: CustomEvent<string>) => {
 		const filteredOrders = scannedOrders.filter((item) => item.mo_no !== e.detail)
 		if (filteredOrders.length > 0) {

@@ -17,8 +17,7 @@ import {
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
-	SelectFieldControl,
-	Typography
+	SelectFieldControl
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { usePrevious } from 'ahooks'
@@ -30,21 +29,18 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useExchangeEpcMutation } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-exchange-form.context'
-import { usePageContext } from '../../_contexts/-page-context'
+import { OrderSize, usePageContext } from '../../_contexts/-page-context'
 import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange-epc.schema'
-
-const fallbackValues: ExchangeEpcFormValue = {
-	mo_no: '',
-	mat_code: '',
-	size_numcode: '',
-	mo_no_actual: '',
-	quantity: 0
-}
+import NoExchangeOrder from './-no-exchangable-order'
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const { open, defaultValues, setOpen } = useOrderDetailContext()
-	const { scannedSizes } = usePageContext((state) => pick(state, ['scannedSizes', 'connection', 'setScannedSizes']))
+	const {
+		exchangeEpcDialogOpen: open,
+		defaultExchangeEpcFormValues: defaultValues,
+		setExchangeEpcDialogOpen: setOpen
+	} = useOrderDetailContext()
+	const { scannedSizes } = usePageContext((state) => pick(state, ['scannedSizes']))
 	const form = useForm<ExchangeEpcFormValue>({
 		resolver: zodResolver(exchangeEpcSchema),
 		mode: 'onChange'
@@ -60,9 +56,9 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		return uniqBy(
 			scannedSizes.filter(
 				(item) =>
-					item.mo_no !== defaultValues?.mo_no &&
-					item.size_numcode === defaultValues?.size_numcode &&
-					item.mat_code === defaultValues?.mat_code
+					item.mo_no !== (defaultValues as OrderSize)?.mo_no &&
+					item.size_numcode === (defaultValues as OrderSize)?.size_numcode &&
+					item.mat_code === (defaultValues as OrderSize)?.mat_code
 			),
 			'mo_no'
 		)
@@ -87,7 +83,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	}, [isExchangeAll])
 
 	useEffect(() => {
-		form.reset(defaultValues)
+		form.reset({ ...defaultValues, multi: false })
 	}, [defaultValues])
 
 	return (
@@ -96,9 +92,10 @@ const ExchangeEpcFormDialog: React.FC = () => {
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.exchange_epc')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.exchange_epc_dialog_desc')}</DialogDescription>
-					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				{exchangableOrders.length > 0 ? (
+				{exchangableOrders.length === 0 ? (
+					<NoExchangeOrder />
+				) : (
 					<FormProvider {...form}>
 						<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
 							<Div className='col-span-2'>
@@ -168,16 +165,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 							</DialogFooter>
 						</Form>
 					</FormProvider>
-				) : (
-					<Div className='grid h-64 place-content-center rounded-lg border p-6 text-center'>
-						<Div className='inline-flex max-w-xs flex-col items-center gap-2'>
-							<Icon name='PackageOpen' size={40} className='stroke-foreground stroke-[1px] text-center' />
-							<Typography className='font-medium'>No available item</Typography>
-							<Typography variant='small' color='muted'>
-								{t('ns_inoutbound:description.no_exchangable_order')}
-							</Typography>
-						</Div>
-					</Div>
 				)}
 			</DialogContent>
 		</Dialog>

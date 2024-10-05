@@ -15,7 +15,6 @@ export type RFIDStreamEventData = {
 export class RFIDService {
 	static async fetchEpcManually(connection: string, page: null | number, selectedOrder: string) {
 		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
-		console.log('params', params)
 		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>('/rfid/fetch-next-epc', {
 			headers: { ['X-Database-Host']: connection },
 			params

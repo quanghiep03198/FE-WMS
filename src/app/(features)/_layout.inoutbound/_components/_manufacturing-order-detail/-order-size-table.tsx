@@ -32,27 +32,17 @@ import OrderDetailTableRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const {
-		connection,
-		scannedOrders,
-		scannedSizes,
-		scanningStatus,
-		setScannedOrders,
-		setScanningStatus,
-		setScannedSizes,
-		reset
-	} = usePageContext((state) =>
-		pick(state, [
-			'connection',
-			'scannedOrders',
-			'scannedSizes',
-			'scanningStatus',
-			'setScannedOrders',
-			'setScanningStatus',
-			'setScannedSizes',
-			'reset'
-		])
-	)
+	const { connection, scannedOrders, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } =
+		usePageContext((state) =>
+			pick(state, [
+				'connection',
+				'scannedOrders',
+				'scanningStatus',
+				'setScannedOrders',
+				'setScanningStatus',
+				'setScannedSizes'
+			])
+		)
 	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
@@ -111,40 +101,43 @@ const OrderSizeDetailTable: React.FC = () => {
 						<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 					</HoverCardContent>
 				</HoverCard>
-				<DialogContent className='max-w-6xl overflow-hidden'>
+				<DialogContent className='max-w-7xl xxl:max-w-8xl'>
 					<DialogHeader>
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 					</DialogHeader>
-					<Div className='relative max-h-96 w-full divide-y overflow-clip overflow-x-auto overflow-y-auto rounded-lg border text-sm scrollbar-track-scrollbar/20'>
+					<Div className='border-collapse divide-y overflow-hidden rounded-lg border'>
 						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-							<Table className='border-separate border-spacing-0'>
-								<TableHeader>
-									<TableRow className='sticky top-0 z-10 bg-background'>
-										<TableHead align='left' className='sticky left-0 z-10 w-[15%]'>
-											{t('ns_erp:fields.mo_no')}
-										</TableHead>
-										<TableHead className='w-[75%]'>Sizes</TableHead>
-										<TableHead align='right' className='sticky right-[5%] w-[5%]'>
-											{t('ns_common:common_fields.total')}
-										</TableHead>
-										<TableHead className='sticky right-0 w-[5%]'>-</TableHead>
-									</TableRow>
-								</TableHeader>
-								<TableBody>
-									{scannedOrders.map((order) => {
-										return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
-									})}
-								</TableBody>
-							</Table>
+							<Div className='flow-root h-96 w-full overflow-scroll rounded-lg'>
+								<Table className='border-separate border-spacing-0 rounded-lg'>
+									<TableHeader>
+										<TableRow className='sticky top-0 z-20'>
+											<TableHead
+												align='left'
+												className='left-0 z-20 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+												{t('ns_erp:fields.mo_no')}
+											</TableHead>
+											<TableHead className='z-10'>Sizes</TableHead>
+											<TableHead align='right' className='right-20 z-20'>
+												{t('ns_common:common_fields.total')}
+											</TableHead>
+											<TableHead className='right-0 z-20 min-w-20'>-</TableHead>
+										</TableRow>
+									</TableHeader>
+									<TableBody className='[&_tr]:snap-start'>
+										{scannedOrders.map((order) => {
+											return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
+										})}
+									</TableBody>
+								</Table>
+							</Div>
 						) : (
-							<Div className='inset-0 flex h-full w-full items-center justify-center gap-x-2'>
+							<Div className='inset-0 flex min-h-64 w-full items-center justify-center gap-x-2'>
 								<Icon name='Inbox' size={24} strokeWidth={1} />
 								No data
 							</Div>
 						)}
-
-						<Div className='flex items-center justify-between p-4'>
+						<Div className='sticky bottom-0 left-0 flex items-center justify-between bg-background p-4'>
 							<Typography variant='small' color='muted'>
 								{t('ns_inoutbound:mo_no_box.caption')}
 							</Typography>
