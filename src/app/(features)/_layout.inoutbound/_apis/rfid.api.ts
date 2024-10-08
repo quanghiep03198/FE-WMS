@@ -30,6 +30,19 @@ export const useManualFetchEpcQuery = () => {
 	})
 }
 
+export const useSearchExchangableOrderQuery = (orderTarget: string, searchTerm: string) => {
+	const { connection } = usePageContext((state) => pick(state, 'connection'))
+
+	return useQuery({
+		queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG'],
+		queryFn: async () => await RFIDService.searchExchangableOrder(connection, orderTarget, searchTerm),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+		enabled: false,
+		select: (response) => response.metadata
+	})
+}
+
 export const useUpdateStockMovementMutation = () => {
 	const { connection } = usePageContext((state) => pick(state, 'connection'))
 
@@ -71,7 +84,7 @@ export const useGetOrderDetail = () => {
 
 	return useQuery({
 		queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
-		queryFn: async () => await RFIDService.getOrderDetail({ headers: { ['X-Database-Host']: connection } }),
+		queryFn: async () => await RFIDService.getOrderDetail({ headers: { ['X-Tenant-Id']: connection } }),
 		enabled: scanningStatus === 'disconnected',
 		select: (response) => response.metadata
 	})

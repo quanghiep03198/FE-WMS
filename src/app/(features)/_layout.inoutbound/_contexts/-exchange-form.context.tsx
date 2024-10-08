@@ -12,8 +12,8 @@ type TOrderDetailContext = {
 	setExchangeOrderDialogOpen: (value: boolean) => void
 	defaultExchangeEpcFormValues: OrderSize
 	setDefaultExchangeEpcFormValues: (value: OrderSize) => void
-	defaultExchangeOrderFormValues: OrderItem
-	setDefaultExchangeOrderFormValues: (value: OrderItem) => void
+	defaultExchangeOrderFormValues: Pick<OrderItem, 'mo_no'>
+	setDefaultExchangeOrderFormValues: (value: Pick<OrderItem, 'mo_no'>) => void
 }
 
 const OrderDetailContext = createContext<StoreApi<TOrderDetailContext>>(null)

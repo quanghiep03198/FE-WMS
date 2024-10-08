@@ -83,7 +83,7 @@ const EpcDataList: React.FC = () => {
 			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc', {
 				method: RequestMethod.GET,
 				headers: {
-					['X-Database-Host']: connection,
+					['X-Tenant-Id']: connection,
 					['X-Polling-Duration']: pollingDuration.toString(),
 					['Authorization']: AuthService.getAccessToken()
 				},
@@ -141,6 +141,7 @@ const EpcDataList: React.FC = () => {
 		} catch (e) {
 			toast('Failed to connect', { id: 'FETCH_SSE', description: e.message })
 		} finally {
+			setScanningStatus('disconnected')
 			toast.info('Disconnected', { id: 'FETCH_SSE' })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
@@ -222,12 +223,12 @@ const EpcDataList: React.FC = () => {
 
 	// * On page changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (!isFetching) await handleFetchNextPage()
+		await handleFetchNextPage()
 	}, [page])
 
 	// * On selected order changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (!isFetching) await handleFetchWithSelectedOrder()
+		await handleFetchWithSelectedOrder()
 	}, [selectedOrder])
 
 	// * On refetch data event is triggered

@@ -37,7 +37,9 @@ export default {
 		confirm_delete_all_mono: {
 			title: 'Bạn chắc chắn muốn xóa chỉ lệnh này ?',
 			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
-		}
+		},
+		exchange_order_caution:
+			'The action of swapping production orders cannot be undone. Please make sure to confirm your changes before proceeding.'
 	},
 
 	order_status: {

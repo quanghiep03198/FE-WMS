@@ -38,7 +38,8 @@ export default {
 		confirm_delete_all_mono: {
 			title: '您確定要刪除此命令嗎 ?',
 			description: '如果您刪除它, 則必須重新執行EPC掃描操作.'
-		}
+		},
+		exchange_order_caution: '操作后不能还原，确定要换指令？'
 	},
 
 	order_status: {

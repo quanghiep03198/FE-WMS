@@ -1,6 +1,4 @@
-import { RFID_READER_HOSTS } from '@/common/constants/constants'
 import { PresetBreakPoints } from '@/common/constants/enums'
-import Regex from '@/common/constants/regex'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
@@ -19,7 +17,9 @@ import {
 	Typography
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { TenancyService } from '@/services/tenancy.service'
 import { HoverCardTrigger } from '@radix-ui/react-hover-card'
+import { useQuery } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import { pick } from 'lodash'
 import React, { Fragment, useCallback, useMemo } from 'react'
@@ -31,7 +31,7 @@ interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'>
 }
 
 const ScanningActions: React.FC = () => {
-	const { user, isAuthenticated } = useAuth()
+	const { isAuthenticated } = useAuth()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const { t, i18n } = useTranslation()
 	const {
@@ -51,17 +51,11 @@ const ScanningActions: React.FC = () => {
 		])
 	)
 
-	const rfidReaderHosts = useMemo(() => {
-		switch (true) {
-			case Regex.VIETNAM_FACTORY_CODE.test(user?.company_code):
-				return RFID_READER_HOSTS.VI
-			case Regex.CAMBODIA_FACTORY_CODE.test(user?.company_code):
-				return RFID_READER_HOSTS.KM
-			// * Add more case if there still have other reader hosts
-			default:
-				return []
-		}
-	}, [user?.company_code])
+	const { data: tenants } = useQuery({
+		queryKey: ['TENANCY'],
+		queryFn: TenancyService.getTenantsByFactory,
+		select: (response) => response.metadata
+	})
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
@@ -100,11 +94,12 @@ const ScanningActions: React.FC = () => {
 					</HoverCard>
 					<SelectContent>
 						<SelectGroup>
-							{rfidReaderHosts.map((item) => (
-								<SelectItem key={item} value={item}>
-									{item}
-								</SelectItem>
-							))}
+							{Array.isArray(tenants) &&
+								tenants.map((item) => (
+									<SelectItem key={item.id} value={item.id}>
+										{item.host}
+									</SelectItem>
+								))}
 						</SelectGroup>
 					</SelectContent>
 				</Select>

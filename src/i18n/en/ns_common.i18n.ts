@@ -102,7 +102,8 @@ export default {
 	confirmation: {
 		delete_title: 'Delete selected record(s)',
 		delete_description:
-			'Are you sure you want to delete the selected record(s)? The data will be irrecoverable. This action cannot be undone.'
+			'Are you sure you want to delete the selected record(s)? The data will be irrecoverable. This action cannot be undone.',
+		understand_and_proceed: 'I understand and want to proceed'
 	},
 	errors: {
 		'404': 'Page Not Found',
@@ -115,6 +116,9 @@ export default {
 	common_form_titles: {
 		create: 'Create new {{object}}',
 		update: 'Update {{object}}'
+	},
+	titles: {
+		caution: 'Caution'
 	},
 	status: {
 		connecting: 'Connnecting',

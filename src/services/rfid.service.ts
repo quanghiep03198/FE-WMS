@@ -16,7 +16,7 @@ export class RFIDService {
 	static async fetchEpcManually(connection: string, page: null | number, selectedOrder: string) {
 		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
 		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>('/rfid/fetch-next-epc', {
-			headers: { ['X-Database-Host']: connection },
+			headers: { ['X-Tenant-Id']: connection },
 			params
 		})
 	}
@@ -28,21 +28,28 @@ export class RFIDService {
 		)
 	}
 
+	static async searchExchangableOrder(connection: string, orderTarget: string, searchTerm: string) {
+		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>('/rfid/search-exchangable-order', {
+			headers: { ['X-Tenant-Id']: connection },
+			params: { target: orderTarget, search: searchTerm }
+		})
+	}
+
 	static async updateStockMovement(host: string, payload: InoutboundPayload) {
 		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>('/rfid/update-stock', payload, {
-			headers: { ['X-Database-Host']: host }
+			headers: { ['X-Tenant-Id']: host }
 		})
 	}
 
 	static async deleteUnexpectedOrder(host: string, orderCode: string) {
 		return await axiosInstance.delete(`/rfid/delete-unexpected-order/${orderCode}`, {
-			headers: { ['X-Database-Host']: host }
+			headers: { ['X-Tenant-Id']: host }
 		})
 	}
 
 	static async exchangeEpc(host: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
 		return await axiosInstance.patch('/rfid/exchange-epc', payload, {
-			headers: { ['X-Database-Host']: host }
+			headers: { ['X-Tenant-Id']: host }
 		})
 	}
 
@@ -51,7 +58,7 @@ export class RFIDService {
 	 */
 	static async synchronizeOrderCode(host: string) {
 		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono', undefined, {
-			headers: { ['X-Database-Host']: host }
+			headers: { ['X-Tenant-Id']: host }
 		})
 	}
 }

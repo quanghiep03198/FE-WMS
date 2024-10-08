@@ -103,7 +103,8 @@ export default {
 	confirmation: {
 		delete_title: 'Xóa (các) bản ghi đã chọn',
 		delete_description:
-			'Bạn chắc chắn muốn xóa các bạn ghi đã chọn? Dữ liệu sẽ bị xóa hoàn toàn và không thể khôi phục'
+			'Bạn chắc chắn muốn xóa các bạn ghi đã chọn? Dữ liệu sẽ bị xóa hoàn toàn và không thể khôi phục',
+		understand_and_proceed: 'Tôi hiểu và muốn tiếp tục'
 	},
 	errors: {
 		'404': 'Không Tìm Thấy Trang.',
@@ -116,6 +117,9 @@ export default {
 	common_form_titles: {
 		create: 'Thêm mới {{object}}',
 		update: 'Cập nhật {{object}}'
+	},
+	titles: {
+		caution: 'Cảnh báo'
 	},
 	status: {
 		connecting: 'Đang kết nối',

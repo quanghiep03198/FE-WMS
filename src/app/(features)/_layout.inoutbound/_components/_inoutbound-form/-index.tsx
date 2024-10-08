@@ -223,7 +223,6 @@ const InoutboundForm: React.FC = () => {
 								datalist={storageAreaOptions}
 								labelField='storage_name'
 								valueField='storage_num'
-								form={form}
 								shouldFilter={false}
 								disabled={warehouseOptions?.length === 0}
 								label={t('ns_inoutbound:labels.io_storage_location')}

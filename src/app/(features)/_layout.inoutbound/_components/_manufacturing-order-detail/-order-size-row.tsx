@@ -20,17 +20,17 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 
 	return (
 		<TableRow>
-			<TableCell className='sticky left-0 z-10 font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
-				<Div className='group/cell inline-flex items-center gap-x-4'>
+			<TableCell className='group/cell sticky left-0 z-10 font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
+				<Div className='inline-flex items-center gap-x-4'>
 					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
-					<ExchangeOrderDialogTrigger defaultValues={data} />
+					<ExchangeOrderDialogTrigger defaultValues={pick(data, 'mo_no')} />
 				</Div>
 			</TableCell>
 			<TableCell className='!p-0'>
 				<Div className='flex flex-grow flex-nowrap divide-x'>
 					{filteredSizeByOrder?.map((size) => (
-						<Div key={size?.size_numcode} className='group/cell inline-grid flex-1 grid-rows-2 divide-y'>
-							<TableCell className='min-w-52 font-medium'>
+						<Div key={size?.size_numcode} className='group/cell inline-grid basis-64 grid-rows-2 divide-y'>
+							<TableCell className='font-medium'>
 								<Div className='flex items-center gap-x-2'>
 									{size?.size_numcode}
 									<Badge variant='outline'>{size?.mat_code}</Badge>
@@ -50,7 +50,12 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 					triggerProps={{ asChild: true }}
 					contentProps={{ side: 'left' }}
 					message={t('ns_common:actions.delete')}>
-					<Button type='button' variant='ghost' size='icon' onClick={() => onBeforeDelete(data?.mo_no)}>
+					<Button
+						disabled={data?.mo_no === FALLBACK_ORDER_VALUE}
+						type='button'
+						variant='ghost'
+						size='icon'
+						onClick={() => onBeforeDelete(data?.mo_no)}>
 						<Icon name='Trash2' className='stroke-destructive' />
 					</Button>
 				</Tooltip>
@@ -59,7 +64,7 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 	)
 }
 
-const ExchangeOrderDialogTrigger: React.FC<{ defaultValues: OrderItem }> = ({ defaultValues }) => {
+const ExchangeOrderDialogTrigger: React.FC<{ defaultValues: Pick<OrderItem, 'mo_no'> }> = ({ defaultValues }) => {
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,

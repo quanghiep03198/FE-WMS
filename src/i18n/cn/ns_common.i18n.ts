@@ -101,7 +101,8 @@ export default {
 	},
 	confirmation: {
 		delete_title: '删除所以记录已选择',
-		delete_description: '你确定想删除你的记录? 质料会完全删除并不可恢复'
+		delete_description: '你确定想删除你的记录? 质料会完全删除并不可恢复',
+		understand_and_proceed: '我同意及要继续'
 	},
 	errors: {
 		'404': '不找到页面.',
@@ -114,6 +115,9 @@ export default {
 	common_form_titles: {
 		create: '加新{{object}}',
 		update: '編輯{{object}}'
+	},
+	titles: {
+		caution: '警告'
 	},
 	status: {
 		connecting: '连接中',

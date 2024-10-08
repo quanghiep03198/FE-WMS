@@ -29,7 +29,9 @@ export default {
 		confirm_delete_all_mono: {
 			title: 'Bạn chắc chắn muốn xóa chỉ lệnh này ?',
 			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
-		}
+		},
+		exchange_order_caution:
+			'Sau khi đổi chỉ lệnh sẽ không thể thao tác đổi ngược lại, hãy chắc chắn trước khi bấm xác nhận đổi chỉ lệnh.'
 	},
 	labels: {
 		// EPC import/export
