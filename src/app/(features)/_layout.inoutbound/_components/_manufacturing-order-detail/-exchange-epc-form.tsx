@@ -39,7 +39,9 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		exchangeEpcDialogOpen: open,
 		defaultExchangeEpcFormValues: defaultValues,
 		setExchangeEpcDialogOpen: setOpen
-	} = useOrderDetailContext()
+	} = useOrderDetailContext((state) =>
+		pick(state, ['exchangeEpcDialogOpen', 'defaultExchangeEpcFormValues', 'setExchangeEpcDialogOpen'])
+	)
 	const { scannedSizes } = usePageContext((state) => pick(state, ['scannedSizes']))
 	const form = useForm<ExchangeEpcFormValue>({
 		resolver: zodResolver(exchangeEpcSchema),

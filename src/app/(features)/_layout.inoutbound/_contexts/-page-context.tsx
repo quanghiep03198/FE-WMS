@@ -159,7 +159,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 }
 
 export const usePageContext = (
-	selector?: (state: PageContextStore) => Partial<PageContextStore>
+	selector: (state: PageContextStore) => Partial<PageContextStore>
 ): Partial<PageContextStore> => {
 	const store = useContext(PageContext)
 	if (!store) throw new Error('Missing StoreProvider')
