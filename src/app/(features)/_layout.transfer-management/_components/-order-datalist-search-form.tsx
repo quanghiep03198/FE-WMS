@@ -45,7 +45,6 @@ const OrderDatalistSearchForm: React.FC = () => {
 				<Div className='col-span-5 sm:col-span-full'>
 					<ComboboxFieldControl
 						name='brand'
-						form={form}
 						datalist={brands}
 						loading={isLoading}
 						valueField='custbrand_id'

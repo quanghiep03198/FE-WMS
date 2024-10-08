@@ -136,7 +136,6 @@ const BaseDatalistForm: React.FC = () => {
 							datalist={storageAreaOptions}
 							labelField='storage_name'
 							valueField='storage_num'
-							form={form}
 							shouldFilter={false}
 							disabled={!warehouseNum}
 							label={t('ns_inoutbound:labels.io_storage_location')}

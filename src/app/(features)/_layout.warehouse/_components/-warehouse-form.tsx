@@ -140,7 +140,6 @@ const WarehouseFormDialog: React.FC = () => {
 								name='dept_code'
 								placeholder='Search department ...'
 								label={t('ns_company:department')}
-								form={form}
 								datalist={departments}
 								shouldFilter={false}
 								labelField='dept_name'
@@ -161,7 +160,6 @@ const WarehouseFormDialog: React.FC = () => {
 								name='employee_code'
 								placeholder='Search employee ...'
 								label={t('ns_warehouse:fields.manager')}
-								form={form}
 								datalist={employees}
 								disabled={!department}
 								shouldFilter={false}

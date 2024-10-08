@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { Fragment, useId, useMemo, useState } from 'react'
-import { FieldValues, Path, PathValue, UseFormReturn, useFormContext } from 'react-hook-form'
+import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import {
 	ButtonProps,
 	Command,
@@ -31,7 +31,6 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 	BaseFieldControl<T>,
 	'control'
 > & {
-	form: UseFormReturn<any>
 	datalist: Array<D>
 	disabled?: boolean
 	loading?: boolean
@@ -145,7 +144,13 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 											}}
 										/>
 										{loading && <CommandLoading />}
-										{!loading && <CommandEmpty>No result</CommandEmpty>}
+										{!loading && (
+											<CommandEmpty>
+												<Typography variant='small' color='muted'>
+													No result
+												</Typography>
+											</CommandEmpty>
+										)}
 										<CommandList className='scrollbar'>
 											<CommandGroup>
 												{Array.isArray(data) &&
