@@ -14,6 +14,7 @@ import {
 import { HomeIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { Fragment, memo } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 const THREADS_HOLD = 3 as const
 
@@ -39,7 +40,7 @@ const NavBreadcrumb: React.FC = () => {
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='start'>
 								{breadcrumb.slice(0, THREADS_HOLD).map((item, index) => (
-									<DropdownMenuItem key={index} asChild={true}>
+									<DropdownMenuItem key={uuidv4()} asChild={true}>
 										<Link
 											to={item.to}
 											params={item.params}
@@ -68,7 +69,7 @@ const NavBreadcrumb: React.FC = () => {
 					breadcrumb.map((item, index) => (
 						<Fragment key={index}>
 							<BreadcrumbItem>
-								<BreadcrumbLink key={crypto.randomUUID()} asChild={true}>
+								<BreadcrumbLink key={index} asChild={true}>
 									<Link
 										to={item.to}
 										params={item.params}
