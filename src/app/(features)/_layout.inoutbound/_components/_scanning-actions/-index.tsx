@@ -104,23 +104,21 @@ const ScanningActions: React.FC = () => {
 					</SelectContent>
 				</Select>
 
-				<Div className='grid grid-cols-2 items-center gap-x-1 *:w-full'>
+				<Div className='inline-grid grid-cols-2 items-stretch gap-x-1 *:w-full'>
 					<Button
-						className='gap-x-2'
 						size={isSmallScreen ? 'default' : 'sm'}
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
 						onClick={() => resetScanningAction()}>
-						<Icon name='Redo' />
+						<Icon name='Redo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>
 					<Button
 						size={isSmallScreen ? 'default' : 'sm'}
-						className='gap-x-2'
 						disabled={!connection}
 						onClick={handleToggleScanning}
 						variant={scanningButtonProps.variant}>
-						<Icon name={scanningButtonProps.icon} fill='currentColor' size={14} />
+						<Icon role='img' name={scanningButtonProps.icon} />
 						{scanningButtonProps.children}
 					</Button>
 				</Div>

@@ -74,7 +74,7 @@ const EpcDataList: React.FC = () => {
 	// * Ignore too many orders warning
 	const isTooManyOrdersIgnoredRef = useRef<boolean>(false)
 
-	const { refetch: manualFetchEpc } = useManualFetchEpcQuery()
+	const { data, refetch: manualFetchEpc, isFetching } = useManualFetchEpcQuery()
 
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
@@ -209,7 +209,6 @@ const EpcDataList: React.FC = () => {
 		if (isEqual(previousEpc, incommingEpc)) {
 			const previousData = scannedEpc?.data ?? []
 			const newData = incommingEpc?.data ?? []
-
 			setScannedEpc({
 				...scannedEpc,
 				...incommingEpc,
@@ -223,16 +222,21 @@ const EpcDataList: React.FC = () => {
 
 	// * On page changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
+		if (isFetching) return
 		await handleFetchNextPage()
 	}, [page])
 
 	// * On selected order changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
+		if (isFetching) return
 		await handleFetchWithSelectedOrder()
 	}, [selectedOrder])
 
 	// * On refetch data event is triggered
-	useEventListener(MANUALLY_MUTATE_DATA, async () => await manualFetchEpc())
+	useEventListener(MANUALLY_MUTATE_DATA, async () => {
+		await manualFetchEpc()
+		setScannedEpc(data)
+	})
 
 	// * On too many order found
 	useEffect(() => {

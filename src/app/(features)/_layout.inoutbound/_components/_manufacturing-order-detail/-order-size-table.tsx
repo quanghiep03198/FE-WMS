@@ -114,7 +114,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										<TableRow className='sticky top-0 z-20'>
 											<TableHead
 												align='left'
-												className='left-0 z-20 w-64 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+												className='left-0 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 												{t('ns_erp:fields.mo_no')}
 											</TableHead>
 											<TableHead className='z-10'>Sizes</TableHead>

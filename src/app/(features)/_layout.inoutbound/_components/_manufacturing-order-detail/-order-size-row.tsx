@@ -27,9 +27,11 @@ const OrderDetailTableRow: React.FC<{ data: OrderItem; onBeforeDelete?: (orderCo
 				</Div>
 			</TableCell>
 			<TableCell className='!p-0'>
-				<Div className='flex flex-grow flex-nowrap divide-x'>
+				<Div className='flex flex-grow border-collapse flex-nowrap divide-x'>
 					{filteredSizeByOrder?.map((size) => (
-						<Div key={size?.size_numcode} className='group/cell inline-grid basis-64 grid-rows-2 divide-y'>
+						<Div
+							key={size?.size_numcode}
+							className='group/cell inline-grid min-w-48 shrink-0 basis-48 grid-rows-2 divide-y last:flex-1'>
 							<TableCell className='font-medium'>
 								<Div className='flex items-center gap-x-2'>
 									{size?.size_numcode}
@@ -82,6 +84,7 @@ const ExchangeOrderDialogTrigger: React.FC<{ defaultValues: Pick<OrderItem, 'mo_
 		</button>
 	)
 }
+
 const ExchangeEpcDialogTrigger: React.FC<{ defaultValues: OrderSize }> = ({ defaultValues }) => {
 	const {
 		exchangeEpcDialogOpen: open,

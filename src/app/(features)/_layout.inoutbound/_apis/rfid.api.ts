@@ -72,7 +72,7 @@ export const useDeleteOrderMutation = () => {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG] })
-			setPage(1)
+			setPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			window.dispatchEvent(new Event(MANUALLY_MUTATE_DATA))
 		}
