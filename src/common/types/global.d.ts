@@ -9,12 +9,6 @@ export declare global {
 		readonly VITE_REPORT_BUG_URL: string
 		readonly VITE_DEFAULT_TTL: string
 		readonly VITE_REQUEST_TIMEOUT: string
-		readonly VITE_TEST_DB_HOST: string
-		readonly VITE_PRODUCTION_DB_HOST: string
-		readonly VITE_KM_DB_HOST_01: string
-		readonly VITE_KM_DB_HOST_02: string
-		readonly VITE_VN_DB_HOST_01: string
-		readonly VITE_VN_DB_HOST_02: string
 	}
 
 	interface Navigator {
