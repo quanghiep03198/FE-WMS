@@ -6,7 +6,7 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { Table, createColumnHelper } from '@tanstack/react-table'
+import { Row, Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -38,6 +38,27 @@ const WarehouseList: React.FC = () => {
 	const handleDeleteSelectedRows = useCallback(() => {
 		deleteWarehouseAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original.id))
 	}, [])
+
+	const handlePreUpdate = (row: Row<IWarehouse>) => {
+		dispatch({
+			type: CommonActions.UPDATE,
+			payload: {
+				dialogTitle: t('ns_warehouse:form.update_warehouse_title'),
+				defaultFormValues: {
+					...row.original,
+					type_warehouse: Object.keys(warehouseTypes).find(
+						(key) => t(warehouseTypes[key], { ns: 'ns_warehouse' }) === row.original.type_warehouse
+					)
+				}
+			}
+		})
+	}
+
+	const handlePreDelete = (row: Row<IWarehouse>) => {
+		setConfirmDialogOpen(!confirmDialogOpen)
+		setRowSelectionType('single')
+		row.toggleSelected(true)
+	}
 
 	// Transform warehouse response data
 	const transformResponse = useCallback(
@@ -211,25 +232,8 @@ const WarehouseList: React.FC = () => {
 				cell: ({ row }) => (
 					<WarehouseRowActions
 						row={row}
-						onDelete={() => {
-							setConfirmDialogOpen(!confirmDialogOpen)
-							setRowSelectionType('single')
-							row.toggleSelected(true)
-						}}
-						onEdit={() => {
-							dispatch({
-								type: CommonActions.UPDATE,
-								payload: {
-									dialogTitle: t('ns_warehouse:form.update_warehouse_title'),
-									defaultFormValues: {
-										...row.original,
-										type_warehouse: Object.keys(warehouseTypes).find(
-											(key) => t(warehouseTypes[key], { ns: 'ns_warehouse' }) === row.original.type_warehouse
-										)
-									}
-								}
-							})
-						}}
+						onDelete={() => handlePreDelete(row)}
+						onEdit={() => handlePreUpdate(row)}
 					/>
 				)
 			})

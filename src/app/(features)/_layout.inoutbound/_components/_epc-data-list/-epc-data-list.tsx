@@ -74,7 +74,7 @@ const EpcDataList: React.FC = () => {
 	// * Ignore too many orders warning
 	const isTooManyOrdersIgnoredRef = useRef<boolean>(false)
 
-	const { refetch: manualFetchEpc, isFetching } = useManualFetchEpcQuery()
+	const { refetch: manualFetchEpc } = useManualFetchEpcQuery()
 
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()

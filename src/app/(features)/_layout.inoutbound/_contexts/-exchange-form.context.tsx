@@ -53,10 +53,8 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 	return <OrderDetailContext.Provider value={storeRef.current}>{children}</OrderDetailContext.Provider>
 }
 
-export const useOrderDetailContext = (selector?: (state: TOrderDetailContext) => Partial<TOrderDetailContext>) => {
+export const useOrderDetailContext = (selector: (state: TOrderDetailContext) => Partial<TOrderDetailContext>) => {
 	const store = useContext(OrderDetailContext)
 	if (!store) throw new Error('Missing StoreProvider')
-	if (typeof selector === 'undefined') return useStore(store)
-	const contextSelector = useShallow(selector)
-	return useStore(store, contextSelector)
+	return useStore(store, useShallow(selector))
 }

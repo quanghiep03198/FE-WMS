@@ -1,6 +1,6 @@
 import { CommonActions } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
-import { type IEmployee, type IWarehouse } from '@/common/types/entities'
+import { IEmployee, type IWarehouse } from '@/common/types/entities'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -21,8 +21,8 @@ import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
-import _ from 'lodash'
-import { memo, useState } from 'react'
+import { debounce } from 'lodash'
+import React, { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -165,15 +165,8 @@ const WarehouseFormDialog: React.FC = () => {
 								shouldFilter={false}
 								labelField='employee_name'
 								valueField='employee_code'
-								onInput={_.debounce((value) => setEmployeeSearchTerm(value), 500)}
-								template={({ data }: { data: IEmployee }) => (
-									<Div className='space-y-1'>
-										<Typography className='line-clamp-1'>{data.employee_name}</Typography>
-										<Typography variant='small' className='line-clamp-1' color='muted'>
-											{data.employee_code}
-										</Typography>
-									</Div>
-								)}
+								onInput={debounce((value) => setEmployeeSearchTerm(value), 500)}
+								template={EmployeeComboboxSelection}
 							/>
 						</FormItem>
 						<FormItem className='col-span-full'>
@@ -200,6 +193,15 @@ const WarehouseFormDialog: React.FC = () => {
 		</Dialog>
 	)
 }
+
+const EmployeeComboboxSelection: React.FC<{ data: IEmployee }> = ({ data }) => (
+	<Div className='space-y-1'>
+		<Typography className='line-clamp-1'>{data.employee_name}</Typography>
+		<Typography variant='small' className='line-clamp-1' color='muted'>
+			{data.employee_code}
+		</Typography>
+	</Div>
+)
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 const FormItem = tw.div`col-span-1 sm:col-span-full md:col-span-full`

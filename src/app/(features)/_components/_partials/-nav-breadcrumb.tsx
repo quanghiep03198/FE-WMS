@@ -68,7 +68,7 @@ const NavBreadcrumb: React.FC = () => {
 					breadcrumb.map((item, index) => (
 						<Fragment key={index}>
 							<BreadcrumbItem>
-								<BreadcrumbLink key={index} asChild={true}>
+								<BreadcrumbLink key={crypto.randomUUID()} asChild={true}>
 									<Link
 										to={item.to}
 										params={item.params}

@@ -1,7 +1,7 @@
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse.api'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { IWarehouse } from '@/common/types/entities'
+import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -226,16 +226,7 @@ const InoutboundForm: React.FC = () => {
 								shouldFilter={false}
 								disabled={warehouseOptions?.length === 0}
 								label={t('ns_inoutbound:labels.io_storage_location')}
-								template={({ data }) => (
-									<Div className='space-y-0.5'>
-										<Typography variant='small' className='font-medium'>
-											{data.storage_name}
-										</Typography>
-										<Typography variant='small' color='muted'>
-											{data.storage_num}
-										</Typography>
-									</Div>
-								)}
+								template={WarehouseComboboxSelection}
 							/>
 						</Div>
 					</Fragment>
@@ -260,6 +251,17 @@ const InoutboundForm: React.FC = () => {
 		</FormProvider>
 	)
 }
+
+const WarehouseComboboxSelection: React.FC<{ data: IWarehouseStorage }> = ({ data }) => (
+	<Div className='space-y-0.5'>
+		<Typography variant='small' className='font-medium'>
+			{data.storage_name}
+		</Typography>
+		<Typography variant='small' color='muted'>
+			{data.storage_num}
+		</Typography>
+	</Div>
+)
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6 max-h-full`
 const StyledFormLabel = tw(FormLabel)<React.ComponentProps<typeof FormLabel>>`

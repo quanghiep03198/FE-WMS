@@ -4,7 +4,6 @@ import { Checkbox, Icon, Typography } from '@/components/ui'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useUpdate } from 'ahooks'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
@@ -26,9 +25,8 @@ export const useTransferOrderTableColumns = ({
 	setRowSelectionType,
 	setConfirmDialogOpen
 }: TransferOrderTableColumnParams) => {
-	const update = useUpdate() // Force re-render to sync table state
 	const { t, i18n } = useTranslation()
-	const { toggleSheetPanelFormOpen } = usePageStore()
+	const { toggleSheetPanelFormOpen: handleToggleFormOpen } = usePageStore()
 	const { mutateAsync: updateAsync } = useUpdateTransferOrderMutation()
 
 	const { data: warehouseLists } = useGetWarehouseQuery<IWarehouse[]>({
@@ -259,7 +257,7 @@ export const useTransferOrderTableColumns = ({
 				cell: (props) => (
 					<TransferOrderRowActions
 						cellContext={props}
-						onViewDetail={() => toggleSheetPanelFormOpen}
+						onViewDetail={handleToggleFormOpen}
 						onSaveChange={(data: UpdateTransferOrderValues) =>
 							updateAsync({ transferOrderCode: props.row.original.transfer_order_code, payload: data })
 						}

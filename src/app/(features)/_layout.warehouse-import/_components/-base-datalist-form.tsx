@@ -1,6 +1,6 @@
 import { CofactoryRef } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
-import { IWarehouse } from '@/common/types/entities'
+import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -139,16 +139,7 @@ const BaseDatalistForm: React.FC = () => {
 							shouldFilter={false}
 							disabled={!warehouseNum}
 							label={t('ns_inoutbound:labels.io_storage_location')}
-							template={({ data }) => (
-								<Div className='space-y-0.5'>
-									<Typography variant='small' className='font-medium'>
-										{data.storage_name}
-									</Typography>
-									<Typography variant='small' color='muted'>
-										{data.storage_num}
-									</Typography>
-								</Div>
-							)}
+							template={StorageComboboxSelection}
 						/>
 					</Div>
 					<Div className='col-span-full'>
@@ -161,6 +152,17 @@ const BaseDatalistForm: React.FC = () => {
 		</FormProvider>
 	)
 }
+
+const StorageComboboxSelection: React.FC<{ data: IWarehouseStorage }> = ({ data }) => (
+	<Div className='space-y-0.5'>
+		<Typography variant='small' className='font-medium'>
+			{data.storage_name}
+		</Typography>
+		<Typography variant='small' color='muted'>
+			{data.storage_num}
+		</Typography>
+	</Div>
+)
 
 const Form = tw.form`mx-auto flex w-full max-w-4xl`
 const FieldSet = tw.fieldset`grid grid-cols-2 gap-x-2 gap-y-6 flex-1 overflow-x-hidden`

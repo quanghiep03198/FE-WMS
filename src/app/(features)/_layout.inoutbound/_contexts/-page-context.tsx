@@ -163,7 +163,5 @@ export const usePageContext = (
 ): Partial<PageContextStore> => {
 	const store = useContext(PageContext)
 	if (!store) throw new Error('Missing StoreProvider')
-	if (typeof selector === 'undefined') return useStore(store)
-	const contextSelector = useShallow(selector)
-	return useStore(store, contextSelector)
+	return useStore(store, useShallow(selector))
 }
