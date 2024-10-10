@@ -43,7 +43,10 @@ const ToolbarToggler: React.FC = () => {
 	useEventListener(SIDEBAR_TOGGLE_CHANGE, (e: CustomEvent<boolean>) => setIsToggled(!e.detail || isExtraLargeScreen))
 
 	useEffect(() => {
-		if ((!isLargeScreen || !isExtraLargeScreen) && isToggled) setIsToggled(!isToggled)
+		if (((!isLargeScreen || !isExtraLargeScreen) && isToggled) || isLargeScreen) {
+			setIsToggled(!isToggled)
+			sidebarTrigger.checked = false
+		}
 	}, [isLargeScreen, isExtraLargeScreen])
 
 	return (

@@ -1,3 +1,4 @@
+import { useSelectedText } from '@/common/hooks/use-selected-text'
 import { cn } from '@/common/utils/cn'
 import {
 	Dialog,
@@ -46,7 +47,6 @@ const OrderSizeDetailTable: React.FC = () => {
 	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
-
 	const { data } = useGetOrderDetail()
 
 	useEffect(() => {
@@ -86,6 +86,8 @@ const OrderSizeDetailTable: React.FC = () => {
 		setOrderToDelete(orderCode)
 	})
 
+	const [select, text] = useSelectedText()
+
 	return (
 		<Fragment>
 			<Dialog>
@@ -101,7 +103,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 					</HoverCardContent>
 				</HoverCard>
-				<DialogContent className='max-w-7xl xxl:max-w-8xl'>
+				<DialogContent className='max-w-7xl focus-visible:outline-none focus-visible:ring-0 xxl:max-w-8xl'>
 					<DialogHeader>
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
@@ -112,21 +114,26 @@ const OrderSizeDetailTable: React.FC = () => {
 								<Table className='border-separate border-spacing-0 rounded-lg'>
 									<TableHeader>
 										<TableRow className='sticky top-0 z-20'>
-											<TableHead
-												align='left'
-												className='left-0 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+											<TableHead className='left-0 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 												{t('ns_erp:fields.mo_no')}
 											</TableHead>
-											<TableHead className='z-10'>Sizes</TableHead>
+											<TableHead>Size</TableHead>
 											<TableHead align='right' className='right-20 z-20'>
 												{t('ns_common:common_fields.total')}
 											</TableHead>
-											<TableHead className='right-0 z-20 min-w-20'>-</TableHead>
+											<TableHead className='absolute right-0 z-20 min-w-20'>-</TableHead>
 										</TableRow>
 									</TableHeader>
 									<TableBody className='[&_tr]:snap-start'>
 										{scannedOrders.map((order) => {
-											return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
+											return (
+												<OrderDetailTableRow
+													data={order}
+													selectedText={text}
+													onSelectedTextChange={select}
+													onBeforeDelete={handleBeforeDelete}
+												/>
+											)
 										})}
 									</TableBody>
 								</Table>
