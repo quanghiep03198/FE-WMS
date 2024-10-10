@@ -6,6 +6,7 @@ import {
 	ButtonProps,
 	Command,
 	CommandEmpty,
+	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
@@ -145,45 +146,45 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										{loading ? (
 											<CommandLoading />
 										) : (
-											<Fragment>
-												<CommandEmpty>
-													<Typography variant='small' color='muted'>
-														No result
-													</Typography>
-												</CommandEmpty>
-												<CommandList className='scrollbar'>
-													{options.map((option) => {
-														return (
-															<CommandItem
-																key={option[valueField]}
-																value={option[valueField]}
-																className='line-clamp-1 flex items-center gap-x-4'
-																onSelect={(value) => {
-																	setValue(name, value as PathValue<T, Path<T>>)
-																	setValue(name, option[valueField])
-																	clearErrors(name)
-																	if (typeof onSelect === 'function') onSelect(option[valueField])
-																}}>
-																{CommandItemTemplate ? (
-																	<CommandItemTemplate data={option} />
-																) : (
-																	<Typography variant='small' className='line-clamp-1 flex-1'>
-																		{option[labelField]}
-																	</Typography>
-																)}
-																<Icon
-																	name='Check'
-																	className={cn(
-																		'ml-auto',
-																		option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
-																	)}
-																/>
-															</CommandItem>
-														)
-													})}
-												</CommandList>
-											</Fragment>
+											<CommandEmpty>
+												<Typography variant='small' color='muted'>
+													No result
+												</Typography>
+											</CommandEmpty>
 										)}
+										<CommandList className={cn('scrollbar', { hidden: loading })}>
+											<CommandGroup>
+												{options.map((option) => {
+													return (
+														<CommandItem
+															key={option[valueField]}
+															value={option[valueField]}
+															className='line-clamp-1 flex items-center gap-x-4'
+															onSelect={(value) => {
+																setValue(name, value as PathValue<T, Path<T>>)
+																setValue(name, option[valueField])
+																clearErrors(name)
+																if (typeof onSelect === 'function') onSelect(option[valueField])
+															}}>
+															{CommandItemTemplate ? (
+																<CommandItemTemplate data={option} />
+															) : (
+																<Typography variant='small' className='line-clamp-1 flex-1'>
+																	{option[labelField]}
+																</Typography>
+															)}
+															<Icon
+																name='Check'
+																className={cn(
+																	'ml-auto',
+																	option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
+																)}
+															/>
+														</CommandItem>
+													)
+												})}
+											</CommandGroup>
+										</CommandList>
 									</Command>
 								</PopoverContent>
 							</Popover>
