@@ -17,7 +17,6 @@ import {
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
-import { RFIDService } from '@/services/rfid.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useAsyncEffect, useResetState } from 'ahooks'
@@ -29,7 +28,6 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useExchangeEpcMutation, useSearchExchangableOrderQuery } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-exchange-form.context'
-import { usePageContext } from '../../_contexts/-page-context'
 import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
@@ -49,26 +47,15 @@ const ExchangeOrderFormDialog: React.FC = () => {
 			'setDefaultExchangeEpcFormValues'
 		])
 	)
-	const { connection } = usePageContext((state) => pick(state, 'connection'))
-	const [data, setData] = useState<Record<'mo_no', string>[]>([])
-	const [loading, setLoading] = useState(false)
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
-
+	const { data, refetch, isLoading } = useSearchExchangableOrderQuery(defaultValues?.mo_no, searchTerm)
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
 	})
 
 	useAsyncEffect(async () => {
 		if (!defaultValues) return
-		setLoading(true)
-		try {
-			const response = await RFIDService.searchExchangableOrder(connection, defaultValues?.mo_no, searchTerm)
-			setData(response.metadata)
-		} catch {
-			setData([])
-		} finally {
-			setLoading(false)
-		}
+		await refetch()
 	}, [searchTerm, defaultValues])
 
 	useEffect(() => {
@@ -104,7 +91,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 							label={t('ns_erp:fields.mo_no_actual')}
 							datalist={data}
 							shouldFilter={false}
-							loading={loading}
+							loading={isLoading}
 							onInput={debounce((value) => setSearchTerm(value), 200)}
 							labelField='mo_no'
 							valueField='mo_no'
