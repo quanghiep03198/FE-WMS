@@ -6,7 +6,6 @@ import {
 	ButtonProps,
 	Command,
 	CommandEmpty,
-	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
@@ -91,7 +90,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		}
 		return placeholder
 	}
-
+	console.log(options)
 	return (
 		<FormField
 			name={name}
@@ -143,18 +142,17 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												setSearchTerm(value)
 											}}
 										/>
-										{loading && <CommandLoading />}
-										{!loading && (
-											<CommandEmpty>
-												<Typography variant='small' color='muted'>
-													No result
-												</Typography>
-											</CommandEmpty>
-										)}
-										<CommandList className='scrollbar'>
-											<CommandGroup>
-												{Array.isArray(data) &&
-													options.map((option) => {
+										{loading ? (
+											<CommandLoading />
+										) : (
+											<Fragment>
+												<CommandEmpty>
+													<Typography variant='small' color='muted'>
+														No result
+													</Typography>
+												</CommandEmpty>
+												<CommandList className='scrollbar'>
+													{options.map((option) => {
 														return (
 															<CommandItem
 																key={option[valueField]}
@@ -183,8 +181,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 															</CommandItem>
 														)
 													})}
-											</CommandGroup>
-										</CommandList>
+												</CommandList>
+											</Fragment>
+										)}
 									</Command>
 								</PopoverContent>
 							</Popover>
