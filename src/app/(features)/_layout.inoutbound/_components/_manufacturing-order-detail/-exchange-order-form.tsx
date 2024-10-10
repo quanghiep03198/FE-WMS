@@ -17,9 +17,10 @@ import {
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
+import { RFIDService } from '@/services/rfid.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useResetState } from 'ahooks'
+import { useAsyncEffect, useResetState } from 'ahooks'
 import { debounce, pick } from 'lodash'
 import { useEffect, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -28,12 +29,14 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useExchangeEpcMutation, useSearchExchangableOrderQuery } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-exchange-form.context'
+import { usePageContext } from '../../_contexts/-page-context'
 import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const checkboxId = useId()
+	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
+	const checkboxId = useId()
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,
@@ -46,41 +49,41 @@ const ExchangeOrderFormDialog: React.FC = () => {
 			'setDefaultExchangeEpcFormValues'
 		])
 	)
+	const { connection } = usePageContext((state) => pick(state, 'connection'))
+	const [data, setData] = useState<Record<'mo_no', string>[]>([])
+	const [loading, setLoading] = useState(false)
+	const { mutateAsync, isPending } = useExchangeEpcMutation()
+
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
 	})
 
-	// const exchangableOrders = useMemo(() => {
-	// 	if (!Array.isArray(scannedSizes) || !defaultValues?.mo_no) return []
-	// 	const filteredOrderSizes = scannedSizes.filter((item) => item.mo_no === defaultValues?.mo_no)
-	// 	return uniqBy(
-	// 		scannedSizes
-	// 			.filter((size) =>
-	// 				filteredOrderSizes.some(
-	// 					(item) =>
-	// 						item.mo_no !== size.mo_no &&
-	// 						item.mat_code === size.mat_code &&
-	// 						item.size_numcode === size.size_numcode
-	// 				)
-	// 			)
-	// 			.map((item) => item.mo_no),
-	// 		'mo_no'
-	// 	).map((item) => ({ label: item, value: item }))
-	// }, [scannedSizes, defaultValues])
+	useAsyncEffect(async () => {
+		if (!defaultValues) return
+		setLoading(true)
+		try {
+			const response = await RFIDService.searchExchangableOrder(connection, defaultValues?.mo_no, searchTerm)
+			setData(response.metadata)
+		} catch {
+			setData([])
+		} finally {
+			setLoading(false)
+		}
+	}, [searchTerm, defaultValues])
 
 	useEffect(() => {
-		if (defaultValues) form.reset({ mo_no: defaultValues?.mo_no, multi: true })
-	}, [defaultValues])
-
-	const { mutateAsync, isPending } = useExchangeEpcMutation()
+		if (open && defaultValues) form.reset({ mo_no: defaultValues?.mo_no, multi: true })
+		if (!open) {
+			form.reset()
+			resetConfirm()
+		}
+	}, [open, defaultValues])
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
 			await mutateAsync({ ...data, multi: true })
 			toast.success(t('ns_common:notification.success'))
 			setOpen(!open)
-			form.reset()
-			resetConfirm()
 		} catch (error) {
 			toast.error(t('ns_common:notification.error'))
 		}
@@ -90,22 +93,30 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className='grid max-w-xl gap-6'>
 				<DialogHeader>
-					<DialogTitle>{t('ns_inoutbound:titles.exchange_epc')}</DialogTitle>
+					<DialogTitle>{t('ns_inoutbound:titles.exchange_order')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.exchange_epc_dialog_desc')}</DialogDescription>
 				</DialogHeader>
-
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
 						<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} disabled />
-						<OrderSearchFieldControl targetOrderRef={defaultValues?.mo_no} />
-						<Div className='space-y-4 py-4 shadow-sm'>
+						<ComboboxFieldControl
+							name='mo_no_actual'
+							label={t('ns_erp:fields.mo_no_actual')}
+							datalist={data}
+							shouldFilter={false}
+							loading={loading}
+							onInput={debounce((value) => setSearchTerm(value), 200)}
+							labelField='mo_no'
+							valueField='mo_no'
+							description={t('ns_inoutbound:description.transferred_order')}
+						/>
+						<Div className='space-y-4 py-4'>
 							<Div className='space-y-1.5 leading-none'>
 								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
 								</Typography>
 								<Typography variant='small'>
 									{t('ns_inoutbound:notification.exchange_order_caution')}
-									{/* Cảnh báo: Tác vụ hoán đổi chỉ lệnh sản xuất không thể hoàn tác. Vui lòng xác nhận các thay đổi của bạn trước khi tiếp tục. */}
 								</Typography>
 							</Div>
 							<Separator />
@@ -140,8 +151,6 @@ const OrderSearchFieldControl: React.FC<{ targetOrderRef: string }> = ({ targetO
 	const { t } = useTranslation()
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { data, refetch, isLoading } = useSearchExchangableOrderQuery(targetOrderRef, searchTerm)
-
-	console.log(data)
 
 	useEffect(() => {
 		refetch()

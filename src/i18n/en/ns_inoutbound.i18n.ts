@@ -53,7 +53,8 @@ export default {
 		transfer_order_list: 'Transfer orders list',
 		transfer_order_datalist: 'Transfer order datalist',
 		order_sizing_list: 'Order sizing list',
-		exchange_epc: 'Exchange EPC'
+		exchange_epc: 'Exchange EPC',
+		exchange_order: 'Exchange manufacturing order'
 	},
 	description: {
 		transfer_order_list: 'Following and managing transfer orders',

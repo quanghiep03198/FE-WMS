@@ -53,7 +53,8 @@ export default {
 		transfer_order_list: '转移订单列表',
 		transfer_order_datalist: '转移订单数据列表',
 		order_sizing_list: '指令及尺码列表',
-		exchange_epc: '交换 EPC'
+		exchange_epc: '交换 EPC',
+		exchange_order: '交换生产订单'
 	},
 	description: {
 		transfer_order_list: '跟踪和管理转移订单',

@@ -52,7 +52,8 @@ export default {
 		transfer_order_list: 'Danh sách đơn chuyển kho',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		order_sizing_list: 'Danh sách Size theo đơn',
-		exchange_epc: 'Hoán đổi EPC'
+		exchange_epc: 'Hoán đổi EPC',
+		exchange_order: 'Hoán đổi đơn hàng'
 	},
 	description: {
 		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho',
