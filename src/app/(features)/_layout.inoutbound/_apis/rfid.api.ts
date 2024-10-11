@@ -34,7 +34,7 @@ export const useSearchExchangableOrderQuery = (orderTarget: string, searchTerm: 
 	const { connection } = usePageContext((state) => pick(state, 'connection'))
 
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG'],
+		queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG', orderTarget],
 		queryFn: async () => await RFIDService.searchExchangableOrder(connection, orderTarget, searchTerm),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,

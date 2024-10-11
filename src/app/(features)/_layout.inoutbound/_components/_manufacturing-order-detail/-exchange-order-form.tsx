@@ -19,8 +19,10 @@ import {
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useAsyncEffect, useResetState } from 'ahooks'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAsyncEffect, usePrevious, useResetState } from 'ahooks'
 import { debounce, pick } from 'lodash'
+
 import { useEffect, useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -33,6 +35,7 @@ import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exch
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const [searchTerm, setSearchTerm] = useState<string>('')
+	const previousSearchTerm = usePrevious(searchTerm)
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const checkboxId = useId()
 	const {
@@ -48,23 +51,24 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		])
 	)
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
-	const { data, refetch, isLoading } = useSearchExchangableOrderQuery(defaultValues?.mo_no, searchTerm)
+
+	const { data, refetch, isFetching } = useSearchExchangableOrderQuery(defaultValues?.mo_no, searchTerm)
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
 	})
 
+	const queryClient = useQueryClient()
+
 	useAsyncEffect(async () => {
 		if (!defaultValues) return
+		queryClient.cancelQueries({ queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG', previousSearchTerm] })
 		await refetch()
 	}, [searchTerm, defaultValues])
 
 	useEffect(() => {
-		if (open && defaultValues) form.reset({ mo_no: defaultValues?.mo_no, multi: true })
-		if (!open) {
-			form.reset()
-			resetConfirm()
-		}
-	}, [open, defaultValues])
+		if (defaultValues) form.reset({ mo_no: defaultValues?.mo_no, multi: true })
+	}, [defaultValues])
+	console.log(data)
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
@@ -76,8 +80,17 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		}
 	}
 
+	const handleOpenChange = (open: boolean) => {
+		setOpen(open)
+		if (!open) {
+			form.reset()
+			resetConfirm()
+			// queryClient.removeQueries({ queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG'] })
+		}
+	}
+
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent className='grid max-w-xl gap-6'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.exchange_order')}</DialogTitle>
@@ -91,7 +104,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 							label={t('ns_erp:fields.mo_no_actual')}
 							datalist={data}
 							shouldFilter={false}
-							loading={isLoading}
+							loading={isFetching}
 							onInput={debounce((value) => setSearchTerm(value), 200)}
 							labelField='mo_no'
 							valueField='mo_no'
