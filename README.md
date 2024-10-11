@@ -1,7 +1,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=quanghiep03198_FE-WMS&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=quanghiep03198_FE-WMS)
 # Warehouse Management System
 
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=quanghiep03198_FE-WMS)
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/summary/new_code?id=quanghiep03198_FE-WMS)
 
 ## Table of Contents
 
