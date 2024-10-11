@@ -161,7 +161,7 @@ const Steps: React.FC<{ enableChangeStep?: boolean }> = ({ enableChangeStep }) =
 										<Icon name='Check' size={20} className='text-success-foreground' aria-hidden='true' />
 									</StepIndex>
 									<Typography variant='small' color='success' className='font-medium'>
-										{step.name}
+										{stepName}
 									</Typography>
 								</StepContent>
 							) : step.status === 'current' ? (
