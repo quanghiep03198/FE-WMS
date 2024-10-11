@@ -5,8 +5,6 @@ import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import {
 	ButtonProps,
 	Command,
-	CommandEmpty,
-	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
@@ -91,7 +89,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 		}
 		return placeholder
 	}
-	console.log(options)
+
 	return (
 		<FormField
 			name={name}
@@ -135,7 +133,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 									</FormControl>
 								</PopoverTrigger>
 								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0'>
-									<Command shouldFilter={shouldFilter}>
+									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
 											placeholder={placeholder}
 											onValueChange={(value) => {
@@ -143,47 +141,52 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												setSearchTerm(value)
 											}}
 										/>
-										{loading ? (
-											<CommandLoading />
-										) : (
-											<CommandEmpty>
-												<Typography variant='small' color='muted'>
-													No result
-												</Typography>
-											</CommandEmpty>
-										)}
-										<CommandList className={cn('scrollbar', { hidden: loading })}>
-											<CommandGroup>
-												{options.map((option) => {
-													return (
+										<CommandList>
+											{loading ? (
+												<CommandLoading />
+											) : (
+												<Fragment>
+													{options.length > 0 ? (
+														options.map((option) => {
+															return (
+																<CommandItem
+																	key={option[valueField]}
+																	value={option[valueField]}
+																	className='line-clamp-1 flex items-center gap-x-4'
+																	onSelect={(value) => {
+																		setValue(name, value as PathValue<T, Path<T>>)
+																		setValue(name, option[valueField])
+																		clearErrors(name)
+																		if (typeof onSelect === 'function') onSelect(option[valueField])
+																	}}>
+																	{CommandItemTemplate ? (
+																		<CommandItemTemplate data={option} />
+																	) : (
+																		<Typography variant='small' className='line-clamp-1 flex-1'>
+																			{option[labelField]}
+																		</Typography>
+																	)}
+																	<Icon
+																		name='Check'
+																		className={cn(
+																			'ml-auto',
+																			option[valueField] === field.value
+																				? 'opacity-100'
+																				: 'opacity-0'
+																		)}
+																	/>
+																</CommandItem>
+															)
+														})
+													) : (
 														<CommandItem
-															key={option[valueField]}
-															value={option[valueField]}
-															className='line-clamp-1 flex items-center gap-x-4'
-															onSelect={(value) => {
-																setValue(name, value as PathValue<T, Path<T>>)
-																setValue(name, option[valueField])
-																clearErrors(name)
-																if (typeof onSelect === 'function') onSelect(option[valueField])
-															}}>
-															{CommandItemTemplate ? (
-																<CommandItemTemplate data={option} />
-															) : (
-																<Typography variant='small' className='line-clamp-1 flex-1'>
-																	{option[labelField]}
-																</Typography>
-															)}
-															<Icon
-																name='Check'
-																className={cn(
-																	'ml-auto',
-																	option[valueField] === field.value ? 'opacity-100' : 'opacity-0'
-																)}
-															/>
+															disabled
+															className='flex justify-center py-4 text-center text-sm'>
+															No result
 														</CommandItem>
-													)
-												})}
-											</CommandGroup>
+													)}
+												</Fragment>
+											)}
 										</CommandList>
 									</Command>
 								</PopoverContent>
