@@ -14,6 +14,7 @@ import {
 	Icon,
 	Label,
 	Separator,
+	Switch,
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
@@ -52,7 +53,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
 
-	const { data, refetch, isFetching } = useSearchExchangableOrderQuery(defaultValues?.mo_no, searchTerm)
+	const { data, refetch, isLoading } = useSearchExchangableOrderQuery(defaultValues?.mo_no, searchTerm)
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
 	})
@@ -68,7 +69,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	useEffect(() => {
 		if (defaultValues) form.reset({ mo_no: defaultValues?.mo_no, multi: true })
 	}, [defaultValues])
-	console.log(data)
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
@@ -97,19 +97,33 @@ const ExchangeOrderFormDialog: React.FC = () => {
 					<DialogDescription>{t('ns_inoutbound:description.exchange_epc_dialog_desc')}</DialogDescription>
 				</DialogHeader>
 				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
+					<Form className='group' onSubmit={form.handleSubmit(handleExchangeEpc)}>
 						<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} disabled />
-						<ComboboxFieldControl
-							name='mo_no_actual'
-							label={t('ns_erp:fields.mo_no_actual')}
-							datalist={data}
-							shouldFilter={false}
-							loading={isFetching}
-							onInput={debounce((value) => setSearchTerm(value), 200)}
-							labelField='mo_no'
-							valueField='mo_no'
-							description={t('ns_inoutbound:description.transferred_order')}
-						/>
+						<Div className='hidden group-has-[#toggle-manual[data-state=checked]]:block'>
+							<InputFieldControl
+								name='mo_no_actual'
+								label={t('ns_erp:fields.mo_no_actual')}
+								placeholder='Enter your actual order ...'
+								description={t('ns_inoutbound:description.transferred_order')}
+							/>
+						</Div>
+						<Div className='block group-has-[#toggle-manual[data-state=checked]]:hidden'>
+							<ComboboxFieldControl
+								name='mo_no_actual'
+								label={t('ns_erp:fields.mo_no_actual')}
+								datalist={data}
+								shouldFilter={false}
+								loading={isLoading}
+								onInput={debounce((value) => setSearchTerm(value), 200)}
+								labelField='mo_no'
+								valueField='mo_no'
+								description={t('ns_inoutbound:description.transferred_order')}
+							/>
+						</Div>
+						<Div className='inline-flex items-center gap-x-3'>
+							<Label htmlFor='toggle-manual'>Manual</Label>
+							<Switch id='toggle-manual' />
+						</Div>
 						<Div className='space-y-4 py-4'>
 							<Div className='space-y-1.5 leading-none'>
 								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
@@ -120,7 +134,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 								</Typography>
 							</Div>
 							<Separator />
-							<Div className='inline-flex items-center gap-x-3'>
+							<Div className='inline-flex items-center gap-x-2'>
 								<Checkbox
 									id={checkboxId}
 									checked={isConfirmed}
