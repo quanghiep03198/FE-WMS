@@ -49,7 +49,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 					<button
 						onClick={() => {
 							setExchangeOrderDialogOpen(true)
-							setDefaultExchangeOrderFormValues(pick(data, 'mo_no'))
+							setDefaultExchangeOrderFormValues(data)
 						}}>
 						<Icon
 							name='ArrowLeftRight'

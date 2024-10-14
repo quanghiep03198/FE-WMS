@@ -8,7 +8,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
 export type OrderItem = { mo_no: string; count: number }
-export type OrderSize = OrderItem & { size_numcode: string; mat_code: string }
+export type OrderSize = OrderItem & { size_numcode: string; mat_code: string; shoes_style_code_factory: string }
 export type Log = { message: string; timestamp?: Date; type: 'info' | 'error' }
 
 type PageContextStore = {

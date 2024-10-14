@@ -1,7 +1,6 @@
 import {
 	Button,
 	Checkbox,
-	ComboboxFieldControl,
 	Dialog,
 	DialogClose,
 	DialogContent,
@@ -10,34 +9,43 @@ import {
 	DialogHeader,
 	DialogTitle,
 	Div,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
 	Form as FormProvider,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 	Icon,
+	Input,
 	Label,
 	Separator,
-	Switch,
 	Typography
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useQueryClient } from '@tanstack/react-query'
-import { useAsyncEffect, usePrevious, useResetState } from 'ahooks'
-import { debounce, pick } from 'lodash'
+import { useResetState } from 'ahooks'
+import { pick } from 'lodash'
 
-import { useEffect, useId, useState } from 'react'
+import { usePrevious } from 'ahooks'
+import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useExchangeEpcMutation, useSearchExchangableOrderQuery } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, useExchangeEpcMutation, useSearchExchangableOrderQuery } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-exchange-form.context'
 import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const [searchTerm, setSearchTerm] = useState<string>('')
-	const previousSearchTerm = usePrevious(searchTerm)
+	const [hoverCardOpen, setHoverCardOpen] = useState<boolean>(false)
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()
 	const {
 		exchangeOrderDialogOpen: open,
@@ -53,26 +61,36 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
 
-	const { data, refetch, isLoading } = useSearchExchangableOrderQuery(defaultValues?.mo_no, searchTerm)
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
 	})
+	const isExchangeAll = form.watch('exchange_all')
+	const quantity = form.watch('quantity')
+	const actualOrder = form.watch('mo_no_actual')
+	const previousQuantity = usePrevious(quantity)
 
-	const queryClient = useQueryClient()
-
-	useAsyncEffect(async () => {
-		if (!defaultValues) return
-		queryClient.cancelQueries({ queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG', previousSearchTerm] })
-		await refetch()
-	}, [searchTerm, defaultValues])
+	const { data, refetch } = useSearchExchangableOrderQuery(defaultValues?.mo_no, actualOrder)
 
 	useEffect(() => {
-		if (defaultValues) form.reset({ mo_no: defaultValues?.mo_no, multi: true })
+		if (timeoutRef.current) clearTimeout(timeoutRef.current)
+		timeoutRef.current = setTimeout(() => refetch(), 200)
+		return () => {
+			clearTimeout(timeoutRef.current)
+		}
+	}, [actualOrder])
+
+	useEffect(() => {
+		if (defaultValues) form.reset(defaultValues)
 	}, [defaultValues])
+
+	useEffect(() => {
+		if (isExchangeAll) form.setValue('quantity', defaultValues?.count ?? 0)
+		else form.setValue('quantity', previousQuantity ?? 0)
+	}, [isExchangeAll])
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
-			await mutateAsync({ ...data, multi: true })
+			await mutateAsync({ ...data, quantity: data.quantity ?? data.count })
 			toast.success(t('ns_common:notification.success'))
 			setOpen(!open)
 		} catch (error) {
@@ -85,7 +103,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		if (!open) {
 			form.reset()
 			resetConfirm()
-			// queryClient.removeQueries({ queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG'] })
 		}
 	}
 
@@ -98,33 +115,89 @@ const ExchangeOrderFormDialog: React.FC = () => {
 				</DialogHeader>
 				<FormProvider {...form}>
 					<Form className='group' onSubmit={form.handleSubmit(handleExchangeEpc)}>
-						<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} disabled />
-						<Div className='hidden group-has-[#toggle-manual[data-state=checked]]:block'>
-							<InputFieldControl
-								name='mo_no_actual'
-								label={t('ns_erp:fields.mo_no_actual')}
-								placeholder='Enter your actual order ...'
-								description={t('ns_inoutbound:description.transferred_order')}
-							/>
+						<Div className='col-span-full'>
+							<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} readOnly />
 						</Div>
-						<Div className='block group-has-[#toggle-manual[data-state=checked]]:hidden'>
-							<ComboboxFieldControl
-								name='mo_no_actual'
-								label={t('ns_erp:fields.mo_no_actual')}
-								datalist={data}
-								shouldFilter={false}
-								loading={isLoading}
-								onInput={debounce((value) => setSearchTerm(value), 200)}
-								labelField='mo_no'
-								valueField='mo_no'
-								description={t('ns_inoutbound:description.transferred_order')}
-							/>
+						<Div className={defaultValues?.mo_no === FALLBACK_ORDER_VALUE ? 'col-span-1' : 'col-span-full'}>
+							<HoverCard open={hoverCardOpen}>
+								<HoverCardTrigger type='button' className='item-stretch flex w-full flex-col'>
+									<FormField
+										control={form.control}
+										name='mo_no_actual'
+										render={({ field }) => {
+											return (
+												<FormItem className='w-full text-left'>
+													<FormLabel>{t('ns_erp:fields.mo_no_actual')}</FormLabel>
+													<FormControl>
+														<Input
+															value={field.value}
+															onChange={field.onChange}
+															placeholder='Enter a manufacturing order code'
+															onFocus={() => setHoverCardOpen(true)}
+															onBlur={() => setHoverCardOpen(false)}
+															className='w-full'
+														/>
+													</FormControl>
+													<FormMessage />
+												</FormItem>
+											)
+										}}
+									/>
+								</HoverCardTrigger>
+								<HoverCardContent className='flex w-[var(--radix-hover-card-trigger-width)] flex-col items-stretch gap-y-1 p-1'>
+									{Array.isArray(data) && data.length > 0 ? (
+										<Div>
+											{data.map((item) => (
+												<Button
+													type='button'
+													variant='ghost'
+													size='sm'
+													className='w-full justify-start'
+													onClick={() => form.setValue('mo_no_actual', item?.mo_no)}>
+													{item?.mo_no}
+												</Button>
+											))}
+										</Div>
+									) : (
+										<Button type='button' variant='ghost' disabled className='font-normal'>
+											No result match
+										</Button>
+									)}
+								</HoverCardContent>
+							</HoverCard>
 						</Div>
-						<Div className='inline-flex items-center gap-x-3'>
-							<Label htmlFor='toggle-manual'>Manual</Label>
-							<Switch id='toggle-manual' />
-						</Div>
-						<Div className='space-y-4 py-4'>
+
+						{defaultValues?.mo_no === FALLBACK_ORDER_VALUE && (
+							<Fragment>
+								<Div className='col-span-1'>
+									<InputFieldControl
+										name='quantity'
+										type='number'
+										placeholder='0'
+										disabled={!actualOrder}
+										readOnly={isExchangeAll}
+										label={t('ns_common:common_fields.quantity')}
+									/>
+								</Div>
+								<FormField
+									control={form.control}
+									name='exchange_all'
+									render={({ field }) => (
+										<FormItem className='col-span-full flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm'>
+											<FormControl>
+												<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+											</FormControl>
+											<Div className='space-y-1.5 leading-none'>
+												<FormLabel>{t('ns_inoutbound:labels.exchange_all')}</FormLabel>
+												<FormDescription>{t('ns_inoutbound:description.exchange_all')}</FormDescription>
+											</Div>
+										</FormItem>
+									)}
+								/>
+							</Fragment>
+						)}
+
+						<Div className='col-span-full space-y-4'>
 							<Div className='space-y-1.5 leading-none'>
 								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
@@ -143,7 +216,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 								<Label htmlFor={checkboxId}>{t('ns_common:confirmation.understand_and_proceed')}</Label>
 							</Div>
 						</Div>
-						<DialogFooter>
+						<DialogFooter className='col-span-full'>
 							<DialogClose asChild>
 								<Button variant='secondary'>{t('ns_common:actions.cancel')}</Button>
 							</DialogClose>
@@ -161,30 +234,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 }
 
-const OrderSearchFieldControl: React.FC<{ targetOrderRef: string }> = ({ targetOrderRef }) => {
-	const { t } = useTranslation()
-	const [searchTerm, setSearchTerm] = useState<string>('')
-	const { data, refetch, isLoading } = useSearchExchangableOrderQuery(targetOrderRef, searchTerm)
-
-	useEffect(() => {
-		refetch()
-	}, [searchTerm])
-
-	return (
-		<ComboboxFieldControl
-			name='mo_no_actual'
-			label={t('ns_erp:fields.mo_no_actual')}
-			datalist={data}
-			shouldFilter={false}
-			loading={isLoading}
-			onInput={debounce((value) => setSearchTerm(value), 200)}
-			labelField='mo_no'
-			valueField='mo_no'
-			description={t('ns_inoutbound:description.transferred_order')}
-		/>
-	)
-}
-
-const Form = tw.form`flex flex-col items-stretch gap-6`
+const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 
 export default ExchangeOrderFormDialog
