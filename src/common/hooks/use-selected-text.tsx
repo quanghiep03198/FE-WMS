@@ -6,5 +6,5 @@ export const useSelectedText = () => {
 		const selected = window.getSelection() as Selection
 		setText(selected.toString())
 	}
-	return [select, text] as const
+	return [text, select] as const
 }
