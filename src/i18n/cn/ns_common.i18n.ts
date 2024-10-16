@@ -24,6 +24,7 @@ export default {
 		add: '添加',
 		update: '編輯',
 		delete: '删除',
+		dismiss: '忽略',
 		save: '保存',
 		save_changes: '保存更改',
 		revert_changes: '恢复更改',

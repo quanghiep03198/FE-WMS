@@ -10,12 +10,13 @@ export type RFIDStreamEventData = {
 	epcs: Pagination<IElectronicProductCode>
 	orders: OrderItem[]
 	sizes: OrderSize[]
+	has_invalid_epc: boolean
 }
 
 export class RFIDService {
 	static async fetchEpcManually(connection: string, page: null | number, selectedOrder: string) {
 		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
-		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>('/rfid/fetch-next-epc', {
+		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>('/rfid/fetch-epc/manual', {
 			headers: { ['X-Tenant-Id']: connection },
 			params
 		})

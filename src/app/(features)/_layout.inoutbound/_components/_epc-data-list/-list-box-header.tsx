@@ -18,7 +18,7 @@ import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
 import { UPDATE_STOCK_SUBMISSION } from '../../_constants/event.const'
-import { useListBoxContext } from '../../_contexts/-list-box.context'
+import { useListBoxContext } from '../../_contexts/-list-box-context'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const ListBoxHeader: React.FC = () => {
@@ -70,7 +70,7 @@ const OrderListSelect: React.FC = () => {
 						<SelectValue placeholder={!selectedOrder && 'Select'} />
 					</SelectTrigger>
 				</HoverCardTrigger>
-				<HoverCardContent asChild sideOffset={8} side='top'>
+				<HoverCardContent asChild sideOffset={8} side='left' align='start'>
 					<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 				</HoverCardContent>
 			</HoverCard>

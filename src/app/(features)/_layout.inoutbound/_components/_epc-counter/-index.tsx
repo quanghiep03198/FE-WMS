@@ -1,9 +1,9 @@
 import { Badge, Div, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import { Separator } from '@radix-ui/react-context-menu'
-import { useInterval, useReactive, useResetState } from 'ahooks'
+import { useInterval, useResetState } from 'ahooks'
 import { pick } from 'lodash'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -42,20 +42,25 @@ const ScanningCounter: React.FC = () => {
 	const { scannedEpc } = usePageContext((state) => pick(state, 'scannedEpc'))
 	const total = scannedEpc?.totalDocs ?? 0
 	const { t } = useTranslation()
-	const count = useReactive({ value: total, duration: undefined })
+	const [count, setCount] = useState(total)
+	const [interval, setInterval] = useState<number | undefined>(undefined)
 
 	// Counter increment/decrement effect
 	useInterval(() => {
-		if (total > count.value) {
-			count.value += Math.min(Math.ceil((total - count.value) / 100), total - count.value)
-		} else if (total < count.value) {
-			count.value -= Math.min(Math.ceil((count.value - total) / 100), count.value - total)
+		if (total > count) {
+			setCount((count) => (count += Math.min(Math.ceil((total - count) / 100), total - count)))
+			// count += Math.min(Math.ceil((total - count.value) / 100), total - count.value)
+		} else if (total < count) {
+			setCount((count) => count - Math.min(Math.ceil((count - total) / 100), count - total))
+			// count -= Math.min(Math.ceil((count.value - total) / 100), count.value - total)
 		}
-	}, count.duration)
+	}, interval)
 
 	useEffect(() => {
-		count.duration = total !== count.value ? INTERVAL_TIME : undefined
-	}, [total, count.value])
+		if (total !== count) setInterval(INTERVAL_TIME)
+		else setInterval(undefined)
+		// count.duration = total !== count.value ? INTERVAL_TIME : undefined
+	}, [total, count])
 
 	return (
 		<Div className='relative z-10 mb-1.5 flex items-baseline justify-between gap-x-3'>
@@ -64,7 +69,7 @@ const ScanningCounter: React.FC = () => {
 			</Typography>
 			<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
 			<Typography variant='h6' className='inline-flex gap-x-1 text-xl font-bold'>
-				{count.value}
+				{count}
 				<Typography variant='small' className='text-xs font-medium'>
 					pcs
 				</Typography>

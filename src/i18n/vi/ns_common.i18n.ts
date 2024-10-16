@@ -29,6 +29,7 @@ export default {
 		close: 'Đóng',
 		start: 'Bắt đầu',
 		continue: 'Tiếp tục',
+		dismiss: 'Bỏ qua',
 		stop: 'Dừng',
 		reset: 'Đặt lại',
 		finish: 'Hoàn thành',

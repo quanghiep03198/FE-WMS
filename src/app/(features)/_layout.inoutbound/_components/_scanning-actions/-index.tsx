@@ -109,7 +109,7 @@ const ScanningActions: React.FC = () => {
 						size={isSmallScreen ? 'default' : 'sm'}
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
-						onClick={() => resetScanningAction()}>
+						onClick={resetScanningAction}>
 						<Icon name='Redo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>

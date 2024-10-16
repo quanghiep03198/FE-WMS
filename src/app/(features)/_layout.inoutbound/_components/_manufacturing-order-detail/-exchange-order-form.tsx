@@ -28,17 +28,21 @@ import {
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useResetState } from 'ahooks'
-import { pick } from 'lodash'
-
-import { usePrevious } from 'ahooks'
+import { usePrevious, useResetState } from 'ahooks'
+import { AxiosError, HttpStatusCode } from 'axios'
+import { omit, pick } from 'lodash'
 import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { FALLBACK_ORDER_VALUE, useExchangeEpcMutation, useSearchExchangableOrderQuery } from '../../_apis/rfid.api'
-import { useOrderDetailContext } from '../../_contexts/-exchange-form.context'
+import {
+	FALLBACK_ORDER_VALUE,
+	useExchangeEpcMutation,
+	useGetOrderDetail,
+	useSearchOrderQuery
+} from '../../_apis/rfid.api'
+import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
@@ -50,16 +54,20 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,
-		defaultExchangeOrderFormValues: defaultValues
+		defaultExchangeOrderFormValues: defaultValues,
+		resetSelectedRows
 	} = useOrderDetailContext((state) =>
 		pick(state, [
 			'exchangeOrderDialogOpen',
 			'defaultExchangeOrderFormValues',
 			'setExchangeOrderDialogOpen',
-			'setDefaultExchangeEpcFormValues'
+			'setDefaultExchangeEpcFormValues',
+			'resetSelectedRows'
 		])
 	)
+
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
+	const { refetch: refetchOrderDetail } = useGetOrderDetail()
 
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
@@ -69,11 +77,11 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const actualOrder = form.watch('mo_no_actual')
 	const previousQuantity = usePrevious(quantity)
 
-	const { data, refetch } = useSearchExchangableOrderQuery(defaultValues?.mo_no, actualOrder)
+	const { data, refetch: fetchExchangableOrder } = useSearchOrderQuery(defaultValues?.mo_no, actualOrder)
 
 	useEffect(() => {
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
-		timeoutRef.current = setTimeout(() => refetch(), 200)
+		timeoutRef.current = setTimeout(() => fetchExchangableOrder(), 200)
 		return () => {
 			clearTimeout(timeoutRef.current)
 		}
@@ -90,11 +98,16 @@ const ExchangeOrderFormDialog: React.FC = () => {
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
-			await mutateAsync({ ...data, quantity: data.quantity ?? data.count })
+			await mutateAsync(omit({ ...data, quantity: data.quantity ?? data.count }, ['exchange_all', 'count']))
 			toast.success(t('ns_common:notification.success'))
 			setOpen(!open)
+			resetSelectedRows()
+			refetchOrderDetail()
 		} catch (error) {
-			toast.error(t('ns_common:notification.error'))
+			const err = error as AxiosError<ResponseBody<any>>
+			console.log(err.response?.status)
+			if (err.response?.status === HttpStatusCode.NotFound) toast.error(err.response?.data?.message)
+			else toast.error(t('ns_common:notification.error'))
 		}
 	}
 
@@ -119,7 +132,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 							<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} readOnly />
 						</Div>
 						<Div className={defaultValues?.mo_no === FALLBACK_ORDER_VALUE ? 'col-span-1' : 'col-span-full'}>
-							<HoverCard open={hoverCardOpen}>
+							<HoverCard open={hoverCardOpen && Array.isArray(data) && data.length > 0}>
 								<HoverCardTrigger type='button' className='item-stretch flex w-full flex-col'>
 									<FormField
 										control={form.control}

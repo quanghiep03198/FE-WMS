@@ -2,8 +2,8 @@ import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { pick } from 'lodash'
-import { MANUALLY_MUTATE_DATA } from '../_constants/event.const'
-import { useListBoxContext } from '../_contexts/-list-box.context'
+import { MANUALLY_MUTATE_DATA, UPDATE_STOCK_SUBMISSION } from '../_constants/event.const'
+import { useListBoxContext } from '../_contexts/-list-box-context'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -25,16 +25,15 @@ export const useManualFetchEpcQuery = () => {
 		queryKey: [EPC_LIST_PROVIDE_TAG, page, selectedOrder],
 		queryFn: async () => RFIDService.fetchEpcManually(connection, page, selectedOrder),
 		enabled: false,
-		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
 	})
 }
 
-export const useSearchExchangableOrderQuery = (orderTarget: string, searchTerm: string) => {
+export const useSearchOrderQuery = (orderTarget: string, searchTerm: string) => {
 	const { connection } = usePageContext((state) => pick(state, 'connection'))
 
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER_PROVIDE_TAG', orderTarget],
+		queryKey: ['EXCHANGABLE_ORDER', orderTarget],
 		queryFn: async () => await RFIDService.searchExchangableOrder(connection, orderTarget, searchTerm),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
@@ -44,11 +43,14 @@ export const useSearchExchangableOrderQuery = (orderTarget: string, searchTerm: 
 }
 
 export const useUpdateStockMovementMutation = () => {
-	const { connection } = usePageContext((state) => pick(state, 'connection'))
+	const { connection, selectedOrder } = usePageContext((state) => pick(state, ['connection', 'selectedOrder']))
 
 	return useMutation({
 		mutationKey: [ORDER_DETAIL_PROVIDE_TAG],
-		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload)
+		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload),
+		onSuccess: () => {
+			window.dispatchEvent(new CustomEvent(UPDATE_STOCK_SUBMISSION, { detail: selectedOrder }))
+		}
 	})
 }
 
@@ -80,12 +82,12 @@ export const useDeleteOrderMutation = () => {
 }
 
 export const useGetOrderDetail = () => {
-	const { connection, scanningStatus } = usePageContext((state) => pick(state, ['connection', 'scanningStatus']))
+	const { connection } = usePageContext((state) => pick(state, 'connection'))
 
 	return useQuery({
 		queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
 		queryFn: async () => await RFIDService.getOrderDetail({ headers: { ['X-Tenant-Id']: connection } }),
-		enabled: scanningStatus === 'disconnected',
+		enabled: false,
 		select: (response) => response.metadata
 	})
 }

@@ -32,11 +32,9 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
-	ORDER_DETAIL_PROVIDE_TAG,
 	useGetShapingProductLineQuery,
 	useUpdateStockMovementMutation
 } from '../../_apis/rfid.api'
-import { UPDATE_STOCK_SUBMISSION } from '../../_constants/event.const'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
 	FormActionEnum,
@@ -110,20 +108,18 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	const handleSubmit = async (data: InboundFormValues): Promise<string | number> => {
-		const loading = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			await mutateAsync({
+	const handleSubmit = (data: InboundFormValues) => {
+		toast.promise(
+			mutateAsync({
 				...omit(data, ['warehouse_num']),
 				mo_no: selectedOrder === FALLBACK_ORDER_VALUE ? null : selectedOrder
-			})
-			window.dispatchEvent(new CustomEvent(UPDATE_STOCK_SUBMISSION, { detail: selectedOrder }))
-
-			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG] })
-			return toast.success(t('ns_common:notification.success'), { id: loading })
-		} catch (error) {
-			return toast.error(t('ns_common:notification.error'), { id: loading })
-		}
+			}),
+			{
+				loading: t('ns_common:notification.processing_request'),
+				success: t('ns_common:notification.success'),
+				error: t('ns_common:notification.error')
+			}
+		)
 	}
 
 	return (

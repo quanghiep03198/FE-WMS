@@ -155,6 +155,12 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		)
 	}
 
+	// const store = useStore(storeRef.current)
+
+	// useEffect(() => {
+	// 	if (typeof store.scanningStatus === 'undefined') store.reset()
+	// }, [store.scanningStatus])
+
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }
 

@@ -28,6 +28,7 @@ export default {
 		save_changes: 'Save changes',
 		revert_changes: 'Revert changes',
 		cancel: 'Cancel',
+		dismiss: 'Dismiss',
 		submit: 'Submit',
 		proceed: 'Proceed',
 		start: 'Start',

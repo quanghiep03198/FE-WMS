@@ -1,6 +1,6 @@
-import { useSelectedText } from '@/common/hooks/use-selected-text'
 import { cn } from '@/common/utils/cn'
 import {
+	Button,
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -22,17 +22,19 @@ import {
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useQueryClient } from '@tanstack/react-query'
-import { useMemoizedFn, useResetState } from 'ahooks'
+import { useAsyncEffect, useMemoizedFn, useResetState } from 'ahooks'
 import { pick } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ORDER_DETAIL_PROVIDE_TAG, useDeleteOrderMutation, useGetOrderDetail } from '../../_apis/rfid.api'
+import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
+
 	const { connection, scannedOrders, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } =
 		usePageContext((state) =>
 			pick(state, [
@@ -44,22 +46,30 @@ const OrderSizeDetailTable: React.FC = () => {
 				'setScannedSizes'
 			])
 		)
+
 	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
-	const { data } = useGetOrderDetail()
+	const { data, refetch } = useGetOrderDetail()
 
-	useEffect(() => {
+	useAsyncEffect(async () => {
 		if (typeof scanningStatus === 'undefined') {
 			queryClient.removeQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
 			return
 		}
+		if (scanningStatus === 'disconnected') {
+			await refetch()
+		}
+	}, [data, scanningStatus])
+
+	useEffect(() => {
 		setScannedSizes(data?.sizes)
 		setScannedOrders(data?.orders)
-	}, [data, scanningStatus])
+	}, [data])
 
 	// Delete unexpected orders
 	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
+	const { refetch: refetchOrderDetail } = useGetOrderDetail()
 
 	const handleDeleteOrder = async () => {
 		try {
@@ -72,6 +82,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				resetOrderToDelete()
 				return
 			}
+			refetchOrderDetail()
 			resetOrderToDelete()
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		} catch (e) {
@@ -85,8 +96,6 @@ const OrderSizeDetailTable: React.FC = () => {
 		setConfirmDialogOpen(true)
 		setOrderToDelete(orderCode)
 	})
-
-	const [select, text] = useSelectedText()
 
 	return (
 		<Fragment>
@@ -108,32 +117,27 @@ const OrderSizeDetailTable: React.FC = () => {
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 					</DialogHeader>
+
 					<Div className='border-collapse divide-y overflow-hidden rounded-lg border'>
 						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
 							<Div className='flow-root max-h-96 w-full overflow-scroll rounded-lg'>
 								<Table className='border-separate border-spacing-0 rounded-lg'>
 									<TableHeader>
 										<TableRow className='sticky top-0 z-20'>
-											<TableHead className='left-0 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+											<TableHead className='sticky left-0 z-20 w-12 border-r'>-</TableHead>
+											<TableHead className='sticky left-12 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 												{t('ns_erp:fields.mo_no')}
 											</TableHead>
 											<TableHead>Size</TableHead>
 											<TableHead align='right' className='right-20 z-20'>
 												{t('ns_common:common_fields.total')}
 											</TableHead>
-											<TableHead className='absolute right-0 z-20 min-w-20'>-</TableHead>
+											<TableHead className='right-0 z-20 min-w-20'>-</TableHead>
 										</TableRow>
 									</TableHeader>
 									<TableBody className='[&_tr]:snap-start'>
 										{scannedOrders.map((order) => {
-											return (
-												<OrderDetailTableRow
-													data={order}
-													selectedText={text}
-													onSelectedTextChange={select}
-													onBeforeDelete={handleBeforeDelete}
-												/>
-											)
+											return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
 										})}
 									</TableBody>
 								</Table>
@@ -144,10 +148,12 @@ const OrderSizeDetailTable: React.FC = () => {
 								No data
 							</Div>
 						)}
-						<Div className='sticky bottom-0 left-0 flex items-center justify-between bg-background p-4'>
+						<Div className='sticky bottom-0 left-0 flex h-16 items-center justify-between bg-background p-4'>
 							<Typography variant='small' color='muted'>
 								{t('ns_inoutbound:mo_no_box.caption')}
 							</Typography>
+
+							<ExchangeSelectedOrderTrigger />
 						</Div>
 					</Div>
 				</DialogContent>
@@ -161,6 +167,32 @@ const OrderSizeDetailTable: React.FC = () => {
 				onConfirm={handleDeleteOrder}
 			/>
 		</Fragment>
+	)
+}
+
+const ExchangeSelectedOrderTrigger: React.FC = () => {
+	const {
+		selectedRows,
+		setDefaultExchangeOrderFormValues: setDefaultValues,
+		setExchangeOrderDialogOpen: setOpen
+	} = useOrderDetailContext((state) =>
+		pick(state, ['selectedRows', 'setExchangeOrderDialogOpen', 'setDefaultExchangeOrderFormValues'])
+	)
+
+	if (!selectedRows || selectedRows?.length === 0) return null
+
+	const handlePreExchangeSelectedRows = () => {
+		setOpen(true)
+		setDefaultValues({
+			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
+			count: selectedRows.reduce((acc, curr) => acc + curr.count, 0)
+		})
+	}
+
+	return (
+		<Button size='sm' onClick={handlePreExchangeSelectedRows}>
+			<Icon name='ArrowLeftRight' role='img' /> Exchange
+		</Button>
 	)
 }
 

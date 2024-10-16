@@ -6,6 +6,10 @@ import { useShallow } from 'zustand/react/shallow'
 import { OrderItem, OrderSize } from './-page-context'
 
 type TOrderDetailContext = {
+	selectedRows: Array<OrderSize>
+	pushSelectedRow: (order: OrderSize) => void
+	pullSelectedRow: (order: OrderSize) => void
+	resetSelectedRows: () => void
 	exchangeEpcDialogOpen: boolean
 	setExchangeEpcDialogOpen: (value: boolean) => void
 	exchangeOrderDialogOpen: boolean
@@ -23,6 +27,7 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 	if (!storeRef.current)
 		storeRef.current = create<TOrderDetailContext>()(
 			immer((set) => ({
+				selectedRows: [],
 				exchangeEpcDialogOpen: false,
 				exchangeOrderDialogOpen: false,
 				defaultExchangeEpcFormValues: null,
@@ -45,6 +50,21 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 				setDefaultExchangeOrderFormValues: (value) => {
 					set((state) => {
 						state.defaultExchangeOrderFormValues = value
+					})
+				},
+				pushSelectedRow: (order) => {
+					set((state) => {
+						state.selectedRows = [...new Set([...state.selectedRows, order])]
+					})
+				},
+				pullSelectedRow: (order) => {
+					set((state) => {
+						state.selectedRows = state.selectedRows.filter((row) => row.mo_no !== order.mo_no)
+					})
+				},
+				resetSelectedRows: () => {
+					set((state) => {
+						state.selectedRows = []
 					})
 				}
 			}))

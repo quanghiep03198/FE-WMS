@@ -1,4 +1,4 @@
-import { Div, Icon, Typography } from '@/components/ui'
+import { Div, Typography } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -6,9 +6,8 @@ const NoExchangeOrder: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='grid h-64 grid-cols-[4rem_auto] place-content-center gap-x-2 rounded-lg border px-4 py-10'>
-			<Icon name='PackageOpen' size={46} className='stroke-[1px] text-center' />
-			<Div className='inline-flex flex-col items-start gap-1'>
+		<Div className='grid place-content-center gap-x-2 rounded-lg border px-4 py-10'>
+			<Div className='inline-flex flex-col items-center gap-0.5'>
 				<Typography className='font-medium'>No available item</Typography>
 				<Typography variant='small' color='muted'>
 					{t('ns_inoutbound:description.no_exchangable_order')}
