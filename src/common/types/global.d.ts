@@ -25,6 +25,7 @@ export declare global {
 		message: string
 		statusCode: HttpStatusCode
 		metadata: T | null
+		path: string
 	}
 
 	type Pagination<T = unknown> = {

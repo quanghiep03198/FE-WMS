@@ -8,6 +8,18 @@ import { toast } from 'sonner'
 export class AxiosClient {
 	public instance: AxiosInstance
 
+	/**
+	 * @description List of error codes that should be notified to the user
+	 */
+	private readonly NOTIFIABLE_ERROR_CODES = [
+		HttpStatusCode.BadRequest,
+		HttpStatusCode.Forbidden,
+		HttpStatusCode.NotFound,
+		HttpStatusCode.PayloadTooLarge,
+		HttpStatusCode.Conflict,
+		HttpStatusCode.TooManyRequests
+	]
+
 	constructor(baseURL?: string) {
 		// * Instance configuration
 		this.instance = axios.create({
@@ -39,10 +51,13 @@ export class AxiosClient {
 		// * Instance response interceptor
 		this.instance.interceptors.response.use(
 			(response) => response.data,
-			async (error: AxiosError) => {
+			async (error: AxiosError<ResponseBody<any>>) => {
 				if (error.code === 'ECONNABORTED') {
 					toast.error('Request timeout')
 					return Promise.reject(new Error('Request timeout'))
+				}
+				if (this.NOTIFIABLE_ERROR_CODES.includes(error.response.status)) {
+					toast.error(error.response?.data?.message, { id: error.response?.data?.path, duration: 5000 })
 				}
 
 				const originalRequest = error.config
