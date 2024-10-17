@@ -251,7 +251,7 @@ const EpcDataList: React.FC = () => {
 				description: t('ns_inoutbound:notification.too_many_mono'),
 				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
 				closeButton: true,
-				duration: Infinity,
+				duration: 2000,
 				id: 'TOO_MANY_ORDERS',
 				onDismiss: () => {
 					isTooManyOrdersIgnoredRef.current = true
