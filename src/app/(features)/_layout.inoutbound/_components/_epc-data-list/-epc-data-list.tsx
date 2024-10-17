@@ -155,41 +155,6 @@ const EpcDataList: React.FC = () => {
 		}
 	}
 
-	// * Handle fetch next page of scanned epc
-	const handleFetchNextPage = async () => {
-		if (!connection || !scanningStatus) return
-		try {
-			setLoading(true)
-			const { data: metadata } = await manualFetchEpc()
-
-			const previousPageData = scannedEpc?.data ?? []
-			const nextPageData = metadata?.data ?? []
-			setScannedEpc({
-				...metadata,
-				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	// * Handle fetch scanned epc with selected order
-	const handleFetchWithSelectedOrder = async () => {
-		if (!connection || !scanningStatus) return
-		try {
-			setLoading(true)
-			const { data: metadata } = await manualFetchEpc()
-			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
-			const nextFilteredEpc = metadata?.data ?? []
-			setScannedEpc({
-				...metadata,
-				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
-			})
-		} finally {
-			setLoading(false)
-		}
-	}
-
 	// * Triggered when scanning status changes
 	useEffect(() => {
 		switch (scanningStatus) {
@@ -234,14 +199,37 @@ const EpcDataList: React.FC = () => {
 
 	// * On page changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (isFetching) return
-		await handleFetchNextPage()
+		if (isFetching || !connection || !scanningStatus) return
+		try {
+			setLoading(true)
+			const { data: metadata } = await manualFetchEpc()
+
+			const previousPageData = scannedEpc?.data ?? []
+			const nextPageData = metadata?.data ?? []
+			setScannedEpc({
+				...metadata,
+				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
+			})
+		} finally {
+			setLoading(false)
+		}
 	}, [page])
 
 	// * On selected order changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (isFetching) return
-		await handleFetchWithSelectedOrder()
+		if (isFetching || !connection || !scanningStatus) return
+		try {
+			setLoading(true)
+			const { data: metadata } = await manualFetchEpc()
+			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
+			const nextFilteredEpc = metadata?.data ?? []
+			setScannedEpc({
+				...metadata,
+				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
+			})
+		} finally {
+			setLoading(false)
+		}
 	}, [selectedOrder])
 
 	// * On too many order found
@@ -255,6 +243,10 @@ const EpcDataList: React.FC = () => {
 				id: 'TOO_MANY_ORDERS',
 				onDismiss: () => {
 					isTooManyOrdersIgnoredRef.current = true
+				},
+				action: {
+					label: t('ns_common:actions.dismiss'),
+					onClick: () => toast.dismiss('TOO_MANY_ORDERS')
 				}
 			})
 		else toast.dismiss('TOO_MANY_ORDERS')
