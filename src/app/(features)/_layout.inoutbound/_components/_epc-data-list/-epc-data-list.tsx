@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { EPC_LIST_PROVIDE_TAG, ORDER_DETAIL_PROVIDE_TAG, useManualFetchEpcQuery } from '../../_apis/rfid.api'
-import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
+import { INCOMING_DATA_CHANGE } from '../../_constants/rfid.const'
 import { useListBoxContext } from '../../_contexts/-list-box-context'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 

@@ -2,6 +2,7 @@ import { useSelectedText } from '@/common/hooks/use-selected-text'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	Checkbox,
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -33,7 +34,6 @@ import {
 	ORDER_DETAIL_PROVIDE_TAG,
 	useDeleteOrderMutation,
 	useGetOrderDetail,
-	useManualFetchEpcQuery,
 	useRefetchLatestData
 } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
@@ -55,11 +55,14 @@ const OrderSizeDetailTable: React.FC = () => {
 			])
 		)
 
+	const { selectedRows, resetSelectedRows } = useOrderDetailContext((state) =>
+		pick(state, ['selectedRows', 'resetSelectedRows'])
+	)
+
 	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
-	const { refetch: refetchEpcData } = useManualFetchEpcQuery()
 
 	useAsyncEffect(async () => {
 		if (typeof scanningStatus === 'undefined') {
@@ -135,7 +138,15 @@ const OrderSizeDetailTable: React.FC = () => {
 								<Table className='border-separate border-spacing-0 rounded-lg'>
 									<TableHeader>
 										<TableRow className='sticky top-0 z-20'>
-											<TableHead className='sticky left-0 z-20 w-12 border-r'>-</TableHead>
+											<TableHead className='sticky left-0 z-20 w-12 border-r'>
+												<Checkbox
+													checked={selectedRows && selectedRows.length > 0}
+													disabled={!selectedRows || selectedRows?.length === 0}
+													onCheckedChange={(checked) => {
+														if (!checked) resetSelectedRows()
+													}}
+												/>
+											</TableHead>
 											<TableHead className='sticky left-12 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 												{t('ns_erp:fields.mo_no')}
 											</TableHead>

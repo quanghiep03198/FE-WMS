@@ -22,7 +22,6 @@ import {
 	Typography
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
 import { useMemoizedFn } from 'ahooks'
 import { omit, pick } from 'lodash'
 import React, { Fragment, memo, useEffect, useMemo, useState } from 'react'
@@ -47,7 +46,6 @@ import {
 const InoutboundForm: React.FC = () => {
 	const { selectedOrder, scanningStatus } = usePageContext((state) => pick(state, ['selectedOrder', 'scanningStatus']))
 	const { t, i18n } = useTranslation()
-	const queryClient = useQueryClient()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 

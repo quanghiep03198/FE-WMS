@@ -12,12 +12,10 @@ import {
 	SelectValue,
 	Typography
 } from '@/components/ui'
-import { useEventListener } from 'ahooks'
 import { pick } from 'lodash'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
-import { UPDATE_STOCK_SUBMISSION } from '../../_constants/event.const'
 import { useListBoxContext } from '../../_contexts/-list-box-context'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -41,17 +39,6 @@ const OrderListSelect: React.FC = () => {
 	const { selectedOrder, scannedOrders, setScannedOrders, setSelectedOrder, reset } = usePageContext((state) =>
 		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
 	)
-
-	// * Event listener for updating stock submission, remove the order from the list
-	useEventListener(UPDATE_STOCK_SUBMISSION, (e: CustomEvent<string>) => {
-		const filteredOrders = scannedOrders.filter((item) => item.mo_no !== e.detail)
-		if (filteredOrders.length > 0) {
-			setSelectedOrder(filteredOrders[0]?.mo_no)
-			setScannedOrders(filteredOrders)
-		} else {
-			reset()
-		}
-	})
 
 	const handleChangeOrder = (value: string) => {
 		setSelectedOrder(value)

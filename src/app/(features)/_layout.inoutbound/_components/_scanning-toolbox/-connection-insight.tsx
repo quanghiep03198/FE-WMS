@@ -7,7 +7,7 @@ import { pick } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
+import { INCOMING_DATA_CHANGE } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const NetworkInsight: React.FC = () => {

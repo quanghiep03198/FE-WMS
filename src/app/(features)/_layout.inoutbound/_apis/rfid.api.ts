@@ -3,7 +3,6 @@ import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash'
-import { UPDATE_STOCK_SUBMISSION } from '../_constants/event.const'
 import { useListBoxContext } from '../_contexts/-list-box-context'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
@@ -44,14 +43,13 @@ export const useSearchOrderQuery = (orderTarget: string, searchTerm: string) => 
 }
 
 export const useUpdateStockMovementMutation = () => {
-	const { connection, selectedOrder } = usePageContext((state) => pick(state, ['connection', 'selectedOrder']))
+	const { connection, setSelectedOrder } = usePageContext((state) => pick(state, ['connection', 'setSelectedOrder']))
+	// const refetchLatestData = useRefetchLatestData()
 
 	return useMutation({
 		mutationKey: [ORDER_DETAIL_PROVIDE_TAG],
 		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload),
-		onSuccess: () => {
-			window.dispatchEvent(new CustomEvent(UPDATE_STOCK_SUBMISSION, { detail: selectedOrder }))
-		}
+		onSuccess: () => setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 	})
 }
 
