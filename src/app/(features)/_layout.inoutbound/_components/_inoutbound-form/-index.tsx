@@ -32,9 +32,10 @@ import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
 	useGetShapingProductLineQuery,
+	useRefetchLatestData,
 	useUpdateStockMovementMutation
 } from '../../_apis/rfid.api'
-import { usePageContext } from '../../_contexts/-page-context'
+import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import {
 	FormActionEnum,
 	FormValues,
@@ -44,7 +45,9 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { selectedOrder, scanningStatus } = usePageContext((state) => pick(state, ['selectedOrder', 'scanningStatus']))
+	const { selectedOrder, scanningStatus, setSelectedOrder } = usePageContext((state) =>
+		pick(state, ['selectedOrder', 'scanningStatus', 'setSelectedOrder'])
+	)
 	const { t, i18n } = useTranslation()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
@@ -88,6 +91,7 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { mutateAsync } = useUpdateStockMovementMutation()
+	const refetchLatestData = useRefetchLatestData()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -106,18 +110,21 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	const handleSubmit = (data: InboundFormValues) => {
-		toast.promise(
-			mutateAsync({
+	const handleSubmit = async (data: InboundFormValues) => {
+		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
+		try {
+			await mutateAsync({
 				...omit(data, ['warehouse_num']),
 				mo_no: selectedOrder === FALLBACK_ORDER_VALUE ? null : selectedOrder
-			}),
-			{
-				loading: t('ns_common:notification.processing_request'),
-				success: t('ns_common:notification.success'),
-				error: t('ns_common:notification.error')
-			}
-		)
+			})
+			// * Always select all scanned order after performing update stock
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			// * Refetch latest data after update stock
+			await refetchLatestData()
+			toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
+		} catch {
+			toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
+		}
 	}
 
 	return (

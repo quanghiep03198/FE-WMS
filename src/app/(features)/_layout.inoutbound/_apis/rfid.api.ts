@@ -18,12 +18,12 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 export type FetchEpcQueryKey = [typeof EPC_LIST_PROVIDE_TAG, number, string]
 
 export const useManualFetchEpcQuery = () => {
-	const { page } = useListBoxContext()
+	const listBoxContext = useListBoxContext()
 	const { selectedOrder, connection } = usePageContext((state) => pick(state, ['selectedOrder', 'connection']))
 
 	return useQuery({
-		queryKey: [EPC_LIST_PROVIDE_TAG, page, selectedOrder],
-		queryFn: async () => RFIDService.fetchEpcManually(connection, page, selectedOrder),
+		queryKey: [EPC_LIST_PROVIDE_TAG, listBoxContext?.page, selectedOrder],
+		queryFn: async () => RFIDService.fetchEpcManually(connection, listBoxContext?.page, selectedOrder),
 		enabled: false,
 		select: (response) => response.metadata
 	})
@@ -43,13 +43,11 @@ export const useSearchOrderQuery = (orderTarget: string, searchTerm: string) => 
 }
 
 export const useUpdateStockMovementMutation = () => {
-	const { connection, setSelectedOrder } = usePageContext((state) => pick(state, ['connection', 'setSelectedOrder']))
-	// const refetchLatestData = useRefetchLatestData()
+	const { connection } = usePageContext((state) => pick(state, 'connection'))
 
 	return useMutation({
-		mutationKey: [ORDER_DETAIL_PROVIDE_TAG],
-		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload),
-		onSuccess: () => setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+		mutationKey: [ORDER_DETAIL_PROVIDE_TAG, EPC_LIST_PROVIDE_TAG],
+		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload)
 	})
 }
 
