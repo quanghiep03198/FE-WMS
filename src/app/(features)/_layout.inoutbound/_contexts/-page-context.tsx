@@ -7,9 +7,20 @@ import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
-export type OrderItem = { mo_no: string; count: number }
-export type OrderSize = OrderItem & { size_numcode: string; mat_code: string; shoes_style_code_factory: string }
-export type Log = { message: string; timestamp?: Date; type: 'info' | 'error' }
+export type Log = {
+	message: string
+	timestamp?: Date
+	type: 'info' | 'error'
+}
+export type OrderItem = {
+	mo_no: string
+	count: number
+}
+export type OrderSize = OrderItem & {
+	size_numcode: string
+	mat_code: string
+	shoes_style_code_factory: string
+}
 
 type PageContextStore = {
 	scannedEpc: Pagination<IElectronicProductCode>
@@ -154,12 +165,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 			}))
 		)
 	}
-
-	// const store = useStore(storeRef.current)
-
-	// useEffect(() => {
-	// 	if (typeof store.scanningStatus === 'undefined') store.reset()
-	// }, [store.scanningStatus])
 
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }

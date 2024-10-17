@@ -26,10 +26,17 @@ import { OrderItem, usePageContext } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
-	onBeforeDelete?: (orderCode: string) => void
+	selectedProductionCode: string
+	onBeforeDelete: (orderCode: string) => void
+	onSelectedProductionCodeChange: () => void
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, onBeforeDelete }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
+	data,
+	selectedProductionCode,
+	onBeforeDelete,
+	onSelectedProductionCodeChange
+}) => {
 	const { scannedSizes } = usePageContext((state) => pick(state, 'scannedSizes'))
 	const { t } = useTranslation()
 
@@ -77,7 +84,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, onBefor
 		<TableRow
 			className={cn(
 				'transition-all duration-500',
-				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground'
+				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
 			<TableCell className='sticky left-0 z-10 w-12'>
 				<Checkbox
@@ -113,7 +120,15 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, onBefor
 							<TableCell className='bg-accent/20 font-medium'>
 								<Div className='flex items-center gap-x-2'>
 									{size?.size_numcode}
-									<Badge className='text-inherit' variant='outline'>
+									<Badge
+										className={cn(
+											selectedProductionCode?.length > 0 && size?.mat_code?.includes(selectedProductionCode)
+												? 'border-active text-active selection:bg-transparent'
+												: 'text-inherit'
+										)}
+										variant='outline'
+										onMouseUp={onSelectedProductionCodeChange}
+										onBlur={() => onSelectedProductionCodeChange()}>
 										{size?.mat_code}
 									</Badge>
 									<button

@@ -49,17 +49,14 @@ const ScanningCounter: React.FC = () => {
 	useInterval(() => {
 		if (total > count) {
 			setCount((count) => (count += Math.min(Math.ceil((total - count) / 100), total - count)))
-			// count += Math.min(Math.ceil((total - count.value) / 100), total - count.value)
 		} else if (total < count) {
 			setCount((count) => count - Math.min(Math.ceil((count - total) / 100), count - total))
-			// count -= Math.min(Math.ceil((count.value - total) / 100), count.value - total)
 		}
 	}, interval)
 
 	useEffect(() => {
 		if (total !== count) setInterval(INTERVAL_TIME)
 		else setInterval(undefined)
-		// count.duration = total !== count.value ? INTERVAL_TIME : undefined
 	}, [total, count])
 
 	return (

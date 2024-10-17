@@ -29,8 +29,7 @@ import { InputFieldControl } from '@/components/ui/@hook-form/input-field-contro
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { usePrevious, useResetState } from 'ahooks'
-import { AxiosError, HttpStatusCode } from 'axios'
-import { omit, pick } from 'lodash'
+import { omit, pick, uniqBy } from 'lodash'
 import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -39,10 +38,12 @@ import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
 	useExchangeEpcMutation,
-	useGetOrderDetail,
+	useManualFetchEpcQuery,
+	useRefetchLatestData,
 	useSearchOrderQuery
 } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
+import { usePageContext } from '../../_contexts/-page-context'
 import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
@@ -51,6 +52,9 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()
+	const { scannedEpc, connection, setScannedEpc } = usePageContext((state) =>
+		pick(state, ['scannedEpc', 'connection', 'setScannedEpc'])
+	)
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,
@@ -67,7 +71,8 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
-	const { refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { data: currentEpcData } = useManualFetchEpcQuery()
+	const refetchLatestData = useRefetchLatestData()
 
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
@@ -77,15 +82,16 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const actualOrder = form.watch('mo_no_actual')
 	const previousQuantity = usePrevious(quantity)
 
-	const { data, refetch: fetchExchangableOrder } = useSearchOrderQuery(defaultValues?.mo_no, actualOrder)
+	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchOrderQuery(defaultValues?.mo_no, actualOrder)
 
 	useEffect(() => {
+		if (!connection || !defaultValues || !actualOrder) return
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		timeoutRef.current = setTimeout(() => fetchExchangableOrder(), 200)
 		return () => {
 			clearTimeout(timeoutRef.current)
 		}
-	}, [actualOrder])
+	}, [actualOrder, connection, actualOrder])
 
 	useEffect(() => {
 		if (defaultValues) form.reset(defaultValues)
@@ -100,14 +106,12 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		try {
 			await mutateAsync(omit({ ...data, quantity: data.quantity ?? data.count }, ['exchange_all', 'count']))
 			toast.success(t('ns_common:notification.success'))
-			setOpen(!open)
+			await refetchLatestData()
+			setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
 			resetSelectedRows()
-			refetchOrderDetail()
+			setOpen(!open)
 		} catch (error) {
-			const err = error as AxiosError<ResponseBody<any>>
-			console.log(err.response?.status)
-			if (err.response?.status === HttpStatusCode.NotFound) toast.error(err.response?.data?.message)
-			else toast.error(t('ns_common:notification.error'))
+			toast.error(t('ns_common:notification.error'))
 		}
 	}
 
@@ -132,7 +136,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 							<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} readOnly />
 						</Div>
 						<Div className={defaultValues?.mo_no === FALLBACK_ORDER_VALUE ? 'col-span-1' : 'col-span-full'}>
-							<HoverCard open={hoverCardOpen && Array.isArray(data) && data.length > 0}>
+							<HoverCard open={hoverCardOpen && Array.isArray(orderDetail) && orderDetail.length > 0}>
 								<HoverCardTrigger type='button' className='item-stretch flex w-full flex-col'>
 									<FormField
 										control={form.control}
@@ -158,9 +162,9 @@ const ExchangeOrderFormDialog: React.FC = () => {
 									/>
 								</HoverCardTrigger>
 								<HoverCardContent className='flex w-[var(--radix-hover-card-trigger-width)] flex-col items-stretch gap-y-1 p-1'>
-									{Array.isArray(data) && data.length > 0 ? (
+									{Array.isArray(orderDetail) && orderDetail.length > 0 ? (
 										<Div>
-											{data.map((item) => (
+											{orderDetail.map((item) => (
 												<Button
 													type='button'
 													variant='ghost'

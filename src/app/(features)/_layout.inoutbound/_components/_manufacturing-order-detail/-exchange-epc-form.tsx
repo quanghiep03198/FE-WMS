@@ -27,7 +27,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useExchangeEpcMutation } from '../../_apis/rfid.api'
+import { useExchangeEpcMutation, useManualFetchEpcQuery, useRefetchLatestData } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { OrderSize, usePageContext } from '../../_contexts/-page-context'
 import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange-epc.schema'
@@ -35,6 +35,8 @@ import NoExchangeOrder from './-no-exchangable-order'
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()
+	const { scannedEpc, setScannedEpc } = usePageContext((state) => pick(state, ['scannedEpc', 'setScannedEpc']))
+	const { scannedSizes } = usePageContext((state) => pick(state, ['scannedSizes']))
 	const {
 		exchangeEpcDialogOpen: open,
 		defaultExchangeEpcFormValues: defaultValues,
@@ -42,16 +44,18 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	} = useOrderDetailContext((state) =>
 		pick(state, ['exchangeEpcDialogOpen', 'defaultExchangeEpcFormValues', 'setExchangeEpcDialogOpen'])
 	)
-	const { scannedSizes } = usePageContext((state) => pick(state, ['scannedSizes']))
+
+	const { data: currentEpcData } = useManualFetchEpcQuery()
+	const { mutateAsync, isPending, isError } = useExchangeEpcMutation()
+	const refetchLatestData = useRefetchLatestData()
+
 	const form = useForm<ExchangeEpcFormValue>({
 		resolver: zodResolver(exchangeEpcSchema),
 		mode: 'onChange'
 	})
-
 	const isExchangeAll = form.watch('exchange_all')
 	const quantity = form.watch('quantity')
 	const actualOrder = form.watch('mo_no_actual')
-
 	const previousQuantity = usePrevious(quantity)
 
 	const exchangableOrders = useMemo(() => {
@@ -66,27 +70,33 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		)
 	}, [defaultValues])
 
-	const { mutateAsync, isPending, isError } = useExchangeEpcMutation()
+	// * Reset quantity value when exchange all is checked
+	useEffect(() => {
+		if (isExchangeAll) form.setValue('quantity', defaultValues?.count ?? 0)
+		else form.setValue('quantity', previousQuantity ?? 0)
+	}, [isExchangeAll])
 
+	// * Reset form when default values change
+	useEffect(() => {
+		form.reset({ ...defaultValues, multi: false })
+	}, [defaultValues])
+
+	/**
+	 * @description Handle exchange EPC
+	 * @param data
+	 */
 	const handleExchangeEpc = async (data: ExchangeEpcFormValue) => {
 		try {
 			const payload = omit(data, ['count', 'exchange_all'])
 			await mutateAsync(payload)
+			await refetchLatestData()
+			setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
 			toast.success(t('ns_common:notification.success'))
 			setOpen(!open)
 		} catch (error) {
 			toast.error(t('ns_common:notification.error'))
 		}
 	}
-
-	useEffect(() => {
-		if (isExchangeAll) form.setValue('quantity', defaultValues?.count ?? 0)
-		else form.setValue('quantity', previousQuantity ?? 0)
-	}, [isExchangeAll])
-
-	useEffect(() => {
-		form.reset({ ...defaultValues, multi: false })
-	}, [defaultValues])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -132,7 +142,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									min={1}
 								/>
 							</Div>
-
 							<FormField
 								control={form.control}
 								name='exchange_all'

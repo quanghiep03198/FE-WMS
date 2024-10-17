@@ -1,8 +1,9 @@
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash'
-import { MANUALLY_MUTATE_DATA, UPDATE_STOCK_SUBMISSION } from '../_constants/event.const'
+import { UPDATE_STOCK_SUBMISSION } from '../_constants/event.const'
 import { useListBoxContext } from '../_contexts/-list-box-context'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
@@ -63,20 +64,17 @@ export const useGetShapingProductLineQuery = () => {
 }
 
 export const useDeleteOrderMutation = () => {
-	const queryClient = useQueryClient()
 	const { connection, setSelectedOrder } = usePageContext((state) => pick(state, ['connection', 'setSelectedOrder']))
 	const { setPage } = useListBoxContext()
 
 	return useMutation({
-		mutationKey: [ORDER_DETAIL_PROVIDE_TAG],
+		mutationKey: [ORDER_DETAIL_PROVIDE_TAG, EPC_LIST_PROVIDE_TAG],
 		mutationFn: async (orderCode: string) => {
 			return await RFIDService.deleteUnexpectedOrder(connection, orderCode)
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG] })
 			setPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			window.dispatchEvent(new Event(MANUALLY_MUTATE_DATA))
 		}
 	})
 }
@@ -87,6 +85,8 @@ export const useGetOrderDetail = () => {
 	return useQuery({
 		queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
 		queryFn: async () => await RFIDService.getOrderDetail({ headers: { ['X-Tenant-Id']: connection } }),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 		enabled: false,
 		select: (response) => response.metadata
 	})
@@ -101,4 +101,11 @@ export const useExchangeEpcMutation = () => {
 		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(connection, payload),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
 	})
+}
+
+export const useRefetchLatestData = () => {
+	const { refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { refetch: refetchEpc } = useManualFetchEpcQuery()
+
+	return useMemoizedFn(async () => await Promise.all([refetchOrderDetail(), refetchEpc()]))
 }

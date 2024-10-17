@@ -1,7 +1,7 @@
 import { SIDEBAR_TOGGLE_CHANGE } from '@/app/(features)/_constants/event.const'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import useQuerySelector from '@/common/hooks/useQuerySelector'
+import useQuerySelector from '@/common/hooks/use-query-selector'
 import { Icon, Separator, Toggle, Tooltip, Typography } from '@/components/ui'
 import { useEventListener } from 'ahooks'
 import { useEffect, useState } from 'react'

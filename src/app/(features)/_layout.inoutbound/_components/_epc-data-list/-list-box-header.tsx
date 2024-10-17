@@ -37,11 +37,12 @@ const ListBoxHeader: React.FC = () => {
 
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
+	const { loading, setPage } = useListBoxContext()
 	const { selectedOrder, scannedOrders, setScannedOrders, setSelectedOrder, reset } = usePageContext((state) =>
 		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
 	)
-	const { loading, setPage } = useListBoxContext()
 
+	// * Event listener for updating stock submission, remove the order from the list
 	useEventListener(UPDATE_STOCK_SUBMISSION, (e: CustomEvent<string>) => {
 		const filteredOrders = scannedOrders.filter((item) => item.mo_no !== e.detail)
 		if (filteredOrders.length > 0) {
@@ -70,7 +71,7 @@ const OrderListSelect: React.FC = () => {
 						<SelectValue placeholder={!selectedOrder && 'Select'} />
 					</SelectTrigger>
 				</HoverCardTrigger>
-				<HoverCardContent asChild sideOffset={8} side='left' align='start'>
+				<HoverCardContent asChild sideOffset={8} side='top'>
 					<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 				</HoverCardContent>
 			</HoverCard>

@@ -1,3 +1,4 @@
+import { useSelectedText } from '@/common/hooks/use-selected-text'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -25,9 +26,16 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAsyncEffect, useMemoizedFn, useResetState } from 'ahooks'
 import { pick } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { ORDER_DETAIL_PROVIDE_TAG, useDeleteOrderMutation, useGetOrderDetail } from '../../_apis/rfid.api'
+import {
+	ORDER_DETAIL_PROVIDE_TAG,
+	useDeleteOrderMutation,
+	useGetOrderDetail,
+	useManualFetchEpcQuery,
+	useRefetchLatestData
+} from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableRow from './-order-size-row'
@@ -50,7 +58,8 @@ const OrderSizeDetailTable: React.FC = () => {
 	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
-	const { data, refetch } = useGetOrderDetail()
+	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { refetch: refetchEpcData } = useManualFetchEpcQuery()
 
 	useAsyncEffect(async () => {
 		if (typeof scanningStatus === 'undefined') {
@@ -58,7 +67,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			return
 		}
 		if (scanningStatus === 'disconnected') {
-			await refetch()
+			await refetchOrderDetail()
 		}
 	}, [data, scanningStatus])
 
@@ -69,7 +78,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	// Delete unexpected orders
 	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
-	const { refetch: refetchOrderDetail } = useGetOrderDetail()
+	const refetchLatestData = useRefetchLatestData()
 
 	const handleDeleteOrder = async () => {
 		try {
@@ -82,7 +91,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				resetOrderToDelete()
 				return
 			}
-			refetchOrderDetail()
+			await refetchLatestData()
 			resetOrderToDelete()
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		} catch (e) {
@@ -96,6 +105,8 @@ const OrderSizeDetailTable: React.FC = () => {
 		setConfirmDialogOpen(true)
 		setOrderToDelete(orderCode)
 	})
+
+	const [text, selectText] = useSelectedText()
 
 	return (
 		<Fragment>
@@ -137,7 +148,14 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableHeader>
 									<TableBody className='[&_tr]:snap-start'>
 										{scannedOrders.map((order) => {
-											return <OrderDetailTableRow data={order} onBeforeDelete={handleBeforeDelete} />
+											return (
+												<OrderDetailTableRow
+													data={order}
+													selectedProductionCode={text}
+													onBeforeDelete={handleBeforeDelete}
+													onSelectedProductionCodeChange={selectText}
+												/>
+											)
 										})}
 									</TableBody>
 								</Table>
@@ -145,7 +163,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						) : (
 							<Div className='inset-0 flex min-h-64 w-full items-center justify-center gap-x-2'>
 								<Icon name='Inbox' size={24} strokeWidth={1} />
-								No data
+								{t('ns_common:table.no_data')}
 							</Div>
 						)}
 						<Div className='sticky bottom-0 left-0 flex h-16 items-center justify-between bg-background p-4'>
@@ -159,13 +177,16 @@ const OrderSizeDetailTable: React.FC = () => {
 				</DialogContent>
 			</Dialog>
 			{/* Confirm deleting all fetched orders and restart scanning progress */}
-			<ConfirmDialog
-				title={t('ns_inoutbound:notification.confirm_delete_all_mono.title')}
-				description={t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
-				open={confirmDialogOpen}
-				onOpenChange={setConfirmDialogOpen}
-				onConfirm={handleDeleteOrder}
-			/>
+			{createPortal(
+				<ConfirmDialog
+					title={t('ns_inoutbound:notification.confirm_delete_all_mono.title')}
+					description={t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
+					open={confirmDialogOpen}
+					onOpenChange={setConfirmDialogOpen}
+					onConfirm={handleDeleteOrder}
+				/>,
+				document.body
+			)}
 		</Fragment>
 	)
 }

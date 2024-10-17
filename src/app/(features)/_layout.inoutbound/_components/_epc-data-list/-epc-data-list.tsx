@@ -8,16 +8,17 @@ import { AuthService } from '@/services/auth.service'
 import { RFIDStreamEventData } from '@/services/rfid.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useQueryClient } from '@tanstack/react-query'
-import { useAsyncEffect, useDeepCompareEffect, useEventListener, usePrevious, useVirtualList } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isNil, pick, uniqBy } from 'lodash'
 import { Fragment, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { EPC_LIST_PROVIDE_TAG, ORDER_DETAIL_PROVIDE_TAG, useManualFetchEpcQuery } from '../../_apis/rfid.api'
-import { INCOMING_DATA_CHANGE, MANUALLY_MUTATE_DATA } from '../../_constants/event.const'
+import { INCOMING_DATA_CHANGE } from '../../_constants/event.const'
 import { useListBoxContext } from '../../_contexts/-list-box-context'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
@@ -79,14 +80,14 @@ const EpcDataList: React.FC = () => {
 	const isTooManyOrdersIgnoredRef = useRef<boolean>(false)
 	const isInvalidEpcIgnoredRef = useRef<boolean>(false)
 
-	const { data, refetch: manualFetchEpc, isFetching } = useManualFetchEpcQuery()
+	const { refetch: manualFetchEpc, isFetching } = useManualFetchEpcQuery()
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading('Establishing connection ...', { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc/latest', {
+			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc/sse', {
 				method: RequestMethod.GET,
 				headers: {
 					['X-Tenant-Id']: connection,
@@ -243,12 +244,6 @@ const EpcDataList: React.FC = () => {
 		await handleFetchWithSelectedOrder()
 	}, [selectedOrder])
 
-	// * On refetch data event is triggered
-	useEventListener(MANUALLY_MUTATE_DATA, async () => {
-		await manualFetchEpc()
-		setScannedEpc(data)
-	})
-
 	// * On too many order found
 	useEffect(() => {
 		if (!isTooManyOrdersIgnoredRef.current && scannedOrders?.length > 3)
@@ -265,6 +260,7 @@ const EpcDataList: React.FC = () => {
 		else toast.dismiss('TOO_MANY_ORDERS')
 	}, [scannedOrders, isTooManyOrdersIgnoredRef])
 
+	// * Intitialize virtual list to render scanned EPC data
 	const [virtualItems] = useVirtualList(scannedEpc?.data, {
 		containerTarget: containerRef,
 		wrapperTarget: wrapperRef,
@@ -274,27 +270,29 @@ const EpcDataList: React.FC = () => {
 
 	return (
 		<Fragment>
-			{hasInvalidEpcAlert && (
-				<Alert>
-					<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
-					<Div className='inline-flex flex-col'>
-						<AlertTitle>Alert</AlertTitle>
-						<AlertDescription>
-							Invalid EPC detected. Please contact to shaping department for this issue, then move them to
-							recycle
-						</AlertDescription>
-					</Div>
-					{scanningStatus !== 'connected' && (
-						<AlertClose
-							onClick={() => {
-								isInvalidEpcIgnoredRef.current = true
-								setHasInvalidEpcAlert(false)
-							}}>
-							<Icon name='X' />
-						</AlertClose>
-					)}
-				</Alert>
-			)}
+			{hasInvalidEpcAlert &&
+				createPortal(
+					<Alert>
+						<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
+						<AlertContent>
+							<AlertTitle>Alert</AlertTitle>
+							<AlertDescription>
+								Invalid EPC detected. Please contact to shaping department for this issue, then move them to
+								recycle
+							</AlertDescription>
+						</AlertContent>
+						{scanningStatus !== 'connected' && (
+							<AlertClose
+								onClick={() => {
+									isInvalidEpcIgnoredRef.current = true
+									setHasInvalidEpcAlert(false)
+								}}>
+								<Icon name='X' />
+							</AlertClose>
+						)}
+					</Alert>,
+					document.body
+				)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<List ref={containerRef}>
 					<Div ref={wrapperRef}>
@@ -327,7 +325,7 @@ const EpcDataList: React.FC = () => {
 				<Div className='z-10 grid h-[65dvh] min-h-full place-content-center sm:h-[50dvh] md:h-[50dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:h-[75dvh]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
-						<Typography color='muted'>Empty</Typography>
+						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
@@ -337,8 +335,8 @@ const EpcDataList: React.FC = () => {
 
 const List = tw.div`bg-background flex w-full z-10 h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar max-h-[65dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:max-h-[75dvh] md:max-h-[50dvh] sm:max-h-[50dvh]`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap`
-
-const Alert = tw.div`fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-6`
+const Alert = tw.div`fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-3`
+const AlertContent = tw.div`inline-flex flex-col`
 const AlertTitle = tw.h5`font-medium`
 const AlertDescription = tw.p`text-sm`
 const AlertClose = tw.button`ml-auto self-start`
