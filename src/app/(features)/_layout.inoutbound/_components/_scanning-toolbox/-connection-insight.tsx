@@ -59,7 +59,9 @@ const JobStatus: React.FC = () => {
 		</StatusItem>
 	)
 }
-
+/**
+ * @deprecated
+ */
 const TransferDataCalculator: React.FC = () => {
 	const { t } = useTranslation()
 	const [transferredDataSize, setTransferredDataSize, resetTransferredDataSize] = useResetState('')
@@ -132,7 +134,6 @@ const ConnectionInsight: React.FC = () => {
 				<NetworkInsight />
 				<LatencyInsight />
 				<JobStatus />
-				<TransferDataCalculator />
 			</Div>
 		</Div>
 	)

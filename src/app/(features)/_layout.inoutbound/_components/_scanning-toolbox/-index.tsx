@@ -82,7 +82,7 @@ const ToolbarWrapper = tw.div`
 const ToolbarHeader = tw.div`sticky top-0 z-10 flex items-center justify-between gap-x-2 border-b px-4 py-2 bg-background/80 backdrop-blur-sm rounded-t-lg`
 
 const ToolbarBody = tw.div`
-	flex items-stretch flex-grow gap-10 basis-full p-4 lg:flex-row xl:flex-row flex-col-reverse 
+	flex items-stretch flex-grow gap-8 basis-full p-4 lg:flex-row xl:flex-row flex-col-reverse 
 	group-has-[#toggle-pin-toolbar[data-state=on]]:flex-col-reverse
 	group-has-[#toggle-pin-toolbar[data-state=on]]:justify-end
 	group-has-[#toggle-pin-toolbar[data-state=on]]:max-h-none
