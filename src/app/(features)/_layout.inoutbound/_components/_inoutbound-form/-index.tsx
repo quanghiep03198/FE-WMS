@@ -32,7 +32,6 @@ import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
 	useGetShapingProductLineQuery,
-	useRefetchLatestData,
 	useUpdateStockMovementMutation
 } from '../../_apis/rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
@@ -91,7 +90,6 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { mutateAsync } = useUpdateStockMovementMutation()
-	const refetchLatestData = useRefetchLatestData()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -120,7 +118,7 @@ const InoutboundForm: React.FC = () => {
 			// * Always select all scanned order after performing update stock
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			// * Refetch latest data after update stock
-			await refetchLatestData()
+			// await refetchLatestData()
 			toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
@@ -202,7 +200,7 @@ const InoutboundForm: React.FC = () => {
 						<Div className='col-span-1 sm:col-span-full'>
 							<SelectFieldControl
 								name='dept_code'
-								label={t('ns_company:department')}
+								label={t('ns_erp:fields.shaping_dept_code')}
 								datalist={inoutboundDepts}
 								labelField='dept_name'
 								valueField='dept_code'

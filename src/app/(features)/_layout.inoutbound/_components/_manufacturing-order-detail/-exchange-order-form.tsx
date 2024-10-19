@@ -39,7 +39,6 @@ import {
 	FALLBACK_ORDER_VALUE,
 	useExchangeEpcMutation,
 	useManualFetchEpcQuery,
-	useRefetchLatestData,
 	useSearchOrderQuery
 } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
@@ -72,7 +71,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
 	const { data: currentEpcData } = useManualFetchEpcQuery()
-	const refetchLatestData = useRefetchLatestData()
 
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
@@ -106,7 +104,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		try {
 			await mutateAsync(omit({ ...data, quantity: data.quantity ?? data.count }, ['exchange_all', 'count']))
 			toast.success(t('ns_common:notification.success'))
-			await refetchLatestData()
 			setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
 			resetSelectedRows()
 			setOpen(!open)

@@ -87,6 +87,8 @@ export default {
 		toggle_fullscreen: 'Toggle full screen',
 		toggle_fullscreen_note: 'Use full screen mode to have larger view',
 		preserve_log: 'Preserve log',
-		preserve_log_note: 'Do not clear log on reset'
+		preserve_log_note: 'Do not clear log on reset',
+		developer_mode: 'Developer mode',
+		developer_mode_note: 'Enabling developer mode for more advanced features'
 	}
 }

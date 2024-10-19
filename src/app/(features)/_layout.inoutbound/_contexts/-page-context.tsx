@@ -72,6 +72,8 @@ export const DEFAULT_PROPS: Pick<
 	scannedSizes: []
 }
 
+const MAX_LINES_OF_LOG = 50
+
 const PageContext = createContext(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -121,7 +123,8 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				writeLog: (log) => {
 					set((state) => {
-						state.logs.unshift({ timestamp: new Date(), ...log })
+						if (state.logs.length > MAX_LINES_OF_LOG) state.logs.pop()
+						const totalLogs = state.logs.unshift({ timestamp: new Date(), ...log })
 					})
 				},
 				clearLog: () => {
@@ -173,6 +176,6 @@ export const usePageContext = (
 	selector: (state: PageContextStore) => Partial<PageContextStore>
 ): Partial<PageContextStore> => {
 	const store = useContext(PageContext)
-	if (!store) throw new Error('Missing StoreProvider')
+	if (!store) throw new Error('Missing store provider')
 	return useStore(store, useShallow(selector))
 }

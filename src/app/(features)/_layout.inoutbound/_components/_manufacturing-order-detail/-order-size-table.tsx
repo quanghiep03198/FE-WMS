@@ -23,78 +23,55 @@ import {
 	buttonVariants
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { useQueryClient } from '@tanstack/react-query'
-import { useAsyncEffect, useMemoizedFn, useResetState } from 'ahooks'
+import { useMemoizedFn, useResetState } from 'ahooks'
 import { pick } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import {
-	ORDER_DETAIL_PROVIDE_TAG,
-	useDeleteOrderMutation,
-	useGetOrderDetail,
-	useRefetchLatestData
-} from '../../_apis/rfid.api'
+import { useDeleteOrderMutation, useGetOrderDetail } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-
-	const { connection, scannedOrders, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } =
-		usePageContext((state) =>
-			pick(state, [
-				'connection',
-				'scannedOrders',
-				'scanningStatus',
-				'setScannedOrders',
-				'setScanningStatus',
-				'setScannedSizes'
-			])
-		)
-
+	const { scannedOrders, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } = usePageContext(
+		(state) =>
+			pick(state, ['scannedOrders', 'scanningStatus', 'setScannedOrders', 'setScanningStatus', 'setScannedSizes'])
+	)
 	const { selectedRows, resetSelectedRows } = useOrderDetailContext((state) =>
 		pick(state, ['selectedRows', 'resetSelectedRows'])
 	)
-
-	const queryClient = useQueryClient()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
 
-	useAsyncEffect(async () => {
+	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
-			queryClient.removeQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
-			return
+			resetSelectedRows()
 		}
 		if (scanningStatus === 'disconnected') {
-			await refetchOrderDetail()
+			refetchOrderDetail()
 		}
-	}, [data, scanningStatus])
+	}, [scanningStatus])
 
 	useEffect(() => {
 		setScannedSizes(data?.sizes)
 		setScannedOrders(data?.orders)
 	}, [data])
 
-	// Delete unexpected orders
-	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
-	const refetchLatestData = useRefetchLatestData()
-
 	const handleDeleteOrder = async () => {
 		try {
 			toast.loading(t('ns_common:notification.processing_request'), { id: 'DELETE_UNEXPECTED_ORDER' })
 			await deleteOrderAsync(orderToDelete)
 			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderToDelete)
-
 			if (filteredOrders.length === 0) {
 				setScanningStatus(undefined)
 				resetOrderToDelete()
 				return
 			}
-			await refetchLatestData()
 			resetOrderToDelete()
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		} catch (e) {
@@ -109,6 +86,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		setOrderToDelete(orderCode)
 	})
 
+	// * Selected text that highlighted matching production code
 	const [text, selectText] = useSelectedText()
 
 	return (
@@ -117,7 +95,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				<HoverCard openDelay={50} closeDelay={50}>
 					<HoverCardTrigger asChild>
 						<DialogTrigger
-							className={cn(buttonVariants({ variant: 'default', className: 'w-full items-center' }))}>
+							className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'items-center' }))}>
 							<Icon name='List' role='img' />
 							{t('ns_common:actions.detail')}
 						</DialogTrigger>
@@ -134,7 +112,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 					<Div className='border-collapse divide-y overflow-hidden rounded-lg border'>
 						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-							<Div className='flow-root max-h-96 w-full overflow-scroll rounded-lg'>
+							<Div className='flow-root max-h-[65dvh] w-full overflow-scroll rounded-lg'>
 								<Table className='border-separate border-spacing-0 rounded-lg'>
 									<TableHeader>
 										<TableRow className='sticky top-0 z-20'>

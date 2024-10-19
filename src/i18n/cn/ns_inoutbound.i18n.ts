@@ -82,6 +82,8 @@ export default {
 		toggle_fullscreen: '切换全屏模式',
 		toggle_fullscreen_note: '使用全屏模式以获得更大的视图',
 		preserve_log: '保留日志',
-		preserve_log_note: '重置时不要清除日志'
+		preserve_log_note: '重置时不要清除日志',
+		developer_mode: '开发者模式',
+		developer_mode_note: '启用开发者模式以获取更多高级功能'
 	}
 }

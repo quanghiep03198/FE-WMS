@@ -19,18 +19,19 @@ import {
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { TenancyService } from '@/services/tenancy.service'
 import { HoverCardTrigger } from '@radix-ui/react-hover-card'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import { pick } from 'lodash'
 import React, { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { EPC_LIST_PROVIDE_TAG, ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'> {
 	icon: React.ComponentProps<typeof Icon>['name']
 }
 
-const ScanningActions: React.FC = () => {
+const ScannerToolbar: React.FC = () => {
 	const { isAuthenticated } = useAuth()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const { t, i18n } = useTranslation()
@@ -57,6 +58,8 @@ const ScanningActions: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
+	const queryClient = useQueryClient()
+
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
 		condition: typeof scanningStatus !== 'undefined' && isAuthenticated
@@ -71,6 +74,20 @@ const ScanningActions: React.FC = () => {
 
 	const handleReset = useCallback(reset, [status])
 	const handleProceed = useCallback(proceed, [status])
+
+	const handleResetScanningAction = () => {
+		queryClient.removeQueries({
+			queryKey: [ORDER_DETAIL_PROVIDE_TAG],
+			exact: false,
+			type: 'all'
+		})
+		queryClient.removeQueries({
+			queryKey: [EPC_LIST_PROVIDE_TAG],
+			exact: false,
+			type: 'all'
+		})
+		resetScanningAction()
+	}
 
 	return (
 		<Fragment>
@@ -109,7 +126,7 @@ const ScanningActions: React.FC = () => {
 						size={isSmallScreen ? 'default' : 'sm'}
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
-						onClick={resetScanningAction}>
+						onClick={handleResetScanningAction}>
 						<Icon name='Redo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>
@@ -135,4 +152,4 @@ const ScanningActions: React.FC = () => {
 	)
 }
 
-export default ScanningActions
+export default ScannerToolbar

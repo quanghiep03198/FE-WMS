@@ -84,6 +84,8 @@ export default {
 		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',
 		toggle_fullscreen_note: 'Sử dụng chế độ toàn màn hình để có góc nhìn rộng hơn',
 		preserve_log: 'Giữ log',
-		preserve_log_note: 'Không xóa nhật ký khi thiết lập lại'
+		preserve_log_note: 'Không xóa nhật ký khi thiết lập lại',
+		developer_mode: 'Chế độ phát triển',
+		developer_mode_note: 'Bật chế độ phát triển để sử dụng các tính năng nâng cao hơn'
 	}
 }

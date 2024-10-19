@@ -22,6 +22,7 @@ export default {
 	},
 	actions: {
 		add: 'Add',
+		adjust: 'Adjust',
 		update: 'Update',
 		delete: 'Delete',
 		save: 'Save',

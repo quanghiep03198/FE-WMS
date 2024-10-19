@@ -22,6 +22,7 @@ export default {
 	},
 	actions: {
 		add: '添加',
+		adjust: '调整',
 		update: '編輯',
 		delete: '删除',
 		dismiss: '忽略',

@@ -22,6 +22,7 @@ export default {
 	},
 	actions: {
 		add: 'Thêm mới',
+		adjust: 'Điều chỉnh',
 		update: 'Chỉnh sửa',
 		delete: 'Xóa',
 		back: 'Quay lại',

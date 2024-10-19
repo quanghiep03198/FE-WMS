@@ -10,8 +10,8 @@ import {
 	Switch,
 	Typography
 } from '@/components/ui'
-import { useSessionStorageState } from 'ahooks'
-import { pick } from 'lodash'
+import { useLocalStorageState, useSessionStorageState } from 'ahooks'
+import { debounce, pick } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -22,12 +22,12 @@ const SettingPanel: React.FC = () => {
 	return (
 		<Div className='basis-1/2 space-y-4'>
 			<Typography variant='h6' className='text-lg sm:text-base md:text-base'>
-				{t('ns_common:navigation.settings')}
+				{t('ns_common:actions.adjust')}
 			</Typography>
 			<Div className='flex h-full flex-1 flex-col gap-y-4 @container-normal'>
 				<PollingIntervalSelector />
 				<FullScreenModeSwitch />
-				<PreserveLogSwitch />
+				<DeveloperModeSwitch />
 			</Div>
 		</Div>
 	)
@@ -42,7 +42,7 @@ const PollingIntervalSelector: React.FC = () => {
 	const disabled = scanningStatus === 'connected' || scanningStatus === 'connecting'
 
 	return (
-		<Div className='w-2/3 gap-2 group-has-[#toggle-pin-toolbar[data-state=on]]:w-full sm:w-full'>
+		<Div className='w-full gap-2'>
 			<HoverCard openDelay={50}>
 				<HoverCardTrigger>
 					<Div className='grid gap-2'>
@@ -61,7 +61,7 @@ const PollingIntervalSelector: React.FC = () => {
 								step={100}
 								defaultValue={[pollingDuration]}
 								disabled={disabled}
-								onValueChange={(value) => setPollingDuration(value[0])}
+								onValueChange={debounce((value) => setPollingDuration(value[0]), 500)}
 								className='[&_[role=slider]]:h-4 [&_[role=slider]]:w-4'
 								aria-label='Polling Duration'
 							/>
@@ -82,6 +82,10 @@ const PollingIntervalSelector: React.FC = () => {
 
 const FullScreenModeSwitch: React.FC = () => {
 	const { t } = useTranslation()
+	const [isFullScreen, setFullScreen] = useSessionStorageState<boolean>('isFullScreen', {
+		listenStorageChange: true,
+		defaultValue: false
+	})
 
 	return (
 		<Div className='@container'>
@@ -93,16 +97,21 @@ const FullScreenModeSwitch: React.FC = () => {
 					</Typography>
 				</SwitchBox.TitleWrapper>
 				<SwitchBox.InnerWrapper>
-					<Switch id='toggle-fullscreen' className='max-w-full' />
+					<Switch
+						id='toggle-fullscreen'
+						className='max-w-full'
+						checked={isFullScreen}
+						onCheckedChange={setFullScreen}
+					/>
 				</SwitchBox.InnerWrapper>
 			</SwitchBox.Wrapper>
 		</Div>
 	)
 }
 
-const PreserveLogSwitch: React.FC = () => {
+const DeveloperModeSwitch: React.FC = () => {
 	const { t } = useTranslation()
-	const [isEnablePreserveLog, setEnablePreserveLog] = useSessionStorageState<boolean>('rfidPreserveLog', {
+	const [isEnableDeveloperMode, setDeveloperMode] = useLocalStorageState<boolean>('enableDeveloperMode', {
 		listenStorageChange: true
 	})
 
@@ -110,17 +119,17 @@ const PreserveLogSwitch: React.FC = () => {
 		<Div className='@container'>
 			<SwitchBox.Wrapper>
 				<SwitchBox.TitleWrapper>
-					<Label htmlFor='toggle-preserve-log'>{t('ns_inoutbound:rfid_toolbox.preserve_log')}</Label>
+					<Label htmlFor='toggle-developer-mode'>{t('ns_inoutbound:rfid_toolbox.developer_mode')}</Label>
 					<Typography variant='small' color='muted'>
-						{t('ns_inoutbound:rfid_toolbox.preserve_log_note')}
+						{t('ns_inoutbound:rfid_toolbox.developer_mode_note')}
 					</Typography>
 				</SwitchBox.TitleWrapper>
 				<SwitchBox.InnerWrapper>
 					<Switch
-						id='toggle-preserve-log'
-						checked={isEnablePreserveLog}
+						id='toggle-developer-mode'
+						checked={isEnableDeveloperMode}
 						className='max-w-full'
-						onCheckedChange={(value) => setEnablePreserveLog(value)}
+						onCheckedChange={(value) => setDeveloperMode(value)}
 					/>
 				</SwitchBox.InnerWrapper>
 			</SwitchBox.Wrapper>

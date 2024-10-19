@@ -22,7 +22,7 @@ export const useManualFetchEpcQuery = () => {
 	const { selectedOrder, connection } = usePageContext((state) => pick(state, ['selectedOrder', 'connection']))
 
 	return useQuery({
-		queryKey: [EPC_LIST_PROVIDE_TAG, listBoxContext?.page, selectedOrder],
+		queryKey: [EPC_LIST_PROVIDE_TAG, connection, listBoxContext?.page, selectedOrder],
 		queryFn: async () => RFIDService.fetchEpcManually(connection, listBoxContext?.page, selectedOrder),
 		enabled: false,
 		select: (response) => response.metadata
@@ -44,10 +44,15 @@ export const useSearchOrderQuery = (orderTarget: string, searchTerm: string) => 
 
 export const useUpdateStockMovementMutation = () => {
 	const { connection } = usePageContext((state) => pick(state, 'connection'))
+	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationKey: [ORDER_DETAIL_PROVIDE_TAG, EPC_LIST_PROVIDE_TAG],
-		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload)
+		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
+			queryClient.invalidateQueries({ queryKey: [EPC_LIST_PROVIDE_TAG, connection] })
+		}
 	})
 }
 
@@ -62,6 +67,7 @@ export const useGetShapingProductLineQuery = () => {
 export const useDeleteOrderMutation = () => {
 	const { connection, setSelectedOrder } = usePageContext((state) => pick(state, ['connection', 'setSelectedOrder']))
 	const { setPage } = useListBoxContext()
+	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationKey: [ORDER_DETAIL_PROVIDE_TAG, EPC_LIST_PROVIDE_TAG],
@@ -71,6 +77,8 @@ export const useDeleteOrderMutation = () => {
 		onSuccess: () => {
 			setPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
+			queryClient.invalidateQueries({ queryKey: [EPC_LIST_PROVIDE_TAG, connection] })
 		}
 	})
 }
@@ -95,7 +103,10 @@ export const useExchangeEpcMutation = () => {
 	return useMutation({
 		mutationKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
 		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(connection, payload),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection] })
+			queryClient.invalidateQueries({ queryKey: [EPC_LIST_PROVIDE_TAG, connection] })
+		}
 	})
 }
 

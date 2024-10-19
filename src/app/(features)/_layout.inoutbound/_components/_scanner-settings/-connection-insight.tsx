@@ -1,5 +1,4 @@
 import { cn } from '@/common/utils/cn'
-import { Json } from '@/common/utils/json'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
 import { useEventListener, usePrevious, useResetState } from 'ahooks'
@@ -59,34 +58,6 @@ const JobStatus: React.FC = () => {
 		</StatusItem>
 	)
 }
-/**
- * @deprecated
- */
-const TransferDataCalculator: React.FC = () => {
-	const { t } = useTranslation()
-	const [transferredDataSize, setTransferredDataSize, resetTransferredDataSize] = useResetState('')
-	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
-
-	useEventListener(INCOMING_DATA_CHANGE, (e: CustomEvent<number>) => {
-		if (scanningStatus === 'connected') setTransferredDataSize((prev) => prev + e.detail)
-	})
-
-	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') resetTransferredDataSize()
-	}, [scanningStatus])
-
-	return (
-		<StatusItem>
-			<Typography variant='small' className='font-medium'>
-				{t('ns_inoutbound:rfid_toolbox.transferred_data')}
-			</Typography>
-			<StatusItemDetail>
-				<Icon name='FileJson2' size={18} />
-				{Json.getContentSize(transferredDataSize)} MB
-			</StatusItemDetail>
-		</StatusItem>
-	)
-}
 
 const LatencyInsight: React.FC = () => {
 	const { t } = useTranslation()
@@ -139,10 +110,12 @@ const ConnectionInsight: React.FC = () => {
 	)
 }
 
-const StatusItem = tw.div`
-	grid grid-cols-2 gap-x-20 sm:gap-x-6 
-	group-has-[#toggle-pin-toolbar[data-state=on]]:gap-x-4
-`
+const StatusItem = tw.div`grid grid-cols-2 gap-x-20 sm:gap-x-6 xl:gap-x-4`
 const StatusItemDetail = tw.div`inline-grid grid-cols-[24px_auto] items-center gap-x-2 text-sm`
 
 export default ConnectionInsight
+//  chủn xiang níu chu/yíang? - ngu như con lợn
+
+/**
+ * nỉ
+ */

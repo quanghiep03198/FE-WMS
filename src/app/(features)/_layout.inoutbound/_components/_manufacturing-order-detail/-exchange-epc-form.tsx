@@ -27,7 +27,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useExchangeEpcMutation, useManualFetchEpcQuery, useRefetchLatestData } from '../../_apis/rfid.api'
+import { useExchangeEpcMutation, useManualFetchEpcQuery } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { OrderSize, usePageContext } from '../../_contexts/-page-context'
 import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange-epc.schema'
@@ -47,8 +47,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 
 	const { data: currentEpcData } = useManualFetchEpcQuery()
 	const { mutateAsync, isPending, isError } = useExchangeEpcMutation()
-	const refetchLatestData = useRefetchLatestData()
-
 	const form = useForm<ExchangeEpcFormValue>({
 		resolver: zodResolver(exchangeEpcSchema),
 		mode: 'onChange'
@@ -63,7 +61,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 			scannedSizes.filter(
 				(item) =>
 					item.mo_no !== (defaultValues as OrderSize)?.mo_no &&
-					item.size_numcode === (defaultValues as OrderSize)?.size_numcode &&
 					item.mat_code === (defaultValues as OrderSize)?.mat_code
 			),
 			'mo_no'
@@ -89,7 +86,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		try {
 			const payload = omit(data, ['count', 'exchange_all'])
 			await mutateAsync(payload)
-			await refetchLatestData()
 			setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
 			toast.success(t('ns_common:notification.success'))
 			setOpen(!open)

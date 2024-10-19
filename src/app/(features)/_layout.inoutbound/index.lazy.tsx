@@ -7,8 +7,8 @@ import PageComposition from './_components/-page-composition'
 import ScannedEPCsCounter from './_components/_epc-counter/-index'
 import EpcListBox from './_components/_epc-data-list/-index'
 import InoutboundForm from './_components/_inoutbound-form/-index'
-import ScanningActions from './_components/_scanning-actions/-index'
-import ScanningToolbox from './_components/_scanning-toolbox/-index'
+import ScanningToolbox from './_components/_scanner-settings/-index'
+import ScannerToolbar from './_components/_scanner-toolbar/-index'
 import { PageProvider } from './_contexts/-page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inoutbound/')({
@@ -19,8 +19,6 @@ export type PageEventEmitter = { action: 'get' | 'delete'; payload: string }
 
 function Page() {
 	const { t, i18n } = useTranslation()
-
-	// Set page breadcrumb
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
@@ -37,7 +35,7 @@ function Page() {
 				<PageComposition.Container>
 					<PageComposition.Wrapper>
 						<PageComposition.InnerWrapper>
-							<ScanningActions />
+							<ScannerToolbar />
 							<PageComposition.Main>
 								<PageComposition.ListBoxPanel>
 									<EpcListBox />

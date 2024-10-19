@@ -24,6 +24,6 @@ const EpcListBox: React.FC = () => {
 
 const ListBoxWrapper = tw.div`flex flex-1 divide-y divide-border justify-between h-full flex-col items-stretch has-[#logger-console[data-state=open]]:max-h-[80dvh] max-h-full rounded-[var(--radius)] border md:order-2 bg-background overflow-hidden`
 const ListBoxBody = tw.div`flex flex-1 basis-full items-center justify-center`
-const ListBoxFooter = tw.div`grid grid-cols-2 items-center p-2 gap-x-2`
+const ListBoxFooter = tw.div`flex justify-end items-center p-2 gap-x-2 max-w-full *:basis-full`
 
 export default EpcListBox
