@@ -40,8 +40,8 @@ const OrderSizeDetailTable: React.FC = () => {
 		(state) =>
 			pick(state, ['scannedOrders', 'scanningStatus', 'setScannedOrders', 'setScanningStatus', 'setScannedSizes'])
 	)
-	const { selectedRows, resetSelectedRows } = useOrderDetailContext((state) =>
-		pick(state, ['selectedRows', 'resetSelectedRows'])
+	const { selectedRows, pullSelectedRow, resetSelectedRows } = useOrderDetailContext((state) =>
+		pick(state, ['selectedRows', 'pullSelectedRow', 'resetSelectedRows'])
 	)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
@@ -66,6 +66,11 @@ const OrderSizeDetailTable: React.FC = () => {
 		try {
 			toast.loading(t('ns_common:notification.processing_request'), { id: 'DELETE_UNEXPECTED_ORDER' })
 			await deleteOrderAsync(orderToDelete)
+			// * Remove from selected row if scanned order is deleted
+			if (selectedRows.some((row) => row.mo_no === orderToDelete)) {
+				pullSelectedRow(selectedRows.find((row) => row.mo_no === orderToDelete))
+			}
+			// * If all order is deleted, reset all
 			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderToDelete)
 			if (filteredOrders.length === 0) {
 				setScanningStatus(undefined)
