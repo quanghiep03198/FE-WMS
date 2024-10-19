@@ -39,9 +39,16 @@ export class Json {
 		return Util.isPrimitive(value) ? value : JSON.stringify(value)
 	}
 
-	public static getContentSize(value: any) {
+	public static getContentSize(value: any, unit: 'kilobyte' | 'megabyte'): string {
 		const jsonString = JSON.stringify(value)
 		const byteLength = new TextEncoder().encode(jsonString).length
-		return (byteLength / (1024 * 1024)).toFixed(2)
+		switch (unit) {
+			case 'kilobyte': {
+				return `${(byteLength / 1024).toFixed(2)} kb`
+			}
+			case 'megabyte': {
+				return `${(byteLength / (1024 * 1024)).toFixed(2)} mb`
+			}
+		}
 	}
 }
