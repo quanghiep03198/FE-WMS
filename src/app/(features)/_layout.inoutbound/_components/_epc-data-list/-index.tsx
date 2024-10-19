@@ -1,5 +1,4 @@
 import tw from 'tailwind-styled-components'
-import { ListBoxProvider } from '../../_contexts/-list-box-context'
 import OrderDetails from '../_manufacturing-order-detail/-index'
 import EpcDataList from './-epc-data-list'
 import ListBoxHeader from './-list-box-header'
@@ -7,18 +6,16 @@ import LoggerConsole from './-logger-console'
 
 const EpcListBox: React.FC = () => {
 	return (
-		<ListBoxProvider>
-			<ListBoxWrapper>
-				<ListBoxHeader />
-				<ListBoxBody>
-					<EpcDataList />
-				</ListBoxBody>
-				<ListBoxFooter>
-					<OrderDetails />
-					<LoggerConsole />
-				</ListBoxFooter>
-			</ListBoxWrapper>
-		</ListBoxProvider>
+		<ListBoxWrapper>
+			<ListBoxHeader />
+			<ListBoxBody>
+				<EpcDataList />
+			</ListBoxBody>
+			<ListBoxFooter>
+				<OrderDetails />
+				<LoggerConsole />
+			</ListBoxFooter>
+		</ListBoxWrapper>
 	)
 }
 

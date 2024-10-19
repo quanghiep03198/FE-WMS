@@ -8,10 +8,9 @@ import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { RFIDStreamEventData } from '@/services/rfid.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useQueryClient } from '@tanstack/react-query'
 import { useAsyncEffect, useDeepCompareEffect, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { isNil, pick, uniqBy } from 'lodash'
+import { pick, uniqBy } from 'lodash'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
@@ -20,7 +19,6 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useManualFetchEpcQuery } from '../../_apis/rfid.api'
 import { INCOMING_DATA_CHANGE } from '../../_constants/rfid.const'
-import { useListBoxContext } from '../../_contexts/-list-box-context'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 class RetriableError extends Error {}
@@ -32,10 +30,8 @@ const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 
 const EpcDataList: React.FC = () => {
-	const queryClient = useQueryClient()
 	const { t } = useTranslation()
 	const { user, setAccessToken } = useAuth()
-	const { page, setPage, loading, setLoading } = useListBoxContext()
 
 	const {
 		scannedEpc,
@@ -44,6 +40,8 @@ const EpcDataList: React.FC = () => {
 		selectedOrder,
 		scannedOrders,
 		pollingDuration,
+		currentPage,
+		setCurrentPage,
 		writeLog,
 		setScannedEpc,
 		setScanningStatus,
@@ -63,7 +61,9 @@ const EpcDataList: React.FC = () => {
 			'setScannedEpc',
 			'setScannedOrders',
 			'setScannedSizes',
-			'setSelectedOrder'
+			'setSelectedOrder',
+			'currentPage',
+			'setCurrentPage'
 		])
 	)
 	// * Abort controller to control fetch event source
@@ -178,7 +178,7 @@ const EpcDataList: React.FC = () => {
 		switch (scanningStatus) {
 			case undefined: {
 				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
-				setPage(null)
+				setCurrentPage(null)
 				setHasInvalidEpcAlert(false)
 				break
 			}
@@ -216,27 +216,24 @@ const EpcDataList: React.FC = () => {
 
 	// * On page changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (isFetching || !connection || !scanningStatus) return
+		if (!connection || !scanningStatus) return
 		try {
-			setLoading(true)
 			const { data: metadata } = await manualFetchEpc()
-
 			const previousPageData = scannedEpc?.data ?? []
 			const nextPageData = metadata?.data ?? []
 			setScannedEpc({
 				...metadata,
 				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
 			})
-		} finally {
-			setLoading(false)
+		} catch {
+			console.error('Failed to fetch data of next page')
 		}
-	}, [page])
+	}, [currentPage])
 
 	// * On selected order changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (isFetching || !connection || !scanningStatus) return
+		if (!connection || !scanningStatus) return
 		try {
-			setLoading(true)
 			const { data: metadata } = await manualFetchEpc()
 			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
 			const nextFilteredEpc = metadata?.data ?? []
@@ -244,8 +241,8 @@ const EpcDataList: React.FC = () => {
 				...metadata,
 				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
 			})
-		} finally {
-			setLoading(false)
+		} catch {
+			console.error('Failed to fetch data of selected order')
 		}
 	}, [selectedOrder])
 
@@ -325,9 +322,13 @@ const EpcDataList: React.FC = () => {
 						<Button
 							variant='link'
 							className='w-full'
-							onClick={() => setPage((prev) => (isNil(prev) ? DEFAULT_NEXT_CURSOR : prev + 1))}
-							disabled={loading}>
-							{loading ? 'Loading more ...' : 'Load more'}
+							onClick={() => {
+								console.log(currentPage)
+								if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
+								else setCurrentPage(currentPage + 1)
+							}}
+							disabled={isFetching}>
+							{isFetching ? 'Loading more ...' : 'Load more'}
 						</Button>
 					)}
 				</List>

@@ -15,8 +15,7 @@ import {
 import { pick } from 'lodash'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
-import { useListBoxContext } from '../../_contexts/-list-box-context'
+import { FALLBACK_ORDER_VALUE, useManualFetchEpcQuery } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const ListBoxHeader: React.FC = () => {
@@ -35,14 +34,14 @@ const ListBoxHeader: React.FC = () => {
 
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
-	const { loading, setPage } = useListBoxContext()
-	const { selectedOrder, scannedOrders, setScannedOrders, setSelectedOrder, reset } = usePageContext((state) =>
-		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset'])
+	const { isFetching } = useManualFetchEpcQuery()
+	const { setCurrentPage, selectedOrder, scannedOrders, setSelectedOrder } = usePageContext((state) =>
+		pick(state, ['selectedOrder', 'scannedOrders', 'setScannedOrders', 'setSelectedOrder', 'reset', 'setCurrentPage'])
 	)
 
 	const handleChangeOrder = (value: string) => {
 		setSelectedOrder(value)
-		setPage(1)
+		setCurrentPage(null)
 	}
 
 	return (
@@ -50,7 +49,7 @@ const OrderListSelect: React.FC = () => {
 			<HoverCard openDelay={50} closeDelay={50}>
 				<HoverCardTrigger asChild className='w-full basis-1/2'>
 					<SelectTrigger className='flex justify-start gap-x-2'>
-						{loading ? (
+						{isFetching ? (
 							<Icon name='LoaderCircle' className='animate-[spin_1.75s_linear_infinite]' />
 						) : (
 							<Icon name='ListFilter' />

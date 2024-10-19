@@ -23,6 +23,7 @@ export type OrderSize = OrderItem & {
 }
 
 type PageContextStore = {
+	currentPage: number | null
 	scannedEpc: Pagination<IElectronicProductCode>
 	scannedOrders: Array<OrderItem>
 	scannedSizes: Array<OrderSize>
@@ -31,6 +32,7 @@ type PageContextStore = {
 	selectedOrder: string | undefined
 	logs: Array<Log>
 	pollingDuration: number
+	setCurrentPage: (page: number | null) => void
 	setScanningStatus: (status: ScanningStatus) => void
 	setConnection: (value: string) => void
 	setSelectedOrder: (value: string) => void
@@ -45,6 +47,7 @@ type PageContextStore = {
 }
 export const DEFAULT_PROPS: Pick<
 	PageContextStore,
+	| 'currentPage'
 	| 'scannedEpc'
 	| 'scannedOrders'
 	| 'scannedSizes'
@@ -54,6 +57,7 @@ export const DEFAULT_PROPS: Pick<
 	| 'logs'
 	| 'pollingDuration'
 > = {
+	currentPage: null,
 	scanningStatus: undefined,
 	connection: '',
 	selectedOrder: 'all',
@@ -87,9 +91,15 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		storeRef.current = create<PageContextStore>()(
 			immer((set) => ({
 				...DEFAULT_PROPS,
-				setScanningStatus: (stt) =>
+				setCurrentPage: (page: number | null) => {
 					set((state) => {
-						state.scanningStatus = stt
+						console.log(page)
+						state.currentPage = page
+					})
+				},
+				setScanningStatus: (status) =>
+					set((state) => {
+						state.scanningStatus = status
 					}),
 				setConnection: (value) => {
 					set((state) => {
@@ -124,7 +134,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				writeLog: (log) => {
 					set((state) => {
 						if (state.logs.length > MAX_LINES_OF_LOG) state.logs.pop()
-						const totalLogs = state.logs.unshift({ timestamp: new Date(), ...log })
+						state.logs.unshift({ timestamp: new Date(), ...log })
 					})
 				},
 				clearLog: () => {
@@ -157,6 +167,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						})
 					}
 					set((state) => {
+						state.currentPage = DEFAULT_PROPS.currentPage
 						state.connection = DEFAULT_PROPS.connection
 						state.scanningStatus = DEFAULT_PROPS.scanningStatus
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc

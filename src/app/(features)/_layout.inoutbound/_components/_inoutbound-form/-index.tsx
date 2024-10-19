@@ -32,9 +32,10 @@ import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
 	useGetShapingProductLineQuery,
+	useManualFetchEpcQuery,
 	useUpdateStockMovementMutation
 } from '../../_apis/rfid.api'
-import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+import { usePageContext } from '../../_contexts/-page-context'
 import {
 	FormActionEnum,
 	FormValues,
@@ -44,8 +45,8 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { selectedOrder, scanningStatus, setSelectedOrder } = usePageContext((state) =>
-		pick(state, ['selectedOrder', 'scanningStatus', 'setSelectedOrder'])
+	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext((state) =>
+		pick(state, ['selectedOrder', 'scanningStatus', 'setScannedEpc'])
 	)
 	const { t, i18n } = useTranslation()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
@@ -83,7 +84,7 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
-
+	const { data: currentEpcData } = useManualFetchEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
@@ -116,9 +117,7 @@ const InoutboundForm: React.FC = () => {
 				mo_no: selectedOrder === FALLBACK_ORDER_VALUE ? null : selectedOrder
 			})
 			// * Always select all scanned order after performing update stock
-			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			// * Refetch latest data after update stock
-			// await refetchLatestData()
+			setScannedEpc(currentEpcData)
 			toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })

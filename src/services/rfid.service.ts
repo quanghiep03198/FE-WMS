@@ -3,7 +3,6 @@ import { InoutboundPayload } from '@/app/(features)/_layout.inoutbound/_schemas/
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.inoutbound/_schemas/exchange-epc.schema'
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { AxiosRequestConfig } from 'axios'
 import { omitBy } from 'lodash'
 
 export type RFIDStreamEventData = {
@@ -22,10 +21,10 @@ export class RFIDService {
 		})
 	}
 
-	static async getOrderDetail(config: AxiosRequestConfig) {
+	static async getOrderDetail(connection: string) {
 		return await axiosInstance.get<void, ResponseBody<Omit<RFIDStreamEventData, 'epcs'>>>(
 			'/rfid/manufacturing-order-detail',
-			config
+			{ headers: { ['X-Tenant-Id']: connection } }
 		)
 	}
 

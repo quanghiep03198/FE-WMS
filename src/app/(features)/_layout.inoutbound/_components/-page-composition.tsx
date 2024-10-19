@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components'
 
 const Container = tw.div`
-	group flex-1 bg-background max-h-full grid items-stretch
+	group flex-1 bg-background max-h-full grid items-stretch @container
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50
@@ -10,7 +10,7 @@ const Container = tw.div`
    has-[#toggle-fullscreen[data-state=checked]]:h-screen
    has-[#toggle-fullscreen[data-state=checked]]:overflow-y-auto
 	`
-const Wrapper = tw.div`max-h-full h-full items-stretch xl:grid xl:grid-cols-[5fr_2fr] xl:gap-x-6`
+const Wrapper = tw.div`max-h-full h-full items-stretch grid grid-cols-1 @[1366px]:grid-cols-[5fr_2fr] gap-x-6 gap-y-10`
 const InnerWrapper = tw.div`flex flex-col gap-y-6 max-h-full items-stretch`
 const Main = tw.div`grid xl:grid-cols-2 lg:grid-cols-2 xl:grid-rows-3 lg:grid-rows-3 gap-y-4 gap-x-6 flex-1 `
 const ListBoxPanel = tw.div`xl:col-span-1 xl:row-span-full xl:order-1 order-2 lg:col-span-1 lg:row-span-full lg:order-1 lg:max-h-full xl:max-h-full`
