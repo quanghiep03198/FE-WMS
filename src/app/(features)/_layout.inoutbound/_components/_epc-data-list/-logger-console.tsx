@@ -37,7 +37,6 @@ const LoggerConsole: React.FC = () => {
 	})
 	const update = useUpdate()
 
-	console.log(logs)
 	return (
 		<Sheet onOpenChange={() => update()}>
 			<SheetTrigger

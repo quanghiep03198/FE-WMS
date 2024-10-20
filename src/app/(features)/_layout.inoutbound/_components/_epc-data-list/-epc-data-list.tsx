@@ -180,6 +180,8 @@ const EpcDataList: React.FC = () => {
 				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
 				setCurrentPage(null)
 				setHasInvalidEpcAlert(false)
+				isInvalidEpcDismissedRef.current = false
+				isTooManyOrdersDimssiedRef.current = false
 				break
 			}
 			case 'disconnected': {
@@ -248,13 +250,11 @@ const EpcDataList: React.FC = () => {
 
 	// * On too many order found
 	useEffect(() => {
-		if (!isTooManyOrdersDimssiedRef.current && scannedOrders?.length > 3)
+		if (!isTooManyOrdersDimssiedRef.current && scannedOrders?.length > 3 && scanningStatus === 'connected')
 			toast.warning('Oops !!!', {
+				id: 'TOO_MANY_ORDERS',
 				description: t('ns_inoutbound:notification.too_many_mono'),
 				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
-				closeButton: true,
-				duration: 2000,
-				id: 'TOO_MANY_ORDERS',
 				action: {
 					label: t('ns_common:actions.dismiss'),
 					type: 'button',
@@ -265,7 +265,7 @@ const EpcDataList: React.FC = () => {
 				}
 			})
 		else toast.dismiss('TOO_MANY_ORDERS')
-	}, [scannedOrders, isTooManyOrdersDimssiedRef])
+	}, [scannedOrders, isTooManyOrdersDimssiedRef, scanningStatus])
 
 	// * Intitialize virtual list to render scanned EPC data
 	const [virtualItems] = useVirtualList(scannedEpc?.data, {
@@ -323,7 +323,6 @@ const EpcDataList: React.FC = () => {
 							variant='link'
 							className='w-full'
 							onClick={() => {
-								console.log(currentPage)
 								if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
 								else setCurrentPage(currentPage + 1)
 							}}

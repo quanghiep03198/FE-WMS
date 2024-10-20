@@ -112,7 +112,6 @@ const OrderSizeDetailTable: React.FC = () => {
 	}, [selectedRows])
 
 	const toggleAllMatchedRowsSelected = useMemoizedFn((checked: CheckedState) => {
-		console.log(checked)
 		if (!checked) {
 			resetSelectedRows()
 		} else {
