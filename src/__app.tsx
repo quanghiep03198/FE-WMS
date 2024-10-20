@@ -15,7 +15,7 @@ const App: React.FC = () => {
 					<Suspense fallback={null}>
 						<RouterProvider />
 					</Suspense>
-					<Toaster position='bottom-right' expand={true} visibleToasts={5} />
+					<Toaster position='bottom-right' expand={true} closeButton={true} visibleToasts={5} />
 				</ThemeProvider>
 			</I18nextProvider>
 		</QueryClientProvider>
