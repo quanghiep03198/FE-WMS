@@ -16,7 +16,7 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 
 export type FetchEpcQueryKey = [typeof EPC_LIST_PROVIDE_TAG, number, string]
 
-export const useManualFetchEpcQuery = () => {
+export const useGetEpcQuery = () => {
 	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext((state) =>
 		pick(state, ['currentPage', 'selectedOrder', 'connection', 'scanningStatus'])
 	)
@@ -60,10 +60,10 @@ export const useGetShapingProductLineQuery = () => {
 }
 
 export const useDeleteOrderMutation = () => {
+	const invalidateQueries = useRevalidateQueries()
 	const { connection, setSelectedOrder, setCurrentPage } = usePageContext((state) =>
 		pick(state, ['connection', 'setSelectedOrder', 'setCurrentPage'])
 	)
-	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async (orderCode: string) => {
@@ -72,53 +72,29 @@ export const useDeleteOrderMutation = () => {
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({
-				queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
-				exact: false,
-				type: 'all',
-				refetchType: 'all'
-			})
-			queryClient.invalidateQueries({
-				queryKey: [EPC_LIST_PROVIDE_TAG, connection],
-				exact: false,
-				type: 'all',
-				refetchType: 'all'
-			})
+			invalidateQueries()
 		}
 	})
 }
 
-export const useUpdateStockMovementMutation = () => {
+export const useUpdateStockMutation = () => {
+	const invalidateQueries = useRevalidateQueries()
 	const { connection, setSelectedOrder, setCurrentPage } = usePageContext((state) =>
 		pick(state, ['connection', 'setSelectedOrder', 'setCurrentPage'])
 	)
-	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			queryClient.invalidateQueries({
-				queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
-				exact: false,
-				type: 'all',
-				refetchType: 'all'
-			})
-			queryClient.invalidateQueries({
-				queryKey: [EPC_LIST_PROVIDE_TAG, connection],
-				exact: false,
-				type: 'all',
-				refetchType: 'all'
-			})
+			invalidateQueries()
 		}
 	})
 }
 
 export const useExchangeEpcMutation = () => {
-	const queryClient = useQueryClient()
+	const invalidateQueries = useRevalidateQueries()
 	const { connection, setSelectedOrder, setCurrentPage } = usePageContext((state) =>
 		pick(state, ['connection', 'setSelectedOrder', 'setCurrentPage'])
 	)
@@ -128,18 +104,26 @@ export const useExchangeEpcMutation = () => {
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			queryClient.invalidateQueries({
-				queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
-				exact: false,
-				type: 'all',
-				refetchType: 'all'
-			})
-			queryClient.invalidateQueries({
-				queryKey: [EPC_LIST_PROVIDE_TAG, connection],
-				exact: false,
-				type: 'all',
-				refetchType: 'all'
-			})
+			invalidateQueries()
 		}
 	})
+}
+
+const useRevalidateQueries = () => {
+	const queryClient = useQueryClient()
+
+	return () => {
+		queryClient.invalidateQueries({
+			queryKey: [ORDER_DETAIL_PROVIDE_TAG],
+			exact: false,
+			type: 'all',
+			refetchType: 'all'
+		})
+		queryClient.invalidateQueries({
+			queryKey: [EPC_LIST_PROVIDE_TAG],
+			exact: false,
+			type: 'all',
+			refetchType: 'all'
+		})
+	}
 }

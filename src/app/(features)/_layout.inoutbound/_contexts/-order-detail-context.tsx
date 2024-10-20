@@ -1,22 +1,26 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { uniqBy } from 'lodash'
 import { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 import { OrderItem, OrderSize } from './-page-context'
 
+type SelectedRow = { mo_no: string; mat_code: Array<string>; count: number }
+
 type TOrderDetailContext = {
-	selectedRows: Array<OrderSize>
-	pushSelectedRow: (order: OrderSize) => void
-	pullSelectedRow: (order: OrderSize) => void
-	resetSelectedRows: () => void
+	selectedRows: Array<SelectedRow>
 	exchangeEpcDialogOpen: boolean
-	setExchangeEpcDialogOpen: (value: boolean) => void
 	exchangeOrderDialogOpen: boolean
-	setExchangeOrderDialogOpen: (value: boolean) => void
 	defaultExchangeEpcFormValues: OrderSize
-	setDefaultExchangeEpcFormValues: (value: OrderSize) => void
 	defaultExchangeOrderFormValues: OrderItem
+	pushSelectedRow: (order: SelectedRow) => void
+	pullSelectedRow: (order: SelectedRow) => void
+	setSelectedRows: (orders: Array<SelectedRow>) => void
+	resetSelectedRows: () => void
+	setExchangeEpcDialogOpen: (value: boolean) => void
+	setExchangeOrderDialogOpen: (value: boolean) => void
+	setDefaultExchangeEpcFormValues: (value: OrderSize) => void
 	setDefaultExchangeOrderFormValues: (value: OrderItem) => void
 }
 
@@ -54,7 +58,7 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 				},
 				pushSelectedRow: (order) => {
 					set((state) => {
-						state.selectedRows = [...new Set([...state.selectedRows, order])]
+						state.selectedRows = uniqBy([...state.selectedRows, order], 'mo_no')
 					})
 				},
 				pullSelectedRow: (order) => {
@@ -65,6 +69,11 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 				resetSelectedRows: () => {
 					set((state) => {
 						state.selectedRows = []
+					})
+				},
+				setSelectedRows: (orders) => {
+					set((state) => {
+						state.selectedRows = orders
 					})
 				}
 			}))

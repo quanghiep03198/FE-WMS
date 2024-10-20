@@ -34,9 +34,9 @@ function Page() {
 			<PageProvider>
 				<PageComposition.Container>
 					<PageComposition.Wrapper>
-						<PageComposition.InnerWrapper>
+						<PageComposition.Main>
 							<ScannerToolbar />
-							<PageComposition.Main>
+							<PageComposition.InnerWrapper>
 								<PageComposition.ListBoxPanel>
 									<EpcListBox />
 								</PageComposition.ListBoxPanel>
@@ -46,8 +46,8 @@ function Page() {
 								<PageComposition.FormPanel>
 									<InoutboundForm />
 								</PageComposition.FormPanel>
-							</PageComposition.Main>
-						</PageComposition.InnerWrapper>
+							</PageComposition.InnerWrapper>
+						</PageComposition.Main>
 						<ScanningToolbox />
 					</PageComposition.Wrapper>
 				</PageComposition.Container>

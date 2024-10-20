@@ -23,9 +23,11 @@ import {
 	buttonVariants
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { CheckedState } from '@radix-ui/react-checkbox'
+import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useMemoizedFn, useResetState } from 'ahooks'
-import { pick } from 'lodash'
-import { Fragment, useEffect, useState } from 'react'
+import { groupBy, pick, uniqBy } from 'lodash'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -36,25 +38,31 @@ import OrderDetailTableRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedOrders, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } = usePageContext(
-		(state) =>
-			pick(state, ['scannedOrders', 'scanningStatus', 'setScannedOrders', 'setScanningStatus', 'setScannedSizes'])
-	)
-	const { selectedRows, pullSelectedRow, resetSelectedRows } = useOrderDetailContext((state) =>
-		pick(state, ['selectedRows', 'pullSelectedRow', 'resetSelectedRows'])
+	const { scannedOrders, scannedSizes, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } =
+		usePageContext((state) =>
+			pick(state, [
+				'scannedOrders',
+				'scannedSizes',
+				'scanningStatus',
+				'setScannedOrders',
+				'setScanningStatus',
+				'setScannedSizes'
+			])
+		)
+	const { selectedRows, pullSelectedRow, resetSelectedRows, setSelectedRows } = useOrderDetailContext((state) =>
+		pick(state, ['selectedRows', 'pullSelectedRow', 'resetSelectedRows', 'setSelectedRows'])
 	)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
 	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
 
+	// * Selected text that highlighted matching production code
+	const [text, selectText] = useSelectedText()
+
 	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') {
-			resetSelectedRows()
-		}
-		if (scanningStatus === 'disconnected') {
-			refetchOrderDetail()
-		}
+		if (typeof scanningStatus === 'undefined') resetSelectedRows()
+		if (scanningStatus === 'disconnected') refetchOrderDetail()
 	}, [scanningStatus])
 
 	useEffect(() => {
@@ -91,8 +99,40 @@ const OrderSizeDetailTable: React.FC = () => {
 		setOrderToDelete(orderCode)
 	})
 
-	// * Selected text that highlighted matching production code
-	const [text, selectText] = useSelectedText()
+	const allMatchedRowSelection = useMemo(() => {
+		return Object.entries(groupBy(scannedSizes, 'mo_no')).filter(([_, sizeList]) =>
+			sizeList.some((size) => selectedRows[0]?.mat_code.includes(size.mat_code))
+		)
+	}, [selectedRows])
+
+	const areAllRowsMatched = useMemo(() => {
+		if (!selectedRows || selectedRows.length === 0) return false
+		const ordersMatchWithFirstSelection = allMatchedRowSelection.map((item) => item[0])
+		return ordersMatchWithFirstSelection.every((orderCode) => selectedRows.some((row) => row.mo_no === orderCode))
+	}, [selectedRows])
+
+	const toggleAllMatchedRowsSelected = useMemoizedFn((checked: CheckedState) => {
+		console.log(checked)
+		if (!checked) {
+			resetSelectedRows()
+		} else {
+			setSelectedRows(
+				allMatchedRowSelection.map((item) => ({
+					mo_no: item[0],
+					mat_code: uniqBy(
+						item[1].map((size) => size.mat_code),
+						'mat_code'
+					),
+					count: item[1].reduce((acc, curr) => {
+						return acc + curr.count
+					}, 0)
+				}))
+			)
+		}
+	})
+
+	const isSomeRowSelected =
+		selectedRows && selectedRows.length > 0 && selectedRows.length < allMatchedRowSelection.length
 
 	return (
 		<Fragment>
@@ -105,9 +145,11 @@ const OrderSizeDetailTable: React.FC = () => {
 							{t('ns_common:actions.detail')}
 						</DialogTrigger>
 					</HoverCardTrigger>
-					<HoverCardContent side='top' align='start' sideOffset={8}>
-						<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
-					</HoverCardContent>
+					<HoverCardPortal>
+						<HoverCardContent side='top' align='start' sideOffset={8}>
+							<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
+						</HoverCardContent>
+					</HoverCardPortal>
 				</HoverCard>
 				<DialogContent className='max-w-7xl focus-visible:outline-none focus-visible:ring-0 xxl:max-w-8xl'>
 					<DialogHeader>
@@ -123,11 +165,11 @@ const OrderSizeDetailTable: React.FC = () => {
 										<TableRow className='sticky top-0 z-20'>
 											<TableHead className='sticky left-0 z-20 w-12 border-r'>
 												<Checkbox
-													checked={selectedRows && selectedRows.length > 0}
+													checked={
+														(areAllRowsMatched || (isSomeRowSelected && 'indeterminate')) as CheckedState
+													}
 													disabled={!selectedRows || selectedRows?.length === 0}
-													onCheckedChange={(checked) => {
-														if (!checked) resetSelectedRows()
-													}}
+													onCheckedChange={toggleAllMatchedRowsSelected}
 												/>
 											</TableHead>
 											<TableHead className='sticky left-12 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
@@ -141,10 +183,11 @@ const OrderSizeDetailTable: React.FC = () => {
 										</TableRow>
 									</TableHeader>
 									<TableBody className='[&_tr]:snap-start'>
-										{scannedOrders.map((order) => {
+										{Object.entries(groupBy(scannedSizes, 'mo_no')).map(([orderCode, sizeList]) => {
 											return (
 												<OrderDetailTableRow
-													data={order}
+													orderCode={orderCode}
+													sizeList={sizeList}
 													selectedProductionCode={text}
 													onBeforeDelete={handleBeforeDelete}
 													onSelectedProductionCodeChange={selectText}

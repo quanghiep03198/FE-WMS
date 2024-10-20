@@ -14,7 +14,7 @@ import {
 	SheetTrigger,
 	Typography
 } from '@/components/ui'
-import { useSessionStorageState, useVirtualList } from 'ahooks'
+import { useLocalStorageState, useUpdate, useVirtualList } from 'ahooks'
 import { format } from 'date-fns'
 import { pick } from 'lodash'
 import { useRef } from 'react'
@@ -23,11 +23,10 @@ import { usePageContext } from '../../_contexts/-page-context'
 
 const LoggerConsole: React.FC = () => {
 	const { t } = useTranslation()
-
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const { logs, clearLog } = usePageContext((state) => pick(state, ['logs', 'clearLog']))
-	const [isEnablePreserveLog, setEnablePreserveLog] = useSessionStorageState<boolean>('rfidPreserveLog', {
+	const [isEnablePreserveLog, setEnablePreserveLog] = useLocalStorageState<boolean>('rfidPreserveLog', {
 		listenStorageChange: true
 	})
 	const [virtualList, scrollTo] = useVirtualList(logs, {
@@ -36,9 +35,11 @@ const LoggerConsole: React.FC = () => {
 		itemHeight: 32,
 		overscan: 5
 	})
+	const update = useUpdate()
 
+	console.log(logs)
 	return (
-		<Sheet>
+		<Sheet onOpenChange={() => update()}>
 			<SheetTrigger
 				className={cn(
 					buttonVariants({
@@ -99,7 +100,11 @@ const LoggerConsole: React.FC = () => {
 							</Button>
 						</Div>
 						<Div className='inline-flex items-center gap-x-2'>
-							<Checkbox id='toggle-preserve-log' />
+							<Checkbox
+								id='toggle-preserve-log'
+								checked={isEnablePreserveLog}
+								onCheckedChange={(value) => setEnablePreserveLog(Boolean(value))}
+							/>
 							<Label htmlFor='toggle-preserve-log' className='text-xs'>
 								{t('ns_inoutbound:rfid_toolbox.preserve_log')}
 							</Label>

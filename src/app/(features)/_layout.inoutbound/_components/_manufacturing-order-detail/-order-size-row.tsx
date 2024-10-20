@@ -17,22 +17,25 @@ import {
 	Tooltip
 } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { pick } from 'lodash'
+import { pick, uniqBy } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { OrderItem, usePageContext } from '../../_contexts/-page-context'
+import { OrderSize, usePageContext } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
-	data: OrderItem
+	orderCode: string
+	sizeList: Array<OrderSize>
 	selectedProductionCode: string
 	onBeforeDelete: (orderCode: string) => void
 	onSelectedProductionCodeChange: () => void
 }
 
 const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
-	data,
+	orderCode,
+	sizeList,
+	// data,
 	selectedProductionCode,
 	onBeforeDelete,
 	onSelectedProductionCodeChange
@@ -60,25 +63,25 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 		])
 	)
 
-	const filteredSizeByOrder = useMemo(
-		() => scannedSizes?.filter((size) => size?.mo_no === data?.mo_no),
-		[scannedSizes, data]
-	)
-
-	const sizeOfFirstSelectedRow = useMemo(
-		() => (selectedRows[0] ? scannedSizes?.filter((item) => item.mo_no === selectedRows[0].mo_no) : []),
-		[selectedRows, data]
-	)
-
 	const hasSomeRowMatch = useMemo(() => {
-		return filteredSizeByOrder?.some((filteredSize) =>
-			sizeOfFirstSelectedRow?.some((selectedSize) => selectedSize.mat_code === filteredSize.mat_code)
-		)
-	}, [filteredSizeByOrder, sizeOfFirstSelectedRow])
+		if (!selectedRows || selectedRows.length === 0) return false
+		const sizeMatCodesSet = new Set(sizeList.map((size) => size.mat_code))
+		return selectedRows[0].mat_code.some((productionCode) => sizeMatCodesSet.has(productionCode))
+	}, [selectedRows])
 
 	const handleToggleSelectRow = (checked: CheckedState, data: any) => {
 		checked ? pushSelectedRow(data) : pullSelectedRow(data)
 	}
+
+	const aggregateSizeCount = useMemo(
+		() =>
+			Array.isArray(sizeList)
+				? sizeList.reduce((acc, curr) => {
+						return acc + curr.count
+					}, 0)
+				: 0,
+		[sizeList]
+	)
 
 	return (
 		<TableRow
@@ -89,17 +92,26 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 			<TableCell className='sticky left-0 z-10 w-12'>
 				<Checkbox
 					disabled={!hasSomeRowMatch && selectedRows.length > 0}
-					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
-					onCheckedChange={(checked) => handleToggleSelectRow(checked, data)}
+					checked={selectedRows.some((row) => row.mo_no === orderCode)}
+					onCheckedChange={(checked) =>
+						handleToggleSelectRow(checked, {
+							mo_no: orderCode,
+							mat_code: uniqBy(
+								sizeList.map((item) => item.mat_code),
+								'mat_code'
+							),
+							count: aggregateSizeCount
+						})
+					}
 				/>
 			</TableCell>
 			<TableCell className='group/cell sticky left-12 z-10 font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
 				<Div className='inline-flex items-center gap-x-4'>
-					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
+					{orderCode ?? FALLBACK_ORDER_VALUE}
 					<button
 						onClick={() => {
 							setExchangeOrderDialogOpen(true)
-							setDefaultExchangeOrderFormValues({ ...data })
+							setDefaultExchangeOrderFormValues({ mo_no: orderCode, count: aggregateSizeCount })
 						}}>
 						<Icon
 							name='ArrowLeftRight'
@@ -113,7 +125,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
-					{filteredSizeByOrder?.map((size) => (
+					{sizeList?.map((size) => (
 						<Div
 							key={size?.size_numcode}
 							className='group/cell inline-grid min-w-48 shrink-0 basis-48 grid-rows-2 divide-y last:flex-1'>
@@ -149,7 +161,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 				</Div>
 			</TableCell>
 			<TableCell align='right' className='sticky right-20 font-medium'>
-				{data?.count}
+				{aggregateSizeCount}
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-20 !opacity-100'>
 				<Tooltip
@@ -157,11 +169,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 					contentProps={{ side: 'left' }}
 					message={t('ns_common:actions.delete')}>
 					<Button
-						disabled={data?.mo_no === FALLBACK_ORDER_VALUE}
+						disabled={orderCode === FALLBACK_ORDER_VALUE}
 						type='button'
 						variant='ghost'
 						size='icon'
-						onClick={() => onBeforeDelete(data?.mo_no)}>
+						onClick={() => onBeforeDelete(orderCode)}>
 						<Icon name='Trash2' className='stroke-destructive' />
 					</Button>
 				</Tooltip>

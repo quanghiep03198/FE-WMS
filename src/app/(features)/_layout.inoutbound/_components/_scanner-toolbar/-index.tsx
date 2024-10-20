@@ -18,7 +18,7 @@ import {
 } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { TenancyService } from '@/services/tenancy.service'
-import { HoverCardTrigger } from '@radix-ui/react-hover-card'
+import { HoverCardPortal, HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import { pick } from 'lodash'
@@ -105,9 +105,11 @@ const ScannerToolbar: React.FC = () => {
 								</Div>
 							</SelectTrigger>
 						</HoverCardTrigger>
-						<HoverCardContent side={isSmallScreen ? 'top' : 'right'} align='start' sideOffset={8}>
-							<Typography variant='small'>{t('ns_inoutbound:description.select_database')}</Typography>
-						</HoverCardContent>
+						<HoverCardPortal>
+							<HoverCardContent side={isSmallScreen ? 'top' : 'right'} align='start' sideOffset={8}>
+								<Typography variant='small'>{t('ns_inoutbound:description.select_database')}</Typography>
+							</HoverCardContent>
+						</HoverCardPortal>
 					</HoverCard>
 					<SelectContent>
 						<SelectGroup>

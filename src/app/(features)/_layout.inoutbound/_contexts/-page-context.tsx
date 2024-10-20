@@ -62,7 +62,7 @@ export const DEFAULT_PROPS: Pick<
 	connection: '',
 	selectedOrder: 'all',
 	logs: [],
-	pollingDuration: 500,
+	pollingDuration: 750,
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,
@@ -76,7 +76,7 @@ export const DEFAULT_PROPS: Pick<
 	scannedSizes: []
 }
 
-const MAX_LINES_OF_LOG = 50
+const MAX_LINES_OF_LOG = 100
 
 const PageContext = createContext(null)
 
@@ -93,7 +93,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				...DEFAULT_PROPS,
 				setCurrentPage: (page: number | null) => {
 					set((state) => {
-						console.log(page)
 						state.currentPage = page
 					})
 				},
@@ -133,7 +132,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				writeLog: (log) => {
 					set((state) => {
-						if (state.logs.length > MAX_LINES_OF_LOG) state.logs.pop()
+						if (state.logs.length >= MAX_LINES_OF_LOG) state.logs.pop()
 						state.logs.unshift({ timestamp: new Date(), ...log })
 					})
 				},

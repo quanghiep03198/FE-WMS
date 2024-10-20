@@ -31,9 +31,9 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
+	useGetEpcQuery,
 	useGetShapingProductLineQuery,
-	useManualFetchEpcQuery,
-	useUpdateStockMovementMutation
+	useUpdateStockMutation
 } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
@@ -84,13 +84,13 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
-	const { data: currentEpcData } = useManualFetchEpcQuery()
+	const { data: currentEpcData } = useGetEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync } = useUpdateStockMovementMutation()
+	const { mutateAsync } = useUpdateStockMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({

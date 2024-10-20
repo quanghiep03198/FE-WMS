@@ -10,6 +10,7 @@ import {
 	Switch,
 	Typography
 } from '@/components/ui'
+import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useLocalStorageState, useSessionStorageState } from 'ahooks'
 import { debounce, pick } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +25,7 @@ const SettingPanel: React.FC = () => {
 			<Typography variant='h6' className='text-lg sm:text-base md:text-base'>
 				{t('ns_common:actions.adjust')}
 			</Typography>
-			<Div className='flex h-full flex-1 flex-col gap-y-4 @container-normal'>
+			<Div className='flex h-full flex-1 flex-col gap-y-4'>
 				<PollingIntervalSelector />
 				<FullScreenModeSwitch />
 				<DeveloperModeSwitch />
@@ -42,41 +43,41 @@ const PollingIntervalSelector: React.FC = () => {
 	const disabled = scanningStatus === 'connected' || scanningStatus === 'connecting'
 
 	return (
-		<Div className='w-full gap-2'>
-			<HoverCard openDelay={50}>
-				<HoverCardTrigger>
-					<Div className='grid gap-2'>
-						<Div className='flex items-center justify-between'>
-							<Label htmlFor='polling-duration'>{t('ns_inoutbound:rfid_toolbox.polling_duration')}</Label>
-							<Badge variant='outline'>
-								{pollingDuration / 1000 >= 1 ? `${pollingDuration / 1000} s` : `${pollingDuration} ms`}
-							</Badge>
-						</Div>
-						<Div className='flex items-center gap-x-3'>
-							<Icon name='Zap' size={20} />
-							<Slider
-								id='polling-duration'
-								min={500}
-								max={1000}
-								step={100}
-								defaultValue={[pollingDuration]}
-								disabled={disabled}
-								onValueChange={debounce((value) => setPollingDuration(value[0]), 500)}
-								className='[&_[role=slider]]:h-4 [&_[role=slider]]:w-4'
-								aria-label='Polling Duration'
-							/>
-							<Icon name='Leaf' size={20} />
-						</Div>
-						<Typography variant='small' color='muted'>
-							{t('ns_inoutbound:rfid_toolbox.polling_duration_note')}
-						</Typography>
+		<HoverCard openDelay={50} closeDelay={50}>
+			<HoverCardTrigger asChild>
+				<Div className='grid gap-2'>
+					<Div className='flex items-center justify-between'>
+						<Label htmlFor='polling-duration'>{t('ns_inoutbound:rfid_toolbox.polling_duration')}</Label>
+						<Badge variant='outline'>
+							{pollingDuration / 1000 >= 1 ? `${pollingDuration / 1000} s` : `${pollingDuration} ms`}
+						</Badge>
 					</Div>
-				</HoverCardTrigger>
-				<HoverCardContent className='z-50 w-64 text-sm' side='top' align='start' sideOffset={8}>
+					<Div className='flex items-center gap-x-3'>
+						<Icon name='Zap' size={20} />
+						<Slider
+							id='polling-duration'
+							min={500}
+							max={1000}
+							step={100}
+							defaultValue={[pollingDuration]}
+							disabled={disabled}
+							onValueChange={debounce((value) => setPollingDuration(value[0]), 500)}
+							className='[&_[role=slider]]:h-4 [&_[role=slider]]:w-4'
+							aria-label='Polling Duration'
+						/>
+						<Icon name='Leaf' size={20} />
+					</Div>
+					<Typography variant='small' color='muted'>
+						{t('ns_inoutbound:rfid_toolbox.polling_duration_note')}
+					</Typography>
+				</Div>
+			</HoverCardTrigger>
+			<HoverCardPortal>
+				<HoverCardContent className='z-50 w-64 text-sm' side='left' align='start' sideOffset={8}>
 					{t('ns_inoutbound:rfid_toolbox.polling_duration_description')}
 				</HoverCardContent>
-			</HoverCard>
-		</Div>
+			</HoverCardPortal>
+		</HoverCard>
 	)
 }
 
@@ -88,24 +89,22 @@ const FullScreenModeSwitch: React.FC = () => {
 	})
 
 	return (
-		<Div className='@container'>
-			<SwitchBox.Wrapper>
-				<SwitchBox.TitleWrapper>
-					<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:rfid_toolbox.toggle_fullscreen')}</Label>
-					<Typography variant='small' color='muted'>
-						{t('ns_inoutbound:rfid_toolbox.toggle_fullscreen_note')}
-					</Typography>
-				</SwitchBox.TitleWrapper>
-				<SwitchBox.InnerWrapper>
-					<Switch
-						id='toggle-fullscreen'
-						className='max-w-full'
-						checked={isFullScreen}
-						onCheckedChange={setFullScreen}
-					/>
-				</SwitchBox.InnerWrapper>
-			</SwitchBox.Wrapper>
-		</Div>
+		<SwitchBox.Wrapper>
+			<SwitchBox.TitleWrapper>
+				<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:rfid_toolbox.toggle_fullscreen')}</Label>
+				<Typography variant='small' color='muted'>
+					{t('ns_inoutbound:rfid_toolbox.toggle_fullscreen_note')}
+				</Typography>
+			</SwitchBox.TitleWrapper>
+			<SwitchBox.InnerWrapper>
+				<Switch
+					id='toggle-fullscreen'
+					className='max-w-full'
+					checked={isFullScreen}
+					onCheckedChange={setFullScreen}
+				/>
+			</SwitchBox.InnerWrapper>
+		</SwitchBox.Wrapper>
 	)
 }
 
@@ -116,24 +115,22 @@ const DeveloperModeSwitch: React.FC = () => {
 	})
 
 	return (
-		<Div className='@container'>
-			<SwitchBox.Wrapper>
-				<SwitchBox.TitleWrapper>
-					<Label htmlFor='toggle-developer-mode'>{t('ns_inoutbound:rfid_toolbox.developer_mode')}</Label>
-					<Typography variant='small' color='muted'>
-						{t('ns_inoutbound:rfid_toolbox.developer_mode_note')}
-					</Typography>
-				</SwitchBox.TitleWrapper>
-				<SwitchBox.InnerWrapper>
-					<Switch
-						id='toggle-developer-mode'
-						checked={isEnableDeveloperMode}
-						className='max-w-full'
-						onCheckedChange={(value) => setDeveloperMode(value)}
-					/>
-				</SwitchBox.InnerWrapper>
-			</SwitchBox.Wrapper>
-		</Div>
+		<SwitchBox.Wrapper>
+			<SwitchBox.TitleWrapper>
+				<Label htmlFor='toggle-developer-mode'>{t('ns_inoutbound:rfid_toolbox.developer_mode')}</Label>
+				<Typography variant='small' color='muted'>
+					{t('ns_inoutbound:rfid_toolbox.developer_mode_note')}
+				</Typography>
+			</SwitchBox.TitleWrapper>
+			<SwitchBox.InnerWrapper>
+				<Switch
+					id='toggle-developer-mode'
+					checked={isEnableDeveloperMode}
+					className='max-w-full'
+					onCheckedChange={(value) => setDeveloperMode(value)}
+				/>
+			</SwitchBox.InnerWrapper>
+		</SwitchBox.Wrapper>
 	)
 }
 

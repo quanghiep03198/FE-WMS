@@ -17,7 +17,7 @@ import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useManualFetchEpcQuery } from '../../_apis/rfid.api'
+import { useGetEpcQuery } from '../../_apis/rfid.api'
 import { INCOMING_DATA_CHANGE } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
@@ -82,7 +82,7 @@ const EpcDataList: React.FC = () => {
 	const isTooManyOrdersDimssiedRef = useRef<boolean>(false)
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
-	const { refetch: manualFetchEpc, isFetching } = useManualFetchEpcQuery()
+	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
@@ -133,7 +133,7 @@ const EpcDataList: React.FC = () => {
 						writeLog({
 							type: 'info',
 							message: /* template */ `
-								<span>GET /api/rfid/fetch-epc/sse</span>  
+								<span>[SSE] /api/rfid/fetch-epc/sse</span>  
 								<span class='text-success'>200</span> ~ 
 								<span>${(performance.now() - previousTimeRef.current).toFixed(2)} ms</span> - 
 								<span>${Json.getContentSize(event.data, 'kilobyte')}</span>
@@ -153,7 +153,7 @@ const EpcDataList: React.FC = () => {
 					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 					writeLog({
 						message: /* template */ `
-							<span> GET /api/rfid/fetch-epc/sse</span>
+							<span>GET /api/rfid/fetch-epc/sse</span>
 							<span class='text-destructive'>${error.status}</span>
 							<br/>
 							<span>${error.message}</span>`,
@@ -226,7 +226,7 @@ const EpcDataList: React.FC = () => {
 				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
 			})
 		} catch {
-			console.error('Failed to fetch data of next page')
+			throw new RetriableError()
 		}
 	}, [currentPage])
 
@@ -242,7 +242,7 @@ const EpcDataList: React.FC = () => {
 				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
 			})
 		} catch {
-			console.error('Failed to fetch data of selected order')
+			throw new RetriableError()
 		}
 	}, [selectedOrder])
 
@@ -333,7 +333,7 @@ const EpcDataList: React.FC = () => {
 					)}
 				</List>
 			) : (
-				<Div className='z-10 grid h-[65dvh] min-h-full place-content-center sm:h-[50dvh] md:h-[50dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:h-[75dvh]'>
+				<Div className='z-10 grid h-[50dvh] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[75dvh]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -344,7 +344,7 @@ const EpcDataList: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar max-h-[65dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:max-h-[75dvh] md:max-h-[50dvh] sm:max-h-[50dvh]`
+const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar max-h-[50dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:max-h-[75dvh]`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap`
 const Alert = tw.div`fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-3`
 const AlertContent = tw.div`inline-flex flex-col`
