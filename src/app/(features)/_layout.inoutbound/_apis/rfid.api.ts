@@ -111,16 +111,17 @@ export const useExchangeEpcMutation = () => {
 
 const useRevalidateQueries = () => {
 	const queryClient = useQueryClient()
+	const { connection } = usePageContext((state) => pick(state, 'connection'))
 
 	return () => {
 		queryClient.invalidateQueries({
-			queryKey: [ORDER_DETAIL_PROVIDE_TAG],
+			queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
 			exact: false,
 			type: 'all',
 			refetchType: 'all'
 		})
 		queryClient.invalidateQueries({
-			queryKey: [EPC_LIST_PROVIDE_TAG],
+			queryKey: [EPC_LIST_PROVIDE_TAG, connection],
 			exact: false,
 			type: 'all',
 			refetchType: 'all'
