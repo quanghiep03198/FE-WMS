@@ -155,7 +155,6 @@ const OrderSizeDetailTable: React.FC = () => {
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 					</DialogHeader>
-
 					<Div className='border-collapse divide-y overflow-hidden rounded-lg border'>
 						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
 							<Div className='flow-root max-h-[65dvh] w-full overflow-scroll rounded-lg'>
@@ -206,7 +205,6 @@ const OrderSizeDetailTable: React.FC = () => {
 							<Typography variant='small' color='muted'>
 								{t('ns_inoutbound:mo_no_box.caption')}
 							</Typography>
-
 							<ExchangeSelectedOrderTrigger />
 						</Div>
 					</Div>

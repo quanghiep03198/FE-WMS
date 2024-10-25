@@ -1,28 +1,12 @@
 import { cn } from '@/common/utils/cn'
-import {
-	Badge,
-	Button,
-	Checkbox,
-	// ContextMenu,
-	// ContextMenuContent,
-	// ContextMenuItem,
-	// ContextMenuSub,
-	// ContextMenuSubContent,
-	// ContextMenuSubTrigger,
-	// ContextMenuTrigger,
-	Div,
-	Icon,
-	TableCell,
-	TableRow,
-	Tooltip
-} from '@/components/ui'
+import { Badge, Button, Checkbox, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { pick, uniqBy } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { OrderSize, usePageContext } from '../../_contexts/-page-context'
+import { OrderSize } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
 	orderCode: string
@@ -35,14 +19,11 @@ type OrderDetailTableRowProps = {
 const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 	orderCode,
 	sizeList,
-	// data,
 	selectedProductionCode,
 	onBeforeDelete,
 	onSelectedProductionCodeChange
 }) => {
-	const { scannedSizes } = usePageContext((state) => pick(state, 'scannedSizes'))
 	const { t } = useTranslation()
-
 	const {
 		selectedRows,
 		pushSelectedRow,
@@ -89,7 +70,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 				'transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
-			<TableCell className='sticky left-0 z-10 w-12'>
+			<TableCell className='sticky left-0 z-10 w-12 py-4'>
 				<Checkbox
 					disabled={!hasSomeRowMatch && selectedRows.length > 0}
 					checked={selectedRows.some((row) => row.mo_no === orderCode)}
@@ -108,16 +89,16 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 			<TableCell className='group/cell sticky left-12 z-10 space-y-1 text-center font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
 				<Div className='flex items-center gap-x-2'>
 					{orderCode ?? FALLBACK_ORDER_VALUE}
-					<Badge className='whitespace-nowrap'>{sizeList[0]?.shoes_style_code_factory}</Badge>
+					<Badge variant='outline' className='whitespace-nowrap text-inherit'>
+						{sizeList[0]?.shoes_style_code_factory}
+					</Badge>
 					<button
+						className='opacity-0 duration-100 group-hover/cell:opacity-100'
 						onClick={() => {
 							setExchangeOrderDialogOpen(true)
 							setDefaultExchangeOrderFormValues({ mo_no: orderCode, count: aggregateSizeCount })
 						}}>
-						<Icon
-							name='ArrowLeftRight'
-							className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100'
-						/>
+						<Icon name='ArrowLeftRight' className='stroke-active' />
 					</button>
 				</Div>
 			</TableCell>
