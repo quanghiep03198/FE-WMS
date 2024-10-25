@@ -105,9 +105,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 					}
 				/>
 			</TableCell>
-			<TableCell className='group/cell sticky left-12 z-10 font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
-				<Div className='inline-flex items-center gap-x-4'>
+			<TableCell className='group/cell sticky left-12 z-10 space-y-1 text-center font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
+				<Div className='flex items-center gap-x-2'>
 					{orderCode ?? FALLBACK_ORDER_VALUE}
+					<Badge className='whitespace-nowrap'>{sizeList[0]?.shoes_style_code_factory}</Badge>
 					<button
 						onClick={() => {
 							setExchangeOrderDialogOpen(true)

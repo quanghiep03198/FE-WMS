@@ -58,7 +58,7 @@ const PollingIntervalSelector: React.FC = () => {
 							id='polling-duration'
 							min={500}
 							max={1000}
-							step={100}
+							step={50}
 							defaultValue={[pollingDuration]}
 							disabled={disabled}
 							onValueChange={debounce((value) => setPollingDuration(value[0]), 500)}

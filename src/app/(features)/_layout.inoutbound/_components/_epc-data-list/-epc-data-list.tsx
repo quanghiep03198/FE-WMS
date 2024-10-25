@@ -92,9 +92,10 @@ const EpcDataList: React.FC = () => {
 			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc/sse', {
 				method: RequestMethod.GET,
 				headers: {
+					['Authorization']: AuthService.getAccessToken(),
 					['X-Tenant-Id']: connection,
-					['X-Polling-Duration']: pollingDuration.toString(),
-					['Authorization']: AuthService.getAccessToken()
+					['X-User-Company']: user.company_code,
+					['X-Polling-Duration']: pollingDuration.toString()
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -343,7 +344,7 @@ const EpcDataList: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar max-h-[50dvh] xxl:max-h-[65dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:max-h-[75dvh]`
+const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar h-[50dvh] xxl:h-[65dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:h-[75dvh]`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap`
 const Alert = tw.div`fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-3`
 const AlertContent = tw.div`inline-flex flex-col`
