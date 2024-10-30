@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { IElectronicProductCode } from '@/common/types/entities'
 import { useSessionStorageState } from 'ahooks'
+import { pick } from 'lodash'
 import React, { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
@@ -78,7 +79,7 @@ export const DEFAULT_PROPS: Pick<
 
 const MAX_LINES_OF_LOG = 100
 
-const PageContext = createContext(null)
+const PageContext = createContext<StoreApi<PageContextStore>>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const storeRef = useRef<StoreApi<PageContextStore>>(null)
@@ -182,10 +183,12 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }
 
-export const usePageContext = (
-	selector: (state: PageContextStore) => Partial<PageContextStore>
-): Partial<PageContextStore> => {
+export const usePageContext = <T extends PageContextStore, K extends keyof PageContextStore>(...selectors: K[]) => {
 	const store = useContext(PageContext)
 	if (!store) throw new Error('Missing store provider')
-	return useStore(store, useShallow(selector))
+	if (!selectors) return useStore(store)
+	return useStore(
+		store,
+		useShallow((state) => pick(state, selectors))
+	) as Pick<T, K>
 }

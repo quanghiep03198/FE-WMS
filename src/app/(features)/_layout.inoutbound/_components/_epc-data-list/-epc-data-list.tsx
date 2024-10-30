@@ -8,9 +8,9 @@ import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { RFIDStreamEventData } from '@/services/rfid.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useVirtualList } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { pick, uniqBy } from 'lodash'
+import { uniqBy } from 'lodash'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
-import { INCOMING_DATA_CHANGE } from '../../_constants/rfid.const'
+import { INCOMING_DATA_CHANGE, RFIDSettings } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 class RetriableError extends Error {}
@@ -34,45 +34,53 @@ const EpcDataList: React.FC = () => {
 	const { user, setAccessToken } = useAuth()
 
 	const {
-		scannedEpc,
-		connection,
-		scanningStatus,
-		selectedOrder,
-		scannedOrders,
-		pollingDuration,
 		currentPage,
+		connection,
+		scannedEpc,
+		scanningStatus,
+		scannedOrders,
+		selectedOrder,
 		setCurrentPage,
-		writeLog,
-		setScannedEpc,
 		setScanningStatus,
+		setScannedEpc,
 		setScannedOrders,
 		setScannedSizes,
-		setSelectedOrder
-	} = usePageContext((state) =>
-		pick(state, [
-			'scannedEpc',
-			'connection',
-			'scanningStatus',
-			'scannedOrders',
-			'selectedOrder',
-			'pollingDuration',
-			'writeLog',
-			'setScanningStatus',
-			'setScannedEpc',
-			'setScannedOrders',
-			'setScannedSizes',
-			'setSelectedOrder',
-			'currentPage',
-			'setCurrentPage'
-		])
+		setSelectedOrder,
+		writeLog
+	} = usePageContext(
+		'currentPage',
+		'connection',
+		'scannedEpc',
+		'scanningStatus',
+		'scannedOrders',
+		'selectedOrder',
+		'setCurrentPage',
+		'setScanningStatus',
+		'setScannedEpc',
+		'setScannedOrders',
+		'setScannedSizes',
+		'setSelectedOrder',
+		'writeLog'
 	)
 	// * Abort controller to control fetch event source
 	const abortControllerRef = useRef<AbortController>(new AbortController())
+
+	// * Previous time reference
 	const previousTimeRef = useRef<number>(performance.now())
 
+	// * Polling duration for SSE
+	const [pollingDuration] = useLocalStorageState<number>(RFIDSettings.SSE_POLLING_DURATION, {
+		defaultValue: 750,
+		listenStorageChange: true
+	})
+
+	// * Alert for invalid EPCs
 	const [hasInvalidEpcAlert, setHasInvalidEpcAlert] = useState<boolean>(false)
+
+	// * Incomming EPCs data from server-sent event
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
-	const previousEpc = usePrevious(incommingEpc) // * Stored previous epc data to compare with new one
+	// * Previous scanned EPCs
+	const previousEpc = usePrevious(incommingEpc)
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -95,7 +103,7 @@ const EpcDataList: React.FC = () => {
 					['Authorization']: AuthService.getAccessToken(),
 					['X-Tenant-Id']: connection,
 					['X-User-Company']: user.company_code,
-					['X-Polling-Duration']: pollingDuration.toString()
+					['X-Polling-Duration']: String(pollingDuration)
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,

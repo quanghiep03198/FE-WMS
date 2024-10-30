@@ -29,7 +29,7 @@ import { InputFieldControl } from '@/components/ui/@hook-form/input-field-contro
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { usePrevious, useResetState } from 'ahooks'
-import { omit, pick, uniqBy } from 'lodash'
+import { omit, uniqBy } from 'lodash'
 import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -46,22 +46,18 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()
-	const { scannedEpc, connection, setScannedEpc } = usePageContext((state) =>
-		pick(state, ['scannedEpc', 'connection', 'setScannedEpc'])
-	)
+	const { scannedEpc, connection, setScannedEpc } = usePageContext('scannedEpc', 'connection', 'setScannedEpc')
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,
 		defaultExchangeOrderFormValues: defaultValues,
 		resetSelectedRows
-	} = useOrderDetailContext((state) =>
-		pick(state, [
-			'exchangeOrderDialogOpen',
-			'defaultExchangeOrderFormValues',
-			'setExchangeOrderDialogOpen',
-			'setDefaultExchangeEpcFormValues',
-			'resetSelectedRows'
-		])
+	} = useOrderDetailContext(
+		'exchangeOrderDialogOpen',
+		'defaultExchangeOrderFormValues',
+		'setExchangeOrderDialogOpen',
+		'setDefaultExchangeEpcFormValues',
+		'resetSelectedRows'
 	)
 
 	const { mutateAsync, isPending } = useExchangeEpcMutation()

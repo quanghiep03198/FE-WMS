@@ -16,7 +16,6 @@ import {
 } from '@/components/ui'
 import { useLocalStorageState, useUpdate, useVirtualList } from 'ahooks'
 import { format } from 'date-fns'
-import { pick } from 'lodash'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -25,7 +24,7 @@ const LoggerConsole: React.FC = () => {
 	const { t } = useTranslation()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
-	const { logs, clearLog } = usePageContext((state) => pick(state, ['logs', 'clearLog']))
+	const { logs, clearLog } = usePageContext('logs', 'clearLog')
 	const [isEnablePreserveLog, setEnablePreserveLog] = useLocalStorageState<boolean>('rfidPreserveLog', {
 		listenStorageChange: true
 	})
@@ -105,7 +104,7 @@ const LoggerConsole: React.FC = () => {
 								onCheckedChange={(value) => setEnablePreserveLog(Boolean(value))}
 							/>
 							<Label htmlFor='toggle-preserve-log' className='text-xs'>
-								{t('ns_inoutbound:rfid_toolbox.preserve_log')}
+								{t('ns_inoutbound:scanner_setting.preserve_log')}
 							</Label>
 						</Div>
 					</Div>

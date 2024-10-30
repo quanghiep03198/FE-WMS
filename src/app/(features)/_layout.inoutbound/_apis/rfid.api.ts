@@ -1,7 +1,6 @@
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { pick } from 'lodash'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -17,8 +16,11 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 export type FetchEpcQueryKey = [typeof EPC_LIST_PROVIDE_TAG, number, string]
 
 export const useGetEpcQuery = () => {
-	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext((state) =>
-		pick(state, ['currentPage', 'selectedOrder', 'connection', 'scanningStatus'])
+	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
+		'currentPage',
+		'selectedOrder',
+		'connection',
+		'scanningStatus'
 	)
 
 	return useQuery({
@@ -30,7 +32,7 @@ export const useGetEpcQuery = () => {
 }
 
 export const useGetOrderDetail = () => {
-	const { connection, scanningStatus } = usePageContext((state) => pick(state, ['connection', 'scanningStatus']))
+	const { connection, scanningStatus } = usePageContext('connection', 'scanningStatus')
 
 	return useQuery({
 		queryKey: [ORDER_DETAIL_PROVIDE_TAG, connection],
@@ -41,7 +43,7 @@ export const useGetOrderDetail = () => {
 }
 
 export const useSearchOrderQuery = (orderTarget: string, searchTerm: string) => {
-	const { connection } = usePageContext((state) => pick(state, 'connection'))
+	const { connection } = usePageContext('connection')
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', orderTarget],
@@ -60,9 +62,11 @@ export const useGetShapingProductLineQuery = () => {
 }
 
 export const useDeleteOrderMutation = () => {
-	const invalidateQueries = useRevalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext((state) =>
-		pick(state, ['connection', 'setSelectedOrder', 'setCurrentPage'])
+	const invalidateQueries = useInvalidateQueries()
+	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
+		'connection',
+		'setSelectedOrder',
+		'setCurrentPage'
 	)
 
 	return useMutation({
@@ -78,9 +82,11 @@ export const useDeleteOrderMutation = () => {
 }
 
 export const useUpdateStockMutation = () => {
-	const invalidateQueries = useRevalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext((state) =>
-		pick(state, ['connection', 'setSelectedOrder', 'setCurrentPage'])
+	const invalidateQueries = useInvalidateQueries()
+	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
+		'connection',
+		'setSelectedOrder',
+		'setCurrentPage'
 	)
 
 	return useMutation({
@@ -94,9 +100,11 @@ export const useUpdateStockMutation = () => {
 }
 
 export const useExchangeEpcMutation = () => {
-	const invalidateQueries = useRevalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext((state) =>
-		pick(state, ['connection', 'setSelectedOrder', 'setCurrentPage'])
+	const invalidateQueries = useInvalidateQueries()
+	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
+		'connection',
+		'setSelectedOrder',
+		'setCurrentPage'
 	)
 
 	return useMutation({
@@ -109,9 +117,9 @@ export const useExchangeEpcMutation = () => {
 	})
 }
 
-const useRevalidateQueries = () => {
+const useInvalidateQueries = () => {
 	const queryClient = useQueryClient()
-	const { connection } = usePageContext((state) => pick(state, 'connection'))
+	const { connection } = usePageContext('connection')
 
 	return () => {
 		queryClient.invalidateQueries({

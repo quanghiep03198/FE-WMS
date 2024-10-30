@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Badge, Button, Checkbox, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { pick, uniqBy } from 'lodash'
+import { uniqBy } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
@@ -32,16 +32,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 		setExchangeEpcDialogOpen,
 		setDefaultExchangeEpcFormValues,
 		setDefaultExchangeOrderFormValues
-	} = useOrderDetailContext((state) =>
-		pick(state, [
-			'selectedRows',
-			'pushSelectedRow',
-			'pullSelectedRow',
-			'setExchangeOrderDialogOpen',
-			'setExchangeEpcDialogOpen',
-			'setDefaultExchangeEpcFormValues',
-			'setDefaultExchangeOrderFormValues'
-		])
+	} = useOrderDetailContext(
+		'selectedRows',
+		'pushSelectedRow',
+		'pullSelectedRow',
+		'setExchangeOrderDialogOpen',
+		'setExchangeEpcDialogOpen',
+		'setDefaultExchangeEpcFormValues',
+		'setDefaultExchangeOrderFormValues'
 	)
 
 	const hasSomeRowMatch = useMemo(() => {

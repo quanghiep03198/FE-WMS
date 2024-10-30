@@ -23,7 +23,7 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
-import { omit, pick } from 'lodash'
+import { omit } from 'lodash'
 import React, { Fragment, memo, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -45,8 +45,10 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext((state) =>
-		pick(state, ['selectedOrder', 'scanningStatus', 'setScannedEpc'])
+	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
+		'selectedOrder',
+		'scanningStatus',
+		'setScannedEpc'
 	)
 	const { t, i18n } = useTranslation()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)

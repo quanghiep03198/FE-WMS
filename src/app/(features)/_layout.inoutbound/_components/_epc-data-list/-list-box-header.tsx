@@ -14,7 +14,6 @@ import {
 } from '@/components/ui'
 import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { usePrevious } from 'ahooks'
-import { pick } from 'lodash'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
@@ -37,8 +36,11 @@ const ListBoxHeader: React.FC = () => {
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
 	const { isLoading } = useGetEpcQuery()
-	const { selectedOrder, scannedOrders, setCurrentPage, setSelectedOrder } = usePageContext((state) =>
-		pick(state, ['selectedOrder', 'scannedOrders', 'setCurrentPage', 'setSelectedOrder'])
+	const { selectedOrder, scannedOrders, setCurrentPage, setSelectedOrder } = usePageContext(
+		'selectedOrder',
+		'scannedOrders',
+		'setCurrentPage',
+		'setSelectedOrder'
 	)
 	const previousSelectedOrder = usePrevious(selectedOrder)
 

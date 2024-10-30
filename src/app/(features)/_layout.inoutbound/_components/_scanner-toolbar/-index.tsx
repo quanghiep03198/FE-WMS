@@ -21,7 +21,6 @@ import { TenancyService } from '@/services/tenancy.service'
 import { HoverCardPortal, HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
-import { pick } from 'lodash'
 import React, { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { EPC_LIST_PROVIDE_TAG, ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
@@ -41,15 +40,13 @@ const ScannerToolbar: React.FC = () => {
 		reset: resetScanningAction,
 		setConnection,
 		handleToggleScanning
-	} = usePageContext((state) =>
-		pick(state, [
-			'scanningStatus',
-			'connection',
-			'reset',
-			'setScanningStatus',
-			'setConnection',
-			'handleToggleScanning'
-		])
+	} = usePageContext(
+		'scanningStatus',
+		'connection',
+		'reset',
+		'setScanningStatus',
+		'setConnection',
+		'handleToggleScanning'
 	)
 
 	const { data: tenants } = useQuery({

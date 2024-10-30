@@ -26,7 +26,7 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useMemoizedFn, useResetState } from 'ahooks'
-import { groupBy, pick, uniqBy } from 'lodash'
+import { groupBy, uniqBy } from 'lodash'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
@@ -39,19 +39,21 @@ import OrderDetailTableRow from './-order-size-row'
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const { scannedOrders, scannedSizes, scanningStatus, setScannedOrders, setScanningStatus, setScannedSizes } =
-		usePageContext((state) =>
-			pick(state, [
-				'scannedOrders',
-				'scannedSizes',
-				'scanningStatus',
-				'setScannedOrders',
-				'setScanningStatus',
-				'setScannedSizes'
-			])
+		usePageContext(
+			'scannedOrders',
+			'scannedSizes',
+			'scanningStatus',
+			'setScannedOrders',
+			'setScanningStatus',
+			'setScannedSizes'
 		)
-	const { selectedRows, pullSelectedRow, resetSelectedRows, setSelectedRows } = useOrderDetailContext((state) =>
-		pick(state, ['selectedRows', 'pullSelectedRow', 'resetSelectedRows', 'setSelectedRows'])
+	const { selectedRows, pullSelectedRow, resetSelectedRows, setSelectedRows } = useOrderDetailContext(
+		'selectedRows',
+		'pullSelectedRow',
+		'resetSelectedRows',
+		'setSelectedRows'
 	)
+
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
@@ -230,9 +232,7 @@ const ExchangeSelectedOrderTrigger: React.FC = () => {
 		selectedRows,
 		setDefaultExchangeOrderFormValues: setDefaultValues,
 		setExchangeOrderDialogOpen: setOpen
-	} = useOrderDetailContext((state) =>
-		pick(state, ['selectedRows', 'setExchangeOrderDialogOpen', 'setDefaultExchangeOrderFormValues'])
-	)
+	} = useOrderDetailContext('selectedRows', 'setExchangeOrderDialogOpen', 'setDefaultExchangeOrderFormValues')
 
 	if (!selectedRows || selectedRows?.length === 0) return null
 

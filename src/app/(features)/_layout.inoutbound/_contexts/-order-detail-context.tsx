@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { uniqBy } from 'lodash'
+import { pick, uniqBy } from 'lodash'
 import { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
@@ -82,8 +82,14 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 	return <OrderDetailContext.Provider value={storeRef.current}>{children}</OrderDetailContext.Provider>
 }
 
-export const useOrderDetailContext = (selector: (state: TOrderDetailContext) => Partial<TOrderDetailContext>) => {
+export const useOrderDetailContext = <T extends TOrderDetailContext, K extends keyof TOrderDetailContext>(
+	...selectors: K[]
+) => {
 	const store = useContext(OrderDetailContext)
 	if (!store) throw new Error('Missing store provider')
-	return useStore(store, useShallow(selector))
+	if (!selectors) return useStore(store)
+	return useStore(
+		store,
+		useShallow((state) => pick(state, selectors))
+	) as Pick<T, K>
 }

@@ -1,27 +1,13 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
-import useQuerySelector from '@/common/hooks/use-query-selector'
 import { Icon, Separator, Typography } from '@/components/ui'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import ConnectionInsight from './-connection-insight'
 import SettingPanel from './-setting-panel'
+// import useQuerySelector from '@/common/hooks/use-query-selector'
+// import { useEffect } from 'react'
 
 const ScanningToolbox: React.FC = () => {
 	const { t } = useTranslation()
-	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
-	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
-	const sidebarTrigger = useQuerySelector<HTMLInputElement>('#sidebar-toggle')
-
-	useEffect(() => {
-		if (!sidebarTrigger) return
-		if (!isLargeScreen || !isExtraLargeScreen) {
-			sidebarTrigger.checked = false
-		} else {
-			sidebarTrigger.checked = true
-		}
-	}, [isLargeScreen, isExtraLargeScreen])
 
 	return (
 		<ToolbarWrapper>
@@ -45,6 +31,6 @@ const ScanningToolbox: React.FC = () => {
 
 const ToolbarWrapper = tw.div`@container group flex flex-col rounded-lg border bg-background`
 const ToolbarHeader = tw.div`flex items-center justify-between gap-x-2 border-b px-4 py-2`
-const ToolbarBody = tw.div`flex items-stretch flex-grow gap-10 @3xl:flex-row @3xl:justify-start basis-full p-4 flex-col-reverse justify-end`
+const ToolbarBody = tw.div`flex items-stretch flex-grow gap-6 py-4 @3xl:flex-row @3xl:justify-start basis-full flex-col-reverse justify-end`
 
 export default ScanningToolbox

@@ -1,12 +1,11 @@
 import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
-import { useEventListener, usePrevious, useResetState } from 'ahooks'
-import { pick } from 'lodash'
+import { useEventListener, useLocalStorageState, usePrevious, useResetState } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { INCOMING_DATA_CHANGE } from '../../_constants/rfid.const'
+import { INCOMING_DATA_CHANGE, RFIDSettings } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const NetworkInsight: React.FC = () => {
@@ -20,7 +19,7 @@ const NetworkInsight: React.FC = () => {
 	return (
 		<StatusItem>
 			<Typography variant='small' className='font-medium'>
-				{t('ns_inoutbound:rfid_toolbox.internet_access')}
+				{t('ns_inoutbound:scanner_setting.internet_access')}
 			</Typography>
 			<StatusItemDetail>
 				{isNetworkAvailable ? (
@@ -36,12 +35,12 @@ const NetworkInsight: React.FC = () => {
 
 const JobStatus: React.FC = () => {
 	const { t } = useTranslation()
-	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
+	const { scanningStatus } = usePageContext('scanningStatus')
 
 	return (
 		<StatusItem>
 			<Typography variant='small' className='font-medium'>
-				{t('ns_inoutbound:rfid_toolbox.cron_job')}
+				{t('ns_inoutbound:scanner_setting.cron_job')}
 			</Typography>
 			<StatusItemDetail>
 				<Icon
@@ -61,19 +60,21 @@ const JobStatus: React.FC = () => {
 
 const LatencyInsight: React.FC = () => {
 	const { t } = useTranslation()
-	const { pollingDuration } = usePageContext((state) => pick(state, 'pollingDuration'))
+	const [pollingDuration] = useLocalStorageState<number>(RFIDSettings.SSE_POLLING_DURATION, {
+		listenStorageChange: true
+	})
 	const [currentTime, setCurrentTime] = useState<number>(performance.now())
 	const previousTime = usePrevious(currentTime)
 	const [latency, setLatency, reset] = useResetState(0)
 
-	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
+	const { scanningStatus } = usePageContext('scanningStatus')
 
 	useEventListener(INCOMING_DATA_CHANGE, () => setCurrentTime(performance.now()))
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') reset()
 		if (scanningStatus === 'connected') {
-			const latency = currentTime - previousTime - pollingDuration
+			const latency = currentTime - previousTime - Number(pollingDuration)
 			setLatency(latency > 0 ? +latency.toFixed(2) : 0)
 		}
 	}, [scanningStatus, currentTime, scanningStatus, pollingDuration])
@@ -81,7 +82,7 @@ const LatencyInsight: React.FC = () => {
 	return (
 		<StatusItem>
 			<Typography variant='small' className='font-medium'>
-				{t('ns_inoutbound:rfid_toolbox.latency')}
+				{t('ns_inoutbound:scanner_setting.latency')}
 			</Typography>
 			<StatusItemDetail>
 				<Icon name='Gauge' size={18} />
@@ -97,9 +98,9 @@ const ConnectionInsight: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='space-y-4'>
+		<Div className='space-y-4 px-4'>
 			<Typography variant='h6' className='text-lg sm:text-base md:text-base'>
-				{t('ns_inoutbound:rfid_toolbox.network_status')}
+				{t('ns_inoutbound:scanner_setting.network_status')}
 			</Typography>
 			<Div className='flex-1 space-y-2'>
 				<NetworkInsight />
@@ -114,8 +115,3 @@ const StatusItem = tw.div`grid grid-cols-2 gap-x-20 sm:gap-x-6 xl:gap-x-4`
 const StatusItemDetail = tw.div`inline-grid grid-cols-[24px_auto] items-center gap-x-2 text-sm`
 
 export default ConnectionInsight
-//  chủn xiang níu chu/yíang? - ngu như con lợn
-
-/**
- * nỉ
- */

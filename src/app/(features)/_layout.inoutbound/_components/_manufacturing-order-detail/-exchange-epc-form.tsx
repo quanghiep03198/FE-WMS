@@ -21,7 +21,7 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { usePrevious } from 'ahooks'
-import { omit, pick, uniqBy } from 'lodash'
+import { omit, uniqBy } from 'lodash'
 import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -35,14 +35,12 @@ import NoExchangeOrder from './-no-exchangable-order'
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedSizes } = usePageContext((state) => pick(state, ['scannedSizes']))
+	const { scannedSizes } = usePageContext('scannedSizes')
 	const {
 		exchangeEpcDialogOpen: open,
 		defaultExchangeEpcFormValues: defaultValues,
 		setExchangeEpcDialogOpen: setOpen
-	} = useOrderDetailContext((state) =>
-		pick(state, ['exchangeEpcDialogOpen', 'defaultExchangeEpcFormValues', 'setExchangeEpcDialogOpen'])
-	)
+	} = useOrderDetailContext('exchangeEpcDialogOpen', 'defaultExchangeEpcFormValues', 'setExchangeEpcDialogOpen')
 
 	const { mutateAsync, isPending, isError } = useExchangeEpcMutation()
 	const form = useForm<ExchangeEpcFormValue>({

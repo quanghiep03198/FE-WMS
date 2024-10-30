@@ -2,7 +2,6 @@ import { Badge, Div, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import { Separator } from '@radix-ui/react-context-menu'
 import { useInterval, useResetState } from 'ahooks'
-import { pick } from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -28,7 +27,7 @@ const ScannedEPCsCounter: React.FC = () => {
 }
 
 const ScanningSkeleton: React.FC = () => {
-	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
+	const { scanningStatus } = usePageContext('scanningStatus')
 	return (
 		<Div
 			data-status={scanningStatus}
@@ -39,7 +38,7 @@ const ScanningSkeleton: React.FC = () => {
 }
 
 const ScanningCounter: React.FC = () => {
-	const { scannedEpc } = usePageContext((state) => pick(state, 'scannedEpc'))
+	const { scannedEpc } = usePageContext('scannedEpc')
 	const total = scannedEpc?.totalDocs ?? 0
 	const { t } = useTranslation()
 	const [count, setCount] = useState(total)
@@ -76,7 +75,7 @@ const ScanningCounter: React.FC = () => {
 }
 
 const ScanningTimer: React.FC = () => {
-	const { scanningStatus } = usePageContext((state) => pick(state, 'scanningStatus'))
+	const { scanningStatus } = usePageContext('scanningStatus')
 	const duration = useRef<number>(0)
 	const [intervalValue, setIntervalValue, resetInterval] = useResetState(undefined)
 	const [scannedTime, setScannedTime, resetScannedTime] = useResetState({
