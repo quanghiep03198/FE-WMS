@@ -69,11 +69,13 @@ const featuresRoute = featuresImport.update({
 } as any)
 
 const featuresPreferencesRoute = featuresPreferencesImport.update({
+  id: '/preferences',
   path: '/preferences',
   getParentRoute: () => featuresRoute,
 } as any)
 
 const publicIndexRoute = publicIndexImport.update({
+  id: '/(public)/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
@@ -84,11 +86,13 @@ const featuresLayoutRoute = featuresLayoutImport.update({
 } as any)
 
 const authLoginIndexRoute = authLoginIndexImport.update({
+  id: '/(auth)/login/',
   path: '/login/',
   getParentRoute: () => rootRoute,
 } as any)
 
 const authAuthorizationIndexRoute = authAuthorizationIndexImport.update({
+  id: '/(auth)/authorization/',
   path: '/authorization/',
   getParentRoute: () => rootRoute,
 } as any)
@@ -101,6 +105,7 @@ const featuresPreferencesLayoutRoute = featuresPreferencesLayoutImport.update({
 const featuresLayoutWarehouseIndexLazyRoute =
   featuresLayoutWarehouseIndexLazyImport
     .update({
+      id: '/warehouse/',
       path: '/warehouse/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -113,6 +118,7 @@ const featuresLayoutWarehouseIndexLazyRoute =
 const featuresLayoutWarehouseImportIndexLazyRoute =
   featuresLayoutWarehouseImportIndexLazyImport
     .update({
+      id: '/warehouse-import/',
       path: '/warehouse-import/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -125,6 +131,7 @@ const featuresLayoutWarehouseImportIndexLazyRoute =
 const featuresLayoutWarehouseExportIndexLazyRoute =
   featuresLayoutWarehouseExportIndexLazyImport
     .update({
+      id: '/warehouse-export/',
       path: '/warehouse-export/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -137,6 +144,7 @@ const featuresLayoutWarehouseExportIndexLazyRoute =
 const featuresLayoutTransferManagementIndexLazyRoute =
   featuresLayoutTransferManagementIndexLazyImport
     .update({
+      id: '/transfer-management/',
       path: '/transfer-management/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -148,6 +156,7 @@ const featuresLayoutTransferManagementIndexLazyRoute =
 
 const featuresLayoutReportIndexLazyRoute = featuresLayoutReportIndexLazyImport
   .update({
+    id: '/report/',
     path: '/report/',
     getParentRoute: () => featuresLayoutRoute,
   } as any)
@@ -158,6 +167,7 @@ const featuresLayoutReportIndexLazyRoute = featuresLayoutReportIndexLazyImport
 const featuresLayoutProductIncomingInspectionIndexLazyRoute =
   featuresLayoutProductIncomingInspectionIndexLazyImport
     .update({
+      id: '/product-incoming-inspection/',
       path: '/product-incoming-inspection/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -170,6 +180,7 @@ const featuresLayoutProductIncomingInspectionIndexLazyRoute =
 const featuresLayoutInventoryIndexLazyRoute =
   featuresLayoutInventoryIndexLazyImport
     .update({
+      id: '/inventory/',
       path: '/inventory/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -182,6 +193,7 @@ const featuresLayoutInventoryIndexLazyRoute =
 const featuresLayoutInoutboundIndexLazyRoute =
   featuresLayoutInoutboundIndexLazyImport
     .update({
+      id: '/inoutbound/',
       path: '/inoutbound/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -193,6 +205,7 @@ const featuresLayoutInoutboundIndexLazyRoute =
 
 const featuresLayoutDashboardIndexRoute =
   featuresLayoutDashboardIndexImport.update({
+    id: '/dashboard/',
     path: '/dashboard/',
     getParentRoute: () => featuresLayoutRoute,
   } as any)
@@ -200,6 +213,7 @@ const featuresLayoutDashboardIndexRoute =
 const featuresPreferencesLayoutKeybindingsIndexLazyRoute =
   featuresPreferencesLayoutKeybindingsIndexLazyImport
     .update({
+      id: '/keybindings/',
       path: '/keybindings/',
       getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
@@ -212,6 +226,7 @@ const featuresPreferencesLayoutKeybindingsIndexLazyRoute =
 const featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute =
   featuresPreferencesLayoutAppearanceSettingsIndexLazyImport
     .update({
+      id: '/appearance-settings/',
       path: '/appearance-settings/',
       getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
@@ -224,6 +239,7 @@ const featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute =
 const featuresPreferencesLayoutAccountIndexLazyRoute =
   featuresPreferencesLayoutAccountIndexLazyImport
     .update({
+      id: '/account/',
       path: '/account/',
       getParentRoute: () => featuresPreferencesLayoutRoute,
     } as any)
@@ -236,6 +252,7 @@ const featuresPreferencesLayoutAccountIndexLazyRoute =
 const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute =
   featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport
     .update({
+      id: '/warehouse/_layout/storage-details/$warehouseNum/',
       path: '/warehouse/storage-details/$warehouseNum/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
@@ -250,140 +267,140 @@ const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute =
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/(features)': {
-      id: '/'
+      id: '/(features)'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof featuresImport
       parentRoute: typeof rootRoute
     }
     '/(features)/_layout': {
-      id: '/_layout'
+      id: '/(features)/_layout'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof featuresLayoutImport
       parentRoute: typeof featuresRoute
     }
     '/(public)/': {
-      id: '/'
+      id: '/(public)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof publicIndexImport
       parentRoute: typeof rootRoute
     }
     '/(features)/preferences': {
-      id: '/preferences'
+      id: '/(features)/preferences'
       path: '/preferences'
       fullPath: '/preferences'
       preLoaderRoute: typeof featuresPreferencesImport
       parentRoute: typeof featuresImport
     }
     '/(features)/preferences/_layout': {
-      id: '/preferences/_layout'
+      id: '/(features)/preferences/_layout'
       path: '/preferences'
       fullPath: '/preferences'
       preLoaderRoute: typeof featuresPreferencesLayoutImport
       parentRoute: typeof featuresPreferencesRoute
     }
     '/(auth)/authorization/': {
-      id: '/authorization/'
+      id: '/(auth)/authorization/'
       path: '/authorization'
       fullPath: '/authorization'
       preLoaderRoute: typeof authAuthorizationIndexImport
       parentRoute: typeof rootRoute
     }
     '/(auth)/login/': {
-      id: '/login/'
+      id: '/(auth)/login/'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof authLoginIndexImport
       parentRoute: typeof rootRoute
     }
     '/(features)/_layout/dashboard/': {
-      id: '/_layout/dashboard/'
+      id: '/(features)/_layout/dashboard/'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof featuresLayoutDashboardIndexImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/inoutbound/': {
-      id: '/_layout/inoutbound/'
+      id: '/(features)/_layout/inoutbound/'
       path: '/inoutbound'
       fullPath: '/inoutbound'
       preLoaderRoute: typeof featuresLayoutInoutboundIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/inventory/': {
-      id: '/_layout/inventory/'
+      id: '/(features)/_layout/inventory/'
       path: '/inventory'
       fullPath: '/inventory'
       preLoaderRoute: typeof featuresLayoutInventoryIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/product-incoming-inspection/': {
-      id: '/_layout/product-incoming-inspection/'
+      id: '/(features)/_layout/product-incoming-inspection/'
       path: '/product-incoming-inspection'
       fullPath: '/product-incoming-inspection'
       preLoaderRoute: typeof featuresLayoutProductIncomingInspectionIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/report/': {
-      id: '/_layout/report/'
+      id: '/(features)/_layout/report/'
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof featuresLayoutReportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/transfer-management/': {
-      id: '/_layout/transfer-management/'
+      id: '/(features)/_layout/transfer-management/'
       path: '/transfer-management'
       fullPath: '/transfer-management'
       preLoaderRoute: typeof featuresLayoutTransferManagementIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/warehouse-export/': {
-      id: '/_layout/warehouse-export/'
+      id: '/(features)/_layout/warehouse-export/'
       path: '/warehouse-export'
       fullPath: '/warehouse-export'
       preLoaderRoute: typeof featuresLayoutWarehouseExportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/warehouse-import/': {
-      id: '/_layout/warehouse-import/'
+      id: '/(features)/_layout/warehouse-import/'
       path: '/warehouse-import'
       fullPath: '/warehouse-import'
       preLoaderRoute: typeof featuresLayoutWarehouseImportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/warehouse/': {
-      id: '/_layout/warehouse/'
+      id: '/(features)/_layout/warehouse/'
       path: '/warehouse'
       fullPath: '/warehouse'
       preLoaderRoute: typeof featuresLayoutWarehouseIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/preferences/_layout/account/': {
-      id: '/preferences/_layout/account/'
+      id: '/(features)/preferences/_layout/account/'
       path: '/account'
       fullPath: '/preferences/account'
       preLoaderRoute: typeof featuresPreferencesLayoutAccountIndexLazyImport
       parentRoute: typeof featuresPreferencesLayoutImport
     }
     '/(features)/preferences/_layout/appearance-settings/': {
-      id: '/preferences/_layout/appearance-settings/'
+      id: '/(features)/preferences/_layout/appearance-settings/'
       path: '/appearance-settings'
       fullPath: '/preferences/appearance-settings'
       preLoaderRoute: typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyImport
       parentRoute: typeof featuresPreferencesLayoutImport
     }
     '/(features)/preferences/_layout/keybindings/': {
-      id: '/preferences/_layout/keybindings/'
+      id: '/(features)/preferences/_layout/keybindings/'
       path: '/keybindings'
       fullPath: '/preferences/keybindings'
       preLoaderRoute: typeof featuresPreferencesLayoutKeybindingsIndexLazyImport
       parentRoute: typeof featuresPreferencesLayoutImport
     }
     '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/': {
-      id: '/_layout/warehouse/_layout/storage-details/$warehouseNum/'
+      id: '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/'
       path: '/warehouse/storage-details/$warehouseNum'
       fullPath: '/warehouse/storage-details/$warehouseNum'
       preLoaderRoute: typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport
@@ -394,33 +411,233 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  featuresRoute: featuresRoute.addChildren({
-    featuresLayoutRoute: featuresLayoutRoute.addChildren({
-      featuresLayoutDashboardIndexRoute,
-      featuresLayoutInoutboundIndexLazyRoute,
-      featuresLayoutInventoryIndexLazyRoute,
-      featuresLayoutProductIncomingInspectionIndexLazyRoute,
-      featuresLayoutReportIndexLazyRoute,
-      featuresLayoutTransferManagementIndexLazyRoute,
-      featuresLayoutWarehouseExportIndexLazyRoute,
-      featuresLayoutWarehouseImportIndexLazyRoute,
-      featuresLayoutWarehouseIndexLazyRoute,
-      featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute,
-    }),
-    featuresPreferencesRoute: featuresPreferencesRoute.addChildren({
-      featuresPreferencesLayoutRoute:
-        featuresPreferencesLayoutRoute.addChildren({
-          featuresPreferencesLayoutAccountIndexLazyRoute,
-          featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute,
-          featuresPreferencesLayoutKeybindingsIndexLazyRoute,
-        }),
-    }),
-  }),
-  publicIndexRoute,
-  authAuthorizationIndexRoute,
-  authLoginIndexRoute,
-})
+interface featuresLayoutRouteChildren {
+  featuresLayoutDashboardIndexRoute: typeof featuresLayoutDashboardIndexRoute
+  featuresLayoutInoutboundIndexLazyRoute: typeof featuresLayoutInoutboundIndexLazyRoute
+  featuresLayoutInventoryIndexLazyRoute: typeof featuresLayoutInventoryIndexLazyRoute
+  featuresLayoutProductIncomingInspectionIndexLazyRoute: typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
+  featuresLayoutReportIndexLazyRoute: typeof featuresLayoutReportIndexLazyRoute
+  featuresLayoutTransferManagementIndexLazyRoute: typeof featuresLayoutTransferManagementIndexLazyRoute
+  featuresLayoutWarehouseExportIndexLazyRoute: typeof featuresLayoutWarehouseExportIndexLazyRoute
+  featuresLayoutWarehouseImportIndexLazyRoute: typeof featuresLayoutWarehouseImportIndexLazyRoute
+  featuresLayoutWarehouseIndexLazyRoute: typeof featuresLayoutWarehouseIndexLazyRoute
+  featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute: typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+
+const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
+  featuresLayoutDashboardIndexRoute: featuresLayoutDashboardIndexRoute,
+  featuresLayoutInoutboundIndexLazyRoute:
+    featuresLayoutInoutboundIndexLazyRoute,
+  featuresLayoutInventoryIndexLazyRoute: featuresLayoutInventoryIndexLazyRoute,
+  featuresLayoutProductIncomingInspectionIndexLazyRoute:
+    featuresLayoutProductIncomingInspectionIndexLazyRoute,
+  featuresLayoutReportIndexLazyRoute: featuresLayoutReportIndexLazyRoute,
+  featuresLayoutTransferManagementIndexLazyRoute:
+    featuresLayoutTransferManagementIndexLazyRoute,
+  featuresLayoutWarehouseExportIndexLazyRoute:
+    featuresLayoutWarehouseExportIndexLazyRoute,
+  featuresLayoutWarehouseImportIndexLazyRoute:
+    featuresLayoutWarehouseImportIndexLazyRoute,
+  featuresLayoutWarehouseIndexLazyRoute: featuresLayoutWarehouseIndexLazyRoute,
+  featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute:
+    featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute,
+}
+
+const featuresLayoutRouteWithChildren = featuresLayoutRoute._addFileChildren(
+  featuresLayoutRouteChildren,
+)
+
+interface featuresPreferencesLayoutRouteChildren {
+  featuresPreferencesLayoutAccountIndexLazyRoute: typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute: typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  featuresPreferencesLayoutKeybindingsIndexLazyRoute: typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+}
+
+const featuresPreferencesLayoutRouteChildren: featuresPreferencesLayoutRouteChildren =
+  {
+    featuresPreferencesLayoutAccountIndexLazyRoute:
+      featuresPreferencesLayoutAccountIndexLazyRoute,
+    featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute:
+      featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute,
+    featuresPreferencesLayoutKeybindingsIndexLazyRoute:
+      featuresPreferencesLayoutKeybindingsIndexLazyRoute,
+  }
+
+const featuresPreferencesLayoutRouteWithChildren =
+  featuresPreferencesLayoutRoute._addFileChildren(
+    featuresPreferencesLayoutRouteChildren,
+  )
+
+interface featuresPreferencesRouteChildren {
+  featuresPreferencesLayoutRoute: typeof featuresPreferencesLayoutRouteWithChildren
+}
+
+const featuresPreferencesRouteChildren: featuresPreferencesRouteChildren = {
+  featuresPreferencesLayoutRoute: featuresPreferencesLayoutRouteWithChildren,
+}
+
+const featuresPreferencesRouteWithChildren =
+  featuresPreferencesRoute._addFileChildren(featuresPreferencesRouteChildren)
+
+interface featuresRouteChildren {
+  featuresLayoutRoute: typeof featuresLayoutRouteWithChildren
+  featuresPreferencesRoute: typeof featuresPreferencesRouteWithChildren
+}
+
+const featuresRouteChildren: featuresRouteChildren = {
+  featuresLayoutRoute: featuresLayoutRouteWithChildren,
+  featuresPreferencesRoute: featuresPreferencesRouteWithChildren,
+}
+
+const featuresRouteWithChildren = featuresRoute._addFileChildren(
+  featuresRouteChildren,
+)
+
+export interface FileRoutesByFullPath {
+  '/': typeof publicIndexRoute
+  '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
+  '/authorization': typeof authAuthorizationIndexRoute
+  '/login': typeof authLoginIndexRoute
+  '/dashboard': typeof featuresLayoutDashboardIndexRoute
+  '/inoutbound': typeof featuresLayoutInoutboundIndexLazyRoute
+  '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
+  '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
+  '/report': typeof featuresLayoutReportIndexLazyRoute
+  '/transfer-management': typeof featuresLayoutTransferManagementIndexLazyRoute
+  '/warehouse-export': typeof featuresLayoutWarehouseExportIndexLazyRoute
+  '/warehouse-import': typeof featuresLayoutWarehouseImportIndexLazyRoute
+  '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+  '/warehouse/storage-details/$warehouseNum': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof publicIndexRoute
+  '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
+  '/authorization': typeof authAuthorizationIndexRoute
+  '/login': typeof authLoginIndexRoute
+  '/dashboard': typeof featuresLayoutDashboardIndexRoute
+  '/inoutbound': typeof featuresLayoutInoutboundIndexLazyRoute
+  '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
+  '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
+  '/report': typeof featuresLayoutReportIndexLazyRoute
+  '/transfer-management': typeof featuresLayoutTransferManagementIndexLazyRoute
+  '/warehouse-export': typeof featuresLayoutWarehouseExportIndexLazyRoute
+  '/warehouse-import': typeof featuresLayoutWarehouseImportIndexLazyRoute
+  '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  '/preferences/keybindings': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+  '/warehouse/storage-details/$warehouseNum': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/(features)': typeof featuresRouteWithChildren
+  '/(features)/_layout': typeof featuresLayoutRouteWithChildren
+  '/(public)/': typeof publicIndexRoute
+  '/(features)/preferences': typeof featuresPreferencesRouteWithChildren
+  '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
+  '/(auth)/authorization/': typeof authAuthorizationIndexRoute
+  '/(auth)/login/': typeof authLoginIndexRoute
+  '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexRoute
+  '/(features)/_layout/inoutbound/': typeof featuresLayoutInoutboundIndexLazyRoute
+  '/(features)/_layout/inventory/': typeof featuresLayoutInventoryIndexLazyRoute
+  '/(features)/_layout/product-incoming-inspection/': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
+  '/(features)/_layout/report/': typeof featuresLayoutReportIndexLazyRoute
+  '/(features)/_layout/transfer-management/': typeof featuresLayoutTransferManagementIndexLazyRoute
+  '/(features)/_layout/warehouse-export/': typeof featuresLayoutWarehouseExportIndexLazyRoute
+  '/(features)/_layout/warehouse-import/': typeof featuresLayoutWarehouseImportIndexLazyRoute
+  '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/(features)/preferences/_layout/account/': typeof featuresPreferencesLayoutAccountIndexLazyRoute
+  '/(features)/preferences/_layout/appearance-settings/': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
+  '/(features)/preferences/_layout/keybindings/': typeof featuresPreferencesLayoutKeybindingsIndexLazyRoute
+  '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/': typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/preferences'
+    | '/authorization'
+    | '/login'
+    | '/dashboard'
+    | '/inoutbound'
+    | '/inventory'
+    | '/product-incoming-inspection'
+    | '/report'
+    | '/transfer-management'
+    | '/warehouse-export'
+    | '/warehouse-import'
+    | '/warehouse'
+    | '/preferences/account'
+    | '/preferences/appearance-settings'
+    | '/preferences/keybindings'
+    | '/warehouse/storage-details/$warehouseNum'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/preferences'
+    | '/authorization'
+    | '/login'
+    | '/dashboard'
+    | '/inoutbound'
+    | '/inventory'
+    | '/product-incoming-inspection'
+    | '/report'
+    | '/transfer-management'
+    | '/warehouse-export'
+    | '/warehouse-import'
+    | '/warehouse'
+    | '/preferences/account'
+    | '/preferences/appearance-settings'
+    | '/preferences/keybindings'
+    | '/warehouse/storage-details/$warehouseNum'
+  id:
+    | '__root__'
+    | '/(features)'
+    | '/(features)/_layout'
+    | '/(public)/'
+    | '/(features)/preferences'
+    | '/(features)/preferences/_layout'
+    | '/(auth)/authorization/'
+    | '/(auth)/login/'
+    | '/(features)/_layout/dashboard/'
+    | '/(features)/_layout/inoutbound/'
+    | '/(features)/_layout/inventory/'
+    | '/(features)/_layout/product-incoming-inspection/'
+    | '/(features)/_layout/report/'
+    | '/(features)/_layout/transfer-management/'
+    | '/(features)/_layout/warehouse-export/'
+    | '/(features)/_layout/warehouse-import/'
+    | '/(features)/_layout/warehouse/'
+    | '/(features)/preferences/_layout/account/'
+    | '/(features)/preferences/_layout/appearance-settings/'
+    | '/(features)/preferences/_layout/keybindings/'
+    | '/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  featuresRoute: typeof featuresRouteWithChildren
+  publicIndexRoute: typeof publicIndexRoute
+  authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
+  authLoginIndexRoute: typeof authLoginIndexRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  featuresRoute: featuresRouteWithChildren,
+  publicIndexRoute: publicIndexRoute,
+  authAuthorizationIndexRoute: authAuthorizationIndexRoute,
+  authLoginIndexRoute: authLoginIndexRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
@@ -430,104 +647,111 @@ export const routeTree = rootRoute.addChildren({
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/",
-        "/authorization/",
-        "/login/"
+        "/(features)",
+        "/(public)/",
+        "/(auth)/authorization/",
+        "/(auth)/login/"
       ]
     },
-    "/": {
+    "/(features)": {
+      "filePath": "(features)",
+      "children": [
+        "/(features)/_layout",
+        "/(features)/preferences"
+      ]
+    },
+    "/(features)/_layout": {
+      "filePath": "(features)/_layout.tsx",
+      "parent": "/(features)",
+      "children": [
+        "/(features)/_layout/dashboard/",
+        "/(features)/_layout/inoutbound/",
+        "/(features)/_layout/inventory/",
+        "/(features)/_layout/product-incoming-inspection/",
+        "/(features)/_layout/report/",
+        "/(features)/_layout/transfer-management/",
+        "/(features)/_layout/warehouse-export/",
+        "/(features)/_layout/warehouse-import/",
+        "/(features)/_layout/warehouse/",
+        "/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/"
+      ]
+    },
+    "/(public)/": {
       "filePath": "(public)/index.tsx"
     },
-    "/_layout": {
-      "filePath": "(features)/_layout.tsx",
-      "parent": "/",
-      "children": [
-        "/_layout/dashboard/",
-        "/_layout/inoutbound/",
-        "/_layout/inventory/",
-        "/_layout/product-incoming-inspection/",
-        "/_layout/report/",
-        "/_layout/transfer-management/",
-        "/_layout/warehouse-export/",
-        "/_layout/warehouse-import/",
-        "/_layout/warehouse/",
-        "/_layout/warehouse/_layout/storage-details/$warehouseNum/"
-      ]
-    },
-    "/preferences": {
+    "/(features)/preferences": {
       "filePath": "(features)/preferences",
-      "parent": "/",
+      "parent": "/(features)",
       "children": [
-        "/preferences/_layout"
+        "/(features)/preferences/_layout"
       ]
     },
-    "/preferences/_layout": {
+    "/(features)/preferences/_layout": {
       "filePath": "(features)/preferences/_layout.tsx",
-      "parent": "/preferences",
+      "parent": "/(features)/preferences",
       "children": [
-        "/preferences/_layout/account/",
-        "/preferences/_layout/appearance-settings/",
-        "/preferences/_layout/keybindings/"
+        "/(features)/preferences/_layout/account/",
+        "/(features)/preferences/_layout/appearance-settings/",
+        "/(features)/preferences/_layout/keybindings/"
       ]
     },
-    "/authorization/": {
+    "/(auth)/authorization/": {
       "filePath": "(auth)/authorization/index.tsx"
     },
-    "/login/": {
+    "/(auth)/login/": {
       "filePath": "(auth)/login/index.tsx"
     },
-    "/_layout/dashboard/": {
+    "/(features)/_layout/dashboard/": {
       "filePath": "(features)/_layout.dashboard/index.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/inoutbound/": {
+    "/(features)/_layout/inoutbound/": {
       "filePath": "(features)/_layout.inoutbound/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/inventory/": {
+    "/(features)/_layout/inventory/": {
       "filePath": "(features)/_layout.inventory/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/product-incoming-inspection/": {
+    "/(features)/_layout/product-incoming-inspection/": {
       "filePath": "(features)/_layout.product-incoming-inspection/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/report/": {
+    "/(features)/_layout/report/": {
       "filePath": "(features)/_layout.report/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/transfer-management/": {
+    "/(features)/_layout/transfer-management/": {
       "filePath": "(features)/_layout.transfer-management/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/warehouse-export/": {
+    "/(features)/_layout/warehouse-export/": {
       "filePath": "(features)/_layout.warehouse-export/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/warehouse-import/": {
+    "/(features)/_layout/warehouse-import/": {
       "filePath": "(features)/_layout.warehouse-import/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/_layout/warehouse/": {
+    "/(features)/_layout/warehouse/": {
       "filePath": "(features)/_layout.warehouse/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     },
-    "/preferences/_layout/account/": {
+    "/(features)/preferences/_layout/account/": {
       "filePath": "(features)/preferences/_layout.account/index.lazy.tsx",
-      "parent": "/preferences/_layout"
+      "parent": "/(features)/preferences/_layout"
     },
-    "/preferences/_layout/appearance-settings/": {
+    "/(features)/preferences/_layout/appearance-settings/": {
       "filePath": "(features)/preferences/_layout.appearance-settings/index.lazy.tsx",
-      "parent": "/preferences/_layout"
+      "parent": "/(features)/preferences/_layout"
     },
-    "/preferences/_layout/keybindings/": {
+    "/(features)/preferences/_layout/keybindings/": {
       "filePath": "(features)/preferences/_layout.keybindings/index.lazy.tsx",
-      "parent": "/preferences/_layout"
+      "parent": "/(features)/preferences/_layout"
     },
-    "/_layout/warehouse/_layout/storage-details/$warehouseNum/": {
+    "/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/": {
       "filePath": "(features)/_layout.warehouse/_layout.storage-details.$warehouseNum/index.lazy.tsx",
-      "parent": "/_layout"
+      "parent": "/(features)/_layout"
     }
   }
 }
