@@ -1,11 +1,10 @@
+import GlobalTransportImage from '@/assets/images/svgs/global-transport.svg'
 import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography, buttonVariants } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
-import { usePageContext } from '../_contexts/-page-context'
-// import BrowserMockup from './-browser-mockup'
-import GlobalTransportImage from '@/assets/images/svgs/global-transport.svg'
 import tw from 'tailwind-styled-components'
+import { usePageContext } from '../_contexts/-page-context'
 
 const CTASection: React.FC = () => {
 	const { handleMenuClick } = usePageContext()
