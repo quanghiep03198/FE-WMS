@@ -76,7 +76,12 @@ function KeybindingsPage() {
 				<PageDescription>{t('ns_preference:captions.keybindings')}</PageDescription>
 			</PageHeader>
 			<Separator />
-			<DataTable data={navigationCommands.concat(extendedCommands)} enableColumnResizing columns={columns} />
+			<DataTable
+				data={navigationCommands.concat(extendedCommands)}
+				enableColumnResizing
+				columns={columns}
+				containerProps={{ className: 'xxl:h-[50vh]' }}
+			/>
 		</Div>
 	)
 }
