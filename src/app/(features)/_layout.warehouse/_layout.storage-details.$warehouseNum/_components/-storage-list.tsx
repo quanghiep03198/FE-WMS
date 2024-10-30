@@ -201,7 +201,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 									type: CommonActions.UPDATE,
 									payload: {
 										dialogTitle: t('ns_common:common_form_titles.update', {
-											object: t('ns_common:specialized_vocabs.storage_area')
+											object: t('ns_warehouse:specialized_vocabs.storage_area')
 										}),
 										defaultFormValues: {
 											...row.original,
