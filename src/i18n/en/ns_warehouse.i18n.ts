@@ -1,4 +1,8 @@
 export default {
+	specialized_vocabs: {
+		warehouse: 'Warehouse',
+		storage_area: 'Storage area'
+	},
 	fields: {
 		warehouse_num: 'Warehouse code',
 		warehouse_name: 'Warehouse name',

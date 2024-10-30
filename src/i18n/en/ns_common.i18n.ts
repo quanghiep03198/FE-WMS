@@ -5,10 +5,7 @@ export default {
 		function: 'Function',
 		font: 'Font'
 	},
-	specialized_vocabs: {
-		warehouse: 'Warehouse',
-		storage_area: 'Storage area'
-	},
+
 	common_fields: {
 		created_at: 'Created at',
 		updated_at: 'Updated at',
@@ -120,7 +117,8 @@ export default {
 		update: 'Update {{object}}'
 	},
 	titles: {
-		caution: 'Caution'
+		caution: 'Caution',
+		general_settings: 'General settings'
 	},
 	status: {
 		connecting: 'Connnecting',

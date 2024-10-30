@@ -1,4 +1,8 @@
 export default {
+	specialized_vocabs: {
+		warehouse: '仓库',
+		storage_area: '库位'
+	},
 	fields: {
 		warehouse_num: '库位编号',
 		warehouse_name: '库位名称',

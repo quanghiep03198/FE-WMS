@@ -5,10 +5,7 @@ export default {
 		function: '功能名称',
 		font: '字体'
 	},
-	specialized_vocabs: {
-		warehouse: '仓库',
-		storage_area: '库位'
-	},
+
 	common_fields: {
 		created_at: '创建日期',
 		updated_at: '编辑日期',
@@ -119,7 +116,8 @@ export default {
 		update: '編輯{{object}}'
 	},
 	titles: {
-		caution: '警告'
+		caution: '警告',
+		general_settings: '常规设置'
 	},
 	status: {
 		connecting: '连接中',

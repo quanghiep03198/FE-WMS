@@ -5,10 +5,7 @@ export default {
 		function: 'Chức năng',
 		font: 'Phông chữ'
 	},
-	specialized_vocabs: {
-		warehouse: 'Kho',
-		storage_area: 'Khu vực lưu trữ'
-	},
+
 	common_fields: {
 		created_at: 'Ngày tạo',
 		updated_at: 'Ngày cập nhật',
@@ -121,7 +118,8 @@ export default {
 		update: 'Cập nhật {{object}}'
 	},
 	titles: {
-		caution: 'Cảnh báo'
+		caution: 'Cảnh báo',
+		general_settings: 'Cài đặt chung'
 	},
 	status: {
 		connecting: 'Đang kết nối',

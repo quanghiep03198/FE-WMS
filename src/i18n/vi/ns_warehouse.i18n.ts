@@ -1,4 +1,8 @@
 export default {
+	specialized_vocabs: {
+		warehouse: 'Kho',
+		storage_area: 'Khu vực lưu trữ'
+	},
 	fields: {
 		warehouse_num: 'Mã kho',
 		warehouse_name: 'Tên kho',

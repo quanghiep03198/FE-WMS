@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -74,7 +75,7 @@ export default {
 		exchange_qty: 'Number of exchanged items for the actual order',
 		exchange_all: 'You can exchange the whole EPC belongs to the selected size'
 	},
-	rfid_toolbox: {
+	scanner_setting: {
 		network_status: 'Network status',
 		internet_access: 'Internet access',
 		latency: 'Latency',
@@ -84,6 +85,8 @@ export default {
 		polling_duration_note: 'Choose polling duration before scanning',
 		polling_duration_description:
 			'Controls polling duration: lower value means faster polling however it can cause higher traffic for server',
+		fetch_older_data: 'Fetch older data',
+		fetch_oder_data_note: "Allow you to scan EPC that's not imported/exported from the previous days",
 		toggle_fullscreen: 'Toggle full screen',
 		toggle_fullscreen_note: 'Use full screen mode to have larger view',
 		preserve_log: 'Preserve log',

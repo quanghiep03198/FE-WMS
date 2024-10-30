@@ -70,7 +70,7 @@ export default {
 		exchange_qty: '实际订单的交换商品数量',
 		exchange_all: '您可以交换属于所选尺码的整个 EPC'
 	},
-	rfid_toolbox: {
+	scanner_setting: {
 		network_status: '网络状态',
 		internet_access: '互联网访问',
 		latency: '延迟',
@@ -79,6 +79,8 @@ export default {
 		polling_duration: '轮询持续时间',
 		polling_duration_note: '扫描前选择轮询持续时间',
 		polling_duration_description: '控制轮询间隔时间：值越低，轮询越快，但可能导致服务器流量增加',
+		fetch_older_data: '获取更多数据',
+		fetch_oder_data_note: '允许您扫描未从前几天导入/导出的EPC',
 		toggle_fullscreen: '切换全屏模式',
 		toggle_fullscreen_note: '使用全屏模式以获得更大的视图',
 		preserve_log: '保留日志',

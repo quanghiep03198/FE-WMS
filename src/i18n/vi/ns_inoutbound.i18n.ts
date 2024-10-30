@@ -71,7 +71,7 @@ export default {
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn'
 	},
-	rfid_toolbox: {
+	scanner_setting: {
 		network_status: 'Trạng thái kết nối',
 		internet_access: 'Kết nối mạng',
 		latency: 'Độ trễ',
@@ -81,6 +81,8 @@ export default {
 		polling_duration_note: 'Chọn tần suất trước khi thao tác quét',
 		polling_duration_description:
 			'Kiểm soát tần suất quét: giá trị thấp hơn có nghĩa là quét nhanh hơn, tuy nhiên nó có thể gây ra lưu lượng truy cập cao hơn cho máy chủ.',
+		fetch_older_data: 'Lấy dữ liệu cũ',
+		fetch_oder_data_note: 'Cho phép bạn tải các dữ liệu EPC cũ hơn chưa thực hiện thao tác nhập/xuất',
 		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',
 		toggle_fullscreen_note: 'Sử dụng chế độ toàn màn hình để có góc nhìn rộng hơn',
 		preserve_log: 'Giữ log',
