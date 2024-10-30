@@ -30,7 +30,7 @@ function easeInOutQuint(t) {
 }
 
 function TableDataGrid<TData, TValue>({
-	containerProps = { className: cn('h-[40vh] xxl:h-[70vh]') },
+	containerProps = { className: cn('h-[50vh] xxl:h-[60vh]') },
 	table,
 	footerProps = { hidden: true, slot: null },
 	caption,
@@ -127,7 +127,7 @@ function TableDataGrid<TData, TValue>({
 													key={header.id}
 													colSpan={header.colSpan}
 													rowSpan={rowSpan}
-													className={cn('group relative h-10 p-0')}
+													className={cn('group relative h-10 bg-secondary p-0 dark:bg-[hsl(0,0%,6.9%)]')}
 													align={header.column.columnDef.meta?.align}
 													style={{
 														height: `${ESTIMATE_SIZE}px`,
@@ -187,7 +187,7 @@ function TableDataGrid<TData, TValue>({
 	)
 }
 
-const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-[var(--radius)] divide-y divide-border`
+const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md divide-y divide-border`
 const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none ring-0 ring-offset-0 ring-offset-transparent`
 
 TableDataGrid.displayName = 'DataTable'
