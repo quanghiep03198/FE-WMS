@@ -1,4 +1,5 @@
 import NetworkDetector from '@/components/shared/network-detector'
+import { SidebarProvider } from '@/components/ui'
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
@@ -24,21 +25,23 @@ function Layout() {
 		<Fragment>
 			<AuthGuard>
 				<LayoutComposition.Container>
-					<NavSidebar />
-					<BreadcrumbProvider>
-						<LayoutComposition.Main>
-							<Navbar />
-							<LayoutComposition.OutletWrapper>
-								<QueryErrorResetBoundary>
-									{({ reset }) => (
-										<ErrorBoundary onReset={reset}>
-											<Outlet />
-										</ErrorBoundary>
-									)}
-								</QueryErrorResetBoundary>
-							</LayoutComposition.OutletWrapper>
-						</LayoutComposition.Main>
-					</BreadcrumbProvider>
+					<SidebarProvider>
+						<NavSidebar />
+						<BreadcrumbProvider>
+							<LayoutComposition.Main>
+								<Navbar />
+								<LayoutComposition.OutletWrapper>
+									<QueryErrorResetBoundary>
+										{({ reset }) => (
+											<ErrorBoundary onReset={reset}>
+												<Outlet />
+											</ErrorBoundary>
+										)}
+									</QueryErrorResetBoundary>
+								</LayoutComposition.OutletWrapper>
+							</LayoutComposition.Main>
+						</BreadcrumbProvider>
+					</SidebarProvider>
 				</LayoutComposition.Container>
 			</AuthGuard>
 			<NetworkDetector />
