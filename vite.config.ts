@@ -45,6 +45,16 @@ export default defineConfig(({ mode }) => {
 							sizes: '512x512',
 							type: 'image/png',
 							purpose: 'maskable'
+						},
+						{
+							src: './src/assets/images/svgs/faq-card.svg',
+							type: 'image/svg+xml',
+							purpose: 'any'
+						},
+						{
+							src: './src/assets/images/svgs/global-transport.svg',
+							type: 'image/svg+xml',
+							purpose: 'any'
 						}
 					]
 				},
