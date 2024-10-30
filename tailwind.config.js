@@ -6,7 +6,7 @@ module.exports = {
 	prefix: '',
 	theme: {
 		container: {
-			center: true,
+			center: 'true',
 			padding: '2rem',
 			screens: {
 				'2xl': '1400px'
@@ -27,8 +27,8 @@ module.exports = {
 			},
 			width: {
 				88: '22rem',
-				'1/8': `${(1 / 8) * 100}%`,
-				'1/12': `${(1 / 12) * 100}%`
+				'1/8': '`${(1 / 8) * 100}%`',
+				'1/12': '`${(1 / 12) * 100}%`'
 			},
 			fontFamily: {
 				noto: 'Noto Sans SC, sans-serif '
@@ -76,6 +76,21 @@ module.exports = {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				table: {
+					head: 'hsl(var(--table-head))',
+					'row-active': 'hsl(var(--table-row-active))',
+					'row-selected': 'hsl(var(--table-row-selected))'
+				},
+				sidebar: {
+					DEFAULT: 'hsl(var(--sidebar-background))',
+					foreground: 'hsl(var(--sidebar-foreground))',
+					primary: 'hsl(var(--sidebar-primary))',
+					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+					accent: 'hsl(var(--sidebar-accent))',
+					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+					border: 'hsl(var(--sidebar-border))',
+					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
 			screens: {
@@ -91,8 +106,12 @@ module.exports = {
 					min: '1024px',
 					max: '1365px'
 				},
-				xl: { min: '1366px' },
-				xxl: { min: '1920px' }
+				xl: {
+					min: '1366px'
+				},
+				xxl: {
+					min: '1920px'
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -101,28 +120,52 @@ module.exports = {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: { height: '0' },
-					to: { height: 'var(--radix-accordion-content-height)' }
+					from: {
+						height: '0'
+					},
+					to: {
+						height: 'var(--radix-accordion-content-height)'
+					}
 				},
 				'accordion-up': {
-					from: { height: 'var(--radix-accordion-content-height)' },
-					to: { height: '0' }
+					from: {
+						height: 'var(--radix-accordion-content-height)'
+					},
+					to: {
+						height: '0'
+					}
 				},
 				'collapsible-down': {
-					from: { height: '0' },
-					to: { height: 'var(--radix-collapsible-content-height)' }
+					from: {
+						height: '0'
+					},
+					to: {
+						height: 'var(--radix-collapsible-content-height)'
+					}
 				},
 				'collapsible-up': {
-					from: { height: 'var(--radix-collapsible-content-height)' },
-					to: { height: '0' }
+					from: {
+						height: 'var(--radix-collapsible-content-height)'
+					},
+					to: {
+						height: '0'
+					}
 				},
 				'collapsible-up-reverse': {
-					from: { height: '0' },
-					to: { height: 'var(--radix-collapsible-content-height)' }
+					from: {
+						height: '0'
+					},
+					to: {
+						height: 'var(--radix-collapsible-content-height)'
+					}
 				},
 				'collapsible-down-reverse': {
-					from: { height: 'var(--radix-collapsible-content-height)' },
-					to: { height: '0' }
+					from: {
+						height: 'var(--radix-collapsible-content-height)'
+					},
+					to: {
+						height: '0'
+					}
 				},
 				shimmer: {
 					from: {
@@ -134,12 +177,11 @@ module.exports = {
 				},
 				spotlight: {
 					'0%': {
-						opacity: 0,
+						opacity: '0',
 						transform: 'translate(-75%, -60%) scale(0.5)'
 					},
-
 					'100%': {
-						opacity: 1,
+						opacity: '1',
 						transform: 'translate(-50%,-40%) scale(1)'
 					}
 				}

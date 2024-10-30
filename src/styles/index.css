@@ -41,24 +41,37 @@
 		--border: 0 0% 89.8%;
 		--input: 0 0% 89.8%;
 		--ring: 0 0% 3.9%;
-
-		--radius: 0.5rem;
+		--scrollbar: 0 0% 90%;
 		--scrollbar-width: 16px;
 
-		--scrollbar: 0 0% 90%;
-		--row-active: 0 0% 96%;
-		--row-selected: 0 0% 98%;
+		--radius: 0.5rem;
+
+		--table-head: 0 0% 99%;
+		--table-row-active: 0 0% 96%;
+		--table-row-selected: 0 0% 98%;
 
 		--chart-1: 220 70% 50%;
 		--chart-2: 340 75% 55%;
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
 		--chart-5: 160 60% 45%;
-		/* --chart-1: 359 2% 90%;
-		--chart-2: 240 1% 74%;
-		--chart-3: 240 1% 58%;
-		--chart-4: 240 1% 42%;
-		--chart-5: 240 2% 26%; */
+
+		--sidebar-background: 0 0% 100%;
+		--sidebar-foreground: 240 5.3% 26.1%;
+		--sidebar-primary: 240 5.9% 10%;
+		--sidebar-primary-foreground: 0 0% 98%;
+		--sidebar-accent: 240 4.8% 95.9%;
+		--sidebar-accent-foreground: 240 5.9% 10%;
+		--sidebar-border: 220 13% 91%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
+
+		/* 
+			--chart-1: 359 2% 90%;
+			--chart-2: 240 1% 74%;
+			--chart-3: 240 1% 58%;
+			--chart-4: 240 1% 42%;
+			--chart-5: 240 2% 26%; 
+		*/
 	}
 
 	.dark {
@@ -97,22 +110,34 @@
 		--border: 0 0% 14.9%;
 		--input: 0 0% 14.9%;
 		--ring: 0 0% 83.1%;
-
 		--scrollbar: 0 0% 15%;
 
-		--row-active: 0 0% 12%;
-		--row-selected: 0 0% 9%;
+		--table-head: 0 0% 6.9%;
+		--table-row-active: 0 0% 12%;
+		--table-row-selected: 0 0% 9%;
 
 		--chart-1: 220 70% 50%;
 		--chart-2: 160 60% 45%;
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
 		--chart-5: 340 75% 55%;
-		/* --chart-1: 359 2% 90%;
-		--chart-2: 240 1% 74%;
-		--chart-3: 240 1% 58%;
-		--chart-4: 240 1% 42%;
-		--chart-5: 240 2% 26%; */
+
+		--sidebar-background: 0 0% 3.9%;
+		--sidebar-foreground: 0 0% 98%;
+		--sidebar-primary: 224.3 76.3% 48%;
+		--sidebar-primary-foreground: 0 0% 100%;
+		--sidebar-accent: 240 3.7% 15.9%;
+		--sidebar-accent-foreground: 240 4.8% 95.9%;
+		--sidebar-border: 240 3.7% 15.9%;
+		--sidebar-ring: 217.2 91.2% 59.8%;
+
+		/* 
+			--chart-1: 359 2% 90%;
+			--chart-2: 240 1% 74%;
+			--chart-3: 240 1% 58%;
+			--chart-4: 240 1% 42%;
+			--chart-5: 240 2% 26%; 
+		*/
 	}
 }
 
@@ -138,5 +163,14 @@
 
 	button:focus-within {
 		outline: none;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
 	}
 }
