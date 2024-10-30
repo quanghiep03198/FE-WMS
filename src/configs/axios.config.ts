@@ -5,8 +5,15 @@ import axios, { HttpStatusCode, type AxiosError, type AxiosInstance } from 'axio
 import qs from 'qs'
 import { toast } from 'sonner'
 
+type PromiseExecutor<T = unknown> = {
+	resolve: (value: T) => void
+	reject: (reason?: unknown) => void
+}
+
 export class AxiosClient {
 	public instance: AxiosInstance
+	private isRefreshingToken = false
+	private unauthorizedRequestHandlers: Array<PromiseExecutor<string | null>> = []
 
 	/**
 	 * @description List of error codes that should be notified to the user
@@ -64,24 +71,52 @@ export class AxiosClient {
 				const errorStatus = error.response?.status
 
 				if (originalRequest && !originalRequest.retry && errorStatus === HttpStatusCode.Unauthorized) {
+					if (this.isRefreshingToken) {
+						return new Promise((resolve, reject) => {
+							this.unauthorizedRequestHandlers.push({ resolve, reject })
+						})
+							.then((token) => {
+								originalRequest.headers['Authorization'] = `Bearer ${token}`
+								return this.instance(originalRequest)
+							})
+							.catch((err) => {
+								return Promise.reject(err)
+							})
+					}
+
+					this.isRefreshingToken = true
 					const user = AuthService.getCredentials()
 					if (!user?.id) throw new Error('Failed to refresh token')
 					try {
 						const { metadata: refreshToken } = await AuthService.refreshToken(user.id)
 						AuthService.setAccessToken(refreshToken)
+						this.processQueue(null, refreshToken)
 						originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
 						const response = await this.instance(originalRequest)
 						originalRequest.retry = true
 						return response
 					} catch (error) {
-						AuthService.logout()
+						this.processQueue(error, null)
 						throw new Error('Failed to refresh token')
+					} finally {
+						this.isRefreshingToken = false
 					}
 				}
 
 				return Promise.reject(error)
 			}
 		)
+	}
+
+	private processQueue(error, token = null) {
+		this.unauthorizedRequestHandlers.forEach((promise) => {
+			if (error) {
+				promise.reject(error)
+			} else {
+				promise.resolve(token)
+			}
+		})
+		this.unauthorizedRequestHandlers = []
 	}
 }
 

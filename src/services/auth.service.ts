@@ -29,7 +29,11 @@ export class AuthService {
 	}
 
 	static async refreshToken(id: string): Promise<ResponseBody<string>> {
-		return await axiosInstance.get(`/refresh-token/${id}`)
+		try {
+			return await axiosInstance.get(`/refresh-token/${id}`)
+		} catch {
+			AuthService.logout()
+		}
 	}
 
 	static getAccessToken(): string | null {
