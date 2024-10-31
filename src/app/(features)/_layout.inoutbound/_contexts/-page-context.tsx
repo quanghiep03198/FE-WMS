@@ -134,7 +134,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				writeLog: (log) => {
 					set((state) => {
-						console.log(state.logs?.length)
 						if (state.logs.length >= MAX_LINES_OF_LOG) state.logs.pop()
 						state.logs.unshift({ timestamp: new Date(), ...log })
 					})

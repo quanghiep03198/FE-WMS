@@ -150,7 +150,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 							/>
 							<DialogFooter className='col-span-full'>
 								<DialogClose asChild>
-									<Button variant='secondary' onClick={() => form.reset()}>
+									<Button variant='secondary' onClick={() => form.reset()} disabled={isPending}>
 										{t('ns_common:actions.cancel')}
 									</Button>
 								</DialogClose>

@@ -154,6 +154,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 										<Div>
 											{orderDetail.map((item) => (
 												<Button
+													key={item.mo_no}
 													type='button'
 													variant='ghost'
 													size='sm'
@@ -223,7 +224,9 @@ const ExchangeOrderFormDialog: React.FC = () => {
 						</Div>
 						<DialogFooter className='col-span-full'>
 							<DialogClose asChild>
-								<Button variant='secondary'>{t('ns_common:actions.cancel')}</Button>
+								<Button variant='secondary' disabled={isPending}>
+									{t('ns_common:actions.cancel')}
+								</Button>
 							</DialogClose>
 							<Button type='submit' disabled={!isConfirmed || isPending}>
 								{isPending && (

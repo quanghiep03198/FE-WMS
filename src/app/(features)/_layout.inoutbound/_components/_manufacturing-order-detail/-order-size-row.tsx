@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { Badge, Button, Checkbox, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
+import { Button, Checkbox, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { uniqBy } from 'lodash'
 import { useMemo } from 'react'
@@ -11,18 +11,10 @@ import { OrderSize } from '../../_contexts/-page-context'
 type OrderDetailTableRowProps = {
 	orderCode: string
 	sizeList: Array<OrderSize>
-	selectedProductionCode: string
 	onBeforeDelete: (orderCode: string) => void
-	onSelectedProductionCodeChange: () => void
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
-	orderCode,
-	sizeList,
-	selectedProductionCode,
-	onBeforeDelete,
-	onSelectedProductionCodeChange
-}) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, sizeList, onBeforeDelete }) => {
 	const { t } = useTranslation()
 	const {
 		selectedRows,
@@ -68,7 +60,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 				'transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
-			<TableCell className='sticky left-0 z-10 w-12 py-4'>
+			<TableCell className='sticky left-0 z-10 min-w-[var(--row-selection-col-width)] py-4'>
 				<Checkbox
 					disabled={!hasSomeRowMatch && selectedRows.length > 0}
 					checked={selectedRows.some((row) => row.mo_no === orderCode)}
@@ -84,12 +76,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 					}
 				/>
 			</TableCell>
-			<TableCell className='group/cell sticky left-12 z-10 space-y-1 text-center font-medium drop-shadow-[1px_0px_hsl(var(--border))]'>
+			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>
 					{orderCode ?? FALLBACK_ORDER_VALUE}
-					<Badge variant='outline' className='whitespace-nowrap text-inherit'>
-						{sizeList[0]?.shoes_style_code_factory}
-					</Badge>
 					<button
 						className='opacity-0 duration-100 group-hover/cell:opacity-100'
 						onClick={() => {
@@ -100,29 +89,23 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 					</button>
 				</Div>
 			</TableCell>
-
-			<TableCell className={cn('!p-0')} onContextMenu={(e) => e.preventDefault()}>
+			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 min-w-[var(--sticky-left-col-width)]'>
+				{sizeList[0]?.shoes_style_code_factory}
+			</TableCell>
+			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+				{sizeList[0]?.mat_code}
+			</TableCell>
+			<TableCell className={cn('!p-0')}>
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
 					{sizeList?.map((size) => (
 						<Div
 							key={size?.size_numcode}
-							className='group/cell inline-grid min-w-48 shrink-0 basis-48 grid-rows-2 divide-y last:flex-1'>
-							<TableCell className='bg-accent/20 font-medium'>
+							className='group/cell inline-grid min-w-32 shrink-0 basis-32 grid-rows-2 divide-y last:flex-1'>
+							<TableCell className='bg-table-head font-medium'>
 								<Div className='flex items-center gap-x-2'>
 									{size?.size_numcode}
-									<Badge
-										className={cn(
-											selectedProductionCode?.length > 0 && size?.mat_code?.includes(selectedProductionCode)
-												? 'border-active text-active selection:bg-transparent'
-												: 'text-inherit'
-										)}
-										variant='outline'
-										onMouseUp={onSelectedProductionCodeChange}
-										onBlur={() => onSelectedProductionCodeChange()}>
-										{size?.mat_code}
-									</Badge>
 									<button
 										onClick={() => {
 											setExchangeEpcDialogOpen(true)
@@ -140,10 +123,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({
 					))}
 				</Div>
 			</TableCell>
-			<TableCell align='right' className='sticky right-20 font-medium'>
+			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] font-medium'>
 				{aggregateSizeCount}
 			</TableCell>
-			<TableCell align='center' className='sticky right-0 w-20 !opacity-100'>
+			<TableCell align='center' className='sticky right-0 w-20 min-w-[var(--sticky-right-col-width)] !opacity-100'>
 				<Tooltip
 					triggerProps={{ asChild: true }}
 					contentProps={{ side: 'left' }}
