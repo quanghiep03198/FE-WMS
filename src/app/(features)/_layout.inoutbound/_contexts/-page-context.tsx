@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { IElectronicProductCode } from '@/common/types/entities'
-import { useSessionStorageState } from 'ahooks'
+import { useLocalStorageState } from 'ahooks'
 import { pick } from 'lodash'
 import React, { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
+import { RFIDSettings } from '../_constants/rfid.const'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
 export type Log = {
@@ -84,7 +85,7 @@ const PageContext = createContext<StoreApi<PageContextStore>>(null)
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const storeRef = useRef<StoreApi<PageContextStore>>(null)
 
-	const [isEnablePreserveLog] = useSessionStorageState<boolean>('rfidPreserveLog', {
+	const [isEnablePreserveLog] = useLocalStorageState<boolean>(RFIDSettings.PRESERVE_LOG, {
 		listenStorageChange: true
 	})
 
@@ -133,6 +134,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				writeLog: (log) => {
 					set((state) => {
+						console.log(state.logs?.length)
 						if (state.logs.length >= MAX_LINES_OF_LOG) state.logs.pop()
 						state.logs.unshift({ timestamp: new Date(), ...log })
 					})

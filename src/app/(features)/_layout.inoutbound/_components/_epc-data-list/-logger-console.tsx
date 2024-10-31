@@ -18,6 +18,7 @@ import { useLocalStorageState, useUpdate, useVirtualList } from 'ahooks'
 import { format } from 'date-fns'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { RFIDSettings } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const LoggerConsole: React.FC = () => {
@@ -25,7 +26,8 @@ const LoggerConsole: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const { logs, clearLog } = usePageContext('logs', 'clearLog')
-	const [isEnablePreserveLog, setEnablePreserveLog] = useLocalStorageState<boolean>('rfidPreserveLog', {
+	const [isEnablePreserveLog, setEnablePreserveLog] = useLocalStorageState<boolean>(RFIDSettings.PRESERVE_LOG, {
+		defaultValue: false,
 		listenStorageChange: true
 	})
 	const [virtualList, scrollTo] = useVirtualList(logs, {
