@@ -1,4 +1,3 @@
-import { useSelectedText } from '@/common/hooks/use-selected-text'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -58,9 +57,7 @@ const OrderSizeDetailTable: React.FC = () => {
 	const [orderToDelete, setOrderToDelete, resetOrderToDelete] = useResetState<string | null>(null)
 	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
 	const { mutateAsync: deleteOrderAsync } = useDeleteOrderMutation()
-
-	// * Selected text that highlighted matching production code
-	const [text, selectText] = useSelectedText()
+	const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') resetSelectedRows()
@@ -72,7 +69,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		setScannedOrders(data?.orders)
 	}, [data])
 
-	const handleDeleteOrder = async () => {
+	const handleDeleteOrder = useMemoizedFn(async () => {
 		try {
 			toast.loading(t('ns_common:notification.processing_request'), { id: 'DELETE_UNEXPECTED_ORDER' })
 			await deleteOrderAsync(orderToDelete)
@@ -91,10 +88,8 @@ const OrderSizeDetailTable: React.FC = () => {
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		} catch (e) {
 			toast.error(t('ns_common:notification.error'), { id: 'DELETE_UNEXPECTED_ORDER' })
-		} finally {
-			setConfirmDialogOpen(false)
 		}
-	}
+	})
 
 	const handleBeforeDelete = useMemoizedFn((orderCode: string) => {
 		setConfirmDialogOpen(true)
@@ -137,7 +132,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Dialog>
+			<Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(!dialogOpen)} modal>
 				<HoverCard openDelay={50} closeDelay={50}>
 					<HoverCardTrigger asChild>
 						<DialogTrigger
@@ -152,18 +147,26 @@ const OrderSizeDetailTable: React.FC = () => {
 						</HoverCardContent>
 					</HoverCardPortal>
 				</HoverCard>
-				<DialogContent className='max-w-7xl focus-visible:outline-none focus-visible:ring-0 xxl:max-w-8xl'>
+				<DialogContent className='max-w-8xl focus-visible:outline-none focus-visible:ring-0'>
 					<DialogHeader>
 						<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 						<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 					</DialogHeader>
 					<Div className='border-collapse divide-y overflow-hidden rounded-lg border'>
 						{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-							<Div className='flow-root max-h-[65dvh] w-full overflow-scroll rounded-lg'>
-								<Table className='border-separate border-spacing-0 rounded-lg'>
+							<Div className='flow-root max-h-[65vh] w-full overflow-scroll rounded-lg'>
+								<Table
+									className='border-separate border-spacing-0 rounded-lg'
+									style={
+										{
+											'--row-selection-col-width': '3rem',
+											'--sticky-left-col-width': '9rem',
+											'--row-action-col-width': '5rem'
+										} as React.CSSProperties
+									}>
 									<TableHeader>
-										<TableRow className='sticky top-0 z-20'>
-											<TableHead className='sticky left-0 z-20 w-12 border-r'>
+										<TableRow className='sticky top-0 z-20 *:bg-table-head'>
+											<TableHead className='sticky left-0 z-20 w-[var(--row-selection-col-width)]'>
 												<Checkbox
 													checked={
 														(areAllRowsMatched || (isSomeRowSelected && 'indeterminate')) as CheckedState
@@ -172,25 +175,34 @@ const OrderSizeDetailTable: React.FC = () => {
 													onCheckedChange={toggleAllMatchedRowsSelected}
 												/>
 											</TableHead>
-											<TableHead className='sticky left-12 z-20 w-36 min-w-36 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+											<TableHead className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)]'>
 												{t('ns_erp:fields.mo_no')}
 											</TableHead>
+											<TableHead className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-left-col-width)]'>
+												{t('ns_erp:fields.shoestyle_codefactory')}
+											</TableHead>
+											<TableHead className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+												{t('ns_erp:fields.mat_code')}
+											</TableHead>
 											<TableHead>Size</TableHead>
-											<TableHead align='right' className='right-20 z-20'>
+											<TableHead
+												align='right'
+												className='sticky left-auto right-[var(--row-action-col-width)] z-20 min-w-32'>
 												{t('ns_common:common_fields.total')}
 											</TableHead>
-											<TableHead className='right-0 z-20 min-w-20'>-</TableHead>
+											<TableHead className='sticky left-auto right-0 z-20 min-w-[var(--row-action-col-width)]'>
+												-
+											</TableHead>
 										</TableRow>
 									</TableHeader>
 									<TableBody className='[&_tr]:snap-start'>
 										{Object.entries(groupBy(scannedSizes, 'mo_no')).map(([orderCode, sizeList]) => {
 											return (
 												<OrderDetailTableRow
+													key={orderCode}
 													orderCode={orderCode}
 													sizeList={sizeList}
-													selectedProductionCode={text}
 													onBeforeDelete={handleBeforeDelete}
-													onSelectedProductionCodeChange={selectText}
 												/>
 											)
 										})}
@@ -212,7 +224,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					</Div>
 				</DialogContent>
 			</Dialog>
-			{/* Confirm deleting all fetched orders and restart scanning progress */}
+
 			{createPortal(
 				<ConfirmDialog
 					title={t('ns_inoutbound:notification.confirm_delete_all_mono.title')}
@@ -220,6 +232,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					open={confirmDialogOpen}
 					onOpenChange={setConfirmDialogOpen}
 					onConfirm={handleDeleteOrder}
+					onCancel={resetOrderToDelete}
 				/>,
 				document.body
 			)}

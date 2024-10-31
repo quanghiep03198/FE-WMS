@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	AlertDialog,
@@ -29,18 +29,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 	onCancel
 }) => {
 	const { t } = useTranslation()
-	const [_open, setOpen] = useState<boolean>(open)
-
-	useEffect(() => {
-		setOpen(open)
-	}, [open])
 
 	return (
 		<AlertDialog
 			open={open}
 			onOpenChange={(open) => {
 				if (typeof onOpenChange === 'function') onOpenChange(open)
-				setOpen(open)
 			}}>
 			<AlertDialogContent>
 				<AlertDialogHeader className='text-left'>
