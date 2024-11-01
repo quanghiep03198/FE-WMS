@@ -5,6 +5,7 @@ import { RouterProvider as BrowserRouter, createRouter } from '@tanstack/react-r
 import Loading from '../components/shared/loading'
 import { queryClient } from './query-client-provider'
 
+// @ts-ignore
 // Set up a Router instance
 const router = createRouter({
 	routeTree,
