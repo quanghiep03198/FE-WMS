@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import {
 	AlertDialog,
@@ -30,7 +31,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 }) => {
 	const { t } = useTranslation()
 
-	return (
+	return createPortal(
 		<AlertDialog
 			open={open}
 			onOpenChange={(open) => {
@@ -57,7 +58,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
-		</AlertDialog>
+		</AlertDialog>,
+		document.body
 	)
 }
 
