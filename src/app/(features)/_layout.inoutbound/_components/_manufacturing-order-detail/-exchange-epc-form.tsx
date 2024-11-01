@@ -39,8 +39,14 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const {
 		exchangeEpcDialogOpen: open,
 		defaultExchangeEpcFormValues: defaultValues,
-		setExchangeEpcDialogOpen: setOpen
-	} = useOrderDetailContext('exchangeEpcDialogOpen', 'defaultExchangeEpcFormValues', 'setExchangeEpcDialogOpen')
+		setExchangeEpcDialogOpen: setOpen,
+		resetSelectedRows
+	} = useOrderDetailContext(
+		'exchangeEpcDialogOpen',
+		'defaultExchangeEpcFormValues',
+		'setExchangeEpcDialogOpen',
+		'resetSelectedRows'
+	)
 
 	const { mutateAsync, isPending, isError } = useExchangeEpcMutation()
 	const form = useForm<ExchangeEpcFormValue>({
@@ -83,6 +89,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 			const payload = omit(data, ['count', 'exchange_all'])
 			await mutateAsync(payload)
 			toast.success(t('ns_common:notification.success'))
+			resetSelectedRows()
 			setOpen(!open)
 		} catch (error) {
 			toast.error(t('ns_common:notification.error'))

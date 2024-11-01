@@ -10,7 +10,6 @@ import {
 	Switch,
 	Typography
 } from '@/components/ui'
-import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useLocalStorageState } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -77,11 +76,9 @@ const PollingIntervalSelector: React.FC = () => {
 					</Typography>
 				</Div>
 			</HoverCardTrigger>
-			<HoverCardPortal>
-				<HoverCardContent className='z-50 w-64 text-sm' side='left' align='start' sideOffset={8}>
-					{t('ns_inoutbound:scanner_setting.polling_duration_description')}
-				</HoverCardContent>
-			</HoverCardPortal>
+			<HoverCardContent className='z-50 w-64 text-sm' side='left' align='start' sideOffset={8}>
+				{t('ns_inoutbound:scanner_setting.polling_duration_description')}
+			</HoverCardContent>
 		</HoverCard>
 	)
 }

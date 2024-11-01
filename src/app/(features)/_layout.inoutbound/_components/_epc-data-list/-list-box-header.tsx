@@ -12,7 +12,6 @@ import {
 	SelectValue,
 	Typography
 } from '@/components/ui'
-import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { usePrevious } from 'ahooks'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -63,11 +62,9 @@ const OrderListSelect: React.FC = () => {
 							<SelectValue placeholder={!selectedOrder && 'Select'} />
 						</SelectTrigger>
 					</HoverCardTrigger>
-					<HoverCardPortal>
-						<HoverCardContent side='top'>
-							<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
-						</HoverCardContent>
-					</HoverCardPortal>
+					<HoverCardContent side='top'>
+						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
+					</HoverCardContent>
 				</HoverCard>
 				<SelectContent>
 					<SelectGroup>

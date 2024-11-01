@@ -1,21 +1,37 @@
 import { cn } from '@/common/utils/cn'
-import { Button, Checkbox, Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
+import {
+	Button,
+	buttonVariants,
+	Checkbox,
+	Div,
+	Icon,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	TableCell,
+	TableRow,
+	Typography
+} from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
+import { PopoverClose } from '@radix-ui/react-popover'
+import { useInViewport, useMemoizedFn } from 'ahooks'
 import { uniqBy } from 'lodash'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
+import { toast } from 'sonner'
+import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { OrderSize } from '../../_contexts/-page-context'
+import { OrderSize, usePageContext } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
 	orderCode: string
 	sizeList: Array<OrderSize>
-	onBeforeDelete: (orderCode: string) => void
+	// inViewport: boolean
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, sizeList, onBeforeDelete }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, sizeList }) => {
 	const { t } = useTranslation()
+	const { scannedOrders, setScanningStatus } = usePageContext('scannedOrders', 'setScanningStatus')
 	const {
 		selectedRows,
 		pushSelectedRow,
@@ -34,15 +50,39 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 		'setDefaultExchangeOrderFormValues'
 	)
 
+	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteOrderMutation()
+
 	const hasSomeRowMatch = useMemo(() => {
 		if (!selectedRows || selectedRows.length === 0) return false
 		const sizeMatCodesSet = new Set(sizeList.map((size) => size.mat_code))
 		return selectedRows[0].mat_code.some((productionCode) => sizeMatCodesSet.has(productionCode))
 	}, [selectedRows])
 
+	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
+
 	const handleToggleSelectRow = (checked: CheckedState, data: any) => {
 		checked ? pushSelectedRow(data) : pullSelectedRow(data)
 	}
+
+	const handleDeleteOrder = useMemoizedFn(async () => {
+		try {
+			await deleteOrderAsync(orderCode)
+			// * Remove from selected row if scanned order is deleted
+			if (selectedRows.some((row) => row.mo_no === orderCode)) {
+				pullSelectedRow(selectedRows.find((row) => row.mo_no === orderCode))
+			}
+			// * If all order is deleted, reset all
+			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderCode)
+			if (filteredOrders.length === 0) {
+				setScanningStatus(undefined)
+				return
+			}
+			setPopoverOpen(false)
+			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
+		} catch (e) {
+			toast.error(t('ns_common:notification.error'), { id: 'DELETE_UNEXPECTED_ORDER' })
+		}
+	})
 
 	const aggregateSizeCount = useMemo(
 		() =>
@@ -54,8 +94,20 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 		[sizeList]
 	)
 
+	const ref = useRef(null)
+
+	const [inViewport, ratio] = useInViewport(ref, {
+		threshold: [0, 0.25, 0.5, 0.75, 1],
+		root: () => document.getElementById('order-size-container')
+	})
+
+	useEffect(() => {
+		if (ratio < 0.75) setPopoverOpen(false)
+	}, [ratio])
+
 	return (
 		<TableRow
+			ref={ref}
 			className={cn(
 				'transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
@@ -127,19 +179,35 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-20 min-w-[var(--sticky-right-col-width)] !opacity-100'>
-				<Tooltip
-					triggerProps={{ asChild: true }}
-					contentProps={{ side: 'left' }}
-					message={t('ns_common:actions.delete')}>
-					<Button
-						disabled={orderCode === FALLBACK_ORDER_VALUE}
-						type='button'
-						variant='ghost'
-						size='icon'
-						onClick={() => onBeforeDelete(orderCode)}>
+				<Popover open={popoverOpen && inViewport} onOpenChange={setPopoverOpen}>
+					<PopoverTrigger disabled={orderCode === FALLBACK_ORDER_VALUE}>
 						<Icon name='Trash2' className='stroke-destructive' />
-					</Button>
-				</Tooltip>
+					</PopoverTrigger>
+					<PopoverContent className='w-96 space-y-6' side='left' align='center' sideOffset={16}>
+						<Div className='space-y-1.5'>
+							{/* <Div className='row-span-full inline-grid size-12 place-content-center rounded-full bg-destructive/20 p-4'>
+								<Icon name='TriangleAlert' className='stroke-destructive' size={24} />
+							</Div> */}
+							<Typography className='row-span-1 font-medium'>
+								{t('ns_inoutbound:notification.confirm_delete_all_mono.title')}
+							</Typography>
+							<Typography variant='small' className='row-span-2'>
+								{t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
+							</Typography>
+						</Div>
+						<Div className='flex items-stretch justify-end gap-x-1 *:basis-20'>
+							<PopoverClose
+								disabled={isDeleting}
+								className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
+								{t('ns_common:actions.cancel')}
+							</PopoverClose>
+							<Button disabled={isDeleting} variant='destructive' size='sm' onClick={handleDeleteOrder}>
+								{isDeleting && <Icon name='LoaderCircle' role='img' className='animate-spin' />}
+								{t('ns_common:actions.delete')}
+							</Button>
+						</Div>
+					</PopoverContent>
+				</Popover>
 			</TableCell>
 		</TableRow>
 	)
