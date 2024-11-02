@@ -51,7 +51,7 @@ export const storageFormSchema = z.object({
 	company_code: z.string().trim().min(1, { message: 'ns_validation:required' }),
 	warehouse_num: z.string().trim().min(1, { message: 'ns_validation:required' }),
 	warehouse_name: z.string().trim().min(1, { message: 'ns_validation:required' }),
-	remark: z.string().optional(),
+	remark: z.string().optional().nullable(),
 	is_disable: z.boolean().optional(),
 	is_default: z.boolean().optional()
 })

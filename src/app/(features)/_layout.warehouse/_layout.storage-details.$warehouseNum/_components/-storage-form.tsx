@@ -67,7 +67,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 					return WarehouseStorageService.createWarehouseStorage(payload)
 				}
 				case CommonActions.UPDATE: {
-					return WarehouseStorageService.updateWarehouseStorage(defaultFormValues.storage_num, payload)
+					return WarehouseStorageService.updateWarehouseStorage(defaultFormValues.id, payload)
 				}
 				default: {
 					throw new Error('Invalid actions')

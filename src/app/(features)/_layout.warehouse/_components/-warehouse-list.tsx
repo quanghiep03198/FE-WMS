@@ -249,7 +249,6 @@ const WarehouseList: React.FC = () => {
 				loading={isLoading}
 				enableColumnResizing={true}
 				enableRowSelection={true}
-				containerProps={{ style: { height: (screen.height * 40) / 100 } }}
 				ref={tableRef}
 				toolbarProps={{
 					slotRight: ({ table }) => (
