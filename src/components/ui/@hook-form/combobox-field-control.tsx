@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
+import { CommandLoading } from 'cmdk'
 import { Fragment, useId, useMemo, useState } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import {
@@ -8,7 +9,6 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
-	CommandLoading,
 	Div,
 	FormControl,
 	FormDescription,
