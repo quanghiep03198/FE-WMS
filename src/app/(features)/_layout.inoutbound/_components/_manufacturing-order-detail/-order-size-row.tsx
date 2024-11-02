@@ -14,9 +14,9 @@ import {
 } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useInViewport, useMemoizedFn } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import { uniqBy } from 'lodash'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
@@ -94,20 +94,8 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 		[sizeList]
 	)
 
-	const ref = useRef(null)
-
-	const [inViewport, ratio] = useInViewport(ref, {
-		threshold: [0, 0.25, 0.5, 0.75, 1],
-		root: () => document.getElementById('order-size-container')
-	})
-
-	useEffect(() => {
-		if (ratio < 0.75) setPopoverOpen(false)
-	}, [ratio])
-
 	return (
 		<TableRow
-			ref={ref}
 			className={cn(
 				'transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
@@ -179,19 +167,18 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-20 min-w-[var(--sticky-right-col-width)] !opacity-100'>
-				<Popover open={popoverOpen && inViewport} onOpenChange={setPopoverOpen}>
-					<PopoverTrigger disabled={orderCode === FALLBACK_ORDER_VALUE}>
-						<Icon name='Trash2' className='stroke-destructive' />
+				<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
+					<PopoverTrigger
+						disabled={orderCode === FALLBACK_ORDER_VALUE}
+						className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
+						<Icon name='Trash2' />
 					</PopoverTrigger>
 					<PopoverContent className='w-96 space-y-6' side='left' align='center' sideOffset={16}>
 						<Div className='space-y-1.5'>
-							{/* <Div className='row-span-full inline-grid size-12 place-content-center rounded-full bg-destructive/20 p-4'>
-								<Icon name='TriangleAlert' className='stroke-destructive' size={24} />
-							</Div> */}
-							<Typography className='row-span-1 font-medium'>
+							<Typography className='font-medium'>
 								{t('ns_inoutbound:notification.confirm_delete_all_mono.title')}
 							</Typography>
-							<Typography variant='small' className='row-span-2'>
+							<Typography variant='small'>
 								{t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
 							</Typography>
 						</Div>
