@@ -64,9 +64,11 @@ jobs:
            shell: bash
            run: npm run build
 
-         - name: Restart PM2 process
+         - name: Restart and save PM2 process
            shell: bash
-           run: pm2 restart ecosystem.config.cjs
+           run: |
+              pm2 restart ecosystem.config.cjs
+              pm2 save
 
    deploy-server-51:
       name: Deploy to server 51
@@ -90,6 +92,8 @@ jobs:
            shell: bash
            run: npm run build
 
-         - name: Restart PM2 process
+         - name: Restart and save PM2 process
            shell: bash
-           run: pm2 restart ecosystem.config.cjs
+           run: |
+              pm2 restart ecosystem.config.cjs
+              pm2 save
