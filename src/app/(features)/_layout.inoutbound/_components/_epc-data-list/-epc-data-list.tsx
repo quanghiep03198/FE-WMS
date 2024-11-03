@@ -97,7 +97,7 @@ const EpcDataList: React.FC = () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading('Establishing connection ...', { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fetch-epc/sse', {
+			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fp-inventory/sse', {
 				method: RequestMethod.GET,
 				headers: {
 					['Authorization']: AuthService.getAccessToken(),

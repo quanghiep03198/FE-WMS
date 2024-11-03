@@ -15,40 +15,50 @@ export type RFIDStreamEventData = {
 export class RFIDService {
 	static async fetchEpcManually(connection: string, page: null | number, selectedOrder: string) {
 		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
-		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>('/rfid/fetch-epc', {
-			headers: { ['X-Tenant-Id']: connection },
-			params
-		})
+		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>(
+			'/rfid/fp-inventory/fetch-epc',
+			{
+				headers: { ['X-Tenant-Id']: connection },
+				params
+			}
+		)
 	}
 
 	static async getOrderDetail(connection: string) {
 		return await axiosInstance.get<void, ResponseBody<Omit<RFIDStreamEventData, 'epcs'>>>(
-			'/rfid/manufacturing-order-detail',
+			'/rfid/fp-inventory/manufacturing-order-detail',
 			{ headers: { ['X-Tenant-Id']: connection } }
 		)
 	}
 
 	static async searchExchangableOrder(connection: string, orderTarget: string, searchTerm: string) {
-		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>('/rfid/search-exchangable-order', {
-			headers: { ['X-Tenant-Id']: connection },
-			params: { target: orderTarget, search: searchTerm }
-		})
+		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>(
+			'/rfid/fp-inventory/search-exchangable-order',
+			{
+				headers: { ['X-Tenant-Id']: connection },
+				params: { target: orderTarget, search: searchTerm }
+			}
+		)
 	}
 
 	static async updateStockMovement(host: string, payload: InoutboundPayload) {
-		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>('/rfid/update-stock', payload, {
-			headers: { ['X-Tenant-Id']: host }
-		})
+		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>(
+			'/rfid/fp-inventory/update-stock',
+			payload,
+			{
+				headers: { ['X-Tenant-Id']: host }
+			}
+		)
 	}
 
 	static async deleteUnexpectedOrder(host: string, orderCode: string) {
-		return await axiosInstance.delete(`/rfid/delete-unexpected-order/${orderCode}`, {
+		return await axiosInstance.delete(`/rfid/fp-inventory/delete-unexpected-order/${orderCode}`, {
 			headers: { ['X-Tenant-Id']: host }
 		})
 	}
 
 	static async exchangeEpc(host: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
-		return await axiosInstance.patch('/rfid/exchange-epc', payload, {
+		return await axiosInstance.patch('/rfid/fp-inventory/exchange-epc', payload, {
 			headers: { ['X-Tenant-Id']: host }
 		})
 	}
@@ -57,7 +67,7 @@ export class RFIDService {
 	 * @deprecated
 	 */
 	static async synchronizeOrderCode(host: string) {
-		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/sync-epc-mono', undefined, {
+		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/fp-inventory/sync-epc-mono', undefined, {
 			headers: { ['X-Tenant-Id']: host }
 		})
 	}
