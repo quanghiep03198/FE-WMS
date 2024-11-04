@@ -13,6 +13,7 @@ import {
 } from '../_apis/-use-transfer-order-api'
 import { useTransferOrderTableColumns } from '../_hooks/use-columns.hook'
 import { usePageStore } from '../_stores/page.store'
+import { toast } from 'sonner'
 
 const TransferOrdersList: React.FC = () => {
 	const tableRef = useRef<Table<any>>(null)
@@ -21,6 +22,14 @@ const TransferOrdersList: React.FC = () => {
 	const [rowSelectionType, setRowSelectionType] = useState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 
+	const [errors, setErrors] = useState({
+		new_warehouse: false,
+		or_warehouse: false,
+		or_location: false,
+		new_location: false,
+	});
+
+
 	const { data, isLoading, refetch } = useGetTransferOrderQuery()
 
 	const { mutateAsync: deleteAsync } = useDeleteTransferOrderMutation()
@@ -28,8 +37,11 @@ const TransferOrdersList: React.FC = () => {
 
 	const columns = useTransferOrderTableColumns({
 		setConfirmDialogOpen,
-		setRowSelectionType
+		setRowSelectionType,
+		errors,
 	})
+
+	
 
 	//
 	const handleResetAllRowSelection = useCallback(() => {
@@ -82,16 +94,52 @@ const TransferOrdersList: React.FC = () => {
 										variant='secondary'
 										disabled={disabled}
 										onClick={() => {
-											table.options.meta.setEditedRows({})
+											const unsavedChanges = table.options.meta.getUnsavedChanges();
+										
+											const newErrors = {
+												new_warehouse: false,
+												or_warehouse: false,
+												or_location: false,
+												new_location: false,
+											};
+											let hasError = false;
+										
+											unsavedChanges.forEach(item => {
+												if (!item.or_warehouse_num) {
+													newErrors.or_warehouse = true;
+													hasError = true;
+												}
+												if (!item.or_storage_num) {
+													newErrors.or_location = true;
+													hasError = true;
+												}
+												if (!item.new_warehouse_num) {
+													newErrors.new_warehouse = true;
+													hasError = true;
+												}
+												if (!item.new_storage_num) {
+													newErrors.new_location = true;
+													hasError = true;
+												}
+											});
+										
+											setErrors(newErrors); 
+									
+											if (hasError) {
+												toast.error("Vui lòng hoàn thành tất cả các trường bắt buộc cho tất cả hàng trước khi lưu.", { position: 'top-center' });
+												return;
+											}
+										
+											table.options.meta.setEditedRows({});
 											updateMultiAsync(
-												table.options.meta.getUnsavedChanges().map((item: ITransferOrder) => ({
+												unsavedChanges.map((item: ITransferOrder) => ({
 													transfer_order_code: item.transfer_order_code,
 													or_warehouse: item.or_warehouse_num,
 													or_location: item.or_storage_num,
 													new_warehouse: item.new_warehouse_num,
 													new_location: item.new_storage_num
 												}))
-											)
+											);
 										}}>
 										<Icon name='SaveAll' role='img' />
 										{t('ns_common:actions.save')}
