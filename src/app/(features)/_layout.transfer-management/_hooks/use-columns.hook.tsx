@@ -19,11 +19,18 @@ import { usePageStore } from '../_stores/page.store'
 type TransferOrderTableColumnParams = {
 	setConfirmDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
 	setRowSelectionType: React.Dispatch<React.SetStateAction<RowDeletionType>>
+	errors: {
+		new_warehouse: boolean
+		or_warehouse: boolean
+		or_location: boolean
+		new_location: boolean
+	}
 }
 
 export const useTransferOrderTableColumns = ({
 	setRowSelectionType,
-	setConfirmDialogOpen
+	setConfirmDialogOpen,
+	errors
 }: TransferOrderTableColumnParams) => {
 	const { t, i18n } = useTranslation()
 	const { toggleSheetPanelFormOpen: handleToggleFormOpen } = usePageStore()
@@ -170,7 +177,13 @@ export const useTransferOrderTableColumns = ({
 						header: t('ns_warehouse:fields.original_warehouse'),
 						minSize: 250,
 						cell: (props) => (
-							<WarehouseCellEditor {...{ ...props, transformedValue: props.row.original.or_warehouse_name }} />
+							<WarehouseCellEditor
+								{...{
+									...props,
+									transformedValue: props.row.original.or_warehouse,
+									className: errors.or_warehouse ? 'border border-red-500' : ''
+								}}
+							/>
 						)
 					}),
 					columnHelper.accessor('or_storage_num', {
@@ -184,7 +197,8 @@ export const useTransferOrderTableColumns = ({
 									{...{
 										...props,
 										selectedWarehouse: rowData.or_warehouse_num,
-										transformedValue: rowData.or_storage_name
+										transformedValue: rowData.or_storage_name,
+										className: errors.or_location ? 'border border-red-500' : ''
 									}}
 								/>
 							)
@@ -194,7 +208,13 @@ export const useTransferOrderTableColumns = ({
 						header: t('ns_warehouse:fields.new_warehouse'),
 						minSize: 250,
 						cell: (props) => (
-							<WarehouseCellEditor {...{ ...props, transformedValue: props.row.original.new_warehouse_name }} />
+							<WarehouseCellEditor
+								{...{
+									...props,
+									transformedValue: props.row.original.new_warehouse,
+									className: errors.new_warehouse ? 'border border-red-500' : ''
+								}}
+							/>
 						)
 					}),
 					columnHelper.accessor('new_storage_num', {
@@ -208,7 +228,8 @@ export const useTransferOrderTableColumns = ({
 									{...{
 										...props,
 										selectedWarehouse: rowData.new_warehouse_num,
-										transformedValue: rowData.new_storage_name
+										transformedValue: rowData.new_storage_name,
+										className: errors.new_location ? 'border border-red-500' : ''
 									}}
 								/>
 							)
@@ -258,9 +279,10 @@ export const useTransferOrderTableColumns = ({
 					<TransferOrderRowActions
 						cellContext={props}
 						onViewDetail={handleToggleFormOpen}
-						onSaveChange={(data: UpdateTransferOrderValues) =>
-							updateAsync({ transferOrderCode: props.row.original.transfer_order_code, payload: data })
-						}
+						// onSaveChange={(data: UpdateTransferOrderValues) =>
+						// 	updateAsync({ transferOrderCode: props.row.original.transfer_order_code, payload: data })
+						// }
+
 						onDeleteRow={() => {
 							setConfirmDialogOpen((prev) => !prev)
 							setRowSelectionType('single')
@@ -270,6 +292,6 @@ export const useTransferOrderTableColumns = ({
 				)
 			})
 		],
-		[i18n.language, warehouseLists]
+		[i18n.language, warehouseLists, errors]
 	)
 }

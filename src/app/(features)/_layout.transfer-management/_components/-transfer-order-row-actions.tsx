@@ -23,7 +23,7 @@ import { usePageStore } from '../_stores/page.store'
 
 type TransferOrderRowActionsProps = {
 	cellContext: CellContext<ITransferOrder, unknown>
-	onSaveChange: (dataChanges: UpdateTransferOrderValues | UpdateApprovalStatusValues) => Promise<any>
+	onSaveChange?: (dataChanges: UpdateTransferOrderValues | UpdateApprovalStatusValues) => Promise<any>
 	onDeleteRow: () => void
 	onViewDetail: () => void
 }
@@ -86,14 +86,14 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 							</DropdownMenuButton>
 						</DropdownMenuItem>
 						<DropdownMenuItem asChild>
-							<DropdownMenuButton
+							{/* <DropdownMenuButton
 								data-action={CommonActions.SAVE}
 								onClick={(e) => {
 									setEditedRows(e)
 								}}>
 								<Icon name='Save' />
 								{t('ns_common:actions.save')}
-							</DropdownMenuButton>
+							</DropdownMenuButton> */}
 						</DropdownMenuItem>
 					</Fragment>
 				) : (

@@ -25,6 +25,7 @@ export class TransferOrderService {
 	}
 
 	static async getTransferOrderDetail(transferOrderCode: string) {
+		console.log(transferOrderCode)
 		return await axiosInstance.get<void, ResponseBody<ITransferOrderDetail>>(
 			`/order/transfer-order/detail/${transferOrderCode}`
 		)

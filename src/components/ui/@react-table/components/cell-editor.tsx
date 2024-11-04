@@ -10,14 +10,19 @@ type BaseCellEditorProps =
 	  }
 	| {
 			cellEditorVariant: 'select'
-			cellEditorProps: DropdownSelectProps<any>
+			cellEditorProps: DropdownSelectProps<any> & { template?: (data: any) => string };
 	  }
 	| {
 			cellEditorVariant: 'combobox'
-			cellEditorProps: ComboboxProps<any>
+			cellEditorProps: ComboboxProps<any> & { template?: (data: any) => string };
 	  }
 
-export type CellEditorProps = CellContext<any, unknown> & BaseCellEditorProps & { transformedValue?: any }
+
+
+	  export type CellEditorProps = CellContext<any, unknown> & BaseCellEditorProps & {
+		transformedValue?: any;
+		className?: string;
+	}
 
 const CellEditor: React.FC<CellEditorProps> = ({
 	getValue,
@@ -26,10 +31,13 @@ const CellEditor: React.FC<CellEditorProps> = ({
 	table,
 	row,
 	cellEditorVariant,
-	cellEditorProps
+	cellEditorProps,
+	className
 }) => {
 	// We need to keep and update the state of the cell normally
 	const [value, setValue] = useState(getValue())
+
+
 
 	// If the initialValue is changed external, sync it up with our state
 	useEffect(() => {
@@ -45,7 +53,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 				<Input
 					role='textbox'
 					placeholder={cellEditorProps.placeholder ?? 'Type ...'}
-					className='focus-within:ring-offset-transparen h-full rounded-none border-none p-0 px-4 py-0 outline-none ring-0 focus-within:ring-0'
+					className='focus-within:ring-offset-transparen h-full rounded-none p-0 px-4 py-0 outline-none ring-0 focus-within:ring-0'
 					onChange={(e) => {
 						setValue(e.target.value)
 						table.options.meta?.updateRow(row.index, column.id, value)
@@ -54,25 +62,38 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					{...cellEditorProps}
 				/>
 			)
-		case 'select': {
-			return (
-				<DropdownSelect
-					selectProps={{
-						value: (value ?? undefined) as string | undefined,
-						onValueChange: (value) => {
-							setValue(value)
-							table.options.meta?.updateRow(row.index, column.id, value)
-						}
-					}}
-					selectTriggerProps={{
-						role: 'listbox',
-						className: 'border-none ouline-none focus-within:ring-0 rounded-none px-4 h-full py-0'
-					}}
-					selectContentProps={{ sideOffset: 8, ...cellEditorProps?.selectContentProps }}
-					{...cellEditorProps}
-				/>
-			)
-		}
+	
+			case 'select': {
+				const transformedData = cellEditorProps.data.map((item) => ({
+					...item,
+					customLabel: `${item[cellEditorProps.labelField]} - ${item[cellEditorProps.valueField]}`, 
+				}));
+				
+				return (
+					<DropdownSelect
+						data={transformedData} 
+						labelField="customLabel" 
+						valueField={cellEditorProps.valueField}
+						selectProps={{
+							value: (value ?? undefined) as string | undefined,
+							onValueChange: (value) => {
+								setValue(value);
+								table.options.meta?.updateRow(row.index, column.id, value);
+							},
+						}}
+						selectTriggerProps={{
+							role: 'listbox',
+							className: `${className}  outline-none focus-within:ring-0 rounded-none px-4 h-full py-0`, 
+						}}
+						selectContentProps={{
+							sideOffset: 8,
+							...cellEditorProps?.selectContentProps,
+						}}
+					/>
+				);
+			}
+			
+		
 		case 'combobox': {
 			return (
 				<Combobox
@@ -84,7 +105,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					triggerProps={{
 						role: 'combobox',
 						className:
-							'rounded-none border-none hover:bg-inherit focus-within:ring-0 focus-within:ring-offset-transparent h-full py-0 px-4'
+							'rounded-none  hover:bg-inherit focus-within:ring-0 focus-within:ring-offset-transparent h-full py-0 px-4'
 					}}
 					contentProps={{ sideOffset: 12, ...cellEditorProps.contentProps }}
 					{...cellEditorProps}
