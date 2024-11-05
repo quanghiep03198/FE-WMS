@@ -2,6 +2,7 @@
 import { Combobox, ComboboxProps, DropdownSelect, DropdownSelectProps, Input, InputProps } from '@/components/ui'
 import { CellContext } from '@tanstack/react-table'
 import React, { Fragment, useEffect, useState } from 'react'
+import { ESTIMATE_SIZE } from './table'
 
 type BaseCellEditorProps =
 	| {
@@ -10,18 +11,17 @@ type BaseCellEditorProps =
 	  }
 	| {
 			cellEditorVariant: 'select'
-			cellEditorProps: DropdownSelectProps<any> & { template?: (data: any) => string };
+			cellEditorProps: DropdownSelectProps<any> & { template?: (data: any) => string }
 	  }
 	| {
 			cellEditorVariant: 'combobox'
-			cellEditorProps: ComboboxProps<any> & { template?: (data: any) => string };
+			cellEditorProps: ComboboxProps<any> & { template?: (data: any) => string }
 	  }
 
-
-
-	  export type CellEditorProps = CellContext<any, unknown> & BaseCellEditorProps & {
-		transformedValue?: any;
-		className?: string;
+export type CellEditorProps = CellContext<any, unknown> &
+	BaseCellEditorProps & {
+		transformedValue?: any
+		className?: string
 	}
 
 const CellEditor: React.FC<CellEditorProps> = ({
@@ -36,8 +36,6 @@ const CellEditor: React.FC<CellEditorProps> = ({
 }) => {
 	// We need to keep and update the state of the cell normally
 	const [value, setValue] = useState(getValue())
-
-
 
 	// If the initialValue is changed external, sync it up with our state
 	useEffect(() => {
@@ -58,42 +56,44 @@ const CellEditor: React.FC<CellEditorProps> = ({
 						setValue(e.target.value)
 						table.options.meta?.updateRow(row.index, column.id, value)
 					}}
+					style={{height : ESTIMATE_SIZE}}
 					value={value as InputProps['value']}
 					{...cellEditorProps}
 				/>
 			)
-	
-			case 'select': {
-				const transformedData = cellEditorProps.data.map((item) => ({
-					...item,
-					customLabel: `${item[cellEditorProps.labelField]} - ${item[cellEditorProps.valueField]}`, 
-				}));
-				
-				return (
-					<DropdownSelect
-						data={transformedData} 
-						labelField="customLabel" 
-						valueField={cellEditorProps.valueField}
-						selectProps={{
-							value: (value ?? undefined) as string | undefined,
-							onValueChange: (value) => {
-								setValue(value);
-								table.options.meta?.updateRow(row.index, column.id, value);
-							},
-						}}
-						selectTriggerProps={{
-							role: 'listbox',
-							className: `${className}  outline-none focus-within:ring-0 rounded-none px-4 h-full py-0`, 
-						}}
-						selectContentProps={{
-							sideOffset: 8,
-							...cellEditorProps?.selectContentProps,
-						}}
-					/>
-				);
-			}
-			
-		
+
+		case 'select': {
+			const transformedData = cellEditorProps.data.map((item) => ({
+				...item,
+				customLabel: `${item[cellEditorProps.labelField]}`
+				// customLabel: `${item[cellEditorProps.labelField]} - ${item[cellEditorProps.valueField]}`
+			}))
+
+			return (
+				<DropdownSelect
+					data={transformedData}
+					labelField='customLabel'
+					valueField={cellEditorProps.valueField}
+					selectProps={{
+						value: (value ?? undefined) as string | undefined,
+						onValueChange: (value) => {
+							setValue(value)
+							table.options.meta?.updateRow(row.index, column.id, value)
+						}
+					}}
+					selectTriggerProps={{
+						role: 'listbox',
+						className: `${className} border-none outline-none focus-within:ring-0 rounded-none px-4 h-full`
+						,	style: {height : ESTIMATE_SIZE},
+					}}
+					selectContentProps={{
+						sideOffset: 8,
+						...cellEditorProps?.selectContentProps
+					}}
+				/>
+			)
+		}
+
 		case 'combobox': {
 			return (
 				<Combobox
@@ -104,8 +104,9 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					}}
 					triggerProps={{
 						role: 'combobox',
+						style: {height : ESTIMATE_SIZE},
 						className:
-							'rounded-none  hover:bg-inherit focus-within:ring-0 focus-within:ring-offset-transparent h-full py-0 px-4'
+							'rounded-none border-none hover:bg-inherit focus-within:ring-0 focus-within:ring-offset-transparent h-full py-0 px-4'
 					}}
 					contentProps={{ sideOffset: 12, ...cellEditorProps.contentProps }}
 					{...cellEditorProps}

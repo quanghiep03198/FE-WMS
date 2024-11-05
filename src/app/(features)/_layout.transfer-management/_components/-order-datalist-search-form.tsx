@@ -63,6 +63,6 @@ const OrderDatalistSearchForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`xl:max-w-1/2 max-w-full grid grid-cols-12 items-end gap-x-2 sm:max-w-full gap-y-3`
+const Form = tw.form`xl:max-w-1/2 lg:max-w-3/4  max-w-full grid grid-cols-12 items-end gap-x-2 sm:max-w-full gap-y-3`
 
 export default memo(OrderDatalistSearchForm)

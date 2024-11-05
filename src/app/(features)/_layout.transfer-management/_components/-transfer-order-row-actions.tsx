@@ -33,6 +33,7 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 	onSaveChange,
 	onDeleteRow
 }) => {
+
 	const { t } = useTranslation()
 	const meta = table.options.meta
 	const { user } = useAuth()
@@ -59,13 +60,15 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 		}
 	}
 
-	const handleSetApprovalStatus = async (status: OrderStatus) =>
-		await onSaveChange({
-			status_approve: status,
-			employee_name_approve: user.display_name,
-			approve_date: new Date()
-		})
-
+	const handleSetApprovalStatus = async (status: OrderStatus) => {
+		if (onSaveChange) {
+			await onSaveChange({
+				status_approve: status,
+				employee_name_approve: user.display_name,
+				approve_date: new Date()
+			});
+		}
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
