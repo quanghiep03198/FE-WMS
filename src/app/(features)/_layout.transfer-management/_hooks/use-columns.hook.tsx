@@ -13,8 +13,9 @@ import { useUpdateTransferOrderMutation } from '../_apis/-use-transfer-order-api
 import { StorageCellEditor, WarehouseCellEditor } from '../_components/-cell-editor'
 import TransferOrderRowActions from '../_components/-transfer-order-row-actions'
 import { TransferOrderApprovalStatus } from '../_constants/-transfer-order.enum'
-import { UpdateTransferOrderValues } from '../_schemas/transfer-order.schema'
 import { usePageStore } from '../_stores/page.store'
+import { UpdateTransferOrderValues } from '../_schemas/transfer-order.schema'
+import { ESTIMATE_SIZE } from '@/components/ui/@react-table/components/table'
 
 type TransferOrderTableColumnParams = {
 	setConfirmDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -40,7 +41,12 @@ export const useTransferOrderTableColumns = ({
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
+
+
+
 	const columnHelper = createColumnHelper<ITransferOrder>()
+
+	
 
 	return useMemo(
 		() => [
@@ -180,8 +186,8 @@ export const useTransferOrderTableColumns = ({
 							<WarehouseCellEditor
 								{...{
 									...props,
-									transformedValue: props.row.original.or_warehouse,
-									className: errors.or_warehouse ? 'border border-red-500' : ''
+									transformedValue: props.row.original.or_warehouse_name,
+									className: errors.or_warehouse ? 'text-destructive bg-destructive/10 font-medium [&>svg]:!stroke-[4px]' : ''
 								}}
 							/>
 						)
@@ -191,6 +197,7 @@ export const useTransferOrderTableColumns = ({
 						minSize: 250,
 						cell: (props) => {
 							const rowData = props.row.original
+							console.log(rowData,'rowDatarowData')
 
 							return (
 								<StorageCellEditor
@@ -198,7 +205,7 @@ export const useTransferOrderTableColumns = ({
 										...props,
 										selectedWarehouse: rowData.or_warehouse_num,
 										transformedValue: rowData.or_storage_name,
-										className: errors.or_location ? 'border border-red-500' : ''
+										className: errors.or_location ? 'text-destructive bg-destructive/10 font-medium' : ''
 									}}
 								/>
 							)
@@ -211,8 +218,8 @@ export const useTransferOrderTableColumns = ({
 							<WarehouseCellEditor
 								{...{
 									...props,
-									transformedValue: props.row.original.new_warehouse,
-									className: errors.new_warehouse ? 'border border-red-500' : ''
+									transformedValue: props.row.original.new_warehouse_name,
+									className: errors.new_warehouse ? 'text-destructive bg-destructive/10 font-medium' : ''
 								}}
 							/>
 						)
@@ -229,7 +236,8 @@ export const useTransferOrderTableColumns = ({
 										...props,
 										selectedWarehouse: rowData.new_warehouse_num,
 										transformedValue: rowData.new_storage_name,
-										className: errors.new_location ? 'border border-red-500' : ''
+										className: errors.new_location ? 'text-destructive bg-destructive/10 font-medium' : '',
+										style:{minHeight: `${ESTIMATE_SIZE}px !important`}
 									}}
 								/>
 							)
@@ -279,10 +287,9 @@ export const useTransferOrderTableColumns = ({
 					<TransferOrderRowActions
 						cellContext={props}
 						onViewDetail={handleToggleFormOpen}
-						// onSaveChange={(data: UpdateTransferOrderValues) =>
-						// 	updateAsync({ transferOrderCode: props.row.original.transfer_order_code, payload: data })
-						// }
-
+						onSaveChange={(data: UpdateTransferOrderValues) =>
+							updateAsync({ transferOrderCode: props.row.original.transfer_order_code, payload: data })
+						}
 						onDeleteRow={() => {
 							setConfirmDialogOpen((prev) => !prev)
 							setRowSelectionType('single')
