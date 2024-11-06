@@ -139,9 +139,8 @@
 			--chart-5: 240 2% 26%; 
 		*/
 	}
-}
 
-@layer base {
+	/* Global styles */
 	* {
 		@apply border-border !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar;
 	}
@@ -163,14 +162,5 @@
 
 	button:focus-within {
 		outline: none;
-	}
-}
-
-@layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
 	}
 }
