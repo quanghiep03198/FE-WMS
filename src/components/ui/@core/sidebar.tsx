@@ -136,7 +136,6 @@ const Sidebar = React.forwardRef<
 	}
 >(({ side = 'left', variant = 'sidebar', collapsible = 'offcanvas', className, children, ...props }, ref) => {
 	const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
-	console.log(isMobile)
 	if (collapsible === 'none') {
 		return (
 			<div
@@ -247,7 +246,7 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<'bu
 				onClick={toggleSidebar}
 				title='Toggle Sidebar'
 				className={cn(
-					'absolute inset-y-0 z-20 flex w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[side=left]:-right-4 group-data-[side=right]:left-0 hover:after:bg-sidebar-border sm:hidden md:hidden',
+					'absolute inset-y-0 z-20 flex w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-1/2 after:left-full after:h-10 after:w-1.5 after:-translate-y-1/2 after:rounded group-data-[side=left]:-right-4 group-data-[side=right]:left-0 hover:after:bg-sidebar-border sm:hidden md:hidden',
 					'[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize',
 					'[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
 					'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar',
@@ -461,7 +460,13 @@ const SidebarMenuButton = React.forwardRef<
 	return (
 		<Tooltip>
 			<TooltipTrigger asChild>{button}</TooltipTrigger>
-			<TooltipContent side='right' align='center' hidden={state !== 'collapsed' || isMobile} {...tooltip} />
+			<TooltipContent
+				side='right'
+				align='center'
+				sideOffset={8}
+				hidden={state !== 'collapsed' || isMobile}
+				{...tooltip}
+			/>
 		</Tooltip>
 	)
 })

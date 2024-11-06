@@ -97,7 +97,6 @@ function DataTable<TData, TValue>(
 		return _columnFilters?.length === 0 && _globalFilter?.length === 0
 	}, [_globalFilter, _columnFilters, columnFilters])
 
-
 	// * Table declaration
 	const table = useReactTable({
 		data: _data,
