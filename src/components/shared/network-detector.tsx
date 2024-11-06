@@ -19,12 +19,12 @@ export default function NetworkDetector() {
 	const { isSuccess, isError } = useQuery({
 		queryKey: ['NETWORK_HEALTH_CHECK'],
 		queryFn: async () => axios.get(env('VITE_CHECKING_NETWORK_URL')),
-		refetchInterval: 1000 // Checking internet connection every 10 seconds
+		refetchInterval: 1000 // Checking internet connection every 1 seconds
 	})
 
 	useEffect(() => {
 		if (isError) {
-			window.dispatchEvent(new CustomEvent('RETRIEVE_NETWORK_CONNECTION', { detail: false }))
+			window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: false }))
 			toastRef.current = toast.error('Network error', {
 				icon: <Icon name='WifiOff' stroke='hsl(var(--foreground))' />,
 				description: 'You are currently offline.',
@@ -32,7 +32,7 @@ export default function NetworkDetector() {
 			})
 		}
 		if (isSuccess) {
-			window.dispatchEvent(new CustomEvent('RETRIEVE_NETWORK_CONNECTION', { detail: true }))
+			window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: true }))
 			toast.success('You are back to online.', {
 				id: toastRef.current,
 				icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />,
