@@ -18,6 +18,7 @@ import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
 import { Route as authAuthorizationIndexImport } from './app/(auth)/authorization/index'
 import { Route as featuresPreferencesLayoutImport } from './app/(features)/preferences/_layout'
+import { Route as featuresLayoutProductionManagementInboundIndexImport } from './app/(features)/_layout.production-management-inbound/index'
 import { Route as featuresLayoutDashboardIndexImport } from './app/(features)/_layout.dashboard/index'
 
 // Create Virtual Routes
@@ -45,9 +46,8 @@ const featuresLayoutProductIncomingInspectionIndexLazyImport = createFileRoute(
 const featuresLayoutInventoryIndexLazyImport = createFileRoute(
   '/(features)/_layout/inventory/',
 )()
-const featuresLayoutInoutboundIndexLazyImport = createFileRoute(
-  '/(features)/_layout/inoutbound/',
-)()
+const featuresLayoutFinishedProductionInoutboundIndexLazyImport =
+  createFileRoute('/(features)/_layout/finished-production-inoutbound/')()
 const featuresPreferencesLayoutKeybindingsIndexLazyImport = createFileRoute(
   '/(features)/preferences/_layout/keybindings/',
 )()
@@ -190,18 +190,25 @@ const featuresLayoutInventoryIndexLazyRoute =
       ),
     )
 
-const featuresLayoutInoutboundIndexLazyRoute =
-  featuresLayoutInoutboundIndexLazyImport
+const featuresLayoutFinishedProductionInoutboundIndexLazyRoute =
+  featuresLayoutFinishedProductionInoutboundIndexLazyImport
     .update({
-      id: '/inoutbound/',
-      path: '/inoutbound/',
+      id: '/finished-production-inoutbound/',
+      path: '/finished-production-inoutbound/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout.inoutbound/index.lazy').then(
-        (d) => d.Route,
-      ),
+      import(
+        './app/(features)/_layout.finished-production-inoutbound/index.lazy'
+      ).then((d) => d.Route),
     )
+
+const featuresLayoutProductionManagementInboundIndexRoute =
+  featuresLayoutProductionManagementInboundIndexImport.update({
+    id: '/production-management-inbound/',
+    path: '/production-management-inbound/',
+    getParentRoute: () => featuresLayoutRoute,
+  } as any)
 
 const featuresLayoutDashboardIndexRoute =
   featuresLayoutDashboardIndexImport.update({
@@ -322,11 +329,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutDashboardIndexImport
       parentRoute: typeof featuresLayoutImport
     }
-    '/(features)/_layout/inoutbound/': {
-      id: '/(features)/_layout/inoutbound/'
-      path: '/inoutbound'
-      fullPath: '/inoutbound'
-      preLoaderRoute: typeof featuresLayoutInoutboundIndexLazyImport
+    '/(features)/_layout/production-management-inbound/': {
+      id: '/(features)/_layout/production-management-inbound/'
+      path: '/production-management-inbound'
+      fullPath: '/production-management-inbound'
+      preLoaderRoute: typeof featuresLayoutProductionManagementInboundIndexImport
+      parentRoute: typeof featuresLayoutImport
+    }
+    '/(features)/_layout/finished-production-inoutbound/': {
+      id: '/(features)/_layout/finished-production-inoutbound/'
+      path: '/finished-production-inoutbound'
+      fullPath: '/finished-production-inoutbound'
+      preLoaderRoute: typeof featuresLayoutFinishedProductionInoutboundIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/inventory/': {
@@ -413,7 +427,8 @@ declare module '@tanstack/react-router' {
 
 interface featuresLayoutRouteChildren {
   featuresLayoutDashboardIndexRoute: typeof featuresLayoutDashboardIndexRoute
-  featuresLayoutInoutboundIndexLazyRoute: typeof featuresLayoutInoutboundIndexLazyRoute
+  featuresLayoutProductionManagementInboundIndexRoute: typeof featuresLayoutProductionManagementInboundIndexRoute
+  featuresLayoutFinishedProductionInoutboundIndexLazyRoute: typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   featuresLayoutInventoryIndexLazyRoute: typeof featuresLayoutInventoryIndexLazyRoute
   featuresLayoutProductIncomingInspectionIndexLazyRoute: typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   featuresLayoutReportIndexLazyRoute: typeof featuresLayoutReportIndexLazyRoute
@@ -426,8 +441,10 @@ interface featuresLayoutRouteChildren {
 
 const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
   featuresLayoutDashboardIndexRoute: featuresLayoutDashboardIndexRoute,
-  featuresLayoutInoutboundIndexLazyRoute:
-    featuresLayoutInoutboundIndexLazyRoute,
+  featuresLayoutProductionManagementInboundIndexRoute:
+    featuresLayoutProductionManagementInboundIndexRoute,
+  featuresLayoutFinishedProductionInoutboundIndexLazyRoute:
+    featuresLayoutFinishedProductionInoutboundIndexLazyRoute,
   featuresLayoutInventoryIndexLazyRoute: featuresLayoutInventoryIndexLazyRoute,
   featuresLayoutProductIncomingInspectionIndexLazyRoute:
     featuresLayoutProductIncomingInspectionIndexLazyRoute,
@@ -499,7 +516,8 @@ export interface FileRoutesByFullPath {
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
   '/dashboard': typeof featuresLayoutDashboardIndexRoute
-  '/inoutbound': typeof featuresLayoutInoutboundIndexLazyRoute
+  '/production-management-inbound': typeof featuresLayoutProductionManagementInboundIndexRoute
+  '/finished-production-inoutbound': typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
   '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/report': typeof featuresLayoutReportIndexLazyRoute
@@ -519,7 +537,8 @@ export interface FileRoutesByTo {
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
   '/dashboard': typeof featuresLayoutDashboardIndexRoute
-  '/inoutbound': typeof featuresLayoutInoutboundIndexLazyRoute
+  '/production-management-inbound': typeof featuresLayoutProductionManagementInboundIndexRoute
+  '/finished-production-inoutbound': typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
   '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/report': typeof featuresLayoutReportIndexLazyRoute
@@ -543,7 +562,8 @@ export interface FileRoutesById {
   '/(auth)/authorization/': typeof authAuthorizationIndexRoute
   '/(auth)/login/': typeof authLoginIndexRoute
   '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexRoute
-  '/(features)/_layout/inoutbound/': typeof featuresLayoutInoutboundIndexLazyRoute
+  '/(features)/_layout/production-management-inbound/': typeof featuresLayoutProductionManagementInboundIndexRoute
+  '/(features)/_layout/finished-production-inoutbound/': typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   '/(features)/_layout/inventory/': typeof featuresLayoutInventoryIndexLazyRoute
   '/(features)/_layout/product-incoming-inspection/': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/(features)/_layout/report/': typeof featuresLayoutReportIndexLazyRoute
@@ -565,7 +585,8 @@ export interface FileRouteTypes {
     | '/authorization'
     | '/login'
     | '/dashboard'
-    | '/inoutbound'
+    | '/production-management-inbound'
+    | '/finished-production-inoutbound'
     | '/inventory'
     | '/product-incoming-inspection'
     | '/report'
@@ -584,7 +605,8 @@ export interface FileRouteTypes {
     | '/authorization'
     | '/login'
     | '/dashboard'
-    | '/inoutbound'
+    | '/production-management-inbound'
+    | '/finished-production-inoutbound'
     | '/inventory'
     | '/product-incoming-inspection'
     | '/report'
@@ -606,7 +628,8 @@ export interface FileRouteTypes {
     | '/(auth)/authorization/'
     | '/(auth)/login/'
     | '/(features)/_layout/dashboard/'
-    | '/(features)/_layout/inoutbound/'
+    | '/(features)/_layout/production-management-inbound/'
+    | '/(features)/_layout/finished-production-inoutbound/'
     | '/(features)/_layout/inventory/'
     | '/(features)/_layout/product-incoming-inspection/'
     | '/(features)/_layout/report/'
@@ -663,7 +686,8 @@ export const routeTree = rootRoute
       "parent": "/(features)",
       "children": [
         "/(features)/_layout/dashboard/",
-        "/(features)/_layout/inoutbound/",
+        "/(features)/_layout/production-management-inbound/",
+        "/(features)/_layout/finished-production-inoutbound/",
         "/(features)/_layout/inventory/",
         "/(features)/_layout/product-incoming-inspection/",
         "/(features)/_layout/report/",
@@ -703,8 +727,12 @@ export const routeTree = rootRoute
       "filePath": "(features)/_layout.dashboard/index.tsx",
       "parent": "/(features)/_layout"
     },
-    "/(features)/_layout/inoutbound/": {
-      "filePath": "(features)/_layout.inoutbound/index.lazy.tsx",
+    "/(features)/_layout/production-management-inbound/": {
+      "filePath": "(features)/_layout.production-management-inbound/index.tsx",
+      "parent": "/(features)/_layout"
+    },
+    "/(features)/_layout/finished-production-inoutbound/": {
+      "filePath": "(features)/_layout.finished-production-inoutbound/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/inventory/": {
