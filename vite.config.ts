@@ -99,22 +99,38 @@ export default defineConfig(({ mode }) => {
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
-						const modules = new Map([
+						const modules = new Map<string, RegExp>([
+							['ahooks', /ahooks/],
+							['axios', /axios/],
+							['@dnd-kit/modifiers', /dnd-kit/],
+							['@dnd-kit/sortable', /dnd-kit/],
+							['@radix-ui', /@radix-ui/],
+							['@tanstack/react-query', /react-query/],
 							['@tanstack/react-router', /react-router/],
 							['@tanstack/react-table', /react-table/],
 							['@tanstack/react-virtual', /react-virtual/],
-							['@tanstack/react-query', /react-query/],
-							['@radix-ui', /@radix-ui/],
+							['clsx', /clsx/],
+							['cmdk', /cmdk/],
+							['copy-to-clipboard', /copy-to-clipboard/],
+							['d3-shape', /d3-shape/],
 							['date-fns', /date-fns/],
-							['react-hook-form', /react-hook-form/],
-							['lucide', /lucide-react/],
-							['ahooks', /ahooks/],
-							['zustand', /zustand/],
+							['flat', /flat/],
 							['immer', /immer/],
-							['zod', /zod/],
+							['i18next', /i18next/],
 							['lodash', /lodash/],
+							['lucide', /lucide-react/],
+							['lz-string', /lz-string/],
+							['nprogress', /nprogress/],
+							['qs', /qs/],
+							['react-day-picker', /react-day-picker/],
+							['react-hook-form', /react-hook-form/],
+							['react-resizable-panels', /react-resizable-panels/],
+							['recharts', /recharts/],
 							['sonner', /sonner/],
-							['recharts', /recharts/]
+							['tailwind-merge', /tailwind-merge/],
+							['uuid', /uuid/],
+							['zustand', /zustand/],
+							['zod', /zod/]
 						])
 
 						// @ts-ignore
