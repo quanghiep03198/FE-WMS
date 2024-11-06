@@ -17,7 +17,6 @@ export class TransferOrderService {
 	}
 
 	static async getTransferOrderDatalist(params: TransferOrderDatalistParams) {
-		console.log(flatten(params))
 
 		return await axiosInstance.get<void, ResponseBody<ITransferOrderData[]>>('/order/transfer-order/datalist', {
 			params: flatten(params)
@@ -25,7 +24,6 @@ export class TransferOrderService {
 	}
 
 	static async getTransferOrderDetail(transferOrderCode: string) {
-		console.log(transferOrderCode)
 		return await axiosInstance.get<void, ResponseBody<ITransferOrderDetail>>(
 			`/order/transfer-order/detail/${transferOrderCode}`
 		)

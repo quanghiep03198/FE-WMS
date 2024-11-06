@@ -33,7 +33,6 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 	onSaveChange,
 	onDeleteRow
 }) => {
-
 	const { t } = useTranslation()
 	const meta = table.options.meta
 	const { user } = useAuth()
@@ -66,9 +65,9 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 				status_approve: status,
 				employee_name_approve: user.display_name,
 				approve_date: new Date()
-			});
+			})
 		}
-	};
+	}
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
@@ -79,26 +78,14 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-60'>
 				{meta?.editedRows[row.id] ? (
-					<Fragment>
-						<DropdownMenuItem asChild>
-							<DropdownMenuButton data-action={CommonActions.CANCEL} onClick={setEditedRows}>
-								<Icon name='X' stroke='hsl(var(--destructive))' />
-								<Typography variant='small' className='text-destructive group-hover:text-destructive'>
-									{t('ns_common:actions.cancel')}
-								</Typography>
-							</DropdownMenuButton>
-						</DropdownMenuItem>
-						<DropdownMenuItem asChild>
-							{/* <DropdownMenuButton
-								data-action={CommonActions.SAVE}
-								onClick={(e) => {
-									setEditedRows(e)
-								}}>
-								<Icon name='Save' />
-								{t('ns_common:actions.save')}
-							</DropdownMenuButton> */}
-						</DropdownMenuItem>
-					</Fragment>
+					<DropdownMenuItem asChild>
+						<DropdownMenuButton data-action={CommonActions.CANCEL} onClick={setEditedRows}>
+							<Icon name='X' stroke='hsl(var(--destructive))' />
+							<Typography variant='small' className='text-destructive group-hover:text-destructive'>
+								{t('ns_common:actions.cancel')}
+							</Typography>
+						</DropdownMenuButton>
+					</DropdownMenuItem>
 				) : (
 					<DropdownMenuItem asChild>
 						<DropdownMenuButton onClick={setEditedRows} data-action={CommonActions.UPDATE}>

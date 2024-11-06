@@ -21,7 +21,6 @@ export class WarehouseStorageService {
 	}
 
 	static async deleteWarehouseStorage(selectedRecords: Array<string>) {
-		console.log(selectedRecords)
 		return axiosInstance.delete(`/warehouse/storage-detail`, { data: { id: selectedRecords } })
 	}
 }

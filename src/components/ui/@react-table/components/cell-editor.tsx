@@ -56,7 +56,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 						setValue(e.target.value)
 						table.options.meta?.updateRow(row.index, column.id, value)
 					}}
-					style={{height : ESTIMATE_SIZE}}
+					style={{ height: ESTIMATE_SIZE }}
 					value={value as InputProps['value']}
 					{...cellEditorProps}
 				/>
@@ -83,8 +83,8 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					}}
 					selectTriggerProps={{
 						role: 'listbox',
-						className: `${className} border-none outline-none focus-within:ring-0 rounded-none px-4 h-full`
-						,	style: {height : ESTIMATE_SIZE},
+						className: `${className} border-none outline-none focus-within:ring-0 rounded-none px-4 h-full`,
+						style: { height: ESTIMATE_SIZE }
 					}}
 					selectContentProps={{
 						sideOffset: 8,
@@ -104,7 +104,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 					}}
 					triggerProps={{
 						role: 'combobox',
-						style: {height : ESTIMATE_SIZE},
+						style: { height: ESTIMATE_SIZE },
 						className:
 							'rounded-none border-none hover:bg-inherit focus-within:ring-0 focus-within:ring-offset-transparent h-full py-0 px-4'
 					}}
