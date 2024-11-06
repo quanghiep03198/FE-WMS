@@ -5,4 +5,8 @@ export class TenancyService {
 	static async getTenantsByFactory() {
 		return await axiosInstance.get<void, ResponseBody<ITenant[]>>('/tenants')
 	}
+
+	static async getDefaultTenantByFactory() {
+		return await axiosInstance.get<void, ResponseBody<ITenant>>('/tenants/default')
+	}
 }

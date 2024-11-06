@@ -33,6 +33,10 @@ export default {
 		exchange_order_caution:
 			'Sau khi đổi chỉ lệnh sẽ không thể thao tác đổi ngược lại, hãy chắc chắn trước khi bấm xác nhận đổi chỉ lệnh.'
 	},
+	rfid_process: {
+		production_management_inbound: 'Quét tem kho QLSX',
+		cutting_inbound: 'Quét tem pha cắt'
+	},
 	labels: {
 		// EPC import/export
 		io_reason: 'Lý do nhập/xuất',
