@@ -49,7 +49,10 @@ export default {
 		[OrderStatus.CANCELLED]: 'Cancelled',
 		[OrderStatus.REAPPROVED]: 'Reapproved'
 	},
-
+	rfid_process: {
+		production_management_inbound: 'Production management inbound',
+		cutting_inbound: 'Cutting inbound'
+	},
 	titles: {
 		transfer_order_list: 'Transfer orders list',
 		transfer_order_datalist: 'Transfer order datalist',

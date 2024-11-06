@@ -41,7 +41,10 @@ export default {
 		},
 		exchange_order_caution: '操作后不能还原，确定要换指令？'
 	},
-
+	rfid_process: {
+		production_management_inbound: '生产管理入库',
+		cutting_inbound: '裁剪入库'
+	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: '未審核',
 		[OrderStatus.APPROVED]: '已審核',
