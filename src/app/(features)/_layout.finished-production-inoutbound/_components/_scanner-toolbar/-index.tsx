@@ -52,7 +52,8 @@ const ScannerToolbar: React.FC = () => {
 	const { data: tenants } = useQuery({
 		queryKey: ['TENANCY'],
 		queryFn: TenancyService.getTenantsByFactory,
-		select: (response) => response.metadata
+		select: (response) => response.metadata,
+		refetchOnMount: 'always'
 	})
 
 	const queryClient = useQueryClient()
