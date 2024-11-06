@@ -17,7 +17,6 @@ export class TransferOrderService {
 	}
 
 	static async getTransferOrderDatalist(params: TransferOrderDatalistParams) {
-
 		return await axiosInstance.get<void, ResponseBody<ITransferOrderData[]>>('/order/transfer-order/datalist', {
 			params: flatten(params)
 		})
