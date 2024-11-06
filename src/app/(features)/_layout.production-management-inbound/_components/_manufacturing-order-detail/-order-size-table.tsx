@@ -8,7 +8,6 @@ import TableDataRow from './-order-size-row'
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const { scannedSizes } = usePageContext('scannedSizes', 'scanningStatus', 'setScannedOrders', 'setScannedSizes')
-
 	const ref = useRef(null)
 
 	return (
@@ -21,22 +20,26 @@ const OrderSizeDetailTable: React.FC = () => {
 					className='border-separate border-spacing-0 rounded-lg'
 					style={
 						{
-							'--sticky-col-width': '10rem'
+							'--sticky-col-width': '9rem'
 						} as React.CSSProperties
 					}>
 					<TableHeader>
 						<TableRow className='sticky top-0 z-20 *:bg-table-head'>
-							<TableHead className='sticky left-0 z-20 w-[var(--sticky-col-width)] min-w-[var(--sticky-col-width)]'>
+							<TableHead
+								align='left'
+								className='left-0 z-20 xl:sticky xl:w-[var(--sticky-col-width)] xl:min-w-[var(--sticky-col-width)]'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
-							<TableHead className='sticky left-[var(--sticky-col-width)] z-20 w-[var(--sticky-col-width)] min-w-[var(--sticky-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+							<TableHead
+								align='left'
+								className='z-20 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[var(--sticky-col-width)] xl:w-[var(--sticky-col-width)] xl:min-w-[var(--sticky-col-width)]'>
 								{t('ns_erp:fields.shoestyle_codefactory')}
 							</TableHead>
-							<TableHead>Size</TableHead>
-							<TableHead align='right' className='sticky right-12 z-20'>
+							<TableHead align='left'>Size</TableHead>
+							<TableHead align='right' className='z-20 xl:sticky xl:right-12'>
 								{t('ns_common:common_fields.total')}
 							</TableHead>
-							<TableHead align='right' className='sticky right-0 z-20 min-w-12'>
+							<TableHead align='right' className='right-0 z-20 xl:sticky xl:min-w-12'>
 								-
 							</TableHead>
 						</TableRow>

@@ -18,7 +18,7 @@ export const NetworkInsight: React.FC = () => {
 	})
 
 	return (
-		<Typography variant='small' className='inline-flex items-center gap-x-2'>
+		<Typography variant='small' className='inline-flex items-center justify-center gap-x-2'>
 			{isNetworkAvailable ? (
 				<Icon name='Wifi' size={18} className='stroke-success' />
 			) : (
@@ -34,7 +34,7 @@ export const JobStatus: React.FC = () => {
 	const { scanningStatus } = usePageContext('scanningStatus')
 
 	return (
-		<Typography variant='small' className='inline-flex items-center gap-x-2'>
+		<Typography variant='small' className='inline-flex items-center justify-center gap-x-2'>
 			<Icon
 				name='Dot'
 				className={cn(
@@ -71,7 +71,7 @@ export const LatencyInsight: React.FC = () => {
 	}, [scanningStatus, currentTime, scanningStatus, pollingDuration])
 
 	return (
-		<Typography variant='small' className='inline-flex items-center gap-x-2'>
+		<Typography variant='small' className='inline-flex items-center justify-center gap-x-2'>
 			<Icon name='Gauge' size={18} />
 			<Typography variant='small' className={cn(latency / 1000 >= 1 && 'text-warning')}>
 				{latency / 1000 >= 1 ? `${latency / 1000} s` : `${latency} ms`}
@@ -82,7 +82,7 @@ export const LatencyInsight: React.FC = () => {
 
 export const ConnectionInsight: React.FC = () => {
 	return (
-		<Div className='flex h-full min-h-10 items-center justify-evenly rounded-md border bg-accent/25'>
+		<Div className='grid h-full min-h-10 grid-cols-3 items-center rounded-md border bg-accent/25 *:w-full'>
 			<NetworkInsight />
 			<JobStatus />
 			<LatencyInsight />

@@ -43,10 +43,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 
 	return (
 		<TableRow className={cn('transition-all duration-500')}>
-			<TableCell className='group/cell sticky left-0 z-10 min-w-[var(--sticky-col-width)] space-y-1 text-center'>
+			<TableCell
+				align='left'
+				className='group/cell left-0 z-10 space-y-1 xl:sticky xl:min-w-[var(--sticky-col-width)]'>
 				{orderCode === 'null' ? FALLBACK_ORDER_VALUE : orderCode}
 			</TableCell>
-			<TableCell className='sticky left-[var(--sticky-col-width)] z-10 min-w-[var(--sticky-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+			<TableCell
+				align='left'
+				className='z-10 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[var(--sticky-col-width)] xl:min-w-[var(--sticky-col-width)]'>
 				{sizeList[0]?.shoes_style_code_factory ?? FALLBACK_ORDER_VALUE}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
@@ -56,7 +60,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 					{sizeList?.map((size) => (
 						<Div
 							key={size?.size_numcode ?? FALLBACK_ORDER_VALUE}
-							className='group/cell inline-grid min-w-32 shrink-0 basis-32 grid-rows-2 divide-y last:flex-1'>
+							className='group/cell inline-grid min-w-16 shrink-0 basis-16 grid-rows-2 divide-y last:flex-1'>
 							<TableHead align='left' className='bg-table-head'>
 								{size?.size_numcode ?? FALLBACK_ORDER_VALUE}
 							</TableHead>
@@ -65,10 +69,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 					))}
 				</Div>
 			</TableCell>
-			<TableCell align='right' className='sticky right-12 font-medium'>
+			<TableCell align='right' className='font-medium xl:sticky xl:right-12'>
 				{aggregateSizeCount}
 			</TableCell>
-			<TableCell align='center' className='sticky right-0 w-12 min-w-12'>
+			<TableCell align='center' className='right-0 xl:sticky xl:w-12 xl:min-w-12'>
 				<DeleteOrderPopoverConfirm orderCode={orderCode} />
 			</TableCell>
 		</TableRow>

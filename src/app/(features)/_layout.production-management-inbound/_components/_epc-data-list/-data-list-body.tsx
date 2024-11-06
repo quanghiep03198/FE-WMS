@@ -17,7 +17,7 @@ import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetEpcQuery } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -51,7 +51,7 @@ const DataListBody: React.FC = () => {
 	const { searchParams } = useQueryParams()
 
 	// * Fetch EPC query
-	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery(searchParams.process)
+	const { data, refetch: manualFetchEpc, isFetching } = useGetEpcQuery(searchParams.process)
 
 	const { user, setAccessToken } = useAuth()
 	// * Incomming EPCs data from server-sent event
@@ -190,6 +190,11 @@ const DataListBody: React.FC = () => {
 		}
 	}, [currentPage])
 
+	useEffect(() => {
+		setScannedSizes(data?.sizes)
+		setScannedOrders(data?.orders)
+	}, [data])
+
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
@@ -209,7 +214,7 @@ const DataListBody: React.FC = () => {
 							<ListItem key={virtualItem.index} style={{ height: VIRTUAL_ITEM_SIZE }}>
 								<Typography className='font-medium'>{virtualItem?.data?.epc}</Typography>
 								<Typography variant='small' className='capitalize text-foreground'>
-									{virtualItem?.data?.mo_no}
+									{virtualItem?.data?.mo_no ?? FALLBACK_ORDER_VALUE}
 								</Typography>
 							</ListItem>
 						)
@@ -238,7 +243,7 @@ const DataListBody: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:h-[45vh] h-[40vh]`
+const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:h-[45vh] lg:h-[40vh] h-[40vh]`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap hover:bg-accent/50`
 
 export default DataListBody
