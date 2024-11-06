@@ -1,3 +1,4 @@
+import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
 import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
@@ -5,7 +6,7 @@ import { useEventListener, useLocalStorageState, usePrevious, useResetState } fr
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { INCOMING_DATA_CHANGE, RFIDSettings } from '../../_constants/rfid.const'
+import { RFIDSettings } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const NetworkInsight: React.FC = () => {

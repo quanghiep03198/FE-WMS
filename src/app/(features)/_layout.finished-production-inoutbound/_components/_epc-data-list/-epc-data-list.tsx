@@ -1,4 +1,6 @@
+import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
 import { RequestMethod } from '@/common/constants/enums'
+import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -18,11 +20,8 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
-import { INCOMING_DATA_CHANGE, RFIDSettings } from '../../_constants/rfid.const'
+import { RFIDSettings } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
-
-class RetriableError extends Error {}
-class FatalError extends Error {}
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
@@ -62,6 +61,7 @@ const EpcDataList: React.FC = () => {
 		'setSelectedOrder',
 		'writeLog'
 	)
+
 	// * Abort controller to control fetch event source
 	const abortControllerRef = useRef<AbortController>(new AbortController())
 

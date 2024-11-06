@@ -90,7 +90,7 @@ export interface IElectronicProductCode {
 	mo_no: string
 	rfid_status: 'A' | 'B' | null
 	rfid_use: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | null
-	storage: any
+	storage?: any
 }
 
 export interface IInOutBoundOrder extends IBaseEntity {
