@@ -1,4 +1,5 @@
 import { useAuth } from '@/common/hooks/use-auth'
+import { cn } from '@/common/utils/cn'
 import {
 	Icon,
 	Sidebar,
@@ -16,9 +17,9 @@ import {
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
 import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
-import { useKeyPress } from 'ahooks'
+import { useKeyPress, useScroll } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import AppLogo from '../../../_components/_shared/-app-logo'
@@ -60,6 +61,14 @@ const NavSidebar: React.FC = () => {
 		})
 	}, [])
 
+	const mainMenuRef = useRef<typeof SidebarMenu.prototype>(null)
+	const mainMenuScroll = useScroll(mainMenuRef)
+
+	const isScrolledToTop = mainMenuScroll?.top === 0
+	const isScrolledToBottom =
+		mainMenuRef.current?.scrollHeight - mainMenuRef.current?.scrollTop - mainMenuRef.current?.clientHeight < 1
+	const isScrollTopBottom = !isScrolledToTop && !isScrolledToBottom
+
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon' className='z-50 !bg-background'>
 			<SidebarHeader>
@@ -70,7 +79,7 @@ const NavSidebar: React.FC = () => {
 					<Icon name='Boxes' className='size-9 stroke-primary stroke-[1px] transition-all duration-200' />
 					<LogoWrapper>
 						<AppLogo />
-						<Typography variant='small' className='whitespace-nowrap text-xs text-muted-foreground'>
+						<Typography variant='small' className='text-xs text-muted-foreground'>
 							{user?.company_name}
 						</Typography>
 					</LogoWrapper>
@@ -79,9 +88,20 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>Main</SidebarGroupLabel>
-					<SidebarMenu>
+					<SidebarMenu
+						ref={mainMenuRef}
+						data-top-scroll={isScrolledToTop}
+						data-bottom-scroll={isScrolledToBottom}
+						data-top-bottom-scroll={isScrollTopBottom}
+						style={{ '--scroll-shadow-size': '320px' } as React.CSSProperties}
+						className={cn(
+							'h-[var(--scroll-shadow-size)] overflow-y-auto transition-colors duration-200 !scrollbar-none',
+							'data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/2),transparent)]',
+							'data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/2),transparent)]',
+							'data-[top-bottom-scroll=true]:[mask-image:linear-gradient(180deg,transparent,hsl(var(--sidebar-background))_calc(var(--scroll-shadow-size)/4),hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]'
+						)}>
 						{mainMenu.map((item) => (
-							<NavLink key={item.id} {...item} />
+							<SidebarMenuLink key={item.id} {...item} />
 						))}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -90,7 +110,7 @@ const NavSidebar: React.FC = () => {
 					<SidebarGroupLabel>Preferences</SidebarGroupLabel>
 					<SidebarMenu>
 						{preferenceMenu.map((item) => (
-							<NavLink key={item.id} {...item} />
+							<SidebarMenuLink key={item.id} {...item} />
 						))}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -100,11 +120,11 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
+const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
 
 	return (
-		<SidebarMenuItem role='menuItem' tabIndex={0}>
+		<SidebarMenuItem>
 			<SidebarMenuButton
 				asChild
 				size='default'
@@ -125,6 +145,6 @@ const NavLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	)
 }
 
-const LogoWrapper = tw.div`space-y-0 transition-[width_opacity] group-data-[state=expanded]:w-auto group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0 duration-50`
+const LogoWrapper = tw.div`space-y-0.5 transition-[width_opacity] group-data-[state=expanded]:w-auto group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0 duration-50`
 
 export default memo(NavSidebar)
