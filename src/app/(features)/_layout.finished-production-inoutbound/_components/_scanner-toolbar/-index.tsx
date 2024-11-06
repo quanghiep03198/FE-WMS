@@ -23,7 +23,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import React, { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { EPC_LIST_PROVIDE_TAG, ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
+import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'> {
@@ -74,12 +74,12 @@ const ScannerToolbar: React.FC = () => {
 
 	const handleResetScanningAction = () => {
 		queryClient.removeQueries({
-			queryKey: [ORDER_DETAIL_PROVIDE_TAG],
+			queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
 			exact: false,
 			type: 'all'
 		})
 		queryClient.removeQueries({
-			queryKey: [EPC_LIST_PROVIDE_TAG],
+			queryKey: [FP_EPC_LIST_PROVIDE_TAG],
 			exact: false,
 			type: 'all'
 		})
