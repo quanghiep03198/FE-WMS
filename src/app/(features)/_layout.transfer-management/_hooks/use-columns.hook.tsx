@@ -8,14 +8,14 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetWarehouseQuery } from '../../_layout.warehouse/_apis/warehouse.api'
 
+import { ESTIMATE_SIZE } from '@/components/ui/@react-table/components/table'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { useUpdateTransferOrderMutation } from '../_apis/-use-transfer-order-api'
 import { StorageCellEditor, WarehouseCellEditor } from '../_components/-cell-editor'
 import TransferOrderRowActions from '../_components/-transfer-order-row-actions'
 import { TransferOrderApprovalStatus } from '../_constants/-transfer-order.enum'
-import { usePageStore } from '../_stores/page.store'
 import { UpdateTransferOrderValues } from '../_schemas/transfer-order.schema'
-import { ESTIMATE_SIZE } from '@/components/ui/@react-table/components/table'
+import { usePageStore } from '../_stores/page.store'
 
 type TransferOrderTableColumnParams = {
 	setConfirmDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -41,12 +41,7 @@ export const useTransferOrderTableColumns = ({
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
-
-
-
 	const columnHelper = createColumnHelper<ITransferOrder>()
-
-	
 
 	return useMemo(
 		() => [
@@ -187,7 +182,9 @@ export const useTransferOrderTableColumns = ({
 								{...{
 									...props,
 									transformedValue: props.row.original.or_warehouse_name,
-									className: errors.or_warehouse ? 'text-destructive bg-destructive/10 font-medium [&>svg]:!stroke-[4px]' : ''
+									className: errors.or_warehouse
+										? 'text-destructive bg-destructive/10 font-medium [&>svg]:!stroke-[4px]'
+										: ''
 								}}
 							/>
 						)
@@ -197,7 +194,6 @@ export const useTransferOrderTableColumns = ({
 						minSize: 250,
 						cell: (props) => {
 							const rowData = props.row.original
-							console.log(rowData,'rowDatarowData')
 
 							return (
 								<StorageCellEditor
@@ -237,7 +233,7 @@ export const useTransferOrderTableColumns = ({
 										selectedWarehouse: rowData.new_warehouse_num,
 										transformedValue: rowData.new_storage_name,
 										className: errors.new_location ? 'text-destructive bg-destructive/10 font-medium' : '',
-										style:{minHeight: `${ESTIMATE_SIZE}px !important`}
+										style: { minHeight: `${ESTIMATE_SIZE}px !important` }
 									}}
 								/>
 							)

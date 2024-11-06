@@ -31,7 +31,6 @@ const TransferOrdersList: React.FC = () => {
 
 	const { data, isLoading, refetch } = useGetTransferOrderQuery()
 
-
 	const { mutateAsync: deleteAsync } = useDeleteTransferOrderMutation()
 	const { mutateAsync: updateMultiAsync } = useUpdateMultiTransferOrderMutation()
 
