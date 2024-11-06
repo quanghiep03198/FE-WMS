@@ -1,6 +1,6 @@
 import { routeTree } from '@/route-tree.gen'
 import { AnyPathParams, ParseRoute } from '@tanstack/react-router'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 
 export type TBreadcrumb = {
 	to: ParseRoute<typeof routeTree>['fullPath']
@@ -20,9 +20,14 @@ const BreadcrumbContext = createContext<TBreadcrumbContext>({
 })
 
 export const BreadcrumbProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [breadcrumb, setBreadcrumb] = useState<TBreadcrumb[]>([])
+	const [_breadcrumb, _setBreadcrumb] = useState<TBreadcrumb[]>([])
 
-	return <BreadcrumbContext.Provider value={{ breadcrumb, setBreadcrumb }}>{children}</BreadcrumbContext.Provider>
+	const contextValues = useMemo(
+		() => ({ breadcrumb: _breadcrumb, setBreadcrumb: _setBreadcrumb }),
+		[_breadcrumb, _setBreadcrumb]
+	)
+
+	return <BreadcrumbContext.Provider value={contextValues}>{children}</BreadcrumbContext.Provider>
 }
 
 export const useBreadcrumbContext = () => useContext(BreadcrumbContext)
