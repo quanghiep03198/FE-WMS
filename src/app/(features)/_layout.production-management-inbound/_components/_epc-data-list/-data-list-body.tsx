@@ -30,6 +30,7 @@ const DataListBody: React.FC = () => {
 	const {
 		currentPage,
 		scannedEpc,
+		scannedOrders,
 		scanningStatus,
 		connection,
 		setScanningStatus,
@@ -40,6 +41,7 @@ const DataListBody: React.FC = () => {
 	} = usePageContext(
 		'currentPage',
 		'scannedEpc',
+		'scannedOrders',
 		'scanningStatus',
 		'connection',
 		'setScanningStatus',
@@ -191,9 +193,20 @@ const DataListBody: React.FC = () => {
 	}, [currentPage])
 
 	useEffect(() => {
-		setScannedSizes(data?.sizes)
-		setScannedOrders(data?.orders)
-	}, [data])
+		if (scanningStatus === 'disconnected') {
+			const previousPageData = scannedEpc?.data ?? []
+			setScannedEpc({
+				...data?.epcs,
+				data: uniqBy([...previousPageData, ...data?.epcs?.data], 'epc').filter((item) =>
+					scannedOrders.some((order) => item.mo_no === order)
+				)
+			})
+			setScannedSizes(data?.sizes)
+			setScannedOrders(data?.orders)
+		}
+	}, [data, scanningStatus])
+
+	console.log(data)
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)

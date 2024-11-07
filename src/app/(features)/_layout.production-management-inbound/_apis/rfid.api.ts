@@ -24,12 +24,13 @@ export const useGetEpcQuery = (process: ProducingProcessSuffix) => {
 
 export const useUpdateStockMutation = () => {
 	const queryClient = useQueryClient()
-	const { connection } = usePageContext('connection')
+	const { connection, setCurrentPage } = usePageContext('connection', 'setCurrentPage')
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG, connection],
 		mutationFn: async (payload: Array<string>) => RFIDService.updatePMStockMovement(connection, payload),
 		onSuccess: () => {
+			setCurrentPage(1)
 			queryClient.invalidateQueries({ queryKey: [PM_EPC_LIST_PROVIDE_TAG] })
 		}
 	})
@@ -37,12 +38,16 @@ export const useUpdateStockMutation = () => {
 
 export const useDeletePMOrderMutation = () => {
 	const queryClient = useQueryClient()
-	const { connection } = usePageContext('connection')
+	const { connection, currentPage, setCurrentPage } = usePageContext('connection', 'currentPage', 'setCurrentPage')
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG, connection],
-		mutationFn: async (orderCode: string) => RFIDService.deleteUnexpectedPMOrder(connection, orderCode),
-		onSuccess: () => {
+		mutationFn: async (params: { process: string; order: string }) => {
+			const response = await RFIDService.deleteUnexpectedPMOrder(connection, params)
+			return response.metadata // Ensure the correct type is returned
+		},
+		onSuccess: (data: Pick<Pagination<any>, 'totalDocs' | 'totalPages'>) => {
+			setCurrentPage(currentPage > data?.totalPages ? data?.totalPages : currentPage)
 			queryClient.invalidateQueries({ queryKey: [PM_EPC_LIST_PROVIDE_TAG] })
 		}
 	})

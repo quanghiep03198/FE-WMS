@@ -39,7 +39,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							<TableHead align='right' className='z-20 xl:sticky xl:right-12'>
 								{t('ns_common:common_fields.total')}
 							</TableHead>
-							<TableHead align='right' className='right-0 z-20 xl:sticky xl:min-w-12'>
+							<TableHead align='center' className='right-0 z-20 xl:sticky xl:min-w-12'>
 								-
 							</TableHead>
 						</TableRow>
@@ -52,8 +52,8 @@ const OrderSizeDetailTable: React.FC = () => {
 						) : (
 							<TableRow>
 								<TableCell colSpan={5}>
-									<Div className='flex h-[calc(50vh-3rem)] w-full items-center justify-center gap-x-2'>
-										<Icon name='Inbox' size={24} strokeWidth={1} />
+									<Div className='flex h-[calc(75vh-40px)] w-full items-center justify-center gap-x-4 text-base text-muted-foreground'>
+										<Icon name='Inbox' size={40} strokeWidth={1} />
 										{t('ns_common:table.no_data')}
 									</Div>
 								</TableCell>

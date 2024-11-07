@@ -7,7 +7,7 @@ import { usePageContext } from '../../_contexts/-page-context'
 
 const DataListAction: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedOrders } = usePageContext('scannedOrders')
+	const { scannedEpc, scannedOrders } = usePageContext('scannedEpc', 'scannedOrders')
 
 	const { mutateAsync, isPending } = useUpdateStockMutation()
 
@@ -21,13 +21,13 @@ const DataListAction: React.FC = () => {
 	}
 
 	return (
-		<Button disabled={isPending} onClick={handleUpdateStock}>
+		<Button disabled={isPending || scannedEpc?.totalDocs === 0} size='lg' onClick={handleUpdateStock}>
 			{isPending ? (
 				<Icon name='LoaderCircle' className='animate-spin' size={20} role='img' />
 			) : (
 				<Icon name='BaggageClaim' role='img' size={20} />
 			)}
-			Confirm
+			{t('ns_common:actions.save')}
 		</Button>
 	)
 }

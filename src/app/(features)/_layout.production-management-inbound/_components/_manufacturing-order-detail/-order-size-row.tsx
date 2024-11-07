@@ -17,10 +17,12 @@ import { useTranslation } from 'react-i18next'
 // import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
 // import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { FALLBACK_ORDER_VALUE } from '@/app/(features)/_layout.finished-production-inoutbound/_apis/rfid.api'
+import useQueryParams from '@/common/hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { toast } from 'sonner'
 import { useDeletePMOrderMutation } from '../../_apis/rfid.api'
+import { ProducingProcessSuffix } from '../../_constants/index.const'
 import { OrderSize } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
@@ -73,19 +75,22 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell align='center' className='right-0 xl:sticky xl:w-12 xl:min-w-12'>
-				<DeleteOrderPopoverConfirm orderCode={orderCode} />
+				<DeleteOrderPopoverConfirm orderToDelete={orderCode} />
 			</TableCell>
 		</TableRow>
 	)
 }
 
-const DeleteOrderPopoverConfirm: React.FC<{ orderCode: string }> = memo(
-	({ orderCode }) => {
+const DeleteOrderPopoverConfirm: React.FC<{ orderToDelete: string }> = memo(
+	({ orderToDelete }) => {
 		const { t } = useTranslation()
+
+		const { searchParams } = useQueryParams<{ process: ProducingProcessSuffix }>()
 		const { mutateAsync: deleteOrder, isPending: isDeleting } = useDeletePMOrderMutation()
+
 		const handleDeleteOrder = useMemoizedFn(async (orderCode: string) => {
 			try {
-				await deleteOrder(orderCode)
+				await deleteOrder({ process: searchParams.process, order: orderCode })
 				toast.success(t('ns_common:notification.success'))
 			} catch (error) {
 				console.log(error)
@@ -95,7 +100,7 @@ const DeleteOrderPopoverConfirm: React.FC<{ orderCode: string }> = memo(
 		return (
 			<Popover modal>
 				<PopoverTrigger
-					disabled={orderCode === FALLBACK_ORDER_VALUE}
+					disabled={orderToDelete === FALLBACK_ORDER_VALUE}
 					className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
 					<Icon name='Trash2' />
 				</PopoverTrigger>
@@ -118,7 +123,7 @@ const DeleteOrderPopoverConfirm: React.FC<{ orderCode: string }> = memo(
 							disabled={isDeleting}
 							variant='destructive'
 							size='sm'
-							onClick={() => handleDeleteOrder(orderCode)}>
+							onClick={() => handleDeleteOrder(orderToDelete)}>
 							{isDeleting && <Icon name='LoaderCircle' role='img' className='animate-spin' />}
 							{t('ns_common:actions.delete')}
 						</Button>
@@ -127,7 +132,7 @@ const DeleteOrderPopoverConfirm: React.FC<{ orderCode: string }> = memo(
 			</Popover>
 		)
 	},
-	(prev, next) => prev.orderCode === next.orderCode
+	(prev, next) => prev.orderToDelete === next.orderToDelete
 )
 
 export default OrderDetailTableRow
