@@ -1,6 +1,16 @@
 import { z } from 'zod'
 import { FALLBACK_ORDER_VALUE } from '../_apis/rfid.api'
 
+const currentYear = new Date().getFullYear() - 1911
+const validYears = [currentYear - 1, currentYear, currentYear + 1].map((year) => year.toString().padStart(3, '0'))
+
+export enum FactoryCodeOrderRef {
+	VA1 = 'A',
+	VB1 = 'B',
+	VB2 = 'C',
+	CA1 = 'D'
+}
+
 export const exchangeEpcSchema = z
 	.object({
 		mo_no: z.string().min(1, { message: 'Please select an order code' }),
@@ -25,11 +35,7 @@ export const exchangeEpcSchema = z
 export const exchangeOrderSchema = z
 	.object({
 		mo_no: z.string().min(1, { message: 'Please select an order code' }),
-		mo_no_actual: z
-			.string()
-			.trim()
-			.min(1, { message: 'Please select an order code' })
-			.refine((value) => !/\s+/g.test(value), 'Invalid order code'),
+		mo_no_actual: z.string().trim().min(1, { message: 'Please select an order code' }),
 		multi: z.boolean().default(true),
 		count: z.number().positive().optional(), // Maximum quantity
 		quantity: z.number().optional(), // Quantity to exchange
@@ -47,6 +53,5 @@ export const exchangeOrderSchema = z
 	)
 
 export type ExchangeEpcFormValue = z.infer<typeof exchangeEpcSchema>
-export type ExchangeEpcPayload = Omit<ExchangeEpcFormValue, 'count' | 'exchange_all'>
-
 export type ExchangeOrderFormValue = z.infer<typeof exchangeOrderSchema>
+export type ExchangeEpcPayload = Omit<ExchangeEpcFormValue, 'count' | 'exchange_all'>

@@ -4,7 +4,7 @@ import { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
-import { OrderItem, OrderSize } from './-page-context'
+import { OrderSize } from './-page-context'
 
 type SelectedRow = { mo_no: string; mat_code: Array<string>; count: number }
 
@@ -13,7 +13,7 @@ type TOrderDetailContext = {
 	exchangeEpcDialogOpen: boolean
 	exchangeOrderDialogOpen: boolean
 	defaultExchangeEpcFormValues: OrderSize
-	defaultExchangeOrderFormValues: OrderItem
+	defaultExchangeOrderFormValues: Partial<OrderSize>
 	pushSelectedRow: (order: SelectedRow) => void
 	pullSelectedRow: (order: SelectedRow) => void
 	setSelectedRows: (orders: Array<SelectedRow>) => void
@@ -21,7 +21,7 @@ type TOrderDetailContext = {
 	setExchangeEpcDialogOpen: (value: boolean) => void
 	setExchangeOrderDialogOpen: (value: boolean) => void
 	setDefaultExchangeEpcFormValues: (value: OrderSize) => void
-	setDefaultExchangeOrderFormValues: (value: OrderItem) => void
+	setDefaultExchangeOrderFormValues: (value: Partial<OrderSize>) => void
 }
 
 const OrderDetailContext = createContext<StoreApi<TOrderDetailContext>>(null)

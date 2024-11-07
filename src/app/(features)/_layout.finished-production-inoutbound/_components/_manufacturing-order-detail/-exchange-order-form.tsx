@@ -1,6 +1,8 @@
+import { useAuth } from '@/common/hooks/use-auth'
 import {
 	Button,
 	Checkbox,
+	ComboboxFieldControl,
 	Dialog,
 	DialogClose,
 	DialogContent,
@@ -14,13 +16,8 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
 	Form as FormProvider,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
 	Icon,
-	Input,
 	Label,
 	Separator,
 	Typography
@@ -29,7 +26,7 @@ import { InputFieldControl } from '@/components/ui/@hook-form/input-field-contro
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { usePrevious, useResetState } from 'ahooks'
-import { omit, uniqBy } from 'lodash'
+import { debounce, omit, uniqBy } from 'lodash'
 import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -42,10 +39,12 @@ import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exch
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const [hoverCardOpen, setHoverCardOpen] = useState<boolean>(false)
+	const { user } = useAuth()
+	// const [hoverCardOpen, setHoverCardOpen] = useState<boolean>(false)
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()
+	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { scannedEpc, connection, setScannedEpc } = usePageContext('scannedEpc', 'connection', 'setScannedEpc')
 	const {
 		exchangeOrderDialogOpen: open,
@@ -71,16 +70,20 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const actualOrder = form.watch('mo_no_actual')
 	const previousQuantity = usePrevious(quantity)
 
-	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchOrderQuery(defaultValues?.mo_no, actualOrder)
+	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchOrderQuery({
+		orderTarget: defaultValues?.mo_no,
+		productionCode: defaultValues?.mat_code,
+		searchTerm: searchTerm
+	})
 
 	useEffect(() => {
-		if (!connection || !defaultValues || !actualOrder) return
+		if (!connection || !defaultValues) return
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		timeoutRef.current = setTimeout(() => fetchExchangableOrder(), 200)
 		return () => {
 			clearTimeout(timeoutRef.current)
 		}
-	}, [actualOrder, connection, actualOrder])
+	}, [searchTerm, defaultValues])
 
 	useEffect(() => {
 		if (defaultValues) form.reset(defaultValues)
@@ -124,7 +127,18 @@ const ExchangeOrderFormDialog: React.FC = () => {
 							<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} readOnly />
 						</Div>
 						<Div className={defaultValues?.mo_no === FALLBACK_ORDER_VALUE ? 'col-span-1' : 'col-span-full'}>
-							<HoverCard open={hoverCardOpen && Array.isArray(orderDetail) && orderDetail.length > 0}>
+							<ComboboxFieldControl
+								name='mo_no_actual'
+								label={t('ns_erp:fields.mo_no_actual')}
+								datalist={orderDetail ?? []}
+								labelField='mo_no'
+								valueField='mo_no'
+								shouldFilter={false}
+								onInput={debounce((value) => setSearchTerm(value), 200)}
+								description={t('ns_inoutbound:description.transferred_order')}
+							/>
+
+							{/* <HoverCard open={hoverCardOpen && Array.isArray(orderDetail) && orderDetail.length > 0}>
 								<HoverCardTrigger type='button' className='item-stretch flex w-full flex-col'>
 									<FormField
 										control={form.control}
@@ -170,7 +184,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 										</Button>
 									)}
 								</HoverCardContent>
-							</HoverCard>
+							</HoverCard> */}
 						</Div>
 
 						{defaultValues?.mo_no === FALLBACK_ORDER_VALUE && (

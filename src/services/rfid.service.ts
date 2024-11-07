@@ -18,6 +18,13 @@ export type RfidPmResponseData = {
 	sizes: Record<string, Array<OrderSize>>
 }
 
+export type SearchCustOrderParams = {
+	orderTarget: string
+	productionCode: string
+	sizeNumCode?: string
+	searchTerm: string
+}
+
 export class RFIDService {
 	static async fetchFPData(connection: string, page: null | number, selectedOrder: string) {
 		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
@@ -46,12 +53,12 @@ export class RFIDService {
 		)
 	}
 
-	static async searchExchangableOrder(connection: string, orderTarget: string, searchTerm: string) {
+	static async searchExchangableOrder(connection: string, params: SearchCustOrderParams) {
 		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>(
 			'/rfid/fp-inventory/search-exchangable-order',
 			{
 				headers: { ['X-Tenant-Id']: connection },
-				params: { target: orderTarget, search: searchTerm }
+				params: { target: params.orderTarget, production_code: params.productionCode, search: params.searchTerm }
 			}
 		)
 	}
@@ -82,10 +89,14 @@ export class RFIDService {
 		})
 	}
 
-	static async deleteUnexpectedPMOrder(tenant: string, orderCode: string) {
-		return await axiosInstance.delete(`/rfid/pm-inventory/delete-unexpected-order/${orderCode}`, {
-			headers: { ['X-Tenant-Id']: tenant }
-		})
+	static async deleteUnexpectedPMOrder(tenant: string, params: { process: string; order: string }) {
+		return await axiosInstance.delete<any, ResponseBody<Pick<Pagination<any>, 'totalDocs' | 'totalPages'>>>(
+			`/rfid/pm-inventory/delete-unexpected-order`,
+			{
+				headers: { ['X-Tenant-Id']: tenant },
+				params
+			}
+		)
 	}
 
 	static async exchangeEpc(tenant: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {

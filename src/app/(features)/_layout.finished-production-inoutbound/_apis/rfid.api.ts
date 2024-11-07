@@ -1,5 +1,5 @@
 import { DepartmentService } from '@/services/department.service'
-import { RFIDService } from '@/services/rfid.service'
+import { RFIDService, SearchCustOrderParams } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
@@ -42,12 +42,12 @@ export const useGetOrderDetail = () => {
 	})
 }
 
-export const useSearchOrderQuery = (orderTarget: string, searchTerm: string) => {
+export const useSearchOrderQuery = (params: SearchCustOrderParams) => {
 	const { connection } = usePageContext('connection')
 
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER', orderTarget],
-		queryFn: async () => await RFIDService.searchExchangableOrder(connection, orderTarget, searchTerm),
+		queryKey: ['EXCHANGABLE_ORDER'],
+		queryFn: async () => await RFIDService.searchExchangableOrder(connection, params),
 		enabled: false,
 		select: (response) => response.metadata
 	})

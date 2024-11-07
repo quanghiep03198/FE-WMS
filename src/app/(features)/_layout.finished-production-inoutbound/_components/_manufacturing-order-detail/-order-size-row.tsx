@@ -123,7 +123,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 						className='opacity-0 duration-100 group-hover/cell:opacity-100'
 						onClick={() => {
 							setExchangeOrderDialogOpen(true)
-							setDefaultExchangeOrderFormValues({ mo_no: orderCode, count: aggregateSizeCount })
+							setDefaultExchangeOrderFormValues({
+								mo_no: orderCode,
+								mat_code: sizeList[0]?.mat_code,
+								count: aggregateSizeCount
+							})
 						}}>
 						<Icon name='ArrowLeftRight' className='stroke-active' />
 					</button>
