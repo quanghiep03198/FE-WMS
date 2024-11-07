@@ -6,7 +6,7 @@ import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 import { OrderSize } from './-page-context'
 
-type SelectedRow = { mo_no: string; mat_code: Array<string>; count: number }
+type SelectedRow = { mo_no: string; mat_code: string; count: number }
 
 type TOrderDetailContext = {
 	selectedRows: Array<SelectedRow>

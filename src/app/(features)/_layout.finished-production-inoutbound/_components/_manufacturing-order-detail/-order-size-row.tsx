@@ -15,7 +15,6 @@ import {
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
-import { uniqBy } from 'lodash'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -55,7 +54,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 	const hasSomeRowMatch = useMemo(() => {
 		if (!selectedRows || selectedRows.length === 0) return false
 		const sizeMatCodesSet = new Set(sizeList.map((size) => size.mat_code))
-		return selectedRows[0].mat_code.some((productionCode) => sizeMatCodesSet.has(productionCode))
+		return sizeMatCodesSet.has(selectedRows[0].mat_code)
 	}, [selectedRows])
 
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
@@ -107,10 +106,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 					onCheckedChange={(checked) =>
 						handleToggleSelectRow(checked, {
 							mo_no: orderCode,
-							mat_code: uniqBy(
-								sizeList.map((item) => item.mat_code),
-								'mat_code'
-							),
+							mat_code: sizeList[0]?.mat_code,
 							count: aggregateSizeCount
 						})
 					}

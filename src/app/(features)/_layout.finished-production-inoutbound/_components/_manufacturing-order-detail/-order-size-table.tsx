@@ -23,7 +23,7 @@ import {
 } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMemoizedFn } from 'ahooks'
-import { groupBy, uniqBy } from 'lodash'
+import { groupBy } from 'lodash'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetOrderDetail } from '../../_apis/rfid.api'
@@ -86,10 +86,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			setSelectedRows(
 				allMatchingRowsSelection.map((item) => ({
 					mo_no: item[0],
-					mat_code: uniqBy(
-						item[1].map((size) => size.mat_code),
-						'mat_code'
-					),
+					mat_code: item[1]?.[0]?.mat_code,
 					count: item[1].reduce((acc, curr) => {
 						return acc + curr.count
 					}, 0)
@@ -202,8 +199,10 @@ const ExchangeSelectedOrderTrigger: React.FC = () => {
 
 	const handlePreExchangeSelectedRows = () => {
 		setOpen(true)
+		console.log(selectedRows)
 		setDefaultValues({
 			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
+			mat_code: selectedRows[0]?.mat_code,
 			count: selectedRows.reduce((acc, curr) => acc + curr.count, 0)
 		})
 	}

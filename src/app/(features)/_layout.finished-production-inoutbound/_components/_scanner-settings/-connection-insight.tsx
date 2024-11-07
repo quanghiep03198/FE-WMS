@@ -76,7 +76,7 @@ const LatencyInsight: React.FC = () => {
 		if (typeof scanningStatus === 'undefined') reset()
 		if (scanningStatus === 'connected') {
 			const latency = currentTime - previousTime - Number(pollingDuration)
-			setLatency(latency > 0 ? +latency.toFixed(2) : 0)
+			setLatency(latency > 0 ? parseFloat(latency.toFixed(2)) : 0)
 		}
 	}, [scanningStatus, currentTime, scanningStatus, pollingDuration])
 

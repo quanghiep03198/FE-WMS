@@ -11,6 +11,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { useLocalStorageState } from 'ahooks'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { RFIDSettings } from '../../_constants/rfid.const'
@@ -42,6 +43,11 @@ const PollingIntervalSelector: React.FC = () => {
 		defaultValue: 750,
 		listenStorageChange: true
 	})
+
+	useEffect(() => {
+		if (!pollingDuration) setPollingDuration(750)
+	}, [pollingDuration])
+
 	const { scanningStatus } = usePageContext('scanningStatus')
 
 	const disabled = scanningStatus === 'connected' || scanningStatus === 'connecting'
