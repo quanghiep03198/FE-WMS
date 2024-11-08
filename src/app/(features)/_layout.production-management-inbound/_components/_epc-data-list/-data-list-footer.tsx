@@ -1,11 +1,12 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
-import { RFIDSettings } from '@/app/(features)/_layout.finished-production-inoutbound/_constants/rfid.const'
 import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
 import { useEventListener, useLocalStorageState, usePrevious, useResetState } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { DEFAULT_PM_RFID_SETTINGS, RFIDSettings } from '../..'
+import { PM_RFID_SETTINGS_KEY } from '../../_constants/index.const'
 import { usePageContext } from '../../_contexts/-page-context'
 type Props = {}
 
@@ -50,15 +51,15 @@ export const JobStatus: React.FC = () => {
 }
 
 export const LatencyInsight: React.FC = () => {
-	const { t } = useTranslation()
-	const [pollingDuration] = useLocalStorageState<number>(RFIDSettings.SSE_POLLING_DURATION, {
-		listenStorageChange: true
-	})
+	const { scanningStatus } = usePageContext('scanningStatus')
 	const [currentTime, setCurrentTime] = useState<number>(performance.now())
 	const previousTime = usePrevious(currentTime)
 	const [latency, setLatency, reset] = useResetState(0)
+	const [settings] = useLocalStorageState<RFIDSettings>(PM_RFID_SETTINGS_KEY, {
+		listenStorageChange: true
+	})
 
-	const { scanningStatus } = usePageContext('scanningStatus')
+	const pollingDuration = settings?.pollingDuration ?? DEFAULT_PM_RFID_SETTINGS.pollingDuration
 
 	useEventListener(INCOMING_DATA_CHANGE, () => setCurrentTime(performance.now()))
 

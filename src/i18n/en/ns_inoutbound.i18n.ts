@@ -50,8 +50,8 @@ export default {
 		[OrderStatus.REAPPROVED]: 'Reapproved'
 	},
 	rfid_process: {
-		production_management_inbound: 'Production management inbound',
-		cutting_inbound: 'Cutting inbound'
+		production_management_inbound: 'P.M Inbound',
+		cutting_inbound: 'Cutting Inbound'
 	},
 	titles: {
 		transfer_order_list: 'Transfer orders list',

@@ -8,7 +8,7 @@ import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { type EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useVirtualList } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
 import qs from 'qs'
@@ -17,7 +17,9 @@ import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { DEFAULT_PM_RFID_SETTINGS, RFIDSettings } from '../..'
 import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
+import { PM_RFID_SETTINGS_KEY } from '../../_constants/index.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -64,6 +66,11 @@ const DataListBody: React.FC = () => {
 	// * Abort controller ref
 	const abortControllerRef = useRef<AbortController>(new AbortController())
 
+	const [settings] = useLocalStorageState<RFIDSettings>(PM_RFID_SETTINGS_KEY, {
+		listenStorageChange: true
+	})
+	const pollingDuration = settings?.pollingDuration ?? DEFAULT_PM_RFID_SETTINGS.pollingDuration
+
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading('Establishing connection ...', { id: SSE_TOAST_ID })
@@ -75,7 +82,8 @@ const DataListBody: React.FC = () => {
 					headers: {
 						['Authorization']: AuthService.getAccessToken(),
 						['X-Tenant-Id']: connection,
-						['X-User-Company']: user.company_code
+						['X-User-Company']: user.company_code,
+						['X-Polling-Duration']: String(pollingDuration)
 					},
 					signal: abortControllerRef.current.signal,
 					openWhenHidden: true,
@@ -247,7 +255,7 @@ const DataListBody: React.FC = () => {
 			)}
 		</List>
 	) : (
-		<Div className='z-10 grid h-[42vh] place-content-center xxl:h-[48vh]'>
+		<Div className='z-10 grid h-[45vh] place-content-center'>
 			<Div className='inline-flex items-center gap-x-4'>
 				<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 				<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>

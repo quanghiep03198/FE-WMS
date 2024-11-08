@@ -59,8 +59,6 @@ export const DEFAULT_PROPS: Pick<
 	scannedSizes: {}
 }
 
-const MAX_LINES_OF_LOG = 100
-
 const PageContext = createContext<StoreApi<PageContextStore>>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
