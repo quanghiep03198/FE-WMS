@@ -25,7 +25,7 @@ export const LanguageSelect: React.FC = () => {
 
 	return (
 		<Select onValueChange={(value) => i18n.changeLanguage(value)} value={i18n.language}>
-			<SelectTrigger>
+			<SelectTrigger aria-label='Languages'>
 				<SelectValue placeholder='Choose language' />
 			</SelectTrigger>
 			<SelectContent>
@@ -46,7 +46,7 @@ export const LanguageDropdown: React.FC<{ triggerProps?: ButtonProps }> = ({ tri
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:settings.language')} triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger asChild>
-					<Button {...triggerProps} size='icon' type='button'>
+					<Button {...triggerProps} size='icon' type='button' aria-label='Languages'>
 						<Icon name='Languages' />
 					</Button>
 				</DropdownMenuTrigger>

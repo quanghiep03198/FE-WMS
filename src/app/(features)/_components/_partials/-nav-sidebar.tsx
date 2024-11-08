@@ -62,7 +62,7 @@ const NavSidebar: React.FC = () => {
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon' className='z-50 !bg-background'>
-			<SidebarHeader>
+			<SidebarHeader className='py-4'>
 				<Link
 					to='/dashboard'
 					preload='intent'
@@ -76,19 +76,20 @@ const NavSidebar: React.FC = () => {
 					</LogoWrapper>
 				</Link>
 			</SidebarHeader>
+
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>Main</SidebarGroupLabel>
-					<SidebarMenu>
+					<SidebarMenu role='menu' aria-label='Main menu'>
 						{mainMenu.map((item) => (
 							<SidebarMenuLink key={item.id} {...item} />
 						))}
 					</SidebarMenu>
 				</SidebarGroup>
 				<SidebarSeparator />
-				<SidebarGroup role='menu'>
+				<SidebarGroup>
 					<SidebarGroupLabel>Preferences</SidebarGroupLabel>
-					<SidebarMenu>
+					<SidebarMenu role='menu' aria-label='Preferences menu'>
 						{preferenceMenu.map((item) => (
 							<SidebarMenuLink key={item.id} {...item} />
 						))}
@@ -104,7 +105,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
 
 	return (
-		<SidebarMenuItem>
+		<SidebarMenuItem role='menuitem'>
 			<SidebarMenuButton
 				asChild
 				size='default'
