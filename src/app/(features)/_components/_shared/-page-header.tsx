@@ -10,7 +10,7 @@ export const PageHeader: React.FC<PageTitleProps> = forwardRef(({ children, clas
 ))
 
 export const PageTitle: React.FC<TypographyProps> = ({ children, className }) => (
-	<Typography className={cn('text-2xl font-bold leading-none tracking-tight', className)} children={children} />
+	<Typography className={cn('text-2xl font-semibold leading-none tracking-tight', className)} children={children} />
 )
 
 export const PageDescription: React.FC<TypographyProps> = ({ children, className }) => (
