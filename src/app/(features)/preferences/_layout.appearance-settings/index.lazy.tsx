@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
 import { AppearanceFormValues, appearanceFormSchema } from './_schemas/user-preference.schema'
 
 export const Route = createLazyFileRoute('/(features)/preferences/_layout/appearance-settings/')({

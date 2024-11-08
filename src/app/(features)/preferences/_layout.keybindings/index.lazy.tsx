@@ -5,7 +5,7 @@ import { NavigationConfig, navigationConfig } from '@/configs/navigation.config'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
 
 type CommandList = Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>[]
 

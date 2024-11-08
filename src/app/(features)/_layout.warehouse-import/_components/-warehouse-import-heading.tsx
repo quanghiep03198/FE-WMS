@@ -1,6 +1,6 @@
 import { Div } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
 import ImportDataListDialog from './-import-order-datalist-dialog'
 
 type Props = {}

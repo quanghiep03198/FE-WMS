@@ -1,7 +1,7 @@
 import { CommonActions } from '@/common/constants/enums'
 import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../_components/shared/-page-header'
+import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
 import { usePageContext } from '../_contexts/-page-context'
 
 const WarehouseListHeading: React.FC = () => {
