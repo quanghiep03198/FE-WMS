@@ -20,8 +20,10 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
-import { RFIDSettings } from '../../_constants/rfid.const'
+// import { RFIDSettings } from '../../_constants/rfid.const'
+import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
@@ -69,10 +71,7 @@ const EpcDataList: React.FC = () => {
 	const previousTimeRef = useRef<number>(performance.now())
 
 	// * Polling duration for SSE
-	const [pollingDuration] = useLocalStorageState<number>(RFIDSettings.SSE_POLLING_DURATION, {
-		defaultValue: 750,
-		listenStorageChange: true
-	})
+	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY)
 
 	// * Alert for invalid EPCs
 	const [hasInvalidEpcAlert, setHasInvalidEpcAlert] = useState<boolean>(false)
@@ -91,6 +90,8 @@ const EpcDataList: React.FC = () => {
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
 	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
+
+	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {

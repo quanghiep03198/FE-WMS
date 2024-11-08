@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../_manufacturing-order-detail/-index'
-import EpcDataList from './-epc-data-list'
-import ListBoxHeader from './-list-box-header'
+import EpcDataList from './-data-list-body'
+import ListBoxHeader from './-data-list-header'
 import LoggerConsole from './-logger-console'
 
 const EpcListBox: React.FC = () => {

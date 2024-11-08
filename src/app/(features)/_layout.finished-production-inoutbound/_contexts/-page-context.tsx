@@ -6,7 +6,8 @@ import React, { createContext, useContext, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
-import { RFIDSettings } from '../_constants/rfid.const'
+import { FP_RFID_SETTINGS_KEY } from '../_constants/rfid.const'
+import { RFIDSettings } from '../index.lazy'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
 export type Log = {
@@ -85,7 +86,7 @@ const PageContext = createContext<StoreApi<PageContextStore>>(null)
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const storeRef = useRef<StoreApi<PageContextStore>>(null)
 
-	const [isEnablePreserveLog] = useLocalStorageState<boolean>(RFIDSettings.PRESERVE_LOG, {
+	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
 		listenStorageChange: true
 	})
 
@@ -162,7 +163,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 					})
 				},
 				reset: () => {
-					if (!isEnablePreserveLog) {
+					if (!settings?.preserveLog) {
 						set((state) => {
 							state.logs = DEFAULT_PROPS.logs
 						})

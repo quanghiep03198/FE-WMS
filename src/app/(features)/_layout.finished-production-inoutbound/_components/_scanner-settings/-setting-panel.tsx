@@ -11,11 +11,12 @@ import {
 	Typography
 } from '@/components/ui'
 import { useLocalStorageState } from 'ahooks'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { RFIDSettings } from '../../_constants/rfid.const'
+
+import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
+import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
@@ -39,18 +40,15 @@ const SettingPanel: React.FC = () => {
  */
 const PollingIntervalSelector: React.FC = () => {
 	const { t } = useTranslation()
-	const [pollingDuration, setPollingDuration] = useLocalStorageState<number>(RFIDSettings.SSE_POLLING_DURATION, {
-		defaultValue: 750,
+	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
 		listenStorageChange: true
 	})
-
-	useEffect(() => {
-		if (!pollingDuration) setPollingDuration(750)
-	}, [pollingDuration])
 
 	const { scanningStatus } = usePageContext('scanningStatus')
 
 	const disabled = scanningStatus === 'connected' || scanningStatus === 'connecting'
+
+	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
 
 	return (
 		<HoverCard openDelay={50} closeDelay={50}>
@@ -59,7 +57,7 @@ const PollingIntervalSelector: React.FC = () => {
 					<Div className='flex items-center justify-between'>
 						<Label htmlFor='polling-duration'>{t('ns_inoutbound:scanner_setting.polling_duration')}</Label>
 						<Badge variant='outline'>
-							{+pollingDuration / 1000 >= 1 ? `${+pollingDuration / 1000} s` : `${+pollingDuration} ms`}
+							{pollingDuration / 1000 >= 1 ? `${pollingDuration / 1000} s` : `${pollingDuration} ms`}
 						</Badge>
 					</Div>
 					<Div className='flex items-center gap-x-3'>
@@ -69,9 +67,9 @@ const PollingIntervalSelector: React.FC = () => {
 							min={500}
 							max={1000}
 							step={50}
-							defaultValue={[+pollingDuration]}
+							defaultValue={[settings?.pollingDuration ?? 750]}
 							disabled={disabled}
-							onValueChange={(value) => setPollingDuration(value[0])}
+							onValueChange={(value) => setSettings({ ...settings, pollingDuration: value[0] })}
 							className='[&_[role=slider]]:h-4 [&_[role=slider]]:w-4'
 							aria-label='Polling Duration'
 						/>
@@ -94,11 +92,9 @@ const PollingIntervalSelector: React.FC = () => {
  */
 const FullScreenModeSwitch: React.FC = () => {
 	const { t } = useTranslation()
-	const [isFullScreen, setFullScreen] = useLocalStorageState<boolean>(RFIDSettings.FULLSCREEN_MODE, {
-		listenStorageChange: true,
-		defaultValue: false
+	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
+		listenStorageChange: true
 	})
-
 	return (
 		<SwitchBox.Wrapper>
 			<SwitchBox.TitleWrapper>
@@ -111,8 +107,8 @@ const FullScreenModeSwitch: React.FC = () => {
 				<Switch
 					id='toggle-fullscreen'
 					className='max-w-full'
-					checked={isFullScreen}
-					onCheckedChange={setFullScreen}
+					checked={settings?.fullscreenMode}
+					onCheckedChange={(value) => setSettings({ ...settings, fullscreenMode: Boolean(value) })}
 				/>
 			</SwitchBox.InnerWrapper>
 		</SwitchBox.Wrapper>
@@ -124,8 +120,7 @@ const FullScreenModeSwitch: React.FC = () => {
  */
 const DeveloperModeSwitch: React.FC = () => {
 	const { t } = useTranslation()
-	const [isEnableDeveloperMode, setDeveloperMode] = useLocalStorageState<boolean>(RFIDSettings.DEVELOPER_MODE, {
-		defaultValue: false,
+	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
 		listenStorageChange: true
 	})
 
@@ -140,9 +135,9 @@ const DeveloperModeSwitch: React.FC = () => {
 			<SwitchBox.InnerWrapper>
 				<Switch
 					id='toggle-developer-mode'
-					checked={isEnableDeveloperMode}
+					checked={settings?.developerMode}
 					className='max-w-full'
-					onCheckedChange={(value) => setDeveloperMode(value)}
+					onCheckedChange={(value) => setSettings({ ...settings, developerMode: Boolean(value) })}
 				/>
 			</SwitchBox.InnerWrapper>
 		</SwitchBox.Wrapper>

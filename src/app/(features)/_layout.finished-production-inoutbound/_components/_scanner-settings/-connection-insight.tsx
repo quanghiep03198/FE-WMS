@@ -6,8 +6,9 @@ import { useEventListener, useLocalStorageState, usePrevious, useResetState } fr
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { RFIDSettings } from '../../_constants/rfid.const'
+import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
+import { RFIDSettings } from '../../index.lazy'
 
 const NetworkInsight: React.FC = () => {
 	const { t } = useTranslation()
@@ -61,7 +62,7 @@ const JobStatus: React.FC = () => {
 
 const LatencyInsight: React.FC = () => {
 	const { t } = useTranslation()
-	const [pollingDuration] = useLocalStorageState<number>(RFIDSettings.SSE_POLLING_DURATION, {
+	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
 		listenStorageChange: true
 	})
 	const [currentTime, setCurrentTime] = useState<number>(performance.now())
@@ -75,10 +76,11 @@ const LatencyInsight: React.FC = () => {
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') reset()
 		if (scanningStatus === 'connected') {
-			const latency = currentTime - previousTime - Number(pollingDuration)
+			const pollingDuration = settings?.pollingDuration ? Number(settings?.pollingDuration) : 0
+			const latency = currentTime - previousTime - pollingDuration
 			setLatency(latency > 0 ? parseFloat(latency.toFixed(2)) : 0)
 		}
-	}, [scanningStatus, currentTime, scanningStatus, pollingDuration])
+	}, [scanningStatus, currentTime, scanningStatus, settings?.pollingDuration])
 
 	return (
 		<StatusItem>

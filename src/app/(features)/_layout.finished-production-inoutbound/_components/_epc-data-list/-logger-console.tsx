@@ -18,16 +18,16 @@ import { useLocalStorageState, useUpdate, useVirtualList } from 'ahooks'
 import { format } from 'date-fns'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RFIDSettings } from '../../_constants/rfid.const'
+import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
+import { RFIDSettings } from '../../index.lazy'
 
 const LoggerConsole: React.FC = () => {
 	const { t } = useTranslation()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const { logs, clearLog } = usePageContext('logs', 'clearLog')
-	const [isEnablePreserveLog, setEnablePreserveLog] = useLocalStorageState<boolean>(RFIDSettings.PRESERVE_LOG, {
-		defaultValue: false,
+	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
 		listenStorageChange: true
 	})
 	const [virtualList, scrollTo] = useVirtualList(logs, {
@@ -102,8 +102,8 @@ const LoggerConsole: React.FC = () => {
 						<Div className='inline-flex items-center gap-x-2'>
 							<Checkbox
 								id='toggle-preserve-log'
-								checked={isEnablePreserveLog}
-								onCheckedChange={(value) => setEnablePreserveLog(Boolean(value))}
+								checked={settings?.preserveLog}
+								onCheckedChange={(value) => setSettings({ ...settings, preserveLog: Boolean(value) })}
 							/>
 							<Label htmlFor='toggle-preserve-log' className='text-xs'>
 								{t('ns_inoutbound:scanner_setting.preserve_log')}
