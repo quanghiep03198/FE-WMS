@@ -71,7 +71,7 @@ function Page() {
 }
 
 const PanelGroup = {
-	Container: tw.div`group space-y-3 bg-background
+	Container: tw.div`space-y-3 bg-background
 		data-[screen=fullscreen]:fixed
 		data-[screen=fullscreen]:p-6
 		data-[screen=fullscreen]:z-50
@@ -83,7 +83,6 @@ const PanelGroup = {
 		grid grid-cols-12 grid-rows-12 items-stretch gap-x-6 gap-y-3 max-h-none grid-flow-col
 		xl:max-h-[85vh]
 		xxl:max-h-[90vh]
-		group-data-[screen=fullscreen]:max-h-screen
 	`,
 	CounterPanel: tw.div`
 		order-1

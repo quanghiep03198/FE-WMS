@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
-import { RFIDSettings } from '../../index.lazy'
+import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const NetworkInsight: React.FC = () => {
 	const { t } = useTranslation()
@@ -73,10 +73,11 @@ const LatencyInsight: React.FC = () => {
 
 	useEventListener(INCOMING_DATA_CHANGE, () => setCurrentTime(performance.now()))
 
+	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
+
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') reset()
 		if (scanningStatus === 'connected') {
-			const pollingDuration = settings?.pollingDuration ? Number(settings?.pollingDuration) : 0
 			const latency = currentTime - previousTime - pollingDuration
 			setLatency(latency > 0 ? parseFloat(latency.toFixed(2)) : 0)
 		}
