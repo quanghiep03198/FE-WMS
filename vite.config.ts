@@ -1,17 +1,20 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
-import react from '@vitejs/plugin-react-swc'
+import ReactSWC from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, ViteDevServer } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// https://vitejs.dev/config/
+/**
+ * @see https://vitejs.dev/config/
+ */
+
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 
 	return {
 		plugins: [
 			TanStackRouterVite(),
-			react(),
+			ReactSWC(),
 			VitePWA({
 				registerType: 'autoUpdate',
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
@@ -87,6 +90,16 @@ export default defineConfig(({ mode }) => {
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, '')
 				}
+			},
+
+			configureServer: (server: ViteDevServer) => {
+				server.middlewares.use((_, res, next) => {
+					res.setHeader(
+						'Content-Security-Policy',
+						`default-src 'self' ${process.env.VITE_BASE_URL} ${process.env.VITE_CHECKING_NETWORK_URL}; script-src 'self' ${process.env.VITE_BASE_URL} ${process.env.VITE_CHECKING_NETWORK_URL}; style-src 'self' 'unsafe-inline';`
+					)
+					next()
+				})
 			}
 		},
 		preview: {
@@ -96,6 +109,7 @@ export default defineConfig(({ mode }) => {
 		build: {
 			emptyOutDir: true,
 			chunkSizeWarningLimit: 1024,
+			sourcemap: false,
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
