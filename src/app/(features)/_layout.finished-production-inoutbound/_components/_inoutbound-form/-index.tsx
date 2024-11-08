@@ -146,6 +146,8 @@ const InoutboundForm: React.FC = () => {
 									}}>
 									<FormItem>
 										<StyledFormLabel
+											role='checkbox'
+											tabIndex={0}
 											aria-checked={field.value === FormActionEnum.IMPORT}
 											htmlFor={FormActionEnum.IMPORT}>
 											<FormControl>
@@ -166,6 +168,8 @@ const InoutboundForm: React.FC = () => {
 									<FormItem>
 										<StyledFormLabel
 											htmlFor={FormActionEnum.EXPORT}
+											role='radio'
+											tabIndex={0}
 											aria-checked={field.value == FormActionEnum.EXPORT}>
 											<FormControl>
 												<RadioGroupItem

@@ -121,18 +121,13 @@ const ScannerToolbar: React.FC = () => {
 
 				<Div className='inline-grid grid-cols-2 items-stretch gap-x-1 *:w-full'>
 					<Button
-						size={isSmallScreen ? 'default' : 'sm'}
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
 						onClick={handleResetScanningAction}>
 						<Icon name='Redo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>
-					<Button
-						size={isSmallScreen ? 'default' : 'sm'}
-						disabled={!connection}
-						onClick={handleToggleScanning}
-						variant={scanningButtonProps.variant}>
+					<Button disabled={!connection} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
 						<Icon role='img' name={scanningButtonProps.icon} />
 						{scanningButtonProps.children}
 					</Button>
