@@ -1,4 +1,6 @@
 import { LoginFormValues } from '@/app/(auth)/login/_schemas/login.schema'
+import { FP_RFID_SETTINGS_KEY } from '@/app/(features)/_layout.finished-production-inoutbound/_constants/rfid.const'
+import { PM_RFID_SETTINGS_KEY } from '@/app/(features)/_layout.production-management-inbound/_constants/index.const'
 import { IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
@@ -13,6 +15,8 @@ export class AuthService {
 
 	static logout() {
 		useAuthStore.getState().resetCredentials() // reset auth state
+		localStorage.removeItem(FP_RFID_SETTINGS_KEY) // remove finished production RFID settings
+		localStorage.removeItem(PM_RFID_SETTINGS_KEY) // remove production management RFID settings
 		queryClient.clear() // clear cached queries
 	}
 
