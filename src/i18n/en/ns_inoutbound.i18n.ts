@@ -95,6 +95,7 @@ export default {
 		preserve_log: 'Preserve log',
 		preserve_log_note: 'Do not clear log on reset',
 		developer_mode: 'Developer mode',
-		developer_mode_note: 'Enabling developer mode for more advanced features'
+		developer_mode_note: 'Enabling developer mode for more advanced features',
+		adjust_setting_description: 'Adjust RFID Playground settings'
 	}
 }

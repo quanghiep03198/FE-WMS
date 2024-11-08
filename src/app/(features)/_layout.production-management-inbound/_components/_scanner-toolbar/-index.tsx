@@ -68,7 +68,6 @@ const ScannerToolbar: React.FC = () => {
 
 	useEffect(() => {
 		setConnection(tenant.id)
-		console.log(tenant)
 	}, [tenant])
 
 	const queryClient = useQueryClient()
@@ -179,7 +178,7 @@ const SettingPopover: React.FC = () => {
 						{t('ns_common:navigation.settings')}
 					</Typography>
 					<Typography variant='small' color='muted'>
-						Adjust RFID Playground settings
+						{t('ns_inoutbound:scanner_setting.adjust_setting_description')}
 					</Typography>
 				</Div>
 				<PollingIntervalSelector />

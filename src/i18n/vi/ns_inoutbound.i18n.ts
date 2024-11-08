@@ -92,6 +92,7 @@ export default {
 		preserve_log: 'Giữ log',
 		preserve_log_note: 'Không xóa nhật ký khi thiết lập lại',
 		developer_mode: 'Chế độ phát triển',
-		developer_mode_note: 'Bật chế độ phát triển để sử dụng các tính năng nâng cao hơn'
+		developer_mode_note: 'Bật chế độ phát triển để sử dụng các tính năng nâng cao hơn',
+		adjust_setting_description: 'Điều chỉnh cài đặt RFID Playground'
 	}
 }

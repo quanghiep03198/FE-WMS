@@ -51,7 +51,6 @@ export default {
 		[OrderStatus.CANCELLED]: '取消審核 ',
 		[OrderStatus.REAPPROVED]: '重新審核'
 	},
-
 	titles: {
 		transfer_order_list: '转移订单列表',
 		transfer_order_datalist: '转移订单数据列表',
@@ -89,6 +88,7 @@ export default {
 		preserve_log: '保留日志',
 		preserve_log_note: '重置时不要清除日志',
 		developer_mode: '开发者模式',
-		developer_mode_note: '启用开发者模式以获取更多高级功能'
+		developer_mode_note: '启用开发者模式以获取更多高级功能',
+		adjust_setting_description: '调整RFID游乐场设置'
 	}
 }

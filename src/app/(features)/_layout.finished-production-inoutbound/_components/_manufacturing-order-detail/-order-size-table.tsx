@@ -199,7 +199,6 @@ const ExchangeSelectedOrderTrigger: React.FC = () => {
 
 	const handlePreExchangeSelectedRows = () => {
 		setOpen(true)
-		console.log(selectedRows)
 		setDefaultValues({
 			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
 			mat_code: selectedRows[0]?.mat_code,

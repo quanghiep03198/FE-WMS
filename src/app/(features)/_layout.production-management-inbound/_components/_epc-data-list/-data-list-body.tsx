@@ -189,7 +189,6 @@ const DataListBody: React.FC = () => {
 			const { data: metadata } = await manualFetchEpc()
 			const previousPageData = scannedEpc?.data ?? []
 			const nextPageData = metadata?.epcs?.data ?? []
-			console.log(nextPageData)
 
 			setScannedEpc({
 				...metadata?.epcs,
@@ -203,9 +202,10 @@ const DataListBody: React.FC = () => {
 	useEffect(() => {
 		if (scanningStatus === 'disconnected') {
 			const previousPageData = scannedEpc?.data ?? []
+			const incomingPageData = data?.epcs?.data ?? []
 			setScannedEpc({
 				...data?.epcs,
-				data: uniqBy([...previousPageData, ...data?.epcs?.data], 'epc').filter((item) =>
+				data: uniqBy([...previousPageData, ...incomingPageData], 'epc').filter((item) =>
 					scannedOrders.some((order) => item.mo_no === order)
 				)
 			})
@@ -213,8 +213,6 @@ const DataListBody: React.FC = () => {
 			setScannedOrders(data?.orders)
 		}
 	}, [data, scanningStatus])
-
-	console.log(data)
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)

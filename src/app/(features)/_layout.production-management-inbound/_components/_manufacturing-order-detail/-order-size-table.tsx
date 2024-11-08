@@ -56,7 +56,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						) : (
 							<TableRow>
 								<TableCell colSpan={5} className='group-hover:!bg-background'>
-									<Div className='absolute inset-y-0 flex w-full items-center justify-center gap-x-4 text-base text-muted-foreground'>
+									<Div className='absolute inset-0 z-0 flex w-full items-center justify-center gap-x-4 text-base text-muted-foreground'>
 										<Icon name='Inbox' size={40} strokeWidth={1} />
 										{t('ns_common:table.no_data')}
 									</Div>

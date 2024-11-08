@@ -88,13 +88,12 @@ const DeleteOrderPopoverConfirm: React.FC<{ orderToDelete: string }> = memo(
 		const { searchParams } = useQueryParams<{ process: ProducingProcessSuffix }>()
 		const { mutateAsync: deleteOrder, isPending: isDeleting } = useDeletePMOrderMutation()
 
-		const handleDeleteOrder = useMemoizedFn(async (orderCode: string) => {
-			try {
-				await deleteOrder({ process: searchParams.process, order: orderCode })
-				toast.success(t('ns_common:notification.success'))
-			} catch (error) {
-				console.log(error)
-			}
+		const handleDeleteOrder = useMemoizedFn((orderCode: string) => {
+			toast.promise(deleteOrder({ process: searchParams.process, order: orderCode }), {
+				loading: t('ns_common:notification.processing_request'),
+				success: t('ns_common:notification.success'),
+				error: t('ns_common:notification.error')
+			})
 		})
 
 		return (
