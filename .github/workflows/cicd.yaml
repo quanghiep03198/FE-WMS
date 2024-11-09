@@ -68,7 +68,7 @@ jobs:
            shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
-              pm2 save --name ${{secrets.APP_NAME}}
+              pm2 save
 
    deploy-server-51:
       name: Deploy to server 51
@@ -96,4 +96,4 @@ jobs:
            shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
-              pm2 save --name ${{secrets.APP_NAME}}
+              pm2 save
