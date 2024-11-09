@@ -12,10 +12,13 @@ const ScannedEpcCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex h-full flex-col items-center justify-center gap-1 overflow-clip rounded-lg border p-4'>
+		<Div className='relative flex h-full flex-col items-center justify-center gap-1 overflow-clip rounded-lg border p-4 @container'>
 			<ScanningSkeleton />
 			<ScanningCounter />
-			<Typography variant='small' className='relative z-10 mb-2 text-center text-xs xxl:text-sm' color='muted'>
+			<Typography
+				variant='small'
+				className='relative z-10 mb-2 text-center text-xs @[512px]:text-sm xxl:text-sm'
+				color='muted'>
 				{t('ns_inoutbound:counter_box.caption')}
 			</Typography>
 			<ScanningTimer />
@@ -56,7 +59,7 @@ const ScanningCounter: React.FC = () => {
 	}, [total, count])
 
 	return (
-		<Div className='relative z-10 flex items-baseline justify-between gap-x-3 *:text-base *:xxl:text-lg'>
+		<Div className='relative z-10 flex items-baseline justify-between gap-x-3 *:text-base @[512px]:*:text-lg *:xxl:text-lg'>
 			<Typography variant='h6' className='inline-flex items-center gap-x-2'>
 				{t('ns_inoutbound:counter_box.label')}
 			</Typography>

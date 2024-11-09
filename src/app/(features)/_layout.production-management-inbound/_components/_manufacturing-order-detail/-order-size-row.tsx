@@ -31,8 +31,6 @@ type OrderDetailTableRowProps = {
 }
 
 const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, sizeList }) => {
-	const { t } = useTranslation()
-
 	const aggregateSizeCount = useMemo(
 		() =>
 			Array.isArray(sizeList)

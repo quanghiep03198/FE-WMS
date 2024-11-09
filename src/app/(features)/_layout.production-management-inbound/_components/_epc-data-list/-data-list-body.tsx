@@ -10,7 +10,7 @@ import { AuthService } from '@/services/auth.service'
 import { type EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { uniqBy } from 'lodash'
+import { omit, uniqBy } from 'lodash'
 import qs from 'qs'
 import { useEffect, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
@@ -34,6 +34,7 @@ const DataListBody: React.FC = () => {
 		scannedEpc,
 		scannedOrders,
 		scanningStatus,
+		selectedOrder,
 		connection,
 		setScanningStatus,
 		setScannedEpc,
@@ -45,6 +46,7 @@ const DataListBody: React.FC = () => {
 		'scannedEpc',
 		'scannedOrders',
 		'scanningStatus',
+		'selectedOrder',
 		'connection',
 		'setScanningStatus',
 		'setScannedEpc',
@@ -55,7 +57,7 @@ const DataListBody: React.FC = () => {
 	const { searchParams } = useQueryParams()
 
 	// * Fetch EPC query
-	const { data, refetch: manualFetchEpc, isFetching } = useGetEpcQuery(searchParams.process)
+	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery(searchParams.process)
 
 	const { user, setAccessToken } = useAuth()
 	// * Incomming EPCs data from server-sent event
@@ -73,7 +75,7 @@ const DataListBody: React.FC = () => {
 
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
-		toast.loading('Establishing connection ...', { id: SSE_TOAST_ID })
+		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
 			await fetchEventSource(
 				env('VITE_API_BASE_URL') + '/rfid/pm-inventory/sse' + qs.stringify(searchParams, { addQueryPrefix: true }),
@@ -199,20 +201,22 @@ const DataListBody: React.FC = () => {
 		}
 	}, [currentPage])
 
-	useEffect(() => {
-		if (scanningStatus === 'disconnected') {
-			const previousPageData = scannedEpc?.data ?? []
-			const incomingPageData = data?.epcs?.data ?? []
+	// * On selected order changes and manual fetch epc query is not running
+	useAsyncEffect(async () => {
+		if (!connection || !scanningStatus) return
+		try {
+			const { data: metadata } = await manualFetchEpc()
+
+			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
+			const nextFilteredEpc = metadata?.epcs?.data ?? []
 			setScannedEpc({
-				...data?.epcs,
-				data: uniqBy([...previousPageData, ...incomingPageData], 'epc').filter((item) =>
-					scannedOrders.some((order) => item.mo_no === order)
-				)
+				...omit(metadata?.epcs, 'data'),
+				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
 			})
-			setScannedSizes(data?.sizes)
-			setScannedOrders(data?.orders)
+		} catch {
+			throw new RetriableError()
 		}
-	}, [data, scanningStatus])
+	}, [selectedOrder])
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -253,7 +257,7 @@ const DataListBody: React.FC = () => {
 			)}
 		</List>
 	) : (
-		<Div className='z-10 grid h-[45vh] place-content-center'>
+		<Div className='z-10 grid h-[40vh] place-content-center xxl:h-[45vh]'>
 			<Div className='inline-flex items-center gap-x-4'>
 				<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 				<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -262,7 +266,7 @@ const DataListBody: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:h-[45vh] lg:h-[40vh] h-[40vh]`
+const List = tw.div`bg-background flex w-full z-10 flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:max-h-[45vh] max-h-[40vh] min-h-full`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap hover:bg-accent/50`
 
 export default DataListBody

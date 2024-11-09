@@ -12,7 +12,6 @@ const DataListAction: React.FC = () => {
 	const { mutateAsync, isPending } = useUpdateStockMutation()
 
 	const handleUpdateStock = () => {
-		console.log(scannedOrders)
 		toast.promise(mutateAsync(scannedOrders), {
 			loading: t('ns_common:notification.processing_request'),
 			success: t('ns_common:notification.success'),

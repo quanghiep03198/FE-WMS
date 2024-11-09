@@ -1,26 +1,7 @@
 import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import {
-	Button,
-	ButtonProps,
-	buttonVariants,
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Typography
-} from '@/components/ui'
+import { Button, ButtonProps, Div, Icon } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { TenancyService } from '@/services/tenancy.service'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -29,12 +10,12 @@ import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useQueryParams from '@/common/hooks/use-query-params'
-import { cn } from '@/common/utils/cn'
 import { PM_EPC_LIST_PROVIDE_TAG } from '../../_apis/rfid.api'
 import { ProducingProcessSuffix } from '../../_constants/index.const'
 import { usePageContext } from '../../_contexts/-page-context'
-import FullscreenSwitch from './-fullscreen-switch'
-import PollingIntervalSelector from './-polling-duration-selector'
+import OrderFilterSelect from './-order-filter-select'
+import ProcessSelect from './-process-select'
+import SettingPopover from './-setting-popover'
 
 interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'> {
 	icon: React.ComponentProps<typeof Icon>['name']
@@ -99,45 +80,21 @@ const ScannerToolbar: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='flex w-full items-start justify-between sm:flex-col sm:items-stretch sm:justify-stretch sm:gap-y-6'>
-				<Select
-					value={searchParams.process}
-					disabled={typeof scanningStatus !== 'undefined'}
-					onValueChange={(value) => setParams({ process: value })}>
-					<HoverCard openDelay={50} closeDelay={50}>
-						<HoverCardTrigger asChild>
-							<SelectTrigger className='basis-56 sm:basis-full'>
-								<Div className='flex flex-1 items-center gap-x-3'>
-									<Icon name='Workflow' size={18} stroke='hsl(var(--primary))' />
-									<SelectValue placeholder='Select process' className='line-clamp-1' />
-								</Div>
-							</SelectTrigger>
-						</HoverCardTrigger>
-						<HoverCardContent side='left' align='start'>
-							<Typography variant='small'>
-								Lựa chọn công đoạn quét tem tương ứng với các bộ phận đương nhiệm
-							</Typography>
-						</HoverCardContent>
-					</HoverCard>
-					<SelectContent>
-						<SelectGroup>
-							<SelectItem
-								key={ProducingProcessSuffix.HALF_FINISHED}
-								value={ProducingProcessSuffix.HALF_FINISHED}>
-								{t('ns_inoutbound:rfid_process.production_management_inbound')}
-							</SelectItem>
-							<SelectItem key={ProducingProcessSuffix.CUTTING} value={ProducingProcessSuffix.CUTTING}>
-								{t('ns_inoutbound:rfid_process.cutting_inbound')}
-							</SelectItem>
-						</SelectGroup>
-					</SelectContent>
-				</Select>
-				<Div className='flex flex-1 items-stretch justify-end gap-x-1'>
+			<Div className='flex w-full items-stretch justify-between gap-x-6 gap-y-2 sm:flex-col sm:justify-stretch md:flex-col'>
+				<Div className='flex flex-1 basis-full items-stretch gap-2 sm:flex-col'>
+					<Div className='basis-64 sm:basis-full md:basis-1/2'>
+						<ProcessSelect />
+					</Div>
+					<Div className='basis-64 sm:basis-full md:basis-1/2'>
+						<OrderFilterSelect />
+					</Div>
+				</Div>
+				<Div className='flex flex-1 basis-full items-stretch gap-x-1 lg:justify-end xl:justify-end'>
 					<Button
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
 						onClick={handleResetScanningAction}
-						className='basis-32 sm:basis-1/2'>
+						className='basis-32 sm:basis-1/2 md:basis-full'>
 						<Icon name='Redo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>
@@ -145,7 +102,7 @@ const ScannerToolbar: React.FC = () => {
 						disabled={!searchParams.process}
 						onClick={handleToggleScanning}
 						variant={scanningButtonProps.variant}
-						className='basis-32 sm:basis-1/2'>
+						className='basis-32 sm:basis-1/2 md:basis-full'>
 						<Icon role='img' name={scanningButtonProps.icon} />
 						{scanningButtonProps.children}
 					</Button>
@@ -161,30 +118,6 @@ const ScannerToolbar: React.FC = () => {
 				onCancel={handleReset}
 			/>
 		</Fragment>
-	)
-}
-
-const SettingPopover: React.FC = () => {
-	const { t } = useTranslation()
-
-	return (
-		<Popover>
-			<PopoverTrigger className={cn(buttonVariants({ variant: 'secondary', size: 'icon' }))}>
-				<Icon name='Settings' />
-			</PopoverTrigger>
-			<PopoverContent side='bottom' align='end' className='min-w-96 space-y-4 @container'>
-				<Div className='space-y-1'>
-					<Typography variant='h6' className='text-lg'>
-						{t('ns_common:navigation.settings')}
-					</Typography>
-					<Typography variant='small' color='muted'>
-						{t('ns_inoutbound:scanner_setting.adjust_setting_description')}
-					</Typography>
-				</Div>
-				<PollingIntervalSelector />
-				<FullscreenSwitch />
-			</PopoverContent>
-		</Popover>
 	)
 }
 

@@ -27,9 +27,11 @@ type PageContextStore = {
 	scannedEpc: Pagination<IElectronicProductCode>
 	scannedOrders: Array<string>
 	scannedSizes: { [key: string]: Array<OrderSize> }
+	selectedOrder: string | 'all'
 	scanningStatus: ScanningStatus
 	connection: string
 	setCurrentPage: (page: number | null) => void
+	setSelectedOrder: (order: string) => void
 	setScanningStatus: (status: ScanningStatus) => void
 	setConnection: (value: string) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
@@ -40,12 +42,12 @@ type PageContextStore = {
 }
 export const DEFAULT_PROPS: Pick<
 	PageContextStore,
-	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scannedSizes' | 'scanningStatus' | 'connection'
+	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scannedSizes' | 'scanningStatus' | 'connection' | 'selectedOrder'
 > = {
 	currentPage: null,
 	scanningStatus: undefined,
 	connection: '',
-
+	selectedOrder: '',
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,
@@ -97,7 +99,11 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.scannedSizes = data ?? {}
 					})
 				},
-
+				setSelectedOrder: (order) => {
+					set((state) => {
+						state.selectedOrder = order
+					})
+				},
 				handleToggleScanning: () => {
 					set((state) => {
 						switch (true) {
@@ -118,6 +124,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				reset: () => {
 					set((state) => {
+						state.selectedOrder = DEFAULT_PROPS.selectedOrder
 						state.currentPage = DEFAULT_PROPS.currentPage
 						state.scanningStatus = DEFAULT_PROPS.scanningStatus
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc

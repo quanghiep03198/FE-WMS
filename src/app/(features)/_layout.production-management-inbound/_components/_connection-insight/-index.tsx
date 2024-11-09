@@ -72,7 +72,7 @@ export const LatencyInsight: React.FC = () => {
 	return (
 		<Typography variant='small' className='inline-flex basis-1/3 items-center gap-x-2'>
 			<Icon name='Gauge' size={18} className='basis-5' />
-			<Typography variant='small' className={cn('whitespace-nowrap', latency / 1000 >= 1 && 'text-warning')}>
+			<Typography variant='small' className={cn('line-clamp-1', latency / 1000 >= 1 && 'text-warning')}>
 				{latency / 1000 >= 1 ? `${latency / 1000} s` : `${latency} ms`}
 			</Typography>
 		</Typography>
@@ -83,9 +83,9 @@ export const ConnectionInsight: React.FC = () => {
 	return (
 		<Div className='flex h-full min-h-10 items-center justify-evenly gap-x-4 rounded-md border px-4 py-2'>
 			<NetworkInsight />
-			<Separator orientation='vertical' className='h-4 w-1' />
+			<Separator orientation='vertical' className='w-px' />
 			<JobStatus />
-			<Separator orientation='vertical' className='h-4 w-1' />
+			<Separator orientation='vertical' className='w-px' />
 			<LatencyInsight />
 		</Div>
 	)
