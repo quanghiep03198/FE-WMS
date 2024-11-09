@@ -112,7 +112,7 @@ const ScannerToolbar: React.FC = () => {
 							{Array.isArray(tenants) &&
 								tenants.map((item) => (
 									<SelectItem key={item.id} value={item.id}>
-										{item.host}
+										{t('ns_common:others.server', { alias: item.alias, defaultValue: item.alias })}
 									</SelectItem>
 								))}
 						</SelectGroup>

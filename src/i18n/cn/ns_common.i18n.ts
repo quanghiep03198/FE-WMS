@@ -95,6 +95,7 @@ export default {
 		report_management: '報表管理'
 	},
 	notification: {
+		establishing_connection: '建立连接 ...',
 		processing_request: '正在处理请求 ...',
 		success: '成功 !',
 		error: '失败 !'

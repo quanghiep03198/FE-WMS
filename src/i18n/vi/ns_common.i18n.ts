@@ -5,7 +5,6 @@ export default {
 		function: 'Chức năng',
 		font: 'Phông chữ'
 	},
-
 	common_fields: {
 		created_at: 'Ngày tạo',
 		updated_at: 'Ngày cập nhật',
@@ -96,6 +95,7 @@ export default {
 		report_management: 'Báo biểu'
 	},
 	notification: {
+		establishing_connection: 'Đang thiết lập kết nối ...',
 		processing_request: 'Đang xử lý yêu cầu ...',
 		success: 'Thành công !',
 		error: 'Đã có lỗi xảy ra !'
@@ -130,5 +130,8 @@ export default {
 		idle: 'Không hoạt động',
 		processing: 'Đang xử lý',
 		loading: 'Đang tải ...'
+	},
+	others: {
+		server: 'Máy chủ {{alias}}'
 	}
 } as const

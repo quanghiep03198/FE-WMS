@@ -95,6 +95,7 @@ export default {
 		report_management: 'Report'
 	},
 	notification: {
+		establish_connection: 'Establishing connection ...',
 		processing_request: 'Processing request ...',
 		success: 'Successfully !',
 		error: 'Something went wrong !'
@@ -129,5 +130,8 @@ export default {
 		idle: 'Idle',
 		processing: 'Processing ...',
 		loading: 'Loading ...'
+	},
+	others: {
+		server: 'Server {{alias}}'
 	}
 } as const
