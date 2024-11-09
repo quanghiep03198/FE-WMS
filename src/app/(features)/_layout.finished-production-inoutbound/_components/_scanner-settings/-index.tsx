@@ -30,7 +30,7 @@ const ScanningToolbox: React.FC = () => {
 }
 
 const ToolbarWrapper = tw.div`@container group flex flex-col rounded-lg border bg-background`
-const ToolbarHeader = tw.div`flex items-center justify-between gap-x-2 border-b px-4 py-2`
+const ToolbarHeader = tw.div`flex items-center justify-between gap-x-2 border-b px-4 py-2 bg-table-head rounded-t-[inherit]`
 const ToolbarBody = tw.div`flex items-stretch flex-grow gap-6 py-4 @3xl:flex-row @3xl:justify-start basis-full flex-col-reverse justify-end`
 
 export default ScanningToolbox

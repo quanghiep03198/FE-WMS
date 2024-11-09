@@ -118,10 +118,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				</DialogHeader>
 				<Div className='divide-y overflow-hidden rounded-lg border'>
 					{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
-						<Div
-							ref={ref}
-							className='flow-root max-h-[65vh] w-full overflow-scroll rounded-lg'
-							id='order-size-container'>
+						<Div ref={ref} className='flow-root max-h-[65vh] w-full overflow-scroll rounded-lg'>
 							<Table
 								className='border-separate border-spacing-0 rounded-lg'
 								style={
