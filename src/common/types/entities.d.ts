@@ -10,12 +10,13 @@ export interface IBaseEntity {
 	[key: string]: any
 }
 
-export interface ITenant {
+export interface ITenancy {
 	id: Tenant
-	location: 'Vietnam' | 'Cambodia' | string
+	default?: boolean
+	factories: Array<FactoryCode>
+	alias: string
 	host: string
 }
-
 export interface IUser extends IBaseEntity, Pick<ICompany, 'company_code' | 'company_name'> {
 	username: string
 	display_name: string

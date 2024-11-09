@@ -12,11 +12,18 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 export type FetchEpcQueryKey = [typeof PM_EPC_LIST_PROVIDE_TAG, number, string]
 
 export const useGetEpcQuery = (process: ProducingProcessSuffix) => {
-	const { currentPage, connection, scanningStatus } = usePageContext('currentPage', 'connection', 'scanningStatus')
-
+	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
+		'currentPage',
+		'selectedOrder',
+		'connection',
+		'scanningStatus'
+	)
+	console.log(selectedOrder)
 	return useQuery({
 		queryKey: [PM_EPC_LIST_PROVIDE_TAG, connection],
-		queryFn: async () => RFIDService.fetchPMData(connection, process, currentPage),
+		queryFn: async () => {
+			return await RFIDService.fetchPMData(connection, { page: currentPage, process, selected_order: selectedOrder })
+		},
 		enabled: !!connection && scanningStatus === 'disconnected',
 		select: (response) => response.metadata
 	})

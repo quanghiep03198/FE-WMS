@@ -25,6 +25,12 @@ export type SearchCustOrderParams = {
 	searchTerm: string
 }
 
+export type FetchEpcParams = {
+	process: string
+	page: number
+	selected_order: string
+}
+
 export class RFIDService {
 	static async fetchFPData(connection: string, page: null | number, selectedOrder: string) {
 		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
@@ -36,13 +42,10 @@ export class RFIDService {
 			}
 		)
 	}
-	static async fetchPMData(connection: string, producingProcess: string, page: null | number) {
+	static async fetchPMData(connection: string, params: FetchEpcParams) {
 		return await axiosInstance.get<void, ResponseBody<RfidPmResponseData>>('/rfid/pm-inventory/fetch-epc', {
 			headers: { ['X-Tenant-Id']: connection },
-			params: {
-				page,
-				process: producingProcess
-			}
+			params: omitBy(params, (value) => !value || value === 'all')
 		})
 	}
 
