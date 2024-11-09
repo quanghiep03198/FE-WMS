@@ -80,7 +80,7 @@ const ScannerToolbar: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='flex w-full items-stretch justify-between gap-x-6 gap-y-2 sm:flex-col sm:justify-stretch md:flex-col'>
+			<Div className='flex w-full items-stretch justify-between gap-x-6 gap-y-2 sm:flex-col-reverse sm:justify-stretch md:flex-col-reverse'>
 				<Div className='flex flex-1 basis-full items-stretch gap-2 sm:flex-col'>
 					<Div className='basis-64 sm:basis-full md:basis-1/2'>
 						<ProcessSelect />
