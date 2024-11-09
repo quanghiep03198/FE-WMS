@@ -45,7 +45,12 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()
 	const [searchTerm, setSearchTerm] = useState<string>('')
-	const { scannedEpc, connection, setScannedEpc } = usePageContext('scannedEpc', 'connection', 'setScannedEpc')
+	const { scanningStatus, scannedEpc, connection, setScannedEpc } = usePageContext(
+		'scanningStatus',
+		'scannedEpc',
+		'connection',
+		'setScannedEpc'
+	)
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,
@@ -98,7 +103,9 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		try {
 			await mutateAsync(omit({ ...data, quantity: data.quantity ?? data.count }, ['exchange_all', 'count']))
 			toast.success(t('ns_common:notification.success'))
-			setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
+			if (scanningStatus === 'disconnected' && Array.isArray(currentEpcData?.data)) {
+				setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })
+			}
 			resetSelectedRows()
 			setOpen(!open)
 		} catch (error) {
