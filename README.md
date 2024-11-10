@@ -61,43 +61,56 @@ npm run dev
 ├── .husky
 ├── .storybook
 ├── public
-├── resources
-│   └── locales
 ├── src
 │   ├── app
 │   ├── assets
 │   ├── common
+│   |   ├── constants
+│   |   ├── errors
+│   |   ├── hooks
+│   |   ├── types
+│   |   ├── hooks
+│   |   └── utils
 │   ├── components
+│   |    ├── shared
+│   |    └── ui
+│   |        ├── @core
+│   |        ├── @custom
+│   |        ├── @hook-form
+│   |        ├── @override
+│   |        └── @react-table
 │   ├── configs
-│   └── i18n
-│       ├── cn
-│       ├── en
-│       └── vi
-│   ├── mocks
+│   ├── i18n
+│   |    ├── cn
+│   |    ├── en
+│   |    └── vi
 │   ├── providers
 │   ├── services
 │   ├── stores
 │   ├── stories
 │   ├── styles
 │   ├── _app.tsx
-│   └── main.tsx
+│   ├── main.tsx
 │   ├── report-web-vitals.ts
 │   ├── route-tree.gen.tsx
-│   ├── vite-env.d.ts
+│   └── vite-env.d.ts
 ├── .eslintrc.cjs
 ├── .prettierrc
 ├── .gitignore
 ├── commitlint.config.js
 ├── components.json
+├── ecosystem.config.cjs
 ├── index.html
 ├── package.json
 ├── postcss.config.js
-└── README.md
+├── sonar-project.properties
+├── README.md
 ├── tailwind.config.js
-├── tsr.config.json
 ├── tsconfig.json
+├── tsconfig.node.json
+├── tsr.config.json
 ├── vite.config.ts
-├── ...
+└── ...
 ```
 
 ## Contributing
