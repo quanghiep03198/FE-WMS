@@ -1,6 +1,4 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, ButtonProps, Div, Icon } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { TenancyService } from '@/services/tenancy.service'
@@ -23,11 +21,9 @@ interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'>
 
 const ScannerToolbar: React.FC = () => {
 	const { isAuthenticated } = useAuth()
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const { t, i18n } = useTranslation()
 	const {
 		scanningStatus,
-		connection,
 		reset: resetScanningAction,
 		setConnection,
 		handleToggleScanning
@@ -48,7 +44,7 @@ const ScannerToolbar: React.FC = () => {
 	})
 
 	useEffect(() => {
-		setConnection(tenant.id)
+		if (tenant) setConnection(tenant?.id)
 	}, [tenant])
 
 	const queryClient = useQueryClient()

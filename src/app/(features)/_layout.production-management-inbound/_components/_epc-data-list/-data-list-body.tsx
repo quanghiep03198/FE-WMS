@@ -206,7 +206,6 @@ const DataListBody: React.FC = () => {
 		if (!connection || !scanningStatus) return
 		try {
 			const { data: metadata } = await manualFetchEpc()
-
 			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
 			const nextFilteredEpc = metadata?.epcs?.data ?? []
 			setScannedEpc({

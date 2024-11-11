@@ -18,7 +18,6 @@ export const useGetEpcQuery = (process: ProducingProcessSuffix) => {
 		'connection',
 		'scanningStatus'
 	)
-	console.log(selectedOrder)
 	return useQuery({
 		queryKey: [PM_EPC_LIST_PROVIDE_TAG, connection],
 		queryFn: async () => {

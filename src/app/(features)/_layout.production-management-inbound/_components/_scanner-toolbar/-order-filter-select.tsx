@@ -41,11 +41,8 @@ const OrderFilterSelect: React.FC = () => {
 					Object.entries(scannedSizes).map(([orderCode, sizeList]) => {
 						const count = sizeList.reduce((acc, curr) => acc + curr.count, 0)
 						return (
-							<SelectItem
-								key={orderCode}
-								value={orderCode ?? FALLBACK_ORDER_VALUE}
-								className='flex items-center gap-x-2'>
-								{orderCode ?? FALLBACK_ORDER_VALUE} {`(${count} pairs)`}
+							<SelectItem key={orderCode} value={orderCode} className='flex items-center gap-x-2'>
+								{orderCode === 'null' ? FALLBACK_ORDER_VALUE : orderCode} {`(${count} pairs)`}
 							</SelectItem>
 						)
 					})}
