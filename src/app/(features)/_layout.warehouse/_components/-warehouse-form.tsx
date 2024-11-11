@@ -98,6 +98,11 @@ const WarehouseFormDialog: React.FC = () => {
 		value: key
 	}))
 
+	const upsertedBy =
+		type === CommonActions.CREATE
+			? { user_name_created: user?.display_name, user_code_created: user?.username }
+			: { user_name_updated: user?.display_name, user_code_updated: user?.username }
+
 	return (
 		<Dialog
 			open={open}
@@ -109,7 +114,7 @@ const WarehouseFormDialog: React.FC = () => {
 					<DialogTitle>{t(dialogTitle, { ns: 'ns_warehouse', defaultValue: dialogTitle })}</DialogTitle>
 				</DialogHeader>
 				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
+					<Form onSubmit={form.handleSubmit((data) => mutateAsync({ ...data, ...upsertedBy }))}>
 						<FormItem>
 							<InputFieldControl
 								placeholder='Some warehouse name ...'

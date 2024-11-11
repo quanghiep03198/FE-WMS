@@ -85,6 +85,11 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 		}
 	})
 
+	const upsertedBy =
+		type === CommonActions.CREATE
+			? { user_name_created: user?.user_name, user_code_created: user?.user_code }
+			: { user_name_updated: user?.user_name, user_code_updated: user?.user_code }
+
 	return (
 		<Dialog open={open} onOpenChange={() => dispatch({ type: undefined })}>
 			<DialogContent className='w-full max-w-2xl bg-popover'>
@@ -94,7 +99,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 					</DialogTitle>
 				</DialogHeader>
 				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
+					<Form onSubmit={form.handleSubmit((data) => mutateAsync({ ...data, ...upsertedBy }))}>
 						<InputFieldControl
 							placeholder='Some storage name ...'
 							name='storage_name'

@@ -27,10 +27,14 @@ export const warehouseFormSchema = z.object({
 		.string({ required_error: 'ns_validation:required' })
 		.trim()
 		.min(1, { message: 'ns_validation:required' }),
+	user_code_created: z.string().nullable().optional(),
+	user_name_created: z.string().nullable().optional(),
+	user_code_updated: z.string().nullable().optional(),
+	user_name_updated: z.string().nullable().optional(),
 	area: z.number({ required_error: 'ns_validation:required' }).nonnegative({ message: 'ns_validation:nonnegative' }),
 	is_disable: z.boolean().default(false),
 	is_default: z.boolean().default(false),
-	remark: z.string().optional()
+	remark: z.string().nullable().optional()
 })
 
 export const storageFormSchema = z.object({
@@ -51,9 +55,13 @@ export const storageFormSchema = z.object({
 	company_code: z.string().trim().min(1, { message: 'ns_validation:required' }),
 	warehouse_num: z.string().trim().min(1, { message: 'ns_validation:required' }),
 	warehouse_name: z.string().trim().min(1, { message: 'ns_validation:required' }),
-	remark: z.string().optional(),
+	user_code_created: z.string().optional(),
+	user_name_created: z.string().optional(),
+	user_code_updated: z.string().optional(),
+	user_name_updated: z.string().optional(),
 	is_disable: z.boolean().optional(),
-	is_default: z.boolean().optional()
+	is_default: z.boolean().optional(),
+	remark: z.string().nullable().optional()
 })
 
 export type WarehouseFormValue = z.infer<typeof warehouseFormSchema>
