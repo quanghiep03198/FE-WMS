@@ -32,7 +32,6 @@ const DataListBody: React.FC = () => {
 	const {
 		currentPage,
 		scannedEpc,
-		scannedOrders,
 		scanningStatus,
 		selectedOrder,
 		connection,
@@ -265,7 +264,7 @@ const DataListBody: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:max-h-[45vh] max-h-[40vh] min-h-full`
+const List = tw.div`bg-background flex w-full z-10 flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:h-[45vh] h-[40vh] min-h-full`
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap hover:bg-accent/50`
 
 export default DataListBody

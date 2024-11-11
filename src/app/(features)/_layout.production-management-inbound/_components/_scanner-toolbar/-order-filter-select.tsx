@@ -4,7 +4,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'
 import { usePrevious } from 'ahooks'
 import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
-import { usePageContext } from '../../_contexts/-page-context'
+import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 const OrderFilterSelect: React.FC = () => {
 	const { searchParams } = useQueryParams()
@@ -24,7 +24,7 @@ const OrderFilterSelect: React.FC = () => {
 	}
 
 	return (
-		<Select defaultValue='all' onValueChange={handleChangeOrder}>
+		<Select defaultValue={DEFAULT_PROPS.selectedOrder} value={selectedOrder} onValueChange={handleChangeOrder}>
 			<SelectTrigger className='inline-flex w-full items-center gap-x-2 bg-background'>
 				{selectedOrder !== previousSelectedOrder && isLoading ? (
 					<Icon name='LoaderCircle' className='animate-[spin_1.75s_linear_infinite]' />
@@ -34,7 +34,7 @@ const OrderFilterSelect: React.FC = () => {
 				<SelectValue placeholder={!selectedOrder && 'Select'} />
 			</SelectTrigger>
 			<SelectContent>
-				<SelectItem value='all'>All</SelectItem>
+				<SelectItem value={DEFAULT_PROPS.selectedOrder}>All</SelectItem>
 				{Object.keys(scannedSizes).length > 0 &&
 					scannedOrders.length > 0 &&
 					Array.isArray(scannedOrders) &&

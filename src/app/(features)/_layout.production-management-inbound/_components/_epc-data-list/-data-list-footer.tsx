@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next'
 import { DEFAULT_PM_RFID_SETTINGS, RFIDSettings } from '../..'
 import { PM_RFID_SETTINGS_KEY } from '../../_constants/index.const'
 import { usePageContext } from '../../_contexts/-page-context'
-type Props = {}
 
 export const NetworkInsight: React.FC = () => {
 	const { t } = useTranslation()

@@ -47,7 +47,7 @@ export const DEFAULT_PROPS: Pick<
 	currentPage: null,
 	scanningStatus: undefined,
 	connection: '',
-	selectedOrder: '',
+	selectedOrder: 'all',
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,

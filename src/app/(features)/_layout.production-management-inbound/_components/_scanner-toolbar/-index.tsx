@@ -37,18 +37,18 @@ const ScannerToolbar: React.FC = () => {
 	)
 
 	const { data: tenant } = useQuery({
-		queryKey: ['TENANCY'],
+		queryKey: ['DEFAULT_TENANT'],
 		queryFn: TenancyService.getDefaultTenantByFactory,
 		refetchOnMount: 'always',
 		select: (response) => response.metadata
 	})
 
+	const queryClient = useQueryClient()
+	const { searchParams } = useQueryParams({ process: ProducingProcessSuffix.HALF_FINISHED })
+
 	useEffect(() => {
 		if (tenant) setConnection(tenant?.id)
 	}, [tenant])
-
-	const queryClient = useQueryClient()
-	const { searchParams, setParams } = useQueryParams({ process: ProducingProcessSuffix.HALF_FINISHED })
 
 	// Blocking navigation on reading EPC or unsave changes
 	const { proceed, reset, status } = useBlocker({
