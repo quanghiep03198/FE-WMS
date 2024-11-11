@@ -60,6 +60,7 @@
 		"@tanstack/react-router": "^1.77.8",
 		"@tanstack/react-table": "^8.17.3",
 		"@tanstack/react-virtual": "^3.5.1",
+		"@tanstack/router-zod-adapter": "^1.81.1",
 		"ahooks": "^3.8.0",
 		"axios": "^1.7.2",
 		"class-variance-authority": "^0.7.0",
