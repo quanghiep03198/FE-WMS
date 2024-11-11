@@ -1,21 +1,21 @@
+import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.const'
 import { IWarehouse } from '@/common/types/entities'
+import { warehouses } from '@/components/ui/@react-table/mocks'
 import { i18n } from '@/i18n'
-import { warehouses } from '@/mocks/warehouse.data'
 import { Meta } from '@storybook/react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { I18nextProvider } from 'react-i18next'
 import { DataTable } from '..'
 
-const meta = {
+export default {
 	title: 'Components/Datagrid',
 	component: DataTable,
 	parameters: {
-		// Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
+		// * Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
 	},
-	// This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+	// * This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
 	tags: ['autodocs'],
-	// More on argTypes: https://storybook.js.org/docs/api/argtypes
+	// * More on argTypes: https://storybook.js.org/docs/api/argtypes
 	argTypes: {
 		data: { name: 'data', description: 'Dữ liệu hiển thị trên table' },
 		columns: { name: 'columns', description: 'Các cột đã được định nghĩa' },
@@ -32,20 +32,31 @@ const meta = {
 		paginationProps: {
 			description: 'State phân trang thủ công, thường sử dụng với server side pagination.',
 			defaultValue: undefined
+		},
+		toolbarProps: {
+			description: 'Các nút chức năng trên table',
+			defaultValue: undefined
 		}
-	},
-	args: { data: [], columns: [], loading: false, enableColumnFilters: true, enableColumnResizing: true }
+	}
 } satisfies Meta<typeof DataTable>
 
-export default meta
-
-const Template = (props) => {
+export function SampleDataTable() {
 	const columnHelper = createColumnHelper<IWarehouse>()
+
+	const data = warehouses.map((item) => ({
+		...item,
+		is_default: Boolean(item.is_default),
+		is_disable: Boolean(item.is_disable),
+		type_warehouse: i18n.t(warehouseTypes[item.type_warehouse], {
+			ns: 'ns_warehouse',
+			defaultValue: item.type_warehouse
+		})
+	}))
 
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor('warehouse_num', {
-				header: 'Warehouse code',
+				header: i18n.t('ns_warehouse:fields.warehouse_num'),
 				minSize: 150,
 				enableColumnFilter: true,
 				enableResizing: true,
@@ -53,15 +64,30 @@ const Template = (props) => {
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
 			columnHelper.accessor('warehouse_name', {
-				header: 'Warehouse name',
+				header: i18n.t('ns_warehouse:fields.warehouse_name'),
 				minSize: 250,
 				enableResizing: true,
 				enableColumnFilter: true,
 				enableSorting: true,
 				cell: ({ getValue }) => String(getValue()).toUpperCase()
 			}),
+			columnHelper.accessor('type_warehouse', {
+				header: i18n.t('ns_warehouse:fields.type_warehouse'),
+				minSize: 250,
+				enableResizing: true,
+				enableColumnFilter: true,
+				enableSorting: true,
+				filterFn: 'equals',
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.entries(warehouseTypes).map(([key, val]) => ({
+						label: i18n.t(val, { ns: 'ns_warehouse', defaultValue: val }),
+						value: key
+					}))
+				}
+			}),
 			columnHelper.accessor('area', {
-				header: 'Area (m²)',
+				header: i18n.t('ns_warehouse:fields.area'),
 				minSize: 150,
 				filterFn: 'inNumberRange',
 				enableColumnFilter: true,
@@ -82,11 +108,5 @@ const Template = (props) => {
 	/**
 	 * * Ứng dụng đang sử dụng đa ngôn ngữ, I18nextProvider đã được bọc bên ngoài app, nên bạn chỉ cần khai báo component DataTable khi sử dụng.
 	 */
-	return (
-		<I18nextProvider i18n={i18n}>
-			<DataTable {...props} data={warehouses} columns={columns} />
-		</I18nextProvider>
-	)
+	return <DataTable data={data} columns={columns} />
 }
-
-export const SampleDataTable = Template.bind({})

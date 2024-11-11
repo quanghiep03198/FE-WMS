@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Column } from '@tanstack/react-table'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
 import { DateRangePicker } from '../../@core/date-range-picker'
@@ -26,23 +25,18 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		}
 	}
 
-	const sortedUniqueValues = useMemo(() => {
+	const getSortedUniqueValues = () => {
 		const facetedUniqueValues = getFacetedUniqueValues()
-		if (!facetedUniqueValues) return []
-
 		const uniqueValues = Array.from(facetedUniqueValues?.keys())
-
 		uniqueValues.sort((a, b) => {
 			if (a === b) return 0
 			return a > b ? 1 : -1
 		})
-
 		return uniqueValues
-	}, [column, filterVariant])
+	}
 
 	// * Useful for server side filtering
 	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
-
 	if (!column.columnDef.enableColumnFilter)
 		return (
 			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
@@ -86,7 +80,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					data={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
-							: sortedUniqueValues
+							: getSortedUniqueValues()
 									.filter((value) => Boolean(value))
 									.map((value: any) => ({
 										label: value,

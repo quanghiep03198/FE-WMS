@@ -1,10 +1,10 @@
-import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.enum'
+import { WarehouseStorageTypes, WarehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.enum'
 import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 
-const warehouseTypes = ['A', 'B', 'C', 'D', 'E']
+const warehouseTypes = Object.values(WarehouseTypes)
 const storageTypes = Object.values(WarehouseStorageTypes)
 
-export const warehouses: IWarehouse[] = Array.from(new Array(20)).map((_, index) => ({
+export const warehouses: IWarehouse[] = Array.from(new Array(10)).map((_, index) => ({
 	id: String(index + 1),
 	warehouse_name: 'Warehouse ' + String(index + 1),
 	type_warehouse: warehouseTypes[Math.floor(Math.random() * warehouseTypes.length)] as any,
@@ -31,5 +31,3 @@ export const storageLocation: IWarehouseStorage[] = Array.from(new Array(20)).ma
 	is_default: false,
 	remark: null
 }))
-
-console.log(JSON.stringify(storageLocation))
