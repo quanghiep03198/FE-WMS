@@ -1,18 +1,15 @@
 // #region Modules
 import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IWarehouseStorage } from '@/common/types/entities'
 import { Div, Separator } from '@/components/ui'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
-import { format } from 'date-fns'
-import { Fragment, useCallback, useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
 import { WAREHOUSE_PROVIDE_TAG } from '../_apis/warehouse.api'
-import { warehouseStorageTypes } from '../_constants/warehouse.const'
 import { PageProvider } from '../_contexts/-page-context'
 import WarehouseStorageFormDialog from './_components/-storage-form'
 import StorageListHeading from './_components/-storage-heading'
@@ -43,35 +40,19 @@ function Page() {
 			{
 				text: t('ns_common:navigation.storage_detail'),
 				to: '/warehouse/storage-details/$warehouseNum',
-				params: { warehouseNum },
-				search: searchParams
+				params: warehouseNum
 			},
 			{
 				text: warehouseNum,
 				to: '/warehouse/storage-details/$warehouseNum',
-				params: { warehouseNum },
-				search: searchParams
+				params: warehouseNum
 			}
 		])
 	}, [i18n.language])
 
-	const transformResponse = useCallback(
-		(response: ResponseBody<IWarehouseStorage[]>) => {
-			const { metadata } = response
-			return Array.isArray(metadata)
-				? metadata.map((item) => ({
-						...item,
-						created: format(item.created, 'yyyy-MM-dd'),
-						type_storage: t(warehouseStorageTypes[item.type_storage], {
-							ns: 'ns_warehouse',
-							defaultValue: item.type_storage
-						})
-					}))
-				: []
-		},
-		[i18n.language]
+	const warehouseStorageQueryResult = useQuery(
+		getWarehouseStorageOptions(warehouseNum, { select: (response) => response.metadata })
 	)
-	const warehouseStorageQueryResult = useQuery(getWarehouseStorageOptions(warehouseNum, { select: transformResponse }))
 	const warehouseDetailQueryResult = useQuery({
 		queryKey: [WAREHOUSE_PROVIDE_TAG, warehouseNum],
 		queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum),

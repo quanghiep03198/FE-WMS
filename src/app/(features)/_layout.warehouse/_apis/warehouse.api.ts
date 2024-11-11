@@ -22,7 +22,7 @@ export function getWarehouseDetailOptions(warehouseNum: string) {
 }
 
 export function useGetWarehouseQuery<TData = ResponseBody<IWarehouse[]>>(
-	options: Partial<
+	options?: Partial<
 		UseQueryOptions<ResponseBody<IWarehouse[]>, AxiosError<unknown, any>, TData, readonly ['WAREHOUSES']>
 	>
 ) {

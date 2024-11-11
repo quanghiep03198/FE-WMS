@@ -44,12 +44,7 @@ const WarehouseList: React.FC = () => {
 			type: CommonActions.UPDATE,
 			payload: {
 				dialogTitle: t('ns_warehouse:form.update_warehouse_title'),
-				defaultFormValues: {
-					...row.original,
-					type_warehouse: Object.keys(warehouseTypes).find(
-						(key) => t(warehouseTypes[key], { ns: 'ns_warehouse' }) === row.original.type_warehouse
-					)
-				}
+				defaultFormValues: row.original
 			}
 		})
 	}
@@ -60,27 +55,10 @@ const WarehouseList: React.FC = () => {
 		row.toggleSelected(true)
 	}
 
-	// Transform warehouse response data
-	const transformResponse = useCallback(
-		(response: ResponseBody<IWarehouse[]>) => {
-			const { metadata } = response
-			return Array.isArray(metadata)
-				? metadata.map((item) => ({
-						...item,
-						is_default: Boolean(item.is_default),
-						is_disable: Boolean(item.is_disable),
-						type_warehouse: t(warehouseTypes[item.type_warehouse], {
-							ns: 'ns_warehouse',
-							defaultValue: item.type_warehouse
-						})
-					}))
-				: []
-		},
-		[i18n.language]
-	)
-
 	// Get warehouse data
-	const { data, isLoading, refetch } = useGetWarehouseQuery<IWarehouse[]>({ select: transformResponse })
+	const { data, isLoading, refetch } = useGetWarehouseQuery<IWarehouse[]>({
+		select: (response) => response.metadata
+	})
 
 	// Delete warehouse
 	const { mutateAsync: deleteWarehouseAsync } = useDeleteWarehouseMutation(handleResetAllRowSelection)
@@ -144,7 +122,20 @@ const WarehouseList: React.FC = () => {
 				enablePinning: true,
 				enableColumnFilter: true,
 				filterFn: 'equals',
-				meta: { filterVariant: 'select' }
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.entries(warehouseTypes).map(([key, val]) => ({
+						label: t(val, { ns: 'ns_warehouse', defaultValue: val }),
+						value: key
+					}))
+				},
+				cell: ({ getValue }) => {
+					const originalValue = getValue()
+					return t(warehouseTypes[originalValue], {
+						ns: 'ns_warehouse',
+						defaultValue: originalValue
+					})
+				}
 			}),
 			columnHelper.accessor('warehouse_name', {
 				id: 'warehouse_name',

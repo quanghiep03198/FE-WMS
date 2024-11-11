@@ -113,7 +113,17 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				enableSorting: true,
 				enableColumnFilter: true,
 				enableHiding: false,
-				meta: { filterVariant: 'select' }
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.entries(warehouseStorageTypes).map(([key, val]) => ({
+						label: t(val, { ns: 'ns_warehouse', defaultValue: val }),
+						value: key
+					}))
+				},
+				cell: ({ getValue }) => {
+					const originalValue = getValue()
+					return t(warehouseStorageTypes[originalValue], { ns: 'ns_warehouse' })
+				}
 			}),
 			columnHelper.accessor('warehouse_name', {
 				header: t('ns_warehouse:fields.warehouse_name'),
@@ -203,10 +213,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 										dialogTitle: t('ns_common:common_form_titles.update', {
 											object: t('ns_warehouse:specialized_vocabs.storage_area')
 										}),
-										defaultFormValues: {
-											...row.original,
-											type_storage: getOriginalStorageType(row.original.type_storage)
-										}
+										defaultFormValues: row.original
 									}
 								})
 							}}
