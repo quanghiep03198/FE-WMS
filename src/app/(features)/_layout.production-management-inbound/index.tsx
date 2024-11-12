@@ -90,7 +90,7 @@ const PanelGroup = {
 		data-[screen=fullscreen]:h-screen
 		data-[screen=fullscreen]:overflow-y-auto`,
 	Wrapper: tw.div`
-		grid grid-cols-12 grid-rows-12 items-stretch gap-x-6 gap-y-3 max-h-none grid-flow-col
+		grid grid-cols-12 grid-rows-12 items-stretch gap-3 max-h-none grid-flow-col
 		xl:max-h-[85vh]
 		xxl:max-h-[90vh]
 		group-data-[screen=fullscreen]/container:xl:max-h-none

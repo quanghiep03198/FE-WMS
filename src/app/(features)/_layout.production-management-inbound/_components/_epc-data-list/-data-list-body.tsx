@@ -38,8 +38,7 @@ const DataListBody: React.FC = () => {
 		setScanningStatus,
 		setScannedEpc,
 		setCurrentPage,
-		setScannedOrders,
-		setScannedSizes
+		setScannedOrders
 	} = usePageContext(
 		'currentPage',
 		'scannedEpc',
@@ -49,7 +48,6 @@ const DataListBody: React.FC = () => {
 		'connection',
 		'setScanningStatus',
 		'setScannedEpc',
-		'setScannedSizes',
 		'setScannedOrders',
 		'setCurrentPage'
 	)
@@ -116,7 +114,6 @@ const DataListBody: React.FC = () => {
 							if (!event.data) return
 							const data = JSON.parse(event.data)
 							setIncommingEpc(data?.epcs)
-							setScannedSizes(data?.sizes)
 							setScannedOrders(data?.orders)
 							window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
 						} catch (error) {

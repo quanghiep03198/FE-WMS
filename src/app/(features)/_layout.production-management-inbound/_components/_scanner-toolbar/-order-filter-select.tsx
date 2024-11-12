@@ -9,10 +9,9 @@ import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 const OrderFilterSelect: React.FC = () => {
 	const { searchParams } = useQueryParams()
 	const { isLoading } = useGetEpcQuery(searchParams?.process)
-	const { selectedOrder, scannedSizes, scannedOrders, setCurrentPage, setSelectedOrder } = usePageContext(
+	const { selectedOrder, scannedOrders, setCurrentPage, setSelectedOrder } = usePageContext(
 		'selectedOrder',
 		'scannedOrders',
-		'scannedSizes',
 		'setCurrentPage',
 		'setSelectedOrder'
 	)
@@ -35,10 +34,8 @@ const OrderFilterSelect: React.FC = () => {
 			</SelectTrigger>
 			<SelectContent>
 				<SelectItem value={DEFAULT_PROPS.selectedOrder}>All</SelectItem>
-				{Object.keys(scannedSizes).length > 0 &&
-					scannedOrders.length > 0 &&
-					Array.isArray(scannedOrders) &&
-					Object.entries(scannedSizes).map(([orderCode, sizeList]) => {
+				{Object.keys(scannedOrders).length > 0 &&
+					Object.entries(scannedOrders).map(([orderCode, sizeList]) => {
 						const count = sizeList.reduce((acc, curr) => acc + curr.count, 0)
 						return (
 							<SelectItem key={orderCode} value={orderCode} className='flex items-center gap-x-2'>

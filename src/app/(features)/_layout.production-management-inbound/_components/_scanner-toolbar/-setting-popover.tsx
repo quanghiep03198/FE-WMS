@@ -1,3 +1,4 @@
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
@@ -20,11 +21,14 @@ import { usePageContext } from '../../_contexts/-page-context'
 
 const SettingPopover: React.FC = () => {
 	const { t } = useTranslation()
-
+	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	return (
 		<Popover>
 			<PopoverTrigger
-				className={cn(buttonVariants({ variant: 'secondary', size: 'icon', className: 'aspect-square' }))}>
+				className={cn(
+					buttonVariants({ variant: 'outline', size: 'icon', className: 'aspect-square' }),
+					isSmallScreen ? 'size-10' : 'size-9'
+				)}>
 				<Icon name='Settings' />
 			</PopoverTrigger>
 			<PopoverContent side='bottom' align='end' className='w-[28rem] space-y-4 @container'>

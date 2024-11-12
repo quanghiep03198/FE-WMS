@@ -7,10 +7,10 @@ import TableDataRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedSizes, selectedOrder } = usePageContext('scannedSizes', 'selectedOrder')
+	const { scannedOrders, selectedOrder } = usePageContext('scannedOrders', 'selectedOrder')
 
 	return (
-		<Div className='relative h-full max-h-[60vh] min-h-full divide-y overflow-auto rounded-lg border group-data-[screen=fullscreen]/container:max-h-[85vh] xxl:max-h-[80vh]'>
+		<Div className='relative h-[60vh] min-h-full divide-y overflow-auto rounded-lg border group-data-[screen=fullscreen]/container:h-[85vh] xxl:h-[80vh]'>
 			<Table
 				className='border-separate border-spacing-0 rounded-[inherit]'
 				style={
@@ -22,12 +22,12 @@ const OrderSizeDetailTable: React.FC = () => {
 					<TableRow className='sticky top-0 z-20 *:bg-table-head'>
 						<TableHead
 							align='left'
-							className='z-20 xl:sticky xl:left-0 xl:w-[var(--sticky-col-width)] xl:min-w-[var(--sticky-col-width)]'>
+							className='z-20 w-[var(--sticky-col-width)] min-w-[var(--sticky-col-width)] xl:sticky xl:left-0'>
 							{t('ns_erp:fields.mo_no')}
 						</TableHead>
 						<TableHead
 							align='left'
-							className='z-20 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[var(--sticky-col-width)] xl:w-[var(--sticky-col-width)] xl:min-w-[var(--sticky-col-width)]'>
+							className='z-20 w-[var(--sticky-col-width)] min-w-[var(--sticky-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[var(--sticky-col-width)]'>
 							{t('ns_erp:fields.shoestyle_codefactory')}
 						</TableHead>
 						<TableHead align='left'>Size</TableHead>
@@ -40,8 +40,8 @@ const OrderSizeDetailTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody className='[&_tr]:snap-start'>
-					{Object.keys(scannedSizes).length > 0 ? (
-						Object.entries(scannedSizes)
+					{Object.keys(scannedOrders).length > 0 ? (
+						Object.entries(scannedOrders)
 							.filter(([orderCode]) => {
 								if (selectedOrder === 'all' || !selectedOrder) return true
 								return orderCode === selectedOrder

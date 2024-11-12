@@ -25,8 +25,7 @@ export type OrderSize = OrderItem & {
 type PageContextStore = {
 	currentPage: number | null
 	scannedEpc: Pagination<IElectronicProductCode>
-	scannedOrders: Array<string>
-	scannedSizes: { [key: string]: Array<OrderSize> }
+	scannedOrders: { [key: string]: Array<OrderSize> }
 	selectedOrder: string | 'all'
 	scanningStatus: ScanningStatus
 	connection: string
@@ -35,14 +34,13 @@ type PageContextStore = {
 	setScanningStatus: (status: ScanningStatus) => void
 	setConnection: (value: string) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
-	setScannedOrders: (data: Array<string>) => void
-	setScannedSizes: (data: { [key: string]: Array<OrderSize> }) => void
+	setScannedOrders: (data: { [key: string]: Array<OrderSize> }) => void
 	handleToggleScanning: () => void
 	reset: () => void
 }
 export const DEFAULT_PROPS: Pick<
 	PageContextStore,
-	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scannedSizes' | 'scanningStatus' | 'connection' | 'selectedOrder'
+	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scanningStatus' | 'connection' | 'selectedOrder'
 > = {
 	currentPage: null,
 	scanningStatus: undefined,
@@ -57,8 +55,7 @@ export const DEFAULT_PROPS: Pick<
 		totalDocs: 0,
 		totalPages: 0
 	},
-	scannedOrders: [],
-	scannedSizes: {}
+	scannedOrders: {}
 }
 
 const PageContext = createContext<StoreApi<PageContextStore>>(null)
@@ -89,14 +86,10 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.scannedEpc = !data ? DEFAULT_PROPS.scannedEpc : data
 					})
 				},
+
 				setScannedOrders: (data) => {
 					set((state) => {
-						state.scannedOrders = Array.isArray(data) ? data : []
-					})
-				},
-				setScannedSizes: (data) => {
-					set((state) => {
-						state.scannedSizes = data ?? {}
+						state.scannedOrders = data ?? {}
 					})
 				},
 				setSelectedOrder: (order) => {
@@ -124,12 +117,11 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				reset: () => {
 					set((state) => {
-						state.selectedOrder = DEFAULT_PROPS.selectedOrder
 						state.currentPage = DEFAULT_PROPS.currentPage
+						state.selectedOrder = DEFAULT_PROPS.selectedOrder
 						state.scanningStatus = DEFAULT_PROPS.scanningStatus
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc
 						state.scannedOrders = DEFAULT_PROPS.scannedOrders
-						state.scannedSizes = DEFAULT_PROPS.scannedSizes
 					})
 				}
 			}))
