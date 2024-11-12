@@ -1,4 +1,5 @@
 import { useAuth } from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Icon,
 	Sidebar,
@@ -11,7 +12,8 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 	SidebarSeparator,
-	Typography
+	Typography,
+	useSidebar
 } from '@/components/ui'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
@@ -103,9 +105,11 @@ const NavSidebar: React.FC = () => {
 
 const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
+	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
+	const { setOpenMobile } = useSidebar()
 
 	return (
-		<SidebarMenuItem role='menuitem'>
+		<SidebarMenuItem role='menuitem' onClick={() => setOpenMobile(!isSmallScreen)}>
 			<SidebarMenuButton
 				asChild
 				size='default'
