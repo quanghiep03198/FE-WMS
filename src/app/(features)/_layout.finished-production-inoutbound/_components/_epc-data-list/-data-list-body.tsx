@@ -111,8 +111,8 @@ const EpcDataList: React.FC = () => {
 				async onopen(response) {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
 						setScanningStatus('connected')
+						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 						writeLog({ message: 'Connected', type: 'info' })
-						toast.success('Connected', { id: SSE_TOAST_ID })
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						const response = await AuthService.refreshToken(user.id)
@@ -175,10 +175,10 @@ const EpcDataList: React.FC = () => {
 				}
 			})
 		} catch (e) {
-			toast('Failed to connect', { id: 'FETCH_SSE', description: e.message })
+			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
 		} finally {
 			setScanningStatus('disconnected')
-			toast.info('Disconnected', { id: 'FETCH_SSE' })
+			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
 	}
