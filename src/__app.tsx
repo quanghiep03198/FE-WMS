@@ -16,7 +16,7 @@ const App: React.FC = () => {
 					<Suspense fallback={<Loading />}>
 						<RouterProvider />
 					</Suspense>
-					<Toaster position='bottom-right' expand={true} closeButton={true} visibleToasts={3} duration={2000} />
+					<Toaster position='bottom-right' duration={2000} />
 				</ThemeProvider>
 			</I18nextProvider>
 		</QueryClientProvider>
