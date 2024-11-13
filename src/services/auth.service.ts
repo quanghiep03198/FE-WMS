@@ -18,6 +18,8 @@ export class AuthService {
 		localStorage.removeItem(FP_RFID_SETTINGS_KEY) // remove finished production RFID settings
 		localStorage.removeItem(PM_RFID_SETTINGS_KEY) // remove production management RFID settings
 		queryClient.clear() // clear cached queries
+		queryClient.removeQueries({ type: 'all', exact: false }) // remove all triggered queries
+		queryClient.cancelQueries({ fetchStatus: 'fetching' }) // cancel all running queries
 	}
 
 	static async profile(config?: AxiosRequestConfig): Promise<IUser> {
