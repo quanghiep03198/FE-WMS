@@ -1,8 +1,15 @@
-import { RFIDService } from '@/services/rfid.service'
+import { IElectronicProductCode } from '@/common/types/entities'
+import { OrderSize, RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { usePrevious } from 'ahooks'
 import { PMInboundSearch } from '..'
 import { ProducingProcessSuffix } from '../_constants/index.const'
-import { usePageContext } from '../_contexts/-page-context'
+import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
+
+export type RFIDEventStreamData = {
+	epcs: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>
+	orders: Record<string, Array<OrderSize>>
+}
 
 // * API Query Keys
 export const PM_EPC_LIST_PROVIDE_TAG = 'PM_EPC_LIST'
@@ -49,11 +56,17 @@ export const useUpdateStockMutation = () => {
 
 export const useDeletePMOrderMutation = () => {
 	const queryClient = useQueryClient()
-	const { connection, setCurrentPage, setSelectedOrder } = usePageContext(
-		'connection',
-		'setCurrentPage',
-		'setSelectedOrder'
-	)
+	const { connection, selectedOrder, setCurrentPage, setSelectedOrder, setScannedEpc, setScannedOrders } =
+		usePageContext(
+			'connection',
+			'selectedOrder',
+			'setCurrentPage',
+			'setSelectedOrder',
+			'setScannedEpc',
+			'setScannedOrders'
+		)
+
+	const previousSelectedOrder = usePrevious(selectedOrder)
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG],
@@ -61,10 +74,20 @@ export const useDeletePMOrderMutation = () => {
 			const response = await RFIDService.deleteUnexpectedPMOrder(connection, params)
 			return response.metadata // Ensure the correct type is returned
 		},
-		onSuccess: (data: Pick<Pagination<any>, 'totalDocs' | 'totalPages'>) => {
+		onSuccess: async () => {
 			setCurrentPage(1)
 			setSelectedOrder('all')
-			queryClient.invalidateQueries({ queryKey: [PM_EPC_LIST_PROVIDE_TAG], exact: false })
+			if (selectedOrder !== DEFAULT_PROPS.selectedOrder) {
+				setCurrentPage(1)
+				setSelectedOrder('all')
+				return
+			}
+
+			const data = await queryClient.fetchQuery<ResponseBody<RFIDEventStreamData>>({
+				queryKey: [PM_EPC_LIST_PROVIDE_TAG]
+			})
+			setScannedEpc(data?.metadata?.epcs ?? DEFAULT_PROPS.scannedEpc)
+			setScannedOrders(data?.metadata?.orders ?? DEFAULT_PROPS.scannedOrders)
 		}
 	})
 }

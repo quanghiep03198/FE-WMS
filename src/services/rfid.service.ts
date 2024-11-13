@@ -1,4 +1,3 @@
-import { OrderItem, OrderSize } from '@/app/(features)/_layout.finished-production-inoutbound/_contexts/-page-context'
 import { InoutboundPayload } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/exchange-epc.schema'
 import { IElectronicProductCode } from '@/common/types/entities'
@@ -12,10 +11,19 @@ export type RFIDStreamEventData = {
 	has_invalid_epc: boolean
 }
 
+export type OrderItem = {
+	mo_no: string
+	count: number
+}
+export type OrderSize = OrderItem & {
+	size_numcode: string
+	mat_code: string
+	shoes_style_code_factory: string
+}
+
 export type RfidPmResponseData = {
 	epcs: Pagination<IElectronicProductCode>
-	orders: Array<string>
-	sizes: Record<string, Array<OrderSize>>
+	orders: Record<string, Array<OrderSize>>
 }
 
 export type SearchCustOrderParams = {

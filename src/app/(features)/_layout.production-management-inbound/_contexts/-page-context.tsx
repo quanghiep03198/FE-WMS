@@ -24,7 +24,7 @@ export type OrderSize = OrderItem & {
 
 type PageContextStore = {
 	currentPage: number | null
-	scannedEpc: Pagination<IElectronicProductCode>
+	scannedEpc: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>
 	scannedOrders: { [key: string]: Array<OrderSize> }
 	selectedOrder: string | 'all'
 	scanningStatus: ScanningStatus
@@ -33,7 +33,7 @@ type PageContextStore = {
 	setSelectedOrder: (order: string) => void
 	setScanningStatus: (status: ScanningStatus) => void
 	setConnection: (value: string) => void
-	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
+	setScannedEpc: (data: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>) => void
 	setScannedOrders: (data: { [key: string]: Array<OrderSize> }) => void
 	handleToggleScanning: () => void
 	reset: () => void

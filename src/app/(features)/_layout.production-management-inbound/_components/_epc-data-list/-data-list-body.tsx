@@ -3,7 +3,6 @@ import { RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
@@ -18,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { DEFAULT_PM_RFID_SETTINGS, RFIDSettings } from '../..'
-import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, RFIDEventStreamData, useGetEpcQuery } from '../../_apis/rfid.api'
 import { PM_RFID_SETTINGS_KEY } from '../../_constants/index.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
@@ -58,7 +57,7 @@ const DataListBody: React.FC = () => {
 
 	const { user, setAccessToken } = useAuth()
 	// * Incomming EPCs data from server-sent event
-	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
+	const [incommingEpc, setIncommingEpc] = useState<RFIDEventStreamData['epcs']>(scannedEpc)
 	// * Previous scanned EPCs
 	const previousEpc = usePrevious(incommingEpc)
 
