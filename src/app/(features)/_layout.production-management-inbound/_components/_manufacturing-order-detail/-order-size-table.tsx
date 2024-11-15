@@ -7,7 +7,7 @@ import TableDataRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedOrders, selectedOrder } = usePageContext('scannedOrders', 'selectedOrder')
+	const { scannedOrders } = usePageContext('scannedOrders')
 
 	return (
 		<Div className='relative h-[60vh] min-h-full divide-y overflow-auto rounded-lg border group-data-[screen=fullscreen]/container:h-[85vh] xxl:h-[80vh]'>
@@ -40,15 +40,10 @@ const OrderSizeDetailTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody className='[&_tr]:snap-start'>
-					{Object.keys(scannedOrders).length > 0 ? (
-						Object.entries(scannedOrders)
-							.filter(([orderCode]) => {
-								if (selectedOrder === 'all' || !selectedOrder) return true
-								return orderCode === selectedOrder
-							})
-							.map(([orderCode, sizeList]) => {
-								return <TableDataRow key={orderCode} orderCode={orderCode} sizeList={sizeList} />
-							})
+					{scannedOrders?.length > 0 ? (
+						scannedOrders.map((item) => {
+							return <TableDataRow key={item.mo_no} data={item} />
+						})
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className='text-muted-foreground group-hover:!bg-background'>

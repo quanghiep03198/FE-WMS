@@ -34,12 +34,12 @@ const OrderFilterSelect: React.FC = () => {
 			</SelectTrigger>
 			<SelectContent>
 				<SelectItem value={DEFAULT_PROPS.selectedOrder}>All</SelectItem>
-				{Object.keys(scannedOrders).length > 0 &&
-					Object.entries(scannedOrders).map(([orderCode, sizeList]) => {
-						const count = sizeList.reduce((acc, curr) => acc + curr.count, 0)
+				{Array.isArray(scannedOrders) &&
+					scannedOrders?.map((item) => {
+						const count = item?.sizes.reduce((acc, curr) => acc + curr.count, 0)
 						return (
-							<SelectItem key={orderCode} value={orderCode} className='flex items-center gap-x-2'>
-								{orderCode === 'null' ? FALLBACK_ORDER_VALUE : orderCode} {`(${count} pairs)`}
+							<SelectItem key={item?.mo_no} value={item?.mo_no} className='flex items-center gap-x-2'>
+								{item?.mo_no === 'null' ? FALLBACK_ORDER_VALUE : item?.mo_no} {`(${count} pairs)`}
 							</SelectItem>
 						)
 					})}

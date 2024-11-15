@@ -144,54 +144,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 								onInput={debounce((value) => setSearchTerm(value), 200)}
 								description={t('ns_inoutbound:description.transferred_order')}
 							/>
-
-							{/* <HoverCard open={hoverCardOpen && Array.isArray(orderDetail) && orderDetail.length > 0}>
-								<HoverCardTrigger type='button' className='item-stretch flex w-full flex-col'>
-									<FormField
-										control={form.control}
-										name='mo_no_actual'
-										render={({ field }) => {
-											return (
-												<FormItem className='w-full text-left'>
-													<FormLabel>{t('ns_erp:fields.mo_no_actual')}</FormLabel>
-													<FormControl>
-														<Input
-															value={field.value}
-															onChange={field.onChange}
-															placeholder='Enter a manufacturing order code'
-															onFocus={() => setHoverCardOpen(true)}
-															onBlur={() => setHoverCardOpen(false)}
-															className='w-full'
-														/>
-													</FormControl>
-													<FormMessage />
-												</FormItem>
-											)
-										}}
-									/>
-								</HoverCardTrigger>
-								<HoverCardContent className='flex w-[var(--radix-hover-card-trigger-width)] flex-col items-stretch gap-y-1 p-1'>
-									{Array.isArray(orderDetail) && orderDetail.length > 0 ? (
-										<Div>
-											{orderDetail.map((item) => (
-												<Button
-													key={item.mo_no}
-													type='button'
-													variant='ghost'
-													size='sm'
-													className='w-full justify-start'
-													onClick={() => form.setValue('mo_no_actual', item?.mo_no)}>
-													{item?.mo_no}
-												</Button>
-											))}
-										</Div>
-									) : (
-										<Button type='button' variant='ghost' disabled className='font-normal'>
-											No result match
-										</Button>
-									)}
-								</HoverCardContent>
-							</HoverCard> */}
 						</Div>
 
 						{defaultValues?.mo_no === FALLBACK_ORDER_VALUE && (

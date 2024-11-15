@@ -17,19 +17,18 @@ export type Log = {
 }
 export type OrderItem = {
 	mo_no: string
-	count: number
-}
-export type OrderSize = OrderItem & {
-	size_numcode: string
 	mat_code: string
 	shoes_style_code_factory: string
+	sizes: Array<{
+		size_numcode: string
+		count: number
+	}>
 }
 
 type PageContextStore = {
 	currentPage: number | null
 	scannedEpc: Pagination<IElectronicProductCode>
 	scannedOrders: Array<OrderItem>
-	scannedSizes: Array<OrderSize>
 	scanningStatus: ScanningStatus
 	connection: string
 	selectedOrder: string | undefined
@@ -41,7 +40,6 @@ type PageContextStore = {
 	setSelectedOrder: (value: string) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
 	setScannedOrders: (data: Array<OrderItem>) => void
-	setScannedSizes: (data: Array<OrderSize>) => void
 	setPollingDuration: (data: number) => void
 	writeLog: (data: Omit<Log, 'timestamp'>) => void
 	clearLog: () => void
@@ -53,7 +51,6 @@ export const DEFAULT_PROPS: Pick<
 	| 'currentPage'
 	| 'scannedEpc'
 	| 'scannedOrders'
-	| 'scannedSizes'
 	| 'scanningStatus'
 	| 'connection'
 	| 'selectedOrder'
@@ -75,8 +72,7 @@ export const DEFAULT_PROPS: Pick<
 		totalDocs: 0,
 		totalPages: 0
 	},
-	scannedOrders: [],
-	scannedSizes: []
+	scannedOrders: []
 }
 
 const MAX_LINES_OF_LOG = 100
@@ -123,11 +119,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.scannedOrders = Array.isArray(data) ? data : []
 					})
 				},
-				setScannedSizes: (data) => {
-					set((state) => {
-						state.scannedSizes = Array.isArray(data) ? data : []
-					})
-				},
+
 				setPollingDuration: (data) => {
 					set((state) => {
 						state.pollingDuration = data
@@ -174,7 +166,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.scanningStatus = DEFAULT_PROPS.scanningStatus
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc
 						state.scannedOrders = DEFAULT_PROPS.scannedOrders
-						state.scannedSizes = DEFAULT_PROPS.scannedSizes
 						state.selectedOrder = DEFAULT_PROPS.selectedOrder
 					})
 				}

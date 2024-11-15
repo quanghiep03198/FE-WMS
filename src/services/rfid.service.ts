@@ -1,43 +1,11 @@
 import { InoutboundPayload } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/exchange-epc.schema'
+import { SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inoutbound/_types'
+import { FetchEpcParams } from '@/app/(features)/_layout.production-management-inbound/types'
+import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash'
-
-export type RFIDStreamEventData = {
-	epcs: Pagination<IElectronicProductCode>
-	orders: OrderItem[]
-	sizes: OrderSize[]
-	has_invalid_epc: boolean
-}
-
-export type OrderItem = {
-	mo_no: string
-	count: number
-}
-export type OrderSize = OrderItem & {
-	size_numcode: string
-	mat_code: string
-	shoes_style_code_factory: string
-}
-
-export type RfidPmResponseData = {
-	epcs: Pagination<IElectronicProductCode>
-	orders: Record<string, Array<OrderSize>>
-}
-
-export type SearchCustOrderParams = {
-	orderTarget: string
-	productionCode: string
-	sizeNumCode?: string
-	searchTerm: string
-}
-
-export type FetchEpcParams = {
-	process: string
-	page: number
-	selected_order: string
-}
 
 export class RFIDService {
 	static async fetchFPData(tenantId: string, page: null | number, selectedOrder: string) {
@@ -51,14 +19,14 @@ export class RFIDService {
 		)
 	}
 	static async fetchPMData(tenantId: string, params: FetchEpcParams) {
-		return await axiosInstance.get<void, ResponseBody<RfidPmResponseData>>('/rfid/pm-inventory/fetch-epc', {
+		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData>>('/rfid/pm-inventory/fetch-epc', {
 			headers: { ['X-Tenant-Id']: tenantId },
 			params: omitBy(params, (value) => !value || value === 'all')
 		})
 	}
 
 	static async getOrderDetail(tenantId: string) {
-		return await axiosInstance.get<void, ResponseBody<Omit<RFIDStreamEventData, 'epcs'>>>(
+		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData['orders']>>(
 			'/rfid/fp-inventory/manufacturing-order-detail',
 			{ headers: { ['X-Tenant-Id']: tenantId } }
 		)
@@ -102,7 +70,7 @@ export class RFIDService {
 	}
 
 	static async deleteUnexpectedPMOrder(tenantId: string, params: { process: string; order: string }) {
-		return await axiosInstance.delete<any, ResponseBody<Pick<Pagination<any>, 'totalDocs' | 'totalPages'>>>(
+		return await axiosInstance.delete<any, ResponseBody<{ affected: number }>>(
 			`/rfid/pm-inventory/delete-unexpected-order`,
 			{
 				headers: { ['X-Tenant-Id']: tenantId },

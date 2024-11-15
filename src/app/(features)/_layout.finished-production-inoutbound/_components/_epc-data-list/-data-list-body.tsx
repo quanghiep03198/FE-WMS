@@ -8,9 +8,15 @@ import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
-import { RFIDStreamEventData } from '@/services/rfid.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	useLocalStorageState,
+	useMemoizedFn,
+	usePrevious,
+	useVirtualList
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -21,14 +27,18 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
 // import { RFIDSettings } from '../../_constants/rfid.const'
+import { AppConfigs } from '@/configs/app.config'
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+
+import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
 import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
+const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
@@ -45,7 +55,6 @@ const EpcDataList: React.FC = () => {
 		setScanningStatus,
 		setScannedEpc,
 		setScannedOrders,
-		setScannedSizes,
 		setSelectedOrder,
 		writeLog
 	} = usePageContext(
@@ -59,7 +68,6 @@ const EpcDataList: React.FC = () => {
 		'setScanningStatus',
 		'setScannedEpc',
 		'setScannedOrders',
-		'setScannedSizes',
 		'setSelectedOrder',
 		'writeLog'
 	)
@@ -94,7 +102,7 @@ const EpcDataList: React.FC = () => {
 	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
 
 	// * Fetch server-sent event
-	const fetchServerEvent = async () => {
+	const fetchServerEvent = useMemoizedFn(async () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -138,7 +146,6 @@ const EpcDataList: React.FC = () => {
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
-						setScannedSizes(data?.sizes)
 						setHasInvalidEpcAlert(data?.has_invalid_epc)
 						writeLog({
 							type: 'info',
@@ -181,10 +188,10 @@ const EpcDataList: React.FC = () => {
 			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
-	}
+	})
 
 	// * Triggered when scanning status changes
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		switch (scanningStatus) {
 			case undefined: {
 				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
@@ -205,7 +212,10 @@ const EpcDataList: React.FC = () => {
 				break
 			}
 			default: {
-				break
+				const timeout = setTimeout(() => toast.dismiss(SSE_TOAST_ID), AppConfigs.TOAST_DURATION)
+				return () => {
+					clearTimeout(timeout)
+				}
 			}
 		}
 	}, [scanningStatus])
@@ -262,19 +272,19 @@ const EpcDataList: React.FC = () => {
 	useEffect(() => {
 		if (!isTooManyOrdersDimssiedRef.current && scannedOrders?.length > 3 && scanningStatus === 'connected')
 			toast.warning('Oops !!!', {
-				id: 'TOO_MANY_ORDERS',
+				id: TOO_MANY_ORDER_TOAST,
 				description: t('ns_inoutbound:notification.too_many_mono'),
 				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
 				action: {
 					label: t('ns_common:actions.dismiss'),
 					type: 'button',
 					onClick: () => {
-						toast.dismiss('TOO_MANY_ORDERS')
+						toast.dismiss(TOO_MANY_ORDER_TOAST)
 						isTooManyOrdersDimssiedRef.current = true
 					}
 				}
 			})
-		else toast.dismiss('TOO_MANY_ORDERS')
+		else toast.dismiss(TOO_MANY_ORDER_TOAST)
 	}, [scannedOrders, isTooManyOrdersDimssiedRef, scanningStatus])
 
 	// * Intitialize virtual list to render scanned EPC data

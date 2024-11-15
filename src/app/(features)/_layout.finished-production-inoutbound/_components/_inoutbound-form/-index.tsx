@@ -256,8 +256,8 @@ const InoutboundForm: React.FC = () => {
 	)
 }
 
-const WarehouseComboboxSelection: React.FC<{ data: IWarehouseStorage }> = ({ data }) => (
-	<Div className='space-y-0.5'>
+const WarehouseComboboxSelection: React.FC<{ data: IWarehouseStorage }> = ({ data, ...props }) => (
+	<Div className='w-full flex-1' {...props}>
 		<Typography variant='small' className='font-medium'>
 			{data.storage_name}
 		</Typography>

@@ -23,7 +23,6 @@ import {
 } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useMemoizedFn } from 'ahooks'
-import { groupBy } from 'lodash'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetOrderDetail } from '../../_apis/rfid.api'
@@ -34,12 +33,10 @@ import TableDataRow from './-order-size-row'
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-	const { scannedOrders, scannedSizes, scanningStatus, setScannedOrders, setScannedSizes } = usePageContext(
+	const { scannedOrders, scanningStatus, setScannedOrders } = usePageContext(
 		'scannedOrders',
-		'scannedSizes',
 		'scanningStatus',
-		'setScannedOrders',
-		'setScannedSizes'
+		'setScannedOrders'
 	)
 	const { selectedRows, resetSelectedRows, setSelectedRows } = useOrderDetailContext(
 		'selectedRows',
@@ -56,8 +53,7 @@ const OrderSizeDetailTable: React.FC = () => {
 	}, [scanningStatus])
 
 	useEffect(() => {
-		setScannedSizes(data?.sizes)
-		setScannedOrders(data?.orders)
+		setScannedOrders(data)
 	}, [data])
 
 	useEffect(() => {
@@ -65,15 +61,12 @@ const OrderSizeDetailTable: React.FC = () => {
 	}, [dialogOpen])
 
 	const allMatchingRowsSelection = useMemo(() => {
-		return Object.entries(groupBy(scannedSizes, 'mo_no')).filter(([_, sizeList]) =>
-			sizeList.some((size) => selectedRows[0]?.mat_code.includes(size.mat_code))
-		)
+		return scannedOrders.filter((item) => selectedRows[0]?.mat_code === item.mat_code)
 	}, [selectedRows])
 
 	const isAllMatchingRowsSelected = useMemo(() => {
 		if (!selectedRows || selectedRows.length === 0) return false
-		const ordersMatchWithFirstSelection = allMatchingRowsSelection.map((item) => item[0])
-		return ordersMatchWithFirstSelection.every((orderCode) => selectedRows.some((row) => row.mo_no === orderCode))
+		return allMatchingRowsSelection.length === selectedRows.length
 	}, [selectedRows])
 
 	const isSomeMatchingRowsSelected =
@@ -85,9 +78,9 @@ const OrderSizeDetailTable: React.FC = () => {
 		} else {
 			setSelectedRows(
 				allMatchingRowsSelection.map((item) => ({
-					mo_no: item[0],
-					mat_code: item[1]?.[0]?.mat_code,
-					count: item[1].reduce((acc, curr) => {
+					mo_no: item.mo_no,
+					mat_code: item.mat_code,
+					count: item?.sizes?.reduce((acc, curr) => {
 						return acc + curr.count
 					}, 0)
 				}))
@@ -117,7 +110,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
 				<Div className='divide-y overflow-hidden rounded-lg border'>
-					{Array.isArray(scannedOrders) && scannedOrders.length > 0 ? (
+					{Array.isArray(scannedOrders) && scannedOrders?.length > 0 ? (
 						<Div ref={ref} className='flow-root max-h-[65vh] w-full overflow-scroll rounded-lg'>
 							<Table
 								className='border-separate border-spacing-0 rounded-lg'
@@ -161,8 +154,8 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableRow>
 								</TableHeader>
 								<TableBody className='[&_tr]:snap-start'>
-									{Object.entries(groupBy(scannedSizes, 'mo_no')).map(([orderCode, sizeList]) => {
-										return <TableDataRow key={orderCode} orderCode={orderCode} sizeList={sizeList} />
+									{scannedOrders.map((order) => {
+										return <TableDataRow key={order.mo_no} data={order} />
 									})}
 								</TableBody>
 							</Table>

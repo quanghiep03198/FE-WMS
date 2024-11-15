@@ -12,33 +12,32 @@ import {
 	TableRow,
 	Typography
 } from '@/components/ui'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 // import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
 // import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { FALLBACK_ORDER_VALUE } from '@/app/(features)/_layout.finished-production-inoutbound/_apis/rfid.api'
+import { OrderItem } from '@/app/_shared/_types/rfid'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { toast } from 'sonner'
 import { useDeletePMOrderMutation } from '../../_apis/rfid.api'
 import { ProducingProcessSuffix } from '../../_constants/index.const'
-import { OrderSize } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
-	orderCode: string
-	sizeList: Array<OrderSize>
+	data: OrderItem
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, sizeList }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const aggregateSizeCount = useMemo(
 		() =>
-			Array.isArray(sizeList)
-				? sizeList.reduce((acc, curr) => {
+			Array.isArray(data?.sizes)
+				? data?.sizes.reduce((acc, curr) => {
 						return acc + curr.count
 					}, 0)
 				: 0,
-		[sizeList]
+		[data]
 	)
 
 	return (
@@ -46,34 +45,35 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 			<TableCell
 				align='left'
 				className='group/cell left-0 z-10 space-y-1 xl:sticky xl:min-w-[var(--sticky-col-width)]'>
-				{orderCode === 'null' ? FALLBACK_ORDER_VALUE : orderCode}
+				{data?.mo_no === 'null' ? FALLBACK_ORDER_VALUE : data?.mo_no}
 			</TableCell>
 			<TableCell
 				align='left'
 				className='z-10 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[var(--sticky-col-width)] xl:min-w-[var(--sticky-col-width)]'>
-				{sizeList[0]?.shoes_style_code_factory ?? FALLBACK_ORDER_VALUE}
+				{data?.shoes_style_code_factory ?? FALLBACK_ORDER_VALUE}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
-					{sizeList?.map((size) => (
-						<Div
-							key={size?.size_numcode ?? FALLBACK_ORDER_VALUE}
-							className='group/cell inline-grid min-w-16 shrink-0 basis-16 grid-rows-2 divide-y last:flex-1'>
-							<TableHead align='left' className='bg-table-head'>
-								{size?.size_numcode ?? FALLBACK_ORDER_VALUE}
-							</TableHead>
-							<TableCell>{size?.count ?? 0}</TableCell>
-						</Div>
-					))}
+					{Array.isArray(data?.sizes) &&
+						data?.sizes?.map((size) => (
+							<Div
+								key={size?.size_numcode ?? FALLBACK_ORDER_VALUE}
+								className='group/cell inline-grid min-w-16 shrink-0 basis-16 grid-rows-2 divide-y last:flex-1'>
+								<TableHead align='left' className='bg-table-head'>
+									{size?.size_numcode ?? FALLBACK_ORDER_VALUE}
+								</TableHead>
+								<TableCell>{size?.count ?? 0}</TableCell>
+							</Div>
+						))}
 				</Div>
 			</TableCell>
 			<TableCell align='right' className='font-medium xl:sticky xl:right-12'>
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell align='center' className='right-0 xl:sticky xl:w-12 xl:min-w-12'>
-				<DeleteOrderPopoverConfirm orderToDelete={orderCode} />
+				<DeleteOrderPopoverConfirm orderToDelete={data?.mo_no} />
 			</TableCell>
 		</TableRow>
 	)
@@ -82,20 +82,24 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 const DeleteOrderPopoverConfirm: React.FC<{ orderToDelete: string }> = memo(
 	({ orderToDelete }) => {
 		const { t } = useTranslation()
+		const [open, setOpen] = useState<boolean>(false)
 
 		const { searchParams } = useQueryParams<{ process: ProducingProcessSuffix }>()
-		const { mutateAsync: deleteOrder, isPending: isDeleting } = useDeletePMOrderMutation()
+		const { mutateAsync: deleteOrder, isPending: isDeleting, isError } = useDeletePMOrderMutation()
 
 		const handleDeleteOrder = useMemoizedFn((orderCode: string) => {
 			toast.promise(deleteOrder({ process: searchParams.process, order: orderCode }), {
 				loading: t('ns_common:notification.processing_request'),
-				success: t('ns_common:notification.success'),
+				success: () => {
+					setOpen(false)
+					return t('ns_common:notification.success')
+				},
 				error: t('ns_common:notification.error')
 			})
 		})
 
 		return (
-			<Popover modal>
+			<Popover open={open} onOpenChange={setOpen} modal={true}>
 				<PopoverTrigger
 					disabled={orderToDelete === FALLBACK_ORDER_VALUE}
 					className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
@@ -122,7 +126,7 @@ const DeleteOrderPopoverConfirm: React.FC<{ orderToDelete: string }> = memo(
 							size='sm'
 							onClick={() => handleDeleteOrder(orderToDelete)}>
 							{isDeleting && <Icon name='LoaderCircle' role='img' className='animate-spin' />}
-							{t('ns_common:actions.delete')}
+							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.delete')}
 						</Button>
 					</Div>
 				</PopoverContent>

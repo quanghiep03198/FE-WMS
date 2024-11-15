@@ -13,9 +13,8 @@ import {
 	Typography
 } from '@/components/ui'
 import { usePrevious } from 'ahooks'
-import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
+import { useGetEpcQuery } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const ListBoxHeader: React.FC = () => {
@@ -69,19 +68,14 @@ const OrderListSelect: React.FC = () => {
 				<SelectContent>
 					<SelectGroup>
 						<SelectItem value='all'>All</SelectItem>
-						{Array.isArray(scannedOrders) && scannedOrders.length > 0 && (
-							<Fragment>
-								{Array.isArray(scannedOrders) &&
-									scannedOrders.map((order, index) => (
-										<SelectItem
-											key={index}
-											value={order.mo_no ?? FALLBACK_ORDER_VALUE}
-											className='!flex items-center gap-x-2'>
-											{order.mo_no ?? FALLBACK_ORDER_VALUE} {`(${order.count} pairs)`}
-										</SelectItem>
-									))}
-							</Fragment>
-						)}
+						{scannedOrders.map((item) => (
+							<SelectItem key={item.mo_no} value={item.mo_no} className='!flex items-center gap-x-2'>
+								{item.mo_no}{' '}
+								{`(${item.sizes.reduce((acc, curr) => {
+									return acc + curr.count
+								}, 0)} pairs)`}
+							</SelectItem>
+						))}
 					</SelectGroup>
 				</SelectContent>
 			</Select>

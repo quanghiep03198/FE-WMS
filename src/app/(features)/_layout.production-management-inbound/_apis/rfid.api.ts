@@ -1,15 +1,9 @@
-import { IElectronicProductCode } from '@/common/types/entities'
-import { OrderSize, RFIDService } from '@/services/rfid.service'
+import useQueryParams from '@/common/hooks/use-query-params'
+import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { usePrevious } from 'ahooks'
-import { PMInboundSearch } from '..'
+import { PMInboundURLSearch } from '..'
 import { ProducingProcessSuffix } from '../_constants/index.const'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
-
-export type RFIDEventStreamData = {
-	epcs: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>
-	orders: Record<string, Array<OrderSize>>
-}
 
 // * API Query Keys
 export const PM_EPC_LIST_PROVIDE_TAG = 'PM_EPC_LIST'
@@ -25,7 +19,7 @@ export const useGetEpcQuery = (process: ProducingProcessSuffix) => {
 		'scanningStatus'
 	)
 	return useQuery({
-		queryKey: [PM_EPC_LIST_PROVIDE_TAG],
+		queryKey: [PM_EPC_LIST_PROVIDE_TAG, currentPage, selectedOrder],
 		queryFn: async () => {
 			return await RFIDService.fetchPMData(connection, { page: currentPage, process, selected_order: selectedOrder })
 		},
@@ -44,18 +38,17 @@ export const useUpdateStockMutation = () => {
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG],
-		mutationFn: async (payload: PMInboundSearch & { selectedOrder: string }) =>
+		mutationFn: async (payload: PMInboundURLSearch & { selectedOrder: string }) =>
 			RFIDService.updatePMStockMovement(connection, payload.process, payload.selectedOrder),
 		onSuccess: () => {
-			setCurrentPage(1)
-			setSelectedOrder('all')
+			setCurrentPage(DEFAULT_PROPS.currentPage)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			queryClient.invalidateQueries({ queryKey: [PM_EPC_LIST_PROVIDE_TAG] })
 		}
 	})
 }
 
 export const useDeletePMOrderMutation = () => {
-	const queryClient = useQueryClient()
 	const { connection, selectedOrder, setCurrentPage, setSelectedOrder, setScannedEpc, setScannedOrders } =
 		usePageContext(
 			'connection',
@@ -65,8 +58,7 @@ export const useDeletePMOrderMutation = () => {
 			'setScannedEpc',
 			'setScannedOrders'
 		)
-
-	const previousSelectedOrder = usePrevious(selectedOrder)
+	const { searchParams } = useQueryParams<PMInboundURLSearch>()
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG],
@@ -75,19 +67,19 @@ export const useDeletePMOrderMutation = () => {
 			return response.metadata // Ensure the correct type is returned
 		},
 		onSuccess: async () => {
-			setCurrentPage(1)
-			setSelectedOrder('all')
+			setCurrentPage(DEFAULT_PROPS.currentPage)
 			if (selectedOrder !== DEFAULT_PROPS.selectedOrder) {
-				setCurrentPage(1)
-				setSelectedOrder('all')
+				setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 				return
 			}
 
-			const data = await queryClient.fetchQuery<ResponseBody<RFIDEventStreamData>>({
-				queryKey: [PM_EPC_LIST_PROVIDE_TAG]
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			const { metadata } = await RFIDService.fetchPMData(connection, {
+				page: DEFAULT_PROPS.currentPage,
+				...searchParams
 			})
-			setScannedEpc(data?.metadata?.epcs ?? DEFAULT_PROPS.scannedEpc)
-			setScannedOrders(data?.metadata?.orders ?? DEFAULT_PROPS.scannedOrders)
+			setScannedEpc(metadata?.epcs)
+			setScannedOrders(metadata?.orders)
 		}
 	})
 }

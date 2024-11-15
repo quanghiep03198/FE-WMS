@@ -1,4 +1,5 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
+import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
 import { RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
@@ -7,7 +8,14 @@ import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { type EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	useLocalStorageState,
+	useMemoizedFn,
+	usePrevious,
+	useVirtualList
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { omit, uniqBy } from 'lodash'
 import qs from 'qs'
@@ -17,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { DEFAULT_PM_RFID_SETTINGS, RFIDSettings } from '../..'
-import { FALLBACK_ORDER_VALUE, RFIDEventStreamData, useGetEpcQuery } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
 import { PM_RFID_SETTINGS_KEY } from '../../_constants/index.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
@@ -57,7 +65,7 @@ const DataListBody: React.FC = () => {
 
 	const { user, setAccessToken } = useAuth()
 	// * Incomming EPCs data from server-sent event
-	const [incommingEpc, setIncommingEpc] = useState<RFIDEventStreamData['epcs']>(scannedEpc)
+	const [incommingEpc, setIncommingEpc] = useState<RFIDStreamEventData['epcs']>(scannedEpc)
 	// * Previous scanned EPCs
 	const previousEpc = usePrevious(incommingEpc)
 
@@ -69,7 +77,7 @@ const DataListBody: React.FC = () => {
 	})
 	const pollingDuration = settings?.pollingDuration ?? DEFAULT_PM_RFID_SETTINGS.pollingDuration
 
-	const fetchServerEvent = async () => {
+	const fetchServerEvent = useMemoizedFn(async () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -111,7 +119,7 @@ const DataListBody: React.FC = () => {
 					onmessage(event: EventSourceMessage) {
 						try {
 							if (!event.data) return
-							const data = JSON.parse(event.data)
+							const data = JSON.parse(event.data) as RFIDStreamEventData
 							setIncommingEpc(data?.epcs)
 							setScannedOrders(data?.orders)
 							window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
@@ -139,7 +147,7 @@ const DataListBody: React.FC = () => {
 			toast.info('Disconnected', { id: 'FETCH_SSE' })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
-	}
+	})
 
 	// * Triggered when scanning status changes
 	useEffect(() => {

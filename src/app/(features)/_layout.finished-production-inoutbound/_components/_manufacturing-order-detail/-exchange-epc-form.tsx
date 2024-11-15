@@ -29,12 +29,12 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useExchangeEpcMutation, useSearchOrderQuery } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { OrderSize, usePageContext } from '../../_contexts/-page-context'
+import { usePageContext } from '../../_contexts/-page-context'
 import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange-epc.schema'
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedSizes, connection } = usePageContext('scannedSizes', 'connection')
+	const { scannedOrders, connection } = usePageContext('scannedOrders', 'connection')
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	const {
@@ -69,10 +69,8 @@ const ExchangeEpcFormDialog: React.FC = () => {
 
 	const exchangableOrders = useMemo(() => {
 		return uniqBy(
-			scannedSizes.filter(
-				(item) =>
-					item.mo_no !== (defaultValues as OrderSize)?.mo_no &&
-					item.mat_code === (defaultValues as OrderSize)?.mat_code
+			scannedOrders.filter(
+				(item) => item.mo_no !== defaultValues?.mo_no && item.mat_code === defaultValues?.mat_code
 			),
 			'mo_no'
 		)

@@ -98,7 +98,7 @@ const ScannerToolbar: React.FC = () => {
 						<HoverCardTrigger asChild className='w-full basis-1/5 sm:basis-full md:basis-1/3 lg:basis-1/3'>
 							<SelectTrigger>
 								<Div className='flex flex-1 items-center gap-x-3'>
-									<Icon name='Database' size={18} stroke='hsl(var(--primary))' />
+									<Icon name='Server' size={18} stroke='hsl(var(--primary))' />
 									<SelectValue placeholder={'Select database'} />
 								</Div>
 							</SelectTrigger>

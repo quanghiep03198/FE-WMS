@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { OrderItem } from '@/app/_shared/_types/rfid'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { pick } from 'lodash'
 import React, { createContext, useContext, useRef } from 'react'
@@ -7,25 +8,17 @@ import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
-export type Log = {
-	message: string
-	timestamp?: Date
-	type: 'info' | 'error'
-}
-export type OrderItem = {
-	mo_no: string
-	count: number
-}
-export type OrderSize = OrderItem & {
-	size_numcode: string
-	mat_code: string
-	shoes_style_code_factory: string
-}
+
+// export type Log = {
+// 	message: string
+// 	timestamp?: Date
+// 	type: 'info' | 'error'
+// }
 
 type PageContextStore = {
 	currentPage: number | null
 	scannedEpc: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>
-	scannedOrders: { [key: string]: Array<OrderSize> }
+	scannedOrders: Array<OrderItem>
 	selectedOrder: string | 'all'
 	scanningStatus: ScanningStatus
 	connection: string
@@ -34,7 +27,7 @@ type PageContextStore = {
 	setScanningStatus: (status: ScanningStatus) => void
 	setConnection: (value: string) => void
 	setScannedEpc: (data: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>) => void
-	setScannedOrders: (data: { [key: string]: Array<OrderSize> }) => void
+	setScannedOrders: (data: Array<OrderItem>) => void
 	handleToggleScanning: () => void
 	reset: () => void
 }
@@ -50,12 +43,12 @@ export const DEFAULT_PROPS: Pick<
 		data: [],
 		hasNextPage: false,
 		hasPrevPage: false,
-		limit: 100,
+		limit: 50,
 		page: 1,
 		totalDocs: 0,
 		totalPages: 0
 	},
-	scannedOrders: {}
+	scannedOrders: []
 }
 
 const PageContext = createContext<StoreApi<PageContextStore>>(null)
@@ -83,13 +76,13 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				},
 				setScannedEpc: (data) => {
 					set((state) => {
-						state.scannedEpc = !data ? DEFAULT_PROPS.scannedEpc : data
+						state.scannedEpc = data
 					})
 				},
 
 				setScannedOrders: (data) => {
 					set((state) => {
-						state.scannedOrders = data ?? {}
+						state.scannedOrders = data
 					})
 				},
 				setSelectedOrder: (order) => {

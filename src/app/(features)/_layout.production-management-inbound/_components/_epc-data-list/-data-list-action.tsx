@@ -3,14 +3,14 @@ import { Button, Icon } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { PMInboundSearch } from '../..'
+import { PMInboundURLSearch } from '../..'
 import { useUpdateStockMutation } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const DataListAction: React.FC = () => {
 	const { t } = useTranslation()
 	const { scannedEpc, selectedOrder } = usePageContext('scannedEpc', 'selectedOrder')
-	const { searchParams } = useQueryParams<PMInboundSearch>()
+	const { searchParams } = useQueryParams<PMInboundURLSearch>()
 
 	const { mutateAsync, isPending } = useUpdateStockMutation()
 

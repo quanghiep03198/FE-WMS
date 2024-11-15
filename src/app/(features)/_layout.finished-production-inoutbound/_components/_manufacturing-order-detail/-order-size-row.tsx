@@ -1,3 +1,4 @@
+import { OrderItem } from '@/app/_shared/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -20,15 +21,14 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { OrderSize, usePageContext } from '../../_contexts/-page-context'
+import { usePageContext } from '../../_contexts/-page-context'
 
 type OrderDetailTableRowProps = {
-	orderCode: string
-	sizeList: Array<OrderSize>
+	data: OrderItem
 	// inViewport: boolean
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, sizeList }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const { t } = useTranslation()
 	const { scannedOrders, setScanningStatus } = usePageContext('scannedOrders', 'setScanningStatus')
 	const {
@@ -53,8 +53,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 
 	const hasSomeRowMatch = useMemo(() => {
 		if (!selectedRows || selectedRows.length === 0) return false
-		const sizeMatCodesSet = new Set(sizeList.map((size) => size.mat_code))
-		return sizeMatCodesSet.has(selectedRows[0].mat_code)
+		return data?.mat_code === selectedRows[0].mat_code
 	}, [selectedRows])
 
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
@@ -65,13 +64,13 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 
 	const handleDeleteOrder = useMemoizedFn(async () => {
 		try {
-			await deleteOrderAsync(orderCode)
+			await deleteOrderAsync(data?.mo_no)
 			// * Remove from selected row if scanned order is deleted
-			if (selectedRows.some((row) => row.mo_no === orderCode)) {
-				pullSelectedRow(selectedRows.find((row) => row.mo_no === orderCode))
+			if (selectedRows.some((row) => row.mo_no === data?.mo_no)) {
+				pullSelectedRow(selectedRows.find((row) => row.mo_no === data?.mo_no))
 			}
 			// * If all order is deleted, reset all
-			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== orderCode)
+			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== data?.mo_no)
 			if (filteredOrders.length === 0) {
 				setScanningStatus(undefined)
 				return
@@ -85,12 +84,12 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 
 	const aggregateSizeCount = useMemo(
 		() =>
-			Array.isArray(sizeList)
-				? sizeList.reduce((acc, curr) => {
+			Array.isArray(data?.sizes)
+				? data.sizes.reduce((acc, curr) => {
 						return acc + curr.count
 					}, 0)
 				: 0,
-		[sizeList]
+		[data]
 	)
 
 	return (
@@ -102,11 +101,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 			<TableCell className='sticky left-0 z-10 min-w-[var(--row-selection-col-width)] py-4'>
 				<Checkbox
 					disabled={!hasSomeRowMatch && selectedRows.length > 0}
-					checked={selectedRows.some((row) => row.mo_no === orderCode)}
+					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
 					onCheckedChange={(checked) =>
 						handleToggleSelectRow(checked, {
-							mo_no: orderCode,
-							mat_code: sizeList[0]?.mat_code,
+							mo_no: data?.mo_no,
+							mat_code: data?.mat_code,
 							count: aggregateSizeCount
 						})
 					}
@@ -114,14 +113,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 			</TableCell>
 			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>
-					{orderCode ?? FALLBACK_ORDER_VALUE}
+					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
 					<button
 						className='opacity-0 duration-100 group-hover/cell:opacity-100'
 						onClick={() => {
 							setExchangeOrderDialogOpen(true)
 							setDefaultExchangeOrderFormValues({
-								mo_no: orderCode,
-								mat_code: sizeList[0]?.mat_code,
+								mo_no: data?.mo_no,
+								mat_code: data?.mat_code,
 								count: aggregateSizeCount
 							})
 						}}>
@@ -130,37 +129,43 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 				</Div>
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 min-w-[var(--sticky-left-col-width)]'>
-				{sizeList[0]?.shoes_style_code_factory}
+				{data?.shoes_style_code_factory}
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
-				{sizeList[0]?.mat_code}
+				{data?.mat_code}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
-					{sizeList?.map((size) => (
-						<Div
-							key={size?.size_numcode}
-							className='group/cell inline-grid min-w-32 shrink-0 basis-32 grid-rows-2 divide-y last:flex-1'>
-							<TableCell className='bg-table-head font-medium'>
-								<Div className='flex items-center gap-x-2'>
-									{size?.size_numcode}
-									<button
-										onClick={() => {
-											setExchangeEpcDialogOpen(true)
-											setDefaultExchangeEpcFormValues(size)
-										}}>
-										<Icon
-											name='ArrowLeftRight'
-											className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100'
-										/>
-									</button>
-								</Div>
-							</TableCell>
-							<TableCell>{size?.count ?? 0}</TableCell>
-						</Div>
-					))}
+					{Array(data?.sizes) &&
+						data?.sizes?.map((size) => (
+							<Div
+								key={size?.size_numcode}
+								className='group/cell inline-grid min-w-32 shrink-0 basis-32 grid-rows-2 divide-y last:flex-1'>
+								<TableCell className='bg-table-head font-medium'>
+									<Div className='flex items-center gap-x-2'>
+										{size?.size_numcode}
+										<button
+											onClick={() => {
+												setExchangeEpcDialogOpen(true)
+												setDefaultExchangeEpcFormValues({
+													mo_no: data?.mo_no,
+													mat_code: data?.mat_code,
+													size_numcode: size?.size_numcode,
+													count: size?.count
+												})
+											}}>
+											<Icon
+												name='ArrowLeftRight'
+												className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100'
+											/>
+										</button>
+									</Div>
+								</TableCell>
+								<TableCell>{size?.count ?? 0}</TableCell>
+							</Div>
+						))}
 				</Div>
 			</TableCell>
 			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] font-medium'>
@@ -169,7 +174,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ orderCode, si
 			<TableCell align='center' className='sticky right-0 w-20 min-w-[var(--sticky-right-col-width)] !opacity-100'>
 				<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
 					<PopoverTrigger
-						disabled={orderCode === FALLBACK_ORDER_VALUE}
+						disabled={data?.mo_no === FALLBACK_ORDER_VALUE}
 						className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
 						<Icon name='Trash2' />
 					</PopoverTrigger>

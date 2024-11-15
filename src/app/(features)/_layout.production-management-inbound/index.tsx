@@ -18,7 +18,7 @@ const pmInboundSearchValidator = z.object({
 	process: z.nativeEnum(ProducingProcessSuffix).optional()
 })
 
-export type PMInboundSearch = z.infer<typeof pmInboundSearchValidator>
+export type PMInboundURLSearch = z.infer<typeof pmInboundSearchValidator>
 
 export const Route = createFileRoute('/(features)/_layout/production-management-inbound/')({
 	component: Page,
@@ -31,7 +31,7 @@ export type RFIDSettings = {
 }
 
 export const DEFAULT_PM_RFID_SETTINGS: RFIDSettings = {
-	pollingDuration: 750,
+	pollingDuration: 1000,
 	fullscreenMode: false
 }
 
@@ -80,7 +80,7 @@ function Page() {
 }
 
 const PanelGroup = {
-	Container: tw.div`group/container space-y-3 bg-background
+	Container: tw.div`group/container space-y-6 bg-background
 		data-[screen=fullscreen]:fixed
 		data-[screen=fullscreen]:xxl:p-10
 		data-[screen=fullscreen]:p-4

@@ -1,9 +1,10 @@
 import { DepartmentService } from '@/services/department.service'
-import { RFIDService, SearchCustOrderParams } from '@/services/rfid.service'
+import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
+import { SearchCustOrderParams } from '../_types'
 
 // * API Query Keys
 export const SHAPING_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
