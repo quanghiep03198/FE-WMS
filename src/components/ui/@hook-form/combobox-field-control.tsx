@@ -6,6 +6,8 @@ import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import {
 	ButtonProps,
 	Command,
+	CommandEmpty,
+	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
@@ -32,7 +34,11 @@ type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> =
 	datalist: Array<D>
 	disabled?: boolean
 	loading?: boolean
-	template?: React.FC<{ data: D }>
+	template?: React.FC<
+		{ data: D } & React.ComponentProps<
+			'div' extends keyof HTMLElementTagNameMap ? keyof HTMLElementTagNameMap : React.ElementType
+		>
+	>
 	shouldFilter?: boolean
 	onInput?: (value: string) => unknown
 	onSelect?: (value: string) => unknown
@@ -69,9 +75,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 
 	const id = useId()
 	const { control, getFieldState, setValue, clearErrors } = useFormContext()
+
 	const options = useMemo(() => {
 		if (!Array.isArray(data)) return []
-
 		return data.filter((option) => {
 			if (typeof shouldFilter === 'undefined' || shouldFilter === true) return true
 			return (
@@ -146,8 +152,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												<CommandLoading />
 											) : (
 												<Fragment>
-													{options.length > 0 ? (
-														options.map((option) => {
+													<CommandEmpty>No result</CommandEmpty>
+													<CommandGroup>
+														{options.map((option) => {
 															return (
 																<CommandItem
 																	key={option[valueField]}
@@ -160,7 +167,15 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																		if (typeof onSelect === 'function') onSelect(option[valueField])
 																	}}>
 																	{CommandItemTemplate ? (
-																		<CommandItemTemplate data={option} />
+																		<CommandItemTemplate
+																			data={option}
+																			onMouseEnter={(e) => {
+																				e.currentTarget.parentElement.dataset.selected = 'true'
+																			}}
+																			onMouseLeave={(e) => {
+																				e.currentTarget.parentElement.dataset.selected = 'false'
+																			}}
+																		/>
 																	) : (
 																		<Typography variant='small' className='line-clamp-1 flex-1'>
 																			{option[labelField]}
@@ -177,14 +192,8 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																	/>
 																</CommandItem>
 															)
-														})
-													) : (
-														<CommandItem
-															disabled
-															className='flex justify-center py-4 text-center text-sm'>
-															No result
-														</CommandItem>
-													)}
+														})}
+													</CommandGroup>
 												</Fragment>
 											)}
 										</CommandList>
