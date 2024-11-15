@@ -56,7 +56,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 						<Fragment>
 							<CommandGroup heading='Suggestions'>
 								{navigationConfig.slice(0, 5).map((item) => (
-									<CommandItem key={item.id} asChild>
+									<CommandItem className='!h-8 text-sm' key={item.id} asChild>
 										<Link
 											className='flex items-center gap-x-2'
 											to={item.path}
@@ -70,14 +70,14 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 							</CommandGroup>
 							<CommandSeparator />
 							<CommandGroup heading='Settings'>
-								<CommandItem asChild>
+								<CommandItem asChild className='h-8'>
 									<Link to='/preferences/account'>
 										<PersonIcon className='mr-2 h-4 w-4' />
 										<Typography variant='small'>{t('ns_common:navigation.profile')}</Typography>
 										<CommandShortcut>ctrl+alt+P</CommandShortcut>
 									</Link>
 								</CommandItem>
-								<CommandItem asChild>
+								<CommandItem asChild className='h-8'>
 									<Link to='/preferences/appearance-settings'>
 										<GearIcon className='mr-2 h-4 w-4' />
 										<Typography variant='small'>{t('ns_common:navigation.settings')}</Typography>
@@ -90,7 +90,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 						filteredItems.length > 0 && (
 							<CommandGroup heading={`${filteredItems.length} results`}>
 								{filteredItems.map((item) => (
-									<CommandItem key={item.id} asChild>
+									<CommandItem className='h-8' key={item.id} asChild>
 										<Link
 											className='flex items-center gap-x-2'
 											to={item.path}

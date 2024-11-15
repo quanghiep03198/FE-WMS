@@ -130,7 +130,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	)
 }
 
-const LogoWrapper = tw.div`space-y-0.5 transition-[width_opacity] group-data-[state=expanded]:w-auto group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0 duration-50`
+const LogoWrapper = tw.div`space-y-0.5 overflow-hidden transition-[width_opacity] group-data-[state=expanded]:w-auto group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0 duration-50`
 
 export default memo(NavSidebar)
 

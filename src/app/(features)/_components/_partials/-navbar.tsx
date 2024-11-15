@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div as='header' role='menubar' className='sticky top-0 z-40 bg-background/80 px-6 py-4 backdrop-blur sm:px-4'>
+			<Div as='header' role='menubar' className='sticky top-0 z-50 bg-background/80 px-6 py-4 backdrop-blur sm:px-4'>
 				<Div
 					as='nav'
 					role='menu'
