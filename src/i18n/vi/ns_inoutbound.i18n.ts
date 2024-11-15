@@ -35,7 +35,8 @@ export default {
 	},
 	rfid_process: {
 		production_management_inbound: 'Quét tem kho QLSX',
-		cutting_inbound: 'Quét tem pha cắt'
+		cutting_inbound: 'Quét tem pha cắt',
+		shaping_inbound: 'Quét tem định hình'
 	},
 	labels: {
 		// EPC import/export

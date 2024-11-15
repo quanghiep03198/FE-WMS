@@ -39,7 +39,7 @@ const ProcessSelect = () => {
 						</Div>
 					</SelectTrigger>
 				</HoverCardTrigger>
-				<HoverCardContent side={isSmallScreen ? 'top' : 'right'} align='start'>
+				<HoverCardContent side='bottom' align='start'>
 					<Typography variant='small'>
 						Lựa chọn công đoạn quét tem tương ứng với các bộ phận đương nhiệm
 					</Typography>
@@ -52,6 +52,9 @@ const ProcessSelect = () => {
 					</SelectItem>
 					<SelectItem key={ProducingProcessSuffix.CUTTING} value={ProducingProcessSuffix.CUTTING}>
 						{t('ns_inoutbound:rfid_process.cutting_inbound')}
+					</SelectItem>
+					<SelectItem key={ProducingProcessSuffix.CUTTING} value={ProducingProcessSuffix.CUTTING}>
+						{t('ns_inoutbound:rfid_process.shaping_inbound')}
 					</SelectItem>
 				</SelectGroup>
 			</SelectContent>

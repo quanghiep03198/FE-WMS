@@ -51,7 +51,8 @@ export default {
 	},
 	rfid_process: {
 		production_management_inbound: 'P.M Inbound',
-		cutting_inbound: 'Cutting Inbound'
+		cutting_inbound: 'Cutting Inbound',
+		shaping_inbound: 'Shaping Inbound'
 	},
 	titles: {
 		transfer_order_list: 'Transfer orders list',
