@@ -10,6 +10,7 @@ import { UseQueryResult } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
+import { format } from 'date-fns'
 import { Fragment, memo, useCallback, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -182,7 +183,11 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 			columnHelper.accessor('created', {
 				header: t('ns_common:common_fields.created_at'),
 				enableSorting: true,
-				sortingFn: fuzzySort
+				sortingFn: fuzzySort,
+				cell: ({ getValue }) => {
+					const createdAt = getValue()
+					return format(createdAt, 'yyyy-MM-dd')
+				}
 			}),
 			columnHelper.accessor('remark', {
 				header: t('ns_common:common_fields.remark'),
