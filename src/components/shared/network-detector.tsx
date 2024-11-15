@@ -35,8 +35,7 @@ export default function NetworkDetector() {
 			window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: true }))
 			toast.success('You are back to online.', {
 				id: toastRef.current,
-				icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />,
-				duration: 5000
+				icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />
 			})
 		}
 	}, [isError, isSuccess])
