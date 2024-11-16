@@ -53,7 +53,7 @@ const ProcessSelect = () => {
 					<SelectItem key={ProducingProcessSuffix.CUTTING} value={ProducingProcessSuffix.CUTTING}>
 						{t('ns_inoutbound:rfid_process.cutting_inbound')}
 					</SelectItem>
-					<SelectItem key={ProducingProcessSuffix.CUTTING} value={ProducingProcessSuffix.CUTTING}>
+					<SelectItem key={ProducingProcessSuffix.SHAPING} value={ProducingProcessSuffix.SHAPING}>
 						{t('ns_inoutbound:rfid_process.shaping_inbound')}
 					</SelectItem>
 				</SelectGroup>
