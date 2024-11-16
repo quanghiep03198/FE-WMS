@@ -48,7 +48,11 @@ jobs:
       needs: test
       steps:
          - name: Checkout code
-           uses: actions/checkout@v4
+           shell: bash
+           run: |
+              git fetch
+              git reset --hard
+              git pull origin develop --rebase
 
          - name: Load environment variables
            shell: bash
@@ -76,7 +80,11 @@ jobs:
       needs: test
       steps:
          - name: Checkout code
-           uses: actions/checkout@v4
+           shell: bash
+           run: |
+              git fetch
+              git reset --hard
+              git pull origin develop --rebase
 
          - name: Load environment variables
            shell: bash
