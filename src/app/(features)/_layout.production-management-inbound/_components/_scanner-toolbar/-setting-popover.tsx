@@ -70,9 +70,9 @@ const PollingIntervalSelector: React.FC = () => {
 				<Icon name='Zap' size={20} />
 				<Slider
 					id='polling-duration'
-					min={500}
-					max={1000}
-					step={50}
+					min={1000}
+					max={5000}
+					step={1000}
 					defaultValue={[pollingDuration]}
 					disabled={disabled}
 					onValueChange={(value) => setSettings({ ...settings, pollingDuration: value[0] })}
