@@ -1,9 +1,8 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
-import { RequestMethod } from '@/common/constants/enums'
+import { PresetBreakPoints, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
 import { IElectronicProductCode } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Typography } from '@/components/ui'
@@ -32,6 +31,8 @@ import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -71,6 +72,7 @@ const EpcDataList: React.FC = () => {
 		'setSelectedOrder',
 		'writeLog'
 	)
+	const isUltimateLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 
 	// * Abort controller to control fetch event source
 	const abortControllerRef = useRef<AbortController>(new AbortController())
@@ -321,20 +323,23 @@ const EpcDataList: React.FC = () => {
 					document.body
 				)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
-				<List ref={containerRef}>
+				<ScrollShadow
+					size={isUltimateLargeScreen ? 600 : 500}
+					ref={containerRef}
+					className='z-10 flex min-h-full w-full flex-col items-stretch divide-y divide-border overflow-y-scroll bg-background p-2 scrollbar'>
 					<Div ref={wrapperRef}>
 						{Array.isArray(virtualItems) &&
 							virtualItems.map((virtualItem) => {
 								return (
-									<ListItem
+									<Div
 										key={virtualItem.index}
-										className={cn('hover:bg-secondary')}
+										className='flex h-10 justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
 										style={{ height: VIRTUAL_ITEM_SIZE }}>
 										<Typography className='font-medium'>{virtualItem?.data?.epc}</Typography>
 										<Typography variant='small' className='capitalize text-foreground'>
 											{virtualItem?.data?.mo_no}
 										</Typography>
-									</ListItem>
+									</Div>
 								)
 							})}
 					</Div>
@@ -350,7 +355,7 @@ const EpcDataList: React.FC = () => {
 							{isFetching ? 'Loading more ...' : 'Load more'}
 						</Button>
 					)}
-				</List>
+				</ScrollShadow>
 			) : (
 				<Div className='z-10 grid h-[50dvh] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[75dvh] xxl:h-[65dvh]'>
 					<Div className='inline-flex items-center gap-x-4'>
@@ -363,8 +368,6 @@ const EpcDataList: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 min-h-full flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar h-[50dvh] xxl:h-[65dvh] group-has-[#toggle-fullscreen[data-state=checked]]:xxl:h-[75dvh]`
-const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap`
 const Alert = tw.div`fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-3`
 const AlertContent = tw.div`inline-flex flex-col`
 const AlertTitle = tw.h5`font-medium`
