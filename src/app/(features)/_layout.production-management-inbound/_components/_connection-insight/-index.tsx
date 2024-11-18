@@ -81,7 +81,7 @@ export const LatencyInsight: React.FC = () => {
 
 export const ConnectionInsight: React.FC = () => {
 	return (
-		<Div className='flex h-full min-h-10 items-center justify-around gap-x-4 rounded-md border px-4 py-2'>
+		<Div className='flex h-full items-center justify-around gap-x-4 rounded-md border px-4 py-1.5'>
 			<NetworkInsight />
 			<Separator orientation='vertical' className='w-0.5' />
 			<JobStatus />

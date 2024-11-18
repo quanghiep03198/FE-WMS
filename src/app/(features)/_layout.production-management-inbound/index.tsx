@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
-import { ConnectionInsight } from './_components/_connection-insight/-index'
 import ScannedEpcCounter from './_components/_epc-counter/-index'
 import EpcListBox from './_components/_epc-data-list/-index'
 import OrderSizeDetailTable from './_components/_manufacturing-order-detail/-order-size-table'
@@ -64,9 +63,6 @@ function Page() {
 					<PanelGroup.CounterPanel>
 						<ScannedEpcCounter />
 					</PanelGroup.CounterPanel>
-					<PanelGroup.InsightPanel>
-						<ConnectionInsight />
-					</PanelGroup.InsightPanel>
 					<PanelGroup.DataPanel>
 						<EpcListBox />
 					</PanelGroup.DataPanel>
@@ -103,8 +99,9 @@ const PanelGroup = {
 		lg:col-span-5 
 		xl:col-span-5 
 		xxl:col-span-4 	
-		lg:row-span-3
-		xl:row-span-3
+		xxl:row-span-3 	
+		lg:row-span-4
+		xl:row-span-4
 	`,
 	InsightPanel: tw.div`
 		order-2
@@ -119,6 +116,7 @@ const PanelGroup = {
 		order-3 
 		col-span-full
 		row-span-8
+		xxl:row-span-9
 		lg:col-span-5
 		xl:col-span-5
 		xxl:col-span-4

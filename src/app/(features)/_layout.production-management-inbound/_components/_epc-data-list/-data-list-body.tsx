@@ -6,6 +6,7 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
+import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { type EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import {
@@ -19,7 +20,7 @@ import {
 import { HttpStatusCode } from 'axios'
 import { omit, uniqBy } from 'lodash'
 import qs from 'qs'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -231,7 +232,9 @@ const DataListBody: React.FC = () => {
 	})
 
 	return Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
-		<List ref={containerRef}>
+		<ScrollShadow
+			ref={containerRef}
+			className='z-10 flex h-[40vh] min-h-full w-full flex-col items-stretch divide-y divide-border overflow-y-scroll bg-background p-2 scrollbar xxl:h-[45vh]'>
 			<Div ref={wrapperRef}>
 				{Array.isArray(virtualItems) &&
 					virtualItems.map((virtualItem) => {
@@ -257,7 +260,7 @@ const DataListBody: React.FC = () => {
 					{isFetching ? 'Loading more ...' : 'Load more'}
 				</Button>
 			)}
-		</List>
+		</ScrollShadow>
 	) : (
 		<Div className='z-10 grid h-[40vh] place-content-center xxl:h-[45vh]'>
 			<Div className='inline-flex items-center gap-x-4'>
@@ -268,7 +271,7 @@ const DataListBody: React.FC = () => {
 	)
 }
 
-const List = tw.div`bg-background flex w-full z-10 flex-col items-stretch divide-y divide-border overflow-y-scroll p-2 scrollbar xxl:h-[45vh] h-[40vh] min-h-full`
+const List = tw(ScrollShadow)<ScrollShadowProps>``
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap hover:bg-accent/50`
 
 export default DataListBody

@@ -20,7 +20,7 @@ interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'>
 }
 
 const ScannerToolbar: React.FC = () => {
-	const { isAuthenticated } = useAuth()
+	const { user, isAuthenticated } = useAuth()
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const {
@@ -38,7 +38,7 @@ const ScannerToolbar: React.FC = () => {
 	)
 
 	const { data: tenant } = useQuery({
-		queryKey: ['DEFAULT_TENANT'],
+		queryKey: ['DEFAULT_TENANT', user.company_code],
 		queryFn: TenancyService.getDefaultTenantByFactory,
 		refetchOnMount: 'always',
 		select: (response) => response.metadata
@@ -78,17 +78,18 @@ const ScannerToolbar: React.FC = () => {
 	return (
 		<Fragment>
 			<Div className='grid grid-cols-12 gap-x-3 sm:grid-cols-1 sm:gap-y-3 md:grid-cols-1 md:gap-y-3'>
-				<Div className='grid grid-cols-2 items-stretch gap-1 lg:col-span-5 xl:col-span-5 xxl:col-span-4'>
+				<Div className='grid grid-cols-2 gap-1 sm:grid-cols-1 lg:col-span-5 xl:col-span-5 xxl:col-span-4'>
 					<ProcessSelect />
 					<OrderFilterSelect />
 				</Div>
-				<Div className='flex items-stretch justify-end gap-1 sm:order-first sm:justify-around md:order-first md:justify-around lg:col-span-7 xl:col-span-7 xxl:col-span-8'>
+
+				<Div className='flex items-stretch justify-end gap-1 sm:order-first sm:justify-around md:order-first lg:col-span-7 xl:col-span-7 xxl:col-span-8'>
 					<Button
 						size={isSmallScreen ? 'lg' : 'default'}
 						variant='secondary'
 						disabled={scanningStatus === 'connected'}
 						onClick={handleResetScanningAction}
-						className='basis-32 sm:basis-1/2 md:basis-full'>
+						className='basis-32 sm:basis-1/2 md:basis-1/2'>
 						<Icon name='Redo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>
@@ -97,11 +98,10 @@ const ScannerToolbar: React.FC = () => {
 						disabled={!searchParams.process}
 						onClick={handleToggleScanning}
 						variant={scanningButtonProps.variant}
-						className='basis-32 sm:basis-1/2 md:basis-full'>
+						className='basis-32 sm:basis-1/2 md:basis-1/2'>
 						<Icon role='img' name={scanningButtonProps.icon} />
 						{scanningButtonProps.children}
 					</Button>
-
 					<SettingPopover />
 				</Div>
 			</Div>
