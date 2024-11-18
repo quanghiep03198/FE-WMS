@@ -51,16 +51,13 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 					onValueChange={debounce((value) => setSearchTerm(value), 200)}
 				/>
 				<CommandEmpty>No results found.</CommandEmpty>
-				<CommandList className='scrollbar sm:max-h-full'>
+				<CommandList className='scrollbar sm:max-h-full xxl:max-h-none'>
 					{!searchTerm ? (
 						<Fragment>
 							<CommandGroup heading='Suggestions'>
 								{navigationConfig.slice(0, 5).map((item) => (
-									<CommandItem className='!h-8 text-sm' key={item.id} asChild>
-										<Link
-											className='flex items-center gap-x-2'
-											to={item.path}
-											onClick={() => handleOpenChange(false)}>
+									<CommandItem asChild className='text-sm' key={item.id}>
+										<Link to={item.path} onClick={() => handleOpenChange(false)}>
 											<Icon name={item.icon} />
 											{t(item.title, { defaultValue: item.title })}
 											<CommandShortcut>{String(item.keybinding).split('.').join('+')}</CommandShortcut>
@@ -70,17 +67,17 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 							</CommandGroup>
 							<CommandSeparator />
 							<CommandGroup heading='Settings'>
-								<CommandItem asChild className='h-8'>
+								<CommandItem asChild className=''>
 									<Link to='/preferences/account'>
-										<PersonIcon className='mr-2 h-4 w-4' />
-										<Typography variant='small'>{t('ns_common:navigation.profile')}</Typography>
+										<PersonIcon />
+										<Typography>{t('ns_common:navigation.profile')}</Typography>
 										<CommandShortcut>ctrl+alt+P</CommandShortcut>
 									</Link>
 								</CommandItem>
-								<CommandItem asChild className='h-8'>
+								<CommandItem asChild className=''>
 									<Link to='/preferences/appearance-settings'>
-										<GearIcon className='mr-2 h-4 w-4' />
-										<Typography variant='small'>{t('ns_common:navigation.settings')}</Typography>
+										<GearIcon />
+										<Typography>{t('ns_common:navigation.settings')}</Typography>
 										<CommandShortcut>ctrl+alt+S</CommandShortcut>
 									</Link>
 								</CommandItem>
