@@ -1,4 +1,3 @@
-import useQueryParams from '@/common/hooks/use-query-params'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { PMInboundURLSearch } from '..'
@@ -29,12 +28,12 @@ export const useGetEpcQuery = (process: ProducingProcessSuffix) => {
 }
 
 export const useUpdateStockMutation = () => {
-	const queryClient = useQueryClient()
 	const { connection, setCurrentPage, setSelectedOrder } = usePageContext(
 		'connection',
 		'setCurrentPage',
 		'setSelectedOrder'
 	)
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG],
@@ -43,22 +42,21 @@ export const useUpdateStockMutation = () => {
 		onSuccess: () => {
 			setCurrentPage(DEFAULT_PROPS.currentPage)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			queryClient.invalidateQueries({ queryKey: [PM_EPC_LIST_PROVIDE_TAG] })
+			invalidateQueries()
 		}
 	})
 }
 
 export const useDeletePMOrderMutation = () => {
-	const { connection, selectedOrder, setCurrentPage, setSelectedOrder, setScannedEpc, setScannedOrders } =
-		usePageContext(
-			'connection',
-			'selectedOrder',
-			'setCurrentPage',
-			'setSelectedOrder',
-			'setScannedEpc',
-			'setScannedOrders'
-		)
-	const { searchParams } = useQueryParams<PMInboundURLSearch>()
+	const { connection, setCurrentPage, setSelectedOrder } = usePageContext(
+		'connection',
+		'setCurrentPage',
+		'setSelectedOrder',
+		'setScannedEpc',
+		'setScannedOrders'
+	)
+	// const { searchParams } = useQueryParams<PMInboundURLSearch>()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationKey: [PM_EPC_LIST_PROVIDE_TAG],
@@ -68,18 +66,21 @@ export const useDeletePMOrderMutation = () => {
 		},
 		onSuccess: async () => {
 			setCurrentPage(DEFAULT_PROPS.currentPage)
-			if (selectedOrder !== DEFAULT_PROPS.selectedOrder) {
-				setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-				return
-			}
-
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			const { metadata } = await RFIDService.fetchPMData(connection, {
-				page: DEFAULT_PROPS.currentPage,
-				...searchParams
-			})
-			setScannedEpc(metadata?.epcs)
-			setScannedOrders(metadata?.orders)
+			invalidateQueries()
 		}
 	})
+}
+
+const useInvalidateQueries = () => {
+	const queryClient = useQueryClient()
+
+	return () => {
+		queryClient.invalidateQueries({
+			queryKey: [PM_EPC_LIST_PROVIDE_TAG],
+			exact: false,
+			type: 'all',
+			refetchType: 'all'
+		})
+	}
 }

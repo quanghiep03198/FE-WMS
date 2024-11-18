@@ -2,12 +2,12 @@ import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRo
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { usePageContext } from '../../_contexts/-page-context'
+import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import TableDataRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedOrders } = usePageContext('scannedOrders')
+	const { scannedOrders, selectedOrder } = usePageContext('scannedOrders', 'selectedOrder')
 
 	return (
 		<Div className='relative h-[60vh] min-h-full divide-y overflow-auto rounded-lg border group-data-[screen=fullscreen]/container:h-[85vh] xxl:h-[80vh]'>
@@ -41,9 +41,13 @@ const OrderSizeDetailTable: React.FC = () => {
 				</TableHeader>
 				<TableBody className='[&_tr]:snap-start'>
 					{scannedOrders?.length > 0 ? (
-						scannedOrders.map((item) => {
-							return <TableDataRow key={item.mo_no} data={item} />
-						})
+						scannedOrders
+							.filter((item) => {
+								return selectedOrder === DEFAULT_PROPS.selectedOrder ? true : item.mo_no === selectedOrder
+							})
+							.map((item) => {
+								return <TableDataRow key={item.mo_no} data={item} />
+							})
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className='text-muted-foreground group-hover:!bg-background'>
