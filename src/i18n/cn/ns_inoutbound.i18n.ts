@@ -43,8 +43,8 @@ export default {
 	},
 	rfid_process: {
 		production_management_inbound: '生产管理入库',
-		cutting_inbound: '裁剪入库',
-		shaping_inbound: '成型入库'
+		cutting_inbound: '裁断入库',
+		shaping_inbound: '定型入库 '
 	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: '未審核',

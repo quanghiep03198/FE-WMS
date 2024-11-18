@@ -4,7 +4,8 @@ export default {
 		username: 'User name',
 		password: 'Password',
 		remember_account: 'Remember me',
-		forgot_password: 'Forgot your password?'
+		forgot_password: 'Forgot your password?',
+		logged_in_with: 'Logged in with'
 	},
 	texts: {
 		title: 'Sign in to your account',

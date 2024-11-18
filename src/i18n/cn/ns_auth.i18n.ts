@@ -3,7 +3,8 @@ export default {
 		username: '账号',
 		password: '密码',
 		remember_account: '记住我',
-		forgot_password: '忘记密码?'
+		forgot_password: '忘记密码?',
+		logged_in_with: '已登入'
 	},
 	texts: {
 		title: '登入系统',

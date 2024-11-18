@@ -4,7 +4,8 @@ export default {
 		username: 'Tài khoản',
 		password: 'Mật khẩu',
 		remember_account: 'Ghi nhớ tài khoản',
-		forgot_password: 'Quên mật khẩu?'
+		forgot_password: 'Quên mật khẩu?',
+		logged_in_with: 'Đã đăng nhập vào'
 	},
 	texts: {
 		title: 'Đăng nhập vào hệ thống',
