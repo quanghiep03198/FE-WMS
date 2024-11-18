@@ -31,7 +31,7 @@ module.exports = {
 				'1/12': '`${(1 / 12) * 100}%`'
 			},
 			fontFamily: {
-				noto: 'Noto Sans SC, sans-serif '
+				jetbrains: 'JetBrains Mono, monospace'
 			},
 			colors: {
 				active: 'hsl(var(--active))',
@@ -167,6 +167,22 @@ module.exports = {
 						height: '0'
 					}
 				},
+				fadeIn: {
+					from: { transform: 'scale(0.95)', opacity: 0 },
+					to: {
+						transform: 'scale(1)',
+						opacity: '1'
+					}
+				},
+
+				slideIn: {
+					from: {
+						transform: 'translate3d(0,-100%,0)'
+					},
+					to: {
+						transform: 'translateZ(0)'
+					}
+				},
 				shimmer: {
 					from: {
 						backgroundPosition: '0 0'
@@ -176,11 +192,11 @@ module.exports = {
 					}
 				},
 				spotlight: {
-					'0%': {
+					from: {
 						opacity: '0',
 						transform: 'translate(-75%, -60%) scale(0.5)'
 					},
-					'100%': {
+					to: {
 						opacity: '1',
 						transform: 'translate(-50%,-40%) scale(1)'
 					}
@@ -193,6 +209,8 @@ module.exports = {
 				'collapsible-down': 'collapsible-down 0.2s ease-out',
 				'collapsible-up-reverse': 'collapsible-up-reverse 0.2s ease-out',
 				'collapsible-down-reverse': 'collapsible-down-reverse 0.2s ease-out',
+				'fade-in': 'fadeIn .5s cubic-bezier(.25,.25,0,1) .5s both!important',
+				'slide-in': 'slideIn .3s ease-out 0.75s both',
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
 				shimmer: 'shimmer 1.5s linear infinite'
 			}
