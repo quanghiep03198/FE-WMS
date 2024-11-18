@@ -1,9 +1,21 @@
+import { useGetUserCompany } from '@/app/(auth)/_apis/department.api'
+import AppLogo from '@/app/_components/_shared/-app-logo'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
+import { cn } from '@/common/utils/cn'
 import {
+	Button,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 	Icon,
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupLabel,
 	SidebarHeader,
@@ -12,24 +24,21 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 	SidebarSeparator,
-	Typography,
 	useSidebar
 } from '@/components/ui'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
 import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
-import { memo, useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import tw from 'tailwind-styled-components'
-import AppLogo from '../../../_components/_shared/-app-logo'
 
 type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
-	const { user } = useAuth()
 
 	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
 		() => ({
@@ -48,6 +57,10 @@ const NavSidebar: React.FC = () => {
 		keyCallbackMap[key]()
 	})
 
+	const isUltimateLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+
+	const mainMenuSize = useMemo(() => (isUltimateLargeScreen ? 384 : 320), [isUltimateLargeScreen])
+
 	const mainMenu = useMemo(() => {
 		return navigationConfig.filter((item) => item.type === 'main')
 	}, [])
@@ -64,29 +77,22 @@ const NavSidebar: React.FC = () => {
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon' className='z-50 !bg-background'>
-			<SidebarHeader className='py-4'>
-				<Link
-					to='/dashboard'
-					preload='intent'
-					className='flex items-center gap-x-3 group-data-[state=expanded]:gap-x-3 xl:gap-x-0'>
-					<Icon name='Boxes' className='size-9 stroke-primary stroke-[1px] transition-all duration-200' />
-					<LogoWrapper>
-						<AppLogo />
-						<Typography variant='small' className='text-xs text-muted-foreground'>
-							{user?.company_name}
-						</Typography>
-					</LogoWrapper>
+			<SidebarHeader className='overflow-hidden'>
+				<Link to='/dashboard' preload='intent'>
+					<AppLogo />
 				</Link>
 			</SidebarHeader>
 
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>Main</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Main menu'>
-						{mainMenu.map((item) => (
-							<SidebarMenuLink key={item.id} {...item} />
-						))}
-					</SidebarMenu>
+					<ScrollShadow size={mainMenuSize}>
+						<SidebarMenu role='menu' aria-label='Main menu'>
+							{mainMenu.map((item) => (
+								<SidebarMenuLink key={item.id} {...item} />
+							))}
+						</SidebarMenu>
+					</ScrollShadow>
 				</SidebarGroup>
 				<SidebarSeparator />
 				<SidebarGroup>
@@ -98,6 +104,9 @@ const NavSidebar: React.FC = () => {
 					</SidebarMenu>
 				</SidebarGroup>
 			</SidebarContent>
+			<SidebarFooter>
+				<SwitchUserCompany />
+			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>
 	)
@@ -130,30 +139,46 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	)
 }
 
-const LogoWrapper = tw.div`space-y-0.5 overflow-hidden transition-[width_opacity] group-data-[state=expanded]:w-auto group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0 duration-50`
+const SwitchUserCompany: React.FC = () => {
+	const { user, setUserCompany } = useAuth()
+	const { data } = useGetUserCompany()
+	const { t } = useTranslation()
+	const { open } = useSidebar()
 
-export default memo(NavSidebar)
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant='outline'
+					size={open ? 'default' : 'icon'}
+					className={cn(open ? 'justify-start' : 'size-8')}>
+					<Icon name='Factory' role='img' />
+					{open && (
+						<Fragment>
+							{user?.company_name}
+							<Icon name='ChevronsUpDown' role='img' className='ml-auto' />
+						</Fragment>
+					)}
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent
+				className='w-[var(--radix-dropdown-menu-trigger-width)] min-w-60'
+				side={open ? 'top' : 'right'}
+				align='end'>
+				<DropdownMenuLabel>{t('ns_company:company')}</DropdownMenuLabel>
+				<DropdownMenuSeparator />
+				{Array.isArray(data) &&
+					data.map((item) => (
+						<DropdownMenuCheckboxItem
+							key={item.company_code}
+							checked={user.company_code === item.company_code}
+							onCheckedChange={() => setUserCompany(item)}>
+							{item.company_name}
+						</DropdownMenuCheckboxItem>
+					))}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
 
-/**
-	 @deprecated	
-		const mainMenuRef = useRef<typeof SidebarMenu.prototype>(null)
-		const mainMenuScroll = useScroll(mainMenuRef)
-		const isScrolledToTop = mainMenuScroll?.top === 0
-		const isScrolledToBottom =
-		mainMenuRef.current?.scrollHeight - mainMenuRef.current?.scrollTop - mainMenuRef.current?.clientHeight < 1
-		const isScrollTopBottom = !isScrolledToTop && !isScrolledToBottom
-
-		* * This is a sample code for handling scroll event on the sidebar menu
-		<SidebarMenu>
-			style={{ '--scroll-shadow-size': '320px' } as React.CSSProperties}
-			data-top-scroll={isScrolledToTop}
-			data-bottom-scroll={isScrolledToBottom}
-			data-top-bottom-scroll={isScrollTopBottom}
-			className={cn(
-				'h-[var(--scroll-shadow-size)] overflow-y-auto transition-colors duration-200 !scrollbar-none',
-				'data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/2),transparent)]',
-				'data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/2),transparent)]',
-				'data-[top-bottom-scroll=true]:[mask-image:linear-gradient(180deg,transparent,hsl(var(--sidebar-background))_calc(var(--scroll-shadow-size)/4),hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]'
-				)}
-		</SidebarMenu>
-*/
+export default NavSidebar
