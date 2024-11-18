@@ -1,13 +1,14 @@
 import { useInViewport, useMemoizedFn } from 'ahooks'
 import { MutableRefObject, createContext, useContext, useRef, useState } from 'react'
 import CTASection from '../_components/-cta-section'
+import CTA2Section from '../_components/-cta2-section'
 import FAQsSection from '../_components/-faq-section'
 import FeaturesSection from '../_components/-features-section'
 import SupportSection from '../_components/-support-section'
 
 type TNavigationLink = {
 	title: string
-	href: 'cta' | 'company' | 'outstanding-features' | 'support' | 'faqs'
+	href: string
 	SectionComponent: React.FunctionComponent
 }
 
@@ -29,6 +30,11 @@ export const navigationConfig: TNavigationLink[] = [
 		title: 'Features',
 		href: 'outstanding-features',
 		SectionComponent: FeaturesSection
+	},
+	{
+		title: 'Deployment',
+		href: 'high-availability',
+		SectionComponent: CTA2Section
 	},
 	{
 		title: 'FAQs',

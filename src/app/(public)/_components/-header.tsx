@@ -6,9 +6,7 @@ import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import env from '@/common/utils/env'
 import {
-	Badge,
 	Button,
 	Div,
 	Icon,
@@ -26,14 +24,16 @@ import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
 	return (
-		<Div className='sticky top-0 z-20 h-16 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
+		<Div className='sticky top-0 z-20 h-20 border-b bg-gradient-to-r from-transparent via-background/95 to-transparent backdrop-blur-sm'>
 			<Div
 				as='nav'
 				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
 				aria-label='Global'>
 				<Div className='inline-flex items-center gap-x-2'>
 					<NavHeaderDrawerMenu />
-					<NavHeaderLogo />
+					<Link to='/' className='group' data-state='expanded'>
+						<AppLogo />
+					</Link>
 				</Div>
 				<NavHeaderMenu />
 				<NavHeaderActions />
@@ -43,19 +43,7 @@ const Header: React.FunctionComponent = () => {
 }
 
 const NavHeaderLogo: React.FC = memo(() => {
-	return (
-		<Div className='flex items-center gap-x-3'>
-			<Icon name='Boxes' strokeWidth={1} stroke='hsl(var(--primary))' size={28} />
-			<Link
-				to='/'
-				className='inline-flex items-center gap-x-3 text-xs font-bold transition-colors duration-200 hover:text-primary'>
-				i-WMS
-			</Link>
-			<Badge variant='default' className='select-none'>
-				{env('VITE_APP_VERSION')}
-			</Badge>
-		</Div>
-	)
+	return <Div className='flex items-center gap-x-3'></Div>
 })
 
 const NavHeaderMenu: React.FC = memo(() => {

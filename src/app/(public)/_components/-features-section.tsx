@@ -29,7 +29,7 @@ const mainFeatures: Array<FeatureItemProps> = [
 
 const FeaturesSection: React.FunctionComponent = () => {
 	return (
-		<Div className='space-y-16 sm:space-y-8' id='outstanding-features' as='section'>
+		<Div className='flex flex-col justify-center space-y-16 sm:space-y-8' id='outstanding-features' as='section'>
 			<Div className='max-w-4xl space-y-1.5 text-left sm:text-center'>
 				<Typography color='primary' variant='small' className='!text-base font-medium sm:text-sm sm:font-normal'>
 					No more paperwork
