@@ -1,13 +1,12 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/step'
-import { CompanyService } from '@/services/company.service'
-import { useQuery } from '@tanstack/react-query'
 import { pick } from 'lodash'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { useGetUserCompany } from '../../_apis/department.api'
 
 type FormValues = { company_code: string }
 
@@ -20,19 +19,7 @@ const WorkplaceSelectionForm: React.FC = () => {
 	const form = useForm<FormValues>()
 	const companyCode = form.watch('company_code')
 
-	const { data, isFetching } = useQuery({
-		queryKey: [COMPANY_PROVIDE_TAG],
-		queryFn: () => CompanyService.getCompanies(),
-		enabled: !!token,
-		select: (data) => {
-			return Array.isArray(data.metadata)
-				? data.metadata.map((item) => ({
-						...item,
-						company_name: t(`ns_company:factories.${item.factory_code}`, { defaultValue: item.factory_code })
-					}))
-				: []
-		}
-	})
+	const { data, isFetching } = useGetUserCompany()
 
 	const selectedCompany = useMemo(() => {
 		if (!Array.isArray(data)) return null

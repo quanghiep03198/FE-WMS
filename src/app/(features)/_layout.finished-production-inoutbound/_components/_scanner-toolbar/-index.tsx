@@ -31,8 +31,9 @@ interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'>
 }
 
 const ScannerToolbar: React.FC = () => {
-	const { isAuthenticated } = useAuth()
+	const { user, isAuthenticated } = useAuth()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+
 	const { t, i18n } = useTranslation()
 	const {
 		scanningStatus,
@@ -50,7 +51,7 @@ const ScannerToolbar: React.FC = () => {
 	)
 
 	const { data: tenants } = useQuery({
-		queryKey: ['TENANCY'],
+		queryKey: ['TENANCY', user.company_code],
 		queryFn: TenancyService.getTenantsByFactory,
 		select: (response) => response.metadata,
 		refetchOnMount: 'always'
