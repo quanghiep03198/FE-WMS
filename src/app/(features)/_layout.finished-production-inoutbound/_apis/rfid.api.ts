@@ -1,3 +1,4 @@
+import { useAuth } from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -45,9 +46,10 @@ export const useGetOrderDetail = () => {
 
 export const useSearchOrderQuery = (params: SearchCustOrderParams) => {
 	const { connection } = usePageContext('connection')
+	const { user } = useAuth()
 
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER'],
+		queryKey: ['EXCHANGABLE_ORDER', user?.company_code],
 		queryFn: async () => await RFIDService.searchExchangableOrder(connection, params),
 		enabled: false,
 		select: (response) => response.metadata
