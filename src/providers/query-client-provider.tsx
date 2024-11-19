@@ -37,6 +37,6 @@ export const QueryClientProvider: React.FC<React.PropsWithChildren> = ({ childre
 		client={queryClient}
 		persistOptions={{ persister: localStoragePersister, maxAge: +env('VITE_DEFAULT_TTL', 30_000) }}>
 		{children}
-		<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-left' />
+		<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-right' />
 	</PersistQueryClientProvider>
 )
