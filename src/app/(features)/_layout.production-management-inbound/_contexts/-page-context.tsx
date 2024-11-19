@@ -9,12 +9,6 @@ import { useShallow } from 'zustand/react/shallow'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
 
-// export type Log = {
-// 	message: string
-// 	timestamp?: Date
-// 	type: 'info' | 'error'
-// }
-
 type PageContextStore = {
 	currentPage: number | null
 	scannedEpc: Pagination<Pick<IElectronicProductCode, 'epc' | 'mo_no'>>
@@ -35,7 +29,7 @@ export const DEFAULT_PROPS: Pick<
 	PageContextStore,
 	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scanningStatus' | 'connection' | 'selectedOrder'
 > = {
-	currentPage: null,
+	currentPage: 1,
 	scanningStatus: undefined,
 	connection: '',
 	selectedOrder: 'all',
