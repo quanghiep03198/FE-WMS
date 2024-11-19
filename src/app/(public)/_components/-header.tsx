@@ -42,10 +42,6 @@ const Header: React.FunctionComponent = () => {
 	)
 }
 
-const NavHeaderLogo: React.FC = memo(() => {
-	return <Div className='flex items-center gap-x-3'></Div>
-})
-
 const NavHeaderMenu: React.FC = memo(() => {
 	const { activeMenu, handleMenuClick } = usePageContext()
 
@@ -115,8 +111,7 @@ const NavHeaderDrawerMenu: React.FC = memo(() => {
 			</SheetTrigger>
 			<SheetContent className='max-w-sm'>
 				<SheetHeader>
-					<Link to='/' className='inline-flex items-center gap-x-3'>
-						<Icon name='Boxes' strokeWidth={1} stroke='hsl(var(--primary))' size={24} />
+					<Link to='/' className='text-left'>
 						<AppLogo />
 					</Link>
 				</SheetHeader>

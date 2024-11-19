@@ -1,3 +1,5 @@
+import GlobeDarkerImage from '@/assets/images/svgs/globe-darker.svg'
+import GlobeImage from '@/assets/images/svgs/globe.svg'
 import { cn } from '@/common/utils/cn'
 import { HoverCard, HoverCardContent, HoverCardTrigger, Icon } from '@/components/ui'
 import { useInViewport } from 'ahooks'
@@ -18,31 +20,15 @@ const DeploymentGlobe: React.FC = () => {
 					'absolute left-[25%] top-[2%] z-20 flex h-auto w-[60%] flex-1 animate-[fadeIn_0.5s_cubic-bezier(.25,.25,0,1)_0.2s_both] items-center justify-center opacity-0 sm:left-[34%] sm:top-[6%] sm:w-[35%] md:left-[33.5%] md:top-[6%] md:w-[35%] lg:left-[26%] lg:top-[3%] lg:w-[52%] xl:left-[28%] xl:top-[3%] xl:w-[48%] 2xl:left-[32%] 2xl:top-[3%] 2xl:w-[40%]',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}>
-				<button className='group flex w-full items-center gap-1 gap-x-3 rounded-xl border border-primary/60 bg-transparent px-3 py-2 transition-colors duration-200 hover:border-primary sm:gap-2'>
+				<button className='group flex w-full min-w-64 -translate-y-1.5 items-center gap-1 gap-x-3 rounded-lg border border-primary/60 bg-transparent px-3 py-2 transition-colors duration-200 hover:border-primary sm:-translate-y-1/2 sm:gap-2 md:-translate-y-1/2'>
 					<div
 						className={cn(
-							'flex flex-1 animate-[fadeIn_0.5s_cubic-bezier(.25,.25,0,1)_0.5s_both] items-center gap-x-2 text-left font-mono text-xs text-foreground opacity-0 md:text-sm',
+							'flex flex-1 animate-[fadeIn_0.5s_cubic-bezier(.25,.25,0,1)_0.5s_both] items-center gap-x-2 whitespace-nowrap text-left font-mono text-xs text-foreground opacity-0 md:text-sm',
 							inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 						)}>
 						<Icon name='Globe' />
 						Available in 2 regions
 					</div>
-					{/* <div className='rounded p-1.5 text-foreground opacity-0 transition-opacity group-hover:opacity-100'>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								width='24'
-								height='24'
-								viewBox='0 0 24 24'
-								fill='none'
-								stroke='currentColor'
-								strokeWidth='2'
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								className='lucide lucide-copy h-3.5 w-3.5'>
-								<rect width='14' height='14' x='8' y='8' rx='2' ry='2'></rect>
-								<path d='M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2'></path>
-							</svg>
-						</div> */}
 				</button>
 			</div>
 			<svg
@@ -187,8 +173,8 @@ const DeploymentGlobe: React.FC = () => {
 				decoding='async'
 				data-nimg='1'
 				className='block h-full w-full dark:hidden'
-				srcSet='https://supabase.com/_next/image?url=%2Fimages%2Fproduct%2Ffunctions%2Fglobe-light.svg&w=640&q=100'
-				src='https://supabase.com/_next/image?url=%2Fimages%2Fproduct%2Ffunctions%2Fglobe-light.svg&w=640&q=100'
+				srcSet={GlobeImage}
+				src={GlobeImage}
 				style={{ color: 'transparent' }}
 			/>
 			<img
@@ -199,8 +185,8 @@ const DeploymentGlobe: React.FC = () => {
 				decoding='async'
 				data-nimg='1'
 				className='hidden h-full w-full dark:block'
-				srcSet='https://supabase.com/_next/image?url=%2Fimages%2Fproduct%2Ffunctions%2Fglobe-light.svg&w=640&q=100'
-				src='https://supabase.com/_next/image?url=%2Fimages%2Fproduct%2Ffunctions%2Fglobe.svg&w=640&q=100'
+				srcSet={GlobeDarkerImage}
+				src={GlobeDarkerImage}
 				style={{ color: 'transparent' }}
 			/>
 		</div>

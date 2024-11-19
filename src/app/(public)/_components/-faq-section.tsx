@@ -1,6 +1,19 @@
-import FAQsImage from '@/assets/images/svgs/faq-card.svg'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Div, Typography } from '@/components/ui'
-import tw from 'tailwind-styled-components'
+import { generateAvatar } from '@/common/utils/generate-avatar'
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+	Avatar,
+	AvatarImage,
+	Div,
+	Typography
+} from '@/components/ui'
+import ChatBubble from '@/components/ui/@custom/chat-bubble'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useInViewport } from 'ahooks'
+import { Fragment, useRef } from 'react'
+import { usePageContext } from '../_contexts/-page-context'
 
 const faqs = [
 	{
@@ -30,12 +43,18 @@ const faqs = [
 ]
 
 const FAQsSection: React.FunctionComponent = () => {
+	const ref = useRef<HTMLDivElement>(null)
+	const pageContext = usePageContext()
+	const [inViewport] = useInViewport(ref, {
+		root: () => pageContext?.contentScrollRef?.current
+	})
+
 	return (
-		<Div className='flex w-full flex-grow flex-col-reverse items-start gap-10 lg:flex-row xl:flex-row xl:gap-20'>
+		<Div className='flex w-full flex-grow flex-col-reverse items-start gap-10 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'>
 			<Div
 				id='faqs'
 				as='section'
-				className='w-full basis-full space-y-16 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
+				className='w-full basis-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
 				<Typography variant='h3' className='sm:text-xl'>
 					Frequently asked questions
 				</Typography>
@@ -50,13 +69,52 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex w-full flex-grow basis-1/3 items-center justify-center sm:basis-full md:basis-full'>
-				<Image src={FAQsImage} alt='Support' width='320' height='320' />
+			<Div className='flex h-[32rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border sm:h-[24rem] sm:basis-full md:h-[24rem] md:basis-full'>
+				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
+					<Div className='size-3 rounded-full bg-muted-foreground' />
+					<Div className='size-3 rounded-full bg-muted-foreground' />
+					<Div className='size-3 rounded-full bg-muted-foreground' />
+				</Div>
+				<Typography className='py-2 text-center font-medium'>FAQs</Typography>
+				<ScrollShadow size={200} ref={ref} className='flex flex-1 flex-col gap-y-3 p-4'>
+					{faqs.map((faq, index) => (
+						<Fragment key={index}>
+							<Div
+								className='flex-rows inline-flex animate-fly-in items-end gap-x-1 place-self-start text-sm opacity-0'
+								style={{
+									animationDelay: `${index + 0.5}s`,
+									animationFillMode: 'both',
+									animationPlayState: inViewport ? 'running' : 'paused'
+								}}>
+								<Avatar>
+									<Avatar>
+										<AvatarImage src={generateAvatar({ name: 'Q' })} />
+									</Avatar>
+								</Avatar>
+								<ChatBubble variant='secondary' side='right'>
+									{faq.question}
+								</ChatBubble>
+							</Div>
+							<Div
+								className='inline-flex animate-fly-in flex-row-reverse place-content-end items-end gap-x-1 text-sm opacity-0'
+								style={{
+									animationDelay: `${index + 1}s`,
+									animationFillMode: 'both',
+									animationPlayState: inViewport ? 'running' : 'paused'
+								}}>
+								<Avatar className='animate-fade-in'>
+									<AvatarImage src={generateAvatar({ name: 'A' })} />
+								</Avatar>
+								<ChatBubble variant='primary' side='left'>
+									{faq.answer}
+								</ChatBubble>
+							</Div>
+						</Fragment>
+					))}
+				</ScrollShadow>
 			</Div>
 		</Div>
 	)
 }
-
-const Image = tw.img`max-w-md sm:max-w-[256px] md:max-w-xs lg:max-w-xs w-full object-cover object-center`
 
 export default FAQsSection
