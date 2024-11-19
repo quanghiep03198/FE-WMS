@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { useScroll, useSize } from 'ahooks'
-import React, { forwardRef, useEffect, useRef } from 'react'
+import { useScroll, useUpdate } from 'ahooks'
+import React, { forwardRef, memo, useEffect, useRef } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {
 	/**
@@ -11,12 +11,11 @@ export interface ScrollShadowProps extends React.PropsWithChildren, React.Compon
 }
 
 const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320, className, children }, ref) => {
-	const [isScrollable, setIsScrollable] = React.useState(false)
+	const update = useUpdate()
 	const localContainerRef = useRef<HTMLDivElement>(null)
 	const resolvedRef = (ref ?? localContainerRef) as React.MutableRefObject<HTMLDivElement>
 
 	const containerScroll = useScroll(resolvedRef)
-	const _size = useSize(() => resolvedRef.current)
 
 	const scrollHeight = resolvedRef.current?.scrollHeight ?? 0
 	const scrollTop = resolvedRef.current?.scrollTop ?? 0
@@ -26,9 +25,9 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320
 	const isScrolledToBottom = scrollHeight - scrollTop - scrollClientHeight < 1
 	const isScrollTopBottom = !isScrolledToTop && !isScrolledToBottom
 
-	useEffect(() => {
-		setIsScrollable(scrollHeight > scrollClientHeight)
-	}, [_size])
+	const isScrollable = scrollHeight > scrollClientHeight
+
+	useEffect(update, [children])
 
 	return (
 		<div
@@ -49,4 +48,4 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320
 	)
 })
 
-export default ScrollShadow
+export default memo(ScrollShadow)
