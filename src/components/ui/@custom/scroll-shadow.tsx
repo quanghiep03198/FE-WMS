@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { useScroll } from 'ahooks'
-import React, { forwardRef, useRef } from 'react'
+import { useScroll, useSize } from 'ahooks'
+import React, { forwardRef, useEffect, useRef } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {
 	/**
@@ -11,22 +11,32 @@ export interface ScrollShadowProps extends React.PropsWithChildren, React.Compon
 }
 
 const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320, className, children }, ref) => {
+	const [isScrollable, setIsScrollable] = React.useState(false)
 	const localContainerRef = useRef<HTMLDivElement>(null)
 	const resolvedRef = (ref ?? localContainerRef) as React.MutableRefObject<HTMLDivElement>
 
 	const containerScroll = useScroll(resolvedRef)
+	const _size = useSize(() => resolvedRef.current)
+
+	const scrollHeight = resolvedRef.current?.scrollHeight ?? 0
+	const scrollTop = resolvedRef.current?.scrollTop ?? 0
+	const scrollClientHeight = resolvedRef.current?.clientHeight ?? 0
+
 	const isScrolledToTop = containerScroll?.top === 0
-	const isScrolledToBottom =
-		resolvedRef.current?.scrollHeight - resolvedRef.current?.scrollTop - resolvedRef.current?.clientHeight < 1
+	const isScrolledToBottom = scrollHeight - scrollTop - scrollClientHeight < 1
 	const isScrollTopBottom = !isScrolledToTop && !isScrolledToBottom
+
+	useEffect(() => {
+		setIsScrollable(scrollHeight > scrollClientHeight)
+	}, [_size])
 
 	return (
 		<div
 			ref={resolvedRef}
 			style={{ '--scroll-shadow-size': typeof size === 'number' ? `${size}px` : size } as React.CSSProperties}
-			data-top-scroll={isScrolledToTop}
-			data-bottom-scroll={isScrolledToBottom}
-			data-top-bottom-scroll={isScrollTopBottom}
+			data-top-scroll={isScrollable && isScrolledToTop}
+			data-bottom-scroll={isScrollable && isScrolledToBottom}
+			data-top-bottom-scroll={isScrollable && isScrollTopBottom}
 			className={cn(
 				className,
 				'h-[var(--scroll-shadow-size)] overflow-y-auto transition-colors duration-200 !scrollbar-none',
