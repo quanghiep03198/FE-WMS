@@ -21,7 +21,7 @@ import { TenancyService } from '@/services/tenancy.service'
 import { HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
-import React, { Fragment, useCallback, useMemo } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -40,14 +40,16 @@ const ScannerToolbar: React.FC = () => {
 		connection,
 		reset: resetScanningAction,
 		setConnection,
-		handleToggleScanning
+		handleToggleScanning,
+		reset: resetScanner
 	} = usePageContext(
 		'scanningStatus',
 		'connection',
 		'reset',
 		'setScanningStatus',
 		'setConnection',
-		'handleToggleScanning'
+		'handleToggleScanning',
+		'reset'
 	)
 
 	const { data: tenants } = useQuery({
@@ -59,8 +61,12 @@ const ScannerToolbar: React.FC = () => {
 
 	const queryClient = useQueryClient()
 
-	// Blocking navigation on reading EPC or unsave changes
-	const { proceed, reset, status } = useBlocker({
+	useEffect(() => {
+		resetScanner()
+	}, [user?.company_code])
+
+	// * Blocking navigation on reading EPC or unsave changes
+	const blocker = useBlocker({
 		condition: typeof scanningStatus !== 'undefined' && isAuthenticated
 	})
 
@@ -71,8 +77,8 @@ const ScannerToolbar: React.FC = () => {
 			return { children: t('ns_common:actions.disconnect'), variant: 'destructive', icon: 'Unplug' }
 	}, [scanningStatus, i18n.language])
 
-	const handleReset = useCallback(reset, [status])
-	const handleProceed = useCallback(proceed, [status])
+	const handleReset = useCallback(blocker.reset, [blocker.status])
+	const handleProceed = useCallback(blocker.proceed, [blocker.status])
 
 	const handleResetScanningAction = () => {
 		queryClient.removeQueries({
@@ -135,7 +141,7 @@ const ScannerToolbar: React.FC = () => {
 				</Div>
 			</Div>
 			<ConfirmDialog
-				open={status === 'blocked'}
+				open={blocker.status === 'blocked'}
 				onOpenChange={handleReset}
 				title={t('ns_inoutbound:notification.navigation_blocked_message')}
 				description={t('ns_inoutbound:notification.navigation_blocked_caption')}

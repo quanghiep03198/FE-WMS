@@ -153,7 +153,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										</TableHead>
 									</TableRow>
 								</TableHeader>
-								<TableBody className='[&_tr]:snap-start'>
+								<TableBody>
 									{scannedOrders.map((order) => {
 										return <TableDataRow key={order.mo_no} data={order} />
 									})}
