@@ -174,7 +174,16 @@ module.exports = {
 						opacity: '1'
 					}
 				},
-
+				flyIn: {
+					from: {
+						transform: 'translateY(80%) scale(0.8)',
+						opacity: 0
+					},
+					to: {
+						transform: 'translateY(0) scale(1)',
+						opacity: 1
+					}
+				},
 				slideIn: {
 					from: {
 						transform: 'translate3d(0,-100%,0)'
@@ -211,6 +220,7 @@ module.exports = {
 				'collapsible-down-reverse': 'collapsible-down-reverse 0.2s ease-out',
 				'fade-in': 'fadeIn .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				'slide-in': 'slideIn .3s ease-out 0.75s both',
+				'fly-in': 'flyIn 0.5s cubic-bezier(.5,.5,0,1)',
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
 				shimmer: 'shimmer 1.5s linear infinite'
 			}
