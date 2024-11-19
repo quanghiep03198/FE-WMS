@@ -40,7 +40,9 @@ export default {
 			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
 		},
 		exchange_order_caution:
-			'The action of swapping production orders cannot be undone. Please make sure to confirm your changes before proceeding.'
+			'The action of swapping production orders cannot be undone. Please make sure to confirm your changes before proceeding.',
+		invalid_epc_deteted:
+			'Invalid EPC detected. Please contact to shaping department for this issue, then move them to recycle'
 	},
 
 	order_status: {

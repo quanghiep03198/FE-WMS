@@ -31,7 +31,9 @@ export default {
 			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
 		},
 		exchange_order_caution:
-			'Sau khi đổi chỉ lệnh sẽ không thể thao tác đổi ngược lại, hãy chắc chắn trước khi bấm xác nhận đổi chỉ lệnh.'
+			'Sau khi đổi chỉ lệnh sẽ không thể thao tác đổi ngược lại, hãy chắc chắn trước khi bấm xác nhận đổi chỉ lệnh.',
+		invalid_epc_deteted:
+			'EPC không hợp lệ được phát hiện. Vui lòng liên hệ với bộ phận định hình để giải quyết vấn đề này, sau đó chuyển chúng đến tái chế'
 	},
 	rfid_process: {
 		production_management_inbound: 'Quét tem kho QLSX',

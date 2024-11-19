@@ -21,7 +21,6 @@ export default {
 		transfer_information: '转仓信息',
 		exchange_all: '全部交换'
 	},
-
 	inoutbound_actions: {
 		normal_import: '正常入庫',
 		normal_export: '正常出庫',
@@ -39,7 +38,8 @@ export default {
 			title: '您確定要刪除此命令嗎 ?',
 			description: '如果您刪除它, 則必須重新執行EPC掃描操作.'
 		},
-		exchange_order_caution: '操作后不能还原，确定要换指令？'
+		exchange_order_caution: '操作后不能还原，确定要换指令？',
+		invalid_epc_deteted: '检测到无效的EPC。请联系成型部门解决此问题, 然后将其移至回收'
 	},
 	rfid_process: {
 		production_management_inbound: '生产管理入库',
