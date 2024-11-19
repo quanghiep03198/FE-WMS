@@ -29,8 +29,9 @@ import {
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
+import { useQueryClient } from '@tanstack/react-query'
 import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
-import { useKeyPress } from 'ahooks'
+import { useKeyPress, useUpdateEffect } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -144,6 +145,11 @@ const SwitchUserCompany: React.FC = () => {
 	const { data } = useGetUserCompany()
 	const { t } = useTranslation()
 	const { open } = useSidebar()
+	const queryClient = useQueryClient()
+
+	useUpdateEffect(() => {
+		queryClient.invalidateQueries({ type: 'all', refetchType: 'all' })
+	}, [user?.company_code])
 
 	return (
 		<DropdownMenu>
