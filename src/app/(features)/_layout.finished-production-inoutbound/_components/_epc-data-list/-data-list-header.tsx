@@ -1,3 +1,4 @@
+import { RetriableError } from '@/common/errors'
 import {
 	Div,
 	HoverCard,
@@ -12,10 +13,15 @@ import {
 	SelectValue,
 	Typography
 } from '@/components/ui'
-import { usePrevious } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, usePrevious } from 'ahooks'
+import { uniqBy } from 'lodash'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
+
+const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 
 const ListBoxHeader: React.FC = () => {
 	return (
@@ -33,14 +39,65 @@ const ListBoxHeader: React.FC = () => {
 
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
-	const { isLoading } = useGetEpcQuery()
-	const { selectedOrder, scannedOrders, setCurrentPage, setSelectedOrder } = usePageContext(
+	const { isLoading, refetch: manualFetchEpc } = useGetEpcQuery()
+	const {
+		scannedEpc,
+		selectedOrder,
+		scannedOrders,
+		scanningStatus,
+		connection,
+		setScannedEpc,
+		setCurrentPage,
+		setSelectedOrder
+	} = usePageContext(
+		'scannedEpc',
 		'selectedOrder',
 		'scannedOrders',
+		'scanningStatus',
+		'connection',
+		'setScannedEpc',
 		'setCurrentPage',
 		'setSelectedOrder'
 	)
 	const previousSelectedOrder = usePrevious(selectedOrder)
+
+	// * Ignore too many orders warning
+	const isTooManyOrdersDimssiedRef = useRef<boolean>(false)
+
+	// * On selected order changes and manual fetch epc query is not running
+	useAsyncEffect(async () => {
+		if (!connection || !scanningStatus) return
+		try {
+			const { data: metadata } = await manualFetchEpc()
+			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
+			const nextFilteredEpc = metadata?.data ?? []
+			setScannedEpc({
+				...metadata,
+				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
+			})
+		} catch {
+			throw new RetriableError()
+		}
+	}, [selectedOrder])
+
+	// * On too many order found
+	useDeepCompareEffect(() => {
+		if (!isTooManyOrdersDimssiedRef.current && scannedOrders?.length > 3 && scanningStatus === 'connected')
+			toast.warning('Oops !!!', {
+				id: TOO_MANY_ORDER_TOAST,
+				description: t('ns_inoutbound:notification.too_many_mono'),
+				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
+				action: {
+					label: t('ns_common:actions.dismiss'),
+					type: 'button',
+					onClick: () => {
+						toast.dismiss(TOO_MANY_ORDER_TOAST)
+						isTooManyOrdersDimssiedRef.current = true
+					}
+				}
+			})
+		else toast.dismiss(TOO_MANY_ORDER_TOAST)
+	}, [scannedOrders, isTooManyOrdersDimssiedRef, scanningStatus])
 
 	const handleChangeOrder = (value: string) => {
 		setSelectedOrder(value)

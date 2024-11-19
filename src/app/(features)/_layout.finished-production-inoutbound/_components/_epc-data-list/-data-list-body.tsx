@@ -1,50 +1,52 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
+import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
 import { PresetBreakPoints, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Typography } from '@/components/ui'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	useLocalStorageState,
+	usePrevious,
+	useUpdateEffect,
+	useVirtualList
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
-// import { RFIDSettings } from '../../_constants/rfid.const'
-import { AppConfigs } from '@/configs/app.config'
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
-
-import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
-import useMediaQuery from '@/common/hooks/use-media-query'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
-const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
-	const { user, setAccessToken } = useAuth()
+	const { user, token, setAccessToken } = useAuth()
 
 	const {
 		currentPage,
 		connection,
 		scannedEpc,
 		scanningStatus,
-		scannedOrders,
-		selectedOrder,
 		setCurrentPage,
 		setScanningStatus,
 		setScannedEpc,
@@ -57,8 +59,6 @@ const EpcDataList: React.FC = () => {
 		'connection',
 		'scannedEpc',
 		'scanningStatus',
-		'scannedOrders',
-		'selectedOrder',
 		'setCurrentPage',
 		'setScanningStatus',
 		'setScannedEpc',
@@ -90,24 +90,22 @@ const EpcDataList: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const wrapperRef = useRef<HTMLDivElement>(null)
 
-	// * Ignore too many orders warning
-	const isTooManyOrdersDimssiedRef = useRef<boolean>(false)
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
+	// * Manual fetch EPC
 	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
 
 	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
-		if (!connection) return
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
 			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/fp-inventory/sse', {
 				method: RequestMethod.GET,
 				headers: {
-					['Authorization']: AuthService.getAccessToken(),
+					['Authorization']: `Bearer ${token}`,
 					['X-Tenant-Id']: connection,
 					['X-User-Company']: user.company_code,
 					['X-Polling-Duration']: String(pollingDuration)
@@ -189,19 +187,20 @@ const EpcDataList: React.FC = () => {
 	}
 
 	// * Triggered when scanning status changes
-	useDeepCompareEffect(() => {
+	useUpdateEffect(() => {
+		const cancelFetchSSE = () => abortControllerRef.current.abort()
+
 		switch (scanningStatus) {
 			case undefined: {
-				isInvalidEpcDismissedRef.current = false
-				isTooManyOrdersDimssiedRef.current = false
-				abortControllerRef.current.abort()
-				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
-				setHasInvalidEpcAlert(false)
+				cancelFetchSSE() // Cancel fetch event source
+				setHasInvalidEpcAlert(false) // Hide invalid EPC alert
+				isInvalidEpcDismissedRef.current = false // Reset invalid EPC alert dismiss flag
+				setIncommingEpc(DEFAULT_PROPS.scannedEpc) // Reset scanned EPC data
 				reset()
 				break
 			}
 			case 'disconnected': {
-				abortControllerRef.current.abort()
+				cancelFetchSSE()
 				writeLog({ message: 'Disconnected', type: 'info' })
 				window.removeEventListener(INCOMING_DATA_CHANGE, null)
 				break
@@ -219,12 +218,13 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
 	}, [user?.company_code])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {
+		console.log('rerender')
 		if (isEqual(previousEpc, incommingEpc)) {
 			const previousData = scannedEpc?.data ?? []
 			const newData = incommingEpc?.data ?? []
@@ -255,41 +255,6 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [currentPage])
 
-	// * On selected order changes and manual fetch epc query is not running
-	useAsyncEffect(async () => {
-		if (!connection || !scanningStatus) return
-		try {
-			const { data: metadata } = await manualFetchEpc()
-			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
-			const nextFilteredEpc = metadata?.data ?? []
-			setScannedEpc({
-				...metadata,
-				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
-			})
-		} catch {
-			throw new RetriableError()
-		}
-	}, [selectedOrder])
-
-	// * On too many order found
-	useEffect(() => {
-		if (!isTooManyOrdersDimssiedRef.current && scannedOrders?.length > 3 && scanningStatus === 'connected')
-			toast.warning('Oops !!!', {
-				id: TOO_MANY_ORDER_TOAST,
-				description: t('ns_inoutbound:notification.too_many_mono'),
-				icon: <Icon name='TriangleAlert' className='stroke-destructive' />,
-				action: {
-					label: t('ns_common:actions.dismiss'),
-					type: 'button',
-					onClick: () => {
-						toast.dismiss(TOO_MANY_ORDER_TOAST)
-						isTooManyOrdersDimssiedRef.current = true
-					}
-				}
-			})
-		else toast.dismiss(TOO_MANY_ORDER_TOAST)
-	}, [scannedOrders, isTooManyOrdersDimssiedRef, scanningStatus])
-
 	// * Intitialize virtual list to render scanned EPC data
 	const [virtualItems] = useVirtualList(scannedEpc?.data, {
 		containerTarget: containerRef,
@@ -298,6 +263,8 @@ const EpcDataList: React.FC = () => {
 		overscan: PRERENDERED_ITEMS
 	})
 
+	console.log(1)
+
 	return (
 		<Fragment>
 			{hasInvalidEpcAlert &&
@@ -305,11 +272,8 @@ const EpcDataList: React.FC = () => {
 					<Alert>
 						<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
 						<AlertContent>
-							<AlertTitle>Alert</AlertTitle>
-							<AlertDescription>
-								Invalid EPC detected. Please contact to shaping department for this issue, then move them to
-								recycle
-							</AlertDescription>
+							<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
+							<AlertDescription>{t('ns_inoutbound:notification.invalid_epc_deteted')}</AlertDescription>
 						</AlertContent>
 						{scanningStatus !== 'connected' && (
 							<AlertClose

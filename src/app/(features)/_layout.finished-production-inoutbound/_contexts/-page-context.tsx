@@ -57,7 +57,7 @@ export const DEFAULT_PROPS: Pick<
 	| 'logs'
 	| 'pollingDuration'
 > = {
-	currentPage: null,
+	currentPage: 1,
 	scanningStatus: undefined,
 	connection: '',
 	selectedOrder: 'all',
