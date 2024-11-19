@@ -21,7 +21,7 @@ import { TenancyService } from '@/services/tenancy.service'
 import { HoverCardTrigger } from '@radix-ui/react-hover-card'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
-import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
+import React, { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -40,8 +40,7 @@ const ScannerToolbar: React.FC = () => {
 		connection,
 		reset: resetScanningAction,
 		setConnection,
-		handleToggleScanning,
-		reset: resetScanner
+		handleToggleScanning
 	} = usePageContext(
 		'scanningStatus',
 		'connection',
@@ -60,10 +59,6 @@ const ScannerToolbar: React.FC = () => {
 	})
 
 	const queryClient = useQueryClient()
-
-	useEffect(() => {
-		resetScanner()
-	}, [user?.company_code])
 
 	// * Blocking navigation on reading EPC or unsave changes
 	const blocker = useBlocker({

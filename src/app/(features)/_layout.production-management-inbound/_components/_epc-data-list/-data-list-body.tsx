@@ -9,14 +9,7 @@ import { Button, Div, Icon, Typography } from '@/components/ui'
 import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { type EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import {
-	useAsyncEffect,
-	useDeepCompareEffect,
-	useLocalStorageState,
-	useMemoizedFn,
-	usePrevious,
-	useVirtualList
-} from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { omit, uniqBy } from 'lodash'
 import qs from 'qs'
@@ -46,7 +39,8 @@ const DataListBody: React.FC = () => {
 		setScanningStatus,
 		setScannedEpc,
 		setCurrentPage,
-		setScannedOrders
+		setScannedOrders,
+		reset
 	} = usePageContext(
 		'currentPage',
 		'scannedEpc',
@@ -57,7 +51,8 @@ const DataListBody: React.FC = () => {
 		'setScanningStatus',
 		'setScannedEpc',
 		'setScannedOrders',
-		'setCurrentPage'
+		'setCurrentPage',
+		'reset'
 	)
 	const { searchParams } = useQueryParams()
 
@@ -78,7 +73,7 @@ const DataListBody: React.FC = () => {
 	})
 	const pollingDuration = settings?.pollingDuration ?? DEFAULT_PM_RFID_SETTINGS.pollingDuration
 
-	const fetchServerEvent = useMemoizedFn(async () => {
+	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -144,18 +139,20 @@ const DataListBody: React.FC = () => {
 		} catch (e) {
 			toast('Failed to connect', { id: 'FETCH_SSE', description: e.message })
 		} finally {
+			if (scanningStatus === 'connected') setScanningStatus('disconnected')
 			setScanningStatus('disconnected')
 			toast.info('Disconnected', { id: 'FETCH_SSE' })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
-	})
+	}
 
 	// * Triggered when scanning status changes
 	useEffect(() => {
 		switch (scanningStatus) {
 			case undefined: {
+				abortControllerRef.current.abort()
 				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
-				setCurrentPage(null)
+				reset()
 				break
 			}
 			case 'disconnected': {
@@ -172,6 +169,10 @@ const DataListBody: React.FC = () => {
 			}
 		}
 	}, [scanningStatus])
+
+	useEffect(() => {
+		setScanningStatus(DEFAULT_PROPS.scanningStatus)
+	}, [user?.company_code])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {

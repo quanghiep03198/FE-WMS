@@ -8,14 +8,7 @@ import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import {
-	useAsyncEffect,
-	useDeepCompareEffect,
-	useLocalStorageState,
-	useMemoizedFn,
-	usePrevious,
-	useVirtualList
-} from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -57,7 +50,8 @@ const EpcDataList: React.FC = () => {
 		setScannedEpc,
 		setScannedOrders,
 		setSelectedOrder,
-		writeLog
+		writeLog,
+		reset
 	} = usePageContext(
 		'currentPage',
 		'connection',
@@ -70,7 +64,8 @@ const EpcDataList: React.FC = () => {
 		'setScannedEpc',
 		'setScannedOrders',
 		'setSelectedOrder',
-		'writeLog'
+		'writeLog',
+		'reset'
 	)
 	const isUltimateLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 
@@ -104,7 +99,8 @@ const EpcDataList: React.FC = () => {
 	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
 
 	// * Fetch server-sent event
-	const fetchServerEvent = useMemoizedFn(async () => {
+	const fetchServerEvent = async () => {
+		if (!connection) return
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -186,21 +182,22 @@ const EpcDataList: React.FC = () => {
 		} catch (e) {
 			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
 		} finally {
-			setScanningStatus('disconnected')
+			if (scanningStatus === 'connected') setScanningStatus('disconnected')
 			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
-	})
+	}
 
 	// * Triggered when scanning status changes
 	useDeepCompareEffect(() => {
 		switch (scanningStatus) {
 			case undefined: {
-				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
-				setCurrentPage(null)
-				setHasInvalidEpcAlert(false)
 				isInvalidEpcDismissedRef.current = false
 				isTooManyOrdersDimssiedRef.current = false
+				abortControllerRef.current.abort()
+				setIncommingEpc(DEFAULT_PROPS.scannedEpc)
+				setHasInvalidEpcAlert(false)
+				reset()
 				break
 			}
 			case 'disconnected': {
@@ -221,6 +218,10 @@ const EpcDataList: React.FC = () => {
 			}
 		}
 	}, [scanningStatus])
+
+	useEffect(() => {
+		setScanningStatus(DEFAULT_PROPS.scanningStatus)
+	}, [user?.company_code])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {

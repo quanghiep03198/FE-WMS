@@ -27,14 +27,16 @@ const ScannerToolbar: React.FC = () => {
 		scanningStatus,
 		reset: resetScanningAction,
 		setConnection,
-		handleToggleScanning
+		handleToggleScanning,
+		reset: resetScanner
 	} = usePageContext(
 		'scanningStatus',
 		'connection',
 		'reset',
 		'setScanningStatus',
 		'setConnection',
-		'handleToggleScanning'
+		'handleToggleScanning',
+		'reset'
 	)
 
 	const { data: tenant } = useQuery({
@@ -52,7 +54,7 @@ const ScannerToolbar: React.FC = () => {
 	}, [tenant])
 
 	// Blocking navigation on reading EPC or unsave changes
-	const { proceed, reset, status } = useBlocker({
+	const blocker = useBlocker({
 		condition: typeof scanningStatus !== 'undefined' && isAuthenticated
 	})
 
@@ -63,8 +65,8 @@ const ScannerToolbar: React.FC = () => {
 			return { children: t('ns_common:actions.disconnect'), variant: 'destructive', icon: 'Unplug' }
 	}, [scanningStatus, i18n.language])
 
-	const handleReset = useCallback(reset, [status])
-	const handleProceed = useCallback(proceed, [status])
+	const handleReset = useCallback(blocker.reset, [blocker.status])
+	const handleProceed = useCallback(blocker.proceed, [blocker.status])
 
 	const handleResetScanningAction = () => {
 		queryClient.removeQueries({
@@ -106,7 +108,7 @@ const ScannerToolbar: React.FC = () => {
 				</Div>
 			</Div>
 			<ConfirmDialog
-				open={status === 'blocked'}
+				open={blocker.status === 'blocked'}
 				onOpenChange={handleReset}
 				title={t('ns_inoutbound:notification.navigation_blocked_message')}
 				description={t('ns_inoutbound:notification.navigation_blocked_caption')}
