@@ -4,20 +4,14 @@ import { useLocalStorageState } from 'ahooks'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { z } from 'zod'
 import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
 import ScannedEpcCounter from './_components/_epc-counter/-index'
 import EpcListBox from './_components/_epc-data-list/-index'
 import OrderSizeDetailTable from './_components/_manufacturing-order-detail/-order-size-table'
 import ScannerToolbar from './_components/_scanner-toolbar/-index'
-import { PM_RFID_SETTINGS_KEY, ProducingProcessSuffix } from './_constants/index.const'
+import { PM_RFID_SETTINGS_KEY } from './_constants/index.const'
 import { PageProvider } from './_contexts/-page-context'
-
-const pmInboundSearchValidator = z.object({
-	process: z.nativeEnum(ProducingProcessSuffix).optional()
-})
-
-export type PMInboundURLSearch = z.infer<typeof pmInboundSearchValidator>
+import { pmInboundSearchValidator } from './_schemas/pm-inbound.schema'
 
 export const Route = createFileRoute('/(features)/_layout/production-management-inbound/')({
 	component: Page,

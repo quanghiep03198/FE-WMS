@@ -6,7 +6,13 @@ export type PMEventStreamData = {
 	orders: Record<string, Array<OrderSize>>
 }
 
-export type FetchEpcParams = {
+export type FetchPMEpcParams = {
 	page: number
-	selected_order: string
-} & PMInboundSearch
+	'producing_process.eq': ProducingProcessSuffix
+	'mo_no.eq': string
+}
+
+export type DeletePMOrderParams = {
+	'producing_process.eq': ProducingProcessSuffix
+	'mo_no.eq': string
+}

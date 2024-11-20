@@ -22,6 +22,7 @@ import { usePageContext } from '../../_contexts/-page-context'
 const SettingPopover: React.FC = () => {
 	const { t } = useTranslation()
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
+
 	return (
 		<Popover>
 			<PopoverTrigger

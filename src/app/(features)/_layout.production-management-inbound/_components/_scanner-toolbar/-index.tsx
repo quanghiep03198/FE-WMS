@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { PM_EPC_LIST_PROVIDE_TAG } from '../../_apis/rfid.api'
 import { ProducingProcessSuffix } from '../../_constants/index.const'
 import { usePageContext } from '../../_contexts/-page-context'
+import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 import OrderFilterSelect from './-order-filter-select'
 import ProcessSelect from './-process-select'
 import SettingPopover from './-setting-popover'
@@ -25,7 +26,6 @@ const ScannerToolbar: React.FC = () => {
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const {
 		scanningStatus,
-		reset: resetScanningAction,
 		setConnection,
 		handleToggleScanning,
 		reset: resetScanner
@@ -47,7 +47,7 @@ const ScannerToolbar: React.FC = () => {
 	})
 
 	const queryClient = useQueryClient()
-	const { searchParams } = useQueryParams({ process: ProducingProcessSuffix.HALF_FINISHED })
+	const { searchParams } = useQueryParams<PMInboundURLSearch>({ process: ProducingProcessSuffix.HALF_FINISHED })
 
 	useEffect(() => {
 		if (tenant) setConnection(tenant?.id)
@@ -74,7 +74,7 @@ const ScannerToolbar: React.FC = () => {
 			exact: false,
 			type: 'all'
 		})
-		resetScanningAction()
+		resetScanner()
 	}
 
 	return (

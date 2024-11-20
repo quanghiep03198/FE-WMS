@@ -15,15 +15,16 @@ import {
 import { useTranslation } from 'react-i18next'
 import { ProducingProcessSuffix } from '../../_constants/index.const'
 
-import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { usePageContext } from '../../_contexts/-page-context'
+import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 
 const ProcessSelect = () => {
 	const { t } = useTranslation()
 	const { scanningStatus } = usePageContext('scanningStatus')
-	const { searchParams, setParams } = useQueryParams({ process: ProducingProcessSuffix.HALF_FINISHED })
-	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 767px)')
+	const { searchParams, setParams } = useQueryParams<PMInboundURLSearch>({
+		process: ProducingProcessSuffix.HALF_FINISHED
+	})
 
 	return (
 		<Select

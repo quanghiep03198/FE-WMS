@@ -27,7 +27,11 @@ export const useGetEpcQuery = () => {
 
 	return useQuery({
 		queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection],
-		queryFn: async () => RFIDService.fetchFPData(connection, currentPage, selectedOrder),
+		queryFn: async () =>
+			RFIDService.fetchFPData(connection, {
+				page: currentPage,
+				'mo_no.eq': selectedOrder
+			}),
 		enabled: !!connection && scanningStatus === 'disconnected',
 		select: (response) => response.metadata
 	})
@@ -38,7 +42,7 @@ export const useGetOrderDetail = () => {
 
 	return useQuery({
 		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG, connection],
-		queryFn: async () => await RFIDService.getOrderDetail(connection),
+		queryFn: async () => await RFIDService.getFPOrderDetail(connection),
 		enabled: !!connection && scanningStatus === 'disconnected',
 		select: (response) => response.metadata
 	})
@@ -50,7 +54,7 @@ export const useSearchOrderQuery = (params: SearchCustOrderParams) => {
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', user?.company_code],
-		queryFn: async () => await RFIDService.searchExchangableOrder(connection, params),
+		queryFn: async () => await RFIDService.searchExchangableFPOrder(connection, params),
 		enabled: false,
 		select: (response) => response.metadata
 	})
@@ -93,7 +97,7 @@ export const useUpdateStockMutation = () => {
 	)
 
 	return useMutation({
-		mutationFn: (payload: InoutboundPayload) => RFIDService.updateStockMovement(connection, payload),
+		mutationFn: (payload: InoutboundPayload) => RFIDService.updateFPStockMovement(connection, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
