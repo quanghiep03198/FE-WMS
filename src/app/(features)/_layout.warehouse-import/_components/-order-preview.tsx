@@ -26,8 +26,6 @@ const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSucce
 	const { dispatch } = useStepContext()
 	const { user } = useAuth()
 	const { t, i18n } = useTranslation()
-	// console.log(isPending)
-	// console.log(importOrderDetailValue,'importOrderValue')
 
 	const orderTotalQty = useMemo(
 		() => importOrderDetailValue.reduce((acc, curr) => acc + +curr.or_totalqty, 0),
