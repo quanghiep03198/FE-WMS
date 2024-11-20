@@ -30,13 +30,6 @@ const ProductionImportList: React.FC = () => {
 		handleResetAllRowSelection()
 	}, [tableRef])
 
-	const selectedRows = tableRef?.current?.getSelectedRowModel()?.flatRows
-	selectedRows?.forEach((item) => {
-		console.log('Original item:', item.original.sno_no)
-	})
-
-	console.log(data, 'datadata')
-
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
