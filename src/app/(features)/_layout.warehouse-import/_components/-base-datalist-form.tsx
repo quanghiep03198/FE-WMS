@@ -78,6 +78,7 @@ const BaseDatalistForm: React.FC = () => {
 
 	const handleCreateOrder = (data: ImportOrderValue) => {
 		setImportOrderValue(data)
+		console.log(data?.storage_num, 'storage_numstorage_num')
 		dispatch({ type: 'NEXT_STEP' })
 	}
 

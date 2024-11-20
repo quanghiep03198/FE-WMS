@@ -4,6 +4,7 @@ import vi_ns_common from './vi/ns_common.i18n'
 import vi_ns_company from './vi/ns_company.i18n'
 import vi_ns_dashboard from './vi/ns_dashboard.i18n'
 import vi_ns_erp from './vi/ns_erp.i18n'
+import vi_ns_import_order from './vi/ns_import_order.i18n'
 import vi_ns_inoutbound from './vi/ns_inoutbound.i18n'
 import vi_ns_preference from './vi/ns_preference.i18n'
 import vi_ns_validation from './vi/ns_validation.i18n'
@@ -45,7 +46,8 @@ export const resources = {
 		ns_inoutbound: vi_ns_inoutbound,
 		ns_preference: vi_ns_preference,
 		ns_erp: vi_ns_erp,
-		ns_validation: vi_ns_validation
+		ns_validation: vi_ns_validation,
+		ns_import_order: vi_ns_import_order
 	},
 	en: {
 		ns_auth: en_ns_auth,

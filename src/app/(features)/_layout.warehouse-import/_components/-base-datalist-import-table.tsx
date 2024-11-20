@@ -220,13 +220,17 @@ const OrderDetailsDatalist: React.FC = () => {
 			/>
 			<Separator />
 			<DialogFooter>
-				<Button variant='outline' onClick={() => dispatch({ type: 'PREV_STEP' })}>
+				<Button type='button' variant='outline' onClick={() => dispatch({ type: 'PREV_STEP' })}>
 					{t('ns_common:actions.back')}
 				</Button>
 				<Button
 					variant='default'
+					type='button'
 					disabled={isEmpty(selectedOrderDetailRows)}
-					onClick={() => handleAddImportOrderDetail()}>
+					onClick={(e) => {
+						e.stopPropagation()
+						handleAddImportOrderDetail()
+					}}>
 					{t('ns_common:actions.proceed')}
 				</Button>
 			</DialogFooter>
