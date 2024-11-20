@@ -16,17 +16,18 @@ import { useStepContext } from '@/components/ui/@custom/step'
 import { format } from 'date-fns'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { useAddImportOrderMutation } from '../_apis/use-warehouse-import.api'
 import { useDatalistDialogContext } from '../_contexts/-datalist-dialog-context'
 
-type Props = {}
-
-const OrderPreview = (props: Props) => {
+const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSuccess }) => {
 	const { importOrderValue, importOrderDetailValue } = useDatalistDialogContext()
+	const { mutateAsync, isPending } = useAddImportOrderMutation()
 	const { dispatch } = useStepContext()
 	const { user } = useAuth()
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
+	// console.log(isPending)
+	// console.log(importOrderDetailValue,'importOrderValue')
 
 	const orderTotalQty = useMemo(
 		() => importOrderDetailValue.reduce((acc, curr) => acc + +curr.or_totalqty, 0),
@@ -40,6 +41,15 @@ const OrderPreview = (props: Props) => {
 		() => importOrderDetailValue.reduce((acc, curr) => acc + Number(curr.sno_qty_notyet), 0),
 		[importOrderDetailValue]
 	)
+
+	const handleSubmitImportOrder = async () => {
+		try {
+			await mutateAsync(importOrderDetailValue)
+			onSubmitSuccess()
+		} catch (error) {
+			console.error('Error submitting import order:', error)
+		}
+	}
 
 	return (
 		<Fragment>
@@ -150,7 +160,10 @@ const OrderPreview = (props: Props) => {
 				<Button variant='outline' onClick={() => dispatch({ type: 'PREV_STEP' })}>
 					{t('ns_common:actions.back')}
 				</Button>
-				<Button onClick={() => toast.info('This feature is under development')}>
+				<Button
+					onClick={() => {
+						handleSubmitImportOrder()
+					}}>
 					{t('ns_common:actions.confirm')}
 				</Button>
 			</DialogFooter>

@@ -12,6 +12,7 @@ import {
 import { Stepper, TStep } from '@/components/ui/@custom/step'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePageStore } from '../../_layout.transfer-management/_stores/page.store'
 import { DatalistDialogProvider } from '../_contexts/-datalist-dialog-context'
 import BaseDatalistForm from './-base-datalist-form'
 import OrderDetailsDatalist from './-base-datalist-import-table'
@@ -21,6 +22,7 @@ type Props = {}
 
 const ImportDataListDialog = (props: Props) => {
 	const { t, i18n } = useTranslation()
+	const { datalistDialogOpen, toggleDatalistDialogOpen } = usePageStore()
 
 	const steps: TStep[] = useMemo(
 		() => [
@@ -41,7 +43,7 @@ const ImportDataListDialog = (props: Props) => {
 	)
 
 	return (
-		<Dialog>
+		<Dialog open={datalistDialogOpen} onOpenChange={toggleDatalistDialogOpen}>
 			<DialogTrigger asChild>
 				<Button>
 					<Icon name='CirclePlus' role='img' /> {t('ns_common:actions.add')}
@@ -63,7 +65,7 @@ const ImportDataListDialog = (props: Props) => {
 								<OrderDetailsDatalist />
 							</Stepper.Panel>
 							<Stepper.Panel value={3}>
-								<OrderPreview />
+								<OrderPreview onSubmitSuccess={toggleDatalistDialogOpen} />
 							</Stepper.Panel>
 						</Stepper.Provider>
 					</DatalistDialogProvider>
