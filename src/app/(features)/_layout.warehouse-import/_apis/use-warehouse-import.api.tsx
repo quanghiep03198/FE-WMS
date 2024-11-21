@@ -7,27 +7,6 @@ export const PRODUCTION_IMPORT_PROVIDE_TAG = 'PRODUCTION_IMPORT'
 export const PRODUCTION_IMPORT_DATALIST_PROVIDE_TAG = 'PRODUCTION_IMPORT_DATALIST'
 
 export const useGetProductionImportListQuery = () => {
-	// const { t, i18n } = useTranslation()
-	// const { setOrderCount } = usePageContext()
-	// // Transform warehouse response data
-	// const transformResponse = useCallback(
-	// 	(response: ProductionImportResponse): IProductionImportOrder[] => {
-	// 		const { data, count } = response.metadata
-	// 		setOrderCount(count ?? 0)
-	// 		return Array.isArray(data)
-	// 			? data.map((item) => ({
-	// 					...item,
-	// 					status_approve: Boolean(item.is_disable),
-	// 					type_inventorylist: t(InventoryListType[item.type_warehouse], {
-	// 						ns: 'ns_inoutbound',
-	// 						defaultValue: item.type_warehouse
-	// 					})
-	// 				}))
-	// 			: []
-	// 	},
-	// 	[i18n.language]
-	// )
-
 	return useQuery({
 		queryKey: [PRODUCTION_IMPORT_PROVIDE_TAG],
 		queryFn: ProductionImportService.getProductionImportData,

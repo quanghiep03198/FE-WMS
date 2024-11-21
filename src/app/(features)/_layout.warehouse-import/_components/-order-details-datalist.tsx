@@ -156,22 +156,6 @@ const ProductionImportList: React.FC = () => {
 					return format(value as Date, 'yyyy-MM-dd')
 				}
 			}),
-			// columnHelper.accessor('remark', {
-			// 	id: 'remark',
-			// 	header: t('ns_common:common_fields.remark'),
-			// 	enableSorting: false,
-			// 	enableColumnFilter: false,
-			// 	enablePinning: true,
-			// 	sortingFn: fuzzySort
-			// }),
-			// columnHelper.display({
-			// 	id: ROW_ACTIONS_COLUMN_ID,
-			// 	header: t('ns_common:common_fields.actions'),
-			// 	enableSorting: false,
-			// 	enableColumnFilter: false,
-			// 	enableResizing: false,
-			// 	size: 80
-			// }),
 
 			columnHelper.accessor('id', {
 				id: ROW_ACTIONS_COLUMN_ID,

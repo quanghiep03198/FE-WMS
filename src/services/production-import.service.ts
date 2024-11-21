@@ -1,4 +1,4 @@
-import { IProductionImportOrder } from '@/common/types/entities'
+import { IProductionImportOrder, ITransferOrder } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export type ProductionImportResponse = ResponseBody<{ data: IProductionImportOrder[]; count: number }>
@@ -17,6 +17,12 @@ export class ProductionImportService {
 	}
 	static async addImportOrder(payload) {
 		return await axiosInstance.post<void, ResponseBody<any>>('/order/production-import', payload)
+	}
+	static async updateImportOrder(transferOrderCode: string, payload: Partial<ITransferOrder>) {
+		return await axiosInstance.patch<any, ResponseBody<null>>(
+			`/order/transfer-order/update/${transferOrderCode}`,
+			payload
+		)
 	}
 	static async deleteImportOrder(selectedRecords) {
 		return await axiosInstance.delete<{ id: string[] }, ResponseBody<null>>(`/order/production-import`, {
