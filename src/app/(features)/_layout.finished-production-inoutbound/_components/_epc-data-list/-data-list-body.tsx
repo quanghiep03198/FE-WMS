@@ -44,6 +44,7 @@ const EpcDataList: React.FC = () => {
 
 	const {
 		currentPage,
+		selectedOrder,
 		connection,
 		scannedEpc,
 		scanningStatus,
@@ -56,6 +57,7 @@ const EpcDataList: React.FC = () => {
 		reset
 	} = usePageContext(
 		'currentPage',
+		'selectedOrder',
 		'connection',
 		'scannedEpc',
 		'scanningStatus',
@@ -254,6 +256,22 @@ const EpcDataList: React.FC = () => {
 			throw new RetriableError()
 		}
 	}, [currentPage])
+
+	// * On selected order changes and manual fetch epc query is not running
+	useAsyncEffect(async () => {
+		if (!connection || !scanningStatus) return
+		try {
+			const { data: metadata } = await manualFetchEpc()
+			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
+			const nextFilteredEpc = metadata?.data ?? []
+			setScannedEpc({
+				...metadata,
+				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
+			})
+		} catch {
+			throw new RetriableError()
+		}
+	}, [selectedOrder])
 
 	// * Intitialize virtual list to render scanned EPC data
 	const [virtualItems] = useVirtualList(scannedEpc?.data, {

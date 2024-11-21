@@ -18,7 +18,7 @@ import {
 	useVirtualList
 } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { has, uniqBy } from 'lodash'
+import { has, omit, uniqBy } from 'lodash'
 import qs from 'qs'
 import React, { useEffect, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
@@ -218,6 +218,22 @@ const DataListBody: React.FC = () => {
 			throw new RetriableError()
 		}
 	}, [currentPage])
+
+	// * On selected order changes and manual fetch epc query is not running
+	useAsyncEffect(async () => {
+		if (!connection || !scanningStatus) return
+		try {
+			const { data: metadata } = await manualFetchEpc()
+			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
+			const nextFilteredEpc = metadata?.epcs?.data ?? []
+			setScannedEpc({
+				...omit(metadata?.epcs, 'data'),
+				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
+			})
+		} catch {
+			throw new RetriableError()
+		}
+	}, [selectedOrder])
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
