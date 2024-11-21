@@ -61,10 +61,10 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const previousQuantity = usePrevious(quantity)
 
 	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchOrderQuery({
-		orderTarget: defaultValues?.mo_no,
-		productionCode: defaultValues?.mat_code,
-		sizeNumCode: defaultValues?.size_numcode,
-		searchTerm: searchTerm
+		'mo_no.eq': defaultValues?.mo_no,
+		'mat_code.eq': defaultValues?.mat_code,
+		'size_num_code.eq': defaultValues?.size_numcode,
+		q: searchTerm
 	})
 
 	const exchangableOrders = useMemo(() => {

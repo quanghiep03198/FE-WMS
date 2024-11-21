@@ -49,12 +49,11 @@ export const useGetOrderDetail = () => {
 }
 
 export const useSearchOrderQuery = (params: SearchCustOrderParams) => {
-	const { connection } = usePageContext('connection')
 	const { user } = useAuth()
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', user?.company_code],
-		queryFn: async () => await RFIDService.searchExchangableFPOrder(connection, params),
+		queryFn: async () => await RFIDService.searchExchangableFPOrder(params),
 		enabled: false,
 		select: (response) => response.metadata
 	})
