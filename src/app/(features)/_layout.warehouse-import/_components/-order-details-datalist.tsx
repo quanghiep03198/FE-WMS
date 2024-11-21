@@ -1,4 +1,4 @@
-import { Button, Checkbox, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import { Button, Checkbox, DataTable, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
@@ -8,8 +8,10 @@ import { format, isValid } from 'date-fns'
 import { isEmpty } from 'lodash'
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ProductionApprovalStatus } from '../../_layout.product-incoming-inspection/_constants/production.enum'
+import { TransferOrderApprovalStatus } from '../../_layout.transfer-management/_constants/-transfer-order.enum'
+import { usePageStore } from '../../_layout.transfer-management/_stores/page.store'
 import { useDeleteImportOrderMutation, useGetProductionImportListQuery } from '../_apis/use-warehouse-import.api'
+import ImportOrderRowActions from './-import-order-row-actions'
 
 const ProductionImportList: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -17,6 +19,10 @@ const ProductionImportList: React.FC = () => {
 	const columnHelper = createColumnHelper()
 	const [rowSelectionType, setRowSelectionType] = useState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
+	const { toggleSheetPanelFormOpen: handleToggleFormOpen } = usePageStore()
+
+	console.log('toggleSheetPanelFormOpen exists:', !!handleToggleFormOpen)
+	// const { mutateAsync: updateAsync } = useUpdateTransferOrderMutation()
 	const tableRef = useRef<Table<any>>(null)
 	const { mutateAsync: deleteAsync } = useDeleteImportOrderMutation()
 
@@ -75,14 +81,23 @@ const ProductionImportList: React.FC = () => {
 			}),
 			columnHelper.accessor('status_approve', {
 				header: t('ns_erp:fields.status_approve'),
-				size: 160,
 				cell: ({ getValue }) => {
-					const value = getValue()
-					return value === ProductionApprovalStatus.REVIEWED ? (
-						<Div className='flex items-center justify-center'>
-							<Icon name='Check' stroke='hsl(var(--primary))' size={20} />
-						</Div>
-					) : null
+					const value = getValue() ?? TransferOrderApprovalStatus.NOT_APPROVED
+					const statusIconMap: Record<TransferOrderApprovalStatus, React.ComponentProps<typeof Icon>['name']> = {
+						[TransferOrderApprovalStatus.NOT_APPROVED]: 'Circle',
+						[TransferOrderApprovalStatus.APPROVED]: 'CircleCheck',
+						[TransferOrderApprovalStatus.CANCELLED]: 'CircleX',
+						[TransferOrderApprovalStatus.REAPPROVED]: 'CircleDot'
+					}
+					return (
+						<Typography variant='small' className='inline-flex items-center gap-x-2'>
+							<Icon name={statusIconMap[value]} stroke='hsl(var(--muted-foreground))' />
+							{t(`order_status.${value}`, {
+								ns: 'ns_inoutbound',
+								defaultValue: value as any
+							})}
+						</Typography>
+					)
 				}
 			}),
 			columnHelper.accessor('sno_date', {
@@ -149,13 +164,37 @@ const ProductionImportList: React.FC = () => {
 			// 	enablePinning: true,
 			// 	sortingFn: fuzzySort
 			// }),
-			columnHelper.display({
+			// columnHelper.display({
+			// 	id: ROW_ACTIONS_COLUMN_ID,
+			// 	header: t('ns_common:common_fields.actions'),
+			// 	enableSorting: false,
+			// 	enableColumnFilter: false,
+			// 	enableResizing: false,
+			// 	size: 80
+			// }),
+
+			columnHelper.accessor('id', {
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
-				enableSorting: false,
-				enableColumnFilter: false,
-				enableResizing: false,
-				size: 80
+				// meta: {
+				// 	rowSpan: 2
+				// },
+				size: 80,
+				cell: (props) => (
+					<ImportOrderRowActions
+						cellContext={props}
+						onViewDetail={() => {
+							console.log('onViewDetail clicked')
+							handleToggleFormOpen()
+						}}
+						onDeleteRow={() => {
+							console.log('Delete triggered')
+						}}
+						onSaveChange={async (dataChanges) => {
+							console.log('Save triggered with:', dataChanges)
+						}}
+					/>
+				)
 			})
 		],
 		[i18n.language]

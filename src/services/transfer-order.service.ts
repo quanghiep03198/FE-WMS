@@ -2,7 +2,6 @@ import { SearchFormValues } from '@/app/(features)/_layout.transfer-management/_
 import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/transfer-order.schema'
 import { ICustomerBrand, ITransferOrder, ITransferOrderData, ITransferOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { flatten } from 'flat'
 import { DateRange } from 'react-day-picker'
 
 export type CreateTransferOrderPayload = Pick<
@@ -13,12 +12,12 @@ export type TransferOrderDatalistParams = SearchFormValues & { time_range?: Date
 
 export class TransferOrderService {
 	static async getTransferOrderList() {
-		return await axiosInstance.get<void, ResponseBody<ITransferOrder[]>>('/order/transfer-order')
+		return await axiosInstance.get<void, ResponseBody<ITransferOrder[]>>('order/transfer-order')
 	}
 
-	static async getTransferOrderDatalist(params: TransferOrderDatalistParams) {
-		return await axiosInstance.get<void, ResponseBody<ITransferOrderData[]>>('/order/transfer-order/datalist', {
-			params: flatten(params)
+	static async getTransferOrderDatalist(params: { time_range?: string; brand?: string }) {
+		return await axiosInstance.get<void, ResponseBody<ITransferOrderData[]>>('order/transfer-order/datalist', {
+			params: { ...params }
 		})
 	}
 
@@ -67,7 +66,7 @@ export class TransferOrderService {
 
 	static async searchOrderCustomer(search: string) {
 		return await axiosInstance.get<string, ResponseBody<ICustomerBrand[]>>(
-			'/order/transfer-order/search-customer-brand',
+			'order/transfer-order/search-customer-brand',
 			{
 				params: { search }
 			}
