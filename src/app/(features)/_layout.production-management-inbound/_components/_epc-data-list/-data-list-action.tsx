@@ -3,9 +3,9 @@ import { Button, Icon } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { PMInboundURLSearch } from '../..'
 import { useUpdateStockMutation } from '../../_apis/rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
+import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 
 const DataListAction: React.FC = () => {
 	const { t } = useTranslation()

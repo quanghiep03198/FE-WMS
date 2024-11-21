@@ -1,4 +1,3 @@
-import { RetriableError } from '@/common/errors'
 import {
 	Div,
 	HoverCard,
@@ -13,8 +12,7 @@ import {
 	SelectValue,
 	Typography
 } from '@/components/ui'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious } from 'ahooks'
-import { uniqBy } from 'lodash'
+import { useDeepCompareEffect, usePrevious } from 'ahooks'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -63,22 +61,6 @@ const OrderListSelect: React.FC = () => {
 
 	// * Ignore too many orders warning
 	const isTooManyOrdersDimssiedRef = useRef<boolean>(false)
-
-	// * On selected order changes and manual fetch epc query is not running
-	useAsyncEffect(async () => {
-		if (!connection || !scanningStatus) return
-		try {
-			const { data: metadata } = await manualFetchEpc()
-			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)
-			const nextFilteredEpc = metadata?.data ?? []
-			setScannedEpc({
-				...metadata,
-				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
-			})
-		} catch {
-			throw new RetriableError()
-		}
-	}, [selectedOrder])
 
 	// * On too many order found
 	useDeepCompareEffect(() => {

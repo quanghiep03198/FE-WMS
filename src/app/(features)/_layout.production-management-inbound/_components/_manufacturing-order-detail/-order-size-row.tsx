@@ -23,7 +23,7 @@ import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { toast } from 'sonner'
 import { useDeletePMOrderMutation } from '../../_apis/rfid.api'
-import { ProducingProcessSuffix } from '../../_constants/index.const'
+import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
@@ -83,12 +83,11 @@ const DeleteOrderPopoverConfirm: React.FC<{ orderToDelete: string }> = memo(
 	({ orderToDelete }) => {
 		const { t } = useTranslation()
 		const [open, setOpen] = useState<boolean>(false)
-
-		const { searchParams } = useQueryParams<{ process: ProducingProcessSuffix }>()
+		const { searchParams } = useQueryParams<PMInboundURLSearch>()
 		const { mutateAsync: deleteOrder, isPending: isDeleting, isError } = useDeletePMOrderMutation()
 
 		const handleDeleteOrder = useMemoizedFn((orderCode: string) => {
-			toast.promise(deleteOrder({ process: searchParams.process, order: orderCode }), {
+			toast.promise(deleteOrder({ 'producing_process.eq': searchParams.process, 'mo_no.eq': orderCode }), {
 				loading: t('ns_common:notification.processing_request'),
 				success: () => {
 					setOpen(false)

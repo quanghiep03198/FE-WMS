@@ -5,17 +5,34 @@ import { Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } f
 import { usePrevious } from 'ahooks'
 import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 
 const OrderFilterSelect: React.FC = () => {
-	const { searchParams } = useQueryParams()
-	const { isLoading } = useGetEpcQuery(searchParams?.process)
-	const { selectedOrder, scannedOrders, setCurrentPage, setSelectedOrder } = usePageContext(
-		'selectedOrder',
+	const { searchParams } = useQueryParams<PMInboundURLSearch>()
+	const { isLoading } = useGetEpcQuery()
+	const {
+		scannedEpc,
+		scannedOrders,
+		scanningStatus,
+		connection,
+		selectedOrder,
+		setScannedEpc,
+		setCurrentPage,
+		setSelectedOrder
+	} = usePageContext(
+		'scannedEpc',
 		'scannedOrders',
+		'scanningStatus',
+		'connection',
+		'selectedOrder',
+		'setScannedEpc',
 		'setCurrentPage',
 		'setSelectedOrder'
 	)
 	const previousSelectedOrder = usePrevious(selectedOrder)
+
+	// * Fetch EPC query
+	const { refetch: manualFetchEpc } = useGetEpcQuery()
 
 	const handleChangeOrder = (value: string) => {
 		setSelectedOrder(value)

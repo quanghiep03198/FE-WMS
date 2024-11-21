@@ -1,96 +1,95 @@
 import { InoutboundPayload } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/exchange-epc.schema'
-import { SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inoutbound/_types'
-import { FetchEpcParams } from '@/app/(features)/_layout.production-management-inbound/types'
+import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inoutbound/_types'
+import { DeletePMOrderParams, FetchPMEpcParams } from '@/app/(features)/_layout.production-management-inbound/_types'
 import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash'
 
 export class RFIDService {
-	static async fetchFPData(tenantId: string, page: null | number, selectedOrder: string) {
-		const params = omitBy({ page: page, filter: selectedOrder }, (value) => !value || value === 'all')
+	protected static readonly TENANCY_REQ_HEADER = 'X-Tenant-Id' // * Tenant ID request header to determine which database to use
+	protected static readonly FP_BASE_URL = '/rfid/fp-inventory' // * Finished Production Inventory base API URL
+	protected static readonly PM_BASE_URL = '/rfid/pm-inventory' // * Production Management Inventory base API URL
+
+	// #region [RFID] Finished Production APIs
+	static async fetchFPData(tenantId: string, params: FetchFPEpcParams) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>(
-			'/rfid/fp-inventory/fetch-epc',
+			`${this.FP_BASE_URL}/fetch-epc`,
 			{
-				headers: { ['X-Tenant-Id']: tenantId },
+				headers: { [this.TENANCY_REQ_HEADER]: tenantId },
+				params: omitBy(params, (value) => !value || value === 'all')
+			}
+		)
+	}
+
+	static async getFPOrderDetail(tenantId: string) {
+		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData['orders']>>(
+			`${this.FP_BASE_URL}/manufacturing-order-detail`,
+			{ headers: { [this.TENANCY_REQ_HEADER]: tenantId } }
+		)
+	}
+
+	static async searchExchangableFPOrder(tenantId: string, params: SearchCustOrderParams) {
+		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>(
+			`${this.FP_BASE_URL}/search-exchangable-order`,
+
+			{
+				headers: { [this.TENANCY_REQ_HEADER]: tenantId },
 				params
 			}
 		)
 	}
-	static async fetchPMData(tenantId: string, params: FetchEpcParams) {
-		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData>>('/rfid/pm-inventory/fetch-epc', {
-			headers: { ['X-Tenant-Id']: tenantId },
-			params: omitBy(params, (value) => !value || value === 'all')
-		})
-	}
 
-	static async getOrderDetail(tenantId: string) {
-		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData['orders']>>(
-			'/rfid/fp-inventory/manufacturing-order-detail',
-			{ headers: { ['X-Tenant-Id']: tenantId } }
-		)
-	}
-
-	static async searchExchangableOrder(tenantId: string, params: SearchCustOrderParams) {
-		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>(
-			'/rfid/fp-inventory/search-exchangable-order',
-			{
-				headers: { ['X-Tenant-Id']: tenantId },
-				params: { target: params.orderTarget, production_code: params.productionCode, search: params.searchTerm }
-			}
-		)
-	}
-
-	static async updateStockMovement(tenantId: string, payload: InoutboundPayload) {
+	static async updateFPStockMovement(tenantId: string, payload: InoutboundPayload) {
 		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>(
-			'/rfid/fp-inventory/update-stock',
+			`${this.FP_BASE_URL}/update-stock`,
 			payload,
 			{
-				headers: { ['X-Tenant-Id']: tenantId }
-			}
-		)
-	}
-
-	static async updatePMStockMovement(tenantId: string, producingProcess, selectedOrder: string) {
-		console.log('rfid.service.ts :>> ', tenantId)
-		return await axiosInstance.patch(
-			`/rfid/pm-inventory/update-stock/${producingProcess}/${selectedOrder}`,
-			{},
-			{
-				headers: { ['X-Tenant-Id']: tenantId }
+				headers: { [this.TENANCY_REQ_HEADER]: tenantId }
 			}
 		)
 	}
 
 	static async deleteUnexpectedFPOrder(tenantId: string, orderCode: string) {
-		return await axiosInstance.delete(`/rfid/fp-inventory/delete-unexpected-order/${orderCode}`, {
-			headers: { ['X-Tenant-Id']: tenantId }
+		return await axiosInstance.delete(`${this.FP_BASE_URL}/delete-unexpected-order/${orderCode}`, {
+			headers: { [this.TENANCY_REQ_HEADER]: tenantId }
 		})
 	}
 
-	static async deleteUnexpectedPMOrder(tenantId: string, params: { process: string; order: string }) {
-		return await axiosInstance.delete<any, ResponseBody<{ affected: number }>>(
-			`/rfid/pm-inventory/delete-unexpected-order`,
+	static async exchangeEpc(tenant: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
+		return await axiosInstance.patch(`${this.FP_BASE_URL}/exchange-epc`, payload, {
+			headers: { [this.TENANCY_REQ_HEADER]: tenant }
+		})
+	}
+	// #endregion
+
+	// #region [RFID] Production Management APIs
+	static async fetchPMData(tenantId: string, params: FetchPMEpcParams) {
+		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData>>(`${this.PM_BASE_URL}/fetch-epc`, {
+			headers: { [this.TENANCY_REQ_HEADER]: tenantId },
+			params: omitBy(params, (value) => !value || value === 'all')
+		})
+	}
+
+	static async updatePMStockMovement(tenantId: string, producingProcess, selectedOrder: string) {
+		return await axiosInstance.patch(
+			`${this.PM_BASE_URL}/update-stock/${producingProcess}/${selectedOrder}`,
+			{},
 			{
-				headers: { ['X-Tenant-Id']: tenantId },
-				params
+				headers: { [this.TENANCY_REQ_HEADER]: tenantId }
 			}
 		)
 	}
 
-	static async exchangeEpc(tenant: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
-		return await axiosInstance.patch('/rfid/fp-inventory/exchange-epc', payload, {
-			headers: { ['X-Tenant-Id']: tenant }
-		})
+	static async deleteUnexpectedPMOrder(tenantId: string, params: DeletePMOrderParams) {
+		return await axiosInstance.delete<any, ResponseBody<{ affected: number }>>(
+			`${this.PM_BASE_URL}/delete-unexpected-order`,
+			{
+				headers: { [this.TENANCY_REQ_HEADER]: tenantId },
+				params
+			}
+		)
 	}
-
-	/**
-	 * @deprecated
-	 */
-	static async synchronizeOrderCode(tenant: string) {
-		return await axiosInstance.patch<void, ResponseBody<boolean>>('/rfid/fp-inventory/sync-epc-mono', undefined, {
-			headers: { ['X-Tenant-Id']: tenant }
-		})
-	}
+	// #endregion
 }

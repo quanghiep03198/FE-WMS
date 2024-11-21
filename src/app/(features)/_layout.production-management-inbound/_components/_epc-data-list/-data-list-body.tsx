@@ -6,12 +6,19 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
-import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { type EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useVirtualList } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	useLocalStorageState,
+	usePrevious,
+	useUpdateEffect,
+	useVirtualList
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { omit, uniqBy } from 'lodash'
+import { has, omit, uniqBy } from 'lodash'
 import qs from 'qs'
 import React, { useEffect, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
@@ -22,6 +29,7 @@ import { DEFAULT_PM_RFID_SETTINGS, RFIDSettings } from '../..'
 import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
 import { PM_RFID_SETTINGS_KEY } from '../../_constants/index.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
@@ -54,10 +62,10 @@ const DataListBody: React.FC = () => {
 		'setCurrentPage',
 		'reset'
 	)
-	const { searchParams } = useQueryParams()
+	const { searchParams } = useQueryParams<PMInboundURLSearch>()
 
 	// * Fetch EPC query
-	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery(searchParams.process)
+	const { data, refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
 
 	const { user, setAccessToken } = useAuth()
 	// * Incomming EPCs data from server-sent event
@@ -78,7 +86,9 @@ const DataListBody: React.FC = () => {
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
 			await fetchEventSource(
-				env('VITE_API_BASE_URL') + '/rfid/pm-inventory/sse' + qs.stringify(searchParams, { addQueryPrefix: true }),
+				env('VITE_API_BASE_URL') +
+					'/rfid/pm-inventory/sse' +
+					qs.stringify({ 'producing_process.eq': searchParams.process }, { addQueryPrefix: true }),
 				{
 					method: RequestMethod.GET,
 					headers: {
@@ -116,12 +126,15 @@ const DataListBody: React.FC = () => {
 						try {
 							if (!event.data) return
 							const data = JSON.parse(event.data) as RFIDStreamEventData
+							if (!has(data, 'epcs') || !has(data, 'orders')) throw new Error('Invalid data format')
 							setIncommingEpc(data?.epcs)
 							setScannedOrders(data?.orders)
 							window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
 						} catch (error) {
-							console.error(error.message)
-							return
+							abortControllerRef.current.abort()
+
+							toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
+							throw new FatalError()
 						}
 					},
 					onclose() {
@@ -170,7 +183,7 @@ const DataListBody: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
 	}, [user?.company_code])
 
@@ -272,7 +285,6 @@ const DataListBody: React.FC = () => {
 	)
 }
 
-const List = tw(ScrollShadow)<ScrollShadowProps>``
 const ListItem = tw.div`px-4 py-2 h-10 flex justify-between uppercase transition-all duration-75 rounded border-b last:border-none whitespace-nowrap hover:bg-accent/50`
 
 export default DataListBody
