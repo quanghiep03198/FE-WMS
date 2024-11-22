@@ -4,13 +4,14 @@ import bcrypt from 'bcryptjs-react'
 import { debounce } from 'lodash'
 import React, { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { updatePasswordUser } from '../_apis/account.api'
 
 const ChangePasswordForm: React.FC = () => {
 	const { mutateAsync: updatePasswordFn } = updatePasswordUser()
-
 	const { user } = useAuth()
+	const { t } = useTranslation()
 
 	const form = useForm<any>({
 		mode: 'onChange',
@@ -28,7 +29,7 @@ const ChangePasswordForm: React.FC = () => {
 		if (!bcrypt.compareSync(value, user.password)) {
 			setError('currentPassword', {
 				type: 'manual',
-				message: 'Current password is incorrect'
+				message: t('ns_auth:validation.password_incorrect')
 			})
 		} else {
 			clearErrors('currentPassword')
@@ -43,10 +44,15 @@ const ChangePasswordForm: React.FC = () => {
 	}, [currentPassword])
 
 	const updatePassword = (data: any) => {
-		if (data.password.length < 6) {
+		if (data.currentPassword.length < 6) {
+			setError('currentPassword', {
+				type: 'manual',
+				message: t('ns_auth:validation.password_length')
+			})
+		} else if (data.password.length < 6) {
 			setError('password', {
 				type: 'manual',
-				message: 'New password must be at least 6 characters long'
+				message: t('ns_auth:validation.password_length')
 			})
 			return
 		} else {
@@ -60,15 +66,19 @@ const ChangePasswordForm: React.FC = () => {
 			<Form onSubmit={form.handleSubmit((data) => updatePassword(data))}>
 				{/* Public profile */}
 				<Fieldset>
-					<Legend>Update password</Legend>
+					<Legend>{t('ns_auth:profile.update_password')}</Legend>
 					<Typography variant='small' color='muted'>
-						Change password to access to your account
+						{t('ns_auth:profile.change_password_to_access')}
 					</Typography>
 
 					<Div className='space-y-6'>
-						<InputFieldControl label='Current password' name='currentPassword' placeholder='********' />
-						<InputFieldControl label='New password' name='password' placeholder='********' />
-						<Button>Change password</Button>
+						<InputFieldControl
+							label={t('ns_auth:profile.current_password')}
+							name='currentPassword'
+							placeholder='********'
+						/>
+						<InputFieldControl label={t('ns_auth:profile.new_password')} name='password' placeholder='********' />
+						<Button>{t('ns_auth:profile.change_password')}</Button>
 					</Div>
 				</Fieldset>
 			</Form>
