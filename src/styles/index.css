@@ -51,11 +51,11 @@
 		--table-row-active: 0 0% 96%;
 		--table-row-selected: 0 0% 98%;
 
-		--chart-1: 220 70% 50%;
+		/* --chart-1: 220 70% 50%;
 		--chart-2: 340 75% 55%;
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
-		--chart-5: 160 60% 45%;
+		--chart-5: 160 60% 45%; */
 
 		--sidebar-background: 0 0% 100%;
 		--sidebar-foreground: 240 5.3% 26.1%;
@@ -66,13 +66,11 @@
 		--sidebar-border: 220 13% 91%;
 		--sidebar-ring: 217.2 91.2% 59.8%;
 
-		/* 
-			--chart-1: 359 2% 90%;
-			--chart-2: 240 1% 74%;
-			--chart-3: 240 1% 58%;
-			--chart-4: 240 1% 42%;
-			--chart-5: 240 2% 26%; 
-		*/
+		--chart-1: 359 2% 90%;
+		--chart-2: 240 1% 74%;
+		--chart-3: 240 1% 58%;
+		--chart-4: 240 1% 42%;
+		--chart-5: 240 2% 26%;
 	}
 
 	.dark {
@@ -117,11 +115,11 @@
 		--table-row-active: 0 0% 12%;
 		--table-row-selected: 0 0% 9%;
 
-		--chart-1: 220 70% 50%;
+		/* --chart-1: 220 70% 50%;
 		--chart-2: 160 60% 45%;
 		--chart-3: 30 80% 55%;
 		--chart-4: 280 65% 60%;
-		--chart-5: 340 75% 55%;
+		--chart-5: 340 75% 55%; */
 
 		--sidebar-background: 0 0% 3.9%;
 		--sidebar-foreground: 0 0% 98%;
@@ -132,13 +130,11 @@
 		--sidebar-border: 240 3.7% 15.9%;
 		--sidebar-ring: 217.2 91.2% 59.8%;
 
-		/* 
-			--chart-1: 359 2% 90%;
-			--chart-2: 240 1% 74%;
-			--chart-3: 240 1% 58%;
-			--chart-4: 240 1% 42%;
-			--chart-5: 240 2% 26%; 
-		*/
+		--chart-1: 359 2% 90%;
+		--chart-2: 240 1% 74%;
+		--chart-3: 240 1% 58%;
+		--chart-4: 240 1% 42%;
+		--chart-5: 240 2% 26%;
 	}
 
 	/* Global styles */

@@ -53,7 +53,7 @@ const Statistics: React.FC = () => {
 	const chartConfig = useMemo(
 		() =>
 			statistics.reduce((acc, curr) => {
-				acc[curr.dataField] = { color: 'hsl(var(--chart-1))' }
+				acc[curr.dataField] = { color: 'hsl(var(--chart-5))' }
 				return acc
 			}, {}),
 		[statistics]
@@ -82,14 +82,14 @@ const Statistics: React.FC = () => {
 								<defs>
 									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
 										<stop offset='1%' stopColor='hsl(var(--chart-1))' stopOpacity={0.8} />
-										<stop offset='99%' stopColor='hsl(var(--chart-1))' stopOpacity={0} />
+										<stop offset='99%' stopColor='hsl(var(--chart-3))' stopOpacity={0} />
 									</linearGradient>
 								</defs>
 								<Area
 									type='monotone'
 									dataKey={stats.dataField}
 									fillOpacity={0.8}
-									stroke='hsl(var(--chart-1))'
+									stroke='hsl(var(--chart-3))'
 									fill='url(#colorPv)'
 								/>
 							</AreaChart>
