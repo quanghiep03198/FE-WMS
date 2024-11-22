@@ -14,7 +14,6 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 
 export const useGetEpcQuery = () => {
 	const { searchParams } = useQueryParams<PMInboundURLSearch>()
-	console.log(searchParams)
 	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
 		'currentPage',
 		'selectedOrder',

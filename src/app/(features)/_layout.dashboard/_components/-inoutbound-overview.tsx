@@ -25,7 +25,7 @@ const chartConfig = {
 	},
 	export: {
 		label: 'Export',
-		color: 'hsl(var(--chart-2))'
+		color: 'hsl(var(--chart-5))'
 	}
 } satisfies ChartConfig
 

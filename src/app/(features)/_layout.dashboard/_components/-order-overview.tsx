@@ -19,11 +19,11 @@ const chartConfig = {
 	},
 	completed: {
 		label: 'Completed',
-		color: 'hsl(var(--chart-2))'
+		color: 'hsl(var(--chart-3))'
 	},
 	cancelled: {
 		label: 'Cancelled',
-		color: 'hsl(var(--chart-3))'
+		color: 'hsl(var(--chart-5))'
 	}
 } satisfies ChartConfig
 
