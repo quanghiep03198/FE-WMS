@@ -55,4 +55,7 @@ export class AuthService {
 		const accessToken = useAuthStore.getState().token
 		return !isNil(accessToken)
 	}
+	static async updatePassword(newPassword: string) {
+		return await axiosInstance.patch(`/change-password`, newPassword)
+	}
 }
