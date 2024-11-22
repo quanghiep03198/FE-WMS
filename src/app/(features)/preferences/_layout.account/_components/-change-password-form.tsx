@@ -76,8 +76,14 @@ const ChangePasswordForm: React.FC = () => {
 							label={t('ns_auth:profile.current_password')}
 							name='currentPassword'
 							placeholder='********'
+							type='password'
 						/>
-						<InputFieldControl label={t('ns_auth:profile.new_password')} name='password' placeholder='********' />
+						<InputFieldControl
+							label={t('ns_auth:profile.new_password')}
+							name='password'
+							placeholder='********'
+							type='password'
+						/>
 						<Button>{t('ns_auth:profile.change_password')}</Button>
 					</Div>
 				</Fieldset>
