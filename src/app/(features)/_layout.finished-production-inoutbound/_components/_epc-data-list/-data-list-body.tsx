@@ -226,7 +226,6 @@ const EpcDataList: React.FC = () => {
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {
-		console.log('rerender')
 		if (isEqual(previousEpc, incommingEpc)) {
 			const previousData = scannedEpc?.data ?? []
 			const newData = incommingEpc?.data ?? []
@@ -280,8 +279,6 @@ const EpcDataList: React.FC = () => {
 		itemHeight: VIRTUAL_ITEM_SIZE,
 		overscan: PRERENDERED_ITEMS
 	})
-
-	console.log(1)
 
 	return (
 		<Fragment>

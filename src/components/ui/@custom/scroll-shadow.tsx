@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { useScroll, useUpdate } from 'ahooks'
+import { useScroll, useSize, useUpdate } from 'ahooks'
 import React, { forwardRef, memo, useEffect, useRef } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {
@@ -16,6 +16,7 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320
 	const resolvedRef = (ref ?? localContainerRef) as React.MutableRefObject<HTMLDivElement>
 
 	const containerScroll = useScroll(resolvedRef)
+	const clientSize = useSize(resolvedRef)
 
 	const scrollHeight = resolvedRef.current?.scrollHeight ?? 0
 	const scrollTop = resolvedRef.current?.scrollTop ?? 0
@@ -27,7 +28,7 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320
 
 	const isScrollable = scrollHeight > scrollClientHeight
 
-	useEffect(update, [children])
+	useEffect(update, [scrollHeight, scrollTop, scrollClientHeight, clientSize])
 
 	return (
 		<div
@@ -38,9 +39,9 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(({ size = 320
 			data-top-bottom-scroll={isScrollable && isScrollTopBottom}
 			className={cn(
 				className,
-				'h-[var(--scroll-shadow-size)] overflow-y-auto transition-colors duration-200 !scrollbar-none',
-				'data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/2),transparent)]',
-				'data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/2),transparent)]',
+				'h-[var(--scroll-shadow-size)] overflow-y-auto !scrollbar-none',
+				'data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]',
+				'data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]',
 				'data-[top-bottom-scroll=true]:[mask-image:linear-gradient(180deg,transparent,hsl(var(--sidebar-background))_calc(var(--scroll-shadow-size)/4),hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]'
 			)}>
 			{children}

@@ -15,7 +15,6 @@ const NetworkInsight: React.FC = () => {
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
 
 	useEventListener(NETWORK_CONNECTION_CHANGE, (e: CustomEvent<boolean>) => {
-		console.log(e.detail)
 		setIsNetworkAvailable(e.detail)
 	})
 

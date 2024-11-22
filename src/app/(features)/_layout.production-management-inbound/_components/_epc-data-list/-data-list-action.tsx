@@ -22,8 +22,6 @@ const DataListAction: React.FC = () => {
 		})
 	}
 
-	console.log(selectedOrder)
-
 	return (
 		<Button
 			disabled={isPending || scannedEpc?.totalDocs === 0 || selectedOrder === 'all'}
