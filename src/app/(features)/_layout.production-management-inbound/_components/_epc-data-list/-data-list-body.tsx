@@ -214,6 +214,7 @@ const DataListBody: React.FC = () => {
 				...metadata?.epcs,
 				data: uniqBy([...previousPageData, ...nextPageData], 'epc')
 			})
+			setScannedOrders(metadata?.orders)
 		} catch {
 			throw new RetriableError()
 		}
@@ -230,6 +231,7 @@ const DataListBody: React.FC = () => {
 				...omit(metadata?.epcs, 'data'),
 				data: uniqBy([...previousFilteredEpc, ...nextFilteredEpc], 'epc')
 			})
+			setScannedOrders(metadata?.orders)
 		} catch {
 			throw new RetriableError()
 		}
