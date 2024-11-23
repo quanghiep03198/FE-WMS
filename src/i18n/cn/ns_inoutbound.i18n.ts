@@ -66,6 +66,7 @@ export default {
 		inoutbound_form_note: '更新库存移动之前断开连接',
 		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',
 		select_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
+		select_rfid_process: '选择与各自部门相对应的扫描过程',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		no_exchangable_order: '没有可交换的顺序',
 		exchange_epc_dialog_desc: '允许用户用新的生产订单替换或更新产品上的 EPC 标签.',

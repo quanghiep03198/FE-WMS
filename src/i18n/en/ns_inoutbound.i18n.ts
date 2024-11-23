@@ -72,6 +72,7 @@ export default {
 			'Select the production order to view its scanned EPC data and perform warehouse inbound or outbound operations.',
 		select_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
+		select_rfid_process: 'Select the process to scan the corresponding tags for the responsible departments',
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',

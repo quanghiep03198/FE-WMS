@@ -1,3 +1,4 @@
+import useQueryParams from '@/common/hooks/use-query-params'
 import {
 	Div,
 	HoverCard,
@@ -14,8 +15,6 @@ import {
 } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { ProducingProcessSuffix } from '../../_constants/index.const'
-
-import useQueryParams from '@/common/hooks/use-query-params'
 import { usePageContext } from '../../_contexts/-page-context'
 import { PMInboundURLSearch } from '../../_schemas/pm-inbound.schema'
 
@@ -41,9 +40,7 @@ const ProcessSelect = () => {
 					</SelectTrigger>
 				</HoverCardTrigger>
 				<HoverCardContent side='bottom' align='start'>
-					<Typography variant='small'>
-						Lựa chọn công đoạn quét tem tương ứng với các bộ phận đương nhiệm
-					</Typography>
+					<Typography variant='small'>{t('ns_inoutbound:description.select_rfid_process')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
 			<SelectContent>
