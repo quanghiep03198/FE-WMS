@@ -36,11 +36,9 @@ tmp
 # Storybook log
 *storybook.log
 
-# JSON server
-_api
-
 # PWA dev
 dev-dist
 
 # Vitest
 html
+coverage
