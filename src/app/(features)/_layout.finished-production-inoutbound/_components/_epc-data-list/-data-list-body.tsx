@@ -240,9 +240,9 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [incommingEpc, previousEpc])
 
-	// * On page changes and manual fetch epc query is not running
+	// * On current page changes with value greater than default (1 or null)
 	useAsyncEffect(async () => {
-		if (!connection || !scanningStatus) return
+		if (!connection || !scanningStatus || currentPage === DEFAULT_PROPS.currentPage || currentPage === null) return
 		try {
 			const { data: metadata } = await manualFetchEpc()
 			const previousPageData = scannedEpc?.data ?? []
@@ -256,7 +256,7 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [currentPage])
 
-	// * On selected order changes and manual fetch epc query is not running
+	// * On selected order changes
 	useAsyncEffect(async () => {
 		if (!connection || !scanningStatus) return
 		try {
@@ -304,9 +304,10 @@ const EpcDataList: React.FC = () => {
 				)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
+					scrollbar={true}
 					size={isUltimateLargeScreen ? 600 : 500}
 					ref={containerRef}
-					className='z-10 flex min-h-full w-full flex-col items-stretch divide-y divide-border overflow-y-scroll bg-background p-2 scrollbar'>
+					className='z-10 flex w-full flex-col items-stretch divide-y divide-border bg-background p-2'>
 					<Div ref={wrapperRef}>
 						{Array.isArray(virtualItems) &&
 							virtualItems.map((virtualItem) => {

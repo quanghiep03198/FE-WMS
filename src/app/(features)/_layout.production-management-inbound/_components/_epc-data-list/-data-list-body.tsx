@@ -204,7 +204,7 @@ const DataListBody: React.FC = () => {
 
 	// * On page changes and manual fetch epc query is not running
 	useAsyncEffect(async () => {
-		if (!connection || !scanningStatus) return
+		if (!connection || !scanningStatus || currentPage === null || currentPage === DEFAULT_PROPS.currentPage) return
 		try {
 			const { data: metadata } = await manualFetchEpc()
 			const previousPageData = scannedEpc?.data ?? []
@@ -250,7 +250,9 @@ const DataListBody: React.FC = () => {
 	return Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 		<ScrollShadow
 			ref={containerRef}
-			className='z-10 flex h-[40vh] min-h-full w-full flex-col items-stretch divide-y divide-border overflow-y-scroll bg-background p-2 scrollbar xxl:h-[45vh]'>
+			scrollbar={true}
+			size={500}
+			className='z-10 flex w-full flex-col items-stretch divide-y divide-border bg-background p-2'>
 			<Div ref={wrapperRef}>
 				{Array.isArray(virtualItems) &&
 					virtualItems.map((virtualItem) => {
