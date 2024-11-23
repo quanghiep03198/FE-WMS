@@ -17,16 +17,14 @@ import {
 	Input,
 	Table,
 	TableBody,
-	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
 	Typography,
 	buttonVariants
 } from '@/components/ui'
-import { ESTIMATE_SIZE } from '@/components/ui/@react-table/components/table'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useMemoizedFn, useReactive } from 'ahooks'
+import { useReactive } from 'ahooks'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetOrderDetail } from '../../_apis/rfid.api'
@@ -82,7 +80,7 @@ const OrderSizeDetailTable: React.FC = () => {
 	const isSomeMatchingRowsSelected =
 		selectedRows && selectedRows.length > 0 && selectedRows.length < allMatchingRowsSelection.length
 
-	const toggleAllMatchedRowsSelected = useMemoizedFn((checked: CheckedState) => {
+	const toggleAllMatchedRowsSelected = (checked: CheckedState) => {
 		if (!checked) {
 			resetSelectedRows()
 		} else {
@@ -96,7 +94,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				}))
 			)
 		}
-	})
+	}
 
 	const filteredScannedOrders = useMemo(() => {
 		const { mo_no, mat_code, shoes_style_code_factory } = columnFilters
@@ -125,25 +123,24 @@ const OrderSizeDetailTable: React.FC = () => {
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
-			<DialogContent className='max-w-8xl focus-visible:outline-none focus-visible:ring-0'>
+			<DialogContent className='max-w-8xl focus-visible:outline-none focus-visible:ring-0 lg:h-screen lg:rounded-none'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
-				<Div className='divide-y overflow-hidden rounded-lg border'>
-					<Div ref={ref} className='flow-root h-[65vh] w-full overflow-scroll rounded-lg'>
+				<Div className='relative divide-y overflow-hidden rounded-lg border'>
+					<Div ref={ref} className='flow-root h-[65vh] overflow-scroll rounded-lg'>
 						<Table
-							className='border-separate border-spacing-0 rounded-lg'
+							className='w-full border-separate border-spacing-0 rounded-lg'
 							style={
 								{
 									'--row-selection-col-width': '3rem',
-									'--sticky-left-col-width': '9rem',
-									'--row-action-col-width': '5rem',
-									'--header-cell-height': `${ESTIMATE_SIZE}px`
+									'--sticky-left-col-width': '10rem',
+									'--row-action-col-width': '5rem'
 								} as React.CSSProperties
 							}>
 							<TableHeader className='sticky top-0 z-20'>
-								<TableRow className='*:bg-table-head'>
+								<TableRow className='sticky *:bg-table-head'>
 									<TableHead className='sticky left-0 z-20 w-[var(--row-selection-col-width)]'>
 										<Checkbox
 											checked={
@@ -154,36 +151,36 @@ const OrderSizeDetailTable: React.FC = () => {
 											onCheckedChange={toggleAllMatchedRowsSelected}
 										/>
 									</TableHead>
-									<TableHead className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-full'>
+									<TableHead className='left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 										{t('ns_erp:fields.mo_no')}
 									</TableHead>
-									<TableHead className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-left-col-width)] min-w-full'>
+									<TableHead className='left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 										{t('ns_erp:fields.shoestyle_codefactory')}
 									</TableHead>
-									<TableHead className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-left-col-width)] min-w-full border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+									<TableHead className='left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
 										{t('ns_erp:fields.mat_code')}
 									</TableHead>
 									<TableHead>Size</TableHead>
 									<TableHead
 										align='right'
-										className='sticky left-auto right-[var(--row-action-col-width)] z-20 min-w-32'>
+										className='right-[var(--row-action-col-width)] z-20 w-32 bg-background xl:sticky'>
 										{t('ns_common:common_fields.total')}
 									</TableHead>
-									<TableHead className='sticky left-auto right-0 z-20 min-w-[var(--row-action-col-width)]'>
-										-
+									<TableHead className='right-0 z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky'>
+										<span className='sr-only'></span>
 									</TableHead>
 								</TableRow>
 								{/* Column Filters */}
-								<TableRow className='sticky top-[37px] z-20'>
+								<TableRow className='sticky'>
 									<TableHead
 										align='center'
-										className='sticky left-0 z-20 w-[var(--row-selection-col-width)]'></TableHead>
+										className='sticky left-0 z-20 w-[var(--row-selection-col-width)] min-w-[var(--row-selection-col-width)]'></TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] p-0'>
+										className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
 										<Input
 											placeholder='Search ...'
-											className='min-w-full border-none'
+											className='w-full border-none font-normal'
 											onChange={(e) => {
 												columnFilters.mo_no = e.target.value
 											}}
@@ -191,10 +188,10 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-left-col-width)] p-0'>
+										className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
 										<Input
 											placeholder='Search ...'
-											className='min-w-full border-none'
+											className='w-full border-none font-normal'
 											onChange={(e) => {
 												columnFilters.shoes_style_code_factory = e.target.value
 											}}
@@ -202,52 +199,48 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-left-col-width)] border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+										className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 										<Input
 											placeholder='Search ...'
-											className='min-w-full border-none'
+											className='w-full border-none font-normal'
 											onChange={(e) => {
 												columnFilters.mat_code = e.target.value
 											}}
 										/>
 									</TableHead>
+									<TableHead></TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-0 z-20 w-[var(--row-selection-col-width)]'></TableHead>
-									<TableHead
-										align='center'
-										className='sticky left-auto right-[var(--row-action-col-width)] z-20 min-w-32'></TableHead>
-									<TableHead
-										align='center'
-										className='sticky left-auto right-0 z-20 min-w-[var(--row-action-col-width)]'></TableHead>
+										className='sticky right-[var(--row-action-col-width)] z-20 w-24 min-w-24'>
+										<span className='sr-only'></span>
+									</TableHead>
+									<TableHead align='center' className='sticky right-0 z-20 w-[var(--row-action-col-width)]'>
+										<span className='sr-only'></span>
+									</TableHead>
 								</TableRow>
 							</TableHeader>
-							<TableBody>
-								{filteredScannedOrders.length > 0 ? (
-									filteredScannedOrders.map((order) => {
+							{Array.isArray(filteredScannedOrders) && filteredScannedOrders.length > 0 && (
+								<TableBody>
+									{filteredScannedOrders.map((order) => {
 										return <TableDataRow key={order.mo_no} data={order} />
-									})
-								) : (
-									<TableRow>
-										<TableCell colSpan={6}>
-											<Div className='grid h-[calc(65vh-74px)] place-content-center text-center text-sm text-muted-foreground'>
-												<Typography className='inline-flex items-center gap-x-2'>
-													<Icon name='Inbox' size={20} />
-													{t('ns_common:table.no_data')}
-												</Typography>
-											</Div>
-										</TableCell>
-									</TableRow>
-								)}
-							</TableBody>
+									})}
+								</TableBody>
+							)}
 						</Table>
+						{(!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0) && (
+							<Div className='absolute inset-0 grid place-content-center text-center text-sm text-muted-foreground'>
+								<Typography className='inline-flex items-center gap-x-2'>
+									<Icon name='Inbox' size={20} />
+									{t('ns_common:table.no_data')}
+								</Typography>
+							</Div>
+						)}
 					</Div>
-
 					<Div className='sticky bottom-0 left-0 flex h-16 items-center justify-between bg-background p-4'>
 						<Typography variant='small' color='muted'>
 							{t('ns_inoutbound:mo_no_box.caption')}
 						</Typography>
-						<ExchangeSelectedOrderTrigger />
+						<ExchangeOrderDialogTrigger />
 					</Div>
 				</Div>
 			</DialogContent>
@@ -255,7 +248,7 @@ const OrderSizeDetailTable: React.FC = () => {
 	)
 }
 
-const ExchangeSelectedOrderTrigger: React.FC = () => {
+const ExchangeOrderDialogTrigger: React.FC = () => {
 	const {
 		selectedRows,
 		setDefaultExchangeOrderFormValues: setDefaultValues,

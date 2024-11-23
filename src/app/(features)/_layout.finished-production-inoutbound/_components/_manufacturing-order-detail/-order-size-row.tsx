@@ -98,7 +98,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				'transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
-			<TableCell className='sticky left-0 z-10 min-w-[var(--row-selection-col-width)] py-4'>
+			<TableCell className='sticky left-0 z-10 w-[var(--row-selection-col-width)] min-w-[var(--row-selection-col-width)] py-4'>
 				<Checkbox
 					disabled={!hasSomeRowMatch && selectedRows.length > 0}
 					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
@@ -111,7 +111,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					}
 				/>
 			</TableCell>
-			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
+			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
 					<button
@@ -128,10 +128,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					</button>
 				</Div>
 			</TableCell>
-			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 min-w-[var(--sticky-left-col-width)]'>
+			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
 				{data?.shoes_style_code_factory}
 			</TableCell>
-			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 				{data?.mat_code}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
@@ -168,10 +168,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						))}
 				</Div>
 			</TableCell>
-			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] font-medium'>
+			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] w-24 min-w-24 font-medium'>
 				{aggregateSizeCount}
 			</TableCell>
-			<TableCell align='center' className='sticky right-0 w-20 min-w-[var(--sticky-right-col-width)] !opacity-100'>
+			<TableCell align='center' className='sticky right-0 w-[var(--sticky-right-col-width)] !opacity-100'>
 				<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
 					<PopoverTrigger
 						disabled={data?.mo_no === FALLBACK_ORDER_VALUE}
