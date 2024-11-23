@@ -116,10 +116,14 @@ const NavSidebar: React.FC = () => {
 const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
-	const { setOpenMobile } = useSidebar()
+	const { openMobile, setOpenMobile } = useSidebar()
 
 	return (
-		<SidebarMenuItem role='menuitem' onClick={() => setOpenMobile(!isSmallScreen)}>
+		<SidebarMenuItem
+			role='menuitem'
+			onClick={() => {
+				if (isSmallScreen) setOpenMobile(!openMobile)
+			}}>
 			<SidebarMenuButton
 				asChild
 				size='default'
