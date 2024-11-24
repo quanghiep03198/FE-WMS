@@ -1,5 +1,3 @@
-import GlobeDarkerImage from '@/assets/images/svgs/globe-darker.svg'
-import GlobeImage from '@/assets/images/svgs/globe.svg'
 import { cn } from '@/common/utils/cn'
 import { HoverCard, HoverCardContent, HoverCardTrigger, Icon } from '@/components/ui'
 import { useInViewport } from 'ahooks'
@@ -173,8 +171,7 @@ const DeploymentGlobe: React.FC = () => {
 				decoding='async'
 				data-nimg='1'
 				className='block h-full w-full dark:hidden'
-				srcSet={GlobeImage}
-				src={GlobeImage}
+				src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/globe.svg'
 				style={{ color: 'transparent' }}
 			/>
 			<img
@@ -185,8 +182,7 @@ const DeploymentGlobe: React.FC = () => {
 				decoding='async'
 				data-nimg='1'
 				className='hidden h-full w-full dark:block'
-				srcSet={GlobeDarkerImage}
-				src={GlobeDarkerImage}
+				src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/globe.svg'
 				style={{ color: 'transparent' }}
 			/>
 		</div>

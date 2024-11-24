@@ -1,4 +1,3 @@
-import GlobalTransportImage from '@/assets/images/svgs/global-transport.svg'
 import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography, buttonVariants } from '@/components/ui'
@@ -39,7 +38,13 @@ const CTASection: React.FC = () => {
 				</Div>
 			</Div>
 			<Div className='flex h-full w-full flex-grow flex-col items-center justify-center'>
-				<Image loading='eager' width='500' height='500' src={GlobalTransportImage} alt='Global transport' />
+				<Image
+					loading='eager'
+					width='500'
+					height='500'
+					src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/global-transport.svg'
+					alt='Global transport'
+				/>
 			</Div>
 		</Div>
 	)
