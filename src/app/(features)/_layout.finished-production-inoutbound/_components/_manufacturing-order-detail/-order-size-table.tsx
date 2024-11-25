@@ -24,7 +24,7 @@ import {
 	buttonVariants
 } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useReactive } from 'ahooks'
+import { useResetState } from 'ahooks'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetOrderDetail } from '../../_apis/rfid.api'
@@ -47,7 +47,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		'setSelectedRows'
 	)
 
-	const columnFilters = useReactive<Omit<OrderItem, 'sizes'>>({
+	const [columnFilters, setColumnFilters, resetColumnFilters] = useResetState<Omit<OrderItem, 'sizes'>>({
 		mo_no: '',
 		mat_code: '',
 		shoes_style_code_factory: ''
@@ -65,7 +65,10 @@ const OrderSizeDetailTable: React.FC = () => {
 	}, [data])
 
 	useEffect(() => {
-		if (!dialogOpen) resetSelectedRows()
+		if (!dialogOpen) {
+			resetSelectedRows()
+			resetColumnFilters()
+		}
 	}, [dialogOpen])
 
 	const allMatchingRowsSelection = useMemo(() => {
@@ -181,9 +184,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
-											onChange={(e) => {
-												columnFilters.mo_no = e.target.value
-											}}
+											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
 										/>
 									</TableHead>
 									<TableHead
@@ -192,9 +193,9 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
-											onChange={(e) => {
-												columnFilters.shoes_style_code_factory = e.target.value
-											}}
+											onChange={(e) =>
+												setColumnFilters((prev) => ({ ...prev, shoes_style_code_factory: e.target.value }))
+											}
 										/>
 									</TableHead>
 									<TableHead
@@ -203,9 +204,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
-											onChange={(e) => {
-												columnFilters.mat_code = e.target.value
-											}}
+											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mat_code: e.target.value }))}
 										/>
 									</TableHead>
 									<TableHead></TableHead>
