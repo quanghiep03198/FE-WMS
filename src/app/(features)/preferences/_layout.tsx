@@ -1,5 +1,6 @@
 import AuthGuard from '@/app/_components/_guard/-auth-guard'
 import { useAuth } from '@/common/hooks/use-auth'
+import Loading from '@/components/shared/loading'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +9,7 @@ import LayoutComposition from './_components/_partials/-layout-composition'
 
 export const Route = createFileRoute('/(features)/preferences/_layout')({
 	component: Layout,
+	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({

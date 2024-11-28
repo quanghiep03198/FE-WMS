@@ -174,6 +174,15 @@
 	}
 }
 
+@keyframes fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
 @keyframes slide-from-right {
 	from {
 		transform: translateX(30px);
@@ -186,13 +195,19 @@
 	}
 }
 
+::view-transition-new(root) {
+	animation: 1s cubic-bezier(0, 0, 0.5, 1) fade both;
+}
+
 ::view-transition-old(wrapper) {
+	animation: 2s cubic-bezier(0, 0, 0.2, 1) fade;
 	animation:
 		90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
 		300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
 }
 
 ::view-transition-new(wrapper) {
+	animation: 2s cubic-bezier(0.4, 0, 1, 1) fade;
 	animation:
 		210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
 		300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;

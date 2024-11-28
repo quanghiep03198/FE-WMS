@@ -1,3 +1,4 @@
+import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { SidebarProvider } from '@/components/ui'
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
@@ -12,6 +13,7 @@ import { BreadcrumbProvider } from './_contexts/-breadcrumb-context'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
+	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated)
 			throw redirect({

@@ -1,3 +1,4 @@
+import { useEventListener } from 'ahooks'
 import nProgress from 'nprogress'
 import { useEffect } from 'react'
 import { Div, Icon, Typography } from '../ui'
@@ -13,6 +14,10 @@ export default function Loading() {
 			nProgress.done()
 		}
 	}, [])
+
+	useEventListener('load', () => document.startViewTransition())
+
+	return null
 
 	return (
 		<Div className='fixed z-50 flex h-screen w-screen items-center justify-center gap-x-2'>

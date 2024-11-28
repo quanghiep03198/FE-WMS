@@ -1,5 +1,6 @@
 import GridBackground from '@/app/(public)/_components/-grid-background'
 import { useAuth } from '@/common/hooks/use-auth'
+import Loading from '@/components/shared/loading'
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
@@ -7,6 +8,7 @@ import PageComposition from './_components/-page-composition'
 
 export const Route = createFileRoute('/(auth)/login/')({
 	component: LoginPage,
+	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (isAuthenticated)
 			throw redirect({
