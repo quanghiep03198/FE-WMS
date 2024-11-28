@@ -1,8 +1,8 @@
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
-import ReactSWC from '@vitejs/plugin-react-swc'
+import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
+import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { defineConfig, loadEnv, ViteDevServer } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA as pwa } from 'vite-plugin-pwa'
 
 /**
  * @see https://vitejs.dev/config/
@@ -13,9 +13,9 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [
-			TanStackRouterVite(),
-			ReactSWC(),
-			VitePWA({
+			reactRouter(),
+			react(),
+			pwa({
 				registerType: 'autoUpdate',
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
 				manifest: {
@@ -144,6 +144,8 @@ export default defineConfig(({ mode }) => {
 							['tailwind-merge', /tailwind-merge/],
 							['uuid', /uuid/],
 							['zustand', /zustand/],
+							['bcryptjs-react', /bcryptjs-react/],
+							['web-vitals', /web-vitals/],
 							['zod', /zod/]
 						])
 
