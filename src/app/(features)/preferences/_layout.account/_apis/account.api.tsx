@@ -4,9 +4,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-export const updatePasswordUser = () => {
+export const useUpdatePasswordMutation = () => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
+
 	return useMutation({
 		mutationKey: [USER_PROVIDE_TAG],
 		mutationFn: AuthService.updatePassword,

@@ -6,10 +6,10 @@ import React, { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { updatePasswordUser } from '../_apis/account.api'
+import { useUpdatePasswordMutation } from '../_apis/account.api'
 
 const ChangePasswordForm: React.FC = () => {
-	const { mutateAsync: updatePasswordFn } = updatePasswordUser()
+	const { mutateAsync: updatePasswordFn } = useUpdatePasswordMutation()
 	const { user } = useAuth()
 	const { t } = useTranslation()
 
