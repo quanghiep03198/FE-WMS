@@ -27,7 +27,7 @@ const NavBreadcrumb: React.FC = () => {
 				<BreadcrumbItem className=''>
 					<BreadcrumbLink asChild>
 						<Link to='/dashboard' preload={false}>
-							<HomeIcon className='size-[1.125rem]' />
+							<HomeIcon className='size-[1.135rem]' />
 						</Link>
 					</BreadcrumbLink>
 				</BreadcrumbItem>
