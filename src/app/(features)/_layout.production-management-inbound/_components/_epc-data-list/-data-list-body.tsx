@@ -251,7 +251,7 @@ const DataListBody: React.FC = () => {
 		<ScrollShadow
 			ref={containerRef}
 			scrollbar={true}
-			size={500}
+			size={485}
 			className='z-10 flex w-full flex-col items-stretch divide-y divide-border bg-background p-2'>
 			<Div ref={wrapperRef}>
 				{Array.isArray(virtualItems) &&

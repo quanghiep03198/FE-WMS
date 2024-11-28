@@ -64,9 +64,9 @@ const PollingIntervalSelector: React.FC = () => {
 						<Icon name='Zap' size={20} />
 						<Slider
 							id='polling-duration'
-							min={1000}
+							min={500}
 							max={5000}
-							step={1000}
+							step={100}
 							defaultValue={[settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration]}
 							disabled={disabled}
 							onValueChange={(value) => setSettings({ ...settings, pollingDuration: value[0] })}

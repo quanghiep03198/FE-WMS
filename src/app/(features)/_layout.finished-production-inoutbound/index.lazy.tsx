@@ -27,7 +27,7 @@ export type RFIDSettings = {
 }
 
 export const DEFAULT_FP_RFID_SETTINGS: RFIDSettings = {
-	pollingDuration: 1000,
+	pollingDuration: 500,
 	fullscreenMode: false,
 	developerMode: false,
 	preserveLog: false

@@ -5,7 +5,7 @@ import { FALLBACK_ORDER_VALUE, useGetEpcQuery } from '../../_apis/rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 const OrderFilterSelect: React.FC = () => {
-	const { isLoading } = useGetEpcQuery()
+	const { isFetching } = useGetEpcQuery()
 	const { scannedOrders, selectedOrder, setCurrentPage, setSelectedOrder } = usePageContext(
 		'scannedOrders',
 		'selectedOrder',
@@ -22,7 +22,7 @@ const OrderFilterSelect: React.FC = () => {
 	return (
 		<Select defaultValue={DEFAULT_PROPS.selectedOrder} value={selectedOrder} onValueChange={handleChangeOrder}>
 			<SelectTrigger className='inline-flex w-full items-center gap-x-2 bg-background'>
-				{selectedOrder !== previousSelectedOrder && isLoading ? (
+				{selectedOrder !== previousSelectedOrder && isFetching ? (
 					<Icon name='LoaderCircle' className='animate-[spin_1.75s_linear_infinite]' />
 				) : (
 					<Icon name='ListFilter' />
