@@ -9,8 +9,9 @@ module.exports = {
 	],
 	ignorePatterns: ['dist', '.eslintrc.cjs'],
 	parser: '@typescript-eslint/parser',
-	plugins: ['react-refresh', 'unused-imports'],
+	plugins: ['react-refresh', 'unused-imports', '@tanstack/eslint-plugin-router'],
 	rules: {
+		'@tanstack/router/create-route-property-order': 'warn',
 		'no-unused-vars': 'off',
 		'unused-imports/no-unused-imports': 'warn',
 		'react-hooks/rules-of-hooks': 'warn',
