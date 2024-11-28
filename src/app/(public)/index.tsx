@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, ScrollRestoration } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
 import GridBackground from './_components/-grid-background'
@@ -20,6 +20,7 @@ export default function Page() {
 				<PageComposition />
 			</PageProvider>
 			<GridBackground />
+			<ScrollRestoration />
 		</Fragment>
 	)
 }

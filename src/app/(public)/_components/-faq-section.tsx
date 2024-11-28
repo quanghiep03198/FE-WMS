@@ -54,7 +54,7 @@ const FAQsSection: React.FunctionComponent = () => {
 			<Div
 				id='faqs'
 				as='section'
-				className='w-full basis-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
+				className='w-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
 				<Typography variant='h3' className='sm:text-xl'>
 					Frequently asked questions
 				</Typography>
@@ -69,7 +69,7 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex h-[32rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border sm:h-[24rem] sm:basis-full md:h-[24rem] md:basis-full'>
+			<Div className='flex max-h-[28rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
 					<Div className='size-3 rounded-full bg-muted-foreground' />
 					<Div className='size-3 rounded-full bg-muted-foreground' />

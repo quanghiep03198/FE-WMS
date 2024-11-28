@@ -14,8 +14,8 @@ const SupportSection: React.FunctionComponent = () => {
 				</Typography>
 			</Div>
 			<Div className='flex gap-x-6'>
-				<Div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10'>
-					<Icon name='Bug' size={20} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
+				<Div className='grid size-12 place-content-center rounded-lg bg-accent'>
+					<Icon name='Bug' size={24} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
 				</Div>
 				<Div>
 					<Typography variant='h6' className='mb-1 text-base sm:text-sm'>
@@ -35,8 +35,8 @@ const SupportSection: React.FunctionComponent = () => {
 				</Div>
 			</Div>
 			<Div className='flex gap-x-6'>
-				<Div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10'>
-					<Icon name='Computer' size={20} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
+				<Div className='grid size-12 place-content-center rounded-lg bg-accent'>
+					<Icon name='Computer' size={24} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
 				</Div>
 				<Div>
 					<Typography variant='h6' className='mb-1 text-base sm:text-sm'>

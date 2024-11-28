@@ -9,7 +9,10 @@ const CTASection: React.FC = () => {
 	const { handleMenuClick } = usePageContext()
 
 	return (
-		<Div id='cta' as='section' className='flex flex-grow flex-col items-center gap-10 xl:flex-row xl:gap-20'>
+		<Div
+			id='cta'
+			as='section'
+			className='mx-auto flex max-w-7xl flex-grow flex-col items-center gap-10 xl:flex-row xl:gap-20 xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center text-center xl:items-start xl:text-left'>
 				<Button
 					onClick={() => handleMenuClick(1)}

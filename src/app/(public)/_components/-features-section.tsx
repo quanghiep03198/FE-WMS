@@ -50,8 +50,8 @@ const FeaturesSection: React.FunctionComponent = () => {
 const FeatureItem: React.FC<FeatureItemProps> = (props) => {
 	return (
 		<Div className='flex items-start gap-x-4'>
-			<Div className='inline-flex items-center justify-center rounded-full bg-primary/10 p-3'>
-				<Icon name={props.icon} strokeWidth={1.5} className='inline-flex h-6 w-6 stroke-primary' />
+			<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-accent'>
+				<Icon name={props.icon} strokeWidth={1.5} size={24} />
 			</Div>
 			<Div className='space-y-2'>
 				<Typography className='font-medium'>{props.title}</Typography>
