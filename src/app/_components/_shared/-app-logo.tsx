@@ -3,10 +3,10 @@ import React from 'react'
 
 const AppLogo: React.FC = () => {
 	return (
-		<Div className='flex items-center gap-x-3 font-jetbrains antialiased group-data-[state=expanded]:gap-x-3 xl:gap-x-0'>
-			<Div className='flex aspect-square size-16 flex-col items-center justify-around rounded bg-primary p-px text-center font-jetbrains text-[10px] text-sm font-medium tracking-widest text-primary-foreground group-data-[state=collapsed]:size-8 group-data-[state=expanded]:size-14 group-data-[state=expanded]:p-2 group-data-[state=collapsed]:!text-[10px] group-data-[state=expanded]:font-medium'>
+		<Div className='flex items-center gap-x-3 font-jetbrains group-data-[state=expanded]:gap-x-3 xl:gap-x-0'>
+			<Div className='flex aspect-square size-16 flex-col items-center justify-around rounded bg-primary p-px text-center text-[10px] text-sm font-medium tracking-widest text-primary-foreground group-data-[state=collapsed]:size-8 group-data-[state=expanded]:size-14 group-data-[state=expanded]:p-2 group-data-[state=collapsed]:!text-[10px]'>
 				WMS
-				<Separator className='max-w-[80%] group-data-[state=expanded]:h-0.5' />
+				<Separator className='h-0.5 max-w-[80%]' />
 			</Div>
 			<Typography
 				variant='code'
