@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register'
 import App from './__app.tsx'
 import reportWebVitals from './report-web-vitals.ts'
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
 
 registerSW({ immediate: true })
 reportWebVitals()

@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './app/__root'
+import { Route as PubsubImport } from './app/pubsub'
 import { Route as publicIndexImport } from './app/(public)/index'
 import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
@@ -65,6 +66,12 @@ const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport =
 
 const featuresRoute = featuresImport.update({
   id: '/(features)',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PubsubRoute = PubsubImport.update({
+  id: '/pubsub',
+  path: '/pubsub',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -273,6 +280,13 @@ const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pubsub': {
+      id: '/pubsub'
+      path: '/pubsub'
+      fullPath: '/pubsub'
+      preLoaderRoute: typeof PubsubImport
+      parentRoute: typeof rootRoute
+    }
     '/(features)': {
       id: '/(features)'
       path: '/'
@@ -511,6 +525,7 @@ const featuresRouteWithChildren = featuresRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
+  '/pubsub': typeof PubsubRoute
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
@@ -532,6 +547,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/pubsub': typeof PubsubRoute
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
@@ -554,6 +570,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/pubsub': typeof PubsubRoute
   '/(features)': typeof featuresRouteWithChildren
   '/(features)/_layout': typeof featuresLayoutRouteWithChildren
   '/(public)/': typeof publicIndexRoute
@@ -580,6 +597,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/pubsub'
     | '/'
     | '/preferences'
     | '/authorization'
@@ -600,6 +618,7 @@ export interface FileRouteTypes {
     | '/warehouse/storage-details/$warehouseNum'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/pubsub'
     | '/'
     | '/preferences'
     | '/authorization'
@@ -620,6 +639,7 @@ export interface FileRouteTypes {
     | '/warehouse/storage-details/$warehouseNum'
   id:
     | '__root__'
+    | '/pubsub'
     | '/(features)'
     | '/(features)/_layout'
     | '/(public)/'
@@ -645,6 +665,7 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  PubsubRoute: typeof PubsubRoute
   featuresRoute: typeof featuresRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
   authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
@@ -652,6 +673,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  PubsubRoute: PubsubRoute,
   featuresRoute: featuresRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
   authAuthorizationIndexRoute: authAuthorizationIndexRoute,
@@ -668,11 +690,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/pubsub",
         "/(features)",
         "/(public)/",
         "/(auth)/authorization/",
         "/(auth)/login/"
       ]
+    },
+    "/pubsub": {
+      "filePath": "pubsub.tsx"
     },
     "/(features)": {
       "filePath": "(features)",

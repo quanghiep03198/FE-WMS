@@ -5,10 +5,9 @@ import { RouterProvider as BrowserRouterProvider, createRouter } from '@tanstack
 import { queryClient } from './query-client-provider'
 
 // Set up a Router instance
-// @ts-ignore
 const router = createRouter({
 	routeTree,
-	context: { queryClient, isAuthenticated: undefined },
+	context: { queryClient, isAuthenticated: false },
 	defaultPreload: 'intent',
 	defaultNotFoundComponent: NotFoundPage,
 	defaultPreloadStaleTime: 0
