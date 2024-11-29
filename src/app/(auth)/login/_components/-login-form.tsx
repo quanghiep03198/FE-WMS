@@ -39,7 +39,7 @@ const LoginForm: React.FC = () => {
 			return toast.loading(t('ns_common:notification.processing_request'))
 		},
 		onSuccess: async (data, _variables, context) => {
-			setAccessToken(data?.metadata?.token) // Store user's access token
+			setAccessToken(data?.metadata?.token!) // Store user's access token
 			toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError(_error, _variables, context) {
