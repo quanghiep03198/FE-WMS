@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [
-			reactRouter(),
 			react(),
+			reactRouter(),
 			pwa({
 				registerType: 'autoUpdate',
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
@@ -48,16 +48,6 @@ export default defineConfig(({ mode }) => {
 							sizes: '512x512',
 							type: 'image/png',
 							purpose: 'maskable'
-						},
-						{
-							src: './src/assets/images/svgs/faq-card.svg',
-							type: 'image/svg+xml',
-							purpose: 'any'
-						},
-						{
-							src: './src/assets/images/svgs/global-transport.svg',
-							type: 'image/svg+xml',
-							purpose: 'any'
 						}
 					]
 				},
@@ -145,7 +135,6 @@ export default defineConfig(({ mode }) => {
 							['uuid', /uuid/],
 							['zustand', /zustand/],
 							['bcryptjs-react', /bcryptjs-react/],
-							['web-vitals', /web-vitals/],
 							['zod', /zod/]
 						])
 
