@@ -3,14 +3,14 @@ import tw from 'tailwind-styled-components'
 import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 import Footer from './-footer'
 import Header from './-header'
+import Spotlight from './-spotlight'
 
 const PageComposition: React.FC = () => {
 	const pageContext = usePageContext()
 
 	return (
 		<Container ref={pageContext?.parentScrollRef} data-state='expanded'>
-			{/* <Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-top-40' /> */}
-
+			<Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-top-40' />
 			<Main ref={pageContext?.contentScrollRef}>
 				<Header />
 				<Div>

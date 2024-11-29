@@ -166,8 +166,8 @@ const DeploymentGlobe: React.FC = () => {
 			<img
 				alt='globe wireframe'
 				fetchPriority='high'
-				width='500'
-				height='500'
+				width='400'
+				height='400'
 				decoding='async'
 				data-nimg='1'
 				className='block h-full w-full dark:hidden'
@@ -177,8 +177,8 @@ const DeploymentGlobe: React.FC = () => {
 			<img
 				alt='globe wireframe'
 				fetchPriority='high'
-				width='500'
-				height='500'
+				width='400'
+				height='400'
 				decoding='async'
 				data-nimg='1'
 				className='hidden h-full w-full dark:block'
