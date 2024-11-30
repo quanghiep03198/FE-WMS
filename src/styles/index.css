@@ -1,5 +1,4 @@
 @import url('./nprogress.css');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -137,12 +136,30 @@
 		--chart-5: 240 2% 26%;
 	}
 
+	@font-face {
+		font-family: 'JetBrains Mono';
+		src: url(../assets/fonts/jetbrains-mono.woff2);
+	}
+
 	/* Global styles */
 	* {
 		@apply border-border !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar;
 	}
 	body {
 		@apply !pointer-events-auto bg-background text-foreground;
+	}
+
+	@keyframes fade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	::view-transition-new(root) {
+		animation: 1s cubic-bezier(0, 0, 0.5, 1) 0.25s fade both;
 	}
 }
 
@@ -160,55 +177,4 @@
 	button:focus-within {
 		outline: none;
 	}
-}
-
-@keyframes fade-in {
-	from {
-		opacity: 0;
-	}
-}
-
-@keyframes fade-out {
-	to {
-		opacity: 0;
-	}
-}
-
-@keyframes fade {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-@keyframes slide-from-right {
-	from {
-		transform: translateX(30px);
-	}
-}
-
-@keyframes slide-to-left {
-	to {
-		transform: translateX(-30px);
-	}
-}
-
-::view-transition-new(root) {
-	animation: 1s cubic-bezier(0, 0, 0.5, 1) 0.25s fade both;
-}
-
-::view-transition-old(wrapper) {
-	animation: 2s cubic-bezier(0, 0, 0.2, 1) fade;
-	animation:
-		90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-		300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-}
-
-::view-transition-new(wrapper) {
-	animation: 2s cubic-bezier(0.4, 0, 1, 1) fade;
-	animation:
-		210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-		300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
