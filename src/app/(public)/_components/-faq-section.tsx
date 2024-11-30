@@ -82,7 +82,7 @@ const FAQsSection: React.FunctionComponent = () => {
 							<Div
 								className='flex-rows inline-flex animate-fly-in items-end gap-x-1 place-self-start text-sm opacity-0'
 								style={{
-									animationDelay: `${index + 0.5}s`,
+									animationDelay: `${index / 2 + 0.35}s`,
 									animationFillMode: 'both',
 									animationPlayState: inViewport ? 'running' : 'paused'
 								}}>
@@ -98,7 +98,7 @@ const FAQsSection: React.FunctionComponent = () => {
 							<Div
 								className='inline-flex animate-fly-in flex-row-reverse place-content-end items-end gap-x-1 text-sm opacity-0'
 								style={{
-									animationDelay: `${index + 1}s`,
+									animationDelay: `${index / 2 + 0.65}s`,
 									animationFillMode: 'both',
 									animationPlayState: inViewport ? 'running' : 'paused'
 								}}>

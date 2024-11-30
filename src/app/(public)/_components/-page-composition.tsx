@@ -19,7 +19,7 @@ const PageComposition: React.FC = () => {
 							id={href}
 							key={href}
 							ref={(el: HTMLDivElement) => {
-								if (pageContext?.menuRef) pageContext.menuRef.current[index] = el
+								if (pageContext?.menuRef?.current) pageContext.menuRef.current[index] = el
 							}}>
 							<SectionComponent />
 						</Wrapper>
