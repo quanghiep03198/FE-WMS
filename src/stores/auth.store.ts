@@ -6,7 +6,7 @@ import { immer } from 'zustand/middleware/immer'
 
 export interface IAuthState {
 	user: IUser | null
-	token: string | null
+	token: string
 	setUserProfile: (profile: Partial<IUser>) => void
 	setUserCompany: (company: Omit<ICompany, 'factory_code'>) => void
 	setAccessToken: (token: string, meta?: { expires_time: string }) => void
@@ -35,7 +35,7 @@ export const useAuthStore = create(
 				},
 				setUserCompany: (company: Omit<ICompany, 'factory_code'>) => {
 					const state = get()
-					set({ user: { ...state.user!, company } })
+					set({ user: { ...state.user, ...company } })
 				},
 				resetCredentials: () => {
 					set(initialState)
