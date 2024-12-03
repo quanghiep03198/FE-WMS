@@ -1,0 +1,81 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Typography Component > renders correctly with combined variant and color 1`] = `
+<p
+  class="text-5xl sm:text-4xl font-bold scroll-m-20 tracking-tight text-accent"
+>
+  Accent Heading 2
+</p>
+`;
+
+exports[`Typography Component > renders correctly with custom element 1`] = `
+<span
+  class="text-base tracking-tight text-[inherit]"
+>
+  Span Text
+</span>
+`;
+
+exports[`Typography Component > renders correctly with default props 1`] = `
+<p
+  class="text-base tracking-tight text-[inherit]"
+>
+  Default Text
+</p>
+`;
+
+exports[`Typography Component > renders correctly with destructive color 1`] = `
+<p
+  class="text-base tracking-tight text-destructive"
+>
+  Destructive Text
+</p>
+`;
+
+exports[`Typography Component > renders correctly with h1 variant 1`] = `
+<p
+  class="text-6xl sm:text-5xl scroll-m-20 font-bold tracking-tight text-[inherit]"
+>
+  Heading 1
+</p>
+`;
+
+exports[`Typography Component > renders correctly with h2 variant 1`] = `
+<p
+  class="text-5xl sm:text-4xl font-bold scroll-m-20 tracking-tight text-[inherit]"
+>
+  Heading 2
+</p>
+`;
+
+exports[`Typography Component > renders correctly with h3 variant 1`] = `
+<p
+  class="text-4xl sm:text-3xl font-bold tracking-tight scroll-m-20 text-[inherit]"
+>
+  Heading 3
+</p>
+`;
+
+exports[`Typography Component > renders correctly with h4 variant 1`] = `
+<p
+  class="text-3xl sm:text-2xl font-semibold tracking-tight scroll-m-20 text-[inherit]"
+>
+  Heading 4
+</p>
+`;
+
+exports[`Typography Component > renders correctly with primary color 1`] = `
+<p
+  class="text-base tracking-tight text-primary"
+>
+  Primary Text
+</p>
+`;
+
+exports[`Typography Component > renders correctly with success color 1`] = `
+<p
+  class="text-base tracking-tight text-success"
+>
+  Success Text
+</p>
+`;
