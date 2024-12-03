@@ -10,6 +10,7 @@ export type NavigationConfig = {
 	icon: IconProps['name']
 	title: ResourceKeys['ns_common']
 	path: ParseRoute<typeof routeTree>['fullPath']
+	status?: 'stable' | 'experimental' | 'deprecated'
 	type: 'main' | 'preference' | 'auth'
 	keybinding: KeyType
 	children?: NavigationConfig[]
@@ -30,6 +31,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.warehouse_management',
 		path: '/warehouse',
 		type: 'main',
+		status: 'stable',
 		keybinding: 'ctrl.1'
 	},
 	{
@@ -42,20 +44,11 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'BaggageClaim',
-		title: 'navigation.pm_inbound',
-		path: '/production-management-inbound',
-		type: 'main',
-		keybinding: 'ctrl.3'
-	},
-
-	{
-		id: uuidv4(),
 		icon: 'GitPullRequestArrow',
 		title: 'navigation.import_management',
 		path: '/warehouse-import',
 		type: 'main',
-		keybinding: 'ctrl.4'
+		keybinding: 'ctrl.3'
 	},
 	{
 		id: uuidv4(),
@@ -63,7 +56,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.export_management',
 		path: '/warehouse-export',
 		type: 'main',
-		keybinding: 'ctrl.5'
+		keybinding: 'ctrl.4'
 	},
 	{
 		id: uuidv4(),
@@ -71,7 +64,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.transfer_managment',
 		path: '/transfer-management',
 		type: 'main',
-		keybinding: 'ctrl.6'
+		keybinding: 'ctrl.5'
 	},
 	{
 		id: uuidv4(),
@@ -79,7 +72,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.inventory_management',
 		path: '/inventory',
 		type: 'main',
-		keybinding: 'ctrl.7'
+		keybinding: 'ctrl.6'
 	},
 	{
 		id: uuidv4(),
@@ -87,7 +80,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.production_incoming_inspection',
 		path: '/product-incoming-inspection',
 		type: 'main',
-		keybinding: 'ctrl.8'
+		keybinding: 'ctrl.7'
 	},
 	{
 		id: uuidv4(),
@@ -95,7 +88,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.report_management',
 		path: '/report',
 		type: 'main',
-		keybinding: 'ctrl.9'
+		keybinding: 'ctrl.8'
 	},
 	{
 		id: uuidv4(),
