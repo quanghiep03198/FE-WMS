@@ -1,3 +1,6 @@
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
+
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
@@ -10,7 +13,7 @@ import { VitePWA as pwa } from 'vite-plugin-pwa'
 
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
-
+	console.log(mode)
 	return {
 		plugins: [
 			react(),
@@ -65,8 +68,13 @@ export default defineConfig(({ mode }) => {
 		envDir: '.',
 		test: {
 			globals: true,
+			setupFiles: './tests/setup.ts',
 			environment: 'jsdom',
-			reporters: ['default', 'html']
+			reporters: ['default', 'html'],
+			dir: './tests',
+			coverage: {
+				ignoreEmptyLines: true
+			}
 		},
 		esbuild: {
 			drop: ['console', 'debugger']
@@ -81,7 +89,6 @@ export default defineConfig(({ mode }) => {
 					rewrite: (path) => path.replace(/^\/api/, '')
 				}
 			},
-
 			configureServer: (server: ViteDevServer) => {
 				server.middlewares.use((_, res, next) => {
 					res.setHeader(
@@ -93,7 +100,7 @@ export default defineConfig(({ mode }) => {
 			}
 		},
 		preview: {
-			port: 4000,
+			port: mode === 'test' ? 5000 : 4000,
 			host: true
 		},
 		build: {

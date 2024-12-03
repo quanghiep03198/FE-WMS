@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
+		"target": "ESNext",
 		"useDefineForClassFields": true,
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
 		/* Bundler mode */
@@ -25,9 +25,9 @@
 			"@/*": ["./src/*"]
 		},
 		/* Types */
-		"types": ["vite-plugin-pwa/client"]
+		"types": ["vite-plugin-pwa/client", "vite-plugin-pwa", "vitest/globals"]
 	},
-	"include": ["src", "tests", "node_modules/vite-plugin-pwa"],
+	"include": ["src", "tests"],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"

@@ -6,12 +6,12 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
-		"preview": "vite preview",
+		"preview": "vite preview --port 4000",
+		"test": "vitest --config ./vite.config.ts",
+		"test:preview": "vite preview --port 5000 --outDir ./html",
+		"test:coverage": "vitest run --coverage",
 		"pm2:start": "pm2 serve ./dist --name \"wms-client\" --port 3000 --spa",
 		"pm2:restart": "pm2 restart \"wms-client\"",
-		"test": "vitest --config ./vite.config.ts",
-		"test:report": "npx vite preview --outDir ./html",
-		"coverage": "vitest run --coverage",
 		"tsr:generate": "npx tsr generate",
 		"tsr:watch": "npx tsr watch",
 		"eslint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -121,6 +121,8 @@
 		"@tanstack/router-devtools": "^1.85.0",
 		"@tanstack/router-generator": "^1.84.4",
 		"@tanstack/router-plugin": "^1.84.4",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/react": "^16.0.1",
 		"@types/lodash": "^4.17.4",
 		"@types/node": "^20.12.13",
 		"@types/nprogress": "^0.2.3",
@@ -133,6 +135,7 @@
 		"@typescript-eslint/parser": "^7.2.0",
 		"@vite-pwa/assets-generator": "^0.2.6",
 		"@vitejs/plugin-react-swc": "^3.5.0",
+		"@vitest/browser": "^2.1.8",
 		"@vitest/ui": "^2.0.5",
 		"autoprefixer": "^10.4.19",
 		"axios-mock-adapter": "^2.1.0",
@@ -143,6 +146,7 @@
 		"eslint-plugin-unused-imports": "^3.2.0",
 		"husky": "^9.0.11",
 		"jsdom": "^24.1.1",
+		"playwright": "^1.49.0",
 		"postcss": "^8.4.38",
 		"prettier": "^3.2.5",
 		"prettier-plugin-organize-imports": "^4.1.0",
@@ -155,6 +159,7 @@
 		"vite": "^5.2.0",
 		"vite-plugin-pwa": "^0.21.0",
 		"vite-tsconfig-paths": "^4.3.2",
-		"vitest": "^2.0.5"
+		"vitest": "^2.0.5",
+		"vitest-browser-react": "^0.0.4"
 	}
 }
