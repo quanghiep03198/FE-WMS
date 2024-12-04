@@ -22,8 +22,8 @@ const CTASection: React.FC = () => {
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
-				<Typography variant='h3' className='mb-4 sm:text-xl'>
-					Simplify Warehouse Management <br /> with i-WMS
+				<Typography variant='h3' className='mb-4 text-pretty sm:text-xl'>
+					Simplify Warehouse Management with i-WMS
 				</Typography>
 				<Typography
 					variant='p'

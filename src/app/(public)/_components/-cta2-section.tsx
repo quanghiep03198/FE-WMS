@@ -9,7 +9,7 @@ const CTA2Section: React.FC = () => {
 					<Typography variant='small' className='font-jetbrains'>
 						EDGE DEPLOYMENT
 					</Typography>
-					<Typography variant='h3' className='sm:text-lg'>
+					<Typography variant='h3' className='text-pretty sm:text-lg'>
 						High Availability at our factories across Asia
 					</Typography>
 					<Typography className='leading-relaxed tracking-wide sm:text-sm'>
