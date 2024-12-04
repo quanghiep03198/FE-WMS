@@ -152,7 +152,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 	}
 
 	return (
-		<Div as='nav' aria-label='Progress' className='sticky top-0 w-full bg-background'>
+		<Div as='nav' aria-label='Progress' className='sticky top-0 z-20 w-full bg-background'>
 			<StepList role='list'>
 				{data.map((step: TStep) => {
 					const stepTitle = t(step.title, { defaultValue: step.title, ns: undefined })
