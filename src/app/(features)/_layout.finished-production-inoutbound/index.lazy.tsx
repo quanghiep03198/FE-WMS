@@ -8,7 +8,7 @@ import PageComposition from './_components/-page-composition'
 import ScannedEPCsCounter from './_components/_epc-counter/-index'
 import EpcListBox from './_components/_epc-data-list/-index'
 import InoutboundForm from './_components/_inoutbound-form/-index'
-import ScanningToolbox from './_components/_scanner-settings/-index'
+import ScannerSettings from './_components/_scanner-settings/-index'
 import ScannerToolbar from './_components/_scanner-toolbar/-index'
 import { FP_RFID_SETTINGS_KEY } from './_constants/rfid.const'
 import { PageProvider } from './_contexts/-page-context'
@@ -75,7 +75,7 @@ function Page() {
 								</PageComposition.FormPanel>
 							</PageComposition.InnerWrapper>
 						</PageComposition.Main>
-						<ScanningToolbox />
+						<ScannerSettings />
 					</PageComposition.Wrapper>
 				</PageComposition.Container>
 			</PageProvider>
