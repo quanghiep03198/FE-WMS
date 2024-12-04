@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export default function useWebWorker<T>(workerFn: (e: MessageEvent<T>) => any, payload: any) {
+export default function useWebWorker<T>(workerFn: (e: MessageEvent<T>) => any, payload: T) {
 	const [data, setData] = useState<T>(null)
 	const [loading, setLoading] = useState<boolean>(false)
 	const [error, setError] = useState<Error>(null)
@@ -13,7 +13,7 @@ export default function useWebWorker<T>(workerFn: (e: MessageEvent<T>) => any, p
 
 		try {
 			const evaluation = memorizedWorkerFn.toString()
-			const blob = new Blob([`(${evaluation})()`], { type: 'text/javascript' })
+			const blob = new Blob([`(${evaluation})()`], { type: 'application/javascript' })
 			const workerScriptURL = URL.createObjectURL(blob)
 			const worker = new Worker(workerScriptURL)
 
