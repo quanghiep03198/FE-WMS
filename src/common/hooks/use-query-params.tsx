@@ -1,14 +1,16 @@
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useDeepCompareEffect } from 'ahooks'
-import _ from 'lodash'
-import { useCallback } from 'react'
+import { useNavigate, UseNavigateResult, useSearch } from '@tanstack/react-router'
+import { omit } from 'lodash'
+import { useCallback, useEffect } from 'react'
+
+type NavigateFnOptions = Parameter<UseNavigateResult<string>>
 
 export default function useQueryParams<T extends Record<string, any>>(defaultParams?: T) {
 	const navigate = useNavigate()
 
 	const searchParams = useSearch({
 		strict: false,
-		select: (search: T) => search
+		structuralSharing: false,
+		select: (search) => search
 	})
 	/**
 	 * Set search params from URL
@@ -16,7 +18,7 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	 * @returns {Promise<void>}
 	 */
 	const setParams = useCallback((params: Record<string, any>) => {
-		navigate({ search: (prev) => ({ ...prev, ...params }) })
+		navigate({ search: (prev) => ({ ...prev, ...params }) } as NavigateFnOptions)
 	}, [])
 
 	/**
@@ -25,10 +27,10 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	 * @returns {Promise<void>}
 	 */
 	const removeParam = useCallback((key: string) => {
-		navigate({ search: (prev) => _.omit(prev, [key]) })
+		navigate({ search: (prev) => omit(prev, [key]) } as NavigateFnOptions)
 	}, [])
 
-	useDeepCompareEffect(() => {
+	useEffect(() => {
 		if (defaultParams) navigate({ search: { ...defaultParams, ...searchParams } })
 	}, [])
 

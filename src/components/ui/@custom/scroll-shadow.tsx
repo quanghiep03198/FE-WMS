@@ -41,7 +41,7 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(
 				data-top-bottom-scroll={isScrollable && isScrollTopBottom}
 				className={cn(
 					className,
-					scrollbar ? 'overflow-scroll scrollbar' : 'overflow-auto !scrollbar-none',
+					scrollbar ? 'overflow-y-scroll scrollbar' : 'overflow-auto !scrollbar-none',
 					'h-[var(--scroll-shadow-size)]',
 					'data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]',
 					'data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]',
