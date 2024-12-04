@@ -1,6 +1,6 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
 import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
-import { PresetBreakPoints, RequestMethod } from '@/common/constants/enums'
+import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -78,7 +78,7 @@ const EpcDataList: React.FC = () => {
 	const previousTimeRef = useRef<number>(performance.now())
 
 	// * Polling duration for SSE
-	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY)
+	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, { listenStorageChange: true })
 
 	// * Alert for invalid EPCs
 	const [hasInvalidEpcAlert, setHasInvalidEpcAlert] = useState<boolean>(false)
@@ -107,10 +107,10 @@ const EpcDataList: React.FC = () => {
 			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/sse', {
 				method: RequestMethod.GET,
 				headers: {
-					['Authorization']: `Bearer ${token}`,
-					['X-Tenant-Id']: connection,
-					['X-User-Company']: user.company_code,
-					['X-Polling-Duration']: String(pollingDuration)
+					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
+					[RequestHeaders.TENANT_ID]: connection,
+					[RequestHeaders.USER_COMPANY]: user.company_code,
+					[RequestHeaders.POLLING_DURATION]: String(pollingDuration)
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -121,12 +121,12 @@ const EpcDataList: React.FC = () => {
 						writeLog({ message: 'Connected', type: 'info' })
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
+						abortControllerRef.current.abort()
 						const response = await AuthService.refreshToken(user.id)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
 						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one
 						setAccessToken(refreshToken)
-						fetchServerEvent()
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
 						response.status < HttpStatusCode.InternalServerError &&
@@ -140,6 +140,7 @@ const EpcDataList: React.FC = () => {
 				},
 				onmessage(event: EventSourceMessage) {
 					try {
+						console.log(event.data)
 						if (!event.data) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
@@ -218,7 +219,7 @@ const EpcDataList: React.FC = () => {
 				}
 			}
 		}
-	}, [scanningStatus])
+	}, [scanningStatus, token])
 
 	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
