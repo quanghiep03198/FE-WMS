@@ -14,6 +14,7 @@ export default {
 		approver: 'Người phê duyệt',
 		approver_time: 'Thời gian phê duyệt',
 		quantity: 'Số lượng',
+		status: 'Trạng thái',
 		total: 'Tổng cộng'
 	},
 	actions: {
@@ -63,7 +64,8 @@ export default {
 		no_filter_applied: 'Bộ lọc không được áp dụng',
 		no_data: 'Không có dữ liệu',
 		search_in_column: 'Tìm kiếm trong cột',
-		no_match_result: 'Không có kết quả.'
+		no_match_result: 'Không có kết quả.',
+		problem_arises: 'Vấn đề phát sinh'
 	},
 	form_placeholder: {
 		select: '-- Chọn {{object}} --',

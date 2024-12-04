@@ -162,3 +162,9 @@ export interface IProductionImportOrder extends IBaseEntity {
 	sno_location: string
 	remark: string | null
 }
+
+export interface IDailyInboundReport {
+	mo_no: string
+	count: number
+	is_exchanged: boolean
+}

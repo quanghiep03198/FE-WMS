@@ -35,6 +35,9 @@ export default {
 		invalid_epc_deteted:
 			'EPC không hợp lệ được phát hiện. Vui lòng liên hệ với bộ phận thành hình để giải quyết vấn đề này, sau đó chuyển chúng đến tái chế'
 	},
+	errors: {
+		wrong_stamp: 'Dán sai tem'
+	},
 	rfid_process: {
 		production_management_inbound: 'Quét tem kho QLSX',
 		cutting_inbound: 'Quét tem pha cắt',

@@ -14,6 +14,7 @@ export default {
 		remark: 'Remark',
 		approver: 'Approver',
 		approver_time: 'Approval time',
+		status: 'Status',
 		quantity: 'Quantity',
 		total: 'Total'
 	},
@@ -63,7 +64,8 @@ export default {
 		no_filter_applied: 'No filter is applied',
 		no_data: 'No data',
 		search_in_column: 'Search in column',
-		no_match_result: 'No results found.'
+		no_match_result: 'No results found.',
+		problem_arises: 'Problem arises'
 	},
 	form_placeholder: {
 		select: '-- Select {{object}} --',

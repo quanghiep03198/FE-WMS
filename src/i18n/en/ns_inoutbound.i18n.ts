@@ -44,7 +44,9 @@ export default {
 		invalid_epc_deteted:
 			'Invalid EPC detected. Please contact to shaping department for this issue, then move them to recycle'
 	},
-
+	errors: {
+		wrong_stamp: 'Wrong stamp'
+	},
 	order_status: {
 		[OrderStatus.NOT_APPROVED]: 'Not approved',
 		[OrderStatus.APPROVED]: 'Approved',

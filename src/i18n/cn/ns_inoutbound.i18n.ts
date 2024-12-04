@@ -41,6 +41,9 @@ export default {
 		exchange_order_caution: '操作后不能还原，确定要换指令？',
 		invalid_epc_deteted: '检测到无效的EPC。请联系成型部门解决此问题, 然后将其移至回收'
 	},
+	errors: {
+		wrong_stamp: '错误的标签'
+	},
 	rfid_process: {
 		production_management_inbound: '生产管理入库',
 		cutting_inbound: '裁断入库',

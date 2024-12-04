@@ -4,9 +4,9 @@ import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import DailyInboundReport from './_components/-daily-inbound-report'
 import InoutboundOverview from './_components/-inoutbound-overview'
 import TransactionOverview from './_components/-order-overview'
-import TransactionHistory from './_components/-orders-history'
 import Statistics from './_components/-statistics'
 
 export const Route = createFileRoute('/(features)/_layout/dashboard/')({
@@ -28,7 +28,7 @@ function Page() {
 			<Container>
 				<Statistics />
 				<InoutboundOverview />
-				<TransactionHistory />
+				<DailyInboundReport />
 				<TransactionOverview />
 			</Container>
 		</Fragment>

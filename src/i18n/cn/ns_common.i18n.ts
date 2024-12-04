@@ -5,7 +5,6 @@ export default {
 		function: '功能名称',
 		font: '字体'
 	},
-
 	common_fields: {
 		created_at: '创建日期',
 		updated_at: '编辑日期',
@@ -14,6 +13,7 @@ export default {
 		remark: '管理人',
 		approver: '審核人',
 		approver_time: '審核時間',
+		status: '狀態',
 		quantity: '數量',
 		total: '全部的'
 	},
@@ -68,7 +68,8 @@ export default {
 		no_filter_applied: '不应用过滤器',
 		no_data: '没有数据',
 		search_in_column: '在栏目中搜索',
-		no_match_result: '未找到结果.'
+		no_match_result: '未找到结果.',
+		problem_arises: '问题出现'
 	},
 	pagination: {
 		next_page: '下页',
