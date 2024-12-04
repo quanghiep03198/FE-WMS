@@ -95,12 +95,12 @@ function TableDataGrid<TData, TValue>({
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
 	return (
-		<Wrapper role='group'>
+		<Wrapper>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
-			<ScrollArea tabIndex={0} ref={containerRef} role='scrollbar' {...containerProps}>
+			<ScrollArea tabIndex={0} ref={containerRef} {...containerProps}>
 				<Table
 					ref={tableRef}
-					className='w-full table-fixed border-separate border-spacing-0'
+					className='w-full table-fixed border-separate border-spacing-0 border-none'
 					style={{
 						...columnSizeVars,
 						minWidth: table.getTotalSize(),
@@ -187,8 +187,8 @@ function TableDataGrid<TData, TValue>({
 	)
 }
 
-const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md divide-y divide-border`
-const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none ring-0 ring-offset-0 ring-offset-transparent`
+const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
+const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
 
 TableDataGrid.displayName = 'DataTable'
 
