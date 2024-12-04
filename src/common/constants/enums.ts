@@ -15,6 +15,15 @@ export enum RequestMethod {
 	CONNECT = 'CONNECT'
 }
 
+export enum RequestHeaders {
+	AUTHORIZATION = 'Authorization',
+	ACCEPT_LANGUAGE = 'Accept-Language',
+	CONTENT_TYPE = 'Content-Type',
+	TENANT_ID = 'X-Tenant-Id',
+	USER_COMPANY = 'X-User-Company',
+	POLLING_DURATION = 'X-Polling-Duration'
+}
+
 export enum Languages {
 	VIETNAMESE = 'vi',
 	ENGLISH = 'en',
@@ -39,6 +48,7 @@ export enum CommonActions {
 	IMPORT = 'IMPORT',
 	EXPORT = 'EXPORT'
 }
+
 export enum CofactoryRef {
 	VA1 = 'A',
 	VB1 = 'B',

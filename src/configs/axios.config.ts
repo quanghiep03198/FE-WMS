@@ -1,3 +1,4 @@
+import { RequestHeaders } from '@/common/constants/enums'
 import env from '@/common/utils/env'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
@@ -33,7 +34,7 @@ export class AxiosClient {
 			baseURL: baseURL ?? env('VITE_API_BASE_URL'),
 			timeout: env('VITE_API_BASE_URL', 10_000),
 			headers: {
-				['Content-Type']: 'application/json'
+				[RequestHeaders.CONTENT_TYPE]: 'application/json'
 			},
 			paramsSerializer: (params) => {
 				return qs.stringify(params, {
@@ -48,9 +49,9 @@ export class AxiosClient {
 				const accessToken = AuthService.getAccessToken()
 				const locale = StorageService.getLocale()
 				const user = AuthService.getCredentials()
-				config.headers['Authorization'] = config.headers['Authorization'] ?? accessToken
-				config.headers['X-User-Company'] = user?.company_code
-				config.headers['Accept-Language'] = locale
+				config.headers[RequestHeaders.AUTHORIZATION] = config.headers[RequestHeaders.AUTHORIZATION] ?? accessToken
+				config.headers[RequestHeaders.USER_COMPANY] = user?.company_code
+				config.headers[RequestHeaders.ACCEPT_LANGUAGE] = locale
 				return config
 			},
 			(error) => Promise.reject(error)
@@ -83,8 +84,9 @@ export class AxiosClient {
 								return Promise.reject(err)
 							})
 					}
-
+					// * Marking the request is refreshing token
 					this.isRefreshingToken = true
+
 					const user = AuthService.getCredentials()
 					if (!user?.id) throw new Error('Failed to refresh token')
 					try {
