@@ -30,7 +30,11 @@ type OrderDetailTableRowProps = {
 
 const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const { t } = useTranslation()
-	const { scannedOrders, setScanningStatus } = usePageContext('scannedOrders', 'setScanningStatus')
+	const { scannedOrders, setScanningStatus, setScannedOrders } = usePageContext(
+		'scannedOrders',
+		'setScanningStatus',
+		'setScannedOrders'
+	)
 	const {
 		selectedRows,
 		pushSelectedRow,
@@ -75,6 +79,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				setScanningStatus(undefined)
 				return
 			}
+			setScannedOrders(filteredOrders)
 			setPopoverOpen(false)
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		} catch (e) {
