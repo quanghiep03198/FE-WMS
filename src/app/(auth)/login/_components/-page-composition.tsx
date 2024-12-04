@@ -2,7 +2,7 @@ import { LanguageSelect } from '@/app/_components/_shared/-language-selector'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Label, Tooltip, Typography, buttonVariants } from '@/components/ui'
-import { Stepper, type TStep } from '@/components/ui/@custom/step'
+import { Stepper, type TStep } from '@/components/ui/@custom/stepper'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -35,11 +35,11 @@ const HomeNavigator: React.FC = () => {
 const FormFieldset: React.FC = () => {
 	const steps: TStep[] = [
 		{
-			name: 'ns_auth:steps.verify_account',
+			title: 'ns_auth:steps.verify_account',
 			status: 'current'
 		},
 		{
-			name: 'ns_auth:steps.select_department',
+			title: 'ns_auth:steps.select_department',
 			status: 'upcoming'
 		}
 	]

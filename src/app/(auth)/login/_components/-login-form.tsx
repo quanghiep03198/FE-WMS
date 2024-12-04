@@ -1,7 +1,7 @@
 import { USER_PROVIDE_TAG } from '@/app/(auth)/_apis/auth.api'
 import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
-import { useStepContext } from '@/components/ui/@custom/step'
+import { useStepContext } from '@/components/ui/@custom/stepper'
 import { AuthService } from '@/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'

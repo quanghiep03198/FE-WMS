@@ -1,6 +1,6 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
-import { useStepContext } from '@/components/ui/@custom/step'
+import { useStepContext } from '@/components/ui/@custom/stepper'
 import { pick } from 'lodash'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,10 +10,8 @@ import { useGetUserCompany } from '../../_apis/department.api'
 
 type FormValues = { company_code: string }
 
-const COMPANY_PROVIDE_TAG = 'COMPANIES' as const
-
 const WorkplaceSelectionForm: React.FC = () => {
-	const { token, setUserCompany } = useAuth()
+	const { setUserCompany } = useAuth()
 	const { dispatch } = useStepContext()
 	const { t } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()
