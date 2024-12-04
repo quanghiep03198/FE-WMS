@@ -40,9 +40,20 @@ const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSucce
 		[importOrderDetailValue]
 	)
 
+	const updatedImportOrderDetailValue = importOrderDetailValue.map((item) => ({
+		...item,
+		sno_no: importOrderValue.sno_no,
+		sno_date: importOrderValue.sno_date,
+		type_inventorylist: importOrderValue.type_inventorylist,
+		dept_code: importOrderValue.dept_code,
+		warehouse_num: importOrderValue.warehouse_num,
+		storage_num: importOrderValue.storage_num
+	}))
+
 	const handleSubmitImportOrder = async () => {
+		console.log(updatedImportOrderDetailValue, 'updatedImportOrderDetailValue')
 		try {
-			await mutateAsync(importOrderDetailValue)
+			await mutateAsync(updatedImportOrderDetailValue)
 			onSubmitSuccess()
 		} catch (error) {
 			console.error('Error submitting import order:', error)
@@ -160,7 +171,7 @@ const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSucce
 				</Button>
 				<Button
 					onClick={() => {
-						handleSubmitImportOrder()
+						handleSubmitImportOrder(updatedImportOrderDetailValue)
 					}}>
 					{t('ns_common:actions.confirm')}
 				</Button>
