@@ -160,9 +160,6 @@ const ProductionImportList: React.FC = () => {
 			columnHelper.accessor('id', {
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
-				// meta: {
-				// 	rowSpan: 2
-				// },
 				size: 80,
 				cell: (props) => (
 					<ImportOrderRowActions
