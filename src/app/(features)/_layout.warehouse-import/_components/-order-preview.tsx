@@ -1,5 +1,6 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import {
+	Badge,
 	Button,
 	Card,
 	CardContent,
@@ -12,7 +13,8 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { useStepContext } from '@/components/ui/@custom/step'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useStepContext } from '@/components/ui/@custom/stepper'
 import { format } from 'date-fns'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +22,11 @@ import tw from 'tailwind-styled-components'
 import { useAddImportOrderMutation } from '../_apis/use-warehouse-import.api'
 import { useDatalistDialogContext } from '../_contexts/-datalist-dialog-context'
 
-const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSuccess }) => {
+type OrderPreviewProps = {
+	onProceed: () => void
+}
+
+const OrderPreview: React.FC<OrderPreviewProps> = ({ onProceed }) => {
 	const { importOrderValue, importOrderDetailValue } = useDatalistDialogContext()
 	const { mutateAsync, isPending } = useAddImportOrderMutation()
 	const { dispatch } = useStepContext()
@@ -43,7 +49,7 @@ const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSucce
 	const handleSubmitImportOrder = async () => {
 		try {
 			await mutateAsync(importOrderDetailValue)
-			onSubmitSuccess()
+			onProceed()
 		} catch (error) {
 			console.error('Error submitting import order:', error)
 		}
@@ -95,18 +101,18 @@ const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSucce
 				</Div>
 				<Div className='space-y-6'>
 					<Typography variant='h6'>Order Details</Typography>
-					<Div className='flex h-[50dvh] flex-col gap-y-4 overflow-y-auto pb-2 scrollbar-none'>
+					<ScrollShadow size={450} scrollbar={true} className='space-y-4 py-2'>
 						{Array.isArray(importOrderDetailValue) &&
 							importOrderDetailValue.map((item) => (
-								<Card className='relative'>
-									<Button variant='destructive' size='icon' className='absolute right-6 top-6'>
+								<Card className='relative shadow-none'>
+									<Button variant='ghost' size='icon' className='absolute right-6 top-6'>
 										<Icon name='Trash2' role='img' />
 										{/* {t('ns_common:actions.delete')} */}
 									</Button>
 									<CardHeader>
 										<CardTitle className='inline-flex items-center gap-x-2'>
 											#{item.or_custpoone} <Separator orientation='vertical' className='h-5 w-0.5' />{' '}
-											{item.brand_name}
+											<Badge>{item.brand_name}</Badge>
 										</CardTitle>
 										<CardDescription className='inline-flex items-center gap-x-2'>
 											{item.mo_no}
@@ -150,7 +156,7 @@ const OrderPreview: React.FC<{ onSubmitSuccess: () => void }> = ({ onSubmitSucce
 									</CardContent>
 								</Card>
 							))}
-					</Div>
+					</ScrollShadow>
 				</Div>
 			</Div>
 			<Separator className='col-span-full' />

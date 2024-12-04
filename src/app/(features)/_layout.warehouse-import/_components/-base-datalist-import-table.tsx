@@ -1,5 +1,5 @@
 import { Button, Checkbox, DataTable, DialogFooter, Icon, Separator, Tooltip } from '@/components/ui'
-import { useStepContext } from '@/components/ui/@custom/step'
+import { useStepContext } from '@/components/ui/@custom/stepper'
 import { ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'

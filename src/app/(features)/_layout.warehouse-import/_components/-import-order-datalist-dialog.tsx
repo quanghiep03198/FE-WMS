@@ -9,7 +9,7 @@ import {
 	Div,
 	Icon
 } from '@/components/ui'
-import { Stepper, TStep } from '@/components/ui/@custom/step'
+import { Stepper, TStep } from '@/components/ui/@custom/stepper'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageStore } from '../../_layout.transfer-management/_stores/page.store'
@@ -27,15 +27,18 @@ const ImportDataListDialog = (props: Props) => {
 	const steps: TStep[] = useMemo(
 		() => [
 			{
-				name: 'Create new order',
+				title: 'Create new order',
+				description: 'Fill in the form below to create new inbound receipt',
 				status: 'current'
 			},
 			{
-				name: 'Import order details',
+				title: 'Import order details',
+				description: 'Pick the order details from the table below',
 				status: 'upcoming'
 			},
 			{
-				name: 'Preview',
+				title: 'Preview',
+				description: 'Review the order details before submitting',
 				status: 'upcoming'
 			}
 		],
@@ -55,7 +58,7 @@ const ImportDataListDialog = (props: Props) => {
 					<DialogDescription>Follow the steps below to create new inbound receipt</DialogDescription>
 				</DialogHeader>
 
-				<Div className='max-h-[80vh] overflow-y-auto !scrollbar-none'>
+				<Div className='overflow-y-auto !scrollbar-none lg:h-[80vh] xl:h-[80vh]'>
 					<DatalistDialogProvider>
 						<Stepper.Provider data={steps}>
 							<Stepper.Panel value={1}>
@@ -65,7 +68,7 @@ const ImportDataListDialog = (props: Props) => {
 								<OrderDetailsDatalist />
 							</Stepper.Panel>
 							<Stepper.Panel value={3}>
-								<OrderPreview onSubmitSuccess={toggleDatalistDialogOpen} />
+								<OrderPreview onProceed={toggleDatalistDialogOpen} />
 							</Stepper.Panel>
 						</Stepper.Provider>
 					</DatalistDialogProvider>
