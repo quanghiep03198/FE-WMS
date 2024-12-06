@@ -14,5 +14,5 @@ export const PageTitle: React.FC<TypographyProps> = ({ children, className }) =>
 )
 
 export const PageDescription: React.FC<TypographyProps> = ({ children, className }) => (
-	<Typography color='muted' className={className} children={children} />
+	<Typography color='muted' className={cn('text-pretty', className)} children={children} />
 )
