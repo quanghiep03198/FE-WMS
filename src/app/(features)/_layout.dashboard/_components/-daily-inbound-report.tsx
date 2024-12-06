@@ -43,8 +43,8 @@ const DailyInboundReport: React.FC = () => {
 			columnHelper.display({
 				header: t('ns_common:common_fields.remark'),
 				enableColumnFilter: false,
-				enableSorting: true,
-				enableMultiSort: true,
+				enableSorting: false,
+				enableMultiSort: false,
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
 					const isExchanged = row.original.is_exchanged
@@ -77,7 +77,7 @@ const DailyInboundReport: React.FC = () => {
 					)
 				}}
 				containerProps={{
-					style: { height: screen.availHeight / 3 }
+					style: { height: screen.availHeight / 2 }
 				}}
 			/>
 		</Div>
