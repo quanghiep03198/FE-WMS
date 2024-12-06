@@ -2,7 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { SelectSingleEventHandler } from 'react-day-picker'
-import { Div } from '../@custom/div'
 import { Button } from './button'
 import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
@@ -18,15 +17,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({ value, onValueChange }) 
 			<PopoverTrigger asChild>
 				<Button
 					variant={'outline'}
-					className={cn('w-[240px] justify-start text-left font-normal', !value && 'text-muted-foreground')}>
-					<CalendarIcon className='mr-2 h-4 w-4' />
+					className={cn('min-w-60 justify-start text-left font-normal', !value && 'text-muted-foreground')}>
+					<CalendarIcon className='mr-2 size-4' />
 					{value ? format(value, 'PPP') : <span>Pick a date</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent align='start' className='flex w-auto flex-col space-y-2 p-2'>
-				<Div className='rounded-md border'>
-					<Calendar mode='single' selected={value} onSelect={onValueChange} />
-				</Div>
+			<PopoverContent className='w-auto p-0'>
+				<Calendar mode='single' selected={value} onSelect={onValueChange} initialFocus />
 			</PopoverContent>
 		</Popover>
 	)
