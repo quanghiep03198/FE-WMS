@@ -29,10 +29,14 @@ export class RFIDService {
 		})
 	}
 
-	static async updateFPStockMovement(tenantId: string, payload: InoutboundPayload) {
-		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>(`/rfid/update-stock`, payload, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId }
-		})
+	static async updateFPStockMovement(tenantId: string, orderCode: string, payload: InoutboundPayload) {
+		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>(
+			`/rfid/update-stock/${orderCode}`,
+			payload,
+			{
+				headers: { [RequestHeaders.TENANT_ID]: tenantId }
+			}
+		)
 	}
 
 	static async deleteUnexpectedFPOrder(tenantId: string, orderCode: string) {

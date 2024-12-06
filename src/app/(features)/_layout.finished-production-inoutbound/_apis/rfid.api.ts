@@ -89,14 +89,15 @@ export const useDeleteOrderMutation = () => {
 
 export const useUpdateStockMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
+	const { connection, selectedOrder, setSelectedOrder, setCurrentPage } = usePageContext(
 		'connection',
+		'selectedOrder',
 		'setSelectedOrder',
 		'setCurrentPage'
 	)
 
 	return useMutation({
-		mutationFn: (payload: InoutboundPayload) => RFIDService.updateFPStockMovement(connection, payload),
+		mutationFn: (payload: InoutboundPayload) => RFIDService.updateFPStockMovement(connection, selectedOrder, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
