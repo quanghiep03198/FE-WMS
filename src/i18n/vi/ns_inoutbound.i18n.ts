@@ -59,6 +59,7 @@ export default {
 		[OrderStatus.REAPPROVED]: 'Duyệt lại'
 	},
 	titles: {
+		inbound_report: 'Báo cáo nhập kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		order_sizing_list: 'Danh sách Size theo đơn',
@@ -66,6 +67,7 @@ export default {
 		exchange_order: 'Hoán đổi đơn hàng'
 	},
 	description: {
+		inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm',
 		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho',
 		transfer_order_datalist: 'Chọn dữ liệu từ bảng dưới để thêm đơn chuyển kho mới',
 		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',

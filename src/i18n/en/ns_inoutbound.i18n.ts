@@ -59,6 +59,7 @@ export default {
 		shaping_inbound: 'Shaping Inbound'
 	},
 	titles: {
+		inbound_report: 'Inbound report',
 		transfer_order_list: 'Transfer orders list',
 		transfer_order_datalist: 'Transfer order datalist',
 		order_sizing_list: 'Order sizing list',
@@ -66,6 +67,7 @@ export default {
 		exchange_order: 'Exchange manufacturing order'
 	},
 	description: {
+		inbound_report: 'View the scanned EPC data and perform warehouse inbound operations',
 		transfer_order_list: 'Following and managing transfer orders',
 		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders',
 		order_sizing_list: 'Table below shows the sizing information of the scanned orders',

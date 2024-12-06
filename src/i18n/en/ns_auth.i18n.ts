@@ -1,44 +1,44 @@
 export default {
+	actions: { go_to_dashboard: 'Go to dashboard' },
 	labels: {
 		email: 'Email',
-		username: 'User name',
+		forgot_password: 'Forgot your password?',
+		logged_in_with: 'Logged in with',
 		password: 'Password',
 		remember_account: 'Remember me',
-		forgot_password: 'Forgot your password?',
-		logged_in_with: 'Logged in with'
-	},
-	texts: {
-		title: 'Sign in to your account',
-		description: 'Enter account, password then select department access to the system'
+		username: 'User name'
 	},
 	notification: {
 		authenticate_success: 'Verified your account',
-		login_success: 'Logged in succesfully',
-		logout_success: 'Logged out',
 		login_failed: 'Failed to log in',
-		logout_failed: 'Failed to log out'
-	},
-	actions: { go_to_dashboard: 'Go to dashboard' },
-	validation: {
-		require_account: 'Enter your account',
-		require_password: 'Enter your password',
-		require_company: 'Select company/factory',
-		require_department: 'Select department',
-		password_length: 'Password must be at least 6 characters long',
-		password_incorrect: 'Current password is incorrect'
+		login_success: 'Logged in succesfully',
+		logout_failed: 'Failed to log out',
+		logout_success: 'Logged out'
 	},
 	profile: {
-		update_password: 'Update password',
-		change_password_to_access: 'Change password to access to your account',
-		current_password: 'Current password',
-		new_password: 'New password',
 		change_password: 'Change password',
-		public_profile: 'Public profile',
-		this_will_be: 'This will be displayed on your profile',
-		display_name: 'Display name',
+		change_password_to_access: 'Change password to access to your account',
 		company: 'Company',
+		current_password: 'Current password',
+		display_name: 'Display name',
 		email: 'Email',
-		save_changes: 'Save changes'
+		new_password: 'New password',
+		public_profile: 'Public profile',
+		save_changes: 'Save changes',
+		this_will_be: 'This will be displayed on your profile',
+		update_password: 'Update password'
 	},
-	steps: { verify_account: 'Verify your account', select_department: 'Select department' }
+	steps: { select_department: 'Select department', verify_account: 'Verify your account' },
+	texts: {
+		description: 'Enter account, password then select department access to the system',
+		title: 'Sign in to your account'
+	},
+	validation: {
+		password_incorrect: 'Current password is incorrect',
+		password_length: 'Password must be at least 6 characters long',
+		require_account: 'Enter your account',
+		require_company: 'Select company/factory',
+		require_department: 'Select department',
+		require_password: 'Enter your password'
+	}
 } as const
