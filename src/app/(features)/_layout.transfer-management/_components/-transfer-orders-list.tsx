@@ -7,12 +7,12 @@ import { isEmpty } from 'lodash'
 import { Fragment, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useTransferOrderTableColumns } from '../../_layout.warehouse-import/_hooks/use-columns.hook'
 import {
 	useDeleteTransferOrderMutation,
 	useGetTransferOrderQuery,
 	useUpdateMultiTransferOrderMutation
 } from '../_apis/-use-transfer-order-api'
+import { useTransferOrderTableColumns } from '../_hooks/use-columns.hook'
 import { usePageStore } from '../_stores/page.store'
 
 const TransferOrdersList: React.FC = () => {
