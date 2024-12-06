@@ -46,7 +46,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: uuidv4(),
 		icon: 'GitPullRequestArrow',
 		title: 'navigation.import_management',
-		path: '/warehouse-import',
+		path: '/inbound-report',
 		type: 'main',
 		keybinding: 'ctrl.3'
 	},

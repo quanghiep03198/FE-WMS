@@ -168,3 +168,13 @@ export interface IDailyInboundReport {
 	count: number
 	is_exchanged: boolean
 }
+
+export interface IInboundReport {
+	mo_no: string
+	mat_code: string
+	shoes_style_code_factory: string | null
+	order_qty: number
+	shaping_dept_name: string
+	inbound_qty: number
+	inbound_date: string | Date
+}
