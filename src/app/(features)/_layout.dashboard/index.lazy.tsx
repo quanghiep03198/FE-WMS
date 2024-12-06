@@ -1,5 +1,5 @@
 import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
-import { createFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +9,7 @@ import InoutboundOverview from './_components/-inoutbound-overview'
 import TransactionOverview from './_components/-order-overview'
 import Statistics from './_components/-statistics'
 
-export const Route = createFileRoute('/(features)/_layout/dashboard/')({
+export const Route = createLazyFileRoute('/(features)/_layout/dashboard/')({
 	component: Page
 })
 
