@@ -13,7 +13,7 @@ import { VitePWA as pwa } from 'vite-plugin-pwa'
 
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
-	console.log('api url :>>> ', process.env?.VITE_API_BASE_URL)
+
 	return {
 		plugins: [
 			react(),
