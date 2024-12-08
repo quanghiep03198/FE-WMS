@@ -140,7 +140,6 @@ const EpcDataList: React.FC = () => {
 				},
 				onmessage(event: EventSourceMessage) {
 					try {
-						console.log(event.data)
 						if (!event.data) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
