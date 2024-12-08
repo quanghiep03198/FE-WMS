@@ -45,7 +45,8 @@ const CTASection: React.FC = () => {
 					loading='eager'
 					width='500'
 					height='500'
-					src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/global-transport.svg'
+					src='/global-transport.svg'
+					// src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/global-transport.svg'
 					alt='Global transport'
 				/>
 			</Div>

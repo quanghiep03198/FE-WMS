@@ -13,7 +13,7 @@ import { VitePWA as pwa } from 'vite-plugin-pwa'
 
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
-
+	console.log('api url :>>> ', process.env?.VITE_API_BASE_URL)
 	return {
 		plugins: [
 			react(),
@@ -54,6 +54,21 @@ export default defineConfig(({ mode }) => {
 						}
 					]
 				},
+				workbox: {
+					runtimeCaching: [
+						{
+							urlPattern: /.*\.(js|css|png|jpg|svg|woff2?)$/,
+							handler: 'CacheFirst',
+							options: {
+								cacheName: 'static-cache',
+								expiration: {
+									maxEntries: 50,
+									maxAgeSeconds: 60 * 60 * 24
+								}
+							}
+						}
+					]
+				},
 				devOptions: {
 					enabled: true,
 					suppressWarnings: true
@@ -89,12 +104,13 @@ export default defineConfig(({ mode }) => {
 					rewrite: (path) => path.replace(/^\/api/, '')
 				}
 			},
+			headers: {
+				['Content-Security-Policy']: `script-src: 'self' 'unsafe-inline'; frame-ancestors 'self'`,
+				['Cache-control']: 'public, max-age=31536000, immutable'
+			},
 			configureServer: (server: ViteDevServer) => {
 				server.middlewares.use((_, res, next) => {
-					res.setHeader(
-						'Content-Security-Policy',
-						`default-src 'self' ${process.env.VITE_BASE_URL} ${process.env.VITE_CHECKING_NETWORK_URL}; script-src 'self' ${process.env.VITE_BASE_URL} ${process.env.VITE_CHECKING_NETWORK_URL}; style-src 'self' 'unsafe-inline';`
-					)
+					console.log('middleware triggered')
 					next()
 				})
 			}

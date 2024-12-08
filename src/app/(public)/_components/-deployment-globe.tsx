@@ -171,7 +171,8 @@ const DeploymentGlobe: React.FC = () => {
 				decoding='async'
 				data-nimg='1'
 				className='block h-full w-full dark:hidden'
-				src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/globe.svg'
+				src='/globe.svg'
+				// src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/globe.svg'
 				style={{ color: 'transparent' }}
 			/>
 			<img
@@ -182,7 +183,8 @@ const DeploymentGlobe: React.FC = () => {
 				decoding='async'
 				data-nimg='1'
 				className='hidden h-full w-full dark:block'
-				src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/globe.svg'
+				src='/globe.svg'
+				// src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/globe.svg'
 				style={{ color: 'transparent' }}
 			/>
 		</div>
