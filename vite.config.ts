@@ -63,7 +63,7 @@ export default defineConfig(({ mode }) => {
 								cacheName: 'static-cache',
 								expiration: {
 									maxEntries: 50,
-									maxAgeSeconds: 60 * 60 * 24
+									maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
 								}
 							}
 						}
@@ -105,8 +105,9 @@ export default defineConfig(({ mode }) => {
 				}
 			},
 			headers: {
-				['Content-Security-Policy']: `script-src: 'self' 'unsafe-inline'; frame-ancestors 'self'`,
-				['Cache-control']: 'public, max-age=31536000, immutable'
+				['Content-Security-Policy']:
+					"script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+				['Cache-Control']: 'public, max-age=604800, immutable' // 1 week in seconds
 			},
 			configureServer: (server: ViteDevServer) => {
 				server.middlewares.use((_, res, next) => {
@@ -121,8 +122,10 @@ export default defineConfig(({ mode }) => {
 		},
 		build: {
 			emptyOutDir: true,
-			chunkSizeWarningLimit: 1024,
 			sourcemap: false,
+			cssCodeSplit: true,
+			reportCompressedSize: true,
+			chunkSizeWarningLimit: 1024,
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
