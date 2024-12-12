@@ -1,4 +1,3 @@
-import { useAuth } from '@/common/hooks/use-auth'
 import {
 	Button,
 	Checkbox,
@@ -39,8 +38,6 @@ import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exch
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
-	// const [hoverCardOpen, setHoverCardOpen] = useState<boolean>(false)
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()

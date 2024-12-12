@@ -1,4 +1,3 @@
-import { OrderItem } from '@/app/_shared/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -30,6 +29,7 @@ import { useTranslation } from 'react-i18next'
 import { useGetOrderDetail } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
+import { OrderItem } from '../../_types'
 import TableDataRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
@@ -122,7 +122,11 @@ const OrderSizeDetailTable: React.FC = () => {
 						{t('ns_common:actions.detail')}
 					</DialogTrigger>
 				</HoverCardTrigger>
-				<HoverCardContent side='top' align='start' sideOffset={8}>
+				<HoverCardContent
+					side='top'
+					align='start'
+					sideOffset={8}
+					className='w-[var(--radix-hover-card-trigger-width)] text-pretty'>
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>

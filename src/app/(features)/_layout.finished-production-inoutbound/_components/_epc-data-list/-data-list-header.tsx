@@ -38,22 +38,10 @@ const ListBoxHeader: React.FC = () => {
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
 	const { isLoading, refetch: manualFetchEpc } = useGetEpcQuery()
-	const {
-		scannedEpc,
-		selectedOrder,
-		scannedOrders,
-		scanningStatus,
-		connection,
-		setScannedEpc,
-		setCurrentPage,
-		setSelectedOrder
-	} = usePageContext(
-		'scannedEpc',
+	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder } = usePageContext(
 		'selectedOrder',
 		'scannedOrders',
 		'scanningStatus',
-		'connection',
-		'setScannedEpc',
 		'setCurrentPage',
 		'setSelectedOrder'
 	)
@@ -100,7 +88,7 @@ const OrderListSelect: React.FC = () => {
 							<SelectValue placeholder={!selectedOrder && 'Select'} />
 						</SelectTrigger>
 					</HoverCardTrigger>
-					<HoverCardContent side='top'>
+					<HoverCardContent side='top' className='w-[var(--radix-hover-card-trigger-width)] *:text-pretty'>
 						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 					</HoverCardContent>
 				</HoverCard>

@@ -1,7 +1,10 @@
 import { InoutboundPayload } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/exchange-epc.schema'
-import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inoutbound/_types'
-import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
+import {
+	FetchFPEpcParams,
+	RFIDStreamEventData,
+	SearchCustOrderParams
+} from '@/app/(features)/_layout.finished-production-inoutbound/_types'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'

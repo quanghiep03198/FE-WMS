@@ -1,4 +1,3 @@
-import { OrderItem } from '@/app/_shared/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -22,6 +21,7 @@ import { toast } from 'sonner'
 import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
+import { OrderItem } from '../../_types'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem

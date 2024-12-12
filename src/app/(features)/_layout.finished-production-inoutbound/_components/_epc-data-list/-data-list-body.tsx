@@ -1,12 +1,10 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
-import { RFIDStreamEventData } from '@/app/_shared/_types/rfid'
 import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
-import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
@@ -31,6 +29,8 @@ import tw from 'tailwind-styled-components'
 import { useGetEpcQuery } from '../../_apis/rfid.api'
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+import { RFIDStreamEventData } from '../../_types'
+import createLogger from '../../_utils/log.util'
 import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -93,6 +93,7 @@ const EpcDataList: React.FC = () => {
 	const wrapperRef = useRef<HTMLDivElement>(null)
 
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
+	const incommingMessageCountRef = useRef<number>(0)
 
 	// * Manual fetch EPC
 	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
@@ -116,9 +117,6 @@ const EpcDataList: React.FC = () => {
 				openWhenHidden: true,
 				async onopen(response) {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-						setScanningStatus('connected')
-						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
-						writeLog({ message: 'Connected', type: 'info' })
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
@@ -140,19 +138,27 @@ const EpcDataList: React.FC = () => {
 				},
 				onmessage(event: EventSourceMessage) {
 					try {
-						if (!event.data) return
+						if (!event.data) {
+							incommingMessageCountRef.current = 0
+							return
+						}
+						incommingMessageCountRef.current++
+						if (incommingMessageCountRef.current === 1) {
+							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
+							writeLog({ message: 'Connected', type: 'info' })
+							setScanningStatus('connected')
+						}
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
-						setHasInvalidEpcAlert(data?.has_invalid_epc)
+
 						writeLog({
 							type: 'info',
-							message: /* template */ `
-								<span>[SSE] /api/rfid/fetch-epc/sse</span>  
-								<span class='text-success'>200</span> ~ 
-								<span>${(performance.now() - previousTimeRef.current).toFixed(2)} ms</span> - 
-								<span>${Json.getContentSize(event.data, 'kilobyte')}</span>
-								`
+							message: createLogger({
+								status: 200,
+								duration: performance.now() - previousTimeRef.current,
+								data: event.data
+							})
 						})
 						previousTimeRef.current = performance.now()
 						window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
@@ -165,14 +171,15 @@ const EpcDataList: React.FC = () => {
 					throw new RetriableError()
 				},
 				onerror(error) {
+					setScanningStatus('disconnected')
 					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 					writeLog({
-						message: /* template */ `
-							<span>GET /api/rfid/fetch-epc/sse</span>
-							<span class='text-destructive'>${error.status}</span>
-							<br/>
-							<span>${error.message}</span>`,
-						type: 'error'
+						type: 'error',
+						message: createLogger({
+							status: error.status,
+							duration: performance.now() - previousTimeRef.current,
+							data: error.message
+						})
 					})
 					// * Depend on error type, retry or not
 					if (error instanceof FatalError) throw error
@@ -182,7 +189,6 @@ const EpcDataList: React.FC = () => {
 		} catch (e) {
 			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
 		} finally {
-			if (scanningStatus === 'connected') setScanningStatus('disconnected')
 			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
@@ -235,7 +241,10 @@ const EpcDataList: React.FC = () => {
 				data: uniqBy([...previousData, ...newData], 'epc')
 			})
 		} else {
-			setSelectedOrder('all')
+			setHasInvalidEpcAlert(
+				Array.isArray(incommingEpc?.data) && incommingEpc.data.some((item) => item.epc.includes('E28'))
+			)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			setScannedEpc(incommingEpc)
 		}
 	}, [incommingEpc, previousEpc])
