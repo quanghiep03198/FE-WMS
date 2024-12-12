@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { addMonths, format } from 'date-fns'

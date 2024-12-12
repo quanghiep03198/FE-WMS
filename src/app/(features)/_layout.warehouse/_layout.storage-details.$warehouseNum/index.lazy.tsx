@@ -1,6 +1,5 @@
 // #region Modules
 import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
-import useQueryParams from '@/common/hooks/use-query-params'
 import { Div, Separator } from '@/components/ui'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
@@ -26,7 +25,6 @@ export const Route = createLazyFileRoute('/(features)/_layout/warehouse/_layout/
 function Page() {
 	const { t, i18n } = useTranslation(['ns_common'])
 	const { warehouseNum } = useParams({ strict: false })
-	const { searchParams } = useQueryParams()
 
 	// Set page breadcrumb navigation
 	const { setBreadcrumb } = useBreadcrumbContext()

@@ -31,8 +31,6 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			queryFn: () => EmployeeService.searchEmployee({ dept_code: departmentCode, search: employeeCode })
 		})
 
-	// useUnmount(() => setOpen(false))
-
 	return (
 		<DropdownMenu open={open} onOpenChange={setOpen}>
 			<DropdownMenuTrigger>
@@ -42,9 +40,14 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 			<DropdownMenuContent align='end' className='min-w-40'>
 				<DropdownMenuItem asChild={true} className='flex items-center gap-x-3'>
 					<Link
-						preload='intent'
+						preload='render'
 						to='/warehouse/storage-details/$warehouseNum'
-						params={{ warehouseNum: row.original.warehouse_num }}>
+						params={
+							{ warehouseNum: row.original.warehouse_num } as unknown as React.ComponentProps<
+								typeof Link
+							>['params']
+						}
+						onMouseEnter={() => prefetchWarehouseDetail(row.original.warehouse_num)}>
 						<Icon name='SquareDashedMousePointer' />
 						{t('ns_common:actions.detail')}
 					</Link>

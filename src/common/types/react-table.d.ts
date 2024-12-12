@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 import '@tanstack/react-table'
 import { Row, RowData } from '@tanstack/react-table'
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {

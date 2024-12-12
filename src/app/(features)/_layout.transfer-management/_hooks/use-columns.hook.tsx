@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { ITransferOrder, IWarehouse } from '@/common/types/entities'
 import { Checkbox, Icon, Typography } from '@/components/ui'
 import { ESTIMATE_SIZE } from '@/components/ui/@react-table/components/table'
