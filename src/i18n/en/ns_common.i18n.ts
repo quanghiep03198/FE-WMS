@@ -96,7 +96,8 @@ export default {
 		establish_connection: 'Establishing connection ...',
 		error: 'Something went wrong !',
 		processing_request: 'Processing request ...',
-		success: 'Successfully !'
+		success: 'Successfully !',
+		waiting_for_data: 'Waiting for data ...'
 	},
 	pagination: {
 		first_page: 'First page',

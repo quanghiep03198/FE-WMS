@@ -37,6 +37,7 @@ const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
+const POLLING_DATA_TOAST_ID = 'POLLING_DATA'
 
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
@@ -117,6 +118,12 @@ const EpcDataList: React.FC = () => {
 				openWhenHidden: true,
 				async onopen(response) {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+						if (scanningStatus === 'connecting') {
+							setScanningStatus('connected')
+							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
+							writeLog({ message: 'Connected', type: 'info' })
+							toast.loading(t('ns_common:notification.waiting_for_data'), { id: POLLING_DATA_TOAST_ID })
+						}
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
@@ -144,9 +151,7 @@ const EpcDataList: React.FC = () => {
 						}
 						incommingMessageCountRef.current++
 						if (incommingMessageCountRef.current === 1) {
-							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
-							writeLog({ message: 'Connected', type: 'info' })
-							setScanningStatus('connected')
+							toast.success(t('ns_common:notification.success'), { id: POLLING_DATA_TOAST_ID })
 						}
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
@@ -163,8 +168,7 @@ const EpcDataList: React.FC = () => {
 						previousTimeRef.current = performance.now()
 						window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
 					} catch (error) {
-						console.error(error.message)
-						return
+						throw new FatalError(error)
 					}
 				},
 				onclose() {
@@ -176,7 +180,7 @@ const EpcDataList: React.FC = () => {
 					writeLog({
 						type: 'error',
 						message: createLogger({
-							status: error.status,
+							status: error.status ?? HttpStatusCode.InternalServerError,
 							duration: performance.now() - previousTimeRef.current,
 							data: error.message
 						})

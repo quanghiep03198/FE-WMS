@@ -95,7 +95,8 @@ export default {
 		establishing_connection: '建立连接 ...',
 		error: '失败 !',
 		processing_request: '正在处理请求 ...',
-		success: '成功 !'
+		success: '成功 !',
+		waiting_for_data: '等待数据 ...'
 	},
 	pagination: {
 		first_page: '第一页',
