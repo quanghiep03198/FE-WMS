@@ -6,6 +6,7 @@ export default {
 		customer_branch_id: 'Customer branch ID',
 		customer_order: 'Customer order code', //: Đặt đơn của khách
 		dept_name: 'Department',
+		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
 		inbound_date: 'Inbound date',
 		inbound_qty: 'Inbound quantity',
