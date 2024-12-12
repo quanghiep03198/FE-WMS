@@ -2,6 +2,6 @@
 	"routesDirectory": "./src/app",
 	"generatedRouteTree": "./src/route-tree.gen.ts",
 	"routeFileIgnorePrefix": "-",
-	"routeFileIgnorePattern": "((hook|api|schema|const|enum|store|worker|d).ts)|((hook|api|schema|const|enum|store|d).tsx)",
+	"routeFileIgnorePattern": "((hook|api|schema|const|enum|store|worker|d|util).ts)|((hook|api|schema|const|enum|store|d|util).tsx)",
 	"quoteStyle": "single"
 }
