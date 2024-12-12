@@ -20,7 +20,7 @@ import {
 } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -97,7 +97,7 @@ const EpcDataList: React.FC = () => {
 	const incommingMessageCountRef = useRef<number>(0)
 
 	// * Manual fetch EPC
-	const { refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
+	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
 
 	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
 
@@ -284,6 +284,11 @@ const EpcDataList: React.FC = () => {
 			throw new RetriableError()
 		}
 	}, [selectedOrder])
+
+	useEffect(() => {
+		if (retrievedEpcData)
+			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
+	}, [retrievedEpcData])
 
 	// * Intitialize virtual list to render scanned EPC data
 	const [virtualItems] = useVirtualList(scannedEpc?.data, {
