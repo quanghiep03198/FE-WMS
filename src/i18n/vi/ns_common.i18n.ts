@@ -97,7 +97,7 @@ export default {
 		error: 'Đã có lỗi xảy ra !',
 		processing_request: 'Đang xử lý yêu cầu ...',
 		success: 'Thành công !',
-		waiting_for_data: 'Đang lấy dữ liệu ...'
+		receiving_data: 'Đang lấy dữ liệu ...'
 	},
 	others: {
 		server: 'Máy chủ {{alias}}'

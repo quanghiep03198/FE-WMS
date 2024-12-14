@@ -96,7 +96,7 @@ export default {
 		error: '失败 !',
 		processing_request: '正在处理请求 ...',
 		success: '成功 !',
-		waiting_for_data: '等待数据 ...'
+		receiving_data: '等待数据 ...'
 	},
 	pagination: {
 		first_page: '第一页',

@@ -122,7 +122,7 @@ const EpcDataList: React.FC = () => {
 							setScanningStatus('connected')
 							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 							writeLog({ message: 'Connected', type: 'info' })
-							toast.loading(t('ns_common:notification.waiting_for_data'), { id: POLLING_DATA_TOAST_ID })
+							toast.loading(t('ns_common:notification.receiving_data'), { id: POLLING_DATA_TOAST_ID })
 						}
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
@@ -286,7 +286,7 @@ const EpcDataList: React.FC = () => {
 	}, [selectedOrder])
 
 	useEffect(() => {
-		if (retrievedEpcData)
+		if (retrievedEpcData && typeof scanningStatus !== 'undefined')
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 

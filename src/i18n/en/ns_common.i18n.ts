@@ -97,7 +97,7 @@ export default {
 		error: 'Something went wrong !',
 		processing_request: 'Processing request ...',
 		success: 'Successfully !',
-		waiting_for_data: 'Waiting for data ...'
+		receiving_data: 'Waiting for data ...'
 	},
 	pagination: {
 		first_page: 'First page',
