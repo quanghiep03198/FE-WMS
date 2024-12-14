@@ -129,24 +129,25 @@ export default defineConfig(({ mode }) => {
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
-						const modules = new Map<string, RegExp>([
-							['ahooks', /ahooks/],
-							['axios', /axios/],
-							['@dnd-kit/modifiers', /dnd-kit/],
-							['@dnd-kit/sortable', /dnd-kit/],
+						const modules = new Array<[string, RegExp]>(
+							['@dnd-kit', /@dnd-kit/],
 							['@radix-ui', /@radix-ui/],
 							['@tanstack/react-query', /react-query/],
 							['@tanstack/react-router', /react-router/],
 							['@tanstack/react-table', /react-table/],
 							['@tanstack/react-virtual', /react-virtual/],
+							['ahooks', /ahooks/],
+							['axios', /axios/],
+							['bcryptjs-react', /bcryptjs-react/],
 							['clsx', /clsx/],
 							['cmdk', /cmdk/],
 							['copy-to-clipboard', /copy-to-clipboard/],
 							['d3-shape', /d3-shape/],
 							['date-fns', /date-fns/],
+							['file-saver', /file-saver/],
 							['flat', /flat/],
-							['immer', /immer/],
 							['i18next', /i18next/],
+							['immer', /immer/],
 							['lodash', /lodash/],
 							['lucide', /lucide-react/],
 							['lz-string', /lz-string/],
@@ -159,12 +160,10 @@ export default defineConfig(({ mode }) => {
 							['sonner', /sonner/],
 							['tailwind-merge', /tailwind-merge/],
 							['uuid', /uuid/],
-							['zustand', /zustand/],
-							['bcryptjs-react', /bcryptjs-react/],
-							['zod', /zod/]
-						])
+							['zod', /zod/],
+							['zustand', /zustand/]
+						)
 
-						// @ts-ignore
 						for (const [key, regex] of modules) {
 							if (id.match(regex)) return key
 						}
