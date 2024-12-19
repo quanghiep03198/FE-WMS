@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
@@ -73,6 +74,11 @@ export default defineConfig(({ mode }) => {
 					enabled: true,
 					suppressWarnings: true
 				}
+			}),
+			sentryVitePlugin({
+				authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
+				org: 'scyllas',
+				project: 'wms-fe-react'
 			})
 		],
 		resolve: {
@@ -106,11 +112,11 @@ export default defineConfig(({ mode }) => {
 			},
 			headers: {
 				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+					"style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
 				['Cache-Control']: 'public, max-age=604800, immutable' // 1 week in seconds
 			},
 			configureServer: (server: ViteDevServer) => {
-				server.middlewares.use((_, res, next) => {
+				server.middlewares.use((_req, _res, next) => {
 					console.log('middleware triggered')
 					next()
 				})
@@ -122,7 +128,7 @@ export default defineConfig(({ mode }) => {
 		},
 		build: {
 			emptyOutDir: true,
-			sourcemap: false,
+			sourcemap: true,
 			cssCodeSplit: true,
 			reportCompressedSize: true,
 			chunkSizeWarningLimit: 1024,
@@ -157,6 +163,7 @@ export default defineConfig(({ mode }) => {
 							['react-hook-form', /react-hook-form/],
 							['react-resizable-panels', /react-resizable-panels/],
 							['recharts', /recharts/],
+							['@sentry/react', /@sentry\/react/],
 							['sonner', /sonner/],
 							['tailwind-merge', /tailwind-merge/],
 							['uuid', /uuid/],
