@@ -6,7 +6,8 @@ import PageComposition from './_components/-page-composition'
 import { PageProvider } from './_contexts/-page-context'
 
 export const Route = createFileRoute('/(public)/')({
-	component: Page
+	component: Page,
+	staticData: {}
 })
 
 export default function Page() {

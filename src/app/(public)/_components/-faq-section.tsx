@@ -76,7 +76,7 @@ const FAQsSection: React.FunctionComponent = () => {
 					<Div className='size-3 rounded-full bg-muted-foreground' />
 				</Div>
 				<Typography className='py-2 text-center font-medium'>FAQs</Typography>
-				<ScrollShadow size={200} ref={ref} className='flex flex-1 flex-col gap-y-3 p-4'>
+				<ScrollShadow ref={ref} className='flex h-52 flex-1 flex-col gap-y-3 p-4'>
 					{faqs.map((faq, index) => (
 						<Fragment key={index}>
 							<Div

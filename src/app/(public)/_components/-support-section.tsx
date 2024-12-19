@@ -1,4 +1,3 @@
-import env from '@/common/utils/env'
 import { Div, Icon, Typography } from '@/components/ui'
 import { memo } from 'react'
 
@@ -27,7 +26,7 @@ const SupportSection: React.FunctionComponent = () => {
 					</Typography>
 
 					<a
-						href={env('VITE_REPORT_BUG_URL', '#')}
+						href='https://forms.gle/7Bes5qhm2AGPxhQ36'
 						target='_blank'
 						className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
 						Report a bug <Icon name='ArrowRight' size={12} />
