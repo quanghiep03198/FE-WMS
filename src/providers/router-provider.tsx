@@ -7,7 +7,7 @@ import { queryClient } from './query-client-provider'
 type CreateRouterOptions = FirstParameter<typeof createRouter>
 
 // Set up a Router instance
-const router = createRouter({
+export const router = createRouter({
 	routeTree,
 	context: { queryClient, isAuthenticated: false },
 	defaultPreload: 'intent',
