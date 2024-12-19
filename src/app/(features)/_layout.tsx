@@ -1,10 +1,10 @@
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { SidebarProvider } from '@/components/ui'
-import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import ErrorBoundary from '../_components/_errors/-error-boundary'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorBoundaryFallback } from '../_components/_errors/-error-boundary-fallback'
 import AuthGuard from '../_components/_guard/-auth-guard'
 import LayoutComposition from './_components/_partials/-layout-composition'
 import NavSidebar from './_components/_partials/-nav-sidebar'
@@ -32,15 +32,16 @@ function Layout() {
 						<BreadcrumbProvider>
 							<LayoutComposition.Main>
 								<Navbar />
-								<LayoutComposition.OutletWrapper>
-									<QueryErrorResetBoundary>
-										{({ reset }) => (
-											<ErrorBoundary onReset={reset}>
-												<Outlet />
-											</ErrorBoundary>
-										)}
-									</QueryErrorResetBoundary>
-								</LayoutComposition.OutletWrapper>
+								<LayoutComposition.ScrollArea>
+									<LayoutComposition.OutletWrapper>
+										<ErrorBoundary
+											fallbackRender={({ error, resetErrorBoundary }) => (
+												<ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
+											)}>
+											<Outlet />
+										</ErrorBoundary>
+									</LayoutComposition.OutletWrapper>
+								</LayoutComposition.ScrollArea>
 							</LayoutComposition.Main>
 						</BreadcrumbProvider>
 					</SidebarProvider>
