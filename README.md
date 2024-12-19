@@ -6,13 +6,13 @@
 
 ## Table of Contents
 
--  [Introduction](#introduction)
--  [Features](#features)
--  [Installation](#installation)
--  [Usage](#usage)
--  [Folder Structure](#folder-structure)
--  [Contributing](#contributing)
--  [License](#license)
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Introduction
 
@@ -20,11 +20,11 @@ The warehouse management project helps you manage inventory, track shipments, an
 
 ## Features
 
--  Inventory Tracking: Update inventory quantities.
--  Order Processing Manage Order Statuses.
--  Generating Reports.
--  Exchange & Return Management.
--  Warehouse Import & Export Management.
+- Inventory Tracking: Update inventory quantities.
+- Order Processing Manage Order Statuses.
+- Generating Reports.
+- Exchange & Return Management.
+- Warehouse Import & Export Management.
 
 ## Installation & Requirements
 
