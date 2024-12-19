@@ -5,7 +5,7 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { defineConfig, loadEnv, ViteDevServer } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { VitePWA as pwa } from 'vite-plugin-pwa'
 
 /**
@@ -77,8 +77,8 @@ export default defineConfig(({ mode }) => {
 			}),
 			sentryVitePlugin({
 				authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
-				org: 'scyllas',
-				project: 'wms-fe-react'
+				org: process.env.VITE_SENTRY_ORG,
+				project: process.env.VITE_SENTRY_PROJECT
 			})
 		],
 		resolve: {
@@ -114,12 +114,6 @@ export default defineConfig(({ mode }) => {
 				['Content-Security-Policy']:
 					"style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
 				['Cache-Control']: 'public, max-age=604800, immutable' // 1 week in seconds
-			},
-			configureServer: (server: ViteDevServer) => {
-				server.middlewares.use((_req, _res, next) => {
-					console.log('middleware triggered')
-					next()
-				})
 			}
 		},
 		preview: {
