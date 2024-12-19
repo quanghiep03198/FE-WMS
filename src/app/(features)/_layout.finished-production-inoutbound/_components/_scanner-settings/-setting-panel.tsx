@@ -22,11 +22,11 @@ const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='basis-1/2 space-y-4'>
-			<Typography variant='h6' className='px-4 text-lg sm:text-base md:text-base'>
+		<Div as='section' className='w-full space-y-3'>
+			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg sm:text-base md:text-base'>
 				{t('ns_common:titles.general_settings')}
 			</Typography>
-			<Div className='flex h-full flex-1 flex-col gap-y-4 overflow-y-auto px-4 scrollbar xl:max-h-96 xxl:max-h-none'>
+			<Div className='flex h-full flex-wrap items-stretch gap-x-4 gap-y-2 overflow-y-auto *:flex-[1_1_24rem] @5xl:flex-wrap-reverse'>
 				<PollingIntervalSelector />
 				<FullScreenModeSwitch />
 				<DeveloperModeSwitch />
@@ -53,7 +53,7 @@ const PollingIntervalSelector: React.FC = () => {
 	return (
 		<HoverCard openDelay={50} closeDelay={50}>
 			<HoverCardTrigger asChild>
-				<Div className='grid gap-2'>
+				<Div className='grid h-28 gap-2 rounded-lg border p-4 md:basis-full'>
 					<Div className='flex items-center justify-between'>
 						<Label htmlFor='polling-duration'>{t('ns_inoutbound:scanner_setting.polling_duration')}</Label>
 						<Badge variant='outline'>
@@ -99,7 +99,7 @@ const FullScreenModeSwitch: React.FC = () => {
 		<SwitchBox.Wrapper>
 			<SwitchBox.TitleWrapper>
 				<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}</Label>
-				<Typography variant='small' color='muted'>
+				<Typography variant='small' color='muted' className='text-pretty'>
 					{t('ns_inoutbound:scanner_setting.toggle_fullscreen_note')}
 				</Typography>
 			</SwitchBox.TitleWrapper>
@@ -128,7 +128,7 @@ const DeveloperModeSwitch: React.FC = () => {
 		<SwitchBox.Wrapper>
 			<SwitchBox.TitleWrapper>
 				<Label htmlFor='toggle-developer-mode'>{t('ns_inoutbound:scanner_setting.developer_mode')}</Label>
-				<Typography variant='small' color='muted'>
+				<Typography variant='small' color='muted' className='text-pretty'>
 					{t('ns_inoutbound:scanner_setting.developer_mode_note')}
 				</Typography>
 			</SwitchBox.TitleWrapper>
@@ -145,7 +145,7 @@ const DeveloperModeSwitch: React.FC = () => {
 }
 
 const SwitchBox = {
-	Wrapper: tw.div`grid min-h-40 grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:min-h-28 @[320px]:gap-0`,
+	Wrapper: tw.div`grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0 z-0 h-28`,
 	TitleWrapper: tw.div`col-span-full space-y-1 @[320px]:col-span-3`,
 	InnerWrapper: tw.div`col-span-full grid @[320px]:col-span-1 @[320px]:place-content-end`
 }

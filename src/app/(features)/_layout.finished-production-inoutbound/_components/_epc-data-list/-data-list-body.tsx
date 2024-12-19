@@ -322,10 +322,8 @@ const EpcDataList: React.FC = () => {
 				)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
-					scrollbar={true}
-					size={isUltimateLargeScreen ? 600 : 500}
 					ref={containerRef}
-					className='z-10 flex w-full flex-col items-stretch divide-y divide-border bg-background p-2'>
+					className='z-10 flex h-[480px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 xxl:h-[625px]'>
 					<Div ref={wrapperRef}>
 						{Array.isArray(virtualItems) &&
 							virtualItems.map((virtualItem) => {
@@ -356,7 +354,7 @@ const EpcDataList: React.FC = () => {
 					)}
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[50dvh] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[75dvh] xxl:h-[65dvh]'>
+				<Div className='z-10 grid h-[500px] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[625px] xxl:h-[625px]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
