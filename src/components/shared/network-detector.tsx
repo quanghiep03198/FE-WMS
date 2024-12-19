@@ -1,7 +1,8 @@
-import env from '@/common/utils/env'
+import { AppConfigs } from '@/configs/app.config'
 import { useQuery } from '@tanstack/react-query'
+import { useUpdateEffect } from 'ahooks'
 import axios from 'axios'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { toast } from 'sonner'
 import { Icon } from '../ui'
 
@@ -18,11 +19,11 @@ export default function NetworkDetector() {
 
 	const { isSuccess, isError } = useQuery({
 		queryKey: ['NETWORK_HEALTH_CHECK'],
-		queryFn: async () => axios.get(env('VITE_CHECKING_NETWORK_URL')),
+		queryFn: async () => axios.get(AppConfigs.NETWORK_CONNECTION_HEALTH_CHECK_URL),
 		refetchInterval: 1000 // Checking internet connection every 1 seconds
 	})
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		if (isError) {
 			window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: false }))
 			toastRef.current = toast.error('Network error', {
