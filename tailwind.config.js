@@ -167,24 +167,47 @@ module.exports = {
 						height: '0'
 					}
 				},
-				fadeIn: {
+				'fade-in': {
 					from: { transform: 'scale(0.95)', opacity: 0 },
 					to: {
 						transform: 'scale(1)',
 						opacity: '1'
 					}
 				},
-				flyIn: {
+				'fall-down': {
 					from: {
-						transform: 'translateY(80%) scale(0.8)',
+						transform: 'translateY(0)'
+					},
+					to: {
+						transform: 'translateY(2rem)',
+						width: 0
+					}
+				},
+				'fly-in': {
+					from: {
+						transform: 'translateY(1.5rem)',
 						opacity: 0
 					},
 					to: {
-						transform: 'translateY(0) scale(1)',
+						transform: 'translate(0)',
 						opacity: 1
 					}
 				},
-				slideIn: {
+				'fly-in-out': {
+					'0%': {
+						transform: 'translateY(1.5rem)',
+						opacity: 0
+					},
+					'40%': {
+						transform: 'translateY(0)',
+						opacity: 1
+					},
+					'100%': {
+						transform: 'translateY(-1.5rem)',
+						opacity: 0
+					}
+				},
+				'slide-in': {
 					from: {
 						transform: 'translate3d(0,-100%,0)'
 					},
@@ -218,9 +241,11 @@ module.exports = {
 				'collapsible-down': 'collapsible-down 0.2s ease-out',
 				'collapsible-up-reverse': 'collapsible-up-reverse 0.2s ease-out',
 				'collapsible-down-reverse': 'collapsible-down-reverse 0.2s ease-out',
-				'fade-in': 'fadeIn .5s cubic-bezier(.25,.25,0,1) .5s both!important',
-				'slide-in': 'slideIn .3s ease-out 0.75s both',
-				'fly-in': 'flyIn 0.5s cubic-bezier(.5,.5,0,1)',
+				'fade-in': 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
+				'slide-in': 'slide-in .3s ease-out 0.75s both',
+				'fly-in': 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
+				'fly-in-out': 'fly-in-out 1s linear',
+				'fall-down': 'fall-down 1s linear',
 				spotlight: 'spotlight 1.5s ease 0.5s forwards',
 				shimmer: 'shimmer 1.5s linear infinite'
 			}
