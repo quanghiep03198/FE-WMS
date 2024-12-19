@@ -24,6 +24,7 @@ export default {
 		proceed: 'Proceed',
 		reapprove: 'Reapprove',
 		reload: 'Reload',
+		report_bug: 'Report bug',
 		reset: 'Reset',
 		retry: 'Retry',
 		revert_changes: 'Revert changes',

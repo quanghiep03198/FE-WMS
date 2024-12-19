@@ -24,6 +24,7 @@ export default {
 		proceed: '确认',
 		reapprove: '重新批准',
 		reload: '重新加载',
+		report_bug: '报告错误',
 		reset: '重置',
 		retry: '重试',
 		revert_changes: '恢复更改',

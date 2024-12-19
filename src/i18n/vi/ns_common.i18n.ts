@@ -23,6 +23,7 @@ export default {
 		proceed: 'Tiếp tục',
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',
+		report_bug: 'Báo cáo lỗi',
 		reset: 'Đặt lại',
 		retry: 'Thử lại',
 		revert_changes: 'Hủy thay đổi',
