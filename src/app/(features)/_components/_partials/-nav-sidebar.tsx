@@ -60,8 +60,6 @@ const NavSidebar: React.FC = () => {
 
 	const isUltimateLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 
-	const mainMenuSize = useMemo(() => (isUltimateLargeScreen ? 384 : 320), [isUltimateLargeScreen])
-
 	const mainMenu = useMemo(() => {
 		return navigationConfig.filter((item) => item.type === 'main')
 	}, [])
@@ -83,11 +81,10 @@ const NavSidebar: React.FC = () => {
 					<AppLogo />
 				</Link>
 			</SidebarHeader>
-
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>Main</SidebarGroupLabel>
-					<ScrollShadow size={mainMenuSize}>
+					<ScrollShadow className='max-h-80 overflow-y-auto overflow-x-hidden !scrollbar-none'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{mainMenu.map((item) => (
 								<SidebarMenuLink key={item.id} {...item} />
