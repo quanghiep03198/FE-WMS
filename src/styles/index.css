@@ -158,8 +158,8 @@
 		}
 	}
 
-	::view-transition-new(root) {
-		animation: 1s cubic-bezier(0, 0, 0.5, 1) 0.25s fade both;
+	::view-transition-new(app) {
+		animation: 1s cubic-bezier(0, 0, 0.5, 1) fade both;
 	}
 }
 
