@@ -1,51 +1,91 @@
 import { cn } from '@/common/utils/cn'
-import { useScroll, useSize, useUpdate } from 'ahooks'
-import React, { forwardRef, memo, useEffect, useRef } from 'react'
+import { useScroll } from 'ahooks'
+import { debounce } from 'lodash'
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {
-	/**
-	 * If size is a number, it will be treated as pixels, otherwise is a string, it will be treated as a CSS value such as px, rem or em.
-	 */
-	size?: React.CSSProperties['height']
-	scrollbar?: boolean
+	orientation?: 'vertical' | 'horizontal'
 	ref?: React.Ref<HTMLDivElement>
 }
 
 const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(
-	({ size = 320, scrollbar = false, className, children }, ref) => {
-		const update = useUpdate()
-		const localContainerRef = useRef<HTMLDivElement>(null)
-		const resolvedRef = (ref ?? localContainerRef) as React.MutableRefObject<HTMLDivElement>
+	({ className, orientation = 'vertical', children }, ref) => {
+		const localRef = useRef<HTMLDivElement>(null)
+		const resolvedRef = (ref ?? localRef) as React.MutableRefObject<HTMLDivElement>
 
+		const [isScrollable, setIsScrollable] = useState<boolean>(true)
 		const containerScroll = useScroll(resolvedRef)
-		const clientSize = useSize(resolvedRef)
 
-		const scrollHeight = resolvedRef.current?.scrollHeight ?? 0
-		const scrollTop = resolvedRef.current?.scrollTop ?? 0
-		const scrollClientHeight = resolvedRef.current?.clientHeight ?? 0
+		const scrollStates = useMemo(() => {
+			const scrollHeight = resolvedRef.current?.scrollHeight ?? 0
+			const scrollWidth = resolvedRef.current?.scrollWidth ?? 0
+			const scrollTop = containerScroll?.top ?? 0
+			const scrollLeft = containerScroll?.left ?? 0
+			const scrollClientHeight = resolvedRef.current?.clientHeight ?? 0
+			const scrollClientWidth = resolvedRef.current?.clientWidth ?? 0
 
-		const isScrolledToTop = containerScroll?.top === 0
-		const isScrolledToBottom = scrollHeight - scrollTop - scrollClientHeight < 1
-		const isScrollTopBottom = !isScrolledToTop && !isScrolledToBottom
+			const isScrolledToTop = scrollTop === 0
+			const isScrolledToBottom = scrollHeight - scrollTop - scrollClientHeight < 1
+			const isScrollToStart = scrollLeft === 0
+			const isScrollToEnd = scrollWidth - scrollLeft - scrollClientWidth < 1
+			const isAwayFromEdge = (!isScrolledToTop && !isScrolledToBottom) || (!isScrollToStart && !isScrollToEnd)
 
-		const isScrollable = scrollHeight > scrollClientHeight
+			return {
+				isScrolledToTop,
+				isScrolledToBottom,
+				isScrollToStart,
+				isScrollToEnd,
+				isAwayFromEdge
+			}
+		}, [containerScroll, resolvedRef])
 
-		useEffect(update, [scrollHeight, scrollTop, scrollClientHeight, clientSize])
+		const handleScheckScrollable = useCallback(
+			debounce(() => {
+				const element: HTMLDivElement = resolvedRef.current
+				if (element) {
+					const _isScrollable =
+						orientation === 'vertical'
+							? element.scrollHeight > element.clientHeight
+							: element.scrollWidth > element.clientWidth
+					setIsScrollable(_isScrollable)
+				}
+			}, 100),
+			[]
+		)
+
+		useEffect(() => {
+			const element = resolvedRef.current
+
+			handleScheckScrollable()
+
+			const mutationObserver = new MutationObserver(handleScheckScrollable)
+			const resizeObserver = new ResizeObserver(handleScheckScrollable)
+
+			if (element) {
+				mutationObserver.observe(element, { childList: true, subtree: true })
+				resizeObserver.observe(element)
+			}
+
+			return () => {
+				mutationObserver.disconnect()
+				resizeObserver.disconnect()
+			}
+		}, [])
 
 		return (
 			<div
 				ref={resolvedRef}
-				style={{ '--scroll-shadow-size': typeof size === 'number' ? `${size}px` : size } as React.CSSProperties}
-				data-top-scroll={isScrollable && isScrolledToTop}
-				data-bottom-scroll={isScrollable && isScrolledToBottom}
-				data-top-bottom-scroll={isScrollable && isScrollTopBottom}
+				data-top-scroll={isScrollable && scrollStates.isScrolledToTop}
+				data-bottom-scroll={isScrollable && scrollStates.isScrolledToBottom}
+				data-away-edge={isScrollable && scrollStates.isAwayFromEdge}
+				data-left-scroll={isScrollable && scrollStates.isScrollToStart}
+				data-right-scroll={isScrollable && scrollStates.isScrollToEnd}
 				className={cn(
 					className,
-					scrollbar ? 'overflow-y-scroll scrollbar' : 'overflow-auto !scrollbar-none',
-					'h-[var(--scroll-shadow-size)]',
-					'data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]',
-					'data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]',
-					'data-[top-bottom-scroll=true]:[mask-image:linear-gradient(180deg,transparent,hsl(var(--sidebar-background))_calc(var(--scroll-shadow-size)/4),hsl(var(--sidebar-background))_calc(100%_-_var(--scroll-shadow-size)/4),transparent)]'
+					orientation === 'vertical' &&
+						`overflow-y-auto data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_85%,transparent)] data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(to_bottom,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]`,
+					orientation === 'horizontal' &&
+						`overflow-x-auto data-[right-scroll=true]:[mask-image:linear-gradient(270deg,hsl(var(--sidebar-background))_85%,transparent)] data-[left-scroll=true]:[mask-image:linear-gradient(90deg,hsl(var(--sidebar-background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]`
 				)}>
 				{children}
 			</div>
@@ -53,4 +93,6 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(
 	}
 )
 
-export default memo(ScrollShadow)
+ScrollShadow.displayName = 'ScrollShadow'
+
+export default React.memo(ScrollShadow)
