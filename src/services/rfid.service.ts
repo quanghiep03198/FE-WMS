@@ -12,7 +12,7 @@ import { omitBy } from 'lodash'
 
 export class RFIDService {
 	// #region [RFID] Finished Production APIs
-	static async fetchFPData(tenantId: string, params: FetchFPEpcParams) {
+	static async fetchFPInventoryData(tenantId: string, params: FetchFPEpcParams) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>(`/rfid/fetch-epc`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: omitBy(params, (value) => !value || value === 'all')
@@ -52,5 +52,15 @@ export class RFIDService {
 		return await axiosInstance.patch(`/rfid/exchange-epc`, payload, {
 			headers: { [RequestHeaders.TENANT_ID]: tenant }
 		})
+	}
+
+	static async triggerFetchThirdPartyApi(tenant: string) {
+		return await axiosInstance.put(
+			'/rfid/third-party-api-sync',
+			{},
+			{
+				headers: { [RequestHeaders.TENANT_ID]: tenant }
+			}
+		)
 	}
 }

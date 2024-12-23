@@ -28,7 +28,7 @@ export const useGetEpcQuery = () => {
 	return useQuery({
 		queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection],
 		queryFn: async () =>
-			RFIDService.fetchFPData(connection, {
+			RFIDService.fetchFPInventoryData(connection, {
 				page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
@@ -116,6 +116,20 @@ export const useExchangeEpcMutation = () => {
 
 	return useMutation({
 		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(connection, payload),
+		onSuccess: () => {
+			setCurrentPage(null)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			invalidateQueries()
+		}
+	})
+}
+
+export const useSyncDataMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+	const { setSelectedOrder, setCurrentPage } = usePageContext('connection', 'setSelectedOrder', 'setCurrentPage')
+
+	return useMutation({
+		mutationFn: async (connection: string) => await RFIDService.triggerFetchThirdPartyApi(connection),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
