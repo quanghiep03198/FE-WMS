@@ -22,11 +22,11 @@ const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div as='section' className='w-full space-y-3'>
+		<Div as='section' className='flex w-full flex-col gap-y-3'>
 			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg sm:text-base md:text-base'>
 				{t('ns_common:titles.general_settings')}
 			</Typography>
-			<Div className='flex h-full flex-wrap items-stretch gap-x-4 gap-y-2 overflow-y-auto *:flex-[1_1_24rem] @5xl:flex-wrap-reverse'>
+			<Div className='flex h-full flex-col items-stretch gap-x-4 gap-y-2 *:flex-1 @5xl:flex-row @5xl:flex-wrap-reverse'>
 				<PollingIntervalSelector />
 				<FullScreenModeSwitch />
 				<DeveloperModeSwitch />
@@ -53,7 +53,7 @@ const PollingIntervalSelector: React.FC = () => {
 	return (
 		<HoverCard openDelay={50} closeDelay={50}>
 			<HoverCardTrigger asChild>
-				<Div className='grid h-28 gap-2 rounded-lg border p-4 md:basis-full'>
+				<Div className='grid h-28 w-full gap-2 rounded-lg border p-4 md:basis-full'>
 					<Div className='flex items-center justify-between'>
 						<Label htmlFor='polling-duration'>{t('ns_inoutbound:scanner_setting.polling_duration')}</Label>
 						<Badge variant='outline'>

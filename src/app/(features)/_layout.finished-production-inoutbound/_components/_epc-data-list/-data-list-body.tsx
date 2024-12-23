@@ -20,7 +20,7 @@ import {
 } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -285,7 +285,7 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [selectedOrder])
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		if (retrievedEpcData && typeof scanningStatus !== 'undefined')
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
@@ -323,7 +323,7 @@ const EpcDataList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[480px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 xxl:h-[625px]'>
+					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1400px]:h-[500px] @[1500px]:h-[625px]'>
 					<Div ref={wrapperRef}>
 						{Array.isArray(virtualItems) &&
 							virtualItems.map((virtualItem) => {
