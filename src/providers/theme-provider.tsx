@@ -13,7 +13,7 @@ type ThemeProviderState = {
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>({
-	theme: Theme.SYSTEM,
+	theme: Theme?.SYSTEM,
 	setTheme: () => undefined
 })
 
