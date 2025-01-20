@@ -1,14 +1,19 @@
+import useQueryParams from '@/common/hooks/use-query-params'
 import { IDailyInboundReport } from '@/common/types/entities'
 import { Button, DataTable, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { createColumnHelper } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetDailyInboundReport } from '../../_apis/use-inventory.api'
+import { useGetInboundReport } from '../../_apis/use-report.api'
 import { useGetDefaultTenantByFactory } from '../../_apis/use-tenacy.api'
 
 const DailyInboundReport: React.FC = () => {
 	const { data: tenant } = useGetDefaultTenantByFactory()
-	const { data, refetch, isLoading } = useGetDailyInboundReport(tenant?.id)
+	const { searchParams } = useQueryParams<{ 'date.eq': string }>({
+		'date.eq': format(new Date(), 'yyyy-MM-dd')
+	})
+	const { data, refetch, isLoading } = useGetInboundReport(tenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDailyInboundReport>()
 

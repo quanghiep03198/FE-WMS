@@ -10,18 +10,20 @@ import { saveAs } from 'file-saver'
 import { Fragment, memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { useGetDefaultTenantByFactory } from '../../_apis/use-tenacy.api'
 import { useGetInboundReport } from '../_apis/use-report.api'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
 
 const ReportDatalist: React.FC = () => {
-	const { data, isLoading, refetch } = useGetInboundReport()
+	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
+	const { data: tenant } = useGetDefaultTenantByFactory()
+	const { data, isLoading, refetch } = useGetInboundReport(tenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
 	const columnHelper = createColumnHelper<IInboundReport>()
-	const { searchParams } = useQueryParams<{ 'date.eq': string }>({ 'date.eq': format(new Date(), 'yyyy-MM-dd') })
 
 	const columns = useMemo(
 		() => [
@@ -74,6 +76,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.inbound_date'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enableResizing: true,
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return format(value, 'yyyy-MM-dd')

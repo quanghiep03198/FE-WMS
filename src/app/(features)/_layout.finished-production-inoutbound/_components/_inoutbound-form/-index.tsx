@@ -61,7 +61,8 @@ const InoutboundForm: React.FC = () => {
 			rfid_use: '',
 			warehouse_num: '',
 			storage: '',
-			dept_code: ''
+			dept_code: '',
+			dept_name:''
 		},
 		mode: 'onChange'
 	})
@@ -99,6 +100,7 @@ const InoutboundForm: React.FC = () => {
 			...form.getValues(),
 			rfid_use: '',
 			dept_code: '',
+			dept_name: '',
 			warehouse_num: '',
 			storage: ''
 		})
@@ -111,8 +113,15 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
+	useEffect(()=>{
+		console.log(form.getValues())
+	},[form.watch('dept_code')])
+
+
 	const handleSubmit = async (data: InboundFormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
+		console.log(data)
+		return
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
@@ -206,6 +215,7 @@ const InoutboundForm: React.FC = () => {
 							<SelectFieldControl
 								name='dept_code'
 								label={t('ns_erp:fields.shaping_dept_code')}
+								onValueChange={(value) => form.setValue('dept_name', inoutboundDepts.find(item=> item.dept_code === value)?.dept_name)}
 								datalist={inoutboundDepts}
 								labelField='dept_name'
 								valueField='dept_code'

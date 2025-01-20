@@ -21,7 +21,12 @@ export const inboundSchema = outboundSchema.extend({
 	dept_code: z
 		.string({ required_error: 'ns_validation:required' })
 		.trim()
-		.min(1, { message: 'ns_validation:required' })
+		.min(1, { message: 'ns_validation:required' }),
+	dept_name: z
+		.string({ required_error: 'ns_validation:required' })
+		.trim()
+		.min(1, { message: 'ns_validation:required' }),
+
 })
 
 export type InboundFormValues = z.infer<typeof inboundSchema>

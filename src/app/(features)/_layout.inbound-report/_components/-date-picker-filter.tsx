@@ -7,7 +7,7 @@ const DatePickerFilter: React.FC = () => {
 	const { searchParams, setParams } = useQueryParams<{ 'date.eq': string }>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd')
 	})
-
+	console.log('searchParams  :>> ', searchParams)
 	return (
 		<DatePicker
 			selected={searchParams['date.eq'] ? new Date(searchParams['date.eq']) : new Date()}
