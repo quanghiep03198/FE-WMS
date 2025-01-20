@@ -62,7 +62,7 @@ const InoutboundForm: React.FC = () => {
 			warehouse_num: '',
 			storage: '',
 			dept_code: '',
-			dept_name:''
+			dept_name: ''
 		},
 		mode: 'onChange'
 	})
@@ -113,10 +113,9 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	useEffect(()=>{
+	useEffect(() => {
 		console.log(form.getValues())
-	},[form.watch('dept_code')])
-
+	}, [form.watch('dept_code')])
 
 	const handleSubmit = async (data: InboundFormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
@@ -215,7 +214,12 @@ const InoutboundForm: React.FC = () => {
 							<SelectFieldControl
 								name='dept_code'
 								label={t('ns_erp:fields.shaping_dept_code')}
-								onValueChange={(value) => form.setValue('dept_name', inoutboundDepts.find(item=> item.dept_code === value)?.dept_name)}
+								onValueChange={(value) =>
+									form.setValue(
+										'dept_name',
+										inoutboundDepts.find((item) => item.dept_code === value)?.dept_name
+									)
+								}
 								datalist={inoutboundDepts}
 								labelField='dept_name'
 								valueField='dept_code'
