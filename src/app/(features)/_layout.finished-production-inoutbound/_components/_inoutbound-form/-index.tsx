@@ -119,8 +119,6 @@ const InoutboundForm: React.FC = () => {
 
 	const handleSubmit = async (data: InboundFormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
-		console.log(data)
-		return
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
