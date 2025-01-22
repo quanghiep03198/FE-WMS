@@ -1,7 +1,6 @@
 import { AppConfigs } from '@/configs/app.config'
-import { useQuery } from '@tanstack/react-query'
-import { useUpdateEffect } from 'ahooks'
-import axios from 'axios'
+import { useInterval } from 'ahooks'
+import axios, { AxiosError } from 'axios'
 import { useRef } from 'react'
 import { toast } from 'sonner'
 import { Icon } from '../ui'
@@ -12,34 +11,44 @@ import { Icon } from '../ui'
  */
 export const NETWORK_CONNECTION_CHANGE = 'NETWORK_CONNECTION_CHANGE' as const
 
-export const NETWORK_HEALTH_CHECK = 'NETWORK_HEALTH_CHECK'
-
 export default function NetworkDetector() {
 	const toastRef = useRef<string | number | null>(null)
+	const statusRef = useRef<'success' | 'error'>(null)
 
-	const { isSuccess, isError } = useQuery({
-		queryKey: ['NETWORK_HEALTH_CHECK'],
-		queryFn: async () => axios.get(AppConfigs.NETWORK_CONNECTION_HEALTH_CHECK_URL),
-		refetchInterval: 1000 // Checking internet connection every 1 seconds
-	})
-
-	useUpdateEffect(() => {
-		if (isError) {
-			window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: false }))
-			toastRef.current = toast.error('Network error', {
-				icon: <Icon name='WifiOff' stroke='hsl(var(--foreground))' />,
-				description: 'You are currently offline.',
-				duration: Infinity
-			})
-		}
-		if (isSuccess) {
-			window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: true }))
-			toast.success('You are back to online.', {
-				id: toastRef.current,
-				icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />
-			})
-		}
-	}, [isError, isSuccess])
+	useInterval(
+		() => {
+			axios
+				.get(AppConfigs.NETWORK_CONNECTION_HEALTH_CHECK_URL)
+				.then(() => {
+					window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: true }))
+					if (statusRef.current !== 'success') {
+						toastRef.current = toast.success('You are back to online.', {
+							id: toastRef.current,
+							icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />,
+							description: null,
+							duration: 2000
+						})
+						statusRef.current = 'success'
+					}
+				})
+				.catch((e: AxiosError) => {
+					if (e.code === AxiosError.ERR_NETWORK) {
+						window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: false }))
+						if (statusRef.current !== 'error') {
+							toastRef.current = toast.error('Network error', {
+								id: toastRef.current,
+								icon: <Icon name='WifiOff' stroke='hsl(var(--foreground))' />,
+								description: 'You are currently offline.',
+								duration: 2000
+							})
+							statusRef.current = 'error'
+						}
+					}
+				})
+		},
+		5000,
+		{ immediate: true }
+	)
 
 	return null
 }
