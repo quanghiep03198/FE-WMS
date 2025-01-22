@@ -28,10 +28,10 @@ const SyncRunner: React.FC = () => {
 				{t('ns_inoutbound:scanner_setting.data_synchronization')}
 			</Typography>
 
-			<Div className='grid flex-1 grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0'>
+			<Div className='grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0'>
 				<Div className='col-span-full space-y-1 @[320px]:col-span-3'>
 					<Label htmlFor='webhook-trigger'>{t('ns_inoutbound:scanner_setting.synchronization_trigger')}</Label>
-					<Typography variant='small' color='muted' className='max-w-[calc(100%-0.5rem)] text-pretty'>
+					<Typography variant='small' color='muted' className='max-w-[90%] text-pretty'>
 						{t('ns_inoutbound:scanner_setting.synchronization_trigger_description')}
 					</Typography>
 				</Div>
@@ -46,7 +46,7 @@ const SyncRunner: React.FC = () => {
 						) : (
 							<Icon name='Webhook' role='img' />
 						)}
-						Trigger
+						{t('ns_common:actions.trigger')}
 					</Button>
 				</Div>
 			</Div>

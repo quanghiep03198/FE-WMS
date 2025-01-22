@@ -37,6 +37,7 @@ export default {
 		submit: 'Xác nhận',
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
 		toggle_theme: 'Chuyển đổi chế độ nền',
+		trigger: 'Kích hoạt',
 		update: 'Chỉnh sửa'
 	},
 	common_fields: {

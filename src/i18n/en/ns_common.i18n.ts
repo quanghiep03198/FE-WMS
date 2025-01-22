@@ -37,6 +37,7 @@ export default {
 		submit: 'Submit',
 		toggle_sidebar: 'Toggle Primary Side Bar',
 		toggle_theme: 'Toggle Theme',
+		trigger: 'Trigger',
 		update: 'Update'
 	},
 	common_fields: {

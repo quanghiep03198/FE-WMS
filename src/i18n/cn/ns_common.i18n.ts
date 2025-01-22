@@ -37,6 +37,7 @@ export default {
 		submit: '确认',
 		toggle_sidebar: '切换主侧边栏',
 		toggle_theme: '切换主题',
+		trigger: '触发',
 		update: '編輯'
 	},
 	common_fields: {
