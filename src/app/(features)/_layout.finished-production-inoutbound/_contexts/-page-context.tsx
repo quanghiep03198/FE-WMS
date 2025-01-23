@@ -2,7 +2,7 @@
 import { IElectronicProductCode } from '@/common/types/entities'
 import { useLocalStorageState } from 'ahooks'
 import { pick } from 'lodash'
-import React, { createContext, useContext, useRef } from 'react'
+import React, { createContext, use, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
@@ -177,7 +177,7 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 }
 
 export const usePageContext = <T extends PageContextStore, K extends keyof PageContextStore>(...selectors: K[]) => {
-	const store = useContext(PageContext)
+	const store = use(PageContext)
 	if (!store) throw new Error('Missing store provider')
 	if (!selectors) return useStore(store)
 	return useStore(

@@ -4,7 +4,7 @@ import { Div, Icon, Separator, Sheet, SheetContent, SheetTrigger, buttonVariants
 import { navigationConfig } from '@/configs/navigation.config'
 import { routeTree } from '@/route-tree.gen'
 import { Link, ParseRoute } from '@tanstack/react-router'
-import React, { memo, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
@@ -79,4 +79,4 @@ const NavDrawerSidebar: React.FC = () => {
 const Menu = tw.ul`flex flex-col gap-y-2`
 const MenuItem = tw.li`whitespace-nowrap font-normal`
 
-export default memo(NavDrawerSidebar)
+export default NavDrawerSidebar

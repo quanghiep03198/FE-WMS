@@ -22,7 +22,7 @@ import StorageRowActions from './-storage-row-actions'
 
 const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLoading, refetch }) => {
 	const { t, i18n } = useTranslation(['ns_common'])
-	const tableRef = useRef<Table<any>>()
+	const tableRef = useRef<Table<any>>(null)
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const { warehouseNum } = useParams({ strict: false })
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)

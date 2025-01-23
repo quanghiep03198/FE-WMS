@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
-import React, { memo, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { useTableContext } from '../context/table.context'
@@ -56,4 +56,4 @@ function TableToolbar<TData>({ table, slotLeft: SlotLeft, slotRight: SlotRight }
 	)
 }
 
-export default memo(TableToolbar)
+export default TableToolbar

@@ -1,5 +1,5 @@
 import { useInViewport, useMemoizedFn } from 'ahooks'
-import { MutableRefObject, createContext, useContext, useRef, useState } from 'react'
+import { MutableRefObject, createContext, use, useRef, useState } from 'react'
 import CTASection from '../_components/-cta-section'
 import CTA2Section from '../_components/-cta2-section'
 import FAQsSection from '../_components/-faq-section'
@@ -91,4 +91,4 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	)
 }
 
-export const usePageContext = () => useContext(PageContext)
+export const usePageContext = () => use(PageContext)

@@ -10,7 +10,7 @@ import {
 	SheetTitle
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { memo, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -91,4 +91,4 @@ const TransferOrderDetail: React.FC = () => {
 
 const Form = tw.form`max-w-2xl grid grid-cols-6 sticky left-0 my-6 gap-x-2 gap-y-6`
 
-export default memo(TransferOrderDetail)
+export default TransferOrderDetail

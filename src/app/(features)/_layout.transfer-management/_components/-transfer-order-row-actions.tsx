@@ -15,7 +15,7 @@ import {
 } from '@/components/ui'
 import { CellContext } from '@tanstack/react-table'
 import { omit, pick } from 'lodash'
-import { Fragment, memo } from 'react'
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { UpdateApprovalStatusValues, UpdateTransferOrderValues } from '../_schemas/transfer-order.schema'
@@ -152,4 +152,4 @@ const TransferOrderRowActions: React.FC<TransferOrderRowActionsProps> = ({
 
 const DropdownMenuButton = tw.button`gap-x-3 relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground w-full`
 
-export default memo(TransferOrderRowActions)
+export default TransferOrderRowActions

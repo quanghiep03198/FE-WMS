@@ -19,7 +19,7 @@ import {
 	buttonVariants
 } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
-import { memo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
@@ -42,7 +42,7 @@ const Header: React.FunctionComponent = () => {
 	)
 }
 
-const NavHeaderMenu: React.FC = memo(() => {
+const NavHeaderMenu: React.FC = () => {
 	const { activeMenu, handleMenuClick } = usePageContext()
 
 	return (
@@ -58,9 +58,9 @@ const NavHeaderMenu: React.FC = memo(() => {
 			))}
 		</Div>
 	)
-})
+}
 
-const NavHeaderActions: React.FC = memo(() => {
+const NavHeaderActions: React.FC = () => {
 	const { isAuthenticated } = useAuth()
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
@@ -91,9 +91,9 @@ const NavHeaderActions: React.FC = memo(() => {
 			)}
 		</Div>
 	)
-})
+}
 
-const NavHeaderDrawerMenu: React.FC = memo(() => {
+const NavHeaderDrawerMenu: React.FC = () => {
 	const { handleMenuClick } = usePageContext()
 	const [open, setOpen] = useState(false)
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
@@ -151,6 +151,6 @@ const NavHeaderDrawerMenu: React.FC = memo(() => {
 			</SheetContent>
 		</Sheet>
 	)
-})
+}
 
-export default memo(Header)
+export default Header

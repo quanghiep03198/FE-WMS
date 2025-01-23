@@ -14,7 +14,6 @@ import {
 } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
-import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const NavUserControl: React.FC = () => {
@@ -53,4 +52,4 @@ const NavUserControl: React.FC = () => {
 	)
 }
 
-export default memo(NavUserControl)
+export default NavUserControl

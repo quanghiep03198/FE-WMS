@@ -33,7 +33,7 @@ export class RFIDService {
 	}
 
 	static async updateFPStockMovement(tenantId: string, orderCode: string, payload: InoutboundPayload) {
-		return await axiosInstance.patch<InoutboundPayload, ResponseBody<unknown>>(
+		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
 			`/rfid/update-stock/${orderCode}`,
 			payload,
 			{

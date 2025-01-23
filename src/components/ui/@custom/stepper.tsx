@@ -1,6 +1,6 @@
 import { Div, Icon, Typography } from '@/components/ui'
 import { TFunction } from 'i18next'
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, use, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
@@ -142,7 +142,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 	const {
 		steps: { data, finishedSteps },
 		dispatch
-	} = useContext(StepContext)
+	} = use(StepContext)
 
 	const handleChangeStep = (step: TStep) => {
 		if (!enableChangeStep) return
@@ -227,7 +227,7 @@ const StepPanel: React.FC<TStepPanelProps> = ({ value, children }) => {
 
 // #endregion
 
-export const useStepContext = () => useContext(StepContext)
+export const useStepContext = () => use(StepContext)
 
 export const Stepper = {
 	Provider: StepProvider,

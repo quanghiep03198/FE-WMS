@@ -24,7 +24,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
 import { omit } from 'lodash'
-import React, { Fragment, memo, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -287,4 +287,4 @@ const CheckIcon = tw(Icon)<IconProps>`
 	ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200 aria-checked:opacity-100
 `
 
-export default memo(InoutboundForm)
+export default InoutboundForm

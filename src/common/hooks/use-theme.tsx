@@ -1,6 +1,6 @@
 import { ThemeProviderContext } from '@/providers/theme-provider'
-import { useContext } from 'react'
+import { use } from 'react'
 
 export default function useTheme() {
-	return useContext(ThemeProviderContext)
+	return use(ThemeProviderContext)
 }

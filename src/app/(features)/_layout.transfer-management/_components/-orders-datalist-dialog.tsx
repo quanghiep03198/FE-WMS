@@ -22,7 +22,7 @@ import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
-import { Fragment, memo, useCallback, useMemo, useRef } from 'react'
+import { Fragment, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useAddTransferOrderMutation, useGetTransferOrderDatalist } from '../_apis/-use-transfer-order-api'
@@ -217,4 +217,4 @@ const OrderDatalistDialog: React.FC = () => {
 	)
 }
 
-export default memo(OrderDatalistDialog)
+export default OrderDatalistDialog

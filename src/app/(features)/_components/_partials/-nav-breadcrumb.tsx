@@ -13,7 +13,7 @@ import {
 } from '@/components/ui'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
-import { Fragment, memo } from 'react'
+import { Fragment } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 const THREADS_HOLD = 3 as const
@@ -90,4 +90,4 @@ const NavBreadcrumb: React.FC = () => {
 	)
 }
 
-export default memo(NavBreadcrumb)
+export default NavBreadcrumb

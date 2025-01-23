@@ -27,7 +27,6 @@ const SettingPanel: React.FC = () => {
 				{t('ns_common:titles.general_settings')}
 			</Typography>
 			<Div className='flex h-full flex-col items-stretch gap-x-4 gap-y-2 *:flex-1 @5xl:flex-row @5xl:flex-wrap-reverse'>
-				<PollingIntervalSelector />
 				<FullScreenModeSwitch />
 				<DeveloperModeSwitch />
 			</Div>
@@ -37,6 +36,7 @@ const SettingPanel: React.FC = () => {
 
 /**
  * @description Adjust polling duration for SSE
+ * ! This component will be removed in the future
  */
 const PollingIntervalSelector: React.FC = () => {
 	const { t } = useTranslation()

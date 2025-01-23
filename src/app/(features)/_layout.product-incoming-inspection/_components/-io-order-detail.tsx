@@ -1,5 +1,5 @@
 import { Badge, Div, DivProps, Typography } from '@/components/ui'
-import React, { memo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
@@ -90,7 +90,7 @@ const IOSubOrderRow: React.FC<{ data: any }> = ({ data }) => {
 	)
 }
 
-export default memo(IOSubOrderRow)
+export default IOSubOrderRow
 
 const List = tw(Div)<DivProps>`grid grid-cols-3 gap-y-2 gap-x-4 overflow-auto scrollbar-none w-full sticky left-4`
 const ListItem = tw(Div)<DivProps>`grid grid-cols-2 whitespace-nowrap gap-x-4`

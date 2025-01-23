@@ -1,5 +1,4 @@
 import { Div, Icon, Typography } from '@/components/ui'
-import { memo } from 'react'
 
 const SupportSection: React.FunctionComponent = () => {
 	return (
@@ -56,4 +55,4 @@ const SupportSection: React.FunctionComponent = () => {
 	)
 }
 
-export default memo(SupportSection)
+export default SupportSection

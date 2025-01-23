@@ -21,8 +21,7 @@ import { UseQueryResult, useMutation, useQueryClient } from '@tanstack/react-que
 import { useParams } from '@tanstack/react-router'
 import { useDeepCompareEffect } from 'ahooks'
 import { pick } from 'lodash'
-import React, { memo } from 'react'
-import isEqual from 'react-fast-compare'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -139,4 +138,4 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 }
 const Form = tw.form`flex flex-col items-stretch gap-6`
 
-export default memo(WarehouseStorageFormDialog, (prev, next) => isEqual(prev.data, next.data))
+export default WarehouseStorageFormDialog

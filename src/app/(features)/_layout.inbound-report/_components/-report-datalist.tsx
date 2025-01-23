@@ -7,7 +7,7 @@ import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { Fragment, memo, useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetDefaultTenantByFactory } from '../../_apis/use-tenacy.api'
@@ -123,4 +123,4 @@ const ReportDatalist: React.FC = () => {
 	)
 }
 
-export default memo(ReportDatalist)
+export default ReportDatalist

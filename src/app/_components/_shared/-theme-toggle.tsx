@@ -3,7 +3,7 @@ import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import { Button, Icon, Tooltip, TooltipProps } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
-import React, { memo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const ThemeToggle: React.FC<
@@ -49,4 +49,4 @@ const ThemeToggle: React.FC<
 	)
 }
 
-export default memo(ThemeToggle)
+export default ThemeToggle

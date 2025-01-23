@@ -5,7 +5,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
-import React, { memo, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
 
@@ -75,4 +75,4 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 	)
 }
 
-export default memo(WarehouseRowActions)
+export default WarehouseRowActions

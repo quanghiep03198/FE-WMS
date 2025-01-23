@@ -1,7 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { DatePicker } from '@/components/ui'
 import { format } from 'date-fns'
-import { memo } from 'react'
 
 const DatePickerFilter: React.FC = () => {
 	const { searchParams, setParams } = useQueryParams<{ 'date.eq': string }>({
@@ -17,4 +16,4 @@ const DatePickerFilter: React.FC = () => {
 	)
 }
 
-export default memo(DatePickerFilter)
+export default DatePickerFilter

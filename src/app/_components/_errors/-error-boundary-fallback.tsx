@@ -36,7 +36,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 	}, [error])
 
 	return (
-		<Div className='mx-auto flex max-w-7xl flex-col items-center gap-10 *:flex-1 @5xl:flex-row xxl:max-w-8xl'>
+		<Div className='mx-auto flex h-full max-w-7xl flex-col items-center gap-10 *:flex-1 @5xl:flex-row xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center gap-y-3 @5xl:items-start'>
 				<Typography variant='code' className='text-lg font-semibold' color='destructive'>
 					{HttpStatusCode.InternalServerError}

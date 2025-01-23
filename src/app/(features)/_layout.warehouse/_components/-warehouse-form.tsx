@@ -22,7 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
 import { debounce } from 'lodash'
-import React, { memo, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -211,4 +211,4 @@ const EmployeeComboboxSelection: React.FC<{ data: IEmployee }> = ({ data }) => (
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 const FormItem = tw.div`col-span-1 sm:col-span-full md:col-span-full`
 
-export default memo(WarehouseFormDialog)
+export default WarehouseFormDialog

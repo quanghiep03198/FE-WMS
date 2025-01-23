@@ -1,6 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
 import { Button, Div, Icon, Typography } from '@/components/ui'
-import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -32,4 +31,4 @@ const StorageListHeading: React.FC = () => {
 	)
 }
 
-export default memo(StorageListHeading)
+export default StorageListHeading

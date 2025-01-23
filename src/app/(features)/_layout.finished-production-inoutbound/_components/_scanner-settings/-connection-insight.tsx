@@ -106,13 +106,12 @@ const ConnectionInsight: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div as='section' className='flex flex-1 flex-grow flex-col gap-y-3'>
+		<Div as='section' className='flex flex-grow flex-col gap-y-3'>
 			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.network_status')}
 			</Typography>
 			<Div className='flex-1 basis-full space-y-2 rounded-lg border p-4'>
 				<NetworkInsight />
-				<LatencyInsight />
 				<JobStatus />
 			</Div>
 		</Div>

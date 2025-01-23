@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
-import { Fragment, memo, useCallback, useId, useMemo, useRef } from 'react'
+import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
 import { useTableContext } from '../context/table.context'
@@ -41,7 +41,7 @@ function TableDataGrid<TData, TValue>({
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
-	const scrollingRef = useRef<number>()
+	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
 
 	const scrollToFn: VirtualizerOptions<any, any>['scrollToFn'] = useCallback((offset, canSmooth, instance) => {
@@ -192,4 +192,4 @@ const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll m
 
 TableDataGrid.displayName = 'DataTable'
 
-export default memo(TableDataGrid)
+export default TableDataGrid

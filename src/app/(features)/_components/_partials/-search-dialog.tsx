@@ -17,8 +17,7 @@ import { GearIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
 import { debounce } from 'lodash'
-import React, { Fragment, memo, useEffect } from 'react'
-import isEqual from 'react-fast-compare'
+import React, { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type SearchDialogProps = Required<Pick<React.ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'>>
@@ -107,4 +106,4 @@ const SearchDialog: React.FC<SearchDialogProps> = ({ open, onOpenChange: handleO
 	)
 }
 
-export default memo(SearchDialog, (prev, next) => isEqual(prev, next))
+export default SearchDialog

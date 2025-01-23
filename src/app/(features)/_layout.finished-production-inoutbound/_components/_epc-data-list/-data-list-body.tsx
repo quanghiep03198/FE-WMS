@@ -286,7 +286,7 @@ const EpcDataList: React.FC = () => {
 	}, [selectedOrder])
 
 	useUpdateEffect(() => {
-		if (retrievedEpcData && typeof scanningStatus !== 'undefined')
+		if (Array.isArray(retrievedEpcData) && typeof scanningStatus !== 'undefined')
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 

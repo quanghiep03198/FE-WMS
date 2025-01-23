@@ -95,4 +95,4 @@ const ScrollShadow = forwardRef<HTMLDivElement, ScrollShadowProps>(
 
 ScrollShadow.displayName = 'ScrollShadow'
 
-export default React.memo(ScrollShadow)
+export default ScrollShadow

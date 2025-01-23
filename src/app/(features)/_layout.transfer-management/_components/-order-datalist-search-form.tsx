@@ -4,7 +4,7 @@ import { TransferOrderService } from '@/services/transfer-order.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { debounce } from 'lodash'
-import { memo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -65,4 +65,4 @@ const OrderDatalistSearchForm: React.FC = () => {
 
 const Form = tw.form`xl:max-w-1/2 lg:max-w-3/4  max-w-full grid grid-cols-12 items-end gap-x-2 sm:max-w-full gap-y-3`
 
-export default memo(OrderDatalistSearchForm)
+export default OrderDatalistSearchForm

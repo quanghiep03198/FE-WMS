@@ -4,7 +4,7 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Badge, Button, Div, Icon, Separator, Tooltip, Typography, useSidebar } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
-import React, { Fragment, memo } from 'react'
+import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import ThemeToggle from '../../../_components/_shared/-theme-toggle'
 import NavBreadcrumb from './-nav-breadcrumb'
@@ -75,4 +75,4 @@ const Navbar: React.FC = () => {
 	)
 }
 
-export default memo(Navbar)
+export default Navbar

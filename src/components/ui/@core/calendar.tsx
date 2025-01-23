@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { cn } from '@/common/utils/cn'
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import * as React from 'react'
@@ -9,6 +11,7 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
 	return (
 		<DayPicker
+			disabled
 			showOutsideDays={showOutsideDays}
 			className={cn('p-3', className)}
 			classNames={{

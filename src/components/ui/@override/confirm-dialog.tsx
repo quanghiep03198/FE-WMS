@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -63,4 +63,4 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 	)
 }
 
-export default memo(ConfirmDialog)
+export default ConfirmDialog

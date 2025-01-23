@@ -17,7 +17,6 @@ import {
 } from '@/components/ui'
 import { TenancyService } from '@/services/tenancy.service'
 import { useQuery } from '@tanstack/react-query'
-import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -74,4 +73,4 @@ const TenancySelect: React.FC = () => {
 	)
 }
 
-export default memo(TenancySelect)
+export default TenancySelect

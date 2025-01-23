@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import React, { forwardRef, memo, useEffect, useId, useRef, useState } from 'react'
+import React, { forwardRef, useEffect, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
@@ -98,6 +98,6 @@ export function InputFieldControl<T extends FieldValues>(
 
 InputFieldControl.displayName = 'InputFieldControl'
 
-export const ForwardedRefInputFieldControl = memo(
-	forwardRef<HTMLInputElement, InputFieldControlProps<any>>(InputFieldControl)
+export const ForwardedRefInputFieldControl = forwardRef<HTMLInputElement, InputFieldControlProps<any>>(
+	InputFieldControl
 )

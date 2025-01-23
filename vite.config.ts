@@ -3,7 +3,7 @@
 
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import { VitePWA as pwa } from 'vite-plugin-pwa'
@@ -17,10 +17,15 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [
-			react(),
+			react({
+				babel: {
+					plugins: [['babel-plugin-react-compiler', {}]]
+				}
+			}),
 			reactRouter(),
 			pwa({
 				registerType: 'autoUpdate',
+				disable: mode === 'development',
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
 				manifest: {
 					name: 'Warehouse Management System',

@@ -19,7 +19,7 @@ import {
 } from '@tanstack/react-table'
 import { useLatest, useResetState } from 'ahooks'
 import { omit } from 'lodash'
-import { forwardRef, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '..'
@@ -294,4 +294,4 @@ function DataTable<TData, TValue>(
 const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden`
 const FooterGroup = tw.div`flex items-center justify-between`
 
-export default memo(forwardRef(DataTable))
+export default forwardRef(DataTable)
