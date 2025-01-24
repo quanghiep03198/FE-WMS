@@ -55,25 +55,18 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
 
-         - name: Install pnpm
-           uses: pnpm/action-setup@v4
-           with:
-              version: 10
-
          - name: Load environment variables
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR19 }}" > .env.production
 
          - name: Install dependencies
-           run: |
-              pnpm store prune
-              pnpm install
+           run: npm install --legacy-peer-deps
 
          - name: Generate PWA assets
-           run: pnpm generate-pwa-assets
+           run: npm run generate-pwa-assets
 
          - name: Build the React app
-           run: pnpm build
+           run: npm run build
 
          - name: Restart and save PM2 process
            run: |
@@ -88,25 +81,18 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
 
-         - name: Install pnpm
-           uses: pnpm/action-setup@v4
-           with:
-              version: 10
-
          - name: Load environment variables
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
 
          - name: Install dependencies
-           run: |
-              pnpm store prune
-              pnpm install
+           run: npm install --legacy-peer-deps
 
          - name: Generate PWA assets
-           run: pnpm generate-pwa-assets
+           run: npm run generate-pwa-assets
 
          - name: Build the React app
-           run: pnpm build
+           run: npm run build
 
          - name: Restart and save PM2 process
            run: |
