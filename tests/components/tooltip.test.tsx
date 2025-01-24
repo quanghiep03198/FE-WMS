@@ -1,5 +1,5 @@
 import { Tooltip } from '@/components/ui/@override/tooltip'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 
 describe('Tooltip', () => {
@@ -15,13 +15,18 @@ describe('Tooltip', () => {
 	})
 
 	it('displays the message on hover', async () => {
-		render(
+		const { getByText, getByRole } = render(
 			<Tooltip message={message} triggerProps={{ asChild: true }}>
-				<button>Hover me</button>
+				<button id='tooltip-trigger'>Hover me</button>
 			</Tooltip>
 		)
-		const trigger = screen.getByText('Hover me')
+		const trigger = getByText('Hover me')
+
 		await userEvent.hover(trigger)
-		expect(trigger).toHaveAttribute('data-state', 'delayed-open')
+
+		await waitFor(() => getByRole('tooltip'))
+
+		expect(getByRole('tooltip')).toBeVisible()
+		expect(getByRole('tooltip')).toHaveTextContent(message)
 	})
 })
