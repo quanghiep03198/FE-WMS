@@ -38,7 +38,7 @@ jobs:
          - name: Set up Node.js
            uses: actions/setup-node@v4
            with:
-              node-version: '22.x'
+              node-version: '23.x'
               cache: pnpm
 
          - name: Install dependencies
@@ -60,15 +60,19 @@ jobs:
            run: echo "${{ secrets.ENV_VARIABLE_SVR19 }}" > .env.production
 
          - name: Install dependencies
+           shell: bash
            run: npm install --legacy-peer-deps
 
          - name: Generate PWA assets
+           shell: bash
            run: npm run generate-pwa-assets
 
          - name: Build the React app
+           shell: bash
            run: npm run build
 
          - name: Restart and save PM2 process
+           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save
@@ -86,15 +90,19 @@ jobs:
            run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
 
          - name: Install dependencies
+           shell: bash
            run: npm install --legacy-peer-deps
 
          - name: Generate PWA assets
+           shell: bash
            run: npm run generate-pwa-assets
 
          - name: Build the React app
+           shell: bash
            run: npm run build
 
          - name: Restart and save PM2 process
+           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save

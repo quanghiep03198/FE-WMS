@@ -215,9 +215,6 @@ importers:
       recharts:
         specifier: ^2.15.0
         version: 2.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      sharp:
-        specifier: ^0.33.5
-        version: 0.33.5
       sonner:
         specifier: ^1.7.2
         version: 1.7.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
