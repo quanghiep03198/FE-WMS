@@ -106,7 +106,7 @@ const ConnectionInsight: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div as='section' className='flex flex-grow flex-col gap-y-3'>
+		<Div as='section' className='flex flex-shrink flex-col gap-y-3 @5xl:flex-grow'>
 			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.network_status')}
 			</Typography>
@@ -118,7 +118,7 @@ const ConnectionInsight: React.FC = () => {
 	)
 }
 
-const StatusItem = tw.div`grid grid-cols-[1fr_1.25fr] gap-x-20 sm:gap-x-6 xl:gap-x-4`
+const StatusItem = tw.div`grid grid-cols-[9rem_auto] gap-x-20 sm:gap-x-6 xl:gap-x-4`
 const StatusItemDetail = tw.div`inline-grid grid-cols-[24px_auto] items-center gap-x-2 text-sm`
 
 export default ConnectionInsight

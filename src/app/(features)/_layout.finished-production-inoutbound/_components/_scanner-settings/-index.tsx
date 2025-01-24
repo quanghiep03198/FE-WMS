@@ -6,7 +6,6 @@ import tw from 'tailwind-styled-components'
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import ConnectionInsight from './-connection-insight'
 import SettingPanel from './-setting-panel'
-import SyncRunner from './-sync-runner'
 
 const ScannerSettings: React.FC = () => {
 	const { t } = useTranslation()
@@ -27,7 +26,6 @@ const ScannerSettings: React.FC = () => {
 			</ToolbarHeader>
 			<ToolbarBody>
 				<ConnectionInsight />
-				<SyncRunner />
 				<SettingPanel />
 			</ToolbarBody>
 		</ToolbarWrapper>

@@ -1,22 +1,10 @@
-import {
-	Badge,
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Label,
-	Slider,
-	Switch,
-	Typography
-} from '@/components/ui'
+import { Div, Label, Switch, Typography } from '@/components/ui'
 import { useLocalStorageState } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
-import { usePageContext } from '../../_contexts/-page-context'
-import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
+import { RFIDSettings } from '../../index.lazy'
 
 const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
@@ -31,59 +19,6 @@ const SettingPanel: React.FC = () => {
 				<DeveloperModeSwitch />
 			</Div>
 		</Div>
-	)
-}
-
-/**
- * @description Adjust polling duration for SSE
- * ! This component will be removed in the future
- */
-const PollingIntervalSelector: React.FC = () => {
-	const { t } = useTranslation()
-	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
-		listenStorageChange: true
-	})
-
-	const { scanningStatus } = usePageContext('scanningStatus')
-
-	const disabled = scanningStatus === 'connected' || scanningStatus === 'connecting'
-
-	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
-
-	return (
-		<HoverCard openDelay={50} closeDelay={50}>
-			<HoverCardTrigger asChild>
-				<Div className='grid h-28 w-full gap-2 rounded-lg border p-4 md:basis-full'>
-					<Div className='flex items-center justify-between'>
-						<Label htmlFor='polling-duration'>{t('ns_inoutbound:scanner_setting.polling_duration')}</Label>
-						<Badge variant='outline'>
-							{pollingDuration / 1000 >= 1 ? `${pollingDuration / 1000} s` : `${pollingDuration} ms`}
-						</Badge>
-					</Div>
-					<Div className='flex items-center gap-x-3'>
-						<Icon name='Zap' size={20} />
-						<Slider
-							id='polling-duration'
-							min={500}
-							max={5000}
-							step={100}
-							defaultValue={[settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration]}
-							disabled={disabled}
-							onValueChange={(value) => setSettings({ ...settings, pollingDuration: value[0] })}
-							className='[&_[role=slider]]:h-4 [&_[role=slider]]:w-4'
-							aria-label='Polling Duration'
-						/>
-						<Icon name='Leaf' size={20} />
-					</Div>
-					<Typography variant='small' color='muted'>
-						{t('ns_inoutbound:scanner_setting.polling_duration_note')}
-					</Typography>
-				</Div>
-			</HoverCardTrigger>
-			<HoverCardContent className='z-50 w-64 text-sm' side='top' align='end'>
-				{t('ns_inoutbound:scanner_setting.polling_duration_description')}
-			</HoverCardContent>
-		</HoverCard>
 	)
 }
 
@@ -145,7 +80,7 @@ const DeveloperModeSwitch: React.FC = () => {
 }
 
 const SwitchBox = {
-	Wrapper: tw.div`grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0 z-0 h-28`,
+	Wrapper: tw.div`grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0 z-0 min-h-28`,
 	TitleWrapper: tw.div`col-span-full space-y-1 @[320px]:col-span-3`,
 	InnerWrapper: tw.div`col-span-full grid @[320px]:col-span-1 @[320px]:place-content-end`
 }
