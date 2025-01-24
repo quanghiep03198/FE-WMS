@@ -30,17 +30,22 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
 
+         - name: Install pnpm
+           uses: pnpm/action-setup@v4
+           with:
+              version: 10
+
          - name: Set up Node.js
            uses: actions/setup-node@v4
            with:
               node-version: '22.x'
-              cache: npm
+              cache: pnpm
 
          - name: Install dependencies
-           run: npm install
+           run: pnpm install
 
          - name: Unit testing
-           run: npm run test
+           run: pnpm test
 
    deploy-server-19:
       name: Deploy to server 19
@@ -50,22 +55,28 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
 
+         - name: Install pnpm
+           uses: pnpm/action-setup@v4
+
          - name: Load environment variables
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR19 }}" > .env.production
 
+         - name: Install pnpm
+           uses: pnpm/action-setup@v4
+           with:
+              version: 10
+
          - name: Install dependencies
-           run: npm ci
+           run: pnpm install
 
          - name: Generate PWA assets
-           run: npm run generate-pwa-assets
+           run: pnpm generate-pwa-assets
 
          - name: Build the React app
-           shell: bash
-           run: npm run build
+           run: pnpm build
 
          - name: Restart and save PM2 process
-           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save
@@ -82,18 +93,21 @@ jobs:
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
 
+         - name: Install pnpm
+           uses: pnpm/action-setup@v4
+           with:
+              version: 10
+
          - name: Install dependencies
-           run: npm ci
+           run: pnpm install
 
          - name: Generate PWA assets
-           run: npm run generate-pwa-assets
+           run: pnpm generate-pwa-assets
 
          - name: Build the React app
-           shell: bash
-           run: npm run build
+           run: pnpm build
 
          - name: Restart and save PM2 process
-           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save
