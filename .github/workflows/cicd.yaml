@@ -61,7 +61,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: npm install --production --legacy-peer-deps
+           run: npm install --legacy-peer-deps
 
          - name: Generate PWA assets
            shell: bash
@@ -91,7 +91,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: npm install --production --legacy-peer-deps
+           run: npm install --legacy-peer-deps
 
          - name: Generate PWA assets
            shell: bash
