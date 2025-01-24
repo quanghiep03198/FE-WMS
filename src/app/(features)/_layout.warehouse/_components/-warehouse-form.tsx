@@ -58,7 +58,7 @@ const WarehouseFormDialog: React.FC = () => {
 
 	// Get employee field values
 	const { data: employees } = useQuery({
-		queryKey: ['EMPLOYEES', employeeSearchTerm],
+		queryKey: ['EMPLOYEES', employeeSearchTerm, department],
 		queryFn: () => EmployeeService.searchEmployee({ dept_code: department, search: employeeSearchTerm }),
 		select: (data) => data?.metadata
 	})

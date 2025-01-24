@@ -6,13 +6,17 @@ type PageTitleProps = React.PropsWithChildren &
 	React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 export const PageHeader: React.FC<PageTitleProps> = forwardRef(({ children, className }, ref) => (
-	<div ref={ref} className={cn('space-y-1 text-left sm:items-center sm:text-center', className)} children={children} />
+	<div ref={ref} className={cn('space-y-1 text-left sm:items-center sm:text-center', className)}>
+		{children}
+	</div>
 ))
 
 export const PageTitle: React.FC<TypographyProps> = ({ children, className }) => (
-	<Typography className={cn('text-2xl font-semibold leading-none tracking-tight', className)} children={children} />
+	<Typography className={cn('text-2xl font-semibold leading-none tracking-tight', className)}>{children}</Typography>
 )
 
 export const PageDescription: React.FC<TypographyProps> = ({ children, className }) => (
-	<Typography color='muted' className={cn('text-pretty', className)} children={children} />
+	<Typography color='muted' className={cn('text-pretty', className)}>
+		{children}
+	</Typography>
 )

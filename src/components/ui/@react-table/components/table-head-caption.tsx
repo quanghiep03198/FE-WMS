@@ -13,3 +13,5 @@ export const TableHeadCaption: React.FC<DivProps & React.PropsWithChildren> = me
 	},
 	(prev, next) => prev['aria-description'] === next['aria-description']
 )
+
+TableHeadCaption.displayName = 'TableHeadCaption'

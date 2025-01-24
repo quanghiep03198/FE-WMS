@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { IElectronicProductCode } from '@/common/types/entities'
 import { useLocalStorageState } from 'ahooks'
 import { pick } from 'lodash'

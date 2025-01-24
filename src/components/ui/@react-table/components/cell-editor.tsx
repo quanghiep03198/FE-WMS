@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 import { Combobox, ComboboxProps, DropdownSelect, DropdownSelectProps, Input, InputProps } from '@/components/ui'
 import { CellContext } from '@tanstack/react-table'
 import React, { Fragment, useEffect, useState } from 'react'

@@ -27,7 +27,8 @@ const SupportSection: React.FunctionComponent = () => {
 					<a
 						href='https://forms.gle/7Bes5qhm2AGPxhQ36'
 						target='_blank'
-						className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'>
+						className='inline-flex items-center gap-x-2 text-sm font-medium text-primary underline-offset-4 hover:underline'
+						rel='noreferrer'>
 						Report a bug <Icon name='ArrowRight' size={12} />
 					</a>
 				</Div>

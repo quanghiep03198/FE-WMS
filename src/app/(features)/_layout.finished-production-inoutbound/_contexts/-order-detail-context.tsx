@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { pick, uniqBy } from 'lodash'
 import { createContext, use, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'

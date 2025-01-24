@@ -26,7 +26,7 @@ export const useGetEpcQuery = () => {
 	)
 
 	return useQuery({
-		queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection],
+		queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection, currentPage, selectedOrder],
 		queryFn: async () =>
 			RFIDService.fetchFPInventoryData(connection, {
 				page: currentPage,
@@ -52,7 +52,7 @@ export const useSearchOrderQuery = (params: SearchCustOrderParams) => {
 	const { user } = useAuth()
 
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER', user?.company_code],
+		queryKey: ['EXCHANGABLE_ORDER', user?.company_code, params],
 		queryFn: async () => await RFIDService.searchExchangableFPOrder(params),
 		enabled: false,
 		select: (response) => response.metadata

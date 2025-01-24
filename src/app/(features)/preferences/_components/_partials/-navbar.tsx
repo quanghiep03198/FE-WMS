@@ -15,6 +15,7 @@ const Navbar: React.FC = () => {
 				.filter((item) => item.type === 'preference')
 				.map((item) => (
 					<Link
+						key={item.id}
 						to={item.path}
 						activeProps={{ className: 'text-primary hover:text-primary bg-primary/10' }}
 						className={cn(

@@ -6,7 +6,7 @@ export const USER_PROVIDE_TAG = 'USER'
 
 export function getUserProfileQuery(config?: AxiosRequestConfig) {
 	return queryOptions({
-		queryKey: [USER_PROVIDE_TAG],
+		queryKey: [USER_PROVIDE_TAG, config],
 		queryFn: () => AuthService.profile(config),
 		refetchOnMount: 'always',
 		networkMode: 'always',
