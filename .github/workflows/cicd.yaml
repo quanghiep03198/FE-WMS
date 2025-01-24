@@ -57,18 +57,17 @@ jobs:
 
          - name: Install pnpm
            uses: pnpm/action-setup@v4
+           with:
+              version: 10
 
          - name: Load environment variables
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR19 }}" > .env.production
 
-         - name: Install pnpm
-           uses: pnpm/action-setup@v4
-           with:
-              version: 10
-
          - name: Install dependencies
-           run: pnpm install
+           run: |
+              pnpm store prune
+              pnpm install
 
          - name: Generate PWA assets
            run: pnpm generate-pwa-assets
@@ -89,17 +88,19 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
 
-         - name: Load environment variables
-           shell: bash
-           run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
-
          - name: Install pnpm
            uses: pnpm/action-setup@v4
            with:
               version: 10
 
+         - name: Load environment variables
+           shell: bash
+           run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
+
          - name: Install dependencies
-           run: pnpm install
+           run: |
+              pnpm store prune
+              pnpm install
 
          - name: Generate PWA assets
            run: pnpm generate-pwa-assets
