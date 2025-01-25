@@ -53,14 +53,4 @@ export class RFIDService {
 			headers: { [RequestHeaders.TENANT_ID]: tenant }
 		})
 	}
-
-	static async triggerFetchThirdPartyApi(tenant: string) {
-		return await axiosInstance.put(
-			'/rfid/third-party-api-sync',
-			{},
-			{
-				headers: { [RequestHeaders.TENANT_ID]: tenant }
-			}
-		)
-	}
 }

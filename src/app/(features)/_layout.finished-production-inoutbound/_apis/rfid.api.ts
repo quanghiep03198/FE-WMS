@@ -124,20 +124,6 @@ export const useExchangeEpcMutation = () => {
 	})
 }
 
-export const useSyncDataMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
-	const { setSelectedOrder, setCurrentPage } = usePageContext('connection', 'setSelectedOrder', 'setCurrentPage')
-
-	return useMutation({
-		mutationFn: async (connection: string) => await RFIDService.triggerFetchThirdPartyApi(connection),
-		onSuccess: () => {
-			setCurrentPage(null)
-			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			invalidateQueries()
-		}
-	})
-}
-
 const useInvalidateQueries = () => {
 	const queryClient = useQueryClient()
 	const { connection } = usePageContext('connection')
