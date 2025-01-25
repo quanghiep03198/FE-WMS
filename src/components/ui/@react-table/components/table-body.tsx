@@ -5,7 +5,6 @@ import { Virtualizer, notUndefined } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
 import isEqual from 'react-fast-compare'
 import { TableCell, TableRow, TableBody as TableRowGroup } from '../../@core/table'
-import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { DataTableUtility } from '../utils/table.util'
 
@@ -16,7 +15,8 @@ type TableBodyProps = {
 }
 
 export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
-	const { tableWrapperRef } = useTableContext()
+	'use no memo'
+
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
@@ -75,8 +75,8 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 										<CollapsibleContent
 											style={{
 												position: 'sticky',
-												left: '0',
-												maxWidth: `calc(${tableWrapperRef.current?.clientWidth}px - var(--scrollbar-width, 16px))`
+												left: '0'
+												// maxWidth: `calc(${tableWrapperRef.current?.clientWidth}px - var(--scrollbar-width, 16px))`
 											}}
 											className='transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 											<Div className='p-4'>
