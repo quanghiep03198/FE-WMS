@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { cn } from '@/common/utils/cn'
 import { Div, Separator } from '@/components/ui'
@@ -10,17 +10,17 @@ function TableFooter({
 	hidden,
 	slot: Slot,
 	rtl: rtl
-}: TableFooterProps & { table: Table<any> & React.PropsWithChildren }) {
+}: TableFooterProps & { table: Table<unknown> & React.PropsWithChildren }) {
 	if (hidden || !Slot) return null
 
 	return (
-		<>
+		<Fragment>
 			<Separator />
 			<Div
 				className={cn('flex items-center gap-x-1 bg-background px-4 py-2', rtl ? 'justify-start' : 'justify-end')}>
 				<Slot table={table} />
 			</Div>
-		</>
+		</Fragment>
 	)
 }
 
