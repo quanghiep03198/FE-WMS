@@ -1,6 +1,5 @@
 import { useGetUserCompany } from '@/app/(auth)/_apis/department.api'
 import AppLogo from '@/app/_components/_shared/-app-logo'
-import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -58,8 +57,6 @@ const NavSidebar: React.FC = () => {
 		keyCallbackMap[key]()
 	})
 
-	const isUltimateLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
-
 	const mainMenu = useMemo(() => {
 		return navigationConfig.filter((item) => item.type === 'main')
 	}, [])
@@ -75,7 +72,7 @@ const NavSidebar: React.FC = () => {
 	}, [])
 
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='icon' className='z-50 !bg-background'>
+		<Sidebar variant='sidebar' side='left' collapsible='icon' className='z-40 !bg-background'>
 			<SidebarHeader className='overflow-hidden'>
 				<Link to='/dashboard' preload='intent'>
 					<AppLogo />

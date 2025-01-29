@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
 			<Div
 				as='header'
 				role='menubar'
-				className='sticky top-0 z-50 flex items-center bg-background/80 px-6 backdrop-blur sm:px-4'>
+				className='sticky top-0 z-40 flex items-center bg-background/80 px-6 backdrop-blur sm:px-4'>
 				<Div
 					as='nav'
 					role='menu'
