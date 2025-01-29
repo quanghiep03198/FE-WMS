@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { PaginationState, Table } from '@tanstack/react-table'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
@@ -92,6 +92,10 @@ function TablePagination<TData>({
 			table.lastPage()
 		}
 	}
+
+	useEffect(() => {
+		if (pageIndex > pageCount) goToFirstPage()
+	}, [pageCount])
 
 	return (
 		<Div role='navigation' className='ml-auto flex items-center space-x-6 py-0.5 lg:space-x-8'>
