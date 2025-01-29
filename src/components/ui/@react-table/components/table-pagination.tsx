@@ -37,8 +37,10 @@ function TablePagination<TData>({
 	onPaginationChange,
 	prefetch
 }: DataTablePaginationProps<TData>) {
+	'use no memo'
+
 	const { t } = useTranslation('ns_common')
-	const timeoutRef = useRef<NodeJS.Timeout>()
+	const timeoutRef = useRef<NodeJS.Timeout>(null)
 	const prefetchCountRef = useRef<number>(0)
 
 	const canNextPage = manualPagination ? hasNextPage : table.getCanNextPage()
@@ -55,7 +57,7 @@ function TablePagination<TData>({
 		table.setPageSize(value)
 	}
 
-	const handlePrefetch = (params: Record<string, any>) => {
+	const handlePrefetch = (params: Record<string, unknown>) => {
 		if (!manualPagination || typeof prefetch !== 'function') return
 		prefetch(params)
 	}
@@ -76,15 +78,19 @@ function TablePagination<TData>({
 	}
 
 	const goToFirstPage = () => {
-		manualPagination && typeof onPaginationChange === 'function'
-			? onPaginationChange({ pageIndex: 0, pageSize })
-			: table.firstPage()
+		if (manualPagination && typeof onPaginationChange === 'function') {
+			onPaginationChange({ pageIndex: 0, pageSize })
+		} else {
+			table.firstPage()
+		}
 	}
 
 	const goToLastPage = () => {
-		manualPagination && typeof onPaginationChange === 'function'
-			? onPaginationChange({ pageIndex: pageCount - 1, pageSize })
-			: table.lastPage()
+		if (manualPagination && typeof onPaginationChange === 'function') {
+			onPaginationChange({ pageIndex: pageCount - 1, pageSize })
+		} else {
+			table.lastPage()
+		}
 	}
 
 	return (
