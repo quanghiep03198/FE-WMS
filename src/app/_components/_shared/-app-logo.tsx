@@ -10,7 +10,7 @@ const AppLogo: React.FC = () => {
 			</Div>
 			<Typography
 				variant='code'
-				className='duration-50 text-sm font-semibold leading-snug tracking-widest transition-[width_opacity] group-data-[state=expanded]:w-auto group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0'>
+				className='text-sm font-semibold leading-snug tracking-widest transition-all duration-100 group-data-[state=expanded]:w-auto group-data-[state=collapsed]:scale-75 group-data-[state=expanded]:scale-100 group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0'>
 				WAREHOUSE
 				<br />
 				MANAGEMENT
