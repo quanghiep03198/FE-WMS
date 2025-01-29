@@ -89,10 +89,10 @@ const ReportDatalist: React.FC = () => {
 	const handleDownloadExcel = async () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		try {
-			const blob = await ReportService.downloadInboundReport(searchParams)
+			const blob = await ReportService.downloadInboundReport(tenant?.id, searchParams)
 			saveAs(blob, `Inbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}.xlsx`)
 			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INBOUND_REPORT_ID })
-		} catch (error) {
+		} catch {
 			toast.error('ns_common:notification.error', { id: DOWNLOAD_INBOUND_REPORT_ID })
 		}
 	}
