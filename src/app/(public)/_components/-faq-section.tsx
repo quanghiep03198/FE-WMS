@@ -91,9 +91,7 @@ const FAQsSection: React.FunctionComponent = () => {
 										<AvatarImage src={generateAvatar({ name: 'Q' })} />
 									</Avatar>
 								</Avatar>
-								<ChatBubble variant='secondary' side='right'>
-									{faq.question}
-								</ChatBubble>
+								<ChatBubble variant='secondary'>{faq.question}</ChatBubble>
 							</Div>
 							<Div
 								className='inline-flex animate-fly-in flex-row-reverse place-content-end items-end gap-x-1 text-sm opacity-0'
@@ -105,9 +103,7 @@ const FAQsSection: React.FunctionComponent = () => {
 								<Avatar className='animate-fade-in'>
 									<AvatarImage src={generateAvatar({ name: 'A' })} />
 								</Avatar>
-								<ChatBubble variant='primary' side='left'>
-									{faq.answer}
-								</ChatBubble>
+								<ChatBubble variant='primary'>{faq.answer}</ChatBubble>
 							</Div>
 						</Fragment>
 					))}
