@@ -38,6 +38,6 @@ export default [
 			'react/jsx-key': 'error'
 		},
 		languageOptions: { globals: globals.browser },
-		ignores: ['dist', 'node_modules', 'eslint.config.js']
+		ignores: ['dist', 'node_modules', 'eslint.config.js', 'tailwind.config.js']
 	}
 ]
