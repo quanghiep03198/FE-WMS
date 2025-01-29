@@ -24,7 +24,7 @@ import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
 	return (
-		<Div className='sticky top-0 z-20 h-20 border-b bg-opacity-90 bg-gradient-to-b from-background/90 via-background/60 to-background/30 backdrop-blur-sm'>
+		<Div className='sticky top-0 z-20 h-20 border-b bg-background/90 mix-blend-overlay backdrop-blur-xl'>
 			<Div
 				as='nav'
 				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
