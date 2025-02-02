@@ -1,8 +1,7 @@
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
-import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
+import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
@@ -70,7 +69,6 @@ const EpcDataList: React.FC = () => {
 		'writeLog',
 		'reset'
 	)
-	const isUltimateLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 
 	// * Abort controller to control fetch event source
 	const abortControllerRef = useRef<AbortController>(new AbortController())
@@ -323,7 +321,7 @@ const EpcDataList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1400px]:h-[500px] @[1500px]:h-[625px]'>
+					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[475px] @[1400px]:h-[500px] @[1500px]:h-[625px]'>
 					<Div ref={wrapperRef}>
 						{Array.isArray(virtualItems) &&
 							virtualItems.map((virtualItem) => {
