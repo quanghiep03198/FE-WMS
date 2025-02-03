@@ -9,7 +9,6 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 
 	const searchParams = useSearch({
 		strict: false,
-		structuralSharing: false,
 		select: (search) => search
 	})
 	/**
