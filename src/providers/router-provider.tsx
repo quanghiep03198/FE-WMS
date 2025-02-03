@@ -12,7 +12,8 @@ export const router = createRouter({
 	context: { queryClient, isAuthenticated: false },
 	defaultPreload: 'intent',
 	defaultNotFoundComponent: NotFoundPage,
-	defaultPreloadStaleTime: 0
+	defaultPreloadStaleTime: 0,
+	defaultStructuralSharing: true
 } as unknown as CreateRouterOptions)
 
 // Register things for typesafety
