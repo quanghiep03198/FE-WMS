@@ -10,7 +10,7 @@ function TableFooter({
 	hidden,
 	slot: Slot,
 	rtl: rtl
-}: TableFooterProps & { table: Table<unknown> & React.PropsWithChildren }) {
+}: TableFooterProps & { table: Table<any> & React.PropsWithChildren }) {
 	if (hidden || !Slot) return null
 
 	return (

@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import React, { forwardRef, useEffect, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'

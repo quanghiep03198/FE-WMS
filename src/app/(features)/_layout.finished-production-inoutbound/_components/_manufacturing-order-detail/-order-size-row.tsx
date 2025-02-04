@@ -18,10 +18,11 @@ import { useMemoizedFn } from 'ahooks'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { FALLBACK_ORDER_VALUE, useDeleteOrderMutation } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, useDeleteEpcMutation } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
+import DeleteSizePopover from './-delete-size-popover'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
@@ -53,7 +54,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		'setDefaultExchangeOrderFormValues'
 	)
 
-	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteOrderMutation()
+	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteEpcMutation()
 
 	const hasSomeRowMatch = useMemo(() => {
 		if (!selectedRows || selectedRows.length === 0) return false
@@ -68,7 +69,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 
 	const handleDeleteOrder = useMemoizedFn(async () => {
 		try {
-			await deleteOrderAsync(data?.mo_no)
+			await deleteOrderAsync({ ['mo_no.eq']: data?.mo_no })
 			// * Remove from selected row if scanned order is deleted
 			if (selectedRows.some((row) => row.mo_no === data?.mo_no)) {
 				pullSelectedRow(selectedRows.find((row) => row.mo_no === data?.mo_no))
@@ -147,7 +148,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						data?.sizes?.map((size) => (
 							<Div
 								key={size?.size_numcode}
-								className='group/cell inline-grid min-w-32 shrink-0 basis-32 grid-rows-2 divide-y last:flex-1'>
+								className='group/cell inline-grid min-w-36 shrink-0 basis-36 grid-rows-2 divide-y last:flex-1'>
 								<TableCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
@@ -163,9 +164,17 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 											}}>
 											<Icon
 												name='ArrowLeftRight'
-												className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100'
+												className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
 											/>
 										</button>
+										<DeleteSizePopover
+											data={{
+												mo_no: data?.mo_no,
+												mat_code: data?.mat_code,
+												size_numcode: size?.size_numcode,
+												quantity: size?.count
+											}}
+										/>
 									</Div>
 								</TableCell>
 								<TableCell>{size?.count ?? 0}</TableCell>

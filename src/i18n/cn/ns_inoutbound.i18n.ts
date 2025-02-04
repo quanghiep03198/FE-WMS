@@ -38,6 +38,7 @@ export default {
 		transfer_outbound: '調撥出庫'
 	},
 	labels: {
+		delete_all: '删除全部',
 		exchange_all: '全部交换',
 		io_archive_warehouse: '仓库别',
 		io_reason: '出入庫類别',

@@ -1,14 +1,11 @@
-import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
 import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
-import { useEventListener, useLocalStorageState, usePrevious, useResetState } from 'ahooks'
-import { useEffect, useState } from 'react'
+import { useEventListener } from 'ahooks'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { usePageContext } from '../../_contexts/-page-context'
-import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const NetworkInsight: React.FC = () => {
 	const { t } = useTranslation()
@@ -58,44 +55,6 @@ const JobStatus: React.FC = () => {
 				/>
 				<Typography variant='small' className='font-medium'>
 					{scanningStatus === 'connected' ? t('ns_common:status.running') : t('ns_common:status.idle')}
-				</Typography>
-			</StatusItemDetail>
-		</StatusItem>
-	)
-}
-
-const LatencyInsight: React.FC = () => {
-	const { t } = useTranslation()
-	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
-		listenStorageChange: true
-	})
-	const [currentTime, setCurrentTime] = useState<number>(performance.now())
-	const previousTime = usePrevious(currentTime)
-	const [latency, setLatency, reset] = useResetState(0)
-
-	const { scanningStatus } = usePageContext('scanningStatus')
-
-	useEventListener(INCOMING_DATA_CHANGE, () => setCurrentTime(performance.now()))
-
-	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
-
-	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') reset()
-		if (scanningStatus === 'connected') {
-			const latency = currentTime - previousTime - pollingDuration
-			setLatency(latency > 0 ? parseFloat(latency.toFixed(2)) : 0)
-		}
-	}, [scanningStatus, currentTime, scanningStatus, settings?.pollingDuration])
-
-	return (
-		<StatusItem>
-			<Typography variant='small' className='font-medium'>
-				{t('ns_inoutbound:scanner_setting.latency')}
-			</Typography>
-			<StatusItemDetail>
-				<Icon name='Gauge' size={20} />
-				<Typography variant='small' className={cn('font-medium', latency / 1000 >= 1 && 'text-warning')}>
-					{latency / 1000 >= 1 ? `${latency / 1000} s` : `${latency} ms`}
 				</Typography>
 			</StatusItemDetail>
 		</StatusItem>

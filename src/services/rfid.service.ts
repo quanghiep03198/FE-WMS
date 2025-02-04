@@ -48,9 +48,16 @@ export class RFIDService {
 		})
 	}
 
-	static async exchangeEpc(tenant: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
+	static async deleteScannedEpcs(tenantId: string, filters: Record<string, string | number>) {
+		return await axiosInstance.delete(`/rfid/delete-scanned-epcs`, {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params: filters
+		})
+	}
+
+	static async exchangeEpc(tenantId: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
 		return await axiosInstance.patch(`/rfid/exchange-epc`, payload, {
-			headers: { [RequestHeaders.TENANT_ID]: tenant }
+			headers: { [RequestHeaders.TENANT_ID]: tenantId }
 		})
 	}
 }
