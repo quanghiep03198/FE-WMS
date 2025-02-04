@@ -1,7 +1,10 @@
+'use no memo'
+
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
+import { useScrollToFn } from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography } from '@/components/ui'
@@ -9,17 +12,11 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
-import {
-	useAsyncEffect,
-	useDeepCompareEffect,
-	useLocalStorageState,
-	usePrevious,
-	useUpdateEffect,
-	useVirtualList
-} from 'ahooks'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -33,7 +30,7 @@ import createLogger from '../../_utils/log.util'
 import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
-const PRERENDERED_ITEMS = 5
+const PRERENDERED_ITEMS = 20
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 const POLLING_DATA_TOAST_ID = 'POLLING_DATA'
@@ -89,7 +86,7 @@ const EpcDataList: React.FC = () => {
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
-	const wrapperRef = useRef<HTMLDivElement>(null)
+	const scrollingRef = useRef<number>(null)
 
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 	const incommingMessageCountRef = useRef<number>(0)
@@ -283,16 +280,23 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [selectedOrder])
 
-	useUpdateEffect(() => {
+	useEffect(() => {
 		if (Array.isArray(retrievedEpcData) && typeof scanningStatus !== 'undefined')
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 
+	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+
 	// * Intitialize virtual list to render scanned EPC data
-	const [virtualItems] = useVirtualList(scannedEpc?.data, {
-		containerTarget: containerRef,
-		wrapperTarget: wrapperRef,
-		itemHeight: VIRTUAL_ITEM_SIZE,
+	const virtualizer = useVirtualizer({
+		count: scannedEpc.data.length,
+		getScrollElement: () => containerRef.current,
+		scrollToFn: (...args) => scrollToFn(...args),
+		estimateSize: useCallback(() => VIRTUAL_ITEM_SIZE, []),
+		measureElement:
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
+				? (element) => element?.getBoundingClientRect().height
+				: undefined,
 		overscan: PRERENDERED_ITEMS
 	})
 
@@ -322,34 +326,47 @@ const EpcDataList: React.FC = () => {
 				<ScrollShadow
 					ref={containerRef}
 					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[475px] @[1400px]:h-[500px] @[1500px]:h-[625px]'>
-					<Div ref={wrapperRef}>
-						{Array.isArray(virtualItems) &&
-							virtualItems.map((virtualItem) => {
-								return (
-									<Div
-										key={virtualItem.index}
-										className='flex h-10 justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
-										style={{ height: VIRTUAL_ITEM_SIZE }}>
-										<Typography className='font-medium'>{virtualItem?.data?.epc}</Typography>
-										<Typography variant='small' className='capitalize text-foreground'>
-											{virtualItem?.data?.mo_no}
-										</Typography>
-									</Div>
-								)
-							})}
+					<Div
+						className='relative w-full'
+						style={{
+							height: virtualizer.getTotalSize()
+						}}>
+						{virtualizer.getVirtualItems().map((virtualItem) => {
+							const item = scannedEpc.data[virtualItem.index]
+							return (
+								<Div
+									key={virtualItem.index}
+									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+									style={{
+										height: virtualItem.size,
+										transform: `translateY(${virtualItem.start}px)`
+									}}>
+									<Typography className='font-medium'>{item.epc}</Typography>
+									<Typography variant='small' className='capitalize text-foreground'>
+										{item.mo_no}
+									</Typography>
+								</Div>
+							)
+						})}
+						{scannedEpc.hasNextPage && (
+							<Button
+								variant='link'
+								className='w-full'
+								style={{
+									position: 'absolute',
+									top: 0,
+									bottom: 0,
+									transform: `translateY(${virtualizer.getTotalSize()}px)`
+								}}
+								onClick={() => {
+									if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
+									else setCurrentPage(currentPage + 1)
+								}}
+								disabled={isFetching}>
+								{isFetching ? 'Loading more ...' : 'Load more'}
+							</Button>
+						)}
 					</Div>
-					{scannedEpc.hasNextPage && (
-						<Button
-							variant='link'
-							className='w-full'
-							onClick={() => {
-								if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
-								else setCurrentPage(currentPage + 1)
-							}}
-							disabled={isFetching}>
-							{isFetching ? 'Loading more ...' : 'Load more'}
-						</Button>
-					)}
 				</ScrollShadow>
 			) : (
 				<Div className='z-10 grid h-[500px] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[625px] xxl:h-[625px]'>

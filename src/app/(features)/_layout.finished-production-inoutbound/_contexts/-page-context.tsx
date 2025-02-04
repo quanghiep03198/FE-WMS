@@ -118,7 +118,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.scannedOrders = Array.isArray(data) ? data : []
 					})
 				},
-
 				setPollingDuration: (data) => {
 					set((state) => {
 						state.pollingDuration = data

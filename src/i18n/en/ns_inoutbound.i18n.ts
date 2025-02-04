@@ -42,6 +42,7 @@ export default {
 		transfer_outbound: 'Transfer outbound'
 	},
 	labels: {
+		delete_all: 'Delete all',
 		exchange_all: 'Exchange all',
 		io_archive_warehouse: 'Archived warehouse',
 		io_reason: 'Import/Export reason',
@@ -55,8 +56,8 @@ export default {
 	},
 	notification: {
 		confirm_delete_all_mono: {
-			title: 'Bạn chắc chắn muốn xóa chỉ lệnh này ?',
-			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại'
+			title: 'Do you want to delete this order?',
+			description: 'If you delete it, you have to rescan EPCs.'
 		},
 		exchange_order_caution:
 			'The action of swapping production orders cannot be undone. Please make sure to confirm your changes before proceeding.',

@@ -53,6 +53,7 @@ export default {
 		transfer_outbound: 'Điều động xuất kho'
 	},
 	labels: {
+		delete_all: 'Xóa tất cả',
 		exchange_all: 'Hoán đổi tất cả',
 		io_archive_warehouse: 'Kho lưu trữ',
 		io_reason: 'Lý do nhập/xuất',

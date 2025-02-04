@@ -67,6 +67,9 @@ export const useGetShapingProductLineQuery = () => {
 	})
 }
 
+/**
+ * @deprecated
+ */
 export const useDeleteOrderMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
@@ -81,6 +84,26 @@ export const useDeleteOrderMutation = () => {
 		},
 		onSuccess: () => {
 			setCurrentPage(null)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			invalidateQueries()
+		}
+	})
+}
+
+export const useDeleteEpcMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+	const { connection, currentPage, setSelectedOrder, setCurrentPage } = usePageContext(
+		'connection',
+		'currentPage',
+		'setSelectedOrder',
+		'setCurrentPage'
+	)
+
+	return useMutation({
+		mutationFn: async (filters: Record<string, string | number>) =>
+			await RFIDService.deleteScannedEpcs(connection, filters),
+		onSuccess: () => {
+			setCurrentPage(currentPage === 1 ? null : 1)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			invalidateQueries()
 		}
