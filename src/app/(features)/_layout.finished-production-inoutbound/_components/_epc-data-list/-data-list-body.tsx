@@ -16,7 +16,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -280,8 +280,8 @@ const EpcDataList: React.FC = () => {
 		}
 	}, [selectedOrder])
 
-	useEffect(() => {
-		if (Array.isArray(retrievedEpcData) && typeof scanningStatus !== 'undefined')
+	useUpdateEffect(() => {
+		if (retrievedEpcData)
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 

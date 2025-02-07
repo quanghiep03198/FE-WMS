@@ -18,7 +18,7 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
 
 export const useGetEpcQuery = () => {
-	const { currentPage, selectedOrder, connection } = usePageContext(
+	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
 		'currentPage',
 		'selectedOrder',
 		'connection',
@@ -32,7 +32,7 @@ export const useGetEpcQuery = () => {
 				_page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
-		enabled: !!connection,
+		enabled: !!connection && !!scanningStatus,
 		select: (response) => response.metadata
 	})
 }
