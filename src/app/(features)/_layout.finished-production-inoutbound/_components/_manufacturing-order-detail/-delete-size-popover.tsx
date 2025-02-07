@@ -66,7 +66,7 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 		try {
 			await deleteAsync({
 				['mo_no.eq']: data.mo_no,
-				['size_num_code.eq']: data.size_numcode,
+				['size_numcode.eq']: data.size_numcode,
 				['quantity.eq']: data.quantity
 			})
 			toast.success(t('ns_common:notification.success'), { id })

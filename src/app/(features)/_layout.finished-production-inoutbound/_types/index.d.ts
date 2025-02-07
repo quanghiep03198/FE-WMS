@@ -1,12 +1,12 @@
 export type SearchCustOrderParams = {
 	'mo_no.eq': string
 	'mat_code.eq': string
-	'size_num_code.eq'?: string
+	'size_numcode.eq'?: string
 	q: string
 }
 
 export type FetchFPEpcParams = {
-	page: number
+	_page: number
 	'mo_no.eq': string
 }
 

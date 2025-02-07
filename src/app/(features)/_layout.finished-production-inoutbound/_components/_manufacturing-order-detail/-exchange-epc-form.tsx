@@ -63,7 +63,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchOrderQuery({
 		'mo_no.eq': defaultValues?.mo_no,
 		'mat_code.eq': defaultValues?.mat_code,
-		'size_num_code.eq': defaultValues?.size_numcode,
+		'size_numcode.eq': defaultValues?.size_numcode,
 		q: searchTerm
 	})
 
@@ -109,7 +109,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 			toast.success(t('ns_common:notification.success'))
 			resetSelectedRows()
 			setOpen(!open)
-		} catch (error) {
+		} catch {
 			toast.error(t('ns_common:notification.error'))
 		}
 	}
