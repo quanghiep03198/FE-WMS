@@ -79,6 +79,8 @@ jobs:
 
    deploy-server-51:
       name: Deploy to server 51
+      # Temporary disable this job
+      if: false
       runs-on: [self-hosted, Server-51]
       needs: test
       steps:
