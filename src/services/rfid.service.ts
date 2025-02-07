@@ -42,12 +42,6 @@ export class RFIDService {
 		)
 	}
 
-	static async deleteUnexpectedFPOrder(tenantId: string, orderCode: string) {
-		return await axiosInstance.delete(`/rfid/delete-unexpected-order/${orderCode}`, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId }
-		})
-	}
-
 	static async deleteScannedEpcs(tenantId: string, filters: Record<string, string | number>) {
 		return await axiosInstance.delete(`/rfid/delete-scanned-epcs`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },

@@ -1,7 +1,7 @@
 import { useAuth } from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -18,7 +18,7 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
 
 export const useGetEpcQuery = () => {
-	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
+	const { currentPage, selectedOrder, connection } = usePageContext(
 		'currentPage',
 		'selectedOrder',
 		'connection',
@@ -29,10 +29,10 @@ export const useGetEpcQuery = () => {
 		queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection, currentPage, selectedOrder],
 		queryFn: async () =>
 			RFIDService.fetchFPInventoryData(connection, {
-				page: currentPage,
+				_page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
-		enabled: !!connection && scanningStatus === 'disconnected',
+		enabled: !!connection,
 		select: (response) => response.metadata
 	})
 }
@@ -67,10 +67,7 @@ export const useGetShapingProductLineQuery = () => {
 	})
 }
 
-/**
- * @deprecated
- */
-export const useDeleteOrderMutation = () => {
+export const useDeleteEpcMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
 		'connection',
@@ -79,31 +76,10 @@ export const useDeleteOrderMutation = () => {
 	)
 
 	return useMutation({
-		mutationFn: async (orderCode: string) => {
-			return await RFIDService.deleteUnexpectedFPOrder(connection, orderCode)
-		},
-		onSuccess: () => {
-			setCurrentPage(null)
-			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
-			invalidateQueries()
-		}
-	})
-}
-
-export const useDeleteEpcMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
-	const { connection, currentPage, setSelectedOrder, setCurrentPage } = usePageContext(
-		'connection',
-		'currentPage',
-		'setSelectedOrder',
-		'setCurrentPage'
-	)
-
-	return useMutation({
 		mutationFn: async (filters: Record<string, string | number>) =>
 			await RFIDService.deleteScannedEpcs(connection, filters),
 		onSuccess: () => {
-			setCurrentPage(currentPage === 1 ? null : 1)
+			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			invalidateQueries()
 		}
@@ -148,21 +124,10 @@ export const useExchangeEpcMutation = () => {
 }
 
 const useInvalidateQueries = () => {
-	const queryClient = useQueryClient()
-	const { connection } = usePageContext('connection')
-
+	const { refetch: refetchScannedEpcs } = useGetEpcQuery()
+	const { refetch: refetchOrderDetail } = useGetOrderDetail()
 	return () => {
-		queryClient.invalidateQueries({
-			queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG, connection],
-			exact: false,
-			type: 'all',
-			refetchType: 'all'
-		})
-		queryClient.invalidateQueries({
-			queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection],
-			exact: false,
-			type: 'all',
-			refetchType: 'all'
-		})
+		refetchScannedEpcs()
+		refetchOrderDetail()
 	}
 }
