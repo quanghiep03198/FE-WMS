@@ -113,10 +113,6 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	useEffect(() => {
-		console.log(form.getValues())
-	}, [form.watch('dept_code')])
-
 	const handleSubmit = async (data: InboundFormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
 		try {
