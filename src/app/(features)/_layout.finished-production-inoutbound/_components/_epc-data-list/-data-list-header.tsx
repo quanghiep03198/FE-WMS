@@ -37,7 +37,7 @@ const ListBoxHeader: React.FC = () => {
 
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
-	const { isLoading, refetch: manualFetchEpc } = useGetEpcQuery()
+	const { isLoading } = useGetEpcQuery()
 	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder } = usePageContext(
 		'selectedOrder',
 		'scannedOrders',

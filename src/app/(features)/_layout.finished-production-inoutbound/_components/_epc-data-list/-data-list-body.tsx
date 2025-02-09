@@ -1,5 +1,3 @@
-'use no memo'
-
 import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
@@ -7,6 +5,7 @@ import { useAuth } from '@/common/hooks/use-auth'
 import { useScrollToFn } from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
+import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
@@ -38,7 +37,6 @@ const POLLING_DATA_TOAST_ID = 'POLLING_DATA'
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
 	const { user, token, setAccessToken } = useAuth()
-
 	const {
 		currentPage,
 		selectedOrder,
@@ -145,10 +143,12 @@ const EpcDataList: React.FC = () => {
 							return
 						}
 						incommingMessageCountRef.current++
-						if (incommingMessageCountRef.current === 1) {
+						if (incommingMessageCountRef.current > 0) {
 							toast.success(t('ns_common:notification.success'), { id: POLLING_DATA_TOAST_ID })
 						}
+						if (!Json.isValid(event.data)) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
+
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
 

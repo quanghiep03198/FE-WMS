@@ -1,10 +1,14 @@
+'use no memo'
+
 import { IElectronicProductCode } from '@/common/types/entities'
+import { useQueryClient } from '@tanstack/react-query'
 import { useLocalStorageState } from 'ahooks'
 import { pick } from 'lodash'
-import React, { createContext, use, useRef } from 'react'
+import React, { createContext, use, useEffect, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
+import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../_apis/rfid.api'
 import { FP_RFID_SETTINGS_KEY } from '../_constants/rfid.const'
 import { RFIDSettings } from '../index.lazy'
 
@@ -80,6 +84,7 @@ const PageContext = createContext<StoreApi<PageContextStore>>(null)
 
 export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const storeRef = useRef<StoreApi<PageContextStore>>(null)
+	const queryClient = useQueryClient()
 
 	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
 		listenStorageChange: true
@@ -170,6 +175,13 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 			}))
 		)
 	}
+
+	useEffect(() => {
+		queryClient.removeQueries({
+			queryKey: [FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG],
+			type: 'all'
+		})
+	}, [])
 
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }

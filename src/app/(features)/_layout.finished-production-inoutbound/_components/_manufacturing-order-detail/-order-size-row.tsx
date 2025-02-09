@@ -26,7 +26,6 @@ import DeleteSizePopover from './-delete-size-popover'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
-	// inViewport: boolean
 }
 
 const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {

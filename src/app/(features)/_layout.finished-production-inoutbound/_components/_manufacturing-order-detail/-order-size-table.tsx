@@ -40,6 +40,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		'scanningStatus',
 		'setScannedOrders'
 	)
+
 	const { selectedRows, resetSelectedRows, setSelectedRows } = useOrderDetailContext(
 		'selectedRows',
 		'pullSelectedRow',
@@ -53,7 +54,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		shoes_style_code_factory: ''
 	})
 
-	const { data, refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { data: retrievedOrderDetail, refetch: refetchOrderDetail } = useGetOrderDetail()
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') resetSelectedRows()
@@ -61,8 +62,8 @@ const OrderSizeDetailTable: React.FC = () => {
 	}, [scanningStatus])
 
 	useEffect(() => {
-		setScannedOrders(data)
-	}, [data])
+		setScannedOrders(retrievedOrderDetail)
+	}, [retrievedOrderDetail])
 
 	useEffect(() => {
 		if (!dialogOpen) {
@@ -108,7 +109,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				item.shoes_style_code_factory.toLowerCase().includes(shoes_style_code_factory.toLowerCase())
 			)
 		})
-	}, [scannedOrders, columnFilters])
+	}, [scannedOrders, columnFilters, dialogOpen])
 
 	const ref = useRef(null)
 

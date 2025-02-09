@@ -1,3 +1,4 @@
+/* eslint-disable @tanstack/query/exhaustive-deps */
 import { useAuth } from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
@@ -26,13 +27,13 @@ export const useGetEpcQuery = () => {
 	)
 
 	return useQuery({
-		queryKey: [FP_EPC_LIST_PROVIDE_TAG, connection, currentPage, selectedOrder],
+		queryKey: [FP_EPC_LIST_PROVIDE_TAG],
 		queryFn: async () =>
 			RFIDService.fetchFPInventoryData(connection, {
 				_page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
-		enabled: !!connection && !!scanningStatus,
+		enabled: !!connection && scanningStatus === 'disconnected',
 		select: (response) => response.metadata
 	})
 }
@@ -41,7 +42,7 @@ export const useGetOrderDetail = () => {
 	const { connection, scanningStatus } = usePageContext('connection', 'scanningStatus')
 
 	return useQuery({
-		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG, connection],
+		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
 		queryFn: async () => await RFIDService.getFPOrderDetail(connection),
 		enabled: !!connection && scanningStatus === 'disconnected',
 		select: (response) => response.metadata
