@@ -32,7 +32,6 @@ const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 20
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
-const POLLING_DATA_TOAST_ID = 'POLLING_DATA'
 
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
@@ -87,7 +86,6 @@ const EpcDataList: React.FC = () => {
 	const scrollingRef = useRef<number>(null)
 
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
-	const incommingMessageCountRef = useRef<number>(0)
 
 	// * Manual fetch EPC
 	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
@@ -115,7 +113,6 @@ const EpcDataList: React.FC = () => {
 							setScanningStatus('connected')
 							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 							writeLog({ message: 'Connected', type: 'info' })
-							toast.loading(t('ns_common:notification.receiving_data'), { id: POLLING_DATA_TOAST_ID })
 						}
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
@@ -138,20 +135,10 @@ const EpcDataList: React.FC = () => {
 				},
 				onmessage(event: EventSourceMessage) {
 					try {
-						if (!event.data) {
-							incommingMessageCountRef.current = 0
-							return
-						}
-						incommingMessageCountRef.current++
-						if (incommingMessageCountRef.current > 0) {
-							toast.success(t('ns_common:notification.success'), { id: POLLING_DATA_TOAST_ID })
-						}
-						if (!Json.isValid(event.data)) return
+						if (!event.data || !Json.isValid(event.data)) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
-
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
-
 						writeLog({
 							type: 'info',
 							message: createLogger({
