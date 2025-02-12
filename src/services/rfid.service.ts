@@ -26,8 +26,9 @@ export class RFIDService {
 		)
 	}
 
-	static async searchExchangableFPOrder(params: SearchCustOrderParams) {
+	static async searchExchangableFPOrder(tenantId: string, params: SearchCustOrderParams) {
 		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>(`/rfid/search-exchangable-order`, {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params
 		})
 	}
