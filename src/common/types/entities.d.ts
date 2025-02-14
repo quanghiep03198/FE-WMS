@@ -165,7 +165,7 @@ export interface IProductionImportOrder extends IBaseEntity {
 
 export interface IDailyInboundReport {
 	mo_no: string
-	count: number
+	inbound_qty: number
 	is_exchanged: boolean
 }
 

@@ -26,7 +26,7 @@ const DailyInboundReport: React.FC = () => {
 				enableSorting: true,
 				enableMultiSort: true
 			}),
-			columnHelper.accessor('count', {
+			columnHelper.accessor('inbound_qty', {
 				header: t('ns_common:common_fields.total'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -40,9 +40,12 @@ const DailyInboundReport: React.FC = () => {
 				enableColumnFilter: false,
 				enableSorting: false,
 				enableMultiSort: false,
+				meta: {
+					cellDataType: 'boolean'
+				},
 				cell: ({ getValue }) => {
 					const isExchanged = getValue()
-					return isExchanged && <Icon name='Check' />
+					return Boolean(isExchanged) && <Icon name='Check' />
 				}
 			}),
 			columnHelper.display({
@@ -51,9 +54,10 @@ const DailyInboundReport: React.FC = () => {
 				enableSorting: false,
 				enableMultiSort: false,
 				filterFn: 'inNumberRange',
+				meta: { cellDataType: 'text' },
 				cell: ({ row }) => {
 					const isExchanged = row.original.is_exchanged
-					return isExchanged && t('ns_inoutbound:errors.wrong_stamp')
+					return Boolean(isExchanged) && t('ns_inoutbound:errors.wrong_stamp')
 				}
 			})
 		],
