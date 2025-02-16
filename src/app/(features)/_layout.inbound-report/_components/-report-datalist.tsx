@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetDefaultTenantByFactory } from '../../_apis/use-tenacy.api'
+import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import { useGetInboundReport } from '../_apis/use-report.api'
 import DatePickerFilter from './-date-picker-filter'
 
@@ -18,7 +18,7 @@ const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
 
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
-	const { data: tenant } = useGetDefaultTenantByFactory()
+	const { data: tenant } = useGetTenantByFactory()
 	const { data, isLoading, refetch } = useGetInboundReport(tenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)

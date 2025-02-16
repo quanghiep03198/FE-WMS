@@ -6,10 +6,10 @@ import { format } from 'date-fns'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundReport } from '../../_apis/use-report.api'
-import { useGetDefaultTenantByFactory } from '../../_apis/use-tenacy.api'
+import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 const DailyInboundReport: React.FC = () => {
-	const { data: tenant } = useGetDefaultTenantByFactory()
+	const { data: tenant } = useGetTenantByFactory()
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd')
 	})

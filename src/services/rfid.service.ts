@@ -13,27 +13,33 @@ import { omitBy } from 'lodash'
 export class RFIDService {
 	// #region [RFID] Finished Production APIs
 	static async fetchFPInventoryData(tenantId: string, params: FetchFPEpcParams) {
-		return await axiosInstance.get<void, ResponseBody<Pagination<IElectronicProductCode>>>(`/rfid/fetch-epc`, {
+		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(`/rfid/fetch-epc`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: omitBy(params, (value) => !value || value === 'all')
 		})
 	}
 
 	static async getFPOrderDetail(tenantId: string) {
-		return await axiosInstance.get<void, ResponseBody<RFIDStreamEventData['orders']>>(
+		return await axiosInstance.get<unknown, ResponseBody<RFIDStreamEventData['orders']>>(
 			`/rfid/manufacturing-order-detail`,
 			{ headers: { [RequestHeaders.TENANT_ID]: tenantId } }
 		)
 	}
 
 	static async searchExchangableFPOrder(tenantId: string, params: SearchCustOrderParams) {
-		return await axiosInstance.get<any, ResponseBody<Record<'mo_no', string>[]>>(`/rfid/search-exchangable-order`, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
-			params
-		})
+		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
+			`/rfid/search-exchangable-order`,
+			{
+				headers: { [RequestHeaders.TENANT_ID]: tenantId },
+				params
+			}
+		)
 	}
 
 	static async updateFPStockMovement(tenantId: string, orderCode: string, payload: InoutboundPayload) {
+		console.log('tenantId', tenantId)
+		return
+
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
 			`/rfid/update-stock/${orderCode}`,
 			payload,

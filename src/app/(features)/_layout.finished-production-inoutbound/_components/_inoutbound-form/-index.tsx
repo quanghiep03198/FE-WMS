@@ -1,3 +1,4 @@
+import { useGetAllTenants } from '@/app/(features)/_apis/use-tenacy.api'
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse.api'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -8,16 +9,26 @@ import {
 	ComboboxFieldControl,
 	Div,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 	Form as FormProvider,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 	Icon,
 	IconProps,
 	RadioGroup,
 	RadioGroupItem,
+	Select,
+	SelectContent,
 	SelectFieldControl,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 	Separator,
 	Typography
 } from '@/components/ui'
@@ -45,7 +56,8 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
+	const { connection, selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
+		'connection',
 		'selectedOrder',
 		'scanningStatus',
 		'setScannedEpc'
@@ -53,6 +65,7 @@ const InoutboundForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
+	const { data: writableTenants } = useGetAllTenants()
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema),
@@ -62,7 +75,8 @@ const InoutboundForm: React.FC = () => {
 			warehouse_num: '',
 			storage: '',
 			dept_code: '',
-			dept_name: ''
+			dept_name: '',
+			writable_tenant: null
 		},
 		mode: 'onChange'
 	})
@@ -102,7 +116,8 @@ const InoutboundForm: React.FC = () => {
 			dept_code: '',
 			dept_name: '',
 			warehouse_num: '',
-			storage: ''
+			storage: '',
+			writable_tenant: null
 		})
 	})
 
@@ -193,6 +208,55 @@ const InoutboundForm: React.FC = () => {
 						)}
 					/>
 				</Div>
+				<Div className='col-span-full'>
+					<FormField
+						control={form.control}
+						name='writable_tenant'
+						render={({ field }) => (
+							<FormItem>
+								<Select onValueChange={field.onChange} value={field.value} defaultValue={connection}>
+									<HoverCard openDelay={50} closeDelay={50}>
+										<HoverCardTrigger
+											asChild
+											className='w-full basis-1/5 sm:basis-full md:basis-1/3 lg:basis-1/3'>
+											<SelectTrigger>
+												<Div className='flex flex-1 items-center gap-x-3'>
+													<Icon name='Database' size={18} stroke='hsl(var(--warning))' />
+													<SelectValue placeholder={'Select database'} />
+												</Div>
+											</SelectTrigger>
+										</HoverCardTrigger>
+										<HoverCardContent side='top' align='start' sideOffset={8} className='w-96 space-y-4'>
+											<Typography variant='small'>
+												{t('ns_inoutbound:description.select_writable_database')}
+											</Typography>
+											<ul className='list-inside list-disc text-sm'>
+												<li>LianYing: Server 80.2</li>
+												<li>LianShun 2: Server 201.202</li>
+												<li>Cambodia: Server 5.1</li>
+											</ul>
+										</HoverCardContent>
+									</HoverCard>
+									<SelectContent>
+										<SelectGroup>
+											{Array.isArray(writableTenants) &&
+												writableTenants.map((item) => (
+													<SelectItem key={item.id} value={item.id}>
+														{t('ns_common:others.server', {
+															alias: item.alias,
+															defaultValue: item.alias
+														})}
+													</SelectItem>
+												))}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+								<FormDescription>{t('ns_inoutbound:description.skip_select_tenant')}</FormDescription>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</Div>
 				<Div className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
 					<SelectFieldControl
 						name='rfid_use'
@@ -208,15 +272,15 @@ const InoutboundForm: React.FC = () => {
 							<SelectFieldControl
 								name='dept_code'
 								label={t('ns_erp:fields.shaping_dept_code')}
+								datalist={inoutboundDepts}
+								labelField='dept_name'
+								valueField='dept_code'
 								onValueChange={(value) =>
 									form.setValue(
 										'dept_name',
 										inoutboundDepts.find((item) => item.dept_code === value)?.dept_name
 									)
 								}
-								datalist={inoutboundDepts}
-								labelField='dept_name'
-								valueField='dept_code'
 							/>
 						</Div>
 						<Div className='col-span-1 sm:col-span-full'>
@@ -243,13 +307,21 @@ const InoutboundForm: React.FC = () => {
 						</Div>
 					</Fragment>
 				)}
-				<Div className='col-span-full flex flex-col items-center justify-between gap-6 lg:flex-row xl:flex-row'>
+				<Div className='col-span-full grid grid-cols-2 gap-x-1'>
 					<Button
 						type='submit'
 						size={isMobileScreen ? 'lg' : 'default'}
 						className='gap-x-2 sm:w-full md:w-full'
 						disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
 						<Icon name='Check' /> {t('ns_common:actions.save')}
+					</Button>
+					<Button
+						type='reset'
+						variant='outline'
+						size={isMobileScreen ? 'lg' : 'default'}
+						onClick={handleResetForm}
+						className='gap-x-2 sm:w-full md:w-full'>
+						<Icon name='Undo' /> {t('ns_common:actions.reset')}
 					</Button>
 				</Div>
 				<Separator className='col-span-full' />

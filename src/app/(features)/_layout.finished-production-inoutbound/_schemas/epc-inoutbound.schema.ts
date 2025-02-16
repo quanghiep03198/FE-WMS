@@ -12,7 +12,8 @@ export const outboundSchema = z.object({
 			required_error: 'ns_validation:required'
 		})
 		.trim()
-		.min(1, { message: 'ns_validation:required' })
+		.min(1, { message: 'ns_validation:required' }),
+	writable_tenant: z.string().optional()
 })
 
 export const inboundSchema = outboundSchema.extend({
