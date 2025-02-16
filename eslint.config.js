@@ -30,7 +30,7 @@ export default [
 			'@typescript-eslint/no-unused-expressions': 'warn',
 			'@typescript-eslint/ban-ts-comment': 'warn',
 			'prefer-spread': 'warn',
-			'react/prop-types': 'warn',
+			'react/prop-types': 'off',
 			'react/display-name': 'warn',
 			'react/no-unknown-property': 'warn',
 			'react/no-unescaped-entities': 'warn',
