@@ -18,9 +18,11 @@ export default {
 		no_exchangable_order: '没有可交换的顺序',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
-		select_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
+		select_readable_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
+		select_writable_database: '选择数据库连接以保存仓库入库/出库数据. 如果订单指定在当前工厂生产，请跳过.',
 		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',
 		select_rfid_process: '选择与各自部门相对应的扫描过程',
+		skip_select_tenant: '如果订单指定在当前工厂生产，请跳过.',
 		transferred_order: '要交换的实际订单代码',
 		transfer_order_datalist: '从下面的表格中选择数据以添加新转移订单',
 		transfer_order_list: '跟踪和管理转移订单'

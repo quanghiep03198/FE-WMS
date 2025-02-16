@@ -27,15 +27,18 @@ export default {
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
 		inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm',
-		inoutbound_form_note: 'Ngắt kết nối trước khi thao tác nhập/xuất',
+		inoutbound_form_note: 'Dừng đọc thiết bị RFID và ngắt kết nối trên ứng dụng trước khi thao tác nhập/xuất',
 		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',
 		order_size_detail:
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
 		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',
-		select_database:
+		select_readable_database:
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
+		select_writable_database:
+			'Chọn kết nối database để lưu dữ liệu nhập/xuất kho. Bỏ qua nếu chỉ lệnh chỉ định được sản xuất tại nhà máy hiện tại.',
 		select_order: 'Chọn chỉ lệnh sản xuất để xem dữ liệu EPC đã quét được và thao tác nhập hoặc xuất kho',
 		select_rfid_process: 'Chọn quy trình sản xuất để quét tem tương ứng với các bộ phận đang nhiệm',
+		skip_select_tenant: 'Bỏ qua nếu chỉ lệnh chỉ định được sản xuất tại nhà máy hiện tại.',
 		transferred_order: 'Chỉ lệnh thực cần hoán đổi',
 		transfer_order_datalist: 'Chọn dữ liệu từ bảng dưới để thêm đơn chuyển kho mới',
 		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho'

@@ -19,11 +19,14 @@ export default {
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
 		order_sizing_list: 'Table below shows the sizing information of the scanned orders',
-		select_database:
+		select_readable_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
+		select_writable_database:
+			'Select a database connection to save the warehouse inbound/outbound data. Skip if the order is designated to be produced at the current factory.',
 		select_order:
 			'Select the production order to view its scanned EPC data and perform warehouse inbound or outbound operations.',
 		select_rfid_process: 'Select the process to scan the corresponding tags for the responsible departments',
+		skip_select_tenant: 'Skip if the order is designated to be produced at the current factory.',
 		transferred_order: 'The actual order code to be exchanged',
 		exchange_qty: 'Number of exchanged items for the actual order',
 		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders',
