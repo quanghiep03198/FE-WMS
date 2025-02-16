@@ -59,7 +59,7 @@ export class AxiosClient {
 		// * Instance response interceptor
 		this.instance.interceptors.response.use(
 			(response) => response.data,
-			async (error: AxiosError<ResponseBody<any>>) => {
+			async (error: AxiosError<ResponseBody<unknown>>) => {
 				if (error.code === 'ECONNABORTED') {
 					toast.error('Request timeout')
 					return Promise.reject(new Error('Request timeout'))
