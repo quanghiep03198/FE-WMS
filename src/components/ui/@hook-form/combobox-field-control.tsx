@@ -27,7 +27,7 @@ import {
 } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
 
-type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
+export type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,
 	'control'
 > & {
@@ -138,7 +138,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										</Fragment>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0'>
+								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' {...popoverContentProps}>
 									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
 											placeholder={placeholder}
