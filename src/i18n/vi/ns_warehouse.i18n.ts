@@ -45,5 +45,10 @@ export default {
 		warehouse_list_description: 'Quản lý thông tin các kho',
 		storage_list_title: 'Danh sách vị trí lưu kho',
 		storage_list_description: 'Quản lý thông tin vị trí lưu kho'
+	},
+	tenancy_warehouse: {
+		'80.2': 'Kho thành phẩm Liên Dinh',
+		'201.202': 'Kho thành phẩm Liên Thuấn 2',
+		'5.1': 'Kho thành phẩm Cambodia'
 	}
 } as const

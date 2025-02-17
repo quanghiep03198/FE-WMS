@@ -44,5 +44,10 @@ export default {
 		material_warehouse: 'Material warehouse',
 		production_warehouse: 'Production warehouse',
 		scrap_production_warehouse: 'Scrap production warehouse'
+	},
+	tenancy_warehouse: {
+		'80.2': 'LianYing Finished Product Warehouse',
+		'201.202': 'LianShun 2 Finished Product Warehouse',
+		'5.1': 'Cambodia Finished Product Warehouse'
 	}
 } as const

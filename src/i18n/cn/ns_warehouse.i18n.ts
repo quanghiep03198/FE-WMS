@@ -45,5 +45,10 @@ export default {
 		warehouse_list_description: '管理仓库信息',
 		storage_list_title: '存储位置列表',
 		storage_list_description: '管理存储位置信息'
+	},
+	tenancy_warehouse: {
+		'80.2': '聯盈成品倉 ',
+		'201.202': '聯舜二成品倉',
+		'5.1': '柬埔寨成品倉'
 	}
 } as const
