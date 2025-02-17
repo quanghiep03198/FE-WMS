@@ -3,7 +3,6 @@ import { useAuth } from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { omit } from 'lodash'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -102,7 +101,7 @@ export const useUpdateStockMutation = () => {
 	return useMutation({
 		mutationFn: (payload: InoutboundPayload) => {
 			const currentTenant = payload.writable_tenant || connection
-			return RFIDService.updateFPStockMovement(currentTenant, selectedOrder, omit(payload, 'writable_tenant'))
+			return RFIDService.updateFPStockMovement(currentTenant, selectedOrder, payload)
 		},
 		onSuccess: () => {
 			setCurrentPage(null)

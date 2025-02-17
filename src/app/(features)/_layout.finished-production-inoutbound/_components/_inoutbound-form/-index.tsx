@@ -76,7 +76,8 @@ const InoutboundForm: React.FC = () => {
 			storage: '',
 			dept_code: '',
 			dept_name: '',
-			writable_tenant: ''
+			writable_tenant: '',
+			readable_tenant: connection
 		},
 		mode: 'onChange'
 	})
@@ -117,7 +118,8 @@ const InoutboundForm: React.FC = () => {
 			dept_name: '',
 			warehouse_num: '',
 			storage: '',
-			writable_tenant: ''
+			writable_tenant: '',
+			readable_tenant: connection
 		})
 	})
 
@@ -127,6 +129,10 @@ const InoutboundForm: React.FC = () => {
 			handleResetForm()
 		}
 	}, [scanningStatus])
+
+	useEffect(() => {
+		form.setValue('readable_tenant', connection)
+	}, [connection])
 
 	const handleSubmit = async (data: InboundFormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
@@ -242,8 +248,7 @@ const InoutboundForm: React.FC = () => {
 											{Array.isArray(writableTenants) &&
 												writableTenants.map((item) => (
 													<SelectItem key={item.id} value={item.id}>
-														{t('ns_common:others.server', {
-															alias: item.alias,
+														{t(`ns_warehouse:tenancy_warehouse.${item.alias}`, {
 															defaultValue: item.alias
 														})}
 													</SelectItem>
