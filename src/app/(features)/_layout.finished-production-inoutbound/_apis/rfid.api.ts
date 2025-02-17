@@ -101,8 +101,7 @@ export const useUpdateStockMutation = () => {
 
 	return useMutation({
 		mutationFn: (payload: InoutboundPayload) => {
-			const currentTenant = payload.writable_tenant ?? connection
-
+			const currentTenant = payload.writable_tenant || connection
 			return RFIDService.updateFPStockMovement(currentTenant, selectedOrder, omit(payload, 'writable_tenant'))
 		},
 		onSuccess: () => {

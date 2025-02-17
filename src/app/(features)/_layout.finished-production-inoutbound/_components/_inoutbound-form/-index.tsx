@@ -76,7 +76,7 @@ const InoutboundForm: React.FC = () => {
 			storage: '',
 			dept_code: '',
 			dept_name: '',
-			writable_tenant: null
+			writable_tenant: ''
 		},
 		mode: 'onChange'
 	})
@@ -117,7 +117,7 @@ const InoutboundForm: React.FC = () => {
 			dept_name: '',
 			warehouse_num: '',
 			storage: '',
-			writable_tenant: null
+			writable_tenant: ''
 		})
 	})
 
@@ -214,7 +214,7 @@ const InoutboundForm: React.FC = () => {
 						name='writable_tenant'
 						render={({ field }) => (
 							<FormItem>
-								<Select onValueChange={field.onChange} value={field.value} defaultValue={connection}>
+								<Select onValueChange={field.onChange} value={field.value}>
 									<HoverCard openDelay={50} closeDelay={50}>
 										<HoverCardTrigger
 											asChild
