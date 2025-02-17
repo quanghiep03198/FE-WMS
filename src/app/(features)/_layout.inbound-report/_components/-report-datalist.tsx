@@ -1,4 +1,5 @@
 import { PresetBreakPoints } from '@/common/constants/enums'
+import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
@@ -18,8 +19,13 @@ const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
 
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
-	const { data: tenant } = useGetTenantByFactory()
-	const { data, isLoading, refetch } = useGetInboundReport(tenant?.id, searchParams)
+	const { data: tenants } = useGetTenantByFactory()
+	const { user } = useAuth()
+	const currentTenant = useMemo(
+		() => tenants.find((item) => item.factories.join('') === user.company_code),
+		[tenants, user.company_code]
+	)
+	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
@@ -89,7 +95,7 @@ const ReportDatalist: React.FC = () => {
 	const handleDownloadExcel = async () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		try {
-			const blob = await ReportService.downloadInboundReport(tenant?.id, searchParams)
+			const blob = await ReportService.downloadInboundReport(currentTenant?.id, searchParams)
 			saveAs(blob, `Inbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}.xlsx`)
 			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		} catch {

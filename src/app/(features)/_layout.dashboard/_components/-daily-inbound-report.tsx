@@ -10,10 +10,11 @@ import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 const DailyInboundReport: React.FC = () => {
 	const { data: tenant } = useGetTenantByFactory()
+
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd')
 	})
-	const { data, refetch, isLoading } = useGetInboundReport(tenant?.id, searchParams)
+	const { data, refetch, isLoading } = useGetInboundReport(tenant[0]?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDailyInboundReport>()
 
