@@ -23,6 +23,8 @@ export default {
 		or_qtyperpacking: 'Tổng số lượng đóng thùng',
 		or_totalqty: 'Tổng số lượng đặt hàng',
 		order_qty: 'Số Lượng Đơn Đặt Hàng', // Order Quantity
+		outbound_date: 'Ngày Xuất Kho', // Outbound Date
+		outbound_qty: 'Số lượng xuất kho',
 		packaging_code: 'Mã đóng thùng',
 		prod_color: 'Màu sắc sản phẩm',
 		required_date: 'Ngày Yêu Cầu', // Required Date

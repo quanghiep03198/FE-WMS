@@ -10,10 +10,11 @@ export default {
 		caption: '在连接开启时, EPC 数据会从服务器持续传输.'
 	},
 	description: {
+		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
+		daily_outbound_report: '跟踪和管理每日成品仓库出库进度',
 		exchange_all: '您可以交换属于所选尺码的整个 EPC',
 		exchange_epc_dialog_desc: '允许用户用新的生产订单替换或更新产品上的 EPC 标签.',
 		exchange_qty: '实际订单的交换商品数量',
-		inbound_report: '查看入库报表以跟踪和管理入库订单',
 		inoutbound_form_note: '更新库存移动之前断开连接',
 		no_exchangable_order: '没有可交换的顺序',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
@@ -97,9 +98,10 @@ export default {
 		synchronization_trigger_description: '激活API以同步客人标签(若需要)'
 	},
 	titles: {
+		daily_inbound_report: '入庫报表',
+		daily_outbound_report: '出庫报表',
 		exchange_epc: '交换 EPC',
 		exchange_order: '交换生产订单',
-		inbound_report: '入庫报表',
 		order_sizing_list: '指令及尺码列表',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表'

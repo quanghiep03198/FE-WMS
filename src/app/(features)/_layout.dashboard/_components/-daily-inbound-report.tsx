@@ -1,3 +1,4 @@
+import { useAuth } from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IDailyInboundReport } from '@/common/types/entities'
 import { Button, DataTable, Div, Icon, Tooltip, Typography } from '@/components/ui'
@@ -9,12 +10,20 @@ import { useGetInboundReport } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 const DailyInboundReport: React.FC = () => {
-	const { data: tenant } = useGetTenantByFactory()
-
+	const { data: tenants } = useGetTenantByFactory()
+	const { user } = useAuth()
+	const currentTenant = useMemo(() => {
+		if (Array.isArray(tenants) && tenants.length > 0) {
+			return tenants.find((item) => item.factories.join('') === user.company_code)
+		} else {
+			return null
+		}
+	}, [tenants, user.company_code])
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd')
 	})
-	const { data, refetch, isLoading } = useGetInboundReport(tenant[0]?.id, searchParams)
+
+	const { data, refetch, isLoading } = useGetInboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDailyInboundReport>()
 

@@ -2,7 +2,7 @@ import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IInboundReport } from '@/common/types/entities'
+import { IOutboundReport } from '@/common/types/entities'
 import { Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
-import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
+import { useGetOutboundReport } from '@/app/(features)/_apis/use-report.api'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
@@ -30,11 +30,13 @@ const ReportDatalist: React.FC = () => {
 		}
 	}, [tenants, user.company_code])
 
-	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
+	console.log('ahihhhi')
+
+	const { data, isLoading, refetch } = useGetOutboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
-	const columnHelper = createColumnHelper<IInboundReport>()
+	const columnHelper = createColumnHelper<IOutboundReport>()
 
 	const columns = useMemo(
 		() => [
@@ -58,13 +60,6 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
 				minSize: 200
 			}),
-			columnHelper.accessor('shaping_dept_name', {
-				header: t('ns_erp:fields.shaping_dept_name'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				minSize: 200
-			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				enableColumnFilter: true,
@@ -74,8 +69,8 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('inbound_qty', {
-				header: t('ns_erp:fields.inbound_qty'),
+			columnHelper.accessor('outbound_qty', {
+				header: t('ns_erp:fields.outbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
@@ -83,8 +78,8 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('inbound_date', {
-				header: t('ns_erp:fields.inbound_date'),
+			columnHelper.accessor('outbound_date', {
+				header: t('ns_erp:fields.outbound_date'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enableResizing: true,

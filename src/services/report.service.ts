@@ -4,7 +4,14 @@ import axiosInstance from '@/configs/axios.config'
 
 export class ReportService {
 	static async getInboundReport(tenantId: string, params?: { 'date.eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IInboundReport[]>>('/report', {
+		return await axiosInstance.get<void, ResponseBody<IInboundReport[]>>('/report/daily-inbound', {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params: params
+		})
+	}
+
+	static async getOutboundReport(tenantId: string, params?: { 'date.eq': string }) {
+		return await axiosInstance.get<void, ResponseBody<IInboundReport[]>>('/report/daily-outbound', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: params
 		})

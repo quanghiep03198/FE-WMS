@@ -54,23 +54,23 @@ export const navigationConfig: NavigationConfig[] = [
 		id: uuidv4(),
 		icon: 'GitBranch',
 		title: 'navigation.export_management',
-		path: '/warehouse-export',
+		path: '/outbound-report',
 		type: 'main',
 		keybinding: 'ctrl.4'
-	},
-	{
-		id: uuidv4(),
-		icon: 'ArrowRightLeft',
-		title: 'navigation.transfer_managment',
-		path: '/transfer-management',
-		type: 'main',
-		keybinding: 'ctrl.5'
 	},
 	{
 		id: uuidv4(),
 		icon: 'Container',
 		title: 'navigation.inventory_management',
 		path: '/inventory',
+		type: 'main',
+		keybinding: 'ctrl.5'
+	},
+	{
+		id: uuidv4(),
+		icon: 'ArrowRightLeft',
+		title: 'navigation.transfer_managment',
+		path: '/transfer-management',
 		type: 'main',
 		keybinding: 'ctrl.6'
 	},

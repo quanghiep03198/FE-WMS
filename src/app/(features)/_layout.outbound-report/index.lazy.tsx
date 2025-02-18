@@ -7,20 +7,21 @@ import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-
 import DatePickerFilter from './_components/-date-picker-filter'
 import ReportDatalist from './_components/-report-datalist'
 
-export const Route = createLazyFileRoute('/(features)/_layout/inbound-report/')({
+export const Route = createLazyFileRoute('/(features)/_layout/outbound-report/')({
 	component: Page
 })
 
 function Page() {
 	const { t, i18n } = useTranslation()
+
 	// Set page breadcrumb navigation
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
 		setBreadcrumb([
 			{
-				to: '/inbound-report',
-				text: t('ns_common:navigation.import_management')
+				to: '/outbound-report',
+				text: t('ns_common:navigation.export_management')
 			}
 		])
 	}, [i18n.language])
@@ -29,8 +30,8 @@ function Page() {
 		<Div as='section' className='space-y-4'>
 			<Div className='flex w-full'>
 				<PageHeader className='flex-1'>
-					<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
-					<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
+					<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>
+					<PageDescription>{t('ns_inoutbound:description.daily_outbound_report')}</PageDescription>
 				</PageHeader>
 				<Div className='ml-auto sm:hidden'>
 					<DatePickerFilter />

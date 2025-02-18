@@ -23,10 +23,11 @@ export default {
 		label: 'Số lượng EPC đã quét'
 	},
 	description: {
+		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
+		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn',
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
-		inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm',
 		inoutbound_form_note: 'Dừng đọc thiết bị RFID và ngắt kết nối trên ứng dụng trước khi thao tác nhập/xuất',
 		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',
 		order_size_detail:
@@ -103,9 +104,10 @@ export default {
 		transferred_data: 'Dữ liệu đã chuyển'
 	},
 	titles: {
+		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
+		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		exchange_epc: 'Hoán đổi EPC',
 		exchange_order: 'Hoán đổi đơn hàng',
-		inbound_report: 'Báo cáo nhập kho',
 		order_sizing_list: 'Danh sách Size theo đơn',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho'

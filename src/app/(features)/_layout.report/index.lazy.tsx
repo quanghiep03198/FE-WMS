@@ -15,7 +15,7 @@ function Page() {
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/warehouse-export', text: t('ns_common:navigation.report_management') }])
+		setBreadcrumb([{ to: '/outbound-report', text: t('ns_common:navigation.report_management') }])
 	}, [i18n.language])
 
 	return <UnavailableService />

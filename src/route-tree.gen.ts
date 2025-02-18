@@ -26,9 +26,6 @@ const featuresPreferencesImport = createFileRoute('/(features)/preferences')()
 const featuresLayoutWarehouseIndexLazyImport = createFileRoute(
   '/(features)/_layout/warehouse/',
 )()
-const featuresLayoutWarehouseExportIndexLazyImport = createFileRoute(
-  '/(features)/_layout/warehouse-export/',
-)()
 const featuresLayoutTransferManagementIndexLazyImport = createFileRoute(
   '/(features)/_layout/transfer-management/',
 )()
@@ -37,6 +34,9 @@ const featuresLayoutReportIndexLazyImport = createFileRoute(
 )()
 const featuresLayoutProductIncomingInspectionIndexLazyImport = createFileRoute(
   '/(features)/_layout/product-incoming-inspection/',
+)()
+const featuresLayoutOutboundReportIndexLazyImport = createFileRoute(
+  '/(features)/_layout/outbound-report/',
 )()
 const featuresLayoutInventoryIndexLazyImport = createFileRoute(
   '/(features)/_layout/inventory/',
@@ -116,19 +116,6 @@ const featuresLayoutWarehouseIndexLazyRoute =
       ),
     )
 
-const featuresLayoutWarehouseExportIndexLazyRoute =
-  featuresLayoutWarehouseExportIndexLazyImport
-    .update({
-      id: '/warehouse-export/',
-      path: '/warehouse-export/',
-      getParentRoute: () => featuresLayoutRoute,
-    } as any)
-    .lazy(() =>
-      import('./app/(features)/_layout.warehouse-export/index.lazy').then(
-        (d) => d.Route,
-      ),
-    )
-
 const featuresLayoutTransferManagementIndexLazyRoute =
   featuresLayoutTransferManagementIndexLazyImport
     .update({
@@ -163,6 +150,19 @@ const featuresLayoutProductIncomingInspectionIndexLazyRoute =
       import(
         './app/(features)/_layout.product-incoming-inspection/index.lazy'
       ).then((d) => d.Route),
+    )
+
+const featuresLayoutOutboundReportIndexLazyRoute =
+  featuresLayoutOutboundReportIndexLazyImport
+    .update({
+      id: '/outbound-report/',
+      path: '/outbound-report/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.outbound-report/index.lazy').then(
+        (d) => d.Route,
+      ),
     )
 
 const featuresLayoutInventoryIndexLazyRoute =
@@ -350,6 +350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutInventoryIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
+    '/(features)/_layout/outbound-report/': {
+      id: '/(features)/_layout/outbound-report/'
+      path: '/outbound-report'
+      fullPath: '/outbound-report'
+      preLoaderRoute: typeof featuresLayoutOutboundReportIndexLazyImport
+      parentRoute: typeof featuresLayoutImport
+    }
     '/(features)/_layout/product-incoming-inspection/': {
       id: '/(features)/_layout/product-incoming-inspection/'
       path: '/product-incoming-inspection'
@@ -369,13 +376,6 @@ declare module '@tanstack/react-router' {
       path: '/transfer-management'
       fullPath: '/transfer-management'
       preLoaderRoute: typeof featuresLayoutTransferManagementIndexLazyImport
-      parentRoute: typeof featuresLayoutImport
-    }
-    '/(features)/_layout/warehouse-export/': {
-      id: '/(features)/_layout/warehouse-export/'
-      path: '/warehouse-export'
-      fullPath: '/warehouse-export'
-      preLoaderRoute: typeof featuresLayoutWarehouseExportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/warehouse/': {
@@ -423,10 +423,10 @@ interface featuresLayoutRouteChildren {
   featuresLayoutFinishedProductionInoutboundIndexLazyRoute: typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   featuresLayoutInboundReportIndexLazyRoute: typeof featuresLayoutInboundReportIndexLazyRoute
   featuresLayoutInventoryIndexLazyRoute: typeof featuresLayoutInventoryIndexLazyRoute
+  featuresLayoutOutboundReportIndexLazyRoute: typeof featuresLayoutOutboundReportIndexLazyRoute
   featuresLayoutProductIncomingInspectionIndexLazyRoute: typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   featuresLayoutReportIndexLazyRoute: typeof featuresLayoutReportIndexLazyRoute
   featuresLayoutTransferManagementIndexLazyRoute: typeof featuresLayoutTransferManagementIndexLazyRoute
-  featuresLayoutWarehouseExportIndexLazyRoute: typeof featuresLayoutWarehouseExportIndexLazyRoute
   featuresLayoutWarehouseIndexLazyRoute: typeof featuresLayoutWarehouseIndexLazyRoute
   featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute: typeof featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute
 }
@@ -438,13 +438,13 @@ const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
   featuresLayoutInboundReportIndexLazyRoute:
     featuresLayoutInboundReportIndexLazyRoute,
   featuresLayoutInventoryIndexLazyRoute: featuresLayoutInventoryIndexLazyRoute,
+  featuresLayoutOutboundReportIndexLazyRoute:
+    featuresLayoutOutboundReportIndexLazyRoute,
   featuresLayoutProductIncomingInspectionIndexLazyRoute:
     featuresLayoutProductIncomingInspectionIndexLazyRoute,
   featuresLayoutReportIndexLazyRoute: featuresLayoutReportIndexLazyRoute,
   featuresLayoutTransferManagementIndexLazyRoute:
     featuresLayoutTransferManagementIndexLazyRoute,
-  featuresLayoutWarehouseExportIndexLazyRoute:
-    featuresLayoutWarehouseExportIndexLazyRoute,
   featuresLayoutWarehouseIndexLazyRoute: featuresLayoutWarehouseIndexLazyRoute,
   featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute:
     featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyRoute,
@@ -509,10 +509,10 @@ export interface FileRoutesByFullPath {
   '/finished-production-inoutbound': typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
   '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
+  '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
   '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/report': typeof featuresLayoutReportIndexLazyRoute
   '/transfer-management': typeof featuresLayoutTransferManagementIndexLazyRoute
-  '/warehouse-export': typeof featuresLayoutWarehouseExportIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
   '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
   '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
@@ -529,10 +529,10 @@ export interface FileRoutesByTo {
   '/finished-production-inoutbound': typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
   '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
+  '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
   '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/report': typeof featuresLayoutReportIndexLazyRoute
   '/transfer-management': typeof featuresLayoutTransferManagementIndexLazyRoute
-  '/warehouse-export': typeof featuresLayoutWarehouseExportIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
   '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
   '/preferences/appearance-settings': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
@@ -553,10 +553,10 @@ export interface FileRoutesById {
   '/(features)/_layout/finished-production-inoutbound/': typeof featuresLayoutFinishedProductionInoutboundIndexLazyRoute
   '/(features)/_layout/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
   '/(features)/_layout/inventory/': typeof featuresLayoutInventoryIndexLazyRoute
+  '/(features)/_layout/outbound-report/': typeof featuresLayoutOutboundReportIndexLazyRoute
   '/(features)/_layout/product-incoming-inspection/': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/(features)/_layout/report/': typeof featuresLayoutReportIndexLazyRoute
   '/(features)/_layout/transfer-management/': typeof featuresLayoutTransferManagementIndexLazyRoute
-  '/(features)/_layout/warehouse-export/': typeof featuresLayoutWarehouseExportIndexLazyRoute
   '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
   '/(features)/preferences/_layout/account/': typeof featuresPreferencesLayoutAccountIndexLazyRoute
   '/(features)/preferences/_layout/appearance-settings/': typeof featuresPreferencesLayoutAppearanceSettingsIndexLazyRoute
@@ -575,10 +575,10 @@ export interface FileRouteTypes {
     | '/finished-production-inoutbound'
     | '/inbound-report'
     | '/inventory'
+    | '/outbound-report'
     | '/product-incoming-inspection'
     | '/report'
     | '/transfer-management'
-    | '/warehouse-export'
     | '/warehouse'
     | '/preferences/account'
     | '/preferences/appearance-settings'
@@ -594,10 +594,10 @@ export interface FileRouteTypes {
     | '/finished-production-inoutbound'
     | '/inbound-report'
     | '/inventory'
+    | '/outbound-report'
     | '/product-incoming-inspection'
     | '/report'
     | '/transfer-management'
-    | '/warehouse-export'
     | '/warehouse'
     | '/preferences/account'
     | '/preferences/appearance-settings'
@@ -616,10 +616,10 @@ export interface FileRouteTypes {
     | '/(features)/_layout/finished-production-inoutbound/'
     | '/(features)/_layout/inbound-report/'
     | '/(features)/_layout/inventory/'
+    | '/(features)/_layout/outbound-report/'
     | '/(features)/_layout/product-incoming-inspection/'
     | '/(features)/_layout/report/'
     | '/(features)/_layout/transfer-management/'
-    | '/(features)/_layout/warehouse-export/'
     | '/(features)/_layout/warehouse/'
     | '/(features)/preferences/_layout/account/'
     | '/(features)/preferences/_layout/appearance-settings/'
@@ -673,10 +673,10 @@ export const routeTree = rootRoute
         "/(features)/_layout/finished-production-inoutbound/",
         "/(features)/_layout/inbound-report/",
         "/(features)/_layout/inventory/",
+        "/(features)/_layout/outbound-report/",
         "/(features)/_layout/product-incoming-inspection/",
         "/(features)/_layout/report/",
         "/(features)/_layout/transfer-management/",
-        "/(features)/_layout/warehouse-export/",
         "/(features)/_layout/warehouse/",
         "/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/"
       ]
@@ -722,6 +722,10 @@ export const routeTree = rootRoute
       "filePath": "(features)/_layout.inventory/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
+    "/(features)/_layout/outbound-report/": {
+      "filePath": "(features)/_layout.outbound-report/index.lazy.tsx",
+      "parent": "/(features)/_layout"
+    },
     "/(features)/_layout/product-incoming-inspection/": {
       "filePath": "(features)/_layout.product-incoming-inspection/index.lazy.tsx",
       "parent": "/(features)/_layout"
@@ -732,10 +736,6 @@ export const routeTree = rootRoute
     },
     "/(features)/_layout/transfer-management/": {
       "filePath": "(features)/_layout.transfer-management/index.lazy.tsx",
-      "parent": "/(features)/_layout"
-    },
-    "/(features)/_layout/warehouse-export/": {
-      "filePath": "(features)/_layout.warehouse-export/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/warehouse/": {

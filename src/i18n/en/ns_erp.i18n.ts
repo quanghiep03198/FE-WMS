@@ -23,6 +23,8 @@ export default {
 		or_no: 'Sub-manufacturing order',
 		or_qtyperpacking: 'Total Quantity per Box',
 		or_totalqty: 'Total quantity',
+		outbound_date: 'Outbound date',
+		outbound_qty: 'Outbound quantity',
 		order_qty: 'Order quantity',
 		packaging_code: 'Packaging number',
 		prod_color: 'Product color',

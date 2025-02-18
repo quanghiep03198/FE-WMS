@@ -10,10 +10,11 @@ export default {
 		caption: 'Data is streamed continuously from server when connection is established.'
 	},
 	description: {
+		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations every day',
+		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations every day',
 		exchange_all: 'You can exchange the whole EPC belongs to the selected size',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
-		inbound_report: 'View the scanned EPC data and perform warehouse inbound operations',
 		inoutbound_form_note: 'Disconnect before updating stock moves',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
 		order_size_detail:
@@ -105,9 +106,10 @@ export default {
 		transferred_data: 'Transferred data'
 	},
 	titles: {
+		daily_inbound_report: 'Daily inbound report',
+		daily_outbound_report: 'Daily outbound report',
 		exchange_epc: 'Exchange EPC',
 		exchange_order: 'Exchange manufacturing order',
-		inbound_report: 'Inbound report',
 		order_sizing_list: 'Order sizing list',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'
