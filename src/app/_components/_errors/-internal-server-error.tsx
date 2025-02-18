@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 type InternalServerErrorProps = React.ComponentProps<'svg'>
 
 const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ...props }) => {
@@ -877,4 +879,4 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 	)
 }
 
-export default InternalServerError
+export default memo(InternalServerError)
