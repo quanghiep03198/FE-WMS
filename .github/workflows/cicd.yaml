@@ -29,8 +29,6 @@ jobs:
       steps:
          - name: Checkout code
            uses: actions/checkout@v4
-           with:
-              fetch-depth: 0
 
          - name: Install pnpm
            uses: pnpm/action-setup@v4
@@ -44,7 +42,7 @@ jobs:
               cache: pnpm
 
          - name: Install dependencies
-           run: pnpm install
+           run: pnpm install --no-frozen-lockfile
 
          - name: Unit testing
            run: pnpm test
@@ -57,8 +55,7 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
            with:
-              fetch-dept: 0
-              clean: false
+              fetch-depth: 0
 
          - name: Load environment variables
            shell: bash
@@ -90,9 +87,8 @@ jobs:
          - name: Checkout code
            uses: actions/checkout@v4
            with:
-              fetch-dept: 0
-              clean: false
-
+              fetch-depth: 0
+              
          - name: Load environment variables
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
