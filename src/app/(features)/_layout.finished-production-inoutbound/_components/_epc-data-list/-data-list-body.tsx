@@ -312,7 +312,7 @@ const EpcDataList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[475px] @[1400px]:h-[500px] @[1500px]:h-[625px]'>
+					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[500px] @[1400px]:h-[625px]'>
 					<Div
 						className='relative w-full'
 						style={{
