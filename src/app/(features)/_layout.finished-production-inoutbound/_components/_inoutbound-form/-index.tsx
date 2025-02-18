@@ -232,15 +232,10 @@ const InoutboundForm: React.FC = () => {
 												</Div>
 											</SelectTrigger>
 										</HoverCardTrigger>
-										<HoverCardContent side='top' align='start' sideOffset={8} className='w-96 space-y-4'>
+										<HoverCardContent side='top' align='start' sideOffset={8} className='w-96'>
 											<Typography variant='small'>
 												{t('ns_inoutbound:description.select_writable_database')}
 											</Typography>
-											<ul className='list-inside list-disc text-sm'>
-												<li>LianYing: Server 80.2</li>
-												<li>LianShun 2: Server 201.202</li>
-												<li>Cambodia: Server 5.1</li>
-											</ul>
 										</HoverCardContent>
 									</HoverCard>
 									<SelectContent>
