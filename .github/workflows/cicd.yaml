@@ -29,6 +29,8 @@ jobs:
       steps:
          - name: Checkout code
            uses: actions/checkout@v4
+           with:
+              fetch-depth: 0
 
          - name: Install pnpm
            uses: pnpm/action-setup@v4
@@ -54,6 +56,9 @@ jobs:
       steps:
          - name: Checkout code
            uses: actions/checkout@v4
+           with:
+              fetch-dept: 0
+              clean: false
 
          - name: Load environment variables
            shell: bash
@@ -61,15 +66,15 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: npm install --legacy-peer-deps
+           run: pnpm install
 
          - name: Generate PWA assets
            shell: bash
-           run: npm run generate-pwa-assets
+           run: pnpm generate-pwa-assets
 
          - name: Build the React app
            shell: bash
-           run: npm run build
+           run: pnpm build
 
          - name: Restart and save PM2 process
            shell: bash
@@ -84,6 +89,9 @@ jobs:
       steps:
          - name: Checkout code
            uses: actions/checkout@v4
+           with:
+              fetch-dept: 0
+              clean: false
 
          - name: Load environment variables
            shell: bash
@@ -91,15 +99,15 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: npm install --legacy-peer-deps
+           run: pnpm install
 
          - name: Generate PWA assets
            shell: bash
-           run: npm run generate-pwa-assets
+           run: pnpm generate-pwa-assets
 
          - name: Build the React app
            shell: bash
-           run: npm run build
+           run: pnpm build
 
          - name: Restart and save PM2 process
            shell: bash
