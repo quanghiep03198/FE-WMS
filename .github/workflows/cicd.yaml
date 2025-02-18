@@ -63,7 +63,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: pnpm install
+           run: pnpm install --no-frozen-lockfile
 
          - name: Generate PWA assets
            shell: bash
@@ -88,14 +88,14 @@ jobs:
            uses: actions/checkout@v4
            with:
               fetch-depth: 0
-              
+
          - name: Load environment variables
            shell: bash
            run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
 
          - name: Install dependencies
            shell: bash
-           run: pnpm install
+           run: pnpm install --no-frozen-lockfile
 
          - name: Generate PWA assets
            shell: bash
