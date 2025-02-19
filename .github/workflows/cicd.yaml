@@ -48,7 +48,7 @@ jobs:
            run: pnpm test
 
    deploy-server-19:
-      name: Deploy to server 19
+      name: Deploy to server 0.19
       runs-on: [self-hosted, Server-19]
       needs: test
       steps:
@@ -79,9 +79,9 @@ jobs:
               pm2 restart ecosystem.config.cjs
               pm2 save
 
-   deploy-server-51:
-      name: Deploy to server 51
-      runs-on: [self-hosted, Server-51]
+   deploy-server-5251:
+      name: Deploy to server 5.251
+      runs-on: [self-hosted, Server-5251]
       needs: test
       steps:
          - name: Checkout code
@@ -91,7 +91,7 @@ jobs:
 
          - name: Load environment variables
            shell: bash
-           run: echo "${{ secrets.ENV_VARIABLE_SVR51 }}" > .env.production
+           run: echo "${{ secrets.ENV_VARIABLE_SVR5251 }}" > .env.production
 
          - name: Install dependencies
            shell: bash
