@@ -65,6 +65,16 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
 				minSize: 200
 			}),
+			columnHelper.accessor('station_no', {
+				header: 'Station NO',
+				enableColumnFilter: true,
+				enableSorting: true,
+				minSize: 200,
+				filterFn: 'equals',
+				meta: {
+					filterVariant: 'select'
+				}
+			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				enableColumnFilter: true,

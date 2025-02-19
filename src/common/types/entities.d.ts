@@ -179,6 +179,7 @@ export interface IInOutBoundReport {
 export interface IInboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
 	inbound_qty: number
+	station_no: string
 	inbound_date: string | Date
 }
 export interface IOutboundReport extends IInOutBoundReport {
