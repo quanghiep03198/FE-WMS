@@ -64,7 +64,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: pnpm install
+           run: pnpm install --fix-lockfile
 
          - name: Generate PWA assets
            shell: bash
@@ -97,7 +97,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: pnpm install
+           run: pnpm install --fix-lockfile
 
          - name: Generate PWA assets
            shell: bash
