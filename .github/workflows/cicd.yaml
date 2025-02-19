@@ -42,7 +42,7 @@ jobs:
               cache: pnpm
 
          - name: Install dependencies
-           run: pnpm install --no-frozen-lockfile
+           run: pnpm install
 
          - name: Unit testing
            run: pnpm test
@@ -63,7 +63,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: pnpm install --no-frozen-lockfile
+           run: pnpm install
 
          - name: Generate PWA assets
            shell: bash
@@ -95,7 +95,7 @@ jobs:
 
          - name: Install dependencies
            shell: bash
-           run: pnpm install --no-frozen-lockfile
+           run: pnpm install
 
          - name: Generate PWA assets
            shell: bash
