@@ -25,7 +25,7 @@
 			"@/*": ["./src/*"]
 		},
 		/* Types */
-		"types": ["vite-plugin-pwa/client", "vite-plugin-pwa", "vitest/globals"]
+		"types": ["vite-plugin-pwa", "vite-plugin-pwa/client", "vite-plugin-pwa/pwa-assets", "vitest/globals"]
 	},
 	"include": ["src", "tests"],
 	"references": [
