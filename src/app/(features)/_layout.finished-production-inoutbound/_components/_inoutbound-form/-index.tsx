@@ -104,6 +104,7 @@ const InoutboundForm: React.FC = () => {
 	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
 	const { data: currentEpcData } = useGetEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
+		refetchOnMount: true,
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
 	})
