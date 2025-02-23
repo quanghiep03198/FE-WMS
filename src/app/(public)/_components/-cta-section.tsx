@@ -13,7 +13,7 @@ const CTASection: React.FC = () => {
 			id='cta'
 			as='section'
 			className='mx-auto flex max-w-7xl flex-grow flex-col items-center gap-10 xl:flex-row xl:gap-20 xxl:max-w-8xl'>
-			<Div className='flex flex-col items-center text-center xl:items-start xl:text-left'>
+			<Div className='flex animate-[fly-in_1.5s_ease] flex-col items-center text-center xl:items-start xl:text-left'>
 				<Button
 					onClick={() => handleMenuClick(1)}
 					variant='outline'
@@ -23,12 +23,15 @@ const CTASection: React.FC = () => {
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
 				<Typography variant='h3' className='mb-4 text-pretty sm:text-xl'>
-					Simplify Warehouse Management with i-WMS
+					Simplify Warehouse Management with{' '}
+					<span className='bg-gradient-to-r from-indigo-500 from-[25%] to-blue-500 bg-clip-text text-transparent'>
+						i-WMS
+					</span>
 				</Typography>
 				<Typography
 					variant='p'
 					className='mx-auto mb-10 max-w-4xl leading-relaxed tracking-wide sm:text-sm xl:max-w-6xl'>
-					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
+					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS . Our
 					comprehensive system provides the tools you need to manage your warehouse effortlessly.
 				</Typography>
 				<Div className='flex items-center justify-center gap-x-1'>
@@ -41,14 +44,7 @@ const CTASection: React.FC = () => {
 				</Div>
 			</Div>
 			<Div className='flex h-full w-full flex-grow flex-col items-center justify-center'>
-				<Image
-					loading='eager'
-					width='500'
-					height='500'
-					src='/global-transport.svg'
-					// src='https://res.cloudinary.com/djhwmxvxg/image/upload/v1732469652/global-transport.svg'
-					alt='Global transport'
-				/>
+				<Image loading='eager' width='500' height='500' src='/global-transport.svg' alt='Global transport' />
 			</Div>
 		</Div>
 	)

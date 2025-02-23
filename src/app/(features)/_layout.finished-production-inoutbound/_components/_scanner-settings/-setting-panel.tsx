@@ -11,7 +11,7 @@ const SettingPanel: React.FC = () => {
 
 	return (
 		<Div as='section' className='flex w-full flex-col gap-y-3'>
-			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg sm:text-base md:text-base'>
+			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 				{t('ns_common:titles.general_settings')}
 			</Typography>
 			<Div className='flex h-full flex-col items-stretch gap-x-4 gap-y-2 *:flex-1 @5xl:flex-row @5xl:flex-wrap-reverse'>

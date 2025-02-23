@@ -26,7 +26,7 @@ import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import { RFIDStreamEventData } from '../../_types'
 import createLogger from '../../_utils/log.util'
-import { DEFAULT_FP_RFID_SETTINGS, RFIDSettings } from '../../index.lazy'
+import { RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 20
@@ -90,8 +90,6 @@ const EpcDataList: React.FC = () => {
 	// * Manual fetch EPC
 	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
 
-	const pollingDuration = settings?.pollingDuration ?? DEFAULT_FP_RFID_SETTINGS.pollingDuration
-
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
@@ -102,8 +100,7 @@ const EpcDataList: React.FC = () => {
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
 					[RequestHeaders.TENANT_ID]: connection,
-					[RequestHeaders.USER_COMPANY]: user.company_code,
-					[RequestHeaders.POLLING_DURATION]: String(pollingDuration)
+					[RequestHeaders.USER_COMPANY]: user.company_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,

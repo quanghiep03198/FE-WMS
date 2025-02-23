@@ -1,19 +1,36 @@
 import { Div, Icon, Typography } from '@/components/ui'
+import { useInViewport } from 'ahooks'
+import { useRef } from 'react'
+import { usePageContext } from '../_contexts/-page-context'
 
 const SupportSection: React.FunctionComponent = () => {
+	const ref = useRef<HTMLDivElement>(null)
+	const pageContext = usePageContext()
+	const [inViewport] = useInViewport(ref, {
+		root: () => pageContext?.contentScrollRef?.current
+	})
+
 	return (
-		<Div id='cta' as='section' className='max-w-7xl space-y-8 xl:space-y-16'>
+		<Div
+			ref={ref}
+			id='cta'
+			as='section'
+			className='max-w-7xl animate-[fly-in_1.5s_ease] space-y-8 xl:space-y-16'
+			style={{
+				animationFillMode: 'both',
+				animationPlayState: inViewport ? 'running' : 'paused'
+			}}>
 			<Div className='space-y-4 text-center'>
 				<Typography variant='h3' className='sm:text-xl'>
 					Contact support
 				</Typography>
 				<Typography variant='p' className='sm:text-sm xl:text-lg'>
-					If you encounter any issues while using the application, don't hesitate to reach out for assistance.
+					If you encounter any issues while using the application, don&apos;t hesitate to reach out for assistance.
 				</Typography>
 			</Div>
 			<Div className='flex gap-x-6'>
-				<Div className='grid size-12 place-content-center rounded-lg bg-accent'>
-					<Icon name='Bug' size={24} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
+				<Div className='grid size-12 place-content-center rounded-lg bg-destructive/10'>
+					<Icon name='Bug' size={24} strokeWidth={1.5} stroke='hsl(var(--destructive))' aria-hidden='true' />
 				</Div>
 				<Div>
 					<Typography variant='h6' className='mb-1 text-base sm:text-sm'>
@@ -34,8 +51,8 @@ const SupportSection: React.FunctionComponent = () => {
 				</Div>
 			</Div>
 			<Div className='flex gap-x-6'>
-				<Div className='grid size-12 place-content-center rounded-lg bg-accent'>
-					<Icon name='Computer' size={24} strokeWidth={1.5} stroke='hsl(var(--primary))' aria-hidden='true' />
+				<Div className='grid size-12 place-content-center rounded-lg bg-active/10'>
+					<Icon name='Computer' size={24} strokeWidth={1.5} stroke='hsl(var(--active))' aria-hidden='true' />
 				</Div>
 				<Div>
 					<Typography variant='h6' className='mb-1 text-base sm:text-sm'>

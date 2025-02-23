@@ -1,7 +1,8 @@
 import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
 import DatePickerFilter from './_components/-date-picker-filter'
@@ -27,18 +28,21 @@ function Page() {
 	}, [i18n.language])
 
 	return (
-		<Div as='section' className='space-y-4'>
-			<Div className='flex w-full'>
-				<PageHeader className='flex-1'>
-					<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>
-					<PageDescription>{t('ns_inoutbound:description.daily_outbound_report')}</PageDescription>
-				</PageHeader>
-				<Div className='ml-auto sm:hidden'>
-					<DatePickerFilter />
+		<Fragment>
+			<Helmet title={t('ns_common:navigation.export_management')} />
+			<Div as='section' className='space-y-4'>
+				<Div className='flex w-full'>
+					<PageHeader className='flex-1'>
+						<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>
+						<PageDescription>{t('ns_inoutbound:description.daily_outbound_report')}</PageDescription>
+					</PageHeader>
+					<Div className='ml-auto sm:hidden'>
+						<DatePickerFilter />
+					</Div>
 				</Div>
+				<Separator />
+				<ReportDatalist />
 			</Div>
-			<Separator />
-			<ReportDatalist />
-		</Div>
+		</Fragment>
 	)
 }

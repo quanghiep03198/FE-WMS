@@ -1,12 +1,32 @@
 import { Div, Icon, Typography } from '@/components/ui'
+import { useInViewport } from 'ahooks'
+import { useRef } from 'react'
+import { usePageContext } from '../_contexts/-page-context'
+import AnimatedBorderCard from './-animated-border-card'
 import DeploymentGlobe from './-deployment-globe'
 
 const CTA2Section: React.FC = () => {
+	const pageContext = usePageContext()
+	const topSectionRef = useRef<HTMLDivElement>(null)
+	const bottomSectionRef = useRef<HTMLDivElement>(null)
+	const [topSectionInViewPort] = useInViewport(topSectionRef, {
+		root: () => pageContext?.contentScrollRef?.current
+	})
+	const [bottomSectionInViewPort] = useInViewport(bottomSectionRef, {
+		root: () => pageContext?.contentScrollRef?.current
+	})
+
 	return (
 		<Div>
-			<Div className='grid grid-cols-1 items-center gap-10 lg:grid-cols-2 xl:grid-cols-2 xxl:grid-cols-[1fr_1.5fr]'>
+			<Div
+				ref={topSectionRef}
+				className='grid animate-[fly-in_1.5s] grid-cols-1 items-center gap-10 lg:grid-cols-2 xl:grid-cols-2 xxl:grid-cols-[1fr_1.5fr]'
+				style={{
+					animationFillMode: 'both',
+					animationPlayState: topSectionInViewPort ? 'running' : 'paused'
+				}}>
 				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center'>
-					<Typography variant='small' className='font-jetbrains'>
+					<Typography variant='small' className='font-jetbrains text-active'>
 						EDGE DEPLOYMENT
 					</Typography>
 					<Typography variant='h3' className='text-pretty sm:text-lg'>
@@ -18,15 +38,26 @@ const CTA2Section: React.FC = () => {
 						today
 					</Typography>
 				</Div>
-				<Div className='relative flex justify-end'>
+				<Div
+					className='relative flex animate-none justify-end'
+					style={{
+						animationFillMode: 'both',
+						animationPlayState: topSectionInViewPort ? 'running' : 'paused'
+					}}>
 					<DeploymentGlobe />
 				</Div>
 			</Div>
-			<Div className='grid w-full grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 xl:-translate-y-1/4'>
+			<Div
+				ref={bottomSectionRef}
+				className='grid w-full animate-[fly-in_1.5s_ease_0.25s] grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 xl:-translate-y-1/4'
+				style={{
+					animationFillMode: 'both',
+					animationPlayState: bottomSectionInViewPort ? 'running' : 'paused'
+				}}>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-md bg-accent'>
+					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon name='Rocket' size={24} strokeWidth={1.5} />
-					</Div>
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold'>Automatically Deployment</Typography>
 						<Typography variant='small' color='muted'>
@@ -36,9 +67,9 @@ const CTA2Section: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-md bg-accent sm:col-span-1'>
+					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon name='CloudCog' size={24} strokeWidth={1.5} />
-					</Div>
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Fully managed</Typography>
 						<Typography variant='small' color='muted'>
@@ -48,9 +79,9 @@ const CTA2Section: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-md bg-accent sm:col-span-1'>
+					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon name='Blocks' size={24} strokeWidth={1.5} />
-					</Div>
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Mornitoring</Typography>
 						<Typography variant='small' color='muted'>
@@ -60,9 +91,9 @@ const CTA2Section: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-md bg-accent'>
+					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon name='Server' size={24} strokeWidth={1.5} />
-					</Div>
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Server & Backup</Typography>
 						<Typography variant='small' color='muted'>

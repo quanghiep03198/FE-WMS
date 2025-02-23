@@ -21,21 +21,20 @@ module.exports = {
 				'3/4': '75%'
 			},
 			transitionProperty: {
-				height: 'height',
-				'max-height': 'max-height',
-				width: 'width',
-				spacing: 'margin, padding'
+				['height']: 'height',
+				['max-height']: 'max-height',
+				['width']: 'width',
+				['spacing']: 'margin, padding'
 			},
 			width: {
-				88: '22rem',
-				'1/8': '`${(1 / 8) * 100}%`',
-				'1/12': '`${(1 / 12) * 100}%`'
+				['88']: '22rem',
+				['1/8']: '`${(1 / 8) * 100}%`',
+				['1/12']: '`${(1 / 12) * 100}%`'
 			},
 			fontFamily: {
 				jetbrains: 'JetBrains Mono, monospace'
 			},
 			colors: {
-				active: 'hsl(var(--active))',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -49,6 +48,10 @@ module.exports = {
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
+				},
+				active: {
+					DEFAULT: 'hsl(var(--active))',
+					foreground: 'hsl(var(--active-foreground))'
 				},
 				success: {
 					DEFAULT: 'hsl(var(--success))',
@@ -120,7 +123,7 @@ module.exports = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
-				'accordion-down': {
+				['accordion-down']: {
 					from: {
 						height: '0'
 					},
@@ -128,7 +131,7 @@ module.exports = {
 						height: 'var(--radix-accordion-content-height)'
 					}
 				},
-				'accordion-up': {
+				['accordion-up']: {
 					from: {
 						height: 'var(--radix-accordion-content-height)'
 					},
@@ -136,7 +139,7 @@ module.exports = {
 						height: '0'
 					}
 				},
-				'collapsible-down': {
+				['collapsible-down']: {
 					from: {
 						height: '0'
 					},
@@ -144,7 +147,7 @@ module.exports = {
 						height: 'var(--radix-collapsible-content-height)'
 					}
 				},
-				'collapsible-up': {
+				['collapsible-up']: {
 					from: {
 						height: 'var(--radix-collapsible-content-height)'
 					},
@@ -152,7 +155,7 @@ module.exports = {
 						height: '0'
 					}
 				},
-				'collapsible-up-reverse': {
+				['collapsible-up-reverse']: {
 					from: {
 						height: '0'
 					},
@@ -160,7 +163,7 @@ module.exports = {
 						height: 'var(--radix-collapsible-content-height)'
 					}
 				},
-				'collapsible-down-reverse': {
+				['collapsible-down-reverse']: {
 					from: {
 						height: 'var(--radix-collapsible-content-height)'
 					},
@@ -168,14 +171,14 @@ module.exports = {
 						height: '0'
 					}
 				},
-				'fade-in': {
+				['fade-in']: {
 					from: { transform: 'scale(0.95)', opacity: 0 },
 					to: {
 						transform: 'scale(1)',
 						opacity: '1'
 					}
 				},
-				'fall-down': {
+				['fall-down']: {
 					from: {
 						transform: 'translateY(0)'
 					},
@@ -184,7 +187,7 @@ module.exports = {
 						width: 0
 					}
 				},
-				'fly-in': {
+				['fly-in']: {
 					from: {
 						transform: 'translateY(1.5rem)',
 						opacity: 0
@@ -194,7 +197,7 @@ module.exports = {
 						opacity: 1
 					}
 				},
-				'fly-in-out': {
+				['fly-in-out']: {
 					'0%': {
 						transform: 'translateY(1.5rem)',
 						opacity: 0
@@ -208,7 +211,12 @@ module.exports = {
 						opacity: 0
 					}
 				},
-				'slide-in': {
+				['border-spin']: {
+					'100%': {
+						transform: 'rotate(-360deg)'
+					}
+				},
+				['slide-in']: {
 					from: {
 						transform: 'translate3d(0,-100%,0)'
 					},
@@ -216,7 +224,7 @@ module.exports = {
 						transform: 'translateZ(0)'
 					}
 				},
-				shimmer: {
+				['shimmer']: {
 					from: {
 						backgroundPosition: '0 0'
 					},
@@ -224,7 +232,7 @@ module.exports = {
 						backgroundPosition: '-200% 0'
 					}
 				},
-				spotlight: {
+				['spotlight']: {
 					from: {
 						opacity: '0',
 						transform: 'translate(-75%, -60%) scale(0.5)'
@@ -236,19 +244,20 @@ module.exports = {
 				}
 			},
 			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out',
-				'collapsible-up': 'collapsible-up 0.2s ease-out',
-				'collapsible-down': 'collapsible-down 0.2s ease-out',
-				'collapsible-up-reverse': 'collapsible-up-reverse 0.2s ease-out',
-				'collapsible-down-reverse': 'collapsible-down-reverse 0.2s ease-out',
-				'fade-in': 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
-				'slide-in': 'slide-in .3s ease-out 0.75s both',
-				'fly-in': 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
-				'fly-in-out': 'fly-in-out 1s linear',
-				'fall-down': 'fall-down 1s linear',
-				spotlight: 'spotlight 1.5s ease 0.5s forwards',
-				shimmer: 'shimmer 1.5s linear infinite'
+				['accordion-down']: 'accordion-down 0.2s ease-out',
+				['accordion-up']: 'accordion-up 0.2s ease-out',
+				['collapsible-up']: 'collapsible-up 0.2s ease-out',
+				['collapsible-down']: 'collapsible-down 0.2s ease-out',
+				['collapsible-up-reverse']: 'collapsible-up-reverse 0.2s ease-out',
+				['collapsible-down-reverse']: 'collapsible-down-reverse 0.2s ease-out',
+				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
+				['slide-in']: 'slide-in .3s ease-out 0.75s both',
+				['fly-in']: 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
+				['fly-in-out']: 'fly-in-out 1s linear',
+				['fall-down']: 'fall-down 1s linear',
+				['border-spin']: 'border-spin 7s linear infinite',
+				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
+				['shimmer']: 'shimmer 1.5s linear infinite'
 			}
 		}
 	},

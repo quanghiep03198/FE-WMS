@@ -43,14 +43,24 @@ const faqs = [
 ]
 
 const FAQsSection: React.FunctionComponent = () => {
-	const ref = useRef<HTMLDivElement>(null)
+	const containerRef = useRef<HTMLDivElement>(null)
+	const chatBoxRef = useRef<HTMLDivElement>(null)
 	const pageContext = usePageContext()
-	const [inViewport] = useInViewport(ref, {
+	const [containerInViewPort] = useInViewport(containerRef, {
+		root: () => pageContext?.contentScrollRef?.current
+	})
+	const [chatInViewPort] = useInViewport(chatBoxRef, {
 		root: () => pageContext?.contentScrollRef?.current
 	})
 
 	return (
-		<Div className='flex w-full flex-grow flex-col-reverse items-start gap-10 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'>
+		<Div
+			ref={containerRef}
+			className='flex w-full flex-grow animate-[fly-in_1.5s_ease] flex-col-reverse items-start gap-10 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'
+			style={{
+				animationFillMode: 'both',
+				animationPlayState: containerInViewPort ? 'running' : 'paused'
+			}}>
 			<Div
 				id='faqs'
 				as='section'
@@ -71,12 +81,12 @@ const FAQsSection: React.FunctionComponent = () => {
 			</Div>
 			<Div className='flex max-h-[28rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
-					<Div className='size-3 rounded-full bg-muted-foreground' />
-					<Div className='size-3 rounded-full bg-muted-foreground' />
-					<Div className='size-3 rounded-full bg-muted-foreground' />
+					<Div className='size-3 rounded-full bg-destructive' />
+					<Div className='size-3 rounded-full bg-warning' />
+					<Div className='size-3 rounded-full bg-success' />
 				</Div>
 				<Typography className='py-2 text-center font-medium'>FAQs</Typography>
-				<ScrollShadow ref={ref} className='flex h-52 flex-1 flex-col gap-y-3 p-4'>
+				<ScrollShadow ref={chatBoxRef} className='flex h-52 flex-1 flex-col gap-y-3 p-4'>
 					{faqs.map((faq, index) => (
 						<Fragment key={index}>
 							<Div
@@ -84,7 +94,7 @@ const FAQsSection: React.FunctionComponent = () => {
 								style={{
 									animationDelay: `${index / 2 + 0.35}s`,
 									animationFillMode: 'both',
-									animationPlayState: inViewport ? 'running' : 'paused'
+									animationPlayState: chatInViewPort ? 'running' : 'paused'
 								}}>
 								<Avatar>
 									<Avatar>
@@ -98,12 +108,12 @@ const FAQsSection: React.FunctionComponent = () => {
 								style={{
 									animationDelay: `${index / 2 + 0.65}s`,
 									animationFillMode: 'both',
-									animationPlayState: inViewport ? 'running' : 'paused'
+									animationPlayState: chatInViewPort ? 'running' : 'paused'
 								}}>
 								<Avatar className='animate-fade-in'>
 									<AvatarImage src={generateAvatar({ name: 'A' })} />
 								</Avatar>
-								<ChatBubble variant='primary'>{faq.answer}</ChatBubble>
+								<ChatBubble variant='active'>{faq.answer}</ChatBubble>
 							</Div>
 						</Fragment>
 					))}

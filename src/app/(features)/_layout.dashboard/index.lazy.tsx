@@ -23,8 +23,7 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title='Warehouse Management' />
-
+			<Helmet title={t('ns_common:navigation.dashboard')} />
 			<Container>
 				<Statistics />
 				<InoutboundOverview />
