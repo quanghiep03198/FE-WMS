@@ -23,10 +23,7 @@ const CTASection: React.FC = () => {
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
 				<Typography variant='h3' className='mb-4 text-pretty sm:text-xl'>
-					Simplify Warehouse Management with{' '}
-					<span className='bg-gradient-to-r from-indigo-500 from-[25%] to-blue-500 bg-clip-text text-transparent'>
-						i-WMS
-					</span>
+					Simplify Warehouse Management with <span className='text-active'>i-WMS</span>
 				</Typography>
 				<Typography
 					variant='p'

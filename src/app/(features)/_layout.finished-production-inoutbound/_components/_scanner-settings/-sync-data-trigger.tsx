@@ -3,10 +3,11 @@ import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
 import env from '@/common/utils/env'
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { ThirdPartyApiService } from '@/services/third-party-api.service'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useResetState } from 'ahooks'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
@@ -17,10 +18,11 @@ type SyncProcessState = {
 }
 
 const SyncDataTrigger: React.FC = () => {
-	const { t } = useTranslation()
-	const [state, setState] = useState<SyncProcessState[]>([])
+	const { t, i18n } = useTranslation()
+	const [state, setState, resetState] = useResetState<SyncProcessState[]>([])
 	const { user, token } = useAuth()
 	const { data: tenants } = useGetTenantByFactory()
+	const abortControllerRef = useRef<AbortController>(null)
 
 	const currentTenant = useMemo(() => {
 		if (Array.isArray(tenants) && tenants.length > 0) {
@@ -42,14 +44,18 @@ const SyncDataTrigger: React.FC = () => {
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
+		abortControllerRef.current = new AbortController()
+
 		try {
 			await fetchEventSource(env('VITE_API_BASE_URL') + '/third-party-api/sync-state', {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
 					[RequestHeaders.TENANT_ID]: currentTenant?.id,
-					[RequestHeaders.USER_COMPANY]: user.company_code
+					[RequestHeaders.USER_COMPANY]: user.company_code,
+					[RequestHeaders.ACCEPT_LANGUAGE]: i18n.language
 				},
+				signal: abortControllerRef.current?.signal,
 				openWhenHidden: true,
 				onmessage(event) {
 					setState(JSON.parse(event.data) satisfies SyncProcessState[])
@@ -68,9 +74,15 @@ const SyncDataTrigger: React.FC = () => {
 		}
 	}
 
+	const handleRefresh = () => {
+		abortControllerRef.current.abort()
+		fetchServerEvent()
+		resetState()
+	}
+
 	useEffect(() => {
 		if (currentTenant) fetchServerEvent()
-	}, [currentTenant])
+	}, [currentTenant, abortControllerRef])
 
 	return (
 		<Div as='section' className='flex w-full flex-col gap-y-3'>
@@ -80,8 +92,16 @@ const SyncDataTrigger: React.FC = () => {
 			<Div className='flex flex-col items-stretch gap-6 rounded-md border p-4'>
 				<Div className='grid grid-cols-[3fr,1fr] gap-4'>
 					<Div className='space-y-1'>
-						<Typography variant='small' className='font-semibold'>
+						<Typography variant='small' className='inline-flex items-center gap-x-3 font-semibold'>
 							{t('ns_inoutbound:scanner_setting.synchronization_trigger')}
+							<Tooltip
+								message={t('ns_common:actions.reload')}
+								triggerProps={{ asChild: true }}
+								contentProps={{ side: 'top', sideOffset: 8 }}>
+								<button onClick={() => handleRefresh()}>
+									<Icon name='RotateCw' stroke='hsl(var(--active))' />
+								</button>
+							</Tooltip>
 						</Typography>
 						<Typography variant='small' color='muted' className='text-pretty'>
 							{t('ns_inoutbound:scanner_setting.synchronization_trigger_description')}
@@ -117,14 +137,14 @@ const SyncDataTrigger: React.FC = () => {
 										className={item.status === 'processing' && 'animate-spin'}
 										size={18}
 									/>
-									{item.name}
+									{t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
 								</StepItem>
 							)
 						})}
 					</StepList>
 				) : (
 					<Div className='grid h-32 place-content-center rounded-md bg-muted text-center text-sm text-muted-foreground'>
-						No sync process is running
+						{t('ns_rfid:no_sync_process')}
 					</Div>
 				)}
 			</Div>
@@ -133,6 +153,6 @@ const SyncDataTrigger: React.FC = () => {
 }
 
 const StepList = tw.ul`grid gap-y-4 bg-secondary rounded-md p-4`
-const StepItem = tw.li`animate-[fade-in_0.75s_ease-out] flex items-center text-sm gap-2 text-ellipsis`
+const StepItem = tw.li`animate-[fade-in_0.5s_ease_0.25s_both] flex items-center text-sm gap-2 text-ellipsis`
 
 export default SyncDataTrigger

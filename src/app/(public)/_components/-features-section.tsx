@@ -2,6 +2,7 @@ import { Div, Icon, IconProps, Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import { usePageContext } from '../_contexts/-page-context'
+import AnimatedBorderCard from './-animated-border-card'
 
 type FeatureItemProps = {
 	icon: IconProps['name']
@@ -45,9 +46,9 @@ const FeaturesSection: React.FunctionComponent = () => {
 					} as React.CSSProperties
 				}>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-background drop-shadow-[0px_0px_4px_var(--green)]'>
-						<Icon name='Warehouse' strokeWidth={1.5} size={24} stroke='var(--green)' />
-					</Div>
+					<AnimatedBorderCard className='aspect-square size-12'>
+						<Icon name='Warehouse' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Inventory Tracking and Control</Typography>
 						<Typography variant='small' color='muted'>
@@ -57,9 +58,9 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-background drop-shadow-[0px_0px_4px_var(--cyan)]'>
-						<Icon name='ScanBarcode' strokeWidth={1.5} size={24} stroke='var(--cyan)' className='' />
-					</Div>
+					<AnimatedBorderCard className='aspect-square size-12'>
+						<Icon name='ScanBarcode' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Barcode Scanning and RFID Integration</Typography>
 						<Typography variant='small' color='muted'>
@@ -70,9 +71,9 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-background drop-shadow-[0px_0px_4px_var(--fuchisa)]'>
-						<Icon name='FileText' strokeWidth={1.5} size={24} stroke='var(--fuchisa)' />
-					</Div>
+					<AnimatedBorderCard className='aspect-square size-12'>
+						<Icon name='FileText' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Reporting and Analytics</Typography>
 						<Typography variant='small' color='muted'>
@@ -82,9 +83,9 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-background drop-shadow-[0px_0px_4px_var(--indigo)]'>
-						<Icon name='Languages' strokeWidth={1.5} size={24} stroke='var(--indigo)' />
-					</Div>
+					<AnimatedBorderCard className='aspect-square size-12'>
+						<Icon name='Languages' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Multi-Language Support</Typography>
 						<Typography
@@ -96,9 +97,6 @@ const FeaturesSection: React.FunctionComponent = () => {
 						/>
 					</Div>
 				</Div>
-				{/* {mainFeatures.map((item, index) => (
-					<FeatureItem {...item} key={index} />
-				))} */}
 			</Div>
 		</Div>
 	)

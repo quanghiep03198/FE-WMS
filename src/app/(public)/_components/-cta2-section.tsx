@@ -56,7 +56,7 @@ const CTA2Section: React.FC = () => {
 				}}>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='Rocket' size={24} strokeWidth={1.5} />
+						<Icon name='Rocket' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold'>Automatically Deployment</Typography>
@@ -68,7 +68,7 @@ const CTA2Section: React.FC = () => {
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='CloudCog' size={24} strokeWidth={1.5} />
+						<Icon name='CloudCog' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Fully managed</Typography>
@@ -80,7 +80,7 @@ const CTA2Section: React.FC = () => {
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='Blocks' size={24} strokeWidth={1.5} />
+						<Icon name='Blocks' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Mornitoring</Typography>
@@ -92,7 +92,7 @@ const CTA2Section: React.FC = () => {
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='Server' size={24} strokeWidth={1.5} />
+						<Icon name='Server' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Server & Backup</Typography>
