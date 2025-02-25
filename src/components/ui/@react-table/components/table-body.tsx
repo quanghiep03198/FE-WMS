@@ -74,11 +74,12 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 									<Collapsible data-state={row.getIsExpanded() ? 'open' : 'closed'} open={row.getIsExpanded()}>
 										<CollapsibleContent
 											style={{
+												width: 'var(--table-width)',
 												position: 'sticky',
 												left: '0'
 												// maxWidth: `calc(${tableWrapperRef.current?.clientWidth}px - var(--scrollbar-width, 16px))`
 											}}
-											className='transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+											className='max-w- transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 											<Div className='p-4'>
 												{typeof renderSubComponent === 'function' && renderSubComponent({ table, row })}
 											</Div>

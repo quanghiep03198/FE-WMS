@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
+import { useSize } from 'ahooks'
 import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
@@ -94,8 +95,16 @@ function TableDataGrid<TData, TValue>({
 		return colSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
+	const wrapperRef = useRef<HTMLDivElement>(null)
+
+	const wrapperSize = useSize(wrapperRef)
+
 	return (
-		<Wrapper>
+		<Wrapper
+			ref={wrapperRef}
+			style={{
+				'--table-width': wrapperSize?.width + 'px'
+			}}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea tabIndex={0} ref={containerRef} {...containerProps}>
 				<Table
