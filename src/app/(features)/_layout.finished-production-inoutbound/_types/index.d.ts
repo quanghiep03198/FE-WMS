@@ -1,3 +1,5 @@
+import { IElectronicProductCode } from '@/common/types/entities'
+
 export type SearchCustOrderParams = {
 	'mo_no.eq': string
 	'mat_code.eq': string

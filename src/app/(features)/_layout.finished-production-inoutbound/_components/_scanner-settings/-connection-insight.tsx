@@ -66,7 +66,7 @@ const ConnectionInsight: React.FC = () => {
 
 	return (
 		<Div as='section' className='flex flex-shrink flex-col gap-y-3 @5xl:flex-grow'>
-			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg sm:text-base md:text-base'>
+			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.network_status')}
 			</Typography>
 			<Div className='flex-1 basis-full space-y-2 rounded-lg border p-4'>

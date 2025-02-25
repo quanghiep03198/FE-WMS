@@ -6,7 +6,8 @@ const chatBubbleVariant = cva('rounded-md max-w-64 text-sm p-3', {
 	variants: {
 		variant: {
 			primary: 'bg-primary text-primary-foreground',
-			secondary: 'bg-secondary text-secondary-foreground'
+			secondary: 'bg-secondary text-secondary-foreground',
+			active: 'bg-active text-active-foreground'
 		}
 	}
 })

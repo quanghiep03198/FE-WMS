@@ -5,9 +5,9 @@ const BrowserMockup: React.FC = () => {
 	return (
 		<Browser>
 			<BrowserToolbar>
-				<BrowserToolbarButton />
-				<BrowserToolbarButton />
-				<BrowserToolbarButton />
+				<BrowserToolbarButton className='bg-destructive' />
+				<BrowserToolbarButton className='bg-warning' />
+				<BrowserToolbarButton className='bg-success' />
 			</BrowserToolbar>
 			<Layout>
 				<LayoutSidebar className='sm:hidden'>
@@ -70,7 +70,7 @@ const BrowserMockup: React.FC = () => {
 
 const Browser = tw.div`grid xxl:h-[30rem] h-[26rem]  overflow-hidden w-full xxl:max-w-2xl max-w-xl grid-rows-[40px_auto] shadow-2xl divide-y divide-border rounded-[var(--radius)] border bg-background relative`
 const BrowserToolbar = tw.div`relative z-10 flex items-center gap-x-2 bg-secondary p-4 h-full`
-const BrowserToolbarButton = tw.div`size-3 rounded-full bg-background relative z-10`
+const BrowserToolbarButton = tw.div`size-3 rounded-full relative z-10`
 const Layout = tw.div`grid flex-1 sm:grid-cols-1 grid-cols-[1fr_2.5fr] overflow-hidden items-stretch`
 const LayoutSidebar = tw.div`flex h-full flex-col gap-4 border-r p-4 transition-height bg-background`
 const LayoutContent = tw.div`flex w-full flex-col items-stretch space-y-2 bg-secondary/20`

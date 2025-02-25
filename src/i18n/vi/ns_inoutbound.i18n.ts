@@ -98,7 +98,7 @@ export default {
 		preserve_log: 'Giữ log',
 		preserve_log_note: 'Không xóa nhật ký khi thiết lập lại',
 		synchronization_trigger: 'Kích hoạt đồng bộ',
-		synchronization_trigger_description: 'Kích hoạt cuộc gọi API để đồng bộ dữ liệu từ API của khách hàng nếu cần.',
+		synchronization_trigger_description: 'Kích hoạt đồng bộ dữ liệu từ API của khách hàng nếu tem không có chỉ lệnh.',
 		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',
 		toggle_fullscreen_note: 'Sử dụng chế độ toàn màn hình để có góc nhìn rộng hơn',
 		transferred_data: 'Dữ liệu đã chuyển'

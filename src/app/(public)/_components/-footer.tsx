@@ -58,12 +58,12 @@ const Footer: React.FC = () => {
 							Powered by
 						</Typography>
 						<Div className='inline-flex items-center gap-x-1'>
-							<Image src='/react.svg' alt='React' className='grayscale' />
+							<Image src='/react.svg' alt='React' className='' />
 							<Typography variant='small'>React</Typography>
 						</Div>
 						<Icon name='X' className='stroke-foreground' />
 						<Div className='inline-flex items-center gap-x-1'>
-							<Image src='/nest.svg' alt='Laravel' className='grayscale' />
+							<Image src='/nest.svg' alt='Laravel' className='' />
 							<Typography variant='small'>Nest</Typography>
 						</Div>
 					</Div>
