@@ -3,7 +3,7 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
-import { Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
+import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
@@ -38,6 +39,23 @@ const ReportDatalist: React.FC = () => {
 
 	const columns = useMemo(
 		() => [
+			columnHelper.display({
+				id: ROW_EXPANSION_COLUMN_ID,
+				header: '',
+				size: 50,
+				maxSize: 50,
+				enableResizing: false,
+				cell: ({ row }) => (
+					<button
+						className='w-full'
+						onClick={() => {
+							console.log(row.id)
+							row.toggleExpanded()
+						}}>
+						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
+					</button>
+				)
+			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
 				enableColumnFilter: true,
@@ -123,6 +141,8 @@ const ReportDatalist: React.FC = () => {
 			columns={columns}
 			data={data}
 			loading={isLoading}
+			enableExpanding={true}
+			renderSubComponent={({ row }) => <Div>{JSON.stringify(row)}</Div>}
 			toolbarProps={{
 				slotLeft: () => isSmallScreen && <DatePickerFilter />,
 				slotRight: () => (
