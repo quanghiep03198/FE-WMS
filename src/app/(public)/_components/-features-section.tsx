@@ -1,14 +1,8 @@
-import { Div, Icon, IconProps, Typography } from '@/components/ui'
+import { Div, Icon, Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import { usePageContext } from '../_contexts/-page-context'
 import AnimatedBorderCard from './-animated-border-card'
-
-type FeatureItemProps = {
-	icon: IconProps['name']
-	title: string
-	description: string
-}
 
 const FeaturesSection: React.FunctionComponent = () => {
 	const pageContext = usePageContext()
@@ -35,16 +29,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 					Comprehensive solutions for Warehouse Management
 				</Typography>
 			</Div>
-			<Div
-				className='grid items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'
-				style={
-					{
-						'--green': '#00bc7d',
-						'--cyan': '#00d3f2',
-						'--fuchisa': '#e12afb',
-						'--indigo': '#615fff'
-					} as React.CSSProperties
-				}>
+			<Div className='grid items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12'>
 						<Icon name='Warehouse' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />

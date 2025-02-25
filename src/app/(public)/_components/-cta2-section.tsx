@@ -91,7 +91,7 @@ const CTA2Section: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
-					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
+					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12 animate-shimmer bg-accent'>
 						<Icon name='Server' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
