@@ -103,7 +103,7 @@ function TableDataGrid<TData, TValue>({
 		<Wrapper
 			ref={wrapperRef}
 			style={{
-				'--table-width': wrapperSize?.width + 'px'
+				'--table-width': wrapperSize?.width - 8 + 'px'
 			}}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea tabIndex={0} ref={containerRef} {...containerProps}>

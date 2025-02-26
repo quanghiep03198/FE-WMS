@@ -178,9 +178,15 @@ export interface IInOutBoundReport {
 
 export interface IInboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
-	inbound_qty: number
+	mat_ecolor: string
 	station_no: string
-	inbound_date: string | Date
+	daily_inbound_qty: number
+	accumulated_inbound_qty: number
+	missing_qty: number
+	size_run: Array<{
+		size_numcode: string
+		inbound_qty: number
+	}>
 }
 export interface IOutboundReport extends IInOutBoundReport {
 	shaping_dept_name: string

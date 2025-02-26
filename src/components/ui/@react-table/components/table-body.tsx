@@ -11,7 +11,7 @@ import { DataTableUtility } from '../utils/table.util'
 type TableBodyProps = {
 	table: TTable<any>
 	virtualizer: Virtualizer<HTMLDivElement, Element>
-	renderSubComponent: RenderSubComponent
+	renderSubComponent: RenderSubComponent<any>
 }
 
 export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
@@ -70,17 +70,19 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 							<TableRow data-index={virtualRow.index}>
 								<TableCell
 									colSpan={row.getVisibleCells().length}
-									className={cn('p-0', !row.getIsExpanded() ? 'border-none shadow-none' : 'shadow-inner')}>
+									className={cn(
+										'p-0',
+										!row.getIsExpanded() ? 'border-none shadow-none' : 'shadow-[inset_0_0px_4px_#17171725]'
+									)}>
 									<Collapsible data-state={row.getIsExpanded() ? 'open' : 'closed'} open={row.getIsExpanded()}>
 										<CollapsibleContent
 											style={{
 												width: 'var(--table-width)',
 												position: 'sticky',
 												left: '0'
-												// maxWidth: `calc(${tableWrapperRef.current?.clientWidth}px - var(--scrollbar-width, 16px))`
 											}}
-											className='max-w- transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
-											<Div className='p-4'>
+											className='overflow-auto bg-secondary/50 transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+											<Div className='flex items-center justify-center p-4'>
 												{typeof renderSubComponent === 'function' && renderSubComponent({ table, row })}
 											</Div>
 										</CollapsibleContent>

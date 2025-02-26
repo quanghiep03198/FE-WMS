@@ -1,10 +1,12 @@
 export default {
 	fields: {
+		accumulated_inbound_qty: '累计',
 		active_date: '入库日期',
 		brand_name: '品牌',
 		container_order_code: '出櫃單號',
 		conversion_rate: '換算率',
 		customer_order: '客户订单',
+		daily_inbound_qty: '日产量',
 		dept_code: '成型線',
 		dept_name: '更新部門',
 		employee_name: '建檔人姓名',
@@ -15,6 +17,8 @@ export default {
 		kg_noend: '結束箱號',
 		kg_nostart: '起始箱號',
 		mat_code: '成品料号',
+		mat_ecolor: '产品颜色',
+		missing_qty: '缺貨量',
 		mo_no: '指令碼',
 		mo_no_actual: '實際指令碼',
 		no_crates_in_stock: '入库箱数',

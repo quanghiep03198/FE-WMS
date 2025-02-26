@@ -80,7 +80,15 @@ type SortingProps =
 			onSortingChange?: React.Dispatch<React.SetStateAction<SortingState>>
 	  }
 
-export type RenderSubComponent = (props: { row: Row<TData & any>; table: Table<TData, TValue> }) => React.ReactElement
+type RenderSubComponentProps<TData = any, TValue = any> = {
+	row: Row<TData>
+	table: Table<TData, TValue>
+}
+
+export type RenderSubComponent<TData, TValue = any> = (props: {
+	row: Row<TData>
+	table: Table<TData, TValue>
+}) => React.ReactElement
 
 // #region Data table prop types
 export type DataTableProps<TData = any, TValue = any> = {
@@ -95,7 +103,7 @@ export type DataTableProps<TData = any, TValue = any> = {
 	sorting?: SortingState
 	initialState?: Partial<TableState>
 	onStateChange?: (instance: Table<TData, TValue>) => void
-	renderSubComponent?: RenderSubComponent
+	renderSubComponent?: (props: RenderSubComponentProps<TData, TValue>) => React.ReactElement
 } & Partial<TableOptions<any>> &
 	PaginationProps<TData> &
 	ColumnFilterProps &
