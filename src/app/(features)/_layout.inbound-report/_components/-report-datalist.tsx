@@ -3,10 +3,22 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
-import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import {
+	Badge,
+	Button,
+	DataTable,
+	Div,
+	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Tooltip
+} from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +27,8 @@ import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { RenderSubComponent } from '@/components/ui/@react-table/types'
+import { isNil } from 'lodash'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
@@ -41,16 +55,20 @@ const ReportDatalist: React.FC = () => {
 		() => [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
-				header: '',
+				header: ({ table }) => (
+					<button onClick={() => table.toggleAllRowsExpanded(false)}>
+						<Icon name='SquareMinus' />
+					</button>
+				),
 				size: 50,
 				maxSize: 50,
 				enableResizing: false,
-				cell: ({ row }) => (
+				cell: ({ row, table }) => (
 					<button
-						className='w-full'
+						className='absolute inset-0 flex h-full w-full items-center justify-center'
 						onClick={() => {
-							console.log(row.id)
-							row.toggleExpanded()
+							table.toggleAllRowsExpanded(false)
+							row.toggleExpanded(!row.getIsExpanded())
 						}}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
@@ -76,21 +94,31 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
 				minSize: 200
 			}),
-			columnHelper.accessor('shaping_dept_name', {
-				header: t('ns_erp:fields.shaping_dept_name'),
+			columnHelper.accessor('mat_ecolor', {
+				header: t('ns_erp:fields.mat_ecolor'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
 				minSize: 200
 			}),
-			columnHelper.accessor('station_no', {
-				header: 'Station NO',
+			columnHelper.accessor('shaping_dept_name', {
+				header: t('ns_erp:fields.shaping_dept_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				minSize: 200,
-				filterFn: 'equals',
-				meta: {
-					filterVariant: 'select'
+				filterFn: 'includesString',
+				cell: ({ getValue }) => {
+					const value = getValue()
+					// return value
+					return (
+						<Div className='space-x-1'>
+							{value.split(',').map((item) => (
+								<Badge key={item} variant='outline'>
+									{item}
+								</Badge>
+							))}
+						</Div>
+					)
 				}
 			}),
 			columnHelper.accessor('order_qty', {
@@ -102,8 +130,8 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('inbound_qty', {
-				header: t('ns_erp:fields.inbound_qty'),
+			columnHelper.accessor('daily_inbound_qty', {
+				header: t('ns_erp:fields.daily_inbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
@@ -111,15 +139,29 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('inbound_date', {
-				header: t('ns_erp:fields.inbound_date'),
+			columnHelper.accessor('accumulated_inbound_qty', {
+				header: t('ns_erp:fields.accumulated_inbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				enableResizing: true,
-				cell: ({ getValue }) => {
-					const value = getValue()
-					return format(value, 'yyyy-MM-dd')
-				}
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				minSize: 250
+			}),
+			columnHelper.display({
+				id: 'missing_qty',
+				header: t('ns_erp:fields.missing_qty'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ row }) => {
+					const { order_qty, accumulated_inbound_qty } = row.original
+					return !isNil(order_qty) && order_qty >= 0
+						? new Intl.NumberFormat().format(order_qty - accumulated_inbound_qty)
+						: 0
+				},
+				minSize: 250
 			})
 		],
 		[i18n.language]
@@ -129,7 +171,7 @@ const ReportDatalist: React.FC = () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		try {
 			const blob = await ReportService.downloadInboundReport(currentTenant?.id, searchParams)
-			saveAs(blob, `Inbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}.xlsx`)
+			saveAs(blob, `Inbound Report ~ ${searchParams['date.eq']}.xlsx`)
 			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		} catch {
 			toast.error('ns_common:notification.error', { id: DOWNLOAD_INBOUND_REPORT_ID })
@@ -142,7 +184,12 @@ const ReportDatalist: React.FC = () => {
 			data={data}
 			loading={isLoading}
 			enableExpanding={true}
-			renderSubComponent={({ row }) => <Div>{JSON.stringify(row)}</Div>}
+			containerProps={{ className: 'h-[65vh]' }}
+			renderSubComponent={
+				(({ row }) => {
+					return <InboundReportDetailTable data={row.original?.size_run} />
+				}) satisfies RenderSubComponent<IInboundReport>
+			}
 			toolbarProps={{
 				slotLeft: () => isSmallScreen && <DatePickerFilter />,
 				slotRight: () => (
@@ -161,6 +208,44 @@ const ReportDatalist: React.FC = () => {
 				)
 			}}
 		/>
+	)
+}
+
+const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> = ({ data }) => {
+	const { t } = useTranslation()
+
+	return (
+		<Div className='w-1/3 overflow-clip rounded-md border'>
+			<Table className='table-fixed !border-none'>
+				<TableHeader>
+					<TableRow>
+						<TableHead className='w-20'>Size</TableHead>
+						<TableHead className='w-20'>{t('ns_erp:fields.inbound_qty')}</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{Array.isArray(data) && data.length > 0 ? (
+						data.map((item) => (
+							<TableRow key={item.size_numcode}>
+								<TableCell align='center' className='font-medium'>
+									{item.size_numcode}
+								</TableCell>
+								<TableCell align='center' className='w-10' key={item.inbound_qty}>
+									{item.inbound_qty}
+								</TableCell>
+								{data.length === 0 && <TableCell></TableCell>}
+							</TableRow>
+						))
+					) : (
+						<TableRow>
+							<TableCell align='center' colSpan={2} className='font-medium'>
+								No data
+							</TableCell>
+						</TableRow>
+					)}
+				</TableBody>
+			</Table>
+		</Div>
 	)
 }
 

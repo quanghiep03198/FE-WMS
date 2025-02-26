@@ -7,7 +7,7 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
 		<table
 			cellSpacing={0}
 			ref={ref}
-			className={cn('w-full caption-bottom border-collapse text-sm', className)}
+			className={cn('w-full caption-bottom border-collapse rounded-md border text-sm', className)}
 			{...props}
 		/>
 	)

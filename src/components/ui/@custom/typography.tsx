@@ -28,6 +28,7 @@ export const typographyVariants = cva('', {
 			primary: 'text-primary',
 			accent: 'text-accent',
 			active: 'text-active',
+			warning: 'text-warning',
 			secondary: 'text-secondary',
 			muted: 'text-muted-foreground',
 			success: 'text-success',
