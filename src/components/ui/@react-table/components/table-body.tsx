@@ -81,10 +81,8 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 												position: 'sticky',
 												left: '0'
 											}}
-											className='overflow-auto bg-secondary/50 transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
-											<Div className='flex items-center justify-center p-4'>
-												{typeof renderSubComponent === 'function' && renderSubComponent({ table, row })}
-											</Div>
+											className='overflow-auto bg-secondary/50 p-3 transition-all ease-in-out data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+											{typeof renderSubComponent === 'function' && renderSubComponent({ table, row })}
 										</CollapsibleContent>
 									</Collapsible>
 								</TableCell>

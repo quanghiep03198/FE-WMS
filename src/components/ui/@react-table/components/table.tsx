@@ -67,14 +67,11 @@ function TableDataGrid<TData, TValue>({
 
 		requestAnimationFrame(run)
 	}, [])
-
+	console.log(table.getExpandedRowModel().flatRows.length)
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
-		overscan:
-			table.getCanSomeRowsExpand() && table.getIsSomeRowsExpanded()
-				? table.getExpandedRowModel().flatRows.length
-				: 5,
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5,
 		getScrollElement: () => containerRef.current,
 		estimateSize: useCallback(() => ESTIMATE_SIZE, []),
 		measureElement:
@@ -96,7 +93,6 @@ function TableDataGrid<TData, TValue>({
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
 	const wrapperRef = useRef<HTMLDivElement>(null)
-
 	const wrapperSize = useSize(wrapperRef)
 
 	return (
