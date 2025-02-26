@@ -17,6 +17,7 @@ export default {
 		dismiss: '忽略',
 		export: '导出',
 		finish: '完成',
+		fold: '折叠',
 		load_more: '加载更多',
 		login: '登入',
 		logout: '登出',
