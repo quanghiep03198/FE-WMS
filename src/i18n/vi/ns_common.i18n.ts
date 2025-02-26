@@ -16,6 +16,7 @@ export default {
 		dismiss: 'Bỏ qua',
 		export: 'Xuất',
 		finish: 'Hoàn thành',
+		fold: 'Thu gọn',
 		load_more: 'Tải thêm',
 		login: 'Đăng nhập',
 		logout: 'Đăng xuất',

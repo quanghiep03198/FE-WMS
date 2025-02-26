@@ -17,6 +17,7 @@ export default {
 		dismiss: 'Dismiss',
 		export: 'Export',
 		finish: 'Finish',
+		fold: 'Fold',
 		load_more: 'Load more',
 		login: 'Log in',
 		logout: 'Log out',

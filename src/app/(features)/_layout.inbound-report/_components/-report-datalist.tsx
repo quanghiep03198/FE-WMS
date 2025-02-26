@@ -56,9 +56,13 @@ const ReportDatalist: React.FC = () => {
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: ({ table }) => (
-					<button onClick={() => table.toggleAllRowsExpanded(false)}>
-						<Icon name='SquareMinus' />
-					</button>
+					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
+						<button
+							className='absolute inset-0 flex h-full w-full items-center justify-center'
+							onClick={() => table.toggleAllRowsExpanded(false)}>
+							<Icon name='FoldVertical' stroke='hsl(var(--foreground))' />
+						</button>
+					</Tooltip>
 				),
 				size: 50,
 				maxSize: 50,
@@ -215,12 +219,12 @@ const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> =
 	const { t } = useTranslation()
 
 	return (
-		<Div className='w-1/3 overflow-clip rounded-md border'>
+		<Div className='w-1/4 overflow-clip rounded-md border'>
 			<Table className='table-fixed !border-none'>
 				<TableHeader>
 					<TableRow>
-						<TableHead className='w-20'>Size</TableHead>
-						<TableHead className='w-20'>{t('ns_erp:fields.inbound_qty')}</TableHead>
+						<TableHead>Size</TableHead>
+						<TableHead>{t('ns_erp:fields.inbound_qty')}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
