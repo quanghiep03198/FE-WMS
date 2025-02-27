@@ -176,10 +176,10 @@ export interface IInOutBoundReport {
 	order_qty: number
 	factory_code: string
 	mat_ecolor: string
-	accumulated_inbound_qty: number
+	accumulated_qty: number
 	size_run: Array<{
 		size_numcode: string
-		inbound_qty: number
+		qty: number
 	}>
 }
 

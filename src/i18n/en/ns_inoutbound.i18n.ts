@@ -110,6 +110,8 @@ export default {
 		daily_outbound_report: 'Daily outbound report',
 		exchange_epc: 'Exchange EPC',
 		exchange_order: 'Exchange manufacturing order',
+		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',
+		file_daily_outbound_report: 'Daily Outbound Report {{factory}} - {{date}}',
 		order_sizing_list: 'Order sizing list',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'

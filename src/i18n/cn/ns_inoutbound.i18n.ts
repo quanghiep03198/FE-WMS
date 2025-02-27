@@ -102,6 +102,8 @@ export default {
 		daily_outbound_report: '出庫报表',
 		exchange_epc: '交换 EPC',
 		exchange_order: '交换生产订单',
+		file_daily_inbound_report: '{{factory}}每日入库报告 - {date}',
+		file_daily_outbound_report: '{{factory}}每日出库报告 - {date}',
 		order_sizing_list: '指令及尺码列表',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表'

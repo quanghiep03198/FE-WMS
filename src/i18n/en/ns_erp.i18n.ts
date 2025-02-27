@@ -1,12 +1,13 @@
 export default {
 	fields: {
-		accumulated_inbound_qty: 'Accumulated inbound quantity',
+		accumulated_qty: 'Accumulated quantity',
 		brand_name: 'Customer branch name',
 		container_order_code: 'Container Order Code',
 		conversion_rate: 'Conversion rate',
 		customer_branch_id: 'Customer branch ID',
 		customer_order: 'Customer order code', //: Đặt đơn của khách
 		daily_inbound_qty: 'Daily inbound quantity',
+		daily_outbound_qty: 'Daily outbound quantity',
 		dept_name: 'Department',
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
