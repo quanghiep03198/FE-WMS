@@ -3,7 +3,19 @@ import { useAuth } from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IOutboundReport } from '@/common/types/entities'
-import { Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import {
+	Button,
+	DataTable,
+	Div,
+	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Tooltip
+} from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -14,6 +26,9 @@ import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 import { useGetOutboundReport } from '@/app/(features)/_apis/use-report.api'
+import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { RenderSubComponent } from '@/components/ui/@react-table/types'
+import { capitalize, isNil } from 'lodash'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
@@ -40,24 +55,63 @@ const ReportDatalist: React.FC = () => {
 
 	const columns = useMemo(
 		() => [
+			columnHelper.display({
+				id: ROW_EXPANSION_COLUMN_ID,
+				header: ({ table }) => (
+					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
+						<button
+							className='absolute inset-0 flex h-full w-full items-center justify-center'
+							onClick={() => table.toggleAllRowsExpanded(false)}>
+							<Icon name='FoldVertical' stroke='hsl(var(--foreground))' />
+						</button>
+					</Tooltip>
+				),
+				size: 50,
+				enableResizing: false,
+				cell: ({ row, table }) => (
+					<button
+						className='absolute inset-0 flex h-full w-full items-center justify-center'
+						onClick={() => {
+							table.toggleAllRowsExpanded(false)
+							row.toggleExpanded(!row.getIsExpanded())
+						}}>
+						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
+					</button>
+				)
+			}),
+
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				minSize: 200
+				minSize: 150,
+				meta: {
+					filterVariant: 'select'
+				}
 			}),
 			columnHelper.accessor('mat_code', {
 				header: t('ns_erp:fields.mat_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				minSize: 200
+				minSize: 150,
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				minSize: 200
+			}),
+			columnHelper.accessor('mat_ecolor', {
+				header: t('ns_erp:fields.mat_ecolor'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (value) return capitalize(value)
+					return 'Unknown'
+				},
 				minSize: 200
 			}),
 			columnHelper.accessor('order_qty', {
@@ -67,9 +121,18 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				minSize: 220
+			}),
+			columnHelper.accessor('accumulated_inbound_qty', {
+				header: t('ns_erp:fields.accumulated_inbound_qty'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('outbound_qty', {
+			columnHelper.accessor('daily_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -78,15 +141,20 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('outbound_date', {
-				header: t('ns_erp:fields.outbound_date'),
+			columnHelper.display({
+				id: 'missing_qty',
+				header: t('ns_erp:fields.missing_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				enableResizing: true,
-				cell: ({ getValue }) => {
-					const value = getValue()
-					return format(value, 'yyyy-MM-dd')
-				}
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ row }) => {
+					const { order_qty, accumulated_inbound_qty } = row.original
+					return !isNil(order_qty) && order_qty >= 0
+						? new Intl.NumberFormat().format(order_qty - accumulated_inbound_qty)
+						: 0
+				},
+				minSize: 200
 			})
 		],
 		[i18n.language]
@@ -108,6 +176,12 @@ const ReportDatalist: React.FC = () => {
 			columns={columns}
 			data={data}
 			loading={isLoading}
+			enableExpanding={true}
+			renderSubComponent={
+				(({ row }) => {
+					return <OutboundReportDetailTable data={row.original?.size_run} />
+				}) satisfies RenderSubComponent<IOutboundReport>
+			}
 			toolbarProps={{
 				slotLeft: () => isSmallScreen && <DatePickerFilter />,
 				slotRight: () => (
@@ -126,6 +200,44 @@ const ReportDatalist: React.FC = () => {
 				)
 			}}
 		/>
+	)
+}
+
+const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['size_run'] }> = ({ data }) => {
+	const { t } = useTranslation()
+
+	return (
+		<Div className='w-1/4 overflow-clip rounded-md border'>
+			<Table className='table-fixed !border-none'>
+				<TableHeader>
+					<TableRow>
+						<TableHead>Size</TableHead>
+						<TableHead>{t('ns_erp:fields.inbound_qty')}</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{Array.isArray(data) && data.length > 0 ? (
+						data.map((item) => (
+							<TableRow key={item.size_numcode}>
+								<TableCell align='center' className='font-medium'>
+									{item.size_numcode}
+								</TableCell>
+								<TableCell align='center' className='w-10' key={item.inbound_qty}>
+									{item.inbound_qty}
+								</TableCell>
+								{data.length === 0 && <TableCell></TableCell>}
+							</TableRow>
+						))
+					) : (
+						<TableRow>
+							<TableCell align='center' colSpan={2} className='font-medium'>
+								{t('ns_common:table.no_data')}
+							</TableCell>
+						</TableRow>
+					)}
+				</TableBody>
+			</Table>
+		</Div>
 	)
 }
 

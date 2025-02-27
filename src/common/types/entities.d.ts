@@ -174,23 +174,21 @@ export interface IInOutBoundReport {
 	mat_code: string
 	shoes_style_code_factory: string | null
 	order_qty: number
-}
-
-export interface IInboundReport extends IInOutBoundReport {
-	shaping_dept_name: string
 	factory_code: string
 	mat_ecolor: string
-	station_no: string
-	daily_inbound_qty: number
 	accumulated_inbound_qty: number
-	missing_qty: number
 	size_run: Array<{
 		size_numcode: string
 		inbound_qty: number
 	}>
 }
+
+export interface IInboundReport extends IInOutBoundReport {
+	shaping_dept_name: string
+	daily_inbound_qty: number
+	missing_qty: number
+}
 export interface IOutboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
-	outbound_qty: number
-	outbound_date: string | Date
+	daily_outbound_qty: number
 }
