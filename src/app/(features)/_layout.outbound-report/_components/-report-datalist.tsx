@@ -26,6 +26,7 @@ import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 import { useGetOutboundReport } from '@/app/(features)/_apis/use-report.api'
+import { factories } from '@/common/constants/constants'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { capitalize, isNil } from 'lodash'
@@ -123,8 +124,8 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 220
 			}),
-			columnHelper.accessor('accumulated_inbound_qty', {
-				header: t('ns_erp:fields.accumulated_inbound_qty'),
+			columnHelper.accessor('accumulated_qty', {
+				header: t('ns_erp:fields.accumulated_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
@@ -132,15 +133,7 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 250
 			}),
-			columnHelper.accessor('daily_outbound_qty', {
-				header: t('ns_erp:fields.outbound_qty'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				meta: { filterVariant: 'range', align: 'right' },
-				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
-				minSize: 250
-			}),
+
 			columnHelper.display({
 				id: 'missing_qty',
 				header: t('ns_erp:fields.missing_qty'),
@@ -149,12 +142,21 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
-					const { order_qty, accumulated_inbound_qty } = row.original
+					const { order_qty, accumulated_qty } = row.original
 					return !isNil(order_qty) && order_qty >= 0
-						? new Intl.NumberFormat().format(order_qty - accumulated_inbound_qty)
+						? new Intl.NumberFormat().format(order_qty - accumulated_qty)
 						: 0
 				},
 				minSize: 200
+			}),
+			columnHelper.accessor('daily_outbound_qty', {
+				header: t('ns_erp:fields.daily_outbound_qty'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				minSize: 250
 			})
 		],
 		[i18n.language]
@@ -164,7 +166,14 @@ const ReportDatalist: React.FC = () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		try {
 			const blob = await ReportService.downloadOutboundReport(currentTenant?.id, searchParams)
-			saveAs(blob, `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}.xlsx`)
+			saveAs(
+				blob,
+				t('ns_inoutbound:titles.file_daily_outbound_report', {
+					factory: t(factories[user.company_code], { ns: 'ns_common' }),
+					date: searchParams['date.eq'],
+					defaultValue: `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}.xlsx`
+				}) + '.xlsx'
+			)
 			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		} catch {
 			toast.error('ns_common:notification.error', { id: DOWNLOAD_INBOUND_REPORT_ID })
@@ -187,7 +196,11 @@ const ReportDatalist: React.FC = () => {
 				slotRight: () => (
 					<Fragment>
 						<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-							<Button size='icon' variant='outline' onClick={handleDownloadExcel}>
+							<Button
+								size='icon'
+								variant='outline'
+								onClick={handleDownloadExcel}
+								disabled={!data || data.length === 0}>
 								<Icon name='Download' />
 							</Button>
 						</Tooltip>
@@ -222,8 +235,8 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['size_run'] }>
 								<TableCell align='center' className='font-medium'>
 									{item.size_numcode}
 								</TableCell>
-								<TableCell align='center' className='w-10' key={item.inbound_qty}>
-									{item.inbound_qty}
+								<TableCell align='center' className='w-10' key={item.qty}>
+									{item.qty}
 								</TableCell>
 								{data.length === 0 && <TableCell></TableCell>}
 							</TableRow>
