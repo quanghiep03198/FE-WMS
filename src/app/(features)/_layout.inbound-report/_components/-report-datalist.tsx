@@ -18,9 +18,9 @@ import {
 	Tooltip
 } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
 import { saveAs } from 'file-saver'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
@@ -49,8 +49,12 @@ const ReportDatalist: React.FC = () => {
 	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
-
+	const dataTableRef = useRef<TTable<IInboundReport>>(null)
 	const columnHelper = createColumnHelper<IInboundReport>()
+
+	useEffect(() => {
+		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
+	}, [data])
 
 	const columns = useMemo(
 		() => [
@@ -207,6 +211,7 @@ const ReportDatalist: React.FC = () => {
 			data={data}
 			loading={isLoading}
 			enableExpanding={true}
+			ref={dataTableRef}
 			containerProps={{ className: 'h-[65vh]' }}
 			renderSubComponent={
 				(({ row }) => {
