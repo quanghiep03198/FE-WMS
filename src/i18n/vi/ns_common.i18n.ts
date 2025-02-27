@@ -46,7 +46,7 @@ export default {
 		approver: 'Người phê duyệt',
 		approver_time: 'Thời gian phê duyệt',
 		created_at: 'Ngày tạo',
-		factpry_code: 'Xưởng',
+		factory_code: 'Xưởng',
 		quantity: 'Số lượng',
 		remark: 'Ghi chú',
 		status: 'Trạng thái',

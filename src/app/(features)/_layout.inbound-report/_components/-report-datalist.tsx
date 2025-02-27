@@ -29,7 +29,7 @@ import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
 import { factories } from '@/common/constants/constants'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
-import { isNil } from 'lodash'
+import { capitalize, isNil } from 'lodash'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
@@ -70,7 +70,6 @@ const ReportDatalist: React.FC = () => {
 					</Tooltip>
 				),
 				size: 50,
-				maxSize: 50,
 				enableResizing: false,
 				cell: ({ row, table }) => (
 					<button
@@ -87,6 +86,8 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_common:common_fields.factory_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				minSize: 150,
+				size: 150,
 				meta: {
 					filterVariant: 'select',
 					facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
@@ -105,14 +106,17 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.mo_no'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				minSize: 200
+				minSize: 150,
+				meta: {
+					filterVariant: 'select'
+				}
 			}),
 			columnHelper.accessor('mat_code', {
 				header: t('ns_erp:fields.mat_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				minSize: 200
+				minSize: 150,
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
@@ -125,7 +129,11 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.mat_ecolor'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (value) return capitalize(value)
+					return 'Unknown'
+				},
 				minSize: 200
 			}),
 			columnHelper.accessor('shaping_dept_name', {
@@ -136,7 +144,6 @@ const ReportDatalist: React.FC = () => {
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
 					const value = getValue()
-					// return value
 					return (
 						<Div className='space-x-1'>
 							{value.split(',').map((item) => (
@@ -155,7 +162,7 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
-				minSize: 250
+				minSize: 220
 			}),
 			columnHelper.accessor('daily_inbound_qty', {
 				header: t('ns_erp:fields.daily_inbound_qty'),
@@ -164,7 +171,7 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
-				minSize: 250
+				minSize: 275
 			}),
 			columnHelper.accessor('accumulated_inbound_qty', {
 				header: t('ns_erp:fields.accumulated_inbound_qty'),
@@ -188,7 +195,7 @@ const ReportDatalist: React.FC = () => {
 						? new Intl.NumberFormat().format(order_qty - accumulated_inbound_qty)
 						: 0
 				},
-				minSize: 250
+				minSize: 200
 			})
 		],
 		[i18n.language]
@@ -267,7 +274,7 @@ const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> =
 					) : (
 						<TableRow>
 							<TableCell align='center' colSpan={2} className='font-medium'>
-								No data
+								{t('ns_common:table.no_data')}
 							</TableCell>
 						</TableRow>
 					)}
