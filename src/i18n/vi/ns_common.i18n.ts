@@ -46,6 +46,7 @@ export default {
 		approver: 'Người phê duyệt',
 		approver_time: 'Thời gian phê duyệt',
 		created_at: 'Ngày tạo',
+		factpry_code: 'Xưởng',
 		quantity: 'Số lượng',
 		remark: 'Ghi chú',
 		status: 'Trạng thái',
@@ -73,6 +74,11 @@ export default {
 			'Chúng tôi xin lỗi về sự bất tiện này. Bạn có thể thử lại hành động trước đó, nếu vẫn không giải quyết được, vui lòng gửi phản hồi cho chúng tôi mô tả lỗi bạn gặp phải. Chúng tôi sẽ khắc phục nhanh nhất có thể.',
 		'503': 'Tính Năng Không Khả Dụng',
 		'503_message': 'Tính năng đang trong quá trình phát triển / bảo trì. Vui lòng thử lại sau'
+	},
+	factory: {
+		VA1: 'Liên Dinh',
+		VB2: 'Liên Thuấn 2',
+		CA1: 'KHRU'
 	},
 	form_placeholder: {
 		fill: 'Nhập {{object}}...',

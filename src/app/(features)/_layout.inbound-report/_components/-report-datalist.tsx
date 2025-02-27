@@ -26,6 +26,7 @@ import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
+import { factories } from '@/common/constants/constants'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { isNil } from 'lodash'
@@ -77,6 +78,24 @@ const ReportDatalist: React.FC = () => {
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
 				)
+			}),
+			columnHelper.accessor('factory_code', {
+				header: t('ns_common:common_fields.factory_code'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
+						label: t(val, { ns: 'ns_common', defaultValue: val }),
+						value: key
+					}))
+				},
+				cell: ({ getValue }) => {
+					const factoryCode = getValue()
+					return factoryCode
+						? t(factories[factoryCode], { ns: 'ns_common', defaultValue: factoryCode })
+						: 'Unknown'
+				}
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),

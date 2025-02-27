@@ -46,6 +46,7 @@ export default {
 		approver: '審核人',
 		approver_time: '審核時間',
 		created_at: '创建日期',
+		factory_code: '工厂',
 		quantity: '數量',
 		remark: '管理人',
 		status: '狀態',
@@ -72,6 +73,11 @@ export default {
 			'我们对此不便深感抱歉。您可以重试之前的操作，如果仍然无法解决，请向我们发送反馈，描述您遇到的错误。我们会尽快修复。',
 		'503': '功能不可用',
 		'503_message': '功能正在开发/维护中。请稍后再试'
+	},
+	factory: {
+		VA1: '联盈',
+		VB2: '联舜二厂',
+		CA1: '柬埔寨'
 	},
 	form_placeholder: {
 		fill: 'Fill in {{object}}...',

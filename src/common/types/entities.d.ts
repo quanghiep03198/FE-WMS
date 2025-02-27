@@ -178,6 +178,7 @@ export interface IInOutBoundReport {
 
 export interface IInboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
+	factory_code: string
 	mat_ecolor: string
 	station_no: string
 	daily_inbound_qty: number

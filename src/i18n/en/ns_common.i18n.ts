@@ -46,6 +46,7 @@ export default {
 		approver: 'Approver',
 		approver_time: 'Approval time',
 		created_at: 'Created at',
+		factory_code: 'Factory code',
 		quantity: 'Quantity',
 		remark: 'Remark',
 		status: 'Status',
@@ -73,6 +74,11 @@ export default {
 			'We are so sorry about this inconvenience. You can retry previous action again, if it does not work, please send us a feedback to describe whar error that you have been encountered. We will try to fix it as soon as possible.',
 		'503': 'Service Unavailable',
 		'503_message': 'This feature is currently under development/maintenance. Please try again later.'
+	},
+	factory: {
+		VA1: 'Lian Ying',
+		VB2: 'Lian Shun 2',
+		CA1: 'KHRU'
 	},
 	form_placeholder: {
 		fill: 'Fill in {{object}}...',
