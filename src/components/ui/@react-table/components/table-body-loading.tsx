@@ -24,6 +24,7 @@ export function TableBodyLoading<T>({ prepareRows, table }: DataTableLoading<T>)
 						style={{
 							width: `calc(var(--col-${column?.id}-size) * 1px)`,
 							height: ESTIMATE_SIZE,
+							maxHeight: ESTIMATE_SIZE,
 							...DataTableUtility.getStickyOffsetPosition(column)
 						}}>
 						<Skeleton />
