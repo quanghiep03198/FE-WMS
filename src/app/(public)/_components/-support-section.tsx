@@ -15,7 +15,7 @@ const SupportSection: React.FunctionComponent = () => {
 			ref={ref}
 			id='cta'
 			as='section'
-			className='max-w-7xl animate-[fly-in_1.5s_ease] space-y-8 xl:space-y-16'
+			className='max-w-7xl animate-[fly-in_1s_ease] space-y-8 xl:space-y-16'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'

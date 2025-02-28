@@ -20,13 +20,13 @@ const CTA2Section: React.FC = () => {
 		<Div>
 			<Div
 				ref={topSectionRef}
-				className='grid animate-[fly-in_1.5s] grid-cols-1 items-center gap-10 lg:grid-cols-2 xl:grid-cols-2 xxl:grid-cols-[1fr_1.5fr]'
+				className='grid animate-[fly-in_1s_ease] grid-cols-1 items-center gap-10 lg:grid-cols-2 xl:grid-cols-2 xxl:grid-cols-[1fr_1.5fr]'
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: topSectionInViewPort ? 'running' : 'paused'
 				}}>
 				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center'>
-					<Typography variant='small' className='font-jetbrains text-active'>
+					<Typography variant='small' className='font-jetbrains'>
 						EDGE DEPLOYMENT
 					</Typography>
 					<Typography variant='h3' className='text-pretty sm:text-lg'>
@@ -49,14 +49,14 @@ const CTA2Section: React.FC = () => {
 			</Div>
 			<Div
 				ref={bottomSectionRef}
-				className='grid w-full animate-[fly-in_1.5s_ease_0.25s] grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 xl:-translate-y-1/4'
+				className='grid w-full animate-[fly-in_1s_ease_0.25s] grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 xl:-translate-y-1/4'
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: bottomSectionInViewPort ? 'running' : 'paused'
 				}}>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='Rocket' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='Rocket' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold'>Automatically Deployment</Typography>
@@ -68,7 +68,7 @@ const CTA2Section: React.FC = () => {
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='CloudCog' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='CloudCog' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Fully managed</Typography>
@@ -80,7 +80,7 @@ const CTA2Section: React.FC = () => {
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
-						<Icon name='Blocks' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='Blocks' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Mornitoring</Typography>
@@ -92,7 +92,7 @@ const CTA2Section: React.FC = () => {
 				</Div>
 				<Div className='flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12 animate-shimmer bg-accent'>
-						<Icon name='Server' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='Server' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Server & Backup</Typography>

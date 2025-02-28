@@ -24,7 +24,7 @@ import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
 	return (
-		<Div className='sticky top-0 z-20 h-20 border-b bg-background/90 mix-blend-overlay backdrop-blur-xl'>
+		<Div className='sticky top-0 z-20 h-20 border-b bg-background/90 mix-blend-overlay backdrop-blur-2xl'>
 			<Div
 				as='nav'
 				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
@@ -52,7 +52,7 @@ const NavHeaderMenu: React.FC = () => {
 					variant='link'
 					key={index}
 					onClick={() => handleMenuClick(index)}
-					className={cn(activeMenu === item.href && 'underline')}>
+					className={cn('text-foreground', activeMenu === item.href && 'underline')}>
 					{item.title}
 				</Button>
 			))}

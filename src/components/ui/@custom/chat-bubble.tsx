@@ -2,11 +2,12 @@ import { cn } from '@/common/utils/cn'
 import { cva, VariantProps } from 'class-variance-authority'
 import React from 'react'
 
-const chatBubbleVariant = cva('rounded-md max-w-64 text-sm p-3', {
+const chatBubbleVariant = cva('rounded-md max-w-64 text-sm p-3 hover:opacity-80 transtion-all duration-200', {
 	variants: {
 		variant: {
 			primary: 'bg-primary text-primary-foreground',
 			secondary: 'bg-secondary text-secondary-foreground',
+			success: 'bg-success text-success-foreground',
 			active: 'bg-active text-active-foreground'
 		}
 	}

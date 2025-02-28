@@ -56,7 +56,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={containerRef}
-			className='flex w-full flex-grow animate-[fly-in_1.5s_ease] flex-col-reverse items-start gap-10 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'
+			className='flex w-full flex-grow animate-[fly-in_1s_ease] flex-col-reverse items-start gap-10 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'
@@ -113,7 +113,7 @@ const FAQsSection: React.FunctionComponent = () => {
 								<Avatar className='animate-fade-in'>
 									<AvatarImage src={generateAvatar({ name: 'A' })} />
 								</Avatar>
-								<ChatBubble variant='active'>{faq.answer}</ChatBubble>
+								<ChatBubble variant='success'>{faq.answer}</ChatBubble>
 							</Div>
 						</Fragment>
 					))}

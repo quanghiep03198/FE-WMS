@@ -14,7 +14,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={ref}
-			className='flex animate-[fly-in_1.5s_ease] flex-col justify-center space-y-16 sm:space-y-8'
+			className='flex animate-[fly-in_1s_ease] flex-col justify-center space-y-16 sm:space-y-8'
 			id='outstanding-features'
 			as='section'
 			style={{
@@ -22,7 +22,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
 			<Div className='max-w-4xl space-y-1.5 text-left sm:text-center'>
-				<Typography variant='small' className='!text-base font-medium text-active sm:text-sm sm:font-normal'>
+				<Typography variant='small' className='!text-base font-medium sm:text-sm sm:font-normal'>
 					No more paperwork
 				</Typography>
 				<Typography variant='h3' className='sm:mb-4 sm:text-xl'>
@@ -32,7 +32,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 			<Div className='grid items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12'>
-						<Icon name='Warehouse' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='Warehouse' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Inventory Tracking and Control</Typography>
@@ -44,7 +44,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12'>
-						<Icon name='ScanBarcode' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='ScanBarcode' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Barcode Scanning and RFID Integration</Typography>
@@ -57,7 +57,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12'>
-						<Icon name='FileText' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='FileText' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Reporting and Analytics</Typography>
@@ -69,7 +69,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
 					<AnimatedBorderCard className='aspect-square size-12'>
-						<Icon name='Languages' strokeWidth={1.5} size={24} stroke='hsl(var(--active))' />
+						<Icon name='Languages' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Multi-Language Support</Typography>
