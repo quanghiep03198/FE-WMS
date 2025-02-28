@@ -86,34 +86,35 @@ const ReportDatalist: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				minSize: 150,
-				meta: {
-					filterVariant: 'select'
-				}
+				filterFn: 'fuzzy'
 			}),
 			columnHelper.accessor('mat_code', {
 				header: t('ns_erp:fields.mat_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				minSize: 150,
+				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				minSize: 200
+				minSize: 200,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('mat_ecolor', {
 				header: t('ns_erp:fields.mat_ecolor'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				filterFn: 'fuzzy',
+				minSize: 200,
 				cell: ({ getValue }) => {
 					const value = getValue()
 					if (value) return capitalize(value)
 					return 'Unknown'
-				},
-				minSize: 200
+				}
 			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
