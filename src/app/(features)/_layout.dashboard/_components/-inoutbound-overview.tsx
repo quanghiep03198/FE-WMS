@@ -25,7 +25,7 @@ const chartConfig = {
 	},
 	export: {
 		label: 'Export',
-		color: 'hsl(var(--chart-5))'
+		color: 'hsl(var(--chart-2))'
 	}
 } satisfies ChartConfig
 
@@ -49,7 +49,7 @@ const InoutboundOverview: React.FC = () => {
 				</Div>
 			</CardHeader>
 			<CardContent className='@container-norma @container'>
-				<ChartContainer className='@xs:h-72 @xl:h-80 @3xl:h-96 @5xl:h-[468px]' config={chartConfig}>
+				<ChartContainer className='@xs:h-72 @xl:h-80 @3xl:h-96 @4xl:h-[28rem]' config={chartConfig}>
 					<BarChart accessibilityLayer data={annuallInOutBoundStatistics}>
 						<CartesianGrid vertical={false} />
 						<XAxis
@@ -72,8 +72,8 @@ const InoutboundOverview: React.FC = () => {
 }
 
 const Card = tw.div`rounded-[var(--radius)] p-4 flex flex-col gap-4 shadow border justify-between bg-background`
-const CardContent = tw.div`flex flex-col gap-6`
 const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
+const CardContent = tw.div`flex flex-col gap-6`
 const CardTitle = tw.h6`font-medium text-sm`
 
 export default InoutboundOverview

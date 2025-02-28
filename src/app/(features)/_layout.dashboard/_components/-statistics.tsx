@@ -60,12 +60,12 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='col-span-full grid grid-cols-2 gap-2 @container lg:grid-cols-4 xl:col-span-1'>
+		<Div className='grid w-full grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-4 xxl:grid-cols-4'>
 			{statistics.map((stats, index) => (
 				<Card key={index}>
 					<CardHeader className='@container'>
 						<CardTitle className='@[200px]:text-sm'>{stats.category}</CardTitle>
-						<Icon name={stats.icon} size={18} />
+						<Icon name={stats.icon} size={20} />
 					</CardHeader>
 					<CardContent>
 						<Div className='space-y-0.5'>
@@ -82,14 +82,14 @@ const Statistics: React.FC = () => {
 								<defs>
 									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
 										<stop offset='1%' stopColor='hsl(var(--chart-1))' stopOpacity={0.8} />
-										<stop offset='99%' stopColor='hsl(var(--chart-3))' stopOpacity={0} />
+										<stop offset='99%' stopColor='hsl(var(--chart-1))' stopOpacity={0} />
 									</linearGradient>
 								</defs>
 								<Area
 									type='monotone'
 									dataKey={stats.dataField}
 									fillOpacity={0.8}
-									stroke='hsl(var(--chart-3))'
+									stroke='hsl(var(--chart-1))'
 									fill='url(#colorPv)'
 								/>
 							</AreaChart>
@@ -101,7 +101,7 @@ const Statistics: React.FC = () => {
 	)
 }
 
-const Card = tw.div`rounded-[var(--radius)] p-3 aspect-square flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
+const Card = tw.div`rounded-[var(--radius)] p-4 sm:p-3 flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
 const CardContent = tw.div`flex flex-col gap-6 justify-between flex-1`
 const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
 const CardTitle = tw.h6`font-medium text-xs`

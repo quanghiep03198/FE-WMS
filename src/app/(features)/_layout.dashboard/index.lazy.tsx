@@ -4,9 +4,7 @@ import { Fragment, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import DailyInboundReport from './_components/-daily-inbound-report'
 import InoutboundOverview from './_components/-inoutbound-overview'
-import TransactionOverview from './_components/-order-overview'
 import Statistics from './_components/-statistics'
 
 export const Route = createLazyFileRoute('/(features)/_layout/dashboard/')({
@@ -27,11 +25,10 @@ function Page() {
 			<Container>
 				<Statistics />
 				<InoutboundOverview />
-				<DailyInboundReport />
-				<TransactionOverview />
+				{/* <TransactionOverview /> */}
 			</Container>
 		</Fragment>
 	)
 }
 
-const Container = tw.div`grid grid-cols-3 gap-x-6 gap-y-10`
+const Container = tw.div`flex flex-col gap-y-6`
