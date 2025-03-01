@@ -60,7 +60,7 @@ jobs:
               clean: false
 
          - name: Load environment variables
-           shell: bash
+           shell: cmd
            run: echo "${{ secrets.ENV_VARIABLE_SVR19 }}" > .env.production
 
          - name: Install dependencies
@@ -94,7 +94,7 @@ jobs:
               clean: false
 
          - name: Load environment variables
-           shell: bash
+           shell: cmd
            run: echo "${{ secrets.ENV_VARIABLE_SVR201201 }}" > .env.production
 
          - name: Install dependencies
@@ -128,7 +128,7 @@ jobs:
               clean: false
 
          - name: Load environment variables
-           shell: bash
+           shell: cmd
            run: echo "${{ secrets.ENV_VARIABLE_SVR5251 }}" > .env.production
 
          - name: Install dependencies
