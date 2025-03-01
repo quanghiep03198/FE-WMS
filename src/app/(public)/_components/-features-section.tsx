@@ -8,7 +8,8 @@ const FeaturesSection: React.FunctionComponent = () => {
 	const pageContext = usePageContext()
 	const ref = useRef<HTMLDivElement>(null)
 	const [inViewport] = useInViewport(ref, {
-		root: () => pageContext?.contentScrollRef?.current
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
 	})
 
 	return (
@@ -31,7 +32,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 			</Div>
 			<Div className='grid items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12'>
+					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
 						<Icon name='Warehouse' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
@@ -43,7 +44,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12'>
+					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
 						<Icon name='ScanBarcode' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
@@ -56,7 +57,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12'>
+					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
 						<Icon name='FileText' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
@@ -68,7 +69,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 					</Div>
 				</Div>
 				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12'>
+					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
 						<Icon name='Languages' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>

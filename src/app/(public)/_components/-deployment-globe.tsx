@@ -37,7 +37,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 155 284'
 				className={cn(
-					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1s_both]',
+					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.125s_both]',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}
 				style={{ width: '15.244%', height: '41.24%', left: '38.8%', top: '31.2%' }}>
@@ -85,7 +85,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 261 144'
 				className={cn(
-					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1s_both]',
+					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.25s_both]',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}
 				style={{ width: '26.687%', height: '20.49%', left: '25.1%', top: '31.4%' }}>

@@ -47,10 +47,12 @@ const FAQsSection: React.FunctionComponent = () => {
 	const chatBoxRef = useRef<HTMLDivElement>(null)
 	const pageContext = usePageContext()
 	const [containerInViewPort] = useInViewport(containerRef, {
-		root: () => pageContext?.contentScrollRef?.current
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
 	})
 	const [chatInViewPort] = useInViewport(chatBoxRef, {
-		root: () => pageContext?.contentScrollRef?.current
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
 	})
 
 	return (

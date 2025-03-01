@@ -172,7 +172,7 @@ module.exports = {
 					}
 				},
 				['fade-in']: {
-					from: { transform: 'scale(0.95)', opacity: 0 },
+					from: { transform: 'scale(0.9)', opacity: 0 },
 					to: {
 						transform: 'scale(1)',
 						opacity: '1'
@@ -209,11 +209,6 @@ module.exports = {
 					'100%': {
 						transform: 'translateY(-1.5rem)',
 						opacity: 0
-					}
-				},
-				['border-spin']: {
-					'100%': {
-						transform: 'rotate(-360deg)'
 					}
 				},
 				['slide-in']: {
@@ -255,7 +250,6 @@ module.exports = {
 				['fly-in']: 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
 				['fly-in-out']: 'fly-in-out 1s linear',
 				['fall-down']: 'fall-down 1s linear',
-				['border-spin']: 'border-spin 7s linear infinite',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
 				['shimmer']: 'shimmer 1.5s linear infinite'
 			}

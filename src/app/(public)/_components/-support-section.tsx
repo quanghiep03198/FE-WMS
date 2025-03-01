@@ -7,7 +7,8 @@ const SupportSection: React.FunctionComponent = () => {
 	const ref = useRef<HTMLDivElement>(null)
 	const pageContext = usePageContext()
 	const [inViewport] = useInViewport(ref, {
-		root: () => pageContext?.contentScrollRef?.current
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
 	})
 
 	return (
