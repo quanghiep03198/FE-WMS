@@ -60,23 +60,20 @@ jobs:
               clean: false
 
          - name: Load environment variables
-           shell: cmd
-           run: echo "${{ secrets.ENV_VARIABLE_SVR19 }}" > .env.production
+           run: |
+              $env = "${{ secrets.ENV_VARIABLE_SVR19 }}"
+              $env | Out-File -FilePath .env.production -Encoding utf8
 
          - name: Install dependencies
-           shell: bash
            run: pnpm install --fix-lockfile
 
          - name: Generate PWA assets
-           shell: bash
            run: pnpm generate-pwa-assets
 
          - name: Build the React app
-           shell: bash
            run: pnpm build
 
          - name: Restart and save PM2 process
-           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save
@@ -94,23 +91,20 @@ jobs:
               clean: false
 
          - name: Load environment variables
-           shell: cmd
-           run: echo "${{ secrets.ENV_VARIABLE_SVR201201 }}" > .env.production
+           run: |
+              $env = "${{ secrets.ENV_VARIABLE_SVR201201 }}"
+              $env | Out-File -FilePath .env.production -Encoding utf8
 
          - name: Install dependencies
-           shell: bash
            run: pnpm install --fix-lockfile
 
          - name: Generate PWA assets
-           shell: bash
            run: pnpm generate-pwa-assets
 
          - name: Build the React app
-           shell: bash
            run: pnpm build
 
          - name: Restart and save PM2 process
-           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save
@@ -128,23 +122,20 @@ jobs:
               clean: false
 
          - name: Load environment variables
-           shell: cmd
-           run: echo "${{ secrets.ENV_VARIABLE_SVR5251 }}" > .env.production
+           run: |
+              $env = "${{ secrets.ENV_VARIABLE_SVR5251 }}"
+              $env | Out-File -FilePath .env.production -Encoding utf8
 
          - name: Install dependencies
-           shell: bash
            run: pnpm install --fix-lockfile
 
          - name: Generate PWA assets
-           shell: bash
            run: pnpm generate-pwa-assets
 
          - name: Build the React app
-           shell: bash
            run: pnpm build
 
          - name: Restart and save PM2 process
-           shell: bash
            run: |
               pm2 restart ecosystem.config.cjs
               pm2 save
