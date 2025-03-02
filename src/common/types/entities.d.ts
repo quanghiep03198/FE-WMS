@@ -68,23 +68,6 @@ export interface IEmployee extends IBaseEntity {
 	employee_code: string
 }
 
-export interface IProduction extends IBaseEntity {
-	company_code
-	date
-	no
-	ship_order
-	container
-	seal_number
-	car_number
-	total_boxes
-	dept_name
-	employee_name
-	updated
-	remark
-	status_approve
-	month_close: string
-}
-
 export interface IElectronicProductCode {
 	record_time: Date
 	epc: string
@@ -144,25 +127,6 @@ export interface ITransferOrderData extends ITransferOrder {
 	cofactory_code: string
 }
 
-export interface ICustomerBrand {
-	brand_name: string
-	custbrand_id: string
-}
-
-export interface IProductionImportOrder extends IBaseEntity {
-	active_date: Date | string
-	cofactory_code: string
-	status_approve: boolean
-	type_inventorylist: string
-	sno_no: string
-	dept_code: string
-	dept_name: string
-	warehouse_code: string
-	warehouse_name: string
-	sno_location: string
-	remark: string | null
-}
-
 export interface IDailyInboundReport {
 	mo_no: string
 	inbound_qty: number
@@ -191,4 +155,40 @@ export interface IInboundReport extends IInOutBoundReport {
 export interface IOutboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
 	daily_outbound_qty: number
+}
+
+export interface ICommandNumberInfor {
+	mo_no: string
+	mat_code: string
+	shoes_style_code_factory: string
+	mo_noseq: Array<string>
+	sizes: Array<{
+		size_numcode: string
+		qty: number
+	}>
+}
+
+/**
+ * @deprecated
+ */
+export interface ICustomerBrand {
+	brand_name: string
+	custbrand_id: string
+}
+
+/**
+ * @deprecated
+ */
+export interface IProductionImportOrder extends IBaseEntity {
+	active_date: Date | string
+	cofactory_code: string
+	status_approve: boolean
+	type_inventorylist: string
+	sno_no: string
+	dept_code: string
+	dept_name: string
+	warehouse_code: string
+	warehouse_name: string
+	sno_location: string
+	remark: string | null
 }
