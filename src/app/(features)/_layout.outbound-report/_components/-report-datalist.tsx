@@ -46,8 +46,6 @@ const ReportDatalist: React.FC = () => {
 		}
 	}, [tenants, user.company_code])
 
-	console.log('ahihhhi')
-
 	const { data, isLoading, refetch } = useGetOutboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
