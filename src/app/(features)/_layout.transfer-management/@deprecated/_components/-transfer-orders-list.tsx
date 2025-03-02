@@ -10,7 +10,7 @@ import {
 	useDeleteTransferOrderMutation,
 	useGetTransferOrderQuery,
 	useUpdateMultiTransferOrderMutation
-} from '../_apis/-use-transfer-order-api'
+} from '../@deprecated/_apis/-use-transfer-order-api'
 import { useTransferOrderTableColumns } from '../_hooks/use-columns.hook'
 import { usePageStore } from '../_stores/page.store'
 

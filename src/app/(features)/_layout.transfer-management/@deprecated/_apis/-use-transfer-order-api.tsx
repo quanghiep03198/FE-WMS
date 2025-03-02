@@ -1,5 +1,5 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { TransferOrderDatalistParams, TransferOrderService } from '@/services/transfer-order.service'
+import { TransferOrderDatalistParams, TransferOrderService } from '@/services/[deprecated] transfer-order.service'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

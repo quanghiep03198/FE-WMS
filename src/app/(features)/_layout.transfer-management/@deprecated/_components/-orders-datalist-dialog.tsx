@@ -25,7 +25,7 @@ import { useUpdate } from 'ahooks'
 import { Fragment, useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useAddTransferOrderMutation, useGetTransferOrderDatalist } from '../_apis/-use-transfer-order-api'
+import { useAddTransferOrderMutation, useGetTransferOrderDatalist } from '../@deprecated/_apis/-use-transfer-order-api'
 import { usePageStore } from '../_stores/page.store'
 import OrderDatalistSearchForm from './-order-datalist-search-form'
 

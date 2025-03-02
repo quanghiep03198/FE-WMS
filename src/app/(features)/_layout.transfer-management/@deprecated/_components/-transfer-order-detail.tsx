@@ -14,7 +14,10 @@ import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetTransferOrderDetail, useUpdateTransferOrderDetailMutation } from '../_apis/-use-transfer-order-api'
+import {
+	useGetTransferOrderDetail,
+	useUpdateTransferOrderDetailMutation
+} from '../@deprecated/_apis/-use-transfer-order-api'
 import { UpdateTransferOrderDetailValues, updateTransferOrderDetailSchema } from '../_schemas/transfer-order.schema'
 import { usePageStore } from '../_stores/page.store'
 

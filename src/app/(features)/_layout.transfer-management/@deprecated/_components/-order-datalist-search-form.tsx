@@ -1,6 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Button, ComboboxFieldControl, DatePickerFieldControl, Div, Form as FormProvider, Icon } from '@/components/ui'
-import { TransferOrderService } from '@/services/transfer-order.service'
+import { TransferOrderService } from '@/services/[deprecated] transfer-order.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { debounce } from 'lodash'

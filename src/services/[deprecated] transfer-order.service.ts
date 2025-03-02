@@ -1,15 +1,25 @@
-import { SearchFormValues } from '@/app/(features)/_layout.transfer-management/_schemas/search-customer-brand.schema'
-import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/_schemas/transfer-order.schema'
+import { SearchFormValues } from '@/app/(features)/_layout.transfer-management/@deprecated/_schemas/search-customer-brand.schema'
+import { UpdateTransferOrderDetailValues } from '@/app/(features)/_layout.transfer-management/@deprecated/_schemas/transfer-order.schema'
 import { ICustomerBrand, ITransferOrder, ITransferOrderData, ITransferOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { DateRange } from 'react-day-picker'
 
+/**
+ * @deprecated
+ */
 export type CreateTransferOrderPayload = Pick<
 	ITransferOrderData,
 	'mo_no' | 'or_no' | 'or_custpo' | 'shoestyle_codefactory'
 >[]
+
+/**
+ * @deprecated
+ */
 export type TransferOrderDatalistParams = SearchFormValues & { time_range?: DateRange }
 
+/**
+ * @deprecated
+ */
 export class TransferOrderService {
 	static async getTransferOrderList() {
 		return await axiosInstance.get<void, ResponseBody<ITransferOrder[]>>('order/transfer-order')

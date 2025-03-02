@@ -1,8 +1,14 @@
 import { IProductionImportOrder, ITransferOrder } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
+/**
+ * @deprecated
+ */
 export type ProductionImportResponse = ResponseBody<{ data: IProductionImportOrder[]; count: number }>
 
+/**
+ * @deprecated
+ */
 export class ProductionImportService {
 	static async getProductionImportData(): Promise<ProductionImportResponse> {
 		return await axiosInstance.get('/order/production-import')
