@@ -21,6 +21,7 @@ export default {
 		missing_qty: 'Missing quantity',
 		mo_no: 'Manufacturing order',
 		mo_no_actual: 'Actual manufacturing order',
+		mo_noseq: 'Manufacturing sub-order',
 		no_crates_in_stock: 'No. crates in stock', //: Số thùng nhập kho
 		no_pair_in_stock: 'No. pairs in stock', //: Số đôi nhập kho
 		or_custpo: 'Customer order code',
@@ -63,5 +64,9 @@ export default {
 		finished_goods_receipt: 'Finished Product Warehouse Import Order',
 		inbound_shipment_receipt: 'Warehouse Import Transfer Order',
 		outbound_shipment_receipt: 'Warehouse Export Transfer Order'
+	},
+	rfid_match_craft_form: {
+		title: 'Update EPC information',
+		description: "Craft EPC's information that does not exist in the system."
 	}
 }

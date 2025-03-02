@@ -22,6 +22,7 @@ export default {
 		missing_qty: '缺貨量',
 		mo_no: '指令碼',
 		mo_no_actual: '實際指令碼',
+		mo_noseq: '指令碼序號',
 		no_crates_in_stock: '入库箱数',
 		no_pair_in_stock: '入库数量',
 		or_custpo: '客戶訂單',
@@ -65,5 +66,9 @@ export default {
 		finished_goods_receipt: '成品入庫單',
 		inbound_shipment_receipt: '轉撥入庫單',
 		outbound_shipment_receipt: '轉撥出庫單'
+	},
+	rfid_match_craft_form: {
+		title: '更新EPC信息',
+		description: '更新系统中不存在的EPC信息.'
 	}
 }

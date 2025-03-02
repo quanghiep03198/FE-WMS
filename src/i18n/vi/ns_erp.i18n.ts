@@ -21,6 +21,7 @@ export default {
 		missing_qty: 'Số lượng còn thiếu',
 		mo_no: 'Chỉ lệnh',
 		mo_no_actual: 'Chỉ lệnh thực',
+		mo_noseq: 'Tiểu chỉ lệnh',
 		no_crates_in_stock: 'Số thùng nhập kho',
 		no_pair_in_stock: 'Số đôi nhập kho',
 		or_custpo: 'Mã đơn đặt hàng của khách',
@@ -56,12 +57,16 @@ export default {
 		status_approve: 'Trạng thái duyệt đơn',
 		trans_num: 'Lượng thùng đã phát',
 		transfer_order_code: 'Mã đơn chuyển giao',
-		uninspected_qty: 'Số Lượng Chưa Kiểm Tra' // Uninspected Quantity
+		uninspected_qty: 'Số Lượng Chưa Kiểm Tra'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Đơn xuất kho thành phẩm',
 		finished_goods_receipt: 'Đơn nhập kho thành phẩm',
 		inbound_shipment_receipt: 'Đơn nhập kho chuyển phát',
 		outbound_shipment_receipt: 'Đơn xuất kho chuyển phát'
+	},
+	rfid_match_craft_form: {
+		title: 'Cập nhật thông tin EPC',
+		description: 'Cập nhật thông tin cho các EPC không có đơn hàng trên hệ thống'
 	}
 }
