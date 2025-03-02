@@ -67,7 +67,7 @@ function TableDataGrid<TData, TValue>({
 
 		requestAnimationFrame(run)
 	}, [])
-	console.log(table.getExpandedRowModel().flatRows.length)
+
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
