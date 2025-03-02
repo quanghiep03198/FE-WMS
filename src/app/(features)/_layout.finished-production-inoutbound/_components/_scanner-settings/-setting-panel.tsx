@@ -1,10 +1,8 @@
 import { Div, Label, Switch, Typography } from '@/components/ui'
-import { useLocalStorageState } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
-import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
-import { RFIDSettings } from '../../index.lazy'
+import { useLayoutEffect, useState } from 'react'
 
 const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
@@ -16,7 +14,7 @@ const SettingPanel: React.FC = () => {
 			</Typography>
 			<Div className='flex h-full flex-col items-stretch gap-x-4 gap-y-2 *:flex-1 @5xl:flex-row @5xl:flex-wrap-reverse'>
 				<FullScreenModeSwitch />
-				<DeveloperModeSwitch />
+				{/* <DeveloperModeSwitch /> */}
 			</Div>
 		</Div>
 	)
@@ -27,9 +25,13 @@ const SettingPanel: React.FC = () => {
  */
 const FullScreenModeSwitch: React.FC = () => {
 	const { t } = useTranslation()
-	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
-		listenStorageChange: true
-	})
+	const [fullScreen, setFullScreen] = useState<boolean>(false)
+
+	useLayoutEffect(() => {
+		if (fullScreen && !document.fullscreenElement) document.documentElement.requestFullscreen()
+		else if (!fullScreen && document.fullscreenElement) document.exitFullscreen()
+	}, [fullScreen, document.fullscreenElement])
+
 	return (
 		<SwitchBox.Wrapper>
 			<SwitchBox.TitleWrapper>
@@ -42,37 +44,8 @@ const FullScreenModeSwitch: React.FC = () => {
 				<Switch
 					id='toggle-fullscreen'
 					className='max-w-full'
-					checked={settings?.fullscreenMode}
-					onCheckedChange={(value) => setSettings({ ...settings, fullscreenMode: Boolean(value) })}
-				/>
-			</SwitchBox.InnerWrapper>
-		</SwitchBox.Wrapper>
-	)
-}
-
-/**
- * @description Toggle developer mode setting
- */
-const DeveloperModeSwitch: React.FC = () => {
-	const { t } = useTranslation()
-	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
-		listenStorageChange: true
-	})
-
-	return (
-		<SwitchBox.Wrapper>
-			<SwitchBox.TitleWrapper>
-				<Label htmlFor='toggle-developer-mode'>{t('ns_inoutbound:scanner_setting.developer_mode')}</Label>
-				<Typography variant='small' color='muted' className='text-pretty'>
-					{t('ns_inoutbound:scanner_setting.developer_mode_note')}
-				</Typography>
-			</SwitchBox.TitleWrapper>
-			<SwitchBox.InnerWrapper>
-				<Switch
-					id='toggle-developer-mode'
-					checked={settings?.developerMode}
-					className='max-w-full'
-					onCheckedChange={(value) => setSettings({ ...settings, developerMode: Boolean(value) })}
+					checked={fullScreen}
+					onCheckedChange={(value) => setFullScreen(Boolean(value))}
 				/>
 			</SwitchBox.InnerWrapper>
 		</SwitchBox.Wrapper>

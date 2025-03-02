@@ -25,7 +25,6 @@ import { useGetEpcQuery } from '../../_apis/rfid.api'
 import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import { RFIDStreamEventData } from '../../_types'
-import createLogger from '../../_utils/log.util'
 import { RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -47,7 +46,6 @@ const EpcDataList: React.FC = () => {
 		setScannedEpc,
 		setScannedOrders,
 		setSelectedOrder,
-		writeLog,
 		reset
 	} = usePageContext(
 		'currentPage',
@@ -60,7 +58,6 @@ const EpcDataList: React.FC = () => {
 		'setScannedEpc',
 		'setScannedOrders',
 		'setSelectedOrder',
-		'writeLog',
 		'reset'
 	)
 
@@ -109,7 +106,6 @@ const EpcDataList: React.FC = () => {
 						if (scanningStatus === 'connecting') {
 							setScanningStatus('connected')
 							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
-							writeLog({ message: 'Connected', type: 'info' })
 						}
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
@@ -136,14 +132,6 @@ const EpcDataList: React.FC = () => {
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
-						writeLog({
-							type: 'info',
-							message: createLogger({
-								status: 200,
-								duration: performance.now() - previousTimeRef.current,
-								data: event.data
-							})
-						})
 						previousTimeRef.current = performance.now()
 						window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
 					} catch (error) {
@@ -156,14 +144,6 @@ const EpcDataList: React.FC = () => {
 				onerror(error) {
 					setScanningStatus('disconnected')
 					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
-					writeLog({
-						type: 'error',
-						message: createLogger({
-							status: error.status ?? HttpStatusCode.InternalServerError,
-							duration: performance.now() - previousTimeRef.current,
-							data: error.message
-						})
-					})
 					// * Depend on error type, retry or not
 					if (error instanceof FatalError) throw error
 					else throw new RetriableError()
@@ -192,8 +172,6 @@ const EpcDataList: React.FC = () => {
 			}
 			case 'disconnected': {
 				cancelFetchSSE()
-				writeLog({ message: 'Disconnected', type: 'info' })
-				window.removeEventListener(INCOMING_DATA_CHANGE, null)
 				break
 			}
 			case 'connecting': {
@@ -309,7 +287,7 @@ const EpcDataList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[500px] @[1400px]:h-[625px]'>
+					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[625px]'>
 					<Div
 						className='relative w-full'
 						style={{

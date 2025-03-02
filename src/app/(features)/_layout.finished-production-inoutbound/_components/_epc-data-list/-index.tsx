@@ -2,7 +2,6 @@ import tw from 'tailwind-styled-components'
 import OrderDetails from '../_manufacturing-order-detail/-index'
 import EpcDataList from './-data-list-body'
 import ListBoxHeader from './-data-list-header'
-import LoggerConsole from './-logger-console'
 
 const EpcListBox: React.FC = () => {
 	return (
@@ -13,7 +12,6 @@ const EpcListBox: React.FC = () => {
 			</ListBoxBody>
 			<ListBoxFooter>
 				<OrderDetails />
-				<LoggerConsole />
 			</ListBoxFooter>
 		</ListBoxWrapper>
 	)

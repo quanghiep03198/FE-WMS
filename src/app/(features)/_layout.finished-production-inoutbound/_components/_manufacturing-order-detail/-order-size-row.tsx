@@ -131,6 +131,18 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						}}>
 						<Icon name='ArrowLeftRight' className='stroke-active' />
 					</button>
+					{/* <button
+						className='opacity-0 duration-100 group-hover/cell:opacity-100'
+						onClick={() => {
+							setExchangeOrderDialogOpen(true)
+							setDefaultExchangeOrderFormValues({
+								mo_no: data?.mo_no,
+								mat_code: data?.mat_code,
+								count: aggregateSizeCount
+							})
+						}}>
+						<Icon name='Replace' size={18} />
+					</button> */}
 				</Div>
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>

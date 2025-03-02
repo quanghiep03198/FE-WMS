@@ -1,8 +1,10 @@
 /* eslint-disable @tanstack/query/exhaustive-deps */
 import { useAuth } from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
+import { OrderService } from '@/services/order.service'
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -19,12 +21,20 @@ export const FALLBACK_ORDER_VALUE = 'Unknown'
 export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
 
 export const useGetEpcQuery = () => {
+	const queryClient = useQueryClient()
+
 	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
 		'currentPage',
 		'selectedOrder',
 		'connection',
 		'scanningStatus'
 	)
+
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined') {
+			queryClient.removeQueries({ queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG] })
+		}
+	}, [scanningStatus])
 
 	return useQuery({
 		queryKey: [FP_EPC_LIST_PROVIDE_TAG],
@@ -34,30 +44,62 @@ export const useGetEpcQuery = () => {
 				'mo_no.eq': selectedOrder
 			}),
 		enabled: !!connection && scanningStatus === 'disconnected',
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
 	})
 }
 
 export const useGetOrderDetail = () => {
+	const queryClient = useQueryClient()
 	const { connection, scanningStatus } = usePageContext('connection', 'scanningStatus')
+
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined') {
+			queryClient.removeQueries({ queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG] })
+		}
+	}, [scanningStatus])
 
 	return useQuery({
 		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
 		queryFn: async () => await RFIDService.getFPOrderDetail(connection),
 		enabled: !!connection && scanningStatus === 'disconnected',
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
 	})
 }
 
-export const useSearchOrderQuery = (params: SearchCustOrderParams) => {
+export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) => {
 	const { user } = useAuth()
-
 	const { connection } = usePageContext('connection')
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', user?.company_code, params],
 		queryFn: async () => await RFIDService.searchExchangableFPOrder(connection, params),
 		enabled: false,
+		select: (response) => response.metadata
+	})
+}
+
+export const useSearchCommandNumberQuery = (searchTerm: string) => {
+	return useQuery({
+		queryKey: ['SEARCH_ORDER', searchTerm],
+		queryFn: async () => await OrderService.searchCommandNumber({ q: searchTerm }),
+		select: (response) => {
+			if (!Array.isArray(response.metadata)) return []
+			return response.metadata.map((item) => ({
+				label: item,
+				value: item
+			}))
+		}
+	})
+}
+
+export const useGetCommandNumberDetailQuery = (commandNumber: string) => {
+	return useQuery({
+		queryKey: ['COMMAND_NUMBER_DETAIL', commandNumber],
+		queryFn: async () => await OrderService.getCommandNumberDetail(commandNumber),
 		select: (response) => response.metadata
 	})
 }

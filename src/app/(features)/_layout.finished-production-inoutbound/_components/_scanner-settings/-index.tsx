@@ -27,8 +27,8 @@ const ScannerSettings: React.FC = () => {
 			</ToolbarHeader>
 			<ToolbarBody>
 				<ConnectionInsight />
-				<SyncDataTrigger />
 				<SettingPanel />
+				<SyncDataTrigger />
 			</ToolbarBody>
 		</ToolbarWrapper>
 	)

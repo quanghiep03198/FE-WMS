@@ -9,7 +9,9 @@ const Container = tw.div`
    has-[#toggle-fullscreen[data-state=checked]]:w-screen
    has-[#toggle-fullscreen[data-state=checked]]:h-screen
    has-[#toggle-fullscreen[data-state=checked]]:overflow-y-auto
-	`
+   has-[#toggle-fullscreen[data-state=checked]]:grid
+   has-[#toggle-fullscreen[data-state=checked]]:place-content-center
+`
 const Wrapper = tw.div`max-h-full items-stretch grid grid-cols-1 @[1366px]:grid-cols-[2.5fr_1fr] gap-x-6 gap-y-10`
 const Main = tw.div`flex flex-col gap-y-6 max-h-full items-stretch basis-full flex-1`
 const InnerWrapper = tw.div`grid xl:grid-cols-2 lg:grid-cols-2 xl:grid-rows-3 lg:grid-rows-3 gap-y-4 gap-x-6 flex-1 `

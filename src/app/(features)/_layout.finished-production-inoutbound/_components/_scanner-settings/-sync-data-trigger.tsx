@@ -2,6 +2,7 @@ import { useGetTenantByFactory } from '@/app/(features)/_apis/use-tenacy.api'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
+import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { ThirdPartyApiService } from '@/services/third-party-api.service'
@@ -9,6 +10,7 @@ import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { useResetState } from 'ahooks'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
 type SyncProcessState = {
@@ -32,13 +34,11 @@ const SyncDataTrigger: React.FC = () => {
 		}
 	}, [tenants, user.company_code])
 
-	console.log(currentTenant)
-
 	const triggerSyncData = async () => {
 		try {
 			await ThirdPartyApiService.syncDeckerData(currentTenant?.id, user.company_code)
 		} catch {
-			console.log('Failed to trigger sync data')
+			toast.error(t('ns_common:notification.error'))
 		}
 	}
 
@@ -112,7 +112,7 @@ const SyncDataTrigger: React.FC = () => {
 					</Button>
 				</Div>
 				{Array.isArray(state) && state.length > 0 ? (
-					<StepList className='grid h-32 gap-y-4'>
+					<StepList className='flex min-h-40 flex-col gap-y-4 overflow-y-auto'>
 						{state.map((item, index) => {
 							const icon: Record<
 								SyncProcessState['status'],
@@ -131,12 +131,14 @@ const SyncDataTrigger: React.FC = () => {
 										animationDelay: `${index / 5 + 0.5}s`,
 										animationFillMode: 'both'
 									}}>
-									<Icon
-										name={icon[item.status].icon}
-										stroke={icon[item.status].color}
-										className={item.status === 'processing' && 'animate-spin'}
-										size={18}
-									/>
+									<Div className='translate-y-px'>
+										<Icon
+											name={icon[item.status].icon}
+											stroke={icon[item.status].color}
+											className={cn({ 'animate-spin': item.status === 'processing' })}
+											size={18}
+										/>
+									</Div>
 									{t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
 								</StepItem>
 							)
@@ -153,6 +155,6 @@ const SyncDataTrigger: React.FC = () => {
 }
 
 const StepList = tw.ul`grid gap-y-4 bg-secondary rounded-md p-4`
-const StepItem = tw.li`animate-[fade-in_0.5s_ease_0.25s_both] flex items-center text-sm gap-2 text-ellipsis`
+const StepItem = tw.li`animate-[fade-in_0.5s_ease_0.25s_both] flex items-start text-sm gap-2 text-ellipsis text-pretty`
 
 export default SyncDataTrigger

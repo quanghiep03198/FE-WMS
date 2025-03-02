@@ -27,7 +27,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useExchangeEpcMutation, useSearchOrderQuery } from '../../_apis/rfid.api'
+import { useExchangeEpcMutation, useSearchExchangableOrderQuery } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
 import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../_schemas/exchange-epc.schema'
@@ -60,7 +60,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const actualOrder = form.watch('mo_no_actual')
 	const previousQuantity = usePrevious(quantity)
 
-	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchOrderQuery({
+	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchExchangableOrderQuery({
 		'mo_no.eq': defaultValues?.mo_no,
 		'mat_code.eq': defaultValues?.mat_code,
 		'size_numcode.eq': defaultValues?.size_numcode,

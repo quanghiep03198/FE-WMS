@@ -131,13 +131,13 @@ const OrderSizeDetailTable: React.FC = () => {
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
-			<DialogContent className='max-w-8xl focus-visible:outline-none focus-visible:ring-0 lg:h-screen lg:rounded-none'>
+			<DialogContent className='h-screen w-screen max-w-[100vw] rounded-none border-none focus-visible:outline-none focus-visible:ring-0'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
 				<Div className='relative divide-y overflow-hidden rounded-lg border'>
-					<Div ref={ref} className='flow-root h-[65vh] overflow-scroll rounded-lg'>
+					<Div ref={ref} className='flow-root h-[85vh] overflow-scroll rounded-lg'>
 						<Table
 							className='w-full border-separate border-spacing-0 rounded-lg'
 							style={

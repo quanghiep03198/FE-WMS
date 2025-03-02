@@ -4,11 +4,10 @@ import { IElectronicProductCode } from '@/common/types/entities'
 import { useQueryClient } from '@tanstack/react-query'
 import { useLocalStorageState } from 'ahooks'
 import { pick } from 'lodash'
-import React, { createContext, use, useEffect, useRef } from 'react'
+import React, { createContext, use, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
-import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../_apis/rfid.api'
 import { FP_RFID_SETTINGS_KEY } from '../_constants/rfid.const'
 import { RFIDSettings } from '../index.lazy'
 
@@ -44,7 +43,6 @@ type PageContextStore = {
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
 	setScannedOrders: (data: Array<OrderItem>) => void
 	setPollingDuration: (data: number) => void
-	writeLog: (data: Omit<Log, 'timestamp'>) => void
 	clearLog: () => void
 	handleToggleScanning: () => void
 	reset: () => void
@@ -128,12 +126,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.pollingDuration = data
 					})
 				},
-				writeLog: (log) => {
-					set((state) => {
-						if (state.logs.length >= MAX_LINES_OF_LOG) state.logs.pop()
-						state.logs.unshift({ timestamp: new Date(), ...log })
-					})
-				},
 				clearLog: () => {
 					set((state) => {
 						state.logs = []
@@ -175,13 +167,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 			}))
 		)
 	}
-
-	useEffect(() => {
-		queryClient.removeQueries({
-			queryKey: [FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG],
-			type: 'all'
-		})
-	}, [])
 
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }
