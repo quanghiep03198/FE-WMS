@@ -165,7 +165,21 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				minSize: 200,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return (
+						<Div className='space-x-1'>
+							{value
+								.split(',')
+								.sort()
+								.map((item) => (
+									<Badge key={item} variant='secondary'>
+										{item.trim()}
+									</Badge>
+								))}
+						</Div>
+					)
+				}
 			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
