@@ -10,7 +10,7 @@ type DataTableLoading<TData> = {
 }
 
 export function TableBodyLoading<T>({ prepareRows, table }: DataTableLoading<T>) {
-	const preRenderRows = Array.apply(null, Array(prepareRows)).map((_, index) => index)
+	const preRenderRows = Array.from(new Array(prepareRows), (_, index) => index)
 	const preRenderColumns = table.getAllLeafColumns()
 
 	return preRenderRows.map((rowIndex) => (
