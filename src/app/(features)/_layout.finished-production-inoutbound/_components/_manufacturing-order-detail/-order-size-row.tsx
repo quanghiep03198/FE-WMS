@@ -41,12 +41,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		pullSelectedRow,
 		setExchangeOrderDialogOpen,
 		setExchangeEpcDialogOpen,
+		setCraftEpcInfoDialogOpen,
 		setDefaultExchangeEpcFormValues,
 		setDefaultExchangeOrderFormValues
 	} = useOrderDetailContext(
 		'selectedRows',
 		'pushSelectedRow',
 		'pullSelectedRow',
+		'setCraftEpcInfoDialogOpen',
 		'setExchangeOrderDialogOpen',
 		'setExchangeEpcDialogOpen',
 		'setDefaultExchangeEpcFormValues',
@@ -63,7 +65,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
 
 	const handleToggleSelectRow = (checked: CheckedState, data: any) => {
-		checked ? pushSelectedRow(data) : pullSelectedRow(data)
+		if (checked) {
+			pushSelectedRow(data)
+		} else {
+			pullSelectedRow(data)
+		}
 	}
 
 	const handleDeleteOrder = useMemoizedFn(async () => {
@@ -82,7 +88,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			setScannedOrders(filteredOrders)
 			setPopoverOpen(false)
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
-		} catch (e) {
+		} catch {
 			toast.error(t('ns_common:notification.error'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		}
 	})
@@ -131,18 +137,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						}}>
 						<Icon name='ArrowLeftRight' className='stroke-active' />
 					</button>
-					{/* <button
+					<button
 						className='opacity-0 duration-100 group-hover/cell:opacity-100'
-						onClick={() => {
-							setExchangeOrderDialogOpen(true)
-							setDefaultExchangeOrderFormValues({
-								mo_no: data?.mo_no,
-								mat_code: data?.mat_code,
-								count: aggregateSizeCount
-							})
-						}}>
+						onClick={() => setCraftEpcInfoDialogOpen(true)}>
 						<Icon name='Replace' size={18} />
-					</button> */}
+					</button>
 				</Div>
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>

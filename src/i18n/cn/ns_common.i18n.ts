@@ -48,6 +48,7 @@ export default {
 		created_at: '创建日期',
 		factory_code: '工厂',
 		quantity: '數量',
+		quantity_with_limit: '數量 (最大 {{limit}})',
 		remark: '管理人',
 		status: '狀態',
 		total: '全部的',
