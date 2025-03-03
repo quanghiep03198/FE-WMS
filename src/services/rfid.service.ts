@@ -1,3 +1,4 @@
+import { EpcCombinationFormValues } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/epc-combination.schema'
 import { InoutboundPayload } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inoutbound/_schemas/exchange-epc.schema'
 import {
@@ -55,6 +56,12 @@ export class RFIDService {
 
 	static async exchangeEpc(tenantId: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
 		return await axiosInstance.patch(`/rfid/exchange-epc`, payload, {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId }
+		})
+	}
+
+	static async combineEpcInfor(tenantId: string, payload: EpcCombinationFormValues) {
+		return await axiosInstance.patch(`/rfid/combine-epc-info`, payload, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId }
 		})
 	}

@@ -2,7 +2,9 @@ import axiosInstance from '@/configs/axios.config'
 
 export class OrderService {
 	static async searchCommandNumber(params: { q: string }) {
-		return await axiosInstance.get<unknown, ResponseBody<string[]>>('/order/search-order', { params })
+		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>('/order/search', {
+			params
+		})
 	}
 
 	static async getCommandNumberDetail(commandNumber: string) {

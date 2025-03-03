@@ -48,6 +48,7 @@ export default {
 		created_at: 'Created at',
 		factory_code: 'Factory code',
 		quantity: 'Quantity',
+		quantity_with_limit: 'Quantity (max {{limit}})',
 		remark: 'Remark',
 		status: 'Status',
 		total: 'Total',

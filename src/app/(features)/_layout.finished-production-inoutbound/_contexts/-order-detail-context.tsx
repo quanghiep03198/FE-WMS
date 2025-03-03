@@ -16,6 +16,7 @@ type TOrderDetailContext = {
 	selectedRows: Array<SelectedRow>
 	exchangeEpcDialogOpen: boolean
 	exchangeOrderDialogOpen: boolean
+	craftEpcInfoDialogOpen: boolean
 	defaultExchangeEpcFormValues: SelectedRow
 	defaultExchangeOrderFormValues: Partial<SelectedRow>
 	pushSelectedRow: (order: SelectedRow) => void
@@ -24,6 +25,7 @@ type TOrderDetailContext = {
 	resetSelectedRows: () => void
 	setExchangeEpcDialogOpen: (value: boolean) => void
 	setExchangeOrderDialogOpen: (value: boolean) => void
+	setCraftEpcInfoDialogOpen: (value: boolean) => void
 	setDefaultExchangeEpcFormValues: (value: SelectedRow) => void
 	setDefaultExchangeOrderFormValues: (value: Partial<SelectedRow>) => void
 }
@@ -38,6 +40,7 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 				selectedRows: [],
 				exchangeEpcDialogOpen: false,
 				exchangeOrderDialogOpen: false,
+				craftEpcInfoDialogOpen: false,
 				defaultExchangeEpcFormValues: null,
 				defaultExchangeOrderFormValues: null,
 				setExchangeEpcDialogOpen: (value) => {
@@ -48,6 +51,11 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 				setExchangeOrderDialogOpen: (value) => {
 					set((state) => {
 						state.exchangeOrderDialogOpen = value
+					})
+				},
+				setCraftEpcInfoDialogOpen: (value) => {
+					set((state) => {
+						state.craftEpcInfoDialogOpen = value
 					})
 				},
 				setDefaultExchangeEpcFormValues: (value) => {

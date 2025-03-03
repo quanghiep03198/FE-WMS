@@ -48,6 +48,7 @@ export default {
 		created_at: 'Ngày tạo',
 		factory_code: 'Xưởng',
 		quantity: 'Số lượng',
+		quantity_with_limit: 'Số lượng (tối đa {{limit}})',
 		remark: 'Ghi chú',
 		status: 'Trạng thái',
 		total: 'Tổng cộng',

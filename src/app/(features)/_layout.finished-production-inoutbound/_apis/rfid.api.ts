@@ -1,7 +1,6 @@
 /* eslint-disable @tanstack/query/exhaustive-deps */
 import { useAuth } from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
-import { OrderService } from '@/services/order.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
@@ -82,28 +81,6 @@ export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) =>
 	})
 }
 
-export const useSearchCommandNumberQuery = (searchTerm: string) => {
-	return useQuery({
-		queryKey: ['SEARCH_ORDER', searchTerm],
-		queryFn: async () => await OrderService.searchCommandNumber({ q: searchTerm }),
-		select: (response) => {
-			if (!Array.isArray(response.metadata)) return []
-			return response.metadata.map((item) => ({
-				label: item,
-				value: item
-			}))
-		}
-	})
-}
-
-export const useGetCommandNumberDetailQuery = (commandNumber: string) => {
-	return useQuery({
-		queryKey: ['COMMAND_NUMBER_DETAIL', commandNumber],
-		queryFn: async () => await OrderService.getCommandNumberDetail(commandNumber),
-		select: (response) => response.metadata
-	})
-}
-
 export const useGetShapingProductLineQuery = () => {
 	return useQuery({
 		queryKey: [SHAPING_DEPT_PROVIDE_TAG],
@@ -163,6 +140,24 @@ export const useExchangeEpcMutation = () => {
 
 	return useMutation({
 		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(connection, payload),
+		onSuccess: () => {
+			setCurrentPage(null)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			invalidateQueries()
+		}
+	})
+}
+
+export const useCombineEpcInfoMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
+		'connection',
+		'setSelectedOrder',
+		'setCurrentPage'
+	)
+
+	return useMutation({
+		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.combineEpcInfor(connection, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
