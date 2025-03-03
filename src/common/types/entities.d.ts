@@ -149,6 +149,7 @@ export interface IInOutBoundReport {
 
 export interface IInboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
+	storage: string
 	daily_inbound_qty: number
 	missing_qty: number
 }

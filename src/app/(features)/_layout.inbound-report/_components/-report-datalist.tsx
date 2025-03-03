@@ -159,6 +159,14 @@ const ReportDatalist: React.FC = () => {
 					)
 				}
 			}),
+			columnHelper.accessor('storage', {
+				header: t('ns_warehouse:fields.storage_name'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				minSize: 200,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				enableColumnFilter: true,
