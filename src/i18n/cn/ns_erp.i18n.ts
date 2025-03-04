@@ -43,7 +43,7 @@ export default {
 		shipping_destination: '港口名稱',
 		shipment_confirm_date: '确认出货日',
 		shoes_type_b: 'B级鞋',
-		shoestyle_codefactory: '客戶訂單',
+		shoestyle_codefactory: '工廠形體',
 		sno_car_number: '車號',
 		sno_container: '貨櫃號碼',
 		sno_date: '驗收日期',
