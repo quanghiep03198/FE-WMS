@@ -137,13 +137,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						}}>
 						<Icon name='ArrowLeftRight' className='stroke-active' />
 					</button>
-					{data?.mo_no === FALLBACK_ORDER_VALUE && (
-						<button
-							className='opacity-0 duration-100 group-hover/cell:opacity-100'
-							onClick={() => setCraftEpcInfoDialogOpen(true)}>
-							<Icon name='Replace' size={18} />
-						</button>
-					)}
+					<button
+						className='opacity-0 duration-100 group-hover/cell:opacity-100'
+						onClick={() => setCraftEpcInfoDialogOpen(true)}>
+						<Icon name='Replace' size={18} />
+					</button>
 				</Div>
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
