@@ -18,6 +18,10 @@ temp
 tmp
 .tmp
 
+# Private folders
+private
+.private
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
