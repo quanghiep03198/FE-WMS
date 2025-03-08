@@ -67,16 +67,14 @@ jobs:
          - name: Install dependencies
            run: pnpm install --fix-lockfile
 
-         - name: Generate PWA assets
-           run: pnpm generate-pwa-assets
-
          - name: Build the React app
            run: pnpm build
 
-         - name: Restart and save PM2 process
-           run: |
-              pm2 restart ecosystem.config.cjs
-              pm2 save
+         - name: Generate PWA assets
+           run: pnpm generate-pwa-assets
+
+         - name: Restart IIS server
+           run: iisreset
 
    deploy-server-201:
       if: ${{github.ref == 'refs/heads/develop'}}
@@ -98,16 +96,14 @@ jobs:
          - name: Install dependencies
            run: pnpm install --fix-lockfile
 
-         - name: Generate PWA assets
-           run: pnpm generate-pwa-assets
-
          - name: Build the React app
            run: pnpm build
 
-         - name: Restart and save PM2 process
-           run: |
-              pm2 restart ecosystem.config.cjs
-              pm2 save
+         - name: Generate PWA assets
+           run: pnpm generate-pwa-assets
+
+         - name: Restart IIS server
+           run: iisreset
 
    deploy-server-5251:
       if: ${{github.ref == 'refs/heads/develop'}}
@@ -129,13 +125,11 @@ jobs:
          - name: Install dependencies
            run: pnpm install --fix-lockfile
 
-         - name: Generate PWA assets
-           run: pnpm generate-pwa-assets
-
          - name: Build the React app
            run: pnpm build
 
-         - name: Restart and save PM2 process
-           run: |
-              pm2 restart ecosystem.config.cjs
-              pm2 save
+         - name: Generate PWA assets
+           run: pnpm generate-pwa-assets
+
+         - name: Restart IIS server
+           run: iisreset

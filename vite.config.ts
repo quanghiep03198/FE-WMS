@@ -5,15 +5,16 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { VitePWA as pwa } from 'vite-plugin-pwa'
-
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 /**
  * @see https://vitejs.dev/config/
  */
 
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
+	normalizePath(path.resolve(__dirname, './infrastructure'))
 
 	return {
 		plugins: [
@@ -23,6 +24,9 @@ export default defineConfig(({ mode }) => {
 				}
 			}),
 			reactRouter(),
+			viteStaticCopy({
+				targets: [{ src: './infrastructure/web.config', dest: '' }]
+			}),
 			pwa({
 				registerType: 'autoUpdate',
 				disable: mode === 'development',
