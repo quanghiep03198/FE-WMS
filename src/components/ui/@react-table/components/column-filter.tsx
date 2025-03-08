@@ -71,6 +71,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 					}}
 					selectProps={{
 						defaultValue: '',
+						value: hasNoFilter ? '' : (column.getFilterValue() as string),
 						onValueChange: (value) => {
 							column.setFilterValue(value)
 						}
