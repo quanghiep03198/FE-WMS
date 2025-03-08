@@ -39,6 +39,13 @@ export default defineConfig(({ mode }) => {
 					display: 'fullscreen',
 					theme_color: '#262626',
 					orientation: 'landscape-primary',
+					screenshots: [
+						{
+							src: 'logo.svg',
+							sizes: '64x64',
+							type: 'image/svg+xml'
+						}
+					],
 					icons: [
 						{
 							src: 'pwa-64x64.png',
