@@ -141,10 +141,13 @@ export default {
 		problem_arises: '问题出现',
 		rows_per_page: '展示',
 		search_in_column: '在栏目中搜索',
-		selected_rows: '已选择 {{selectedRows}} 行'
+		selected_rows: '已选择 {{selectedRows}} 行',
+		total_rows: '{{count}} 记录'
 	},
 	titles: {
 		caution: '警告',
-		general_settings: '常规设置'
+		general_settings: '常规设置',
+		original_data: '原资料',
+		target_data: '目标资料'
 	}
 } as const

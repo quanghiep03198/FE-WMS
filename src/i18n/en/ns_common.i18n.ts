@@ -142,11 +142,14 @@ export default {
 		problem_arises: 'Problem arises',
 		rows_per_page: 'Rows per page',
 		search_in_column: 'Search in column',
-		selected_rows: '{{selectedRows}} row(s) selected'
+		selected_rows: '{{selectedRows}} row(s) selected',
+		total_rows: '{{count}} records'
 	},
 	titles: {
 		caution: 'Caution',
-		general_settings: 'General settings'
+		general_settings: 'General settings',
+		original_data: 'Original data',
+		target_data: 'Target data'
 	},
 	others: {
 		server: 'Server {{alias}}'

@@ -3,6 +3,9 @@ import { z } from 'zod'
 export const epcCombinationSchema = z
 	.object({
 		mo_no: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+		mo_no_actual: z
+			.string({ required_error: 'ns_validation:required' })
+			.nonempty({ message: 'ns_validation:required' }),
 		or_no: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 		or_cust_po: z
 			.string({ required_error: 'ns_validation:required' })
@@ -19,7 +22,7 @@ export const epcCombinationSchema = z
 			.string({ required_error: 'ns_validation:required' })
 			.nonempty({ message: 'ns_validation:required' }),
 		size_code: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		size_sumqty: z
+		size_qty: z
 			.number({ required_error: 'ns_validation:required' })
 			.nonnegative({ message: 'ns_validation:nonnegative' })
 			.default(0),
@@ -27,7 +30,7 @@ export const epcCombinationSchema = z
 			.number({ required_error: 'ns_validation:required' })
 			.nonnegative({ message: 'ns_validation:nonnegative' })
 	})
-	.refine((values) => values.quantity <= values.size_sumqty, {
+	.refine((values) => values.quantity <= values.size_qty, {
 		message: 'ns_validation:invalid_value',
 		path: ['quantity']
 	})

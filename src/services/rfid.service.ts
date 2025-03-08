@@ -61,7 +61,7 @@ export class RFIDService {
 	}
 
 	static async combineEpcInfor(tenantId: string, payload: EpcCombinationFormValues) {
-		return await axiosInstance.patch(`/rfid/combine-epc-info`, payload, {
+		return await axiosInstance.put(`/rfid/exchange-epc-by-size`, payload, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId }
 		})
 	}

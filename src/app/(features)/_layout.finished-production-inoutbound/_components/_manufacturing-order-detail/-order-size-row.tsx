@@ -15,6 +15,7 @@ import {
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
+import { sortBy } from 'lodash'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -58,8 +59,13 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteEpcMutation()
 
 	const hasSomeRowMatch = useMemo(() => {
+		console.log(selectedRows[0], data)
+
 		if (!selectedRows || selectedRows.length === 0) return false
-		return data?.mat_code === selectedRows[0].mat_code
+		return (
+			data?.mat_ecolor === selectedRows[0].mat_ecolor &&
+			data?.shoes_style_code_factory === selectedRows[0].shoes_style_code_factory
+		)
 	}, [selectedRows])
 
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
@@ -116,7 +122,8 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					onCheckedChange={(checked) =>
 						handleToggleSelectRow(checked, {
 							mo_no: data?.mo_no,
-							mat_code: data?.mat_code,
+							shoes_style_code_factory: data?.shoes_style_code_factory,
+							mat_ecolor: data?.mat_ecolor,
 							count: aggregateSizeCount
 						})
 					}
@@ -125,37 +132,42 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
-					<button
-						className='opacity-0 duration-100 group-hover/cell:opacity-100'
-						onClick={() => {
-							setExchangeOrderDialogOpen(true)
-							setDefaultExchangeOrderFormValues({
-								mo_no: data?.mo_no,
-								mat_code: data?.mat_code,
-								count: aggregateSizeCount
-							})
-						}}>
-						<Icon name='ArrowLeftRight' className='stroke-active' />
-					</button>
-					<button
-						className='opacity-0 duration-100 group-hover/cell:opacity-100'
-						onClick={() => setCraftEpcInfoDialogOpen(true)}>
-						<Icon name='Replace' size={18} />
-					</button>
+
+					{data?.mo_no === FALLBACK_ORDER_VALUE ? (
+						<button
+							className='opacity-0 duration-100 group-hover/cell:opacity-100'
+							onClick={() => setCraftEpcInfoDialogOpen(true)}>
+							<Icon name='Replace' size={18} />
+						</button>
+					) : (
+						<button
+							className='opacity-0 duration-100 group-hover/cell:opacity-100'
+							onClick={() => {
+								setExchangeOrderDialogOpen(true)
+								setDefaultExchangeOrderFormValues({
+									mo_no: data?.mo_no,
+									mat_ecolor: data?.mat_ecolor,
+									shoes_style_code_factory: data?.shoes_style_code_factory,
+									scanned_size_qty: aggregateSizeCount
+								})
+							}}>
+							<Icon name='ArrowLeftRight' className='stroke-active' />
+						</button>
+					)}
 				</Div>
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
 				{data?.shoes_style_code_factory}
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
-				{data?.mat_code}
+				{data?.mat_ecolor}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array(data?.sizes) &&
-						data?.sizes?.map((size) => (
+						sortBy(data.sizes, 'size_numcode').map((size) => (
 							<Div
 								key={size?.size_numcode}
 								className='group/cell inline-grid min-w-36 shrink-0 basis-36 grid-rows-2 divide-y last:flex-1'>
@@ -167,9 +179,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 												setExchangeEpcDialogOpen(true)
 												setDefaultExchangeEpcFormValues({
 													mo_no: data?.mo_no,
-													mat_code: data?.mat_code,
+													mat_ecolor: data?.mat_ecolor,
+													shoes_style_code_factory: data?.shoes_style_code_factory,
 													size_numcode: size?.size_numcode,
-													count: size?.count
+													scanned_size_qty: size?.count
 												})
 											}}>
 											<Icon
@@ -180,7 +193,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 										<DeleteSizePopover
 											data={{
 												mo_no: data?.mo_no,
-												mat_code: data?.mat_code,
+												mat_ecolor: data?.mat_ecolor,
 												size_numcode: size?.size_numcode,
 												quantity: size?.count
 											}}
@@ -197,9 +210,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-[var(--sticky-right-col-width)] !opacity-100'>
 				<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
-					<PopoverTrigger
-						disabled={data?.mo_no === FALLBACK_ORDER_VALUE}
-						className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
+					<PopoverTrigger className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
 						<Icon name='Trash2' />
 					</PopoverTrigger>
 					<PopoverContent className='w-96 space-y-6' side='left' align='center' sideOffset={16}>

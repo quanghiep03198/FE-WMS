@@ -19,7 +19,7 @@ export type Log = {
 }
 export type OrderItem = {
 	mo_no: string
-	mat_code: string
+	mat_ecolor: string
 	shoes_style_code_factory: string
 	sizes: Array<{
 		size_numcode: string

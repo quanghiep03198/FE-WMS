@@ -25,17 +25,19 @@ import {
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
+import { useResetState } from 'ahooks'
 import { useEffect, useId, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useCombineEpcInfoMutation } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, useCombineEpcInfoMutation } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { EpcCombinationFormValues, epcCombinationSchema } from '../../_schemas/epc-combination.schema'
 
 const DEFAULT_FORM_VALUES = {
-	mo_no: '',
+	mo_no: FALLBACK_ORDER_VALUE,
+	mo_no_actual: '',
 	mat_code: '',
 	shoes_style_code_factory: '',
 	mo_noseq: '',
@@ -44,12 +46,12 @@ const DEFAULT_FORM_VALUES = {
 	quantity: null
 }
 
-const CraftEpcInfoDialog: React.FC<any> = () => {
+const CombineEpcFormDialog: React.FC<any> = () => {
 	const { t } = useTranslation()
-	const [searchTerm, setSearchTerm] = useState<string>('')
+	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const [availableSizes, setAvailableSizes] = useState([])
 	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
-	const [isConfirmed, setIsConfirmed] = useState<CheckedState>(false)
+	const [isConfirmed, setIsConfirmed, resetConfirmation] = useResetState<CheckedState>(false)
 	const { craftEpcInfoDialogOpen, setCraftEpcInfoDialogOpen } = useOrderDetailContext(
 		'craftEpcInfoDialogOpen',
 		'setCraftEpcInfoDialogOpen'
@@ -59,42 +61,58 @@ const CraftEpcInfoDialog: React.FC<any> = () => {
 		defaultValues: DEFAULT_FORM_VALUES
 	})
 	const checkboxId = useId()
-	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
-	const currentSizeQty = useWatch({ control: form.control, name: 'size_sumqty' })
+	const currCommandNumber = useWatch({ control: form.control, name: 'mo_no_actual' })
+	const currCommandNumberSeq = useWatch({ control: form.control, name: 'mo_noseq' })
+	const currentSizeQty = useWatch({ control: form.control, name: 'size_qty' })
 
 	const { data: commandNumbers } = useSearchCommandNumberQuery(searchTerm)
-	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentCommandNumber)
+	const { data: orderDetail } = useGetCommandNumberDetailQuery(currCommandNumber)
 	const { mutateAsync } = useCombineEpcInfoMutation()
 
 	useEffect(() => {
-		if (orderDetail) {
-			form.reset({
-				...form.getValues(),
-				...orderDetail
-			})
+		if (orderDetail && orderDetail.orders && orderDetail.sizes) {
 			setAvailableSizes(orderDetail.sizes)
 			setAvailableCmdSequence(
-				orderDetail.mo_noseqs.map((item) => ({
-					label: item,
-					value: item
+				orderDetail.orders.map((item) => ({
+					label: item.mo_noseq,
+					value: item.mo_noseq
 				}))
 			)
 		}
 	}, [orderDetail])
 
+	useEffect(() => {
+		const currOrderInfo = orderDetail?.orders?.find((item) => item?.mo_noseq === currCommandNumberSeq)
+		if (currOrderInfo) {
+			form.reset({
+				...form.getValues(),
+				...currOrderInfo
+			})
+		}
+	}, [currCommandNumberSeq])
+
 	const handleCombineEpcInfo = async (data: EpcCombinationFormValues) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
-			await mutateAsync(data)
+			await mutateAsync({ ...data, mo_no: FALLBACK_ORDER_VALUE })
 			toast.success(t('ns_common:notification.success'), { id })
 			setCraftEpcInfoDialogOpen(false)
+			form.reset(DEFAULT_FORM_VALUES)
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id })
 		}
 	}
 
+	const handleDialogOpenChange = (open: boolean) => {
+		setCraftEpcInfoDialogOpen(open)
+		if (!open) {
+			resetConfirmation()
+			resetSearchTerm()
+		}
+	}
+
 	return (
-		<Dialog open={craftEpcInfoDialogOpen} onOpenChange={setCraftEpcInfoDialogOpen}>
+		<Dialog open={craftEpcInfoDialogOpen} onOpenChange={handleDialogOpenChange}>
 			<DialogContent className='max-w-2xl'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_erp:rfid_match_craft_form.title')}</DialogTitle>
@@ -103,12 +121,20 @@ const CraftEpcInfoDialog: React.FC<any> = () => {
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleCombineEpcInfo)}>
 						<ComboboxFieldControl
-							name='mo_no'
+							name='mo_no_actual'
 							label={t('ns_erp:fields.mo_no_actual')}
 							datalist={commandNumbers}
 							labelField='mo_no'
 							valueField='mo_no'
 							onInput={setSearchTerm}
+							onSelect={(value) => form.reset({ mo_no_actual: value })}
+						/>
+						<SelectFieldControl
+							label={t('ns_erp:fields.mo_noseq')}
+							name='mo_noseq'
+							datalist={availableCmdSequence}
+							labelField='label'
+							valueField='value'
 						/>
 						<InputFieldControl
 							label={t('ns_erp:fields.mat_code')}
@@ -123,13 +149,6 @@ const CraftEpcInfoDialog: React.FC<any> = () => {
 							readOnly={true}
 						/>
 						<SelectFieldControl
-							label={t('ns_erp:fields.mo_noseq')}
-							name='mo_noseq'
-							datalist={availableCmdSequence}
-							labelField='label'
-							valueField='value'
-						/>
-						<SelectFieldControl
 							label='Size'
 							name='size_numcode'
 							datalist={availableSizes}
@@ -137,7 +156,7 @@ const CraftEpcInfoDialog: React.FC<any> = () => {
 							valueField='size_numcode'
 							onValueChange={(value) => {
 								const selectedSize = availableSizes.find((size) => size.size_numcode === value)
-								form.reset({ ...form.getValues(), size_sumqty: selectedSize?.size_qty ?? 0 })
+								form.reset({ ...form.getValues(), size_qty: selectedSize?.size_qty ?? 0 })
 							}}
 						/>
 						<InputFieldControl
@@ -191,4 +210,4 @@ const CraftEpcInfoDialog: React.FC<any> = () => {
 
 const Form = tw.form`grid grid-cols-2 gap-y-6 gap-x-2`
 
-export default CraftEpcInfoDialog
+export default CombineEpcFormDialog

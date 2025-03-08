@@ -10,11 +10,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 	Div,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
 	Form as FormProvider,
 	Icon,
 	Label,
@@ -24,9 +19,9 @@ import {
 import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { usePrevious, useResetState } from 'ahooks'
+import { useResetState } from 'ahooks'
 import { debounce, omit, uniqBy } from 'lodash'
-import { Fragment, useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -72,14 +67,11 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)
 	})
-	const isExchangeAll = form.watch('exchange_all')
-	const quantity = form.watch('quantity')
-	const actualOrder = form.watch('mo_no_actual')
-	const previousQuantity = usePrevious(quantity)
 
 	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchExchangableOrderQuery({
 		'mo_no.eq': defaultValues?.mo_no,
-		'mat_code.eq': defaultValues?.mat_code,
+		'shoes_style_code_factory.eq': defaultValues?.shoes_style_code_factory,
+		'mat_ecolor.eq': defaultValues?.mat_ecolor,
 		q: searchTerm
 	})
 
@@ -96,11 +88,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 		if (defaultValues) form.reset(defaultValues)
 	}, [defaultValues])
 
-	useEffect(() => {
-		if (isExchangeAll) form.setValue('quantity', defaultValues?.count ?? 0)
-		else form.setValue('quantity', previousQuantity ?? 0)
-	}, [isExchangeAll])
-
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
 			await mutateAsync(omit({ ...data, quantity: data.quantity ?? data.count }, ['exchange_all', 'count']))
@@ -110,7 +97,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 			}
 			resetSelectedRows()
 			setOpen(!open)
-		} catch (error) {
+		} catch {
 			toast.error(t('ns_common:notification.error'))
 		}
 	}
@@ -147,36 +134,6 @@ const ExchangeOrderFormDialog: React.FC = () => {
 								description={t('ns_inoutbound:description.transferred_order')}
 							/>
 						</Div>
-
-						{defaultValues?.mo_no === FALLBACK_ORDER_VALUE && (
-							<Fragment>
-								<Div className='col-span-1'>
-									<InputFieldControl
-										name='quantity'
-										type='number'
-										placeholder='0'
-										disabled={!actualOrder}
-										readOnly={isExchangeAll}
-										label={t('ns_common:common_fields.quantity')}
-									/>
-								</Div>
-								<FormField
-									control={form.control}
-									name='exchange_all'
-									render={({ field }) => (
-										<FormItem className='col-span-full flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm'>
-											<FormControl>
-												<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-											</FormControl>
-											<Div className='space-y-1.5 leading-none'>
-												<FormLabel>{t('ns_inoutbound:labels.exchange_all')}</FormLabel>
-												<FormDescription>{t('ns_inoutbound:description.exchange_all')}</FormDescription>
-											</Div>
-										</FormItem>
-									)}
-								/>
-							</Fragment>
-						)}
 
 						<Div className='col-span-full space-y-4'>
 							<Div className='space-y-1.5 leading-none'>

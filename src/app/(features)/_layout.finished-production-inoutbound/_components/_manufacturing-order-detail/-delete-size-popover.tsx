@@ -32,7 +32,7 @@ import { DeleteScannedEpcsFormValues, deleteScannedEpcsSchema } from '../../_sch
 type DeleteSizePopoverProps = {
 	data: {
 		mo_no: string
-		mat_code: string
+		mat_ecolor: string
 		size_numcode: string
 		quantity: number
 	}

@@ -50,7 +50,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	const [columnFilters, setColumnFilters, resetColumnFilters] = useResetState<Omit<OrderItem, 'sizes'>>({
 		mo_no: '',
-		mat_code: '',
+		mat_ecolor: '',
 		shoes_style_code_factory: ''
 	})
 
@@ -73,7 +73,11 @@ const OrderSizeDetailTable: React.FC = () => {
 	}, [dialogOpen])
 
 	const allMatchingRowsSelection = useMemo(() => {
-		return scannedOrders.filter((item) => selectedRows[0]?.mat_code === item.mat_code)
+		return scannedOrders.filter(
+			(item) =>
+				selectedRows[0]?.mat_ecolor === item.mat_ecolor &&
+				selectedRows[0]?.shoes_style_code_factory === item.shoes_style_code_factory
+		)
 	}, [selectedRows])
 
 	const isAllMatchingRowsSelected = useMemo(() => {
@@ -91,21 +95,23 @@ const OrderSizeDetailTable: React.FC = () => {
 			setSelectedRows(
 				allMatchingRowsSelection.map((item) => ({
 					mo_no: item.mo_no,
-					mat_code: item.mat_code,
-					count: item?.sizes?.reduce((acc, curr) => {
-						return acc + curr.count
-					}, 0)
+					shoes_style_code_factory: item.shoes_style_code_factory,
+					mat_ecolor: item.mat_ecolor,
+					scanned_size_qty:
+						item?.sizes?.reduce((acc, curr) => {
+							return acc + curr.count
+						}, 0) ?? 0
 				}))
 			)
 		}
 	}
 
 	const filteredScannedOrders = useMemo(() => {
-		const { mo_no, mat_code, shoes_style_code_factory } = columnFilters
+		const { mo_no, mat_ecolor: mat_ecolor, shoes_style_code_factory } = columnFilters
 		return scannedOrders.filter((item) => {
 			return (
 				item.mo_no.toLowerCase().includes(mo_no.toLowerCase()) &&
-				item.mat_code.toLowerCase().includes(mat_code.toLowerCase()) &&
+				item.mat_ecolor.toLowerCase().includes(mat_ecolor.toLowerCase()) &&
 				item.shoes_style_code_factory.toLowerCase().includes(shoes_style_code_factory.toLowerCase())
 			)
 		})
@@ -131,15 +137,15 @@ const OrderSizeDetailTable: React.FC = () => {
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
-			<DialogContent className='h-screen w-screen max-w-[100vw] rounded-none border-none focus-visible:outline-none focus-visible:ring-0'>
+			<DialogContent className='h-screen max-w-[screen] overflow-hidden rounded-none border-none focus-visible:outline-none focus-visible:ring-0'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
-				<Div className='relative divide-y overflow-hidden rounded-lg border'>
+				<Div className='relative flex h-[calc(85vh-4rem)] flex-col divide-y overflow-hidden rounded-lg border'>
 					<Div ref={ref} className='flow-root h-[85vh] overflow-scroll rounded-lg'>
 						<Table
-							className='w-full border-separate border-spacing-0 rounded-lg'
+							className='border-separate border-spacing-0 rounded-lg'
 							style={
 								{
 									'--row-selection-col-width': '3rem',
@@ -166,7 +172,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										{t('ns_erp:fields.shoestyle_codefactory')}
 									</TableHead>
 									<TableHead className='left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
-										{t('ns_erp:fields.mat_code')}
+										{t('ns_erp:fields.mat_ecolor')}
 									</TableHead>
 									<TableHead>Size</TableHead>
 									<TableHead
@@ -199,7 +205,10 @@ const OrderSizeDetailTable: React.FC = () => {
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
 											onChange={(e) =>
-												setColumnFilters((prev) => ({ ...prev, shoes_style_code_factory: e.target.value }))
+												setColumnFilters((prev) => ({
+													...prev,
+													shoes_style_code_factory: e.target.value
+												}))
 											}
 										/>
 									</TableHead>
@@ -209,10 +218,12 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
-											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mat_code: e.target.value }))}
+											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mat_ecolor: e.target.value }))}
 										/>
 									</TableHead>
-									<TableHead></TableHead>
+									<TableHead>
+										<span className='sr-only'></span>
+									</TableHead>
 									<TableHead
 										align='center'
 										className='sticky right-[var(--row-action-col-width)] z-20 w-24 min-w-24'>
@@ -240,7 +251,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</Div>
 						)}
 					</Div>
-					<Div className='sticky bottom-0 left-0 flex h-16 items-center justify-between bg-background p-4'>
+					<Div className='flex basis-16 items-center justify-between bg-background p-4'>
 						<Typography variant='small' color='muted'>
 							{t('ns_inoutbound:mo_no_box.caption')}
 						</Typography>
@@ -265,8 +276,8 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 		setOpen(true)
 		setDefaultValues({
 			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
-			mat_code: selectedRows[0]?.mat_code,
-			count: selectedRows.reduce((acc, curr) => acc + curr.count, 0)
+			mat_ecolor: selectedRows[0]?.mat_ecolor,
+			scanned_size_qty: selectedRows.reduce((acc, curr) => acc + curr.scanned_size_qty, 0)
 		})
 	}
 

@@ -2,8 +2,8 @@ import { IElectronicProductCode } from '@/common/types/entities'
 
 export type SearchCustOrderParams = {
 	'mo_no.eq': string
-	'mat_code.eq': string
-	'size_numcode.eq'?: string
+	'mat_ecolor.eq': string
+	'shoes_style_code_factory.eq'?: string
 	q: string
 }
 
@@ -16,7 +16,7 @@ export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undef
 
 export type OrderItem = {
 	mo_no: string
-	mat_code: string
+	mat_ecolor: string
 	shoes_style_code_factory: string
 	sizes: Array<{
 		size_numcode: string

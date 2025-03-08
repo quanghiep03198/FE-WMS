@@ -8,6 +8,7 @@ export default {
 		cancel_approve: 'Hủy duyệt',
 		clear_filter: 'Xóa lọc',
 		close: 'Đóng',
+		confirm: 'Xác nhận',
 		connect: 'Kết nối',
 		continue: 'Tiếp tục',
 		delete: 'Xóa',
@@ -145,10 +146,13 @@ export default {
 		problem_arises: 'Vấn đề phát sinh',
 		rows_per_page: 'Số hàng mỗi trang',
 		search_in_column: 'Tìm kiếm trong cột',
-		selected_rows: 'Đã chọn {{selectedRows}} dòng'
+		selected_rows: 'Đã chọn {{selectedRows}} dòng',
+		total_rows: '{{count}} bản ghi'
 	},
 	titles: {
 		caution: 'Cảnh báo',
-		general_settings: 'Cài đặt chung'
+		general_settings: 'Cài đặt chung',
+		original_data: 'Dữ liệu gốc',
+		target_data: 'Dữ liệu cập nhật'
 	}
 } as const

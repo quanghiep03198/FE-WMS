@@ -7,9 +7,10 @@ import { useShallow } from 'zustand/react/shallow'
 
 type SelectedRow = {
 	mo_no: string
-	mat_code: string
+	shoes_style_code_factory: string
+	mat_ecolor: string
 	size_numcode?: string
-	count: number
+	scanned_size_qty: number
 }
 
 type TOrderDetailContext = {
