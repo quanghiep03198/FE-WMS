@@ -229,10 +229,9 @@ function DataTable<TData, TValue>(
 	}, [tableRef.current])
 
 	// * Get row selection count
-	const rowSelectionCount =
-		String(table.getFilteredSelectedRowModel().rows?.length ?? 0) +
-		'/' +
-		String(table.getFilteredRowModel().rows?.length ?? 0)
+	const selectedRows = table.getFilteredSelectedRowModel().rows?.length ?? 0
+	const totalRows = manualPagination ? paginationProps.totalDocs : (table.getFilteredRowModel().rows?.length ?? 0)
+	const rowSelectionCount = String(selectedRows) + '/' + String(totalRows)
 
 	return (
 		<TableContext.Provider
@@ -270,11 +269,18 @@ function DataTable<TData, TValue>(
 					getRowCanExpand={getRowCanExpand}
 				/>
 				<FooterGroup>
-					{enableRowSelection && (
+					{enableRowSelection ? (
 						<Typography className='text-sm font-medium sm:hidden'>
 							{t('ns_common:table.selected_rows', {
 								selectedRows: rowSelectionCount,
 								defaultValue: rowSelectionCount
+							})}
+						</Typography>
+					) : (
+						<Typography className='text-sm font-medium sm:hidden'>
+							{t('ns_common:table.total_rows', {
+								count: totalRows,
+								defaultValue: `${totalRows} rows`
 							})}
 						</Typography>
 					)}
