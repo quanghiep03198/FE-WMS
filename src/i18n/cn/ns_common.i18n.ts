@@ -134,12 +134,14 @@ export default {
 		running: '运行中'
 	},
 	table: {
+		auto_refresh: '自动刷新',
 		filter: '过滤',
 		no_data: '没有数据',
 		no_filter_applied: '不应用过滤器',
 		no_match_result: '未找到结果.',
 		page: '第 {{page}} 页',
 		problem_arises: '问题出现',
+		refetch_interval: '重新获取间隔 (s)',
 		rows_per_page: '展示',
 		search_in_column: '在栏目中搜索',
 		selected_rows: '已选择 {{selectedRows}} 行',

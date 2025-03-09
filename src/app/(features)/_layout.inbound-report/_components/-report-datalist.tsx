@@ -1,6 +1,4 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
 import { useAuth } from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
 import {
@@ -8,19 +6,26 @@ import {
 	Button,
 	DataTable,
 	Div,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 	Icon,
+	Label,
+	Slider,
+	Switch,
 	Table,
 	TableBody,
 	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
-	Tooltip
+	Tooltip,
+	Typography
 } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
 import { saveAs } from 'file-saver'
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, memo, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
@@ -29,13 +34,23 @@ import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
 import { factories } from '@/common/constants/constants'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
+import { HoverCardPortal } from '@radix-ui/react-hover-card'
+import { useDebounce, useMemoizedFn, usePrevious } from 'ahooks'
+import { format } from 'date-fns'
 import { capitalize, isNil } from 'lodash'
-import DatePickerFilter from './-date-picker-filter'
+
+export type UrlQueryParams = {
+	'date.eq': string
+	'auto-refresh': number | false
+}
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
 
 const ReportDatalist: React.FC = () => {
-	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
+	const { searchParams } = useQueryParams<UrlQueryParams>({
+		'date.eq': format(new Date(), 'yyyy-MM-dd'),
+		'auto-refresh': false
+	})
 	const { data: tenants } = useGetTenantByFactory()
 	const { user } = useAuth()
 	const currentTenant = useMemo(() => {
@@ -48,7 +63,6 @@ const ReportDatalist: React.FC = () => {
 
 	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const dataTableRef = useRef<TTable<IInboundReport>>(null)
 	const columnHelper = createColumnHelper<IInboundReport>()
 
@@ -86,6 +100,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_common:common_fields.factory_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				minSize: 150,
 				size: 150,
 				meta: {
@@ -106,16 +121,9 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.mo_no'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				minSize: 150,
 				filterFn: 'fuzzy'
-			}),
-			columnHelper.accessor('mat_code', {
-				header: t('ns_erp:fields.mat_code'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				filterFn: 'fuzzy',
-				minSize: 150,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
@@ -190,10 +198,21 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
 				minSize: 220
 			}),
+			columnHelper.accessor('daily_inbound_qty', {
+				header: t('ns_erp:fields.daily_inbound_qty'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				minSize: 275
+			}),
 			columnHelper.accessor('accumulated_qty', {
 				header: t('ns_erp:fields.accumulated_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
@@ -204,6 +223,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.missing_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
@@ -213,21 +233,12 @@ const ReportDatalist: React.FC = () => {
 						: 0
 				},
 				minSize: 200
-			}),
-			columnHelper.accessor('daily_inbound_qty', {
-				header: t('ns_erp:fields.daily_inbound_qty'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				meta: { filterVariant: 'range', align: 'right' },
-				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
-				minSize: 275
 			})
 		],
 		[i18n.language]
 	)
 
-	const handleDownloadExcel = async () => {
+	const handleDownloadExcel = useMemoizedFn(async () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INBOUND_REPORT_ID })
 		try {
 			const blob = await ReportService.downloadInboundReport(currentTenant?.id, searchParams)
@@ -243,51 +254,118 @@ const ReportDatalist: React.FC = () => {
 		} catch {
 			toast.error('ns_common:notification.error', { id: DOWNLOAD_INBOUND_REPORT_ID })
 		}
-	}
+	})
 
 	return (
-		<DataTable
-			columns={columns}
-			data={data}
-			loading={isLoading}
-			enableExpanding={true}
-			ref={dataTableRef}
-			containerProps={{ className: 'h-[65vh]' }}
-			renderSubComponent={
-				(({ row }) => {
-					return <InboundReportDetailTable data={row.original?.size_run} />
-				}) satisfies RenderSubComponent<IInboundReport>
-			}
-			toolbarProps={{
-				slotLeft: () => isSmallScreen && <DatePickerFilter />,
-				slotRight: () => (
-					<Fragment>
-						<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-							<Button
-								size='icon'
-								variant='outline'
-								disabled={!data || data.length === 0}
-								onClick={handleDownloadExcel}>
-								<Icon name='Download' />
-							</Button>
-						</Tooltip>
-						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-							<Button size='icon' variant='outline' onClick={() => refetch()}>
-								<Icon name='RotateCw' />
-							</Button>
-						</Tooltip>
-					</Fragment>
-				)
-			}}
-		/>
+		<Div className='relative'>
+			<AutoRefreshToggle />
+			<DataTable
+				columns={columns}
+				data={data}
+				loading={isLoading}
+				enableExpanding={true}
+				ref={dataTableRef}
+				containerProps={{ className: 'h-[65vh]' }}
+				renderSubComponent={
+					(({ row }) => {
+						return <InboundReportDetailTable data={row.original?.size_run} />
+					}) satisfies RenderSubComponent<IInboundReport>
+				}
+				toolbarProps={{
+					slotRight: () => (
+						<Fragment>
+							<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
+								<Button
+									size='icon'
+									variant='outline'
+									disabled={!data || data.length === 0}
+									onClick={handleDownloadExcel}>
+									<Icon name='Download' />
+								</Button>
+							</Tooltip>
+							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+								<Button size='icon' variant='outline' onClick={() => refetch()}>
+									<Icon name='RotateCw' />
+								</Button>
+							</Tooltip>
+						</Fragment>
+					)
+				}}
+			/>
+		</Div>
 	)
 }
 
-const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> = ({ data }) => {
+const AutoRefreshToggle: React.FC = memo(() => {
 	const { t } = useTranslation()
+	const id = useId()
+	const { searchParams, setParams } = useQueryParams<UrlQueryParams>()
+	const [refetchInterval, setRefetchInterval] = useState<number | false>(searchParams['auto-refresh'])
+	const previousRefetchInterval = usePrevious<number | false>(refetchInterval)
+
+	const debouncedValue = useDebounce(refetchInterval, { wait: 1000 })
+
+	useEffect(() => {
+		setParams({ ...searchParams, 'auto-refresh': debouncedValue })
+	}, [debouncedValue])
 
 	return (
-		<Div className='w-96 overflow-clip rounded-md border'>
+		<HoverCard>
+			<HoverCardTrigger className='absolute inline-flex items-center justify-center gap-x-3 rounded-md bg-accent/60 px-4 py-2'>
+				<Label htmlFor={id}>{t('ns_common:table.auto_refresh')}</Label>
+				<Switch
+					id={id}
+					checked={Boolean(refetchInterval)}
+					onCheckedChange={(checked) => {
+						if (checked) setRefetchInterval(previousRefetchInterval ?? 5000)
+						else setRefetchInterval(false)
+					}}
+				/>
+			</HoverCardTrigger>
+			<HoverCardPortal>
+				<HoverCardContent hidden={!refetchInterval} side='right' sideOffset={8} className='w-80'>
+					<Div className='space-y-4'>
+						<Typography variant='small'>{t('ns_common:table.refetch_interval')}</Typography>
+						<Div className='flex items-start justify-between gap-2'>
+							<Icon name='Zap' size={20} className='-translate-y-2' />
+							<Div className='flex-1 basis-full space-y-3'>
+								<Slider
+									min={5000}
+									max={30000}
+									step={5000}
+									value={
+										typeof refetchInterval === 'number'
+											? [refetchInterval]
+											: [previousRefetchInterval || 5000]
+									}
+									onValueChange={([value]) => setRefetchInterval(value)}
+								/>
+								<Div className='flex items-baseline justify-between'>
+									{Array.from({ length: 6 }, (_, i) => (
+										<Typography
+											key={i}
+											variant='small'
+											className='translate-x-1/2 text-center !text-[10px] first:-translate-x-1/2'>
+											{(i + 1) * 5}
+										</Typography>
+									))}
+								</Div>
+							</Div>
+							<Icon name='Leaf' size={20} className='-translate-y-2' />
+						</Div>
+					</Div>
+				</HoverCardContent>
+			</HoverCardPortal>
+		</HoverCard>
+	)
+})
+
+AutoRefreshToggle.displayName = 'AutoRefreshToggle'
+
+const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> = ({ data }) => {
+	const { t } = useTranslation()
+	return (
+		<Div className='right-0 top-0 w-96 overflow-clip rounded-md border'>
 			<Table className='table-fixed !border-none'>
 				<TableHeader>
 					<TableRow>
@@ -320,5 +398,7 @@ const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> =
 		</Div>
 	)
 }
+
+InboundReportDetailTable.displayName = 'InboundReportDetailTable'
 
 export default ReportDatalist

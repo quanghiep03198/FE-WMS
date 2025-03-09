@@ -135,12 +135,14 @@ export default {
 		running: 'Running'
 	},
 	table: {
+		auto_refresh: 'Auto refresh',
 		filter: 'Filter',
 		no_data: 'No data',
 		no_filter_applied: 'No filter is applied',
 		no_match_result: 'No results found.',
 		page: 'Page {{page}}',
 		problem_arises: 'Problem arises',
+		refetch_interval: 'Refetch interval (s)',
 		rows_per_page: 'Rows per page',
 		search_in_column: 'Search in column',
 		selected_rows: '{{selectedRows}} row(s) selected',

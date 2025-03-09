@@ -139,12 +139,14 @@ export default {
 		running: 'Đang hoạt động'
 	},
 	table: {
+		auto_refresh: 'Tự động làm mới',
 		filter: 'Bộ lọc',
 		no_data: 'Không có dữ liệu',
 		no_filter_applied: 'Bộ lọc không được áp dụng',
 		no_match_result: 'Không có kết quả.',
 		page: 'Trang {{page}}',
 		problem_arises: 'Vấn đề phát sinh',
+		refetch_interval: 'Thời gian làm mới (s)',
 		rows_per_page: 'Số hàng mỗi trang',
 		search_in_column: 'Tìm kiếm trong cột',
 		selected_rows: 'Đã chọn {{selectedRows}} dòng',
