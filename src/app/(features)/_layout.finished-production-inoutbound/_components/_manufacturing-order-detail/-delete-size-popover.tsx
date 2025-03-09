@@ -7,7 +7,6 @@ import {
 	Checkbox,
 	Div,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -22,7 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { usePrevious } from 'ahooks'
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -48,8 +47,8 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 
 	const { mutateAsync: deleteAsync, isPending } = useDeleteEpcMutation()
 
-	const isDeleteAll = form.watch('delete_all')
-	const quantity = form.watch('quantity')
+	const isDeleteAll = useWatch({ control: form.control, name: 'delete_all' })
+	const quantity = useWatch({ control: form.control, name: 'quantity' })
 	const prevQuantity = usePrevious(quantity)
 
 	useEffect(() => {
@@ -62,12 +61,15 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	}, [isDeleteAll])
 
 	const handleDeleteEpcs = async (data: DeleteScannedEpcsFormValues) => {
+		console.log(data)
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await deleteAsync({
 				['mo_no.eq']: data.mo_no,
+				['mat_ecolor.eq']: data.mat_ecolor,
 				['size_numcode.eq']: data.size_numcode,
-				['quantity.eq']: data.quantity
+				['quantity.eq']: data.quantity,
+				f: data.f
 			})
 			toast.success(t('ns_common:notification.success'), { id })
 			setOpen(false)
@@ -84,37 +86,60 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 			<PopoverContent className='w-96' side='bottom' align='start'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleDeleteEpcs)}>
-						<InputFieldControl name='quantity' type='number' label={t('ns_common:common_fields.quantity')} />
-						<FormField
-							control={form.control}
-							name='delete_all'
-							render={({ field }) => (
-								<FormItem className='col-span-full flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm'>
-									<FormControl>
-										<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-									</FormControl>
-									<Div className='space-y-1.5 leading-none'>
-										<FormLabel>{t('ns_inoutbound:labels.delete_all')}</FormLabel>
-										<FormDescription>
-											{t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
-										</FormDescription>
-									</Div>
-								</FormItem>
-							)}
+						<InputFieldControl
+							name='quantity'
+							type='number'
+							disabled={isDeleteAll}
+							label={t('ns_common:common_fields.quantity')}
 						/>
+
+						<Div className='space-y-6 rounded-md border p-4'>
+							<FormField
+								control={form.control}
+								name='f'
+								render={({ field }) => (
+									<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<Div className='space-y-1.5 leading-none'>
+											<FormLabel>{t('ns_inoutbound:labels.delete_and_unscannable')}</FormLabel>
+										</Div>
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name='delete_all'
+								render={({ field }) => (
+									<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+										<FormControl>
+											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+										</FormControl>
+										<Div className='space-y-1.5 leading-none'>
+											<FormLabel>{t('ns_inoutbound:labels.delete_all')}</FormLabel>
+										</Div>
+									</FormItem>
+								)}
+							/>
+						</Div>
+
 						<Div className='flex items-center justify-end gap-x-2'>
-							<PopoverClose
-								type='button'
-								className={cn(
-									buttonVariants({
-										variant: 'outline'
-									})
-								)}>
-								{t('ns_common:actions.cancel')}
-							</PopoverClose>
-							<Button variant='destructive' type='submit' disabled={isPending}>
-								{t('ns_common:actions.delete')}
-							</Button>
+							<Div className='flex items-stretch justify-end gap-x-1'>
+								<PopoverClose
+									type='button'
+									className={cn(
+										buttonVariants({
+											variant: 'outline'
+										})
+									)}>
+									{t('ns_common:actions.cancel')}
+								</PopoverClose>
+								<Button variant='destructive' type='submit' disabled={isPending}>
+									{t('ns_common:actions.delete')}
+								</Button>
+							</Div>
 						</Div>
 					</Form>
 				</FormProvider>

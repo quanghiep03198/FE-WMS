@@ -58,6 +58,7 @@ export default {
 	},
 	labels: {
 		delete_all: 'Xóa tất cả',
+		delete_and_unscannable: 'Xóa và không quét lại',
 		exchange_all: 'Hoán đổi tất cả',
 		io_archive_warehouse: 'Kho lưu trữ',
 		io_reason: 'Lý do nhập/xuất',

@@ -1,28 +1,12 @@
 import { cn } from '@/common/utils/cn'
-import {
-	Button,
-	buttonVariants,
-	Checkbox,
-	Div,
-	Icon,
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-	TableCell,
-	TableRow,
-	Typography
-} from '@/components/ui'
+import { Checkbox, Div, Icon, TableCell, TableRow } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { PopoverClose } from '@radix-ui/react-popover'
-import { useMemoizedFn } from 'ahooks'
 import { sortBy } from 'lodash'
-import { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import { FALLBACK_ORDER_VALUE, useDeleteEpcMutation } from '../../_apis/rfid.api'
+import { useMemo } from 'react'
+import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
+import DeleteOrderPopover from './-delete-prder-popover'
 import DeleteSizePopover from './-delete-size-popover'
 
 type OrderDetailTableRowProps = {
@@ -30,12 +14,6 @@ type OrderDetailTableRowProps = {
 }
 
 const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
-	const { t } = useTranslation()
-	const { scannedOrders, setScanningStatus, setScannedOrders } = usePageContext(
-		'scannedOrders',
-		'setScanningStatus',
-		'setScannedOrders'
-	)
 	const {
 		selectedRows,
 		pushSelectedRow,
@@ -56,8 +34,6 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		'setDefaultExchangeOrderFormValues'
 	)
 
-	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteEpcMutation()
-
 	const hasSomeRowMatch = useMemo(() => {
 		console.log(selectedRows[0], data)
 
@@ -68,8 +44,6 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		)
 	}, [selectedRows])
 
-	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
-
 	const handleToggleSelectRow = (checked: CheckedState, data: any) => {
 		if (checked) {
 			pushSelectedRow(data)
@@ -77,27 +51,6 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			pullSelectedRow(data)
 		}
 	}
-
-	const handleDeleteOrder = useMemoizedFn(async () => {
-		try {
-			await deleteOrderAsync({ ['mo_no.eq']: data?.mo_no })
-			// * Remove from selected row if scanned order is deleted
-			if (selectedRows.some((row) => row.mo_no === data?.mo_no)) {
-				pullSelectedRow(selectedRows.find((row) => row.mo_no === data?.mo_no))
-			}
-			// * If all order is deleted, reset all
-			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== data?.mo_no)
-			if (filteredOrders.length === 0) {
-				setScanningStatus(undefined)
-				return
-			}
-			setScannedOrders(filteredOrders)
-			setPopoverOpen(false)
-			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: 'DELETE_UNEXPECTED_ORDER' })
-		}
-	})
 
 	const aggregateSizeCount = useMemo(
 		() =>
@@ -209,32 +162,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-[var(--sticky-right-col-width)] !opacity-100'>
-				<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
-					<PopoverTrigger className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
-						<Icon name='Trash2' />
-					</PopoverTrigger>
-					<PopoverContent className='w-96 space-y-6' side='left' align='center' sideOffset={16}>
-						<Div className='space-y-1.5'>
-							<Typography className='font-medium'>
-								{t('ns_inoutbound:notification.confirm_delete_all_mono.title')}
-							</Typography>
-							<Typography variant='small'>
-								{t('ns_inoutbound:notification.confirm_delete_all_mono.description')}
-							</Typography>
-						</Div>
-						<Div className='flex items-stretch justify-end gap-x-1 *:basis-20'>
-							<PopoverClose
-								disabled={isDeleting}
-								className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
-								{t('ns_common:actions.cancel')}
-							</PopoverClose>
-							<Button disabled={isDeleting} variant='destructive' size='sm' onClick={handleDeleteOrder}>
-								{isDeleting && <Icon name='LoaderCircle' role='img' className='animate-spin' />}
-								{t('ns_common:actions.delete')}
-							</Button>
-						</Div>
-					</PopoverContent>
-				</Popover>
+				<DeleteOrderPopover data={data} />
 			</TableCell>
 		</TableRow>
 	)

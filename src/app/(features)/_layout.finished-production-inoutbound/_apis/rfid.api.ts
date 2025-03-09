@@ -98,7 +98,7 @@ export const useDeleteEpcMutation = () => {
 	)
 
 	return useMutation({
-		mutationFn: async (filters: Record<string, string | number>) =>
+		mutationFn: async (filters: Record<string, string | number | boolean>) =>
 			await RFIDService.deleteScannedEpcs(connection, filters),
 		onSuccess: () => {
 			setCurrentPage(null)

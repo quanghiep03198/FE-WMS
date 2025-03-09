@@ -47,7 +47,7 @@ export class RFIDService {
 		)
 	}
 
-	static async deleteScannedEpcs(tenantId: string, filters: Record<string, string | number>) {
+	static async deleteScannedEpcs(tenantId: string, filters: Record<string, string | number | boolean>) {
 		return await axiosInstance.delete(`/rfid/delete-scanned-epcs`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filters

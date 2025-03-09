@@ -47,6 +47,7 @@ export default {
 	},
 	labels: {
 		delete_all: 'Delete all',
+		delete_and_unscannable: 'Delete and do not rescan',
 		exchange_all: 'Exchange all',
 		io_archive_warehouse: 'Archived warehouse',
 		io_reason: 'Import/Export reason',
