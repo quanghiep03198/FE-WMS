@@ -39,6 +39,7 @@ export default {
 		toggle_sidebar: '切换主侧边栏',
 		toggle_theme: '切换主题',
 		trigger: '触发',
+		unpin_all_columns: '取消固定所有列',
 		update: '編輯'
 	},
 	common_fields: {

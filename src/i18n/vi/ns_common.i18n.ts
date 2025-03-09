@@ -40,6 +40,7 @@ export default {
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
 		toggle_theme: 'Chuyển đổi chế độ nền',
 		trigger: 'Kích hoạt',
+		unpin_all_columns: 'Bỏ ghim tất cả cột',
 		update: 'Chỉnh sửa'
 	},
 	common_fields: {

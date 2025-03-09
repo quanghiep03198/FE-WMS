@@ -39,6 +39,7 @@ export default {
 		toggle_sidebar: 'Toggle Primary Side Bar',
 		toggle_theme: 'Toggle Theme',
 		trigger: 'Trigger',
+		unpin_all_columns: 'Unpin all columns',
 		update: 'Update'
 	},
 	common_fields: {
