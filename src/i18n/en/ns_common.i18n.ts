@@ -137,6 +137,7 @@ export default {
 	},
 	table: {
 		auto_refresh: 'Auto refresh',
+		clear_sort: 'Clear sort',
 		filter: 'Filter',
 		no_data: 'No data',
 		no_filter_applied: 'No filter is applied',

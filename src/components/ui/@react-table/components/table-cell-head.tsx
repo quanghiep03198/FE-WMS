@@ -42,7 +42,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 
 	return (
 		<ContextMenu>
-			<ContextMenuTrigger className='focus:outline-none'>
+			<ContextMenuTrigger className='line-clamp-1 focus:outline-none'>
 				<Div
 					className={cn(
 						'relative line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
@@ -58,10 +58,10 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 					title={
 						header.column.getCanSort()
 							? getNextSortingOrder() === 'asc'
-								? 'Sort ascending'
+								? t('ns_common:table.sort_asc')
 								: getNextSortingOrder() === 'desc'
-									? 'Sort descending'
-									: 'Clear sort'
+									? t('ns_common:table.sort_desc')
+									: t('ns_common:table.clear_sort')
 							: undefined
 					}>
 					{flexRender(columnDef.header, header.getContext())}

@@ -141,6 +141,7 @@ export default {
 	},
 	table: {
 		auto_refresh: 'Tự động làm mới',
+		clear_sort: 'Xóa sắp xếp',
 		filter: 'Bộ lọc',
 		no_data: 'Không có dữ liệu',
 		no_filter_applied: 'Bộ lọc không được áp dụng',
