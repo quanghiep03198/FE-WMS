@@ -22,6 +22,7 @@ export default {
 		login: 'Đăng nhập',
 		logout: 'Đăng xuất',
 		open: 'Mở',
+		pin: 'Ghim',
 		proceed: 'Tiếp tục',
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',
@@ -145,12 +146,17 @@ export default {
 		no_filter_applied: 'Bộ lọc không được áp dụng',
 		no_match_result: 'Không có kết quả.',
 		page: 'Trang {{page}}',
-		problem_arises: 'Vấn đề phát sinh',
+		pin_left: 'Ghim bên trái',
+		pin_right: 'Ghim bên phải',
 		refetch_interval: 'Thời gian làm mới (s)',
+		reset_size: 'Đặt lại kích thước',
 		rows_per_page: 'Số hàng mỗi trang',
 		search_in_column: 'Tìm kiếm trong cột',
 		selected_rows: 'Đã chọn {{selectedRows}} dòng',
-		total_rows: '{{count}} bản ghi'
+		sort_asc: 'Sắp xếp tăng dần',
+		sort_desc: 'Sắp xếp giảm dần',
+		total_rows: '{{count}} bản ghi',
+		unpin: 'Bỏ ghim'
 	},
 	titles: {
 		caution: 'Cảnh báo',

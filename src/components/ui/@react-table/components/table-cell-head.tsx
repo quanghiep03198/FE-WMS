@@ -3,6 +3,7 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { ArrowDownIcon, ArrowUpIcon, WidthIcon } from '@radix-ui/react-icons'
 import { Header, Table, flexRender } from '@tanstack/react-table'
 import { icons } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import {
 	ContextMenu,
 	ContextMenuCheckboxItem,
@@ -23,6 +24,7 @@ type TableCellHeadProps<TData, TValue> = {
 }
 
 export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
+	const { t } = useTranslation()
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
@@ -72,14 +74,14 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 					className='gap-x-2'
 					onClick={() => header.column.toggleSorting(false)}>
 					<ArrowUpIcon />
-					Sort ascending
+					{t('ns_common:table.sort_asc')}
 				</ContextMenuItem>
 				<ContextMenuItem
 					disabled={!columnDef.enableSorting}
 					className='gap-x-2'
 					onClick={() => header.column.toggleSorting(true)}>
 					<ArrowDownIcon />
-					Sort descending
+					{t('ns_common:table.sort_desc')}
 				</ContextMenuItem>
 				<ContextMenuSeparator />
 				<ContextMenuSub>
@@ -88,31 +90,31 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 						aria-disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
 						disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
 						className='aria-disabled:text-muted-foreground'>
-						Pin
+						{t('ns_common:actions.pin')}
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className='w-56'>
 						<ContextMenuCheckboxItem
 							checked={header.column.getIsPinned() === (false as CheckedState)}
 							onCheckedChange={() => header.column.pin(false)}>
-							No pin
+							{t('ns_common:table.unpin')}
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem
 							checked={header.column.getIsPinned() === ('left' as CheckedState)}
 							onCheckedChange={() => header.column.pin('left')}>
-							Pin left
+							{t('ns_common:table.pin_left')}
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem
 							checked={header.column.getIsPinned() === ('right' as CheckedState)}
 							onCheckedChange={() => {
 								header.column.pin('right')
 							}}>
-							Pin right
+							{t('ns_common:table.pin_right')}
 						</ContextMenuCheckboxItem>
 					</ContextMenuSubContent>
 				</ContextMenuSub>
 				<ContextMenuSeparator />
 				<ContextMenuItem className='gap-x-2' onClick={header.column.resetSize}>
-					<WidthIcon /> Reset size
+					<WidthIcon /> {t('ns_common:table.reset_size')}
 				</ContextMenuItem>
 			</ContextMenuContent>
 		</ContextMenu>

@@ -22,6 +22,7 @@ export default {
 		login: '登入',
 		logout: '登出',
 		open: '打开',
+		pin: '固定',
 		proceed: '确认',
 		reapprove: '重新批准',
 		reload: '重新加载',
@@ -140,12 +141,17 @@ export default {
 		no_filter_applied: '不应用过滤器',
 		no_match_result: '未找到结果.',
 		page: '第 {{page}} 页',
-		problem_arises: '问题出现',
 		refetch_interval: '重新获取间隔 (s)',
 		rows_per_page: '展示',
 		search_in_column: '在栏目中搜索',
 		selected_rows: '已选择 {{selectedRows}} 行',
-		total_rows: '{{count}} 记录'
+		total_rows: '{{count}} 记录',
+		unpin: '取消固定',
+		pin_left: '固定左侧',
+		pin_right: '固定右侧',
+		reset_size: '重置大小',
+		sort_asc: '升序排序',
+		sort_desc: '降序排序'
 	},
 	titles: {
 		caution: '警告',

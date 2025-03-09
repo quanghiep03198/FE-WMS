@@ -22,6 +22,7 @@ export default {
 		login: 'Log in',
 		logout: 'Log out',
 		open: 'Open',
+		pin: 'Pin',
 		proceed: 'Proceed',
 		reapprove: 'Reapprove',
 		reload: 'Reload',
@@ -141,12 +142,17 @@ export default {
 		no_filter_applied: 'No filter is applied',
 		no_match_result: 'No results found.',
 		page: 'Page {{page}}',
-		problem_arises: 'Problem arises',
+		pin_left: 'Pin left',
+		pin_right: 'Pin right',
 		refetch_interval: 'Refetch interval (s)',
+		reset_size: 'Reset size',
 		rows_per_page: 'Rows per page',
 		search_in_column: 'Search in column',
 		selected_rows: '{{selectedRows}} row(s) selected',
-		total_rows: '{{count}} records'
+		sort_asc: 'Sort ascending',
+		sort_desc: 'Sort descending',
+		total_rows: '{{count}} records',
+		unpin: 'Unpin'
 	},
 	titles: {
 		caution: 'Caution',
