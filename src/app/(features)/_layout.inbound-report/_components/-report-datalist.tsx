@@ -157,7 +157,7 @@ const ReportDatalist: React.FC = () => {
 						<Div className='space-x-1'>
 							{value
 								.split(',')
-								.sort()
+								.sort((a, b) => a.localeCompare(b))
 								.map((item) => (
 									<Badge key={item} variant='outline' className='font-normal'>
 										{item}
@@ -179,7 +179,7 @@ const ReportDatalist: React.FC = () => {
 						<Div className='space-x-1'>
 							{value
 								.split(',')
-								.sort()
+								.sort((a, b) => a.localeCompare(b))
 								.map((item) => (
 									<Badge key={item} variant='secondary'>
 										{item.trim()}
@@ -311,7 +311,7 @@ const AutoRefreshToggle: React.FC = memo(() => {
 
 	return (
 		<HoverCard>
-			<HoverCardTrigger className='absolute inline-flex items-center justify-center gap-x-3 rounded-md bg-accent/60 px-4 py-2'>
+			<HoverCardTrigger className='absolute inline-flex items-center justify-center gap-x-3 rounded-md bg-accent/60 px-4 py-2 shadow'>
 				<Label htmlFor={id}>{t('ns_common:table.auto_refresh')}</Label>
 				<Switch
 					id={id}
@@ -342,10 +342,7 @@ const AutoRefreshToggle: React.FC = memo(() => {
 								/>
 								<Div className='flex items-baseline justify-between'>
 									{Array.from({ length: 6 }, (_, i) => (
-										<Typography
-											key={i}
-											variant='small'
-											className='translate-x-1/2 text-center !text-[10px] first:-translate-x-1/2'>
+										<Typography key={i} variant='small' className='text-center !text-[10px]'>
 											{(i + 1) * 5}
 										</Typography>
 									))}
