@@ -277,6 +277,7 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 		setDefaultValues({
 			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
 			mat_ecolor: selectedRows[0]?.mat_ecolor,
+			shoes_style_code_factory: selectedRows[0]?.shoes_style_code_factory,
 			scanned_size_qty: selectedRows.reduce((acc, curr) => acc + curr.scanned_size_qty, 0)
 		})
 	}
