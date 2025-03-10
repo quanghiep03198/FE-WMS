@@ -1,4 +1,4 @@
-import { INCOMING_DATA_CHANGE } from '@/app/(features)/_constants/event.const'
+import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
@@ -12,7 +12,7 @@ import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, useLocalStorageState, usePrevious, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
 import { Fragment, useCallback, useRef, useState } from 'react'
@@ -21,11 +21,8 @@ import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetEpcQuery } from '../../_apis/rfid.api'
-import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
+import { useGetInboundEpcQuery } from '../../_apis/inbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
-import { RFIDStreamEventData } from '../../_types'
-import { RFIDSettings } from '../../index.lazy'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 20
@@ -64,17 +61,12 @@ const EpcDataList: React.FC = () => {
 	// * Abort controller to control fetch event source
 	const abortControllerRef = useRef<AbortController>(new AbortController())
 
-	// * Previous time reference
-	const previousTimeRef = useRef<number>(performance.now())
-
-	// * Polling duration for SSE
-	const [settings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, { listenStorageChange: true })
-
 	// * Alert for invalid EPCs
 	const [hasInvalidEpcAlert, setHasInvalidEpcAlert] = useState<boolean>(false)
 
 	// * Incomming EPCs data from server-sent event
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
+
 	// * Previous scanned EPCs
 	const previousEpc = usePrevious(incommingEpc)
 
@@ -85,14 +77,14 @@ const EpcDataList: React.FC = () => {
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
 	// * Manual fetch EPC
-	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetEpcQuery()
+	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetInboundEpcQuery()
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/sse', {
+			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/sse/inbound', {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
@@ -132,8 +124,6 @@ const EpcDataList: React.FC = () => {
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
-						previousTimeRef.current = performance.now()
-						window.dispatchEvent(new CustomEvent(INCOMING_DATA_CHANGE, { detail: event.data }))
 					} catch (error) {
 						throw new FatalError(error)
 					}
@@ -153,7 +143,6 @@ const EpcDataList: React.FC = () => {
 			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
 		} finally {
 			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
-			window.removeEventListener(INCOMING_DATA_CHANGE, null)
 		}
 	}
 

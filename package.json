@@ -174,5 +174,14 @@
 		"vitest": "^3.0.2",
 		"vitest-browser-react": "^0.0.4",
 		"workbox-window": "^7.3.0"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@sentry/cli",
+			"@swc/core",
+			"esbuild",
+			"msw",
+			"sharp"
+		]
 	}
 }

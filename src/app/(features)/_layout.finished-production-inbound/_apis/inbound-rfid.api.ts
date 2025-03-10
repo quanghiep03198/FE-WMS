@@ -11,15 +11,15 @@ import { SearchCustOrderParams } from '../_types'
 
 // * API Query Keys
 export const SHAPING_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
-export const FP_ORDER_DETAIL_PROVIDE_TAG = 'ORDER_DETAIL'
-export const FP_EPC_LIST_PROVIDE_TAG = 'FP_EPC_LIST'
+export const FP_ORDER_DETAIL_PROVIDE_TAG = 'INBOUND_ORDER_DETAIL'
+export const FP_EPC_LIST_PROVIDE_TAG = 'INBOUND_EPC_LIST'
 
 // * Fallback order value if it's null
 export const FALLBACK_ORDER_VALUE = 'Unknown'
 
 export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
 
-export const useGetEpcQuery = () => {
+export const useGetInboundEpcQuery = () => {
 	const queryClient = useQueryClient()
 
 	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
@@ -38,7 +38,7 @@ export const useGetEpcQuery = () => {
 	return useQuery({
 		queryKey: [FP_EPC_LIST_PROVIDE_TAG],
 		queryFn: async () =>
-			RFIDService.fetchFPInventoryData(connection, {
+			RFIDService.fetchNextInboundEpc(connection, {
 				_page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
@@ -49,7 +49,7 @@ export const useGetEpcQuery = () => {
 	})
 }
 
-export const useGetOrderDetail = () => {
+export const useGetInboundOrderDetail = () => {
 	const queryClient = useQueryClient()
 	const { connection, scanningStatus } = usePageContext('connection', 'scanningStatus')
 
@@ -99,7 +99,7 @@ export const useDeleteEpcMutation = () => {
 
 	return useMutation({
 		mutationFn: async (filters: Record<string, string | number | boolean>) =>
-			await RFIDService.deleteScannedEpcs(connection, filters),
+			await RFIDService.deleteScannedInboundEpcs(connection, filters),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
@@ -167,8 +167,8 @@ export const useCombineEpcInfoMutation = () => {
 }
 
 const useInvalidateQueries = () => {
-	const { refetch: refetchScannedEpcs } = useGetEpcQuery()
-	const { refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { refetch: refetchScannedEpcs } = useGetInboundEpcQuery()
+	const { refetch: refetchOrderDetail } = useGetInboundOrderDetail()
 	return () => {
 		refetchScannedEpcs()
 		refetchOrderDetail()

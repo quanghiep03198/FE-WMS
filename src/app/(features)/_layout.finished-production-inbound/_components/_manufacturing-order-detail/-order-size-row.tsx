@@ -1,12 +1,12 @@
+import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import { Checkbox, Div, Icon, TableCell, TableRow } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { sortBy } from 'lodash'
 import { useMemo } from 'react'
-import { FALLBACK_ORDER_VALUE } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE } from '../../_apis/inbound-rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
-import { OrderItem } from '../../_types'
-import DeleteOrderPopover from './-delete-prder-popover'
+import DeleteOrderPopover from './-delete-order-popover'
 import DeleteSizePopover from './-delete-size-popover'
 
 type OrderDetailTableRowProps = {

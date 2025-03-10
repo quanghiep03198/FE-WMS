@@ -13,7 +13,7 @@ import ScannerToolbar from './_components/_scanner-toolbar/-index'
 import { FP_RFID_SETTINGS_KEY } from './_constants/rfid.const'
 import { PageProvider } from './_contexts/-page-context'
 
-export const Route = createLazyFileRoute('/(features)/_layout/finished-production-inoutbound/')({
+export const Route = createLazyFileRoute('/(features)/_layout/finished-production-inbound/')({
 	component: Page
 })
 
@@ -38,7 +38,7 @@ function Page() {
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/finished-production-inoutbound', text: t('ns_common:navigation.fm_inoutbound') }])
+		setBreadcrumb([{ to: '/finished-production-inbound', text: t('ns_common:navigation.fp_inoutbound') }])
 	}, [i18n.language])
 
 	const [settings, setSettings] = useLocalStorageState<RFIDSettings>(FP_RFID_SETTINGS_KEY, {
@@ -55,7 +55,7 @@ function Page() {
 	return (
 		<Fragment>
 			<Helmet>
-				<title>{t('ns_common:navigation.fm_inoutbound')}</title>
+				<title>{t('ns_common:navigation.fp_inoutbound')}</title>
 				<meta name='description' content='RFID Scanner Integration' />
 			</Helmet>
 			<PageProvider>

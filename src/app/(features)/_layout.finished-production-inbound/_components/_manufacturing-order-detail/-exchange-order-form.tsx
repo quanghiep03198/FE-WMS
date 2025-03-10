@@ -29,9 +29,9 @@ import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
 	useExchangeEpcMutation,
-	useGetEpcQuery,
+	useGetInboundEpcQuery,
 	useSearchExchangableOrderQuery
-} from '../../_apis/rfid.api'
+} from '../../_apis/inbound-rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
 import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exchange-epc.schema'
@@ -62,7 +62,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
-	const { data: currentEpcData } = useGetEpcQuery()
+	const { data: currentEpcData } = useGetInboundEpcQuery()
 
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)

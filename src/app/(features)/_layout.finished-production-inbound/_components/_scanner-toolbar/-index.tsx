@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useBlocker } from '@tanstack/react-router'
 import React, { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/rfid.api'
+import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../../_apis/inbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import TenancySelect from './-tenancy-select'
 

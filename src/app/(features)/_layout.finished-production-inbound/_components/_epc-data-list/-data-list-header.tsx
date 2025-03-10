@@ -16,7 +16,7 @@ import { useDeepCompareEffect, usePrevious } from 'ahooks'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetEpcQuery } from '../../_apis/rfid.api'
+import { useGetInboundEpcQuery } from '../../_apis/inbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
@@ -37,7 +37,7 @@ const ListBoxHeader: React.FC = () => {
 
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
-	const { isLoading } = useGetEpcQuery()
+	const { isLoading } = useGetInboundEpcQuery()
 	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder } = usePageContext(
 		'selectedOrder',
 		'scannedOrders',

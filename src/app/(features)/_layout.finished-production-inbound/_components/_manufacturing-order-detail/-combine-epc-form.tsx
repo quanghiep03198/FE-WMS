@@ -31,7 +31,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { FALLBACK_ORDER_VALUE, useCombineEpcInfoMutation } from '../../_apis/rfid.api'
+import { FALLBACK_ORDER_VALUE, useCombineEpcInfoMutation } from '../../_apis/inbound-rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { EpcCombinationFormValues, epcCombinationSchema } from '../../_schemas/epc-combination.schema'
 

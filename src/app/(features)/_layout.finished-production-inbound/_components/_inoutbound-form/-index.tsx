@@ -42,10 +42,10 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import {
 	FALLBACK_ORDER_VALUE,
-	useGetEpcQuery,
+	useGetInboundEpcQuery,
 	useGetShapingProductLineQuery,
 	useUpdateStockMutation
-} from '../../_apis/rfid.api'
+} from '../../_apis/inbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
 	FormActionEnum,
@@ -102,7 +102,7 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
-	const { data: currentEpcData } = useGetEpcQuery()
+	const { data: currentEpcData } = useGetInboundEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata

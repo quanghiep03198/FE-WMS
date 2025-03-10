@@ -1,3 +1,4 @@
+import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -26,10 +27,9 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetOrderDetail } from '../../_apis/rfid.api'
+import { useGetInboundOrderDetail } from '../../_apis/inbound-rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
 import { usePageContext } from '../../_contexts/-page-context'
-import { OrderItem } from '../../_types'
 import TableDataRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
@@ -54,7 +54,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		shoes_style_code_factory: ''
 	})
 
-	const { data: retrievedOrderDetail, refetch: refetchOrderDetail } = useGetOrderDetail()
+	const { data: retrievedOrderDetail, refetch: refetchOrderDetail } = useGetInboundOrderDetail()
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') resetSelectedRows()
