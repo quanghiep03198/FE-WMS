@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { FALLBACK_ORDER_VALUE } from '../_apis/rfid.api'
 
 // const currentYear = new Date().getFullYear() - 1911
 // const validYears = [currentYear - 1, currentYear, currentYear + 1].map((year) => year.toString().padStart(3, '0'))
@@ -59,25 +58,12 @@ export const exchangeEpcSchema = z
 		path: ['size_numcode_match']
 	})
 
-export const exchangeOrderSchema = z
-	.object({
-		mo_no: z.string().nonempty({ message: 'ns_validation:required' }),
-		mo_no_actual: z.string().trim().nonempty({ message: 'ns_validation:required' }),
-		multi: z.boolean().default(true),
-		count: z.number().positive().optional(), // Maximum quantity
-		quantity: z.number().optional(), // Quantity to exchange
-		exchange_all: z.boolean().default(false)
-	})
-	.refine(
-		(values) => {
-			if (values.mo_no !== FALLBACK_ORDER_VALUE) return true
-			return values.quantity > 0 && values.quantity <= values.count
-		},
-		{
-			message: 'Please select valid quantity',
-			path: ['quantity']
-		}
-	)
+export const exchangeOrderSchema = z.object({
+	mo_no: z.string().nonempty({ message: 'ns_validation:required' }),
+	mo_no_actual: z.string().trim().nonempty({ message: 'ns_validation:required' }),
+	shoes_style_code_factory: z.string().nonempty({ message: 'ns_validation:required' }),
+	mat_ecolor: z.string().nonempty({ message: 'ns_validation:required' })
+})
 
 export type ExchangeEpcFormValue = z.infer<typeof exchangeEpcSchema>
 export type ExchangeOrderFormValue = z.infer<typeof exchangeOrderSchema>

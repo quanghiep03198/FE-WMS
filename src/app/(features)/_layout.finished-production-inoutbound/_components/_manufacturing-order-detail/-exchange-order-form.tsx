@@ -90,7 +90,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
-			await mutateAsync(omit({ ...data, quantity: data.quantity ?? data.count }, ['exchange_all', 'count']))
+			await mutateAsync(omit(data, ['exchange_all', 'scanned_size_qty']))
 			toast.success(t('ns_common:notification.success'))
 			if (scanningStatus === 'disconnected' && Array.isArray(currentEpcData?.data)) {
 				setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })

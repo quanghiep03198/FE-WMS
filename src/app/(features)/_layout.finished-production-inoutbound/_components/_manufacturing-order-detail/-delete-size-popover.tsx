@@ -61,7 +61,6 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	}, [isDeleteAll])
 
 	const handleDeleteEpcs = async (data: DeleteScannedEpcsFormValues) => {
-		console.log(data)
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await deleteAsync({

@@ -35,8 +35,6 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	)
 
 	const hasSomeRowMatch = useMemo(() => {
-		console.log(selectedRows[0], data)
-
 		if (!selectedRows || selectedRows.length === 0) return false
 		return (
 			data?.mat_ecolor === selectedRows[0].mat_ecolor &&

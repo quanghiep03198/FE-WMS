@@ -154,10 +154,6 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		}
 	}
 
-	useEffect(() => {
-		console.log('form values :>>', form.getValues())
-	}, [form])
-
 	return (
 		<Dialog
 			open={open}
