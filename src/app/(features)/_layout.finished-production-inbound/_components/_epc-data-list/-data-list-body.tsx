@@ -25,7 +25,7 @@ import { useGetInboundEpcQuery } from '../../_apis/inbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 
 const VIRTUAL_ITEM_SIZE = 40
-const PRERENDERED_ITEMS = 20
+const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 

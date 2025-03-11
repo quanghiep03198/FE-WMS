@@ -12,7 +12,7 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useEventListener, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash'
 import { useCallback, useRef, useState } from 'react'
@@ -26,18 +26,21 @@ const PRERENDERED_ITEMS = 20
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 
-const EpcList = () => {
+const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const { user, token, setAccessToken } = useAuth()
 	// * Incomming EPCs data from server-sent event
-	const { scannedEpc, currentPage, setScannedEpc, setCurrentPage, setScannedOrders } = usePageContext(
-		'scannedEpc',
-		'currentPage',
-		'setScannedEpc',
-		'setCurrentPage',
-		'setScannedOrders'
-	)
+	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
+		usePageContext(
+			'scanningState',
+			'scannedEpc',
+			'currentPage',
+			'setScanningState',
+			'setScannedEpc',
+			'setCurrentPage',
+			'setScannedOrders'
+		)
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
 	const previousEpc = usePrevious(incommingEpc)
 	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetOutboundEpcQuery()
@@ -84,6 +87,7 @@ const EpcList = () => {
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
+		setScanningState('pending')
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -97,6 +101,7 @@ const EpcList = () => {
 				openWhenHidden: true,
 				async onopen(response) {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+						setScanningState('success')
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
@@ -131,6 +136,7 @@ const EpcList = () => {
 					throw new RetriableError()
 				},
 				onerror(error) {
+					setScanningState('error')
 					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 					// * Depend on error type, retry or not
 					if (error instanceof FatalError) throw error
@@ -145,10 +151,13 @@ const EpcList = () => {
 	}
 
 	useEffectOnce(() => {
-		if (abortControllerRef.current) {
-			abortControllerRef.current.abort()
-			fetchServerEvent()
-		}
+		if (abortControllerRef.current) abortControllerRef.current.abort()
+		fetchServerEvent()
+	})
+
+	useEventListener('refetchSSE', () => {
+		if (abortControllerRef.current) abortControllerRef.current.abort()
+		fetchServerEvent()
 	})
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
@@ -157,7 +166,7 @@ const EpcList = () => {
 	const virtualizer = useVirtualizer({
 		count: scannedEpc.data.length,
 		getScrollElement: () => containerRef.current,
-		scrollToFn: (...args) => scrollToFn(...args),
+		scrollToFn,
 		estimateSize: useCallback(() => VIRTUAL_ITEM_SIZE, []),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
@@ -169,7 +178,7 @@ const EpcList = () => {
 	return Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 		<ScrollShadow
 			ref={containerRef}
-			className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border rounded-md border bg-background p-2 @[1000px]:h-[625px]'>
+			className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @[1000px]:h-[625px]'>
 			<Div
 				className='relative w-full'
 				style={{
@@ -213,7 +222,7 @@ const EpcList = () => {
 			</Div>
 		</ScrollShadow>
 	) : (
-		<Div className='z-10 grid h-[400px] place-content-center rounded-md border group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[625px] xxl:h-[625px]'>
+		<Div className='z-10 grid h-full place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[625px] xxl:h-[625px]'>
 			<Div className='inline-flex items-center gap-x-4'>
 				<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 				<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -222,4 +231,4 @@ const EpcList = () => {
 	)
 }
 
-export default EpcList
+export default ScannedEpcList

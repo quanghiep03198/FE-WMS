@@ -6,37 +6,25 @@ import React, { createContext, use, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
+import { OrderItem } from '../_types'
 
-export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
-export type Log = {
-	message: string
-	timestamp?: Date
-	type: 'info' | 'error'
-}
-export type OrderItem = {
-	mo_no: string
-	mat_ecolor: string
-	shoes_style_code_factory: string
-	sizes: Array<{
-		size_numcode: string
-		count: number
-	}>
-}
+export type ScanningState = 'pending' | 'success' | 'error'
 
 type PageContextStore = {
+	scanningState: ScanningState
 	currentPage: number | null
 	scannedEpc: Pagination<IElectronicProductCode>
 	scannedOrders: Array<OrderItem>
-	selectedOrder: string | undefined
+	setScanningState: (status: ScanningState) => void
 	setCurrentPage: (page: number | null) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
 	setScannedOrders: (data: Array<OrderItem>) => void
 	reset: () => void
 }
 
-export const DEFAULT_PROPS: Pick<PageContextStore, 'currentPage' | 'scannedEpc' | 'scannedOrders' | 'selectedOrder'> = {
+export const DEFAULT_PROPS: Pick<PageContextStore, 'scanningState' | 'currentPage' | 'scannedEpc' | 'scannedOrders'> = {
+	scanningState: 'pending',
 	currentPage: 1,
-	selectedOrder: 'all',
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,
@@ -58,6 +46,11 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 		storeRef.current = create<PageContextStore>()(
 			immer((set) => ({
 				...DEFAULT_PROPS,
+				setScanningState: (value: ScanningState) => {
+					set((state) => {
+						state.scanningState = value
+					})
+				},
 				setCurrentPage: (page: number | null) => {
 					set((state) => {
 						state.currentPage = page
@@ -78,7 +71,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 						state.currentPage = DEFAULT_PROPS.currentPage
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc
 						state.scannedOrders = DEFAULT_PROPS.scannedOrders
-						state.selectedOrder = DEFAULT_PROPS.selectedOrder
 					})
 				}
 			}))

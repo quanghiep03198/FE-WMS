@@ -33,6 +33,7 @@ export default {
 		outbound_qty: 'Outbound quantity',
 		order_qty: 'Order quantity',
 		packaging_code: 'Packaging number',
+		po: 'Purchase order',
 		prod_color: 'Product color',
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',

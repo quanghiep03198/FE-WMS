@@ -46,6 +46,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 								{row?.getVisibleCells()?.map((cell) => {
 									return (
 										<TableCell
+											{...cell.column.columnDef?.meta?.tableCellProps}
 											key={cell.id}
 											aria-selected={row.getIsSelected()}
 											align={cell.column.columnDef.meta?.align}

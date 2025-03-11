@@ -62,6 +62,7 @@ function DataTable<TData, TValue>(
 		sorting,
 		columnFilters,
 		globalFilter,
+		virtualizerOptions,
 		onGlobalFilterChange,
 		onColumnFiltersChange,
 		renderSubComponent,
@@ -263,6 +264,7 @@ function DataTable<TData, TValue>(
 					columns={columns}
 					loading={loading}
 					caption={caption}
+					virtualizerOptions={virtualizerOptions}
 					containerProps={containerProps}
 					footerProps={footerProps}
 					renderSubComponent={renderSubComponent}

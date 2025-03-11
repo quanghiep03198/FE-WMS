@@ -18,7 +18,20 @@ export const useGetOutboundEpcQuery = () => {
 }
 
 export const useDeleteEpcMutation = () => {
+	const { currentPage } = usePageContext()
+
 	return useMutation({
+		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
+		mutationFn: async (filters: Record<string, string | number | boolean>) =>
+			await RFIDService.deleteScannedOutboundEpcs(filters)
+	})
+}
+
+export const useUpdateStockOutMutation = () => {
+	const { currentPage } = usePageContext()
+
+	return useMutation({
+		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
 		mutationFn: async (filters: Record<string, string | number | boolean>) =>
 			await RFIDService.deleteScannedOutboundEpcs(filters)
 	})

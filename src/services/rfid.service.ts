@@ -56,6 +56,10 @@ export class RFIDService {
 		)
 	}
 
+	static async updateFPStockOut(payload: InoutboundPayload) {
+		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>('/rfid/update-stock-out', payload)
+	}
+
 	static async deleteScannedInboundEpcs(tenantId: string, filters: Record<string, string | number | boolean>) {
 		return await axiosInstance.delete(`/rfid/inbound/delete-scanned-epcs`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },

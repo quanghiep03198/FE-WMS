@@ -178,6 +178,16 @@ module.exports = {
 						opacity: '1'
 					}
 				},
+				['fade-out']: {
+					from: {
+						transform: 'scale(1)',
+						opacity: '1'
+					},
+					to: {
+						transform: 'scale(0.9)',
+						opacity: 0
+					}
+				},
 				['fall-down']: {
 					from: {
 						transform: 'translateY(0)'
@@ -246,6 +256,7 @@ module.exports = {
 				['collapsible-up-reverse']: 'collapsible-up-reverse 0.2s ease-out',
 				['collapsible-down-reverse']: 'collapsible-down-reverse 0.2s ease-out',
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
+				['fade-out']: 'fade-out .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
 				['fly-in']: 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
 				['fly-in-out']: 'fly-in-out 1s linear',

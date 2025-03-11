@@ -17,8 +17,7 @@ import { useMemoizedFn } from 'ahooks'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useDeleteEpcMutation } from '../../_apis/inbound-rfid.api'
-import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
+import { useDeleteEpcMutation } from '../../_apis/outbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
 
@@ -26,28 +25,16 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 	const { t } = useTranslation()
 	const id = useId()
 	const [isUnscannable, setIsUnscannable] = useState<CheckedState>(false)
-	const { scannedOrders, setScanningStatus, setScannedOrders } = usePageContext(
-		'scannedOrders',
-		'setScanningStatus',
-		'setScannedOrders'
-	)
-	const { selectedRows, pullSelectedRow } = useOrderDetailContext('selectedRows', 'pullSelectedRow')
+	const { scannedOrders, setScannedOrders } = usePageContext('scannedOrders', 'setScannedOrders')
 	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteEpcMutation()
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
 
 	const handleDeleteOrder = useMemoizedFn(async () => {
 		try {
 			await deleteOrderAsync({ ['mo_no.eq']: data?.mo_no, f: isUnscannable })
-			// * Remove from selected row if scanned order is deleted
-			if (selectedRows.some((row) => row.mo_no === data?.mo_no)) {
-				pullSelectedRow(selectedRows.find((row) => row.mo_no === data?.mo_no))
-			}
+
 			// * If all order is deleted, reset all
 			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== data?.mo_no)
-			if (filteredOrders.length === 0) {
-				setScanningStatus(undefined)
-				return
-			}
 			setScannedOrders(filteredOrders)
 			setPopoverOpen(false)
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
