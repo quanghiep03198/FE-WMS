@@ -39,8 +39,8 @@ import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../_schemas/exch
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const checkboxId = useId()
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { scanningStatus, scannedEpc, connection, setScannedEpc } = usePageContext(
 		'scanningStatus',

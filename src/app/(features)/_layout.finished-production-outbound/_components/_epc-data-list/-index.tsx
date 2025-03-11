@@ -14,7 +14,7 @@ import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@m
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useEventListener, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { isEqualWith, uniqBy } from 'lodash'
+import { isEqualWith, uniqBy, uniqueId } from 'lodash'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -125,7 +125,83 @@ const ScannedEpcList: React.FC = () => {
 				onmessage(event: EventSourceMessage) {
 					try {
 						if (!event.data || !Json.isValid(event.data)) return
-						const data = JSON.parse(event.data) as RFIDStreamEventData
+						// const data = JSON.parse(event.data) as RFIDStreamEventData
+						const data = {
+							epcs: {
+								data: [
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' },
+									{ epc: uniqueId(), mo_no: 'test' }
+								],
+								hasNextPage: false,
+								hasPrevPage: false,
+								limit: 50,
+								page: 1,
+								totalPages: 1,
+								totalDocs: 0
+							},
+							orders: [
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] }
+							]
+						} as RFIDStreamEventData
+
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
 					} catch (error) {
@@ -175,58 +251,62 @@ const ScannedEpcList: React.FC = () => {
 		overscan: PRERENDERED_ITEMS
 	})
 
-	return Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
-		<ScrollShadow
-			ref={containerRef}
-			className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @[1000px]:h-[625px]'>
-			<Div
-				className='relative w-full'
-				style={{
-					height: virtualizer.getTotalSize()
-				}}>
-				{virtualizer.getVirtualItems().map((virtualItem) => {
-					const item = scannedEpc.data[virtualItem.index]
-					return (
-						<Div
-							key={virtualItem.index}
-							className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
-							style={{
-								height: virtualItem.size,
-								transform: `translateY(${virtualItem.start}px)`
-							}}>
-							<Typography className='font-medium'>{item.epc}</Typography>
-							<Typography variant='small' className='capitalize text-foreground'>
-								{item.mo_no}
-							</Typography>
-						</Div>
-					)
-				})}
-				{scannedEpc.hasNextPage && (
-					<Button
-						variant='link'
-						className='w-full'
+	return (
+		<Div className='flex h-full flex-1 items-center justify-center overflow-clip rounded-md border'>
+			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
+				<ScrollShadow
+					ref={containerRef}
+					className='z-10 flex h-[vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @[1366px]:h-[calc(30+0.5rem)]'>
+					<Div
+						className='relative w-full'
 						style={{
-							position: 'absolute',
-							top: 0,
-							bottom: 0,
-							transform: `translateY(${virtualizer.getTotalSize()}px)`
-						}}
-						onClick={() => {
-							if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
-							else setCurrentPage(currentPage + 1)
-						}}
-						disabled={isFetching}>
-						{isFetching ? 'Loading more ...' : 'Load more'}
-					</Button>
-				)}
-			</Div>
-		</ScrollShadow>
-	) : (
-		<Div className='z-10 grid h-full place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[625px] xxl:h-[625px]'>
-			<Div className='inline-flex items-center gap-x-4'>
-				<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
-				<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
-			</Div>
+							height: virtualizer.getTotalSize()
+						}}>
+						{virtualizer.getVirtualItems().map((virtualItem) => {
+							const item = scannedEpc.data[virtualItem.index]
+							return (
+								<Div
+									key={virtualItem.index}
+									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+									style={{
+										height: virtualItem.size,
+										transform: `translateY(${virtualItem.start}px)`
+									}}>
+									<Typography className='font-medium'>{item.epc}</Typography>
+									<Typography variant='small' className='capitalize text-foreground'>
+										{item.mo_no}
+									</Typography>
+								</Div>
+							)
+						})}
+						{scannedEpc.hasNextPage && (
+							<Button
+								variant='link'
+								className='w-full'
+								style={{
+									position: 'absolute',
+									top: 0,
+									bottom: 0,
+									transform: `translateY(${virtualizer.getTotalSize()}px)`
+								}}
+								onClick={() => {
+									if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
+									else setCurrentPage(currentPage + 1)
+								}}
+								disabled={isFetching}>
+								{isFetching ? 'Loading more ...' : 'Load more'}
+							</Button>
+						)}
+					</Div>
+				</ScrollShadow>
+			) : (
+				<Div className='z-10 grid h-full place-content-center'>
+					<Div className='inline-flex items-center gap-x-4'>
+						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
+						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
+					</Div>
+				</Div>
+			)}
 		</Div>
 	)
 }

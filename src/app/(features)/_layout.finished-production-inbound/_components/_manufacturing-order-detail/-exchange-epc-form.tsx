@@ -154,12 +154,16 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		}
 	}
 
+	const handleOpenChange = (open: boolean) => {
+		setOpen(open)
+		if (!open) {
+			form.reset(defaultValues)
+			setIsExchangeAll(false)
+		}
+	}
+
 	return (
-		<Dialog
-			open={open}
-			onOpenChange={(open) => {
-				setOpen(open)
-			}}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent className='grid max-w-3xl gap-6'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.exchange_epc')}</DialogTitle>

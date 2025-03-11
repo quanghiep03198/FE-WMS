@@ -8,7 +8,7 @@ import TableDataRow from './-order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedOrders } = usePageContext('scannedOrders')
+	const { scanningState, scannedOrders } = usePageContext('scanningState', 'scannedOrders')
 	const tableWrapperRef = useRef<HTMLDivElement>(null)
 	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes'>>({
 		mo_no: '',
@@ -29,9 +29,9 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative flex h-full w-full flex-col divide-y overflow-hidden rounded-lg border'
+			className='relative flex max-h-full w-full flex-col divide-y overflow-hidden rounded-lg border'
 			ref={tableWrapperRef}>
-			<Div className='flow-root h-[85vh] overflow-scroll rounded-lg'>
+			<Div className='flow-root overflow-scroll rounded-lg xxl:h-[calc(76vh+1rem)]'>
 				<Table
 					className='border-separate border-spacing-0 rounded-lg'
 					style={
@@ -54,7 +54,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							<TableHead>Size</TableHead>
 							<TableHead
 								align='right'
-								className='right-[var(--row-action-col-width)] z-20 w-32 min-w-32 bg-background xl:sticky'>
+								className='right-[var(--row-action-col-width)] z-20 w-28 min-w-28 bg-background xl:sticky'>
 								{t('ns_common:common_fields.total')}
 							</TableHead>
 							<TableHead
@@ -70,7 +70,7 @@ const OrderSizeDetailTable: React.FC = () => {
 								className='sticky left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
 								<Input
 									placeholder='Search ...'
-									className='w-full border-none font-normal'
+									className='w-full border-none font-normal shadow-none'
 									onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
 								/>
 							</TableHead>
@@ -79,7 +79,7 @@ const OrderSizeDetailTable: React.FC = () => {
 								className='sticky left-[var(--sticky-left-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
 								<Input
 									placeholder='Search ...'
-									className='w-full border-none font-normal'
+									className='w-full border-none font-normal shadow-none'
 									onChange={(e) =>
 										setColumnFilters((prev) => ({ ...prev, shoes_style_code_factory: e.target.value }))
 									}
@@ -90,7 +90,7 @@ const OrderSizeDetailTable: React.FC = () => {
 								className='sticky left-[calc(2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 								<Input
 									placeholder='Search ...'
-									className='w-full border-none font-normal'
+									className='w-full border-none font-normal shadow-none'
 									onChange={(e) =>
 										setColumnFilters((prev) => ({
 											...prev,
@@ -104,7 +104,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='sticky right-[var(--row-action-col-width)] z-20 w-[var(--row-action-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+								className='sticky right-[var(--row-action-col-width)] z-20 w-28 min-w-28 border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 								<span className='sr-only'></span>
 							</TableHead>
 							<TableHead
@@ -122,14 +122,27 @@ const OrderSizeDetailTable: React.FC = () => {
 						</TableBody>
 					)}
 				</Table>
-				{(!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0) && (
+				{scanningState !== 'pending' &&
+					(!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0) && (
+						<Div className='absolute inset-0 grid place-content-center text-center text-sm text-muted-foreground'>
+							<Typography className='inline-flex items-center gap-x-2'>
+								<Icon name='Inbox' size={32} strokeWidth={1} />
+								{t('ns_common:table.no_data')}
+							</Typography>
+						</Div>
+					)}
+				{scanningState === 'pending' && (
 					<Div className='absolute inset-0 grid place-content-center text-center text-sm text-muted-foreground'>
 						<Typography className='inline-flex items-center gap-x-2'>
-							<Icon name='Inbox' size={20} />
-							{t('ns_common:table.no_data')}
+							<Icon name='LoaderCircle' size={24} className='animate-spin' />
+							Loading ...
 						</Typography>
 					</Div>
 				)}
+			</Div>
+			<Div className='flex basis-14 items-center justify-center gap-x-2 p-3 text-center text-sm text-muted-foreground'>
+				<Icon name='Table2' size={20} strokeWidth={1.5} />
+				{t('ns_inoutbound:description.outbound_table_caption')}
 			</Div>
 		</Div>
 	)

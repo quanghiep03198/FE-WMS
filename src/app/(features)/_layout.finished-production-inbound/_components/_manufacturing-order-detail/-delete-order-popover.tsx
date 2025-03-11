@@ -71,8 +71,15 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 					</Typography>
 				</Div>
 				<Div className='flex items-center gap-x-2'>
-					<Checkbox id={id} checked={isUnscannable} onCheckedChange={setIsUnscannable} />
-					<Label htmlFor={id}>{t('ns_inoutbound:labels.delete_and_unscannable')}</Label>
+					<Checkbox
+						id={id}
+						checked={isUnscannable}
+						onCheckedChange={setIsUnscannable}
+						className='border-destructive data-[state=checked]:bg-destructive data-[state=checked]:text-destructive-foreground'
+					/>
+					<Label htmlFor={id} className='text-destructive'>
+						{t('ns_inoutbound:labels.delete_and_unscannable')}
+					</Label>
 				</Div>
 				<Div className='flex items-stretch justify-end gap-x-1 *:basis-20'>
 					<PopoverClose disabled={isDeleting} className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>

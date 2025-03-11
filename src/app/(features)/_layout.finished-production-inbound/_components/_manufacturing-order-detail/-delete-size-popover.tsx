@@ -88,26 +88,11 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 						<InputFieldControl
 							name='quantity'
 							type='number'
+							placeholder='0'
 							disabled={isDeleteAll}
 							label={t('ns_common:common_fields.quantity')}
 						/>
-
-						<Div className='space-y-6 rounded-md border p-4'>
-							<FormField
-								control={form.control}
-								name='f'
-								render={({ field }) => (
-									<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-										<FormControl>
-											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-										</FormControl>
-										<Div className='space-y-1.5 leading-none'>
-											<FormLabel>{t('ns_inoutbound:labels.delete_and_unscannable')}</FormLabel>
-										</Div>
-									</FormItem>
-								)}
-							/>
-
+						<Div className='space-y-3 rounded-md border p-3'>
 							<FormField
 								control={form.control}
 								name='delete_all'
@@ -122,8 +107,27 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 									</FormItem>
 								)}
 							/>
+							<FormField
+								control={form.control}
+								name='f'
+								render={({ field }) => (
+									<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+										<FormControl>
+											<Checkbox
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												className='border-destructive data-[state=checked]:bg-destructive data-[state=checked]:text-destructive-foreground'
+											/>
+										</FormControl>
+										<Div className='space-y-1.5 leading-none'>
+											<FormLabel className='!font-semibold text-destructive'>
+												{t('ns_inoutbound:labels.delete_and_unscannable')}
+											</FormLabel>
+										</Div>
+									</FormItem>
+								)}
+							/>
 						</Div>
-
 						<Div className='flex items-center justify-end gap-x-2'>
 							<Div className='flex items-stretch justify-end gap-x-1'>
 								<PopoverClose

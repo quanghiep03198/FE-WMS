@@ -19,6 +19,8 @@ export default {
 		no_exchangable_order: '没有可交换的顺序',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
+		outbound_table_caption: '上表总结了扫描的EPC数据',
+		po_outbound: '按容器出库的订单代码. 根据此订单计算当天扫描的EPC数据.',
 		select_readable_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
 		select_writable_database: '选择数据库连接以保存仓库入库/出库数据. 如果订单指定在当前工厂生产，请跳过.',
 		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',
@@ -63,6 +65,7 @@ export default {
 		invalid_epc_deteted: '检测到无效的EPC。请联系成型部门解决此问题, 然后将其移至回收',
 		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?',
 		navigation_blocked_message: '现在停读 ?',
+		stock_out_submission_caution: '请在确认出库前仔细检查信息. 确认后, 您将无法更改此信息.',
 		too_many_mono: '已扫描到超过3个命令. 请重新检查'
 	},
 	order_status: {
@@ -88,10 +91,6 @@ export default {
 		latency: '延迟',
 		network_status: '网络状态',
 		polling_duration: '轮询持续时间',
-		polling_duration_description: '控制轮询间隔时间：值越低，轮询越快，但可能导致服务器流量增加',
-		polling_duration_note: '扫描前选择轮询持续时间',
-		preserve_log: '保留日志',
-		preserve_log_note: '重置时不要清除日志',
 		toggle_fullscreen: '切换全屏模式',
 		toggle_fullscreen_note: '使用全屏模式以获得更大的视图',
 		transferred_data: '已传输的数据',

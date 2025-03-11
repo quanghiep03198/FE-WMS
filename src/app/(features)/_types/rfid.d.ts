@@ -1,3 +1,5 @@
+import { IElectronicProductCode } from '@/common/types/entities'
+
 export type OrderItem = {
 	mo_no: string
 	mat_ecolor: string

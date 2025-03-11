@@ -1,8 +1,20 @@
 import { useSearchPurchaseOrderQuery } from '@/app/(features)/_apis/use-order.api'
 import { cn } from '@/common/utils/cn'
-import { Button, ComboboxFieldControl, Form as FormProvider, Icon } from '@/components/ui'
+import {
+	Button,
+	Checkbox,
+	ComboboxFieldControl,
+	Div,
+	Form as FormProvider,
+	Icon,
+	Label,
+	Separator,
+	Typography
+} from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { CheckedState } from '@radix-ui/react-checkbox'
+import { useResetState } from 'ahooks'
+import { useId, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -12,6 +24,8 @@ import { outboundValidator } from '../../_schemas/outbound.schema'
 
 const OutboundForm: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
+	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
+	const checkboxId = useId()
 	const { t } = useTranslation()
 	const form = useForm({
 		resolver: zodResolver(outboundValidator),
@@ -39,11 +53,27 @@ const OutboundForm: React.FC = () => {
 				<ComboboxFieldControl
 					name='po'
 					label={t('ns_erp:fields.po')}
+					description={t('ns_inoutbound:description.po_outbound')}
 					datalist={purchaseOrders}
 					onInput={setSearchTerm}
 					labelField='po'
 					valueField='po'
 				/>
+				<Div className='col-span-full space-y-4'>
+					<Div className='space-y-1.5 leading-none'>
+						<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
+							<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
+						</Typography>
+						<Typography variant='small'>
+							{t('ns_inoutbound:notification.stock_out_submission_caution')}
+						</Typography>
+					</Div>
+					<Separator />
+					<Div className='inline-flex items-center gap-x-2'>
+						<Checkbox id={checkboxId} checked={isConfirmed} onCheckedChange={(value) => setIsConfirmed(value)} />
+						<Label htmlFor=''>{t('ns_common:confirmation.understand_and_proceed')}</Label>
+					</Div>
+				</Div>
 				<Button type='submit' size='lg' disabled={isPending}>
 					<Icon
 						name={isPending ? 'LoaderCircle' : 'Check'}
@@ -57,6 +87,6 @@ const OutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`flex items-stretch gap-y-6 flex-col border rounded-md p-4`
+const Form = tw.form`flex items-stretch gap-y-6 flex-col border rounded-md p-6`
 
 export default OutboundForm

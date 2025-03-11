@@ -16,6 +16,8 @@ export default {
 			'EPC không hợp lệ được phát hiện. Vui lòng liên hệ với bộ phận thành hình để giải quyết vấn đề này, sau đó chuyển chúng đến tái chế',
 		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?',
 		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
+		stock_out_submission_caution:
+			'Vui lòng kiểm tra kỹ thông tin trước khi xác nhận xuất kho. Sau khi xác nhận, bạn không thể thay đổi thông tin này.',
 		too_many_mono: 'Có nhiều hơn 3 chỉ lệnh được quét. Hãy kiểm tra lại.'
 	},
 	counter_box: {
@@ -33,6 +35,8 @@ export default {
 		order_size_detail:
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
 		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',
+		outbound_table_caption: 'Bảng trên thống kê dữ liệu các chi tiết các tem đã quét',
+		po_outbound: 'Dữ liệu xuất kho các tem đã quét sẽ được tính theo đơn hàng này.',
 		select_readable_database:
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
 		select_writable_database:
@@ -92,12 +96,6 @@ export default {
 		internet_access: 'Kết nối mạng',
 		latency: 'Độ trễ',
 		network_status: 'Trạng thái kết nối',
-		polling_duration: 'Tần suất',
-		polling_duration_description:
-			'Kiểm soát tần suất quét: giá trị thấp hơn có nghĩa là quét nhanh hơn, tuy nhiên nó có thể gây ra lưu lượng truy cập cao hơn cho máy chủ.',
-		polling_duration_note: 'Chọn tần suất trước khi thao tác quét',
-		preserve_log: 'Giữ log',
-		preserve_log_note: 'Không xóa nhật ký khi thiết lập lại',
 		synchronization_trigger: 'Kích hoạt đồng bộ',
 		synchronization_trigger_description: 'Kích hoạt đồng bộ dữ liệu từ API của khách hàng nếu tem không có chỉ lệnh.',
 		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',

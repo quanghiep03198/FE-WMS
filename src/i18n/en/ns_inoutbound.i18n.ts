@@ -20,6 +20,8 @@ export default {
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
 		order_sizing_list: 'Table below shows the sizing information of the scanned orders',
+		outbound_table_caption: 'The table above summarizes the scanned EPC data',
+		po_outbound: 'The scanned EPC data will be counted according to this order after perform stock out.',
 		select_readable_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		select_writable_database:
@@ -70,6 +72,8 @@ export default {
 			'Invalid EPC detected. Please contact to shaping department for this issue, then move them to recycle',
 		navigation_blocked_caption: 'Unsaved tasks. Are you sure you want to leave the page right now?',
 		navigation_blocked_message: 'Cancel scanning EPCs anyway ?',
+		stock_out_submission_caution:
+			'Please check the information carefully before confirming the stock out. After confirmation, you cannot change this information.',
 		too_many_mono: 'There are more than 3 commands scanned. Please check again.'
 	},
 	order_status: {
@@ -94,12 +98,6 @@ export default {
 		internet_access: 'Internet access',
 		latency: 'Latency',
 		network_status: 'Network status',
-		polling_duration: 'Polling duration',
-		polling_duration_description:
-			'Controls polling duration: lower value means faster polling however it can cause higher traffic for server',
-		polling_duration_note: 'Choose polling duration before scanning',
-		preserve_log: 'Preserve log',
-		preserve_log_note: 'Do not clear log on reset',
 		synchronization_trigger: 'Synchronization trigger',
 		synchronization_trigger_description: "Trigger API call to sync data from customer's API if needed.",
 		toggle_fullscreen: 'Toggle full screen',
