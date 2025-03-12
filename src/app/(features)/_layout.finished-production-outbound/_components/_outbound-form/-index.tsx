@@ -1,22 +1,12 @@
 'use no memo'
 
-import { useSearchPurchaseOrderQuery } from '@/app/(features)/_apis/use-order.api'
 import { cn } from '@/common/utils/cn'
-import {
-	Button,
-	Checkbox,
-	ComboboxFieldControl,
-	Div,
-	Form as FormProvider,
-	Icon,
-	Label,
-	Separator,
-	Typography
-} from '@/components/ui'
+import { Button, Checkbox, Div, Form as FormProvider, Icon, Label, Separator, Typography } from '@/components/ui'
+import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -25,7 +15,6 @@ import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
 import { outboundValidator } from '../../_schemas/outbound.schema'
 
 const OutboundForm: React.FC = () => {
-	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const checkboxId = useId()
 	const { t } = useTranslation()
@@ -36,13 +25,13 @@ const OutboundForm: React.FC = () => {
 		}
 	})
 
-	const { data: purchaseOrders } = useSearchPurchaseOrderQuery(searchTerm)
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation()
 
 	const handleSubmit = async (data) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync(data)
+			resetConfirm()
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id })
@@ -52,14 +41,10 @@ const OutboundForm: React.FC = () => {
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmit)}>
-				<ComboboxFieldControl
+				<InputFieldControl
 					name='po'
 					label={t('ns_erp:fields.po')}
 					description={t('ns_inoutbound:description.po_outbound')}
-					datalist={purchaseOrders}
-					onInput={setSearchTerm}
-					labelField='po'
-					valueField='po'
 				/>
 				<Div className='col-span-full space-y-3'>
 					<Div className='space-y-1.5 leading-none'>

@@ -11,7 +11,7 @@ const OrderSizeTableDialog = () => {
 			<DialogTrigger className={cn(buttonVariants({ size: 'lg', className: 'w-full' }))}>
 				{t('ns_common:actions.detail')}
 			</DialogTrigger>
-			<DialogContent>
+			<DialogContent className='h-screen max-w-[screen]'>
 				<OrderSizeDetailTable />
 			</DialogContent>
 		</Dialog>

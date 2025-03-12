@@ -32,7 +32,6 @@ export const useUpdateStockOutMutation = () => {
 
 	return useMutation({
 		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
-		mutationFn: async (filters: Record<string, string | number | boolean>) =>
-			await RFIDService.deleteScannedOutboundEpcs(filters)
+		mutationFn: async (payload: any) => await RFIDService.updateFPStockOut(payload)
 	})
 }

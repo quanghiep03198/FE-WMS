@@ -127,80 +127,6 @@ const ScannedEpcList: React.FC = () => {
 					try {
 						if (!event.data || !Json.isValid(event.data)) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
-						// const data = {
-						// 	epcs: {
-						// 		data: [
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' },
-						// 			{ epc: uniqueId(), mo_no: 'test' }
-						// 		],
-						// 		hasNextPage: false,
-						// 		hasPrevPage: false,
-						// 		limit: 50,
-						// 		page: 1,
-						// 		totalPages: 1,
-						// 		totalDocs: 0
-						// 	},
-						// 	orders: [
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] }
-						// 	]
-						// } as RFIDStreamEventData
 
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
@@ -256,7 +182,7 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[28vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @7xl:h-[60vh]'>
+					className='z-10 flex h-[30vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @3xl:h-[80vh] @7xl:h-[60vh] md:h-[30vh]'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -300,7 +226,7 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[28vh] place-content-center'>
+				<Div className='z-10 grid h-[30vh] place-content-center @3xl:h-[75vh] md:h-[30vh] lg:h-[30vh]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
