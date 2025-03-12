@@ -1,12 +1,30 @@
 'use no memo'
 
+import { useSearchPurchaseOrderQuery } from '@/app/(features)/_apis/use-order.api'
 import { cn } from '@/common/utils/cn'
-import { Button, Checkbox, Div, Form as FormProvider, Icon, Label, Separator, Typography } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
+import {
+	Button,
+	Checkbox,
+	Div,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Form as FormProvider,
+	Icon,
+	Input,
+	Label,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	Separator,
+	Typography
+} from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useResetState } from 'ahooks'
-import { useId } from 'react'
+import { useDebounce, useResetState } from 'ahooks'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -15,8 +33,11 @@ import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
 import { outboundValidator } from '../../_schemas/outbound.schema'
 
 const OutboundForm: React.FC = () => {
+	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
+	const [autoCompleteOpen, setAutoCompleteOpen] = useState<boolean>(false)
 	const checkboxId = useId()
+	const inputRef = useRef<HTMLInputElement>(null)
 	const { t } = useTranslation()
 	const form = useForm({
 		resolver: zodResolver(outboundValidator),
@@ -24,7 +45,8 @@ const OutboundForm: React.FC = () => {
 			po: ''
 		}
 	})
-
+	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
+	const { data: purchaseOrders } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation()
 
 	const handleSubmit = async (data) => {
@@ -38,13 +60,79 @@ const OutboundForm: React.FC = () => {
 		}
 	}
 
+	useEffect(() => {
+		if (autoCompleteOpen && purchaseOrders?.length === 0) {
+			setAutoCompleteOpen(false)
+		} else {
+			setAutoCompleteOpen(true)
+		}
+	}, [purchaseOrders])
+
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmit)}>
-				<InputFieldControl
+				<FormField
+					control={form.control}
 					name='po'
-					label={t('ns_erp:fields.po')}
-					description={t('ns_inoutbound:description.po_outbound')}
+					render={({ field }) => {
+						return (
+							<FormItem className='flex flex-col'>
+								<FormLabel htmlFor='po'>{t('ns_erp:fields.po')}</FormLabel>
+								<FormControl>
+									<Popover open={autoCompleteOpen} onOpenChange={setAutoCompleteOpen}>
+										<PopoverTrigger>
+											<Input
+												ref={inputRef}
+												id='po'
+												autoComplete='off'
+												placeholder='xxxx-xxxx-xxxx'
+												className={cn(
+													'tracking-wider placeholder:tracking-widest',
+													form.getFieldState('po').error &&
+														'border-destructive bg-background focus:border-destructive'
+												)}
+												value={field.value}
+												onClick={(e) => e.stopPropagation()}
+												onFocus={() => setAutoCompleteOpen(true)}
+												onChange={(e) => {
+													setSearchTerm(e.target.value)
+													field.onChange(e)
+												}}
+											/>
+										</PopoverTrigger>
+										<PopoverContent
+											hidden={purchaseOrders?.length === 0}
+											className='w-[var(--radix-popover-trigger-width)] p-1'>
+											{purchaseOrders?.length > 0 ? (
+												purchaseOrders?.map(({ po }) => (
+													<Div
+														key={po}
+														className='flex cursor-pointer items-center rounded-md p-2 hover:bg-secondary hover:text-secondary-foreground'
+														onClick={() => form.setValue('po', po)}>
+														<Typography variant='small' className='tracking-wider'>
+															{po}
+														</Typography>
+														<Icon
+															name='Check'
+															className={cn(
+																'ml-auto transition-opacity duration-200',
+																field.value === po ? 'opacity-100' : 'opacity-0'
+															)}
+														/>
+													</Div>
+												))
+											) : (
+												<Typography variant='small' className='p-10 text-center'>
+													{t('ns_common:table.no_data')}
+												</Typography>
+											)}
+										</PopoverContent>
+									</Popover>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)
+					}}
 				/>
 				<Div className='col-span-full space-y-3'>
 					<Div className='space-y-1.5 leading-none'>
