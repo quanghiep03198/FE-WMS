@@ -37,7 +37,7 @@ import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { useDebounce, useMemoizedFn, usePrevious } from 'ahooks'
 import { format } from 'date-fns'
-import { capitalize, isNil } from 'lodash'
+import { isNil } from 'lodash'
 
 export type UrlQueryParams = {
 	'date.eq': string
@@ -140,9 +140,7 @@ const ReportDatalist: React.FC = () => {
 				minSize: 200,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
-					const value = getValue()
-					if (value) return capitalize(value)
-					return 'Unknown'
+					return getValue() ?? 'Unknown'
 				}
 			}),
 			columnHelper.accessor('shaping_dept_name', {
