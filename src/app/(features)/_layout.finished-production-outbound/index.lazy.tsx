@@ -1,8 +1,14 @@
-import UnavailableService from '@/app/_components/_errors/-unavailable-service'
+import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
+import ScannedEpcCounter from './_components/_epc-counter/-index'
+import ScannedEpcList from './_components/_epc-data-list/-index'
+import OrderSizeDetailTable from './_components/_manufacture-order-detail/-order-size-table'
+import OutboundForm from './_components/_outbound-form/-index'
+import ScanningFloatToolbar from './_components/_scanning-toolbar/-index'
+import { PageProvider } from './_contexts/-page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/finished-production-outbound/')({
 	component: Page
@@ -17,24 +23,26 @@ function Page() {
 	}, [i18n.language])
 
 	return (
-		<UnavailableService />
-		// <PageProvider>
-		// 	<Div className='grid grid-cols-1 items-stretch gap-4 overflow-hidden @container xxl:grid-cols-[1fr_3fr]'>
-		// 		<Div className='flex max-h-[inherit] flex-col justify-between gap-4 @[1366px]:grid-flow-col @[1366px]:grid-cols-2 @[1366px]:grid-rows-12 xl:max-h-[85vh]'>
-		// 			<Div className='order-first @[1366px]:col-span-1 @[1366px]:row-span-4'>
-		// 				<ScannedEpcCounter />
-		// 			</Div>
-		// 			<Div className='order-last @[1366px]:order-2 @[1366px]:col-span-1 @[1366px]:row-span-8'>
-		// 				<OutboundForm />
-		// 			</Div>
-		// 			<Div className='@[1366px]:order-2 @[1366px]:col-span-full @[1366px]:row-span-full'>
-		// 				<ScannedEpcList />
-		// 			</Div>
-		// 		</Div>
-
-		// 		<OrderSizeDetailTable />
-		// 	</Div>
-		// 	<ScanningFloatToolbar />
-		// </PageProvider>
+		<PageProvider>
+			<Div className='grid max-h-screen grid-cols-12 place-items-stretch items-stretch gap-4 overflow-hidden md:grid-cols-1'>
+				<Div className='@container lg:col-span-full xl:col-span-full xxl:col-span-4'>
+					<Div className='flex grid-rows-12 flex-col gap-4 @7xl:grid @7xl:grid-flow-col @7xl:grid-cols-2'>
+						<Div className='order-first col-span-full row-span-3 @7xl:col-span-1 @7xl:row-span-4'>
+							<ScannedEpcCounter />
+						</Div>
+						<Div className='col-span-full row-span-6 @7xl:order-last @7xl:col-span-full @7xl:row-span-12'>
+							<ScannedEpcList />
+						</Div>
+						<Div className='order-last col-span-full @7xl:order-2 @7xl:col-span-1 @7xl:row-span-8'>
+							<OutboundForm />
+						</Div>
+					</Div>
+				</Div>
+				<Div className='hidden lg:col-span-full xl:col-span-full xxl:col-span-8 xxl:block'>
+					<OrderSizeDetailTable />
+				</Div>
+			</Div>
+			<ScanningFloatToolbar />
+		</PageProvider>
 	)
 }

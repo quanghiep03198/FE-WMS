@@ -20,9 +20,10 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
+import OrderSizeTableDialog from '../_manufacture-order-detail/-order-size-dialog'
 
 const VIRTUAL_ITEM_SIZE = 40
-const PRERENDERED_ITEMS = 20
+const PRERENDERED_ITEMS = 0
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 
@@ -91,7 +92,7 @@ const ScannedEpcList: React.FC = () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/sse/outbound', {
+			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/outbound/sse', {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
@@ -251,11 +252,11 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='flex h-full flex-1 items-center justify-center overflow-clip rounded-md border'>
+		<Div className='flex h-full flex-1 flex-col items-stretch justify-center overflow-clip rounded-md border @3xl:divide-y'>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex w-full flex-col items-stretch justify-start divide-y bg-background p-2 xxl:h-[30vh]'>
+					className='z-10 flex h-[28vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @7xl:h-[60vh]'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -299,13 +300,16 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[21vh] place-content-center'>
+				<Div className='z-10 grid h-[28vh] place-content-center'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
+			<Div className='block @3xl:p-2 xxl:hidden'>
+				<OrderSizeTableDialog />
+			</Div>
 		</Div>
 	)
 }

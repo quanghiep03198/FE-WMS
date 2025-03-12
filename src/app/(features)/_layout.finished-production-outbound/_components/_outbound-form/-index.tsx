@@ -1,3 +1,5 @@
+'use no memo'
+
 import { useSearchPurchaseOrderQuery } from '@/app/(features)/_apis/use-order.api'
 import { cn } from '@/common/utils/cn'
 import {
@@ -59,7 +61,7 @@ const OutboundForm: React.FC = () => {
 					labelField='po'
 					valueField='po'
 				/>
-				<Div className='col-span-full space-y-4'>
+				<Div className='col-span-full space-y-3'>
 					<Div className='space-y-1.5 leading-none'>
 						<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
 							<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
@@ -87,6 +89,6 @@ const OutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`flex items-stretch gap-y-6 flex-col border rounded-md p-6`
+const Form = tw.form`h-full flex items-stretch gap-y-6 flex-col border rounded-md p-6`
 
 export default OutboundForm

@@ -12,7 +12,7 @@ export class RFIDService {
 	// #region [RFID] Finished Production APIs
 	static async fetchNextInboundEpc(tenantId: string, params: FetchFPEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
-			`/rfid/fetch-epc/inbound`,
+			`/rfid/inbound/fetch-epc`,
 			{
 				headers: { [RequestHeaders.TENANT_ID]: tenantId },
 				params: omitBy(params, (value) => !value || value === 'all')
@@ -20,18 +20,9 @@ export class RFIDService {
 		)
 	}
 
-	static async fetchNextOutboundEpc(params: { _page: number }) {
-		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
-			`/rfid/fetch-epc/outbound`,
-			{
-				params
-			}
-		)
-	}
-
 	static async getFPOrderDetail(tenantId: string) {
 		return await axiosInstance.get<unknown, ResponseBody<RFIDStreamEventData['orders']>>(
-			`/rfid/manufacturing-order-detail`,
+			`/rfid/inbound/manufacturing-order-detail`,
 			{ headers: { [RequestHeaders.TENANT_ID]: tenantId } }
 		)
 	}
@@ -48,7 +39,7 @@ export class RFIDService {
 
 	static async updateFPStockMovement(tenantId: string, orderCode: string, payload: InoutboundPayload) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
-			`/rfid/update-stock/${orderCode}`,
+			`/rfid/inbound/update-stock/${orderCode}`,
 			payload,
 			{
 				headers: { [RequestHeaders.TENANT_ID]: tenantId }
@@ -57,7 +48,10 @@ export class RFIDService {
 	}
 
 	static async updateFPStockOut(payload: InoutboundPayload) {
-		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>('/rfid/update-stock-out', payload)
+		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
+			'/rfid/outbound/update-stock-out',
+			payload
+		)
 	}
 
 	static async deleteScannedInboundEpcs(tenantId: string, filters: Record<string, string | number | boolean>) {
@@ -67,21 +61,31 @@ export class RFIDService {
 		})
 	}
 
-	static async deleteScannedOutboundEpcs(filters: Record<string, string | number | boolean>) {
-		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-epcs`, {
-			params: filters
-		})
-	}
-
 	static async exchangeEpc(tenantId: string, payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
-		return await axiosInstance.patch(`/rfid/exchange-epc`, payload, {
+		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId }
 		})
 	}
 
 	static async combineEpcInfor(tenantId: string, payload: EpcCombinationFormValues) {
-		return await axiosInstance.put(`/rfid/exchange-epc-by-size`, payload, {
+		return await axiosInstance.put(`/rfid/inbound/exchange-epc-by-size`, payload, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId }
+		})
+	}
+
+	// #region Outbound
+	static async fetchNextOutboundEpc(params: { _page: number }) {
+		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
+			`/rfid/outbound/fetch-epc`,
+			{
+				params
+			}
+		)
+	}
+
+	static async deleteScannedOutboundEpcs(filters: Record<string, string | number | boolean>) {
+		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-epcs`, {
+			params: filters
 		})
 	}
 }
