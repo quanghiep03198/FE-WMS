@@ -37,10 +37,18 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: uuidv4(),
 		icon: 'GitCompareArrows',
-		title: 'navigation.fm_inoutbound',
-		path: '/finished-production-inoutbound',
+		title: 'navigation.fp_inoutbound',
+		path: '/finished-production-inbound',
 		type: 'main',
 		keybinding: 'ctrl.2'
+	},
+	{
+		id: uuidv4(),
+		icon: 'GitBranchPlus',
+		title: 'navigation.fp_stock_out',
+		path: '/finished-production-outbound',
+		type: 'main',
+		keybinding: 'ctrl.3'
 	},
 	{
 		id: uuidv4(),
@@ -48,7 +56,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.import_management',
 		path: '/inbound-report',
 		type: 'main',
-		keybinding: 'ctrl.3'
+		keybinding: 'ctrl.4'
 	},
 	{
 		id: uuidv4(),
@@ -56,7 +64,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.export_management',
 		path: '/outbound-report',
 		type: 'main',
-		keybinding: 'ctrl.4'
+		keybinding: 'ctrl.5'
 	},
 	{
 		id: uuidv4(),
@@ -64,7 +72,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.inventory_management',
 		path: '/inventory',
 		type: 'main',
-		keybinding: 'ctrl.5'
+		keybinding: 'ctrl.6'
 	},
 	{
 		id: uuidv4(),
@@ -72,7 +80,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.transfer_managment',
 		path: '/transfer-management',
 		type: 'main',
-		keybinding: 'ctrl.6'
+		keybinding: 'ctrl.7'
 	},
 	{
 		id: uuidv4(),
@@ -80,7 +88,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.production_incoming_inspection',
 		path: '/product-incoming-inspection',
 		type: 'main',
-		keybinding: 'ctrl.7'
+		keybinding: 'ctrl.8'
 	},
 	{
 		id: uuidv4(),
@@ -88,7 +96,7 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.report_management',
 		path: '/report',
 		type: 'main',
-		keybinding: 'ctrl.8'
+		keybinding: 'ctrl.9'
 	},
 	{
 		id: uuidv4(),

@@ -1,6 +1,7 @@
+import { useScrollToFn } from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
-import { elementScroll, useVirtualizer, VirtualizerOptions } from '@tanstack/react-virtual'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSize } from 'ahooks'
 import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
@@ -26,16 +27,16 @@ interface TableProps<TData, TValue>
 
 export const ESTIMATE_SIZE = 40
 
-function easeInOutQuint(t) {
-	return t <= 0.5 ? 16 * t ** 5 : 1 + 16 * (--t) ** 5
-}
-
 function TableDataGrid<TData, TValue>({
 	containerProps = { className: cn('h-[50vh] xxl:h-[60vh]') },
 	table,
 	footerProps = { hidden: true, slot: null },
 	caption,
 	loading,
+	virtualizerOptions = {
+		estimateSize: 40,
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5
+	},
 	renderSubComponent
 }: TableProps<TData, TValue>) {
 	const { isFilterOpened } = useTableContext()
@@ -45,35 +46,14 @@ function TableDataGrid<TData, TValue>({
 	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
 
-	const scrollToFn: VirtualizerOptions<any, any>['scrollToFn'] = useCallback((offset, canSmooth, instance) => {
-		const duration = 1000
-		const start = containerRef.current.scrollTop
-		const startTime = (scrollingRef.current = Date.now())
-
-		const run = () => {
-			if (scrollingRef.current !== startTime) return
-			const now = Date.now()
-			const elapsed = now - startTime
-			const progress = easeInOutQuint(Math.min(elapsed / duration, 1))
-			const interpolated = start + (offset - start) * progress
-
-			if (elapsed < duration) {
-				elementScroll(interpolated, canSmooth, instance)
-				requestAnimationFrame(run)
-			} else {
-				elementScroll(interpolated, canSmooth, instance)
-			}
-		}
-
-		requestAnimationFrame(run)
-	}, [])
+	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5,
+		overscan: virtualizerOptions.overscan,
 		getScrollElement: () => containerRef.current,
-		estimateSize: useCallback(() => ESTIMATE_SIZE, []),
+		estimateSize: useCallback(() => virtualizerOptions.estimateSize, []),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? (element) => element?.getBoundingClientRect().height

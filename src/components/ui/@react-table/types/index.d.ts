@@ -102,6 +102,7 @@ export type DataTableProps<TData = any, TValue = any> = {
 	footerProps?: TableFooterProps
 	sorting?: SortingState
 	initialState?: Partial<TableState>
+	virtualizerOptions?: { estimateSize?: number; overscan?: number }
 	onStateChange?: (instance: Table<TData, TValue>) => void
 	renderSubComponent?: (props: RenderSubComponentProps<TData, TValue>) => React.ReactElement
 } & Partial<TableOptions<any>> &

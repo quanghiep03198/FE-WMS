@@ -6,16 +6,16 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	Div,
-	Icon,
 	Typography
 } from '@/components/ui'
-import { captureException, FallbackRender, showReportDialog } from '@sentry/react'
+import { captureException, FallbackRender } from '@sentry/react'
 import React, { useEffect } from 'react'
 
 import env from '@/common/utils/env'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { HttpStatusCode } from 'axios'
 import { useTranslation } from 'react-i18next'
+import BugReportDialog from './-bug-report-dialog'
 import InternalServerError from './-internal-server-error'
 
 interface ErrorBoundaryFallbackProps extends Partial<Parameter<FallbackRender>> {
@@ -66,10 +66,10 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 				)}
 				<Div className='mt-6 inline-grid grid-cols-2 gap-x-2'>
 					<Button onClick={() => resetError()}>{t('ns_common:actions.retry')}</Button>
-					<Button variant='link' onClick={() => showReportDialog({ eventId })}>
-						{t('ns_common:actions.report_bug')}
-						<Icon name='ArrowUpRight' role='img' />
-					</Button>
+					<BugReportDialog eventId={eventId} />
+					{/* <Button variant='link' onClick={() => showReportDialog({ eventId })}>
+						
+					</Button> */}
 				</Div>
 			</Div>
 

@@ -34,6 +34,7 @@ export default {
 		outbound_date: '出庫日期',
 		outbound_qty: '出庫數量',
 		packaging_code: '裝箱單號',
+		po: '订单编号',
 		prod_color: '产品颜色',
 		required_date: '需求日期',
 		returned_qty: '已退貨量',

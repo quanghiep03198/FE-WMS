@@ -1,3 +1,4 @@
+import { TableCell } from '@/components/ui'
 import '@tanstack/react-table'
 import { Row, RowData } from '@tanstack/react-table'
 
@@ -9,6 +10,7 @@ declare module '@tanstack/react-table' {
 		rowSpan?: number
 		align?: 'left' | 'center' | 'right'
 		cellDataType?: 'text' | 'number' | 'date' | 'boolean'
+		tableCellProps?: React.ComponentProps<typeof TableCell>
 		validate?: (value: TValue) => boolean
 	}
 
