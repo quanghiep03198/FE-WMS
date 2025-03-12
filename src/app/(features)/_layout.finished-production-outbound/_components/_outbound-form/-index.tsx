@@ -74,7 +74,7 @@ const OutboundForm: React.FC = () => {
 						<Label htmlFor=''>{t('ns_common:confirmation.understand_and_proceed')}</Label>
 					</Div>
 				</Div>
-				<Button type='submit' size='lg' disabled={isPending}>
+				<Button type='submit' size='lg' disabled={isPending || !isConfirmed}>
 					<Icon
 						name={isPending ? 'LoaderCircle' : 'Check'}
 						role='img'

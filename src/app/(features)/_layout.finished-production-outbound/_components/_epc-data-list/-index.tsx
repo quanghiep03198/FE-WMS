@@ -14,7 +14,7 @@ import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@m
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useEventListener, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { isEqualWith, uniqBy, uniqueId } from 'lodash'
+import { isEqualWith, uniqBy } from 'lodash'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -125,82 +125,81 @@ const ScannedEpcList: React.FC = () => {
 				onmessage(event: EventSourceMessage) {
 					try {
 						if (!event.data || !Json.isValid(event.data)) return
-						// const data = JSON.parse(event.data) as RFIDStreamEventData
-						const data = {
-							epcs: {
-								data: [
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' },
-									{ epc: uniqueId(), mo_no: 'test' }
-								],
-								hasNextPage: false,
-								hasPrevPage: false,
-								limit: 50,
-								page: 1,
-								totalPages: 1,
-								totalDocs: 0
-							},
-							orders: [
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
-								{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] }
-							]
-						} as RFIDStreamEventData
+						const data = JSON.parse(event.data) as RFIDStreamEventData
+						// const data = {
+						// 	epcs: {
+						// 		data: [
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' },
+						// 			{ epc: uniqueId(), mo_no: 'test' }
+						// 		],
+						// 		hasNextPage: false,
+						// 		hasPrevPage: false,
+						// 		limit: 50,
+						// 		page: 1,
+						// 		totalPages: 1,
+						// 		totalDocs: 0
+						// 	},
+						// 	orders: [
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] },
+						// 		{ mo_no: '123', mat_ecolor: 'black', shoes_style_code_factory: '123', sizes: [] }
+						// 	]
+						// } as RFIDStreamEventData
 
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
@@ -256,7 +255,7 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @[1366px]:h-[calc(30+0.5rem)]'>
+					className='z-10 flex w-full flex-col items-stretch justify-start divide-y bg-background p-2 xxl:h-[30vh]'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -300,7 +299,7 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-full place-content-center'>
+				<Div className='z-10 grid h-[21vh] place-content-center'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>

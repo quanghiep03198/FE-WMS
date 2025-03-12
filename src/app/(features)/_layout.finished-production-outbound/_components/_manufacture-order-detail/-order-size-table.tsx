@@ -29,11 +29,11 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative flex max-h-full w-full flex-col divide-y overflow-hidden rounded-lg border'
+			className='relative flex h-full max-h-[85vh] max-w-full flex-col divide-y overflow-hidden rounded-lg border'
 			ref={tableWrapperRef}>
-			<Div className='flow-root overflow-scroll rounded-lg xxl:h-[calc(76vh+1rem)]'>
+			<Div className='flow-root h-[calc(85vh-2rem)] w-full max-w-full overflow-scroll rounded-lg'>
 				<Table
-					className='border-separate border-spacing-0 rounded-lg'
+					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
 						{
 							'--sticky-left-col-width': '10rem',
@@ -140,7 +140,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					</Div>
 				)}
 			</Div>
-			<Div className='flex basis-14 items-center justify-center gap-x-2 p-3 text-center text-sm text-muted-foreground'>
+			<Div className='flex basis-[2rem] items-center justify-center gap-x-2 p-3 text-center text-sm text-muted-foreground'>
 				<Icon name='Table2' size={20} strokeWidth={1.5} />
 				{t('ns_inoutbound:description.outbound_table_caption')}
 			</Div>
