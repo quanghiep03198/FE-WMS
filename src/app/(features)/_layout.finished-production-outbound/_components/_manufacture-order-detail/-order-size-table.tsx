@@ -29,9 +29,9 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative flex h-full max-w-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
+			className='relative flex h-full max-h-full max-w-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
 			ref={tableWrapperRef}>
-			<Div className='flow-root h-[calc(80vh-0.3rem)] w-full max-w-full overflow-scroll rounded-lg'>
+			<Div className='flow-root h-[calc(80vh-1.125rem)] w-full max-w-full overflow-scroll rounded-lg'>
 				<Table
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={

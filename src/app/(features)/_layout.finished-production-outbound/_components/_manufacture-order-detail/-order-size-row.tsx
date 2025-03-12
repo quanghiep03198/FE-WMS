@@ -45,7 +45,6 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								<TableCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
-
 										<DeleteSizePopover
 											data={{
 												mo_no: data?.mo_no,
