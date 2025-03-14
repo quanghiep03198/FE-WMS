@@ -34,6 +34,8 @@ export default {
 		save_changes: 'Lưu thay đổi',
 		search: 'Tìm kiếm',
 		select: 'Chọn',
+		select_database: 'Chọn cơ sở dữ liệu',
+		select_server: 'Chọn máy chủ',
 		set_approval_status: 'Đặt trạng thái phê duyệt',
 		start: 'Bắt đầu',
 		stop: 'Dừng',
@@ -120,6 +122,7 @@ export default {
 		server: 'Máy chủ {{alias}}'
 	},
 	pagination: {
+		ellipsis_count: '... và {{count}} dữ liệu khác',
 		first_page: 'Trang đầu',
 		last_page: 'Trang cuối',
 		next_page: 'Trang sau',

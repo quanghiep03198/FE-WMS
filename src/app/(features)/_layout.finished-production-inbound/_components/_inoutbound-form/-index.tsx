@@ -228,7 +228,7 @@ const InoutboundForm: React.FC = () => {
 											<SelectTrigger>
 												<Div className='flex flex-1 items-center gap-x-3'>
 													<Icon name='Database' size={18} stroke='hsl(var(--warning))' />
-													<SelectValue placeholder={'Select database'} />
+													<SelectValue placeholder={t('ns_common:actions.select_database')} />
 												</Div>
 											</SelectTrigger>
 										</HoverCardTrigger>

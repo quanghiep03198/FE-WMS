@@ -43,7 +43,7 @@ export default {
 		shoes_type_b: 'Giày loại B',
 		shoestyle_codefactory: 'Hình thể xưởng',
 		shaping_dept_code: 'Mã chuyền thành hình',
-		shaping_dept_name: 'Tên chuyền thành hình',
+		shaping_dept_name: 'Chuyền thành hình',
 		sno_car_number: 'Số xe container',
 		sno_container: 'Mã container',
 		sno_date: 'Ngày tạo đơn',

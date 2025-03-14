@@ -33,6 +33,8 @@ export default {
 		save: '保存',
 		save_changes: '保存更改',
 		search: '查詢',
+		select_database: '选择数据库',
+		select_server: '选择服务器',
 		set_approval_status: '审核状态设置',
 		start: '开始',
 		stop: '停止',
@@ -115,6 +117,7 @@ export default {
 		receiving_data: '等待数据 ...'
 	},
 	pagination: {
+		ellipsis_count: '... 和 {{count}} 更多项目',
 		first_page: '第一页',
 		last_page: '最后一页',
 		next_page: '下页',

@@ -33,6 +33,8 @@ export default {
 		save: 'Save',
 		save_changes: 'Save changes',
 		search: 'Search',
+		select_database: 'Select database',
+		select_server: 'Select server',
 		set_approval_status: 'Set approval status',
 		start: 'Start',
 		stop: 'Stop',
@@ -116,6 +118,7 @@ export default {
 		receiving_data: 'Waiting for data ...'
 	},
 	pagination: {
+		ellipsis_count: '... and {{count}} more items',
 		first_page: 'First page',
 		last_page: 'Last page',
 		next_page: 'Next page',
