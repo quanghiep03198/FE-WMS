@@ -32,6 +32,7 @@ import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
 import { factories } from '@/common/constants/constants'
+import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { HoverCardPortal } from '@radix-ui/react-hover-card'
@@ -152,16 +153,15 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return (
-						<Div className='space-x-1'>
-							{value
-								.split(',')
-								.sort((a, b) => a.localeCompare(b))
-								.map((item) => (
-									<Badge key={item} variant='outline' className='font-normal'>
-										{item}
-									</Badge>
-								))}
-						</Div>
+						<EllipsisList
+							threshhold={3}
+							data={value.split(',').sort((a, b) => a.localeCompare(b))}
+							template={({ data }) => (
+								<Badge variant='outline' className='whitespace-nowrap font-normal'>
+									{data}
+								</Badge>
+							)}
+						/>
 					)
 				}
 			}),
@@ -174,16 +174,15 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return (
-						<Div className='space-x-1'>
-							{value
-								.split(',')
-								.sort((a, b) => a.localeCompare(b))
-								.map((item) => (
-									<Badge key={item} variant='secondary'>
-										{item.trim()}
-									</Badge>
-								))}
-						</Div>
+						<EllipsisList
+							threshhold={3}
+							data={value.split(',').sort((a, b) => a.localeCompare(b))}
+							template={({ data }) => (
+								<Badge variant='secondary' className='whitespace-nowrap'>
+									{data.trim()}
+								</Badge>
+							)}
+						/>
 					)
 				}
 			}),
