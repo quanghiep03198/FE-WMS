@@ -69,7 +69,6 @@ function DataTable<TData, TValue>(
 		getRowCanExpand,
 		onPaginationChange,
 		onSortingChange,
-		onStateChange,
 		onRowSelectionChange,
 		...props
 	}: DataTableProps<TData, TValue>,
@@ -152,7 +151,7 @@ function DataTable<TData, TValue>(
 			fuzzy: fuzzyFilter,
 			inDateRange: dateRangeFilter
 		},
-		globalFilterFn: 'fuzzy',
+		globalFilterFn: globalFilterFn,
 		onPaginationChange: manualPagination ? onPaginationChange : setPagination,
 		onSortingChange: manualSorting ? onSortingChange : setSorting,
 		onColumnFiltersChange: manualFiltering ? onColumnFiltersChange : setColumnFilters,

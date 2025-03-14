@@ -117,7 +117,7 @@ function TableDataGrid<TData, TValue>({
 													style={{
 														height: `${ESTIMATE_SIZE}px`,
 														width: `calc(var(--header-${header?.id}-size) * 1px)`,
-														...DataTableUtility.getStickyOffsetPosition(header?.column, table)
+														...DataTableUtility.getStickyOffsetPosition(header?.column)
 													}}>
 													<TableCellHead table={table} header={header} />
 													<ColumnResizer header={header} />
@@ -156,10 +156,9 @@ function TableDataGrid<TData, TValue>({
 							)
 						})}
 					</TableHeader>
-
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
-					) : table.getState().columnSizingInfo.isResizingColumn ? (
+					) : table.getState().columnSizingInfo.isResizingColumn && !table.getIsSomeColumnsPinned() ? (
 						<MemorizedTableBody {...{ table, virtualizer, renderSubComponent }} />
 					) : (
 						<TableBody {...{ table, virtualizer, renderSubComponent }} />

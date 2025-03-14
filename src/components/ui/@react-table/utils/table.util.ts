@@ -1,4 +1,4 @@
-import { Column, ColumnFiltersState, SortingState, Table } from '@tanstack/react-table'
+import { Column, ColumnFiltersState, SortingState } from '@tanstack/react-table'
 import { CSSProperties } from 'react'
 
 export class DataTableUtility {
@@ -28,10 +28,7 @@ export class DataTableUtility {
 		}, {})
 	}
 
-	public static getStickyOffsetPosition<TData = any, TValue = any>(
-		column: Column<TData, TValue>,
-		table?: Table<TData>
-	): CSSProperties {
+	public static getStickyOffsetPosition<TData = any, TValue = any>(column: Column<TData, TValue>): CSSProperties {
 		const stickyAlignment = column.getIsPinned()
 
 		switch (stickyAlignment) {
@@ -61,6 +58,7 @@ export class DataTableUtility {
 			default: {
 				return {
 					position: 'relative',
+					zIndex: 0,
 					borderLeft: column.getIsFirstColumn() ? 'none' : undefined
 					// borderRight: column.getIsLastColumn('center') ? 'none' : '1px solid hsl(var(--border))'
 				}
