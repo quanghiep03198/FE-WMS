@@ -2,7 +2,7 @@ import { RequestHeaders } from '@/common/constants/enums'
 import env from '@/common/utils/env'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
-import axios, { HttpStatusCode, type AxiosError, type AxiosInstance } from 'axios'
+import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
 
@@ -60,7 +60,7 @@ export class AxiosClient {
 		this.instance.interceptors.response.use(
 			(response) => response.data,
 			async (error: AxiosError<ResponseBody<unknown>>) => {
-				if (error.code === 'ECONNABORTED') {
+				if (error.code === AxiosError.ETIMEDOUT || error.code === AxiosError.ECONNABORTED) {
 					toast.error('Request timeout')
 					return Promise.reject(new Error('Request timeout'))
 				}

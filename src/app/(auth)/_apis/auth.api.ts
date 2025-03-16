@@ -1,10 +1,12 @@
 import { AuthService } from '@/services/auth.service'
 import { queryOptions, useQuery } from '@tanstack/react-query'
-import { AxiosRequestConfig } from 'axios'
+import { AxiosError, AxiosRequestConfig } from 'axios'
 
 export const USER_PROVIDE_TAG = 'USER'
 
 export function getUserProfileQuery(config?: AxiosRequestConfig) {
+	const unexpectedErrorCodes = [AxiosError.ERR_NETWORK, AxiosError.ETIMEDOUT, AxiosError.ECONNABORTED]
+
 	return queryOptions({
 		queryKey: [USER_PROVIDE_TAG, config],
 		queryFn: () => AuthService.profile(config),
@@ -12,7 +14,10 @@ export function getUserProfileQuery(config?: AxiosRequestConfig) {
 		networkMode: 'always',
 		enabled: AuthService.getHasAccessToken(),
 		select: (response) => response.metadata,
-		retry: (failureCount) => failureCount <= 2 && AuthService.getHasAccessToken()
+		retry: (failureCount, error) => {
+			if (unexpectedErrorCodes.includes(error.code)) return AuthService.getHasAccessToken()
+			return failureCount <= 2 && AuthService.getHasAccessToken()
+		}
 	})
 }
 
