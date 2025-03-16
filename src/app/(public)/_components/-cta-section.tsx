@@ -17,13 +17,13 @@ const CTASection: React.FC = () => {
 				<Button
 					onClick={() => handleMenuClick(1)}
 					variant='outline'
-					className='mb-4 w-72 cursor-pointer justify-start gap-x-2 rounded-full border-primary/50 px-5 tracking-wide hover:bg-primary hover:text-primary-foreground'>
+					className='mb-4 w-72 cursor-pointer justify-start gap-x-2 rounded-full border-primary/50 px-5 tracking-wide transition-colors duration-200 hover:border-success hover:bg-transparent hover:text-success'>
 					<Icon name='Tags' size={20} />
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
-				<Typography variant='h3' className='mb-4 text-pretty sm:text-xl'>
-					Simplify Warehouse Management with i-WMS
+				<Typography variant='h3' className='mb-4 text-pretty leading-tight sm:text-xl'>
+					Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
 				</Typography>
 				<Typography
 					variant='p'

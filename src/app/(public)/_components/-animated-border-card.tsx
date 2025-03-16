@@ -7,7 +7,7 @@ const AnimatedBorderCard: React.FC<DivProps> = ({ className, children, ...props 
 		<Div
 			{...props}
 			className={cn(
-				'relative flex aspect-square items-center justify-center overflow-hidden rounded-md bg-border p-px before:absolute before:left-[-25%] before:top-[-25%] before:h-[150%] before:w-[150%] before:animate-[spin_5s_linear_infinite] before:bg-[conic-gradient(transparent_45deg,transparent,hsl(var(--success)))] before:content-[""]',
+				'relative flex aspect-square items-center justify-center overflow-hidden rounded-md bg-border p-px before:absolute before:left-[-25%] before:top-[-25%] before:h-[150%] before:w-[150%] before:animate-[spin_5s_linear_infinite] before:bg-[conic-gradient(transparent_45deg,transparent,var(--primary-alt))] before:content-[""]',
 				className
 			)}>
 			<Div className='z-10 grid aspect-square h-full w-full flex-1 basis-full place-content-center rounded-[inherit] bg-popover'>

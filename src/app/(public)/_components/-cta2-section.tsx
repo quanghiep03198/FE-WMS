@@ -28,7 +28,7 @@ const CTA2Section: React.FC = () => {
 					animationPlayState: topSectionInViewPort ? 'running' : 'paused'
 				}}>
 				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center'>
-					<Typography variant='small' className='font-jetbrains'>
+					<Typography variant='small' className='font-jetbrains text-[var(--primary-alt)]'>
 						EDGE DEPLOYMENT
 					</Typography>
 					<Typography variant='h3' className='text-pretty sm:text-lg'>

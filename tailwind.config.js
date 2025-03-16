@@ -252,6 +252,16 @@ module.exports = {
 						opacity: '1',
 						transform: 'translate(-50%,-40%) scale(1)'
 					}
+				},
+				['spotlight-off']: {
+					from: {
+						opacity: '1',
+						transform: 'translate(-50%,-40%) scale(1)'
+					},
+					to: {
+						opacity: '0',
+						transform: 'translate(-75%, -60%) scale(0.95)'
+					}
 				}
 			},
 			animation: {
@@ -269,6 +279,7 @@ module.exports = {
 				['fly-in-out']: 'fly-in-out 1s linear',
 				['fall-down']: 'fall-down 1s linear',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
+				['spotlight-off']: 'spotlight-off 6s ease forwards',
 				['shimmer']: 'shimmer 1.5s linear infinite'
 			}
 		}

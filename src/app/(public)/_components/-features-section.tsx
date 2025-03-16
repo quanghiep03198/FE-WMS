@@ -1,8 +1,8 @@
-import { Div, Icon, Typography } from '@/components/ui'
+import { Div, DivProps, Icon, IconProps, Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
+import tw from 'tailwind-styled-components'
 import { usePageContext } from '../_contexts/-page-context'
-import AnimatedBorderCard from './-animated-border-card'
 
 const FeaturesSection: React.FunctionComponent = () => {
 	const pageContext = usePageContext()
@@ -23,69 +23,89 @@ const FeaturesSection: React.FunctionComponent = () => {
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
 			<Div className='max-w-4xl space-y-1.5 text-left sm:text-center'>
-				<Typography variant='small' className='!text-base font-medium sm:text-sm sm:font-normal'>
+				<Typography
+					variant='small'
+					className='!text-base font-medium text-[var(--primary-alt)] sm:text-sm sm:font-normal'>
 					No more paperwork
 				</Typography>
 				<Typography variant='h3' className='sm:mb-4 sm:text-xl'>
 					Comprehensive solutions for Warehouse Management
 				</Typography>
 			</Div>
-			<Div className='grid items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
-				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
-						<Icon name='Warehouse' strokeWidth={1.5} size={24} />
-					</AnimatedBorderCard>
+			<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
+				<EffectCard>
+					<EffectCardIconWrapper>
+						<EffectCardIcon
+							name='Warehouse'
+							className='group-hover/card:stroke-success'
+							strokeWidth={1.5}
+							size={24}
+						/>
+					</EffectCardIconWrapper>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Inventory Tracking and Control</Typography>
-						<Typography variant='small' color='muted'>
+						<Typography variant='small' color='muted' className='text-pretty'>
 							i-WMS can help warehouse managers keep track of inventory levels, locations, and movement within
 							the warehouse, ensuring optimal stock levels and minimizing stockouts.
 						</Typography>
 					</Div>
-				</Div>
-				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
-						<Icon name='ScanBarcode' strokeWidth={1.5} size={24} />
-					</AnimatedBorderCard>
+				</EffectCard>
+				<EffectCard>
+					<EffectCardIconWrapper>
+						<EffectCardIcon
+							name='ScanBarcode'
+							className='group-hover/feat:stroke-success'
+							strokeWidth={1.5}
+							size={24}
+						/>
+					</EffectCardIconWrapper>
 					<Div className='space-y-2'>
-						<Typography className='font-medium'>Barcode Scanning and RFID Integration</Typography>
-						<Typography variant='small' color='muted'>
-							Integrating barcode scanning and RFID in WMS allows for precise and efficient inventory tracking
-							across the warehouse. By providing improved visibility, faster scanning, and more accurate data
-							capture, these features help ensure precise inventory tracking and management.
+						<Typography className='font-medium'>Barcode and RFID Integration</Typography>
+						<Typography variant='small' color='muted' className='text-pretty'>
+							Enhance inventory tracking with barcode scanning and RFID integration for better visibility, faster
+							scanning, and precise data capture, ensuring effective inventory management.
 						</Typography>
 					</Div>
-				</Div>
-				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
-						<Icon name='FileText' strokeWidth={1.5} size={24} />
-					</AnimatedBorderCard>
+				</EffectCard>
+				<EffectCard>
+					<EffectCardIconWrapper>
+						<EffectCardIcon name='FileText' strokeWidth={1.5} size={24} />
+					</EffectCardIconWrapper>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Reporting and Analytics</Typography>
-						<Typography variant='small' color='muted'>
-							i-WMS allows warehouse managers to monitor performance, identify bottlenecks and performance gaps,
-							and supply insights for optimization.
+						<Typography variant='small' color='muted' className='text-pretty'>
+							i-WMS provides customizable reports and real-time analytics, enabling managers to monitor
+							performance, identify bottlenecks, and make data-driven decisions to enhance warehouse operations.
 						</Typography>
 					</Div>
-				</Div>
-				<Div className='flex flex-col gap-4 sm:flex-row'>
-					<AnimatedBorderCard className='aspect-square size-12 min-w-12'>
-						<Icon name='Languages' strokeWidth={1.5} size={24} />
-					</AnimatedBorderCard>
+				</EffectCard>
+				<EffectCard>
+					<EffectCardIconWrapper>
+						<EffectCardIcon name='Languages' strokeWidth={1.5} size={24} />
+					</EffectCardIconWrapper>
 					<Div className='space-y-2'>
 						<Typography className='font-medium'>Multi-Language Support</Typography>
 						<Typography
 							variant='small'
 							color='muted'
+							className='text-pretty'
 							dangerouslySetInnerHTML={{
-								__html: /* html */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language. This feature is particularly useful for multinational companies with employees from different regions.`
+								__html: /* html */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
 							}}
 						/>
 					</Div>
-				</Div>
+				</EffectCard>
 			</Div>
 		</Div>
 	)
 }
+
+const EffectCard = tw(
+	Div
+)<DivProps>`relative transition-all h-full border p-6 sm:p-4 duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-md sm:flex-row xl:hover:shadow-xl`
+const EffectCardIconWrapper = tw(
+	Div
+)<DivProps>`inline-flex aspect-square size-12 min-w-12 items-center justify-center rounded-md bg-secondary`
+const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-[var(--primary-alt)] duration-200 transition-colors`
 
 export default FeaturesSection

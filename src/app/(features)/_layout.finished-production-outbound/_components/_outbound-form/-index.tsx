@@ -79,7 +79,7 @@ const OutboundForm: React.FC = () => {
 							<FormItem className='flex flex-col'>
 								<FormLabel htmlFor='po'>{t('ns_erp:fields.po')}</FormLabel>
 								<FormControl>
-									<Popover open={autoCompleteOpen} onOpenChange={setAutoCompleteOpen}>
+									<Popover defaultOpen={false} open={autoCompleteOpen} onOpenChange={setAutoCompleteOpen}>
 										<PopoverTrigger>
 											<Input
 												ref={inputRef}

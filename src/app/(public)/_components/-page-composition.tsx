@@ -9,7 +9,12 @@ const PageComposition: React.FC = () => {
 	const pageContext = usePageContext()
 
 	return (
-		<Container ref={pageContext?.parentScrollRef} data-state='expanded'>
+		<Container
+			ref={pageContext?.parentScrollRef}
+			data-state='expanded'
+			style={{
+				'--primary-alt': 'hsl(var(--success))'
+			}}>
 			<Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-top-40' />
 			<Main ref={pageContext?.contentScrollRef}>
 				<Header />

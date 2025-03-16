@@ -1,4 +1,6 @@
 import { cn } from '@/common/utils/cn'
+import { useScroll } from 'ahooks'
+import { usePageContext } from '../_contexts/-page-context'
 
 type SpotlightProps = {
 	className?: string
@@ -6,10 +8,16 @@ type SpotlightProps = {
 }
 
 export default function Spotlight({ className, fill }: SpotlightProps) {
+	const pageContext = usePageContext()
+	const scroll = useScroll(pageContext?.contentScrollRef)
+
 	return (
 		<svg
 			className={cn(
-				'pointer-events-none absolute z-[1] h-[169%] w-[138%] animate-spotlight opacity-0 lg:w-[84%]',
+				'pointer-events-none absolute z-[1] h-[169%] w-[138%] animate-spotlight opacity-0 transition-width lg:w-[84%]',
+				{
+					'animate-spotlight-off': scroll?.top > screen.availHeight / 4
+				},
 				className
 			)}
 			xmlns='http://www.w3.org/2000/svg'
