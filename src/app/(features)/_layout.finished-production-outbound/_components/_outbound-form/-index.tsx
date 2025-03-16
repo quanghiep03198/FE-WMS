@@ -23,8 +23,8 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useDebounce, useResetState } from 'ahooks'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useDebounce, useResetState, useUpdateEffect } from 'ahooks'
+import { useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -60,11 +60,9 @@ const OutboundForm: React.FC = () => {
 		}
 	}
 
-	useEffect(() => {
-		if (autoCompleteOpen && purchaseOrders?.length === 0) {
-			setAutoCompleteOpen(false)
-		} else {
-			setAutoCompleteOpen(true)
+	useUpdateEffect(() => {
+		if (autoCompleteOpen) {
+			setAutoCompleteOpen(purchaseOrders?.length > 0)
 		}
 	}, [purchaseOrders])
 
