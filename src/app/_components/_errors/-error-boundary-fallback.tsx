@@ -13,9 +13,9 @@ import React, { useEffect } from 'react'
 
 import env from '@/common/utils/env'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import { HttpStatusCode } from 'axios'
 import { useTranslation } from 'react-i18next'
-import BugReportDialog from './-bug-report-dialog'
 import InternalServerError from './-internal-server-error'
 
 interface ErrorBoundaryFallbackProps extends Partial<Parameter<FallbackRender>> {
@@ -66,10 +66,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 				)}
 				<Div className='mt-6 inline-grid grid-cols-2 gap-x-2'>
 					<Button onClick={() => resetError()}>{t('ns_common:actions.retry')}</Button>
-					<BugReportDialog eventId={eventId} />
-					{/* <Button variant='link' onClick={() => showReportDialog({ eventId })}>
-						
-					</Button> */}
+					<FeedbackFormTrigger />
 				</Div>
 			</Div>
 

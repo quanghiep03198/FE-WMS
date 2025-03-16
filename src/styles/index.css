@@ -1,4 +1,5 @@
 @import url('./nprogress.css');
+@import url('./sentry.css');
 
 @tailwind base;
 @tailwind components;

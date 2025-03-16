@@ -1,0 +1,17 @@
+#sentry-feedback {
+	--foreground: hsl(var(--popover-foreground));
+	--background: hsl(var(--popover));
+	--accent-background: hsl(var(--primary));
+	--accent-foreground: hsl(var(--primary-foreground));
+	--border: 1.5px solid hsl(var(--input));
+	--error-color: hsl(var(--destructive));
+	--success-color: hsl(var(--success));
+	--font-family: 'Inter', monospace;
+	--dialog-border-radius: 8px;
+	--dialog-color: hsl(var(--popover-foreground));
+	--z-index: 100000;
+	/* --dialog-inset: auto; */
+	--interactive-filter: opacity(0.8);
+	--trigger-background: hsl(var(--primary));
+	--button-hover-background: hsl(var(--accent));
+}
