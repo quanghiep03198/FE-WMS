@@ -47,6 +47,6 @@ const CTASection: React.FC = () => {
 	)
 }
 
-const Image = tw.img`w-full max-w-xl xxl:max-w-2xl flex-1`
+const Image = tw.img`w-full max-w-xl xxl:max-w-3xl flex-1`
 
 export default CTASection

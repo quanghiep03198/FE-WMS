@@ -51,7 +51,7 @@ const CTA2Section: React.FC = () => {
 			</Div>
 			<Div
 				ref={bottomSectionRef}
-				className='grid w-full animate-[fly-in_1s_ease] grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 xl:-translate-y-1/4'
+				className='grid w-full animate-[fly-in_1s_ease] grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2'
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: bottomSectionInViewPort ? 'running' : 'paused'

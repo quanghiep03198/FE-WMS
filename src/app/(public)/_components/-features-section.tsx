@@ -102,7 +102,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 
 const EffectCard = tw(
 	Div
-)<DivProps>`relative transition-all h-full border p-6 sm:p-4 duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-md sm:flex-row xl:hover:shadow-xl`
+)<DivProps>`relative transition-all h-full border p-6 sm:p-4 duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-md sm:flex-row hover:shadow-[0_0px_12px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_0px_12px_var(--primary-alt)]`
 const EffectCardIconWrapper = tw(
 	Div
 )<DivProps>`inline-flex aspect-square size-12 min-w-12 items-center justify-center rounded-md bg-secondary`

@@ -12,22 +12,29 @@ const DeploymentGlobe: React.FC = () => {
 	})
 
 	return (
-		<div ref={ref} id='functions-hero' className='relative inset-0 mx-auto aspect-[978/678] w-full max-w-2xl'>
+		<div
+			ref={ref}
+			id='functions-hero'
+			className='relative inset-0 mx-auto aspect-[978/678] w-full max-w-2xl xl:max-w-3xl xl:translate-y-12'>
 			<div
 				className={cn(
-					'absolute left-[25%] top-[2%] z-20 flex h-auto w-[60%] flex-1 animate-[fade-in_0.5s_cubic-bezier(.25,.25,0,1)_0.2s_both] items-center justify-center opacity-0 sm:left-[34%] sm:top-[6%] sm:w-[35%] md:left-[33.5%] md:top-[6%] md:w-[35%] lg:left-[26%] lg:top-[3%] lg:w-[52%] xl:left-[28%] xl:top-[3%] xl:w-[48%] 2xl:left-[32%] 2xl:top-[3%] 2xl:w-[40%]',
-					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
+					'absolute left-[25%] top-[2%] z-20 flex h-auto w-[60%] flex-1 items-center justify-center sm:left-[34%] sm:top-[6%] sm:w-[35%] md:left-[33.5%] md:top-[6%] md:w-[35%] lg:left-[26%] lg:top-[3%] lg:w-[52%] xl:left-[28%] xl:top-[3%] xl:w-[48%] 2xl:left-[32%] 2xl:top-[3%] 2xl:w-[40%]'
 				)}>
-				<button className='group flex w-full min-w-64 -translate-y-1.5 items-center gap-1 gap-x-3 rounded-lg border border-primary/60 bg-transparent px-3 py-2 transition-colors duration-200 hover:border-primary sm:-translate-y-1/2 sm:gap-2 md:-translate-y-1/2'>
+				<div className='group flex w-full min-w-64 -translate-y-1.5 items-center gap-1 gap-x-3 rounded-lg border border-primary/60 bg-transparent px-3 py-2 transition-colors duration-200 hover:border-primary sm:-translate-y-1/2 sm:gap-2 md:-translate-y-1/2'>
 					<div
 						className={cn(
-							'flex flex-1 animate-[fade-in_0.5s_cubic-bezier(.25,.25,0,1)_0.5s_both] items-center gap-x-2 whitespace-nowrap text-left font-mono text-xs text-foreground opacity-0 md:text-sm',
-							inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
+							'flex flex-1 items-center gap-x-2 whitespace-nowrap text-left font-jetbrains text-xs text-foreground md:text-sm'
 						)}>
 						<Icon name='Globe' />
-						Available in 2 regions
+						<span
+							className={cn(
+								'hidden w-3/4 animate-typing overflow-hidden text-foreground',
+								inViewport ? 'block [animation-play-state:_running]' : '[animation-play-state:_paused]'
+							)}>
+							Available in 2 regions
+						</span>
 					</div>
-				</button>
+				</div>
 			</div>
 			<svg
 				id='svg1'
@@ -37,7 +44,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 155 284'
 				className={cn(
-					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.125s_both]',
+					'absolute animate-[fade-in_1.25s_cubic-bezier(.25,.25,0,1)_1.5s_both]',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}
 				style={{ width: '15.244%', height: '41.24%', left: '38.8%', top: '31.2%' }}>
@@ -61,7 +68,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 272 235'
 				className={cn(
-					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1s_both]',
+					'absolute animate-[fade-in_1.25s_cubic-bezier(.25,.25,0,1)_1.5s_both]',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}
 				style={{ width: '27.458%', height: '34.045%', left: '50.8%', top: '31.4%' }}>
@@ -85,7 +92,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 261 144'
 				className={cn(
-					'absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.25s_both]',
+					'absolute animate-[fade-in_1.25s_cubic-bezier(.25,.25,0,1)_1.5s_both]',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}
 				style={{ width: '26.687%', height: '20.49%', left: '25.1%', top: '31.4%' }}>
@@ -104,23 +111,23 @@ const DeploymentGlobe: React.FC = () => {
 			<div
 				id='dot1'
 				className={cn(
-					'absolute flex h-[3.6%] w-[2.5%] origin-center animate-[fade-in_0.75s_ease-out_1s_both] items-center justify-center opacity-0 transition-opacity',
+					'before:w absolute flex h-[3.6%] w-[2.5%] origin-center animate-[fade-in_0.75s_ease-out_1.25s_both] items-center justify-center opacity-0 transition-opacity',
 					inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 				)}
 				style={{ left: '50%', top: '29.9%' }}>
 				<span className='absolute inset-0 h-full w-full rounded-full bg-foreground bg-opacity-20'></span>
-				<span className='absolute h-4/5 w-4/5 rounded-full bg-foreground bg-opacity-90'></span>
+				<span className='absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full bg-foreground bg-opacity-90'></span>
 			</div>
 			<HoverCard>
 				<HoverCardTrigger
 					id='dot2'
 					className={cn(
-						'absolute flex h-[3.6%] w-[2.5%] origin-center animate-[fade-in_0.75s_ease-out_1s_both] items-center justify-center opacity-0 transition-opacity',
+						'absolute flex h-[3.6%] w-[2.5%] origin-center animate-[fade-in_0.875s_ease-out_1.75s_both] items-center justify-center opacity-0 transition-opacity',
 						inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 					)}
 					style={{ left: '24.3%', top: '50.2%' }}>
-					<span className='absolute inset-0 h-full w-full rounded-full bg-foreground bg-opacity-20'></span>
-					<span className='absolute h-4/5 w-4/5 rounded-full bg-foreground bg-opacity-90'></span>
+					<span className='absolute inset-0 rounded-full bg-foreground bg-opacity-20'></span>
+					<span className='absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full bg-foreground bg-opacity-90'></span>
 				</HoverCardTrigger>
 				<HoverCardContent className='bg-background/50 backdrop-blur-sm'>
 					<ul className='space-y-2 text-sm'>
@@ -139,17 +146,17 @@ const DeploymentGlobe: React.FC = () => {
 				<HoverCardTrigger
 					id='dot3'
 					className={cn(
-						'absolute flex h-[3.6%] w-[2.5%] origin-center animate-[fade-in_0.75s_ease-out_1s_both] items-center justify-center opacity-0 transition-opacity',
+						'absolute flex h-[3.6%] w-[2.5%] origin-center animate-[fade-in_0.875s_ease-out_1.75s_both] items-center justify-center opacity-0 transition-opacity',
 						inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 					)}
 					style={{ left: '77.8%', top: '63.4%' }}>
 					<span className='absolute inset-0 h-full w-full rounded-full bg-foreground bg-opacity-20'></span>
-					<span className='absolute h-4/5 w-4/5 rounded-full bg-foreground bg-opacity-90'></span>
+					<span className='absolute h-4/5 w-4/5 animate-[ping_2s_ease-in-out_2s_infinite] rounded-full bg-foreground bg-opacity-90'></span>
 				</HoverCardTrigger>
 				<HoverCardContent className='bg-background/50 bg-opacity-50 backdrop-blur-sm'>
 					<ul className='space-y-2 text-sm'>
 						<li className='grid grid-cols-[1.5rem_auto] items-start gap-x-2'>
-							<Icon name='MapPin' size={20} /> Phnomphenh, Cambodia
+							<Icon name='MapPin' size={20} /> KHRU factory, Phnomphenh, Cambodia
 						</li>
 					</ul>
 				</HoverCardContent>
@@ -158,7 +165,7 @@ const DeploymentGlobe: React.FC = () => {
 			<div className='absolute left-[51.15%] top-[10%] h-[20%] w-[2px] overflow-hidden'>
 				<span
 					className={cn(
-						'absolute inset-0 h-full w-full animate-[slide-in_0.25s_ease-out_0.5s_both] bg-gradient-to-t from-current to-transparent',
+						'absolute inset-0 h-full w-full animate-[slide-in_0.25s_ease-out_1s_both] bg-gradient-to-t from-current to-transparent',
 						inViewport ? '[animation-play-state:_running]' : '[animation-play-state:_paused]'
 					)}
 				/>
@@ -166,8 +173,8 @@ const DeploymentGlobe: React.FC = () => {
 			<img
 				alt='globe wireframe'
 				fetchPriority='high'
-				width='400'
-				height='400'
+				width='500'
+				height='500'
 				decoding='async'
 				data-nimg='1'
 				className='block h-full w-full dark:hidden'
@@ -178,8 +185,8 @@ const DeploymentGlobe: React.FC = () => {
 			<img
 				alt='globe wireframe'
 				fetchPriority='high'
-				width='400'
-				height='400'
+				width='500'
+				height='500'
 				decoding='async'
 				data-nimg='1'
 				className='hidden h-full w-full dark:block'

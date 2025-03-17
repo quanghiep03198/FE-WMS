@@ -262,6 +262,15 @@ module.exports = {
 						opacity: '0',
 						transform: 'translate(-75%, -60%) scale(0.95)'
 					}
+				},
+				['typing']: {
+					from: {
+						width: '0',
+						opacity: '0.5'
+					},
+					to: {
+						opacity: '1'
+					}
 				}
 			},
 			animation: {
@@ -280,7 +289,8 @@ module.exports = {
 				['fall-down']: 'fall-down 1s linear',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
 				['spotlight-off']: 'spotlight-off 6s ease forwards',
-				['shimmer']: 'shimmer 1.5s linear infinite'
+				['shimmer']: 'shimmer 1.5s linear infinite',
+				['typing']: 'typing 1.125s steps(25), 0.65s step-end 0s infinite alternate'
 			}
 		}
 	},
