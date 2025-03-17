@@ -33,7 +33,6 @@ import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
 import { outboundValidator } from '../../_schemas/outbound.schema'
 
 const OutboundForm: React.FC = () => {
-	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const [autoCompleteOpen, setAutoCompleteOpen] = useState<boolean>(false)
 	const checkboxId = useId()
@@ -45,7 +44,8 @@ const OutboundForm: React.FC = () => {
 			po: ''
 		}
 	})
-	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
+	const currentPurchaseOrderValue = form.watch('po')
+	const debouncedSearchTerm = useDebounce(currentPurchaseOrderValue, { wait: 500 })
 	const { data: purchaseOrders } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation()
 
@@ -61,10 +61,10 @@ const OutboundForm: React.FC = () => {
 	}
 
 	useUpdateEffect(() => {
-		if (autoCompleteOpen) {
-			setAutoCompleteOpen(purchaseOrders?.length > 0)
+		if (!autoCompleteOpen && !!currentPurchaseOrderValue) {
+			setAutoCompleteOpen(true)
 		}
-	}, [purchaseOrders])
+	}, [purchaseOrders, currentPurchaseOrderValue])
 
 	return (
 		<FormProvider {...form}>
@@ -93,7 +93,6 @@ const OutboundForm: React.FC = () => {
 												onClick={(e) => e.stopPropagation()}
 												onFocus={() => setAutoCompleteOpen(true)}
 												onChange={(e) => {
-													setSearchTerm(e.target.value)
 													field.onChange(e)
 												}}
 											/>
