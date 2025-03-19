@@ -78,21 +78,13 @@ const ReportDatalist: React.FC = () => {
 					</button>
 				)
 			}),
-
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				minSize: 150,
 				filterFn: 'fuzzy'
-			}),
-			columnHelper.accessor('mat_code', {
-				header: t('ns_erp:fields.mat_code'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				minSize: 150,
-				filterFn: 'fuzzy',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
@@ -180,38 +172,40 @@ const ReportDatalist: React.FC = () => {
 	}
 
 	return (
-		<DataTable
-			columns={columns}
-			data={data}
-			loading={isLoading}
-			enableExpanding={true}
-			renderSubComponent={
-				(({ row }) => {
-					return <OutboundReportDetailTable data={row.original?.size_run} />
-				}) satisfies RenderSubComponent<IOutboundReport>
-			}
-			toolbarProps={{
-				slotLeft: () => isSmallScreen && <DatePickerFilter />,
-				slotRight: () => (
-					<Fragment>
-						<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-							<Button
-								size='icon'
-								variant='outline'
-								onClick={handleDownloadExcel}
-								disabled={!data || data.length === 0}>
-								<Icon name='Download' />
-							</Button>
-						</Tooltip>
-						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-							<Button size='icon' variant='outline' onClick={() => refetch()}>
-								<Icon name='RotateCw' />
-							</Button>
-						</Tooltip>
-					</Fragment>
-				)
-			}}
-		/>
+		<Div as='section'>
+			<DataTable
+				columns={columns}
+				data={data}
+				loading={isLoading}
+				enableExpanding={true}
+				renderSubComponent={
+					(({ row }) => {
+						return <OutboundReportDetailTable data={row.original?.size_run} />
+					}) satisfies RenderSubComponent<IOutboundReport>
+				}
+				toolbarProps={{
+					slotLeft: () => isSmallScreen && <DatePickerFilter />,
+					slotRight: () => (
+						<Fragment>
+							<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
+								<Button
+									size='icon'
+									variant='outline'
+									onClick={handleDownloadExcel}
+									disabled={!data || data.length === 0}>
+									<Icon name='Download' />
+								</Button>
+							</Tooltip>
+							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+								<Button size='icon' variant='outline' onClick={() => refetch()}>
+									<Icon name='RotateCw' />
+								</Button>
+							</Tooltip>
+						</Fragment>
+					)
+				}}
+			/>
+		</Div>
 	)
 }
 

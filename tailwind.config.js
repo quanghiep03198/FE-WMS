@@ -83,6 +83,7 @@ module.exports = {
 				},
 				table: {
 					head: 'hsl(var(--table-head))',
+					'head-foreground': 'hsl(var(--table-head-foreground))',
 					'row-active': 'hsl(var(--table-row-active))',
 					'row-selected': 'hsl(var(--table-row-selected))'
 				},

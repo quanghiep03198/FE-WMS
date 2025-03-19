@@ -1,6 +1,7 @@
 export default {
 	fields: {
 		accumulated_qty: 'Số lượng tích lũy',
+		actual_inventory_qty: 'Số lượng kiểm kê',
 		brand_name: 'Nhãn hiệu khách hàng',
 		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
@@ -11,9 +12,11 @@ export default {
 		dept_name: 'Bộ phận cập nhật',
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
+		final_inventory_qty: 'Tồn kho cuối kỳ',
 		inbound_date: 'Ngày Nhập Kho', // Inbound Date
 		inbound_qty: 'Số Lượng Nhập Kho', // Inbound Quantity
 		inspected_qty: 'Số Lượng Đã Kiểm Tra', // Inspected Quantity
+		inventory_qty_by_order: 'Tồn kho theo đơn',
 		kg_noend: 'Thứ tự thùng cuối',
 		kg_nostart: 'Thứ tự thùng đầu',
 		mat_code: 'Mã thành phẩm',
@@ -56,6 +59,7 @@ export default {
 		sno_total_boxes: 'Số lượng đóng thùng',
 		sno_type: 'Loại',
 		status_approve: 'Trạng thái duyệt đơn',
+		total_init_qty: 'Số lượng nhập kỳ đầu',
 		trans_num: 'Lượng thùng đã phát',
 		transfer_order_code: 'Mã đơn chuyển giao',
 		uninspected_qty: 'Số Lượng Chưa Kiểm Tra'

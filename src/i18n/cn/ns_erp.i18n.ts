@@ -2,6 +2,7 @@ export default {
 	fields: {
 		accumulated_qty: '累计',
 		active_date: '入库日期',
+		actual_inventory_qty: '盘点数量',
 		brand_name: '品牌',
 		container_order_code: '出櫃單號',
 		conversion_rate: '換算率',
@@ -12,9 +13,11 @@ export default {
 		dept_name: '更新部門',
 		employee_name: '建檔人姓名',
 		export_num: '已出库量',
+		final_inventory_qty: '期末库存',
 		inbound_date: '入庫日期',
 		inbound_qty: '入庫數量',
 		inspected_qty: '已驗收量',
+		inventory_qty_by_order: '指令入库数量',
 		kg_noend: '結束箱號',
 		kg_nostart: '起始箱號',
 		mat_code: '成品料号',
@@ -58,6 +61,7 @@ export default {
 		sno_total_boxes: '箱數合計',
 		sno_type: '左右',
 		status_approve: '審核',
+		total_init_qty: '期初数量',
 		trans_num: '調撥箱數',
 		transfer_order_code: '轉撥單號',
 		uninspected_qty: '未驗收量'

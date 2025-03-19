@@ -111,6 +111,7 @@ export default {
 		exchange_order: 'Exchange manufacturing order',
 		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Daily Outbound Report {{factory}} - {{date}}',
+		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
 		order_sizing_list: 'Order sizing list',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'
