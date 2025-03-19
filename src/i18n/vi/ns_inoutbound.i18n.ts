@@ -107,6 +107,7 @@ export default {
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Báo biểu xuất kho {{factory}} - {{date}}',
+		file_monthly_inventory_report: 'Báo biểu tồn kho {{factory}} - {{month}}',
 		exchange_epc: 'Hoán đổi EPC',
 		exchange_order: 'Hoán đổi đơn hàng',
 		order_sizing_list: 'Danh sách Size theo đơn',

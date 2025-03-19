@@ -49,6 +49,7 @@
 		--radius: 0.5rem;
 
 		--table-head: 0 0% 99%;
+		--table-head-foreground: 0 0% 45.1%;
 		--table-row-active: 0 0% 96%;
 		--table-row-selected: 0 0% 98%;
 
@@ -114,6 +115,7 @@
 		--scrollbar: 0 0% 15%;
 
 		--table-head: 0 0% 6.9%;
+		--table-head-foreground: 0 0% 63.9%;
 		--table-row-active: 0 0% 12%;
 		--table-row-selected: 0 0% 9%;
 

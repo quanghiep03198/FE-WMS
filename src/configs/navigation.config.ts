@@ -70,7 +70,7 @@ export const navigationConfig: NavigationConfig[] = [
 		id: uuidv4(),
 		icon: 'Container',
 		title: 'navigation.inventory_management',
-		path: '/inventory',
+		path: '/inventory-report',
 		type: 'main',
 		keybinding: 'ctrl.6'
 	},

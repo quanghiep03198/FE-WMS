@@ -1,6 +1,7 @@
 export default {
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
+		actual_inventory_qty: 'Actual inventory quantity',
 		brand_name: 'Customer branch name',
 		container_order_code: 'Container Order Code',
 		conversion_rate: 'Conversion rate',
@@ -11,9 +12,11 @@ export default {
 		dept_name: 'Department',
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
+		final_inventory_qty: 'Final inventory',
 		inbound_date: 'Inbound date',
 		inbound_qty: 'Inbound quantity',
 		inspected_qty: 'Inspected quantity',
+		inventory_qty_by_order: 'Actual instock quantity',
 		kg_noend: 'Ending Box Number',
 		kg_nostart: 'Starting Box Number',
 		mat_code: 'Finished production code',
@@ -56,6 +59,7 @@ export default {
 		sno_total_boxes: 'Total boxes',
 		sno_type: 'Type',
 		status_approve: 'Approval status',
+		total_init_qty: 'Initial stock quantity',
 		trans_num: 'Number of Boxes Issued',
 		transfer_order_code: 'Transfer order code',
 		uninspected_qty: 'Uninspected quantity'

@@ -2,6 +2,8 @@ import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-w
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
 import { ProductionApprovalStatus, TransferOrderApprovalStatus } from '../constants/enums'
 
+// #region In use Entities
+
 export interface IBaseEntity {
 	id: string
 	updated?: Date | string
@@ -77,62 +79,6 @@ export interface IElectronicProductCode {
 	storage?: any
 }
 
-export interface IInOutBoundOrder extends IBaseEntity {
-	status_approve: ProductionApprovalStatus
-	sno_no: string // Order code
-	sno_date: Date | string // Import/Export date
-	sno_car_number: string // Container truck number
-	sno_ship_order: string // shipping order code
-	sno_container: string // Container code
-	sno_sealnumber: string
-	sno_qty: string // Import/Export quantity
-	sno_total_boxes: number // Packaging total
-	dept_name: string
-	employee_name: string
-	company_code?: string
-}
-
-export interface ITransferOrder extends IBaseEntity {
-	custbrand_id: string
-	brand_name: string
-	transfer_order_code: string // need to be rename
-	kg_no: string
-	mo_no: string
-	or_no: string
-	or_custpo: string
-	shoestyle_codefactory: string
-	or_warehouse_num: string | null
-	or_warehouse_name: string | null
-	or_storage_num: string | null
-	or_storage_name: string | null
-	new_warehouse_num: string | null
-	new_warehouse_name: string | null
-	new_storage_num: string | null
-	new_storage_name: string | null
-	status_approve: TransferOrderApprovalStatus
-	employee_name_approve: string | null
-	approve_date: Date | null
-}
-
-export interface ITransferOrderDetail extends ITransferOrder {
-	seqno: number
-	trans_num: number
-	sno_qty: number
-	or_qtyperpacking: number
-	kg_nostart: number
-	kg_noend: number
-}
-
-export interface ITransferOrderData extends ITransferOrder {
-	cofactory_code: string
-}
-
-export interface IDailyInboundReport {
-	mo_no: string
-	inbound_qty: number
-	is_exchanged: boolean
-}
-
 export interface IInOutBoundReport {
 	mo_no: string
 	mat_code: string
@@ -158,15 +104,52 @@ export interface IOutboundReport extends IInOutBoundReport {
 	daily_outbound_qty: number
 }
 
-export interface ICommandNumberInfor {
+export interface IMonthlyInventoryReport {
+	brand_name: string
+	po: string
 	mo_no: string
-	mat_code: string
-	shoes_style_code_factory: string
-	mo_noseq: Array<string>
-	sizes: Array<{
+	order_qty: number
+	or_no: string
+	shoes_style_code_factory: string | null
+	init_inv_qty: number
+	total_instock_qty: number
+	total_outstock_qty: number
+	actual_inv_qty: number
+	final_inv_qty: number
+	size_data: Array<{
 		size_numcode: string
-		qty: number
+		init_inv_qty: number
+		instock_qty: number
+		outstock_qty: number
+		final_inv_qty: number
 	}>
+}
+
+// #region Deprecated
+
+/**
+ * @deprecated
+ */
+export interface ITransferOrder extends IBaseEntity {
+	custbrand_id: string
+	brand_name: string
+	transfer_order_code: string // need to be rename
+	kg_no: string
+	mo_no: string
+	or_no: string
+	or_custpo: string
+	shoestyle_codefactory: string
+	or_warehouse_num: string | null
+	or_warehouse_name: string | null
+	or_storage_num: string | null
+	or_storage_name: string | null
+	new_warehouse_num: string | null
+	new_warehouse_name: string | null
+	new_storage_num: string | null
+	new_storage_name: string | null
+	status_approve: TransferOrderApprovalStatus
+	employee_name_approve: string | null
+	approve_date: Date | null
 }
 
 /**
@@ -192,4 +175,41 @@ export interface IProductionImportOrder extends IBaseEntity {
 	warehouse_name: string
 	sno_location: string
 	remark: string | null
+}
+
+/**
+ * @deprecated
+ */
+export interface ITransferOrderDetail extends ITransferOrder {
+	seqno: number
+	trans_num: number
+	sno_qty: number
+	or_qtyperpacking: number
+	kg_nostart: number
+	kg_noend: number
+}
+
+/**
+ * @deprecated
+ */
+export interface ITransferOrderData extends ITransferOrder {
+	cofactory_code: string
+}
+
+/**
+ * @deprecated
+ */
+export interface IInOutBoundOrder extends IBaseEntity {
+	status_approve: ProductionApprovalStatus
+	sno_no: string // Order code
+	sno_date: Date | string // Import/Export date
+	sno_car_number: string // Container truck number
+	sno_ship_order: string // shipping order code
+	sno_container: string // Container code
+	sno_sealnumber: string
+	sno_qty: string // Import/Export quantity
+	sno_total_boxes: number // Packaging total
+	dept_name: string
+	employee_name: string
+	company_code?: string
 }

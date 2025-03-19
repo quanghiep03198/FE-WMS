@@ -38,8 +38,8 @@ const featuresLayoutProductIncomingInspectionIndexLazyImport = createFileRoute(
 const featuresLayoutOutboundReportIndexLazyImport = createFileRoute(
   '/(features)/_layout/outbound-report/',
 )()
-const featuresLayoutInventoryIndexLazyImport = createFileRoute(
-  '/(features)/_layout/inventory/',
+const featuresLayoutInventoryReportIndexLazyImport = createFileRoute(
+  '/(features)/_layout/inventory-report/',
 )()
 const featuresLayoutInboundReportIndexLazyImport = createFileRoute(
   '/(features)/_layout/inbound-report/',
@@ -169,15 +169,15 @@ const featuresLayoutOutboundReportIndexLazyRoute =
       ),
     )
 
-const featuresLayoutInventoryIndexLazyRoute =
-  featuresLayoutInventoryIndexLazyImport
+const featuresLayoutInventoryReportIndexLazyRoute =
+  featuresLayoutInventoryReportIndexLazyImport
     .update({
-      id: '/inventory/',
-      path: '/inventory/',
+      id: '/inventory-report/',
+      path: '/inventory-report/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout.inventory/index.lazy').then(
+      import('./app/(features)/_layout.inventory-report/index.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -367,11 +367,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutInboundReportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
-    '/(features)/_layout/inventory/': {
-      id: '/(features)/_layout/inventory/'
-      path: '/inventory'
-      fullPath: '/inventory'
-      preLoaderRoute: typeof featuresLayoutInventoryIndexLazyImport
+    '/(features)/_layout/inventory-report/': {
+      id: '/(features)/_layout/inventory-report/'
+      path: '/inventory-report'
+      fullPath: '/inventory-report'
+      preLoaderRoute: typeof featuresLayoutInventoryReportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/outbound-report/': {
@@ -447,7 +447,7 @@ interface featuresLayoutRouteChildren {
   featuresLayoutFinishedProductionInboundIndexLazyRoute: typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   featuresLayoutFinishedProductionOutboundIndexLazyRoute: typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   featuresLayoutInboundReportIndexLazyRoute: typeof featuresLayoutInboundReportIndexLazyRoute
-  featuresLayoutInventoryIndexLazyRoute: typeof featuresLayoutInventoryIndexLazyRoute
+  featuresLayoutInventoryReportIndexLazyRoute: typeof featuresLayoutInventoryReportIndexLazyRoute
   featuresLayoutOutboundReportIndexLazyRoute: typeof featuresLayoutOutboundReportIndexLazyRoute
   featuresLayoutProductIncomingInspectionIndexLazyRoute: typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   featuresLayoutReportIndexLazyRoute: typeof featuresLayoutReportIndexLazyRoute
@@ -464,7 +464,8 @@ const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
     featuresLayoutFinishedProductionOutboundIndexLazyRoute,
   featuresLayoutInboundReportIndexLazyRoute:
     featuresLayoutInboundReportIndexLazyRoute,
-  featuresLayoutInventoryIndexLazyRoute: featuresLayoutInventoryIndexLazyRoute,
+  featuresLayoutInventoryReportIndexLazyRoute:
+    featuresLayoutInventoryReportIndexLazyRoute,
   featuresLayoutOutboundReportIndexLazyRoute:
     featuresLayoutOutboundReportIndexLazyRoute,
   featuresLayoutProductIncomingInspectionIndexLazyRoute:
@@ -536,7 +537,7 @@ export interface FileRoutesByFullPath {
   '/finished-production-inbound': typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   '/finished-production-outbound': typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
-  '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
+  '/inventory-report': typeof featuresLayoutInventoryReportIndexLazyRoute
   '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
   '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/report': typeof featuresLayoutReportIndexLazyRoute
@@ -557,7 +558,7 @@ export interface FileRoutesByTo {
   '/finished-production-inbound': typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   '/finished-production-outbound': typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
-  '/inventory': typeof featuresLayoutInventoryIndexLazyRoute
+  '/inventory-report': typeof featuresLayoutInventoryReportIndexLazyRoute
   '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
   '/product-incoming-inspection': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/report': typeof featuresLayoutReportIndexLazyRoute
@@ -582,7 +583,7 @@ export interface FileRoutesById {
   '/(features)/_layout/finished-production-inbound/': typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   '/(features)/_layout/finished-production-outbound/': typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   '/(features)/_layout/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
-  '/(features)/_layout/inventory/': typeof featuresLayoutInventoryIndexLazyRoute
+  '/(features)/_layout/inventory-report/': typeof featuresLayoutInventoryReportIndexLazyRoute
   '/(features)/_layout/outbound-report/': typeof featuresLayoutOutboundReportIndexLazyRoute
   '/(features)/_layout/product-incoming-inspection/': typeof featuresLayoutProductIncomingInspectionIndexLazyRoute
   '/(features)/_layout/report/': typeof featuresLayoutReportIndexLazyRoute
@@ -605,7 +606,7 @@ export interface FileRouteTypes {
     | '/finished-production-inbound'
     | '/finished-production-outbound'
     | '/inbound-report'
-    | '/inventory'
+    | '/inventory-report'
     | '/outbound-report'
     | '/product-incoming-inspection'
     | '/report'
@@ -625,7 +626,7 @@ export interface FileRouteTypes {
     | '/finished-production-inbound'
     | '/finished-production-outbound'
     | '/inbound-report'
-    | '/inventory'
+    | '/inventory-report'
     | '/outbound-report'
     | '/product-incoming-inspection'
     | '/report'
@@ -648,7 +649,7 @@ export interface FileRouteTypes {
     | '/(features)/_layout/finished-production-inbound/'
     | '/(features)/_layout/finished-production-outbound/'
     | '/(features)/_layout/inbound-report/'
-    | '/(features)/_layout/inventory/'
+    | '/(features)/_layout/inventory-report/'
     | '/(features)/_layout/outbound-report/'
     | '/(features)/_layout/product-incoming-inspection/'
     | '/(features)/_layout/report/'
@@ -706,7 +707,7 @@ export const routeTree = rootRoute
         "/(features)/_layout/finished-production-inbound/",
         "/(features)/_layout/finished-production-outbound/",
         "/(features)/_layout/inbound-report/",
-        "/(features)/_layout/inventory/",
+        "/(features)/_layout/inventory-report/",
         "/(features)/_layout/outbound-report/",
         "/(features)/_layout/product-incoming-inspection/",
         "/(features)/_layout/report/",
@@ -756,8 +757,8 @@ export const routeTree = rootRoute
       "filePath": "(features)/_layout.inbound-report/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
-    "/(features)/_layout/inventory/": {
-      "filePath": "(features)/_layout.inventory/index.lazy.tsx",
+    "/(features)/_layout/inventory-report/": {
+      "filePath": "(features)/_layout.inventory-report/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/outbound-report/": {
