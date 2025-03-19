@@ -111,7 +111,7 @@ export default {
 		file_monthly_inventory_report: 'Báo biểu tồn kho {{factory}} - {{month}}',
 		exchange_epc: 'Hoán đổi EPC',
 		exchange_order: 'Hoán đổi đơn hàng',
-		monthly_inventory_report: 'Báo biểu tồn kho',
+		monthly_inventory_report: 'Báo biểu tồn kho hàng tháng',
 		order_sizing_list: 'Danh sách Size theo đơn',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho'
