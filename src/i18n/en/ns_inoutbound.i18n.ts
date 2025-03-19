@@ -7,40 +7,41 @@ export default {
 	},
 	counter_box: {
 		label: 'Scanned EPCs',
-		caption: 'Data is streamed continuously from server when connection is established.'
+		caption: 'Data is streamed continuously from the server when the connection is established.'
 	},
 	description: {
-		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations every day',
-		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations every day',
-		exchange_all: 'You can exchange the whole EPC belongs to the selected size',
+		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
+		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
+		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
-		inoutbound_form_note: 'Disconnect before updating stock moves',
+		inoutbound_form_note: 'Disconnect before updating stock moves.',
+		monthly_inventory_report: 'Manage and track the monthly inventory of finished goods in the warehouse.',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
-		order_sizing_list: 'Table below shows the sizing information of the scanned orders',
-		outbound_table_caption: 'The table above summarizes the scanned EPC data',
-		po_outbound: 'The scanned EPC data will be counted according to this order after perform stock out.',
+		order_sizing_list: 'The table below shows the sizing information of the scanned orders.',
+		outbound_table_caption: 'The table above summarizes the scanned EPC data.',
+		po_outbound: 'The scanned EPC data will be counted according to this order after performing stock out.',
 		select_readable_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		select_writable_database:
 			'Select a database connection to save the warehouse inbound/outbound data. Skip if the order is designated to be produced at the current factory.',
 		select_order:
 			'Select the production order to view its scanned EPC data and perform warehouse inbound or outbound operations.',
-		select_rfid_process: 'Select the process to scan the corresponding tags for the responsible departments',
+		select_rfid_process: 'Select the process to scan the corresponding tags for the responsible departments.',
 		skip_select_tenant: 'Skip if the order is designated to be produced at the current factory.',
-		transferred_order: 'The actual order code to be exchanged',
-		exchange_qty: 'Number of exchanged items for the actual order',
-		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders',
-		transfer_order_list: 'Following and managing transfer orders'
+		transferred_order: 'The actual order code to be exchanged.',
+		exchange_qty: 'Number of exchanged items for the actual order.',
+		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders.',
+		transfer_order_list: 'Follow and manage transfer orders.'
 	},
 	errors: {
-		wrong_stamp: 'Wrong stamp'
+		wrong_stamp: 'Wrong stamp.'
 	},
 	inoutbound_actions: {
-		normal_export: 'Normally export',
-		normal_import: 'Normally import',
+		normal_export: 'Normal export',
+		normal_import: 'Normal import',
 		recycling: 'Recycling',
 		return_for_repair: 'Return for Repair',
 		scrap: 'Scrap',
@@ -58,8 +59,8 @@ export default {
 		transfer_information: 'Transfer information'
 	},
 	mo_no_box: {
-		caption: 'You can determine which order should be used to import/export',
-		order_count: '{{ count }} order(s) found'
+		caption: 'You can determine which order should be used to import/export.',
+		order_count: '{{ count }} order(s) found.'
 	},
 	notification: {
 		confirm_delete_all_mono: {
@@ -69,9 +70,9 @@ export default {
 		exchange_order_caution:
 			'The action of swapping production orders cannot be undone. Please make sure to confirm your changes before proceeding.',
 		invalid_epc_deteted:
-			'Invalid EPC detected. Please contact to shaping department for this issue, then move them to recycle',
+			'Invalid EPC detected. Please contact the shaping department for this issue, then move them to recycle.',
 		navigation_blocked_caption: 'Unsaved tasks. Are you sure you want to leave the page right now?',
-		navigation_blocked_message: 'Cancel scanning EPCs anyway ?',
+		navigation_blocked_message: 'Cancel scanning EPCs anyway?',
 		stock_out_submission_caution:
 			'Please check the information carefully before confirming the stock out. After confirmation, you cannot change this information.',
 		too_many_mono: 'There are more than 3 commands scanned. Please check again.'
@@ -88,20 +89,20 @@ export default {
 		shaping_inbound: 'Shaping Inbound'
 	},
 	scanner_setting: {
-		adjust_setting_description: 'Adjust RFID Playground settings',
+		adjust_setting_description: 'Adjust RFID Playground settings.',
 		cron_job: 'Job status',
 		data_synchronization: 'Synchronization runner',
 		developer_mode: 'Developer mode',
-		developer_mode_note: 'Enabling developer mode for more advanced features',
-		fetch_oder_data_note: "Allow you to scan EPC that's not imported/exported from the previous days",
+		developer_mode_note: 'Enable developer mode for more advanced features.',
+		fetch_oder_data_note: "Allows you to scan EPCs that weren't imported/exported from previous days.",
 		fetch_older_data: 'Fetch older data',
 		internet_access: 'Internet access',
 		latency: 'Latency',
 		network_status: 'Network status',
 		synchronization_trigger: 'Synchronization trigger',
-		synchronization_trigger_description: "Trigger API call to sync data from customer's API if needed.",
+		synchronization_trigger_description: "Trigger API calls to sync data from the customer's API if needed.",
 		toggle_fullscreen: 'Toggle full screen',
-		toggle_fullscreen_note: 'Use full screen mode to have larger view',
+		toggle_fullscreen_note: 'Use full screen mode for a larger view.',
 		transferred_data: 'Transferred data'
 	},
 	titles: {
@@ -112,6 +113,7 @@ export default {
 		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Daily Outbound Report {{factory}} - {{date}}',
 		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
+		monthly_inventory_report: 'Monthly inventory report',
 		order_sizing_list: 'Order sizing list',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'

@@ -2,34 +2,21 @@ import { factories } from '@/common/constants/constants'
 import { useAuth } from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
-import {
-	Button,
-	DataTable,
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	Label,
-	Slider,
-	Switch,
-	Tooltip,
-	Typography
-} from '@/components/ui'
+import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
-import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { createColumnHelper, type Table as TTable } from '@tanstack/react-table'
-import { useDebounce, useMemoizedFn, usePrevious } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick, sortBy } from 'lodash'
-import { Fragment, memo, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetMonthlyInventoryReport } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
+import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 import { InventorySizeTable } from './-inventory-size-detail'
 
 export type UrlQueryParams = {
@@ -70,7 +57,7 @@ export const ReportDataList: React.FC = () => {
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
-							className='absolute inset-0 flex h-full w-full items-center justify-center'
+							className='flex h-full w-full items-center justify-center'
 							onClick={() => table.toggleAllRowsExpanded(false)}>
 							<Icon name='FoldVertical' stroke='hsl(var(--foreground))' />
 						</button>
@@ -78,9 +65,12 @@ export const ReportDataList: React.FC = () => {
 				),
 				size: 50,
 				enableResizing: false,
+				meta: {
+					align: 'center'
+				},
 				cell: ({ row, table }) => (
 					<button
-						className='absolute inset-0 flex h-full w-full items-center justify-center'
+						className='flex h-full w-full items-center justify-center'
 						onClick={() => {
 							table.toggleAllRowsExpanded(false)
 							row.toggleExpanded(!row.getIsExpanded())
@@ -181,7 +171,7 @@ export const ReportDataList: React.FC = () => {
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {
 					factory: t(factories[user.company_code], { ns: 'ns_common' }),
 					month: searchParams['month.eq'],
-					defaultValue: `Inbound Report ~ ${searchParams['month.eq']}`
+					defaultValue: `Monthly Inventory Report ~ ${searchParams['month.eq']}`
 				}) + '.xlsx'
 			)
 			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INVENTORY_REPORT_ID })
@@ -192,11 +182,15 @@ export const ReportDataList: React.FC = () => {
 
 	return (
 		<Div className='relative space-y-10'>
-			<AutoRefreshToggle />
+			<Div className='absolute left-0 top-0'>
+				<AutoRefreshToggle />
+			</Div>
 			<DataTable
+				ref={dataTableRef}
 				columns={columns}
 				data={data}
 				loading={isLoading}
+				enableExpanding={true}
 				containerProps={{
 					style: { height: screen.availHeight / 1.75 }
 				}}
@@ -231,66 +225,3 @@ export const ReportDataList: React.FC = () => {
 }
 
 ReportDataList.displayName = 'InventoryReportDataTable'
-
-const AutoRefreshToggle: React.FC = memo(() => {
-	const { t } = useTranslation()
-	const id = useId()
-	const { searchParams, setParams } = useQueryParams<UrlQueryParams>()
-	const [refetchInterval, setRefetchInterval] = useState<number | false>(searchParams['auto-refresh'])
-	const previousRefetchInterval = usePrevious<number | false>(refetchInterval)
-
-	const debouncedValue = useDebounce(refetchInterval, { wait: 1000 })
-
-	useEffect(() => {
-		setParams({ ...searchParams, 'auto-refresh': debouncedValue })
-	}, [debouncedValue])
-
-	return (
-		<HoverCard>
-			<HoverCardTrigger className='absolute inline-flex items-center justify-center gap-x-3 rounded-md bg-accent/60 px-4 py-2 shadow'>
-				<Label htmlFor={id}>{t('ns_common:table.auto_refresh')}</Label>
-				<Switch
-					id={id}
-					checked={Boolean(refetchInterval)}
-					onCheckedChange={(checked) => {
-						if (checked) setRefetchInterval(previousRefetchInterval ?? 5000)
-						else setRefetchInterval(false)
-					}}
-				/>
-			</HoverCardTrigger>
-			<HoverCardPortal>
-				<HoverCardContent hidden={!refetchInterval} side='right' sideOffset={8} className='w-80'>
-					<Div className='space-y-4'>
-						<Typography variant='small'>{t('ns_common:table.refetch_interval')}</Typography>
-						<Div className='flex items-start justify-between gap-2'>
-							<Icon name='Zap' size={20} className='-translate-y-2' />
-							<Div className='flex-1 basis-full space-y-3'>
-								<Slider
-									min={5000}
-									max={30000}
-									step={5000}
-									value={
-										typeof refetchInterval === 'number'
-											? [refetchInterval]
-											: [previousRefetchInterval || 5000]
-									}
-									onValueChange={([value]) => setRefetchInterval(value)}
-								/>
-								<Div className='flex items-baseline justify-between'>
-									{Array.from({ length: 6 }, (_, i) => (
-										<Typography key={i} variant='small' className='text-center !text-[10px]'>
-											{(i + 1) * 5}
-										</Typography>
-									))}
-								</Div>
-							</Div>
-							<Icon name='Leaf' size={20} className='-translate-y-2' />
-						</Div>
-					</Div>
-				</HoverCardContent>
-			</HoverCardPortal>
-		</HoverCard>
-	)
-})
-
-AutoRefreshToggle.displayName = 'AutoRefreshToggle'

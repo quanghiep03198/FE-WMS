@@ -28,8 +28,8 @@ function Page() {
 			<Div as='section' className='space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>
-						<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
-						<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
+						<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
+						<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
 					</PageHeader>
 					<Div className='ml-auto sm:hidden'>
 						<MonthPickerFilter />

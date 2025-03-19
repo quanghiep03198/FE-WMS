@@ -30,6 +30,7 @@ import { factories } from '@/common/constants/constants'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { capitalize, isNil } from 'lodash'
+import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 import DatePickerFilter from './-date-picker-filter'
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
@@ -172,12 +173,18 @@ const ReportDatalist: React.FC = () => {
 	}
 
 	return (
-		<Div as='section'>
+		<Div as='section' className='relative'>
+			<Div className='absolute left-0 top-0'>
+				<AutoRefreshToggle />
+			</Div>
 			<DataTable
 				columns={columns}
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
+				containerProps={{
+					style: { height: screen.availHeight / 1.75 }
+				}}
 				renderSubComponent={
 					(({ row }) => {
 						return <OutboundReportDetailTable data={row.original?.size_run} />

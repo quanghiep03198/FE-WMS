@@ -16,7 +16,8 @@ export default {
 		exchange_epc_dialog_desc: '允许用户用新的生产订单替换或更新产品上的 EPC 标签.',
 		exchange_qty: '实际订单的交换商品数量',
 		inoutbound_form_note: '更新库存移动之前断开连接',
-		no_exchangable_order: '没有可交换的顺序',
+		monthly_inventory_report: '管理和跟踪成品仓库的每月库存',
+		no_exchangable_order: '没有可交换的订单',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
 		outbound_table_caption: '上表总结了扫描的EPC数据',
@@ -100,6 +101,7 @@ export default {
 	titles: {
 		daily_inbound_report: '入庫报表',
 		daily_outbound_report: '出庫报表',
+		monthly_inventory_report: '库存报表',
 		exchange_epc: '交换 EPC',
 		exchange_order: '交换生产订单',
 		file_daily_inbound_report: '{{factory}}每日入库报告 - {{date}}',
