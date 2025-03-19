@@ -8,36 +8,29 @@ import {
 	Button,
 	DataTable,
 	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
 	Icon,
-	Label,
-	Slider,
-	Switch,
 	Table,
 	TableBody,
 	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
-	Tooltip,
-	Typography
+	Tooltip
 } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
-import { HoverCardPortal } from '@radix-ui/react-hover-card'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
-import { useDebounce, useMemoizedFn, usePrevious } from 'ahooks'
+import { useMemoizedFn } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { isNil } from 'lodash'
-import { Fragment, memo, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
+import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 
 export type UrlQueryParams = {
 	'date.eq': string
@@ -254,14 +247,18 @@ const ReportDatalist: React.FC = () => {
 
 	return (
 		<Div className='relative'>
-			<AutoRefreshToggle />
+			<Div className='absolute left-0 top-0'>
+				<AutoRefreshToggle />
+			</Div>
 			<DataTable
 				columns={columns}
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
 				ref={dataTableRef}
-				containerProps={{ className: 'h-[65vh]' }}
+				containerProps={{
+					style: { height: screen.availHeight / 1.75 }
+				}}
 				renderSubComponent={
 					(({ row }) => {
 						return <InboundReportDetailTable data={row.original?.size_run} />
@@ -291,69 +288,6 @@ const ReportDatalist: React.FC = () => {
 		</Div>
 	)
 }
-
-const AutoRefreshToggle: React.FC = memo(() => {
-	const { t } = useTranslation()
-	const id = useId()
-	const { searchParams, setParams } = useQueryParams<UrlQueryParams>()
-	const [refetchInterval, setRefetchInterval] = useState<number | false>(searchParams['auto-refresh'])
-	const previousRefetchInterval = usePrevious<number | false>(refetchInterval)
-
-	const debouncedValue = useDebounce(refetchInterval, { wait: 1000 })
-
-	useEffect(() => {
-		setParams({ ...searchParams, 'auto-refresh': debouncedValue })
-	}, [debouncedValue])
-
-	return (
-		<HoverCard>
-			<HoverCardTrigger className='absolute inline-flex items-center justify-center gap-x-3 rounded-md bg-accent/60 px-4 py-2 shadow'>
-				<Label htmlFor={id}>{t('ns_common:table.auto_refresh')}</Label>
-				<Switch
-					id={id}
-					checked={Boolean(refetchInterval)}
-					onCheckedChange={(checked) => {
-						if (checked) setRefetchInterval(previousRefetchInterval ?? 5000)
-						else setRefetchInterval(false)
-					}}
-				/>
-			</HoverCardTrigger>
-			<HoverCardPortal>
-				<HoverCardContent hidden={!refetchInterval} side='right' sideOffset={8} className='w-80'>
-					<Div className='space-y-4'>
-						<Typography variant='small'>{t('ns_common:table.refetch_interval')}</Typography>
-						<Div className='flex items-start justify-between gap-2'>
-							<Icon name='Zap' size={20} className='-translate-y-2' />
-							<Div className='flex-1 basis-full space-y-3'>
-								<Slider
-									min={5000}
-									max={30000}
-									step={5000}
-									value={
-										typeof refetchInterval === 'number'
-											? [refetchInterval]
-											: [previousRefetchInterval || 5000]
-									}
-									onValueChange={([value]) => setRefetchInterval(value)}
-								/>
-								<Div className='flex items-baseline justify-between'>
-									{Array.from({ length: 6 }, (_, i) => (
-										<Typography key={i} variant='small' className='text-center !text-[10px]'>
-											{(i + 1) * 5}
-										</Typography>
-									))}
-								</Div>
-							</Div>
-							<Icon name='Leaf' size={20} className='-translate-y-2' />
-						</Div>
-					</Div>
-				</HoverCardContent>
-			</HoverCardPortal>
-		</HoverCard>
-	)
-})
-
-AutoRefreshToggle.displayName = 'AutoRefreshToggle'
 
 const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> = ({ data }) => {
 	const { t } = useTranslation()

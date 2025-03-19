@@ -64,7 +64,7 @@ const MonthPicker: React.FC<MonthCalendarProps> = (props) => {
 						!props?.selectedMonth && 'text-muted-foreground'
 					)}>
 					<CalendarIcon className='mr-2 h-4 w-4' />
-					{props?.selectedMonth ? format(props?.selectedMonth, 'MMM yyyy') : <span>Pick a month</span>}
+					{props?.selectedMonth ? format(new Date(props.selectedMonth), 'MMM yyyy') : <span>Pick a month</span>}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className='w-[var(--radix-popover-trigger-width)]'>

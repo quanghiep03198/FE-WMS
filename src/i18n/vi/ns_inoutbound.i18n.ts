@@ -31,6 +31,7 @@ export default {
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
 		inoutbound_form_note: 'Dừng đọc thiết bị RFID và ngắt kết nối trên ứng dụng trước khi thao tác nhập/xuất',
+		monthly_inventory_report: 'Quản lý và theo dõi tồn kho hàng kho thành phẩm hàng tháng',
 		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',
 		order_size_detail:
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
@@ -110,6 +111,7 @@ export default {
 		file_monthly_inventory_report: 'Báo biểu tồn kho {{factory}} - {{month}}',
 		exchange_epc: 'Hoán đổi EPC',
 		exchange_order: 'Hoán đổi đơn hàng',
+		monthly_inventory_report: 'Báo biểu tồn kho',
 		order_sizing_list: 'Danh sách Size theo đơn',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho'

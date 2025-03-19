@@ -52,7 +52,7 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'GitPullRequestArrow',
+		icon: 'FileInput',
 		title: 'navigation.import_management',
 		path: '/inbound-report',
 		type: 'main',
@@ -60,7 +60,7 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'GitBranch',
+		icon: 'FileOutput',
 		title: 'navigation.export_management',
 		path: '/outbound-report',
 		type: 'main',

@@ -17,12 +17,16 @@ export const useGetInboundReport = (tenantId: string, params?: UrlQueryParams) =
 	})
 }
 
-export const useGetOutboundReport = (tenantId: string, params?: { 'date.eq': string }) => {
+export const useGetOutboundReport = (
+	tenantId: string,
+	params?: { 'auto-refresh': false | number; 'date.eq': string }
+) => {
 	return useQuery({
-		queryKey: [OUTBOUND_REPORT_PROVIDE_TAG, tenantId, params],
-		queryFn: async () => await ReportService.getOutboundReport(tenantId, params),
+		queryKey: [OUTBOUND_REPORT_PROVIDE_TAG, tenantId, pick(params, 'date.eq')],
+		queryFn: async () => await ReportService.getOutboundReport(tenantId, pick(params, 'date.eq')),
 		enabled: !!tenantId,
 		refetchOnMount: true,
+		refetchInterval: params['auto-refresh'],
 		select: (response) => response.metadata
 	})
 }
