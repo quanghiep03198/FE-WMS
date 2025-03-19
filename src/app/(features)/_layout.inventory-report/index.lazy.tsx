@@ -24,7 +24,7 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.import_management')} />
+			<Helmet title={t('ns_common:navigation.inventory_management')} />
 			<Div as='section' className='space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>
