@@ -5,7 +5,7 @@ import { usePageContext } from '../_contexts/-page-context'
 export const OUTBOUND_EPC_LIST_PROVIDE_TAG = 'OUTBOUND_EPC_LIST'
 
 export const useGetOutboundEpcQuery = () => {
-	const { currentPage } = usePageContext()
+	const { currentPage } = usePageContext('currentPage')
 
 	return useQuery({
 		queryKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
@@ -18,7 +18,7 @@ export const useGetOutboundEpcQuery = () => {
 }
 
 export const useDeleteEpcMutation = () => {
-	const { currentPage } = usePageContext()
+	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
 		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
@@ -28,7 +28,7 @@ export const useDeleteEpcMutation = () => {
 }
 
 export const useUpdateStockOutMutation = () => {
-	const { currentPage } = usePageContext()
+	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
 		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
