@@ -43,7 +43,6 @@ const Navbar: React.FC = () => {
 								<Icon name='Menu' />
 							</Button>
 						</Tooltip>
-						{/* <NavDrawerSidebar /> */}
 						<Separator orientation='vertical' className='hidden h-5 w-1 xl:block' />
 						<NavBreadcrumb />
 					</Div>

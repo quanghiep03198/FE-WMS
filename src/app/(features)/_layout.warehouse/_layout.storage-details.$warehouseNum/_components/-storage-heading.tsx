@@ -1,5 +1,6 @@
+import { PageDescription, PageHeader, PageTitle } from '@/app/(features)/_components/_shared/-page-header'
 import { CommonActions } from '@/common/constants/enums'
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 
@@ -9,16 +10,11 @@ const StorageListHeading: React.FC = () => {
 
 	return (
 		<Div className='flex justify-between'>
-			<Div className='space-y-1'>
-				<Typography variant='h6' className='font-bold'>
-					{t('ns_warehouse:headings.storage_list_title')}
-				</Typography>
-				<Typography variant='small' color='muted'>
-					{t('ns_warehouse:headings.storage_list_description')}
-				</Typography>
-			</Div>
+			<PageHeader>
+				<PageTitle> {t('ns_warehouse:headings.storage_list_title')}</PageTitle>
+				<PageDescription>{t('ns_warehouse:headings.storage_list_description')}</PageDescription>
+			</PageHeader>
 			<Button
-				size='sm'
 				onClick={() =>
 					dispatch({
 						type: CommonActions.CREATE,

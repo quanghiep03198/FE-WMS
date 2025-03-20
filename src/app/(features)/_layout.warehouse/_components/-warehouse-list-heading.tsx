@@ -14,7 +14,6 @@ const WarehouseListHeading: React.FC = () => {
 				<PageTitle>{t('ns_warehouse:headings.warehouse_list_title')}</PageTitle>
 				<PageDescription>{t('ns_warehouse:headings.warehouse_list_description')}</PageDescription>
 			</PageHeader>
-
 			<Button
 				onClick={() =>
 					dispatch({
