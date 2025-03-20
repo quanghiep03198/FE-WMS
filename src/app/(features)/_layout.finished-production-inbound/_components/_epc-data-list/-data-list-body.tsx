@@ -192,7 +192,7 @@ const EpcDataList: React.FC = () => {
 			})
 		} else {
 			setHasInvalidEpcAlert(
-				Array.isArray(incommingEpc?.data) && incommingEpc.data.some((item) => item.epc.includes('E28'))
+				Array.isArray(incommingEpc?.data) && incommingEpc.data.some((item) => item.epc.startsWith('E28'))
 			)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			setScannedEpc(incommingEpc)
