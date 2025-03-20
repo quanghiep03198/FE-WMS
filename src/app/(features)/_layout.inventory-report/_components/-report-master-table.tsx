@@ -17,16 +17,14 @@ import { toast } from 'sonner'
 import { useGetMonthlyInventoryReport } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
-import { InventorySizeTable } from './-inventory-size-detail'
+import { InventoryReportDetailTable } from './-report-detail-table'
 
 export type UrlQueryParams = {
 	'month.eq': string
 	'auto-refresh': number | false
 }
 
-const DOWNLOAD_INVENTORY_REPORT_ID = 'download-inbound-report'
-
-export const ReportDataList: React.FC = () => {
+export const InventoryReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'month.eq': format(new Date(), 'yyyy-MM'),
 		'auto-refresh': false
@@ -163,7 +161,7 @@ export const ReportDataList: React.FC = () => {
 	)
 
 	const handleDownloadExcel = useMemoizedFn(async () => {
-		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INVENTORY_REPORT_ID })
+		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
 			const blob = await ReportService.downloadInventoryReport(currentTenant?.id, pick(searchParams, 'month.eq'))
 			saveAs(
@@ -174,9 +172,9 @@ export const ReportDataList: React.FC = () => {
 					defaultValue: `Monthly Inventory Report ~ ${searchParams['month.eq']}`
 				}) + '.xlsx'
 			)
-			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INVENTORY_REPORT_ID })
+			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
-			toast.error('ns_common:notification.error', { id: DOWNLOAD_INVENTORY_REPORT_ID })
+			toast.error('ns_common:notification.error', { id })
 		}
 	})
 
@@ -196,7 +194,7 @@ export const ReportDataList: React.FC = () => {
 				}}
 				renderSubComponent={
 					(({ row }) => {
-						return <InventorySizeTable data={sortBy(row.original?.size_data, 'size_numcode')} />
+						return <InventoryReportDetailTable data={sortBy(row.original?.size_data, 'size_numcode')} />
 					}) satisfies RenderSubComponent<IMonthlyInventoryReport>
 				}
 				toolbarProps={{
@@ -224,4 +222,4 @@ export const ReportDataList: React.FC = () => {
 	)
 }
 
-ReportDataList.displayName = 'InventoryReportDataTable'
+InventoryReportMasterTable.displayName = 'InventoryReportDataTable'

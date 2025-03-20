@@ -4,7 +4,7 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const InventorySizeTable: React.FC<{ data: IMonthlyInventoryReport['size_data'] }> = ({ data }) => {
+export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryReport['size_data'] }> = ({ data }) => {
 	const { t } = useTranslation()
 
 	return (
@@ -73,4 +73,4 @@ export const InventorySizeTable: React.FC<{ data: IMonthlyInventoryReport['size_
 	)
 }
 
-InventorySizeTable.displayName = 'InboundReportDetailTable'
+InventoryReportDetailTable.displayName = 'InboundReportDetailTable'

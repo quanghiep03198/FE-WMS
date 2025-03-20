@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
 import { MonthPickerFilter } from './_components/-month-picker-filter'
-import { ReportDataList } from './_components/-report-datalist'
+import { InventoryReportMasterTable } from './_components/-report-master-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inventory-report/')({
 	component: Page
@@ -36,7 +36,7 @@ function Page() {
 					</Div>
 				</Div>
 				<Separator />
-				<ReportDataList />
+				<InventoryReportMasterTable />
 			</Div>
 		</Fragment>
 	)

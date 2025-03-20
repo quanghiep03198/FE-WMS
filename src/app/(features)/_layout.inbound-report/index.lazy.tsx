@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
 import DatePickerFilter from './_components/-date-picker-filter'
-import ReportDatalist from './_components/-report-datalist'
+import InboundReportMasterTable from './_components/-report-master-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/inbound-report/')({
 	component: Page
@@ -40,7 +40,7 @@ function Page() {
 					</Div>
 				</Div>
 				<Separator />
-				<ReportDatalist />
+				<InboundReportMasterTable />
 			</Div>
 		</Fragment>
 	)

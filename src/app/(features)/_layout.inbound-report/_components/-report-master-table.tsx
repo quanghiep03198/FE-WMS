@@ -3,20 +3,7 @@ import { factories } from '@/common/constants/constants'
 import { useAuth } from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
-import {
-	Badge,
-	Button,
-	DataTable,
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip
-} from '@/components/ui'
+import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
@@ -31,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
+import InboundReportDetailTable from './-report-detail-table-'
 
 export type UrlQueryParams = {
 	'date.eq': string
@@ -39,7 +27,7 @@ export type UrlQueryParams = {
 
 const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
 
-const ReportDatalist: React.FC = () => {
+const InboundReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd'),
 		'auto-refresh': false
@@ -228,7 +216,7 @@ const ReportDatalist: React.FC = () => {
 	)
 
 	const handleDownloadExcel = useMemoizedFn(async () => {
-		toast.loading(t('ns_common:notification.downloading'), { id: DOWNLOAD_INBOUND_REPORT_ID })
+		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
 			const blob = await ReportService.downloadInboundReport(currentTenant?.id, searchParams)
 			saveAs(
@@ -239,9 +227,9 @@ const ReportDatalist: React.FC = () => {
 					defaultValue: `Inbound Report ~ ${searchParams['date.eq']}`
 				}) + '.xlsx'
 			)
-			toast.success(t('ns_common:notification.success'), { id: DOWNLOAD_INBOUND_REPORT_ID })
+			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
-			toast.error('ns_common:notification.error', { id: DOWNLOAD_INBOUND_REPORT_ID })
+			toast.error('ns_common:notification.error', { id })
 		}
 	})
 
@@ -261,7 +249,7 @@ const ReportDatalist: React.FC = () => {
 				}}
 				renderSubComponent={
 					(({ row }) => {
-						return <InboundReportDetailTable data={row.original?.size_run} />
+						return <InboundReportDetailTable data={row.original?.size_data} />
 					}) satisfies RenderSubComponent<IInboundReport>
 				}
 				toolbarProps={{
@@ -289,43 +277,4 @@ const ReportDatalist: React.FC = () => {
 	)
 }
 
-const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_run'] }> = ({ data }) => {
-	const { t } = useTranslation()
-	return (
-		<Div className='right-0 top-0 w-96 overflow-clip rounded-md border'>
-			<Table className='table-fixed !border-none'>
-				<TableHeader>
-					<TableRow>
-						<TableHead>Size</TableHead>
-						<TableHead>{t('ns_erp:fields.inbound_qty')}</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{Array.isArray(data) && data.length > 0 ? (
-						data.map((item) => (
-							<TableRow key={item.size_numcode}>
-								<TableCell align='center' className='font-medium'>
-									{item.size_numcode}
-								</TableCell>
-								<TableCell align='center' key={item.qty}>
-									{item.qty}
-								</TableCell>
-								{data.length === 0 && <TableCell></TableCell>}
-							</TableRow>
-						))
-					) : (
-						<TableRow>
-							<TableCell align='center' colSpan={2} className='font-medium'>
-								{t('ns_common:table.no_data')}
-							</TableCell>
-						</TableRow>
-					)}
-				</TableBody>
-			</Table>
-		</Div>
-	)
-}
-
-InboundReportDetailTable.displayName = 'InboundReportDetailTable'
-
-export default ReportDatalist
+export default InboundReportMasterTable

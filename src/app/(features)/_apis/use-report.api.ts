@@ -1,7 +1,7 @@
 import { ReportService } from '@/services/report.service'
 import { useQuery } from '@tanstack/react-query'
 import { pick } from 'lodash'
-import { UrlQueryParams } from '../_layout.inbound-report/_components/-report-datalist'
+import { UrlQueryParams } from '../_layout.inbound-report/_components/-report-master-table'
 
 const INBOUND_REPORT_PROVIDE_TAG = 'DAILY_INBOUND'
 const OUTBOUND_REPORT_PROVIDE_TAG = 'DAILY_OUTBOUND'

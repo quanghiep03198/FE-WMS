@@ -87,7 +87,7 @@ export interface IInOutBoundReport {
 	factory_code: string
 	mat_ecolor: string
 	accumulated_qty: number
-	size_run: Array<{
+	size_data: Array<{
 		size_numcode: string
 		qty: number
 	}>
