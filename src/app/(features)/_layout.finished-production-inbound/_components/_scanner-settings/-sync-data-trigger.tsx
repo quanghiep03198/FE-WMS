@@ -1,4 +1,3 @@
-import { useGetTenantByFactory } from '@/app/(features)/_apis/use-tenacy.api'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import { useAuth } from '@/common/hooks/use-auth'
@@ -8,10 +7,11 @@ import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { ThirdPartyApiService } from '@/services/third-party-api.service'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { useResetState } from 'ahooks'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { usePageContext } from '../../_contexts/-page-context'
 
 type SyncProcessState = {
 	id: number
@@ -23,20 +23,12 @@ const SyncDataTrigger: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const [state, setState, resetState] = useResetState<SyncProcessState[]>([])
 	const { user, token } = useAuth()
-	const { data: tenants } = useGetTenantByFactory()
+	const { connection } = usePageContext('connection')
 	const abortControllerRef = useRef<AbortController>(null)
-
-	const currentTenant = useMemo(() => {
-		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factories.join('') === user.company_code)
-		} else {
-			return null
-		}
-	}, [tenants, user.company_code])
 
 	const triggerSyncData = async () => {
 		try {
-			await ThirdPartyApiService.syncDeckerData(currentTenant?.id, user.company_code)
+			await ThirdPartyApiService.syncDeckerData(connection, user.company_code)
 		} catch {
 			toast.error(t('ns_common:notification.error'))
 		}
@@ -51,7 +43,7 @@ const SyncDataTrigger: React.FC = () => {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.TENANT_ID]: currentTenant?.id,
+					[RequestHeaders.TENANT_ID]: connection,
 					[RequestHeaders.USER_COMPANY]: user.company_code,
 					[RequestHeaders.ACCEPT_LANGUAGE]: i18n.language
 				},
@@ -81,8 +73,8 @@ const SyncDataTrigger: React.FC = () => {
 	}
 
 	useEffect(() => {
-		if (currentTenant) fetchServerEvent()
-	}, [currentTenant, abortControllerRef])
+		if (connection) fetchServerEvent()
+	}, [connection, abortControllerRef])
 
 	return (
 		<Div as='section' className='flex w-full flex-col gap-y-3'>
