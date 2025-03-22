@@ -1,19 +1,13 @@
 import { Icon, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { useEventListener } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { FP_RFID_SETTINGS_KEY } from '../../_constants/rfid.const'
 import ConnectionInsight from './-connection-insight'
 import SettingPanel from './-setting-panel'
 import SyncDataTrigger from './-sync-data-trigger'
 
 const ScannerSettings: React.FC = () => {
 	const { t } = useTranslation()
-
-	useEventListener('LOGOUT', () => {
-		localStorage.removeItem(FP_RFID_SETTINGS_KEY) // remove finished production RFID settings
-	})
 
 	return (
 		<ToolbarWrapper>

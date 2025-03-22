@@ -6,25 +6,6 @@ import { useLayoutEffect, useState } from 'react'
 
 const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
-
-	return (
-		<Div as='section' className='flex w-full flex-col gap-y-3'>
-			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
-				{t('ns_common:titles.general_settings')}
-			</Typography>
-			<Div className='flex h-full flex-col items-stretch gap-x-4 gap-y-2 *:flex-1 @5xl:flex-row @5xl:flex-wrap-reverse'>
-				<FullScreenModeSwitch />
-				{/* <DeveloperModeSwitch /> */}
-			</Div>
-		</Div>
-	)
-}
-
-/**
- * @description Toggle fullscreen mode setting
- */
-const FullScreenModeSwitch: React.FC = () => {
-	const { t } = useTranslation()
 	const [fullScreen, setFullScreen] = useState<boolean>(false)
 
 	useLayoutEffect(() => {
@@ -33,22 +14,29 @@ const FullScreenModeSwitch: React.FC = () => {
 	}, [fullScreen, document.fullscreenElement])
 
 	return (
-		<SwitchBox.Wrapper>
-			<SwitchBox.TitleWrapper>
-				<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}</Label>
-				<Typography variant='small' color='muted' className='text-pretty'>
-					{t('ns_inoutbound:scanner_setting.toggle_fullscreen_note')}
-				</Typography>
-			</SwitchBox.TitleWrapper>
-			<SwitchBox.InnerWrapper>
-				<Switch
-					id='toggle-fullscreen'
-					className='max-w-full'
-					checked={fullScreen}
-					onCheckedChange={(value) => setFullScreen(Boolean(value))}
-				/>
-			</SwitchBox.InnerWrapper>
-		</SwitchBox.Wrapper>
+		<Div as='section' className='flex w-full flex-col gap-y-3'>
+			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
+				{t('ns_common:titles.general_settings')}
+			</Typography>
+			<Div className='flex h-full flex-col items-stretch gap-x-4 gap-y-2 *:flex-1 @5xl:flex-row @5xl:flex-wrap-reverse'>
+				<SwitchBox.Wrapper>
+					<SwitchBox.TitleWrapper>
+						<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}</Label>
+						<Typography variant='small' color='muted' className='text-pretty'>
+							{t('ns_inoutbound:scanner_setting.toggle_fullscreen_note')}
+						</Typography>
+					</SwitchBox.TitleWrapper>
+					<SwitchBox.InnerWrapper>
+						<Switch
+							id='toggle-fullscreen'
+							className='max-w-full'
+							checked={fullScreen}
+							onCheckedChange={(value) => setFullScreen(Boolean(value))}
+						/>
+					</SwitchBox.InnerWrapper>
+				</SwitchBox.Wrapper>
+			</Div>
+		</Div>
 	)
 }
 

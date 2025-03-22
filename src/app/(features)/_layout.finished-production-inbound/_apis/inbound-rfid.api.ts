@@ -22,10 +22,9 @@ export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
 export const useGetInboundEpcQuery = () => {
 	const queryClient = useQueryClient()
 
-	const { currentPage, selectedOrder, connection, scanningStatus } = usePageContext(
+	const { currentPage, selectedOrder, scanningStatus } = usePageContext(
 		'currentPage',
 		'selectedOrder',
-		'connection',
 		'scanningStatus'
 	)
 
@@ -38,11 +37,11 @@ export const useGetInboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [FP_EPC_LIST_PROVIDE_TAG],
 		queryFn: async () =>
-			RFIDService.fetchNextInboundEpc(connection, {
+			RFIDService.fetchNextInboundEpc({
 				_page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
-		enabled: !!connection && scanningStatus === 'disconnected',
+		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
@@ -51,7 +50,7 @@ export const useGetInboundEpcQuery = () => {
 
 export const useGetInboundOrderDetail = () => {
 	const queryClient = useQueryClient()
-	const { connection, scanningStatus } = usePageContext('connection', 'scanningStatus')
+	const { scanningStatus } = usePageContext('connection', 'scanningStatus')
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
@@ -61,8 +60,8 @@ export const useGetInboundOrderDetail = () => {
 
 	return useQuery({
 		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
-		queryFn: async () => await RFIDService.getFPOrderDetail(connection),
-		enabled: !!connection && scanningStatus === 'disconnected',
+		queryFn: async () => await RFIDService.getFPOrderDetail(),
+		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
@@ -71,11 +70,10 @@ export const useGetInboundOrderDetail = () => {
 
 export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) => {
 	const { user } = useAuth()
-	const { connection } = usePageContext('connection')
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', user?.company_code, params],
-		queryFn: async () => await RFIDService.searchExchangableFPOrder(connection, params),
+		queryFn: async () => await RFIDService.searchExchangableFPOrder(params),
 		enabled: false,
 		select: (response) => response.metadata
 	})
@@ -91,15 +89,11 @@ export const useGetShapingProductLineQuery = () => {
 
 export const useDeleteEpcMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
-		'connection',
-		'setSelectedOrder',
-		'setCurrentPage'
-	)
+	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
 		mutationFn: async (filters: Record<string, string | number | boolean>) =>
-			await RFIDService.deleteScannedInboundEpcs(connection, filters),
+			await RFIDService.deleteScannedInboundEpcs(filters),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
@@ -108,10 +102,9 @@ export const useDeleteEpcMutation = () => {
 	})
 }
 
-export const useUpdateStockMutation = () => {
+export const useUpdateStockInMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { connection, selectedOrder, setSelectedOrder, setCurrentPage } = usePageContext(
-		'connection',
+	const { selectedOrder, setSelectedOrder, setCurrentPage } = usePageContext(
 		'selectedOrder',
 		'setSelectedOrder',
 		'setCurrentPage'
@@ -119,8 +112,11 @@ export const useUpdateStockMutation = () => {
 
 	return useMutation({
 		mutationFn: (payload: InoutboundPayload) => {
-			const currentTenant = payload.writable_tenant || connection
-			return RFIDService.updateFPStockMovement(currentTenant, selectedOrder, payload)
+			return RFIDService.updateFPStockMovement(
+				payload.target_tenant || payload.default_tenant,
+				selectedOrder,
+				payload
+			)
 		},
 		onSuccess: () => {
 			setCurrentPage(null)
@@ -132,14 +128,10 @@ export const useUpdateStockMutation = () => {
 
 export const useExchangeEpcMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
-		'connection',
-		'setSelectedOrder',
-		'setCurrentPage'
-	)
+	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
-		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(connection, payload),
+		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
@@ -150,14 +142,10 @@ export const useExchangeEpcMutation = () => {
 
 export const useCombineEpcInfoMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { connection, setSelectedOrder, setCurrentPage } = usePageContext(
-		'connection',
-		'setSelectedOrder',
-		'setCurrentPage'
-	)
+	const { setSelectedOrder, setCurrentPage } = usePageContext('connection', 'setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
-		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.combineEpcInfor(connection, payload),
+		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.combineEpcInfor(payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)

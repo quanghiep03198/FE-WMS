@@ -9,7 +9,6 @@ import {
 	ComboboxFieldControl,
 	Div,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -44,7 +43,7 @@ import {
 	FALLBACK_ORDER_VALUE,
 	useGetInboundEpcQuery,
 	useGetShapingProductLineQuery,
-	useUpdateStockMutation
+	useUpdateStockInMutation
 } from '../../_apis/inbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import {
@@ -56,11 +55,12 @@ import {
 } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { connection, selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
+	const { connection, selectedOrder, scanningStatus, currentFactoryProduce, setScannedEpc } = usePageContext(
 		'connection',
 		'selectedOrder',
 		'scanningStatus',
-		'setScannedEpc'
+		'setScannedEpc',
+		'currentFactoryProduce'
 	)
 	const { t, i18n } = useTranslation()
 	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
@@ -76,8 +76,8 @@ const InoutboundForm: React.FC = () => {
 			storage: '',
 			dept_code: '',
 			dept_name: '',
-			writable_tenant: '',
-			readable_tenant: connection
+			target_tenant: '',
+			default_tenant: connection
 		},
 		mode: 'onChange'
 	})
@@ -108,7 +108,7 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync } = useUpdateStockMutation()
+	const { mutateAsync } = useUpdateStockInMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -118,8 +118,8 @@ const InoutboundForm: React.FC = () => {
 			dept_name: '',
 			warehouse_num: '',
 			storage: '',
-			writable_tenant: '',
-			readable_tenant: connection
+			target_tenant: '',
+			default_tenant: connection
 		})
 	})
 
@@ -131,7 +131,7 @@ const InoutboundForm: React.FC = () => {
 	}, [scanningStatus])
 
 	useEffect(() => {
-		form.setValue('readable_tenant', connection)
+		if (connection) form.setValue('default_tenant', connection)
 	}, [connection])
 
 	const handleSubmit = async (data: InboundFormValues) => {
@@ -148,6 +148,11 @@ const InoutboundForm: React.FC = () => {
 			toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
 		}
 	}
+
+	useEffect(() => {
+		const currentTenant = writableTenants.find((item) => item.factory === currentFactoryProduce)
+		form.setValue('target_tenant', currentTenant?.id ?? '')
+	}, [currentFactoryProduce])
 
 	return (
 		<FormProvider {...form}>
@@ -215,12 +220,17 @@ const InoutboundForm: React.FC = () => {
 					/>
 				</Div>
 				<Div className='col-span-full'>
+					{/* <InputFieldControl
+						name='target_tenant'
+						readOnly={true}
+						placeholder={t('ns_common:actions.select_database')}
+					/> */}
 					<FormField
 						control={form.control}
-						name='writable_tenant'
+						name='target_tenant'
 						render={({ field }) => (
 							<FormItem>
-								<Select onValueChange={field.onChange} value={field.value}>
+								<Select onValueChange={field.onChange} value={field.value} disabled={true}>
 									<HoverCard openDelay={50} closeDelay={50}>
 										<HoverCardTrigger
 											asChild
@@ -251,7 +261,7 @@ const InoutboundForm: React.FC = () => {
 										</SelectGroup>
 									</SelectContent>
 								</Select>
-								<FormDescription>{t('ns_inoutbound:description.skip_select_tenant')}</FormDescription>
+								{/* <FormDescription>{t('ns_inoutbound:description.skip_select_tenant')}</FormDescription> */}
 								<FormMessage />
 							</FormItem>
 						)}

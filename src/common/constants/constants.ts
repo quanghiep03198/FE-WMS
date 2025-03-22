@@ -1,4 +1,5 @@
 import { ResourceKeys } from 'i18next'
+import env from '../utils/env'
 import { Languages } from './enums'
 
 type LocaleOptions = Array<{ value: Languages; label: string }>
@@ -14,3 +15,9 @@ export const factories: Record<'VA1' | 'VB2' | 'CA1', ResourceKeys['ns_common']>
 	VB2: 'factory.VB2',
 	CA1: 'factory.CA1'
 }
+
+export const appHostRegistry: Map<'VA1' | 'VB2' | 'CA1' | string, string> = new Map([
+	['VA1', env('VITE_LIANYING_APP_HOST', 'localhost')],
+	['VB2', env('VITE_LIANSHUN_APP_HOST', 'localhost')],
+	['CA1', env('VITE_KHRU_APP_HOST', 'localhost')]
+])

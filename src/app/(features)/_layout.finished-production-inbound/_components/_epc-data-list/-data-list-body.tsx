@@ -35,7 +35,6 @@ const EpcDataList: React.FC = () => {
 	const {
 		currentPage,
 		selectedOrder,
-		connection,
 		scannedEpc,
 		scanningStatus,
 		setCurrentPage,
@@ -47,7 +46,6 @@ const EpcDataList: React.FC = () => {
 	} = usePageContext(
 		'currentPage',
 		'selectedOrder',
-		'connection',
 		'scannedEpc',
 		'scanningStatus',
 		'setCurrentPage',
@@ -88,7 +86,6 @@ const EpcDataList: React.FC = () => {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.TENANT_ID]: connection,
 					[RequestHeaders.USER_COMPANY]: user.company_code
 				},
 				signal: abortControllerRef.current.signal,
@@ -201,7 +198,7 @@ const EpcDataList: React.FC = () => {
 
 	// * On current page changes with value greater than default (1 or null)
 	useAsyncEffect(async () => {
-		if (!connection || !scanningStatus || currentPage === DEFAULT_PROPS.currentPage || currentPage === null) return
+		if (!scanningStatus || currentPage === DEFAULT_PROPS.currentPage || currentPage === null) return
 		try {
 			const { data: metadata } = await manualFetchEpc()
 			const previousPageData = scannedEpc?.data ?? []
@@ -217,7 +214,7 @@ const EpcDataList: React.FC = () => {
 
 	// * On selected order changes
 	useAsyncEffect(async () => {
-		if (!connection || !scanningStatus) return
+		if (!scanningStatus) return
 		try {
 			const { data: metadata } = await manualFetchEpc()
 			const previousFilteredEpc = scannedEpc?.data.filter((e) => e.mo_no === selectedOrder)

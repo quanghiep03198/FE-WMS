@@ -4,5 +4,5 @@ export default {
 		step_2: 'Lấy dữ liệu các đơn hàng và thông tin của EPC',
 		step_3: 'Cập nhật thông tin cho các EPC'
 	},
-	no_sync_process: 'Không có tiến trình đồng bộ đang chạy'
+	no_sync_process: 'Không có tiến trình đồng bộ đang hoạt động'
 }

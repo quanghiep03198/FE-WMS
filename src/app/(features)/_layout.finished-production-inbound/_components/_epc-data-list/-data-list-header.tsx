@@ -38,13 +38,15 @@ const ListBoxHeader: React.FC = () => {
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
 	const { isLoading } = useGetInboundEpcQuery()
-	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder } = usePageContext(
-		'selectedOrder',
-		'scannedOrders',
-		'scanningStatus',
-		'setCurrentPage',
-		'setSelectedOrder'
-	)
+	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder, setCurrentFactoryProduce } =
+		usePageContext(
+			'selectedOrder',
+			'scannedOrders',
+			'scanningStatus',
+			'setCurrentPage',
+			'setSelectedOrder',
+			'setCurrentFactoryProduce'
+		)
 	const previousSelectedOrder = usePrevious(selectedOrder)
 
 	// * Ignore too many orders warning
@@ -71,6 +73,7 @@ const OrderListSelect: React.FC = () => {
 
 	const handleChangeOrder = (value: string) => {
 		setSelectedOrder(value)
+		setCurrentFactoryProduce(scannedOrders.find((item) => item.mo_no === value)?.factory_code_produce)
 		setCurrentPage(null)
 	}
 
@@ -95,14 +98,16 @@ const OrderListSelect: React.FC = () => {
 				<SelectContent>
 					<SelectGroup>
 						<SelectItem value='all'>All</SelectItem>
-						{scannedOrders.map((item) => (
-							<SelectItem key={item.mo_no} value={item.mo_no} className='!flex items-center gap-x-2'>
-								{item.mo_no}{' '}
-								{`(${item.sizes.reduce((acc, curr) => {
-									return acc + curr.count
-								}, 0)} pairs)`}
-							</SelectItem>
-						))}
+						{scannedOrders.map((item) => {
+							const cmdQuantity = item.sizes.reduce((acc, curr) => {
+								return acc + curr.count
+							}, 0)
+							return (
+								<SelectItem key={item.mo_no} value={item.mo_no} className='!flex items-center gap-x-2'>
+									{item.mo_no} {`(${cmdQuantity} pairs)`}
+								</SelectItem>
+							)
+						})}
 					</SelectGroup>
 				</SelectContent>
 			</Select>
