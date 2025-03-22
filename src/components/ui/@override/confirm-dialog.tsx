@@ -40,7 +40,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 			<AlertDialogContent>
 				<AlertDialogHeader className='text-left'>
 					<AlertDialogTitle>{title}</AlertDialogTitle>
-					<AlertDialogDescription>{description}</AlertDialogDescription>
+					<AlertDialogDescription dangerouslySetInnerHTML={{ __html: description }} />
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel

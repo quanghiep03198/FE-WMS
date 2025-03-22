@@ -17,6 +17,7 @@ export type OrderItem = {
 	mo_no: string
 	mat_ecolor: string
 	shoes_style_code_factory: string
+	factory_code_produce: string
 	sizes: Array<{
 		size_numcode: string
 		count: number
@@ -29,11 +30,13 @@ type PageContextStore = {
 	scannedOrders: Array<OrderItem>
 	scanningStatus: ScanningStatus
 	connection: string
-	selectedOrder: string | undefined
+	selectedOrder: string
+	currentFactoryProduce: string | null
 	setCurrentPage: (page: number | null) => void
 	setScanningStatus: (status: ScanningStatus) => void
 	setConnection: (value: string) => void
 	setSelectedOrder: (value: string) => void
+	setCurrentFactoryProduce: (value: string) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
 	setScannedOrders: (data: Array<OrderItem>) => void
 	handleToggleScanning: () => void
@@ -41,12 +44,19 @@ type PageContextStore = {
 }
 export const DEFAULT_PROPS: Pick<
 	PageContextStore,
-	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scanningStatus' | 'connection' | 'selectedOrder'
+	| 'currentPage'
+	| 'scannedEpc'
+	| 'scannedOrders'
+	| 'scanningStatus'
+	| 'connection'
+	| 'selectedOrder'
+	| 'currentFactoryProduce'
 > = {
 	currentPage: 1,
 	scanningStatus: undefined,
 	connection: '',
 	selectedOrder: 'all',
+	currentFactoryProduce: '',
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,
@@ -85,6 +95,11 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				setSelectedOrder: (value) => {
 					set((state) => {
 						state.selectedOrder = value
+					})
+				},
+				setCurrentFactoryProduce: (value) => {
+					set((state) => {
+						state.currentFactoryProduce = value
 					})
 				},
 				setScannedEpc: (data) => {

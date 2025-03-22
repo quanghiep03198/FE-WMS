@@ -7,6 +7,6 @@ export class TenancyService {
 	}
 
 	static async getTenantsByFactory() {
-		return await axiosInstance.get<void, ResponseBody<ITenancy[]>>('/tenants/by-factory')
+		return await axiosInstance.get<void, ResponseBody<ITenancy>>('/tenants/by-factory')
 	}
 }
