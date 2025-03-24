@@ -23,15 +23,8 @@ import OutboundReportDetailTable from './-report-detail-table'
 
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
-	const { data: tenants } = useGetTenantByFactory()
 	const { user } = useAuth()
-	const currentTenant = useMemo(() => {
-		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factory === user.company_code)
-		} else {
-			return null
-		}
-	}, [tenants, user.company_code])
+	const { data: currentTenant } = useGetTenantByFactory()
 
 	const { data, isLoading, refetch } = useGetOutboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()

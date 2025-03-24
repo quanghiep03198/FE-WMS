@@ -30,14 +30,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 		'auto-refresh': false
 	})
 	const { user } = useAuth()
-	const { data: tenants } = useGetTenantByFactory()
-	const currentTenant = useMemo(() => {
-		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factory === user.company_code)
-		} else {
-			return null
-		}
-	}, [tenants, user.company_code])
+	const { data: currentTenant } = useGetTenantByFactory()
 
 	const { data, isLoading, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()

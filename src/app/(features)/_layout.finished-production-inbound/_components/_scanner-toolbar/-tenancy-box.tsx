@@ -1,6 +1,4 @@
 import { useGetTenantByFactory } from '@/app/(features)/_apis/use-tenacy.api'
-import { PresetBreakPoints } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import env from '@/common/utils/env'
 import { Div, Icon, Typography } from '@/components/ui'
 import { useEffect } from 'react'
@@ -8,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 
 const TenacyBox: React.FC = () => {
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const { t } = useTranslation()
 	const { setConnection } = usePageContext('setConnection')
 	const { data } = useGetTenantByFactory()

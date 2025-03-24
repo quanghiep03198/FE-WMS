@@ -30,16 +30,8 @@ const InboundReportMasterTable: React.FC = () => {
 		'date.eq': format(new Date(), 'yyyy-MM-dd'),
 		'auto-refresh': false
 	})
-	const { data: tenants } = useGetTenantByFactory()
+	const { data: currentTenant } = useGetTenantByFactory()
 	const { user } = useAuth()
-	const currentTenant = useMemo(() => {
-		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factory === user.company_code)
-		} else {
-			return null
-		}
-	}, [tenants, user.company_code])
-
 	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IInboundReport>>(null)
