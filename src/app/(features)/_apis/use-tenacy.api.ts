@@ -17,6 +17,6 @@ export const useGetAllTenants = () => {
 		queryKey: ['TENANTS'],
 		queryFn: TenancyService.getAllTenants,
 		refetchOnMount: 'always',
-		select: (response) => response.metadata
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }
