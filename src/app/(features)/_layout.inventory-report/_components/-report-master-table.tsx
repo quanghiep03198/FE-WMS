@@ -101,7 +101,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
 				minSize: 200,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -110,7 +111,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
 				minSize: 200,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -119,7 +121,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
 				minSize: 200,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -128,7 +131,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
 				minSize: 200,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -137,7 +141,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
 				minSize: 200,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -146,7 +151,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
 				minSize: 200,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
