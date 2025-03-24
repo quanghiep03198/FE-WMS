@@ -6,6 +6,7 @@ import { useSize } from 'ahooks'
 import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
+import { DEFAULT_ESTIMATE_SIZE } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { DataTableUtility } from '../utils/table.util'
@@ -24,8 +25,6 @@ interface TableProps<TData, TValue>
 		Pick<React.ComponentProps<'div'>, 'style'> {
 	table: TTable<TData>
 }
-
-export const ESTIMATE_SIZE = 40
 
 function TableDataGrid<TData, TValue>({
 	containerProps = { className: cn('h-[50vh] xxl:h-[60vh]') },
@@ -89,7 +88,7 @@ function TableDataGrid<TData, TValue>({
 					style={{
 						...columnSizeVars,
 						minWidth: table.getTotalSize(),
-						height: virtualizer.getTotalSize()
+						height: loading ? 'auto' : virtualizer.getTotalSize()
 					}}>
 					{caption && (
 						<TableCaption aria-labelledby={captionId} className='hidden'>
@@ -115,7 +114,7 @@ function TableDataGrid<TData, TValue>({
 													className={cn('group relative h-10 bg-secondary p-0 dark:bg-[hsl(0,0%,6.9%)]')}
 													align={header.column.columnDef.meta?.align}
 													style={{
-														height: `${ESTIMATE_SIZE}px`,
+														height: `${DEFAULT_ESTIMATE_SIZE}px`,
 														width: `calc(var(--header-${header?.id}-size) * 1px)`,
 														...DataTableUtility.getStickyOffsetPosition(header?.column)
 													}}>

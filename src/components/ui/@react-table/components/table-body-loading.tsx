@@ -2,7 +2,6 @@ import { Table } from '@tanstack/react-table'
 import { TableCell, TableRow } from '../..'
 import Skeleton from '../../@custom/skeleton'
 import { DataTableUtility } from '../utils/table.util'
-import { ESTIMATE_SIZE } from './table'
 
 type DataTableLoading<TData> = {
 	table: Table<TData>
@@ -19,13 +18,10 @@ export function TableBodyLoading<T>({ prepareRows, table }: DataTableLoading<T>)
 				return (
 					<TableCell
 						key={`${rowIndex}-${columnIndex}`}
-						data-sticky={column.getIsPinned()}
-						className='py-1 data-[sticky=left]:!sticky data-[sticky=right]:!sticky data-[sticky=left]:z-10'
 						style={{
+							...DataTableUtility.getStickyOffsetPosition(column),
 							width: `calc(var(--col-${column?.id}-size) * 1px)`,
-							height: ESTIMATE_SIZE,
-							maxHeight: ESTIMATE_SIZE,
-							...DataTableUtility.getStickyOffsetPosition(column)
+							height: 40
 						}}>
 						<Skeleton />
 					</TableCell>

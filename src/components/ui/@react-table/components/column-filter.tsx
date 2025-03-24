@@ -2,10 +2,10 @@ import { Column } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
 import { DateRangePicker } from '../../@core/date-range-picker'
+import { DEFAULT_ESTIMATE_SIZE } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 import { NumberRangeFilter } from './number-range-filter'
-import { ESTIMATE_SIZE } from './table'
 
 type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
@@ -67,7 +67,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 						className:
 							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
 						tabIndex: 0,
-						style: { height: ESTIMATE_SIZE }
+						style: { height: DEFAULT_ESTIMATE_SIZE }
 					}}
 					selectProps={{
 						defaultValue: '',

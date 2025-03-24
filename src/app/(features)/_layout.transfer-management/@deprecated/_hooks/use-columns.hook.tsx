@@ -1,7 +1,10 @@
 import { ITransferOrder, IWarehouse } from '@/common/types/entities'
 import { Checkbox, Icon, Typography } from '@/components/ui'
-import { ESTIMATE_SIZE } from '@/components/ui/@react-table/components/table'
-import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import {
+	DEFAULT_ESTIMATE_SIZE,
+	ROW_ACTIONS_COLUMN_ID,
+	ROW_SELECTION_COLUMN_ID
+} from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -231,7 +234,7 @@ export const useTransferOrderTableColumns = ({
 										selectedWarehouse: rowData.new_warehouse_num,
 										transformedValue: rowData.new_storage_name,
 										className: errors.new_location ? 'text-destructive bg-destructive/10 font-medium' : '',
-										style: { minHeight: `${ESTIMATE_SIZE}px !important` }
+										style: { minHeight: `${DEFAULT_ESTIMATE_SIZE}px !important` }
 									}}
 								/>
 							)
