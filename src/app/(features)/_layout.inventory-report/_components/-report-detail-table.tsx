@@ -1,4 +1,5 @@
 import { IMonthlyInventoryReport } from '@/common/types/entities'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { Fragment } from 'react'
@@ -29,7 +30,7 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 								<TableCell align='left'>{t('ns_erp:fields.total_init_qty')}</TableCell>
 								{data.map((item) => (
 									<TableCell key={item.size_numcode} align='center'>
-										{item.init_inv_qty}
+										{formatIntlNumber(item.init_inv_qty)}
 									</TableCell>
 								))}
 							</TableRow>
@@ -37,7 +38,7 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 								<TableCell align='left'>{t('ns_erp:fields.inbound_qty')}</TableCell>
 								{data.map((item) => (
 									<TableCell key={item.size_numcode} align='center'>
-										{item.instock_qty}
+										{formatIntlNumber(item.instock_qty)}
 									</TableCell>
 								))}
 							</TableRow>
@@ -45,7 +46,7 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 								<TableCell align='left'>{t('ns_erp:fields.outbound_qty')}</TableCell>
 								{data.map((item) => (
 									<TableCell key={item.size_numcode} align='center'>
-										{item.outstock_qty}
+										{formatIntlNumber(item.outstock_qty)}
 									</TableCell>
 								))}
 							</TableRow>
@@ -53,7 +54,7 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 								<TableCell align='left'>{t('ns_erp:fields.final_inventory_qty')}</TableCell>
 								{data.map((item) => (
 									<TableCell key={item.size_numcode} align='center'>
-										{item.final_inv_qty}
+										{formatIntlNumber(item.final_inv_qty)}
 									</TableCell>
 								))}
 							</TableRow>

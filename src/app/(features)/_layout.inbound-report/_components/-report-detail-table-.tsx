@@ -1,4 +1,5 @@
 import { IInboundReport } from '@/common/types/entities'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 
@@ -20,9 +21,7 @@ const InboundReportDetailTable: React.FC<{ data: IInboundReport['size_data'] }> 
 								<TableCell align='center' className='font-medium'>
 									{item.size_numcode}
 								</TableCell>
-								<TableCell align='center' key={item.qty}>
-									{item.qty}
-								</TableCell>
+								<TableCell align='center'>{formatIntlNumber(item.qty)}</TableCell>
 								{data.length === 0 && <TableCell></TableCell>}
 							</TableRow>
 						))

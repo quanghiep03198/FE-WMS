@@ -3,6 +3,7 @@ import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
@@ -162,7 +163,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 220
 			}),
 			columnHelper.accessor('daily_inbound_qty', {
@@ -172,7 +173,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 275
 			}),
 			columnHelper.accessor('accumulated_qty', {
@@ -182,7 +183,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 200
 			}),
 			columnHelper.display({
@@ -195,9 +196,7 @@ const InboundReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
 					const { order_qty, accumulated_qty } = row.original
-					return !isNil(order_qty) && order_qty >= 0
-						? new Intl.NumberFormat().format(order_qty - accumulated_qty)
-						: 0
+					return !isNil(order_qty) && order_qty > 0 ? formatIntlNumber(order_qty - accumulated_qty) : 0
 				},
 				minSize: 200
 			})

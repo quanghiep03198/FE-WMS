@@ -2,6 +2,7 @@ import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
@@ -102,7 +103,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('init_inv_qty', {
 				header: t('ns_erp:fields.total_init_qty'),
@@ -111,7 +112,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('total_instock_qty', {
 				header: t('ns_erp:fields.inbound_qty'),
@@ -120,7 +121,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('total_outstock_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
@@ -129,7 +130,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('actual_inv_qty', {
 				header: t('ns_erp:fields.actual_inventory_qty'),
@@ -138,7 +139,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('final_inv_qty', {
 				header: t('ns_erp:fields.final_inventory_qty'),
@@ -147,7 +148,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
 		[i18n.language]

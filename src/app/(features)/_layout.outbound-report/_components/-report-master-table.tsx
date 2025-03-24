@@ -5,6 +5,7 @@ import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IOutboundReport } from '@/common/types/entities'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
@@ -92,7 +93,7 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 220
 			}),
 			columnHelper.accessor('accumulated_qty', {
@@ -101,7 +102,7 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 250
 			}),
 
@@ -114,9 +115,7 @@ const ReportDatalist: React.FC = () => {
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
 					const { order_qty, accumulated_qty } = row.original
-					return !isNil(order_qty) && order_qty >= 0
-						? new Intl.NumberFormat().format(order_qty - accumulated_qty)
-						: 0
+					return !isNil(order_qty) && order_qty >= 0 ? formatIntlNumber(order_qty - accumulated_qty) : 0
 				},
 				minSize: 200
 			}),
@@ -126,7 +125,7 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => new Intl.NumberFormat().format(getValue()),
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 250
 			})
 		],
