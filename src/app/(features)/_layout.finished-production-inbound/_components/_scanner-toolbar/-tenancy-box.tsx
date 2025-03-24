@@ -19,7 +19,7 @@ const TenacyBox: React.FC = () => {
 	return (
 		<Div className='inline-flex h-9 w-full basis-1/5 items-center gap-x-2 rounded-md border px-3 py-1 sm:basis-full sm:justify-center md:basis-1/3 lg:basis-1/3'>
 			<Icon name='Server' size={18} stroke='hsl(var(--active))' />
-			<Typography>
+			<Typography variant='small'>
 				{t('ns_common:others.server', {
 					alias:
 						env('VITE_NODE_ENV') === 'development'
