@@ -33,7 +33,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const { data: tenants } = useGetTenantByFactory()
 	const currentTenant = useMemo(() => {
 		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factories.join('') === user.company_code)
+			return tenants.find((item) => item.factory === user.company_code)
 		} else {
 			return null
 		}

@@ -25,8 +25,6 @@ export type UrlQueryParams = {
 	'auto-refresh': number | false
 }
 
-const DOWNLOAD_INBOUND_REPORT_ID = 'download-inbound-report'
-
 const InboundReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd'),
@@ -36,7 +34,7 @@ const InboundReportMasterTable: React.FC = () => {
 	const { user } = useAuth()
 	const currentTenant = useMemo(() => {
 		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factories.join('') === user.company_code)
+			return tenants.find((item) => item.factory === user.company_code)
 		} else {
 			return null
 		}

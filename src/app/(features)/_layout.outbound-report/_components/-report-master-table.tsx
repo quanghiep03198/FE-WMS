@@ -21,15 +21,13 @@ import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 import DatePickerFilter from './-date-picker-filter'
 import OutboundReportDetailTable from './-report-detail-table'
 
-const DOWNLOAD_INBOUND_REPORT_ID = 'download-outbound-report'
-
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
 	const { data: tenants } = useGetTenantByFactory()
 	const { user } = useAuth()
 	const currentTenant = useMemo(() => {
 		if (Array.isArray(tenants) && tenants.length > 0) {
-			return tenants.find((item) => item.factories.join('') === user.company_code)
+			return tenants.find((item) => item.factory === user.company_code)
 		} else {
 			return null
 		}
