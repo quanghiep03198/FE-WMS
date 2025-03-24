@@ -1,5 +1,5 @@
 import { isNil } from 'lodash'
-import { Util } from './util'
+import { isPrimitive } from './common'
 
 /**
  * JSON strictify handler
@@ -15,7 +15,7 @@ export class Json {
 		try {
 			if (isNil(value)) return false
 			return !!JSON.parse(value)
-		} catch (error) {
+		} catch {
 			return false
 		}
 	}
@@ -36,19 +36,6 @@ export class Json {
 	 * @returns
 	 */
 	public static stringify(value: any): string {
-		return Util.isPrimitive(value) ? value : JSON.stringify(value)
-	}
-
-	public static getContentSize(value: any, unit: 'kilobyte' | 'megabyte'): string {
-		const jsonString = JSON.stringify(value)
-		const byteLength = new TextEncoder().encode(jsonString).length
-		switch (unit) {
-			case 'kilobyte': {
-				return `${(byteLength / 1024).toFixed(2)} kb`
-			}
-			case 'megabyte': {
-				return `${(byteLength / (1024 * 1024)).toFixed(2)} mb`
-			}
-		}
+		return isPrimitive(value) ? value : JSON.stringify(value)
 	}
 }

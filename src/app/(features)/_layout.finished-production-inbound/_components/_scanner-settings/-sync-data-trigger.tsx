@@ -1,6 +1,6 @@
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'

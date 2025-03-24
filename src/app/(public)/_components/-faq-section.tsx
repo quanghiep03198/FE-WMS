@@ -1,4 +1,4 @@
-import { generateAvatar } from '@/common/utils/generate-avatar'
+import generateAvatar from '@/common/utils/generate-avatar'
 import {
 	Accordion,
 	AccordionContent,

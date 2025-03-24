@@ -1,4 +1,4 @@
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { IDepartment } from '@/common/types/entities'
 import { CompanyService } from '@/services/company.service'
 import { DepartmentService } from '@/services/department.service'

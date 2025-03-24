@@ -1,5 +1,6 @@
 import { appHostRegistry } from '@/common/constants/constants'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
+import env from '@/common/utils/env'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,9 +13,13 @@ const HostCompatibleAlert: React.FC = () => {
 	const movedPermanentlyURL = `${window.location.protocol}//${currentHostRegistry}:${window.location.port}/${window.location.pathname}`
 
 	useEffect(() => {
-		setOpen(window.location.hostname !== currentHostRegistry)
+		const timeout = setTimeout(() => {
+			setOpen(window.location.hostname !== currentHostRegistry && env('VITE_NODE_ENV') === 'production')
+		}, 200)
+		return () => {
+			clearTimeout(timeout)
+		}
 	}, [user.company_code])
-	console.log(`${window.location.protocol}`)
 
 	return (
 		<ConfirmDialog

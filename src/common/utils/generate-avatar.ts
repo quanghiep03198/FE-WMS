@@ -9,14 +9,14 @@ type TAvatarGenOptions = {
 	format?: 'svg' | 'png'
 }
 
-export const generateAvatar = ({
+export default function generateAvatar({
 	background = '#525252',
 	color = '#fafafa',
 	length = 1,
 	bold = true,
 	format = 'svg',
 	name
-}: TAvatarGenOptions) => {
+}: TAvatarGenOptions) {
 	const BASE_AVATAR_URL = 'https://ui-avatars.com/api/'
 	return (
 		BASE_AVATAR_URL +

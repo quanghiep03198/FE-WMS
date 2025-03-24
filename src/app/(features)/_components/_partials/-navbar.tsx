@@ -1,6 +1,6 @@
 import { LanguageDropdown } from '@/app/_components/_shared/-language-selector'
 import { PresetBreakPoints } from '@/common/constants/enums'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Badge, Button, Div, Icon, Separator, Tooltip, Typography, useSidebar } from '@/components/ui'
 import { useKeyPress } from 'ahooks'

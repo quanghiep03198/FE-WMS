@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const useSelectedText = () => {
+export default function useSelectedText() {
 	const [text, setText] = useState<string>('')
 	const select = () => {
 		const selected = window.getSelection() as Selection

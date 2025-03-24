@@ -1,4 +1,4 @@
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/stepper'
 import { pick } from 'lodash'

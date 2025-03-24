@@ -1,5 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { IEmployee, type IWarehouse } from '@/common/types/entities'
 import {
 	Button,

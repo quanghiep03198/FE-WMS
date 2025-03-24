@@ -1,4 +1,4 @@
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, InputFieldControl, Typography } from '@/components/ui'
 import React from 'react'
 import { useForm } from 'react-hook-form'

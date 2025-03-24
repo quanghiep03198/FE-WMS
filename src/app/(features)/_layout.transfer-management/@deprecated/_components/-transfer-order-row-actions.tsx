@@ -1,5 +1,5 @@
 import { CommonActions, OrderStatus } from '@/common/constants/enums'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { ITransferOrder } from '@/common/types/entities'
 import {
 	DropdownMenu,

@@ -1,6 +1,6 @@
 import { useGetUserCompany } from '@/app/(auth)/_apis/department.api'
 import AppLogo from '@/app/_components/_shared/-app-logo'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {

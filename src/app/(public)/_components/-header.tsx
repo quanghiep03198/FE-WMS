@@ -3,7 +3,7 @@ import { LanguageDropdown, LanguageSelect } from '@/app/_components/_shared/-lan
 import ThemeDropdownSelect from '@/app/_components/_shared/-theme-dropdown-select'
 import ThemeToggle from '@/app/_components/_shared/-theme-toggle'
 import { PresetBreakPoints } from '@/common/constants/enums'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {

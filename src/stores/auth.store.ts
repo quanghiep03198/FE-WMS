@@ -1,5 +1,5 @@
 import { ICompany, IUser } from '@/common/types/entities'
-import { generateAvatar } from '@/common/utils/generate-avatar'
+import generateAvatar from '@/common/utils/generate-avatar'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'

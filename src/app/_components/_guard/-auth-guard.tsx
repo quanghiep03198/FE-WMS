@@ -1,5 +1,5 @@
 import { useGetUserProfileQuery } from '@/app/(auth)/_apis/auth.api'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { useRouter } from '@tanstack/react-router'

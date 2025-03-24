@@ -1,7 +1,7 @@
 // #region Modules
 import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { CommonActions } from '@/common/constants/enums'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import {
 	Button,

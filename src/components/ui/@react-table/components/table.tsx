@@ -1,4 +1,4 @@
-import { useScrollToFn } from '@/common/hooks/use-scroll-fn'
+import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'

@@ -1,5 +1,5 @@
 import AuthGuard from '@/app/_components/_guard/-auth-guard'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import Loading from '@/components/shared/loading'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'

@@ -1,4 +1,4 @@
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, InputFieldControl, Typography } from '@/components/ui'
 import bcrypt from 'bcryptjs-react'
 import { debounce } from 'lodash'

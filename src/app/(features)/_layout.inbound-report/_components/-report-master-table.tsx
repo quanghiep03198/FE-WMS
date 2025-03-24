@@ -1,6 +1,6 @@
 import { useGetInboundReport } from '@/app/(features)/_apis/use-report.api'
 import { factories } from '@/common/constants/constants'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
 import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'

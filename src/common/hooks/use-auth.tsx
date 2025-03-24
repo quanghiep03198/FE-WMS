@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 /**
  * @summary Custom hook that provides authentication-related functionality.
  */
-export function useAuth() {
+export default function useAuth() {
 	const { t } = useTranslation()
 	const authStore = useAuthStore()
 	const queryClient = useQueryClient()

@@ -2,7 +2,6 @@ import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { useMemoizedFn } from 'ahooks'
 import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorBoundaryFallback } from '../_components/_errors/-error-boundary-fallback'
@@ -37,8 +36,9 @@ function Layout() {
 									<LayoutComposition.OutletWrapper>
 										<ErrorBoundary
 											fallbackRender={({ error, resetErrorBoundary }) => {
-												const resetError = useMemoizedFn(resetErrorBoundary)
-												return <ErrorBoundaryFallback error={error as Error} resetError={resetError} />
+												return (
+													<ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
+												)
 											}}>
 											<Outlet />
 										</ErrorBoundary>

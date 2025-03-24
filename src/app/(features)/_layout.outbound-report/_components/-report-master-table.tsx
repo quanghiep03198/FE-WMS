@@ -1,7 +1,7 @@
 import { useGetOutboundReport } from '@/app/(features)/_apis/use-report.api'
 import { factories } from '@/common/constants/constants'
 import { PresetBreakPoints } from '@/common/constants/enums'
-import { useAuth } from '@/common/hooks/use-auth'
+import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IOutboundReport } from '@/common/types/entities'
