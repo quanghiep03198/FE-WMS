@@ -61,6 +61,7 @@ export * from './@override/tooltip'
 export * from './@custom/div'
 export * from './@custom/divider'
 export * from './@custom/month-picker'
+export * from './@custom/multi-select'
 export * from './@custom/swap'
 export * from './@custom/typography'
 // #endregion

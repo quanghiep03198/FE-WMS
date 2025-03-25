@@ -21,6 +21,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { MultiSelectFieldControl } from '@/components/ui/@hook-form/multi-select-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useDebounce, useResetState, useUpdateEffect } from 'ahooks'
@@ -30,18 +31,21 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
+import { usePageContext } from '../../_contexts/-page-context'
 import { outboundValidator } from '../../_schemas/outbound.schema'
 
 const OutboundForm: React.FC = () => {
 	const [isConfirmed, setIsConfirmed, resetConfirm] = useResetState<CheckedState>(false)
 	const [autoCompleteOpen, setAutoCompleteOpen] = useState<boolean>(false)
+	const { scannedOrders } = usePageContext('scannedOrders')
 	const checkboxId = useId()
 	const inputRef = useRef<HTMLInputElement>(null)
 	const { t } = useTranslation()
 	const form = useForm({
 		resolver: zodResolver(outboundValidator),
 		defaultValues: {
-			po: ''
+			po: '',
+			mo_no: []
 		}
 	})
 	const currentPurchaseOrderValue = form.watch('po')
@@ -69,6 +73,14 @@ const OutboundForm: React.FC = () => {
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmit)}>
+				<MultiSelectFieldControl
+					label={t('ns_erp:fields.mo_no')}
+					name='mo_no'
+					datalist={scannedOrders}
+					labelField='mo_no'
+					valueField='mo_no'
+				/>
+
 				<FormField
 					control={form.control}
 					name='po'
@@ -131,6 +143,7 @@ const OutboundForm: React.FC = () => {
 						)
 					}}
 				/>
+
 				<Div className='col-span-full space-y-3'>
 					<Div className='space-y-1.5 leading-none'>
 						<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
