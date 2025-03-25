@@ -68,7 +68,7 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'Container',
+		icon: 'Archive',
 		title: 'navigation.inventory_management',
 		path: '/inventory-report',
 		type: 'main',
@@ -76,17 +76,17 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'ArrowRightLeft',
-		title: 'navigation.transfer_managment',
-		path: '/transfer-management',
+		icon: 'PackageCheck',
+		title: 'navigation.production_incoming_inspection',
+		path: '/product-incoming-inspection',
 		type: 'main',
 		keybinding: 'ctrl.7'
 	},
 	{
 		id: uuidv4(),
-		icon: 'PackageCheck',
-		title: 'navigation.production_incoming_inspection',
-		path: '/product-incoming-inspection',
+		icon: 'ArrowRightLeft',
+		title: 'navigation.transfer_managment',
+		path: '/transfer-management',
 		type: 'main',
 		keybinding: 'ctrl.8'
 	},
