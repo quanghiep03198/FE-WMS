@@ -141,8 +141,10 @@ const InoutboundForm: React.FC = () => {
 	}
 
 	useEffect(() => {
-		const currentTenant = writableTenants.find((item) => item.factory === currentFactoryProduce)
-		form.setValue('target_tenant', currentTenant?.id ?? '')
+		if (Array.isArray(writableTenants)) {
+			const currentTenant = writableTenants.find((item) => item.factory === currentFactoryProduce)
+			form.setValue('target_tenant', currentTenant?.id ?? '')
+		}
 	}, [currentFactoryProduce])
 
 	const currentWritableTenant = useMemo<Partial<ITenancy>>(

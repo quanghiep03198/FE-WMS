@@ -24,9 +24,9 @@ const TenacyBox: React.FC = () => {
 							alias:
 								env('VITE_NODE_ENV') === 'development'
 									? 'Local'
-									: typeof data.factory !== 'string'
+									: typeof data?.factory !== 'string'
 										? data?.alias
-										: t(`ns_common:factory.${data.factory}`, { defaultValue: data.factory }),
+										: t(`ns_common:factory.${data?.factory}`, { defaultValue: data?.factory }),
 							defaultValue: data?.alias
 						})}
 			</Typography>
