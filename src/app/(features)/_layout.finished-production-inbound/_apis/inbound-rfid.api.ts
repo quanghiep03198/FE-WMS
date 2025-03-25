@@ -3,6 +3,7 @@ import useAuth from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { omit } from 'lodash'
 import { useEffect } from 'react'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
@@ -115,7 +116,7 @@ export const useUpdateStockInMutation = () => {
 			return RFIDService.updateFPStockMovement(
 				payload.target_tenant || payload.default_tenant,
 				selectedOrder,
-				payload
+				omit(payload, ['default_tenant', 'target_tenant'])
 			)
 		},
 		onSuccess: () => {

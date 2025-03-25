@@ -48,7 +48,9 @@ const OrderSizeDetailTable: React.FC = () => {
 		'setSelectedRows'
 	)
 
-	const [columnFilters, setColumnFilters, resetColumnFilters] = useResetState<Omit<OrderItem, 'sizes'>>({
+	const [columnFilters, setColumnFilters, resetColumnFilters] = useResetState<
+		Omit<OrderItem, 'sizes' | 'factory_code_produce'>
+	>({
 		mo_no: '',
 		mat_ecolor: '',
 		shoes_style_code_factory: ''
@@ -108,6 +110,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	const filteredScannedOrders = useMemo(() => {
 		const { mo_no, mat_ecolor: mat_ecolor, shoes_style_code_factory } = columnFilters
+		// return scannedOrders
 		return scannedOrders.filter((item) => {
 			return (
 				item.mo_no.toLowerCase().includes(mo_no.toLowerCase()) &&

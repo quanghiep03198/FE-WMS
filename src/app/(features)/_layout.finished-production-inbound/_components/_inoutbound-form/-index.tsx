@@ -2,7 +2,7 @@ import { useGetAllTenants } from '@/app/(features)/_apis/use-tenacy.api'
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse-storage.api'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/_apis/warehouse.api'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
+import { ITenancy, IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -14,20 +14,11 @@ import {
 	FormLabel,
 	FormMessage,
 	Form as FormProvider,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
 	Icon,
 	IconProps,
 	RadioGroup,
 	RadioGroupItem,
-	Select,
-	SelectContent,
 	SelectFieldControl,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
 	Separator,
 	Typography
 } from '@/components/ui'
@@ -45,7 +36,7 @@ import {
 	useGetShapingProductLineQuery,
 	useUpdateStockInMutation
 } from '../../_apis/inbound-rfid.api'
-import { usePageContext } from '../../_contexts/-page-context'
+import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import {
 	FormActionEnum,
 	FormValues,
@@ -154,6 +145,14 @@ const InoutboundForm: React.FC = () => {
 		form.setValue('target_tenant', currentTenant?.id ?? '')
 	}, [currentFactoryProduce])
 
+	const currentWritableTenant = useMemo<Partial<ITenancy>>(
+		() =>
+			Array.isArray(writableTenants)
+				? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
+				: undefined,
+		[writableTenants, form.watch('target_tenant')]
+	)
+
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit((data) => handleSubmit(data))}>
@@ -220,52 +219,21 @@ const InoutboundForm: React.FC = () => {
 					/>
 				</Div>
 				<Div className='col-span-full'>
-					{/* <InputFieldControl
-						name='target_tenant'
-						readOnly={true}
-						placeholder={t('ns_common:actions.select_database')}
-					/> */}
-					<FormField
-						control={form.control}
-						name='target_tenant'
-						render={({ field }) => (
-							<FormItem>
-								<Select onValueChange={field.onChange} value={field.value} disabled={true}>
-									<HoverCard openDelay={50} closeDelay={50}>
-										<HoverCardTrigger
-											asChild
-											className='w-full basis-1/5 sm:basis-full md:basis-1/3 lg:basis-1/3'>
-											<SelectTrigger>
-												<Div className='flex flex-1 items-center gap-x-3'>
-													<Icon name='Database' size={18} stroke='hsl(var(--warning))' />
-													<SelectValue placeholder={t('ns_common:actions.select_database')} />
-												</Div>
-											</SelectTrigger>
-										</HoverCardTrigger>
-										<HoverCardContent side='top' align='start' sideOffset={8} className='w-96'>
-											<Typography variant='small'>
-												{t('ns_inoutbound:description.select_writable_database')}
-											</Typography>
-										</HoverCardContent>
-									</HoverCard>
-									<SelectContent>
-										<SelectGroup>
-											{Array.isArray(writableTenants) &&
-												writableTenants.map((item) => (
-													<SelectItem key={item.id} value={item.id}>
-														{t(`ns_warehouse:tenancy_warehouse.${item.alias}`, {
-															defaultValue: item.alias
-														})}
-													</SelectItem>
-												))}
-										</SelectGroup>
-									</SelectContent>
-								</Select>
-								{/* <FormDescription>{t('ns_inoutbound:description.skip_select_tenant')}</FormDescription> */}
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+					<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
+						<Icon name='Database' size={18} stroke='hsl(var(--warning))' />
+						<input
+							readOnly={true}
+							placeholder={t('ns_common:actions.select_database')}
+							className='w-full border-none bg-background text-sm text-foreground shadow-none focus:border-none focus:outline-none'
+							value={
+								currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder
+									? t(`ns_warehouse:tenancy_warehouse.${currentWritableTenant?.alias}`, {
+											defaultValue: ''
+										})
+									: ''
+							}
+						/>
+					</Div>
 				</Div>
 				<Div className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
 					<SelectFieldControl

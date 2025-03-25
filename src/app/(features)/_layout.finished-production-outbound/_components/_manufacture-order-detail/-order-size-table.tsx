@@ -10,21 +10,24 @@ const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const { scanningState, scannedOrders } = usePageContext('scanningState', 'scannedOrders')
 	const tableWrapperRef = useRef<HTMLDivElement>(null)
-	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes'>>({
+	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>({
 		mo_no: '',
 		mat_ecolor: '',
 		shoes_style_code_factory: ''
 	})
 
 	const filteredScannedOrders = useMemo(() => {
-		const { mo_no, mat_ecolor: mat_ecolor, shoes_style_code_factory } = columnFilters
-		return scannedOrders.filter((item) => {
-			return (
-				item.mo_no.toLowerCase().includes(mo_no.toLowerCase()) &&
-				item.mat_ecolor.toLowerCase().includes(mat_ecolor.toLowerCase()) &&
-				item.shoes_style_code_factory.toLowerCase().includes(shoes_style_code_factory.toLowerCase())
-			)
-		})
+		const { mo_no, mat_ecolor, shoes_style_code_factory } = columnFilters
+		return Array.isArray(scannedOrders)
+			? scannedOrders.filter((item) => {
+					if (item)
+						return (
+							item.mo_no.toLowerCase().includes(mo_no?.toLowerCase()) &&
+							item.mat_ecolor.toLowerCase().includes(mat_ecolor.toLowerCase()) &&
+							item.shoes_style_code_factory.toLowerCase().includes(shoes_style_code_factory.toLowerCase())
+						)
+				})
+			: []
 	}, [scannedOrders, columnFilters])
 
 	return (
