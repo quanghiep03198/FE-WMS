@@ -26,19 +26,19 @@ function Page() {
 		<PageProvider>
 			<Div className='grid max-h-screen grid-cols-12 items-stretch gap-4 overflow-hidden sm:grid-cols-1 md:grid-cols-1'>
 				<Div className='h-full @container lg:col-span-full xl:col-span-full xxl:col-span-4'>
-					<Div className='flex grid-rows-12 flex-col gap-4 @7xl:grid @7xl:grid-flow-col @7xl:grid-cols-2'>
-						<Div className='order-first col-span-full row-span-3 @7xl:col-span-1 @7xl:row-span-4'>
+					<Div className='flex grid-rows-12 flex-col gap-4 @6xl:grid @6xl:grid-flow-col @6xl:grid-cols-2'>
+						<Div className='order-first col-span-full row-span-3 @6xl:col-span-1 @6xl:row-span-5'>
 							<ScannedEpcCounter />
 						</Div>
-						<Div className='col-span-full row-span-6 @7xl:order-last @7xl:col-span-full @7xl:row-span-12'>
+						<Div className='col-span-full row-span-6 @6xl:order-last @6xl:col-span-1 @6xl:row-span-12'>
 							<ScannedEpcList />
 						</Div>
-						<Div className='order-last col-span-full @7xl:order-2 @7xl:col-span-1 @7xl:row-span-8'>
+						<Div className='order-last col-span-full @6xl:order-2 @6xl:col-span-1 @6xl:row-span-7'>
 							<OutboundForm />
 						</Div>
 					</Div>
 				</Div>
-				<Div className='hidden lg:col-span-full xl:col-span-full xxl:col-span-8 xxl:block'>
+				<Div className='hidden flex-col items-stretch gap-4 lg:col-span-full xl:col-span-full xxl:col-span-8 xxl:flex'>
 					<OrderSizeDetailTable />
 				</Div>
 			</Div>

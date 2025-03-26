@@ -178,11 +178,16 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='flex h-full flex-1 flex-col items-stretch justify-center overflow-clip rounded-md border @3xl:divide-y'>
+		<Div className='flex h-full flex-1 flex-col items-stretch justify-center overflow-clip rounded-md border'>
+			<Div className='hidden items-center border-b px-6 py-2 @6xl:flex'>
+				<Typography variant='h6' className='inline-flex items-center gap-x-2'>
+					<Icon name='Tags' size={28} /> EPC Data
+				</Typography>
+			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[30vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @3xl:h-[75vh] @7xl:h-[75vh] md:h-[30vh]'>
+					className='z-10 flex h-[23vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[75vh] md:h-[30vh]'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -226,14 +231,14 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[30vh] place-content-center @3xl:h-[75vh] @7xl:h-[75vh] md:h-[30vh]'>
+				<Div className='z-10 grid h-[25vh] place-content-center @3xl:h-[75vh] @6xl:h-[75vh] md:h-[30vh]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
-			<Div className='block @3xl:p-2 xxl:hidden'>
+			<Div className='block border-t @3xl:p-2 xxl:hidden'>
 				<OrderSizeTableDialog />
 			</Div>
 		</Div>

@@ -43,6 +43,7 @@ const OutboundForm: React.FC = () => {
 	const { t } = useTranslation()
 	const form = useForm({
 		resolver: zodResolver(outboundValidator),
+		mode: 'onChange',
 		defaultValues: {
 			po: '',
 			mo_no: []
@@ -99,14 +100,12 @@ const OutboundForm: React.FC = () => {
 												className={cn(
 													'tracking-wider placeholder:tracking-widest',
 													form.getFieldState('po').error &&
-														'border-destructive bg-background focus:border-destructive'
+														'border-destructive bg-background focus-within:border-destructive'
 												)}
 												value={field.value}
 												onClick={(e) => e.stopPropagation()}
 												onFocus={() => setAutoCompleteOpen(true)}
-												onChange={(e) => {
-													field.onChange(e)
-												}}
+												onChange={field.onChange}
 											/>
 										</PopoverTrigger>
 										<PopoverContent
@@ -117,7 +116,10 @@ const OutboundForm: React.FC = () => {
 													<Div
 														key={po}
 														className='flex cursor-pointer items-center rounded-md p-2 hover:bg-secondary hover:text-secondary-foreground'
-														onClick={() => form.setValue('po', po)}>
+														onClick={() => {
+															form.setValue('po', po)
+															form.trigger('po')
+														}}>
 														<Typography variant='small' className='tracking-wider'>
 															{po}
 														</Typography>
