@@ -7,7 +7,7 @@ export default {
 	},
 	counter_box: {
 		label: 'Scanned EPCs',
-		caption: 'Data is streamed continuously from the server when the connection is established.'
+		caption: 'Data is streamed continuously when the connection is established.'
 	},
 	description: {
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
