@@ -111,17 +111,22 @@ export interface IMonthlyInventoryReport {
 	order_qty: number
 	or_no: string
 	shoes_style_code_factory: string | null
+	cust_shoestyle: string
 	init_inv_qty: number
 	total_instock_qty: number
 	total_outstock_qty: number
 	actual_inv_qty: number
 	final_inv_qty: number
+	// prettier-ignore
 	size_data: Array<{
-		size_numcode: string
-		init_inv_qty: number
-		instock_qty: number
-		outstock_qty: number
-		final_inv_qty: number
+		size: string			// * Size code
+		ms_qty: number			// * Monthly stock quantity
+		int_qty: number		// * Initial quantity
+		ist_qty: number		// * Instock quantity
+		mn_ist_qty: number	// * Manual instock quantity
+		ost_qty: number		// * Outstock quantity
+		mn_ost_qty: number	// * Manual outstock quantity
+		fnl_qty: number		// * Final quantity
 	}>
 }
 

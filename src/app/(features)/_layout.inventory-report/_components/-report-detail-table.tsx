@@ -19,42 +19,80 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 									Size
 								</TableHead>
 								{data.map((item) => (
-									<TableHead key={item.size_numcode} align='center' className='w-24'>
-										{item.size_numcode}
+									<TableHead key={item.size} align='center' className='w-24'>
+										{item.size}
 									</TableHead>
 								))}
 							</TableRow>
 						</TableHeader>
 						<TableBody className='[&>tr>:first-child]:font-medium [&>tr>:first-child]:text-table-head-foreground'>
 							<TableRow>
-								<TableCell align='left'>{t('ns_erp:fields.total_init_qty')}</TableCell>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.total_init_qty')}
+								</TableCell>
 								{data.map((item) => (
-									<TableCell key={item.size_numcode} align='center'>
-										{formatIntlNumber(item.init_inv_qty)}
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.int_qty)}
 									</TableCell>
 								))}
 							</TableRow>
 							<TableRow>
-								<TableCell align='left'>{t('ns_erp:fields.inbound_qty')}</TableCell>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.mo_size_qty')}
+								</TableCell>
 								{data.map((item) => (
-									<TableCell key={item.size_numcode} align='center'>
-										{formatIntlNumber(item.instock_qty)}
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.ms_qty)}
 									</TableCell>
 								))}
 							</TableRow>
 							<TableRow>
-								<TableCell align='left'>{t('ns_erp:fields.outbound_qty')}</TableCell>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.inbound_qty')}
+								</TableCell>
 								{data.map((item) => (
-									<TableCell key={item.size_numcode} align='center'>
-										{formatIntlNumber(item.outstock_qty)}
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.ist_qty)}
 									</TableCell>
 								))}
 							</TableRow>
 							<TableRow>
-								<TableCell align='left'>{t('ns_erp:fields.final_inventory_qty')}</TableCell>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.actual_instock_qty')}
+								</TableCell>
 								{data.map((item) => (
-									<TableCell key={item.size_numcode} align='center'>
-										{formatIntlNumber(item.final_inv_qty)}
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.mn_ist_qty)}
+									</TableCell>
+								))}
+							</TableRow>
+							<TableRow>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.outbound_qty')}
+								</TableCell>
+								{data.map((item) => (
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.ost_qty)}
+									</TableCell>
+								))}
+							</TableRow>
+							<TableRow>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.actual_outstock_qty')}
+								</TableCell>
+								{data.map((item) => (
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.mn_ost_qty)}
+									</TableCell>
+								))}
+							</TableRow>
+							<TableRow>
+								<TableCell align='left' className='capitalize'>
+									{t('ns_erp:fields.final_inventory_qty')}
+								</TableCell>
+								{data.map((item) => (
+									<TableCell key={item.size} align='center'>
+										{formatIntlNumber(item.fnl_qty)}
 									</TableCell>
 								))}
 							</TableRow>

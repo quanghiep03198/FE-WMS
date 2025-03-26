@@ -49,7 +49,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
-							className='flex h-full w-full items-center justify-center'
+							className='absolute inset-0 flex h-full w-full items-center justify-center'
 							onClick={() => table.toggleAllRowsExpanded(false)}>
 							<Icon name='FoldVertical' stroke='hsl(var(--foreground))' />
 						</button>
@@ -62,7 +62,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				},
 				cell: ({ row, table }) => (
 					<button
-						className='flex h-full w-full items-center justify-center'
+						className='absolute inset-0 flex h-full w-full items-center justify-center'
 						onClick={() => {
 							table.toggleAllRowsExpanded(false)
 							row.toggleExpanded(!row.getIsExpanded())
@@ -77,7 +77,17 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				minSize: 150,
-				filterFn: 'fuzzy'
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('po', {
+				header: 'P.O',
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				minSize: 150,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -96,8 +106,17 @@ export const InventoryReportMasterTable: React.FC = () => {
 				minSize: 200,
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
+			columnHelper.accessor('cust_shoestyle', {
+				header: t('ns_erp:fields.cust_shoestyle'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				filterFn: 'fuzzy',
+				minSize: 200,
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
 			columnHelper.accessor('order_qty', {
-				header: t('ns_erp:fields.order_qty'),
+				header: t('ns_erp:fields.mo_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,

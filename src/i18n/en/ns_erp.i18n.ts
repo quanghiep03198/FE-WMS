@@ -2,11 +2,14 @@ export default {
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
 		actual_inventory_qty: 'Actual inventory quantity',
+		actual_instock_qty: 'Actual instock quantity',
+		actual_outstock_qty: 'Actual outstock quantity',
 		brand_name: 'Customer branch name',
 		container_order_code: 'Container Order Code',
 		conversion_rate: 'Conversion rate',
 		customer_branch_id: 'Customer branch ID',
 		customer_order: 'Customer order code', //: Đặt đơn của khách
+		cust_shoestyle: 'Customer shoe style',
 		daily_inbound_qty: 'Daily inbound quantity',
 		daily_outbound_qty: 'Daily outbound quantity',
 		dept_name: 'Department',
@@ -25,6 +28,8 @@ export default {
 		mo_no: 'Manufacturing order',
 		mo_no_actual: 'Actual manufacturing order',
 		mo_noseq: 'Manufacturing sub-order',
+		mo_qty: 'Manufacturing quantity',
+		mo_size_qty: 'Quantity by size',
 		no_crates_in_stock: 'No. crates in stock', //: Số thùng nhập kho
 		no_pair_in_stock: 'No. pairs in stock', //: Số đôi nhập kho
 		or_custpo: 'Customer order code',
