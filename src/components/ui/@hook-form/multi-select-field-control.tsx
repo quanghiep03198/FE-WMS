@@ -2,7 +2,7 @@ import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
-import { FormField, FormItem, FormLabel } from '../@core/form'
+import { FormField, FormItem, FormLabel, FormMessage } from '../@core/form'
 import {
 	MultiSelect,
 	MultiSelectContent,
@@ -37,13 +37,12 @@ export function MultiSelectFieldControl<T extends FieldValues, D extends Record<
 	} = props
 
 	const isError = Boolean(getFieldState(name).error)
-	console.log(getValues(name))
 
 	return (
 		<FormField
 			name={name}
 			control={control}
-			defaultValue={[]}
+			defaultValue={getValues(name)}
 			render={({ field }) => (
 				<FormItem
 					className={cn({
@@ -57,18 +56,12 @@ export function MultiSelectFieldControl<T extends FieldValues, D extends Record<
 							{label}
 						</FormLabel>
 					)}
-					<MultiSelect
-						values={field.value}
-						onValuesChange={(values) => {
-							console.log(values)
-							field.onChange(values)
-						}}>
+					<MultiSelect values={field.value} onValuesChange={field.onChange}>
 						<MultiSelectTrigger
 							id={id}
 							className={cn(
-								'bg-background focus:border-primary',
 								className,
-								isError && 'w-full border-destructive focus:border-destructive active:border-destructive'
+								isError && 'w-full border-destructive focus-within:border-destructive active:border-destructive'
 							)}>
 							<MultiSelectInput placeholder={placeholder} />
 						</MultiSelectTrigger>
@@ -83,6 +76,7 @@ export function MultiSelectFieldControl<T extends FieldValues, D extends Record<
 							</MultiSelectList>
 						</MultiSelectContent>
 					</MultiSelect>
+					<FormMessage />
 				</FormItem>
 			)}
 		/>

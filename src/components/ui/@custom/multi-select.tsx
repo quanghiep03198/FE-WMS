@@ -2,10 +2,10 @@
 
 import { cn } from '@/common/utils/cn'
 import { Command as CommandPrimitive } from 'cmdk'
-import { Check, X as RemoveIcon } from 'lucide-react'
 import React, { KeyboardEvent, createContext, forwardRef, useCallback, useContext, useEffect, useState } from 'react'
 import { Badge } from '../@core/badge'
 import { Command, CommandEmpty, CommandItem, CommandList } from '../@core/command'
+import { Icon } from '../@core/icon'
 import { Div } from './div'
 import ScrollShadow from './scroll-shadow'
 
@@ -177,7 +177,7 @@ const MultiSelect = ({
 			}}>
 			<Command
 				onKeyDown={handleKeyDown}
-				className={cn('flex flex-col gap-y-2 overflow-visible bg-transparent', className)}
+				className={cn('flex h-auto flex-col overflow-visible bg-transparent', className)}
 				dir={dir}
 				{...props}>
 				{children}
@@ -204,15 +204,18 @@ const MultiSelectTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 
 		return (
 			<Div
-				className={cn('flex h-9 items-center rounded-md border border-input bg-background p-1 py-2 text-sm', {
-					'focus-within:border-primary': activeIndex === -1
-				})}>
+				className={cn(
+					'flex h-9 items-center rounded-md border border-input bg-background p-2 text-sm',
+					{
+						'focus-within:border-primary': activeIndex === -1
+					},
+					className
+				)}>
 				<ScrollShadow
 					ref={scrollRef}
 					orientation='horizontal'
 					className={cn(
-						'flex w-full flex-nowrap items-center gap-1 overflow-x-auto rounded-[inherit] bg-transparent !scrollbar-none',
-						className
+						'flex w-full flex-nowrap items-center gap-1 overflow-x-auto rounded-[inherit] bg-transparent !scrollbar-none'
 					)}
 					{...props}>
 					{Array.isArray(value) &&
@@ -220,7 +223,7 @@ const MultiSelectTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 							<Badge
 								key={item}
 								className={cn(
-									'flex items-center gap-1 px-1',
+									'flex items-center gap-1 px-1.5',
 									activeIndex === index && 'ring-2 ring-muted-foreground'
 								)}
 								variant={'secondary'}>
@@ -232,7 +235,7 @@ const MultiSelectTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 									onMouseDown={mousePreventDefault}
 									onClick={() => onValueChange(item)}>
 									<span className='sr-only'>Remove {item} option</span>
-									<RemoveIcon className='h-4 w-4 stroke-muted-foreground hover:stroke-foreground' />
+									<Icon name='X' className='stroke-muted-foreground hover:stroke-foreground' />
 								</button>
 							</Badge>
 						))}
@@ -271,7 +274,7 @@ const MultiSelectInput = forwardRef<
 			onFocus={() => setOpen(true)}
 			onClick={() => setActiveIndex(-1)}
 			className={cn(
-				'ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground',
+				'flex-1 bg-transparent px-2 outline-none placeholder:text-muted-foreground',
 				className,
 				activeIndex !== -1 && 'caret-transparent'
 			)}
@@ -284,7 +287,12 @@ MultiSelectInput.displayName = 'MultiSelectInput'
 const MultiSelectContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ children }, ref) => {
 	const { open } = useMultiSelect()
 	return (
-		<div ref={ref} className='relative'>
+		<div
+			ref={ref}
+			data-state={open ? 'open' : 'closed'}
+			className={cn(
+				'translate-y-2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2'
+			)}>
 			{open && children}
 		</div>
 	)
@@ -300,7 +308,7 @@ const MultiSelectList = forwardRef<
 		<CommandList
 			ref={ref}
 			className={cn(
-				'scrollbar-thumb-rounded-lg absolute top-0 z-10 flex w-full flex-col gap-1 rounded-md border border-muted bg-background p-2 shadow-md transition-colors scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground dark:scrollbar-thumb-muted',
+				'scrollbar-thumb-rounded-lg absolute top-0 z-10 flex w-full flex-col gap-1 rounded-md border border-muted bg-background p-1 shadow-md transition-colors scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground dark:scrollbar-thumb-muted',
 				className
 			)}>
 			{children}
@@ -334,14 +342,13 @@ const MultiSelectItem = forwardRef<
 				setInputValue('')
 			}}
 			className={cn(
-				'flex cursor-pointer justify-between rounded px-2 py-1 transition-colors',
 				className,
 				isIncluded && 'cursor-default opacity-50',
 				props.disabled && 'cursor-not-allowed opacity-50'
 			)}
 			onMouseDown={mousePreventDefault}>
 			{children}
-			{isIncluded && <Check className='h-4 w-4' />}
+			{isIncluded && <Icon name='Check' className='ml-auto' />}
 		</CommandItem>
 	)
 })
