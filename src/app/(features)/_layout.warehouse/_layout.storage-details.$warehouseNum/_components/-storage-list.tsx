@@ -29,14 +29,6 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 
 	const { dispatch } = usePageContext()
 
-	// Get original storage type value
-	const getOriginalStorageType = useCallback(
-		(translatedValue: string) => {
-			return Object.keys(warehouseStorageTypes).find((key) => t(warehouseStorageTypes[key]) === translatedValue)
-		},
-		[i18n.language]
-	)
-
 	// Update warehouse storage location
 	const { mutateAsync: updateWarehouseStorage } = useUpdateStorageMutation({ warehouseNum })
 

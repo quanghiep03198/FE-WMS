@@ -6,7 +6,7 @@ import { useSize } from 'ahooks'
 import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
-import { DEFAULT_ESTIMATE_SIZE } from '../constants'
+import { DEFAULT_ESTIMATE_SIZE, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { DataTableUtility } from '../utils/table.util'
@@ -157,7 +157,12 @@ function TableDataGrid<TData, TValue>({
 					</TableHeader>
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
-					) : table.getState().columnSizingInfo.isResizingColumn && !table.getIsSomeColumnsPinned() ? (
+					) : table.getState().columnSizingInfo.isResizingColumn &&
+					  !table
+							.getState()
+							.columnPinning.left.some(
+								(columnId) => columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
+							) ? (
 						<MemorizedTableBody {...{ table, virtualizer, renderSubComponent }} />
 					) : (
 						<TableBody {...{ table, virtualizer, renderSubComponent }} />

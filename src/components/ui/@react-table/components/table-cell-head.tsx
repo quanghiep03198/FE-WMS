@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { ArrowDownIcon, ArrowUpIcon, WidthIcon } from '@radix-ui/react-icons'

@@ -18,43 +18,49 @@ import {
 import { type PaginationBaseProps } from '../types'
 
 type DataTablePaginationProps<TData> = {
-	table: Table<TData>
 	manualPagination?: boolean
-	loading: boolean
+	canNextPage: boolean
+	canPreviousPage: boolean
+	pageCount: number
+	pageSize: number
+	pageIndex: number
+	rowCount: number
+	onFirstPage: Table<TData>['firstPage']
+	onLastPage: Table<TData>['lastPage']
+	onNextPage: Table<TData>['nextPage']
+	onPreviousPage: Table<TData>['previousPage']
+	onPageSizeChange: Table<TData>['setPageSize']
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
+	[key: string]: any
 } & PaginationBaseProps<TData>
 
 function TablePagination<TData>({
-	table,
 	loading,
 	manualPagination,
-	hasNextPage = false,
-	hasPrevPage = false,
-	page = 1,
-	totalPages = 1,
-	limit = 10,
-	totalDocs = 0,
+	rowCount,
+	canNextPage,
+	canPreviousPage,
+	pageCount,
+	pageSize,
+	pageIndex,
+	onFirstPage,
+	onLastPage,
+	onNextPage,
+	onPreviousPage,
+	onPageSizeChange,
 	onPaginationChange,
 	prefetch
 }: DataTablePaginationProps<TData>) {
-	'use no memo'
-
 	const { t } = useTranslation('ns_common')
 	const timeoutRef = useRef<NodeJS.Timeout>(null)
 	const prefetchCountRef = useRef<number>(0)
-
-	const canNextPage = manualPagination ? hasNextPage : table.getCanNextPage()
-	const canPreviousPage = manualPagination ? hasPrevPage : table.getCanPreviousPage()
-	const pageCount = manualPagination ? totalPages : table.getPageCount()
-	const pageSize = manualPagination ? limit : table.getState().pagination.pageSize
-	const pageIndex = manualPagination ? page : table.getState().pagination.pageIndex + 1
 	const pageIndexContext = String(pageIndex) + '/' + String(pageCount)
 
 	const changePageSize = (value: number) => {
-		if (value > totalDocs) {
+		if (value > rowCount) {
 			goToFirstPage()
 		}
-		table.setPageSize(value)
+		onPageSizeChange(value)
 	}
 
 	const handlePrefetch = (params: Record<string, unknown>) => {
@@ -81,7 +87,7 @@ function TablePagination<TData>({
 		if (manualPagination && typeof onPaginationChange === 'function') {
 			onPaginationChange({ pageIndex: 0, pageSize })
 		} else {
-			table.firstPage()
+			onFirstPage()
 		}
 	}
 
@@ -89,7 +95,7 @@ function TablePagination<TData>({
 		if (manualPagination && typeof onPaginationChange === 'function') {
 			onPaginationChange({ pageIndex: pageCount - 1, pageSize })
 		} else {
-			table.lastPage()
+			onLastPage()
 		}
 	}
 
@@ -153,7 +159,7 @@ function TablePagination<TData>({
 						disabled={!canPreviousPage || loading}
 						variant='outline'
 						size='icon'
-						onClick={table.previousPage}
+						onClick={onPreviousPage}
 						onMouseEnter={() => handlePrefetch({ limit: pageSize, page: pageIndex - 1 })}
 						className={cn(!canPreviousPage && 'pointer-events-none bg-muted text-muted-foreground')}>
 						<Icon name='ChevronLeft' />
@@ -167,7 +173,7 @@ function TablePagination<TData>({
 						disabled={!canNextPage || loading}
 						variant='outline'
 						size='icon'
-						onClick={table.nextPage}
+						onClick={onNextPage}
 						onMouseEnter={handlePrefetchNextPage}
 						onMouseLeave={() => {
 							clearInterval(timeoutRef.current)

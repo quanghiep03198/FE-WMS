@@ -1,3 +1,5 @@
+'use no memo'
+
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { ColumnDefBase, HeaderContext } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'

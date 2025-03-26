@@ -71,6 +71,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				minSize: 200,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
@@ -79,6 +80,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.mat_ecolor'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
 				cell: ({ getValue }) => {
@@ -100,6 +102,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.accumulated_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
@@ -111,6 +114,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.missing_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ row }) => {
@@ -123,6 +127,7 @@ const ReportDatalist: React.FC = () => {
 				header: t('ns_erp:fields.daily_outbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),

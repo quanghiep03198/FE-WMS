@@ -20,8 +20,7 @@ export enum RequestHeaders {
 	ACCEPT_LANGUAGE = 'Accept-Language',
 	CONTENT_TYPE = 'Content-Type',
 	TENANT_ID = 'X-Tenant-Id',
-	USER_COMPANY = 'X-User-Company',
-	POLLING_DURATION = 'X-Polling-Duration'
+	USER_COMPANY = 'X-User-Company'
 }
 
 export enum Languages {

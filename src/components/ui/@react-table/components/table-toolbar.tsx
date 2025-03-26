@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
@@ -10,11 +10,19 @@ import { TableViewOptions } from './table-view-options'
 
 type TableToolbarProps<TData> = {
 	table: Table<TData>
-	slotLeft?: React.FC<{ table: Table<TData> }>
-	slotRight?: React.FC<{ table: Table<TData> }>
+	slotLeft?: React.FC<{ table?: Table<TData> }>
+	slotRight?: React.FC<{ table?: Table<TData> }>
+	[key: string]: any
 }
 
-function TableToolbar<TData>({ table, slotLeft: SlotLeft, slotRight: SlotRight }: TableToolbarProps<TData>) {
+function TableToolbar<TData>({
+	table,
+	onResetAllFilters,
+	slotLeft: SlotLeft,
+	slotRight: SlotRight
+}: TableToolbarProps<TData>) {
+	'use no memo'
+
 	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useTableContext()
 	const { t } = useTranslation('ns_common')
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
@@ -25,12 +33,6 @@ function TableToolbar<TData>({ table, slotLeft: SlotLeft, slotRight: SlotRight }
 	const isSomeColumnsPinned =
 		left.some((columnId) => columnId !== ROW_SELECTION_COLUMN_ID && columnId !== ROW_EXPANSION_COLUMN_ID) ||
 		right.some((columnId) => columnId !== ROW_ACTIONS_COLUMN_ID)
-
-	// Reset all of current filters
-	const resetAllFilters = useCallback(() => {
-		table.resetGlobalFilter(table.initialState.globalFilter)
-		table.resetColumnFilters(true)
-	}, [])
 
 	return (
 		<Div role='toolbar' className='flex items-center justify-between py-0.5'>
@@ -49,7 +51,7 @@ function TableToolbar<TData>({ table, slotLeft: SlotLeft, slotRight: SlotRight }
 					<Button
 						variant='destructive'
 						size='icon'
-						onClick={resetAllFilters}
+						onClick={() => onResetAllFilters()}
 						className={cn(!isFilterDirty && 'hidden')}>
 						<Icon name='FilterX' />
 					</Button>
