@@ -1,3 +1,4 @@
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Div, Separator, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import { useInterval, useResetState } from 'ahooks'
@@ -55,13 +56,13 @@ const ScanningCounter: React.FC = () => {
 	}, [total, count])
 
 	return (
-		<Div className='relative z-10 mb-1.5 flex items-baseline justify-between gap-x-3'>
-			<Typography variant='h6' className='inline-flex items-center gap-x-2 text-lg'>
+		<Div className='relative z-10 mb-2 flex items-center justify-center gap-x-3'>
+			<Typography variant='h5' className='inline-flex items-center gap-x-2'>
 				{t('ns_inoutbound:counter_box.label')}
 			</Typography>
 			<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
-			<Typography variant='h6' className='inline-flex gap-x-1 text-xl font-bold'>
-				{count}
+			<Typography variant='h4' className='inline-flex gap-x-1 font-bold tracking-wide @6xl:text-4xl'>
+				{formatIntlNumber(count)}
 				<Typography variant='small' className='text-xs font-medium'>
 					pcs
 				</Typography>

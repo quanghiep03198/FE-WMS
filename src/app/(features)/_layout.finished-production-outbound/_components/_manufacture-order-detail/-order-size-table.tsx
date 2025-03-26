@@ -32,7 +32,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative flex h-full max-h-full max-w-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
+			className='relative flex h-full max-h-full max-w-full flex-1 basis-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
 			ref={tableWrapperRef}>
 			<Div className='flow-root max-h-[calc(80vh-1.125rem)] w-full max-w-full overflow-scroll rounded-lg'>
 				<Table
@@ -135,7 +135,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						</Div>
 					)}
 				{scanningState === 'pending' && (
-					<Div className='absolute inset-0 grid place-content-center text-center text-sm text-muted-foreground'>
+					<Div className='absolute inset-0 z-10 grid place-content-center text-center text-sm text-muted-foreground'>
 						<Typography className='inline-flex items-center gap-x-2'>
 							<Icon name='LoaderCircle' size={24} className='animate-spin' />
 							Loading ...

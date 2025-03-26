@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { buttonVariants, Dialog, DialogContent, DialogTrigger } from '@/components/ui'
+import { buttonVariants, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui'
+import { DialogDescription } from '@radix-ui/react-dialog'
 import { useTranslation } from 'react-i18next'
 import OrderSizeDetailTable from './-order-size-table'
 
@@ -11,7 +12,11 @@ const OrderSizeTableDialog = () => {
 			<DialogTrigger className={cn(buttonVariants({ size: 'lg', className: 'w-full' }))}>
 				{t('ns_common:actions.detail')}
 			</DialogTrigger>
-			<DialogContent className='h-screen max-w-[screen]'>
+			<DialogContent className='flex h-screen max-w-[screen] flex-col rounded-none border-none'>
+				<DialogHeader className='basis-auto'>
+					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
+					<DialogDescription></DialogDescription>
+				</DialogHeader>
 				<OrderSizeDetailTable />
 			</DialogContent>
 		</Dialog>
