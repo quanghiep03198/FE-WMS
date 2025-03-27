@@ -60,6 +60,7 @@ const OutboundForm: React.FC = () => {
 			await mutateAsync(data)
 			resetConfirm()
 			toast.success(t('ns_common:notification.success'), { id })
+			form.reset()
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id })
 		}
