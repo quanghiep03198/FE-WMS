@@ -103,7 +103,7 @@ export default {
 		inventory_management: 'Quản lý tồn kho',
 		keyboard_shortcut: 'Phím tắt',
 		pm_inbound: 'Nhập kho QLSX',
-		production_incoming_inspection: 'Quản lý nghiệm thu hàng vào',
+		cargo_weight_check: 'Kiểm tra & Cân Hàng',
 		profile: 'Thông tin cá nhân',
 		report_management: 'Báo biểu',
 		settings: 'Cài đặt',

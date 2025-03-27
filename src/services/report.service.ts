@@ -1,5 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import { IInboundReport, IMonthlyInventoryReport } from '@/common/types/entities'
+import { IInboundReport, IMonthlyInventoryReport, IPackingReport } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class ReportService {
@@ -27,6 +27,13 @@ export class ReportService {
 		)
 	}
 
+	static async getPackingReport(params: { 'date.eq': string }) {
+		return await axiosInstance.get<void, ResponseBody<IPackingReport[]>>('/report/daily-packing-report', {
+			headers: { [RequestHeaders.TENANT_ID]: 'tenant-lianying' },
+			params: params
+		})
+	}
+
 	static async downloadInboundReport(tenantId: string, filter: { 'date.eq': string }) {
 		return await axiosInstance.get<void, Blob>('/report/export-daily-inbound', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
@@ -46,6 +53,14 @@ export class ReportService {
 	static async downloadInventoryReport(tenantId: string, filter: { 'month.eq': string }) {
 		return await axiosInstance.get<void, Blob>('/report/export-monthly-inventory-report', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params: filter,
+			responseType: 'blob'
+		})
+	}
+
+	static async downloadPackingWeigtReport(filter: { 'month.eq': string }) {
+		return await axiosInstance.get<void, Blob>('/report/export-daily-packing-report', {
+			headers: { [RequestHeaders.TENANT_ID]: 'tenant-lianying' },
 			params: filter,
 			responseType: 'blob'
 		})

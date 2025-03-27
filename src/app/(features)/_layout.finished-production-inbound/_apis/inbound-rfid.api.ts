@@ -5,6 +5,7 @@ import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omit } from 'lodash'
 import { useEffect } from 'react'
+import { INBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -112,6 +113,7 @@ export const useUpdateStockInMutation = () => {
 	)
 
 	return useMutation({
+		mutationKey: [INBOUND_REPORT_PROVIDE_TAG],
 		mutationFn: (payload: InoutboundPayload) => {
 			return RFIDService.updateFPStockMovement(
 				payload.target_tenant || payload.default_tenant,

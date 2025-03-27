@@ -69,7 +69,9 @@ export default {
 		total_init_qty: '期初库存',
 		trans_num: '調撥箱數',
 		transfer_order_code: '轉撥單號',
-		uninspected_qty: '未驗收量'
+		uninspected_qty: '未驗收量',
+		unweighed_qty: '未稱重量',
+		weighed_qty: '已稱重量'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: '成品出庫單',

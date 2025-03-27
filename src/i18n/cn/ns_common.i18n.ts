@@ -100,7 +100,7 @@ export default {
 		inventory_management: '盤點管理',
 		keyboard_shortcut: '快捷键',
 		pm_inbound: '生产管理入库操作',
-		production_incoming_inspection: '進貨驗收作業管理',
+		cargo_weight_check: '货物称重检查',
 		profile: '个人信息',
 		report_management: '報表管理',
 		settings: '建立',

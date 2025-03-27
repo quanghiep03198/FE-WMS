@@ -4,8 +4,8 @@ import vi_ns_common from './vi/ns_common.i18n'
 import vi_ns_company from './vi/ns_company.i18n'
 import vi_ns_dashboard from './vi/ns_dashboard.i18n'
 import vi_ns_erp from './vi/ns_erp.i18n'
-import vi_ns_import_order from './vi/ns_import_order.i18n'
 import vi_ns_inoutbound from './vi/ns_inoutbound.i18n'
+import { default as vi_ns_import_order, default as vi_ns_packing } from './vi/ns_packing.i18n'
 import vi_ns_preference from './vi/ns_preference.i18n'
 import vi_ns_rfid from './vi/ns_rfid.i18n'
 import vi_ns_validation from './vi/ns_validation.i18n'
@@ -19,6 +19,7 @@ import en_ns_company from './en/ns_company.i18n'
 import en_ns_dashboard from './en/ns_dashboard.i18n'
 import en_ns_erp from './en/ns_erp.i18n'
 import en_ns_inoutbound from './en/ns_inoutbound.i18n'
+import en_ns_packing from './en/ns_packing.i18n'
 import en_ns_preference from './en/ns_preference.i18n'
 import en_ns_rfid from './en/ns_rfid.i18n'
 import en_ns_validation from './en/ns_validation.i18n'
@@ -32,6 +33,7 @@ import cn_ns_company from './cn/ns_company.i18n'
 import cn_ns_dashboard from './cn/ns_dashboard.i18n'
 import cn_ns_erp from './cn/ns_erp.i18n'
 import cn_ns_inoutbound from './cn/ns_inoutbound.i18n'
+import cn_ns_packing from './cn/ns_packing.i18n'
 import cn_ns_preference from './cn/ns_preference.i18n'
 import cn_ns_rfid from './cn/ns_rfid.i18n'
 import cn_ns_validation from './cn/ns_validation.i18n'
@@ -47,6 +49,7 @@ export const resources = {
 		ns_erp: vi_ns_erp,
 		ns_import_order: vi_ns_import_order,
 		ns_inoutbound: vi_ns_inoutbound,
+		ns_packing: vi_ns_packing,
 		ns_preference: vi_ns_preference,
 		ns_rfid: vi_ns_rfid,
 		ns_validation: vi_ns_validation,
@@ -59,6 +62,7 @@ export const resources = {
 		ns_dashboard: en_ns_dashboard,
 		ns_erp: en_ns_erp,
 		ns_inoutbound: en_ns_inoutbound,
+		ns_packing: en_ns_packing,
 		ns_preference: en_ns_preference,
 		ns_rfid: en_ns_rfid,
 		ns_validation: en_ns_validation,
@@ -71,6 +75,7 @@ export const resources = {
 		ns_dashboard: cn_ns_dashboard,
 		ns_erp: cn_ns_erp,
 		ns_inoutbound: cn_ns_inoutbound,
+		ns_packing: cn_ns_packing,
 		ns_preference: cn_ns_preference,
 		ns_rfid: cn_ns_rfid,
 		ns_validation: cn_ns_validation,

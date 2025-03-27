@@ -157,6 +157,16 @@ export interface ITransferOrder extends IBaseEntity {
 	approve_date: Date | null
 }
 
+export interface IPackingReport {
+	brand_name: string
+	po: string
+	shoes_style_code_factory: string
+	mat_ecolor: string
+	po_qty: number
+	weighed_qty: number
+	unweighed_qty: number
+}
+
 /**
  * @deprecated
  */

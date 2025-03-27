@@ -1,0 +1,156 @@
+import { factories } from '@/common/constants/constants'
+import useAuth from '@/common/hooks/use-auth'
+import useQueryParams from '@/common/hooks/use-query-params'
+import { IPackingReport } from '@/common/types/entities'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Button, DataTable, Div, Icon } from '@/components/ui'
+import { ReportService } from '@/services/report.service'
+import { useQuery } from '@tanstack/react-query'
+import { createColumnHelper } from '@tanstack/react-table'
+import { format } from 'date-fns'
+import { saveAs } from 'file-saver'
+import { pick } from 'lodash'
+import React, { Fragment, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
+
+const ReportMasterTable: React.FC = () => {
+	const { t, i18n } = useTranslation()
+	const { user } = useAuth()
+	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>({
+		'date.eq': format(new Date(), 'yyyy-MM-dd'),
+		'auto-refresh': false
+	})
+	const { data, isLoading, refetch } = useQuery({
+		queryKey: ['PACKING_REPORT', pick(searchParams, 'date.eq')],
+		queryFn: () => ReportService.getPackingReport(pick(searchParams, 'date.eq')),
+		refetchInterval: searchParams['auto-refresh'],
+		select: (response) => response.metadata
+	})
+
+	const columnHelper = createColumnHelper<IPackingReport>()
+
+	const columns = useMemo(
+		() => [
+			columnHelper.accessor('brand_name', {
+				header: t('ns_erp:fields.po'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'fuzzy',
+				size: 200,
+				meta: { align: 'left' },
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('po', {
+				header: t('ns_erp:fields.po'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'fuzzy',
+				size: 200,
+				meta: { align: 'left' },
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('shoes_style_code_factory', {
+				header: t('ns_erp:fields.shoestyle_codefactory'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'fuzzy',
+				size: 200,
+				meta: { align: 'left' },
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('mat_ecolor', {
+				header: t('ns_erp:fields.mat_ecolor'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'fuzzy',
+				size: 200,
+				meta: { align: 'left' },
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('po_qty', {
+				header: t('ns_erp:fields.order_qty'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'inNumberRange',
+				size: 200,
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
+			}),
+			columnHelper.accessor('weighed_qty', {
+				header: t('ns_erp:fields.weighed_qty'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'inNumberRange',
+				size: 200,
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
+			}),
+			columnHelper.accessor('unweighed_qty', {
+				header: t('ns_erp:fields.unweighed_qty'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'inNumberRange',
+				size: 200,
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
+			})
+		],
+		[i18n.language]
+	)
+
+	const handleDownloadExcel = async () => {
+		const id = toast.loading(t('ns_common:notification.downloading'))
+		try {
+			const blob = await ReportService.downloadPackingWeigtReport(searchParams)
+			saveAs(
+				blob,
+				t('ns_packing:titles.file_daily_weighing_report', {
+					factory: t(factories[user.company_code], { ns: 'ns_common' }),
+					date: searchParams['date.eq'],
+					defaultValue: `Packing weight Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
+				}) + '.xlsx'
+			)
+			toast.success(t('ns_common:notification.success'), { id })
+		} catch {
+			toast.error('ns_common:notification.error', { id })
+		}
+	}
+
+	return (
+		<Div className='relative'>
+			<Div className='absolute left-0 top-0'>
+				<AutoRefreshToggle />
+			</Div>
+			<DataTable
+				data={data}
+				columns={columns}
+				loading={isLoading}
+				toolbarProps={{
+					slotRight: () => {
+						return (
+							<Fragment>
+								<Button variant='outline' size='icon' onClick={() => handleDownloadExcel()}>
+									<Icon name='Download' />
+								</Button>
+								<Button variant='outline' size='icon' onClick={() => refetch()}>
+									<Icon name='RotateCw' />
+								</Button>
+							</Fragment>
+						)
+					}
+				}}
+			/>
+		</Div>
+	)
+}
+
+export default ReportMasterTable

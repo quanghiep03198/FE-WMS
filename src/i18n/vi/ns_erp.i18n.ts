@@ -67,7 +67,9 @@ export default {
 		total_init_qty: 'Số lượng nhập kỳ đầu',
 		trans_num: 'Lượng thùng đã phát',
 		transfer_order_code: 'Mã đơn chuyển giao',
-		uninspected_qty: 'Số Lượng Chưa Kiểm Tra'
+		uninspected_qty: 'Số Lượng Chưa Kiểm Tra',
+		unweighed_qty: 'Số lượng chưa cân',
+		weighed_qty: 'Số lượng đã cân'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Đơn xuất kho thành phẩm',

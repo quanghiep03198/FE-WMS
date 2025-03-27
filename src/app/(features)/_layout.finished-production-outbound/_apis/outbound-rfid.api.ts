@@ -1,5 +1,6 @@
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { OUTBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { usePageContext } from '../_contexts/-page-context'
 
 export const OUTBOUND_EPC_LIST_PROVIDE_TAG = 'OUTBOUND_EPC_LIST'
@@ -31,7 +32,7 @@ export const useUpdateStockOutMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
+		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, OUTBOUND_REPORT_PROVIDE_TAG, currentPage],
 		mutationFn: async (payload: any) => await RFIDService.updateFPStockOut(payload)
 	})
 }

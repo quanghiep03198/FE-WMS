@@ -77,7 +77,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: uuidv4(),
 		icon: 'PackageCheck',
-		title: 'navigation.production_incoming_inspection',
+		title: 'navigation.cargo_weight_check',
 		path: '/product-incoming-inspection',
 		type: 'main',
 		keybinding: 'ctrl.7'

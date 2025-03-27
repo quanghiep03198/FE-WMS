@@ -67,7 +67,9 @@ export default {
 		total_init_qty: 'Initial stock quantity',
 		trans_num: 'Number of Boxes Issued',
 		transfer_order_code: 'Transfer order code',
-		uninspected_qty: 'Uninspected quantity'
+		uninspected_qty: 'Uninspected quantity',
+		unweighed_qty: 'Unweighed quantity',
+		weighed_qty: 'Weighed quantity'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Finished Product Delivery Order',

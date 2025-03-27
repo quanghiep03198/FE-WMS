@@ -102,7 +102,7 @@ export default {
 		inventory_management: 'Inventory',
 		keyboard_shortcut: 'Keyboard shortcut',
 		pm_inbound: 'P.M warehouse inbound',
-		production_incoming_inspection: 'Product Incoming Inspection',
+		cargo_weight_check: 'Cargo weight check',
 		profile: 'Profile',
 		report_management: 'Report',
 		settings: 'Settings',
