@@ -73,6 +73,16 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
+			columnHelper.accessor('size_data', {
+				header: 'Size',
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'fuzzy',
+				size: 200,
+				meta: { align: 'left' },
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
 			columnHelper.accessor('po_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				enableSorting: true,

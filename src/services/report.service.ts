@@ -29,7 +29,7 @@ export class ReportService {
 
 	static async getPackingReport(params: { 'date.eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IPackingReport[]>>('/report/daily-packing-report', {
-			headers: { [RequestHeaders.TENANT_ID]: 'tenant-lianying' },
+			headers: { [RequestHeaders.TENANT_ID]: 'tenant-main' },
 			params: params
 		})
 	}
@@ -60,7 +60,7 @@ export class ReportService {
 
 	static async downloadPackingWeigtReport(filter: { 'month.eq': string }) {
 		return await axiosInstance.get<void, Blob>('/report/export-daily-packing-report', {
-			headers: { [RequestHeaders.TENANT_ID]: 'tenant-lianying' },
+			headers: { [RequestHeaders.TENANT_ID]: 'tenant-main' },
 			params: filter,
 			responseType: 'blob'
 		})

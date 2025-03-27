@@ -162,6 +162,7 @@ export interface IPackingReport {
 	po: string
 	shoes_style_code_factory: string
 	mat_ecolor: string
+	size_data: string
 	po_qty: number
 	weighed_qty: number
 	unweighed_qty: number
