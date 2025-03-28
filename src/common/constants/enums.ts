@@ -61,3 +61,8 @@ export enum OrderStatus {
 	REAPPROVED = 'D',
 	CANCELLED = 'E'
 }
+
+export enum InventoryType {
+	FINISHED_GOOD = 'FG', // Finsihed goods
+	INSOLE_HOUSE = 'IH' // Insole house
+}

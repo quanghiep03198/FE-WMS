@@ -1,6 +1,7 @@
 import { RequestHeaders } from '@/common/constants/enums'
 import { IInboundReport, IMonthlyInventoryReport, IPackingReport } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import { AxiosRequestConfig } from 'axios'
 
 export class ReportService {
 	static async getInboundReport(tenantId: string, params?: { 'date.eq': string }) {
@@ -18,24 +19,28 @@ export class ReportService {
 	}
 
 	static async getMonthlyInventoryReport(tenantId: string, params: { 'month.eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryReport[]>>(
-			'/report/monthly-inventory-report',
-			{
-				headers: { [RequestHeaders.TENANT_ID]: tenantId },
-				params: params
-			}
-		)
+		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryReport[]>>('/report/monthly-inventory', {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params: params
+		})
 	}
 
-	static async getPackingReport(params: { 'date.eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IPackingReport[]>>('/report/daily-packing-report', {
+	static async updateInventoryReport(tenantId: string, params: AxiosRequestConfig['params'], payload: any) {
+		return await axiosInstance.patch('/report/monthly-inventory/update', payload, {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params
+		})
+	}
+
+	static async getDailyWeighingReport(params: { 'date.eq': string }) {
+		return await axiosInstance.get<void, ResponseBody<IPackingReport[]>>('/report/daily-weighing', {
 			headers: { [RequestHeaders.TENANT_ID]: 'tenant-main' },
 			params: params
 		})
 	}
 
 	static async downloadInboundReport(tenantId: string, filter: { 'date.eq': string }) {
-		return await axiosInstance.get<void, Blob>('/report/export-daily-inbound', {
+		return await axiosInstance.get<void, Blob>('/report/daily-inbound/export', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
@@ -43,7 +48,7 @@ export class ReportService {
 	}
 
 	static async downloadOutboundReport(tenantId: string, filter: { 'date.eq': string }) {
-		return await axiosInstance.get<void, Blob>('/report/export-daily-outbound', {
+		return await axiosInstance.get<void, Blob>('/report/daily-outbound/export', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
@@ -51,15 +56,15 @@ export class ReportService {
 	}
 
 	static async downloadInventoryReport(tenantId: string, filter: { 'month.eq': string }) {
-		return await axiosInstance.get<void, Blob>('/report/export-monthly-inventory-report', {
+		return await axiosInstance.get<void, Blob>('/report/monthly-inventory/export', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
 		})
 	}
 
-	static async downloadPackingWeigtReport(filter: { 'month.eq': string }) {
-		return await axiosInstance.get<void, Blob>('/report/export-daily-packing-report', {
+	static async downloadWeighingReport(filter: { 'date.eq': string }) {
+		return await axiosInstance.get<void, Blob>('/report/daily-weighing/export', {
 			headers: { [RequestHeaders.TENANT_ID]: 'tenant-main' },
 			params: filter,
 			responseType: 'blob'

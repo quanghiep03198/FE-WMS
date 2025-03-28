@@ -213,7 +213,19 @@ export const InventoryReportMasterTable: React.FC = () => {
 				}}
 				renderSubComponent={
 					(({ row }) => {
-						return <InventoryReportDetailTable data={sortBy(row.original?.size_data, 'size_numcode')} />
+						return (
+							<InventoryReportDetailTable
+								info={pick(row.original, [
+									'po',
+									'mo_no',
+									'cust_shoestyle',
+									'shoes_style_code_factory',
+									'inv_type',
+									'inv_year_month'
+								])}
+								sizes={sortBy(row.original?.size_data, 'size_numcode')}
+							/>
+						)
 					}) satisfies RenderSubComponent<IMonthlyInventoryReport>
 				}
 				toolbarProps={{

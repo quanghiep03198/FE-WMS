@@ -24,7 +24,7 @@ const ReportMasterTable: React.FC = () => {
 	})
 	const { data, isLoading, refetch } = useQuery({
 		queryKey: ['PACKING_REPORT', pick(searchParams, 'date.eq')],
-		queryFn: () => ReportService.getPackingReport(pick(searchParams, 'date.eq')),
+		queryFn: () => ReportService.getDailyWeighingReport(pick(searchParams, 'date.eq')),
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
 	})
@@ -120,7 +120,7 @@ const ReportMasterTable: React.FC = () => {
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
-			const blob = await ReportService.downloadPackingWeigtReport(searchParams)
+			const blob = await ReportService.downloadWeighingReport(searchParams)
 			saveAs(
 				blob,
 				t('ns_packing:titles.file_daily_weighing_report', {

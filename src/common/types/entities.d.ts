@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { ProductionApprovalStatus, TransferOrderApprovalStatus } from '../constants/enums'
+import { InventoryType, ProductionApprovalStatus, TransferOrderApprovalStatus } from '../constants/enums'
 
 // #region In use Entities
 
@@ -117,6 +117,8 @@ export interface IMonthlyInventoryReport {
 	total_outstock_qty: number
 	actual_inv_qty: number
 	final_inv_qty: number
+	inv_type: InventoryType
+	inv_year_month: string
 	// prettier-ignore
 	size_data: Array<{
 		size: string			// * Size code

@@ -1,21 +1,33 @@
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div } from '@/components/ui'
-import { Fragment } from 'react'
+import { Div, Input } from '@/components/ui'
+import { ReportService } from '@/services/report.service'
+import { useDebounce, useUpdateEffect } from 'ahooks'
+import { omit } from 'lodash'
+import React, { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
-export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryReport['size_data'] }> = ({ data }) => {
+type BaseUpdateUpdateQuery = Pick<
+	IMonthlyInventoryReport,
+	'po' | 'mo_no' | 'shoes_style_code_factory' | 'cust_shoestyle' | 'inv_type' | 'inv_year_month'
+> & { size_numcode: string }
+
+export const InventoryReportDetailTable: React.FC<{
+	info: Omit<BaseUpdateUpdateQuery, 'size_numcode'>
+	sizes: IMonthlyInventoryReport['size_data']
+}> = ({ info, sizes }) => {
 	const { t } = useTranslation()
 
 	return (
 		<ScrollArea>
 			<Table>
-				{Array.isArray(data) && data.length > 0 ? (
+				{Array.isArray(sizes) && sizes.length > 0 ? (
 					<Fragment>
 						<TableRow>
 							<TableVerticalHeader align='left'>Size</TableVerticalHeader>
-							{data.map((item) => (
+							{sizes.map((item) => (
 								<TableCellHead key={item.size} align='center'>
 									{item.size}
 								</TableCellHead>
@@ -24,7 +36,7 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 
 						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
-							{data.map((item) => (
+							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									{formatIntlNumber(item.int_qty)}
 								</TableCell>
@@ -32,7 +44,7 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 						</TableRow>
 						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.mo_size_qty')}</TableVerticalHeader>
-							{data.map((item) => (
+							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									{formatIntlNumber(item.ms_qty)}
 								</TableCell>
@@ -40,41 +52,48 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 						</TableRow>
 						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.inbound_qty')}</TableVerticalHeader>
-							{data.map((item) => (
+
+							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									{formatIntlNumber(item.ist_qty)}
 								</TableCell>
 							))}
 						</TableRow>
 						<TableRow>
-							<TableVerticalHeader align='left'>{t('ns_erp:fields.actual_instock_qty')}</TableVerticalHeader>
-							{data.map((item) => (
-								<TableCell key={item.size} align='center'>
-									{formatIntlNumber(item.mn_ist_qty)}
-								</TableCell>
-							))}
-						</TableRow>
-						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.outbound_qty')}</TableVerticalHeader>
-							{data.map((item) => (
+							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									{formatIntlNumber(item.ost_qty)}
 								</TableCell>
 							))}
 						</TableRow>
 						<TableRow>
-							<TableVerticalHeader align='left'>{t('ns_erp:fields.actual_outstock_qty')}</TableVerticalHeader>
-							{data.map((item) => (
+							<TableVerticalHeader align='left'>{t('ns_erp:fields.actual_instock_qty')}</TableVerticalHeader>
+							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
-									{formatIntlNumber(item.mn_ost_qty)}
+									<CellContentEditable
+										{...{ ...info, size_numcode: item.size, name: 'mn_ist_qty', value: item.mn_ist_qty }}
+									/>
+								</TableCell>
+							))}
+						</TableRow>
+						<TableRow>
+							<TableVerticalHeader align='left'>{t('ns_erp:fields.actual_outstock_qty')}</TableVerticalHeader>
+							{sizes.map((item) => (
+								<TableCell key={item.size} align='center'>
+									<CellContentEditable
+										{...{ ...info, size_numcode: item.size, name: 'mn_ost_qty', value: item.mn_ost_qty }}
+									/>
 								</TableCell>
 							))}
 						</TableRow>
 						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
-							{data.map((item) => (
-								<TableCell key={item.size} align='center'>
-									{formatIntlNumber(item.fnl_qty)}
+							{sizes.map((item) => (
+								<TableCell key={item.size} align='center' className='hover:!ring-primary'>
+									<CellContentEditable
+										{...{ ...info, size_numcode: item.size, name: 'fnl_qty', value: item.fnl_qty }}
+									/>
 								</TableCell>
 							))}
 						</TableRow>
@@ -86,6 +105,42 @@ export const InventoryReportDetailTable: React.FC<{ data: IMonthlyInventoryRepor
 				)}
 			</Table>
 		</ScrollArea>
+	)
+}
+
+const CellContentEditable: React.FC<{ name: string; value: string | number } & BaseUpdateUpdateQuery> = (props) => {
+	const [value, setValue] = useState<string | number>(props.value)
+	const debouncedValue = useDebounce(value, { wait: 500 })
+	const { data: currentTenant } = useGetTenantByFactory()
+
+	const handleChange = async () => {
+		if (debouncedValue)
+			return await ReportService.updateInventoryReport(
+				currentTenant?.id,
+				{ ...omit(props, 'value') },
+				{ [props.name]: +debouncedValue }
+			)
+	}
+
+	useUpdateEffect(() => {
+		handleChange()
+	}, [debouncedValue])
+
+	return (
+		<form
+			onSubmit={(e) => {
+				e.preventDefault()
+			}}>
+			<Input
+				type='number'
+				name={props.name}
+				className='h-auto whitespace-nowrap border-none p-0 text-center focus-within:border-none focus:outline-none'
+				defaultValue={props.value}
+				value={value}
+				required={true}
+				onChange={(e) => setValue(e.currentTarget.value)}
+			/>
+		</form>
 	)
 }
 
