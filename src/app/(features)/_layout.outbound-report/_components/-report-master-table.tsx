@@ -8,7 +8,6 @@ import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -23,7 +22,7 @@ import DatePickerFilter from './-date-picker-filter'
 import OutboundReportDetailTable from './-report-detail-table'
 
 const ReportDatalist: React.FC = () => {
-	const { searchParams } = useQueryParams<{ 'date.eq': string }>()
+	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>()
 	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
 
@@ -106,6 +105,16 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 220
 			}),
+			columnHelper.accessor('daily_outbound_qty', {
+				header: t('ns_erp:fields.daily_outbound_qty'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				meta: { filterVariant: 'range', align: 'right' },
+				filterFn: 'inNumberRange',
+				cell: ({ getValue }) => formatIntlNumber(getValue()),
+				minSize: 250
+			}),
 			columnHelper.accessor('accumulated_qty', {
 				header: t('ns_erp:fields.accumulated_qty'),
 				enableColumnFilter: true,
@@ -125,16 +134,6 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				minSize: 200
-			}),
-			columnHelper.accessor('daily_outbound_qty', {
-				header: t('ns_erp:fields.daily_outbound_qty'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				enablePinning: true,
-				meta: { filterVariant: 'range', align: 'right' },
-				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 250
 			})
 		],
 		[i18n.language]
@@ -171,11 +170,9 @@ const ReportDatalist: React.FC = () => {
 				containerProps={{
 					style: { height: screen.availHeight / 1.75 }
 				}}
-				renderSubComponent={
-					(({ row }) => {
-						return <OutboundReportDetailTable data={row.original?.size_data} />
-					}) satisfies RenderSubComponent<IOutboundReport>
-				}
+				renderSubComponent={({ row }) => {
+					return <OutboundReportDetailTable data={row.original?.size_data} />
+				}}
 				toolbarProps={{
 					slotLeft: () => isSmallScreen && <DatePickerFilter />,
 					slotRight: () => (
