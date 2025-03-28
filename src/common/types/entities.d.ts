@@ -97,10 +97,10 @@ export interface IInboundReport extends IInOutBoundReport {
 	shaping_dept_name: string
 	storage: string
 	daily_inbound_qty: number
-	missing_qty: number
 }
 export interface IOutboundReport extends IInOutBoundReport {
-	shaping_dept_name: string
+	po: string
+	missing_qty: number
 	daily_outbound_qty: number
 }
 

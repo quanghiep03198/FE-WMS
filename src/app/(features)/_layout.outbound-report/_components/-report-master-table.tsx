@@ -13,7 +13,7 @@ import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { capitalize, isNil } from 'lodash'
+import { capitalize } from 'lodash'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -58,6 +58,14 @@ const ReportDatalist: React.FC = () => {
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
 				)
+			}),
+			columnHelper.accessor('po', {
+				header: t('ns_erp:fields.po'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				minSize: 150,
+				filterFn: 'fuzzy'
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -109,18 +117,13 @@ const ReportDatalist: React.FC = () => {
 				minSize: 250
 			}),
 
-			columnHelper.display({
-				id: 'missing_qty',
+			columnHelper.accessor('missing_qty', {
 				header: t('ns_erp:fields.missing_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ row }) => {
-					const { order_qty, accumulated_qty } = row.original
-					return !isNil(order_qty) && order_qty >= 0 ? formatIntlNumber(order_qty - accumulated_qty) : 0
-				},
 				minSize: 200
 			}),
 			columnHelper.accessor('daily_outbound_qty', {
