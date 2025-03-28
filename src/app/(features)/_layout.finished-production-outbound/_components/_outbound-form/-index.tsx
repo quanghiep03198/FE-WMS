@@ -162,14 +162,25 @@ const OutboundForm: React.FC = () => {
 						<Label htmlFor=''>{t('ns_common:confirmation.understand_and_proceed')}</Label>
 					</Div>
 				</Div>
-				<Button type='submit' size='lg' disabled={isPending || !isConfirmed}>
-					<Icon
-						name={isPending ? 'LoaderCircle' : 'Check'}
-						role='img'
-						className={cn(isPending && 'animate-spin')}
-					/>
-					{isError ? t('ns_common:actions.retry') : t('ns_common:actions.submit')}
-				</Button>
+				<Div className='grid grid-cols-2 gap-2 sm:grid-cols-1'>
+					<Button type='submit' size='lg' disabled={isPending || !isConfirmed}>
+						<Icon
+							name={isPending ? 'LoaderCircle' : 'Check'}
+							role='img'
+							className={cn(isPending && 'animate-spin')}
+						/>
+						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.submit')}
+					</Button>
+					<Button
+						variant='outline'
+						type='button'
+						size='lg'
+						disabled={isPending || !isConfirmed}
+						onClick={() => form.reset()}>
+						<Icon name='Undo' role='img' />
+						{t('ns_common:actions.reset')}
+					</Button>
+				</Div>
 			</Form>
 		</FormProvider>
 	)

@@ -128,8 +128,8 @@ const OrderSizeDetailTable: React.FC = () => {
 				<HoverCardTrigger asChild>
 					<DialogTrigger
 						className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'items-center' }))}>
-						<Icon name='List' role='img' />
 						{t('ns_common:actions.detail')}
+						<Icon name='ArrowUpRight' role='img' />
 					</DialogTrigger>
 				</HoverCardTrigger>
 				<HoverCardContent
