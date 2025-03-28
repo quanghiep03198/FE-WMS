@@ -7,7 +7,7 @@ type NavigateFnOptions = Parameter<UseNavigateResult<string>>
 export default function useQueryParams<T extends Record<string, any>>(defaultParams?: T) {
 	const navigate = useNavigate()
 
-	const searchParams = useSearch({
+	const search = useSearch({
 		strict: false,
 		select: (search) => search
 	})
@@ -16,7 +16,7 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	 * @param { Record<string, any> } params
 	 * @returns {Promise<void>}
 	 */
-	const setParams = useCallback((params: Record<string, any>) => {
+	const setParams = useCallback((params: T) => {
 		navigate({ search: (prev) => ({ ...prev, ...params }) } as NavigateFnOptions)
 	}, [])
 
@@ -30,11 +30,11 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	}, [])
 
 	useEffect(() => {
-		if (defaultParams) navigate({ search: { ...defaultParams, ...searchParams } })
+		if (defaultParams) navigate({ search: { ...defaultParams, ...search } })
 	}, [])
 
 	return {
-		searchParams,
+		searchParams: search as T,
 		setParams,
 		removeParam
 	}
