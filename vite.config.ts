@@ -128,8 +128,10 @@ export default defineConfig(({ mode }) => {
 			},
 			headers: {
 				['Content-Security-Policy']:
-					"style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
-				['Cache-Control']: 'public, max-age=604800, immutable' // 1 week in seconds
+					"script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+				['Cache-Control']: mode === 'production' ? 'public, max-age=604800, immutable' : undefined, // 1 week in seconds
+				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
+				['Cross-Origin-Resource-Policy']: 'cross-origin'
 			}
 		},
 		preview: {
