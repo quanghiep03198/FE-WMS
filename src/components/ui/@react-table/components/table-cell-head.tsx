@@ -47,7 +47,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 			<ContextMenuTrigger className='line-clamp-1 focus:outline-none'>
 				<Div
 					className={cn(
-						'relative line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
+						'relative line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm first-letter:uppercase [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
 						{
 							'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
 							'cursor-col-resize': getIsResizing(),
@@ -66,8 +66,9 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 									: t('ns_common:table.clear_sort')
 							: undefined
 					}>
+					{columnDef.enableSorting && <Icon name={currentSortingState} size={14} className='min-w-4 basis-4' />}
+
 					{flexRender(columnDef.header, header.getContext())}
-					{columnDef.enableSorting && <Icon name={currentSortingState} size={14} className='min-w-[14px]' />}
 				</Div>
 			</ContextMenuTrigger>
 			<ContextMenuContent className='w-64'>

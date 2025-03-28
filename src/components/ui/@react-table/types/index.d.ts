@@ -92,6 +92,7 @@ export type RenderSubComponent<TData, TValue = any> = (props: {
 
 // #region Data table prop types
 export type DataTableProps<TData = any, TValue = any> = {
+	ref?: React.RefObject<Table<TData, TValue>>
 	data: Array<TData>
 	columns: ColumnDef<TData & any, TValue>[]
 	caption?: string

@@ -20,7 +20,7 @@ import {
 	type SortingState
 } from '@tanstack/react-table'
 import { useLatest, useResetState } from 'ahooks'
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '..'
@@ -37,44 +37,42 @@ import tw from 'tailwind-styled-components'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
-function DataTable<TData, TValue>(
-	{
-		data,
-		caption,
-		columns,
-		loading,
-		initialState = { rowSelection: {} },
-		containerProps,
-		paginationProps = { hidden: false },
-		toolbarProps = { hidden: false, slotRight: null },
-		footerProps = { hidden: true, slot: null },
-		manualPagination = false,
-		manualSorting = false,
-		manualFiltering = false,
-		enableColumnResizing = true,
-		enableRowSelection = false,
-		enableColumnFilters = true,
-		enableSorting = true,
-		enableExpanding = true,
-		enableColumnPinning = true,
-		enableGlobalFilter = true,
-		globalFilterFn = fuzzyFilter,
-		autoResetExpanded = false,
-		sorting,
-		columnFilters,
-		globalFilter,
-		virtualizerOptions,
-		onGlobalFilterChange,
-		onColumnFiltersChange,
-		renderSubComponent,
-		getRowCanExpand,
-		onPaginationChange,
-		onSortingChange,
-		onRowSelectionChange,
-		...props
-	}: DataTableProps<TData, TValue>,
-	ref: React.MutableRefObject<Table<any>>
-) {
+function DataTable<TData, TValue>({
+	data,
+	caption,
+	columns,
+	loading,
+	initialState = { rowSelection: {} },
+	containerProps,
+	paginationProps = { hidden: false },
+	toolbarProps = { hidden: false, slotRight: null },
+	footerProps = { hidden: true, slot: null },
+	manualPagination = false,
+	manualSorting = false,
+	manualFiltering = false,
+	enableColumnResizing = true,
+	enableRowSelection = false,
+	enableColumnFilters = true,
+	enableSorting = true,
+	enableExpanding = true,
+	enableColumnPinning = true,
+	enableGlobalFilter = true,
+	globalFilterFn = fuzzyFilter,
+	autoResetExpanded = false,
+	sorting,
+	columnFilters,
+	globalFilter,
+	virtualizerOptions,
+	onGlobalFilterChange,
+	onColumnFiltersChange,
+	renderSubComponent,
+	getRowCanExpand,
+	onPaginationChange,
+	onSortingChange,
+	onRowSelectionChange,
+	ref,
+	...props
+}: DataTableProps<TData, TValue>) {
 	const { t } = useTranslation()
 	const originalData = useMemo(() => data ?? [], [data])
 
@@ -83,7 +81,6 @@ function DataTable<TData, TValue>(
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
 	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
-	const [isScrolling, setIsScrolling] = useState(false)
 	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
@@ -94,6 +91,7 @@ function DataTable<TData, TValue>(
 		pageIndex: 0,
 		pageSize: 10
 	}))
+
 	const hasNoFilter = useMemo(() => {
 		if (manualFiltering) return columnFilters?.length === 0
 		return _columnFilters?.length === 0 && _globalFilter?.length === 0
@@ -112,6 +110,7 @@ function DataTable<TData, TValue>(
 				left: [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID],
 				right: [ROW_ACTIONS_COLUMN_ID]
 			},
+			expanded,
 			columnOrder,
 			globalFilter: '',
 			columnFilters: [],
@@ -144,7 +143,6 @@ function DataTable<TData, TValue>(
 		enableGlobalFilter,
 		enableColumnPinning,
 		enableColumnResizing,
-		autoResetExpanded,
 		filterFromLeafRows: false,
 		columnResizeMode: 'onChange',
 		debugAll: false,
@@ -174,6 +172,7 @@ function DataTable<TData, TValue>(
 		getFacetedMinMaxValues: getFacetedMinMaxValues(),
 		getRowCanExpand,
 		autoResetPageIndex,
+		autoResetExpanded: false,
 		meta: {
 			editedRows,
 			setEditedRows,
@@ -220,7 +219,9 @@ function DataTable<TData, TValue>(
 	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
 	 */
 	useEffect(() => {
-		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
+		if (!isEqual(data, _data) && Array.isArray(data)) {
+			setData(data)
+		}
 	}, [data])
 
 	/**
@@ -243,23 +244,10 @@ function DataTable<TData, TValue>(
 	return (
 		<TableContext.Provider
 			value={{
-				isScrolling,
 				hasNoFilter,
 				isFilterOpened,
-				columnOrder,
-				sorting,
-				columnFilters: _columnFilters,
-				globalFilter: _globalFilter,
 				enableGlobalFilter,
-				manualSorting,
-				autoResetPageIndex,
-				tableWrapperRef,
-				setAutoResetPageIndex,
-				setIsScrolling,
-				setIsFilterOpened,
-				setColumnFilters,
-				setSorting,
-				setGlobalFilter
+				setIsFilterOpened
 			}}>
 			<DataTableWrapper ref={tableWrapperRef}>
 				{!toolbarProps.hidden && (
@@ -326,4 +314,4 @@ function DataTable<TData, TValue>(
 const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden`
 const FooterGroup = tw.div`flex items-center justify-between`
 
-export default forwardRef(DataTable)
+export default DataTable

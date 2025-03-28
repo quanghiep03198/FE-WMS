@@ -23,12 +23,14 @@ function TableToolbar<TData>({
 }: TableToolbarProps<TData>) {
 	'use no memo'
 
-	const { isFilterOpened, setIsFilterOpened, globalFilter, columnFilters } = useTableContext()
+	const {
+		columnPinning: { left, right },
+		globalFilter,
+		columnFilters
+	} = table.getState()
+	const { isFilterOpened, setIsFilterOpened } = useTableContext()
 	const { t } = useTranslation('ns_common')
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
-	const {
-		columnPinning: { left, right }
-	} = table.getState()
 
 	const isSomeColumnsPinned =
 		left.some((columnId) => columnId !== ROW_SELECTION_COLUMN_ID && columnId !== ROW_EXPANSION_COLUMN_ID) ||
@@ -58,7 +60,10 @@ function TableToolbar<TData>({
 				</Tooltip>
 
 				{SlotRight && <SlotRight table={table} />}
-				<GlobalFilterPopover />
+				<GlobalFilterPopover
+					globalFilter={table.getState().globalFilter}
+					onGlobalFilterChange={table.setGlobalFilter}
+				/>
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
 					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
 						<Button

@@ -34,7 +34,7 @@ function TableDataGrid<TData, TValue>({
 	loading,
 	virtualizerOptions = {
 		estimateSize: 40,
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 10
 	},
 	renderSubComponent
 }: TableProps<TData, TValue>) {

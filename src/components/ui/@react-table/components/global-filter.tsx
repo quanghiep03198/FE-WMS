@@ -1,12 +1,18 @@
 import { cn } from '@/common/utils/cn'
+import { Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 
-export const GlobalFilterPopover: React.FC = () => {
+type GlobalFilterPopoverProps = {
+	globalFilter: ReturnType<Table<unknown>['getState']>['globalFilter']
+	onGlobalFilterChange: Table<unknown>['setGlobalFilter']
+}
+
+export const GlobalFilterPopover: React.FC<GlobalFilterPopoverProps> = ({ globalFilter, onGlobalFilterChange }) => {
 	const { t } = useTranslation()
-	const { globalFilter, setGlobalFilter, enableGlobalFilter } = useTableContext()
+	const { enableGlobalFilter } = useTableContext()
 
 	if (!enableGlobalFilter) return null
 
@@ -21,7 +27,7 @@ export const GlobalFilterPopover: React.FC = () => {
 				<Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2' />
 				<DebouncedInput
 					value={globalFilter}
-					onChange={(value) => setGlobalFilter(String(value))}
+					onChange={(value) => onGlobalFilterChange(String(value))}
 					className='font-lg border p-2 pl-8'
 					placeholder='Tìm kiếm ...'
 					type='search'
