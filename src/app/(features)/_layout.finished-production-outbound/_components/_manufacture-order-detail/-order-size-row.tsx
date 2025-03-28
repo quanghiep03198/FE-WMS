@@ -41,7 +41,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						sortBy(data.sizes, 'size_numcode').map((size) => (
 							<Div
 								key={size?.size_numcode}
-								className='group/cell inline-grid min-w-36 shrink-0 basis-36 grid-rows-2 divide-y last:flex-1'>
+								className='group/cell inline-grid min-w-20 shrink-0 basis-20 grid-rows-2 divide-y last:flex-1'>
 								<TableCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
