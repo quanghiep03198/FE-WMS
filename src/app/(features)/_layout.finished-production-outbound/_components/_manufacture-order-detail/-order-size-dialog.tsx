@@ -15,7 +15,7 @@ const OrderSizeTableDialog = () => {
 			<DialogContent className='flex h-screen max-w-[screen] flex-col rounded-none border-none'>
 				<DialogHeader className='basis-auto'>
 					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
-					<DialogDescription></DialogDescription>
+					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
 				<OrderSizeDetailTable />
 			</DialogContent>
