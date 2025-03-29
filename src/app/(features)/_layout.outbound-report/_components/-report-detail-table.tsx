@@ -1,5 +1,5 @@
 import { IOutboundReport } from '@/common/types/entities'
-import { Div, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { ReportDetailRow } from './-report-detail-row'
 
@@ -25,9 +25,6 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 							<TableHead className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
-							<TableHead className='left-[var(--sticky-left-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
-								{t('ns_erp:fields.mat_ecolor')}
-							</TableHead>
 							<TableHead>Size</TableHead>
 							<TableHead className='right-0 z-20 w-32 bg-background xl:sticky'>
 								{t('ns_common:common_fields.total')}
@@ -40,7 +37,10 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 						) : (
 							<TableRow>
 								<TableCell align='center' colSpan={4} className='p-20 text-muted-foreground'>
-									{t('ns_common:table.no_data')}
+									<Div className='inline-flex items-center justify-center gap-x-2'>
+										<Icon name='Inbox' size={24} strokeWidth={1} />
+										{t('ns_common:table.no_data')}
+									</Div>
 								</TableCell>
 							</TableRow>
 						)}
