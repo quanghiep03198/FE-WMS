@@ -98,10 +98,18 @@ export interface IInboundReport extends IInOutBoundReport {
 	storage: string
 	daily_inbound_qty: number
 }
-export interface IOutboundReport extends IInOutBoundReport {
+export interface IOutboundReport extends Omit<IInOutBoundReport, 'size_data'> {
 	po: string
 	missing_qty: number
 	daily_outbound_qty: number
+	detail: Array<{
+		mo_no: string
+		mat_ecolor: string
+		sizes: Array<{
+			size_numcode: string
+			qty: number
+		}>
+	}>
 }
 
 export interface IMonthlyInventoryReport {

@@ -1,5 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import { IInboundReport, IMonthlyInventoryReport, IPackingReport } from '@/common/types/entities'
+import { IInboundReport, IMonthlyInventoryReport, IOutboundReport, IPackingReport } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { AxiosRequestConfig } from 'axios'
 
@@ -12,7 +12,7 @@ export class ReportService {
 	}
 
 	static async getOutboundReport(tenantId: string, params?: { 'date.eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IInboundReport[]>>('/report/daily-outbound', {
+		return await axiosInstance.get<void, ResponseBody<IOutboundReport[]>>('/report/daily-outbound', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: params
 		})
