@@ -59,7 +59,7 @@ const ReportDatalist: React.FC = () => {
 				)
 			}),
 			columnHelper.accessor('po', {
-				header: t('ns_erp:fields.po'),
+				header: 'PO',
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
