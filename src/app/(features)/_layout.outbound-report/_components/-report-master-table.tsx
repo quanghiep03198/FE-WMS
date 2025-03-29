@@ -12,7 +12,6 @@ import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { capitalize } from 'lodash'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -66,14 +65,6 @@ const ReportDatalist: React.FC = () => {
 				minSize: 150,
 				filterFn: 'fuzzy'
 			}),
-			columnHelper.accessor('mo_no', {
-				header: t('ns_erp:fields.mo_no'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				enablePinning: true,
-				minSize: 150,
-				filterFn: 'fuzzy'
-			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableColumnFilter: true,
@@ -82,19 +73,6 @@ const ReportDatalist: React.FC = () => {
 				minSize: 200,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
-			}),
-			columnHelper.accessor('mat_ecolor', {
-				header: t('ns_erp:fields.mat_ecolor'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				enablePinning: true,
-				filterFn: 'fuzzy',
-				minSize: 200,
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (value) return capitalize(value)
-					return 'Unknown'
-				}
 			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
@@ -125,7 +103,6 @@ const ReportDatalist: React.FC = () => {
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
 				minSize: 250
 			}),
-
 			columnHelper.accessor('missing_qty', {
 				header: t('ns_erp:fields.missing_qty'),
 				enableColumnFilter: true,
@@ -171,7 +148,7 @@ const ReportDatalist: React.FC = () => {
 					style: { height: screen.availHeight / 1.75 }
 				}}
 				renderSubComponent={({ row }) => {
-					return <OutboundReportDetailTable data={row.original?.size_data} />
+					return <OutboundReportDetailTable data={row.original.detail} />
 				}}
 				toolbarProps={{
 					slotLeft: () => isSmallScreen && <DatePickerFilter />,
