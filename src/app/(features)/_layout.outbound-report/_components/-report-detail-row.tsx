@@ -20,9 +20,6 @@ export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number]
 			<TableCell className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>{data?.mo_no}</Div>
 			</TableCell>
-			<TableCell className='sticky left-[var(--sticky-left-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
-				{data?.mat_ecolor}
-			</TableCell>
 			<TableCell className={cn('!p-0')}>
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'

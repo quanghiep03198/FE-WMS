@@ -74,6 +74,15 @@ const ReportDatalist: React.FC = () => {
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
+			columnHelper.accessor('mat_ecolor', {
+				header: t('ns_erp:fields.mat_ecolor'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				minSize: 200,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				enableColumnFilter: true,
