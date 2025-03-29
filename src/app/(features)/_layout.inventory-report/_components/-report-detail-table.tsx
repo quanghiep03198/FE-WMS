@@ -134,7 +134,7 @@ const CellContentEditable: React.FC<{ name: string; value: string | number } & B
 			<Input
 				type='number'
 				name={props.name}
-				className='h-auto whitespace-nowrap border-none p-0 text-center focus-within:border-none focus:outline-none'
+				className='h-auto whitespace-nowrap border-none p-0 text-center shadow-none focus-within:border-none focus:outline-none'
 				defaultValue={props.value}
 				value={value}
 				required={true}
