@@ -8,7 +8,8 @@ const DeploymentGlobe: React.FC = () => {
 	const ref = useRef<HTMLDivElement>(null)
 	const pageContext = usePageContext()
 	const [inViewport] = useInViewport(ref, {
-		root: () => pageContext?.contentScrollRef?.current
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
 	})
 
 	return (
@@ -28,8 +29,8 @@ const DeploymentGlobe: React.FC = () => {
 						<Icon name='Globe' />
 						<span
 							className={cn(
-								'hidden w-3/4 animate-typing overflow-hidden text-foreground',
-								inViewport ? 'block [animation-play-state:_running]' : '[animation-play-state:_paused]'
+								'w-4/5 animate-typing overflow-hidden text-foreground',
+								inViewport ? 'animate-typing [animation-play-state:_running]' : '[animation-play-state:_paused]'
 							)}>
 							Available in 2 regions
 						</span>

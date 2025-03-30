@@ -15,7 +15,7 @@ const CTA2Section: React.FC = () => {
 	})
 	const [bottomSectionInViewPort] = useInViewport(bottomSectionRef, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 0.25
+		threshold: 0.75
 	})
 
 	return (
@@ -61,7 +61,7 @@ const CTA2Section: React.FC = () => {
 						<Icon name='Rocket' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
-						<Typography className='font-semibold'>Automatically Deployment</Typography>
+						<Typography className='font-semibold'>Automatic Deployment</Typography>
 						<Typography variant='small' color='muted'>
 							Our applications are automatically deployed, delivering the latest updates quickly while ensuring
 							minimal downtime and optimal efficiency.
@@ -85,7 +85,7 @@ const CTA2Section: React.FC = () => {
 						<Icon name='Blocks' strokeWidth={1.5} size={24} />
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
-						<Typography className='font-semibold sm:col-span-5'>Mornitoring</Typography>
+						<Typography className='font-semibold sm:col-span-5'>Monitoring</Typography>
 						<Typography variant='small' color='muted'>
 							Monitor your applications in real-time with PM2, allowing you to control and manage your
 							deployments remotely with ease.
