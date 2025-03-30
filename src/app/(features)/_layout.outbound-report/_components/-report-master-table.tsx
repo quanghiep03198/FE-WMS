@@ -6,7 +6,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, DataTable, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
+import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -19,6 +19,7 @@ import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 import DatePickerFilter from './-date-picker-filter'
 import OutboundReportDetailTable from './-report-detail-table'
+import ReportTableFooter from './-report-table-footer'
 
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>()
@@ -179,23 +180,7 @@ const ReportDatalist: React.FC = () => {
 					)
 				}}
 				footerProps={{
-					slot: () => (
-						<Div
-							role='row'
-							aria-colspan={columns.length}
-							className='flex w-full items-center justify-center gap-x-4'>
-							<Typography color='muted' className='font-medium'>
-								{t('ns_common:common_fields.total')}
-							</Typography>
-							<Separator orientation='horizontal' className='h-0.5 basis-4' />
-							<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
-								{Array.isArray(data)
-									? formatIntlNumber(data?.reduce((acc, curr) => acc + curr.daily_outbound_qty, 0))
-									: 0}
-								<Typography variant='small'>pcs</Typography>
-							</Typography>
-						</Div>
-					)
+					slot: () => <ReportTableFooter data={data} />
 				}}
 			/>
 		</Div>

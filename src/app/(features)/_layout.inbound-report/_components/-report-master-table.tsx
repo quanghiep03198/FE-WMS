@@ -20,6 +20,7 @@ import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 import InboundReportDetailTable from './-report-detail-table-'
+import ReportTableFooter from './-report-table-footer'
 
 export type UrlQueryParams = {
 	'date.eq': string
@@ -233,9 +234,6 @@ const InboundReportMasterTable: React.FC = () => {
 				loading={isLoading}
 				enableExpanding={true}
 				ref={dataTableRef}
-				containerProps={{
-					style: { height: screen.availHeight / 1.75 }
-				}}
 				renderSubComponent={
 					(({ row }) => {
 						return <InboundReportDetailTable data={row.original?.size_data} />
@@ -260,6 +258,9 @@ const InboundReportMasterTable: React.FC = () => {
 							</Tooltip>
 						</Fragment>
 					)
+				}}
+				footerProps={{
+					slot: () => <ReportTableFooter data={data} />
 				}}
 			/>
 		</Div>
