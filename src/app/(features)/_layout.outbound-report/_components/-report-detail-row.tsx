@@ -1,5 +1,6 @@
 import { IOutboundReport } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'
 import { sortBy } from 'lodash'
 import { useMemo } from 'react'
@@ -32,13 +33,13 @@ export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number]
 								<TableCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>{size?.size_numcode}</Div>
 								</TableCell>
-								<TableCell>{size?.qty ?? 0}</TableCell>
+								<TableCell>{formatIntlNumber(size?.qty ?? 0)}</TableCell>
 							</Div>
 						))}
 				</Div>
 			</TableCell>
 			<TableCell align='right' className='sticky right-0 w-24 min-w-24 font-medium'>
-				{aggregateSizeCount}
+				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
 		</TableRow>
 	)

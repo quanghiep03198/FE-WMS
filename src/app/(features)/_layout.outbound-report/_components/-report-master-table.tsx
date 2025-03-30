@@ -119,7 +119,8 @@ const ReportDatalist: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200
+				minSize: 200,
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
 		[i18n.language]
