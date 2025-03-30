@@ -5,12 +5,11 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSize } from 'ahooks'
 import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
-import { Collapsible, CollapsibleContent, Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
+import { Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
 import { DEFAULT_ESTIMATE_SIZE, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
-import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { DataTableUtility } from '../utils/table.util'
-import { ColumnFilter } from './column-filter'
+import CollapsibleFilterCell from './collapsible-filter-cell'
 import ColumnResizer from './column-resizer'
 import { MemorizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
@@ -38,7 +37,6 @@ function TableDataGrid<TData, TValue>({
 	},
 	renderSubComponent
 }: TableProps<TData, TValue>) {
-	const { isFilterOpened } = useTableContext()
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
@@ -127,27 +125,7 @@ function TableDataGrid<TData, TValue>({
 									{headerGroup.headers.every((header) => header.colSpan === 1) && (
 										<TableRow>
 											{headerGroup.headers.map((header) => {
-												return (
-													<TableHead
-														key={header.id}
-														colSpan={header.colSpan}
-														className={cn(
-															'group relative p-0',
-															isFilterOpened ? 'border-b border-border' : 'border-none'
-														)}
-														style={{
-															width: `calc(var(--header-${header?.id}-size) * 1px)`,
-															...DataTableUtility.getStickyOffsetPosition(header?.column)
-														}}>
-														<Collapsible
-															data-state={isFilterOpened ? 'open' : 'closed'}
-															open={isFilterOpened}>
-															<CollapsibleContent className='h-10 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
-																<ColumnFilter column={header.column} />
-															</CollapsibleContent>
-														</Collapsible>
-													</TableHead>
-												)
+												return <CollapsibleFilterCell key={header.id} header={header} />
 											})}
 										</TableRow>
 									)}

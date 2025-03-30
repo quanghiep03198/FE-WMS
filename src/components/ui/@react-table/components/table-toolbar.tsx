@@ -1,34 +1,36 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
-import { useTableContext } from '../context/table.context'
+import ColumnFilterToggle from './column-filter-toggle'
 import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
 type TableToolbarProps<TData> = {
 	table: Table<TData>
+	enableGlobalFilter: boolean
+	onResetAllFilters: () => void
 	slotLeft?: React.FC<{ table?: Table<TData> }>
 	slotRight?: React.FC<{ table?: Table<TData> }>
-	[key: string]: any
 }
 
 function TableToolbar<TData>({
 	table,
+	enableGlobalFilter,
 	onResetAllFilters,
 	slotLeft: SlotLeft,
 	slotRight: SlotRight
 }: TableToolbarProps<TData>) {
-	'use no memo'
-
 	const {
 		columnPinning: { left, right },
 		globalFilter,
 		columnFilters
 	} = table.getState()
-	const { isFilterOpened, setIsFilterOpened } = useTableContext()
+
 	const { t } = useTranslation('ns_common')
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
 
@@ -61,23 +63,17 @@ function TableToolbar<TData>({
 
 				{SlotRight && <SlotRight table={table} />}
 				<GlobalFilterPopover
+					enableGlobalFilter={enableGlobalFilter}
 					globalFilter={table.getState().globalFilter}
 					onGlobalFilterChange={table.setGlobalFilter}
 				/>
-				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && (
-					<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-						<Button
-							variant={isFilterOpened ? 'secondary' : 'outline'}
-							size='icon'
-							onClick={() => setIsFilterOpened((prev) => !prev)}>
-							<Icon name='Filter' />
-						</Button>
-					</Tooltip>
-				)}
+				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && <ColumnFilterToggle />}
 				<TableViewOptions table={table} />
 			</Div>
 		</Div>
 	)
 }
+
+TableToolbar.displayName = 'TableToolbar'
 
 export default TableToolbar

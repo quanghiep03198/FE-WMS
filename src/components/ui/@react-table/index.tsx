@@ -34,6 +34,7 @@ import { fuzzySort } from './utils/fuzzy-sort.util'
 // needed for table body level scope DnD setup
 import { pick } from 'lodash'
 import tw from 'tailwind-styled-components'
+import { v4 as uuidv4 } from 'uuid'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
@@ -81,7 +82,6 @@ function DataTable<TData, TValue>({
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
 	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
-	const [isFilterOpened, setIsFilterOpened] = useState(false)
 	const [expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>(initialState?.rowSelection ?? {})
@@ -172,7 +172,7 @@ function DataTable<TData, TValue>({
 		getFacetedMinMaxValues: getFacetedMinMaxValues(),
 		getRowCanExpand,
 		autoResetPageIndex,
-		autoResetExpanded: false,
+		autoResetExpanded,
 		meta: {
 			editedRows,
 			setEditedRows,
@@ -241,18 +241,19 @@ function DataTable<TData, TValue>({
 	const totalRows = manualPagination ? paginationProps.totalDocs : (table.getFilteredRowModel().rows?.length ?? 0)
 	const rowSelectionCount = String(selectedRows) + '/' + String(totalRows)
 
+	const instanceId = uuidv4()
+
 	return (
 		<TableContext.Provider
 			value={{
-				hasNoFilter,
-				isFilterOpened,
-				enableGlobalFilter,
-				setIsFilterOpened
+				instanceId,
+				hasNoFilter
 			}}>
 			<DataTableWrapper ref={tableWrapperRef}>
 				{!toolbarProps.hidden && (
 					<TableToolbar
 						table={table}
+						enableGlobalFilter={enableGlobalFilter}
 						onResetAllFilters={resetAllFilters}
 						slotLeft={toolbarProps.slotLeft}
 						slotRight={toolbarProps.slotRight}

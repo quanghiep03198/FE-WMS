@@ -1,19 +1,18 @@
 'use no memo'
 
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { ColumnDefBase, HeaderContext } from '@tanstack/react-table'
+import { CellContext, HeaderContext } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import React from 'react'
 import { Checkbox } from '../../@core/checkbox'
 
-type RowSelectionCheckboxProps<TData> = Partial<Parameter<ColumnDefBase<TData>['cell']>> &
-	React.ComponentProps<typeof Checkbox>
+type IndeterminateCheckboxProps<TData, TValue> = HeaderContext<TData, TValue> & React.ComponentProps<typeof Checkbox>
+type RowSelectionCheckboxProps<TData, TValue> = CellContext<TData, TValue> & React.ComponentProps<typeof Checkbox>
 
-type IndeterminateCheckboxProps<TData> = {
-	onCheckedChange?(checked: CheckedState): void
-} & HeaderContext<TData, unknown>
-
-export function IndeterminateCheckbox<TData>({ table, onCheckedChange }: IndeterminateCheckboxProps<TData>) {
+export function IndeterminateCheckbox<TData, TValue>({
+	table,
+	onCheckedChange
+}: IndeterminateCheckboxProps<TData, TValue>) {
 	const update = useUpdate()
 	const checked = table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
 
@@ -21,21 +20,21 @@ export function IndeterminateCheckbox<TData>({ table, onCheckedChange }: Indeter
 		<Checkbox
 			role='checkbox'
 			checked={checked as CheckedState}
-			onCheckedChange={(checkedState) => {
+			onCheckedChange={(checked) => {
 				update()
-				table.toggleAllPageRowsSelected(!!checkedState)
-				if (typeof onCheckedChange === 'function') onCheckedChange(checkedState)
+				table.toggleAllPageRowsSelected(!!checked)
+				if (typeof onCheckedChange === 'function') onCheckedChange(checked)
 			}}
 		/>
 	)
 }
 
-export function RowSelectionCheckbox<TData>({
+export function RowSelectionCheckbox<TData, TValue>({
 	row,
 	checked,
 	disabled,
 	onCheckedChange
-}: RowSelectionCheckboxProps<TData>) {
+}: RowSelectionCheckboxProps<TData, TValue>) {
 	return (
 		<Checkbox
 			aria-label='Select row'
