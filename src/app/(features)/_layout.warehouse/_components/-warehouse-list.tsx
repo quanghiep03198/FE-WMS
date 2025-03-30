@@ -3,12 +3,16 @@ import { CommonActions } from '@/common/constants/enums'
 import { IWarehouse } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import {
+	IndeterminateCheckbox,
+	RowSelectionCheckbox
+} from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { DataTableProps } from '@/components/ui/@react-table/types'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
-import { CheckedState } from '@radix-ui/react-checkbox'
 import { Row, Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
+import { Fragment, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	useDeleteWarehouseMutation,
@@ -29,15 +33,15 @@ const WarehouseList: React.FC = () => {
 	const { dispatch } = usePageContext()
 
 	// Handle reset row deletion
-	const handleResetAllRowSelection = useCallback(() => {
+	const handleResetAllRowSelection = () => {
 		tableRef.current.resetRowSelection()
 		resetRowSelectionType()
-	}, [])
+	}
 
 	// Handle delete selected row(s)
-	const handleDeleteSelectedRows = useCallback(() => {
+	const handleDeleteSelectedRows = () => {
 		deleteWarehouseAsync(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original.id))
-	}, [])
+	}
 
 	const handlePreUpdate = (row: Row<IWarehouse>) => {
 		dispatch({
@@ -68,32 +72,23 @@ const WarehouseList: React.FC = () => {
 
 	const columnHelper = createColumnHelper<IWarehouse>()
 
-	const columns = useMemo(
+	const columns: DataTableProps<IWarehouse>['columns'] = useMemo(
 		() => [
 			columnHelper.accessor('id', {
 				id: ROW_SELECTION_COLUMN_ID,
-				header: ({ table }) => {
-					const checked =
-						table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
-					return (
-						<Checkbox
-							role='checkbox'
-							checked={checked as CheckedState}
-							onCheckedChange={(checkedState) => {
-								setRowSelectionType('multiple')
-								table.toggleAllPageRowsSelected(!!checkedState)
-							}}
-						/>
-					)
-				},
-				cell: ({ row }) => (
-					<Checkbox
-						aria-label='Select row'
-						role='checkbox'
-						checked={row.getIsSelected()}
-						onCheckedChange={(checkedState) => {
-							if (checkedState) setRowSelectionType('multiple')
-							row.toggleSelected(Boolean(checkedState))
+				header: (props) => (
+					<IndeterminateCheckbox
+						{...props}
+						onCheckedChange={(checked) => {
+							if (checked) setRowSelectionType('multiple')
+						}}
+					/>
+				),
+				cell: (props) => (
+					<RowSelectionCheckbox
+						{...props}
+						onCheckedChange={(checked) => {
+							if (checked) setRowSelectionType('multiple')
 						}}
 					/>
 				),

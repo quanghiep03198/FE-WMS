@@ -3,15 +3,18 @@ import { CommonActions } from '@/common/constants/enums'
 import { IWarehouseStorage } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import {
+	IndeterminateCheckbox,
+	RowSelectionCheckbox
+} from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
-import { CheckedState } from '@radix-ui/react-checkbox'
 import { UseQueryResult } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { Fragment, memo, useCallback, useMemo, useRef, useState } from 'react'
+import { Fragment, memo, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { useDeleteStorageMutation, useUpdateStorageMutation } from '../../_apis/warehouse-storage.api'
@@ -32,15 +35,14 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 	// Update warehouse storage location
 	const { mutateAsync: updateWarehouseStorage } = useUpdateStorageMutation({ warehouseNum })
 
-	const handleResetAllRowSelection = useCallback(() => {
+	const handleResetAllRowSelection = () => {
 		tableRef.current.resetRowSelection()
 		resetRowSelectionType()
-	}, [tableRef])
+	}
 
-	const handleDeleteSelectedRows = useCallback(
-		() => deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.id)),
-		[tableRef]
-	)
+	const handleDeleteSelectedRows = () => {
+		deleteWarehouseStorage(tableRef.current.getSelectedRowModel().flatRows.map((item) => item.original?.id))
+	}
 
 	// Delete selected warehouse storage locations
 	const { mutateAsync: deleteWarehouseStorage } = useDeleteStorageMutation(
@@ -54,29 +56,19 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 		() => [
 			columnHelper.accessor('id', {
 				id: ROW_SELECTION_COLUMN_ID,
-				header: ({ table }) => {
-					const checked =
-						table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
-
-					return (
-						<Checkbox
-							role='checkbox'
-							checked={checked as CheckedState}
-							onCheckedChange={(checkedState) => {
-								table.toggleAllRowsSelected(!!checkedState)
-								if (checkedState) setRowSelectionType('multiple')
-							}}
-						/>
-					)
-				},
-				cell: ({ row }) => (
-					<Checkbox
-						aria-label='Select row'
-						role='checkbox'
-						checked={row.getIsSelected()}
-						onCheckedChange={(checkedState) => {
-							if (checkedState) setRowSelectionType('multiple')
-							row.toggleSelected(Boolean(checkedState))
+				header: (props) => (
+					<IndeterminateCheckbox
+						{...props}
+						onCheckedChange={(checked) => {
+							if (checked) setRowSelectionType('multiple')
+						}}
+					/>
+				),
+				cell: (props) => (
+					<RowSelectionCheckbox
+						{...props}
+						onCheckedChange={(checked) => {
+							if (checked) setRowSelectionType('multiple')
 						}}
 					/>
 				),
