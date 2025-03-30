@@ -210,7 +210,7 @@ const Steps: React.FC<TStepsProps> = ({ enableChangeStep }) => {
 }
 
 const StepSeparator: React.FC = () => (
-	<div className='absolute right-0 top-0 h-full w-5 translate-x-1/2 sm:hidden' aria-hidden='true'>
+	<div className='absolute right-0 top-0 h-full w-5 translate-x-1/2 sm:hidden md:hidden' aria-hidden='true'>
 		<svg className='h-full w-full text-border' viewBox='0 0 22 80' fill='none' preserveAspectRatio='none'>
 			<path d='M0 -2L20 40L0 82' vectorEffect='non-scaling-stroke' stroke='currentcolor' strokeLinejoin='round' />
 		</svg>
