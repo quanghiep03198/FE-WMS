@@ -1,17 +1,11 @@
 import { Div, Label, Switch, Typography } from '@/components/ui'
+import { useFullscreen } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
-import { useLayoutEffect, useState } from 'react'
-
 const SettingPanel: React.FC = () => {
 	const { t } = useTranslation()
-	const [fullScreen, setFullScreen] = useState<boolean>(false)
-
-	useLayoutEffect(() => {
-		if (fullScreen && !document.fullscreenElement) document.documentElement.requestFullscreen()
-		else if (!fullScreen && document.fullscreenElement) document.exitFullscreen()
-	}, [fullScreen, document.fullscreenElement])
+	const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.body)
 
 	return (
 		<Div as='section' className='flex w-full flex-col gap-y-3'>
@@ -30,8 +24,8 @@ const SettingPanel: React.FC = () => {
 						<Switch
 							id='toggle-fullscreen'
 							className='max-w-full'
-							checked={fullScreen}
-							onCheckedChange={(value) => setFullScreen(Boolean(value))}
+							checked={isFullscreen}
+							onCheckedChange={() => toggleFullscreen()}
 						/>
 					</SwitchBox.InnerWrapper>
 				</SwitchBox.Wrapper>

@@ -1,10 +1,11 @@
 import { Button, Div, Icon, Toggle } from '@/components/ui'
+import { useFullscreen } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const ScanningFloatToolbar: React.FC = () => {
 	const [isVisible, setIsVisible] = useState(false)
-	const [isFullScreen, setIsFullScreen] = useState(false)
+	const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.body)
 	const { t } = useTranslation()
 
 	useEffect(() => {
@@ -40,13 +41,9 @@ const ScanningFloatToolbar: React.FC = () => {
 
 					<Toggle
 						className='gap-x-2 rounded-l-full rounded-r-full hover:text-foreground'
-						pressed={isFullScreen}
-						onPressedChange={(pressed) => {
-							setIsFullScreen(pressed)
-							if (pressed && !document?.fullscreenElement) document.documentElement.requestFullscreen()
-							else document.exitFullscreen()
-						}}>
-						<Icon name={isFullScreen ? 'Shrink' : 'Fullscreen'} role='img' />
+						pressed={isFullscreen}
+						onPressedChange={() => toggleFullscreen()}>
+						<Icon name={isFullscreen ? 'Shrink' : 'Fullscreen'} role='img' />
 						{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}
 					</Toggle>
 				</Div>
