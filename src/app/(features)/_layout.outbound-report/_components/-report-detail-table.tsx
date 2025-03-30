@@ -10,7 +10,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 
 	return (
 		<Div className='relative flex flex-col divide-y overflow-hidden rounded-lg border'>
-			<Div className='max-h-[50vh] overflow-scroll'>
+			<Div className='max-h-[40vh] overflow-scroll'>
 				<Table
 					className='border-separate border-spacing-0 rounded-lg'
 					style={
@@ -21,7 +21,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 						} as React.CSSProperties
 					}>
 					<TableHeader className='sticky top-0 z-20'>
-						<TableRow className='sticky *:bg-table-head'>
+						<TableRow className='sticky'>
 							<TableHead className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
