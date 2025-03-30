@@ -6,7 +6,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import { Button, DataTable, Div, Icon, Separator, Tooltip, Typography } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -145,7 +145,7 @@ const ReportDatalist: React.FC = () => {
 
 	return (
 		<Div as='section' className='relative'>
-			<Div className='absolute left-0 top-0'>
+			<Div aria-description='Auto refresh toggle' className='absolute left-0 top-0'>
 				<AutoRefreshToggle />
 			</Div>
 			<DataTable
@@ -153,9 +153,6 @@ const ReportDatalist: React.FC = () => {
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
-				containerProps={{
-					style: { height: screen.availHeight / 1.75 }
-				}}
 				renderSubComponent={({ row }) => {
 					return <OutboundReportDetailTable data={row.original.detail} />
 				}}
@@ -178,6 +175,25 @@ const ReportDatalist: React.FC = () => {
 								</Button>
 							</Tooltip>
 						</Fragment>
+					)
+				}}
+				footerProps={{
+					slot: () => (
+						<Div
+							role='row'
+							aria-colspan={columns.length}
+							className='flex w-full items-center justify-center gap-x-4'>
+							<Typography color='muted' className='font-medium'>
+								{t('ns_common:common_fields.total')}
+							</Typography>
+							<Separator orientation='horizontal' className='h-0.5 basis-4' />
+							<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
+								{Array.isArray(data)
+									? formatIntlNumber(data?.reduce((acc, curr) => acc + curr.daily_outbound_qty, 0))
+									: 0}
+								<Typography variant='small'>pcs</Typography>
+							</Typography>
+						</Div>
 					)
 				}}
 			/>
