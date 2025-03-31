@@ -13,7 +13,8 @@ export const router = createRouter({
 	defaultPreload: 'intent',
 	defaultNotFoundComponent: NotFoundPage,
 	defaultPreloadStaleTime: 0,
-	defaultStructuralSharing: true
+	defaultStructuralSharing: true,
+	scrollRestoration: true
 } as unknown as CreateRouterOptions)
 
 // Register things for typesafety
