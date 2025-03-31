@@ -11,7 +11,7 @@ const ScrollArea = tw(ScrollShadow)<ScrollShadowProps>`
 `
 const Main = tw(Div)<DivProps>`grid w-full flex-1 basis-full grid-rows-[80px_auto] overflow-hidden`
 
-const OutletWrapper = tw.div`sm:px-4 px-6 py-4 flex-1 basis-full`
+const OutletWrapper = tw.div`sm:px-4 px-6 py-4 flex-1 basis-full [view-transition-name:main-content]`
 
 export default {
 	Container,
