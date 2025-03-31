@@ -196,6 +196,15 @@
 		-moz-appearance: textfield;
 		appearance: textfield;
 	}
+	input[type='password'] {
+		font-family: 'pass';
+		-webkit-text-security: disc;
+		letter-spacing: 1px;
+		font-size: 18px;
+	}
+	input[type='password']::placeholder {
+		font-size: 14px;
+	}
 	input[type='number']::-webkit-inner-spin-button,
 	input[type='number']::-webkit-outer-spin-button {
 		-webkit-appearance: none;
