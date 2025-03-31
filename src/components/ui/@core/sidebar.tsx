@@ -13,9 +13,10 @@ import { Skeleton } from '@/components/ui/@core/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/@core/tooltip'
 import { useLocalStorageState } from 'ahooks'
 
+const SIDEBAR_WIDTH_XXL = '22.5rem'
 const SIDEBAR_WIDTH = '20rem'
 const SIDEBAR_WIDTH_MOBILE = '20rem'
-const SIDEBAR_WIDTH_ICON = '3rem'
+const SIDEBAR_WIDTH_ICON = '3.125rem'
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
 
 type SidebarContext = {
@@ -108,6 +109,7 @@ const SidebarProvider = React.forwardRef<
 				<div
 					style={
 						{
+							'--sidebar-width-xxl': SIDEBAR_WIDTH_XXL,
 							'--sidebar-width': SIDEBAR_WIDTH,
 							'--sidebar-width-icon': SIDEBAR_WIDTH_ICON,
 							...style
@@ -139,7 +141,10 @@ const Sidebar = React.forwardRef<
 	if (collapsible === 'none') {
 		return (
 			<div
-				className={cn('flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground', className)}
+				className={cn(
+					'flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground xxl:w-[--sidebar-width-xxl]',
+					className
+				)}
 				ref={ref}
 				{...props}>
 				{children}
@@ -153,7 +158,7 @@ const Sidebar = React.forwardRef<
 				<SheetContent
 					data-sidebar='sidebar'
 					data-mobile='true'
-					className='w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden'
+					className='w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground xxl:w-[--sidebar-width-xxl] [&>button]:hidden'
 					style={
 						{
 							'--sidebar-width': SIDEBAR_WIDTH_MOBILE
@@ -177,7 +182,7 @@ const Sidebar = React.forwardRef<
 			{/* This is what handles the sidebar gap on desktop */}
 			<div
 				className={cn(
-					'relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-150 ease-linear',
+					'relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-150 ease-linear xxl:w-[--sidebar-width-xxl]',
 					'group-data-[collapsible=offcanvas]:w-0',
 					'group-data-[side=right]:rotate-180',
 					variant === 'floating' || variant === 'inset'
@@ -187,7 +192,7 @@ const Sidebar = React.forwardRef<
 			/>
 			<div
 				className={cn(
-					'fixed inset-y-0 z-10 flex h-svh w-[--sidebar-width] transition-[left,right,width] duration-150 ease-linear sm:hidden md:hidden',
+					'fixed inset-y-0 z-10 flex h-svh w-[--sidebar-width] transition-[left,right,width] duration-150 ease-linear sm:hidden md:hidden xxl:w-[--sidebar-width-xxl]',
 					side === 'left'
 						? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
 						: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
@@ -323,7 +328,7 @@ const SidebarContent = React.forwardRef<HTMLDivElement, React.ComponentProps<'di
 			ref={ref}
 			data-sidebar='content'
 			className={cn(
-				'flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
+				'flex min-h-0 flex-1 flex-col items-center gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
 				className
 			)}
 			{...props}
@@ -394,7 +399,12 @@ const SidebarGroupContent = React.forwardRef<HTMLDivElement, React.ComponentProp
 SidebarGroupContent.displayName = 'SidebarGroupContent'
 
 const SidebarMenu = React.forwardRef<HTMLUListElement, React.ComponentProps<'ul'>>(({ className, ...props }, ref) => (
-	<ul ref={ref} data-sidebar='menu' className={cn('flex w-full min-w-0 flex-col gap-1', className)} {...props} />
+	<ul
+		ref={ref}
+		data-sidebar='menu'
+		className={cn('flex w-full min-w-0 flex-col items-stretch gap-1', className)}
+		{...props}
+	/>
 ))
 SidebarMenu.displayName = 'SidebarMenu'
 
@@ -404,7 +414,7 @@ const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li
 SidebarMenuItem.displayName = 'SidebarMenuItem'
 
 const sidebarMenuButtonVariants = cva(
-	'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+	'peer/menu-button flex-nowrap flex-row flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
 	{
 		variants: {
 			variant: {

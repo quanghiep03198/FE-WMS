@@ -69,9 +69,9 @@ const NavSidebar: React.FC = () => {
 	}, [])
 
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='icon' className='z-40 !bg-background'>
+		<Sidebar variant='sidebar' side='left' collapsible='icon'>
 			<SidebarHeader className='overflow-hidden'>
-				<Link to='/dashboard' preload='intent'>
+				<Link to='/dashboard' preload='intent' className='max-w-full'>
 					<AppLogo />
 				</Link>
 			</SidebarHeader>
@@ -115,11 +115,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon, viewTransi
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuButton
-				asChild
-				size='default'
-				className='w-full gap-x-3'
-				tooltip={t(title, { defaultValue: title })}>
+			<SidebarMenuButton asChild size='default' tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={path}
 					role='link'

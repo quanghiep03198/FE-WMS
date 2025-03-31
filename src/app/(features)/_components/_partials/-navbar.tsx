@@ -26,14 +26,11 @@ const Navbar: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div
-				as='header'
-				role='menubar'
-				className='sticky top-0 z-40 flex items-center bg-background/80 px-6 backdrop-blur sm:px-4'>
+			<Div as='header' role='menubar' className='sticky top-0 z-40 flex items-center bg-background px-6 sm:px-4'>
 				<Div
 					as='nav'
 					role='menu'
-					className='flex w-full basis-full items-center justify-between rounded-md border border-border bg-background px-3 py-2'>
+					className='flex w-full basis-full items-center justify-between rounded-md border border-border px-3 py-2'>
 					<Div role='group' className='flex items-center gap-x-4'>
 						<Tooltip
 							message={`${t('ns_common:actions.toggle_sidebar')} (ctrl+b)`}

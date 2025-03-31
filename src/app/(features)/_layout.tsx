@@ -31,7 +31,7 @@ function Layout() {
 
 	useEffectOnce(() => {
 		if (document.body.classList.contains(font)) document.body.classList.remove(font)
-		else document.body.classList.add(font)
+		document.body.classList.add(font)
 	})
 
 	return (
