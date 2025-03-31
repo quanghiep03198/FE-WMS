@@ -1,7 +1,8 @@
+import { LanguageSelect } from '@/app/_components/_shared/-language-selector'
 import { Div, Label } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 
-const LanguageSelect: React.FC = () => {
+const LanguageDropdownSelect: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -12,4 +13,4 @@ const LanguageSelect: React.FC = () => {
 	)
 }
 
-export default LanguageSelect
+export default LanguageDropdownSelect
