@@ -27,15 +27,15 @@ import {
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
-import { routeTree } from '@/route-tree.gen'
+import { FileRouteTypes } from '@/route-tree.gen'
 import { useQueryClient } from '@tanstack/react-query'
-import { Link, ParseRoute, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { useKeyPress, useUpdateEffect } from 'ahooks'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'>
+type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'> & { viewTransition?: boolean }
 
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
@@ -63,10 +63,7 @@ const NavSidebar: React.FC = () => {
 
 	const preferenceMenu = useMemo(() => {
 		return navigationConfig.filter((item) => {
-			const matches: Array<ParseRoute<typeof routeTree>['fullPath']> = [
-				'/preferences/keybindings',
-				'/preferences/appearance-settings'
-			]
+			const matches: Array<FileRouteTypes['to']> = ['/preferences/keybindings', '/preferences/appearance-settings']
 			return item.type === 'preference' && matches.includes(item.path)
 		})
 	}, [])
@@ -107,7 +104,7 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
+const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { openMobile, setOpenMobile } = useSidebar()
@@ -127,6 +124,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon }) => {
 					to={path}
 					role='link'
 					preload='intent'
+					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>

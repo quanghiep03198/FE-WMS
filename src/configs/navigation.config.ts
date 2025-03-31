@@ -1,6 +1,5 @@
 import { IconProps } from '@/components/ui'
-import { routeTree } from '@/route-tree.gen'
-import { ParseRoute } from '@tanstack/react-router'
+import { FileRouteTypes } from '@/route-tree.gen'
 import { KeyType } from 'ahooks/lib/useKeyPress'
 import { ResourceKeys } from 'i18next'
 import { v4 as uuidv4 } from 'uuid'
@@ -9,7 +8,7 @@ export type NavigationConfig = {
 	id: string
 	icon: IconProps['name']
 	title: ResourceKeys['ns_common']
-	path: ParseRoute<typeof routeTree>['fullPath']
+	path: FileRouteTypes['to']
 	status?: 'stable' | 'experimental' | 'deprecated'
 	type: 'main' | 'preference' | 'auth'
 	keybinding: KeyType

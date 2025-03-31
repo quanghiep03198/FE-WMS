@@ -2,8 +2,8 @@ import AppLogo from '@/app/_components/_shared/-app-logo'
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Separator, Sheet, SheetContent, SheetTrigger, buttonVariants } from '@/components/ui'
 import { navigationConfig } from '@/configs/navigation.config'
-import { routeTree } from '@/route-tree.gen'
-import { Link, ParseRoute } from '@tanstack/react-router'
+import { FileRouteTypes } from '@/route-tree.gen'
+import { Link } from '@tanstack/react-router'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -18,10 +18,7 @@ const NavDrawerSidebar: React.FC = () => {
 
 	const preferenceMenu = useMemo(() => {
 		return navigationConfig.filter((item) => {
-			const matches: Array<ParseRoute<typeof routeTree>['fullPath']> = [
-				'/preferences/keybindings',
-				'/preferences/appearance-settings'
-			]
+			const matches: Array<FileRouteTypes['to']> = ['/preferences/keybindings', '/preferences/appearance-settings']
 			return item.type === 'preference' && matches.includes(item.path)
 		})
 	}, [])

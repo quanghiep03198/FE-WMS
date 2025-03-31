@@ -1,9 +1,9 @@
-import { routeTree } from '@/route-tree.gen'
-import { Link, ParseRoute } from '@tanstack/react-router'
+import { FileRouteTypes } from '@/route-tree.gen'
+import { Link } from '@tanstack/react-router'
 import { createContext, use, useMemo, useState } from 'react'
 
 export type TBreadcrumb = {
-	to: ParseRoute<typeof routeTree>['fullPath']
+	to: FileRouteTypes['to']
 	text: string
 	params?: React.ComponentProps<typeof Link>['params']
 	search?: React.ComponentProps<typeof Link>['search']
