@@ -32,7 +32,9 @@ module.exports = {
 				['1/12']: '`${(1 / 12) * 100}%`'
 			},
 			fontFamily: {
-				jetbrains: 'JetBrains Mono, monospace'
+				['jetbrains']: 'JetBrains Mono, monospace',
+				['roboto']: 'Roboto, sans-serif',
+				['noto-sans-sc']: 'Noto Sans SC, sans-serif'
 			},
 			colors: {
 				border: 'hsl(var(--border))',
