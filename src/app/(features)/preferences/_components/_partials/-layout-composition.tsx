@@ -9,7 +9,7 @@ const Container = tw(Div)<DivProps>`
 
 const MainSection = tw(Div)<DivProps>`h-full w-full flex-1 xxl:max-w-8xl max-w-7xl mx-auto`
 
-const OutletWrapper = tw(Div)<DivProps>`xl:pl-96 py-6 flex-1`
+const OutletWrapper = tw(Div)<DivProps>`z-0 xl:pl-96 py-6 flex-1 [view-transition-name:main-content]`
 
 export default {
 	Container,

@@ -1,5 +1,6 @@
-import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
-import { useRouter } from '@tanstack/react-router'
+import { Button, Div, Tooltip, Typography } from '@/components/ui'
+import { ArrowLeftIcon, ArrowRightIcon, HomeIcon } from '@radix-ui/react-icons'
+import { Link, useRouter } from '@tanstack/react-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,18 +16,29 @@ const Heading: React.FC = () => {
 				</Typography>
 				<Typography color='muted'>{t('ns_preference:captions.header')}</Typography>
 			</Div>
-			<Tooltip
-				message={t('ns_common:actions.back')}
-				triggerProps={{ asChild: true }}
-				contentProps={{ side: 'left' }}>
-				<Button
-					variant='ghost'
-					size='icon'
-					disabled={!router.history.canGoBack()}
-					onClick={() => router.history.back()}>
-					<Icon name='Undo2' />
-				</Button>
-			</Tooltip>
+			<Div className='inline-flex items-center'>
+				<Tooltip message={t('ns_common:actions.back')} triggerProps={{ asChild: true }}>
+					<Button
+						variant='ghost'
+						size='icon'
+						disabled={!router.history.canGoBack()}
+						onClick={() => router.history.back()}>
+						<ArrowLeftIcon />
+					</Button>
+				</Tooltip>
+				<Tooltip message='Forward' triggerProps={{ asChild: true }}>
+					<Button variant='ghost' size='icon' onClick={() => router.history.forward()}>
+						<ArrowRightIcon />
+					</Button>
+				</Tooltip>
+				<Tooltip message='Home' triggerProps={{ asChild: true }}>
+					<Button asChild variant='ghost' size='icon' onClick={() => router.history.forward()}>
+						<Link to='/dashboard'>
+							<HomeIcon />
+						</Link>
+					</Button>
+				</Tooltip>
+			</Div>
 		</Div>
 	)
 }
