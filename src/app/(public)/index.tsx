@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet'
-import GridBackground from './_components/-grid-background'
+import GridBackground from '../_components/_shared/-grid-background'
 import PageComposition from './_components/-page-composition'
 import { PageProvider } from './_contexts/-page-context'
 

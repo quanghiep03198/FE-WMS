@@ -2,6 +2,7 @@ import { locales } from '@/common/constants/constants'
 import {
 	Button,
 	ButtonProps,
+	Div,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuLabel,
@@ -10,6 +11,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon,
+	Label,
 	Select,
 	SelectContent,
 	SelectItem,
@@ -21,21 +23,24 @@ import {
 import { useTranslation } from 'react-i18next'
 
 export const LanguageSelect: React.FC = () => {
-	const { i18n } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	return (
-		<Select onValueChange={(value) => i18n.changeLanguage(value)} value={i18n.language}>
-			<SelectTrigger aria-label='Languages'>
-				<SelectValue placeholder='Choose language' />
-			</SelectTrigger>
-			<SelectContent>
-				{locales.map((item) => (
-					<SelectItem key={item.value} value={item.value}>
-						{item.label}
-					</SelectItem>
-				))}
-			</SelectContent>
-		</Select>
+		<Div className='space-y-2'>
+			<Label htmlFor='language'>{t('ns_common:settings.language')}</Label>
+			<Select onValueChange={(value) => i18n.changeLanguage(value)} value={i18n.language}>
+				<SelectTrigger aria-label='Languages' id='language'>
+					<SelectValue placeholder='Choose language' />
+				</SelectTrigger>
+				<SelectContent>
+					{locales.map((item) => (
+						<SelectItem key={item.value} value={item.value}>
+							{item.label}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
+		</Div>
 	)
 }
 
