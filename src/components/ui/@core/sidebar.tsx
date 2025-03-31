@@ -1,8 +1,3 @@
-import { Slot } from '@radix-ui/react-slot'
-import { VariantProps, cva } from 'class-variance-authority'
-import { PanelLeft } from 'lucide-react'
-import * as React from 'react'
-
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import { Button } from '@/components/ui/@core/button'
@@ -11,7 +6,11 @@ import { Separator } from '@/components/ui/@core/separator'
 import { Sheet, SheetContent } from '@/components/ui/@core/sheet'
 import { Skeleton } from '@/components/ui/@core/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/@core/tooltip'
+import { Slot } from '@radix-ui/react-slot'
 import { useLocalStorageState } from 'ahooks'
+import { VariantProps, cva } from 'class-variance-authority'
+import { PanelLeft } from 'lucide-react'
+import * as React from 'react'
 
 const SIDEBAR_WIDTH_XXL = '22.5rem'
 const SIDEBAR_WIDTH = '20rem'
@@ -116,7 +115,7 @@ const SidebarProvider = React.forwardRef<
 						} as React.CSSProperties
 					}
 					className={cn(
-						'group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar',
+						'group/sidebar-wrapper z-50 flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar',
 						className
 					)}
 					ref={ref}
@@ -192,7 +191,7 @@ const Sidebar = React.forwardRef<
 			/>
 			<div
 				className={cn(
-					'fixed inset-y-0 z-10 flex h-svh w-[--sidebar-width] transition-[left,right,width] duration-150 ease-linear sm:hidden md:hidden xxl:w-[--sidebar-width-xxl]',
+					'fixed inset-y-0 flex h-svh w-[--sidebar-width] transition-[left,right,width] duration-150 ease-linear sm:hidden md:hidden xxl:w-[--sidebar-width-xxl]',
 					side === 'left'
 						? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
 						: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
@@ -251,7 +250,7 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<'bu
 				onClick={toggleSidebar}
 				title='Toggle Sidebar'
 				className={cn(
-					'absolute inset-y-0 z-20 flex w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-1/2 after:left-full after:h-10 after:w-1.5 after:-translate-y-1/2 after:rounded group-data-[side=left]:-right-4 group-data-[side=right]:left-0 hover:after:bg-sidebar-border sm:hidden md:hidden',
+					'absolute inset-y-0 z-50 flex w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-1/2 after:left-full after:h-10 after:w-1.5 after:-translate-y-1/2 after:rounded group-data-[side=left]:-right-4 group-data-[side=right]:left-0 hover:after:bg-sidebar-border sm:hidden md:hidden',
 					'[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize',
 					'[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
 					'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar',
@@ -328,7 +327,7 @@ const SidebarContent = React.forwardRef<HTMLDivElement, React.ComponentProps<'di
 			ref={ref}
 			data-sidebar='content'
 			className={cn(
-				'flex min-h-0 flex-1 flex-col items-center gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
+				'flex min-h-0 flex-1 flex-col items-stretch gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
 				className
 			)}
 			{...props}
