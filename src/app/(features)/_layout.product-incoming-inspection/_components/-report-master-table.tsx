@@ -4,6 +4,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IPackingReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon } from '@/components/ui'
+import { DataTableProps } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
 import { useQuery } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -31,10 +32,10 @@ const ReportMasterTable: React.FC = () => {
 
 	const columnHelper = createColumnHelper<IPackingReport>()
 
-	const columns = useMemo(
+	const columns: DataTableProps<IPackingReport>['columns'] = useMemo(
 		() => [
 			columnHelper.accessor('brand_name', {
-				header: t('ns_erp:fields.po'),
+				header: t('ns_erp:fields.brand_name'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
