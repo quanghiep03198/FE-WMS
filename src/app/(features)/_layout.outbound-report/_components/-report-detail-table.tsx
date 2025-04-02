@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { ReportDetailRow } from './-report-detail-row'
 
 const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> = ({ data }) => {
-	console.log(data)
-
 	const { t } = useTranslation()
 
 	return (
