@@ -36,9 +36,15 @@ const SupportSection: React.FunctionComponent = () => {
 						assistance.
 					</Typography>
 				</Div>
-				<Div className='flex gap-x-6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-destructive/20'>
-						<Icon name='Bug' size={24} strokeWidth={1.5} aria-hidden='true' stroke='hsl(var(--destructive))' />
+				<Div className='group/support flex gap-x-6'>
+					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-accent'>
+						<Icon
+							name='Bug'
+							size={24}
+							strokeWidth={1.5}
+							aria-hidden='true'
+							className='transition-colors duration-200 group-hover/support:stroke-destructive'
+						/>
 					</Div>
 					<Div>
 						<Typography variant='h6' className='mb-1 text-base sm:text-sm'>
@@ -51,9 +57,15 @@ const SupportSection: React.FunctionComponent = () => {
 						<FeedbackFormTrigger />
 					</Div>
 				</Div>
-				<Div className='flex gap-x-6'>
-					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-active/20'>
-						<Icon name='Computer' size={24} strokeWidth={1.5} aria-hidden='true' stroke='hsl(var(--active))' />
+				<Div className='group/support flex gap-x-6'>
+					<Div className='grid aspect-square size-12 place-content-center rounded-lg bg-accent'>
+						<Icon
+							name='Computer'
+							size={24}
+							strokeWidth={1.5}
+							aria-hidden='true'
+							className='transition-colors duration-200 group-hover/support:stroke-[var(--primary-alt)]'
+						/>
 					</Div>
 					<Div>
 						<Typography variant='h6' className='mb-1 text-base sm:text-sm'>

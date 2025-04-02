@@ -42,13 +42,13 @@ const FeaturesSection: React.FunctionComponent = () => {
 							size={24}
 						/>
 					</EffectCardIconWrapper>
-					<Div className='space-y-2'>
+					<EffectCardContent>
 						<Typography className='font-medium'>Inventory Tracking and Control</Typography>
 						<Typography variant='small' color='muted' className='text-pretty'>
 							i-WMS can help warehouse managers keep track of inventory levels, locations, and movement within
 							the warehouse, ensuring optimal stock levels and minimizing stockouts.
 						</Typography>
-					</Div>
+					</EffectCardContent>
 				</EffectCard>
 				<EffectCard>
 					<EffectCardIconWrapper>
@@ -59,31 +59,31 @@ const FeaturesSection: React.FunctionComponent = () => {
 							size={24}
 						/>
 					</EffectCardIconWrapper>
-					<Div className='space-y-2'>
+					<EffectCardContent>
 						<Typography className='font-medium'>Barcode and RFID Integration</Typography>
 						<Typography variant='small' color='muted' className='text-pretty'>
 							Enhance inventory tracking with barcode scanning and RFID integration for better visibility, faster
 							scanning, and precise data capture, ensuring effective inventory management.
 						</Typography>
-					</Div>
+					</EffectCardContent>
 				</EffectCard>
 				<EffectCard>
 					<EffectCardIconWrapper>
 						<EffectCardIcon name='FileText' strokeWidth={1.5} size={24} />
 					</EffectCardIconWrapper>
-					<Div className='space-y-2'>
+					<EffectCardContent>
 						<Typography className='font-medium'>Reporting and Analytics</Typography>
 						<Typography variant='small' color='muted' className='text-pretty'>
 							i-WMS provides customizable reports and real-time analytics, enabling managers to monitor
 							performance, identify bottlenecks, and make data-driven decisions to enhance warehouse operations.
 						</Typography>
-					</Div>
+					</EffectCardContent>
 				</EffectCard>
 				<EffectCard>
 					<EffectCardIconWrapper>
 						<EffectCardIcon name='Languages' strokeWidth={1.5} size={24} />
 					</EffectCardIconWrapper>
-					<Div className='space-y-2'>
+					<EffectCardContent>
 						<Typography className='font-medium'>Multi-Language Support</Typography>
 						<Typography
 							variant='small'
@@ -93,7 +93,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 								__html: /* html */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
 							}}
 						/>
-					</Div>
+					</EffectCardContent>
 				</EffectCard>
 			</Div>
 		</Div>
@@ -102,10 +102,11 @@ const FeaturesSection: React.FunctionComponent = () => {
 
 const EffectCard = tw(
 	Div
-)<DivProps>`relative transition-all h-full border p-6 sm:p-4 duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-md sm:flex-row hover:shadow-[0_0px_12px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_0px_12px_var(--primary-alt)]`
+)<DivProps>`z-10 relative bg-background transition-all h-full border p-6 sm:p-4 duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-lg sm:flex-row hover:shadow-[0_0px_16px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_0px_16px_var(--primary-alt)]`
 const EffectCardIconWrapper = tw(
 	Div
 )<DivProps>`inline-flex aspect-square size-12 min-w-12 items-center justify-center rounded-md bg-secondary`
 const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-[var(--primary-alt)] duration-200 transition-colors`
+const EffectCardContent = tw(Div)`z-10 space-y-2`
 
 export default FeaturesSection
