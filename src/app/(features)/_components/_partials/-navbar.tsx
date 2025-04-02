@@ -4,7 +4,7 @@ import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Badge, Button, Div, Icon, Separator, Tooltip, Typography, useSidebar } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
-import React, { Fragment } from 'react'
+import React, { Fragment, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import ThemeToggle from '../../../_components/_shared/-theme-toggle'
 import NavBreadcrumb from './-nav-breadcrumb'
@@ -12,7 +12,7 @@ import NavUserControl from './-nav-user-controller'
 import Notification from './-notifications'
 import SearchDialog from './-search-dialog'
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{ ref: RefObject<HTMLElement> }> = ({ ref }) => {
 	const [open, setOpen] = React.useState<boolean>(false)
 	const { logout } = useAuth()
 	const { t } = useTranslation()
@@ -26,7 +26,16 @@ const Navbar: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div as='header' role='menubar' className='sticky top-0 z-40 flex items-center bg-background px-6 sm:px-4'>
+			<Div
+				ref={ref}
+				as='header'
+				role='menubar'
+				className='sticky top-0 z-40 flex h-20 items-center bg-background px-6 sm:px-4'
+				style={
+					{
+						'--nav-height': '80px'
+					} as React.CSSProperties
+				}>
 				<Div
 					as='nav'
 					role='menu'
