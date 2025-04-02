@@ -60,7 +60,7 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='grid w-full grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-4 xxl:grid-cols-4'>
+		<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-4 xxl:grid-cols-4'>
 			{statistics.map((stats, index) => (
 				<Card key={index}>
 					<CardHeader className='@container'>
@@ -69,7 +69,7 @@ const Statistics: React.FC = () => {
 					</CardHeader>
 					<CardContent>
 						<Div className='space-y-0.5'>
-							<Typography variant='h5' className='font-bold'>
+							<Typography variant='h4' className='font-bold'>
 								{stats.value}
 							</Typography>
 							<Typography variant='small' color='muted' className='text-xs'>

@@ -14,60 +14,65 @@ import {
 	SelectValue
 } from '@/components/ui'
 import _ from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import tw from 'tailwind-styled-components'
 import { annuallInOutBoundStatistics } from '../_mocks/-dashboard.data'
 
 const chartConfig = {
 	import: {
-		label: 'Import',
+		label: 'Inbound',
 		color: 'hsl(var(--chart-1))'
 	},
 	export: {
-		label: 'Export',
+		label: 'Outbound',
 		color: 'hsl(var(--chart-2))'
 	}
 } satisfies ChartConfig
 
 const InoutboundOverview: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
-		<Card className='col-span-full max-h-full xl:col-span-2'>
-			<CardHeader>
-				<CardTitle>Import/Export Overview</CardTitle>
-				<Div className='inline-flex items-center gap-x-3'>
-					<Icon name='CalendarDays' size={18} />
-					<Select defaultValue='2024'>
-						<SelectTrigger className='w-[180px]' defaultChecked>
-							<SelectValue placeholder='-- Select --' />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value='2024'>2024</SelectItem>
-							<SelectItem value='2023'>2023</SelectItem>
-							<SelectItem value='2022'>2022</SelectItem>
-						</SelectContent>
-					</Select>
-				</Div>
-			</CardHeader>
-			<CardContent className='@container-norma @container'>
-				<ChartContainer className='@xs:h-72 @xl:h-80 @3xl:h-96 @4xl:h-[28rem]' config={chartConfig}>
-					<BarChart accessibilityLayer data={annuallInOutBoundStatistics}>
-						<CartesianGrid vertical={false} />
-						<XAxis
-							dataKey='month'
-							tickLine={false}
-							tickMargin={10}
-							axisLine={false}
-							tickFormatter={(value) => value.slice(0, 3)}
-						/>
-						<YAxis stroke='hsl(var(--muted-foreground))' />
-						<ChartTooltip content={<ChartTooltipContent />} />
-						<Bar dataKey='import' fill='var(--color-import)' radius={3} />
-						<Bar dataKey='export' fill='var(--color-export)' radius={3} />
-						<ChartLegend content={<ChartLegendContent />} formatter={(value) => _.capitalize(value)} />
-					</BarChart>
-				</ChartContainer>
-			</CardContent>
-		</Card>
+		<Div className='flex h-full flex-col items-stretch justify-end'>
+			<Card className='col-span-full max-h-full w-full flex-1 basis-full self-end xl:col-span-2'>
+				<CardHeader>
+					<CardTitle>{t('ns_dashboard:inoutbound_overview')}</CardTitle>
+					<Div className='inline-flex items-center gap-x-3'>
+						<Icon name='CalendarDays' size={18} />
+						<Select defaultValue={new Date().getFullYear().toString()}>
+							<SelectTrigger className='w-[180px]' defaultChecked>
+								<SelectValue placeholder='-- Select --' />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value={new Date().getFullYear().toString()}>
+									{new Date().getFullYear().toString()}
+								</SelectItem>
+							</SelectContent>
+						</Select>
+					</Div>
+				</CardHeader>
+				<CardContent className='@container-norma @container'>
+					<ChartContainer className='@xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-[400px]' config={chartConfig}>
+						<BarChart accessibilityLayer data={annuallInOutBoundStatistics}>
+							<CartesianGrid vertical={false} />
+							<XAxis
+								dataKey='month'
+								tickLine={false}
+								tickMargin={10}
+								axisLine={false}
+								tickFormatter={(value) => value.slice(0, 3)}
+							/>
+							<YAxis stroke='hsl(var(--muted-foreground))' />
+							<ChartTooltip content={<ChartTooltipContent />} />
+							<Bar dataKey='import' fill='var(--color-import)' radius={3} />
+							<Bar dataKey='export' fill='var(--color-export)' radius={3} />
+							<ChartLegend content={<ChartLegendContent />} formatter={(value) => _.capitalize(value)} />
+						</BarChart>
+					</ChartContainer>
+				</CardContent>
+			</Card>
+		</Div>
 	)
 }
 

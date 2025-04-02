@@ -132,8 +132,10 @@ export default {
 		theme: 'Theme'
 	},
 	status: {
+		active: 'Active',
 		connected: 'Connected',
 		connecting: 'Connnecting',
+		deactivated: 'Deactivated',
 		disconnected: 'Disconnected',
 		idle: 'Idle',
 		loading: 'Loading ...',

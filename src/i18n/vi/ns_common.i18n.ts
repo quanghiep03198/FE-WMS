@@ -136,11 +136,13 @@ export default {
 		theme: 'Chế độ nền'
 	},
 	status: {
+		active: 'Đang hoạt động',
 		connected: 'Đã kết nối',
 		connecting: 'Đang kết nối',
 		disconnected: 'Đã ngắt kết nối',
 		idle: 'Không hoạt động',
 		loading: 'Đang tải ...',
+		deactivated: 'Đã vô hiệu hóa',
 		processing: 'Đang xử lý',
 		running: 'Đang hoạt động'
 	},

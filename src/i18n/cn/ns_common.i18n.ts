@@ -131,8 +131,10 @@ export default {
 		theme: '主题'
 	},
 	status: {
+		active: '活动',
 		connected: '已连接',
 		connecting: '连接中',
+		deactivated: '停用',
 		disconnected: '已断开连接',
 		idle: '空闲',
 		loading: '载入中 ...',
