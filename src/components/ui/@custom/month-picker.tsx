@@ -67,7 +67,7 @@ const MonthPicker: React.FC<MonthCalendarProps> = (props) => {
 					{props?.selectedMonth ? format(new Date(props.selectedMonth), 'MMM yyyy') : <span>Pick a month</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className='w-[var(--radix-popover-trigger-width)]'>
+			<PopoverContent className='w-[var(--radix-popover-trigger-width)] space-y-4'>
 				<MonthCalendar {...props} />
 			</PopoverContent>
 		</Popover>
@@ -135,7 +135,7 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({
 									return (
 										<td
 											key={m.number}
-											className='relative h-10 w-1/4 p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md'>
+											className='relative h-8 w-1/4 p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md'>
 											<button
 												onClick={() => {
 													setMonth(m.number)
