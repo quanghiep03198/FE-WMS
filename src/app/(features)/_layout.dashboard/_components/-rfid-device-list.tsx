@@ -45,7 +45,7 @@ const RFIDDeviceList: React.FC = () => {
 							<Badge
 								variant='outline'
 								className={cn(
-									'justify-center whitespace-nowrap',
+									'justify-center whitespace-nowrap rounded',
 									device.is_active === 'Y'
 										? 'border-success text-success'
 										: 'border-destructive text-destructive'

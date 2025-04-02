@@ -27,8 +27,8 @@ function Page() {
 		<Fragment>
 			<Helmet title={t('ns_common:navigation.dashboard')} />
 			<Div className='z-10 flex flex-col gap-y-6 @container'>
-				<Div className='flex items-center justify-between gap-4 sm:flex-col md:flex-col'>
-					<PageHeader>
+				<Div className='flex items-center justify-between gap-4'>
+					<PageHeader className='basis-1/2'>
 						<PageTitle>Dashboard</PageTitle>
 						<PageDescription>{t('ns_dashboard:dashboard_description')}</PageDescription>
 					</PageHeader>
