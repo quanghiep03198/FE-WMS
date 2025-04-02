@@ -12,7 +12,7 @@ import { VariantProps, cva } from 'class-variance-authority'
 import { PanelLeft } from 'lucide-react'
 import * as React from 'react'
 
-const SIDEBAR_WIDTH_XXL = '22.5rem'
+const SIDEBAR_WIDTH_XXL = '21.5rem'
 const SIDEBAR_WIDTH = '20rem'
 const SIDEBAR_WIDTH_MOBILE = '20rem'
 const SIDEBAR_WIDTH_ICON = '3.125rem'
