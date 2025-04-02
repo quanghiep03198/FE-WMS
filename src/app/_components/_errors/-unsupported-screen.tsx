@@ -4,7 +4,7 @@ import tw from 'tailwind-styled-components'
 
 const UnsupportedScreen: React.FC = () => {
 	return (
-		<Div className='relative flex h-screen w-full items-center justify-center p-6 sm:p-4'>
+		<Div className='relative flex h-screen w-full items-center justify-center bg-background p-6 sm:p-4'>
 			<Div className='z-10 flex flex-row items-center justify-center gap-6 sm:flex-col'>
 				<Image src='/onboarding.svg' />
 				<Div className='animate-fly-in *:text-pretty'>
