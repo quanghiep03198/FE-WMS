@@ -1,3 +1,5 @@
+'use no memo'
+
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { useId } from 'react'
