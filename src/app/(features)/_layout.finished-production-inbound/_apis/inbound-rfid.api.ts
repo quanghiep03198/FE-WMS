@@ -62,7 +62,7 @@ export const useGetInboundOrderDetail = () => {
 
 	return useQuery({
 		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
-		queryFn: async () => await RFIDService.getFPOrderDetail(),
+		queryFn: async () => await RFIDService.getInboundOrderDetail(),
 		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
@@ -75,7 +75,7 @@ export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) =>
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', user?.company_code, params],
-		queryFn: async () => await RFIDService.searchExchangableFPOrder(params),
+		queryFn: async () => await RFIDService.searchExchangableOrder(params),
 		enabled: false,
 		select: (response) => response.metadata
 	})
@@ -115,7 +115,7 @@ export const useUpdateStockInMutation = () => {
 	return useMutation({
 		mutationKey: [INBOUND_REPORT_PROVIDE_TAG],
 		mutationFn: (payload: InoutboundPayload) => {
-			return RFIDService.updateFPStockMovement(
+			return RFIDService.upsertInboundInventory(
 				payload.target_tenant || payload.default_tenant,
 				selectedOrder,
 				omit(payload, ['default_tenant', 'target_tenant'])

@@ -19,20 +19,20 @@ export class RFIDService {
 		)
 	}
 
-	static async getFPOrderDetail() {
+	static async getInboundOrderDetail() {
 		return await axiosInstance.get<unknown, ResponseBody<RFIDStreamEventData['orders']>>(
 			`/rfid/inbound/manufacturing-order-detail`
 		)
 	}
 
-	static async searchExchangableFPOrder(params: SearchCustOrderParams) {
+	static async searchExchangableOrder(params: SearchCustOrderParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
 			`/rfid/search-exchangable-order`,
 			{ params }
 		)
 	}
 
-	static async updateFPStockMovement(tenantId: string, orderCode: string, payload: InoutboundPayload) {
+	static async upsertInboundInventory(tenantId: string, orderCode: string, payload: InoutboundPayload) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
 			`/rfid/inbound/update-stock/${orderCode}`,
 			payload,
@@ -64,7 +64,7 @@ export class RFIDService {
 		)
 	}
 
-	static async updateFPStockOut(payload: InoutboundPayload) {
+	static async upsertOutboundInventory(payload: InoutboundPayload) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>('/rfid/outbound/update-stock', payload)
 	}
 
@@ -72,5 +72,10 @@ export class RFIDService {
 		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-epcs`, {
 			params: filters
 		})
+	}
+
+	// #endregion
+	static async getWarehouseRFIDDevices() {
+		return await axiosInstance.get<unknown, ResponseBody<Record<string, string>[]>>(`/rfid/devices`)
 	}
 }

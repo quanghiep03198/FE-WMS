@@ -33,6 +33,6 @@ export const useUpdateStockOutMutation = () => {
 
 	return useMutation({
 		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, OUTBOUND_REPORT_PROVIDE_TAG, currentPage],
-		mutationFn: async (payload: any) => await RFIDService.updateFPStockOut(payload)
+		mutationFn: async (payload: any) => await RFIDService.upsertOutboundInventory(payload)
 	})
 }
