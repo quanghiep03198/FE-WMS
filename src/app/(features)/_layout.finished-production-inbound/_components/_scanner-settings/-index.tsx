@@ -28,10 +28,10 @@ const ScannerSettings: React.FC = () => {
 	)
 }
 
-const ToolbarWrapper = tw.div`@container group grid grid-rows-[48px_auto] rounded-lg border bg-background max-h-full overflow-hidden xxl:max-h-[calc(100vh-7rem)]`
-const ToolbarHeader = tw.div`flex items-center gap-x-2 border-b px-4 py-2 bg-table-head rounded-t-[inherit]`
+const ToolbarWrapper = tw.div`@container group grid grid-rows-[48px_auto] sm:rounded-none sm:border-none rounded-lg border bg-background max-h-full overflow-hidden xxl:max-h-[calc(100vh-7rem)]`
+const ToolbarHeader = tw.div`sm:bg-transparent sm:px-0 flex items-center gap-x-2 border-b px-4 py-2 bg-table-head rounded-t-[inherit]`
 const ToolbarBody = tw(ScrollShadow)`
-	flex max-h-full flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 overflow-y-auto p-4 !scrollbar-none @5xl:flex-row @5xl:flex-wrap sm:max-h-[60vh] md:max-h-[60vh]
+	flex max-h-full sm:px-0 flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 overflow-y-auto p-4 !scrollbar-none @5xl:flex-row @5xl:flex-wrap sm:max-h-[60vh] md:max-h-[60vh]
 `
 
 export default ScannerSettings

@@ -186,6 +186,6 @@ const OutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`h-full flex items-stretch gap-y-6 flex-col border rounded-md p-6`
+const Form = tw.form`h-full flex items-stretch gap-y-6 flex-col border rounded-md p-6 sm:p-0 sm:border-none`
 
 export default OutboundForm

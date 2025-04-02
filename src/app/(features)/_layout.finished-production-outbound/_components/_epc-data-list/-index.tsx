@@ -178,7 +178,7 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='flex h-full flex-1 flex-col items-stretch justify-center overflow-clip rounded-md border'>
+		<Div className='flex h-full flex-1 flex-col items-stretch justify-center rounded-md border'>
 			<Div className='hidden items-center border-b px-6 py-2 @6xl:flex'>
 				<Typography variant='h6' className='inline-flex items-center gap-x-2'>
 					<Icon name='Tags' size={28} /> EPC Data
@@ -198,12 +198,12 @@ const ScannedEpcList: React.FC = () => {
 							return (
 								<Div
 									key={virtualItem.index}
-									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+									className='absolute left-auto right-auto top-0 mb-1 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none sm:px-2'
 									style={{
 										height: virtualItem.size,
 										transform: `translateY(${virtualItem.start}px)`
 									}}>
-									<Typography className='font-medium'>{item.epc}</Typography>
+									<Typography className='font-medium sm:text-sm'>{item.epc}</Typography>
 									<Typography variant='small' className='capitalize text-foreground'>
 										{item.mo_no}
 									</Typography>

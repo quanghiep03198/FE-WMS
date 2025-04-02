@@ -24,7 +24,7 @@ function Page() {
 
 	return (
 		<PageProvider>
-			<Div className='grid max-h-screen grid-cols-12 items-stretch gap-4 overflow-hidden sm:grid-cols-1 md:grid-cols-1'>
+			<Div className='grid grid-cols-12 items-stretch gap-4 sm:grid-cols-1 md:grid-cols-1'>
 				<Div className='h-full @container lg:col-span-full xl:col-span-full xxl:col-span-4'>
 					<Div className='flex grid-rows-12 flex-col gap-4 @6xl:grid @6xl:grid-flow-col @6xl:grid-cols-2'>
 						<Div className='order-first col-span-full row-span-3 @6xl:col-span-1 @6xl:row-span-5'>
