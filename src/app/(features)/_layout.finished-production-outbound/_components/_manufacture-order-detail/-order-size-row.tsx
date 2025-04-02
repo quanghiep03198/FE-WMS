@@ -24,13 +24,13 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 
 	return (
 		<TableRow className={cn('transition-all duration-500')}>
-			<TableCell className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
+			<TableCell className='group/cell left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center md:right-auto xl:sticky'>
 				<Div className='flex items-center gap-x-2'>{data?.mo_no ?? FALLBACK_ORDER_VALUE}</Div>
 			</TableCell>
-			<TableCell className='sticky left-[var(--sticky-left-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
+			<TableCell className='z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] xl:sticky xl:left-[var(--sticky-left-col-width)] xl:right-auto'>
 				{data?.shoes_style_code_factory}
 			</TableCell>
-			<TableCell className='sticky left-[calc(2*var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+			<TableCell className='z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
 				{data?.mat_ecolor}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
@@ -60,12 +60,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						))}
 				</Div>
 			</TableCell>
-			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] w-28 min-w-28 font-medium'>
+			<TableCell
+				align='right'
+				className='w-28 min-w-28 font-medium md:relative md:right-auto xl:sticky xl:right-[var(--row-action-col-width)]'>
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell
 				align='center'
-				className='sticky right-0 w-[var(--sticky-right-col-width)] min-w-[var(--sticky-right-col-width)] !opacity-100'>
+				className='w-[var(--sticky-right-col-width)] min-w-[var(--sticky-right-col-width)] !opacity-100 md:relative md:right-auto xl:sticky xl:right-0'>
 				<DeleteOrderPopover data={data} />
 			</TableCell>
 		</TableRow>

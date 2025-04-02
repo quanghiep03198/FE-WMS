@@ -1,5 +1,5 @@
 import { Div, Icon, Input, Table, TableBody, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
-import { useResetState } from 'ahooks'
+import { useResetState, useSize } from 'ahooks'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -30,11 +30,15 @@ const OrderSizeDetailTable: React.FC = () => {
 			: []
 	}, [scannedOrders, columnFilters])
 
+	const tableWrapperSize = useSize(tableWrapperRef)
+
 	return (
 		<Div
 			className='relative flex h-full max-h-full max-w-full flex-1 basis-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
 			ref={tableWrapperRef}>
-			<Div className='flow-root max-h-[calc(80vh-1.125rem)] w-full max-w-full overflow-scroll rounded-lg'>
+			<Div
+				style={{ height: tableWrapperSize?.height }}
+				className='flow-root w-full max-w-full overflow-scroll rounded-lg'>
 				<Table
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
@@ -44,25 +48,25 @@ const OrderSizeDetailTable: React.FC = () => {
 						} as React.CSSProperties
 					}>
 					<TableHeader className='sticky top-0 z-20'>
-						<TableRow className='sticky *:bg-table-head'>
-							<TableHead className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+						<TableRow className='sticky top-0 *:bg-table-head'>
+							<TableHead className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky xl:left-0'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
-							<TableHead className='left-[var(--sticky-left-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+							<TableHead className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky xl:left-[var(--sticky-left-col-width)]'>
 								{t('ns_erp:fields.shoestyle_codefactory')}
 							</TableHead>
-							<TableHead className='left-[calc(2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
+							<TableHead className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
 								{t('ns_erp:fields.mat_ecolor')}
 							</TableHead>
 							<TableHead>Size</TableHead>
 							<TableHead
 								align='right'
-								className='right-[var(--row-action-col-width)] z-20 w-28 min-w-28 bg-background xl:sticky'>
+								className='z-20 w-28 min-w-28 bg-background xl:sticky xl:right-[var(--row-action-col-width)]'>
 								{t('ns_common:common_fields.total')}
 							</TableHead>
 							<TableHead
 								align='right'
-								className='right-0 z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky'>
+								className='z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky xl:right-0'>
 								<span className='sr-only'>Action</span>
 							</TableHead>
 						</TableRow>
@@ -70,7 +74,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						<TableRow className='sticky'>
 							<TableHead
 								align='center'
-								className='sticky left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 xl:sticky xl:left-0'>
 								<Input
 									placeholder='Search ...'
 									className='w-full border-none font-normal shadow-none'
@@ -79,7 +83,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='sticky left-[var(--sticky-left-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 xl:sticky xl:left-[var(--sticky-left-col-width)]'>
 								<Input
 									placeholder='Search ...'
 									className='w-full border-none font-normal shadow-none'
@@ -90,7 +94,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='sticky left-[calc(2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
 								<Input
 									placeholder='Search ...'
 									className='w-full border-none font-normal shadow-none'
@@ -107,12 +111,12 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='sticky right-[var(--row-action-col-width)] z-20 w-28 min-w-28 border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+								className='z-20 w-28 min-w-28 border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:right-[var(--row-action-col-width)]'>
 								<span className='sr-only'></span>
 							</TableHead>
 							<TableHead
 								align='center'
-								className='right-0 z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky'>
+								className='z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky xl:right-0'>
 								<span className='sr-only'></span>
 							</TableHead>
 						</TableRow>
