@@ -55,3 +55,5 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) 
 		</Element>
 	)
 })
+
+Typography.displayName = 'Typography'
