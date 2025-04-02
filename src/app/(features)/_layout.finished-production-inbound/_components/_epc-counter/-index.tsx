@@ -67,7 +67,7 @@ const ScanningCounter: React.FC = () => {
 			<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
 			<Typography variant='h6' className='inline-flex gap-x-1 text-xl font-bold'>
 				{formatIntlNumber(count)}
-				<Typography variant='small' className='text-xs font-medium'>
+				<Typography as='small' variant='small' className='text-xs font-medium'>
 					pcs
 				</Typography>
 			</Typography>
