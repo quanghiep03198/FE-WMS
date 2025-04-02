@@ -30,8 +30,8 @@ export enum Languages {
 }
 
 export enum PresetBreakPoints {
-	SMALL = '(min-width: 320px) and (max-width: 599px)',
-	MEDIUM = '(min-width: 600px) and (max-width: 1023px)',
+	SMALL = '(min-width: 360px) and (max-width: 767px)',
+	MEDIUM = '(min-width: 768px) and (max-width: 1023px)',
 	LARGE = '(min-width: 1024px) and (max-width: 1365px)',
 	EXTRA_LARGE = '(min-width: 1366px)',
 	ULTIMATE_LARGE = '(min-width: 1920px)'

@@ -102,11 +102,11 @@ module.exports = {
 			},
 			screens: {
 				sm: {
-					min: '320px',
-					max: '599px'
+					min: '360px',
+					max: '767px'
 				},
 				md: {
-					min: '600px',
+					min: '768px',
 					max: '1023px'
 				},
 				lg: {
