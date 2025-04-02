@@ -1,5 +1,6 @@
 import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Checkbox, Div, Icon, TableCell, TableRow } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { sortBy } from 'lodash'
@@ -151,13 +152,13 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 										/>
 									</Div>
 								</TableCell>
-								<TableCell>{size?.count ?? 0}</TableCell>
+								<TableCell>{formatIntlNumber(size?.count)}</TableCell>
 							</Div>
 						))}
 				</Div>
 			</TableCell>
 			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] w-24 min-w-24 font-medium'>
-				{aggregateSizeCount}
+				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-[var(--sticky-right-col-width)] !opacity-100'>
 				<DeleteOrderPopover data={data} />

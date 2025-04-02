@@ -168,13 +168,19 @@ const OrderSizeDetailTable: React.FC = () => {
 											onCheckedChange={toggleAllMatchedRowsSelected}
 										/>
 									</TableHead>
-									<TableHead className='left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+									<TableHead
+										align='left'
+										className='left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 										{t('ns_erp:fields.mo_no')}
 									</TableHead>
-									<TableHead className='left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+									<TableHead
+										align='left'
+										className='left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 										{t('ns_erp:fields.shoestyle_codefactory')}
 									</TableHead>
-									<TableHead className='left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
+									<TableHead
+										align='left'
+										className='left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
 										{t('ns_erp:fields.mat_ecolor')}
 									</TableHead>
 									<TableHead>Size</TableHead>

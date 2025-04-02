@@ -1,3 +1,4 @@
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Div, Typography } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import { Separator } from '@radix-ui/react-context-menu'
@@ -65,7 +66,7 @@ const ScanningCounter: React.FC = () => {
 			</Typography>
 			<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
 			<Typography variant='h6' className='inline-flex gap-x-1 text-xl font-bold'>
-				{count}
+				{formatIntlNumber(count)}
 				<Typography variant='small' className='text-xs font-medium'>
 					pcs
 				</Typography>
