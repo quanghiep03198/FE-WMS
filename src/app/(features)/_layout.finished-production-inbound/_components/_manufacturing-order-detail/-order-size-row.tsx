@@ -1,3 +1,4 @@
+import { NestedCell, NestedRow } from '@/app/(features)/_components/_shared/-horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
@@ -120,10 +121,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<Div
+							<NestedRow
 								key={size?.size_numcode}
 								className='group/cell inline-grid min-w-28 shrink-0 basis-28 grid-rows-2 divide-y last:flex-1'>
-								<TableCell className='bg-table-head font-medium'>
+								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
 										<button
@@ -151,9 +152,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 											}}
 										/>
 									</Div>
-								</TableCell>
-								<TableCell>{formatIntlNumber(size?.count)}</TableCell>
-							</Div>
+								</NestedCell>
+								<NestedCell>{formatIntlNumber(size?.count)}</NestedCell>
+							</NestedRow>
 						))}
 				</Div>
 			</TableCell>

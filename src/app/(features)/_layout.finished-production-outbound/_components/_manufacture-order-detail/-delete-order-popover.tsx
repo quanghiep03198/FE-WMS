@@ -45,7 +45,9 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 
 	return (
 		<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
-			<PopoverTrigger className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
+			<PopoverTrigger
+				role='button'
+				className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
 				<Icon name='Trash2' />
 			</PopoverTrigger>
 			<PopoverContent className='w-96 space-y-6' side='left' align='center' sideOffset={16}>

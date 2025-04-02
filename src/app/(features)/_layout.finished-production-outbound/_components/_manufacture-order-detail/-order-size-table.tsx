@@ -79,8 +79,9 @@ const OrderSizeDetailTable: React.FC = () => {
 						<TableRow className='sticky'>
 							<TableHead
 								align='center'
-								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 xl:sticky xl:left-0'>
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] xl:sticky xl:left-0'>
 								<Input
+									role='textbox'
 									placeholder='Search ...'
 									className='w-full border-none font-normal shadow-none'
 									onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
@@ -88,8 +89,9 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 xl:sticky xl:left-[var(--sticky-left-col-width)]'>
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] xl:sticky xl:left-[var(--sticky-left-col-width)]'>
 								<Input
+									role='textbox'
 									placeholder='Search ...'
 									className='w-full border-none font-normal shadow-none'
 									onChange={(e) =>
@@ -99,8 +101,9 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
 								<Input
+									role='textbox'
 									placeholder='Search ...'
 									className='w-full border-none font-normal shadow-none'
 									onChange={(e) =>
@@ -116,7 +119,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='z-20 w-28 min-w-28 border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:right-[var(--row-action-col-width)]'>
+								className='z-20 w-28 min-w-28 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:right-[var(--row-action-col-width)]'>
 								<span className='sr-only'></span>
 							</TableHead>
 							<TableHead

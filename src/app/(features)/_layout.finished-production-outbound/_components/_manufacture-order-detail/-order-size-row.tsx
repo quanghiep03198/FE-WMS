@@ -1,3 +1,4 @@
+import { NestedCell, NestedRow } from '@/app/(features)/_components/_shared/-horizontal-nested-table'
 import { FALLBACK_ORDER_VALUE } from '@/app/(features)/_layout.finished-production-inbound/_apis/inbound-rfid.api'
 import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
@@ -39,10 +40,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<Div
+							<NestedRow
 								key={size?.size_numcode}
 								className='group/cell inline-grid min-w-20 shrink-0 basis-20 grid-rows-2 divide-y last:flex-1'>
-								<TableCell className='bg-table-head font-medium'>
+								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
 										<DeleteSizePopover
@@ -54,9 +55,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 											}}
 										/>
 									</Div>
-								</TableCell>
-								<TableCell>{size?.count ?? 0}</TableCell>
-							</Div>
+								</NestedCell>
+								<NestedCell>{size?.count ?? 0}</NestedCell>
+							</NestedRow>
 						))}
 				</Div>
 			</TableCell>

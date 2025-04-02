@@ -160,6 +160,7 @@ const OrderSizeDetailTable: React.FC = () => {
 								<TableRow className='sticky *:bg-table-head'>
 									<TableHead className='sticky left-0 z-20 w-[var(--row-selection-col-width)]'>
 										<Checkbox
+											role='checkbox'
 											checked={
 												(isAllMatchingRowsSelected ||
 													(isSomeMatchingRowsSelected && 'indeterminate')) as CheckedState
@@ -200,8 +201,9 @@ const OrderSizeDetailTable: React.FC = () => {
 										className='sticky left-0 z-20 w-[var(--row-selection-col-width)] min-w-[var(--row-selection-col-width)]'></TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
+										className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
 										<Input
+											role='textbox'
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
@@ -209,8 +211,9 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] p-0'>
+										className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
 										<Input
+											role='textbox'
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
 											onChange={(e) =>
@@ -223,8 +226,9 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='center'
-										className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 p-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+										className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 										<Input
+											role='textbox'
 											placeholder='Search ...'
 											className='w-full border-none font-normal'
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mat_ecolor: e.target.value }))}

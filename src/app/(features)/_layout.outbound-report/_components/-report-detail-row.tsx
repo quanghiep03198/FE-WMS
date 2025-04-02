@@ -1,3 +1,4 @@
+import { NestedCell, NestedRow } from '@/app/(features)/_components/_shared/-horizontal-nested-table'
 import { IOutboundReport } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
@@ -27,14 +28,12 @@ export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number]
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<Div
-								key={size?.size_numcode}
-								className='group/cell inline-grid min-w-28 shrink-0 basis-28 grid-rows-2 divide-y last:flex-1'>
-								<TableCell className='bg-table-head font-medium'>
-									<Div className='flex items-center gap-x-2'>{size?.size_numcode}</Div>
-								</TableCell>
-								<TableCell>{formatIntlNumber(size?.qty ?? 0)}</TableCell>
-							</Div>
+							<NestedRow key={size?.size_numcode} className=''>
+								<NestedCell className='bg-table-head px-4 py-2 font-medium first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0'>
+									{size?.size_numcode}
+								</NestedCell>
+								<NestedCell>{formatIntlNumber(size?.qty ?? 0)}</NestedCell>
+							</NestedRow>
 						))}
 				</Div>
 			</TableCell>
