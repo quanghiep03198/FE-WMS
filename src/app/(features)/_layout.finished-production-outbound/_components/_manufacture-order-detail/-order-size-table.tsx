@@ -1,6 +1,6 @@
 import { Div, Icon, Input, Table, TableBody, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
-import { useResetState, useSize } from 'ahooks'
-import { useMemo, useRef } from 'react'
+import { useResetState } from 'ahooks'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
@@ -9,7 +9,6 @@ import TableDataRow from './-order-size-row'
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const { scanningState, scannedOrders } = usePageContext('scanningState', 'scannedOrders')
-	const tableWrapperRef = useRef<HTMLDivElement>(null)
 	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>({
 		mo_no: '',
 		mat_ecolor: '',
@@ -30,15 +29,15 @@ const OrderSizeDetailTable: React.FC = () => {
 			: []
 	}, [scannedOrders, columnFilters])
 
-	const tableWrapperSize = useSize(tableWrapperRef)
-
 	return (
 		<Div
 			className='relative flex h-full max-h-full max-w-full flex-1 basis-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
-			ref={tableWrapperRef}>
-			<Div
-				style={{ height: tableWrapperSize?.height }}
-				className='flow-root w-full max-w-full overflow-scroll rounded-lg'>
+			style={
+				{
+					'--table-footer-height': '2rem'
+				} as React.CSSProperties
+			}>
+			<Div className='h-[calc(var(--outlet-wrapper-height)-2*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'>
 				<Table
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
@@ -49,13 +48,19 @@ const OrderSizeDetailTable: React.FC = () => {
 					}>
 					<TableHeader className='sticky top-0 z-20'>
 						<TableRow className='sticky top-0 *:bg-table-head'>
-							<TableHead className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky xl:left-0'>
+							<TableHead
+								align='left'
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky xl:left-0'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
-							<TableHead className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky xl:left-[var(--sticky-left-col-width)]'>
+							<TableHead
+								align='left'
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky xl:left-[var(--sticky-left-col-width)]'>
 								{t('ns_erp:fields.shoestyle_codefactory')}
 							</TableHead>
-							<TableHead className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
+							<TableHead
+								align='left'
+								className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
 								{t('ns_erp:fields.mat_ecolor')}
 							</TableHead>
 							<TableHead>Size</TableHead>
@@ -139,7 +144,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						</Div>
 					)}
 				{scanningState === 'pending' && (
-					<Div className='absolute inset-0 z-10 grid place-content-center text-center text-sm text-muted-foreground'>
+					<Div className='absolute inset-0 z-10 grid flex-1 place-content-center text-center text-sm text-muted-foreground'>
 						<Typography className='inline-flex items-center gap-x-2'>
 							<Icon name='LoaderCircle' size={24} className='animate-spin' />
 							Loading ...
@@ -147,7 +152,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					</Div>
 				)}
 			</Div>
-			<Div className='flex basis-[2rem] items-center justify-center gap-x-2 p-3 text-center text-sm text-muted-foreground'>
+			<Div className='flex basis-[var(--table-footer-height)] items-center justify-center gap-x-2 p-3 text-center text-sm text-muted-foreground'>
 				<Icon name='Table2' size={20} strokeWidth={1.5} />
 				{t('ns_inoutbound:description.outbound_table_caption')}
 			</Div>

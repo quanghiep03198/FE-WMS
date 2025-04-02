@@ -99,9 +99,9 @@ const OutboundForm: React.FC = () => {
 												autoComplete='off'
 												placeholder='xxxx-xxxx-xxxx'
 												className={cn(
-													'tracking-wider placeholder:tracking-widest',
+													'bg-background tracking-wider placeholder:tracking-widest',
 													form.getFieldState('po').error &&
-														'border-destructive bg-background focus-within:border-destructive'
+														'border-destructive focus-within:border-destructive'
 												)}
 												value={field.value}
 												onClick={(e) => e.stopPropagation()}
@@ -162,7 +162,7 @@ const OutboundForm: React.FC = () => {
 						<Label htmlFor=''>{t('ns_common:confirmation.understand_and_proceed')}</Label>
 					</Div>
 				</Div>
-				<Div className='grid grid-cols-2 gap-2 sm:grid-cols-1'>
+				<Div className='grid grid-cols-2 items-end gap-2 sm:grid-cols-1'>
 					<Button type='submit' size='lg' disabled={isPending || !isConfirmed}>
 						<Icon
 							name={isPending ? 'LoaderCircle' : 'Check'}
@@ -186,6 +186,6 @@ const OutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`h-full flex items-stretch gap-y-6 flex-col border rounded-md p-6 sm:p-0 sm:border-none`
+const Form = tw.form`h-full flex items-stretch gap-y-6 flex-col`
 
 export default OutboundForm

@@ -1,8 +1,9 @@
 import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
-import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
+import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import useEffectOnce from '@/common/hooks/use-effect-once'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -31,6 +32,7 @@ const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const { user, token, setAccessToken } = useAuth()
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
 		usePageContext(
@@ -178,16 +180,24 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='flex h-full flex-1 flex-col items-stretch justify-center rounded-md border'>
-			<Div className='hidden items-center border-b px-6 py-2 @6xl:flex'>
-				<Typography variant='h6' className='inline-flex items-center gap-x-2'>
-					<Icon name='Tags' size={28} /> EPC Data
+		<Div
+			className='flex h-full flex-1 flex-col items-stretch justify-between overflow-clip rounded-md border'
+			style={
+				{
+					'--data-list-header-height': '36px'
+				} as React.CSSProperties
+			}>
+			{/* Datalist header */}
+			<Div className='hidden items-center justify-between border-b p-3 @6xl:flex'>
+				<Typography className='ml-2 inline-flex items-center gap-x-1 text-lg font-medium'>
+					<Icon name='Tags' size={24} /> EPC Data
 				</Typography>
 			</Div>
+			{/* Datalist body */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[23vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[75vh] md:h-[23vh]'>
+					className='z-10 flex h-[200px] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-80'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -198,7 +208,7 @@ const ScannedEpcList: React.FC = () => {
 							return (
 								<Div
 									key={virtualItem.index}
-									className='absolute left-auto right-auto top-0 mb-1 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none sm:px-2'
+									className='absolute left-auto right-auto top-0 mb-1 flex h-10 w-full justify-between whitespace-nowrap border-b p-2 uppercase transition-all duration-75 last:border-none sm:px-2'
 									style={{
 										height: virtualItem.size,
 										transform: `translateY(${virtualItem.start}px)`
@@ -231,15 +241,21 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[23vh] place-content-center @6xl:h-[75vh] md:h-[30vh]'>
+				<Div className='z-10 grid h-52 place-content-center @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-80'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
-			<Div className='block border-t p-2 xxl:hidden'>
-				<OrderSizeTableDialog />
+			{/* Datalist footer */}
+			<Div className='grid basis-auto gap-1.5 border-t p-2 @2xl:grid-cols-2'>
+				<Div className='hidden @2xl:block'>
+					<OrderSizeTableDialog />
+				</Div>
+				<Button size={isExtraLargeScreen ? 'default' : 'lg'} variant='secondary'>
+					<Icon name='RotateCw' role='img' /> {t('ns_common:actions.reload')}
+				</Button>
 			</Div>
 		</Div>
 	)
