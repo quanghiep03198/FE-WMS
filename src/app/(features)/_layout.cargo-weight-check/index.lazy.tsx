@@ -8,7 +8,7 @@ import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-
 import DatePickerFilter from './_components/-date-picker-filter'
 import ReportMasterTable from './_components/-report-master-table'
 
-export const Route = createLazyFileRoute('/(features)/_layout/product-incoming-inspection/')({
+export const Route = createLazyFileRoute('/(features)/_layout/cargo-weight-check/')({
 	component: Page
 })
 
@@ -19,7 +19,7 @@ function Page() {
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/product-incoming-inspection', text: t('ns_common:navigation.cargo_weight_check') }])
+		setBreadcrumb([{ to: '/cargo-weight-check', text: t('ns_common:navigation.cargo_weight_check') }])
 	}, [i18n.language])
 
 	return (
