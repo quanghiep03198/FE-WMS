@@ -1,5 +1,6 @@
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
 import FontSelect from './_components/-font-select'
@@ -15,17 +16,23 @@ function Page() {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='space-y-6'>
-			<PageHeader>
-				<PageTitle>{t('ns_common:navigation.settings')}</PageTitle>
-				<PageDescription>{t('ns_preference:captions.appearance')}</PageDescription>
-			</PageHeader>
-			<Separator />
-			<Div className='max-w-sm space-y-8'>
-				<FontSelect />
-				<LanguageSelect />
-				<ThemeRadioGroup />
+		<Fragment>
+			<head>
+				<title>{t('ns_common:navigation.settings')}</title>
+				<meta name='description' content={t('ns_preference:captions.appearance')} />
+			</head>
+			<Div className='space-y-6'>
+				<PageHeader>
+					<PageTitle>{t('ns_common:navigation.settings')}</PageTitle>
+					<PageDescription>{t('ns_preference:captions.appearance')}</PageDescription>
+				</PageHeader>
+				<Separator />
+				<Div className='max-w-sm space-y-8'>
+					<FontSelect />
+					<LanguageSelect />
+					<ThemeRadioGroup />
+				</Div>
 			</Div>
-		</Div>
+		</Fragment>
 	)
 }

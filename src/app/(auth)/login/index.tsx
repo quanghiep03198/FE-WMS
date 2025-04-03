@@ -3,7 +3,6 @@ import useAuth from '@/common/hooks/use-auth'
 import Loading from '@/components/shared/loading'
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import { Helmet } from 'react-helmet'
 import PageComposition from './_components/-page-composition'
 
 export const Route = createFileRoute('/(auth)/login/')({
@@ -24,10 +23,10 @@ function LoginPage() {
 
 	return (
 		<Fragment>
-			<Helmet>
+			<head>
 				<title>Login</title>
 				<meta name='description' content='Warehouse management system authentication' />
-			</Helmet>
+			</head>
 			<PageComposition.Container>
 				<PageComposition.HomeNavigator />
 				<PageComposition.ThemeSelector />

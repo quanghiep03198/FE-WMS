@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import { Helmet } from 'react-helmet'
 import GridBackground from '../_components/_shared/-grid-background'
 import PageComposition from './_components/-page-composition'
 import { PageProvider } from './_contexts/-page-context'
@@ -13,10 +12,8 @@ export const Route = createFileRoute('/(public)/')({
 export default function Page() {
 	return (
 		<Fragment>
-			<Helmet>
-				<title>Warehouse Management System</title>
-				<meta name='description' content='Greenland Warehouse Management System' />
-			</Helmet>
+			<title>Warehouse Management System</title>
+			<meta name='description' content='Greenland Warehouse Management System' />
 			<PageProvider>
 				<PageComposition />
 			</PageProvider>

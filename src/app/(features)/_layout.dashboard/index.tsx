@@ -2,7 +2,6 @@ import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-con
 import { Div, Separator } from '@/components/ui'
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { MonthPickerFilter } from '../_components/_shared/-month-picker-filter'
 import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
@@ -25,7 +24,10 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.dashboard')} />
+			<head>
+				<title>{t('ns_common:navigation.dashboard')}</title>
+				<meta name='description' content={t('ns_dashboard:dashboard_description')} />
+			</head>
 			<Div className='z-10 flex flex-col gap-y-6 @container'>
 				<Div className='flex items-center justify-between gap-4'>
 					<PageHeader className='basis-1/2'>

@@ -2,7 +2,6 @@ import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-con
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
 import { MonthPickerFilter } from './_components/-month-picker-filter'
@@ -24,7 +23,10 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.inventory_management')} />
+			<head>
+				<title>{t('ns_common:navigation.inventory_management')}</title>
+				<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
+			</head>
 			<Div as='section' className='space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>

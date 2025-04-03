@@ -1,6 +1,6 @@
 import UnavailableService from '@/app/_components/_errors/-unavailable-service'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
 
@@ -18,5 +18,12 @@ function Page() {
 		setBreadcrumb([{ to: '/outbound-report', text: t('ns_common:navigation.report_management') }])
 	}, [i18n.language])
 
-	return <UnavailableService />
+	return (
+		<Fragment>
+			<head>
+				<title>{t('ns_common:navigation.report_management')}</title>
+			</head>
+			<UnavailableService />
+		</Fragment>
+	)
 }

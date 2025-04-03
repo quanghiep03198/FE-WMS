@@ -3,7 +3,6 @@ import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-con
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import WarehouseFormDialog from './_components/-warehouse-form'
 import WarehouseList from './_components/-warehouse-list'
@@ -30,7 +29,10 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.warehouse_management')} />
+			<head>
+				<title>{t('ns_common:navigation.warehouse_management')}</title>
+				<meta name='description' content={t('ns_warehouse:headings.warehouse_list_description')} />
+			</head>
 			<PageProvider>
 				<Div className='space-y-6'>
 					<WarehouseListHeading />

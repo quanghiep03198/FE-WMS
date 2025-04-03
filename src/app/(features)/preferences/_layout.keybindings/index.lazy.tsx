@@ -4,6 +4,7 @@ import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { NavigationConfig, navigationConfig } from '@/configs/navigation.config'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
 
@@ -70,18 +71,24 @@ function KeybindingsPage() {
 	]
 
 	return (
-		<Div className='space-y-6'>
-			<PageHeader>
-				<PageTitle>{t('ns_common:navigation.keyboard_shortcut')}</PageTitle>
-				<PageDescription>{t('ns_preference:captions.keybindings')}</PageDescription>
-			</PageHeader>
-			<Separator />
-			<DataTable
-				data={navigationCommands.concat(extendedCommands)}
-				enableColumnResizing
-				columns={columns}
-				containerProps={{ className: 'xxl:h-[50vh]' }}
-			/>
-		</Div>
+		<Fragment>
+			<head>
+				<title>{t('ns_common:navigation.keyboard_shortcut')}</title>
+				<meta name='description' content={t('ns_preference:captions.keybindings')} />
+			</head>
+			<Div className='space-y-6'>
+				<PageHeader>
+					<PageTitle>{t('ns_common:navigation.keyboard_shortcut')}</PageTitle>
+					<PageDescription>{t('ns_preference:captions.keybindings')}</PageDescription>
+				</PageHeader>
+				<Separator />
+				<DataTable
+					data={navigationCommands.concat(extendedCommands)}
+					enableColumnResizing
+					columns={columns}
+					containerProps={{ className: 'xxl:h-[50vh]' }}
+				/>
+			</Div>
+		</Fragment>
 	)
 }

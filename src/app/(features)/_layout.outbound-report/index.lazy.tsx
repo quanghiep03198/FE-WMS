@@ -2,7 +2,6 @@ import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-con
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
 import DatePickerFilter from './_components/-date-picker-filter'
@@ -29,7 +28,10 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.export_management')} />
+			<head>
+				<title>{t('ns_common:navigation.export_management')}</title>
+				<meta name='description' content={t('ns_inoutbound:description.daily_outbound_report')} />
+			</head>
 			<Div as='section' className='space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>

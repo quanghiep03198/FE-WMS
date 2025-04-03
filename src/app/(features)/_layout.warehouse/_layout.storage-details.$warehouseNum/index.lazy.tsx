@@ -5,7 +5,6 @@ import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
 import { WAREHOUSE_PROVIDE_TAG } from '../_apis/warehouse.api'
@@ -59,7 +58,10 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.warehouse_management')} />
+			<head>
+				<title>{t('ns_common:navigation.warehouse_management')}</title>
+				<meta name='description' content={t('ns_warehouse:headings.storage_list_description')} />
+			</head>
 			<PageProvider>
 				<Div className='space-y-6'>
 					<StorageListHeading />

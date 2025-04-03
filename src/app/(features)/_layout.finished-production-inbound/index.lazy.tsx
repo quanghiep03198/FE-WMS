@@ -1,9 +1,8 @@
+import HostCompatibleAlert from '@/app/(features)/_components/_shared/-host-compatible-alert'
 import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import HostCompatibleAlert from './_components/-host-compatible-alert'
 import PageNavigationBlocker from './_components/-navigation-blocker'
 import PageComposition from './_components/-page-composition'
 import ScannedEPCsCounter from './_components/_epc-counter/-index'
@@ -43,10 +42,10 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet>
+			<head>
 				<title>{t('ns_common:navigation.fp_inoutbound')}</title>
-				<meta name='description' content='RFID Scanner Integration' />
-			</Helmet>
+				<meta name='description' content='RFID Scanner integration for inbound process' />
+			</head>
 			<HostCompatibleAlert />
 			<PageProvider>
 				<PageComposition.Container>

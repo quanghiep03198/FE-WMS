@@ -1,6 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import UnavailableService from '@/app/_components/_errors/-unavailable-service'
@@ -20,7 +19,9 @@ function Page() {
 
 	return (
 		<Fragment>
-			<Helmet title={t('ns_common:navigation.transfer_managment')} />
+			<head>
+				<title>{t('ns_common:navigation.transfer_managment')}</title>
+			</head>
 			<UnavailableService />
 		</Fragment>
 	)
