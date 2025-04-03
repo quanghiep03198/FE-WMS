@@ -1,7 +1,6 @@
 export default {
 	compare_from_last_month: '{{value}} so với tháng trước',
-	dashboard_description:
-		'Cung cấp cái nhìn tổng quan về các chỉ số chính, bao gồm thống kê và hoạt động nhập/xuất kho',
+	dashboard_description: 'Cung cấp số liệu tổng quan về các chỉ số chính, bao gồm thống kê và hoạt động nhập/xuất kho',
 	inoutbound_overview: 'Tổng quan nhập/xuất kho',
 	statistic: {
 		order_number: 'Số đơn hàng',
