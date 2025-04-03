@@ -26,16 +26,7 @@ const Navbar: React.FC<{ ref: RefObject<HTMLElement> }> = ({ ref }) => {
 
 	return (
 		<Fragment>
-			<Div
-				ref={ref}
-				as='header'
-				role='menubar'
-				className='sticky top-0 z-40 flex h-20 items-center bg-background px-6 sm:px-4'
-				style={
-					{
-						'--nav-height': '80px'
-					} as React.CSSProperties
-				}>
+			<Div ref={ref} as='header' role='menubar' className='top-0 flex h-20 items-center bg-background px-6 sm:px-4'>
 				<Div
 					as='nav'
 					role='menu'
