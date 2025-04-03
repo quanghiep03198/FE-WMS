@@ -59,8 +59,10 @@ npm run dev
 ## Folder Structure
 
 ```
+├── .github
 ├── .husky
 ├── .storybook
+├── infrastructure
 ├── public
 ├── src
 │   ├── app
@@ -95,6 +97,11 @@ npm run dev
 │   ├── report-web-vitals.ts
 │   ├── route-tree.gen.tsx
 │   └── vite-env.d.ts
+├── tests
+│   ├── components
+│   ├── hooks
+│   ├── utils
+│   └── setup.ts
 ├── .eslintrc.cjs
 ├── .prettierrc
 ├── .gitignore
