@@ -13,7 +13,7 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, useEventListener, usePrevious, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash'
 import { useCallback, useRef, useState } from 'react'
@@ -91,6 +91,9 @@ const ScannedEpcList: React.FC = () => {
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
 		setScanningState('pending')
+		if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+			abortControllerRef.current.abort()
+		}
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -155,12 +158,6 @@ const ScannedEpcList: React.FC = () => {
 	}
 
 	useEffectOnce(() => {
-		if (abortControllerRef.current) abortControllerRef.current.abort()
-		fetchServerEvent()
-	})
-
-	useEventListener('refetchSSE', () => {
-		if (abortControllerRef.current) abortControllerRef.current.abort()
 		fetchServerEvent()
 	})
 
@@ -197,7 +194,7 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[200px] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-80'>
+					className='z-10 flex h-[24vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-[30vh]'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -241,7 +238,7 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-52 place-content-center @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-80'>
+				<Div className='z-10 grid h-[24vh] place-content-center @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-[30vh]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -253,7 +250,7 @@ const ScannedEpcList: React.FC = () => {
 				<Div className='hidden @2xl:block'>
 					<OrderSizeTableDialog />
 				</Div>
-				<Button size={isExtraLargeScreen ? 'default' : 'lg'} variant='secondary'>
+				<Button size={isExtraLargeScreen ? 'default' : 'lg'} variant='secondary' onClick={() => fetchServerEvent()}>
 					<Icon name='RotateCw' role='img' /> {t('ns_common:actions.reload')}
 				</Button>
 			</Div>
