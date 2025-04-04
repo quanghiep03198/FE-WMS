@@ -238,7 +238,7 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[24vh] place-content-center @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-[30vh]'>
+				<Div className='z-10 grid h-[23vh] place-content-center @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-[30vh]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -246,7 +246,7 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto gap-1.5 border-t p-2 @2xl:grid-cols-2'>
+			<Div className='grid basis-auto gap-1.5 border-t p-1 @2xl:grid-cols-2'>
 				<Div className='hidden @2xl:block'>
 					<OrderSizeTableDialog />
 				</Div>

@@ -1,5 +1,6 @@
 import { Div, Icon, Input, Table, TableBody, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
 import { useResetState } from 'ahooks'
+import { sortBy } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -31,13 +32,13 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative flex h-full max-h-full max-w-full flex-1 basis-full flex-col justify-between divide-y overflow-hidden rounded-lg border'
+			className='relative flex h-full max-h-full max-w-full flex-1 basis-full flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border'
 			style={
 				{
 					'--table-footer-height': '2rem'
 				} as React.CSSProperties
 			}>
-			<Div className='h-[calc(var(--outlet-wrapper-height)-2*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'>
+			<Div className='h-[calc(var(--outlet-wrapper-height)-1.5*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'>
 				<Table
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
@@ -131,7 +132,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					</TableHeader>
 					{Array.isArray(filteredScannedOrders) && filteredScannedOrders.length > 0 && (
 						<TableBody>
-							{filteredScannedOrders.map((order) => {
+							{sortBy(filteredScannedOrders, 'mo_no').map((order) => {
 								return <TableDataRow key={order.mo_no} data={order} />
 							})}
 						</TableBody>

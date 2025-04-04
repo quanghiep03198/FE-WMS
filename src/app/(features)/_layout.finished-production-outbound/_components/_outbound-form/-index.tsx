@@ -18,14 +18,16 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
+	SelectFieldControl,
 	Separator,
 	Typography
 } from '@/components/ui'
-import { MultiSelectFieldControl } from '@/components/ui/@hook-form/multi-select-field-control'
+import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useDebounce, useResetState, useUpdateEffect } from 'ahooks'
-import { useId, useRef, useState } from 'react'
+import { omit, sortBy } from 'lodash'
+import { useId, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -46,10 +48,14 @@ const OutboundForm: React.FC = () => {
 		mode: 'onChange',
 		defaultValues: {
 			po: '',
-			mo_no: []
+			mo_no: '',
+			size_numcode: '',
+			size_qty: 0,
+			qty: undefined
 		}
 	})
 	const currentPurchaseOrderValue = form.watch('po')
+	const currentCommandNumber = form.watch('mo_no')
 	const debouncedSearchTerm = useDebounce(currentPurchaseOrderValue, { wait: 500 })
 	const { data: purchaseOrders } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation()
@@ -58,6 +64,7 @@ const OutboundForm: React.FC = () => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync(data)
+			console.log('data :>> ', omit(data, 'size_qty'))
 			resetConfirm()
 			toast.success(t('ns_common:notification.success'), { id })
 			form.reset()
@@ -72,34 +79,33 @@ const OutboundForm: React.FC = () => {
 		}
 	}, [purchaseOrders, currentPurchaseOrderValue])
 
+	const sizeDataList = useMemo(() => {
+		const currentCommandNumberData = scannedOrders.find((item) => item.mo_no === currentCommandNumber)
+		return Array.isArray(currentCommandNumberData?.sizes)
+			? sortBy(currentCommandNumberData.sizes, 'size_numcode')
+			: []
+	}, [scannedOrders, currentCommandNumber])
+
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmit)}>
-				<MultiSelectFieldControl
-					label={t('ns_erp:fields.mo_no')}
-					name='mo_no'
-					datalist={scannedOrders}
-					labelField='mo_no'
-					valueField='mo_no'
-				/>
-
 				<FormField
 					control={form.control}
 					name='po'
 					render={({ field }) => {
 						return (
-							<FormItem className='flex flex-col'>
+							<FormItem>
 								<FormLabel htmlFor='po'>{t('ns_erp:fields.po')}</FormLabel>
 								<FormControl>
 									<Popover defaultOpen={false} open={autoCompleteOpen} onOpenChange={setAutoCompleteOpen}>
-										<PopoverTrigger>
+										<PopoverTrigger className='w-full'>
 											<Input
 												ref={inputRef}
 												id='po'
 												autoComplete='off'
 												placeholder='xxxx-xxxx-xxxx'
 												className={cn(
-													'bg-background tracking-wider placeholder:tracking-widest',
+													'w-full bg-background tracking-wider placeholder:tracking-widest',
 													form.getFieldState('po').error &&
 														'border-destructive focus-within:border-destructive'
 												)}
@@ -146,7 +152,34 @@ const OutboundForm: React.FC = () => {
 						)
 					}}
 				/>
-
+				<SelectFieldControl
+					label={t('ns_erp:fields.mo_no')}
+					name='mo_no'
+					datalist={sortBy(scannedOrders, 'mo_no')}
+					labelField='mo_no'
+					valueField='mo_no'
+				/>
+				<SelectFieldControl
+					label='Size'
+					name='size_numcode'
+					datalist={sizeDataList}
+					labelField='size_numcode'
+					valueField='size_numcode'
+					disabled={!currentCommandNumber}
+					onValueChange={(value) => {
+						form.setValue('size_qty', sizeDataList.find((item) => item.size_numcode === value)?.count ?? 0)
+					}}
+				/>
+				<InputFieldControl
+					label={t('ns_common:common_fields.quantity_with_limit', {
+						limit: form.watch('size_qty'),
+						defaultValue: null
+					})}
+					disabled={!form.watch('size_numcode')}
+					name='qty'
+					type='number'
+					placeholder='0'
+				/>
 				<Div className='col-span-full space-y-3'>
 					<Div className='space-y-1.5 leading-none'>
 						<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
@@ -159,10 +192,10 @@ const OutboundForm: React.FC = () => {
 					<Separator />
 					<Div className='inline-flex items-center gap-x-2'>
 						<Checkbox id={checkboxId} checked={isConfirmed} onCheckedChange={(value) => setIsConfirmed(value)} />
-						<Label htmlFor=''>{t('ns_common:confirmation.understand_and_proceed')}</Label>
+						<Label htmlFor={checkboxId}>{t('ns_common:confirmation.understand_and_proceed')}</Label>
 					</Div>
 				</Div>
-				<Div className='grid grid-cols-2 items-end gap-2 sm:grid-cols-1'>
+				<Div className='col-span-full grid grid-cols-2 items-end gap-2 sm:grid-cols-1'>
 					<Button type='submit' size='lg' disabled={isPending || !isConfirmed}>
 						<Icon
 							name={isPending ? 'LoaderCircle' : 'Check'}
@@ -171,12 +204,7 @@ const OutboundForm: React.FC = () => {
 						/>
 						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.submit')}
 					</Button>
-					<Button
-						variant='outline'
-						type='button'
-						size='lg'
-						disabled={isPending || !isConfirmed}
-						onClick={() => form.reset()}>
+					<Button variant='outline' type='button' size='lg' disabled={isPending} onClick={() => form.reset()}>
 						<Icon name='Undo' role='img' />
 						{t('ns_common:actions.reset')}
 					</Button>
@@ -186,6 +214,6 @@ const OutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`h-full flex items-stretch gap-y-6 flex-col`
+const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 
 export default OutboundForm
