@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import React, { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
