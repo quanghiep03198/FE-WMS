@@ -141,7 +141,7 @@ const Sidebar = React.forwardRef<
 		return (
 			<div
 				className={cn(
-					'flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground xxl:w-[--sidebar-width-xxl]',
+					'flex h-full w-[--sidebar-width] flex-col overflow-x-auto bg-sidebar text-sidebar-foreground !scrollbar-none xxl:w-[--sidebar-width-xxl]',
 					className
 				)}
 				ref={ref}
@@ -280,21 +280,19 @@ const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<'main
 })
 SidebarInset.displayName = 'SidebarInset'
 
-const SidebarInput = React.forwardRef<React.ElementRef<typeof Input>, React.ComponentProps<typeof Input>>(
-	({ className, ...props }, ref) => {
-		return (
-			<Input
-				ref={ref}
-				data-sidebar='input'
-				className={cn(
-					'h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring',
-					className
-				)}
-				{...props}
-			/>
-		)
-	}
-)
+const SidebarInput: React.FC<React.ComponentProps<typeof Input>> = ({ className, ref, ...props }) => {
+	return (
+		<Input
+			ref={ref}
+			data-sidebar='input'
+			className={cn(
+				'h-8 w-full bg-background shadow-none focus-visible:ring-2 focus-visible:ring-sidebar-ring',
+				className
+			)}
+			{...props}
+		/>
+	)
+}
 SidebarInput.displayName = 'SidebarInput'
 
 const SidebarHeader = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(({ className, ...props }, ref) => {
