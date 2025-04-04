@@ -45,6 +45,7 @@ export * from './@core/toggle'
 // #endregion
 
 // #region Form field controls
+export { AutoCompleteFieldControl } from './@hook-form/auto-complete-field-control'
 export { ComboboxFieldControl } from './@hook-form/combobox-field-control'
 export { DatePickerFieldControl } from './@hook-form/date-picker-control'
 export { ForwardedRefInputFieldControl as InputFieldControl } from './@hook-form/input-field-control'

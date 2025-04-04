@@ -1,6 +1,13 @@
 import { z } from 'zod'
 
-export const outboundValidator = z
+export const standardOutboundValidator = z.object({
+	po: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	mo_no: z
+		.array(z.string(), { required_error: 'ns_validation:required' })
+		.nonempty({ message: 'ns_validation:required' })
+})
+
+export const detailedOutboundValidator = z
 	.object({
 		po: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 		mo_no: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
@@ -23,4 +30,6 @@ export const outboundValidator = z
 		}
 	)
 
-export type OutboundFormValues = z.infer<typeof outboundValidator>
+export type StandardOutboundFormValues = z.infer<typeof standardOutboundValidator>
+export type DetailedOutBoundFormValues = z.infer<typeof detailedOutboundValidator>
+export type OutboundFormValues = StandardOutboundFormValues | DetailedOutBoundFormValues
