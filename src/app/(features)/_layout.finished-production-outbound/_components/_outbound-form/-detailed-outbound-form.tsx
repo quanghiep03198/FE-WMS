@@ -2,7 +2,7 @@ import { Div, Form as FormProvider, InputFieldControl, SelectFieldControl } from
 import { zodResolver } from '@hookform/resolvers/zod'
 import { sortBy } from 'lodash'
 import { useMemo } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -26,7 +26,8 @@ const DetailedOutboundForm = () => {
 	})
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation(form.reset)
 
-	const currentCommandNumber = form.watch('mo_no')
+	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
+	const currentSize = useWatch({ control: form.control, name: 'size_numcode' })
 
 	const sizeDataList = useMemo(() => {
 		const currentCommandNumberData = scannedOrders.find((item) => item.mo_no === currentCommandNumber)
@@ -78,7 +79,7 @@ const DetailedOutboundForm = () => {
 							limit: form.watch('size_qty'),
 							defaultValue: null
 						})}
-						disabled={!form.watch('size_numcode')}
+						disabled={!currentSize}
 						name='qty'
 						type='number'
 						placeholder='0'
