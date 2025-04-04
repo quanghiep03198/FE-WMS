@@ -4,8 +4,8 @@ import tw from 'tailwind-styled-components'
 
 const Footer: React.FC = () => {
 	return (
-		<Div as='footer' className='border-t bg-gradient-to-t from-accent/50 to-background px-6'>
-			{/* <Separator className='h-px rounded-full bg-foreground [mask-image:linear-gradient(90deg,transparent,white_50%,white_50%,transparent)]' /> */}
+		<Div as='footer' className='border-t bg-background/90 bg-opacity-90 px-6 mix-blend-screen'>
+			{/* <Separator className='mx-auto h-px max-w-7xl rounded-full bg-success [mask-image:linear-gradient(90deg,transparent,white_50%,white_50%,transparent)]' /> */}
 			<Div className='mx-auto max-w-7xl divide-y xxl:max-w-8xl'>
 				<Div className='flex flex-wrap items-start gap-y-10 py-12'>
 					<Div className='basis-1/5 space-y-4 sm:basis-full md:basis-1/3'>
