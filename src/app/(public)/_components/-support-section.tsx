@@ -17,11 +17,11 @@ const SupportSection: React.FunctionComponent = () => {
 
 	return (
 		<Div className='grid grid-cols-2 items-center justify-center gap-16 sm:grid-cols-1 md:grid-cols-1'>
-			<Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} className='' />
+			<Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
 			<Div
-				ref={ref}
 				id='cta'
 				as='section'
+				ref={ref}
 				className='animate-[fly-in_1s_ease] space-y-8 xl:space-y-12'
 				style={{
 					animationFillMode: 'both',
