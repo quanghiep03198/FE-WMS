@@ -39,7 +39,7 @@ function Page() {
 							<Div className='col-span-full row-span-6 flex-1 @6xl:order-last @6xl:col-span-1 @6xl:row-span-12'>
 								<ScannedEpcList />
 							</Div>
-							<Div className='order-last col-span-full flex-1 @6xl:order-2 @6xl:col-span-1 @6xl:row-span-8'>
+							<Div className='order-last col-span-full @6xl:order-2 @6xl:col-span-1 @6xl:row-span-8'>
 								<OutboundForm />
 							</Div>
 						</Div>

@@ -119,14 +119,14 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 								<PopoverTrigger
 									id={id}
 									disabled={disabled}
+									aria-invalid={isError}
 									className={cn(
 										buttonVariants({
 											variant: 'outline',
 											className:
-												'w-full justify-between font-normal hover:bg-background focus:border-primary'
+												'w-full justify-between font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
 										}),
-										triggerProps?.className,
-										getFieldState(name).error && 'border-destructive focus:border-destructive'
+										triggerProps?.className
 									)}
 									{...triggerProps}>
 									<FormControl>

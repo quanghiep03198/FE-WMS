@@ -1,5 +1,8 @@
 import { EpcCombinationFormValues } from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-combination.schema'
-import { InoutboundPayload } from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-inoutbound.schema'
+import {
+	InoutboundPayload,
+	OutboundFormValues
+} from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inbound/_schemas/exchange-epc.schema'
 import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inbound/_types'
 import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
@@ -64,8 +67,8 @@ export class RFIDService {
 		)
 	}
 
-	static async upsertOutboundInventory(payload: InoutboundPayload) {
-		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>('/rfid/outbound/update-stock', payload)
+	static async upsertOutboundInventory(payload: OutboundFormValues) {
+		return await axiosInstance.put<OutboundFormValues, ResponseBody<unknown>>('/rfid/outbound/update-stock', payload)
 	}
 
 	static async deleteScannedOutboundEpcs(filters: Record<string, string | number | boolean>) {

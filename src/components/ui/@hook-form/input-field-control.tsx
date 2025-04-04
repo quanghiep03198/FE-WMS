@@ -5,9 +5,9 @@ import React, { forwardRef, useEffect, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '..'
 import { BaseFieldControl } from '../../../common/types/hook-form'
-import { Input, InputProps } from '../@core/input'
+import { Input } from '../@core/input'
 
-export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & InputProps
+export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & React.ComponentProps<'input'>
 
 export function InputFieldControl<T extends FieldValues>(
 	props: InputFieldControlProps<T> & React.PropsWithRef<T> & React.RefAttributes<T>,
@@ -70,9 +70,10 @@ export function InputFieldControl<T extends FieldValues>(
 						<FormControl>
 							<Input
 								id={id}
+								aria-invalid={!!getFieldState(name).error}
 								className={cn(
 									className,
-									getFieldState(name).error && 'border-destructive bg-background focus:border-destructive',
+									'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
 									orientation === 'horizontal' && 'mb-2 block'
 								)}
 								value={value}
