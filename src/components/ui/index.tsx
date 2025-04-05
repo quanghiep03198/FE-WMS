@@ -49,6 +49,7 @@ export { AutoCompleteFieldControl } from './@hook-form/auto-complete-field-contr
 export { ComboboxFieldControl } from './@hook-form/combobox-field-control'
 export { DatePickerFieldControl } from './@hook-form/date-picker-control'
 export { ForwardedRefInputFieldControl as InputFieldControl } from './@hook-form/input-field-control'
+export { MultiSelectFieldControl } from './@hook-form/muti-select-field-control'
 export { SelectFieldControl } from './@hook-form/select-field-control'
 export { ForwardedRefTextareaFieldControl as TextareaFieldControl } from './@hook-form/textarea-control'
 // #endregion
@@ -61,6 +62,7 @@ export * from './@override/tooltip'
 // #region Customs
 export * from './@custom/div'
 export * from './@custom/divider'
+export * from './@custom/input-tag'
 export * from './@custom/month-picker'
 export * from './@custom/multi-select'
 export * from './@custom/swap'
