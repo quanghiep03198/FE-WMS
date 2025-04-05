@@ -18,16 +18,17 @@ import {
 	SheetTrigger,
 	buttonVariants
 } from '@/components/ui'
+import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 
 const Header: React.FunctionComponent = () => {
 	return (
-		<Div className='sticky top-0 z-20 h-20 border-b bg-background/90 mix-blend-overlay backdrop-blur-2xl'>
+		<Div className={cn('sticky top-0 z-50 h-20 transition-all duration-200')}>
 			<Div
 				as='nav'
-				className='mx-auto flex h-full max-w-7xl items-center justify-between p-6 sm:p-4 xxl:max-w-8xl'
+				className='mx-auto flex h-full max-w-7xl items-center justify-between rounded-b-lg border-b border-l border-r bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:p-4 xxl:max-w-8xl'
 				aria-label='Global'>
 				<Div className='inline-flex items-center gap-x-2'>
 					<NavHeaderDrawerMenu />
@@ -76,7 +77,7 @@ const NavHeaderActions: React.FC = () => {
 						className: 'gap-x-2'
 					})}>
 					Dashboard
-					<Icon name='ArrowRight' size={12} />
+					<ArrowRightIcon />
 				</Link>
 			) : (
 				<Link
