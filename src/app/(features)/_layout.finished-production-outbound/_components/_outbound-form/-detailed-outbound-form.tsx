@@ -1,10 +1,11 @@
+'use no memo'
+
 import { Div, Form as FormProvider, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { sortBy } from 'lodash'
 import { useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
@@ -21,7 +22,9 @@ const DetailedOutboundForm = () => {
 		defaultValues: {
 			po: '',
 			mo_no: '',
-			size_numcode: ''
+			size_numcode: '',
+			size_qty: 0,
+			qty: 0
 		}
 	})
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation(form.reset)
@@ -36,18 +39,9 @@ const DetailedOutboundForm = () => {
 			: []
 	}, [scannedOrders, currentCommandNumber])
 
-	const handleSubmit = async (data: DetailedOutBoundFormValues) => {
-		const id = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			await mutateAsync(data)
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id })
-		}
-	}
-
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit(handleSubmit)}>
+			<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
 				<Div className='col-span-1'>
 					<PurchaseOrderAutoComplete />
 				</Div>
