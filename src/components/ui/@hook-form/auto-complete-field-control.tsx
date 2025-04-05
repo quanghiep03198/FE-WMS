@@ -2,7 +2,7 @@
 
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
-import { CheckIcon } from '@radix-ui/react-icons'
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import React, { useId, useRef } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -55,17 +55,18 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
 						<Popover modal={true}>
 							<FormControl>
-								<PopoverTrigger className='w-full'>
+								<PopoverTrigger className='relative w-full'>
 									<Input
 										id={id}
 										autoComplete='off'
 										placeholder='xxxx-xxxx-xxxx'
 										aria-invalid={!!getFieldState(name).error}
-										className='aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
+										className='pr-9 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
 										value={field.value}
 										ref={resolvedRef}
 										onChange={field.onChange}
 									/>
+									<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50' />
 								</PopoverTrigger>
 							</FormControl>
 							<PopoverContent

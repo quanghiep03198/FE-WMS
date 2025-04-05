@@ -6,22 +6,22 @@ import { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import { FormField, FormItem, FormLabel, FormMessage } from '../@core/form'
 import {
-	MultiSelect,
-	MultiSelectContent,
-	MultiSelectInput,
-	MultiSelectItem,
-	MultiSelectList,
-	MultiSelectTrigger
-} from '../@custom/multi-select'
+	InputTag,
+	InputTagSelectContent,
+	InputTagSelectInput,
+	InputTagSelectItem,
+	InputTagSelectList,
+	InputTagTrigger
+} from '../@custom/input-tag'
 
-export type MultiSelectFieldControlProps<T extends FieldValues, D> = BaseFieldControl<T> & {
+export type InputTagFieldControlProps<T extends FieldValues, D> = BaseFieldControl<T> & {
 	datalist: Array<D>
 	labelField: keyof D
 	valueField: keyof D
 }
 
-export function MultiSelectFieldControl<T extends FieldValues, D extends Record<string, any>>(
-	props: MultiSelectFieldControlProps<T, D>
+export function InputTagFieldControl<T extends FieldValues, D extends Record<string, any>>(
+	props: InputTagFieldControlProps<T, D>
 ) {
 	const { control, getValues, getFieldState } = useFormContext()
 	const id = useId()
@@ -58,26 +58,26 @@ export function MultiSelectFieldControl<T extends FieldValues, D extends Record<
 							{label}
 						</FormLabel>
 					)}
-					<MultiSelect values={field.value} onValuesChange={field.onChange}>
-						<MultiSelectTrigger
+					<InputTag values={field.value} onValuesChange={field.onChange}>
+						<InputTagTrigger
 							id={id}
 							className={cn(
 								className,
 								isError && 'w-full border-destructive focus-within:border-destructive active:border-destructive'
 							)}>
-							<MultiSelectInput placeholder={placeholder} />
-						</MultiSelectTrigger>
-						<MultiSelectContent>
-							<MultiSelectList>
+							<InputTagSelectInput placeholder={placeholder} />
+						</InputTagTrigger>
+						<InputTagSelectContent>
+							<InputTagSelectList>
 								{Array.isArray(datalist) &&
 									datalist?.map((item) => (
-										<MultiSelectItem key={item[valueField]} value={item[valueField]}>
+										<InputTagSelectItem key={item[valueField]} value={item[valueField]}>
 											{item[labelField]}
-										</MultiSelectItem>
+										</InputTagSelectItem>
 									))}
-							</MultiSelectList>
-						</MultiSelectContent>
-					</MultiSelect>
+							</InputTagSelectList>
+						</InputTagSelectContent>
+					</InputTag>
 					<FormMessage />
 				</FormItem>
 			)}
