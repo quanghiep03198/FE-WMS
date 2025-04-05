@@ -1,5 +1,7 @@
+'use no memo'
+
 import { Form as FormProvider } from '@/components/ui'
-import { MultiSelectFieldControl } from '@/components/ui/@hook-form/multi-select-field-control'
+import { MultiSelectFieldControl } from '@/components/ui/@hook-form/muti-select-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { sortBy } from 'lodash'
 import { useForm } from 'react-hook-form'
@@ -19,7 +21,8 @@ const StandardOutboundForm: React.FC = () => {
 		defaultValues: {
 			po: '',
 			mo_no: []
-		}
+		},
+		mode: 'onChange'
 	})
 
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation(form.reset)

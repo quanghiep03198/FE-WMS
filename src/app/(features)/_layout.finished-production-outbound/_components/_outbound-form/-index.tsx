@@ -1,5 +1,3 @@
-'use no memo'
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
 
 import DetailedOutboundForm from './-detailed-outbound-form'
