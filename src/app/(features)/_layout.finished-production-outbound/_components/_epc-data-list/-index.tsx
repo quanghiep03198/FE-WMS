@@ -246,7 +246,7 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto gap-1.5 border-t p-1 @2xl:grid-cols-2'>
+			<Div className='grid basis-auto gap-1.5 border-t p-2 @2xl:grid-cols-2'>
 				<Div className='hidden @2xl:block'>
 					<OrderSizeTableDialog />
 				</Div>
