@@ -5,7 +5,7 @@ import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { RenderSubComponent } from '@/components/ui/@react-table/types'
+import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper, type Table as TTable } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
@@ -197,6 +197,39 @@ export const InventoryReportMasterTable: React.FC = () => {
 		}
 	})
 
+	const renderDetailTable = useMemoizedFn(({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
+		<InventoryReportDetailTable
+			info={pick(row.original, [
+				'po',
+				'mo_no',
+				'cust_shoestyle',
+				'shoes_style_code_factory',
+				'inv_type',
+				'inv_year_month'
+			])}
+			sizes={sortBy(row.original?.size_data, 'size_numcode')}
+		/>
+	))
+
+	const renderSlotRight = useMemoizedFn(() => (
+		<Fragment>
+			<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
+				<Button
+					size='icon'
+					variant='outline'
+					disabled={!data || data.length === 0}
+					onClick={() => handleDownloadExcel()}>
+					<Icon name='Download' />
+				</Button>
+			</Tooltip>
+			<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+				<Button size='icon' variant='outline' onClick={() => refetch()}>
+					<Icon name='RotateCw' />
+				</Button>
+			</Tooltip>
+		</Fragment>
+	))
+
 	return (
 		<Div className='relative space-y-10'>
 			<Div className='absolute left-0 top-0'>
@@ -208,42 +241,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
-				renderSubComponent={
-					(({ row }) => {
-						return (
-							<InventoryReportDetailTable
-								info={pick(row.original, [
-									'po',
-									'mo_no',
-									'cust_shoestyle',
-									'shoes_style_code_factory',
-									'inv_type',
-									'inv_year_month'
-								])}
-								sizes={sortBy(row.original?.size_data, 'size_numcode')}
-							/>
-						)
-					}) satisfies RenderSubComponent<IMonthlyInventoryReport>
-				}
+				renderSubComponent={renderDetailTable satisfies RenderSubComponent<IMonthlyInventoryReport>}
 				toolbarProps={{
-					slotRight: () => (
-						<Fragment>
-							<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-								<Button
-									size='icon'
-									variant='outline'
-									disabled={!data || data.length === 0}
-									onClick={() => handleDownloadExcel()}>
-									<Icon name='Download' />
-								</Button>
-							</Tooltip>
-							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-								<Button size='icon' variant='outline' onClick={() => refetch()}>
-									<Icon name='RotateCw' />
-								</Button>
-							</Tooltip>
-						</Fragment>
-					)
+					slotRight: renderSlotRight
 				}}
 			/>
 		</Div>
