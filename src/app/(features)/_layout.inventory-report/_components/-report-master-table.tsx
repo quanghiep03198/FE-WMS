@@ -208,9 +208,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
-				containerProps={{
-					style: { height: screen.availHeight / 1.75 }
-				}}
 				renderSubComponent={
 					(({ row }) => {
 						return (
