@@ -14,13 +14,15 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
+	Div,
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	Separator
+	Separator,
+	Typography
 } from '@/components/ui'
 
 /**
@@ -155,7 +157,7 @@ export function MultiSelect<D = Record<string, any>>({
 	}
 
 	const toggleAll = () => {
-		if (selectedValues.length === datalist.length) {
+		if (datalist.length > 0 && selectedValues.length === datalist.length) {
 			handleClear()
 		} else {
 			const allValues = datalist.map((option) => String(option?.[valueField]))
@@ -176,7 +178,7 @@ export function MultiSelect<D = Record<string, any>>({
 					ref={ref}
 					onClick={handleTogglePopover}
 					className={cn(
-						'flex w-full items-center justify-between rounded-md border bg-inherit p-1 aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+						'flex w-full items-center justify-between rounded-md border bg-inherit p-1 !shadow-sm aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
 						className
 					)}>
 					{Array.isArray(selectedValues) && selectedValues.length > 0 ? (
@@ -212,7 +214,7 @@ export function MultiSelect<D = Record<string, any>>({
 												/>
 											</Badge>
 										</HoverCardTrigger>
-										<HoverCardContent className='flex flex-wrap items-center gap-x-2 p-2'>
+										<HoverCardContent className='flex w-96 flex-wrap items-center gap-x-1 gap-y-2 p-2'>
 											{Array.isArray(selectedValues) &&
 												selectedValues.slice(maxCount).map((item) => (
 													<Badge key={String(item)} variant='secondary'>
@@ -243,10 +245,12 @@ export function MultiSelect<D = Record<string, any>>({
 							</div>
 						</div>
 					) : (
-						<div className='mx-auto flex w-full items-center justify-between'>
-							<span className='mx-3 text-sm font-normal text-muted-foreground'>{placeholder}</span>
+						<Div className='mx-auto flex w-full items-center justify-between'>
+							<Typography variant='small' className='mx-3 text-sm font-normal text-muted-foreground'>
+								{placeholder}
+							</Typography>
 							<ChevronDown className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground' />
-						</div>
+						</Div>
 					)}
 				</Button>
 			</PopoverTrigger>
@@ -266,16 +270,16 @@ export function MultiSelect<D = Record<string, any>>({
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup>
 							<CommandItem key='all' onSelect={toggleAll} className='cursor-pointer'>
-								<div
+								<Div
 									className={cn(
 										'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
 										selectedValues.length === datalist.length
 											? 'bg-primary text-primary-foreground'
 											: 'opacity-50 [&_svg]:invisible'
 									)}>
-									<CheckIcon className='h-4 w-4' />
-								</div>
-								<span>(Select All)</span>
+									<CheckIcon className='!size-3' />
+								</Div>
+								<Typography variant='small'>(Select All)</Typography>
 							</CommandItem>
 							{Array.isArray(datalist) &&
 								datalist.map((option) => {
@@ -285,40 +289,40 @@ export function MultiSelect<D = Record<string, any>>({
 											key={option?.[valueField] as string}
 											onSelect={() => toggleOption(option?.[valueField])}
 											className='cursor-pointer'>
-											<div
+											<Div
 												className={cn(
-													'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+													'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
 													isSelected
 														? 'bg-primary text-primary-foreground'
 														: 'opacity-50 [&_svg]:invisible'
 												)}>
-												<CheckIcon className='h-4 w-4' />
-											</div>
+												<CheckIcon className='!size-3' />
+											</Div>
 											{/* {option.icon && <option.icon className='mr-2 h-4 w-4 text-muted-foreground' />} */}
-											<span>{String(option?.[labelField])}</span>
+											<Typography variant='small'>{String(option?.[labelField])}</Typography>
 										</CommandItem>
 									)
 								})}
 						</CommandGroup>
-						<CommandSeparator />
-						<CommandGroup>
-							<div className='flex items-center justify-between gap-x-1'>
-								{Array.isArray(selectedValues) && selectedValues.length > 0 && (
-									<>
-										<CommandItem onSelect={handleClear} className='flex-1 cursor-pointer justify-center'>
-											Clear
-										</CommandItem>
-										<Separator orientation='vertical' className='flex h-full min-h-6' />
-									</>
-								)}
-								<CommandItem
-									onSelect={() => setIsPopoverOpen(false)}
-									className='max-w-full flex-1 cursor-pointer justify-center'>
-									Close
-								</CommandItem>
-							</div>
-						</CommandGroup>
 					</CommandList>
+					<CommandSeparator />
+					<CommandGroup>
+						<Div className='flex items-center justify-between gap-x-1'>
+							{Array.isArray(selectedValues) && selectedValues.length > 0 && (
+								<React.Fragment>
+									<CommandItem onSelect={handleClear} className='flex-1 cursor-pointer justify-center'>
+										Clear
+									</CommandItem>
+									<Separator orientation='vertical' className='flex h-full min-h-6' />
+								</React.Fragment>
+							)}
+							<CommandItem
+								onSelect={() => setIsPopoverOpen(false)}
+								className='max-w-full flex-1 cursor-pointer justify-center'>
+								Close
+							</CommandItem>
+						</Div>
+					</CommandGroup>
 				</Command>
 			</PopoverContent>
 		</Popover>
