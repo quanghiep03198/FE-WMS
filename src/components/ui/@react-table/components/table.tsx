@@ -26,7 +26,7 @@ interface TableProps<TData, TValue>
 }
 
 function TableDataGrid<TData, TValue>({
-	containerProps = { className: cn('h-[50vh] xxl:h-[60vh]') },
+	containerProps = { className: cn('h-[52.5dvh] xxl:h-[62.5dvh]') },
 	table,
 	footerProps = { hidden: true, slot: null },
 	caption,
