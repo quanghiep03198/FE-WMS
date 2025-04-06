@@ -30,7 +30,7 @@ function Page() {
 			</head>
 			<Div className='z-10 flex flex-col gap-y-6 @container'>
 				<Div className='flex items-center justify-between gap-4'>
-					<PageHeader className='basis-1/2'>
+					<PageHeader className='basis-1/2 xl:basis-full'>
 						<PageTitle>Dashboard</PageTitle>
 						<PageDescription>{t('ns_dashboard:dashboard_description')}</PageDescription>
 					</PageHeader>
