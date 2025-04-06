@@ -111,8 +111,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 				data-sentry-element='MainWindows'
 				className='app-0 e1kx31js14'
 				opacity='1'
-				style={{ transform: 'none', transformOrigin: '317.533px 384.563px' }}
-				transform-origin='317.53286361694336px 384.56349182128906px'>
+				style={{ transform: 'none', transformOrigin: '317.533px 384.563px' }}>
 				<path
 					d='M59.76 411.11c-16.58 0-30.25 0-35.35-.08v1c4.55.08 15.16.1 28.07.1h7.49l-.21-1.02z'
 					fill='#e5e5e5'></path>
@@ -490,8 +489,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 				data-sentry-element='SecondWindow'
 				className='app-0 e1kx31js13'
 				opacity='1'
-				style={{ transform: 'none', transformOrigin: '350.044px 71.4498px' }}
-				transform-origin='350.0438690185547px 71.4497557003051px'>
+				style={{ transform: 'none', transformOrigin: '350.044px 71.4498px' }}>
 				<path
 					d='M439.03 116.58l-164.95.31a6.12 6.12 0 01-6.12-6.12l-5.32-63.66a6.12 6.12 0 016.11-6.12l169.45-5a6.12 6.12 0 016.11 6.12l.84 68.37a6.1 6.1 0 01-6.12 6.1z'
 					fill='hsl(var(--muted))'></path>
@@ -768,15 +766,13 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 			<g
 				data-sentry-element='Sparks'
 				className='app-0 e1kx31js4'
-				style={{ transform: 'none', transformOrigin: '0px 0px' }}
-				transform-origin='0px 0px'>
+				style={{ transform: 'none', transformOrigin: '0px 0px' }}>
 				<g
 					data-sentry-element='Spark'
 					className='app-1hdvaaa e1kx31js3'
 					opacity='1'
 					display='block'
-					style={{ transform: 'none', transformOrigin: '248.977px 502.004px' }}
-					transform-origin='248.97708129882812px 502.00389099121094px'>
+					style={{ transform: 'none', transformOrigin: '248.977px 502.004px' }}>
 					<path
 						d='M249.66 498.04a.5.5 0 01-.31-.11l-6.56-5.31a.49.49 0 01-.08-.7.51.51 0 01.71-.07l6.56 5.3a.5.5 0 01-.03.8.5.5 0 01-.29.09z'
 						fill='#A67029'></path>
@@ -801,8 +797,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 					className='app-iycass e1kx31js3'
 					opacity='1'
 					display='block'
-					style={{ transform: 'none', transformOrigin: '245.832px 480.37px' }}
-					transform-origin='245.83233642578125px 480.3697967529297px'>
+					style={{ transform: 'none', transformOrigin: '245.832px 480.37px' }}>
 					<path
 						d='M251.06 478.5a.5.5 0 01-.37-.16l-7-7.53a.51.51 0 010-.71c.05-.05.1-.08.16-.1a.49.49 0 01.39 0c.06.02.11.05.16.1l7 7.53a.49.49 0 01.1.54.5.5 0 01-.46.3l.02.03z'
 						fill='#A67029'></path>
@@ -827,8 +822,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 					className='app-n315u2 e1kx31js3'
 					opacity='1'
 					display='block'
-					style={{ transform: 'none', transformOrigin: '455.895px 104.334px' }}
-					transform-origin='455.8951110839844px 104.33353424072266px'>
+					style={{ transform: 'none', transformOrigin: '455.895px 104.334px' }}>
 					<path
 						d='M451.99 95.34a.5.5 0 01-.49-.38.5.5 0 01.36-.6c.42-.11 5.87-2.22 9.43-3.61a.5.5 0 01.64.66.5.5 0 01-.27.27c-.92.36-9 3.5-9.55 3.65l-.12.01z'
 						fill='#A67029'></path>
@@ -853,8 +847,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 					className='app-1se72fb e1kx31js3'
 					opacity='1'
 					display='block'
-					style={{ transform: 'none', transformOrigin: '455.492px 73.116px' }}
-					transform-origin='455.4920654296875px 73.11596298217773px'>
+					style={{ transform: 'none', transformOrigin: '455.492px 73.116px' }}>
 					<path
 						d='M447.66 68.27a.5.5 0 01-.34-.13.51.51 0 010-.71l8.24-8.93a.5.5 0 01.7.71l-8.23 8.9a.5.5 0 01-.37.16z'
 						fill='#A67029'></path>
