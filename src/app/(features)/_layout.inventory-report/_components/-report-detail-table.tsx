@@ -1,12 +1,15 @@
+import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Input } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDebounce, useUpdateEffect } from 'ahooks'
-import { omit } from 'lodash'
+import { omit, pick } from 'lodash'
 import React, { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { INVENTORY_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 
 type BaseUpdateUpdateQuery = Pick<
@@ -33,7 +36,6 @@ export const InventoryReportDetailTable: React.FC<{
 								</TableCellHead>
 							))}
 						</TableRow>
-
 						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
 							{sizes.map((item) => (
@@ -52,7 +54,6 @@ export const InventoryReportDetailTable: React.FC<{
 						</TableRow>
 						<TableRow>
 							<TableVerticalHeader align='left'>{t('ns_erp:fields.inbound_qty')}</TableVerticalHeader>
-
 							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									{formatIntlNumber(item.ist_qty)}
@@ -109,21 +110,28 @@ export const InventoryReportDetailTable: React.FC<{
 }
 
 const CellContentEditable: React.FC<{ name: string; value: string | number } & BaseUpdateUpdateQuery> = (props) => {
+	const { searchParams } = useQueryParams()
 	const [value, setValue] = useState<string | number>(props.value)
 	const debouncedValue = useDebounce(value, { wait: 500 })
 	const { data: currentTenant } = useGetTenantByFactory()
+	const queryClient = useQueryClient()
 
-	const handleChange = async () => {
-		if (debouncedValue)
-			return await ReportService.updateInventoryReport(
+	const { mutateAsync } = useMutation({
+		mutationFn: async () =>
+			await ReportService.updateInventoryReport(
 				currentTenant?.id,
 				{ ...omit(props, 'value') },
 				{ [props.name]: +debouncedValue }
-			)
-	}
+			),
+		onSuccess: () =>
+			queryClient.invalidateQueries({
+				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
+				exact: true
+			})
+	})
 
 	useUpdateEffect(() => {
-		handleChange()
+		mutateAsync()
 	}, [debouncedValue])
 
 	return (
