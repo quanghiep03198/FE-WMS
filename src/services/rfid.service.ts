@@ -12,7 +12,7 @@ import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash'
 
 export class RFIDService {
-	// #region [RFID] Finished Production APIs
+	// #region Inbound
 	static async fetchNextInboundEpc(params: FetchFPEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
 			`/rfid/inbound/fetch-epc`,
@@ -30,7 +30,7 @@ export class RFIDService {
 
 	static async searchExchangableOrder(params: SearchCustOrderParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
-			`/rfid/search-exchangable-order`,
+			`/rfid/inbound/search-exchangable-order`,
 			{ params }
 		)
 	}
