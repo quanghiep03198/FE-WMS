@@ -117,8 +117,6 @@ export function MultiSelect<D = Record<string, any>>({
 	ref,
 	...props
 }: MultiSelectProps<D>) {
-	console.log(props['aria-invalid'])
-
 	const [selectedValues, setSelectedValues] = React.useState<Array<D[keyof D]>>(defaultValue)
 	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
 

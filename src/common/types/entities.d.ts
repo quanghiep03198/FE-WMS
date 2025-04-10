@@ -174,8 +174,9 @@ export interface IPackingReport {
 	mat_ecolor: string
 	size_data: string
 	po_qty: number
-	weighed_qty: number
-	unweighed_qty: number
+	weighed_item_qty: number
+	weighed_box_qty: number
+	unweighed_item_qty: number
 }
 
 /**

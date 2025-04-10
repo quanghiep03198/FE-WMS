@@ -94,8 +94,8 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('weighed_qty', {
-				header: t('ns_erp:fields.weighed_qty'),
+			columnHelper.accessor('weighed_item_qty', {
+				header: t('ns_erp:fields.weighed_item_qty'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
@@ -104,8 +104,19 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('unweighed_qty', {
-				header: t('ns_erp:fields.unweighed_qty'),
+			columnHelper.accessor('weighed_box_qty', {
+				header: t('ns_erp:fields.weighed_box_qty'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'inNumberRange',
+				size: 200,
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
+			}),
+
+			columnHelper.accessor('unweighed_item_qty', {
+				header: t('ns_erp:fields.unweighed_item_qty'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
