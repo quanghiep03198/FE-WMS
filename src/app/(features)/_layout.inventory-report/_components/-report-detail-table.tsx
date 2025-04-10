@@ -73,7 +73,12 @@ export const InventoryReportDetailTable: React.FC<{
 							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									<CellContentEditable
-										{...{ ...info, size_numcode: item.size, name: 'mn_ist_qty', value: item.mn_ist_qty }}
+										{...{
+											...info,
+											size_numcode: item.size,
+											name: 'mn_ist_qty',
+											value: item.mn_ist_qty
+										}}
 									/>
 								</TableCell>
 							))}
@@ -83,7 +88,12 @@ export const InventoryReportDetailTable: React.FC<{
 							{sizes.map((item) => (
 								<TableCell key={item.size} align='center'>
 									<CellContentEditable
-										{...{ ...info, size_numcode: item.size, name: 'mn_ost_qty', value: item.mn_ost_qty }}
+										{...{
+											...info,
+											size_numcode: item.size,
+											name: 'mn_ost_qty',
+											value: item.mn_ost_qty
+										}}
 									/>
 								</TableCell>
 							))}
