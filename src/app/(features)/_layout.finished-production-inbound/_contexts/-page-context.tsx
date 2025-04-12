@@ -8,11 +8,7 @@ import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
-export type Log = {
-	message: string
-	timestamp?: Date
-	type: 'info' | 'error'
-}
+
 export type OrderItem = {
 	mo_no: string
 	mat_ecolor: string
