@@ -1,7 +1,5 @@
 import {
 	ColumnOrderState,
-	RowSelectionState,
-	Table,
 	getCoreRowModel,
 	getExpandedRowModel,
 	getFacetedMinMaxValues,
@@ -10,6 +8,8 @@ import {
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
+	RowSelectionState,
+	Table,
 	useReactTable,
 	type ColumnFiltersState,
 	type ExpandedState,
@@ -43,9 +43,11 @@ function DataTable<TData, TValue>({
 	loading,
 	initialState = { rowSelection: {} },
 	containerProps,
+	expanded = {},
 	paginationProps = { hidden: false },
 	toolbarProps = { hidden: false, slotRight: null },
 	footerProps = { hidden: true, slot: null },
+	manualExpanding = false,
 	manualPagination = false,
 	manualSorting = false,
 	manualFiltering = false,
@@ -57,7 +59,6 @@ function DataTable<TData, TValue>({
 	enableColumnPinning = true,
 	enableGlobalFilter = true,
 	globalFilterFn = fuzzyFilter,
-	autoResetExpanded = false,
 	sorting,
 	columnFilters,
 	globalFilter,
@@ -68,6 +69,7 @@ function DataTable<TData, TValue>({
 	getRowCanExpand,
 	onPaginationChange,
 	onSortingChange,
+	onExpandedChange,
 	onRowSelectionChange,
 	ref,
 	...props
@@ -76,11 +78,13 @@ function DataTable<TData, TValue>({
 	const originalData = useMemo(() => data ?? [], [data])
 
 	// * Table states declaration
+
+	const instanceId = uuidv4()
 	const [_data, setData, resetData] = useResetState(originalData)
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])
 	const [_globalFilter, setGlobalFilter] = useState<GlobalFilterTableState['globalFilter']>('')
-	const [expanded, setExpanded] = useState<ExpandedState>({})
+	const [_expanded, setExpanded] = useState<ExpandedState>({})
 	const [autoResetPageIndex, setAutoResetPageIndex] = useState<boolean>(false)
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>(initialState?.rowSelection ?? {})
 	const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
@@ -122,7 +126,7 @@ function DataTable<TData, TValue>({
 			sorting: manualSorting ? sorting : _sorting,
 			columnFilters: manualFiltering ? columnFilters : _columnFilters,
 			globalFilter: manualFiltering ? globalFilter : _globalFilter,
-			expanded,
+			expanded: manualExpanding ? expanded : _expanded,
 			rowSelection,
 			columnOrder,
 			pagination: manualPagination
@@ -135,6 +139,7 @@ function DataTable<TData, TValue>({
 		manualPagination,
 		manualSorting,
 		manualFiltering,
+		manualExpanding,
 		enableColumnFilters,
 		enableSorting,
 		enableExpanding,
@@ -154,8 +159,8 @@ function DataTable<TData, TValue>({
 		onSortingChange: manualSorting ? onSortingChange : setSorting,
 		onColumnFiltersChange: manualFiltering ? onColumnFiltersChange : setColumnFilters,
 		onGlobalFilterChange: manualFiltering ? onGlobalFilterChange : setGlobalFilter,
+		onExpandedChange: manualExpanding ? onExpandedChange : setExpanded,
 		onColumnOrderChange: setColumnOrder,
-		onExpandedChange: setExpanded,
 		onRowSelectionChange: (updateFn) => {
 			setRowSelection(updateFn)
 			if (typeof onRowSelectionChange === 'function') onRowSelectionChange(updateFn)
@@ -170,7 +175,7 @@ function DataTable<TData, TValue>({
 		getFacetedMinMaxValues: getFacetedMinMaxValues(),
 		getRowCanExpand,
 		autoResetPageIndex,
-		autoResetExpanded,
+		autoResetExpanded: false,
 		meta: {
 			editedRows,
 			setEditedRows,
@@ -238,8 +243,6 @@ function DataTable<TData, TValue>({
 	const selectedRows = table.getFilteredSelectedRowModel().rows?.length ?? 0
 	const totalRows = manualPagination ? paginationProps.totalDocs : (table.getFilteredRowModel().rows?.length ?? 0)
 	const rowSelectionCount = String(selectedRows) + '/' + String(totalRows)
-
-	const instanceId = uuidv4()
 
 	return (
 		<TableContext.Provider

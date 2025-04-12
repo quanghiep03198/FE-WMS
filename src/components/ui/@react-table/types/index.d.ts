@@ -1,12 +1,13 @@
 import {
-	TableState,
 	type ColumnDef,
 	type ColumnFiltersState,
+	type ExpandedState,
 	type GlobalFilterTableState,
 	type Row,
 	type SortingState,
 	type Table,
-	type TableOptions
+	type TableOptions,
+	type TableState
 } from '@tanstack/react-table'
 import React from 'react'
 
@@ -102,6 +103,7 @@ export type DataTableProps<TData = any, TValue = any> = {
 	toolbarProps?: ToolbarProps
 	footerProps?: TableFooterProps
 	sorting?: SortingState
+	expanded?: ExpandedState
 	initialState?: Partial<TableState>
 	virtualizerOptions?: { estimateSize?: number; overscan?: number }
 	onStateChange?: (instance: Table<TData, TValue>) => void
