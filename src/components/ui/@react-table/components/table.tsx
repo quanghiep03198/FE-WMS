@@ -72,8 +72,6 @@ function TableDataGrid<TData, TValue>({
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
 
-	console.log(table.getState().columnPinning)
-
 	return (
 		<Wrapper
 			ref={wrapperRef}
