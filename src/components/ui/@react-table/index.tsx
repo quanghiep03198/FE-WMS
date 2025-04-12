@@ -310,7 +310,7 @@ function DataTable<TData, TValue>({
 	)
 }
 
-const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden`
+const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200`
 const FooterGroup = tw.div`flex items-center justify-between`
 
 export default DataTable

@@ -35,7 +35,7 @@ export class DataTableUtility {
 			case 'left': {
 				return {
 					position: 'sticky',
-					zIndex: 10,
+					zIndex: 20,
 					left: column.getStart('left'),
 					borderLeft: 'none',
 					boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined,
@@ -47,11 +47,11 @@ export class DataTableUtility {
 					return {
 						position: 'sticky',
 						right: 0,
-						zIndex: 10
+						zIndex: 20
 					}
 				return {
 					position: 'sticky',
-					zIndex: 10,
+					zIndex: 20,
 					right: column.getAfter('right')
 				}
 			}

@@ -23,7 +23,7 @@ export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TDa
 		<DropdownMenu>
 			<Tooltip message='Columns' triggerProps={{ asChild: true }}>
 				<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', size: 'icon' }))}>
-					<Icon name='SlidersHorizontal' />
+					<Icon name='Columns2' />
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent align='end' className='w-56'>

@@ -72,11 +72,13 @@ function TableDataGrid<TData, TValue>({
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
 
+	console.log(table.getState().columnPinning)
+
 	return (
 		<Wrapper
 			ref={wrapperRef}
 			style={{
-				'--table-width': wrapperSize?.width - 10 + 'px'
+				'--table-width': wrapperSize?.width - 12 + 'px'
 			}}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea tabIndex={0} ref={containerRef} {...containerProps}>
@@ -93,7 +95,7 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					<TableHeader className='sticky top-0 z-20 bg-background'>
+					<TableHeader className='sticky top-0 z-40 bg-background'>
 						{table.getHeaderGroups().map((headerGroup) => {
 							return (
 								<Fragment key={headerGroup.id}>
@@ -109,7 +111,10 @@ function TableDataGrid<TData, TValue>({
 													key={header.id}
 													colSpan={header.colSpan}
 													rowSpan={rowSpan}
-													className={cn('group relative h-10 bg-secondary p-0 dark:bg-[hsl(0,0%,6.9%)]')}
+													className={cn(
+														'group relative bg-table-head p-0',
+														header?.column?.getIsFirstColumn('left') && 'xl:!border-r-0 xl:shadow-none'
+													)}
 													align={header.column.columnDef.meta?.align}
 													style={{
 														height: `${DEFAULT_ESTIMATE_SIZE}px`,
