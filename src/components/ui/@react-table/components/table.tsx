@@ -95,7 +95,7 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					<TableHeader className='sticky top-0 z-40 bg-background'>
+					<TableHeader className='sticky top-0 z-20 bg-background'>
 						{table.getHeaderGroups().map((headerGroup) => {
 							return (
 								<Fragment key={headerGroup.id}>
@@ -111,10 +111,7 @@ function TableDataGrid<TData, TValue>({
 													key={header.id}
 													colSpan={header.colSpan}
 													rowSpan={rowSpan}
-													className={cn(
-														'group relative z-30 bg-table-head p-0',
-														header?.column?.getIsFirstColumn('left') && 'xl:!border-r-0 xl:shadow-none'
-													)}
+													className={cn('group relative z-40 bg-table-head p-0')}
 													align={header.column.columnDef.meta?.align}
 													style={{
 														height: `${DEFAULT_ESTIMATE_SIZE}px`,

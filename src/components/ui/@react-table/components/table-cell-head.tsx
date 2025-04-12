@@ -44,7 +44,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 
 	return (
 		<ContextMenu>
-			<ContextMenuTrigger className='line-clamp-1 w-auto ring-0 ring-offset-0 ring-offset-transparent focus:outline-none'>
+			<ContextMenuTrigger className='line-clamp-1 w-auto focus:outline-none'>
 				<Div
 					className={cn(
 						'relative line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
