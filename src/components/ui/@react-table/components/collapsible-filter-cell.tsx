@@ -19,7 +19,7 @@ function CollapsibleFilterCell<TData, TValue>({ header }: CollapsibleFilterCellP
 		<TableHead
 			key={header.id}
 			colSpan={header.colSpan}
-			className={cn('group relative p-0', isFilterOpened ? 'border-b border-border' : 'border-none')}
+			className={cn('group relative z-20 p-0', isFilterOpened ? 'border-b border-border' : 'border-none')}
 			style={{
 				width: `calc(var(--header-${header?.id}-size) * 1px)`,
 				...DataTableUtility.getStickyOffsetPosition(header?.column)

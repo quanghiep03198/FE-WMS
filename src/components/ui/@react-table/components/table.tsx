@@ -112,7 +112,7 @@ function TableDataGrid<TData, TValue>({
 													colSpan={header.colSpan}
 													rowSpan={rowSpan}
 													className={cn(
-														'group relative bg-table-head p-0',
+														'group relative z-30 bg-table-head p-0',
 														header?.column?.getIsFirstColumn('left') && 'xl:!border-r-0 xl:shadow-none'
 													)}
 													align={header.column.columnDef.meta?.align}
