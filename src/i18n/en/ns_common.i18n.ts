@@ -146,6 +146,7 @@ export default {
 		auto_refresh: 'Auto refresh',
 		clear_sort: 'Clear sort',
 		filter: 'Filter',
+		hide_column: 'Hide this column',
 		no_data: 'No data',
 		no_filter_applied: 'No filter is applied',
 		no_match_result: 'No results found.',

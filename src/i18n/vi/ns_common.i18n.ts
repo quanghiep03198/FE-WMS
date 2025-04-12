@@ -150,6 +150,7 @@ export default {
 		auto_refresh: 'Tự động làm mới',
 		clear_sort: 'Xóa sắp xếp',
 		filter: 'Bộ lọc',
+		hide_column: 'Ẩn cột này',
 		no_data: 'Không có dữ liệu',
 		no_filter_applied: 'Bộ lọc không được áp dụng',
 		no_match_result: 'Không có kết quả.',

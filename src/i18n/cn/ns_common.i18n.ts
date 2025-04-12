@@ -145,6 +145,7 @@ export default {
 		auto_refresh: '自动刷新',
 		clear_sort: '清除排序',
 		filter: '过滤',
+		hide_column: '隐藏此列',
 		no_data: '没有数据',
 		no_filter_applied: '不应用过滤器',
 		no_match_result: '未找到结果.',
