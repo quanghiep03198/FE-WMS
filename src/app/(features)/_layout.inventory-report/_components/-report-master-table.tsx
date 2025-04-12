@@ -7,8 +7,8 @@ import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
-import { createColumnHelper, type Table as TTable } from '@tanstack/react-table'
-import { useMemoizedFn } from 'ahooks'
+import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
+import { useMemoizedFn, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick, sortBy } from 'lodash'
@@ -37,6 +37,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IMonthlyInventoryReport>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryReport>()
+	const [expanded, setExpanded, resetExpanded] = useResetState<ExpandedState>({})
 
 	useEffect(() => {
 		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
@@ -46,11 +47,11 @@ export const InventoryReportMasterTable: React.FC = () => {
 		() => [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
-				header: ({ table }) => (
+				header: () => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
 							className='absolute inset-0 flex h-full w-full items-center justify-center'
-							onClick={() => table.toggleAllRowsExpanded(false)}>
+							onClick={() => resetExpanded()}>
 							<Icon name='FoldVertical' stroke='hsl(var(--foreground))' />
 						</button>
 					</Tooltip>
@@ -60,13 +61,10 @@ export const InventoryReportMasterTable: React.FC = () => {
 				meta: {
 					align: 'center'
 				},
-				cell: ({ row, table }) => (
+				cell: ({ row }) => (
 					<button
 						className='absolute inset-0 flex h-full w-full items-center justify-center'
-						onClick={() => {
-							table.toggleAllRowsExpanded(false)
-							row.toggleExpanded(!row.getIsExpanded())
-						}}>
+						onClick={() => setExpanded({ [row.index]: !row.getIsExpanded() })}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
 				)
@@ -240,7 +238,10 @@ export const InventoryReportMasterTable: React.FC = () => {
 				columns={columns}
 				data={data}
 				loading={isLoading}
+				expanded={expanded}
+				getRowCanExpand={() => true}
 				enableExpanding={true}
+				manualExpanding={true}
 				renderSubComponent={renderDetailTable satisfies RenderSubComponent<IMonthlyInventoryReport>}
 				toolbarProps={{
 					slotRight: renderSlotRight

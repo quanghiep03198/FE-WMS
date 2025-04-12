@@ -120,20 +120,46 @@ export const InventoryReportDetailTable: React.FC<{
 }
 
 const CellContentEditable: React.FC<{ name: string; value: string | number } & BaseUpdateUpdateQuery> = (props) => {
-	const { searchParams } = useQueryParams()
 	const [value, setValue] = useState<string | number>(props.value)
+	const { searchParams } = useQueryParams()
 	const debouncedValue = useDebounce(value, { wait: 500 })
 	const { data: currentTenant } = useGetTenantByFactory()
 	const queryClient = useQueryClient()
 
-	const { mutateAsync } = useMutation({
+	const { mutateAsync, isPending } = useMutation({
 		mutationFn: async () =>
 			await ReportService.updateInventoryReport(
 				currentTenant?.id,
 				{ ...omit(props, 'value') },
 				{ [props.name]: +debouncedValue }
 			),
-		onSuccess: () =>
+		onMutate: async (variable) => {
+			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+			await queryClient.cancelQueries({
+				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
+				exact: true
+			})
+			// Snapshot the previous value
+			const previousData = queryClient.getQueryData([
+				INVENTORY_REPORT_PROVIDE_TAG,
+				currentTenant?.id,
+				pick(searchParams, 'month.eq')
+			])
+
+			// Optimistically update to the new value
+			queryClient.setQueryData(
+				[INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
+				variable
+			)
+			return { previousData }
+		},
+		onError: (_error, _variable, context) => {
+			queryClient.setQueryData(
+				[INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
+				context.previousData
+			)
+		},
+		onSettled: () =>
 			queryClient.invalidateQueries({
 				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
 				exact: true
@@ -153,6 +179,7 @@ const CellContentEditable: React.FC<{ name: string; value: string | number } & B
 				type='number'
 				name={props.name}
 				className='h-auto whitespace-nowrap border-none p-0 text-center shadow-none focus-within:border-none focus:outline-none'
+				disabled={isPending}
 				defaultValue={props.value}
 				value={value}
 				required={true}
