@@ -15,7 +15,7 @@ import * as React from 'react'
 const SIDEBAR_WIDTH_XXL = '21.5rem'
 const SIDEBAR_WIDTH = '20rem'
 const SIDEBAR_WIDTH_MOBILE = '20rem'
-const SIDEBAR_WIDTH_ICON = '3.125rem'
+const SIDEBAR_WIDTH_ICON = '3.25rem'
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
 
 type SidebarContext = {
@@ -250,7 +250,7 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<'bu
 				onClick={toggleSidebar}
 				title='Toggle Sidebar'
 				className={cn(
-					'absolute inset-y-0 z-20 flex w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[side=left]:-right-4 group-data-[side=right]:left-0 hover:after:bg-sidebar-border sm:hidden md:hidden',
+					'absolute inset-y-0 z-30 flex w-4 -translate-x-1/2 bg-sidebar transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:h-full after:w-px after:bg-sidebar-border after:transition-all after:duration-200 group-data-[side=left]:-right-4 group-data-[side=right]:left-0 hover:after:bg-sidebar-border/50 sm:hidden md:hidden',
 					'[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize',
 					'[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
 					'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar',
@@ -411,7 +411,7 @@ const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li
 SidebarMenuItem.displayName = 'SidebarMenuItem'
 
 const sidebarMenuButtonVariants = cva(
-	'peer/menu-button flex-nowrap flex-row flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+	'peer/menu-button flex-nowrap flex-row flex items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-[34px] group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
 	{
 		variants: {
 			variant: {
