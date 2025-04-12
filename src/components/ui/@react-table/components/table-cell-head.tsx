@@ -16,8 +16,8 @@ import {
 	ContextMenuSubContent,
 	ContextMenuSubTrigger,
 	ContextMenuTrigger,
-	Div,
-	Icon
+	Icon,
+	Typography
 } from '../..'
 
 type TableCellHeadProps<TData, TValue> = {
@@ -44,10 +44,11 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 
 	return (
 		<ContextMenu>
-			<ContextMenuTrigger className='line-clamp-1 w-auto focus:outline-none'>
-				<Div
+			<ContextMenuTrigger className='line-clamp-1 focus:outline-none'>
+				<Typography
+					as='span'
 					className={cn(
-						'relative line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
+						'relative inline-flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
 						{
 							'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
 							'cursor-col-resize': getIsResizing(),
@@ -66,9 +67,11 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 									: t('ns_common:table.clear_sort')
 							: undefined
 					}>
-					{columnDef.enableSorting && <Icon name={currentSortingState} size={14} />}
+					{columnDef.enableSorting && (
+						<Icon name={currentSortingState} size={14} className='min-w-[14px] max-w-[14px] basis-[14px]' />
+					)}
 					{flexRender(columnDef.header, header.getContext())}
-				</Div>
+				</Typography>
 			</ContextMenuTrigger>
 			<ContextMenuContent className='w-64'>
 				<ContextMenuItem
@@ -115,6 +118,7 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 						</ContextMenuCheckboxItem>
 					</ContextMenuSubContent>
 				</ContextMenuSub>
+
 				<ContextMenuSeparator className='h-[0.5px]' />
 				<ContextMenuItem className='gap-x-2' onClick={header.column.resetSize}>
 					<WidthIcon /> {t('ns_common:table.reset_size')}
