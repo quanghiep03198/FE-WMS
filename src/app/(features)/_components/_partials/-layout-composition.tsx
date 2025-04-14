@@ -7,11 +7,11 @@ const Container = tw(Div)<DivProps>`
 `
 
 const ScrollArea = tw(ScrollShadow)<ScrollShadowProps>`
-	relative flex flex-grow flex-col overflow-y-auto !scrollbar-none overflow-x-hidden bg-background scrollbar scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-thumb-secondary
+	relative sm:px-4 px-6 mb-4 flex flex-shrink flex-col overflow-y-auto !scrollbar-none overflow-x-hidden bg-background scrollbar scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-thumb-secondary
 `
-const Main = tw(Div)<DivProps>`grid w-full flex-1 basis-full grid-rows-[80px_auto]`
+const Main = tw(Div)<DivProps>`relative grid w-full flex-1 basis-full grid-rows-[80px_auto]`
 
-const OutletWrapper = tw.div`sm:px-4 px-6 pb-4 flex-1 basis-full [view-transition-name:main-content]`
+const OutletWrapper = tw.div`flex-1 basis-full [view-transition-name:main-content]`
 
 export default {
 	Container,

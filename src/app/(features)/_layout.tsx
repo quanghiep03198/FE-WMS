@@ -69,6 +69,7 @@ function Layout() {
 										ref={outletWrapperRef}
 										style={
 											{
+												display: 'contents',
 												'--outlet-wrapper-height':
 													containerSize && headerSize
 														? containerSize.height - headerSize.height - outletWrapperPaddingY + 'px'
