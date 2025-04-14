@@ -12,7 +12,7 @@ import { useMemoizedFn, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick, sortBy } from 'lodash'
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetMonthlyInventoryReport } from '../../_apis/use-report.api'
@@ -33,7 +33,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
 
-	const { data, isLoading, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
+	const { data, isFetching, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IMonthlyInventoryReport>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryReport>()
@@ -42,6 +42,10 @@ export const InventoryReportMasterTable: React.FC = () => {
 	useEffect(() => {
 		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
 	}, [data])
+
+	useEffect(() => {
+		resetExpanded()
+	}, [searchParams['month.eq']])
 
 	const columns = useMemo(
 		() => [
@@ -195,19 +199,22 @@ export const InventoryReportMasterTable: React.FC = () => {
 		}
 	})
 
-	const renderDetailTable = useMemoizedFn(({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
-		<InventoryReportDetailTable
-			info={pick(row.original, [
-				'po',
-				'mo_no',
-				'cust_shoestyle',
-				'shoes_style_code_factory',
-				'inv_type',
-				'inv_year_month'
-			])}
-			sizes={sortBy(row.original?.size_data, 'size_numcode')}
-		/>
-	))
+	const renderDetailTable = useCallback(
+		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
+			<InventoryReportDetailTable
+				info={pick(row.original, [
+					'po',
+					'mo_no',
+					'cust_shoestyle',
+					'shoes_style_code_factory',
+					'inv_type',
+					'inv_year_month'
+				])}
+				sizes={sortBy(row.original?.size_data, 'size_numcode')}
+			/>
+		),
+		[]
+	)
 
 	const renderSlotRight = useMemoizedFn(() => (
 		<Fragment>
@@ -237,7 +244,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				ref={dataTableRef}
 				columns={columns}
 				data={data}
-				loading={isLoading}
+				loading={isFetching}
 				expanded={expanded}
 				getRowCanExpand={() => true}
 				enableExpanding={true}
