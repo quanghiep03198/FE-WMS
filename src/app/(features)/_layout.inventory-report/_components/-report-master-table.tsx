@@ -33,7 +33,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
 
-	const { data, isFetching, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
+	const { data, isLoading, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IMonthlyInventoryReport>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryReport>()
@@ -244,7 +244,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				ref={dataTableRef}
 				columns={columns}
 				data={data}
-				loading={isFetching}
+				loading={isLoading}
 				expanded={expanded}
 				getRowCanExpand={() => true}
 				enableExpanding={true}

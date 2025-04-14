@@ -1,5 +1,6 @@
 import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Button,
 	Checkbox,
@@ -15,6 +16,7 @@ import {
 	HoverCardTrigger,
 	Icon,
 	Input,
+	Separator,
 	Table,
 	TableBody,
 	TableHead,
@@ -265,12 +267,34 @@ const OrderSizeDetailTable: React.FC = () => {
 						)}
 					</Div>
 					<Div className='flex basis-16 items-center justify-between bg-background p-4'>
-						<Typography variant='small' color='muted'>
-							{t('ns_inoutbound:mo_no_box.caption')}
-						</Typography>
 						<ExchangeOrderDialogTrigger />
+						<Div className='flex flex-1 items-center justify-end gap-x-2 bg-background'>
+							<Typography color='muted' className='font-medium'>
+								{t('ns_common:common_fields.total')}
+							</Typography>
+							<Separator orientation='horizontal' className='h-0.5 basis-4' />
+							<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
+								{Array.isArray(filteredScannedOrders) &&
+								filteredScannedOrders.every((item) => Array.isArray(item.sizes))
+									? formatIntlNumber(
+											filteredScannedOrders?.reduce(
+												(acc, curr) => acc + curr.sizes.reduce((_acc, _curr) => _acc + _curr.count, 0),
+												0
+											)
+										)
+									: 0}
+								<Typography variant='small'>pcs</Typography>
+							</Typography>
+						</Div>
 					</Div>
 				</Div>
+				<Typography
+					variant='small'
+					color='muted'
+					className='flex h-fit items-center justify-center gap-x-2 text-center'>
+					<Icon name='Info' size={18} />
+					{t('ns_inoutbound:mo_no_box.caption')}
+				</Typography>
 			</DialogContent>
 		</Dialog>
 	)
@@ -283,8 +307,6 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 		setExchangeOrderDialogOpen: setOpen
 	} = useOrderDetailContext('selectedRows', 'setExchangeOrderDialogOpen', 'setDefaultExchangeOrderFormValues')
 
-	if (!selectedRows || selectedRows?.length === 0) return null
-
 	const handlePreExchangeSelectedRows = () => {
 		setOpen(true)
 		setDefaultValues({
@@ -296,7 +318,7 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 	}
 
 	return (
-		<Button size='sm' onClick={handlePreExchangeSelectedRows}>
+		<Button onClick={handlePreExchangeSelectedRows} disabled={!selectedRows || selectedRows?.length === 0}>
 			<Icon name='ArrowLeftRight' role='img' /> Exchange
 		</Button>
 	)
