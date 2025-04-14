@@ -32,7 +32,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative flex h-full max-h-full max-w-full flex-1 basis-full flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border'
+			className='relative flex max-h-[var(--outlet-wrapper-height)] max-w-full flex-1 basis-full flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border'
 			style={
 				{
 					'--table-footer-height': '2rem'
