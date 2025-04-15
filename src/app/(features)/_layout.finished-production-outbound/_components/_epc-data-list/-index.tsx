@@ -178,7 +178,7 @@ const ScannedEpcList: React.FC = () => {
 
 	return (
 		<Div
-			className='flex h-full flex-col items-stretch justify-between overflow-clip rounded-md border'
+			className='flex flex-col items-stretch justify-between overflow-clip rounded-md border'
 			style={
 				{
 					'--data-list-header-height': '36px'
