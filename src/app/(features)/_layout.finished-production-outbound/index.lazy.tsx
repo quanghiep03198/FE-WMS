@@ -30,13 +30,13 @@ function Page() {
 			</head>
 			<HostCompatibleAlert />
 			<PageProvider>
-				<Div className='static max-h-full gap-4 xxl:flex xxl:items-stretch'>
-					<Div className='h-full basis-[40%] @container'>
+				<Div className='static gap-4 xxl:grid xxl:grid-cols-[4fr_8fr] xxl:items-stretch'>
+					<Div className='h-full @container'>
 						<Div className='flex h-full grid-rows-12 flex-col items-stretch gap-6 @6xl:grid @6xl:grid-flow-col @6xl:grid-cols-2 xxl:gap-4'>
 							<Div className='order-first col-span-full row-span-3 @6xl:col-span-1 @6xl:row-span-4'>
 								<ScannedEpcCounter />
 							</Div>
-							<Div className='col-span-full row-span-6 flex-1 @6xl:sticky @6xl:top-0 @6xl:order-last @6xl:col-span-1 @6xl:row-span-12'>
+							<Div className='col-span-full row-span-6 flex-1 @6xl:sticky @6xl:top-[var(--header-height)] @6xl:order-last @6xl:col-span-1 @6xl:row-span-12 @6xl:h-[var(--outlet-wrapper-height)]'>
 								<ScannedEpcList />
 							</Div>
 							<Div className='order-last col-span-full @6xl:order-2 @6xl:col-span-1 @6xl:row-span-8'>
@@ -44,7 +44,7 @@ function Page() {
 							</Div>
 						</Div>
 					</Div>
-					<Div className='sticky top-0 hidden flex-col items-stretch gap-4 lg:col-span-full xl:col-span-full xxl:col-span-8 xxl:flex xxl:basis-[60%]'>
+					<Div className='hidden xxl:block'>
 						<OrderSizeDetailTable />
 					</Div>
 				</Div>
