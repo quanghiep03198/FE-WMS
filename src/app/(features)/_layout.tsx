@@ -3,7 +3,7 @@ import useEffectOnce from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
-import { SidebarProvider } from '@/components/ui'
+import { Div, SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useLocalStorageState, useSize } from 'ahooks'
 import { Fragment, useMemo, useRef } from 'react'
@@ -12,7 +12,6 @@ import { USER_PROVIDE_TAG } from '../(auth)/_apis/auth.api'
 import { ErrorBoundaryFallback } from '../_components/_errors/-error-boundary-fallback'
 import UnsupportedScreen from '../_components/_errors/-unsupported-screen'
 import AuthGuard from '../_components/_guard/-auth-guard'
-import LayoutComposition from './_components/_partials/-layout-composition'
 import NavSidebar from './_components/_partials/-nav-sidebar'
 import Navbar from './_components/_partials/-navbar'
 import { BreadcrumbProvider } from './_contexts/-breadcrumb-context'
@@ -56,40 +55,38 @@ function Layout() {
 
 	return (
 		<Fragment>
+			{isSmallScreen && <UnsupportedScreen />}
 			<AuthGuard>
-				{isSmallScreen && <UnsupportedScreen />}
-				<LayoutComposition.Container ref={containerRef}>
-					<SidebarProvider>
-						<NavSidebar />
+				<SidebarProvider className='group/app-layout'>
+					<NavSidebar />
+					<Div
+						className='flex-1 @container'
+						ref={containerRef}
+						style={
+							{
+								'--header-height': headerSize ? headerSize.height + 'px' : '80px',
+								'--outlet-wrapper-height':
+									containerSize && headerSize
+										? containerSize.height - headerSize.height - outletWrapperPaddingY + 'px'
+										: 'calc(100vh-112px)'
+							} as React.CSSProperties
+						}>
 						<BreadcrumbProvider>
-							<LayoutComposition.Main>
-								<Navbar ref={headerRef} />
-								<LayoutComposition.ScrollArea>
-									<LayoutComposition.OutletWrapper
-										ref={outletWrapperRef}
-										style={
-											{
-												display: 'contents',
-												'--outlet-wrapper-height':
-													containerSize && headerSize
-														? containerSize.height - headerSize.height - outletWrapperPaddingY + 'px'
-														: 'calc(100vh-112px)'
-											} as React.CSSProperties
-										}>
-										<ErrorBoundary
-											fallbackRender={({ error, resetErrorBoundary }) => {
-												return (
-													<ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
-												)
-											}}>
-											<Outlet />
-										</ErrorBoundary>
-									</LayoutComposition.OutletWrapper>
-								</LayoutComposition.ScrollArea>
-							</LayoutComposition.Main>
+							<Navbar ref={headerRef} />
+							<Div
+								as='main'
+								className='flex-1 basis-full px-6 pb-6 [view-transition-name:main-content] sm:px-4'
+								ref={outletWrapperRef}>
+								<ErrorBoundary
+									fallbackRender={({ error, resetErrorBoundary }) => {
+										return <ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
+									}}>
+									<Outlet />
+								</ErrorBoundary>
+							</Div>
 						</BreadcrumbProvider>
-					</SidebarProvider>
-				</LayoutComposition.Container>
+					</Div>
+				</SidebarProvider>
 			</AuthGuard>
 			<NetworkDetector />
 		</Fragment>
