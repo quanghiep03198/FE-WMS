@@ -12,7 +12,6 @@ import { VariantProps, cva } from 'class-variance-authority'
 import { PanelLeft } from 'lucide-react'
 import * as React from 'react'
 
-const SIDEBAR_WIDTH_XXL = '21.5rem'
 const SIDEBAR_WIDTH = '20rem'
 const SIDEBAR_WIDTH_MOBILE = '20rem'
 const SIDEBAR_WIDTH_ICON = '3.25rem'
@@ -108,7 +107,6 @@ const SidebarProvider = React.forwardRef<
 				<div
 					style={
 						{
-							'--sidebar-width-xxl': SIDEBAR_WIDTH_XXL,
 							'--sidebar-width': SIDEBAR_WIDTH,
 							'--sidebar-width-icon': SIDEBAR_WIDTH_ICON,
 							...style
@@ -141,7 +139,7 @@ const Sidebar = React.forwardRef<
 		return (
 			<div
 				className={cn(
-					'flex h-full w-[--sidebar-width] flex-col overflow-x-auto bg-sidebar text-sidebar-foreground !scrollbar-none xxl:w-[--sidebar-width-xxl]',
+					'flex h-full w-[--sidebar-width] flex-col overflow-x-auto bg-sidebar text-sidebar-foreground !scrollbar-none',
 					className
 				)}
 				ref={ref}
@@ -157,7 +155,7 @@ const Sidebar = React.forwardRef<
 				<SheetContent
 					data-sidebar='sidebar'
 					data-mobile='true'
-					className='w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground xxl:w-[--sidebar-width-xxl] [&>button]:hidden'
+					className='w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden'
 					style={
 						{
 							'--sidebar-width': SIDEBAR_WIDTH_MOBILE
@@ -181,7 +179,7 @@ const Sidebar = React.forwardRef<
 			{/* This is what handles the sidebar gap on desktop */}
 			<div
 				className={cn(
-					'relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-150 ease-linear xxl:w-[--sidebar-width-xxl]',
+					'relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-150 ease-linear',
 					'group-data-[collapsible=offcanvas]:w-0',
 					'group-data-[side=right]:rotate-180',
 					variant === 'floating' || variant === 'inset'
@@ -191,7 +189,7 @@ const Sidebar = React.forwardRef<
 			/>
 			<div
 				className={cn(
-					'fixed inset-y-0 flex h-svh w-[--sidebar-width] transition-[left,right,width] duration-150 ease-linear sm:hidden md:hidden xxl:w-[--sidebar-width-xxl]',
+					'fixed inset-y-0 flex h-svh w-[--sidebar-width] transition-[left,right,width] duration-150 ease-linear sm:hidden md:hidden',
 					side === 'left'
 						? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
 						: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
