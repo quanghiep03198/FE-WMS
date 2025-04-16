@@ -1,7 +1,10 @@
 import HostCompatibleAlert from '@/app/(features)/_components/_shared/-host-compatible-alert'
 import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
+import useQuerySelector from '@/common/hooks/use-query-selector'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { useFullscreen, useUpdateEffect } from 'ahooks'
 import { Fragment, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import PageNavigationBlocker from './_components/-navigation-blocker'
 import PageComposition from './_components/-page-composition'
@@ -35,10 +38,25 @@ export const DEFAULT_FP_RFID_SETTINGS: RFIDSettings = {
 function Page() {
 	const { t, i18n } = useTranslation()
 	const { setBreadcrumb } = useBreadcrumbContext()
+	const outletWrapper = useQuerySelector('#outlet-wrapper')
+	const [isFullscreen] = useFullscreen(document.body)
 
 	useEffect(() => {
 		setBreadcrumb([{ to: '/finished-production-inbound', text: t('ns_common:navigation.fp_inoutbound') }])
 	}, [i18n.language])
+
+	useUpdateEffect(() => {
+		if (isFullscreen) {
+			document.body.classList.remove('animate-in')
+			document.body.classList.remove('fade-in-0')
+			document.body.classList.remove('zoom-in-95')
+			document.body.classList.add('animate-in')
+			document.body.classList.add('fade-in-0')
+			document.body.classList.add('zoom-in-95')
+		}
+	}, [isFullscreen])
+
+	if (!outletWrapper) return null
 
 	return (
 		<Fragment>
@@ -47,28 +65,34 @@ function Page() {
 				<meta name='description' content='RFID Scanner integration for inbound process' />
 			</head>
 			<HostCompatibleAlert />
-			<PageProvider>
-				<PageComposition.Container>
-					<PageComposition.Wrapper>
-						<PageComposition.Main>
-							<ScannerToolbar />
-							<PageComposition.InnerWrapper>
-								<PageComposition.ListBoxPanel>
-									<EpcListBox />
-								</PageComposition.ListBoxPanel>
-								<PageComposition.CounterPanel>
-									<ScannedEPCsCounter />
-								</PageComposition.CounterPanel>
-								<PageComposition.FormPanel>
-									<InoutboundForm />
-								</PageComposition.FormPanel>
-							</PageComposition.InnerWrapper>
-						</PageComposition.Main>
-						<ScannerSettings />
-					</PageComposition.Wrapper>
-				</PageComposition.Container>
-				<PageNavigationBlocker />
-			</PageProvider>
+			{createPortal(
+				<PageProvider>
+					<PageComposition.Container
+						style={{
+							animationDelay: 0.25
+						}}>
+						<PageComposition.Wrapper>
+							<PageComposition.Main>
+								<ScannerToolbar />
+								<PageComposition.InnerWrapper>
+									<PageComposition.ListBoxPanel>
+										<EpcListBox />
+									</PageComposition.ListBoxPanel>
+									<PageComposition.CounterPanel>
+										<ScannedEPCsCounter />
+									</PageComposition.CounterPanel>
+									<PageComposition.FormPanel>
+										<InoutboundForm />
+									</PageComposition.FormPanel>
+								</PageComposition.InnerWrapper>
+							</PageComposition.Main>
+							<ScannerSettings />
+						</PageComposition.Wrapper>
+					</PageComposition.Container>
+					<PageNavigationBlocker />
+				</PageProvider>,
+				isFullscreen ? document.querySelector('#root') : outletWrapper
+			)}
 		</Fragment>
 	)
 }
