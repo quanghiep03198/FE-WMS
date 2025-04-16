@@ -27,7 +27,7 @@ import {
 } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundOrderDetail } from '../../_apis/inbound-rfid.api'
 import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
@@ -112,7 +112,6 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	const filteredScannedOrders = useMemo(() => {
 		const { mo_no, mat_ecolor: mat_ecolor, shoes_style_code_factory } = columnFilters
-		// return scannedOrders
 		return scannedOrders.filter((item) => {
 			return (
 				item.mo_no.toLowerCase().includes(mo_no.toLowerCase()) &&
@@ -122,7 +121,18 @@ const OrderSizeDetailTable: React.FC = () => {
 		})
 	}, [scannedOrders, columnFilters, dialogOpen])
 
-	const ref = useRef(null)
+	const totalFilteredQty = useMemo(
+		() =>
+			Array.isArray(filteredScannedOrders) && filteredScannedOrders.every((item) => Array.isArray(item.sizes))
+				? formatIntlNumber(
+						filteredScannedOrders?.reduce(
+							(acc, curr) => acc + curr.sizes.reduce((_acc, _curr) => _acc + _curr.count, 0),
+							0
+						)
+					)
+				: 0,
+		[filteredScannedOrders]
+	)
 
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -148,7 +158,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
 				<Div className='relative flex h-[calc(85vh-4rem)] flex-col divide-y overflow-hidden rounded-lg border'>
-					<Div ref={ref} className='flow-root h-[85vh] overflow-scroll rounded-lg'>
+					<Div className='flow-root h-[85vh] overflow-scroll rounded-lg'>
 						<Table
 							className='border-separate border-spacing-0 rounded-lg'
 							style={
@@ -274,15 +284,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</Typography>
 							<Separator orientation='horizontal' className='h-0.5 basis-4' />
 							<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
-								{Array.isArray(filteredScannedOrders) &&
-								filteredScannedOrders.every((item) => Array.isArray(item.sizes))
-									? formatIntlNumber(
-											filteredScannedOrders?.reduce(
-												(acc, curr) => acc + curr.sizes.reduce((_acc, _curr) => _acc + _curr.count, 0),
-												0
-											)
-										)
-									: 0}
+								{totalFilteredQty}
 								<Typography variant='small'>pcs</Typography>
 							</Typography>
 						</Div>
