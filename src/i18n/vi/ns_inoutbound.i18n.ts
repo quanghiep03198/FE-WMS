@@ -25,6 +25,7 @@ export default {
 		label: 'Số lượng EPC đã quét'
 	},
 	description: {
+		add_outbound_size: 'Thêm size và số lượng để tiến hành xuất tách đơn.',
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
 		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn',
@@ -32,6 +33,7 @@ export default {
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
 		inoutbound_form_note: 'Dừng đọc thiết bị RFID và ngắt kết nối trên ứng dụng trước khi thao tác nhập/xuất',
 		monthly_inventory_report: 'Quản lý và theo dõi tồn kho hàng kho thành phẩm hàng tháng',
+		no_added_size: 'Chưa có size nào được thêm',
 		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',
 		order_size_detail:
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',

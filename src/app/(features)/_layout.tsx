@@ -65,7 +65,7 @@ function Layout() {
 		<Fragment>
 			{isSmallScreen && <UnsupportedScreen />}
 			<AuthGuard>
-				<SidebarProvider className='group/app-layout h-screen overflow-y-scroll' ref={containerRef}>
+				<SidebarProvider className='relative !h-screen overflow-y-scroll' ref={containerRef}>
 					<NavSidebar />
 					<Div
 						className='flex-1 @container'
@@ -80,7 +80,7 @@ function Layout() {
 							<Div
 								as='main'
 								id='outlet-wrapper'
-								className='static flex-1 basis-full px-6 pb-6 [view-transition-name:main-content] sm:px-4'
+								className='flex-1 basis-full px-6 pb-6 [view-transition-name:main-content] sm:px-4'
 								ref={outletWrapperRef}>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {

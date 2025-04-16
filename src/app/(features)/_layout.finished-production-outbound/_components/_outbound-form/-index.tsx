@@ -12,10 +12,10 @@ const OutboundForm: React.FC = () => {
 					Detailed
 				</TabsTrigger>
 			</TabsList>
-			<TabsContent value='standard'>
+			<TabsContent value='standard' className='animate-in fade-in-0 slide-in-from-right-6'>
 				<StandardOutboundForm />
 			</TabsContent>
-			<TabsContent value='detailed'>
+			<TabsContent value='detailed' className='animate-in fade-in-0 slide-in-from-left-6'>
 				<DetailedOutboundForm />
 			</TabsContent>
 		</Tabs>

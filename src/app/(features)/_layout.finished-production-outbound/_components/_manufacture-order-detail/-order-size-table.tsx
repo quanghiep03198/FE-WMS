@@ -1,4 +1,16 @@
-import { Div, Icon, Input, Table, TableBody, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import {
+	Div,
+	Icon,
+	Input,
+	Separator,
+	Table,
+	TableBody,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Typography
+} from '@/components/ui'
 import { useResetState } from 'ahooks'
 import { sortBy } from 'lodash'
 import { useMemo } from 'react'
@@ -30,9 +42,22 @@ const OrderSizeDetailTable: React.FC = () => {
 			: []
 	}, [scannedOrders, columnFilters])
 
+	const totalFilteredQty = useMemo(
+		() =>
+			Array.isArray(filteredScannedOrders) && filteredScannedOrders.every((item) => Array.isArray(item.sizes))
+				? formatIntlNumber(
+						filteredScannedOrders?.reduce(
+							(acc, curr) => acc + curr.sizes.reduce((_acc, _curr) => _acc + _curr.count, 0),
+							0
+						)
+					)
+				: 0,
+		[filteredScannedOrders]
+	)
+
 	return (
 		<Div
-			className='sticky top-[var(--header-height)] z-50 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border'
+			className='z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border xxl:sticky xxl:top-[var(--header-height)]'
 			style={
 				{
 					'--table-footer-height': '2rem'
@@ -43,7 +68,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
 						{
-							'--sticky-left-col-width': '10rem',
+							'--sticky-left-col-width': '8rem',
 							'--row-action-col-width': '4rem'
 						} as React.CSSProperties
 					}>
@@ -67,7 +92,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							<TableHead>Size</TableHead>
 							<TableHead
 								align='right'
-								className='z-20 w-28 min-w-28 bg-background xl:sticky xl:right-[var(--row-action-col-width)]'>
+								className='z-20 w-24 min-w-24 bg-background xl:sticky xl:right-[var(--row-action-col-width)]'>
 								{t('ns_common:common_fields.total')}
 							</TableHead>
 							<TableHead
@@ -120,7 +145,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='center'
-								className='z-20 w-28 min-w-28 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:right-[var(--row-action-col-width)]'>
+								className='z-20 w-24 min-w-24 border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:right-[var(--row-action-col-width)]'>
 								<span className='sr-only'></span>
 							</TableHead>
 							<TableHead
@@ -156,9 +181,18 @@ const OrderSizeDetailTable: React.FC = () => {
 					</Div>
 				)}
 			</Div>
-			<Div className='flex basis-[var(--table-footer-height)] items-center justify-center gap-x-2 p-3 text-center text-sm text-muted-foreground'>
-				<Icon name='Table2' size={20} strokeWidth={1.5} />
-				{t('ns_inoutbound:description.outbound_table_caption')}
+			<Div className='flex basis-[var(--table-footer-height)] items-center justify-center gap-x-2 p-3 px-4 text-center text-sm text-muted-foreground'>
+				<Typography variant='small'>{t('ns_inoutbound:description.outbound_table_caption')}</Typography>
+				<Div className='inline-flex flex-1 items-center justify-end gap-x-2 bg-background'>
+					<Typography color='muted' className='font-medium'>
+						{t('ns_common:common_fields.total')}
+					</Typography>
+					<Separator orientation='horizontal' className='h-0.5 basis-4' />
+					<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
+						{totalFilteredQty}
+						<Typography variant='small'>pcs</Typography>
+					</Typography>
+				</Div>
 			</Div>
 		</Div>
 	)

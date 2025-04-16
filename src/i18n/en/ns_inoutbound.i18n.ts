@@ -10,6 +10,7 @@ export default {
 		caption: 'Data is streamed continuously when the connection is established.'
 	},
 	description: {
+		add_outbound_size: 'Add size and quantity for this order to perform the outbound process.',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
@@ -17,6 +18,7 @@ export default {
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
 		inoutbound_form_note: 'Disconnect before updating stock moves.',
 		monthly_inventory_report: 'Manage and track the monthly inventory of finished goods in the warehouse.',
+		no_added_size: 'No size added',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',

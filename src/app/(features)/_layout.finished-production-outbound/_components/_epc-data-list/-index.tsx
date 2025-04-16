@@ -178,14 +178,14 @@ const ScannedEpcList: React.FC = () => {
 
 	return (
 		<Div
-			className='flex flex-col items-stretch justify-between overflow-clip rounded-md border'
+			className='flex flex-col items-stretch justify-between overflow-clip rounded-md border @6xl:sticky @6xl:top-[var(--header-height)] @6xl:h-[var(--outlet-wrapper-height)]'
 			style={
 				{
 					'--data-list-header-height': '36px'
 				} as React.CSSProperties
 			}>
 			{/* Datalist header */}
-			<Div className='hidden items-center justify-between border-b p-3 @6xl:flex'>
+			<Div className='hidden items-center justify-between border-b p-3 @6xl:flex md:flex lg:flex'>
 				<Typography className='ml-2 inline-flex items-center gap-x-1 text-lg font-medium'>
 					<Icon name='Tags' size={24} /> EPC Data
 				</Typography>
@@ -194,7 +194,7 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-[50vh]'>
+					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height-10rem))] md:h-[50vh]'>
 					<Div
 						className='relative w-full'
 						style={{

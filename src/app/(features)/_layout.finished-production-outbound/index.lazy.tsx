@@ -30,21 +30,21 @@ function Page() {
 			</head>
 			<HostCompatibleAlert />
 			<PageProvider>
-				<Div className='static gap-4 xxl:grid xxl:grid-cols-[4fr_8fr] xxl:items-stretch'>
-					<Div className='h-full @container'>
-						<Div className='flex h-full grid-rows-12 flex-col items-stretch gap-6 @6xl:grid @6xl:grid-flow-col @6xl:grid-cols-2 xxl:gap-4'>
-							<Div className='order-first col-span-full row-span-3 @6xl:col-span-1 @6xl:row-span-4'>
+				<Div className='static gap-4 xxl:grid xxl:grid-cols-12'>
+					<Div className='h-full @container xxl:col-span-4'>
+						<Div className='flex flex-col items-stretch gap-6 @6xl:grid @6xl:grid-flow-col @6xl:auto-rows-auto @6xl:grid-cols-2 @6xl:grid-rows-3 xxl:gap-4'>
+							<Div className='order-first col-span-full @6xl:col-span-1 @6xl:row-span-1'>
 								<ScannedEpcCounter />
 							</Div>
-							<Div className='col-span-full row-span-6 flex-1 @6xl:sticky @6xl:top-[var(--header-height)] @6xl:order-last @6xl:col-span-1 @6xl:row-span-12 @6xl:h-[var(--outlet-wrapper-height)]'>
+							<Div className='col-span-full flex-1 @6xl:sticky @6xl:top-[var(--header-height)] @6xl:order-last @6xl:col-span-1 @6xl:row-span-3'>
 								<ScannedEpcList />
 							</Div>
-							<Div className='order-last col-span-full @6xl:order-2 @6xl:col-span-1 @6xl:row-span-8'>
+							<Div className='order-last col-span-full @6xl:order-2 @6xl:col-span-1 @6xl:row-span-2'>
 								<OutboundForm />
 							</Div>
 						</Div>
 					</Div>
-					<Div className='hidden xxl:block'>
+					<Div className='hidden xxl:col-span-8 xxl:block'>
 						<OrderSizeDetailTable />
 					</Div>
 				</Div>

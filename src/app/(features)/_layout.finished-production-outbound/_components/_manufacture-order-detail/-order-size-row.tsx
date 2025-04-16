@@ -28,10 +28,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			<TableCell className='group/cell left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center md:right-auto xl:sticky'>
 				<Div className='flex items-center gap-x-2'>{data?.mo_no ?? FALLBACK_ORDER_VALUE}</Div>
 			</TableCell>
-			<TableCell className='z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] xl:sticky xl:left-[var(--sticky-left-col-width)] xl:right-auto'>
+			<TableCell className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] xl:sticky xl:left-[var(--sticky-left-col-width)] xl:right-auto'>
 				{data?.shoes_style_code_factory}
 			</TableCell>
-			<TableCell className='z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
+			<TableCell className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(var(--sticky-left-ntn-col-width)+var(--sticky-left-col-width))]'>
 				{data?.mat_ecolor}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
@@ -63,7 +63,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			</TableCell>
 			<TableCell
 				align='right'
-				className='w-28 min-w-28 font-medium md:relative md:right-auto xl:sticky xl:right-[var(--row-action-col-width)]'>
+				className='w-24 min-w-24 font-medium md:relative md:right-auto xl:sticky xl:right-[var(--row-action-col-width)]'>
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell

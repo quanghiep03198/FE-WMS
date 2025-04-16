@@ -10,6 +10,7 @@ export default {
 		caption: '在连接开启时, EPC 数据会从服务器持续传输.'
 	},
 	description: {
+		add_outbound_size: '添加尺码和数量以执行出库操作',
 		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
 		daily_outbound_report: '跟踪和管理每日成品仓库出库进度',
 		exchange_all: '您可以交换属于所选尺码的整个 EPC',
@@ -17,6 +18,7 @@ export default {
 		exchange_qty: '实际订单的交换商品数量',
 		inoutbound_form_note: '更新库存移动之前断开连接',
 		monthly_inventory_report: '管理和跟踪成品仓库的每月库存',
+		no_added_size: '没有添加尺码',
 		no_exchangable_order: '没有可交换的订单',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
