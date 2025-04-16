@@ -25,19 +25,24 @@ export const detailedOutboundValidator = z
 		)
 	})
 	.superRefine((values, context) => {
-		if (!values.sizes.every((item) => item.qty <= item.size_qty)) {
-			values.sizes.forEach((item, index) => {
-				if (item.qty > item.size_qty)
-					context.addIssue({
-						code: z.ZodIssueCode.too_big,
-						message: 'ns_validation:invalid_value',
-						maximum: item.size_qty,
-						type: 'number',
-						inclusive: true,
-						path: [`sizes.${index}.qty`]
-					})
-			})
-		}
+		values.sizes.forEach((item, index) => {
+			if (item.qty > item.size_qty)
+				context.addIssue({
+					code: z.ZodIssueCode.too_big,
+					message: 'ns_validation:invalid_value',
+					maximum: item.size_qty,
+					type: 'number',
+					inclusive: true,
+					path: [`sizes.${index}.qty`]
+				})
+			if (values.sizes.findIndex((otherItem) => otherItem.size_numcode === item.size_numcode) !== index)
+				context.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Do not select the same size',
+					fatal: true,
+					path: [`sizes.${index}.size_numcode`]
+				})
+		})
 	})
 
 export type StandardOutboundFormValues = z.infer<typeof standardOutboundValidator>

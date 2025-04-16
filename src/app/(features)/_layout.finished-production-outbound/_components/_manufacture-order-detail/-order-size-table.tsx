@@ -32,7 +32,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='sticky top-[var(--header-height)] z-50 flex h-[calc(0.85*var(--outlet-wrapper-height))] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border'
+			className='sticky top-[var(--header-height)] z-50 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border'
 			style={
 				{
 					'--table-footer-height': '2rem'
