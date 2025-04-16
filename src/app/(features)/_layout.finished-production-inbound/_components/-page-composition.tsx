@@ -12,8 +12,13 @@ const Container = tw.div`
    has-[#toggle-fullscreen[data-state=checked]]:flex
    has-[#toggle-fullscreen[data-state=checked]]:justify-center
    has-[#toggle-fullscreen[data-state=checked]]:items-center
+	has-[#toggle-fullscreen[data-state=checked]]:animate-in
+	has-[#toggle-fullscreen[data-state=checked]]:fade-in-0
+	has-[#toggle-fullscreen[data-state=unchecked]]:fade-out-0
+	has-[#toggle-fullscreen[data-state=unchecked]]:zoom-out-95
+	has-[#toggle-fullscreen[data-state=unchecked]]:duration-200
 `
-const Wrapper = tw.div`w-full max-h-full items-stretch grid grid-cols-1 @[1366px]:grid-cols-[2.5fr_1fr] gap-x-6 gap-y-10`
+const Wrapper = tw.div`w-full max-h-full has-[#toggle-fullscreen[data-state=checked]]:h-full items-stretch grid grid-cols-1 @[1366px]:grid-cols-[2.5fr_1fr] gap-x-6 gap-y-10`
 const Main = tw.div`flex flex-col gap-y-6 max-h-full items-stretch basis-full flex-1`
 const InnerWrapper = tw.div`grid xl:grid-cols-2 lg:grid-cols-2 xl:grid-rows-3 lg:grid-rows-3 gap-y-4 gap-x-6 flex-1 `
 const ListBoxPanel = tw.div`xl:col-span-1 xl:row-span-full xl:order-1 order-2 lg:col-span-1 lg:row-span-full lg:order-1 lg:max-h-full xl:max-h-full`
