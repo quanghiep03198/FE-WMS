@@ -48,6 +48,14 @@ function Layout() {
 		return 0
 	}, [outletWrapperRef.current])
 
+	const headerHeight = useMemo(() => {
+		return headerSize ? headerSize.height + 'px' : '80px'
+	}, [headerSize])
+
+	const outletWrapperHeight = useMemo(() => {
+		return headerSize ? containerSize.height - headerSize.height - outletWrapperPaddingY + 'px' : 'calc(100vh-112px)'
+	}, [containerSize, headerSize, outletWrapperPaddingY])
+
 	useEffectOnce(() => {
 		if (document.body.classList.contains(font)) document.body.classList.remove(font)
 		document.body.classList.add(font)
@@ -57,25 +65,22 @@ function Layout() {
 		<Fragment>
 			{isSmallScreen && <UnsupportedScreen />}
 			<AuthGuard>
-				<SidebarProvider className='group/app-layout'>
+				<SidebarProvider className='group/app-layout h-screen overflow-y-scroll' ref={containerRef}>
 					<NavSidebar />
 					<Div
 						className='flex-1 @container'
-						ref={containerRef}
 						style={
 							{
-								'--header-height': headerSize ? headerSize.height + 'px' : '80px',
-								'--outlet-wrapper-height':
-									containerSize && headerSize
-										? containerSize.height - headerSize.height - outletWrapperPaddingY + 'px'
-										: 'calc(100vh-112px)'
+								'--header-height': headerHeight,
+								'--outlet-wrapper-height': outletWrapperHeight
 							} as React.CSSProperties
 						}>
 						<BreadcrumbProvider>
 							<Navbar ref={headerRef} />
 							<Div
 								as='main'
-								className='flex-1 basis-full px-6 pb-6 [view-transition-name:main-content] sm:px-4'
+								id='outlet-wrapper'
+								className='static flex-1 basis-full px-6 pb-6 [view-transition-name:main-content] sm:px-4'
 								ref={outletWrapperRef}>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
