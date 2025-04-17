@@ -202,7 +202,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const renderDetailTable = useCallback(
 		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
 			<InventoryReportDetailTable
-				info={pick(row.original, [
+				queries={pick(row.original, [
 					'po',
 					'mo_no',
 					'cust_shoestyle',
@@ -210,10 +210,10 @@ export const InventoryReportMasterTable: React.FC = () => {
 					'inv_type',
 					'inv_year_month'
 				])}
-				sizes={sortBy(row.original?.size_data, 'size_numcode')}
+				data={sortBy(row.original?.size_data, 'size_numcode')}
 			/>
 		),
-		[]
+		[data, isLoading]
 	)
 
 	const renderSlotRight = useMemoizedFn(() => (

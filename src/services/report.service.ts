@@ -25,9 +25,15 @@ export class ReportService {
 		})
 	}
 
-	static async updateInventoryReport(tenantId: string, params: AxiosRequestConfig['params'], payload: any) {
+	static async updateInventoryReport(
+		tenantId: string,
+		signal: AbortSignal,
+		params: AxiosRequestConfig['params'],
+		payload: any
+	) {
 		return await axiosInstance.patch('/report/monthly-inventory/update', payload, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			signal,
 			params
 		})
 	}
