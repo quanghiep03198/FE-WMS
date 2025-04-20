@@ -28,7 +28,7 @@ export default {
 		mo_no: 'Chỉ lệnh',
 		mo_no_actual: 'Chỉ lệnh thực',
 		mo_noseq: 'Tiểu chỉ lệnh',
-		mo_qty: 'Số lượng chỉ lệnh',
+		mo_qty: 'Số lượng đặt đơn',
 		mo_size_qty: 'Số lượng theo size',
 		no_crates_in_stock: 'Số thùng nhập kho',
 		no_pair_in_stock: 'Số đôi nhập kho',
