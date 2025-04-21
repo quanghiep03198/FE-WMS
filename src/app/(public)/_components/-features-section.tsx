@@ -15,7 +15,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={ref}
-			className='flex animate-[fly-in_1s_ease] flex-col justify-center space-y-16 sm:space-y-8'
+			className='mx-auto flex w-full max-w-7xl animate-[fly-in_1s_ease] flex-col justify-center space-y-16 xxl:max-w-8xl'
 			id='outstanding-features'
 			as='section'
 			style={{
@@ -32,7 +32,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 					Comprehensive solutions for Warehouse Management
 				</Typography>
 			</Div>
-			<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
+			<Div className='grid w-full items-start gap-6 bg-background md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
 				<EffectCard>
 					<EffectCardIconWrapper>
 						<EffectCardIcon

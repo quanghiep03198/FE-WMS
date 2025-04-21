@@ -25,7 +25,8 @@ export default function FeedbackFormTrigger() {
 	return (
 		<>
 			<Button variant='link' type='button' className='p-0' ref={buttonRef}>
-				{t('ns_common:actions.report_bug')}
+				{/* {t('ns_common:actions.report_bug')} */}
+				Report bug
 				<Icon name='ArrowRight' size={12} role='img' />
 			</Button>
 		</>

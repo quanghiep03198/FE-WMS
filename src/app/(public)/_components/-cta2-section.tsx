@@ -101,10 +101,17 @@ const CTA2Section: React.FC = () => {
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
 						<Typography className='font-semibold sm:col-span-5'>Monitoring</Typography>
-						<Typography variant='small' color='muted'>
-							Monitor your applications in real-time with PM2, allowing you to control and manage your
+						<Typography
+							variant='small'
+							color='muted'
+							dangerouslySetInnerHTML={{
+								__html: /* template */ `
+							
+							Monitor your applications in real-time with <strong>PM2</strong>, <strong>Prometheus</strong> and <strong>Grafana</strong> , allowing you to control and manage your
 							deployments remotely with ease.
-						</Typography>
+							`
+							}}
+						/>
 					</Div>
 				</Div>
 				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>

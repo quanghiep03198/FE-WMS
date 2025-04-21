@@ -16,8 +16,11 @@ const SupportSection: React.FunctionComponent = () => {
 	})
 
 	return (
-		<Div className='grid grid-cols-2 items-center justify-center gap-16 sm:grid-cols-1 md:grid-cols-1'>
-			<Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
+		<Div className='grid grid-cols-[1fr_1.125fr] items-center justify-center gap-16 sm:grid-cols-1 md:grid-cols-1'>
+			<Div className='flex items-center justify-center'>
+				<Image src='/global-transport.svg' alt='Shipping' />
+			</Div>
+			{/* <Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' /> */}
 			<Div
 				id='cta'
 				as='section'
@@ -87,6 +90,6 @@ const SupportSection: React.FunctionComponent = () => {
 	)
 }
 
-const Image = tw.img`max-w-2xl object-contain object-center sm:order-last md:order-last sm:max-w-full`
+const Image = tw.img`max-w-2xl object-contain object-center sm:order-last md:order-last sm:max-w-full w-full`
 
 export default SupportSection

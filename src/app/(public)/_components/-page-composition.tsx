@@ -3,6 +3,7 @@ import tw from 'tailwind-styled-components'
 import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 import Footer from './-footer'
 import Header from './-header'
+import LogoCloud from './-logo-cloud'
 import Spotlight from './-spotlight'
 
 const PageComposition: React.FC = () => {
@@ -30,6 +31,7 @@ const PageComposition: React.FC = () => {
 						</Wrapper>
 					))}
 				</Div>
+				<LogoCloud />
 				<Footer />
 			</Main>
 		</Container>

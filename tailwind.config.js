@@ -266,6 +266,14 @@ module.exports = {
 						transform: 'translate(-75%, -60%) scale(0.95)'
 					}
 				},
+				['scrolling']: {
+					from: {
+						transform: 'translateX(0)'
+					},
+					to: {
+						transform: 'translateX(-109%)'
+					}
+				},
 				['typing']: {
 					from: {
 						width: '0',
@@ -290,6 +298,7 @@ module.exports = {
 				['fly-in']: 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
 				['fly-in-out']: 'fly-in-out 1s linear',
 				['fall-down']: 'fall-down 1s linear',
+				['scrolling']: 'scrolling 10s linear infinite both!important',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
 				['spotlight-off']: 'spotlight-off 6s ease forwards',
 				['shimmer']: 'shimmer 1.5s linear infinite',
