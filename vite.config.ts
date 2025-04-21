@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					runtimeCaching: [
 						{
-							urlPattern: /.*\.(js|css|png|jpg|svg|woff2?)$/,
+							urlPattern: /.*\.(js|css|png|jpg|svg|webp|woff2?)$/,
 							handler: 'CacheFirst',
 							options: {
 								cacheName: 'static-cache',
