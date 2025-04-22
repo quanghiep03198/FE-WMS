@@ -41,7 +41,7 @@ export const exchangeEpcSchema = z
 			.default(0)
 			.transform((value) => Number(value))
 	})
-	.refine((values) => values.quantity <= values.scanned_size_qty && values.quantity <= values.size_qty, {
+	.refine((values) => values.quantity <= values.scanned_size_qty, {
 		message: 'ns_validation:invalid_value',
 		path: ['quantity']
 	})
