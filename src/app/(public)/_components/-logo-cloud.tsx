@@ -4,7 +4,7 @@ import { cloneElement } from 'react'
 
 const LogoCloud: React.FC = () => {
 	return (
-		<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center gap-5 border-t py-20 xxl:max-w-8xl'>
+		<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center border-t py-20 xxl:max-w-8xl'>
 			<Typography className='font-medium lg:text-left'>Built with open-source technologies</Typography>
 			<Div className='group/scroll flex w-max max-w-lg flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
 				<LogoList />
@@ -18,12 +18,12 @@ const LogoCloud: React.FC = () => {
 const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 	<div
 		{...props}
-		className='mx-auto flex w-fit animate-[scrolling_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 will-change-transform group-hover/scroll:[animation-play-state:paused]'>
+		className='mx-auto flex w-fit animate-[scrolling_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-6 will-change-transform group-hover/scroll:[animation-play-state:paused]'>
 		<a
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img
 				src='/typescript.svg'
@@ -35,7 +35,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img src='/react.svg' alt='React' className='h-6 saturate-0 transition-all group-hover/card:saturate-100' />
 		</a>
@@ -43,7 +43,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' className='h-6 w-6'>
 				<rect width='256' height='256' fill='none'></rect>
@@ -73,7 +73,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img
 				src='/tailwindcss.svg'
@@ -85,7 +85,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img
 				src='/tanstack.webp'
@@ -97,7 +97,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img src='/nest.svg' alt='NestJS' className='h-6 saturate-0 transition-all group-hover/card:saturate-100' />
 		</a>
@@ -105,7 +105,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img
 				src='/mongodb.svg'
@@ -117,7 +117,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img src='/redis.svg' alt='Redis' className='h-7 saturate-0 transition-all group-hover/card:saturate-100' />
 		</a>
@@ -125,7 +125,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 66' width='32' height='32'>
 				<path
@@ -138,7 +138,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img
 				src='/prometheus.svg'
@@ -150,7 +150,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			href='#'
 			className={cn(
 				buttonVariants({ variant: 'outline' }),
-				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0'
+				'group/card flex aspect-square h-12 items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)]'
 			)}>
 			<img
 				src='/grafana.svg'
