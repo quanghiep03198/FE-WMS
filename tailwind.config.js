@@ -271,7 +271,7 @@ module.exports = {
 						transform: 'translateX(0)'
 					},
 					to: {
-						transform: 'translateX(-109%)'
+						transform: 'translateX(calc(-100% - 1rem))'
 					}
 				},
 				['typing']: {
