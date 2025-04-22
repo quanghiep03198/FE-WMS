@@ -124,53 +124,41 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 						{Array.isArray(data) && data.length > 0 ? (
 							<Fragment>
 								<TableRow>
-									<TableVerticalHeader align='left'>Size</TableVerticalHeader>
+									<TableVerticalHeader>Size</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCellHead key={item.size} align='center'>
-											{item.size}
-										</TableCellHead>
+										<TableCellHead key={item.size}>{item.size}</TableCellHead>
 									))}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} align='center'>
-											{formatIntlNumber(item.int_qty)}
-										</TableCell>
+										<TableCell key={item.size}>{formatIntlNumber(item.int_qty)}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>{t('ns_erp:fields.mo_size_qty')}</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.mo_size_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} align='center'>
-											{formatIntlNumber(item.ms_qty)}
-										</TableCell>
+										<TableCell key={item.size}>{formatIntlNumber(item.ms_qty)}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>{t('ns_erp:fields.inbound_qty')}</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.inbound_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} align='center'>
-											{formatIntlNumber(item.ist_qty)}
-										</TableCell>
+										<TableCell key={item.size}>{formatIntlNumber(item.ist_qty)}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>{t('ns_erp:fields.outbound_qty')}</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.outbound_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} align='center'>
-											{formatIntlNumber(item.ost_qty)}
-										</TableCell>
+										<TableCell key={item.size}>{formatIntlNumber(item.ost_qty)}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>
-										{t('ns_erp:fields.actual_instock_qty')}
-									</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.actual_instock_qty')}</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
 											return (
-												<TableCell key={field.id} align='center'>
+												<TableCell key={field.id}>
 													<InputFieldControl
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
@@ -182,16 +170,13 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										})}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>
-										{t('ns_erp:fields.actual_outstock_qty')}
-									</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.actual_outstock_qty')}</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
 											const error = form.getFieldState(`data.${index}.mn_ost_qty`).error
 											return (
 												<TableCell
 													key={field.id}
-													align='center'
 													aria-invalid={error ? true : false}
 													className='p-0 aria-[invalid=true]:border aria-[invalid=true]:border-destructive'>
 													<InputFieldControl
@@ -205,23 +190,19 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										})}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader align='left'>
-										{t('ns_erp:fields.final_inventory_qty')}
-									</TableVerticalHeader>
+									<TableVerticalHeader>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} align='center' className='hover:!ring-primary'>
+										<TableCell key={item.size} className='hover:!ring-primary'>
 											{item.fnl_qty}
 										</TableCell>
 									))}
 								</TableRow>
 							</Fragment>
 						) : (
-							<Div align='center' className='p-10 font-medium'>
-								{t('ns_common:table.no_data')}
-							</Div>
+							<Div className='p-10 font-medium'>{t('ns_common:table.no_data')}</Div>
 						)}
-						<TableRow className='w-full'>
-							<TableCell className='!w-full flex-1'>
+						<TableRow className='*:border-none'>
+							<TableVerticalHeader className='sticky left-0 !w-full flex-1'>
 								<Div className='inline-grid grid-cols-2 gap-x-2'>
 									{isEditing ? (
 										<Button
@@ -268,10 +249,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												: t('ns_common:actions.save')}
 									</Button>
 								</Div>
-							</TableCell>
+							</TableVerticalHeader>
+							<TableCell className='flex-1' />
 						</TableRow>
 					</Table>
-				</form>{' '}
+				</form>
 			</Form>
 		</ScrollArea>
 	)
