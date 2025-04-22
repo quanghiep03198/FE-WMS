@@ -36,25 +36,25 @@ const CTASection: React.FC = () => {
 
 				<List className='mb-12 hidden grid-cols-1 gap-x-10 xl:grid'>
 					<ListItem>
-						<Icon name='Check' />{' '}
+						<Icon name='Check' size={18} />{' '}
 						<Typography as='span' className='flex-1'>
 							Real-time data streaming
 						</Typography>
 					</ListItem>
 					<ListItem>
-						<Icon name='Check' />{' '}
+						<Icon name='Check' size={18} />{' '}
 						<Typography as='span' className='flex-1'>
 							Friendly UI/UX
 						</Typography>
 					</ListItem>
 					<ListItem>
-						<Icon name='Check' />{' '}
+						<Icon name='Check' size={18} />
 						<Typography as='span' className='flex-1'>
 							Automated Inbound, Outbound & Auditing Process
 						</Typography>
 					</ListItem>
 					<ListItem>
-						<Icon name='Check' />{' '}
+						<Icon name='Check' size={18} />{' '}
 						<Typography as='span' className='flex-1'>
 							Powerful analytics and reporting
 						</Typography>
@@ -70,31 +70,31 @@ const CTASection: React.FC = () => {
 					</Button>
 				</Div>
 			</Div>
-			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-y-10 lg:gap-x-10 xl:gap-y-0'>
+			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-y-10 lg:gap-x-12 xl:gap-y-0'>
 				{/* <Image loading='eager' width='500' height='500' src='/global-transport.svg' alt='Global transport' /> */}
 				<Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
-				<Div className='block space-y-10 xl:hidden'>
-					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:gap-y-8'>
+				<Div className='block space-y-10 lg:space-y-12 xl:hidden'>
+					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:-translate-x-8'>
 						<ListItem>
-							<Icon name='Check' />{' '}
+							<Icon name='Check' size={20} />{' '}
 							<Typography as='span' className='flex-1'>
 								Real-time data streaming
 							</Typography>
 						</ListItem>
 						<ListItem>
-							<Icon name='Check' />{' '}
+							<Icon name='Check' size={20} />{' '}
 							<Typography as='span' className='flex-1'>
 								Friendly UI/UX
 							</Typography>
 						</ListItem>
 						<ListItem>
-							<Icon name='Check' />{' '}
+							<Icon name='Check' size={20} />{' '}
 							<Typography as='span' className='flex-1'>
 								Automated Inbound, Outbound & Auditing Process
 							</Typography>
 						</ListItem>
 						<ListItem>
-							<Icon name='Check' />{' '}
+							<Icon name='Check' size={20} />{' '}
 							<Typography as='span' className='flex-1'>
 								Powerful analytics and reporting
 							</Typography>
@@ -114,7 +114,7 @@ const CTASection: React.FC = () => {
 	)
 }
 
-const List = tw.ul`grid gap-y-2 mb-8`
+const List = tw.ul`grid gap-y-2 mb-8 sm:gap-y-2`
 const ListItem = tw.li`flex items-center gap-x-2 text-muted-foreground [&>svg]:text-foreground [&>svg]:min-w-6 whitespace-nowrap text-left`
 
 const Image = tw.img`w-full max-w-lg md:max-w-md lg:max-w-xl sm:max-w-sm xl:max-w-xl xxl:max-w-3xl flex-1`

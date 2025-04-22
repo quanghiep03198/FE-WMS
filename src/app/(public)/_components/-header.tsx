@@ -28,7 +28,7 @@ const Header: React.FunctionComponent = () => {
 		<Div className={cn('sticky top-0 z-50 h-20 transition-all duration-200')}>
 			<Div
 				as='nav'
-				className='mx-auto flex h-full max-w-7xl items-center justify-between rounded-b-lg border-b border-l border-r bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:p-4 xxl:max-w-8xl'
+				className='mx-auto flex h-full max-w-7xl items-center justify-between border-b bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:p-4 xl:rounded-b-2xl xl:border-l xl:border-r xxl:max-w-8xl'
 				aria-label='Global'>
 				<Div className='inline-flex items-center gap-x-2'>
 					<NavHeaderDrawerMenu />

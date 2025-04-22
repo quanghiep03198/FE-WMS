@@ -4,7 +4,6 @@ import { navigationConfig, usePageContext } from '../_contexts/-page-context'
 import Footer from './-footer'
 import Header from './-header'
 import LogoCloud from './-logo-cloud'
-import Spotlight from './-spotlight'
 
 const PageComposition: React.FC = () => {
 	const pageContext = usePageContext()
@@ -16,7 +15,7 @@ const PageComposition: React.FC = () => {
 			style={{
 				'--primary-alt': 'hsl(var(--success))'
 			}}>
-			<Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-left-40 xl:-top-40' />
+			{/* <Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-left-40 xl:-top-40' /> */}
 			<Main ref={pageContext?.contentScrollRef}>
 				<Header />
 				<Div>
