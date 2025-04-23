@@ -62,9 +62,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				),
 				size: 50,
 				enableResizing: false,
-				meta: {
-					align: 'center'
-				},
+				meta: { align: 'left' },
 				cell: ({ row }) => (
 					<button
 						className='absolute inset-0 flex h-full w-full items-center justify-center'
@@ -80,6 +78,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				minSize: 150,
 				filterFn: 'fuzzy',
+				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('po', {
@@ -89,6 +88,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				minSize: 150,
 				filterFn: 'fuzzy',
+				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('mo_no', {
@@ -97,6 +97,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				minSize: 150,
+				meta: { align: 'left' },
 				filterFn: 'fuzzy'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
@@ -106,6 +107,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
+				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('cust_shoestyle', {
@@ -115,6 +117,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				minSize: 200,
+				meta: {
+					align: 'left'
+				},
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('order_qty', {
@@ -125,6 +130,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				minSize: 200,
+
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('init_inv_qty', {
