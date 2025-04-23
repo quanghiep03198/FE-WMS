@@ -44,32 +44,34 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 
 	return (
 		<ContextMenu>
-			<ContextMenuTrigger className='line-clamp-1 focus:outline-none'>
-				<Typography
-					as='span'
-					className={cn(
-						'relative inline-flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
-						{
-							'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
-							'cursor-col-resize': getIsResizing(),
-							'justify-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
-							'justify-start text-left': columnDef.meta?.align === 'left',
-							'justify-end text-right': columnDef.meta?.align === 'right'
-						}
-					)}
-					onClick={toggleSorting}
-					title={
-						header.column.getCanSort()
-							? getNextSortingOrder() === 'asc'
-								? t('ns_common:table.sort_asc')
-								: getNextSortingOrder() === 'desc'
-									? t('ns_common:table.sort_desc')
-									: t('ns_common:table.clear_sort')
-							: undefined
-					}>
-					{columnDef.enableSorting && (
-						<Icon name={currentSortingState} size={14} className='min-w-[14px] max-w-[14px] basis-[14px]' />
-					)}
+			<ContextMenuTrigger
+				className={cn(
+					'line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
+					{
+						'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
+						'cursor-col-resize': getIsResizing(),
+						'justify-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
+						'justify-start text-left': columnDef.meta?.align === 'left',
+						'justify-end text-right': columnDef.meta?.align === 'right'
+					}
+				)}
+				style={{
+					minWidth: `calc(var(--header-${header?.id}-size) * 1px)`
+				}}
+				onClick={toggleSorting}
+				title={
+					header.column.getCanSort()
+						? getNextSortingOrder() === 'asc'
+							? t('ns_common:table.sort_asc')
+							: getNextSortingOrder() === 'desc'
+								? t('ns_common:table.sort_desc')
+								: t('ns_common:table.clear_sort')
+						: undefined
+				}>
+				{columnDef.enableSorting && (
+					<Icon name={currentSortingState} size={14} className='min-w-[14px] max-w-[14px] basis-[14px]' />
+				)}
+				<Typography variant='small' className='line-clamp-1 text-inherit'>
 					{flexRender(columnDef.header, header.getContext())}
 				</Typography>
 			</ContextMenuTrigger>

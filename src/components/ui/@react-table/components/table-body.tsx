@@ -83,7 +83,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 								...DataTableUtility.getStickyOffsetPosition(cell.column)
 							}}>
 							<Div
-								className={cn('line-clamp-1', {
+								className={cn('!line-clamp-1', {
 									'block text-left': cell.column.columnDef.meta?.align === 'left',
 									'block text-center': cell.column.columnDef.meta?.align === 'center',
 									'block text-right': cell.column.columnDef.meta?.align === 'right'

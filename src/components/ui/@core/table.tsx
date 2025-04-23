@@ -16,7 +16,7 @@ Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
 	({ className, ...props }, ref) => (
-		<thead ref={ref} className={cn('whitespace-nowrap [&>tr>th:first-child]:border-l-0', className)} {...props} />
+		<thead ref={ref} className={cn('[&>tr>th:first-child]:border-l-0', className)} {...props} />
 	)
 )
 TableHeader.displayName = 'TableHeader'
