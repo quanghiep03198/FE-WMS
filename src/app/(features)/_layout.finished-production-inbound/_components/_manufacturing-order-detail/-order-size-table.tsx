@@ -199,7 +199,7 @@ const OrderSizeDetailTable: React.FC = () => {
 									<TableHead>Size</TableHead>
 									<TableHead
 										align='right'
-										className='right-[var(--row-action-col-width)] z-20 w-32 bg-background xl:sticky'>
+										className='right-[var(--row-action-col-width)] z-20 w-28 min-w-28 bg-background xl:sticky'>
 										{t('ns_common:common_fields.total')}
 									</TableHead>
 									<TableHead className='right-0 z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky'>
@@ -251,7 +251,7 @@ const OrderSizeDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='center'
-										className='sticky right-[var(--row-action-col-width)] z-20 w-24 min-w-24'>
+										className='sticky right-[var(--row-action-col-width)] z-20 w-28 min-w-28'>
 										<span className='sr-only'></span>
 									</TableHead>
 									<TableHead align='center' className='sticky right-0 z-20 w-[var(--row-action-col-width)]'>

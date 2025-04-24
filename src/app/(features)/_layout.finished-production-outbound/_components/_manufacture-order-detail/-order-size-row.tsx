@@ -63,7 +63,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			</TableCell>
 			<TableCell
 				align='right'
-				className='w-24 min-w-24 font-medium md:relative md:right-auto xl:sticky xl:right-[var(--row-action-col-width)]'>
+				className='w-28 min-w-28 font-medium md:relative md:right-auto xl:sticky xl:right-[var(--row-action-col-width)]'>
 				{aggregateSizeCount}
 			</TableCell>
 			<TableCell
