@@ -3,7 +3,8 @@ import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
@@ -87,9 +88,27 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				minSize: 150,
-				filterFn: 'fuzzy',
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value)
+						return (
+							<Badge variant='outline' className='whitespace-nowrap'>
+								Unknown
+							</Badge>
+						)
+					return (
+						<EllipsisList
+							threshhold={2}
+							data={value.split(',').sort((a, b) => a.localeCompare(b))}
+							template={({ data }) => (
+								<Badge variant='outline' className='whitespace-nowrap'>
+									{data.trim()}
+								</Badge>
+							)}
+						/>
+					)
+				}
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),

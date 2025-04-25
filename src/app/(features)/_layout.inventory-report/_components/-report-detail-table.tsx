@@ -124,15 +124,15 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 						{Array.isArray(data) && data.length > 0 ? (
 							<Fragment>
 								<TableRow>
-									<TableVerticalHeader>Size</TableVerticalHeader>
-									{data.map((item) => (
-										<TableCellHead key={item.size}>{item.size}</TableCellHead>
-									))}
-								</TableRow>
-								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
 									{data.map((item) => (
 										<TableCell key={item.size}>{formatIntlNumber(item.int_qty)}</TableCell>
+									))}
+								</TableRow>
+								<TableRow>
+									<TableVerticalHeader>Size</TableVerticalHeader>
+									{data.map((item) => (
+										<TableCellHead key={item.size}>{item.size}</TableCellHead>
 									))}
 								</TableRow>
 								<TableRow>
