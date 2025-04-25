@@ -20,11 +20,13 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 					}>
 					<TableHeader className='sticky top-0 z-20'>
 						<TableRow className='sticky'>
-							<TableHead className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+							<TableHead
+								align='left'
+								className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
-							<TableHead>Size</TableHead>
-							<TableHead className='right-0 z-20 w-32 bg-background xl:sticky'>
+							<TableHead align='center'>Size</TableHead>
+							<TableHead align='right' className='right-0 z-20 w-28 min-w-28 bg-background xl:sticky'>
 								{t('ns_common:common_fields.total')}
 							</TableHead>
 						</TableRow>
