@@ -6,7 +6,7 @@ const UnavailableService: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 
 	return (
-		<Div className='flex h-full w-full flex-col items-center justify-center gap-2'>
+		<Div className='flex h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-2'>
 			<Typography variant='code' color='destructive' className='mb-3 text-xl font-bold'>
 				503
 			</Typography>
