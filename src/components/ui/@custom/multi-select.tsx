@@ -181,7 +181,7 @@ export function MultiSelect<D = Record<string, any>>({
 					)}>
 					{Array.isArray(selectedValues) && selectedValues.length > 0 ? (
 						<div className='flex w-full items-center justify-between'>
-							<div className='flex flex-wrap items-center gap-x-1'>
+							<div className='flex flex-nowrap items-center gap-x-1'>
 								{Array.isArray(selectedValues) &&
 									selectedValues.slice(0, maxCount).map((value) => {
 										const option = datalist.find((item) => item?.[valueField] === value)
@@ -256,7 +256,13 @@ export function MultiSelect<D = Record<string, any>>({
 				className='w-[var(--radix-popover-trigger-width)] p-0'
 				align='start'
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}>
-				<Command shouldFilter={shouldFilter}>
+				<Command
+					shouldFilter={shouldFilter}
+					filter={(value, search, keywords) => {
+						const normalizedSearchTerm = search.trim().toLowerCase()
+						const normalizedValue = value.trim().toLowerCase()
+						return normalizedValue.includes(normalizedSearchTerm) || keywords.includes('all') ? 1 : 0
+					}}>
 					<CommandInput
 						placeholder='Search...'
 						onKeyDown={handleInputKeyDown}
@@ -267,7 +273,7 @@ export function MultiSelect<D = Record<string, any>>({
 					<CommandList>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup>
-							<CommandItem key='all' onSelect={toggleAll} className='cursor-pointer'>
+							<CommandItem key='all' keywords={['all']} onSelect={toggleAll} className='cursor-pointer'>
 								<Div
 									className={cn(
 										'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
@@ -284,8 +290,10 @@ export function MultiSelect<D = Record<string, any>>({
 									const isSelected = selectedValues.includes(option?.[valueField])
 									return (
 										<CommandItem
-											key={option?.[valueField] as string}
-											onSelect={() => toggleOption(option?.[valueField])}
+											key={option[valueField] as string}
+											value={String(option[valueField])}
+											keywords={[String(option[valueField])]}
+											onSelect={() => toggleOption(option[valueField])}
 											className='cursor-pointer'>
 											<Div
 												className={cn(

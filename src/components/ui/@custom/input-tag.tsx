@@ -130,6 +130,8 @@ const InputTag = ({
 					break
 
 				case 'Backspace':
+					break
+
 				case 'Delete':
 					if (value.length > 0) {
 						if (activeIndex !== -1 && activeIndex < value.length) {
@@ -176,10 +178,15 @@ const InputTag = ({
 				handleSelect
 			}}>
 			<Command
+				{...props}
 				onKeyDown={handleKeyDown}
 				className={cn('flex h-auto flex-col overflow-visible bg-transparent', className)}
 				dir={dir}
-				{...props}>
+				filter={(value, search) => {
+					const normalizedSearchTerm = search.trim().toLowerCase()
+					const normalizedValue = value.trim().toLowerCase()
+					return normalizedValue.includes(normalizedSearchTerm) ? 1 : 0
+				}}>
 				{children}
 			</Command>
 		</MultiSelectContext.Provider>
@@ -215,7 +222,7 @@ const InputTagTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
 					ref={scrollRef}
 					orientation='horizontal'
 					className={cn(
-						'flex w-full flex-nowrap items-center gap-1 overflow-x-auto rounded-[inherit] bg-transparent !scrollbar-none'
+						'flex w-full !flex-nowrap items-center gap-1 overflow-x-auto rounded-[inherit] bg-transparent !scrollbar-none'
 					)}
 					{...props}>
 					{Array.isArray(value) &&
@@ -336,8 +343,10 @@ const InputTagSelectItem = forwardRef<
 	const isIncluded = Options?.includes(value)
 	return (
 		<CommandItem
-			ref={ref}
 			{...props}
+			ref={ref}
+			value={value}
+			keywords={[value]}
 			onSelect={() => {
 				onValueChange(value)
 				setInputValue('')
