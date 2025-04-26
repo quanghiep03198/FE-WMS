@@ -31,7 +31,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			<TableCell className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] xl:sticky xl:left-[var(--sticky-left-col-width)] xl:right-auto'>
 				{data?.shoes_style_code_factory}
 			</TableCell>
-			<TableCell className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(var(--sticky-left-ntn-col-width)+var(--sticky-left-col-width))]'>
+			<TableCell className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:!sticky xl:left-[calc(var(--sticky-left-col-width)+var(--sticky-left-col-width))] xl:right-auto'>
 				{data?.mat_ecolor}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
