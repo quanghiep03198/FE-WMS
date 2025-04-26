@@ -68,7 +68,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			</TableCell>
 			<TableCell
 				align='center'
-				className='w-[var(--sticky-right-col-width)] min-w-[var(--sticky-right-col-width)] !opacity-100 md:relative md:right-auto xl:sticky xl:right-0'>
+				className='w-[var(--sticky-right-col-width)] min-w-[var(--sticky-right-col-width)] md:relative md:right-auto xl:sticky xl:right-0'>
 				<DeleteOrderPopover data={data} />
 			</TableCell>
 		</TableRow>
