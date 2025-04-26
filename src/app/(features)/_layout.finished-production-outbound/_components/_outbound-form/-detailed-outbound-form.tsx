@@ -2,7 +2,7 @@
 
 import { OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
-import { Button, Div, Form as FormProvider, Icon, SelectFieldControl, Typography } from '@/components/ui'
+import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Typography } from '@/components/ui'
 import {
 	closestCenter,
 	DndContext,
@@ -130,7 +130,7 @@ const DetailedOutboundForm = () => {
 						<PurchaseOrderAutoComplete />
 					</Div>
 					<Div className='col-span-1'>
-						<SelectFieldControl
+						<ComboboxFieldControl
 							label={t('ns_erp:fields.mo_no')}
 							name='mo_no'
 							datalist={sortBy(scannedOrders, 'mo_no')}

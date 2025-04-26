@@ -3,8 +3,7 @@ import { cn } from '@/common/utils/cn'
 import { Div, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { defaultAnimateLayoutChanges, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { useLockFn } from 'ahooks'
-import { use, useState } from 'react'
+import { use } from 'react'
 import { UseFieldArrayRemove, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { FormContext } from './-detailed-outbound-form'
@@ -17,7 +16,6 @@ const DroppableFieldItem: React.FC<{
 	const { t } = useTranslation()
 	const { sizes } = use(FormContext)
 	const { watch, setValue } = useFormContext()
-	const [isRemoving, setIsRemoving] = useState(false)
 
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
@@ -34,18 +32,9 @@ const DroppableFieldItem: React.FC<{
 		opacity: isDragging ? 0.5 : 1
 	}
 
-	const remove = useLockFn(async () => {
-		setIsRemoving(true)
-		await Promise.resolve(setTimeout(() => onRemove(index), 150))
-	})
-
 	return (
 		<Div style={style} {...attributes}>
-			<Div
-				className={cn(
-					'flex items-stretch gap-x-2 duration-200 ease-in animate-in slide-in-from-top-4',
-					'ease-out has-[button[data-state=removing]]:animate-out has-[button[data-state=removing]]:fade-out-0 has-[button[data-state=removing]]:slide-out-to-top-6'
-				)}>
+			<Div className='flex items-stretch gap-x-2'>
 				<button
 					{...listeners}
 					ref={setNodeRef}
@@ -87,8 +76,7 @@ const DroppableFieldItem: React.FC<{
 				</Div>
 				<button
 					type='button'
-					data-state={isRemoving ? 'removing' : undefined}
-					onClick={() => remove()}
+					onClick={() => onRemove(index)}
 					className='inline-flex h-9 basis-4 items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-destructive'>
 					<Icon name='X' size={14} strokeWidth={3} />
 				</button>
