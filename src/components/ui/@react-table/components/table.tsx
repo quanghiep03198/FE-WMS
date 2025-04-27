@@ -154,7 +154,7 @@ function TableDataGrid<TData, TValue>({
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
+const ScrollArea = tw.div`will-change-transform contain-paint relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
 
 TableDataGrid.displayName = 'DataTable'
 
