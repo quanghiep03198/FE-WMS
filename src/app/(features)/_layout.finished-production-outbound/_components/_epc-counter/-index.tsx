@@ -1,6 +1,5 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Div, Separator, Typography } from '@/components/ui'
-import Skeleton from '@/components/ui/@custom/skeleton'
+import { Badge, Div, Separator, Skeleton, Typography } from '@/components/ui'
 import { useInterval, useResetState } from 'ahooks'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,7 +31,7 @@ const ScanningSkeleton: React.FC = () => {
 		<Div
 			data-status={scanningState}
 			className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=success]:opacity-100'>
-			<Skeleton className='inset-0 h-full w-full' />
+			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite]' />
 		</Div>
 	)
 }

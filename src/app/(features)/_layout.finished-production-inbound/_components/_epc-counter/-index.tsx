@@ -1,6 +1,5 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Div, Typography } from '@/components/ui'
-import Skeleton from '@/components/ui/@custom/skeleton'
+import { Badge, Div, Skeleton, Typography } from '@/components/ui'
 import { Separator } from '@radix-ui/react-context-menu'
 import { useInterval, useResetState } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'
@@ -33,7 +32,7 @@ const ScanningSkeleton: React.FC = () => {
 		<Div
 			data-status={scanningStatus}
 			className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=connected]:opacity-100'>
-			<Skeleton className='inset-0 h-full w-full' />
+			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite]' />
 		</Div>
 	)
 }
