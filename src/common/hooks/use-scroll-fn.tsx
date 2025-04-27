@@ -11,7 +11,7 @@ export default function useScrollToFn(containerRef: RefObject<HTMLElement>, scro
 	return useCallback<VirtualizerOptions<any, any>['scrollToFn']>((...args: ScrollToFnArgs) => {
 		const [offset, canSmooth, instance] = args
 		const duration = 1000
-		const start = containerRef.current.scrollTop
+		const start = containerRef.current?.scrollTop ?? 0
 		const startTime = (scrollingRef.current = Date.now())
 
 		const run = () => {
