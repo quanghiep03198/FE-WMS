@@ -1,23 +1,18 @@
 import { z } from 'zod'
 
-export const deleteScannedEpcsSchema = z
-	.object({
-		mo_no: z.string(),
-		mat_ecolor: z.string(),
-		size_numcode: z.string(),
-		quantity: z.number().positive(),
-		max_quantity: z.number().positive(),
-		delete_all: z.boolean().optional().default(false),
-		f: z.boolean().optional().default(false)
-	})
-	.refine(
-		(values) => {
-			return values.quantity <= values.max_quantity
-		},
-		{
-			message: 'Please select valid quantity',
-			path: ['quantity']
-		}
-	)
+/**
+ * A valid EPC is a 24-character string.
+ */
+const VALID_EPC_LENGTH = 24
+
+export const deleteScannedEpcsSchema = z.object({
+	epcs: z
+		.array(
+			z.string().refine((value) => value.length === VALID_EPC_LENGTH, { message: 'ns_validation:invalid_value' })
+		)
+		.nonempty(),
+
+	rescannable: z.boolean().optional().default(false)
+})
 
 export type DeleteScannedEpcsFormValues = z.infer<typeof deleteScannedEpcsSchema>

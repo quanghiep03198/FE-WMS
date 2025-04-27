@@ -5,6 +5,7 @@ import {
 } from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inbound/_schemas/exchange-epc.schema'
 import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inbound/_types'
+import { SearchOutboundEpcParams } from '@/app/(features)/_layout.finished-production-outbound/_types'
 import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IElectronicProductCode } from '@/common/types/entities'
@@ -71,9 +72,17 @@ export class RFIDService {
 		return await axiosInstance.put<OutboundFormValues, ResponseBody<unknown>>('/rfid/outbound/update-stock', payload)
 	}
 
-	static async deleteScannedOutboundEpcs(filters: Record<string, string | number | boolean>) {
-		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-epcs`, {
-			params: filters
+	static async deleteScannedOutboundEpcs(data: string[], params: { rescannable: boolean }) {
+		return await axiosInstance.post(`/rfid/outbound/delete-scanned-epcs`, data, { params })
+	}
+
+	static async deleteScannedOutboundOrder(commandNumber: string, params: { rescannable: boolean }) {
+		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-order/${commandNumber}`, { params })
+	}
+
+	static async getOutboundEpcBySize(params: SearchOutboundEpcParams) {
+		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/outbound/get-epc-by-size`, {
+			params
 		})
 	}
 

@@ -1,10 +1,12 @@
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { OUTBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { usePageContext } from '../_contexts/-page-context'
+import { DeleteScannedEpcsFormValues } from '../_schemas/delete-epc.schema'
+import { SearchOutboundEpcParams } from '../_types'
 
 export const OUTBOUND_EPC_LIST_PROVIDE_TAG = 'OUTBOUND_EPC_LIST'
 
@@ -23,11 +25,31 @@ export const useGetOutboundEpcQuery = () => {
 
 export const useDeleteEpcMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
+	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
-		mutationFn: async (filters: Record<string, string | number | boolean>) =>
-			await RFIDService.deleteScannedOutboundEpcs(filters)
+		mutationFn: async ({ rescannable, epcs }: DeleteScannedEpcsFormValues) =>
+			await RFIDService.deleteScannedOutboundEpcs(epcs, { rescannable: !rescannable }),
+		onSettled: async () => {
+			queryClient.invalidateQueries({
+				queryKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
+				exact: false
+			})
+			queryClient.invalidateQueries({
+				queryKey: ['OUTBOUND_EPC'],
+				exact: false
+			})
+		}
+	})
+}
+
+export const useDeleteOrderMutation = () => {
+	const { currentPage } = usePageContext('currentPage')
+
+	return useMutation({
+		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC', currentPage],
+		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
+			await RFIDService.deleteScannedOutboundOrder(commandNumber, { rescannable: !rescannable })
 	})
 }
 
@@ -49,5 +71,19 @@ export const useUpdateStockOutMutation = (callback: () => unknown) => {
 		onError: () => {
 			toast.error(t('ns_common:notification.error'), { id: toastId.current })
 		}
+	})
+}
+
+export const useGetOutboundEpcsBySize = (
+	params: SearchOutboundEpcParams,
+	options: Pick<Parameter<typeof useQuery<ResponseBody<Array<{ epc: string }>>>>, 'enabled'>
+) => {
+	return useQuery({
+		...options,
+		queryKey: ['OUTBOUND_EPC', params],
+		queryFn: async () => await RFIDService.getOutboundEpcBySize(params),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }

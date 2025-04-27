@@ -11,27 +11,26 @@ import {
 	PopoverTrigger,
 	Typography
 } from '@/components/ui'
-import { CheckedState } from '@radix-ui/react-checkbox'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useDeleteEpcMutation } from '../../_apis/outbound-rfid.api'
+import { useDeleteOrderMutation } from '../../_apis/outbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
 
 const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 	const { t } = useTranslation()
 	const id = useId()
-	const [isUnscannable, setIsUnscannable] = useState<CheckedState>(false)
+	const [rescannable, setIsRescannable] = useState<boolean>(false)
 	const { scannedOrders, setScannedOrders } = usePageContext('scannedOrders', 'setScannedOrders')
-	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteEpcMutation()
+	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteOrderMutation()
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
 
 	const handleDeleteOrder = useMemoizedFn(async () => {
 		try {
-			await deleteOrderAsync({ ['mo_no.eq']: data?.mo_no, f: isUnscannable })
+			await deleteOrderAsync({ commandNumber: data.mo_no, rescannable })
 
 			// * If all order is deleted, reset all
 			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== data?.mo_no)
@@ -60,7 +59,11 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 					</Typography>
 				</Div>
 				<Div className='flex items-center gap-x-2'>
-					<Checkbox id={id} checked={isUnscannable} onCheckedChange={setIsUnscannable} />
+					<Checkbox
+						id={id}
+						checked={rescannable}
+						onCheckedChange={(checked) => setIsRescannable(Boolean(checked))}
+					/>
 					<Label htmlFor={id}>{t('ns_inoutbound:labels.delete_and_unscannable')}</Label>
 				</Div>
 				<Div className='flex items-stretch justify-end gap-x-1 *:basis-20'>
