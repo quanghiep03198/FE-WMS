@@ -1,12 +1,8 @@
-'use no memo'
-
-import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
-import * as React from 'react'
-
+import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
-	Button,
+	buttonVariants,
 	Command,
 	CommandEmpty,
 	CommandGroup,
@@ -18,12 +14,17 @@ import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
+	Icon,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 	Separator,
 	Typography
 } from '@/components/ui'
+import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
+import { CommandLoading } from 'cmdk'
+import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 
 /**
  * Props for MultiSelect component
@@ -99,7 +100,16 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 * Optional, can be used to add custom styles.
 		 */
 		className?: string
+
+		/**
+		 * Additional class names to apply custom styles to the multi-select component.
+		 * Optional, can be used to add custom styles.
+		 */
+		loading?: boolean
 	}
+
+const ESTIMATE_SIZE = 32
+const PRERENDER_COUNT = 5
 
 export function MultiSelect<D = Record<string, any>>({
 	datalist,
@@ -108,6 +118,7 @@ export function MultiSelect<D = Record<string, any>>({
 	shouldFilter = true,
 	onValueChange,
 	onInput,
+	loading,
 	value,
 	defaultValue = [],
 	placeholder = 'Select options',
@@ -117,10 +128,14 @@ export function MultiSelect<D = Record<string, any>>({
 	ref,
 	...props
 }: MultiSelectProps<D>) {
-	const [selectedValues, setSelectedValues] = React.useState<Array<D[keyof D]>>(defaultValue)
-	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
+	'use no memo'
+
+	const [selectedValues, setSelectedValues] = useState<Array<D[keyof D]>>(defaultValue)
+	const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
 	const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		event.stopPropagation()
+
 		if (event.key === 'Enter') {
 			setIsPopoverOpen(true)
 		} else if (event.key === 'Backspace' && !event.currentTarget.value) {
@@ -144,7 +159,8 @@ export function MultiSelect<D = Record<string, any>>({
 		onValueChange([])
 	}
 
-	const handleTogglePopover = () => {
+	const handleTogglePopover = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation()
 		setIsPopoverOpen((prev) => !prev)
 	}
 
@@ -155,7 +171,12 @@ export function MultiSelect<D = Record<string, any>>({
 	}
 
 	const toggleAll = () => {
-		if (datalist.length > 0 && selectedValues.length === datalist.length) {
+		if (
+			Array.isArray(datalist) &&
+			Array.isArray(selectedValues) &&
+			datalist?.length > 0 &&
+			selectedValues?.length === datalist?.length
+		) {
 			handleClear()
 		} else {
 			const allValues = datalist.map((option) => String(option?.[valueField]))
@@ -164,93 +185,136 @@ export function MultiSelect<D = Record<string, any>>({
 		}
 	}
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (Array.isArray(value)) setSelectedValues(value)
 	}, [value])
 
+	// TODO: Implement virtual scroll for better performance with large list
+	const [scrollableEl, setScrollableEl] = useState<HTMLDivElement>(null)
+	const refCallback = useCallback((node: HTMLDivElement) => {
+		if (node) {
+			setScrollableEl(node)
+		}
+	}, [])
+
+	const scrollingRef = useRef<number>(0)
+
+	const scrollToFn = useScrollToFn({ current: scrollableEl }, scrollingRef)
+	const getScrollElement = useCallback(() => scrollableEl, [scrollableEl])
+	const estimateSize = useCallback(() => ESTIMATE_SIZE, [])
+	const virtualizer = useVirtualizer({
+		indexAttribute: 'data-index',
+		count: datalist?.length,
+		overscan: PRERENDER_COUNT,
+		estimateSize,
+		getScrollElement,
+		measureElement:
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
+				? (element) => element?.getBoundingClientRect().height
+				: undefined,
+		scrollToFn
+	})
+
+	const virtualItems = virtualizer.getVirtualItems()
+
+	const [before, after] =
+		virtualItems.length > 0
+			? [
+					notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
+					virtualItems.length > 0
+						? virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems.length - 1]).end
+						: 0
+				]
+			: [0, 0]
+
+	useEffect(() => {
+		// If the popover is closed, there is no need to measure
+		if (!isPopoverOpen) return
+		virtualizer.measure()
+	}, [isPopoverOpen, virtualizer])
+
 	return (
 		<Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
-			<PopoverTrigger asChild>
-				<Button
-					{...props}
-					ref={ref}
-					onClick={handleTogglePopover}
-					className={cn(
-						'flex w-full items-center justify-between rounded-md border bg-inherit p-1 !shadow-sm aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
-						className
-					)}>
-					{Array.isArray(selectedValues) && selectedValues.length > 0 ? (
-						<div className='flex w-full items-center justify-between'>
-							<div className='flex flex-nowrap items-center gap-x-1'>
-								{Array.isArray(selectedValues) &&
-									selectedValues.slice(0, maxCount).map((value) => {
-										const option = datalist.find((item) => item?.[valueField] === value)
-										return (
-											<Badge key={String(value)} variant='secondary'>
-												{String(option?.[labelField])}
-												<XCircle
-													className='ml-2 h-4 w-4 cursor-pointer'
-													onClick={(event) => {
-														event.stopPropagation()
-														toggleOption(value)
-													}}
-												/>
-											</Badge>
-										)
-									})}
-								{Array.isArray(selectedValues) && selectedValues.length > maxCount && (
-									<HoverCard>
-										<HoverCardTrigger>
-											<Badge variant='secondary'>
-												{`+ ${selectedValues.length - maxCount} more`}
-												<XCircle
-													className='ml-2 h-4 w-4 cursor-pointer'
-													onClick={(event) => {
-														event.stopPropagation()
-														clearExtraOptions()
-													}}
-												/>
-											</Badge>
-										</HoverCardTrigger>
-										<HoverCardContent className='flex w-96 flex-wrap items-center gap-x-1 gap-y-2 p-2'>
-											{Array.isArray(selectedValues) &&
-												selectedValues.slice(maxCount).map((item) => (
-													<Badge key={String(item)} variant='secondary'>
-														{String(item)}
-														<XCircle
-															className='ml-2 h-4 w-4 cursor-pointer'
-															onClick={(event) => {
-																event.stopPropagation()
-																toggleOption(item)
-															}}
-														/>
-													</Badge>
-												))}
-										</HoverCardContent>
-									</HoverCard>
-								)}
-							</div>
-							<div className='flex items-center justify-between'>
-								<XIcon
-									className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground'
-									onClick={(event) => {
-										event.stopPropagation()
-										handleClear()
-									}}
-								/>
-								<Separator orientation='vertical' className='flex h-full min-h-6' />
-								<ChevronDown className='mx-2 h-4 cursor-pointer text-muted-foreground' />
-							</div>
-						</div>
-					) : (
-						<Div className='mx-auto flex w-full items-center justify-between'>
-							<Typography variant='small' className='mx-3 text-sm font-normal text-muted-foreground'>
-								{placeholder}
-							</Typography>
-							<ChevronDown className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground' />
+			<PopoverTrigger
+				{...props}
+				ref={ref}
+				onClick={handleTogglePopover}
+				className={cn(
+					buttonVariants({ variant: 'outline' }),
+					'flex w-full max-w-full items-center justify-between overflow-y-hidden overflow-x-scroll rounded-md border bg-inherit p-1 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+					className
+				)}>
+				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
+					<Div className='flex w-full items-center justify-between'>
+						<Div className='flex items-center gap-x-1 whitespace-normal'>
+							{Array.isArray(selectedValues) &&
+								selectedValues.slice(0, maxCount).map((value) => {
+									const option = datalist.find((item) => item?.[valueField] === value)
+									return (
+										<Badge key={String(value)} variant='secondary'>
+											<span className='line-clamp-1'>{String(option?.[labelField])}</span>
+											<XCircle
+												className='ml-2 size-4 min-w-4 basis-4 cursor-pointer'
+												onClick={(event) => {
+													event.stopPropagation()
+													toggleOption(value)
+												}}
+											/>
+										</Badge>
+									)
+								})}
+							{Array.isArray(selectedValues) && selectedValues?.length > maxCount && (
+								<HoverCard>
+									<HoverCardTrigger>
+										<Badge variant='secondary' className='whitespace-nowrap'>
+											{`+ ${selectedValues?.length - maxCount} more`}
+											<XCircle
+												className='ml-2 h-4 w-4 cursor-pointer'
+												onClick={(event) => {
+													event.stopPropagation()
+													clearExtraOptions()
+												}}
+											/>
+										</Badge>
+									</HoverCardTrigger>
+									<HoverCardContent className='flex w-96 flex-wrap items-center gap-x-1 gap-y-2 p-2'>
+										{Array.isArray(selectedValues) &&
+											selectedValues.slice(maxCount).map((item) => (
+												<Badge key={String(item)} variant='secondary'>
+													{String(item)}
+													<XCircle
+														className='ml-2 h-4 w-4 cursor-pointer'
+														onClick={(event) => {
+															event.stopPropagation()
+															toggleOption(item)
+														}}
+													/>
+												</Badge>
+											))}
+									</HoverCardContent>
+								</HoverCard>
+							)}
 						</Div>
-					)}
-				</Button>
+						<Div className='sticky right-0 flex items-center justify-between bg-background'>
+							<XIcon
+								className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground'
+								onClick={(event) => {
+									event.stopPropagation()
+									handleClear()
+								}}
+							/>
+							<Separator orientation='vertical' className='flex h-full min-h-6' />
+							<ChevronDown className='mx-2 h-4 cursor-pointer text-muted-foreground' />
+						</Div>
+					</Div>
+				) : (
+					<Div className='mx-auto flex w-full items-center justify-between'>
+						<Typography variant='small' className='mx-3 text-sm font-normal text-muted-foreground'>
+							{placeholder}
+						</Typography>
+						<ChevronDown className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground' />
+					</Div>
+				)}
 			</PopoverTrigger>
 			<PopoverContent
 				className='w-[var(--radix-popover-trigger-width)] p-0'
@@ -258,26 +322,38 @@ export function MultiSelect<D = Record<string, any>>({
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}>
 				<Command
 					shouldFilter={shouldFilter}
-					filter={(value, search, keywords) => {
+					filter={(value, search) => {
 						const normalizedSearchTerm = search.trim().toLowerCase()
 						const normalizedValue = value.trim().toLowerCase()
-						return normalizedValue.includes(normalizedSearchTerm) || keywords.includes('all') ? 1 : 0
+						if (datalist?.length === 0) return 0
+						return normalizedValue.includes(normalizedSearchTerm) ? 1 : 0
 					}}>
 					<CommandInput
 						placeholder='Search...'
 						onKeyDown={handleInputKeyDown}
 						onInput={(e) => {
+							e.stopPropagation()
 							if (typeof onInput === 'function') onInput(String(e.currentTarget.value))
 						}}
 					/>
-					<CommandList>
+					<CommandList ref={refCallback}>
+						{loading && (
+							<CommandLoading className='flex items-center justify-center p-6'>
+								<Icon name='LoaderCircle' className='animate-spin' />
+							</CommandLoading>
+						)}
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup>
-							<CommandItem key='all' keywords={['all']} onSelect={toggleAll} className='cursor-pointer'>
+							<CommandItem
+								key='all'
+								disabled={datalist?.length === 0}
+								keywords={['all']}
+								onSelect={toggleAll}
+								className='cursor-pointer'>
 								<Div
 									className={cn(
 										'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-										selectedValues.length === datalist.length
+										selectedValues?.length === datalist?.length && datalist?.length > 0
 											? 'bg-primary text-primary-foreground'
 											: 'opacity-50 [&_svg]:invisible'
 									)}>
@@ -285,42 +361,35 @@ export function MultiSelect<D = Record<string, any>>({
 								</Div>
 								<Typography variant='small'>(Select All)</Typography>
 							</CommandItem>
-							{Array.isArray(datalist) &&
-								datalist.map((option) => {
-									const isSelected = selectedValues.includes(option?.[valueField])
-									return (
-										<CommandItem
-											key={option[valueField] as string}
-											value={String(option[valueField])}
-											keywords={[String(option[valueField])]}
-											onSelect={() => toggleOption(option[valueField])}
-											className='cursor-pointer'>
-											<Div
-												className={cn(
-													'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
-													isSelected
-														? 'bg-primary text-primary-foreground'
-														: 'opacity-50 [&_svg]:invisible'
-												)}>
-												<CheckIcon className='!size-3' />
-											</Div>
-											{/* {option.icon && <option.icon className='mr-2 h-4 w-4 text-muted-foreground' />} */}
-											<Typography variant='small'>{String(option?.[labelField])}</Typography>
-										</CommandItem>
-									)
-								})}
+							{before > 0 && <CommandItem disabled style={{ height: before }} />}
+							{virtualItems.map((item) => {
+								const option = datalist[item.index]
+								const isSelected = selectedValues.includes(option?.[valueField])
+								return (
+									<CommandItem
+										key={item.key}
+										data-index={item.index}
+										value={String(option[valueField])}
+										keywords={[String(option[valueField])]}
+										onSelect={() => toggleOption(option[valueField])}>
+										<Checkbox checked={isSelected} />
+										<Typography variant='small'>{String(option?.[labelField])}</Typography>
+									</CommandItem>
+								)
+							})}
+							{after > 0 && <CommandItem disabled style={{ height: after }} />}
 						</CommandGroup>
 					</CommandList>
 					<CommandSeparator />
 					<CommandGroup>
 						<Div className='flex items-center justify-between gap-x-1'>
-							{Array.isArray(selectedValues) && selectedValues.length > 0 && (
-								<React.Fragment>
+							{Array.isArray(selectedValues) && selectedValues?.length > 0 && (
+								<Fragment>
 									<CommandItem onSelect={handleClear} className='flex-1 cursor-pointer justify-center'>
 										Clear
 									</CommandItem>
 									<Separator orientation='vertical' className='flex h-full min-h-6' />
-								</React.Fragment>
+								</Fragment>
 							)}
 							<CommandItem
 								onSelect={() => setIsPopoverOpen(false)}
@@ -334,5 +403,15 @@ export function MultiSelect<D = Record<string, any>>({
 		</Popover>
 	)
 }
+
+const Checkbox: React.FC<{ checked: boolean }> = ({ checked }) => (
+	<Div
+		className={cn(
+			'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
+			checked ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
+		)}>
+		<CheckIcon className='!size-3' />
+	</Div>
+)
 
 MultiSelect.displayName = 'MultiSelect'

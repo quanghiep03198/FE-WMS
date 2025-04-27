@@ -32,10 +32,11 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 			name={name}
 			control={control}
 			render={({ field }) => (
-				<FormItem>
+				<FormItem className='max-w-full overflow-x-hidden'>
 					{label && <FormLabel>{label}</FormLabel>}
 					<FormControl>
 						<MultiSelect
+							{...props}
 							shouldFilter={shouldFilter}
 							placeholder={placeholder}
 							datalist={datalist}
