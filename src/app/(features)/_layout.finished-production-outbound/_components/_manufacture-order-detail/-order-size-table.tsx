@@ -1,3 +1,4 @@
+import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Div,
@@ -6,14 +7,16 @@ import {
 	Separator,
 	Table,
 	TableBody,
+	TableCell,
 	TableHead,
 	TableHeader,
 	TableRow,
 	Typography
 } from '@/components/ui'
+import { notUndefined, useVirtualizer, Virtualizer } from '@tanstack/react-virtual'
 import { useResetState } from 'ahooks'
 import { sortBy } from 'lodash'
-import { useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
@@ -30,7 +33,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	const filteredScannedOrders = useMemo(() => {
 		const { mo_no, mat_ecolor, shoes_style_code_factory } = columnFilters
-		return Array.isArray(scannedOrders)
+		const result = Array.isArray(scannedOrders)
 			? scannedOrders.filter((item) => {
 					if (item)
 						return (
@@ -40,6 +43,8 @@ const OrderSizeDetailTable: React.FC = () => {
 						)
 				})
 			: []
+
+		return sortBy(result, ['mo_no'])
 	}, [scannedOrders, columnFilters])
 
 	const totalFilteredQty = useMemo(
@@ -55,6 +60,25 @@ const OrderSizeDetailTable: React.FC = () => {
 		[filteredScannedOrders]
 	)
 
+	const containerRef = useRef<HTMLDivElement>(null)
+	const scrollingRef = useRef<number>(0)
+
+	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+
+	const virtualizer = useVirtualizer({
+		count: filteredScannedOrders.length,
+		indexAttribute: 'data-index',
+		overscan: 5,
+		getScrollElement: () => containerRef.current,
+		useAnimationFrameWithResizeObserver: false,
+		estimateSize: useCallback(() => 75, []),
+		measureElement:
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
+				? (element) => element?.getBoundingClientRect().height
+				: undefined,
+		scrollToFn
+	})
+
 	return (
 		<Div
 			className='z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border xxl:sticky xxl:top-[var(--header-height)]'
@@ -63,7 +87,10 @@ const OrderSizeDetailTable: React.FC = () => {
 					'--table-footer-height': '2rem'
 				} as React.CSSProperties
 			}>
-			<Div className='h-[calc(var(--outlet-wrapper-height)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'>
+			<Div
+				ref={containerRef}
+				className='h-[calc(var(--outlet-wrapper-height)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'
+				onScroll={() => window.dispatchEvent(new CustomEvent('scroll'))}>
 				<Table
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
@@ -95,7 +122,7 @@ const OrderSizeDetailTable: React.FC = () => {
 									{t('ns_erp:fields.mat_ecolor')}
 								</span>
 							</TableHead>
-							<TableHead className='border-x-0' title='Size'>
+							<TableHead align='left' className='border-x-0' title='Size'>
 								Size
 							</TableHead>
 							<TableHead
@@ -165,13 +192,7 @@ const OrderSizeDetailTable: React.FC = () => {
 							</TableHead>
 						</TableRow>
 					</TableHeader>
-					{Array.isArray(filteredScannedOrders) && filteredScannedOrders.length > 0 && (
-						<TableBody>
-							{sortBy(filteredScannedOrders, 'mo_no').map((order) => {
-								return <TableDataRow key={order.mo_no} data={order} />
-							})}
-						</TableBody>
-					)}
+					<OrderDetailTableBody virtualizer={virtualizer} data={filteredScannedOrders} />
 				</Table>
 				{scanningState !== 'pending' &&
 					(!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0) && (
@@ -205,6 +226,45 @@ const OrderSizeDetailTable: React.FC = () => {
 				</Div>
 			</Div>
 		</Div>
+	)
+}
+
+const OrderDetailTableBody: React.FC<{ virtualizer: Virtualizer<any, any>; data: OrderItem[] }> = ({
+	virtualizer,
+	data
+}) => {
+	'use no memo'
+
+	const virtualItems = virtualizer.getVirtualItems()
+
+	const [before, after] =
+		virtualItems.length > 0
+			? [
+					notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
+					virtualItems.length > 0
+						? virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems.length - 1]).end
+						: 0
+				]
+			: [0, 0]
+
+	return (
+		<TableBody className=''>
+			{before > 0 && (
+				<TableRow>
+					<TableCell colSpan={6} style={{ height: before }} />
+				</TableRow>
+			)}
+			{Array.isArray(virtualItems) &&
+				virtualItems.map((virtualRow) => {
+					const row = data[virtualRow.index]
+					return <TableDataRow key={row.mo_no} data={row} virtualRow={virtualRow} />
+				})}
+			{after > 0 && (
+				<TableRow ref={(node) => virtualizer.measureElement(node)}>
+					<TableCell colSpan={6} style={{ height: after }} />
+				</TableRow>
+			)}
+		</TableBody>
 	)
 }
 

@@ -16,7 +16,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
@@ -33,6 +33,7 @@ const ScannedEpcList: React.FC = () => {
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const { user, token, setAccessToken } = useAuth()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const [isPending, startTransition] = useTransition()
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
 		usePageContext(
@@ -133,8 +134,8 @@ const ScannedEpcList: React.FC = () => {
 						if (!event.data || !Json.isValid(event.data)) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 
-						setIncommingEpc(data?.epcs)
-						setScannedOrders(data?.orders)
+						startTransition(() => setIncommingEpc(data?.epcs))
+						startTransition(() => setScannedOrders(data?.orders))
 					} catch (error) {
 						throw new FatalError(error)
 					}
@@ -166,6 +167,7 @@ const ScannedEpcList: React.FC = () => {
 	// * Intitialize virtual list to render scanned EPC data
 	const virtualizer = useVirtualizer({
 		count: scannedEpc.data.length,
+		indexAttribute: 'data-index',
 		getScrollElement: () => containerRef.current,
 		scrollToFn,
 		estimateSize: useCallback(() => VIRTUAL_ITEM_SIZE, []),
@@ -205,6 +207,7 @@ const ScannedEpcList: React.FC = () => {
 							return (
 								<Div
 									key={virtualItem.index}
+									data-index={virtualItem.index}
 									className='absolute left-auto right-auto top-0 mb-1 flex h-10 w-full justify-between whitespace-nowrap border-b p-2 uppercase transition-all duration-75 last:border-none sm:px-2'
 									style={{
 										height: virtualItem.size,
