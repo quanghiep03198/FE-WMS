@@ -34,7 +34,8 @@ const NonSeparatedOutboundForm: React.FC = () => {
 		const result = scannedOrders.filter(({ mo_no }) =>
 			mo_no.trim().toLowerCase().includes(searchTerm.trim().toLowerCase())
 		)
-		return sortedUniqBy(result, 'mo_no')
+		const selectedOrders = form.watch('mo_no').map((value) => ({ mo_no: value }))
+		return sortedUniqBy([...result, ...selectedOrders], 'mo_no')
 	}, [searchTerm, scannedOrders])
 
 	return (

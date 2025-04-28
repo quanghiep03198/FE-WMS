@@ -65,7 +65,7 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 * Callback function triggered when the selected values change.
 		 * Receives an array of the new selected values.
 		 */
-		onInput: (value: string) => unknown
+		onInput?: (value: string) => unknown
 
 		/** The default selected values when the component mounts. */
 		defaultValue?: Array<T[keyof T]>
