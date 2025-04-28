@@ -146,9 +146,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 										<DeleteSizePopover
 											data={{
 												mo_no: data?.mo_no,
-												mat_ecolor: data?.mat_ecolor,
-												size_numcode: size?.size_numcode,
-												quantity: size?.count
+												size_numcode: size?.size_numcode
 											}}
 										/>
 									</Div>
@@ -162,7 +160,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
 			<TableCell align='center' className='sticky right-0 w-[var(--sticky-right-col-width)] !opacity-100'>
-				<DeleteOrderPopover data={data} />
+				<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
 			</TableCell>
 		</TableRow>
 	)

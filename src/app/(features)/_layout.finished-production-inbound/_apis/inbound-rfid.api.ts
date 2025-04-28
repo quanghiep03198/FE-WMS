@@ -6,6 +6,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omit } from 'lodash'
 import { useEffect } from 'react'
 import { INBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
+import { DeleteScannedEpcsFormValues } from '../../_schemas/delete-epc.schema'
+import { SearchEpcParams } from '../../_types/rfid'
 import { DEFAULT_PROPS, usePageContext } from '../_contexts/-page-context'
 import { InoutboundPayload } from '../_schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../_schemas/exchange-epc.schema'
@@ -90,12 +92,27 @@ export const useGetShapingProductLineQuery = () => {
 }
 
 export const useDeleteEpcMutation = () => {
+	const { setCurrentPage, setSelectedOrder } = usePageContext('currentPage', 'setCurrentPage', 'setSelectedOrder')
 	const invalidateQueries = useInvalidateQueries()
-	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
-		mutationFn: async (filters: Record<string, string | number | boolean>) =>
-			await RFIDService.deleteScannedInboundEpcs(filters),
+		mutationFn: async ({ rescannable, epcs }: DeleteScannedEpcsFormValues) =>
+			await RFIDService.deleteScannedInboundEpcs(epcs, { rescannable: !rescannable }),
+		onSuccess: () => {
+			setCurrentPage(null)
+			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
+			invalidateQueries()
+		}
+	})
+}
+
+export const useDeleteOrderMutation = () => {
+	const { setCurrentPage, setSelectedOrder } = usePageContext('currentPage', 'setCurrentPage', 'setSelectedOrder')
+	const invalidateQueries = useInvalidateQueries()
+
+	return useMutation({
+		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
+			await RFIDService.deleteScannedInboundOrder(commandNumber, { rescannable: !rescannable }),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
@@ -160,8 +177,25 @@ export const useCombineEpcInfoMutation = () => {
 const useInvalidateQueries = () => {
 	const { refetch: refetchScannedEpcs } = useGetInboundEpcQuery()
 	const { refetch: refetchOrderDetail } = useGetInboundOrderDetail()
+	const queryClient = useQueryClient()
+
 	return () => {
 		refetchScannedEpcs()
 		refetchOrderDetail()
+		queryClient.invalidateQueries({ queryKey: ['INBOUND_EPC_BY_SIZE'], exact: false })
 	}
+}
+
+export const useGetInboundEpcsBySize = (
+	params: SearchEpcParams,
+	options: Pick<Parameter<typeof useQuery<ResponseBody<Array<{ epc: string }>>>>, 'enabled'>
+) => {
+	return useQuery({
+		...options,
+		queryKey: ['INBOUND_EPC_BY_SIZE', params],
+		queryFn: async () => await RFIDService.getInboundEpcBySize(params),
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
+	})
 }

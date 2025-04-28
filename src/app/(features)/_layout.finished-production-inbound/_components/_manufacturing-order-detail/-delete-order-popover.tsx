@@ -1,4 +1,3 @@
-import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -12,42 +11,28 @@ import {
 	PopoverTrigger,
 	Typography
 } from '@/components/ui'
-import { CheckedState } from '@radix-ui/react-checkbox'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useDeleteEpcMutation } from '../../_apis/inbound-rfid.api'
-import { useOrderDetailContext } from '../../_contexts/-order-detail-context'
+import { useDeleteOrderMutation } from '../../_apis/inbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 
-const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
+const DeleteOrderPopover: React.FC<{ data: { mo_no: string } }> = ({ data }) => {
 	const { t } = useTranslation()
 	const id = useId()
-	const [isUnscannable, setIsUnscannable] = useState<CheckedState>(false)
-	const { scannedOrders, setScanningStatus, setScannedOrders } = usePageContext(
-		'scannedOrders',
-		'setScanningStatus',
-		'setScannedOrders'
-	)
-	const { selectedRows, pullSelectedRow } = useOrderDetailContext('selectedRows', 'pullSelectedRow')
-	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteEpcMutation()
+	const [rescannable, setIsRescannable] = useState<boolean>(false)
+	const { scannedOrders, setScannedOrders } = usePageContext('scannedOrders', 'setScannedOrders')
+	const { mutateAsync: deleteOrderAsync, isPending: isDeleting } = useDeleteOrderMutation()
 	const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
 
 	const handleDeleteOrder = useMemoizedFn(async () => {
 		try {
-			await deleteOrderAsync({ ['mo_no.eq']: data?.mo_no, f: isUnscannable })
-			// * Remove from selected row if scanned order is deleted
-			if (selectedRows.some((row) => row.mo_no === data?.mo_no)) {
-				pullSelectedRow(selectedRows.find((row) => row.mo_no === data?.mo_no))
-			}
+			await deleteOrderAsync({ commandNumber: data.mo_no, rescannable })
+
 			// * If all order is deleted, reset all
 			const filteredOrders = scannedOrders.filter((item) => item?.mo_no !== data?.mo_no)
-			if (filteredOrders.length === 0) {
-				setScanningStatus(undefined)
-				return
-			}
 			setScannedOrders(filteredOrders)
 			setPopoverOpen(false)
 			toast.success(t('ns_common:notification.success'), { id: 'DELETE_UNEXPECTED_ORDER' })
@@ -57,8 +42,10 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 	})
 
 	return (
-		<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal>
-			<PopoverTrigger className='[&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
+		<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal={true}>
+			<PopoverTrigger
+				role='button'
+				className='inline-flex size-6 items-center justify-center [&:disabled>svg]:cursor-not-allowed [&:disabled>svg]:stroke-muted-foreground [&>svg]:stroke-destructive'>
 				<Icon name='Trash2' />
 			</PopoverTrigger>
 			<PopoverContent className='w-96 space-y-6' side='left' align='center' sideOffset={16}>
@@ -73,13 +60,10 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 				<Div className='flex items-center gap-x-2'>
 					<Checkbox
 						id={id}
-						checked={isUnscannable}
-						onCheckedChange={setIsUnscannable}
-						className='border-destructive data-[state=checked]:bg-destructive data-[state=checked]:text-destructive-foreground'
+						checked={rescannable}
+						onCheckedChange={(checked) => setIsRescannable(Boolean(checked))}
 					/>
-					<Label htmlFor={id} className='text-destructive'>
-						{t('ns_inoutbound:labels.delete_and_unscannable')}
-					</Label>
+					<Label htmlFor={id}>{t('ns_inoutbound:labels.delete_and_unscannable')}</Label>
 				</Div>
 				<Div className='flex items-stretch justify-end gap-x-1 *:basis-20'>
 					<PopoverClose disabled={isDeleting} className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>

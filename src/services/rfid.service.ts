@@ -5,8 +5,7 @@ import {
 } from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inbound/_schemas/exchange-epc.schema'
 import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inbound/_types'
-import { SearchOutboundEpcParams } from '@/app/(features)/_layout.finished-production-outbound/_types'
-import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
+import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
@@ -29,6 +28,12 @@ export class RFIDService {
 		)
 	}
 
+	static async getInboundEpcBySize(params: SearchEpcParams) {
+		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/inbound/get-epc-by-size`, {
+			params
+		})
+	}
+
 	static async searchExchangableOrder(params: SearchCustOrderParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
 			`/rfid/inbound/search-exchangable-order`,
@@ -46,10 +51,12 @@ export class RFIDService {
 		)
 	}
 
-	static async deleteScannedInboundEpcs(filters: Record<string, string | number | boolean>) {
-		return await axiosInstance.delete(`/rfid/inbound/delete-scanned-epcs`, {
-			params: filters
-		})
+	static async deleteScannedInboundEpcs(data: string[], params: { rescannable: boolean }) {
+		return await axiosInstance.post(`/rfid/inbound/delete-scanned-epcs`, data, { params })
+	}
+
+	static async deleteScannedInboundOrder(commandNumber: string, params: { rescannable: boolean }) {
+		return await axiosInstance.delete(`/rfid/inbound/delete-scanned-order/${commandNumber}`, { params })
 	}
 
 	static async exchangeEpc(payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
@@ -80,7 +87,7 @@ export class RFIDService {
 		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-order/${commandNumber}`, { params })
 	}
 
-	static async getOutboundEpcBySize(params: SearchOutboundEpcParams) {
+	static async getOutboundEpcBySize(params: SearchEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/outbound/get-epc-by-size`, {
 			params
 		})

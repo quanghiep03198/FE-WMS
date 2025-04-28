@@ -1,5 +1,6 @@
 'use no memo'
 
+import { DeleteScannedEpcsFormValues, deleteScannedEpcsSchema } from '@/app/(features)/_schemas/delete-epc.schema'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -26,7 +27,6 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useDeleteEpcMutation, useGetOutboundEpcsBySize } from '../../_apis/outbound-rfid.api'
-import { DeleteScannedEpcsFormValues, deleteScannedEpcsSchema } from '../../_schemas/delete-epc.schema'
 
 type DeleteSizePopoverProps = {
 	data: {
@@ -73,7 +73,7 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 				onMouseEnter={() =>
 					queryClient.prefetchQuery({
 						queryKey: [
-							'DELETABLE_OUTBOUND_EPC',
+							'OUTBOUND_EPC_BY_SIZE',
 							{
 								['mo_no.eq']: data.mo_no,
 								['size_numcode.eq']: data.size_numcode

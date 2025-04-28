@@ -15,3 +15,8 @@ export type RFIDStreamEventData = {
 	epcs: Pagination<IElectronicProductCode>
 	orders: Array<OrderItem>
 }
+
+export type SearchEpcParams = {
+	'mo_no.eq': string
+	'size_numcode.eq': string
+}

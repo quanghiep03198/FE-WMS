@@ -4,9 +4,9 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { OUTBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
+import { DeleteScannedEpcsFormValues } from '../../_schemas/delete-epc.schema'
+import { SearchEpcParams } from '../../_types/rfid'
 import { usePageContext } from '../_contexts/-page-context'
-import { DeleteScannedEpcsFormValues } from '../_schemas/delete-epc.schema'
-import { SearchOutboundEpcParams } from '../_types'
 
 export const OUTBOUND_EPC_LIST_PROVIDE_TAG = 'OUTBOUND_EPC_LIST'
 
@@ -36,7 +36,7 @@ export const useDeleteEpcMutation = () => {
 				exact: false
 			})
 			queryClient.invalidateQueries({
-				queryKey: ['OUTBOUND_EPC'],
+				queryKey: ['OUTBOUND_EPC_BY_SIZE'],
 				exact: false
 			})
 		}
@@ -47,7 +47,7 @@ export const useDeleteOrderMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC', currentPage],
+		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC_BY_SIZE', currentPage],
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
 			await RFIDService.deleteScannedOutboundOrder(commandNumber, { rescannable: !rescannable })
 	})
@@ -75,12 +75,12 @@ export const useUpdateStockOutMutation = (callback: () => unknown) => {
 }
 
 export const useGetOutboundEpcsBySize = (
-	params: SearchOutboundEpcParams,
+	params: SearchEpcParams,
 	options: Pick<Parameter<typeof useQuery<ResponseBody<Array<{ epc: string }>>>>, 'enabled'>
 ) => {
 	return useQuery({
 		...options,
-		queryKey: ['OUTBOUND_EPC', params],
+		queryKey: ['OUTBOUND_EPC_BY_SIZE', params],
 		queryFn: async () => await RFIDService.getOutboundEpcBySize(params),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
