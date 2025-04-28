@@ -141,6 +141,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' {...popoverContentProps}>
 									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
+											value={searchTerm}
 											placeholder={placeholder}
 											onValueChange={(value) => {
 												if (typeof onInput === 'function') onInput(value)

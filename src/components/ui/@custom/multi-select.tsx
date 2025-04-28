@@ -133,7 +133,8 @@ export function MultiSelect<D = Record<string, any>>({
 	'use no memo'
 
 	const [selectedValues, setSelectedValues] = useState<Array<D[keyof D]>>(defaultValue)
-	const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+	const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false)
+	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 		event.stopPropagation()
@@ -334,10 +335,12 @@ export function MultiSelect<D = Record<string, any>>({
 							: 0
 					}}>
 					<CommandInput
+						value={searchTerm}
 						placeholder='Search...'
 						onKeyDown={handleInputKeyDown}
 						onInput={(e) => {
 							e.stopPropagation()
+							setSearchTerm(e.currentTarget.value)
 							if (typeof onInput === 'function') onInput(String(e.currentTarget.value))
 						}}
 					/>
