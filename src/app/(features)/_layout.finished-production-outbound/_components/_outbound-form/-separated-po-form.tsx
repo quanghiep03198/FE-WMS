@@ -19,7 +19,7 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSize } from 'ahooks'
-import { sortBy } from 'lodash'
+import { sortBy, sortedUniqBy } from 'lodash'
 import React, { createContext, use, useMemo, useRef, useState } from 'react'
 import {
 	FieldArrayWithId,
@@ -41,7 +41,6 @@ import DroppableFieldItem from './-separated-po-field-item'
 export const FormContext = createContext<Pick<OrderItem, 'sizes'>>(null)
 
 const SeparatedPoOutboundForm = () => {
-	const { t } = useTranslation()
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const [activeState, setActiveState] = useState<{ id: string | null; index: number | null }>({
 		id: null,
@@ -130,13 +129,7 @@ const SeparatedPoOutboundForm = () => {
 						<PurchaseOrderAutoComplete />
 					</Div>
 					<Div className='col-span-1'>
-						<ComboboxFieldControl
-							label={t('ns_erp:fields.mo_no')}
-							name='mo_no'
-							datalist={sortBy(scannedOrders, 'mo_no')}
-							labelField='mo_no'
-							valueField='mo_no'
-						/>
+						<CommandNumberFieldControl />
 					</Div>
 					<Div
 						className='col-span-full'
@@ -255,6 +248,30 @@ const EmptyState: React.FC = () => {
 				{t('ns_inoutbound:description.add_outbound_size')}
 			</Typography>
 		</Div>
+	)
+}
+
+const CommandNumberFieldControl: React.FC = () => {
+	const { scannedOrders } = usePageContext('scannedOrders')
+	const [searchTerm, setSearchTerm] = useState<string>('')
+	const { t } = useTranslation()
+
+	const filteredOrders = useMemo(() => {
+		if (!Array.isArray(scannedOrders)) return []
+		const result = scannedOrders.filter((order) => order.mo_no.toLowerCase().includes(searchTerm.toLowerCase()))
+		return sortedUniqBy(result, 'mo_no')
+	}, [searchTerm, scannedOrders])
+
+	return (
+		<ComboboxFieldControl
+			label={t('ns_erp:fields.mo_no')}
+			name='mo_no'
+			onInput={(search) => setSearchTerm(search)}
+			shouldFilter={false}
+			datalist={filteredOrders}
+			labelField='mo_no'
+			valueField='mo_no'
+		/>
 	)
 }
 
