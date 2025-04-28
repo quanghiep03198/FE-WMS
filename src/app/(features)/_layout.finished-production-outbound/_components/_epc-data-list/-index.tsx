@@ -133,9 +133,9 @@ const ScannedEpcList: React.FC = () => {
 					try {
 						if (!event.data || !Json.isValid(event.data)) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
-
 						startTransition(() => setIncommingEpc(data?.epcs))
 						startTransition(() => setScannedOrders(data?.orders))
+						setScanningState(isPending ? 'pending' : 'success')
 					} catch (error) {
 						throw new FatalError(error)
 					}
