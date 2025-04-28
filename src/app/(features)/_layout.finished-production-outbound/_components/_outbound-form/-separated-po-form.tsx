@@ -34,13 +34,13 @@ import tw from 'tailwind-styled-components'
 import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import { DetailedOutBoundFormValues, detailedOutboundValidator } from '../../_schemas/outbound.schema'
-import DroppableFieldItem from './-detailed-field-item'
 import FormSubmission from './-form-submission'
 import PurchaseOrderAutoComplete from './-purchase-order-autocomplete'
+import DroppableFieldItem from './-separated-po-field-item'
 
 export const FormContext = createContext<Pick<OrderItem, 'sizes'>>(null)
 
-const DetailedOutboundForm = () => {
+const SeparatedPoOutboundForm = () => {
 	const { t } = useTranslation()
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const [activeState, setActiveState] = useState<{ id: string | null; index: number | null }>({
@@ -260,4 +260,4 @@ const EmptyState: React.FC = () => {
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 
-export default DetailedOutboundForm
+export default SeparatedPoOutboundForm

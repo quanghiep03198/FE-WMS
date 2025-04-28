@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
 
-import DetailedOutboundForm from './-detailed-outbound-form'
-import StandardOutboundForm from './-standard-outbound-form'
+import NonSeparatedOutboundForm from './-non-separated-po-form'
+import SeparatedPoOutboundForm from './-separated-po-form'
 
 const OutboundForm: React.FC = () => {
 	return (
@@ -13,10 +13,10 @@ const OutboundForm: React.FC = () => {
 				</TabsTrigger>
 			</TabsList>
 			<TabsContent value='standard' className='animate-in fade-in-0 slide-in-from-right-4'>
-				<StandardOutboundForm />
+				<NonSeparatedOutboundForm />
 			</TabsContent>
 			<TabsContent value='detailed' className='animate-in fade-in-0 slide-in-from-left-4'>
-				<DetailedOutboundForm />
+				<SeparatedPoOutboundForm />
 			</TabsContent>
 		</Tabs>
 	)

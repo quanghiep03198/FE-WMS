@@ -3,7 +3,8 @@
 import { Form as FormProvider } from '@/components/ui'
 import { MultiSelectFieldControl } from '@/components/ui/@hook-form/muti-select-field-control'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { sortBy } from 'lodash'
+import { sortedUniqBy } from 'lodash'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -13,7 +14,8 @@ import { StandardOutboundFormValues, standardOutboundValidator } from '../../_sc
 import FormSubmission from './-form-submission'
 import PurchaseOrderAutoComplete from './-purchase-order-autocomplete'
 
-const StandardOutboundForm: React.FC = () => {
+const NonSeparatedOutboundForm: React.FC = () => {
+	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const { t } = useTranslation()
 	const form = useForm<StandardOutboundFormValues>({
@@ -27,6 +29,14 @@ const StandardOutboundForm: React.FC = () => {
 
 	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation(form.reset)
 
+	const filteredOrders = useMemo(() => {
+		if (!Array.isArray(scannedOrders)) return []
+		const result = scannedOrders.filter(({ mo_no }) =>
+			mo_no.trim().toLowerCase().includes(searchTerm.trim().toLowerCase())
+		)
+		return sortedUniqBy(result, 'mo_no')
+	}, [searchTerm, scannedOrders])
+
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
@@ -34,7 +44,9 @@ const StandardOutboundForm: React.FC = () => {
 				<MultiSelectFieldControl
 					name='mo_no'
 					label={t('ns_erp:fields.mo_no')}
-					datalist={sortBy(scannedOrders, 'mo_no')}
+					shouldFilter={false}
+					onInput={(value) => setSearchTerm(value)}
+					datalist={filteredOrders}
 					labelField='mo_no'
 					valueField='mo_no'
 				/>
@@ -46,4 +58,4 @@ const StandardOutboundForm: React.FC = () => {
 
 const Form = tw.form`grid gap-y-6`
 
-export default StandardOutboundForm
+export default NonSeparatedOutboundForm
