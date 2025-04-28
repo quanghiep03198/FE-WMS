@@ -111,6 +111,8 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 const ESTIMATE_SIZE = 32
 const PRERENDER_COUNT = 5
 
+const normalizeString = (value: string) => value.trim().toLowerCase()
+
 export function MultiSelect<D = Record<string, any>>({
 	datalist,
 	labelField,
@@ -190,17 +192,17 @@ export function MultiSelect<D = Record<string, any>>({
 	}, [value])
 
 	// TODO: Implement virtual scroll for better performance with large list
-	const [scrollableEl, setScrollableEl] = useState<HTMLDivElement>(null)
+	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
 		if (node) {
-			setScrollableEl(node)
+			setScrollElement(node)
 		}
 	}, [])
 
 	const scrollingRef = useRef<number>(0)
 
-	const scrollToFn = useScrollToFn({ current: scrollableEl }, scrollingRef)
-	const getScrollElement = useCallback(() => scrollableEl, [scrollableEl])
+	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
+	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const estimateSize = useCallback(() => ESTIMATE_SIZE, [])
 	const virtualizer = useVirtualizer({
 		indexAttribute: 'data-index',
@@ -322,11 +324,14 @@ export function MultiSelect<D = Record<string, any>>({
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}>
 				<Command
 					shouldFilter={shouldFilter}
-					filter={(value, search) => {
-						const normalizedSearchTerm = search.trim().toLowerCase()
-						const normalizedValue = value.trim().toLowerCase()
-						if (datalist?.length === 0) return 0
-						return normalizedValue.includes(normalizedSearchTerm) ? 1 : 0
+					filter={(value, search, keywords) => {
+						const normalizedSearchTerm = normalizeString(search)
+						const normalizedValue = normalizeString(value)
+						return normalizedValue.includes(normalizedSearchTerm) ||
+							keywords.some((kw) => normalizeString(kw).includes(normalizedSearchTerm)) ||
+							keywords.some((kw) => kw === 'all')
+							? 1
+							: 0
 					}}>
 					<CommandInput
 						placeholder='Search...'
@@ -361,7 +366,7 @@ export function MultiSelect<D = Record<string, any>>({
 								</Div>
 								<Typography variant='small'>(Select All)</Typography>
 							</CommandItem>
-							{before > 0 && <CommandItem disabled style={{ height: before }} />}
+							{before > 0 && <CommandItem disabled style={{ width: '100%', height: before }} />}
 							{virtualItems.map((item) => {
 								const option = datalist[item.index]
 								const isSelected = selectedValues.includes(option?.[valueField])
@@ -370,14 +375,14 @@ export function MultiSelect<D = Record<string, any>>({
 										key={item.key}
 										data-index={item.index}
 										value={String(option[valueField])}
-										keywords={[String(option[valueField])]}
+										keywords={[String(option[labelField])]}
 										onSelect={() => toggleOption(option[valueField])}>
 										<Checkbox checked={isSelected} />
 										<Typography variant='small'>{String(option?.[labelField])}</Typography>
 									</CommandItem>
 								)
 							})}
-							{after > 0 && <CommandItem disabled style={{ height: after }} />}
+							{after > 0 && <CommandItem disabled style={{ width: '100%', height: after }} />}
 						</CommandGroup>
 					</CommandList>
 					<CommandSeparator />
