@@ -99,7 +99,7 @@ export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: Col
 		case 'multi-select': {
 			return (
 				<MultiSelectColumnFilter
-					value={(column.getFilterValue() ?? []) as any}
+					value={(column.getFilterValue() ?? []) as string[]}
 					onValueChange={(value) => column.setFilterValue(value)}
 					datalist={
 						Array.isArray(metaUniqueValues)
