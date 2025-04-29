@@ -101,7 +101,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				sortUndefined: 'last',
 				sortingFn: fuzzySort,
 				enableGlobalFilter: false,
-				minSize: 300,
+				size: 250,
+				minSize: 200,
 				meta: {
 					align: 'left',
 					filterVariant: 'multi-select',
