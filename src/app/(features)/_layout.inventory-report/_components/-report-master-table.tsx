@@ -7,6 +7,7 @@ import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
+import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
 import { useMemoizedFn, useResetState } from 'ahooks'
@@ -97,6 +98,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				sortUndefined: 'last',
+				sortingFn: fuzzySort,
 				enableGlobalFilter: false,
 				minSize: 300,
 				meta: {
