@@ -2,7 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { useEffect, useState } from 'react'
 import { Input } from '../..'
 
-type DebouncedInputProps = {
+export type DebouncedInputProps = {
 	value: string | number
 	onChange: (value: string | number) => void
 	debounce?: number

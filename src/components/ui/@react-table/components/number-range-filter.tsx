@@ -3,7 +3,7 @@ import { Column } from '@tanstack/react-table'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
 
-type NumberRangeFilterProps<TData, TValue> = { column: Column<TData, TValue> }
+export type NumberRangeFilterProps<TData, TValue> = { column: Column<TData, TValue> }
 
 export function NumberRangeFilter<TData, TValue>({ column }: NumberRangeFilterProps<TData, TValue>) {
 	const { hasNoFilter } = useTableContext()

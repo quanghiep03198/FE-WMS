@@ -7,15 +7,16 @@ import { DateRangePicker } from '../../@core/date-range-picker'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
+import MultiSelectColumnFilter from './multi-select-column-filter'
 import { NumberRangeFilter } from './number-range-filter'
 
 type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
 }
 
-export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
+export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
-	const filterVariant = column.columnDef.meta?.filterVariant
+	const filterVariant = column.columnDef.meta?.filterVariant satisfies ColumnFilterVariant
 	const { hasNoFilter } = useTableContext()
 
 	const getFacetedUniqueValues = () => {
@@ -94,6 +95,26 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 				/>
 			)
 		}
+
+		case 'multi-select': {
+			return (
+				<MultiSelectColumnFilter
+					value={(column.getFilterValue() ?? []) as any}
+					onValueChange={(value) => column.setFilterValue(value)}
+					datalist={
+						Array.isArray(metaUniqueValues)
+							? metaUniqueValues
+							: getSortedUniqueValues()
+									.filter((value) => Boolean(value))
+									.map((value: any) => ({
+										label: value,
+										value: value
+									}))
+					}
+				/>
+			)
+		}
+
 		default: {
 			return (
 				<DebouncedInput
