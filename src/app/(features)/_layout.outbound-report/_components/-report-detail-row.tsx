@@ -18,7 +18,7 @@ export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number]
 
 	return (
 		<TableRow className='[&>td]:!border-b'>
-			<TableCell className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
+			<TableCell className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center shadow-[1px_0px_0px_hsl(var(--border))]'>
 				<Div className='flex items-center gap-x-2'>{data?.mo_no}</Div>
 			</TableCell>
 			<TableCell className='!p-0'>

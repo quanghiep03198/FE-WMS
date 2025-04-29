@@ -31,8 +31,10 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['detail'] }> = ({ dat
 
 	return (
 		<TableFooter>
-			<TableRow>
-				<TableCell className='font-medium text-table-head-foreground'>
+			<TableRow className='sticky bottom-0 z-10 *:shadow-[1px_-1px_0px_hsl(var(--border))]'>
+				<TableCell
+					align='left'
+					className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-left text-table-head-foreground'>
 					{t('ns_erp:fields.total_qty_by_size')}
 				</TableCell>
 				<TableCell className='!p-0'>
@@ -45,12 +47,12 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['detail'] }> = ({ dat
 									<NestedCell className='bg-table-head px-4 py-2 font-medium first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0'>
 										{size?.size_numcode}
 									</NestedCell>
-									<NestedCell>{formatIntlNumber(size?.qty ?? 0)}</NestedCell>
+									<NestedCell className='font-normal'>{formatIntlNumber(size?.qty ?? 0)}</NestedCell>
 								</NestedRow>
 							))}
 					</Div>
 				</TableCell>
-				<TableCell className='font-medium' align='right'>
+				<TableCell className='sticky right-0 w-24 min-w-24 font-medium' align='right'>
 					{formatIntlNumber(totalSizeCount)}
 				</TableCell>
 			</TableRow>

@@ -23,7 +23,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 						<TableRow className='sticky'>
 							<TableHead
 								align='left'
-								className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+								className='left-0 z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap shadow-[1px_0px_0px_hsl(var(--border))] xl:sticky'>
 								{t('ns_erp:fields.mo_no')}
 							</TableHead>
 							<TableHead align='center'>Size</TableHead>
