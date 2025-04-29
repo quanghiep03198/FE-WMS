@@ -29,7 +29,7 @@ const reportDataSchema = z.object({
 
 type BaseUpdateUpdateQuery = Pick<
 	IMonthlyInventoryReport,
-	'po' | 'mo_no' | 'shoes_style_code_factory' | 'cust_shoestyle' | 'inv_type' | 'inv_year_month'
+	'mo_no' | 'shoes_style_code_factory' | 'cust_shoestyle' | 'inv_type' | 'inv_year_month'
 > & { size_numcode: string }
 
 type InventoryReportDetailTableProps = {

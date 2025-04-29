@@ -12,7 +12,7 @@ import { createColumnHelper, ExpandedState, type Table as TTable } from '@tansta
 import { useMemoizedFn, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { pick, sortBy } from 'lodash'
+import { has, isEmpty, isNil, pick, sortBy, sortedUniq } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -47,6 +47,16 @@ export const InventoryReportMasterTable: React.FC = () => {
 	useEffect(() => {
 		resetExpanded()
 	}, [searchParams['month.eq']])
+
+	const facetedUniqPurchaseOrder = useMemo<Record<'label' | 'value', string>[]>(() => {
+		if (!Array.isArray(data) || !data.every((item) => has(item, 'po'))) return []
+		return sortedUniq(
+			data.filter((item) => !isNil(item.po) && !isEmpty(item.po)).flatMap((item) => item?.po?.split(','))
+		).map((item) => ({
+			label: item,
+			value: item
+		}))
+	}, [data])
 
 	const columns = useMemo(
 		() => [
@@ -83,12 +93,18 @@ export const InventoryReportMasterTable: React.FC = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('po', {
-				header: 'P.O',
+				header: 'PO',
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
-				meta: { align: 'left' },
+				enableGlobalFilter: false,
+				minSize: 300,
+				meta: {
+					align: 'left',
+					filterVariant: 'multi-select',
+					facetedUniqueValues: facetedUniqPurchaseOrder
+				},
+				filterFn: 'arrIncludesAll',
 				cell: ({ getValue }) => {
 					const value = getValue()
 					if (!value)
@@ -228,7 +244,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
 			<InventoryReportDetailTable
 				queries={pick(row.original, [
-					'po',
 					'mo_no',
 					'cust_shoestyle',
 					'shoes_style_code_factory',
