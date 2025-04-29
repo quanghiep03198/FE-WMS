@@ -69,6 +69,7 @@ export default {
 		target_box_qty: '需称箱数',
 		target_item_qty: '需称双数',
 		total_init_qty: '期初库存',
+		total_qty_by_size: '尺码明细',
 		trans_num: '調撥箱數',
 		transfer_order_code: '轉撥單號',
 		uninspected_qty: '未驗收量',

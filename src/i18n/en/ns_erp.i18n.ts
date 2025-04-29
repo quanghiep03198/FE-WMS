@@ -67,6 +67,7 @@ export default {
 		target_box_qty: 'Target box quantity',
 		target_item_qty: 'Target item quantity',
 		total_init_qty: 'Initial stock quantity',
+		total_qty_by_size: 'Total by size',
 		trans_num: 'Number of Boxes Issued',
 		transfer_order_code: 'Transfer order code',
 		uninspected_qty: 'Uninspected quantity',

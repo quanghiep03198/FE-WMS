@@ -1,6 +1,7 @@
 import { IOutboundReport } from '@/common/types/entities'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
+import ReportDetailFooter from './-report-detail-footer'
 import { ReportDetailRow } from './-report-detail-row'
 
 const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> = ({ data }) => {
@@ -36,7 +37,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 							data.map((item) => <ReportDetailRow key={item.mo_no} data={item} />)
 						) : (
 							<TableRow>
-								<TableCell align='center' colSpan={4} className='p-20 text-muted-foreground'>
+								<TableCell align='center' colSpan={4} className='!border-b p-20 text-muted-foreground'>
 									<Div className='inline-flex items-center justify-center gap-x-2'>
 										<Icon name='Inbox' size={24} strokeWidth={1} />
 										{t('ns_common:table.no_data')}
@@ -45,6 +46,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 							</TableRow>
 						)}
 					</TableBody>
+					<ReportDetailFooter data={data} />
 				</Table>
 			</Div>
 		</Div>

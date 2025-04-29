@@ -1,6 +1,5 @@
 import { NestedCell, NestedRow } from '@/app/(features)/_components/_shared/-horizontal-nested-table'
 import { IOutboundReport } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'
 import { sortBy } from 'lodash'
@@ -18,11 +17,11 @@ export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number]
 	)
 
 	return (
-		<TableRow>
+		<TableRow className='[&>td]:!border-b'>
 			<TableCell className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>{data?.mo_no}</Div>
 			</TableCell>
-			<TableCell className={cn('!p-0')}>
+			<TableCell className='!p-0'>
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>

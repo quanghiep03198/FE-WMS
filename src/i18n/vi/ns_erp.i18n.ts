@@ -67,6 +67,7 @@ export default {
 		target_box_qty: 'Số thùng cần cân',
 		target_item_qty: 'Số đôi cần cân',
 		total_init_qty: 'Số lượng nhập kỳ đầu',
+		total_qty_by_size: 'Tổng theo size',
 		trans_num: 'Lượng thùng đã phát',
 		transfer_order_code: 'Mã đơn chuyển giao',
 		uninspected_qty: 'Số Lượng Chưa Kiểm Tra',
