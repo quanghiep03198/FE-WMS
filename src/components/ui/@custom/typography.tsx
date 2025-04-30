@@ -50,10 +50,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) 
 	const Element = !variant || variant === 'default' || as ? as : (variant as React.ElementType)
 
 	return (
-		<Element
-			ref={resolvedRef}
-			className={cn(typographyVariants({ variant, color, className: className ?? 'text-inherit' }))}
-			{...restProps}>
+		<Element ref={resolvedRef} className={cn(typographyVariants({ variant, color, className }))} {...restProps}>
 			{children}
 		</Element>
 	)
