@@ -15,7 +15,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={ref}
-			className='mx-auto flex w-full max-w-7xl animate-[fly-in_1s_ease] flex-col justify-center space-y-16 xxl:max-w-8xl'
+			className='mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl'
 			id='outstanding-features'
 			as='section'
 			style={{

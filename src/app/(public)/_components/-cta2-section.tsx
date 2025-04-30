@@ -22,7 +22,7 @@ const CTA2Section: React.FC = () => {
 		<Div>
 			<Div
 				ref={topSectionRef}
-				className='grid animate-[fly-in_1s_ease] grid-cols-1 items-center gap-10 lg:grid-cols-2 xl:grid-cols-2 xxl:grid-cols-[1fr_1.5fr]'
+				className='grid grid-cols-1 items-center gap-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:grid-cols-[1fr_1.5fr] xl:grid-cols-[1fr_1.5fr]'
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: topSectionInViewPort ? 'running' : 'paused'
@@ -51,7 +51,7 @@ const CTA2Section: React.FC = () => {
 			</Div>
 			<Div
 				ref={bottomSectionRef}
-				className='grid w-full animate-[fly-in_1s_ease] grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2'
+				className='grid w-full grid-cols-4 gap-6 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 sm:grid-cols-1 md:grid-cols-2'
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: bottomSectionInViewPort ? 'running' : 'paused'

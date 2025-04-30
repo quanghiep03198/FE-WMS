@@ -1,4 +1,3 @@
-import useTheme from '@/common/hooks/use-theme'
 import { Div, Icon, Typography } from '@/components/ui'
 import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import { useInViewport } from 'ahooks'
@@ -8,7 +7,6 @@ import { usePageContext } from '../_contexts/-page-context'
 
 const SupportSection: React.FunctionComponent = () => {
 	const ref = useRef<HTMLDivElement>(null)
-	const { theme } = useTheme()
 	const pageContext = usePageContext()
 	const [inViewport] = useInViewport(ref, {
 		root: () => pageContext?.contentScrollRef?.current,
@@ -20,12 +18,11 @@ const SupportSection: React.FunctionComponent = () => {
 			<Div className='flex items-center justify-center'>
 				<Image src='/global-transport.svg' alt='Shipping' />
 			</Div>
-			{/* <Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' /> */}
 			<Div
 				id='cta'
 				as='section'
 				ref={ref}
-				className='animate-[fly-in_1s_ease] space-y-8 xl:space-y-12'
+				className='space-y-8 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:space-y-12'
 				style={{
 					animationFillMode: 'both',
 					animationPlayState: inViewport ? 'running' : 'paused'

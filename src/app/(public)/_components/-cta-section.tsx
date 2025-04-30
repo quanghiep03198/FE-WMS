@@ -15,7 +15,7 @@ const CTASection: React.FC = () => {
 			id='cta'
 			as='section'
 			className='mx-auto flex max-w-7xl flex-grow flex-col items-center gap-10 sm:gap-y-6 xl:flex-row xl:gap-20 xxl:max-w-8xl'>
-			<Div className='flex animate-[fly-in_1s_ease] flex-col items-center text-center xl:items-start xl:text-left'>
+			<Div className='flex flex-col items-center text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:items-start xl:text-left'>
 				<Button
 					onClick={() => handleMenuClick(1)}
 					variant='outline'

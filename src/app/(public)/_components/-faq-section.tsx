@@ -58,7 +58,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={containerRef}
-			className='flex w-full flex-grow animate-[fly-in_1s_ease] flex-col-reverse items-start gap-10 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'
+			className='flex w-full flex-grow flex-col-reverse items-start gap-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'
@@ -92,27 +92,22 @@ const FAQsSection: React.FunctionComponent = () => {
 					{faqs.map((faq, index) => (
 						<Fragment key={index}>
 							<Div
-								className='flex-rows inline-flex animate-fly-in items-end gap-x-1 place-self-start text-sm opacity-0'
+								className='flex-rows inline-flex items-end gap-x-1 place-self-start text-sm duration-500 animate-in fade-in-0 slide-in-from-bottom-4'
 								style={{
 									animationDelay: `${index / 2 + 0.35}s`,
 									animationFillMode: 'both',
 									animationPlayState: chatInViewPort ? 'running' : 'paused'
 								}}>
-								<Avatar>
-									<Avatar>
-										<AvatarImage src={generateAvatar({ name: 'Q' })} />
-									</Avatar>
+								<Avatar className='duration-200 animate-in fade-in-0'>
+									<AvatarImage src={generateAvatar({ name: 'Q' })} />
 								</Avatar>
 								<ChatBubble variant='secondary'>{faq.question}</ChatBubble>
 							</Div>
 							<Div
-								className='inline-flex animate-fly-in flex-row-reverse place-content-end items-end gap-x-1 text-sm opacity-0'
-								style={{
-									animationDelay: `${index / 2 + 0.65}s`,
-									animationFillMode: 'both',
-									animationPlayState: chatInViewPort ? 'running' : 'paused'
-								}}>
-								<Avatar className='animate-fade-in'>
+								data-viewport={chatInViewPort ? 'visible' : 'invisible'}
+								className='inline-flex flex-row-reverse place-content-end items-end gap-x-1 text-sm duration-500 animate-in fade-in-0 slide-in-from-bottom-4 fill-mode-both data-[viewport=visible]:running data-[viewport=invisible]:paused'
+								style={{ animationDelay: `${index / 2 + 0.65}s` }}>
+								<Avatar className='duration-200 animate-in fade-in-0'>
 									<AvatarImage src={generateAvatar({ name: 'A' })} />
 								</Avatar>
 								<ChatBubble variant='success'>{faq.answer}</ChatBubble>
