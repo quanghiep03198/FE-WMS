@@ -9,6 +9,7 @@ export default function Loading() {
 	nProgress.configure({
 		showSpinner: false
 	})
+
 	useEffect(() => {
 		nProgress.start()
 
@@ -17,7 +18,9 @@ export default function Loading() {
 		}
 	}, [])
 
-	useEventListener('load', () => document.startViewTransition())
+	useEventListener('load', () => {
+		document.startViewTransition()
+	})
 
 	return (
 		<Fragment>
@@ -25,7 +28,7 @@ export default function Loading() {
 				<title>Loading ...</title>
 			</head>
 			<Div data-state='expanded' className='group relative flex h-screen items-center justify-center'>
-				<Div className='z-10 animate-[fade_.5s_cubic-bezier(.25,.25,.5,1)_.125s_both!important]'>
+				<Div className='z-10 duration-300 animate-in fade-in-0 zoom-in-95'>
 					<AppLogo />
 				</Div>
 				<GridBackground />
