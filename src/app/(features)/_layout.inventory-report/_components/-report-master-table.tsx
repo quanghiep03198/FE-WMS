@@ -223,7 +223,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
-		[i18n.language]
+		[data, i18n.language]
 	)
 
 	const handleDownloadExcel = useMemoizedFn(async () => {
