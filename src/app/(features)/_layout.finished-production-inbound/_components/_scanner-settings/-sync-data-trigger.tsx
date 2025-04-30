@@ -117,21 +117,30 @@ const SyncDataTrigger: React.FC = () => {
 								waiting: { icon: 'CircleDot', color: 'hsl(var(--foreground))' }
 							}
 							return (
-								<StepItem
-									key={item.id}
-									style={{
-										animationDelay: `${index / 5 + 0.5}s`,
-										animationFillMode: 'both'
-									}}>
+								<StepItem key={item.id}>
 									<Div className='translate-y-px'>
 										<Icon
 											name={icon[item.status].icon}
 											stroke={icon[item.status].color}
-											className={cn({ 'animate-spin': item.status === 'processing' })}
+											style={{
+												animationDelay: `${index / 5 + 0.5}s`,
+												animationFillMode: 'both'
+											}}
+											className={cn('duration-300 animate-in fade-in-0 zoom-in-75', {
+												'animate-spin': item.status === 'processing'
+											})}
 											size={18}
 										/>
 									</Div>
-									{t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
+									<Typography
+										variant='small'
+										className='line-clamp-1 w-full animate-typing whitespace-nowrap text-nowrap'
+										style={{
+											animationDelay: `${index / 5 + 0.75}s`,
+											animationFillMode: 'both'
+										}}>
+										{t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
+									</Typography>
 								</StepItem>
 							)
 						})}
@@ -147,6 +156,6 @@ const SyncDataTrigger: React.FC = () => {
 }
 
 const StepList = tw.ul`grid gap-y-4 bg-secondary rounded-md p-4`
-const StepItem = tw.li`animate-[fade-in_0.5s_ease_0.25s_both] flex items-start text-sm gap-2 text-ellipsis text-pretty`
+const StepItem = tw.li`flex items-start text-sm gap-2 `
 
 export default SyncDataTrigger
