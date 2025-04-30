@@ -174,27 +174,11 @@ module.exports = {
 						height: '0'
 					}
 				},
-				['fade']: {
-					from: { opacity: 0 },
-					to: {
-						opacity: '1'
-					}
-				},
 				['fade-in']: {
-					from: { transform: 'scale(0.9)', opacity: 0 },
+					from: { transform: 'scale(0.95)', opacity: 0 },
 					to: {
 						transform: 'scale(1)',
 						opacity: '1'
-					}
-				},
-				['fade-out']: {
-					from: {
-						transform: 'scale(1)',
-						opacity: '1'
-					},
-					to: {
-						transform: 'scale(0.9)',
-						opacity: 0
 					}
 				},
 				['fall-down']: {
@@ -204,16 +188,6 @@ module.exports = {
 					to: {
 						transform: 'translateY(2rem)',
 						width: 0
-					}
-				},
-				['fly-in']: {
-					from: {
-						transform: 'translateY(1.5rem)',
-						opacity: 0
-					},
-					to: {
-						transform: 'translate(0)',
-						opacity: 1
 					}
 				},
 				['fly-in-out']: {
@@ -291,11 +265,8 @@ module.exports = {
 				['collapsible-down']: 'collapsible-down 0.2s ease-out',
 				['collapsible-up-reverse']: 'collapsible-up-reverse 0.2s ease-out',
 				['collapsible-down-reverse']: 'collapsible-down-reverse 0.2s ease-out',
-				['fade']: 'fade .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
-				['fade-out']: 'fade-out .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
-				['fly-in']: 'fly-in 0.5s cubic-bezier(.5,.5,0,1)',
 				['fly-in-out']: 'fly-in-out 1s linear',
 				['fall-down']: 'fall-down 1s linear',
 				['scrolling']: 'scrolling 10s linear infinite both!important',
@@ -311,6 +282,5 @@ module.exports = {
 		require('tailwind-scrollbar'),
 		require('@tailwindcss/container-queries'),
 		require('@tailwindcss/typography')
-		// require('@tailwindcss/forms')
 	]
 }
