@@ -14,6 +14,7 @@ export type OrderItem = {
 export type RFIDStreamEventData = {
 	epcs: Pagination<IElectronicProductCode>
 	orders: Array<OrderItem>
+	has_invalid?: boolean
 }
 
 export type SearchEpcParams = {
