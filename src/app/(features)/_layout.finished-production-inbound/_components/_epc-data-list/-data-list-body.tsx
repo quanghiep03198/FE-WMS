@@ -6,7 +6,7 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
@@ -121,6 +121,7 @@ const EpcDataList: React.FC = () => {
 						const data = JSON.parse(event.data) as RFIDStreamEventData
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
+						setHasInvalidEpcAlert(Boolean(data?.has_invalid) && !isInvalidEpcDismissedRef.current)
 					} catch (error) {
 						throw new FatalError(error)
 					}
@@ -188,9 +189,6 @@ const EpcDataList: React.FC = () => {
 				data: uniqBy([...previousData, ...newData], 'epc')
 			})
 		} else {
-			setHasInvalidEpcAlert(
-				Array.isArray(incommingEpc?.data) && incommingEpc.data.some((item) => item.epc.startsWith('E28'))
-			)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
 			setScannedEpc(incommingEpc)
 		}
@@ -250,26 +248,28 @@ const EpcDataList: React.FC = () => {
 
 	return (
 		<Fragment>
-			{hasInvalidEpcAlert &&
-				createPortal(
-					<Alert>
-						<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
-						<AlertContent>
-							<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
-							<AlertDescription>{t('ns_inoutbound:notification.invalid_epc_deteted')}</AlertDescription>
-						</AlertContent>
-						{scanningStatus !== 'connected' && (
-							<AlertClose
-								onClick={() => {
-									isInvalidEpcDismissedRef.current = true
-									setHasInvalidEpcAlert(false)
-								}}>
-								<Icon name='X' />
-							</AlertClose>
-						)}
-					</Alert>,
-					document.body
-				)}
+			{createPortal(
+				<Alert data-state={hasInvalidEpcAlert ? 'open' : 'closed'}>
+					<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
+					<AlertContent>
+						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
+						<AlertDescription>{t('ns_inoutbound:notification.invalid_epc_deteted')}</AlertDescription>
+					</AlertContent>
+					<Tooltip
+						message={t('ns_common:actions.dismiss')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ side: 'left' }}>
+						<AlertClose
+							onClick={() => {
+								isInvalidEpcDismissedRef.current = true
+								setHasInvalidEpcAlert(false)
+							}}>
+							<Icon name='X' />
+						</AlertClose>
+					</Tooltip>
+				</Alert>,
+				document.body
+			)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
@@ -328,10 +328,10 @@ const EpcDataList: React.FC = () => {
 	)
 }
 
-const Alert = tw.div`fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-3`
+const Alert = tw.div`data-[state=open]:animate-in data-[state=open]:fade-in-0 [transition-behavior:allow-discrete] data-[state=open]:slide-in-from-top-4 transition-all data-[state=closed]:hidden data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-4 fixed top-0 left-0 right-auto flex items-center w-full bg-destructive text-destructive-foreground px-4 py-3 z-50 gap-3`
 const AlertContent = tw.div`inline-flex flex-col`
 const AlertTitle = tw.h5`font-medium`
 const AlertDescription = tw.p`text-sm`
-const AlertClose = tw.button`ml-auto self-start`
+const AlertClose = tw.button`ml-auto self-start hover:opacity-80 transition-opacity duration-200 ease-in-out`
 
 export default EpcDataList
