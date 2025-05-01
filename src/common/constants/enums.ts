@@ -18,6 +18,7 @@ export enum RequestMethod {
 export enum RequestHeaders {
 	AUTHORIZATION = 'Authorization',
 	ACCEPT_LANGUAGE = 'Accept-Language',
+	API_VERSION = 'X-Api-Version',
 	CONTENT_TYPE = 'Content-Type',
 	TENANT_ID = 'X-Tenant-Id',
 	USER_COMPANY = 'X-User-Company'

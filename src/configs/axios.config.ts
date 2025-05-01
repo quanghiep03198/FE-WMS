@@ -28,13 +28,14 @@ export class AxiosClient {
 		HttpStatusCode.TooManyRequests
 	]
 
-	constructor(baseURL?: string) {
+	constructor(baseURL: string, version: string = '1.0') {
 		// * Instance configuration
 		this.instance = axios.create({
-			baseURL: baseURL ?? env('VITE_API_BASE_URL'),
+			baseURL: baseURL,
 			timeout: env('VITE_API_BASE_URL', 10_000),
 			headers: {
-				[RequestHeaders.CONTENT_TYPE]: 'application/json'
+				[RequestHeaders.CONTENT_TYPE]: 'application/json',
+				[RequestHeaders.API_VERSION]: version
 			},
 			paramsSerializer: (params) => {
 				return qs.stringify(params, {
@@ -122,6 +123,6 @@ export class AxiosClient {
 	}
 }
 
-const axiosInstance = new AxiosClient().instance
+const axiosInstance = new AxiosClient(env('VITE_API_BASE_URL'), '1.0').instance
 
 export default axiosInstance
