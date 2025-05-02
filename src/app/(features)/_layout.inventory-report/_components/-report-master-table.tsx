@@ -32,8 +32,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 		'month.eq': format(new Date(), 'yyyy-MM'),
 		'auto-refresh': false
 	})
-	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
+	const { user } = useAuth()
 
 	const { data, isLoading, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()

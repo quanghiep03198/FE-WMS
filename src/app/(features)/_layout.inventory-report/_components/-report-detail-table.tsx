@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useBoolean } from 'ahooks'
 import { format } from 'date-fns'
 import { pick } from 'lodash'
-import React, { Fragment, useRef } from 'react'
+import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -116,6 +116,15 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		}
 	})
 
+	const isLoading = useMemo(() => {
+		const queryState = queryClient.getQueryState([
+			INVENTORY_REPORT_PROVIDE_TAG,
+			currentTenant?.id,
+			pick(searchParams, 'month.eq')
+		])
+		return isPending || queryState?.fetchStatus === 'fetching'
+	}, [isPending, queryClient])
+
 	return (
 		<ScrollArea>
 			<Form {...form}>
@@ -163,7 +172,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
 														className='h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus-within:border-none focus:outline-none'
-														disabled={!isEditing || isPending}
+														disabled={!isEditing || isLoading}
 													/>
 												</TableCell>
 											)
@@ -183,7 +192,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 														name={`data.${index}.mn_ost_qty`}
 														type='number'
 														className='h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus-within:border-none focus:outline-none'
-														disabled={!isEditing || isPending}
+														disabled={!isEditing || isLoading}
 													/>
 												</TableCell>
 											)
@@ -210,7 +219,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											size='sm'
 											variant='destructive'
 											onClick={() => {
-												if (isPending) abortControllerRef.current.abort()
+												if (isLoading) abortControllerRef.current.abort()
 												disableEditing()
 												form.reset({
 													data: data.map((item) => ({
@@ -236,13 +245,13 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										</Button>
 									)}
 
-									<Button type='submit' size='sm' disabled={!isEditing || isPending}>
+									<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
 										<Icon
-											name={isPending ? 'LoaderCircle' : 'Check'}
+											name={isLoading ? 'LoaderCircle' : 'Check'}
 											role='img'
-											className={isPending && 'animate-spin'}
+											className={isLoading && 'animate-spin'}
 										/>{' '}
-										{isPending
+										{isLoading
 											? t('ns_common:status.processing')
 											: isError
 												? t('ns_common:actions.retry')
