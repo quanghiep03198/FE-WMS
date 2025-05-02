@@ -6,9 +6,9 @@ export const useGetTenantByFactory = () => {
 	const { user } = useAuth()
 
 	return useQuery({
-		queryKey: ['TENANTS', user.company_code],
+		queryKey: ['TENANT', user.company_code],
 		queryFn: TenancyService.getTenantsByFactory,
-		refetchOnMount: 'always',
+		refetchOnMount: true,
 		select: (response) => response.metadata
 	})
 }
@@ -17,7 +17,7 @@ export const useGetAllTenants = () => {
 	return useQuery({
 		queryKey: ['TENANTS'],
 		queryFn: TenancyService.getAllTenants,
-		refetchOnMount: 'always',
+		refetchOnMount: true,
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }
