@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useBoolean } from 'ahooks'
 import { format } from 'date-fns'
 import { pick } from 'lodash'
-import React, { Fragment, useMemo, useRef } from 'react'
+import React, { Fragment, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -62,12 +62,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		}
 	})
 	const { fields } = useFieldArray({ name: 'data', control: form.control })
-
 	const abortControllerRef = useRef<AbortController | null>(null)
-
 	const queryClient = useQueryClient()
-
 	const { data: currentTenant } = useGetTenantByFactory()
+
+	const queryParam = pick(searchParams, 'month.eq')
 
 	// * Implement optimistic update on save manual changes
 	const { mutateAsync, isPending, isError } = useMutation({
@@ -82,48 +81,37 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		onMutate: async (variable) => {
 			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
 			await queryClient.cancelQueries({
-				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
+				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam],
 				exact: true
 			})
 			// Snapshot the previous value
-			const previousData = queryClient.getQueryData([
-				INVENTORY_REPORT_PROVIDE_TAG,
-				currentTenant?.id,
-				pick(searchParams, 'month.eq')
-			])
+			const previousData = queryClient.getQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam])
 
 			// Optimistically update to the new value
-			queryClient.setQueryData(
-				[INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
-				variable
-			)
+			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam], variable)
 			return { previousData }
 		},
 		onSuccess: () => {
 			disableEditing()
 		},
 		onError: (_error, _variable, context) => {
-			queryClient.setQueryData(
-				[INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
-				context.previousData
-			)
+			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam], context.previousData)
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({
-				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, pick(searchParams, 'month.eq')],
+				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam],
 				exact: true
 			})
 		}
 	})
 
-	const isLoading = useMemo(() => {
-		const queryState = queryClient.getQueryState([
-			INVENTORY_REPORT_PROVIDE_TAG,
-			currentTenant?.id,
-			pick(searchParams, 'month.eq')
-		])
-		return isPending || queryState?.fetchStatus === 'fetching'
-	}, [isPending, queryClient])
+	const inventoryReportQueryState = queryClient.getQueryState([
+		INVENTORY_REPORT_PROVIDE_TAG,
+		currentTenant?.id,
+		queryParam
+	])
+
+	const isLoading = isPending || inventoryReportQueryState.fetchStatus === 'fetching'
 
 	return (
 		<ScrollArea>
@@ -219,7 +207,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											size='sm'
 											variant='destructive'
 											onClick={() => {
-												if (isLoading) abortControllerRef.current.abort()
+												abortControllerRef.current.abort()
 												disableEditing()
 												form.reset({
 													data: data.map((item) => ({
