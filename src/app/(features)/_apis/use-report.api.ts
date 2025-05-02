@@ -1,13 +1,15 @@
 import { ReportService } from '@/services/report.service'
 import { useQuery } from '@tanstack/react-query'
 import { pick } from 'lodash'
-import { UrlQueryParams } from '../_layout.inbound-report/_components/-report-master-table'
 
 export const INBOUND_REPORT_PROVIDE_TAG = 'DAILY_INBOUND'
 export const OUTBOUND_REPORT_PROVIDE_TAG = 'DAILY_OUTBOUND'
 export const INVENTORY_REPORT_PROVIDE_TAG = 'MONTHLY_INVENTORY_REPORT'
 
-export const useGetInboundReport = (tenantId: string, params?: UrlQueryParams) => {
+export const useGetInboundReport = (
+	tenantId: string,
+	params?: { 'auto-refresh': false | number; 'date.eq': string }
+) => {
 	return useQuery({
 		queryKey: [INBOUND_REPORT_PROVIDE_TAG, tenantId, pick(params, 'date.eq')],
 		queryFn: async () => await ReportService.getInboundReport(tenantId, pick(params, 'date.eq')),
