@@ -38,7 +38,7 @@ export const useGetMonthlyInventoryReport = (tenantId: string, params?: { 'month
 		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, tenantId, pick(params, 'month.eq')],
 		queryFn: async () => await ReportService.getMonthlyInventoryReport(tenantId, pick(params, 'month.eq')),
 		enabled: !!tenantId,
-		refetchOnMount: true,
+		refetchOnWindowFocus: false,
 		refetchInterval: params['auto-refresh'],
 		select: (response) => response.metadata
 	})

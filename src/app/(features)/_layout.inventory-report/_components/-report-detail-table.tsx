@@ -8,12 +8,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useBoolean } from 'ahooks'
 import { format } from 'date-fns'
 import { pick } from 'lodash'
-import React, { Fragment, useRef } from 'react'
+import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
-import { INVENTORY_REPORT_PROVIDE_TAG, useGetMonthlyInventoryReport } from '../../_apis/use-report.api'
+import { INVENTORY_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import { UrlQueryParams } from './-report-master-table'
 
@@ -65,8 +65,6 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const queryClient = useQueryClient()
 	const { data: currentTenant } = useGetTenantByFactory()
-	const { isFetching } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
-
 	const queryParam = pick(searchParams, 'month.eq')
 
 	// * Implement optimistic update on save manual changes
@@ -106,7 +104,9 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		}
 	})
 
-	const isLoading = isPending || isFetching
+	const { fetchStatus } = queryClient.getQueryState([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam])
+
+	const isLoading = useMemo(() => isPending || fetchStatus === 'fetching', [isPending, fetchStatus])
 
 	return (
 		<ScrollArea>
