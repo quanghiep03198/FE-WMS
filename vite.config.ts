@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
 				targets: [{ src: './infrastructure/web.config', dest: '' }]
 			}),
 			pwa({
-				registerType: 'prompt',
+				registerType: 'autoUpdate',
 				disable: mode === 'development',
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
 				manifest: {
