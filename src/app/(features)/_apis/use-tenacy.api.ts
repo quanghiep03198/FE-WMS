@@ -8,7 +8,6 @@ export const useGetTenantByFactory = () => {
 	return useQuery({
 		queryKey: ['TENANT', user.company_code],
 		queryFn: TenancyService.getTenantsByFactory,
-		enabled: !!user.company_code,
 		select: (response) => response.metadata
 	})
 }
