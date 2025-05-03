@@ -8,7 +8,7 @@ export const useGetTenantByFactory = () => {
 	return useQuery({
 		queryKey: ['TENANT', user.company_code],
 		queryFn: TenancyService.getTenantsByFactory,
-		refetchOnMount: true,
+		enabled: !!user.company_code,
 		select: (response) => response.metadata
 	})
 }
@@ -17,7 +17,6 @@ export const useGetAllTenants = () => {
 	return useQuery({
 		queryKey: ['TENANTS'],
 		queryFn: TenancyService.getAllTenants,
-		refetchOnMount: true,
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }
