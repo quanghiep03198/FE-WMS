@@ -1,6 +1,6 @@
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IMonthlyInventoryReport, ITenancy } from '@/common/types/entities'
+import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 import { INVENTORY_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
+import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import { UrlQueryParams } from './-report-master-table'
 
 const reportDataSchema = z.object({
@@ -66,7 +67,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const queryClient = useQueryClient()
 
-	const { data: currentTenant } = queryClient.getQueryState<ITenancy>(['TENANT', user?.company_code])
+	const { data: currentTenant } = useGetTenantByFactory()
 
 	const queryParam = pick(searchParams, 'month.eq')
 
