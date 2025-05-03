@@ -261,7 +261,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 
 const ScrollArea = tw.div`relative h-fit max-w-full overflow-auto overflow-x-scroll rounded-md border bg-background`
 const Table = tw.div`[&>*>:first-child]:top-0 [&>*>:first-child]:font-medium [&>*>:first-child]:text-table-head-foreground`
-const TableVerticalHeader = tw.div`sticky left-0 z-10`
+const TableVerticalHeader = tw.div`sticky left-0 z-10 lowercase first-letter:uppercase`
 const TableRow = tw.div`flex [&>*]:px-4 [&>*]:border-b [&>*]:bg-background [&>*]:py-2 [&>*]:whitespace-nowrap [&>*]:border-r [&>:last-child]:border-r-0 [&>:last-child]:flex-1 [&>:first-child]:basis-52 [&>:first-child]:min-w-52 [&>:not(:first-child)]:basis-24 [&>:not(:first-child)]:min-w-24`
 const TableCell = tw.div`text-foreground text-left`
 const TableCellHead = tw.div`text-table-head-foreground font-medium text-left`
