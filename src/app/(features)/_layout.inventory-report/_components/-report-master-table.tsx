@@ -257,7 +257,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				data={sortBy(row.original?.size_data, 'size_numcode')}
 			/>
 		),
-		[data, isLoading]
+		[data]
 	)
 
 	const renderSlotRight = useMemoizedFn(() => (

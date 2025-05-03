@@ -1,5 +1,6 @@
+import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IMonthlyInventoryReport } from '@/common/types/entities'
+import { IMonthlyInventoryReport, ITenancy } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
@@ -14,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 import { INVENTORY_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
-import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import { UrlQueryParams } from './-report-master-table'
 
 const reportDataSchema = z.object({
@@ -41,6 +41,7 @@ type ReportDataFormValues = z.infer<typeof reportDataSchema>
 
 export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
 	const { t } = useTranslation()
+	const { user } = useAuth()
 
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'month.eq': format(new Date(), 'yyyy-MM'),
@@ -64,7 +65,9 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	const { fields } = useFieldArray({ name: 'data', control: form.control })
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const queryClient = useQueryClient()
-	const { data: currentTenant } = useGetTenantByFactory()
+
+	const { data: currentTenant } = queryClient.getQueryState<ITenancy>(['TENANT', user?.company_code])
+
 	const queryParam = pick(searchParams, 'month.eq')
 
 	// * Implement optimistic update on save manual changes
@@ -104,9 +107,13 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		}
 	})
 
-	const { fetchStatus } = queryClient.getQueryState([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam])
+	const queryState = queryClient.getQueryState<IMonthlyInventoryReport>([
+		INVENTORY_REPORT_PROVIDE_TAG,
+		currentTenant?.id,
+		queryParam
+	])
 
-	const isLoading = useMemo(() => isPending || fetchStatus === 'fetching', [isPending, fetchStatus])
+	const isLoading = useMemo(() => isPending || queryState?.fetchStatus === 'fetching', [isPending, queryState])
 
 	return (
 		<ScrollArea>
