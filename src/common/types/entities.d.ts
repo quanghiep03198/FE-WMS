@@ -114,6 +114,7 @@ export interface IOutboundReport extends Omit<IInOutBoundReport, 'size_data'> {
 
 export interface IMonthlyInventoryReport {
 	brand_name: string
+	actual_po: string
 	po: string
 	mo_no: string
 	order_qty: number

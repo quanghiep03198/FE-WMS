@@ -248,6 +248,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
 			<InventoryReportDetailTable
 				queries={pick(row.original, [
+					'actual_po',
 					'mo_no',
 					'cust_shoestyle',
 					'shoes_style_code_factory',

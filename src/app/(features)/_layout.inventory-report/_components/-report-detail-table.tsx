@@ -1,4 +1,3 @@
-import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
@@ -12,6 +11,7 @@ import { pick } from 'lodash'
 import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 import { INVENTORY_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
@@ -30,7 +30,7 @@ const reportDataSchema = z.object({
 
 type BaseUpdateUpdateQuery = Pick<
 	IMonthlyInventoryReport,
-	'mo_no' | 'shoes_style_code_factory' | 'cust_shoestyle' | 'inv_type' | 'inv_year_month'
+	'actual_po' | 'mo_no' | 'shoes_style_code_factory' | 'cust_shoestyle' | 'inv_type' | 'inv_year_month'
 > & { size_numcode: string }
 
 type InventoryReportDetailTableProps = {
@@ -42,7 +42,6 @@ type ReportDataFormValues = z.infer<typeof reportDataSchema>
 
 export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
 
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'month.eq': format(new Date(), 'yyyy-MM'),
@@ -77,7 +76,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 			return await ReportService.updateInventoryReport(
 				currentTenant?.id,
 				abortControllerRef.current?.signal,
-				queries,
+				{ ...queries, po: queries.actual_po, inv_year_month: queryParam['month.eq'] },
 				payload
 			)
 		},
@@ -95,9 +94,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 			return { previousData }
 		},
 		onSuccess: () => {
+			toast.success(t('ns_common:notification.success'))
 			disableEditing()
 		},
 		onError: (_error, _variable, context) => {
+			toast.error(t('ns_common:notification.error'))
 			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam], context.previousData)
 		},
 		onSettled: () => {
@@ -107,6 +108,23 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 			})
 		}
 	})
+
+	const handleCancelUpdate = () => {
+		abortControllerRef.current.abort()
+		disableEditing()
+		form.reset({
+			data: data.map((item) => ({
+				size_numcode: item.size,
+				mn_ist_qty: item.mn_ist_qty,
+				mn_ost_qty: item.mn_ost_qty
+			}))
+		})
+	}
+
+	const handleStartUpdate = () => {
+		abortControllerRef.current = new AbortController()
+		enableEditing()
+	}
 
 	const queryState = queryClient.getQueryState<IMonthlyInventoryReport>([
 		INVENTORY_REPORT_PROVIDE_TAG,
@@ -209,33 +227,15 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											type='button'
 											size='sm'
 											variant='destructive'
-											onClick={() => {
-												abortControllerRef.current.abort()
-												disableEditing()
-												form.reset({
-													data: data.map((item) => ({
-														size_numcode: item.size,
-														mn_ist_qty: item.mn_ist_qty,
-														mn_ost_qty: item.mn_ost_qty
-													}))
-												})
-											}}>
+											onClick={() => handleCancelUpdate()}>
 											<Icon name='X' role='img' />
 											{t('ns_common:actions.cancel')}
 										</Button>
 									) : (
-										<Button
-											type='button'
-											size='sm'
-											variant='outline'
-											onClick={() => {
-												abortControllerRef.current = new AbortController()
-												enableEditing()
-											}}>
+										<Button type='button' size='sm' variant='outline' onClick={() => handleStartUpdate()}>
 											<Icon name='Pencil' role='img' /> {t('ns_common:actions.update')}
 										</Button>
 									)}
-
 									<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
 										<Icon
 											name={isLoading ? 'LoaderCircle' : 'Check'}
