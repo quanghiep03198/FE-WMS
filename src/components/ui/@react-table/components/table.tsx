@@ -3,20 +3,17 @@ import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSize } from 'ahooks'
-import { Fragment, useCallback, useId, useMemo, useRef } from 'react'
+import { useCallback, useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
-import { Table, TableCaption, TableHead, TableHeader, TableRow } from '../..'
-import { DEFAULT_ESTIMATE_SIZE, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
+import { Table, TableCaption } from '../..'
+import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { type DataTableProps } from '../types'
-import { DataTableUtility } from '../utils/table.util'
-import CollapsibleFilterCell from './collapsible-filter-cell'
-import ColumnResizer from './column-resizer'
-import { MemorizedTableBody, TableBody } from './table-body'
+import { MemoizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
-import { TableCellHead } from './table-cell-head'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
+import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
@@ -51,9 +48,10 @@ function TableDataGrid<TData, TValue>({
 		overscan: virtualizerOptions.overscan,
 		getScrollElement: () => containerRef.current,
 		estimateSize: useCallback(() => virtualizerOptions.estimateSize, []),
+
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? (element) => element?.getBoundingClientRect().height
+				? useCallback((element) => element?.getBoundingClientRect().height, [])
 				: undefined,
 		scrollToFn
 	})
@@ -71,6 +69,12 @@ function TableDataGrid<TData, TValue>({
 
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
+
+	const isColumnResizing =
+		table.getState().columnSizingInfo.isResizingColumn &&
+		!table.getState().columnPinning.left.some((columnId) => {
+			return columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
+		})
 
 	return (
 		<Wrapper
@@ -93,55 +97,11 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					<TableHeader className='sticky top-0 z-20 bg-background'>
-						{table.getHeaderGroups().map((headerGroup) => {
-							return (
-								<Fragment key={headerGroup.id}>
-									<TableRow>
-										{headerGroup.headers.map((header) => {
-											const rowSpan = header.column.columnDef.meta?.rowSpan
-											if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
-												return null
-											}
-
-											return (
-												<TableHead
-													key={header.id}
-													colSpan={header.colSpan}
-													rowSpan={rowSpan}
-													className={cn('group relative z-40 bg-table-head p-0')}
-													align={header.column.columnDef.meta?.align}
-													style={{
-														height: `${DEFAULT_ESTIMATE_SIZE}px`,
-														width: `calc(var(--header-${header?.id}-size) * 1px)`,
-														...DataTableUtility.getStickyOffsetPosition(header?.column)
-													}}>
-													<TableCellHead table={table} header={header} />
-													<ColumnResizer header={header} />
-												</TableHead>
-											)
-										})}
-									</TableRow>
-									{headerGroup.headers.every((header) => header.colSpan === 1) && (
-										<TableRow>
-											{headerGroup.headers.map((header) => {
-												return <CollapsibleFilterCell key={header.id} header={header} />
-											})}
-										</TableRow>
-									)}
-								</Fragment>
-							)
-						})}
-					</TableHeader>
+					{virtualizer.isScrolling ? <MemoizedDataTableHeader table={table} /> : <DataTableHeader table={table} />}
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
-					) : table.getState().columnSizingInfo.isResizingColumn &&
-					  !table
-							.getState()
-							.columnPinning.left.some(
-								(columnId) => columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
-							) ? (
-						<MemorizedTableBody {...{ table, virtualizer, renderSubComponent }} />
+					) : isColumnResizing ? (
+						<MemoizedTableBody {...{ table, virtualizer, renderSubComponent }} />
 					) : (
 						<TableBody {...{ table, virtualizer, renderSubComponent }} />
 					)}

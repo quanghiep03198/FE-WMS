@@ -20,6 +20,8 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
+	console.log(virtualizer.isScrolling)
+
 	const [before, after] =
 		virtualItems.length > 0
 			? [
@@ -40,7 +42,15 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = rows[virtualRow.index] as TRow<any>
-					return (
+					return virtualizer.isScrolling ? (
+						<MemoizedVirtualTableRow
+							key={row?.id}
+							table={table}
+							row={row}
+							virtualRow={virtualRow}
+							renderSubComponent={renderSubComponent}
+						/>
+					) : (
 						<VirtualTableRow
 							key={row?.id}
 							table={table}
@@ -121,6 +131,15 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 	)
 }
 
-export const MemorizedTableBody = memo(TableBody, (prev, next) =>
+const MemoizedVirtualTableRow = memo(
+	VirtualTableRow,
+	(prevProps, nextProps) =>
+		isEqual(prevProps.table, nextProps.table) &&
+		isEqual(prevProps.virtualRow, nextProps.virtualRow) &&
+		isEqual(prevProps.row, nextProps.row) &&
+		isEqual(prevProps.renderSubComponent, nextProps.renderSubComponent)
+)
+
+export const MemoizedTableBody = memo(TableBody, (prev, next) =>
 	isEqual(prev.table.options.data, next.table.options.data)
 )
