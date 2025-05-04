@@ -4,16 +4,18 @@ import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import { Div, TableCell, TableRow } from '@/components/ui'
 import { sortBy } from 'lodash'
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
+import isEqual from 'react-fast-compare'
 import DeleteOrderPopover from './-delete-order-popover'
 import DeleteSizePopover from './-delete-size-popover'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
 	virtualRow: { index: number; start: number; size: number }
+	shouldClosePopover?: boolean
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtualRow }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtualRow, shouldClosePopover }) => {
 	const aggregateSizeCount = useMemo(
 		() =>
 			Array.isArray(data?.sizes)
@@ -25,7 +27,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 	)
 
 	return (
-		<TableRow data-index={virtualRow.index} className={cn('transition-all duration-500')}>
+		<TableRow
+			data-index={virtualRow.index}
+			className={cn('transition-all duration-500')}
+			style={{ height: virtualRow.size }}>
 			<TableCell
 				style={{ height: virtualRow.size }}
 				className='group/cell left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-pretty text-center md:right-auto xl:sticky'>
@@ -82,4 +87,4 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 	)
 }
 
-export default OrderDetailTableRow
+export default memo(OrderDetailTableRow, (preProps, nextProps) => isEqual(preProps.data, nextProps.data))

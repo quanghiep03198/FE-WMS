@@ -1,5 +1,3 @@
-'use no memo'
-
 import { DeleteScannedEpcsFormValues, deleteScannedEpcsSchema } from '@/app/(features)/_schemas/delete-epc.schema'
 import { cn } from '@/common/utils/cn'
 import {

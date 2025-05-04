@@ -13,14 +13,17 @@ import {
 } from '@/components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useMemoizedFn } from 'ahooks'
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useDeleteOrderMutation } from '../../_apis/outbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
 
-const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
+const DeleteOrderPopover: React.FC<{ data: OrderItem; shouldClosePopover?: boolean }> = ({
+	data,
+	shouldClosePopover
+}) => {
 	const { t } = useTranslation()
 	const id = useId()
 	const [rescannable, setIsRescannable] = useState<boolean>(false)
@@ -41,6 +44,10 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem }> = ({ data }) => {
 			toast.error(t('ns_common:notification.error'), { id: 'DELETE_UNEXPECTED_ORDER' })
 		}
 	})
+
+	useEffect(() => {
+		if (shouldClosePopover) setPopoverOpen(false)
+	}, [shouldClosePopover])
 
 	return (
 		<Popover open={popoverOpen} onOpenChange={setPopoverOpen} modal={true}>

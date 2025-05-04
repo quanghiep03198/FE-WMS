@@ -2,9 +2,9 @@ import { cn } from '@/common/utils/cn'
 import { buttonVariants, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Icon } from '@/components/ui'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useTranslation } from 'react-i18next'
-import OrderSizeDetailTable from './-order-size-table'
+import OrderSizeDetailTable from './-order-detail-table'
 
-const OrderSizeTableDialog = () => {
+const OrderDetailTableDialog = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -24,4 +24,4 @@ const OrderSizeTableDialog = () => {
 	)
 }
 
-export default OrderSizeTableDialog
+export default OrderDetailTableDialog

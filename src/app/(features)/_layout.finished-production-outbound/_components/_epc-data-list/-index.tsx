@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
-import OrderSizeTableDialog from '../_manufacture-order-detail/-order-size-dialog'
+import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 0
@@ -251,7 +251,7 @@ const ScannedEpcList: React.FC = () => {
 			{/* Datalist footer */}
 			<Div className='grid basis-auto gap-1.5 border-t p-1.5 @2xl:grid-cols-2'>
 				<Div className='hidden @2xl:block'>
-					<OrderSizeTableDialog />
+					<OrderDetailTableDialog />
 				</Div>
 				<Button size={isExtraLargeScreen ? 'default' : 'lg'} variant='secondary' onClick={() => fetchServerEvent()}>
 					<Icon name='RotateCw' role='img' /> {t('ns_common:actions.reload')}

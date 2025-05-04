@@ -4,9 +4,10 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
+import PageNavigationBlocker from './_components/-navigation-blocker'
 import ScannedEpcCounter from './_components/_epc-counter/-index'
 import ScannedEpcList from './_components/_epc-data-list/-index'
-import OrderSizeDetailTable from './_components/_manufacture-order-detail/-order-size-table'
+import OrderSizeDetailTable from './_components/_manufacture-order-detail/-order-detail-table'
 import OutboundForm from './_components/_outbound-form/-index'
 import { PageProvider } from './_contexts/-page-context'
 
@@ -29,6 +30,7 @@ function Page() {
 				<meta name='description' content='RFID Scanner integration for outbound process' />
 			</head>
 			<HostCompatibleAlert />
+			<PageNavigationBlocker />
 			<PageProvider>
 				<Div className='static gap-4 xxl:grid xxl:grid-cols-12'>
 					<Div className='h-full @container xxl:col-span-4'>
