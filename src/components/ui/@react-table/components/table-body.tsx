@@ -42,7 +42,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = rows[virtualRow.index] as TRow<any>
-					return virtualizer.isScrolling ? (
+					return virtualizer.isScrolling && !table.getIsSomeRowsExpanded() ? (
 						<MemoizedVirtualTableRow
 							key={row?.id}
 							table={table}

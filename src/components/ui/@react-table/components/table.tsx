@@ -48,7 +48,6 @@ function TableDataGrid<TData, TValue>({
 		overscan: virtualizerOptions.overscan,
 		getScrollElement: () => containerRef.current,
 		estimateSize: useCallback(() => virtualizerOptions.estimateSize, []),
-
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? useCallback((element) => element?.getBoundingClientRect().height, [])
