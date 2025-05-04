@@ -4,7 +4,7 @@ import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useBoolean } from 'ahooks'
 import { format } from 'date-fns'
 import { pick } from 'lodash'
@@ -53,6 +53,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 
 	const form = useForm<ReportDataFormValues>({
 		shouldUseNativeValidation: true,
+		reValidateMode: 'onChange',
+		mode: 'onChange',
 		resolver: zodResolver(reportDataSchema),
 		defaultValues: {
 			data: data.map((item) => ({
@@ -126,13 +128,9 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		enableEditing()
 	}
 
-	const queryState = queryClient.getQueryState<IMonthlyInventoryReport>([
-		INVENTORY_REPORT_PROVIDE_TAG,
-		currentTenant?.id,
-		queryParam
-	])
+	const fetchingQueries = useIsFetching({ queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam] })
 
-	const isLoading = useMemo(() => isPending || queryState?.fetchStatus === 'fetching', [isPending, queryState])
+	const isLoading = useMemo(() => isPending || fetchingQueries > 0, [isPending, fetchingQueries])
 
 	return (
 		<ScrollArea>
@@ -175,8 +173,12 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 									<TableVerticalHeader>{t('ns_common:actions.increment')}</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
+											const error = form.getFieldState(`data.${index}.mn_ist_qty`).error
 											return (
-												<TableCell key={field.id}>
+												<TableCell
+													key={field.id}
+													aria-invalid={!!error}
+													className='p-0 aria-[invalid=true]:border aria-[invalid=true]:border-destructive'>
 													<InputFieldControl
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
@@ -195,7 +197,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											return (
 												<TableCell
 													key={field.id}
-													aria-invalid={error ? true : false}
+													aria-invalid={!!error}
 													className='p-0 aria-[invalid=true]:border aria-[invalid=true]:border-destructive'>
 													<InputFieldControl
 														name={`data.${index}.mn_ost_qty`}

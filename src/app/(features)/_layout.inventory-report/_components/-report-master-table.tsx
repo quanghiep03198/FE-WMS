@@ -59,6 +59,44 @@ export const InventoryReportMasterTable: React.FC = () => {
 		}))
 	}, [data])
 
+	const renderPurchaseOrderCell = useCallback(
+		(value: string) => {
+			if (!value) return <Badge variant='outline'>Unknown</Badge>
+			return (
+				<EllipsisList
+					threshhold={2}
+					data={value
+						.split(',')
+						.filter((item) => !isNil(item) && !isEmpty(item))
+						.sort((a, b) => a.localeCompare(b))}
+					template={({ data }) => (
+						<Badge variant='outline' className='whitespace-nowrap'>
+							{data.trim()}
+						</Badge>
+					)}
+				/>
+			)
+		},
+		[data]
+	)
+
+	const renderDetailTable = useCallback(
+		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
+			<InventoryReportDetailTable
+				queries={pick(row.original, [
+					'actual_po',
+					'mo_no',
+					'cust_shoestyle',
+					'shoes_style_code_factory',
+					'inv_type',
+					'inv_year_month'
+				])}
+				data={sortBy(row.original?.size_data, 'size_numcode')}
+			/>
+		),
+		[data]
+	)
+
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
@@ -109,26 +147,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 					facetedUniqueValues: facetedUniqPurchaseOrder
 				},
 				filterFn: 'arrIncludesAll',
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (!value)
-						return (
-							<Badge variant='outline' className='whitespace-nowrap'>
-								Unknown
-							</Badge>
-						)
-					return (
-						<EllipsisList
-							threshhold={2}
-							data={value.split(',').sort((a, b) => a.localeCompare(b))}
-							template={({ data }) => (
-								<Badge variant='outline' className='whitespace-nowrap'>
-									{data.trim()}
-								</Badge>
-							)}
-						/>
-					)
-				}
+				cell: ({ getValue }) => renderPurchaseOrderCell(getValue())
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -243,23 +262,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 			toast.error('ns_common:notification.error', { id })
 		}
 	})
-
-	const renderDetailTable = useCallback(
-		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
-			<InventoryReportDetailTable
-				queries={pick(row.original, [
-					'actual_po',
-					'mo_no',
-					'cust_shoestyle',
-					'shoes_style_code_factory',
-					'inv_type',
-					'inv_year_month'
-				])}
-				data={sortBy(row.original?.size_data, 'size_numcode')}
-			/>
-		),
-		[data]
-	)
 
 	const renderSlotRight = useMemoizedFn(() => (
 		<Fragment>
