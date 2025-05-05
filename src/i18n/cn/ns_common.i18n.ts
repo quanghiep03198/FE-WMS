@@ -168,6 +168,7 @@ export default {
 		caution: '警告',
 		general_settings: '常规设置',
 		original_data: '原资料',
+		overall: '总体数据',
 		target_data: '目标资料'
 	}
 } as const

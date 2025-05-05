@@ -22,7 +22,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 		<TableFooter>
 			<TableRow>
 				<TableCell colSpan={3} align='center' className='bg-muted text-muted-foreground'>
-					Overall
+					{t('ns_common:titles.overall')}
 				</TableCell>
 			</TableRow>
 			<TableRow className='sticky bottom-0 z-10 *:shadow-[1px_-1px_0px_hsl(var(--border))]'>

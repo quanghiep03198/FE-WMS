@@ -169,7 +169,8 @@ export default {
 		caution: 'Caution',
 		general_settings: 'General settings',
 		original_data: 'Original data',
-		target_data: 'Target data'
+		target_data: 'Target data',
+		overall: 'Overall'
 	},
 	others: {
 		server: 'Server {{alias}}'

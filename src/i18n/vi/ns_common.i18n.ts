@@ -173,6 +173,7 @@ export default {
 		caution: 'Cảnh báo',
 		general_settings: 'Cài đặt chung',
 		original_data: 'Dữ liệu gốc',
+		overall: 'Tổng quan',
 		target_data: 'Dữ liệu cập nhật'
 	}
 } as const
