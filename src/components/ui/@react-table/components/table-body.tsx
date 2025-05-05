@@ -20,8 +20,6 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
-	console.log(virtualizer.isScrolling)
-
 	const [before, after] =
 		virtualItems.length > 0
 			? [
