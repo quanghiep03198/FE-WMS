@@ -12,6 +12,7 @@ import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
+import { pick } from 'lodash'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -156,7 +157,8 @@ const ReportDatalist: React.FC = () => {
 				loading={isLoading}
 				enableExpanding={true}
 				renderSubComponent={({ row }) => {
-					return <OutboundReportDetailTable data={row.original.detail} />
+					const data = pick(row.original, ['detail', 'overall'])
+					return <OutboundReportDetailTable {...data} />
 				}}
 				toolbarProps={{
 					slotLeft: () => isSmallScreen && <DatePickerFilter />,

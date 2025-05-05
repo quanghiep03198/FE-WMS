@@ -27,7 +27,7 @@ export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number]
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<NestedRow key={size?.size_numcode} className=''>
+							<NestedRow key={size?.size_numcode}>
 								<NestedCell className='bg-table-head px-4 py-2 font-medium first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0'>
 									{size?.size_numcode}
 								</NestedCell>

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import ReportDetailFooter from './-report-detail-footer'
 import { ReportDetailRow } from './-report-detail-row'
 
-const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> = ({ data }) => {
+const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'overall'>> = ({ detail, overall }) => {
 	const { t } = useTranslation()
 
 	return (
@@ -14,9 +14,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 					className='border-separate border-spacing-0 rounded-lg'
 					style={
 						{
-							'--row-selection-col-width': '3rem',
-							'--sticky-left-col-width': '10rem',
-							'--row-action-col-width': '5rem'
+							'--sticky-left-col-width': '12rem'
 						} as React.CSSProperties
 					}>
 					<TableHeader className='sticky top-0 z-20'>
@@ -33,8 +31,8 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{Array.isArray(data) && data.length > 0 ? (
-							data.map((item) => <ReportDetailRow key={item.mo_no} data={item} />)
+						{Array.isArray(detail) && detail.length > 0 ? (
+							detail.map((item) => <ReportDetailRow key={item.mo_no} data={item} />)
 						) : (
 							<TableRow>
 								<TableCell align='center' colSpan={4} className='!border-b p-20 text-muted-foreground'>
@@ -46,7 +44,7 @@ const OutboundReportDetailTable: React.FC<{ data: IOutboundReport['detail'] }> =
 							</TableRow>
 						)}
 					</TableBody>
-					<ReportDetailFooter data={data} />
+					<ReportDetailFooter data={overall} />
 				</Table>
 			</Div>
 		</Div>
