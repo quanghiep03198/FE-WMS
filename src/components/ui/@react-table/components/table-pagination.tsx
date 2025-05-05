@@ -137,7 +137,9 @@ function TablePagination<TData>({
 			</Div>
 			<Separator orientation='vertical' className='h-6 w-1 bg-border' />
 			<Div className='flex items-center space-x-1'>
-				<Tooltip message={t('pagination.first_page', { defaultValue: 'First page' })}>
+				<Tooltip
+					message={t('pagination.first_page', { defaultValue: 'First page' })}
+					triggerProps={{ asChild: true }}>
 					<Button
 						role='button'
 						aria-disabled={!canPreviousPage || loading}
@@ -151,7 +153,9 @@ function TablePagination<TData>({
 						<Icon name='ChevronsLeft' />
 					</Button>
 				</Tooltip>
-				<Tooltip message={t('pagination.previous_page', { defaultValue: 'Previous page' })}>
+				<Tooltip
+					message={t('pagination.previous_page', { defaultValue: 'Previous page' })}
+					triggerProps={{ asChild: true }}>
 					<Button
 						role='button'
 						aria-disabled={!canPreviousPage || loading}
@@ -165,7 +169,9 @@ function TablePagination<TData>({
 						<Icon name='ChevronLeft' />
 					</Button>
 				</Tooltip>
-				<Tooltip message={t('pagination.next_page', { defaultValue: 'Next page' })}>
+				<Tooltip
+					message={t('pagination.next_page', { defaultValue: 'Next page' })}
+					triggerProps={{ asChild: true }}>
 					<Button
 						role='button'
 						aria-disabled={!canNextPage || loading}
@@ -183,7 +189,10 @@ function TablePagination<TData>({
 						<Icon name='ChevronRight' />
 					</Button>
 				</Tooltip>
-				<Tooltip message={t('pagination.last_page', { defaultValue: 'Last page' })} contentProps={{ align: 'end' }}>
+				<Tooltip
+					message={t('pagination.last_page', { defaultValue: 'Last page' })}
+					triggerProps={{ asChild: true }}
+					contentProps={{ align: 'end' }}>
 					<Button
 						role='button'
 						aria-disabled={!canNextPage || loading}
