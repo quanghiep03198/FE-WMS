@@ -4,7 +4,9 @@ export const standardOutboundValidator = z.object({
 	po: z
 		.string({ required_error: 'ns_validation:required' })
 		.nonempty({ message: 'ns_validation:required' })
-		.refine((value) => /^[0-9]+$/.test(value), { message: 'ns_validation:invalid_value' }),
+		.refine((value) => !value.startsWith('-'), { message: 'ns_validation:invalid_value' })
+		.refine((value) => !value.endsWith('-'), { message: 'ns_validation:invalid_value' })
+		.refine((value) => /^[0-9-]+$/.test(value), { message: 'ns_validation:invalid_value' }),
 	mo_no: z
 		.array(z.string(), { required_error: 'ns_validation:required' })
 		.nonempty({ message: 'ns_validation:required' })
@@ -15,7 +17,9 @@ export const detailedOutboundValidator = z
 		po: z
 			.string({ required_error: 'ns_validation:required' })
 			.nonempty({ message: 'ns_validation:required' })
-			.refine((value) => /^[0-9]+$/.test(value), { message: 'ns_validation:invalid_value' }),
+			.refine((value) => !value.startsWith('-'), { message: 'ns_validation:invalid_value' })
+			.refine((value) => !value.endsWith('-'), { message: 'ns_validation:invalid_value' })
+			.refine((value) => /^[0-9-]+$/.test(value), { message: 'ns_validation:invalid_value' }),
 		mo_no: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 		sizes: z.array(
 			z.object({
