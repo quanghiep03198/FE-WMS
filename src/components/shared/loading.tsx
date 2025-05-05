@@ -24,9 +24,7 @@ export default function Loading() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>Loading ...</title>
-			</head>
+			<title>Loading ...</title>
 			<Div data-state='expanded' className='group relative flex h-screen items-center justify-center'>
 				<Div className='z-10 animate-[fade-in_0.25s_ease-out_forwards]'>
 					<AppLogo />

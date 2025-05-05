@@ -20,9 +20,8 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.report_management')}</title>
-			</head>
+			<title>{t('ns_common:navigation.report_management')}</title>
+
 			<UnavailableService />
 		</Fragment>
 	)

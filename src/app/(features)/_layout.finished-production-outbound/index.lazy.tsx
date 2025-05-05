@@ -25,10 +25,9 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.fp_stock_out')}</title>
-				<meta name='description' content='RFID Scanner integration for outbound process' />
-			</head>
+			<title>{t('ns_common:navigation.fp_stock_out')}</title>
+			<meta name='description' content='RFID Scanner integration for outbound process' />
+
 			<HostCompatibleAlert />
 			<PageNavigationBlocker />
 			<PageProvider>

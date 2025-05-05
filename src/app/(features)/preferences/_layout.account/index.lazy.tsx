@@ -15,9 +15,8 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.account')}</title>
-			</head>
+			<title>{t('ns_common:navigation.account')}</title>
+
 			<Div className='flex flex-col items-stretch gap-y-10'>
 				<ProfileWallpaper />
 				<ProfileForm />

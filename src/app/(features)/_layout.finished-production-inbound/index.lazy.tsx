@@ -60,10 +60,9 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.fp_inoutbound')}</title>
-				<meta name='description' content='RFID Scanner integration for inbound process' />
-			</head>
+			<title>{t('ns_common:navigation.fp_inoutbound')}</title>
+			<meta name='description' content='RFID Scanner integration for inbound process' />
+
 			<HostCompatibleAlert />
 			{createPortal(
 				<PageProvider>

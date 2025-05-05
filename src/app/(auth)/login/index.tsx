@@ -23,10 +23,9 @@ function LoginPage() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>Login</title>
-				<meta name='description' content='Warehouse management system authentication' />
-			</head>
+			<title>Login</title>
+			<meta name='description' content='Warehouse management system authentication' />
+
 			<PageComposition.Container>
 				<PageComposition.HomeNavigator />
 				<PageComposition.ThemeSelector />

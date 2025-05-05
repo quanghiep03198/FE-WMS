@@ -72,10 +72,9 @@ function KeybindingsPage() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.keyboard_shortcut')}</title>
-				<meta name='description' content={t('ns_preference:captions.keybindings')} />
-			</head>
+			<title>{t('ns_common:navigation.keyboard_shortcut')}</title>
+			<meta name='description' content={t('ns_preference:captions.keybindings')} />
+
 			<Div className='space-y-6'>
 				<PageHeader>
 					<PageTitle>{t('ns_common:navigation.keyboard_shortcut')}</PageTitle>

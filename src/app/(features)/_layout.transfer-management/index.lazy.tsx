@@ -19,9 +19,8 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.transfer_managment')}</title>
-			</head>
+			<title>{t('ns_common:navigation.transfer_managment')}</title>
+
 			<UnavailableService />
 		</Fragment>
 	)

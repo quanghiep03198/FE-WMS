@@ -23,10 +23,9 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.inventory_management')}</title>
-				<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
-			</head>
+			<title>{t('ns_common:navigation.inventory_management')}</title>
+			<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
+
 			<Div as='section' className='space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>

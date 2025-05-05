@@ -29,10 +29,9 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.warehouse_management')}</title>
-				<meta name='description' content={t('ns_warehouse:headings.warehouse_list_description')} />
-			</head>
+			<title>{t('ns_common:navigation.warehouse_management')}</title>
+			<meta name='description' content={t('ns_warehouse:headings.warehouse_list_description')} />
+
 			<PageProvider>
 				<Div className='space-y-6'>
 					<WarehouseListHeading />

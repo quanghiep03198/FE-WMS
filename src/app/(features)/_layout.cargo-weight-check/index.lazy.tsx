@@ -23,10 +23,9 @@ function Page() {
 
 	return (
 		<Fragment>
-			<head>
-				<title>{t('ns_common:navigation.cargo_weight_check')}</title>
-				<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
-			</head>
+			<title>{t('ns_common:navigation.cargo_weight_check')}</title>
+			<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
+
 			<Div as='section' className='space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>
