@@ -1,3 +1,4 @@
+import { Languages } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
@@ -41,7 +42,7 @@ type InventoryReportDetailTableProps = {
 type ReportDataFormValues = z.infer<typeof reportDataSchema>
 
 export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'month.eq': format(new Date(), 'yyyy-MM'),
@@ -170,7 +171,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 									))}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader>{t('ns_common:actions.increment')}</TableVerticalHeader>
+									<TableVerticalHeader>
+										{i18n.language === Languages.VIETNAMESE
+											? t('ns_common:actions.increment')
+											: t('ns_erp:fields.actual_instock_qty')}
+									</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
 											const error = form.getFieldState(`data.${index}.mn_ist_qty`).error
@@ -190,7 +195,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										})}
 								</TableRow>
 								<TableRow>
-									<TableVerticalHeader>{t('ns_common:actions.decrement')}</TableVerticalHeader>
+									<TableVerticalHeader>
+										{i18n.language === Languages.VIETNAMESE
+											? t('ns_common:actions.decrement')
+											: t('ns_erp:fields.actual_outstock_qty')}
+									</TableVerticalHeader>
 									{fields.length > 0 &&
 										fields.map((field, index) => {
 											const error = form.getFieldState(`data.${index}.mn_ost_qty`).error
