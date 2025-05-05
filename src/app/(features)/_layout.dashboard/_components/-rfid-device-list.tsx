@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { Badge, Div, Icon, TableCell, TableRow, Typography } from '@/components/ui'
+import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { RFIDService } from '@/services/rfid.service'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
@@ -12,8 +12,9 @@ const RFIDDeviceList: React.FC = () => {
 		queryFn: () => RFIDService.getWarehouseRFIDDevices(),
 		select: (response) => response.metadata
 	})
+
 	return (
-		<Div className='h-full space-y-8 overflow-hidden rounded-lg border p-6 shadow'>
+		<Div className='flex h-full flex-col space-y-8 overflow-hidden rounded-lg border p-6 shadow'>
 			<Div className='sticky top-0'>
 				<Typography className='font-medium'>{t('ns_rfid:devices')}</Typography>
 				<Typography variant='small' className='text-pretty text-muted-foreground'>
@@ -55,11 +56,12 @@ const RFIDDeviceList: React.FC = () => {
 						</Div>
 					))
 				) : (
-					<TableRow>
-						<TableCell colSpan={3} className='h-80' align='center'>
+					<Div className='grid h-full place-content-center rounded-md bg-muted text-muted-foreground'>
+						<Typography as='small' variant='small' className='inline-flex items-center justify-center gap-x-2'>
+							<Icon name='Inbox' className='size-6' strokeWidth={1.25} />
 							{t('ns_common:table.no_data')}
-						</TableCell>
-					</TableRow>
+						</Typography>
+					</Div>
 				)}
 			</Div>
 		</Div>
