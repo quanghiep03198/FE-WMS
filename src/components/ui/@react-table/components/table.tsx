@@ -13,7 +13,7 @@ import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
+import { DataTableHeader } from './table-header'
 
 interface TableProps<TData, TValue>
 	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
@@ -39,7 +39,6 @@ function TableDataGrid<TData, TValue>({
 	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
-
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 
 	const virtualizer = useVirtualizer({
@@ -96,7 +95,7 @@ function TableDataGrid<TData, TValue>({
 							{caption}
 						</TableCaption>
 					)}
-					{virtualizer.isScrolling ? <MemoizedDataTableHeader table={table} /> : <DataTableHeader table={table} />}
+					<DataTableHeader table={table} />
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
 					) : isColumnResizing ? (

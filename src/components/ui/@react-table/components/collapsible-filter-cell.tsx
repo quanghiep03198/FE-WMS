@@ -1,5 +1,3 @@
-'use no memo'
-
 import useEventEmitter from '@/common/hooks/use-event-emitter'
 import { cn } from '@/common/utils/cn'
 import { Header } from '@tanstack/react-table'

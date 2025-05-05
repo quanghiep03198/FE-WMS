@@ -40,9 +40,11 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = rows[virtualRow.index] as TRow<any>
+
 					return virtualizer.isScrolling && !table.getIsSomeRowsExpanded() ? (
 						<MemoizedVirtualTableRow
-							key={row?.id}
+							data-index={virtualRow.index}
+							key={row.id}
 							table={table}
 							row={row}
 							virtualRow={virtualRow}
@@ -50,7 +52,8 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 						/>
 					) : (
 						<VirtualTableRow
-							key={row?.id}
+							data-index={virtualRow.index}
+							key={row.id}
 							table={table}
 							row={row}
 							virtualRow={virtualRow}
@@ -104,7 +107,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 			</TableRow>
 			{/* Sub-component */}
 			{typeof renderSubComponent === 'function' && (
-				<TableRow data-index={virtualRow.index}>
+				<TableRow>
 					<TableCell
 						colSpan={row.getVisibleCells().length}
 						className={cn(
@@ -129,14 +132,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 	)
 }
 
-const MemoizedVirtualTableRow = memo(
-	VirtualTableRow,
-	(prevProps, nextProps) =>
-		isEqual(prevProps.table, nextProps.table) &&
-		isEqual(prevProps.virtualRow, nextProps.virtualRow) &&
-		isEqual(prevProps.row, nextProps.row) &&
-		isEqual(prevProps.renderSubComponent, nextProps.renderSubComponent)
-)
+const MemoizedVirtualTableRow = memo(VirtualTableRow)
 
 export const MemoizedTableBody = memo(TableBody, (prev, next) =>
 	isEqual(prev.table.options.data, next.table.options.data)
