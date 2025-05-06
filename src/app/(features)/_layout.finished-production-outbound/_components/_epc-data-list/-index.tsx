@@ -254,7 +254,7 @@ const ScannedEpcList: React.FC = () => {
 					<OrderDetailTableDialog />
 				</Div>
 				<Button size={isExtraLargeScreen ? 'default' : 'lg'} variant='secondary' onClick={() => fetchServerEvent()}>
-					<Icon name='RotateCw' role='img' /> {t('ns_common:actions.reload')}
+					<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
 				</Button>
 			</Div>
 		</Div>

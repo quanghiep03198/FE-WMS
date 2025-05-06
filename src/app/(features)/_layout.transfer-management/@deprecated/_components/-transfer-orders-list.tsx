@@ -64,7 +64,7 @@ const TransferOrdersList: React.FC = () => {
 						</Typography>
 					</Div>
 					<Button onClick={() => toggleDatalistDialogOpen()}>
-						<Icon name='CirclePlus' role='img' aria-label={t('ns_common:actions.add')} />{' '}
+						<Icon name='CirclePlus' role='presentation' aria-label={t('ns_common:actions.add')} />{' '}
 						{t('ns_common:actions.add')}
 					</Button>
 				</Div>
@@ -140,7 +140,7 @@ const TransferOrdersList: React.FC = () => {
 												}))
 											)
 										}}>
-										<Icon name='SaveAll' role='img' />
+										<Icon name='SaveAll' role='presentation' />
 										{t('ns_common:actions.save')}
 									</Button>
 									<Button
@@ -148,7 +148,7 @@ const TransferOrdersList: React.FC = () => {
 										variant='outline'
 										disabled={disabled}
 										onClick={() => table.options.meta.discardChanges()}>
-										<Icon name='Undo' role='img' />
+										<Icon name='Undo' role='presentation' />
 										{t('ns_common:actions.revert_changes')}
 									</Button>
 								</Div>

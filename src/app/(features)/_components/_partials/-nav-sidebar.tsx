@@ -118,13 +118,12 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon, viewTransi
 			<SidebarMenuButton asChild size='default' tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={path}
-					role='link'
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
-					<Icon className='!size-[18px] !stroke-[2px]' name={icon} role='img' />
+					<Icon className='!size-[18px] !stroke-[2px]' name={icon} role='presentation' />
 					<span className='font-medium'>{t(title, { defaultValue: title })}</span>
 				</Link>
 			</SidebarMenuButton>
@@ -150,11 +149,11 @@ const SwitchUserCompany: React.FC = () => {
 					variant='outline'
 					size={open ? 'default' : 'icon'}
 					className={cn(open ? 'justify-start' : 'size-8')}>
-					<Icon name='Factory' role='img' />
+					<Icon name='Factory' role='presentation' />
 					{open && (
 						<Fragment>
 							{user?.company_name}
-							<Icon name='ChevronsUpDown' role='img' className='ml-auto' />
+							<Icon name='ChevronsUpDown' role='presentation' className='ml-auto' />
 						</Fragment>
 					)}
 				</Button>

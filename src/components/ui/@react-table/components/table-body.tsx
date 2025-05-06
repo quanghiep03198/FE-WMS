@@ -98,9 +98,9 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 							}}>
 							<Div
 								className={cn('!line-clamp-1', {
-									'block text-left': cell.column.columnDef.meta?.align === 'left',
-									'block text-center': cell.column.columnDef.meta?.align === 'center',
-									'block text-right': cell.column.columnDef.meta?.align === 'right'
+									'text-left': cell.column.columnDef.meta?.align === 'left',
+									'text-center': cell.column.columnDef.meta?.align === 'center',
+									'text-right': cell.column.columnDef.meta?.align === 'right'
 								})}>
 								{flexRender(cell.column.columnDef.cell, cell.getContext())}
 							</Div>

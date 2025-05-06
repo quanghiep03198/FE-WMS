@@ -66,7 +66,7 @@ const CTASection: React.FC = () => {
 						Get started
 					</Link>
 					<Button variant='link' onClick={() => handleMenuClick(1)}>
-						Learn more <Icon name='ArrowRight' size={12} role='img' />
+						Learn more <Icon name='ArrowRight' size={12} role='presentation' />
 					</Button>
 				</Div>
 			</Div>
@@ -105,7 +105,7 @@ const CTASection: React.FC = () => {
 							Get started
 						</Link>
 						<Button variant='link' onClick={() => handleMenuClick(1)}>
-							Learn more <Icon name='ArrowRight' size={12} role='img' />
+							Learn more <Icon name='ArrowRight' size={12} role='presentation' />
 						</Button>
 					</Div>
 				</Div>

@@ -42,11 +42,11 @@ const ScannerActions: React.FC = () => {
 	return (
 		<Div className='inline-grid grid-cols-2 items-stretch gap-x-1 *:w-full'>
 			<Button variant='secondary' disabled={scanningStatus === 'connected'} onClick={handleResetScanningAction}>
-				<Icon name='Redo' role='img' />
+				<Icon name='Redo' role='presentation' />
 				{t('ns_common:actions.reset')}
 			</Button>
 			<Button onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
-				<Icon role='img' name={scanningButtonProps.icon} />
+				<Icon role='presentation' name={scanningButtonProps.icon} />
 				{scanningButtonProps.children}
 			</Button>
 		</Div>

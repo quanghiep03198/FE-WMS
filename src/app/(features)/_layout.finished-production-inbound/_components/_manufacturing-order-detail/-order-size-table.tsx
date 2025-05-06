@@ -141,7 +141,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					<DialogTrigger
 						className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'items-center' }))}>
 						{t('ns_common:actions.detail')}
-						<Icon name='ArrowUpRight' role='img' />
+						<Icon name='ArrowUpRight' role='presentation' />
 					</DialogTrigger>
 				</HoverCardTrigger>
 				<HoverCardContent
@@ -321,7 +321,7 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 
 	return (
 		<Button onClick={handlePreExchangeSelectedRows} disabled={!selectedRows || selectedRows?.length === 0}>
-			<Icon name='ArrowLeftRight' role='img' /> Exchange
+			<Icon name='ArrowLeftRight' role='presentation' /> Exchange
 		</Button>
 	)
 }

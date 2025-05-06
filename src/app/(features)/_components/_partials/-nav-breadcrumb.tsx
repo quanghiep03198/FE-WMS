@@ -39,7 +39,7 @@ const NavBreadcrumb: React.FC = () => {
 								<BreadcrumbEllipsis className='h-4 w-4' />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align='start'>
-								{breadcrumb.slice(0, THREADS_HOLD).map((item, index) => (
+								{breadcrumb.slice(0, THREADS_HOLD).map((item) => (
 									<DropdownMenuItem key={uuidv4()} asChild={true}>
 										<Link
 											to={item.to}
@@ -67,9 +67,9 @@ const NavBreadcrumb: React.FC = () => {
 					</Fragment>
 				) : (
 					breadcrumb.map((item, index) => (
-						<Fragment key={index}>
+						<Fragment key={uuidv4()}>
 							<BreadcrumbItem>
-								<BreadcrumbLink key={index} asChild={true}>
+								<BreadcrumbLink key={uuidv4()} asChild={true}>
 									<Link
 										to={item.to}
 										params={item.params}
