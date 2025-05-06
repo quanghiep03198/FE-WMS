@@ -16,9 +16,6 @@ const SystemTime: React.FC = () => {
 
 	return (
 		<Div className='relative flex h-full min-h-48 w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border bg-background shadow'>
-			<Typography color='success' className='z-10 text-center font-medium'>
-				System Time
-			</Typography>
 			<Typography variant='code' className='z-10 text-center text-3xl tracking-wide'>
 				{format(currentTime, 'HH:mm:ss')}
 			</Typography>

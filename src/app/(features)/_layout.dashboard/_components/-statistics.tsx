@@ -18,13 +18,13 @@ const Statistics: React.FC = () => {
 
 	const statistics = useMemo<TStatistic[]>(
 		() => [
-			{
-				category: t('ns_dashboard:statistic.order_number'),
-				dataField: 'order_number',
-				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'ReceiptText',
-				comparision: 25
-			},
+			// {
+			// 	category: t('ns_dashboard:statistic.order_number'),
+			// 	dataField: 'order_number',
+			// 	value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
+			// 	icon: 'ReceiptText',
+			// 	comparision: 25
+			// },
 			{
 				category: t('ns_dashboard:statistic.inventory_number'),
 				dataField: 'inventory_number',
@@ -60,7 +60,7 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-4 xxl:grid-cols-4'>
+		<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-3 xxl:grid-cols-3'>
 			{statistics.map((stats, index) => (
 				<Card key={index}>
 					<CardHeader className='@container'>

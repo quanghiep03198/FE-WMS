@@ -1,4 +1,3 @@
-import { cn } from '@/common/utils/cn'
 import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { RFIDService } from '@/services/rfid.service'
 import { useQuery } from '@tanstack/react-query'
@@ -43,14 +42,7 @@ const RFIDDeviceList: React.FC = () => {
 									</Div>
 								</Div>
 							</Div>
-							<Badge
-								variant='outline'
-								className={cn(
-									'justify-center whitespace-nowrap rounded',
-									device.is_active === 'Y'
-										? 'border-success text-success'
-										: 'border-destructive text-destructive'
-								)}>
+							<Badge variant='outline' className='justify-center whitespace-nowrap rounded'>
 								{device.is_active === 'Y' ? t('ns_common:status.active') : t('ns_common:status.deactivated')}
 							</Badge>
 						</Div>
