@@ -2,6 +2,7 @@ import { NestedCell, NestedRow } from '@/app/(features)/_components/_shared/-hor
 import { FALLBACK_ORDER_VALUE } from '@/app/(features)/_layout.finished-production-inbound/_apis/inbound-rfid.api'
 import { type OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'
 import { sortBy } from 'lodash'
 import { memo, useMemo } from 'react'
@@ -12,10 +13,9 @@ import DeleteSizePopover from './-delete-size-popover'
 type OrderDetailTableRowProps = {
 	data: OrderItem
 	virtualRow: { index: number; start: number; size: number }
-	shouldClosePopover?: boolean
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtualRow, shouldClosePopover }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtualRow }) => {
 	const aggregateSizeCount = useMemo(
 		() =>
 			Array.isArray(data?.sizes)
@@ -66,7 +66,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 										/>
 									</Div>
 								</NestedCell>
-								<NestedCell>{size?.count ?? 0}</NestedCell>
+								<NestedCell>{formatIntlNumber(size?.count) ?? 0}</NestedCell>
 							</NestedRow>
 						))}
 				</Div>
@@ -75,7 +75,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 				style={{ height: virtualRow.size }}
 				align='right'
 				className='w-28 min-w-28 font-medium md:relative md:right-auto xl:sticky xl:right-[var(--row-action-col-width)]'>
-				{aggregateSizeCount}
+				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
 			<TableCell
 				style={{ height: virtualRow.size }}

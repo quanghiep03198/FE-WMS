@@ -1,4 +1,8 @@
 export default {
+	descriptions: {
+		centralized_po: 'Nhiều lệnh sản xuất được gom chung vào một PO duy nhất.',
+		decentralized_po: 'Nhiều lệnh sản xuất được phân vào nhiều PO khác nhau.'
+	},
 	fields: {
 		accumulated_qty: 'Số lượng tích lũy',
 		actual_instock_qty: 'Số lượng nhập thực tế',
@@ -33,6 +37,7 @@ export default {
 		mo_size_qty: 'Số lượng theo size',
 		no_crates_in_stock: 'Số thùng nhập kho',
 		no_pair_in_stock: 'Số đôi nhập kho',
+		centralized_po: 'PO không phân tách',
 		or_custpo: 'Mã đơn đặt hàng của khách',
 		or_custpoone: 'Mã đặt đơn',
 		or_no: 'Mã đơn hàng',
@@ -46,6 +51,7 @@ export default {
 		prod_color: 'Màu sắc sản phẩm',
 		required_date: 'Ngày Yêu Cầu', // Required Date
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
+		decentralized_po: 'PO phân tách',
 		ship_order: 'Mã đóng hàng',
 		shipment_confirm_date: 'Ngày xác nhận xuất hàng',
 		shipping_destination: 'Địa điểm giao hàng',

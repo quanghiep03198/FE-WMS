@@ -1,4 +1,8 @@
 export default {
+	descriptions: {
+		centralized_po: '多个生产指令被汇总到同一个采购订单中.',
+		decentralized_po: '多个生产指令被分配到不同的采购订单中.'
+	},
 	fields: {
 		accumulated_qty: '累计',
 		active_date: '入库日期',
@@ -34,6 +38,7 @@ export default {
 		mo_size_qty: '指令數量',
 		no_crates_in_stock: '入库箱数',
 		no_pair_in_stock: '入库数量',
+		centralized_po: '集中采购订单',
 		or_custpo: '客戶訂單',
 		or_custpoone: '订单编号',
 		or_no: '訂單編號',
@@ -47,6 +52,7 @@ export default {
 		prod_color: '产品颜色',
 		required_date: '需求日期',
 		returned_qty: '已退貨量',
+		decentralized_po: '分散采购订单',
 		shaping_dept_code: '成型線福號',
 		shaping_dept_name: '成型線',
 		ship_order: '裝貨號碼',

@@ -1,4 +1,8 @@
 export default {
+	descriptions: {
+		centralized_po: 'Multiple production orders are consolidated into a single purchase order.',
+		decentralized_po: 'Multiple production orders are distributed into different purchase orders.'
+	},
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
 		actual_inventory_qty: 'Actual inventory quantity',
@@ -33,6 +37,7 @@ export default {
 		mo_size_qty: 'Quantity by size',
 		no_crates_in_stock: 'No. crates in stock', //: Số thùng nhập kho
 		no_pair_in_stock: 'No. pairs in stock', //: Số đôi nhập kho
+		centralized_po: 'Centralized PO',
 		or_custpo: 'Customer order code',
 		or_custpoone: 'Customer purchase code', //：Mã đặt đơn
 		or_no: 'Sub-manufacturing order',
@@ -46,6 +51,7 @@ export default {
 		prod_color: 'Product color',
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',
+		decentralized_po: 'Decentralized PO',
 		ship_order: 'Shipping order number',
 		shipping_destination: 'Shipping destination',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
