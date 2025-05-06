@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { HeaderGroup, Table } from '@tanstack/react-table'
+import { type Header, type HeaderGroup, type Table } from '@tanstack/react-table'
 import { Fragment } from 'react'
 import { TableHead, TableHeader, TableRow } from '../../@core/table'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
@@ -28,6 +28,8 @@ const DataTableHeader: React.FC<DataTableHeaderProps> = ({ table }) => {
 }
 
 const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any> }> = ({ table, headerGroup }) => {
+	'use no memo'
+
 	return (
 		<TableRow>
 			{headerGroup.headers.map((header) => {
@@ -36,24 +38,33 @@ const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any
 					return null
 				}
 
-				return (
-					<TableHead
-						key={header.id}
-						colSpan={header.colSpan}
-						rowSpan={rowSpan}
-						className={cn('group relative z-40 bg-table-head p-0')}
-						align={header.column.columnDef.meta?.align}
-						style={{
-							height: `${DEFAULT_ESTIMATE_SIZE}px`,
-							width: `calc(var(--header-${header?.id}-size) * 1px)`,
-							...DataTableUtility.getStickyOffsetPosition(header?.column)
-						}}>
-						<TableCellHead table={table} header={header} />
-						<ColumnResizer header={header} />
-					</TableHead>
-				)
+				return <DataTableHead key={header.id} table={table} header={header} rowSpan={rowSpan} />
 			})}
 		</TableRow>
+	)
+}
+
+const DataTableHead: React.FC<{ table: Table<any>; header: Header<any, any>; rowSpan: number }> = ({
+	table,
+	header,
+	rowSpan
+}) => {
+	'use no memo'
+
+	return (
+		<TableHead
+			colSpan={header.colSpan}
+			rowSpan={rowSpan}
+			className={cn('group relative z-40 bg-table-head p-0')}
+			align={header.column.columnDef.meta?.align}
+			style={{
+				height: `${DEFAULT_ESTIMATE_SIZE}px`,
+				width: `calc(var(--header-${header?.id}-size) * 1px)`,
+				...DataTableUtility.getStickyOffsetPosition(header?.column)
+			}}>
+			<TableCellHead table={table} header={header} />
+			<ColumnResizer header={header} />
+		</TableHead>
 	)
 }
 

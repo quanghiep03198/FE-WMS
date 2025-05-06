@@ -1,5 +1,3 @@
-'use no memo'
-
 import { cn } from '@/common/utils/cn'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
@@ -42,36 +40,36 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 		}
 	})()
 
+	const headerTitle = header.column.getCanSort()
+		? getNextSortingOrder() === 'asc'
+			? t('ns_common:table.sort_asc')
+			: getNextSortingOrder() === 'desc'
+				? t('ns_common:table.sort_desc')
+				: t('ns_common:table.clear_sort')
+		: undefined
+
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger
 				className={cn(
-					'line-clamp-1 flex h-full cursor-auto select-none items-center px-4 py-2 text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:justify-center',
+					'inline-grid h-max w-full cursor-auto select-none grid-cols-[14px_auto] place-content-start place-items-stretch items-center px-4 py-2 text-left text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:!justify-center',
 					{
 						'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
 						'cursor-col-resize': getIsResizing(),
-						'justify-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
-						'justify-start text-left': columnDef.meta?.align === 'left',
-						'justify-end text-right': columnDef.meta?.align === 'right'
+						'place-content-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
+						'place-content-start text-left': columnDef.meta?.align === 'left',
+						'place-content-end': columnDef.meta?.align === 'right'
 					}
 				)}
-				style={{
-					minWidth: `calc(var(--header-${header?.id}-size) * 1px)`
-				}}
+				style={{ minWidth: `calc(var(--header-${header?.id}-size) * 1px)` }}
 				onClick={toggleSorting}
-				title={
-					header.column.getCanSort()
-						? getNextSortingOrder() === 'asc'
-							? t('ns_common:table.sort_asc')
-							: getNextSortingOrder() === 'desc'
-								? t('ns_common:table.sort_desc')
-								: t('ns_common:table.clear_sort')
-						: undefined
-				}>
-				{columnDef.enableSorting && (
-					<Icon name={currentSortingState} size={14} className='min-w-[14px] max-w-[14px] basis-[14px]' />
-				)}
-				<Typography variant='small' className='line-clamp-1 text-inherit'>
+				title={headerTitle}>
+				{columnDef.enableSorting && <Icon name={currentSortingState} size={14} />}
+				<Typography
+					as='small'
+					variant='small'
+					className={cn('line-clamp-1 text-left text-inherit', {})}
+					style={{ display: '-webkit-inline-box' }}>
 					{flexRender(columnDef.header, header.getContext())}
 				</Typography>
 			</ContextMenuTrigger>
@@ -93,7 +91,6 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 				<ContextMenuSeparator />
 				<ContextMenuSub>
 					<ContextMenuSubTrigger
-						// inset={true}
 						aria-disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
 						disabled={!header.isPlaceholder && !header.column.columnDef.enablePinning}
 						className='gap-x-2 aria-disabled:text-muted-foreground'>
@@ -120,7 +117,6 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 						</ContextMenuCheckboxItem>
 					</ContextMenuSubContent>
 				</ContextMenuSub>
-
 				<ContextMenuSeparator className='h-[0.5px]' />
 				<ContextMenuItem className='gap-x-2' onClick={header.column.resetSize}>
 					<WidthIcon /> {t('ns_common:table.reset_size')}

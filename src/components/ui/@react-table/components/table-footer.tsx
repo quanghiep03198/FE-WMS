@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react'
-
 import { cn } from '@/common/utils/cn'
 import { Div, Separator } from '@/components/ui'
 import { Table } from '@tanstack/react-table'
+import { Fragment } from 'react'
 import { type TableFooterProps } from '../types'
 
 function TableFooter({
