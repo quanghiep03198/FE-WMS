@@ -52,24 +52,31 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 		<ContextMenu>
 			<ContextMenuTrigger
 				className={cn(
-					'inline-grid h-max w-full cursor-auto select-none grid-cols-[14px_auto] place-content-start place-items-stretch items-center px-4 py-2 text-left text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:!justify-center',
+					'flex h-max w-full cursor-auto select-none grid-cols-[14px_auto] items-center px-4 py-2 text-left text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:!justify-center',
 					{
 						'cursor-pointer gap-x-2 hover:text-foreground': columnDef.enableSorting,
 						'cursor-col-resize': getIsResizing(),
-						'place-content-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
-						'place-content-start text-left': columnDef.meta?.align === 'left',
-						'place-content-end': columnDef.meta?.align === 'right'
+						'justify-center text-center': header.colSpan > 1 || columnDef.meta?.align === 'center',
+						'justify-start text-left': columnDef.meta?.align === 'left',
+						'justify-end': columnDef.meta?.align === 'right'
 					}
 				)}
-				style={{ minWidth: `calc(var(--header-${header?.id}-size) * 1px)` }}
+				style={
+					{
+						'--icon-size': '14px',
+						minWidth: `calc(var(--header-${header?.id}-size) * 1px)`
+					} as React.CSSProperties
+				}
 				onClick={toggleSorting}
 				title={headerTitle}>
-				{columnDef.enableSorting && <Icon name={currentSortingState} size={14} />}
-				<Typography
-					as='small'
-					variant='small'
-					className={cn('line-clamp-1 text-left text-inherit', {})}
-					style={{ display: '-webkit-inline-box' }}>
+				{columnDef.enableSorting && (
+					<Icon
+						name={currentSortingState}
+						size={14}
+						className='h-[var(--icon-size)] min-w-[var(--icon-size)] max-w-[var(--icon-size)]'
+					/>
+				)}
+				<Typography as='small' variant='small' className='line-clamp-1 text-left text-inherit'>
 					{flexRender(columnDef.header, header.getContext())}
 				</Typography>
 			</ContextMenuTrigger>
