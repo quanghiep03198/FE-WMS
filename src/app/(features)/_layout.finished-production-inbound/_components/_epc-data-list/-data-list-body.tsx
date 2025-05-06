@@ -284,7 +284,7 @@ const EpcDataList: React.FC = () => {
 							return (
 								<Div
 									key={virtualItem.index}
-									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap rounded border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
 									style={{
 										height: virtualItem.size,
 										transform: `translateY(${virtualItem.start}px)`

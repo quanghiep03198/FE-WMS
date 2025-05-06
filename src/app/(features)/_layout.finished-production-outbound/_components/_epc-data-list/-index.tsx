@@ -208,7 +208,7 @@ const ScannedEpcList: React.FC = () => {
 								<Div
 									key={virtualItem.index}
 									data-index={virtualItem.index}
-									className='absolute left-auto right-auto top-0 mb-1 flex h-10 w-full justify-between whitespace-nowrap border-b p-2 uppercase transition-all duration-75 last:border-none sm:px-2'
+									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
 									style={{
 										height: virtualItem.size,
 										transform: `translateY(${virtualItem.start}px)`
