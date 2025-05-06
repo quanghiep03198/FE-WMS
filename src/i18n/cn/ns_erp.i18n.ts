@@ -12,6 +12,7 @@ export default {
 		cust_shoestyle: '客戶型體',
 		daily_inbound_qty: '日产量',
 		daily_outbound_qty: '日出庫量',
+		daily_productivity: '日产量',
 		dept_code: '成型線',
 		dept_name: '更新部門',
 		employee_name: '建檔人姓名',

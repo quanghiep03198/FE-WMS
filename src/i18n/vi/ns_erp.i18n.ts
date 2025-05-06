@@ -12,6 +12,7 @@ export default {
 		cust_shoestyle: 'Mã khách hàng',
 		daily_inbound_qty: 'Số lượng nhập trong ngày',
 		daily_outbound_qty: 'Số lượng xuất trong ngày',
+		daily_productivity: 'Sản lượng ngày',
 		dept_name: 'Bộ phận cập nhật',
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
