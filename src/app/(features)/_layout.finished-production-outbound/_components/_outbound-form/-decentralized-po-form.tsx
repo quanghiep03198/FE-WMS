@@ -1,6 +1,5 @@
 'use no memo'
 
-import { OrderItem } from '@/app/(features)/_types/rfid'
 import { cn } from '@/common/utils/cn'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Typography } from '@/components/ui'
 import {
@@ -20,7 +19,7 @@ import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSize } from 'ahooks'
 import { sortBy, sortedUniqBy } from 'lodash'
-import React, { createContext, use, useMemo, useRef, useState } from 'react'
+import React, { use, useMemo, useRef, useState } from 'react'
 import {
 	FieldArrayWithId,
 	useFieldArray,
@@ -33,14 +32,13 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useUpdateStockOutMutation } from '../../_apis/outbound-rfid.api'
 import { usePageContext } from '../../_contexts/-page-context'
+import { DecentralizedPoFormContext, DecentralizedPoFormProvider } from '../../_contexts/-separated-form-context'
 import { DetailedOutBoundFormValues, detailedOutboundValidator } from '../../_schemas/outbound.schema'
+import DroppableFieldItem from './-decentralized-po-field-item'
 import FormSubmission from './-form-submission'
 import PurchaseOrderAutoComplete from './-purchase-order-autocomplete'
-import DroppableFieldItem from './-separated-po-field-item'
 
-export const FormContext = createContext<Pick<OrderItem, 'sizes'>>(null)
-
-const SeparatedPoOutboundForm = () => {
+const DecentralizedPoOutboundForm = () => {
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const [activeState, setActiveState] = useState<{ id: string | null; index: number | null }>({
 		id: null,
@@ -115,7 +113,7 @@ const SeparatedPoOutboundForm = () => {
 	}, [fieldsetRef.current])
 
 	return (
-		<FormContext.Provider value={{ sizes: availableSizes }}>
+		<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
 			<FormProvider {...form}>
 				<Form
 					onSubmit={form.handleSubmit(
@@ -176,7 +174,7 @@ const SeparatedPoOutboundForm = () => {
 					</Div>
 				</Form>
 			</FormProvider>
-		</FormContext.Provider>
+		</DecentralizedPoFormProvider>
 	)
 }
 
@@ -184,7 +182,7 @@ const ArrayFieldControl: React.FC<{
 	fields: FieldArrayWithId<DetailedOutBoundFormValues>[]
 	onAppend: UseFieldArrayAppend<DetailedOutBoundFormValues>
 }> = ({ fields, onAppend }) => {
-	const { sizes: availableSizes } = use(FormContext)
+	const { sizes: availableSizes } = use(DecentralizedPoFormContext)
 	const { t } = useTranslation()
 	const { reset, getValues } = useFormContext<DetailedOutBoundFormValues>()
 
@@ -277,4 +275,4 @@ const CommandNumberFieldControl: React.FC = () => {
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6`
 
-export default SeparatedPoOutboundForm
+export default DecentralizedPoOutboundForm

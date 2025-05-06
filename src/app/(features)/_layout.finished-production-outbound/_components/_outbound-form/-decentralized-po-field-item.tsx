@@ -6,7 +6,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { use } from 'react'
 import { UseFieldArrayRemove, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { FormContext } from './-separated-po-form'
+import { DecentralizedPoFormContext } from '../../_contexts/-separated-form-context'
 
 const DroppableFieldItem: React.FC<{
 	id: string
@@ -14,7 +14,7 @@ const DroppableFieldItem: React.FC<{
 	onRemove: UseFieldArrayRemove
 }> = ({ id, index, onRemove }) => {
 	const { t } = useTranslation()
-	const { sizes } = use(FormContext)
+	const { sizes } = use(DecentralizedPoFormContext)
 	const { watch, setValue } = useFormContext()
 
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({

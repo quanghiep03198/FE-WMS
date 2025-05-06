@@ -14,7 +14,7 @@ import { StandardOutboundFormValues, standardOutboundValidator } from '../../_sc
 import FormSubmission from './-form-submission'
 import PurchaseOrderAutoComplete from './-purchase-order-autocomplete'
 
-const NonSeparatedOutboundForm: React.FC = () => {
+const CentralizedPoOutboundForm: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const { t } = useTranslation()
@@ -59,4 +59,4 @@ const NonSeparatedOutboundForm: React.FC = () => {
 
 const Form = tw.form`grid gap-y-6`
 
-export default NonSeparatedOutboundForm
+export default CentralizedPoOutboundForm

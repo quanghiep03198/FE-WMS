@@ -12,8 +12,8 @@ import {
 } from '@/components/ui'
 
 import { useTranslation } from 'react-i18next'
-import NonSeparatedOutboundForm from './-non-separated-po-form'
-import SeparatedPoOutboundForm from './-separated-po-form'
+import CentralizedPoOutboundForm from './-centralized-po-form'
+import DecentralizedPoOutboundForm from './-decentralized-po-form'
 
 enum OutboundFormType {
 	CENTRALIZED_PO = 'centralized-po',
@@ -58,10 +58,10 @@ const OutboundForm: React.FC = () => {
 				</HoverCard>
 			</TabsList>
 			<TabsContent value={OutboundFormType.CENTRALIZED_PO} className='animate-in fade-in-0 slide-in-from-right-4'>
-				<NonSeparatedOutboundForm />
+				<CentralizedPoOutboundForm />
 			</TabsContent>
 			<TabsContent value={OutboundFormType.DECENTRALIZED_PO} className='animate-in fade-in-0 slide-in-from-left-4'>
-				<SeparatedPoOutboundForm />
+				<DecentralizedPoOutboundForm />
 			</TabsContent>
 		</Tabs>
 	)
