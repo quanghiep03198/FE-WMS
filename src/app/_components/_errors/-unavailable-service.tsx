@@ -20,6 +20,6 @@ const UnavailableService: React.FC = () => {
 	)
 }
 
-const Image = tw.img`max-w-md object-center object-contain w-full animate-[fade-in_0.35s_ease-out_0s]`
+const Image = tw.img`max-w-md object-center object-contain w-full select-none`
 
 export default UnavailableService
