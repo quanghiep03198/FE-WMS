@@ -74,8 +74,8 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
-				size: 150,
+				minSize: 120,
+				size: 120,
 				meta: {
 					filterVariant: 'select',
 					facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
@@ -95,7 +95,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
+				minSize: 100,
 				filterFn: 'fuzzy'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
@@ -103,14 +103,14 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'fuzzy',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('mat_ecolor', {
 				header: t('ns_erp:fields.mat_ecolor'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				minSize: 200,
+				minSize: 100,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					return getValue() ?? 'Unknown'
@@ -120,6 +120,7 @@ const InboundReportMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.shaping_dept_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				size: 200,
 				minSize: 200,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
@@ -142,6 +143,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				minSize: 200,
+				size: 200,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					const value = getValue()
@@ -165,7 +167,8 @@ const InboundReportMasterTable: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 220
+				minSize: 100,
+				size: 150
 			}),
 			columnHelper.accessor('daily_inbound_qty', {
 				header: t('ns_erp:fields.daily_inbound_qty'),
@@ -175,7 +178,8 @@ const InboundReportMasterTable: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 275
+				minSize: 150,
+				size: 150
 			}),
 			columnHelper.accessor('accumulated_qty', {
 				header: t('ns_erp:fields.accumulated_qty'),
@@ -185,7 +189,8 @@ const InboundReportMasterTable: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 200
+				minSize: 150,
+				size: 150
 			}),
 			columnHelper.display({
 				id: 'missing_qty',
@@ -199,7 +204,8 @@ const InboundReportMasterTable: React.FC = () => {
 					const { order_qty, accumulated_qty } = row.original
 					return !isNil(order_qty) && order_qty > 0 ? formatIntlNumber(order_qty - accumulated_qty) : 0
 				},
-				minSize: 200
+				minSize: 150,
+				size: 150
 			})
 		],
 		[i18n.language]

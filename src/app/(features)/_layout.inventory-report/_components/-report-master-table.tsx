@@ -111,6 +111,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 					</Tooltip>
 				),
 				size: 50,
+				maxSize: 50,
 				enableResizing: false,
 				meta: { align: 'left' },
 				cell: ({ row }) => (
@@ -126,7 +127,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
+				minSize: 100,
 				filterFn: 'fuzzy',
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
@@ -139,7 +140,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				sortUndefined: 'last',
 				sortingFn: fuzzySort,
 				enableGlobalFilter: false,
-				size: 250,
+				size: 220,
 				minSize: 200,
 				meta: {
 					align: 'left',
@@ -154,7 +155,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
+				minSize: 100,
 				meta: { align: 'left' },
 				filterFn: 'fuzzy'
 			}),
@@ -164,7 +165,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				filterFn: 'fuzzy',
-				minSize: 200,
+				minSize: 100,
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
@@ -174,7 +175,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				filterFn: 'fuzzy',
-				minSize: 200,
+				minSize: 100,
 				meta: {
 					align: 'left'
 				},
@@ -187,7 +188,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -198,7 +199,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('total_instock_qty', {
@@ -208,7 +209,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('total_outstock_qty', {
@@ -218,7 +219,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('actual_inv_qty', {
@@ -228,7 +229,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('final_inv_qty', {
@@ -238,7 +239,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],

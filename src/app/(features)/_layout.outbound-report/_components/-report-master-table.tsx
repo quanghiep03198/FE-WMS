@@ -13,7 +13,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick } from 'lodash'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
@@ -47,6 +47,7 @@ const ReportDatalist: React.FC = () => {
 					</Tooltip>
 				),
 				size: 50,
+				maxSize: 50,
 				enableResizing: false,
 				cell: ({ row, table }) => (
 					<button
@@ -72,7 +73,7 @@ const ReportDatalist: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 200,
+				minSize: 150,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
@@ -81,7 +82,7 @@ const ReportDatalist: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 200,
+				minSize: 100,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
@@ -92,7 +93,7 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 220
+				minSize: 100
 			}),
 			columnHelper.accessor('daily_outbound_qty', {
 				header: t('ns_erp:fields.daily_outbound_qty'),
@@ -102,7 +103,7 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 250
+				minSize: 100
 			}),
 			columnHelper.accessor('accumulated_qty', {
 				header: t('ns_erp:fields.accumulated_qty'),
@@ -112,7 +113,7 @@ const ReportDatalist: React.FC = () => {
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
 				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 250
+				minSize: 100
 			}),
 			columnHelper.accessor('missing_qty', {
 				header: t('ns_erp:fields.missing_qty'),
@@ -121,7 +122,7 @@ const ReportDatalist: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 200,
+				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
@@ -145,6 +146,8 @@ const ReportDatalist: React.FC = () => {
 			toast.error('ns_common:notification.error', { id })
 		}
 	}
+
+	const renderTableFooter = useCallback(() => <ReportTableFooter data={data} />, [data])
 
 	return (
 		<Div as='section' className='relative'>
@@ -182,7 +185,7 @@ const ReportDatalist: React.FC = () => {
 					)
 				}}
 				footerProps={{
-					slot: () => <ReportTableFooter data={data} />
+					slot: renderTableFooter
 				}}
 			/>
 		</Div>
