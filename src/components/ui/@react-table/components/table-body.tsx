@@ -80,13 +80,16 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 
 	return (
 		<Fragment>
-			<TableRow data-index={virtualRow.index} className='group border-spacing-0'>
+			<TableRow
+				data-index={virtualRow.index}
+				aria-selected={row.getIsSelected()}
+				aria-expanded={row.getIsExpanded()}
+				className='group border-spacing-0'>
 				{row?.getVisibleCells()?.map((cell) => {
 					return (
 						<TableCell
 							{...cell.column.columnDef?.meta?.tableCellProps}
 							key={cell.id}
-							aria-selected={row.getIsSelected()}
 							align={cell.column.columnDef.meta?.align}
 							style={{
 								width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
