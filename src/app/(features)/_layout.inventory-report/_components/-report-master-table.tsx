@@ -13,7 +13,7 @@ import { createColumnHelper, ExpandedState, type Table as TTable } from '@tansta
 import { useMemoizedFn, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { has, isEmpty, isNil, pick, sortBy, sortedUniq } from 'lodash'
+import { has, isEmpty, isNil, pick, sortedUniq } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -91,7 +91,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 					'inv_type',
 					'inv_year_month'
 				])}
-				data={sortBy(row.original?.size_data, 'size_numcode')}
+				data={row.original?.detail}
 			/>
 		),
 		[data]

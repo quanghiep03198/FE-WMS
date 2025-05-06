@@ -130,15 +130,15 @@ export interface IMonthlyInventoryReport {
 	inv_type: InventoryType
 	inv_year_month: string
 	// prettier-ignore
-	size_data: Array<{
-		size: string			// * Size code
-		ms_qty: number			// * Monthly stock quantity
-		int_qty: number		// * Initial quantity
-		ist_qty: number		// * Instock quantity
-		mn_ist_qty: number	// * Manual instock quantity
-		ost_qty: number		// * Outstock quantity
-		mn_ost_qty: number	// * Manual outstock quantity
-		fnl_qty: number		// * Final quantity
+	detail: Array<{
+		size: string							// * Size code
+		order_qty_by_size: number			// * Order quantity by size 
+		initial_stock_qty: number			// * Initial stock quantity
+		instock_qty: number					// * Instock quantity
+		outstock_qty: number					// * Outstock quantity
+		actual_instock_qty: number			// * Actual instock quantity
+		actual_outstock_qty: number		// * Actual outstock quantity
+		final_stock_qty: number				// * Final stock quantity
 	}>
 }
 

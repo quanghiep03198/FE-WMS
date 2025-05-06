@@ -1,7 +1,6 @@
 import { Languages } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -36,7 +35,7 @@ type BaseUpdateUpdateQuery = Pick<
 
 type InventoryReportDetailTableProps = {
 	queries: Omit<BaseUpdateUpdateQuery, 'size_numcode'>
-	data: IMonthlyInventoryReport['size_data']
+	data: IMonthlyInventoryReport['detail']
 }
 
 type ReportDataFormValues = z.infer<typeof reportDataSchema>
@@ -60,8 +59,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		defaultValues: {
 			data: data.map((item) => ({
 				size_numcode: item.size,
-				mn_ist_qty: item.mn_ist_qty,
-				mn_ost_qty: item.mn_ost_qty
+				mn_ist_qty: item.actual_instock_qty,
+				mn_ost_qty: item.actual_outstock_qty
 			}))
 		}
 	})
@@ -118,8 +117,8 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		form.reset({
 			data: data.map((item) => ({
 				size_numcode: item.size,
-				mn_ist_qty: item.mn_ist_qty,
-				mn_ost_qty: item.mn_ost_qty
+				mn_ist_qty: item.actual_instock_qty,
+				mn_ost_qty: item.actual_outstock_qty
 			}))
 		})
 	}
@@ -149,25 +148,25 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.mo_size_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{formatIntlNumber(item.ms_qty)}</TableCell>
+										<TableCell key={item.size}>{item.order_qty_by_size}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.total_init_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{formatIntlNumber(item.int_qty)}</TableCell>
+										<TableCell key={item.size}>{item.initial_stock_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.inbound_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{formatIntlNumber(item.ist_qty)}</TableCell>
+										<TableCell key={item.size}>{item.instock_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.outbound_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size}>{formatIntlNumber(item.ost_qty)}</TableCell>
+										<TableCell key={item.size}>{item.outstock_qty}</TableCell>
 									))}
 								</TableRow>
 								<TableRow>
@@ -222,7 +221,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 									<TableVerticalHeader>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
 									{data.map((item) => (
 										<TableCell key={item.size} className='hover:!ring-primary'>
-											{item.fnl_qty}
+											{item.final_stock_qty}
 										</TableCell>
 									))}
 								</TableRow>
