@@ -287,7 +287,7 @@ const InoutboundForm: React.FC = () => {
 						</Div>
 					</Fragment>
 				)}
-				<Div className='col-span-full grid grid-cols-2 gap-x-1'>
+				<Div className='col-span-full grid grid-cols-2 gap-x-2'>
 					<Button
 						type='submit'
 						size={isMobileScreen ? 'lg' : 'default'}
