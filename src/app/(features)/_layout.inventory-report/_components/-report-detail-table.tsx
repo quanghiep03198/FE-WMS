@@ -48,7 +48,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		'auto-refresh': false
 	})
 
-	// Handle toggle enable editing
+	// * Handle toggle enable editing
 	const [isEditing, { setTrue: enableEditing, setFalse: disableEditing }] = useBoolean(false)
 
 	const form = useForm<ReportDataFormValues>({
@@ -128,9 +128,18 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		enableEditing()
 	}
 
-	const fetchingQueries = useIsFetching({ queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam] })
+	const fetchingQueries = useIsFetching({
+		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam],
+		exact: true,
+		type: 'active',
+		fetchStatus: 'fetching',
+		stale: false
+	})
 
-	const isLoading = useMemo(() => isPending || fetchingQueries > 0, [isPending, fetchingQueries])
+	const isLoading = useMemo(
+		() => form.formState.isSubmitting || isPending || fetchingQueries > 0,
+		[isPending, fetchingQueries, form.formState]
+	)
 
 	return (
 		<ScrollArea>
@@ -248,11 +257,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 									)}
 									<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
 										<Icon
-											name={isLoading ? 'LoaderCircle' : 'Check'}
+											name={isPending ? 'LoaderCircle' : 'Check'}
 											role='presentation'
-											className={isLoading && 'animate-spin'}
+											className={isPending && 'animate-spin'}
 										/>{' '}
-										{isLoading
+										{isPending
 											? t('ns_common:status.processing')
 											: isError
 												? t('ns_common:actions.retry')
