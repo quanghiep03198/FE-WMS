@@ -37,6 +37,7 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
 function DataTable<TData, TValue>({
+	instanceId = uuidv4(),
 	data,
 	caption,
 	columns,
@@ -79,7 +80,6 @@ function DataTable<TData, TValue>({
 
 	// * Table states declaration
 
-	const instanceId = uuidv4()
 	const [_data, setData, resetData] = useResetState(originalData)
 	const [_columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [_sorting, setSorting] = useState<SortingState>([])

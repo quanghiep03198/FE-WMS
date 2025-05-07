@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { type Header, type HeaderGroup, type Table } from '@tanstack/react-table'
 import { Fragment } from 'react'
@@ -11,8 +13,6 @@ import { TableCellHead } from './table-cell-head'
 type DataTableHeaderProps = { table: Table<any> }
 
 const DataTableHeader: React.FC<DataTableHeaderProps> = ({ table }) => {
-	'use no memo'
-
 	return (
 		<TableHeader className='sticky top-0 z-20 bg-background'>
 			{table.getHeaderGroups().map((headerGroup) => {
@@ -28,8 +28,6 @@ const DataTableHeader: React.FC<DataTableHeaderProps> = ({ table }) => {
 }
 
 const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any> }> = ({ table, headerGroup }) => {
-	'use no memo'
-
 	return (
 		<TableRow>
 			{headerGroup.headers.map((header) => {
@@ -49,8 +47,6 @@ const DataTableHead: React.FC<{ table: Table<any>; header: Header<any, any>; row
 	header,
 	rowSpan
 }) => {
-	'use no memo'
-
 	return (
 		<TableHead
 			colSpan={header.colSpan}
@@ -69,8 +65,6 @@ const DataTableHead: React.FC<{ table: Table<any>; header: Header<any, any>; row
 }
 
 const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
-	'use no memo'
-
 	return (
 		headerGroup.headers.every((header) => header.colSpan === 1) && (
 			<TableRow>
@@ -82,4 +76,4 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ hea
 	)
 }
 
-export { DataTableHeader }
+export default DataTableHeader

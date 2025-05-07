@@ -1,3 +1,5 @@
+'use no memo'
+
 import useEventEmitter from '@/common/hooks/use-event-emitter'
 import { cn } from '@/common/utils/cn'
 import { Header } from '@tanstack/react-table'
@@ -24,7 +26,7 @@ function CollapsibleFilterCell<TData, TValue>({ header }: CollapsibleFilterCellP
 				width: `calc(var(--header-${header?.id}-size) * 1px)`,
 				...DataTableUtility.getStickyOffsetPosition(header?.column)
 			}}>
-			<Collapsible data-state={open ? 'open' : 'closed'} open={isFilterOpened}>
+			<Collapsible data-state={open ? 'open' : 'closed'} open={Boolean(isFilterOpened)}>
 				<CollapsibleContent className='h-10 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 					<ColumnFilter column={header.column} />
 				</CollapsibleContent>
