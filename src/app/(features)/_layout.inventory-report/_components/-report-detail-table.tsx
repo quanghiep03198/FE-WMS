@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useBoolean } from 'ahooks'
 import { format } from 'date-fns'
-import { pick } from 'lodash'
 import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +15,6 @@ import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 import { INVENTORY_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
-import { UrlQueryParams } from './-report-master-table'
 
 const reportDataSchema = z.object({
 	data: z.array(
@@ -43,10 +41,7 @@ type ReportDataFormValues = z.infer<typeof reportDataSchema>
 export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
 	const { t, i18n } = useTranslation()
 
-	const { searchParams } = useQueryParams<UrlQueryParams>({
-		'month.eq': format(new Date(), 'yyyy-MM'),
-		'auto-refresh': false
-	})
+	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
 
 	// * Handle toggle enable editing
 	const [isEditing, { setTrue: enableEditing, setFalse: disableEditing }] = useBoolean(false)
@@ -70,29 +65,27 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 
 	const { data: currentTenant } = useGetTenantByFactory()
 
-	const queryParam = pick(searchParams, 'month.eq')
-
 	// * Implement optimistic update on save manual changes
 	const { mutateAsync, isPending, isError } = useMutation({
 		mutationFn: async (payload: ReportDataFormValues['data']) => {
 			return await ReportService.updateInventoryReport(
 				currentTenant?.id,
 				abortControllerRef.current?.signal,
-				{ ...queries, po: queries.actual_po, inv_year_month: queryParam['month.eq'] },
+				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month.eq'] },
 				payload
 			)
 		},
 		onMutate: async (variable) => {
 			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
 			await queryClient.cancelQueries({
-				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam],
+				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams],
 				exact: true
 			})
 			// Snapshot the previous value
-			const previousData = queryClient.getQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam])
+			const previousData = queryClient.getQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams])
 
 			// Optimistically update to the new value
-			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam], variable)
+			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams], variable)
 			return { previousData }
 		},
 		onSuccess: () => {
@@ -101,11 +94,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		},
 		onError: (_error, _variable, context) => {
 			toast.error(t('ns_common:notification.error'))
-			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam], context.previousData)
+			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams], context.previousData)
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({
-				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam],
+				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams],
 				exact: true
 			})
 		}
@@ -129,7 +122,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	}
 
 	const fetchingQueries = useIsFetching({
-		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, queryParam],
+		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams],
 		exact: true,
 		type: 'active',
 		fetchStatus: 'fetching',

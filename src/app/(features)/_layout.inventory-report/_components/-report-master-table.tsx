@@ -19,19 +19,10 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetMonthlyInventoryReport } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
-import AutoRefreshToggle from '../../_components/_shared/-auto-refresh-toggle'
 import { InventoryReportDetailTable } from './-report-detail-table'
 
-export type UrlQueryParams = {
-	'month.eq': string
-	'auto-refresh': number | false
-}
-
 export const InventoryReportMasterTable: React.FC = () => {
-	const { searchParams } = useQueryParams<UrlQueryParams>({
-		'month.eq': format(new Date(), 'yyyy-MM'),
-		'auto-refresh': false
-	})
+	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
 	const { data: currentTenant } = useGetTenantByFactory()
 	const { user } = useAuth()
 
@@ -285,9 +276,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 
 	return (
 		<Div className='relative space-y-10'>
-			<Div className='absolute left-0 top-0'>
-				<AutoRefreshToggle />
-			</Div>
 			<DataTable
 				ref={dataTableRef}
 				columns={columns}
@@ -298,9 +286,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableExpanding={true}
 				manualExpanding={true}
 				renderSubComponent={renderDetailTable satisfies RenderSubComponent<IMonthlyInventoryReport>}
-				toolbarProps={{
-					slotRight: renderSlotRight
-				}}
+				toolbarProps={{ slotRight: renderSlotRight }}
 			/>
 		</Div>
 	)

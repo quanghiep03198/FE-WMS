@@ -35,11 +35,10 @@ export const useGetOutboundReport = (
 
 export const useGetMonthlyInventoryReport = (tenantId: string, params?: { 'month.eq': string }) => {
 	return useQuery({
-		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, tenantId, pick(params, 'month.eq')],
-		queryFn: async () => await ReportService.getMonthlyInventoryReport(tenantId, pick(params, 'month.eq')),
+		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, tenantId, params],
+		queryFn: async () => await ReportService.getMonthlyInventoryReport(tenantId, params),
 		enabled: !!tenantId,
 		refetchOnWindowFocus: false,
-		refetchInterval: params['auto-refresh'],
 		select: (response) => response.metadata
 	})
 }
