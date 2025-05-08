@@ -90,7 +90,7 @@ export default {
 		developer_mode_note: '启用开发者模式以获取更多高级功能',
 		fetch_oder_data_note: '允许您扫描未从前几天导入/导出的EPC',
 		fetch_older_data: '获取更多数据',
-		internet_access: '互联网访问',
+		server_connection: '服务器连接',
 		latency: '延迟',
 		network_status: '网络状态',
 		polling_duration: '轮询持续时间',

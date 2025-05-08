@@ -98,7 +98,7 @@ export default {
 		developer_mode_note: 'Enable developer mode for more advanced features.',
 		fetch_oder_data_note: "Allows you to scan EPCs that weren't imported/exported from previous days.",
 		fetch_older_data: 'Fetch older data',
-		internet_access: 'Internet access',
+		server_connection: 'Server conection',
 		latency: 'Latency',
 		network_status: 'Network status',
 		synchronization_trigger: 'Synchronization trigger',

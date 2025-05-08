@@ -96,7 +96,7 @@ export default {
 		developer_mode_note: 'Bật chế độ phát triển để sử dụng các tính năng nâng cao hơn',
 		fetch_oder_data_note: 'Cho phép bạn tải các dữ liệu EPC cũ hơn chưa thực hiện thao tác nhập/xuất',
 		fetch_older_data: 'Lấy dữ liệu cũ',
-		internet_access: 'Kết nối mạng',
+		server_connection: 'Kết nối máy chủ',
 		latency: 'Độ trễ',
 		network_status: 'Trạng thái kết nối',
 		synchronization_trigger: 'Kích hoạt đồng bộ',

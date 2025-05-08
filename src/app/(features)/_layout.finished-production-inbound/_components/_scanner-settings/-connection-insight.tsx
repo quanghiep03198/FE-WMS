@@ -18,13 +18,13 @@ const NetworkInsight: React.FC = () => {
 	return (
 		<StatusItem>
 			<Typography variant='small' className='font-medium'>
-				{t('ns_inoutbound:scanner_setting.internet_access')}
+				{t('ns_inoutbound:scanner_setting.server_connection')}
 			</Typography>
 			<StatusItemDetail>
 				{isNetworkAvailable ? (
-					<Icon name='Wifi' size={20} className='stroke-success' />
+					<Icon name='Server' size={20} className='stroke-success' />
 				) : (
-					<Icon name='WifiOff' size={20} className='stroke-muted-foreground' />
+					<Icon name='ServerCrash' size={20} className='stroke-muted-foreground' />
 				)}
 				<Typography variant='small' className='font-medium'>
 					{isNetworkAvailable ? t('ns_common:status.connected') : t('ns_common:status.disconnected')}

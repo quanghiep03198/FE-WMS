@@ -222,7 +222,7 @@ const InoutboundForm: React.FC = () => {
 				</Div>
 				<Div className='col-span-full'>
 					<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
-						<Icon name='Database' size={18} stroke='hsl(var(--warning))' />
+						<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
 						<input
 							readOnly={true}
 							placeholder={t('ns_common:actions.select_database')}
