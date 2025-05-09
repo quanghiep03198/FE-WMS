@@ -22,9 +22,9 @@ const NetworkInsight: React.FC = () => {
 			</Typography>
 			<StatusItemDetail>
 				{isNetworkAvailable ? (
-					<Icon name='Server' size={20} className='stroke-success' />
+					<Icon name='Server' size={18} className='stroke-success' />
 				) : (
-					<Icon name='ServerCrash' size={20} className='stroke-muted-foreground' />
+					<Icon name='ServerCrash' size={18} className='stroke-muted-foreground' />
 				)}
 				<Typography variant='small' className='font-medium'>
 					{isNetworkAvailable ? t('ns_common:status.connected') : t('ns_common:status.disconnected')}
