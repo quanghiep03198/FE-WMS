@@ -16,7 +16,7 @@ export default {
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
-		inoutbound_form_note: 'Disconnect before updating stock moves.',
+		inoutbound_form_note: 'Stop reading from RFID device and disconnect before updating stock moves.',
 		monthly_inventory_report: 'Manage and track the monthly inventory of finished goods in the warehouse.',
 		no_added_size: 'No size added',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
