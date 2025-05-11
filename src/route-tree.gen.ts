@@ -18,7 +18,6 @@ import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
 import { Route as authAuthorizationIndexImport } from './app/(auth)/authorization/index'
 import { Route as featuresPreferencesLayoutImport } from './app/(features)/preferences/_layout'
-import { Route as featuresLayoutDashboardIndexImport } from './app/(features)/_layout.dashboard/index'
 
 // Create Virtual Routes
 
@@ -47,6 +46,9 @@ const featuresLayoutFinishedProductionOutboundIndexLazyImport = createFileRoute(
 )()
 const featuresLayoutFinishedProductionInboundIndexLazyImport = createFileRoute(
   '/(features)/_layout/finished-production-inbound/',
+)()
+const featuresLayoutDashboardIndexLazyImport = createFileRoute(
+  '/(features)/_layout/dashboard/',
 )()
 const featuresLayoutCargoWeightCheckIndexLazyImport = createFileRoute(
   '/(features)/_layout/cargo-weight-check/',
@@ -206,6 +208,19 @@ const featuresLayoutFinishedProductionInboundIndexLazyRoute =
       ).then((d) => d.Route),
     )
 
+const featuresLayoutDashboardIndexLazyRoute =
+  featuresLayoutDashboardIndexLazyImport
+    .update({
+      id: '/dashboard/',
+      path: '/dashboard/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.dashboard/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+
 const featuresLayoutCargoWeightCheckIndexLazyRoute =
   featuresLayoutCargoWeightCheckIndexLazyImport
     .update({
@@ -218,13 +233,6 @@ const featuresLayoutCargoWeightCheckIndexLazyRoute =
         (d) => d.Route,
       ),
     )
-
-const featuresLayoutDashboardIndexRoute =
-  featuresLayoutDashboardIndexImport.update({
-    id: '/dashboard/',
-    path: '/dashboard/',
-    getParentRoute: () => featuresLayoutRoute,
-  } as any)
 
 const featuresPreferencesLayoutKeybindingsIndexLazyRoute =
   featuresPreferencesLayoutKeybindingsIndexLazyImport
@@ -331,18 +339,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginIndexImport
       parentRoute: typeof rootRoute
     }
-    '/(features)/_layout/dashboard/': {
-      id: '/(features)/_layout/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof featuresLayoutDashboardIndexImport
-      parentRoute: typeof featuresLayoutImport
-    }
     '/(features)/_layout/cargo-weight-check/': {
       id: '/(features)/_layout/cargo-weight-check/'
       path: '/cargo-weight-check'
       fullPath: '/cargo-weight-check'
       preLoaderRoute: typeof featuresLayoutCargoWeightCheckIndexLazyImport
+      parentRoute: typeof featuresLayoutImport
+    }
+    '/(features)/_layout/dashboard/': {
+      id: '/(features)/_layout/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof featuresLayoutDashboardIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/finished-production-inbound/': {
@@ -435,8 +443,8 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface featuresLayoutRouteChildren {
-  featuresLayoutDashboardIndexRoute: typeof featuresLayoutDashboardIndexRoute
   featuresLayoutCargoWeightCheckIndexLazyRoute: typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  featuresLayoutDashboardIndexLazyRoute: typeof featuresLayoutDashboardIndexLazyRoute
   featuresLayoutFinishedProductionInboundIndexLazyRoute: typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   featuresLayoutFinishedProductionOutboundIndexLazyRoute: typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   featuresLayoutInboundReportIndexLazyRoute: typeof featuresLayoutInboundReportIndexLazyRoute
@@ -449,9 +457,9 @@ interface featuresLayoutRouteChildren {
 }
 
 const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
-  featuresLayoutDashboardIndexRoute: featuresLayoutDashboardIndexRoute,
   featuresLayoutCargoWeightCheckIndexLazyRoute:
     featuresLayoutCargoWeightCheckIndexLazyRoute,
+  featuresLayoutDashboardIndexLazyRoute: featuresLayoutDashboardIndexLazyRoute,
   featuresLayoutFinishedProductionInboundIndexLazyRoute:
     featuresLayoutFinishedProductionInboundIndexLazyRoute,
   featuresLayoutFinishedProductionOutboundIndexLazyRoute:
@@ -525,8 +533,8 @@ export interface FileRoutesByFullPath {
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
-  '/dashboard': typeof featuresLayoutDashboardIndexRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
   '/finished-production-inbound': typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   '/finished-production-outbound': typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
@@ -546,8 +554,8 @@ export interface FileRoutesByTo {
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
-  '/dashboard': typeof featuresLayoutDashboardIndexRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
   '/finished-production-inbound': typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   '/finished-production-outbound': typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
@@ -571,8 +579,8 @@ export interface FileRoutesById {
   '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
   '/(auth)/authorization/': typeof authAuthorizationIndexRoute
   '/(auth)/login/': typeof authLoginIndexRoute
-  '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexRoute
   '/(features)/_layout/cargo-weight-check/': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
+  '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexLazyRoute
   '/(features)/_layout/finished-production-inbound/': typeof featuresLayoutFinishedProductionInboundIndexLazyRoute
   '/(features)/_layout/finished-production-outbound/': typeof featuresLayoutFinishedProductionOutboundIndexLazyRoute
   '/(features)/_layout/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
@@ -594,8 +602,8 @@ export interface FileRouteTypes {
     | '/preferences'
     | '/authorization'
     | '/login'
-    | '/dashboard'
     | '/cargo-weight-check'
+    | '/dashboard'
     | '/finished-production-inbound'
     | '/finished-production-outbound'
     | '/inbound-report'
@@ -614,8 +622,8 @@ export interface FileRouteTypes {
     | '/preferences'
     | '/authorization'
     | '/login'
-    | '/dashboard'
     | '/cargo-weight-check'
+    | '/dashboard'
     | '/finished-production-inbound'
     | '/finished-production-outbound'
     | '/inbound-report'
@@ -637,8 +645,8 @@ export interface FileRouteTypes {
     | '/(features)/preferences/_layout'
     | '/(auth)/authorization/'
     | '/(auth)/login/'
-    | '/(features)/_layout/dashboard/'
     | '/(features)/_layout/cargo-weight-check/'
+    | '/(features)/_layout/dashboard/'
     | '/(features)/_layout/finished-production-inbound/'
     | '/(features)/_layout/finished-production-outbound/'
     | '/(features)/_layout/inbound-report/'
@@ -695,8 +703,8 @@ export const routeTree = rootRoute
       "filePath": "(features)/_layout.tsx",
       "parent": "/(features)",
       "children": [
-        "/(features)/_layout/dashboard/",
         "/(features)/_layout/cargo-weight-check/",
+        "/(features)/_layout/dashboard/",
         "/(features)/_layout/finished-production-inbound/",
         "/(features)/_layout/finished-production-outbound/",
         "/(features)/_layout/inbound-report/",
@@ -733,12 +741,12 @@ export const routeTree = rootRoute
     "/(auth)/login/": {
       "filePath": "(auth)/login/index.tsx"
     },
-    "/(features)/_layout/dashboard/": {
-      "filePath": "(features)/_layout.dashboard/index.tsx",
-      "parent": "/(features)/_layout"
-    },
     "/(features)/_layout/cargo-weight-check/": {
       "filePath": "(features)/_layout.cargo-weight-check/index.lazy.tsx",
+      "parent": "/(features)/_layout"
+    },
+    "/(features)/_layout/dashboard/": {
+      "filePath": "(features)/_layout.dashboard/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/finished-production-inbound/": {
