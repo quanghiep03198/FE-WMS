@@ -7,7 +7,7 @@ import tw from 'tailwind-styled-components'
 import { usePageContext } from '../_contexts/-page-context'
 
 const CTASection: React.FC = () => {
-	const { handleMenuClick } = usePageContext()
+	const pageContext = usePageContext()
 	const { theme } = useTheme()
 
 	return (
@@ -17,7 +17,9 @@ const CTASection: React.FC = () => {
 			className='mx-auto flex max-w-7xl flex-grow flex-col items-center gap-10 sm:gap-y-6 xl:flex-row xl:gap-20 xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:items-start xl:text-left'>
 				<Button
-					onClick={() => handleMenuClick(1)}
+					onClick={() => {
+						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
+					}}
 					variant='outline'
 					className='mb-4 w-72 cursor-pointer justify-start gap-x-2 rounded-full px-5 tracking-wide transition-colors duration-200 hover:!border-success hover:bg-transparent hover:text-success'>
 					<Icon name='Tags' size={20} />
@@ -65,7 +67,11 @@ const CTASection: React.FC = () => {
 					<Link to='/login' className={cn(buttonVariants())}>
 						Get started
 					</Link>
-					<Button variant='link' onClick={() => handleMenuClick(1)}>
+					<Button
+						variant='link'
+						onClick={() => {
+							if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
+						}}>
 						Learn more <Icon name='ArrowRight' size={12} role='presentation' />
 					</Button>
 				</Div>
@@ -104,7 +110,11 @@ const CTASection: React.FC = () => {
 						<Link to='/login' className={cn(buttonVariants())}>
 							Get started
 						</Link>
-						<Button variant='link' onClick={() => handleMenuClick(1)}>
+						<Button
+							variant='link'
+							onClick={() => {
+								if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
+							}}>
 							Learn more <Icon name='ArrowRight' size={12} role='presentation' />
 						</Button>
 					</Div>
