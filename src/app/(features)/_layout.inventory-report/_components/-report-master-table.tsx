@@ -148,7 +148,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				minSize: 100,
 				meta: { align: 'left' },
-				filterFn: 'fuzzy'
+				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
