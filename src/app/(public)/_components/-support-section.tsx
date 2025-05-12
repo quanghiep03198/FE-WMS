@@ -87,6 +87,6 @@ const SupportSection: React.FunctionComponent = () => {
 	)
 }
 
-const Image = tw.img`max-w-2xl object-contain object-center sm:order-last md:order-last sm:max-w-full w-full`
+const Image = tw.img`max-w-xl object-contain object-center sm:order-last md:order-last sm:max-w-full w-full`
 
 export default SupportSection
