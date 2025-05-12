@@ -49,7 +49,7 @@ const ReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
 				size: 200,
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'

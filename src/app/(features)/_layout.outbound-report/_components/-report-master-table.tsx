@@ -66,7 +66,7 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				minSize: 150,
-				filterFn: 'fuzzy'
+				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),

@@ -96,7 +96,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				minSize: 100,
-				filterFn: 'fuzzy'
+				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
