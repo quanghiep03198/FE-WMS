@@ -117,7 +117,7 @@ const InoutboundForm: React.FC = () => {
 	useEffect(() => {
 		form.setValue(
 			'rfid_use',
-			action === FormActionEnum.IMPORT ? FormActionReasonEnum.NORMAL_IMPORT : FormActionReasonEnum.SCRAP
+			action === FormActionEnum.IMPORT ? FormActionReasonEnum.NORMAL_IMPORT : FormActionReasonEnum.RECYCLE_EXPORT
 		)
 	}, [action])
 
@@ -235,7 +235,7 @@ const InoutboundForm: React.FC = () => {
 								<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors aria-disabled:text-muted-foreground'>
 									{form.watch('rfid_use') === FormActionReasonEnum.NORMAL_IMPORT
 										? t('ns_inoutbound:inoutbound_actions.normal_import')
-										: t('ns_inoutbound:inoutbound_actions.scrap')}
+										: t('ns_inoutbound:inoutbound_actions.recycling')}
 									<Input
 										readOnly={true}
 										type='hidden'

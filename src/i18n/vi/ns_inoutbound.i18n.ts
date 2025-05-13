@@ -57,7 +57,7 @@ export default {
 	inoutbound_actions: {
 		normal_export: 'Xuất kho bình thường',
 		normal_import: 'Nhập kho bình thường',
-		recycling: 'Phân loại lại hàng hóa',
+		recycling: 'Tái chế',
 		return_for_repair: 'Hàng trả về để sửa chữa',
 		scrap: 'Báo phế',
 		transfer_inbound: 'Điều động nhập kho',

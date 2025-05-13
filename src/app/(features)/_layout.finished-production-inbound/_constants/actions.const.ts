@@ -5,5 +5,5 @@ export enum FormActionEnum {
 
 export enum FormActionReasonEnum {
 	NORMAL_IMPORT = 'A',
-	SCRAP = 'C'
+	RECYCLE_EXPORT = 'C'
 }
