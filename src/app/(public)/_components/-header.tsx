@@ -59,7 +59,7 @@ const NavHeaderMenu: React.FC = () => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(index)
 					}}
 					className={cn(
-						'text-muted-foreground transition-colors duration-500',
+						'text-muted-foreground transition-[colors,opacity] duration-500 hover:no-underline hover:opacity-80',
 						pageContext?.activeMenu === item.href && 'text-[var(--primary-alt)]'
 					)}>
 					{item.title}
