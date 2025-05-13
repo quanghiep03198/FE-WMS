@@ -3,7 +3,7 @@ import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../_contexts/-page-context'
-import BeamAnimated from './-beam-animated'
+import BeamAnimated from './-animated-chip'
 
 const FeaturesSection: React.FunctionComponent = () => {
 	const pageContext = usePageContext()
@@ -16,32 +16,13 @@ const FeaturesSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={ref}
-			className='relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 bg-background transition-opacity duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl'
+			className='relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 transition-opacity duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl'
 			id='outstanding-features'
 			as='section'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
-			{/* <svg
-				aria-hidden='true'
-				data-side='top-left'
-				fill='none'
-				height='75'
-				viewBox='0 0 75 75'
-				width='75'
-				className='absolute left-0 top-0 -translate-x-full'>
-				<path
-					d='M74 37.5C74 30.281 71.8593 23.2241 67.8486 17.2217C63.838 11.2193 58.1375 6.541 51.4679 3.7784C44.7984 1.0158 37.4595 0.292977 30.3792 1.70134C23.2989 3.1097 16.7952 6.58599 11.6906 11.6906C6.58599 16.7952 3.1097 23.2989 1.70134 30.3792C0.292977 37.4595 1.0158 44.7984 3.7784 51.4679C6.541 58.1375 11.2193 63.838 17.2217 67.8486C23.2241 71.8593 30.281 74 37.5 74'
-					className='stroke-neutral-300 dark:stroke-neutral-700'
-					strokeDasharray='3 3'></path>
-			</svg> */}
-			{/* Horizontal dashed border */}
-			{/* <Div className='absolute -left-24 -top-6 h-px w-[115%] bg-bottom bg-repeat-x [background-image:linear-gradient(to_right,#d4d4d4,#d4d4d4_50%,_transparent_0)] [background-size:_8px_1px] dark:[background-image:linear-gradient(to_right,#404040,#404040_50%,_transparent_0)]' /> */}
-			{/* <Div className='absolute -bottom-8 -left-24 h-px w-[115%] bg-bottom bg-repeat-x [background-image:linear-gradient(to_right,#d4d4d4,#d4d4d4_50%,_transparent_0)] [background-size:_8px_1px] dark:[background-image:linear-gradient(to_right,#404040,#404040_50%,_transparent_0)]' /> */}
-			{/* Vertical dashed border */}
-			{/* <Div className='absolute -left-9 -top-20 h-[115%] w-px bg-right bg-repeat-y [background-image:linear-gradient(180deg,#d4d4d4,#d4d4d4_50%,_transparent_0)] [background-size:_1px_8px] dark:[background-image:linear-gradient(180deg,#404040,#404040_50%,_transparent_0)]' /> */}
-			{/* <Div className='absolute -right-9 -top-20 h-[115%] w-px bg-right bg-repeat-y [background-image:linear-gradient(180deg,#d4d4d4,#d4d4d4_50%,_transparent_0)] [background-size:_1px_8px] dark:[background-image:linear-gradient(180deg,#404040,#404040_50%,_transparent_0)]' /> */}
 			<Div className='max-w-4xl space-y-1.5 text-left sm:text-center'>
 				<Typography
 					variant='small'

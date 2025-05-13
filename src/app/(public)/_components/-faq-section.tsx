@@ -81,7 +81,7 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex max-h-[28rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border'>
+			<Div className='flex max-h-[28rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border bg-background'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
 					<Div className='size-3 rounded-full bg-destructive' />
 					<Div className='size-3 rounded-full bg-warning' />

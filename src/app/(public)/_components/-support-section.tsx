@@ -1,3 +1,5 @@
+import { Theme } from '@/common/constants/enums'
+import useTheme from '@/common/hooks/use-theme'
 import { Div, Icon, Typography } from '@/components/ui'
 import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import { useInViewport } from 'ahooks'
@@ -8,6 +10,7 @@ import { usePageContext } from '../_contexts/-page-context'
 const SupportSection: React.FunctionComponent = () => {
 	const ref = useRef<HTMLDivElement>(null)
 	const pageContext = usePageContext()
+	const { theme } = useTheme()
 	const [inViewport] = useInViewport(ref, {
 		root: () => pageContext?.contentScrollRef?.current,
 		threshold: 0.5
@@ -16,7 +19,10 @@ const SupportSection: React.FunctionComponent = () => {
 	return (
 		<Div className='grid grid-cols-[1fr_1.125fr] items-center justify-center gap-16 sm:grid-cols-1 md:grid-cols-1'>
 			<Div className='flex items-center justify-center'>
-				<Image src='/global-transport.svg' alt='Shipping' />
+				<Image
+					src={theme === Theme.LIGHT ? '/global-transport-light.svg' : '/global-transport-dark.svg'}
+					alt='Shipping'
+				/>
 			</Div>
 			<Div
 				id='cta'
