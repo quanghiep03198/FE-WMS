@@ -2,7 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import React, { useId } from 'react'
-import { FieldValues, useFormContext } from 'react-hook-form'
+import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import {
 	Div,
 	FormControl,
@@ -29,7 +29,7 @@ export type SelectFieldControlProps<T extends FieldValues, D> = BaseFieldControl
 export function SelectFieldControl<T extends FieldValues, D extends Record<string, any>>(
 	props: SelectFieldControlProps<T, D>
 ) {
-	const { control, getValues, getFieldState } = useFormContext()
+	const { control, getFieldState } = useFormContext()
 	const id = useId()
 
 	const {
@@ -48,10 +48,12 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 
 	const isError = Boolean(getFieldState(name).error)
 
+	const value = useWatch(name)
+
 	return (
 		<FormField
 			name={name!}
-			defaultValue={getValues(name)}
+			defaultValue={value}
 			control={control}
 			render={({ field }) => {
 				return (

@@ -16,7 +16,6 @@ const Container = tw.div`
 	has-[#toggle-fullscreen[data-state=checked]]:fade-in-0
 	has-[#toggle-fullscreen[data-state=unchecked]]:fade-out-0
 	has-[#toggle-fullscreen[data-state=unchecked]]:zoom-out-95
-	has-[#toggle-fullscreen[data-state=unchecked]]:duration-200
 `
 const Wrapper = tw.div`w-full max-h-full has-[#toggle-fullscreen[data-state=checked]]:h-full items-stretch grid grid-cols-1 @[1366px]:grid-cols-[2.5fr_1fr] gap-x-6 gap-y-10`
 const Main = tw.div`flex flex-col gap-y-6 max-h-full items-stretch basis-full flex-1`

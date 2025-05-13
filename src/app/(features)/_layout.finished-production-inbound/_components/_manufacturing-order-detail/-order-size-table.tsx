@@ -217,7 +217,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											role='textbox'
 											placeholder='Search ...'
-											className='w-full border-none font-normal'
+											className='w-full border-none font-normal shadow-none transition-none'
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
 										/>
 									</TableHead>
@@ -227,7 +227,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											role='textbox'
 											placeholder='Search ...'
-											className='w-full border-none font-normal'
+											className='w-full border-none font-normal shadow-none transition-none'
 											onChange={(e) =>
 												setColumnFilters((prev) => ({
 													...prev,
@@ -242,7 +242,7 @@ const OrderSizeDetailTable: React.FC = () => {
 										<Input
 											role='textbox'
 											placeholder='Search ...'
-											className='w-full border-none font-normal'
+											className='w-full border-none font-normal shadow-none transition-none'
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mat_ecolor: e.target.value }))}
 										/>
 									</TableHead>

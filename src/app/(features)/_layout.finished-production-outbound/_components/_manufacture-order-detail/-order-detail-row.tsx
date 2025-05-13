@@ -27,10 +27,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 	)
 
 	return (
-		<TableRow
-			data-index={virtualRow.index}
-			className={cn('transition-all duration-500')}
-			style={{ height: virtualRow.size }}>
+		<TableRow data-index={virtualRow.index} style={{ height: virtualRow.size }}>
 			<TableCell
 				style={{ height: virtualRow.size }}
 				className='group/cell left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-pretty text-center md:right-auto xl:sticky'>

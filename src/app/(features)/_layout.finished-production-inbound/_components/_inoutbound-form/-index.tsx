@@ -215,7 +215,7 @@ const InoutboundForm: React.FC = () => {
 						<Input
 							readOnly={true}
 							placeholder={t('ns_common:actions.select_database')}
-							className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none focus:border-none focus:outline-none'
+							className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none transition-none focus:border-none focus:outline-none'
 							value={
 								currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder
 									? t(`ns_warehouse:tenancy_warehouse.${currentWritableTenant?.alias}`, {
@@ -232,7 +232,7 @@ const InoutboundForm: React.FC = () => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>{t('ns_common:common_fields.actions')}</FormLabel>
-								<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors aria-disabled:text-muted-foreground'>
+								<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm aria-disabled:text-muted-foreground'>
 									{form.watch('rfid_use') === FormActionReasonEnum.NORMAL_IMPORT
 										? t('ns_inoutbound:inoutbound_actions.normal_import')
 										: t('ns_inoutbound:inoutbound_actions.recycling')}

@@ -61,7 +61,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 										autoComplete='off'
 										placeholder='xxxx-xxxx-xxxx'
 										aria-invalid={!!getFieldState(name).error}
-										className='pr-9 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
+										className='pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
 										value={field.value}
 										ref={resolvedRef}
 										onChange={field.onChange}

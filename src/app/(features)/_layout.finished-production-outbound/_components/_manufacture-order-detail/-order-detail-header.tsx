@@ -58,7 +58,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 					<Input
 						role='textbox'
 						placeholder='Search ...'
-						className='w-full border-none font-normal shadow-none'
+						className='w-full border-none font-normal shadow-none transition-none'
 						onChange={(e) => onColumnFilterChange((prev) => ({ ...prev, mo_no: e.target.value }))}
 					/>
 				</TableHead>
@@ -68,7 +68,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 					<Input
 						role='textbox'
 						placeholder='Search ...'
-						className='w-full border-none font-normal shadow-none'
+						className='w-full border-none font-normal shadow-none transition-none'
 						onChange={(e) =>
 							onColumnFilterChange((prev) => ({ ...prev, shoes_style_code_factory: e.target.value }))
 						}
@@ -80,7 +80,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 					<Input
 						role='textbox'
 						placeholder='Search ...'
-						className='w-full border-none font-normal shadow-none'
+						className='w-full border-none font-normal shadow-none transition-none'
 						onChange={(e) =>
 							onColumnFilterChange((prev) => ({
 								...prev,
