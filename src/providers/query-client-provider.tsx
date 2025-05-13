@@ -1,4 +1,3 @@
-import env from '@/common/utils/env'
 import { AppConfigs } from '@/configs/app.config'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
@@ -24,10 +23,11 @@ export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			staleTime: 1000 * 60 * 15,
-			networkMode: 'online' //In this mode, Queries and Mutations will not fire unless you have network connection.
+
+			networkMode: 'always'
 		},
 		mutations: {
-			networkMode: 'online'
+			networkMode: 'always'
 		}
 	}
 })
@@ -35,7 +35,7 @@ export const queryClient = new QueryClient({
 export const QueryClientProvider: React.FC<React.PropsWithChildren> = ({ children }) => (
 	<PersistQueryClientProvider
 		client={queryClient}
-		persistOptions={{ persister: localStoragePersister, maxAge: +env('VITE_DEFAULT_TTL', 30_000) }}>
+		persistOptions={{ persister: localStoragePersister, maxAge: 60 * 1000 * 15 }}>
 		{children}
 		<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-right' />
 	</PersistQueryClientProvider>
