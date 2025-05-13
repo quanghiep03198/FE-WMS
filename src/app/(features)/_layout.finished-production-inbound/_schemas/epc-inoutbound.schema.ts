@@ -1,18 +1,9 @@
 import { z } from 'zod'
-
-export enum FormActionEnum {
-	IMPORT = 'A',
-	EXPORT = 'B'
-}
+import { FormActionEnum, FormActionReasonEnum } from '../_constants/actions.const'
 
 export const outboundSchema = z.object({
 	rfid_status: z.nativeEnum(FormActionEnum),
-	rfid_use: z
-		.string({
-			required_error: 'ns_validation:required'
-		})
-		.trim()
-		.min(1, { message: 'ns_validation:required' }),
+	rfid_use: z.nativeEnum(FormActionReasonEnum),
 	default_tenant: z.string(),
 	target_tenant: z.string().nullable().optional()
 })

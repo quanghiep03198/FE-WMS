@@ -16,6 +16,7 @@ import {
 	Form as FormProvider,
 	Icon,
 	IconProps,
+	Input,
 	RadioGroup,
 	RadioGroupItem,
 	SelectFieldControl,
@@ -36,14 +37,9 @@ import {
 	useGetShapingProductLineQuery,
 	useUpdateStockInMutation
 } from '../../_apis/inbound-rfid.api'
+import { FormActionEnum, FormActionReasonEnum } from '../../_constants/actions.const'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
-import {
-	FormActionEnum,
-	FormValues,
-	InboundFormValues,
-	inboundSchema,
-	outboundSchema
-} from '../../_schemas/epc-inoutbound.schema'
+import { FormValues, InboundFormValues, inboundSchema, outboundSchema } from '../../_schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const { connection, selectedOrder, scanningStatus, currentFactoryProduce, setScannedEpc } = usePageContext(
@@ -53,8 +49,8 @@ const InoutboundForm: React.FC = () => {
 		'setScannedEpc',
 		'currentFactoryProduce'
 	)
-	const { t, i18n } = useTranslation()
-	const [action, setAction] = useState<FormActionEnum>(() => FormActionEnum.IMPORT)
+	const { t } = useTranslation()
+	const [action, setAction] = useState<FormActionEnum>(FormActionEnum.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 	const { data: writableTenants } = useGetAllTenants()
 
@@ -62,7 +58,7 @@ const InoutboundForm: React.FC = () => {
 		resolver: zodResolver(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema),
 		defaultValues: {
 			rfid_status: FormActionEnum.IMPORT,
-			rfid_use: '',
+			rfid_use: FormActionReasonEnum.NORMAL_IMPORT,
 			warehouse_num: '',
 			storage: '',
 			dept_code: '',
@@ -74,19 +70,6 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const warehouseNum = form.watch('warehouse_num')
-
-	const storageTypes = useMemo(
-		() =>
-			[
-				{ label: t('ns_inoutbound:inoutbound_actions.normal_import'), type: FormActionEnum.IMPORT, value: 'A' },
-				{ label: t('ns_inoutbound:inoutbound_actions.normal_export'), type: FormActionEnum.EXPORT, value: 'B' },
-				{ label: t('ns_inoutbound:inoutbound_actions.scrap'), type: FormActionEnum.EXPORT, value: 'C' },
-				{ label: t('ns_inoutbound:inoutbound_actions.transfer_inbound'), type: FormActionEnum.IMPORT, value: 'D' },
-				{ label: t('ns_inoutbound:inoutbound_actions.transfer_outbound'), type: FormActionEnum.EXPORT, value: 'E' }, //
-				{ label: t('ns_inoutbound:inoutbound_actions.recycling'), type: FormActionEnum.EXPORT, value: 'F' }
-			].filter((item) => item.type === action),
-		[i18n.language, action]
-	)
 
 	const { data: warehouseOptions, isLoading } = useGetWarehouseQuery<IWarehouse[]>({
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
@@ -104,7 +87,6 @@ const InoutboundForm: React.FC = () => {
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
 			...form.getValues(),
-			rfid_use: '',
 			dept_code: '',
 			dept_name: '',
 			warehouse_num: '',
@@ -125,6 +107,28 @@ const InoutboundForm: React.FC = () => {
 		if (connection) form.setValue('default_tenant', connection)
 	}, [connection])
 
+	useEffect(() => {
+		if (Array.isArray(writableTenants)) {
+			const currentTenant = writableTenants.find((item) => item.factory === currentFactoryProduce)
+			form.setValue('target_tenant', currentTenant?.id ?? '')
+		}
+	}, [currentFactoryProduce])
+
+	useEffect(() => {
+		form.setValue(
+			'rfid_use',
+			action === FormActionEnum.IMPORT ? FormActionReasonEnum.NORMAL_IMPORT : FormActionReasonEnum.SCRAP
+		)
+	}, [action])
+
+	const currentWritableTenant = useMemo<Partial<ITenancy>>(
+		() =>
+			Array.isArray(writableTenants)
+				? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
+				: undefined,
+		[writableTenants, form.watch('target_tenant')]
+	)
+
 	const handleSubmit = async (data: InboundFormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
 		try {
@@ -139,21 +143,6 @@ const InoutboundForm: React.FC = () => {
 			toast.error(t('ns_common:notification.error'), { id: 'UPDATE_STOCK' })
 		}
 	}
-
-	useEffect(() => {
-		if (Array.isArray(writableTenants)) {
-			const currentTenant = writableTenants.find((item) => item.factory === currentFactoryProduce)
-			form.setValue('target_tenant', currentTenant?.id ?? '')
-		}
-	}, [currentFactoryProduce])
-
-	const currentWritableTenant = useMemo<Partial<ITenancy>>(
-		() =>
-			Array.isArray(writableTenants)
-				? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
-				: undefined,
-		[writableTenants, form.watch('target_tenant')]
-	)
 
 	return (
 		<FormProvider {...form}>
@@ -223,10 +212,10 @@ const InoutboundForm: React.FC = () => {
 				<Div className='col-span-full'>
 					<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
 						<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
-						<input
+						<Input
 							readOnly={true}
 							placeholder={t('ns_common:actions.select_database')}
-							className='w-full border-none bg-background text-sm text-foreground shadow-none focus:border-none focus:outline-none'
+							className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none focus:border-none focus:outline-none'
 							value={
 								currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder
 									? t(`ns_warehouse:tenancy_warehouse.${currentWritableTenant?.alias}`, {
@@ -238,12 +227,26 @@ const InoutboundForm: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
-					<SelectFieldControl
+					<FormField
 						name='rfid_use'
-						label={t('ns_common:common_fields.actions')}
-						datalist={storageTypes}
-						labelField='label'
-						valueField='value'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>{t('ns_common:common_fields.actions')}</FormLabel>
+								<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors aria-disabled:text-muted-foreground'>
+									{form.watch('rfid_use') === FormActionReasonEnum.NORMAL_IMPORT
+										? t('ns_inoutbound:inoutbound_actions.normal_import')
+										: t('ns_inoutbound:inoutbound_actions.scrap')}
+									<Input
+										readOnly={true}
+										type='hidden'
+										placeholder={t('ns_common:actions.select_database')}
+										className='h-max w-full border-none px-0 text-foreground shadow-none focus-within:outline-none focus:border-none'
+										onChange={field.onChange}
+										value={field.value}
+									/>
+								</Div>
+							</FormItem>
+						)}
 					/>
 				</Div>
 				{action === FormActionEnum.IMPORT && (
