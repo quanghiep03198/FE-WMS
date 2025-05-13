@@ -46,7 +46,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 						</Typography>
 					</Div>
 				</Div>
-				<Div className='grid w-full items-start gap-6 bg-background md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
+				<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
 					<EffectCard>
 						<EffectCardIconWrapper>
 							<EffectCardIcon
