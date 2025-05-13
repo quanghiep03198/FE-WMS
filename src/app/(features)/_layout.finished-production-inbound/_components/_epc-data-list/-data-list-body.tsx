@@ -12,7 +12,7 @@ import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUnmount, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash'
 import { Fragment, useCallback, useRef, useState } from 'react'
@@ -230,6 +230,10 @@ const EpcDataList: React.FC = () => {
 		if (retrievedEpcData)
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
+
+	useUnmount(() => {
+		abortControllerRef.current.abort()
+	})
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 

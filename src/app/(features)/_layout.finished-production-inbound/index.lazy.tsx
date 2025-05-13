@@ -66,10 +66,7 @@ function Page() {
 			<HostCompatibleAlert />
 			{createPortal(
 				<PageProvider>
-					<PageComposition.Container
-						style={{
-							animationDelay: 0.25
-						}}>
+					<PageComposition.Container style={{ animationDelay: 0.25 }}>
 						<PageComposition.Wrapper>
 							<PageComposition.Main>
 								<ScannerToolbar />
