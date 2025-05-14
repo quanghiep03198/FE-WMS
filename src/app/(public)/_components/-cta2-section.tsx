@@ -27,7 +27,7 @@ const CTA2Section: React.FC = () => {
 					animationFillMode: 'both',
 					animationPlayState: topSectionInViewPort ? 'running' : 'paused'
 				}}>
-				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center'>
+				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center md:text-center'>
 					<Typography variant='small' className='font-jetbrains text-[var(--primary-alt)]'>
 						EDGE DEPLOYMENT
 					</Typography>

@@ -1,5 +1,3 @@
-import { Theme } from '@/common/constants/enums'
-import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import { Separator } from '@/components/ui'
 import { useInViewport } from 'ahooks'
@@ -12,8 +10,9 @@ const BeamAnimated: React.FC = () => {
 	const standaloneCubeRef = useRef<SVGPathElement>(null)
 	const greenPathRef = useRef<SVGPathElement>(null)
 	const cyanPathRef = useRef<SVGPathElement>(null)
+	const greenGlowLightRef = useRef<HTMLDivElement>(null)
+	const cyanGlowLightRef = useRef<HTMLDivElement>(null)
 	const logoRef = useRef<HTMLDivElement>(null)
-	const { theme } = useTheme()
 	const pageContext = usePageContext()
 	const [inViewport] = useInViewport(containerRef, {
 		root: () => pageContext?.contentScrollRef?.current,
@@ -23,7 +22,7 @@ const BeamAnimated: React.FC = () => {
 	const animatePath = (path: SVGPathElement, color: string) => {
 		if (!path) return
 
-		path.style.transition = 'stroke 1.5s ease-out 1s, fill 1.5s ease-out 1s'
+		path.style.transition = 'stroke 1s ease-out 0.5s, fill 1s ease-out 0.5s'
 		path.style.fill = 'transparent'
 		path.style.stroke = 'transparent'
 
@@ -33,28 +32,37 @@ const BeamAnimated: React.FC = () => {
 		})
 	}
 
+	const animateGlowLight = (el: HTMLDivElement) => {
+		if (!el) return
+		el.style.transition = 'opacity 0.5s ease-out 0.5s'
+		el.style.opacity = '0'
+		requestAnimationFrame(() => {
+			el.style.opacity = '1'
+		})
+	}
+
 	const animateLogo = () => {
 		requestAnimationFrame(() => {
-			logoRef.current.style.transition = 'transform 0.35s ease-out, box-shadow 0.5s ease-out 0.125s'
-			logoRef.current.style.boxShadow = theme === Theme.LIGHT ? '4px 4px 16px #0a0a0a' : '4px 4px 16px #737373'
-			logoRef.current.style.transform = 'translate(-8px,-8px)'
+			logoRef.current.style.transition = 'transform 0.35s ease-out 1s, box-shadow 0.5s ease-out 1s'
+			logoRef.current.style.boxShadow = '12px 12px 18px #0a0a0a'
+			logoRef.current.style.transform = 'translate(-8px,-8px) scale(1.035)'
 		})
 	}
 
 	useEffect(() => {
 		if (inViewport) {
-			animatePath(greenPathRef.current, '#22c55e')
-			animatePath(cyanPathRef.current, '#22d3ee')
+			animateGlowLight(greenGlowLightRef.current)
+			animateGlowLight(cyanGlowLightRef.current)
 			const clusterCubes = clusterCubesRef.current?.childNodes
 			const singleCube = standaloneCubeRef.current?.childNodes
 			if (clusterCubes && Symbol.iterator in Object(clusterCubes)) {
 				clusterCubes.forEach((path: SVGPathElement) => {
-					if (!path.getAttribute('fill')) animatePath(path, '#22d3ee')
+					if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, '#22d3ee')
 				})
 			}
 			if (singleCube && Symbol.iterator in Object(singleCube)) {
 				singleCube.forEach((path: SVGPathElement) => {
-					if (!path.getAttribute('fill')) animatePath(path, '#22c55e')
+					if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, '#22c55e')
 				})
 			}
 
@@ -101,6 +109,7 @@ const BeamAnimated: React.FC = () => {
 					</g>
 					<g className='standalone-cube' ref={standaloneCubeRef}>
 						<path
+							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'
 							d='M573.798 105.165L573.684 96.2398L581.79 90.9291L590.029 96.0306L590.143 104.956L582.027 109.523L573.798 105.165Z'></path>
 						<path
@@ -170,6 +179,7 @@ const BeamAnimated: React.FC = () => {
 					<g className='cluster-cube' ref={clusterCubesRef}>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
+							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'></path>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
@@ -177,6 +187,7 @@ const BeamAnimated: React.FC = () => {
 							fillOpacity='0.5'></path>
 						<path
 							d='M110.272 103.431L110.1 96.4099L116.435 92.1574L122.971 96.0953L123.143 103.116L116.793 106.784L110.272 103.431Z'
+							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'></path>
 						<path
 							d='M110.272 103.431L110.1 96.4099L116.435 92.1574L122.971 96.0953L123.143 103.116L116.793 106.784L110.272 103.431Z'
@@ -184,6 +195,7 @@ const BeamAnimated: React.FC = () => {
 							fillOpacity='0.5'></path>
 						<path
 							d='M89.6627 103.976L89.491 96.9545L95.8263 92.7019L102.362 96.6398L102.533 103.661L96.1839 107.328L89.6627 103.976Z'
+							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'></path>
 						<path
 							d='M89.6627 103.976L89.491 96.9545L95.8263 92.7019L102.362 96.6398L102.533 103.661L96.1839 107.328L89.6627 103.976Z'
@@ -191,6 +203,7 @@ const BeamAnimated: React.FC = () => {
 							fillOpacity='0.5'></path>
 						<path
 							d='M99.4817 109.323L99.31 102.302L105.645 98.0495L112.181 101.987L112.352 109.008L106.003 112.676L99.4817 109.323Z'
+							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'></path>
 						<path
 							d='M99.4817 109.323L99.31 102.302L105.645 98.0495L112.181 101.987L112.352 109.008L106.003 112.676L99.4817 109.323Z'
@@ -202,25 +215,39 @@ const BeamAnimated: React.FC = () => {
 			<div
 				style={{ transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)' }}
 				className={cn(
-					'absolute top-1/2 z-20 grid aspect-square w-full place-content-center rounded-xl shadow-2xl',
-					'bg-secondary',
+					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl shadow-2xl ring-4 ring-border',
+					'rounded-lg bg-[linear-gradient(130deg,#e5e5e5,45%,#fafafa,55%,#e5e5e5)] bg-[length:100%_100%] dark:bg-[linear-gradient(120deg,#171717,45%,#404040,55%,#171717)]',
 					'left-[56%] sm:max-w-[140px]',
 					'left-[56%] md:max-w-[200px]',
 					'left-[52%] lg:max-w-[210px]',
 					'xl:left-[56%] xl:max-w-[210px] xl:-translate-x-1/2',
 					'-translate-y-1/2 xxl:left-[52%]'
 				)}>
-				<div
-					ref={logoRef}
-					className='flex aspect-square size-20 select-none flex-col items-center justify-center gap-y-4 rounded-lg bg-primary p-4 text-primary-foreground shadow-[4px_2px_4px_hsl(var(--secondary))] sm:size-14 sm:gap-y-2 sm:p-2 md:gap-y-3 md:p-4'>
-					<span className='h-6 text-center font-jetbrains text-xl font-semibold transition-none duration-0 sm:text-base md:text-lg'>
-						WMS
-					</span>
-					<Separator className='h-[3px] w-full bg-primary-foreground' />
+				<div className='relative grid h-full w-full flex-1 place-content-center'>
+					<div
+						ref={logoRef}
+						className='flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg border-2 border-muted-foreground bg-primary p-4 text-primary-foreground shadow-[4px_2px_4px_hsl(var(--secondary))] sm:size-14 sm:gap-y-2 sm:p-2 md:gap-y-3 md:p-4'>
+						<span className='h-6 text-center font-jetbrains text-xl font-semibold transition-none duration-0 sm:text-base md:text-lg xl:text-2xl'>
+							WMS
+						</span>
+						<Separator className='h-[3px] w-full bg-primary-foreground' />
+					</div>
 				</div>
 			</div>
-			<div className='absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[#22c55e] blur-[72px] will-change-[opacity] sm:right-0 sm:size-14 sm:blur-3xl md:right-[5%] lg:right-[25%] xl:right-[10%]' />
-			<div className='absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[#22d3ee] blur-[72px] will-change-[opacity] sm:left-0 sm:size-14 sm:blur-3xl md:left-[5%] lg:left-[25%] xl:left-[10%]' />
+			<div
+				ref={cyanGlowLightRef}
+				className={cn(
+					'absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[#22d3ee] opacity-0 blur-3xl will-change-[opacity] sm:left-0 sm:size-14 sm:blur-3xl md:left-[5%] lg:left-[25%] xl:left-[4%] xxl:left-[12%]',
+					'transition-opacity delay-700 duration-500 ease-out'
+				)}
+			/>
+			<div
+				ref={greenGlowLightRef}
+				className={cn(
+					'absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[#22c55e] opacity-0 blur-3xl will-change-[opacity] sm:right-0 sm:size-14 sm:blur-3xl md:right-[5%] lg:right-[25%] xl:right-[-4%] xxl:right-[6%]',
+					'transition-opacity delay-700 duration-500 ease-out'
+				)}
+			/>
 		</div>
 	)
 }

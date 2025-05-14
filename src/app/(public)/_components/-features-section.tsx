@@ -16,31 +16,33 @@ const FeaturesSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={ref}
-			className='relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 transition-opacity duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xxl:max-w-8xl'
+			className='relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 transition-opacity duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @container xxl:max-w-8xl'
 			id='outstanding-features'
 			as='section'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
-			<Div className='max-w-4xl space-y-1.5 text-left sm:text-center'>
+			<Div className='space-y-1.5 text-center sm:mb-4 sm:text-xl xl:text-left'>
 				<Typography
 					variant='small'
-					className='!text-base font-medium text-[var(--primary-alt)] sm:text-sm sm:font-normal'>
+					className='w-full !text-base font-medium text-[var(--primary-alt)] sm:text-sm sm:font-normal'>
 					No more paperwork
 				</Typography>
-				<Typography variant='h3' className='sm:mb-4 sm:text-xl'>
+				<Typography variant='h3' className='text-pretty'>
 					Comprehensive solutions for Warehouse Management
 				</Typography>
 			</Div>
 			<Div className='grid items-center gap-10 xl:grid-cols-2'>
-				<Div className='space-y-6'>
-					<BeamAnimated />
+				<Div className='space-y-8 sm:space-y-6 xl:space-y-10'>
+					<Div className='xl:-translate-x-12'>
+						<BeamAnimated />
+					</Div>
 					<Div className='flex flex-col space-y-3 text-center xl:text-left'>
 						<Typography as='h5' variant='h6'>
 							Outstanding Features
 						</Typography>
-						<Typography as='small' variant='small' color='muted' className='text-pretty xl:max-w-xl'>
+						<Typography color='muted' className='text-pretty xl:max-w-xl'>
 							i-WMS streamlines warehouse operations with advanced inventory management, order processing, and
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
