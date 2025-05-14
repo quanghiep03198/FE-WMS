@@ -120,6 +120,7 @@ export interface IMonthlyInventoryReport {
 	mo_no: string
 	order_qty: number
 	or_no: string
+	mat_ecolor: string
 	shoes_style_code_factory: string | null
 	cust_shoestyle: string
 	init_inv_qty: number

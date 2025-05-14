@@ -172,6 +172,16 @@ export const InventoryReportMasterTable: React.FC = () => {
 				},
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
+			columnHelper.accessor('mat_ecolor', {
+				header: t('ns_erp:fields.mat_ecolor'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				minSize: 100,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => {
+					return getValue() ?? 'Unknown'
+				}
+			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.mo_qty'),
 				enableColumnFilter: true,
