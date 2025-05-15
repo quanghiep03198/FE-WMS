@@ -24,7 +24,7 @@ const Navbar: React.FC<{ ref: RefObject<HTMLElement> }> = ({ ref }) => {
 				ref={ref}
 				as='header'
 				role='menubar'
-				className='sticky top-0 z-20 flex h-20 items-center bg-background px-6 sm:px-4'>
+				className='sticky top-0 z-20 flex h-[var(--header-height)] items-center bg-background px-6 sm:px-4'>
 				<Div
 					as='nav'
 					role='menu'

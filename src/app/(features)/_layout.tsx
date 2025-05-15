@@ -5,8 +5,8 @@ import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { Div, SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { useLocalStorageState, useSize } from 'ahooks'
-import { Fragment, useMemo, useRef } from 'react'
+import { useLocalStorageState } from 'ahooks'
+import { Fragment, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { USER_PROVIDE_TAG } from '../(auth)/_apis/auth.api'
 import { ErrorBoundaryFallback } from '../_components/_errors/-error-boundary-fallback'
@@ -32,29 +32,8 @@ function Layout() {
 		listenStorageChange: true
 	})
 
-	const containerRef = useRef<HTMLDivElement>(null)
 	const outletWrapperRef = useRef<HTMLDivElement>(null)
 	const headerRef = useRef<HTMLElement>(null)
-	const containerSize = useSize(containerRef)
-	const headerSize = useSize(headerRef)
-
-	const outletWrapperPaddingY = useMemo(() => {
-		if (outletWrapperRef.current) {
-			const computedStyle = window.getComputedStyle(outletWrapperRef.current)
-			const paddingTop = parseInt(computedStyle.paddingTop) || 0
-			const paddingBottom = parseInt(computedStyle.paddingBottom) || 0
-			return paddingTop + paddingBottom
-		}
-		return 0
-	}, [outletWrapperRef.current])
-
-	const headerHeight = useMemo(() => {
-		return headerSize ? headerSize.height + 'px' : '80px'
-	}, [headerSize])
-
-	const outletWrapperHeight = useMemo(() => {
-		return headerSize ? containerSize.height - headerSize.height - outletWrapperPaddingY + 'px' : 'calc(100vh-112px)'
-	}, [containerSize, headerSize, outletWrapperPaddingY])
 
 	useEffectOnce(() => {
 		if (document.body.classList.contains(font)) document.body.classList.remove(font)
@@ -65,14 +44,15 @@ function Layout() {
 		<Fragment>
 			{isSmallScreen && <UnsupportedScreen />}
 			<AuthGuard>
-				<SidebarProvider className='relative !h-screen overflow-y-scroll' ref={containerRef}>
+				<SidebarProvider className='relative !h-screen overflow-y-scroll'>
 					<NavSidebar />
 					<Div
 						className='flex-1 @container'
 						style={
 							{
-								'--header-height': headerHeight,
-								'--outlet-wrapper-height': outletWrapperHeight
+								'--header-height': 80 + 'px',
+								'--outlet-padding-bottom': 24 + 'px',
+								'--outlet-wrapper-height': window.innerHeight - 104 + 'px'
 							} as React.CSSProperties
 						}>
 						<BreadcrumbProvider>
@@ -80,7 +60,7 @@ function Layout() {
 							<Div
 								as='main'
 								id='outlet-wrapper'
-								className='flex-1 basis-full px-6 pb-6 [view-transition-name:main-content] sm:px-4'
+								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] [view-transition-name:main-content] sm:px-4'
 								ref={outletWrapperRef}>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
