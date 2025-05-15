@@ -36,7 +36,7 @@ const RFIDDeviceList: React.FC = () => {
 										<Typography variant='small' className='font-medium'>
 											{device?.device_name}
 										</Typography>
-										<Typography variant='small' color='muted'>
+										<Typography variant='small' color='muted' className='block'>
 											{device?.device_sn}
 										</Typography>
 									</Div>

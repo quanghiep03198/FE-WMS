@@ -16,7 +16,7 @@ const SettingPanel: React.FC = () => {
 				<SwitchBox.Wrapper>
 					<SwitchBox.TitleWrapper>
 						<Label htmlFor='toggle-fullscreen'>{t('ns_inoutbound:scanner_setting.toggle_fullscreen')}</Label>
-						<Typography variant='small' color='muted' className='text-pretty'>
+						<Typography variant='small' color='muted' className='block text-pretty'>
 							{t('ns_inoutbound:scanner_setting.toggle_fullscreen_note')}
 						</Typography>
 					</SwitchBox.TitleWrapper>

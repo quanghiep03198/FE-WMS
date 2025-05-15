@@ -4,8 +4,7 @@ import { Div, Table } from '@/components/ui'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useResetState } from 'ahooks'
 import { sortBy } from 'lodash'
-import { useCallback, useMemo, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useMemo, useRef } from 'react'
 import { usePageContext } from '../../_contexts/-page-context'
 import { OrderItem } from '../../_types'
 import TableBody from './-order-detail-body'
@@ -15,7 +14,6 @@ import TableHeader from './-order-detail-header'
 import TableLoading from './-order-detail-loading'
 
 const OrderSizeDetailTable: React.FC = () => {
-	const { t } = useTranslation()
 	const { scanningState, scannedOrders } = usePageContext('scanningState', 'scannedOrders')
 	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>({
 		mo_no: '',
@@ -63,11 +61,10 @@ const OrderSizeDetailTable: React.FC = () => {
 		overscan: 0,
 		getScrollElement: () => containerRef.current,
 		useAnimationFrameWithResizeObserver: false,
-
-		estimateSize: useCallback(() => 75, []),
+		estimateSize: useMemoizedFn(() => 75),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useCallback((element) => element?.getBoundingClientRect().height, [])
+				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
 				: undefined,
 		scrollToFn
 	})

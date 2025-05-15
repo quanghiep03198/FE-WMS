@@ -95,7 +95,7 @@ const SyncDataTrigger: React.FC = () => {
 								</button>
 							</Tooltip>
 						</Typography>
-						<Typography variant='small' color='muted' className='text-pretty'>
+						<Typography variant='small' color='muted' className='block text-pretty'>
 							{t('ns_inoutbound:scanner_setting.synchronization_trigger_description')}
 						</Typography>
 					</Div>

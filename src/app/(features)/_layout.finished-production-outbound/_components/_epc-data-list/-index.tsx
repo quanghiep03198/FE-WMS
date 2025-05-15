@@ -13,7 +13,7 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash'
 import { useCallback, useRef, useState, useTransition } from 'react'
@@ -173,7 +173,7 @@ const ScannedEpcList: React.FC = () => {
 		estimateSize: useCallback(() => VIRTUAL_ITEM_SIZE, []),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? (element) => element?.getBoundingClientRect().height
+				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
 				: undefined,
 		overscan: PRERENDERED_ITEMS
 	})
