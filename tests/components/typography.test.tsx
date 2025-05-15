@@ -4,16 +4,19 @@ import { render } from '@testing-library/react'
 describe('Typography Component', () => {
 	it('renders correctly with default props', () => {
 		const { container } = render(<Typography>Default Text</Typography>)
+		expect(container.firstChild?.nodeName).toBe('P')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with primary color', () => {
 		const { container } = render(<Typography color='primary'>Primary Text</Typography>)
+		expect(container.firstChild).toHaveClass('text-primary')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with custom element', () => {
 		const { container } = render(<Typography as='span'>Span Text</Typography>)
+		expect(container.firstChild?.nodeName).toBe('SPAN')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
@@ -23,6 +26,7 @@ describe('Typography Component', () => {
 				Accent Heading 2
 			</Typography>
 		)
+		expect(container.firstChild?.nodeName).toBe('H2')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
@@ -38,21 +42,31 @@ describe('Typography Component', () => {
 
 	it('renders correctly with h1 variant', () => {
 		const { container } = render(<Typography variant='h1'>Heading 1</Typography>)
+		expect(container.firstChild?.nodeName).toBe('H1')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with h2 variant', () => {
 		const { container } = render(<Typography variant='h2'>Heading 2</Typography>)
+		expect(container.firstChild?.nodeName).toBe('H2')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with h3 variant', () => {
 		const { container } = render(<Typography variant='h3'>Heading 3</Typography>)
+		expect(container.firstChild?.nodeName).toBe('H3')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with h4 variant', () => {
 		const { container } = render(<Typography variant='h4'>Heading 4</Typography>)
+		expect(container.firstChild?.nodeName).toBe('H4')
+		expect(container.firstChild).toMatchSnapshot()
+	})
+
+	it('renders correctly with small variant', () => {
+		const { container } = render(<Typography variant='small'>Small Text</Typography>)
+		expect(container.firstChild?.nodeName).toBe('SMALL')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 })

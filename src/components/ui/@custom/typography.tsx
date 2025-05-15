@@ -42,12 +42,12 @@ export const typographyVariants = cva('', {
 })
 
 export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) => {
-	const { as = 'p', className, children, color, variant, ...restProps } = props
+	const { as, className, children, color, variant = 'default', ...restProps } = props
 
 	const localRef = useRef(null)
 	const resolvedRef = ref ?? localRef
 
-	const Element = !variant || variant === 'default' || as ? as : (variant as React.ElementType)
+	const Element: React.ElementType = as || (variant === 'default' ? 'p' : variant)
 
 	return (
 		<Element ref={resolvedRef} className={cn(typographyVariants({ variant, color, className }))} {...restProps}>
