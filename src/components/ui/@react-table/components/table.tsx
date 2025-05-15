@@ -2,8 +2,8 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useSize } from 'ahooks'
-import { useCallback, useId, useMemo, useRef } from 'react'
+import { useMemoizedFn, useSize } from 'ahooks'
+import { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
 import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
@@ -30,7 +30,7 @@ function TableDataGrid<TData, TValue>({
 	loading,
 	virtualizerOptions = {
 		estimateSize: 40,
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 10
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5
 	},
 	renderSubComponent
 }: TableProps<TData, TValue>) {
@@ -50,10 +50,10 @@ function TableDataGrid<TData, TValue>({
 			isScrolling.current = instance.isScrolling
 		},
 		getScrollElement: () => containerRef.current,
-		estimateSize: useCallback(() => virtualizerOptions.estimateSize, []),
+		estimateSize: useMemoizedFn(() => virtualizerOptions.estimateSize),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useCallback((element) => element?.getBoundingClientRect().height, [])
+				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
 				: undefined,
 		scrollToFn
 	})
