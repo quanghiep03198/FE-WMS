@@ -9,9 +9,9 @@ const BeamAnimated: React.FC = () => {
 	const clusterCubesRef = useRef<SVGPathElement>(null)
 	const standaloneCubeRef = useRef<SVGPathElement>(null)
 	const greenPathRef = useRef<SVGPathElement>(null)
-	const cyanPathRef = useRef<SVGPathElement>(null)
+	const yellowPathRef = useRef<SVGPathElement>(null)
 	const greenGlowLightRef = useRef<HTMLDivElement>(null)
-	const cyanGlowLightRef = useRef<HTMLDivElement>(null)
+	const yellowGlowLightRef = useRef<HTMLDivElement>(null)
 	const logoRef = useRef<HTMLDivElement>(null)
 	const pageContext = usePageContext()
 	const [inViewport] = useInViewport(containerRef, {
@@ -22,7 +22,7 @@ const BeamAnimated: React.FC = () => {
 	const animatePath = (path: SVGPathElement, color: string) => {
 		if (!path) return
 
-		path.style.transition = 'stroke 1s ease-out 0.5s, fill 1s ease-out 0.5s'
+		path.style.transition = 'stroke 1s ease-out 0.75s, fill 1s ease-out 0.75s'
 		path.style.fill = 'transparent'
 		path.style.stroke = 'transparent'
 
@@ -34,7 +34,7 @@ const BeamAnimated: React.FC = () => {
 
 	const animateGlowLight = (el: HTMLDivElement) => {
 		if (!el) return
-		el.style.transition = 'opacity 0.5s ease-out 0.5s'
+		el.style.transition = 'opacity 0.5s ease-out 0.25s'
 		el.style.opacity = '0'
 		requestAnimationFrame(() => {
 			el.style.opacity = '1'
@@ -43,21 +43,21 @@ const BeamAnimated: React.FC = () => {
 
 	const animateLogo = () => {
 		requestAnimationFrame(() => {
-			logoRef.current.style.transition = 'transform 0.35s ease-out 1s, box-shadow 0.5s ease-out 1s'
-			logoRef.current.style.boxShadow = '12px 12px 18px #0a0a0a'
-			logoRef.current.style.transform = 'translate(-8px,-8px) scale(1.035)'
+			logoRef.current.style.transition = 'transform 0.25s linear 1.25s, box-shadow 0.25s ease-out 1.25s'
+			logoRef.current.style.boxShadow = '16px 16px 16px #0a0a0a98'
+			logoRef.current.style.transform = 'translate(-8px,-8px) scale(1.05)'
 		})
 	}
 
 	useEffect(() => {
 		if (inViewport) {
 			animateGlowLight(greenGlowLightRef.current)
-			animateGlowLight(cyanGlowLightRef.current)
+			animateGlowLight(yellowGlowLightRef.current)
 			const clusterCubes = clusterCubesRef.current?.childNodes
 			const singleCube = standaloneCubeRef.current?.childNodes
 			if (clusterCubes && Symbol.iterator in Object(clusterCubes)) {
 				clusterCubes.forEach((path: SVGPathElement) => {
-					if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, '#22d3ee')
+					if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, '#eab308')
 				})
 			}
 			if (singleCube && Symbol.iterator in Object(singleCube)) {
@@ -66,18 +66,9 @@ const BeamAnimated: React.FC = () => {
 				})
 			}
 
-			const timerPath = setTimeout(() => {
-				animatePath(greenPathRef.current, '#22c55e')
-				animatePath(cyanPathRef.current, '#22d3ee')
-			}, 750)
-			const timerLogo = setTimeout(() => {
-				animateLogo()
-			}, 1000)
-
-			return () => {
-				clearTimeout(timerPath)
-				clearTimeout(timerLogo)
-			}
+			animatePath(greenPathRef.current, '#22c55e')
+			animatePath(yellowPathRef.current, '#eab308')
+			animateLogo()
 		}
 	}, [inViewport])
 
@@ -127,7 +118,7 @@ const BeamAnimated: React.FC = () => {
 						stroke='hsl(var(--border))'
 						strokeWidth='1.2'></path>
 					<path
-						ref={cyanPathRef}
+						ref={yellowPathRef}
 						className='cyan-chip__connection duration-500 animate-in'
 						strokeDashoffset={0}
 						fillRule='evenodd'
@@ -213,10 +204,13 @@ const BeamAnimated: React.FC = () => {
 				</g>
 			</svg>
 			<div
-				style={{ transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)' }}
+				style={{
+					transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)',
+					boxShadow: '12px 12px 18px #0a0a0a50'
+				}}
 				className={cn(
-					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl shadow-2xl ring-4 ring-border',
-					'rounded-lg bg-[linear-gradient(130deg,#e5e5e5,45%,#fafafa,55%,#e5e5e5)] bg-[length:100%_100%] dark:bg-[linear-gradient(120deg,#171717,45%,#404040,55%,#171717)]',
+					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-900',
+					'rounded-lg bg-[linear-gradient(130deg,#e5e5e5,45%,#fafafa,55%,#e5e5e5)] bg-[length:100%_100%] dark:bg-[linear-gradient(125deg,#262626,45%,#525252,55%,#262626)]',
 					'left-[56%] sm:max-w-[140px]',
 					'left-[56%] md:max-w-[200px]',
 					'left-[52%] lg:max-w-[210px]',
@@ -230,14 +224,14 @@ const BeamAnimated: React.FC = () => {
 						<span className='h-6 text-center font-jetbrains text-xl font-semibold transition-none duration-0 sm:text-base md:text-lg xl:text-2xl'>
 							WMS
 						</span>
-						<Separator className='h-[3px] w-full bg-primary-foreground' />
+						<Separator className='h-[6px] w-full bg-primary-foreground' />
 					</div>
 				</div>
 			</div>
 			<div
-				ref={cyanGlowLightRef}
+				ref={yellowGlowLightRef}
 				className={cn(
-					'absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[#22d3ee] opacity-0 blur-3xl will-change-[opacity] sm:left-0 sm:size-14 sm:blur-3xl md:left-[5%] lg:left-[25%] xl:left-[4%] xxl:left-[12%]',
+					'absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[#eab308] opacity-0 blur-3xl will-change-[opacity] sm:left-0 sm:size-14 sm:blur-3xl md:left-[5%] lg:left-[25%] xl:left-[8%] xxl:left-[12%]',
 					'transition-opacity delay-700 duration-500 ease-out'
 				)}
 			/>
