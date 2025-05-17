@@ -24,8 +24,14 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: The
 
 	useEffect(() => {
 		const root = window.document.documentElement
+		root.classList.add('no-transition')
+
 		root.classList.remove(Theme.DARK, Theme.LIGHT)
 		root.classList.add(theme as Theme)
+
+		requestAnimationFrame(() => {
+			root.classList.remove('no-transition')
+		})
 	}, [theme])
 
 	return (

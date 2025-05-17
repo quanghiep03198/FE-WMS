@@ -216,4 +216,9 @@
 }
 
 @layer utilities {
+	.no-transition *,
+	.no-transition *::before,
+	.no-transition *::after {
+		transition: none !important;
+	}
 }

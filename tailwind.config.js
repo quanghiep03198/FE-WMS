@@ -256,6 +256,26 @@ module.exports = {
 					to: {
 						opacity: '1'
 					}
+				},
+				['rotate-in']: {
+					from: {
+						opacity: '0',
+						transform: 'rotate(45deg)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'rotate(0deg)'
+					}
+				},
+				['rotate-in-reverse']: {
+					from: {
+						opacity: '0',
+						transform: 'rotate(-45deg)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'rotate(0deg)'
+					}
 				}
 			},
 			animation: {
