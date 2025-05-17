@@ -27,16 +27,19 @@ describe('Typography Component', () => {
 			</Typography>
 		)
 		expect(container.firstChild?.nodeName).toBe('H2')
+		expect(container.firstChild).toHaveClass('text-accent')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with success color', () => {
 		const { container } = render(<Typography color='success'>Success Text</Typography>)
+		expect(container.firstChild).toHaveClass('text-success')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
 	it('renders correctly with destructive color', () => {
 		const { container } = render(<Typography color='destructive'>Destructive Text</Typography>)
+		expect(container.firstChild).toHaveClass('text-destructive')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 
@@ -67,6 +70,18 @@ describe('Typography Component', () => {
 	it('renders correctly with small variant', () => {
 		const { container } = render(<Typography variant='small'>Small Text</Typography>)
 		expect(container.firstChild?.nodeName).toBe('SMALL')
+		expect(container.firstChild).toMatchSnapshot()
+	})
+
+	it('renders correctly with blockquote variant', () => {
+		const { container } = render(<Typography variant='blockquote'>Quote</Typography>)
+		expect(container.firstChild?.nodeName).toBe('BLOCKQUOTE')
+		expect(container.firstChild).toMatchSnapshot()
+	})
+
+	it('renders correctly with code variant', () => {
+		const { container } = render(<Typography variant='code'>Code</Typography>)
+		expect(container.firstChild?.nodeName).toBe('CODE')
 		expect(container.firstChild).toMatchSnapshot()
 	})
 })
