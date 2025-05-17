@@ -4,6 +4,7 @@ export type IconProps = {
 	name: keyof typeof icons
 	color?: string
 	size?: number
+	ref?: React.RefAttributes<SVGSVGElement>
 } & React.HTMLAttributes<HTMLOrSVGElement> &
 	LucideProps
 
