@@ -10,6 +10,13 @@ const CTASection: React.FC = () => {
 	const pageContext = usePageContext()
 	const { theme } = useTheme()
 
+	const outstandingFeatures = [
+		'Friendly UI/UX',
+		'Real-time data streaming',
+		'Automated Inbound, Outbound & Auditing Process',
+		'Powerful analytics and reporting'
+	]
+
 	return (
 		<Div
 			id='cta'
@@ -26,41 +33,24 @@ const CTASection: React.FC = () => {
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
-				<Typography variant='h3' className='mb-4 max-w-xl text-pretty leading-tight sm:text-xl lg:max-w-full'>
+				<Typography variant='h2' className='mb-4 max-w-xl text-pretty lg:max-w-full'>
 					Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
 				</Typography>
 				<Typography
 					variant='p'
-					className='mx-auto mb-6 max-w-4xl text-pretty leading-relaxed tracking-wide sm:text-sm xl:max-w-6xl'>
-					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS . Our
+					className='mx-auto mb-6 max-w-4xl text-pretty leading-relaxed tracking-wide xl:max-w-6xl xl:text-lg'>
+					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 					comprehensive system provides the tools you need to manage your warehouse effortlessly.
 				</Typography>
-
 				<List className='mb-12 hidden grid-cols-1 gap-x-10 xl:grid'>
-					<ListItem>
-						<Icon name='Check' size={18} />{' '}
-						<Typography as='span' className='flex-1'>
-							Real-time data streaming
-						</Typography>
-					</ListItem>
-					<ListItem>
-						<Icon name='Check' size={18} />{' '}
-						<Typography as='span' className='flex-1'>
-							Friendly UI/UX
-						</Typography>
-					</ListItem>
-					<ListItem>
-						<Icon name='Check' size={18} />
-						<Typography as='span' className='flex-1'>
-							Automated Inbound, Outbound & Auditing Process
-						</Typography>
-					</ListItem>
-					<ListItem>
-						<Icon name='Check' size={18} />{' '}
-						<Typography as='span' className='flex-1'>
-							Powerful analytics and reporting
-						</Typography>
-					</ListItem>
+					{outstandingFeatures.map((feature, index) => (
+						<ListItem key={index.toString()}>
+							<Icon name='Check' size={18} />{' '}
+							<Typography as='span' className='flex-1'>
+								{feature}
+							</Typography>
+						</ListItem>
+					))}
 				</List>
 
 				<Div className='hidden items-center justify-center gap-x-1 xl:flex'>
@@ -77,34 +67,17 @@ const CTASection: React.FC = () => {
 				</Div>
 			</Div>
 			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-y-10 lg:gap-x-12 xl:gap-y-0'>
-				{/* <Image loading='eager' width='500' height='500' src='/global-transport.svg' alt='Global transport' /> */}
 				<Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
 				<Div className='block space-y-10 lg:space-y-12 xl:hidden'>
-					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:-translate-x-8'>
-						<ListItem>
-							<Icon name='Check' size={20} />{' '}
-							<Typography as='span' className='flex-1'>
-								Real-time data streaming
-							</Typography>
-						</ListItem>
-						<ListItem>
-							<Icon name='Check' size={20} />{' '}
-							<Typography as='span' className='flex-1'>
-								Friendly UI/UX
-							</Typography>
-						</ListItem>
-						<ListItem>
-							<Icon name='Check' size={20} />{' '}
-							<Typography as='span' className='flex-1'>
-								Automated Inbound, Outbound & Auditing Process
-							</Typography>
-						</ListItem>
-						<ListItem>
-							<Icon name='Check' size={20} />{' '}
-							<Typography as='span' className='flex-1'>
-								Powerful analytics and reporting
-							</Typography>
-						</ListItem>
+					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-1 md:gap-x-6 lg:-translate-x-8'>
+						{outstandingFeatures.map((feature, index) => (
+							<ListItem key={index.toString()}>
+								<Icon name='Check' size={18} />{' '}
+								<Typography as='span' className='flex-1'>
+									{feature}
+								</Typography>
+							</ListItem>
+						))}
 					</List>
 					<Div className='flex items-center justify-start gap-x-1 md:justify-center'>
 						<Link to='/login' className={cn(buttonVariants())}>
@@ -126,7 +99,6 @@ const CTASection: React.FC = () => {
 
 const List = tw.ul`grid gap-y-2 mb-8 sm:gap-y-2`
 const ListItem = tw.li`flex items-center gap-x-2 text-muted-foreground [&>svg]:text-foreground [&>svg]:min-w-6 whitespace-nowrap text-left`
-
-const Image = tw.img`w-full max-w-lg md:max-w-md lg:max-w-xl sm:max-w-sm xl:max-w-xl xxl:max-w-3xl flex-1`
+const Image = tw.img`w-full max-w-lg md:max-w-md lg:max-w-xl sm:max-w-sm xl:max-w-3xl xxl:max-w-3xl flex-1`
 
 export default CTASection

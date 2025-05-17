@@ -5,7 +5,9 @@ import tw from 'tailwind-styled-components'
 const LogoCloud: React.FC = () => {
 	return (
 		<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center py-20 xxl:max-w-8xl'>
-			<Typography className='font-medium lg:text-left xl:text-xl'>Built with open-source technologies</Typography>
+			<Typography className='font-medium lg:text-left xl:text-xl'>
+				Developed with trusted open-source technologies
+			</Typography>
 			<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
 				<LogoList />
 				{/* Clone element for infinite scroll effect */}

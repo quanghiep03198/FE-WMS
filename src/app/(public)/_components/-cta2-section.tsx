@@ -31,12 +31,12 @@ const CTA2Section: React.FC = () => {
 					<Typography variant='small' className='font-jetbrains text-[var(--primary-alt)]'>
 						EDGE DEPLOYMENT
 					</Typography>
-					<Typography variant='h3' className='text-pretty sm:text-lg'>
+					<Typography variant='h2' className='text-pretty'>
 						High Availability at our factories across Asia
 					</Typography>
-					<Typography className='leading-relaxed tracking-wide sm:text-sm'>
+					<Typography className='leading-relaxed xl:text-lg'>
 						Our app is designed to provide exceptional reliability and performance at factories throughout Asia.
-						Ensure seamless operations and robust connectivity where it’s needed most—empower your facilities
+						Ensure seamless operations and robust connectivity where it is needed most—empower your facilities
 						today
 					</Typography>
 				</Div>

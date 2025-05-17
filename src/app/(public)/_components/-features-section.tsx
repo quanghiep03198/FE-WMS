@@ -13,6 +13,32 @@ const FeaturesSection: React.FunctionComponent = () => {
 		threshold: 0.5
 	})
 
+	const features: Array<{ icon: React.ComponentProps<typeof Icon>['name']; name: string; description: string }> = [
+		{
+			icon: 'Warehouse',
+			name: 'Inventory Tracking and Control',
+			description:
+				'i-WMS can help warehouse managers keep track of inventory levels, locations, and movement within the warehouse, ensuring optimal stock levels and minimizing stockouts.'
+		},
+		{
+			icon: 'ScanBarcode',
+			name: 'Barcode and RFID Integration',
+			description:
+				'Enhance inventory tracking with barcode scanning and RFID integration for better visibility, faster scanning, and precise data capture, ensuring effective inventory management.'
+		},
+		{
+			icon: 'FileText',
+			name: 'Reporting and Analytics',
+			description:
+				'i-WMS provides customizable reports and real-time analytics, enabling managers to monitor performance, identify bottlenecks, and make data-driven decisions to enhance warehouse operations.'
+		},
+		{
+			icon: 'Languages',
+			name: 'Multi-Language Support',
+			description: /* template */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
+		}
+	]
+
 	return (
 		<Div
 			ref={ref}
@@ -29,8 +55,8 @@ const FeaturesSection: React.FunctionComponent = () => {
 					className='w-full !text-base font-medium text-[var(--primary-alt)] sm:text-sm sm:font-normal'>
 					No more paperwork
 				</Typography>
-				<Typography variant='h3' className='text-pretty'>
-					Comprehensive solutions for Warehouse Management
+				<Typography variant='h2' className='text-pretty'>
+					Comprehensive solutions for <br className='hidden lg:block' /> Warehouse Management
 				</Typography>
 			</Div>
 			<Div className='grid items-center gap-10 xl:grid-cols-2'>
@@ -39,79 +65,37 @@ const FeaturesSection: React.FunctionComponent = () => {
 						<BeamAnimated />
 					</Div>
 					<Div className='flex flex-col space-y-3 text-center xl:text-left'>
-						<Typography as='h5' variant='h6'>
-							Outstanding Features
-						</Typography>
-						<Typography color='muted' className='text-pretty xl:max-w-xl'>
+						<Typography variant='h4'>Outstanding Features</Typography>
+						<Typography color='muted' className='text-pretty'>
 							i-WMS streamlines warehouse operations with advanced inventory management, order processing, and
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
 					</Div>
 				</Div>
 				<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
-					<EffectCard>
-						<EffectCardIconWrapper>
-							<EffectCardIcon
-								name='Warehouse'
-								className='group-hover/card:stroke-success'
-								strokeWidth={1.5}
-								size={24}
-							/>
-						</EffectCardIconWrapper>
-						<EffectCardContent>
-							<Typography className='font-medium'>Inventory Tracking and Control</Typography>
-							<Typography variant='small' color='muted' className='text-pretty'>
-								i-WMS can help warehouse managers keep track of inventory levels, locations, and movement within
-								the warehouse, ensuring optimal stock levels and minimizing stockouts.
-							</Typography>
-						</EffectCardContent>
-					</EffectCard>
-					<EffectCard>
-						<EffectCardIconWrapper>
-							<EffectCardIcon
-								name='ScanBarcode'
-								className='group-hover/feat:stroke-success'
-								strokeWidth={1.5}
-								size={24}
-							/>
-						</EffectCardIconWrapper>
-						<EffectCardContent>
-							<Typography className='font-medium'>Barcode and RFID Integration</Typography>
-							<Typography variant='small' color='muted' className='text-pretty'>
-								Enhance inventory tracking with barcode scanning and RFID integration for better visibility,
-								faster scanning, and precise data capture, ensuring effective inventory management.
-							</Typography>
-						</EffectCardContent>
-					</EffectCard>
-					<EffectCard>
-						<EffectCardIconWrapper>
-							<EffectCardIcon name='FileText' strokeWidth={1.5} size={24} />
-						</EffectCardIconWrapper>
-						<EffectCardContent>
-							<Typography className='font-medium'>Reporting and Analytics</Typography>
-							<Typography variant='small' color='muted' className='text-pretty'>
-								i-WMS provides customizable reports and real-time analytics, enabling managers to monitor
-								performance, identify bottlenecks, and make data-driven decisions to enhance warehouse
-								operations.
-							</Typography>
-						</EffectCardContent>
-					</EffectCard>
-					<EffectCard>
-						<EffectCardIconWrapper>
-							<EffectCardIcon name='Languages' strokeWidth={1.5} size={24} />
-						</EffectCardIconWrapper>
-						<EffectCardContent>
-							<Typography className='font-medium'>Multi-Language Support</Typography>
-							<Typography
-								variant='small'
-								color='muted'
-								className='text-pretty'
-								dangerouslySetInnerHTML={{
-									__html: /* html */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
-								}}
-							/>
-						</EffectCardContent>
-					</EffectCard>
+					{features.map((feature, index) => (
+						<EffectCard key={index.toString()}>
+							<EffectCardIconWrapper>
+								<EffectCardIcon
+									name={feature.icon}
+									className='group-hover/card:stroke-success'
+									strokeWidth={1.5}
+									size={24}
+								/>
+							</EffectCardIconWrapper>
+							<EffectCardContent>
+								<Typography className='font-medium'>{feature.name}</Typography>
+								<Typography
+									variant='small'
+									color='muted'
+									className='text-pretty'
+									dangerouslySetInnerHTML={{
+										__html: /* html */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
+									}}
+								/>
+							</EffectCardContent>
+						</EffectCard>
+					))}
 				</Div>
 			</Div>
 		</Div>
@@ -123,8 +107,8 @@ const EffectCard = tw(
 )<DivProps>`bg-background h-full border p-6 sm:p-4 hover:duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-lg sm:flex-row hover:shadow-[0_0px_16px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_0px_16px_var(--primary-alt)]`
 const EffectCardIconWrapper = tw(
 	Div
-)<DivProps>`inline-flex aspect-square size-12 min-w-12 items-center justify-center rounded-md bg-secondary`
+)<DivProps>`inline-flex aspect-square size-12 mb-2 min-w-12 items-center justify-center rounded-md bg-secondary`
 const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-[var(--primary-alt)] duration-200 transition-colors`
-const EffectCardContent = tw(Div)`z-10 space-y-2`
+const EffectCardContent = tw(Div)`z-10 flex flex-col space-y-1.5`
 
 export default FeaturesSection

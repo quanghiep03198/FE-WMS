@@ -34,10 +34,10 @@ const SupportSection: React.FunctionComponent = () => {
 					animationPlayState: inViewport ? 'running' : 'paused'
 				}}>
 				<Div className='space-y-3 text-left'>
-					<Typography variant='h3' className='sm:text-center sm:text-xl'>
+					<Typography variant='h2' className='sm:text-center sm:text-xl'>
 						Contact support
 					</Typography>
-					<Typography variant='p' className='text-pretty sm:text-center sm:text-sm xl:text-lg'>
+					<Typography variant='p' className='text-pretty sm:text-center xl:text-lg'>
 						If you encounter any issues while using the application, don&apos;t hesitate to reach out for
 						assistance.
 					</Typography>

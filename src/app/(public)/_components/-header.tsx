@@ -50,7 +50,7 @@ const NavHeaderMenu: React.FC = () => {
 	const pageContext = usePageContext()
 
 	return (
-		<Div className='flex flex-1 items-center justify-center gap-x-2 rounded-full text-sm sm:hidden md:hidden'>
+		<Div className='flex flex-1 items-center justify-center gap-x-1 rounded-full text-sm sm:hidden md:hidden'>
 			{navigationConfig.map((item, index) => (
 				<Button
 					variant='link'

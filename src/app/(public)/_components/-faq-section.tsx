@@ -67,9 +67,7 @@ const FAQsSection: React.FunctionComponent = () => {
 				id='faqs'
 				as='section'
 				className='w-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
-				<Typography variant='h3' className='sm:text-xl'>
-					Frequently asked questions
-				</Typography>
+				<Typography variant='h2'>Frequently asked questions</Typography>
 				<Accordion type='multiple'>
 					{faqs.map((faq, index) => (
 						<AccordionItem key={index} value={index.toString()}>

@@ -34,11 +34,11 @@ const Footer: React.FC = () => {
 						</ul>
 					</Div>
 					<Separator className='hidden sm:block' />
-					<Div className='basis-2/5 space-y-2 sm:basis-full md:basis-full'>
+					<Div className='basis-2/5 space-y-1.5 sm:basis-full md:basis-full'>
 						<Label htmlFor='subscribe' className='text-lg'>
 							Subscribe to our updates
 						</Label>
-						<Typography variant='small' color='muted' className='!mb-6 w-full max-w-96'>
+						<Typography variant='small' color='muted' className='!mb-6 block w-full max-w-96'>
 							The latest updates, release, and resources from developer team, sent to your inbox weekly.
 						</Typography>
 						<form className='flex items-center gap-x-2'>
