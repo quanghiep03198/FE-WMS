@@ -31,8 +31,8 @@ const ThemeToggle: React.FC<
 					name={darkTheme ? 'Moon' : 'Sun'}
 					className={
 						darkTheme
-							? 'animate-[rotate-in-reverse_0.25s_ease-out_1_forwards]'
-							: 'animate-[rotate-in_0.25s_ease-out_1_forwards]'
+							? 'animate-[rotate-in-reverse_0.25s_ease-out_forwards]'
+							: 'animate-[rotate-in_0.25s_ease-out_forwards]'
 					}
 				/>
 			</Button>
