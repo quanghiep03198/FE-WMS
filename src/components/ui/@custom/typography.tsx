@@ -1,23 +1,24 @@
 import { cn } from '@/common/utils/cn'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { forwardRef, useRef } from 'react'
+import { useRef } from 'react'
 
 export type TypographyProps = {
 	as?: React.ElementType
+	ref?: React.RefObject<HTMLElement>
 } & React.HTMLAttributes<HTMLElement> &
 	VariantProps<typeof typographyVariants> &
 	React.PropsWithChildren
 
-export const typographyVariants = cva('', {
+export const typographyVariants = cva('font-sans', {
 	variants: {
 		variant: {
 			default: 'text-base tracking-tight text-inherit',
-			h1: 'text-6xl sm:text-5xl scroll-m-20 font-bold tracking-tight',
-			h2: 'text-5xl sm:text-4xl font-bold scroll-m-20 tracking-tight',
-			h3: 'text-4xl sm:text-3xl font-bold tracking-tight scroll-m-20',
-			h4: 'text-3xl sm:text-2xl font-semibold tracking-tight scroll-m-20',
-			h5: 'text-2xl sm:text-xl font-semibold tracking-tight scroll-m-20',
-			h6: 'text-xl sm:text-lg font-semibold',
+			h1: 'text-5xl md:text-4xl sm:text-4xl scroll-m-20 font-bold tracking-tight leading-tight',
+			h2: 'text-4xl md:text-3xl sm:text-3xl font-bold scroll-m-20 tracking-tight leading-tight',
+			h3: 'text-3xl md:text-2xl sm:text-2xl font-bold tracking-tight scroll-m-20 leading-tight',
+			h4: 'text-2xl md:text-xl sm:text-xl font-semibold tracking-tight scroll-m-20',
+			h5: 'text-xl md:text-lg sm:text-lg font-semibold tracking-tight scroll-m-20',
+			h6: 'text-lg md:text-base sm:text-base font-semibold',
 			p: 'leading-7',
 			code: 'leading-7 font-mono',
 			blockquote: 'mt-6 border-l-2 pl-6 italic',
@@ -41,7 +42,7 @@ export const typographyVariants = cva('', {
 	}
 })
 
-export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) => {
+export const Typography: React.FC<TypographyProps> = ({ ref, ...props }) => {
 	const { as, className, children, color, variant = 'default', ...restProps } = props
 
 	const localRef = useRef(null)
@@ -54,6 +55,6 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>((props, ref) 
 			{children}
 		</Element>
 	)
-})
+}
 
 Typography.displayName = 'Typography'
