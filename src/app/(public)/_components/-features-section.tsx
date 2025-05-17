@@ -90,7 +90,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 									color='muted'
 									className='text-pretty'
 									dangerouslySetInnerHTML={{
-										__html: /* html */ `i-WMS supports multiple languages including <b>English</b>, <b>Vietnamese</b> and <b>Chinese</b>, allowing users to interact with the system in their preferred language.`
+										__html: feature.description
 									}}
 								/>
 							</EffectCardContent>
