@@ -190,17 +190,25 @@ module.exports = {
 						width: 0
 					}
 				},
-				['fly-in-out']: {
+				['smoke']: {
 					'0%': {
-						transform: 'translateY(1.5rem)',
+						transform: 'translateY(1rem)',
 						opacity: 0
 					},
-					'40%': {
-						transform: 'translateY(0)',
+					'25%': {
+						transform: 'translateY(0rem)',
+						opacity: 0.5
+					},
+					'50%': {
+						transform: 'translateY(-1rem)',
 						opacity: 1
 					},
+					'75%': {
+						transform: 'translateY(-2rem)',
+						opacity: 0.5
+					},
 					'100%': {
-						transform: 'translateY(-1.5rem)',
+						transform: 'translateY(-3rem)',
 						opacity: 0
 					}
 				},
@@ -287,7 +295,6 @@ module.exports = {
 				['collapsible-down-reverse']: 'collapsible-down-reverse 0.2s ease-out',
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
-				['fly-in-out']: 'fly-in-out 1s linear',
 				['fall-down']: 'fall-down 1s linear',
 				['scrolling']: 'scrolling 10s linear infinite both!important',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
