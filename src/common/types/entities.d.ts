@@ -85,7 +85,7 @@ export interface IInOutBoundReport {
 	shoes_style_code_factory: string | null
 	order_qty: number
 	factory_code: string
-	mat_ecolor: string
+	color_sn: string
 	accumulated_qty: number
 	size_data: Array<{
 		size_numcode: string
@@ -104,7 +104,7 @@ export interface IOutboundReport extends Omit<IInOutBoundReport, 'size_data'> {
 	daily_outbound_qty: number
 	detail: Array<{
 		mo_no: string
-		mat_ecolor: string
+		color_sn: string
 		sizes: Array<{
 			size_numcode: string
 			qty: number
@@ -120,7 +120,7 @@ export interface IMonthlyInventoryReport {
 	mo_no: string
 	order_qty: number
 	or_no: string
-	mat_ecolor: string
+	color_sn: string
 	shoes_style_code_factory: string | null
 	cust_shoestyle: string
 	init_inv_qty: number
@@ -174,7 +174,7 @@ export interface IPackingReport {
 	brand_name: string
 	po: string
 	shoes_style_code_factory: string
-	mat_ecolor: string
+	color_sn: string
 	size_data: string
 	po_qty: number
 	target_box_qty: number

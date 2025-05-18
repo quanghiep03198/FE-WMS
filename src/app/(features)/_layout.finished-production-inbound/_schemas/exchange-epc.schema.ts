@@ -19,8 +19,8 @@ export const exchangeEpcSchema = z
 		mo_no_actual: z.string().nonempty({ message: 'ns_validation:required' }),
 		size_numcode: z.string().nonempty({ message: 'ns_validation:required' }),
 		size_numcode_match: z.string().nonempty({ message: 'ns_validation:required' }),
-		mat_ecolor: z.string().nonempty({ message: 'ns_validation:required' }),
-		mat_ecolor_match: z.string().nonempty({ message: 'ns_validation:required' }),
+		color_sn: z.string().nonempty({ message: 'ns_validation:required' }),
+		color_sn_match: z.string().nonempty({ message: 'ns_validation:required' }),
 		shoes_style_code_factory: z.string().nonempty({ message: 'ns_validation:required' }),
 		shoes_style_code_factory_match: z.string().nonempty({ message: 'ns_validation:required' }),
 		cust_shoes_style: z.string().nonempty({ message: 'ns_validation:required' }),
@@ -49,9 +49,9 @@ export const exchangeEpcSchema = z
 		message: 'ns_validation:invalid_value',
 		path: ['shoes_style_code_factory_match']
 	})
-	.refine((values) => values.mat_ecolor === values.mat_ecolor_match, {
+	.refine((values) => values.color_sn === values.color_sn_match, {
 		message: 'ns_validation:invalid_value',
-		path: ['mat_ecolor_match']
+		path: ['color_sn_match']
 	})
 	.refine((values) => values.size_numcode === values.size_numcode_match, {
 		message: 'ns_validation:invalid_value',
@@ -62,7 +62,7 @@ export const exchangeOrderSchema = z.object({
 	mo_no: z.string().nonempty({ message: 'ns_validation:required' }),
 	mo_no_actual: z.string().trim().nonempty({ message: 'ns_validation:required' }),
 	shoes_style_code_factory: z.string().nonempty({ message: 'ns_validation:required' }),
-	mat_ecolor: z.string().nonempty({ message: 'ns_validation:required' })
+	color_sn: z.string().nonempty({ message: 'ns_validation:required' })
 })
 
 export type ExchangeEpcFormValue = z.infer<typeof exchangeEpcSchema>

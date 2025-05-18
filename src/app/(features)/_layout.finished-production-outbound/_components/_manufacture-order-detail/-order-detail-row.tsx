@@ -41,7 +41,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 			<TableCell
 				style={{ height: virtualRow.size }}
 				className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] text-pretty border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:!sticky xl:left-[calc(var(--sticky-left-col-width)+var(--sticky-left-col-width))] xl:right-auto'>
-				{data?.mat_ecolor}
+				{data?.color_sn}
 			</TableCell>
 			<TableCell style={{ height: virtualRow.size }} className={cn('!p-0')}>
 				<Div

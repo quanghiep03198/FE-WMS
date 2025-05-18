@@ -39,7 +39,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const hasSomeRowMatch = useMemo(() => {
 		if (!selectedRows || selectedRows.length === 0) return false
 		return (
-			data?.mat_ecolor === selectedRows[0].mat_ecolor &&
+			data?.color_sn === selectedRows[0].color_sn &&
 			data?.shoes_style_code_factory === selectedRows[0].shoes_style_code_factory
 		)
 	}, [selectedRows])
@@ -76,7 +76,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 						handleToggleSelectRow(checked, {
 							mo_no: data?.mo_no,
 							shoes_style_code_factory: data?.shoes_style_code_factory,
-							mat_ecolor: data?.mat_ecolor,
+							color_sn: data?.color_sn,
 							count: aggregateSizeCount
 						})
 					}
@@ -99,7 +99,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								setExchangeOrderDialogOpen(true)
 								setDefaultExchangeOrderFormValues({
 									mo_no: data?.mo_no,
-									mat_ecolor: data?.mat_ecolor,
+									color_sn: data?.color_sn,
 									shoes_style_code_factory: data?.shoes_style_code_factory,
 									scanned_size_qty: aggregateSizeCount
 								})
@@ -113,7 +113,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				{data?.shoes_style_code_factory}
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
-				{data?.mat_ecolor}
+				{data?.color_sn}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
 				<Div
@@ -132,7 +132,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 												setExchangeEpcDialogOpen(true)
 												setDefaultExchangeEpcFormValues({
 													mo_no: data?.mo_no,
-													mat_ecolor: data?.mat_ecolor,
+													color_sn: data?.color_sn,
 													shoes_style_code_factory: data?.shoes_style_code_factory,
 													size_numcode: size?.size_numcode,
 													scanned_size_qty: size?.count

@@ -29,7 +29,7 @@ export default {
 		kg_noend: '結束箱號',
 		kg_nostart: '起始箱號',
 		mat_code: '成品料号',
-		mat_ecolor: '产品颜色',
+		color_sn: '产品颜色',
 		missing_qty: '缺貨量',
 		mo_no: '指令碼',
 		mo_no_actual: '實際指令碼',

@@ -28,7 +28,7 @@ export default {
 		kg_noend: 'Thứ tự thùng cuối',
 		kg_nostart: 'Thứ tự thùng đầu',
 		mat_code: 'Mã thành phẩm',
-		mat_ecolor: 'Màu sắc sản phẩm',
+		color_sn: 'Màu sắc sản phẩm',
 		missing_qty: 'Số lượng còn thiếu',
 		mo_no: 'Chỉ lệnh',
 		mo_no_actual: 'Chỉ lệnh thực',

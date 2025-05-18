@@ -72,7 +72,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const exchangableOrders = useMemo(() => {
 		return uniqBy(
 			scannedOrders.filter(
-				(item) => item.mo_no !== defaultValues?.mo_no && item.mat_ecolor === defaultValues?.mat_ecolor
+				(item) => item.mo_no !== defaultValues?.mo_no && item.color_sn === defaultValues?.color_sn
 			),
 			'mo_no'
 		)
@@ -114,7 +114,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 				...form.getValues(),
 				mat_code: currOrderInfo.mat_code,
 				mo_no_actual: currOrderInfo.mo_no,
-				mat_ecolor_match: currOrderInfo.mat_ecolor,
+				color_sn_match: currOrderInfo.color_sn,
 				or_cust_po: currOrderInfo.or_cust_po,
 				or_no: currOrderInfo.or_no,
 				cust_shoes_style: currOrderInfo.cust_shoes_style,
@@ -175,7 +175,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 							<Fieldset as='fieldset'>
 								<Legend as='legend'>{t('ns_common:titles.original_data')}</Legend>
 								<InputFieldControl label={t('ns_erp:fields.mo_no')} name='mo_no' readOnly={true} />
-								<InputFieldControl label={t('ns_erp:fields.mat_ecolor')} name='mat_ecolor' readOnly={true} />
+								<InputFieldControl label={t('ns_erp:fields.color_sn')} name='color_sn' readOnly={true} />
 								<InputFieldControl
 									label={t('ns_erp:fields.shoestyle_codefactory')}
 									name='shoes_style_code_factory'
@@ -201,7 +201,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 											mo_noseq: '',
 											mat_code: '',
 											shoes_style_code_factory_match: '',
-											mat_ecolor_match: '',
+											color_sn_match: '',
 											size_numcode_match: ''
 										})
 									}}
@@ -222,8 +222,8 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									readOnly={true}
 								/>
 								<InputFieldControl
-									label={t('ns_erp:fields.mat_ecolor')}
-									name='mat_ecolor_match'
+									label={t('ns_erp:fields.color_sn')}
+									name='color_sn_match'
 									placeholder='Black'
 									readOnly={true}
 								/>

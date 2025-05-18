@@ -71,7 +71,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const { data: orderDetail, refetch: fetchExchangableOrder } = useSearchExchangableOrderQuery({
 		'mo_no.eq': defaultValues?.mo_no,
 		'shoes_style_code_factory.eq': defaultValues?.shoes_style_code_factory,
-		'mat_ecolor.eq': defaultValues?.mat_ecolor,
+		'color_sn.eq': defaultValues?.color_sn,
 		q: searchTerm
 	})
 

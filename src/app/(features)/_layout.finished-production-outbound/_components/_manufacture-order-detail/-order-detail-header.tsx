@@ -30,8 +30,8 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 				<TableHead
 					align='left'
 					className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-normal border-r-0 !drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky xl:left-[calc(2*var(--sticky-left-col-width))]'>
-					<span className='line-clamp-1' title={t('ns_erp:fields.mat_ecolor')}>
-						{t('ns_erp:fields.mat_ecolor')}
+					<span className='line-clamp-1' title={t('ns_erp:fields.color_sn')}>
+						{t('ns_erp:fields.color_sn')}
 					</span>
 				</TableHead>
 				<TableHead align='left' className='border-x-0' title='Size'>
@@ -84,7 +84,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 						onChange={(e) =>
 							onColumnFilterChange((prev) => ({
 								...prev,
-								mat_ecolor: e.target.value
+								color_sn: e.target.value
 							}))
 						}
 					/>

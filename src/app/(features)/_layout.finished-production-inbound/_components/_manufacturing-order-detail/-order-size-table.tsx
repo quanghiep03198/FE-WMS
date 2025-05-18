@@ -54,7 +54,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		Omit<OrderItem, 'sizes' | 'factory_code_produce'>
 	>({
 		mo_no: '',
-		mat_ecolor: '',
+		color_sn: '',
 		shoes_style_code_factory: ''
 	})
 
@@ -79,7 +79,7 @@ const OrderSizeDetailTable: React.FC = () => {
 	const allMatchingRowsSelection = useMemo(() => {
 		return scannedOrders.filter(
 			(item) =>
-				selectedRows[0]?.mat_ecolor === item.mat_ecolor &&
+				selectedRows[0]?.color_sn === item.color_sn &&
 				selectedRows[0]?.shoes_style_code_factory === item.shoes_style_code_factory
 		)
 	}, [selectedRows])
@@ -100,7 +100,7 @@ const OrderSizeDetailTable: React.FC = () => {
 				allMatchingRowsSelection.map((item) => ({
 					mo_no: item.mo_no,
 					shoes_style_code_factory: item.shoes_style_code_factory,
-					mat_ecolor: item.mat_ecolor,
+					color_sn: item.color_sn,
 					scanned_size_qty:
 						item?.sizes?.reduce((acc, curr) => {
 							return acc + curr.count
@@ -110,13 +110,15 @@ const OrderSizeDetailTable: React.FC = () => {
 		}
 	}
 
+	console.log(scannedOrders)
+
 	const filteredScannedOrders = useMemo(() => {
-		const { mo_no, mat_ecolor: mat_ecolor, shoes_style_code_factory } = columnFilters
+		const { mo_no, color_sn, shoes_style_code_factory } = columnFilters
 		return scannedOrders.filter((item) => {
 			return (
-				item.mo_no.toLowerCase().includes(mo_no.toLowerCase()) &&
-				item.mat_ecolor.toLowerCase().includes(mat_ecolor.toLowerCase()) &&
-				item.shoes_style_code_factory.toLowerCase().includes(shoes_style_code_factory.toLowerCase())
+				item.mo_no?.toLowerCase()?.includes(mo_no?.toLowerCase()) &&
+				item.color_sn?.toLowerCase()?.includes(color_sn?.toLowerCase()) &&
+				item.shoes_style_code_factory?.toLowerCase()?.includes(shoes_style_code_factory?.toLowerCase())
 			)
 		})
 	}, [scannedOrders, columnFilters, dialogOpen])
@@ -194,7 +196,7 @@ const OrderSizeDetailTable: React.FC = () => {
 									<TableHead
 										align='left'
 										className='left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
-										{t('ns_erp:fields.mat_ecolor')}
+										{t('ns_erp:fields.color_sn')}
 									</TableHead>
 									<TableHead>Size</TableHead>
 									<TableHead
@@ -243,7 +245,7 @@ const OrderSizeDetailTable: React.FC = () => {
 											role='textbox'
 											placeholder='Search ...'
 											className='w-full border-none font-normal shadow-none transition-none'
-											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mat_ecolor: e.target.value }))}
+											onChange={(e) => setColumnFilters((prev) => ({ ...prev, color_sn: e.target.value }))}
 										/>
 									</TableHead>
 									<TableHead>
@@ -313,7 +315,7 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 		setOpen(true)
 		setDefaultValues({
 			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
-			mat_ecolor: selectedRows[0]?.mat_ecolor,
+			color_sn: selectedRows[0]?.color_sn,
 			shoes_style_code_factory: selectedRows[0]?.shoes_style_code_factory,
 			scanned_size_qty: selectedRows.reduce((acc, curr) => acc + curr.scanned_size_qty, 0)
 		})

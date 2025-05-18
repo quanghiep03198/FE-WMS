@@ -106,8 +106,8 @@ const InboundReportMasterTable: React.FC = () => {
 				minSize: 100,
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
-			columnHelper.accessor('mat_ecolor', {
-				header: t('ns_erp:fields.mat_ecolor'),
+			columnHelper.accessor('color_sn', {
+				header: t('ns_erp:fields.color_sn'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				minSize: 100,
