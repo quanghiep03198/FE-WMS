@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react'
 
 type BrowserTabStatus = 'active' | 'idle' | 'hidden'
 
-interface BrowserTabActivityOptions {
+type BrowserTabActivityOptions = {
 	/**
 	 * The time in milliseconds after which the tab is considered idle.
 	 */

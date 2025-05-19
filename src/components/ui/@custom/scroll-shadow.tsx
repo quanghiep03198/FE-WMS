@@ -74,19 +74,21 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 	return (
 		<div
 			ref={resolvedRef}
-			data-top-scroll={isScrollable && scrollStates.isScrolledToTop}
-			data-bottom-scroll={isScrollable && scrollStates.isScrolledToBottom}
-			data-away-edge={isScrollable && scrollStates.isAwayFromEdge}
-			data-left-scroll={isScrollable && scrollStates.isScrollToStart}
-			data-right-scroll={isScrollable && scrollStates.isScrollToEnd}
-			className={cn(
-				className,
-				orientation === 'vertical' &&
-					`overflow-y-auto data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_85%,transparent)] data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(to_bottom,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]`,
-				orientation === 'horizontal' &&
-					`overflow-x-auto data-[right-scroll=true]:[mask-image:linear-gradient(270deg,hsl(var(--sidebar-background))_85%,transparent)] data-[left-scroll=true]:[mask-image:linear-gradient(90deg,hsl(var(--sidebar-background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]`
-			)}>
-			{children}
+			className={cn(className, orientation === 'vertical' ? 'overflow-y-auto' : 'overflow-x-auto')}>
+			<div
+				className={cn(
+					orientation === 'vertical' &&
+						`data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--background))_55%,transparent_85%)] data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--background))_50%,transparent_85%)] data-[away-edge=true]:[mask-image:linear-gradient(180deg,transparent_0%,hsl(var(--background))_30%_60%,transparent_100%)]`,
+					orientation === 'horizontal' &&
+						`data-[right-scroll=true]:[mask-image:linear-gradient(270deg,hsl(var(--sidebar-background))_85%,transparent)] data-[left-scroll=true]:[mask-image:linear-gradient(90deg,hsl(var(--background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(90deg,transparent_0%,hsl(var(--background))_25%_65%,transparent_100%)]`
+				)}
+				data-top-scroll={isScrollable && scrollStates.isScrolledToTop}
+				data-bottom-scroll={isScrollable && scrollStates.isScrolledToBottom}
+				data-away-edge={isScrollable && scrollStates.isAwayFromEdge}
+				data-left-scroll={isScrollable && scrollStates.isScrollToStart}
+				data-right-scroll={isScrollable && scrollStates.isScrollToEnd}>
+				{children}
+			</div>
 		</div>
 	)
 }

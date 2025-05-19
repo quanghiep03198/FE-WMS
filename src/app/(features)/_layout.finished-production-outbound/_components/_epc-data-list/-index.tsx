@@ -189,7 +189,7 @@ const ScannedEpcList: React.FC = () => {
 			}>
 			{/* Datalist header */}
 			<Div className='hidden items-center justify-between border-b p-3 @6xl:flex md:flex lg:flex'>
-				<Typography className='ml-2 inline-flex items-center gap-x-1 text-lg font-medium'>
+				<Typography className='ml-2 inline-flex items-center gap-x-2 text-lg font-medium'>
 					<Icon name='Tags' size={24} /> EPC Data
 				</Typography>
 			</Div>
@@ -251,16 +251,16 @@ const ScannedEpcList: React.FC = () => {
 			)}
 			{/* Datalist footer */}
 			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5 @2xl:grid-cols-3'>
+				<Div className='col-span-1'>
+					<UploadDataFileDialog />
+				</Div>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />
 				</Div>
 				<Div className='col-span-1'>
-					<UploadDataFileDialog />
-				</Div>
-				<Div className='col-span-1'>
 					<Button
 						size={isExtraLargeScreen ? 'default' : 'lg'}
-						variant='secondary'
+						variant='destructive'
 						className='w-full'
 						onClick={() => fetchServerEvent()}>
 						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
