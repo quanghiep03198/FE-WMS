@@ -1,6 +1,7 @@
 import { Languages } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
 import { ReportService } from '@/services/report.service'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -188,7 +189,12 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 													<InputFieldControl
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
-														className='h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus-within:border-none focus:outline-none'
+														className={cn(
+															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus:outline-none',
+															form.watch(`data.${index}.mn_ist_qty`) !== 0
+																? 'text-destructive disabled:text-destructive/80'
+																: 'text-foreground'
+														)}
 														disabled={!isEditing || isLoading}
 													/>
 												</TableCell>
@@ -212,7 +218,12 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 													<InputFieldControl
 														name={`data.${index}.mn_ost_qty`}
 														type='number'
-														className='h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus-within:border-none focus:outline-none'
+														className={cn(
+															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus:outline-none',
+															form.watch(`data.${index}.mn_ost_qty`) !== 0
+																? 'text-destructive disabled:text-destructive/80'
+																: 'text-foreground'
+														)}
 														disabled={!isEditing || isLoading}
 													/>
 												</TableCell>
