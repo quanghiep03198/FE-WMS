@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
+import UploadDataFileDialog from './-upload-dialog'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 0
@@ -180,7 +181,7 @@ const ScannedEpcList: React.FC = () => {
 
 	return (
 		<Div
-			className='flex flex-col items-stretch justify-between overflow-clip rounded-md border @6xl:sticky @6xl:top-[var(--header-height)] @6xl:h-[var(--outlet-wrapper-height)]'
+			className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @6xl:sticky @6xl:top-[var(--header-height)] @6xl:h-[var(--outlet-wrapper-height)]'
 			style={
 				{
 					'--data-list-header-height': '36px'
@@ -249,13 +250,22 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto gap-1.5 border-t p-1.5 @2xl:grid-cols-2'>
+			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5 @2xl:grid-cols-3'>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />
 				</Div>
-				<Button size={isExtraLargeScreen ? 'default' : 'lg'} variant='secondary' onClick={() => fetchServerEvent()}>
-					<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
-				</Button>
+				<Div className='col-span-1'>
+					<UploadDataFileDialog />
+				</Div>
+				<Div className='col-span-1'>
+					<Button
+						size={isExtraLargeScreen ? 'default' : 'lg'}
+						variant='secondary'
+						className='w-full'
+						onClick={() => fetchServerEvent()}>
+						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
+					</Button>
+				</Div>
 			</Div>
 		</Div>
 	)

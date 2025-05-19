@@ -4,6 +4,7 @@ import useAuth from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { ThirdPartyApiService } from '@/services/third-party-api.service'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 import { useResetState } from 'ahooks'
@@ -118,29 +119,31 @@ const SyncDataTrigger: React.FC = () => {
 							}
 							return (
 								<StepItem key={item.id}>
-									<Div className='translate-y-px'>
+									<Div className='translate-y-1.5'>
 										<Icon
 											name={icon[item.status].icon}
 											stroke={icon[item.status].color}
 											style={{
-												animationDelay: `${index / 5 + 0.5}s`,
 												animationFillMode: 'both'
 											}}
-											className={cn('duration-300 animate-in fade-in-0 zoom-in-75', {
+											className={cn('duration-700 animate-in fade-in-0 zoom-in-90', {
 												'animate-spin': item.status === 'processing'
 											})}
 											size={18}
 										/>
 									</Div>
-									<Typography
-										variant='small'
+									<Typewriter
+										className='line-clamp-1 w-full animate-typing whitespace-pre-wrap'
+										text={t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
+									/>
+									{/* variant='small'
 										className='line-clamp-1 w-full animate-typing whitespace-nowrap text-nowrap'
 										style={{
 											animationDelay: `${index / 5 + 0.75}s`,
 											animationFillMode: 'both'
 										}}>
 										{t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
-									</Typography>
+									</Typewriter> */}
 								</StepItem>
 							)
 						})}

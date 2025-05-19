@@ -1,4 +1,5 @@
 import { HoverCard, HoverCardContent, HoverCardTrigger, Icon } from '@/components/ui'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import { usePageContext } from '../_contexts/-page-context'
@@ -18,11 +19,11 @@ const DeploymentGlobe: React.FC = () => {
 			<div className='group absolute left-[calc(50%+0.5rem)] top-[5%] z-20 flex w-72 -translate-x-1/2 items-center gap-x-3 whitespace-nowrap rounded-md border border-primary/50 bg-background px-3 py-2 shadow-2xl transition-colors duration-200 hover:border-primary sm:top-0 sm:w-60 sm:gap-2 sm:px-2 sm:py-1'>
 				<div className='inline-flex flex-1 items-center gap-x-2'>
 					<Icon name='Globe' strokeWidth={1} size={18} stroke='hsl(var(--muted-foreground))' />
-					<small
+					<Typewriter
 						data-viewport={inViewport ? 'visible' : 'invisible'}
-						className='w-4/5 animate-typing overflow-hidden align-middle font-jetbrains text-xs leading-relaxed text-foreground data-[viewport=visible]:running data-[viewport=invisible]:paused sm:text-[10px]'>
-						Available in 2 regions
-					</small>
+						className='animate-overflow-hidden align-middle font-jetbrains text-xs leading-relaxed text-foreground data-[viewport=visible]:running data-[viewport=invisible]:paused sm:text-[10px]'
+						text='Available in 2 regions'
+					/>
 				</div>
 			</div>
 			<svg
