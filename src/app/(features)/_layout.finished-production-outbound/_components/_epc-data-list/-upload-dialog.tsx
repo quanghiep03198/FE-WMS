@@ -3,6 +3,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	buttonVariants,
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -65,13 +66,12 @@ const UploadDataFileDialog: React.FC = () => {
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<Button size={isExtraLargeScreen ? 'default' : 'lg'} className='w-full'>
-					<Icon name='Upload' role='presentation' />
-					Upload
-				</Button>
+			<DialogTrigger
+				className={cn(buttonVariants({ size: isExtraLargeScreen ? 'default' : 'lg', className: 'w-full' }))}>
+				<Icon name='Upload' role='presentation' size={18} />
+				Upload
 			</DialogTrigger>
-			<DialogContent className='lg:max-w-[35vw] xl:max-w-[35vw]'>
+			<DialogContent className='max-w-xl'>
 				<DialogHeader>
 					<DialogTitle>Upload offline data</DialogTitle>
 					<DialogDescription>
@@ -79,10 +79,9 @@ const UploadDataFileDialog: React.FC = () => {
 					</DialogDescription>
 				</DialogHeader>
 				<Div
-					className={cn(
-						'mt-6 flex cursor-pointer flex-col items-center justify-center gap-y-3 rounded-lg border-2 border-dashed px-6 py-10 transition-colors duration-200',
+					className={`mt-6 flex cursor-pointer flex-col items-center justify-center space-y-3 rounded-lg border-2 border-dashed p-6 transition-colors duration-200 ${
 						dragActive && 'border-primary bg-accent/30'
-					)}
+					}`}
 					onClick={handleClick}
 					onDrop={onDrop}
 					onDragOver={onDragOver}
@@ -95,7 +94,7 @@ const UploadDataFileDialog: React.FC = () => {
 						className='hidden'
 						onChange={handleFileChange}
 					/>
-					<Icon name='CloudUpload' size={40} strokeWidth={1.25} stroke='hsl(var(--muted-foreground))' />
+					<Icon name='CloudUpload' size={48} strokeWidth={1.25} stroke='hsl(var(--muted-foreground))' />
 					<Typography color='muted'>
 						<Typography as='span' className='font-medium'>
 							Click to upload
@@ -104,26 +103,26 @@ const UploadDataFileDialog: React.FC = () => {
 						<Typography as='span' className='font-medium'>
 							CSV
 						</Typography>{' '}
-						file into this box
+						file
 					</Typography>
 				</Div>
 
-				<ScrollShadow
-					aria-hidden={files.length === 0}
-					className={cn('overflow-y-scroll', files.length === 0 ? 'hidden' : 'block max-h-32')}>
-					{files.map((file, idx) => (
-						<FileItem
-							key={file.name + idx}
-							fileName={file.name}
-							onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
-						/>
-					))}
-				</ScrollShadow>
+				{files.length > 0 && (
+					<ScrollShadow className='max-h-32'>
+						{files.map((file, idx) => (
+							<FileItem
+								key={file.name + idx}
+								fileName={file.name}
+								onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
+							/>
+						))}
+					</ScrollShadow>
+				)}
 
 				<Typography variant='small' color='muted'>
 					{files.length} chosen file(s)
 				</Typography>
-				<Button size='lg'>
+				<Button>
 					<Icon name='Upload' role='presentation' /> Upload
 				</Button>
 			</DialogContent>
@@ -133,12 +132,12 @@ const UploadDataFileDialog: React.FC = () => {
 
 const FileItem: React.FC<{ fileName: string; onRemove: () => void }> = ({ fileName, onRemove }) => {
 	return (
-		<Div className='flex flex-grow items-center gap-x-3 rounded px-3 py-1.5 transition-colors duration-200 hover:bg-accent'>
-			<Icon name='File' />
+		<Div className='flex flex-grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 hover:bg-accent'>
+			<Icon name='Paperclip' />
 			<Typography variant='small' className='flex-1'>
 				{fileName}
 			</Typography>
-			<button className='text-muted-foreground' onClick={() => onRemove()}>
+			<button className='hover:opacity-80' onClick={() => onRemove()}>
 				<Icon name='X' size={14} />
 			</button>
 		</Div>

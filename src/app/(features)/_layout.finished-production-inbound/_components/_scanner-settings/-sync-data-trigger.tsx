@@ -124,7 +124,8 @@ const SyncDataTrigger: React.FC = () => {
 											name={icon[item.status].icon}
 											stroke={icon[item.status].color}
 											style={{
-												animationFillMode: 'both'
+												animationFillMode: 'both',
+												animationDelay: (index + 1) * 200 + 'ms'
 											}}
 											className={cn('duration-700 animate-in fade-in-0 zoom-in-90', {
 												'animate-spin': item.status === 'processing'
@@ -133,6 +134,7 @@ const SyncDataTrigger: React.FC = () => {
 										/>
 									</Div>
 									<Typewriter
+										delay={(index + 1) * 200}
 										className='line-clamp-1 w-full animate-typing whitespace-pre-wrap'
 										text={t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
 									/>

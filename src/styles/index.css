@@ -166,10 +166,11 @@
 	* {
 		@apply border-border !scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar;
 	}
+
 	body {
 		@apply !pointer-events-auto bg-background text-foreground;
 	}
-
+	/*  */
 	@keyframes fade {
 		from {
 			opacity: 0;

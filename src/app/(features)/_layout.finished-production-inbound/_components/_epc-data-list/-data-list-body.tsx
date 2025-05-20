@@ -2,6 +2,7 @@ import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -32,6 +33,7 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
 	const { user, token, setAccessToken } = useAuth()
+	const isLargeScreen = useMediaQuery('(min-width: 1000px)')
 	const {
 		currentPage,
 		selectedOrder,
