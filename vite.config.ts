@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			react({
 				babel: {
-					plugins: [['babel-plugin-react-compiler', {}]]
+					plugins: [['babel-plugin-react-compiler', {}], 'babel-plugin-macros', 'babel-plugin-styled-components']
 				}
 			}),
 			reactRouter(),
@@ -114,7 +114,10 @@ export default defineConfig(({ mode }) => {
 			}
 		},
 		esbuild: {
-			drop: mode === 'production' ? ['console', 'debugger'] : undefined
+			drop: mode === 'production' ? ['console', 'debugger'] : undefined,
+			logOverride: {
+				'this-is-undefined-in-esm': 'silent'
+			}
 		},
 		server: {
 			port: 3000,

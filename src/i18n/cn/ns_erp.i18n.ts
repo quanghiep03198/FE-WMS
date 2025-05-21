@@ -8,6 +8,7 @@ export default {
 		active_date: '入库日期',
 		actual_inventory_qty: '盘盈/盘亏',
 		actual_instock_qty: '盘盈',
+		actual_missing_qty: '实际欠数',
 		actual_outstock_qty: '盘亏',
 		brand_name: '品牌',
 		container_order_code: '出櫃單號',

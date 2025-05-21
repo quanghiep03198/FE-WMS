@@ -7,6 +7,7 @@ export default {
 		accumulated_qty: 'Số lượng tích lũy',
 		actual_instock_qty: 'Số lượng nhập thực tế',
 		actual_inventory_qty: 'Số lượng kiểm kê',
+		actual_missing_qty: 'Số lượng thiếu thực tế',
 		actual_outstock_qty: 'Số lượng xuất thực tế',
 		brand_name: 'Nhãn hiệu khách hàng',
 		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
