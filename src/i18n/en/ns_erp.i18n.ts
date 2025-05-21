@@ -7,6 +7,7 @@ export default {
 		accumulated_qty: 'Accumulated quantity',
 		actual_inventory_qty: 'Actual inventory quantity',
 		actual_instock_qty: 'Actual instock quantity',
+		actual_missing_qty: 'Actual missing quantity',
 		actual_outstock_qty: 'Actual outstock quantity',
 		brand_name: 'Customer branch name',
 		container_order_code: 'Container Order Code',

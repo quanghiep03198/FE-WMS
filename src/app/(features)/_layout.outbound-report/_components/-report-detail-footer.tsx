@@ -33,7 +33,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 						<NestedCell>Size</NestedCell>
 						<NestedCell>{t('ns_erp:fields.order_qty')}</NestedCell>
 						<NestedCell>{t('ns_erp:fields.daily_productivity')}</NestedCell>
-						<NestedCell>{t('ns_erp:fields.missing_qty')}</NestedCell>
+						<NestedCell>{t('ns_erp:fields.actual_missing_qty')}</NestedCell>
 					</NestedRow>
 				</TableCell>
 				<TableCell className='!p-0'>
