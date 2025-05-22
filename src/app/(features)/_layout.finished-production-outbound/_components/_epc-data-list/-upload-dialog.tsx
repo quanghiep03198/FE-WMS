@@ -1,0 +1,187 @@
+import { PresetBreakPoints, RequestHeaders } from '@/common/constants/enums'
+import useAuth from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { cn } from '@/common/utils/cn'
+import {
+	Button,
+	buttonVariants,
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+	Div,
+	Icon,
+	Input,
+	Typography
+} from '@/components/ui'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import axiosInstance from '@/configs/axios.config'
+import { useMutation } from '@tanstack/react-query'
+import { useResetState } from 'ahooks'
+import { filesize } from 'filesize'
+import React, { useCallback, useId, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import tw from 'twin.macro'
+import { v4 as uuid } from 'uuid'
+
+const MAX_FILES: number = 10
+
+const UploadDataFileDialog: React.FC = () => {
+	const { t } = useTranslation()
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const [isDragActive, setDragActive] = useState(false)
+	const [files, setFiles, resetFiles] = useResetState<File[]>([])
+	const { user } = useAuth()
+	const inputRef = useRef<HTMLInputElement>(null)
+	const dropFileAreaId = useId()
+
+	const { mutateAsync, isPending } = useMutation({
+		mutationFn: async () => {
+			const formData = new FormData()
+			formData.append('station', `CUS_${user.company_code}_WH103`)
+			files.forEach((file) => formData.append('files', file, uuid()))
+			return await axiosInstance.post(`/rfid/upload-data`, formData, {
+				headers: {
+					[RequestHeaders.CONTENT_TYPE]: 'multipart/form-data'
+				}
+			})
+		},
+		onMutate: () => {
+			return toast.loading(t('ns_common:notification.processing_request'))
+		},
+		onSuccess: (_data, _variables, id) => {
+			resetFiles()
+			inputRef.current.value = ''
+			toast.success(t('ns_common:notification.success'), { id })
+		},
+		onError: (_data, _variables, id) => {
+			toast.error(t('ns_common:notification.error'), { id })
+		}
+	})
+
+	const onDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+		if (files.length >= MAX_FILES) {
+			toast.warning(`You can only upload ${MAX_FILES} files at a time`)
+			return
+		}
+		e.preventDefault()
+		e.stopPropagation()
+		setDragActive(false)
+		const shouldAcceptDroppedFile = e.dataTransfer.files.item(0).type === 'text/csv'
+		if (!shouldAcceptDroppedFile) {
+			toast.warning('Please select a CSV file')
+			return
+		}
+
+		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+			setFiles((prev) => [...prev, ...Array.from(e.dataTransfer.files)])
+			e.dataTransfer.clearData()
+		}
+	}, [])
+
+	const onDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		if (files.length < MAX_FILES) setDragActive(true)
+	}, [])
+
+	const onDragLeave = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setDragActive(false)
+	}, [])
+
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (files.length >= MAX_FILES) {
+			e.preventDefault()
+			return
+		}
+		if (e.target.files) {
+			setFiles((prev) => [...prev, ...Array.from(e.target.files!)])
+		}
+	}
+
+	return (
+		<Dialog>
+			<DialogTrigger
+				className={cn(buttonVariants({ size: isExtraLargeScreen ? 'default' : 'lg', className: 'w-full' }))}>
+				<Icon name='Upload' role='presentation' size={18} />
+				Upload
+			</DialogTrigger>
+			<DialogContent className='max-w-xl'>
+				<DialogHeader>
+					<DialogTitle>Upload offline data</DialogTitle>
+					<DialogDescription>
+						Upload CSV file to import offline data. The file must be in correct format.
+					</DialogDescription>
+				</DialogHeader>
+				<DroppableArea
+					htmlFor={dropFileAreaId}
+					data-drag-active={isDragActive}
+					aria-disabled={files.length >= MAX_FILES}
+					onDrop={onDrop}
+					onDragOver={onDragOver}
+					onDragLeave={onDragLeave}>
+					<Input
+						id={dropFileAreaId}
+						ref={inputRef}
+						type='file'
+						accept='.csv'
+						multiple
+						className='hidden'
+						onChange={handleFileChange}
+					/>
+					<Icon name='CloudUpload' size={48} strokeWidth={1.25} stroke='hsl(var(--muted-foreground))' />
+					<Typography color='muted'>Click to upload or drag and drop CSV files</Typography>
+				</DroppableArea>
+				{files.length > 0 && (
+					<ScrollShadow className='max-h-32'>
+						{files.map((file, idx) => (
+							<FileItem
+								key={file.name + idx}
+								file={file}
+								disabled={isPending}
+								onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
+							/>
+						))}
+					</ScrollShadow>
+				)}
+				<Typography variant='small' color='muted'>
+					{files.length}/{MAX_FILES} chosen file(s)
+				</Typography>
+				<Button disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
+					<Icon name='Upload' role='presentation' /> Upload
+				</Button>
+			</DialogContent>
+		</Dialog>
+	)
+}
+
+const FileItem: React.FC<{ file: File; disabled: boolean; onRemove: () => void }> = ({ file, disabled, onRemove }) => {
+	return (
+		<Div
+			aria-disabled={disabled}
+			className='group flex flex-grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80 hover:bg-accent'>
+			<Icon name='File' />
+			<Typography variant='small' className='line-clamp-1 block flex-1'>
+				{file.name}
+			</Typography>
+			<Typography variant='small' color='muted'>
+				{filesize(file.size, { round: 2 })}
+			</Typography>
+			<button
+				className='opacity-0 group-hover:opacity-100 hover:opacity-80'
+				disabled={disabled}
+				onClick={() => onRemove()}>
+				<Icon name='X' size={14} />
+			</button>
+		</Div>
+	)
+}
+
+const DroppableArea = tw.label`mt-6 flex cursor-pointer flex-col items-center justify-center space-y-3 rounded-lg border-2 border-dashed p-6 transition-colors duration-200 data-[drag-active=true]:border-primary aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-80`
+
+export default UploadDataFileDialog

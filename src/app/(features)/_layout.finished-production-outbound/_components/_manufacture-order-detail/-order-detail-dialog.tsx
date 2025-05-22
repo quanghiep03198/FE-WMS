@@ -9,7 +9,7 @@ const OrderDetailTableDialog = () => {
 
 	return (
 		<Dialog>
-			<DialogTrigger className={cn(buttonVariants({ size: 'lg', className: 'w-full' }))}>
+			<DialogTrigger className={cn(buttonVariants({ size: 'lg', variant: 'secondary', className: 'w-full' }))}>
 				{t('ns_common:actions.detail')}
 				<Icon name='ArrowUpRight' role='presentation' />
 			</DialogTrigger>

@@ -81,11 +81,27 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 			data-right-scroll={isScrollable && scrollStates.isScrollToEnd}
 			className={cn(
 				className,
-				orientation === 'vertical' &&
-					`overflow-y-auto data-[bottom-scroll=true]:[mask-image:linear-gradient(0deg,hsl(var(--sidebar-background))_85%,transparent)] data-[top-scroll=true]:[mask-image:linear-gradient(180deg,hsl(var(--sidebar-background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(to_bottom,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]`,
-				orientation === 'horizontal' &&
-					`overflow-x-auto data-[right-scroll=true]:[mask-image:linear-gradient(270deg,hsl(var(--sidebar-background))_85%,transparent)] data-[left-scroll=true]:[mask-image:linear-gradient(90deg,hsl(var(--sidebar-background))_85%,transparent)] data-[away-edge=true]:[mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]`
-			)}>
+				// prettier-ignore
+				orientation==='vertical' && `
+					overflow-y-auto
+					data-[away-edge=true]:[mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
+					data-[top-scroll=true]:[mask-image:linear-gradient(to_bottom,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
+					data-[bottom-scroll=true]:[mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)]
+				`,
+				// prettier-ignore
+				orientation==='horizontal' && `
+					overflow-x-auto
+					data-[away-edge=true]:[mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
+					data-[left-scroll=true]:[mask-image:linear-gradient(to_right,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
+					data-[right-scroll=true]:[mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)]
+				`
+			)}
+			style={{
+				scrollbarGutter: 'stable',
+				maskRepeat: 'no-repeat',
+				WebkitMaskRepeat: 'no-repeat',
+				maskSize: '100% 100%'
+			}}>
 			{children}
 		</div>
 	)

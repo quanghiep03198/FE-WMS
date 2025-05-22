@@ -23,6 +23,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
 import { omit } from 'lodash'
@@ -308,11 +309,14 @@ const InoutboundForm: React.FC = () => {
 					</Button>
 				</Div>
 				<Separator className='col-span-full' />
-				<Div className='col-span-full'>
-					<Typography variant='small' className='inline-flex items-center gap-x-2 italic'>
-						<Icon name='BotMessageSquare' size={24} strokeWidth={1.5} />
-						{t('ns_inoutbound:description.inoutbound_form_note')}
-					</Typography>
+				<Div className='col-span-full inline-flex items-center gap-x-2'>
+					<Icon
+						name='BotMessageSquare'
+						size={24}
+						strokeWidth={1.5}
+						className='duration-500 animate-in zoom-in-90 slide-in-from-bottom-1'
+					/>
+					<Typewriter className='text-sm italic' text={t('ns_inoutbound:description.inoutbound_form_note')} />
 				</Div>
 			</Form>
 		</FormProvider>
