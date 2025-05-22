@@ -1,5 +1,5 @@
-import { useGetRFIDDevices } from '@/app/(features)/_apis/use-device.api'
 import { PresetBreakPoints, RequestHeaders } from '@/common/constants/enums'
+import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
@@ -12,19 +12,16 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	Div,
-	// FormField,
-	// Form as FormProvider,
 	Icon,
 	Input,
 	Typography
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import axiosInstance from '@/configs/axios.config'
+import { useMutation } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { filesize } from 'filesize'
-import { debounce } from 'lodash'
 import React, { useCallback, useId, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'twin.macro'
@@ -37,22 +34,39 @@ const UploadDataFileDialog: React.FC = () => {
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	const [isDragActive, setDragActive] = useState(false)
 	const [files, setFiles, resetFiles] = useResetState<File[]>([])
-	const [isPending, setIsPending] = useState<boolean>(false)
+	const { user } = useAuth()
 	const inputRef = useRef<HTMLInputElement>(null)
-	const selectId = useId()
 	const dropFileAreaId = useId()
-	const form = useForm()
 
-	const { data: devices } = useGetRFIDDevices()
-
-	console.log('isPending :>> ', isPending)
+	const { mutateAsync, isPending } = useMutation({
+		mutationFn: async () => {
+			const formData = new FormData()
+			formData.append('station', `CUS_${user.company_code}_WH103`)
+			files.forEach((file) => formData.append('files', file, uuid()))
+			return await axiosInstance.post(`/rfid/upload-data`, formData, {
+				headers: {
+					[RequestHeaders.CONTENT_TYPE]: 'multipart/form-data'
+				}
+			})
+		},
+		onMutate: () => {
+			return toast.loading(t('ns_common:notification.processing_request'))
+		},
+		onSuccess: (_data, _variables, id) => {
+			resetFiles()
+			inputRef.current.value = ''
+			toast.success(t('ns_common:notification.success'), { id })
+		},
+		onError: (_data, _variables, id) => {
+			toast.error(t('ns_common:notification.error'), { id })
+		}
+	})
 
 	const onDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
 		if (files.length >= MAX_FILES) {
-			toast.warning('You can only upload 10 files at a time')
+			toast.warning(`You can only upload ${MAX_FILES} files at a time`)
 			return
 		}
-
 		e.preventDefault()
 		e.stopPropagation()
 		setDragActive(false)
@@ -71,7 +85,7 @@ const UploadDataFileDialog: React.FC = () => {
 	const onDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
 		e.preventDefault()
 		e.stopPropagation()
-		setDragActive(true)
+		if (files.length < MAX_FILES) setDragActive(true)
 	}, [])
 
 	const onDragLeave = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
@@ -90,46 +104,6 @@ const UploadDataFileDialog: React.FC = () => {
 		}
 	}
 
-	const handleUploadFile = async () => {
-		const formData = new FormData()
-		files.forEach((file) => formData.append('files', file, uuid()))
-		setIsPending(true)
-		const toastId = toast.loading(t('ns_common:notification.processing_request'))
-		try {
-			await axiosInstance.post('/rfid/outbound/upload-data', formData, {
-				headers: {
-					[RequestHeaders.CONTENT_TYPE]: 'multipart/form-data'
-				}
-			})
-			toast.success(t('ns_common:notification.success'), { id: toastId })
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: toastId })
-		}
-
-		toast.promise(
-			axiosInstance.post('/rfid/outbound/upload-data', formData, {
-				headers: {
-					[RequestHeaders.CONTENT_TYPE]: 'multipart/form-data'
-				}
-			}),
-			{
-				loading: 'Uploading file ...',
-				success: (response) => {
-					if (inputRef.current) {
-						inputRef.current.value = ''
-						resetFiles()
-					}
-					console.log('response :>>', response)
-					return 'File uploaded successfully'
-				},
-				error: (error) => {
-					console.log('error :>>', error)
-					return 'Failed to upload file'
-				}
-			}
-		)
-	}
-
 	return (
 		<Dialog>
 			<DialogTrigger
@@ -144,18 +118,16 @@ const UploadDataFileDialog: React.FC = () => {
 						Upload CSV file to import offline data. The file must be in correct format.
 					</DialogDescription>
 				</DialogHeader>
-
 				<DroppableArea
 					htmlFor={dropFileAreaId}
-					data-active={isDragActive}
+					data-drag-active={isDragActive}
+					aria-disabled={files.length >= MAX_FILES}
 					onDrop={onDrop}
 					onDragOver={onDragOver}
 					onDragLeave={onDragLeave}>
 					<Input
-						ref={(e) => {
-							inputRef.current = e
-						}}
 						id={dropFileAreaId}
+						ref={inputRef}
 						type='file'
 						accept='.csv'
 						multiple
@@ -165,7 +137,6 @@ const UploadDataFileDialog: React.FC = () => {
 					<Icon name='CloudUpload' size={48} strokeWidth={1.25} stroke='hsl(var(--muted-foreground))' />
 					<Typography color='muted'>Click to upload or drag and drop CSV files</Typography>
 				</DroppableArea>
-
 				{files.length > 0 && (
 					<ScrollShadow className='max-h-32'>
 						{files.map((file, idx) => (
@@ -181,9 +152,7 @@ const UploadDataFileDialog: React.FC = () => {
 				<Typography variant='small' color='muted'>
 					{files.length}/{MAX_FILES} chosen file(s)
 				</Typography>
-				<Button
-					// disabled={isPending || files.length === 0}
-					onClick={debounce(() => toast.info('Upload data'), 500)}>
+				<Button disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
 					<Icon name='Upload' role='presentation' /> Upload
 				</Button>
 			</DialogContent>
@@ -195,20 +164,24 @@ const FileItem: React.FC<{ file: File; disabled: boolean; onRemove: () => void }
 	return (
 		<Div
 			aria-disabled={disabled}
-			className='flex flex-grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80 hover:bg-accent'>
+			className='group flex flex-grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80 hover:bg-accent'>
 			<Icon name='File' />
-			<Typography variant='small'>{file.name}</Typography>
+			<Typography variant='small' className='line-clamp-1 block flex-1'>
+				{file.name}
+			</Typography>
 			<Typography variant='small' color='muted'>
 				{filesize(file.size, { round: 2 })}
 			</Typography>
-			<button className='ml-auto hover:opacity-80' disabled={disabled} onClick={() => onRemove()}>
+			<button
+				className='opacity-0 group-hover:opacity-100 hover:opacity-80'
+				disabled={disabled}
+				onClick={() => onRemove()}>
 				<Icon name='X' size={14} />
 			</button>
 		</Div>
 	)
 }
 
-export default UploadDataFileDialog
+const DroppableArea = tw.label`mt-6 flex cursor-pointer flex-col items-center justify-center space-y-3 rounded-lg border-2 border-dashed p-6 transition-colors duration-200 data-[drag-active=true]:border-primary aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-80`
 
-const DroppableArea = tw.label`mt-6 flex cursor-pointer flex-col items-center justify-center space-y-3 rounded-lg border-2 border-dashed p-6 transition-colors duration-200 data-[active=true]:border-primary`
-const Form = tw.form`flex flex-col items-stretch gap-y-6`
+export default UploadDataFileDialog
