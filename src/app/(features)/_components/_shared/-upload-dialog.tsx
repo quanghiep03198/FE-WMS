@@ -24,12 +24,15 @@ import { filesize } from 'filesize'
 import React, { useCallback, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import tw from 'twin.macro'
+import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 
-const MAX_FILES: number = 100
+type UploadDataFileDialogProps = {
+	station: string
+	maxFiles: number
+}
 
-const UploadDataFileDialog: React.FC = () => {
+const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, maxFiles }) => {
 	const { t } = useTranslation()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	const [isDragActive, setDragActive] = useState(false)
@@ -41,7 +44,12 @@ const UploadDataFileDialog: React.FC = () => {
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: async () => {
 			const formData = new FormData()
-			formData.append('station', `CUS_${user.company_code}_WH103`)
+			/**
+			 * Station prefix is used to identify the station where the file is uploaded.
+			 * 'CUS' prefix represents the customer's EPC data.
+			 */
+			const STATION_PREFIX = 'CUS'
+			formData.append('station', `${STATION_PREFIX}_${user.company_code}_${station}`)
 			files.forEach((file) => formData.append('files', file, uuid()))
 			return await axiosInstance.post(`/rfid/upload-data`, formData, {
 				headers: {
@@ -63,8 +71,8 @@ const UploadDataFileDialog: React.FC = () => {
 	})
 
 	const onDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
-		if (files.length >= MAX_FILES) {
-			toast.warning(`You can only upload ${MAX_FILES} files at a time`)
+		if (files.length >= maxFiles) {
+			toast.warning(`You can only upload ${maxFiles} files at a time`)
 			return
 		}
 		e.preventDefault()
@@ -85,7 +93,7 @@ const UploadDataFileDialog: React.FC = () => {
 	const onDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
 		e.preventDefault()
 		e.stopPropagation()
-		if (files.length < MAX_FILES) setDragActive(true)
+		if (files.length < maxFiles) setDragActive(true)
 	}, [])
 
 	const onDragLeave = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
@@ -95,7 +103,7 @@ const UploadDataFileDialog: React.FC = () => {
 	}, [])
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (files.length >= MAX_FILES) {
+		if (files.length >= maxFiles) {
 			e.preventDefault()
 			return
 		}
@@ -109,7 +117,7 @@ const UploadDataFileDialog: React.FC = () => {
 			<DialogTrigger
 				className={cn(buttonVariants({ size: isExtraLargeScreen ? 'default' : 'lg', className: 'w-full' }))}>
 				<Icon name='Upload' role='presentation' size={18} />
-				{t('ns_common:actions.upload')}
+				Upload
 			</DialogTrigger>
 			<DialogContent className='max-w-xl'>
 				<DialogHeader>
@@ -119,7 +127,7 @@ const UploadDataFileDialog: React.FC = () => {
 				<DroppableArea
 					htmlFor={dropFileAreaId}
 					data-drag-active={isDragActive}
-					aria-disabled={files.length >= MAX_FILES}
+					aria-disabled={files.length >= maxFiles}
 					onDrop={onDrop}
 					onDragOver={onDragOver}
 					onDragLeave={onDragLeave}>
@@ -148,7 +156,7 @@ const UploadDataFileDialog: React.FC = () => {
 					</ScrollShadow>
 				)}
 				<Typography variant='small' color='muted'>
-					{files.length}/{MAX_FILES} chosen file(s)
+					{files.length}/{maxFiles} chosen file(s)
 				</Typography>
 				<Button disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
 					<Icon name='Upload' role='presentation' /> Upload

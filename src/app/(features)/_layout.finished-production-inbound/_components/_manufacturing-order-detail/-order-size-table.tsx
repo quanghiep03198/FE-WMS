@@ -141,7 +141,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			<HoverCard openDelay={50} closeDelay={50}>
 				<HoverCardTrigger asChild>
 					<DialogTrigger
-						className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'items-center' }))}>
+						className={cn(buttonVariants({ variant: 'secondary', size: 'lg', className: 'items-center' }))}>
 						{t('ns_common:actions.detail')}
 						<Icon name='ArrowUpRight' role='presentation' />
 					</DialogTrigger>

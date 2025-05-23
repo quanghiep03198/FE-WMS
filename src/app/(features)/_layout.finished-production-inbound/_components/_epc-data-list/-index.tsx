@@ -1,3 +1,4 @@
+import UploadDataFileDialog from '@/app/(features)/_components/_shared/-upload-dialog'
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../_manufacturing-order-detail/-index'
 import EpcDataList from './-data-list-body'
@@ -11,6 +12,7 @@ const EpcListBox: React.FC = () => {
 				<EpcDataList />
 			</ListBoxBody>
 			<ListBoxFooter>
+				<UploadDataFileDialog station='101' maxFiles={100} />
 				<OrderDetails />
 			</ListBoxFooter>
 		</ListBoxWrapper>

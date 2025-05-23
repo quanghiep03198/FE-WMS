@@ -1,3 +1,4 @@
+import UploadDataFileDialog from '@/app/(features)/_components/_shared/-upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
@@ -22,7 +23,6 @@ import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
-import UploadDataFileDialog from './-upload-dialog'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 0
@@ -197,7 +197,6 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					size={40}
 					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height-10rem))] md:h-[50vh]'>
 					<Div
 						className='relative w-full'
@@ -253,7 +252,7 @@ const ScannedEpcList: React.FC = () => {
 			{/* Datalist footer */}
 			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5 @2xl:grid-cols-3'>
 				<Div className='col-span-1'>
-					<UploadDataFileDialog />
+					<UploadDataFileDialog station='103' maxFiles={100} />
 				</Div>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />

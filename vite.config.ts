@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			react({
 				babel: {
-					plugins: [['babel-plugin-react-compiler', {}], 'babel-plugin-macros', 'babel-plugin-styled-components']
+					plugins: [['babel-plugin-react-compiler', {}]]
 				}
 			}),
 			reactRouter(),
@@ -111,6 +111,11 @@ export default defineConfig(({ mode }) => {
 			dir: './tests',
 			coverage: {
 				ignoreEmptyLines: true
+			}
+		},
+		optimizeDeps: {
+			esbuildOptions: {
+				target: 'esnext'
 			}
 		},
 		esbuild: {

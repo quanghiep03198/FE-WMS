@@ -140,7 +140,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
 								</Typography>
-								<Typography variant='small'>
+								<Typography className='text-sm'>
 									{t('ns_inoutbound:notification.exchange_order_caution')}
 								</Typography>
 							</Div>

@@ -126,6 +126,6 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 	</div>
 )
 
-const LinkCard = tw.a`'inline-flex rounded-md group/card flex aspect-square xl:h-14 h-12 border items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)] [&>img]:object-contain [&>img]:object-center`
+const LinkCard = tw.a`rounded-md group/card flex aspect-square xl:h-14 h-12 border items-center justify-center bg-background p-0 shadow-[0px_2px_8px_rgba(10,10,10,0.2)] dark:shadow-[0px_2px_8px_rgba(82,82,82,0.3)] [&>img]:object-contain [&>img]:object-center`
 
 export default LogoCloud

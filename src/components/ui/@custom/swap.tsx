@@ -51,7 +51,7 @@ const Label = tw.label`
 	cursor-pointer
 	relative
 	select-none
-	padding-1
+	p-1
 	hover:bg-accent
 	hover:text-accent-foreground
 	h-9 w-9

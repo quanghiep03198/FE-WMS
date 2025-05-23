@@ -4,7 +4,7 @@ import env from '@/common/utils/env'
 import { Div, Typography } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import tw from 'twin.macro'
+import tw from 'tailwind-styled-components'
 
 const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
