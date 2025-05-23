@@ -11,6 +11,7 @@ export default {
 		confirm: 'Xác nhận',
 		connect: 'Kết nối',
 		continue: 'Tiếp tục',
+		csv_upload: 'Nhấp để tải lên hoặc kéo và thả tệp CSV',
 		decrement: 'Giảm số lượng',
 		delete: 'Xóa',
 		detail: 'Chi tiết',
@@ -74,7 +75,8 @@ export default {
 		understand_and_proceed: 'Tôi hiểu và muốn tiếp tục'
 	},
 	descriptions: {
-		import_data: 'Tải lên file CSV nhập dữ liệu. File tải lải lên phải đúng định dạng.'
+		import_data: 'Tải lên file CSV nhập dữ liệu. File tải lải lên phải đúng định dạng.',
+		chosen_files: 'Đã chọn {{qty}} file'
 	},
 	errors: {
 		'403': 'Yêu Cầu Quyền Truy Cập',

@@ -11,6 +11,7 @@ export default {
 		confirm: '确认',
 		connect: '连接',
 		continue: '继续',
+		csv_upload: '点击上传或拖放 CSV 文件',
 		decrement: '减量',
 		delete: '删除',
 		detail: '细节',
@@ -72,7 +73,8 @@ export default {
 		understand_and_proceed: '我同意及要继续'
 	},
 	descriptions: {
-		import_data: '上传入数据的 CSV档案. 上传的文件必须符合正确的格式'
+		import_data: '上传入数据的 CSV档案. 上传的文件必须符合正确的格式',
+		chosen_files: '已选择 {{qty}} 个文件'
 	},
 	errors: {
 		'403': '要就使用权',

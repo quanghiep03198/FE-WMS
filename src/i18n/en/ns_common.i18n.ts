@@ -11,6 +11,7 @@ export default {
 		confirm: 'Confirm',
 		connect: 'Connect',
 		continue: 'Continue',
+		csv_upload: 'Click to upload or drag and drop CSV files',
 		decrement: 'Decrement',
 		delete: 'Delete',
 		detail: 'Detail',
@@ -73,7 +74,8 @@ export default {
 		understand_and_proceed: 'I understand and want to proceed'
 	},
 	descriptions: {
-		import_data: 'Upload a CSV files to import data. The uploaded files must be in the correct format.'
+		import_data: 'Upload a CSV files to import data. The uploaded files must be in the correct format.',
+		chosen_files: 'Chose {{qty}} files'
 	},
 	errors: {
 		'403': 'Permission Denied',

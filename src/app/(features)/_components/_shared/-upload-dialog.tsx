@@ -140,8 +140,8 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 						className='hidden'
 						onChange={handleFileChange}
 					/>
-					<Icon name='CloudUpload' size={48} strokeWidth={1.25} stroke='hsl(var(--muted-foreground))' />
-					<Typography color='muted'>Click to upload or drag and drop CSV files</Typography>
+					<Icon name='CloudUpload' size={40} strokeWidth={1} stroke={'hsl(var(--active))'} />
+					<Typography color='muted'>{t('ns_common:actions.csv_upload')}</Typography>
 				</DroppableArea>
 				{files.length > 0 && (
 					<ScrollShadow className='max-h-32'>
@@ -155,11 +155,24 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 						))}
 					</ScrollShadow>
 				)}
-				<Typography variant='small' color='muted'>
-					{files.length}/{maxFiles} chosen file(s)
-				</Typography>
+				<Div className='flex items-center justify-between'>
+					<Typography variant='small' color='muted'>
+						{t('ns_common:descriptions.chosen_files', {
+							qty: `${files.length}/${maxFiles}`,
+							defaultValue: `${files.length}/${maxFiles}`
+						})}
+					</Typography>
+					<Typography variant='small' color='muted'>
+						{filesize(files.map((item) => item.size).reduce<number>((acc, curr) => acc + curr, 0))}
+					</Typography>
+				</Div>
 				<Button disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
-					<Icon name='Upload' role='presentation' /> Upload
+					<Icon
+						name={isPending ? 'LoaderCircle' : 'Upload'}
+						className={cn({ 'animate-[spin_1s_linear_infinite]': isPending })}
+						role='presentation'
+					/>{' '}
+					Upload
 				</Button>
 			</DialogContent>
 		</Dialog>
@@ -188,6 +201,6 @@ const FileItem: React.FC<{ file: File; disabled: boolean; onRemove: () => void }
 	)
 }
 
-const DroppableArea = tw.label`mt-6 flex cursor-pointer flex-col items-center justify-center space-y-3 rounded-lg border-2 border-dashed p-6 transition-colors duration-200 data-[drag-active=true]:border-primary aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-80`
+const DroppableArea = tw.label`mt-6 flex cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border-2 border-dashed p-6 transition-colors h-48 duration-200 data-[drag-active=true]:border-primary aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-80`
 
 export default UploadDataFileDialog
