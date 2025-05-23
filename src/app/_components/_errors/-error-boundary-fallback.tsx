@@ -41,7 +41,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 				<Typography variant='code' className='text-lg font-semibold' color='destructive'>
 					{HttpStatusCode.InternalServerError}
 				</Typography>
-				<Typography variant='h2'>{t('ns_common:errors.500')}</Typography>
+				<Typography variant='h1'>{t('ns_common:errors.500')}</Typography>
 				<Typography color='muted' className='text-center @5xl:text-left'>
 					{t('ns_common:errors.500_message')}
 				</Typography>

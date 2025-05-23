@@ -7,8 +7,8 @@ const UnavailableService: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 
 	return (
-		<Div className='flex h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-2 lg:flex-row xl:flex-row xl:gap-0'>
-			<Div className='flex flex-col gap-2'>
+		<Div className='flex h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-evenly gap-2 md:justify-center md:gap-10 lg:flex-row xl:flex-row xl:gap-0'>
+			<Div className='flex flex-col gap-2 md:items-center'>
 				<Typography variant='code' color='destructive' className='mb-3 text-xl font-bold'>
 					503
 				</Typography>
@@ -22,6 +22,6 @@ const UnavailableService: React.FC = () => {
 	)
 }
 
-const Image = tw.img`xxl:max-w-3xl xl:max-w-2xl object-center object-contain w-full select-none`
+const Image = tw.img`xxl:max-w-4xl xl:max-w-2xl max-w-lg object-center object-contain w-full select-none`
 
 export default UnavailableService
