@@ -121,7 +121,6 @@ const EpcDataList: React.FC = () => {
 					try {
 						if (!event.data || !Json.isValid(event.data)) return
 						const data = JSON.parse(event.data) as RFIDStreamEventData
-						console.table(data?.orders)
 						setIncommingEpc(data?.epcs)
 						setScannedOrders(data?.orders)
 						setHasInvalidEpcAlert(Boolean(data?.has_invalid) && !isInvalidEpcDismissedRef.current)

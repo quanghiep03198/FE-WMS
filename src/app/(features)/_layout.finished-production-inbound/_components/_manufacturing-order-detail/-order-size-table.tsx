@@ -110,8 +110,6 @@ const OrderSizeDetailTable: React.FC = () => {
 		}
 	}
 
-	console.log(scannedOrders)
-
 	const filteredScannedOrders = useMemo(() => {
 		const { mo_no, color_sn, shoes_style_code_factory } = columnFilters
 		return scannedOrders.filter((item) => {
