@@ -65,6 +65,9 @@ export default {
 		order_count: '{{ count }} order(s) found.'
 	},
 	notification: {
+		browser_tab_resumed: 'Welcome back',
+		browser_tab_resumed_message:
+			'Due to inactivity, the connection was temporarily closed to save system resources. Would you like to reconnect?',
 		confirm_delete_all_mono: {
 			title: 'Do you want to delete this order?',
 			description: 'If you delete it, you have to rescan EPCs.'

@@ -1,4 +1,5 @@
-import { useSyncExternalStore } from 'react'
+import { useMemoizedFn } from 'ahooks'
+import { useRef, useSyncExternalStore } from 'react'
 
 type BrowserTabStatus = 'active' | 'idle' | 'hidden'
 
@@ -7,6 +8,10 @@ type BrowserTabActivityOptions = {
 	 * The time in milliseconds after which the tab is considered idle.
 	 */
 	idleTime?: number
+	/**
+	 * The time in milliseconds after which the tab is considered hidden.
+	 */
+	hiddenTime?: number
 	onIdle?: () => void
 	onResume?: () => void
 	onInactive?: () => void
@@ -14,43 +19,46 @@ type BrowserTabActivityOptions = {
 }
 
 export function useBrowserTabStatus(options: BrowserTabActivityOptions = {}): BrowserTabStatus {
-	const { idleTime = 5 * 60 * 1000, onIdle, onResume, onInactive, onActive } = options
-
-	let isVisible = document.visibilityState === 'visible'
-	let isIdle = false
-	let idleTimeout: ReturnType<typeof setTimeout> | null = null
+	const { idleTime = 5 * 60 * 1000, hiddenTime = 0, onIdle, onResume, onInactive, onActive } = options
 
 	const subscribers = new Set<() => void>()
+	const isVisibleRef = useRef<boolean>(document.visibilityState === 'visible')
+	const isIdleRef = useRef<boolean>(false)
+	const idleTimeoutRef = useRef<NodeJS.Timeout | null>(null) // useRef to store the timeout ID
 
 	const getStatusSnapshot = (): BrowserTabStatus => {
-		if (!isVisible) return 'hidden'
-		if (isIdle) return 'idle'
+		if (!isVisibleRef) return 'hidden'
+		if (isIdleRef) return 'idle'
 		return 'active'
 	}
 
 	const broadcastChange = () => subscribers.forEach((cb) => cb())
 
-	const resetIdle = () => {
-		if (isIdle) {
-			isIdle = false
-			if (onResume) onResume()
+	const resetIdle = useMemoizedFn(() => {
+		if (isIdleRef.current) {
+			isIdleRef.current = false
+			if (typeof onResume === 'function') onResume()
 			broadcastChange()
 		}
-		if (idleTimeout) clearTimeout(idleTimeout)
-		idleTimeout = setTimeout(() => {
-			isIdle = true
+		if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current)
+		idleTimeoutRef.current = setTimeout(() => {
+			isIdleRef.current = true
 			if (typeof onIdle === 'function') onIdle()
 			broadcastChange()
 		}, idleTime)
-	}
+	})
 
 	const onVisibilityChange = () => {
 		const visibleNow = document.visibilityState === 'visible'
-		if (visibleNow !== isVisible) {
-			isVisible = visibleNow
+		if (visibleNow !== isVisibleRef.current) {
+			isVisibleRef.current = visibleNow
 			broadcastChange()
-			if (typeof onActive === 'function' && typeof onInactive === 'function') {
-				if (visibleNow) onActive()
+			if (visibleNow && typeof onActive === 'function') onActive()
+			if (!visibleNow && typeof onInactive === 'function') {
+				if (hiddenTime > 0)
+					setTimeout(() => {
+						onInactive()
+					}, hiddenTime)
 				else onInactive()
 			}
 		}
@@ -60,14 +68,13 @@ export function useBrowserTabStatus(options: BrowserTabActivityOptions = {}): Br
 		document.addEventListener('visibilitychange', onVisibilityChange)
 		window.addEventListener('mousemove', resetIdle)
 		window.addEventListener('keydown', resetIdle)
-		resetIdle() // start initial timer
 	}
 
 	const stopTracking = () => {
 		document.removeEventListener('visibilitychange', onVisibilityChange)
 		window.removeEventListener('mousemove', resetIdle)
 		window.removeEventListener('keydown', resetIdle)
-		if (idleTimeout) clearTimeout(idleTimeout)
+		if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current)
 	}
 
 	const subscribe = (callback: () => void) => {

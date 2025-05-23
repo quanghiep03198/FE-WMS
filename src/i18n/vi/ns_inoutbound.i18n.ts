@@ -6,6 +6,9 @@ export default {
 		warehouse_output: 'Xuất kho'
 	},
 	notification: {
+		browser_tab_resumed: 'Chào mừng quay lại',
+		browser_tab_resumed_message:
+			'Do không có hoạt động trong một thời gian, kết nối đã bị ngắt tạm thời để tiết kiệm tài nguyên. Bạn có muốn kết nối lại không?',
 		confirm_delete_all_mono: {
 			description: 'Nếu bạn xóa hết, thao tác quét epc sẽ phải thực hiện lại',
 			title: 'Bạn chắc chắn muốn xóa chỉ lệnh này ?'
@@ -13,7 +16,7 @@ export default {
 		exchange_order_caution:
 			'Sau khi đổi chỉ lệnh sẽ không thể thao tác đổi ngược lại, hãy chắc chắn trước khi bấm xác nhận đổi chỉ lệnh.',
 		invalid_epc_deteted:
-			'EPC không hợp lệ được phát hiện. Vui lòng liên hệ với bộ phận thành hình để giải quyết vấn đề này, sau đó chuyển chúng đến tái chế',
+			'Phát hiện EPC không hợp lệ. Vui lòng liên hệ bộ phận thành hình để xử lý, sau đó chuyển đến tái chế',
 		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?',
 		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
 		stock_out_submission_caution:

@@ -17,7 +17,6 @@ export default {
 		exchange_epc_dialog_desc: '允许用户用新的生产订单替换或更新产品上的 EPC 标签.',
 		exchange_qty: '实际订单的交换商品数量',
 		inoutbound_form_note: '更新库存移动之前断开连接',
-
 		monthly_inventory_report: '管理和跟踪成品仓库的每月库存',
 		no_added_size: '没有添加尺码',
 		no_exchangable_order: '没有可交换的订单',
@@ -61,6 +60,9 @@ export default {
 		order_count: '找到 {{ count }} 个订单'
 	},
 	notification: {
+		browser_tab_resumed: '浏览器标签已恢复',
+		browser_tab_resumed_message: '由于长时间未操作，连接已暂时断开以节省系统资源。是否重新连接?',
+
 		confirm_delete_all_mono: {
 			description: '如果您刪除它, 則必須重新執行EPC掃描操作.',
 			title: '您確定要刪除此命令嗎 ?'
