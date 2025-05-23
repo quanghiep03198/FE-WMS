@@ -105,7 +105,7 @@ const SyncDataTrigger: React.FC = () => {
 					</Button>
 				</Div>
 				{Array.isArray(state) && state.length > 0 ? (
-					<StepList className='flex min-h-40 flex-col gap-y-4 overflow-y-auto'>
+					<StepList className='flex h-40 flex-col gap-y-3 overflow-y-auto'>
 						{state.map((item, index) => {
 							const icon: Record<
 								SyncProcessState['status'],
@@ -138,14 +138,6 @@ const SyncDataTrigger: React.FC = () => {
 										className='line-clamp-1 w-full animate-typing whitespace-pre-wrap'
 										text={t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
 									/>
-									{/* variant='small'
-										className='line-clamp-1 w-full animate-typing whitespace-nowrap text-nowrap'
-										style={{
-											animationDelay: `${index / 5 + 0.75}s`,
-											animationFillMode: 'both'
-										}}>
-										{t(item.name, { ns: 'ns_rfid', defaultValue: item.name })}
-									</Typewriter> */}
 								</StepItem>
 							)
 						})}
