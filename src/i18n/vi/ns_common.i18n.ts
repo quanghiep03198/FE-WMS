@@ -46,7 +46,8 @@ export default {
 		toggle_theme: 'Chuyển đổi chế độ nền',
 		trigger: 'Kích hoạt',
 		unpin_all_columns: 'Bỏ ghim tất cả cột',
-		update: 'Chỉnh sửa'
+		update: 'Chỉnh sửa',
+		upload: 'Tải lên'
 	},
 	common_fields: {
 		actions: 'Thao tác',
@@ -71,6 +72,9 @@ export default {
 			'Bạn chắc chắn muốn xóa các bạn ghi đã chọn? Dữ liệu sẽ bị xóa hoàn toàn và không thể khôi phục',
 		delete_title: 'Xóa (các) bản ghi đã chọn',
 		understand_and_proceed: 'Tôi hiểu và muốn tiếp tục'
+	},
+	descriptions: {
+		import_data: 'Tải lên file CSV nhập dữ liệu. File tải lải lên phải đúng định dạng.'
 	},
 	errors: {
 		'403': 'Yêu Cầu Quyền Truy Cập',
@@ -174,6 +178,7 @@ export default {
 		caution: 'Cảnh báo',
 		general_settings: 'Cài đặt chung',
 		original_data: 'Dữ liệu gốc',
+		import_data: 'Tải lên dữ liệu',
 		overall: 'Tổng quan',
 		target_data: 'Dữ liệu cập nhật'
 	}

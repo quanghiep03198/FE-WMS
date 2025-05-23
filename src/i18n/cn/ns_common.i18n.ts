@@ -45,7 +45,8 @@ export default {
 		toggle_theme: '切换主题',
 		trigger: '触发',
 		unpin_all_columns: '取消固定所有列',
-		update: '編輯'
+		update: '編輯',
+		upload: '上传'
 	},
 	common_fields: {
 		actions: '操作',
@@ -69,6 +70,9 @@ export default {
 		delete_description: '你确定想删除你的记录? 质料会完全删除并不可恢复',
 		delete_title: '删除所以记录已选择',
 		understand_and_proceed: '我同意及要继续'
+	},
+	descriptions: {
+		import_data: '上传入数据的 CSV档案. 上传的文件必须符合正确的格式'
 	},
 	errors: {
 		'403': '要就使用权',
@@ -168,6 +172,7 @@ export default {
 	titles: {
 		caution: '警告',
 		general_settings: '常规设置',
+		import_data: '上传数据',
 		original_data: '原资料',
 		overall: '总体数据',
 		target_data: '目标资料'

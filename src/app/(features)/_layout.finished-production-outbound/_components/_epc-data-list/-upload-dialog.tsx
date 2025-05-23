@@ -27,7 +27,7 @@ import { toast } from 'sonner'
 import tw from 'twin.macro'
 import { v4 as uuid } from 'uuid'
 
-const MAX_FILES: number = 10
+const MAX_FILES: number = 100
 
 const UploadDataFileDialog: React.FC = () => {
 	const { t } = useTranslation()
@@ -109,14 +109,12 @@ const UploadDataFileDialog: React.FC = () => {
 			<DialogTrigger
 				className={cn(buttonVariants({ size: isExtraLargeScreen ? 'default' : 'lg', className: 'w-full' }))}>
 				<Icon name='Upload' role='presentation' size={18} />
-				Upload
+				{t('ns_common:actions.upload')}
 			</DialogTrigger>
 			<DialogContent className='max-w-xl'>
 				<DialogHeader>
-					<DialogTitle>Upload offline data</DialogTitle>
-					<DialogDescription>
-						Upload CSV file to import offline data. The file must be in correct format.
-					</DialogDescription>
+					<DialogTitle>{t('ns_common:titles.import_data')}</DialogTitle>
+					<DialogDescription>{t('ns_common:descriptions.import_data')}</DialogDescription>
 				</DialogHeader>
 				<DroppableArea
 					htmlFor={dropFileAreaId}

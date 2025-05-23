@@ -45,7 +45,8 @@ export default {
 		toggle_theme: 'Toggle Theme',
 		trigger: 'Trigger',
 		unpin_all_columns: 'Unpin all columns',
-		update: 'Update'
+		update: 'Update',
+		upload: 'Upload'
 	},
 	common_fields: {
 		actions: 'Actions',
@@ -70,6 +71,9 @@ export default {
 			'Are you sure you want to delete the selected record(s)? The data will be irrecoverable. This action cannot be undone.',
 		delete_title: 'Delete selected record(s)',
 		understand_and_proceed: 'I understand and want to proceed'
+	},
+	descriptions: {
+		import_data: 'Upload a CSV files to import data. The uploaded files must be in the correct format.'
 	},
 	errors: {
 		'403': 'Permission Denied',
@@ -169,9 +173,10 @@ export default {
 	titles: {
 		caution: 'Caution',
 		general_settings: 'General settings',
+		import_data: 'Import data',
 		original_data: 'Original data',
-		target_data: 'Target data',
-		overall: 'Overall'
+		overall: 'Overall',
+		target_data: 'Target data'
 	},
 	others: {
 		server: 'Server {{alias}}'
