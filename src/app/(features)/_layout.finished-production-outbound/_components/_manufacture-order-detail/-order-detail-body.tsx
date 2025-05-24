@@ -31,14 +31,7 @@ const OrderDetailTableBody: React.FC<{ virtualizer: Virtualizer<any, any>; data:
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = data[virtualRow.index]
-					return (
-						<TableDataRow
-							key={row.mo_no}
-							data={row}
-							virtualRow={virtualRow}
-							// shouldClosePopover={virtualizer.isScrolling}
-						/>
-					)
+					return <TableDataRow key={row.mo_no} data={row} virtualRow={virtualRow} />
 				})}
 			{after > 0 && (
 				<TableRow ref={(node) => virtualizer.measureElement(node)}>

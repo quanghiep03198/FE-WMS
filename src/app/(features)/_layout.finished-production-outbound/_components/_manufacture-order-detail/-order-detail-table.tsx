@@ -11,7 +11,6 @@ import TableBody from './-order-detail-body'
 import TableEmptyState from './-order-detail-empty-state'
 import TableFooter from './-order-detail-footer'
 import TableHeader from './-order-detail-header'
-import TableLoading from './-order-detail-loading'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { scanningState, scannedOrders } = usePageContext('scanningState', 'scannedOrders')
@@ -73,7 +72,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border xxl:sticky xxl:top-[var(--header-height)]'
+			className='relative z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border xxl:sticky xxl:top-[var(--header-height)]'
 			style={
 				{
 					'--table-footer-height': '2rem'
@@ -81,7 +80,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			}>
 			<Div
 				ref={containerRef}
-				className='h-[calc(var(--outlet-wrapper-height)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg'>
+				className='h-[calc(var(--outlet-wrapper-height)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20'>
 				<Table
 					className='w-full border-separate border-spacing-0 rounded-lg'
 					style={
@@ -91,11 +90,12 @@ const OrderSizeDetailTable: React.FC = () => {
 						} as React.CSSProperties
 					}>
 					<TableHeader onColumnFilterChange={handleColumnFilterChange} />
-					<TableBody virtualizer={virtualizer} data={filteredScannedOrders} />
+					{!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0 ? (
+						<TableEmptyState />
+					) : (
+						<TableBody virtualizer={virtualizer} data={filteredScannedOrders} />
+					)}
 				</Table>
-				{scanningState !== 'pending' &&
-					(!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0) && <TableEmptyState />}
-				{scanningState === 'pending' && <TableLoading />}
 			</Div>
 			<TableFooter totalFilteredQty={String(totalFilteredQty)} />
 		</Div>

@@ -158,7 +158,7 @@ const OrderSizeDetailTable: React.FC = () => {
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
 				<Div className='relative flex h-[calc(85vh-4rem)] flex-col divide-y overflow-hidden rounded-lg border'>
-					<Div className='flow-root h-[85vh] overflow-scroll rounded-lg'>
+					<Div className='flow-root h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20'>
 						<Table
 							className='border-separate border-spacing-0 rounded-lg'
 							style={
