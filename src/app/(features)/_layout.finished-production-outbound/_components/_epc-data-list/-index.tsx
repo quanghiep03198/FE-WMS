@@ -252,7 +252,7 @@ const ScannedEpcList: React.FC = () => {
 			{/* Datalist footer */}
 			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5 @2xl:grid-cols-3'>
 				<Div className='col-span-1'>
-					<UploadDataFileDialog station='103' maxFiles={100} />
+					<UploadDataFileDialog station='WH103' maxFiles={100} />
 				</Div>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />
