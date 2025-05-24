@@ -5,11 +5,19 @@ type TypewriterProps = {
 	text?: string
 	typeSpeed?: number
 	delay?: number
+	playState?: 'running' | 'paused'
 	className?: string
 	onComplete?: () => void
 }
 
-export const Typewriter = ({ text = '', typeSpeed = 32, delay = 0, onComplete, className }: TypewriterProps) => {
+export const Typewriter = ({
+	text = '',
+	typeSpeed = 32,
+	delay = 0,
+	playState = 'running',
+	className,
+	onComplete
+}: TypewriterProps) => {
 	const [displayedText, setDisplayedText] = useState('')
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
 	const onCompleteRef = useRef(onComplete) // Ref to store the latest onComplete
@@ -20,6 +28,7 @@ export const Typewriter = ({ text = '', typeSpeed = 32, delay = 0, onComplete, c
 	}, [onComplete])
 
 	useEffect(() => {
+		if (playState === 'paused') return
 		/**
 		 * Each time htmlString changes,
 		 * only add new characters from the end of the currently displayed text.
@@ -51,7 +60,7 @@ export const Typewriter = ({ text = '', typeSpeed = 32, delay = 0, onComplete, c
 				clearInterval(intervalRef.current)
 			}
 		}
-	}, [text, typeSpeed])
+	}, [text, typeSpeed, playState])
 
 	return (
 		<span
