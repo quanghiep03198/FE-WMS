@@ -5,6 +5,7 @@ export default {
 	sync_data_steps: {
 		step_1: "Authenticate Decker's API",
 		step_2: "Fetch Decker's orders and EPC data",
-		step_3: 'Update EPC data'
+		step_3: 'Update EPC data',
+		step_4: 'Complete Job'
 	}
 }
