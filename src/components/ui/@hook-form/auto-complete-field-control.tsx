@@ -9,8 +9,10 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuidv4 } from 'uuid'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../@core/form'
+import { Icon } from '../@core/icon'
 import { Input } from '../@core/input'
 import { Popover, PopoverContent, PopoverTrigger } from '../@core/popover'
+import { Div } from '../@custom/div'
 import { Typography } from '../@custom/typography'
 
 type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
@@ -21,7 +23,7 @@ type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any
 	disabled?: boolean
 	loading?: boolean
 	template?: React.FC<
-		{ data: D } & React.ComponentProps<
+		{ value: D } & React.ComponentProps<
 			'div' extends keyof HTMLElementTagNameMap ? keyof HTMLElementTagNameMap : React.ElementType
 		>
 	>
@@ -35,7 +37,16 @@ type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any
 export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlProps<T, D>) {
 	const { t } = useTranslation()
 	const { control, getFieldState, setValue } = useFormContext()
-	const { name, datalist, labelField, valueField, label, ref: forwardedRef } = props
+	const {
+		name,
+		datalist,
+		loading,
+		labelField,
+		valueField,
+		label,
+		template: CustomAutoCompleteItem,
+		ref: forwardedRef
+	} = props
 	const id = useId()
 	const internalRef = useRef<HTMLInputElement>(null)
 	const resolvedRef = (forwardedRef || internalRef) as React.RefObject<HTMLInputElement>
@@ -53,7 +64,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							} as React.CSSProperties
 						}>
 						{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
-						<Popover modal={true}>
+						<Popover>
 							<FormControl>
 								<PopoverTrigger className='relative w-full'>
 									<Input
@@ -70,29 +81,38 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 								</PopoverTrigger>
 							</FormControl>
 							<PopoverContent
+								sideOffset={8}
 								className='w-[var(--radix-popover-trigger-width)] p-1'
 								onOpenAutoFocus={(e) => e.preventDefault()}>
-								{datalist?.length > 0 ? (
-									datalist?.map((item) => (
-										<AutoCompleteItem
-											key={uuidv4()}
-											onClick={(e) => {
-												e.stopPropagation()
-												setValue(name, item[valueField])
-											}}>
-											<Typography variant='small' className='line-clamp-1 flex-1'>
-												{String(item[labelField])}
-											</Typography>
-											<CheckIcon
-												className={cn(
-													'ml-auto transition-opacity duration-200',
-													field.value === item[valueField] ? 'opacity-100' : 'opacity-0'
-												)}
-											/>
-										</AutoCompleteItem>
-									))
+								{loading ? (
+									<Div className='flex items-center justify-center p-10 text-center'>
+										<Icon name='LoaderCircle' size={18} className='animate-[spin_1s_linear_infinite]' />
+									</Div>
+								) : datalist?.length > 0 ? (
+									datalist?.map((item) => {
+										if (CustomAutoCompleteItem) return <CustomAutoCompleteItem key={uuidv4()} value={item} />
+
+										return (
+											<AutoCompleteItem
+												key={uuidv4()}
+												onClick={(e) => {
+													e.stopPropagation()
+													setValue(name, item[valueField])
+												}}>
+												<Typography variant='small' className='line-clamp-1 flex-1'>
+													{String(item[labelField])}
+												</Typography>
+												<CheckIcon
+													className={cn(
+														'ml-auto transition-opacity duration-200',
+														field.value === item[valueField] ? 'opacity-100' : 'opacity-0'
+													)}
+												/>
+											</AutoCompleteItem>
+										)
+									})
 								) : (
-									<Typography variant='small' className='p-10 text-center'>
+									<Typography variant='small' color='muted' className='block p-10 text-center'>
 										{t('ns_common:table.no_data')}
 									</Typography>
 								)}

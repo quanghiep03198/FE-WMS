@@ -8,9 +8,12 @@ export class OrderService {
 	}
 
 	static async searchPurchaseOrder(params: { q: string }) {
-		return await axiosInstance.get<unknown, ResponseBody<Record<'po', string>[]>>('/order/purchase-order/search', {
-			params
-		})
+		return await axiosInstance.get<unknown, ResponseBody<Array<{ po: string; is_completed: boolean }>>>(
+			'/order/purchase-order/search',
+			{
+				params
+			}
+		)
 	}
 
 	static async getCommandNumberDetail(commandNumber: string) {
