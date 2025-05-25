@@ -166,7 +166,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 						{filesize(files.map((item) => item.size).reduce<number>((acc, curr) => acc + curr, 0))}
 					</Typography>
 				</Div>
-				<Button disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
+				<Button size='lg' disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
 					<Icon
 						name={isPending ? 'LoaderCircle' : 'Upload'}
 						className={cn({ 'animate-[spin_1s_linear_infinite]': isPending })}
