@@ -8,6 +8,7 @@
 
 - [Introduction](#introduction)
 - [Features](#features)
+- [Technologies Stack](#technologies-stack)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Folder Structure](#folder-structure)
@@ -26,6 +27,25 @@ The warehouse management project helps you manage inventory, track shipments, an
 - Exchange & Return Management.
 - Warehouse Import & Export Management.
 
+## Technologies Stack
+
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Zustand](https://img.shields.io/badge/zustand-%23443e38?style=for-the-badge)
+![Tanstack Router](https://img.shields.io/badge/tanstack_router-%2310b981?style=for-the-badge&logo=react&logoColor=white)
+![Tanstack Query](https://img.shields.io/badge/-Tanstack%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
+![Tanstack Table](https://img.shields.io/badge/Tanstack_Table-%233b82f6?style=for-the-badge&logo=reacttable&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Radix UI](https://img.shields.io/badge/radix%20ui-161618.svg?style=for-the-badge&logo=radix-ui&logoColor=white)
+![Shadcn/UI](https://img.shields.io/badge/shadcn%2Fui-black?style=for-the-badge&logo=shadcnui)
+![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&badgeColor=010101)
+![Storybook](https://img.shields.io/badge/-Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)
+![Sentry](https://img.shields.io/badge/sentry-%23362D59.svg?style=for-the-badge&logo=sentry&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Vitest](https://img.shields.io/badge/-Vitest-252529?style=for-the-badge&logo=vitest&logoColor=FCC72B)
+![Zod](https://img.shields.io/badge/zod-%233068b7.svg?style=for-the-badge&logo=zod&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+
 ## Installation & Requirements
 
 **Node.js** version >= 20.14.0.
@@ -40,21 +60,21 @@ cd <repository-directory>
 ### Step 2: Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Step 3: Run the application in development mode
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ## Usage
 
-1. After running the `npm run dev` command, open your browser and go to `http://localhost:3000`.
+1. After running the `pnpm dev` command, open your browser and go to `http://localhost:3000`.
 2. Log in with your warehouse management account.
 3. Start managing products, tracking inventory, and processing orders.
-4. View UI Components documentation by running `npm run storybook`, open your browser then go to `http://localhost:6006`
+4. View UI Components documentation by running `pnpm storybook`, open your browser then go to `http://localhost:6006`
 
 ## Folder Structure
 
