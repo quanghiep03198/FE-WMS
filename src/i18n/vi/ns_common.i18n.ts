@@ -93,6 +93,7 @@ export default {
 	},
 	factory: {
 		VA1: 'Liên Dinh',
+		VB1: 'Liên Thuấn 1',
 		VB2: 'Liên Thuấn 2',
 		CA1: 'KHRU'
 	},

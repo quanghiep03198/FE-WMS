@@ -91,6 +91,7 @@ export default {
 	},
 	factory: {
 		VA1: '联盈',
+		VB1: '联舜一厂',
 		VB2: '联舜二厂',
 		CA1: '柬埔寨'
 	},

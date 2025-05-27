@@ -92,6 +92,7 @@ export default {
 	},
 	factory: {
 		VA1: 'Lian Ying',
+		VB1: 'Lian Shun 1',
 		VB2: 'Lian Shun 2',
 		CA1: 'KHRU'
 	},
