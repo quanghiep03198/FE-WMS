@@ -2,7 +2,6 @@ import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -33,7 +32,6 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
 	const { user, token, setAccessToken } = useAuth()
-	const isLargeScreen = useMediaQuery('(min-width: 1000px)')
 	const {
 		currentPage,
 		selectedOrder,
@@ -279,7 +277,7 @@ const EpcDataList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[625px]'>
+					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1000px]:h-[calc(var(--outlet-wrapper-height)-168px)]'>
 					<Div
 						className='relative w-full'
 						style={{
@@ -323,7 +321,7 @@ const EpcDataList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[500px] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:max-h-[625px] xxl:h-[625px]'>
+				<Div className='z-10 grid h-[500px] place-content-center group-has-[#toggle-fullscreen[data-state=checked]]:xl:h-[calc(var(--outlet-wrapper-height)-168px)] xxl:h-[calc(var(--outlet-wrapper-height)-168px)]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>

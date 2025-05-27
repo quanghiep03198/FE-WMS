@@ -88,7 +88,7 @@ const ScannerActions: React.FC = () => {
 	})
 
 	return (
-		<Div className='inline-grid grid-cols-2 items-stretch gap-x-1 *:w-full'>
+		<Div className='inline-grid grid-cols-2 items-stretch gap-x-2 *:w-full'>
 			<Button variant='secondary' disabled={scanningStatus === 'connected'} onClick={handleResetScanningAction}>
 				<Icon name='Redo' role='presentation' />
 				{t('ns_common:actions.reset')}

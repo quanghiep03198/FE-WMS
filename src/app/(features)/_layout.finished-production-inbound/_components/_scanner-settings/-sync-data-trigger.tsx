@@ -22,7 +22,7 @@ const SyncDataTrigger: React.FC = () => {
 			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.data_synchronization')}
 			</Typography>
-			<Div className='flex flex-col items-stretch gap-6 rounded-md border p-4'>
+			<Div className='flex flex-col items-stretch gap-6'>
 				<Div className='grid grid-cols-[3fr,1fr] gap-4'>
 					<Div className='space-y-1'>
 						<Typography variant='small' className='inline-flex items-center gap-x-3 font-semibold'>
@@ -37,7 +37,7 @@ const SyncDataTrigger: React.FC = () => {
 					</Button>
 				</Div>
 				{Array.isArray(data) && data.length > 0 ? (
-					<StepList className='flex min-h-48 flex-col gap-y-3 overflow-y-auto transition-height duration-300 ease-out'>
+					<StepList className=''>
 						{data.map((item, index) => {
 							const icon: Record<
 								SyncProcessState['status'],
@@ -85,7 +85,7 @@ const SyncDataTrigger: React.FC = () => {
 	)
 }
 
-const StepList = tw.ul`grid gap-y-4 bg-secondary rounded-md p-4`
+const StepList = tw.ul`bg-secondary p-4 flex min-h-48 flex-col gap-y-3 overflow-y-auto transition-height duration-300 ease-out rounded-[var(--radius)]`
 const StepItem = tw.li`flex items-start text-sm gap-2 duration-300 ease-out animate-in fade-in-0`
 
 export default SyncDataTrigger
