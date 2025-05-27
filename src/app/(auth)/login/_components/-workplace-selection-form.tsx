@@ -13,7 +13,7 @@ type FormValues = { company_code: string }
 const WorkplaceSelectionForm: React.FC = () => {
 	const { setUserCompany } = useAuth()
 	const { dispatch } = useStepContext()
-	const { t } = useTranslation(['ns_auth', 'ns_company'])
+	const { t, i18n } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()
 	const companyCode = form.watch('company_code')
 
@@ -24,6 +24,14 @@ const WorkplaceSelectionForm: React.FC = () => {
 		return data.find((item) => item.company_code === companyCode)
 	}, [data, companyCode])
 
+	const companies = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		return data.map((item) => ({
+			...item,
+			company_name: t(`ns_common:factory.${item.company_code}`, { defaultValue: item.company_name })
+		}))
+	}, [data, i18n.language])
+
 	return (
 		<FormProvider {...form}>
 			<Form
@@ -31,8 +39,8 @@ const WorkplaceSelectionForm: React.FC = () => {
 				<SelectFieldControl
 					label={t('ns_company:company')}
 					name='company_code'
-					placeholder={isFetching ? 'Loading ...' : '-- Select --'}
-					datalist={data}
+					placeholder={isFetching ? 'Loading ...' : 'Select'}
+					datalist={companies}
 					labelField='company_name'
 					valueField='company_code'
 					onValueChange={() => dispatch({ type: 'COMPLETE' })}
