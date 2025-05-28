@@ -125,7 +125,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 									left: '0',
 									scrollbarGutter: 'stable'
 								}}
-								className='overflow-auto bg-secondary/50 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+								className='overflow-auto bg-secondary/50 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>
 							</CollapsibleContent>
 						</Collapsible>
