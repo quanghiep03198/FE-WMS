@@ -8,14 +8,10 @@ const OutboundReportDetailTable: React.FC<Pick<IOutboundReport, 'detail' | 'over
 	const { t } = useTranslation()
 
 	return (
-		<Div className='overflow-clip rounded-md border'>
+		<Div className='overflow-auto rounded-md border'>
 			<Table
 				className='border-separate border-spacing-0 rounded-lg'
-				style={
-					{
-						'--sticky-left-col-width': '12rem'
-					} as React.CSSProperties
-				}>
+				style={{ '--sticky-left-col-width': '12rem' } as React.CSSProperties}>
 				<TableHeader className='sticky top-0 z-20'>
 					<TableRow className='sticky'>
 						<TableHead

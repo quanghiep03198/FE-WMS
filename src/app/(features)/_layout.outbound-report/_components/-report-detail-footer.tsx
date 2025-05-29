@@ -11,7 +11,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 
 	const totalAccumulatedQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
-		return data.reduce((acc, curr) => acc + curr.accumulated_qty, 0)
+		return data.reduce((acc, curr) => acc + curr.daily_qty, 0)
 	}, [data])
 	const totalMissingQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
@@ -47,9 +47,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 										{size?.size_numcode}
 									</NestedCell>
 									<NestedCell className='font-normal'>{formatIntlNumber(size?.po_size_qty ?? 0)}</NestedCell>
-									<NestedCell className='font-normal'>
-										{formatIntlNumber(size?.accumulated_qty ?? 0)}
-									</NestedCell>
+									<NestedCell className='font-normal'>{formatIntlNumber(size?.daily_qty ?? 0)}</NestedCell>
 									<NestedCell className='font-normal'>{formatIntlNumber(size?.missing_qty ?? 0)}</NestedCell>
 								</NestedRow>
 							))}
