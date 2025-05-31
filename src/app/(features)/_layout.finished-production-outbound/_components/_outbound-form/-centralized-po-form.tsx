@@ -1,7 +1,6 @@
 'use no memo'
 
-import { Form as FormProvider } from '@/components/ui'
-import { MultiSelectFieldControl } from '@/components/ui/@hook-form/muti-select-field-control'
+import { Form as FormProvider, MultiSelectFieldControl } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { sortedUniqBy } from 'lodash'
 import { useMemo, useState } from 'react'

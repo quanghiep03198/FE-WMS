@@ -16,26 +16,17 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 	buttonVariants
-} from '..'
-import { BaseFieldControl } from '../../../common/types/hook-form'
+} from '../..'
+import { BaseFieldControl } from '../../../../common/types/hook-form'
 
-type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
+export type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
 	calendarProps?: Partial<CalendarProps>
 }
 
 export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerFieldControlProps<T>) {
 	const { control } = useFormContext()
 
-	const {
-		name,
-		description,
-		label,
-		orientation,
-		hidden,
-		calendarProps = {
-			mode: 'single'
-		}
-	} = props
+	const { name, description, label, orientation, hidden, calendarProps = { mode: 'single' } } = props
 	const id = useId()
 
 	return (

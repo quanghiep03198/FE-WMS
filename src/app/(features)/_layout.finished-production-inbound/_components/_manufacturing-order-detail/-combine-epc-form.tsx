@@ -22,7 +22,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
+import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'

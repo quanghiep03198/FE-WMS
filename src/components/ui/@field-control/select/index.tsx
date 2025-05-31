@@ -16,8 +16,8 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue
-} from '..'
-import { BaseFieldControl } from '../../../common/types/hook-form'
+} from '../..'
+import { BaseFieldControl } from '../../../../common/types/hook-form'
 
 export type SelectFieldControlProps<T extends FieldValues, D> = BaseFieldControl<T> &
 	React.ComponentProps<typeof Select> & {
@@ -58,12 +58,12 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 					<FormItem
 						className={cn({
 							hidden,
-							'grid grid-cols-[1fr_2fr] grid-rows-4 items-center gap-x-2 space-y-0': orientation === 'horizontal'
+							'grid grid-cols-[1fr_3fr] grid-rows-4 items-center gap-x-2 space-y-0': orientation === 'horizontal'
 						})}>
 						{label && (
 							<FormLabel
 								htmlFor={id}
-								className={cn(orientation === 'horizontal' && (isError ? 'row-span-2' : 'row-span-4'))}>
+								className={cn(orientation === 'horizontal' && (isError ? 'row-span-1' : 'row-span-4'))}>
 								{label}
 							</FormLabel>
 						)}

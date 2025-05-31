@@ -4,7 +4,7 @@ import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
-import { FormField, FormItem, FormLabel, FormMessage } from '../@core/form'
+import { FormField, FormItem, FormLabel, FormMessage } from '../../@core/form'
 import {
 	InputTag,
 	InputTagSelectContent,
@@ -12,16 +12,16 @@ import {
 	InputTagSelectItem,
 	InputTagSelectList,
 	InputTagTrigger
-} from '../@custom/input-tag'
+} from '../../@custom/tag-input'
 
-export type InputTagFieldControlProps<T extends FieldValues, D> = BaseFieldControl<T> & {
+export type TagInputFieldControlProps<T extends FieldValues, D> = BaseFieldControl<T> & {
 	datalist: Array<D>
 	labelField: keyof D
 	valueField: keyof D
 }
 
-export function InputTagFieldControl<T extends FieldValues, D extends Record<string, any>>(
-	props: InputTagFieldControlProps<T, D>
+export function TagInputFieldControl<T extends FieldValues, D extends Record<string, any>>(
+	props: TagInputFieldControlProps<T, D>
 ) {
 	const { control, getValues, getFieldState } = useFormContext()
 	const id = useId()

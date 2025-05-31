@@ -11,11 +11,11 @@ import {
 	DialogTitle,
 	Div,
 	Form as FormProvider,
+	InputFieldControl,
 	SelectFieldControl,
 	TextareaFieldControl,
 	Typography
 } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
 import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
 import { zodResolver } from '@hookform/resolvers/zod'
