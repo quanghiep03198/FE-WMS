@@ -44,7 +44,7 @@ const useMultiSelect = () => {
 
 // TODO : expose the visibility of the popup
 
-const InputTag = ({
+const TagInput = ({
 	values: value,
 	onValuesChange: onValueChange,
 	loop = false,
@@ -365,4 +365,11 @@ const InputTagSelectItem = forwardRef<
 
 InputTagSelectItem.displayName = 'InputTagSelectItem'
 
-export { InputTag, InputTagSelectContent, InputTagSelectInput, InputTagSelectItem, InputTagSelectList, InputTagTrigger }
+export {
+	TagInput as InputTag,
+	InputTagSelectContent,
+	InputTagSelectInput,
+	InputTagSelectItem,
+	InputTagSelectList,
+	InputTagTrigger
+}

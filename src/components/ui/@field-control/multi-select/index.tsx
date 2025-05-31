@@ -2,8 +2,8 @@
 
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { FieldValues, useFormContext } from 'react-hook-form'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../@core/form'
-import { MultiSelect, MultiSelectProps } from '../@custom/multi-select'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../@core/form'
+import { MultiSelect, MultiSelectProps } from '../../@custom/multi-select'
 
 type MultipleSelectFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,

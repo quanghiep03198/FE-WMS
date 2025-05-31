@@ -3,12 +3,12 @@ import { Meta, StoryFn } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Button } from '../@core/button'
-import { Form } from '../@core/form'
-import { ComboboxFieldControl, ComboboxFieldControlProps } from './combobox-field-control'
+import { ComboboxFieldControl, ComboboxFieldControlProps } from '.'
+import { Button } from '../../@core/button'
+import { Form } from '../../@core/form'
 
 const meta = {
-	title: 'Components/Form/ComboboxFieldControl',
+	title: 'Components/Field Controls/Combobox',
 	component: ComboboxFieldControl,
 	parameters: {
 		// * Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout

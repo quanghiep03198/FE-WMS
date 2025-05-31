@@ -14,7 +14,7 @@ import {
 	SelectFieldControl,
 	TextareaFieldControl
 } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@hook-form/input-field-control'
+import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UseQueryResult, useMutation, useQueryClient } from '@tanstack/react-query'

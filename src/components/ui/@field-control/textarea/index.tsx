@@ -1,27 +1,26 @@
 import { cn } from '@/common/utils/cn'
 import { forwardRef, useId, useRef } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '..'
-import { BaseFieldControl } from '../../../common/types/hook-form'
-import { TextareaProps } from '../@core/textarea'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '../..'
+import { BaseFieldControl } from '../../../../common/types/hook-form'
+import { TextareaProps } from '../../@core/textarea'
 
 export type TextareaFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & TextareaProps
 
-function TextareaFieldControl<T extends FieldValues>(
-	props: TextareaFieldControlProps<T> & React.PropsWithoutRef<T> & React.RefAttributes<T>,
-	ref: React.ForwardedRef<HTMLTextAreaElement>
+export function TextareaFieldControl<T extends FieldValues>(
+	props: TextareaFieldControlProps<T> & React.PropsWithoutRef<T> & React.RefAttributes<T>
 ) {
-	const { getFieldState, getValues } = useFormContext()
+	const { control, getFieldState, getValues } = useFormContext()
 
 	const {
 		label,
 		name,
 		className,
 		disabled,
-		control,
 		placeholder,
 		description,
 		hidden,
+		ref,
 		orientation,
 		defaultValue = getValues(name),
 		onChange,

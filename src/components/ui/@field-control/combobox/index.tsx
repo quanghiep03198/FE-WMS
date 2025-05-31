@@ -24,8 +24,8 @@ import {
 	PopoverTrigger,
 	Typography,
 	buttonVariants
-} from '..'
-import { BaseFieldControl } from '../../../common/types/hook-form'
+} from '../..'
+import { BaseFieldControl } from '../../../../common/types/hook-form'
 
 export type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,

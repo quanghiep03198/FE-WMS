@@ -8,17 +8,18 @@ import { FieldValues, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuidv4 } from 'uuid'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../@core/form'
-import { Icon } from '../@core/icon'
-import { Input } from '../@core/input'
-import { Popover, PopoverContent, PopoverTrigger } from '../@core/popover'
-import { Div } from '../@custom/div'
-import { Typography } from '../@custom/typography'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../@core/form'
+import { Icon } from '../../@core/icon'
+import { Input } from '../../@core/input'
+import { Popover, PopoverContent, PopoverTrigger } from '../../@core/popover'
+import { Div } from '../../@custom/div'
+import { Typography } from '../../@custom/typography'
 
-type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
+export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,
 	'control'
 > & {
+	placeholder?: string
 	datalist: Array<D>
 	disabled?: boolean
 	loading?: boolean
@@ -39,11 +40,13 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	const { control, getFieldState, setValue } = useFormContext()
 	const {
 		name,
+		placeholder,
 		datalist,
 		loading,
 		labelField,
 		valueField,
 		label,
+		description,
 		template: CustomAutoCompleteItem,
 		ref: forwardedRef
 	} = props
@@ -54,7 +57,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	return (
 		<FormField
 			control={control}
-			name='po'
+			name={name}
 			render={({ field }) => {
 				return (
 					<FormItem
@@ -69,8 +72,8 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 								<PopoverTrigger className='relative w-full'>
 									<Input
 										id={id}
-										autoComplete='off'
-										placeholder='xxxx-xxxx-xxxx'
+										autoComplete='on'
+										placeholder={placeholder}
 										aria-invalid={!!getFieldState(name).error}
 										className='pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
 										value={field.value}
@@ -82,7 +85,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							</FormControl>
 							<PopoverContent
 								sideOffset={8}
-								className='w-[var(--radix-popover-trigger-width)] p-1'
+								className='h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
 								onOpenAutoFocus={(e) => e.preventDefault()}>
 								{loading ? (
 									<Div className='flex items-center justify-center p-10 text-center'>
@@ -119,6 +122,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							</PopoverContent>
 						</Popover>
 						<FormMessage />
+						{description && <FormDescription>{description}</FormDescription>}
 					</FormItem>
 				)
 			}}
