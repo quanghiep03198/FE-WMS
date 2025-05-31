@@ -1,7 +1,7 @@
-import { appHostRegistry } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import env from '@/common/utils/env'
 import { Div, Typography } from '@/components/ui'
+import { hostRegistry } from '@/configs/host-registry.config'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -9,7 +9,7 @@ import tw from 'tailwind-styled-components'
 const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
-	const currentHostRegistry = appHostRegistry.get(user.company_code)
+	const currentHostRegistry = hostRegistry.get(user.company_code)
 	const movedPermanentlyURL = `${window.location.protocol}//${currentHostRegistry}:${window.location.port}/${window.location.pathname}`
 
 	const isNotCompatible = window.location.hostname !== currentHostRegistry && env('VITE_NODE_ENV') === 'production'
