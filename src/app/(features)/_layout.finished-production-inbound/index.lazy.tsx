@@ -4,7 +4,6 @@ import useQuerySelector from '@/common/hooks/use-query-selector'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useFullscreen, useUpdateEffect } from 'ahooks'
 import { Fragment, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import PageNavigationBlocker from './_components/-navigation-blocker'
 import PageComposition from './_components/-page-composition'
@@ -64,7 +63,29 @@ function Page() {
 			<meta name='description' content='RFID Scanner integration for inbound process' />
 
 			<HostCompatibleGuard>
-				{createPortal(
+				<PageProvider>
+					<PageComposition.Container style={{ animationDelay: 0.25 }}>
+						<PageComposition.Wrapper>
+							<PageComposition.Main>
+								<ScannerToolbar />
+								<PageComposition.InnerWrapper>
+									<PageComposition.ListBoxPanel>
+										<EpcListBox />
+									</PageComposition.ListBoxPanel>
+									<PageComposition.CounterPanel>
+										<ScannedEPCsCounter />
+									</PageComposition.CounterPanel>
+									<PageComposition.FormPanel>
+										<InoutboundForm />
+									</PageComposition.FormPanel>
+								</PageComposition.InnerWrapper>
+							</PageComposition.Main>
+							<ScannerSettings />
+						</PageComposition.Wrapper>
+					</PageComposition.Container>
+					<PageNavigationBlocker />
+				</PageProvider>
+				{/* {createPortal(
 					<PageProvider>
 						<PageComposition.Container style={{ animationDelay: 0.25 }}>
 							<PageComposition.Wrapper>
@@ -88,7 +109,7 @@ function Page() {
 						<PageNavigationBlocker />
 					</PageProvider>,
 					isFullscreen ? document.querySelector('#root') : outletWrapper
-				)}
+				)} */}
 			</HostCompatibleGuard>
 		</Fragment>
 	)
