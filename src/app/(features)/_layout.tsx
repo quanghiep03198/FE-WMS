@@ -79,7 +79,7 @@ function Layout() {
 							<Div
 								as='main'
 								id='outlet-wrapper'
-								className='peer flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] [view-transition-name:main-content] sm:px-4'>
+								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] [view-transition-name:main-content] sm:px-4'>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
 										return <ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
