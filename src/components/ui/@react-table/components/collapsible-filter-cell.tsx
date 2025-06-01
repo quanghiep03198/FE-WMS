@@ -6,7 +6,7 @@ import { Header } from '@tanstack/react-table'
 import { Collapsible, CollapsibleContent } from '../../@core/collapsible'
 import { TableHead } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
-import { DataTableUtility } from '../utils/table.util'
+import { DataTableUtility } from '../utils'
 import { ColumnFilter } from './column-filter'
 
 type CollapsibleFilterCellProps<TData, TValue = unknown> = {

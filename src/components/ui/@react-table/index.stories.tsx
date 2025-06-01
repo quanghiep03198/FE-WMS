@@ -1,6 +1,5 @@
-import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.const'
+import { WarehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.enum'
 import { IWarehouse } from '@/common/types/entities'
-import { warehouses } from '@/components/ui/@react-table/mocks'
 import { i18n } from '@/i18n'
 import { Meta } from '@storybook/react'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -12,6 +11,9 @@ export default {
 	component: DataTable,
 	parameters: {
 		// * Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
+		backgrounds: {
+			options: {}
+		}
 	},
 	// * This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
 	tags: ['autodocs'],
@@ -19,10 +21,23 @@ export default {
 	argTypes: {
 		data: { name: 'data', description: 'Dữ liệu hiển thị trên table' },
 		columns: { name: 'columns', description: 'Các cột đã được định nghĩa' },
-		loading: { name: 'loading', description: 'Trạng thái loading dữ liệu khi dùng với API' },
-		enableColumnFilters: { description: 'Cho phép tìm kiếm dữ liệu theo các cột', defaultValue: false },
-		enableColumnResizing: { description: 'Cho phép tùy chỉnh độ rộng các cột', defaultValue: false },
-		enableSorting: { description: 'Cho phép sort dữ liệu trên bảng' },
+		loading: {
+			name: 'loading',
+			description: 'Trạng thái loading dữ liệu khi dùng với API',
+			control: 'boolean',
+			defaultValue: false
+		},
+		enableColumnFilters: {
+			description: 'Cho phép tìm kiếm dữ liệu theo các cột',
+			control: 'boolean',
+			defaultValue: false
+		},
+		enableColumnResizing: {
+			description: 'Cho phép tùy chỉnh độ rộng các cột',
+			control: 'boolean',
+			defaultValue: true
+		},
+		enableSorting: { description: 'Cho phép sort dữ liệu trên bảng', control: 'boolean', defaultValue: true },
 		renderSubComponent: { description: 'Render sub-row component' },
 		manualPagination: {
 			description: 'Xác định sử dụng phân trang mặc định hay không',
@@ -40,10 +55,28 @@ export default {
 	}
 } satisfies Meta<typeof DataTable>
 
-export function SampleDataTable() {
+export const Default = () => {
+	const warehouseTypes = Object.values(WarehouseTypes)
+
+	const warehouses: IWarehouse[] = Array.from(new Array(10)).map((_, index) => ({
+		id: String(index + 1),
+		warehouse_name: 'Warehouse ' + String(index + 1),
+		type_warehouse: warehouseTypes[Math.floor(Math.random() * warehouseTypes.length)] as any,
+		warehouse_num: 'VA1PW' + String(index + 1),
+		dept_code: 'VA1PW01',
+		area: Math.round(Math.random() * 5000),
+		is_disable: false,
+		is_default: false,
+		employee_code: null,
+		employee_name: null,
+		company_code: 'VA1',
+		dept_name: null,
+		remark: null
+	}))
+
 	const columnHelper = createColumnHelper<IWarehouse>()
 
-	const data = warehouses.map((item) => ({
+	const data = warehouses?.map((item) => ({
 		...item,
 		is_default: Boolean(item.is_default),
 		is_disable: Boolean(item.is_disable),
@@ -96,7 +129,6 @@ export function SampleDataTable() {
 				enableSorting: true,
 				cell: ({ getValue }) => new Intl.NumberFormat('en-US', { minimumSignificantDigits: 3 }).format(getValue())
 			}),
-
 			columnHelper.accessor('remark', {
 				header: 'Remark',
 				enableResizing: true
@@ -104,7 +136,6 @@ export function SampleDataTable() {
 		],
 		[]
 	)
-
 	/**
 	 * * Ứng dụng đang sử dụng đa ngôn ngữ, I18nextProvider đã được bọc bên ngoài app, nên bạn chỉ cần khai báo component DataTable khi sử dụng.
 	 */

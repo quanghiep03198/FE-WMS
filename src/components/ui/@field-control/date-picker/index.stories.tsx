@@ -1,14 +1,25 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta, StoryObj } from '@storybook/react'
-import { isAfter } from 'date-fns'
+import { format, isAfter } from 'date-fns'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { DatePickerFieldControl, DatePickerFieldControlProps } from '.'
 import { Button } from '../../@core/button'
-import { DatePickerFieldControl } from './index'
 
-const meta: Meta<typeof DatePickerFieldControl> = {
+type Story = StoryObj<typeof DatePickerFieldControl>
+type StoryArgs = DatePickerFieldControlProps<any>
+
+export default {
 	title: 'Components/Field Controls/Date Picker',
 	component: DatePickerFieldControl,
 	tags: ['autodocs'],
+	args: {
+		name: 'date',
+		label: 'Pick a date',
+		description: 'Select a date from the calendar',
+		calendarProps: { disabled: (date) => isAfter(date, new Date()) }
+	},
 	argTypes: {
 		name: {
 			control: 'text',
@@ -46,28 +57,27 @@ const meta: Meta<typeof DatePickerFieldControl> = {
 			table: { type: { summary: 'Partial<CalendarProps>' } }
 		}
 	}
-}
-export default meta
+} satisfies Meta<typeof DatePickerFieldControl<any>>
+
+const formSchema = z.object({
+	date: z.date({ required_error: 'Date is required.' })
+})
+
+type FormValues = z.infer<typeof formSchema>
 
 const Template = (args: any) => {
-	const methods = useForm({ defaultValues: { date: null } })
-	const [formValues, setFormValues] = useState<any>(null)
+	'use no memo'
 
-	const onSubmit = (data: any) => setFormValues(data)
+	const form = useForm<FormValues>({ resolver: zodResolver(formSchema), mode: 'onSubmit' })
+	const [formValues, setFormValues] = useState<any>({})
+
+	const onSubmit = (data: any) => setFormValues({ date: format(data.date, 'MMM dd,yyyy') })
 
 	return (
-		<div className='mx-auto max-w-md space-y-10'>
-			<FormProvider {...methods}>
-				<form onSubmit={methods.handleSubmit(onSubmit)} style={{ maxWidth: 400 }} className='grid gap-y-6'>
-					<DatePickerFieldControl
-						name='date'
-						label='Pick a date'
-						description='Select a date from the calendar'
-						calendarProps={{
-							disabled: (date) => isAfter(date, new Date()) // Disable future dates
-						}}
-						{...args}
-					/>
+		<div className='mx-auto w-full max-w-lg space-y-10'>
+			<FormProvider {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className='flex w-full flex-col gap-y-6'>
+					<DatePickerFieldControl {...args} />
 					<Button type='submit' style={{ marginTop: 16 }}>
 						Submit
 					</Button>
@@ -81,14 +91,15 @@ const Template = (args: any) => {
 	)
 }
 
-export const Default: StoryObj = {
-	render: (args) => (
-		<Template {...args} calendarProps={{ mode: 'single', disabled: (date) => isAfter(date, new Date()) }} />
-	)
+export const Default: Story = {
+	render: (args: StoryArgs) => <Template {...args} calendarProps={{ ...args.calendarProps, mode: 'single' }} />
 }
 
-export const Range: StoryObj = {
-	render: (args) => (
-		<Template {...args} calendarProps={{ mode: 'range', disabled: (date) => isAfter(date, new Date()) }} />
+export const Range: Story = {
+	render: (args: StoryArgs) => <Template {...args} calendarProps={{ ...args.calendarProps, mode: 'range' }} />
+}
+export const Horizontal: Story = {
+	render: (args: StoryArgs) => (
+		<Template {...args} orientation='horizontal' calendarProps={{ ...args.calendarProps, mode: 'range' }} />
 	)
 }

@@ -3,34 +3,19 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '../../@core/button'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { Form } from '../../@core/form'
 import { TagInputFieldControl, TagInputFieldControlProps } from './index'
 
-const datalist: Record<'id' | 'name', string>[] = [
-	{ id: 'angular', name: 'Angular' },
-	{ id: 'astrojs', name: 'AstroJS' },
-	{ id: 'backbonejs', name: 'BackboneJS' },
-	{ id: 'emberjs', name: 'EmberJS' },
-	{ id: 'lit', name: 'Lit' },
-	{ id: 'nextjs', name: 'NextJS' },
-	{ id: 'nuxtjs', name: 'NuxtJS' },
-	{ id: 'react', name: 'React' },
-	{ id: 'solid', name: 'Solid' },
-	{ id: 'svelte', name: 'Svelte' },
-	{ id: 'vuejs', name: 'VueJS' }
-]
-
-const meta: Meta<typeof TagInputFieldControl> = {
+export default {
 	title: 'Components/Field Controls/Tag Input',
 	component: TagInputFieldControl,
 	tags: ['autodocs'],
 	args: {
 		name: 'frameworks',
 		label: 'Frameworks',
-		labelField: 'name',
-		valueField: 'id',
-		placeholder: 'Select frameworks ...',
-		datalist: datalist
+		placeholder: 'Select frameworks ...'
 	},
 	parameters: {
 		docs: {
@@ -40,19 +25,27 @@ const meta: Meta<typeof TagInputFieldControl> = {
 	argTypes: {
 		name: { control: 'text', description: 'Tên trường trong form' },
 		label: { control: 'text', description: 'Nhãn hiển thị' },
-		datalist: { control: 'object', description: 'Danh sách dữ liệu tag' },
-		labelField: { control: 'text', description: 'Trường hiển thị label của tag' },
-		valueField: { control: 'text', description: 'Trường giá trị của tag' },
 		placeholder: { control: 'text', description: 'Placeholder cho input' },
 		orientation: { control: 'radio', options: ['horizontal', 'vertical'], description: 'Kiểu bố cục' },
 		hidden: { control: 'boolean', description: 'Ẩn trường' },
 		className: { control: 'text', description: 'Class CSS bổ sung' }
 	}
-}
-export default meta
+} satisfies Meta<typeof TagInputFieldControl>
 
-const Template = (args: TagInputFieldControlProps<any, Record<'id' | 'name', string>>) => {
-	const form = useForm({})
+const schema = z.object({
+	frameworks: z
+		.array(z.string(), { required_error: 'This field is required at least 1 item' })
+		.nonempty({ message: 'This field is required at least 1 item' })
+})
+
+type FormValues = z.infer<typeof schema>
+
+const Template = (args: TagInputFieldControlProps<any>) => {
+	'use no memo'
+
+	const form = useForm<FormValues>({
+		resolver: zodResolver(schema)
+	})
 	const [formValues, setFormValues] = useState(form.getValues())
 
 	return (
@@ -72,5 +65,22 @@ const Template = (args: TagInputFieldControlProps<any, Record<'id' | 'name', str
 }
 
 export const Default: StoryObj<typeof TagInputFieldControl> = {
-	render: Template
+	render: Template,
+	args: {
+		name: 'frameworks',
+		label: 'Frameworks',
+		placeholder: 'Enter frameworks ...',
+		description: 'Enter your favorite frameworks'
+	}
+}
+
+export const Horizontal: StoryObj<typeof TagInputFieldControl> = {
+	render: Template,
+	args: {
+		name: 'frameworks',
+		label: 'Frameworks',
+		placeholder: 'Enter frameworks ...',
+		description: 'Enter your favorite frameworks',
+		orientation: 'horizontal'
+	}
 }

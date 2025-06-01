@@ -61,54 +61,58 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn('relative', {
-							'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0': orientation === 'horizontal',
-							hidden: type === 'hidden' || hidden
-						})}>
+						className={cn(
+							orientation === 'horizontal'
+								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
+								: 'space-y-2',
+							(type === 'hidden' || hidden) && 'hidden'
+						)}>
 						{label && (
-							<FormLabel htmlFor={id} className={orientation === 'horizontal' && 'translate-y-3'}>
+							<FormLabel htmlFor={id} className={orientation === 'horizontal' && 'translate-y-full'}>
 								{label}
 							</FormLabel>
 						)}
 						<FormControl>
-							<Div className='relative space-y-2'>
-								<Input
-									id={id}
-									aria-invalid={!!getFieldState(name).error}
-									type={currentType}
-									ref={(e) => {
-										field.ref(e)
-										if (resolvedRef.current) {
-											resolvedRef.current = e
-										}
-									}}
-									value={value}
-									placeholder={placeholder}
-									disabled={disabled}
-									className={cn(
-										className,
-										'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
-										orientation === 'horizontal' && 'mb-2 block',
-										type === 'password' && 'placeholder:font-pass'
-									)}
-									style={{ ...props.style, letterSpacing: type === 'password' ? '1px' : 'normal' }}
-									onChange={(e) => handleChange(e, field)}
-									{...restProps}
-								/>
-								{type === 'password' && (
-									<Toggle
+							<Div className='space-y-2'>
+								<Div className='relative'>
+									<Input
+										id={id}
+										aria-invalid={!!getFieldState(name).error}
+										type={currentType}
+										ref={(e) => {
+											field.ref(e)
+											if (resolvedRef.current) {
+												resolvedRef.current = e
+											}
+										}}
+										value={value}
+										placeholder={placeholder}
+										disabled={disabled}
 										className={cn(
-											'absolute inset-y-0 right-0 z-20 data-[state=on]:bg-transparent hover:bg-transparent'
+											className,
+											'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+											orientation === 'horizontal' && 'mb-2 block',
+											type === 'password' && 'placeholder:font-pass'
 										)}
-										type='button'
-										onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
-										<Icon name={currentType === 'password' ? 'Eye' : 'EyeOff'} />
-									</Toggle>
-								)}
+										style={{ ...props.style, letterSpacing: type === 'password' ? '1px' : 'normal' }}
+										onChange={(e) => handleChange(e, field)}
+										{...restProps}
+									/>
+									{type === 'password' && (
+										<Toggle
+											className={cn(
+												'absolute inset-y-0 right-0 z-20 data-[state=on]:bg-transparent hover:bg-transparent'
+											)}
+											type='button'
+											onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
+											<Icon name={currentType === 'password' ? 'Eye' : 'EyeOff'} />
+										</Toggle>
+									)}
+								</Div>
 								{description && <FormDescription>{description}</FormDescription>}
+								{!!getFieldState(name).error && <FormMessage />}
 							</Div>
 						</FormControl>
-						<FormMessage />
 					</FormItem>
 				)
 			}}

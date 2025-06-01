@@ -5,7 +5,7 @@ import { type Header, type HeaderGroup, type Table } from '@tanstack/react-table
 import { Fragment } from 'react'
 import { TableHead, TableHeader, TableRow } from '../../@core/table'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
-import { DataTableUtility } from '../utils/table.util'
+import { DataTableUtility } from '../utils'
 import CollapsibleFilterCell from './collapsible-filter-cell'
 import ColumnResizer from './column-resizer'
 import { TableCellHead } from './table-cell-head'

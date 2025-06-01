@@ -65,7 +65,7 @@ export * from './@custom/divider'
 export * from './@custom/month-picker'
 export * from './@custom/multi-select'
 export * from './@custom/swap'
-export * from './@custom/tag-input'
+export * from './@custom/tags-input'
 export * from './@custom/typography'
 // #endregion
 

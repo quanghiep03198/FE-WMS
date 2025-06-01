@@ -1,13 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta, StoryFn } from '@storybook/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { AutoCompleteFieldControl, AutoCompleteFieldControlProps } from '.'
 import { Button } from '../../@core/button'
 import { Form } from '../../@core/form'
 
-const meta = {
+type Story = Meta<typeof AutoCompleteFieldControl<any, Record<'name', string>>>
+type StoryArgs = AutoCompleteFieldControlProps<Record<'name', string>>
+
+export default {
 	title: 'Components/Field Controls/Auto Complete',
 	component: AutoCompleteFieldControl,
 	parameters: {
@@ -60,103 +63,84 @@ const meta = {
 	}
 } satisfies Meta<typeof AutoCompleteFieldControl>
 
-export default meta
-
 const formSchema = z.object({
 	fruit: z.string({ required_error: 'Please select a fruit' }).nonempty({ message: 'Please select a fruit' })
 })
 
 type FormValues = z.infer<typeof formSchema>
-type StoryArgs = AutoCompleteFieldControlProps<Record<'id' | 'name', string>>
-
-const datalist: Record<'name', string>[] = [
-	'Apple',
-	'Banana',
-	'Cherry',
-	'Date',
-	'Elderberry',
-	'Fig',
-	'Grape',
-	'Honeydew',
-	'Ivy',
-	'Jackfruit',
-	'Kiwi',
-	'Lemon',
-	'Mango',
-	'Nectarine',
-	'Orange',
-	'Peach'
-].map((item) => ({ name: item }))
 
 const Template: StoryFn<StoryArgs> = (args) => {
+	'use no memo'
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema)
 	})
 
-	const fruits = useMemo(
-		() => [
-			{ id: 'apple', name: 'Apple' },
-			{ id: 'banana', name: 'Banana' },
-			{ id: 'cherry', name: 'Cherry' },
-			{ id: 'date', name: 'Date' },
-			{ id: 'elderberry', name: 'Elderberry' },
-			{ id: 'fig', name: 'Fig' },
-			{ id: 'grape', name: 'Grape' },
-			{ id: 'honeydew', name: 'Honeydew' },
-			{ id: 'ivy', name: 'Ivy' },
-			{ id: 'jackfruit', name: 'Jackfruit' },
-			{ id: 'kiwi', name: 'Kiwi' },
-			{ id: 'lemon', name: 'Lemon' },
-			{ id: 'mango', name: 'Mango' },
-			{ id: 'nectarine', name: 'Nectarine' },
-			{ id: 'orange', name: 'Orange' },
-			{ id: 'peach', name: 'Peach' }
-		],
-		[]
-	)
-
 	const [formValues, setFormValues] = useState<FormValues>(form.getValues())
 
+	useEffect(() => {
+		console.log(form.getFieldState('fruit')?.error)
+	}, [form])
+
 	return (
-		<div className='mx-auto max-w-md space-y-10'>
+		<div className='mx-auto max-w-lg space-y-10'>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(setFormValues)} className='grid gap-y-6'>
+				<form onSubmit={form.handleSubmit(setFormValues)} className='flex flex-col gap-y-6'>
 					<AutoCompleteFieldControl {...args} />
 					<Button type='submit'>Submit</Button>
 				</form>
 			</Form>
 			<pre className='flex flex-col divide-y rounded-md bg-secondary text-sm text-secondary-foreground [&>code:first-child]:py-2 [&>code]:p-4'>
 				<code>JSON</code>
-				<code>{JSON.stringify(formValues, null, 3)}</code>
+				<code>{JSON.stringify(formValues ?? {}, null, 3)}</code>
 			</pre>
 		</div>
 	)
 }
 
-export const Default = Template.bind({})
-Default.args = {
-	name: 'fruit',
-	label: 'Fruit',
-	placeholder: 'Select a fruit ...',
-	description: 'Choose your favorite fruit',
-	datalist: [
-		{ id: 'apple', name: 'Apple' },
-		{ id: 'banana', name: 'Banana' },
-		{ id: 'cherry', name: 'Cherry' },
-		{ id: 'date', name: 'Date' },
-		{ id: 'elderberry', name: 'Elderberry' },
-		{ id: 'fig', name: 'Fig' },
-		{ id: 'grape', name: 'Grape' },
-		{ id: 'honeydew', name: 'Honeydew' },
-		{ id: 'ivy', name: 'Ivy' },
-		{ id: 'jackfruit', name: 'Jackfruit' },
-		{ id: 'kiwi', name: 'Kiwi' },
-		{ id: 'lemon', name: 'Lemon' },
-		{ id: 'mango', name: 'Mango' },
-		{ id: 'nectarine', name: 'Nectarine' },
-		{ id: 'orange', name: 'Orange' },
-		{ id: 'peach', name: 'Peach' }
-	],
-	labelField: 'name',
-	valueField: 'id'
-} satisfies AutoCompleteFieldControlProps<Record<'id' | 'name', string>>
+const datalist: Record<'name', string>[] = [
+	{ name: 'Apple' },
+	{ name: 'Banana' },
+	{ name: 'Cherry' },
+	{ name: 'Date' },
+	{ name: 'Elderberry' },
+	{ name: 'Fig' },
+	{ name: 'Grape' },
+	{ name: 'Honeydew' },
+	{ name: 'Ivy' },
+	{ name: 'Jackfruit' },
+	{ name: 'Kiwi' },
+	{ name: 'Lemon' },
+	{ name: 'Mango' },
+	{ name: 'Nectarine' },
+	{ name: 'Orange' },
+	{ name: 'Peach' }
+]
+
+export const Default: Story = {
+	render: Template,
+	args: {
+		name: 'fruit',
+		label: 'Favourite fruit',
+		placeholder: 'Select a fruit ...',
+		description: 'Choose your favorite fruit',
+		orientation: 'vertical',
+		datalist: datalist,
+		labelField: 'name',
+		valueField: 'name'
+	}
+}
+export const Horizontal: Story = {
+	render: Template,
+	args: {
+		name: 'fruit',
+		label: 'Favourite fruit',
+		shouldFilter: true,
+		placeholder: 'Select a fruit ...',
+		description: 'Choose your favorite fruit',
+		orientation: 'horizontal',
+		datalist: datalist,
+		labelField: 'name',
+		valueField: 'name'
+	}
+}
