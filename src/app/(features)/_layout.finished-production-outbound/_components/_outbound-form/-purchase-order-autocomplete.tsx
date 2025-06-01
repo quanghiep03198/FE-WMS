@@ -18,6 +18,8 @@ const PurchaseOrderAutoComplete: React.FC = () => {
 			label={t('ns_erp:fields.po')}
 			name='po'
 			datalist={purchaseOrders}
+			shouldFilter={false}
+			placeholder={t('ns_common:form_placeholder.fill', { object: 'PO', defaultValue: 'PO' })}
 			labelField='po'
 			valueField='po'
 			loading={isLoading}
