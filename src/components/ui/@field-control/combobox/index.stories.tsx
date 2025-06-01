@@ -74,6 +74,8 @@ type FormValues = z.infer<typeof formSchema>
 type StoryArgs = ComboboxFieldControlProps<Record<'id' | 'name', string>>
 
 const Template: StoryFn<StoryArgs> = (args) => {
+	'use no memo'
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema)
 	})
@@ -88,8 +90,9 @@ const Template: StoryFn<StoryArgs> = (args) => {
 					<Button type='submit'>Submit</Button>
 				</form>
 			</Form>
-			<pre>
-				<code>{JSON.stringify(formValues, null, 2)}</code>
+			<pre className='flex flex-col divide-y rounded-md bg-secondary text-sm text-secondary-foreground [&>code:first-child]:py-2 [&>code]:p-4'>
+				<code>JSON</code>
+				<code>{JSON.stringify(formValues ?? {}, null, 3)}</code>
 			</pre>
 		</div>
 	)

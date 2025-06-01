@@ -56,10 +56,10 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn({
-							hidden,
-							'grid grid-cols-[1fr_3fr] grid-rows-4 items-center gap-x-2 space-y-0': orientation === 'horizontal'
-						})}>
+						className={cn(
+							orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2' : 'space-y-2',
+							hidden && 'hidden'
+						)}>
 						{label && (
 							<FormLabel
 								htmlFor={id}
@@ -109,7 +109,7 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 								</SelectContent>
 							</Select>
 							{props.description && <FormDescription>{props.description}</FormDescription>}
-							<FormMessage className={cn(orientation === 'horizontal' && 'row-span-1')} />
+							<FormMessage />
 						</Div>
 					</FormItem>
 				)

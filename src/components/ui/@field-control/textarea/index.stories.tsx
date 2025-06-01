@@ -3,15 +3,15 @@ import { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { InputFieldControl, InputFieldControlProps } from '.'
+import { TextareaFieldControl, TextareaFieldControlProps } from '.'
 import { Button } from '../../@core/button'
 
-type Story = StoryObj<typeof InputFieldControl>
-type StoryArgs = InputFieldControlProps<Record<'name', string>>
+type Story = StoryObj<typeof TextareaFieldControl>
+type StoryArgs = TextareaFieldControlProps<Record<'name', string>>
 
 export default {
-	title: 'Components/Field Controls/Input',
-	component: InputFieldControl,
+	title: 'Components/Field Controls/Textarea',
+	component: TextareaFieldControl,
 	tags: ['autodocs'],
 	argTypes: {
 		label: { control: 'text' },
@@ -23,7 +23,7 @@ export default {
 		hidden: { control: 'boolean' },
 		orientation: { control: 'radio', options: ['horizontal', 'vertical'] }
 	}
-} satisfies Meta<typeof InputFieldControl>
+} satisfies Meta<typeof TextareaFieldControl>
 
 const formSchema = z.object({})
 
@@ -44,12 +44,12 @@ const Template: StoryFn<StoryArgs> = (args: any) => {
 	const [formValues, setFormValues] = useState(form.getValues())
 
 	return (
-		<div className='mx-auto w-full max-w-lg space-y-10'>
+		<div className='mx-auto w-full max-w-xl space-y-10'>
 			<FormProvider {...form}>
 				<form
 					className='flex flex-col items-stretch space-y-6'
 					onSubmit={form.handleSubmit((data) => setFormValues(data))}>
-					<InputFieldControl {...args} />
+					<TextareaFieldControl {...args} />
 					<Button type='submit'>Submit</Button>
 				</form>
 			</FormProvider>
@@ -65,23 +65,13 @@ const Template: StoryFn<StoryArgs> = (args: any) => {
 export const Default: Story = {
 	render: Template,
 	args: {
-		label: 'Username',
-		name: 'username',
-		placeholder: 'Enter your username',
-		description: 'This is your unique username.',
+		label: 'Message',
+		name: 'message',
+		placeholder: 'Leave your message here...',
+		description: 'This is a textarea for your message.',
 		type: 'text',
-		orientation: 'vertical'
-	}
-}
-
-export const Password: Story = {
-	render: Template,
-	args: {
-		label: 'Password',
-		name: 'password',
-		placeholder: '******',
-		type: 'password',
-		orientation: 'vertical'
+		orientation: 'vertical',
+		rows: 5
 	}
 }
 
@@ -89,7 +79,7 @@ export const Disabled: Story = {
 	render: Template,
 	args: {
 		label: 'Disabled',
-		name: 'disabledInput',
+		name: 'disabledTextarea',
 		placeholder: 'Cannot type here',
 		disabled: true,
 		orientation: 'vertical'
@@ -99,10 +89,11 @@ export const Disabled: Story = {
 export const Horizontal: Story = {
 	render: Template,
 	args: {
-		label: 'Horizontal',
-		name: 'horizontalInput',
+		label: 'Message',
+		name: 'horizontalTextarea',
 		placeholder: 'Horizontal layout',
 		orientation: 'horizontal',
-		description: 'This input is displayed in a horizontal layout.'
+		description: 'This input is displayed in a horizontal layout.',
+		rows: 5
 	}
 }

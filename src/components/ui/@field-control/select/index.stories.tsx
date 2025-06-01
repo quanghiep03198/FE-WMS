@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Meta, StoryFn } from '@storybook/react'
-import { useMemo, useState } from 'react'
+import { Meta, StoryFn, StoryObj } from '@storybook/react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { SelectFieldControl, SelectFieldControlProps } from '.'
@@ -53,55 +53,26 @@ export default {
 			control: { type: 'text' }
 		}
 	}
-} as Meta
+} satisfies Meta<typeof SelectFieldControl>
 
 const formSchema = z.object({
 	fruit: z.string({ required_error: 'Please select a fruit' }).nonempty({ message: 'Please select a fruit' })
 })
 
 type FormValues = z.infer<typeof formSchema>
-type StoryArgs = SelectFieldControlProps<any, Record<'id' | 'name', string>>
+type StoryArgs = SelectFieldControlProps<any, Record<'name', string>>
 
-export const Template: StoryFn<StoryArgs> = () => {
+const Template: StoryFn<StoryArgs> = (args) => {
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema)
 	})
 	const [formValues, setFormValues] = useState<FormValues>(form.getValues())
 
-	const fruits = useMemo(
-		() => [
-			{ id: 'apple', name: 'Apple' },
-			{ id: 'banana', name: 'Banana' },
-			{ id: 'cherry', name: 'Cherry' },
-			{ id: 'date', name: 'Date' },
-			{ id: 'elderberry', name: 'Elderberry' },
-			{ id: 'fig', name: 'Fig' },
-			{ id: 'grape', name: 'Grape' },
-			{ id: 'honeydew', name: 'Honeydew' },
-			{ id: 'ivy', name: 'Ivy' },
-			{ id: 'jackfruit', name: 'Jackfruit' },
-			{ id: 'kiwi', name: 'Kiwi' },
-			{ id: 'lemon', name: 'Lemon' },
-			{ id: 'mango', name: 'Mango' },
-			{ id: 'nectarine', name: 'Nectarine' },
-			{ id: 'orange', name: 'Orange' },
-			{ id: 'peach', name: 'Peach' }
-		],
-		[]
-	)
-
 	return (
 		<div className='mx-auto max-w-md space-y-10'>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(setFormValues)} className='grid gap-y-6'>
-					<SelectFieldControl
-						name='fruit'
-						label='Fruit'
-						placeholder='Select a fruit ...'
-						datalist={fruits}
-						labelField='name'
-						valueField='id'
-					/>
+					<SelectFieldControl {...args} />
 					<Button type='submit'>Submit</Button>
 				</form>
 			</Form>
@@ -111,4 +82,39 @@ export const Template: StoryFn<StoryArgs> = () => {
 			</pre>
 		</div>
 	)
+}
+
+type Story = Meta<StoryArgs>['component'] extends React.ComponentType<infer P> ? StoryObj<P> : never
+
+const fruits: Record<'name', string>[] = [
+	{ name: 'Apple' },
+	{ name: 'Banana' },
+	{ name: 'Cherry' },
+	{ name: 'Date' },
+	{ name: 'Elderberry' },
+	{ name: 'Fig' },
+	{ name: 'Grape' },
+	{ name: 'Honeydew' },
+	{ name: 'Ivy' },
+	{ name: 'Jackfruit' },
+	{ name: 'Kiwi' },
+	{ name: 'Lemon' },
+	{ name: 'Mango' },
+	{ name: 'Nectarine' },
+	{ name: 'Orange' },
+	{ name: 'Peach' }
+]
+
+export const Default: Story = {
+	render: Template,
+	args: {
+		name: 'fruit',
+		label: 'Favourite fruit',
+		placeholder: 'Select a fruit ...',
+		description: 'Choose your favorite fruit',
+		datalist: fruits,
+		labelField: 'name',
+		valueField: 'name',
+		className: 'w-full'
+	}
 }

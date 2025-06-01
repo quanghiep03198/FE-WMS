@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { forwardRef, useId, useRef } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '../..'
+import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '../..'
 import { BaseFieldControl } from '../../../../common/types/hook-form'
 import { TextareaProps } from '../../@core/textarea'
 
@@ -22,6 +22,7 @@ export function TextareaFieldControl<T extends FieldValues>(
 		hidden,
 		ref,
 		orientation,
+		rows = 5,
 		defaultValue = getValues(name),
 		onChange,
 		...restProps
@@ -36,36 +37,43 @@ export function TextareaFieldControl<T extends FieldValues>(
 			name={name}
 			render={({ field }) => (
 				<FormItem
-					className={cn({
-						hidden,
-						'grid grid-cols-[1fr_2fr] items-center gap-x-2 space-y-0': orientation === 'horizontal'
-					})}>
-					{label && <FormLabel htmlFor={id}>{label}</FormLabel>}
+					className={cn(
+						orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0' : 'space-y-2',
+						hidden && 'hidden'
+					)}>
+					{label && (
+						<FormLabel htmlFor={id} className={orientation === 'horizontal' && 'translate-y-full'}>
+							{label}
+						</FormLabel>
+					)}
 					<FormControl>
-						<Textarea
-							{...field}
-							id={id}
-							placeholder={placeholder}
-							className={cn(
-								className,
-								getFieldState(name).error && 'border-destructive focus:border-destructive'
-							)}
-							value={field.value}
-							disabled={disabled}
-							onChange={(e) => {
-								field.onChange(e)
-								if (onChange) onChange(e)
-							}}
-							ref={(e) => {
-								field.ref(e)
-								resolvedRef.current = e
-							}}
-							{...restProps}>
-							{defaultValue}
-						</Textarea>
+						<Div className='space-y-2'>
+							<Textarea
+								{...field}
+								id={id}
+								placeholder={placeholder}
+								className={cn(
+									className,
+									getFieldState(name).error && 'border-destructive focus-visible:ring-0'
+								)}
+								value={field.value}
+								disabled={disabled}
+								onChange={(e) => {
+									field.onChange(e)
+									if (typeof onChange === 'function') onChange(e)
+								}}
+								rows={rows}
+								ref={(e) => {
+									field.ref(e)
+									resolvedRef.current = e
+								}}
+								{...restProps}>
+								{defaultValue}
+							</Textarea>
+							{description && <FormDescription>{description}</FormDescription>}
+							<FormMessage />
+						</Div>
 					</FormControl>
-					{description && <FormDescription>{description}</FormDescription>}
-					<FormMessage />
 				</FormItem>
 			)}
 		/>
