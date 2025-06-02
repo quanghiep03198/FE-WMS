@@ -34,7 +34,7 @@ const CentralizedPoOutboundForm: React.FC = () => {
 			mo_no.trim().toLowerCase().includes(searchTerm.trim().toLowerCase())
 		)
 		const selectedOrders = form.watch('mo_no').map((value) => ({ mo_no: value }))
-		return sortedUniqBy([...result, ...selectedOrders], 'mo_no')
+		return sortedUniqBy([...result, ...selectedOrders], (item) => item.mo_no)
 	}, [searchTerm, scannedOrders])
 
 	return (

@@ -257,7 +257,7 @@ const CommandNumberFieldControl: React.FC = () => {
 	const filteredOrders = useMemo(() => {
 		if (!Array.isArray(scannedOrders)) return []
 		const result = scannedOrders.filter((order) => order.mo_no.toLowerCase().includes(searchTerm.toLowerCase()))
-		return sortedUniqBy(result, 'mo_no')
+		return sortedUniqBy(result, (item) => item.mo_no)
 	}, [searchTerm, scannedOrders])
 
 	return (
