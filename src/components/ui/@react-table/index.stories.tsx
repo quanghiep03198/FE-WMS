@@ -1,10 +1,10 @@
-import { WarehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/warehouse.enum'
-import { IWarehouse } from '@/common/types/entities'
 import { i18n } from '@/i18n'
+import { faker } from '@faker-js/faker'
 import { Meta } from '@storybook/react'
-import { createColumnHelper } from '@tanstack/react-table'
+import { AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { DataTable } from '..'
+import { I18nextProvider } from 'react-i18next'
+import { DataTable, Div, Separator, Typography } from '..'
 
 export default {
 	title: 'Components/Datagrid',
@@ -55,89 +55,171 @@ export default {
 	}
 } satisfies Meta<typeof DataTable>
 
+interface IUser {
+	id: string
+	first_name: string
+	last_name: string
+	email: string
+	phone: string
+	address: string
+	age: number
+	job_title: string
+	company: string
+	department: string
+	salary: number
+	hire_date: string
+	status: 'active' | 'inactive' | 'pending'
+}
+
+const users: IUser[] = Array.from(new Array(100)).map((_, index) => ({
+	id: '#' + String(index + 1),
+	first_name: faker.person.firstName(),
+	last_name: faker.person.lastName(),
+	email: faker.internet.email(),
+	phone: faker.phone.number(),
+	address: faker.location.streetAddress(),
+	age: faker.number.int({ min: 18, max: 60 }),
+	job_title: faker.person.jobTitle(),
+	company: faker.company.name(),
+	department: faker.commerce.department(),
+	salary: faker.number.int({ min: 30000, max: 120000 }),
+	hire_date: faker.date.past().toISOString().split('T')[0],
+	status: faker.helpers.arrayElement(['active', 'inactive', 'pending'] as const)
+}))
+
 export const Default = () => {
-	const warehouseTypes = Object.values(WarehouseTypes)
+	const columnHelper = createColumnHelper<IUser>()
 
-	const warehouses: IWarehouse[] = Array.from(new Array(10)).map((_, index) => ({
-		id: String(index + 1),
-		warehouse_name: 'Warehouse ' + String(index + 1),
-		type_warehouse: warehouseTypes[Math.floor(Math.random() * warehouseTypes.length)] as any,
-		warehouse_num: 'VA1PW' + String(index + 1),
-		dept_code: 'VA1PW01',
-		area: Math.round(Math.random() * 5000),
-		is_disable: false,
-		is_default: false,
-		employee_code: null,
-		employee_name: null,
-		company_code: 'VA1',
-		dept_name: null,
-		remark: null
-	}))
-
-	const columnHelper = createColumnHelper<IWarehouse>()
-
-	const data = warehouses?.map((item) => ({
-		...item,
-		is_default: Boolean(item.is_default),
-		is_disable: Boolean(item.is_disable),
-		type_warehouse: i18n.t(warehouseTypes[item.type_warehouse], {
-			ns: 'ns_warehouse',
-			defaultValue: item.type_warehouse
-		})
-	}))
-
-	const columns = useMemo(
+	const columns: AccessorKeyColumnDef<IUser>[] = useMemo(
 		() => [
-			columnHelper.accessor('warehouse_num', {
-				header: i18n.t('ns_warehouse:fields.warehouse_num'),
+			columnHelper.accessor('id', {
+				header: '#',
+				minSize: 80,
+				size: 80,
+				enableColumnFilter: true,
+				enableResizing: true,
+				enableSorting: true
+			}),
+			columnHelper.accessor('first_name', {
+				header: 'First name',
 				minSize: 150,
-				enableColumnFilter: true,
 				enableResizing: true,
-				enableSorting: true,
-				cell: ({ getValue }) => String(getValue()).toUpperCase()
-			}),
-			columnHelper.accessor('warehouse_name', {
-				header: i18n.t('ns_warehouse:fields.warehouse_name'),
-				minSize: 250,
-				enableResizing: true,
+				enableGlobalFilter: true,
 				enableColumnFilter: true,
-				enableSorting: true,
-				cell: ({ getValue }) => String(getValue()).toUpperCase()
+				enablePinning: true,
+				enableSorting: true
 			}),
-			columnHelper.accessor('type_warehouse', {
-				header: i18n.t('ns_warehouse:fields.type_warehouse'),
-				minSize: 250,
+			columnHelper.accessor('last_name', {
+				header: 'Last name',
+				minSize: 150,
 				enableResizing: true,
+				enableGlobalFilter: true,
 				enableColumnFilter: true,
+				enablePinning: true,
 				enableSorting: true,
-				filterFn: 'equals',
-				meta: {
-					filterVariant: 'select',
-					facetedUniqueValues: Object.entries(warehouseTypes).map(([key, val]) => ({
-						label: i18n.t(val, { ns: 'ns_warehouse', defaultValue: val }),
-						value: key
-					}))
-				}
+				filterFn: 'fuzzy'
 			}),
-			columnHelper.accessor('area', {
-				header: i18n.t('ns_warehouse:fields.area'),
+			columnHelper.accessor('age', {
+				header: 'Age',
 				minSize: 150,
 				filterFn: 'inNumberRange',
-				enableColumnFilter: true,
-				enableGlobalFilter: false,
 				enableResizing: true,
+				enableColumnFilter: true,
+				enablePinning: true,
 				enableSorting: true,
 				cell: ({ getValue }) => new Intl.NumberFormat('en-US', { minimumSignificantDigits: 3 }).format(getValue())
 			}),
-			columnHelper.accessor('remark', {
-				header: 'Remark',
-				enableResizing: true
+			columnHelper.accessor('email', {
+				header: 'Email',
+				minSize: 250,
+				enableResizing: true,
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				filterFn: 'fuzzy'
+			}),
+			columnHelper.accessor('address', {
+				header: 'Address',
+				minSize: 250,
+				enableResizing: true,
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				filterFn: 'fuzzy'
+			}),
+			columnHelper.accessor('company', {
+				header: 'Company',
+				minSize: 250,
+				enableResizing: true,
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				filterFn: 'fuzzy'
+			}),
+			columnHelper.accessor('department', {
+				header: 'Department',
+				minSize: 250,
+				enableResizing: true,
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				filterFn: 'fuzzy'
+			}),
+			columnHelper.accessor('job_title', {
+				header: 'Job title',
+				minSize: 250,
+				enableResizing: true,
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				filterFn: 'fuzzy'
+			}),
+			columnHelper.accessor('salary', {
+				header: 'Salary',
+				minSize: 150,
+				enableResizing: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				filterFn: 'inNumberRange',
+				cell: ({ getValue }) =>
+					new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(getValue())
+			}),
+			columnHelper.accessor('hire_date', {
+				header: 'Hire date',
+				minSize: 200,
+				enableResizing: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				enableSorting: true,
+				meta: {
+					filterVariant: 'date'
+				},
+				cell: ({ getValue }) => new Intl.DateTimeFormat('en-US').format(new Date(getValue()))
 			})
 		],
-		[]
+		[i18n.language]
 	)
 	/**
 	 * * Ứng dụng đang sử dụng đa ngôn ngữ, I18nextProvider đã được bọc bên ngoài app, nên bạn chỉ cần khai báo component DataTable khi sử dụng.
 	 */
-	return <DataTable data={data} columns={columns} />
+	return (
+		<I18nextProvider i18n={i18n}>
+			<Div className='w-full space-y-6'>
+				<Div>
+					<Typography variant='h3'>User list</Typography>
+					<Typography variant='small' className='text-muted-foreground'>
+						This is a sample user list with various fields. You can sort, filter, and resize columns.
+					</Typography>
+				</Div>
+				<Separator />
+				<DataTable data={users} columns={columns} enableColumnPinning={true} />
+			</Div>
+		</I18nextProvider>
+	)
 }
