@@ -55,6 +55,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	const id = useId()
 	const internalRef = useRef<HTMLInputElement>(null)
 	const resolvedRef = (forwardedRef || internalRef) as React.RefObject<HTMLInputElement>
+	const [open, setOpen] = React.useState(false)
 
 	const currentValue = watch(name) ?? ''
 
@@ -65,6 +66,14 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 			? datalist.filter((item) => String(item[valueField]).toLowerCase().includes(currentValue.toLowerCase()))
 			: []
 	}, [datalist, shouldFilter, currentValue])
+
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter') e.preventDefault()
+		else if (e.key === 'Escape') setOpen(false)
+		else {
+			setOpen(true)
+		}
+	}
 
 	return (
 		<FormField
@@ -87,17 +96,19 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							</FormLabel>
 						)}
 						<Div className='space-y-2'>
-							<Popover>
+							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
-									<PopoverTrigger className='relative w-full'>
+									<PopoverTrigger className='relative w-full' onClick={(e) => e.preventDefault()}>
 										<Input
 											id={id}
+											ref={resolvedRef}
+											value={field.value}
 											autoComplete='off'
 											placeholder={placeholder}
 											aria-invalid={!!getFieldState(name).error}
 											className='pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
-											value={field.value}
-											ref={resolvedRef}
+											onKeyDown={handleKeyDown}
+											onClick={() => setOpen(true)}
 											onChange={field.onChange}
 										/>
 										<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50' />
