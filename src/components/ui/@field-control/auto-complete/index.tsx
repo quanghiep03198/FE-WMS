@@ -64,7 +64,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		return Array.isArray(datalist)
 			? datalist.filter((item) => String(item[valueField]).toLowerCase().includes(currentValue.toLowerCase()))
 			: []
-	}, [shouldFilter, currentValue])
+	}, [datalist, shouldFilter, currentValue])
 
 	return (
 		<FormField
