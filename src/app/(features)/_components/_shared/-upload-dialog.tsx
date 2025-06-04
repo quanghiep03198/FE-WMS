@@ -115,7 +115,13 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 	return (
 		<Dialog>
 			<DialogTrigger
-				className={cn(buttonVariants({ size: isExtraLargeScreen ? 'default' : 'lg', className: 'w-full' }))}>
+				className={cn(
+					buttonVariants({
+						variant: 'secondary',
+						size: isExtraLargeScreen ? 'default' : 'lg',
+						className: 'w-full'
+					})
+				)}>
 				<Icon name='Upload' role='presentation' size={18} />
 				Upload
 			</DialogTrigger>

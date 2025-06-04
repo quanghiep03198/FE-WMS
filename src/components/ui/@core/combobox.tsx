@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
@@ -44,19 +44,30 @@ export function Combobox<T extends Record<string, any>>({
 	const [currentValue, setCurrentValue] = useState(value)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
-	const triggerRef = useRef<typeof Button.prototype>(null)
 
-	const _data = useMemo(
-		() =>
-			!isEmpty(searchTerm)
-				? datalist.filter(
-						(item) =>
-							String(item[labelField]).toLocaleLowerCase().includes(searchTerm) ||
-							String(item[valueField]).toLocaleLowerCase().includes(searchTerm)
-					)
-				: datalist,
-		[datalist, searchTerm]
-	)
+	const options = useMemo(() => {
+		if (!Array.isArray(datalist)) {
+			return []
+		} else if (!isEmpty(searchTerm)) {
+			return datalist.filter((item) => {
+				return (
+					String(item[labelField]).toLocaleLowerCase().includes(searchTerm) ||
+					String(item[valueField]).toLocaleLowerCase().includes(searchTerm)
+				)
+			})
+		} else {
+			return datalist
+		}
+	}, [datalist, searchTerm])
+
+	const currentValueText = useMemo<string>(() => {
+		if (!Array.isArray(datalist)) return ''
+		const currentOption = datalist.find(
+			(option) => option[valueField] === value || option[valueField] === currentValue
+		)
+		if (!currentOption) return ''
+		return String(currentOption[labelField])
+	}, [datalist, value, valueField, currentValue])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -65,22 +76,19 @@ export function Combobox<T extends Record<string, any>>({
 					{...triggerProps}
 					variant='outline'
 					role='combobox'
-					ref={triggerRef}
 					aria-expanded={open}
+					aria-placeholder={placeholder}
+					data-empty={!currentValue}
 					onClick={() => setOpen(true)}
-					className={cn('w-full max-w-full justify-between', triggerProps?.className)}>
-					{datalist.find((option) => option[valueField] === value || option[valueField] === currentValue)?.[
-						labelField
-					] ?? placeholder}
+					className={cn(
+						'w-full max-w-full justify-between font-normal data-[empty=true]:text-muted-foreground hover:bg-background data-[empty=true]:hover:text-muted-foreground',
+						triggerProps?.className
+					)}>
+					{currentValueText || placeholder}
 					<CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent
-				style={{
-					padding: 0,
-					width: triggerRef.current?.offsetWidth
-				}}
-				{...contentProps}>
+			<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' {...contentProps}>
 				<Command shouldFilter={false} value={currentValue}>
 					<CommandInput
 						placeholder={placeholder ?? `${t('ns_common:actions.search')} ...`}
@@ -94,7 +102,7 @@ export function Combobox<T extends Record<string, any>>({
 
 					<CommandList className='max-h-80 scrollbar'>
 						<CommandGroup>
-							{_data.map((option) => (
+							{options.map((option) => (
 								<CommandItem
 									key={option[valueField]}
 									value={option[valueField]}

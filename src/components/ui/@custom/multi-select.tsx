@@ -33,7 +33,7 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 	Pick<React.ComponentProps<typeof CommandInput>, 'onInput'> & {
 		ref?: React.RefObject<HTMLButtonElement>
 
-		value: Array<T[keyof T]>
+		value?: Array<T[keyof T]>
 
 		/**
 		 * Determines whether command should filter the datalist automatically or manually.
@@ -121,7 +121,7 @@ export function MultiSelect<D = Record<string, any>>({
 	onValueChange,
 	onInput,
 	loading,
-	value,
+	value = [],
 	defaultValue = [],
 	placeholder = 'Select options',
 	maxCount = 3,

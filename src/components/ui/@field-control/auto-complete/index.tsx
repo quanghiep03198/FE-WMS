@@ -115,7 +115,6 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 									</PopoverTrigger>
 								</FormControl>
 								<PopoverContent
-									sideOffset={8}
 									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{loading ? (
