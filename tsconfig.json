@@ -27,7 +27,13 @@
 		/* Types */
 		"types": ["vite-plugin-pwa", "vite-plugin-pwa/client", "vite-plugin-pwa/pwa-assets", "vitest/globals"]
 	},
-	"include": ["src", "tests"],
+	"include": [
+		"src",
+		"tests",
+		".tmp/@deprecated/services/[deprecated] transfer-order.service.ts",
+		".tmp/@deprecated/services/[deprecated] production-import.service.ts",
+		".tmp/@deprecated/services/[deprecated] inoutbound.service.ts"
+	],
 	"references": [
 		{
 			"path": "./tsconfig.node.json"

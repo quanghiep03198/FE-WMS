@@ -1,15 +1,14 @@
 import UploadDataFileDialog from '@/app/(features)/_components/_shared/-upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
-import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
+import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import useEffectOnce from '@/common/hooks/use-effect-once'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
@@ -23,6 +22,8 @@ import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
+import ArchivedUploadSheet from './-archived-upload-sheet'
+import ConnectionInsight from './-connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 0
@@ -33,7 +34,6 @@ const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const { user, token, setAccessToken } = useAuth()
-	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	const [isPending, startTransition] = useTransition()
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
@@ -188,21 +188,23 @@ const ScannedEpcList: React.FC = () => {
 				} as React.CSSProperties
 			}>
 			{/* Datalist header */}
-			<Div className='hidden items-center justify-between border-b p-3 @6xl:flex md:flex lg:flex'>
-				<Typography className='ml-2 inline-flex items-center gap-x-2 text-lg font-medium'>
-					<Icon name='Tags' size={24} /> EPC Data
-				</Typography>
+			<Div className='flex items-center justify-between border-b p-1.5'>
+				<Div className='ml-2'>
+					<ConnectionInsight />
+				</Div>
+				<Div className='inline-flex items-center gap-x-2'>
+					<ArchivedUploadSheet />
+					<Separator orientation='vertical' className='h-6' />
+					<Button variant='ghost' size='sm' className='px-2 text-sm' onClick={() => fetchServerEvent()}>
+						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
+					</Button>
+				</Div>
 			</Div>
-			{/* Datalist body */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
 					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height-10rem))] md:h-[50vh]'>
-					<Div
-						className='relative w-full'
-						style={{
-							height: virtualizer.getTotalSize()
-						}}>
+					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
@@ -250,21 +252,12 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5 @2xl:grid-cols-3'>
-				<Div className='col-span-1'>
-					<UploadDataFileDialog station='WH103' maxFiles={200} />
-				</Div>
+			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5'>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />
 				</Div>
-				<Div className='col-span-1'>
-					<Button
-						size={isExtraLargeScreen ? 'default' : 'lg'}
-						variant='destructive'
-						className='w-full'
-						onClick={() => fetchServerEvent()}>
-						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
-					</Button>
+				<Div className='col-span-full @2xl:col-span-1'>
+					<UploadDataFileDialog station='WH103' maxFiles={200} />
 				</Div>
 			</Div>
 		</Div>
