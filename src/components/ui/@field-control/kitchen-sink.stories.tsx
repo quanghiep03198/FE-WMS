@@ -94,7 +94,6 @@ export const Template = () => {
 
 	const onSubmit = (data: any) => {
 		setFormValues(data)
-		console.log('Form submitted:', data)
 	}
 
 	return (
