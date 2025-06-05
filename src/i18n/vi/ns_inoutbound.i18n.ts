@@ -29,6 +29,7 @@ export default {
 	},
 	description: {
 		add_outbound_size: 'Thêm size và số lượng để tiến hành xuất tách đơn.',
+		archived_restoration: 'Khôi phục dữ liệu đã lưu trữ. Chỉ sử dụng khi cần thiết.',
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
 		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn',
@@ -109,6 +110,7 @@ export default {
 		transferred_data: 'Dữ liệu đã chuyển'
 	},
 	titles: {
+		archived_restoration: 'Khôi phục dữ liệu',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',

@@ -31,6 +31,7 @@ export default {
 		reload: '重新加载',
 		report_bug: '报告错误',
 		reset: '重置',
+		restore: '恢复',
 		retry: '重试',
 		revert_changes: '恢复更改',
 		save: '保存',

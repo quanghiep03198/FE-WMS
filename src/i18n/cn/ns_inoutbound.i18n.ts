@@ -11,6 +11,7 @@ export default {
 	},
 	description: {
 		add_outbound_size: '添加尺码和数量以执行出库操作',
+		archived_restoration: '恢复已存档的数据. 仅在必要时使用.',
 		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
 		daily_outbound_report: '跟踪和管理每日成品仓库出库进度',
 		exchange_all: '您可以交换属于所选尺码的整个 EPC',
@@ -104,6 +105,7 @@ export default {
 		synchronization_trigger_description: '激活API以同步客人标签(若需要)'
 	},
 	titles: {
+		archived_restoration: '已存档数据恢复',
 		daily_inbound_report: '入庫报表',
 		daily_outbound_report: '出庫报表',
 		monthly_inventory_report: '库存报表',
@@ -112,7 +114,6 @@ export default {
 		file_daily_inbound_report: '{{factory}}每日入库报告 - {{date}}',
 		file_daily_outbound_report: '{{factory}}每日出库报告 - {{date}}',
 		file_monthly_inventory_report: '{{factory}}库存报表 - {{month}}',
-
 		order_sizing_list: '指令及尺码列表',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表'

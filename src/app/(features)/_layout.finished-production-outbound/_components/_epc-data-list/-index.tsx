@@ -193,11 +193,11 @@ const ScannedEpcList: React.FC = () => {
 					<ConnectionInsight />
 				</Div>
 				<Div className='inline-flex items-center gap-x-2'>
-					<ArchivedUploadSheet />
-					<Separator orientation='vertical' className='h-6' />
 					<Button variant='ghost' onClick={() => fetchServerEvent()}>
 						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
 					</Button>
+					<Separator orientation='vertical' className='h-6' />
+					<ArchivedUploadSheet />
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (

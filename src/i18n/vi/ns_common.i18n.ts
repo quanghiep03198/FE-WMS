@@ -31,6 +31,7 @@ export default {
 		reload: 'Tải lại',
 		report_bug: 'Báo cáo lỗi',
 		reset: 'Đặt lại',
+		restore: 'Khôi phục',
 		retry: 'Thử lại',
 		revert_changes: 'Hủy thay đổi',
 		save: 'Lưu',

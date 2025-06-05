@@ -1,3 +1,4 @@
+import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -30,15 +31,22 @@ import {
 } from '@/components/ui'
 import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useResetState } from 'ahooks'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
+import { useMemoizedFn, useResetState } from 'ahooks'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetArchivedEpcQuery } from '../../_apis/outbound-rfid.api'
+import { useGetArchivedEpcQuery, useRestoreEpcMutation } from '../../_apis/outbound-rfid.api'
+
+const VIRTUAL_ITEM_SIZE: number = 40
+const PRERENDERED_ITEMS: number = 0
 
 const ArchivedUploadSheet: React.FC = () => {
 	const { t } = useTranslation()
+	const [sheetOpen, setSheetOpen] = useState<boolean>(false)
+	const [filterOpen, setFilterOpen] = useState<boolean>(false)
 	const [selectedEpcs, setSelectedEpcs, resetSelectedEpcs] = useResetState<IElectronicProductCode[]>([])
 	const [filterText, setFilterText, resetFilterText] = useResetState<string>('')
 
@@ -48,12 +56,11 @@ const ArchivedUploadSheet: React.FC = () => {
 			size_numcode: ''
 		}
 	})
-
 	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
 	const currentSizeCode = useWatch({ control: form.control, name: 'size_numcode' })
 
 	const { data: archivedEpcs, refetch } = useGetArchivedEpcQuery()
-
+	const { mutateAsync, isPending, isError } = useRestoreEpcMutation()
 	const [filteredEpcs, setFilteredEpcs] = useState<IElectronicProductCode[]>(archivedEpcs)
 
 	const commandNumbers = useMemo(() => {
@@ -93,40 +100,89 @@ const ArchivedUploadSheet: React.FC = () => {
 
 	useEffect(() => {
 		setSelectedEpcs((prev) => prev.filter((item) => filteredEpcs.some((epc) => epc.epc === item.epc)))
-	}, [filteredEpcs])
+	}, [filteredEpcs, archivedEpcs])
+
+	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
+	const scrollingRef = useRef<number>(null)
+	const refCallback = useCallback((node: HTMLDivElement) => {
+		if (node) {
+			setScrollElement(node)
+		}
+	}, [])
+	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
+	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
+	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
+	const virtualizer = useVirtualizer({
+		count: filteredEpcs?.length,
+		overscan: PRERENDERED_ITEMS,
+		indexAttribute: 'data-index',
+		scrollToFn,
+		getScrollElement,
+		estimateSize,
+		measureElement:
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
+				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
+				: undefined
+	})
+
+	const virtualItems = virtualizer.getVirtualItems()
+
+	const [before, after] =
+		virtualItems.length > 0
+			? [
+					notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
+					virtualItems.length > 0
+						? virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems.length - 1]).end
+						: 0
+				]
+			: [0, 0]
+
+	useEffect(() => {
+		// * If the popover is closed, there is no need to measure
+		if (!sheetOpen) return
+		virtualizer.measure()
+	}, [sheetOpen, virtualizer])
 
 	const handleResetFilter = () => {
 		resetFilterText()
 		form.reset()
 	}
 
+	const handleRestoreArchivedEpcs = async () => {
+		const id = toast.loading(t('ns_common:notification.processing_request'))
+
+		try {
+			await mutateAsync(selectedEpcs.map((epc) => epc.epc))
+			toast.success(t('ns_common:notification.success'), { id })
+		} catch {
+			toast.error(t('ns_common:notification.error'), { id })
+		}
+	}
+
 	const isSomeItemsSelected = selectedEpcs?.length > 0 && selectedEpcs?.length < filteredEpcs?.length
-	const isAllItemsSelected = selectedEpcs?.length === filteredEpcs?.length
+	const isAllItemsSelected = selectedEpcs?.length > 0 && selectedEpcs?.length === filteredEpcs?.length
 
 	return (
-		<Sheet>
-			<SheetTrigger className={cn(buttonVariants({ variant: 'ghost' }))}>
-				<Icon name='ArchiveRestore' role='presentation' size={18} /> Archive
+		<Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+			<SheetTrigger className={cn(buttonVariants({ variant: 'ghost' }))} onClick={() => setSheetOpen(!sheetOpen)}>
+				<Icon name='Archive' role='presentation' size={18} /> Archived
 			</SheetTrigger>
-			<SheetContent className='max-w-lg gap-y-6'>
+			<SheetContent className='max-w-md gap-y-6'>
 				<SheetHeader>
-					<SheetTitle>Archived Uploads</SheetTitle>
-					<SheetDescription>
-						This section contains all the uploads that have been archived. You can view details of each upload
-						here.
-					</SheetDescription>
+					<SheetTitle>{t('ns_inoutbound:titles.archived_restoration')}</SheetTitle>
+					<SheetDescription>{t('ns_inoutbound:description.archived_restoration')}</SheetDescription>
 				</SheetHeader>
 				<SheetBody>
-					<Popover>
-						<PopoverTrigger className='relative flex h-9 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
+					<Popover open={filterOpen} onOpenChange={setFilterOpen}>
+						<PopoverTrigger className='group relative flex h-9 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
 							<Icon
 								name='Search'
 								stroke='hsl(var(--muted-foreground))'
-								className='absolute left-2 top-1/2 -translate-y-1/2'
-								size={18}
+								className='absolute left-3 top-1/2 -translate-y-1/2'
+								size={20}
 							/>
 							<Input
-								className='static z-10 h-max border-none bg-transparent px-0 pl-6 shadow-none focus:border-none focus:outline-none'
+								className='static z-10 h-max border-none bg-transparent px-0 pl-8 shadow-none focus:border-none focus:outline-none'
 								placeholder={t('ns_common:form_placeholder.search', {
 									object: 'EPC',
 									defaultValue: 'Search EPC ...'
@@ -149,7 +205,9 @@ const ArchivedUploadSheet: React.FC = () => {
 								</Fragment>
 							)}
 							<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-								<GhostButton className='basis-5'>
+								<GhostButton
+									aria-expanded={filterOpen}
+									className='aspect-square basis-5 aria-expanded:text-foreground'>
 									<Icon name='ListFilter' />
 								</GhostButton>
 							</Tooltip>
@@ -160,7 +218,7 @@ const ArchivedUploadSheet: React.FC = () => {
 							className='w-[var(--radix-popover-trigger-width)]'
 							onOpenAutoFocus={(e) => e.preventDefault()}>
 							<Form {...form}>
-								<FilterForm className='grid gap-6' onSubmit={(e) => e.preventDefault()}>
+								<FilterForm className='grid gap-4' onSubmit={(e) => e.preventDefault()}>
 									<ComboboxFieldControl
 										label={t('ns_erp:fields.mo_no')}
 										name='mo_no'
@@ -186,7 +244,7 @@ const ArchivedUploadSheet: React.FC = () => {
 							<Checkbox
 								checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
 								onCheckedChange={(checked) => {
-									if (checked) setSelectedEpcs(archivedEpcs)
+									if (checked) setSelectedEpcs(filteredEpcs)
 									else resetSelectedEpcs()
 								}}
 							/>
@@ -203,13 +261,22 @@ const ArchivedUploadSheet: React.FC = () => {
 								<Typography className='font-medium'>{t('ns_common:table.no_data')}</Typography>
 							</Div>
 						) : (
-							<ListBody>
-								{filteredEpcs.map((item, index) => {
+							<ListBody ref={refCallback}>
+								{before > 0 && <ListItem style={{ width: '100%', height: before }} />}
+								{virtualItems.map((virtualItem) => {
+									const item = filteredEpcs[virtualItem.index]
 									const isSelected = selectedEpcs.some((epc) => epc.epc === item.epc)
 									return (
-										<ListItem key={item.epc} data-index={index} aria-selected={isSelected} htmlFor={item.epc}>
+										<ListItem
+											key={virtualItem.key}
+											data-index={virtualItem.index}
+											aria-selected={isSelected}
+											htmlFor={virtualItem.key.toString()}
+											style={{
+												height: virtualItem.size
+											}}>
 											<Checkbox
-												id={item.epc}
+												id={virtualItem.key.toString()}
 												checked={isSelected}
 												onCheckedChange={(checked) => handleSelectEpc(checked, item)}
 											/>
@@ -247,10 +314,11 @@ const ArchivedUploadSheet: React.FC = () => {
 										</ListItem>
 									)
 								})}
+								{after > 0 && <ListItem style={{ width: '100%', height: after }} />}
 							</ListBody>
 						)}
 					</ListContainer>
-					<Typography className='text-end tracking-wide'>
+					<Typography variant='small' className='block text-end font-medium tracking-wide'>
 						{t('ns_common:table.selected_rows', {
 							selectedRows: `${selectedEpcs?.length}/${filteredEpcs?.length ?? 0}`,
 							defaultValue: null
@@ -258,9 +326,13 @@ const ArchivedUploadSheet: React.FC = () => {
 					</Typography>
 				</SheetBody>
 				<SheetFooter className='flex-col gap-y-2'>
-					<SheetClose asChild>
-						<Button disabled={!selectedEpcs.length}>Revert</Button>
-					</SheetClose>
+					<Button disabled={!selectedEpcs.length || isPending} onClick={() => handleRestoreArchivedEpcs()}>
+						{isPending && (
+							<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' role='presentation' />
+						)}
+						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.restore')}
+					</Button>
+
 					<SheetClose asChild>
 						<Button
 							variant='outline'
@@ -280,9 +352,9 @@ const ArchivedUploadSheet: React.FC = () => {
 const FilterForm = tw.form`grid gap-6 auto-rows-min`
 const SheetBody = tw.div`flex flex-col flex-1 gap-y-6 w-full`
 const ListContainer = tw.div`space-y-2`
-const ListHeader = tw.div`grid grid-cols-[24px_auto_24px] items-center gap-x-6 px-2 py-4 border-b`
-const ListItem = tw.label`grid grid-cols-[24px_auto_24px] items-center gap-x-6 p-2 cursor-pointer hover:bg-accent/50 hover:text-accent-foreground inset-x-0 rounded-md font-medium aria-selected:bg-accent`
-const ListBody = tw(ScrollShadow)<ScrollShadowProps>`h-[50vh] !scrollbar-none`
+const ListHeader = tw.div`grid grid-cols-[24px_auto_24px] mr-[10px] [&>:first-child]:place-self-center [&>:last-child]:place-self-center items-center gap-x-6 px-2 py-4 border-b`
+const ListItem = tw.label`grid grid-cols-[24px_auto_24px] [&>:first-child]:place-self-center [&>:last-child]:place-self-center items-center gap-x-6 p-2 cursor-pointer hover:bg-accent/50 hover:text-accent-foreground inset-x-0 rounded-md font-medium aria-selected:bg-accent`
+const ListBody = tw(ScrollShadow)<ScrollShadowProps>`xxl:h-[50vh] h-[40vh] space-y-1 !scroll-auto`
 const ListDetail = tw.ul`flex list-inside list-disc flex-col items-stretch gap-y-2`
 const ListDetailItem = tw.li`[&>small]:font-medium`
 const GhostButton = tw.button`text-muted-foreground transition-colors duration-200 hover:text-foreground`
