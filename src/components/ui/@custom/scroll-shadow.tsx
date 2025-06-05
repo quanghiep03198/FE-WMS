@@ -5,23 +5,22 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {
 	orientation?: 'vertical' | 'horizontal'
-	ref?: React.RefObject<HTMLDivElement>
+	ref?: React.RefObject<HTMLDivElement> | ((node: HTMLDivElement) => void)
 }
 
 const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'vertical', children, ref }) => {
 	const localRef = useRef<HTMLDivElement>(null)
-	const resolvedRef = (ref ?? localRef) as React.RefObject<HTMLDivElement>
 
 	const [isScrollable, setIsScrollable] = useRafState<boolean>(true)
-	const containerScroll = useScroll(resolvedRef)
+	const containerScroll = useScroll(localRef)
 
 	const scrollStates = useMemo(() => {
-		const scrollHeight = resolvedRef.current?.scrollHeight ?? 0
-		const scrollWidth = resolvedRef.current?.scrollWidth ?? 0
+		const scrollHeight = localRef.current?.scrollHeight ?? 0
+		const scrollWidth = localRef.current?.scrollWidth ?? 0
 		const scrollTop = containerScroll?.top ?? 0
 		const scrollLeft = containerScroll?.left ?? 0
-		const scrollClientHeight = resolvedRef.current?.clientHeight ?? 0
-		const scrollClientWidth = resolvedRef.current?.clientWidth ?? 0
+		const scrollClientHeight = localRef.current?.clientHeight ?? 0
+		const scrollClientWidth = localRef.current?.clientWidth ?? 0
 
 		const isScrolledToTop = scrollTop === 0
 		const isScrolledToBottom = scrollHeight - scrollTop - scrollClientHeight < 1
@@ -36,11 +35,11 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 			isScrollToEnd,
 			isAwayFromEdge
 		}
-	}, [containerScroll, resolvedRef])
+	}, [containerScroll, localRef])
 
 	const handleScheckScrollable = useCallback(
 		debounce(() => {
-			const element: HTMLDivElement = resolvedRef.current
+			const element: HTMLDivElement = localRef.current
 			if (element) {
 				const _isScrollable =
 					orientation === 'vertical'
@@ -53,7 +52,7 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 	)
 
 	useEffect(() => {
-		const element = resolvedRef.current
+		const element = localRef.current
 
 		handleScheckScrollable()
 
@@ -73,7 +72,14 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 
 	return (
 		<div
-			ref={resolvedRef}
+			ref={(e) => {
+				localRef.current = e
+				if (typeof ref === 'function') {
+					ref(e)
+				} else if (ref && 'current' in ref) {
+					ref.current = e
+				}
+			}}
 			data-top-scroll={isScrollable && scrollStates.isScrolledToTop}
 			data-bottom-scroll={isScrollable && scrollStates.isScrolledToBottom}
 			data-away-edge={isScrollable && scrollStates.isAwayFromEdge}
