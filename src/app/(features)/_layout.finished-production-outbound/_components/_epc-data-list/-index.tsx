@@ -195,7 +195,7 @@ const ScannedEpcList: React.FC = () => {
 				<Div className='inline-flex items-center gap-x-2'>
 					<ArchivedUploadSheet />
 					<Separator orientation='vertical' className='h-6' />
-					<Button variant='ghost' size='sm' className='px-2 text-sm' onClick={() => fetchServerEvent()}>
+					<Button variant='ghost' onClick={() => fetchServerEvent()}>
 						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
 					</Button>
 				</Div>

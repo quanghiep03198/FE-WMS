@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { InventoryType, ProductionApprovalStatus, TransferOrderApprovalStatus } from '../constants/enums'
+import { InventoryType } from '../constants/enums'
 
 // #region In use Entities
 
@@ -71,12 +71,16 @@ export interface IEmployee extends IBaseEntity {
 }
 
 export interface IElectronicProductCode {
-	record_time: Date
 	epc: string
 	mo_no: string
-	rfid_status: 'A' | 'B' | null
-	rfid_use: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | null
-	storage?: any
+	shoes_style_code_factory?: string
+	color_sn?: string
+	size_numcode?: string
+	factory_code_produce?: string
+	// record_time?: Date
+	// rfid_status: 'A' | 'B' | null
+	// rfid_use: 'A' | 'C' | 'D' | null
+	// storage?: any
 }
 
 export interface IInOutBoundReport {
@@ -141,106 +145,4 @@ export interface IMonthlyInventoryReport {
 		actual_outstock_qty: number		// * Actual outstock quantity
 		final_stock_qty: number				// * Final stock quantity
 	}>
-}
-
-// #region Deprecated
-
-/**
- * @deprecated
- */
-export interface ITransferOrder extends IBaseEntity {
-	custbrand_id: string
-	brand_name: string
-	transfer_order_code: string // need to be rename
-	kg_no: string
-	mo_no: string
-	or_no: string
-	or_custpo: string
-	shoestyle_codefactory: string
-	or_warehouse_num: string | null
-	or_warehouse_name: string | null
-	or_storage_num: string | null
-	or_storage_name: string | null
-	new_warehouse_num: string | null
-	new_warehouse_name: string | null
-	new_storage_num: string | null
-	new_storage_name: string | null
-	status_approve: TransferOrderApprovalStatus
-	employee_name_approve: string | null
-	approve_date: Date | null
-}
-
-export interface IPackingReport {
-	brand_name: string
-	po: string
-	shoes_style_code_factory: string
-	color_sn: string
-	size_data: string
-	po_qty: number
-	target_box_qty: number
-	target_item_qty: number
-	weighed_box_qty: number
-	unweighed_box_qty: number
-}
-
-/**
- * @deprecated
- */
-export interface ICustomerBrand {
-	brand_name: string
-	custbrand_id: string
-}
-
-/**
- * @deprecated
- */
-export interface IProductionImportOrder extends IBaseEntity {
-	active_date: Date | string
-	cofactory_code: string
-	status_approve: boolean
-	type_inventorylist: string
-	sno_no: string
-	dept_code: string
-	dept_name: string
-	warehouse_code: string
-	warehouse_name: string
-	sno_location: string
-	remark: string | null
-}
-
-/**
- * @deprecated
- */
-export interface ITransferOrderDetail extends ITransferOrder {
-	seqno: number
-	trans_num: number
-	sno_qty: number
-	or_qtyperpacking: number
-	kg_nostart: number
-	kg_noend: number
-}
-
-/**
- * @deprecated
- */
-export interface ITransferOrderData extends ITransferOrder {
-	cofactory_code: string
-}
-
-/**
- * @deprecated
- */
-export interface IInOutBoundOrder extends IBaseEntity {
-	status_approve: ProductionApprovalStatus
-	sno_no: string // Order code
-	sno_date: Date | string // Import/Export date
-	sno_car_number: string // Container truck number
-	sno_ship_order: string // shipping order code
-	sno_container: string // Container code
-	sno_sealnumber: string
-	sno_qty: string // Import/Export quantity
-	sno_total_boxes: number // Packaging total
-	dept_name: string
-	employee_name: string
-	company_code?: string
 }

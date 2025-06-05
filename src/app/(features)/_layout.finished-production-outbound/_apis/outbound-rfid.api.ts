@@ -23,6 +23,30 @@ export const useGetOutboundEpcQuery = () => {
 	})
 }
 
+export const useGetArchivedEpcQuery = () => {
+	return useQuery({
+		queryKey: ['ARCHIVED_EPCS'],
+		queryFn: RFIDService.getArchivedEpcs,
+		refetchOnMount: true,
+		select: (response) => {
+			if (!Array.isArray(response.metadata)) return []
+			return response.metadata
+		}
+	})
+}
+
+// export const useRevertArchivedEpc = () => {
+// 	return useMutation({
+// 		mutationFn: async (epc: string) => await RFIDService.revertArchivedEpc(epc),
+// 		onSuccess: () => {
+// 			toast.success('Reverted archived EPC successfully')
+// 		},
+// 		onError: () => {
+// 			toast.error('Failed to revert archived EPC')
+// 		}
+// 	})
+// }
+
 export const useDeleteEpcMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
 	const queryClient = useQueryClient()
@@ -36,7 +60,7 @@ export const useDeleteEpcMutation = () => {
 				exact: false
 			})
 			queryClient.invalidateQueries({
-				queryKey: ['OUTBOUND_EPC_BY_SIZE'],
+				queryKey: ['OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'],
 				exact: false
 			})
 		}
@@ -47,7 +71,7 @@ export const useDeleteOrderMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC_BY_SIZE', currentPage],
+		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS', currentPage],
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
 			await RFIDService.deleteScannedOutboundOrder(commandNumber, { rescannable: !rescannable })
 	})

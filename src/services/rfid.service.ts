@@ -28,6 +28,10 @@ export class RFIDService {
 		)
 	}
 
+	static async getArchivedEpcs() {
+		return await axiosInstance.get<unknown, ResponseBody<IElectronicProductCode[]>>(`/rfid/archived-epcs`)
+	}
+
 	static async getInboundEpcBySize(params: SearchEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/inbound/get-epc-by-size`, {
 			params
