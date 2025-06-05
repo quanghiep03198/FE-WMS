@@ -98,7 +98,7 @@ export default {
 	},
 	form_placeholder: {
 		fill: 'Fill in {{object}}...',
-		search: 'Search by {{object}} ...',
+		search: 'Search {{object}} ...',
 		select: '-- Select {{object}} --'
 	},
 	navigation: {
