@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta, StoryFn } from '@storybook/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { AutoCompleteFieldControl, AutoCompleteFieldControlProps } from '.'
@@ -77,10 +77,6 @@ const Template: StoryFn<StoryArgs> = (args) => {
 	})
 
 	const [formValues, setFormValues] = useState<FormValues>(form.getValues())
-
-	useEffect(() => {
-		console.log(form.getFieldState('fruit')?.error)
-	}, [form])
 
 	return (
 		<div className='mx-auto max-w-lg space-y-10'>

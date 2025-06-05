@@ -28,7 +28,6 @@ export function useSocketIo<T>({ event }: UseWebSocketOptions<T>) {
 		const handleConnect = () => setIsConnected(true)
 		const handleDisconnect = () => setIsConnected(false)
 		const handleEvent = (payload: T) => {
-			console.log(payload)
 			setData(payload)
 		}
 		socket.on('connect', handleConnect)
