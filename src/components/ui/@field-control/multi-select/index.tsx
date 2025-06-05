@@ -63,8 +63,8 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 								datalist={datalist}
 								labelField={labelField}
 								valueField={valueField}
-								value={field.value}
 								defaultValue={defaultValue}
+								value={field.value}
 								onInput={(value) => {
 									if (typeof onInput === 'function') onInput(value)
 								}}

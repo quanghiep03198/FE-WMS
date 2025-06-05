@@ -188,10 +188,6 @@ export function MultiSelect<D = Record<string, any>>({
 		}
 	}
 
-	useEffect(() => {
-		if (Array.isArray(value)) setSelectedValues(value)
-	}, [value])
-
 	// TODO: Implement virtual scroll for better performance with large list
 	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
