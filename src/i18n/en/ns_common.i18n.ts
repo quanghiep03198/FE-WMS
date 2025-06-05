@@ -31,6 +31,7 @@ export default {
 		reload: 'Reload',
 		report_bug: 'Report bug',
 		reset: 'Reset',
+		restore: 'Restore',
 		retry: 'Retry',
 		revert_changes: 'Revert changes',
 		save: 'Save',

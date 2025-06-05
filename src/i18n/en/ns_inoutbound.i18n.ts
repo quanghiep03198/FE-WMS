@@ -11,6 +11,7 @@ export default {
 	},
 	description: {
 		add_outbound_size: 'Add size and quantity for this order to perform the outbound process.',
+		archived_restoration: 'Restore archived data. Use only when necessary.',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
@@ -111,6 +112,7 @@ export default {
 		transferred_data: 'Transferred data'
 	},
 	titles: {
+		archived_restoration: 'Archived restoration',
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
 		exchange_epc: 'Exchange EPC',

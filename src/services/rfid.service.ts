@@ -28,10 +28,6 @@ export class RFIDService {
 		)
 	}
 
-	static async getArchivedEpcs() {
-		return await axiosInstance.get<unknown, ResponseBody<IElectronicProductCode[]>>(`/rfid/archived-epcs`)
-	}
-
 	static async getInboundEpcBySize(params: SearchEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/inbound/get-epc-by-size`, {
 			params
@@ -79,6 +75,10 @@ export class RFIDService {
 		)
 	}
 
+	static async getArchivedEpcs() {
+		return await axiosInstance.get<unknown, ResponseBody<IElectronicProductCode[]>>(`/rfid/outbound/archived-epcs`)
+	}
+
 	static async upsertOutboundInventory(payload: OutboundFormValues) {
 		return await axiosInstance.put<OutboundFormValues, ResponseBody<unknown>>('/rfid/outbound/update-stock', payload)
 	}
@@ -89,6 +89,13 @@ export class RFIDService {
 
 	static async deleteScannedOutboundOrder(commandNumber: string, params: { rescannable: boolean }) {
 		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-order/${commandNumber}`, { params })
+	}
+
+	static async restoreArchivedEpcs(payload: Array<string>) {
+		return await axiosInstance.patch<Array<string>, ResponseBody<any>>(
+			`/rfid/outbound/restore-archived-epcs`,
+			payload
+		)
 	}
 
 	static async getOutboundEpcBySize(params: SearchEpcParams) {
