@@ -78,7 +78,7 @@ export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: Col
 						}
 					}}
 					placeholder={t('ns_common:table.search_in_column')}
-					data={
+					datalist={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
 							: getSortedUniqueValues()

@@ -91,7 +91,9 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							} as React.CSSProperties
 						}>
 						{label && (
-							<FormLabel htmlFor={id} className={orientation === 'horizontal' && 'translate-y-full'}>
+							<FormLabel
+								htmlFor={id}
+								className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
 								{label}
 							</FormLabel>
 						)}

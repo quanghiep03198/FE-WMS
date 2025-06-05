@@ -52,6 +52,13 @@ export default {
 			description: 'Custom class cho select',
 			control: { type: 'text' }
 		}
+	},
+	parameters: {
+		docs: {
+			description: {
+				component: 'Trường chọn giá trị trong select, tích hợp với react-hook-form.'
+			}
+		}
 	}
 } satisfies Meta<typeof SelectFieldControl>
 
@@ -63,6 +70,8 @@ type FormValues = z.infer<typeof formSchema>
 type StoryArgs = SelectFieldControlProps<any, Record<'name', string>>
 
 const Template: StoryFn<StoryArgs> = (args) => {
+	'use no memo'
+
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema)
 	})
@@ -116,5 +125,19 @@ export const Default: Story = {
 		labelField: 'name',
 		valueField: 'name',
 		className: 'w-full'
+	}
+}
+export const Horizontal: Story = {
+	render: Template,
+	args: {
+		name: 'fruit',
+		label: 'Favourite fruit',
+		placeholder: 'Select a fruit ...',
+		description: 'Choose your favorite fruit',
+		datalist: fruits,
+		labelField: 'name',
+		valueField: 'name',
+		className: 'w-full',
+		orientation: 'horizontal'
 	}
 }
