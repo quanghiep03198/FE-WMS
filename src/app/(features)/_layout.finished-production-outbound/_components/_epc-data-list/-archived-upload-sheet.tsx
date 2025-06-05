@@ -1,13 +1,22 @@
-import { useSearchCommandNumberQuery } from '@/app/(features)/_apis/use-order.api'
-import useScrollToFn from '@/common/hooks/use-scroll-fn'
+import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	buttonVariants,
 	Checkbox,
-	Combobox,
+	ComboboxFieldControl,
 	Div,
+	Form,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 	Icon,
+	Input,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	SelectFieldControl,
+	Separator,
 	Sheet,
 	SheetClose,
 	SheetContent,
@@ -16,78 +25,87 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
+	Tooltip,
 	Typography
 } from '@/components/ui'
 import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
-import axiosInstance from '@/configs/axios.config'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useQuery } from '@tanstack/react-query'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useMemoizedFn, useResetState } from 'ahooks'
-import { debounce } from 'lodash'
-import { useRef, useState } from 'react'
+import { useResetState } from 'ahooks'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { z } from 'zod'
-
-const VIRTUAL_ITEM_SIZE: number = 40
-const PRERENDERED_ITEMS: number = 5
-
-const schema = z.object({
-	epc: z.array(z.string().nonempty()).nonempty()
-})
+import { useGetArchivedEpcQuery } from '../../_apis/outbound-rfid.api'
 
 const ArchivedUploadSheet: React.FC = () => {
 	const { t } = useTranslation()
-	const [searchTerm, setSearchTerm] = useState<string>('')
-	const { data: commandNumbers } = useSearchCommandNumberQuery(searchTerm)
-	const [currentCommandNumber, setCurrentCommandNumber] = useState<string>('')
-	const [selectedEpcs, setSelectedEpcs, resetSelectedEpcs] = useResetState<string[]>([])
+	const [selectedEpcs, setSelectedEpcs, resetSelectedEpcs] = useResetState<IElectronicProductCode[]>([])
+	const [filterText, setFilterText, resetFilterText] = useResetState<string>('')
 
-	const { data: archivedEpcs } = useQuery({
-		queryKey: ['ARCHIVED_EPCS', currentCommandNumber],
-		queryFn: async () =>
-			await axiosInstance.get<void, ResponseBody<Record<'epc', string>[]>>(
-				`/rfid/archived-epcs/${currentCommandNumber}`
-			),
-		enabled: !!currentCommandNumber,
-		select: (response) => {
-			if (!Array.isArray(response.metadata)) return []
-			return response.metadata.map((item) => item.epc)
+	const form = useForm({
+		defaultValues: {
+			mo_no: '',
+			size_numcode: ''
 		}
 	})
 
-	const containerRef = useRef<HTMLDivElement>(null)
-	const scrollingRef = useRef<number>(null)
-	const virtualScrollFn = useScrollToFn(containerRef, scrollingRef)
+	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
+	const currentSizeCode = useWatch({ control: form.control, name: 'size_numcode' })
 
-	const virtualizer = useVirtualizer({
-		count: archivedEpcs?.length ?? 0,
-		indexAttribute: 'data-index',
-		overscan: PRERENDERED_ITEMS,
-		gap: 2,
-		getScrollElement: () => containerRef.current,
-		estimateSize: useMemoizedFn(() => VIRTUAL_ITEM_SIZE),
-		scrollToFn: virtualScrollFn,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
-				: undefined
-	})
+	const { data: archivedEpcs, refetch } = useGetArchivedEpcQuery()
 
-	const handleSelectEpc = (checked: CheckedState, value) => {
+	const [filteredEpcs, setFilteredEpcs] = useState<IElectronicProductCode[]>(archivedEpcs)
+
+	const commandNumbers = useMemo(() => {
+		if (!Array.isArray(archivedEpcs)) return []
+		const uniqueCommandNumbers = new Set(archivedEpcs.map((item) => item.mo_no))
+		return Array.from(uniqueCommandNumbers, (mo_no) => ({ mo_no }))
+	}, [archivedEpcs])
+
+	const sizeCodes = useMemo(() => {
+		if (!Array.isArray(archivedEpcs)) return []
+		if (!currentCommandNumber) return []
+		const filteredEpcs = archivedEpcs.filter((item) => item.mo_no === currentCommandNumber)
+		const uniqueSizeCodes = new Set(filteredEpcs.map((item) => item.size_numcode))
+		return Array.from(uniqueSizeCodes, (size_numcode) => ({ size_numcode }))
+	}, [archivedEpcs, currentCommandNumber])
+
+	const handleSelectEpc = (checked: CheckedState, value: IElectronicProductCode) => {
 		if (checked) setSelectedEpcs((prev) => [...prev, value])
-		else setSelectedEpcs((prev) => prev.filter((epc) => epc !== value))
+		else setSelectedEpcs((prev) => prev.filter((item) => item.epc !== value.epc))
 	}
 
-	const isSomeItemsSelected = selectedEpcs?.length > 0 && selectedEpcs?.length < archivedEpcs?.length
-	const isAllItemsSelected = selectedEpcs?.length === archivedEpcs?.length
+	useEffect(() => {
+		setFilteredEpcs(archivedEpcs)
+	}, [archivedEpcs])
 
-	console.table(selectedEpcs)
+	useEffect(() => {
+		const filterFn = (item: IElectronicProductCode) => {
+			return (
+				item.epc.toUpperCase().includes(filterText.toUpperCase()) &&
+				item.mo_no.includes(currentCommandNumber) &&
+				item.size_numcode.includes(currentSizeCode)
+			)
+		}
+
+		setFilteredEpcs(archivedEpcs.filter(filterFn))
+	}, [archivedEpcs, filterText, currentCommandNumber, currentSizeCode])
+
+	useEffect(() => {
+		setSelectedEpcs((prev) => prev.filter((item) => filteredEpcs.some((epc) => epc.epc === item.epc)))
+	}, [filteredEpcs])
+
+	const handleResetFilter = () => {
+		resetFilterText()
+		form.reset()
+	}
+
+	const isSomeItemsSelected = selectedEpcs?.length > 0 && selectedEpcs?.length < filteredEpcs?.length
+	const isAllItemsSelected = selectedEpcs?.length === filteredEpcs?.length
 
 	return (
 		<Sheet>
-			<SheetTrigger className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'px-2 text-sm')}>
+			<SheetTrigger className={cn(buttonVariants({ variant: 'ghost' }))}>
 				<Icon name='ArchiveRestore' role='presentation' size={18} /> Archive
 			</SheetTrigger>
 			<SheetContent className='max-w-lg gap-y-6'>
@@ -99,70 +117,159 @@ const ArchivedUploadSheet: React.FC = () => {
 					</SheetDescription>
 				</SheetHeader>
 				<SheetBody>
-					<Combobox
-						datalist={commandNumbers}
-						labelField='mo_no'
-						valueField='mo_no'
-						onInput={debounce((value) => setSearchTerm(value), 200)}
-						onSelect={(value) => setCurrentCommandNumber(value)}
-					/>
-
-					{!Array.isArray(archivedEpcs) || archivedEpcs.length === 0 ? (
-						<Div className='flex h-full flex-col place-content-center items-center justify-center space-y-2 rounded-lg border-2 border-dashed'>
-							<Icon name='ArchiveX' size={44} strokeWidth={1} stroke='hsl(var(--muted-foreground))' />
-							<Typography className='font-medium'>{t('ns_common:table.no_data')}</Typography>
-							<Typography variant='small' color='muted'>
-								Select a command number to view all archived EPC
-							</Typography>
-						</Div>
-					) : (
-						<ListContainer>
-							<ListHeader>
-								<Checkbox
-									checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
-									onCheckedChange={(checked) => {
-										if (checked) setSelectedEpcs(archivedEpcs)
-										else resetSelectedEpcs()
-									}}
-								/>
-								<Typography className='font-medium'>EPC</Typography>
-							</ListHeader>
-							<ListBody ref={containerRef}>
-								<ListWrapper style={{ height: virtualizer.getTotalSize() }}>
-									{virtualizer.getVirtualItems().map((virtualItem) => {
-										const value = archivedEpcs[virtualItem.index]
-										return (
-											<ListItem
-												key={virtualItem.key}
-												data-index={virtualItem.index}
-												aria-selected={selectedEpcs.includes(value)}
-												htmlFor={virtualItem.key}
-												style={{
-													height: virtualItem.size,
-													transform: `translateY(${virtualItem.start}px)`
-												}}>
-												<Checkbox
-													id={virtualItem.key.toString()}
-													checked={selectedEpcs.includes(value)}
-													onCheckedChange={(checked) => handleSelectEpc(checked, value)}
-												/>
-												<Typography>{value}</Typography>
-											</ListItem>
-										)
-									})}
-								</ListWrapper>
+					<Popover>
+						<PopoverTrigger className='relative flex h-9 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
+							<Icon
+								name='Search'
+								stroke='hsl(var(--muted-foreground))'
+								className='absolute left-2 top-1/2 -translate-y-1/2'
+								size={18}
+							/>
+							<Input
+								className='static z-10 h-max border-none bg-transparent px-0 pl-6 shadow-none focus:border-none focus:outline-none'
+								placeholder={t('ns_common:form_placeholder.search', {
+									object: 'EPC',
+									defaultValue: 'Search EPC ...'
+								})}
+								value={filterText}
+								onClick={(e) => e.stopPropagation()}
+								onFocus={(e) => e.stopPropagation()}
+								onInput={(e) => setFilterText(e.currentTarget.value)}
+							/>
+							{(filterText || currentCommandNumber || currentSizeCode) && (
+								<Fragment>
+									<GhostButton
+										onClick={(e) => {
+											e.stopPropagation()
+											handleResetFilter()
+										}}>
+										<Icon name='X' />
+									</GhostButton>
+									<Separator orientation='vertical' />
+								</Fragment>
+							)}
+							<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
+								<GhostButton className='basis-5'>
+									<Icon name='ListFilter' />
+								</GhostButton>
+							</Tooltip>
+						</PopoverTrigger>
+						<PopoverContent
+							side='bottom'
+							sideOffset={8}
+							className='w-[var(--radix-popover-trigger-width)]'
+							onOpenAutoFocus={(e) => e.preventDefault()}>
+							<Form {...form}>
+								<FilterForm className='grid gap-6' onSubmit={(e) => e.preventDefault()}>
+									<ComboboxFieldControl
+										label={t('ns_erp:fields.mo_no')}
+										name='mo_no'
+										orientation='horizontal'
+										datalist={commandNumbers}
+										labelField='mo_no'
+										valueField='mo_no'
+									/>
+									<SelectFieldControl
+										label='Size'
+										name='size_numcode'
+										orientation='horizontal'
+										datalist={sizeCodes}
+										labelField='size_numcode'
+										valueField='size_numcode'
+									/>
+								</FilterForm>
+							</Form>
+						</PopoverContent>
+					</Popover>
+					<ListContainer>
+						<ListHeader>
+							<Checkbox
+								checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
+								onCheckedChange={(checked) => {
+									if (checked) setSelectedEpcs(archivedEpcs)
+									else resetSelectedEpcs()
+								}}
+							/>
+							<Typography className='font-medium'>EPC</Typography>
+							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+								<GhostButton onClick={() => refetch()}>
+									<Icon name='RotateCw' />
+								</GhostButton>
+							</Tooltip>
+						</ListHeader>
+						{!Array.isArray(filteredEpcs) || filteredEpcs.length === 0 ? (
+							<Div className='flex h-[50vh] flex-col place-content-center items-center justify-center space-y-2'>
+								<Icon name='PackageOpen' size={44} strokeWidth={1} stroke='hsl(var(--muted-foreground))' />
+								<Typography className='font-medium'>{t('ns_common:table.no_data')}</Typography>
+							</Div>
+						) : (
+							<ListBody>
+								{filteredEpcs.map((item, index) => {
+									const isSelected = selectedEpcs.some((epc) => epc.epc === item.epc)
+									return (
+										<ListItem key={item.epc} data-index={index} aria-selected={isSelected} htmlFor={item.epc}>
+											<Checkbox
+												id={item.epc}
+												checked={isSelected}
+												onCheckedChange={(checked) => handleSelectEpc(checked, item)}
+											/>
+											<Typography>{item?.epc}</Typography>
+											<HoverCard openDelay={100} closeDelay={100}>
+												<HoverCardTrigger asChild>
+													<GhostButton>
+														<Icon name='Ellipsis' />
+													</GhostButton>
+												</HoverCardTrigger>
+												<HoverCardContent
+													align='start'
+													side='left'
+													sideOffset={8}
+													className='w-full max-w-md rounded-md bg-popover text-popover-foreground'>
+													<ListDetail>
+														<ListDetailItem>
+															{t('ns_erp:fields.mo_no')}:{' '}
+															<Typography variant='small'>{item.mo_no}</Typography>
+														</ListDetailItem>
+														<ListDetailItem>
+															{t('ns_erp:fields.shoestyle_codefactory')}:{' '}
+															<Typography variant='small'>{item.shoes_style_code_factory}</Typography>
+														</ListDetailItem>
+														<ListDetailItem>
+															{t('ns_erp:fields.color_sn')}:{' '}
+															<Typography variant='small'>{item.color_sn}</Typography>
+														</ListDetailItem>
+														<ListDetailItem>
+															Size: <Typography variant='small'>{item.size_numcode}</Typography>
+														</ListDetailItem>
+													</ListDetail>
+												</HoverCardContent>
+											</HoverCard>
+										</ListItem>
+									)
+								})}
 							</ListBody>
-						</ListContainer>
-					)}
-
+						)}
+					</ListContainer>
 					<Typography className='text-end tracking-wide'>
-						{selectedEpcs?.length}/{archivedEpcs?.length ?? 0} selected
+						{t('ns_common:table.selected_rows', {
+							selectedRows: `${selectedEpcs?.length}/${filteredEpcs?.length ?? 0}`,
+							defaultValue: null
+						})}
 					</Typography>
 				</SheetBody>
 				<SheetFooter className='flex-col gap-y-2'>
-					<Button disabled={!selectedEpcs.length}>Upload</Button>
 					<SheetClose asChild>
-						<Button variant='outline'>Discard</Button>
+						<Button disabled={!selectedEpcs.length}>Revert</Button>
+					</SheetClose>
+					<SheetClose asChild>
+						<Button
+							variant='outline'
+							onClick={() => {
+								handleResetFilter()
+								resetSelectedEpcs()
+							}}>
+							Discard
+						</Button>
 					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
@@ -170,11 +277,14 @@ const ArchivedUploadSheet: React.FC = () => {
 	)
 }
 
+const FilterForm = tw.form`grid gap-6 auto-rows-min`
 const SheetBody = tw.div`flex flex-col flex-1 gap-y-6 w-full`
 const ListContainer = tw.div`space-y-2`
-const ListHeader = tw.div`grid grid-cols-[24px_auto] items-center gap-x-6 px-2 py-4 border-b`
-const ListItem = tw.label`grid grid-cols-[24px_auto] items-center gap-x-6 p-2 cursor-pointer absolute top-0 left-auto right-auto hover:bg-accent/50 hover:text-accent-foreground inset-x-0 rounded-md font-medium aria-selected:bg-accent`
+const ListHeader = tw.div`grid grid-cols-[24px_auto_24px] items-center gap-x-6 px-2 py-4 border-b`
+const ListItem = tw.label`grid grid-cols-[24px_auto_24px] items-center gap-x-6 p-2 cursor-pointer hover:bg-accent/50 hover:text-accent-foreground inset-x-0 rounded-md font-medium aria-selected:bg-accent`
 const ListBody = tw(ScrollShadow)<ScrollShadowProps>`h-[50vh] !scrollbar-none`
-const ListWrapper = tw.div`relative`
+const ListDetail = tw.ul`flex list-inside list-disc flex-col items-stretch gap-y-2`
+const ListDetailItem = tw.li`[&>small]:font-medium`
+const GhostButton = tw.button`text-muted-foreground transition-colors duration-200 hover:text-foreground`
 
 export default ArchivedUploadSheet
