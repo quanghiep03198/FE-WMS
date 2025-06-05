@@ -57,17 +57,22 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 				return (
 					<FormItem
 						className={cn(
-							orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2' : 'space-y-2',
+							orientation === 'horizontal'
+								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
+								: 'space-y-2',
 							hidden && 'hidden'
 						)}>
 						{label && (
 							<FormLabel
 								htmlFor={id}
-								className={cn(orientation === 'horizontal' && (isError ? 'row-span-1' : 'row-span-4'))}>
+								className={cn(
+									'text-pretty',
+									orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'
+								)}>
 								{label}
 							</FormLabel>
 						)}
-						<Div className={cn('space-y-2', orientation === 'horizontal' && 'row-span-4')}>
+						<Div className='space-y-2'>
 							<Select
 								{...restProps}
 								value={field.value ?? ''}

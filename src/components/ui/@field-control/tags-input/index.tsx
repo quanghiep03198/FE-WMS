@@ -36,7 +36,12 @@ export function TagInputFieldControl<T extends FieldValues>(props: TagInputField
 						hidden && 'hidden'
 					)}>
 					{label && (
-						<FormLabel htmlFor={id} className={orientation === 'horizontal' && 'translate-y-full'}>
+						<FormLabel
+							htmlFor={id}
+							className={cn(
+								'text-pretty',
+								orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'
+							)}>
 							{label}
 						</FormLabel>
 					)}

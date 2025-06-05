@@ -41,7 +41,9 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 						hidden && 'hidden'
 					)}>
 					{label && (
-						<FormLabel htmlFor={id} className={orientation === 'horizontal' && 'translate-y-full'}>
+						<FormLabel
+							htmlFor={id}
+							className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
 							{label}
 						</FormLabel>
 					)}

@@ -103,18 +103,20 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 			render={({ field }) => {
 				return (
 					<FormItem
-						className={cn({
-							hidden: hidden,
-							'grid grid-cols-[1fr_2fr] grid-rows-4 items-center gap-x-2 space-y-0': orientation === 'horizontal'
-						})}>
+						className={cn(
+							orientation === 'horizontal'
+								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
+								: 'space-y-2',
+							hidden && 'hidden'
+						)}>
 						{label && (
 							<FormLabel
 								htmlFor={id}
-								className={cn(orientation === 'horizontal' && (isError ? 'row-span-2' : 'row-span-4'))}>
+								className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
 								{label}
 							</FormLabel>
 						)}
-						<Div className={cn('space-y-2', orientation === 'horizontal' && 'row-span-4')}>
+						<Div className={cn('space-y-2')}>
 							<Popover>
 								<PopoverTrigger
 									id={id}
@@ -124,7 +126,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										buttonVariants({
 											variant: 'outline',
 											className:
-												'w-full justify-between font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
+												'w-full justify-between px-3 py-1 font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
 										}),
 										triggerProps?.className
 									)}

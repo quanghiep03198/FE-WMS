@@ -62,7 +62,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 			)
 
 		case 'select': {
-			const transformedData = cellEditorProps.data.map((item) => ({
+			const transformedData = cellEditorProps.datalist.map((item) => ({
 				...item,
 				customLabel: `${item[cellEditorProps.labelField]}`
 				// customLabel: `${item[cellEditorProps.labelField]} - ${item[cellEditorProps.valueField]}`
@@ -70,7 +70,7 @@ const CellEditor: React.FC<CellEditorProps> = ({
 
 			return (
 				<DropdownSelect
-					data={transformedData}
+					datalist={transformedData}
 					labelField='customLabel'
 					valueField={cellEditorProps.valueField}
 					selectProps={{

@@ -4,18 +4,17 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 export type DropdownSelectProps<T extends Record<string, any>> = {
 	openState?: boolean
 	onValueChange?: (value: string) => any | AnonymousFunction
-	data: Array<T>
 	placeholder?: string
 	selectProps?: Partial<SelectProps>
 	selectTriggerProps?: Partial<SelectTriggerProps>
 	selectContentProps?: Partial<SelectContentProps>
-} & {
+	datalist: Array<T>
 	labelField: keyof T & string
 	valueField: keyof T & string
 }
 
 export const DropdownSelect = <T extends Record<string, any>>({
-	data,
+	datalist: data,
 	labelField,
 	valueField,
 	placeholder = 'Select',
