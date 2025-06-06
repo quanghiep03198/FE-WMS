@@ -22,7 +22,7 @@ import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
-import ArchivedUploadSheet from './-archived-upload-sheet'
+import ArchivedRestorationSheet from './-archived-restoration-sheet'
 import ConnectionInsight from './-connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -197,7 +197,7 @@ const ScannedEpcList: React.FC = () => {
 						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
-					<ArchivedUploadSheet />
+					<ArchivedRestorationSheet />
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (

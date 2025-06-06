@@ -33,7 +33,7 @@ import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useResetState } from 'ahooks'
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -43,7 +43,7 @@ import { useGetArchivedEpcQuery, useRestoreEpcMutation } from '../../_apis/outbo
 const VIRTUAL_ITEM_SIZE: number = 40
 const PRERENDERED_ITEMS: number = 0
 
-const ArchivedUploadSheet: React.FC = () => {
+const ArchivedRestorationSheet: React.FC = () => {
 	const { t } = useTranslation()
 	const [sheetOpen, setSheetOpen] = useState<boolean>(false)
 	const [filterOpen, setFilterOpen] = useState<boolean>(false)
@@ -52,6 +52,8 @@ const ArchivedUploadSheet: React.FC = () => {
 
 	const form = useForm({
 		defaultValues: {
+			shoes_style_code_factory: '',
+			color_sn: '',
 			mo_no: '',
 			size_numcode: ''
 		}
@@ -59,47 +61,35 @@ const ArchivedUploadSheet: React.FC = () => {
 	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
 	const currentSizeCode = useWatch({ control: form.control, name: 'size_numcode' })
 
-	const { data: archivedEpcs, refetch } = useGetArchivedEpcQuery()
+	const { data, hasNextPage, isFetching, isFetchingNextPage, isPlaceholderData, refetch, fetchNextPage } =
+		useGetArchivedEpcQuery()
 	const { mutateAsync, isPending, isError } = useRestoreEpcMutation()
-	const [filteredEpcs, setFilteredEpcs] = useState<IElectronicProductCode[]>(archivedEpcs)
+	const [filteredEpcs, setFilteredEpcs] = useState<IElectronicProductCode[]>(
+		data?.flatMap((item) => item.metadata?.data) ?? []
+	)
+
+	const shoesStyles = useMemo(() => {
+		return []
+		// if (!Array.isArray(archivedRecords?.pages)) return []
+		// const uniqueShoeStyles = new Set(archivedRecords.pages?.map((item) => item.))
+		// return Array.from(uniqueShoeStyles, (shoes_style_code_factory) => ({ shoes_style_code_factory }))
+	}, [data])
 
 	const commandNumbers = useMemo(() => {
-		if (!Array.isArray(archivedEpcs)) return []
-		const uniqueCommandNumbers = new Set(archivedEpcs.map((item) => item.mo_no))
-		return Array.from(uniqueCommandNumbers, (mo_no) => ({ mo_no }))
-	}, [archivedEpcs])
+		return []
+		// if (!Array.isArray(archivedRecords)) return []
+		// const uniqueCommandNumbers = new Set(archivedRecords.map((item) => item.mo_no))
+		// return Array.from(uniqueCommandNumbers, (mo_no) => ({ mo_no }))
+	}, [data])
 
 	const sizeCodes = useMemo(() => {
-		if (!Array.isArray(archivedEpcs)) return []
-		if (!currentCommandNumber) return []
-		const filteredEpcs = archivedEpcs.filter((item) => item.mo_no === currentCommandNumber)
-		const uniqueSizeCodes = new Set(filteredEpcs.map((item) => item.size_numcode))
-		return Array.from(uniqueSizeCodes, (size_numcode) => ({ size_numcode }))
-	}, [archivedEpcs, currentCommandNumber])
-
-	const handleSelectEpc = (checked: CheckedState, value: IElectronicProductCode) => {
-		if (checked) setSelectedEpcs((prev) => [...prev, value])
-		else setSelectedEpcs((prev) => prev.filter((item) => item.epc !== value.epc))
-	}
-
-	useEffect(() => {
-		setFilteredEpcs(archivedEpcs)
-	}, [archivedEpcs])
-
-	useEffect(() => {
-		const filterFn = (item: IElectronicProductCode) => {
-			return (
-				item.epc.toUpperCase().includes(filterText.toUpperCase()) &&
-				item.mo_no.includes(currentCommandNumber) &&
-				item.size_numcode.includes(currentSizeCode)
-			)
-		}
-		if (Array.isArray(archivedEpcs)) setFilteredEpcs(archivedEpcs.filter(filterFn))
-	}, [archivedEpcs, filterText, currentCommandNumber, currentSizeCode])
-
-	useEffect(() => {
-		setSelectedEpcs((prev) => prev.filter((item) => filteredEpcs.some((epc) => epc.epc === item.epc)))
-	}, [filteredEpcs, archivedEpcs])
+		return []
+		// if (!Array.isArray(archivedRecords)) return []
+		// if (!currentCommandNumber) return []
+		// const filteredEpcs = archivedRecords.filter((item) => item.mo_no === currentCommandNumber)
+		// const uniqueSizeCodes = new Set(filteredEpcs.map((item) => item.size_numcode))
+		// return Array.from(uniqueSizeCodes, (size_numcode) => ({ size_numcode }))
+	}, [data, currentCommandNumber])
 
 	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
 	const scrollingRef = useRef<number>(null)
@@ -136,15 +126,47 @@ const ArchivedUploadSheet: React.FC = () => {
 				]
 			: [0, 0]
 
+	const allRows = data ? data.flatMap((d) => d.metadata.data) : []
+
 	useEffect(() => {
 		// * If the popover is closed, there is no need to measure
 		if (!sheetOpen) return
 		virtualizer.measure()
 	}, [sheetOpen, virtualizer])
 
+	useEffect(() => {
+		const [lastItem] = [...virtualItems].reverse()
+		if (!lastItem) return
+		if (lastItem.index >= allRows.length - 1 && hasNextPage && !isFetchingNextPage) fetchNextPage()
+	}, [hasNextPage, fetchNextPage, allRows.length, isFetchingNextPage, virtualizer.getVirtualItems()])
+
+	useEffect(() => {
+		startTransition(() => setFilteredEpcs(data.flatMap((item) => item.metadata?.data)))
+	}, [data])
+
+	useEffect(() => {
+		const filterFn = (item: IElectronicProductCode) => {
+			return (
+				item.epc.toUpperCase().includes(filterText.toUpperCase()) &&
+				item.mo_no.includes(currentCommandNumber) &&
+				item.size_numcode.includes(currentSizeCode)
+			)
+		}
+		if (Array.isArray(data)) setFilteredEpcs(data.flatMap((item) => item.metadata.data).filter(filterFn))
+	}, [data, filterText, currentCommandNumber, currentSizeCode])
+
+	useEffect(() => {
+		setSelectedEpcs((prev) => prev.filter((item) => filteredEpcs.some((epc) => epc.epc === item.epc)))
+	}, [filteredEpcs, data])
+
 	const handleResetFilter = () => {
 		resetFilterText()
 		form.reset()
+	}
+
+	const handleSelectEpc = (checked: CheckedState, value: IElectronicProductCode) => {
+		if (checked) setSelectedEpcs((prev) => [...prev, value])
+		else setSelectedEpcs((prev) => prev.filter((item) => item.epc !== value.epc))
 	}
 
 	const handleRestoreArchivedEpcs = async () => {
@@ -166,7 +188,7 @@ const ArchivedUploadSheet: React.FC = () => {
 			<SheetTrigger className={cn(buttonVariants({ variant: 'ghost' }))} onClick={() => setSheetOpen(!sheetOpen)}>
 				<Icon name='Archive' role='presentation' size={18} /> Archived
 			</SheetTrigger>
-			<SheetContent className='max-w-md gap-y-6'>
+			<SheetContent className='max-w-lg gap-y-6'>
 				<SheetHeader>
 					<SheetTitle>{t('ns_inoutbound:titles.archived_restoration')}</SheetTitle>
 					<SheetDescription>{t('ns_inoutbound:description.archived_restoration')}</SheetDescription>
@@ -218,6 +240,14 @@ const ArchivedUploadSheet: React.FC = () => {
 							onOpenAutoFocus={(e) => e.preventDefault()}>
 							<Form {...form}>
 								<FilterForm className='grid gap-4' onSubmit={(e) => e.preventDefault()}>
+									<ComboboxFieldControl
+										label={t('ns_erp:fields.shoestyle_codefactory')}
+										name='mo_no'
+										orientation='horizontal'
+										datalist={shoesStyles}
+										labelField='shoes_style_code_factory'
+										valueField='shoes_style_code_factory'
+									/>
 									<ComboboxFieldControl
 										label={t('ns_erp:fields.mo_no')}
 										name='mo_no'
@@ -314,6 +344,15 @@ const ArchivedUploadSheet: React.FC = () => {
 									)
 								})}
 								{after > 0 && <ListItem style={{ width: '100%', height: after }} />}
+								{hasNextPage && (
+									<Button
+										variant='link'
+										className='w-full'
+										disabled={isFetching || isPlaceholderData}
+										onClick={() => fetchNextPage()}>
+										{t('ns_common:actions.load_more')}
+									</Button>
+								)}
 							</ListBody>
 						)}
 					</ListContainer>
@@ -358,4 +397,4 @@ const ListDetail = tw.ul`flex list-inside list-disc flex-col items-stretch gap-y
 const ListDetailItem = tw.li`[&>small]:font-medium`
 const GhostButton = tw.button`text-muted-foreground transition-colors duration-200 hover:text-foreground`
 
-export default ArchivedUploadSheet
+export default ArchivedRestorationSheet

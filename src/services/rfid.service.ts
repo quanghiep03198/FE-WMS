@@ -75,8 +75,11 @@ export class RFIDService {
 		)
 	}
 
-	static async getArchivedEpcs() {
-		return await axiosInstance.get<unknown, ResponseBody<IElectronicProductCode[]>>(`/rfid/outbound/archived-epcs`)
+	static async getArchivedEpcs(params: { _page: number }) {
+		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
+			`/rfid/outbound/archived-epcs`,
+			{ params }
+		)
 	}
 
 	static async upsertOutboundInventory(payload: OutboundFormValues) {

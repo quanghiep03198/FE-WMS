@@ -1,5 +1,5 @@
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -16,6 +16,7 @@ export const useGetOutboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
 		queryFn: async () => RFIDService.fetchNextOutboundEpc({ _page: currentPage }),
+		placeholderData: keepPreviousData,
 		enabled: false,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
@@ -24,14 +25,18 @@ export const useGetOutboundEpcQuery = () => {
 }
 
 export const useGetArchivedEpcQuery = () => {
-	return useQuery({
+	return useInfiniteQuery({
 		queryKey: ['ARCHIVED_EPCS'],
-		queryFn: RFIDService.getArchivedEpcs,
-		refetchOnMount: true,
-		select: (response) => {
-			if (!Array.isArray(response.metadata)) return []
-			return response.metadata
-		}
+		queryFn: async ({ pageParam }) => await RFIDService.getArchivedEpcs({ _page: pageParam }),
+		initialPageParam: 0,
+		getNextPageParam: (lastPage, allPages, lastPageParam) => {
+			console.log('lastPage :>> ', lastPage)
+			console.log('allPages :>> ', allPages)
+			console.log('lastPageParam :>> ', lastPageParam)
+			return lastPage.metadata?.nextPage ?? 0
+		},
+		placeholderData: keepPreviousData,
+		select: (response) => response?.pages
 	})
 }
 

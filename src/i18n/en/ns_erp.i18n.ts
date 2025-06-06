@@ -57,7 +57,7 @@ export default {
 		shipping_destination: 'Shipping destination',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
 		shoes_type_b: 'Shoes type B', //: Giày cấp B
-		shoestyle_codefactory: 'Shoes style code',
+		shoestyle_codefactory: 'Shoes style',
 		shaping_dept_code: 'Shaping department code',
 		shaping_dept_name: 'Shaping department name',
 		sno_car_number: 'Container number',
