@@ -2,10 +2,9 @@
 
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
+import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui'
 import { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../@core/form'
-import { Div } from '../../@custom/div'
 import { MultiSelect, MultiSelectProps } from '../../@custom/multi-select'
 
 export type MultipleSelectFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
@@ -15,7 +14,7 @@ export type MultipleSelectFieldControlProps<T extends FieldValues, D = Record<st
 	Partial<MultiSelectProps<D>>
 
 export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlProps<T, D>) {
-	const { control, trigger } = useFormContext()
+	const { control, formState, trigger } = useFormContext()
 	const {
 		name,
 		placeholder,
@@ -57,6 +56,7 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 					<FormControl>
 						<Div className='space-y-2'>
 							<MultiSelect
+								{...props}
 								id={id}
 								shouldFilter={shouldFilter}
 								placeholder={placeholder}
@@ -71,9 +71,8 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 								onValueChange={(value) => {
 									field.onChange(value)
 									if (typeof onValueChange === 'function') onValueChange(value)
-									trigger(name)
+									if (formState.isSubmitted) trigger(name)
 								}}
-								{...props}
 							/>
 							<FormDescription>{description}</FormDescription>
 							<FormMessage />
@@ -84,6 +83,3 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 		/>
 	)
 }
-// xuất tách đơn 分單出貨
-
-// xuất gộp đơn 出貨單

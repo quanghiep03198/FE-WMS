@@ -80,7 +80,7 @@ export default {
 } satisfies Meta<typeof MultiSelectFieldControl>
 
 const schema = z.object({
-	fruits: z.string({ required_error: 'Please select a fruit' }).nonempty({ message: 'Please select a fruit' })
+	fruits: z.array(z.string().nonempty()).nonempty({ message: 'Vui lòng chọn ít nhất một loại quả' })
 })
 
 type FormValues = z.infer<typeof schema>
@@ -99,7 +99,7 @@ const Template: StoryFn<StoryArgs> = (args) => {
 	return (
 		<div className='mx-auto max-w-md space-y-10'>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(setFormValues)} className='grid gap-y-6'>
+				<form onSubmit={form.handleSubmit(setFormValues)} className='flex flex-col gap-y-6'>
 					<MultiSelectFieldControl {...args} />
 					<Button type='submit'>Submit</Button>
 				</form>
@@ -138,11 +138,12 @@ export const Default: Story = {
 		label: 'Chọn nhiều giá trị',
 		placeholder: 'Chọn...',
 		description: 'Bạn có thể chọn nhiều giá trị từ danh sách.',
+		orientation: 'vertical',
 		datalist,
 		labelField: 'name',
 		valueField: 'name',
 		shouldFilter: true,
-		orientation: 'vertical',
+		maxCount: 5,
 		hidden: false
 	}
 }
@@ -153,11 +154,11 @@ export const Horizontal: Story = {
 		label: 'Chọn nhiều giá trị',
 		placeholder: 'Chọn...',
 		description: 'Bạn có thể chọn nhiều giá trị từ danh sách.',
+		orientation: 'horizontal',
 		datalist,
 		labelField: 'name',
 		valueField: 'name',
 		shouldFilter: true,
-		orientation: 'horizontal',
 		hidden: false
 	}
 }

@@ -26,6 +26,7 @@ import { useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
 import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
 import React, { Fragment, useCallback, useRef, useState } from 'react'
+import ScrollShadow from './scroll-shadow'
 
 /**
  * Props for MultiSelect component
@@ -163,11 +164,6 @@ export function MultiSelect<D = Record<string, any>>({
 		onValueChange([])
 	}
 
-	const handleTogglePopover = (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.stopPropagation()
-		setIsPopoverOpen((prev) => !prev)
-	}
-
 	const clearExtraOptions = () => {
 		const newSelectedValues = selectedValues.slice(0, maxCount)
 		setSelectedValues(newSelectedValues)
@@ -188,10 +184,6 @@ export function MultiSelect<D = Record<string, any>>({
 			onValueChange(allValues as Array<D[keyof D]>)
 		}
 	}
-
-	// useEffect(() => {
-	// 	if (Array.isArray(value)) setSelectedValues(value)
-	// }, [value])
 
 	// TODO: Implement virtual scroll for better performance with large list
 	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
@@ -232,7 +224,7 @@ export function MultiSelect<D = Record<string, any>>({
 			: [0, 0]
 
 	useDeepCompareEffect(() => {
-		// If the popover is closed, there is no need to measure
+		// * If the popover is closed, there is no need to measure
 		if (!isPopoverOpen) return
 		virtualizer.measure()
 	}, [isPopoverOpen, virtualizer])
@@ -246,20 +238,22 @@ export function MultiSelect<D = Record<string, any>>({
 			<PopoverTrigger
 				{...props}
 				ref={ref}
-				onClick={handleTogglePopover}
+				onWheel={(e) => e.stopPropagation()}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
-					'w-full justify-stretch overflow-x-auto overflow-y-hidden rounded-md border bg-inherit py-0 pl-2 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+					'w-full justify-stretch rounded-md border bg-inherit py-0 pl-2 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
 					className
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
-					<Div className='flex flex-1 items-center justify-stretch gap-x-2'>
-						<Div className='flex w-full flex-1 items-center gap-x-1'>
+					<Div className='flex flex-1 items-center justify-stretch gap-x-2 overflow-x-hidden'>
+						<ScrollShadow
+							orientation='horizontal'
+							className='flex w-full max-w-full flex-1 items-center gap-x-1 overflow-x-auto overflow-y-hidden !scrollbar-none'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
 									return (
-										<Badge key={String(value)} variant='secondary' className=''>
+										<Badge key={String(value)} variant='secondary'>
 											<Typography
 												variant='small'
 												className='max-w-10 truncate text-xs'
@@ -290,7 +284,7 @@ export function MultiSelect<D = Record<string, any>>({
 											/>
 										</Badge>
 									</HoverCardTrigger>
-									<HoverCardContent className='flex w-96 flex-wrap items-center gap-x-1 gap-y-2 p-2'>
+									<HoverCardContent className='flex max-h-56 max-w-md flex-wrap items-center gap-x-1 gap-y-2 overflow-y-auto p-2'>
 										{Array.isArray(selectedValues) &&
 											selectedValues.slice(maxCount).map((item) => (
 												<Badge key={String(item)} variant='secondary'>
@@ -307,8 +301,8 @@ export function MultiSelect<D = Record<string, any>>({
 									</HoverCardContent>
 								</HoverCard>
 							)}
-						</Div>
-						<Div className='sticky right-0 ml-auto flex items-center justify-between gap-x-2 bg-background px-2'>
+						</ScrollShadow>
+						<Div className='ml-auto flex items-center justify-end gap-x-2 bg-background px-2'>
 							<XIcon
 								className='size-4 cursor-pointer text-muted-foreground'
 								onClick={(event) => {
@@ -332,7 +326,8 @@ export function MultiSelect<D = Record<string, any>>({
 			<PopoverContent
 				className='w-[var(--radix-popover-trigger-width)] p-0'
 				align='start'
-				onEscapeKeyDown={() => setIsPopoverOpen(false)}>
+				onEscapeKeyDown={() => setIsPopoverOpen(false)}
+				onOpenAutoFocus={(e) => e.preventDefault()}>
 				<Command
 					shouldFilter={shouldFilter}
 					filter={(value, search, keywords) => {
