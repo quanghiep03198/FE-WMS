@@ -22,9 +22,10 @@ import {
 	Typography
 } from '@/components/ui'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
+import { useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
 import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useRef, useState } from 'react'
 
 /**
  * Props for MultiSelect component
@@ -125,7 +126,7 @@ export function MultiSelect<D = Record<string, any>>({
 	defaultValue = [],
 	placeholder = 'Select options',
 	maxCount = 3,
-	modalPopover = false,
+	modalPopover = true,
 	className,
 	ref,
 	...props
@@ -188,6 +189,10 @@ export function MultiSelect<D = Record<string, any>>({
 		}
 	}
 
+	// useEffect(() => {
+	// 	if (Array.isArray(value)) setSelectedValues(value)
+	// }, [value])
+
 	// TODO: Implement virtual scroll for better performance with large list
 	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
@@ -226,32 +231,41 @@ export function MultiSelect<D = Record<string, any>>({
 				]
 			: [0, 0]
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		// If the popover is closed, there is no need to measure
 		if (!isPopoverOpen) return
 		virtualizer.measure()
 	}, [isPopoverOpen, virtualizer])
 
+	useDeepCompareEffect(() => {
+		if (Array.isArray(value)) setSelectedValues(value)
+	}, [value])
+
 	return (
-		<Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
+		<Popover modal={modalPopover} open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
 			<PopoverTrigger
 				{...props}
 				ref={ref}
 				onClick={handleTogglePopover}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
-					'flex w-full max-w-full items-center justify-between overflow-y-hidden overflow-x-scroll rounded-md border bg-inherit p-1 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+					'w-full justify-stretch overflow-x-auto overflow-y-hidden rounded-md border bg-inherit py-0 pl-2 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
 					className
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
-					<Div className='flex w-full items-center justify-between'>
-						<Div className='flex items-center gap-x-1 whitespace-normal'>
+					<Div className='flex flex-1 items-center justify-stretch gap-x-2'>
+						<Div className='flex w-full flex-1 items-center gap-x-1'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
 									return (
-										<Badge key={String(value)} variant='secondary'>
-											<span className='line-clamp-1'>{String(option?.[labelField])}</span>
+										<Badge key={String(value)} variant='secondary' className=''>
+											<Typography
+												variant='small'
+												className='max-w-10 truncate text-xs'
+												title={String(option?.[labelField])}>
+												{String(option?.[labelField])}
+											</Typography>
 											<XCircle
 												className='ml-2 size-4 min-w-4 basis-4 cursor-pointer'
 												onClick={(event) => {
@@ -294,16 +308,16 @@ export function MultiSelect<D = Record<string, any>>({
 								</HoverCard>
 							)}
 						</Div>
-						<Div className='sticky right-0 flex items-center justify-between bg-background'>
+						<Div className='sticky right-0 ml-auto flex items-center justify-between gap-x-2 bg-background px-2'>
 							<XIcon
-								className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground'
+								className='size-4 cursor-pointer text-muted-foreground'
 								onClick={(event) => {
 									event.stopPropagation()
 									handleClear()
 								}}
 							/>
 							<Separator orientation='vertical' className='flex h-full min-h-6' />
-							<ChevronDown className='mx-2 h-4 cursor-pointer text-muted-foreground' />
+							<ChevronDown className='size-4 cursor-pointer text-muted-foreground' />
 						</Div>
 					</Div>
 				) : (
@@ -341,48 +355,51 @@ export function MultiSelect<D = Record<string, any>>({
 						}}
 					/>
 					<CommandList ref={refCallback}>
-						{loading && (
+						{loading ? (
 							<CommandLoading className='flex items-center justify-center p-6'>
 								<Icon name='LoaderCircle' className='animate-spin' />
 							</CommandLoading>
-						)}
-						<CommandEmpty>No results found.</CommandEmpty>
-						<CommandGroup>
-							<CommandItem
-								key='all'
-								disabled={datalist?.length === 0}
-								keywords={['all']}
-								onSelect={toggleAll}
-								className='cursor-pointer'>
-								<Div
-									className={cn(
-										'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-										selectedValues?.length === datalist?.length && datalist?.length > 0
-											? 'bg-primary text-primary-foreground'
-											: 'opacity-50 [&_svg]:invisible'
-									)}>
-									<CheckIcon className='!size-3' />
-								</Div>
-								<Typography variant='small'>(Select All)</Typography>
-							</CommandItem>
-							{before > 0 && <CommandItem disabled style={{ width: '100%', height: before }} />}
-							{virtualItems.map((item) => {
-								const option = datalist[item.index]
-								const isSelected = selectedValues.includes(option?.[valueField])
-								return (
+						) : (
+							<Fragment>
+								<CommandEmpty>No results found.</CommandEmpty>
+								<CommandGroup>
 									<CommandItem
-										key={item.key}
-										data-index={item.index}
-										value={String(option[valueField])}
-										keywords={[String(option[labelField])]}
-										onSelect={() => toggleOption(option[valueField])}>
-										<Checkbox checked={isSelected} />
-										<Typography variant='small'>{String(option?.[labelField])}</Typography>
+										key='all'
+										disabled={datalist?.length === 0}
+										keywords={['all']}
+										onSelect={toggleAll}
+										className='cursor-pointer'>
+										<Div
+											className={cn(
+												'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+												selectedValues?.length === datalist?.length && datalist?.length > 0
+													? 'bg-primary text-primary-foreground'
+													: 'opacity-50 [&_svg]:invisible'
+											)}>
+											<CheckIcon className='!size-3' />
+										</Div>
+										<Typography variant='small'>(Select All)</Typography>
 									</CommandItem>
-								)
-							})}
-							{after > 0 && <CommandItem disabled style={{ width: '100%', height: after }} />}
-						</CommandGroup>
+									{before > 0 && <CommandItem disabled style={{ width: '100%', height: before }} />}
+									{virtualItems.map((item) => {
+										const option = datalist[item.index]
+										const isSelected = selectedValues.includes(option?.[valueField])
+										return (
+											<CommandItem
+												key={item.key}
+												data-index={item.index}
+												value={String(option[valueField])}
+												keywords={[String(option[labelField])]}
+												onSelect={() => toggleOption(option[valueField])}>
+												<Checkbox checked={isSelected} />
+												<Typography variant='small'>{String(option?.[labelField])}</Typography>
+											</CommandItem>
+										)
+									})}
+									{after > 0 && <CommandItem disabled style={{ width: '100%', height: after }} />}
+								</CommandGroup>
+							</Fragment>
+						)}
 					</CommandList>
 					<CommandSeparator />
 					<CommandGroup>
