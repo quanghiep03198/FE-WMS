@@ -94,8 +94,7 @@ const ArchivedUploadSheet: React.FC = () => {
 				item.size_numcode.includes(currentSizeCode)
 			)
 		}
-
-		setFilteredEpcs(archivedEpcs.filter(filterFn))
+		if (Array.isArray(archivedEpcs)) setFilteredEpcs(archivedEpcs.filter(filterFn))
 	}, [archivedEpcs, filterText, currentCommandNumber, currentSizeCode])
 
 	useEffect(() => {
