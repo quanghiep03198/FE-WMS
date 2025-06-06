@@ -39,7 +39,7 @@ const CentralizedPoOutboundForm: React.FC = () => {
 
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
+			<Form onSubmit={form.handleSubmit((data) => mutateAsync(data).then(() => form.reset()))}>
 				<PurchaseOrderAutoComplete />
 				<MultiSelectFieldControl
 					name='mo_no'

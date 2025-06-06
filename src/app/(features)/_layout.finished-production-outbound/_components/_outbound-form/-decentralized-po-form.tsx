@@ -116,13 +116,12 @@ const DecentralizedPoOutboundForm = () => {
 		<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
 			<FormProvider {...form}>
 				<Form
-					onSubmit={form.handleSubmit(
-						async (data) =>
-							await mutateAsync({
-								...data,
-								sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
-							})
-					)}>
+					onSubmit={form.handleSubmit((data) => {
+						mutateAsync({
+							...data,
+							sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
+						}).then(() => form.reset())
+					})}>
 					<Div className='col-span-1'>
 						<PurchaseOrderAutoComplete />
 					</Div>
