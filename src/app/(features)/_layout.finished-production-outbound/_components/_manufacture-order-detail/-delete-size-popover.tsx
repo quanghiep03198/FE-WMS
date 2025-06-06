@@ -132,6 +132,6 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	)
 }
 
-const Form = tw.form`grid items-stretch gap-y-6`
+const Form = tw.form`flex flex-col items-stretch gap-y-6`
 
 export default DeleteSizePopover

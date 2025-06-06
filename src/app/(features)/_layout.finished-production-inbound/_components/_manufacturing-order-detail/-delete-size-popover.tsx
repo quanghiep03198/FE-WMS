@@ -69,7 +69,7 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger
-				className='peer opacity-0 group-hover/cell:opacity-100 data-[state=open]:opacity-100'
+				className='opacity-0 group-hover/cell:opacity-100 data-[state=open]:opacity-100'
 				onMouseEnter={() =>
 					queryClient.prefetchQuery({
 						queryKey: [
@@ -134,6 +134,6 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	)
 }
 
-const Form = tw.form`grid items-stretch gap-y-6`
+const Form = tw.form`flex flex-col items-stretch gap-y-6 w-full`
 
 export default DeleteSizePopover
