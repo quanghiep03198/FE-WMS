@@ -45,25 +45,25 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 				<Typography color='muted' className='text-center @5xl:text-left'>
 					{t('ns_common:errors.500_message')}
 				</Typography>
-				{isDevelopment && (
-					<Dialog>
-						<DialogTrigger asChild>
-							<Button variant='link' size='lg' className='w-full p-0 text-base @5xl:w-auto'>
-								Show error details
-							</Button>
-						</DialogTrigger>
-						<DialogContent className='max-w-4xl'>
-							<DialogHeader>
-								<DialogTitle className='text-destructive'>Error</DialogTitle>
-							</DialogHeader>
-							<ScrollShadow className='max-h-96 !scrollbar-none'>
-								<Typography color='muted' className='font-medium'>
-									{error?.stack}
-								</Typography>
-							</ScrollShadow>
-						</DialogContent>
-					</Dialog>
-				)}
+
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button variant='link' size='lg' className='w-full p-0 text-base @5xl:w-auto'>
+							Show error details
+						</Button>
+					</DialogTrigger>
+					<DialogContent className='max-w-4xl'>
+						<DialogHeader>
+							<DialogTitle className='text-destructive'>Error</DialogTitle>
+						</DialogHeader>
+						<ScrollShadow className='max-h-96 !scrollbar-none'>
+							<Typography color='muted' className='font-medium'>
+								{error?.stack}
+							</Typography>
+						</ScrollShadow>
+					</DialogContent>
+				</Dialog>
+
 				<Div className='mt-6 inline-grid grid-cols-2 gap-x-2'>
 					<Button onClick={() => resetError()}>{t('ns_common:actions.retry')}</Button>
 					<FeedbackFormTrigger />
