@@ -8,7 +8,7 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
+import { Button, Div, Icon, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
@@ -22,7 +22,6 @@ import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
-import ArchivedUploadSheet from './-archived-upload-sheet'
 import ConnectionInsight from './-connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -196,8 +195,8 @@ const ScannedEpcList: React.FC = () => {
 					<Button variant='ghost' onClick={() => fetchServerEvent()}>
 						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
 					</Button>
-					<Separator orientation='vertical' className='h-6' />
-					<ArchivedUploadSheet />
+					{/* <Separator orientation='vertical' className='h-6' />
+					<ArchivedUploadSheet /> */}
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
