@@ -22,11 +22,11 @@ import { toast } from 'sonner'
 import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
-import ArchivedRestorationSheet from './-archived-restoration-sheet'
+
+import ArchivedRestorationSheet from '../_archived-restoration-sheet/-index'
 import ConnectionInsight from './-connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
-const PRERENDERED_ITEMS = 0
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 
@@ -164,29 +164,26 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
+	const getScrollElement = useCallback(() => containerRef.current, [])
+	const overscan = containerRef.current?.getBoundingClientRect().height > 400 ? 5 : 0
 
 	// * Intitialize virtual list to render scanned EPC data
 	const virtualizer = useVirtualizer({
 		count: scannedEpc.data.length,
 		indexAttribute: 'data-index',
-		getScrollElement: () => containerRef.current,
+		overscan,
+		getScrollElement,
 		scrollToFn,
-		estimateSize: useCallback(() => VIRTUAL_ITEM_SIZE, []),
+		estimateSize,
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
-				: undefined,
-		overscan: PRERENDERED_ITEMS
+				: undefined
 	})
 
 	return (
-		<Div
-			className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @6xl:sticky @6xl:top-[var(--header-height)] @6xl:h-[var(--outlet-wrapper-height)]'
-			style={
-				{
-					'--data-list-header-height': '36px'
-				} as React.CSSProperties
-			}>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @6xl:sticky @6xl:top-[var(--header-height)] @6xl:h-[var(--outlet-wrapper-height)]'>
 			{/* Datalist header */}
 			<Div className='flex items-center justify-between border-b p-1.5'>
 				<Div className='ml-2'>
@@ -203,7 +200,7 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[calc(var(--outlet-wrapper-height-10rem))] md:h-[50vh]'>
+					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[var(--outlet-wrapper-height)] md:h-[50vh]'>
 					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
@@ -228,6 +225,7 @@ const ScannedEpcList: React.FC = () => {
 								variant='link'
 								className='w-full'
 								style={{
+									height: VIRTUAL_ITEM_SIZE,
 									position: 'absolute',
 									top: 0,
 									bottom: 0,
