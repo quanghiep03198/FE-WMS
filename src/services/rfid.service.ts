@@ -5,9 +5,10 @@ import {
 } from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inbound/_schemas/exchange-epc.schema'
 import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inbound/_types'
+import { FilterArchivedEpcParams } from '@/app/(features)/_layout.finished-production-outbound/_types'
 import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
 import { RequestHeaders } from '@/common/constants/enums'
-import { IElectronicProductCode } from '@/common/types/entities'
+import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash'
 
@@ -75,10 +76,16 @@ export class RFIDService {
 		)
 	}
 
-	static async getArchivedEpcs(params: { _page: number }) {
+	static async getArchivedEpcs(params: Partial<FilterArchivedEpcParams>) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
 			`/rfid/outbound/archived-epcs`,
 			{ params }
+		)
+	}
+
+	static async getArchivedEpcFeatures() {
+		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(
+			`/rfid/outbound/archived-epc-features`
 		)
 	}
 

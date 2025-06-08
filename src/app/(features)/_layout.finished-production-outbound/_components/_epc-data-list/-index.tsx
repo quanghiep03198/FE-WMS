@@ -23,6 +23,7 @@ import { useGetOutboundEpcQuery } from '../../_apis/outbound-rfid.api'
 import { DEFAULT_PROPS, usePageContext } from '../../_contexts/-page-context'
 import OrderDetailTableDialog from '../_manufacture-order-detail/-order-detail-dialog'
 
+import { ArchivedRestorationProvider } from '../../_contexts/-archived-sheet-context'
 import ArchivedRestorationSheet from '../_archived-restoration-sheet/-index'
 import ConnectionInsight from './-connection-insight'
 
@@ -194,7 +195,9 @@ const ScannedEpcList: React.FC = () => {
 						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
-					<ArchivedRestorationSheet />
+					<ArchivedRestorationProvider>
+						<ArchivedRestorationSheet />
+					</ArchivedRestorationProvider>
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (

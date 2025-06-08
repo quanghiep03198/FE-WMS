@@ -3,6 +3,7 @@ export default {
 		add: 'Add',
 		adjust: 'Adjust',
 		approve: 'Approve',
+		archived: ' Archived',
 		back: 'Back',
 		cancel: 'Cancel',
 		cancel_approve: 'Cancel Approval',

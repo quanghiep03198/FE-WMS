@@ -32,7 +32,9 @@ export const DEFAULT_PROPS: Pick<PageContextStore, 'scanningState' | 'currentPag
 		limit: 100,
 		page: 1,
 		totalDocs: 0,
-		totalPages: 0
+		totalPages: 0,
+		nextPage: null,
+		prevPage: null
 	},
 	scannedOrders: []
 }

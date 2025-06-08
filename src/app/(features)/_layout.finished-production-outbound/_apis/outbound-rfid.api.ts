@@ -1,5 +1,6 @@
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { pickBy, uniqBy } from 'lodash'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -7,6 +8,7 @@ import { OUTBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
 import { DeleteScannedEpcsFormValues } from '../../_schemas/delete-epc.schema'
 import { SearchEpcParams } from '../../_types/rfid'
 import { usePageContext } from '../_contexts/-page-context'
+import { FilterArchivedEpcParams } from '../_types'
 
 export const OUTBOUND_EPC_LIST_PROVIDE_TAG = 'OUTBOUND_EPC_LIST'
 
@@ -16,7 +18,6 @@ export const useGetOutboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
 		queryFn: async () => RFIDService.fetchNextOutboundEpc({ _page: currentPage }),
-		placeholderData: keepPreviousData,
 		enabled: false,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
@@ -24,19 +25,45 @@ export const useGetOutboundEpcQuery = () => {
 	})
 }
 
-export const useGetArchivedEpcQuery = () => {
+export const useGetArchivedEpcQuery = (params) => {
 	return useInfiniteQuery({
-		queryKey: ['ARCHIVED_EPCS'],
-		queryFn: async ({ pageParam }) => await RFIDService.getArchivedEpcs({ _page: pageParam }),
+		queryKey: ['ARCHIVED_EPCS', params],
+		queryFn: async ({ pageParam }) => {
+			const filterQueries = pickBy<Partial<FilterArchivedEpcParams>>(
+				{
+					_page: pageParam,
+					q: params.searchTerm,
+					'shoes_style_code_factory.eq': params.shoes_style_code_factory,
+					'color_sn.eq': params.color_sn,
+					'mo_no.eq': params.mo_no,
+					'size_numcode.eq': params.size_numcode
+				},
+				(value) => Boolean(value)
+			)
+			return await RFIDService.getArchivedEpcs(filterQueries)
+		},
 		initialPageParam: 0,
-		getNextPageParam: (lastPage, allPages, lastPageParam) => {
-			console.log('lastPage :>> ', lastPage)
-			console.log('allPages :>> ', allPages)
-			console.log('lastPageParam :>> ', lastPageParam)
-			return lastPage.metadata?.nextPage ?? 0
+		getNextPageParam: (lastPage) => {
+			return lastPage.metadata?.nextPage
 		},
 		placeholderData: keepPreviousData,
-		select: (response) => response?.pages
+		select: (response) => {
+			const data = response.pages.flatMap((page) => {
+				if (!Array.isArray(page.metadata.data)) return []
+				else return page.metadata.data
+			})
+			return uniqBy(data, (item) => item.epc)
+		}
+	})
+}
+
+export const useGetArchivedEpcFeature = () => {
+	return useQuery({
+		queryKey: ['ARCHIVED_EPCS_FEATURES'],
+		queryFn: async () => await RFIDService.getArchivedEpcFeatures(),
+		// refetchOnMount: false,
+		// refetchOnWindowFocus: false,
+		select: (response) => response.metadata
 	})
 }
 
