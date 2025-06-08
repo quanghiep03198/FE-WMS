@@ -77,10 +77,17 @@ export interface IElectronicProductCode {
 	color_sn?: string
 	size_numcode?: string
 	factory_code_produce?: string
-	// record_time?: Date
-	// rfid_status: 'A' | 'B' | null
-	// rfid_use: 'A' | 'C' | 'D' | null
-	// storage?: any
+}
+
+export interface IArchivedFilterFeature {
+	shoes_style_code_factory: string
+	colorways: Array<{
+		color_sn: string
+		batches: Array<{
+			mo_no: string
+			sizes: Array<string>
+		}>
+	}>
 }
 
 export interface IInOutBoundReport {

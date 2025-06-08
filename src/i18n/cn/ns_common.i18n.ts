@@ -3,6 +3,7 @@ export default {
 		add: '添加',
 		adjust: '调整',
 		approve: '批准',
+		archived: ' 已归档',
 		back: '返回',
 		cancel: '取消',
 		cancel_approve: '取消批准',

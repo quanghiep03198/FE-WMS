@@ -3,6 +3,7 @@ export default {
 		add: 'Thêm mới',
 		adjust: 'Điều chỉnh',
 		approve: 'Duyệt',
+		archived: ' Lưu trữ',
 		back: 'Quay lại',
 		cancel: 'Hủy',
 		cancel_approve: 'Hủy duyệt',

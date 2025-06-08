@@ -2,7 +2,7 @@
 import useAuth from '@/common/hooks/use-auth'
 import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omit } from 'lodash'
 import { useEffect } from 'react'
 import { INBOUND_REPORT_PROVIDE_TAG } from '../../_apis/use-report.api'
@@ -48,6 +48,7 @@ export const useGetInboundEpcQuery = () => {
 		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
+		placeholderData: keepPreviousData,
 		select: (response) => response.metadata
 	})
 }

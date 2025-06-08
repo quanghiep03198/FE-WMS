@@ -52,6 +52,8 @@ export declare global {
 		page: number
 		totalDocs: number
 		totalPages: number
+		nextPage: number
+		prevPage: number
 	}
 	type Locale = 'vi' | 'en' | 'cn'
 

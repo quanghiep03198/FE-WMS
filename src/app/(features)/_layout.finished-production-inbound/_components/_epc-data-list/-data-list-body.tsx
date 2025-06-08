@@ -236,18 +236,21 @@ const EpcDataList: React.FC = () => {
 	})
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
+	const getScrollElement = useCallback(() => containerRef.current, [])
 
 	// * Intitialize virtual list to render scanned EPC data
 	const virtualizer = useVirtualizer({
 		count: scannedEpc.data.length,
-		getScrollElement: () => containerRef.current,
-		scrollToFn: (...args) => scrollToFn(...args),
-		estimateSize: useCallback(() => VIRTUAL_ITEM_SIZE, []),
+		overscan: PRERENDERED_ITEMS,
+		indexAttribute: 'data-index',
+		getScrollElement,
+		scrollToFn,
+		estimateSize,
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? (element) => element?.getBoundingClientRect().height
-				: undefined,
-		overscan: PRERENDERED_ITEMS
+				: undefined
 	})
 
 	return (

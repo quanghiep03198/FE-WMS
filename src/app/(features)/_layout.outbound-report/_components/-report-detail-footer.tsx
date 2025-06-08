@@ -11,11 +11,18 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 
 	const totalAccumulatedQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
-		return data.reduce((acc, curr) => acc + curr.daily_qty, 0)
+		return data.reduce((acc, curr) => {
+			curr.daily_qty ??= 0
+			return acc + curr.daily_qty
+		}, 0)
 	}, [data])
+
 	const totalMissingQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
-		return data.reduce((acc, curr) => acc + curr.missing_qty, 0)
+		return data.reduce((acc, curr) => {
+			curr.missing_qty ??= 0
+			return acc + curr.missing_qty
+		}, 0)
 	}, [data])
 
 	return (
