@@ -7,7 +7,6 @@ import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
-import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
 import { useMemoizedFn, useResetState } from 'ahooks'
@@ -122,24 +121,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
-			}),
-			columnHelper.accessor('po', {
-				header: 'PO',
-				enableColumnFilter: true,
-				enableSorting: true,
-				enablePinning: true,
-				sortUndefined: 'last',
-				sortingFn: fuzzySort,
-				enableGlobalFilter: false,
-				size: 220,
-				minSize: 200,
-				meta: {
-					align: 'left',
-					filterVariant: 'multi-select',
-					facetedUniqueValues: facetedUniqPurchaseOrder
-				},
-				filterFn: 'arrIncludesAll',
-				cell: ({ getValue }) => renderPurchaseOrderCell(getValue())
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
