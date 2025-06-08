@@ -1,4 +1,5 @@
 import {
+	ComboboxFieldControl,
 	Form,
 	Icon,
 	Input,
@@ -9,12 +10,12 @@ import {
 	Separator,
 	Tooltip
 } from '@/components/ui'
-import { useDebounceEffect, useDeepCompareEffect, useUpdateEffect } from 'ahooks'
+import { useDebounceEffect, useDeepCompareEffect } from 'ahooks'
 import { isEmpty, sortBy } from 'lodash'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useGetArchivedEpcFeature } from '../../_apis/outbound-rfid.api'
+import { useGetArchivedEpcFeatureQuery } from '../../_apis/outbound-rfid.api'
 import { useArchivedRestorationContext } from '../../_contexts/-archived-sheet-context'
 import { FilterForm, GhostButton } from './-styled'
 
@@ -22,17 +23,18 @@ const ArchivedEpcFilter: React.FC = () => {
 	const { t } = useTranslation()
 
 	const [filterOpen, setFilterOpen] = useState<boolean>(false)
-	const { data } = useGetArchivedEpcFeature()
+	const { data } = useGetArchivedEpcFeatureQuery()
 	const [search, setSearch] = useState<string>('')
 
 	const { searchTerm, advancedFilters, setSearchTerm, setAdvancedFilters } = useArchivedRestorationContext(
 		'searchTerm',
-		'advancedFilters',
 		'setSearchTerm',
+		'advancedFilters',
 		'setAdvancedFilters'
 	)
 
 	const form = useForm({
+		mode: 'onChange',
 		defaultValues: {
 			shoes_style_code_factory: '',
 			color_sn: '',
@@ -41,7 +43,6 @@ const ArchivedEpcFilter: React.FC = () => {
 		}
 	})
 
-	const formValues = form.getValues()
 	const currentShoesStyle = useWatch({ control: form.control, name: 'shoes_style_code_factory' })
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
 	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
@@ -49,16 +50,14 @@ const ArchivedEpcFilter: React.FC = () => {
 
 	const shoesStyleOptions = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.map((item) => ({
-			shoes_style_factory_code: item.shoes_style_code_factory
-		}))
+		return data.map((item) => ({ shoes_style_factory_code: item.shoes_style_code_factory }))
 	}, [data])
 
 	const colorOptions = useMemo(() => {
 		if (Array.isArray(data) && currentShoesStyle) {
 			const feature = data.find((item) => item.shoes_style_code_factory === currentShoesStyle)
-			const result = feature?.colorways?.map((color) => ({ color_sn: color.color_sn ?? '' })) ?? []
-			return sortBy(result, (item) => item.color_sn)
+			const result = feature?.colorways?.map((color) => ({ color_sn: color?.color_sn })) ?? []
+			return sortBy(result, (item) => item?.color_sn)
 		} else {
 			return []
 		}
@@ -68,8 +67,8 @@ const ArchivedEpcFilter: React.FC = () => {
 		if (Array.isArray(data) && currentShoesStyle) {
 			const feature = data.find((item) => item.shoes_style_code_factory === currentShoesStyle)
 			const colorways = feature.colorways?.find((item) => item.color_sn === currentColor)
-			const result = colorways?.batches?.map((item) => ({ mo_no: item.mo_no ?? '' })) ?? []
-			return sortBy(result, (item) => item.mo_no)
+			const result = colorways?.batches?.map((item) => ({ mo_no: item?.mo_no })) ?? []
+			return sortBy(result, (item) => item?.mo_no)
 		} else {
 			return []
 		}
@@ -79,41 +78,36 @@ const ArchivedEpcFilter: React.FC = () => {
 		if (Array.isArray(data) && currentShoesStyle && currentColor && currentCommandNumber) {
 			const feature = data.find((item) => item.shoes_style_code_factory === currentShoesStyle)
 			const colorways = feature.colorways?.find((item) => item.color_sn === currentColor)
+			if (!colorways) return []
 			const batch = colorways?.batches?.find((item) => item.mo_no === currentCommandNumber)
-			const result = batch?.sizes.map((size) => ({ size_numcode: size ?? '' })) ?? []
+			if (!batch) return []
+			const result = batch?.sizes?.map((size) => ({ size_numcode: size })) ?? []
 			return sortBy(result, (item) => item.size_numcode)
 		} else {
 			return []
 		}
-	}, [data, currentShoesStyle, currentCommandNumber])
+	}, [data, currentShoesStyle, currentColor, currentCommandNumber])
 
-	useUpdateEffect(() => {}, [
-		currentColor,
-		currentCommandNumber,
-		currentSize,
-		colorOptions,
-		commandNumberOptions,
-		sizeOptions
-	])
-
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (!colorOptions.some((item) => item.color_sn === currentColor)) {
 			form.setValue('color_sn', '')
-			return
 		}
 		if (!commandNumberOptions.some((item) => item.mo_no === currentCommandNumber)) {
 			form.setValue('mo_no', '')
-			return
 		}
 		if (!sizeOptions.some((item) => item.size_numcode === currentSize)) {
 			form.setValue('size_numcode', '')
-			return
 		}
 	}, [colorOptions, commandNumberOptions, sizeOptions])
 
 	useDeepCompareEffect(() => {
-		setAdvancedFilters(formValues)
-	}, [formValues])
+		setAdvancedFilters({
+			shoes_style_code_factory: currentShoesStyle,
+			color_sn: currentColor,
+			mo_no: currentCommandNumber,
+			size_numcode: currentSize
+		})
+	}, [currentShoesStyle, currentColor, currentCommandNumber, currentSize])
 
 	useDebounceEffect(
 		() => {
@@ -122,10 +116,6 @@ const ArchivedEpcFilter: React.FC = () => {
 		[search],
 		{ wait: 300 }
 	)
-
-	useEffect(() => {
-		console.log('advancedFilters :>> ', advancedFilters)
-	}, [advancedFilters])
 
 	return (
 		<Popover open={filterOpen} onOpenChange={setFilterOpen}>
@@ -147,15 +137,17 @@ const ArchivedEpcFilter: React.FC = () => {
 					onFocus={(e) => e.stopPropagation()}
 					onInput={(e) => setSearch(e.currentTarget.value)}
 				/>
-				{(searchTerm || !Object.values(formValues).every(isEmpty)) && (
+				{(searchTerm || !Object.values(advancedFilters).every(isEmpty)) && (
 					<Fragment>
-						<GhostButton
-							onClick={(e) => {
-								e.stopPropagation()
-								form.reset()
-							}}>
-							<Icon name='X' />
-						</GhostButton>
+						<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
+							<GhostButton
+								onClick={(e) => {
+									e.stopPropagation()
+									form.reset()
+								}}>
+								<Icon name='X' />
+							</GhostButton>
+						</Tooltip>
 						<Separator orientation='vertical' />
 					</Fragment>
 				)}
@@ -171,8 +163,8 @@ const ArchivedEpcFilter: React.FC = () => {
 				className='w-[var(--radix-popover-trigger-width)]'
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				<Form {...form}>
-					<FilterForm className='grid gap-4' onSubmit={(e) => e.preventDefault()}>
-						<SelectFieldControl
+					<FilterForm className='grid gap-4' onSubmit={form.handleSubmit(setAdvancedFilters)}>
+						<ComboboxFieldControl
 							label={t('ns_erp:fields.shoestyle_codefactory')}
 							name='shoes_style_code_factory'
 							orientation='horizontal'
@@ -180,7 +172,7 @@ const ArchivedEpcFilter: React.FC = () => {
 							labelField='shoes_style_factory_code'
 							valueField='shoes_style_factory_code'
 						/>
-						<SelectFieldControl
+						<ComboboxFieldControl
 							label={t('ns_erp:fields.color_sn')}
 							name='color_sn'
 							orientation='horizontal'
@@ -188,7 +180,7 @@ const ArchivedEpcFilter: React.FC = () => {
 							labelField='color_sn'
 							valueField='color_sn'
 						/>
-						<SelectFieldControl
+						<ComboboxFieldControl
 							label={t('ns_erp:fields.mo_no')}
 							name='mo_no'
 							orientation='horizontal'

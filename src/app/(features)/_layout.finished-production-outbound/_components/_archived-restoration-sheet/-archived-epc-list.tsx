@@ -13,7 +13,7 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetArchivedEpcQuery } from '../../_apis/outbound-rfid.api'
+import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../_apis/outbound-rfid.api'
 import { useArchivedRestorationContext } from '../../_contexts/-archived-sheet-context'
 import { GhostButton, ListBody, ListContainer, ListDetail, ListDetailItem, ListHeader, ListItem } from './-styled'
 
@@ -39,8 +39,14 @@ const ArchivedEpcList: React.FC = () => {
 		'searchTerm',
 		'advancedFilters'
 	)
-
-	const { data, hasNextPage, isFetchingNextPage, refetch, fetchNextPage } = useGetArchivedEpcQuery({
+	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery()
+	const {
+		data,
+		hasNextPage,
+		isFetchingNextPage,
+		refetch: refetchArchivedEpc,
+		fetchNextPage
+	} = useGetArchivedEpcQuery({
 		searchTerm,
 		...advancedFilters
 	})
@@ -89,6 +95,11 @@ const ArchivedEpcList: React.FC = () => {
 		if (lastItem.index >= datalist.length - 1 && hasNextPage && !isFetchingNextPage) fetchNextPage()
 	}, [hasNextPage, fetchNextPage, datalist.length, isFetchingNextPage, virtualItems])
 
+	const handleRefetch = () => {
+		refetchArchivedEpcFeature()
+		refetchArchivedEpc()
+	}
+
 	const isSomeItemsSelected = selectedItems.length > 0 && selectedItems.length < datalist.length
 	const isAllItemsSelected = selectedItems.length > 0 && selectedItems.length === datalist.length
 
@@ -105,7 +116,7 @@ const ArchivedEpcList: React.FC = () => {
 					/>
 					<Typography className='font-medium'>EPC</Typography>
 					<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-						<GhostButton onClick={() => refetch()}>
+						<GhostButton onClick={() => handleRefetch()}>
 							<Icon name='RotateCw' />
 						</GhostButton>
 					</Tooltip>
@@ -187,7 +198,7 @@ const ArchivedEpcList: React.FC = () => {
 			</ListContainer>
 			<Typography variant='small' className='block text-end font-medium tracking-wide'>
 				{t('ns_common:table.selected_rows', {
-					selectedRows: `${selectedItems?.length}/${data?.length ?? 0}`,
+					selectedRows: `${selectedItems?.length}/${datalist?.length ?? 0}`,
 					defaultValue: null
 				})}
 			</Typography>

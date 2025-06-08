@@ -10,13 +10,11 @@ import { SearchEpcParams } from '../../_types/rfid'
 import { usePageContext } from '../_contexts/-page-context'
 import { FilterArchivedEpcParams } from '../_types'
 
-export const OUTBOUND_EPC_LIST_PROVIDE_TAG = 'OUTBOUND_EPC_LIST'
-
 export const useGetOutboundEpcQuery = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useQuery({
-		queryKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, currentPage],
+		queryKey: ['OUTBOUND_EPC_LIST', currentPage],
 		queryFn: async () => RFIDService.fetchNextOutboundEpc({ _page: currentPage }),
 		enabled: false,
 		refetchOnMount: false,
@@ -43,6 +41,7 @@ export const useGetArchivedEpcQuery = (params) => {
 			return await RFIDService.getArchivedEpcs(filterQueries)
 		},
 		initialPageParam: 0,
+		refetchOnMount: true,
 		getNextPageParam: (lastPage) => {
 			return lastPage.metadata?.nextPage
 		},
@@ -57,12 +56,11 @@ export const useGetArchivedEpcQuery = (params) => {
 	})
 }
 
-export const useGetArchivedEpcFeature = () => {
+export const useGetArchivedEpcFeatureQuery = () => {
 	return useQuery({
 		queryKey: ['ARCHIVED_EPCS_FEATURES'],
 		queryFn: async () => await RFIDService.getArchivedEpcFeatures(),
-		// refetchOnMount: false,
-		// refetchOnWindowFocus: false,
+		refetchOnMount: 'always',
 		select: (response) => response.metadata
 	})
 }
@@ -71,7 +69,7 @@ export const useRestoreEpcMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'],
+		mutationKey: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'],
 		mutationFn: async (epcs: Array<string>) => await RFIDService.restoreArchivedEpcs(epcs),
 		onSettled: invalidateQueries
 	})
@@ -91,7 +89,7 @@ export const useDeleteOrderMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS', currentPage],
+		mutationKey: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS', currentPage],
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
 			await RFIDService.deleteScannedOutboundOrder(commandNumber, { rescannable: !rescannable })
 	})
@@ -103,7 +101,7 @@ export const useUpdateStockOutMutation = (callback: () => unknown) => {
 	const { t } = useTranslation()
 
 	return useMutation({
-		mutationKey: [OUTBOUND_EPC_LIST_PROVIDE_TAG, OUTBOUND_REPORT_PROVIDE_TAG, currentPage],
+		mutationKey: ['OUTBOUND_EPC_LIST', OUTBOUND_REPORT_PROVIDE_TAG, currentPage],
 		mutationFn: async (payload: any) => await RFIDService.upsertOutboundInventory(payload),
 		onMutate: () => {
 			toastId.current = toast.loading(t('ns_common:notification.processing_request'))
@@ -139,7 +137,9 @@ const useInvalidateQueries = () => {
 		queryClient.invalidateQueries({
 			predicate: (query) =>
 				query.queryKey.some((key) =>
-					[OUTBOUND_EPC_LIST_PROVIDE_TAG, 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'].includes(key as string)
+					['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS', 'ARCHIVED_EPCS_FEATURES'].includes(
+						key as string
+					)
 				)
 		})
 	}
