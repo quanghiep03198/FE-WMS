@@ -119,18 +119,18 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 						<Div className={cn('space-y-2')}>
 							<Popover>
 								<PopoverTrigger
+									{...triggerProps}
 									id={id}
 									disabled={disabled}
 									aria-invalid={isError}
 									className={cn(
+										triggerProps?.className,
 										buttonVariants({
 											variant: 'outline',
 											className:
-												'w-full justify-between px-3 py-1 font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
-										}),
-										triggerProps?.className
-									)}
-									{...triggerProps}>
+												'w-full justify-between bg-background px-3 py-1 font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
+										})
+									)}>
 									<FormControl>
 										<Fragment>
 											<Typography variant='small' className='line-clamp-1'>
