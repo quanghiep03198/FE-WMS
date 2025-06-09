@@ -1,6 +1,5 @@
 import { IconProps } from '@/components/ui'
 import { FileRouteTypes } from '@/route-tree.gen'
-import { KeyType } from 'ahooks/lib/useKeyPress'
 import { ResourceKeys } from 'i18next'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -10,8 +9,8 @@ export type NavigationConfig = {
 	title: ResourceKeys['ns_common']
 	path: FileRouteTypes['to']
 	status?: 'stable' | 'experimental' | 'deprecated'
+	keybinding?: string
 	type: 'main' | 'preference' | 'auth'
-	keybinding: KeyType
 	children?: NavigationConfig[]
 }
 
@@ -21,8 +20,7 @@ export const navigationConfig: NavigationConfig[] = [
 		icon: 'LayoutDashboard',
 		title: 'navigation.dashboard',
 		path: '/dashboard',
-		type: 'main',
-		keybinding: 'ctrl.0'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
@@ -30,72 +28,70 @@ export const navigationConfig: NavigationConfig[] = [
 		title: 'navigation.warehouse_management',
 		path: '/warehouse',
 		type: 'main',
-		status: 'stable',
-		keybinding: 'ctrl.1'
+		status: 'stable'
 	},
 	{
 		id: uuidv4(),
 		icon: 'GitCompareArrows',
 		title: 'navigation.fp_inoutbound',
 		path: '/finished-production-inbound',
-		type: 'main',
-		keybinding: 'ctrl.2'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'GitBranchPlus',
 		title: 'navigation.fp_stock_out',
 		path: '/finished-production-outbound',
-		type: 'main',
-		keybinding: 'ctrl.3'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'FileInput',
 		title: 'navigation.import_management',
 		path: '/inbound-report',
-		type: 'main',
-		keybinding: 'ctrl.4'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'FileOutput',
 		title: 'navigation.export_management',
 		path: '/outbound-report',
-		type: 'main',
-		keybinding: 'ctrl.5'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'Archive',
-		title: 'navigation.inventory_management',
-		path: '/inventory-report',
-		type: 'main',
-		keybinding: 'ctrl.6'
+		title: 'navigation.monthly_inventory_audit',
+		path: '/inventory-audit',
+		type: 'main'
+	},
+	{
+		id: uuidv4(),
+		icon: 'Archive',
+		title: 'navigation.production_inventory',
+		path: '/production-inventory',
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'PackageCheck',
 		title: 'navigation.cargo_weight_check',
 		path: '/cargo-weight-check',
-		type: 'main',
-		keybinding: 'ctrl.7'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'ArrowRightLeft',
 		title: 'navigation.transfer_managment',
 		path: '/transfer-management',
-		type: 'main',
-		keybinding: 'ctrl.8'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'FileText',
 		title: 'navigation.report_management',
 		path: '/report',
-		type: 'main',
-		keybinding: 'ctrl.9'
+		type: 'main'
 	},
 	{
 		id: uuidv4(),
@@ -118,7 +114,7 @@ export const navigationConfig: NavigationConfig[] = [
 		icon: 'Settings',
 		title: 'navigation.settings',
 		path: '/preferences/appearance-settings',
-		type: 'preference',
-		keybinding: 'ctrl.alt.s'
+		keybinding: 'ctrl.alt.s',
+		type: 'preference'
 	}
 ]

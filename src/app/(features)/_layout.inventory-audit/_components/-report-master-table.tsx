@@ -3,20 +3,19 @@ import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
-import EllipsisList from '@/components/ui/@custom/ellipsis-list'
+import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
-import { ReportService } from '@/services/report.service'
+import { InventoryService } from '@/services/inventory.service'
 import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
 import { useMemoizedFn, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { has, isEmpty, isNil, pick, sortedUniq } from 'lodash'
+import { pick } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetMonthlyInventoryReport } from '../../_apis/use-report.api'
+import { useGetInventoryAuditReport } from '../../_apis/use-report.api'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import { InventoryReportDetailTable } from './-report-detail-table'
 
@@ -25,7 +24,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const { data: currentTenant } = useGetTenantByFactory()
 	const { user } = useAuth()
 
-	const { data, isLoading, refetch } = useGetMonthlyInventoryReport(currentTenant?.id, searchParams)
+	const { data, isLoading, refetch } = useGetInventoryAuditReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IMonthlyInventoryReport>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryReport>()
@@ -38,37 +37,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 	useEffect(() => {
 		resetExpanded()
 	}, [searchParams['month.eq']])
-
-	const facetedUniqPurchaseOrder = useMemo<Record<'label' | 'value', string>[]>(() => {
-		if (!Array.isArray(data) || !data.every((item) => has(item, 'po'))) return []
-		return sortedUniq(
-			data.filter((item) => !isNil(item.po) && !isEmpty(item.po)).flatMap((item) => item?.po?.split(','))
-		).map((item) => ({
-			label: item,
-			value: item
-		}))
-	}, [data])
-
-	const renderPurchaseOrderCell = useCallback(
-		(value: string) => {
-			if (!value) return <Badge variant='outline'>Unknown</Badge>
-			return (
-				<EllipsisList
-					threshhold={2}
-					data={value
-						.split(',')
-						.filter((item) => !isNil(item) && !isEmpty(item))
-						.sort((a, b) => a.localeCompare(b))}
-					template={({ data }) => (
-						<Badge variant='outline' className='whitespace-nowrap'>
-							{data.trim()}
-						</Badge>
-					)}
-				/>
-			)
-		},
-		[data]
-	)
 
 	const renderDetailTable = useCallback(
 		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
@@ -231,7 +199,10 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const handleDownloadExcel = useMemoizedFn(async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
-			const blob = await ReportService.downloadInventoryReport(currentTenant?.id, pick(searchParams, 'month.eq'))
+			const blob = await InventoryService.downloadInventoryAuditReport(
+				currentTenant?.id,
+				pick(searchParams, 'month.eq')
+			)
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {

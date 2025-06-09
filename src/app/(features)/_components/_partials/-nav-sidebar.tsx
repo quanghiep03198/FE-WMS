@@ -30,8 +30,7 @@ import { navigationConfig, type NavigationConfig } from '@/configs/navigation.co
 import { FileRouteTypes } from '@/route-tree.gen'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
-import { useKeyPress, useUpdateEffect } from 'ahooks'
-import { KeyType } from 'ahooks/lib/useKeyPress'
+import { useUpdateEffect } from 'ahooks'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -40,22 +39,22 @@ type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'> & { viewTr
 const NavSidebar: React.FC = () => {
 	const navigate = useNavigate()
 
-	const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
-		() => ({
-			...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
-				acc[String(curr.keybinding)] = function () {
-					return navigate({ to: curr.path })
-				}
-				return acc
-			}, {})
-		}),
-		[]
-	)
+	// const keyCallbackMap = useMemo<Record<KeyType, () => void>>(
+	// 	() => ({
+	// 		...navigationConfig.reduce<{ [key: string]: () => void }>((acc, curr) => {
+	// 			acc[String(curr.keybinding)] = function () {
+	// 				return navigate({ to: curr.path })
+	// 			}
+	// 			return acc
+	// 		}, {})
+	// 	}),
+	// 	[]
+	// )
 
-	useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
-		e.preventDefault()
-		keyCallbackMap[key]()
-	})
+	// useKeyPress(Object.keys(keyCallbackMap), (e, key) => {
+	// 	e.preventDefault()
+	// 	keyCallbackMap[key]()
+	// })
 
 	const mainMenu = useMemo(() => {
 		return navigationConfig.filter((item) => item.type === 'main')

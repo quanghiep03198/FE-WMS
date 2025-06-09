@@ -25,6 +25,7 @@ export default {
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
 		outbound_table_caption: '上表总结了扫描的EPC数据',
 		po_outbound: '按容器出库的订单代码. 根据此订单计算当天扫描的EPC数据.',
+		production_inventory: '管理和跟踪工厂的生产库存.',
 		select_readable_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
 		select_writable_database: '选择数据库连接以保存仓库入库/出库数据. 如果订单指定在当前工厂生产，请跳过.',
 		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',

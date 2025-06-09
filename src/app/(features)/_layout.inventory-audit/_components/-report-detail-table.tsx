@@ -3,7 +3,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
-import { ReportService } from '@/services/report.service'
+import { InventoryService } from '@/services/inventory.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useBoolean } from 'ahooks'
@@ -69,7 +69,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	// * Implement optimistic update on save manual changes
 	const { mutateAsync, isPending, isError } = useMutation({
 		mutationFn: async (payload: ReportDataFormValues['data']) => {
-			return await ReportService.updateInventoryReport(
+			return await InventoryService.updateInventoryAuditReport(
 				currentTenant?.id,
 				abortControllerRef.current?.signal,
 				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month.eq'] },

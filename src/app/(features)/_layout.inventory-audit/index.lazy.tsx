@@ -7,7 +7,7 @@ import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-
 import { MonthPickerFilter } from './_components/-month-picker-filter'
 import { InventoryReportMasterTable } from './_components/-report-master-table'
 
-export const Route = createLazyFileRoute('/(features)/_layout/inventory-report/')({
+export const Route = createLazyFileRoute('/(features)/_layout/inventory-audit/')({
 	component: Page
 })
 
@@ -18,12 +18,12 @@ function Page() {
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/inventory-report', text: t('ns_common:navigation.inventory_management') }])
+		setBreadcrumb([{ to: '/inventory-report', text: t('ns_common:navigation.monthly_inventory_audit') }])
 	}, [i18n.language])
 
 	return (
 		<Fragment>
-			<title>{t('ns_common:navigation.inventory_management')}</title>
+			<title>{t('ns_common:navigation.monthly_inventory_audit')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
 
 			<Div as='section' className='space-y-4'>

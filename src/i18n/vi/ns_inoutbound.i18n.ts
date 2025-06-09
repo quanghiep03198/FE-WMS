@@ -44,6 +44,7 @@ export default {
 		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',
 		outbound_table_caption: 'Bảng trên thống kê dữ liệu các chi tiết các tem đã quét',
 		po_outbound: 'Dữ liệu xuất kho các tem đã quét sẽ được tính theo đơn hàng này.',
+		production_inventory: 'Quản lý và theo dõi sản phẩm tồn kho sản xuất tại nhà máy.',
 		select_readable_database:
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
 		select_writable_database:
