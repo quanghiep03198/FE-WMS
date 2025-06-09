@@ -1,7 +1,6 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import { IInboundReport, IMonthlyInventoryReport, IOutboundReport, IPackingReport } from '@/common/types/entities'
+import { IInboundReport, IOutboundReport, IPackingReport } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { AxiosRequestConfig } from 'axios'
 
 export class ReportService {
 	static async getInboundReport(tenantId: string, params?: { 'date.eq': string }) {
@@ -15,26 +14,6 @@ export class ReportService {
 		return await axiosInstance.get<void, ResponseBody<IOutboundReport[]>>('/report/daily-outbound', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: params
-		})
-	}
-
-	static async getMonthlyInventoryReport(tenantId: string, params: { 'month.eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryReport[]>>('/report/monthly-inventory', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
-			params: params
-		})
-	}
-
-	static async updateInventoryReport(
-		tenantId: string,
-		signal: AbortSignal,
-		params: AxiosRequestConfig['params'],
-		payload: any
-	) {
-		return await axiosInstance.patch('/report/monthly-inventory/update', payload, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
-			signal,
-			params
 		})
 	}
 
@@ -55,14 +34,6 @@ export class ReportService {
 
 	static async downloadOutboundReport(tenantId: string, filter: { 'date.eq': string }) {
 		return await axiosInstance.get<void, Blob>('/report/daily-outbound/export', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
-			params: filter,
-			responseType: 'blob'
-		})
-	}
-
-	static async downloadInventoryReport(tenantId: string, filter: { 'month.eq': string }) {
-		return await axiosInstance.get<void, Blob>('/report/monthly-inventory/export', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'

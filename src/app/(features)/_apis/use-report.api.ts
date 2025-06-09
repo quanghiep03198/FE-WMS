@@ -1,3 +1,4 @@
+import { InventoryService } from '@/services/inventory.service'
 import { ReportService } from '@/services/report.service'
 import { useQuery } from '@tanstack/react-query'
 import { pick } from 'lodash'
@@ -33,10 +34,10 @@ export const useGetOutboundReport = (
 	})
 }
 
-export const useGetMonthlyInventoryReport = (tenantId: string, params?: { 'month.eq': string }) => {
+export const useGetInventoryAuditReport = (tenantId: string, params?: { 'month.eq': string }) => {
 	return useQuery({
 		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, tenantId, params],
-		queryFn: async () => await ReportService.getMonthlyInventoryReport(tenantId, params),
+		queryFn: async () => await InventoryService.getInventoryAuditReport(tenantId, params),
 		enabled: !!tenantId,
 		refetchOnWindowFocus: false,
 		select: (response) => response.metadata

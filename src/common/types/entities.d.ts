@@ -109,6 +109,7 @@ export interface IInboundReport extends IInOutBoundReport {
 	storage: string
 	daily_inbound_qty: number
 }
+
 export interface IOutboundReport extends Omit<IInOutBoundReport, 'size_data'> {
 	po: string
 	missing_qty: number
@@ -152,4 +153,18 @@ export interface IMonthlyInventoryReport {
 		actual_outstock_qty: number		// * Actual outstock quantity
 		final_stock_qty: number				// * Final stock quantity
 	}>
+}
+
+export interface IPackingReport {
+	brand_name: string
+	po: string
+	shoes_style_code_factory: string
+	mat_ecolor: string
+	color_sn: string
+	size_data: string
+	po_qty: number
+	target_box_qty: number
+	target_item_qty: number
+	weighed_box_qty: number
+	unweighed_box_qty: number
 }

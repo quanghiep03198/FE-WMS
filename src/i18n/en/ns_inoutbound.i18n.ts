@@ -26,6 +26,7 @@ export default {
 		order_sizing_list: 'The table below shows the sizing information of the scanned orders.',
 		outbound_table_caption: 'The table above summarizes the scanned EPC data.',
 		po_outbound: 'The scanned EPC data will be counted according to this order after performing stock out.',
+		production_inventory: 'Manage and track the production inventory at the factory.',
 		select_readable_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		select_writable_database:
