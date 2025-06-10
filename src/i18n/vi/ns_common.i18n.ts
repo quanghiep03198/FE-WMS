@@ -102,7 +102,7 @@ export default {
 	form_placeholder: {
 		fill: 'Nhập {{object}}...',
 		search: 'Tìm kiếm {{object}} ...',
-		select: '-- Chọn {{object}} --'
+		select: 'Chọn {{object}}'
 	},
 	navigation: {
 		account: 'Tài khoản',
@@ -116,7 +116,7 @@ export default {
 		keyboard_shortcut: 'Phím tắt',
 		pm_inbound: 'Nhập kho QLSX',
 		cargo_weight_check: 'Kiểm tra & Cân Hàng',
-		production_inventory: 'Quản lý tồn kho sản xuất',
+		inventory_estimation: 'Quản lý tồn kho sản xuất',
 		profile: 'Thông tin cá nhân',
 		report_management: 'Báo biểu',
 		settings: 'Cài đặt',
@@ -133,6 +133,7 @@ export default {
 		receiving_data: 'Đang lấy dữ liệu ...'
 	},
 	others: {
+		all: 'Tất cả',
 		server: 'Máy chủ {{alias}}'
 	},
 	pagination: {

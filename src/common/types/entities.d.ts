@@ -168,3 +168,28 @@ export interface IPackingReport {
 	weighed_box_qty: number
 	unweighed_box_qty: number
 }
+
+export interface IProductSizeInventory {
+	shoes_style: string
+	color: string
+	total_qty: number
+	inv_sizes: Array<{ size_numcode: string; qty: number }>
+}
+
+export interface IOutboundExpectation {
+	shoes_style: string
+	color: string
+	po: string
+	po_qty: number
+	outbound_date: Date
+	outbound_qty: number
+}
+
+export interface IInboundInventory {
+	shoes_style: string
+	color: string
+	mo_no: string
+	mo_qty: number
+	inbound_qty: number
+	inspected_qty: number
+}

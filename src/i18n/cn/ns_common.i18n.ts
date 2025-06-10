@@ -100,7 +100,7 @@ export default {
 	form_placeholder: {
 		fill: 'Fill in {{object}}...',
 		search: 'Search by {{object}} ...',
-		select: '-- Select {{object}} --'
+		select: 'Select {{object}}'
 	},
 	navigation: {
 		account: '账户管理',
@@ -110,7 +110,7 @@ export default {
 		fp_stock_out: '成品倉出庫作業',
 		import_management: '入庫管理',
 		monthly_inventory_audit: '盤點管理',
-		production_inventory: '生产库存管理',
+		inventory_estimation: '生产库存管理',
 		keyboard_shortcut: '快捷键',
 		pm_inbound: '生产管理入库操作',
 		cargo_weight_check: '货物称重检查',
@@ -129,6 +129,9 @@ export default {
 		processing_request: '正在处理请求 ...',
 		success: '成功 !',
 		receiving_data: '等待数据 ...'
+	},
+	others: {
+		all: '全部'
 	},
 	pagination: {
 		ellipsis_count: '... 和 {{count}} 更多项目',

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable no-undef */
+const plugin = require('tailwindcss/plugin')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ['class'],
@@ -25,6 +27,9 @@ module.exports = {
 				['max-height']: 'max-height',
 				['width']: 'width',
 				['spacing']: 'margin, padding'
+			},
+			transitionBehaivior: {
+				['discrete']: 'allow-discrete'
 			},
 			width: {
 				['88']: '22rem',
@@ -306,6 +311,16 @@ module.exports = {
 		}
 	},
 	plugins: [
+		plugin(function ({ addUtilities }) {
+			addUtilities({
+				'.backface-hidden': {
+					'backface-visibility': 'hidden'
+				},
+				'.transition-allow-discrete': {
+					'transition-behavior': 'allow-discrete'
+				}
+			})
+		}),
 		require('tailwindcss-animate'),
 		require('tailwind-scrollbar'),
 		require('@tailwindcss/container-queries'),
