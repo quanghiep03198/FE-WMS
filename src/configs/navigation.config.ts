@@ -68,7 +68,7 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: uuidv4(),
 		icon: 'Container',
-		title: 'navigation.production_inventory',
+		title: 'navigation.inventory_estimation',
 		path: '/production-inventory',
 		type: 'main'
 	},

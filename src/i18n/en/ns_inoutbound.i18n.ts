@@ -26,7 +26,7 @@ export default {
 		order_sizing_list: 'The table below shows the sizing information of the scanned orders.',
 		outbound_table_caption: 'The table above summarizes the scanned EPC data.',
 		po_outbound: 'The scanned EPC data will be counted according to this order after performing stock out.',
-		production_inventory: 'Manage and track the production inventory at the factory.',
+		inventory_estimation: 'Estimate the inventory levels based on the current production and shipping status.',
 		select_readable_database:
 			'Select a database connection to read the data. You can change it when there is no connection or the current connection has been interrupted.',
 		select_writable_database:
@@ -38,7 +38,15 @@ export default {
 		transferred_order: 'The actual order code to be exchanged.',
 		exchange_qty: 'Number of exchanged items for the actual order.',
 		transfer_order_datalist: 'Pick the data from the table below to add new transfer orders.',
-		transfer_order_list: 'Follow and manage transfer orders.'
+		transfer_order_list: 'Follow and manage transfer orders.',
+		inbound_directive: 'Inbound directive',
+		outbound_estimation: 'Estimated outbound quantity for the order',
+		inventory_by_size: 'Inventory by size',
+		inventory_by_size_desc: 'Display the inventory quantity by product size after performing the search.',
+		inventory_audit: 'Inventory audit',
+		inventory_audit_desc: 'The inventory audit will be displayed here after the search is performed.',
+		outbound_order_estimation: 'Estimated outbound orders',
+		outbound_order_estimation_desc: 'Display the estimated outbound orders based on the scanned EPCs.'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'
@@ -123,6 +131,7 @@ export default {
 		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
 		monthly_inventory_report: 'Monthly inventory report',
 		order_sizing_list: 'Order sizing list',
+		production_inventory_estimation: 'Production inventory estimation',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'
 	}

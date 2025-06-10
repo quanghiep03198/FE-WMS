@@ -25,7 +25,7 @@ export default {
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
 		outbound_table_caption: '上表总结了扫描的EPC数据',
 		po_outbound: '按容器出库的订单代码. 根据此订单计算当天扫描的EPC数据.',
-		production_inventory: '管理和跟踪工厂的生产库存.',
+		inventory_estimation: '根据当前生产和出货状态估算库存水平.',
 		select_readable_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
 		select_writable_database: '选择数据库连接以保存仓库入库/出库数据. 如果订单指定在当前工厂生产，请跳过.',
 		select_order: '选择生产订单以查看已扫描的EPC数据并进行入库或出库操作.',
@@ -33,7 +33,15 @@ export default {
 		skip_select_tenant: '如果订单指定在当前工厂生产，请跳过.',
 		transferred_order: '要交换的实际订单代码',
 		transfer_order_datalist: '从下面的表格中选择数据以添加新转移订单',
-		transfer_order_list: '跟踪和管理转移订单'
+		transfer_order_list: '跟踪和管理转移订单',
+		inbound_directive: '入库指令',
+		outbound_estimation: '订单的预计出库数量',
+		inventory_by_size: '按尺码库存',
+		inventory_by_size_desc: '执行查询后，将按产品尺码显示库存数量.',
+		inventory_audit: '入库库存审计',
+		inventory_audit_desc: '查询完成后，相关入库记录将在此处展示.',
+		outbound_order_estimation: '预计出库订单',
+		outbound_order_estimation_desc: '执行出库预估查询后，结果将自动加载至此区域.'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'
@@ -116,6 +124,7 @@ export default {
 		file_daily_outbound_report: '{{factory}}每日出库报告 - {{date}}',
 		file_monthly_inventory_report: '{{factory}}库存报表 - {{month}}',
 		order_sizing_list: '指令及尺码列表',
+		production_inventory_estimation: '生产库存估算',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表'
 	}

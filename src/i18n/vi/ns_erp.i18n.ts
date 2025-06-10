@@ -44,7 +44,7 @@ export default {
 		or_no: 'Mã đơn hàng',
 		or_qtyperpacking: 'Tổng số lượng đóng thùng',
 		or_totalqty: 'Tổng số lượng đặt hàng',
-		order_qty: 'Số Lượng Đơn Đặt Hàng', // Order Quantity
+		order_qty: 'Số lượng đặt hàng', // Order Quantity
 		outbound_date: 'Ngày Xuất Kho', // Outbound Date
 		outbound_qty: 'Số lượng xuất kho',
 		packaging_code: 'Mã đóng thùng',
@@ -57,7 +57,7 @@ export default {
 		shipment_confirm_date: 'Ngày xác nhận xuất hàng',
 		shipping_destination: 'Địa điểm giao hàng',
 		shoes_type_b: 'Giày loại B',
-		shoestyle_codefactory: 'Hình thể xưởng',
+		shoestyle_codefactory: 'Hình thể',
 		shaping_dept_code: 'Mã chuyền thành hình',
 		shaping_dept_name: 'Chuyền thành hình',
 		sno_car_number: 'Số xe container',

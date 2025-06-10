@@ -101,7 +101,7 @@ export default {
 	form_placeholder: {
 		fill: 'Fill in {{object}}...',
 		search: 'Search {{object}} ...',
-		select: '-- Select {{object}} --'
+		select: 'Select {{object}}'
 	},
 	navigation: {
 		account: 'Account',
@@ -112,7 +112,7 @@ export default {
 		fp_stock_out: 'F.P stock out',
 		import_management: 'Import management',
 		monthly_inventory_audit: 'Monthly inventory audit',
-		production_inventory: 'Production inventory',
+		inventory_estimation: 'Inventory estimation',
 		keyboard_shortcut: 'Keyboard shortcut',
 		pm_inbound: 'P.M warehouse inbound',
 		cargo_weight_check: 'Cargo weight check',
@@ -185,6 +185,7 @@ export default {
 		target_data: 'Target data'
 	},
 	others: {
+		all: 'All',
 		server: 'Server {{alias}}'
 	}
 } as const

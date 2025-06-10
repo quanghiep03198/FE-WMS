@@ -39,12 +39,14 @@ export default {
 		monthly_inventory_report: 'Quản lý và theo dõi tồn kho hàng kho thành phẩm hàng tháng',
 		no_added_size: 'Chưa có size nào được thêm',
 		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',
+		inventory_estimation: 'Ước tính mức tồn kho dựa trên tiến độ sản xuất và xuất hàng hiện tại',
+		inbound_directive: 'Chỉ thị nhập kho',
+		outbound_estimation: 'Số lượng đơn hàng xuất dự kiến',
 		order_size_detail:
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
 		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',
 		outbound_table_caption: 'Bảng trên thống kê dữ liệu các chi tiết các tem đã quét',
 		po_outbound: 'Dữ liệu xuất kho các tem đã quét sẽ được tính theo đơn hàng này.',
-		production_inventory: 'Quản lý và theo dõi sản phẩm tồn kho sản xuất tại nhà máy.',
 		select_readable_database:
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',
 		select_writable_database:
@@ -54,7 +56,14 @@ export default {
 		skip_select_tenant: 'Bỏ qua nếu chỉ lệnh chỉ định được sản xuất tại nhà máy hiện tại.',
 		transferred_order: 'Chỉ lệnh thực cần hoán đổi',
 		transfer_order_datalist: 'Chọn dữ liệu từ bảng dưới để thêm đơn chuyển kho mới',
-		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho'
+		transfer_order_list: 'Theo dõi và quản lý các đơn chuyển kho',
+		inventory_by_size: 'Tồn kho theo kích cỡ',
+		inventory_by_size_desc: 'Hiển thị số lượng tồn theo từng kích cỡ sản phẩm sau khi thực hiện tìm kiếm.',
+		inventory_audit: 'Kiểm kê hàng nhập kho',
+		inventory_audit_desc: 'Danh sách hàng hóa nhập kho sẽ được hiển thị tại đây sau khi tìm kiếm được thực hiện.',
+		outbound_order_estimation: 'Đơn hàng xuất dự kiến',
+		outbound_order_estimation_desc:
+			'Số lượng đơn hàng xuất kho dự kiến sẽ được hiển thị tại đây sau khi tìm kiếm được thực hiện.'
 	},
 	errors: {
 		wrong_stamp: 'Dán sai tem'
@@ -121,6 +130,7 @@ export default {
 		exchange_order: 'Hoán đổi đơn hàng',
 		monthly_inventory_report: 'Báo biểu tồn kho hàng tháng',
 		order_sizing_list: 'Danh sách Size theo đơn',
+		production_inventory_estimation: 'Tính toán tồn kho sản xuất',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho'
 	}
