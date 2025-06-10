@@ -144,7 +144,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
 											value={searchTerm}
-											placeholder={placeholder}
+											placeholder='Search ...'
 											onValueChange={(value) => {
 												if (typeof onInput === 'function') onInput(value)
 												setSearchTerm(value)
