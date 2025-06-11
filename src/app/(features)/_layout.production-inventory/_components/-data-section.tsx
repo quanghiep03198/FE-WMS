@@ -28,10 +28,8 @@ const DataSection: React.FC = () => {
 				<Icon name='LoaderCircle' size={20} className='animate-[spin_1s_linear_infinite]' />
 			</Div>
 		)
-
-	if (!shouldRender) return <EmptyState />
-
-	if (shouldRender)
+	else if (!shouldRender) return <EmptyState />
+	else if (shouldRender)
 		return (
 			<Div className='grid grid-cols-1 gap-6 duration-300 ease-out animate-in fade-in-0 xl:grid-cols-2'>
 				<Div className='col-span-1'>
@@ -45,8 +43,7 @@ const DataSection: React.FC = () => {
 				</Div>
 			</Div>
 		)
-
-	return null
+	else return null
 }
 
 export default DataSection
