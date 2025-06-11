@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash'
 import { useMemo } from 'react'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
 import { useGetProductionInventoryQuery } from '../_apis/production-inventory.api'
+import EmptyState from './-empty-state'
 import InboundOrderTable from './-inbound-order-table'
 import { OutboundEstimationTable } from './-outbound-estimation-table'
 import SizeTable from './-size-table'
@@ -27,6 +28,8 @@ const DataSection: React.FC = () => {
 				<Icon name='LoaderCircle' size={20} className='animate-[spin_1s_linear_infinite]' />
 			</Div>
 		)
+
+	if (!shouldRender) return <EmptyState />
 
 	if (shouldRender)
 		return (

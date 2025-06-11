@@ -42,11 +42,11 @@ export default {
 		inbound_directive: 'Inbound directive',
 		outbound_estimation: 'Estimated outbound quantity for the order',
 		inventory_by_size: 'Inventory by size',
-		inventory_by_size_desc: 'Display the inventory quantity by product size after performing the search.',
-		inventory_audit: 'Inventory audit',
-		inventory_audit_desc: 'The inventory audit will be displayed here after the search is performed.',
-		outbound_order_estimation: 'Estimated outbound orders',
-		outbound_order_estimation_desc: 'Display the estimated outbound orders based on the scanned EPCs.'
+		inventory_by_size_desc: 'Product quantity information by each size of the product',
+		inventory_audit: 'Warehouse inventory audit',
+		inventory_audit_desc: 'List of inbound directives based on each product type',
+		outbound_order_estimation: 'Outbound progress evaluation',
+		outbound_order_estimation_desc: 'Evaluate the outbound progress of each PO based on the number of scanned tags.'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'
@@ -111,7 +111,7 @@ export default {
 		developer_mode_note: 'Enable developer mode for more advanced features.',
 		fetch_oder_data_note: "Allows you to scan EPCs that weren't imported/exported from previous days.",
 		fetch_older_data: 'Fetch older data',
-		server_connection: 'Server conection',
+		server_connection: 'Server connection',
 		latency: 'Latency',
 		network_status: 'Network status',
 		synchronization_trigger: 'Synchronization trigger',
@@ -128,10 +128,11 @@ export default {
 		exchange_order: 'Exchange manufacturing order',
 		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Daily Outbound Report {{factory}} - {{date}}',
+		file_production_inventory_summary: 'Production Inventory Summary - {{factory}}',
 		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
 		monthly_inventory_report: 'Monthly inventory report',
 		order_sizing_list: 'Order sizing list',
-		production_inventory_estimation: 'Production inventory estimation',
+		production_inventory_summary: 'Production inventory summary',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'
 	}

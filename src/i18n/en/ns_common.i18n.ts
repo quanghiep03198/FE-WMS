@@ -18,6 +18,7 @@ export default {
 		detail: 'Detail',
 		disconnect: 'Disconnect',
 		dismiss: 'Dismiss',
+		download_excel: 'Download Excel',
 		export: 'Export',
 		finish: 'Finish',
 		fold: 'Fold',

@@ -45,12 +45,19 @@ export class InventoryService {
 				inbound: IInboundInventory[]
 				outbound: IOutboundExpectation[]
 			}>
-		>('/inventory/production', {
+		>('/inventory/summary', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: {
 				'shoes_style.eq': params.shoes_style,
 				'color.eq': params.color
 			}
+		})
+	}
+
+	static async downloadProductionInventoryReport(tenantId: string) {
+		return await axiosInstance.get('/inventory/summary/export', {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			responseType: 'blob'
 		})
 	}
 

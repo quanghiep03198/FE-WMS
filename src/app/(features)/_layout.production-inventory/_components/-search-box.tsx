@@ -1,12 +1,13 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon } from '@/components/ui'
+import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Separator } from '@/components/ui'
 import { InventoryService } from '@/services/inventory.service'
 import { useQuery } from '@tanstack/react-query'
-import { capitalize, has } from 'lodash'
+import { capitalize, has, isEmpty } from 'lodash'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useGetTenantByFactory } from '../../_apis/use-tenacy.api'
+import DownloadExcelButton from './-download-excel-button'
 
 const SearchBox: React.FC = () => {
 	const { t } = useTranslation()
@@ -44,48 +45,57 @@ const SearchBox: React.FC = () => {
 	})
 
 	return (
-		<FormProvider {...form}>
-			<Form
-				onSubmit={form.handleSubmit((values) => {
-					if (!values?.shoes_style && !values?.color) return
-					setParams(values)
-				})}>
-				<Div className='flex-1'>
-					<ComboboxFieldControl
-						name='shoes_style'
-						placeholder={capitalize(
-							t('ns_common:form_placeholder.select', {
-								object: t('ns_erp:fields.shoestyle_codefactory'),
-								defaultValue: 'Select shoes style'
-							})
-						)}
-						datalist={data?.shoes_style}
-						labelField='label'
-						valueField='value'
-					/>
+		<Div
+			className={
+				!isEmpty(searchParams)
+					? 'mx-auto flex max-w-5xl items-center justify-center gap-x-6'
+					: 'mx-auto block max-w-3xl'
+			}>
+			<FormProvider {...form}>
+				<Form onSubmit={form.handleSubmit((values) => setParams(values))}>
+					<Div className='flex-1'>
+						<ComboboxFieldControl
+							name='shoes_style'
+							placeholder={capitalize(
+								t('ns_common:form_placeholder.select', {
+									object: t('ns_erp:fields.shoestyle_codefactory'),
+									defaultValue: 'Select shoes style'
+								})
+							)}
+							datalist={data?.shoes_style}
+							labelField='label'
+							valueField='value'
+						/>
+					</Div>
+					<Div className='flex-1'>
+						<ComboboxFieldControl
+							name='color'
+							placeholder={capitalize(
+								t('ns_common:form_placeholder.select', {
+									object: t('ns_erp:fields.color_sn'),
+									defaultValue: 'Select color'
+								})
+							)}
+							datalist={data?.color}
+							labelField='label'
+							valueField='value'
+						/>
+					</Div>
+					<Button type='submit' disabled={!form.watch('shoes_style') || !form.watch('color')}>
+						<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
+					</Button>
+				</Form>
+			</FormProvider>
+			{!isEmpty(searchParams) && (
+				<Div className='inline-flex items-center gap-x-6 duration-300 ease-in animate-in fade-in-0'>
+					<Separator orientation='vertical' className='h-8 w-0.5' />
+					<DownloadExcelButton variant='secondary' />
 				</Div>
-				<Div className='flex-1'>
-					<ComboboxFieldControl
-						name='color'
-						placeholder={capitalize(
-							t('ns_common:form_placeholder.select', {
-								object: t('ns_erp:fields.color_sn'),
-								defaultValue: 'Select color'
-							})
-						)}
-						datalist={data?.color}
-						labelField='label'
-						valueField='value'
-					/>
-				</Div>
-				<Button type='submit'>
-					<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
-				</Button>
-			</Form>
-		</FormProvider>
+			)}
+		</Div>
 	)
 }
 
-const Form = tw.form`flex items-center gap-x-2 w-full`
+const Form = tw.form`flex items-center gap-x-2 w-full max-w-full mx-auto py-6 flex-1`
 
 export default SearchBox

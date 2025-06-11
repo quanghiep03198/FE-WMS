@@ -18,6 +18,7 @@ export default {
 		detail: '细节',
 		disconnect: '断开',
 		dismiss: '忽略',
+		download_excel: '下载 Excel',
 		export: '导出',
 		finish: '完成',
 		fold: '折叠',
