@@ -18,6 +18,7 @@ export default {
 		detail: 'Chi tiết',
 		disconnect: 'Ngắt kết nối',
 		dismiss: 'Bỏ qua',
+		download_excel: 'Tải xuống Excel',
 		export: 'Xuất',
 		finish: 'Hoàn thành',
 		fold: 'Thu gọn',

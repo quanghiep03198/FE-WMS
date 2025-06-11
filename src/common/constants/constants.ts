@@ -15,3 +15,11 @@ export const factories: Record<'VA1' | 'VB1' | 'VB2' | 'CA1', ResourceKeys['ns_c
 	VB2: 'factory.VB2',
 	CA1: 'factory.CA1'
 }
+
+export enum FactoryAgencyCode {
+	VA1 = 'GL1',
+	VB1 = 'GL2',
+	VB2 = 'GL3',
+	CA1 = 'GL4',
+	MA1 = 'GL5'
+}

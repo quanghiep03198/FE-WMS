@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
 import DataSection from './_components/-data-section'
-import EmptyState from './_components/-empty-state'
 import SearchBox from './_components/-search-box'
 
 export const Route = createLazyFileRoute('/(features)/_layout/production-inventory/')({
@@ -26,16 +25,13 @@ function Page() {
 					<Icon name='PackageSearch' size={48} strokeWidth={1} />
 				</Div>
 				<Typography variant='h5' className='text-center capitalize'>
-					{t('ns_inoutbound:titles.production_inventory_estimation')}
+					{t('ns_inoutbound:titles.production_inventory_summary')}
 				</Typography>
 				<Typography variant='small' color='muted'>
 					{t('ns_inoutbound:description.inventory_estimation')}
 				</Typography>
 			</Div>
-			<Div className='mx-auto flex h-full w-full max-w-3xl flex-col items-stretch gap-y-6 py-8'>
-				<SearchBox />
-				<EmptyState />
-			</Div>
+			<SearchBox />
 			<DataSection />
 		</Div>
 	)

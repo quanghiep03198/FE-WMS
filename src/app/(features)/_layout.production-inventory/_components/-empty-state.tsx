@@ -1,11 +1,12 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Div, Icon, Typography } from '@/components/ui'
 import { isEmpty } from 'lodash'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import DownloadExcelButton from './-download-excel-button'
 
 const EmptyState: React.FC = () => {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const { searchParams } = useQueryParams()
 
 	const shouldRender = isEmpty(searchParams)
@@ -27,48 +28,49 @@ const EmptyState: React.FC = () => {
 		}
 	}, [shouldRender])
 
-	// 	inventory_by_size
-	// inventory_by_size_desc
-	// inventory_audit
-	// inventory_audit_desc
-	// outbound_order_estimation
-	// outbound_order_estimation_desc
-
 	const inventoryHints: Array<{
 		icon: React.ComponentProps<typeof Icon>['name']
 		title: string
 		description: string
-	}> = [
-		{
-			icon: 'PackageOpen',
-			title: t('ns_inoutbound:description.inventory_by_size'),
-			description: t('ns_inoutbound:description.inventory_by_size_desc')
-		},
-		{
-			icon: 'Forklift',
-			title: t('ns_inoutbound:description.inventory_audit'),
-			description: t('ns_inoutbound:description.inventory_audit_desc')
-		},
-		{
-			icon: 'Ship',
-			title: t('ns_inoutbound:description.outbound_order_estimation'),
-			description: t('ns_inoutbound:description.outbound_order_estimation_desc')
-		}
-	]
+	}> = useMemo(
+		() => [
+			{
+				icon: 'PackageOpen',
+				title: t('ns_inoutbound:description.inventory_by_size'),
+				description: t('ns_inoutbound:description.inventory_by_size_desc')
+			},
+			{
+				icon: 'Forklift',
+				title: t('ns_inoutbound:description.inventory_audit'),
+				description: t('ns_inoutbound:description.inventory_audit_desc')
+			},
+			{
+				icon: 'Ship',
+				title: t('ns_inoutbound:description.outbound_order_estimation'),
+				description: t('ns_inoutbound:description.outbound_order_estimation_desc')
+			}
+		],
+		[i18n.language]
+	)
 
 	return (
-		<Div ref={ref} className='order-last flex flex-col items-stretch divide-y transition-allow-discrete'>
-			{inventoryHints.map((item, index) => (
-				<Div key={index.toString()} className='grid grid-cols-[3rem_auto] items-center py-6'>
-					<Icon name={item.icon} size={32} strokeWidth={1} />
-					<Div className='space-y-2'>
-						<Typography className='font-medium'>{item.title}</Typography>
-						<Typography variant='small' color='muted'>
-							{item.description}
-						</Typography>
+		<Div className='transition-allow-discret mx-auto w-full max-w-3xl space-y-10'>
+			<Div ref={ref} className='flex flex-col items-stretch divide-y'>
+				{inventoryHints.map((item, index) => (
+					<Div key={index.toString()} className='grid grid-cols-[3rem_auto] items-center py-6'>
+						<Icon name={item.icon} size={32} strokeWidth={1} />
+						<Div className='space-y-2'>
+							<Typography className='font-medium'>{item.title}</Typography>
+							<Typography variant='small' color='muted'>
+								{item.description}
+							</Typography>
+						</Div>
 					</Div>
-				</Div>
-			))}
+				))}
+			</Div>
+			<Div className='flex w-full justify-center'>
+				<DownloadExcelButton size='lg' />
+			</Div>
 		</Div>
 	)
 }
