@@ -53,7 +53,7 @@ const EmptyState: React.FC = () => {
 	)
 
 	return (
-		<Div className='transition-allow-discret mx-auto w-full max-w-3xl space-y-10'>
+		<Div className='transition-allow-discret mx-auto w-full max-w-3xl xl:space-y-6 xxl:space-y-10'>
 			<Div ref={ref} className='flex flex-col items-stretch divide-y'>
 				{inventoryHints.map((item, index) => (
 					<Div key={index.toString()} className='grid grid-cols-[3rem_auto] items-center py-6'>
