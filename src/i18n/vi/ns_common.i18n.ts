@@ -117,7 +117,7 @@ export default {
 		keyboard_shortcut: 'Phím tắt',
 		pm_inbound: 'Nhập kho QLSX',
 		cargo_weight_check: 'Kiểm tra & Cân Hàng',
-		inventory_estimation: 'Quản lý tồn kho sản xuất',
+		inventory_estimation: 'Ước lượng tồn kho',
 		profile: 'Thông tin cá nhân',
 		report_management: 'Báo biểu',
 		settings: 'Cài đặt',

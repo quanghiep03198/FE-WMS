@@ -111,7 +111,7 @@ export default {
 		fp_stock_out: '成品倉出庫作業',
 		import_management: '入庫管理',
 		monthly_inventory_audit: '盤點管理',
-		inventory_estimation: '生产库存管理',
+		inventory_estimation: '生产库存估算',
 		keyboard_shortcut: '快捷键',
 		pm_inbound: '生产管理入库操作',
 		cargo_weight_check: '货物称重检查',
