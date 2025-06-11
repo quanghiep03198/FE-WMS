@@ -124,7 +124,7 @@ export default {
 		file_monthly_inventory_report: '{{factory}}库存报表 - {{month}}',
 		file_production_inventory_summary: '{{factory}} 成品库存总表',
 		order_sizing_list: '指令及尺码列表',
-		production_inventory_estimation: '生产库存估算',
+		production_inventory_summary: '成品库存总表',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表'
 	}

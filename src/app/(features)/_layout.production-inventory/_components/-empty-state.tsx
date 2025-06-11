@@ -8,10 +8,9 @@ import DownloadExcelButton from './-download-excel-button'
 const EmptyState: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { searchParams } = useQueryParams()
+	const ref = useRef<HTMLDivElement>(null)
 
 	const shouldRender = isEmpty(searchParams)
-
-	const ref = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		if (!shouldRender) {
@@ -20,7 +19,7 @@ const EmptyState: React.FC = () => {
 					'animate-out',
 					'fade-out-0',
 					'slide-out-to-top-2',
-					'duration-200',
+					'duration-500',
 					'ease-out',
 					'hidden'
 				)

@@ -3,6 +3,7 @@ import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Separato
 import { InventoryService } from '@/services/inventory.service'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, has, isEmpty } from 'lodash'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -13,7 +14,7 @@ const SearchBox: React.FC = () => {
 	const { t } = useTranslation()
 
 	const { data: tenant } = useGetTenantByFactory()
-	const { searchParams, setParams } = useQueryParams()
+	const { searchParams, setParams } = useQueryParams<Record<'shoes_style' | 'color', string>>(null)
 
 	const { data } = useQuery({
 		queryKey: ['PRODUCTION_INVENTORY_FEATURE', tenant?.id],
@@ -40,7 +41,7 @@ const SearchBox: React.FC = () => {
 		}
 	})
 
-	const form = useForm({
+	const form = useForm<Record<'shoes_style' | 'color', string>>({
 		defaultValues: searchParams ? { ...searchParams } : { shoes_style: '', color: '' }
 	})
 
@@ -53,34 +54,8 @@ const SearchBox: React.FC = () => {
 			}>
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit((values) => setParams(values))}>
-					<Div className='flex-1'>
-						<ComboboxFieldControl
-							name='shoes_style'
-							placeholder={capitalize(
-								t('ns_common:form_placeholder.select', {
-									object: t('ns_erp:fields.shoestyle_codefactory'),
-									defaultValue: 'Select shoes style'
-								})
-							)}
-							datalist={data?.shoes_style}
-							labelField='label'
-							valueField='value'
-						/>
-					</Div>
-					<Div className='flex-1'>
-						<ComboboxFieldControl
-							name='color'
-							placeholder={capitalize(
-								t('ns_common:form_placeholder.select', {
-									object: t('ns_erp:fields.color_sn'),
-									defaultValue: 'Select color'
-								})
-							)}
-							datalist={data?.color}
-							labelField='label'
-							valueField='value'
-						/>
-					</Div>
+					<ShoesStyleCombobox data={data?.shoes_style ?? []} />
+					<ColorCombobox data={data?.color} />
 					<Button type='submit' disabled={!form.watch('shoes_style') || !form.watch('color')}>
 						<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
 					</Button>
@@ -92,6 +67,65 @@ const SearchBox: React.FC = () => {
 					<DownloadExcelButton variant='secondary' />
 				</Div>
 			)}
+		</Div>
+	)
+}
+
+const ShoesStyleCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
+	const { t } = useTranslation()
+
+	const [searchTerm, setSearchTerm] = useState<string>('')
+
+	const filteredData = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		return data.filter((item) => item.value.toUpperCase().includes(searchTerm.toUpperCase()))
+	}, [data, searchTerm])
+
+	return (
+		<Div className='flex-1'>
+			<ComboboxFieldControl
+				name='shoes_style'
+				placeholder={capitalize(
+					t('ns_common:form_placeholder.select', {
+						object: t('ns_erp:fields.shoestyle_codefactory'),
+						defaultValue: 'Select shoes style'
+					})
+				)}
+				shouldFilter={false}
+				onInput={setSearchTerm}
+				datalist={filteredData}
+				labelField='label'
+				valueField='value'
+			/>
+		</Div>
+	)
+}
+const ColorCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
+	const { t } = useTranslation()
+
+	const [searchTerm, setSearchTerm] = useState<string>('')
+
+	const filteredData = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		return data.filter((item) => item.value.toUpperCase().includes(searchTerm.toUpperCase()))
+	}, [data, searchTerm])
+
+	return (
+		<Div className='flex-1'>
+			<ComboboxFieldControl
+				name='color'
+				placeholder={capitalize(
+					t('ns_common:form_placeholder.select', {
+						object: t('ns_erp:fields.color_sn'),
+						defaultValue: 'Select color'
+					})
+				)}
+				onInput={setSearchTerm}
+				shouldFilter={false}
+				datalist={filteredData}
+				labelField='label'
+				valueField='value'
+			/>
 		</Div>
 	)
 }

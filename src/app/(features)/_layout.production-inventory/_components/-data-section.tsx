@@ -33,7 +33,7 @@ const DataSection: React.FC = () => {
 
 	if (shouldRender)
 		return (
-			<Div className='grid grid-cols-1 gap-6 duration-300 ease-out animate-in fade-in-0 slide-in-from-bottom-2 xl:grid-cols-2'>
+			<Div className='grid grid-cols-1 gap-6 duration-300 ease-out animate-in fade-in-0 xl:grid-cols-2'>
 				<Div className='col-span-1'>
 					<InboundOrderTable data={data?.inbound} />
 				</Div>
