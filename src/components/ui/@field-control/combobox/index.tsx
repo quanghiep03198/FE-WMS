@@ -161,6 +161,10 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 															return (
 																<CommandItem
 																	key={option[valueField].toString()}
+																	keywords={[
+																		option[labelField].toString(),
+																		option[valueField].toString()
+																	]}
 																	value={option[valueField]}
 																	className='line-clamp-1 flex items-center gap-x-4'
 																	onSelect={(value) => {
