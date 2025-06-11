@@ -43,9 +43,9 @@ const BeamAnimated: React.FC = () => {
 
 	const animateLogo = () => {
 		requestAnimationFrame(() => {
-			logoRef.current.style.transition = 'transform 0.25s linear 1.25s, box-shadow 0.25s ease-out 1.25s'
+			logoRef.current.style.transition = 'transform 0.25s ease-out 1s, box-shadow 0.25s ease-out 1s'
 			logoRef.current.style.boxShadow = '16px 16px 16px #0a0a0a98'
-			logoRef.current.style.transform = 'translate(-8px,-8px) scale(1.05)'
+			logoRef.current.style.transform = 'translate(-12px,-12px)'
 		})
 	}
 
