@@ -1,5 +1,4 @@
 import { IOutboundExpectation } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Div,
@@ -26,8 +25,8 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 	const captionId = useId()
 
 	return (
-		<Div className='space-y-4 rounded-md border bg-background p-4 shadow xxl:p-6'>
-			<Div className={cn('h-[20rem] overflow-y-auto !scrollbar-none')}>
+		<Div className='space-y-4 rounded-md border bg-background p-4 shadow-sm xxl:p-6'>
+			<Div className='h-[20rem] overflow-y-auto rounded-sm !scrollbar-none'>
 				<Table className='table-fixed caption-top border-separate border-spacing-0'>
 					<TableCaption id={captionId} className='sr-only'>
 						{t('ns_inoutbound:description.outbound_estimation')}
@@ -69,7 +68,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 						)}
 					</TableBody>
 					<TableFooter className='sticky bottom-0'>
-						<TableRow className='[&_td]:h-12 [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
+						<TableRow className='[&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
 							<TableCell colSpan={2} align='left' className='font-semibold'>
 								{t('ns_common:common_fields.total')}
 							</TableCell>

@@ -12,15 +12,16 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total }) => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='max-w-full rounded-md border p-4 shadow-sm xxl:p-6'>
+		<Div className='max-w-full rounded-sm border p-4 shadow-sm xxl:p-6'>
 			<Div className='max-w-full overflow-x-auto rounded'>
 				<Table className='table-fixed rounded'>
 					{!Array.isArray(data) || data.length === 0 ? (
 						<TableBody>
-							<TableRow className='flex items-center justify-center border-none py-4'>
+							<TableRow>
 								<TableCell
 									colSpan={'100%' as unknown as React.TdHTMLAttributes<HTMLTableCellElement>['colSpan']}
-									className='h-[72px]'>
+									align='center'
+									className='h-[72px] text-muted-foreground'>
 									{t('ns_common:table.no_data')}
 								</TableCell>
 							</TableRow>

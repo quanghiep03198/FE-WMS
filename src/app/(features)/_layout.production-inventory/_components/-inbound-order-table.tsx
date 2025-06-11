@@ -1,5 +1,4 @@
 import { IInboundInventory } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Div,
@@ -27,12 +26,8 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 	const isEmpty = !Array.isArray(data) || data.length === 0
 
 	return (
-		<Div className='space-y-4 rounded-md border p-4 shadow xxl:p-6'>
-			<Div
-				className={cn(
-					'flex h-[20rem] flex-col items-center overflow-auto !scrollbar-none',
-					isEmpty ? 'items-center' : 'items-start'
-				)}>
+		<Div className='space-y-4 rounded-md border p-4 shadow-sm xxl:p-6'>
+			<Div className='h-[20rem] overflow-y-auto rounded-sm !scrollbar-none'>
 				<Table className='w-full table-fixed border-separate border-spacing-0'>
 					<TableCaption id={captionId} className='sr-only'>
 						Inbound orders
@@ -74,7 +69,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 						)}
 					</TableBody>
 					<TableFooter className='sticky bottom-0'>
-						<TableRow className='divide-x-0 [&_td>span]:line-clamp-1 [&_td[align=right]>span]:ml-auto [&_td[align=right]>span]:truncate [&_td]:h-12 [&_td]:border-t [&_td]:bg-table-head [&_td]:lowercase [&_td]:first-letter:uppercase'>
+						<TableRow className='divide-x-0 [&_td>span]:line-clamp-1 [&_td[align=right]>span]:ml-auto [&_td[align=right]>span]:truncate [&_td]:h-10 [&_td]:border-t [&_td]:bg-table-head [&_td]:lowercase [&_td]:first-letter:uppercase'>
 							<TableCell align='left' className='font-semibold'>
 								{t('ns_common:common_fields.total')}
 							</TableCell>
