@@ -18,7 +18,7 @@ function Page() {
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/inventory-report', text: t('ns_common:navigation.monthly_inventory_audit') }])
+		setBreadcrumb([{ to: '/inventory-audit', text: t('ns_common:navigation.monthly_inventory_audit') }])
 	}, [i18n.language])
 
 	return (
