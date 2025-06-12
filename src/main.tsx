@@ -36,5 +36,5 @@ createRoot(container, {
 	}
 }).render(<App />)
 
-registerSW({ immediate: true })
+registerSW({ immediate: true, onOfflineReady() {} })
 reportWebVitals()

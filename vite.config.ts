@@ -6,7 +6,7 @@ import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
-import { VitePWA as pwa } from 'vite-plugin-pwa'
+import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 /**
  * @see https://vitejs.dev/config/
@@ -29,7 +29,9 @@ export default defineConfig(({ mode }) => {
 			}),
 			pwa({
 				registerType: 'autoUpdate',
+				manifestFilename: 'site.webmanifest',
 				disable: mode === 'development',
+				mode: mode as VitePWAOptions['mode'],
 				includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
 				manifest: {
 					name: 'Warehouse Management System',
@@ -72,9 +74,11 @@ export default defineConfig(({ mode }) => {
 					]
 				},
 				workbox: {
+					sourcemap: true,
+					globPatterns: ['**/*.{js,css,ico,png,jpg,svg,webp,woff2}'],
 					runtimeCaching: [
 						{
-							urlPattern: /.*\.(js|css|png|jpg|svg|webp|woff2?)$/,
+							urlPattern: /.*\.(js|css|ico|png|jpg|svg|webp|woff2?)$/,
 							handler: 'CacheFirst',
 							options: {
 								cacheName: 'static-cache',
