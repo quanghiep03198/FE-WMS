@@ -49,7 +49,7 @@ const SearchBox: React.FC = () => {
 		<Div
 			className={
 				!isEmpty(searchParams)
-					? 'mx-auto flex max-w-5xl items-center justify-center gap-x-6'
+					? 'mx-auto flex max-w-5xl items-center justify-center gap-x-6 md:gap-x-2'
 					: 'mx-auto block max-w-3xl'
 			}>
 			<FormProvider {...form}>
@@ -63,7 +63,7 @@ const SearchBox: React.FC = () => {
 			</FormProvider>
 			{!isEmpty(searchParams) && (
 				<Div className='inline-flex items-center gap-x-6 duration-300 ease-in animate-in fade-in-0'>
-					<Separator orientation='vertical' className='h-8 w-0.5' />
+					<Separator orientation='vertical' className='h-8 w-0.5 md:hidden' />
 					<DownloadExcelButton variant='secondary' />
 				</Div>
 			)}

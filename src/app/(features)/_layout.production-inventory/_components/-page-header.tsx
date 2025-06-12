@@ -7,14 +7,12 @@ const PageHeader: React.FC = () => {
 	return (
 		<Div className='flex flex-col items-center gap-y-2'>
 			<Div className='mb-2'>
-				<Icon name='PackageSearch' size={48} strokeWidth={1} />
+				<Icon name='PackageSearch' size={52} strokeWidth={1} />
 			</Div>
-			<Typography variant='h5' className='text-center capitalize'>
+			<Typography variant='h4' className='text-center capitalize'>
 				{t('ns_inoutbound:titles.production_inventory_summary')}
 			</Typography>
-			<Typography variant='small' color='muted'>
-				{t('ns_inoutbound:description.inventory_estimation')}
-			</Typography>
+			<Typography color='muted'>{t('ns_inoutbound:description.inventory_estimation')}</Typography>
 		</Div>
 	)
 }

@@ -33,7 +33,7 @@ function Page() {
 			<meta name='description' content={t('ns_warehouse:headings.warehouse_list_description')} />
 
 			<PageProvider>
-				<Div className='space-y-6'>
+				<Div className='mt-4 space-y-6'>
 					<WarehouseListHeading />
 					<Separator />
 					<WarehouseList />

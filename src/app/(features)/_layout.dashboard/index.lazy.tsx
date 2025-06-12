@@ -27,7 +27,7 @@ function Page() {
 			<title>{t('ns_common:navigation.dashboard')}</title>
 			<meta name='description' content={t('ns_dashboard:dashboard_description')} />
 
-			<Div className='z-10 flex flex-col gap-y-6 @container'>
+			<Div className='z-10 mt-4 flex flex-col gap-y-6 @container'>
 				<Div className='flex items-center justify-between gap-4'>
 					<PageHeader className='basis-1/2 xl:basis-full'>
 						<PageTitle>Dashboard</PageTitle>

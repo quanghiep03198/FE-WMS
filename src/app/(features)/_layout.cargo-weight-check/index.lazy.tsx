@@ -26,7 +26,7 @@ function Page() {
 			<title>{t('ns_common:navigation.cargo_weight_check')}</title>
 			<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
 
-			<Div as='section' className='space-y-4'>
+			<Div as='section' className='mt-4 space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>
 						<PageTitle>{t('ns_packing:titles.daily_weighing_report')}</PageTitle>

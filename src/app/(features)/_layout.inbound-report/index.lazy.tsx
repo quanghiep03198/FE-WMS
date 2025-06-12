@@ -30,7 +30,7 @@ function Page() {
 			<title>{t('ns_common:navigation.import_management')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.daily_inbound_report')} />
 
-			<Div as='section' className='space-y-4'>
+			<Div as='section' className='mt-4 space-y-4'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>
 						<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
