@@ -74,11 +74,18 @@ export default defineConfig(({ mode }) => {
 					]
 				},
 				workbox: {
-					sourcemap: true,
-					globPatterns: ['**/*.{js,css,ico,png,jpg,svg,webp,woff2}'],
+					navigateFallback: '/index.html',
+					globPatterns: ['**/*.{html,css,js,wasm,ico,png,jpg,svg,webp,woff2}'],
 					runtimeCaching: [
 						{
-							urlPattern: /.*\.(js|css|ico|png|jpg|svg|webp|woff2?)$/,
+							urlPattern: /.*\.(html|css|js?)$/,
+							handler: 'StaleWhileRevalidate',
+							options: {
+								cacheName: 'static-resources-cache'
+							}
+						},
+						{
+							urlPattern: /.*\.(json|wasm|ico|png|jpg|svg|webp|woff2?)$/,
 							handler: 'CacheFirst',
 							options: {
 								cacheName: 'static-cache',
@@ -86,6 +93,13 @@ export default defineConfig(({ mode }) => {
 									maxEntries: 50,
 									maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
 								}
+							}
+						},
+						{
+							urlPattern: ({ url }) => url.pathname.startsWith('/api'),
+							handler: 'NetworkOnly',
+							options: {
+								cacheName: 'api-cache'
 							}
 						}
 					]
