@@ -22,7 +22,7 @@ const BeamAnimated: React.FC = () => {
 	const animatePath = (path: SVGPathElement, color: string) => {
 		if (!path) return
 
-		path.style.transition = 'stroke 1s ease-out 0.75s, fill 1s ease-out 0.75s'
+		path.style.transition = 'stroke 1s ease-out 0.75s, fill 1s ease-out 0.75s, width 1s ease 0.75s'
 		path.style.fill = 'transparent'
 		path.style.stroke = 'transparent'
 
@@ -43,9 +43,9 @@ const BeamAnimated: React.FC = () => {
 
 	const animateLogo = () => {
 		requestAnimationFrame(() => {
-			logoRef.current.style.transition = 'transform 0.25s ease-out 1s, box-shadow 0.25s ease-out 1s'
-			logoRef.current.style.boxShadow = '16px 16px 16px #0a0a0a98'
-			logoRef.current.style.transform = 'translate(-12px,-12px)'
+			logoRef.current.style.transition = 'transform 0.25s ease-out 1s, box-shadow 0.25s ease 1s'
+			logoRef.current.style.boxShadow = '24px 24px 16px #0a0a0a98'
+			logoRef.current.style.transform = 'translate(-16px,-16px)'
 		})
 	}
 
