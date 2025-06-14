@@ -257,7 +257,7 @@ const ScannedEpcList: React.FC = () => {
 					<OrderDetailTableDialog />
 				</Div>
 				<Div className='col-span-full @2xl:col-span-1'>
-					<UploadDataFileDialog station='WH103' maxFiles={200} />
+					<UploadDataFileDialog station='WH103' maxFiles={500} />
 				</Div>
 			</Div>
 		</Div>

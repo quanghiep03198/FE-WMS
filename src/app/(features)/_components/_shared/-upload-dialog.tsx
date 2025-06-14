@@ -70,25 +70,28 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 		}
 	})
 
-	const onDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
-		if (files.length >= maxFiles) {
-			toast.warning(`You can only upload ${maxFiles} files at a time`)
-			return
-		}
-		e.preventDefault()
-		e.stopPropagation()
-		setDragActive(false)
-		const shouldAcceptDroppedFile = e.dataTransfer.files.item(0).type === 'text/csv'
-		if (!shouldAcceptDroppedFile) {
-			toast.warning('Please select a CSV file')
-			return
-		}
+	const onDrop = useCallback(
+		(e: React.DragEvent<HTMLLabelElement>) => {
+			e.preventDefault()
+			e.stopPropagation()
+			if (e.dataTransfer.files.length >= maxFiles || files.length >= maxFiles) {
+				toast.warning(`You can only upload ${maxFiles} files at a time`)
+				return
+			}
+			setDragActive(false)
+			const shouldAcceptDroppedFile = e.dataTransfer.files.item(0).type === 'text/csv'
+			if (!shouldAcceptDroppedFile) {
+				toast.warning('Please select a CSV file')
+				return
+			}
 
-		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-			setFiles((prev) => [...prev, ...Array.from(e.dataTransfer.files)])
-			e.dataTransfer.clearData()
-		}
-	}, [])
+			if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+				setFiles((prev) => [...prev, ...Array.from(e.dataTransfer.files)])
+				e.dataTransfer.clearData()
+			}
+		},
+		[maxFiles, files]
+	)
 
 	const onDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
 		e.preventDefault()
@@ -103,8 +106,9 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 	}, [])
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (files.length >= maxFiles) {
-			e.preventDefault()
+		e.preventDefault()
+		if (files.length >= maxFiles || e.target.files.length >= maxFiles) {
+			toast.warning(`You can only upload ${maxFiles} files at a time`)
 			return
 		}
 		if (e.target.files) {
