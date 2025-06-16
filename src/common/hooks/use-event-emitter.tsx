@@ -4,8 +4,11 @@ class GlobalEventEmitter extends EventTarget {}
 
 export const globalEventEmitter = new GlobalEventEmitter()
 
-export default function useEventEmitter<T>(eventName: string): [T, (eventData: T, skipRender?: boolean) => void] {
-	const [eventData, setEventData] = useState<T>()
+export default function useEventEmitter<T>(
+	eventName: string,
+	defaultEventData?: T
+): [T, (eventData: T, skipRender?: boolean) => void] {
+	const [eventData, setEventData] = useState<T>(defaultEventData)
 	const skipRerender = useRef(false)
 
 	const dispatchEvent = useCallback(
