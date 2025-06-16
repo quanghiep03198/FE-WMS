@@ -176,13 +176,14 @@ export interface IProductSizeInventory {
 	inv_sizes: Array<{ size_numcode: string; qty: number }>
 }
 
-export interface IOutboundExpectation {
+export interface IOutboundEstimation {
 	shoes_style: string
 	color: string
 	po: string
 	po_qty: number
 	outbound_date: Date
 	outbound_qty: number
+	inv_sizes: Array<{ size_numcode: string; qty: number }>
 }
 
 export interface IInboundInventory {

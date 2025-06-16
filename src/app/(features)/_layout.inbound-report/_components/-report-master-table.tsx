@@ -240,6 +240,7 @@ const InboundReportMasterTable: React.FC = () => {
 				loading={isLoading}
 				enableExpanding={true}
 				ref={dataTableRef}
+				defaultFilterOpen
 				renderSubComponent={
 					(({ row }) => {
 						return <InboundReportDetailTable data={row.original?.size_data} />

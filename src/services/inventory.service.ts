@@ -2,7 +2,7 @@ import { RequestHeaders } from '@/common/constants/enums'
 import {
 	IInboundInventory,
 	IMonthlyInventoryReport,
-	IOutboundExpectation,
+	IOutboundEstimation,
 	IProductSizeInventory
 } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
@@ -43,7 +43,7 @@ export class InventoryService {
 			ResponseBody<{
 				sizes: IProductSizeInventory[]
 				inbound: IInboundInventory[]
-				outbound: IOutboundExpectation[]
+				outbound: IOutboundEstimation[]
 			}>
 		>('/inventory/summary', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },

@@ -1,7 +1,11 @@
-import { IOutboundExpectation } from '@/common/types/entities'
+import { IOutboundEstimation } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
+	Collapsible,
+	CollapsibleContent,
 	Div,
+	Icon,
 	Table,
 	TableBody,
 	TableCaption,
@@ -13,11 +17,12 @@ import {
 	Typography
 } from '@/components/ui'
 import { format } from 'date-fns'
-import { useId } from 'react'
+import { Fragment, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import SizeTable from './-size-table'
 
 type OutboundEstimationTableProps = {
-	data: IOutboundExpectation[]
+	data: IOutboundEstimation[]
 }
 
 export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = ({ data }) => {
@@ -31,8 +36,11 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 					<TableCaption id={captionId} className='sr-only'>
 						{t('ns_inoutbound:description.outbound_estimation')}
 					</TableCaption>
-					<TableHeader className='sticky top-0 border-b'>
+					<TableHeader className='sticky top-0 z-10 border-b'>
 						<TableRow className='[&_th>span]:line-clamp-1 [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:h-10 [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
+							<TableHead align='center' className='w-14'>
+								<span className='sr-only'>{t('ns_common:common_fields.actions')}</span>
+							</TableHead>
 							<TableHead align='left' className='!uppercase'>
 								<span>PO</span>
 							</TableHead>
@@ -56,20 +64,13 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 							</TableRow>
 						) : (
 							data.map((item, index) => {
-								return (
-									<TableRow key={index.toString()} className='[&_td]:h-10 [&_td]:border-x-0'>
-										<TableCell align='left'>{item.po}</TableCell>
-										<TableCell align='left'>{format(new Date(item.outbound_date), 'yyyy-MM-dd')}</TableCell>
-										<TableCell align='right'>{formatIntlNumber(item.po_qty)}</TableCell>
-										<TableCell align='right'>{formatIntlNumber(item.outbound_qty)}</TableCell>
-									</TableRow>
-								)
+								return <TableRowData key={index.toString()} data={item} />
 							})
 						)}
 					</TableBody>
 					<TableFooter className='sticky bottom-0'>
 						<TableRow className='[&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
-							<TableCell colSpan={2} align='left' className='font-semibold'>
+							<TableCell colSpan={3} align='left' className='font-semibold'>
 								{t('ns_common:common_fields.total')}
 							</TableCell>
 							<TableCell align='right' className='font-semibold'>
@@ -86,5 +87,46 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				{t('ns_inoutbound:description.outbound_estimation')}
 			</Typography>
 		</Div>
+	)
+}
+
+const TableRowData: React.FC<{ data: IOutboundEstimation }> = ({ data }) => {
+	const [open, setOpen] = useState<boolean>(false)
+
+	return (
+		<Fragment>
+			<TableRow className={cn('[&_td]:h-10 [&_td]:border-x-0')}>
+				<TableCell align='center' className='relative'>
+					<button className='absolute inset-0 z-0' onClick={() => setOpen(!open)}>
+						<Icon
+							name='ChevronRight'
+							className={cn(
+								'inline-flex items-center justify-center transition-transform duration-200',
+								open ? 'rotate-90' : 'rotate-0'
+							)}
+						/>
+					</button>
+				</TableCell>
+				<TableCell align='left'>{data.po}</TableCell>
+				<TableCell align='left'>{format(new Date(data.outbound_date), 'yyyy-MM-dd')}</TableCell>
+				<TableCell align='right'>{formatIntlNumber(data.po_qty)}</TableCell>
+				<TableCell align='right'>{formatIntlNumber(data.outbound_qty)}</TableCell>
+			</TableRow>
+			<TableRow>
+				<TableCell
+					colSpan={5}
+					className={cn('p-0', !open ? 'border-none shadow-none' : 'shadow-[inset_0_0px_4px_#17171725]')}>
+					<Collapsible open={open} data-state={open ? 'open' : 'closed'}>
+						<CollapsibleContent
+							className='overflow-auto bg-secondary/50 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'
+							style={{ scrollbarGutter: 'stable' }}>
+							<Div className='p-4'>
+								<SizeTable data={data.inv_sizes} />
+							</Div>
+						</CollapsibleContent>
+					</Collapsible>
+				</TableCell>
+			</TableRow>
+		</Fragment>
 	)
 }
