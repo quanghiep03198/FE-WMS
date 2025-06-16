@@ -73,10 +73,10 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 								{t('ns_common:common_fields.total')}
 							</TableCell>
 							<TableCell align='right' className='font-semibold'>
-								{formatIntlNumber(data?.reduce((total, item) => total + item.po_qty, 0) ?? 0)}
+								{formatIntlNumber(data?.reduce((acc, curr) => acc + curr.po_qty, 0) ?? 0)}
 							</TableCell>
 							<TableCell align='right' className='font-semibold'>
-								{formatIntlNumber(data?.reduce((total, item) => total + item.outbound_qty, 0) ?? 0)}
+								{formatIntlNumber(data?.reduce((acc, curr) => acc + curr.outbound_qty, 0) ?? 0)}
 							</TableCell>
 						</TableRow>
 					</TableFooter>
