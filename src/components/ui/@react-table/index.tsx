@@ -44,6 +44,7 @@ function DataTable<TData, TValue>({
 	loading,
 	initialState = { rowSelection: {} },
 	containerProps,
+	defaultFilterOpen = false,
 	expanded = {},
 	paginationProps = { hidden: false },
 	toolbarProps = { hidden: false, slotRight: null },
@@ -247,13 +248,14 @@ function DataTable<TData, TValue>({
 	return (
 		<TableContext.Provider
 			value={{
+				table,
 				instanceId,
-				hasNoFilter
+				hasNoFilter,
+				defaultFilterOpen
 			}}>
 			<DataTableWrapper ref={tableWrapperRef}>
 				{!toolbarProps.hidden && (
 					<TableToolbar
-						table={table}
 						enableGlobalFilter={enableGlobalFilter}
 						onResetAllFilters={resetAllFilters}
 						slotLeft={toolbarProps.slotLeft}
@@ -261,7 +263,6 @@ function DataTable<TData, TValue>({
 					/>
 				)}
 				<TableDataGrid
-					table={table}
 					columns={columns}
 					loading={loading}
 					caption={caption}
@@ -289,7 +290,6 @@ function DataTable<TData, TValue>({
 					)}
 					{!paginationProps?.hidden && (
 						<TablePagination
-							table={table}
 							loading={loading}
 							manualPagination={manualPagination}
 							canNextPage={manualPagination ? paginationProps?.hasNextPage : table.getCanNextPage()}

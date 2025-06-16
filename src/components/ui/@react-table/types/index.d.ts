@@ -139,6 +139,10 @@ export type DataTableProps<TData = any, TValue = any> = {
 	 */
 	sorting?: SortingState
 	/**
+	 * If true, the filter row will be shown by default
+	 */
+	defaultFilterOpen?: boolean
+	/**
 	 * Optional external expanded state in case you want to control the expanded state of the table from outside.
 	 */
 	expanded?: ExpandedState

@@ -14,8 +14,8 @@ type CollapsibleFilterCellProps<TData, TValue = unknown> = {
 }
 
 function CollapsibleFilterCell<TData, TValue>({ header }: CollapsibleFilterCellProps<TData, TValue>) {
-	const { instanceId } = useTableContext()
-	const [isFilterOpened] = useEventEmitter<boolean>(`toggle-filter-${instanceId}`)
+	const { instanceId, defaultFilterOpen } = useTableContext()
+	const [isFilterOpened] = useEventEmitter<boolean>(`toggle-filter-${instanceId}`, defaultFilterOpen)
 
 	return (
 		<TableHead
@@ -26,7 +26,10 @@ function CollapsibleFilterCell<TData, TValue>({ header }: CollapsibleFilterCellP
 				width: `calc(var(--header-${header?.id}-size) * 1px)`,
 				...DataTableUtility.getStickyOffsetPosition(header?.column)
 			}}>
-			<Collapsible data-state={open ? 'open' : 'closed'} open={Boolean(isFilterOpened)}>
+			<Collapsible
+				defaultOpen={defaultFilterOpen}
+				open={isFilterOpened}
+				data-state={isFilterOpened ? 'open' : 'closed'}>
 				<CollapsibleContent className='h-10 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 					<ColumnFilter column={header.column} />
 				</CollapsibleContent>

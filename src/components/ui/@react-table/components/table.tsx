@@ -1,12 +1,12 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
-import { type Table as TTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useSize } from 'ahooks'
 import { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
 import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
+import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { MemoizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
@@ -15,47 +15,49 @@ import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
 import DataTableHeader from './table-header'
 
-interface TableProps<TData, TValue>
-	extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>,
-		Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'>,
-		Pick<React.ComponentProps<'div'>, 'style'> {
-	table: TTable<TData>
-}
+type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
+	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
+	Pick<React.ComponentProps<'div'>, 'style'>
 
-function TableDataGrid<TData, TValue>({
-	containerProps = { className: cn('h-[52.5dvh] xxl:h-[62.5dvh]') },
-	table,
-	footerProps = { hidden: true, slot: null },
-	caption,
-	loading,
-	virtualizerOptions = {
-		estimateSize: 40,
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5
-	},
-	renderSubComponent
-}: TableProps<TData, TValue>) {
+function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
+	const { table } = useTableContext()
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
 	const isScrolling = useRef<boolean>(false)
+
+	const {
+		containerProps = { className: cn('h-[52.5dvh] xxl:h-[62.5dvh]') },
+		footerProps = { hidden: true, slot: null },
+		caption,
+		loading,
+		virtualizerOptions = {
+			estimateSize: 40,
+			overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5
+		},
+		renderSubComponent
+	} = props
+
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const estimateSize = useMemoizedFn(() => virtualizerOptions.estimateSize)
+	const getScrollElement = useMemoizedFn(() => containerRef.current)
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		indexAttribute: 'data-index',
 		overscan: virtualizerOptions.overscan,
+		getScrollElement,
+		estimateSize,
+		scrollToFn,
 		onChange: (instance) => {
 			isScrolling.current = instance.isScrolling
 		},
-		getScrollElement: () => containerRef.current,
-		estimateSize: useMemoizedFn(() => virtualizerOptions.estimateSize),
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
-				: undefined,
-		scrollToFn
+				: undefined
 	})
 
 	const columnSizeVars = useMemo(() => {

@@ -15,6 +15,7 @@ import {
 	Separator,
 	Tooltip
 } from '../..'
+import { useTableContext } from '../context/table.context'
 import { type PaginationBaseProps } from '../types'
 
 type DataTablePaginationProps<TData> = {
@@ -53,6 +54,7 @@ function TablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
 	const { t } = useTranslation('ns_common')
 	const timeoutRef = useRef<NodeJS.Timeout>(null)
+	const { table } = useTableContext()
 	const prefetchCountRef = useRef<number>(0)
 	const pageIndexContext = String(pageIndex) + '/' + String(pageCount)
 

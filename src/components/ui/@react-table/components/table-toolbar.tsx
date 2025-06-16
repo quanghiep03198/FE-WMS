@@ -6,12 +6,12 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
+import { useTableContext } from '../context/table.context'
 import ColumnFilterToggle from './column-filter-toggle'
 import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
 type TableToolbarProps<TData> = {
-	table: Table<TData>
 	enableGlobalFilter: boolean
 	onResetAllFilters: () => void
 	slotLeft?: React.FC<{ table?: Table<TData> }>
@@ -19,12 +19,12 @@ type TableToolbarProps<TData> = {
 }
 
 function TableToolbar<TData>({
-	table,
 	enableGlobalFilter,
 	onResetAllFilters,
 	slotLeft: SlotLeft,
 	slotRight: SlotRight
 }: TableToolbarProps<TData>) {
+	const { table } = useTableContext()
 	const {
 		columnPinning: { left, right },
 		globalFilter,
