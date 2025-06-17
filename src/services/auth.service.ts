@@ -1,4 +1,4 @@
-import { LoginFormValues } from '@/app/(auth)/login/_schemas/login.schema'
+import { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
 import { IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'

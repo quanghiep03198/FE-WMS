@@ -2,9 +2,9 @@ import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import ChangePasswordForm from './_components/-change-password-form'
-import ProfileForm from './_components/-profile-form'
-import ProfileWallpaper from './_components/-profile-wallpaper'
+import ChangePasswordForm from './-components/change-password-form'
+import ProfileForm from './-components/profile-form'
+import ProfileWallpaper from './-components/profile-wallpaper'
 
 export const Route = createLazyFileRoute('/(features)/preferences/_layout/account/')({
 	component: Page

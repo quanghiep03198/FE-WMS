@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import GridBackground from '../_components/_shared/-grid-background'
-import PageComposition from './_components/-page-composition'
-import { PageProvider } from './_contexts/-page-context'
+import GridBackground from '../-components/-shared/grid-background'
+import PageComposition from './-components/page-composition'
+import { PageProvider } from './-contexts/page-context'
 
 export const Route = createFileRoute('/(public)/')({
 	component: Page,

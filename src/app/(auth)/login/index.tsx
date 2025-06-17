@@ -1,9 +1,9 @@
-import GridBackground from '@/app/_components/_shared/-grid-background'
+import GridBackground from '@/app/-components/-shared/grid-background'
 import useAuth from '@/common/hooks/use-auth'
 import Loading from '@/components/shared/loading'
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import PageComposition from './_components/-page-composition'
+import PageComposition from './-components/page-composition'
 
 export const Route = createFileRoute('/(auth)/login/')({
 	component: LoginPage,

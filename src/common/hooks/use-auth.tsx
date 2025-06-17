@@ -1,4 +1,4 @@
-import { USER_PROVIDE_TAG } from '@/app/(auth)/_apis/auth.api'
+import { USER_PROVIDE_TAG } from '@/app/(auth)/-hooks/use-auth'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'

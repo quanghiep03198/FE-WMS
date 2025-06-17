@@ -2,8 +2,8 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import UnavailableService from '@/app/_components/_errors/-unavailable-service'
-import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
+import UnavailableService from '@/app/-components/-errors/unavailable-service'
+import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/transfer-management/')({
 	component: Page

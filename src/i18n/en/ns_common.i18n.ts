@@ -109,20 +109,22 @@ export default {
 		appearance: 'Appearance',
 		dashboard: 'Dashboard',
 		export_management: 'Export management',
-		fp_inoutbound: 'F.P warehouse inoutbound',
-		fp_stock_out: 'F.P stock out',
+		finished_goods_inbound: 'Finished goods inbound',
+		finished_goods_outbound: 'Finished goods outbound',
 		import_management: 'Import management',
 		monthly_inventory_audit: 'Monthly inventory audit',
 		inventory_estimation: 'Inventory estimation',
 		keyboard_shortcut: 'Keyboard shortcut',
-		pm_inbound: 'P.M warehouse inbound',
 		cargo_weight_check: 'Cargo weight check',
 		profile: 'Profile',
 		report_management: 'Report',
 		settings: 'Settings',
 		storage_detail: 'Storage details',
 		transfer_managment: 'Transfer management',
-		warehouse_management: 'Warehouse management'
+		warehouse_management: 'Warehouse management',
+		// labels
+		main_menu_label: 'Main',
+		preference_menu_label: ' Preference'
 	},
 	notification: {
 		downloading: 'Downloading ...',

@@ -1,14 +1,14 @@
-import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
+import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MonthPickerFilter } from '../_components/_shared/-month-picker-filter'
-import { PageDescription, PageHeader, PageTitle } from '../_components/_shared/-page-header'
-import InoutboundOverview from './_components/-inoutbound-overview'
-import RFIDDeviceList from './_components/-rfid-device-list'
-import Statistics from './_components/-statistics'
-import SystemTime from './_components/-system-time'
+import { MonthPickerFilter } from '../-components/-shared/month-picker-filter'
+import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/page-header'
+import InoutboundOverview from './-components/inoutbound-overview'
+import RFIDDeviceList from './-components/rfid-device-list'
+import Statistics from './-components/statistics'
+import SystemTime from './-components/system-time'
 
 export const Route = createLazyFileRoute('/(features)/_layout/dashboard/')({
 	component: Page

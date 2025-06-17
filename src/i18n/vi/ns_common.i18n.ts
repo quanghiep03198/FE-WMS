@@ -110,12 +110,11 @@ export default {
 		appearance: 'Giao diện',
 		dashboard: 'Màn hình chính',
 		export_management: 'Quản lý xuất hàng',
-		fp_inoutbound: 'Nhập xuất kho thành phẩm',
-		fp_stock_out: 'Xuất hàng kho thành phẩm',
+		finished_goods_inbound: 'Nhập xuất kho thành phẩm',
+		finished_goods_outbound: 'Xuất hàng kho thành phẩm',
 		import_management: 'Quản lý nhập hàng',
 		monthly_inventory_audit: 'Kiểm kê tồn kho',
 		keyboard_shortcut: 'Phím tắt',
-		pm_inbound: 'Nhập kho QLSX',
 		cargo_weight_check: 'Kiểm tra & Cân Hàng',
 		inventory_estimation: 'Ước lượng tồn kho',
 		profile: 'Thông tin cá nhân',
@@ -123,7 +122,9 @@ export default {
 		settings: 'Cài đặt',
 		storage_detail: 'Chi tiết vị trí lưu kho',
 		transfer_managment: 'Quản lý chuyển giao',
-		warehouse_management: 'Quản lý kho'
+		warehouse_management: 'Quản lý kho',
+		main_menu_label: 'Menu chính',
+		preference_menu_label: 'Tùy chỉnh'
 	},
 	notification: {
 		downloading: 'Đang tải xuống ...',

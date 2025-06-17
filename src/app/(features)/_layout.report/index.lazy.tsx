@@ -1,8 +1,8 @@
-import UnavailableService from '@/app/_components/_errors/-unavailable-service'
+import UnavailableService from '@/app/-components/-errors/unavailable-service'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBreadcrumbContext } from '../_contexts/-breadcrumb-context'
+import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/report/')({
 	component: Page

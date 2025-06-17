@@ -1,5 +1,5 @@
-import AppLogo from '@/app/_components/_shared/-app-logo'
-import GridBackground from '@/app/_components/_shared/-grid-background'
+import AppLogo from '@/app/-components/-shared/app-logo'
+import GridBackground from '@/app/-components/-shared/grid-background'
 import { useEventListener } from 'ahooks'
 import nProgress from 'nprogress'
 import { Fragment, useEffect } from 'react'

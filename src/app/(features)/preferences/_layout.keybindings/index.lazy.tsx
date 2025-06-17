@@ -6,7 +6,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
+import { PageDescription, PageHeader, PageTitle } from '../../-components/-shared/page-header'
 
 type CommandList = Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>[]
 
@@ -18,6 +18,7 @@ function KeybindingsPage() {
 	const { t } = useTranslation<'ns_common', undefined>('ns_common')
 
 	const navigationCommands = navigationConfig
+		.filter((item) => !!item.keybinding)
 		.map((item, index) => ({
 			id: String(index + 1),
 			title: t(item.title, { defaultValue: item.title }),
