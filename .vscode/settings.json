@@ -1,0 +1,18 @@
+{
+	"material-icon-theme.folders.associations": {
+		"(features)": "Plugin",
+		"(auth)": "Secure",
+		"(public)": "Public",
+		"-api": "Api",
+		"-components": "React-Components",
+		"-constants": "Constant",
+		"-contexts": "Context",
+		"-hooks": "Hook",
+		"-partials": "Include",
+		"-schemas": "Class",
+		"-shared": "Shared"
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.tabSize": 3
+}
