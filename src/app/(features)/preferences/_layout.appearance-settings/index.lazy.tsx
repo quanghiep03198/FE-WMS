@@ -2,11 +2,11 @@ import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../_components/_shared/-page-header'
-import FontSelect from './_components/-font-select'
+import { PageDescription, PageHeader, PageTitle } from '../../-components/-shared/page-header'
+import FontSelect from './-components/font-select'
 
-import LanguageSelect from './_components/-language-select'
-import ThemeRadioGroup from './_components/-theme-radio-group'
+import LanguageSelect from './-components/language-select'
+import ThemeRadioGroup from './-components/theme-radio-group'
 
 export const Route = createLazyFileRoute('/(features)/preferences/_layout/appearance-settings/')({
 	component: Page

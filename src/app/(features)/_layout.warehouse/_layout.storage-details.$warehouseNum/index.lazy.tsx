@@ -1,17 +1,17 @@
 // #region Modules
-import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
+import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { Div, Separator } from '@/components/ui'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getWarehouseStorageOptions } from '../_apis/warehouse-storage.api'
-import { WAREHOUSE_PROVIDE_TAG } from '../_apis/warehouse.api'
-import { PageProvider } from '../_contexts/-page-context'
-import WarehouseStorageFormDialog from './_components/-storage-form'
-import StorageListHeading from './_components/-storage-heading'
-import StorageList from './_components/-storage-list'
+import { PageProvider } from '../-contexts/page-context'
+import { WAREHOUSE_PROVIDE_TAG } from '../-hooks/use-warehouse'
+import { getWarehouseStorageOptions } from '../-hooks/use-warehouse-storage'
+import WarehouseStorageFormDialog from './-components/storage-form'
+import StorageListHeading from './-components/storage-heading'
+import StorageList from './-components/storage-list'
 // #endregion
 
 // #region Router declaration

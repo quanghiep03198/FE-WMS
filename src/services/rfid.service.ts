@@ -1,12 +1,12 @@
-import { EpcCombinationFormValues } from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-combination.schema'
+import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
+import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
+import { EpcCombinationFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-combination.schema'
 import {
 	InoutboundPayload,
 	OutboundFormValues
-} from '@/app/(features)/_layout.finished-production-inbound/_schemas/epc-inoutbound.schema'
-import { ExchangeEpcFormValue } from '@/app/(features)/_layout.finished-production-inbound/_schemas/exchange-epc.schema'
-import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.finished-production-inbound/_types'
-import { FilterArchivedEpcParams } from '@/app/(features)/_layout.finished-production-outbound/_types'
-import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_types/rfid'
+} from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-inoutbound.schema'
+import { ExchangeEpcFormValue } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
+import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'

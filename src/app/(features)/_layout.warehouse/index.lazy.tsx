@@ -1,13 +1,13 @@
 // #region Modules
-import { useBreadcrumbContext } from '@/app/(features)/_contexts/-breadcrumb-context'
+import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import WarehouseFormDialog from './_components/-warehouse-form'
-import WarehouseList from './_components/-warehouse-list'
-import WarehouseListHeading from './_components/-warehouse-list-heading'
-import { PageProvider } from './_contexts/-page-context'
+import WarehouseFormDialog from './-components/warehouse-form'
+import WarehouseList from './-components/warehouse-list'
+import WarehouseListHeading from './-components/warehouse-list-heading'
+import { PageProvider } from './-contexts/page-context'
 // #endregion
 
 // #region Router declaration

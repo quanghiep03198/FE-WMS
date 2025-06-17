@@ -32,16 +32,16 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'GitCompareArrows',
-		title: 'navigation.fp_inoutbound',
-		path: '/finished-production-inbound',
+		icon: 'Forklift',
+		title: 'navigation.finished_goods_inbound',
+		path: '/finished-goods-inbound',
 		type: 'main'
 	},
 	{
 		id: uuidv4(),
-		icon: 'GitBranchPlus',
-		title: 'navigation.fp_stock_out',
-		path: '/finished-production-outbound',
+		icon: 'Truck',
+		title: 'navigation.finished_goods_outbound',
+		path: '/finished-goods-outbound',
 		type: 'main'
 	},
 	{

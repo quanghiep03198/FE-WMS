@@ -17,6 +17,7 @@ export default {
 		exchange_all: '您可以交换属于所选尺码的整个 EPC',
 		exchange_epc_dialog_desc: '允许用户用新的生产订单替换或更新产品上的 EPC 标签.',
 		exchange_qty: '实际订单的交换商品数量',
+		inventory_by_size: '按尺码查询成品仓库库存数量',
 		inoutbound_form_note: '更新库存移动之前断开连接',
 		monthly_inventory_report: '管理和跟踪成品仓库的每月库存',
 		no_added_size: '没有添加尺码',

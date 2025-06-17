@@ -107,13 +107,12 @@ export default {
 		account: '账户管理',
 		appearance: '外观',
 		dashboard: '首頁',
-		fp_inoutbound: '倉庫出入庫作業',
-		fp_stock_out: '成品倉出庫作業',
+		finished_goods_inbound: '倉庫出入庫作業',
+		finished_goods_outbound: '成品倉出庫作業',
 		import_management: '入庫管理',
 		monthly_inventory_audit: '盤點管理',
 		inventory_estimation: '生产库存估算',
 		keyboard_shortcut: '快捷键',
-		pm_inbound: '生产管理入库操作',
 		cargo_weight_check: '货物称重检查',
 		profile: '个人信息',
 		report_management: '報表管理',
@@ -121,7 +120,10 @@ export default {
 		storage_detail: '仓库存储详情',
 		transfer_managment: '調撥管理',
 		warehouse_management: '倉庫管理',
-		export_management: '出庫管理'
+		export_management: '出庫管理',
+		// labels
+		main_menu_label: '主菜单',
+		preference_menu_label: ' 偏好设置'
 	},
 	notification: {
 		downloading: '下载 ...',
