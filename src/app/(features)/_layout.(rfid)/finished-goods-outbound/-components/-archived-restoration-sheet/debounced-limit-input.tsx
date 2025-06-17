@@ -1,0 +1,41 @@
+import { Div, Input, Label } from '@/components/ui'
+import { useDebounceEffect } from 'ahooks'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
+
+const DebouncedLimitInput: React.FC = () => {
+	const { t } = useTranslation()
+	const { limit, setLimit } = useArchivedRestorationContext('limit', 'setLimit')
+	const [value, setValue] = useState<number>(limit)
+
+	useDebounceEffect(
+		() => {
+			setLimit(value)
+		},
+		[value],
+		{ wait: 300, leading: true, trailing: true }
+	)
+
+	return (
+		<Div className='flex basis-1/2 items-center gap-x-3'>
+			<Label className='whitespace-nowrap'>{t('ns_common:table.rows_per_page')}</Label>
+			<Input
+				type='number'
+				placeholder='0'
+				value={value || ''}
+				min={10}
+				step={10}
+				aria-invalid={value <= 0}
+				className='w-16 text-center aria-[invalid=true]:border-destructive'
+				onChange={(e) => {
+					const val = e.currentTarget.value
+					const formatted = val.replace(/[^0-9]/g, '')
+					setValue(+formatted)
+				}}
+			/>
+		</Div>
+	)
+}
+
+export default DebouncedLimitInput

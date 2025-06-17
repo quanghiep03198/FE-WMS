@@ -77,7 +77,7 @@ export class RFIDService {
 	}
 
 	static async getArchivedEpcs(params: Partial<FilterArchivedEpcParams>) {
-		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
+		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode & { scanned: boolean }>>>(
 			`/rfid/outbound/archived-epcs`,
 			{ params }
 		)

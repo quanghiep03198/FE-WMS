@@ -15,6 +15,7 @@ import { isEmpty, sortBy } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { ScannedStatus } from '../../-constants'
 import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
 import { useGetArchivedEpcFeatureQuery } from '../../-hooks'
 import { FilterForm, GhostButton } from './styled'
@@ -27,6 +28,7 @@ const ArchivedEpcFilter: React.FC = () => {
 	const [search, setSearch] = useState<string>('')
 
 	const { searchTerm, advancedFilters, setSearchTerm, setAdvancedFilters } = useArchivedRestorationContext(
+		'limit',
 		'searchTerm',
 		'setSearchTerm',
 		'advancedFilters',
@@ -36,17 +38,19 @@ const ArchivedEpcFilter: React.FC = () => {
 	const form = useForm({
 		mode: 'onChange',
 		defaultValues: {
-			shoes_style_code_factory: '',
+			shoes_style: '',
 			color_sn: '',
 			mo_no: '',
-			size_numcode: ''
+			size_numcode: '',
+			scanned: ScannedStatus.ALL
 		}
 	})
 
-	const currentShoesStyle = useWatch({ control: form.control, name: 'shoes_style_code_factory' })
+	const currentShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
 	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
 	const currentSize = useWatch({ control: form.control, name: 'size_numcode' })
+	const currentStatus = useWatch({ control: form.control, name: 'scanned' })
 
 	const shoesStyleOptions = useMemo(() => {
 		if (!Array.isArray(data)) return []
@@ -102,12 +106,13 @@ const ArchivedEpcFilter: React.FC = () => {
 
 	useDeepCompareEffect(() => {
 		setAdvancedFilters({
-			shoes_style_code_factory: currentShoesStyle,
+			shoes_style: currentShoesStyle,
 			color_sn: currentColor,
 			mo_no: currentCommandNumber,
-			size_numcode: currentSize
+			size_numcode: currentSize,
+			scanned: currentStatus === ScannedStatus.ALL ? null : currentStatus === ScannedStatus.SCANNED ? true : false
 		})
-	}, [currentShoesStyle, currentColor, currentCommandNumber, currentSize])
+	}, [currentShoesStyle, currentColor, currentCommandNumber, currentSize, currentStatus])
 
 	useDebounceEffect(
 		() => {
@@ -119,7 +124,7 @@ const ArchivedEpcFilter: React.FC = () => {
 
 	return (
 		<Popover open={filterOpen} onOpenChange={setFilterOpen}>
-			<PopoverTrigger className='group relative flex h-9 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
+			<PopoverTrigger className='group relative flex h-10 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
 				<Icon
 					name='Search'
 					stroke='hsl(var(--muted-foreground))'
@@ -163,10 +168,22 @@ const ArchivedEpcFilter: React.FC = () => {
 				className='w-[var(--radix-popover-trigger-width)]'
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				<Form {...form}>
-					<FilterForm className='grid gap-4' onSubmit={form.handleSubmit(setAdvancedFilters)}>
+					<FilterForm
+						className='grid gap-4'
+						onSubmit={form.handleSubmit((data) =>
+							setAdvancedFilters({
+								...data,
+								scanned:
+									data.scanned === ScannedStatus.ALL
+										? null
+										: data.scanned === ScannedStatus.SCANNED
+											? true
+											: false
+							})
+						)}>
 						<ComboboxFieldControl
 							label={t('ns_erp:fields.shoestyle_codefactory')}
-							name='shoes_style_code_factory'
+							name='shoes_style'
 							orientation='horizontal'
 							datalist={shoesStyleOptions}
 							labelField='shoes_style_factory_code'
@@ -195,6 +212,27 @@ const ArchivedEpcFilter: React.FC = () => {
 							datalist={sizeOptions}
 							labelField='size_numcode'
 							valueField='size_numcode'
+						/>
+						<SelectFieldControl
+							label={t('ns_common:common_fields.status')}
+							name='scanned'
+							orientation='horizontal'
+							datalist={[
+								{
+									label: 'All',
+									value: ScannedStatus.ALL
+								},
+								{
+									label: 'Scanned',
+									value: ScannedStatus.SCANNED
+								},
+								{
+									label: 'Unscanned',
+									value: ScannedStatus.UNSCANNED
+								}
+							]}
+							labelField='label'
+							valueField='value'
 						/>
 					</FilterForm>
 				</Form>

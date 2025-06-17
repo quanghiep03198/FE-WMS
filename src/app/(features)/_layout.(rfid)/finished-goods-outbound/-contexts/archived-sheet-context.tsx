@@ -8,12 +8,15 @@ import { useShallow } from 'zustand/react/shallow'
 type ArchivedRestorationFilterStore = {
 	searchTerm: string
 	advancedFilters: {
-		shoes_style_code_factory: string
+		shoes_style: string
 		color_sn: string
 		mo_no: string
 		size_numcode: string
+		scanned: boolean
 	}
 	selectedItems: IElectronicProductCode[]
+	limit: number
+	setLimit: (value: number) => void
 	setSearchTerm: (term: string) => void
 	setAdvancedFilters: (values: ArchivedRestorationFilterStore['advancedFilters']) => void
 	addItemToSet: (item: IElectronicProductCode) => void
@@ -22,13 +25,18 @@ type ArchivedRestorationFilterStore = {
 	removeAllItemsFromSet: () => void
 }
 
-const DEFAULT_PROPS: Pick<ArchivedRestorationFilterStore, 'searchTerm' | 'advancedFilters' | 'selectedItems'> = {
+const DEFAULT_PROPS: Pick<
+	ArchivedRestorationFilterStore,
+	'limit' | 'searchTerm' | 'advancedFilters' | 'selectedItems'
+> = {
+	limit: 100,
 	searchTerm: '',
 	advancedFilters: {
-		shoes_style_code_factory: '',
+		shoes_style: '',
 		color_sn: '',
 		mo_no: '',
-		size_numcode: ''
+		size_numcode: '',
+		scanned: true
 	},
 	selectedItems: []
 }
@@ -42,6 +50,11 @@ export const ArchivedRestorationProvider: React.FC<React.PropsWithChildren> = ({
 		store.current = create<ArchivedRestorationFilterStore>()(
 			immer((set) => ({
 				...DEFAULT_PROPS,
+				setLimit: (value: number) => {
+					set((state) => {
+						state.limit = value
+					})
+				},
 				setSearchTerm: (term: string) => {
 					set((state) => {
 						state.searchTerm = term
