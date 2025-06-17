@@ -7,6 +7,8 @@
 		"-components": "React-Components",
 		"-constants": "Constant",
 		"-contexts": "Context",
+		"-errors": "Error",
+		"-guard": "Guard",
 		"-hooks": "Hook",
 		"-partials": "Include",
 		"-schemas": "Class",
