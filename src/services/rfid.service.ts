@@ -1,5 +1,5 @@
 import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
-import { FetchFPEpcParams, SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
+import { SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
 import { EpcCombinationFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-combination.schema'
 import {
 	InoutboundPayload,
@@ -14,7 +14,7 @@ import { omitBy } from 'lodash'
 
 export class RFIDService {
 	// #region Inbound
-	static async fetchNextInboundEpc(params: FetchFPEpcParams) {
+	static async fetchNextInboundEpc(params: { _page: number; 'mo_no.eq': string }) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
 			`/rfid/inbound/fetch-epc`,
 			{

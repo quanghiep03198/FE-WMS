@@ -5,9 +5,4 @@ export type SearchCustOrderParams = {
 	q: string
 }
 
-export type FetchFPEpcParams = {
-	_page: number
-	'mo_no.eq': string
-}
-
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined

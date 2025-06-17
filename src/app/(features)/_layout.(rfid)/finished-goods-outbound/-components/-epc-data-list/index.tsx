@@ -24,7 +24,7 @@ import OrderDetailTableDialog from '../-manufacture-order-detail/order-detail-di
 import { ArchivedRestorationProvider } from '../../-contexts/archived-sheet-context'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
 import { useGetOutboundEpcQuery } from '../../-hooks'
-import ConnectionInsight from './-connection-insight'
+import ConnectionInsight from './connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
 const DEFAULT_NEXT_CURSOR = 2
