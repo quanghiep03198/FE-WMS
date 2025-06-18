@@ -7,5 +7,9 @@ export default {
 		step_2: "Fetch Decker's orders and EPC data",
 		step_3: 'Update EPC data',
 		step_4: 'Complete Job'
+	},
+	status: {
+		scanned: 'Scanned',
+		unscanned: 'Unscanned'
 	}
 }

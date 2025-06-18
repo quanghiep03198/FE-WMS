@@ -1,15 +1,26 @@
+import { cn } from '@/common/utils/cn'
 import {
+	Button,
 	ComboboxFieldControl,
+	Div,
 	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
 	Icon,
 	Input,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
+	RadioGroup,
+	RadioGroupItem,
 	SelectFieldControl,
 	Separator,
-	Tooltip
+	Tooltip,
+	Typography
 } from '@/components/ui'
+import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useDeepCompareEffect } from 'ahooks'
 import { isEmpty, sortBy } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
@@ -19,6 +30,14 @@ import { ScannedStatus } from '../../-constants'
 import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
 import { useGetArchivedEpcFeatureQuery } from '../../-hooks'
 import { FilterForm, GhostButton } from './styled'
+
+type SearchFormValues = {
+	shoes_style: string
+	color_sn: string
+	mo_no: string
+	size_numcode: string
+	scanned: ScannedStatus
+}
 
 const ArchivedEpcFilter: React.FC = () => {
 	const { t } = useTranslation()
@@ -35,7 +54,7 @@ const ArchivedEpcFilter: React.FC = () => {
 		'setAdvancedFilters'
 	)
 
-	const form = useForm({
+	const form = useForm<SearchFormValues>({
 		mode: 'onChange',
 		defaultValues: {
 			shoes_style: '',
@@ -104,16 +123,6 @@ const ArchivedEpcFilter: React.FC = () => {
 		}
 	}, [colorOptions, commandNumberOptions, sizeOptions])
 
-	useDeepCompareEffect(() => {
-		setAdvancedFilters({
-			shoes_style: currentShoesStyle,
-			color_sn: currentColor,
-			mo_no: currentCommandNumber,
-			size_numcode: currentSize,
-			scanned: currentStatus === ScannedStatus.ALL ? null : currentStatus === ScannedStatus.SCANNED ? true : false
-		})
-	}, [currentShoesStyle, currentColor, currentCommandNumber, currentSize, currentStatus])
-
 	useDebounceEffect(
 		() => {
 			setSearchTerm(search)
@@ -121,6 +130,13 @@ const ArchivedEpcFilter: React.FC = () => {
 		[search],
 		{ wait: 300 }
 	)
+
+	const handleSearch = (data: SearchFormValues) => {
+		setAdvancedFilters({
+			...data,
+			scanned: data.scanned === ScannedStatus.ALL ? null : data.scanned === ScannedStatus.SCANNED ? true : false
+		})
+	}
 
 	return (
 		<Popover open={filterOpen} onOpenChange={setFilterOpen}>
@@ -157,7 +173,9 @@ const ArchivedEpcFilter: React.FC = () => {
 					</Fragment>
 				)}
 				<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-					<GhostButton aria-expanded={filterOpen} className='aspect-square basis-5 aria-expanded:text-foreground'>
+					<GhostButton
+						aria-expanded={filterOpen}
+						className={cn('aspect-square basis-5 aria-expanded:text-active')}>
 						<Icon name='ListFilter' />
 					</GhostButton>
 				</Tooltip>
@@ -165,75 +183,127 @@ const ArchivedEpcFilter: React.FC = () => {
 			<PopoverContent
 				side='bottom'
 				sideOffset={8}
-				className='w-[var(--radix-popover-trigger-width)]'
+				className='w-[var(--radix-popover-trigger-width)] p-6'
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				<Form {...form}>
-					<FilterForm
-						className='grid gap-4'
-						onSubmit={form.handleSubmit((data) =>
-							setAdvancedFilters({
-								...data,
-								scanned:
-									data.scanned === ScannedStatus.ALL
-										? null
-										: data.scanned === ScannedStatus.SCANNED
-											? true
-											: false
-							})
-						)}>
-						<ComboboxFieldControl
-							label={t('ns_erp:fields.shoestyle_codefactory')}
-							name='shoes_style'
-							orientation='horizontal'
-							datalist={shoesStyleOptions}
-							labelField='shoes_style_factory_code'
-							valueField='shoes_style_factory_code'
-						/>
-						<ComboboxFieldControl
-							label={t('ns_erp:fields.color_sn')}
-							name='color_sn'
-							orientation='horizontal'
-							datalist={colorOptions}
-							labelField='color_sn'
-							valueField='color_sn'
-						/>
-						<ComboboxFieldControl
-							label={t('ns_erp:fields.mo_no')}
-							name='mo_no'
-							orientation='horizontal'
-							datalist={commandNumberOptions}
-							labelField='mo_no'
-							valueField='mo_no'
-						/>
-						<SelectFieldControl
-							label='Size'
-							name='size_numcode'
-							orientation='horizontal'
-							datalist={sizeOptions}
-							labelField='size_numcode'
-							valueField='size_numcode'
-						/>
-						<SelectFieldControl
-							label={t('ns_common:common_fields.status')}
-							name='scanned'
-							orientation='horizontal'
-							datalist={[
-								{
-									label: 'All',
-									value: ScannedStatus.ALL
-								},
-								{
-									label: 'Scanned',
-									value: ScannedStatus.SCANNED
-								},
-								{
-									label: 'Unscanned',
-									value: ScannedStatus.UNSCANNED
-								}
-							]}
-							labelField='label'
-							valueField='value'
-						/>
+					<FilterForm className='space-y-2' onSubmit={form.handleSubmit(handleSearch)}>
+						<Div as='fieldset' className='space-y-6'>
+							<Typography as='legend' className='font-medium'>
+								Product information
+							</Typography>
+							<Div className='space-y-3'>
+								<ComboboxFieldControl
+									label={t('ns_erp:fields.shoestyle_codefactory')}
+									name='shoes_style'
+									orientation='horizontal'
+									datalist={shoesStyleOptions}
+									labelField='shoes_style_factory_code'
+									valueField='shoes_style_factory_code'
+								/>
+								<ComboboxFieldControl
+									label={t('ns_erp:fields.color_sn')}
+									name='color_sn'
+									orientation='horizontal'
+									datalist={colorOptions}
+									labelField='color_sn'
+									valueField='color_sn'
+								/>
+							</Div>
+						</Div>
+						<Separator />
+						<Div as='fieldset' className='space-y-6'>
+							<Typography as='legend' className='font-medium'>
+								Batch information
+							</Typography>
+							<Div className='space-y-3'>
+								<ComboboxFieldControl
+									label={t('ns_erp:fields.mo_no')}
+									name='mo_no'
+									orientation='horizontal'
+									datalist={commandNumberOptions}
+									labelField='mo_no'
+									valueField='mo_no'
+								/>
+								<SelectFieldControl
+									label='Size'
+									name='size_numcode'
+									orientation='horizontal'
+									datalist={sizeOptions}
+									labelField='size_numcode'
+									valueField='size_numcode'
+								/>
+							</Div>
+						</Div>
+						<Separator />
+						<Div as='fieldset' className='space-y-6'>
+							<Div className='flex flex-col space-y-1'>
+								<Typography as='legend' className='font-medium'>
+									{t('ns_common:common_fields.status')}
+								</Typography>
+								<Typography variant='small'>Which scanning status do you want to check ?</Typography>
+							</Div>
+							<FormField
+								name='scanned'
+								control={form.control}
+								render={({ field }) => (
+									<FormItem>
+										<RadioGroup
+											value={field.value}
+											onValueChange={field.onChange}
+											className='flex items-center gap-x-10'>
+											<FormItem className='flex items-center gap-x-3 space-y-0'>
+												<FormControl>
+													<RadioGroupItem value={ScannedStatus.ALL} />
+												</FormControl>
+												<FormLabel className='cursor-pointer'>{t('ns_common:others.all')}</FormLabel>
+											</FormItem>
+											<FormItem className='flex items-center gap-x-3 space-y-0'>
+												<FormControl>
+													<RadioGroupItem value={ScannedStatus.SCANNED} />
+												</FormControl>
+												<FormLabel className='cursor-pointer'>{t('ns_rfid:status.scanned')}</FormLabel>
+											</FormItem>
+											<FormItem className='flex items-center gap-x-3 space-y-0'>
+												<FormControl>
+													<RadioGroupItem value={ScannedStatus.UNSCANNED} />
+												</FormControl>
+												<FormLabel className='cursor-pointer'>{t('ns_rfid:status.unscanned')}</FormLabel>
+											</FormItem>
+										</RadioGroup>
+									</FormItem>
+								)}
+							/>
+							{/* <SelectFieldControl
+								label={t('ns_common:common_fields.status')}
+								name='scanned'
+								orientation='horizontal'
+								datalist={[
+									{
+										label: t('ns_common:others.all'),
+										value: ScannedStatus.ALL
+									},
+									{
+										label: t('ns_rfid:status.scanned'),
+										value: ScannedStatus.SCANNED
+									},
+									{
+										label: t('ns_rfid:status.unscanned'),
+										value: ScannedStatus.UNSCANNED
+									}
+								]}
+								labelField='label'
+								valueField='value'
+							/> */}
+						</Div>
+						<Separator />
+						<Div className='mt-6 flex items-center justify-end gap-x-2'>
+							<PopoverClose asChild>
+								<Button type='submit'>{t('ns_common:actions.search')}</Button>
+							</PopoverClose>
+							<Button type='button' variant='secondary' onClick={() => form.reset()}>
+								{t('ns_common:actions.reset')}
+							</Button>
+						</Div>
 					</FilterForm>
 				</Form>
 			</PopoverContent>

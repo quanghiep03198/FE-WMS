@@ -7,5 +7,9 @@ export default {
 		step_2: '获取订单和 EPC 数据',
 		step_3: '更新 EPC 数据',
 		step_4: '完成 Job'
+	},
+	status: {
+		scanned: '已扫描',
+		unscanned: '未扫描'
 	}
 }
