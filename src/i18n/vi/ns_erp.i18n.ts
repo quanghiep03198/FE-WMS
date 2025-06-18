@@ -82,6 +82,9 @@ export default {
 		unweighed_box_qty: 'Số thùng chưa cân',
 		weighed_box_qty: 'Số thùng đã cân'
 	},
+	titles: {
+		product_info: 'Thông tin sản phẩm'
+	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Đơn xuất kho thành phẩm',
 		finished_goods_receipt: 'Đơn nhập kho thành phẩm',

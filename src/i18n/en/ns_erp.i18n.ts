@@ -82,6 +82,9 @@ export default {
 		unweighed_box_qty: 'Unweighed box quantity',
 		weighed_box_qty: 'Weighed box quantity'
 	},
+	titles: {
+		product_info: 'Product Information'
+	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Finished Product Delivery Order',
 		finished_goods_receipt: 'Finished Product Warehouse Import Order',

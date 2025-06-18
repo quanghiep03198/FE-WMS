@@ -84,6 +84,10 @@ export default {
 		unweighed_box_qty: '未称箱数',
 		weighed_box_qty: '已称箱数'
 	},
+
+	titles: {
+		product_info: '产品信息'
+	},
 	inventory_list_type: {
 		finished_goods_dispatch: '成品出庫單',
 		finished_goods_receipt: '成品入庫單',
