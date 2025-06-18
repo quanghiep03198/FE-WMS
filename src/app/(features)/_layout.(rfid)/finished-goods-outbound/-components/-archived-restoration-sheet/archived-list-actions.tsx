@@ -27,7 +27,7 @@ const ArchivedListActions: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Button disabled={!selectedItems.length || isPending} onClick={() => handleRestoreArchivedEpcs()}>
+			<Button size='lg' disabled={!selectedItems.length || isPending} onClick={() => handleRestoreArchivedEpcs()}>
 				{isPending && (
 					<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' role='presentation' />
 				)}
@@ -35,6 +35,7 @@ const ArchivedListActions: React.FC = () => {
 			</Button>
 			<SheetClose asChild>
 				<Button
+					size='lg'
 					variant='outline'
 					onClick={() => {
 						removeAllItemsFromSet()

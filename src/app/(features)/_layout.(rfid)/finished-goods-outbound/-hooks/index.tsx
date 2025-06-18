@@ -1,6 +1,6 @@
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { isEmpty, isNil, pickBy, uniqBy } from 'lodash'
+import { omitBy, uniqBy } from 'lodash'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -27,11 +27,10 @@ export const useGetArchivedEpcQuery = (params) => {
 	return useInfiniteQuery({
 		queryKey: ['ARCHIVED_EPCS', params],
 		queryFn: async ({ pageParam }) => {
-			console.log('params :>> ', params)
-			const filterQueries = pickBy<Partial<FilterArchivedEpcParams>>(
+			const filterQueries = omitBy<Partial<FilterArchivedEpcParams>>(
 				{
 					_page: pageParam,
-					_limit: params.limit as number,
+					_limit: params.limit,
 					q: params.searchTerm,
 					'shoes_style.eq': params.shoes_style,
 					'color_sn.eq': params.color_sn,
@@ -39,7 +38,7 @@ export const useGetArchivedEpcQuery = (params) => {
 					'size_numcode.eq': params.size_numcode,
 					'scanned.eq': params.scanned
 				},
-				(value) => (!isNil(value) && !isEmpty(value)) || typeof value === 'boolean'
+				(value) => value === undefined || value === null || (typeof value === 'string' && value === '')
 			)
 			return await RFIDService.getArchivedEpcs(filterQueries)
 		},

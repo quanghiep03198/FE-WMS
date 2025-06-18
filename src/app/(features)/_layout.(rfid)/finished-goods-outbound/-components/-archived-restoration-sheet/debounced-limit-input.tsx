@@ -27,7 +27,7 @@ const DebouncedLimitInput: React.FC = () => {
 				min={10}
 				step={10}
 				aria-invalid={value <= 0}
-				className='w-16 text-center aria-[invalid=true]:border-destructive'
+				className='h-8 w-16 text-center aria-[invalid=true]:border-destructive'
 				onChange={(e) => {
 					const val = e.currentTarget.value
 					const formatted = val.replace(/[^0-9]/g, '')
