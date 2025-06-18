@@ -183,13 +183,17 @@ const ArchivedEpcFilter: React.FC = () => {
 			<PopoverContent
 				side='bottom'
 				sideOffset={8}
-				className='w-[var(--radix-popover-trigger-width)] p-6'
-				onOpenAutoFocus={(e) => e.preventDefault()}>
+				className='relative w-[var(--radix-popover-trigger-width)] p-6'
+				onOpenAutoFocus={(e) => e.preventDefault()}
+				onWheel={(e) => e.stopPropagation()}>
+				<PopoverClose className='absolute right-3 top-3 text-muted-foreground transition-colors duration-200 hover:text-foreground'>
+					<Icon name='X' />
+				</PopoverClose>
 				<Form {...form}>
-					<FilterForm className='space-y-2' onSubmit={form.handleSubmit(handleSearch)}>
+					<FilterForm className='space-y-1.5' onSubmit={form.handleSubmit(handleSearch)}>
 						<Div as='fieldset' className='space-y-6'>
 							<Typography as='legend' className='font-medium'>
-								Product information
+								{t('ns_erp:titles.product_info')}
 							</Typography>
 							<Div className='space-y-3'>
 								<ComboboxFieldControl
@@ -208,14 +212,6 @@ const ArchivedEpcFilter: React.FC = () => {
 									labelField='color_sn'
 									valueField='color_sn'
 								/>
-							</Div>
-						</Div>
-						<Separator />
-						<Div as='fieldset' className='space-y-6'>
-							<Typography as='legend' className='font-medium'>
-								Batch information
-							</Typography>
-							<Div className='space-y-3'>
 								<ComboboxFieldControl
 									label={t('ns_erp:fields.mo_no')}
 									name='mo_no'
@@ -236,12 +232,9 @@ const ArchivedEpcFilter: React.FC = () => {
 						</Div>
 						<Separator />
 						<Div as='fieldset' className='space-y-6'>
-							<Div className='flex flex-col space-y-1'>
-								<Typography as='legend' className='font-medium'>
-									{t('ns_common:common_fields.status')}
-								</Typography>
-								<Typography variant='small'>Which scanning status do you want to check ?</Typography>
-							</Div>
+							<Typography as='legend' className='font-medium'>
+								{t('ns_common:common_fields.status')}
+							</Typography>
 							<FormField
 								name='scanned'
 								control={form.control}
@@ -273,34 +266,16 @@ const ArchivedEpcFilter: React.FC = () => {
 									</FormItem>
 								)}
 							/>
-							{/* <SelectFieldControl
-								label={t('ns_common:common_fields.status')}
-								name='scanned'
-								orientation='horizontal'
-								datalist={[
-									{
-										label: t('ns_common:others.all'),
-										value: ScannedStatus.ALL
-									},
-									{
-										label: t('ns_rfid:status.scanned'),
-										value: ScannedStatus.SCANNED
-									},
-									{
-										label: t('ns_rfid:status.unscanned'),
-										value: ScannedStatus.UNSCANNED
-									}
-								]}
-								labelField='label'
-								valueField='value'
-							/> */}
 						</Div>
 						<Separator />
 						<Div className='mt-6 flex items-center justify-end gap-x-2'>
 							<PopoverClose asChild>
-								<Button type='submit'>{t('ns_common:actions.search')}</Button>
+								<Button type='submit'>
+									<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
+								</Button>
 							</PopoverClose>
 							<Button type='button' variant='secondary' onClick={() => form.reset()}>
+								<Icon name='Undo' role='presentation' />
 								{t('ns_common:actions.reset')}
 							</Button>
 						</Div>
