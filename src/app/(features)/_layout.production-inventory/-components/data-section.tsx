@@ -38,12 +38,8 @@ const DataSection: React.FC = () => {
 				<Div className='col-span-1'>
 					<OutboundEstimationTable data={data?.outbound} />
 				</Div>
-				<Div className='col-span-full'>
-					<Div className='max-w-full rounded-sm border p-4 shadow-sm xxl:p-6'>
-						<Div className='max-w-full overflow-x-auto rounded'>
-							<SizeTable data={sizeData.data} total={sizeData.total} />
-						</Div>
-					</Div>
+				<Div className='col-span-full overflow-clip rounded-md'>
+					<SizeTable data={sizeData.data} total={sizeData.total} />
 				</Div>
 			</Div>
 		)

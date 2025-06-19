@@ -170,26 +170,29 @@ export interface IPackingReport {
 	unweighed_box_qty: number
 }
 
+export type SizeQuantity = Array<{ size_numcode: string; qty: number }>
+
 export interface IProductSizeInventory {
 	shoes_style: string
 	color: string
 	total_qty: number
-	inv_sizes: Array<{ size_numcode: string; qty: number }>
+	inv_sizes: SizeQuantity
 }
 
-export interface IOutboundEstimation {
+interface IBaseInventory {
 	shoes_style: string
 	color: string
+	inv_sizes: SizeQuantity
+}
+
+export interface IOutboundEstimation extends IBaseInventory {
 	po: string
 	po_qty: number
 	outbound_date: Date
 	outbound_qty: number
-	inv_sizes: Array<{ size_numcode: string; qty: number }>
 }
 
-export interface IInboundInventory {
-	shoes_style: string
-	color: string
+export interface IInboundInventory extends IBaseInventory {
 	mo_no: string
 	mo_qty: number
 	inbound_qty: number

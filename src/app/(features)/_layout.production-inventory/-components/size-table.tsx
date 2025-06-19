@@ -1,7 +1,6 @@
-import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
+import tw from 'tailwind-styled-components'
 
 type SizeTableProps = {
 	data: Array<{ size_numcode: string; qty: number }>
@@ -12,55 +11,28 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total }) => {
 	const { t } = useTranslation()
 
 	return (
-		<Table className='w-full table-fixed rounded-sm'>
-			{!Array.isArray(data) || data.length === 0 ? (
-				<TableBody>
-					<TableRow>
-						<TableCell
-							colSpan={'100%' as unknown as React.TdHTMLAttributes<HTMLTableCellElement>['colSpan']}
-							align='center'
-							className='h-[72px] text-muted-foreground'>
-							{t('ns_common:table.no_data')}
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			) : (
-				<Fragment>
-					<TableHeader className='border-b'>
-						<TableRow className='divide-x [&_th>span]:line-clamp-1 [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
-							{data?.map((item, index) => (
-								<TableHead
-									key={index.toString()}
-									align='left'
-									className='w-full max-w-20 bg-table-head text-table-head-foreground'>
-									{item?.size_numcode}
-								</TableHead>
-							))}
-							{total && (
-								<TableHead align='left' className='sticky right-0 z-10'>
-									<span> {t('ns_common:common_fields.total')}</span>
-								</TableHead>
-							)}
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						<TableRow className='divide-x'>
-							{data?.map((item, index) => (
-								<TableCell key={index.toString()} align='left' className='w-20'>
-									{formatIntlNumber(item.qty)}
-								</TableCell>
-							))}
-							{total && (
-								<TableCell align='left' className='sticky right-0 z-10 font-medium'>
-									{formatIntlNumber(total)}
-								</TableCell>
-							)}
-						</TableRow>
-					</TableBody>
-				</Fragment>
-			)}
+		<Table>
+			<TableRow>
+				{data.map((item) => (
+					<Fragment key={item.size_numcode}>
+						<TableCellHead variant='small'>{item.size_numcode}</TableCellHead>
+					</Fragment>
+				))}
+				{total && <TableCellHead className='sticky right-0'>{t('ns_common:common_fields.total')}</TableCellHead>}
+			</TableRow>
+			<TableRow>
+				{data.map((item) => (
+					<TableCell key={item.size_numcode}>{item.qty}</TableCell>
+				))}
+				{total && <TableCell className='sticky right-0'>{total}</TableCell>}
+			</TableRow>
 		</Table>
 	)
 }
+
+const Table = tw.div`[&>*>:last-child]:top-0 [&>*>:last-child]:font-medium divide-y border [&>*]:text-sm overflow-x-auto w-full rounded-md`
+const TableRow = tw.div`flex [&>*]:px-4 [&>:not(:last-child)]:border-r [&>*]:py-2 [&>*]:whitespace-nowrap [&>:last-child]:border-r-0 [&>:last-child]:flex-1 [&>*]:basis-16 [&>*]:min-w-16`
+const TableCell = tw.div`text-foreground text-left`
+const TableCellHead = tw.div`text-table-head-foreground font-medium text-left bg-table-head`
 
 export default SizeTable
