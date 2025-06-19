@@ -46,7 +46,8 @@ export default {
 		inventory_audit: 'Warehouse inventory audit',
 		inventory_audit_desc: 'List of inbound directives based on each product type',
 		outbound_order_estimation: 'Outbound progress evaluation',
-		outbound_order_estimation_desc: 'Evaluate the outbound progress of each PO based on the number of scanned tags.'
+		outbound_order_estimation_desc: 'Evaluate the outbound progress of each PO based on the number of scanned tags.',
+		size_qty_caption: 'Total product quantity by size'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'

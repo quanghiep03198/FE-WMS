@@ -93,7 +93,7 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 	const { rows } = table.getRowModel()
 
 	return (
-		<Div className='space-y-4 rounded-md border p-4 shadow-sm xxl:p-6'>
+		<Div className='space-y-4 rounded-md border p-4 shadow-sm'>
 			<Div className='flex h-9 w-full max-w-[280px] items-center space-x-2 rounded-md border px-2 py-1 transition-colors duration-200 focus-within:border-primary'>
 				<Icon name='Search' size={18} />
 				<DebouncedInput
@@ -228,10 +228,13 @@ function TableRowData<T extends { inv_sizes: SizeQuantity }>({ row, isLastRow }:
 					className={cn('p-0', !row.getIsExpanded() && 'border-none shadow-none')}>
 					<Collapsible open={row.getIsExpanded()} data-state={row.getIsExpanded() ? 'open' : 'closed'}>
 						<CollapsibleContent
-							className='overflow-auto bg-accent/60 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down dark:bg-accent/10'
+							className='overflow-auto bg-accent/80 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down dark:bg-accent/50'
 							style={{ scrollbarGutter: 'stable' }}>
 							<Div className='p-4'>
-								<SizeTable data={row.original.inv_sizes} />
+								<SizeTable
+									data={row.original.inv_sizes}
+									total={row.original.inv_sizes.reduce((acc, curr) => acc + curr.qty, 0)}
+								/>
 							</Div>
 						</CollapsibleContent>
 					</Collapsible>

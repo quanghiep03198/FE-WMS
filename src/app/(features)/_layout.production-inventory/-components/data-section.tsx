@@ -1,7 +1,8 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { Div, Icon } from '@/components/ui'
+import { Div, Icon, Typography } from '@/components/ui'
 import { isEmpty } from 'lodash'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGetProductionInventoryQuery } from '../-hooks/use-production-inventory'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
 import EmptyState from './empty-state'
@@ -12,6 +13,7 @@ import SizeTable from './size-table'
 const DataSection: React.FC = () => {
 	const { searchParams } = useQueryParams<Record<'shoes_style' | 'color', string>>()
 	const { data: tenant } = useGetTenantByFactory()
+	const { t } = useTranslation()
 
 	const { data, isLoading } = useGetProductionInventoryQuery(tenant?.id, searchParams)
 
@@ -38,8 +40,11 @@ const DataSection: React.FC = () => {
 				<Div className='col-span-1'>
 					<OutboundEstimationTable data={data?.outbound} />
 				</Div>
-				<Div className='col-span-full overflow-clip rounded-md'>
+				<Div className='relative col-span-full space-y-4 rounded-md border p-4 shadow-sm'>
 					<SizeTable data={sizeData.data} total={sizeData.total} />
+					<Typography variant='small' color='muted' className='block text-center'>
+						{t('ns_inoutbound:description.size_qty_caption')}
+					</Typography>
 				</Div>
 			</Div>
 		)

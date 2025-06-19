@@ -41,7 +41,8 @@ export default {
 		inventory_audit: '入库库存审计',
 		inventory_audit_desc: '查询完成后，相关入库记录将在此处展示.',
 		outbound_order_estimation: '预计出库订单',
-		outbound_order_estimation_desc: '执行出库预估查询后，结果将自动加载至此区域.'
+		outbound_order_estimation_desc: '执行出库预估查询后，结果将自动加载至此区域.',
+		size_qty_caption: '按尺码统计的总产品数量'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'

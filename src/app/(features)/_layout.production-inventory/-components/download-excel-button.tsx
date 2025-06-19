@@ -1,5 +1,6 @@
 import { FactoryAgencyCode } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, Icon } from '@/components/ui'
 import { InventoryService } from '@/services/inventory.service'
 import { saveAs } from 'file-saver'
@@ -11,6 +12,7 @@ const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (prop
 	const { t } = useTranslation()
 	const { user } = useAuth()
 	const { data: tenant } = useGetTenantByFactory()
+	const isSmallScreen = useMediaQuery('(max-width:800px)')
 
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
@@ -31,9 +33,9 @@ const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (prop
 	}
 
 	return (
-		<Button {...props} onClick={() => handleDownloadExcel()}>
+		<Button {...props} size={isSmallScreen ? 'icon' : props.size} onClick={() => handleDownloadExcel()}>
 			<Icon name='Download' size={20} role='presentation' />
-			{t('ns_common:actions.download_excel')}
+			{!isSmallScreen && t('ns_common:actions.download_excel')}
 		</Button>
 	)
 }

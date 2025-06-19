@@ -62,7 +62,8 @@ export default {
 		inventory_audit: 'Kiểm kê hàng nhập kho',
 		inventory_audit_desc: 'Danh sách chỉ lệnh đã nhập kho dựa trên từng loại sản phẩm',
 		outbound_order_estimation: 'Đánh giá tiến độ xuất hàng',
-		outbound_order_estimation_desc: 'Đánh giá tiến độ xuất hàng của từng PO dựa trên số lượng tem đã quét.'
+		outbound_order_estimation_desc: 'Đánh giá tiến độ xuất hàng của từng PO dựa trên số lượng tem đã quét.',
+		size_qty_caption: 'Tổng quan số lượng theo từng cỡ'
 	},
 	errors: {
 		wrong_stamp: 'Dán sai tem'

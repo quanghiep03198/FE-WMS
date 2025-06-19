@@ -1,3 +1,4 @@
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Separator } from '@/components/ui'
 import { InventoryService } from '@/services/inventory.service'
@@ -11,8 +12,8 @@ import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
 import DownloadExcelButton from './download-excel-button'
 
 const SearchBox: React.FC = () => {
-	const { t } = useTranslation()
-
+	const { t, i18n } = useTranslation()
+	const isSmallScreen = useMediaQuery('(max-width:800px)')
 	const { data: tenant } = useGetTenantByFactory()
 	const { searchParams, setParams } = useQueryParams<Record<'shoes_style' | 'color', string>>(null)
 
@@ -42,7 +43,7 @@ const SearchBox: React.FC = () => {
 			}))
 		options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
 		return options
-	}, [data])
+	}, [data, i18n.language])
 
 	const colorOptions = useMemo(() => {
 		if (!Array.isArray(data)) return []
@@ -52,7 +53,7 @@ const SearchBox: React.FC = () => {
 		const options = match.colors.filter((item) => item !== 'ALL').map((item) => ({ label: item, value: item }))
 		options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
 		return options
-	}, [data, selectedShoesStyle])
+	}, [data, selectedShoesStyle, i18n.language])
 
 	return (
 		<Div
@@ -65,8 +66,12 @@ const SearchBox: React.FC = () => {
 				<Form onSubmit={form.handleSubmit((values) => setParams(values))}>
 					<ShoesStyleCombobox data={shoesStyleOptions} />
 					<ColorCombobox data={colorOptions} />
-					<Button type='submit' disabled={!form.watch('shoes_style') || !form.watch('color')}>
-						<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
+					<Button
+						type='submit'
+						size={isSmallScreen ? 'icon' : 'default'}
+						disabled={!form.watch('shoes_style') || !form.watch('color')}>
+						<Icon name='Search' role='presentation' size={isSmallScreen ? 18 : 16} />{' '}
+						{!isSmallScreen && t('ns_common:actions.search')}
 					</Button>
 				</Form>
 			</FormProvider>
