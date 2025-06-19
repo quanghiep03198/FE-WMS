@@ -5,6 +5,8 @@ import { create, StoreApi, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 
+type RestorableElectronicProductCode = IElectronicProductCode & { scanned: boolean }
+
 type ArchivedRestorationFilterStore = {
 	searchTerm: string
 	advancedFilters: {
@@ -14,14 +16,14 @@ type ArchivedRestorationFilterStore = {
 		size_numcode: string
 		scanned: boolean
 	}
-	selectedItems: IElectronicProductCode[]
+	selectedItems: Array<RestorableElectronicProductCode>
 	limit: number
 	setLimit: (value: number) => void
 	setSearchTerm: (term: string) => void
 	setAdvancedFilters: (values: ArchivedRestorationFilterStore['advancedFilters']) => void
-	addItemToSet: (item: IElectronicProductCode) => void
-	addAllItemsToSet: (items: IElectronicProductCode[]) => void
-	removeItemFromSet: (item: IElectronicProductCode) => void
+	addItemToSet: (item: RestorableElectronicProductCode) => void
+	addAllItemsToSet: (items: RestorableElectronicProductCode[]) => void
+	removeItemFromSet: (item: RestorableElectronicProductCode) => void
 	removeAllItemsFromSet: () => void
 }
 
@@ -71,12 +73,12 @@ export const ArchivedRestorationProvider: React.FC<React.PropsWithChildren> = ({
 						state.advancedFilters = DEFAULT_PROPS.advancedFilters
 					})
 				},
-				addItemToSet: (item: IElectronicProductCode) => {
+				addItemToSet: (item: RestorableElectronicProductCode) => {
 					set((state) => {
 						state.selectedItems = uniqBy([...state.selectedItems, item], (item) => item.epc)
 					})
 				},
-				addAllItemsToSet: (items: IElectronicProductCode[]) => {
+				addAllItemsToSet: (items: RestorableElectronicProductCode[]) => {
 					set((state) => {
 						state.selectedItems = uniqBy(items, (item) => item.epc)
 					})

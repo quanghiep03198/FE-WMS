@@ -77,6 +77,7 @@ export interface IElectronicProductCode {
 	color_sn?: string
 	size_numcode?: string
 	factory_code_produce?: string
+	station_no?: string
 }
 
 export interface IArchivedFilterFeature {

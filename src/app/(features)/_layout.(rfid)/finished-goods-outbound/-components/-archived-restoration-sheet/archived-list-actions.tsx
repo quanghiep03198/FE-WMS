@@ -1,9 +1,15 @@
+import useAuth from '@/common/hooks/use-auth'
 import { Button, Icon, SheetClose } from '@/components/ui'
+import { omit } from 'lodash'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
 import { useRestoreEpcMutation } from '../../-hooks'
+
+const generateStation = (factory, code: 'WH101' | 'WH103', prefix?: string) => {
+	return [(prefix ??= 'CUS'), factory, code].join('_')
+}
 
 const ArchivedListActions: React.FC = () => {
 	const { t } = useTranslation()
@@ -11,13 +17,18 @@ const ArchivedListActions: React.FC = () => {
 		'selectedItems',
 		'removeAllItemsFromSet'
 	)
+	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useRestoreEpcMutation()
 
 	const handleRestoreArchivedEpcs = async () => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 
 		try {
-			await mutateAsync(selectedItems.map((epc) => epc.epc))
+			await mutateAsync(
+				selectedItems.map((item) =>
+					omit({ ...item, station_no: generateStation(user.company_code, 'WH103') }, 'scanned')
+				)
+			)
 			toast.success(t('ns_common:notification.success'), { id })
 			removeAllItemsFromSet()
 		} catch {

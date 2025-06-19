@@ -101,7 +101,7 @@ export class RFIDService {
 		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-order/${commandNumber}`, { params })
 	}
 
-	static async restoreArchivedEpcs(payload: Array<string>) {
+	static async restoreArchivedEpcs(payload: Array<IElectronicProductCode>) {
 		return await axiosInstance.patch<Array<string>, ResponseBody<any>>(
 			`/rfid/outbound/restore-archived-epcs`,
 			payload

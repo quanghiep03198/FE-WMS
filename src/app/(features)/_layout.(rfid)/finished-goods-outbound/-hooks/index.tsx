@@ -1,3 +1,4 @@
+import { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash'
@@ -72,7 +73,7 @@ export const useRestoreEpcMutation = () => {
 
 	return useMutation({
 		mutationKey: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'],
-		mutationFn: async (epcs: Array<string>) => await RFIDService.restoreArchivedEpcs(epcs),
+		mutationFn: async (epcs: Array<IElectronicProductCode>) => await RFIDService.restoreArchivedEpcs(epcs),
 		onSettled: invalidateQueries
 	})
 }
