@@ -22,7 +22,7 @@ const DebouncedLimitInput: React.FC = () => {
 			<Label className='whitespace-nowrap'>{t('ns_common:table.rows_per_page')}</Label>
 			<Input
 				type='number'
-				placeholder='0'
+				placeholder='10'
 				value={value || ''}
 				min={10}
 				step={10}

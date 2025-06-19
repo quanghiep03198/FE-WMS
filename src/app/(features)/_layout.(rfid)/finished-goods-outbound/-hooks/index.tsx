@@ -31,7 +31,7 @@ export const useGetArchivedEpcQuery = (params) => {
 			const filterQueries = omitBy<Partial<FilterArchivedEpcParams>>(
 				{
 					_page: pageParam,
-					_limit: params.limit,
+					_limit: params.limit ?? 100,
 					q: params.searchTerm,
 					'shoes_style.eq': params.shoes_style,
 					'color_sn.eq': params.color_sn,
@@ -43,7 +43,7 @@ export const useGetArchivedEpcQuery = (params) => {
 			)
 			return await RFIDService.getArchivedEpcs(filterQueries)
 		},
-		initialPageParam: 0,
+		initialPageParam: 1,
 		refetchOnMount: true,
 		getNextPageParam: (lastPage) => {
 			return lastPage.metadata?.nextPage

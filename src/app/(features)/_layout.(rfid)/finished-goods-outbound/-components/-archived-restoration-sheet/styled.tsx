@@ -9,4 +9,4 @@ export const ListItem = tw.label`grid grid-cols-[10%_50%_20%_20%] [&>:first-chil
 export const ListBody = tw(ScrollShadow)<ScrollShadowProps>`xxl:h-[50vh] h-[40vh] space-y-1 !scroll-auto`
 export const ListDetail = tw.ul`flex list-inside list-disc flex-col items-stretch gap-y-2`
 export const ListDetailItem = tw.li`[&>small]:font-medium`
-export const GhostButton = tw.button`text-muted-foreground transition-colors duration-200 hover:text-foreground`
+export const GhostButton = tw.button`text-muted-foreground transition-colors duration-200 hover:text-foreground flex items-center relative justify-center`

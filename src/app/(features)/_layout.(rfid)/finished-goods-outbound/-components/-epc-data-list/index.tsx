@@ -16,7 +16,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash'
-import { useCallback, useRef, useState, useTransition } from 'react'
+import { Fragment, useCallback, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import ArchivedRestorationSheet from '../-archived-restoration-sheet'
@@ -238,7 +238,14 @@ const ScannedEpcList: React.FC = () => {
 									else setCurrentPage(currentPage + 1)
 								}}
 								disabled={isFetching}>
-								{isFetching ? 'Loading more ...' : 'Load more'}
+								{isFetching ? (
+									<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+								) : (
+									<Fragment>
+										<Icon name='Plus' role='presentation' />
+										{t('ns_common:actions.load_more')}
+									</Fragment>
+								)}
 							</Button>
 						)}
 					</Div>

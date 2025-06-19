@@ -38,7 +38,7 @@ const DEFAULT_PROPS: Pick<
 		color_sn: '',
 		mo_no: '',
 		size_numcode: '',
-		scanned: true
+		scanned: null
 	},
 	selectedItems: []
 }

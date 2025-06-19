@@ -154,10 +154,13 @@ const ArchivedEpcList: React.FC = () => {
 							EPC
 						</TableHead>
 						<TableHead align='center'>{t('ns_common:common_fields.status')}</TableHead>
-						<TableHead>
+						<TableHead className='align-middle'>
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<GhostButton onClick={() => handleRefetch()}>
-									<Icon name='RotateCw' className={isFetching && 'animate-[spin_1s_linear_infinite]'} />
+									<Icon
+										name={isFetching ? 'Loader' : 'RotateCw'}
+										className={cn('h-full', isFetching && 'animate-[spin_1s_linear_infinite]')}
+									/>
 								</GhostButton>
 							</Tooltip>
 						</TableHead>

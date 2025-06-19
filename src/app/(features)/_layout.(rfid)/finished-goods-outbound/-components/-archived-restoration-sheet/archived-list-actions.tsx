@@ -1,4 +1,3 @@
-import useAuth from '@/common/hooks/use-auth'
 import { Button, Icon, SheetClose } from '@/components/ui'
 import { omit } from 'lodash'
 import { Fragment } from 'react'
@@ -17,18 +16,13 @@ const ArchivedListActions: React.FC = () => {
 		'selectedItems',
 		'removeAllItemsFromSet'
 	)
-	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useRestoreEpcMutation()
 
 	const handleRestoreArchivedEpcs = async () => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 
 		try {
-			await mutateAsync(
-				selectedItems.map((item) =>
-					omit({ ...item, station_no: generateStation(user.company_code, 'WH103') }, 'scanned')
-				)
-			)
+			await mutateAsync(selectedItems.map((item) => omit(item, ['scanned'])))
 			toast.success(t('ns_common:notification.success'), { id })
 			removeAllItemsFromSet()
 		} catch {

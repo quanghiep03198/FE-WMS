@@ -1,7 +1,7 @@
 import { Input, TableHead, TableHeader, TableRow } from '@/components/ui'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { OrderItem } from '../..'
+import { OrderItem } from '../../..'
 
 type OrderSizeHeaderProps = {
 	onColumnFilterChange: React.Dispatch<React.SetStateAction<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>>

@@ -69,7 +69,6 @@ const ArchivedEpcFilter: React.FC = () => {
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
 	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
 	const currentSize = useWatch({ control: form.control, name: 'size_numcode' })
-	const currentStatus = useWatch({ control: form.control, name: 'scanned' })
 
 	const shoesStyleOptions = useMemo(() => {
 		if (!Array.isArray(data)) return []
