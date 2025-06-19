@@ -62,7 +62,7 @@ export class InventoryService {
 	}
 
 	static async getProductionInventoryFeatures(tenantId: string) {
-		return await axiosInstance.get<void, ResponseBody<Record<'shoes_style' | 'color', string[]>>>(
+		return await axiosInstance.get<void, ResponseBody<Array<{ shoes_style: string; colors: string[] }>>>(
 			'/inventory/production-features',
 			{
 				headers: {

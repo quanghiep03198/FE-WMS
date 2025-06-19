@@ -2,9 +2,9 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Separator } from '@/components/ui'
 import { InventoryService } from '@/services/inventory.service'
 import { useQuery } from '@tanstack/react-query'
-import { capitalize, has, isEmpty } from 'lodash'
+import { capitalize, isEmpty } from 'lodash'
 import { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
@@ -22,28 +22,37 @@ const SearchBox: React.FC = () => {
 		enabled: !!tenant?.id,
 		refetchOnMount: 'always',
 		select: (response) => {
-			const data: Record<'shoes_style' | 'color', Record<'label' | 'value', string>[]> = {
-				shoes_style: [{ label: t('ns_common:others.all'), value: 'ALL' }],
-				color: [{ label: t('ns_common:others.all'), value: 'ALL' }]
-			}
-			if (has(response.metadata, 'shoes_style') && Array.isArray(response.metadata.shoes_style))
-				data.shoes_style = [
-					{ label: t('ns_common:others.all'), value: 'ALL' },
-					...response.metadata.shoes_style.map((item) => ({ label: item, value: item }))
-				]
-
-			if (has(response.metadata, 'color') && Array.isArray(response.metadata.color))
-				data.color = [
-					{ label: t('ns_common:others.all'), value: 'ALL' },
-					...response.metadata.color.map((item) => ({ label: item, value: item }))
-				]
-			return data
+			return response.metadata
 		}
 	})
 
 	const form = useForm<Record<'shoes_style' | 'color', string>>({
 		defaultValues: searchParams ? { ...searchParams } : { shoes_style: '', color: '' }
 	})
+
+	const selectedShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
+
+	const shoesStyleOptions = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		const options = data
+			.filter((item) => item.shoes_style !== 'ALL')
+			.map((item) => ({
+				label: item.shoes_style,
+				value: item.shoes_style
+			}))
+		options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
+		return options
+	}, [data])
+
+	const colorOptions = useMemo(() => {
+		if (!Array.isArray(data)) return []
+
+		const match = data?.find((item) => item.shoes_style === selectedShoesStyle)
+		if (!match || !Array.isArray(match.colors)) return []
+		const options = match.colors.filter((item) => item !== 'ALL').map((item) => ({ label: item, value: item }))
+		options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
+		return options
+	}, [data, selectedShoesStyle])
 
 	return (
 		<Div
@@ -54,8 +63,8 @@ const SearchBox: React.FC = () => {
 			}>
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit((values) => setParams(values))}>
-					<ShoesStyleCombobox data={data?.shoes_style ?? []} />
-					<ColorCombobox data={data?.color} />
+					<ShoesStyleCombobox data={shoesStyleOptions} />
+					<ColorCombobox data={colorOptions} />
 					<Button type='submit' disabled={!form.watch('shoes_style') || !form.watch('color')}>
 						<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
 					</Button>
@@ -78,7 +87,7 @@ const ShoesStyleCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }
 
 	const filteredData = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.filter((item) => item.value.toUpperCase().includes(searchTerm.toUpperCase()))
+		return data.filter((item) => item.value?.toUpperCase()?.includes(searchTerm.toUpperCase()))
 	}, [data, searchTerm])
 
 	return (
@@ -107,7 +116,7 @@ const ColorCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = (
 
 	const filteredData = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.filter((item) => item.value.toUpperCase().includes(searchTerm.toUpperCase()))
+		return data.filter((item) => item.value?.toUpperCase()?.includes(searchTerm.toUpperCase()))
 	}, [data, searchTerm])
 
 	return (
