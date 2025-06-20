@@ -20,7 +20,7 @@ function Page() {
 	}, [i18n.language])
 
 	return (
-		<Div as='section' className='pt-4 xxl:min-h-[var(--outlet-wrapper-height)]'>
+		<Div as='section' className='pt-4 @container xxl:min-h-[var(--outlet-wrapper-height)]'>
 			<PageHeader />
 			<SearchBox />
 			<DataSection />

@@ -5,6 +5,7 @@ import {
 	CollapsibleContent,
 	Div,
 	Icon,
+	ScrollArea,
 	Table,
 	TableBody,
 	TableCaption,
@@ -15,6 +16,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { DebouncedInput } from '@/components/ui/@react-table/components/debounced-input'
+import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
 import {
 	ColumnDef,
@@ -41,6 +43,11 @@ type DataTableProps<T> = {
 	caption: string
 	dataType: 'inbound' | 'outbound'
 	footer: React.FC<{ rows: Row<T>[] }>
+}
+
+const getCanSticky = (columnId: string): React.CSSProperties => {
+	if (columnId !== ROW_EXPANSION_COLUMN_ID) return {}
+	return { position: 'sticky', left: 0, zIndex: 10 }
 }
 
 export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
@@ -93,8 +100,8 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 	const { rows } = table.getRowModel()
 
 	return (
-		<Div className='space-y-4 rounded-md border p-4 shadow-sm'>
-			<Div className='flex h-9 w-full max-w-[280px] items-center space-x-2 rounded-md border px-2 py-1 transition-colors duration-200 focus-within:border-primary'>
+		<Div className='space-y-4 rounded-md border px-2 py-5 shadow-sm'>
+			<Div className='mx-3 flex h-9 w-full max-w-[280px] items-center space-x-2 rounded-md border px-2 py-1 transition-colors duration-200 focus-within:border-primary'>
 				<Icon name='Search' size={18} />
 				<DebouncedInput
 					type='search'
@@ -109,8 +116,7 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 					)}
 				/>
 			</Div>
-
-			<Div className='h-[18rem] overflow-y-auto rounded-sm !scrollbar-none'>
+			<ScrollArea className='h-72 rounded-sm px-3'>
 				<Table className='w-full table-fixed border-separate border-spacing-0'>
 					<TableCaption id={captionId} className='sr-only'>
 						{caption}
@@ -136,7 +142,10 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 											key={header.id}
 											colSpan={header.colSpan}
 											align={columnDef.meta?.align ?? 'left'}
-											style={{ width: header.column.getSize() }}
+											style={{
+												width: header.column.getSize(),
+												...getCanSticky(header.column.id)
+											}}
 											className='relative'>
 											<button
 												className={cn(
@@ -193,7 +202,7 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 					</TableBody>
 					<TableFooter rows={table.getFilteredRowModel().rows} />
 				</Table>
-			</Div>
+			</ScrollArea>
 			<Typography aria-labelledby={captionId} className='block text-center text-sm text-muted-foreground'>
 				{caption}
 			</Typography>
@@ -206,22 +215,28 @@ function TableRowData<T extends { inv_sizes: SizeQuantity }>({ row, isLastRow }:
 	return (
 		<Fragment>
 			<TableRow className={cn('&_td]:h-10 [&_td]:border-x-0', isLastRow && '[&_td]:border-0')}>
-				{row.getVisibleCells().map((cell) => (
-					<TableCell
-						{...cell.column.columnDef?.meta?.tableCellProps}
-						key={cell.id}
-						style={{ width: cell.column.getSize() }}>
-						<Typography
-							variant='small'
-							className={cn('block max-w-full truncate overflow-ellipsis', {
-								'!text-left': cell.column.columnDef.meta?.align === 'left',
-								'!text-center': cell.column.columnDef.meta?.align === 'center',
-								'!text-right': cell.column.columnDef.meta?.align === 'right'
-							})}>
-							{flexRender(cell.column.columnDef.cell, cell.getContext())}
-						</Typography>
-					</TableCell>
-				))}
+				{row.getVisibleCells().map((cell) => {
+					const meta = cell.column.columnDef.meta
+					return (
+						<TableCell
+							{...cell.column.columnDef?.meta?.tableCellProps}
+							key={cell.id}
+							style={{
+								position: 'relative',
+								width: cell.column.getSize(),
+								...getCanSticky(cell.column.id)
+							}}>
+							<Div
+								className={cn('w-full max-w-full place-content-center truncate overflow-ellipsis text-sm', {
+									'!text-left': meta?.align === 'left',
+									'!text-center': meta?.align === 'center',
+									'!text-right': meta?.align === 'right'
+								})}>
+								{flexRender(cell.column.columnDef.cell, cell.getContext())}
+							</Div>
+						</TableCell>
+					)
+				})}
 			</TableRow>
 			<TableRow>
 				<TableCell

@@ -24,6 +24,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				size: 50,
 				enableSorting: false,
 				enableColumnFilter: false,
+				meta: { align: 'center' },
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
@@ -35,7 +36,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				),
 				cell: ({ row, table }) => (
 					<button
-						className='flex h-full w-full items-center'
+						className='absolute inset-0 flex h-full w-full items-center justify-center'
 						onClick={() => {
 							table.toggleAllRowsExpanded(false)
 							row.toggleExpanded(!row.getIsExpanded())
@@ -88,9 +89,9 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 
 	const flexRenderFooter = useCallback(({ rows }: { rows: Row<IInboundInventory>[] }) => {
 		return (
-			<TableFooter className='sticky bottom-0'>
+			<TableFooter className='sticky bottom-0 z-20'>
 				<TableRow className='divide-x-0 [&_td>span]:line-clamp-1 [&_td[align=right]>span]:ml-auto [&_td[align=right]>span]:truncate [&_td]:h-10 [&_td]:border-t [&_td]:bg-table-head [&_td]:lowercase [&_td]:first-letter:uppercase'>
-					<TableCell colSpan={2} align='left' className='font-semibold'>
+					<TableCell colSpan={2} align='left' className='sticky left-0 z-10 font-semibold'>
 						{t('ns_common:common_fields.total')}
 					</TableCell>
 					<TableCell align='right' className='font-semibold'>
