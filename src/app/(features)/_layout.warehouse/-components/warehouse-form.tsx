@@ -51,9 +51,9 @@ const WarehouseFormDialog: React.FC = () => {
 	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
-	const { control, register } = form
 
-	const department = useWatch({ control, name: 'dept_code' })
+   const department = useWatch({ control: form.control, name: 'dept_code' })
+	
 
 	// Get department field values
 	const { data: departments } = useGetDepartmentQuery()
@@ -144,7 +144,6 @@ const WarehouseFormDialog: React.FC = () => {
 						</FormItem>
 						<FormItem>
 							<ComboboxFieldControl
-								{...register('dept_code')}
 								name='dept_code'
 								placeholder='Search department ...'
 								label={t('ns_company:department')}
