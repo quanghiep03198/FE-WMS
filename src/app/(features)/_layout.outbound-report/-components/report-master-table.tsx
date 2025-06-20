@@ -40,9 +40,9 @@ const ReportDatalist: React.FC = () => {
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
 						<button
-							className='absolute inset-0 flex h-full w-full items-center justify-center'
+							className='absolute inset-0 flex h-full w-full items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground'
 							onClick={() => table.toggleAllRowsExpanded(false)}>
-							<Icon name='FoldVertical' stroke='hsl(var(--foreground))' />
+							<Icon name='ListCollapse' size={18} />
 						</button>
 					</Tooltip>
 				),
