@@ -58,10 +58,10 @@ const WarehouseFormDialog: React.FC = () => {
 	const { data: departments } = useGetDepartmentQuery()
 
 	// Get employee field values
-	const { data: employees } = useQuery({
+	const { data: employees, isFetching } = useQuery({
 		queryKey: ['EMPLOYEES', employeeSearchTerm, department],
 		queryFn: () => EmployeeService.searchEmployee({ dept_code: department, search: employeeSearchTerm }),
-		select: (data) => data?.metadata
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 
 	// Create/Update action
@@ -91,7 +91,11 @@ const WarehouseFormDialog: React.FC = () => {
 	})
 
 	useDeepCompareEffect(() => {
-		form.reset({ ...defaultFormValues, company_code: user?.company_code })
+		defaultFormValues.employee_code ??= ''
+		form.reset({
+			...defaultFormValues,
+			company_code: user.company_code
+		})
 	}, [type, defaultFormValues, open])
 
 	const warehouseTypeOptions = Object.entries(warehouseTypes).map(([key, value]) => ({
@@ -165,7 +169,8 @@ const WarehouseFormDialog: React.FC = () => {
 								name='employee_code'
 								placeholder='Search employee ...'
 								label={t('ns_warehouse:fields.manager')}
-								datalist={employees}
+								loading={isFetching}
+								datalist={employees ?? []}
 								disabled={!department}
 								shouldFilter={false}
 								labelField='employee_name'
@@ -201,9 +206,9 @@ const WarehouseFormDialog: React.FC = () => {
 
 const EmployeeComboboxSelection: React.FC<{ data: IEmployee }> = ({ data }) => (
 	<Div className='space-y-1'>
-		<Typography className='line-clamp-1'>{data.employee_name}</Typography>
+		<Typography className='line-clamp-1'>{data?.employee_name}</Typography>
 		<Typography variant='small' className='line-clamp-1' color='muted'>
-			{data.employee_code}
+			{data?.employee_code}
 		</Typography>
 	</Div>
 )
