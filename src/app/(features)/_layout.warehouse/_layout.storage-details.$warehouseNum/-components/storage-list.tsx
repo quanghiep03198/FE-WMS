@@ -227,6 +227,11 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>
+							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.upload')}>
+								<Button variant='outline' size='icon' onClick={() => refetch()}>
+									<Icon name='Upload' />
+								</Button>
+							</Tooltip>
 							{table.getSelectedRowModel().flatRows.length > 0 && rowSelectionType === 'multiple' && (
 								<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.add')}>
 									<Button
