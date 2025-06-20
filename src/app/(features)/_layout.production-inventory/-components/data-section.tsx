@@ -40,7 +40,7 @@ const DataSection: React.FC = () => {
 				<Div className='col-span-1'>
 					<OutboundEstimationTable data={data?.outbound} />
 				</Div>
-				<Div className='relative col-span-full space-y-4 rounded-md border p-4 shadow-sm'>
+				<Div className='relative col-span-full space-y-4 border p-4 shadow-sm'>
 					<SizeTable data={sizeData.data} total={sizeData.total} />
 					<Typography variant='small' color='muted' className='block text-center'>
 						{t('ns_inoutbound:description.size_qty_caption')}

@@ -115,7 +115,7 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 					<TableCaption id={captionId} className='sr-only'>
 						{caption}
 					</TableCaption>
-					<TableHeader className='&_th>span]:line-clamp-1 sticky top-0 border-b [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:h-10 [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
+					<TableHeader className='&_th>span]:line-clamp-1 sticky top-0 z-20 border-b [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:h-10 [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
 						<TableRow>
 							{table.getHeaderGroups().map((headerGroup) =>
 								headerGroup.headers.map((header) => {
@@ -136,7 +136,8 @@ export default function DataTable<T extends { inv_sizes: SizeQuantity }>({
 											key={header.id}
 											colSpan={header.colSpan}
 											align={columnDef.meta?.align ?? 'left'}
-											style={{ width: header.column.getSize() }}>
+											style={{ width: header.column.getSize() }}
+											className='relative'>
 											<button
 												className={cn(
 													'flex h-max w-full cursor-auto select-none grid-cols-[14px_auto] items-center text-left text-sm capitalize [&:has([role=button])]:w-full [&:has([role=button])]:justify-center [&:has([role=checkbox])]:w-full [&:has([role=checkbox])]:!justify-center',
