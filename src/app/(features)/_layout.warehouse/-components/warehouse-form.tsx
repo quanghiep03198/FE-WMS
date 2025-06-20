@@ -23,7 +23,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
 import { debounce } from 'lodash'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -51,7 +51,9 @@ const WarehouseFormDialog: React.FC = () => {
 	const form = useForm<FormValues<typeof type>>({
 		resolver: zodResolver(warehouseFormSchema)
 	})
-	const department = form.watch('dept_code')
+	const { control, register } = form
+
+	const department = useWatch({ control, name: 'dept_code' })
 
 	// Get department field values
 	const { data: departments } = useGetDepartmentQuery()
@@ -142,6 +144,7 @@ const WarehouseFormDialog: React.FC = () => {
 						</FormItem>
 						<FormItem>
 							<ComboboxFieldControl
+								{...register('dept_code')}
 								name='dept_code'
 								placeholder='Search department ...'
 								label={t('ns_company:department')}
