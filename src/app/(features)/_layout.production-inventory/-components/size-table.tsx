@@ -1,4 +1,5 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Div } from '@/components/ui'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -10,6 +11,13 @@ type SizeTableProps = {
 
 const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 	const { t } = useTranslation()
+
+	if (!Array.isArray(data) || data.length === 0)
+		return (
+			<Div className='h-20 place-content-center text-center text-muted-foreground'>
+				{t('ns_common:table.no_data')}
+			</Div>
+		)
 
 	return (
 		<Table {...props}>

@@ -233,7 +233,10 @@ function TableRowData<T extends { inv_sizes: SizeQuantity }>({ row, isLastRow }:
 							<Div className='p-4'>
 								<SizeTable
 									data={row.original.inv_sizes}
-									total={row.original.inv_sizes.reduce((acc, curr) => acc + curr.qty, 0)}
+									total={
+										Array.isArray(row.original.inv_sizes) &&
+										row.original.inv_sizes.reduce((acc, curr) => acc + curr.qty, 0)
+									}
 								/>
 							</Div>
 						</CollapsibleContent>
