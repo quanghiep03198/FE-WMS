@@ -121,8 +121,6 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 		}
 	}
 
-	console.log(fillEpcDataDialogOpen)
-
 	return (
 		<Dialog open={fillEpcDataDialogOpen} onOpenChange={handleDialogOpenChange}>
 			<DialogContent className='max-w-2xl'>
