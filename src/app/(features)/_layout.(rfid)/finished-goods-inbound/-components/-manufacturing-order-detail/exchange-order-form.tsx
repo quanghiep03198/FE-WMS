@@ -29,7 +29,7 @@ import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { usePageContext } from '../../-contexts/page-context'
 import {
-	FALLBACK_ORDER_VALUE,
+	FALLBACK_VALUE,
 	useExchangeEpcMutation,
 	useGetInboundEpcQuery,
 	useSearchExchangableOrderQuery
@@ -122,7 +122,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 						<Div className='col-span-full'>
 							<InputFieldControl name='mo_no' label={t('ns_erp:fields.mo_no')} readOnly />
 						</Div>
-						<Div className={defaultValues?.mo_no === FALLBACK_ORDER_VALUE ? 'col-span-1' : 'col-span-full'}>
+						<Div className={defaultValues?.mo_no === FALLBACK_VALUE ? 'col-span-1' : 'col-span-full'}>
 							<ComboboxFieldControl
 								name='mo_no_actual'
 								label={t('ns_erp:fields.mo_no_actual')}

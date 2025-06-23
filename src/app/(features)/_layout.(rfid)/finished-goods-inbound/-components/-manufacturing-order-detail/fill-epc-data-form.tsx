@@ -26,35 +26,38 @@ import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
+import { omit } from 'lodash'
 import { useEffect, useId, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
-import { FALLBACK_ORDER_VALUE, useCombineEpcInfoMutation } from '../../-hooks'
+import { FALLBACK_VALUE, useCombineEpcInfoMutation } from '../../-hooks'
 import { EpcCombinationFormValues, epcCombinationSchema } from '../../-schemas/epc-combination.schema'
 
-const DEFAULT_FORM_VALUES = {
-	mo_no: FALLBACK_ORDER_VALUE,
+const DEFAULT_FORM_VALUES: EpcCombinationFormValues = {
+	mo_no: FALLBACK_VALUE,
 	mo_no_actual: '',
-	mat_code: '',
-	shoes_style_code_factory: '',
+	color_sn: FALLBACK_VALUE,
+	color_sn_actual: '',
+	shoes_style_code_factory: FALLBACK_VALUE,
+	shoes_style_code_factory_actual: '',
 	mo_noseq: '',
-	size_numcode: '',
-	size_qty: 0,
-	quantity: null
+	size_numcode: FALLBACK_VALUE,
+	size_numcode_actual: '',
+	size_qty: 0
 }
 
-const CombineEpcFormDialog: React.FC<any> = () => {
+const FillEpcDataFormDialog: React.FC<any> = () => {
 	const { t } = useTranslation()
 	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const [availableSizes, setAvailableSizes] = useState([])
 	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
 	const [isConfirmed, setIsConfirmed, resetConfirmation] = useResetState<CheckedState>(false)
-	const { craftEpcInfoDialogOpen, setCraftEpcInfoDialogOpen } = useOrderDetailContext(
-		'craftEpcInfoDialogOpen',
-		'setCraftEpcInfoDialogOpen'
+	const { fillEpcDataDialogOpen, setFillEpcDataDialogOpen } = useOrderDetailContext(
+		'fillEpcDataDialogOpen',
+		'setFillEpcDataDialogOpen'
 	)
 	const form = useForm<EpcCombinationFormValues>({
 		resolver: zodResolver(epcCombinationSchema),
@@ -85,8 +88,15 @@ const CombineEpcFormDialog: React.FC<any> = () => {
 		const currOrderInfo = orderDetail?.orders?.find((item) => item?.mo_noseq === currCommandNumberSeq)
 		if (currOrderInfo) {
 			form.reset({
+				...omit(currOrderInfo, ['mo_no', 'color_sn', 'shoes_style_code_factory']),
 				...form.getValues(),
-				...currOrderInfo
+				mo_no: FALLBACK_VALUE,
+				shoes_style_code_factory: FALLBACK_VALUE,
+				color_sn: FALLBACK_VALUE,
+				size_numcode: FALLBACK_VALUE,
+				mo_no_actual: currOrderInfo.mo_no,
+				color_sn_actual: currOrderInfo.color_sn,
+				shoes_style_code_factory_actual: currOrderInfo.shoes_style_code_factory
 			})
 		}
 	}, [currCommandNumberSeq])
@@ -94,9 +104,9 @@ const CombineEpcFormDialog: React.FC<any> = () => {
 	const handleCombineEpcInfo = async (data: EpcCombinationFormValues) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
-			await mutateAsync({ ...data, mo_no: FALLBACK_ORDER_VALUE })
+			await mutateAsync({ ...data, mo_no: FALLBACK_VALUE })
 			toast.success(t('ns_common:notification.success'), { id })
-			setCraftEpcInfoDialogOpen(false)
+			setFillEpcDataDialogOpen(false)
 			form.reset(DEFAULT_FORM_VALUES)
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id })
@@ -104,15 +114,17 @@ const CombineEpcFormDialog: React.FC<any> = () => {
 	}
 
 	const handleDialogOpenChange = (open: boolean) => {
-		setCraftEpcInfoDialogOpen(open)
+		setFillEpcDataDialogOpen(open)
 		if (!open) {
 			resetConfirmation()
 			resetSearchTerm()
 		}
 	}
 
+	console.log(fillEpcDataDialogOpen)
+
 	return (
-		<Dialog open={craftEpcInfoDialogOpen} onOpenChange={handleDialogOpenChange}>
+		<Dialog open={fillEpcDataDialogOpen} onOpenChange={handleDialogOpenChange}>
 			<DialogContent className='max-w-2xl'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_erp:rfid_match_craft_form.title')}</DialogTitle>
@@ -137,20 +149,20 @@ const CombineEpcFormDialog: React.FC<any> = () => {
 							valueField='value'
 						/>
 						<InputFieldControl
-							label={t('ns_erp:fields.mat_code')}
-							name='mat_code'
-							placeholder={t('ns_erp:fields.mat_code')}
+							label={t('ns_erp:fields.shoestyle_codefactory')}
+							placeholder={t('ns_erp:fields.shoestyle_codefactory')}
+							name='shoes_style_code_factory_actual'
 							readOnly={true}
 						/>
 						<InputFieldControl
-							label={t('ns_erp:fields.shoestyle_codefactory')}
-							placeholder={t('ns_erp:fields.shoestyle_codefactory')}
-							name='shoes_style_code_factory'
+							label={t('ns_erp:fields.color_sn')}
+							name='color_sn_actual'
+							placeholder={t('ns_erp:fields.color_sn')}
 							readOnly={true}
 						/>
 						<SelectFieldControl
 							label='Size'
-							name='size_numcode'
+							name='size_numcode_actual'
 							datalist={availableSizes}
 							labelField='size_numcode'
 							valueField='size_numcode'
@@ -169,7 +181,7 @@ const CombineEpcFormDialog: React.FC<any> = () => {
 							placeholder='0'
 						/>
 						<Div className='col-span-full space-y-4'>
-							<Div className='space-y-1.5 leading-none'>
+							<Div className='flex flex-col space-y-1.5 leading-none'>
 								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
 								</Typography>
@@ -210,4 +222,4 @@ const CombineEpcFormDialog: React.FC<any> = () => {
 
 const Form = tw.form`grid grid-cols-2 gap-y-6 gap-x-2`
 
-export default CombineEpcFormDialog
+export default FillEpcDataFormDialog

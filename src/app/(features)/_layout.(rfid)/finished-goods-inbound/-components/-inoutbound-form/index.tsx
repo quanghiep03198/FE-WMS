@@ -35,7 +35,7 @@ import tw from 'tailwind-styled-components'
 import { FormActionEnum, FormActionReasonEnum } from '../../-constants'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
 import {
-	FALLBACK_ORDER_VALUE,
+	FALLBACK_VALUE,
 	useGetInboundEpcQuery,
 	useGetShapingProductLineQuery,
 	useUpdateStockInMutation
@@ -135,7 +135,7 @@ const InoutboundForm: React.FC = () => {
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
-				mo_no: selectedOrder === FALLBACK_ORDER_VALUE ? null : selectedOrder
+				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder
 			})
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)

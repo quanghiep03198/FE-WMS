@@ -64,8 +64,8 @@ export class RFIDService {
 		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {})
 	}
 
-	static async combineEpcInfor(payload: EpcCombinationFormValues) {
-		return await axiosInstance.put(`/rfid/inbound/exchange-epc-by-size`, payload, {})
+	static async combineEpcInfo(payload: EpcCombinationFormValues) {
+		return await axiosInstance.put(`/rfid/inbound/fill-epc-data`, payload, {})
 	}
 
 	// #region Outbound

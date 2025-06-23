@@ -1,6 +1,6 @@
 import { NestedCell, NestedRow } from '@/app/(features)/-components/-shared/horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
-import { FALLBACK_ORDER_VALUE } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-hooks'
+import { FALLBACK_VALUE } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-hooks'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'
@@ -31,7 +31,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 			<TableCell
 				style={{ height: virtualRow.size }}
 				className='group/cell left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-pretty text-center md:right-auto xl:sticky'>
-				<Div className='flex items-center gap-x-2'>{data?.mo_no ?? FALLBACK_ORDER_VALUE}</Div>
+				<Div className='flex items-center gap-x-2'>{data?.mo_no ?? FALLBACK_VALUE}</Div>
 			</TableCell>
 			<TableCell
 				style={{ height: virtualRow.size }}

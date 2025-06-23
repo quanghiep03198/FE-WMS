@@ -1,3 +1,4 @@
+import { IManufacturingOrder } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class OrderService {
@@ -17,6 +18,9 @@ export class OrderService {
 	}
 
 	static async getCommandNumberDetail(commandNumber: string) {
-		return await axiosInstance.get<unknown, ResponseBody<any>>(`/order/detail/${commandNumber}`)
+		return await axiosInstance.get<
+			unknown,
+			ResponseBody<{ orders: Array<IManufacturingOrder>; sizes: Array<{ size_numcode: string; size_qty: number }> }>
+		>(`/order/detail/${commandNumber}`)
 	}
 }

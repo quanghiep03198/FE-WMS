@@ -7,7 +7,7 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { sortBy } from 'lodash'
 import { useMemo } from 'react'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
-import { FALLBACK_ORDER_VALUE } from '../../-hooks'
+import { FALLBACK_VALUE } from '../../-hooks'
 import DeleteOrderPopover from './delete-order-popover'
 import DeleteSizePopover from './delete-size-popover'
 
@@ -22,14 +22,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		pullSelectedRow,
 		setExchangeOrderDialogOpen,
 		setExchangeEpcDialogOpen,
-		setCraftEpcInfoDialogOpen,
+		setFillEpcDataDialogOpen,
 		setDefaultExchangeEpcFormValues,
 		setDefaultExchangeOrderFormValues
 	} = useOrderDetailContext(
 		'selectedRows',
 		'pushSelectedRow',
 		'pullSelectedRow',
-		'setCraftEpcInfoDialogOpen',
+		'setFillEpcDataDialogOpen',
 		'setExchangeOrderDialogOpen',
 		'setExchangeEpcDialogOpen',
 		'setDefaultExchangeEpcFormValues',
@@ -84,12 +84,12 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			</TableCell>
 			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>
-					{data?.mo_no ?? FALLBACK_ORDER_VALUE}
+					{data?.mo_no ?? FALLBACK_VALUE}
 
-					{data?.mo_no === FALLBACK_ORDER_VALUE ? (
+					{data?.mo_no === FALLBACK_VALUE ? (
 						<button
 							className='opacity-0 duration-100 group-hover/cell:opacity-100'
-							onClick={() => setCraftEpcInfoDialogOpen(true)}>
+							onClick={() => setFillEpcDataDialogOpen(true)}>
 							<Icon name='Replace' size={18} />
 						</button>
 					) : (

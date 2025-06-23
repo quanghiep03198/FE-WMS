@@ -70,6 +70,19 @@ export interface IEmployee extends IBaseEntity {
 	employee_code: string
 }
 
+export interface IManufacturingOrder extends IBaseEntity {
+	mo_no: string
+	mat_code: string
+	mo_noseq: string
+	or_no: string
+	or_custpo: string
+	color_sn: string
+	shoestyle_codefactory: string
+	cust_shoes_style: string
+	size_code: string
+	size_sumqty: number
+}
+
 export interface IElectronicProductCode {
 	epc: string
 	mo_no: string

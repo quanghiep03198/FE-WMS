@@ -19,7 +19,7 @@ export const FP_ORDER_DETAIL_PROVIDE_TAG = 'INBOUND_ORDER_DETAIL'
 export const FP_EPC_LIST_PROVIDE_TAG = 'INBOUND_EPC_LIST'
 
 // * Fallback order value if it's null
-export const FALLBACK_ORDER_VALUE = 'Unknown'
+export const FALLBACK_VALUE = 'Unknown'
 
 export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
 
@@ -166,7 +166,7 @@ export const useCombineEpcInfoMutation = () => {
 	const { setSelectedOrder, setCurrentPage } = usePageContext('connection', 'setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
-		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.combineEpcInfor(payload),
+		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.combineEpcInfo(payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
