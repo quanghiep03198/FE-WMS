@@ -5,7 +5,7 @@ type PageTitleProps = React.PropsWithChildren &
 	React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 export const PageHeader: React.FC<PageTitleProps> = ({ children, className, ref }) => (
-	<div ref={ref} className={cn('space-y-1 text-left sm:items-center sm:text-center', className)}>
+	<div ref={ref} className={cn('space-y-2 text-left sm:items-center sm:text-center', className)}>
 		{children}
 	</div>
 )

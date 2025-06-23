@@ -20,7 +20,7 @@ const ProfileWallpaper = (props: Props) => {
 				/>
 			</Div>
 			<Div className='flex flex-col gap-y-1'>
-				<Typography variant='h5' className='row-span-1'>
+				<Typography variant='h4' className='row-span-1'>
 					{user.display_name}
 				</Typography>
 				<Typography color='muted' className='row-span-1 block'>

@@ -60,11 +60,9 @@ const ScanningCounter: React.FC = () => {
 
 	return (
 		<Div className='relative z-10 mb-1.5 flex items-baseline justify-between gap-x-3'>
-			<Typography variant='h6' className='inline-flex items-center gap-x-2'>
-				{t('ns_inoutbound:counter_box.label')}
-			</Typography>
+			<Typography className='inline-flex items-center gap-x-2'>{t('ns_inoutbound:counter_box.label')}</Typography>
 			<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
-			<Typography variant='h6' className='inline-flex gap-x-1 text-xl font-bold'>
+			<Typography className='inline-flex gap-x-1 text-xl font-bold'>
 				{formatIntlNumber(count)}
 				<Typography as='small' variant='small' className='text-xs font-medium'>
 					pcs

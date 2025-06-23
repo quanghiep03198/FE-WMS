@@ -13,12 +13,10 @@ export const typographyVariants = cva('font-sans', {
 	variants: {
 		variant: {
 			default: 'text-base tracking-tight text-inherit',
-			h1: 'text-5xl md:text-4xl sm:text-4xl scroll-m-20 font-bold tracking-tight leading-tight',
-			h2: 'text-4xl md:text-3xl sm:text-3xl font-bold scroll-m-20 tracking-tight leading-tight',
-			h3: 'text-3xl md:text-2xl sm:text-2xl font-bold tracking-tight scroll-m-20 leading-tight',
-			h4: 'text-2xl md:text-xl sm:text-xl font-semibold tracking-tight scroll-m-20',
-			h5: 'text-xl md:text-lg sm:text-lg font-semibold tracking-tight scroll-m-20',
-			h6: 'text-lg md:text-base sm:text-base font-semibold',
+			h1: 'text-4xl md:text-3xl sm:text-3xl scroll-m-20 font-bold tracking-tight leading-tight',
+			h2: 'text-3xl md:text-2xl sm:text-xl font-bold scroll-m-20 tracking-tight leading-tight',
+			h3: 'text-2xl md:text-xl sm:text-lg font-bold tracking-tight scroll-m-20 leading-tight',
+			h4: 'text-xl md:text-lg sm:text-base font-semibold tracking-tight scroll-m-20',
 			p: 'leading-7',
 			code: 'leading-7 font-mono',
 			blockquote: 'mt-6 border-l-2 pl-6 italic',

@@ -24,9 +24,7 @@ const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 const ListBoxHeader: React.FC = () => {
 	return (
 		<Div className='relative flex items-center justify-between bg-table-head p-2'>
-			<Typography
-				variant='h6'
-				className='relative z-10 inline-flex items-center gap-x-2 px-2 text-center text-lg sm:hidden sm:text-base md:text-base'>
+			<Typography className='relative z-10 inline-flex items-center gap-x-2 px-2 text-center text-lg sm:hidden sm:text-base md:text-base'>
 				<Icon name='ScanBarcode' size={20} />
 				EPC Data
 			</Typography>
