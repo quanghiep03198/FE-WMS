@@ -21,7 +21,7 @@ const CTASection: React.FC = () => {
 		<Div
 			id='cta'
 			as='section'
-			className='flex min-h-[85vh] flex-grow flex-col items-center gap-10 sm:gap-y-6 xl:flex-row xl:gap-20 xxl:max-w-8xl'>
+			className='relative mx-auto flex min-h-[85vh] w-full max-w-7xl flex-grow flex-col items-center gap-10 sm:gap-y-6 xl:flex-row xl:gap-20 xxl:max-w-8xl'>
 			<Div className='flex flex-col items-center text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:items-start xl:text-left'>
 				<Button
 					onClick={() => {
@@ -33,7 +33,7 @@ const CTASection: React.FC = () => {
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
-				<Typography variant='h2' className='mb-4 max-w-xl text-pretty lg:max-w-full'>
+				<Typography variant='h1' className='mb-4 max-w-xl text-pretty lg:max-w-full'>
 					Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
 				</Typography>
 				<Typography
@@ -67,7 +67,11 @@ const CTASection: React.FC = () => {
 				</Div>
 			</Div>
 			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-y-10 lg:gap-x-12 xl:gap-y-0'>
-				<Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
+				<Image
+					src={theme === 'dark' ? '/global-transport-dark.svg' : '/global-transport-light.svg'}
+					alt='Shipping'
+				/>
+				{/* <Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' /> */}
 				<Div className='block space-y-10 lg:space-y-12 xl:hidden'>
 					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-1 md:gap-x-6 lg:-translate-x-8'>
 						{outstandingFeatures.map((feature, index) => (

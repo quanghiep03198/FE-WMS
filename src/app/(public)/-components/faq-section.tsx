@@ -7,12 +7,14 @@ import {
 	Avatar,
 	AvatarImage,
 	Div,
+	Icon,
 	Typography
 } from '@/components/ui'
 import ChatBubble from '@/components/ui/@custom/chat-bubble'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { useInViewport } from 'ahooks'
-import { Fragment, useRef } from 'react'
+import { Fragment, useLayoutEffect, useRef } from 'react'
 import { usePageContext } from '../-contexts/page-context'
 
 const faqs = [
@@ -52,13 +54,17 @@ const FAQsSection: React.FunctionComponent = () => {
 	})
 	const [chatInViewPort] = useInViewport(chatBoxRef, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 0.5
+		threshold: 0.25
 	})
+
+	useLayoutEffect(() => {
+		chatBoxRef.current.scrollTo({ top: 0 })
+	}, [])
 
 	return (
 		<Div
 			ref={containerRef}
-			className='flex w-full flex-grow flex-col-reverse items-start gap-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20'
+			className='mx-auto flex w-full max-w-7xl flex-grow flex-col-reverse items-center gap-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xxl:max-w-8xl'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'
@@ -67,7 +73,7 @@ const FAQsSection: React.FunctionComponent = () => {
 				id='faqs'
 				as='section'
 				className='w-full space-y-10 sm:space-y-8 sm:text-center md:text-center lg:basis-2/3 xl:basis-2/3 xxl:basis-2/3'>
-				<Typography variant='h2'>Frequently asked questions</Typography>
+				<Typography variant='h1'>Frequently asked questions</Typography>
 				<Accordion type='multiple'>
 					{faqs.map((faq, index) => (
 						<AccordionItem key={index} value={index.toString()}>
@@ -79,14 +85,14 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex max-h-[28rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border bg-background'>
+			<Div className='flex max-h-[32rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border bg-background'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
 					<Div className='size-3 rounded-full bg-destructive' />
 					<Div className='size-3 rounded-full bg-warning' />
 					<Div className='size-3 rounded-full bg-success' />
 				</Div>
 				<Typography className='py-2 text-center font-medium'>FAQs</Typography>
-				<ScrollShadow ref={chatBoxRef} className='flex h-52 flex-1 flex-col gap-y-3 p-4'>
+				<ScrollShadow ref={chatBoxRef} className='flex h-64 flex-1 flex-col gap-y-3 !overflow-hidden p-4'>
 					{faqs.map((faq, index) => (
 						<Fragment key={index}>
 							<Div
@@ -113,6 +119,18 @@ const FAQsSection: React.FunctionComponent = () => {
 						</Fragment>
 					))}
 				</ScrollShadow>
+				<Div className='flex min-h-12 items-center gap-x-3 overflow-hidden border-t px-4 py-2 text-sm'>
+					<Typewriter
+						playState={containerInViewPort ? 'running' : 'paused'}
+						className='max-h-10 flex-1 overflow-y-auto text-foreground !scrollbar-none'
+						text={`I have some question, can you help me?`}
+					/>
+					<Div className='inline-flex items-center gap-x-3 bg-background'>
+						<Icon name='SmilePlus' />
+						<Icon name='Paperclip' />
+						<Icon name='Send' />
+					</Div>
+				</Div>
 			</Div>
 		</Div>
 	)

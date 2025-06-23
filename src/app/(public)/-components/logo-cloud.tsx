@@ -4,12 +4,14 @@ import tw from 'tailwind-styled-components'
 
 const LogoCloud: React.FC = () => {
 	return (
-		<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center py-20 xxl:max-w-8xl'>
-			<Typography className='font-medium lg:text-left xl:text-xl'>Developed with trusted technologies</Typography>
-			<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
-				<LogoList />
-				{/* Clone element for infinite scroll effect */}
-				{cloneElement(<LogoList />, { 'aria-hidden': true })}
+		<Div className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%]'>
+			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center py-20 xxl:max-w-8xl'>
+				<Typography variant='h4'>Developed with trusted technologies</Typography>
+				<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
+					<LogoList />
+					{/* Clone element for infinite scroll effect */}
+					{cloneElement(<LogoList />, { 'aria-hidden': true })}
+				</Div>
 			</Div>
 		</Div>
 	)
@@ -70,18 +72,12 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='/tanstack.svg'
+				src='/reactquery.svg'
 				alt='Tanstack'
 				className='max-w-8 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-9'
 			/>
 		</LinkCard>
-		<LinkCard href='#'>
-			<img
-				src='/storybook.svg'
-				alt='Storybook'
-				className='max-w-6 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-6'
-			/>
-		</LinkCard>
+
 		<LinkCard href='#'>
 			<svg
 				viewBox='0 0 256 256'
@@ -118,13 +114,6 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 		</LinkCard>
 		<LinkCard href='#'>
 			<img
-				src='sql-server.svg'
-				alt='SQL Server'
-				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
-			/>
-		</LinkCard>
-		<LinkCard href='#'>
-			<img
 				src='/redis.svg'
 				alt='Redis'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
@@ -149,13 +138,6 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 				src='/grafana.svg'
 				alt='Grafana'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
-			/>
-		</LinkCard>
-		<LinkCard href='#'>
-			<img
-				src='/sonarcloud.svg'
-				alt='SonarCloud'
-				className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>
 	</div>

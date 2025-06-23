@@ -17,7 +17,7 @@ export default function Page() {
 			<PageProvider>
 				<PageComposition />
 			</PageProvider>
-			<GridBackground />
+			<GridBackground className='[mask-image:radial-gradient(75%_100%_at_bottom_left,white,transparent)]' />
 		</Fragment>
 	)
 }

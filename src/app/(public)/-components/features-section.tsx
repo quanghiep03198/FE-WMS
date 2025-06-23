@@ -1,4 +1,5 @@
-import { Div, DivProps, Icon, IconProps, Typography } from '@/components/ui'
+import { cn } from '@/common/utils/cn'
+import { Badge, Div, Icon, IconProps, Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import tw from 'tailwind-styled-components'
@@ -55,7 +56,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 					className='w-full !text-base font-medium text-[var(--primary-alt)] sm:text-sm sm:font-normal'>
 					No more paperwork
 				</Typography>
-				<Typography variant='h2' className='text-pretty'>
+				<Typography variant='h1' className='text-pretty'>
 					Comprehensive solutions for <br className='hidden lg:block' /> Warehouse Management
 				</Typography>
 			</Div>
@@ -71,11 +72,41 @@ const FeaturesSection: React.FunctionComponent = () => {
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
 					</Div>
+					<Div className='flex flex-wrap items-center justify-center gap-2 xl:justify-start'>
+						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500'>
+							SaaS
+						</Badge>
+						<Badge variant='secondary' className='bg-green-500/10 text-green-500'>
+							RFID
+						</Badge>
+						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500'>
+							Automation
+						</Badge>
+						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500'>
+							Multi-tenant
+						</Badge>
+						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500'>
+							Multi-language
+						</Badge>
+						<Badge variant='secondary' className='bg-red-500/10 text-red-500'>
+							Realtime
+						</Badge>
+						<Badge variant='secondary' className='bg-pink-500/10 text-pink-500'>
+							Data-streaming
+						</Badge>
+					</Div>
 				</Div>
 				<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
 					{features.map((feature, index) => (
-						<EffectCard key={index.toString()}>
-							<EffectCardIconWrapper>
+						<EffectCard
+							key={index.toString()}
+							className={
+								cn()
+								// 'duration-500 before:absolute before:inset-0 before:z-0 before:-translate-y-px before:bg-[conic-gradient(from_120deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_220deg,hsl(var(--accent))_1turn)] before:opacity-0 before:transition-opacity before:duration-500 before:content-[""] hover:before:opacity-100 hover:before:animate-in hover:before:fade-in-0 hover:before:slide-in-from-left-10 xl:before:bg-[conic-gradient(from_130deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_217deg,hsl(var(--accent))_1turn)]',
+								// 'after:absolute after:inset-0 after:left-1/2 after:top-1/2 after:z-[10] after:h-[calc(100%-1px)] after:w-[calc(100%-1px)] after:-translate-x-1/2 after:-translate-y-[calc(50%-0.5px)] after:rounded-md after:bg-background after:content-[""]',
+								// 'hover:after:bg-gradient-to-tr hover:after:from-background hover:after:from-[30%] hover:after:to-accent/60'
+							}>
+							<EffectCardIconWrapper className='z-20'>
 								<EffectCardIcon
 									name={feature.icon}
 									className='group-hover/card:stroke-success'
@@ -83,7 +114,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 									size={24}
 								/>
 							</EffectCardIconWrapper>
-							<EffectCardContent>
+							<EffectCardContent className='z-20'>
 								<Typography className='font-medium'>{feature.name}</Typography>
 								<Typography
 									variant='small'
@@ -102,13 +133,14 @@ const FeaturesSection: React.FunctionComponent = () => {
 	)
 }
 
-const EffectCard = tw(
-	Div
-)<DivProps>`bg-background h-full border p-6 sm:p-4 hover:duration-200 justify-start overflow-hidden group/card flex flex-col gap-4 rounded-lg sm:flex-row hover:shadow-[0_0px_16px_rgb(0_0_0/0.1)] dark:hover:shadow-[0_0px_16px_var(--primary-alt)]`
-const EffectCardIconWrapper = tw(
-	Div
-)<DivProps>`inline-flex aspect-square size-12 mb-2 min-w-12 items-center justify-center rounded-md bg-secondary`
+const EffectCard = tw.div`
+	group/card bg-border relative overflow-hidden h-full border p-6 transition-colors bg-background
+	flex flex-col justify-start gap-4 rounded-md 
+	sm:p-4 sm:flex-row 
+	hover:bg-gradient-to-tr hover:from-background hover:from-[30%] hover:to-accent/60
+`
+const EffectCardIconWrapper = tw.div`inline-flex aspect-square size-12 mb-2 min-w-12 items-center justify-center rounded-md bg-secondary`
+const EffectCardContent = tw.div`z-10 flex flex-col space-y-1.5`
 const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-[var(--primary-alt)] duration-200 transition-colors`
-const EffectCardContent = tw(Div)`z-10 flex flex-col space-y-1.5`
 
 export default FeaturesSection
