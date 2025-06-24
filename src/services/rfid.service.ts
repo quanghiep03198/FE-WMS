@@ -1,11 +1,11 @@
 import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
-import { EpcCombinationFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-combination.schema'
 import {
 	InoutboundPayload,
 	OutboundFormValues
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
+import { EpcCombinationFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/fill-epc-data.schema'
 import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'

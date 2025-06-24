@@ -34,7 +34,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { FALLBACK_VALUE, useCombineEpcInfoMutation } from '../../-hooks'
-import { EpcCombinationFormValues, epcCombinationSchema } from '../../-schemas/epc-combination.schema'
+import { EpcCombinationFormValues, epcCombinationSchema } from '../../-schemas/fill-epc-data.schema'
 
 const DEFAULT_FORM_VALUES: EpcCombinationFormValues = {
 	mo_no: FALLBACK_VALUE,
