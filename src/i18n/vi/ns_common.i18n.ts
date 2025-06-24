@@ -82,6 +82,8 @@ export default {
 		chosen_files: 'Đã chọn {{qty}} file'
 	},
 	errors: {
+		'303': 'Đã chuyển hướng đến tài nguyên khác',
+		'303_message': 'Vui lòng truy cập vào {{url}} để sử dụng tính năng này cho nhà máy {{factoryCode}}',
 		'403': 'Yêu Cầu Quyền Truy Cập',
 		'403_message': 'Bạn không được phép truy cập trang này.',
 		'404': 'Không Tìm Thấy Trang.',
@@ -90,7 +92,6 @@ export default {
 		'500_message':
 			'Chúng tôi xin lỗi về sự bất tiện này. Bạn có thể thử lại hành động trước đó, nếu vẫn không giải quyết được, vui lòng gửi phản hồi cho chúng tôi mô tả lỗi bạn gặp phải. Chúng tôi sẽ khắc phục nhanh nhất có thể.',
 		'501': 'Yêu Cầu Chuyển Hướng Vĩnh Viễn',
-		'501_message': 'Vui lòng truy cập vào {{url}} để sử dụng tính năng này cho nhà máy {{factoryCode}}',
 		'503': 'Tính Năng Không Khả Dụng',
 		'503_message': 'Tính năng đang trong quá trình phát triển / bảo trì. Vui lòng thử lại sau'
 	},

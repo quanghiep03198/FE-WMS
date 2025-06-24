@@ -81,6 +81,8 @@ export default {
 		chosen_files: 'Chose {{qty}} files'
 	},
 	errors: {
+		'303': 'See Other',
+		'303_message': 'Please access {{url}} to use this feature for factory {{factoryCode}}',
 		'403': 'Permission Denied',
 		'403_message': "You don't have permission to access this page.",
 		'404': 'Page Not Found',
@@ -89,7 +91,6 @@ export default {
 		'500_message':
 			'We are so sorry about this inconvenience. You can retry previous action again, if it does not work, please send us a feedback to describe whar error that you have been encountered. We will try to fix it as soon as possible.',
 		'501': 'Not Implemented',
-		'501_message': 'Please access {{url}} to use this feature for factory {{factoryCode}}',
 		'503': 'Service Unavailable',
 		'503_message': 'This feature is currently under development/maintenance. Please try again later.'
 	},

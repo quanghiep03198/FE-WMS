@@ -16,24 +16,22 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 
 	if (isNotCompatible)
 		return (
-			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-2'>
-				<Typography variant='code' color='destructive' className='text-xl font-bold'>
-					501
+			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-3'>
+				<Typography variant='code' color='destructive' className='font-semibold'>
+					303
 				</Typography>
-				<Typography variant='h1'>{t('ns_common:errors.501')}</Typography>
+				<Typography variant='h1'>{t('ns_common:errors.303')}</Typography>
 				<Typography
 					variant='p'
 					color='muted'
-					className='mb-10 text-lg'
 					dangerouslySetInnerHTML={{
-						__html: t('ns_common:errors.501_message', {
+						__html: t('ns_common:errors.303_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,
 							factoryCode: t(`ns_common:factory.${user.company_code}`, { defaultValue: user.company_code }),
 							defaultValue: null
 						})
 					}}
 				/>
-
 				<Image src='/onboarding.svg' />
 			</Div>
 		)
@@ -41,6 +39,6 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 	return children
 }
 
-const Image = tw.img`max-w-xl object-center object-contain w-full select-none`
+const Image = tw.img`max-w-md object-center object-contain w-full select-none mt-6`
 
 export default HostCompatibleGuard
