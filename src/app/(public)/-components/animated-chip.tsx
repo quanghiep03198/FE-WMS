@@ -25,7 +25,8 @@ const BeamAnimated: React.FC = () => {
 	const animatePath = (path: SVGPathElement, color: string, fill?: string) => {
 		if (!path) return
 		path.style.transitionProperty = 'fill, stroke'
-		path.style.transitionDuration = '0.25s'
+		path.style.transitionDuration = '0.5s'
+		path.style.transitionDelay = '0.25s'
 		path.style.transitionTimingFunction = 'ease-out'
 		path.style.fill = 'hsl(var(--muted))'
 		path.style.stroke = 'hsl(var(--muted))'
@@ -38,7 +39,7 @@ const BeamAnimated: React.FC = () => {
 
 	const animateGlowLight = (el: HTMLDivElement) => {
 		if (!el) return
-		el.style.transition = 'opacity 0.25s ease-out 0.3s'
+		el.style.transition = 'opacity 0.25s ease-out 0.25s'
 		el.style.opacity = '0'
 		requestAnimationFrame(() => {
 			el.style.opacity = '1'
@@ -47,10 +48,14 @@ const BeamAnimated: React.FC = () => {
 
 	const animateLogo = () => {
 		requestAnimationFrame(() => {
-			logoRef.current.style.transition = 'transform 0.25s ease-out 1s, box-shadow 0.25s ease 1s'
+			logoRef.current.style.transitionProperty = 'transform,box-shadow'
+			logoRef.current.style.transitionTimingFunction = 'ease-out'
+			logoRef.current.style.transitionDuration = '0.25s'
+			logoRef.current.style.transitionDelay = '1.1875s'
+
 			logoRef.current.style.boxShadow = '24px 24px 16px #0a0a0a98'
 			logoRef.current.style.transform = isSmallScreen ? 'translate(-12px,-12px)' : 'translate(-16px,-16px)'
-			logoRef.current.style.animationDelay = '1s'
+			logoRef.current.style.animationDelay = '1.25s'
 		})
 	}
 
@@ -108,62 +113,61 @@ const BeamAnimated: React.FC = () => {
 				fill='none'
 				xmlns='http://www.w3.org/2000/svg'
 				className='mx-auto xl:w-[650px]'>
+				<defs>
+					<linearGradient offset={1} id='right-to-left'>
+						<stop offset={1} stopColor='hsl(var(--muted))'>
+							<animate
+								dur={0.5}
+								attributeName='offset'
+								fill='freeze'
+								from={1}
+								to={0}
+								begin={inViewport ? 1 : Infinity}
+								calcMode='spline'
+								keySplines='0.45 0.35 1 1'
+							/>
+						</stop>
+						<stop offset={1} stopColor='var(--green)'>
+							<animate
+								dur={0.5}
+								attributeName='offset'
+								fill='freeze'
+								from={1}
+								to={0}
+								begin={inViewport ? 1 : Infinity}
+								calcMode='spline'
+								keySplines='0.45 0.35 1 1'
+							/>
+						</stop>
+					</linearGradient>
+					<linearGradient offset={0} id='left-to-right'>
+						<stop offset={0} stopColor='var(--yellow)'>
+							<animate
+								dur={0.5}
+								attributeName='offset'
+								fill='freeze'
+								from={0}
+								to={1}
+								begin={inViewport ? 1 : Infinity}
+								calcMode='spline'
+								keySplines='0.45 0.35 1 1'
+							/>
+						</stop>
+						<stop offset={0} stopColor='hsl(var(--muted))'>
+							<animate
+								dur={0.5}
+								attributeName='offset'
+								fill='freeze'
+								from={0}
+								to={1}
+								begin={inViewport ? 1 : Infinity}
+								calcMode='spline'
+								keySplines='0.45 0.35 1 1'
+							/>
+						</stop>
+					</linearGradient>
+				</defs>
 				<g>
-					<defs>
-						<linearGradient offset={1} id='right-to-left'>
-							<stop offset={1} stopColor='hsl(var(--muted))'>
-								<animate
-									dur={0.5}
-									attributeName='offset'
-									fill='freeze'
-									from={1}
-									to={0}
-									begin={inViewport ? 1 : Infinity}
-									calcMode='spline'
-									keySplines='0.45 0.35 1 1'
-								/>
-							</stop>
-							<stop offset={1} stopColor='var(--green)'>
-								<animate
-									dur={0.5}
-									attributeName='offset'
-									fill='freeze'
-									from={1}
-									to={0}
-									begin={inViewport ? 1 : Infinity}
-									calcMode='spline'
-									keySplines='0.45 0.35 1 1'
-								/>
-							</stop>
-						</linearGradient>
-						<linearGradient offset={0} id='left-to-right'>
-							<stop offset={0} stopColor='var(--yellow)'>
-								<animate
-									dur={0.5}
-									attributeName='offset'
-									fill='freeze'
-									from={0}
-									to={1}
-									begin={inViewport ? 1 : Infinity}
-									calcMode='spline'
-									keySplines='0.45 0.35 1 1'
-								/>
-							</stop>
-							<stop offset={0} stopColor='hsl(var(--muted))'>
-								<animate
-									dur={0.5}
-									attributeName='offset'
-									fill='freeze'
-									from={0}
-									to={1}
-									begin={inViewport ? 1 : Infinity}
-									calcMode='spline'
-									keySplines='0.45 0.35 1 1'
-								/>
-							</stop>
-						</linearGradient>
-					</defs>
-
 					<g className='green-chip__base'>
 						<rect
 							width='35.0955'
