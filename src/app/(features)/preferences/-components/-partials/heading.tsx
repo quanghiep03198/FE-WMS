@@ -11,7 +11,7 @@ const Heading: React.FC = () => {
 	return (
 		<Div className='sticky top-0 z-20 mx-auto flex w-full max-w-7xl basis-40 items-start justify-between border-b border-border bg-background/85 py-10 backdrop-blur xxl:max-w-8xl'>
 			<Div className='space-y-2'>
-				<Typography variant='h3' className='font-bold tracking-tight'>
+				<Typography variant='h1' className='font-bold tracking-tight'>
 					{t('ns_common:navigation.settings')}
 				</Typography>
 				<Typography color='muted'>{t('ns_preference:captions.header')}</Typography>
