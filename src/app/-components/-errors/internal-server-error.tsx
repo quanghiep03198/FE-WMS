@@ -81,7 +81,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 					d='M527.42 68.33a.53.53 0 00-.15-.36.56.56 0 00-.36-.14l-99.63.84a.5.5 0 100 1l99.13-.84.26 65h1l-.25-65.5z'
 					fill='#e5e5e5'></path>
 			</g>
-			<g data-sentry-element='OildDrip' className='animate-[fall-down_0.35s_ease-out_infinite]'>
+			<g data-sentry-element='OildDrip' className='animate-[drop-down_0.35s_ease-out_infinite]'>
 				<path
 					d='M592.5 451.5C592.5 452.24 588.47 467.96 587.94 472.24C587.41 476.52 588.69 481.83 596.5 481.54C601.5 481.35 602.5 475.77 601.5 471.68C600.5 467.59 592.5 451.5 592.5 451.5Z'
 					fill='#404040'></path>

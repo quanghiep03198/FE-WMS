@@ -19,15 +19,16 @@ const BeamAnimated: React.FC = () => {
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const [inViewport] = useInViewport(containerRef, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 0.35
+		threshold: 1
 	})
 
 	const animatePath = (path: SVGPathElement, color: string, fill?: string) => {
 		if (!path) return
-
-		path.style.transition = 'stroke 0.25s ease-out 0.25s, fill 0.25s ease-out 0.25s'
-		path.style.fill = 'transparent'
-		path.style.stroke = 'transparent'
+		path.style.transitionProperty = 'fill, stroke'
+		path.style.transitionDuration = '0.25s'
+		path.style.transitionTimingFunction = 'ease-out'
+		path.style.fill = 'hsl(var(--muted))'
+		path.style.stroke = 'hsl(var(--muted))'
 
 		requestAnimationFrame(() => {
 			path.style.fill = fill ?? color
@@ -37,7 +38,7 @@ const BeamAnimated: React.FC = () => {
 
 	const animateGlowLight = (el: HTMLDivElement) => {
 		if (!el) return
-		el.style.transition = 'opacity 0.25s ease-out 0.35s'
+		el.style.transition = 'opacity 0.25s ease-out 0.3s'
 		el.style.opacity = '0'
 		requestAnimationFrame(() => {
 			el.style.opacity = '1'
@@ -46,32 +47,47 @@ const BeamAnimated: React.FC = () => {
 
 	const animateLogo = () => {
 		requestAnimationFrame(() => {
-			logoRef.current.style.transition = 'transform 0.25s ease-out 1.165s, box-shadow 0.25s ease 1.165s'
+			logoRef.current.style.transition = 'transform 0.25s ease-out 1s, box-shadow 0.25s ease 1s'
 			logoRef.current.style.boxShadow = '24px 24px 16px #0a0a0a98'
 			logoRef.current.style.transform = isSmallScreen ? 'translate(-12px,-12px)' : 'translate(-16px,-16px)'
-			logoRef.current.style.animationDelay = '1.165s'
+			logoRef.current.style.animationDelay = '1s'
 		})
 	}
 
-	useEffect(() => {
-		if (inViewport) {
-			animateGlowLight(greenGlowLightRef.current)
-			animateGlowLight(yellowGlowLightRef.current)
-			const clusterCubes = clusterCubesRef.current?.childNodes
-			const singleCube = standaloneCubeRef.current?.childNodes
-			if (clusterCubes && Symbol.iterator in Object(clusterCubes)) {
-				clusterCubes.forEach((path: SVGPathElement) => {
-					if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, 'var(--yellow)')
-				})
-			}
-			if (singleCube && Symbol.iterator in Object(singleCube)) {
-				singleCube.forEach((path: SVGPathElement) => {
-					if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, 'var(--green)')
-				})
-			}
-			animatePath(greenPathRef.current, 'url(#right-to-left)')
+	const triggerAnimation = () => {
+		if (!inViewport) return
+		animateGlowLight(greenGlowLightRef.current)
+		animateGlowLight(yellowGlowLightRef.current)
+
+		const clusterCubes = clusterCubesRef.current?.childNodes
+		const singleCube = standaloneCubeRef.current?.childNodes
+		if (clusterCubes && Symbol.iterator in Object(clusterCubes)) {
+			if (!clusterCubesRef.current.classList.contains('animate-[fall-down_0.25s_ease-out_both]'))
+				clusterCubesRef.current.classList.add('animate-[fall-down_0.25s_linear_forwards]')
+			clusterCubes.forEach((path: SVGPathElement) => {
+				if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, 'var(--yellow)')
+			})
 			animatePath(yellowPathRef.current, 'url(#left-to-right)')
-			animateLogo()
+		}
+		if (singleCube && Symbol.iterator in Object(singleCube)) {
+			if (!standaloneCubeRef.current.classList.contains('animate-[fall-down_0.25s_ease-out_both]'))
+				standaloneCubeRef.current.classList.add('animate-[fall-down_0.25s_ease-out_both]')
+			singleCube.forEach((path: SVGPathElement) => {
+				if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, 'var(--green)')
+			})
+			animatePath(greenPathRef.current, 'url(#right-to-left)')
+		}
+
+		animateLogo()
+	}
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			triggerAnimation()
+		}, 300)
+
+		return () => {
+			clearTimeout(timeout)
 		}
 	}, [inViewport])
 
@@ -95,14 +111,14 @@ const BeamAnimated: React.FC = () => {
 				<g>
 					<defs>
 						<linearGradient offset={1} id='right-to-left'>
-							<stop offset={1} stopColor='transparent'>
+							<stop offset={1} stopColor='hsl(var(--muted))'>
 								<animate
 									dur={0.5}
 									attributeName='offset'
 									fill='freeze'
 									from={1}
 									to={0}
-									begin={0.65}
+									begin={inViewport ? 1 : Infinity}
 									calcMode='spline'
 									keySplines='0.45 0.35 1 1'
 								/>
@@ -114,7 +130,7 @@ const BeamAnimated: React.FC = () => {
 									fill='freeze'
 									from={1}
 									to={0}
-									begin={0.65}
+									begin={inViewport ? 1 : Infinity}
 									calcMode='spline'
 									keySplines='0.45 0.35 1 1'
 								/>
@@ -128,19 +144,19 @@ const BeamAnimated: React.FC = () => {
 									fill='freeze'
 									from={0}
 									to={1}
-									begin={0.65}
+									begin={inViewport ? 1 : Infinity}
 									calcMode='spline'
 									keySplines='0.45 0.35 1 1'
 								/>
 							</stop>
-							<stop offset={0} stopColor='transparent'>
+							<stop offset={0} stopColor='hsl(var(--muted))'>
 								<animate
 									dur={0.5}
 									attributeName='offset'
 									fill='freeze'
 									from={0}
 									to={1}
-									begin={0.65}
+									begin={inViewport ? 1 : Infinity}
 									calcMode='spline'
 									keySplines='0.45 0.35 1 1'
 								/>
@@ -166,7 +182,7 @@ const BeamAnimated: React.FC = () => {
 							strokeWidth='4'
 						/>
 					</g>
-					<g className='standalone-cube' ref={standaloneCubeRef}>
+					<g className='standalone-cube -translate-y-10' ref={standaloneCubeRef}>
 						<path
 							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'
@@ -243,7 +259,7 @@ const BeamAnimated: React.FC = () => {
 						/>
 					</g>
 
-					<g className='cluster-cube' ref={clusterCubesRef}>
+					<g ref={clusterCubesRef} className={cn('-translate-y-10')}>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
 							fill='hsl(var(--muted))'

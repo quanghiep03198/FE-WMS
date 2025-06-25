@@ -6,7 +6,9 @@ const LogoCloud: React.FC = () => {
 	return (
 		<Div className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%]'>
 			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center py-20 xxl:max-w-8xl'>
-				<Typography variant='h4'>Developed with trusted technologies</Typography>
+				<Typography variant='h4' className='mt-4'>
+					Developed with trusted technologies
+				</Typography>
 				<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
 					<LogoList />
 					{/* Clone element for infinite scroll effect */}

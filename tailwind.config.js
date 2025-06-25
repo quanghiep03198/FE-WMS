@@ -187,7 +187,7 @@ module.exports = {
 						opacity: '1'
 					}
 				},
-				['fall-down']: {
+				['drop-down']: {
 					from: {
 						transform: 'translateY(0)'
 					},
@@ -221,6 +221,14 @@ module.exports = {
 				['slide-in']: {
 					from: {
 						transform: 'translate3d(0,-100%,0)'
+					},
+					to: {
+						transform: 'translateZ(0)'
+					}
+				},
+				['fall-down']: {
+					from: {
+						transform: 'translate3d(0,-40px,0)'
 					},
 					to: {
 						transform: 'translateZ(0)'
@@ -301,7 +309,7 @@ module.exports = {
 				['collapsible-down-reverse']: 'collapsible-down-reverse 0.2s ease-out',
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
-				['fall-down']: 'fall-down 1s linear',
+				['drop-down']: 'drop-down 1s linear',
 				['scrolling']: 'scrolling 10s linear infinite both!important',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
 				['spotlight-off']: 'spotlight-off 6s ease forwards',

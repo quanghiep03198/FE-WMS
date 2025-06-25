@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import GridBackground from '../-components/-shared/grid-background'
 import PageComposition from './-components/page-composition'
 import { PageProvider } from './-contexts/page-context'
 
@@ -17,7 +16,6 @@ export default function Page() {
 			<PageProvider>
 				<PageComposition />
 			</PageProvider>
-			<GridBackground className='[mask-image:radial-gradient(75%_100%_at_bottom_left,white,transparent)]' />
 		</Fragment>
 	)
 }

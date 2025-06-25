@@ -11,7 +11,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 	const ref = useRef<HTMLDivElement>(null)
 	const [inViewport] = useInViewport(ref, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 0.5
+		threshold: 0.25
 	})
 
 	const features: Array<{ icon: React.ComponentProps<typeof Icon>['name']; name: string; description: string }> = [
@@ -47,7 +47,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 			id='outstanding-features'
 			as='section'
 			style={{
-				animationFillMode: 'both',
+				animationFillMode: 'forwards',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}>
 			<Div className='space-y-1.5 text-center sm:mb-4 sm:text-xl xl:text-left'>
@@ -117,7 +117,6 @@ const FeaturesSection: React.FunctionComponent = () => {
 							<EffectCardContent className='z-20'>
 								<Typography className='font-medium'>{feature.name}</Typography>
 								<Typography
-									variant='small'
 									color='muted'
 									className='text-pretty'
 									dangerouslySetInnerHTML={{
@@ -134,7 +133,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 }
 
 const EffectCard = tw.div`
-	group/card bg-border relative overflow-hidden h-full border p-6 transition-colors bg-background
+	group/card relative overflow-hidden h-full border p-6 transition-colors bg-background
 	flex flex-col justify-start gap-4 rounded-md 
 	sm:p-4 sm:flex-row 
 	hover:bg-gradient-to-tr hover:from-background hover:from-[30%] hover:to-accent/60

@@ -31,7 +31,7 @@ const CTA2Section: React.FC = () => {
 						<Typography variant='h1' className='text-pretty'>
 							High Availability at our factories across Asia
 						</Typography>
-						<Typography className='leading-relaxed xl:text-lg'>
+						<Typography variant='p' className='leading-relaxed xl:text-lg'>
 							Our app is designed to provide exceptional reliability and performance at factories throughout
 							Asia. Ensure seamless operations and robust connectivity where it is needed most—empower your
 							facilities today
@@ -63,8 +63,10 @@ const CTA2Section: React.FC = () => {
 							/>
 						</AnimatedBorderCard>
 						<Div className='space-y-2'>
-							<Typography className='font-semibold'>Automatic Deployment</Typography>
-							<Typography variant='small' color='muted'>
+							<Typography variant='h4' className='text-base sm:col-span-5'>
+								Automatic Deployment
+							</Typography>
+							<Typography color='muted'>
 								Our applications are automatically deployed, delivering the latest updates quickly while
 								ensuring minimal downtime and optimal efficiency.
 							</Typography>
@@ -80,8 +82,10 @@ const CTA2Section: React.FC = () => {
 							/>
 						</AnimatedBorderCard>
 						<Div className='space-y-2'>
-							<Typography className='font-semibold sm:col-span-5'>Fully managed</Typography>
-							<Typography variant='small' color='muted'>
+							<Typography variant='h4' className='text-base sm:col-span-5'>
+								Fully managed
+							</Typography>
+							<Typography color='muted'>
 								Experience the convenience of a fully managed service, allowing you to focus on your core
 								business while we handle the infrastructure.
 							</Typography>
@@ -97,9 +101,10 @@ const CTA2Section: React.FC = () => {
 							/>
 						</AnimatedBorderCard>
 						<Div className='space-y-2'>
-							<Typography className='font-semibold sm:col-span-5'>Monitoring</Typography>
+							<Typography variant='h4' className='text-base sm:col-span-5'>
+								Monitoring
+							</Typography>
 							<Typography
-								variant='small'
 								color='muted'
 								dangerouslySetInnerHTML={{
 									__html: /* template */ `
@@ -121,11 +126,12 @@ const CTA2Section: React.FC = () => {
 							/>
 						</AnimatedBorderCard>
 						<Div className='space-y-2'>
-							<Typography className='font-semibold sm:col-span-5'>Server & Backup</Typography>
-							<Typography variant='small' color='muted'>
+							<Typography variant='h4' className='text-base sm:col-span-5'>
+								Server & Backup
+							</Typography>
+							<Typography color='muted'>
 								Secure your data with reliable servers and automated backups. Minimize downtime, protect
-								critical information, and ensure seamless operations with scalable solutions tailored to our
-								business.
+								critical information, and ensure seamless operations.
 							</Typography>
 						</Div>
 					</Div>
