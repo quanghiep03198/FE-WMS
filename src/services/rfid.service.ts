@@ -5,7 +5,7 @@ import {
 	OutboundFormValues
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-inoutbound.schema'
 import { ExchangeEpcFormValue } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
-import { EpcCombinationFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/fill-epc-data.schema'
+import { UpdateEpcFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/fill-epc-data.schema'
 import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
@@ -64,8 +64,8 @@ export class RFIDService {
 		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {})
 	}
 
-	static async combineEpcInfo(payload: EpcCombinationFormValues) {
-		return await axiosInstance.put(`/rfid/inbound/fill-epc-data`, payload, {})
+	static async upsertEpcInformation(payload: UpdateEpcFormValues) {
+		return await axiosInstance.put(`/rfid/inbound/upsert-epc-information`, payload, {})
 	}
 
 	// #region Outbound

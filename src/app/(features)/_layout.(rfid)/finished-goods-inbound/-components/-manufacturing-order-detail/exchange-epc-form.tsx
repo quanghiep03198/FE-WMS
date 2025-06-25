@@ -33,7 +33,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { usePageContext } from '../../-contexts/page-context'
-import { useCombineEpcInfoMutation } from '../../-hooks'
+import { useUpsertEpcInfoMutation } from '../../-hooks'
 import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../-schemas/exchange-epc.schema'
 
 const ExchangeEpcFormDialog: React.FC = () => {
@@ -42,7 +42,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
 	const [isExchangeAll, setIsExchangeAll] = useState<CheckedState>(false)
-	const { mutateAsync, isPending, isError } = useCombineEpcInfoMutation()
+	const { mutateAsync, isPending, isError } = useUpsertEpcInfoMutation()
 
 	const {
 		exchangeEpcDialogOpen: open,
@@ -101,25 +101,29 @@ const ExchangeEpcFormDialog: React.FC = () => {
 					value: item.mo_noseq
 				}))
 			)
-			const matchedSize = orderDetail.sizes.find((item) => item.size_numcode === defaultValues?.size_numcode)
-			form.setValue('size_numcode_match', matchedSize?.size_numcode ?? 'N/A')
-			form.setValue('size_qty', matchedSize?.size_qty ?? 0)
 		}
 	}, [orderDetail])
 
 	const handleSelectSubCommandNumber = (value: string) => {
 		const currOrderInfo = orderDetail?.orders?.find((item) => item?.mo_noseq === value)
 		if (currOrderInfo) {
+			const matchedSize = orderDetail.sizes.find((item) => item.size_numcode === defaultValues?.size_numcode)
 			form.reset({
 				...form.getValues(),
 				mat_code: currOrderInfo.mat_code,
-				mo_no_actual: currOrderInfo.mo_no,
-				color_sn_match: currOrderInfo.color_sn,
-				or_cust_po: currOrderInfo.or_cust_po,
 				or_no: currOrderInfo.or_no,
+				or_cust_po: currOrderInfo.or_cust_po,
+				size_code: currOrderInfo.size_code,
+				size_qty: currOrderInfo.size_sumqty,
 				cust_shoes_style: currOrderInfo.cust_shoes_style,
-				shoes_style_code_factory_match: currOrderInfo.shoes_style_code_factory,
-				size_code: currOrderInfo.size_code
+				mo_no: defaultValues.mo_no,
+				shoes_style_code_factory: defaultValues.shoes_style_code_factory,
+				color_sn: defaultValues.color_sn,
+				size_numcode: defaultValues.size_numcode,
+				mo_no_actual: currOrderInfo.mo_no,
+				color_sn_actual: currOrderInfo.color_sn,
+				shoes_style_code_factory_actual: currOrderInfo.shoes_style_code_factory,
+				size_numcode_actual: matchedSize?.size_numcode ?? 'N/A'
 			})
 		}
 	}
@@ -132,20 +136,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 
 	const handleExchangeEpc = async (data: ExchangeEpcFormValue) => {
 		try {
-			await mutateAsync({
-				mat_code: data.mat_code,
-				mo_no: data.mo_no,
-				mo_no_actual: data.mo_no_actual,
-				or_no: data.or_no,
-				mo_noseq: data.mo_noseq,
-				or_cust_po: data.or_cust_po,
-				shoes_style_code_factory: data.shoes_style_code_factory,
-				cust_shoes_style: data.cust_shoes_style,
-				size_numcode: data.size_numcode,
-				size_code: data.size_code,
-				size_qty: data.size_qty,
-				quantity: data.quantity
-			})
+			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'))
 			resetSelectedRows()
 			setOpen(!open)
@@ -200,9 +191,9 @@ const ExchangeEpcFormDialog: React.FC = () => {
 											mo_no_actual: value,
 											mo_noseq: '',
 											mat_code: '',
-											shoes_style_code_factory_match: '',
-											color_sn_match: '',
-											size_numcode_match: ''
+											shoes_style_code_factory_actual: '',
+											color_sn_actual: '',
+											size_numcode_actual: ''
 										})
 									}}
 									shouldFilter={false}
@@ -217,17 +208,17 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								/>
 								<InputFieldControl
 									label={t('ns_erp:fields.shoestyle_codefactory')}
-									name='shoes_style_code_factory_match'
+									name='shoes_style_code_factory_actual'
 									placeholder='XX01 XX01-1'
 									readOnly={true}
 								/>
 								<InputFieldControl
 									label={t('ns_erp:fields.color_sn')}
-									name='color_sn_match'
+									name='color_sn_actual'
 									placeholder='Black'
 									readOnly={true}
 								/>
-								<InputFieldControl label='Size' name='size_numcode_match' placeholder='10' readOnly={true} />
+								<InputFieldControl label='Size' name='size_numcode_actual' placeholder='10' readOnly={true} />
 								<InputFieldControl
 									autoComplete='off'
 									name='quantity'

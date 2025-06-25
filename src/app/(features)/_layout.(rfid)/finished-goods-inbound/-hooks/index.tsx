@@ -161,12 +161,12 @@ export const useExchangeEpcMutation = () => {
 	})
 }
 
-export const useCombineEpcInfoMutation = () => {
+export const useUpsertEpcInfoMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 	const { setSelectedOrder, setCurrentPage } = usePageContext('connection', 'setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
-		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.combineEpcInfo(payload),
+		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.upsertEpcInformation(payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)

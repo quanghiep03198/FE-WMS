@@ -33,10 +33,10 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
-import { FALLBACK_VALUE, useCombineEpcInfoMutation } from '../../-hooks'
-import { EpcCombinationFormValues, epcCombinationSchema } from '../../-schemas/fill-epc-data.schema'
+import { FALLBACK_VALUE, useUpsertEpcInfoMutation } from '../../-hooks'
+import { updateEpcFormSchema, UpdateEpcFormValues } from '../../-schemas/fill-epc-data.schema'
 
-const DEFAULT_FORM_VALUES: EpcCombinationFormValues = {
+const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {
 	mo_no: FALLBACK_VALUE,
 	mo_no_actual: '',
 	color_sn: FALLBACK_VALUE,
@@ -59,8 +59,8 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 		'fillEpcDataDialogOpen',
 		'setFillEpcDataDialogOpen'
 	)
-	const form = useForm<EpcCombinationFormValues>({
-		resolver: zodResolver(epcCombinationSchema),
+	const form = useForm<UpdateEpcFormValues>({
+		resolver: zodResolver(updateEpcFormSchema),
 		defaultValues: DEFAULT_FORM_VALUES
 	})
 	const checkboxId = useId()
@@ -70,7 +70,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 
 	const { data: commandNumbers } = useSearchCommandNumberQuery(searchTerm)
 	const { data: orderDetail } = useGetCommandNumberDetailQuery(currCommandNumber)
-	const { mutateAsync } = useCombineEpcInfoMutation()
+	const { mutateAsync } = useUpsertEpcInfoMutation()
 
 	useEffect(() => {
 		if (orderDetail && orderDetail.orders && orderDetail.sizes) {
@@ -101,7 +101,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 		}
 	}, [currCommandNumberSeq])
 
-	const handleCombineEpcInfo = async (data: EpcCombinationFormValues) => {
+	const handleCombineEpcInfo = async (data: UpdateEpcFormValues) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync({ ...data, mo_no: FALLBACK_VALUE })

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const epcCombinationSchema = z
+export const updateEpcFormSchema = z
 	.object({
 		color_sn: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 		color_sn_actual: z
@@ -45,4 +45,4 @@ export const epcCombinationSchema = z
 		path: ['quantity']
 	})
 
-export type EpcCombinationFormValues = z.infer<typeof epcCombinationSchema>
+export type UpdateEpcFormValues = z.infer<typeof updateEpcFormSchema>
