@@ -5,7 +5,7 @@ import tw from 'tailwind-styled-components'
 const LogoCloud: React.FC = () => {
 	return (
 		<Div className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%]'>
-			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center py-20 xxl:max-w-8xl'>
+			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 xxl:max-w-8xl'>
 				<Typography variant='h4' className='mt-4'>
 					Developed with trusted technologies
 				</Typography>

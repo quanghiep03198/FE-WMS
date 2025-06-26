@@ -15,7 +15,7 @@ const CTA2Section: React.FC = () => {
 	})
 
 	return (
-		<Div className='w-full border-b bg-gradient-to-t from-accent/40 to-transparent to-[20%] py-10'>
+		<Div className='w-full border-b bg-gradient-to-t from-accent/40 to-transparent to-[20%] px-3 py-10 xl:px-0'>
 			<Div className=''>
 				<Div
 					ref={topSectionRef}

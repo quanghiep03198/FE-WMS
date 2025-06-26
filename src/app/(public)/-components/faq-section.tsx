@@ -64,7 +64,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={containerRef}
-			className='mx-auto flex w-full max-w-7xl flex-grow flex-col-reverse items-center gap-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xxl:max-w-8xl'
+			className='mx-auto flex w-full max-w-7xl flex-grow flex-col-reverse items-center gap-10 px-3 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0 xxl:max-w-8xl'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'

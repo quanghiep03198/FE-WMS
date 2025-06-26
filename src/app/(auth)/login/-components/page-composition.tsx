@@ -61,12 +61,10 @@ const FormHeading: React.FC = () => {
 
 	return (
 		<Div className='w-full space-y-1 text-center'>
-			<Typography variant='h4' className='whitespace-nowrap text-center font-bold'>
+			<Typography variant='h2' className='whitespace-nowrap text-center font-bold'>
 				{t('ns_auth:texts.title')}
 			</Typography>
-			<Typography variant='small' color='muted'>
-				{t('ns_auth:texts.description')}
-			</Typography>
+			<Typography color='muted'>{t('ns_auth:texts.description')}</Typography>
 		</Div>
 	)
 }

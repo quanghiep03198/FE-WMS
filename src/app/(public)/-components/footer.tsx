@@ -1,4 +1,3 @@
-import GridBackground from '@/app/-components/-shared/grid-background'
 import { Button, Div, Input, Label, Typography } from '@/components/ui'
 import { Separator } from '@radix-ui/react-context-menu'
 
@@ -6,7 +5,7 @@ const Footer: React.FC = () => {
 	return (
 		<Div as='footer' className='relative border-t bg-background/90 bg-opacity-90 px-6 mix-blend-screen'>
 			{/* <Separator className='mx-auto h-px max-w-7xl rounded-full bg-success [mask-image:linear-gradient(90deg,transparent,white_50%,white_50%,transparent)]' /> */}
-			<GridBackground className='absolute [mask-image:radial-gradient(75%_100%_at_bottom_left,white,transparent)]' />
+
 			<Div className='mx-auto max-w-7xl divide-y xxl:max-w-8xl'>
 				<Div className='flex flex-wrap items-start gap-y-10 py-12'>
 					<Div className='basis-1/5 space-y-4 sm:basis-full md:basis-1/3'>

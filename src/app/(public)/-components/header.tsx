@@ -50,7 +50,7 @@ const NavHeaderMenu: React.FC = () => {
 	const pageContext = usePageContext()
 
 	return (
-		<Div className='flex flex-1 items-center justify-center gap-x-1 rounded-full text-sm sm:hidden md:hidden'>
+		<Div className='flex flex-1 items-center justify-center gap-x-1 rounded-full sm:hidden md:hidden'>
 			{navigationConfig.map((item, index) => (
 				<Button
 					variant='link'
@@ -59,7 +59,7 @@ const NavHeaderMenu: React.FC = () => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(index)
 					}}
 					className={cn(
-						'text-muted-foreground transition-[colors,opacity] duration-500 hover:no-underline hover:opacity-80',
+						'text-base text-muted-foreground transition-[colors,opacity] duration-500 hover:no-underline hover:opacity-80',
 						pageContext?.activeMenu === item.href && 'text-[var(--primary-alt)]'
 					)}>
 					{item.title}
@@ -74,7 +74,7 @@ const NavHeaderActions: React.FC = () => {
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	return (
-		<Div className='flex items-center justify-end gap-x-1 self-center sm:gap-0 md:gap-0'>
+		<Div className='flex items-center justify-end gap-x-1 self-center *:text-base sm:gap-0 md:gap-0'>
 			{!isSmallScreen && <ThemeToggle />}
 			{!isSmallScreen && <LanguageDropdown />}
 			{isAuthenticated ? (
@@ -142,14 +142,14 @@ const NavHeaderDrawerMenu: React.FC = () => {
 					<Separator />
 					<Div className='items-center gap-x-2 space-y-1.5'>
 						<Div className='grid grid-cols-[35%_auto] items-center gap-x-6'>
-							<Label className='inline-flex items-center gap-x-2 text-sm'>
+							<Label className='inline-flex items-center gap-x-2'>
 								<Icon name='Languages' className='size-4' />
 								Language
 							</Label>
 							<LanguageSelect />
 						</Div>
 						<Div className='grid grid-cols-[35%_auto] items-center gap-x-6'>
-							<Label className='inline-flex items-center gap-x-2 text-sm'>
+							<Label className='inline-flex items-center gap-x-2'>
 								<Icon name='SunMoon' className='size-4' />
 								Theme
 							</Label>
