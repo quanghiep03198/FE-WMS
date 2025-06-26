@@ -16,9 +16,9 @@ import { useMemoizedFn } from 'ahooks'
 import { useEffect, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { OrderItem } from '../..'
 import { usePageContext } from '../../-contexts/page-context'
 import { useDeleteOrderMutation } from '../../-hooks'
+import { OrderItem } from '../../..'
 
 const DeleteOrderPopover: React.FC<{ data: OrderItem; shouldClosePopover?: boolean }> = ({
 	data,

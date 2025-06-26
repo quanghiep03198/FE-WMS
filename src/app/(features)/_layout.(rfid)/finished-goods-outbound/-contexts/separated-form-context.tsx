@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { OrderItem } from '..'
+import { OrderItem } from '../..'
 
 export const DecentralizedPoFormContext = createContext<Pick<OrderItem, 'sizes'>>(null)
 

@@ -6,19 +6,9 @@ import React, { createContext, use, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
+import { OrderItem } from '../..'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
-
-export type OrderItem = {
-	mo_no: string
-	color_sn: string
-	shoes_style_code_factory: string
-	factory_code_produce: string
-	sizes: Array<{
-		size_numcode: string
-		count: number
-	}>
-}
 
 type PageContextStore = {
 	currentPage: number | null
@@ -57,6 +47,8 @@ export const DEFAULT_PROPS: Pick<
 		data: [],
 		hasNextPage: false,
 		hasPrevPage: false,
+		nextPage: null,
+		prevPage: null,
 		limit: 100,
 		page: 1,
 		totalDocs: 0,
