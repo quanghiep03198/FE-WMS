@@ -1,4 +1,4 @@
-import { Combobox, ComboboxProps, DropdownSelect, DropdownSelectProps, Input, InputProps } from '@/components/ui'
+import { Combobox, ComboboxProps, DropdownSelect, DropdownSelectProps, Input, type InputProps } from '@/components/ui'
 import { CellContext } from '@tanstack/react-table'
 import React, { Fragment, useEffect, useState } from 'react'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'

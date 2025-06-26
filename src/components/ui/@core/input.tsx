@@ -1,7 +1,9 @@
 import { cn } from '@/common/utils/cn'
 import * as React from 'react'
 
-const Input: React.FC<React.ComponentProps<'input'>> = ({ className, type, ref, ...props }) => {
+export type InputProps = React.ComponentProps<'input'>
+
+const Input: React.FC<InputProps> = ({ className, type, ref, ...props }) => {
 	return (
 		<input
 			type={type}
