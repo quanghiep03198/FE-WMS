@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "vite build && tsc",
 		"preview": "vite preview --port 4000",
 		"test": "vitest --config ./vite.config.ts",
 		"test:preview": "vite preview --port 5000 --outDir ./html",
