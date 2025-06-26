@@ -24,7 +24,6 @@ export const exchangeEpcSchema = z
 		size_numcode: z.string().nonempty({ message: 'ns_validation:required' }),
 		size_qty: z
 			.number()
-			.positive()
 			.default(0)
 			.transform((value) => Number(value)),
 		mo_no_actual: z.string().nonempty({ message: 'ns_validation:required' }),

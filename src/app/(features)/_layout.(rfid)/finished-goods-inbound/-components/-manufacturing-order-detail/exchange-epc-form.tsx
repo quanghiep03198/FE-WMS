@@ -184,19 +184,24 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									datalist={uniqBy([...exchangableOrders, ...(availableCommandNumbers ?? [])], 'mo_no')}
 									labelField='mo_no'
 									valueField='mo_no'
+									shouldFilter={false}
 									onInput={debounce((value) => setSearchTerm(value), 200)}
 									onSelect={(value) => {
 										form.reset({
 											...form.getValues(),
 											mo_no_actual: value,
-											mo_noseq: '',
-											mat_code: '',
 											shoes_style_code_factory_actual: '',
 											color_sn_actual: '',
-											size_numcode_actual: ''
+											size_numcode_actual: '',
+											mo_noseq: '',
+											mat_code: '',
+											or_no: '',
+											or_cust_po: '',
+											cust_shoes_style: '',
+											size_code: '',
+											size_qty: 0
 										})
 									}}
-									shouldFilter={false}
 								/>
 								<SelectFieldControl
 									name='mo_noseq'
