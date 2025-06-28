@@ -29,13 +29,6 @@ export default defineConfig(({ mode }) => {
 			}),
 			pwa({
 				registerType: 'autoUpdate',
-				strategies: 'generateSW',
-				// srcDir: 'src',
-				// filename: 'service-worker.ts',
-				// pwaAssets: { disabled: false, config: true },
-				// injectManifest: {
-				// 	globPatterns: ['**/*.{html,css,js,wasm,ico,png,jpg,svg,webp,woff2}']
-				// },
 				manifestFilename: 'site.webmanifest',
 				disable: mode === 'development',
 				mode: mode as VitePWAOptions['mode'],
