@@ -2,6 +2,8 @@ import * as Sentry from '@sentry/react'
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
+import { toast } from 'sonner'
+import { useRegisterSW } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from './app/-components/-errors/error-boundary-fallback'
 import { Toaster } from './components/ui/@core/sonner'
 import { AppConfigs } from './configs/app.config'
@@ -11,6 +13,13 @@ import { RouterProvider } from './providers/router-provider'
 import { ThemeProvider } from './providers/theme-provider'
 
 const App: React.FC = () => {
+	const { updateServiceWorker } = useRegisterSW({
+		immediate: true,
+		onOfflineReady() {
+			toast.info('Your app is ready to work offline')
+		}
+	})
+
 	return (
 		<QueryErrorResetBoundary>
 			{({ reset: resetQueryError }) => (
@@ -21,6 +30,7 @@ const App: React.FC = () => {
 							resetError={() => {
 								resetQueryError()
 								resetError()
+								updateServiceWorker()
 							}}
 							{...props}
 						/>

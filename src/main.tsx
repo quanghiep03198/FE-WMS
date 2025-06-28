@@ -2,7 +2,6 @@ import './styles/index.css'
 
 import * as Sentry from '@sentry/react'
 import { createRoot } from 'react-dom/client'
-import { registerSW } from 'virtual:pwa-register'
 import App from './__app.tsx'
 import env from './common/utils/env.ts'
 import { router } from './providers/router-provider.tsx'
@@ -36,5 +35,4 @@ createRoot(container, {
 	}
 }).render(<App />)
 
-registerSW({ immediate: true, onOfflineReady() {} })
 reportWebVitals()

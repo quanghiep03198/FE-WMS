@@ -29,6 +29,13 @@ export default defineConfig(({ mode }) => {
 			}),
 			pwa({
 				registerType: 'autoUpdate',
+				strategies: 'generateSW',
+				// srcDir: 'src',
+				// filename: 'service-worker.ts',
+				// pwaAssets: { disabled: false, config: true },
+				// injectManifest: {
+				// 	globPatterns: ['**/*.{html,css,js,wasm,ico,png,jpg,svg,webp,woff2}']
+				// },
 				manifestFilename: 'site.webmanifest',
 				disable: mode === 'development',
 				mode: mode as VitePWAOptions['mode'],
@@ -76,12 +83,22 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					navigateFallback: '/index.html',
 					globPatterns: ['**/*.{html,css,js,wasm,ico,png,jpg,svg,webp,woff2}'],
+					skipWaiting: true,
+					clientsClaim: true,
 					runtimeCaching: [
 						{
 							urlPattern: /.*\.(html|css|js?)$/,
 							handler: 'StaleWhileRevalidate',
 							options: {
-								cacheName: 'static-resources-cache'
+								cacheName: 'static-resources-cache',
+								expiration: {
+									maxEntries: 100,
+									maxAgeSeconds: 60 * 60,
+									purgeOnQuotaError: true
+								},
+								cacheableResponse: {
+									statuses: [0, 200] // Cache responses with status 0 (opaque) and 200 (OK)
+								}
 							}
 						},
 						{
@@ -105,8 +122,10 @@ export default defineConfig(({ mode }) => {
 					]
 				},
 				devOptions: {
-					enabled: true,
-					suppressWarnings: true
+					enabled: false,
+					type: 'module',
+					suppressWarnings: true,
+					navigateFallback: '/index.html'
 				}
 			}),
 			sentryVitePlugin({
@@ -189,8 +208,10 @@ export default defineConfig(({ mode }) => {
 							['d3-shape', /d3-shape/],
 							['date-fns', /date-fns/],
 							['file-saver', /file-saver/],
+							['filesize', /filesize/],
 							['flat', /flat/],
 							['i18next', /i18next/],
+							['i18next-browser-languagedetector', /i18next-browser-languagedetector/],
 							['immer', /immer/],
 							['lodash', /lodash/],
 							['lucide', /lucide-react/],
@@ -203,6 +224,8 @@ export default defineConfig(({ mode }) => {
 							['recharts', /recharts/],
 							['@sentry/react', /@sentry\/react/],
 							['sonner', /sonner/],
+							['socket.io-client', /socket.io-client/],
+							['socket.io-client', /socket.io-client/],
 							['tailwind-merge', /tailwind-merge/],
 							['tailwind-styled-components', /tailwind-styled-components/],
 							['uuid', /uuid/],
