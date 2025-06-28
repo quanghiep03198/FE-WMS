@@ -8,7 +8,6 @@ import ScannedEpcCounter from './-components/-epc-counter'
 import ScannedEpcList from './-components/-epc-data-list'
 import OrderSizeDetailTable from './-components/-manufacture-order-detail/order-detail-table'
 import OutboundForm from './-components/-outbound-form'
-import PageNavigationBlocker from './-components/navigation-blocker'
 import { PageProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(rfid)/finished-goods-outbound/')({
@@ -29,7 +28,8 @@ function Page() {
 			<meta name='description' content='RFID Scanner integration for outbound process' />
 
 			<HostCompatibleGuard>
-				<PageNavigationBlocker />
+				{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
+				{/* <PageNavigationBlocker /> */}
 				<PageProvider>
 					<Div className='static gap-4 xxl:grid xxl:grid-cols-12'>
 						<Div className='h-full @container xxl:col-span-4'>
