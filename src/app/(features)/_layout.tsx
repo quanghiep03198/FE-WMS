@@ -63,10 +63,10 @@ function Layout() {
 		<Fragment>
 			{isSmallScreen && <UnsupportedScreen />}
 			<AuthGuard>
-				<SidebarProvider className='relative !h-screen overflow-y-scroll [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
+				<SidebarProvider className='h-screen !overflow-hidden [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
 					<NavSidebar />
 					<Div
-						className='flex-1 @container'
+						className='relative h-full flex-1 overflow-y-scroll @container'
 						style={
 							{
 								'--header-height': 80 + 'px',
@@ -79,7 +79,7 @@ function Layout() {
 							<Div
 								as='main'
 								id='outlet-wrapper'
-								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] [view-transition-name:main-content] sm:px-4'>
+								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-4'>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
 										return <ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
