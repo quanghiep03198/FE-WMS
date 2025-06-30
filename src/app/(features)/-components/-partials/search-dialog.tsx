@@ -79,7 +79,11 @@ const SearchDialog: React.FC = () => {
 												<Link to={item.path} onClick={() => setOpen(false)}>
 													<Icon name={item.icon} />
 													{t(item.title, { defaultValue: item.title })}
-													<CommandShortcut>{String(item.keybinding).split('.').join('+')}</CommandShortcut>
+													{item.keybinding && (
+														<CommandShortcut>
+															{String(item.keybinding).split('.').join('+')}
+														</CommandShortcut>
+													)}
 												</Link>
 											</CommandItem>
 										))}
