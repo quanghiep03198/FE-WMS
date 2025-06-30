@@ -44,6 +44,13 @@ export declare global {
 		path: string
 	}
 
+	type WsResponseBody<T> = {
+		event: string
+		ok: boolean
+		error: null | string | object
+		metadata: T
+	}
+
 	type Pagination<T = unknown> = {
 		data: Array<T>
 		hasNextPage: boolean

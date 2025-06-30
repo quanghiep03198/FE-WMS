@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 import { RequestHeaders } from '../constants/enums'
 import env from '../utils/env'
+import { Json } from '../utils/json'
 
-type UseWebSocketOptions<T> = {
+type UseWebSocketOptions<TResponse> = {
 	event: string
-	defaultData?: T
+	initialData?: TResponse
 	room?: string
 }
 
@@ -20,19 +21,21 @@ const socket = io(env('VITE_WEBSOCKET_URL'), {
 	timeout: 10000
 })
 
-export function useSocketIo<T>({ event }: UseWebSocketOptions<T>) {
+export function useSocketIo<TResponse, TPayload>({ event }: UseWebSocketOptions<TResponse>) {
 	const [isConnected, setIsConnected] = useState(socket.connected)
-	const [data, setData] = useState<T | null>(null)
+	const [data, setData] = useState<TResponse | null>(null)
 
 	useEffect(() => {
 		const handleConnect = () => setIsConnected(true)
 		const handleDisconnect = () => setIsConnected(false)
-		const handleEvent = (payload: T) => {
+		const handleEvent = (payload: TResponse) => {
 			setData(payload)
 		}
 		socket.on('connect', handleConnect)
 		socket.on('disconnect', handleDisconnect)
-		socket.on(event, (data) => setData(data))
+		socket.on(event, (data) => {
+			setData(Json.parse<TResponse>(data))
+		})
 
 		// if (room) socket.emit('join', room)
 
@@ -43,7 +46,7 @@ export function useSocketIo<T>({ event }: UseWebSocketOptions<T>) {
 		}
 	}, [])
 
-	const emit = useCallback((payload: any) => {
+	const emit = useCallback((payload: TPayload) => {
 		socket.emit(event, payload)
 	}, [])
 
