@@ -107,7 +107,7 @@ export default {
 	scanner_setting: {
 		adjust_setting_description: 'Adjust RFID Playground settings.',
 		cron_job: 'Job status',
-		data_synchronization: 'Synchronization runner',
+		synchronization: 'Synchronization',
 		developer_mode: 'Developer mode',
 		developer_mode_note: 'Enable developer mode for more advanced features.',
 		fetch_oder_data_note: "Allows you to scan EPCs that weren't imported/exported from previous days.",
@@ -115,8 +115,8 @@ export default {
 		server_connection: 'Server connection',
 		latency: 'Latency',
 		network_status: 'Network status',
-		synchronization_trigger: 'Synchronization trigger',
-		synchronization_trigger_description: "Trigger API calls to sync data from the customer's API if needed.",
+		decker_data_synchronization: "Decker's data synchronization",
+		decker_data_synchronization_description: 'Select a factory that the unknown manufacturing orders belong to',
 		toggle_fullscreen: 'Toggle full screen',
 		toggle_fullscreen_note: 'Use full screen mode for a larger view.',
 		transferred_data: 'Transferred data'

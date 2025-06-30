@@ -105,7 +105,7 @@ export default {
 	scanner_setting: {
 		adjust_setting_description: 'Điều chỉnh cài đặt RFID Playground',
 		cron_job: 'Trạng thái quét',
-		data_synchronization: 'Đồng bộ dữ liệu',
+		synchronization: 'Đồng bộ',
 		developer_mode: 'Chế độ phát triển',
 		developer_mode_note: 'Bật chế độ phát triển để sử dụng các tính năng nâng cao hơn',
 		fetch_oder_data_note: 'Cho phép bạn tải các dữ liệu EPC cũ hơn chưa thực hiện thao tác nhập/xuất',
@@ -113,8 +113,9 @@ export default {
 		server_connection: 'Kết nối máy chủ',
 		latency: 'Độ trễ',
 		network_status: 'Trạng thái kết nối',
-		synchronization_trigger: 'Kích hoạt đồng bộ',
-		synchronization_trigger_description: 'Kích hoạt đồng bộ dữ liệu từ API của khách hàng nếu tem không có chỉ lệnh.',
+		decker_data_synchronization: 'Đồng bộ dữ liệu Decker',
+		decker_data_synchronization_description:
+			'Chọn nhà máy nơi các chỉ lệnh không có dữ liệu được sản xuất để tiến hành đồng bộ',
 		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',
 		toggle_fullscreen_note: 'Sử dụng chế độ toàn màn hình để có góc nhìn rộng hơn',
 		transferred_data: 'Dữ liệu đã chuyển'

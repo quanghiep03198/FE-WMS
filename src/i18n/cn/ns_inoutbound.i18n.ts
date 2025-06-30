@@ -99,7 +99,7 @@ export default {
 	scanner_setting: {
 		adjust_setting_description: '调整RFID游乐场设置',
 		cron_job: '计划任务状态',
-		data_synchronization: '数据同步',
+		synchronization: '数据同步',
 		developer_mode: '开发者模式',
 		developer_mode_note: '启用开发者模式以获取更多高级功能',
 		fetch_oder_data_note: '允许您扫描未从前几天导入/导出的EPC',
@@ -111,8 +111,8 @@ export default {
 		toggle_fullscreen: '切换全屏模式',
 		toggle_fullscreen_note: '使用全屏模式以获得更大的视图',
 		transferred_data: '已传输的数据',
-		synchronization_trigger: '激活同步',
-		synchronization_trigger_description: '激活API以同步客人标签(若需要)'
+		decker_data_synchronization: 'Decker 数据同步',
+		decker_data_synchronization_description: '选择没有生产数据的工厂以进行同步'
 	},
 	titles: {
 		archived_restoration: '已存档数据恢复',
