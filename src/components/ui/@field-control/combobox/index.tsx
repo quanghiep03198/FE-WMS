@@ -4,6 +4,7 @@ import { CommandLoading } from 'cmdk'
 import { Fragment, useId, useMemo, useState } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
 import {
+	Button,
 	ButtonProps,
 	Command,
 	CommandEmpty,
@@ -22,8 +23,7 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	Typography,
-	buttonVariants
+	Typography
 } from '../..'
 import { BaseFieldControl } from '../../../../common/types/hook-form'
 
@@ -118,26 +118,23 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 						)}
 						<Div className={cn('space-y-2')}>
 							<Popover>
-								<PopoverTrigger
-									{...triggerProps}
-									id={id}
-									disabled={disabled}
-									aria-invalid={isError}
-									className={cn(
-										triggerProps?.className,
-										buttonVariants({
-											variant: 'outline',
-											className:
-												'w-full justify-between bg-background px-3 py-1 font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
-										})
-									)}>
+								<PopoverTrigger asChild>
 									<FormControl>
-										<Fragment>
+										<Button
+											{...triggerProps}
+											id={id}
+											disabled={disabled}
+											aria-invalid={isError}
+											variant='outline'
+											className={cn(
+												triggerProps?.className,
+												'w-full justify-between bg-background font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
+											)}>
 											<Typography variant='small' className='line-clamp-1'>
 												{renderCurrentValue(field.value)}
 											</Typography>
 											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
-										</Fragment>
+										</Button>
 									</FormControl>
 								</PopoverTrigger>
 								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' {...popoverContentProps}>
