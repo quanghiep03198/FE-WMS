@@ -14,6 +14,7 @@ export type MultipleSelectFieldControlProps<T extends FieldValues, D = Record<st
 	Partial<MultiSelectProps<D>>
 
 export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlProps<T, D>) {
+	const id = useId()
 	const { control, formState, trigger } = useFormContext()
 	const {
 		name,
@@ -31,7 +32,7 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 		onInput
 	} = props
 
-	const id = useId()
+	const isInvalid = Boolean(formState.errors[name])
 
 	return (
 		<FormField
@@ -60,6 +61,7 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 								id={id}
 								shouldFilter={shouldFilter}
 								placeholder={placeholder}
+								aria-invalid={isInvalid}
 								datalist={datalist}
 								labelField={labelField}
 								valueField={valueField}

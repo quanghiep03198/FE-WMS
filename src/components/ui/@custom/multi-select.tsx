@@ -22,7 +22,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
-import { useDeepCompareEffect } from 'ahooks'
+import { useClickAway, useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
 import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
 import React, { Fragment, useCallback, useRef, useState } from 'react'
@@ -138,6 +138,9 @@ export function MultiSelect<D = Record<string, any>>({
 	const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
+	const popoverContentRef = useRef<HTMLDivElement>(null)
+	const popoverTriggerRef = ref ?? useRef<HTMLButtonElement>(null)
+
 	const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 		event.stopPropagation()
 
@@ -233,12 +236,15 @@ export function MultiSelect<D = Record<string, any>>({
 		if (Array.isArray(value)) setSelectedValues(value)
 	}, [value])
 
+	useClickAway(() => setIsPopoverOpen(false), [popoverTriggerRef, popoverContentRef])
+
 	return (
-		<Popover modal={modalPopover} open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+		<Popover modal={modalPopover} open={isPopoverOpen}>
 			<PopoverTrigger
 				{...props}
-				ref={ref}
+				ref={popoverTriggerRef}
 				onWheel={(e) => e.stopPropagation()}
+				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
 					'w-full justify-stretch rounded-md border bg-inherit py-0 pl-2 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
@@ -256,7 +262,7 @@ export function MultiSelect<D = Record<string, any>>({
 										<Badge key={String(value)} variant='secondary'>
 											<Typography
 												variant='small'
-												className='max-w-10 truncate text-xs'
+												className='max-w-16 truncate text-xs'
 												title={String(option?.[labelField])}>
 												{String(option?.[labelField])}
 											</Typography>
@@ -324,6 +330,7 @@ export function MultiSelect<D = Record<string, any>>({
 				)}
 			</PopoverTrigger>
 			<PopoverContent
+				ref={popoverContentRef}
 				className='w-[var(--radix-popover-trigger-width)] p-0'
 				align='start'
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}
@@ -363,6 +370,7 @@ export function MultiSelect<D = Record<string, any>>({
 										disabled={datalist?.length === 0}
 										keywords={['all']}
 										onSelect={toggleAll}
+										onClick={(e) => e.stopPropagation()}
 										className='cursor-pointer'>
 										<Div
 											className={cn(
