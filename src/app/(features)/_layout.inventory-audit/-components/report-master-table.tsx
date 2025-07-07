@@ -3,9 +3,22 @@ import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import {
+	Button,
+	DataTable,
+	Div,
+	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Tooltip
+} from '@/components/ui'
+import Skeleton from '@/components/ui/@custom/skeleton'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { RenderSubComponent, RenderSubComponentProps } from '@/components/ui/@react-table/types'
+import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { InventoryService } from '@/services/inventory.service'
 import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
 import { useMemoizedFn, useResetState } from 'ahooks'
@@ -247,10 +260,56 @@ export const InventoryReportMasterTable: React.FC = () => {
 				getRowCanExpand={() => true}
 				enableExpanding={true}
 				manualExpanding={true}
-				renderSubComponent={renderDetailTable satisfies RenderSubComponent<IMonthlyInventoryReport>}
+				renderSubComponent={renderDetailTable}
+				containerProps={{ className: 'xxl:h-[50vh]' }}
+				footerProps={{
+					slot: () => <DataTableSummary data={data} isLoading={isLoading} />
+				}}
 				toolbarProps={{ slotRight: renderSlotRight }}
 			/>
 		</Div>
+	)
+}
+
+const DataTableSummary: React.FC<{ data: IMonthlyInventoryReport[]; isLoading: boolean }> = ({ data, isLoading }) => {
+	const { t } = useTranslation()
+
+	const totalInitialQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.init_inv_qty, 0) : 0
+	const totalInboundQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.total_instock_qty, 0) : 0
+	const totalOutboundQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.total_outstock_qty, 0) : 0
+	const actualInventoryQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.actual_inv_qty, 0) : 0
+	const finalInventoryQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.final_inv_qty, 0) : 0
+
+	return (
+		<Table className='w-full table-fixed'>
+			<TableHeader>
+				<TableRow>
+					<TableHead colSpan={5} className='bg-muted text-muted-foreground'>
+						{t('ns_common:titles.overall')}
+					</TableHead>
+				</TableRow>
+				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
+					<TableHead align='right'>{t('ns_erp:fields.total_init_qty')}</TableHead>
+					<TableHead align='right'>{t('ns_erp:fields.inbound_qty')}</TableHead>
+					<TableHead align='right'>{t('ns_erp:fields.outbound_qty')}</TableHead>
+					<TableHead align='right'>{t('ns_erp:fields.actual_inventory_qty')}</TableHead>
+					<TableHead align='right'>{t('ns_erp:fields.final_inventory_qty')}</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				<TableRow className='divide-x *:font-medium'>
+					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalInitialQuantity)}</TableCell>
+					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalInboundQuantity)}</TableCell>
+					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalOutboundQuantity)}</TableCell>
+					<TableCell align='right'>
+						{isLoading ? <Skeleton /> : formatIntlNumber(actualInventoryQuantity)}
+					</TableCell>
+					<TableCell align='right'>
+						{isLoading ? <Skeleton /> : formatIntlNumber(finalInventoryQuantity)}
+					</TableCell>
+				</TableRow>
+			</TableBody>
+		</Table>
 	)
 }
 
