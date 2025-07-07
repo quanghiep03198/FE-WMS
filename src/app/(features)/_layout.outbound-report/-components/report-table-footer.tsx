@@ -8,7 +8,7 @@ const ReportTableFooter: React.FC<{ data: IOutboundReport[] }> = ({ data }) => {
 	const { t } = useTranslation()
 
 	return (
-		<Div role='row' className='flex w-full items-center justify-center gap-x-4'>
+		<Div role='row' className='flex w-full items-center justify-center gap-x-4 px-4 py-2'>
 			<Typography color='muted' className='font-medium'>
 				{t('ns_common:common_fields.total')}
 			</Typography>
