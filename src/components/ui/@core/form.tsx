@@ -80,7 +80,7 @@ const FormLabel: React.FC<React.ComponentProps<typeof Label>> = ({ className, ..
 }
 FormLabel.displayName = 'FormLabel'
 
-const FormControl: React.FC<React.ComponentPropsWithoutRef<typeof Slot>> = (props) => {
+const FormControl: React.FC<React.ComponentProps<typeof Slot>> = (props) => {
 	const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
 	return (
