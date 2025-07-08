@@ -138,8 +138,9 @@ export function MultiSelect<D = Record<string, any>>({
 	const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
+	const triggerRef = useRef<HTMLButtonElement>(null)
 	const popoverContentRef = useRef<HTMLDivElement>(null)
-	const popoverTriggerRef = ref ?? useRef<HTMLButtonElement>(null)
+	const popoverTriggerRef = ref ?? triggerRef
 
 	const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 		event.stopPropagation()
