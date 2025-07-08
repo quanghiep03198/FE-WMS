@@ -1,15 +1,11 @@
 import { cn } from '@/common/utils/cn'
 import { Div, Separator } from '@/components/ui'
-import { Table } from '@tanstack/react-table'
-import { Fragment } from 'react'
+import { Fragment, memo } from 'react'
+import { useTableContext } from '../context/table.context'
 import { type TableFooterProps } from '../types'
 
-function TableFooter({
-	table,
-	hidden,
-	slot: Slot,
-	rtl: rtl
-}: TableFooterProps & { table: Table<any> & React.PropsWithChildren }) {
+function TableFooter({ hidden, slot: Slot, rtl }: TableFooterProps) {
+	const { table } = useTableContext()
 	if (hidden || !Slot) return null
 
 	return (
@@ -22,4 +18,4 @@ function TableFooter({
 	)
 }
 
-export default TableFooter
+export default memo(TableFooter)

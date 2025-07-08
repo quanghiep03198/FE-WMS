@@ -1,5 +1,3 @@
-'use no memo'
-
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import React from 'react'

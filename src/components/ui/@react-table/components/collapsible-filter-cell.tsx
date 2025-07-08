@@ -1,8 +1,6 @@
-'use no memo'
-
-import useEventEmitter from '@/common/hooks/use-event-emitter'
 import { cn } from '@/common/utils/cn'
 import { Header } from '@tanstack/react-table'
+import { useState } from 'react'
 import { Collapsible, CollapsibleContent } from '../../@core/collapsible'
 import { TableHead } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
@@ -14,22 +12,26 @@ type CollapsibleFilterCellProps<TData, TValue = unknown> = {
 }
 
 function CollapsibleFilterCell<TData, TValue>({ header }: CollapsibleFilterCellProps<TData, TValue>) {
-	const { instanceId, defaultFilterOpen } = useTableContext()
-	const [isFilterOpened] = useEventEmitter<boolean>(`toggle-filter-${instanceId}`, defaultFilterOpen)
+	const { defaultFilterOpen, event$ } = useTableContext()
+	const [shouldFilterOpen, setShouldFilterOpen] = useState<boolean>(defaultFilterOpen)
+
+	event$.useSubscription((value) => {
+		if (typeof value.shouldFilterOpen === 'boolean') setShouldFilterOpen(value.shouldFilterOpen)
+	})
 
 	return (
 		<TableHead
 			key={header.id}
 			colSpan={header.colSpan}
-			className={cn('group relative z-40 p-0', isFilterOpened ? 'border-b border-border' : 'border-none')}
+			className={cn('group relative z-40 p-0', shouldFilterOpen ? 'border-b border-border' : 'border-none')}
 			style={{
 				width: `calc(var(--header-${header?.id}-size) * 1px)`,
 				...DataTableUtility.getStickyOffsetPosition(header?.column)
 			}}>
 			<Collapsible
-				defaultOpen={defaultFilterOpen}
-				open={isFilterOpened}
-				data-state={isFilterOpened ? 'open' : 'closed'}>
+				defaultOpen={shouldFilterOpen}
+				open={shouldFilterOpen}
+				data-state={shouldFilterOpen ? 'open' : 'closed'}>
 				<CollapsibleContent className='h-10 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 					<ColumnFilter column={header.column} />
 				</CollapsibleContent>

@@ -13,7 +13,7 @@ export function IndeterminateCheckbox<TData, TValue>({
 	table,
 	onCheckedChange
 }: IndeterminateCheckboxProps<TData, TValue>) {
-	const update = useUpdate()
+	const rerender = useUpdate()
 	const checked = table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
 
 	return (
@@ -21,7 +21,7 @@ export function IndeterminateCheckbox<TData, TValue>({
 			role='checkbox'
 			checked={checked as CheckedState}
 			onCheckedChange={(checked) => {
-				update()
+				rerender()
 				table.toggleAllPageRowsSelected(!!checked)
 				if (typeof onCheckedChange === 'function') onCheckedChange(checked)
 			}}

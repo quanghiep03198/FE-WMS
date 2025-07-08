@@ -22,7 +22,7 @@ export type TableFooterProps<TData = any> = {
 	hidden?: boolean
 	rtl?: boolean
 	slot?: React.FC<{ table: Table<TData> }>
-}
+} & React.PropsWithChildren
 
 // #region Pagination prop types
 type PaginationBaseProps<TData = any> = {

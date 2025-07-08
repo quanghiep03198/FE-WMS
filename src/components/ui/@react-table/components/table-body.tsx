@@ -1,22 +1,22 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
-import { flexRender, type Row as TRow, type Table as TTable } from '@tanstack/react-table'
+import { flexRender, type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer, notUndefined } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
-import isEqual from 'react-fast-compare'
 import { TableCell, TableRow, TableBody as TableRowGroup } from '../../@core/table'
+import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { DataTableUtility } from '../utils/table.util'
 
 type TableBodyProps = {
-	table: TTable<any>
 	virtualizer: Virtualizer<HTMLDivElement, Element>
 	renderSubComponent: RenderSubComponent<any>
 }
 
-export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, renderSubComponent }) => {
+export const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }) => {
 	'use no memo'
 
+	const { table } = useTableContext()
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
@@ -43,18 +43,14 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 
 					return virtualizer.isScrolling && !table.getIsSomeRowsExpanded() ? (
 						<MemoizedVirtualTableRow
-							data-index={virtualRow.index}
 							key={row.id}
-							table={table}
 							row={row}
 							virtualRow={virtualRow}
 							renderSubComponent={renderSubComponent}
 						/>
 					) : (
 						<VirtualTableRow
-							data-index={virtualRow.index}
 							key={row.id}
-							table={table}
 							row={row}
 							virtualRow={virtualRow}
 							renderSubComponent={renderSubComponent}
@@ -70,18 +66,20 @@ export const TableBody: React.FC<TableBodyProps> = ({ table, virtualizer, render
 	)
 }
 
-type VirtualTableRowProps = Pick<TableBodyProps, 'table' | 'renderSubComponent'> & {
+type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
 	row: TRow<any>
 	virtualRow: { index: number; start: number; size: number }
 }
 
-const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRow, renderSubComponent }) => {
+const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, renderSubComponent }) => {
 	'use no memo'
+
+	const { table } = useTableContext()
 
 	return (
 		<Fragment>
 			<TableRow
-				data-index={virtualRow.index}
+				data-index={virtualRow.index + 1}
 				aria-selected={row.getIsSelected()}
 				aria-expanded={row.getIsExpanded()}
 				className='group border-spacing-0'>
@@ -110,7 +108,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 			</TableRow>
 			{/* Sub-component */}
 			{typeof renderSubComponent === 'function' && (
-				<TableRow>
+				<TableRow data-index={virtualRow.index * 1.5}>
 					<TableCell
 						colSpan={row.getVisibleCells().length}
 						className={cn(
@@ -138,6 +136,4 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ table, row, virtualRo
 
 const MemoizedVirtualTableRow = memo(VirtualTableRow)
 
-export const MemoizedTableBody = memo(TableBody, (prev, next) =>
-	isEqual(prev.table.options.data, next.table.options.data)
-)
+export const MemoizedTableBody = memo(TableBody)

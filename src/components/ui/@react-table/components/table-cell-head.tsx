@@ -1,7 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
-import { Header, Table, flexRender } from '@tanstack/react-table'
+import { Header, flexRender } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
 import { icons } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,16 +18,17 @@ import {
 	Icon,
 	Typography
 } from '../..'
+import { useTableContext } from '../context/table.context'
 
 type TableCellHeadProps<TData, TValue> = {
 	header: Header<TData, TValue>
-	table: Table<TData>
 }
 
-export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
+export default function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
 	const { t } = useTranslation()
+	const rerender = useUpdate()
+	const { table, event$ } = useTableContext()
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
-
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
 
 	const currentSortingState: keyof typeof icons = (() => {
@@ -67,7 +69,12 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 						minWidth: `calc(var(--header-${header?.id}-size) * 1px)`
 					} as React.CSSProperties
 				}
-				onClick={toggleSorting}
+				onClick={(e) => {
+					if (typeof toggleSorting === 'function') {
+						toggleSorting(e)
+						rerender()
+					}
+				}}
 				title={headerTitle}>
 				{columnDef.enableSorting && (
 					<Icon
@@ -119,6 +126,8 @@ export function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TDat
 							checked={header.column.getIsPinned() === ('right' as CheckedState)}
 							onCheckedChange={() => {
 								header.column.pin('right')
+								// rerender()
+								event$.emit({ columnPinning: table.getState().columnPinning })
 							}}>
 							{t('ns_common:table.pin_right')}
 						</ContextMenuCheckboxItem>

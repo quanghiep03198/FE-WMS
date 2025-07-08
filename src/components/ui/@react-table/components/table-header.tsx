@@ -1,18 +1,24 @@
-'use no memo'
-
 import { cn } from '@/common/utils/cn'
 import { type Header, type HeaderGroup, type Table } from '@tanstack/react-table'
-import { Fragment } from 'react'
+import { useUpdate } from 'ahooks'
+import { Fragment, memo } from 'react'
 import { TableHead, TableHeader, TableRow } from '../../@core/table'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
+import { useTableContext } from '../context/table.context'
 import { DataTableUtility } from '../utils'
 import CollapsibleFilterCell from './collapsible-filter-cell'
 import ColumnResizer from './column-resizer'
-import { TableCellHead } from './table-cell-head'
+import TableCellHead from './table-cell-head'
 
-type DataTableHeaderProps = { table: Table<any> }
+const DataTableHeader: React.FC = () => {
+	const { table, event$ } = useTableContext()
+	const rerender = useUpdate()
 
-const DataTableHeader: React.FC<DataTableHeaderProps> = ({ table }) => {
+	event$.useSubscription((value) => {
+		if (value.columnPinning && Array.isArray(value.columnPinning.left) && Array.isArray(value.columnPinning.right))
+			rerender()
+	})
+
 	return (
 		<TableHeader className='sticky top-0 z-20 bg-background'>
 			{table.getHeaderGroups().map((headerGroup) => {
@@ -27,7 +33,7 @@ const DataTableHeader: React.FC<DataTableHeaderProps> = ({ table }) => {
 	)
 }
 
-const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any> }> = ({ table, headerGroup }) => {
+const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
 	return (
 		<TableRow>
 			{headerGroup.headers.map((header) => {
@@ -36,17 +42,17 @@ const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any
 					return null
 				}
 
-				return <DataTableHead key={header.id} table={table} header={header} rowSpan={rowSpan} />
+				return <DataTableHead key={header.id} header={header} rowSpan={rowSpan} />
 			})}
 		</TableRow>
 	)
 }
 
-const DataTableHead: React.FC<{ table: Table<any>; header: Header<any, any>; rowSpan: number }> = ({
-	table,
-	header,
-	rowSpan
-}) => {
+TableHeaderRow.displayName = 'TableHeaderRow'
+
+const DataTableHead: React.FC<{ header: Header<any, any>; rowSpan: number }> = ({ header, rowSpan }) => {
+	'use no memo'
+
 	return (
 		<TableHead
 			colSpan={header.colSpan}
@@ -58,11 +64,13 @@ const DataTableHead: React.FC<{ table: Table<any>; header: Header<any, any>; row
 				width: `calc(var(--header-${header?.id}-size) * 1px)`,
 				...DataTableUtility.getStickyOffsetPosition(header?.column)
 			}}>
-			<TableCellHead table={table} header={header} />
+			<TableCellHead header={header} />
 			<ColumnResizer header={header} />
 		</TableHead>
 	)
 }
+
+DataTableHead.displayName = 'DataTableHead'
 
 const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
 	return (
@@ -76,4 +84,6 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ hea
 	)
 }
 
-export default DataTableHeader
+TableHeaderFilterRow.displayName = 'TableHeaderFilterRow'
+
+export default memo(DataTableHeader)

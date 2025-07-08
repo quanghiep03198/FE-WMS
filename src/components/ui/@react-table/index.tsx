@@ -17,11 +17,10 @@ import {
 	type PaginationState,
 	type SortingState
 } from '@tanstack/react-table'
-import { useLatest, useResetState } from 'ahooks'
+import { useEventEmitter, useLatest, useResetState } from 'ahooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '..'
 import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
@@ -33,6 +32,7 @@ import { fuzzySort } from './utils/fuzzy-sort.util'
 import { pick } from 'lodash'
 import tw from 'tailwind-styled-components'
 import { v4 as uuidv4 } from 'uuid'
+import TableRowCount from './components/row-count'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
@@ -245,13 +245,16 @@ function DataTable<TData, TValue>({
 	const totalRows = manualPagination ? paginationProps.totalDocs : (table.getFilteredRowModel().rows?.length ?? 0)
 	const rowSelectionCount = String(selectedRows) + '/' + String(totalRows)
 
+	const event$ = useEventEmitter<Record<string, any>>()
+
 	return (
 		<TableContext.Provider
 			value={{
 				table,
 				instanceId,
 				hasNoFilter,
-				defaultFilterOpen
+				defaultFilterOpen,
+				event$
 			}}>
 			<DataTableWrapper ref={tableWrapperRef}>
 				{!toolbarProps.hidden && (
@@ -273,21 +276,11 @@ function DataTable<TData, TValue>({
 					getRowCanExpand={getRowCanExpand}
 				/>
 				<FooterGroup>
-					{enableRowSelection ? (
-						<Typography className='text-sm font-medium sm:hidden'>
-							{t('ns_common:table.selected_rows', {
-								selectedRows: rowSelectionCount,
-								defaultValue: rowSelectionCount
-							})}
-						</Typography>
-					) : (
-						<Typography className='text-sm font-medium sm:hidden'>
-							{t('ns_common:table.total_rows', {
-								count: totalRows,
-								defaultValue: `${totalRows} rows`
-							})}
-						</Typography>
-					)}
+					<TableRowCount
+						enableRowSelection={enableRowSelection}
+						rowSelectionCount={rowSelectionCount}
+						totalRows={totalRows}
+					/>
 					{!paginationProps?.hidden && (
 						<TablePagination
 							loading={loading}

@@ -1,23 +1,21 @@
-import useEventEmitter from '@/common/hooks/use-event-emitter'
 import { useTranslation } from 'react-i18next'
-import { Button } from '../../@core/button'
 import { Icon } from '../../@core/icon'
+import { Toggle } from '../../@core/toggle'
 import { Tooltip } from '../../@override/tooltip'
 import { useTableContext } from '../context/table.context'
 
 const ColumnFilterToggle: React.FC = () => {
 	const { t } = useTranslation()
-	const { instanceId, defaultFilterOpen } = useTableContext()
-	const [openState, dispatchOpenFilter] = useEventEmitter<boolean>(`toggle-filter-${instanceId}`, defaultFilterOpen)
+	const { event$ } = useTableContext()
 
 	return (
 		<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>
-			<Button
-				variant={openState ? 'secondary' : 'outline'}
-				size='icon'
-				onClick={() => dispatchOpenFilter(!openState, false)}>
+			<Toggle
+				variant='outline'
+				className='size-9 place-content-center p-0 aria-pressed:bg-accent aria-pressed:text-accent-foreground hover:text-foreground'
+				onPressedChange={(pressed) => event$.emit({ shouldFilterOpen: pressed })}>
 				<Icon name='Filter' />
-			</Button>
+			</Toggle>
 		</Tooltip>
 	)
 }

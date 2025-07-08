@@ -20,13 +20,12 @@ type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 's
 	Pick<React.ComponentProps<'div'>, 'style'>
 
 function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
-	const { table } = useTableContext()
+	const { instanceId, table } = useTableContext()
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
-	const isScrolling = useRef<boolean>(false)
 
 	const {
 		containerProps = { className: cn('h-[52.5dvh] xxl:h-[62.5dvh]') },
@@ -51,9 +50,6 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 		getScrollElement,
 		estimateSize,
 		scrollToFn,
-		onChange: (instance) => {
-			isScrolling.current = instance.isScrolling
-		},
 		measureElement:
 			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
 				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
@@ -85,6 +81,7 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea tabIndex={0} ref={containerRef} {...containerProps}>
 				<Table
+					id={instanceId}
 					ref={tableRef}
 					className='w-full table-fixed border-separate border-spacing-0 border-none'
 					style={{
@@ -97,13 +94,14 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					<DataTableHeader table={table} />
+					{/* {virtualizer.isScrolling ? <MemoizedDataTableHeader /> : <DataTableHeader />} */}
+					<DataTableHeader />
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
 					) : isColumnResizing ? (
-						<MemoizedTableBody {...{ table, virtualizer, renderSubComponent }} />
+						<MemoizedTableBody {...{ virtualizer, renderSubComponent }} />
 					) : (
-						<TableBody {...{ table, virtualizer, renderSubComponent }} />
+						<TableBody {...{ virtualizer, renderSubComponent }} />
 					)}
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
