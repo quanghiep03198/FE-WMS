@@ -51,23 +51,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 		resetExpanded()
 	}, [searchParams['month.eq']])
 
-	const renderDetailTable = useCallback(
-		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
-			<InventoryReportDetailTable
-				queries={pick(row.original, [
-					'actual_po',
-					'mo_no',
-					'cust_shoestyle',
-					'shoes_style_code_factory',
-					'inv_type',
-					'inv_year_month'
-				])}
-				data={row.original?.detail}
-			/>
-		),
-		[data]
-	)
-
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
@@ -230,24 +213,46 @@ export const InventoryReportMasterTable: React.FC = () => {
 		}
 	})
 
-	const renderSlotRight = useMemoizedFn(() => (
-		<Fragment>
-			<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-				<Button
-					size='icon'
-					variant='outline'
-					disabled={!data || data.length === 0}
-					onClick={() => handleDownloadExcel()}>
-					<Icon name='Download' />
-				</Button>
-			</Tooltip>
-			<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-				<Button size='icon' variant='outline' onClick={() => refetch()}>
-					<Icon name='RotateCw' />
-				</Button>
-			</Tooltip>
-		</Fragment>
-	))
+	const renderDetailTable = useCallback(
+		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
+			<InventoryReportDetailTable
+				queries={pick(row.original, [
+					'actual_po',
+					'mo_no',
+					'cust_shoestyle',
+					'shoes_style_code_factory',
+					'inv_type',
+					'inv_year_month'
+				])}
+				data={row.original?.detail}
+			/>
+		),
+		[data]
+	)
+
+	const renderSlotRight = useCallback(
+		() => (
+			<Fragment>
+				<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
+					<Button
+						size='icon'
+						variant='outline'
+						disabled={!data || data.length === 0}
+						onClick={() => handleDownloadExcel()}>
+						<Icon name='Download' />
+					</Button>
+				</Tooltip>
+				<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+					<Button size='icon' variant='outline' onClick={() => refetch()}>
+						<Icon name='RotateCw' />
+					</Button>
+				</Tooltip>
+			</Fragment>
+		),
+		[]
+	)
+
+	const renderFooterSlot = useCallback(() => <DataTableSummary data={data} isLoading={isLoading} />, [data, isLoading])
 
 	return (
 		<Div className='relative space-y-10'>
@@ -262,9 +267,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				manualExpanding={true}
 				renderSubComponent={renderDetailTable}
 				containerProps={{ className: 'xxl:h-[50vh]' }}
-				footerProps={{
-					slot: () => <DataTableSummary data={data} isLoading={isLoading} />
-				}}
+				footerProps={{ slot: renderFooterSlot }}
 				toolbarProps={{ slotRight: renderSlotRight }}
 			/>
 		</Div>
