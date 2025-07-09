@@ -35,7 +35,7 @@ type UploadDataFileDialogProps = {
 const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, maxFiles }) => {
 	const { t } = useTranslation()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
-	const [isDragActive, setDragActive] = useState(false)
+	const [isDragActive, setIsDragActive] = useState(false)
 	const [files, setFiles, resetFiles] = useResetState<File[]>([])
 	const { user } = useAuth()
 	const inputRef = useRef<HTMLInputElement>(null)
@@ -78,7 +78,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 				toast.warning(`You can only upload ${maxFiles} files at a time`)
 				return
 			}
-			setDragActive(false)
+			setIsDragActive(false)
 			const shouldAcceptDroppedFile = e.dataTransfer.files.item(0).type === 'text/csv'
 			if (!shouldAcceptDroppedFile) {
 				toast.warning('Please select a CSV file')
@@ -96,13 +96,13 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 	const onDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
 		e.preventDefault()
 		e.stopPropagation()
-		if (files.length < maxFiles) setDragActive(true)
+		if (files.length < maxFiles) setIsDragActive(true)
 	}, [])
 
 	const onDragLeave = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
 		e.preventDefault()
 		e.stopPropagation()
-		setDragActive(false)
+		setIsDragActive(false)
 	}, [])
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +126,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 						className: 'w-full'
 					})
 				)}>
-				<Icon name='Upload' role='presentation' size={18} />
+				<Icon name='Upload' size={18} />
 				Upload
 			</DialogTrigger>
 			<DialogContent className='max-w-xl'>
@@ -180,7 +180,6 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 					<Icon
 						name={isPending ? 'LoaderCircle' : 'Upload'}
 						className={cn({ 'animate-[spin_1s_linear_infinite]': isPending })}
-						role='presentation'
 					/>{' '}
 					Upload
 				</Button>
