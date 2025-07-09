@@ -60,8 +60,8 @@ const FormHeading: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='w-full space-y-1 text-center'>
-			<Typography variant='h2' className='whitespace-nowrap text-center font-bold'>
+		<Div className='w-full space-y-2 text-center *:text-pretty'>
+			<Typography variant='h3' className='whitespace-nowrap text-center'>
 				{t('ns_auth:texts.title')}
 			</Typography>
 			<Typography color='muted'>{t('ns_auth:texts.description')}</Typography>
