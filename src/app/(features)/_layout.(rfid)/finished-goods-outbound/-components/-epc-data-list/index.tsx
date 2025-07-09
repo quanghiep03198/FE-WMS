@@ -111,7 +111,6 @@ const ScannedEpcList: React.FC = () => {
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
 						setScanningState('success')
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
-						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
 						const response = await AuthService.refreshToken(user.id)
