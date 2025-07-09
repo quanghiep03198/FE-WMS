@@ -16,7 +16,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash'
-import { Fragment, useCallback, useRef, useState, useTransition } from 'react'
+import { Fragment, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import ArchivedRestorationSheet from '../-archived-restoration-sheet'
@@ -164,8 +164,9 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
-	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
-	const getScrollElement = useCallback(() => containerRef.current, [])
+	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
+	const getScrollElement = useMemoizedFn(() => containerRef.current)
+	const measureElement = useMemoizedFn((element) => element?.getBoundingClientRect()?.height)
 	const overscan = containerRef.current?.getBoundingClientRect().height > 400 ? 5 : 0
 
 	// * Intitialize virtual list to render scanned EPC data
@@ -177,9 +178,7 @@ const ScannedEpcList: React.FC = () => {
 		scrollToFn,
 		estimateSize,
 		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
-				: undefined
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined
 	})
 
 	return (

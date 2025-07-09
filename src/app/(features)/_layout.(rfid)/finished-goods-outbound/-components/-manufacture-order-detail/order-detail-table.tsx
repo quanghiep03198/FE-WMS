@@ -12,8 +12,10 @@ import TableEmptyState from './order-detail-empty-state'
 import TableFooter from './order-detail-footer'
 import TableHeader from './order-detail-header'
 
+const VIRTUAL_ROW_HEIGHT = 75 // Default row height for virtualized table
+
 const OrderSizeDetailTable: React.FC = () => {
-	const { scanningState, scannedOrders } = usePageContext('scanningState', 'scannedOrders')
+	const { scannedOrders } = usePageContext('scannedOrders')
 	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>({
 		mo_no: '',
 		color_sn: '',
@@ -53,6 +55,8 @@ const OrderSizeDetailTable: React.FC = () => {
 	const scrollingRef = useRef<number>(0)
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const estimateSize = useMemoizedFn(() => VIRTUAL_ROW_HEIGHT)
+	const measureElement = useMemoizedFn((element) => element?.getBoundingClientRect()?.height)
 
 	const virtualizer = useVirtualizer({
 		count: filteredScannedOrders.length,
@@ -60,11 +64,9 @@ const OrderSizeDetailTable: React.FC = () => {
 		overscan: 0,
 		getScrollElement: () => containerRef.current,
 		useAnimationFrameWithResizeObserver: false,
-		estimateSize: useMemoizedFn(() => 75),
+		estimateSize,
 		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
-				: undefined,
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined,
 		scrollToFn
 	})
 

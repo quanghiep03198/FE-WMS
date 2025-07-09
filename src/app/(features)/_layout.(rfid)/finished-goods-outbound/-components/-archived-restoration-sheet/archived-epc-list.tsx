@@ -83,9 +83,10 @@ const ArchivedEpcList: React.FC = () => {
 			setScrollElement(node)
 		}
 	}, [])
-	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
+	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
+	const measureElement = useCallback((element) => element?.getBoundingClientRect().height, [])
 
 	const virtualizer = useVirtualizer({
 		count: datalist.length,
@@ -95,9 +96,7 @@ const ArchivedEpcList: React.FC = () => {
 		getScrollElement,
 		estimateSize,
 		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useCallback((element) => element?.getBoundingClientRect().height, [])
-				: undefined
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined
 	})
 
 	const virtualItems = virtualizer.getVirtualItems()

@@ -42,6 +42,7 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useMemoizedFn(() => virtualizerOptions.estimateSize)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
+	const measureElement = useMemoizedFn((element) => element?.getBoundingClientRect()?.height)
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
@@ -51,9 +52,7 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 		estimateSize,
 		scrollToFn,
 		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? useMemoizedFn((element) => element?.getBoundingClientRect().height)
-				: undefined
+			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined
 	})
 
 	const columnSizeVars = useMemo(() => {
@@ -63,7 +62,6 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 			colSizes[`--header-${header.id}-size`] = header.getSize()
 			colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
 		})
-
 		return colSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
