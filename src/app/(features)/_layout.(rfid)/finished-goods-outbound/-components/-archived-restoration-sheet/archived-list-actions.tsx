@@ -6,10 +6,6 @@ import { toast } from 'sonner'
 import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
 import { useRestoreEpcMutation } from '../../-hooks'
 
-const generateStation = (factory, code: 'WH101' | 'WH103', prefix?: string) => {
-	return [(prefix ??= 'CUS'), factory, code].join('_')
-}
-
 const ArchivedListActions: React.FC = () => {
 	const { t } = useTranslation()
 	const { selectedItems, removeAllItemsFromSet } = useArchivedRestorationContext(
