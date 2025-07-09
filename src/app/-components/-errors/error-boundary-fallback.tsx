@@ -11,7 +11,6 @@ import {
 import { captureException, FallbackRender } from '@sentry/react'
 import React, { useEffect } from 'react'
 
-import env from '@/common/utils/env'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import { HttpStatusCode } from 'axios'
@@ -25,11 +24,9 @@ interface ErrorBoundaryFallbackProps extends Partial<Parameter<FallbackRender>> 
 
 export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 	error,
-	eventId,
 	resetError
 }): React.ReactElement => {
 	const { t } = useTranslation()
-	const isDevelopment = env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
 
 	useEffect(() => {
 		captureException(error)
@@ -45,7 +42,6 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 				<Typography color='muted' className='text-center @5xl:text-left'>
 					{t('ns_common:errors.500_message')}
 				</Typography>
-
 				<Dialog>
 					<DialogTrigger asChild>
 						<Button variant='link' size='lg' className='w-full p-0 text-base @5xl:w-auto'>
@@ -63,13 +59,11 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 						</ScrollShadow>
 					</DialogContent>
 				</Dialog>
-
 				<Div className='mt-6 inline-grid grid-cols-2 gap-x-2'>
 					<Button onClick={() => resetError()}>{t('ns_common:actions.retry')}</Button>
 					<FeedbackFormTrigger />
 				</Div>
 			</Div>
-
 			<InternalServerError className='h-full w-full' />
 		</Div>
 	)
