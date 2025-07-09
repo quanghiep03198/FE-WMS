@@ -12,7 +12,7 @@ const SPLITTER_REGEX = /[\n#?=&\t,./-]+/
 /**
  * used for formatting the pasted element for the correct value format to be added
  */
-const FORMATTING_REGEX = /^[^a-zA-Z0-9]*|[^a-zA-Z0-9]*$/g
+const FORMATTING_REGEX = /^(?:[^a-zA-Z0-9]*)|(?:[^a-zA-Z0-9]*)$/g
 
 export interface TagsInputProps extends React.HTMLAttributes<HTMLButtonElement> {
 	value: string[]
