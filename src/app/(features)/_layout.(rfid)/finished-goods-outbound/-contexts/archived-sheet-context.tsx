@@ -108,12 +108,9 @@ export const useArchivedRestorationContext = <
 ) => {
 	const store = use(RestorationFilterContext)
 	if (!store) throw new Error('Missing store provider')
-	const state =
-		selectors.length === 0
-			? useStore(store)
-			: useStore(
-					store,
-					useShallow((state) => pick(state, selectors))
-				)
-	return state as Pick<T, K>
+	if (!selectors) return useStore(store)
+	return useStore(
+		store,
+		useShallow((state) => pick(state, selectors))
+	) as Pick<T, K>
 }
