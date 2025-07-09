@@ -253,9 +253,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								</Button>
 							</DialogClose>
 							<Button disabled={isPending}>
-								{isPending && (
-									<Icon name='LoaderCircle' aria- className='animate-[spin_1.5s_linear_infinite]' />
-								)}
+								{isPending && <Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' />}
 								{isPending
 									? t('ns_common:status.processing')
 									: isError
