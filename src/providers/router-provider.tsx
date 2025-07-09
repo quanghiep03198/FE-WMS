@@ -1,7 +1,7 @@
 import NotFoundPage from '@/app/-components/-errors/not-found'
 import useAuth from '@/common/hooks/use-auth'
 import { routeTree } from '@/route-tree.gen'
-import { RouterProvider as BrowserRouterProvider, createRouter } from '@tanstack/react-router'
+import { RouterProvider as BrowserRouterProvider, createRouter, RouterProps } from '@tanstack/react-router'
 import { queryClient } from './query-client-provider'
 
 type CreateRouterOptions = FirstParameter<typeof createRouter>
@@ -9,7 +9,7 @@ type CreateRouterOptions = FirstParameter<typeof createRouter>
 // Set up a Router instance
 export const router = createRouter({
 	routeTree,
-	context: { queryClient, isAuthenticated: false },
+	context: { queryClient, isAuthenticated: false, serviceWorker: {} },
 	defaultPreload: 'intent',
 	defaultNotFoundComponent: NotFoundPage,
 	defaultPreloadStaleTime: 0,
@@ -24,7 +24,8 @@ declare module '@tanstack/react-router' {
 	}
 }
 
-export const RouterProvider: React.FC = () => {
+export const RouterProvider: React.FC<Pick<RouterProps, 'context'>> = ({ context: extendedContext }) => {
 	const { isAuthenticated } = useAuth()
-	return <BrowserRouterProvider router={router} context={{ queryClient, isAuthenticated }} />
+
+	return <BrowserRouterProvider router={router} context={{ queryClient, isAuthenticated, ...extendedContext }} />
 }

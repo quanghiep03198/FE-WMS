@@ -4,11 +4,11 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { Div, SidebarProvider } from '@/components/ui'
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
 import { useLocalStorageState, useRafState } from 'ahooks'
-import { Fragment, useEffect, useRef } from 'react'
+import { Fragment, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { USER_PROVIDE_TAG } from '../(auth)/-hooks/use-auth'
+import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from '../-components/-errors/error-boundary-fallback'
 import UnsupportedScreen from '../-components/-errors/unsupported-screen'
 import AuthGuard from '../-components/-guard/auth-guard'
@@ -21,12 +21,17 @@ export const Route = createFileRoute('/(features)/_layout')({
 	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated) throw redirect({ to: '/login' })
-	},
-	loader: async ({ context: { queryClient } }) => await queryClient.prefetchQuery({ queryKey: [USER_PROVIDE_TAG] })
+	}
+	// loader: async ({ context: { queryClient } }) => await queryClient.prefetchQuery({ queryKey: [USER_PROVIDE_TAG] })
 })
 
 function Layout() {
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+	const { updateServiceWorker }: RegisteredServiceWorker = useRouteContext({
+		from: '',
+		select: (context) => context.serviceWorker
+	})
+
 	const [font] = useLocalStorageState<string>('font', {
 		defaultValue: '*:!font-sans',
 		listenStorageChange: true
@@ -35,8 +40,6 @@ function Layout() {
 		width: 0,
 		height: 0
 	})
-
-	const headerRef = useRef<HTMLElement>(null)
 
 	useEffectOnce(() => {
 		if (document.body.classList.contains(font)) document.body.classList.remove(font)
@@ -75,14 +78,22 @@ function Layout() {
 							} as React.CSSProperties
 						}>
 						<BreadcrumbProvider>
-							<Navbar ref={headerRef} />
+							<Navbar />
 							<Div
 								as='main'
 								id='outlet-wrapper'
 								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-4'>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
-										return <ErrorBoundaryFallback error={error as Error} resetError={resetErrorBoundary} />
+										return (
+											<ErrorBoundaryFallback
+												error={error as Error}
+												resetError={(args) => {
+													resetErrorBoundary(args)
+													updateServiceWorker()
+												}}
+											/>
+										)
 									}}>
 									<Outlet />
 								</ErrorBoundary>
