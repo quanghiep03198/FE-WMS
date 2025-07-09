@@ -33,7 +33,7 @@ const ArchivedRestorationSheet: React.FC = () => {
 				</SheetHeader>
 				<SheetBody>
 					<ArchivedEpcFilter />
-					<ArchivedEpcList />
+					<ArchivedEpcList data-open={sheetOpen} />
 				</SheetBody>
 				<SheetFooter className='flex-col gap-y-2'>
 					<ArchivedListActions />

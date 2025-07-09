@@ -23,6 +23,7 @@ import {
 import Skeleton from '@/components/ui/@custom/skeleton'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
+import { useDeepCompareEffect } from 'ahooks'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
@@ -33,7 +34,7 @@ import { GhostButton, ListDetail, ListDetailItem } from './styled'
 const VIRTUAL_ITEM_SIZE: number = 40
 const PRERENDERED_ITEMS: number = 5
 
-const ArchivedEpcList: React.FC = () => {
+const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
 	const { t } = useTranslation()
 	const {
 		limit,
@@ -83,10 +84,14 @@ const ArchivedEpcList: React.FC = () => {
 			setScrollElement(node)
 		}
 	}, [])
-	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
+	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
-	const measureElement = useCallback((element) => element?.getBoundingClientRect().height, [])
+	const measureElement = useMemo(() => {
+		return props['data-open'] && typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
+			? (element) => element?.getBoundingClientRect().height
+			: undefined
+	}, [props['data-open']])
 
 	const virtualizer = useVirtualizer({
 		count: datalist.length,
@@ -95,9 +100,14 @@ const ArchivedEpcList: React.FC = () => {
 		scrollToFn,
 		getScrollElement,
 		estimateSize,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined
+		measureElement
 	})
+
+	useDeepCompareEffect(() => {
+		// * If the sheet is closed, there is no need to measure
+		if (!props['data-open'] && scrollElement) return
+		virtualizer.measure()
+	}, [virtualizer, scrollElement, props['data-open']])
 
 	const virtualItems = virtualizer.getVirtualItems()
 
@@ -127,6 +137,7 @@ const ArchivedEpcList: React.FC = () => {
 
 	return (
 		<Div
+			{...props}
 			className='h-[40vh] space-y-1 overflow-y-auto !scroll-auto scrollbar-track-accent/10 xl:h-[55vh] xxl:h-[60vh]'
 			ref={refCallback}>
 			<Table
@@ -287,7 +298,7 @@ const ArchivedEpcList: React.FC = () => {
 												size='lg'
 												disabled={isFetching}
 												onClick={() => handleFetchNextPage()}>
-												<Icon name='Plus' />
+												<Icon name='Plus' role='presentation' />
 												{t('ns_common:actions.load_more')}
 											</Button>
 										)}
