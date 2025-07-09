@@ -1,13 +1,13 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { sentryVitePlugin } from '@sentry/vite-plugin'
+import { sentryVitePlugin as sentry } from '@sentry/vite-plugin'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
 /**
  * @see https://vitejs.dev/config/
  */
@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
 				}
 			}),
 			reactRouter(),
-			viteStaticCopy({
+			staticCopy({
 				targets: [{ src: './infrastructure/web.config', dest: '' }]
 			}),
 			pwa({
@@ -78,12 +78,13 @@ export default defineConfig(({ mode }) => {
 					globPatterns: ['**/*.{html,css,js,wasm,ico,png,jpg,svg,webp,woff2}'],
 					skipWaiting: true,
 					clientsClaim: true,
+					navigationPreload: true,
 					runtimeCaching: [
 						{
 							urlPattern: /.*\.(html|css|js?)$/,
 							handler: 'StaleWhileRevalidate',
 							options: {
-								cacheName: 'static-resources-cache',
+								cacheName: 'resources-cache',
 								expiration: {
 									maxEntries: 100,
 									maxAgeSeconds: 60 * 60,
@@ -112,7 +113,8 @@ export default defineConfig(({ mode }) => {
 								cacheName: 'api-cache'
 							}
 						}
-					]
+					],
+					cleanupOutdatedCaches: true
 				},
 				devOptions: {
 					enabled: false,
@@ -121,7 +123,7 @@ export default defineConfig(({ mode }) => {
 					navigateFallback: '/index.html'
 				}
 			}),
-			sentryVitePlugin({
+			sentry({
 				authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
 				org: process.env.VITE_SENTRY_ORG,
 				project: process.env.VITE_SENTRY_PROJECT,
