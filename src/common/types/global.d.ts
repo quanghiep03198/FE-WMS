@@ -59,8 +59,8 @@ export declare global {
 		page: number
 		totalDocs: number
 		totalPages: number
-		nextPage: number
-		prevPage: number
+		nextPage: number | null
+		prevPage: number | null
 	}
 	type Locale = 'vi' | 'en' | 'cn'
 
@@ -68,7 +68,7 @@ export declare global {
 
 	type RowDeletionType = 'single' | 'multiple' | undefined
 
-	type FirstParameter<T> = T extends (first: infer FirstArgument, ...args: any[]) => infer T ? FirstArgument : never
+	type FirstParameter<T> = T extends (first: infer FirstArgument, ...args: any[]) => any ? FirstArgument : never
 
-	type Parameter<T> = T extends (param: infer Argument) => infer T ? Argument : never
+	type Parameter<T> = T extends (param: infer Argument) => any ? Argument : never
 }
