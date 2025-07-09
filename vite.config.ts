@@ -220,7 +220,6 @@ export default defineConfig(({ mode }) => {
 							['@sentry/react', /@sentry\/react/],
 							['sonner', /sonner/],
 							['socket.io-client', /socket.io-client/],
-							['socket.io-client', /socket.io-client/],
 							['tailwind-merge', /tailwind-merge/],
 							['tailwind-styled-components', /tailwind-styled-components/],
 							['uuid', /uuid/],
