@@ -9,6 +9,9 @@ export const useGetTenantByFactory = () => {
 		queryKey: ['TENANT', user.company_code],
 		queryFn: TenancyService.getTenantsByFactory,
 		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+		networkMode: 'offlineFirst',
+		staleTime: Infinity,
 		select: (response) => response.metadata
 	})
 }
@@ -18,6 +21,9 @@ export const useGetAllTenants = () => {
 		queryKey: ['TENANTS'],
 		queryFn: TenancyService.getAllTenants,
 		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+		networkMode: 'offlineFirst',
+		staleTime: Infinity,
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
 	})
 }
