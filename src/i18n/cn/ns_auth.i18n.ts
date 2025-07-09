@@ -11,10 +11,12 @@ export default {
 	},
 	notification: {
 		authenticate_success: '确认登录成功',
+		authenticate_failed: '确认登录失败',
 		login_failed: '登入失败',
 		login_success: '登入成功',
 		logout_failed: '登出失败',
-		logout_success: '登出'
+		logout_success: '登出',
+		session_expired: '您的会话已过期，请重新登录'
 	},
 	profile: {
 		change_password: '更改密碼',

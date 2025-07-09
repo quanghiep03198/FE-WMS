@@ -1,5 +1,7 @@
 import { RequestHeaders } from '@/common/constants/enums'
+import { UnauthorizedError } from '@/common/errors'
 import env from '@/common/utils/env'
+import { i18n } from '@/i18n'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
@@ -89,7 +91,12 @@ export class AxiosClient {
 					this.isRefreshingToken = true
 
 					const user = AuthService.getCredentials()
-					if (!user?.id) throw new Error('Failed to refresh token')
+					if (!user?.id) {
+						AuthService.logout()
+						toast.error(i18n.t('ns_auth:notification.authenticate_failed'))
+						throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+					}
+
 					try {
 						const { metadata: refreshToken } = await AuthService.refreshToken(user.id)
 						AuthService.setAccessToken(refreshToken)
@@ -100,7 +107,7 @@ export class AxiosClient {
 						return response
 					} catch (error) {
 						this.processQueue(error, null)
-						throw new Error('Failed to refresh token')
+						throw new UnauthorizedError(i18n.t('ns_auth:notification.session_expired'))
 					} finally {
 						this.isRefreshingToken = false
 					}

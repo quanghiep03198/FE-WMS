@@ -10,10 +10,12 @@ export default {
 	},
 	notification: {
 		authenticate_success: 'Verified your account',
+		authenticate_failed: 'Failed to verify your account',
 		login_failed: 'Failed to log in',
 		login_success: 'Logged in succesfully',
 		logout_failed: 'Failed to log out',
-		logout_success: 'Logged out'
+		logout_success: 'Logged out',
+		session_expired: 'Your session has expired, please log in again'
 	},
 	profile: {
 		change_password: 'Change password',

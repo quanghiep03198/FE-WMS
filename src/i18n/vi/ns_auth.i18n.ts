@@ -12,10 +12,12 @@ export default {
 	},
 	notification: {
 		authenticate_success: 'Đã xác thực tài khoản',
+		authenticate_failed: 'Xác thực tài khoản thất bại',
 		login_failed: 'Đăng nhập thất bại',
 		login_success: 'Đăng nhập thành công',
 		logout_failed: 'Đăng xuất thất bại',
-		logout_success: 'Đã đăng xuất'
+		logout_success: 'Đã đăng xuất',
+		session_expired: 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại'
 	},
 	profile: {
 		change_password: 'Đổi mật khẩu',
