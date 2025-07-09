@@ -12,7 +12,7 @@ const SPLITTER_REGEX = /[\n#?=&\t,./-]+/
 /**
  * used for formatting the pasted element for the correct value format to be added
  */
-const FORMATTING_REGEX = /^(?:[^a-zA-Z0-9]*)|(?:[^a-zA-Z0-9]*)$/g
+const FORMATTING_REGEX = /^[^a-zA-Z0-9]*$/g
 
 export interface TagsInputProps extends React.HTMLAttributes<HTMLButtonElement> {
 	value: string[]
@@ -36,7 +36,6 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 	const [inputValue, setInputValue] = useState<string>('')
 	const [isValueSelected, setIsValueSelected] = useState<boolean>(false)
 	const [selectedValue, setSelectedValue] = useState<string>('')
-	const [open, setOpen] = useState<boolean>(false)
 
 	const onValueChangeHandler = useCallback(
 		(val: string) => {
@@ -177,7 +176,8 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 							aria-current={inputValue === item}
 							className={cn(
 								'relative flex items-center gap-2 truncate rounded px-1',
-								'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-[current=true]:animate-[pulse_1s_ease_forwards] data-[active=true]:ring-2 data-[active=true]:ring-primary'
+								'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-[current=true]:animate-[pulse_1s_ease_forwards]',
+								'data-[active=true]:ring-2 data-[active=true]:ring-primary'
 							)}>
 							<Typography variant='small' className='align-middle leading-none'>
 								{item}
