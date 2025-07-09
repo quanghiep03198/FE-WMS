@@ -40,13 +40,6 @@ function KeybindingsPage() {
 	const columnHelper = createColumnHelper<Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>>()
 
 	const columns = [
-		columnHelper.accessor('id', {
-			header: '#',
-			enableSorting: true,
-			enableResizing: false,
-			sortingFn: fuzzySort,
-			size: 64
-		}),
 		columnHelper.accessor('title', {
 			header: t('ns_common:settings.function'),
 			enableSorting: true,
