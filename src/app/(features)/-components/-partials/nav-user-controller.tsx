@@ -37,7 +37,7 @@ const NavUserControl: React.FC = () => {
 						<DropdownMenuItem asChild key={item.id}>
 							<Link to={item.path} className='whitespace-nowrap'>
 								<Icon name={item.icon} className='mr-2' /> {t(item.title as any)}
-								<DropdownMenuShortcut>{(item.keybinding as string).split('.').join('+')}</DropdownMenuShortcut>
+								<DropdownMenuShortcut>{item.keybinding.split('.').join('+')}</DropdownMenuShortcut>
 							</Link>
 						</DropdownMenuItem>
 					))}
