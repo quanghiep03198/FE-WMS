@@ -85,9 +85,9 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 export const usePageContext = <T extends PageContextStore, K extends keyof PageContextStore>(...selectors: K[]) => {
 	const store = use(PageContext)
 	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
+	
+	const selector = selectors.length > 0 ? useShallow((state) => pick(state, selectors)) : undefined
+	const result = useStore(store, selector)
+	
+	return result as Pick<T, K>
 }

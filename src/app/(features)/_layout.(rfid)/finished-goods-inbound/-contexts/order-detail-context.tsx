@@ -100,9 +100,9 @@ export const useOrderDetailContext = <T extends TOrderDetailContext, K extends k
 ) => {
 	const store = use(OrderDetailContext)
 	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
+	
+	const selector = selectors.length > 0 ? useShallow((state) => pick(state, selectors)) : undefined
+	const result = useStore(store, selector)
+	
+	return result as Pick<T, K>
 }
