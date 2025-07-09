@@ -34,7 +34,7 @@ const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (prop
 
 	return (
 		<Button {...props} size={isSmallScreen ? 'icon' : props.size} onClick={() => handleDownloadExcel()}>
-			<Icon name='Download' size={20} role='presentation' />
+			<Icon name='Download' size={20} />
 			{!isSmallScreen && t('ns_common:actions.download_excel')}
 		</Button>
 	)

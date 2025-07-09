@@ -270,11 +270,11 @@ const ArchivedEpcFilter: React.FC = () => {
 						<Div className='mt-6 flex items-center justify-end gap-x-2'>
 							<PopoverClose asChild>
 								<Button type='submit'>
-									<Icon name='Search' role='presentation' /> {t('ns_common:actions.search')}
+									<Icon name='Search' /> {t('ns_common:actions.search')}
 								</Button>
 							</PopoverClose>
 							<Button type='button' variant='secondary' onClick={() => form.reset()}>
-								<Icon name='Undo' role='presentation' />
+								<Icon name='Undo' />
 								{t('ns_common:actions.reset')}
 							</Button>
 						</Div>

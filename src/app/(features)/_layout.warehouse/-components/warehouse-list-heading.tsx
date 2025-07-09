@@ -21,7 +21,7 @@ const WarehouseListHeading: React.FC = () => {
 						payload: { dialogTitle: t('ns_warehouse:form.add_warehouse_title') }
 					})
 				}>
-				<Icon name='CirclePlus' role='presentation' /> {t('ns_common:actions.add')}
+				<Icon name='CirclePlus' /> {t('ns_common:actions.add')}
 			</Button>
 		</Div>
 	)

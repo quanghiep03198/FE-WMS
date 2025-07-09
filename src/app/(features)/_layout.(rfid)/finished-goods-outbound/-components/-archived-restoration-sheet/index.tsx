@@ -24,7 +24,7 @@ const ArchivedRestorationSheet: React.FC = () => {
 	return (
 		<Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
 			<SheetTrigger className={cn(buttonVariants({ variant: 'ghost' }))} onClick={() => setSheetOpen(!sheetOpen)}>
-				<Icon name='Archive' role='presentation' size={18} /> {t('ns_common:actions.archived')}
+				<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
 			</SheetTrigger>
 			<SheetContent className='max-w-xl gap-y-6'>
 				<SheetHeader>

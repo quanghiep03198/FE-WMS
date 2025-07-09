@@ -105,7 +105,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon, viewTransi
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
-					<Icon className='!size-5' name={icon} role='presentation' size={20} strokeWidth={2} />
+					<Icon className='!size-5' name={icon} size={20} strokeWidth={2} />
 					<span className='font-medium'>{t(title, { defaultValue: title })}</span>
 				</Link>
 			</SidebarMenuButton>
@@ -131,11 +131,11 @@ const SwitchUserCompany: React.FC = () => {
 					variant='outline'
 					size={open ? 'default' : 'icon'}
 					className={cn(open ? 'justify-start' : 'size-8')}>
-					<Icon name='Factory' role='presentation' />
+					<Icon name='Factory' />
 					{open && (
 						<Fragment>
 							{user?.company_name}
-							<Icon name='ChevronsUpDown' role='presentation' className='ml-auto' />
+							<Icon name='ChevronsUpDown' className='ml-auto' />
 						</Fragment>
 					)}
 				</Button>

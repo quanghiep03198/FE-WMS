@@ -40,7 +40,7 @@ const BugReportDialog: React.FC<{ eventId: string }> = ({ eventId }) => {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger className={cn(buttonVariants({ variant: 'ghost' }))}>
 				{t('ns_common:actions.report_bug')}
-				<Icon name='ArrowUpRight' role='presentation' />
+				<Icon name='ArrowUpRight' />
 			</DialogTrigger>
 			<DialogContent className='max-w-4xl'>
 				<FormProvider {...form}>

@@ -11,7 +11,7 @@ const OrderDetailTableDialog = () => {
 		<Dialog>
 			<DialogTrigger className={cn(buttonVariants({ size: 'lg', className: 'w-full' }))}>
 				{t('ns_common:actions.detail')}
-				<Icon name='ArrowUpRight' role='presentation' />
+				<Icon name='ArrowUpRight' />
 			</DialogTrigger>
 			<DialogContent className='flex h-screen max-w-[screen] flex-col rounded-none border-none'>
 				<DialogHeader className='basis-auto'>

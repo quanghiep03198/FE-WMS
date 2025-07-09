@@ -210,7 +210,7 @@ const ArrayFieldControl: React.FC<{
 					aria-disabled={shouldAllowAdditionalSizes}
 					className='aria-disalbed:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:!opacity-50'
 					onClick={handleAppendField}>
-					<Icon name='Plus' role='presentation' /> {t('ns_common:actions.add')}
+					<Icon name='Plus' /> {t('ns_common:actions.add')}
 				</Button>
 				{fields.length > 0 && (
 					<Button
@@ -220,7 +220,7 @@ const ArrayFieldControl: React.FC<{
 						onClick={() => {
 							reset({ ...getValues(), sizes: [] })
 						}}>
-						<Icon name='X' role='presentation' /> {t('ns_inoutbound:labels.delete_all')}
+						<Icon name='X' /> {t('ns_inoutbound:labels.delete_all')}
 					</Button>
 				)}
 			</Div>

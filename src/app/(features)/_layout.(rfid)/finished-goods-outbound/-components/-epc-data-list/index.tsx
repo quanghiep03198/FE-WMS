@@ -190,7 +190,7 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 				<Div className='inline-flex items-center gap-x-2'>
 					<Button variant='ghost' onClick={() => fetchServerEvent()}>
-						<Icon name='RotateCw' role='presentation' /> {t('ns_common:actions.reload')}
+						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
 					<ArchivedRestorationProvider>
@@ -241,7 +241,7 @@ const ScannedEpcList: React.FC = () => {
 									<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
 								) : (
 									<Fragment>
-										<Icon name='Plus' role='presentation' />
+										<Icon name='Plus' />
 										{t('ns_common:actions.load_more')}
 									</Fragment>
 								)}

@@ -78,7 +78,7 @@ const DeleteOrderPopover: React.FC<{ data: OrderItem; shouldClosePopover?: boole
 						{t('ns_common:actions.cancel')}
 					</PopoverClose>
 					<Button disabled={isDeleting} variant='destructive' size='sm' onClick={handleDeleteOrder}>
-						{isDeleting && <Icon name='LoaderCircle' role='presentation' className='animate-spin' />}
+						{isDeleting && <Icon name='LoaderCircle' className='animate-spin' />}
 						{t('ns_common:actions.delete')}
 					</Button>
 				</Div>

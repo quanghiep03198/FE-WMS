@@ -62,7 +62,7 @@ const CTASection: React.FC = () => {
 						onClick={() => {
 							if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
 						}}>
-						Learn more <Icon name='ArrowRight' size={12} role='presentation' />
+						Learn more <Icon name='ArrowRight' size={12} />
 					</Button>
 				</Div>
 			</Div>
@@ -92,7 +92,7 @@ const CTASection: React.FC = () => {
 							onClick={() => {
 								if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
 							}}>
-							Learn more <Icon name='ArrowRight' size={12} role='presentation' />
+							Learn more <Icon name='ArrowRight' size={12} />
 						</Button>
 					</Div>
 				</Div>

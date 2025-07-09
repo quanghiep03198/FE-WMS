@@ -287,7 +287,7 @@ const ArchivedEpcList: React.FC = () => {
 												size='lg'
 												disabled={isFetching}
 												onClick={() => handleFetchNextPage()}>
-												<Icon name='Plus' role='presentation' />
+												<Icon name='Plus' />
 												{t('ns_common:actions.load_more')}
 											</Button>
 										)}

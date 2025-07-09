@@ -70,7 +70,7 @@ const SearchBox: React.FC = () => {
 						type='submit'
 						size={isSmallScreen ? 'icon' : 'default'}
 						disabled={!form.watch('shoes_style') || !form.watch('color')}>
-						<Icon name='Search' role='presentation' size={isSmallScreen ? 18 : 16} />{' '}
+						<Icon name='Search' size={isSmallScreen ? 18 : 16} />{' '}
 						{!isSmallScreen && t('ns_common:actions.search')}
 					</Button>
 				</Form>

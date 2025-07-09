@@ -161,13 +161,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 								</Button>
 							</DialogClose>
 							<Button type='submit' disabled={!isConfirmed || isPending}>
-								{isPending && (
-									<Icon
-										name='LoaderCircle'
-										role='presentation'
-										className='animate-[spin_1.5s_linear_infinite]'
-									/>
-								)}
+								{isPending && <Icon name='LoaderCircle' className='animate-[spin_1.5s_linear_infinite]' />}
 								{isPending ? t('ns_common:status.processing') : t('ns_common:actions.confirm')}
 							</Button>
 						</DialogFooter>

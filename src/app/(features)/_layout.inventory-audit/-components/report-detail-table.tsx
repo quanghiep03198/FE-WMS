@@ -251,18 +251,17 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											size='sm'
 											variant='destructive'
 											onClick={() => handleCancelUpdate()}>
-											<Icon name='X' role='presentation' />
+											<Icon name='X' />
 											{t('ns_common:actions.cancel')}
 										</Button>
 									) : (
 										<Button type='button' size='sm' variant='outline' onClick={() => handleStartUpdate()}>
-											<Icon name='Pencil' role='presentation' /> {t('ns_common:actions.update')}
+											<Icon name='Pencil' /> {t('ns_common:actions.update')}
 										</Button>
 									)}
 									<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
 										<Icon
 											name={isPending ? 'LoaderCircle' : 'Check'}
-											role='presentation'
 											className={isPending && 'animate-spin'}
 										/>{' '}
 										{isPending

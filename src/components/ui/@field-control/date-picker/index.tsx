@@ -62,7 +62,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 								)}>
 								<FormControl>
 									<Fragment>
-										<Icon name='Calendar' role='presentation' />
+										<Icon name='Calendar' />
 										{calendarProps.mode === 'range' || calendarProps.mode === 'multiple' ? (
 											<Fragment>
 												{field.value?.from ? (
