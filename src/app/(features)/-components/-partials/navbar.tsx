@@ -2,7 +2,7 @@ import { LanguageDropdown } from '@/app/-components/-shared/language-selector'
 import useAuth from '@/common/hooks/use-auth'
 import { Div, Separator } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
-import React, { Fragment, RefObject } from 'react'
+import React, { Fragment } from 'react'
 import ThemeToggle from '../../../-components/-shared/theme-toggle'
 import NavBreadcrumb from './nav-breadcrumb'
 import NavSidebarToggler from './nav-sidebar-toggler'
@@ -10,7 +10,7 @@ import NavUserControl from './nav-user-controller'
 import Notification from './notifications'
 import SearchDialog from './search-dialog'
 
-const Navbar: React.FC<{ ref: RefObject<HTMLElement> }> = ({ ref }) => {
+const Navbar: React.FC = () => {
 	const { logout } = useAuth()
 
 	useKeyPress('ctrl.q', (e) => {
@@ -21,7 +21,6 @@ const Navbar: React.FC<{ ref: RefObject<HTMLElement> }> = ({ ref }) => {
 	return (
 		<Fragment>
 			<Div
-				ref={ref}
 				as='header'
 				role='menubar'
 				className='sticky top-0 z-20 flex h-[var(--header-height)] items-center bg-background px-6 sm:px-4'>
