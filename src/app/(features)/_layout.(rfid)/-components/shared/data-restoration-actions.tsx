@@ -3,16 +3,19 @@ import { omit } from 'lodash'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
-import { useRestoreEpcMutation } from '../../-hooks'
+import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
 
-const ArchivedListActions: React.FC = () => {
+import { RFIDDataType } from '../../-constants'
+import { useRestoreEpcMutation } from '../../-hooks/use-data-restoration'
+
+type RestorationDataActionsProps = {
+	dataType: RFIDDataType
+}
+
+const RestorationDataActions: React.FC<RestorationDataActionsProps> = ({ dataType }) => {
 	const { t } = useTranslation()
-	const { selectedItems, removeAllItemsFromSet } = useArchivedRestorationContext(
-		'selectedItems',
-		'removeAllItemsFromSet'
-	)
-	const { mutateAsync, isPending, isError } = useRestoreEpcMutation()
+	const { selectedItems, removeAllItemsFromSet } = useDataRestorationContext('selectedItems', 'removeAllItemsFromSet')
+	const { mutateAsync, isPending, isError } = useRestoreEpcMutation(dataType)
 
 	const handleRestoreArchivedEpcs = async () => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
@@ -46,4 +49,4 @@ const ArchivedListActions: React.FC = () => {
 	)
 }
 
-export default ArchivedListActions
+export default RestorationDataActions

@@ -9,7 +9,9 @@ export default {
 		step_4: 'Complete Job'
 	},
 	status: {
+		scannable: 'Scannable',
 		scanned: 'Scanned',
+		unscannable: 'Unscannable',
 		unscanned: 'Unscanned'
 	}
 }

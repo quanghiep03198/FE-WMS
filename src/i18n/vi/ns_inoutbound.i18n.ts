@@ -105,6 +105,9 @@ export default {
 	scanner_setting: {
 		adjust_setting_description: 'Điều chỉnh cài đặt RFID Playground',
 		cron_job: 'Trạng thái quét',
+		data_restoration: 'Khôi phục dữ liệu',
+		restore_deleted_epcs: 'Khôi phục các EPC đã xóa',
+		data_restoration_note: 'Khôi phục lại các EPCs đã xóa và lưu lại',
 		synchronization: 'Đồng bộ',
 		developer_mode: 'Chế độ phát triển',
 		developer_mode_note: 'Bật chế độ phát triển để sử dụng các tính năng nâng cao hơn',

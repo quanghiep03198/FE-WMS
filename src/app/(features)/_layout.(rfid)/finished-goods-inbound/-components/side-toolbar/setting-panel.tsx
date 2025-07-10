@@ -35,7 +35,7 @@ const SettingPanel: React.FC = () => {
 }
 
 const SwitchBox = {
-	Wrapper: tw.div`grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0 z-0 min-h-28`,
+	Wrapper: tw.div`grid grid-cols-4 items-center gap-y-6 rounded-lg border p-4 @[320px]:gap-0 z-0 min-h-24`,
 	TitleWrapper: tw.div`col-span-full space-y-1 @[320px]:col-span-3`,
 	InnerWrapper: tw.div`col-span-full grid @[320px]:col-span-1 @[320px]:place-content-end`
 }

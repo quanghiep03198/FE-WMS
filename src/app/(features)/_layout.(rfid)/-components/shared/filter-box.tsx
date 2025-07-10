@@ -26,9 +26,9 @@ import { isEmpty, sortBy } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { ScannedStatus } from '../../-constants'
-import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
-import { useGetArchivedEpcFeatureQuery } from '../../-hooks'
+import { RFIDDataType, ScanCapability, ScannedStatus } from '../../-constants'
+import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
+import { useGetArchivedEpcFeatureQuery } from '../../-hooks/use-data-restoration'
 import { FilterForm, GhostButton } from './styled'
 
 type SearchFormValues = {
@@ -36,17 +36,21 @@ type SearchFormValues = {
 	color_sn: string
 	mo_no: string
 	size_numcode: string
-	scanned: ScannedStatus
+	scannable?: ScanCapability | 'all'
+	scanned?: ScannedStatus | 'all'
 }
 
-const ArchivedEpcFilter: React.FC = () => {
-	const { t } = useTranslation()
+type ArchivedEpcFilterProps = {
+	dataType: RFIDDataType
+}
 
+const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
+	const { t } = useTranslation()
 	const [filterOpen, setFilterOpen] = useState<boolean>(false)
-	const { data } = useGetArchivedEpcFeatureQuery()
+	const { data } = useGetArchivedEpcFeatureQuery(dataType)
 	const [search, setSearch] = useState<string>('')
 
-	const { searchTerm, advancedFilters, setSearchTerm, setAdvancedFilters } = useArchivedRestorationContext(
+	const { searchTerm, advancedFilters, setSearchTerm, setAdvancedFilters } = useDataRestorationContext(
 		'limit',
 		'searchTerm',
 		'setSearchTerm',
@@ -61,7 +65,8 @@ const ArchivedEpcFilter: React.FC = () => {
 			color_sn: '',
 			mo_no: '',
 			size_numcode: '',
-			scanned: ScannedStatus.ALL
+			scannable: 'all',
+			scanned: 'all'
 		}
 	})
 
@@ -131,10 +136,26 @@ const ArchivedEpcFilter: React.FC = () => {
 	)
 
 	const handleSearch = (data: SearchFormValues) => {
-		setAdvancedFilters({
-			...data,
-			scanned: data.scanned === ScannedStatus.ALL ? null : data.scanned === ScannedStatus.SCANNED ? true : false
-		})
+		switch (dataType) {
+			case RFIDDataType.INBOUND:
+				setAdvancedFilters({
+					...data,
+					scanned: null,
+					scannable: data.scannable === 'all' ? null : data.scannable === ScanCapability.SCANNABLE ? true : false
+				})
+				break
+			case RFIDDataType.OUTBOUND:
+				setAdvancedFilters({
+					...data,
+					scannable: null,
+					scanned: data.scanned === 'all' ? null : data.scanned === ScannedStatus.SCANNED ? true : false
+				})
+
+				break
+
+			default:
+				break
+		}
 	}
 
 	return (
@@ -235,7 +256,7 @@ const ArchivedEpcFilter: React.FC = () => {
 								{t('ns_common:common_fields.status')}
 							</Typography>
 							<FormField
-								name='scanned'
+								name={dataType === RFIDDataType.INBOUND ? 'scannable' : 'scanned'}
 								control={form.control}
 								render={({ field }) => (
 									<FormItem>
@@ -245,21 +266,41 @@ const ArchivedEpcFilter: React.FC = () => {
 											className='flex items-center gap-x-10'>
 											<FormItem className='flex items-center gap-x-3 space-y-0'>
 												<FormControl>
-													<RadioGroupItem value={ScannedStatus.ALL} />
+													<RadioGroupItem value='all' />
 												</FormControl>
 												<FormLabel className='cursor-pointer'>{t('ns_common:others.all')}</FormLabel>
 											</FormItem>
 											<FormItem className='flex items-center gap-x-3 space-y-0'>
 												<FormControl>
-													<RadioGroupItem value={ScannedStatus.SCANNED} />
+													<RadioGroupItem
+														value={
+															dataType === RFIDDataType.INBOUND
+																? ScanCapability.SCANNABLE
+																: ScannedStatus.SCANNED
+														}
+													/>
 												</FormControl>
-												<FormLabel className='cursor-pointer'>{t('ns_rfid:status.scanned')}</FormLabel>
+												<FormLabel className='cursor-pointer'>
+													{dataType === RFIDDataType.INBOUND
+														? t('ns_rfid:status.scannable')
+														: t('ns_rfid:status.scanned')}
+												</FormLabel>
 											</FormItem>
 											<FormItem className='flex items-center gap-x-3 space-y-0'>
 												<FormControl>
-													<RadioGroupItem value={ScannedStatus.UNSCANNED} />
+													<RadioGroupItem
+														value={
+															dataType === RFIDDataType.INBOUND
+																? ScanCapability.UNSCANNABLE
+																: ScannedStatus.UNSCANNED
+														}
+													/>
 												</FormControl>
-												<FormLabel className='cursor-pointer'>{t('ns_rfid:status.unscanned')}</FormLabel>
+												<FormLabel className='cursor-pointer'>
+													{dataType === RFIDDataType.INBOUND
+														? t('ns_rfid:status.unscannable')
+														: t('ns_rfid:status.unscanned')}
+												</FormLabel>
 											</FormItem>
 										</RadioGroup>
 									</FormItem>

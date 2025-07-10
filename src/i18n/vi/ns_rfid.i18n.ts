@@ -9,7 +9,9 @@ export default {
 		step_4: 'Hoàn thành Job'
 	},
 	status: {
+		scannable: 'Có thể quét',
 		scanned: 'Đã quét',
+		unscannable: 'Không thể quét',
 		unscanned: 'Chưa quét'
 	}
 }

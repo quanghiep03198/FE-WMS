@@ -8,7 +8,7 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
+import { Button, buttonVariants, Div, Icon, Separator, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
@@ -19,11 +19,12 @@ import { isEqualWith, uniqBy } from 'lodash'
 import { Fragment, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import ArchivedRestorationSheet from '../-archived-restoration-sheet'
-import OrderDetailTableDialog from '../-manufacture-order-detail/order-detail-dialog'
-import { ArchivedRestorationProvider } from '../../-contexts/archived-sheet-context'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
 import { useGetOutboundEpcQuery } from '../../-hooks'
+import DataRestorationSheet from '../../../-components/shared'
+import { RFIDDataType } from '../../../-constants'
+import { DataRestorationProvider } from '../../../-contexts/data-sheet-context'
+import OrderDetailTableDialog from '../manufacture-order-detail/order-detail-dialog'
 import ConnectionInsight from './connection-insight'
 
 const VIRTUAL_ITEM_SIZE = 40
@@ -192,9 +193,15 @@ const ScannedEpcList: React.FC = () => {
 						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
-					<ArchivedRestorationProvider>
-						<ArchivedRestorationSheet />
-					</ArchivedRestorationProvider>
+					<DataRestorationProvider>
+						<label
+							role='button'
+							className={buttonVariants({ variant: 'ghost' })}
+							htmlFor='data-restoration-sheet-trigger'>
+							<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
+						</label>
+						<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
+					</DataRestorationProvider>
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (

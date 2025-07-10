@@ -12,6 +12,8 @@ import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/e
 import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash'
 
+export type RFIDDataType = 'inbound' | 'outbound'
+
 export class RFIDService {
 	// #region Inbound
 	static async fetchNextInboundEpc(params: { _page: number; 'mo_no.eq': string }) {
@@ -68,24 +70,19 @@ export class RFIDService {
 		return await axiosInstance.put(`/rfid/inbound/upsert-epc-information`, payload, {})
 	}
 
+	static async getDeletedEpcs(params) {
+		return await axiosInstance.get('/rfid/inbound/deleted-epcs', { params })
+	}
+
+	static async restoreDeleted(params) {
+		return await axiosInstance.get('/rfid/inbound/deleted-epcs', { params })
+	}
+
 	// #region Outbound
 	static async fetchNextOutboundEpc(params: { _page: number }) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
 			`/rfid/outbound/fetch-epc`,
 			{ params }
-		)
-	}
-
-	static async getArchivedEpcs(params: Partial<FilterArchivedEpcParams>) {
-		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode & { scanned: boolean }>>>(
-			`/rfid/outbound/archived-epcs`,
-			{ params }
-		)
-	}
-
-	static async getArchivedEpcFeatures() {
-		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(
-			`/rfid/outbound/archived-epc-features`
 		)
 	}
 
@@ -101,17 +98,28 @@ export class RFIDService {
 		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-order/${commandNumber}`, { params })
 	}
 
-	static async restoreArchivedEpcs(payload: Array<IElectronicProductCode>) {
-		return await axiosInstance.patch<Array<string>, ResponseBody<any>>(
-			`/rfid/outbound/restore-archived-epcs`,
-			payload
-		)
-	}
-
 	static async getOutboundEpcBySize(params: SearchEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/outbound/get-epc-by-size`, {
 			params
 		})
+	}
+	// #endregion
+
+	// #region Shared
+	static async getArchivedEpcs(type: RFIDDataType, params: Partial<FilterArchivedEpcParams>) {
+		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode & { scanned: boolean }>>>(
+			`/rfid/archived-epcs/${type}`,
+			{ params }
+		)
+	}
+
+	static async getArchivedEpcFeatures(type: RFIDDataType) {
+		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(
+			`/rfid/archived-epc-features/${type}`
+		)
+	}
+	static async restoreArchivedEpcs(type: RFIDDataType, payload: Array<IElectronicProductCode>) {
+		return await axiosInstance.patch<Array<string>, ResponseBody<any>>(`/rfid/restore-archived-epcs/${type}`, payload)
 	}
 
 	// #endregion

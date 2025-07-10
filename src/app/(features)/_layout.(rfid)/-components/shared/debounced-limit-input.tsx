@@ -2,11 +2,11 @@ import { Div, Input, Label } from '@/components/ui'
 import { useDebounceEffect } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
+import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
 
 const DebouncedLimitInput: React.FC = () => {
 	const { t } = useTranslation()
-	const { limit, setLimit } = useArchivedRestorationContext('limit', 'setLimit')
+	const { limit, setLimit } = useDataRestorationContext('limit', 'setLimit')
 	const [value, setValue] = useState<number>(limit)
 
 	useDebounceEffect(

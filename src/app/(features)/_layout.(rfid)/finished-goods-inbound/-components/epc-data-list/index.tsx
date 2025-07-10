@@ -1,6 +1,6 @@
 import UploadDataFileDialog from '@/app/(features)/-components/-shared/upload-dialog'
 import tw from 'tailwind-styled-components'
-import OrderDetails from '../-manufacturing-order-detail'
+import OrderDetails from '../manufacturing-order-detail'
 import EpcDataList from './data-list-body'
 import ListBoxHeader from './data-list-header'
 

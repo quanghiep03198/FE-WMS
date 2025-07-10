@@ -90,11 +90,15 @@ export class AxiosClient {
 					// * Marking the request is refreshing token
 					this.isRefreshingToken = true
 
-					const user = AuthService.getCredentials()
-					if (!user?.id) throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+					const credentials = AuthService.getCredentials()
+					if (!credentials?.id) {
+						AuthService.logout()
+						toast.error(i18n.t('ns_auth:notification.session_expired'))
+						throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+					}
 
 					try {
-						const { metadata: refreshToken } = await AuthService.refreshToken(user.id)
+						const { metadata: refreshToken } = await AuthService.refreshToken(credentials.id)
 						AuthService.setAccessToken(refreshToken)
 						this.processQueue(null, refreshToken)
 						originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
@@ -103,9 +107,7 @@ export class AxiosClient {
 						return response
 					} catch (error) {
 						this.processQueue(error, null)
-						AuthService.logout()
-						toast.error(i18n.t('ns_auth:notification.session_expired'))
-						throw new UnauthorizedError(i18n.t('ns_auth:notification.session_expired'))
+						throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
 					} finally {
 						this.isRefreshingToken = false
 					}

@@ -9,7 +9,9 @@ export default {
 		step_4: '完成 Job'
 	},
 	status: {
+		scannable: '可扫描',
 		scanned: '已扫描',
+		unscannable: '不可扫描',
 		unscanned: '未扫描'
 	}
 }

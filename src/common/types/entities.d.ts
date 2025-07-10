@@ -91,6 +91,7 @@ export interface IElectronicProductCode {
 	size_numcode?: string
 	factory_code_produce?: string
 	station_no?: string
+	scannable?: boolean
 }
 
 export interface IArchivedFilterFeature {

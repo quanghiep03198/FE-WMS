@@ -5,32 +5,30 @@ import { create, StoreApi, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
 
-type RestorableElectronicProductCode = IElectronicProductCode & { scanned: boolean }
+type RestorableElectronicProductCode = IElectronicProductCode & { scanned?: boolean }
 
-type ArchivedRestorationFilterStore = {
+type DataRestorationFilterStore = {
 	searchTerm: string
 	advancedFilters: {
 		shoes_style: string
 		color_sn: string
 		mo_no: string
 		size_numcode: string
-		scanned: boolean
+		scanned?: boolean
+		scannable?: boolean
 	}
 	selectedItems: Array<RestorableElectronicProductCode>
 	limit: number
 	setLimit: (value: number) => void
 	setSearchTerm: (term: string) => void
-	setAdvancedFilters: (values: ArchivedRestorationFilterStore['advancedFilters']) => void
+	setAdvancedFilters: (values: DataRestorationFilterStore['advancedFilters']) => void
 	addItemToSet: (item: RestorableElectronicProductCode) => void
 	addAllItemsToSet: (items: RestorableElectronicProductCode[]) => void
 	removeItemFromSet: (item: RestorableElectronicProductCode) => void
 	removeAllItemsFromSet: () => void
 }
 
-const DEFAULT_PROPS: Pick<
-	ArchivedRestorationFilterStore,
-	'limit' | 'searchTerm' | 'advancedFilters' | 'selectedItems'
-> = {
+const DEFAULT_PROPS: Pick<DataRestorationFilterStore, 'limit' | 'searchTerm' | 'advancedFilters' | 'selectedItems'> = {
 	limit: 100,
 	searchTerm: '',
 	advancedFilters: {
@@ -43,13 +41,13 @@ const DEFAULT_PROPS: Pick<
 	selectedItems: []
 }
 
-const RestorationFilterContext = createContext<StoreApi<ArchivedRestorationFilterStore>>(null)
+const RestorationFilterContext = createContext<StoreApi<DataRestorationFilterStore>>(null)
 
-export const ArchivedRestorationProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const store = useRef<StoreApi<ArchivedRestorationFilterStore>>(null)
+export const DataRestorationProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+	const store = useRef<StoreApi<DataRestorationFilterStore>>(null)
 
 	if (store.current === null) {
-		store.current = create<ArchivedRestorationFilterStore>()(
+		store.current = create<DataRestorationFilterStore>()(
 			immer((set) => ({
 				...DEFAULT_PROPS,
 				setLimit: (value: number) => {
@@ -100,9 +98,9 @@ export const ArchivedRestorationProvider: React.FC<React.PropsWithChildren> = ({
 	return <RestorationFilterContext.Provider value={store.current}>{children}</RestorationFilterContext.Provider>
 }
 
-export const useArchivedRestorationContext = <
-	T extends ArchivedRestorationFilterStore,
-	K extends keyof ArchivedRestorationFilterStore
+export const useDataRestorationContext = <
+	T extends DataRestorationFilterStore,
+	K extends keyof DataRestorationFilterStore
 >(
 	...selectors: K[]
 ) => {

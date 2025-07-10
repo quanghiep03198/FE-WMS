@@ -61,9 +61,10 @@ const SyncDataTrigger: React.FC = () => {
 							{t('ns_inoutbound:scanner_setting.decker_data_synchronization_description')}
 						</Typography>
 					</Div>
-					<Div className='group/trigger inline-flex h-9 w-full max-w-44 divide-x justify-self-end overflow-clip rounded-md border'>
+					<Div className='group/trigger inline-flex h-8 w-full max-w-44 items-center divide-x justify-self-end overflow-clip rounded-md border'>
 						<Button
 							variant='ghost'
+							size='sm'
 							disabled={!factory}
 							className='flex-1 rounded-none'
 							onClick={() => emit({ id: uuid(), factory })}>
@@ -71,7 +72,7 @@ const SyncDataTrigger: React.FC = () => {
 						</Button>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant='ghost' size='icon' className='rounded-none'>
+								<Button variant='ghost' size='icon' className='size-8 rounded-none'>
 									<Icon name='ChevronDown' />
 								</Button>
 							</DropdownMenuTrigger>

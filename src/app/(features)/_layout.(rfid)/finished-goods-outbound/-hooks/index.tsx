@@ -1,11 +1,8 @@
-import { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { omitBy, uniqBy } from 'lodash'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { FilterArchivedEpcParams } from '..'
 import { usePageContext } from '../-contexts/page-context'
 import { SearchEpcParams } from '../..'
 import { OUTBOUND_REPORT_PROVIDE_TAG } from '../../../-hooks/use-report'
@@ -21,60 +18,6 @@ export const useGetOutboundEpcQuery = () => {
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
-	})
-}
-
-export const useGetArchivedEpcQuery = (params) => {
-	return useInfiniteQuery({
-		queryKey: ['ARCHIVED_EPCS', params],
-		queryFn: async ({ pageParam }) => {
-			const filterQueries = omitBy<Partial<FilterArchivedEpcParams>>(
-				{
-					_page: pageParam,
-					_limit: params.limit ?? 100,
-					q: params.searchTerm,
-					'shoes_style.eq': params.shoes_style,
-					'color_sn.eq': params.color_sn,
-					'mo_no.eq': params.mo_no,
-					'size_numcode.eq': params.size_numcode,
-					'scanned.eq': params.scanned
-				},
-				(value) => value === undefined || value === null || (typeof value === 'string' && value === '')
-			)
-			return await RFIDService.getArchivedEpcs(filterQueries)
-		},
-		initialPageParam: 1,
-		refetchOnMount: true,
-		getNextPageParam: (lastPage) => {
-			return lastPage.metadata?.nextPage
-		},
-		placeholderData: keepPreviousData,
-		select: (response) => {
-			const data = response.pages.flatMap((page) => {
-				if (!Array.isArray(page.metadata.data)) return []
-				else return page.metadata.data
-			})
-			return uniqBy(data, (item) => item.epc)
-		}
-	})
-}
-
-export const useGetArchivedEpcFeatureQuery = () => {
-	return useQuery({
-		queryKey: ['ARCHIVED_EPCS_FEATURES'],
-		queryFn: async () => await RFIDService.getArchivedEpcFeatures(),
-		refetchOnMount: 'always',
-		select: (response) => response.metadata
-	})
-}
-
-export const useRestoreEpcMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
-
-	return useMutation({
-		mutationKey: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'],
-		mutationFn: async (epcs: Array<IElectronicProductCode>) => await RFIDService.restoreArchivedEpcs(epcs),
-		onSettled: invalidateQueries
 	})
 }
 

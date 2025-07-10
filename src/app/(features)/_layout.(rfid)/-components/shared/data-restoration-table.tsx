@@ -21,20 +21,24 @@ import {
 	Typography
 } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
+
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
 import { useDeepCompareEffect } from 'ahooks'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useArchivedRestorationContext } from '../../-contexts/archived-sheet-context'
-import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../-hooks'
+import { RFIDDataType } from '../../-constants'
+import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
+import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../-hooks/use-data-restoration'
 import DebouncedLimitInput from './debounced-limit-input'
 import { GhostButton, ListDetail, ListDetailItem } from './styled'
+
+type DataRestorationTableProps = React.ComponentProps<'div'> & { 'data-type': RFIDDataType; 'data-open': boolean }
 
 const VIRTUAL_ITEM_SIZE: number = 40
 const PRERENDERED_ITEMS: number = 5
 
-const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
+const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 	const { t } = useTranslation()
 	const {
 		limit,
@@ -45,7 +49,7 @@ const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
 		removeItemFromSet,
 		addAllItemsToSet,
 		removeAllItemsFromSet
-	} = useArchivedRestorationContext(
+	} = useDataRestorationContext(
 		'limit',
 		'selectedItems',
 		'addItemToSet',
@@ -56,7 +60,7 @@ const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
 		'advancedFilters'
 	)
 
-	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery()
+	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery(props['data-type'])
 	const {
 		data,
 		isFetching,
@@ -65,7 +69,7 @@ const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
 		hasNextPage,
 		refetch: refetchArchivedEpc,
 		fetchNextPage
-	} = useGetArchivedEpcQuery({
+	} = useGetArchivedEpcQuery(props['data-type'], {
 		limit,
 		searchTerm,
 		...advancedFilters
@@ -238,14 +242,27 @@ const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
 											</Label>
 										</TableCell>
 										<TableCell align='center' className='group-aria-selected/row:bg-table-row-selected'>
-											<Badge variant='outline' className='justify-center gap-x-2'>
-												<Icon
-													name={item.scanned ? 'Check' : 'CircleDashed'}
-													size={14}
-													className={item.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
-												/>
-												{item.scanned ? t('ns_rfid:status.scanned') : t('ns_rfid:status.unscanned')}
-											</Badge>
+											{props['data-type'] === RFIDDataType.OUTBOUND ? (
+												<Badge variant='outline' className='justify-center gap-x-2'>
+													<Icon
+														name={item.scanned ? 'Check' : 'CircleDashed'}
+														size={14}
+														className={item.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
+													/>
+													{item.scanned ? t('ns_rfid:status.scanned') : t('ns_rfid:status.unscanned')}
+												</Badge>
+											) : (
+												<Badge variant='outline' className='justify-center gap-x-2'>
+													<Icon
+														name={item.scannable ? 'Check' : 'X'}
+														size={14}
+														className={item.scannable ? 'stroke-success' : 'stroke-destructive'}
+													/>
+													{item.scannable
+														? t('ns_rfid:status.scannable')
+														: t('ns_rfid:status.unscannable')}
+												</Badge>
+											)}
 										</TableCell>
 										<TableCell className='group-aria-selected/row:bg-table-row-selected'>
 											<HoverCard openDelay={100} closeDelay={100}>
@@ -326,4 +343,4 @@ const ArchivedEpcList: React.FC<React.ComponentProps<'div'>> = (props) => {
 	)
 }
 
-export default ArchivedEpcList
+export default DataRestorationTable
