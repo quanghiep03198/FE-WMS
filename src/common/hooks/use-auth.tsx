@@ -1,4 +1,3 @@
-import { USER_PROVIDE_TAG } from '@/app/(auth)/-hooks/use-auth'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -14,16 +13,15 @@ export default function useAuth() {
 	const queryClient = useQueryClient()
 
 	const { mutateAsync: logout } = useMutation({
-		mutationKey: [USER_PROVIDE_TAG],
 		mutationFn: AuthService.revokeToken,
 		onMutate: () => {
 			const queryCache = queryClient.getQueryCache()
-			const queryKeys = queryCache.getAll().reduce<QueryKey>((accumulator, currentQuery) => {
+			const cancelledQueryKeys = queryCache.getAll().reduce<QueryKey>((accumulator, currentQuery) => {
 				if (currentQuery.state.status === 'pending')
 					return [...accumulator, ...currentQuery.queryKey.filter((key) => !!key)]
 				else return accumulator
 			}, [])
-			queryClient.cancelQueries({ queryKey: queryKeys })
+			queryClient.cancelQueries({ queryKey: cancelledQueryKeys })
 			return toast.loading(t('ns_common:notification.processing_request'))
 		},
 		onSettled: (_data, _error, _variable, context) => {
