@@ -9,6 +9,7 @@ import { useLocalStorageState, useRafState } from 'ahooks'
 import { Fragment, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
+import { USER_PROVIDE_TAG } from '../(auth)/-hooks/use-auth'
 import { ErrorBoundaryFallback } from '../-components/-errors/error-boundary-fallback'
 import UnsupportedScreen from '../-components/-errors/unsupported-screen'
 import AuthGuard from '../-components/-guard/auth-guard'
@@ -21,8 +22,10 @@ export const Route = createFileRoute('/(features)/_layout')({
 	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {
 		if (!isAuthenticated) throw redirect({ to: '/login' })
+	},
+	loader: async ({ context: { queryClient } }) => {
+		return await queryClient.prefetchQuery({ queryKey: [USER_PROVIDE_TAG] })
 	}
-	// loader: async ({ context: { queryClient } }) => await queryClient.prefetchQuery({ queryKey: [USER_PROVIDE_TAG] })
 })
 
 function Layout() {
@@ -47,16 +50,9 @@ function Layout() {
 	})
 
 	useEffect(() => {
-		const onResize = () => {
-			setWindowSize({
-				width: window.innerWidth,
-				height: window.innerHeight
-			})
-		}
+		const onResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight })
 		onResize()
-
 		window.addEventListener('resize', onResize)
-
 		return () => {
 			window.removeEventListener('resize', onResize)
 		}
