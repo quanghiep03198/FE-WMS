@@ -9,8 +9,9 @@ export function getUserProfileQuery(config?: AxiosRequestConfig) {
 
 	return queryOptions({
 		queryKey: [USER_PROVIDE_TAG, config],
-		queryFn: () => AuthService.profile(config),
+		queryFn: async () => await AuthService.profile(config),
 		refetchOnMount: 'always',
+		refetchOnReconnect: 'always',
 		networkMode: 'always',
 		enabled: AuthService.getHasAccessToken(),
 		select: (response) => response.metadata,

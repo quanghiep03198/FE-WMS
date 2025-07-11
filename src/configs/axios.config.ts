@@ -75,6 +75,8 @@ export class AxiosClient {
 				const errorStatus = error.response?.status
 
 				if (originalRequest && !originalRequest.retry && errorStatus === HttpStatusCode.Unauthorized) {
+					const abortController = new AbortController()
+
 					if (this.isRefreshingToken) {
 						return new Promise((resolve, reject) => {
 							this.unauthorizedRequestHandlers.push({ resolve, reject })
@@ -93,12 +95,16 @@ export class AxiosClient {
 					const credentials = AuthService.getCredentials()
 					if (!credentials?.id) {
 						AuthService.logout()
-						toast.error(i18n.t('ns_auth:notification.session_expired'))
-						throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+						abortController.abort()
+						toast.error(i18n.t('ns_auth:notification.authenticate_failed'))
 					}
 
 					try {
-						const { metadata: refreshToken } = await AuthService.refreshToken(credentials.id)
+						if (!credentials?.id) throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+						const { metadata: refreshToken } = await AuthService.refreshToken(
+							credentials.id,
+							abortController.signal
+						)
 						AuthService.setAccessToken(refreshToken)
 						this.processQueue(null, refreshToken)
 						originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
@@ -107,7 +113,7 @@ export class AxiosClient {
 						return response
 					} catch (error) {
 						this.processQueue(error, null)
-						throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+						return Promise.reject(error)
 					} finally {
 						this.isRefreshingToken = false
 					}
