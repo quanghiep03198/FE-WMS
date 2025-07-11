@@ -8,10 +8,10 @@ import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
+
 /**
  * @see https://vitejs.dev/config/
  */
-
 export default defineConfig(({ mode }) => {
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 	normalizePath(path.resolve(__dirname, './infrastructure'))
@@ -75,46 +75,64 @@ export default defineConfig(({ mode }) => {
 				},
 				workbox: {
 					navigateFallback: '/index.html',
-					globPatterns: ['**/*.{html,css,js,wasm,ico,png,jpg,svg,webp,woff2}'],
+					navigateFallbackDenylist: [/^\/api\//, /^\/sw\.js$/, /^\/workbox-.*\.js$/, /\.(wasm|map)$/],
+					globPatterns: ['**/*.{html,css,ico,png,jpg,svg,webp,woff2}'],
 					skipWaiting: true,
 					clientsClaim: true,
 					navigationPreload: true,
 					runtimeCaching: [
 						{
-							urlPattern: /.*\.(html|css|js?)$/,
+							// Handle versioned JS files (from build)
+							urlPattern: /.*\.(js|mjs)$/,
 							handler: 'StaleWhileRevalidate',
 							options: {
-								cacheName: 'resources-cache',
+								cacheName: 'js-cache',
 								expiration: {
 									maxEntries: 100,
-									maxAgeSeconds: 60 * 60,
+									maxAgeSeconds: 60 * 60 * 24, // 24 hours
 									purgeOnQuotaError: true
 								},
 								cacheableResponse: {
-									statuses: [0, 200] // Cache responses with status 0 (opaque) and 200 (OK)
+									statuses: [0, 200]
 								}
 							}
 						},
 						{
-							urlPattern: /.*\.(json|wasm|ico|png|jpg|svg|webp|woff2?)$/,
+							// Handle CSS and other resources
+							urlPattern: /.*\.(html|css|json|wasm)$/,
+							handler: 'StaleWhileRevalidate',
+							options: {
+								cacheName: 'resources-cache',
+								expiration: {
+									maxEntries: 200,
+									maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
+									purgeOnQuotaError: true
+								},
+								cacheableResponse: {
+									statuses: [0, 200]
+								}
+							}
+						},
+						{
+							// Static assets - longer cache
+							urlPattern: /.*\.(ico|png|jpg|svg|webp|woff2?)$/,
 							handler: 'CacheFirst',
 							options: {
 								cacheName: 'static-cache',
 								expiration: {
 									maxEntries: 50,
-									maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
+									maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
 								}
 							}
 						},
 						{
+							// API calls
 							urlPattern: ({ url }) => url.pathname.startsWith('/api'),
-							handler: 'NetworkOnly',
-							options: {
-								cacheName: 'api-cache'
-							}
+							handler: 'NetworkOnly'
 						}
 					],
-					cleanupOutdatedCaches: true
+					cleanupOutdatedCaches: true,
+					mode: 'production'
 				},
 				devOptions: {
 					enabled: false,
