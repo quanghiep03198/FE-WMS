@@ -1,13 +1,14 @@
 import { IOutboundEstimation } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
+import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
 
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ColumnDef, createColumnHelper, Row } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import DataTable from './data-table'
+import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
+import DataTable from '../data-table'
 
 type OutboundEstimationTableProps = {
 	data: IOutboundEstimation[]
@@ -47,26 +48,37 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
 				cell: (info) => info.getValue(),
-				size: 150,
-				maxSize: 150,
+				size: 160,
 				enableSorting: true,
 				enableColumnFilter: true
 			}),
-
 			columnHelper.accessor('outbound_date', {
 				header: t('ns_erp:fields.outbound_date'),
 				cell: (info) => format(info.getValue(), 'yyyy-MM-dd'),
+				size: 160,
 				enableSorting: true,
-				enableGlobalFilter: false,
-				meta: {
-					align: 'right',
-					filterVariant: 'range'
-				}
+				enableGlobalFilter: false
+			}),
+			columnHelper.accessor('last_outbound_time', {
+				header: t('ns_erp:fields.last_outbound_time'),
+				cell: (info) => {
+					const value = info.getValue()
+					return value ? (
+						format(value, 'yyyy-MM-dd')
+					) : (
+						<Div className='place-items-center'>
+							<Icon name='CalendarOff' className='stroke-muted-foreground' />
+						</Div>
+					)
+				},
+				size: 160,
+				enableSorting: true,
+				enableGlobalFilter: false
 			}),
 			columnHelper.accessor('po_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				cell: (info) => formatIntlNumber(info.getValue()),
-				size: 180,
+				size: 160,
 				enableSorting: true,
 				enableGlobalFilter: false,
 				meta: {
@@ -76,6 +88,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 			}),
 			columnHelper.accessor('outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
+				size: 160,
 				enableSorting: true,
 				enableGlobalFilter: false,
 				cell: (info) => formatIntlNumber(info.getValue()),
@@ -89,8 +102,8 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 	const flexRenderFooter = useCallback(({ rows }: { rows: Row<IOutboundEstimation>[] }) => {
 		return (
 			<TableFooter className='sticky bottom-0 z-20'>
-				<TableRow className='[&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
-					<TableCell colSpan={3} align='left' className='sticky left-0 z-10 font-semibold'>
+				<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
+					<TableCell colSpan={4} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
 						{t('ns_common:common_fields.total')}
 					</TableCell>
 					<TableCell align='right' className='font-semibold'>
@@ -107,10 +120,10 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 	return (
 		<DataTable
 			data={data}
-			dataType='outbound'
+			dataType={RFIDDataType.OUTBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.outbound_estimation')}
-			footer={flexRenderFooter}
+			footer={memo(flexRenderFooter)}
 		/>
 	)
 }

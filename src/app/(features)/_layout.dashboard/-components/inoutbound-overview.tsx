@@ -65,8 +65,8 @@ const InoutboundOverview: React.FC = () => {
 							/>
 							<YAxis stroke='hsl(var(--muted-foreground))' />
 							<ChartTooltip content={<ChartTooltipContent />} />
-							<Bar dataKey='import' fill='var(--color-import)' radius={3} />
-							<Bar dataKey='export' fill='var(--color-export)' radius={3} />
+							<Bar dataKey='import' fill='var(--color-import)' opacity={0.8} radius={3} />
+							<Bar dataKey='export' fill='var(--color-export)' opacity={0.8} radius={3} />
 							<ChartLegend content={<ChartLegendContent />} formatter={(value) => _.capitalize(value)} />
 						</BarChart>
 					</ChartContainer>

@@ -1,12 +1,14 @@
 import { IInboundInventory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
+import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
 import { ColumnDef, createColumnHelper, Row } from '@tanstack/react-table'
-import React, { useCallback, useMemo } from 'react'
+import { format } from 'date-fns'
+import React, { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import DataTable from './data-table'
+import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
+import DataTable from '../data-table'
 
 type InboundOrderTableProps = {
 	data: Array<IInboundInventory>
@@ -54,6 +56,22 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				enableColumnFilter: true,
 				filterFn: fuzzyFilter
 			}),
+			columnHelper.accessor('last_inbound_time', {
+				header: t('ns_erp:fields.last_inbound_time'),
+				cell: (info) => {
+					const value = info.getValue()
+					return value ? (
+						format(value, 'yyyy-MM-dd')
+					) : (
+						<Div className='place-items-center'>
+							<Icon name='CalendarOff' className='stroke-muted-foreground' />
+						</Div>
+					)
+				},
+				size: 180,
+				enableSorting: true,
+				enableGlobalFilter: false
+			}),
 			columnHelper.accessor('mo_qty', {
 				header: t('ns_erp:fields.mo_qty'),
 				enableSorting: true,
@@ -73,6 +91,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 					filterVariant: 'range'
 				}
 			}),
+
 			columnHelper.accessor('inspected_qty', {
 				header: t('ns_erp:fields.inspected_qty'),
 				cell: (info) => formatIntlNumber(info.getValue()),
@@ -87,36 +106,39 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 		]
 	}, [i18n.language])
 
-	const flexRenderFooter = useCallback(({ rows }: { rows: Row<IInboundInventory>[] }) => {
-		return (
-			<TableFooter className='sticky bottom-0 z-20'>
-				<TableRow className='divide-x-0 [&_td>span]:line-clamp-1 [&_td[align=right]>span]:ml-auto [&_td[align=right]>span]:truncate [&_td]:h-10 [&_td]:border-t [&_td]:bg-table-head [&_td]:lowercase [&_td]:first-letter:uppercase'>
-					<TableCell colSpan={2} align='left' className='sticky left-0 z-10 font-semibold'>
-						{t('ns_common:common_fields.total')}
-					</TableCell>
-					<TableCell align='right' className='font-semibold'>
-						{formatIntlNumber(rows?.reduce((total, item) => total + item.original.mo_qty, 0) ?? 0)}
-					</TableCell>
-					<TableCell align='right' className='font-semibold'>
-						{formatIntlNumber(rows?.reduce((total, item) => total + item.original.inbound_qty, 0) ?? 0)}
-					</TableCell>
-					<TableCell align='right' className='font-semibold'>
-						{formatIntlNumber(rows?.reduce((total, item) => total + item.original.inspected_qty, 0) ?? 0)}
-					</TableCell>
-				</TableRow>
-			</TableFooter>
-		)
-	}, [])
-
 	return (
 		<DataTable
 			data={data}
-			dataType='inbound'
+			dataType={RFIDDataType.INBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.inbound_directive')}
-			footer={flexRenderFooter}
+			footer={DataTableFooter}
 		/>
 	)
 }
+
+const DataTableFooter = memo(({ rows }: { rows: Row<IInboundInventory>[] }) => {
+	const { t } = useTranslation()
+	return (
+		<TableFooter className='sticky bottom-0 z-20'>
+			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
+				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
+					{t('ns_common:common_fields.total')}
+				</TableCell>
+				<TableCell align='right' className='font-semibold'>
+					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.mo_qty, 0) ?? 0)}
+				</TableCell>
+				<TableCell align='right' className='font-semibold'>
+					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.inbound_qty, 0) ?? 0)}
+				</TableCell>
+				<TableCell align='right' className='font-semibold'>
+					{formatIntlNumber(rows?.reduce((total, item) => total + item.original.inspected_qty, 0) ?? 0)}
+				</TableCell>
+			</TableRow>
+		</TableFooter>
+	)
+})
+
+DataTableFooter.displayName = 'InboundOrderTableFooter'
 
 export default InboundOrderTable

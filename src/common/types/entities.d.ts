@@ -105,6 +105,14 @@ export interface IArchivedFilterFeature {
 	}>
 }
 
+export interface IProductionInventoryFeature {
+	brand_name: string
+	product_variants: Array<{
+		shoes_style: string
+		colors: Array<Record<'color', string>>
+	}>
+}
+
 export interface IInOutBoundReport {
 	mo_no: string
 	mat_code: string
@@ -204,6 +212,7 @@ export interface IOutboundEstimation extends IBaseInventory {
 	po_qty: number
 	outbound_date: Date
 	outbound_qty: number
+	last_outbound_time: Date
 }
 
 export interface IInboundInventory extends IBaseInventory {
@@ -211,4 +220,5 @@ export interface IInboundInventory extends IBaseInventory {
 	mo_qty: number
 	inbound_qty: number
 	inspected_qty: number
+	last_inbound_time: Date
 }

@@ -3,6 +3,7 @@ import {
 	IInboundInventory,
 	IMonthlyInventoryReport,
 	IOutboundEstimation,
+	IProductionInventoryFeature,
 	IProductSizeInventory
 } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
@@ -37,7 +38,10 @@ export class InventoryService {
 		})
 	}
 
-	static async getProductionInventoryReport(tenantId: string, params: Record<'shoes_style' | 'color', string>) {
+	static async getProductionInventoryReport(
+		tenantId: string,
+		params: Record<'brand_name' | 'shoes_style' | 'color', string>
+	) {
 		return await axiosInstance.get<
 			void,
 			ResponseBody<{
@@ -48,6 +52,7 @@ export class InventoryService {
 		>('/inventory/summary', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: {
+				'brand_name.eq': params.brand_name,
 				'shoes_style.eq': params.shoes_style,
 				'color.eq': params.color
 			}
@@ -62,7 +67,7 @@ export class InventoryService {
 	}
 
 	static async getProductionInventoryFeatures(tenantId: string) {
-		return await axiosInstance.get<void, ResponseBody<Array<{ shoes_style: string; colors: string[] }>>>(
+		return await axiosInstance.get<void, ResponseBody<IProductionInventoryFeature[]>>(
 			'/inventory/production-features',
 			{
 				headers: {

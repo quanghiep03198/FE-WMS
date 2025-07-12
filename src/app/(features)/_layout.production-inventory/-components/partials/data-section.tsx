@@ -3,15 +3,15 @@ import { Div, Icon, Typography } from '@/components/ui'
 import { isEmpty } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetProductionInventoryQuery } from '../-hooks/use-production-inventory'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
+import { useGetProductionInventoryQuery } from '../../-hooks/use-production-inventory'
+import { useGetTenantByFactory } from '../../../-hooks/use-tenacy'
 import EmptyState from './empty-state'
 import InboundOrderTable from './inbound-order-table'
 import { OutboundEstimationTable } from './outbound-estimation-table'
 import SizeTable from './size-table'
 
 const DataSection: React.FC = () => {
-	const { searchParams } = useQueryParams<Record<'shoes_style' | 'color', string>>()
+	const { searchParams } = useQueryParams<Record<'brand_name' | 'shoes_style' | 'color', string>>()
 	const { data: tenant } = useGetTenantByFactory()
 	const { t } = useTranslation()
 
@@ -26,8 +26,11 @@ const DataSection: React.FC = () => {
 
 	if (isLoading)
 		return (
-			<Div className='grid h-64 place-content-center'>
-				<Icon name='LoaderCircle' size={20} className='animate-[spin_1s_linear_infinite]' />
+			<Div className='gap flex h-64 place-items-center justify-center gap-x-2'>
+				<Icon name='LoaderCircle' size={20} className='inline-block animate-[spin_1s_linear_infinite]' />
+				<Typography variant='small' color='muted'>
+					This may take long time
+				</Typography>
 			</Div>
 		)
 	else if (!shouldRender) return <EmptyState />

@@ -3,9 +3,9 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
-import DataSection from './-components/data-section'
-import PageHeader from './-components/page-header'
-import SearchBox from './-components/search-box'
+import DataSection from './-components/partials/data-section'
+import PageHeader from './-components/partials/page-header'
+import SearchBox from './-components/partials/search-box'
 
 export const Route = createLazyFileRoute('/(features)/_layout/production-inventory/')({
 	component: Page
