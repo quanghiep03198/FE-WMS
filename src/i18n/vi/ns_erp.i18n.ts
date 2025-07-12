@@ -28,6 +28,8 @@ export default {
 		inventory_qty_by_order: 'Tồn kho theo đơn',
 		kg_noend: 'Thứ tự thùng cuối',
 		kg_nostart: 'Thứ tự thùng đầu',
+		last_inbound_time: 'Thời gian nhập kho gần nhất', // Last Inbound Time
+		last_outbound_time: 'Thời gian xuất kho gần nhất', // Last Outbound Time
 		mat_code: 'Mã thành phẩm',
 		color_sn: 'Màu sắc sản phẩm',
 		missing_qty: 'Số lượng còn thiếu',

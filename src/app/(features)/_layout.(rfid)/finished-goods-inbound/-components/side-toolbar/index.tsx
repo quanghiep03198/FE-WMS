@@ -24,6 +24,6 @@ const ScannerSettings: React.FC = () => {
 	)
 }
 
-const ToolbarWrapper = tw.div`@container group sm:rounded-none sm:border-none border [box-sizing:border-box] rounded-lg bg-sidebar max-h-[var(--outlet-wrapper-height)] overflow-hidden`
+const ToolbarWrapper = tw.div`@container group sm:rounded-none sm:border-none border rounded-lg bg-sidebar max-h-[var(--outlet-wrapper-height)] overflow-hidden`
 
 export default ScannerSettings

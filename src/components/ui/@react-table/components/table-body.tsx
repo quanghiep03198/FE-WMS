@@ -33,7 +33,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComp
 	return (
 		<TableRowGroup>
 			{before > 0 && (
-				<TableRow>
+				<TableRow ref={(node) => virtualizer.measureElement(node)}>
 					<TableCell colSpan={table.getAllColumns().length} style={{ height: before }} />
 				</TableRow>
 			)}

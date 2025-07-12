@@ -28,6 +28,8 @@ export default {
 		inventory_qty_by_order: 'Actual instock quantity',
 		kg_noend: 'Ending Box Number',
 		kg_nostart: 'Starting Box Number',
+		last_inbound_time: 'Last inbound time', // Last Inbound Time
+		last_outbound_time: 'Last Outbound Time', // Last Outbound Time
 		mat_code: 'Finished production code',
 		color_sn: 'Product color',
 		missing_qty: 'Missing quantity',

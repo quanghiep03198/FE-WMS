@@ -1,6 +1,7 @@
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Separator } from '@/components/ui'
+import { cn } from '@/common/utils/cn'
+import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon } from '@/components/ui'
 import { InventoryService } from '@/services/inventory.service'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, isEmpty } from 'lodash'
@@ -8,7 +9,7 @@ import { useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
+import { useGetTenantByFactory } from '../../../-hooks/use-tenacy'
 import DownloadExcelButton from './download-excel-button'
 
 const SearchBox: React.FC = () => {
@@ -19,7 +20,7 @@ const SearchBox: React.FC = () => {
 
 	const { data } = useQuery({
 		queryKey: ['PRODUCTION_INVENTORY_FEATURE', tenant?.id],
-		queryFn: () => InventoryService.getProductionInventoryFeatures(tenant?.id),
+		queryFn: async () => await InventoryService.getProductionInventoryFeatures(tenant?.id),
 		enabled: !!tenant?.id,
 		refetchOnMount: 'always',
 		select: (response) => {
@@ -27,43 +28,46 @@ const SearchBox: React.FC = () => {
 		}
 	})
 
-	const form = useForm<Record<'shoes_style' | 'color', string>>({
+	const form = useForm<Record<'brand_name' | 'shoes_style' | 'color', string>>({
 		defaultValues: searchParams ? { ...searchParams } : { shoes_style: '', color: '' }
 	})
-
+	const selectedBrandName = useWatch({ control: form.control, name: 'brand_name' })
 	const selectedShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
 
-	const shoesStyleOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		const options = data
-			.filter((item) => item.shoes_style !== 'ALL')
+	const getOptions = (items: any[] | undefined, key: string, labelKey: string = key, valueKey: string = key) => {
+		if (!Array.isArray(items)) return []
+		const options = items
+			.filter((item) => item[key] !== 'ALL')
 			.map((item) => ({
-				label: item.shoes_style,
-				value: item.shoes_style
+				label: item[labelKey],
+				value: item[valueKey]
 			}))
-		options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
+		if (items.some((item) => item[key] === 'ALL')) options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
 		return options
-	}, [data, i18n.language])
+	}
+
+	const brandNameOptions = useMemo(() => getOptions(data, 'brand_name'), [data, i18n.language])
+
+	const shoesStyleOptions = useMemo(() => {
+		const match = Array.isArray(data) ? data.find((item) => item.brand_name === selectedBrandName) : undefined
+		return getOptions(match?.product_variants, 'shoes_style')
+	}, [data, selectedBrandName, i18n.language])
 
 	const colorOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-
-		const match = data?.find((item) => item.shoes_style === selectedShoesStyle)
-		if (!match || !Array.isArray(match.colors)) return []
-		const options = match.colors.filter((item) => item !== 'ALL').map((item) => ({ label: item, value: item }))
-		options.unshift({ label: t('ns_common:others.all'), value: 'ALL' })
-		return options
-	}, [data, selectedShoesStyle, i18n.language])
+		const matchBrand = Array.isArray(data) ? data.find((item) => item.brand_name === selectedBrandName) : undefined
+		const matchVariant = matchBrand?.product_variants?.find((item: any) => item.shoes_style === selectedShoesStyle)
+		return getOptions(matchVariant?.colors, 'color')
+	}, [data, selectedBrandName, selectedShoesStyle, i18n.language])
 
 	return (
 		<Div
-			className={
-				!isEmpty(searchParams)
-					? 'mx-auto flex max-w-5xl items-center justify-center gap-x-6 md:gap-x-2'
-					: 'mx-auto block max-w-3xl'
-			}>
+			className={cn(
+				'mx-auto max-w-5xl',
+				isEmpty(searchParams) ? 'block' : 'flex items-center justify-center space-x-4 divide-x-2 md:space-x-2'
+			)}>
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit((values) => setParams(values))}>
+					<BrandNameComboboxFieldControl data={brandNameOptions} />
 					<ShoesStyleCombobox data={shoesStyleOptions} />
 					<ColorCombobox data={colorOptions} />
 					<Button
@@ -76,11 +80,40 @@ const SearchBox: React.FC = () => {
 				</Form>
 			</FormProvider>
 			{!isEmpty(searchParams) && (
-				<Div className='inline-flex items-center gap-x-6 duration-300 ease-in animate-in fade-in-0'>
-					<Separator orientation='vertical' className='h-8 w-0.5 md:hidden' />
+				<Div className='px-4 duration-300 ease-in animate-in fade-in-0'>
 					<DownloadExcelButton variant='secondary' />
 				</Div>
 			)}
+		</Div>
+	)
+}
+
+const BrandNameComboboxFieldControl: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
+	const { t } = useTranslation()
+
+	const [searchTerm, setSearchTerm] = useState<string>('')
+
+	const filteredData = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		return data.filter((item) => item.value?.toUpperCase()?.includes(searchTerm.toUpperCase()))
+	}, [data, searchTerm])
+
+	return (
+		<Div className='flex-1'>
+			<ComboboxFieldControl
+				name='brand_name'
+				placeholder={capitalize(
+					t('ns_common:form_placeholder.select', {
+						object: t('ns_erp:fields.brand_name'),
+						defaultValue: 'Select customer brand'
+					})
+				)}
+				shouldFilter={false}
+				onInput={setSearchTerm}
+				datalist={filteredData}
+				labelField='label'
+				valueField='value'
+			/>
 		</Div>
 	)
 }
@@ -114,6 +147,7 @@ const ShoesStyleCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }
 		</Div>
 	)
 }
+
 const ColorCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
 	const { t } = useTranslation()
 

@@ -1,4 +1,5 @@
 import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
+import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import { SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
 import {
 	InoutboundPayload,
@@ -11,8 +12,6 @@ import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash'
-
-export type RFIDDataType = 'inbound' | 'outbound'
 
 export class RFIDService {
 	// #region Inbound

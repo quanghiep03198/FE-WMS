@@ -6,7 +6,7 @@ import { InventoryService } from '@/services/inventory.service'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
+import { useGetTenantByFactory } from '../../../-hooks/use-tenacy'
 
 const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (props) => {
 	const { t } = useTranslation()
