@@ -1,4 +1,3 @@
-import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -41,17 +40,16 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 	} = props
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
-	const measureElement = useMeasureElement()
 	const estimateSize = useMemoizedFn(() => virtualizerOptions.estimateSize)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
 		overscan: virtualizerOptions.overscan,
+		useAnimationFrameWithResizeObserver: true,
 		getScrollElement,
 		estimateSize,
-		scrollToFn,
-		measureElement
+		scrollToFn
 	})
 
 	const columnSizeVars = useMemo(() => {
@@ -76,7 +74,16 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 	return (
 		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
-			<ScrollArea tabIndex={0} ref={containerRef} {...containerProps}>
+			<ScrollArea
+				tabIndex={0}
+				ref={containerRef}
+				style={
+					{
+						WebkitTransform: 'translate3d(0, 0, 0)',
+						transform: 'translate3d(0, 0, 0)'
+					} as React.CSSProperties
+				}
+				{...containerProps}>
 				<Table
 					id={instanceId}
 					ref={tableRef}
