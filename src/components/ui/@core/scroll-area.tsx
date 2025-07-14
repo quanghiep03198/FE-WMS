@@ -6,10 +6,11 @@ import { cn } from '@/common/utils/cn'
 const ScrollArea: React.FC<React.ComponentProps<typeof ScrollAreaPrimitive.Root>> = ({
 	className,
 	children,
+	ref,
 	...props
 }) => (
 	<ScrollAreaPrimitive.Root className={cn('relative overflow-hidden', className)} {...props}>
-		<ScrollAreaPrimitive.Viewport className='h-full w-full rounded-[inherit]'>
+		<ScrollAreaPrimitive.Viewport className='h-full w-full rounded-[inherit]' ref={ref}>
 			{children}
 		</ScrollAreaPrimitive.Viewport>
 		<ScrollBar />
