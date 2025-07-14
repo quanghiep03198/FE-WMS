@@ -25,19 +25,14 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 
 	return (
 		<TableRowGroup>
-			{before > 0 && (
-				<VirtualPlaceholderRow
-					measureElement={virtualizer.measureElement}
-					colSpan={table.getAllColumns().length}
-					style={{ height: before }}
-				/>
-			)}
+			{before > 0 && <VirtualPlaceholderRow colSpan={table.getAllColumns().length} style={{ height: before }} />}
 			{Array.isArray(virtualItems) &&
 				virtualItems.map((virtualRow) => {
 					const row = rows[virtualRow.index] as TRow<any>
 
 					return virtualizer.isScrolling && !isSomeRowsExpanded ? (
 						<MemoizedVirtualTableRow
+							data-index={virtualRow.index}
 							key={row.id}
 							row={row}
 							virtualRow={virtualRow}
@@ -45,6 +40,7 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 						/>
 					) : (
 						<VirtualTableRow
+							data-index={virtualRow.index}
 							key={row.id}
 							row={row}
 							virtualRow={virtualRow}
@@ -52,13 +48,7 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 						/>
 					)
 				})}
-			{after > 0 && (
-				<VirtualPlaceholderRow
-					measureElement={virtualizer.measureElement}
-					colSpan={table.getAllColumns().length}
-					style={{ height: after }}
-				/>
-			)}
+			{after > 0 && <VirtualPlaceholderRow colSpan={table.getAllColumns().length} style={{ height: after }} />}
 		</TableRowGroup>
 	)
 }

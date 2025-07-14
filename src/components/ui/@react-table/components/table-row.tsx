@@ -2,6 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { flexRender, type Row as TRow } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
+import isEqual from 'react-fast-compare'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { DataTableUtility } from '../utils/table.util'
@@ -10,16 +11,20 @@ import { type TableBodyProps } from './table-body'
 type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
 	row: TRow<any>
 	virtualRow: { index: number; start: number; size: number }
+	measureElement?: (node: HTMLTableRowElement) => void
 }
 
-const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, renderSubComponent }) => {
+const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, measureElement, renderSubComponent }) => {
 	'use no memo'
 
 	const { table } = useTableContext()
 
+	const shouldRenderSubComponent = typeof renderSubComponent === 'function'
+
 	return (
 		<Fragment>
 			<TableRow
+				data-index={shouldRenderSubComponent ? virtualRow.index : virtualRow.index * 2}
 				aria-selected={row.getIsSelected()}
 				aria-expanded={row.getIsExpanded()}
 				className='group border-spacing-0'>
@@ -47,8 +52,8 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, rend
 				})}
 			</TableRow>
 			{/* Sub-component */}
-			{typeof renderSubComponent === 'function' && (
-				<TableRow>
+			{shouldRenderSubComponent && (
+				<TableRow data-index={virtualRow.index * 2 + 1}>
 					<TableCell
 						colSpan={row.getVisibleCells().length}
 						className={cn(
@@ -74,13 +79,9 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, rend
 	)
 }
 
-type VirtualPlaceHolderRowProps = {
-	measureElement: (node: HTMLTableRowElement) => void
-} & React.ComponentProps<'td'>
-
-const VirtualPlaceholderRow: React.FC<VirtualPlaceHolderRowProps> = ({ measureElement, ...props }) => {
+const VirtualPlaceholderRow: React.FC<React.ComponentProps<'td'>> = (props) => {
 	return (
-		<TableRow ref={(node) => measureElement(node)}>
+		<TableRow>
 			<TableCell {...props} />
 		</TableRow>
 	)
@@ -88,6 +89,8 @@ const VirtualPlaceholderRow: React.FC<VirtualPlaceHolderRowProps> = ({ measureEl
 
 VirtualPlaceholderRow.displayName = 'VirtualPlaceholderRow'
 
-const MemoizedVirtualTableRow = memo(VirtualTableRow)
+const MemoizedVirtualTableRow = memo(VirtualTableRow, (prevProps, nextProps) =>
+	isEqual(prevProps.measureElement, nextProps.measureElement)
+)
 
 export { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow }
