@@ -1,7 +1,7 @@
 import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IMonthlyInventoryReport } from '@/common/types/entities'
+import { IMonthlyInventoryReport, ITenancy } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Button,
@@ -20,24 +20,24 @@ import Skeleton from '@/components/ui/@custom/skeleton'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { InventoryService } from '@/services/inventory.service'
+import { useQueryClient } from '@tanstack/react-query'
 import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
 import { useMemoizedFn, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick } from 'lodash'
-import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetInventoryAuditReport } from '../../-hooks/use-report'
+import { INVENTORY_REPORT_PROVIDE_TAG, useGetInventoryAuditReport } from '../../-hooks/use-report'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
 import { InventoryReportDetailTable } from './report-detail-table'
 
 export const InventoryReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
 	const { data: currentTenant } = useGetTenantByFactory()
-	const { user } = useAuth()
 
-	const { data, isLoading, refetch } = useGetInventoryAuditReport(currentTenant?.id, searchParams)
+	const { data, isLoading } = useGetInventoryAuditReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IMonthlyInventoryReport>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryReport>()
@@ -192,11 +192,43 @@ export const InventoryReportMasterTable: React.FC = () => {
 		[data, i18n.language]
 	)
 
+	return (
+		<Div className='relative space-y-10'>
+			<DataTable
+				ref={dataTableRef}
+				columns={columns}
+				data={data}
+				loading={isLoading}
+				expanded={expanded}
+				getRowCanExpand={() => true}
+				enableExpanding={true}
+				manualExpanding={true}
+				renderSubComponent={DataDetailTable}
+				containerProps={{ className: 'xl:h-[50vh] h-[40vh]' }}
+				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
+				toolbarProps={{ slotRight: DataTableSlotRight }}
+			/>
+		</Div>
+	)
+}
+
+const DataTableSlotRight = () => {
+	const { searchParams } = useQueryParams<{ 'month.eq': string }>()
+	const queryClient = useQueryClient()
+	const { user } = useAuth()
+
+	const factoryTenantQueryState = queryClient.getQueryState<ITenancy>(['TENANT', user.company_code])
+	const monthlyReportQueryState = queryClient.getQueryState<IMonthlyInventoryReport[]>([
+		INVENTORY_REPORT_PROVIDE_TAG,
+		factoryTenantQueryState?.data?.id,
+		searchParams
+	])
+
 	const handleDownloadExcel = useMemoizedFn(async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
 			const blob = await InventoryService.downloadInventoryAuditReport(
-				currentTenant?.id,
+				factoryTenantQueryState?.data?.id,
 				pick(searchParams, 'month.eq')
 			)
 			saveAs(
@@ -212,69 +244,50 @@ export const InventoryReportMasterTable: React.FC = () => {
 			toast.error('ns_common:notification.error', { id })
 		}
 	})
-
-	const renderDetailTable = useCallback(
-		({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
-			<InventoryReportDetailTable
-				queries={pick(row.original, [
-					'actual_po',
-					'mo_no',
-					'cust_shoestyle',
-					'shoes_style_code_factory',
-					'inv_type',
-					'inv_year_month'
-				])}
-				data={row.original?.detail}
-			/>
-		),
-		[data]
-	)
-
-	const renderSlotRight = useCallback(
-		() => (
-			<Fragment>
-				<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-					<Button
-						size='icon'
-						variant='outline'
-						disabled={!data || data.length === 0}
-						onClick={() => handleDownloadExcel()}>
-						<Icon name='Download' />
-					</Button>
-				</Tooltip>
-				<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-					<Button size='icon' variant='outline' onClick={() => refetch()}>
-						<Icon name='RotateCw' />
-					</Button>
-				</Tooltip>
-			</Fragment>
-		),
-		[]
-	)
-
-	const renderFooterSlot = useCallback(() => <DataTableSummary data={data} isLoading={isLoading} />, [data, isLoading])
+	const { t } = useTranslation()
 
 	return (
-		<Div className='relative space-y-10'>
-			<DataTable
-				ref={dataTableRef}
-				columns={columns}
-				data={data}
-				loading={isLoading}
-				expanded={expanded}
-				getRowCanExpand={() => true}
-				enableExpanding={true}
-				manualExpanding={true}
-				renderSubComponent={renderDetailTable}
-				containerProps={{ className: 'xxl:h-[50vh]' }}
-				footerProps={{ slot: renderFooterSlot }}
-				toolbarProps={{ slotRight: renderSlotRight }}
-			/>
-		</Div>
+		<Fragment>
+			<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
+				<Button
+					size='icon'
+					variant='outline'
+					disabled={!monthlyReportQueryState?.data || monthlyReportQueryState?.data?.length === 0}
+					onClick={() => handleDownloadExcel()}>
+					<Icon name='Download' />
+				</Button>
+			</Tooltip>
+			<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+				<Button
+					size='icon'
+					variant='outline'
+					onClick={() =>
+						queryClient.refetchQueries({
+							predicate: (query) => query.queryKey.some((queryKey) => queryKey === INVENTORY_REPORT_PROVIDE_TAG)
+						})
+					}>
+					<Icon name='RotateCw' />
+				</Button>
+			</Tooltip>
+		</Fragment>
 	)
 }
 
-const DataTableSummary: React.FC<{ data: IMonthlyInventoryReport[]; isLoading: boolean }> = ({ data, isLoading }) => {
+const DataDetailTable = ({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
+	<InventoryReportDetailTable
+		queries={pick(row.original, [
+			'actual_po',
+			'mo_no',
+			'cust_shoestyle',
+			'shoes_style_code_factory',
+			'inv_type',
+			'inv_year_month'
+		])}
+		data={row.original?.detail}
+	/>
+)
+
+const DataTableSummary = ({ data, isLoading }: { data: IMonthlyInventoryReport[]; isLoading: boolean }) => {
 	const { t } = useTranslation()
 
 	const totalInitialQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.init_inv_qty, 0) : 0

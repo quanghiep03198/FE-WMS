@@ -1,3 +1,4 @@
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -40,19 +41,17 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 	} = props
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const measureElement = useMeasureElement()
 	const estimateSize = useMemoizedFn(() => virtualizerOptions.estimateSize)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const measureElement = useMemoizedFn((element) => element?.getBoundingClientRect()?.height)
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
-		indexAttribute: 'data-index',
 		overscan: virtualizerOptions.overscan,
 		getScrollElement,
 		estimateSize,
 		scrollToFn,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined
+		measureElement
 	})
 
 	const columnSizeVars = useMemo(() => {

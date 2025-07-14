@@ -1,16 +1,21 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import { Div, Icon } from '@/components/ui'
 import { DebouncedInput } from '@/components/ui/@react-table/components/debounced-input'
-import { Table } from '@tanstack/react-table'
+import { Updater } from '@tanstack/react-table'
 import { capitalize } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 type DataTableGlobalFilterProps = {
-	table: Table<any>
+	globalFilter: any
+	onGlobalFilterChange: (updater: Updater<any>) => void
 	dataType: RFIDDataType
 }
 
-const DataTableGlobalFilter: React.FC<DataTableGlobalFilterProps> = ({ table, dataType }) => {
+const DataTableGlobalFilter: React.FC<DataTableGlobalFilterProps> = ({
+	globalFilter,
+	onGlobalFilterChange,
+	dataType
+}) => {
 	const { t } = useTranslation()
 
 	return (
@@ -18,8 +23,8 @@ const DataTableGlobalFilter: React.FC<DataTableGlobalFilterProps> = ({ table, da
 			<Icon name='Search' size={18} />
 			<DebouncedInput
 				type='search'
-				value={table.getState().globalFilter ?? ''}
-				onChange={(value) => table.setGlobalFilter(String(value))}
+				value={globalFilter}
+				onChange={(value) => onGlobalFilterChange(String(value))}
 				className='font-lg border bg-transparent px-0 text-sm placeholder:text-sm'
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.search', {

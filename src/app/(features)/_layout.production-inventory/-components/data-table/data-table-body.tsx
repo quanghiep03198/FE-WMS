@@ -1,5 +1,6 @@
 import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
-import { TableBody, TableCell, TableRow } from '@/components/ui'
+import { TableBody } from '@/components/ui'
+import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
 import { Row } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
@@ -8,6 +9,7 @@ import DataTableEmptyState from './data-table-empty-state'
 import { DataTableRow, MemoizedDataTableRow } from './data-table-row'
 
 type DataTableBodyProps<T> = {
+	// table: Table<T>
 	virtualizer: Virtualizer<any, any>
 	rows: Row<T>[]
 	columnCount: number
@@ -30,30 +32,37 @@ const DataTableBody = function <T extends TableRowData>({
 			{virtualItems.length > 0 ? (
 				<Fragment>
 					{before > 0 && (
-						<TableRow ref={(node) => virtualizer.measureElement(node)}>
-							<TableCell colSpan={columnCount} style={{ height: before }} />
-						</TableRow>
+						<VirtualPlaceholderRow
+							measureElement={virtualizer.measureElement}
+							colSpan={columnCount}
+							style={{ height: before }}
+						/>
 					)}
 					{virtualItems.map((virtualItem) => {
 						return virtualizer.isScrolling && !isSomeRowsExpanded ? (
 							<MemoizedDataTableRow
 								key={virtualItem.key}
-								size={virtualItem.size}
+								index={virtualItem.index}
 								row={rows[virtualItem.index]}
+								size={virtualItem.size}
+								measureElement={virtualizer.measureElement}
 							/>
 						) : (
 							<DataTableRow
 								key={virtualItem.key}
+								index={virtualItem.index}
 								size={virtualItem.size}
 								row={rows[virtualItem.index]}
-								data-index={virtualItem.index * 2 + 1}
+								measureElement={virtualizer.measureElement}
 							/>
 						)
 					})}
 					{after > 0 && (
-						<TableRow ref={(node) => virtualizer.measureElement(node)}>
-							<TableCell colSpan={columnCount} style={{ height: after }} />
-						</TableRow>
+						<VirtualPlaceholderRow
+							measureElement={virtualizer.measureElement}
+							colSpan={columnCount}
+							style={{ height: after }}
+						/>
 					)}
 				</Fragment>
 			) : (

@@ -1,3 +1,4 @@
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import {
@@ -202,16 +203,15 @@ export function MultiSelect<D = Record<string, any>>({
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const estimateSize = useCallback(() => ESTIMATE_SIZE, [])
+	const measureElement = useMeasureElement(isPopoverOpen)
+
 	const virtualizer = useVirtualizer({
 		indexAttribute: 'data-index',
 		count: datalist?.length,
 		overscan: PRERENDER_COUNT,
 		estimateSize,
 		getScrollElement,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? (element) => element?.getBoundingClientRect().height
-				: undefined,
+		measureElement,
 		scrollToFn
 	})
 

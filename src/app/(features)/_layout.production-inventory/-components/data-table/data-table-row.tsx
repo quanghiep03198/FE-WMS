@@ -1,3 +1,5 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div, TableCell, TableRow } from '@/components/ui'
 import { flexRender, Row } from '@tanstack/react-table'
@@ -9,14 +11,21 @@ import { getCanSticky } from './utils'
 type DataTableRowProps<T> = {
 	size: number
 	row: Row<T>
+	index: number
+	measureElement: (node: any) => void
 }
 
-const DataTableRow = function <T extends TableRowData>({ size, row }: DataTableRowProps<T>) {
+const DataTableRow = function <T extends TableRowData>({ row, index, size, measureElement }: DataTableRowProps<T>) {
 	'use no memo'
 
 	return (
 		<Fragment>
-			<TableRow className={cn('[&_td]:h-10 [&_td]:border-x-0 [&_td]:border-b-0')}>
+			<TableRow
+				aria-expanded={row.getIsExpanded()}
+				className={cn('[&_td]:border-x-0 [&_td]:border-b-0')}
+				ref={(node) => {
+					if (node && typeof index !== 'undefined') measureElement(node)
+				}}>
 				{row?.getVisibleCells()?.map((cell) => {
 					const meta = cell.column.columnDef.meta
 					return (
@@ -24,7 +33,6 @@ const DataTableRow = function <T extends TableRowData>({ size, row }: DataTableR
 							{...cell.column.columnDef?.meta?.tableCellProps}
 							key={cell.id}
 							style={{
-								position: 'relative',
 								width: cell.column.getSize(),
 								height: size + 'px',
 								...getCanSticky(cell.column.id)
@@ -44,7 +52,10 @@ const DataTableRow = function <T extends TableRowData>({ size, row }: DataTableR
 			<TableRow>
 				<TableCell
 					colSpan={row.getVisibleCells().length}
-					className={cn('p-0', !row.getIsExpanded() && 'border-none shadow-none')}>
+					className={cn('p-0', !row.getIsExpanded() && 'border-none shadow-none')}
+					ref={(node) => {
+						if (node && typeof index !== 'undefined') measureElement(node)
+					}}>
 					<Collapsible open={row.getIsExpanded()} data-state={row.getIsExpanded() ? 'open' : 'closed'}>
 						<CollapsibleContent
 							className='overflow-auto bg-accent/80 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'
