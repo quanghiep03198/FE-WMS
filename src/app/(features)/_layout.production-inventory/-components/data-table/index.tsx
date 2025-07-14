@@ -1,4 +1,3 @@
-import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { SizeQuantity } from '@/common/types/entities'
 import { Table, TableCaption, Typography } from '@/components/ui'
@@ -13,13 +12,13 @@ import {
 	getFilteredRowModel,
 	getSortedRowModel,
 	Row,
-	RowData,
+	type RowData,
 	SortingState,
 	useReactTable
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useSize } from 'ahooks'
-import React, { useId, useLayoutEffect, useRef, useState } from 'react'
+import React, { useId, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
 import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
 import { DataTableBody } from './data-table-body'
@@ -53,7 +52,7 @@ function DataTable<T extends TableRowData>({
 	const containerRef = useRef<HTMLDivElement>(null)
 	const captionId = useId()
 
-	const table = useReactTable({
+	const table = useReactTable<T>({
 		data,
 		columns,
 		filterFns: {
@@ -91,20 +90,15 @@ function DataTable<T extends TableRowData>({
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ROW_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const measureElement = useMeasureElement()
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
-		overscan: 20,
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().rows.length : 5,
+		useAnimationFrameWithResizeObserver: true,
 		getScrollElement,
 		estimateSize,
-		scrollToFn,
-		measureElement
+		scrollToFn
 	})
-
-	useLayoutEffect(() => {
-		virtualizer.measure()
-	}, [])
 
 	const containerSize = useSize(containerRef)
 
@@ -115,7 +109,7 @@ function DataTable<T extends TableRowData>({
 				onGlobalFilterChange={table.setGlobalFilter}
 				dataType={dataType}
 			/>
-			<ScrollArea ref={containerRef} style={{ overflowAnchore: 'none' }}>
+			<ScrollArea ref={containerRef} className='h-72'>
 				<Table
 					className='w-full table-fixed border-separate border-spacing-0'
 					style={{ '--table-width': containerSize?.width - 10 + 'px' } as React.CSSProperties}>
@@ -144,6 +138,6 @@ function DataTable<T extends TableRowData>({
 }
 
 const Container = tw.div`space-y-4 rounded-md border p-5 shadow-sm`
-const ScrollArea = tw.div`relative h-72 overflow-auto rounded-sm scrollbar-track-accent/20 contain-paint will-change-transform [overflow-anchor:none]`
+const ScrollArea = tw.div`relative h-72 overflow-auto rounded-sm scrollbar-track-accent/20 contain-paint will-change-transform`
 
 export default DataTable

@@ -1,6 +1,6 @@
 import { IOutboundEstimation } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
+import { Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ColumnDef, createColumnHelper, Row } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -58,22 +58,22 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableSorting: true,
 				enableGlobalFilter: false
 			}),
-			columnHelper.accessor('last_outbound_time', {
-				header: t('ns_erp:fields.last_outbound_time'),
-				cell: (info) => {
-					const value = info.getValue()
-					return value ? (
-						format(value, 'yyyy-MM-dd')
-					) : (
-						<Div className='place-items-center'>
-							<Icon name='CalendarOff' className='stroke-muted-foreground' />
-						</Div>
-					)
-				},
-				size: 160,
-				enableSorting: true,
-				enableGlobalFilter: false
-			}),
+			// columnHelper.accessor('last_outbound_time', {
+			// 	header: t('ns_erp:fields.last_outbound_time'),
+			// 	cell: (info) => {
+			// 		const value = info.getValue()
+			// 		return value ? (
+			// 			format(value, 'yyyy-MM-dd')
+			// 		) : (
+			// 			<Div className='place-items-center'>
+			// 				<Icon name='CalendarOff' className='stroke-muted-foreground' />
+			// 			</Div>
+			// 		)
+			// 	},
+			// 	size: 160,
+			// 	enableSorting: true,
+			// 	enableGlobalFilter: false
+			// }),
 			columnHelper.accessor('po_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				cell: (info) => formatIntlNumber(info.getValue()),
@@ -110,7 +110,7 @@ const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ 
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell colSpan={4} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
+				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
