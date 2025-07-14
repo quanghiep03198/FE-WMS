@@ -8,24 +8,17 @@ import { TableRowData } from '.'
 import SizeTable from '../partials/size-table'
 import { getCanSticky } from './utils'
 
-type DataTableRowProps<T> = {
+type DataTableRowProps = {
 	size: number
-	row: Row<T>
-	index: number
-	measureElement: (node: any) => void
+	row: Row<TableRowData>
 }
 
-const DataTableRow = function <T extends TableRowData>({ row, index, size, measureElement }: DataTableRowProps<T>) {
+const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 	'use no memo'
 
 	return (
 		<Fragment>
-			<TableRow
-				aria-expanded={row.getIsExpanded()}
-				className={cn('[&_td]:border-x-0 [&_td]:border-b-0')}
-				ref={(node) => {
-					if (node && typeof index !== 'undefined') measureElement(node)
-				}}>
+			<TableRow aria-expanded={row.getIsExpanded()} className={cn('[&_td]:border-x-0 [&_td]:border-b-0')}>
 				{row?.getVisibleCells()?.map((cell) => {
 					const meta = cell.column.columnDef.meta
 					return (
@@ -52,10 +45,7 @@ const DataTableRow = function <T extends TableRowData>({ row, index, size, measu
 			<TableRow>
 				<TableCell
 					colSpan={row.getVisibleCells().length}
-					className={cn('p-0', !row.getIsExpanded() && 'border-none shadow-none')}
-					ref={(node) => {
-						if (node && typeof index !== 'undefined') measureElement(node)
-					}}>
+					className={cn('p-0', !row.getIsExpanded() && 'border-none shadow-none')}>
 					<Collapsible open={row.getIsExpanded()} data-state={row.getIsExpanded() ? 'open' : 'closed'}>
 						<CollapsibleContent
 							className='overflow-auto bg-accent/80 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'

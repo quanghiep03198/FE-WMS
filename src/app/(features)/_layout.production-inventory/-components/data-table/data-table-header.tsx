@@ -6,15 +6,15 @@ import { memo, useMemo } from 'react'
 import { TableRowData } from '.'
 import { getCanSticky } from './utils'
 
-type TableCellHeadProps<T extends TableRowData> = {
-	header: Header<T, unknown>
+type TableCellHeadProps = {
+	header: Header<TableRowData, unknown>
 } & React.PropsWithChildren
 
-const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<any>[] }> = ({ headerGroups }) => {
+const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<TableRowData>[] }> = ({ headerGroups }) => {
 	'use no memo'
 
 	return (
-		<TableHeader className='&_th>span]:line-clamp-1 sticky top-0 z-20 border-b [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:h-10 [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
+		<TableHeader className='sticky top-0 z-20 border-b [&_th>span]:line-clamp-1 [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:h-10 [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
 			<TableRow>
 				{headerGroups.map((headerGroup) =>
 					headerGroup.headers.map((header) => {
@@ -42,7 +42,7 @@ const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<any>[] }> = ({ heade
 	)
 }
 
-const TableCellHead = function <T extends TableRowData>({ header }: TableCellHeadProps<T>) {
+const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 	const { columnDef, getIsSorted, getToggleSortingHandler } = header.column
 
 	const columnMeta = columnDef.meta
