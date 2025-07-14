@@ -1,3 +1,4 @@
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Table } from '@/components/ui'
@@ -56,17 +57,15 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ROW_HEIGHT)
-	const measureElement = useMemoizedFn((element) => element?.getBoundingClientRect()?.height)
+	const measureElement = useMeasureElement()
 
 	const virtualizer = useVirtualizer({
 		count: filteredScannedOrders.length,
-		indexAttribute: 'data-index',
 		overscan: 0,
 		getScrollElement: () => containerRef.current,
 		useAnimationFrameWithResizeObserver: false,
 		estimateSize,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined,
+		measureElement,
 		scrollToFn
 	})
 

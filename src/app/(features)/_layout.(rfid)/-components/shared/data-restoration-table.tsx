@@ -1,15 +1,10 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import {
-	Badge,
 	Button,
 	Checkbox,
 	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
 	Icon,
-	Label,
 	Table,
 	TableBody,
 	TableCell,
@@ -22,6 +17,7 @@ import {
 } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
 import { useDeepCompareEffect } from 'ahooks'
@@ -30,8 +26,9 @@ import { useTranslation } from 'react-i18next'
 import { RFIDDataType } from '../../-constants'
 import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
 import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../-hooks/use-data-restoration'
+import { DataRestorationRow, MemoizedDataRestorationRow } from './data-restoration-row'
 import DebouncedLimitInput from './debounced-limit-input'
-import { GhostButton, ListDetail, ListDetailItem } from './styled'
+import { GhostButton } from './styled'
 
 type DataRestorationTableProps = React.ComponentProps<'div'> & { 'data-type': RFIDDataType; 'data-open': boolean }
 
@@ -91,11 +88,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
-	const measureElement = useMemo(() => {
-		return props['data-open'] && typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-			? (element) => element?.getBoundingClientRect().height
-			: undefined
-	}, [props['data-open']])
+	const measureElement = useMeasureElement(props['data-open'])
 
 	const virtualizer = useVirtualizer({
 		count: datalist.length,
@@ -180,7 +173,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 						</TableHead>
 					</TableRow>
 				</TableHeader>
-				<TableBody>
+				<TableBody className='group/body' aria-busy={isFetching}>
 					{isLoading ? (
 						Array.from({ length: 10 }, (_, i) => (
 							<TableRow key={i.toString()}>
@@ -211,92 +204,104 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 							)}
 							{virtualItems.map((virtualItem) => {
 								const item = datalist[virtualItem.index]
-								const isSelected = selectedItems.some((epc) => epc.epc === item.epc)
 
-								return (
-									<TableRow
+								return virtualizer.isScrolling ? (
+									<MemoizedDataRestorationRow
 										key={virtualItem.key}
-										data-index={virtualItem.index}
-										aria-selected={isSelected}
-										className={cn(
-											'group/row transition-all duration-200 ease-in-out',
-											isFetching ? 'opacity-50' : 'opacity-100'
-										)}
-										style={{ height: virtualItem.size }}>
-										<TableCell className='group-aria-selected/row:bg-table-row-selected'>
-											<Checkbox
-												id={virtualItem.key.toString()}
-												checked={isSelected}
-												onCheckedChange={(checked) => {
-													if (checked) {
-														addItemToSet(item)
-													} else {
-														removeItemFromSet(item)
-													}
-												}}
-											/>
-										</TableCell>
-										<TableCell align='left' className='group-aria-selected/row:bg-table-row-selected'>
-											<Label htmlFor={virtualItem.key.toString()} className='cursor-pointer'>
-												{item?.epc}
-											</Label>
-										</TableCell>
-										<TableCell align='center' className='group-aria-selected/row:bg-table-row-selected'>
-											{props['data-type'] === RFIDDataType.OUTBOUND ? (
-												<Badge variant='outline' className='justify-center gap-x-2'>
-													<Icon
-														name={item.scanned ? 'Check' : 'CircleDashed'}
-														size={14}
-														className={item.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
-													/>
-													{item.scanned ? t('ns_rfid:status.scanned') : t('ns_rfid:status.unscanned')}
-												</Badge>
-											) : (
-												<Badge variant='outline' className='justify-center gap-x-2'>
-													<Icon
-														name={item.scannable ? 'Check' : 'X'}
-														size={14}
-														className={item.scannable ? 'stroke-success' : 'stroke-destructive'}
-													/>
-													{item.scannable
-														? t('ns_rfid:status.scannable')
-														: t('ns_rfid:status.unscannable')}
-												</Badge>
-											)}
-										</TableCell>
-										<TableCell className='group-aria-selected/row:bg-table-row-selected'>
-											<HoverCard openDelay={100} closeDelay={100}>
-												<HoverCardTrigger asChild>
-													<GhostButton>
-														<Icon name='Ellipsis' />
-													</GhostButton>
-												</HoverCardTrigger>
-												<HoverCardContent
-													align='start'
-													side='left'
-													sideOffset={8}
-													className='w-full max-w-md rounded-md bg-popover text-popover-foreground'>
-													<ListDetail>
-														<ListDetailItem>
-															{t('ns_erp:fields.mo_no')}:{' '}
-															<Typography variant='small'>{item?.mo_no}</Typography>
-														</ListDetailItem>
-														<ListDetailItem>
-															{t('ns_erp:fields.shoestyle_codefactory')}:{' '}
-															<Typography variant='small'>{item?.shoes_style_code_factory}</Typography>
-														</ListDetailItem>
-														<ListDetailItem>
-															{t('ns_erp:fields.color_sn')}:{' '}
-															<Typography variant='small'>{item?.color_sn}</Typography>
-														</ListDetailItem>
-														<ListDetailItem>
-															Size: <Typography variant='small'>{item?.size_numcode}</Typography>
-														</ListDetailItem>
-													</ListDetail>
-												</HoverCardContent>
-											</HoverCard>
-										</TableCell>
-									</TableRow>
+										data={item}
+										dataType={props['data-type']}
+										virtualItem={virtualItem}
+									/>
+								) : (
+									<DataRestorationRow
+										key={virtualItem.key}
+										data={item}
+										dataType={props['data-type']}
+										virtualItem={virtualItem}
+									/>
+									// <TableRow
+									// 	key={virtualItem.key}
+									// 	data-index={virtualItem.index}
+									// 	aria-selected={isSelected}
+									// 	className={cn(
+									// 		'group/row transition-all duration-200 ease-in-out',
+									// 		isFetching ? 'opacity-50' : 'opacity-100'
+									// 	)}
+									// 	style={{ height: virtualItem.size }}>
+									// 	<TableCell className='group-aria-selected/row:bg-table-row-selected'>
+									// 		<Checkbox
+									// 			id={virtualItem.key.toString()}
+									// 			checked={isSelected}
+									// 			onCheckedChange={(checked) => {
+									// 				if (checked) {
+									// 					addItemToSet(item)
+									// 				} else {
+									// 					removeItemFromSet(item)
+									// 				}
+									// 			}}
+									// 		/>
+									// 	</TableCell>
+									// 	<TableCell align='left' className='group-aria-selected/row:bg-table-row-selected'>
+									// 		<Label htmlFor={virtualItem.key.toString()} className='cursor-pointer'>
+									// 			{item?.epc}
+									// 		</Label>
+									// 	</TableCell>
+									// 	<TableCell align='center' className='group-aria-selected/row:bg-table-row-selected'>
+									// 		{props['data-type'] === RFIDDataType.OUTBOUND ? (
+									// 			<Badge variant='outline' className='justify-center gap-x-2'>
+									// 				<Icon
+									// 					name={item.scanned ? 'Check' : 'CircleDashed'}
+									// 					size={14}
+									// 					className={item.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
+									// 				/>
+									// 				{item.scanned ? t('ns_rfid:status.scanned') : t('ns_rfid:status.unscanned')}
+									// 			</Badge>
+									// 		) : (
+									// 			<Badge variant='outline' className='justify-center gap-x-2'>
+									// 				<Icon
+									// 					name={item.scannable ? 'Check' : 'X'}
+									// 					size={14}
+									// 					className={item.scannable ? 'stroke-success' : 'stroke-destructive'}
+									// 				/>
+									// 				{item.scannable
+									// 					? t('ns_rfid:status.scannable')
+									// 					: t('ns_rfid:status.unscannable')}
+									// 			</Badge>
+									// 		)}
+									// 	</TableCell>
+									// 	<TableCell className='group-aria-selected/row:bg-table-row-selected'>
+									// 		<HoverCard openDelay={100} closeDelay={100}>
+									// 			<HoverCardTrigger asChild>
+									// 				<GhostButton>
+									// 					<Icon name='Ellipsis' />
+									// 				</GhostButton>
+									// 			</HoverCardTrigger>
+									// 			<HoverCardContent
+									// 				align='start'
+									// 				side='left'
+									// 				sideOffset={8}
+									// 				className='w-full max-w-md rounded-md bg-popover text-popover-foreground'>
+									// 				<ListDetail>
+									// 					<ListDetailItem>
+									// 						{t('ns_erp:fields.mo_no')}:{' '}
+									// 						<Typography variant='small'>{item?.mo_no}</Typography>
+									// 					</ListDetailItem>
+									// 					<ListDetailItem>
+									// 						{t('ns_erp:fields.shoestyle_codefactory')}:{' '}
+									// 						<Typography variant='small'>{item?.shoes_style_code_factory}</Typography>
+									// 					</ListDetailItem>
+									// 					<ListDetailItem>
+									// 						{t('ns_erp:fields.color_sn')}:{' '}
+									// 						<Typography variant='small'>{item?.color_sn}</Typography>
+									// 					</ListDetailItem>
+									// 					<ListDetailItem>
+									// 						Size: <Typography variant='small'>{item?.size_numcode}</Typography>
+									// 					</ListDetailItem>
+									// 				</ListDetail>
+									// 			</HoverCardContent>
+									// 		</HoverCard>
+									// 	</TableCell>
+									// </TableRow>
 								)
 							})}
 							{after > 0 && (

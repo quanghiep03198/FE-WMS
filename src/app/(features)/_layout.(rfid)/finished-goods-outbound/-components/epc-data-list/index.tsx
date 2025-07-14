@@ -4,6 +4,7 @@ import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import useEffectOnce from '@/common/hooks/use-effect-once'
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -114,7 +115,7 @@ const ScannedEpcList: React.FC = () => {
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
-						const response = await AuthService.refreshToken(user.id)
+						const response = await AuthService.refreshToken(user.id, abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
 						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one
@@ -166,7 +167,7 @@ const ScannedEpcList: React.FC = () => {
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const measureElement = useMemoizedFn((element) => element?.getBoundingClientRect()?.height)
+	const measureElement = useMeasureElement()
 	const overscan = containerRef.current?.getBoundingClientRect().height > 400 ? 5 : 0
 
 	// * Intitialize virtual list to render scanned EPC data
@@ -174,11 +175,11 @@ const ScannedEpcList: React.FC = () => {
 		count: scannedEpc.data.length,
 		indexAttribute: 'data-index',
 		overscan,
+		useAnimationFrameWithResizeObserver: false,
 		getScrollElement,
 		scrollToFn,
 		estimateSize,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? measureElement : undefined
+		measureElement
 	})
 
 	return (

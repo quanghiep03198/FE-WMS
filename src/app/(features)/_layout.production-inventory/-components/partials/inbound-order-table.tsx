@@ -112,7 +112,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 			dataType={RFIDDataType.INBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.inbound_directive')}
-			footer={DataTableFooter}
+			footer={({ rows }) => <DataTableFooter rows={rows} />}
 		/>
 	)
 }

@@ -1,11 +1,10 @@
 import { IOutboundEstimation } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
-
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ColumnDef, createColumnHelper, Row } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
 import DataTable from '../data-table'
@@ -18,7 +17,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IOutboundEstimation>()
 
-	const columns = useMemo<ColumnDef<IOutboundEstimation, any>[]>(() => {
+	const columns = useMemo<ColumnDef<IOutboundEstimation>[]>(() => {
 		return [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
@@ -81,10 +80,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				size: 160,
 				enableSorting: true,
 				enableGlobalFilter: false,
-				meta: {
-					align: 'right',
-					filterVariant: 'range'
-				}
+				meta: { align: 'right', filterVariant: 'range' }
 			}),
 			columnHelper.accessor('outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
@@ -92,30 +88,10 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableSorting: true,
 				enableGlobalFilter: false,
 				cell: (info) => formatIntlNumber(info.getValue()),
-				meta: {
-					align: 'right'
-				}
+				meta: { align: 'right' }
 			})
 		]
 	}, [i18n.language])
-
-	const flexRenderFooter = useCallback(({ rows }: { rows: Row<IOutboundEstimation>[] }) => {
-		return (
-			<TableFooter className='sticky bottom-0 z-20'>
-				<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-					<TableCell colSpan={4} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
-						{t('ns_common:common_fields.total')}
-					</TableCell>
-					<TableCell align='right' className='font-semibold'>
-						{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.po_qty, 0) ?? 0)}
-					</TableCell>
-					<TableCell align='right' className='font-semibold'>
-						{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.outbound_qty, 0) ?? 0)}
-					</TableCell>
-				</TableRow>
-			</TableFooter>
-		)
-	}, [])
 
 	return (
 		<DataTable
@@ -123,7 +99,29 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 			dataType={RFIDDataType.OUTBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.outbound_estimation')}
-			footer={memo(flexRenderFooter)}
+			footer={DataTableFooter}
 		/>
 	)
 }
+
+const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ rows }) => {
+	const { t } = useTranslation()
+
+	return (
+		<TableFooter className='sticky bottom-0 z-20'>
+			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
+				<TableCell colSpan={4} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
+					{t('ns_common:common_fields.total')}
+				</TableCell>
+				<TableCell align='right' className='font-semibold'>
+					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.po_qty, 0) ?? 0)}
+				</TableCell>
+				<TableCell align='right' className='font-semibold'>
+					{formatIntlNumber(rows?.reduce((acc, curr) => acc + curr.original.outbound_qty, 0) ?? 0)}
+				</TableCell>
+			</TableRow>
+		</TableFooter>
+	)
+})
+
+DataTableFooter.displayName = 'DataTableFooter'

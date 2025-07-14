@@ -6,7 +6,7 @@ import React, { createContext, use, useRef } from 'react'
 import { StoreApi, create, useStore } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { useShallow } from 'zustand/react/shallow'
-import { OrderItem } from '..'
+import { type OrderItem } from '../..'
 
 export type ScanningState = 'pending' | 'success' | 'error'
 

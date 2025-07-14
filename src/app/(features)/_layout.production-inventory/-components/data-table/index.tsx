@@ -1,8 +1,8 @@
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { SizeQuantity } from '@/common/types/entities'
-import { Div, Table, TableCaption, Typography } from '@/components/ui'
+import { Table, TableCaption, Typography } from '@/components/ui'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
-
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -19,13 +19,16 @@ import {
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useSize } from 'ahooks'
-import React, { useId, useMemo, useRef, useState } from 'react'
+import React, { useId, useLayoutEffect, useRef, useState } from 'react'
+import tw from 'tailwind-styled-components'
 import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
-import { DataTableBody, MemoizedDataTableBody } from './data-table-body'
+import { DataTableBody } from './data-table-body'
 import DataTableGlobalFilter from './data-table-filter'
 import { DataTableHeader, MemoizedDataTableHeader } from './data-table-header'
 
-type DataTableProps<T> = {
+export type TableRowData = RowData & { inv_sizes: SizeQuantity }
+
+type DataTableProps<T extends TableRowData> = {
 	data: Array<T>
 	columns: ColumnDef<T, any>[]
 	caption: string
@@ -33,11 +36,9 @@ type DataTableProps<T> = {
 	footer: React.FC<{ rows: Row<T>[] }>
 }
 
-export type TableRowData = RowData & { inv_sizes: SizeQuantity }
-
 const VIRTUAL_ROW_SIZE = 40
 
-export default function DataTable<T extends TableRowData>({
+function DataTable<T extends TableRowData>({
 	data,
 	dataType,
 	columns,
@@ -50,7 +51,6 @@ export default function DataTable<T extends TableRowData>({
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const containerRef = useRef<HTMLDivElement>(null)
-	const wrapperRef = useRef<HTMLDivElement>(null)
 	const captionId = useId()
 
 	const table = useReactTable({
@@ -85,71 +85,65 @@ export default function DataTable<T extends TableRowData>({
 	})
 
 	const { rows } = table.getRowModel()
+	const isSomeRowsExpanded = table.getIsSomeRowsExpanded()
 
 	const scrollingRef = useRef<number>(0)
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ROW_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const measureElement = useMemo(
-		() =>
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? (element: HTMLElement | null) => element?.getBoundingClientRect()?.height
-				: undefined,
-		[]
-	)
+	const measureElement = useMeasureElement()
 
 	const virtualizer = useVirtualizer({
 		count: rows.length,
-		overscan: 5,
+		overscan: 20,
 		getScrollElement,
 		estimateSize,
 		scrollToFn,
 		measureElement
 	})
 
-	const wrapperSize = useSize(wrapperRef)
+	useLayoutEffect(() => {
+		virtualizer.measure()
+	}, [])
+
+	const containerSize = useSize(containerRef)
 
 	return (
-		<Div className='space-y-4 rounded-md border p-5 shadow-sm'>
-			<DataTableGlobalFilter table={table} dataType={dataType} />
-			<Div ref={wrapperRef} className='w-full'>
-				<Div
-					ref={containerRef}
-					className='relative h-72 overflow-auto rounded-sm scrollbar-track-accent/20 scrollbar-corner-transparent'>
-					<Table
-						className='w-full table-fixed border-separate border-spacing-0'
-						style={{ '--table-width': wrapperSize?.width - 10 + 'px' } as React.CSSProperties}>
-						<TableCaption id={captionId} className='sr-only'>
-							{caption}
-						</TableCaption>
-						{virtualizer.isScrolling ? (
-							<MemoizedDataTableHeader headerGroups={table.getHeaderGroups()} />
-						) : (
-							<DataTableHeader headerGroups={table.getHeaderGroups()} />
-						)}
-						{virtualizer.isScrolling && !table.getIsSomeRowsExpanded() ? (
-							<MemoizedDataTableBody
-								rows={table.getRowModel().rows}
-								columnCount={columns.length}
-								virtualizer={virtualizer}
-								isSomeRowsExpanded={table.getIsSomeRowsExpanded()}
-							/>
-						) : (
-							<DataTableBody
-								rows={table.getRowModel().rows}
-								columnCount={columns.length}
-								virtualizer={virtualizer}
-								isSomeRowsExpanded={table.getIsSomeRowsExpanded()}
-							/>
-						)}
-						<DataTableFooter rows={table.getFilteredRowModel().rows} />
-					</Table>
-				</Div>
-			</Div>
-
+		<Container>
+			<DataTableGlobalFilter
+				globalFilter={table.getState().globalFilter ?? ''}
+				onGlobalFilterChange={table.setGlobalFilter}
+				dataType={dataType}
+			/>
+			<ScrollArea ref={containerRef} style={{ overflowAnchore: 'none' }}>
+				<Table
+					className='w-full table-fixed border-separate border-spacing-0'
+					style={{ '--table-width': containerSize?.width - 10 + 'px' } as React.CSSProperties}>
+					<TableCaption id={captionId} className='sr-only'>
+						{caption}
+					</TableCaption>
+					{virtualizer.isScrolling ? (
+						<MemoizedDataTableHeader headerGroups={table.getHeaderGroups()} />
+					) : (
+						<DataTableHeader headerGroups={table.getHeaderGroups()} />
+					)}
+					<DataTableBody
+						rows={rows}
+						columnCount={columns.length}
+						virtualizer={virtualizer}
+						isSomeRowsExpanded={isSomeRowsExpanded}
+					/>
+					<DataTableFooter rows={rows} />
+				</Table>
+			</ScrollArea>
 			<Typography aria-labelledby={captionId} className='block text-center text-sm text-muted-foreground'>
 				{caption}
 			</Typography>
-		</Div>
+		</Container>
 	)
 }
+
+const Container = tw.div`space-y-4 rounded-md border p-5 shadow-sm`
+const ScrollArea = tw.div`relative h-72 overflow-auto rounded-sm scrollbar-track-accent/20 contain-paint will-change-transform [overflow-anchor:none]`
+
+export default DataTable

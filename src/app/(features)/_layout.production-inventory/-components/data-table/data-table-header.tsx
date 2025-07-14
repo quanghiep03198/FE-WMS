@@ -11,6 +11,8 @@ type TableCellHeadProps<T extends TableRowData> = {
 } & React.PropsWithChildren
 
 const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<any>[] }> = ({ headerGroups }) => {
+	'use no memo'
+
 	return (
 		<TableHeader className='&_th>span]:line-clamp-1 sticky top-0 z-20 border-b [&_th[align=right]>span]:ml-auto [&_th[align=right]>span]:truncate [&_th]:h-10 [&_th]:border-x-0 [&_th]:bg-table-head [&_th]:lowercase [&_th]:first-letter:uppercase'>
 			<TableRow>

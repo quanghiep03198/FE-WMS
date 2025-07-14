@@ -2,6 +2,7 @@ import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
+import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -99,7 +100,7 @@ const EpcDataList: React.FC = () => {
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
-						const response = await AuthService.refreshToken(user.id)
+						const response = await AuthService.refreshToken(user.id, abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
 						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one
@@ -238,6 +239,7 @@ const EpcDataList: React.FC = () => {
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
 	const getScrollElement = useCallback(() => containerRef.current, [])
+	const measureElement = useMeasureElement()
 
 	// * Intitialize virtual list to render scanned EPC data
 	const virtualizer = useVirtualizer({
@@ -247,10 +249,7 @@ const EpcDataList: React.FC = () => {
 		getScrollElement,
 		scrollToFn,
 		estimateSize,
-		measureElement:
-			typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1
-				? (element) => element?.getBoundingClientRect().height
-				: undefined
+		measureElement
 	})
 
 	return (
