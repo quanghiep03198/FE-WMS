@@ -1,11 +1,11 @@
-import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
 import { memo } from 'react'
 import { TableBody as TableRowGroup } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
-import { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow } from './table-row'
+import TableBodyVirtualViewport from './table-body-virtual-viewport'
+import { MemoizedVirtualTableRow, VirtualTableRow } from './table-row'
 
 type TableBodyProps = {
 	virtualizer: Virtualizer<HTMLDivElement, Element>
@@ -19,36 +19,34 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 	const { rows } = table.getRowModel()
 	const virtualItems = virtualizer.getVirtualItems()
 
-	const { before, after } = useVirutalScrollOffset(virtualizer)
-
 	const isSomeRowsExpanded = table.getIsSomeRowsExpanded()
 
 	return (
 		<TableRowGroup>
-			{before > 0 && <VirtualPlaceholderRow colSpan={table.getAllColumns().length} style={{ height: before }} />}
-			{Array.isArray(virtualItems) &&
-				virtualItems.map((virtualRow) => {
-					const row = rows[virtualRow.index] as TRow<any>
+			<TableBodyVirtualViewport virtualizer={virtualizer} columnCount={table.getAllColumns().length}>
+				{Array.isArray(virtualItems) &&
+					virtualItems.map((virtualRow) => {
+						const row = rows[virtualRow.index] as TRow<any>
 
-					return virtualizer.isScrolling && !isSomeRowsExpanded ? (
-						<MemoizedVirtualTableRow
-							data-index={virtualRow.index}
-							key={row.id}
-							row={row}
-							virtualRow={virtualRow}
-							renderSubComponent={renderSubComponent}
-						/>
-					) : (
-						<VirtualTableRow
-							data-index={virtualRow.index}
-							key={row.id}
-							row={row}
-							virtualRow={virtualRow}
-							renderSubComponent={renderSubComponent}
-						/>
-					)
-				})}
-			{after > 0 && <VirtualPlaceholderRow colSpan={table.getAllColumns().length} style={{ height: after }} />}
+						return virtualizer.isScrolling && !isSomeRowsExpanded ? (
+							<MemoizedVirtualTableRow
+								data-index={virtualRow.index}
+								key={row.id}
+								row={row}
+								virtualRow={virtualRow}
+								renderSubComponent={renderSubComponent}
+							/>
+						) : (
+							<VirtualTableRow
+								data-index={virtualRow.index}
+								key={row.id}
+								row={row}
+								virtualRow={virtualRow}
+								renderSubComponent={renderSubComponent}
+							/>
+						)
+					})}
+			</TableBodyVirtualViewport>
 		</TableRowGroup>
 	)
 }

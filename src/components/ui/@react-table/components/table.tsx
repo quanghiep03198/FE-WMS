@@ -98,7 +98,6 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					{/* {virtualizer.isScrolling ? <MemoizedDataTableHeader /> : <DataTableHeader />} */}
 					<DataTableHeader />
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />

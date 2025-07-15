@@ -20,6 +20,7 @@ declare module '@tanstack/react-table' {
 		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
 		filterVariant?: Variant
 		filterComponentProps?: FilterComponentProps[Variant]
+		title?: string
 		sticky?: 'left' | 'right'
 		rowSpan?: number
 		align?: 'left' | 'center' | 'right'
