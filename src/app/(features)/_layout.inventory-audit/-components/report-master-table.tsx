@@ -22,6 +22,7 @@ import {
 	RowSelectionCheckbox
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { useTableContext } from '@/components/ui/@react-table/context/table.context'
 import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { InventoryService } from '@/services/inventory.service'
 import { useQueryClient } from '@tanstack/react-query'
@@ -59,10 +60,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 		() => [
 			columnHelper.display({
 				id: ROW_SELECTION_COLUMN_ID,
-				header: (props) => <IndeterminateCheckbox {...props} />,
-				cell: (props) => <RowSelectionCheckbox {...props} />,
+				header: IndeterminateCheckbox,
+				cell: RowSelectionCheckbox,
 				size: 50,
-
 				enableSorting: false,
 				enableHiding: false,
 				enableResizing: false,
@@ -223,27 +223,22 @@ export const InventoryReportMasterTable: React.FC = () => {
 				containerProps={{ className: 'xl:h-[50vh] h-[40vh]' }}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
-					slotRight: ({ table }) => <DataTableSlotRight table={table} downloadable={data?.length > 0} />
+					slotRight: () => <DataTableSlotRight downloadable={data?.length > 0} />
 				}}
 			/>
 		</Div>
 	)
 }
 
-const DataTableSlotRight = ({
-	table,
-	downloadable
-}: {
-	table: TTable<IMonthlyInventoryReport>
-	downloadable: boolean
-}) => {
-	'use no memo'
-
+const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
+	const { t } = useTranslation()
+	const { table } = useTableContext('table')
 	const { searchParams } = useQueryParams<{ 'month.eq': string }>()
 	const queryClient = useQueryClient()
 	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
-	const { rows: selectedRows } = table.getSelectedRowModel()
+
+	const selectedRows = table.getSelectedRowModel().rows
 
 	const handleDownloadExcel = useCallback(async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
@@ -265,7 +260,6 @@ const DataTableSlotRight = ({
 			toast.error('ns_common:notification.error', { id })
 		}
 	}, [selectedRows])
-	const { t } = useTranslation()
 
 	return (
 		<Fragment>
