@@ -26,10 +26,10 @@ const DataSection: React.FC = () => {
 
 	if (isLoading)
 		return (
-			<Div className='gap flex h-64 place-items-center justify-center gap-x-2'>
+			<Div className='flex h-48 items-center justify-center gap-x-2'>
 				<Icon name='LoaderCircle' size={20} className='inline-block animate-[spin_1s_linear_infinite]' />
 				<Typography variant='small' color='muted'>
-					This may take long time
+					{t('ns_common:status.loading')}
 				</Typography>
 			</Div>
 		)
