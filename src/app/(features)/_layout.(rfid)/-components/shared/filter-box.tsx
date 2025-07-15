@@ -21,7 +21,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useDebounceEffect, useDeepCompareEffect } from 'ahooks'
+import { useDebounceEffect, useDeepCompareEffect, useResetState } from 'ahooks'
 import { isEmpty, sortBy } from 'lodash'
 import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -48,7 +48,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 	const { t } = useTranslation()
 	const [filterOpen, setFilterOpen] = useState<boolean>(false)
 	const { data } = useGetArchivedEpcFeatureQuery(dataType)
-	const [search, setSearch] = useState<string>('')
+	const [search, setSearch, resetSearch] = useResetState<string>('')
 
 	const { searchTerm, advancedFilters, setSearchTerm, setAdvancedFilters } = useDataRestorationContext(
 		'limit',
@@ -58,16 +58,32 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 		'setAdvancedFilters'
 	)
 
-	const form = useForm<SearchFormValues>({
-		mode: 'onChange',
-		defaultValues: {
+	const defaultFormValues = useMemo(() => {
+		const values: Partial<SearchFormValues> = {
 			shoes_style: '',
 			color_sn: '',
 			mo_no: '',
-			size_numcode: '',
-			scannable: 'all',
-			scanned: 'all'
+			size_numcode: ''
 		}
+
+		switch (dataType) {
+			case RFIDDataType.INBOUND:
+				values['scannable'] = 'all'
+				break
+			case RFIDDataType.OUTBOUND:
+				values['scanned'] = 'all'
+				break
+
+			default:
+				break
+		}
+
+		return values
+	}, [dataType])
+
+	const form = useForm<SearchFormValues>({
+		mode: 'onChange',
+		defaultValues: defaultFormValues
 	})
 
 	const currentShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
@@ -150,7 +166,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 					scannable: null,
 					scanned: data.scanned === 'all' ? null : data.scanned === ScannedStatus.SCANNED ? true : false
 				})
-
 				break
 
 			default:
@@ -184,7 +199,8 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 							<GhostButton
 								onClick={(e) => {
 									e.stopPropagation()
-									form.reset()
+									form.reset(defaultFormValues)
+									resetSearch()
 								}}>
 								<Icon name='X' />
 							</GhostButton>
