@@ -4,7 +4,6 @@ import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import useEffectOnce from '@/common/hooks/use-effect-once'
-import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -166,7 +165,6 @@ const ScannedEpcList: React.FC = () => {
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const measureElement = useMeasureElement()
 	const overscan = containerRef.current?.getBoundingClientRect().height > 400 ? 5 : 0
 
 	// * Intitialize virtual list to render scanned EPC data
@@ -177,8 +175,7 @@ const ScannedEpcList: React.FC = () => {
 		useAnimationFrameWithResizeObserver: false,
 		getScrollElement,
 		scrollToFn,
-		estimateSize,
-		measureElement
+		estimateSize
 	})
 
 	return (
@@ -206,14 +203,13 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 @6xl:h-[var(--outlet-wrapper-height)] md:h-[50vh]'>
+					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 will-change-transform contain-paint @6xl:h-[var(--outlet-wrapper-height)] md:h-[50vh]'>
 					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
 								<Div
 									key={virtualItem.index}
-									data-index={virtualItem.index}
 									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
 									style={{
 										height: virtualItem.size,

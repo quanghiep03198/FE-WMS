@@ -2,7 +2,6 @@ import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
-import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
@@ -239,7 +238,6 @@ const EpcDataList: React.FC = () => {
 	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
 	const getScrollElement = useCallback(() => containerRef.current, [])
-	const measureElement = useMeasureElement()
 
 	// * Intitialize virtual list to render scanned EPC data
 	const virtualizer = useVirtualizer({
@@ -248,8 +246,7 @@ const EpcDataList: React.FC = () => {
 		indexAttribute: 'data-index',
 		getScrollElement,
 		scrollToFn,
-		estimateSize,
-		measureElement
+		estimateSize
 	})
 
 	return (
@@ -279,12 +276,8 @@ const EpcDataList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 @[1024px]:h-[calc(var(--outlet-wrapper-height)-16px)] @[1440px]:h-[calc(var(--outlet-wrapper-height)-168px)]'>
-					<Div
-						className='relative w-full'
-						style={{
-							height: virtualizer.getTotalSize()
-						}}>
+					className='z-10 flex h-[400px] w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 will-change-transform contain-paint @[1024px]:h-[calc(var(--outlet-wrapper-height)-16px)] @[1440px]:h-[calc(var(--outlet-wrapper-height)-168px)]'>
+					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
