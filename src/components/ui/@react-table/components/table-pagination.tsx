@@ -1,5 +1,8 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
-import { PaginationState, Table } from '@tanstack/react-table'
+import { PaginationState } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
 import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -20,17 +23,7 @@ import { type PaginationBaseProps } from '../types'
 
 type DataTablePaginationProps<TData> = {
 	manualPagination?: boolean
-	canNextPage: boolean
-	canPreviousPage: boolean
-	pageCount: number
-	pageSize: number
-	pageIndex: number
-	rowCount: number
-	onFirstPage: Table<TData>['firstPage']
-	onLastPage: Table<TData>['lastPage']
-	onNextPage: Table<TData>['nextPage']
-	onPreviousPage: Table<TData>['previousPage']
-	onPageSizeChange: Table<TData>['setPageSize']
+	controlledPaginationProps: Partial<Omit<Pagination<TData>, 'data'>>
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
 	[key: string]: any
 } & PaginationBaseProps<TData>
@@ -38,31 +31,32 @@ type DataTablePaginationProps<TData> = {
 function TablePagination<TData>({
 	loading,
 	manualPagination,
-	rowCount,
-	canNextPage,
-	canPreviousPage,
-	pageCount,
-	pageSize,
-	pageIndex,
-	onFirstPage,
-	onLastPage,
-	onNextPage,
-	onPreviousPage,
-	onPageSizeChange,
+	controlledPaginationProps,
 	onPaginationChange,
 	prefetch
 }: DataTablePaginationProps<TData>) {
 	const { t } = useTranslation('ns_common')
+	const { table } = useTableContext('table')
+	const { firstPage, lastPage, nextPage, previousPage, setPageSize } = table
 	const timeoutRef = useRef<NodeJS.Timeout>(null)
-	const { table } = useTableContext()
 	const prefetchCountRef = useRef<number>(0)
+	const rerender = useUpdate()
+
+	const canNextPage = manualPagination ? controlledPaginationProps?.hasNextPage : table.getCanNextPage()
+	const canPreviousPage = manualPagination ? controlledPaginationProps?.hasPrevPage : table.getCanPreviousPage()
+	const pageCount = manualPagination ? controlledPaginationProps?.totalPages : table.getPageCount()
+	const pageSize = manualPagination ? controlledPaginationProps?.limit : table.getState().pagination.pageSize
+	const pageIndex = manualPagination ? controlledPaginationProps?.page : table.getState().pagination.pageIndex + 1
+	const rowCount = manualPagination ? controlledPaginationProps.totalDocs : table.getRowCount()
+
 	const pageIndexContext = String(pageIndex) + '/' + String(pageCount)
 
 	const changePageSize = (value: number) => {
 		if (value > rowCount) {
 			goToFirstPage()
 		}
-		onPageSizeChange(value)
+		setPageSize(value)
+		rerender()
 	}
 
 	const handlePrefetch = (params: Record<string, unknown>) => {
@@ -89,7 +83,7 @@ function TablePagination<TData>({
 		if (manualPagination && typeof onPaginationChange === 'function') {
 			onPaginationChange({ pageIndex: 0, pageSize })
 		} else {
-			onFirstPage()
+			firstPage()
 		}
 	}
 
@@ -97,7 +91,7 @@ function TablePagination<TData>({
 		if (manualPagination && typeof onPaginationChange === 'function') {
 			onPaginationChange({ pageIndex: pageCount - 1, pageSize })
 		} else {
-			onLastPage()
+			lastPage()
 		}
 	}
 
@@ -165,7 +159,7 @@ function TablePagination<TData>({
 						disabled={!canPreviousPage || loading}
 						variant='outline'
 						size='icon'
-						onClick={onPreviousPage}
+						onClick={previousPage}
 						onMouseEnter={() => handlePrefetch({ limit: pageSize, page: pageIndex - 1 })}
 						className={cn(!canPreviousPage && 'pointer-events-none bg-muted text-muted-foreground')}>
 						<Icon name='ChevronLeft' />
@@ -181,7 +175,7 @@ function TablePagination<TData>({
 						disabled={!canNextPage || loading}
 						variant='outline'
 						size='icon'
-						onClick={onNextPage}
+						onClick={nextPage}
 						onMouseEnter={handlePrefetchNextPage}
 						onMouseLeave={() => {
 							clearInterval(timeoutRef.current)

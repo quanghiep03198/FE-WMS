@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
-import { flexRender, type Row as TRow } from '@tanstack/react-table'
+import { flexRender, type Row, type Table } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
@@ -8,25 +8,23 @@ import { DataTableUtility } from '../utils/table.util'
 import { type TableBodyProps } from './table-body'
 
 type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
-	row: TRow<any>
-	virtualRow: { index: number; start: number; size: number }
+	table?: Table<any>
+	row: Row<any>
+	size: number
 }
 
-const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, renderSubComponent }) => {
+const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubComponent }) => {
 	'use no memo'
 
-	const { table } = useTableContext()
-
-	const shouldRenderSubComponent = typeof renderSubComponent === 'function'
+	const { table } = useTableContext('table')
 
 	return (
 		<Fragment>
 			<TableRow
-				data-index={shouldRenderSubComponent ? virtualRow.index : virtualRow.index * 2}
 				aria-selected={row.getIsSelected()}
 				aria-expanded={row.getIsExpanded()}
 				className='group border-spacing-0'>
-				{row?.getVisibleCells()?.map((cell) => {
+				{row.getVisibleCells().map((cell) => {
 					return (
 						<TableCell
 							{...cell.column.columnDef?.meta?.tableCellProps}
@@ -34,7 +32,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, rend
 							align={cell.column.columnDef.meta?.align}
 							style={{
 								width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
-								height: virtualRow.size,
+								height: size,
 								...DataTableUtility.getStickyOffsetPosition(cell.column)
 							}}>
 							<Div
@@ -50,8 +48,8 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, rend
 				})}
 			</TableRow>
 			{/* Sub-component */}
-			{shouldRenderSubComponent && (
-				<TableRow data-index={virtualRow.index * 2 + 1}>
+			{typeof renderSubComponent === 'function' && (
+				<TableRow>
 					<TableCell
 						colSpan={row.getVisibleCells().length}
 						className={cn(
@@ -77,13 +75,13 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, rend
 	)
 }
 
-const VirtualPlaceholderRow: React.FC<React.ComponentProps<'td'>> = (props) => {
+const VirtualPlaceholderRow: React.FC<React.ComponentProps<'td'>> = memo((props) => {
 	return (
 		<TableRow>
 			<TableCell {...props} />
 		</TableRow>
 	)
-}
+})
 
 VirtualPlaceholderRow.displayName = 'VirtualPlaceholderRow'
 

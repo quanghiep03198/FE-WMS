@@ -1,56 +1,68 @@
-import { type Row as TRow } from '@tanstack/react-table'
+import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
+import { RowData, Table, type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
-import { memo } from 'react'
+import { Fragment, memo } from 'react'
 import { TableBody as TableRowGroup } from '../../@core/table'
+import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
-import TableBodyVirtualViewport from './table-body-virtual-viewport'
-import { MemoizedVirtualTableRow, VirtualTableRow } from './table-row'
+import { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow } from './table-row'
 
 type TableBodyProps = {
 	virtualizer: Virtualizer<HTMLDivElement, Element>
+	table?: Table<RowData>
 	renderSubComponent: RenderSubComponent<any>
 }
 
 const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }) => {
 	'use no memo'
 
-	const { table } = useTableContext()
-	const { rows } = table.getRowModel()
+	const { table } = useTableContext('table')
+	const { before, after } = useVirutalScrollOffset(virtualizer)
 	const virtualItems = virtualizer.getVirtualItems()
 
+	const { rows } = table.getRowModel()
+	const {
+		columnSizingInfo: { isResizingColumn },
+		columnPinning
+	} = table.getState()
 	const isSomeRowsExpanded = table.getIsSomeRowsExpanded()
+	const colSpan = table.getAllColumns().length
+	const hasNoColumnPinnedLeft = !columnPinning.left.some((columnId) => {
+		return columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
+	})
+	const shouldSkipRerender =
+		(isResizingColumn && hasNoColumnPinnedLeft) || (virtualizer.isScrolling && !isSomeRowsExpanded)
 
 	return (
 		<TableRowGroup>
-			<TableBodyVirtualViewport virtualizer={virtualizer} columnCount={table.getAllColumns().length}>
+			<Fragment>
+				{before > 0 && <VirtualPlaceholderRow colSpan={colSpan} style={{ height: before }} />}
 				{Array.isArray(virtualItems) &&
 					virtualItems.map((virtualRow) => {
 						const row = rows[virtualRow.index] as TRow<any>
-
-						return virtualizer.isScrolling && !isSomeRowsExpanded ? (
+						return shouldSkipRerender ? (
 							<MemoizedVirtualTableRow
-								data-index={virtualRow.index}
 								key={row.id}
 								row={row}
-								virtualRow={virtualRow}
+								size={virtualRow.size}
 								renderSubComponent={renderSubComponent}
 							/>
 						) : (
 							<VirtualTableRow
-								data-index={virtualRow.index}
 								key={row.id}
 								row={row}
-								virtualRow={virtualRow}
+								size={virtualRow.size}
 								renderSubComponent={renderSubComponent}
 							/>
 						)
 					})}
-			</TableBodyVirtualViewport>
+				{after > 0 && <VirtualPlaceholderRow colSpan={colSpan} style={{ height: after }} />}
+			</Fragment>
 		</TableRowGroup>
 	)
 }
 
-const MemoizedTableBody = memo(TableBody)
+const MemoizedTableBody = memo(TableBody) as typeof TableBody
 
 export { MemoizedTableBody, TableBody, type TableBodyProps }

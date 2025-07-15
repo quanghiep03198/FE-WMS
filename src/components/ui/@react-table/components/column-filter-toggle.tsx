@@ -6,7 +6,7 @@ import { useTableContext } from '../context/table.context'
 
 const ColumnFilterToggle: React.FC = () => {
 	const { t } = useTranslation()
-	const { event$ } = useTableContext()
+	const { event$ } = useTableContext('event$')
 
 	return (
 		<Tooltip message={t('ns_common:table.filter')} triggerProps={{ asChild: true }}>

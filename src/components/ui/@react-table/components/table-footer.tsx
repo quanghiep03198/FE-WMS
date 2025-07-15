@@ -5,7 +5,7 @@ import { useTableContext } from '../context/table.context'
 import { type TableFooterProps } from '../types'
 
 function TableFooter({ hidden, slot: Slot, rtl }: TableFooterProps) {
-	const { table } = useTableContext()
+	const { table } = useTableContext('table')
 	if (hidden || !Slot) return null
 
 	return (

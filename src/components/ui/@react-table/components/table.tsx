@@ -20,7 +20,7 @@ type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 's
 	Pick<React.ComponentProps<'div'>, 'style'>
 
 function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
-	const { instanceId, table } = useTableContext()
+	const { table, instanceId } = useTableContext('table', 'instanceId')
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)

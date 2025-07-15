@@ -11,7 +11,7 @@ import ColumnResizer from './column-resizer'
 import TableCellHead from './table-cell-head'
 
 const DataTableHeader: React.FC = () => {
-	const { table, event$ } = useTableContext()
+	const { table, event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 
 	event$.useSubscription((value) => {
@@ -51,8 +51,6 @@ const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any
 TableHeaderRow.displayName = 'TableHeaderRow'
 
 const DataTableHead: React.FC<{ header: Header<any, any>; rowSpan: number }> = ({ header, rowSpan }) => {
-	'use no memo'
-
 	return (
 		<TableHead
 			colSpan={header.colSpan}

@@ -21,19 +21,19 @@ import { useEventEmitter, useLatest, useResetState } from 'ahooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
+import tw from 'tailwind-styled-components'
+import { v4 as uuidv4 } from 'uuid'
+import { create, StoreApi } from 'zustand'
+import { immer } from 'zustand/middleware/immer'
+import TableRowCount from './components/row-count'
 import TableDataGrid from './components/table'
 import TablePagination from './components/table-pagination'
 import TableToolbar from './components/table-toolbar'
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { TableContext } from './context/table.context'
 import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
-// needed for table body level scope DnD setup
-import { pick } from 'lodash'
-import tw from 'tailwind-styled-components'
-import { v4 as uuidv4 } from 'uuid'
-import TableRowCount from './components/row-count'
-import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
 function DataTable<TData, TValue>({
@@ -46,7 +46,7 @@ function DataTable<TData, TValue>({
 	containerProps,
 	defaultFilterOpen = false,
 	expanded = {},
-	paginationProps = { hidden: false },
+	paginationProps,
 	toolbarProps = { hidden: false, slotRight: null },
 	footerProps = { hidden: true, slot: null },
 	manualExpanding = false,
@@ -240,22 +240,22 @@ function DataTable<TData, TValue>({
 		table.resetColumnFilters(true)
 	}, [])
 
-	// * Get row selection count
-	const selectedRows = table.getFilteredSelectedRowModel().rows?.length ?? 0
-	const totalRows = manualPagination ? paginationProps.totalDocs : (table.getFilteredRowModel().rows?.length ?? 0)
-	const rowSelectionCount = String(selectedRows) + '/' + String(totalRows)
-
 	const event$ = useEventEmitter<Record<string, any>>()
 
-	return (
-		<TableContext.Provider
-			value={{
+	const store = useRef<StoreApi<TableContext>>(null)
+	if (!store.current)
+		store.current = create<TableContext>()(
+			immer(() => ({
 				table,
 				instanceId,
+				event$,
 				hasNoFilter,
-				defaultFilterOpen,
-				event$
-			}}>
+				defaultFilterOpen
+			}))
+		) as StoreApi<TableContext>
+
+	return (
+		<TableContext.Provider value={store.current}>
 			<DataTableWrapper ref={tableWrapperRef}>
 				{!toolbarProps.hidden && (
 					<TableToolbar
@@ -278,28 +278,15 @@ function DataTable<TData, TValue>({
 				<FooterGroup>
 					<TableRowCount
 						enableRowSelection={enableRowSelection}
-						rowSelectionCount={rowSelectionCount}
-						totalRows={totalRows}
+						manualPagination={manualPagination}
+						manualTotalDocs={paginationProps?.totalDocs ?? 0}
 					/>
-					{!paginationProps?.hidden && (
-						<TablePagination
-							loading={loading}
-							manualPagination={manualPagination}
-							canNextPage={manualPagination ? paginationProps?.hasNextPage : table.getCanNextPage()}
-							canPreviousPage={manualPagination ? paginationProps?.hasPrevPage : table.getCanPreviousPage()}
-							pageCount={manualPagination ? paginationProps?.totalPages : table.getPageCount()}
-							pageSize={manualPagination ? paginationProps?.limit : table.getState().pagination.pageSize}
-							pageIndex={manualPagination ? paginationProps?.page : table.getState().pagination.pageIndex + 1}
-							rowCount={manualPagination ? paginationProps.totalDocs : table.getRowCount()}
-							onPaginationChange={onPaginationChange}
-							onFirstPage={table.firstPage}
-							onLastPage={table.lastPage}
-							onNextPage={table.nextPage}
-							onPreviousPage={table.previousPage}
-							onPageSizeChange={table.setPageSize}
-							{...pick(paginationProps, ['hidden'])}
-						/>
-					)}
+					<TablePagination
+						loading={loading}
+						manualPagination={manualPagination}
+						controlledPaginationProps={paginationProps}
+						onPaginationChange={onPaginationChange}
+					/>
 				</FooterGroup>
 			</DataTableWrapper>
 		</TableContext.Provider>

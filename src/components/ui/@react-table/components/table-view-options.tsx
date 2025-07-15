@@ -1,11 +1,13 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
-import { Table } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
+import { useTranslation } from 'react-i18next'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
+	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
@@ -13,12 +15,13 @@ import {
 	Tooltip,
 	buttonVariants
 } from '../..'
+import { useTableContext } from '../context/table.context'
 
-interface DataTableViewOptionsProps<TData> {
-	table: Table<TData>
-}
+export function TableViewOptions() {
+	const { table } = useTableContext('table')
+	const { t } = useTranslation()
+	const rerender = useUpdate()
 
-export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
 	return (
 		<DropdownMenu>
 			<Tooltip message='Columns' triggerProps={{ asChild: true }}>
@@ -38,11 +41,24 @@ export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TDa
 								key={column.id}
 								className='whitespace-nowrap capitalize'
 								checked={column.getIsVisible()}
-								onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+								onCheckedChange={(value) => {
+									column.toggleVisibility(!!value)
+									rerender()
+								}}>
 								{column.columnDef.header?.toString()}
 							</DropdownMenuCheckboxItem>
 						)
 					})}
+				<DropdownMenuSeparator />
+				<DropdownMenuItem
+					className='place-content-center gap-x-2 font-medium'
+					onClick={() => {
+						table.resetColumnVisibility()
+						rerender()
+					}}>
+					<Icon name='Undo2' />
+					{t('ns_common:actions.reset')}
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)

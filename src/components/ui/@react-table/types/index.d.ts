@@ -26,7 +26,6 @@ export type TableFooterProps<TData = any> = {
 
 // #region Pagination prop types
 type PaginationBaseProps<TData = any> = {
-	hidden?: boolean
 	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<TData>, 'data'>>
 

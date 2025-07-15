@@ -15,7 +15,7 @@ type ColumnFilterProps<TData, TValue> = {
 export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
 	const filterVariant = column.columnDef.meta?.filterVariant satisfies ColumnFilterVariant
-	const { hasNoFilter } = useTableContext()
+	const { hasNoFilter } = useTableContext('hasNoFilter')
 
 	const getFacetedUniqueValues = () => {
 		try {

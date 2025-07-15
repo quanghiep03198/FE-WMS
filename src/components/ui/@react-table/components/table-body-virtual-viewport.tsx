@@ -1,6 +1,6 @@
 import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { Virtualizer } from '@tanstack/react-virtual'
-import React, { Fragment } from 'react'
+import React, { Fragment, memo } from 'react'
 import { VirtualPlaceholderRow } from './table-row'
 
 type TableBodyVirtualViewportProps = React.PropsWithChildren & {
@@ -20,4 +20,4 @@ const TableBodyVirtualViewport: React.FC<TableBodyVirtualViewportProps> = ({ chi
 	)
 }
 
-export default TableBodyVirtualViewport
+export default memo(TableBodyVirtualViewport)

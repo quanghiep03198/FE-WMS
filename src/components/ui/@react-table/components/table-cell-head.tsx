@@ -27,7 +27,7 @@ type TableCellHeadProps<TData, TValue> = {
 export default function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
 	const { t } = useTranslation()
 	const rerender = useUpdate()
-	const { table, event$ } = useTableContext()
+	const { table, event$ } = useTableContext('table', 'event$')
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
 
@@ -126,7 +126,6 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 							checked={header.column.getIsPinned() === ('right' as CheckedState)}
 							onCheckedChange={() => {
 								header.column.pin('right')
-								// rerender()
 								event$.emit({ columnPinning: table.getState().columnPinning })
 							}}>
 							{t('ns_common:table.pin_right')}

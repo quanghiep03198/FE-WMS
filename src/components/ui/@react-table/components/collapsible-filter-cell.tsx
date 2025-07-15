@@ -12,7 +12,7 @@ type CollapsibleFilterCellProps<TData, TValue = unknown> = {
 }
 
 function CollapsibleFilterCell<TData, TValue>({ header }: CollapsibleFilterCellProps<TData, TValue>) {
-	const { defaultFilterOpen, event$ } = useTableContext()
+	const { defaultFilterOpen, event$ } = useTableContext('defaultFilterOpen', 'event$')
 	const [shouldFilterOpen, setShouldFilterOpen] = useState<boolean>(defaultFilterOpen)
 
 	event$.useSubscription((value) => {
