@@ -3,7 +3,7 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import tw from 'tailwind-styled-components'
 import ConnectionInsight from './connection-insight'
 import DataRestoration from './data-restoration'
-import SettingPanel from './setting-panel'
+import FullscreenToggleBox from './fullscreen-toggle-box'
 import SyncDataTrigger from './sync-data-trigger'
 
 const ScannerSettings: React.FC = () => {
@@ -16,7 +16,7 @@ const ScannerSettings: React.FC = () => {
 					'@5xl:flex-row @5xl:flex-wrap'
 				)}>
 				<ConnectionInsight />
-				<SettingPanel />
+				<FullscreenToggleBox />
 				<DataRestoration />
 				<SyncDataTrigger />
 			</ScrollShadow>

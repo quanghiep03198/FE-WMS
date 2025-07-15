@@ -9,7 +9,7 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { Button, buttonVariants, Div, Icon, Separator, Typography } from '@/components/ui'
+import { Button, buttonVariants, Div, Icon, Label, Separator, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
@@ -24,7 +24,6 @@ import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
 import { useGetOutboundEpcQuery } from '../../-hooks'
 import DataRestorationSheet from '../../../-components/shared'
 import { RFIDDataType } from '../../../-constants'
-import { DataRestorationProvider } from '../../../-contexts/data-sheet-context'
 import OrderDetailTableDialog from '../manufacture-order-detail/order-detail-dialog'
 import ConnectionInsight from './connection-insight'
 
@@ -194,15 +193,14 @@ const ScannedEpcList: React.FC = () => {
 						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
-					<DataRestorationProvider>
-						<label
-							role='button'
-							className={buttonVariants({ variant: 'ghost' })}
-							htmlFor='data-restoration-sheet-trigger'>
-							<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
-						</label>
-						<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
-					</DataRestorationProvider>
+
+					<Label
+						role='button'
+						className={buttonVariants({ variant: 'ghost' })}
+						htmlFor='data-restoration-sheet-trigger'>
+						<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
+					</Label>
+					<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (

@@ -18,8 +18,9 @@ import {
 import Skeleton from '@/components/ui/@custom/skeleton'
 
 import useMeasureElement from '@/common/hooks/use-measure-element'
+import TableBodyVirtualViewport from '@/components/ui/@react-table/components/table-body-virtual-viewport'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { useDeepCompareEffect } from 'ahooks'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,34 +31,24 @@ import { DataRestorationRow, MemoizedDataRestorationRow } from './data-restorati
 import DebouncedLimitInput from './debounced-limit-input'
 import { GhostButton } from './styled'
 
-type DataRestorationTableProps = React.ComponentProps<'div'> & { 'data-type': RFIDDataType; 'data-open': boolean }
+type DataRestorationTableProps = { dataType: RFIDDataType; shouldMeasureElement?: boolean }
 
 const VIRTUAL_ITEM_SIZE: number = 40
 const PRERENDERED_ITEMS: number = 5
 
-const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
+const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType, shouldMeasureElement }) => {
 	const { t } = useTranslation()
-	const {
-		limit,
-		selectedItems,
-		searchTerm,
-		advancedFilters,
-		addItemToSet,
-		removeItemFromSet,
-		addAllItemsToSet,
-		removeAllItemsFromSet
-	} = useDataRestorationContext(
-		'limit',
-		'selectedItems',
-		'addItemToSet',
-		'addAllItemsToSet',
-		'removeItemFromSet',
-		'removeAllItemsFromSet',
-		'searchTerm',
-		'advancedFilters'
-	)
+	const { limit, selectedItems, searchTerm, advancedFilters, addAllItemsToSet, removeAllItemsFromSet } =
+		useDataRestorationContext(
+			'limit',
+			'selectedItems',
+			'advancedFilters',
+			'addAllItemsToSet',
+			'removeAllItemsFromSet',
+			'searchTerm'
+		)
 
-	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery(props['data-type'])
+	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery(dataType)
 	const {
 		data,
 		isFetching,
@@ -66,7 +57,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 		hasNextPage,
 		refetch: refetchArchivedEpc,
 		fetchNextPage
-	} = useGetArchivedEpcQuery(props['data-type'], {
+	} = useGetArchivedEpcQuery(dataType, {
 		limit,
 		searchTerm,
 		...advancedFilters
@@ -88,35 +79,23 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
-	const measureElement = useMeasureElement(props['data-open'])
+	const measureElement = useMeasureElement()
 
 	const virtualizer = useVirtualizer({
 		count: datalist.length,
 		overscan: PRERENDERED_ITEMS,
-		indexAttribute: 'data-index',
 		scrollToFn,
 		getScrollElement,
 		estimateSize,
 		measureElement
 	})
 
-	useDeepCompareEffect(() => {
-		// * If the sheet is closed, there is no need to measure
-		if (!props['data-open'] && scrollElement) return
-		virtualizer.measure()
-	}, [virtualizer, scrollElement, props['data-open']])
-
 	const virtualItems = virtualizer.getVirtualItems()
 
-	const [before, after] =
-		virtualItems?.length > 0
-			? [
-					notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
-					virtualItems?.length > 0
-						? virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems?.length - 1]).end
-						: 0
-				]
-			: [0, 0]
+	useDeepCompareEffect(() => {
+		// * If the sheet is closed, there is no need to measure
+		if (scrollElement) virtualizer.measure()
+	}, [virtualizer, scrollElement])
 
 	const handleFetchNextPage = () => {
 		const [lastItem] = [...virtualItems].reverse()
@@ -134,7 +113,6 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 
 	return (
 		<Div
-			{...props}
 			className='h-[40vh] space-y-1 overflow-y-auto !scroll-auto scrollbar-track-accent/10 xl:h-[55vh] xxl:h-[60vh]'
 			ref={refCallback}>
 			<Table
@@ -161,7 +139,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 							EPC
 						</TableHead>
 						<TableHead align='center'>{t('ns_common:common_fields.status')}</TableHead>
-						<TableHead className='align-middle'>
+						<TableHead align='center' className='align-middle'>
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<GhostButton onClick={() => handleRefetch()}>
 									<Icon
@@ -197,136 +175,45 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = (props) => {
 						</TableRow>
 					) : (
 						<Fragment>
-							{before > 0 && (
-								<TableRow>
-									<TableCell colSpan={4} style={{ height: before }} />
-								</TableRow>
-							)}
-							{virtualItems.map((virtualItem) => {
-								const item = datalist[virtualItem.index]
+							<TableBodyVirtualViewport virtualizer={virtualizer} columnCount={4}>
+								{virtualItems.map((virtualItem) => {
+									const item = datalist[virtualItem.index]
 
-								return virtualizer.isScrolling ? (
-									<MemoizedDataRestorationRow
-										key={virtualItem.key}
-										data={item}
-										dataType={props['data-type']}
-										virtualItem={virtualItem}
-									/>
-								) : (
-									<DataRestorationRow
-										key={virtualItem.key}
-										data={item}
-										dataType={props['data-type']}
-										virtualItem={virtualItem}
-									/>
-									// <TableRow
-									// 	key={virtualItem.key}
-									// 	data-index={virtualItem.index}
-									// 	aria-selected={isSelected}
-									// 	className={cn(
-									// 		'group/row transition-all duration-200 ease-in-out',
-									// 		isFetching ? 'opacity-50' : 'opacity-100'
-									// 	)}
-									// 	style={{ height: virtualItem.size }}>
-									// 	<TableCell className='group-aria-selected/row:bg-table-row-selected'>
-									// 		<Checkbox
-									// 			id={virtualItem.key.toString()}
-									// 			checked={isSelected}
-									// 			onCheckedChange={(checked) => {
-									// 				if (checked) {
-									// 					addItemToSet(item)
-									// 				} else {
-									// 					removeItemFromSet(item)
-									// 				}
-									// 			}}
-									// 		/>
-									// 	</TableCell>
-									// 	<TableCell align='left' className='group-aria-selected/row:bg-table-row-selected'>
-									// 		<Label htmlFor={virtualItem.key.toString()} className='cursor-pointer'>
-									// 			{item?.epc}
-									// 		</Label>
-									// 	</TableCell>
-									// 	<TableCell align='center' className='group-aria-selected/row:bg-table-row-selected'>
-									// 		{props['data-type'] === RFIDDataType.OUTBOUND ? (
-									// 			<Badge variant='outline' className='justify-center gap-x-2'>
-									// 				<Icon
-									// 					name={item.scanned ? 'Check' : 'CircleDashed'}
-									// 					size={14}
-									// 					className={item.scanned ? 'stroke-success' : 'stroke-muted-foreground'}
-									// 				/>
-									// 				{item.scanned ? t('ns_rfid:status.scanned') : t('ns_rfid:status.unscanned')}
-									// 			</Badge>
-									// 		) : (
-									// 			<Badge variant='outline' className='justify-center gap-x-2'>
-									// 				<Icon
-									// 					name={item.scannable ? 'Check' : 'X'}
-									// 					size={14}
-									// 					className={item.scannable ? 'stroke-success' : 'stroke-destructive'}
-									// 				/>
-									// 				{item.scannable
-									// 					? t('ns_rfid:status.scannable')
-									// 					: t('ns_rfid:status.unscannable')}
-									// 			</Badge>
-									// 		)}
-									// 	</TableCell>
-									// 	<TableCell className='group-aria-selected/row:bg-table-row-selected'>
-									// 		<HoverCard openDelay={100} closeDelay={100}>
-									// 			<HoverCardTrigger asChild>
-									// 				<GhostButton>
-									// 					<Icon name='Ellipsis' />
-									// 				</GhostButton>
-									// 			</HoverCardTrigger>
-									// 			<HoverCardContent
-									// 				align='start'
-									// 				side='left'
-									// 				sideOffset={8}
-									// 				className='w-full max-w-md rounded-md bg-popover text-popover-foreground'>
-									// 				<ListDetail>
-									// 					<ListDetailItem>
-									// 						{t('ns_erp:fields.mo_no')}:{' '}
-									// 						<Typography variant='small'>{item?.mo_no}</Typography>
-									// 					</ListDetailItem>
-									// 					<ListDetailItem>
-									// 						{t('ns_erp:fields.shoestyle_codefactory')}:{' '}
-									// 						<Typography variant='small'>{item?.shoes_style_code_factory}</Typography>
-									// 					</ListDetailItem>
-									// 					<ListDetailItem>
-									// 						{t('ns_erp:fields.color_sn')}:{' '}
-									// 						<Typography variant='small'>{item?.color_sn}</Typography>
-									// 					</ListDetailItem>
-									// 					<ListDetailItem>
-									// 						Size: <Typography variant='small'>{item?.size_numcode}</Typography>
-									// 					</ListDetailItem>
-									// 				</ListDetail>
-									// 			</HoverCardContent>
-									// 		</HoverCard>
-									// 	</TableCell>
-									// </TableRow>
-								)
-							})}
-							{after > 0 && (
-								<TableRow>
-									<TableCell colSpan={4} style={{ height: after }} />
-								</TableRow>
-							)}
-							{hasNextPage && (
-								<TableRow>
-									<TableCell colSpan={4} align='center' className='h-10 text-muted-foreground'>
-										{isFetchingNextPage ? (
-											<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
-										) : (
-											<Button
-												variant='link'
-												size='lg'
-												disabled={isFetching}
-												onClick={() => handleFetchNextPage()}>
-												<Icon name='Plus' role='presentation' />
-												{t('ns_common:actions.load_more')}
-											</Button>
-										)}
-									</TableCell>
-								</TableRow>
-							)}
+									return virtualizer.isScrolling ? (
+										<MemoizedDataRestorationRow
+											key={item.epc}
+											data={item}
+											dataType={dataType}
+											virtualItem={virtualItem}
+										/>
+									) : (
+										<DataRestorationRow
+											key={item.epc}
+											data={item}
+											dataType={dataType}
+											virtualItem={virtualItem}
+										/>
+									)
+								})}
+								{hasNextPage && (
+									<TableRow>
+										<TableCell colSpan={4} align='center' className='h-10 text-muted-foreground'>
+											{isFetchingNextPage ? (
+												<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+											) : (
+												<Button
+													variant='link'
+													size='lg'
+													disabled={isFetching}
+													onClick={() => handleFetchNextPage()}>
+													<Icon name='Plus' role='presentation' />
+													{t('ns_common:actions.load_more')}
+												</Button>
+											)}
+										</TableCell>
+									</TableRow>
+								)}
+							</TableBodyVirtualViewport>
 						</Fragment>
 					)}
 				</TableBody>

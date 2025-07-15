@@ -1,5 +1,4 @@
 import { IElectronicProductCode } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import {
 	Badge,
 	Checkbox,
@@ -32,23 +31,18 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 		'removeItemFromSet',
 		'selectedItems'
 	)
-	// const isFetching = useIsFetching({ predicate: (query) => query.queryKey.some((key) => key === 'ARCHIVED_EPCS') })
 
 	const isSelected = selectedItems.some((epc) => epc.epc === data.epc)
 
 	return (
 		<TableRow
-			key={virtualItem.key}
 			data-index={virtualItem.index}
 			aria-selected={isSelected}
-			className={cn(
-				'group/row transition-all duration-200 ease-in-out group-aria-busy/body:opacity-50'
-				// isFetching ? 'opacity-50' : 'opacity-100'
-			)}
+			className='group/row transition-all duration-200 ease-in-out group-aria-busy/body:opacity-50'
 			style={{ height: virtualItem.size }}>
 			<TableCell className='group-aria-selected/row:bg-table-row-selected'>
 				<Checkbox
-					id={virtualItem.key.toString()}
+					id={data.epc}
 					checked={isSelected}
 					onCheckedChange={(checked) => {
 						if (checked) {
@@ -60,7 +54,7 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 				/>
 			</TableCell>
 			<TableCell align='left' className='group-aria-selected/row:bg-table-row-selected'>
-				<Label htmlFor={virtualItem.key.toString()} className='cursor-pointer'>
+				<Label htmlFor={data.epc} className='cursor-pointer'>
 					{data?.epc}
 				</Label>
 			</TableCell>

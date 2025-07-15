@@ -1,8 +1,7 @@
-import { buttonVariants, Div, Typography } from '@/components/ui'
+import { buttonVariants, Div, Label, Typography } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import DataRestorationSheet from '../../../-components/shared'
 import { RFIDDataType } from '../../../-constants'
-import { DataRestorationProvider } from '../../../-contexts/data-sheet-context'
 
 const DataRestoration: React.FC = () => {
 	const { t } = useTranslation()
@@ -13,7 +12,7 @@ const DataRestoration: React.FC = () => {
 				{t('ns_inoutbound:scanner_setting.data_restoration')}
 			</Typography>
 
-			<Div className='flex min-h-24 items-start justify-between rounded-md border p-4'>
+			<Div className='grid min-h-24 grid-cols-[3fr_1fr] items-center rounded-md border p-4'>
 				<Div className='text-pretty leading-none'>
 					<Typography variant='small' as='h5' className='mb-1 font-medium'>
 						{t('ns_inoutbound:scanner_setting.restore_deleted_epcs')}
@@ -22,15 +21,15 @@ const DataRestoration: React.FC = () => {
 						{t('ns_inoutbound:scanner_setting.data_restoration_note')}
 					</Typography>
 				</Div>
-				<DataRestorationProvider>
-					<label
+				<Div className='place-self-center justify-self-end'>
+					<Label
 						role='button'
 						className={buttonVariants({ variant: 'outline', size: 'sm' })}
 						htmlFor='data-restoration-sheet-trigger'>
 						{t('ns_common:actions.open')}
-					</label>
+					</Label>
 					<DataRestorationSheet dataType={RFIDDataType.INBOUND} />
-				</DataRestorationProvider>
+				</Div>
 			</Div>
 		</Div>
 	)
