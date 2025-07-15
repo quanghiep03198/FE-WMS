@@ -149,7 +149,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										/>
 										<CommandList>
 											{loading ? (
-												<CommandLoading />
+												<CommandLoading className='h-12 cursor-wait place-content-center place-items-center'>
+													<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+												</CommandLoading>
 											) : (
 												<Fragment>
 													<CommandEmpty>No result</CommandEmpty>
