@@ -17,7 +17,7 @@ export class InventoryService {
 		})
 	}
 
-	static async downloadInventoryAuditReport(tenantId: string, filter: { 'month.eq': string }) {
+	static async downloadInventoryAuditReport(tenantId: string, filter: { 'month.eq': string; 'mo_no.in': string[] }) {
 		return await axiosInstance.get<void, Blob>('/inventory/audit/export', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,

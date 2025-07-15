@@ -1,6 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
-import React from 'react'
+import { pick } from 'lodash'
+import React, { memo } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
@@ -22,6 +24,8 @@ function TableToolbar<TData>({
 	slotLeft: SlotLeft,
 	slotRight: SlotRight
 }: TableToolbarProps<TData>) {
+	'use no memo'
+
 	const { table } = useTableContext()
 	const {
 		columnPinning: { left, right },
@@ -74,4 +78,6 @@ function TableToolbar<TData>({
 
 TableToolbar.displayName = 'TableToolbar'
 
-export default TableToolbar
+export default memo(TableToolbar, (prevProps, nextProps) =>
+	isEqual(pick(prevProps, ['slotLeft', 'slotRight']), pick(nextProps, ['slotLeft', 'slotRight']))
+)

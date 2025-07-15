@@ -1,7 +1,7 @@
 import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IMonthlyInventoryReport, ITenancy } from '@/common/types/entities'
+import { IMonthlyInventoryReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Button,
@@ -17,16 +17,20 @@ import {
 	Tooltip
 } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
-import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import {
+	IndeterminateCheckbox,
+	RowSelectionCheckbox
+} from '@/components/ui/@react-table/components/row-selection-checkbox'
+import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { InventoryService } from '@/services/inventory.service'
 import { useQueryClient } from '@tanstack/react-query'
 import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
-import { useMemoizedFn, useResetState } from 'ahooks'
+import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick } from 'lodash'
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { INVENTORY_REPORT_PROVIDE_TAG, useGetInventoryAuditReport } from '../../-hooks/use-report'
@@ -53,6 +57,17 @@ export const InventoryReportMasterTable: React.FC = () => {
 
 	const columns = useMemo(
 		() => [
+			columnHelper.display({
+				id: ROW_SELECTION_COLUMN_ID,
+				header: (props) => <IndeterminateCheckbox {...props} />,
+				cell: (props) => <RowSelectionCheckbox {...props} />,
+				size: 50,
+
+				enableSorting: false,
+				enableHiding: false,
+				enableResizing: false,
+				enablePinning: false
+			}),
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: () => (
@@ -201,36 +216,42 @@ export const InventoryReportMasterTable: React.FC = () => {
 				loading={isLoading}
 				expanded={expanded}
 				getRowCanExpand={() => true}
+				enableRowSelection={true}
 				enableExpanding={true}
 				manualExpanding={true}
 				renderSubComponent={DataDetailTable}
 				containerProps={{ className: 'xl:h-[50vh] h-[40vh]' }}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
-				toolbarProps={{ slotRight: DataTableSlotRight }}
+				toolbarProps={{
+					slotRight: ({ table }) => <DataTableSlotRight table={table} downloadable={data?.length > 0} />
+				}}
 			/>
 		</Div>
 	)
 }
 
-const DataTableSlotRight = () => {
+const DataTableSlotRight = ({
+	table,
+	downloadable
+}: {
+	table: TTable<IMonthlyInventoryReport>
+	downloadable: boolean
+}) => {
+	'use no memo'
+
 	const { searchParams } = useQueryParams<{ 'month.eq': string }>()
 	const queryClient = useQueryClient()
 	const { user } = useAuth()
+	const { data: currentTenant } = useGetTenantByFactory()
+	const { rows: selectedRows } = table.getSelectedRowModel()
 
-	const factoryTenantQueryState = queryClient.getQueryState<ITenancy>(['TENANT', user.company_code])
-	const monthlyReportQueryState = queryClient.getQueryState<IMonthlyInventoryReport[]>([
-		INVENTORY_REPORT_PROVIDE_TAG,
-		factoryTenantQueryState?.data?.id,
-		searchParams
-	])
-
-	const handleDownloadExcel = useMemoizedFn(async () => {
+	const handleDownloadExcel = useCallback(async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
-			const blob = await InventoryService.downloadInventoryAuditReport(
-				factoryTenantQueryState?.data?.id,
-				pick(searchParams, 'month.eq')
-			)
+			const blob = await InventoryService.downloadInventoryAuditReport(currentTenant?.id, {
+				...pick(searchParams, 'month.eq'),
+				'mo_no.in': selectedRows.map((row) => row.original.mo_no)
+			})
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {
@@ -243,17 +264,13 @@ const DataTableSlotRight = () => {
 		} catch {
 			toast.error('ns_common:notification.error', { id })
 		}
-	})
+	}, [selectedRows])
 	const { t } = useTranslation()
 
 	return (
 		<Fragment>
 			<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-				<Button
-					size='icon'
-					variant='outline'
-					disabled={!monthlyReportQueryState?.data || monthlyReportQueryState?.data?.length === 0}
-					onClick={() => handleDownloadExcel()}>
+				<Button size='icon' variant='outline' disabled={!downloadable} onClick={() => handleDownloadExcel()}>
 					<Icon name='Download' />
 				</Button>
 			</Tooltip>

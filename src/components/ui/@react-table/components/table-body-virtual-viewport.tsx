@@ -1,5 +1,3 @@
-'use no memo'
-
 import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { Virtualizer } from '@tanstack/react-virtual'
 import React, { Fragment } from 'react'

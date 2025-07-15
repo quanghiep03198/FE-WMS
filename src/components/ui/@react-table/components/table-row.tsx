@@ -2,7 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { flexRender, type Row as TRow } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
-import isEqual from 'react-fast-compare'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { DataTableUtility } from '../utils/table.util'
@@ -11,10 +10,9 @@ import { type TableBodyProps } from './table-body'
 type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
 	row: TRow<any>
 	virtualRow: { index: number; start: number; size: number }
-	measureElement?: (node: HTMLTableRowElement) => void
 }
 
-const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, measureElement, renderSubComponent }) => {
+const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, virtualRow, renderSubComponent }) => {
 	'use no memo'
 
 	const { table } = useTableContext()
@@ -89,8 +87,6 @@ const VirtualPlaceholderRow: React.FC<React.ComponentProps<'td'>> = (props) => {
 
 VirtualPlaceholderRow.displayName = 'VirtualPlaceholderRow'
 
-const MemoizedVirtualTableRow = memo(VirtualTableRow, (prevProps, nextProps) =>
-	isEqual(prevProps.measureElement, nextProps.measureElement)
-)
+const MemoizedVirtualTableRow = memo(VirtualTableRow)
 
 export { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow }
