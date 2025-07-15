@@ -12,13 +12,15 @@ import tw from 'tailwind-styled-components'
 import { useGetTenantByFactory } from '../../../-hooks/use-tenacy'
 import DownloadExcelButton from './download-excel-button'
 
+type ComboboxProps = { data: Record<'label' | 'value', string>[]; isLoading: boolean }
+
 const SearchBox: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery('(max-width:800px)')
 	const { data: tenant } = useGetTenantByFactory()
 	const { searchParams, setParams } = useQueryParams<Record<'shoes_style' | 'color', string>>(null)
 
-	const { data } = useQuery({
+	const { data, isLoading } = useQuery({
 		queryKey: ['PRODUCTION_INVENTORY_FEATURE', tenant?.id],
 		queryFn: async () => await InventoryService.getProductionInventoryFeatures(tenant?.id),
 		enabled: !!tenant?.id,
@@ -67,9 +69,9 @@ const SearchBox: React.FC = () => {
 			)}>
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit((values) => setParams(values))}>
-					<BrandNameComboboxFieldControl data={brandNameOptions} />
-					<ShoesStyleCombobox data={shoesStyleOptions} />
-					<ColorCombobox data={colorOptions} />
+					<BrandNameComboboxFieldControl data={brandNameOptions} isLoading={isLoading} />
+					<ShoesStyleCombobox data={shoesStyleOptions} isLoading={isLoading} />
+					<ColorCombobox data={colorOptions} isLoading={isLoading} />
 					<Button
 						type='submit'
 						size={isSmallScreen ? 'icon' : 'default'}
@@ -88,7 +90,7 @@ const SearchBox: React.FC = () => {
 	)
 }
 
-const BrandNameComboboxFieldControl: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
+const BrandNameComboboxFieldControl: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -102,6 +104,7 @@ const BrandNameComboboxFieldControl: React.FC<{ data: Record<'label' | 'value', 
 		<Div className='flex-1'>
 			<ComboboxFieldControl
 				name='brand_name'
+				loading={isLoading}
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.select', {
 						object: t('ns_erp:fields.brand_name'),
@@ -118,7 +121,7 @@ const BrandNameComboboxFieldControl: React.FC<{ data: Record<'label' | 'value', 
 	)
 }
 
-const ShoesStyleCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
+const ShoesStyleCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -139,8 +142,9 @@ const ShoesStyleCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }
 					})
 				)}
 				shouldFilter={false}
-				onInput={setSearchTerm}
+				loading={isLoading}
 				datalist={filteredData}
+				onInput={setSearchTerm}
 				labelField='label'
 				valueField='value'
 			/>
@@ -148,7 +152,7 @@ const ShoesStyleCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }
 	)
 }
 
-const ColorCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = ({ data }) => {
+const ColorCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -168,6 +172,7 @@ const ColorCombobox: React.FC<{ data: Record<'label' | 'value', string>[] }> = (
 						defaultValue: 'Select color'
 					})
 				)}
+				loading={isLoading}
 				onInput={setSearchTerm}
 				shouldFilter={false}
 				datalist={filteredData}

@@ -1,9 +1,10 @@
 import { IInboundInventory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
+import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
 import { ColumnDef, createColumnHelper, Row } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import React, { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
@@ -53,30 +54,33 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				maxSize: 120,
 				enableSorting: true,
 				enableColumnFilter: true,
-				filterFn: fuzzyFilter
+				filterFn: fuzzyFilter,
+				meta: { title: t('ns_erp:fields.mo_no') }
 			}),
-			// columnHelper.accessor('last_inbound_time', {
-			// 	header: t('ns_erp:fields.last_inbound_time'),
-			// 	cell: (info) => {
-			// 		const value = info.getValue()
-			// 		return value ? (
-			// 			format(value, 'yyyy-MM-dd')
-			// 		) : (
-			// 			<Div className='place-items-center'>
-			// 				<Icon name='CalendarOff' className='stroke-muted-foreground' />
-			// 			</Div>
-			// 		)
-			// 	},
-			// 	size: 180,
-			// 	enableSorting: true,
-			// 	enableGlobalFilter: false
-			// }),
+			columnHelper.accessor('last_inbound_time', {
+				header: t('ns_erp:fields.last_inbound_time'),
+				cell: (info) => {
+					const value = info.getValue()
+					return value ? (
+						format(value, 'yyyy-MM-dd')
+					) : (
+						<Div className='place-items-center'>
+							<Icon name='CalendarOff' className='stroke-muted-foreground' />
+						</Div>
+					)
+				},
+				size: 180,
+				enableSorting: true,
+				enableGlobalFilter: false,
+				meta: { title: t('ns_erp:fields.last_inbound_time'), align: 'center' }
+			}),
 			columnHelper.accessor('mo_qty', {
 				header: t('ns_erp:fields.mo_qty'),
 				enableSorting: true,
 				enableGlobalFilter: false,
 				cell: (info) => formatIntlNumber(info.getValue()),
 				meta: {
+					title: t('ns_erp:fields.last_inbound_time'),
 					align: 'right'
 				}
 			}),
@@ -86,6 +90,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				enableSorting: true,
 				enableGlobalFilter: false,
 				meta: {
+					title: t('ns_erp:fields.inbound_qty'),
 					align: 'right',
 					filterVariant: 'range'
 				}
@@ -98,6 +103,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				enableSorting: true,
 				enableGlobalFilter: false,
 				meta: {
+					title: t('ns_erp:fields.inspected_qty'),
 					align: 'right',
 					filterVariant: 'range'
 				}
@@ -121,7 +127,7 @@ const DataTableFooter = memo(({ rows }: { rows: Row<IInboundInventory>[] }) => {
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell colSpan={2} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
+				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>

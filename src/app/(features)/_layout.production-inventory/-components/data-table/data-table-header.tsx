@@ -6,11 +6,15 @@ import { memo, useMemo } from 'react'
 import { TableRowData } from '.'
 import { getCanSticky } from './utils'
 
-type TableCellHeadProps = {
-	header: Header<TableRowData, unknown>
+export type DataTableHeaderProps<T> = {
+	headerGroups: HeaderGroup<T>[]
+}
+
+type TableCellHeadProps<T> = {
+	header: Header<T, any>
 } & React.PropsWithChildren
 
-const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<TableRowData>[] }> = ({ headerGroups }) => {
+function DataTableHeader<T extends TableRowData>({ headerGroups }: DataTableHeaderProps<T>) {
 	'use no memo'
 
 	return (
@@ -26,7 +30,7 @@ const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<TableRowData>[] }> =
 								key={header.id}
 								colSpan={header.colSpan}
 								align={columnDef.meta?.align ?? 'left'}
-								title={columnDef.header.toString()}
+								title={columnDef.meta?.title}
 								className='relative'
 								style={{
 									width: column.getSize(),
@@ -42,7 +46,7 @@ const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<TableRowData>[] }> =
 	)
 }
 
-const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
+function TableCellHead<T extends TableRowData>({ header }: TableCellHeadProps<T>) {
 	const { columnDef, getIsSorted, getToggleSortingHandler } = header.column
 
 	const columnMeta = columnDef.meta
@@ -99,6 +103,6 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 
 TableCellHead.displayName = 'DataTableCellHead'
 
-const MemoizedDataTableHeader = memo(DataTableHeader)
+const MemoizedDataTableHeader = memo(DataTableHeader) as typeof DataTableHeader
 
 export { DataTableHeader, MemoizedDataTableHeader }

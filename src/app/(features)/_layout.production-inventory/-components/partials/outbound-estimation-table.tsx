@@ -1,6 +1,6 @@
 import { IOutboundEstimation } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
+import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ColumnDef, createColumnHelper, Row } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -49,38 +49,41 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				cell: (info) => info.getValue(),
 				size: 160,
 				enableSorting: true,
-				enableColumnFilter: true
+				enableColumnFilter: true,
+				meta: { title: t('ns_erp:fields.po') }
 			}),
 			columnHelper.accessor('outbound_date', {
 				header: t('ns_erp:fields.outbound_date'),
 				cell: (info) => format(info.getValue(), 'yyyy-MM-dd'),
 				size: 160,
 				enableSorting: true,
-				enableGlobalFilter: false
+				enableGlobalFilter: false,
+				meta: { title: t('ns_erp:fields.outbound_date') }
 			}),
-			// columnHelper.accessor('last_outbound_time', {
-			// 	header: t('ns_erp:fields.last_outbound_time'),
-			// 	cell: (info) => {
-			// 		const value = info.getValue()
-			// 		return value ? (
-			// 			format(value, 'yyyy-MM-dd')
-			// 		) : (
-			// 			<Div className='place-items-center'>
-			// 				<Icon name='CalendarOff' className='stroke-muted-foreground' />
-			// 			</Div>
-			// 		)
-			// 	},
-			// 	size: 160,
-			// 	enableSorting: true,
-			// 	enableGlobalFilter: false
-			// }),
+			columnHelper.accessor('last_outbound_time', {
+				header: t('ns_erp:fields.last_outbound_time'),
+				cell: (info) => {
+					const value = info.getValue()
+					return value ? (
+						format(value, 'yyyy-MM-dd')
+					) : (
+						<Div className='place-items-center'>
+							<Icon name='CalendarOff' className='stroke-muted-foreground' />
+						</Div>
+					)
+				},
+				size: 160,
+				enableSorting: true,
+				enableGlobalFilter: false,
+				meta: { title: t('ns_erp:fields.last_outbound_time'), align: 'center' }
+			}),
 			columnHelper.accessor('po_qty', {
 				header: t('ns_erp:fields.order_qty'),
 				cell: (info) => formatIntlNumber(info.getValue()),
 				size: 160,
 				enableSorting: true,
 				enableGlobalFilter: false,
-				meta: { align: 'right', filterVariant: 'range' }
+				meta: { title: t('ns_erp:fields.order_qty'), align: 'right', filterVariant: 'range' }
 			}),
 			columnHelper.accessor('outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
@@ -88,7 +91,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 				enableSorting: true,
 				enableGlobalFilter: false,
 				cell: (info) => formatIntlNumber(info.getValue()),
-				meta: { align: 'right' }
+				meta: { title: t('ns_erp:fields.outbound_qty'), align: 'right' }
 			})
 		]
 	}, [i18n.language])
@@ -110,7 +113,7 @@ const DataTableFooter: React.FC<{ rows: Row<IOutboundEstimation>[] }> = memo(({ 
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
+				<TableCell colSpan={4} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>
