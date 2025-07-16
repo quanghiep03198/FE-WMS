@@ -2,8 +2,9 @@
 
 import { Form as FormProvider, MultiSelectFieldControl } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useResetState } from 'ahooks'
 import { sortedUniqBy } from 'lodash'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -14,7 +15,7 @@ import FormSubmission from './form-submission'
 import PurchaseOrderAutoComplete from './purchase-order-autocomplete'
 
 const CentralizedPoOutboundForm: React.FC = () => {
-	const [searchTerm, setSearchTerm] = useState<string>('')
+	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const { t } = useTranslation()
 	const form = useForm<StandardOutboundFormValues>({
@@ -39,7 +40,13 @@ const CentralizedPoOutboundForm: React.FC = () => {
 
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit((data) => mutateAsync(data).then(() => form.reset()))}>
+			<Form
+				onSubmit={form.handleSubmit((data) =>
+					mutateAsync(data).then(() => {
+						form.reset()
+						resetSearchTerm()
+					})
+				)}>
 				<PurchaseOrderAutoComplete />
 				<MultiSelectFieldControl
 					name='mo_no'
