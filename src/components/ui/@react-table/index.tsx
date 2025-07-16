@@ -18,17 +18,17 @@ import {
 	type SortingState
 } from '@tanstack/react-table'
 import { useEventEmitter, useLatest, useResetState } from 'ahooks'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuidv4 } from 'uuid'
 import { create, StoreApi } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import TableRowCount from './components/row-count'
-import TableDataGrid from './components/table'
-import TablePagination from './components/table-pagination'
-import TableToolbar from './components/table-toolbar'
+import { MemoizedTableRowCount, TableRowCount } from './components/row-count'
+import DataTable from './components/table'
+import { MemoizedTablePagination, TablePagination } from './components/table-pagination'
+import { MemoizedTableToolbar, TableToolbar } from './components/table-toolbar'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { TableContext } from './context/table.context'
 import { type DataTableProps } from './types'
@@ -36,7 +36,7 @@ import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
-function DataTable<TData, TValue>({
+function DataGrid<TData, TValue>({
 	instanceId = uuidv4(),
 	data,
 	caption,
@@ -181,7 +181,7 @@ function DataTable<TData, TValue>({
 			editedRows,
 			setEditedRows,
 			updateRow: (rowIndex, columnId, value) => {
-				// Skip page index reset until after next rerender
+				// ? Skip page index reset until after next rerender
 				setAutoResetPageIndex(false)
 				setData((old) =>
 					old.map((row, index) => {
@@ -254,18 +254,28 @@ function DataTable<TData, TValue>({
 			}))
 		) as StoreApi<TableContext>
 
+	const { isResizingColumn } = table.getState().columnSizingInfo
+
 	return (
 		<TableContext.Provider value={store.current}>
 			<DataTableWrapper ref={tableWrapperRef}>
-				{!toolbarProps.hidden && (
-					<TableToolbar
-						enableGlobalFilter={enableGlobalFilter}
-						onResetAllFilters={resetAllFilters}
-						slotLeft={toolbarProps.slotLeft}
-						slotRight={toolbarProps.slotRight}
-					/>
-				)}
-				<TableDataGrid
+				{!toolbarProps.hidden &&
+					(isResizingColumn ? (
+						<MemoizedTableToolbar
+							enableGlobalFilter={enableGlobalFilter}
+							onResetAllFilters={resetAllFilters}
+							slotLeft={toolbarProps.slotLeft}
+							slotRight={toolbarProps.slotRight}
+						/>
+					) : (
+						<TableToolbar
+							enableGlobalFilter={enableGlobalFilter}
+							onResetAllFilters={resetAllFilters}
+							slotLeft={toolbarProps.slotLeft}
+							slotRight={toolbarProps.slotRight}
+						/>
+					))}
+				<DataTable
 					columns={columns}
 					loading={loading}
 					caption={caption}
@@ -276,17 +286,34 @@ function DataTable<TData, TValue>({
 					getRowCanExpand={getRowCanExpand}
 				/>
 				<FooterGroup>
-					<TableRowCount
-						enableRowSelection={enableRowSelection}
-						manualPagination={manualPagination}
-						manualTotalDocs={paginationProps?.totalDocs ?? 0}
-					/>
-					<TablePagination
-						loading={loading}
-						manualPagination={manualPagination}
-						controlledPaginationProps={paginationProps}
-						onPaginationChange={onPaginationChange}
-					/>
+					{isResizingColumn ? (
+						<MemoizedTableRowCount
+							enableRowSelection={enableRowSelection}
+							manualPagination={manualPagination}
+							manualTotalDocs={paginationProps?.totalDocs ?? 0}
+						/>
+					) : (
+						<TableRowCount
+							enableRowSelection={enableRowSelection}
+							manualPagination={manualPagination}
+							manualTotalDocs={paginationProps?.totalDocs ?? 0}
+						/>
+					)}
+					{isResizingColumn ? (
+						<MemoizedTablePagination
+							loading={loading}
+							manualPagination={manualPagination}
+							controlledPaginationProps={paginationProps}
+							onPaginationChange={onPaginationChange}
+						/>
+					) : (
+						<TablePagination
+							loading={loading}
+							manualPagination={manualPagination}
+							controlledPaginationProps={paginationProps}
+							onPaginationChange={onPaginationChange}
+						/>
+					)}
 				</FooterGroup>
 			</DataTableWrapper>
 		</TableContext.Provider>
@@ -294,6 +321,6 @@ function DataTable<TData, TValue>({
 }
 
 const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200`
-const FooterGroup = tw.div`flex items-center justify-between`
+const FooterGroup = memo(tw.div`flex items-center justify-between`, (prevProps, nextProps) => prevProps === nextProps)
 
-export default DataTable
+export default DataGrid

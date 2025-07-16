@@ -1,16 +1,18 @@
 import { Row } from '@tanstack/react-table'
-import React from 'react'
+import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../../@custom/typography'
 import { useTableContext } from '../context/table.context'
 
-type DataTableRowCountProps = {
+export type DataTableRowCountProps = {
 	enableRowSelection: boolean | ((row: Row<any>) => boolean)
 	manualPagination: boolean
 	manualTotalDocs: number
 }
 
 const TableRowCount: React.FC<DataTableRowCountProps> = ({ enableRowSelection, manualPagination, manualTotalDocs }) => {
+	'use no memo'
+
 	const { t } = useTranslation()
 	const { table } = useTableContext('table')
 
@@ -35,4 +37,32 @@ const TableRowCount: React.FC<DataTableRowCountProps> = ({ enableRowSelection, m
 	)
 }
 
-export default TableRowCount
+const MemoizedTableRowCount = memo(TableRowCount) as typeof TableRowCount
+
+export { MemoizedTableRowCount, TableRowCount }
+
+/**
+ {isResizingColumn ? (
+					<MemoizedTablePaginateControl
+						{...({
+							tablePaginationProps: { loading, manualPagination, paginationProps, onPaginationChange },
+							tableRowCountProps: {
+								enableRowSelection,
+								manualPagination,
+								manualTotalDocs: paginationProps?.totalDocs ?? 0
+							}
+						} as unknown as TableControllerProps<TData>)}
+					/>
+				) : (
+					<TablePaginateControl
+						{...({
+							tablePaginationProps: { loading, manualPagination, paginationProps, onPaginationChange },
+							tableRowCountProps: {
+								enableRowSelection,
+								manualPagination,
+								manualTotalDocs: paginationProps?.totalDocs ?? 0
+							}
+						} as unknown as TableControllerProps<TData>)}
+					/>
+				)}
+ */

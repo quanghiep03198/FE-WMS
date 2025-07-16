@@ -19,7 +19,7 @@ type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 's
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
 	Pick<React.ComponentProps<'div'>, 'style'>
 
-function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
+function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const { table, instanceId } = useTableContext('table', 'instanceId')
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
@@ -117,6 +117,6 @@ function TableDataGrid<TData, TValue>(props: TableProps<TData, TValue>) {
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
 const ScrollArea = tw.div`will-change-transform contain-paint relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
 
-TableDataGrid.displayName = 'DataTable'
+DataTable.displayName = 'DataTable'
 
-export default TableDataGrid
+export default DataTable

@@ -2,7 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
-import React from 'react'
+import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
@@ -76,4 +76,6 @@ function TableToolbar<TData>({
 
 TableToolbar.displayName = 'TableToolbar'
 
-export default TableToolbar
+const MemoizedTableToolbar = memo(TableToolbar) as typeof TableToolbar
+
+export { MemoizedTableToolbar, TableToolbar }

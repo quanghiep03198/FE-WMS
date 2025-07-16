@@ -1,9 +1,6 @@
-'use no memo'
-
 import { cn } from '@/common/utils/cn'
-import { PaginationState } from '@tanstack/react-table'
-import { useUpdate } from 'ahooks'
-import React, { useEffect, useRef } from 'react'
+import { PaginationState, RowData } from '@tanstack/react-table'
+import React, { memo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
@@ -21,7 +18,7 @@ import {
 import { useTableContext } from '../context/table.context'
 import { type PaginationBaseProps } from '../types'
 
-type DataTablePaginationProps<TData> = {
+export type DataTablePaginationProps<TData extends RowData> = {
 	manualPagination?: boolean
 	controlledPaginationProps: Partial<Omit<Pagination<TData>, 'data'>>
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
@@ -35,12 +32,13 @@ function TablePagination<TData>({
 	onPaginationChange,
 	prefetch
 }: DataTablePaginationProps<TData>) {
+	'use no memo'
+
 	const { t } = useTranslation('ns_common')
 	const { table } = useTableContext('table')
 	const { firstPage, lastPage, nextPage, previousPage, setPageSize } = table
 	const timeoutRef = useRef<NodeJS.Timeout>(null)
 	const prefetchCountRef = useRef<number>(0)
-	const rerender = useUpdate()
 
 	const canNextPage = manualPagination ? controlledPaginationProps?.hasNextPage : table.getCanNextPage()
 	const canPreviousPage = manualPagination ? controlledPaginationProps?.hasPrevPage : table.getCanPreviousPage()
@@ -56,7 +54,6 @@ function TablePagination<TData>({
 			goToFirstPage()
 		}
 		setPageSize(value)
-		rerender()
 	}
 
 	const handlePrefetch = (params: Record<string, unknown>) => {
@@ -209,4 +206,6 @@ function TablePagination<TData>({
 
 TablePagination.displayName = 'TablePagination'
 
-export default TablePagination
+const MemoizedTablePagination = memo(TablePagination) as typeof TablePagination
+
+export { MemoizedTablePagination, TablePagination }
