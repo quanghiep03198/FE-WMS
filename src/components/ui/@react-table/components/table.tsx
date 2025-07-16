@@ -13,7 +13,7 @@ import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-import DataTableHeader from './table-header'
+import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
 
 type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
@@ -98,7 +98,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					<DataTableHeader />
+					{isColumnResizing || virtualizer.isScrolling ? <MemoizedDataTableHeader /> : <DataTableHeader />}
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
 					) : isColumnResizing ? (

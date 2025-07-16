@@ -84,4 +84,6 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ hea
 
 TableHeaderFilterRow.displayName = 'TableHeaderFilterRow'
 
-export default memo(DataTableHeader)
+const MemoizedDataTableHeader = memo(DataTableHeader) as typeof DataTableHeader
+
+export { DataTableHeader, MemoizedDataTableHeader }

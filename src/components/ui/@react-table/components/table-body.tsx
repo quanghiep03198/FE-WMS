@@ -3,7 +3,6 @@ import { RowData, Table, type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
 import { TableBody as TableRowGroup } from '../../@core/table'
-import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow } from './table-row'
@@ -23,16 +22,11 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 
 	const { rows } = table.getRowModel()
 	const {
-		columnSizingInfo: { isResizingColumn },
-		columnPinning
+		columnSizingInfo: { isResizingColumn }
 	} = table.getState()
 	const isSomeRowsExpanded = table.getIsSomeRowsExpanded()
 	const colSpan = table.getAllColumns().length
-	const hasNoColumnPinnedLeft = !columnPinning.left.some((columnId) => {
-		return columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
-	})
-	const shouldSkipRerender =
-		(isResizingColumn && hasNoColumnPinnedLeft) || (virtualizer.isScrolling && !isSomeRowsExpanded)
+	const shouldSkipRerender = isResizingColumn || (virtualizer.isScrolling && !isSomeRowsExpanded)
 
 	return (
 		<TableRowGroup>
