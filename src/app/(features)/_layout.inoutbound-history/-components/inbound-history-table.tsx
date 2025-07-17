@@ -104,7 +104,7 @@ const InboundHistoryTable: React.FC = () => {
 
 					columnHelper.accessor('inbound_date', {
 						header: t('ns_erp:fields.inbound_date'),
-						enableColumnFilter: true,
+						enableColumnFilter: false,
 						enableSorting: true,
 						minSize: 100,
 						filterFn: 'inNumberRange',
@@ -112,7 +112,8 @@ const InboundHistoryTable: React.FC = () => {
 							const value = getValue()
 							return value ? format(value, 'yyyy-MM-dd') : 'Unknown'
 						},
-						meta: { align: 'left', filterVariant: 'date' }
+						meta: { align: 'left' }
+
 					})
 				]
 			})
