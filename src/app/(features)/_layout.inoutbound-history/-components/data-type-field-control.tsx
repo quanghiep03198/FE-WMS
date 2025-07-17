@@ -9,25 +9,29 @@ import {
 	Label,
 	RadioGroup,
 	RadioGroupItem,
+	Separator,
 	Typography
 } from '@/components/ui'
 import React, { Fragment } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 
 const WarehouseDataTypeFieldControl: React.FC = () => {
 	const { t } = useTranslation()
+	const { setValue } = useFormContext()
 
 	return (
 		<Fragment>
-			<Div className='mt-6 flex w-full items-center gap-x-4 overflow-hidden'>
-				<hr className='basis-1/3' />
-				<Label className='flex bg-background text-center text-base'>What are you looking for ?</Label>
-				<hr className='basis-1/3' />
+			<Div className='relative mx-auto w-full max-w-3xl'>
+				<Separator />
+				<Label className='absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 bg-background px-4 text-center text-base'>
+					{t('ns_common:others.lookup_question')}
+				</Label>
 			</Div>
 			<FormField
-				name='dataType'
+				name='type'
 				render={({ field }) => (
 					<FormItem>
 						<RadioGroup
@@ -36,6 +40,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 							defaultValue={RFIDDataType.INBOUND}
 							onValueChange={(value) => {
 								field.onChange(value)
+								setValue('order', '')
 							}}>
 							<FormItem>
 								<StyledFormLabel
@@ -48,17 +53,15 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 											className='hidden'
 										/>
 									</FormControl>
-
 									<Icon name='Forklift' size={32} strokeWidth={1} className='mr-2' />
 									<Div className='space-y-1.5'>
 										<Typography> {t('ns_inoutbound:action_types.warehouse_input')}</Typography>
 										<Typography
 											variant='small'
 											className='block w-full max-w-3/4 font-normal text-muted-foreground'>
-											Kiểm tra tiến độ nhập hàng, trạng thái chỉ lệnh và số lượng nhập chi tiết.
+											{t('ns_inoutbound:description.inbound_history_lookup')}
 										</Typography>
 									</Div>
-
 									<CheckIcon
 										name='Check'
 										size={24}
@@ -84,7 +87,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 										<Typography
 											variant='small'
 											className='block w-full max-w-3/4 font-normal text-muted-foreground'>
-											Kiểm tra tiến độ xuất hàng, thông tin đơn hàng và chi tiết số lượng đã xuất.
+											{t('ns_inoutbound:description.outbound_history_lookup')}
 										</Typography>
 									</Div>
 									<CheckIcon

@@ -15,7 +15,7 @@ import {
 } from '@/components/ui'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { capitalize } from 'lodash'
-import React, { useId, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -30,7 +30,7 @@ export function OrderSearchFieldControl() {
 
 	const { control, getFieldState, setValue } = useFormContext()
 
-	const currentDataType = useWatch({ control, name: 'dataType' })
+	const currentDataType = useWatch({ control, name: 'type' })
 	const currentOrderValue = useWatch({ control, name: 'order' })
 
 	const { data: availableCommandNumbers, isLoading: isLoadingCommandNumber } = useSearchCommandNumberQuery(
@@ -65,6 +65,10 @@ export function OrderSearchFieldControl() {
 			: []
 	}, [availableOrders, currentOrderValue])
 
+	useEffect(() => {
+		ref.current.focus()
+	}, [currentDataType])
+
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') e.preventDefault()
 		else if (e.key === 'Escape') setOpen(false)
@@ -90,7 +94,7 @@ export function OrderSearchFieldControl() {
 							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
 									<PopoverTrigger
-										className='relative flex h-10 w-full items-center rounded-lg border px-3 py-1 transition-colors duration-200 focus-within:border-primary aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
+										className='relative flex h-10 w-full flex-1 items-center rounded-lg border px-3 py-1 transition-colors duration-200 focus-within:border-primary aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
 										onClick={(e) => e.preventDefault()}>
 										<Icon name='Search' size={20} className={cn('stroke-muted-foreground')} />
 										<Input

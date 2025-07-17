@@ -222,3 +222,23 @@ export interface IInboundInventory extends IBaseInventory {
 	inspected_qty: number
 	last_inbound_time: Date
 }
+
+export interface IInboundHistory {
+	factory_code: string
+	mo_no: string
+	mo_qty: number
+	brand_name: string
+	shoes_style_code_factory: string
+	color_sn: string
+	inbound_qty: number
+	inbound_date: Date
+}
+export interface IOutboundHistory {
+	po: string
+	po_qty: number
+	outbound_qty: number
+	brand_name: string
+	shoes_style_code_factory: string
+	color_sn: string
+	outbound_date: Date
+}
