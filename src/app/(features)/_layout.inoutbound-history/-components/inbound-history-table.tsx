@@ -113,6 +113,7 @@ const InboundHistoryTable: React.FC = () => {
 							return value ? format(value, 'yyyy-MM-dd') : 'Unknown'
 						},
 						meta: { align: 'left' }
+
 					})
 				]
 			})
