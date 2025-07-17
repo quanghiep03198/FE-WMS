@@ -1,5 +1,5 @@
-import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
+import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
@@ -22,7 +22,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { notUndefined, useVirtualizer } from '@tanstack/react-virtual'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { useClickAway, useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
 import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
@@ -58,6 +58,8 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 */
 		valueField: keyof T
 
+		search?: string
+
 		/**
 		 * Callback function triggered when the selected values change.
 		 * Receives an array of the new selected values.
@@ -69,6 +71,11 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 * Receives an array of the new selected values.
 		 */
 		onInput?: (value: string) => unknown
+
+		/**
+		 * Callback function triggered when the component is reset.
+		 */
+		onReset?: () => void
 
 		/** The default selected values when the component mounts. */
 		defaultValue?: Array<T[keyof T]>
@@ -123,6 +130,7 @@ export function MultiSelect<D = Record<string, any>>({
 	shouldFilter = true,
 	onValueChange,
 	onInput,
+	search,
 	loading,
 	value = [],
 	defaultValue = [],
@@ -203,35 +211,19 @@ export function MultiSelect<D = Record<string, any>>({
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const estimateSize = useCallback(() => ESTIMATE_SIZE, [])
-	const measureElement = useMeasureElement(isPopoverOpen)
 
 	const virtualizer = useVirtualizer({
-		indexAttribute: 'data-index',
 		count: datalist?.length,
 		overscan: PRERENDER_COUNT,
+		useAnimationFrameWithResizeObserver: true,
 		estimateSize,
 		getScrollElement,
-		measureElement,
 		scrollToFn
 	})
 
 	const virtualItems = virtualizer.getVirtualItems()
 
-	const [before, after] =
-		virtualItems.length > 0
-			? [
-					notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
-					virtualItems.length > 0
-						? virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems.length - 1]).end
-						: 0
-				]
-			: [0, 0]
-
-	useDeepCompareEffect(() => {
-		// * If the popover is closed, there is no need to measure
-		if (!isPopoverOpen) return
-		virtualizer.measure()
-	}, [isPopoverOpen, virtualizer])
+	const { before, after } = useVirutalScrollOffset(virtualizer)
 
 	useDeepCompareEffect(() => {
 		if (Array.isArray(value)) setSelectedValues(value)
@@ -348,7 +340,7 @@ export function MultiSelect<D = Record<string, any>>({
 							: 0
 					}}>
 					<CommandInput
-						value={searchTerm}
+						value={search ?? searchTerm}
 						placeholder='Search...'
 						onKeyDown={handleInputKeyDown}
 						onInput={(e) => {
@@ -429,14 +421,16 @@ export function MultiSelect<D = Record<string, any>>({
 	)
 }
 
-const Checkbox: React.FC<{ checked: boolean }> = ({ checked }) => (
-	<Div
-		className={cn(
-			'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
-			checked ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
-		)}>
-		<CheckIcon className='!size-3' />
-	</Div>
-)
+function Checkbox({ checked }: { checked: boolean }) {
+	return (
+		<Div
+			className={cn(
+				'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
+				checked ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
+			)}>
+			<CheckIcon className='!size-3' />
+		</Div>
+	)
+}
 
 MultiSelect.displayName = 'MultiSelect'
