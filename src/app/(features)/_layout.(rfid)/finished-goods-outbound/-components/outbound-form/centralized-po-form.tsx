@@ -52,6 +52,7 @@ const CentralizedPoOutboundForm: React.FC = () => {
 					name='mo_no'
 					label={t('ns_erp:fields.mo_no')}
 					shouldFilter={false}
+					search={searchTerm}
 					onInput={(value) => setSearchTerm(value)}
 					datalist={filteredOrders}
 					labelField='mo_no'
