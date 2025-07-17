@@ -114,6 +114,7 @@ export default {
 		finished_goods_outbound: 'Finished goods outbound',
 		import_management: 'Import management',
 		monthly_inventory_audit: 'Monthly inventory audit',
+		inoutbound_progress_lookup: 'In/Outbound progress lookup',
 		inventory_estimation: 'Inventory estimation',
 		keyboard_shortcut: 'Keyboard shortcut',
 		cargo_weight_check: 'Cargo weight check',
