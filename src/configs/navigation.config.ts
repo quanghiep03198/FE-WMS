@@ -60,6 +60,13 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
+		icon: 'PackageSearch',
+		title: 'navigation.inoutbound_progress_lookup',
+		path: '/inoutbound-progress-lookup',
+		type: 'main'
+	},
+	{
+		id: uuidv4(),
 		icon: 'Archive',
 		title: 'navigation.monthly_inventory_audit',
 		path: '/inventory-audit',

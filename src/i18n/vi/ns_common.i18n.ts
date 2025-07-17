@@ -117,6 +117,7 @@ export default {
 		monthly_inventory_audit: 'Kiểm kê tồn kho',
 		keyboard_shortcut: 'Phím tắt',
 		cargo_weight_check: 'Kiểm tra & Cân Hàng',
+		inoutbound_progress_lookup: 'Tra cứu tiến độ nhập/xuất',
 		inventory_estimation: 'Ước lượng tồn kho',
 		profile: 'Thông tin cá nhân',
 		report_management: 'Báo biểu',
