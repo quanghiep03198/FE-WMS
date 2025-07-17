@@ -100,9 +100,9 @@ export default {
 		CA1: '柬埔寨'
 	},
 	form_placeholder: {
-		fill: 'Fill in {{object}}...',
-		search: 'Search by {{object}} ...',
-		select: 'Select {{object}}'
+		fill: '填写{{object}}...',
+		search: '搜索{{object}}...',
+		select: '选择{{object}}'
 	},
 	navigation: {
 		account: '账户管理',
@@ -112,7 +112,7 @@ export default {
 		finished_goods_outbound: '成品倉出庫作業',
 		import_management: '入庫管理',
 		monthly_inventory_audit: '盤點管理',
-		inoutbound_progress_lookup: '出入庫進度查詢',
+		inoutbound_history: '出入庫進度查詢',
 		inventory_estimation: '生产库存估算',
 		keyboard_shortcut: '快捷键',
 		cargo_weight_check: '货物称重检查',
@@ -136,7 +136,8 @@ export default {
 		receiving_data: '等待数据 ...'
 	},
 	others: {
-		all: '全部'
+		all: '全部',
+		lookup_question: '你在找什么 ?'
 	},
 	pagination: {
 		ellipsis_count: '... 和 {{count}} 更多项目',

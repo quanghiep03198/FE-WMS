@@ -61,8 +61,8 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: uuidv4(),
 		icon: 'PackageSearch',
-		title: 'navigation.inoutbound_progress_lookup',
-		path: '/inoutbound-progress-lookup',
+		title: 'navigation.inoutbound_history',
+		path: '/inoutbound-history',
 		type: 'main'
 	},
 	{

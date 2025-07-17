@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
-import InboundReportDetailTable from './report-detail-table-'
+import InboundReportDetailTable from './report-detail-table'
 import ReportTableFooter from './report-table-footer'
 
 export type UrlQueryParams = {
