@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type TypewriterProps = {
 	text?: string
@@ -18,6 +19,7 @@ export const Typewriter = ({
 	className,
 	onComplete
 }: TypewriterProps) => {
+	const { i18n } = useTranslation()
 	const [displayedText, setDisplayedText] = useState('')
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
 	const onCompleteRef = useRef(onComplete) // Ref to store the latest onComplete
@@ -61,6 +63,10 @@ export const Typewriter = ({
 			}
 		}
 	}, [text, typeSpeed, playState])
+
+	useEffect(() => {
+		setDisplayedText(text)
+	}, [i18n.language])
 
 	return (
 		<span
