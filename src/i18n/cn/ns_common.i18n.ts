@@ -112,7 +112,7 @@ export default {
 		finished_goods_outbound: '成品倉出庫作業',
 		import_management: '入庫管理',
 		monthly_inventory_audit: '盤點管理',
-		inoutbound_history: '出入庫進度查詢',
+		inoutbound_history: '出入庫歷史',
 		inventory_estimation: '生产库存估算',
 		keyboard_shortcut: '快捷键',
 		cargo_weight_check: '货物称重检查',
