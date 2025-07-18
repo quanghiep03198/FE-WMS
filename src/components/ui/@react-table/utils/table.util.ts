@@ -36,7 +36,7 @@ export class DataTableUtility {
 				return {
 					position: 'sticky',
 					zIndex: 10,
-					left: column.getStart('left') + 0.125,
+					left: column.getStart('left'),
 					borderLeft: 'none',
 					boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined,
 					borderRight: !column.getIsLastColumn('left') ? '1px solid hsl(var(--border))' : undefined
