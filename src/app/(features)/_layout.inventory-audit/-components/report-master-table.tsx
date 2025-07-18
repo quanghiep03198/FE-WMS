@@ -59,16 +59,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
-				id: ROW_SELECTION_COLUMN_ID,
-				header: IndeterminateCheckbox,
-				cell: RowSelectionCheckbox,
-				size: 50,
-				enableSorting: false,
-				enableHiding: false,
-				enableResizing: false,
-				enablePinning: false
-			}),
-			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: () => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
@@ -90,6 +80,16 @@ export const InventoryReportMasterTable: React.FC = () => {
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
 				)
+			}),
+			columnHelper.display({
+				id: ROW_SELECTION_COLUMN_ID,
+				header: IndeterminateCheckbox,
+				cell: RowSelectionCheckbox,
+				size: 50,
+				enableSorting: false,
+				enableHiding: false,
+				enableResizing: false,
+				enablePinning: false
 			}),
 			columnHelper.accessor('brand_name', {
 				header: t('ns_erp:fields.brand_name'),
