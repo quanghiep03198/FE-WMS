@@ -60,7 +60,7 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
-		icon: 'PackageSearch',
+		icon: 'FileSearch',
 		title: 'navigation.inoutbound_history',
 		path: '/inoutbound-history',
 		type: 'main'
