@@ -183,7 +183,20 @@ const useInvalidateQueries = () => {
 	return () => {
 		refetchScannedEpcs()
 		refetchOrderDetail()
-		queryClient.invalidateQueries({ queryKey: ['INBOUND_EPC_BY_SIZE'], exact: false })
+		queryClient.invalidateQueries({
+			predicate: (query) => {
+				return query.queryKey.some((key) => {
+					const invalidateKeys: readonly string[] = [
+						'INBOUND_ORDER_DETAIL',
+						'INBOUND_EPC_LIST',
+						'ARCHIVED_EPCS',
+						'ARCHIVED_EPCS_FEATURES'
+					]
+
+					return invalidateKeys.includes(key as string)
+				})
+			}
+		})
 	}
 }
 

@@ -82,11 +82,15 @@ const useInvalidateQueries = () => {
 	return () => {
 		queryClient.invalidateQueries({
 			predicate: (query) =>
-				query.queryKey.some((key) =>
-					['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS', 'ARCHIVED_EPCS_FEATURES'].includes(
-						key as string
-					)
-				)
+				query.queryKey.some((key) => {
+					const invalidateKeys: readonly string[] = [
+						'OUTBOUND_EPC_LIST',
+						'OUTBOUND_EPC_BY_SIZE',
+						'ARCHIVED_EPCS',
+						'ARCHIVED_EPCS_FEATURES'
+					]
+					return invalidateKeys.includes(key as string)
+				})
 		})
 	}
 }
