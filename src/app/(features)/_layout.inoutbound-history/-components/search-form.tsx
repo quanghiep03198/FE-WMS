@@ -15,7 +15,7 @@ const SearchForm: React.FC = () => {
 	const form = useForm({
 		defaultValues: {
 			type: searchParams.type ?? RFIDDataType.INBOUND,
-			order: searchParams.order
+			order: searchParams.order ?? ''
 		}
 	})
 

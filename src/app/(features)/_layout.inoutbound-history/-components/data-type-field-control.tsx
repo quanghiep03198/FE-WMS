@@ -6,13 +6,12 @@ import {
 	FormLabel,
 	Icon,
 	IconProps,
-	Label,
 	RadioGroup,
 	RadioGroupItem,
-	Separator,
 	Typography
 } from '@/components/ui'
-import React, { Fragment } from 'react'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
+import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -23,19 +22,17 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 	const { setValue } = useFormContext()
 
 	return (
-		<Fragment>
-			<Div className='relative mx-auto w-full max-w-3xl'>
-				<Separator />
-				<Label className='absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 bg-background px-4 text-center text-base'>
-					{t('ns_common:others.lookup_question')}
-				</Label>
+		<Div className='place-content-center place-items-center space-y-4'>
+			<Div className='flex items-center gap-x-2'>
+				<Icon name='Bot' size={24} />
+				<Typewriter text={t('ns_common:others.lookup_question')} className='italic' />
 			</Div>
 			<FormField
 				name='type'
 				render={({ field }) => (
 					<FormItem>
 						<RadioGroup
-							className='mx-auto grid max-w-3xl grid-cols-2 items-stretch'
+							className='mx-auto grid max-w-3xl grid-cols-2 items-stretch gap-x-4'
 							value={field.value}
 							defaultValue={RFIDDataType.INBOUND}
 							onValueChange={(value) => {
@@ -64,7 +61,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 									</Div>
 									<CheckIcon
 										name='Check'
-										size={24}
+										size={28}
 										className='absolute right-4 top-4'
 										aria-checked={field.value === RFIDDataType.INBOUND}
 									/>
@@ -92,7 +89,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 									</Div>
 									<CheckIcon
 										name='Check'
-										size={24}
+										size={28}
 										aria-checked={field.value === RFIDDataType.OUTBOUND}
 										className='absolute right-4 top-4'
 									/>
@@ -102,7 +99,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 					</FormItem>
 				)}
 			/>
-		</Fragment>
+		</Div>
 	)
 }
 

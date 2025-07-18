@@ -98,9 +98,10 @@ const OutboundHistoryTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const orderQuantity = Array.isArray(data) ? Math.max(...data.map((item) => item.po_qty)) : 0
-	const accumulatedQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.outbound_qty, 0) : 0
-	const missingQuantity = Array.isArray(data) ? orderQuantity - accumulatedQuantity : 0
+	const hasData = Array.isArray(data) && data.length > 0
+	const orderQuantity = hasData ? Math.max(...data.map((item) => item.po_qty)) : 0
+	const accumulatedQuantity = hasData ? data.reduce((acc, curr) => acc + curr.outbound_qty, 0) : 0
+	const missingQuantity = hasData ? orderQuantity - accumulatedQuantity : 0
 
 	return (
 		<DataTable
