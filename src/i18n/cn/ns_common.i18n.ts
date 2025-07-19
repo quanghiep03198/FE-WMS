@@ -132,8 +132,9 @@ export default {
 		establishing_connection: '建立连接 ...',
 		error: '失败 !',
 		processing_request: '正在处理请求 ...',
+		receiving_data: '等待数据 ...',
 		success: '成功 !',
-		receiving_data: '等待数据 ...'
+		synchronizing_data: '正在同步数据，请稍候 ...'
 	},
 	others: {
 		all: '全部',

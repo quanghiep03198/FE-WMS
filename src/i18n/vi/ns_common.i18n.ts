@@ -133,8 +133,9 @@ export default {
 		establishing_connection: 'Đang thiết lập kết nối ...',
 		error: 'Đã có lỗi xảy ra !',
 		processing_request: 'Đang xử lý yêu cầu ...',
+		receiving_data: 'Đang lấy dữ liệu ...',
 		success: 'Thành công !',
-		receiving_data: 'Đang lấy dữ liệu ...'
+		synchronizing_data: 'Dữ liệu trong quá trình đồng bộ ...'
 	},
 	others: {
 		all: 'Tất cả',

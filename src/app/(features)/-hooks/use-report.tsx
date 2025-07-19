@@ -5,7 +5,7 @@ import { pick } from 'lodash'
 
 export const INBOUND_REPORT_PROVIDE_TAG = 'DAILY_INBOUND'
 export const OUTBOUND_REPORT_PROVIDE_TAG = 'DAILY_OUTBOUND'
-export const INVENTORY_REPORT_PROVIDE_TAG = 'MONTHLY_INVENTORY_REPORT'
+export const INVENTORY_AUDIT_PROVIDE_TAG = 'INVENTORY_AUDIT_REPORT'
 
 export const useGetInboundReport = (
 	tenantId: string,
@@ -36,7 +36,7 @@ export const useGetOutboundReport = (
 
 export const useGetInventoryAuditReport = (tenantId: string, params?: { 'month.eq': string }) => {
 	return useQuery({
-		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, tenantId, params],
+		queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, tenantId, params],
 		queryFn: async () => await InventoryService.getInventoryAuditReport(tenantId, params),
 		enabled: !!tenantId,
 		refetchOnWindowFocus: false,

@@ -34,9 +34,10 @@ import { pick } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { INVENTORY_REPORT_PROVIDE_TAG, useGetInventoryAuditReport } from '../../-hooks/use-report'
+import { INVENTORY_AUDIT_PROVIDE_TAG, useGetInventoryAuditReport } from '../../-hooks/use-report'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
 import { InventoryReportDetailTable } from './report-detail-table'
+import SyncDataTrigger from './sync-data-trigger'
 
 export const InventoryReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
@@ -223,6 +224,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				containerProps={{ className: 'xl:h-[50vh] h-[40vh]' }}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
+					slotLeft: () => <SyncDataTrigger />,
 					slotRight: () => <DataTableSlotRight downloadable={data?.length > 0} />
 				}}
 			/>
@@ -274,7 +276,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 					variant='outline'
 					onClick={() =>
 						queryClient.refetchQueries({
-							predicate: (query) => query.queryKey.some((queryKey) => queryKey === INVENTORY_REPORT_PROVIDE_TAG)
+							predicate: (query) => query.queryKey.some((queryKey) => queryKey === INVENTORY_AUDIT_PROVIDE_TAG)
 						})
 					}>
 					<Icon name='RotateCw' />
