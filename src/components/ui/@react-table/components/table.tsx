@@ -98,7 +98,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					{isColumnResizing || virtualizer.isScrolling ? <MemoizedDataTableHeader /> : <DataTableHeader />}
+					{isColumnResizing ? <MemoizedDataTableHeader /> : <DataTableHeader />}
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
 					) : isColumnResizing ? (
