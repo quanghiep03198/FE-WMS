@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { z } from 'zod'
-import { INVENTORY_REPORT_PROVIDE_TAG } from '../../-hooks/use-report'
+import { INVENTORY_AUDIT_PROVIDE_TAG } from '../../-hooks/use-report'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
 
 const reportDataSchema = z.object({
@@ -79,14 +79,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		onMutate: async (variable) => {
 			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
 			await queryClient.cancelQueries({
-				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams],
+				queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams],
 				exact: true
 			})
 			// Snapshot the previous value
-			const previousData = queryClient.getQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams])
+			const previousData = queryClient.getQueryData([INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams])
 
 			// Optimistically update to the new value
-			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams], variable)
+			queryClient.setQueryData([INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams], variable)
 			return { previousData }
 		},
 		onSuccess: () => {
@@ -95,11 +95,11 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		},
 		onError: (_error, _variable, context) => {
 			toast.error(t('ns_common:notification.error'))
-			queryClient.setQueryData([INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams], context.previousData)
+			queryClient.setQueryData([INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams], context.previousData)
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({
-				queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams],
+				queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams],
 				exact: true
 			})
 		}
@@ -123,7 +123,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	}
 
 	const fetchingQueries = useIsFetching({
-		queryKey: [INVENTORY_REPORT_PROVIDE_TAG, currentTenant?.id, searchParams],
+		queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams],
 		exact: true,
 		type: 'active',
 		fetchStatus: 'fetching',

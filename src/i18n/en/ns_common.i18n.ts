@@ -133,8 +133,9 @@ export default {
 		establish_connection: 'Establishing connection ...',
 		error: 'Something went wrong !',
 		processing_request: 'Processing request ...',
+		receiving_data: 'Waiting for data ...',
 		success: 'Successfully !',
-		receiving_data: 'Waiting for data ...'
+		synchronizing_data: 'Data synchronization is in progress ...'
 	},
 	pagination: {
 		ellipsis_count: '... and {{count}} more items',
