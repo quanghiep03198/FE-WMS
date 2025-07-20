@@ -29,6 +29,7 @@ const OutboundHistoryTable: React.FC = () => {
 						{t('ns_inoutbound:titles.outbound_history')}
 					</Typography>
 				),
+				enableGrouping: true,
 				columns: [
 					columnHelper.accessor('brand_name', {
 						header: t('ns_erp:fields.brand_name'),

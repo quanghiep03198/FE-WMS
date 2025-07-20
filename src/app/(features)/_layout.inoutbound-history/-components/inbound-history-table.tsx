@@ -29,7 +29,7 @@ const InboundHistoryTable: React.FC = () => {
 						{t('ns_inoutbound:titles.inbound_history')}
 					</Typography>
 				),
-
+				enableGrouping: true,
 				columns: [
 					columnHelper.accessor('factory_code', {
 						header: t('ns_common:common_fields.factory_code'),
