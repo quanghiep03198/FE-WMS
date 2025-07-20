@@ -81,7 +81,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				{...containerProps}>
 				<Table
 					ref={tableRef}
-					className='w-full table-fixed border-separate border-spacing-0 border-none'
+					className='w-full border-separate border-spacing-0 border-none'
 					style={{
 						...columnSizeVars,
 						minWidth: table.getTotalSize(),
