@@ -5,7 +5,6 @@ import { useMemoizedFn, useSize } from 'ahooks'
 import { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
-import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { MemoizedTableBody, TableBody } from './table-body'
@@ -20,7 +19,7 @@ type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 's
 	Pick<React.ComponentProps<'div'>, 'style'>
 
 function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
-	const { table, instanceId } = useTableContext('table', 'instanceId')
+	const { table } = useTableContext('table')
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
@@ -65,11 +64,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
 
-	const isColumnResizing =
-		table.getState().columnSizingInfo.isResizingColumn &&
-		!table.getState().columnPinning.left.some((columnId) => {
-			return columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
-		})
+	const isColumnResizing = table.getState().columnSizingInfo.isResizingColumn
 
 	return (
 		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
@@ -85,7 +80,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				}
 				{...containerProps}>
 				<Table
-					id={instanceId}
 					ref={tableRef}
 					className='w-full table-fixed border-separate border-spacing-0 border-none'
 					style={{
@@ -98,7 +92,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					{isColumnResizing ? <MemoizedDataTableHeader /> : <DataTableHeader />}
+					{isColumnResizing || virtualizer.isScrolling ? <MemoizedDataTableHeader /> : <DataTableHeader />}
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
 					) : isColumnResizing ? (
@@ -109,7 +103,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</ScrollArea>
-			{footerProps && <TableFooter {...{ table, ...footerProps }} />}
+			{footerProps && <TableFooter {...footerProps} />}
 		</Wrapper>
 	)
 }

@@ -2,7 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
 import { Header, flexRender } from '@tanstack/react-table'
-import { useUpdate } from 'ahooks'
 import { icons } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -26,7 +25,6 @@ type TableCellHeadProps<TData, TValue> = {
 
 export default function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
 	const { t } = useTranslation()
-	const rerender = useUpdate()
 	const { table, event$ } = useTableContext('table', 'event$')
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
@@ -66,14 +64,11 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 				style={
 					{
 						'--icon-size': '14px',
-						minWidth: `calc(var(--header-${header?.id}-size) * 1px)`
+						minWidth: `calc(var(--header-${header?.id}-size)*1px)`
 					} as React.CSSProperties
 				}
 				onClick={(e) => {
-					if (typeof toggleSorting === 'function') {
-						toggleSorting(e)
-						rerender()
-					}
+					if (typeof toggleSorting === 'function') toggleSorting(e)
 				}}
 				title={headerTitle}>
 				{columnDef.enableSorting && (
@@ -114,12 +109,18 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 					<ContextMenuSubContent className='w-56'>
 						<ContextMenuCheckboxItem
 							checked={header.column.getIsPinned() === (false as CheckedState)}
-							onCheckedChange={() => header.column.pin(false)}>
+							onCheckedChange={() => {
+								header.column.pin(false)
+								event$.emit({ columnPinning: table.getState().columnPinning })
+							}}>
 							{t('ns_common:table.unpin')}
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem
 							checked={header.column.getIsPinned() === ('left' as CheckedState)}
-							onCheckedChange={() => header.column.pin('left')}>
+							onCheckedChange={() => {
+								header.column.pin('left')
+								event$.emit({ columnPinning: table.getState().columnPinning })
+							}}>
 							{t('ns_common:table.pin_left')}
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem

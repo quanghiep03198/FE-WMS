@@ -1,30 +1,31 @@
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { CellContext, HeaderContext } from '@tanstack/react-table'
+import { CellContext, HeaderContext, RowData } from '@tanstack/react-table'
 import React, { useEffect, useState } from 'react'
 import { Checkbox } from '../../@core/checkbox'
 import { useTableContext } from '../context/table.context'
 
-type RowSelectionState = boolean | 'indeterminate'
-type IndeterminateCheckboxProps<TData, TValue> = HeaderContext<TData, TValue> & React.ComponentProps<typeof Checkbox>
-type RowSelectionCheckboxProps<TData, TValue> = CellContext<TData, TValue> & React.ComponentProps<typeof Checkbox>
+type IndeterminateCheckboxProps<TData extends RowData, TValue> = HeaderContext<TData, TValue> &
+	React.ComponentProps<typeof Checkbox>
 
-export function IndeterminateCheckbox<TData, TValue>({
+type RowSelectionCheckboxProps<TData extends RowData, TValue> = CellContext<TData, TValue> &
+	React.ComponentProps<typeof Checkbox>
+
+export function IndeterminateCheckbox<TData extends RowData, TValue>({
 	table,
-
 	onCheckedChange
 }: IndeterminateCheckboxProps<TData, TValue>) {
 	const { event$ } = useTableContext('table', 'event$')
 	const [checked, setChecked] = useState<CheckedState>(false)
 
-	event$.useSubscription((value: { rowSelectionState: RowSelectionState }) => {
-		if (typeof value.rowSelectionState === 'boolean' || value.rowSelectionState === 'indeterminate')
-			setChecked(value.rowSelectionState)
+	event$.useSubscription((value: { isAllRowsSelected?: CheckedState }) => {
+		if (typeof value.isAllRowsSelected === 'boolean' || value.isAllRowsSelected === 'indeterminate')
+			setChecked(value.isAllRowsSelected)
 	})
 
 	const handleCheckedChange = (checked: CheckedState) => {
 		setChecked(checked)
-		table.toggleAllPageRowsSelected(Boolean(checked))
-		if (typeof checked === 'boolean') event$.emit({ allPageRowSelected: checked })
+		table.toggleAllRowsSelected(Boolean(checked))
+		if (typeof checked === 'boolean') event$.emit({ isAllRowsSelected: checked })
 		if (typeof onCheckedChange === 'function') onCheckedChange(checked)
 	}
 
@@ -41,12 +42,13 @@ export function RowSelectionCheckbox<TData, TValue>({
 	const [checkedState, setCheckedState] = useState<CheckedState>(row.getIsSelected())
 
 	useEffect(() => {
-		const checked = table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
-		event$.emit({ rowSelectionState: checked })
+		event$.emit({
+			isAllRowsSelected: table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && 'indeterminate')
+		})
 	}, [checkedState, row])
 
-	event$.useSubscription((value: { allPageRowSelected: true }) => {
-		if (typeof value.allPageRowSelected === 'boolean') setCheckedState(value.allPageRowSelected)
+	event$.useSubscription((value: { isAllRowsSelected?: true }) => {
+		if (typeof value.isAllRowsSelected === 'boolean') setCheckedState(value.isAllRowsSelected)
 	})
 
 	const handleCheckedChange = (checked: CheckedState) => {

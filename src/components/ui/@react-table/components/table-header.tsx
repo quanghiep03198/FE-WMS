@@ -1,12 +1,12 @@
 import { cn } from '@/common/utils/cn'
-import { type Header, type HeaderGroup, type Table } from '@tanstack/react-table'
+import { Collapsible, CollapsibleContent, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { ColumnPinningState, type HeaderGroup } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import { Fragment, memo } from 'react'
-import { TableHead, TableHeader, TableRow } from '../../@core/table'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { DataTableUtility } from '../utils'
-import CollapsibleFilterCell from './collapsible-filter-cell'
+import { ColumnFilter } from './column-filter'
 import ColumnResizer from './column-resizer'
 import TableCellHead from './table-cell-head'
 
@@ -14,7 +14,7 @@ const DataTableHeader: React.FC = () => {
 	const { table, event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 
-	event$.useSubscription((value) => {
+	event$.useSubscription((value: { columnPinning?: ColumnPinningState }) => {
 		if (value.columnPinning && Array.isArray(value.columnPinning.left) && Array.isArray(value.columnPinning.right))
 			rerender()
 	})
@@ -24,7 +24,7 @@ const DataTableHeader: React.FC = () => {
 			{table.getHeaderGroups().map((headerGroup) => {
 				return (
 					<Fragment key={headerGroup.id}>
-						<TableHeaderRow table={table} headerGroup={headerGroup} />
+						<TableHeaderRow headerGroup={headerGroup} />
 						<TableHeaderFilterRow headerGroup={headerGroup} />
 					</Fragment>
 				)
@@ -33,7 +33,9 @@ const DataTableHeader: React.FC = () => {
 	)
 }
 
-const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
+const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
+	'use no memo'
+
 	return (
 		<TableRow>
 			{headerGroup.headers.map((header) => {
@@ -42,7 +44,22 @@ const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any
 					return null
 				}
 
-				return <DataTableHead key={header.id} header={header} rowSpan={rowSpan} />
+				return (
+					<TableHead
+						key={header.id}
+						colSpan={header.colSpan}
+						rowSpan={rowSpan}
+						className={cn('group relative z-40 bg-table-head p-0')}
+						align={header.column.columnDef.meta?.align}
+						style={{
+							height: `${DEFAULT_ESTIMATE_SIZE}px`,
+							width: `calc(var(--header-${header?.id}-size) * 1px)`,
+							...DataTableUtility.getStickyOffsetPosition(header?.column)
+						}}>
+						<TableCellHead header={header} />
+						<ColumnResizer header={header} />
+					</TableHead>
+				)
 			})}
 		</TableRow>
 	)
@@ -50,32 +67,34 @@ const TableHeaderRow: React.FC<{ table: Table<any>; headerGroup: HeaderGroup<any
 
 TableHeaderRow.displayName = 'TableHeaderRow'
 
-const DataTableHead: React.FC<{ header: Header<any, any>; rowSpan: number }> = ({ header, rowSpan }) => {
-	return (
-		<TableHead
-			colSpan={header.colSpan}
-			rowSpan={rowSpan}
-			className={cn('group relative z-40 bg-table-head p-0')}
-			align={header.column.columnDef.meta?.align}
-			style={{
-				height: `${DEFAULT_ESTIMATE_SIZE}px`,
-				width: `calc(var(--header-${header?.id}-size) * 1px)`,
-				...DataTableUtility.getStickyOffsetPosition(header?.column)
-			}}>
-			<TableCellHead header={header} />
-			<ColumnResizer header={header} />
-		</TableHead>
-	)
-}
-
-DataTableHead.displayName = 'DataTableHead'
-
 const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
+	'use no memo'
+
+	const { filterOpen } = useTableContext('filterOpen')
+
 	return (
 		headerGroup.headers.every((header) => header.colSpan === 1) && (
 			<TableRow>
 				{headerGroup.headers.map((header) => {
-					return <CollapsibleFilterCell key={header.id} header={header} />
+					return (
+						<TableHead
+							key={header.id}
+							colSpan={header.colSpan}
+							className={cn('group relative z-40 p-0', filterOpen ? 'border-b border-border' : 'border-none')}
+							style={{
+								width: `calc(var(--header-${header?.id}-size) * 1px)`,
+								...DataTableUtility.getStickyOffsetPosition(header?.column)
+							}}>
+							<Collapsible
+								defaultOpen={filterOpen}
+								open={filterOpen}
+								data-state={filterOpen ? 'open' : 'closed'}>
+								<CollapsibleContent className='h-10 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+									<ColumnFilter column={header.column} />
+								</CollapsibleContent>
+							</Collapsible>
+						</TableHead>
+					)
 				})}
 			</TableRow>
 		)

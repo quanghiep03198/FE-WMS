@@ -9,7 +9,6 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	RowSelectionState,
-	Table,
 	useReactTable,
 	type ColumnFiltersState,
 	type ExpandedState,
@@ -17,14 +16,11 @@ import {
 	type PaginationState,
 	type SortingState
 } from '@tanstack/react-table'
-import { useEventEmitter, useLatest, useResetState } from 'ahooks'
+import { useDeepCompareEffect, useEventEmitter, useResetState } from 'ahooks'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
-import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { v4 as uuidv4 } from 'uuid'
 import { create, StoreApi } from 'zustand'
-import { immer } from 'zustand/middleware/immer'
 import { MemoizedTableRowCount, TableRowCount } from './components/row-count'
 import DataTable from './components/table'
 import { MemoizedTablePagination, TablePagination } from './components/table-pagination'
@@ -37,7 +33,6 @@ import { fuzzySort } from './utils/fuzzy-sort.util'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
 function DataGrid<TData, TValue>({
-	instanceId = uuidv4(),
 	data,
 	caption,
 	columns,
@@ -76,7 +71,6 @@ function DataGrid<TData, TValue>({
 	ref,
 	...props
 }: DataTableProps<TData, TValue>) {
-	const { t } = useTranslation()
 	const originalData = useMemo(() => data ?? [], [data])
 
 	// * Table states declaration
@@ -95,10 +89,7 @@ function DataGrid<TData, TValue>({
 		pageSize: 10
 	}))
 
-	const hasNoFilter = useMemo(() => {
-		if (manualFiltering) return columnFilters?.length === 0
-		return _columnFilters?.length === 0 && _globalFilter?.length === 0
-	}, [_globalFilter, _columnFilters, columnFilters])
+	const event$ = useEventEmitter<Record<string, unknown>>()
 
 	// * Table declaration
 	const table = useReactTable({
@@ -215,50 +206,51 @@ function DataGrid<TData, TValue>({
 	})
 
 	// * Forwarding refs
-	const tableWrapperRef = useRef<HTMLDivElement>(null)
-	const tableRef = useLatest<Table<TData>>(table)
+	useEffect(() => {
+		if (ref && typeof ref === 'object' && 'current' in ref) {
+			ref.current = table
+		}
+	}, [table, ref])
 
 	/**
 	 * * Avoid infinite loop if data is empty
 	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
 	 */
-	useEffect(() => {
-		if (!isEqual(data, _data) && Array.isArray(data)) {
-			setData(data)
-		}
+	useDeepCompareEffect(() => {
+		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
 	}, [data])
-
-	/**
-	 * * Forwarding ref from parent component
-	 */
-	useEffect(() => {
-		if (ref) ref.current = tableRef.current
-	}, [tableRef.current])
 
 	const resetAllFilters = useCallback(() => {
 		table.resetGlobalFilter(table.initialState.globalFilter)
 		table.resetColumnFilters(true)
 	}, [])
 
-	const event$ = useEventEmitter<Record<string, any>>()
+	useEffect(() => {
+		const isAllFiltersCleared = manualFiltering
+			? columnFilters?.length === 0
+			: _columnFilters?.length === 0 && _globalFilter?.length === 0
+
+		event$.emit({ isAllFiltersCleared })
+	}, [_globalFilter, _columnFilters, columnFilters])
 
 	const store = useRef<StoreApi<TableContext>>(null)
 	if (!store.current)
-		store.current = create<TableContext>()(
-			immer(() => ({
-				table,
-				instanceId,
-				event$,
-				hasNoFilter,
-				defaultFilterOpen
-			}))
-		) as StoreApi<TableContext>
+		store.current = create((set) => ({
+			table,
+			event$,
+			filterOpen: !!defaultFilterOpen,
+			setFilterOpen(value) {
+				set((state) => {
+					return { ...state, filterOpen: value }
+				})
+			}
+		}))
 
 	const { isResizingColumn } = table.getState().columnSizingInfo
 
 	return (
 		<TableContext.Provider value={store.current}>
-			<DataTableWrapper ref={tableWrapperRef}>
+			<DataTableWrapper>
 				{!toolbarProps.hidden &&
 					(isResizingColumn ? (
 						<MemoizedTableToolbar

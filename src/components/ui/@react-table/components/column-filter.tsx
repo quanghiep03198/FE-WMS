@@ -1,4 +1,6 @@
 import { Column } from '@tanstack/react-table'
+import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
 import { DateRangePicker } from '../../@core/date-range-picker'
@@ -12,10 +14,15 @@ type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
 }
 
-export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: ColumnFilterProps<TData, TValue>) {
+export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
-	const filterVariant = column.columnDef.meta?.filterVariant satisfies ColumnFilterVariant
-	const { hasNoFilter } = useTableContext('hasNoFilter')
+	const filterVariant = column.columnDef.meta?.filterVariant
+	const [isAllFiltersCleared, setIsAllFiltersCleared] = useState(true)
+	const { event$ } = useTableContext('event$')
+
+	event$.useSubscription((value: { isAllFiltersCleared?: boolean }) => {
+		if (typeof value.isAllFiltersCleared === 'boolean') setIsAllFiltersCleared(value.isAllFiltersCleared)
+	})
 
 	const getFacetedUniqueValues = () => {
 		try {
@@ -49,13 +56,17 @@ export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: Col
 			return <NumberRangeFilter column={column} />
 		}
 		case 'date': {
+			const date = column.getFilterValue() as DateRange | undefined
+
 			return (
 				<DateRangePicker
 					triggerProps={{
 						className: 'border-none shadow-none hover:bg-background flex !text-xs font-medium'
 					}}
 					calendarProps={{
-						selected: column.getFilterValue(),
+						defaultMonth: date?.from ?? new Date(),
+						numberOfMonths: 1,
+						selected: date,
 						onSelect: (value) => column.setFilterValue(value)
 					}}
 				/>
@@ -72,7 +83,7 @@ export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: Col
 					}}
 					selectProps={{
 						defaultValue: '',
-						value: hasNoFilter ? '' : (column.getFilterValue() as string),
+						value: isAllFiltersCleared ? '' : (column.getFilterValue() as string),
 						onValueChange: (value) => {
 							column.setFilterValue(value)
 						}
@@ -116,7 +127,7 @@ export function ColumnFilter<TData, TValue, ColumnFilterVariant>({ column }: Col
 		default: {
 			return (
 				<DebouncedInput
-					value={(hasNoFilter ? '' : (column.getFilterValue() as any)) ?? ''}
+					value={(isAllFiltersCleared ? '' : (column.getFilterValue() as any)) ?? ''}
 					placeholder={t('ns_common:table.search_in_column')}
 					onChange={(value) => column.setFilterValue(value)}
 				/>

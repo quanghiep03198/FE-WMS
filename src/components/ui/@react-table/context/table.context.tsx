@@ -7,10 +7,9 @@ import { useShallow } from 'zustand/react/shallow'
 
 export type TableContext = {
 	table: Table<any>
-	instanceId: string
-	hasNoFilter: boolean
-	defaultFilterOpen: boolean
-	event$: EventEmitter<Record<string, any>>
+	filterOpen: boolean
+	setFilterOpen: (open: boolean) => void
+	event$: EventEmitter<Record<string, unknown>>
 }
 
 export const TableContext = createContext<StoreApi<TableContext>>(null)

@@ -93,10 +93,6 @@ export type RenderSubComponent<TData, TValue = any> = (props: {
 // #region Data table prop types
 export type DataTableProps<TData = any, TValue = any> = {
 	/**
-	 * Unique identifier for the table instance. Automatically generated if not provided.
-	 */
-	instanceId?: string
-	/**
 	 * Reference to the table instance. Useful for accessing table methods and properties.
 	 */
 	ref?: React.RefObject<Table<TData, TValue>>

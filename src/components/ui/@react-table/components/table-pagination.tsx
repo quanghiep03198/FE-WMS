@@ -206,6 +206,9 @@ function TablePagination<TData>({
 
 TablePagination.displayName = 'TablePagination'
 
-const MemoizedTablePagination = memo(TablePagination) as typeof TablePagination
+const MemoizedTablePagination = memo(
+	TablePagination,
+	(prevProps, nextProps) => prevProps.controlledPaginationProps === nextProps.controlledPaginationProps
+) as typeof TablePagination
 
 export { MemoizedTablePagination, TablePagination }

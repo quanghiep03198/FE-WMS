@@ -7,19 +7,19 @@ import { Row, RowData } from '@tanstack/react-table'
 
 declare module '@tanstack/react-table' {
 	type FilterComponentProps = {
-		readonly ['text']?: DebouncedInputProps<any>
-		readonly ['range']?: NumberRangeFilterProps<any>
-		readonly ['select']?: DropdownSelectProps<any>
-		readonly ['multi-select']?: MultiSelectProps<any>
-		readonly ['date']?: DateRangePickerProps<any>
+		['text']?: DebouncedInputProps<any>
+		['range']?: NumberRangeFilterProps<any>
+		['select']?: DropdownSelectProps<any>
+		['date']?: DateRangePickerProps<any>
+		['multi-select']?: MultiSelectProps<any>
 	}
 
-	export type ColumnFilterVariant = keyof FilterComponentProps
+	export type ColumnFilterVariant = 'text' | 'range' | 'select' | 'date' | 'multi-select'
 
 	interface ColumnMeta<TData extends RowData, TValue> {
 		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
-		filterVariant?: Variant
-		filterComponentProps?: FilterComponentProps[Variant]
+		filterVariant?: ColumnFilterVariant
+		filterComponentProps?: FilterComponentProps[FilterComponentProps]
 		title?: string
 		sticky?: 'left' | 'right'
 		rowSpan?: number
@@ -31,7 +31,7 @@ declare module '@tanstack/react-table' {
 
 	interface ColumnMetaWithFilterProps<TData extends RowData, TValue, Variant extends ColumnFilterVariant>
 		extends ColumnMeta<TData, TValue> {
-		filterComponentProps?: Partial<FilterComponentProps[Variant]>
+		filterComponentProps?: Partial<FilterComponentProps[FilterComponentProps]>
 	}
 
 	interface TableMeta<TData extends RowData> {
