@@ -37,9 +37,11 @@ export class DataTableUtility {
 					position: 'sticky',
 					zIndex: 10,
 					left: column.getStart('left'),
-					borderLeft: 'none',
-					boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined,
-					borderRight: !column.getIsLastColumn('left') ? '1px solid hsl(var(--border))' : undefined
+					borderLeft:
+						!column.getIsFirstColumn('left') && !column.columnDef.enableGrouping
+							? '1px solid hsl(var(--border))'
+							: undefined,
+					boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined
 				}
 			}
 			case 'right': {

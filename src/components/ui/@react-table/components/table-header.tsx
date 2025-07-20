@@ -36,6 +36,8 @@ const DataTableHeader: React.FC = () => {
 const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGroup }) => {
 	'use no memo'
 
+	const { table } = useTableContext('table')
+
 	return (
 		<TableRow>
 			{headerGroup.headers.map((header) => {
@@ -49,7 +51,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<any> }> = ({ headerGro
 						key={header.id}
 						colSpan={header.colSpan}
 						rowSpan={rowSpan}
-						className={cn('group relative z-40 bg-table-head p-0')}
+						className={cn('group relative z-50 bg-table-head p-0')}
 						align={header.column.columnDef.meta?.align}
 						style={{
 							height: `${DEFAULT_ESTIMATE_SIZE}px`,

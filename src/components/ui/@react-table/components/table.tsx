@@ -22,7 +22,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const { table } = useTableContext('table')
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
-	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
 
@@ -52,7 +51,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	})
 
 	const columnSizeVars = useMemo(() => {
-		const headers = table.getFlatHeaders()
+		const headers = table.getLeafHeaders()
 		const colSizes: { [key: string]: number } = {}
 		headers.forEach((header) => {
 			colSizes[`--header-${header.id}-size`] = header.getSize()
@@ -80,7 +79,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				}
 				{...containerProps}>
 				<Table
-					ref={tableRef}
 					className='w-full border-separate border-spacing-0 border-none'
 					style={{
 						...columnSizeVars,
