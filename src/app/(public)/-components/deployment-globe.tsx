@@ -20,7 +20,7 @@ const DeploymentGlobe: React.FC = () => {
 				<div className='inline-flex flex-1 items-center gap-x-2'>
 					<Icon name='Globe' strokeWidth={1} size={18} stroke='hsl(var(--muted-foreground))' />
 					<Typewriter
-						className='animate-overflow-hidden align-middle font-jetbrains text-xs leading-relaxed text-foreground data-[viewport=visible]:running data-[viewport=invisible]:paused sm:text-[10px]'
+						className='align-middle font-jetbrains text-xs leading-relaxed text-foreground sm:text-[10px]'
 						playState={inViewport ? 'running' : 'paused'}
 						text='Available in 2 regions'
 					/>
@@ -155,6 +155,7 @@ const DeploymentGlobe: React.FC = () => {
 				data-nimg='1'
 				className='h-full w-full'
 				src='/globe.svg'
+				loading='eager'
 				style={{ color: 'transparent' }}
 			/>
 		</div>

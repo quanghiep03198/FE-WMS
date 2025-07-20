@@ -72,9 +72,9 @@ const FeaturesSection: React.FunctionComponent = () => {
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
 					</Div>
-					<Div className='flex flex-wrap items-center justify-center gap-2 xl:justify-start'>
+					<Div className='flex max-w-lg flex-wrap items-center justify-center gap-2 xl:justify-start'>
 						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500'>
-							SaaS
+							On-premise
 						</Badge>
 						<Badge variant='secondary' className='bg-green-500/10 text-green-500'>
 							RFID

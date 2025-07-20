@@ -1,4 +1,4 @@
-import { Div, Typography } from '@/components/ui'
+import { Div, Icon, Typography } from '@/components/ui'
 import { cloneElement } from 'react'
 import tw from 'tailwind-styled-components'
 
@@ -6,8 +6,18 @@ const LogoCloud: React.FC = () => {
 	return (
 		<Div className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%]'>
 			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 xxl:max-w-8xl'>
-				<Typography variant='h4' className='mt-4'>
+				<Div className='size-56 translate-y-12 place-content-center place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
+					<Div className='size-40 place-content-center place-items-center rounded-full border-[1.5px] border-foreground/35'>
+						<Div className='size-24 place-content-center place-items-center rounded-full border border-foreground/50'>
+							<Icon name='Codesandbox' strokeWidth={1} size={60} />
+						</Div>
+					</Div>
+				</Div>
+				<Typography variant='h1' className='mb-2 mt-4'>
 					Developed with trusted technologies
+				</Typography>
+				<Typography className='xl:text-lg'>
+					We use the latest and most reliable technologies to build i-WMS, ensuring a robust and scalable solution.
 				</Typography>
 				<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
 					<LogoList />
@@ -27,6 +37,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/typescript.svg'
 				alt='TypeScript logo'
+				loading='lazy'
 				className='max-w-7 saturate-[0] transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>
@@ -34,11 +45,17 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/react.svg'
 				alt='React'
+				loading='lazy'
 				className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
-			<img src='/vite.svg' alt='Vite' className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100' />
+			<img
+				src='/vite.svg'
+				alt='Vite'
+				loading='lazy'
+				className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100'
+			/>
 		</LinkCard>
 		<LinkCard href='#'>
 			<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256' className='h-6 w-6'>
@@ -69,6 +86,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/tailwindcss.svg'
 				alt='Tailwind CSS'
+				loading='lazy'
 				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
 			/>
 		</LinkCard>
@@ -76,6 +94,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/reactquery.svg'
 				alt='Tanstack'
+				loading='lazy'
 				className='max-w-8 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-9'
 			/>
 		</LinkCard>
@@ -104,6 +123,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/nest.svg'
 				alt='NestJS'
+				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>
@@ -111,6 +131,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/mongodb.svg'
 				alt='MongoDB'
+				loading='lazy'
 				className='h-8 saturate-0 transition-all group-hover/card:saturate-100 xl:h-9'
 			/>
 		</LinkCard>
@@ -118,6 +139,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/redis.svg'
 				alt='Redis'
+				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>
@@ -125,6 +147,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/sentry.svg'
 				alt='Prometheus'
+				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:brightness-125 group-hover/card:saturate-100 xl:max-w-9'
 			/>
 		</LinkCard>
@@ -132,6 +155,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/prometheus.svg'
 				alt='Prometheus'
+				loading='lazy'
 				className='saturate-0 transition-all group-hover/card:saturate-100 xl:h-8'
 			/>
 		</LinkCard>
@@ -139,6 +163,7 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			<img
 				src='/grafana.svg'
 				alt='Grafana'
+				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>

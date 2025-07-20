@@ -1,98 +1,26 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { Separator } from '@/components/ui'
 import { useInViewport } from 'ahooks'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { usePageContext } from '../-contexts/page-context'
 
 const BeamAnimated: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
-	const clusterCubesRef = useRef<SVGPathElement>(null)
-	const standaloneCubeRef = useRef<SVGPathElement>(null)
-	const greenPathRef = useRef<SVGPathElement>(null)
-	const yellowPathRef = useRef<SVGPathElement>(null)
-	const greenGlowLightRef = useRef<HTMLDivElement>(null)
-	const yellowGlowLightRef = useRef<HTMLDivElement>(null)
-	const logoRef = useRef<HTMLDivElement>(null)
+	const svgRef = useRef<SVGSVGElement>(null)
+
 	const pageContext = usePageContext()
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+	const [renderCount, setRenderCount] = useState<number>(0)
 	const [inViewport] = useInViewport(containerRef, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 1
+		threshold: 0.75
 	})
 
-	const animatePath = (path: SVGPathElement, color: string, fill?: string) => {
-		if (!path) return
-		path.style.transitionProperty = 'fill, stroke'
-		path.style.transitionDuration = '0.5s'
-		path.style.transitionDelay = '0.25s'
-		path.style.transitionTimingFunction = 'ease-out'
-		path.style.fill = 'hsl(var(--muted))'
-		path.style.stroke = 'hsl(var(--muted))'
-
-		requestAnimationFrame(() => {
-			path.style.fill = fill ?? color
-			path.style.stroke = color
-		})
-	}
-
-	const animateGlowLight = (el: HTMLDivElement) => {
-		if (!el) return
-		el.style.transition = 'opacity 0.25s ease-out 0.25s'
-		el.style.opacity = '0'
-		requestAnimationFrame(() => {
-			el.style.opacity = '1'
-		})
-	}
-
-	const animateLogo = () => {
-		requestAnimationFrame(() => {
-			logoRef.current.style.transitionProperty = 'transform,box-shadow'
-			logoRef.current.style.transitionTimingFunction = 'ease-out'
-			logoRef.current.style.transitionDuration = '0.25s'
-			logoRef.current.style.transitionDelay = '1.1875s'
-
-			logoRef.current.style.boxShadow = '24px 24px 16px #0a0a0a98'
-			logoRef.current.style.transform = isSmallScreen ? 'translate(-12px,-12px)' : 'translate(-16px,-16px)'
-			logoRef.current.style.animationDelay = '1.25s'
-		})
-	}
-
-	const triggerAnimation = () => {
-		if (!inViewport) return
-		animateGlowLight(greenGlowLightRef.current)
-		animateGlowLight(yellowGlowLightRef.current)
-
-		const clusterCubes = clusterCubesRef.current?.childNodes
-		const singleCube = standaloneCubeRef.current?.childNodes
-		if (clusterCubes && Symbol.iterator in Object(clusterCubes)) {
-			if (!clusterCubesRef.current.classList.contains('animate-[fall-down_0.25s_ease-out_both]'))
-				clusterCubesRef.current.classList.add('animate-[fall-down_0.25s_linear_forwards]')
-			clusterCubes.forEach((path: SVGPathElement) => {
-				if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, 'var(--yellow)')
-			})
-			animatePath(yellowPathRef.current, 'url(#left-to-right)')
-		}
-		if (singleCube && Symbol.iterator in Object(singleCube)) {
-			if (!standaloneCubeRef.current.classList.contains('animate-[fall-down_0.25s_ease-out_both]'))
-				standaloneCubeRef.current.classList.add('animate-[fall-down_0.25s_ease-out_both]')
-			singleCube.forEach((path: SVGPathElement) => {
-				if (path.getAttribute('fill') === 'hsl(var(--muted))') animatePath(path, 'var(--green)')
-			})
-			animatePath(greenPathRef.current, 'url(#right-to-left)')
-		}
-
-		animateLogo()
-	}
-
 	useEffect(() => {
-		const timeout = setTimeout(() => {
-			triggerAnimation()
-		}, 300)
-
-		return () => {
-			clearTimeout(timeout)
+		if (inViewport) {
+			svgRef.current?.setCurrentTime(0)
+			setRenderCount((prev) => (prev === 0 ? 1 : prev + 1))
 		}
 	}, [inViewport])
 
@@ -105,14 +33,15 @@ const BeamAnimated: React.FC = () => {
 					'--yellow': '#eab308'
 				} as React.CSSProperties
 			}
-			className='container relative w-full'>
+			className='group/chip container relative w-full'>
 			<svg
 				width='100%'
 				height='200'
 				viewBox='0 0 650 200'
 				fill='none'
 				xmlns='http://www.w3.org/2000/svg'
-				className='mx-auto xl:w-[650px]'>
+				className='mx-auto xl:w-[650px]'
+				ref={svgRef}>
 				<defs>
 					<linearGradient offset={1} id='right-to-left'>
 						<stop offset={1} stopColor='hsl(var(--muted))'>
@@ -122,7 +51,7 @@ const BeamAnimated: React.FC = () => {
 								fill='freeze'
 								from={1}
 								to={0}
-								begin={inViewport ? 1 : Infinity}
+								begin={1}
 								calcMode='spline'
 								keySplines='0.45 0.35 1 1'
 							/>
@@ -134,33 +63,33 @@ const BeamAnimated: React.FC = () => {
 								fill='freeze'
 								from={1}
 								to={0}
-								begin={inViewport ? 1 : Infinity}
+								begin={1}
 								calcMode='spline'
 								keySplines='0.45 0.35 1 1'
 							/>
 						</stop>
 					</linearGradient>
 					<linearGradient offset={0} id='left-to-right'>
-						<stop offset={0} stopColor='var(--yellow)'>
+						<stop offset={0} begin={1.5} stopColor='var(--yellow)'>
 							<animate
 								dur={0.5}
 								attributeName='offset'
 								fill='freeze'
 								from={0}
 								to={1}
-								begin={inViewport ? 1 : Infinity}
+								begin={1}
 								calcMode='spline'
 								keySplines='0.45 0.35 1 1'
 							/>
 						</stop>
-						<stop offset={0} stopColor='hsl(var(--muted))'>
+						<stop offset={0} stopColor='hsl(var(--border))'>
 							<animate
 								dur={0.5}
 								attributeName='offset'
 								fill='freeze'
 								from={0}
 								to={1}
-								begin={inViewport ? 1 : Infinity}
+								begin={1}
 								calcMode='spline'
 								keySplines='0.45 0.35 1 1'
 							/>
@@ -168,7 +97,8 @@ const BeamAnimated: React.FC = () => {
 					</linearGradient>
 				</defs>
 				<g>
-					<g className='green-chip__base'>
+					{/* Standalone */}
+					<g className='standalone-chip__base'>
 						<rect
 							width='35.0955'
 							height='35.0923'
@@ -186,9 +116,14 @@ const BeamAnimated: React.FC = () => {
 							strokeWidth='4'
 						/>
 					</g>
-					<g className='standalone-cube -translate-y-10' ref={standaloneCubeRef}>
+					<g
+						className={cn(
+							'standalone-cube transition-all ease-in-out',
+							renderCount > 0
+								? 'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-500 [&_path]:duration-500 [&_path]:ease-in-out'
+								: '-translate-y-10 [&_path]:fill-muted'
+						)}>
 						<path
-							fill='hsl(var(--muted))'
 							stroke='hsl(var(--border))'
 							d='M573.798 105.165L573.684 96.2398L581.79 90.9291L590.029 96.0306L590.143 104.956L582.027 109.523L573.798 105.165Z'
 						/>
@@ -199,27 +134,34 @@ const BeamAnimated: React.FC = () => {
 						/>
 					</g>
 					<path
-						className='green-chip__connection'
-						ref={greenPathRef}
+						className='clustered-chip__connection'
 						fillRule='evenodd'
 						clipRule='evenodd'
+						fill={
+							renderCount === 1 ? 'url(#right-to-left)' : renderCount > 1 ? 'var(--green)' : 'hsl(var(--border))'
+						}
+						stroke={
+							renderCount === 1 ? 'url(#right-to-left)' : renderCount > 1 ? 'var(--green)' : 'hsl(var(--border))'
+						}
 						d='M440.083 64.7972L456.9 53.3972C463.204 49.4177 473.724 48.8842 480.397 52.2055L565 94.5L562.717 95.9411L478.114 53.6466C472.776 50.9895 464.359 51.4164 459.316 54.6L442.5 66L440.083 64.7972Z'
-						fill='hsl(var(--border))'
-						stroke='hsl(var(--border))'
 						strokeWidth='1.2'
 					/>
 					<path
-						ref={yellowPathRef}
-						className='cyan-chip__connection duration-500 animate-in'
+						className='standalone-chip__connection duration-500 animate-in'
 						strokeDashoffset={0}
 						fillRule='evenodd'
 						clipRule='evenodd'
 						d='M270 130L230.567 154.669C224.263 158.648 213.743 159.182 207.07 155.86L122.717 113.941L125 112.5L209.353 154.419C214.691 157.076 223.108 156.65 228.151 153.466L267.583 128.797L270 130Z'
-						fill='hsl(var(--border))'
-						stroke='hsl(var(--border))'
+						fill={
+							renderCount > 1 ? 'var(--yellow)' : renderCount === 1 ? 'url(#left-to-right)' : 'hsl(var(--muted))'
+						}
+						stroke={
+							renderCount > 1 ? 'var(--yellow)' : renderCount === 1 ? 'url(#left-to-right)' : 'hsl(var(--muted))'
+						}
 						strokeWidth='1.2'
 					/>
-					<g className='cyan-chip__base'>
+					{/* Clustered */}
+					<g className='clustered-chip__base'>
 						<rect
 							width='35.0955'
 							height='35.0923'
@@ -262,8 +204,13 @@ const BeamAnimated: React.FC = () => {
 							data-v-3ad4b943=''
 						/>
 					</g>
-
-					<g ref={clusterCubesRef} className={cn('-translate-y-10')}>
+					<g
+						className={cn(
+							'clustered-cube transition-transform ease-in-out',
+							renderCount >= 1
+								? 'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-500 [&_path]:duration-500 [&_path]:ease-in-out'
+								: '-translate-y-10 [&_path]:fill-muted'
+						)}>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
 							fill='hsl(var(--muted))'
@@ -323,8 +270,12 @@ const BeamAnimated: React.FC = () => {
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
-						ref={logoRef}
-						className='flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg border-2 border-muted-foreground bg-primary p-4 text-primary-foreground shadow-[4px_2px_4px_hsl(var(--secondary))] sm:size-16 sm:gap-y-2 sm:p-2 sm:text-lg md:gap-y-4 md:p-4'>
+						className={cn(
+							'flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg p-4 sm:size-16 sm:gap-y-2 sm:p-2 sm:text-lg md:gap-y-4 md:p-4',
+							renderCount > 0
+								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1500ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1500ms,box-shadow_300ms_ease-out_1500ms] sm:-translate-x-3 sm:-translate-y-3'
+								: 'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
+						)}>
 						<span className='h-6 text-center font-jetbrains text-2xl font-semibold transition-none duration-0 sm:text-base md:text-2xl xl:text-2xl'>
 							WMS
 						</span>
@@ -333,17 +284,17 @@ const BeamAnimated: React.FC = () => {
 				</div>
 			</div>
 			<div
-				ref={yellowGlowLightRef}
 				className={cn(
 					'sm:size-18 absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[var(--yellow)] opacity-0 blur-3xl will-change-[opacity] sm:left-[6%] md:left-[18%] lg:left-[22%] lg:size-32 lg:blur-[80px] xl:left-[10%] xl:size-24 xxl:left-[12%] xxl:size-32 xxl:blur-[80px]',
-					'transition-opacity delay-700 duration-500 ease-out'
+					'transition-opacity delay-700 duration-500 ease-out',
+					renderCount > 0 ? 'opacity-100' : 'opacity-0'
 				)}
 			/>
 			<div
-				ref={greenGlowLightRef}
 				className={cn(
 					'sm:size-18 absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[var(--green)] opacity-0 blur-3xl will-change-[opacity] sm:right-[6%] md:right-[12%] lg:right-[22%] lg:size-32 lg:blur-[80px] xl:right-[-6%] xl:size-24 xxl:right-[6%] xxl:size-32 xxl:blur-[80px]',
-					'transition-opacity delay-700 duration-500 ease-out'
+					'transition-opacity delay-700 duration-500 ease-out',
+					renderCount > 0 ? 'opacity-100' : 'opacity-0'
 				)}
 			/>
 		</div>

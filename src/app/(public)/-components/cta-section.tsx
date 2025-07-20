@@ -11,7 +11,7 @@ const CTASection: React.FC = () => {
 	const { theme } = useTheme()
 
 	const outstandingFeatures = [
-		'Friendly UI/UX',
+		'High interactive user interface',
 		'Real-time data streaming',
 		'Automated Inbound, Outbound & Auditing Process',
 		'Powerful analytics and reporting'
