@@ -1,14 +1,14 @@
 import { cn } from '@/common/utils/cn'
+import { useUpdateEffect } from 'ahooks'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type TypewriterProps = {
-	text?: string
+	text: string
 	typeSpeed?: number
 	delay?: number
 	playState?: 'running' | 'paused'
 	className?: string
-	onComplete?: () => void
 }
 
 export const Typewriter = ({
@@ -16,18 +16,11 @@ export const Typewriter = ({
 	typeSpeed = 32,
 	delay = 0,
 	playState = 'running',
-	className,
-	onComplete
+	className
 }: TypewriterProps) => {
 	const { i18n } = useTranslation()
 	const [displayedText, setDisplayedText] = useState('')
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
-	const onCompleteRef = useRef(onComplete) // Ref to store the latest onComplete
-
-	// Keep onComplete callback reference up-to-date without causing effect re-runs
-	useEffect(() => {
-		onCompleteRef.current = onComplete
-	}, [onComplete])
 
 	useEffect(() => {
 		if (playState === 'paused') return
@@ -46,7 +39,6 @@ export const Typewriter = ({
 					if (intervalRef.current) {
 						clearInterval(intervalRef.current)
 					}
-					onCompleteRef.current?.()
 				}
 			}, typeSpeed)
 		}
@@ -62,16 +54,11 @@ export const Typewriter = ({
 				clearInterval(intervalRef.current)
 			}
 		}
-	}, [text, typeSpeed, playState])
+	}, [text, typeSpeed, playState, delay, i18n.language])
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		setDisplayedText(text)
 	}, [i18n.language])
 
-	return (
-		<span
-			className={cn('whitespace-pre-wrap leading-7', className)}
-			dangerouslySetInnerHTML={{ __html: displayedText }}
-		/>
-	)
+	return <span className={cn('whitespace-pre-wrap leading-7', className)}>{displayedText}</span>
 }
