@@ -5,7 +5,7 @@ const PageHeader: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative place-content-end place-items-center space-y-2 py-2 text-center'>
+		<Div className='relative mt-4 place-content-end place-items-center space-y-2 text-center'>
 			<Icon name='FileSearch' size={48} strokeWidth={1} />
 			<Typography variant='h3' className='z-10 bg-background font-medium'>
 				{t('ns_inoutbound:titles.inoutbound_history_lookup')}

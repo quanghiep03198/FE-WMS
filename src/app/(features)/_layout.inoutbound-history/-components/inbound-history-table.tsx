@@ -1,6 +1,6 @@
 import { factories } from '@/common/constants/constants'
 import { IInboundHistory } from '@/common/types/entities'
-import { Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import { Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -22,7 +22,14 @@ const InboundHistoryTable: React.FC = () => {
 	const columns = useMemo(
 		() => [
 			columnHelper.group({
-				header: t('ns_inoutbound:titles.inbound_history'),
+				id: 'inbound_history',
+				header: () => (
+					<Typography as='span' variant='small' className='inline-flex items-center gap-x-2'>
+						<Icon name='History' size={20} />
+						{t('ns_inoutbound:titles.inbound_history')}
+					</Typography>
+				),
+
 				columns: [
 					columnHelper.accessor('factory_code', {
 						header: t('ns_common:common_fields.factory_code'),
@@ -104,15 +111,15 @@ const InboundHistoryTable: React.FC = () => {
 
 					columnHelper.accessor('inbound_date', {
 						header: t('ns_erp:fields.inbound_date'),
-						enableColumnFilter: false,
+						enableColumnFilter: true,
 						enableSorting: true,
-						minSize: 100,
-						filterFn: 'inNumberRange',
+						minSize: 200,
+						filterFn: 'inDateRange',
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? format(value, 'yyyy-MM-dd') : 'Unknown'
 						},
-						meta: { align: 'left' }
+						meta: { align: 'left', filterVariant: 'date' }
 					})
 				]
 			})
@@ -132,7 +139,7 @@ const InboundHistoryTable: React.FC = () => {
 			columns={columns}
 			defaultFilterOpen={true}
 			enableColumnResizing={true}
-			containerProps={{ style: { height: 350 } }}
+			containerProps={{ style: { height: 380 } }}
 			toolbarProps={{
 				slotRight: () => (
 					<Fragment>

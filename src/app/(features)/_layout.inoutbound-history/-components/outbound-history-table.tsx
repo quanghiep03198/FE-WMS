@@ -1,6 +1,6 @@
 import { IOutboundHistory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import { Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -22,7 +22,13 @@ const OutboundHistoryTable: React.FC = () => {
 	const columns = useMemo(
 		() => [
 			columnHelper.group({
-				header: t('ns_inoutbound:titles.outbound_history'),
+				id: 'outbound_history',
+				header: () => (
+					<Typography variant='small' className='inline-flex items-center gap-x-2'>
+						<Icon name='History' size={20} />
+						{t('ns_inoutbound:titles.outbound_history')}
+					</Typography>
+				),
 				columns: [
 					columnHelper.accessor('brand_name', {
 						header: t('ns_erp:fields.brand_name'),
@@ -84,8 +90,8 @@ const OutboundHistoryTable: React.FC = () => {
 						header: t('ns_erp:fields.outbound_date'),
 						enableColumnFilter: true,
 						enableSorting: true,
-						minSize: 100,
-						filterFn: 'inNumberRange',
+						minSize: 200,
+						filterFn: 'inDateRange',
 						cell: ({ getValue }) => {
 							const value = getValue()
 							return value ? format(value, 'yyyy-MM-dd') : 'Unknown'
@@ -110,7 +116,7 @@ const OutboundHistoryTable: React.FC = () => {
 			columns={columns}
 			defaultFilterOpen={true}
 			enableColumnResizing={true}
-			containerProps={{ style: { height: 350 } }}
+			containerProps={{ style: { height: 380 } }}
 			toolbarProps={{
 				slotRight: () => (
 					<Fragment>
