@@ -5,16 +5,16 @@ import { createContext, useContext } from 'react'
 import { StoreApi, useStore } from 'zustand'
 import { useShallow } from 'zustand/react/shallow'
 
-export type TableContext = {
+export type TableContextStore = {
 	table: Table<any>
 	filterOpen: boolean
 	setFilterOpen: (open: boolean) => void
 	event$: EventEmitter<Record<string, unknown>>
 }
 
-export const TableContext = createContext<StoreApi<TableContext>>(null)
+export const TableContext = createContext<StoreApi<TableContextStore>>(null)
 
-export const useTableContext = <T extends TableContext, K extends keyof TableContext>(...selectors: K[]) => {
+export const useTableContext = <T extends TableContextStore, K extends keyof TableContextStore>(...selectors: K[]) => {
 	const store = useContext(TableContext)
 	if (!store) throw new Error('Missing store provider')
 	if (!selectors) return useStore(store)

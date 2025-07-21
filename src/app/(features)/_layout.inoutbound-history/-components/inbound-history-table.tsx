@@ -30,14 +30,15 @@ const InboundHistoryTable: React.FC = () => {
 					</Typography>
 				),
 				enableGrouping: true,
+				enablePinning: false,
+				enableResizing: false,
 				columns: [
 					columnHelper.accessor('factory_code', {
 						header: t('ns_common:common_fields.factory_code'),
+						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
-						enablePinning: true,
-						minSize: 120,
-						size: 120,
+						enablePinning: false,
 						meta: {
 							filterVariant: 'select',
 							facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
@@ -54,33 +55,35 @@ const InboundHistoryTable: React.FC = () => {
 					}),
 					columnHelper.accessor('brand_name', {
 						header: t('ns_erp:fields.brand_name'),
+						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
-						enablePinning: true,
-						minSize: 100,
+						enablePinning: false,
 						filterFn: 'includesString'
 					}),
 					columnHelper.accessor('mo_no', {
 						header: t('ns_erp:fields.mo_no'),
+						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
-						enablePinning: true,
-						minSize: 100,
+						enablePinning: false,
+
 						filterFn: 'includesString'
 					}),
 					columnHelper.accessor('shoes_style_code_factory', {
 						header: t('ns_erp:fields.shoestyle_codefactory'),
+						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
 						filterFn: 'fuzzy',
-						minSize: 100,
+
 						cell: ({ getValue }) => getValue() ?? 'Unknown'
 					}),
 					columnHelper.accessor('color_sn', {
 						header: t('ns_erp:fields.color_sn'),
 						enableColumnFilter: true,
 						enableSorting: true,
-						minSize: 100,
+						enableResizing: true,
 						filterFn: 'fuzzy',
 						cell: ({ getValue }) => {
 							return getValue() ?? 'Unknown'
@@ -90,18 +93,27 @@ const InboundHistoryTable: React.FC = () => {
 						header: t('ns_erp:fields.mo_qty'),
 						enableColumnFilter: true,
 						enableSorting: true,
-						minSize: 100,
+						enableResizing: true,
 						filterFn: 'inNumberRange',
 						cell: ({ getValue }) => {
 							return getValue() ?? 'Unknown'
 						},
 						meta: { align: 'right', filterVariant: 'range' }
-					}),
+					})
+				]
+			}),
+			columnHelper.group({
+				id: 'inbound_details',
+				header: t('ns_inoutbound:titles.inbound_history'),
+				enableGrouping: true,
+				enablePinning: false,
+				enableResizing: true,
+				columns: [
 					columnHelper.accessor('inbound_qty', {
 						header: t('ns_erp:fields.inbound_qty'),
 						enableColumnFilter: true,
 						enableSorting: true,
-						minSize: 100,
+
 						filterFn: 'inNumberRange',
 						cell: ({ getValue }) => {
 							return getValue() ?? 'Unknown'
@@ -113,7 +125,7 @@ const InboundHistoryTable: React.FC = () => {
 						header: t('ns_erp:fields.inbound_date'),
 						enableColumnFilter: true,
 						enableSorting: true,
-						minSize: 200,
+						enableResizing: true,
 						filterFn: 'inDateRange',
 						cell: ({ getValue }) => {
 							const value = getValue()
@@ -138,7 +150,7 @@ const InboundHistoryTable: React.FC = () => {
 			loading={isLoading}
 			columns={columns}
 			defaultFilterOpen={true}
-			enableColumnResizing={true}
+			enableColumnPinning={false}
 			containerProps={{ style: { height: 380 } }}
 			toolbarProps={{
 				slotRight: () => (

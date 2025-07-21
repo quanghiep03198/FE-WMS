@@ -1,7 +1,8 @@
 import { cn } from '@/common/utils/cn'
-import { CheckedState } from '@radix-ui/react-checkbox'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
 import { Header, flexRender } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
+import { pick } from 'lodash'
 import { icons } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -28,6 +29,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 	const { table, event$ } = useTableContext('table', 'event$')
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
+	const rerender = useUpdate()
 
 	const currentSortingState: keyof typeof icons = (() => {
 		switch (getIsSorted()) {
@@ -47,6 +49,8 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 				? t('ns_common:table.sort_desc')
 				: t('ns_common:table.clear_sort')
 		: undefined
+
+	if (header.colSpan > 1) return <>{flexRender(columnDef.header, header.getContext())}</>
 
 	return (
 		<ContextMenu>
@@ -69,6 +73,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 				}
 				onClick={(e) => {
 					if (typeof toggleSorting === 'function') toggleSorting(e)
+					rerender()
 				}}
 				title={headerTitle}>
 				{columnDef.enableSorting && (
@@ -108,26 +113,26 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className='w-56'>
 						<ContextMenuCheckboxItem
-							checked={header.column.getIsPinned() === (false as CheckedState)}
+							checked={header.column.getIsPinned() === false}
 							onCheckedChange={() => {
 								header.column.pin(false)
-								event$.emit({ columnPinning: table.getState().columnPinning })
+								event$.emit(pick(table.getState(), ['columnPinning']))
 							}}>
 							{t('ns_common:table.unpin')}
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem
-							checked={header.column.getIsPinned() === ('left' as CheckedState)}
+							checked={header.column.getIsPinned() === 'left'}
 							onCheckedChange={() => {
 								header.column.pin('left')
-								event$.emit({ columnPinning: table.getState().columnPinning })
+								event$.emit(pick(table.getState(), ['columnPinning']))
 							}}>
 							{t('ns_common:table.pin_left')}
 						</ContextMenuCheckboxItem>
 						<ContextMenuCheckboxItem
-							checked={header.column.getIsPinned() === ('right' as CheckedState)}
+							checked={header.column.getIsPinned() === 'right'}
 							onCheckedChange={() => {
 								header.column.pin('right')
-								event$.emit({ columnPinning: table.getState().columnPinning })
+								event$.emit(pick(table.getState(), ['columnPinning']))
 							}}>
 							{t('ns_common:table.pin_right')}
 						</ContextMenuCheckboxItem>

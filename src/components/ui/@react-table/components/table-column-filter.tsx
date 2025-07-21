@@ -1,4 +1,5 @@
 import { Column } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'
@@ -6,7 +7,7 @@ import { Div, DropdownSelect, Icon } from '../..'
 import { DateRangePicker } from '../../@core/date-range-picker'
 import { DEFAULT_ESTIMATE_SIZE } from '../constants'
 import { useTableContext } from '../context/table.context'
-import { DebouncedInput } from './debounced-input'
+import { DebouncedInput, DebouncedInputProps } from './debounced-input'
 import MultiSelectColumnFilter from './multi-select-column-filter'
 import { NumberRangeFilter } from './number-range-filter'
 
@@ -14,11 +15,13 @@ type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>
 }
 
-export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
+export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
 	const filterVariant = column.columnDef.meta?.filterVariant
+	const columnFilterValue = column.getFilterValue()
 	const [isAllFiltersCleared, setIsAllFiltersCleared] = useState(true)
 	const { event$ } = useTableContext('event$')
+	const rerender = useUpdate()
 
 	event$.useSubscription((value: { isAllFiltersCleared?: boolean }) => {
 		if (typeof value.isAllFiltersCleared === 'boolean') setIsAllFiltersCleared(value.isAllFiltersCleared)
@@ -56,7 +59,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 			return <NumberRangeFilter column={column} />
 		}
 		case 'date': {
-			const date = column.getFilterValue() as DateRange | undefined
+			const date = columnFilterValue as DateRange | undefined
 
 			return (
 				<DateRangePicker
@@ -67,7 +70,10 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 						defaultMonth: date?.from ?? new Date(),
 						numberOfMonths: 1,
 						selected: date,
-						onSelect: (value) => column.setFilterValue(value)
+						onSelect: (value) => {
+							column.setFilterValue(value)
+							rerender()
+						}
 					}}
 				/>
 			)
@@ -108,8 +114,10 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		case 'multi-select': {
 			return (
 				<MultiSelectColumnFilter
-					value={(column.getFilterValue() ?? []) as string[]}
-					onValueChange={(value) => column.setFilterValue(value)}
+					value={(columnFilterValue ?? []) as string[]}
+					onValueChange={(value) => {
+						column.setFilterValue(value)
+					}}
 					datalist={
 						Array.isArray(metaUniqueValues)
 							? metaUniqueValues
@@ -127,7 +135,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 		default: {
 			return (
 				<DebouncedInput
-					value={(isAllFiltersCleared ? '' : (column.getFilterValue() as any)) ?? ''}
+					id={column.id}
+					value={(isAllFiltersCleared ? '' : (columnFilterValue as DebouncedInputProps['value'])) ?? ''}
 					placeholder={t('ns_common:table.search_in_column')}
 					onChange={(value) => column.setFilterValue(value)}
 				/>

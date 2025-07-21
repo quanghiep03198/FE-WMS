@@ -2,7 +2,7 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useSize } from 'ahooks'
-import { useId, useMemo, useRef } from 'react'
+import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
 import { useTableContext } from '../context/table.context'
@@ -12,7 +12,7 @@ import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
+import { DataTableHeader } from './table-header'
 
 type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
@@ -80,17 +80,20 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				{...containerProps}>
 				<Table
 					className='w-full border-separate border-spacing-0 border-none'
-					style={{
-						...columnSizeVars,
-						minWidth: table.getTotalSize(),
-						height: loading ? 'auto' : virtualizer.getTotalSize()
-					}}>
+					style={
+						{
+							...columnSizeVars,
+							minWidth: table.getTotalSize(),
+							height: loading ? 'auto' : virtualizer.getTotalSize(),
+							'--row-height': `${virtualizerOptions.estimateSize}px`
+						} as React.CSSProperties
+					}>
 					{caption && (
 						<TableCaption aria-labelledby={captionId} className='hidden'>
 							{caption}
 						</TableCaption>
 					)}
-					{isColumnResizing || virtualizer.isScrolling ? <MemoizedDataTableHeader /> : <DataTableHeader />}
+					<DataTableHeader />
 					{loading ? (
 						<TableBodyLoading table={table} prepareRows={10} />
 					) : isColumnResizing ? (
