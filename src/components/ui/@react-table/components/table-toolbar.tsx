@@ -2,6 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
+import { pick } from 'lodash'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
@@ -24,7 +25,7 @@ function TableToolbar<TData>({
 	slotLeft: SlotLeft,
 	slotRight: SlotRight
 }: TableToolbarProps<TData>) {
-	const { table } = useTableContext('table')
+	const { table, event$ } = useTableContext('table', 'event$')
 	const {
 		columnPinning: { left, right },
 		globalFilter,
@@ -46,7 +47,10 @@ function TableToolbar<TData>({
 					<Button
 						variant='destructive'
 						size='icon'
-						onClick={() => table.resetColumnPinning()}
+						onClick={() => {
+							table.resetColumnPinning()
+							event$.emit(pick(table.getState(), ['columnPinning']))
+						}}
 						className={cn(!isSomeColumnsPinned && 'hidden')}>
 						<Icon name='PinOff' />
 					</Button>

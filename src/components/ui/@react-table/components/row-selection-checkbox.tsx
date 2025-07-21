@@ -1,61 +1,62 @@
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { CellContext, HeaderContext, RowData } from '@tanstack/react-table'
-import React, { useEffect, useState } from 'react'
+import { CellContext, HeaderContext, RowData, RowSelectionState, TableState } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
+import { pick } from 'lodash'
+import React, { useEffect } from 'react'
 import { Checkbox } from '../../@core/checkbox'
 import { useTableContext } from '../context/table.context'
 
-type IndeterminateCheckboxProps<TData extends RowData, TValue> = HeaderContext<TData, TValue> &
-	React.ComponentProps<typeof Checkbox>
+type IndeterminateCheckboxProps<TData = RowData> = HeaderContext<TData, unknown> & React.ComponentProps<typeof Checkbox>
 
-type RowSelectionCheckboxProps<TData extends RowData, TValue> = CellContext<TData, TValue> &
-	React.ComponentProps<typeof Checkbox>
+type RowSelectionCheckboxProps<TData = RowData> = CellContext<TData, unknown> & React.ComponentProps<typeof Checkbox>
 
-export function IndeterminateCheckbox<TData extends RowData, TValue>({
+export const IndeterminateCheckbox: React.FC<IndeterminateCheckboxProps> = ({
 	table,
 	onCheckedChange
-}: IndeterminateCheckboxProps<TData, TValue>) {
+}: IndeterminateCheckboxProps<RowData>) => {
 	const { event$ } = useTableContext('table', 'event$')
-	const [checked, setChecked] = useState<CheckedState>(false)
+	const rerender = useUpdate()
 
-	event$.useSubscription((value: { isAllRowsSelected?: CheckedState }) => {
-		if (typeof value.isAllRowsSelected === 'boolean' || value.isAllRowsSelected === 'indeterminate')
-			setChecked(value.isAllRowsSelected)
+	event$.useSubscription((value: { rowSelection?: RowSelectionState }) => {
+		if (typeof value.rowSelection === 'object') {
+			rerender()
+		}
 	})
 
 	const handleCheckedChange = (checked: CheckedState) => {
-		setChecked(checked)
 		table.toggleAllRowsSelected(Boolean(checked))
-		if (typeof checked === 'boolean') event$.emit({ isAllRowsSelected: checked })
+		if (typeof checked === 'boolean') event$.emit(pick(table.getState(), ['rowSelection']))
 		if (typeof onCheckedChange === 'function') onCheckedChange(checked)
 	}
 
-	return <Checkbox checked={checked as CheckedState} onCheckedChange={handleCheckedChange} />
+	return (
+		<Checkbox
+			checked={(table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && 'indeterminate')) as CheckedState}
+			onCheckedChange={handleCheckedChange}
+		/>
+	)
 }
 
-export function RowSelectionCheckbox<TData, TValue>({
-	row,
-	disabled,
-	onCheckedChange
-}: RowSelectionCheckboxProps<TData, TValue>) {
-	const { table, event$ } = useTableContext('table', 'event$')
+IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
-	const [checkedState, setCheckedState] = useState<CheckedState>(row.getIsSelected())
+export const RowSelectionCheckbox: React.FC<RowSelectionCheckboxProps> = ({ row, disabled, onCheckedChange }) => {
+	const { table, event$ } = useTableContext('table', 'event$')
+	const rerender = useUpdate()
 
 	useEffect(() => {
-		event$.emit({
-			isAllRowsSelected: table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && 'indeterminate')
-		})
-	}, [checkedState, row])
+		event$.emit(pick(table.getState(), ['rowSelection']))
+	}, [row.getIsSelected()])
 
-	event$.useSubscription((value: { isAllRowsSelected?: true }) => {
-		if (typeof value.isAllRowsSelected === 'boolean') setCheckedState(value.isAllRowsSelected)
+	event$.useSubscription((value: Partial<Pick<TableState, 'rowSelection'>>) => {
+		if (typeof value.rowSelection === 'object') rerender()
 	})
 
 	const handleCheckedChange = (checked: CheckedState) => {
-		setCheckedState(checked)
 		row.toggleSelected(Boolean(checked))
 		if (typeof onCheckedChange === 'function') onCheckedChange(checked)
 	}
 
-	return <Checkbox disabled={disabled} checked={checkedState} onCheckedChange={handleCheckedChange} />
+	return <Checkbox disabled={disabled} checked={row.getIsSelected()} onCheckedChange={handleCheckedChange} />
 }
+
+RowSelectionCheckbox.displayName = 'RowSelectionCheckbox'

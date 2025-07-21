@@ -26,7 +26,7 @@ import DataTable from './components/table'
 import { MemoizedTablePagination, TablePagination } from './components/table-pagination'
 import { MemoizedTableToolbar, TableToolbar } from './components/table-toolbar'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
-import { TableContext } from './context/table.context'
+import { TableContext, TableContextStore } from './context/table.context'
 import { type DataTableProps } from './types'
 import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
@@ -233,9 +233,9 @@ function DataGrid<TData, TValue>({
 		event$.emit({ isAllFiltersCleared })
 	}, [_globalFilter, _columnFilters, columnFilters])
 
-	const store = useRef<StoreApi<TableContext>>(null)
+	const store = useRef<StoreApi<TableContextStore>>(null)
 	if (!store.current)
-		store.current = create((set) => ({
+		store.current = create<TableContextStore>((set) => ({
 			table,
 			event$,
 			filterOpen: !!defaultFilterOpen,
