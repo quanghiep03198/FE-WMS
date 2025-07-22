@@ -73,6 +73,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 					/>
 				),
 				size: 50,
+				maxSize: 50,
 				enableSorting: false,
 				enableHiding: false,
 				enableResizing: false
@@ -186,6 +187,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
 				size: 100,
+				maxSize: 100,
 				cell: ({ row }) => {
 					return (
 						<StorageRowActions

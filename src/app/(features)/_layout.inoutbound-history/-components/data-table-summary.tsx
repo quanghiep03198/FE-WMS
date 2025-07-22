@@ -16,13 +16,13 @@ export default function DataTableSummary({
 
 	return (
 		<Table className='w-full table-fixed'>
-			<TableHeader>
+			<TableHeader className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
 				<TableRow>
-					<TableHead colSpan={2} className='bg-muted text-muted-foreground'>
+					<TableHead colSpan={2} className='!text-foreground'>
 						{t('ns_common:titles.overall')}
 					</TableHead>
 				</TableRow>
-				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
+				<TableRow>
 					<TableHead align='right'>{t('ns_erp:fields.accumulated_qty')}</TableHead>
 					<TableHead align='right'>{t('ns_erp:fields.missing_qty')}</TableHead>
 				</TableRow>

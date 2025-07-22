@@ -84,9 +84,10 @@ export const InventoryReportMasterTable: React.FC = () => {
 			}),
 			columnHelper.display({
 				id: ROW_SELECTION_COLUMN_ID,
-				header: IndeterminateCheckbox,
-				cell: RowSelectionCheckbox,
+				header: (props) => <IndeterminateCheckbox {...props} />,
+				cell: (props) => <RowSelectionCheckbox {...props} />,
 				size: 50,
+				maxSize: 50,
 				enableSorting: false,
 				enableHiding: false,
 				enableResizing: false,
@@ -97,7 +98,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 100,
+				enableResizing: true,
 				filterFn: 'fuzzy',
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
@@ -107,7 +108,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 100,
+				enableResizing: true,
 				meta: { align: 'left' },
 				filterFn: 'includesString'
 			}),
@@ -116,8 +117,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				filterFn: 'fuzzy',
-				minSize: 100,
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
@@ -126,8 +127,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				filterFn: 'fuzzy',
-				minSize: 100,
 				meta: {
 					align: 'left'
 				},
@@ -137,7 +138,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.color_sn'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				minSize: 100,
+				enablePinning: true,
+				enableResizing: true,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					return getValue() ?? 'Unknown'
@@ -148,9 +150,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
@@ -159,9 +161,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('total_instock_qty', {
@@ -169,9 +171,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('total_outstock_qty', {
@@ -179,9 +181,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('actual_inv_qty', {
@@ -189,9 +191,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('final_inv_qty', {
@@ -199,9 +201,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableResizing: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
@@ -219,6 +221,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				getRowCanExpand={() => true}
 				enableRowSelection={true}
 				enableExpanding={true}
+				enableColumnResizing={true}
 				manualExpanding={true}
 				renderSubComponent={DataDetailTable}
 				containerProps={{ className: 'xl:h-[50vh] h-[40vh]' }}

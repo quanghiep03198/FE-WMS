@@ -26,7 +26,6 @@ const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>()
 	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
-
 	const { data, isLoading, refetch } = useGetOutboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
@@ -49,6 +48,7 @@ const ReportDatalist: React.FC = () => {
 				size: 50,
 				maxSize: 50,
 				enableResizing: false,
+				enableHiding: false,
 				cell: ({ row, table }) => (
 					<button
 						className='absolute inset-0 flex h-full w-full items-center justify-center'
@@ -61,28 +61,31 @@ const ReportDatalist: React.FC = () => {
 				)
 			}),
 			columnHelper.accessor('po', {
-				header: 'PO',
+				header: t('ns_erp:fields.po'),
+				enableGlobalFilter: true,
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
+				enableHiding: false,
 				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
+				enableGlobalFilter: true,
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 150,
+				enableHiding: false,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
+				enableGlobalFilter: true,
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 100,
+				enableHiding: false,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
@@ -92,18 +95,17 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 100
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('daily_outbound_qty', {
 				header: t('ns_erp:fields.daily_outbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableHiding: false,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 100
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('accumulated_qty', {
 				header: t('ns_erp:fields.accumulated_qty'),
@@ -112,8 +114,7 @@ const ReportDatalist: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 100
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('missing_qty', {
 				header: t('ns_erp:fields.missing_qty'),
@@ -122,7 +123,6 @@ const ReportDatalist: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				minSize: 100,
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
