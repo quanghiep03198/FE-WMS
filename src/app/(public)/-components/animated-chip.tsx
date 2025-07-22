@@ -120,7 +120,7 @@ const BeamAnimated: React.FC = () => {
 						className={cn(
 							'standalone-cube transition-all ease-in-out',
 							renderCount > 0
-								? 'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-500 [&_path]:duration-500 [&_path]:ease-in-out'
+								? 'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 								: '-translate-y-10 [&_path]:fill-muted'
 						)}>
 						<path
@@ -207,8 +207,8 @@ const BeamAnimated: React.FC = () => {
 					<g
 						className={cn(
 							'clustered-cube transition-transform ease-in-out',
-							renderCount >= 1
-								? 'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-500 [&_path]:duration-500 [&_path]:ease-in-out'
+							renderCount > 0
+								? 'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 								: '-translate-y-10 [&_path]:fill-muted'
 						)}>
 						<path

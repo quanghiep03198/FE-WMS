@@ -15,7 +15,7 @@ const SupportSection: React.FunctionComponent = () => {
 
 	return (
 		<Div
-			id='cta'
+			id='support'
 			as='section'
 			ref={ref}
 			style={{

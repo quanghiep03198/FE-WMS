@@ -1,10 +1,27 @@
 import { Div, Icon, Typography } from '@/components/ui'
-import { cloneElement } from 'react'
+import { useInViewport } from 'ahooks'
+import { cloneElement, useRef } from 'react'
 import tw from 'tailwind-styled-components'
+import { usePageContext } from '../-contexts/page-context'
 
 const LogoCloud: React.FC = () => {
+	const ref = useRef<HTMLDivElement>(null)
+	const pageContext = usePageContext()
+	const [inViewport] = useInViewport(ref, {
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
+	})
+
 	return (
-		<Div className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%]'>
+		<Div
+			id='logo-cloud'
+			as='section'
+			ref={ref}
+			style={{
+				animationFillMode: 'both',
+				animationPlayState: inViewport ? 'running' : 'paused'
+			}}
+			className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%] duration-700 animate-in fade-in-0 slide-in-from-bottom-4'>
 			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 xxl:max-w-8xl'>
 				<Div className='size-56 translate-y-12 place-content-center place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
 					<Div className='size-40 place-content-center place-items-center rounded-full border-[1.5px] border-foreground/35'>
