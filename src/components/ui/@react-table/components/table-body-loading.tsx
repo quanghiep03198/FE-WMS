@@ -1,15 +1,12 @@
-import { Table } from '@tanstack/react-table'
 import { TableCell, TableRow } from '../..'
 import Skeleton from '../../@custom/skeleton'
-import { DataTableUtility } from '../utils/table.util'
+import { useTableContext } from '../context/table.context'
+import { getStickyOffsetPosition } from '../utils'
 
-type DataTableLoading<TData> = {
-	table: Table<TData>
-	prepareRows: number
-}
+export const TableBodyLoading: React.FC = () => {
+	const { table } = useTableContext('table')
 
-export function TableBodyLoading<T>({ prepareRows, table }: DataTableLoading<T>) {
-	const preRenderRows = Array.from(new Array(prepareRows), (_, index) => index)
+	const preRenderRows = Array.from(new Array(10), (_, index) => index)
 	const preRenderColumns = table.getAllLeafColumns()
 
 	return preRenderRows.map((rowIndex) => (
@@ -19,9 +16,9 @@ export function TableBodyLoading<T>({ prepareRows, table }: DataTableLoading<T>)
 					<TableCell
 						key={`${rowIndex}-${columnIndex}`}
 						style={{
-							...DataTableUtility.getStickyOffsetPosition(column),
+							...getStickyOffsetPosition(column),
 							width: `calc(var(--col-${column?.id}-size) * 1px)`,
-							height: 40
+							height: 'var(--row-height)'
 						}}>
 						<Skeleton />
 					</TableCell>

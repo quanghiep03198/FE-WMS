@@ -1,14 +1,13 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
-import { flexRender, type Row, type Table } from '@tanstack/react-table'
+import { flexRender, type Row } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
-import { DataTableUtility } from '../utils/table.util'
+import { columnSizingHandler, getStickyOffsetPosition } from '../utils/table.util'
 import { type TableBodyProps } from './table-body'
 
 type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
-	table?: Table<any>
 	row: Row<any>
 	size: number
 }
@@ -30,10 +29,11 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubC
 							{...cell.column.columnDef?.meta?.tableCellProps}
 							key={cell.id}
 							align={cell.column.columnDef.meta?.align}
+							ref={(node) => columnSizingHandler(node, table, cell.column)}
 							style={{
-								width: `calc(var(--col-${cell.column.id}-size) * 1px)`,
+								width: `calc(var(--column-${cell.column.id}-size) * 1px)`,
 								height: size,
-								...DataTableUtility.getStickyOffsetPosition(cell.column)
+								...getStickyOffsetPosition(cell.column)
 							}}>
 							<Div
 								className={cn('!line-clamp-1', {

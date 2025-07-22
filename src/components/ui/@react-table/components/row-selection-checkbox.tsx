@@ -6,14 +6,16 @@ import React, { useEffect } from 'react'
 import { Checkbox } from '../../@core/checkbox'
 import { useTableContext } from '../context/table.context'
 
-type IndeterminateCheckboxProps<TData = RowData> = HeaderContext<TData, unknown> & React.ComponentProps<typeof Checkbox>
+type IndeterminateCheckboxProps<TData extends RowData> = HeaderContext<TData, unknown> &
+	React.ComponentProps<typeof Checkbox>
 
-type RowSelectionCheckboxProps<TData = RowData> = CellContext<TData, unknown> & React.ComponentProps<typeof Checkbox>
+type RowSelectionCheckboxProps<TData extends RowData> = CellContext<TData, unknown> &
+	React.ComponentProps<typeof Checkbox>
 
-export const IndeterminateCheckbox: React.FC<IndeterminateCheckboxProps> = ({
+export function IndeterminateCheckbox<TData extends RowData>({
 	table,
 	onCheckedChange
-}: IndeterminateCheckboxProps<RowData>) => {
+}: IndeterminateCheckboxProps<TData>) {
 	const { event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 
@@ -39,7 +41,11 @@ export const IndeterminateCheckbox: React.FC<IndeterminateCheckboxProps> = ({
 
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
-export const RowSelectionCheckbox: React.FC<RowSelectionCheckboxProps> = ({ row, disabled, onCheckedChange }) => {
+export function RowSelectionCheckbox<TData extends RowData>({
+	row,
+	disabled,
+	onCheckedChange
+}: RowSelectionCheckboxProps<TData>) {
 	const { table, event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 

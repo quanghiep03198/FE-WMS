@@ -2,6 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
+import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,18 +14,11 @@ import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
 type TableToolbarProps<TData> = {
-	enableGlobalFilter: boolean
-	onResetAllFilters: () => void
 	slotLeft?: React.FC<{ table?: Table<TData> }>
 	slotRight?: React.FC<{ table?: Table<TData> }>
 }
 
-function TableToolbar<TData>({
-	enableGlobalFilter,
-	onResetAllFilters,
-	slotLeft: SlotLeft,
-	slotRight: SlotRight
-}: TableToolbarProps<TData>) {
+function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: TableToolbarProps<TData>) {
 	const { table, event$ } = useTableContext('table', 'event$')
 	const {
 		columnPinning: { left, right },
@@ -38,6 +32,11 @@ function TableToolbar<TData>({
 	const isSomeColumnsPinned =
 		left.some((columnId) => columnId !== ROW_SELECTION_COLUMN_ID && columnId !== ROW_EXPANSION_COLUMN_ID) ||
 		right.some((columnId) => columnId !== ROW_ACTIONS_COLUMN_ID)
+
+	const resetAllFilters = useMemoizedFn(() => {
+		table.resetGlobalFilter(table.initialState.globalFilter)
+		table.resetColumnFilters(true)
+	})
 
 	return (
 		<Div role='toolbar' className='flex items-center justify-between py-0.5'>
@@ -59,19 +58,25 @@ function TableToolbar<TData>({
 					<Button
 						variant='destructive'
 						size='icon'
-						onClick={() => onResetAllFilters()}
+						onClick={() => resetAllFilters()}
 						className={cn(!isFilterDirty && 'hidden')}>
 						<Icon name='FilterX' />
 					</Button>
 				</Tooltip>
-
 				{SlotRight && <SlotRight table={table} />}
 				<GlobalFilterPopover
-					enableGlobalFilter={enableGlobalFilter}
+					enableGlobalFilter={table.options.enableGlobalFilter}
 					globalFilter={table.getState().globalFilter}
 					onGlobalFilterChange={table.setGlobalFilter}
 				/>
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && <ColumnFilterToggle />}
+				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) && (
+					<Tooltip message={t('ns_common:table.reset_size')} triggerProps={{ asChild: true }}>
+						<Button variant='outline' size='icon' onClick={() => table.resetColumnSizing()}>
+							<Icon name='MoveHorizontal' />
+						</Button>
+					</Tooltip>
+				)}
 				<TableViewOptions />
 			</Div>
 		</Div>

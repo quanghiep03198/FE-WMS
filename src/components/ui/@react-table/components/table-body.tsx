@@ -1,5 +1,5 @@
 import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
-import { RowData, Table, type Row as TRow } from '@tanstack/react-table'
+import { type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
 import { TableBody as TableRowGroup } from '../../@core/table'
@@ -9,7 +9,6 @@ import { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow } from 
 
 type TableBodyProps = {
 	virtualizer: Virtualizer<HTMLDivElement, Element>
-	table?: Table<RowData>
 	renderSubComponent: RenderSubComponent<any>
 }
 
@@ -19,14 +18,9 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 	const { table } = useTableContext('table')
 	const { before, after } = useVirutalScrollOffset(virtualizer)
 	const virtualItems = virtualizer.getVirtualItems()
-
-	const { rows } = table.getRowModel()
-	const {
-		columnSizingInfo: { isResizingColumn }
-	} = table.getState()
-	const isSomeRowsExpanded = table.getIsSomeRowsExpanded()
 	const colSpan = table.getAllColumns().length
-	const shouldSkipRerender = isResizingColumn || (virtualizer.isScrolling && !isSomeRowsExpanded)
+	const { rows } = table.getRowModel()
+	const shouldSkipRerender = virtualizer.isScrolling && !table.getIsSomeRowsExpanded()
 
 	return (
 		<TableRowGroup>
