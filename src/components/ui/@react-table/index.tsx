@@ -17,7 +17,7 @@ import {
 	type SortingState
 } from '@tanstack/react-table'
 import { useDeepCompareEffect, useEventEmitter, useResetState } from 'ahooks'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import tw from 'tailwind-styled-components'
 import { create, StoreApi } from 'zustand'
@@ -96,7 +96,7 @@ function DataGrid<TData, TValue>({
 		data: _data,
 		columns,
 		defaultColumn: {
-			minSize: 60,
+			minSize: 180,
 			maxSize: 800
 		},
 		initialState: {
@@ -205,7 +205,10 @@ function DataGrid<TData, TValue>({
 		// getSubRows: (row) => row.subRows,
 	})
 
-	// * Forwarding refs
+	/**
+	 * * Forward table instance to ref if provided
+	 * * This is useful for parent components to access the table instance methods and properties
+	 */
 	useEffect(() => {
 		if (ref && typeof ref === 'object' && 'current' in ref) {
 			ref.current = table
@@ -214,17 +217,16 @@ function DataGrid<TData, TValue>({
 
 	/**
 	 * * Avoid infinite loop if data is empty
+	 *
 	 * @see {@link https://github.com/TanStack/table/issues/4566 | Github issue}
 	 */
 	useDeepCompareEffect(() => {
 		if (!isEqual(data, _data) && Array.isArray(data)) setData(data)
 	}, [data])
 
-	const resetAllFilters = useCallback(() => {
-		table.resetGlobalFilter(table.initialState.globalFilter)
-		table.resetColumnFilters(true)
-	}, [])
-
+	/**
+	 * * Emit event when all filters are cleared
+	 */
 	useEffect(() => {
 		const isAllFiltersCleared = manualFiltering
 			? columnFilters?.length === 0
@@ -233,6 +235,10 @@ function DataGrid<TData, TValue>({
 		event$.emit({ isAllFiltersCleared })
 	}, [_globalFilter, _columnFilters, columnFilters])
 
+	/**
+	 * * Table context store
+	 * * This store is used to provide the table instance and event emitter to the table context
+	 */
 	const store = useRef<StoreApi<TableContextStore>>(null)
 	if (!store.current)
 		store.current = create<TableContextStore>((set) => ({
@@ -253,19 +259,9 @@ function DataGrid<TData, TValue>({
 			<DataTableWrapper>
 				{!toolbarProps.hidden &&
 					(isResizingColumn ? (
-						<MemoizedTableToolbar
-							enableGlobalFilter={enableGlobalFilter}
-							onResetAllFilters={resetAllFilters}
-							slotLeft={toolbarProps.slotLeft}
-							slotRight={toolbarProps.slotRight}
-						/>
+						<MemoizedTableToolbar slotLeft={toolbarProps.slotLeft} slotRight={toolbarProps.slotRight} />
 					) : (
-						<TableToolbar
-							enableGlobalFilter={enableGlobalFilter}
-							onResetAllFilters={resetAllFilters}
-							slotLeft={toolbarProps.slotLeft}
-							slotRight={toolbarProps.slotRight}
-						/>
+						<TableToolbar slotLeft={toolbarProps.slotLeft} slotRight={toolbarProps.slotRight} />
 					))}
 				<DataTable
 					columns={columns}
@@ -312,7 +308,7 @@ function DataGrid<TData, TValue>({
 	)
 }
 
-const DataTableWrapper = tw.div`space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200`
+const DataTableWrapper = tw.div`*:box-border space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200`
 const FooterGroup = memo(tw.div`flex items-center justify-between`, (prevProps, nextProps) => prevProps === nextProps)
 
 export default DataGrid

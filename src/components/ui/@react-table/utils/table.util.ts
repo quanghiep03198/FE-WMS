@@ -1,68 +1,47 @@
-import { Column, ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import { Column, Table } from '@tanstack/react-table'
 import { CSSProperties } from 'react'
 
-export class DataTableUtility {
-	/**
-	 * @description Transform column filters from array to object
-	 * @param {SortingState} sorting
-	 * @returns {Record<string, any>}
-	 */
-	public static getColumnFiltersObject(columnFilters: ColumnFiltersState) {
-		if (!Array.isArray(columnFilters) || columnFilters?.length === 0) return {}
-		return columnFilters.reduce((accumulator, currentValue) => {
-			accumulator[currentValue.id] = currentValue.value
-			return accumulator
-		}, {})
-	}
+export function columnSizingHandler(node: HTMLTableCellElement | null, table: Table<any>, column: Column<any>) {
+	if (!node) return
+	// If you don't do that, there will be an infinite loop. We update the value in state only if the value has actually changed.
+	if (table.getState().columnSizing[column.id] === node.getBoundingClientRect().width) return
+	if (column.columns.length > 0)
+		table.setColumnSizing((prevSizes) => ({
+			...prevSizes,
+			// 100% accurate float-point width, even if table content is loaded async
+			[column.id]: node.getBoundingClientRect().width
+		}))
+}
 
-	/**
-	 * @description Transform sorting state from array to object
-	 * @param {SortingState} sorting
-	 * @returns {Record<string, 'desc' | 'asc'>}
-	 */
-	public static getColumnSortingObject(sorting: SortingState) {
-		if (!Array.isArray(sorting) || sorting.length === 0) return {}
-		return sorting.reduce((accumulator, currentValue) => {
-			accumulator[currentValue?.id] = currentValue.desc ? 'desc' : 'asc'
-			return accumulator
-		}, {})
-	}
+export function getStickyOffsetPosition<TData = any, TValue = any>(column: Column<TData, TValue>): CSSProperties {
+	const stickyAlignment = column.getIsPinned()
 
-	public static getStickyOffsetPosition<TData = any, TValue = any>(column: Column<TData, TValue>): CSSProperties {
-		const stickyAlignment = column.getIsPinned()
-
-		switch (stickyAlignment) {
-			case 'left': {
-				return {
-					position: 'sticky',
-					zIndex: 10,
-					left: column.getStart('left'),
-					borderLeft:
-						!column.getIsFirstColumn('left') && !column.columnDef.enableGrouping
-							? '1px solid hsl(var(--border))'
-							: undefined,
-					boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined
-				}
+	switch (stickyAlignment) {
+		case 'left': {
+			return {
+				position: 'sticky',
+				zIndex: 10,
+				left: column.getStart('left'),
+				borderLeft:
+					!column.getIsFirstColumn('left') && column.columns.length === 0
+						? '1px solid hsl(var(--border))'
+						: undefined,
+				boxShadow: column.getIsLastColumn('left') ? '1px 0px hsl(var(--border))' : undefined,
+				borderRight: column.getIsLastColumn('left') ? 'none' : undefined
 			}
-			case 'right': {
-				if (column.getIsLastColumn('right'))
-					return {
-						position: 'sticky',
-						right: 0,
-						zIndex: 10
-					}
-				return {
-					position: 'sticky',
-					zIndex: 10,
-					right: column.getAfter('right')
-				}
+		}
+		case 'right': {
+			return {
+				position: 'sticky',
+				zIndex: 10,
+				right: column.getAfter('right')
 			}
-			default: {
-				return {
-					position: 'relative',
-					zIndex: 0,
-					borderLeft: column.getIsFirstColumn() ? 'none' : undefined
-				}
+		}
+		default: {
+			return {
+				position: 'relative',
+				zIndex: 0,
+				borderLeft: column.getIsFirstColumn() ? 'none' : undefined
 			}
 		}
 	}
