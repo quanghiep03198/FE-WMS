@@ -121,7 +121,7 @@ const BeamAnimated: React.FC = () => {
 							'standalone-cube transition-all ease-in-out',
 							renderCount > 0
 								? 'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
-								: '-translate-y-10 [&_path]:fill-muted'
+								: '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
 						)}>
 						<path
 							stroke='hsl(var(--border))'
@@ -209,7 +209,7 @@ const BeamAnimated: React.FC = () => {
 							'clustered-cube transition-transform ease-in-out',
 							renderCount > 0
 								? 'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
-								: '-translate-y-10 [&_path]:fill-muted'
+								: '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
 						)}>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
@@ -265,7 +265,7 @@ const BeamAnimated: React.FC = () => {
 					'left-[58%] sm:max-w-[144px]',
 					'left-[56%] md:max-w-[196px]',
 					'left-[52%] lg:max-w-[210px]',
-					'xl:left-[62%] xl:max-w-[216px] xl:-translate-x-1/2',
+					'xl:left-[60%] xl:max-w-[200px] xl:-translate-x-1/2 xxl:left-[calc(60%+1rem)] xxl:max-w-[216px]',
 					'-translate-y-1/2 xxl:left-[52%]'
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>

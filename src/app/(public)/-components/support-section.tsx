@@ -23,7 +23,7 @@ const SupportSection: React.FunctionComponent = () => {
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}
 			className='relative w-full border-y px-3 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:px-0'>
-			<GridBackground className='absolute inset-0 [mask-image:radial-gradient(50%_100%_at_top_center,white,transparent)]' />
+			<GridBackground className='absolute inset-0 z-[-1] [mask-image:radial-gradient(50%_100%_at_top_center,white,transparent)]' />
 			<Div className='mx-auto my-20 w-full max-w-3xl gap-10 space-y-8 pb-10 xl:space-y-12'>
 				<Div className='relative space-y-3 overflow-hidden text-center'>
 					<Typography variant='h1'>Contact support</Typography>

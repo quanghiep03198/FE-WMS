@@ -1,4 +1,3 @@
-import { cn } from '@/common/utils/cn'
 import { Badge, Div, Icon, IconProps, Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
@@ -72,15 +71,12 @@ const FeaturesSection: React.FunctionComponent = () => {
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
 					</Div>
-					<Div className='flex max-w-lg flex-wrap items-center justify-center gap-2 xl:justify-start'>
-						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500'>
-							On-premise
-						</Badge>
+					<Div className='flex flex-wrap items-center justify-center gap-2 xl:justify-start'>
 						<Badge variant='secondary' className='bg-green-500/10 text-green-500'>
 							RFID
 						</Badge>
 						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500'>
-							Automation
+							Reporting
 						</Badge>
 						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500'>
 							Multi-tenant
@@ -98,14 +94,12 @@ const FeaturesSection: React.FunctionComponent = () => {
 				</Div>
 				<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
 					{features.map((feature, index) => (
-						<EffectCard
-							key={index.toString()}
-							className={
-								cn()
-								// 'duration-500 before:absolute before:inset-0 before:z-0 before:-translate-y-px before:bg-[conic-gradient(from_120deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_220deg,hsl(var(--accent))_1turn)] before:opacity-0 before:transition-opacity before:duration-500 before:content-[""] hover:before:opacity-100 hover:before:animate-in hover:before:fade-in-0 hover:before:slide-in-from-left-10 xl:before:bg-[conic-gradient(from_130deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_217deg,hsl(var(--accent))_1turn)]',
-								// 'after:absolute after:inset-0 after:left-1/2 after:top-1/2 after:z-[10] after:h-[calc(100%-1px)] after:w-[calc(100%-1px)] after:-translate-x-1/2 after:-translate-y-[calc(50%-0.5px)] after:rounded-md after:bg-background after:content-[""]',
-								// 'hover:after:bg-gradient-to-tr hover:after:from-background hover:after:from-[30%] hover:after:to-accent/60'
-							}>
+						// className={cn(
+						// 	'duration-500 before:absolute before:inset-0 before:z-0 before:-translate-y-px before:bg-[conic-gradient(from_120deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_220deg,hsl(var(--accent))_1turn)] before:opacity-0 before:transition-opacity before:duration-500 before:content-[""] hover:before:opacity-100 hover:before:animate-in hover:before:fade-in-0 hover:before:slide-in-from-left-10 xl:before:bg-[conic-gradient(from_130deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_217deg,hsl(var(--accent))_1turn)]',
+						// 	'after:absolute after:inset-0 after:left-1/2 after:top-1/2 after:z-[10] after:h-[calc(100%-1px)] after:w-[calc(100%-1px)] after:-translate-x-1/2 after:-translate-y-[calc(50%-0.5px)] after:rounded-md after:bg-background after:content-[""]',
+						// 	'hover:after:bg-gradient-to-tr hover:after:from-background hover:after:from-[30%] hover:after:to-accent/60'
+						// )}
+						<EffectCard key={index.toString()}>
 							<EffectCardIconWrapper className='z-20'>
 								<EffectCardIcon
 									name={feature.icon}
