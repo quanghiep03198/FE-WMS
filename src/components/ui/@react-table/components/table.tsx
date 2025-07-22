@@ -69,8 +69,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	})
 	const isSomeColumnsPinned = table.getIsSomeColumnsPinned() && (hasPinnedLeftColumns || hasPinnedRightColumns)
 
-	const shouldSkipRerender = virtualizer.isScrolling || (isColumnResizing && !isSomeColumnsPinned)
-
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
 		const columnSizes: Record<string, number> = {}
@@ -80,8 +78,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		})
 		return columnSizes
 	}, [columnSizingInfo, columnSizing])
-
-	console.log('shouldSkipRerender :>> ', shouldSkipRerender)
 
 	return (
 		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
