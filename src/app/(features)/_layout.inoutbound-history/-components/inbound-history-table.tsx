@@ -24,21 +24,18 @@ const InboundHistoryTable: React.FC = () => {
 			columnHelper.group({
 				id: 'inbound_history',
 				header: () => (
-					<Typography as='span' variant='small' className='inline-flex items-center gap-x-2'>
+					<Typography as='span' variant='small' className='inline-flex items-center gap-x-2 text-foreground'>
 						<Icon name='History' size={20} />
 						{t('ns_inoutbound:titles.inbound_history')}
 					</Typography>
 				),
-				enableGrouping: true,
-				enablePinning: false,
-				enableResizing: false,
 				columns: [
 					columnHelper.accessor('factory_code', {
 						header: t('ns_common:common_fields.factory_code'),
 						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
-						enablePinning: false,
+						enablePinning: true,
 						meta: {
 							filterVariant: 'select',
 							facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
@@ -58,7 +55,7 @@ const InboundHistoryTable: React.FC = () => {
 						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
-						enablePinning: false,
+						enablePinning: true,
 						filterFn: 'includesString'
 					}),
 					columnHelper.accessor('mo_no', {
@@ -66,8 +63,7 @@ const InboundHistoryTable: React.FC = () => {
 						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
-						enablePinning: false,
-
+						enablePinning: true,
 						filterFn: 'includesString'
 					}),
 					columnHelper.accessor('shoes_style_code_factory', {
@@ -75,8 +71,8 @@ const InboundHistoryTable: React.FC = () => {
 						enableResizing: true,
 						enableColumnFilter: true,
 						enableSorting: true,
+						enablePinning: true,
 						filterFn: 'fuzzy',
-
 						cell: ({ getValue }) => getValue() ?? 'Unknown'
 					}),
 					columnHelper.accessor('color_sn', {
@@ -94,26 +90,19 @@ const InboundHistoryTable: React.FC = () => {
 						enableColumnFilter: true,
 						enableSorting: true,
 						enableResizing: true,
+						enablePinning: true,
 						filterFn: 'inNumberRange',
 						cell: ({ getValue }) => {
 							return getValue() ?? 'Unknown'
 						},
 						meta: { align: 'right', filterVariant: 'range' }
-					})
-				]
-			}),
-			columnHelper.group({
-				id: 'inbound_details',
-				header: t('ns_inoutbound:titles.inbound_history'),
-				enableGrouping: true,
-				enablePinning: false,
-				enableResizing: true,
-				columns: [
+					}),
+
 					columnHelper.accessor('inbound_qty', {
 						header: t('ns_erp:fields.inbound_qty'),
 						enableColumnFilter: true,
 						enableSorting: true,
-
+						enablePinning: true,
 						filterFn: 'inNumberRange',
 						cell: ({ getValue }) => {
 							return getValue() ?? 'Unknown'
@@ -126,6 +115,7 @@ const InboundHistoryTable: React.FC = () => {
 						enableColumnFilter: true,
 						enableSorting: true,
 						enableResizing: true,
+						enablePinning: true,
 						filterFn: 'inDateRange',
 						cell: ({ getValue }) => {
 							const value = getValue()

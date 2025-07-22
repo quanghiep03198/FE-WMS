@@ -57,7 +57,8 @@ const InboundReportMasterTable: React.FC = () => {
 					</Tooltip>
 				),
 				size: 50,
-				enableResizing: false,
+				maxSize: 50,
+				enableHiding: false,
 				cell: ({ row, table }) => (
 					<button
 						className='absolute inset-0 flex h-full w-full items-center justify-center'
@@ -74,7 +75,6 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 120,
 				size: 120,
 				meta: {
 					filterVariant: 'select',
@@ -95,22 +95,23 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
-				minSize: 100,
+				enableHiding: false,
 				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('shoes_style_code_factory', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enableHiding: false,
 				filterFn: 'fuzzy',
-				minSize: 100,
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				minSize: 100,
+				enablePinning: true,
+				enableHiding: false,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					return getValue() ?? 'Unknown'
@@ -120,8 +121,6 @@ const InboundReportMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.shaping_dept_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				size: 200,
-				minSize: 200,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
 					const value = getValue()
@@ -142,8 +141,6 @@ const InboundReportMasterTable: React.FC = () => {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				minSize: 200,
-				size: 200,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					const value = getValue()
@@ -166,20 +163,17 @@ const InboundReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 100,
-				size: 150
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('daily_inbound_qty', {
 				header: t('ns_erp:fields.daily_inbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableHiding: false,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 150,
-				size: 150
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('accumulated_qty', {
 				header: t('ns_erp:fields.accumulated_qty'),
@@ -188,9 +182,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ getValue }) => formatIntlNumber(getValue()),
-				minSize: 150,
-				size: 150
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.display({
 				id: 'missing_qty',
@@ -203,9 +195,7 @@ const InboundReportMasterTable: React.FC = () => {
 				cell: ({ row }) => {
 					const { order_qty, accumulated_qty } = row.original
 					return !isNil(order_qty) && order_qty > 0 ? formatIntlNumber(order_qty - accumulated_qty) : 0
-				},
-				minSize: 150,
-				size: 150
+				}
 			})
 		],
 		[i18n.language]
@@ -239,6 +229,7 @@ const InboundReportMasterTable: React.FC = () => {
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
+				enableColumnResizing={true}
 				ref={dataTableRef}
 				renderSubComponent={
 					(({ row }) => {

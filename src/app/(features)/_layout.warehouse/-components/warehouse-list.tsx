@@ -93,18 +93,20 @@ const WarehouseList: React.FC = () => {
 					/>
 				),
 				size: 50,
+				maxSize: 50,
 				enableSorting: false,
 				enableHiding: false,
 				enableResizing: false,
-				enablePinning: false
+				enablePinning: false,
+				enableGlobalFilter: false,
+				enableColumnFilter: false
 			}),
 			columnHelper.accessor('warehouse_num', {
 				id: 'warehouse_num',
 				header: t('ns_warehouse:fields.warehouse_num'),
-				minSize: 150,
 				enableColumnFilter: true,
+				enableGlobalFilter: true,
 				enableResizing: true,
-				enablePinning: true,
 				enableSorting: true,
 				filterFn: 'fuzzy',
 				sortingFn: fuzzySort,
@@ -113,9 +115,10 @@ const WarehouseList: React.FC = () => {
 			columnHelper.accessor('type_warehouse', {
 				id: 'type_warehouse',
 				header: t('ns_warehouse:fields.type_warehouse'),
-				minSize: 250,
-				enablePinning: true,
+				enableSorting: true,
+				enableGlobalFilter: false,
 				enableColumnFilter: true,
+				enableResizing: true,
 				filterFn: 'equals',
 				meta: {
 					filterVariant: 'select',
@@ -136,7 +139,7 @@ const WarehouseList: React.FC = () => {
 				id: 'warehouse_name',
 				header: t('ns_warehouse:fields.warehouse_name'),
 				minSize: 250,
-				enablePinning: true,
+				enableMultiSort: true,
 				enableResizing: true,
 				enableColumnFilter: true,
 				filterFn: 'fuzzy',
@@ -210,6 +213,7 @@ const WarehouseList: React.FC = () => {
 			columnHelper.accessor('id', {
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: t('ns_common:common_fields.actions'),
+				size: 100,
 				maxSize: 100,
 				enableResizing: false,
 				enableHiding: false,
