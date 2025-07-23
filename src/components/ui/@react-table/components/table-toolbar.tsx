@@ -73,7 +73,7 @@ function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: Table
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) && (
 					<Tooltip message={t('ns_common:table.reset_size')} triggerProps={{ asChild: true }}>
 						<Button variant='outline' size='icon' onClick={() => table.resetColumnSizing()}>
-							<Icon name='MoveHorizontal' />
+							<Icon name='FoldHorizontal' size={18} />
 						</Button>
 					</Tooltip>
 				)}

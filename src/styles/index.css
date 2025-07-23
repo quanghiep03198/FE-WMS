@@ -164,7 +164,7 @@
 
 	/* Global styles */
 	* {
-		@apply box-border border-border scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar;
+		@apply box-border border-border scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar selection:bg-neutral-300 dark:selection:bg-neutral-600;
 	}
 
 	body {

@@ -5,15 +5,14 @@ import { useMemoizedFn, useSize } from 'ahooks'
 import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
-import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
-import { MemoizedTableBody, TableBody } from './table-body'
+import { TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
+import { DataTableHeader } from './table-header'
 
 type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
@@ -42,7 +41,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const estimateSize = useMemoizedFn(() => virtualizerOptions.estimateSize)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
 
-	const virtualizer = useVirtualizer({
+	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
 		overscan: virtualizerOptions.overscan,
 		horizontal: false,
@@ -54,21 +53,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
 
-	const { columnSizingInfo, columnSizing, columnPinning } = table.getState()
-	const isColumnResizing = columnSizingInfo.isResizingColumn
-
-	/**
-	 * * Column pinning cause wrong positioning of columns when resizing
-	 * * This is a workaround to fix the issue by calculating the column sizes based on the current state and applying them to the table element.
-	 */
-	const hasPinnedLeftColumns = columnPinning.left.some((columnId) => {
-		return columnId !== ROW_EXPANSION_COLUMN_ID && columnId !== ROW_SELECTION_COLUMN_ID
-	})
-	const hasPinnedRightColumns = columnPinning.right.some((columnId) => {
-		return columnId !== ROW_ACTIONS_COLUMN_ID
-	})
-	const isSomeColumnsPinned = table.getIsSomeColumnsPinned() && (hasPinnedLeftColumns || hasPinnedRightColumns)
-
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
 		const columnSizes: Record<string, number> = {}
@@ -77,7 +61,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 			columnSizes[`--column-${header.column.id}-size`] = header.column.getSize()
 		})
 		return columnSizes
-	}, [columnSizingInfo, columnSizing])
+	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
 	return (
 		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
@@ -98,18 +82,8 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					{virtualizer.isScrolling || (isColumnResizing && !isSomeColumnsPinned) ? (
-						<MemoizedDataTableHeader />
-					) : (
-						<DataTableHeader />
-					)}
-					{loading ? (
-						<TableBodyLoading />
-					) : isColumnResizing && !isSomeColumnsPinned ? (
-						<MemoizedTableBody {...{ virtualizer, renderSubComponent }} />
-					) : (
-						<TableBody {...{ virtualizer, renderSubComponent }} />
-					)}
+					<DataTableHeader />
+					{loading ? <TableBodyLoading /> : <TableBody {...{ virtualizer, renderSubComponent }} />}
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</ScrollArea>
