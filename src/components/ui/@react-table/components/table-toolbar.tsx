@@ -70,7 +70,8 @@ function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: Table
 					onGlobalFilterChange={table.setGlobalFilter}
 				/>
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && <ColumnFilterToggle />}
-				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) && (
+				{(table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) ||
+					table.options.enableColumnResizing) && (
 					<Tooltip message={t('ns_common:table.reset_size')} triggerProps={{ asChild: true }}>
 						<Button variant='outline' size='icon' onClick={() => table.resetColumnSizing()}>
 							<Icon name='FoldHorizontal' size={18} />
