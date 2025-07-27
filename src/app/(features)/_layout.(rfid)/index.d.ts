@@ -3,7 +3,7 @@ import { IElectronicProductCode } from '@/common/types/entities'
 export type OrderItem = {
 	mo_no: string
 	color_sn: string
-	shoes_style_code_factory: string
+	factory_shoes_style: string
 	factory_code_produce: string
 	sizes: Array<{
 		size_numcode: string

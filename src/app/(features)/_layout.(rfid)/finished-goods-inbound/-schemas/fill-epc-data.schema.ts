@@ -22,10 +22,10 @@ export const updateEpcFormSchema = z
 		quantity: z
 			.number({ required_error: 'ns_validation:required' })
 			.nonnegative({ message: 'ns_validation:nonnegative' }),
-		shoes_style_code_factory: z
+		factory_shoes_style: z
 			.string({ required_error: 'ns_validation:required' })
 			.nonempty({ message: 'ns_validation:required' }),
-		shoes_style_code_factory_actual: z
+		factory_shoes_style_actual: z
 			.string({ required_error: 'ns_validation:required' })
 			.nonempty({ message: 'ns_validation:required' }),
 		size_code: z.string({ required_error: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),

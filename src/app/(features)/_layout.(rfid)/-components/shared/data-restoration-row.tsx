@@ -97,7 +97,7 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 							</ListDetailItem>
 							<ListDetailItem>
 								{t('ns_erp:fields.shoestyle_codefactory')}:{' '}
-								<Typography variant='small'>{data?.shoes_style_code_factory}</Typography>
+								<Typography variant='small'>{data?.factory_shoes_style}</Typography>
 							</ListDetailItem>
 							<ListDetailItem>
 								{t('ns_erp:fields.color_sn')}: <Typography variant='small'>{data?.color_sn}</Typography>

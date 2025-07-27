@@ -36,7 +36,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 			<TableCell
 				style={{ height: virtualRow.size }}
 				className='z-10 w-[var(--sticky-left-ntn-col-width)] min-w-[var(--sticky-left-ntn-col-width)] text-pretty xl:sticky xl:left-[var(--sticky-left-col-width)] xl:right-auto'>
-				{data?.shoes_style_code_factory}
+				{data?.factory_shoes_style}
 			</TableCell>
 			<TableCell
 				style={{ height: virtualRow.size }}

@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 type SelectedRow = {
 	mo_no: string
-	shoes_style_code_factory: string
+	factory_shoes_style: string
 	color_sn: string
 	size_numcode?: string
 	scanned_size_qty: number

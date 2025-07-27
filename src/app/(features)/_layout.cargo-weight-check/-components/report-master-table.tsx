@@ -54,7 +54,7 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
-			columnHelper.accessor('shoes_style_code_factory', {
+			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableSorting: true,
 				enableColumnFilter: true,
