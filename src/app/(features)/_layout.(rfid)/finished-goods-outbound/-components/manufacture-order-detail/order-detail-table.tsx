@@ -20,18 +20,18 @@ const OrderSizeDetailTable: React.FC = () => {
 	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>({
 		mo_no: '',
 		color_sn: '',
-		shoes_style_code_factory: ''
+		factory_shoes_style: ''
 	})
 
 	const filteredScannedOrders = useMemo(() => {
-		const { mo_no, color_sn, shoes_style_code_factory } = columnFilters
+		const { mo_no, color_sn, factory_shoes_style } = columnFilters
 		const result = Array.isArray(scannedOrders)
 			? scannedOrders.filter((item) => {
 					if (item)
 						return (
 							item.mo_no.toLowerCase().includes(mo_no?.toLowerCase()) &&
 							item.color_sn.toLowerCase().includes(color_sn.toLowerCase()) &&
-							item.shoes_style_code_factory.toLowerCase().includes(shoes_style_code_factory.toLowerCase())
+							item.factory_shoes_style.toLowerCase().includes(factory_shoes_style.toLowerCase())
 						)
 				})
 			: []

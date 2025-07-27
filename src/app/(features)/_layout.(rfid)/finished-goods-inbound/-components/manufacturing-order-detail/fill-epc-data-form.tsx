@@ -41,8 +41,8 @@ const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {
 	mo_no_actual: '',
 	color_sn: FALLBACK_VALUE,
 	color_sn_actual: '',
-	shoes_style_code_factory: FALLBACK_VALUE,
-	shoes_style_code_factory_actual: '',
+	factory_shoes_style: FALLBACK_VALUE,
+	factory_shoes_style_actual: '',
 	mo_noseq: '',
 	size_numcode: FALLBACK_VALUE,
 	size_numcode_actual: '',
@@ -88,15 +88,15 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 		const currOrderInfo = orderDetail?.orders?.find((item) => item?.mo_noseq === currCommandNumberSeq)
 		if (currOrderInfo) {
 			form.reset({
-				...omit(currOrderInfo, ['mo_no', 'color_sn', 'shoes_style_code_factory']),
+				...omit(currOrderInfo, ['mo_no', 'color_sn', 'factory_shoes_style']),
 				...form.getValues(),
 				mo_no: FALLBACK_VALUE,
-				shoes_style_code_factory: FALLBACK_VALUE,
+				factory_shoes_style: FALLBACK_VALUE,
 				color_sn: FALLBACK_VALUE,
 				size_numcode: FALLBACK_VALUE,
 				mo_no_actual: currOrderInfo.mo_no,
 				color_sn_actual: currOrderInfo.color_sn,
-				shoes_style_code_factory_actual: currOrderInfo.shoes_style_code_factory
+				factory_shoes_style_actual: currOrderInfo.factory_shoes_style
 			})
 		}
 	}, [currCommandNumberSeq])
@@ -149,7 +149,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 						<InputFieldControl
 							label={t('ns_erp:fields.shoestyle_codefactory')}
 							placeholder={t('ns_erp:fields.shoestyle_codefactory')}
-							name='shoes_style_code_factory_actual'
+							name='factory_shoes_style_actual'
 							readOnly={true}
 						/>
 						<InputFieldControl

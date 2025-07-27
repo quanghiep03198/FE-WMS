@@ -112,7 +112,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				meta: { align: 'left' },
 				filterFn: 'includesString'
 			}),
-			columnHelper.accessor('shoes_style_code_factory', {
+			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -122,8 +122,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
-			columnHelper.accessor('cust_shoestyle', {
-				header: t('ns_erp:fields.cust_shoestyle'),
+			columnHelper.accessor('cust_shoes_style', {
+				header: t('ns_erp:fields.cust_shoes_style'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -294,8 +294,8 @@ const DataDetailTable = ({ row }: RenderSubComponentProps<IMonthlyInventoryRepor
 		queries={pick(row.original, [
 			'actual_po',
 			'mo_no',
-			'cust_shoestyle',
-			'shoes_style_code_factory',
+			'cust_shoes_style',
+			'factory_shoes_style',
 			'inv_type',
 			'inv_year_month'
 		])}

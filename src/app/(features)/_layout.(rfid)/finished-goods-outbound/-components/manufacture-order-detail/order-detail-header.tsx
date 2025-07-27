@@ -69,9 +69,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 						role='textbox'
 						placeholder='Search ...'
 						className='w-full border-none font-normal shadow-none transition-none'
-						onChange={(e) =>
-							onColumnFilterChange((prev) => ({ ...prev, shoes_style_code_factory: e.target.value }))
-						}
+						onChange={(e) => onColumnFilterChange((prev) => ({ ...prev, factory_shoes_style: e.target.value }))}
 					/>
 				</TableHead>
 				<TableHead

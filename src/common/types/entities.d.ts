@@ -86,7 +86,7 @@ export interface IManufacturingOrder extends IBaseEntity {
 export interface IElectronicProductCode {
 	epc: string
 	mo_no: string
-	shoes_style_code_factory?: string
+	factory_shoes_style?: string
 	color_sn?: string
 	size_numcode?: string
 	factory_code_produce?: string
@@ -95,7 +95,7 @@ export interface IElectronicProductCode {
 }
 
 export interface IArchivedFilterFeature {
-	shoes_style_code_factory: string
+	factory_shoes_style: string
 	colorways: Array<{
 		color_sn: string
 		batches: Array<{
@@ -116,7 +116,7 @@ export interface IProductionInventoryFeature {
 export interface IInOutBoundReport {
 	mo_no: string
 	mat_code: string
-	shoes_style_code_factory: string | null
+	factory_shoes_style: string | null
 	order_qty: number
 	factory_code: string
 	color_sn: string
@@ -156,8 +156,8 @@ export interface IMonthlyInventoryReport {
 	order_qty: number
 	or_no: string
 	color_sn: string
-	shoes_style_code_factory: string | null
-	cust_shoestyle: string
+	factory_shoes_style: string | null
+	cust_shoes_style: string
 	init_inv_qty: number
 	total_instock_qty: number
 	total_outstock_qty: number
@@ -181,7 +181,7 @@ export interface IMonthlyInventoryReport {
 export interface IPackingReport {
 	brand_name: string
 	po: string
-	shoes_style_code_factory: string
+	factory_shoes_style: string
 	mat_ecolor: string
 	color_sn: string
 	size_data: string
@@ -228,7 +228,7 @@ export interface IInboundHistory {
 	mo_no: string
 	mo_qty: number
 	brand_name: string
-	shoes_style_code_factory: string
+	factory_shoes_style: string
 	color_sn: string
 	inbound_qty: number
 	inbound_date: Date
@@ -238,7 +238,7 @@ export interface IOutboundHistory {
 	po_qty: number
 	outbound_qty: number
 	brand_name: string
-	shoes_style_code_factory: string
+	factory_shoes_style: string
 	color_sn: string
 	outbound_date: Date
 }

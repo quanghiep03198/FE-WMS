@@ -55,7 +55,7 @@ const OrderSizeDetailTable: React.FC = () => {
 	>({
 		mo_no: '',
 		color_sn: '',
-		shoes_style_code_factory: ''
+		factory_shoes_style: ''
 	})
 
 	const { data: retrievedOrderDetail, refetch: refetchOrderDetail } = useGetInboundOrderDetail()
@@ -80,7 +80,7 @@ const OrderSizeDetailTable: React.FC = () => {
 		return scannedOrders.filter(
 			(item) =>
 				selectedRows[0]?.color_sn === item.color_sn &&
-				selectedRows[0]?.shoes_style_code_factory === item.shoes_style_code_factory
+				selectedRows[0]?.factory_shoes_style === item.factory_shoes_style
 		)
 	}, [selectedRows])
 
@@ -99,7 +99,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			setSelectedRows(
 				allMatchingRowsSelection.map((item) => ({
 					mo_no: item.mo_no,
-					shoes_style_code_factory: item.shoes_style_code_factory,
+					factory_shoes_style: item.factory_shoes_style,
 					color_sn: item.color_sn,
 					scanned_size_qty:
 						item?.sizes?.reduce((acc, curr) => {
@@ -111,12 +111,12 @@ const OrderSizeDetailTable: React.FC = () => {
 	}
 
 	const filteredScannedOrders = useMemo(() => {
-		const { mo_no, color_sn, shoes_style_code_factory } = columnFilters
+		const { mo_no, color_sn, factory_shoes_style } = columnFilters
 		return scannedOrders.filter((item) => {
 			return (
 				item.mo_no?.toLowerCase()?.includes(mo_no?.toLowerCase()) &&
 				item.color_sn?.toLowerCase()?.includes(color_sn?.toLowerCase()) &&
-				item.shoes_style_code_factory?.toLowerCase()?.includes(shoes_style_code_factory?.toLowerCase())
+				item.factory_shoes_style?.toLowerCase()?.includes(factory_shoes_style?.toLowerCase())
 			)
 		})
 	}, [scannedOrders, columnFilters, dialogOpen])
@@ -231,7 +231,7 @@ const OrderSizeDetailTable: React.FC = () => {
 											onChange={(e) =>
 												setColumnFilters((prev) => ({
 													...prev,
-													shoes_style_code_factory: e.target.value
+													factory_shoes_style: e.target.value
 												}))
 											}
 										/>
@@ -314,7 +314,7 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 		setDefaultValues({
 			mo_no: selectedRows.map((row) => row.mo_no).join(', '),
 			color_sn: selectedRows[0]?.color_sn,
-			shoes_style_code_factory: selectedRows[0]?.shoes_style_code_factory,
+			factory_shoes_style: selectedRows[0]?.factory_shoes_style,
 			scanned_size_qty: selectedRows.reduce((acc, curr) => acc + curr.scanned_size_qty, 0)
 		})
 	}

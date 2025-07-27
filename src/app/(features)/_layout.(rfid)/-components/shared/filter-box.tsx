@@ -93,12 +93,12 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 
 	const shoesStyleOptions = useMemo(() => {
 		if (!Array.isArray(data)) return []
-		return data.map((item) => ({ shoes_style_factory_code: item.shoes_style_code_factory }))
+		return data.map((item) => ({ shoes_style_factory_code: item.factory_shoes_style }))
 	}, [data])
 
 	const colorOptions = useMemo(() => {
 		if (Array.isArray(data) && currentShoesStyle) {
-			const feature = data.find((item) => item.shoes_style_code_factory === currentShoesStyle)
+			const feature = data.find((item) => item.factory_shoes_style === currentShoesStyle)
 			const result = feature?.colorways?.map((color) => ({ color_sn: color?.color_sn })) ?? []
 			return sortBy(result, (item) => item?.color_sn)
 		} else {
@@ -108,7 +108,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 
 	const commandNumberOptions = useMemo(() => {
 		if (Array.isArray(data) && currentShoesStyle) {
-			const feature = data.find((item) => item.shoes_style_code_factory === currentShoesStyle)
+			const feature = data.find((item) => item.factory_shoes_style === currentShoesStyle)
 			const colorways = feature.colorways?.find((item) => item.color_sn === currentColor)
 			const result = colorways?.batches?.map((item) => ({ mo_no: item?.mo_no })) ?? []
 			return sortBy(result, (item) => item?.mo_no)
@@ -119,7 +119,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 
 	const sizeOptions = useMemo(() => {
 		if (Array.isArray(data) && currentShoesStyle && currentColor && currentCommandNumber) {
-			const feature = data.find((item) => item.shoes_style_code_factory === currentShoesStyle)
+			const feature = data.find((item) => item.factory_shoes_style === currentShoesStyle)
 			const colorways = feature.colorways?.find((item) => item.color_sn === currentColor)
 			if (!colorways) return []
 			const batch = colorways?.batches?.find((item) => item.mo_no === currentCommandNumber)

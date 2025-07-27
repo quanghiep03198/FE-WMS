@@ -40,7 +40,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		if (!selectedRows || selectedRows.length === 0) return false
 		return (
 			data?.color_sn === selectedRows[0].color_sn &&
-			data?.shoes_style_code_factory === selectedRows[0].shoes_style_code_factory
+			data?.factory_shoes_style === selectedRows[0].factory_shoes_style
 		)
 	}, [selectedRows])
 
@@ -75,7 +75,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					onCheckedChange={(checked) =>
 						handleToggleSelectRow(checked, {
 							mo_no: data?.mo_no,
-							shoes_style_code_factory: data?.shoes_style_code_factory,
+							factory_shoes_style: data?.factory_shoes_style,
 							color_sn: data?.color_sn,
 							count: aggregateSizeCount
 						})
@@ -100,7 +100,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								setDefaultExchangeOrderFormValues({
 									mo_no: data?.mo_no,
 									color_sn: data?.color_sn,
-									shoes_style_code_factory: data?.shoes_style_code_factory,
+									factory_shoes_style: data?.factory_shoes_style,
 									scanned_size_qty: aggregateSizeCount
 								})
 							}}>
@@ -110,7 +110,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				</Div>
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
-				{data?.shoes_style_code_factory}
+				{data?.factory_shoes_style}
 			</TableCell>
 			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
 				{data?.color_sn}
@@ -133,7 +133,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 												setDefaultExchangeEpcFormValues({
 													mo_no: data?.mo_no,
 													color_sn: data?.color_sn,
-													shoes_style_code_factory: data?.shoes_style_code_factory,
+													factory_shoes_style: data?.factory_shoes_style,
 													size_numcode: size?.size_numcode,
 													scanned_size_qty: size?.count
 												})

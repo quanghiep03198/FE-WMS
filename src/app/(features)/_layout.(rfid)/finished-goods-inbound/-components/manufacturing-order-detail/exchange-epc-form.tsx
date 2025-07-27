@@ -117,12 +117,12 @@ const ExchangeEpcFormDialog: React.FC = () => {
 				size_qty: currOrderInfo.size_sumqty,
 				cust_shoes_style: currOrderInfo.cust_shoes_style,
 				mo_no: defaultValues.mo_no,
-				shoes_style_code_factory: defaultValues.shoes_style_code_factory,
+				factory_shoes_style: defaultValues.factory_shoes_style,
 				color_sn: defaultValues.color_sn,
 				size_numcode: defaultValues.size_numcode,
 				mo_no_actual: currOrderInfo.mo_no,
 				color_sn_actual: currOrderInfo.color_sn,
-				shoes_style_code_factory_actual: currOrderInfo.shoes_style_code_factory,
+				factory_shoes_style_actual: currOrderInfo.factory_shoes_style,
 				size_numcode_actual: matchedSize?.size_numcode ?? 'N/A'
 			})
 		}
@@ -169,7 +169,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								<InputFieldControl label={t('ns_erp:fields.color_sn')} name='color_sn' readOnly={true} />
 								<InputFieldControl
 									label={t('ns_erp:fields.shoestyle_codefactory')}
-									name='shoes_style_code_factory'
+									name='factory_shoes_style'
 									readOnly={true}
 								/>
 								<InputFieldControl label='Size' name='size_numcode' readOnly={true} />
@@ -190,7 +190,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 										form.reset({
 											...form.getValues(),
 											mo_no_actual: value,
-											shoes_style_code_factory_actual: '',
+											factory_shoes_style_actual: '',
 											color_sn_actual: '',
 											size_numcode_actual: '',
 											mo_noseq: '',
@@ -213,7 +213,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								/>
 								<InputFieldControl
 									label={t('ns_erp:fields.shoestyle_codefactory')}
-									name='shoes_style_code_factory_actual'
+									name='factory_shoes_style_actual'
 									placeholder='XX01 XX01-1'
 									readOnly={true}
 								/>

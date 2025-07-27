@@ -1,7 +1,7 @@
 export type SearchCustOrderParams = {
 	'mo_no.eq': string
 	'color_sn.eq': string
-	'shoes_style_code_factory.eq'?: string
+	'factory_shoes_style.eq'?: string
 	q: string
 }
 

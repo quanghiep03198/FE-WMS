@@ -14,7 +14,7 @@ export default {
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
 		customer_branch_id: 'ID nhã hiệu khách hàng',
 		customer_order: 'Đặt đơn của khách',
-		cust_shoestyle: 'Mã khách hàng',
+		cust_shoes_style: 'Mã khách hàng',
 		daily_inbound_qty: 'Số lượng nhập trong ngày',
 		daily_outbound_qty: 'Số lượng xuất trong ngày',
 		daily_productivity: 'Sản lượng ngày',

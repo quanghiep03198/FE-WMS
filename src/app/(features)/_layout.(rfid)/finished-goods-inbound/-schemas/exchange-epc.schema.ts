@@ -18,7 +18,7 @@ export const exchangeEpcSchema = z
 		mo_noseq: z.string().nonempty({ message: 'ns_validation:required' }),
 		mat_code: z.string().nonempty({ message: 'ns_validation:required' }),
 		cust_shoes_style: z.string().nonempty({ message: 'ns_validation:required' }),
-		shoes_style_code_factory: z.string().nonempty({ message: 'ns_validation:required' }),
+		factory_shoes_style: z.string().nonempty({ message: 'ns_validation:required' }),
 		color_sn: z.string().nonempty({ message: 'ns_validation:required' }),
 		size_code: z.string().nonempty({ message: 'ns_validation:required' }),
 		size_numcode: z.string().nonempty({ message: 'ns_validation:required' }),
@@ -27,7 +27,7 @@ export const exchangeEpcSchema = z
 			.default(0)
 			.transform((value) => Number(value)),
 		mo_no_actual: z.string().nonempty({ message: 'ns_validation:required' }),
-		shoes_style_code_factory_actual: z.string().nonempty({ message: 'ns_validation:required' }),
+		factory_shoes_style_actual: z.string().nonempty({ message: 'ns_validation:required' }),
 		color_sn_actual: z.string().nonempty({ message: 'ns_validation:required' }),
 		size_numcode_actual: z.string().nonempty({ message: 'ns_validation:required' }),
 		scanned_size_qty: z
@@ -44,9 +44,9 @@ export const exchangeEpcSchema = z
 		message: 'ns_validation:invalid_value',
 		path: ['quantity']
 	})
-	.refine((values) => values.shoes_style_code_factory === values.shoes_style_code_factory_actual, {
+	.refine((values) => values.factory_shoes_style === values.factory_shoes_style_actual, {
 		message: 'ns_validation:invalid_value',
-		path: ['shoes_style_code_factory_actual']
+		path: ['factory_shoes_style_actual']
 	})
 	.refine((values) => values.color_sn === values.color_sn_actual, {
 		message: 'ns_validation:invalid_value',
@@ -60,7 +60,7 @@ export const exchangeEpcSchema = z
 export const exchangeOrderSchema = z.object({
 	mo_no: z.string().nonempty({ message: 'ns_validation:required' }),
 	mo_no_actual: z.string().trim().nonempty({ message: 'ns_validation:required' }),
-	shoes_style_code_factory: z.string().nonempty({ message: 'ns_validation:required' }),
+	factory_shoes_style: z.string().nonempty({ message: 'ns_validation:required' }),
 	color_sn: z.string().nonempty({ message: 'ns_validation:required' })
 })
 
