@@ -1,20 +1,19 @@
-import useAuth from '@/common/hooks/use-auth'
 import { useSocketIo } from '@/common/hooks/use-socket-io'
 import { Button, Icon } from '@/components/ui'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { v4 as uuid } from 'uuid'
 import { INVENTORY_AUDIT_PROVIDE_TAG } from '../../-hooks/use-report'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
 
 type WsResponseMessage = WsResponseBody<{ status: 'progress' | 'completed' | 'failed' }>
-type WsMessageData = { id: string; factory: string }
+type WsMessageData = { tenantId: string }
 
 const SyncDataTrigger: React.FC = () => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
 	const queryClient = useQueryClient()
+	const { data: currentTenant } = useGetTenantByFactory()
 	const toastRef = useRef<string | number | null>(null)
 	const { data, emit } = useSocketIo<WsResponseMessage, WsMessageData>({
 		event: 'sync_inventory_audit_data'
@@ -44,7 +43,7 @@ const SyncDataTrigger: React.FC = () => {
 	const isInSyncProgress = data?.metadata?.status === 'progress'
 
 	return (
-		<Button disabled={isInSyncProgress} onClick={() => emit({ id: uuid(), factory: user?.company_code })}>
+		<Button disabled={isInSyncProgress} onClick={() => emit({ tenantId: currentTenant?.id })}>
 			<Icon
 				name={isInSyncProgress ? 'LoaderCircle' : 'DatabaseBackup'}
 				size={18}
