@@ -42,6 +42,8 @@ export declare global {
 		statusCode: HttpStatusCode
 		metadata: T | null
 		path: string
+		stack?: string
+		timestamp: Date
 	}
 
 	type WsResponseBody<T> = {
