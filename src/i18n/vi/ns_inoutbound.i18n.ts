@@ -19,8 +19,6 @@ export default {
 			'Phát hiện EPC không hợp lệ. Vui lòng liên hệ bộ phận thành hình để xử lý, sau đó chuyển đến tái chế',
 		navigation_blocked_caption: 'Các tác vụ chưa được lưu. Bạn chắc chắn muốn rời khỏi trang ngay bây giờ?',
 		navigation_blocked_message: 'Dừng đọc EPC ngay bây giờ ?',
-		over_inbound_limit:
-			'Chỉ lệnh đã nhập kho đủ, bạn không thể nhập thêm nữa. Vui lòng kiểm tra lại trạng thái nhập hàng của chỉ lệnh này.',
 		stock_out_submission_caution:
 			'Vui lòng kiểm tra kỹ thông tin trước khi xác nhận xuất kho. Sau khi xác nhận, bạn không thể thay đổi thông tin này.',
 		too_many_mono: 'Có nhiều hơn 3 chỉ lệnh được quét. Hãy kiểm tra lại.'

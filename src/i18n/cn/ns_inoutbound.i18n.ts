@@ -85,7 +85,6 @@ export default {
 		invalid_epc_deteted: '检测到无效的EPC。请联系成型部门解决此问题, 然后将其移至回收',
 		navigation_blocked_caption: '操做没保存. 你确认想离开页面吗 ?',
 		navigation_blocked_message: '现在停读 ?',
-		over_inbound_limit: '這張之令已經入滿 無法繼續操作 請再次檢查入庫狀況!',
 		stock_out_submission_caution: '请在确认出库前仔细检查信息. 确认后, 您将无法更改此信息.',
 		too_many_mono: '已扫描到超过3个命令. 请重新检查'
 	},
