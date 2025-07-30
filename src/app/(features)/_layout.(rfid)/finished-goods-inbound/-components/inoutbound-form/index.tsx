@@ -21,13 +21,17 @@ import {
 	RadioGroupItem,
 	SelectFieldControl,
 	Separator,
+	Tooltip,
 	Typography
 } from '@/components/ui'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
+import { HttpStatusCode } from 'axios'
 import { omit } from 'lodash'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -83,7 +87,7 @@ const InoutboundForm: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const { mutateAsync } = useUpdateStockInMutation()
+	const { mutateAsync, isError, error, reset } = useUpdateStockInMutation()
 
 	const handleResetForm = useMemoizedFn(() => {
 		form.reset({
@@ -146,180 +150,204 @@ const InoutboundForm: React.FC = () => {
 	}
 
 	return (
-		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit((data) => handleSubmit(data))}>
-				<Div className='col-span-full'>
-					<FormField
-						name='rfid_status'
-						render={({ field }) => (
-							<FormItem>
-								<FormMessage />
-								<RadioGroup
-									className='grid grid-cols-2'
-									value={field.value}
-									defaultValue={FormActionEnum.IMPORT}
-									onValueChange={(value) => {
-										field.onChange(value)
-										setAction(value as FormActionEnum)
-										handleResetForm()
-									}}>
-									<FormItem>
-										<StyledFormLabel
-											role='checkbox'
-											tabIndex={0}
-											aria-checked={field.value === FormActionEnum.IMPORT}
-											htmlFor={FormActionEnum.IMPORT}>
-											<FormControl>
-												<RadioGroupItem
-													id={FormActionEnum.IMPORT}
-													value={FormActionEnum.IMPORT}
-													className='hidden'
-												/>
-											</FormControl>
-											{t('ns_inoutbound:action_types.warehouse_input')}
-											<CheckIcon
-												name='Check'
-												size={24}
+		<Fragment>
+			{createPortal(
+				<Alert data-state={isError && error?.status === HttpStatusCode.UnprocessableEntity ? 'open' : 'closed'}>
+					<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
+					<AlertContent>
+						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
+						<AlertDescription>{t(error?.message as Parameter<typeof t>)}</AlertDescription>
+					</AlertContent>
+					<Tooltip
+						message={t('ns_common:actions.dismiss')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ side: 'left' }}>
+						<AlertClose
+							onClick={() => {
+								reset()
+							}}>
+							<Icon name='X' />
+						</AlertClose>
+					</Tooltip>
+				</Alert>,
+				document.body
+			)}
+			<FormProvider {...form}>
+				<Form onSubmit={form.handleSubmit((data) => handleSubmit(data))}>
+					<Div className='col-span-full'>
+						<FormField
+							name='rfid_status'
+							render={({ field }) => (
+								<FormItem>
+									<FormMessage />
+									<RadioGroup
+										className='grid grid-cols-2'
+										value={field.value}
+										defaultValue={FormActionEnum.IMPORT}
+										onValueChange={(value) => {
+											field.onChange(value)
+											setAction(value as FormActionEnum)
+											handleResetForm()
+										}}>
+										<FormItem>
+											<StyledFormLabel
+												role='checkbox'
+												tabIndex={0}
 												aria-checked={field.value === FormActionEnum.IMPORT}
-											/>
-										</StyledFormLabel>
-									</FormItem>
-									<FormItem>
-										<StyledFormLabel
-											htmlFor={FormActionEnum.EXPORT}
-											role='radio'
-											tabIndex={0}
-											aria-checked={field.value == FormActionEnum.EXPORT}>
-											<FormControl>
-												<RadioGroupItem
-													id={FormActionEnum.EXPORT}
-													value={FormActionEnum.EXPORT}
-													className='sr-only'
+												htmlFor={FormActionEnum.IMPORT}>
+												<FormControl>
+													<RadioGroupItem
+														id={FormActionEnum.IMPORT}
+														value={FormActionEnum.IMPORT}
+														className='hidden'
+													/>
+												</FormControl>
+												{t('ns_inoutbound:action_types.warehouse_input')}
+												<CheckIcon
+													name='Check'
+													size={24}
+													aria-checked={field.value === FormActionEnum.IMPORT}
 												/>
-											</FormControl>
-											{t('ns_inoutbound:action_types.warehouse_output')}
-											<CheckIcon
-												name='Check'
-												size={24}
-												aria-checked={field.value === FormActionEnum.EXPORT}
-											/>
-										</StyledFormLabel>
-									</FormItem>
-								</RadioGroup>
-							</FormItem>
-						)}
-					/>
-				</Div>
-				<Div className='col-span-full'>
-					<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
-						<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
-						<Input
-							readOnly={true}
-							placeholder={t('ns_common:actions.select_database')}
-							className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none transition-none focus:border-none focus:outline-none'
-							value={
-								currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder
-									? t(`ns_warehouse:tenancy_warehouse.${currentWritableTenant?.alias}`, {
-											defaultValue: ''
-										})
-									: ''
-							}
+											</StyledFormLabel>
+										</FormItem>
+										<FormItem>
+											<StyledFormLabel
+												htmlFor={FormActionEnum.EXPORT}
+												role='radio'
+												tabIndex={0}
+												aria-checked={field.value == FormActionEnum.EXPORT}>
+												<FormControl>
+													<RadioGroupItem
+														id={FormActionEnum.EXPORT}
+														value={FormActionEnum.EXPORT}
+														className='sr-only'
+													/>
+												</FormControl>
+												{t('ns_inoutbound:action_types.warehouse_output')}
+												<CheckIcon
+													name='Check'
+													size={24}
+													aria-checked={field.value === FormActionEnum.EXPORT}
+												/>
+											</StyledFormLabel>
+										</FormItem>
+									</RadioGroup>
+								</FormItem>
+							)}
 						/>
 					</Div>
-				</Div>
-				<Div className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
-					<FormField
-						name='rfid_use'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>{t('ns_common:common_fields.actions')}</FormLabel>
-								<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm aria-disabled:text-muted-foreground'>
-									{form.watch('rfid_use') === FormActionReasonEnum.NORMAL_IMPORT
-										? t('ns_inoutbound:inoutbound_actions.normal_import')
-										: t('ns_inoutbound:inoutbound_actions.recycling')}
-									<Input
-										readOnly={true}
-										type='hidden'
-										placeholder={t('ns_common:actions.select_database')}
-										className='h-max w-full border-none px-0 text-foreground shadow-none focus-within:outline-none focus:border-none'
-										onChange={field.onChange}
-										value={field.value}
-									/>
-								</Div>
-							</FormItem>
-						)}
-					/>
-				</Div>
-				{action === FormActionEnum.IMPORT && (
-					<Fragment>
-						<Div className='col-span-1 sm:col-span-full'>
-							<SelectFieldControl
-								name='dept_code'
-								label={t('ns_erp:fields.shaping_dept_code')}
-								datalist={inoutboundDepts}
-								labelField='dept_name'
-								valueField='dept_code'
-								onValueChange={(value) =>
-									form.setValue(
-										'dept_name',
-										inoutboundDepts.find((item) => item.dept_code === value)?.dept_name
-									)
+					<Div className='col-span-full'>
+						<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
+							<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
+							<Input
+								readOnly={true}
+								placeholder={t('ns_common:actions.select_database')}
+								className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none transition-none focus:border-none focus:outline-none'
+								value={
+									currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder
+										? t(`ns_warehouse:tenancy_warehouse.${currentWritableTenant?.alias}`, {
+												defaultValue: ''
+											})
+										: ''
 								}
 							/>
 						</Div>
-						<Div className='col-span-1 sm:col-span-full'>
-							<SelectFieldControl
-								disabled={isLoading}
-								name='warehouse_num'
-								label={t('ns_inoutbound:labels.io_archive_warehouse')}
-								datalist={warehouseOptions}
-								labelField='warehouse_name'
-								valueField='warehouse_num'
-							/>
-						</Div>
-						<Div className='col-span-1 sm:col-span-full'>
-							<ComboboxFieldControl
-								name='storage'
-								datalist={storageAreaOptions}
-								labelField='storage_name'
-								valueField='storage_num'
-								shouldFilter={false}
-								disabled={warehouseOptions?.length === 0}
-								label={t('ns_inoutbound:labels.io_storage_location')}
-								template={WarehouseComboboxSelection}
-							/>
-						</Div>
-					</Fragment>
-				)}
-				<Div className='col-span-full grid grid-cols-2 gap-x-2'>
-					<Button
-						type='submit'
-						size={isMobileScreen ? 'lg' : 'default'}
-						className='gap-x-2 sm:w-full md:w-full'
-						disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
-						<Icon name='Check' /> {t('ns_common:actions.save')}
-					</Button>
-					<Button
-						type='reset'
-						variant='outline'
-						size={isMobileScreen ? 'lg' : 'default'}
-						onClick={handleResetForm}
-						className='gap-x-2 sm:w-full md:w-full'>
-						<Icon name='Undo' /> {t('ns_common:actions.reset')}
-					</Button>
-				</Div>
-				<Separator className='col-span-full' />
-				<Div className='col-span-full inline-flex items-center gap-x-2'>
-					<Icon
-						name='BotMessageSquare'
-						size={24}
-						strokeWidth={1.5}
-						className='duration-500 animate-in zoom-in-90 slide-in-from-bottom-1'
-					/>
-					<Typewriter className='text-sm italic' text={t('ns_inoutbound:description.inoutbound_form_note')} />
-				</Div>
-			</Form>
-		</FormProvider>
+					</Div>
+					<Div
+						className={cn('sm:col-span-full', action === FormActionEnum.IMPORT ? 'col-span-1' : 'col-span-full')}>
+						<FormField
+							name='rfid_use'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>{t('ns_common:common_fields.actions')}</FormLabel>
+									<Div className='flex h-9 w-full items-center rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm aria-disabled:text-muted-foreground'>
+										{form.watch('rfid_use') === FormActionReasonEnum.NORMAL_IMPORT
+											? t('ns_inoutbound:inoutbound_actions.normal_import')
+											: t('ns_inoutbound:inoutbound_actions.recycling')}
+										<Input
+											readOnly={true}
+											type='hidden'
+											placeholder={t('ns_common:actions.select_database')}
+											className='h-max w-full border-none px-0 text-foreground shadow-none focus-within:outline-none focus:border-none'
+											onChange={field.onChange}
+											value={field.value}
+										/>
+									</Div>
+								</FormItem>
+							)}
+						/>
+					</Div>
+					{action === FormActionEnum.IMPORT && (
+						<Fragment>
+							<Div className='col-span-1 sm:col-span-full'>
+								<SelectFieldControl
+									name='dept_code'
+									label={t('ns_erp:fields.shaping_dept_code')}
+									datalist={inoutboundDepts}
+									labelField='dept_name'
+									valueField='dept_code'
+									onValueChange={(value) =>
+										form.setValue(
+											'dept_name',
+											inoutboundDepts.find((item) => item.dept_code === value)?.dept_name
+										)
+									}
+								/>
+							</Div>
+							<Div className='col-span-1 sm:col-span-full'>
+								<SelectFieldControl
+									disabled={isLoading}
+									name='warehouse_num'
+									label={t('ns_inoutbound:labels.io_archive_warehouse')}
+									datalist={warehouseOptions}
+									labelField='warehouse_name'
+									valueField='warehouse_num'
+								/>
+							</Div>
+							<Div className='col-span-1 sm:col-span-full'>
+								<ComboboxFieldControl
+									name='storage'
+									datalist={storageAreaOptions}
+									labelField='storage_name'
+									valueField='storage_num'
+									shouldFilter={false}
+									disabled={warehouseOptions?.length === 0}
+									label={t('ns_inoutbound:labels.io_storage_location')}
+									template={WarehouseComboboxSelection}
+								/>
+							</Div>
+						</Fragment>
+					)}
+					<Div className='col-span-full grid grid-cols-2 gap-x-2'>
+						<Button
+							type='submit'
+							size={isMobileScreen ? 'lg' : 'default'}
+							className='gap-x-2 sm:w-full md:w-full'
+							disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
+							<Icon name='Check' /> {t('ns_common:actions.save')}
+						</Button>
+						<Button
+							type='reset'
+							variant='outline'
+							size={isMobileScreen ? 'lg' : 'default'}
+							onClick={handleResetForm}
+							className='gap-x-2 sm:w-full md:w-full'>
+							<Icon name='Undo' /> {t('ns_common:actions.reset')}
+						</Button>
+					</Div>
+					<Separator className='col-span-full' />
+					<Div className='col-span-full inline-flex items-center gap-x-2'>
+						<Icon
+							name='BotMessageSquare'
+							size={24}
+							strokeWidth={1.5}
+							className='duration-500 animate-in zoom-in-90 slide-in-from-bottom-1'
+						/>
+						<Typewriter className='text-sm italic' text={t('ns_inoutbound:description.inoutbound_form_note')} />
+					</Div>
+				</Form>
+			</FormProvider>
+		</Fragment>
 	)
 }
 

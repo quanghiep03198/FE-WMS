@@ -11,7 +11,6 @@ import {
 	TableRow,
 	Typography
 } from '@/components/ui'
-import { VirtualItem } from '@tanstack/react-virtual'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType } from '../../-constants'
@@ -21,10 +20,11 @@ import { GhostButton, ListDetail, ListDetailItem } from './styled'
 type DataRestorationRowProps = {
 	data: IElectronicProductCode & { scanned: boolean }
 	dataType: RFIDDataType
-	virtualItem: VirtualItem
+	size: number
+	// virtualItem: VirtualItem
 }
 
-const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType, virtualItem }) => {
+const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType, size }) => {
 	const { t } = useTranslation()
 	const { selectedItems, addItemToSet, removeItemFromSet } = useDataRestorationContext(
 		'addItemToSet',
@@ -36,10 +36,9 @@ const DataRestorationRow: React.FC<DataRestorationRowProps> = ({ data, dataType,
 
 	return (
 		<TableRow
-			data-index={virtualItem.index}
 			aria-selected={isSelected}
 			className='group/row transition-all duration-200 ease-in-out group-aria-busy/body:opacity-50'
-			style={{ height: virtualItem.size }}>
+			style={{ height: size }}>
 			<TableCell className='group-aria-selected/row:bg-table-row-selected'>
 				<Checkbox
 					id={data.epc}

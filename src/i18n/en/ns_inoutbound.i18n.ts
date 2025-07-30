@@ -92,6 +92,7 @@ export default {
 			'Invalid EPC detected. Please contact the shaping department for this issue, then move them to recycle.',
 		navigation_blocked_caption: 'Unsaved tasks. Are you sure you want to leave the page right now?',
 		navigation_blocked_message: 'Cancel scanning EPCs anyway?',
+		over_inbound_limit: 'The number of scanned EPCs exceeds the limit for this order. Please check again.',
 		stock_out_submission_caution:
 			'Please check the information carefully before confirming the stock out. After confirmation, you cannot change this information.',
 		too_many_mono: 'There are more than 3 commands scanned. Please check again.'
