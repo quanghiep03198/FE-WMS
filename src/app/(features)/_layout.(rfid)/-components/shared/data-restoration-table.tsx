@@ -17,7 +17,6 @@ import {
 } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 
-import useMeasureElement from '@/common/hooks/use-measure-element'
 import TableBodyVirtualViewport from '@/components/ui/@react-table/components/table-body-virtual-viewport'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -79,15 +78,13 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType, s
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
-	const measureElement = useMeasureElement()
 
 	const virtualizer = useVirtualizer({
 		count: datalist.length,
 		overscan: PRERENDERED_ITEMS,
 		scrollToFn,
 		getScrollElement,
-		estimateSize,
-		measureElement
+		estimateSize
 	})
 
 	const virtualItems = virtualizer.getVirtualItems()
@@ -184,14 +181,14 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType, s
 											key={item.epc}
 											data={item}
 											dataType={dataType}
-											virtualItem={virtualItem}
+											size={virtualItem.size}
 										/>
 									) : (
 										<DataRestorationRow
 											key={item.epc}
 											data={item}
 											dataType={dataType}
-											virtualItem={virtualItem}
+											size={virtualItem.size}
 										/>
 									)
 								})}
