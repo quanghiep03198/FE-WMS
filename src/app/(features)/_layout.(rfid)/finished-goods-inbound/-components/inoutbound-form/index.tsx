@@ -28,7 +28,7 @@ import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
-import { HttpStatusCode } from 'axios'
+import { AxiosError, HttpStatusCode } from 'axios'
 import { omit } from 'lodash'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -152,11 +152,13 @@ const InoutboundForm: React.FC = () => {
 	return (
 		<Fragment>
 			{createPortal(
-				<Alert data-state={isError && error?.status === HttpStatusCode.UnprocessableEntity ? 'open' : 'closed'}>
+				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
 					<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
 					<AlertContent>
 						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
-						<AlertDescription>{t(error?.message as Parameter<typeof t>)}</AlertDescription>
+						<AlertDescription>
+							{(error as AxiosError<ResponseBody<void>>)?.response?.data?.message}
+						</AlertDescription>
 					</AlertContent>
 					<Tooltip
 						message={t('ns_common:actions.dismiss')}
