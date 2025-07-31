@@ -276,7 +276,7 @@ const BeamAnimated: React.FC = () => {
 								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1500ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1500ms,box-shadow_300ms_ease-out_1500ms] sm:-translate-x-3 sm:-translate-y-3'
 								: 'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
 						)}>
-						<span className='h-6 text-center font-jetbrains text-2xl font-semibold transition-none duration-0 sm:text-base md:text-2xl xl:text-2xl'>
+						<span className='h-6 text-center font-jetbrains text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-base md:text-2xl xl:text-2xl'>
 							WMS
 						</span>
 						<Separator className='h-1 w-full bg-primary-foreground sm:h-0.5 md:h-1 lg:h-1' />

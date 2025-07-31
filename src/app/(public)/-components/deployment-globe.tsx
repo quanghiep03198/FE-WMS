@@ -9,7 +9,7 @@ const DeploymentGlobe: React.FC = () => {
 	const pageContext = usePageContext()
 	const [inViewport] = useInViewport(ref, {
 		root: () => pageContext?.contentScrollRef?.current,
-		threshold: 0.5
+		threshold: 0.75
 	})
 
 	return (

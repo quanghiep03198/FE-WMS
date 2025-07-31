@@ -25,8 +25,27 @@ const LogoCloud: React.FC = () => {
 			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 xxl:max-w-8xl'>
 				<Div className='size-56 translate-y-12 place-content-center place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
 					<Div className='size-40 place-content-center place-items-center rounded-full border-[1.5px] border-foreground/35'>
-						<Div className='size-24 place-content-center place-items-center rounded-full border border-foreground/50'>
-							<Icon name='Codesandbox' strokeWidth={1} size={60} />
+						<Div className='relative size-24 place-content-center place-items-center rounded-full border border-foreground/50'>
+							<Icon
+								name='Codesandbox'
+								className='z-20'
+								strokeWidth={1}
+								size={60}
+								stroke='url(#codesandbox-gradient)'>
+								<defs>
+									<linearGradient
+										id='codesandbox-gradient'
+										x1='0'
+										y1='20'
+										x2='0'
+										y2='0'
+										gradientUnits='userSpaceOnUse'>
+										<stop stopColor='hsl(var(--muted-foreground)' />
+										<stop offset='1' stopColor='hsl(var(--foreground))' />
+									</linearGradient>
+								</defs>
+							</Icon>
+							{/* /> */}
 						</Div>
 					</Div>
 				</Div>
