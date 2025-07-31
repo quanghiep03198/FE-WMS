@@ -153,7 +153,12 @@ const InoutboundForm: React.FC = () => {
 		<Fragment>
 			{createPortal(
 				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
-					<Icon name='TriangleAlert' size={36} className='stroke-destructive-foreground' />
+					<Icon
+						name='TriangleAlert'
+						size={40}
+						strokeWidth={2}
+						className='fill-destructive-foreground stroke-destructive'
+					/>
 					<AlertContent>
 						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
 						<AlertDescription>
@@ -164,10 +169,7 @@ const InoutboundForm: React.FC = () => {
 						message={t('ns_common:actions.dismiss')}
 						triggerProps={{ asChild: true }}
 						contentProps={{ side: 'left' }}>
-						<AlertClose
-							onClick={() => {
-								reset()
-							}}>
+						<AlertClose onClick={() => reset()}>
 							<Icon name='X' />
 						</AlertClose>
 					</Tooltip>

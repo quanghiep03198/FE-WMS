@@ -1,10 +1,13 @@
 'use no memo'
 
-import { Form as FormProvider, MultiSelectFieldControl } from '@/components/ui'
+import { Form as FormProvider, Icon, MultiSelectFieldControl, Tooltip } from '@/components/ui'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
+import { AxiosError, HttpStatusCode } from 'axios'
 import { sortedUniqBy } from 'lodash'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -27,7 +30,7 @@ const CentralizedPoOutboundForm: React.FC = () => {
 		mode: 'onChange'
 	})
 
-	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation(form.reset)
+	const { mutateAsync, isPending, isError, error, reset } = useUpdateStockOutMutation(form.reset)
 
 	const filteredOrders = useMemo(() => {
 		if (!Array.isArray(scannedOrders)) return []
@@ -39,28 +42,55 @@ const CentralizedPoOutboundForm: React.FC = () => {
 	}, [searchTerm, scannedOrders])
 
 	return (
-		<FormProvider {...form}>
-			<Form
-				onSubmit={form.handleSubmit((data) =>
-					mutateAsync(data).then(() => {
-						form.reset()
-						resetSearchTerm()
-					})
-				)}>
-				<PurchaseOrderAutoComplete />
-				<MultiSelectFieldControl
-					name='mo_no'
-					label={t('ns_erp:fields.mo_no')}
-					shouldFilter={false}
-					search={searchTerm}
-					onInput={(value) => setSearchTerm(value)}
-					datalist={filteredOrders}
-					labelField='mo_no'
-					valueField='mo_no'
-				/>
-				<FormSubmission isPending={isPending} isError={isError} />
-			</Form>
-		</FormProvider>
+		<Fragment>
+			{createPortal(
+				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
+					<Icon
+						name='TriangleAlert'
+						size={40}
+						strokeWidth={2}
+						className='fill-destructive-foreground stroke-destructive'
+					/>
+					<AlertContent>
+						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
+						<AlertDescription>
+							{(error as AxiosError<ResponseBody<void>>)?.response?.data?.message}
+						</AlertDescription>
+					</AlertContent>
+					<Tooltip
+						message={t('ns_common:actions.dismiss')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ side: 'left' }}>
+						<AlertClose onClick={() => reset()}>
+							<Icon name='X' />
+						</AlertClose>
+					</Tooltip>
+				</Alert>,
+				document.body
+			)}
+			<FormProvider {...form}>
+				<Form
+					onSubmit={form.handleSubmit((data) =>
+						mutateAsync(data).then(() => {
+							form.reset()
+							resetSearchTerm()
+						})
+					)}>
+					<PurchaseOrderAutoComplete />
+					<MultiSelectFieldControl
+						name='mo_no'
+						label={t('ns_erp:fields.mo_no')}
+						shouldFilter={false}
+						search={searchTerm}
+						onInput={(value) => setSearchTerm(value)}
+						datalist={filteredOrders}
+						labelField='mo_no'
+						valueField='mo_no'
+					/>
+					<FormSubmission isPending={isPending} isError={isError} />
+				</Form>
+			</FormProvider>
+		</Fragment>
 	)
 }
 

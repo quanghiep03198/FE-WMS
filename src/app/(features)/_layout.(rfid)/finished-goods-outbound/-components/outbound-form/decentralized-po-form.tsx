@@ -1,7 +1,8 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
-import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Typography } from '@/components/ui'
+import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Tooltip, Typography } from '@/components/ui'
+import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
 import {
 	closestCenter,
 	DndContext,
@@ -18,8 +19,10 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSize } from 'ahooks'
+import { AxiosError, HttpStatusCode } from 'axios'
 import { sortBy, sortedUniqBy } from 'lodash'
-import React, { use, useMemo, useRef, useState } from 'react'
+import React, { Fragment, use, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
 	FieldArrayWithId,
 	useFieldArray,
@@ -38,12 +41,13 @@ import DroppableFieldItem from './decentralized-po-field-item'
 import FormSubmission from './form-submission'
 import PurchaseOrderAutoComplete from './purchase-order-autocomplete'
 
-const DecentralizedPoOutboundForm = () => {
+const DecentralizedPoOutboundForm: React.FC = () => {
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const [activeState, setActiveState] = useState<{ id: string | null; index: number | null }>({
 		id: null,
 		index: null
 	})
+	const { t } = useTranslation()
 
 	const form = useForm<DetailedOutBoundFormValues>({
 		resolver: zodResolver(detailedOutboundValidator),
@@ -65,7 +69,7 @@ const DecentralizedPoOutboundForm = () => {
 
 	const { fields, append, remove, move } = useFieldArray({ control: form.control, name: 'sizes' })
 
-	const { mutateAsync, isPending, isError } = useUpdateStockOutMutation(form.reset)
+	const { mutateAsync, isPending, isError, error, reset } = useUpdateStockOutMutation(form.reset)
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -113,67 +117,94 @@ const DecentralizedPoOutboundForm = () => {
 	}, [fieldsetRef.current])
 
 	return (
-		<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
-			<FormProvider {...form}>
-				<Form
-					onSubmit={form.handleSubmit((data) => {
-						mutateAsync({
-							...data,
-							sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
-						}).then(() => form.reset())
-					})}>
-					<Div className='col-span-1'>
-						<PurchaseOrderAutoComplete />
-					</Div>
-					<Div className='col-span-1'>
-						<CommandNumberFieldControl />
-					</Div>
-					<Div
-						className='col-span-full'
-						style={
-							{
-								'--draggable-item-width': fieldsetSize?.width - fieldsetSizeVerticalPadding + 'px'
-							} as React.CSSProperties
-						}>
-						<DndContext
-							collisionDetection={closestCenter}
-							modifiers={[restrictToVerticalAxis]}
-							sensors={sensors}
-							onDragStart={handleDragStart}
-							onDragEnd={handleDragEnd}>
-							<SortableContext items={fields}>
-								<Div
-									ref={fieldsetRef}
-									as='fieldset'
-									className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border-2 border-dashed p-4 duration-100'>
-									{fields.length > 0 ? (
-										fields.map((field, index) => (
-											<DroppableFieldItem key={field.id} id={field.id} index={index} onRemove={remove} />
-										))
-									) : (
-										<EmptyState />
-									)}
-									<ArrayFieldControl fields={fields} onAppend={append} />
-								</Div>
-								<DragOverlay
-									className='min-w-[var(--draggable-item-width)] max-w-[var(--draggable-item-width)]'
-									dropAnimation={{
-										duration: 300,
-										easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
-									}}>
-									{activeState.id && activeState.index ? (
-										<DroppableFieldItem {...activeState} onRemove={remove} />
-									) : null}
-								</DragOverlay>
-							</SortableContext>
-						</DndContext>
-					</Div>
-					<Div className='col-span-full'>
-						<FormSubmission isPending={isPending} isError={isError} />
-					</Div>
-				</Form>
-			</FormProvider>
-		</DecentralizedPoFormProvider>
+		<Fragment>
+			{createPortal(
+				<Alert data-state={isError && error?.status === HttpStatusCode.BadRequest ? 'open' : 'closed'}>
+					<Icon
+						name='TriangleAlert'
+						size={40}
+						strokeWidth={2}
+						className='fill-destructive-foreground stroke-destructive'
+					/>
+					<AlertContent>
+						<AlertTitle>{t('ns_common:titles.caution')}</AlertTitle>
+						<AlertDescription>
+							{(error as AxiosError<ResponseBody<void>>)?.response?.data?.message}
+						</AlertDescription>
+					</AlertContent>
+					<Tooltip
+						message={t('ns_common:actions.dismiss')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ side: 'left' }}>
+						<AlertClose onClick={() => reset()}>
+							<Icon name='X' />
+						</AlertClose>
+					</Tooltip>
+				</Alert>,
+				document.body
+			)}
+			<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
+				<FormProvider {...form}>
+					<Form
+						onSubmit={form.handleSubmit((data) => {
+							mutateAsync({
+								...data,
+								sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
+							}).then(() => form.reset())
+						})}>
+						<Div className='col-span-1'>
+							<PurchaseOrderAutoComplete />
+						</Div>
+						<Div className='col-span-1'>
+							<CommandNumberFieldControl />
+						</Div>
+						<Div
+							className='col-span-full'
+							style={
+								{
+									'--draggable-item-width': fieldsetSize?.width - fieldsetSizeVerticalPadding + 'px'
+								} as React.CSSProperties
+							}>
+							<DndContext
+								collisionDetection={closestCenter}
+								modifiers={[restrictToVerticalAxis]}
+								sensors={sensors}
+								onDragStart={handleDragStart}
+								onDragEnd={handleDragEnd}>
+								<SortableContext items={fields}>
+									<Div
+										ref={fieldsetRef}
+										as='fieldset'
+										className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border-2 border-dashed p-4 duration-100'>
+										{fields.length > 0 ? (
+											fields.map((field, index) => (
+												<DroppableFieldItem key={field.id} id={field.id} index={index} onRemove={remove} />
+											))
+										) : (
+											<EmptyState />
+										)}
+										<ArrayFieldControl fields={fields} onAppend={append} />
+									</Div>
+									<DragOverlay
+										className='min-w-[var(--draggable-item-width)] max-w-[var(--draggable-item-width)]'
+										dropAnimation={{
+											duration: 300,
+											easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
+										}}>
+										{activeState.id && activeState.index ? (
+											<DroppableFieldItem {...activeState} onRemove={remove} />
+										) : null}
+									</DragOverlay>
+								</SortableContext>
+							</DndContext>
+						</Div>
+						<Div className='col-span-full'>
+							<FormSubmission isPending={isPending} isError={isError} />
+						</Div>
+					</Form>
+				</FormProvider>
+			</DecentralizedPoFormProvider>
+		</Fragment>
 	)
 }
 
