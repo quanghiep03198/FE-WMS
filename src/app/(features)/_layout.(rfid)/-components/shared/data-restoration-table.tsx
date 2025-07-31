@@ -1,4 +1,5 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
+import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -16,11 +17,9 @@ import {
 	Typography
 } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
-
-import TableBodyVirtualViewport from '@/components/ui/@react-table/components/table-body-virtual-viewport'
+import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useDeepCompareEffect } from 'ahooks'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType } from '../../-constants'
@@ -30,12 +29,12 @@ import { DataRestorationRow, MemoizedDataRestorationRow } from './data-restorati
 import DebouncedLimitInput from './debounced-limit-input'
 import { GhostButton } from './styled'
 
-type DataRestorationTableProps = { dataType: RFIDDataType; shouldMeasureElement?: boolean }
+type DataRestorationTableProps = { dataType: RFIDDataType }
 
 const VIRTUAL_ITEM_SIZE: number = 40
 const PRERENDERED_ITEMS: number = 5
 
-const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType, shouldMeasureElement }) => {
+const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType }) => {
 	const { t } = useTranslation()
 	const { limit, selectedItems, searchTerm, advancedFilters, addAllItemsToSet, removeAllItemsFromSet } =
 		useDataRestorationContext(
@@ -87,12 +86,9 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType, s
 		estimateSize
 	})
 
-	const virtualItems = virtualizer.getVirtualItems()
+	const { before, after } = useVirutalScrollOffset(virtualizer)
 
-	useDeepCompareEffect(() => {
-		// * If the sheet is closed, there is no need to measure
-		if (scrollElement) virtualizer.measure()
-	}, [virtualizer, scrollElement])
+	const virtualItems = virtualizer.getVirtualItems()
 
 	const handleFetchNextPage = () => {
 		const [lastItem] = [...virtualItems].reverse()
@@ -172,45 +168,40 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType, s
 						</TableRow>
 					) : (
 						<Fragment>
-							<TableBodyVirtualViewport virtualizer={virtualizer} columnCount={4}>
-								{virtualItems.map((virtualItem) => {
-									const item = datalist[virtualItem.index]
+							{before > 0 && <VirtualPlaceholderRow colSpan={4} style={{ height: before }} />}
+							{virtualItems.map((virtualItem) => {
+								const item = datalist[virtualItem.index]
 
-									return virtualizer.isScrolling ? (
-										<MemoizedDataRestorationRow
-											key={item.epc}
-											data={item}
-											dataType={dataType}
-											size={virtualItem.size}
-										/>
-									) : (
-										<DataRestorationRow
-											key={item.epc}
-											data={item}
-											dataType={dataType}
-											size={virtualItem.size}
-										/>
-									)
-								})}
-								{hasNextPage && (
-									<TableRow>
-										<TableCell colSpan={4} align='center' className='h-10 text-muted-foreground'>
-											{isFetchingNextPage ? (
-												<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
-											) : (
-												<Button
-													variant='link'
-													size='lg'
-													disabled={isFetching}
-													onClick={() => handleFetchNextPage()}>
-													<Icon name='Plus' role='presentation' />
-													{t('ns_common:actions.load_more')}
-												</Button>
-											)}
-										</TableCell>
-									</TableRow>
-								)}
-							</TableBodyVirtualViewport>
+								return virtualizer.isScrolling ? (
+									<MemoizedDataRestorationRow
+										key={item.epc}
+										data={item}
+										dataType={dataType}
+										size={virtualItem.size}
+									/>
+								) : (
+									<DataRestorationRow key={item.epc} data={item} dataType={dataType} size={virtualItem.size} />
+								)
+							})}
+							{hasNextPage && (
+								<TableRow>
+									<TableCell colSpan={4} align='center' className='h-10 text-muted-foreground'>
+										{isFetchingNextPage ? (
+											<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+										) : (
+											<Button
+												variant='link'
+												size='lg'
+												disabled={isFetching}
+												onClick={() => handleFetchNextPage()}>
+												<Icon name='Plus' role='presentation' />
+												{t('ns_common:actions.load_more')}
+											</Button>
+										)}
+									</TableCell>
+								</TableRow>
+							)}
+							{after > 0 && <VirtualPlaceholderRow colSpan={4} style={{ height: after }} />}
 						</Fragment>
 					)}
 				</TableBody>
