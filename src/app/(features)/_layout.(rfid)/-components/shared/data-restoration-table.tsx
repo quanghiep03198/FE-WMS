@@ -24,7 +24,7 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType } from '../../-constants'
 import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
-import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../-hooks/use-data-restoration'
+import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../-hooks/use-data-restoration-asm'
 import { DataRestorationRow, MemoizedDataRestorationRow } from './data-restoration-row'
 import DebouncedLimitInput from './debounced-limit-input'
 import { GhostButton } from './styled'

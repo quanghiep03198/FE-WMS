@@ -1,6 +1,7 @@
 'use no memo'
 
-import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/app/(features)/-hooks/use-order'
+import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/app/(features)/-hooks/use-order-asm'
+import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -33,7 +34,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
-import { FALLBACK_VALUE, useUpsertEpcInfoMutation } from '../../-hooks'
+import { useUpsertEpcInfoMutation } from '../../-hooks/use-rfid-inbound-asm'
 import { updateEpcFormSchema, UpdateEpcFormValues } from '../../-schemas/fill-epc-data.schema'
 
 const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {

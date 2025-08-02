@@ -31,7 +31,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { usePageContext } from '../../-contexts/page-context'
-import { useGetInboundOrderDetail } from '../../-hooks'
+import { useGetInboundOrderDetail } from '../../-hooks/use-rfid-inbound-asm'
 import TableDataRow from './order-size-row'
 
 const OrderSizeDetailTable: React.FC = () => {

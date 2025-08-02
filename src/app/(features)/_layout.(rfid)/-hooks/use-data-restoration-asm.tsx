@@ -3,11 +3,20 @@ import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash'
 import { RFIDDataType } from '../-constants'
+import { RFIDInboundQueryKeys } from '../finished-goods-inbound/-hooks/use-rfid-inbound-asm'
 import { FilterArchivedEpcParams } from '../finished-goods-outbound'
+import { RFIDOutboundQueryKeys } from '../finished-goods-outbound/-hooks/use-rfid-outbound-asm'
+
+export enum ArchiviedDataQueryKeys {
+	ARCHIVED_EPCS = 'ARCHIVED_EPCS',
+	ARCHIVED_EPCS_FEATURES = 'ARCHIVED_EPCS_FEATURES'
+}
+
+type InvalidateQueryKeys = ArchiviedDataQueryKeys | RFIDInboundQueryKeys | RFIDOutboundQueryKeys
 
 export const useGetArchivedEpcQuery = (type: RFIDDataType, params) => {
 	return useInfiniteQuery({
-		queryKey: ['ARCHIVED_EPCS', type, params],
+		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS, type, params],
 		queryFn: async ({ pageParam }) => {
 			const filterQueries = omitBy<Partial<FilterArchivedEpcParams>>(
 				{
@@ -43,7 +52,7 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params) => {
 
 export const useGetArchivedEpcFeatureQuery = (type: RFIDDataType) => {
 	return useQuery({
-		queryKey: ['ARCHIVED_EPCS_FEATURES', type],
+		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES, type],
 		queryFn: async () => await RFIDService.getArchivedEpcFeatures(type),
 		refetchOnMount: 'always',
 		select: (response) => response.metadata
@@ -54,7 +63,6 @@ export const useRestoreEpcMutation = (type: RFIDDataType) => {
 	const invalidateQueries = useInvalidateQueries(type)
 
 	return useMutation({
-		mutationKey: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS'],
 		mutationFn: async (epcs: Array<IElectronicProductCode>) => await RFIDService.restoreArchivedEpcs(type, epcs),
 		onSettled: invalidateQueries
 	})
@@ -67,13 +75,13 @@ const useInvalidateQueries = (type: RFIDDataType) => {
 		queryClient.invalidateQueries({
 			predicate: (query) =>
 				query.queryKey.some((key) => {
-					const shouldInvalidateKeys = ['ARCHIVED_EPCS', 'ARCHIVED_EPCS_FEATURES']
+					const shouldInvalidateKeys = Object.values(ArchiviedDataQueryKeys)
 					const potentialInvalidateKeys =
 						type === RFIDDataType.INBOUND
-							? ['INBOUND_ORDER_DETAIL', 'INBOUND_EPC_LIST']
-							: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE']
+							? [RFIDInboundQueryKeys.INBOUND_EPC, RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL]
+							: [RFIDOutboundQueryKeys.OUTBOUND_EPC, RFIDOutboundQueryKeys.OUTBOUND_EPC_BY_SIZE]
 
-					return [...shouldInvalidateKeys, ...potentialInvalidateKeys].includes(key as string)
+					return [...shouldInvalidateKeys, ...potentialInvalidateKeys].includes(key as InvalidateQueryKeys)
 				})
 		})
 	}

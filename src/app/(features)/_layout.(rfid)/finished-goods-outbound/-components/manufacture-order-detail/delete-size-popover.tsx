@@ -24,7 +24,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useDeleteEpcMutation, useGetOutboundEpcsBySize } from '../../-hooks'
+import { useDeleteEpcMutation, useGetOutboundEpcsBySize } from '../../-hooks/use-rfid-outbound-asm'
 
 type DeleteSizePopoverProps = {
 	data: {

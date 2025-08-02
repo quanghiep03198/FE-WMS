@@ -1,6 +1,6 @@
 /* eslint-disable @tanstack/query/exhaustive-deps */
+import { InboundReportQueryKeys } from '@/app/(features)/_layout.inbound-report/-hooks/use-inbound-report-asm'
 import useAuth from '@/common/hooks/use-auth'
-import { DepartmentService } from '@/services/department.service'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omit } from 'lodash'
@@ -10,18 +10,20 @@ import { DEFAULT_PROPS, usePageContext } from '../-contexts/page-context'
 import { InoutboundPayload } from '../-schemas/epc-inoutbound.schema'
 import { type ExchangeEpcPayload } from '../-schemas/exchange-epc.schema'
 import { SearchEpcParams } from '../..'
-import { INBOUND_REPORT_PROVIDE_TAG } from '../../../-hooks/use-report'
 import { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
 
 // * API Query Keys
-export const SHAPING_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
-export const FP_ORDER_DETAIL_PROVIDE_TAG = 'INBOUND_ORDER_DETAIL'
-export const FP_EPC_LIST_PROVIDE_TAG = 'INBOUND_EPC_LIST'
+export enum RFIDInboundQueryKeys {
+	EXCHANGABLE_ORDER = 'EXCHANGABLE_ORDER',
+	INBOUND_EPC = 'INBOUND_EPC',
+	INBOUND_ORDER_DETAIL = 'INBOUND_ORDER_DETAIL'
+}
 
-// * Fallback order value if it's null
-export const FALLBACK_VALUE = 'Unknown'
+// export const SHAPING_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
+// export const RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL = 'INBOUND_ORDER_DETAIL'
+// export const RFIDInboundQueryKeys.INBOUND_EPC = 'INBOUND_EPC_LIST'
 
-export type FetchEpcQueryKey = [typeof FP_EPC_LIST_PROVIDE_TAG, number, string]
+export type FetchEpcQueryKey = [typeof RFIDInboundQueryKeys.INBOUND_EPC, number, string]
 
 export const useGetInboundEpcQuery = () => {
 	const queryClient = useQueryClient()
@@ -34,12 +36,12 @@ export const useGetInboundEpcQuery = () => {
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
-			queryClient.removeQueries({ queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG] })
+			queryClient.removeQueries({ queryKey: [RFIDInboundQueryKeys.INBOUND_EPC] })
 		}
 	}, [scanningStatus])
 
 	return useQuery({
-		queryKey: [FP_EPC_LIST_PROVIDE_TAG],
+		queryKey: [RFIDInboundQueryKeys.INBOUND_EPC],
 		queryFn: async () =>
 			RFIDService.fetchNextInboundEpc({
 				_page: currentPage,
@@ -59,12 +61,12 @@ export const useGetInboundOrderDetail = () => {
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
-			queryClient.removeQueries({ queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG] })
+			queryClient.removeQueries({ queryKey: [RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL] })
 		}
 	}, [scanningStatus])
 
 	return useQuery({
-		queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
+		queryKey: [RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL],
 		queryFn: async () => await RFIDService.getInboundOrderDetail(),
 		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
@@ -80,14 +82,6 @@ export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) =>
 		queryKey: ['EXCHANGABLE_ORDER', user?.company_code, params],
 		queryFn: async () => await RFIDService.searchExchangableOrder(params),
 		enabled: false,
-		select: (response) => response.metadata
-	})
-}
-
-export const useGetShapingProductLineQuery = () => {
-	return useQuery({
-		queryKey: [SHAPING_DEPT_PROVIDE_TAG],
-		queryFn: DepartmentService.getShapingDepartments,
 		select: (response) => response.metadata
 	})
 }
@@ -131,7 +125,7 @@ export const useUpdateStockInMutation = () => {
 	)
 
 	return useMutation({
-		mutationKey: [INBOUND_REPORT_PROVIDE_TAG],
+		mutationKey: [InboundReportQueryKeys.DAILY_INBOUND],
 		mutationFn: (payload: InoutboundPayload) => {
 			return RFIDService.upsertInboundInventory(
 				payload.target_tenant || payload.default_tenant,
@@ -187,8 +181,8 @@ const useInvalidateQueries = () => {
 			predicate: (query) => {
 				return query.queryKey.some((key) => {
 					const invalidateKeys: readonly string[] = [
-						'INBOUND_ORDER_DETAIL',
-						'INBOUND_EPC_LIST',
+						RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL,
+						RFIDInboundQueryKeys.INBOUND_EPC,
 						'ARCHIVED_EPCS',
 						'ARCHIVED_EPCS_FEATURES'
 					]

@@ -17,7 +17,7 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../../-contexts/page-context'
-import { useGetInboundEpcQuery } from '../../-hooks'
+import { useGetInboundEpcQuery } from '../../-hooks/use-rfid-inbound-asm'
 
 const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 

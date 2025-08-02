@@ -17,7 +17,7 @@ import { useEffect, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../../-contexts/page-context'
-import { useDeleteOrderMutation } from '../../-hooks'
+import { useDeleteOrderMutation } from '../../-hooks/use-rfid-outbound-asm'
 import { OrderItem } from '../../..'
 
 const DeleteOrderPopover: React.FC<{ data: OrderItem; shouldClosePopover?: boolean }> = ({

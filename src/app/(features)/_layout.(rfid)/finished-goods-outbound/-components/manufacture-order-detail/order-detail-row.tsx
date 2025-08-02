@@ -1,6 +1,6 @@
 import { NestedCell, NestedRow } from '@/app/(features)/-components/-shared/horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
-import { FALLBACK_VALUE } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-hooks'
+import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'

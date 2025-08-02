@@ -1,3 +1,4 @@
+import { OutboundReportQueryKeys } from '@/app/(features)/_layout.outbound-report/-hooks/use-outbound-report-asm'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
@@ -5,14 +6,19 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../-contexts/page-context'
 import { SearchEpcParams } from '../..'
-import { OUTBOUND_REPORT_PROVIDE_TAG } from '../../../-hooks/use-report'
+import { ArchiviedDataQueryKeys } from '../../-hooks/use-data-restoration-asm'
 import { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
+
+export enum RFIDOutboundQueryKeys {
+	OUTBOUND_EPC = 'OUTBOUND_EPC',
+	OUTBOUND_EPC_BY_SIZE = 'OUTBOUND_EPC_BY_SIZE'
+}
 
 export const useGetOutboundEpcQuery = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useQuery({
-		queryKey: ['OUTBOUND_EPC_LIST', currentPage],
+		queryKey: [RFIDOutboundQueryKeys.OUTBOUND_EPC, currentPage],
 		queryFn: async () => RFIDService.fetchNextOutboundEpc({ _page: currentPage }),
 		enabled: false,
 		refetchOnMount: false,
@@ -35,7 +41,12 @@ export const useDeleteOrderMutation = () => {
 	const { currentPage } = usePageContext('currentPage')
 
 	return useMutation({
-		mutationKey: ['OUTBOUND_EPC_LIST', 'OUTBOUND_EPC_BY_SIZE', 'ARCHIVED_EPCS', currentPage],
+		mutationKey: [
+			RFIDOutboundQueryKeys.OUTBOUND_EPC,
+			RFIDOutboundQueryKeys.OUTBOUND_EPC_BY_SIZE,
+			'ARCHIVED_EPCS',
+			currentPage
+		],
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
 			await RFIDService.deleteScannedOutboundOrder(commandNumber, { rescannable: !rescannable })
 	})
@@ -47,7 +58,7 @@ export const useUpdateStockOutMutation = (callback: () => unknown) => {
 	const { t } = useTranslation()
 
 	return useMutation({
-		mutationKey: ['OUTBOUND_EPC_LIST', OUTBOUND_REPORT_PROVIDE_TAG, currentPage],
+		mutationKey: [RFIDOutboundQueryKeys.OUTBOUND_EPC, OutboundReportQueryKeys.DAILY_OUTBOUND, currentPage],
 		mutationFn: async (payload: any) => await RFIDService.upsertOutboundInventory(payload),
 		onMutate: () => {
 			toastId.current = toast.loading(t('ns_common:notification.processing_request'))
@@ -68,7 +79,7 @@ export const useGetOutboundEpcsBySize = (
 ) => {
 	return useQuery({
 		...options,
-		queryKey: ['OUTBOUND_EPC_BY_SIZE', params],
+		queryKey: [RFIDOutboundQueryKeys.OUTBOUND_EPC_BY_SIZE, params],
 		queryFn: async () => await RFIDService.getOutboundEpcBySize(params),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
@@ -84,10 +95,10 @@ const useInvalidateQueries = () => {
 			predicate: (query) =>
 				query.queryKey.some((key) => {
 					const invalidateKeys: readonly string[] = [
-						'OUTBOUND_EPC_LIST',
-						'OUTBOUND_EPC_BY_SIZE',
-						'ARCHIVED_EPCS',
-						'ARCHIVED_EPCS_FEATURES'
+						RFIDOutboundQueryKeys.OUTBOUND_EPC,
+						RFIDOutboundQueryKeys.OUTBOUND_EPC_BY_SIZE,
+						ArchiviedDataQueryKeys.ARCHIVED_EPCS,
+						ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES
 					]
 					return invalidateKeys.includes(key as string)
 				})

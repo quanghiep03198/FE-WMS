@@ -6,7 +6,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../../-contexts/page-context'
-import { FP_EPC_LIST_PROVIDE_TAG, FP_ORDER_DETAIL_PROVIDE_TAG } from '../../-hooks'
+import { RFIDInboundQueryKeys } from '../../-hooks/use-rfid-inbound-asm'
 
 interface TScanningButtonProps extends Pick<ButtonProps, 'children' | 'variant'> {
 	icon: React.ComponentProps<typeof Icon>['name']
@@ -34,12 +34,12 @@ const ScannerActions: React.FC = () => {
 
 	const handleResetScanningAction = () => {
 		queryClient.removeQueries({
-			queryKey: [FP_ORDER_DETAIL_PROVIDE_TAG],
+			queryKey: [RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL],
 			exact: false,
 			type: 'all'
 		})
 		queryClient.removeQueries({
-			queryKey: [FP_EPC_LIST_PROVIDE_TAG],
+			queryKey: [RFIDInboundQueryKeys.INBOUND_EPC],
 			exact: false,
 			type: 'all'
 		})

@@ -1,6 +1,8 @@
-import { useGetAllTenants } from '@/app/(features)/-hooks/use-tenacy'
-import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse'
-import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage'
+import { useGetShapingProductLineQuery } from '@/app/(features)/-hooks/use-shaping-department-asm'
+import { useGetAllTenants } from '@/app/(features)/-hooks/use-tenacy-asm'
+import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-asm'
+import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
+import { FALLBACK_VALUE } from '@/common/constants/constants'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { ITenancy, IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -38,12 +40,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { FormActionEnum, FormActionReasonEnum } from '../../-constants'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
-import {
-	FALLBACK_VALUE,
-	useGetInboundEpcQuery,
-	useGetShapingProductLineQuery,
-	useUpdateStockInMutation
-} from '../../-hooks'
+import { useGetInboundEpcQuery, useUpdateStockInMutation } from '../../-hooks/use-rfid-inbound-asm'
 import { FormValues, InboundFormValues, inboundSchema, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {

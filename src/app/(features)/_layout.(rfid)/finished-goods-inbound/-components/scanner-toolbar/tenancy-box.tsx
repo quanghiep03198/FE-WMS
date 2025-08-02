@@ -1,4 +1,4 @@
-import { useGetTenantByFactory } from '@/app/(features)/-hooks/use-tenacy'
+import { useGetTenantByFactory } from '@/app/(features)/-hooks/use-tenacy-asm'
 import env from '@/common/utils/env'
 import { Div, Icon, Typography } from '@/components/ui'
 import { useEffect } from 'react'

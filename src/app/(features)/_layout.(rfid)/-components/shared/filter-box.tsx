@@ -28,7 +28,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType, ScanCapability, ScannedStatus } from '../../-constants'
 import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
-import { useGetArchivedEpcFeatureQuery } from '../../-hooks/use-data-restoration'
+import { useGetArchivedEpcFeatureQuery } from '../../-hooks/use-data-restoration-asm'
 import { FilterForm, GhostButton } from './styled'
 
 type SearchFormValues = {

@@ -22,7 +22,7 @@ import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
-import { useGetInboundEpcQuery } from '../../-hooks'
+import { useGetInboundEpcQuery } from '../../-hooks/use-rfid-inbound-asm'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
