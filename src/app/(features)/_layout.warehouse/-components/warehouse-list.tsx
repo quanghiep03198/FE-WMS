@@ -20,7 +20,7 @@ import {
 	useDeleteWarehouseMutation,
 	useGetWarehouseQuery,
 	useUpdateWarehouseStatusMutation
-} from '../-hooks/use-warehouse'
+} from '../-hooks/use-warehouse-asm'
 import WarehouseRowActions from './warehouse-row-actions'
 // #endregion
 

@@ -29,9 +29,10 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { warehouseTypes } from '../-constants/warehouse.const'
 import { usePageContext } from '../-contexts/page-context'
-import { WAREHOUSE_PROVIDE_TAG } from '../-hooks/use-warehouse'
+
+import { WarehouseQueryKeys } from '../-hooks/use-warehouse-asm'
 import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '../-schemas/warehouse.schema'
-import { useGetDepartmentQuery } from '../../../(auth)/-hooks/use-department'
+import { useGetDepartmentQuery } from '../../../(auth)/-hooks/use-department-asm'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
 	? Required<WarehouseFormValue>
@@ -66,7 +67,7 @@ const WarehouseFormDialog: React.FC = () => {
 
 	// Create/Update action
 	const { mutateAsync, isPending } = useMutation({
-		mutationKey: [WAREHOUSE_PROVIDE_TAG],
+		mutationKey: [WarehouseQueryKeys.WAREHOUSE],
 		mutationFn: (payload: FormValues<typeof type>) => {
 			switch (type) {
 				case CommonActions.CREATE: {
@@ -84,7 +85,7 @@ const WarehouseFormDialog: React.FC = () => {
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			dispatch({ type: 'RESET' })
-			queryClient.invalidateQueries({ queryKey: [WAREHOUSE_PROVIDE_TAG] })
+			queryClient.invalidateQueries({ queryKey: [WarehouseQueryKeys.WAREHOUSE] })
 			return toast.success(t('ns_common:notification.success'), { id: context })
 		},
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })

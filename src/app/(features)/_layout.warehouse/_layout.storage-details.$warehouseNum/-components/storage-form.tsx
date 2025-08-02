@@ -1,5 +1,5 @@
 // #region Modules
-import { WAREHOUSE_STORAGE_PROVIDE_TAG } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage'
+import { WarehouseStorageQueryKeys } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
 import { CommonActions } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
@@ -59,7 +59,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 	}, [dialogTitle, defaultFormValues, open, warehouse])
 
 	const { mutateAsync, isPending } = useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		mutationKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
 		mutationFn: (payload: FormValues<typeof type>) => {
 			switch (type) {
 				case CommonActions.CREATE: {
@@ -77,7 +77,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 		onSuccess: (_data, _variables, context) => {
 			dispatch({ type: undefined })
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => {
 			toast.error(t('ns_common:notification.error'), { id: context })

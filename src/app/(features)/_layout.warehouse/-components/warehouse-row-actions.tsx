@@ -7,7 +7,7 @@ import { Link } from '@tanstack/react-router'
 import { Row } from '@tanstack/react-table'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getWarehouseStorageOptions } from '../-hooks/use-warehouse-storage'
+import { getWarehouseStorageOptions } from '../-hooks/use-warehouse-storage-asm'
 
 type WarehouseRowActionsProps = {
 	row: Row<IWarehouse>

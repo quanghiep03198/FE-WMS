@@ -13,9 +13,11 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PartialStorageFormValue } from '../-schemas/warehouse.schema'
 
-export const WAREHOUSE_STORAGE_PROVIDE_TAG = 'WAREHOUSE_STORAGE'
+export enum WarehouseStorageQueryKeys {
+	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE'
+}
 
-type TQueryKey = ['WAREHOUSE_STORAGE', string]
+type TQueryKey = [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, string]
 
 type TransformResponseFn<T> = UseQueryOptions<
 	ResponseBody<IWarehouseStorage[]>,
@@ -38,7 +40,7 @@ export function getWarehouseStorageOptions<T>(
 	options?: Partial<UseGetWarehouseStorageQueryOptions<T>>
 ) {
 	return {
-		queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
 		queryFn: () => WarehouseStorageService.getWarehouseStorages(warehouseNum),
 		placeholderData: keepPreviousData,
 		...options
@@ -64,13 +66,13 @@ export function useUpdateStorageMutation({ warehouseNum }: { warehouseNum: strin
 	const { t } = useTranslation()
 
 	return useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		mutationKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
 		mutationFn: (data: { id: string; payload: PartialStorageFormValue }) =>
 			WarehouseStorageService.updateWarehouseStorage(data.id, data.payload),
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
@@ -91,12 +93,12 @@ export function useDeleteStorageMutation(
 	const { t } = useTranslation()
 
 	return useMutation({
-		mutationKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum],
+		mutationKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum],
 		mutationFn: WarehouseStorageService.deleteWarehouseStorage,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })
-			return queryClient.invalidateQueries({ queryKey: [WAREHOUSE_STORAGE_PROVIDE_TAG, warehouseNum] })
+			return queryClient.invalidateQueries({ queryKey: [WarehouseStorageQueryKeys.WAREHOUSE_STORAGE, warehouseNum] })
 		},
 		onError: (_data, _variables, context) => {
 			toast.error(t('ns_common:notification.error'), { id: context })

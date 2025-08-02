@@ -19,7 +19,7 @@ import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { warehouseStorageTypes } from '../../-constants/warehouse.const'
 import { usePageContext } from '../../-contexts/page-context'
-import { useDeleteStorageMutation, useUpdateStorageMutation } from '../../-hooks/use-warehouse-storage'
+import { useDeleteStorageMutation, useUpdateStorageMutation } from '../../-hooks/use-warehouse-storage-asm'
 import StorageRowActions from './storage-row-actions'
 // #endregion
 

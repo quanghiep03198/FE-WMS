@@ -7,8 +7,8 @@ import { createLazyFileRoute, useParams } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageProvider } from '../-contexts/page-context'
-import { WAREHOUSE_PROVIDE_TAG } from '../-hooks/use-warehouse'
-import { getWarehouseStorageOptions } from '../-hooks/use-warehouse-storage'
+import { WarehouseQueryKeys } from '../-hooks/use-warehouse-asm'
+import { getWarehouseStorageOptions } from '../-hooks/use-warehouse-storage-asm'
 import WarehouseStorageFormDialog from './-components/storage-form'
 import StorageListHeading from './-components/storage-heading'
 import StorageList from './-components/storage-list'
@@ -50,8 +50,9 @@ function Page() {
 	const warehouseStorageQueryResult = useQuery(
 		getWarehouseStorageOptions(warehouseNum, { select: (response) => response.metadata })
 	)
+
 	const warehouseDetailQueryResult = useQuery({
-		queryKey: [WAREHOUSE_PROVIDE_TAG, warehouseNum],
+		queryKey: [WarehouseQueryKeys.WAREHOUSE, warehouseNum],
 		queryFn: () => WarehouseService.getWarehouseByNum(warehouseNum),
 		select: (response) => response.metadata
 	})
