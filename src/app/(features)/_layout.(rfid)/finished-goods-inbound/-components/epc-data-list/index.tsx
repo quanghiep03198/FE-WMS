@@ -6,7 +6,11 @@ import ListBoxHeader from './data-list-header'
 
 const EpcListBox: React.FC = () => {
 	return (
-		<ListBoxWrapper>
+		<ListBoxWrapper
+			style={{
+				'--list-header-height': '52px',
+				'--list-footer-height': '52px'
+			}}>
 			<ListBoxHeader />
 			<ListBoxBody>
 				<EpcDataList />
@@ -19,8 +23,13 @@ const EpcListBox: React.FC = () => {
 	)
 }
 
-const ListBoxWrapper = tw.div`relative flex flex-1 divide-y divide-border justify-between h-full flex-col items-stretch max-h-full rounded-[var(--radius)] border md:order-2 bg-background overflow-hidden`
+const ListBoxWrapper = tw.div`
+	@4xl:h-fit @4xl:sticky @4xl:top-[calc(var(--header-height)+var(--toolbar-height))] 
+	relative flex flex-1 divide-y divide-border justify-between h-full flex-col items-stretch max-h-full bg-background overflow-hidden
+	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto group-has-[#toggle-fullscreen[data-state=checked]]:!h-full
+	rounded-[var(--radius)] border md:order-2 
+	`
 const ListBoxBody = tw.div`flex flex-1 basis-full items-center justify-center`
-const ListBoxFooter = tw.div`flex justify-end items-center p-1.5 gap-x-2 max-w-full *:basis-full`
+const ListBoxFooter = tw.div`flex justify-end items-center p-1.5 gap-x-2 max-w-full *:basis-full h-[var(--list-footer-height)]`
 
 export default EpcListBox

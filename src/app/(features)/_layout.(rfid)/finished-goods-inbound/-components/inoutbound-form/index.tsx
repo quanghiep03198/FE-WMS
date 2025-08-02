@@ -242,7 +242,7 @@ const InoutboundForm: React.FC = () => {
 							<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
 							<Input
 								readOnly={true}
-								placeholder={t('ns_common:actions.select_database')}
+								placeholder='Database'
 								className='h-max w-full border-none bg-background px-0 text-sm text-foreground shadow-none transition-none focus:border-none focus:outline-none'
 								value={
 									currentWritableTenant && selectedOrder !== DEFAULT_PROPS.selectedOrder

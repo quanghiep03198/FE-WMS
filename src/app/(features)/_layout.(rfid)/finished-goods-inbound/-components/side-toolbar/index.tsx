@@ -1,4 +1,5 @@
 import { cn } from '@/common/utils/cn'
+import { Div } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import tw from 'tailwind-styled-components'
 import ConnectionInsight from './connection-insight'
@@ -13,17 +14,29 @@ const ScannerSettings: React.FC = () => {
 				className={cn(
 					'flex h-full flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none',
 					'sm:max-h-[60vh] sm:px-0 md:max-h-[60vh] xxl:p-6',
-					'@5xl:flex-row @5xl:flex-wrap'
+					'@5xl:grid @5xl:grid-cols-12 @5xl:grid-rows-3 @5xl:gap-x-10'
 				)}>
-				<ConnectionInsight />
-				<FullscreenToggleBox />
-				<DataRestoration />
-				<SyncDataTrigger />
+				<Div className='w-full @5xl:col-span-5 @5xl:col-start-1 @5xl:row-span-1'>
+					<ConnectionInsight />
+				</Div>
+				<Div className='w-full @5xl:col-span-5 @5xl:col-start-1 @5xl:row-span-1'>
+					<FullscreenToggleBox />
+				</Div>
+				<Div className='w-full @5xl:col-span-5 @5xl:col-start-1 @5xl:row-span-1'>
+					<DataRestoration />
+				</Div>
+				<Div className='w-full @5xl:col-span-7 @5xl:col-start-6 @5xl:row-span-full'>
+					<SyncDataTrigger />
+				</Div>
 			</ScrollShadow>
 		</ToolbarWrapper>
 	)
 }
 
-const ToolbarWrapper = tw.div`@container group sm:rounded-none sm:border-none border rounded-lg bg-sidebar max-h-[var(--outlet-wrapper-height)] overflow-hidden`
+const ToolbarWrapper = tw.div`
+	@container sticky top-[var(--header-height)] group sm:rounded-none sm:border-none border rounded-lg bg-sidebar 
+	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto
+	group-has-[#toggle-fullscreen[data-state=unchecked]]:max-h-[var(--outlet-wrapper-height)] overflow-hidden
+	`
 
 export default ScannerSettings

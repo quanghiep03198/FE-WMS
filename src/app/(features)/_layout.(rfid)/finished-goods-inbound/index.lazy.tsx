@@ -39,7 +39,10 @@ function Page() {
 
 			<HostCompatibleGuard>
 				<PageProvider>
-					<PageComposition.Container>
+					<PageComposition.Container
+						style={{
+							'--toolbar-height': '60px'
+						}}>
 						<PageComposition.Wrapper>
 							<PageComposition.Main>
 								<ScannerToolbar />

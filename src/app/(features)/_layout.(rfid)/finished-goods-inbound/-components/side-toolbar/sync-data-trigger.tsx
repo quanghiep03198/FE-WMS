@@ -47,11 +47,11 @@ const SyncDataTrigger: React.FC = () => {
 	}, [data])
 
 	return (
-		<Div as='section' className='flex w-full flex-col gap-y-3'>
+		<Div as='section' className='flex h-full w-full flex-grow flex-col gap-y-3'>
 			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.synchronization')}
 			</Typography>
-			<Div className='flex flex-col items-stretch gap-6'>
+			<Div className='flex h-full flex-1 flex-grow flex-col items-stretch gap-6'>
 				<Div className='grid grid-cols-[3fr,1fr] gap-x-6 gap-y-4'>
 					<Div className='space-y-1'>
 						<Typography variant='small' className='inline-flex items-center gap-x-3 font-semibold'>
@@ -91,7 +91,7 @@ const SyncDataTrigger: React.FC = () => {
 					</Div>
 				</Div>
 				{hasIn(data, 'metadata') && Array.isArray(data.metadata) && data.metadata.length > 0 ? (
-					<StepList className=''>
+					<StepList>
 						{data.metadata.map((item, index) => {
 							const icon: Record<
 								SyncProcessState['status'],
@@ -130,7 +130,7 @@ const SyncDataTrigger: React.FC = () => {
 						})}
 					</StepList>
 				) : (
-					<Div className='grid h-48 place-content-center rounded-md bg-muted text-center text-sm text-muted-foreground'>
+					<Div className='min-h-48 flex-1 place-content-center place-items-center rounded-md bg-muted text-center text-sm text-muted-foreground'>
 						{t('ns_rfid:no_sync_process')}
 					</Div>
 				)}
@@ -139,7 +139,7 @@ const SyncDataTrigger: React.FC = () => {
 	)
 }
 
-const StepList = tw.ul`bg-secondary p-4 flex min-h-48 flex-col gap-y-3 overflow-y-auto transition-height duration-300 ease-out rounded-[var(--radius)]`
+const StepList = tw.ul`bg-secondary p-4 flex h-48 @5xl:p-6 @5xl:gap-3 @5xl:h-full flex-col gap-y-2 overflow-y-auto transition-height duration-300 ease-out rounded-[var(--radius)]`
 const StepItem = tw.li`flex items-start text-sm gap-2 duration-300 ease-out animate-in fade-in-0`
 
 export default SyncDataTrigger

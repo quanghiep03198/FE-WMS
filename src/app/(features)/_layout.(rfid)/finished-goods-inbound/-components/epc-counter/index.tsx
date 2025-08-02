@@ -12,7 +12,7 @@ const ScannedEPCsCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex h-full flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10'>
+		<Div className='relative flex h-full flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 @5xl:py-8'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography
@@ -67,7 +67,7 @@ const ScanningCounter: React.FC = () => {
 			<Typography className='inline-flex gap-x-1 font-bold'>
 				{formatIntlNumber(count)}
 				<Typography as='small' variant='small' className='text-xs font-medium'>
-					pcs
+					prs
 				</Typography>
 			</Typography>
 		</Div>
@@ -110,7 +110,7 @@ const ScanningTimer: React.FC = () => {
 	}, [scanningStatus])
 
 	return (
-		<Badge className='relative z-10 text-sm'>
+		<Badge className='relative z-10 min-w-24 place-content-center text-sm'>
 			{scannedTime.hours}:{scannedTime.minutes}:{scannedTime.seconds}
 		</Badge>
 	)
