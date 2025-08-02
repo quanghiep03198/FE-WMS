@@ -66,7 +66,7 @@ const ScanningCounter: React.FC = () => {
 			<Typography variant='h4' className='inline-flex gap-x-1 self-baseline text-xl tracking-wide @3xl:text-2xl'>
 				{formatIntlNumber(count)}
 				<Typography as='small' variant='small' className='text-xs @3xl:text-sm'>
-					pcs
+					prs
 				</Typography>
 			</Typography>
 		</Div>
