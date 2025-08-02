@@ -4,8 +4,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { INVENTORY_AUDIT_PROVIDE_TAG } from '../../-hooks/use-report'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
+import { InventoryAuditQueryKeys } from '../-hooks/use-inventory-audit-asm'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 
 type WsResponseMessage = WsResponseBody<{ status: 'progress' | 'completed' | 'failed' }>
 type WsMessageData = { tenantId: string }
@@ -28,7 +28,7 @@ const SyncDataTrigger: React.FC = () => {
 				toast.success(t('ns_common:notification.success'), { id: toastRef.current })
 				queryClient.invalidateQueries({
 					predicate: ({ queryKey }) => {
-						return queryKey.some((key) => key === INVENTORY_AUDIT_PROVIDE_TAG)
+						return queryKey.some((key) => key === InventoryAuditQueryKeys.INVENTORY_AUDIT)
 					}
 				})
 				break

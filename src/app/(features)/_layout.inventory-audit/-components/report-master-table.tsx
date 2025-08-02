@@ -1,7 +1,7 @@
 import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IMonthlyInventoryReport } from '@/common/types/entities'
+import { IMonthlyInventoryAudit } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Button,
@@ -34,8 +34,9 @@ import { pick } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { INVENTORY_AUDIT_PROVIDE_TAG, useGetInventoryAuditReport } from '../../-hooks/use-report'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
+
+import { InventoryAuditQueryKeys, useGetInventoryAuditReport } from '../-hooks/use-inventory-audit-asm'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { InventoryReportDetailTable } from './report-detail-table'
 import SyncDataTrigger from './sync-data-trigger'
 
@@ -45,8 +46,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 
 	const { data, isLoading } = useGetInventoryAuditReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
-	const dataTableRef = useRef<TTable<IMonthlyInventoryReport>>(null)
-	const columnHelper = createColumnHelper<IMonthlyInventoryReport>()
+	const dataTableRef = useRef<TTable<IMonthlyInventoryAudit>>(null)
+	const columnHelper = createColumnHelper<IMonthlyInventoryAudit>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<ExpandedState>({})
 
 	useEffect(() => {
@@ -279,7 +280,8 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 					variant='outline'
 					onClick={() =>
 						queryClient.refetchQueries({
-							predicate: (query) => query.queryKey.some((queryKey) => queryKey === INVENTORY_AUDIT_PROVIDE_TAG)
+							predicate: (query) =>
+								query.queryKey.some((queryKey) => queryKey === InventoryAuditQueryKeys.INVENTORY_AUDIT)
 						})
 					}>
 					<Icon name='RotateCw' />
@@ -289,7 +291,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 	)
 }
 
-const DataDetailTable = ({ row }: RenderSubComponentProps<IMonthlyInventoryReport, unknown>) => (
+const DataDetailTable = ({ row }: RenderSubComponentProps<IMonthlyInventoryAudit, unknown>) => (
 	<InventoryReportDetailTable
 		queries={pick(row.original, [
 			'actual_po',
@@ -303,7 +305,7 @@ const DataDetailTable = ({ row }: RenderSubComponentProps<IMonthlyInventoryRepor
 	/>
 )
 
-const DataTableSummary = ({ data, isLoading }: { data: IMonthlyInventoryReport[]; isLoading: boolean }) => {
+const DataTableSummary = ({ data, isLoading }: { data: IMonthlyInventoryAudit[]; isLoading: boolean }) => {
 	const { t } = useTranslation()
 
 	const totalInitialQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.init_inv_qty, 0) : 0

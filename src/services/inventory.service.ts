@@ -1,7 +1,7 @@
 import { RequestHeaders } from '@/common/constants/enums'
 import {
 	IInboundInventory,
-	IMonthlyInventoryReport,
+	IMonthlyInventoryAudit,
 	IOutboundEstimation,
 	IProductionInventoryFeature,
 	IProductSizeInventory
@@ -11,7 +11,7 @@ import { AxiosRequestConfig } from 'axios'
 
 export class InventoryService {
 	static async getInventoryAuditReport(tenantId: string, params: { 'month.eq': string }) {
-		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryReport[]>>('/inventory/audit', {
+		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryAudit[]>>('/inventory/audit', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: params
 		})

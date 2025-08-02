@@ -148,7 +148,7 @@ export interface IOutboundReport extends Omit<IInOutBoundReport, 'size_data'> {
 	overall: Array<{ size_numcode: string; po_size_qty: number; daily_qty: number; missing_qty: number }>
 }
 
-export interface IMonthlyInventoryReport {
+export interface IMonthlyInventoryAudit {
 	brand_name: string
 	actual_po: string
 	po: string

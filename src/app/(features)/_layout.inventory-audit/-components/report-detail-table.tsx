@@ -1,43 +1,25 @@
 import { Languages } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IMonthlyInventoryReport } from '@/common/types/entities'
+import { IMonthlyInventoryAudit } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
-import { InventoryService } from '@/services/inventory.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useIsFetching, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useBoolean } from 'ahooks'
+import { useIsFetching } from '@tanstack/react-query'
+import { useBoolean, useUpdateEffect } from 'ahooks'
 import { format } from 'date-fns'
 import React, { Fragment, useMemo, useRef } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { z } from 'zod'
-import { INVENTORY_AUDIT_PROVIDE_TAG } from '../../-hooks/use-report'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
-
-const reportDataSchema = z.object({
-	data: z.array(
-		z.object({
-			size_numcode: z.string(),
-			mn_ist_qty: z.number().min(0, { message: 'Invalid value' }),
-			mn_ost_qty: z.number().min(0, { message: 'Invalid value' })
-		})
-	)
-})
-
-type BaseUpdateUpdateQuery = Pick<
-	IMonthlyInventoryReport,
-	'actual_po' | 'mo_no' | 'factory_shoes_style' | 'cust_shoes_style' | 'inv_type' | 'inv_year_month'
-> & { size_numcode: string }
+import { InventoryAuditQueryKeys, useInventoryAuditMutation } from '../-hooks/use-inventory-audit-asm'
+import { InventoryAuditFormValues, reportDataSchema } from '../-schemas/inventory-audit.schema'
+import { BaseUpdateUpdateQuery } from '../-types'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 
 type InventoryReportDetailTableProps = {
 	queries: Omit<BaseUpdateUpdateQuery, 'size_numcode'>
-	data: IMonthlyInventoryReport['detail']
+	data: IMonthlyInventoryAudit['detail']
 }
-
-type ReportDataFormValues = z.infer<typeof reportDataSchema>
 
 export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
 	const { t, i18n } = useTranslation()
@@ -47,7 +29,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	// * Handle toggle enable editing
 	const [isEditing, { setTrue: enableEditing, setFalse: disableEditing }] = useBoolean(false)
 
-	const form = useForm<ReportDataFormValues>({
+	const form = useForm<InventoryAuditFormValues>({
 		shouldUseNativeValidation: true,
 		reValidateMode: 'onChange',
 		mode: 'onChange',
@@ -62,48 +44,15 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 	})
 	const { fields } = useFieldArray({ name: 'data', control: form.control })
 	const abortControllerRef = useRef<AbortController | null>(null)
-	const queryClient = useQueryClient()
 
 	const { data: currentTenant } = useGetTenantByFactory()
 
 	// * Implement optimistic update on save manual changes
-	const { mutateAsync, isPending, isError } = useMutation({
-		mutationFn: async (payload: ReportDataFormValues['data']) => {
-			return await InventoryService.updateInventoryAuditReport(
-				currentTenant?.id,
-				abortControllerRef.current?.signal,
-				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month.eq'] },
-				payload
-			)
-		},
-		onMutate: async (variable) => {
-			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-			await queryClient.cancelQueries({
-				queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams],
-				exact: true
-			})
-			// Snapshot the previous value
-			const previousData = queryClient.getQueryData([INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams])
-
-			// Optimistically update to the new value
-			queryClient.setQueryData([INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams], variable)
-			return { previousData }
-		},
-		onSuccess: () => {
-			toast.success(t('ns_common:notification.success'))
-			disableEditing()
-		},
-		onError: (_error, _variable, context) => {
-			toast.error(t('ns_common:notification.error'))
-			queryClient.setQueryData([INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams], context.previousData)
-		},
-		onSettled: () => {
-			queryClient.invalidateQueries({
-				queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams],
-				exact: true
-			})
-		}
-	})
+	const { mutateAsync, isPending, isError, isSuccess } = useInventoryAuditMutation(
+		currentTenant?.id,
+		queries,
+		abortControllerRef?.current?.signal
+	)
 
 	const handleCancelUpdate = () => {
 		abortControllerRef.current.abort()
@@ -122,8 +71,12 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 		enableEditing()
 	}
 
+	useUpdateEffect(() => {
+		if (isSuccess) disableEditing()
+	}, [isSuccess])
+
 	const fetchingQueries = useIsFetching({
-		queryKey: [INVENTORY_AUDIT_PROVIDE_TAG, currentTenant?.id, searchParams],
+		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, currentTenant?.id, searchParams],
 		exact: true,
 		type: 'active',
 		fetchStatus: 'fetching',
