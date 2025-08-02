@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-progress'
+import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
 import DataTableSummary from './data-table-summary'
 
 const InboundHistoryTable: React.FC = () => {

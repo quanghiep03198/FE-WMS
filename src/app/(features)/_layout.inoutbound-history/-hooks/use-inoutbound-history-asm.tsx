@@ -3,14 +3,19 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundHistory, IOutboundHistory } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { useQuery } from '@tanstack/react-query'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+
+export enum InOutBoundHistoryQueryKeys {
+	INBOUND_HISTORY = 'INBOUND_HISTORY',
+	OUTBOUND_HISTORY = 'OUTBOUND_HISTORY'
+}
 
 export const useGetInboundHistoryQuery = () => {
 	const { data: currentTenant } = useGetTenantByFactory()
 	const { searchParams } = useQueryParams<{ order: string }>()
 
 	return useQuery({
-		queryKey: ['INBOUND_HISTORY', searchParams.order, currentTenant?.id],
+		queryKey: [InOutBoundHistoryQueryKeys.INBOUND_HISTORY, searchParams.order, currentTenant?.id],
 		queryFn: async () =>
 			await axiosInstance.get<void, ResponseBody<IInboundHistory[]>>(
 				`/report/inbound-history/${searchParams.order}`,
@@ -28,7 +33,7 @@ export const useGetOutboundHistoryQuery = () => {
 	const { searchParams } = useQueryParams<{ order: string }>()
 
 	return useQuery({
-		queryKey: ['OUTBOUND_HISTORY', searchParams.order, currentTenant?.id],
+		queryKey: [InOutBoundHistoryQueryKeys.OUTBOUND_HISTORY, searchParams.order, currentTenant?.id],
 		queryFn: async () =>
 			await axiosInstance.get<void, ResponseBody<IOutboundHistory[]>>(
 				`/report/outbound-history/${searchParams.order}`,

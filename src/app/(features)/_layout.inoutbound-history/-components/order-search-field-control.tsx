@@ -19,7 +19,7 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useSearchCommandNumberQuery, useSearchPurchaseOrderQuery } from '../../-hooks/use-order'
+import { useSearchCommandNumberQuery, useSearchPurchaseOrderQuery } from '../../-hooks/use-order-asm'
 import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 
 export function OrderSearchFieldControl() {
