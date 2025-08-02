@@ -6,7 +6,7 @@ import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetUserCompany } from '../../-hooks/use-department'
+import { useGetUserCompany } from '../../-hooks/use-department-asm'
 
 type FormValues = { company_code: string }
 

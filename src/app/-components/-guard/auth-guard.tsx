@@ -1,4 +1,4 @@
-import { useGetUserProfileQuery } from '@/app/(auth)/-hooks/use-auth'
+import { useGetUserProfileQuery } from '@/app/-hooks/use-user-asm'
 import useAuth from '@/common/hooks/use-auth'
 import { Div, Icon, Typography } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'

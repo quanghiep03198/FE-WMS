@@ -6,16 +6,18 @@ import { UseQueryOptions, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 
-export const DEPARTMENT_PROVIDE_TAG = 'WAREHOUSE_DEPARTMENT' as const
-export const COMPANY_PROVIDE_TAG = 'COMPANIES' as const
+export enum WorkplaceQueryKeys {
+	DEPARTMENT = 'WAREHOUSE_DEPARTMENT',
+	COMPANY = 'COMPANIES'
+}
 
-type TQueryKey = readonly [typeof DEPARTMENT_PROVIDE_TAG]
+type TQueryKey = readonly [typeof WorkplaceQueryKeys.DEPARTMENT]
 
 export function useGetDepartmentQuery(
 	options?: Partial<UseQueryOptions<ResponseBody<IDepartment[]>, AxiosError<unknown, any>, IDepartment[], TQueryKey>>
 ) {
 	return useQuery({
-		queryKey: [DEPARTMENT_PROVIDE_TAG],
+		queryKey: [WorkplaceQueryKeys.DEPARTMENT],
 		queryFn: DepartmentService.getWarehouseDepartments,
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : []),
 		...options
@@ -27,7 +29,7 @@ export const useGetUserCompany = () => {
 	const { t } = useTranslation()
 
 	return useQuery({
-		queryKey: [COMPANY_PROVIDE_TAG],
+		queryKey: [WorkplaceQueryKeys.COMPANY],
 		queryFn: () => CompanyService.getCompanies(),
 		enabled: !!token,
 		select: (data) => {

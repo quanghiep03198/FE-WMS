@@ -1,4 +1,3 @@
-import { USER_PROVIDE_TAG } from '@/app/(auth)/-hooks/use-auth'
 import useAuth from '@/common/hooks/use-auth'
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/stepper'
@@ -14,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { LoginFormValues, loginSchema } from '../-schemas/login.schema'
+import { AuthQueryKeys } from '../../../-hooks/use-user-asm'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
@@ -33,7 +33,7 @@ const LoginForm: React.FC = () => {
 	})
 
 	const { mutateAsync: login, isPending } = useMutation({
-		mutationKey: [USER_PROVIDE_TAG],
+		mutationKey: [AuthQueryKeys.PROFILE],
 		mutationFn: AuthService.login,
 		onMutate: () => {
 			return toast.loading(t('ns_common:notification.processing_request'))

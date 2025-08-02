@@ -1,3 +1,4 @@
+import { useUpdatePasswordMutation } from '@/app/-hooks/use-user-asm'
 import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, InputFieldControl, Typography } from '@/components/ui'
 import bcrypt from 'bcryptjs-react'
@@ -6,7 +7,6 @@ import React, { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useUpdatePasswordMutation } from '../-hooks/use-account'
 
 const ChangePasswordForm: React.FC = () => {
 	const { mutateAsync: updatePasswordFn } = useUpdatePasswordMutation()

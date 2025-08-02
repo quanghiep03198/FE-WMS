@@ -1,4 +1,4 @@
-import { useGetUserCompany } from '@/app/(auth)/-hooks/use-department'
+import { useGetUserCompany } from '@/app/(auth)/-hooks/use-department-asm'
 import AppLogo from '@/app/-components/-shared/app-logo'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
