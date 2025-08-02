@@ -103,6 +103,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				enableHiding: false,
+				enablePinning: true,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
@@ -129,7 +130,7 @@ const InboundReportMasterTable: React.FC = () => {
 							threshhold={3}
 							data={value.split(',').sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
-								<Badge variant='outline' className='whitespace-nowrap font-normal'>
+								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
 									{data}
 								</Badge>
 							)}

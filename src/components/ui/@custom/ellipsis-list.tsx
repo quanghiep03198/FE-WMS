@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../@core/hover-card'
 import { Div } from './div'
+import ScrollShadow from './scroll-shadow'
 import { Typography } from './typography'
 
 type EllipsisListProps<T> = {
@@ -35,10 +36,12 @@ export default function EllipsisList<T>({ threshhold, data, template: ListItemTe
 									})}
 								</Typography>{' '}
 							</HoverCardTrigger>
-							<HoverCardContent side='bottom' align='end' className='flex flex-wrap gap-2'>
-								{truncatedData.map((item) => (
-									<ListItemTemplate key={uuid()} data={item} />
-								))}
+							<HoverCardContent side='bottom' align='end' className='p-0'>
+								<ScrollShadow className='flex max-h-40 flex-wrap items-start gap-2 p-4'>
+									{truncatedData.map((item) => (
+										<ListItemTemplate key={uuid()} data={item} />
+									))}
+								</ScrollShadow>
 							</HoverCardContent>
 						</HoverCard>
 					}
