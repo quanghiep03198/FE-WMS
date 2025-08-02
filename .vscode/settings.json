@@ -21,6 +21,7 @@
 		"-contexts": "Context",
 		"-errors": "Error",
 		"-guard": "Guard",
+		"-types": "Typescript",
 		"-hooks": "Hook",
 		"-partials": "Include",
 		"-schemas": "Class",
