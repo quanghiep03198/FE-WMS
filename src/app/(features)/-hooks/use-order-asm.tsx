@@ -1,5 +1,6 @@
 import { OrderService } from '@/services/order.service'
 import { useQuery } from '@tanstack/react-query'
+import { useGetTenantByFactory } from './use-tenacy-asm'
 
 export enum OrderQueryKeys {
 	SEARCH_COMMAND_NUMBER = 'SEARCH_COMMAND_NUMBER',
@@ -8,10 +9,12 @@ export enum OrderQueryKeys {
 }
 
 export const useSearchCommandNumberQuery = (searchTerm: string, shouldFetch = true) => {
+	const { data: currentTenant } = useGetTenantByFactory()
+
 	return useQuery({
-		queryKey: [OrderQueryKeys.SEARCH_COMMAND_NUMBER, searchTerm],
-		queryFn: async () => await OrderService.searchCommandNumber({ q: searchTerm }),
-		enabled: shouldFetch,
+		queryKey: [OrderQueryKeys.SEARCH_COMMAND_NUMBER, currentTenant?.id, searchTerm],
+		queryFn: async () => await OrderService.searchCommandNumber(currentTenant?.id, { q: searchTerm }),
+		enabled: shouldFetch && !!currentTenant?.id,
 		select: (response) => {
 			if (!Array.isArray(response.metadata)) return []
 			return response.metadata
@@ -20,10 +23,12 @@ export const useSearchCommandNumberQuery = (searchTerm: string, shouldFetch = tr
 }
 
 export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = true) => {
+	const { data: currentTenant } = useGetTenantByFactory()
+
 	return useQuery({
-		queryKey: [OrderQueryKeys.SEARCH_PURCHASE_ORDER, searchTerm],
-		queryFn: async () => await OrderService.searchPurchaseOrder({ q: searchTerm }),
-		enabled: shouldFetch,
+		queryKey: [OrderQueryKeys.SEARCH_PURCHASE_ORDER, currentTenant?.id, searchTerm],
+		queryFn: async () => await OrderService.searchPurchaseOrder(currentTenant?.id, { q: searchTerm }),
+		enabled: shouldFetch && !!currentTenant?.id,
 		select: (response) => {
 			if (!Array.isArray(response.metadata)) return []
 			return response.metadata
