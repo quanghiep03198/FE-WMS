@@ -67,7 +67,7 @@ export class AxiosClient {
 					toast.error('Request timeout')
 					return Promise.reject(new Error('Request timeout'))
 				}
-				if (this.NOTIFIABLE_ERROR_CODES.includes(error.response.status)) {
+				if (this.NOTIFIABLE_ERROR_CODES.includes(error.response?.status)) {
 					toast.error(error.response?.data?.message, { id: error.response?.data?.path, duration: 5000 })
 				}
 

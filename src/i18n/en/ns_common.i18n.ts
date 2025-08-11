@@ -108,6 +108,7 @@ export default {
 	navigation: {
 		account: 'Account',
 		appearance: 'Appearance',
+		bgrade_goods_inbound: 'B-grade goods inbound',
 		dashboard: 'Dashboard',
 		export_management: 'Export management',
 		finished_goods_inbound: 'Finished goods inbound',
