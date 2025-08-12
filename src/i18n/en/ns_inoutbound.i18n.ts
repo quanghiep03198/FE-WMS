@@ -145,5 +145,10 @@ export default {
 		production_inventory_summary: 'Production inventory summary',
 		transfer_order_datalist: 'Transfer order datalist',
 		transfer_order_list: 'Transfer orders list'
+	},
+	shoes_category: {
+		b_grade: 'B Grade',
+		c_grade: 'C Grade',
+		research_development: 'Research & Development'
 	}
 }

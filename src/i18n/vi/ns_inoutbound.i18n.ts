@@ -145,5 +145,10 @@ export default {
 		production_inventory_summary: 'Tổng quan tồn kho thành phẩm',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho'
+	},
+	shoes_category: {
+		b_grade: 'Loại B',
+		c_grade: 'Loại C',
+		research_development: 'Hàng mẫu'
 	}
 }

@@ -139,7 +139,8 @@ export default {
 	},
 	others: {
 		all: '全部',
-		lookup_question: '你在找什么 ?'
+		lookup_question: '你在找什么 ?',
+		other: '其他'
 	},
 	pagination: {
 		ellipsis_count: '... 和 {{count}} 更多项目',

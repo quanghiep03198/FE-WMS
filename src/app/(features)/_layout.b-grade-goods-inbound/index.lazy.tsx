@@ -29,7 +29,7 @@ function RouteComponent() {
 						<EmptySection />
 					</ResizablePanel>
 					<ResizableHandle withHandle />
-					<ResizablePanel minSize={40} maxSize={70}>
+					<ResizablePanel minSize={50} maxSize={70}>
 						<DefectiveGoodsForm />
 					</ResizablePanel>
 				</ResizablePanelGroup>

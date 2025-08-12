@@ -6,15 +6,15 @@ import {
 	InputFieldControl,
 	Label,
 	SelectFieldControl,
-	Switch,
-	TextareaFieldControl
+	Switch
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
-import { Fragment } from 'react'
+import pako from 'pako'
+import { Fragment, useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { DefectLocation } from '../-constants'
+import { DefectiveLocation, DefectiveType } from '../-constants'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
@@ -23,9 +23,20 @@ const DefectiveGoodsForm: React.FC = () => {
 	const { t } = useTranslation()
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
 
+	useEffect(() => {
+		const formValues = form.getValues()
+		console.log(pako.inflate(formValues.defect_description, { to: 'string' }))
+	}, [form.getValues()])
+
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit(() => {})}>
+			<Form
+				onSubmit={form.handleSubmit((data) => {
+					console.log({
+						...data,
+						defect_description: pako.deflate(new TextEncoder().encode(data.defect_description)).toString()
+					})
+				})}>
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
 					<Div className='col-span-full'>
 						<InputFieldControl
@@ -47,15 +58,18 @@ const DefectiveGoodsForm: React.FC = () => {
 							name='category'
 							label='Category'
 							datalist={[
-								{ label: 'B', value: 'B' },
-								{ label: 'C', value: 'C' },
-								{ label: 'RD', value: 'RD' }
+								{ label: t('ns_inoutbound:shoes_category.b_grade'), value: DefectiveType.B_GRADE },
+								{ label: t('ns_inoutbound:shoes_category.c_grade'), value: DefectiveType.C_GRADE },
+								{
+									label: t('ns_inoutbound:shoes_category.research_development'),
+									value: DefectiveType.RESEARCH_DEVELOPMENT
+								}
 							]}
 							labelField='label'
 							valueField='value'
 						/>
 					</Div>
-					<Div className='col-span-2'>
+					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<SelectFieldControl
 							name='brand_name'
 							label={t('ns_erp:fields.brand_name')}
@@ -68,7 +82,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					{currentCategory === 'B' && (
+					{currentCategory === DefectiveType.B_GRADE && (
 						<Fragment>
 							<Div className='col-span-2'>
 								<PurchaseOrderComboboxFieldControl />
@@ -79,7 +93,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Fragment>
 					)}
 
-					<Div className='col-span-2'>
+					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<InputFieldControl
 							name='factory_shoes_style'
 							label={t('ns_erp:fields.shoestyle_codefactory')}
@@ -87,37 +101,31 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 
-					<Div className='col-span-2'>
+					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<InputFieldControl name='color_sn' label={t('ns_erp:fields.color_sn')} placeholder='BLK' />
 					</Div>
-					<Div className='col-span-2'>
+					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<InputFieldControl name='size_code' label='Size' placeholder='01' />
-					</Div>
-					<Div className='col-span-full'>
-						<InputFieldControl name='storage' label={t('ns_warehouse:fields.storage_name')} placeholder='A1.1' />
 					</Div>
 					<Div className='col-span-full'>
 						<SelectFieldControl
 							name='defect_location'
 							label='Defect location'
 							datalist={[
-								{ label: t('ns_common:others.all'), value: DefectLocation.ALL },
-								{ label: 'Upper', value: DefectLocation.UPPER },
-								{ label: 'Bottom', value: DefectLocation.BOTTOM },
-								{ label: t('ns_common:others.other'), value: DefectLocation.OTHER }
+								{ label: t('ns_common:others.all'), value: DefectiveLocation.ALL },
+								{ label: 'Upper', value: DefectiveLocation.UPPER },
+								{ label: 'Bottom', value: DefectiveLocation.BOTTOM },
+								{ label: t('ns_common:others.other'), value: DefectiveLocation.OTHER }
 							]}
 							labelField='label'
 							valueField='value'
 						/>
 					</Div>
+
 					<Div className='col-span-full'>
-						<TextareaFieldControl
-							name='defect_reason'
-							label='Defect reason'
-							rows={3}
-							placeholder='Enter defective reason within 120 words ...'
-						/>
+						<InputFieldControl name='storage' label={t('ns_warehouse:fields.storage_name')} placeholder='A1.1' />
 					</Div>
+
 					<Div className='col-span-full'>
 						<EditorFieldControl name='defect_description' label='Defect description' className='h-60' />
 					</Div>

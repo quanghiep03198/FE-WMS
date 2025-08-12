@@ -141,7 +141,8 @@ export default {
 	others: {
 		all: 'Tất cả',
 		server: 'Máy chủ {{alias}}',
-		lookup_question: 'Bạn đang tìm kiếm gì ?'
+		lookup_question: 'Bạn đang tìm kiếm gì ?',
+		other: 'Khác'
 	},
 	pagination: {
 		ellipsis_count: '... và {{count}} dữ liệu khác',

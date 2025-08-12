@@ -138,5 +138,10 @@ export default {
 		production_inventory_summary: '成品库存总表',
 		transfer_order_datalist: '转移订单数据列表',
 		transfer_order_list: '转移订单列表'
+	},
+	shoes_category: {
+		b_grade: 'B级品',
+		c_grade: 'C级品',
+		research_development: '样品'
 	}
 }

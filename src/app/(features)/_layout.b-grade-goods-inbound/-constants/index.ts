@@ -1,10 +1,10 @@
-export enum DefectType {
+export enum DefectiveType {
 	B_GRADE = 'B',
 	C_GRADE = 'C',
-	REWORK = 'RD'
+	RESEARCH_DEVELOPMENT = 'RD'
 }
 
-export enum DefectLocation {
+export enum DefectiveLocation {
 	ALL = 'A',
 	UPPER = 'B',
 	BOTTOM = 'C',

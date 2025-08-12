@@ -194,6 +194,7 @@ export default {
 	others: {
 		all: 'All',
 		server: 'Server {{alias}}',
-		lookup_question: 'What are you looking for ?'
+		lookup_question: 'What are you looking for ?',
+		other: 'Other'
 	}
 } as const
