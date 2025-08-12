@@ -1,56 +1,53 @@
-// import { isEmpty } from 'lodash';
-// import { useEffect, useState } from 'react';
-// import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
-// import { Editor, FormControl, FormField, FormItem, FormLabel, FormMessage } from '..';
-// import { BaseFieldControl } from './types/hook-form';
-// import FormTooltipLabel from './form-tooltip-label';
+import { BaseFieldControl } from '@/common/types/hook-form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui'
+import { isEmpty } from 'lodash'
+import { useEffect, useState } from 'react'
+import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
+import { Editor } from '../../@tiptap'
 
-// type EditorFieldControlProps<T extends FieldValues> = Omit<BaseFieldControl<T>, 'control'> & {
-// 	form: UseFormReturn<T>;
-// 	errorMessage?: string;
-// };
+type EditorFieldControlProps<T extends FieldValues> = Omit<BaseFieldControl<T>, 'control'> & {
+	errorMessage?: string
+}
 
-// export function EditorFieldControl<T extends FieldValues>({
-// 	form,
-// 	label,
-// 	name,
-// 	defaultValue,
-// 	messageMode = 'tooltip',
-// 	errorMessage
-// }: EditorFieldControlProps<T>) {
-// 	const [state, setState] = useState<{ value: string; isEmpty: boolean }>(() => ({
-// 		value: defaultValue ?? '',
-// 		isEmpty: isEmpty(defaultValue)
-// 	}));
+export function EditorFieldControl<T extends FieldValues>({
+	label,
+	name,
+	defaultValue,
+	errorMessage
+}: EditorFieldControlProps<T>) {
+	const { formState, control, setValue, setError, clearErrors } = useFormContext()
 
-// 	useEffect(() => {
-// 		if (defaultValue) setState({ value: defaultValue, isEmpty: false });
-// 	}, [defaultValue]);
+	const [state, setState] = useState<{ value: string; isEmpty: boolean }>(() => ({
+		value: defaultValue ?? '',
+		isEmpty: isEmpty(defaultValue)
+	}))
 
-// 	useEffect(() => {
-// 		if (state.isEmpty && form.formState.isSubmitted) {
-// 			form.setError(name, {
-// 				type: 'required',
-// 				message: errorMessage ?? 'Vui lòng nhập nội dung'
-// 			});
-// 		} else {
-// 			form.clearErrors(name);
-// 		}
-// 		form.setValue(name, state.value as PathValue<T, Path<T>>);
-// 	}, [state, form.formState.isSubmitted]);
+	useEffect(() => {
+		if (defaultValue) setState({ value: defaultValue, isEmpty: false })
+	}, [defaultValue])
 
-// 	return (
-// 		<FormField
-// 			name={name}
-// 			render={() => (
-// 				<FormItem>
-// 					<FormTooltipLabel labelText={String(label)} messageMode={messageMode} />
-// 					<FormControl>
-// 						<Editor content={defaultValue} onUpdate={setState} />
-// 					</FormControl>
-// 					<FormMessage />
-// 				</FormItem>
-// 			)}
-// 		/>
-// 	);
-// }
+	useEffect(() => {
+		if (state.isEmpty && formState.isSubmitted) {
+			setError(name, { type: 'required', message: errorMessage ?? 'Vui lòng nhập nội dung' })
+		} else {
+			clearErrors(name)
+		}
+		setValue(name, state.value as PathValue<T, Path<T>>)
+	}, [state, formState.isSubmitted])
+
+	return (
+		<FormField
+			name={name}
+			control={control}
+			render={() => (
+				<FormItem>
+					<FormLabel>{label}</FormLabel>
+					<FormControl>
+						<Editor content={defaultValue} onUpdate={setState} />
+					</FormControl>
+					<FormMessage />
+				</FormItem>
+			)}
+		/>
+	)
+}
