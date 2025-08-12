@@ -53,8 +53,8 @@ const featuresLayoutDashboardIndexLazyImport = createFileRoute(
 const featuresLayoutCargoWeightCheckIndexLazyImport = createFileRoute(
   '/(features)/_layout/cargo-weight-check/',
 )()
-const featuresLayoutBgradeGoodsInboundIndexLazyImport = createFileRoute(
-  '/(features)/_layout/bgrade-goods-inbound/',
+const featuresLayoutBGradeGoodsInboundIndexLazyImport = createFileRoute(
+  '/(features)/_layout/b-grade-goods-inbound/',
 )()
 const featuresPreferencesLayoutKeybindingsIndexLazyImport = createFileRoute(
   '/(features)/preferences/_layout/keybindings/',
@@ -243,15 +243,15 @@ const featuresLayoutCargoWeightCheckIndexLazyRoute =
       ),
     )
 
-const featuresLayoutBgradeGoodsInboundIndexLazyRoute =
-  featuresLayoutBgradeGoodsInboundIndexLazyImport
+const featuresLayoutBGradeGoodsInboundIndexLazyRoute =
+  featuresLayoutBGradeGoodsInboundIndexLazyImport
     .update({
-      id: '/bgrade-goods-inbound/',
-      path: '/bgrade-goods-inbound/',
+      id: '/b-grade-goods-inbound/',
+      path: '/b-grade-goods-inbound/',
       getParentRoute: () => featuresLayoutRoute,
     } as any)
     .lazy(() =>
-      import('./app/(features)/_layout.bgrade-goods-inbound/index.lazy').then(
+      import('./app/(features)/_layout.b-grade-goods-inbound/index.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -387,11 +387,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginIndexImport
       parentRoute: typeof rootRoute
     }
-    '/(features)/_layout/bgrade-goods-inbound/': {
-      id: '/(features)/_layout/bgrade-goods-inbound/'
-      path: '/bgrade-goods-inbound'
-      fullPath: '/bgrade-goods-inbound'
-      preLoaderRoute: typeof featuresLayoutBgradeGoodsInboundIndexLazyImport
+    '/(features)/_layout/b-grade-goods-inbound/': {
+      id: '/(features)/_layout/b-grade-goods-inbound/'
+      path: '/b-grade-goods-inbound'
+      fullPath: '/b-grade-goods-inbound'
+      preLoaderRoute: typeof featuresLayoutBGradeGoodsInboundIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
     '/(features)/_layout/cargo-weight-check/': {
@@ -512,7 +512,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface featuresLayoutRouteChildren {
-  featuresLayoutBgradeGoodsInboundIndexLazyRoute: typeof featuresLayoutBgradeGoodsInboundIndexLazyRoute
+  featuresLayoutBGradeGoodsInboundIndexLazyRoute: typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   featuresLayoutCargoWeightCheckIndexLazyRoute: typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   featuresLayoutDashboardIndexLazyRoute: typeof featuresLayoutDashboardIndexLazyRoute
   featuresLayoutInboundReportIndexLazyRoute: typeof featuresLayoutInboundReportIndexLazyRoute
@@ -529,8 +529,8 @@ interface featuresLayoutRouteChildren {
 }
 
 const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
-  featuresLayoutBgradeGoodsInboundIndexLazyRoute:
-    featuresLayoutBgradeGoodsInboundIndexLazyRoute,
+  featuresLayoutBGradeGoodsInboundIndexLazyRoute:
+    featuresLayoutBGradeGoodsInboundIndexLazyRoute,
   featuresLayoutCargoWeightCheckIndexLazyRoute:
     featuresLayoutCargoWeightCheckIndexLazyRoute,
   featuresLayoutDashboardIndexLazyRoute: featuresLayoutDashboardIndexLazyRoute,
@@ -611,7 +611,7 @@ export interface FileRoutesByFullPath {
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
-  '/bgrade-goods-inbound': typeof featuresLayoutBgradeGoodsInboundIndexLazyRoute
+  '/b-grade-goods-inbound': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
@@ -635,7 +635,7 @@ export interface FileRoutesByTo {
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
-  '/bgrade-goods-inbound': typeof featuresLayoutBgradeGoodsInboundIndexLazyRoute
+  '/b-grade-goods-inbound': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
   '/inbound-report': typeof featuresLayoutInboundReportIndexLazyRoute
@@ -663,7 +663,7 @@ export interface FileRoutesById {
   '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
   '/(auth)/authorization/': typeof authAuthorizationIndexRoute
   '/(auth)/login/': typeof authLoginIndexRoute
-  '/(features)/_layout/bgrade-goods-inbound/': typeof featuresLayoutBgradeGoodsInboundIndexLazyRoute
+  '/(features)/_layout/b-grade-goods-inbound/': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   '/(features)/_layout/cargo-weight-check/': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexLazyRoute
   '/(features)/_layout/inbound-report/': typeof featuresLayoutInboundReportIndexLazyRoute
@@ -689,7 +689,7 @@ export interface FileRouteTypes {
     | '/preferences'
     | '/authorization'
     | '/login'
-    | '/bgrade-goods-inbound'
+    | '/b-grade-goods-inbound'
     | '/cargo-weight-check'
     | '/dashboard'
     | '/inbound-report'
@@ -712,7 +712,7 @@ export interface FileRouteTypes {
     | '/preferences'
     | '/authorization'
     | '/login'
-    | '/bgrade-goods-inbound'
+    | '/b-grade-goods-inbound'
     | '/cargo-weight-check'
     | '/dashboard'
     | '/inbound-report'
@@ -738,7 +738,7 @@ export interface FileRouteTypes {
     | '/(features)/preferences/_layout'
     | '/(auth)/authorization/'
     | '/(auth)/login/'
-    | '/(features)/_layout/bgrade-goods-inbound/'
+    | '/(features)/_layout/b-grade-goods-inbound/'
     | '/(features)/_layout/cargo-weight-check/'
     | '/(features)/_layout/dashboard/'
     | '/(features)/_layout/inbound-report/'
@@ -799,7 +799,7 @@ export const routeTree = rootRoute
       "filePath": "(features)/_layout.tsx",
       "parent": "/(features)",
       "children": [
-        "/(features)/_layout/bgrade-goods-inbound/",
+        "/(features)/_layout/b-grade-goods-inbound/",
         "/(features)/_layout/cargo-weight-check/",
         "/(features)/_layout/dashboard/",
         "/(features)/_layout/inbound-report/",
@@ -840,8 +840,8 @@ export const routeTree = rootRoute
     "/(auth)/login/": {
       "filePath": "(auth)/login/index.tsx"
     },
-    "/(features)/_layout/bgrade-goods-inbound/": {
-      "filePath": "(features)/_layout.bgrade-goods-inbound/index.lazy.tsx",
+    "/(features)/_layout/b-grade-goods-inbound/": {
+      "filePath": "(features)/_layout.b-grade-goods-inbound/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/cargo-weight-check/": {

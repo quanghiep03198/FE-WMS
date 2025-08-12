@@ -47,8 +47,8 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: uuidv4(),
 		icon: 'PackagePlus',
-		title: 'navigation.bgrade_goods_inbound',
-		path: '/bgrade-goods-inbound',
+		title: 'navigation.b_grade_goods_inbound',
+		path: '/b-grade-goods-inbound',
 		type: 'main'
 	},
 	{

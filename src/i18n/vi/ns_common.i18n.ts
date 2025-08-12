@@ -114,7 +114,7 @@ export default {
 		finished_goods_inbound: 'Nhập xuất kho thành phẩm',
 		finished_goods_outbound: 'Xuất hàng kho thành phẩm',
 		import_management: 'Quản lý nhập hàng',
-		bgrade_goods_inbound: 'Nhập hàng loại B',
+		b_grade_goods_inbound: 'Nhập hàng loại B',
 		monthly_inventory_audit: 'Kiểm kê tồn kho',
 		keyboard_shortcut: 'Phím tắt',
 		cargo_weight_check: 'Kiểm tra & Cân Hàng',
