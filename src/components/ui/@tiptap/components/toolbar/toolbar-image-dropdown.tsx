@@ -24,7 +24,7 @@ const ImageDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
 		<DropdownMenu>
 			<Tooltip message='Chèn ảnh'>
 				<DropdownMenuTrigger asChild>
-					<Button variant='outline' size='icon' className='aspect-square h-8 w-8'>
+					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
 						<Icon name='Image' />
 					</Button>
 				</DropdownMenuTrigger>

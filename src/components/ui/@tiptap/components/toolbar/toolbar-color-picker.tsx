@@ -46,10 +46,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) 
 			<DropdownMenu open={open} onOpenChange={setOpen}>
 				<Tooltip message={label}>
 					<DropdownMenuTrigger asChild>
-						<Button variant='outline' className='aspect-square h-8 w-8 flex-col gap-x-1.5' size='icon'>
+						<Button variant='ghost' className='aspect-square h-8 w-8 flex-col gap-x-1.5' size='icon'>
 							<Icon name={icon} />
 							<Div
-								className={cn('h-[4px] w-4/5 self-center', {
+								className={cn('mt-0.5 h-[3px] w-4/5 self-center', {
 									'!bg-foreground': !currentColor && type === 'textStyle',
 									'bg-transparent': !currentColor && type === 'highlight'
 								})}

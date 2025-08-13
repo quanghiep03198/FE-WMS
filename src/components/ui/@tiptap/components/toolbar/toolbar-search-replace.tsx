@@ -1,6 +1,6 @@
 /* eslint-disable */
 // @ts-nocheck
-import { ArrowLeftIcon, ArrowRightIcon, Repeat, X } from 'lucide-react'
+import { ArrowLeftIcon, ArrowRightIcon, Repeat, Search, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { cn } from '@/common/utils/cn'
@@ -67,7 +67,7 @@ export function SearchAndReplaceToolbar() {
 							setOpen(!open)
 						}}
 						className={cn('h-8 w-max px-3 font-normal')}>
-						<Repeat className='mr-2 h-4 w-4' />
+						<Search className='mr-2 h-4 w-4' />
 						<p>Search & Replace</p>
 					</Button>
 				</PopoverTrigger>

@@ -54,8 +54,8 @@ const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 		<DropdownMenu>
 			<Tooltip message='Bảng'>
 				<DropdownMenuTrigger asChild>
-					<Button size='icon' className='h-8 w-8' variant='outline'>
-						<Icon name='Table' strokeWidth={2} />
+					<Button size='icon' className='h-8 w-8' variant='ghost'>
+						<Icon name='Table' />
 					</Button>
 				</DropdownMenuTrigger>
 			</Tooltip>

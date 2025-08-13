@@ -79,7 +79,7 @@ export const AlignmentDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) 
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant='outline' size='icon' className='aspect-square h-8 w-8'>
+				<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
 					<Icon name={currentAlignment.icon} />
 				</Button>
 			</DropdownMenuTrigger>

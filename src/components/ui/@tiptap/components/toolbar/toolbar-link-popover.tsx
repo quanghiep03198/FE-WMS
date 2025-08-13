@@ -42,7 +42,7 @@ export const LinkPopover: React.FC<{ editor: Editor }> = ({ editor }) => {
 		<Popover open={open} onOpenChange={setOpen}>
 			<Tooltip message='Chèn link'>
 				<PopoverTrigger asChild>
-					<Button variant='outline' size='icon' className='aspect-square h-8 w-8'>
+					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
 						<Icon name='Link' />
 					</Button>
 				</PopoverTrigger>

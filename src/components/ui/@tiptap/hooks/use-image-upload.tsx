@@ -1,3 +1,8 @@
+import { useWorkerFn } from '@/common/hooks/use-worker-fn'
+import compressBase64 from '@/common/utils/compress-base64'
+import { convertBase64 } from '@/common/utils/convert-base64'
+// import { useWorker } from '@koale/useworker'
+import imageCompression from 'browser-image-compression'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseImageUploadProps {
@@ -9,30 +14,24 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const [fileName, setFileName] = useState<string | null>(null)
-	const [uploading, setUploading] = useState(false)
+	// const [uploading, setUploading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
-	// Dummy upload function that simulates a delay and returns the local preview URL
-	const dummyUpload = async (file: File, localUrl: string): Promise<string> => {
+	const [compress, uploading] = useWorkerFn(compressBase64)
+
+	const compressImage = async (file) => {
+		console.log('originalFile instanceof Blob', file instanceof Blob) // true
+		console.log(`originalFile size ${file.size / 1024 / 1024} MB`)
+
 		try {
-			setUploading(true)
-			// Simulate network delay
-			await new Promise((resolve) => setTimeout(resolve, 1500))
-
-			// Simulate random upload errors (20% chance)
-			if (Math.random() < 0.2) {
-				throw new Error('Upload failed - This is a demo error')
-			}
-
-			setError(null)
-			// In a real implementation, this would be the URL from the server
-			return localUrl
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Upload failed'
-			setError(errorMessage)
-			throw new Error(errorMessage)
-		} finally {
-			setUploading(false)
+			const compressedFile = await imageCompression(file, {
+				maxSizeMB: 5,
+				maxWidthOrHeight: 1920,
+				useWebWorker: true
+			})
+			return compressedFile // write your own logic
+		} catch (error) {
+			console.log(error)
 		}
 	}
 
@@ -48,10 +47,13 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 				const localUrl = URL.createObjectURL(file)
 				setPreviewUrl(localUrl)
 				previewRef.current = localUrl
-
 				try {
-					const uploadedUrl = await dummyUpload(file, localUrl)
-					onUpload?.(uploadedUrl)
+					const compressedImage = await compressImage(file)
+					const base64Url = await convertBase64(compressedImage)
+					const compressedBase64 = await compress(base64Url.toString(), { width: 500, height: 300, quality: 1 })
+					console.log('compressedBase64 :>> ', compressedBase64)
+					onUpload?.(compressedBase64)
+					// setUploadedBase64(base64Url)
 				} catch (err) {
 					URL.revokeObjectURL(localUrl)
 					setPreviewUrl(null)

@@ -4,10 +4,8 @@ import React, { memo, useState } from 'react'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger, Div, ScrollArea } from '..'
 import BubbleMenu from './components/bubble-menu'
 import CommonContextMenuItems from './components/context-menu/common-context-menu-items'
-import ImageContextMenuItem from './components/context-menu/image-context-menu-item'
 import LinkContextMenuItems from './components/context-menu/link-context-menu-items'
 import TableContextMenuItems from './components/context-menu/table-context-menu-items'
-import SetImageForm from './components/image-form'
 import Toolbar from './components/toolbar'
 import { EditorContextProvider } from './context/editor-context'
 import { extensions } from './extensions'
@@ -82,10 +80,10 @@ export const Editor: React.FC<EditorProps> = memo(
 							<CommonContextMenuItems editor={editor} />
 							{contextMenuType === 'table' && <TableContextMenuItems editor={editor} />}
 							{contextMenuType === 'a' && <LinkContextMenuItems editor={editor} />}
-							{contextMenuType === 'img' && <ImageContextMenuItem editor={editor} />}
+							{/* {contextMenuType === 'img' && <ImageContextMenuItem editor={editor} />} */}
 						</ContextMenuContent>
 					</ContextMenu>
-					<SetImageForm editor={editor} />
+					{/* <SetImageForm editor={editor} /> */}
 				</EditorContextProvider>
 				<BubbleMenu editor={editor} />
 			</Div>
