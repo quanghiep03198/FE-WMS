@@ -99,5 +99,9 @@ export default {
 	rfid_match_craft_form: {
 		title: '更新EPC信息',
 		description: '更新系统中不存在的EPC信息.'
+	},
+	shoes_parts: {
+		upper: '鞋面',
+		bottom: '底部'
 	}
 }

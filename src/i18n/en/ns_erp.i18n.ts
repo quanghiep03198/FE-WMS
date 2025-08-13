@@ -87,6 +87,11 @@ export default {
 	titles: {
 		product_info: 'Product Information'
 	},
+	labels: {
+		goods_category: 'Shoes category',
+		defect_location: 'Defect location',
+		defect_description: 'Defect description'
+	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Finished Product Delivery Order',
 		finished_goods_receipt: 'Finished Product Warehouse Import Order',
@@ -96,5 +101,10 @@ export default {
 	rfid_match_craft_form: {
 		title: 'Update EPC information',
 		description: "Craft EPC's information that does not exist in the system."
+	},
+
+	shoes_parts: {
+		upper: 'Upper',
+		bottom: 'Bottom'
 	}
 }

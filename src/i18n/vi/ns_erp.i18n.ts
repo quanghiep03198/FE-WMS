@@ -96,5 +96,9 @@ export default {
 	rfid_match_craft_form: {
 		title: 'Cập nhật thông tin EPC',
 		description: 'Cập nhật thông tin cho các EPC không có đơn hàng trên hệ thống'
+	},
+	shoes_parts: {
+		upper: 'Mũ giày',
+		bottom: 'Đế giày'
 	}
 }
