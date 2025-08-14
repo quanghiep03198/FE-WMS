@@ -2,6 +2,7 @@ import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
 import { convertBase64 } from '@/common/utils/convert-base64'
 import imageCompression from 'browser-image-compression'
+import { filesize } from 'filesize'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseImageUploadProps {
@@ -43,9 +44,10 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 				setPreviewUrl(localUrl)
 				previewRef.current = localUrl
 				try {
-					const compressedImage = await compressImage(file)
-					const base64Url = await convertBase64(compressedImage)
-					const compressedBase64 = await compress(base64Url.toString(), { width: 500, height: 300, quality: 1 })
+					// const compressedImage = await compressImage(file)
+					const base64Url = await convertBase64(file)
+					const compressedBase64 = await compress(base64Url.toString(), { quality: 1 })
+					console.log(filesize(compressedBase64.length, { base: 10, round: 1 }))
 					onUpload?.(compressedBase64)
 				} catch (err) {
 					URL.revokeObjectURL(localUrl)

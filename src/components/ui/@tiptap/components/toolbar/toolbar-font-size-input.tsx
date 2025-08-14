@@ -4,6 +4,7 @@ import { Button, Div, Icon, Input, Separator } from '@/components/ui'
 import { Editor } from '@tiptap/react'
 import { useDebounce } from 'ahooks'
 import React, { useEffect, useState } from 'react'
+import { useEditorContext } from '../../context/editor-context'
 
 type FontSizeInputProps = {
 	editor: Editor
@@ -19,7 +20,8 @@ const extractFontSizeValue = (attributes: Record<string, any>) => {
 	return Number(fontSize.replace('px', ''))
 }
 
-const FontSizeInput: React.FC<FontSizeInputProps> = ({ editor }) => {
+const FontSizeInput: React.FC = () => {
+	const { editor } = useEditorContext()
 	const [fontSize, setFontSize] = useState<number>(extractFontSizeValue(editor.getAttributes('textStyle')))
 	const debouncedFontSize = useDebounce(fontSize, { wait: 500 })
 
@@ -49,7 +51,7 @@ const FontSizeInput: React.FC<FontSizeInputProps> = ({ editor }) => {
 	}, [debouncedFontSize])
 
 	useEffect(() => {
-		editor.commands.setFontSize(fontSize)
+		editor.commands.setFontSize(String(fontSize))
 	}, [fontSize])
 
 	// const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

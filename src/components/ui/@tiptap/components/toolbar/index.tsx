@@ -1,10 +1,10 @@
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
-import { Editor } from '@tiptap/react'
-import ColorPicker from './toolbar-color-picker'
-
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useUpdate } from 'ahooks'
+import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
+import ColorPicker from './toolbar-color-picker'
 import FontSizeInput from './toolbar-font-size-input'
 import { ImagePlaceholderToolbar } from './toolbar-image-placeholder'
 import { LinkPopover } from './toolbar-link-popover'
@@ -12,12 +12,16 @@ import { SearchAndReplaceToolbar } from './toolbar-search-replace'
 import { StyleDropdownMenu } from './toolbar-style-dropdown'
 import TableDropdownMenu from './toolbar-table-dropdown'
 
-type ToolbarPluginProps = {
-	editor: Editor
-}
+const Toolbar: React.FC = () => {
+	const { editor, event$ } = useEditorContext()
 
-const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
 	if (!editor) return null
+
+	const rerender = useUpdate()
+
+	event$.useSubscription((value: string) => {
+		if (value === 'editor:click') rerender()
+	})
 
 	return (
 		<Div className='p-1'>
@@ -54,21 +58,22 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
 
 					{/* Change font size */}
 					<Tooltip message='Cỡ chữ'>
-						<FontSizeInput editor={editor} />
+						<FontSizeInput />
 					</Tooltip>
 
 					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
-					<AlignmentDropdownMenu editor={editor} />
+					<AlignmentDropdownMenu />
 
 					{/* Toggle bold */}
 					<Tooltip message='Đậm'>
 						<Button
 							variant='ghost'
 							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('bold')
-							})}
+							className={cn(
+								'aspect-square h-8 w-8',
+								editor.isActive('bold') && 'bg-accent text-accent-foreground'
+							)}
 							onClick={() => editor.chain().focus().toggleBold().run()}>
 							<Icon name='Bold' />
 						</Button>

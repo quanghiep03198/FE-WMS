@@ -1,22 +1,20 @@
 import { type Editor } from '@tiptap/react'
-import { createContext, use, useState } from 'react'
+import { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import { createContext, use } from 'react'
 
 type EditorContextType = {
 	editor: Editor
-	imageFormOpenState: boolean
-	setImageFormOpen: React.Dispatch<React.SetStateAction<boolean>>
+	event$: EventEmitter<any>
 }
 
 export const EditorContext = createContext<EditorContextType>(null)
 
-export const EditorContextProvider: React.FC<{ editor: Editor } & React.PropsWithChildren> = ({ editor, children }) => {
-	const [imageFormOpenState, setImageFormOpen] = useState<boolean>()
-
-	return (
-		<EditorContext.Provider value={{ editor, imageFormOpenState, setImageFormOpen }}>
-			{children}
-		</EditorContext.Provider>
-	)
+export const EditorContextProvider: React.FC<EditorContextType & React.PropsWithChildren> = ({
+	editor,
+	event$,
+	children
+}) => {
+	return <EditorContext.Provider value={{ editor, event$ }}>{children}</EditorContext.Provider>
 }
 
 export const useEditorContext = () => {

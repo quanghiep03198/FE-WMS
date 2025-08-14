@@ -12,6 +12,7 @@ import {
 	IconProps,
 	Tooltip
 } from '../../..'
+import { useEditorContext } from '../../context/editor-context'
 
 type AlignmentOption = {
 	icon: IconProps['name']
@@ -73,8 +74,17 @@ const getCurrentAlignment = (editor: Editor): Omit<AlignmentOption, 'label'> => 
 	}
 }
 
-export const AlignmentDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
+export const AlignmentDropdownMenu: React.FC = () => {
+	const { editor, event$ } = useEditorContext()
+
 	const currentAlignment = getCurrentAlignment(editor)
+
+	event$.useSubscription((value: string) => {
+		if (value === 'editor:click') {
+			// Rerender when editor is clicked to update alignment state
+			editor.view.updateState(editor.state)
+		}
+	})
 
 	return (
 		<DropdownMenu>

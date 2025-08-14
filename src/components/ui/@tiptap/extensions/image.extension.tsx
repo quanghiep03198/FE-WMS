@@ -229,7 +229,7 @@ function TiptapImage(props: NodeViewProps) {
 						src={node.attrs.src}
 						alt={node.attrs.alt}
 						title={node.attrs.title}
-						className='rounded-[inherit] transition-shadow duration-200 hover:shadow-lg'
+						className='rounded-[inherit] object-center transition-shadow duration-200 hover:shadow-lg'
 						onLoad={(e) => {
 							const img = e.currentTarget
 							const aspectRatio = img.naturalWidth / img.naturalHeight

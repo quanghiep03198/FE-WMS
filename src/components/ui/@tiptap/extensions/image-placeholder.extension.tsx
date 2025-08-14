@@ -149,12 +149,12 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 						<Div className='text-center'>
 							<Typography className='text-sm font-medium'>Click to upload or drag and drop</Typography>
 							<Typography variant='small' className='text-xs text-muted-foreground'>
-								SVG, PNG, JPG or GIF
+								PNG, JPG, WEBP, JPEG
 							</Typography>
 						</Div>
 					</Div>
 				) : (
-					<Div className='rounded-lg border bg-card p-4 shadow-sm'>
+					<Div className='rounded-lg bg-accent/20 p-4 shadow-sm'>
 						<Div className='mb-4 flex items-center justify-between'>
 							<Typography variant='h4' className='m-0 text-base'>
 								Add Image

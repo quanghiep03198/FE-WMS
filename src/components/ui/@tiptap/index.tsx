@@ -1,4 +1,5 @@
 import { EditorContent, useEditor } from '@tiptap/react'
+import { useEventEmitter } from 'ahooks'
 import { uniqueId } from 'lodash'
 import React, { memo, useState } from 'react'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger, Div, ScrollArea } from '..'
@@ -66,14 +67,23 @@ export const Editor: React.FC<EditorProps> = memo(
 			}
 		}
 
+		const event$ = useEventEmitter<any>()
+
 		return (
 			<Div className='relative flex w-full max-w-full flex-col items-stretch divide-y divide-border overflow-clip rounded-lg border shadow-sm'>
-				<EditorContextProvider editor={editor}>
-					<Toolbar editor={editor} />
+				<EditorContextProvider editor={editor} event$={event$}>
+					<Toolbar />
 					<ContextMenu>
 						<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>
 							<ScrollArea className='relative w-full max-w-full resize-y overflow-auto' style={{ height }}>
-								<EditorContent id={id} editor={editor} name={name} controls={true} content={content} />
+								<EditorContent
+									id={id}
+									editor={editor}
+									name={name}
+									controls={true}
+									content={content}
+									onClick={() => event$.emit('editor:click')}
+								/>
 							</ScrollArea>
 						</ContextMenuTrigger>
 						<ContextMenuContent className='min-w-[320px]'>
