@@ -188,7 +188,7 @@ export default defineConfig(({ mode }) => {
 			},
 			headers: {
 				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline'; worker-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+					"script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
 				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
 				['Cross-Origin-Resource-Policy']: 'cross-origin'
 			}
@@ -213,6 +213,25 @@ export default defineConfig(({ mode }) => {
 							['@tanstack/react-router', /react-router/],
 							['@tanstack/react-table', /react-table/],
 							['@tanstack/react-virtual', /react-virtual/],
+							['@tiptap/core', /@tiptap\/core/],
+							['@tiptap/extension-color', /@tiptap\/extension-color/],
+							['@tiptap/extension-file-handler', /@tiptap\/extension-file-handler/],
+							['@tiptap/extension-gapcursor', /@tiptap\/extension-gapcursor/],
+							['@tiptap/extension-heading', /@tiptap\/extension-heading/],
+							['@tiptap/extension-highlight', /@tiptap\/extension-highlight/],
+							['@tiptap/extension-image', /@tiptap\/extension-image/],
+							['@tiptap/extension-link', /@tiptap\/extension-link/],
+							['@tiptap/extension-placeholder', /@tiptap\/extension-placeholder/],
+							['@tiptap/extension-table', /@tiptap\/extension-table/],
+							['@tiptap/extension-table-cell', /@tiptap\/extension-table-cell/],
+							['@tiptap/extension-table-header', /@tiptap\/extension-table-header/],
+							['@tiptap/extension-table-row', /@tiptap\/extension-table-row/],
+							['@tiptap/extension-text-align', /@tiptap\/extension-text-align/],
+							['@tiptap/extension-text-style', /@tiptap\/extension-text-style/],
+							['@tiptap/extension-underline', /@tiptap\/extension-underline/],
+							['@tiptap/pm', /@tiptap\/pm/],
+							['@tiptap/react', /@tiptap\/react/],
+							['@tiptap/starter-kit', /@tiptap\/starter-kit/],
 							['ahooks', /ahooks/],
 							['axios', /axios/],
 							['bcryptjs-react', /bcryptjs-react/],
@@ -249,6 +268,7 @@ export default defineConfig(({ mode }) => {
 						for (const [key, regex] of modules) {
 							if (id.match(regex)) return key
 						}
+						return null
 					}
 				}
 			}
