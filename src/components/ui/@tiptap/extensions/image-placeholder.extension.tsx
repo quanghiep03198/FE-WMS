@@ -10,7 +10,7 @@ import {
 	NodeViewWrapper,
 	ReactNodeViewRenderer
 } from '@tiptap/react'
-import { Image, Link, Upload } from 'lucide-react'
+import { Image, Link, Loader2, Upload } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
 import { useImageUpload } from '../hooks/use-image-upload'
 import { isValidUrl, NODE_HANDLES_SELECTED_STYLE_CLASSNAME } from '../utils'
@@ -194,12 +194,12 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 												alt='Preview'
 												className='mx-auto max-h-[200px] rounded-lg object-cover'
 											/>
-											<Input
-												value={altText}
-												onChange={(e) => setAltText(e.target.value)}
-												placeholder='Alt text (optional)'
-											/>
-											{/* <Div className='space-y-2'>
+											<Div className='space-y-2'>
+												<Input
+													value={altText}
+													onChange={(e) => setAltText(e.target.value)}
+													placeholder='Alt text (optional)'
+												/>
 												<Div className='flex justify-end gap-2'>
 													<Button variant='outline' onClick={handleRemove} disabled={uploading}>
 														Remove
@@ -209,7 +209,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 														Upload
 													</Button>
 												</Div>
-											</Div> */}
+											</Div>
 										</Div>
 									) : (
 										<>
