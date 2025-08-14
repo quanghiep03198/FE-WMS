@@ -6,9 +6,9 @@ import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
-
 /**
  * @see https://vitejs.dev/config/
  */
@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
 			staticCopy({
 				targets: [{ src: './infrastructure/web.config', dest: '' }]
 			}),
+			nodePolyfills(),
 			pwa({
 				registerType: 'autoUpdate',
 				manifestFilename: 'site.webmanifest',
@@ -187,7 +188,7 @@ export default defineConfig(({ mode }) => {
 			},
 			headers: {
 				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+					"script-src 'self' 'unsafe-inline'; worker-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
 				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
 				['Cross-Origin-Resource-Policy']: 'cross-origin'
 			}
