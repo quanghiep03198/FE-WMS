@@ -10,7 +10,7 @@ export const useGetProductSpecificationQuery = () => {
 	return useQuery({
 		queryKey: [ProductSpecificationQueryKey.PRODUCT_SPECIFICATION],
 		queryFn: async () =>
-			await axiosInstance.get<void, ResponseBody<IProductSpecification[]>>('/product-specifications'),
+			await axiosInstance.get<void, ResponseBody<IProductSpecification[]>>('/product-specification'),
 		select: (response) => response.metadata
 	})
 }
