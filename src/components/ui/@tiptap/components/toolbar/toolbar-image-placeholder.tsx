@@ -1,8 +1,7 @@
 // @ts-nocheck
 
 import { cn } from '@/common/utils/cn'
-import { Button, Tooltip, type ButtonProps } from '@/components/ui'
-import { Image } from 'lucide-react'
+import { Button, Icon, Tooltip, type ButtonProps } from '@/components/ui'
 import React from 'react'
 import { useEditorContext } from '../../context/editor-context'
 
@@ -26,7 +25,7 @@ const ImagePlaceholderToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>
 					}}
 					ref={ref}
 					{...props}>
-					{children ?? <Image className='h-4 w-4' />}
+					{children ?? <Icon name='Image' className='h-4 w-4' />}
 				</Button>
 			</Tooltip>
 		)

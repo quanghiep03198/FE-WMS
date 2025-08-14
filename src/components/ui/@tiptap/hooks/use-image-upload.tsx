@@ -1,7 +1,6 @@
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
-import compressBase64 from '@/common/utils/compress-base64'
+import compressBase64 from '@/common/libs/compress-base64'
 import { convertBase64 } from '@/common/utils/convert-base64'
-// import { useWorker } from '@koale/useworker'
 import imageCompression from 'browser-image-compression'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -14,15 +13,11 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const [fileName, setFileName] = useState<string | null>(null)
-	// const [uploading, setUploading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
 	const [compress, uploading] = useWorkerFn(compressBase64)
 
-	const compressImage = async (file) => {
-		console.log('originalFile instanceof Blob', file instanceof Blob) // true
-		console.log(`originalFile size ${file.size / 1024 / 1024} MB`)
-
+	const compressImage = async (file: File) => {
 		try {
 			const compressedFile = await imageCompression(file, {
 				maxSizeMB: 5,
@@ -51,9 +46,7 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 					const compressedImage = await compressImage(file)
 					const base64Url = await convertBase64(compressedImage)
 					const compressedBase64 = await compress(base64Url.toString(), { width: 500, height: 300, quality: 1 })
-					console.log('compressedBase64 :>> ', compressedBase64)
 					onUpload?.(compressedBase64)
-					// setUploadedBase64(base64Url)
 				} catch (err) {
 					URL.revokeObjectURL(localUrl)
 					setPreviewUrl(null)

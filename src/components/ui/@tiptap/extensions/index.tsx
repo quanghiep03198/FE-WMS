@@ -97,12 +97,6 @@ export const extensions = [
 	FontSize.configure(),
 	TextStyle.configure(),
 	Color.configure(),
-	// Image.configure({
-	// 	HTMLAttributes: {
-	// 		class: 'object-center object-cover max-w-full aspect-[16/9]'
-	// 	},
-	// 	allowBase64: true
-	// }),
 	FileHandler.configure({
 		allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
 		onDrop: (currentEditor, files, pos) => {
@@ -125,10 +119,7 @@ export const extensions = [
 		},
 		onPaste: (currentEditor, files, htmlContent) => {
 			files.forEach((file) => {
-				if (htmlContent) {
-					console.log(htmlContent)
-					return false
-				}
+				if (htmlContent) return false
 
 				const fileReader = new FileReader()
 
