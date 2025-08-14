@@ -1,7 +1,15 @@
-import { Button, Div, Form as FormProvider, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
+import {
+	AutoCompleteFieldControl,
+	Button,
+	Div,
+	Form as FormProvider,
+	Icon,
+	InputFieldControl,
+	SelectFieldControl
+} from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { deflate } from 'pako'
-import { Fragment } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -13,13 +21,60 @@ import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-c
 const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm()
 	const { t } = useTranslation()
-	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	const { data, isLoading } = useGetProductSpecificationQuery()
 
-	// useEffect(() => {
-	// 	const formValues = form.getValues()
-	// 	console.log(pako.inflate(formValues.defect_description, { to: 'string' }))
-	// }, [form.getValues()])
+	const currentCategory = useWatch({ control: form.control, name: 'category' })
+	// Watch form fields
+	const currentBrand = useWatch({ control: form.control, name: 'brand_name' })
+	const currentShoeStyle = useWatch({ control: form.control, name: 'factory_shoes_style' })
+	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
+
+	// Memoized options for brand select
+	const brandOptions = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		return data.map(({ brand_name }) => ({
+			label: brand_name,
+			value: brand_name
+		}))
+	}, [data])
+
+	// Memoized options for shoe style select
+	const shoeStyleOptions = useMemo(() => {
+		if (!Array.isArray(data) || !currentBrand) return []
+		const brand = data.find((item) => item.brand_name === currentBrand)
+		if (!brand?.product_variants) return []
+		return brand.product_variants.map(({ shoes_style }) => ({
+			label: shoes_style,
+			value: shoes_style
+		}))
+	}, [data, currentBrand])
+
+	// Memoized options for color select
+	const colorOptions = useMemo(() => {
+		if (!Array.isArray(data) || !currentBrand || !currentShoeStyle) return []
+		const brand = data.find((item) => item.brand_name === currentBrand)
+		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
+		if (!variant?.spec) return []
+		return variant.spec.map(({ color_sn }) => ({
+			label: color_sn,
+			value: color_sn
+		}))
+	}, [data, currentBrand, currentShoeStyle])
+
+	// Memoized options for size select
+	const sizeOptions = useMemo(() => {
+		if (!Array.isArray(data) || !currentBrand || !currentShoeStyle || !currentColor) return []
+		const brand = data.find((item) => item.brand_name === currentBrand)
+		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
+		const spec = variant?.spec?.find((item) => item.color_sn === currentColor)
+		if (!spec?.sizes) return []
+		return spec.sizes
+			.sort((a, b) => Number(a.size) - Number(b.size))
+			.map(({ size }) => ({
+				label: size,
+				value: size
+			}))
+	}, [data, currentBrand, currentShoeStyle, currentColor])
 
 	return (
 		<FormProvider {...form}>
@@ -63,14 +118,18 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
-						<SelectFieldControl
+						<AutoCompleteFieldControl
 							name='brand_name'
 							label={t('ns_erp:fields.brand_name')}
-							datalist={[
-								{ label: 'UGG', value: 'UGG' },
-								{ label: 'TEVA', value: 'TEVA' },
-								{ label: 'KOOLABURA', value: 'KOOLABURA' }
-							]}
+							placeholder={t('ns_common:form_placeholder.fill', {
+								object: String(t('ns_erp:fields.brand_name')).toLowerCase(),
+								defaultValue: null
+							})}
+							loading={isLoading}
+							datalist={brandOptions}
+							onInput={() => {
+								form.reset({ ...form.getValues(), factory_shoes_style: '', color_sn: '', size_code: '' })
+							}}
 							labelField='label'
 							valueField='value'
 						/>
@@ -87,18 +146,53 @@ const DefectiveGoodsForm: React.FC = () => {
 					)}
 
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
-						<InputFieldControl
+						<AutoCompleteFieldControl
 							name='factory_shoes_style'
 							label={t('ns_erp:fields.shoestyle_codefactory')}
-							placeholder='UF25 W960-1'
+							placeholder={t('ns_common:form_placeholder.fill', {
+								object: String(t('ns_erp:fields.shoestyle_codefactory')).toLowerCase(),
+								defaultValue: null
+							})}
+							loading={isLoading}
+							datalist={shoeStyleOptions}
+							labelField='label'
+							valueField='value'
+							onInput={() => {
+								form.reset({ ...form.getValues(), color_sn: '', size_code: '' })
+							}}
 						/>
 					</Div>
 
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
-						<InputFieldControl name='color_sn' label={t('ns_erp:fields.color_sn')} placeholder='BLK' />
+						<AutoCompleteFieldControl
+							name='color_sn'
+							label={t('ns_erp:fields.color_sn')}
+							placeholder={t('ns_common:form_placeholder.fill', {
+								object: String(t('ns_erp:fields.color_sn')).toLowerCase(),
+								defaultValue: null
+							})}
+							loading={isLoading}
+							datalist={colorOptions}
+							labelField='label'
+							valueField='value'
+							onInput={() => {
+								form.reset({ ...form.getValues(), size_code: '' })
+							}}
+						/>
 					</Div>
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
-						<InputFieldControl name='size_code' label='Size' placeholder='01' />
+						<AutoCompleteFieldControl
+							name='size_code'
+							label='Size'
+							placeholder={t('ns_common:form_placeholder.fill', {
+								object: 'size',
+								defaultValue: null
+							})}
+							loading={isLoading}
+							datalist={sizeOptions}
+							labelField='label'
+							valueField='value'
+						/>
 					</Div>
 					<Div className='col-span-full'>
 						<SelectFieldControl
@@ -124,7 +218,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background p-2'>
-					<Button variant='secondary' size='sm'>
+					<Button variant='secondary' size='sm' onClick={() => form.reset()}>
 						<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 					</Button>
 					<Button size='sm'>
