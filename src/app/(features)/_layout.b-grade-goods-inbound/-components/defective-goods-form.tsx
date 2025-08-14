@@ -1,20 +1,12 @@
-import {
-	Button,
-	Div,
-	Form as FormProvider,
-	Icon,
-	InputFieldControl,
-	Label,
-	SelectFieldControl,
-	Switch
-} from '@/components/ui'
+import { Button, Div, Form as FormProvider, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
-import pako from 'pako'
-import { Fragment, useEffect } from 'react'
+import { deflate } from 'pako'
+import { Fragment } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { DefectiveLocation, DefectiveType } from '../-constants'
+import { useGetProductSpecificationQuery } from '../-hooks/use-product-specification-asm'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
@@ -22,11 +14,12 @@ const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm()
 	const { t } = useTranslation()
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
+	const { data, isLoading } = useGetProductSpecificationQuery()
 
-	useEffect(() => {
-		const formValues = form.getValues()
-		console.log(pako.inflate(formValues.defect_description, { to: 'string' }))
-	}, [form.getValues()])
+	// useEffect(() => {
+	// 	const formValues = form.getValues()
+	// 	console.log(pako.inflate(formValues.defect_description, { to: 'string' }))
+	// }, [form.getValues()])
 
 	return (
 		<FormProvider {...form}>
@@ -34,7 +27,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				onSubmit={form.handleSubmit((data) => {
 					console.log({
 						...data,
-						defect_description: pako.deflate(new TextEncoder().encode(data.defect_description)).toString()
+						defect_description: deflate(new TextEncoder().encode(data.defect_description)).toString()
 					})
 				})}>
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
@@ -113,8 +106,8 @@ const DefectiveGoodsForm: React.FC = () => {
 							label='Defect location'
 							datalist={[
 								{ label: t('ns_common:others.all'), value: DefectiveLocation.ALL },
-								{ label: 'Upper', value: DefectiveLocation.UPPER },
-								{ label: 'Bottom', value: DefectiveLocation.BOTTOM },
+								{ label: t('ns_erp:shoes_parts.upper'), value: DefectiveLocation.UPPER },
+								{ label: t('ns_erp:shoes_parts.bottom'), value: DefectiveLocation.BOTTOM },
 								{ label: t('ns_common:others.other'), value: DefectiveLocation.OTHER }
 							]}
 							labelField='label'
@@ -131,10 +124,6 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background p-2'>
-					<Div className='mr-auto inline-flex items-center gap-x-2'>
-						<Label htmlFor='toggle-use-handhold'>Using RFID handhold</Label>
-						<Switch />
-					</Div>
 					<Button variant='secondary' size='sm'>
 						<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 					</Button>

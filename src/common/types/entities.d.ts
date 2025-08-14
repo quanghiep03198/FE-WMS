@@ -242,3 +242,11 @@ export interface IOutboundHistory {
 	color_sn: string
 	outbound_date: Date
 }
+
+export interface IProductSpecification {
+	brand_name: string
+	product_variants: Array<{
+		shoes_styles: string
+		colors: Array<{ color_sn: string }>
+	}>
+}
