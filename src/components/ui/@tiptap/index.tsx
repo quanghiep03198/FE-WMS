@@ -1,7 +1,7 @@
 import { EditorContent, useEditor } from '@tiptap/react'
-import { useEventEmitter } from 'ahooks'
 import { uniqueId } from 'lodash'
 import React, { memo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger, Div, ScrollArea } from '..'
 import BubbleMenu from './components/bubble-menu'
 import CommonContextMenuItems from './components/context-menu/common-context-menu-items'
@@ -22,6 +22,7 @@ export interface EditorProps {
 
 export const Editor: React.FC<EditorProps> = memo(
 	({ content = '', id = uniqueId(), disabled, name, height = 350, onUpdate: handleUpdate }) => {
+		const { i18n } = useTranslation()
 		const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
 
 		const editor = useEditor(
@@ -35,19 +36,16 @@ export const Editor: React.FC<EditorProps> = memo(
 				},
 				enableCoreExtensions: true,
 				editable: !disabled,
-
+				shouldRerenderOnTransaction: true,
+				immediatelyRender: true,
 				onUpdate: ({ editor }) => {
 					if (handleUpdate) {
 						handleUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
 					}
 				}
 			},
-			[content]
+			[content, i18n.language]
 		)
-
-		if (!editor) {
-			return null
-		}
 
 		const handleContextMenuOpen: React.MouseEventHandler<HTMLSpanElement> = (e) => {
 			const target = e.target as typeof e.currentTarget
@@ -67,11 +65,9 @@ export const Editor: React.FC<EditorProps> = memo(
 			}
 		}
 
-		const event$ = useEventEmitter<any>()
-
 		return (
 			<Div className='relative flex w-full max-w-full flex-col items-stretch divide-y divide-border overflow-clip rounded-lg border shadow-sm'>
-				<EditorContextProvider editor={editor} event$={event$}>
+				<EditorContextProvider editor={editor}>
 					<Toolbar />
 					<ContextMenu>
 						<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>
@@ -82,7 +78,7 @@ export const Editor: React.FC<EditorProps> = memo(
 									name={name}
 									controls={true}
 									content={content}
-									onClick={() => event$.emit('editor:click')}
+									onClick={() => editor.view.dispatchEvent(new FocusEvent('focus'))}
 								/>
 							</ScrollArea>
 						</ContextMenuTrigger>
@@ -90,10 +86,8 @@ export const Editor: React.FC<EditorProps> = memo(
 							<CommonContextMenuItems editor={editor} />
 							{contextMenuType === 'table' && <TableContextMenuItems editor={editor} />}
 							{contextMenuType === 'a' && <LinkContextMenuItems editor={editor} />}
-							{/* {contextMenuType === 'img' && <ImageContextMenuItem editor={editor} />} */}
 						</ContextMenuContent>
 					</ContextMenu>
-					{/* <SetImageForm editor={editor} /> */}
 				</EditorContextProvider>
 				<BubbleMenu editor={editor} />
 			</Div>

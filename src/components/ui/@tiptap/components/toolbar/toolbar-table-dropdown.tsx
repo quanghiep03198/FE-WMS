@@ -19,16 +19,15 @@ import {
 } from '@/components/ui'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Editor } from '@tiptap/react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-
-type FormValue = z.infer<typeof TablePresetSchema>
+import { useEditorContext } from '../../context/editor-context'
 
 const TablePresetSchema = z.object({
 	rows: z
-		.number({ required_error: 'Vui lòng nhập số hàng' })
+		.number({ required_error: 'ns_common:editor.validations.' })
 		.or(z.string({ required_error: 'Vui lòng nhập số hàng' }))
 		.transform((value) => +value)
 		.refine((value) => value >= 1, { message: 'Số hàng phải lớn hơn hoặc bằng 1' }),
@@ -39,7 +38,12 @@ const TablePresetSchema = z.object({
 		.refine((value) => value >= 1, { message: 'Số cột phải lớn hơn hoặc bằng 1' })
 })
 
-const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
+type FormValue = z.infer<typeof TablePresetSchema>
+
+const TableDropdownMenu: React.FC = () => {
+	const { t } = useTranslation()
+
+	const { editor } = useEditorContext()
 	const form = useForm<FormValue>({
 		resolver: zodResolver(TablePresetSchema),
 		defaultValues: { rows: 2, cols: 2 },
@@ -52,23 +56,27 @@ const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 
 	return (
 		<DropdownMenu>
-			<Tooltip message='Bảng'>
+			<Tooltip message={t('ns_common:editor.table')}>
 				<DropdownMenuTrigger asChild>
 					<Button size='icon' className='h-8 w-8' variant='ghost'>
-						<Icon name='Table' />
+						<Icon name='Table2' />
 					</Button>
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent>
-				<DropdownMenuLabel>Bảng</DropdownMenuLabel>
+				<DropdownMenuLabel>{t('ns_common:editor.table')}</DropdownMenuLabel>
 				<DropdownMenuSub>
-					<DropdownMenuSubTrigger>Chèn bảng</DropdownMenuSubTrigger>
+					<DropdownMenuSubTrigger>{t('ns_common:editor.insert_table')}</DropdownMenuSubTrigger>
 					<DropdownMenuPortal>
 						<DropdownMenuSubContent className='p-4'>
 							<Div className='grid gap-4'>
 								<Div className='space-y-2'>
-									<h4 className='text-base font-medium leading-none'>Tùy chọn bảng</h4>
-									<p className='text-sm text-muted-foreground'>Chọn số số cột và hàng để tạo bảng</p>
+									<h4 className='text-base font-medium leading-none'>
+										{t('ns_common:editor.table_option_title')}
+									</h4>
+									<p className='text-sm text-muted-foreground'>
+										{t('ns_common:editor.table_option_description')}
+									</p>
 								</Div>
 								<Form {...form}>
 									<form
@@ -77,10 +85,14 @@ const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 											e.stopPropagation()
 											form.handleSubmit(handleInsertTable)(e)
 										}}>
-										<InputFieldControl type='number' name='rows' label='Số hàng' />
-										<InputFieldControl type='number' name='cols' label='Số cột' />
+										<InputFieldControl type='number' name='rows' label={t('ns_common:editor.num_of_rows')} />
+										<InputFieldControl
+											type='number'
+											name='cols'
+											label={t('ns_common:editor.num_of_columns')}
+										/>
 										<Button type='submit' size='sm' className='gap-x-2'>
-											<Icon name='CirclePlus' /> Chèn bảng
+											<Icon name='CirclePlus' /> {t('ns_common:editor.insert_table')}
 										</Button>
 									</form>
 								</Form>
@@ -92,34 +104,34 @@ const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 				<DropdownMenuGroup>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().addRowBefore().run()}>
 						<Icon name='Plus' />
-						Chèn 1 hàng bên dưới
+						{t('ns_common:editor.insert_row_below')}
 					</DropdownMenuItem>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().addRowBefore().run()}>
 						<Icon name='Plus' />
-						Chèn 1 hàng bên trên
+						{t('ns_common:editor.insert_row_above')}
 					</DropdownMenuItem>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().addColumnBefore().run()}>
 						<Icon name='Plus' />
-						Chèn 1 cột bên trái
+						{t('ns_common:editor.insert_column_left')}
 					</DropdownMenuItem>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().addColumnAfter().run()}>
 						<Icon name='Plus' />
-						Chèn 1 cột bên phải
+						{t('ns_common:editor.insert_column_right')}
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().deleteRow().run()}>
 						<Icon name='Trash2' />
-						Xóa hàng
+						{t('ns_common:editor.delete_row')}
 					</DropdownMenuItem>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().deleteColumn().run()}>
 						<Icon name='Trash2' />
-						Xóa cột
+						{t('ns_common:editor.delete_column')}
 					</DropdownMenuItem>
 					<DropdownMenuItem className='gap-x-2' onClick={() => editor.chain().focus().deleteTable().run()}>
 						<Icon name='Trash2' />
-						Xóa bảng
+						{t('ns_common:editor.delete_table')}
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>

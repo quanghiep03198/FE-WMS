@@ -1,8 +1,10 @@
+import { i18n } from '@/i18n'
 import { Color } from '@tiptap/extension-color'
 import FileHandler from '@tiptap/extension-file-handler'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
+import { ListKit } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
@@ -25,9 +27,10 @@ export const extensions = [
 		},
 		bold: {
 			HTMLAttributes: {
-				class: 'font-bold text-foreground'
+				class: 'font-bold'
 			}
 		},
+
 		paragraph: {
 			HTMLAttributes: {
 				class: 'my-1'
@@ -36,31 +39,45 @@ export const extensions = [
 		blockquote: {
 			HTMLAttributes: { class: 'text-foreground border-none' }
 		},
-		bulletList: {
-			HTMLAttributes: {
-				class: 'list-disc text-foreground'
-			}
-		},
-		orderedList: {
-			HTMLAttributes: {
-				class: 'list-decimal text-foreground'
-			}
-		},
-		listItem: {
-			HTMLAttributes: {
-				class: 'list-decimal text-foreground p-0'
-			}
-		},
 		horizontalRule: {
 			HTMLAttributes: {
 				class: 'border-t dark:border-t-border'
 			}
 		}
 	}),
+	ListKit.configure({
+		bulletList: {
+			HTMLAttributes: {
+				class: 'list-disc text-foreground before:hidden'
+			}
+		},
+		orderedList: {
+			HTMLAttributes: {
+				class: 'list-decimal text-foreground m-0 before:hidden'
+			}
+		},
+		listItem: {
+			HTMLAttributes: {
+				class: 'text-foreground m-0'
+			}
+		},
+		taskList: {
+			itemTypeName: 'taskItem',
+			HTMLAttributes: {
+				class: 'list-none before:hidden p-0'
+			}
+		},
+		taskItem: {
+			HTMLAttributes: {
+				class: 'm-0 flex items-center [&_label]:h-fit [&_input[type=checkbox]]:form-checkbox [&_input[type=checkbox]]:text-active [&_input[type=checkbox]]:mr-2 [&_input[type=checkbox]]:rounded [&_input[type=checkbox]]:!size-4'
+			}
+		}
+	}),
 	Placeholder.configure({
-		placeholder: 'Bắt đầu nhập ...',
+		placeholder: i18n.t('ns_common:editor.placeholder'),
+		showOnlyWhenEditable: true,
 		emptyEditorClass:
-			'text-muted-foreground font-normal text-sm before:pointer-event-none before:content-[attr(data-placeholder)]'
+			'before:h-0 before:place-self-center before:float-left text-muted-foreground font-normal text-sm before:pointer-event-none before:content-[attr(data-placeholder)]'
 	}),
 	Underline.configure(),
 	TextAlign.configure({

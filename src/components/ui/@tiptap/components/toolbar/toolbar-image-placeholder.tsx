@@ -1,20 +1,22 @@
-// @ts-nocheck
-
 import { cn } from '@/common/utils/cn'
 import { Button, Icon, Tooltip, type ButtonProps } from '@/components/ui'
+import '@/components/ui/@tiptap/index'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 
 const ImagePlaceholderToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	({ className, onClick, children, ...props }, ref) => {
 		const { editor } = useEditorContext()
+		const { t } = useTranslation()
+
 		return (
-			<Tooltip message='Image' triggerProps={{ asChild: true }}>
+			<Tooltip message={t('ns_common:editor.image')} triggerProps={{ asChild: true }}>
 				<Button
 					variant='ghost'
 					size='icon'
 					className={cn(
-						'h-8 w-8 p-0 sm:h-9 sm:w-9',
+						'aspect-square size-8 p-0',
 						editor?.isActive('image-placeholder') && 'bg-accent',
 						className
 					)}

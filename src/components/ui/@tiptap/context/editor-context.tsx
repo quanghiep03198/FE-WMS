@@ -1,20 +1,14 @@
 import { type Editor } from '@tiptap/react'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
 type EditorContextType = {
 	editor: Editor
-	event$: EventEmitter<any>
 }
 
 export const EditorContext = createContext<EditorContextType>(null)
 
-export const EditorContextProvider: React.FC<EditorContextType & React.PropsWithChildren> = ({
-	editor,
-	event$,
-	children
-}) => {
-	return <EditorContext.Provider value={{ editor, event$ }}>{children}</EditorContext.Provider>
+export const EditorContextProvider: React.FC<EditorContextType & React.PropsWithChildren> = ({ editor, children }) => {
+	return <EditorContext.Provider value={{ editor }}>{children}</EditorContext.Provider>
 }
 
 export const useEditorContext = () => {

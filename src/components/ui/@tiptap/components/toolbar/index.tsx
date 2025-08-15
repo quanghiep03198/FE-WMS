@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useUpdate } from 'ahooks'
+import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
 import ColorPicker from './toolbar-color-picker'
@@ -13,22 +13,21 @@ import { StyleDropdownMenu } from './toolbar-style-dropdown'
 import TableDropdownMenu from './toolbar-table-dropdown'
 
 const Toolbar: React.FC = () => {
-	const { editor, event$ } = useEditorContext()
-
-	if (!editor) return null
+	const { editor } = useEditorContext()
+	const { t } = useTranslation()
 
 	const rerender = useUpdate()
 
-	event$.useSubscription((value: string) => {
-		if (value === 'editor:click') rerender()
+	editor.on('focus', () => {
+		rerender()
 	})
 
 	return (
 		<Div className='p-1'>
-			<ScrollShadow className='overflow-x-auto scrollbar-none' orientation='horizontal'>
+			<Div className='overflow-x-auto scrollbar-none'>
 				<Div className='flex h-full items-center justify-start gap-x-1 p-1'>
 					{/* Undo */}
-					<Tooltip message='Hoàn tác'>
+					<Tooltip message={t('ns_common:actions.undo')}>
 						<Button
 							className='aspect-square h-8 w-8'
 							type='button'
@@ -40,7 +39,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Redo */}
-					<Tooltip message='Làm lại'>
+					<Tooltip message={t('ns_common:actions.redo')}>
 						<Button
 							className='aspect-square h-8 w-8'
 							type='button'
@@ -54,10 +53,10 @@ const Toolbar: React.FC = () => {
 					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
 					{/* Change style */}
-					<StyleDropdownMenu editor={editor} />
+					<StyleDropdownMenu />
 
 					{/* Change font size */}
-					<Tooltip message='Cỡ chữ'>
+					<Tooltip message={t('ns_common:editor.font_size')}>
 						<FontSizeInput />
 					</Tooltip>
 
@@ -66,7 +65,7 @@ const Toolbar: React.FC = () => {
 					<AlignmentDropdownMenu />
 
 					{/* Toggle bold */}
-					<Tooltip message='Đậm'>
+					<Tooltip message={t('ns_common:editor.bold')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -80,7 +79,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Toggle italic */}
-					<Tooltip message='Nghiêng'>
+					<Tooltip message={t('ns_common:editor.italic')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -93,7 +92,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Toggle quote */}
-					<Tooltip message='Block quote'>
+					<Tooltip message={t('ns_common:editor.blockquote')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -106,7 +105,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Toggle underline */}
-					<Tooltip message='Gạch chân'>
+					<Tooltip message={t('ns_common:editor.underline')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -119,7 +118,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Toggle underline */}
-					<Tooltip message='Code'>
+					<Tooltip message={t('ns_common:editor.code_block')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -132,7 +131,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Toggle strike linethough */}
-					<Tooltip message='Gạch ngang'>
+					<Tooltip message={t('ns_common:editor.strikethrough')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -146,13 +145,13 @@ const Toolbar: React.FC = () => {
 
 					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
-					<ColorPicker label='Màu văn bản' icon='Baseline' editor={editor} type='textStyle' />
-					<ColorPicker label='Highlight' icon='Highlighter' editor={editor} type='highlight' />
+					<ColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
+					<ColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
 
 					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
 					{/* Toggle ordered list */}
-					<Tooltip message='Danh sách được đánh số'>
+					<Tooltip message={t('ns_common:editor.ordered_list')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -165,7 +164,7 @@ const Toolbar: React.FC = () => {
 					</Tooltip>
 
 					{/* Toggle bullet list */}
-					<Tooltip message='Danh sách có dấu đầu dòng'>
+					<Tooltip message={t('ns_common:editor.bullet_list')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -176,9 +175,21 @@ const Toolbar: React.FC = () => {
 							<Icon name='List' />
 						</Button>
 					</Tooltip>
+					{/* Toggle bullet list */}
+					<Tooltip message={t('ns_common:editor.task_list')}>
+						<Button
+							variant='ghost'
+							size='icon'
+							className={cn('aspect-square h-8 w-8', {
+								'bg-accent text-accent-foreground': editor.isActive('taskList')
+							})}
+							onClick={() => editor.chain().focus().toggleTaskList().run()}>
+							<Icon name='ListTodo' />
+						</Button>
+					</Tooltip>
 
 					{/* Horizontal ruler */}
-					<Tooltip message='Đường kẻ ngang'>
+					<Tooltip message={t('ns_common:editor.separator')}>
 						<Button
 							variant='ghost'
 							size='icon'
@@ -187,16 +198,15 @@ const Toolbar: React.FC = () => {
 							<Icon name='PencilLine' />
 						</Button>
 					</Tooltip>
-
-					<LinkPopover editor={editor} />
+					<LinkPopover />
 					<ImagePlaceholderToolbar />
-					<TableDropdownMenu editor={editor} />
+					<TableDropdownMenu />
 					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
-					<Div className='ml-auto'>
+					<Div className='sticky right-0 ml-auto bg-background'>
 						<SearchAndReplaceToolbar />
 					</Div>
 				</Div>
-			</ScrollShadow>
+			</Div>
 		</Div>
 	)
 }

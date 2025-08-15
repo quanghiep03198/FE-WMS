@@ -1,4 +1,4 @@
-declare module '@tiptap/core' {
+export module '@tiptap/core' {
 	interface Commands<ReturnType> {
 		imagePlaceholder: {
 			/**

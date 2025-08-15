@@ -10,6 +10,7 @@ export default {
 		actual_missing_qty: 'Số lượng thiếu thực tế',
 		actual_outstock_qty: 'Số lượng xuất thực tế',
 		brand_name: 'Nhãn hiệu khách hàng',
+		category: 'Phân loại',
 		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
 		customer_branch_id: 'ID nhã hiệu khách hàng',
@@ -18,6 +19,8 @@ export default {
 		daily_inbound_qty: 'Số lượng nhập trong ngày',
 		daily_outbound_qty: 'Số lượng xuất trong ngày',
 		daily_productivity: 'Sản lượng ngày',
+		defect_location: 'Vị trí lỗi',
+		defect_description: 'Mô tả lỗi',
 		dept_name: 'Bộ phận cập nhật',
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',

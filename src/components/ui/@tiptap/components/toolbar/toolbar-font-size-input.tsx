@@ -1,17 +1,12 @@
 'use no memo'
 
 import { Button, Div, Icon, Input, Separator } from '@/components/ui'
-import { Editor } from '@tiptap/react'
 import { useDebounce } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useEditorContext } from '../../context/editor-context'
 
-type FontSizeInputProps = {
-	editor: Editor
-}
-
 const FONT_SIZE_MIN = 14
-const FONT_SIZE_DEFAULT = 14
+const FONT_SIZE_DEFAULT = 16
 const FONT_SIZE_MAX = 96
 
 const extractFontSizeValue = (attributes: Record<string, any>) => {
@@ -51,12 +46,12 @@ const FontSizeInput: React.FC = () => {
 	}, [debouncedFontSize])
 
 	useEffect(() => {
-		editor.commands.setFontSize(String(fontSize))
+		editor.commands.setFontSize(fontSize)
 	}, [fontSize])
 
-	// const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-	// }
+	editor.on('focus', () => {
+		setFontSize(extractFontSizeValue(editor.getAttributes('textStyle')))
+	})
 
 	return (
 		<Div className='flex h-8 items-stretch overflow-hidden rounded-md border *:rounded-none [&>*]:p-0 [&_button]:aspect-square [&_button]:!size-8 [&_button]:place-content-center'>

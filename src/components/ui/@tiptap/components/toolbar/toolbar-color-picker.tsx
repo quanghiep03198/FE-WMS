@@ -1,5 +1,4 @@
 import { cn } from '@/common/utils/cn'
-import { Editor } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 import {
 	Button,
@@ -19,15 +18,17 @@ import {
 	buttonVariants
 } from '../../..'
 import { PresetColors } from '../../constants'
+import { useEditorContext } from '../../context/editor-context'
 
 type ColorPickerProps = {
 	label: string
 	icon: IconProps['name']
-	editor: Editor
 	type: 'textStyle' | 'highlight'
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) => {
+	const { editor } = useEditorContext()
+
 	const [open, setOpen] = useState<boolean>(false)
 	const [currentColor, setCurrentColor] = useState<string | undefined>()
 
@@ -100,7 +101,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) 
 			<Input
 				id='color-picker'
 				type='color'
-				className='color invisible absolute inset-0 appearance-none border-none outline-none'
+				className='invisible absolute inset-0 appearance-none border-none outline-none'
 				onChange={(e) => handleSelectColor(e.target.value)}
 			/>
 		</Div>

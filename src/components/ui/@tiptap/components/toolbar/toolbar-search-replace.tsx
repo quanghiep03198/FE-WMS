@@ -1,26 +1,28 @@
 /* eslint-disable */
 // @ts-nocheck
-import { ArrowLeftIcon, ArrowRightIcon, Repeat, Search, X } from 'lucide-react'
+import { ArrowLeftIcon, ArrowRightIcon, Repeat, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	Checkbox,
+	Icon,
 	Input,
 	Label,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 	Separator,
-	Tooltip,
 	Typography
 } from '@/components/ui'
+import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { type SearchAndReplaceStorage } from '../../extensions/search-and-replace.extension'
 
 export function SearchAndReplaceToolbar() {
 	const { editor } = useEditorContext()
+	const { t } = useTranslation()
 
 	const [open, setOpen] = useState(false)
 	const [replacing, setReplacing] = useState(false)
@@ -58,20 +60,18 @@ export function SearchAndReplaceToolbar() {
 
 	return (
 		<Popover open={open}>
-			<Tooltip message='Search & Replace'>
-				<PopoverTrigger disabled={!editor} asChild>
-					<Button
-						variant='ghost'
-						size='sm'
-						onClick={() => {
-							setOpen(!open)
-						}}
-						className={cn('h-8 w-max px-3 font-normal')}>
-						<Search className='mr-2 h-4 w-4' />
-						<p>Search & Replace</p>
-					</Button>
-				</PopoverTrigger>
-			</Tooltip>
+			<PopoverTrigger disabled={!editor} asChild>
+				<Button
+					variant='ghost'
+					size='sm'
+					onClick={() => {
+						setOpen(!open)
+					}}
+					className={cn('font-normal')}>
+					<Icon name='Search' />
+					{t('ns_common:editor.search_and_replace')}
+				</Button>
+			</PopoverTrigger>
 
 			<PopoverContent
 				align='end'
@@ -90,7 +90,7 @@ export function SearchAndReplaceToolbar() {
 							onChange={(e) => {
 								setSearchText(e.target.value)
 							}}
-							placeholder='Search...'
+							placeholder={t('ns_common:actions.search') + '...'}
 						/>
 						<small>
 							{results?.length === 0 ? selectedResult : selectedResult + 1}/{results?.length}
@@ -139,32 +139,32 @@ export function SearchAndReplaceToolbar() {
 								}}>
 								<ArrowLeftIcon className='h-4 w-4' />
 							</Button>
-							<h2 className='text-sm font-medium'>Search and replace</h2>
+							<h2 className='text-sm font-medium'>{t('ns_common:editor.search_and_replace')}</h2>
 						</div>
 
 						<div className='my-2 w-full'>
 							<div className='mb-3'>
-								<Label className='text-gray-11 mb-1 text-xs'>Search</Label>
+								<Label className='text-gray-11 mb-1 text-xs'>{t('ns_common:actions.search')}</Label>
 								<Input
 									value={searchText}
 									onChange={(e) => {
 										setSearchText(e.target.value)
 									}}
-									placeholder='Search...'
+									placeholder={t('ns_common:actions.search') + '...'}
 								/>
 								<Typography variant='small' className='text-xs'>
 									{results?.length === 0 ? selectedResult : selectedResult + 1}/{results?.length}
 								</Typography>
 							</div>
 							<div className='mb-2'>
-								<Label className='text-gray-11 mb-1 text-xs'>Replace with</Label>
+								<Label className='text-gray-11 mb-1 text-xs'>{t('ns_common:editor.replace_with')}</Label>
 								<Input
 									className='w-full'
 									value={replaceText}
 									onChange={(e) => {
 										setReplaceText(e.target.value)
 									}}
-									placeholder='Replace...'
+									placeholder={t('ns_common:editor.replace') + '...'}
 								/>
 							</div>
 							<div className='mt-3 flex items-center space-x-2'>
@@ -178,7 +178,7 @@ export function SearchAndReplaceToolbar() {
 								<Label
 									htmlFor='match_case'
 									className='text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-									Match case
+									{t('ns_common:editor.match_case')}
 								</Label>
 							</div>
 						</div>
@@ -195,10 +195,10 @@ export function SearchAndReplaceToolbar() {
 
 							<div className='main-actions flex items-center gap-2'>
 								<Button size='sm' className='h-7 px-3 text-xs' variant='secondary' onClick={replaceAll}>
-									Replace All
+									{t('ns_common:editor.replace_all')}
 								</Button>
 								<Button onClick={replace} size='sm' className='h-7 px-3 text-xs'>
-									Replace
+									{t('ns_common:editor.replace')}
 								</Button>
 							</div>
 						</div>

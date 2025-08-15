@@ -332,6 +332,9 @@ module.exports = {
 		require('tailwindcss-animate'),
 		require('tailwind-scrollbar'),
 		require('@tailwindcss/container-queries'),
-		require('@tailwindcss/typography')
+		require('@tailwindcss/typography'),
+		require('@tailwindcss/forms')({
+			strategy: 'class' // only generate classes
+		})
 	]
 }

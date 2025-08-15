@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { Editor } from '@tiptap/react'
-import React from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Button,
 	DropdownMenu,
@@ -20,91 +20,94 @@ type AlignmentOption = {
 	label: string
 }
 
-const PresetAlignments: Array<AlignmentOption> = [
-	{
-		icon: 'AlignLeft',
-		value: 'left',
-		label: 'Căn trái'
-	},
-	{
-		icon: 'AlignRight',
-		value: 'right',
-		label: 'Căn phải'
-	},
-	{
-		icon: 'AlignCenter',
-		value: 'center',
-		label: 'Căn giữa'
-	},
-	{
-		icon: 'AlignJustify',
-		value: 'justify',
-		label: 'Căn đều'
-	}
-]
-
-const getCurrentAlignment = (editor: Editor): Omit<AlignmentOption, 'label'> => {
-	switch (true) {
-		case editor.isActive({ textAlign: 'left' }):
-			return {
-				icon: 'AlignLeft',
-				value: 'left'
-			}
-		case editor.isActive({ textAlign: 'right' }):
-			return {
-				icon: 'AlignRight',
-				value: 'right'
-			}
-		case editor.isActive({ textAlign: 'center' }):
-			return {
-				icon: 'AlignCenter',
-				value: 'center'
-			}
-		case editor.isActive({ textAlign: 'justify' }):
-			return {
-				icon: 'AlignJustify',
-				value: 'justify'
-			}
-
-		default:
-			return {
-				icon: 'AlignRight',
-				value: 'right'
-			}
-	}
-}
-
 export const AlignmentDropdownMenu: React.FC = () => {
-	const { editor, event$ } = useEditorContext()
+	const { editor } = useEditorContext()
+	const { t, i18n } = useTranslation()
+	const presetAlignments: Array<AlignmentOption> = useMemo(
+		() => [
+			{
+				icon: 'AlignLeft',
+				value: 'left',
+				label: String(t('ns_common:editor.align_left'))
+			},
+			{
+				icon: 'AlignRight',
+				value: 'right',
+				label: String(t('ns_common:editor.align_right'))
+			},
+			{
+				icon: 'AlignCenter',
+				value: 'center',
+				label: String(t('ns_common:editor.align_center'))
+			},
+			{
+				icon: 'AlignJustify',
+				value: 'justify',
+				label: String(t('ns_common:editor.align_justify'))
+			}
+		],
+		[i18n.language]
+	)
+	const getCurrentAlignment = useCallback((): Omit<AlignmentOption, 'label'> => {
+		switch (true) {
+			case editor.isActive({ textAlign: 'left' }):
+				return {
+					icon: 'AlignLeft',
+					value: 'left'
+				}
+			case editor.isActive({ textAlign: 'right' }):
+				return {
+					icon: 'AlignRight',
+					value: 'right'
+				}
+			case editor.isActive({ textAlign: 'center' }):
+				return {
+					icon: 'AlignCenter',
+					value: 'center'
+				}
+			case editor.isActive({ textAlign: 'justify' }):
+				return {
+					icon: 'AlignJustify',
+					value: 'justify'
+				}
 
-	const currentAlignment = getCurrentAlignment(editor)
-
-	event$.useSubscription((value: string) => {
-		if (value === 'editor:click') {
-			// Rerender when editor is clicked to update alignment state
-			editor.view.updateState(editor.state)
+			default:
+				return {
+					icon: 'AlignRight',
+					value: 'right'
+				}
 		}
+	}, [editor])
+	const [alignmentState, setAlignmentState] = useState<Omit<AlignmentOption, 'label'>>(getCurrentAlignment())
+
+	editor.on('focus', () => {
+		setAlignmentState(getCurrentAlignment())
 	})
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
-					<Icon name={currentAlignment.icon} />
-				</Button>
-			</DropdownMenuTrigger>
+			<Tooltip message={t('ns_common:editor.alignment')}>
+				<DropdownMenuTrigger asChild>
+					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
+						<Icon name={alignmentState?.icon} />
+					</Button>
+				</DropdownMenuTrigger>
+			</Tooltip>
 			<DropdownMenuContent>
 				<DropdownMenuRadioGroup
 					className='flex list-none !flex-row gap-x-2'
-					value={currentAlignment.value}
-					onValueChange={(value) => editor.commands.setTextAlign(value)}>
-					{PresetAlignments.map((option) => (
+					value={alignmentState?.value}
+					onValueChange={(value) => {
+						editor.commands.setTextAlign(value)
+						setAlignmentState(getCurrentAlignment())
+					}}>
+					{presetAlignments.map((option) => (
 						<Tooltip message={option.label} key={option.value}>
 							<DropdownMenuRadioItem
 								key={option.value}
 								value={option.value}
 								className={cn('p-2 hover:bg-accent hover:text-accent-foreground [&>span]:hidden', {
-									'bg-secondary': currentAlignment.value === option.value
+									'bg-secondary': alignmentState?.value === option.value
 								})}>
 								<Icon name={option.icon} size={16} />
 							</DropdownMenuRadioItem>
