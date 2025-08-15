@@ -8,6 +8,7 @@ import {
 	SelectFieldControl
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { deflate } from 'pako'
 import { Fragment, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -15,16 +16,21 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { DefectiveLocation, DefectiveType } from '../-constants'
 import { useGetProductSpecificationQuery } from '../-hooks/use-product-specification-asm'
+import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
 const DefectiveGoodsForm: React.FC = () => {
-	const form = useForm()
+	const form = useForm<CreateDefectiveGoodsFormValues>({
+		resolver: zodResolver(createDefectiveGoodsSchema),
+		mode: 'onSubmit'
+	})
 	const { t } = useTranslation()
 	const { data, isLoading } = useGetProductSpecificationQuery()
 
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	// Watch form fields
+	const currentEpc = useWatch({ control: form.control, name: 'epc' })
 	const currentBrand = useWatch({ control: form.control, name: 'brand_name' })
 	const currentShoeStyle = useWatch({ control: form.control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
@@ -93,10 +99,18 @@ const DefectiveGoodsForm: React.FC = () => {
 							autoComplete='off'
 							placeholder='Scan EPC tag here'
 							onKeyDown={(e) => {
-								if (e.key === 'Enter') e.preventDefault()
-							}}
-							onKeyDownCapture={(e) => {
-								if (e.key === 'Enter') e.preventDefault()
+								if (e.key === 'Backspace') {
+									form.reset({ ...form.getValues(), epc: '' })
+									return
+								}
+								if (e.key === 'Enter') {
+									e.preventDefault()
+									e.stopPropagation()
+								}
+								if (e.currentTarget.value.length === 24) {
+									form.setValue('epc', e.currentTarget.value.toUpperCase())
+									e.preventDefault()
+								}
 							}}
 							description='Using RFID Reader to scan EPC tag'
 						/>
@@ -104,7 +118,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div className='col-span-full'>
 						<SelectFieldControl
 							name='category'
-							label='Category'
+							label={t('ns_erp:fields.category')}
 							datalist={[
 								{ label: t('ns_inoutbound:shoes_category.b_grade'), value: DefectiveType.B_GRADE },
 								{ label: t('ns_inoutbound:shoes_category.c_grade'), value: DefectiveType.C_GRADE },
@@ -197,7 +211,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div className='col-span-full'>
 						<SelectFieldControl
 							name='defect_location'
-							label='Defect location'
+							label={t('ns_erp:fields.defect_location')}
 							datalist={[
 								{ label: t('ns_common:others.all'), value: DefectiveLocation.ALL },
 								{ label: t('ns_erp:shoes_parts.upper'), value: DefectiveLocation.UPPER },
@@ -214,7 +228,11 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 
 					<Div className='col-span-full'>
-						<EditorFieldControl name='defect_description' label='Defect description' className='h-60' />
+						<EditorFieldControl
+							name='defect_description'
+							label={t('ns_erp:fields.defect_description')}
+							className='h-60'
+						/>
 					</Div>
 				</Div>
 				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background p-2'>
