@@ -47,7 +47,6 @@ export function useWorkerFn<TArgs extends any[], TResult>(
 					const fnString = fn.toString()
 
 					workerRef.current.onmessage = (e) => {
-						console.log('e.data :>> ', e.data)
 						resolve(e.data)
 					}
 
