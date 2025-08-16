@@ -16,8 +16,8 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { gunzipSync, gzipSync } from 'zlib'
 import { DefectiveLocation, DefectiveType } from '../-constants'
-import { useGetProductSpecificationQuery } from '../-hooks/use-product-specification-asm'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
+import { useGetProductSpecificationQuery } from '../../-hooks/use-product-specification-asm'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
@@ -129,7 +129,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							placeholder='Scan EPC tag here'
 							onKeyDown={handleEpcChange}
 							onKeyDownCapture={handleEpcChange}
-							description={t('ns_validation:min_length')}
+							description='Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.'
 						/>
 					</Div>
 					<Div className='col-span-full'>
