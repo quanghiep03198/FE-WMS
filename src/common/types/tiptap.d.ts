@@ -1,8 +1,10 @@
+import { Range } from '@tiptap/core'
+
 export module '@tiptap/core' {
-	interface Commands<ReturnType> {
+	export interface Commands<ReturnType> {
 		imagePlaceholder: {
 			/**
-			 * Inserts an image placeholder
+			 * @description Inserts an image placeholder
 			 */
 			insertImagePlaceholder: () => ReturnType
 		}
@@ -35,6 +37,30 @@ export module '@tiptap/core' {
 			 * @description Set case sensitivity in extension.
 			 */
 			setCaseSensitive: (caseSensitive: boolean) => ReturnType
+		}
+	}
+
+	export interface SearchAndReplaceStorage {
+		searchTerm: string
+		replaceTerm: string
+		results: Range[]
+		lastSearchTerm: string
+		selectedResult: number
+		lastSelectedResult: number
+		caseSensitive: boolean
+		lastCaseSensitiveState: boolean
+	}
+
+	export interface Storage {
+		searchAndReplace: {
+			searchTerm: string
+			replaceTerm: string
+			results: Range[]
+			lastSearchTerm: string
+			selectedResult: number
+			lastSelectedResult: number
+			caseSensitive: boolean
+			lastCaseSensitiveState: boolean
 		}
 	}
 }

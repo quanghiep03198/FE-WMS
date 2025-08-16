@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useUpdate } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
@@ -23,190 +24,184 @@ const Toolbar: React.FC = () => {
 	})
 
 	return (
-		<Div className='p-1'>
-			<Div className='overflow-x-auto scrollbar-none'>
-				<Div className='flex h-full items-center justify-start gap-x-1 p-1'>
-					{/* Undo */}
-					<Tooltip message={t('ns_common:actions.undo')}>
-						<Button
-							className='aspect-square h-8 w-8'
-							type='button'
-							size='icon'
-							variant='ghost'
-							onClick={() => editor.chain().focus().undo().run()}>
-							<Icon name='Undo' />
-						</Button>
-					</Tooltip>
+		<Div className='p-1.5'>
+			<ScrollShadow
+				className='flex h-full items-center justify-start gap-x-1 scrollbar-none'
+				orientation='horizontal'>
+				<SearchAndReplaceToolbar />
+				{/* Undo */}
+				<Tooltip message={t('ns_common:actions.undo')}>
+					<Button
+						className='aspect-square h-8 w-8'
+						type='button'
+						size='icon'
+						variant='ghost'
+						onClick={() => editor.chain().focus().undo().run()}>
+						<Icon name='Undo2' />
+					</Button>
+				</Tooltip>
+				{/* Redo */}
+				<Tooltip message={t('ns_common:actions.redo')}>
+					<Button
+						className='aspect-square h-8 w-8'
+						type='button'
+						size='icon'
+						variant='ghost'
+						onClick={() => editor.chain().focus().redo().run()}>
+						<Icon name='Redo2' />
+					</Button>
+				</Tooltip>
 
-					{/* Redo */}
-					<Tooltip message={t('ns_common:actions.redo')}>
-						<Button
-							className='aspect-square h-8 w-8'
-							type='button'
-							size='icon'
-							variant='ghost'
-							onClick={() => editor.chain().focus().redo().run()}>
-							<Icon name='Redo' />
-						</Button>
-					</Tooltip>
+				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
-					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				{/* Change style */}
+				<StyleDropdownMenu />
 
-					{/* Change style */}
-					<StyleDropdownMenu />
+				{/* Change font size */}
+				<Tooltip message={t('ns_common:editor.font_size')}>
+					<FontSizeInput />
+				</Tooltip>
 
-					{/* Change font size */}
-					<Tooltip message={t('ns_common:editor.font_size')}>
-						<FontSizeInput />
-					</Tooltip>
+				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
-					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				<AlignmentDropdownMenu />
 
-					<AlignmentDropdownMenu />
+				{/* Toggle bold */}
+				<Tooltip message={t('ns_common:editor.bold')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', editor.isActive('bold') && 'bg-accent text-accent-foreground')}
+						onClick={() => editor.chain().focus().toggleBold().run()}>
+						<Icon name='Bold' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle bold */}
-					<Tooltip message={t('ns_common:editor.bold')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn(
-								'aspect-square h-8 w-8',
-								editor.isActive('bold') && 'bg-accent text-accent-foreground'
-							)}
-							onClick={() => editor.chain().focus().toggleBold().run()}>
-							<Icon name='Bold' />
-						</Button>
-					</Tooltip>
+				{/* Toggle italic */}
+				<Tooltip message={t('ns_common:editor.italic')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('italic')
+						})}
+						onClick={() => editor.chain().focus().toggleItalic().run()}>
+						<Icon name='Italic' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle italic */}
-					<Tooltip message={t('ns_common:editor.italic')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('italic')
-							})}
-							onClick={() => editor.chain().focus().toggleItalic().run()}>
-							<Icon name='Italic' />
-						</Button>
-					</Tooltip>
+				{/* Toggle quote */}
+				<Tooltip message={t('ns_common:editor.blockquote')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('blockquote')
+						})}
+						onClick={() => editor.chain().focus().toggleBlockquote().run()}>
+						<Icon name='Quote' size={14} />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle quote */}
-					<Tooltip message={t('ns_common:editor.blockquote')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('blockquote')
-							})}
-							onClick={() => editor.chain().focus().toggleBlockquote().run()}>
-							<Icon name='Quote' size={14} />
-						</Button>
-					</Tooltip>
+				{/* Toggle underline */}
+				<Tooltip message={t('ns_common:editor.underline')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('underline')
+						})}
+						onClick={() => editor.commands.toggleUnderline()}>
+						<Icon name='Underline' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle underline */}
-					<Tooltip message={t('ns_common:editor.underline')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('underline')
-							})}
-							onClick={() => editor.commands.toggleUnderline()}>
-							<Icon name='Underline' />
-						</Button>
-					</Tooltip>
+				{/* Toggle underline */}
+				<Tooltip message={t('ns_common:editor.code_block')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('underline')
+						})}
+						onClick={() => editor.commands.toggleCodeBlock()}>
+						<Icon name='Code' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle underline */}
-					<Tooltip message={t('ns_common:editor.code_block')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('underline')
-							})}
-							onClick={() => editor.commands.toggleCodeBlock()}>
-							<Icon name='Code' />
-						</Button>
-					</Tooltip>
+				{/* Toggle strike linethough */}
+				<Tooltip message={t('ns_common:editor.strikethrough')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('strike')
+						})}
+						onClick={() => editor.chain().focus().toggleStrike().run()}>
+						<Icon name='Strikethrough' className='h-4 w-4' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle strike linethough */}
-					<Tooltip message={t('ns_common:editor.strikethrough')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('strike')
-							})}
-							onClick={() => editor.chain().focus().toggleStrike().run()}>
-							<Icon name='Strikethrough' className='h-4 w-4' />
-						</Button>
-					</Tooltip>
+				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
-					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				{/* Text color and highlight */}
+				<ColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
+				<ColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
 
-					<ColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
-					<ColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
 
-					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				{/* Toggle ordered list */}
+				<Tooltip message={t('ns_common:editor.ordered_list')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('orderedList')
+						})}
+						onClick={() => editor.chain().focus().toggleOrderedList().run()}>
+						<Icon name='ListOrdered' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle ordered list */}
-					<Tooltip message={t('ns_common:editor.ordered_list')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('orderedList')
-							})}
-							onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-							<Icon name='ListOrdered' />
-						</Button>
-					</Tooltip>
+				{/* Toggle bullet list */}
+				<Tooltip message={t('ns_common:editor.bullet_list')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('bulletList')
+						})}
+						onClick={() => editor.chain().focus().toggleBulletList().run()}>
+						<Icon name='List' />
+					</Button>
+				</Tooltip>
+				{/* Toggle task list */}
+				<Tooltip message={t('ns_common:editor.task_list')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className={cn('aspect-square h-8 w-8', {
+							'bg-accent text-accent-foreground': editor.isActive('taskList')
+						})}
+						onClick={() => editor.chain().focus().toggleTaskList().run()}>
+						<Icon name='ListTodo' />
+					</Button>
+				</Tooltip>
 
-					{/* Toggle bullet list */}
-					<Tooltip message={t('ns_common:editor.bullet_list')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('bulletList')
-							})}
-							onClick={() => editor.chain().focus().toggleBulletList().run()}>
-							<Icon name='List' />
-						</Button>
-					</Tooltip>
-					{/* Toggle bullet list */}
-					<Tooltip message={t('ns_common:editor.task_list')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className={cn('aspect-square h-8 w-8', {
-								'bg-accent text-accent-foreground': editor.isActive('taskList')
-							})}
-							onClick={() => editor.chain().focus().toggleTaskList().run()}>
-							<Icon name='ListTodo' />
-						</Button>
-					</Tooltip>
-
-					{/* Horizontal ruler */}
-					<Tooltip message={t('ns_common:editor.separator')}>
-						<Button
-							variant='ghost'
-							size='icon'
-							className='aspect-square h-8 w-8'
-							onClick={() => editor.commands.setHorizontalRule()}>
-							<Icon name='PencilLine' />
-						</Button>
-					</Tooltip>
-					<LinkPopover />
-					<ImagePlaceholderToolbar />
-					<TableDropdownMenu />
-					<Separator orientation='vertical' className='mx-3 h-6 w-px' />
-					<Div className='sticky right-0 ml-auto bg-background'>
-						<SearchAndReplaceToolbar />
-					</Div>
-				</Div>
-			</Div>
+				{/* Horizontal ruler */}
+				<Tooltip message={t('ns_common:editor.separator')}>
+					<Button
+						variant='ghost'
+						size='icon'
+						className='aspect-square h-8 w-8'
+						onClick={() => editor.commands.setHorizontalRule()}>
+						<Icon name='PencilLine' />
+					</Button>
+				</Tooltip>
+				<LinkPopover />
+				<ImagePlaceholderToolbar />
+				<TableDropdownMenu />
+			</ScrollShadow>
 		</Div>
 	)
 }
