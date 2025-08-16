@@ -9,11 +9,12 @@ import {
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { deflate } from 'pako'
-import { Fragment, useMemo } from 'react'
+import { useEventEmitter } from 'ahooks'
+import { Fragment, useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { gunzipSync, gzipSync } from 'zlib'
 import { DefectiveLocation, DefectiveType } from '../-constants'
 import { useGetProductSpecificationQuery } from '../-hooks/use-product-specification-asm'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
@@ -22,8 +23,7 @@ import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-c
 
 const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm<CreateDefectiveGoodsFormValues>({
-		resolver: zodResolver(createDefectiveGoodsSchema),
-		mode: 'onSubmit'
+		resolver: zodResolver(createDefectiveGoodsSchema)
 	})
 	const { t } = useTranslation()
 	const { data, isLoading } = useGetProductSpecificationQuery()
@@ -82,37 +82,54 @@ const DefectiveGoodsForm: React.FC = () => {
 			}))
 	}, [data, currentBrand, currentShoeStyle, currentColor])
 
+	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
+		if (e.key === 'Backspace') {
+			form.reset({ ...form.getValues(), epc: '' })
+			return
+		}
+		if (e.key === 'Enter') {
+			e.preventDefault()
+			e.stopPropagation()
+		}
+		if (e.currentTarget.value.length === 24) {
+			form.setValue('epc', e.currentTarget.value.toUpperCase())
+			e.preventDefault()
+		}
+	}, [])
+
+	const event$ = useEventEmitter<CreateDefectiveGoodsFormValues>()
+
+	event$.useSubscription((value) => {
+		console.log('Submmitted values :>>>', {
+			...value,
+			defect_description: gunzipSync(Buffer.from(value.defect_description, 'base64')).toString()
+		})
+	})
+
 	return (
 		<FormProvider {...form}>
 			<Form
 				onSubmit={form.handleSubmit((data) => {
-					console.log({
+					const payload = {
 						...data,
-						defect_description: deflate(new TextEncoder().encode(data.defect_description)).toString()
-					})
+						defect_description: gzipSync(data.defect_description, { level: 6, chunkSize: 1024 }).toString(
+							'base64'
+						)
+					}
+					console.log('payload :>> ', payload)
+					event$.emit(payload)
 				})}>
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
 					<Div className='col-span-full'>
 						<InputFieldControl
 							name='epc'
 							label='EPC'
+							autoFocus
 							autoComplete='off'
 							placeholder='Scan EPC tag here'
-							onKeyDown={(e) => {
-								if (e.key === 'Backspace') {
-									form.reset({ ...form.getValues(), epc: '' })
-									return
-								}
-								if (e.key === 'Enter') {
-									e.preventDefault()
-									e.stopPropagation()
-								}
-								if (e.currentTarget.value.length === 24) {
-									form.setValue('epc', e.currentTarget.value.toUpperCase())
-									e.preventDefault()
-								}
-							}}
-							description='Using RFID Reader to scan EPC tag'
+							onKeyDown={handleEpcChange}
+							onKeyDownCapture={handleEpcChange}
+							description={t('ns_validation:min_length')}
 						/>
 					</Div>
 					<Div className='col-span-full'>
@@ -232,14 +249,15 @@ const DefectiveGoodsForm: React.FC = () => {
 							name='defect_description'
 							label={t('ns_erp:fields.defect_description')}
 							className='h-60'
+							errorMessage={t('ns_validation:required')}
 						/>
 					</Div>
 				</Div>
 				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background p-2'>
-					<Button variant='secondary' size='sm' onClick={() => form.reset()}>
+					<Button variant='secondary' size='sm' type='button' onClick={() => form.reset()}>
 						<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 					</Button>
-					<Button size='sm'>
+					<Button size='sm' type='submit'>
 						<Icon name='Check' /> {t('ns_common:actions.save')}
 					</Button>
 				</Div>
