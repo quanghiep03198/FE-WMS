@@ -288,6 +288,7 @@ function TiptapImage(props: NodeViewProps) {
 							size='icon'
 							className={cn('size-7', node.attrs.align === 'left' && 'bg-accent')}
 							variant='ghost'
+							type='button'
 							onClick={() => updateAttributes({ align: 'left' })}>
 							<AlignLeft className='size-4' />
 						</Button>
@@ -295,11 +296,13 @@ function TiptapImage(props: NodeViewProps) {
 							size='icon'
 							className={cn('size-7', node.attrs.align === 'center' && 'bg-accent')}
 							variant='ghost'
+							type='button'
 							onClick={() => updateAttributes({ align: 'center' })}>
 							<AlignCenter className='size-4' />
 						</Button>
 						<Button
 							size='icon'
+							type='button'
 							className={cn('size-7', node.attrs.align === 'right' && 'bg-accent')}
 							variant='ghost'
 							onClick={() => updateAttributes({ align: 'right' })}>
@@ -308,7 +311,7 @@ function TiptapImage(props: NodeViewProps) {
 						<Separator orientation='vertical' className='h-[20px]' />
 						<DropdownMenu open={openedMore} onOpenChange={setOpenedMore}>
 							<DropdownMenuTrigger asChild>
-								<Button size='icon' className='size-7' variant='ghost'>
+								<Button size='icon' className='size-7' variant='ghost' type='button'>
 									<MoreVertical className='size-4' />
 								</Button>
 							</DropdownMenuTrigger>
@@ -362,6 +365,7 @@ function TiptapImage(props: NodeViewProps) {
 													<Button
 														onClick={handleImageUrlSubmit}
 														className='w-full'
+														type='button'
 														disabled={!imageUrl}
 														size='sm'>
 														Replace with URL

@@ -202,10 +202,10 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 												placeholder='Alt text (optional)'
 											/>
 											<Div className='flex justify-end gap-2'>
-												<Button variant='outline' onClick={handleRemove} disabled={uploading}>
+												<Button variant='outline' onClick={handleRemove} disabled={uploading} type='button'>
 													{t('ns_common:actions.cancel')}
 												</Button>
-												<Button disabled={uploading}>
+												<Button disabled={uploading} type='button'>
 													{uploading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
 													{t('ns_common:actions.upload')}
 												</Button>
@@ -264,7 +264,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 										placeholder='Alt text (optional)'
 									/>
 								</Div>
-								<Button onClick={handleInsertEmbed} className='w-full' disabled={!url}>
+								<Button onClick={handleInsertEmbed} className='w-full' disabled={!url} type='button'>
 									<Icon name='ImagePlus' />
 									{t('ns_common:editor.add_image')}
 								</Button>

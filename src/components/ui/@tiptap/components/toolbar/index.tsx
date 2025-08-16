@@ -1,7 +1,8 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { useUpdate } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
@@ -16,12 +17,6 @@ import TableDropdownMenu from './toolbar-table-dropdown'
 const Toolbar: React.FC = () => {
 	const { editor } = useEditorContext()
 	const { t } = useTranslation()
-
-	const rerender = useUpdate()
-
-	editor.on('focus', () => {
-		rerender()
-	})
 
 	return (
 		<Div className='p-1.5'>
@@ -73,6 +68,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.bold')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', editor.isActive('bold') && 'bg-accent text-accent-foreground')}
 						onClick={() => editor.chain().focus().toggleBold().run()}>
@@ -84,6 +80,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.italic')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('italic')
@@ -97,6 +94,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.blockquote')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('blockquote')
@@ -110,6 +108,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.underline')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('underline')
@@ -123,6 +122,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.code_block')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('underline')
@@ -136,6 +136,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.strikethrough')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('strike')
@@ -157,6 +158,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.ordered_list')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('orderedList')
@@ -171,6 +173,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
+						type='button'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('bulletList')
 						})}
@@ -182,6 +185,7 @@ const Toolbar: React.FC = () => {
 				<Tooltip message={t('ns_common:editor.task_list')}>
 					<Button
 						variant='ghost'
+						type='button'
 						size='icon'
 						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('taskList')
@@ -196,6 +200,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
+						type='button'
 						className='aspect-square size-8'
 						onClick={() => editor.commands.setHorizontalRule()}>
 						<Icon name='PencilLine' />

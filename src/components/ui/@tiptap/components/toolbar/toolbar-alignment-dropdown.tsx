@@ -98,7 +98,7 @@ export const AlignmentDropdownMenu: React.FC = () => {
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:editor.alignment')}>
 				<DropdownMenuTrigger asChild>
-					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8'>
+					<Button variant='ghost' size='icon' className='aspect-square h-8 w-8' type='button'>
 						<Icon name={alignmentState?.icon} />
 					</Button>
 				</DropdownMenuTrigger>

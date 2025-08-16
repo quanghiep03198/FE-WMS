@@ -72,14 +72,7 @@ export const Editor: React.FC<EditorProps> = memo(
 					<ContextMenu>
 						<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>
 							<ScrollArea className='relative w-full max-w-full resize-y overflow-auto' style={{ height }}>
-								<EditorContent
-									id={id}
-									editor={editor}
-									name={name}
-									controls={true}
-									content={content}
-									onClick={() => editor.view.dispatchEvent(new FocusEvent('focus'))}
-								/>
+								<EditorContent id={id} editor={editor} name={name} controls={true} content={content} />
 							</ScrollArea>
 						</ContextMenuTrigger>
 						<ContextMenuContent className='min-w-[320px]'>

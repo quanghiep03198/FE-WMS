@@ -49,7 +49,11 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) => {
 			<DropdownMenu open={open} onOpenChange={setOpen}>
 				<Tooltip message={label}>
 					<DropdownMenuTrigger asChild>
-						<Button variant='ghost' className='aspect-square h-8 w-8 flex-col gap-x-1.5' size='icon'>
+						<Button
+							variant='ghost'
+							className='aspect-square h-8 w-8 flex-col gap-x-1.5'
+							size='icon'
+							type='button'>
 							<Icon name={icon} />
 							<Div
 								className={cn('mt-0.5 h-[3px] w-4/5 self-center', {
@@ -68,6 +72,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) => {
 							<Button
 								variant='ghost'
 								size='sm'
+								type='button'
 								className='gap-x-2'
 								onClick={() => {
 									if (type === 'highlight') editor.commands.unsetHighlight()

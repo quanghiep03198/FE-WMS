@@ -15,6 +15,7 @@ const ImagePlaceholderToolbar = React.forwardRef<HTMLButtonElement, ButtonProps>
 				<Button
 					variant='ghost'
 					size='icon'
+					type='button'
 					className={cn(
 						'aspect-square size-8 p-0',
 						editor?.isActive('image-placeholder') && 'bg-accent',
