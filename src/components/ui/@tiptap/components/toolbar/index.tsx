@@ -26,13 +26,16 @@ const Toolbar: React.FC = () => {
 	return (
 		<Div className='p-1.5'>
 			<ScrollShadow
-				className='flex h-full items-center justify-start gap-x-1 scrollbar-none'
+				className='flex h-full items-center justify-start gap-x-0.5 scrollbar-none'
 				orientation='horizontal'>
 				<SearchAndReplaceToolbar />
+
+				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+
 				{/* Undo */}
 				<Tooltip message={t('ns_common:actions.undo')}>
 					<Button
-						className='aspect-square h-8 w-8'
+						className='aspect-square size-8'
 						type='button'
 						size='icon'
 						variant='ghost'
@@ -43,7 +46,7 @@ const Toolbar: React.FC = () => {
 				{/* Redo */}
 				<Tooltip message={t('ns_common:actions.redo')}>
 					<Button
-						className='aspect-square h-8 w-8'
+						className='aspect-square size-8'
 						type='button'
 						size='icon'
 						variant='ghost'
@@ -71,7 +74,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', editor.isActive('bold') && 'bg-accent text-accent-foreground')}
+						className={cn('aspect-square size-8', editor.isActive('bold') && 'bg-accent text-accent-foreground')}
 						onClick={() => editor.chain().focus().toggleBold().run()}>
 						<Icon name='Bold' />
 					</Button>
@@ -82,7 +85,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('italic')
 						})}
 						onClick={() => editor.chain().focus().toggleItalic().run()}>
@@ -95,7 +98,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('blockquote')
 						})}
 						onClick={() => editor.chain().focus().toggleBlockquote().run()}>
@@ -108,7 +111,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('underline')
 						})}
 						onClick={() => editor.commands.toggleUnderline()}>
@@ -121,7 +124,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('underline')
 						})}
 						onClick={() => editor.commands.toggleCodeBlock()}>
@@ -134,7 +137,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('strike')
 						})}
 						onClick={() => editor.chain().focus().toggleStrike().run()}>
@@ -155,11 +158,11 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('orderedList')
 						})}
 						onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-						<Icon name='ListOrdered' />
+						<Icon name='ListOrdered' size={20} />
 					</Button>
 				</Tooltip>
 
@@ -168,11 +171,11 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('bulletList')
 						})}
 						onClick={() => editor.chain().focus().toggleBulletList().run()}>
-						<Icon name='List' />
+						<Icon name='List' size={18} />
 					</Button>
 				</Tooltip>
 				{/* Toggle task list */}
@@ -180,11 +183,11 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className={cn('aspect-square h-8 w-8', {
+						className={cn('aspect-square size-8', {
 							'bg-accent text-accent-foreground': editor.isActive('taskList')
 						})}
 						onClick={() => editor.chain().focus().toggleTaskList().run()}>
-						<Icon name='ListTodo' />
+						<Icon name='ListTodo' size={18} />
 					</Button>
 				</Tooltip>
 
@@ -193,7 +196,7 @@ const Toolbar: React.FC = () => {
 					<Button
 						variant='ghost'
 						size='icon'
-						className='aspect-square h-8 w-8'
+						className='aspect-square size-8'
 						onClick={() => editor.commands.setHorizontalRule()}>
 						<Icon name='PencilLine' />
 					</Button>

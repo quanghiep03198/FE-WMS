@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
@@ -73,12 +73,22 @@ export const AlignmentDropdownMenu: React.FC = () => {
 
 			default:
 				return {
-					icon: 'AlignRight',
-					value: 'right'
+					icon: 'AlignLeft',
+					value: 'left'
 				}
 		}
-	}, [editor])
+	}, [
+		editor.isActive({ textAlign: 'left' }),
+		editor.isActive({ textAlign: 'right' }),
+		editor.isActive({ textAlign: 'center' }),
+		editor.isActive({ textAlign: 'justify' })
+	])
+
 	const [alignmentState, setAlignmentState] = useState<Omit<AlignmentOption, 'label'>>(getCurrentAlignment())
+
+	useLayoutEffect(() => {
+		setAlignmentState(getCurrentAlignment())
+	}, [])
 
 	editor.on('focus', () => {
 		setAlignmentState(getCurrentAlignment())
