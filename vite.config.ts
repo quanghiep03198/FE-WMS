@@ -188,7 +188,7 @@ export default defineConfig(({ mode }) => {
 			},
 			headers: {
 				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+					"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
 				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
 				['Cross-Origin-Resource-Policy']: 'cross-origin'
 			}
