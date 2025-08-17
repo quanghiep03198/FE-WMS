@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export function useWorkerFn<TArgs extends any[], TResult>(
+export function useWorkerFn<TArgs extends unknown[], TResult>(
 	fn: (...args: TArgs) => TResult
-): [(...args: TArgs) => Promise<TResult>, boolean, boolean] {
+): { execute: (...args: TArgs) => Promise<TResult>; isPending: boolean; isError: boolean } {
 	const workerRef = useRef<Worker | null>(null)
 	const [isPending, setIsPending] = useState<boolean>(false)
 	const [isError, setIsError] = useState<boolean>(false)
@@ -13,8 +13,8 @@ export function useWorkerFn<TArgs extends any[], TResult>(
 			[
 				/* JavaScript */ `
             self.onmessage = async (e) => {
-               const { fnString, args } = e.data;
-               const fn = new Function('return ' + fnString)();
+               const { rawFunction, args } = e.data;
+               const fn = new Function('return ' + rawFunction)();
                const result = await fn(...args);
                self.postMessage(result);
             };
@@ -44,7 +44,7 @@ export function useWorkerFn<TArgs extends any[], TResult>(
 						return
 					}
 
-					const fnString = fn.toString()
+					const rawFunction = fn.toString()
 
 					workerRef.current.onmessage = (e) => {
 						resolve(e.data)
@@ -54,7 +54,7 @@ export function useWorkerFn<TArgs extends any[], TResult>(
 						reject(e.message)
 					}
 
-					workerRef.current.postMessage({ fnString, args })
+					workerRef.current.postMessage({ rawFunction, args })
 				})
 			} catch {
 				setIsError(true)
@@ -65,5 +65,5 @@ export function useWorkerFn<TArgs extends any[], TResult>(
 		[fn]
 	)
 
-	return [execute, isPending, isError]
+	return { execute, isPending, isError }
 }
