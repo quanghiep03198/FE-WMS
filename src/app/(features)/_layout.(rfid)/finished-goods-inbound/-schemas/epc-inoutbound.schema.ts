@@ -9,16 +9,10 @@ export const outboundSchema = z.object({
 })
 
 export const inboundSchema = outboundSchema.extend({
-	warehouse_num: z.string().trim().min(1, { message: 'ns_validation:required' }),
-	storage: z.string({ required_error: 'ns_validation:required' }).trim().min(1, { message: 'ns_validation:required' }),
-	dept_code: z
-		.string({ required_error: 'ns_validation:required' })
-		.trim()
-		.min(1, { message: 'ns_validation:required' }),
-	dept_name: z
-		.string({ required_error: 'ns_validation:required' })
-		.trim()
-		.min(1, { message: 'ns_validation:required' })
+	warehouse_num: z.string().trim().nonempty({ message: 'ns_validation:required' }),
+	storage: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	dept_code: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	dept_name: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
 })
 
 export type InboundFormValues = z.infer<typeof inboundSchema>
