@@ -1,6 +1,5 @@
 import { i18n } from '@/i18n'
 import { Color } from '@tiptap/extension-color'
-import FileHandler from '@tiptap/extension-file-handler'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
@@ -30,7 +29,6 @@ export const extensions = [
 				class: 'font-bold'
 			}
 		},
-
 		paragraph: {
 			HTMLAttributes: {
 				class: 'my-1'
@@ -48,12 +46,12 @@ export const extensions = [
 	ListKit.configure({
 		bulletList: {
 			HTMLAttributes: {
-				class: 'list-disc text-foreground before:hidden'
+				class: 'list-disc text-foreground'
 			}
 		},
 		orderedList: {
 			HTMLAttributes: {
-				class: 'list-decimal text-foreground m-0 before:hidden'
+				class: 'list-decimal text-foreground m-0'
 			}
 		},
 		listItem: {
@@ -64,12 +62,12 @@ export const extensions = [
 		taskList: {
 			itemTypeName: 'taskItem',
 			HTMLAttributes: {
-				class: 'list-none before:hidden p-0'
+				class: 'list-none p-0'
 			}
 		},
 		taskItem: {
 			HTMLAttributes: {
-				class: 'm-0 flex items-center [&_label]:h-fit [&_input[type=checkbox]]:form-checkbox [&_input[type=checkbox]]:text-active [&_input[type=checkbox]]:mr-2 [&_input[type=checkbox]]:rounded [&_input[type=checkbox]]:!size-4'
+				class: 'm-0 [&_p]:m-0 [&_label]:place-content-center [&_label]:place-items-center [&_p]:leading-relaxed [&_p]:align-middle flex items-baseline [&_label]:h-fit [&_input[type=checkbox]]:form-checkbox [&_input[type=checkbox]]:text-active [&_input[type=checkbox]]:mr-2 [&_input[type=checkbox]]:rounded [&_input[type=checkbox]]:!size-4'
 			}
 		}
 	}),
@@ -77,7 +75,7 @@ export const extensions = [
 		placeholder: i18n.t('ns_common:editor.placeholder'),
 		showOnlyWhenEditable: true,
 		emptyEditorClass:
-			'before:h-0 before:place-self-center before:float-left text-muted-foreground font-normal text-sm before:pointer-event-none before:content-[attr(data-placeholder)]'
+			'before:h-0 before:pl-1 before:place-self-center before:float-left text-muted-foreground font-normal text-sm before:pointer-event-none before:content-[attr(data-placeholder)] [&:not(p)]:before:hidden'
 	}),
 	Underline.configure(),
 	TextAlign.configure({
@@ -88,6 +86,7 @@ export const extensions = [
 		resizable: true,
 		lastColumnResizable: false,
 		allowTableNodeSelection: true,
+		cellMinWidth: 80,
 		HTMLAttributes: {
 			class: 'm-0 w-full table-fixed overflow-hidden border rounded border-collapse [&.resize-cursor]:cursor-col-resize'
 		}
@@ -100,7 +99,7 @@ export const extensions = [
 	}),
 	TableCell.configure({
 		HTMLAttributes: {
-			class: 'p-3 border [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25'
+			class: 'p-3 border [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25 before:hidden align-top'
 		}
 	}),
 	Highlight.configure({ multicolor: true }),
@@ -114,48 +113,49 @@ export const extensions = [
 	FontSize.configure(),
 	TextStyle.configure(),
 	Color.configure(),
-	FileHandler.configure({
-		allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
-		onDrop: (currentEditor, files, pos) => {
-			files.forEach((file) => {
-				const fileReader = new FileReader()
-				fileReader.readAsDataURL(file)
-				fileReader.onload = () => {
-					currentEditor
-						.chain()
-						.insertContentAt(pos, {
-							type: 'image',
-							attrs: {
-								src: fileReader.result
-							}
-						})
-						.focus()
-						.run()
-				}
-			})
-		},
-		onPaste: (currentEditor, files, htmlContent) => {
-			files.forEach((file) => {
-				if (htmlContent) return false
+	// FileHandler.configure({
+	// 	allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
 
-				const fileReader = new FileReader()
+	// 	onDrop: (currentEditor, files, pos) => {
+	// 		files.forEach((file) => {
+	// 			currentEditor.chain().focus().insertImagePlaceholder().run()
 
-				fileReader.readAsDataURL(file)
-				fileReader.onload = () => {
-					currentEditor
-						.chain()
-						.insertContentAt(currentEditor.state.selection.anchor, {
-							type: 'image',
-							attrs: {
-								src: fileReader.result
-							}
-						})
-						.focus()
-						.run()
-				}
-			})
-		}
-	}),
+	// 			const fileReader = new FileReader()
+	// 			fileReader.readAsDataURL(file)
+	// 			fileReader.onload = async() => {
+	// 				currentEditor
+	// 					.chain()
+	// 					.insertContentAt(pos, {
+	// 						type: 'image',
+	// 						attrs: {
+	// 							src: fileReader.result
+	// 						}
+	// 					})
+	// 					.focus()
+	// 					.run()
+	// 			}
+	// 		})
+	// 	},
+	// 	onPaste: (currentEditor, files, htmlContent) => {
+	// 		files.forEach((file) => {
+	// 			if (htmlContent) return false
+	// 			const fileReader = new FileReader()
+	// 			fileReader.readAsDataURL(file)
+	// 			fileReader.onload = () => {
+	// 				currentEditor
+	// 					.chain()
+	// 					.insertContentAt(currentEditor.state.selection.anchor, {
+	// 						type: 'image',
+	// 						attrs: {
+	// 							src: fileReader.result
+	// 						}
+	// 					})
+	// 					.focus()
+	// 					.run()
+	// 			}
+	// 		})
+	// 	}
+	// }),
 	SearchAndReplace,
 	ImagePlaceholder,
 	ImageExtension

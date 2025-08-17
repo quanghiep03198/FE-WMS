@@ -8,7 +8,7 @@ import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
 import ColorPicker from './toolbar-color-picker'
 import FontSizeInput from './toolbar-font-size-input'
-import { ImagePlaceholderToolbar } from './toolbar-image-placeholder'
+import ImageDropdown from './toolbar-image-dropdown'
 import { LinkPopover } from './toolbar-link-popover'
 import { SearchAndReplaceToolbar } from './toolbar-search-replace'
 import { StyleDropdownMenu } from './toolbar-style-dropdown'
@@ -207,7 +207,8 @@ const Toolbar: React.FC = () => {
 					</Button>
 				</Tooltip>
 				<LinkPopover />
-				<ImagePlaceholderToolbar />
+				<ImageDropdown />
+				{/* <ImagePlaceholderToolbar /> */}
 				<TableDropdownMenu />
 			</ScrollShadow>
 		</Div>

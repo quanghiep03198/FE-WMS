@@ -1,17 +1,7 @@
 /* eslint-disable */
 import Image from '@tiptap/extension-image'
 import { type NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
-import {
-	AlignCenter,
-	AlignLeft,
-	AlignRight,
-	Edit,
-	ImageIcon,
-	Loader2,
-	Maximize,
-	MoreVertical,
-	Trash
-} from 'lucide-react'
+import { AlignCenter, AlignLeft, AlignRight, Edit, ImageIcon, Maximize, MoreVertical, Trash } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/common/utils/cn'
@@ -26,9 +16,13 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
+	Icon,
 	Input,
-	Separator
+	Label,
+	Separator,
+	Typography
 } from '@/components/ui'
+import { useTranslation } from 'react-i18next'
 import { useImageUpload } from '../hooks/use-image-upload'
 
 export const ImageExtension = Image.extend({
@@ -79,8 +73,9 @@ function TiptapImage(props: NodeViewProps) {
 	const [openedMore, setOpenedMore] = useState(false)
 	const [imageUrl, setImageUrl] = useState('')
 	const [altText, setAltText] = useState(node.attrs.alt || '')
+	const { t } = useTranslation()
 
-	const { previewUrl, fileInputRef, handleFileChange, handleRemove, uploading, error } = useImageUpload({
+	const { previewUrl, fileInputRef, handleFileChange, handleRemove, isPending, error } = useImageUpload({
 		onUpload: (imageUrl) => {
 			updateAttributes({
 				src: imageUrl,
@@ -214,15 +209,15 @@ function TiptapImage(props: NodeViewProps) {
 		<NodeViewWrapper
 			ref={nodeRef}
 			className={cn(
-				'border-1 relative flex flex-col rounded-md border-transparent transition-all duration-200',
+				'relative flex flex-col rounded border-2 border-transparent transition-all duration-200',
 				selected ? 'border-active' : '',
 				node.attrs.align === 'left' && 'left-0 -translate-x-0',
 				node.attrs.align === 'center' && 'left-1/2 -translate-x-1/2',
 				node.attrs.align === 'right' && 'left-full -translate-x-full'
 			)}
 			style={{ width: node.attrs.width }}>
-			<Div className={cn('group relative flex flex-col rounded-md', resizing && '')}>
-				<figure className='relative m-0'>
+			<Div className={cn('group relative rounded-md', selected && 'divide-y-2 divide-active')}>
+				<Div as='figure' className={cn('relative m-0')}>
 					<img
 						ref={imageRef}
 						src={node.attrs.src}
@@ -238,26 +233,52 @@ function TiptapImage(props: NodeViewProps) {
 					{editor?.isEditable && (
 						<Fragment>
 							<Div
-								className='absolute inset-y-0 z-20 flex w-[25px] cursor-col-resize items-center justify-start p-2'
-								style={{ left: 0 }}
+								className={cn(
+									'absolute left-0 top-0 z-20 cursor-nw-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									resizing && 'opacity-100'
+								)}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'left' })
 								}}
 								onTouchStart={(event) => handleTouchStart(event, 'left')}>
-								<Div className='z-20 h-[70px] w-1 rounded-xl bg-active opacity-0 transition-all group-hover:opacity-100' />
+								<Div className='size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
 							</Div>
 							<Div
-								className='absolute inset-y-0 z-20 flex w-[25px] cursor-col-resize items-center justify-end p-2'
-								style={{ right: 0 }}
+								className={cn(
+									'absolute right-0 top-0 z-20 cursor-ne-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									resizing && 'opacity-100'
+								)}
 								onMouseDown={(event) => {
 									handleResizingPosition({ e: event, position: 'right' })
 								}}
 								onTouchStart={(event) => handleTouchStart(event, 'right')}>
-								<Div className='z-20 h-[70px] w-1 rounded-xl bg-active opacity-0 transition-all group-hover:opacity-100' />
+								<Div className='size-2 -translate-y-1/2 translate-x-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
+							</Div>
+							<Div
+								className={cn(
+									'absolute bottom-0 left-0 z-20 cursor-sw-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									resizing && 'opacity-100'
+								)}
+								onMouseDown={(event) => {
+									handleResizingPosition({ e: event, position: 'left' })
+								}}
+								onTouchStart={(event) => handleTouchStart(event, 'left')}>
+								<Div className='size-2 -translate-x-1/2 translate-y-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
+							</Div>
+							<Div
+								className={cn(
+									'absolute bottom-0 right-0 z-20 cursor-se-resize opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+									resizing && 'opacity-100'
+								)}
+								onMouseDown={(event) => {
+									handleResizingPosition({ e: event, position: 'right' })
+								}}
+								onTouchStart={(event) => handleTouchStart(event, 'right')}>
+								<Div className='size-2 translate-x-1/2 translate-y-1/2 rounded-full bg-active ring-[3px] ring-active/50' />
 							</Div>
 						</Fragment>
 					)}
-				</figure>
+				</Div>
 
 				{editingCaption ? (
 					<Input
@@ -265,13 +286,13 @@ function TiptapImage(props: NodeViewProps) {
 						onChange={handleCaptionChange}
 						onBlur={handleCaptionBlur}
 						onKeyDown={handleCaptionKeyDown}
-						className='mt-2 border-0 text-center text-sm text-muted-foreground shadow-none focus:ring-0'
-						placeholder='Add a caption...'
+						className='h-9 rounded-none border-0 py-0 text-center text-sm text-muted-foreground shadow-none focus:border-0 focus:ring-offset-0'
+						placeholder={t('ns_common:editor.add_caption')}
 						autoFocus
 					/>
 				) : (
 					<Div
-						className='mt-2 cursor-text text-center text-sm text-muted-foreground'
+						className='h-9 cursor-text place-content-center place-items-center text-center text-sm text-muted-foreground'
 						onClick={() => editor?.isEditable && setEditingCaption(true)}>
 						{caption || 'Add a caption...'}
 					</Div>
@@ -280,7 +301,7 @@ function TiptapImage(props: NodeViewProps) {
 				{editor?.isEditable && (
 					<Div
 						className={cn(
-							'absolute right-4 top-4 flex items-center gap-1 rounded-md border bg-background/80 p-1 opacity-0 backdrop-blur transition-opacity',
+							'absolute right-2 top-2 flex items-center gap-1 rounded-md border bg-background/80 p-1 opacity-0 backdrop-blur transition-opacity',
 							!resizing && 'group-hover:opacity-100',
 							openedMore && 'opacity-100'
 						)}>
@@ -315,19 +336,18 @@ function TiptapImage(props: NodeViewProps) {
 									<MoreVertical className='size-4' />
 								</Button>
 							</DropdownMenuTrigger>
-							<DropdownMenuContent align='start' alignOffset={-90} className='mt-1 text-sm'>
+							<DropdownMenuContent align='start' alignOffset={-90} className='mt-1 min-w-48 text-sm'>
 								<DropdownMenuItem onClick={() => setEditingCaption(true)}>
-									<Edit className='mr-2 size-4' /> Edit Caption
+									<Edit className='mr-2 size-4' /> {t('ns_common:editor.edit_caption')}
 								</DropdownMenuItem>
 								<DropdownMenuSub>
 									<DropdownMenuSubTrigger>
-										<ImageIcon className='mr-2 size-4' /> Replace Image
+										<ImageIcon className='mr-2 size-4' /> {t('ns_common:editor.replace_image')}
 									</DropdownMenuSubTrigger>
-									<DropdownMenuSubContent className='w-fit min-w-52 p-2'>
+									<DropdownMenuSubContent className='w-fit min-w-72 p-4'>
 										<Div className='space-y-4'>
 											<Div>
-												<p className='mb-2 text-xs font-medium'>Upload Image</p>
-												<input
+												<Input
 													ref={fileInputRef}
 													type='file'
 													accept='image/*'
@@ -337,29 +357,37 @@ function TiptapImage(props: NodeViewProps) {
 												/>
 												<label
 													htmlFor='replace-image-upload'
-													className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border-2 border-dashed p-4 hover:bg-accent'>
-													{uploading ? (
-														<>
-															<Loader2 className='h-4 w-4 animate-spin' />
-															<span>Uploading...</span>
-														</>
+													className='flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed p-4 hover:bg-accent'>
+													{isPending ? (
+														<Icon name='LoaderCircle' className='h-4 w-4 animate-spin' />
 													) : (
-														<>
-															<ImageIcon className='h-4 w-4' />
-															<span>Choose Image</span>
-														</>
+														<Fragment>
+															<Icon name='Image' size={24} />
+															<Typography variant='small'>
+																{t('ns_common:editor.click_to_upload')}
+															</Typography>
+														</Fragment>
 													)}
 												</label>
 												{error && <p className='mt-2 text-xs text-destructive'>{error}</p>}
 											</Div>
-
+											<Separator className='relative'>
+												<Typography
+													variant='small'
+													className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs uppercase'>
+													{t('ns_common:others.or')}
+												</Typography>
+											</Separator>
 											<Div>
-												<p className='mb-2 text-xs font-medium'>Or use URL</p>
+												{/* <p className='mb-2 text-xs font-medium'>Or use URL</p> */}
 												<Div className='space-y-2'>
 													<Input
 														value={imageUrl}
 														onChange={(e) => setImageUrl(e.target.value)}
-														placeholder='Enter image URL...'
+														placeholder={t('ns_common:form_placeholder.fill', {
+															object: 'URL',
+															defaultValue: null
+														})}
 														className='text-xs'
 													/>
 													<Button
@@ -368,13 +396,13 @@ function TiptapImage(props: NodeViewProps) {
 														type='button'
 														disabled={!imageUrl}
 														size='sm'>
-														Replace with URL
+														{t('ns_common:editor.replace_with_url')}
 													</Button>
 												</Div>
 											</Div>
 
-											<Div>
-												<p className='mb-2 text-xs font-medium'>Alt Text</p>
+											<Div className='space-y-2'>
+												<Label className='text-xs'>{t('ns_common:editor.alt_text')}</Label>
 												<Input
 													value={altText}
 													onChange={(e) => setAltText(e.target.value)}
@@ -396,11 +424,11 @@ function TiptapImage(props: NodeViewProps) {
 											})
 										}
 									}}>
-									<Maximize className='mr-2 size-4' /> Full Width
+									<Maximize className='mr-2 size-4' /> {t('ns_common:editor.full_width')}
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem className='text-destructive focus:text-destructive' onClick={deleteNode}>
-									<Trash className='mr-2 size-4' /> Delete Image
+									<Trash className='mr-2 size-4' /> {t('ns_common:editor.delete_image')}
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>

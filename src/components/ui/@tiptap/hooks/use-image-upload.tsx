@@ -1,35 +1,20 @@
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
 import { convertBase64 } from '@/common/utils/convert-base64'
-import imageCompression from 'browser-image-compression'
-import { filesize } from 'filesize'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-interface UseImageUploadProps {
+type UseImageUploadOptions = {
 	onUpload?: (url: string) => void
 }
 
-export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
+export function useImageUpload({ onUpload }: UseImageUploadOptions = {}) {
 	const previewRef = useRef<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const [fileName, setFileName] = useState<string | null>(null)
 	const [error, setError] = useState<string | null>(null)
 
-	const [compress, uploading] = useWorkerFn(compressBase64)
-
-	const compressImage = async (file: File) => {
-		try {
-			const compressedFile = await imageCompression(file, {
-				maxSizeMB: 5,
-				maxWidthOrHeight: 1920,
-				useWebWorker: true
-			})
-			return compressedFile // write your own logic
-		} catch (error) {
-			console.log(error)
-		}
-	}
+	const { execute: compress, isPending } = useWorkerFn(compressBase64)
 
 	const handleThumbnailClick = useCallback(() => {
 		fileInputRef.current?.click()
@@ -44,11 +29,9 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 				setPreviewUrl(localUrl)
 				previewRef.current = localUrl
 				try {
-					// const compressedImage = await compressImage(file)
 					const base64Url = await convertBase64(file)
 					const compressedBase64 = await compress(base64Url.toString(), { quality: 1 })
-					console.debug(filesize(compressedBase64.length, { base: 10, round: 1 }))
-					onUpload?.(compressedBase64)
+					if (typeof onUpload === 'function') onUpload(compressedBase64)
 				} catch (err) {
 					URL.revokeObjectURL(localUrl)
 					setPreviewUrl(null)
@@ -88,7 +71,7 @@ export function useImageUpload({ onUpload }: UseImageUploadProps = {}) {
 		handleThumbnailClick,
 		handleFileChange,
 		handleRemove,
-		uploading,
+		isPending,
 		error
 	}
 }

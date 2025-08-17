@@ -71,7 +71,7 @@ export const LinkPopover: React.FC = () => {
 							<InputFieldControl
 								placeholder={t('ns_common:editor.insert_link_placeholder')}
 								name='url'
-								className='col-span-2 !h-8 text-sm'
+								className='!h-8 w-full flex-1 text-sm'
 							/>
 							<Button variant='default' size='sm'>
 								{t('ns_common:actions.apply')}

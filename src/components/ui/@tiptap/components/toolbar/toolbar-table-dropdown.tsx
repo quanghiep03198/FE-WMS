@@ -27,13 +27,13 @@ import { useEditorContext } from '../../context/editor-context'
 
 const TablePresetSchema = z.object({
 	rows: z
-		.number({ required_error: 'ns_common:editor.validations.' })
-		.or(z.string({ required_error: 'Vui lòng nhập số hàng' }))
+		.number({ message: 'ns_common:editor.validations.' })
+		.or(z.string({ message: 'Vui lòng nhập số hàng' }))
 		.transform((value) => +value)
 		.refine((value) => value >= 1, { message: 'Số hàng phải lớn hơn hoặc bằng 1' }),
 	cols: z
-		.number({ required_error: 'Vui lòng nhập số hàng' })
-		.or(z.string({ required_error: 'Vui lòng nhập số cột' }))
+		.number({ message: 'Vui lòng nhập số hàng' })
+		.or(z.string({ message: 'Vui lòng nhập số cột' }))
 		.transform((value) => +value)
 		.refine((value) => value >= 1, { message: 'Số cột phải lớn hơn hoặc bằng 1' })
 })
@@ -63,7 +63,7 @@ const TableDropdownMenu: React.FC = () => {
 					</Button>
 				</DropdownMenuTrigger>
 			</Tooltip>
-			<DropdownMenuContent>
+			<DropdownMenuContent align='end'>
 				<DropdownMenuLabel>{t('ns_common:editor.table')}</DropdownMenuLabel>
 				<DropdownMenuSub>
 					<DropdownMenuSubTrigger>{t('ns_common:editor.insert_table')}</DropdownMenuSubTrigger>

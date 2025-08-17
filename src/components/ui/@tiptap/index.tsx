@@ -1,3 +1,4 @@
+import { cn } from '@/common/utils/cn'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { uniqueId } from 'lodash'
 import React, { memo, useState } from 'react'
@@ -31,7 +32,10 @@ export const Editor: React.FC<EditorProps> = memo(
 				extensions,
 				editorProps: {
 					attributes: {
-						class: 'p-4 rounded-lg max-w-full max-h-full overflow-auto scrollbar-none border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background prose prose-li:p-0'
+						class: cn(
+							'p-4 rounded-lg max-w-full max-h-full overflow-auto scrollbar-none border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background',
+							'prose prose-li:p-0 prose-p:text-sm prose-strong:text-[inherit]'
+						)
 					}
 				},
 				enableCoreExtensions: true,
