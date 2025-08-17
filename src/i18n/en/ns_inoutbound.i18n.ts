@@ -1,3 +1,4 @@
+import { DefectiveType } from '@/app/(features)/_layout.b-grade-goods-inbound/-constants'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -147,8 +148,8 @@ export default {
 		transfer_order_list: 'Transfer orders list'
 	},
 	shoes_category: {
-		b_grade: 'B Grade',
-		c_grade: 'C Grade',
-		research_development: 'Research & Development'
+		[DefectiveType.B_GRADE]: 'B Grade',
+		[DefectiveType.C_GRADE]: 'C Grade',
+		[DefectiveType.RESEARCH_DEVELOPMENT]: 'Research & Development'
 	}
 }

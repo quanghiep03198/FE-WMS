@@ -4,7 +4,7 @@ import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import DefectiveGoodsForm from './-components/defective-goods-form'
-import EmptySection from './-components/emtpy-section'
+import DefectiveGoodList from './-components/defective-goods-list'
 
 export const Route = createLazyFileRoute('/(features)/_layout/b-grade-goods-inbound/')({
 	component: RouteComponent
@@ -26,7 +26,8 @@ function RouteComponent() {
 			<Div className='h-[var(--outlet-wrapper-height)]'>
 				<ResizablePanelGroup direction='horizontal' className='h-full rounded-md border'>
 					<ResizablePanel>
-						<EmptySection />
+						<DefectiveGoodList />
+						{/* <EmptySection /> */}
 					</ResizablePanel>
 					<ResizableHandle withHandle />
 					<ResizablePanel minSize={50} maxSize={70} defaultSize={60}>

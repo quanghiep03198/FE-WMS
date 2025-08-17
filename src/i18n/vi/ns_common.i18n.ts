@@ -102,10 +102,14 @@ export default {
 		alignment: 'Căn chỉnh và thụt lề',
 		typography: 'Kiểu',
 		placeholder: 'Nhập nội dung tại đây...',
+		add_caption: 'Thêm chú thích ...',
+		alt_text: 'Văn bản thay thế',
 		align_left: 'Căn trái',
 		align_center: 'Căn giữa',
 		align_right: 'Căn phải',
 		align_justify: 'Căn đều hai bên',
+		choose_image_from_device: 'Chọn ảnh từ thiết bị',
+		choose_image_from_url: 'Chọn ảnh từ URL',
 		normal_text: 'Văn bản thường',
 		heading_1: 'Tiêu đề 1',
 		heading_2: 'Tiêu đề 2',
@@ -156,9 +160,10 @@ export default {
 		paste_without_formatting: 'Dán và không áp dụng định dạng',
 		edit_caption: 'Chỉnh sửa chú thích',
 		replace_image: 'Thay thế hình ảnh',
+		replace_with_url: 'Thay thế bằng URL',
 		full_width: 'Toàn chiều rộng',
 		delete_image: 'Xóa hình ảnh',
-		click_to_upload: 'Nhấp để tải lên hoặc kéo và thả tệp hình ảnh',
+		click_to_upload: 'Nhấp để tải lên tệp hình ảnh',
 		validations: {
 			row_num_required: 'Số hàng là bắt buộc',
 			row_num_min: 'Số hàng phải lớn hơn hoặc bằng 1',
@@ -214,7 +219,8 @@ export default {
 		all: 'Tất cả',
 		server: 'Máy chủ {{alias}}',
 		lookup_question: 'Bạn đang tìm kiếm gì ?',
-		other: 'Khác'
+		other: 'Khác',
+		or: 'Hoặc'
 	},
 	pagination: {
 		ellipsis_count: '... và {{count}} dữ liệu khác',

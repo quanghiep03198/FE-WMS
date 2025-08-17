@@ -83,13 +83,17 @@ export default {
 		chosen_files: '已选择 {{qty}} 个文件'
 	},
 	editor: {
+		alt_text: '替代文本',
 		alignment: '对齐方式',
+		add_caption: '添加说明文字 ...',
 		typography: '排版',
 		placeholder: '在此输入文本 ...',
 		align_left: '左对齐',
 		align_center: '居中对齐',
 		align_right: '右对齐',
 		align_justify: '两端对齐',
+		choose_image_from_device: '从设备选择图片',
+		choose_from_url: '从 URL 选择图片',
 		normal_text: '普通文本',
 		heading_1: '标题 1',
 		heading_2: '标题 2',
@@ -132,7 +136,7 @@ export default {
 		replace_all: '全部替换',
 		replace: '替换',
 		replace_with: '表格替换',
-		click_to_upload: '点击上传或拖放图像文件',
+		click_to_upload: '点击上传图像文件',
 		copy: '复制',
 		cut: '剪切',
 		paste: '粘贴',
@@ -141,6 +145,7 @@ export default {
 		full_width: '全宽',
 		add_image: '添加图片',
 		replace_image: '图片替换',
+		replace_with_url: '用 URL 替换',
 		delete_image: '删除图片',
 		validations: {
 			row_num_required: '行数是必需的',
@@ -211,7 +216,8 @@ export default {
 	others: {
 		all: '全部',
 		lookup_question: '你在找什么 ?',
-		other: '其他'
+		other: '其他',
+		or: '或'
 	},
 	pagination: {
 		ellipsis_count: '... 和 {{count}} 更多项目',

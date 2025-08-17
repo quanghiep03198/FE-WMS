@@ -247,7 +247,7 @@ export interface IProductSpecification {
 	brand_name: string
 	product_variants: Array<{
 		shoes_style: string
-		spec: Array<{
+		specs: Array<{
 			color_sn: string
 			sizes: Array<{ size: string }>
 		}>

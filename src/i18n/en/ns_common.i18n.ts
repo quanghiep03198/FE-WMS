@@ -84,7 +84,9 @@ export default {
 		chosen_files: 'Chose {{qty}} files'
 	},
 	editor: {
+		alt_text: 'Alt text',
 		alignment: 'Alignment',
+		add_caption: 'Add caption ...',
 		typography: 'Typography',
 		placeholder: 'Type something here...',
 		align_left: 'Align left',
@@ -134,15 +136,18 @@ export default {
 		replace_with: 'Replace with',
 		copy: 'Copy',
 		cut: 'Cut',
-		click_to_upload: 'Click to upload or drag and drop image files',
+		click_to_upload: 'Click to upload image files',
 		paste: 'Paste',
 		paste_without_formatting: 'Paste without formatting',
 		edit_caption: 'Edit caption',
 		image: 'Image',
 		replace_image: 'Replace image',
+		replace_with_url: 'Replace with URL',
 		full_width: 'Full width',
 		add_image: 'Add image',
 		delete_image: 'Delete image',
+		choose_image_from_device: 'Choose image from device',
+		choose_from_url: 'Choose from URL',
 		validations: {
 			row_num_required: 'Number of rows is required',
 			row_num_min: 'Number of rows must be greater than or equal to 1',
@@ -266,6 +271,7 @@ export default {
 		all: 'All',
 		server: 'Server {{alias}}',
 		lookup_question: 'What are you looking for ?',
-		other: 'Other'
+		other: 'Other',
+		or: 'Or'
 	}
 } as const

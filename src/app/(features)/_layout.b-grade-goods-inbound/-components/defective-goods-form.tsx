@@ -9,28 +9,110 @@ import {
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEventEmitter } from 'ahooks'
 import { Fragment, useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { gunzipSync, gzipSync } from 'zlib'
+import { gzipSync } from 'zlib'
 import { DefectiveLocation, DefectiveType } from '../-constants'
+import { useCreateDefectiveGoodsMutation } from '../-hooks/use-defective-goods-asm'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
 import { useGetProductSpecificationQuery } from '../../-hooks/use-product-specification-asm'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
+const defectiveDescriptionTemplate = /* template */ `
+	<h2 style="text-align:center">BIỂU MẪU MÔ TẢ LỖI NHẬP HÀNG LOẠI B</h2>
+	
+	<p style="line-height: 2"><strong>Công ty:</strong> ..................................................</p>
+	<p style="line-height: 2"><strong>Ngày nhập kho:</strong> ..../..../....</p>
+	<p style="line-height: 2"><strong>Người lập phiếu:</strong> ..........................................</p>
+	<p style="line-height: 2"><strong>Bộ phận:</strong> ..................................................</p>
+	
+	<table style="border-collapse:collapse; width:100%; margin-top:12px;">
+		<colgroup>
+			<col colwidth="180" />
+			<col />
+		</colgroup>
+		<tr>
+			<th colwidth="180">Tên sản phẩm</th>
+			<td></td>
+		</tr>
+		<tr>
+			<th  olwidth="180">Mã hàng (SKU)</th>
+			<td></td>
+		</tr>
+		<tr>
+			<th colwidth="180">Size</th>
+			<td></td>
+		</tr>
+		<tr>
+			<th colwidth="180">Số lượng kiểm</th>
+			<td></td>
+		</tr>
+		<tr>
+			<th colwidth="180">Số lượng lỗi (Loại B)</th>
+			<td></td>
+		</tr>
+	</table>
+	
+	<h3>2. Loại lỗi phát hiện</h3>
+	<ul data-type="taskList">
+	<li data-type="taskItem" data-checked="false">Trầy xước bề mặt da/vải</li>
+	<li data-type="taskItem" data-checked="false">Bong keo / hở keo</li>
+	<li data-type="taskItem" data-checked="false">Sai màu / loang màu</li>
+	<li data-type="taskItem" data-checked="false">Lỗi đường may (lệch, bung chỉ, dư chỉ)</li>
+	<li data-type="taskItem" data-checked="false">Bẩn, dính vết bẩn không lau được</li>
+	<li data-type="taskItem" data-checked="false">Lỗi form dáng (lệch phom, méo, không cân)</li>
+	<li data-type="taskItem" data-checked="false">Lỗi đế (móp méo, nứt, sứt mẻ)</li>
+	<li data-type="taskItem" data-checked="false">Khác: ...........................................</li>
+	</ul>
+	<h3>3. Mô tả chi tiết lỗi</h3>
+	<p>................................................................................</p>
+	<p>................................................................................</p>
+	<p>................................................................................</p>
+	
+	<h3>4. Hình ảnh minh họa</h3>
+	<div className="tableWrapper">
+		<table style="border-collapse:collapse; width:100%;">
+			<tr>
+				<td>
+					<p id='image-placeholder' style="text-align:center;"> 
+						Chèn hình ảnh mô tả
+					</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<h3>5. Xử lý đề xuất</h3>
+	<ul data-type="taskList">
+	<li data-type="taskItem" data-checked="false">Giữ lại kho loại B</li>
+	<li data-type="taskItem" data-checked="false">Trả lại NCC</li>
+	<li data-type="taskItem" data-checked="false">Thanh lý / Giảm giá</li>
+	<li data-type="taskItem" data-checked="false">Khác: ...........................................</li>
+	</ul>
+
+	<h3>6. Xác nhận</h3>
+	<p>Người lập phiếu: ............................ (ký, ghi rõ họ tên)</p>
+	<p>Quản lý kho: ................................ (ký, ghi rõ họ tên)</p>
+	<p>QC/QA: ...................................... (ký, ghi rõ họ tên)</p>
+
+`
+
 const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm<CreateDefectiveGoodsFormValues>({
-		resolver: zodResolver(createDefectiveGoodsSchema)
+		resolver: zodResolver(createDefectiveGoodsSchema),
+		defaultValues: {
+			defect_description: defectiveDescriptionTemplate
+		}
 	})
 	const { t } = useTranslation()
 	const { data, isLoading } = useGetProductSpecificationQuery()
+	const { mutateAsync, isPending, isError } = useCreateDefectiveGoodsMutation()
 
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	// Watch form fields
-	const currentEpc = useWatch({ control: form.control, name: 'epc' })
 	const currentBrand = useWatch({ control: form.control, name: 'brand_name' })
 	const currentShoeStyle = useWatch({ control: form.control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
@@ -60,8 +142,8 @@ const DefectiveGoodsForm: React.FC = () => {
 		if (!Array.isArray(data) || !currentBrand || !currentShoeStyle) return []
 		const brand = data.find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
-		if (!variant?.spec) return []
-		return variant.spec.map(({ color_sn }) => ({
+		if (!variant?.specs) return []
+		return variant.specs.map(({ color_sn }) => ({
 			label: color_sn,
 			value: color_sn
 		}))
@@ -72,7 +154,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		if (!Array.isArray(data) || !currentBrand || !currentShoeStyle || !currentColor) return []
 		const brand = data.find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
-		const spec = variant?.spec?.find((item) => item.color_sn === currentColor)
+		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
 		if (!spec?.sizes) return []
 		return spec.sizes
 			.sort((a, b) => Number(a.size) - Number(b.size))
@@ -97,28 +179,26 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 	}, [])
 
-	const event$ = useEventEmitter<CreateDefectiveGoodsFormValues>()
+	// const event$ = useEventEmitter<CreateDefectiveGoodsFormValues>()
 
-	event$.useSubscription((value) => {
-		console.log('Submmitted values :>>>', {
-			...value,
-			defect_description: gunzipSync(Buffer.from(value.defect_description, 'base64')).toString()
-		})
-	})
+	// event$.useSubscription((value) => {
+	// 	console.log('Submmitted values :>>>', {
+	// 		...value,
+	// 		defect_description: gunzipSync(Buffer.from(value.defect_description, 'base64')).toString()
+	// 	})
+	// })
+
+	const handleCreateDefectiveGoods = useCallback(async (data: CreateDefectiveGoodsFormValues) => {
+		const payload = {
+			...data,
+			defect_description: gzipSync(data.defect_description, { level: 6, chunkSize: 1024 }).toString('base64')
+		}
+		await mutateAsync(payload)
+	}, [])
 
 	return (
 		<FormProvider {...form}>
-			<Form
-				onSubmit={form.handleSubmit((data) => {
-					const payload = {
-						...data,
-						defect_description: gzipSync(data.defect_description, { level: 6, chunkSize: 1024 }).toString(
-							'base64'
-						)
-					}
-					console.log('payload :>> ', payload)
-					event$.emit(payload)
-				})}>
+			<Form onSubmit={form.handleSubmit(handleCreateDefectiveGoods)}>
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
 					<Div className='col-span-full'>
 						<InputFieldControl
@@ -137,10 +217,20 @@ const DefectiveGoodsForm: React.FC = () => {
 							name='category'
 							label={t('ns_erp:fields.category')}
 							datalist={[
-								{ label: t('ns_inoutbound:shoes_category.b_grade'), value: DefectiveType.B_GRADE },
-								{ label: t('ns_inoutbound:shoes_category.c_grade'), value: DefectiveType.C_GRADE },
 								{
-									label: t('ns_inoutbound:shoes_category.research_development'),
+									label: t(`ns_inoutbound:shoes_category.${DefectiveType.B_GRADE}` as Parameter<typeof t>),
+									value: DefectiveType.B_GRADE
+								},
+								{
+									label: t(`ns_inoutbound:shoes_category.${DefectiveType.C_GRADE}` as Parameter<typeof t>),
+									value: DefectiveType.C_GRADE
+								},
+								{
+									label: t(
+										`ns_inoutbound:shoes_category.${DefectiveType.RESEARCH_DEVELOPMENT}` as Parameter<
+											typeof t
+										>
+									),
 									value: DefectiveType.RESEARCH_DEVELOPMENT
 								}
 							]}
@@ -149,16 +239,15 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
-						<AutoCompleteFieldControl
+						<SelectFieldControl
 							name='brand_name'
 							label={t('ns_erp:fields.brand_name')}
 							placeholder={t('ns_common:form_placeholder.fill', {
 								object: String(t('ns_erp:fields.brand_name')).toLowerCase(),
 								defaultValue: null
 							})}
-							loading={isLoading}
 							datalist={brandOptions}
-							onInput={() => {
+							onValueChange={() => {
 								form.reset({ ...form.getValues(), factory_shoes_style: '', color_sn: '', size_code: '' })
 							}}
 							labelField='label'
@@ -241,7 +330,11 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 
 					<Div className='col-span-full'>
-						<InputFieldControl name='storage' label={t('ns_warehouse:fields.storage_name')} placeholder='A1.1' />
+						<InputFieldControl
+							name='storage_location'
+							label={t('ns_warehouse:fields.storage_name')}
+							placeholder='A1.1'
+						/>
 					</Div>
 
 					<Div className='col-span-full'>
@@ -250,15 +343,20 @@ const DefectiveGoodsForm: React.FC = () => {
 							label={t('ns_erp:fields.defect_description')}
 							className='h-60'
 							errorMessage={t('ns_validation:required')}
+							defaultValue={defectiveDescriptionTemplate}
 						/>
 					</Div>
 				</Div>
 				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background p-2'>
-					<Button variant='secondary' size='sm' type='button' onClick={() => form.reset()}>
+					<Button disabled={isPending} variant='secondary' size='sm' type='button' onClick={() => form.reset()}>
 						<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 					</Button>
-					<Button size='sm' type='submit'>
-						<Icon name='Check' /> {t('ns_common:actions.save')}
+					<Button disabled={isPending} size='sm' type='submit'>
+						<Icon
+							name={isPending ? 'LoaderCircle' : 'Check'}
+							className={isPending && 'animate-[spin_1s_linear_infinite]'}
+						/>{' '}
+						{t('ns_common:actions.save')}
 					</Button>
 				</Div>
 			</Form>
