@@ -1,3 +1,4 @@
+import { CommonActions } from '@/common/constants/enums'
 import {
 	AutoCompleteFieldControl,
 	Button,
@@ -9,107 +10,31 @@ import {
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useCallback, useMemo } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { gzipSync } from 'zlib'
-import { DefectiveLocation, DefectiveType } from '../-constants'
+import { gunzipSync, gzipSync } from 'zlib'
+import { DefectiveCategoryI18n, DefectiveLocation, DefectiveType } from '../-constants'
+import { VietnameseDefectDescriptionTemplate } from '../-constants/templates'
+import { usePageContext } from '../-contexts/page-context'
 import { useCreateDefectiveGoodsMutation } from '../-hooks/use-defective-goods-asm'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
 import { useGetProductSpecificationQuery } from '../../-hooks/use-product-specification-asm'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
-const defectiveDescriptionTemplate = /* template */ `
-	<h2 style="text-align:center">BIỂU MẪU MÔ TẢ LỖI NHẬP HÀNG LOẠI B</h2>
-	
-	<p style="line-height: 2"><strong>Công ty:</strong> ..................................................</p>
-	<p style="line-height: 2"><strong>Ngày nhập kho:</strong> ..../..../....</p>
-	<p style="line-height: 2"><strong>Người lập phiếu:</strong> ..........................................</p>
-	<p style="line-height: 2"><strong>Bộ phận:</strong> ..................................................</p>
-	
-	<table style="border-collapse:collapse; width:100%; margin-top:12px;">
-		<colgroup>
-			<col colwidth="180" />
-			<col />
-		</colgroup>
-		<tr>
-			<th colwidth="180">Tên sản phẩm</th>
-			<td></td>
-		</tr>
-		<tr>
-			<th  olwidth="180">Mã hàng (SKU)</th>
-			<td></td>
-		</tr>
-		<tr>
-			<th colwidth="180">Size</th>
-			<td></td>
-		</tr>
-		<tr>
-			<th colwidth="180">Số lượng kiểm</th>
-			<td></td>
-		</tr>
-		<tr>
-			<th colwidth="180">Số lượng lỗi (Loại B)</th>
-			<td></td>
-		</tr>
-	</table>
-	
-	<h3>2. Loại lỗi phát hiện</h3>
-	<ul data-type="taskList">
-	<li data-type="taskItem" data-checked="false">Trầy xước bề mặt da/vải</li>
-	<li data-type="taskItem" data-checked="false">Bong keo / hở keo</li>
-	<li data-type="taskItem" data-checked="false">Sai màu / loang màu</li>
-	<li data-type="taskItem" data-checked="false">Lỗi đường may (lệch, bung chỉ, dư chỉ)</li>
-	<li data-type="taskItem" data-checked="false">Bẩn, dính vết bẩn không lau được</li>
-	<li data-type="taskItem" data-checked="false">Lỗi form dáng (lệch phom, méo, không cân)</li>
-	<li data-type="taskItem" data-checked="false">Lỗi đế (móp méo, nứt, sứt mẻ)</li>
-	<li data-type="taskItem" data-checked="false">Khác: ...........................................</li>
-	</ul>
-	<h3>3. Mô tả chi tiết lỗi</h3>
-	<p>................................................................................</p>
-	<p>................................................................................</p>
-	<p>................................................................................</p>
-	
-	<h3>4. Hình ảnh minh họa</h3>
-	<div className="tableWrapper">
-		<table style="border-collapse:collapse; width:100%;">
-			<tr>
-				<td>
-					<p id='image-placeholder' style="text-align:center;"> 
-						Chèn hình ảnh mô tả
-					</p>
-				</td>
-			</tr>
-		</table>
-	</div>
-
-	<h3>5. Xử lý đề xuất</h3>
-	<ul data-type="taskList">
-	<li data-type="taskItem" data-checked="false">Giữ lại kho loại B</li>
-	<li data-type="taskItem" data-checked="false">Trả lại NCC</li>
-	<li data-type="taskItem" data-checked="false">Thanh lý / Giảm giá</li>
-	<li data-type="taskItem" data-checked="false">Khác: ...........................................</li>
-	</ul>
-
-	<h3>6. Xác nhận</h3>
-	<p>Người lập phiếu: ............................ (ký, ghi rõ họ tên)</p>
-	<p>Quản lý kho: ................................ (ký, ghi rõ họ tên)</p>
-	<p>QC/QA: ...................................... (ký, ghi rõ họ tên)</p>
-
-`
-
 const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm<CreateDefectiveGoodsFormValues>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
-			defect_description: defectiveDescriptionTemplate
+			defect_description: VietnameseDefectDescriptionTemplate
 		}
 	})
 	const { t } = useTranslation()
 	const { data, isLoading } = useGetProductSpecificationQuery()
 	const { mutateAsync, isPending, isError } = useCreateDefectiveGoodsMutation()
+	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(VietnameseDefectDescriptionTemplate)
 
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	// Watch form fields
@@ -179,14 +104,15 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 	}, [])
 
-	// const event$ = useEventEmitter<CreateDefectiveGoodsFormValues>()
+	const { event$ } = usePageContext()
 
-	// event$.useSubscription((value) => {
-	// 	console.log('Submmitted values :>>>', {
-	// 		...value,
-	// 		defect_description: gunzipSync(Buffer.from(value.defect_description, 'base64')).toString()
-	// 	})
-	// })
+	event$.useSubscription((e) => {
+		if (e.action === CommonActions.UPDATE) {
+			const extractedDescription: string = gunzipSync(Buffer.from(e.payload.defect_description, 'base64')).toString()
+			form.reset({ ...e.payload, defect_description: extractedDescription })
+			setDefaultEditorContent(extractedDescription)
+		}
+	})
 
 	const handleCreateDefectiveGoods = useCallback(async (data: CreateDefectiveGoodsFormValues) => {
 		const payload = {
@@ -218,19 +144,24 @@ const DefectiveGoodsForm: React.FC = () => {
 							label={t('ns_erp:fields.category')}
 							datalist={[
 								{
-									label: t(`ns_inoutbound:shoes_category.${DefectiveType.B_GRADE}` as Parameter<typeof t>),
+									label: t(DefectiveCategoryI18n['B'], {
+										ns: 'ns_inoutbound',
+										defaultValue: DefectiveType.B_GRADE
+									}),
 									value: DefectiveType.B_GRADE
 								},
 								{
-									label: t(`ns_inoutbound:shoes_category.${DefectiveType.C_GRADE}` as Parameter<typeof t>),
+									label: t(DefectiveCategoryI18n['C'], {
+										ns: 'ns_inoutbound',
+										defaultValue: DefectiveType.C_GRADE
+									}),
 									value: DefectiveType.C_GRADE
 								},
 								{
-									label: t(
-										`ns_inoutbound:shoes_category.${DefectiveType.RESEARCH_DEVELOPMENT}` as Parameter<
-											typeof t
-										>
-									),
+									label: t(DefectiveCategoryI18n['RD'], {
+										ns: 'ns_inoutbound',
+										defaultValue: DefectiveType.RESEARCH_DEVELOPMENT
+									}),
 									value: DefectiveType.RESEARCH_DEVELOPMENT
 								}
 							]}
@@ -264,7 +195,6 @@ const DefectiveGoodsForm: React.FC = () => {
 							</Div>
 						</Fragment>
 					)}
-
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<AutoCompleteFieldControl
 							name='factory_shoes_style'
@@ -282,7 +212,6 @@ const DefectiveGoodsForm: React.FC = () => {
 							}}
 						/>
 					</Div>
-
 					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<AutoCompleteFieldControl
 							name='color_sn'
@@ -328,7 +257,6 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-
 					<Div className='col-span-full'>
 						<InputFieldControl
 							name='storage_location'
@@ -343,7 +271,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							label={t('ns_erp:fields.defect_description')}
 							className='h-60'
 							errorMessage={t('ns_validation:required')}
-							defaultValue={defectiveDescriptionTemplate}
+							defaultValue={defaultEditorContent}
 						/>
 					</Div>
 				</Div>
@@ -356,7 +284,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							name={isPending ? 'LoaderCircle' : 'Check'}
 							className={isPending && 'animate-[spin_1s_linear_infinite]'}
 						/>{' '}
-						{t('ns_common:actions.save')}
+						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 					</Button>
 				</Div>
 			</Form>

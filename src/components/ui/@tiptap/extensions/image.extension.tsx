@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 import { useImageUpload } from '../hooks/use-image-upload'
 
 export const ImageExtension = Image.extend({
+	allowGapCursor: true,
 	addAttributes() {
 		return {
 			src: {

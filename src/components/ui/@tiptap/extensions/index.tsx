@@ -94,12 +94,12 @@ export const extensions = [
 	TableRow.configure(),
 	TableHeader.configure({
 		HTMLAttributes: {
-			class: 'border p-3 relative [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25'
+			class: 'border px-3 py-1 relative [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25'
 		}
 	}),
 	TableCell.configure({
 		HTMLAttributes: {
-			class: 'p-3 border [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25 before:hidden align-top'
+			class: 'px-3 py-1 border [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25 before:hidden align-top'
 		}
 	}),
 	Highlight.configure({ multicolor: true }),
@@ -113,6 +113,9 @@ export const extensions = [
 	FontSize.configure(),
 	TextStyle.configure(),
 	Color.configure(),
+	SearchAndReplace.configure(),
+	ImagePlaceholder.configure(),
+	ImageExtension.configure({ allowBase64: true })
 	// FileHandler.configure({
 	// 	allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
 
@@ -156,7 +159,4 @@ export const extensions = [
 	// 		})
 	// 	}
 	// }),
-	SearchAndReplace,
-	ImagePlaceholder,
-	ImageExtension
 ]

@@ -180,6 +180,10 @@ export default {
 		search: '搜索{{object}}...',
 		select: '选择{{object}}'
 	},
+	timestamps: {
+		created_at: '创建时间 {{timestamp}}',
+		updated_at: '创建时间 {{timestamp}}'
+	},
 	navigation: {
 		account: '账户管理',
 		appearance: '外观',

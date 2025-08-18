@@ -52,7 +52,7 @@ export const StyleDropdownMenu: React.FC = () => {
 
 	const presetStyles: Array<BlockTypeItem> = useMemo(
 		() => [
-			{ label: 'Văn bản thường', value: 0, icon: 'Text' },
+			{ label: 'Văn bản thường', value: 0, icon: 'Type' },
 			{
 				label: t('ns_common:editor.heading_1'),
 				value: 1,

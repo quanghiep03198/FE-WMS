@@ -4,7 +4,7 @@ import React from 'react'
 
 import tw from 'tailwind-styled-components'
 
-type PaginationProps = Omit<Pagination<unknown>, 'docs'> & { onPrefetch?: () => void }
+type PaginationProps = Omit<Pagination<unknown>, 'data'> & { onPrefetch?: () => void }
 
 export const calculatePaginationRange = (currentPage: number, totalPages: number): number[] => {
 	const range = 2

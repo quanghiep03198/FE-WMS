@@ -267,6 +267,10 @@ export default {
 		overall: 'Overall',
 		target_data: 'Target data'
 	},
+	timestamps: {
+		created_at: 'Created {{timestamp}}',
+		updated_at: 'Updated {{timestamp}}'
+	},
 	others: {
 		all: 'All',
 		server: 'Server {{alias}}',

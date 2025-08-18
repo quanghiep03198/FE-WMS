@@ -274,5 +274,9 @@ export default {
 		import_data: 'Tải lên dữ liệu',
 		overall: 'Tổng quan',
 		target_data: 'Dữ liệu cập nhật'
+	},
+	timestamps: {
+		created_at: 'Đã tạo {{timestamp}}',
+		updated_at: 'Đã cập nhật {{timestamp}}'
 	}
 } as const

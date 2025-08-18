@@ -7,9 +7,9 @@ import { IDefectiveGoods } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class DefectiveGoodsService {
-	static async getDefectiveGoods(params: Pick<Pagination<IDefectiveGoods>, 'page' | 'limit'>) {
+	static async getDefectiveGoods(page: number) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IDefectiveGoods>>>('/defective-goods', {
-			params
+			params: { page }
 		})
 	}
 
@@ -21,4 +21,8 @@ export class DefectiveGoodsService {
 	}
 
 	static async updateDefectiveGoods(id: string, payload: UpdateDefectiveGoodsFormValues) {}
+
+	static async deleteDefectiveGoods(id: string) {
+		return await axiosInstance.delete<void, ResponseBody<unknown>>(`/defective-goods/delete/${id}`)
+	}
 }
