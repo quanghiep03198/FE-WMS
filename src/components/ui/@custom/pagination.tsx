@@ -1,6 +1,7 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Button, Div, Icon } from '@/components/ui'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import tw from 'tailwind-styled-components'
 
@@ -25,15 +26,12 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 	const { page, totalPages, hasNextPage, hasPrevPage, onPrefetch: handlePrefetch } = props
 	const { setParams } = useQueryParams<{ page: number }>()
 	const paginationRange = calculatePaginationRange(page, totalPages)
+	const { t } = useTranslation()
 
 	return (
 		<Div className='mx-auto flex w-full max-w-full items-center justify-center gap-x-1'>
-			<Button
-				disabled={!hasPrevPage}
-				variant='ghost'
-				className='gap-x-2'
-				onClick={() => setParams({ page: page - 1 })}>
-				<Icon name='ChevronLeft' /> Previous
+			<Button disabled={!hasPrevPage} variant='ghost' size='sm' onClick={() => setParams({ page: page - 1 })}>
+				<Icon name='ChevronLeft' /> {t('ns_common:pagination.previous_page')}
 			</Button>
 			{paginationRange.map((pageIndex, index) => {
 				if (index === paginationRange.length - 1 && pageIndex < totalPages)
@@ -43,6 +41,7 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 						key={pageIndex}
 						onClick={() => setParams({ page: pageIndex })}
 						variant={page == pageIndex ? 'outline' : 'ghost'}
+						className='size-8 text-sm'
 						size='icon'>
 						{pageIndex}
 					</Button>
@@ -51,12 +50,13 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 			<Button
 				variant='ghost'
 				disabled={!hasNextPage}
-				className='flex-row-reverse gap-x-2'
+				size='sm'
 				onClick={() => setParams({ page: page + 1 })}
 				onMouseEnter={() => {
 					if (handlePrefetch) handlePrefetch()
 				}}>
-				<Icon name='ChevronRight' /> Next
+				{t('ns_common:pagination.next_page')}
+				<Icon name='ChevronRight' />
 			</Button>
 		</Div>
 	)
