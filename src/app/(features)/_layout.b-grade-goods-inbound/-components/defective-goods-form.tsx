@@ -1,4 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
+import { IDefectiveGoods } from '@/common/types/entities'
 import {
 	AutoCompleteFieldControl,
 	Button,
@@ -10,31 +11,60 @@ import {
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { useResetState, useUpdateEffect } from 'ahooks'
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gunzipSync, gzipSync } from 'zlib'
 import { DefectiveCategoryI18n, DefectiveLocation, DefectiveType } from '../-constants'
-import { VietnameseDefectDescriptionTemplate } from '../-constants/templates'
+import { DefectDescriptionTemplate } from '../-constants/templates'
 import { usePageContext } from '../-contexts/page-context'
-import { useCreateDefectiveGoodsMutation } from '../-hooks/use-defective-goods-asm'
+import { useCreateDefectiveGoodsMutation, useUpdateDefectiveGoodsMutation } from '../-hooks/use-defective-goods-asm'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
 import { useGetProductSpecificationQuery } from '../../-hooks/use-product-specification-asm'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
 
 const DefectiveGoodsForm: React.FC = () => {
+	const { t, i18n } = useTranslation()
 	const form = useForm<CreateDefectiveGoodsFormValues>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
-			defect_description: VietnameseDefectDescriptionTemplate
+			defect_description: DefectDescriptionTemplate[i18n.language]
 		}
 	})
-	const { t } = useTranslation()
 	const { data, isLoading } = useGetProductSpecificationQuery()
-	const { mutateAsync, isPending, isError } = useCreateDefectiveGoodsMutation()
-	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(VietnameseDefectDescriptionTemplate)
+	const {
+		mutateAsync: createAsync,
+		isPending: isCreating,
+		isError: isFailedToCreate
+	} = useCreateDefectiveGoodsMutation()
+	const {
+		mutateAsync: updateAsync,
+		isPending: isUpdating,
+		isError: isFailedToUpdate
+	} = useUpdateDefectiveGoodsMutation()
+	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(DefectDescriptionTemplate[i18n.language])
+	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(CommonActions.CREATE)
+	const currentIdRef = useRef<string>(null)
+
+	useUpdateEffect(() => {
+		setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
+	}, [i18n.language])
+
+	const { event$ } = usePageContext()
+
+	event$.useSubscription((e: { action: CommonActions; payload: IDefectiveGoods }) => {
+		if (e.action === CommonActions.UPDATE) {
+			setFormAction(CommonActions.UPDATE)
+			const extractedDescription: string = gunzipSync(Buffer.from(e.payload.defect_description, 'base64')).toString()
+			form.reset({ ...e.payload, defect_description: extractedDescription })
+			currentIdRef.current = e.payload.id
+			setDefaultEditorContent(extractedDescription)
+		}
+	})
 
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	// Watch form fields
@@ -104,27 +134,34 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 	}, [])
 
-	const { event$ } = usePageContext()
+	const handleSubmitForm = useCallback(
+		(data: CreateDefectiveGoodsFormValues) => {
+			const payload = {
+				...data,
+				defect_description: gzipSync(data.defect_description, { level: 6, chunkSize: 1024 }).toString('base64')
+			}
+			const mutateAsync = async () =>
+				formAction === CommonActions.UPDATE
+					? await updateAsync({ id: currentIdRef.current, data: payload })
+					: await createAsync(payload)
+			toast.promise(mutateAsync(), {
+				loading: t('ns_common:notification.processing_request'),
+				success: () => {
+					resetFormAction()
+					return t('ns_common:notification.success')
+				},
+				error: t('ns_common:notification.error')
+			})
+		},
+		[formAction]
+	)
 
-	event$.useSubscription((e) => {
-		if (e.action === CommonActions.UPDATE) {
-			const extractedDescription: string = gunzipSync(Buffer.from(e.payload.defect_description, 'base64')).toString()
-			form.reset({ ...e.payload, defect_description: extractedDescription })
-			setDefaultEditorContent(extractedDescription)
-		}
-	})
-
-	const handleCreateDefectiveGoods = useCallback(async (data: CreateDefectiveGoodsFormValues) => {
-		const payload = {
-			...data,
-			defect_description: gzipSync(data.defect_description, { level: 6, chunkSize: 1024 }).toString('base64')
-		}
-		await mutateAsync(payload)
-	}, [])
+	const isPending = isCreating || isUpdating
+	const isError = isFailedToCreate || isFailedToUpdate
 
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit(handleCreateDefectiveGoods)}>
+			<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
 					<Div className='col-span-full'>
 						<InputFieldControl

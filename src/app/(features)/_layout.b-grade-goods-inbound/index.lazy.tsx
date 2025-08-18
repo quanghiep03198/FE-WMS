@@ -3,7 +3,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
-import ActionsGroup from './-components/actions-group'
+import DefectiveDetailDialog from './-components/defective-detail-dialog'
 import DefectiveGoodsForm from './-components/defective-goods-form'
 import DefectiveGoodList from './-components/defective-goods-list'
 import { PageContextProvider } from './-contexts/page-context'
@@ -33,10 +33,11 @@ function RouteComponent() {
 						</ResizablePanel>
 						<ResizableHandle withHandle />
 						<ResizablePanel minSize={50} maxSize={70} defaultSize={60}>
-							<ActionsGroup />
+							{/* <ActionsGroup /> */}
 							<DefectiveGoodsForm />
 						</ResizablePanel>
 					</ResizablePanelGroup>
+					<DefectiveDetailDialog />
 				</PageContextProvider>
 			</Div>
 		</Fragment>
