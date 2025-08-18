@@ -20,7 +20,9 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async updateDefectiveGoods(id: string, payload: UpdateDefectiveGoodsFormValues) {}
+	static async updateDefectiveGoods(id: string, payload: UpdateDefectiveGoodsFormValues) {
+		return await axiosInstance.patch(`/defective-goods/update/${id}`, payload)
+	}
 
 	static async deleteDefectiveGoods(id: string) {
 		return await axiosInstance.delete<void, ResponseBody<unknown>>(`/defective-goods/delete/${id}`)

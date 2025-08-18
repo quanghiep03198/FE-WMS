@@ -30,6 +30,18 @@ export const useCreateDefectiveGoodsMutation = () => {
 	})
 }
 
+export const useUpdateDefectiveGoodsMutation = () => {
+	const invalidateQueries = useInvalidateQuery()
+
+	return useMutation({
+		mutationFn: async (payload: { id: string; data: CreateDefectiveGoodsFormValues }) =>
+			await DefectiveGoodsService.updateDefectiveGoods(payload.id, payload.data),
+		onSuccess: () => {
+			invalidateQueries()
+		}
+	})
+}
+
 export const useDeleteDefectiveGoodsMutation = () => {
 	const invalidateQueries = useInvalidateQuery()
 
