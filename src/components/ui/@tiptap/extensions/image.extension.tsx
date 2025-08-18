@@ -217,14 +217,14 @@ function TiptapImage(props: NodeViewProps) {
 				node.attrs.align === 'right' && 'left-full -translate-x-full'
 			)}
 			style={{ width: node.attrs.width }}>
-			<Div className={cn('group relative rounded-md', selected && 'divide-y-2 divide-active')}>
-				<Div as='figure' className={cn('relative m-0')}>
+			<Div className={cn('group relative rounded-md')}>
+				<figure className={cn('relative m-0')}>
 					<img
 						ref={imageRef}
 						src={node.attrs.src}
 						alt={node.attrs.alt}
 						title={node.attrs.title}
-						className='rounded-[inherit] object-center transition-shadow duration-200 hover:shadow-lg'
+						className='rounded-[inherit] object-center'
 						onLoad={(e) => {
 							const img = e.currentTarget
 							const aspectRatio = img.naturalWidth / img.naturalHeight
@@ -279,7 +279,7 @@ function TiptapImage(props: NodeViewProps) {
 							</Div>
 						</Fragment>
 					)}
-				</Div>
+				</figure>
 
 				{editingCaption ? (
 					<Input
@@ -380,7 +380,6 @@ function TiptapImage(props: NodeViewProps) {
 												</Typography>
 											</Separator>
 											<Div>
-												{/* <p className='mb-2 text-xs font-medium'>Or use URL</p> */}
 												<Div className='space-y-2'>
 													<Input
 														value={imageUrl}

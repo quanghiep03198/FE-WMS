@@ -115,7 +115,13 @@ export const extensions = [
 	Color.configure(),
 	SearchAndReplace.configure(),
 	ImagePlaceholder.configure(),
-	ImageExtension.configure({ allowBase64: true })
+	ImageExtension.configure({
+		HTMLAttributes: {
+			class: 'object-center max-w-full before:text-muted-foreground before:content-[attr(caption)]',
+			loading: 'lazy'
+		},
+		allowBase64: true
+	})
 	// FileHandler.configure({
 	// 	allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
 

@@ -21,7 +21,7 @@ const Toolbar: React.FC = () => {
 	return (
 		<Div className='p-1.5'>
 			<ScrollShadow
-				className='flex h-full items-center justify-start gap-x-0.5 scrollbar-none'
+				className='flex h-full items-center justify-start gap-x-1 overflow-y-hidden scrollbar-none'
 				orientation='horizontal'>
 				<SearchAndReplaceToolbar />
 

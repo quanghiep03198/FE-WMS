@@ -24,7 +24,7 @@ import { z } from 'zod'
 import { useEditorContext } from '../../context/editor-context'
 
 const UploadSchema = z.object({
-	url: z.string().url('URL ảnh không hợp lệ').optional()
+	url: z.url('Invalid image URL').optional()
 })
 
 const ImageDropdown: React.FC = () => {
@@ -38,14 +38,7 @@ const ImageDropdown: React.FC = () => {
 
 	// const { previewUrl, fileInputRef, handleFileChange, handleRemove, uploading, error } = useImageUpload({
 	// 	onUpload: (imageUrl) => {
-	// 		editor
-	// 			.chain()
-	// 			.focus()
-	// 			.setImage({
-	// 				src: imageUrl,
-	// 				alt: altText || fileInputRef.current?.files?.[0]?.name
-	// 			})
-	// 			.run()
+
 	// 		handleRemove()
 	// 		// setIsExpanded(false)
 	// 	}
@@ -67,9 +60,7 @@ const ImageDropdown: React.FC = () => {
 							htmlFor='image-upload'
 							className='flex items-center gap-x-2 font-normal'
 							onClick={() => {
-								// e.preventDefault()
 								editor?.chain().focus().insertImagePlaceholder().run()
-								// onClick?.(e)
 							}}>
 							<Icon name='Upload' /> {t('ns_common:editor.choose_image_from_device')}
 						</Label>
@@ -82,16 +73,18 @@ const ImageDropdown: React.FC = () => {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			{/* <Input type='file' className='hidden' id='editor-image-input' onChange={handleFileChange} /> */}
 			<Dialog>
 				<DialogTrigger id={dialogTriggerId} className='hidden' />
 				<DialogContent className='items-stretch'>
-					<DialogHeader className='text-left'>Chèn hình ảnh</DialogHeader>
+					<DialogHeader className='text-left'>{t('ns_common:editor.add_image')}</DialogHeader>
 					<Form {...form}>
 						<FormDialog
 							onSubmit={(e) => {
 								e.stopPropagation()
-								// form.handleSubmit(handleInsertImageURL)(e)
+								form.handleSubmit((value) => {
+									editor.commands.setImage({ src: value.url, alt: 'Image' })
+									form.reset()
+								})(e)
 							}}>
 							<InputFieldControl
 								type='url'
@@ -99,7 +92,9 @@ const ImageDropdown: React.FC = () => {
 								className='w-full'
 								placeholder={t('ns_common:form_placeholder.fill', { object: 'URL', defaultValue: null })}
 							/>
-							<Button type='submit'>{t('ns_common:actions.apply')}</Button>
+							<Button type='submit' onClick={(e) => e.stopPropagation()}>
+								{t('ns_common:actions.apply')}
+							</Button>
 						</FormDialog>
 					</Form>
 				</DialogContent>
