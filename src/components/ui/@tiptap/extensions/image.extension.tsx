@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Image from '@tiptap/extension-image'
-import { type NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
+import { mergeAttributes, type NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
 import { AlignCenter, AlignLeft, AlignRight, Edit, ImageIcon, Maximize, MoreVertical, Trash } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
@@ -27,6 +27,7 @@ import { useImageUpload } from '../hooks/use-image-upload'
 
 export const ImageExtension = Image.extend({
 	allowGapCursor: true,
+	name: 'figure',
 	addAttributes() {
 		return {
 			src: {
@@ -55,7 +56,37 @@ export const ImageExtension = Image.extend({
 			}
 		}
 	},
+	parseHTML() {
+		return [
+			{
+				tag: `figure[data-type="${this.name}"]`,
+				getAttrs: (node) => {
+					const figure = node as HTMLElement
+					const img = figure.querySelector('img')
+					const figcaption = figure.querySelector('figcaption')
 
+					if (!img) return false
+
+					return {
+						src: img.getAttribute('src'),
+						alt: img.getAttribute('alt'),
+						title: img.getAttribute('title'),
+						width: img.getAttribute('width'),
+						height: img.getAttribute('height'),
+						caption: figcaption?.textContent || ''
+					}
+				}
+			}
+		]
+	},
+	renderHTML({ HTMLAttributes }) {
+		return [
+			'figure',
+			{ 'data-type': this.name },
+			['img', mergeAttributes(HTMLAttributes)],
+			['figcaption', { class: 'text-center text-muted-foreground' }, HTMLAttributes.caption || '']
+		]
+	},
 	addNodeView: () => {
 		return ReactNodeViewRenderer(TiptapImage)
 	}

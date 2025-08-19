@@ -1,8 +1,6 @@
 import { i18n } from '@/i18n'
 import { Color } from '@tiptap/extension-color'
 import Gapcursor from '@tiptap/extension-gapcursor'
-import Highlight from '@tiptap/extension-highlight'
-import Link from '@tiptap/extension-link'
 import { ListKit } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
@@ -11,7 +9,6 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import TextAlign from '@tiptap/extension-text-align'
 import { TextStyle } from '@tiptap/extension-text-style'
-import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
 import { FontSize } from './font-size.extension'
 import { ImagePlaceholder } from './image-placeholder.extension'
@@ -40,6 +37,18 @@ export const extensions = [
 		horizontalRule: {
 			HTMLAttributes: {
 				class: 'border-t dark:border-t-border'
+			}
+		},
+		underline: {
+			HTMLAttributes: {
+				class: 'underline-offset-4'
+			}
+		},
+		link: {
+			openOnClick: false,
+			autolink: false,
+			HTMLAttributes: {
+				class: 'text-blue-500 font-normal'
 			}
 		}
 	}),
@@ -77,7 +86,6 @@ export const extensions = [
 		emptyEditorClass:
 			'before:h-0 before:pl-1 before:place-self-center before:float-left text-muted-foreground font-normal text-sm before:pointer-event-none before:content-[attr(data-placeholder)] [&:not(p)]:before:hidden'
 	}),
-	Underline.configure(),
 	TextAlign.configure({
 		types: ['heading', 'paragraph']
 	}),
@@ -102,14 +110,8 @@ export const extensions = [
 			class: 'px-3 py-1 border [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25 before:hidden align-top'
 		}
 	}),
-	Highlight.configure({ multicolor: true }),
-	Link.configure({
-		openOnClick: false,
-		autolink: false,
-		HTMLAttributes: {
-			class: 'text-blue-500 font-normal'
-		}
-	}),
+	// Highlight.configure(),
+
 	FontSize.configure(),
 	TextStyle.configure(),
 	Color.configure(),
