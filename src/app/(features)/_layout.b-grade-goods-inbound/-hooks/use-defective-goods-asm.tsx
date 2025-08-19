@@ -12,8 +12,8 @@ export const useGetDefectiveGoodsQuery = () => {
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
 
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, searchParams.page],
-		queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(searchParams.page),
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, searchParams],
+		queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(searchParams),
 		select: (response) => response.metadata
 	})
 }

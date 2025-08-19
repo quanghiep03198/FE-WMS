@@ -164,6 +164,8 @@ export default {
 		full_width: 'Toàn chiều rộng',
 		delete_image: 'Xóa hình ảnh',
 		click_to_upload: 'Nhấp để tải lên tệp hình ảnh',
+		use_available_template: 'Chọn mẫu có sẵn',
+		create_custom_template: 'Tạo mẫu tùy chỉnh',
 		validations: {
 			row_num_required: 'Số hàng là bắt buộc',
 			row_num_min: 'Số hàng phải lớn hơn hoặc bằng 1',

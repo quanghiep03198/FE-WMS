@@ -147,6 +147,8 @@ export default {
 		replace_image: '图片替换',
 		replace_with_url: '用 URL 替换',
 		delete_image: '删除图片',
+		use_available_template: '使用可用模板',
+		create_custom_template: '创建自定义模板',
 		validations: {
 			row_num_required: '行数是必需的',
 			row_num_min: '行数必须大于或等于 1',

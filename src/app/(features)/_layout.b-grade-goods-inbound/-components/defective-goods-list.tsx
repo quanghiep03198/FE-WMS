@@ -1,5 +1,6 @@
 import { CommonActions } from '@/common/constants/enums'
 import { IDefectiveGoods } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import {
 	Badge,
 	Card,
@@ -13,15 +14,15 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 	Icon,
-	Input,
 	Typography
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { Link, useLocation } from '@tanstack/react-router'
 import { formatRelative } from 'date-fns'
 import { enUS, vi, zhCN } from 'date-fns/locale'
 import { omit } from 'lodash'
-import { Fragment, useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -29,16 +30,14 @@ import { DefectiveCategoryI18n } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 import { useDeleteDefectiveGoodsMutation, useGetDefectiveGoodsQuery } from '../-hooks/use-defective-goods-asm'
 import EmptySection from './emtpy-section'
+import SearchInput from './search-input'
 
 const DefectiveGoodList = () => {
 	const { data } = useGetDefectiveGoodsQuery()
 
 	return (
 		<Div className='flex h-full flex-col items-stretch gap-y-4 p-4'>
-			<Div className='flex h-9 items-center space-x-2 overflow-clip rounded-md border px-2 focus-within:border-primary'>
-				<Icon name='Search' />
-				<Input placeholder='Scan EPC to search specific item ...' className='border-none px-0 shadow-none' />
-			</Div>
+			<SearchInput />
 
 			{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 				<ScrollShadow className='h-full w-full flex-1 space-y-4 !overflow-y-scroll pr-2'>
@@ -59,6 +58,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 	const { event$ } = usePageContext()
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
+	const { hash, search } = useLocation()
 
 	const locale = useMemo(() => {
 		switch (i18n.language) {
@@ -84,8 +84,12 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 	}, [data])
 
 	return (
-		<Fragment>
-			<Card className='relative overflow-hidden rounded-md border transition-colors duration-200 @container/card *:text-left *:text-sm'>
+		<Link hash={data.id} search={search}>
+			<Card
+				className={cn(
+					'relative overflow-hidden rounded-md border transition-colors duration-200 @container/card *:text-left *:text-sm',
+					hash === String(data.id) && '!bg-accent'
+				)}>
 				<CardHeader>
 					<DropdownMenu>
 						<DropdownMenuTrigger className='absolute right-3 top-3 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
@@ -98,7 +102,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 									onClick={() =>
 										event$.emit({ action: CommonActions.READ, payload: data.defect_description })
 									}>
-									<Icon name='ArrowUpRight' /> {t('ns_common:actions.detail')}
+									<Icon name='MousePointerClick' /> {t('ns_common:actions.detail')}
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									className='gap-x-2'
@@ -164,7 +168,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 					</DescriptionList>
 				</CardContent>
 			</Card>
-		</Fragment>
+		</Link>
 	)
 }
 

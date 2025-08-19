@@ -45,7 +45,8 @@ export default {
 		outbound_history_lookup: '查看出库历史、订单信息及每日出库数量.',
 		outbound_order_estimation: '预计出库订单',
 		outbound_order_estimation_desc: '执行出库预估查询后，结果将自动加载至此区域.',
-		size_qty_caption: '按尺码统计的总产品数量'
+		size_qty_caption: '按尺码统计的总产品数量',
+		defective_epc_caption: '请将输入框聚焦, 然后扫描不良品的EPC标签. EPC应为24个字符.'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'

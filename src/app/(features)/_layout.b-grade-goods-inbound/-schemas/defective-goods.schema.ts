@@ -1,6 +1,6 @@
 import { i18n } from '@/i18n'
 import { z } from 'zod'
-import { DefectiveLocation, DefectiveType } from '../-constants'
+import { DefectiveCategory, DefectiveLocation } from '../-constants'
 
 export const baseDefectiveGoodsSchema = z.object({
 	epc: z
@@ -8,7 +8,7 @@ export const baseDefectiveGoodsSchema = z.object({
 		.trim()
 		.nonempty({ message: 'ns_validation:required' })
 		.length(24, i18n.t('ns_validation:min_length', { min: 24 })),
-	category: z.nativeEnum(DefectiveType, { message: 'ns_validation:required' }),
+	category: z.nativeEnum(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: z
 		.string({ message: 'ns_validation:required' })
 		.trim()
@@ -35,12 +35,12 @@ export const baseDefectiveGoodsSchema = z.object({
 })
 
 export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema.refine((values) => {
-	if (values.category === DefectiveType.B_GRADE) return !!values.po && !!values.mo_no
+	if (values.category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
 	return true
 })
 
 export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().refine((values) => {
-	if (values.category === DefectiveType.B_GRADE) return !!values.po && !!values.mo_no
+	if (values.category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
 	return true
 })
 

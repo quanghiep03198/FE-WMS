@@ -148,6 +148,8 @@ export default {
 		delete_image: 'Delete image',
 		choose_image_from_device: 'Choose image from device',
 		choose_from_url: 'Choose from URL',
+		use_available_template: 'Use available template',
+		create_custom_template: 'Create your own template',
 		validations: {
 			row_num_required: 'Number of rows is required',
 			row_num_min: 'Number of rows must be greater than or equal to 1',

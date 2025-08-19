@@ -1,6 +1,6 @@
 import { ResourceKeys } from 'i18next'
 
-export enum DefectiveType {
+export enum DefectiveCategory {
 	B_GRADE = 'B',
 	C_GRADE = 'C',
 	RESEARCH_DEVELOPMENT = 'RD'
@@ -13,8 +13,8 @@ export enum DefectiveLocation {
 	OTHER = 'D'
 }
 
-export const DefectiveCategoryI18n: Record<DefectiveType, ResourceKeys['ns_inoutbound']> = {
-	[DefectiveType.B_GRADE]: 'shoes_category.b_grade',
-	[DefectiveType.C_GRADE]: 'shoes_category.c_grade',
-	[DefectiveType.RESEARCH_DEVELOPMENT]: 'shoes_category.research_development'
+export const DefectiveCategoryI18n: Record<DefectiveCategory, ResourceKeys['ns_inoutbound']> = {
+	[DefectiveCategory.B_GRADE]: 'shoes_category.b_grade',
+	[DefectiveCategory.C_GRADE]: 'shoes_category.c_grade',
+	[DefectiveCategory.RESEARCH_DEVELOPMENT]: 'shoes_category.research_development'
 }

@@ -7,18 +7,20 @@ import {
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
-	SelectFieldControl
+	Label,
+	SelectFieldControl,
+	Switch
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useResetState, useUpdateEffect } from 'ahooks'
+import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gunzipSync, gzipSync } from 'zlib'
-import { DefectiveCategoryI18n, DefectiveLocation, DefectiveType } from '../-constants'
+import { DefectiveCategory, DefectiveCategoryI18n, DefectiveLocation } from '../-constants'
 import { DefectDescriptionTemplate } from '../-constants/templates'
 import { usePageContext } from '../-contexts/page-context'
 import { useCreateDefectiveGoodsMutation, useUpdateDefectiveGoodsMutation } from '../-hooks/use-defective-goods-asm'
@@ -46,13 +48,19 @@ const DefectiveGoodsForm: React.FC = () => {
 		isPending: isUpdating,
 		isError: isFailedToUpdate
 	} = useUpdateDefectiveGoodsMutation()
-	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(DefectDescriptionTemplate[i18n.language])
 	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(CommonActions.CREATE)
 	const currentIdRef = useRef<string>(null)
+	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
+		defaultValue: true,
+		listenStorageChange: true
+	})
+	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
+		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
+	)
 
 	useUpdateEffect(() => {
-		setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
-	}, [i18n.language])
+		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
+	}, [i18n.language, useAvailableTemplate])
 
 	const { event$ } = usePageContext()
 
@@ -128,11 +136,19 @@ const DefectiveGoodsForm: React.FC = () => {
 			e.preventDefault()
 			e.stopPropagation()
 		}
-		if (e.currentTarget.value.length === 24) {
-			form.setValue('epc', e.currentTarget.value.toUpperCase())
-			e.preventDefault()
-		}
 	}, [])
+
+	const onMutateSuccessfully = () => {
+		resetFormAction()
+		currentIdRef.current = null
+		const currentFormValues = form.getValues()
+		for (const key in currentFormValues) {
+			if (key === 'defect_description') currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
+			else currentFormValues[key] = ''
+		}
+		form.reset(currentFormValues)
+		setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
+	}
 
 	const handleSubmitForm = useCallback(
 		(data: CreateDefectiveGoodsFormValues) => {
@@ -147,7 +163,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			toast.promise(mutateAsync(), {
 				loading: t('ns_common:notification.processing_request'),
 				success: () => {
-					resetFormAction()
+					onMutateSuccessfully()
 					return t('ns_common:notification.success')
 				},
 				error: t('ns_common:notification.error')
@@ -162,6 +178,37 @@ const DefectiveGoodsForm: React.FC = () => {
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
+				<Div className='sticky top-0 z-20 col-span-full flex items-center justify-between gap-x-2 border-b bg-background px-6 py-2'>
+					<Div className='inline-flex items-center gap-x-2'>
+						<Label htmlFor='toggle-use-template' className='inline-flex items-center gap-x-2'>
+							<Icon name='Sparkles' /> {t('ns_common:editor.use_available_template')}
+						</Label>
+						<Switch
+							id='toggle-use-template'
+							checked={useAvailableTemplate}
+							onCheckedChange={(checked) => {
+								setUseAvailabelTemplate(checked)
+								if (!checked) setDefaultEditorContent('')
+							}}
+						/>
+					</Div>
+
+					<Div className='relative h-8 rounded-[var(--radius)] bg-gradient-to-r from-purple-500 via-red-500 to-yellow-500 p-px'>
+						<Button
+							type='button'
+							size='sm'
+							className='h-full'
+							onClick={() =>
+								toast.info('This feature is under development', {
+									description: 'Please try again later. We are working on it.',
+									duration: 5000
+								})
+							}>
+							<Icon name='WandSparkles' />
+							{t('ns_common:editor.create_custom_template')}
+						</Button>
+					</Div>
+				</Div>
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
 					<Div className='col-span-full'>
 						<InputFieldControl
@@ -170,9 +217,16 @@ const DefectiveGoodsForm: React.FC = () => {
 							autoFocus
 							autoComplete='off'
 							placeholder='Scan EPC tag here'
+							onChange={(e) => {
+								if (e.currentTarget.value.length >= 24) {
+									e.preventDefault()
+									return
+								}
+								form.setValue('epc', e.currentTarget.value.toUpperCase())
+							}}
 							onKeyDown={handleEpcChange}
 							onKeyDownCapture={handleEpcChange}
-							description='Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.'
+							description={t('ns_inoutbound:description.defective_epc_caption')}
 						/>
 					</Div>
 					<Div className='col-span-full'>
@@ -183,30 +237,30 @@ const DefectiveGoodsForm: React.FC = () => {
 								{
 									label: t(DefectiveCategoryI18n['B'], {
 										ns: 'ns_inoutbound',
-										defaultValue: DefectiveType.B_GRADE
+										defaultValue: DefectiveCategory.B_GRADE
 									}),
-									value: DefectiveType.B_GRADE
+									value: DefectiveCategory.B_GRADE
 								},
 								{
 									label: t(DefectiveCategoryI18n['C'], {
 										ns: 'ns_inoutbound',
-										defaultValue: DefectiveType.C_GRADE
+										defaultValue: DefectiveCategory.C_GRADE
 									}),
-									value: DefectiveType.C_GRADE
+									value: DefectiveCategory.C_GRADE
 								},
 								{
 									label: t(DefectiveCategoryI18n['RD'], {
 										ns: 'ns_inoutbound',
-										defaultValue: DefectiveType.RESEARCH_DEVELOPMENT
+										defaultValue: DefectiveCategory.RESEARCH_DEVELOPMENT
 									}),
-									value: DefectiveType.RESEARCH_DEVELOPMENT
+									value: DefectiveCategory.RESEARCH_DEVELOPMENT
 								}
 							]}
 							labelField='label'
 							valueField='value'
 						/>
 					</Div>
-					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<SelectFieldControl
 							name='brand_name'
 							label={t('ns_erp:fields.brand_name')}
@@ -222,7 +276,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					{currentCategory === DefectiveType.B_GRADE && (
+					{currentCategory === DefectiveCategory.B_GRADE && (
 						<Fragment>
 							<Div className='col-span-2'>
 								<PurchaseOrderComboboxFieldControl />
@@ -232,7 +286,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							</Div>
 						</Fragment>
 					)}
-					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<AutoCompleteFieldControl
 							name='factory_shoes_style'
 							label={t('ns_erp:fields.shoestyle_codefactory')}
@@ -249,7 +303,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							}}
 						/>
 					</Div>
-					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<AutoCompleteFieldControl
 							name='color_sn'
 							label={t('ns_erp:fields.color_sn')}
@@ -266,7 +320,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							}}
 						/>
 					</Div>
-					<Div className={currentCategory === DefectiveType.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
 						<AutoCompleteFieldControl
 							name='size_code'
 							label='Size'
@@ -312,7 +366,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 				</Div>
-				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background p-2'>
+				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background px-6 py-2'>
 					<Button disabled={isPending} variant='secondary' size='sm' type='button' onClick={() => form.reset()}>
 						<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 					</Button>

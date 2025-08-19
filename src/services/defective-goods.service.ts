@@ -7,9 +7,9 @@ import { IDefectiveGoods } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class DefectiveGoodsService {
-	static async getDefectiveGoods(page: number) {
+	static async getDefectiveGoods(params: { page: number; q?: string }) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IDefectiveGoods>>>('/defective-goods', {
-			params: { page }
+			params
 		})
 	}
 
