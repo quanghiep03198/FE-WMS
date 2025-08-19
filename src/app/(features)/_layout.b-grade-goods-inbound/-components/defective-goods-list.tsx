@@ -40,7 +40,7 @@ const DefectiveGoodList = () => {
 			<SearchInput />
 
 			{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
-				<ScrollShadow className='h-full w-full flex-1 space-y-4 !overflow-y-scroll pr-2'>
+				<ScrollShadow className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
 					{data.data.map((item) => {
 						return <DefectiveGoodsItem key={item.id} data={item} />
 					})}

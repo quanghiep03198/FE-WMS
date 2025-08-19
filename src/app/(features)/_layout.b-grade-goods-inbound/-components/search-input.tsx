@@ -1,6 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Div, Icon, Input } from '@/components/ui'
-import { useDebounceEffect, useKeyPress, useResetState } from 'ahooks'
+import { useDebounceEffect, useResetState } from 'ahooks'
 
 const SearchInput: React.FC = () => {
 	const { searchParams, setParams } = useQueryParams<{ page: number; q?: string }>()
@@ -13,11 +13,6 @@ const SearchInput: React.FC = () => {
 		}
 		setValue(e.currentTarget.value.toUpperCase())
 	}
-
-	useKeyPress('Backspace', (e) => {
-		e.preventDefault()
-		resetValue()
-	})
 
 	useDebounceEffect(
 		() => {
@@ -36,6 +31,9 @@ const SearchInput: React.FC = () => {
 				type='search'
 				value={value}
 				onChange={handleEpcChange}
+				onKeyDown={(e) => {
+					if (e.key === 'Backspace') resetValue()
+				}}
 			/>
 		</Div>
 	)

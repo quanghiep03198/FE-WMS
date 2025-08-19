@@ -1,14 +1,9 @@
-import { i18n } from '@/i18n'
 import { z } from 'zod'
 import { DefectiveCategory, DefectiveLocation } from '../-constants'
 
 export const baseDefectiveGoodsSchema = z.object({
-	epc: z
-		.string({ message: 'ns_validation:required' })
-		.trim()
-		.nonempty({ message: 'ns_validation:required' })
-		.length(24, i18n.t('ns_validation:min_length', { min: 24 })),
-	category: z.nativeEnum(DefectiveCategory, { message: 'ns_validation:required' }),
+	epc: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	category: z.enum(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: z
 		.string({ message: 'ns_validation:required' })
 		.trim()
