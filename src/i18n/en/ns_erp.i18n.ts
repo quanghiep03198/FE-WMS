@@ -10,6 +10,7 @@ export default {
 		actual_missing_qty: 'Actual missing quantity',
 		actual_outstock_qty: 'Actual outstock quantity',
 		brand_name: 'Customer branch name',
+		category: 'Category', //: Phân loại hàng hóa
 		container_order_code: 'Container Order Code',
 		conversion_rate: 'Conversion rate',
 		customer_branch_id: 'Customer branch ID',
@@ -18,6 +19,8 @@ export default {
 		daily_inbound_qty: 'Daily inbound quantity',
 		daily_outbound_qty: 'Daily outbound quantity',
 		daily_productivity: 'Daily productivity',
+		defect_location: 'Defect location',
+		defect_description: 'Defect description',
 		dept_name: 'Department',
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
@@ -87,6 +90,11 @@ export default {
 	titles: {
 		product_info: 'Product Information'
 	},
+	labels: {
+		goods_category: 'Shoes category',
+		defect_location: 'Defect location',
+		defect_description: 'Defect description'
+	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Finished Product Delivery Order',
 		finished_goods_receipt: 'Finished Product Warehouse Import Order',
@@ -96,5 +104,10 @@ export default {
 	rfid_match_craft_form: {
 		title: 'Update EPC information',
 		description: "Craft EPC's information that does not exist in the system."
+	},
+
+	shoes_parts: {
+		upper: 'Upper',
+		bottom: 'Bottom'
 	}
 }

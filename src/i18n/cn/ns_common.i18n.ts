@@ -2,6 +2,7 @@ export default {
 	actions: {
 		add: '添加',
 		adjust: '调整',
+		apply: '应用',
 		approve: '批准',
 		archived: ' 已归档',
 		back: '返回',
@@ -50,7 +51,9 @@ export default {
 		trigger: '触发',
 		unpin_all_columns: '取消固定所有列',
 		update: '編輯',
-		upload: '上传'
+		upload: '上传',
+		undo: '撤销',
+		redo: '重做'
 	},
 	common_fields: {
 		actions: '操作',
@@ -79,6 +82,81 @@ export default {
 		import_data: '上传入数据的 CSV档案. 上传的文件必须符合正确的格式',
 		chosen_files: '已选择 {{qty}} 个文件'
 	},
+	editor: {
+		alt_text: '替代文本',
+		alignment: '对齐方式',
+		add_caption: '添加说明文字 ...',
+		typography: '排版',
+		placeholder: '在此输入文本 ...',
+		align_left: '左对齐',
+		align_center: '居中对齐',
+		align_right: '右对齐',
+		align_justify: '两端对齐',
+		choose_image_from_device: '从设备选择图片',
+		choose_from_url: '从 URL 选择图片',
+		normal_text: '普通文本',
+		heading_1: '标题 1',
+		heading_2: '标题 2',
+		heading_3: '标题 3',
+		font_size: '字体大小',
+		bold: '加粗',
+		italic: '斜体',
+		underline: '下划线',
+		strikethrough: '删除线',
+		blockquote: '引用',
+		ordered_list: '有序列表',
+		bullet_list: '无序列表',
+		task_list: '任务列表',
+		link: '链接',
+		insert_link_title: '插入链接',
+		insert_link_description: '在选中的文本中插入一个链接。您也可以链接到电子邮件地址或电话号码.',
+		insert_link_placeholder: '粘贴链接 ...',
+		image: '相片',
+		code_block: '代码块',
+		text_color: '字体颜色',
+		highlight: '高亮',
+		separator: '分离线',
+		table: '表格',
+		insert_table: '搜入表格',
+		num_of_columns: '列数',
+		num_of_rows: '行数',
+		insert_column_left: '在左侧插入列',
+		insert_column_right: '在右侧插入列',
+		insert_row_above: '在上方插入行',
+		insert_row_below: '在下方插入行',
+		delete_column: '删除列',
+		delete_row: '删除行',
+		delete_table: '删除表格',
+		table_option_title: '表格选项',
+		table_option_description: '选择列数和行数以创建表格',
+		table_option_column: '列数',
+		table_option_row: '行数',
+		search_and_replace: '查询和替换',
+		match_case: '区分大小写',
+		replace_all: '全部替换',
+		replace: '替换',
+		replace_with: '表格替换',
+		click_to_upload: '点击上传图像文件',
+		copy: '复制',
+		cut: '剪切',
+		paste: '粘贴',
+		paste_without_formatting: '粘贴为无格式文本',
+		edit_caption: '编辑说明文字',
+		full_width: '全宽',
+		add_image: '添加图片',
+		replace_image: '图片替换',
+		replace_with_url: '用 URL 替换',
+		delete_image: '删除图片',
+		use_available_template: '使用可用模板',
+		create_custom_template: '创建自定义模板',
+		validations: {
+			row_num_required: '行数是必需的',
+			row_num_min: '行数必须大于或等于 1',
+			column_num_required: '列数是必需的',
+			column_num_min: '列数必须大于或等于 1',
+			invalid_url: '无效的链接'
+		}
+	},
 	errors: {
 		'303': '永久移动',
 		'303_message': '请访问 {{url}} 以使用工厂 {{factoryCode}} 的此功能',
@@ -104,9 +182,14 @@ export default {
 		search: '搜索{{object}}...',
 		select: '选择{{object}}'
 	},
+	timestamps: {
+		created_at: '创建时间 {{timestamp}}',
+		updated_at: '创建时间 {{timestamp}}'
+	},
 	navigation: {
 		account: '账户管理',
 		appearance: '外观',
+		b_grade_goods_inbound: 'B级品入库管理',
 		dashboard: '首頁',
 		finished_goods_inbound: '倉庫出入庫作業',
 		finished_goods_outbound: '成品倉出庫作業',
@@ -138,7 +221,9 @@ export default {
 	},
 	others: {
 		all: '全部',
-		lookup_question: '你在找什么 ?'
+		lookup_question: '你在找什么 ?',
+		other: '其他',
+		or: '或'
 	},
 	pagination: {
 		ellipsis_count: '... 和 {{count}} 更多项目',
@@ -185,6 +270,7 @@ export default {
 		sort_asc: '升序排序',
 		sort_desc: '降序排序'
 	},
+
 	titles: {
 		caution: '警告',
 		general_settings: '常规设置',

@@ -67,7 +67,8 @@ export default {
 		outbound_history_lookup: 'Xem chi tiết lịch sử xuất kho, thông tin đơn hàng và số lượng xuất từng ngày.',
 		outbound_order_estimation: 'Đánh giá tiến độ xuất hàng',
 		outbound_order_estimation_desc: 'Đánh giá tiến độ xuất hàng của từng PO dựa trên số lượng tem đã quét.',
-		size_qty_caption: 'Tổng quan số lượng theo từng cỡ'
+		size_qty_caption: 'Tổng quan số lượng theo từng cỡ',
+		defective_epc_caption: 'Hãy chọn ô nhập này và quét mã EPC của hàng lỗi. Mã EPC phải đủ 24 ký tự.'
 	},
 	errors: {
 		wrong_stamp: 'Dán sai tem'
@@ -145,5 +146,11 @@ export default {
 		production_inventory_summary: 'Tổng quan tồn kho thành phẩm',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
 		transfer_order_list: 'Danh sách đơn chuyển kho'
+	},
+
+	shoes_category: {
+		b_grade: 'Loại B',
+		c_grade: 'Loại C',
+		research_development: 'Hàng mẫu'
 	}
 }

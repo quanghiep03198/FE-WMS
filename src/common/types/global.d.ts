@@ -1,4 +1,5 @@
 import { HttpStatusCode } from 'axios'
+// import './tiptap'
 
 export declare global {
 	interface InternalImportMetaEnv {

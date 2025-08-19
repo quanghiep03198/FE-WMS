@@ -11,6 +11,7 @@ export default {
 		actual_missing_qty: '实际欠数',
 		actual_outstock_qty: '盘亏',
 		brand_name: '品牌',
+		category: '分类',
 		container_order_code: '出櫃單號',
 		conversion_rate: '換算率',
 		customer_order: '客户订单',
@@ -18,6 +19,8 @@ export default {
 		daily_inbound_qty: '日产量',
 		daily_outbound_qty: '日出庫量',
 		daily_productivity: '日产量',
+		defect_location: '故障位置',
+		defect_description: '故障描述',
 		dept_code: '成型線',
 		dept_name: '更新部門',
 		employee_name: '建檔人姓名',
@@ -99,5 +102,9 @@ export default {
 	rfid_match_craft_form: {
 		title: '更新EPC信息',
 		description: '更新系统中不存在的EPC信息.'
+	},
+	shoes_parts: {
+		upper: '鞋面',
+		bottom: '底部'
 	}
 }

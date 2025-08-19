@@ -242,3 +242,28 @@ export interface IOutboundHistory {
 	color_sn: string
 	outbound_date: Date
 }
+
+export interface IProductSpecification {
+	brand_name: string
+	product_variants: Array<{
+		shoes_style: string
+		specs: Array<{
+			color_sn: string
+			sizes: Array<{ size: string }>
+		}>
+	}>
+}
+
+export interface IDefectiveGoods extends IBaseEntity {
+	epc: string
+	brand_name: string
+	category: DefectiveType
+	color_sn: string
+	mo_no?: string
+	po?: string
+	storage_location: string
+	factory_shoes_style: string
+	size: string
+	defect_location: DefectiveLocation
+	defect_description: string
+}
