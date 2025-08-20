@@ -51,6 +51,8 @@ export default {
 		outbound_order_estimation: 'Outbound progress evaluation',
 		outbound_order_estimation_desc: 'Evaluate the outbound progress of each PO based on the number of scanned tags.',
 		size_qty_caption: 'Total product quantity by size',
+		empty_defect_item_caption:
+			'No defective goods found. Please add defective goods to the list with the form beside.',
 		defective_epc_caption:
 			'Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.'
 	},

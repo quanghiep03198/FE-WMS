@@ -1,4 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -18,11 +19,10 @@ import {
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { formatRelative } from 'date-fns'
-import { enUS, vi, zhCN } from 'date-fns/locale'
 import { omit } from 'lodash'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -32,13 +32,12 @@ import { useDeleteDefectiveGoodsMutation, useGetDefectiveGoodsQuery } from '../-
 import EmptySection from './emtpy-section'
 import SearchInput from './search-input'
 
-const DefectiveGoodList = () => {
+const DefectiveGoodList: React.FC = () => {
 	const { data } = useGetDefectiveGoodsQuery()
 
 	return (
 		<Div className='flex h-full flex-col items-stretch gap-y-4 p-4'>
 			<SearchInput />
-
 			{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 				<ScrollShadow className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
 					{data.data.map((item) => {
@@ -54,24 +53,14 @@ const DefectiveGoodList = () => {
 }
 
 const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
 	const { hash, search } = useLocation()
+	const navigate = useNavigate()
 
-	const locale = useMemo(() => {
-		switch (i18n.language) {
-			case 'vi':
-				return vi
-			case 'cn':
-				return zhCN
-			case 'en':
-				return enUS
-			default:
-				return vi // Fallback to Vietnamese if no match
-		}
-	}, [i18n.language])
+	const dateLocale = useDateLocale()
 
 	const handleDelete = useCallback(async () => {
 		try {
@@ -84,11 +73,11 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 	}, [data])
 
 	return (
-		<Link hash={data.id} search={search}>
+		<Link search={search} hash={data.id}>
 			<Card
 				className={cn(
 					'relative overflow-hidden rounded-md border transition-colors duration-200 @container/card *:text-left *:text-sm',
-					hash === String(data.id) && '!bg-accent'
+					hash === String(data.id) && 'bg-accent/50'
 				)}>
 				<CardHeader>
 					<DropdownMenu>
@@ -124,8 +113,8 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 					<CardTitle className='inline-flex items-center gap-x-1'>#ID: {data.epc}</CardTitle>
 					<CardDescription className='first-letter:uppercase'>
 						{t('ns_common:timestamps.created_at', {
-							timestamp: formatRelative(new Date(data.created), new Date(), { locale: locale }),
-							defaultValue: formatRelative(new Date(data.created), new Date(), { locale: locale })
+							timestamp: formatRelative(new Date(data.created), new Date(), { locale: dateLocale }),
+							defaultValue: formatRelative(new Date(data.created), new Date(), { locale: dateLocale })
 						})}
 					</CardDescription>
 				</CardHeader>

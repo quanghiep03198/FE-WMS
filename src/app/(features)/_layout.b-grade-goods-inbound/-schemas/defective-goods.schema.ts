@@ -4,16 +4,8 @@ import { DefectiveCategory, DefectiveLocation } from '../-constants'
 export const baseDefectiveGoodsSchema = z.object({
 	epc: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	category: z.enum(DefectiveCategory, { message: 'ns_validation:required' }),
-	po: z
-		.string({ message: 'ns_validation:required' })
-		.trim()
-		.nonempty({ message: 'ns_validation:required' })
-		.optional(),
-	mo_no: z
-		.string({ message: 'ns_validation:required' })
-		.trim()
-		.nonempty({ message: 'ns_validation:required' })
-		.optional(),
+	po: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
+	mo_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	brand_name: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	factory_shoes_style: z
 		.string({ message: 'ns_validation:required' })

@@ -1,7 +1,11 @@
 import { CommonActions } from '@/common/constants/enums'
-import { IDefectiveGoods } from '@/common/types/entities'
+import { useDateLocale } from '@/common/hooks/use-date-locale'
+import { IBaseEntity, IDefectiveGoods } from '@/common/types/entities'
+import generateAvatar from '@/common/utils/generate-avatar'
 import {
 	AutoCompleteFieldControl,
+	Avatar,
+	AvatarImage,
 	Button,
 	Div,
 	Form as FormProvider,
@@ -9,12 +13,16 @@ import {
 	InputFieldControl,
 	Label,
 	SelectFieldControl,
-	Switch
+	Switch,
+	Typography
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useLocation } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
+import { format, formatRelative } from 'date-fns'
+import { has, isNil, omit } from 'lodash'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -31,7 +39,7 @@ import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-c
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const form = useForm<CreateDefectiveGoodsFormValues>({
+	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
 			defect_description: DefectDescriptionTemplate[i18n.language]
@@ -48,8 +56,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		isPending: isUpdating,
 		isError: isFailedToUpdate
 	} = useUpdateDefectiveGoodsMutation()
-	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(CommonActions.CREATE)
-	const currentIdRef = useRef<string>(null)
+	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(null)
 	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
 		defaultValue: true,
 		listenStorageChange: true
@@ -57,6 +64,8 @@ const DefectiveGoodsForm: React.FC = () => {
 	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
 		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
 	)
+
+	const { hash } = useLocation()
 
 	useUpdateEffect(() => {
 		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
@@ -69,13 +78,13 @@ const DefectiveGoodsForm: React.FC = () => {
 			setFormAction(CommonActions.UPDATE)
 			const extractedDescription: string = gunzipSync(Buffer.from(e.payload.defect_description, 'base64')).toString()
 			form.reset({ ...e.payload, defect_description: extractedDescription })
-			currentIdRef.current = e.payload.id
 			setDefaultEditorContent(extractedDescription)
+			// currentIdRef.current = e.payload.id
 		}
 	})
 
-	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	// Watch form fields
+	const currentCategory = useWatch({ control: form.control, name: 'category' })
 	const currentBrand = useWatch({ control: form.control, name: 'brand_name' })
 	const currentShoeStyle = useWatch({ control: form.control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
@@ -136,19 +145,20 @@ const DefectiveGoodsForm: React.FC = () => {
 			e.preventDefault()
 			e.stopPropagation()
 		}
+		if (e.currentTarget.value.length >= 24) {
+			e.preventDefault()
+			form.setValue('epc', e.currentTarget.value.toUpperCase())
+		}
 	}, [])
 
-	const onMutateSuccessfully = () => {
-		resetFormAction()
-		currentIdRef.current = null
+	const handleResetForm = useCallback(() => {
 		const currentFormValues = form.getValues()
 		for (const key in currentFormValues) {
 			if (key === 'defect_description') currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
 			else currentFormValues[key] = ''
 		}
 		form.reset(currentFormValues)
-		setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
-	}
+	}, [formAction])
 
 	const handleSubmitForm = useCallback(
 		(data: CreateDefectiveGoodsFormValues) => {
@@ -158,12 +168,12 @@ const DefectiveGoodsForm: React.FC = () => {
 			}
 			const mutateAsync = async () =>
 				formAction === CommonActions.UPDATE
-					? await updateAsync({ id: currentIdRef.current, data: payload })
+					? await updateAsync({ id: hash, data: payload })
 					: await createAsync(payload)
 			toast.promise(mutateAsync(), {
 				loading: t('ns_common:notification.processing_request'),
 				success: () => {
-					onMutateSuccessfully()
+					if (formAction === CommonActions.CREATE) form.reset({ ...form.getValues(), epc: '' })
 					return t('ns_common:notification.success')
 				},
 				error: t('ns_common:notification.error')
@@ -172,6 +182,8 @@ const DefectiveGoodsForm: React.FC = () => {
 		[formAction]
 	)
 
+	const dateLocale = useDateLocale()
+
 	const isPending = isCreating || isUpdating
 	const isError = isFailedToCreate || isFailedToUpdate
 
@@ -179,7 +191,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
 				<Div className='sticky top-0 z-20 col-span-full flex items-center justify-between gap-x-2 border-b bg-background px-6 py-2'>
-					<Div className='inline-flex items-center gap-x-2'>
+					<Div className='inline-flex items-center gap-x-3'>
 						<Label htmlFor='toggle-use-template' className='inline-flex items-center gap-x-2'>
 							<Icon name='Sparkles' /> {t('ns_common:editor.use_available_template')}
 						</Label>
@@ -192,23 +204,77 @@ const DefectiveGoodsForm: React.FC = () => {
 							}}
 						/>
 					</Div>
-
-					<Div className='relative h-8 rounded-[var(--radius)] bg-gradient-to-r from-purple-500 via-red-500 to-yellow-500 p-px'>
-						<Button
-							type='button'
-							size='sm'
-							className='h-full'
-							onClick={() =>
-								toast.info('This feature is under development', {
-									description: 'Please try again later. We are working on it.',
-									duration: 5000
-								})
-							}>
-							<Icon name='WandSparkles' />
-							{t('ns_common:editor.create_custom_template')}
+					{isNil(formAction) ? (
+						<Button type='button' size='sm' onClick={() => setFormAction(CommonActions.CREATE)}>
+							<Icon name='CircleFadingPlus' size={18} />
+							{t('ns_common:actions.add')}
 						</Button>
-					</Div>
+					) : (
+						<Div className='flex items-center justify-end gap-x-2'>
+							<Button
+								disabled={isPending}
+								variant='ghost'
+								size='sm'
+								type='button'
+								onClick={() => {
+									resetFormAction()
+									handleResetForm()
+								}}>
+								<Icon name='X' /> {t('ns_common:actions.cancel')}
+							</Button>
+							<Button
+								disabled={isPending}
+								variant='secondary'
+								size='sm'
+								type='button'
+								onClick={() => handleResetForm()}>
+								<Icon name='Undo2' /> {t('ns_common:actions.reset')}
+							</Button>
+							<Button disabled={isPending} size='sm' type='submit'>
+								<Icon
+									name={isPending ? 'LoaderCircle' : 'Check'}
+									className={isPending && 'animate-[spin_1s_linear_infinite]'}
+								/>{' '}
+								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+							</Button>
+						</Div>
+					)}
 				</Div>
+
+				{formAction === CommonActions.UPDATE && has(form.getValues(), 'created') && (
+					<Fragment>
+						<Div className='mx-6 flex items-center gap-x-2 border-b py-6'>
+							<Avatar>
+								<AvatarImage src={generateAvatar({ name: form.getValues().user_code_created })} />
+							</Avatar>
+							<Div className='flex flex-col space-y-1'>
+								<Typography variant='small' className='font-medium'>
+									@{form.getValues().user_code_created}
+								</Typography>
+								<Typography variant='small' color='muted' className='first-letter:uppercase'>
+									{format(new Date(form.getValues().created), 'MMM dd, YYY - hh:mm:ss ', {
+										locale: dateLocale
+									})}
+								</Typography>
+							</Div>
+							{form.getValues().updated && (
+								<Typography
+									variant='small'
+									color='muted'
+									className='ml-auto inline-flex items-center gap-x-2 self-start'>
+									<Icon name='FileCog' size={18} />
+
+									{t('ns_common:timestamps.last_updated', {
+										timestamp: formatRelative(new Date(form.getValues().updated), new Date(), {
+											locale: dateLocale
+										}),
+										defaultValue: null
+									})}
+								</Typography>
+							)}
+						</Div>
+					</Fragment>
+				)}
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
 					<Div className='col-span-full'>
 						<InputFieldControl
@@ -217,15 +283,16 @@ const DefectiveGoodsForm: React.FC = () => {
 							autoFocus
 							autoComplete='off'
 							placeholder='Scan EPC tag here'
-							onChange={(e) => {
-								if (e.currentTarget.value.length >= 24) {
-									e.preventDefault()
-									return
-								}
-								form.setValue('epc', e.currentTarget.value.toUpperCase())
-							}}
+							// onChange={(e) => {
+							// 	if (e.currentTarget.value.length >= 24) {
+							// 		e.preventDefault()
+							// 		// form.setValue('epc', e.currentTarget.value.toUpperCase())
+							// 		return
+							// 	}
+							// }}
 							onKeyDown={handleEpcChange}
 							onKeyDownCapture={handleEpcChange}
+							disabled={isNil(formAction)}
 							description={t('ns_inoutbound:description.defective_epc_caption')}
 						/>
 					</Div>
@@ -256,6 +323,12 @@ const DefectiveGoodsForm: React.FC = () => {
 									value: DefectiveCategory.RESEARCH_DEVELOPMENT
 								}
 							]}
+							disabled={isNil(formAction)}
+							onValueChange={(value) => {
+								if (value !== DefectiveCategory.B_GRADE) {
+									form.reset(omit(form.getValues(), ['po', 'mo_no']))
+								}
+							}}
 							labelField='label'
 							valueField='value'
 						/>
@@ -268,6 +341,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								object: String(t('ns_erp:fields.brand_name')).toLowerCase(),
 								defaultValue: null
 							})}
+							disabled={isNil(formAction)}
 							datalist={brandOptions}
 							onValueChange={() => {
 								form.reset({ ...form.getValues(), factory_shoes_style: '', color_sn: '', size_code: '' })
@@ -276,7 +350,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					{currentCategory === DefectiveCategory.B_GRADE && (
+					{currentCategory === DefectiveCategory.B_GRADE && !isNil(formAction) && (
 						<Fragment>
 							<Div className='col-span-2'>
 								<PurchaseOrderComboboxFieldControl />
@@ -298,6 +372,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							datalist={shoeStyleOptions}
 							labelField='label'
 							valueField='value'
+							disabled={isNil(formAction)}
 							onInput={() => {
 								form.reset({ ...form.getValues(), color_sn: '', size_code: '' })
 							}}
@@ -311,6 +386,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								object: String(t('ns_erp:fields.color_sn')).toLowerCase(),
 								defaultValue: null
 							})}
+							disabled={isNil(formAction) || colorOptions.length === 0}
 							loading={isLoading}
 							datalist={colorOptions}
 							labelField='label'
@@ -328,6 +404,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								object: 'size',
 								defaultValue: null
 							})}
+							disabled={isNil(formAction) || sizeOptions.length === 0}
 							loading={isLoading}
 							datalist={sizeOptions}
 							labelField='label'
@@ -338,6 +415,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						<SelectFieldControl
 							name='defect_location'
 							label={t('ns_erp:fields.defect_location')}
+							disabled={isNil(formAction)}
 							datalist={[
 								{ label: t('ns_common:others.all'), value: DefectiveLocation.ALL },
 								{ label: t('ns_erp:shoes_parts.upper'), value: DefectiveLocation.UPPER },
@@ -353,6 +431,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							name='storage_location'
 							label={t('ns_warehouse:fields.storage_name')}
 							placeholder='A1.1'
+							disabled={isNil(formAction)}
 						/>
 					</Div>
 
@@ -363,20 +442,9 @@ const DefectiveGoodsForm: React.FC = () => {
 							className='h-60'
 							errorMessage={t('ns_validation:required')}
 							defaultValue={defaultEditorContent}
+							disabled={!formAction}
 						/>
 					</Div>
-				</Div>
-				<Div className='sticky bottom-0 z-20 col-span-full flex items-center justify-end gap-x-2 border-t bg-background px-6 py-2'>
-					<Button disabled={isPending} variant='secondary' size='sm' type='button' onClick={() => form.reset()}>
-						<Icon name='Undo2' /> {t('ns_common:actions.reset')}
-					</Button>
-					<Button disabled={isPending} size='sm' type='submit'>
-						<Icon
-							name={isPending ? 'LoaderCircle' : 'Check'}
-							className={isPending && 'animate-[spin_1s_linear_infinite]'}
-						/>{' '}
-						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-					</Button>
 				</Div>
 			</Form>
 		</FormProvider>

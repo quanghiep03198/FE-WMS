@@ -279,6 +279,7 @@ export default {
 	},
 	timestamps: {
 		created_at: 'Đã tạo {{timestamp}}',
-		updated_at: 'Đã cập nhật {{timestamp}}'
+		updated_at: 'Đã cập nhật {{timestamp}}',
+		last_updated: 'Cập nhật lần cuối: {{timestamp}}'
 	}
 } as const

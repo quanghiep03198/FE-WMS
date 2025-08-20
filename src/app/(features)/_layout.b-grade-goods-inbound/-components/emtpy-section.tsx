@@ -1,8 +1,11 @@
 import { cn } from '@/common/utils/cn'
 import { Div, Typography } from '@/components/ui'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const EmptySection: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
 		<Div className='h-full place-content-center place-items-center'>
 			<Div className='flex flex-col items-center justify-center gap-y-2'>
@@ -11,9 +14,9 @@ const EmptySection: React.FC = () => {
 					<PlaceholderItem className='absolute top-6 z-10 scale-[85%] opacity-80' />
 					<PlaceholderItem className='absolute top-12 z-0 scale-[70%] opacity-60' />
 				</Div>
-				<Typography>No data</Typography>
-				<Typography variant='small' color='muted'>
-					No data here yet. Create new item with the form beside
+				<Typography>{t('ns_common:table.no_data')}</Typography>
+				<Typography variant='small' color='muted' className='text-pretty text-center'>
+					{t('ns_inoutbound:description.empty_defect_item_caption')}
 				</Typography>
 			</Div>
 		</Div>

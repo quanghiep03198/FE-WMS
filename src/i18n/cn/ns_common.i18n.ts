@@ -184,7 +184,8 @@ export default {
 	},
 	timestamps: {
 		created_at: '创建时间 {{timestamp}}',
-		updated_at: '创建时间 {{timestamp}}'
+		updated_at: '创建时间 {{timestamp}}',
+		last_updated: '上次更新时间: {{timestamp}}'
 	},
 	navigation: {
 		account: '账户管理',

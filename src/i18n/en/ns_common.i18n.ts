@@ -271,7 +271,8 @@ export default {
 	},
 	timestamps: {
 		created_at: 'Created {{timestamp}}',
-		updated_at: 'Updated {{timestamp}}'
+		updated_at: 'Updated {{timestamp}}',
+		last_updated: 'Last updated: {{timestamp}}'
 	},
 	others: {
 		all: 'All',

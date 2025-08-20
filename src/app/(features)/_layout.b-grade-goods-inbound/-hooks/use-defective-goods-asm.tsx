@@ -2,6 +2,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IDefectiveGoods } from '@/common/types/entities'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { pickBy } from 'lodash'
 import { CreateDefectiveGoodsFormValues } from '../-schemas/defective-goods.schema'
 
 export enum DefectiveGoodsQueryKey {
@@ -12,7 +13,7 @@ export const useGetDefectiveGoodsQuery = () => {
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
 
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, searchParams],
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, pickBy(searchParams, (item) => !!item)],
 		queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(searchParams),
 		select: (response) => response.metadata
 	})

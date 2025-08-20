@@ -8,7 +8,6 @@ const SearchInput: React.FC = () => {
 
 	const handleEpcChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
 		if (e.currentTarget.value.length >= 24) {
-			e.preventDefault()
 			return
 		}
 		setValue(e.currentTarget.value.toUpperCase())
