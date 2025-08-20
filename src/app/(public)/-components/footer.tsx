@@ -1,3 +1,4 @@
+import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
 import { Button, Div, Input, Label, Typography } from '@/components/ui'
 import { Separator } from '@radix-ui/react-context-menu'
 
@@ -49,7 +50,8 @@ const Footer: React.FC = () => {
 					</Div>
 				</Div>
 
-				<Div className='flex justify-between gap-6 py-6 sm:flex-col sm:items-center'>
+				<Div className='flex items-center justify-between gap-6 py-6 sm:flex-col'>
+					<ThemeSwitcher />
 					<Typography variant='small'>
 						© {new Date().getFullYear()} GreenLand, Inc. All rights reserved.
 					</Typography>

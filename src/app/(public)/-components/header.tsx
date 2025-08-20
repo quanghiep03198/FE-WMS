@@ -1,6 +1,5 @@
 import AppLogo from '@/app/-components/-shared/app-logo'
 import ThemeDropdownSelect from '@/app/-components/-shared/theme-dropdown-select'
-import ThemeToggle from '@/app/-components/-shared/theme-toggle'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -74,7 +73,7 @@ const NavHeaderActions: React.FC = () => {
 
 	return (
 		<Div className='flex items-center justify-end gap-x-1 self-center *:text-sm sm:gap-0 md:gap-0'>
-			{!isSmallScreen && <ThemeToggle />}
+			{/* {!isSmallScreen && <ThemeToggle />} */}
 			{isAuthenticated ? (
 				<Link
 					to='/dashboard'
@@ -82,6 +81,7 @@ const NavHeaderActions: React.FC = () => {
 						variant: 'ghost',
 						className: 'gap-x-2'
 					})}>
+					<Icon name='Blocks' size={20} strokeWidth={1.5} />
 					Dashboard
 					<ArrowRightIcon />
 				</Link>
