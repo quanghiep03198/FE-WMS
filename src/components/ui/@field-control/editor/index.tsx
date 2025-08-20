@@ -1,49 +1,60 @@
+'use no memo'
+
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui'
+import { useUpdateEffect } from 'ahooks'
 import { isEmpty } from 'lodash'
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
-import { Editor } from '../../@tiptap'
+import { useTranslation } from 'react-i18next'
+import { Editor, EditorProps } from '../../@tiptap'
 
-type EditorFieldControlProps<T extends FieldValues> = Omit<BaseFieldControl<T>, 'control'> & {
-	errorMessage?: string
-}
+type EditorFieldControlProps<T extends FieldValues> = Omit<BaseFieldControl<T>, 'control'> &
+	Partial<EditorProps> & {
+		errorMessage?: string
+	}
 
 export function EditorFieldControl<T extends FieldValues>({
 	label,
 	name,
-	defaultValue,
-	errorMessage
+	defaultValue = '',
+	errorMessage,
+	disabled = false
 }: EditorFieldControlProps<T>) {
-	const { formState, control, setValue, setError, clearErrors } = useFormContext()
+	const { formState, control, setValue, getValues, setError, clearErrors } = useFormContext()
+	const { t, i18n } = useTranslation()
 
 	const [state, setState] = useState<{ value: string; isEmpty: boolean }>(() => ({
-		value: defaultValue ?? '',
+		value: defaultValue,
 		isEmpty: isEmpty(defaultValue)
 	}))
 
-	useEffect(() => {
-		if (defaultValue) setState({ value: defaultValue, isEmpty: false })
+	useLayoutEffect(() => {
+		setState({ value: defaultValue, isEmpty: isEmpty(defaultValue) })
 	}, [defaultValue])
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		if (state.isEmpty && formState.isSubmitted) {
-			setError(name, { type: 'required', message: errorMessage ?? 'Vui lòng nhập nội dung' })
+			setError(name, { type: 'required', message: errorMessage ?? t('ns_validation:required') })
 		} else {
 			clearErrors(name)
 		}
 		setValue(name, state.value as PathValue<T, Path<T>>)
-	}, [state, formState.isSubmitted])
+	}, [state, i18n.language, formState.isSubmitted])
 
+	useUpdateEffect(() => {
+		setState({ value: getValues(name), isEmpty: isEmpty(getValues(name)) })
+	}, [getValues(name)])
 	return (
 		<FormField
 			name={name}
 			control={control}
+			defaultValue={defaultValue}
 			render={() => (
 				<FormItem>
 					<FormLabel>{label}</FormLabel>
 					<FormControl>
-						<Editor content={defaultValue} onUpdate={setState} />
+						<Editor name={name} defaultValue={defaultValue} onUpdate={setState} disabled={disabled} />
 					</FormControl>
 					<FormMessage />
 				</FormItem>

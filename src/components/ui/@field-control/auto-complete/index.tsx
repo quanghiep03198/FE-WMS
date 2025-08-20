@@ -48,6 +48,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		label,
 		shouldFilter = true,
 		description,
+		disabled,
 		orientation = 'vertical',
 		template: CustomAutoCompleteItem,
 		ref: forwardedRef
@@ -112,6 +113,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 											onKeyDown={handleKeyDown}
 											onClick={() => setOpen(true)}
 											onChange={field.onChange}
+											disabled={disabled}
 										/>
 										<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50' />
 									</PopoverTrigger>
