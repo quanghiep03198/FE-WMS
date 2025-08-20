@@ -32,6 +32,7 @@ The warehouse management project helps you manage inventory, track shipments, an
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Zustand](https://img.shields.io/badge/zustand-%23443e38?style=for-the-badge)
+![Tiptap](https://img.shields.io/badge/tiptap-white?style=for-the-badge)
 ![Tanstack Router](https://img.shields.io/badge/tanstack_router-%2310b981?style=for-the-badge&logo=react&logoColor=white)
 ![Tanstack Query](https://img.shields.io/badge/-Tanstack%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
 ![Tanstack Table](https://img.shields.io/badge/Tanstack_Table-%233b82f6?style=for-the-badge&logo=reacttable&logoColor=white)
