@@ -92,6 +92,7 @@ const NavHeaderActions: React.FC = () => {
 						variant: 'ghost',
 						className: 'gap-x-2'
 					})}>
+					<Icon name='User' size={18} />
 					Log in
 					<Icon name='ArrowRight' size={12} />
 				</Link>

@@ -4,6 +4,7 @@ import { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
+import { useKeyPress } from 'ahooks'
 const themes = [
 	{
 		key: Theme.SYSTEM,
@@ -30,6 +31,13 @@ export type ThemeSwitcherProps = {
 export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 	const { theme, setTheme } = useTheme()
 
+	const toggleTheme = () => setTheme(theme === Theme.DARK ? Theme.LIGHT : Theme.DARK)
+
+	useKeyPress('ctrl.alt.t', (e) => {
+		e.preventDefault()
+		toggleTheme()
+	})
+
 	return (
 		<div className={cn('relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border', className)}>
 			{themes.map(({ key, icon: Icon, label }) => {
@@ -43,11 +51,14 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 						type='button'>
 						{isActive && (
 							<Div
-								className={cn('absolute inset-0 rounded-full bg-secondary transition-all duration-500', {
-									'right-0': theme === Theme.DARK,
-									'left-1/2 -translate-x-1/2': theme === Theme.LIGHT,
-									'left-0': theme === Theme.SYSTEM
-								})}
+								className={cn(
+									'absolute top-1/2 z-0 aspect-square size-6 -translate-y-1/2 rounded-full bg-accent transition-all duration-500',
+									{
+										'right-[anchor(right)]': theme === Theme.DARK,
+										'left-[anchor(center)]': theme === Theme.LIGHT,
+										'left-[anchor(left)]': theme === Theme.SYSTEM
+									}
+								)}
 							/>
 						)}
 						<Icon
