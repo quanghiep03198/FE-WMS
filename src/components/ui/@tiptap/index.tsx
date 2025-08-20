@@ -1,7 +1,10 @@
+'use no memo'
+
 import { cn } from '@/common/utils/cn'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { uniqueId } from 'lodash'
 import React, { memo, useState } from 'react'
+import { RefCallBack } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger, Div, ScrollArea } from '..'
 import BubbleMenu from './components/bubble-menu'
@@ -10,26 +13,27 @@ import LinkContextMenuItems from './components/context-menu/link-context-menu-it
 import TableContextMenuItems from './components/context-menu/table-context-menu-items'
 import Toolbar from './components/toolbar'
 import { EditorContextProvider } from './context/editor-context'
-import { extensions } from './extensions'
+import { editorExtensions } from './extensions'
 
 export interface EditorProps {
 	onUpdate: (state: { value: string; isEmpty: boolean }) => unknown
 	id?: string
+	ref?: React.RefObject<typeof EditorContent.prototype> | RefCallBack
 	name?: string
-	content?: string
+	defaultValue?: string
 	disabled?: boolean
 	height?: number
 }
 
 export const Editor: React.FC<EditorProps> = memo(
-	({ content = '', id = uniqueId(), disabled, name, height = 350, onUpdate: handleUpdate }) => {
+	({ defaultValue = '', id = uniqueId(), ref, disabled, name, height = 350, onUpdate: handleUpdate }) => {
 		const { i18n } = useTranslation()
 		const [contextMenuType, setContextMenuType] = useState<keyof HTMLElementTagNameMap | null>(null)
 
 		const editor = useEditor(
 			{
-				content,
-				extensions,
+				content: defaultValue,
+				extensions: editorExtensions,
 				editorProps: {
 					attributes: {
 						class: cn(
@@ -43,12 +47,12 @@ export const Editor: React.FC<EditorProps> = memo(
 				shouldRerenderOnTransaction: true,
 				immediatelyRender: true,
 				onUpdate: ({ editor }) => {
-					if (handleUpdate) {
+					if (typeof handleUpdate === 'function') {
 						handleUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
 					}
 				}
 			},
-			[content, i18n.language]
+			[defaultValue, disabled, i18n.language]
 		)
 
 		const handleContextMenuOpen: React.MouseEventHandler<HTMLSpanElement> = (e) => {
@@ -70,13 +74,29 @@ export const Editor: React.FC<EditorProps> = memo(
 		}
 
 		return (
-			<Div className='relative flex w-full max-w-full flex-col items-stretch divide-y divide-border overflow-clip rounded-lg border shadow-sm'>
+			<Div
+				className={cn(
+					'relative flex w-full max-w-full flex-col items-stretch divide-y divide-border overflow-clip rounded-lg border shadow-sm',
+					disabled && 'cursor-not-allowed opacity-50 [&>nav]:pointer-events-none'
+				)}>
 				<EditorContextProvider editor={editor}>
 					<Toolbar />
 					<ContextMenu>
 						<ContextMenuTrigger onContextMenu={handleContextMenuOpen}>
 							<ScrollArea className='relative w-full max-w-full resize-y overflow-auto' style={{ height }}>
-								<EditorContent id={id} editor={editor} name={name} controls={true} content={content} />
+								<EditorContent
+									id={id}
+									editor={editor}
+									name={name}
+									controls={true}
+									content={defaultValue}
+									disabled={disabled}
+									ref={(e) => {
+										if (!ref) return
+										if (typeof ref === 'function') ref(e)
+										else ref.current = e
+									}}
+								/>
 							</ScrollArea>
 						</ContextMenuTrigger>
 						<ContextMenuContent className='min-w-[320px]'>

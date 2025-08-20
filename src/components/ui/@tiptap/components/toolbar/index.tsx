@@ -19,7 +19,7 @@ const Toolbar: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='p-1.5'>
+		<Div as='nav' className='p-1.5'>
 			<ScrollShadow
 				className='flex h-full items-center justify-start gap-x-1 overflow-y-hidden scrollbar-none'
 				orientation='horizontal'>

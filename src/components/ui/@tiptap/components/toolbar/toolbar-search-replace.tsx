@@ -57,7 +57,7 @@ export function SearchAndReplaceToolbar() {
 	}, [open])
 
 	return (
-		<Popover open={open}>
+		<Popover open={open} onOpenChange={setOpen} modal={false}>
 			<PopoverTrigger disabled={!editor} asChild>
 				<Button
 					variant='ghost'
@@ -70,9 +70,9 @@ export function SearchAndReplaceToolbar() {
 					{t('ns_common:editor.search_and_replace')}
 				</Button>
 			</PopoverTrigger>
-
 			<PopoverContent
-				align='end'
+				align='start'
+				sideOffset={12}
 				onCloseAutoFocus={(e) => {
 					e.preventDefault()
 				}}
@@ -81,7 +81,7 @@ export function SearchAndReplaceToolbar() {
 				}}
 				className='relative flex w-[400px] px-3 py-2.5'>
 				{!replacing ? (
-					<Div className={cn('relative flex items-center gap-1.5')}>
+					<Div className={cn('relative flex items-center gap-2')}>
 						<Input
 							value={searchText}
 							className='w-48'

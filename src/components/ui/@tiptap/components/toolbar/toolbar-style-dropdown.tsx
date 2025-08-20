@@ -76,7 +76,7 @@ export const StyleDropdownMenu: React.FC = () => {
 		<DropdownMenu>
 			<Tooltip message={t('ns_common:editor.typography')}>
 				<DropdownMenuTrigger asChild>
-					<Button type='button' variant='secondary' size='sm' className='h-8 gap-x-2'>
+					<Button type='button' variant='secondary' size='sm' className='h-8 min-w-32 gap-x-2'>
 						<Icon name={getCurrentStyle.icon} /> {getCurrentStyle.label}
 					</Button>
 				</DropdownMenuTrigger>
