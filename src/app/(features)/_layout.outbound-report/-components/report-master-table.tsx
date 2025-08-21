@@ -20,7 +20,7 @@ import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import DatePickerFilter from './date-picker-filter'
 import OutboundReportDetailTable from './report-detail-table'
-import ReportTableFooter from './report-table-footer'
+import ReportTableSummary from './report-table-footer'
 
 const ReportDatalist: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>()
@@ -147,7 +147,7 @@ const ReportDatalist: React.FC = () => {
 		}
 	}
 
-	const renderTableFooter = useCallback(() => <ReportTableFooter data={data} />, [data])
+	const renderTableFooter = useCallback(() => <ReportTableSummary data={data} />, [data])
 
 	return (
 		<Div as='section' className='relative'>
