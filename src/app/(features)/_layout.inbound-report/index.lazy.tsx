@@ -36,7 +36,7 @@ function Page() {
 						<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
 						<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
 					</PageHeader>
-					<Div className='ml-auto sm:hidden'>
+					<Div className='ml-auto flex gap-x-2'>
 						<DatePickerFilter />
 					</Div>
 				</Div>

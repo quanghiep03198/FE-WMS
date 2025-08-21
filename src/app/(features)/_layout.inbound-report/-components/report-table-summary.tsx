@@ -4,7 +4,7 @@ import { Div, Separator, Typography } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-const ReportTableFooter: React.FC<{ data: IInboundReport[] }> = ({ data }) => {
+const ReportTableSummary: React.FC<{ data: IInboundReport[] }> = ({ data }) => {
 	const { t } = useTranslation()
 
 	return (
@@ -16,11 +16,11 @@ const ReportTableFooter: React.FC<{ data: IInboundReport[] }> = ({ data }) => {
 			<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
 				{Array.isArray(data) ? formatIntlNumber(data?.reduce((acc, curr) => acc + curr.daily_inbound_qty, 0)) : 0}
 				<Typography as='small' variant='small'>
-					pcs
+					prs
 				</Typography>
 			</Typography>
 		</Div>
 	)
 }
 
-export default ReportTableFooter
+export default ReportTableSummary
