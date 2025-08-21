@@ -1,4 +1,3 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
 import useEffectOnce from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
@@ -29,7 +28,7 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+	const isUnsupportedScreen = useMediaQuery('(min-width: 360px) and (max-width: 767px)')
 	const { updateServiceWorker }: RegisteredServiceWorker = useRouteContext({
 		from: '',
 		select: (context) => context.serviceWorker
@@ -60,7 +59,7 @@ function Layout() {
 
 	return (
 		<Fragment>
-			{isSmallScreen && <UnsupportedScreen />}
+			{isUnsupportedScreen && <UnsupportedScreen />}
 			<AuthGuard>
 				<SidebarProvider className='h-screen !overflow-hidden [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
 					<NavSidebar />
