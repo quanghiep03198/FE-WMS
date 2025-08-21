@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 export const useDateLocale = () => {
 	const { i18n } = useTranslation()
+
 	return useMemo(() => {
 		switch (i18n.language) {
 			case 'vi':
@@ -13,7 +14,7 @@ export const useDateLocale = () => {
 			case 'en':
 				return enUS
 			default:
-				return enUS // Fallback to Vietnamese if no match
+				return enUS
 		}
 	}, [i18n.language])
 }
