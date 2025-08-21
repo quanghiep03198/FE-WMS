@@ -61,6 +61,7 @@ export default {
 		decentralized_po: '分散采购订单',
 		shaping_dept_code: '成型線福號',
 		shaping_dept_name: '成型線',
+		shaping_dept_productivity: '成型产量',
 		ship_order: '裝貨號碼',
 		shipping_destination: '港口名稱',
 		shipment_confirm_date: '确认出货日',

@@ -3,7 +3,18 @@ import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import {
+	Badge,
+	Button,
+	DataTable,
+	Div,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+	Icon,
+	Tooltip
+} from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
@@ -202,23 +213,25 @@ const InboundReportMasterTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const handleDownloadExcel = useMemoizedFn(async () => {
-		const id = toast.loading(t('ns_common:notification.downloading'))
-		try {
-			const blob = await ReportService.downloadInboundReport(currentTenant?.id, searchParams)
-			saveAs(
-				blob,
-				t('ns_inoutbound:titles.file_daily_inbound_report', {
-					factory: t(factories[user.company_code], { ns: 'ns_common' }),
-					date: searchParams['date.eq'],
-					defaultValue: `Inbound Report ~ ${searchParams['date.eq']}`
-				}) + '.xlsx'
-			)
-			toast.success(t('ns_common:notification.success'), { id })
-		} catch {
-			toast.error('ns_common:notification.error', { id })
+	const handleDownloadExcel = useMemoizedFn(
+		async (reportType: 'daily-productivity' | 'shaping-department-productivity') => {
+			const id = toast.loading(t('ns_common:notification.downloading'))
+			try {
+				const blob = await ReportService.downloadInboundReport(reportType, currentTenant?.id, searchParams)
+				saveAs(
+					blob,
+					t('ns_inoutbound:titles.file_daily_inbound_report', {
+						factory: t(factories[user.company_code], { ns: 'ns_common' }),
+						date: searchParams['date.eq'],
+						defaultValue: `Inbound Report ~ ${searchParams['date.eq']}`
+					}) + '.xlsx'
+				)
+				toast.success(t('ns_common:notification.success'), { id })
+			} catch {
+				toast.error('ns_common:notification.error', { id })
+			}
 		}
-	})
+	)
 
 	return (
 		<Div className='relative'>
@@ -240,15 +253,23 @@ const InboundReportMasterTable: React.FC = () => {
 				toolbarProps={{
 					slotRight: () => (
 						<Fragment>
-							<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-								<Button
-									size='icon'
-									variant='outline'
-									disabled={!data || data.length === 0}
-									onClick={handleDownloadExcel}>
-									<Icon name='Download' />
-								</Button>
-							</Tooltip>
+							<DropdownMenu>
+								<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
+									<DropdownMenuTrigger asChild>
+										<Button size='icon' variant='outline' disabled={!data || data.length === 0}>
+											<Icon name='Download' />
+										</Button>
+									</DropdownMenuTrigger>
+								</Tooltip>
+								<DropdownMenuContent>
+									<DropdownMenuItem onClick={() => handleDownloadExcel('daily-productivity')}>
+										{t('ns_erp:fields.daily_productivity')}
+									</DropdownMenuItem>
+									<DropdownMenuItem onClick={() => handleDownloadExcel('shaping-department-productivity')}>
+										{t('ns_erp:fields.shaping_dept_productivity')}
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<Button size='icon' variant='outline' onClick={() => refetch()}>
 									<Icon name='RotateCw' />

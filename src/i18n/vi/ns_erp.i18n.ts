@@ -65,6 +65,7 @@ export default {
 		shoestyle_codefactory: 'Hình thể',
 		shaping_dept_code: 'Mã chuyền thành hình',
 		shaping_dept_name: 'Chuyền thành hình',
+		shaping_dept_productivity: 'Sản lượng chuyền thành hình', // Shaping Department Productivity
 		sno_car_number: 'Số xe container',
 		sno_container: 'Mã container',
 		sno_date: 'Ngày tạo đơn',

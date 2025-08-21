@@ -24,8 +24,12 @@ export class ReportService {
 		})
 	}
 
-	static async downloadInboundReport(tenantId: string, filter: { 'date.eq': string }) {
-		return await axiosInstance.get<void, Blob>('/report/daily-inbound/export', {
+	static async downloadInboundReport(
+		reportType: 'daily-productivity' | 'shaping-department-productivity',
+		tenantId: string,
+		filter: { 'date.eq': string }
+	) {
+		return await axiosInstance.get<void, Blob>(`/report/daily-inbound/export/${reportType}`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
