@@ -135,6 +135,7 @@ export default {
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Báo biểu xuất kho {{factory}} - {{date}}',
+		file_shaping_department_productivity_report: 'Báo biểu sản lượng thành hình {{factory}} - {{date}}',
 		file_monthly_inventory_report: 'Báo biểu tồn kho {{factory}} - {{month}}',
 		file_production_inventory_summary: 'Tổng Quan Tồn Kho Thành Phẩm - {{factory}}',
 		exchange_epc: 'Hoán đổi EPC',

@@ -133,6 +133,7 @@ export default {
 		file_daily_outbound_report: '{{factory}}每日出库报告 - {{date}}',
 		file_monthly_inventory_report: '{{factory}}库存报表 - {{month}}',
 		file_production_inventory_summary: '{{factory}} 成品库存总表',
+		file_shaping_department_productivity_report: '{{factory}}成型产量报表 - {{date}}',
 		inbound_history: '入库历史',
 		inoutbound_history_lookup: '入/出库历史查询',
 		outbound_history: '出库历史',
