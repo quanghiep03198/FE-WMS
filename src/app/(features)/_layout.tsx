@@ -28,7 +28,7 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	const isUnsupportedScreen = useMediaQuery('(min-width: 360px) and (max-width: 767px)')
+	const isUnsupportedScreen = useMediaQuery('(max-width: 767px)')
 	const { updateServiceWorker }: RegisteredServiceWorker = useRouteContext({
 		from: '',
 		select: (context) => context.serviceWorker

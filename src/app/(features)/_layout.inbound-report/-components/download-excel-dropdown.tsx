@@ -1,0 +1,57 @@
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { cn } from '@/common/utils/cn'
+import {
+	buttonVariants,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+	Icon,
+	Tooltip
+} from '@/components/ui'
+import { useTranslation } from 'react-i18next'
+import { useDownloadReport } from '../-hooks/use-download-report'
+
+const DownloadExcelDropdown: React.FC = () => {
+	const { t } = useTranslation()
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+	const handleDownloadReport = useDownloadReport()
+
+	return (
+		<DropdownMenu>
+			<Tooltip message={t('ns_common:actions.download_excel')} contentProps={{ hidden: !isLargeScreen }}>
+				<DropdownMenuTrigger
+					className={cn(
+						buttonVariants({
+							size: isLargeScreen ? 'default' : 'icon',
+							variant: isLargeScreen ? 'default' : 'outline'
+						})
+					)}>
+					<Icon name='Download' />
+					{isLargeScreen && t('ns_common:actions.download_excel')}
+				</DropdownMenuTrigger>
+			</Tooltip>
+			<DropdownMenuContent align='end'>
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>Report type</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem className='gap-x-2' onClick={() => handleDownloadReport('daily-productivity')}>
+						<Icon name='File' size={18} />
+						{t('ns_erp:fields.daily_productivity')}
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						className='gap-x-2'
+						onClick={() => handleDownloadReport('shaping-department-productivity')}>
+						<Icon name='FileChartLine' size={18} />
+						{t('ns_erp:fields.shaping_dept_productivity')}
+					</DropdownMenuItem>
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
+
+export default DownloadExcelDropdown

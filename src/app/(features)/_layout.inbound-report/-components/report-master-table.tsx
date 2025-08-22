@@ -1,9 +1,9 @@
 import { factories } from '@/common/constants/constants'
-import useAuth from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Button, DataTable, Div, Icon, Separator, Tooltip } from '@/components/ui'
+import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
@@ -16,6 +16,7 @@ import { useDownloadReport } from '../-hooks/use-download-report'
 import { useGetInboundReport } from '../-hooks/use-inbound-report-asm'
 import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import DownloadExcelDropdown from './download-excel-dropdown'
 import InboundReportDetailTable from './report-detail-table'
 import ReportTableSummary from './report-table-summary'
 
@@ -30,7 +31,7 @@ const InboundReportMasterTable: React.FC = () => {
 		'auto-refresh': false
 	})
 	const { data: currentTenant } = useGetTenantByFactory()
-	const { user } = useAuth()
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
 	const { data, isLoading, refetch } = useGetInboundReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IInboundReport>>(null)
@@ -202,66 +203,45 @@ const InboundReportMasterTable: React.FC = () => {
 	const handleDownloadExcel = useDownloadReport()
 
 	return (
-		<Div className='relative'>
-			{/* <Div className='absolute left-0 top-0'>
-				<AutoRefreshToggle />
-			</Div> */}
-			<DataTable
-				columns={columns}
-				data={data}
-				loading={isLoading}
-				enableExpanding={true}
-				enableColumnResizing={true}
-				ref={dataTableRef}
-				renderSubComponent={
-					(({ row }) => {
-						return <InboundReportDetailTable data={row.original?.size_data} />
-					}) satisfies RenderSubComponent<IInboundReport>
-				}
-				toolbarProps={{
-					slotLeft: () => (
-						<Div className='inline-flex items-center gap-x-4'>
+		<DataTable
+			columns={columns}
+			data={data}
+			loading={isLoading}
+			enableExpanding={true}
+			enableColumnResizing={true}
+			ref={dataTableRef}
+			containerProps={{ className: 'h-[60vh]' }}
+			renderSubComponent={
+				(({ row }) => {
+					return <InboundReportDetailTable data={row.original?.size_data} />
+				}) satisfies RenderSubComponent<IInboundReport>
+			}
+			toolbarProps={{
+				slotLeft: () => <AutoRefreshToggle />,
+				slotRight: () => (
+					<Fragment>
+						{!isLargeScreen && <DownloadExcelDropdown />}
+						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+							<Button size='icon' variant='outline' onClick={() => refetch()}>
+								<Icon name='RotateCw' />
+							</Button>
+						</Tooltip>
+					</Fragment>
+				)
+			}}
+			footerProps={{
+				slot: () => (
+					<Div className='flex w-full items-center justify-between p-2 md:flex-col'>
+						<Div className='hidden md:block'>
 							<Button onClick={() => handleDownloadExcel('shaping-department-productivity')}>
 								<Icon name='FileDown' size={18} /> {t('ns_erp:fields.shaping_dept_productivity')}
 							</Button>
-							<Separator orientation='vertical' className='h-8 w-1' />
-							<AutoRefreshToggle />
 						</Div>
-					),
-
-					slotRight: () => (
-						<Fragment>
-							<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-								<Button
-									size='icon'
-									variant='outline'
-									disabled={!data || data.length === 0}
-									onClick={() => handleDownloadExcel('daily-productivity')}>
-									<Icon name='Download' />
-								</Button>
-							</Tooltip>
-							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-								<Button size='icon' variant='outline' onClick={() => refetch()}>
-									<Icon name='RotateCw' />
-								</Button>
-							</Tooltip>
-						</Fragment>
-					)
-				}}
-				footerProps={{
-					slot: () => (
-						<Div className='flex w-full items-center justify-between p-2 md:flex-col'>
-							<Div className='hidden md:block'>
-								<Button onClick={() => handleDownloadExcel('shaping-department-productivity')}>
-									<Icon name='FileDown' size={18} /> {t('ns_erp:fields.shaping_dept_productivity')}
-								</Button>
-							</Div>
-							<ReportTableSummary data={data} />
-						</Div>
-					)
-				}}
-			/>
-		</Div>
+						<ReportTableSummary data={data} />
+					</Div>
+				)
+			}}
+		/>
 	)
 }
 
