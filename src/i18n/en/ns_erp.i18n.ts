@@ -89,7 +89,8 @@ export default {
 		weighed_box_qty: 'Weighed box quantity'
 	},
 	titles: {
-		product_info: 'Product Information'
+		product_info: 'Product Information',
+		report_type: 'Report Type'
 	},
 	labels: {
 		goods_category: 'Shoes category',

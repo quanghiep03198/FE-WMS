@@ -92,7 +92,8 @@ export default {
 	},
 
 	titles: {
-		product_info: '产品信息'
+		product_info: '产品信息',
+		report_type: '报告类型'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: '成品出庫單',

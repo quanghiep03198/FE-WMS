@@ -89,7 +89,8 @@ export default {
 		weighed_box_qty: 'Số thùng đã cân'
 	},
 	titles: {
-		product_info: 'Thông tin sản phẩm'
+		product_info: 'Thông tin sản phẩm',
+		report_type: 'Loại báo cáo'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Đơn xuất kho thành phẩm',

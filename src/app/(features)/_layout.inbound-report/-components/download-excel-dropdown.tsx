@@ -34,18 +34,18 @@ const DownloadExcelDropdown: React.FC = () => {
 					{isLargeScreen && t('ns_common:actions.download_excel')}
 				</DropdownMenuTrigger>
 			</Tooltip>
-			<DropdownMenuContent align='end'>
+			<DropdownMenuContent align='end' className='min-w-60'>
 				<DropdownMenuGroup>
-					<DropdownMenuLabel>Report type</DropdownMenuLabel>
+					<DropdownMenuLabel className='inline-flex items-center gap-x-2'>
+						<Icon name='FileChartColumn' size={18} /> {t('ns_erp:titles.report_type')}
+					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem className='gap-x-2' onClick={() => handleDownloadReport('daily-productivity')}>
-						<Icon name='File' size={18} />
 						{t('ns_erp:fields.daily_productivity')}
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						className='gap-x-2'
 						onClick={() => handleDownloadReport('shaping-department-productivity')}>
-						<Icon name='FileChartLine' size={18} />
 						{t('ns_erp:fields.shaping_dept_productivity')}
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
