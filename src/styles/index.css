@@ -155,13 +155,6 @@
 		font-variation-settings: 'wdth' 100;
 	}
 
-	@font-face {
-		font-family: 'Roboto';
-		src: url(../assets/fonts/Noto-Sans-SC.woff2);
-		font-style: normal;
-		font-variation-settings: 'wdth' 100;
-	}
-
 	/* Global styles */
 	* {
 		@apply box-border border-border scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar selection:bg-neutral-300 dark:selection:bg-neutral-600;

@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 const fontOptions = [
 	{ label: 'System', value: '*:!font-sans' },
-	{ label: 'Roboto', value: '*:!font-roboto' },
-	{ label: 'Noto Sans SC', value: '*:!font-noto-sans-sc' }
+	{ label: 'Roboto', value: '*:!font-roboto' }
 ]
 
 const FontSelect = () => {

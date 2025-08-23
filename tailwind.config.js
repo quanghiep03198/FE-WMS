@@ -39,7 +39,6 @@ module.exports = {
 			fontFamily: {
 				['jetbrains']: 'JetBrains Mono, monospace',
 				['roboto']: 'Roboto, sans-serif',
-				['noto-sans-sc']: 'Noto Sans SC, sans-serif',
 				['pass']: 'pass'
 			},
 			colors: {
