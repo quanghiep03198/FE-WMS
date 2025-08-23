@@ -1,11 +1,13 @@
 import { Div, ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { useLocalStorageState } from 'ahooks'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import DefectiveDetailDialog from './-components/defective-detail-dialog'
 import DefectiveGoodsForm from './-components/defective-goods-form'
 import DefectiveGoodList from './-components/defective-goods-list'
+import ScannedEpcList from './-components/scanned-epc-list'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/b-grade-goods-inbound/')({
@@ -21,6 +23,11 @@ function RouteComponent() {
 		setBreadcrumb([{ to: '/b-grade-goods-inbound', text: t('ns_common:navigation.b_grade_goods_inbound') }])
 	}, [i18n.language])
 
+	const [useMultipleScan] = useLocalStorageState('use_multiple_scan', {
+		listenStorageChange: true,
+		defaultValue: true
+	})
+
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.b_grade_goods_inbound')}</title>
@@ -28,13 +35,22 @@ function RouteComponent() {
 			<Div className='h-[var(--outlet-wrapper-height)]'>
 				<PageContextProvider>
 					<ResizablePanelGroup direction='horizontal' className='h-full rounded-md border'>
-						<ResizablePanel maxSize={40}>
+						<ResizablePanel minSize={30}>
 							<DefectiveGoodList />
 						</ResizablePanel>
 						<ResizableHandle withHandle />
-						<ResizablePanel minSize={50} maxSize={70} defaultSize={60}>
+						<ResizablePanel minSize={40} defaultSize={50}>
 							{/* <ActionsGroup /> */}
 							<DefectiveGoodsForm />
+						</ResizablePanel>
+
+						<ResizableHandle disabled />
+						<ResizablePanel
+							minSize={useMultipleScan ? 25 : 0}
+							maxSize={useMultipleScan ? 25 : 0}
+							defaultSize={useMultipleScan ? 25 : 0}
+							className='transition-max-width duration-200 ease-out will-change-transform'>
+							<ScannedEpcList />
 						</ResizablePanel>
 					</ResizablePanelGroup>
 					<DefectiveDetailDialog />

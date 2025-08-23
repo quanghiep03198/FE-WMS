@@ -1,4 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
+import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -15,11 +16,12 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 	Icon,
+	Tooltip,
 	Typography
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { Link, useLocation, useNavigate } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
+import { useLocalStorageState } from 'ahooks'
 import { formatRelative } from 'date-fns'
 import { omit } from 'lodash'
 import { useCallback, useRef } from 'react'
@@ -39,11 +41,11 @@ const DefectiveGoodList: React.FC = () => {
 		<Div className='flex h-full flex-col items-stretch gap-y-4 p-4'>
 			<SearchInput />
 			{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
-				<ScrollShadow className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
+				<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
 					{data.data.map((item) => {
 						return <DefectiveGoodsItem key={item.id} data={item} />
 					})}
-				</ScrollShadow>
+				</Div>
 			) : (
 				<EmptySection />
 			)}
@@ -58,9 +60,11 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
 	const { hash, search } = useLocation()
-	const navigate = useNavigate()
-
 	const dateLocale = useDateLocale()
+	const [_, setUseMultipleScan] = useLocalStorageState('use_multiple_scan', {
+		listenStorageChange: true,
+		defaultValue: true
+	})
 
 	const handleDelete = useCallback(async () => {
 		try {
@@ -71,6 +75,8 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 			toast.error(t('ns_common:notification.error'), { id: toastIdRef.current })
 		}
 	}, [data])
+
+	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
 
 	return (
 		<Link search={search} hash={data.id}>
@@ -95,7 +101,10 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									className='gap-x-2'
-									onClick={() => event$.emit({ action: CommonActions.UPDATE, payload: data })}>
+									onClick={() => {
+										event$.emit({ action: CommonActions.UPDATE, payload: data })
+										setUseMultipleScan(false)
+									}}>
 									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 								</DropdownMenuItem>
 								<DropdownMenuItem className='gap-x-2 text-destructive' onClick={() => handleDelete()}>
@@ -110,7 +119,14 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 							{t(DefectiveCategoryI18n[data.category], { ns: 'ns_inoutbound' })}
 						</Badge>
 					</Div>
-					<CardTitle className='inline-flex items-center gap-x-1'>#ID: {data.epc}</CardTitle>
+					<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
+						#ID: {data.epc}{' '}
+						<Tooltip message='Copy' triggerProps={{ asChild: true }}>
+							<button onClick={() => copyToClipboard(data.epc)} className={cn('ml-2')}>
+								<Icon name={isCoppied ? 'CopyCheck' : 'Copy'} />
+							</button>
+						</Tooltip>
+					</CardTitle>
 					<CardDescription className='first-letter:uppercase'>
 						{t('ns_common:timestamps.created_at', {
 							timestamp: formatRelative(new Date(data.created), new Date(), { locale: dateLocale }),

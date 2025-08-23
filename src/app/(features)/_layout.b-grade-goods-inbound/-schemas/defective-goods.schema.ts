@@ -2,7 +2,9 @@ import { z } from 'zod'
 import { DefectiveCategory, DefectiveLocation } from '../-constants'
 
 export const baseDefectiveGoodsSchema = z.object({
-	epc: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	epc: z
+		.array(z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
+		.or(z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })),
 	category: z.enum(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	mo_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),

@@ -13,6 +13,7 @@ import {
 	InputFieldControl,
 	Label,
 	SelectFieldControl,
+	Separator,
 	Switch,
 	Typography
 } from '@/components/ui'
@@ -22,7 +23,7 @@ import { useLocation } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
 import { format, formatRelative } from 'date-fns'
 import { has, isNil, omit } from 'lodash'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { Fragment, useCallback, useId, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -61,9 +62,16 @@ const DefectiveGoodsForm: React.FC = () => {
 		defaultValue: true,
 		listenStorageChange: true
 	})
+	const [useMultipleScan, setUseMultipleScan] = useLocalStorageState('use_multiple_scan', {
+		listenStorageChange: true,
+		defaultValue: true
+	})
 	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
 		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
 	)
+
+	const toggleUseTemplateId = useId()
+	const toggleUseMultiScanningId = useId()
 
 	const { hash } = useLocation()
 
@@ -79,7 +87,12 @@ const DefectiveGoodsForm: React.FC = () => {
 			const extractedDescription: string = gunzipSync(Buffer.from(e.payload.defect_description, 'base64')).toString()
 			form.reset({ ...e.payload, defect_description: extractedDescription })
 			setDefaultEditorContent(extractedDescription)
-			// currentIdRef.current = e.payload.id
+		}
+	})
+
+	event$.useSubscription((e: { action: CommonActions; payload: string[] }) => {
+		if (e.action === CommonActions.IMPORT) {
+			form.setValue('epc', e.payload)
 		}
 	})
 
@@ -100,7 +113,14 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	// Memoized options for shoe style select
 	const shoeStyleOptions = useMemo(() => {
-		if (!Array.isArray(data) || !currentBrand) return []
+		if (!Array.isArray(data)) return []
+		if (!currentBrand)
+			return [...new Set(data.flatMap((item) => item.product_variants?.map((item) => item.shoes_style)))]
+				.sort()
+				.map((item) => ({
+					label: item,
+					value: item
+				}))
 		const brand = data.find((item) => item.brand_name === currentBrand)
 		if (!brand?.product_variants) return []
 		return brand.product_variants.map(({ shoes_style }) => ({
@@ -111,7 +131,18 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	// Memoized options for color select
 	const colorOptions = useMemo(() => {
-		if (!Array.isArray(data) || !currentBrand || !currentShoeStyle) return []
+		if (!Array.isArray(data)) return []
+		if (!currentBrand || !currentShoeStyle)
+			return [
+				...new Set(
+					data.flatMap((item) =>
+						item.product_variants?.flatMap((item) => item.specs?.map((item) => item.color_sn))
+					)
+				)
+			].map((item) => ({
+				label: item,
+				value: item
+			}))
 		const brand = data.find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
 		if (!variant?.specs) return []
@@ -123,7 +154,22 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	// Memoized options for size select
 	const sizeOptions = useMemo(() => {
-		if (!Array.isArray(data) || !currentBrand || !currentShoeStyle || !currentColor) return []
+		if (!Array.isArray(data)) return []
+		if (!currentBrand || !currentShoeStyle || !currentColor)
+			return [
+				...new Set(
+					data.flatMap((item) =>
+						item.product_variants?.flatMap((variant) =>
+							variant.specs?.flatMap((spec) => spec.sizes?.map((size) => size.size))
+						)
+					)
+				)
+			]
+				.sort((a, b) => Number(a) - Number(b))
+				.map((size) => ({
+					label: size,
+					value: size
+				}))
 		const brand = data.find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
 		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
@@ -174,6 +220,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				loading: t('ns_common:notification.processing_request'),
 				success: () => {
 					if (formAction === CommonActions.CREATE) form.reset({ ...form.getValues(), epc: '' })
+					event$.emit({ action: CommonActions.SAVE, payload: [] })
 					return t('ns_common:notification.success')
 				},
 				error: t('ns_common:notification.error')
@@ -190,32 +237,31 @@ const DefectiveGoodsForm: React.FC = () => {
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
-				<Div className='sticky top-0 z-20 col-span-full flex items-center justify-between gap-x-2 border-b bg-background px-6 py-2'>
-					<Div className='inline-flex items-center gap-x-3'>
-						<Label htmlFor='toggle-use-template' className='inline-flex items-center gap-x-2'>
-							<Icon name='Sparkles' /> {t('ns_common:editor.use_available_template')}
-						</Label>
-						<Switch
-							id='toggle-use-template'
-							checked={useAvailableTemplate}
-							onCheckedChange={(checked) => {
-								setUseAvailabelTemplate(checked)
-								if (!checked) setDefaultEditorContent('')
-							}}
-						/>
-					</Div>
+				<Div className='sticky top-0 z-20 col-span-full flex h-14 items-center justify-between gap-x-6 border-b bg-background/80 p-2 backdrop-blur-sm'>
+					<Button
+						variant='outline'
+						type='button'
+						onClick={() =>
+							toast.info('This feature is under development', {
+								description: 'We are working on it. Please check back later.'
+							})
+						}>
+						<Icon name='Clock' /> {t('ns_inoutbound:titles.inbound_history')}
+					</Button>
+
 					{isNil(formAction) ? (
 						<Button type='button' size='sm' onClick={() => setFormAction(CommonActions.CREATE)}>
 							<Icon name='CircleFadingPlus' size={18} />
 							{t('ns_common:actions.add')}
 						</Button>
 					) : (
-						<Div className='flex items-center justify-end gap-x-2'>
+						<Div className='inline-flex items-center gap-x-2'>
 							<Button
 								disabled={isPending}
 								variant='ghost'
 								size='sm'
 								type='button'
+								className='text-destructive hover:text-destructive'
 								onClick={() => {
 									resetFormAction()
 									handleResetForm()
@@ -275,27 +321,24 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Div>
 					</Fragment>
 				)}
+
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
-					<Div className='col-span-full'>
-						<InputFieldControl
-							name='epc'
-							label='EPC'
-							autoFocus
-							autoComplete='off'
-							placeholder='Scan EPC tag here'
-							// onChange={(e) => {
-							// 	if (e.currentTarget.value.length >= 24) {
-							// 		e.preventDefault()
-							// 		// form.setValue('epc', e.currentTarget.value.toUpperCase())
-							// 		return
-							// 	}
-							// }}
-							onKeyDown={handleEpcChange}
-							onKeyDownCapture={handleEpcChange}
-							disabled={isNil(formAction)}
-							description={t('ns_inoutbound:description.defective_epc_caption')}
-						/>
-					</Div>
+					{!useMultipleScan && (
+						<Div className='col-span-full'>
+							<InputFieldControl
+								name='epc'
+								label='EPC'
+								autoFocus
+								autoComplete='off'
+								type='search'
+								placeholder='Scan EPC tag here'
+								onKeyDown={handleEpcChange}
+								onKeyDownCapture={handleEpcChange}
+								disabled={isNil(formAction)}
+								description={t('ns_inoutbound:description.defective_epc_caption')}
+							/>
+						</Div>
+					)}
 					<Div className='col-span-full'>
 						<SelectFieldControl
 							name='category'
@@ -333,7 +376,18 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+
+					{currentCategory === DefectiveCategory.B_GRADE && !isNil(formAction) && (
+						<Fragment>
+							<Div className='col-span-3'>
+								<PurchaseOrderComboboxFieldControl />
+							</Div>
+							<Div className='col-span-3'>
+								<CommandNumberComboboxFieldControl />
+							</Div>
+						</Fragment>
+					)}
+					<Div className='col-span-3'>
 						<SelectFieldControl
 							name='brand_name'
 							label={t('ns_erp:fields.brand_name')}
@@ -350,17 +404,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					{currentCategory === DefectiveCategory.B_GRADE && !isNil(formAction) && (
-						<Fragment>
-							<Div className='col-span-2'>
-								<PurchaseOrderComboboxFieldControl />
-							</Div>
-							<Div className='col-span-2'>
-								<CommandNumberComboboxFieldControl />
-							</Div>
-						</Fragment>
-					)}
-					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className='col-span-3'>
 						<AutoCompleteFieldControl
 							name='factory_shoes_style'
 							label={t('ns_erp:fields.shoestyle_codefactory')}
@@ -378,7 +422,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							}}
 						/>
 					</Div>
-					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className='col-span-3'>
 						<AutoCompleteFieldControl
 							name='color_sn'
 							label={t('ns_erp:fields.color_sn')}
@@ -396,7 +440,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							}}
 						/>
 					</Div>
-					<Div className={currentCategory === DefectiveCategory.B_GRADE ? 'col-span-2' : 'col-span-3'}>
+					<Div className='col-span-3'>
 						<AutoCompleteFieldControl
 							name='size_code'
 							label='Size'
@@ -443,6 +487,34 @@ const DefectiveGoodsForm: React.FC = () => {
 							errorMessage={t('ns_validation:required')}
 							defaultValue={defaultEditorContent}
 							disabled={!formAction}
+						/>
+					</Div>
+				</Div>
+
+				<Div className='sticky bottom-0 flex items-center justify-start gap-x-6 border-t bg-background/80 px-6 py-2 backdrop-blur-sm'>
+					<Div className='inline-flex items-center gap-x-3'>
+						<Label htmlFor={toggleUseTemplateId} className='inline-flex items-center gap-x-2'>
+							<Icon name='Sparkles' /> {t('ns_common:editor.use_available_template')}
+						</Label>
+						<Switch
+							id={toggleUseTemplateId}
+							checked={useAvailableTemplate}
+							onCheckedChange={(checked) => {
+								setUseAvailabelTemplate(checked)
+								if (!checked) setDefaultEditorContent('')
+							}}
+						/>
+					</Div>
+					<Separator orientation='vertical' className='h-6 w-0.5' />
+					<Div className='inline-flex items-center gap-x-3'>
+						<Label htmlFor={toggleUseMultiScanningId} className='inline-flex items-center gap-x-2'>
+							<Icon name='SmartphoneNfc' />
+							{t('ns_rfid:use_rfid_device')}
+						</Label>
+						<Switch
+							id={toggleUseMultiScanningId}
+							checked={useMultipleScan}
+							onCheckedChange={setUseMultipleScan}
 						/>
 					</Div>
 				</Div>

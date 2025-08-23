@@ -17,9 +17,9 @@ export class DefectDescriptionTemplate {
 
       <h3>2. Mô tả chi tiết lỗi</h3>
       <ul data-type="bulletList">
-         <li data-type="listItem">...</li>
-         <li data-type="listItem">...</li>
-         <li data-type="listItem">...</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
       </ul>
       
       <h3>3. Hình ảnh minh họa</h3>
@@ -41,9 +41,9 @@ export class DefectDescriptionTemplate {
 
       <h3>2. Detailed Defect Description</h3>
       <ul data-type="bulletList">
-         <li data-type="listItem">...</li>
-         <li data-type="listItem">...</li>
-         <li data-type="listItem">...</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
       </ul>
       
       <h3>3. Illustrative Images</h3>
@@ -65,9 +65,9 @@ export class DefectDescriptionTemplate {
 
       <h3>2. 缺陷详细描述</h3>
       <ul data-type="bulletList">
-         <li data-type="listItem">...</li>
-         <li data-type="listItem">...</li>
-         <li data-type="listItem">...</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
+         <li data-type="listItem">..............................................................................................................</li>
       </ul>
       
       <h3>3. 示意图片</h3>

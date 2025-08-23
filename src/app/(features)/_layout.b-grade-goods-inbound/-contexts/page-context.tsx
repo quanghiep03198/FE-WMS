@@ -5,7 +5,7 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
 const PageContext = createContext<{
-	event$: EventEmitter<{ action: CommonActions; payload: IDefectiveGoods | string }>
+	event$: EventEmitter<{ action: CommonActions; payload: IDefectiveGoods | string | string[] }>
 }>(null)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
