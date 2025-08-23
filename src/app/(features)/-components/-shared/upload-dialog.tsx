@@ -74,7 +74,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 		(e: React.DragEvent<HTMLLabelElement>) => {
 			e.preventDefault()
 			e.stopPropagation()
-			if (e.dataTransfer.files.length >= maxFiles || files.length >= maxFiles) {
+			if (e.dataTransfer.files.length > maxFiles || files.length > maxFiles) {
 				toast.warning(`You can only upload ${maxFiles} files at a time`)
 				return
 			}
@@ -107,7 +107,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault()
-		if (files.length >= maxFiles || e.target.files.length >= maxFiles) {
+		if (files.length > maxFiles || e.target.files.length > maxFiles) {
 			toast.warning(`You can only upload ${maxFiles} files at a time`)
 			return
 		}
