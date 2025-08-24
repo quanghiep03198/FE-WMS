@@ -60,7 +60,7 @@ function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: Table
 						size='icon'
 						onClick={() => resetAllFilters()}
 						className={cn(!isFilterDirty && 'hidden')}>
-						<Icon name='FilterX' />
+						<Icon name='FunnelX' />
 					</Button>
 				</Tooltip>
 				{SlotRight && <SlotRight table={table} />}

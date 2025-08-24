@@ -17,7 +17,7 @@ const ColumnFilterToggle: React.FC = () => {
 				onPressedChange={(pressed) => {
 					setFilterOpen(pressed)
 				}}>
-				<Icon name='Filter' />
+				<Icon name='Funnel' />
 			</Toggle>
 		</Tooltip>
 	)
