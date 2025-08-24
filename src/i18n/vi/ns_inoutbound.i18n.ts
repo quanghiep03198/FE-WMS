@@ -25,7 +25,7 @@ export default {
 	},
 	counter_box: {
 		caption: 'Dữ liệu EPC được truyền liên tục từ máy chủ khi kết nối được thiết lập.',
-		label: 'Số lượng EPC đã quét'
+		label: 'Số EPC đã quét'
 	},
 	description: {
 		add_outbound_size: 'Thêm size và số lượng để tiến hành xuất tách đơn.',

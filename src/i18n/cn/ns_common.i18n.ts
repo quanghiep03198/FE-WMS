@@ -20,6 +20,8 @@ export default {
 		disconnect: '断开',
 		dismiss: '忽略',
 		download_excel: '下载 Excel',
+		open_list_panel: '打开列表面板',
+		collapse_list_panel: '折叠列表面板',
 		export: '导出',
 		finish: '完成',
 		fold: '折叠',

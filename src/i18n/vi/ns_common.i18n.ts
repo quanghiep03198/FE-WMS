@@ -47,6 +47,8 @@ export default {
 		start: 'Bắt đầu',
 		stop: 'Dừng',
 		submit: 'Xác nhận',
+		open_list_panel: 'Mở bảng danh sách',
+		collapse_list_panel: 'Thu gọn bảng danh sách',
 		toggle_sidebar: 'Đóng/Mở Thanh Menu',
 		toggle_theme: 'Chuyển đổi chế độ nền',
 		trigger: 'Kích hoạt',

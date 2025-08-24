@@ -27,6 +27,8 @@ export default {
 		load_more: 'Load more',
 		login: 'Log in',
 		logout: 'Log out',
+		open_list_panel: 'Open list panel',
+		collapse_list_panel: 'Collapse list panel',
 		open: 'Open',
 		pin: 'Pin',
 		proceed: 'Proceed',
