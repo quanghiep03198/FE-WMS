@@ -21,14 +21,14 @@ function Page() {
 		setBreadcrumb([
 			{
 				to: '/inbound-report',
-				text: t('ns_common:navigation.import_management')
+				text: t('ns_common:navigation.daily_inbound_report')
 			}
 		])
 	}, [i18n.language])
 
 	return (
 		<Fragment>
-			<title>{t('ns_common:navigation.import_management')}</title>
+			<title>{t('ns_common:navigation.daily_inbound_report')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.daily_inbound_report')} />
 
 			<Div as='section' className='mt-4 space-y-4 @container'>

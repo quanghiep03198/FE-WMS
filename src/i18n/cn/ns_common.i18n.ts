@@ -196,7 +196,7 @@ export default {
 		dashboard: '首頁',
 		finished_goods_inbound: '倉庫出入庫作業',
 		finished_goods_outbound: '成品倉出庫作業',
-		import_management: '入庫管理',
+		daily_inbound_report: '入庫管理',
 		monthly_inventory_audit: '盤點管理',
 		inoutbound_history: '出入庫歷史',
 		inventory_estimation: '生产库存估算',
@@ -208,7 +208,7 @@ export default {
 		storage_detail: '仓库存储详情',
 		transfer_managment: '調撥管理',
 		warehouse_management: '倉庫管理',
-		export_management: '出庫管理',
+		daily_outbound_report: '出庫管理',
 		// labels
 		main_menu_label: '主菜单',
 		preference_menu_label: ' 偏好设置'

@@ -54,14 +54,14 @@ export const navigationConfig: NavigationConfig[] = [
 	{
 		id: uuidv4(),
 		icon: 'FileInput',
-		title: 'navigation.import_management',
+		title: 'navigation.daily_inbound_report',
 		path: '/inbound-report',
 		type: 'main'
 	},
 	{
 		id: uuidv4(),
 		icon: 'FileOutput',
-		title: 'navigation.export_management',
+		title: 'navigation.daily_outbound_report',
 		path: '/outbound-report',
 		type: 'main'
 	},
