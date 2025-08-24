@@ -16,21 +16,26 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 	Icon,
+	Sheet,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTrigger,
 	Tooltip,
 	Typography
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import { Link, useLocation } from '@tanstack/react-router'
-import { useLocalStorageState } from 'ahooks'
 import { formatRelative } from 'date-fns'
 import { omit } from 'lodash'
-import { useCallback, useRef } from 'react'
+import { Fragment, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { DefectiveCategoryI18n } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 import { useDeleteDefectiveGoodsMutation, useGetDefectiveGoodsQuery } from '../-hooks/use-defective-goods-asm'
+import { useSwitchRFIDDevice } from '../-hooks/use-switch-rfid-device'
 import EmptySection from './emtpy-section'
 import SearchInput from './search-input'
 
@@ -38,19 +43,41 @@ const DefectiveGoodList: React.FC = () => {
 	const { data } = useGetDefectiveGoodsQuery()
 
 	return (
-		<Div className='flex h-full flex-col items-stretch gap-y-4 p-4'>
-			<SearchInput />
-			{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
-				<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
-					{data.data.map((item) => {
-						return <DefectiveGoodsItem key={item.id} data={item} />
-					})}
-				</Div>
-			) : (
-				<EmptySection />
-			)}
-			<Pagination {...omit(data, ['data'])} />
-		</Div>
+		<Fragment>
+			<Div className='hidden h-full flex-col items-stretch gap-y-4 p-4 @7xl:flex'>
+				<SearchInput />
+				{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
+					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
+						{data.data.map((item) => {
+							return <DefectiveGoodsItem key={item.id} data={item} />
+						})}
+					</Div>
+				) : (
+					<EmptySection />
+				)}
+				<Pagination {...omit(data, ['data'])} />
+			</Div>
+			<Sheet defaultOpen={false}>
+				<SheetTrigger className='hidden' id='list-sheet-trigger' />
+				<SheetContent className='max-w-2xl overflow-hidden'>
+					<SheetHeader className='mt-4'>
+						<SearchInput />
+					</SheetHeader>
+					{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
+						<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
+							{data.data.map((item) => {
+								return <DefectiveGoodsItem key={item.id} data={item} />
+							})}
+						</Div>
+					) : (
+						<EmptySection />
+					)}
+					<SheetFooter>
+						<Pagination {...omit(data, ['data'])} />
+					</SheetFooter>
+				</SheetContent>
+			</Sheet>
+		</Fragment>
 	)
 }
 
@@ -61,10 +88,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 	const toastIdRef = useRef<string | number | null>(null)
 	const { hash, search } = useLocation()
 	const dateLocale = useDateLocale()
-	const [_, setUseMultipleScan] = useLocalStorageState('use_multiple_scan', {
-		listenStorageChange: true,
-		defaultValue: true
-	})
+	const { setCurrentDevice } = useSwitchRFIDDevice()
 
 	const handleDelete = useCallback(async () => {
 		try {
@@ -103,7 +127,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 									className='gap-x-2'
 									onClick={() => {
 										event$.emit({ action: CommonActions.UPDATE, payload: data })
-										setUseMultipleScan(false)
+										setCurrentDevice('usb')
 									}}>
 									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 								</DropdownMenuItem>
@@ -147,7 +171,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 							<Typography variant='small'>{data.color_sn}</Typography>
 						</DescriptionItem>
 						<DescriptionItem>
-							<Icon name='Ruler' />
+							<Icon name='RulerDimensionLine' />
 							<Typography variant='small'>Size: </Typography>
 							<Typography variant='small'>#{data.size_code}</Typography>
 						</DescriptionItem>

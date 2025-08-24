@@ -1,14 +1,17 @@
-import { Div, ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
+import { cn } from '@/common/utils/cn'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { useLocalStorageState } from 'ahooks'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import tw from 'tailwind-styled-components'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import DefectiveDetailDialog from './-components/defective-detail-dialog'
 import DefectiveGoodsForm from './-components/defective-goods-form'
 import DefectiveGoodList from './-components/defective-goods-list'
 import ScannedEpcList from './-components/scanned-epc-list'
 import { PageContextProvider } from './-contexts/page-context'
+import { useSwitchRFIDDevice } from './-hooks/use-switch-rfid-device'
+import { useToggleListPanel } from './-hooks/use-toggle-list-panel'
 
 export const Route = createLazyFileRoute('/(features)/_layout/b-grade-goods-inbound/')({
 	component: RouteComponent
@@ -23,39 +26,66 @@ function RouteComponent() {
 		setBreadcrumb([{ to: '/b-grade-goods-inbound', text: t('ns_common:navigation.b_grade_goods_inbound') }])
 	}, [i18n.language])
 
-	const [useMultipleScan] = useLocalStorageState('use_multiple_scan', {
-		listenStorageChange: true,
-		defaultValue: true
-	})
+	const { currentDevice } = useSwitchRFIDDevice()
+	const { listPanelOpen } = useToggleListPanel()
+
+	const isUsingAndroidDevice = currentDevice === 'android'
 
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.b_grade_goods_inbound')}</title>
-			<meta name='description' content='Matching EPC for defective goods' />
-			<Div className='h-[var(--outlet-wrapper-height)]'>
+			<meta name='description' content='Matching EPCs for defective goods' />
+
+			<Container>
 				<PageContextProvider>
-					<ResizablePanelGroup direction='horizontal' className='h-full rounded-md border'>
-						<ResizablePanel minSize={30}>
+					<ResizablePanelGroup direction='horizontal' className='rounded-md border'>
+						<ResizablePanel
+							minSize={listPanelOpen ? 30 : 0}
+							maxSize={listPanelOpen ? 40 : 0}
+							defaultSize={listPanelOpen ? 30 : 0}
+							className={cn(
+								'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl:block',
+								listPanelOpen && 'border-0'
+							)}>
 							<DefectiveGoodList />
 						</ResizablePanel>
-						<ResizableHandle withHandle />
-						<ResizablePanel minSize={40} defaultSize={50}>
-							{/* <ActionsGroup /> */}
+						{listPanelOpen && <ResizableHandle withHandle className='hidden @7xl:flex' />}
+						<ResizablePanel defaultSize={50} minSize={40}>
 							<DefectiveGoodsForm />
 						</ResizablePanel>
-
-						<ResizableHandle disabled />
+						{isUsingAndroidDevice && <ResizableHandle disabled />}
 						<ResizablePanel
-							minSize={useMultipleScan ? 25 : 0}
-							maxSize={useMultipleScan ? 25 : 0}
-							defaultSize={useMultipleScan ? 25 : 0}
-							className='transition-max-width duration-200 ease-out will-change-transform'>
+							minSize={isUsingAndroidDevice ? 25 : 0}
+							maxSize={isUsingAndroidDevice ? 25 : 0}
+							defaultSize={isUsingAndroidDevice ? 25 : 0}
+							className={cn(
+								'transtion-max-width linear h-full duration-200 will-change-transform',
+								!isUsingAndroidDevice && 'border-0'
+							)}>
 							<ScannedEpcList />
 						</ResizablePanel>
 					</ResizablePanelGroup>
 					<DefectiveDetailDialog />
 				</PageContextProvider>
-			</Div>
+			</Container>
 		</Fragment>
 	)
 }
+
+const Container = tw.div`
+	bg-background h-[var(--outlet-wrapper-height)] @container
+	has-[#toggle-fullscreen[data-state=checked]]:fixed
+	has-[#toggle-fullscreen[data-state=checked]]:p-6
+	has-[#toggle-fullscreen[data-state=checked]]:z-50
+	has-[#toggle-fullscreen[data-state=checked]]:inset-0
+   has-[#toggle-fullscreen[data-state=checked]]:w-screen
+   has-[#toggle-fullscreen[data-state=checked]]:h-screen
+   has-[#toggle-fullscreen[data-state=checked]]:overflow-y-auto
+   has-[#toggle-fullscreen[data-state=checked]]:flex
+   has-[#toggle-fullscreen[data-state=checked]]:justify-center
+   has-[#toggle-fullscreen[data-state=checked]]:items-center
+	has-[#toggle-fullscreen[data-state=checked]]:animate-in
+	has-[#toggle-fullscreen[data-state=checked]]:fade-in-0
+	has-[#toggle-fullscreen[data-state=unchecked]]:fade-out-0
+	has-[#toggle-fullscreen[data-state=unchecked]]:zoom-out-95
+`

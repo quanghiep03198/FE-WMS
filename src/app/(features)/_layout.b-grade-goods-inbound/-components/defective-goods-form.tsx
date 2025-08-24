@@ -1,19 +1,20 @@
 import { CommonActions } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { IBaseEntity, IDefectiveGoods } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import generateAvatar from '@/common/utils/generate-avatar'
 import {
 	AutoCompleteFieldControl,
 	Avatar,
 	AvatarImage,
 	Button,
+	buttonVariants,
 	Div,
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
 	Label,
 	SelectFieldControl,
-	Separator,
 	Switch,
 	Typography
 } from '@/components/ui'
@@ -23,7 +24,7 @@ import { useLocation } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
 import { format, formatRelative } from 'date-fns'
 import { has, isNil, omit } from 'lodash'
-import { Fragment, useCallback, useId, useMemo, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -33,13 +34,19 @@ import { DefectiveCategory, DefectiveCategoryI18n, DefectiveLocation } from '../
 import { DefectDescriptionTemplate } from '../-constants/templates'
 import { usePageContext } from '../-contexts/page-context'
 import { useCreateDefectiveGoodsMutation, useUpdateDefectiveGoodsMutation } from '../-hooks/use-defective-goods-asm'
+import { useSwitchRFIDDevice } from '../-hooks/use-switch-rfid-device'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../-schemas/defective-goods.schema'
 import { useGetProductSpecificationQuery } from '../../-hooks/use-product-specification-asm'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
+import DeviceRadioGroup from './device-radio-group'
+import ListPanelToggleButton from './list-panel-toggle-button'
 import PurchaseOrderComboboxFieldControl from './purchase-order-combobox-field-control'
+import ToggleFullscreen from './toggle-fullscreen'
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
+	const dateLocale = useDateLocale()
+	const { hash } = useLocation()
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
@@ -62,18 +69,10 @@ const DefectiveGoodsForm: React.FC = () => {
 		defaultValue: true,
 		listenStorageChange: true
 	})
-	const [useMultipleScan, setUseMultipleScan] = useLocalStorageState('use_multiple_scan', {
-		listenStorageChange: true,
-		defaultValue: true
-	})
+	const { currentDevice } = useSwitchRFIDDevice()
 	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
 		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
 	)
-
-	const toggleUseTemplateId = useId()
-	const toggleUseMultiScanningId = useId()
-
-	const { hash } = useLocation()
 
 	useUpdateEffect(() => {
 		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
@@ -229,39 +228,38 @@ const DefectiveGoodsForm: React.FC = () => {
 		[formAction]
 	)
 
-	const dateLocale = useDateLocale()
-
 	const isPending = isCreating || isUpdating
 	const isError = isFailedToCreate || isFailedToUpdate
 
 	return (
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
-				<Div className='sticky top-0 z-20 col-span-full flex h-14 items-center justify-between gap-x-6 border-b bg-background/80 p-2 backdrop-blur-sm'>
-					<Button
-						variant='outline'
-						type='button'
-						onClick={() =>
-							toast.info('This feature is under development', {
-								description: 'We are working on it. Please check back later.'
-							})
-						}>
+				<Div className='sticky top-0 z-20 col-span-full flex h-[52px] items-center justify-between gap-x-6 border-b bg-background px-3 py-2'>
+					<Div className='hidden @7xl:block'>
+						<ListPanelToggleButton />
+					</Div>
+					<Label
+						className={cn(buttonVariants({ variant: 'secondary', className: 'inline-flex @7xl:hidden' }))}
+						htmlFor='list-sheet-trigger'>
 						<Icon name='Clock' /> {t('ns_inoutbound:titles.inbound_history')}
-					</Button>
-
+					</Label>
 					{isNil(formAction) ? (
-						<Button type='button' size='sm' onClick={() => setFormAction(CommonActions.CREATE)}>
+						<Button
+							type='button'
+							size='sm'
+							className='ml-auto'
+							onClick={() => setFormAction(CommonActions.CREATE)}>
 							<Icon name='CircleFadingPlus' size={18} />
 							{t('ns_common:actions.add')}
 						</Button>
 					) : (
-						<Div className='inline-flex items-center gap-x-2'>
+						<Div className='ml-auto flex items-center gap-x-2'>
 							<Button
 								disabled={isPending}
 								variant='ghost'
 								size='sm'
 								type='button'
-								className='text-destructive hover:text-destructive'
+								className='text-destructive hover:bg-destructive/10 hover:text-destructive'
 								onClick={() => {
 									resetFormAction()
 									handleResetForm()
@@ -276,7 +274,17 @@ const DefectiveGoodsForm: React.FC = () => {
 								onClick={() => handleResetForm()}>
 								<Icon name='Undo2' /> {t('ns_common:actions.reset')}
 							</Button>
-							<Button disabled={isPending} size='sm' type='submit'>
+							<Button
+								disabled={isPending}
+								size='sm'
+								type='submit'
+								className={cn(
+									isNil(
+										formAction
+											? 'animate-out fade-out-0 slide-out-to-right-0'
+											: 'animate-in fade-in-100 slide-in-from-left-2'
+									)
+								)}>
 								<Icon
 									name={isPending ? 'LoaderCircle' : 'Check'}
 									className={isPending && 'animate-[spin_1s_linear_infinite]'}
@@ -323,7 +331,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				)}
 
 				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
-					{!useMultipleScan && (
+					{currentDevice === 'usb' && (
 						<Div className='col-span-full'>
 							<InputFieldControl
 								name='epc'
@@ -479,7 +487,20 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 
-					<Div className='col-span-full'>
+					<Div className='relative col-span-full'>
+						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>
+							<Label htmlFor='toggle-use-desc-template' className='inline-flex items-center gap-x-2'>
+								<Icon name='Sparkles' strokeWidth={1.5} /> {t('ns_common:editor.use_available_template')}
+							</Label>
+							<Switch
+								id='toggle-use-desc-template'
+								checked={useAvailableTemplate}
+								onCheckedChange={(checked) => {
+									setUseAvailabelTemplate(checked)
+									if (!checked) setDefaultEditorContent('')
+								}}
+							/>
+						</Div>
 						<EditorFieldControl
 							name='defect_description'
 							label={t('ns_erp:fields.defect_description')}
@@ -491,38 +512,15 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 
-				<Div className='sticky bottom-0 flex items-center justify-start gap-x-6 border-t bg-background/80 px-6 py-2 backdrop-blur-sm'>
-					<Div className='inline-flex items-center gap-x-3'>
-						<Label htmlFor={toggleUseTemplateId} className='inline-flex items-center gap-x-2'>
-							<Icon name='Sparkles' /> {t('ns_common:editor.use_available_template')}
-						</Label>
-						<Switch
-							id={toggleUseTemplateId}
-							checked={useAvailableTemplate}
-							onCheckedChange={(checked) => {
-								setUseAvailabelTemplate(checked)
-								if (!checked) setDefaultEditorContent('')
-							}}
-						/>
-					</Div>
-					<Separator orientation='vertical' className='h-6 w-0.5' />
-					<Div className='inline-flex items-center gap-x-3'>
-						<Label htmlFor={toggleUseMultiScanningId} className='inline-flex items-center gap-x-2'>
-							<Icon name='SmartphoneNfc' />
-							{t('ns_rfid:use_rfid_device')}
-						</Label>
-						<Switch
-							id={toggleUseMultiScanningId}
-							checked={useMultipleScan}
-							onCheckedChange={setUseMultipleScan}
-						/>
-					</Div>
+				<Div className='sticky bottom-0 flex items-center justify-between gap-x-6 border-t bg-background px-3 py-4'>
+					<ToggleFullscreen />
+					<DeviceRadioGroup />
 				</Div>
 			</Form>
 		</FormProvider>
 	)
 }
 
-const Form = tw.form`h-full overflow-y-auto`
+const Form = tw.form`h-full overflow-y-auto scrollbar-track-accent/50`
 
 export default DefectiveGoodsForm

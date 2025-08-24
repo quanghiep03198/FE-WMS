@@ -2,13 +2,13 @@ import { CommonActions } from '@/common/constants/enums'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { useSocketIo } from '@/common/hooks/use-socket-io'
 import { cn } from '@/common/utils/cn'
-import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
+import { Button, Div, Icon, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useResetState } from 'ahooks'
-import { useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
 
@@ -52,20 +52,17 @@ const ScannedEpcList: React.FC = () => {
 
 	return (
 		<Div className='flex flex-col divide-y'>
-			<Div className='flex h-14 items-center justify-between p-2'>
-				<Div className='*:text- flex items-center justify-between gap-x-2 pl-2'>
-					{/* <Icon name='ScanBarcode' size={20} /> */}
-					<Typography className='inline-flex items-center gap-x-2 font-medium'>
-						{t('ns_inoutbound:counter_box.label')}
-					</Typography>
-					<Separator className='h-0.5 w-1.5 self-center bg-foreground' />
-					<Typography className='inline-flex gap-x-1 font-bold'>
+			<Div className='flex h-[52px] items-center justify-between gap-x-2 p-2'>
+				<Typography className='ml-2 inline-flex items-center gap-x-2 text-base font-medium'>
+					{t('ns_inoutbound:counter_box.label')}:
+					<Typography className='inline-flex gap-x-1 text-lg font-bold'>
 						{formatIntlNumber(scannedEpcs.length)}
 						<Typography as='small' variant='small' className='text-xs font-medium'>
 							prs
 						</Typography>
 					</Typography>
-				</Div>
+				</Typography>
+
 				<Button variant='secondary' size='sm' onClick={() => resetScannedEpcs()}>
 					<Icon name='RotateCw' /> {t('ns_common:actions.reset')}
 				</Button>
@@ -107,4 +104,4 @@ const ScannedEpcList: React.FC = () => {
 	)
 }
 
-export default ScannedEpcList
+export default memo(ScannedEpcList)
