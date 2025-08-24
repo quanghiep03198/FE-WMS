@@ -608,12 +608,12 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 					fill='hsl(var(--muted))'></path>
 			</g>
 			<g data-sentry-element='Smoke'>
-				<g data-sentry-element='g' className='animate-[smoke_2.5s_linear_1s_infinite] opacity-0'>
+				<g data-sentry-element='g' className='animate-smoke opacity-0' style={{ animationDelay: '0.1s' }}>
 					<path
 						d='M589.45 329.63s-4.67 6.17 1.78 9.71c7.92 4.34 10.62-6.59 10.62-6.59s10.84 1.16 10.74-7.77c-.09-8.28-10-6.74-10-6.74s-7.72-9.91-15.07-2c-6.06 6.55 1.93 13.39 1.93 13.39z'
 						fill='#a1a1aa'></path>
 				</g>
-				<g data-sentry-element='g' className='animate-[smoke_2.5s_linear_1.1s_infinite] opacity-0'>
+				<g data-sentry-element='g' className='animate-smoke opacity-0' style={{ animationDelay: '0.3s' }}>
 					<path
 						d='M612.13 275.21c-.19-.56-6.14-15.07 3-21.58 9.14-6.51 18.42-2.42 21.77 3.16a10.91 10.91 0 01.19 10.79s6.42-1.18 8.18 4.28c1.86 5.77-2.42 7.63-2.42 7.63s9.68 9.3 3 16.75c-6.68 7.45-18.05-1.68-18.05-1.68s-1.3 3.72-5 4.28-6.7-2.42-6.7-2.42-8.08 5.39-14.14-1.67c-4.46-5.21-3.16-14 .93-16.75 5.02-3.47 9.24-2.79 9.24-2.79z'
 						fill='#a1a1aa'></path>
@@ -624,7 +624,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 						d='M624.78 279.81a.5.5 0 01-.35-.15.5.5 0 01-.15-.35c0-.87 1.1-6.15 6.32-10.44a.5.5 0 01.8.24.5.5 0 01-.04.39.49.49 0 01-.13.15 16.1 16.1 0 00-6 9.66.51.51 0 01-.45.5z'
 						fill='white'></path>
 				</g>
-				<g data-sentry-element='g' className='animate-[smoke_2.5s_linear_1.2s_infinite] opacity-0'>
+				<g data-sentry-element='g' className='animate-smoke opacity-0' style={{ animationDelay: '0.5s' }}>
 					<path
 						d='M613.61 219.77s-18.14-1.76-20.09-19.16c-2.23-19.91 16.75-21.58 16.75-21.58s.74-13.52 13.2-15.82c12.1-2.23 15.63 4.65 15.63 4.65s8.75-16.93 30-4.28c21.25 12.65 11.53 31.63 6.51 35.54s-14.14 3.72-14.14 3.72 6.7 7.63-.75 14.51-16.18 1.12-16.18 1.12 2.79 16.74-15.82 16.56c-16.26-.17-15.11-15.26-15.11-15.26z'
 						fill='#a1a1aa'></path>
@@ -636,6 +636,39 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 						fill='white'></path>
 				</g>
 			</g>
+			<style>
+				{
+					/* CSS */ `
+					@keyframes smoke-fly-up {
+						0% {
+							opacity: 0;
+							transform: translateY(1rem) scale(1);
+						}
+						25% {
+							opacity: 0.5;
+							transform:  translateY(-1rem) scale(1.1);
+						}
+						50% {
+							opacity: 1;
+							transform: translateX(-0.15rem) translateY(-2rem) scale(1.15);
+						}
+						75% {
+							opacity: 0.5;
+							transform: translateX(-0.25rem) translateY(-3rem) scale(1.2);
+						}
+						100% {
+							opacity: 0;
+							transform: translateX(-0.35rem) translateY(-4rem) scale(1.25);
+						}
+					}
+					.animate-smoke {
+						animation: smoke-fly-up 1.25s linear infinite 3s;
+						opacity: 0;
+						transform-box: fill-box;
+						transform-origin: 100% 100%;
+				`
+				}
+			</style>
 			<g data-sentry-element='Spinner' className='app-mws4fn e1kx31js11'>
 				<path d='M494.85 256.23a14.63 14.63 0 100-29.26 14.63 14.63 0 000 29.26z' fill='#F58452'></path>
 				<path

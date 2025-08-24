@@ -195,28 +195,7 @@ module.exports = {
 						width: 0
 					}
 				},
-				['smoke']: {
-					'0%': {
-						transform: 'translateY(1rem)',
-						opacity: 0
-					},
-					'25%': {
-						transform: 'translateY(0rem)',
-						opacity: 0.5
-					},
-					'50%': {
-						transform: 'translateY(-1rem)',
-						opacity: 1
-					},
-					'75%': {
-						transform: 'translateY(-2rem)',
-						opacity: 0.5
-					},
-					'100%': {
-						transform: 'translateY(-3rem)',
-						opacity: 0
-					}
-				},
+
 				['slide-in']: {
 					from: {
 						transform: 'translate3d(0,-100%,0)'
