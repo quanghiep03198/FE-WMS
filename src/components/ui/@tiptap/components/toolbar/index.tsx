@@ -2,7 +2,6 @@
 
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
@@ -19,13 +18,11 @@ const Toolbar: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div as='nav' className='p-1.5'>
-			<ScrollShadow
-				className='flex h-full items-center justify-start gap-x-1 overflow-y-hidden scrollbar-none'
-				orientation='horizontal'>
+		<Div as='nav'>
+			<Div className='flex h-full items-center gap-x-1 overflow-y-hidden p-1.5'>
 				<SearchAndReplaceToolbar />
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
 				{/* Undo */}
 				<Tooltip message={t('ns_common:actions.undo')}>
@@ -50,7 +47,7 @@ const Toolbar: React.FC = () => {
 					</Button>
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
 				{/* Change style */}
 				<StyleDropdownMenu />
@@ -60,7 +57,7 @@ const Toolbar: React.FC = () => {
 					<FontSizeInput />
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
 				<AlignmentDropdownMenu />
 
@@ -146,13 +143,13 @@ const Toolbar: React.FC = () => {
 					</Button>
 				</Tooltip>
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
 				{/* Text color and highlight */}
 				<ColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
 				<ColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
 
-				<Separator orientation='vertical' className='mx-3 h-6 w-px' />
+				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
 				{/* Toggle ordered list */}
 				<Tooltip message={t('ns_common:editor.ordered_list')}>
@@ -208,9 +205,8 @@ const Toolbar: React.FC = () => {
 				</Tooltip>
 				<LinkPopover />
 				<ImageDropdown />
-				{/* <ImagePlaceholderToolbar /> */}
 				<TableDropdownMenu />
-			</ScrollShadow>
+			</Div>
 		</Div>
 	)
 }
