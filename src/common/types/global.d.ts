@@ -67,6 +67,8 @@ export declare global {
 	}
 	type Locale = 'vi' | 'en' | 'cn'
 
+	type Bit = 0 | 1
+
 	type AnonymousFunction = (...args: any[]) => any
 
 	type RowDeletionType = 'single' | 'multiple' | undefined

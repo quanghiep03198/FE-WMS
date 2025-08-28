@@ -141,7 +141,6 @@ export default {
 		file_daily_outbound_report: 'Daily Outbound Report {{factory}} - {{date}}',
 		file_production_inventory_summary: 'Production Inventory Summary - {{factory}}',
 		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
-		file_shaping_department_productivity_report: 'Shaping Department Productivity {{factory}} - {{date}}',
 		inbound_history: 'Inbound history',
 		inoutbound_history_lookup: 'In/Outbound history lookup',
 		outbound_history: 'Outbound history',
