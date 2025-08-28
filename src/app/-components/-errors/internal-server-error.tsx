@@ -642,7 +642,7 @@ const InternalServerError: React.FC<InternalServerErrorProps> = ({ className, ..
 					@keyframes smoke-fly-up {
 						0% {
 							opacity: 0;
-							transform: translateY(1rem) scale(1);
+							transform: translateY(1rem) scale(0.95);
 						}
 						25% {
 							opacity: 0.5;

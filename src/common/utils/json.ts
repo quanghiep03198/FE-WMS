@@ -25,9 +25,9 @@ export class Json {
 	 * @param value
 	 * @returns
 	 */
-	public static parse<T>(value: any): T | null | any {
+	public static parse<T>(value: any): T {
 		if (!Json.isValid(value)) return value
-		return JSON.parse(value)
+		return JSON.parse(value) as T
 	}
 
 	/**

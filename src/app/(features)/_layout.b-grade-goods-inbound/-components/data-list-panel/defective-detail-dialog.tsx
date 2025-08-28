@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, Div } from '@/compone
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gunzipSync } from 'zlib'
-import { usePageContext } from '../-contexts/page-context'
+import { usePageContext } from '../../-contexts/page-context'
 
 const DefectiveDetailDialog: React.FC = () => {
 	const { t } = useTranslation()
