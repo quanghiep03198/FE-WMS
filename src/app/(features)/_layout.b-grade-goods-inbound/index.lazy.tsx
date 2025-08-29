@@ -8,8 +8,9 @@ import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import DefectiveGoodList from './-components/data-list-panel'
 import DefectiveDetailDialog from './-components/data-list-panel/defective-detail-dialog'
 import DefectiveGoodsForm from './-components/form-playground'
-import ScannedEpcList from './-components/rfid-reader-playground'
+import RFIDReaderPlayground from './-components/rfid-reader-playground'
 import { PageContextProvider } from './-contexts/page-context'
+import { ReaderPlaygroundProvider } from './-contexts/rfid-reader-playground.context'
 import { useSwitchRFIDDevice } from './-hooks/use-switch-rfid-device'
 import { useToggleListPanel } from './-hooks/use-toggle-list-panel'
 
@@ -62,7 +63,9 @@ function RouteComponent() {
 								'transtion-max-width linear h-full duration-200 will-change-transform',
 								!isUsingAndroidDevice && 'border-0'
 							)}>
-							<ScannedEpcList />
+							<ReaderPlaygroundProvider>
+								<RFIDReaderPlayground />
+							</ReaderPlaygroundProvider>
 						</ResizablePanel>
 					</ResizablePanelGroup>
 					<DefectiveDetailDialog />

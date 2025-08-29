@@ -76,4 +76,8 @@ export declare global {
 	type FirstParameter<T> = T extends (first: infer FirstArgument, ...args: any[]) => any ? FirstArgument : never
 
 	type Parameter<T> = T extends (param: infer Argument) => any ? Argument : never
+
+	interface Set<T> {
+		at(index: number): T | undefined
+	}
 }
