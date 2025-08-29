@@ -2,9 +2,16 @@ import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	buttonVariants,
+	Div,
 	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
 	Icon,
 	InputFieldControl,
+	SelectFieldControl,
 	Sheet,
 	SheetClose,
 	SheetContent,
@@ -12,17 +19,27 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-	SheetTrigger
+	SheetTrigger,
+	Slider
 } from '@/components/ui'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import z from 'zod'
 
-type Props = {}
+const schema = z.object({
+	uhf_reader_ip: z.ipv4({ message: 'ns_validation:invalid_ipv4' }),
+	uhf_reader_ant: z.enum(['1', '2', '3', '4'], { message: 'ns_validation:invalid_value' }),
+	uhf_reader_power: z.number().nonnegative().min(5).max(30)
+})
 
-const ReaderSettingSheet: React.FC<Props> = (props) => {
+const ReaderSettingSheet: React.FC = () => {
 	const { t } = useTranslation()
-	const form = useForm()
+	const form = useForm({
+		resolver: zodResolver(schema),
+		mode: 'onChange'
+	})
 
 	return (
 		<Sheet>
@@ -33,8 +50,8 @@ const ReaderSettingSheet: React.FC<Props> = (props) => {
 				<SheetHeader>
 					<SheetTitle>RFID Reader Settings</SheetTitle>
 					<SheetDescription>
-						This sheet allows you to configure the settings for the RFID reader. You can specify the reader's
-						network details, such as its IP address, to ensure proper connectivity and functionality.
+						{`This sheet allows you to configure the settings for the RFID reader. You can specify the reader's
+						network details, such as its IP address, to ensure proper connectivity and functionality.`}
 					</SheetDescription>
 				</SheetHeader>
 				<Form {...form}>
@@ -43,19 +60,40 @@ const ReaderSettingSheet: React.FC<Props> = (props) => {
 							label='Reader TCP/IP'
 							name='reader_ip'
 							orientation='horizontal'
-							description='Enter the IP address of the RFID reader. This should be in the format of a valid IPv4 address (e.g., 192.168.1.1).'
+							placeholder='10.xx.xx.xx'
+							description='Enter the IP address of the RFID reader. This should be in the format of a valid IPv4 address.'
 						/>
-						<InputFieldControl
-							label='Reader TCP/IP'
-							name='reader_ip'
+						<SelectFieldControl
+							label='Antenna'
+							name='reader_ant'
+							datalist={[
+								{ label: 'Antenna 1', value: '1' },
+								{ label: 'Ant 2', value: '2' },
+								{ label: 'Ant 3', value: '4' },
+								{ label: 'Ant 4', value: '8' }
+							]}
+							labelField='label'
+							valueField='value'
 							orientation='horizontal'
-							description='Enter the IP address of the RFID reader. This should be in the format of a valid IPv4 address (e.g., 192.168.1.1).'
+							description='Select the antenna number to be used for reading RFID tags.'
 						/>
-						<InputFieldControl
-							label='Reader TCP/IP'
-							name='reader_ip'
-							orientation='horizontal'
-							description='Enter the IP address of the RFID reader. This should be in the format of a valid IPv4 address (e.g., 192.168.1.1).'
+						<FormField
+							control={form.control}
+							name='reader_power'
+							render={({ field }) => (
+								<FormItem className='grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'>
+									<FormLabel>Reader power</FormLabel>
+									<FormControl>
+										<Div className='space-y-2'>
+											<Slider step={5} min={5} max={30} value={field.value} onValueChange={field.onChange} />
+											<FormDescription>
+												Adjust the power level of the RFID reader. Higher power levels may increase read
+												range but can also lead to interference.
+											</FormDescription>
+										</Div>
+									</FormControl>
+								</FormItem>
+							)}
 						/>
 					</SheetForm>
 				</Form>
