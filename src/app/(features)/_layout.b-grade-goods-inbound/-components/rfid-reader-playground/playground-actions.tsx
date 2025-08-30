@@ -1,6 +1,6 @@
 import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
+import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
 export const RFIDReaderPlaygroundActions: React.FC = () => {
 	const { connectionStatus, resetScannedEpcs, publishMessage } = useReaderPlaygroundStore(
@@ -18,8 +18,8 @@ export const RFIDReaderPlaygroundActions: React.FC = () => {
 				disabled={!connectionStatus.isMQTTConnectionReady}
 				variant={connectionStatus.isReaderConnectionReady ? 'destructive' : 'default'}
 				onClick={async () => {
-					publishMessage('request/signal', {
-						act: connectionStatus.isReaderConnectionReady ? 'disconnect' : 'connect'
+					publishMessage(PublishedTopics.REQUEST_SIGNAL, {
+						action: connectionStatus.isReaderConnectionReady ? 'disconnect' : 'connect'
 					})
 				}}>
 				<Icon name={connectionStatus.isReaderConnectionReady ? 'Unplug' : 'PlugZap'} />
@@ -32,20 +32,20 @@ export const RFIDReaderPlaygroundActions: React.FC = () => {
 				variant='secondary'
 				disabled={!connectionStatus.isReaderConnectionReady}
 				onClick={async () => {
-					publishMessage('request/signal', {
-						act: connectionStatus.isReaderPlaying ? 'stop' : 'start'
+					publishMessage(PublishedTopics.REQUEST_SIGNAL, {
+						action: connectionStatus.isReaderPlaying ? 'stop' : 'start'
 					})
 				}}>
 				<Icon name={connectionStatus.isReaderPlaying ? 'Pause' : 'Play'} />
-				{connectionStatus.isReaderPlaying ? 'Stop reading' : 'Start reading'}
+				{connectionStatus.isReaderPlaying ? t('ns_common:actions.stop') : t('ns_common:actions.start')}
 			</Button>
 			<Button
 				variant='outline'
 				size='sm'
 				onClick={async () => {
 					resetScannedEpcs()
-					publishMessage('request/data', {
-						act: 'reset'
+					publishMessage(PublishedTopics.REQUEST_DATA, {
+						action: 'reset'
 					})
 				}}>
 				<Icon name='RotateCw' /> {t('ns_common:actions.reset')}

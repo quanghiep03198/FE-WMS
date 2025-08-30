@@ -10,13 +10,13 @@ const PlaygroundHeader: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='flex h-[var(--playground-header-height)] items-center justify-between gap-x-2 px-4 py-2'>
+		<Div className='flex h-[var(--playground-header-height)] items-center justify-between gap-x-2 p-2'>
 			<Div className='inline-flex items-center gap-x-2 text-base'>
-				<Typography className='inline-flex items-center gap-x-2 font-medium'>
+				<Typography className='ml-2 inline-flex items-center gap-x-2 font-medium'>
 					<Icon
 						name='Dot'
 						className={cn(
-							'scale-50 rounded-full ring-8',
+							'scale-[0.55] rounded-full ring-8',
 							Object.values(connectionStatus).every((value) => value)
 								? 'bg-success fill-success stroke-success ring-success/30'
 								: 'bg-warning fill-warning stroke-warning ring-warning/30'

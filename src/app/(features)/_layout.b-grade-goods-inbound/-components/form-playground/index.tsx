@@ -199,8 +199,17 @@ const DefectiveGoodsForm: React.FC = () => {
 	const handleResetForm = useCallback(() => {
 		const currentFormValues = form.getValues()
 		for (const key in currentFormValues) {
-			if (key === 'defect_description') currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
-			else currentFormValues[key] = ''
+			switch (key) {
+				case 'defect_description':
+					currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
+					break
+				case 'epc':
+					if (currentDevice === 'usb') currentFormValues[key] = ''
+					break
+				default:
+					currentFormValues[key] = ''
+					break
+			}
 		}
 		form.reset(currentFormValues)
 	}, [formAction])

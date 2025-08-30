@@ -1,7 +1,5 @@
-import { CommonActions } from '@/common/constants/enums'
 import { Div } from '@/components/ui'
 import { memo } from 'react'
-import { usePageContext } from '../../-contexts/page-context'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 import { RFIDReaderPlaygroundActions } from './playground-actions'
 import { PlaygroundEmptyDataState } from './playground-empty-data-state'
@@ -16,20 +14,7 @@ Set.prototype.at = function (index: number) {
 }
 
 const RFIDReaderPlayground: React.FC = () => {
-	const { connectionStatus, scannedEpcs, resetScannedEpcs } = useReaderPlaygroundStore(
-		'scannedEpcs',
-		'resetScannedEpcs',
-		'connectionStatus',
-		'setScannedEpcs',
-		'setConnectionStatus',
-		'publishMessage'
-	)
-
-	const { event$ } = usePageContext()
-
-	event$.useSubscription((e: { action: CommonActions; payload: [] }) => {
-		if (e.action === CommonActions.SAVE) resetScannedEpcs()
-	})
+	const { connectionStatus, scannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'connectionStatus')
 
 	return (
 		<Div
