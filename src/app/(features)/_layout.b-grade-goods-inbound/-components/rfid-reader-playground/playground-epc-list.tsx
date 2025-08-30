@@ -1,17 +1,18 @@
+import { CommonActions } from '@/common/constants/enums'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
+import { usePageContext } from '../../-contexts/page-context'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5
 
 export const PlaygroundEpcList: React.FC = () => {
-	'use no memo'
-
-	const { scannedEpcs } = useReaderPlaygroundStore('scannedEpcs')
+	const { event$ } = usePageContext()
+	const { scannedEpcs, resetScannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'resetScannedEpcs')
 
 	const containerRef = useRef<HTMLDivElement>(null)
 	const scrollingRef = useRef<number>(null)
@@ -28,6 +29,14 @@ export const PlaygroundEpcList: React.FC = () => {
 		getScrollElement,
 		scrollToFn,
 		estimateSize
+	})
+
+	useEffect(() => {
+		event$.emit({ action: CommonActions.IMPORT, payload: scannedEpcs })
+	}, [scannedEpcs])
+
+	event$.useSubscription((e: { action: CommonActions; payload: [] }) => {
+		if (e.action === CommonActions.SAVE) resetScannedEpcs()
 	})
 
 	return (

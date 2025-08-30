@@ -30,7 +30,7 @@ function RouteComponent() {
 	const { currentDevice } = useSwitchRFIDDevice()
 	const { listPanelOpen } = useToggleListPanel()
 
-	const isUsingAndroidDevice = currentDevice === 'android'
+	const isUsingAndroidDevice = currentDevice === 'uhf'
 
 	return (
 		<Fragment>

@@ -4,17 +4,22 @@ import { Json } from '@/common/utils/json'
 import { pick, throttle, uniq } from 'lodash'
 import mqtt from 'mqtt'
 import { createContext, use, useCallback, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { gunzipSync } from 'zlib'
 import { create, StoreApi, useStore } from 'zustand'
 import { useShallow } from 'zustand/react/shallow'
 
-type RFIDPlaygroundActions = 'connect' | 'disconnect' | 'start' | 'stop' | 'ping' | 'reset'
+type RFIDPlaygroundActions = 'connect' | 'disconnect' | 'start' | 'stop' | 'ping' | 'reset' | 'get' | 'update'
 type PlaygroundConnectionStatus = Record<
 	'isMQTTConnectionReady' | 'isReaderConnectionReady' | 'isReaderPlaying',
 	boolean
 >
-type RFIDReaderSettings = Record<'readerIP' | 'readerAnt' | 'readerPower', string>
+type RFIDReaderSettings = {
+	readerIP: string
+	readerAnt: '1' | '2' | '3' | '4'
+	readerPower: number
+}
 
 type ReaderPlaygroundContextStore = {
 	scannedEpcs: string[]
@@ -26,11 +31,32 @@ type ReaderPlaygroundContextStore = {
 	setConnectionStatus: (
 		value: Record<'isMQTTConnectionReady' | 'isReaderConnectionReady' | 'isReaderPlaying', boolean>
 	) => void
-	publishMessage: (topic: `request/${'signal' | 'data'}`, message: Record<'act', RFIDPlaygroundActions>) => void
+	publishMessage: <TPayload = any>(
+		topic: PublishedTopics,
+		message: {
+			action: RFIDPlaygroundActions
+			payload?: TPayload
+		}
+	) => void
+}
+
+export enum SubscribedTopics {
+	REPLY_DATA = 'reply/data',
+	REPLY_SIGNAL = 'reply/signal',
+	REPLY_SETTINGS = 'reply/settings'
+}
+
+export enum PublishedTopics {
+	REQUEST_DATA = 'request/data',
+	REQUEST_SIGNAL = 'request/signal',
+	REQUEST_SETTINGS = 'request/settings'
 }
 
 const ReaderPlaygroundContext = createContext<StoreApi<ReaderPlaygroundContextStore>>(null)
 
+const FPS = 60 // (fps) Frame per second to refresh the scanned EPC list
+const DURATION = 1000 // (ms) Duration to refresh the scanned EPC list
+const BUFFER_RATE = DURATION / FPS // (ms) Refresh rate to update the scanned EPC list
 const DEFAULT_PROPS: Pick<ReaderPlaygroundContextStore, 'scannedEpcs' | 'connectionStatus' | 'readerSettings'> = {
 	scannedEpcs: [],
 	connectionStatus: {
@@ -41,18 +67,15 @@ const DEFAULT_PROPS: Pick<ReaderPlaygroundContextStore, 'scannedEpcs' | 'connect
 	readerSettings: {
 		readerIP: '',
 		readerAnt: '1',
-		readerPower: '10'
+		readerPower: 10
 	}
 }
-
-const FPS = 10 // (fps) Frame per second to refresh the scanned EPC list
-const DURATION = 1000 // (ms) Duration to refresh the scanned EPC list
-const BUFFER_RATE = DURATION / FPS // (ms) Refresh rate to update the scanned EPC list
 
 const mqttSocket = ({ host, port }: { host: string; readonly port: number }): `ws://${string}:${number}` =>
 	`ws://${host}:${port}`
 
 export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+	const { t } = useTranslation()
 	const { data: agent } = useGetAgentIPv4()
 	const clientRef = useRef<mqtt.MqttClient>(null)
 
@@ -71,7 +94,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 			},
 			resetScannedEpcs: () => {
 				set((state) => {
-					state?.publishMessage?.('request/data', { act: 'reset' })
+					state?.publishMessage?.(PublishedTopics.REQUEST_DATA, { action: 'reset' })
 					return { ...state, scannedEpcs: [] }
 				})
 			},
@@ -85,7 +108,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 					return { ...state, readerSettings: value }
 				})
 			},
-			async publishMessage(topic: `request/${'signal' | 'data'}`, message: Record<'act', RFIDPlaygroundActions>) {
+			async publishMessage(topic: PublishedTopics, message: Record<'action', RFIDPlaygroundActions>) {
 				if (!clientRef.current) return
 				clientRef.current.publishAsync(topic, Json.stringify(message))
 			}
@@ -95,9 +118,13 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 
 	const handleConnectMQTT: mqtt.OnConnectCallback = useCallback(async (): Promise<void> => {
 		if (!clientRef.current) return
-		await clientRef.current.publishAsync('request/signal', Json.stringify({ act: 'ping' }))
-		clientRef.current.subscribeAsync('reply/data')
-		clientRef.current.subscribeAsync('reply/signal')
+		await Promise.all([
+			clientRef.current.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ act: 'ping' })),
+			clientRef.current.publishAsync(PublishedTopics.REQUEST_SETTINGS, Json.stringify({ act: 'get' }))
+		])
+		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_DATA)
+		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SIGNAL)
+		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SETTINGS)
 	}, [clientRef.current])
 
 	const handleDisconnectMQTT: mqtt.OnDisconnectCallback = useCallback((): void => {
@@ -110,7 +137,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 
 			const rawMessage = message.toString()
 			switch (topic) {
-				case 'reply/data': {
+				case SubscribedTopics.REPLY_DATA: {
 					const decodedMessage = gunzipSync(Buffer.from(rawMessage, 'base64')).toString()
 					const parsedMessage = Json.parse<string[]>(decodedMessage)
 					throttle(() => setScannedEpcs(uniq([...scannedEpcs, ...parsedMessage])), BUFFER_RATE, {
@@ -119,14 +146,17 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 					})()
 					break
 				}
-				case 'reply/signal': {
+				case SubscribedTopics.REPLY_SIGNAL: {
 					const data = Json.parse<PlaygroundConnectionStatus>(rawMessage)
 					setConnectionStatus(data)
 					break
 				}
-				case 'reply/settings': {
-					const data = Json.parse<RFIDReaderSettings>(rawMessage)
-					setReaderSettings(data)
+				case SubscribedTopics.REPLY_SETTINGS: {
+					const data = Json.parse<{ metadata: RFIDReaderSettings; message: string; error: any }>(rawMessage)
+					if (data.error) toast.error(t('ns_common:notification.error'))
+
+					if (data.message && !data.error) toast.success(data.message)
+					setReaderSettings(data.metadata)
 					break
 				}
 				default: {
@@ -154,7 +184,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 			clientRef.current.removeListener('disconnect', handleDisconnectMQTT)
 			clientRef.current.removeListener('message', handleMessageMQTT)
 		}
-	}, [])
+	}, [clientRef.current])
 
 	return <ReaderPlaygroundContext.Provider value={store.current}>{children}</ReaderPlaygroundContext.Provider>
 }

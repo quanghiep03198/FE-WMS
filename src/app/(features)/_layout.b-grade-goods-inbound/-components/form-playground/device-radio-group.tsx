@@ -3,17 +3,17 @@ import { memo } from 'react'
 import { useSwitchRFIDDevice } from '../../-hooks/use-switch-rfid-device'
 
 const DeviceRadioGroup: React.FC = () => {
-	const { setCurrentDevice } = useSwitchRFIDDevice()
+	const { currentDevice, setCurrentDevice } = useSwitchRFIDDevice()
 
 	return (
 		<RadioGroup
-			defaultValue={'android'}
-			onValueChange={(value: 'usb' | 'android') => setCurrentDevice(value)}
+			value={currentDevice}
+			onValueChange={(value: 'usb' | 'uhf') => setCurrentDevice(value)}
 			className='flex items-center gap-x-6'>
 			<Div className='flex items-center gap-3'>
-				<RadioGroupItem value='android' id='android-device-option' />
+				<RadioGroupItem value='uhf' id='android-device-option' />
 				<Label htmlFor='android-device-option' className='inline-flex items-center gap-x-2'>
-					Android <Icon name='SmartphoneNfc' size={18} />
+					UHF <Icon name='Router' size={18} />
 				</Label>
 			</Div>
 			<Div className='flex items-center gap-3'>

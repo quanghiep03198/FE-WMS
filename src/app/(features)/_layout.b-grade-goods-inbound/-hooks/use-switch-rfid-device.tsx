@@ -1,9 +1,9 @@
 import { useLocalStorageState } from 'ahooks'
 
 export const useSwitchRFIDDevice = () => {
-	const [currentDevice, setCurrentDevice] = useLocalStorageState<'usb' | 'android'>('def_rfid_device', {
+	const [currentDevice, setCurrentDevice] = useLocalStorageState<'usb' | 'uhf'>('def_rfid_device', {
 		listenStorageChange: true,
-		defaultValue: 'usb'
+		defaultValue: 'uhf'
 	})
 
 	return { currentDevice, setCurrentDevice }
