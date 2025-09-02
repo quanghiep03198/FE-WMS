@@ -240,7 +240,7 @@ module.exports = {
 						transform: 'translate(-75%, -60%) scale(0.95)'
 					}
 				},
-				['scrolling']: {
+				['marquee']: {
 					from: {
 						transform: 'translateX(0)'
 					},
@@ -288,7 +288,7 @@ module.exports = {
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
 				['drop-down']: 'drop-down 1s linear',
-				['scrolling']: 'scrolling 10s linear infinite both!important',
+				['marquee']: 'marquee 10s linear infinite both!important',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
 				['spotlight-off']: 'spotlight-off 6s ease forwards',
 				['shimmer']: 'shimmer 1.5s linear infinite',
