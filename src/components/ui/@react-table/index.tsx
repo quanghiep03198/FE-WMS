@@ -32,6 +32,12 @@ import { fuzzyFilter } from './utils/fuzzy-filter.util'
 import { fuzzySort } from './utils/fuzzy-sort.util'
 import { dateRangeFilter } from './utils/in-date-range-filter.util'
 
+/**
+ * @author quanghiep03198
+ * @description A highly customizable and feature-rich data grid component built with React and TanStack Table. Supports sorting, filtering, pagination, row selection, column resizing, row editting and more.
+ * @param {DataTableProps<TData, TValue>} props - DataTableProps
+ * @returns {JSX.Element} A React component that renders a data grid with various features and customization options.
+ */
 function DataGrid<TData, TValue>({
 	data,
 	caption,
