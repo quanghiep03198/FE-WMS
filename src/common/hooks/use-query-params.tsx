@@ -1,9 +1,25 @@
 import { useNavigate, UseNavigateResult, useSearch } from '@tanstack/react-router'
 import { omit } from 'lodash'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useLayoutEffect } from 'react'
 
 type NavigateFnOptions = Parameter<UseNavigateResult<string>>
 
+/**
+ * Custom React hook to manage URL query parameters.
+ * This hook provides an easy way to read, set, and remove query parameters from the URL.
+ * It leverages the `useSearch` and `useNavigate` hooks from `@tanstack/react-router`.
+ * @param {T} [defaultParams] - An optional object containing default query parameters to initialize the URL with.
+ * @returns {Object} An object containing:
+ * - `searchParams`: The current query parameters as an object of type T.
+ * - `setParams`: A function to set or update query parameters.
+ * - `removeParam`: A function to remove a specific query parameter by key.
+ * @example
+ * const { searchParams, setParams, removeParam } = useQueryParams<{ page: string; filter: string }>({ page: '1' });
+ * setParams({ filter: 'active' }); // Updates URL to include ?page=1&filter=active
+ * removeParam('page'); // Updates URL to include ?filter=active
+ * console.log(searchParams); // { filter: 'active' }
+ * Note: This hook assumes that the component using it is wrapped within a `Router` context provided by `@tanstack/react-router`.
+ */
 export default function useQueryParams<T extends Record<string, any>>(defaultParams?: T) {
 	const navigate = useNavigate()
 
@@ -29,7 +45,7 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 		navigate({ search: (prev) => omit(prev, [key]) } as NavigateFnOptions)
 	}, [])
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (defaultParams) navigate({ search: { ...defaultParams, ...search } })
 	}, [])
 

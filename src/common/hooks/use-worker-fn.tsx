@@ -1,5 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+/**
+ * Custom React hook to run a function in a web worker.
+ * @param fn - Function to be executed in a web worker
+ * @returns
+ * - `execute`: Function to execute the worker function with provided arguments
+ * - `isPending`: Boolean indicating if the worker is currently executing
+ * - `isError`: Boolean indicating if there was an error during execution
+ * @example Calculate Fibonacci in a worker
+ * const fib = (n: number): number => (n <= 1 ? n : fib(n - 1) + fib(n - 2));
+ * const { execute, isPending, isError } = useWorkerFn(fib);
+ * const result = await execute(100000); // result will be the 100000th Fibonacci number
+ */
 export function useWorkerFn<TArgs extends unknown[], TResult>(
 	fn: (...args: TArgs) => TResult
 ): { execute: (...args: TArgs) => Promise<TResult>; isPending: boolean; isError: boolean } {
@@ -17,8 +29,7 @@ export function useWorkerFn<TArgs extends unknown[], TResult>(
                const fn = new Function('return ' + rawFunction)();
                const result = await fn(...args);
                self.postMessage(result);
-            };
-         `
+            }`
 			],
 			{ type: 'application/javascript' }
 		)

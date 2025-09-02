@@ -18,6 +18,24 @@ type BrowserTabActivityOptions = {
 	onActive?: () => void
 }
 
+/**
+ *
+ * Custom React hook to monitor the browser tab's visibility and user activity status.
+ * It tracks whether the tab is active, idle, or hidden based on user interactions and visibility changes.
+ * The hook provides a status that can be used to adapt the UI or functionality based on the tab's state.
+ * @param options
+ * @returns
+ * @example
+ * const tabStatus = useBrowserTabStatus({
+ *  idleTime: 300000, // 5 minutes
+ *  hiddenTime: 0,
+ *  onIdle: () => console.log('Tab is idle'),
+ *  onResume: () => console.log('Tab is active again'),
+ *  onInactive: () => console.log('Tab is hidden'),
+ *  onActive: () => console.log('Tab is visible again'),
+ * });
+ * console.log(tabStatus); // 'active' | 'idle' | 'hidden'
+ */
 export function useBrowserTabStatus(options: BrowserTabActivityOptions = {}): BrowserTabStatus {
 	const { idleTime = 5 * 60 * 1000, hiddenTime = 0, onIdle, onResume, onInactive, onActive } = options
 
