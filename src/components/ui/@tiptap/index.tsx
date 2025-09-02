@@ -25,6 +25,22 @@ export interface EditorProps {
 	height?: number
 }
 
+/**
+ * @author quanghiep03198
+ * @description A rich text editor component using Tiptap with a customizable toolbar, context menus, and support for various content types.
+ *
+ * Props:
+ * - `onUpdate`: Callback function triggered on content update, providing the current HTML value and empty state.
+ * - `id`: Optional ID for the editor element.
+ * - `ref`: Optional ref for accessing the editor instance.
+ * - `name`: Optional name attribute for the editor element.
+ * - `defaultValue`: Initial HTML content for the editor.
+ * - `disabled`: Boolean to disable editing.
+ * - `height`: Height of the editor area in pixels (default is 350).
+ * Returns:
+ * - A React functional component rendering a rich text editor with toolbar and context menus.
+ */
+
 export const Editor: React.FC<EditorProps> = memo(
 	({ defaultValue = '', id = uniqueId(), ref, disabled, name, height = 350, onUpdate: handleUpdate }) => {
 		const { i18n } = useTranslation()
