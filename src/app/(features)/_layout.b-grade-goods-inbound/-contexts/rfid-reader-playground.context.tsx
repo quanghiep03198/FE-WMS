@@ -3,12 +3,13 @@ import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { pick, throttle, uniq } from 'lodash'
 import mqtt from 'mqtt'
-import { createContext, use, useCallback, useEffect, useRef } from 'react'
+import { createContext, use, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { gunzipSync } from 'zlib'
 import { create, StoreApi, useStore } from 'zustand'
 import { useShallow } from 'zustand/react/shallow'
+import { ReaderAntenna } from '../-constants'
 
 type RFIDPlaygroundActions = 'connect' | 'disconnect' | 'start' | 'stop' | 'ping' | 'reset' | 'get' | 'update'
 type PlaygroundConnectionStatus = Record<
@@ -17,7 +18,7 @@ type PlaygroundConnectionStatus = Record<
 >
 type RFIDReaderSettings = {
 	readerIP: string
-	readerAnt: '1' | '2' | '3' | '4'
+	readerAnt: ReaderAntenna
 	readerPower: number
 }
 
@@ -66,7 +67,7 @@ const DEFAULT_PROPS: Pick<ReaderPlaygroundContextStore, 'scannedEpcs' | 'connect
 	},
 	readerSettings: {
 		readerIP: '',
-		readerAnt: '1',
+		readerAnt: ReaderAntenna.ANT_1,
 		readerPower: 10
 	}
 }
@@ -79,9 +80,11 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	const { data: agent } = useGetAgentIPv4()
 	const clientRef = useRef<mqtt.MqttClient>(null)
 
-	if (!clientRef.current && !!agent) {
-		clientRef.current = mqtt.connect(mqttSocket({ host: agent?.ip ?? env<string>('VITE_APP_HOST'), port: 9001 }))
-	}
+	useEffect(() => {
+		if (!clientRef.current && !!agent) {
+			clientRef.current = mqtt.connect(mqttSocket({ host: agent?.ip ?? env<string>('VITE_APP_HOST'), port: 9001 }))
+		}
+	}, [agent])
 
 	const store = useRef<StoreApi<ReaderPlaygroundContextStore>>(null)
 	if (!store.current)
@@ -116,7 +119,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 
 	const { scannedEpcs, setScannedEpcs, setConnectionStatus, setReaderSettings } = useStore(store.current)
 
-	const handleConnectMQTT: mqtt.OnConnectCallback = useCallback(async (): Promise<void> => {
+	const handleConnectMQTT: mqtt.OnConnectCallback = async (): Promise<void> => {
 		if (!clientRef.current) return
 		await Promise.all([
 			clientRef.current.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ act: 'ping' })),
@@ -125,49 +128,46 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_DATA)
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SIGNAL)
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SETTINGS)
-	}, [clientRef.current])
+	}
 
-	const handleDisconnectMQTT: mqtt.OnDisconnectCallback = useCallback((): void => {
+	const handleDisconnectMQTT: mqtt.OnDisconnectCallback = (): void => {
 		toast.info('Stopped controlling the RFID reader')
-	}, [clientRef.current])
+	}
 
-	const handleMessageMQTT: mqtt.OnMessageCallback = useCallback(
-		(topic: string, message: Buffer): void => {
-			if (!clientRef.current) return
+	const handleMessageMQTT: mqtt.OnMessageCallback = (topic: string, message: Buffer): void => {
+		if (!clientRef.current) return
 
-			const rawMessage = message.toString()
-			switch (topic) {
-				case SubscribedTopics.REPLY_DATA: {
-					const decodedMessage = gunzipSync(Buffer.from(rawMessage, 'base64')).toString()
-					const parsedMessage = Json.parse<string[]>(decodedMessage)
-					throttle(() => setScannedEpcs(uniq([...scannedEpcs, ...parsedMessage])), BUFFER_RATE, {
-						leading: true,
-						trailing: false
-					})()
-					break
-				}
-				case SubscribedTopics.REPLY_SIGNAL: {
-					const data = Json.parse<PlaygroundConnectionStatus>(rawMessage)
-					setConnectionStatus(data)
-					break
-				}
-				case SubscribedTopics.REPLY_SETTINGS: {
-					const data = Json.parse<{ metadata: RFIDReaderSettings; message: string; error: any }>(rawMessage)
-					if (data.error) toast.error(t('ns_common:notification.error'))
-
-					if (data.message && !data.error) toast.success(data.message)
-					setReaderSettings(data.metadata)
-					break
-				}
-				default: {
-					if (env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development')
-						console.warn('Unknown topic:', topic, rawMessage)
-					break
-				}
+		const rawMessage = message.toString()
+		switch (topic) {
+			case SubscribedTopics.REPLY_DATA: {
+				const decodedMessage = gunzipSync(Buffer.from(rawMessage, 'base64')).toString()
+				const parsedMessage = Json.parse<string[]>(decodedMessage)
+				throttle(() => setScannedEpcs(uniq([...scannedEpcs, ...parsedMessage])), BUFFER_RATE, {
+					leading: true,
+					trailing: false
+				})()
+				break
 			}
-		},
-		[clientRef.current]
-	)
+			case SubscribedTopics.REPLY_SIGNAL: {
+				const data = Json.parse<PlaygroundConnectionStatus>(rawMessage)
+				setConnectionStatus(data)
+				break
+			}
+			case SubscribedTopics.REPLY_SETTINGS: {
+				const data = Json.parse<{ metadata: RFIDReaderSettings; message: string; error: any }>(rawMessage)
+				if (data.error) toast.error(t('ns_common:notification.error'))
+
+				if (data.message && !data.error) toast.success(data.message)
+				setReaderSettings(data.metadata)
+				break
+			}
+			default: {
+				if (env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development')
+					console.warn('Unknown topic:', topic, rawMessage)
+				break
+			}
+		}
+	}
 
 	useEffect(() => {
 		if (!clientRef.current) return

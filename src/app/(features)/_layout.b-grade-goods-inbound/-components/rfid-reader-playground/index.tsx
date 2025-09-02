@@ -1,7 +1,7 @@
 import { Div } from '@/components/ui'
 import { memo } from 'react'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
-import { RFIDReaderPlaygroundActions } from './playground-actions'
+import { PlaygroundActions } from './playground-actions'
 import { PlaygroundEmptyDataState } from './playground-empty-data-state'
 import { PlaygroundEpcList } from './playground-epc-list'
 import PlaygroundHeader from './playground-header'
@@ -18,7 +18,7 @@ const RFIDReaderPlayground: React.FC = () => {
 
 	return (
 		<Div
-			className='flex h-full flex-col divide-y'
+			className='flex h-full min-w-80 flex-col divide-y'
 			style={
 				{
 					'--playground-header-height': '52px',
@@ -26,7 +26,6 @@ const RFIDReaderPlayground: React.FC = () => {
 				} as React.CSSProperties
 			}>
 			<PlaygroundHeader />
-
 			{!connectionStatus.isMQTTConnectionReady ? (
 				<UnavailableConnection />
 			) : scannedEpcs.length > 0 ? (
@@ -34,7 +33,7 @@ const RFIDReaderPlayground: React.FC = () => {
 			) : (
 				<PlaygroundEmptyDataState />
 			)}
-			<RFIDReaderPlaygroundActions />
+			<PlaygroundActions />
 		</Div>
 	)
 }

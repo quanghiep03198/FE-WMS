@@ -9,7 +9,7 @@ const UnavailableConnection: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='flex h-full flex-col items-center justify-center gap-2 p-2 text-center *:text-pretty'>
+		<Div className='flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center *:text-pretty'>
 			<Icon
 				name='ZapOff'
 				size={48}

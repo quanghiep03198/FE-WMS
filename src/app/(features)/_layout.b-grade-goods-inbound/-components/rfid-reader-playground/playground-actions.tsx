@@ -2,7 +2,7 @@ import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
-export const RFIDReaderPlaygroundActions: React.FC = () => {
+export const PlaygroundActions: React.FC = () => {
 	const { connectionStatus, resetScannedEpcs, publishMessage } = useReaderPlaygroundStore(
 		'connectionStatus',
 		'setConnectionStatus',

@@ -20,7 +20,6 @@ export const Route = createLazyFileRoute('/(features)/_layout/b-grade-goods-inbo
 
 function RouteComponent() {
 	const { t, i18n } = useTranslation()
-
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
@@ -30,7 +29,7 @@ function RouteComponent() {
 	const { currentDevice } = useSwitchRFIDDevice()
 	const { listPanelOpen } = useToggleListPanel()
 
-	const isUsingAndroidDevice = currentDevice === 'uhf'
+	const isUsingUHFReader = currentDevice === 'uhf'
 
 	return (
 		<Fragment>
@@ -54,18 +53,16 @@ function RouteComponent() {
 						<ResizablePanel defaultSize={50} minSize={40}>
 							<DefectiveGoodsForm />
 						</ResizablePanel>
-						{isUsingAndroidDevice && <ResizableHandle disabled />}
+						{isUsingUHFReader && <ResizableHandle disabled />}
 						<ResizablePanel
-							minSize={isUsingAndroidDevice ? 25 : 0}
-							maxSize={isUsingAndroidDevice ? 25 : 0}
-							defaultSize={isUsingAndroidDevice ? 25 : 0}
+							minSize={isUsingUHFReader ? 25 : 0}
+							maxSize={isUsingUHFReader ? 25 : 0}
+							defaultSize={isUsingUHFReader ? 25 : 0}
 							className={cn(
 								'transtion-max-width linear h-full duration-200 will-change-transform',
-								!isUsingAndroidDevice && 'border-0'
+								!isUsingUHFReader && 'border-0'
 							)}>
-							<ReaderPlaygroundProvider>
-								<RFIDReaderPlayground />
-							</ReaderPlaygroundProvider>
+							<ReaderPlaygroundProvider>{isUsingUHFReader && <RFIDReaderPlayground />}</ReaderPlaygroundProvider>
 						</ResizablePanel>
 					</ResizablePanelGroup>
 					<DefectiveDetailDialog />

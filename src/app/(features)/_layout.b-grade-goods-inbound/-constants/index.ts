@@ -18,3 +18,10 @@ export const DefectiveCategoryI18n: Record<DefectiveCategory, ResourceKeys['ns_i
 	[DefectiveCategory.C_GRADE]: 'shoes_category.c_grade',
 	[DefectiveCategory.RESEARCH_DEVELOPMENT]: 'shoes_category.research_development'
 }
+
+export enum ReaderAntenna {
+	ANT_1 = '1',
+	ANT_2 = '2',
+	ANT_3 = '4',
+	ANT_4 = '8'
+}

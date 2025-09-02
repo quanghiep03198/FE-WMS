@@ -1,3 +1,4 @@
+import useEffectOnce from '@/common/hooks/use-effect-once'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -34,30 +35,23 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import z from 'zod'
+import { ReaderAntenna } from '../../-constants'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
-
-const schema = z.object({
-	readerIP: z.ipv4({ message: 'ns_validation:invalid_ipv4' }),
-	readerAnt: z.enum(['1', '2', '3', '4'], { message: 'ns_validation:invalid_value' }),
-	readerPower: z.number().nonnegative().min(5).max(30)
-})
-
-type FormData = z.infer<typeof schema>
+import { readerSettingsFormSchema, ReaderSettingsFormValues } from '../../-schemas/reader-settings.schema'
 
 const ReaderSettingSheet: React.FC = () => {
 	const { readerSettings, publishMessage } = useReaderPlaygroundStore('readerSettings', 'publishMessage')
 	const { t } = useTranslation()
-	const form = useForm<FormData>({
-		resolver: zodResolver(schema),
+	const form = useForm<ReaderSettingsFormValues>({
+		resolver: zodResolver(readerSettingsFormSchema),
 		mode: 'onChange',
 		defaultValues: { ...readerSettings, readerPower: Number(readerSettings.readerPower) }
 	})
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		if (Object.values(form.getValues()).some(isEmpty))
 			publishMessage(PublishedTopics.REQUEST_SETTINGS, { action: 'get' })
-	}, [])
+	})
 
 	useEffect(() => {
 		form.reset({ ...readerSettings, readerPower: Number(readerSettings.readerPower) })
@@ -65,7 +59,10 @@ const ReaderSettingSheet: React.FC = () => {
 
 	return (
 		<Sheet>
-			<Tooltip message={t('ns_rfid:reader_settings_form.title')} triggerProps={{ asChild: true }}>
+			<Tooltip
+				message={t('ns_rfid:reader_settings_form.title')}
+				triggerProps={{ asChild: true }}
+				contentProps={{ side: 'left' }}>
 				<SheetTrigger className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}>
 					<Icon name='Settings' size={18} />
 				</SheetTrigger>
@@ -80,7 +77,10 @@ const ReaderSettingSheet: React.FC = () => {
 					<SheetForm
 						onSubmit={form.handleSubmit((data) => {
 							console.log(data)
-							publishMessage<FormData>(PublishedTopics.REQUEST_SETTINGS, { action: 'update', payload: data })
+							publishMessage<ReaderSettingsFormValues>(PublishedTopics.REQUEST_SETTINGS, {
+								action: 'update',
+								payload: data
+							})
 						})}>
 						<InputFieldControl
 							label={t('ns_rfid:reader_settings_form.reader_ip.label')}
@@ -105,10 +105,10 @@ const ReaderSettingSheet: React.FC = () => {
 											defaultValue={field.value}
 											className='flex flex-col space-y-2'>
 											{[
-												{ label: 'Antenna 1', value: '1' },
-												{ label: 'Antenna 2', value: '2' },
-												{ label: 'Antenna 3', value: '4' },
-												{ label: 'Antenna 4', value: '8' }
+												{ label: 'Antenna 1', value: ReaderAntenna.ANT_1 },
+												{ label: 'Antenna 2', value: ReaderAntenna.ANT_2 },
+												{ label: 'Antenna 3', value: ReaderAntenna.ANT_3 },
+												{ label: 'Antenna 4', value: ReaderAntenna.ANT_4 }
 											].map((item) => (
 												<FormItem key={item.value} className='flex items-center gap-x-3 space-y-0'>
 													<FormControl>
@@ -126,7 +126,6 @@ const ReaderSettingSheet: React.FC = () => {
 								</FormItem>
 							)}
 						/>
-
 						<FormField
 							control={form.control}
 							name='readerPower'
@@ -140,7 +139,7 @@ const ReaderSettingSheet: React.FC = () => {
 													name='WifiLow'
 													size={24}
 													strokeWidth={1.5}
-													className='-translate-y-3 rotate-45 stroke-warning'
+													className='-translate-y-3 rotate-45 stroke-muted-foreground'
 												/>
 												<Div className='flex-1 space-y-2'>
 													<Slider
@@ -150,12 +149,12 @@ const ReaderSettingSheet: React.FC = () => {
 														value={[field.value]}
 														onValueChange={(value) => field.onChange(value[0])}
 													/>
-													<Div className='flex items-baseline justify-between'>
+													<Div className='flex items-baseline justify-between px-1'>
 														{Array.from({ length: 6 }, (_, i) => (
 															<Typography
 																key={i}
 																variant='small'
-																className='translate-x-2 text-center !text-[10px] first:translate-x-0 last:translate-x-0'>
+																className='translate-x-0.5 text-center !text-[10px] first:translate-x-0 last:translate-x-0'>
 																{(i + 1) * 5}
 															</Typography>
 														))}
@@ -165,7 +164,7 @@ const ReaderSettingSheet: React.FC = () => {
 													name='WifiHigh'
 													size={24}
 													strokeWidth={1.5}
-													className='-translate-y-3 rotate-45 stroke-success'
+													className='-translate-y-3 rotate-45'
 												/>
 											</Div>
 											<FormMessage />
