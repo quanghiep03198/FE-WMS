@@ -68,7 +68,7 @@ const LogoCloud: React.FC = () => {
 const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 	<div
 		{...props}
-		className='mx-auto flex w-max animate-[scrolling_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-8 will-change-transform group-hover/scroll:paused'>
+		className='mx-auto flex w-max animate-[marquee_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-8 will-change-transform group-hover/scroll:paused'>
 		<LinkCard href='#'>
 			<img
 				src='/typescript.svg'

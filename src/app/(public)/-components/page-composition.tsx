@@ -1,6 +1,7 @@
 import { Div } from '@/components/ui'
 import tw from 'tailwind-styled-components'
 import { navigationConfig, usePageContext } from '../-contexts/page-context'
+import { ExploreRFIDAgentBanner } from './explore-rfid-agent-banner'
 import Footer from './footer'
 import Header from './header'
 import LogoCloud from './logo-cloud'
@@ -15,8 +16,8 @@ const PageComposition: React.FC = () => {
 			style={{
 				'--primary-alt': 'hsl(var(--success))'
 			}}>
-			{/* <Spotlight fill='white' className='-top-20 left-0 z-[-1] xl:-left-40 xl:-top-40' /> */}
 			<Main ref={pageContext?.contentScrollRef}>
+				<ExploreRFIDAgentBanner />
 				<Header />
 				<Div>
 					{navigationConfig.map(({ href, SectionComponent }, index) => (

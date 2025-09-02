@@ -25,7 +25,7 @@ const Header: React.FunctionComponent = () => {
 	return (
 		<Div
 			className={cn(
-				'sticky top-0 z-50 h-20 border-b bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:p-4'
+				'peer sticky top-10 z-40 h-20 border-b bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:p-4'
 			)}>
 			<Div
 				as='nav'

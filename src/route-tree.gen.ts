@@ -17,6 +17,7 @@ import { Route as publicIndexImport } from './app/(public)/index'
 import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
 import { Route as authAuthorizationIndexImport } from './app/(auth)/authorization/index'
+import { Route as publicExploreRfidAgentImport } from './app/(public)/explore/rfid-agent'
 import { Route as featuresPreferencesLayoutImport } from './app/(features)/preferences/_layout'
 
 // Create Virtual Routes
@@ -108,6 +109,12 @@ const authLoginIndexRoute = authLoginIndexImport.update({
 const authAuthorizationIndexRoute = authAuthorizationIndexImport.update({
   id: '/(auth)/authorization/',
   path: '/authorization/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const publicExploreRfidAgentRoute = publicExploreRfidAgentImport.update({
+  id: '/(public)/explore/rfid-agent',
+  path: '/explore/rfid-agent',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -373,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresPreferencesLayoutImport
       parentRoute: typeof featuresPreferencesRoute
     }
+    '/(public)/explore/rfid-agent': {
+      id: '/(public)/explore/rfid-agent'
+      path: '/explore/rfid-agent'
+      fullPath: '/explore/rfid-agent'
+      preLoaderRoute: typeof publicExploreRfidAgentImport
+      parentRoute: typeof rootRoute
+    }
     '/(auth)/authorization/': {
       id: '/(auth)/authorization/'
       path: '/authorization'
@@ -609,6 +623,7 @@ const featuresRouteWithChildren = featuresRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
+  '/explore/rfid-agent': typeof publicExploreRfidAgentRoute
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
   '/b-grade-goods-inbound': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
@@ -633,6 +648,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
+  '/explore/rfid-agent': typeof publicExploreRfidAgentRoute
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
   '/b-grade-goods-inbound': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
@@ -661,6 +677,7 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/(features)/preferences': typeof featuresPreferencesRouteWithChildren
   '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
+  '/(public)/explore/rfid-agent': typeof publicExploreRfidAgentRoute
   '/(auth)/authorization/': typeof authAuthorizationIndexRoute
   '/(auth)/login/': typeof authLoginIndexRoute
   '/(features)/_layout/b-grade-goods-inbound/': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
@@ -687,6 +704,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/preferences'
+    | '/explore/rfid-agent'
     | '/authorization'
     | '/login'
     | '/b-grade-goods-inbound'
@@ -710,6 +728,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/preferences'
+    | '/explore/rfid-agent'
     | '/authorization'
     | '/login'
     | '/b-grade-goods-inbound'
@@ -736,6 +755,7 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/(features)/preferences'
     | '/(features)/preferences/_layout'
+    | '/(public)/explore/rfid-agent'
     | '/(auth)/authorization/'
     | '/(auth)/login/'
     | '/(features)/_layout/b-grade-goods-inbound/'
@@ -761,6 +781,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   featuresRoute: typeof featuresRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
+  publicExploreRfidAgentRoute: typeof publicExploreRfidAgentRoute
   authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
   authLoginIndexRoute: typeof authLoginIndexRoute
 }
@@ -768,6 +789,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   featuresRoute: featuresRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
+  publicExploreRfidAgentRoute: publicExploreRfidAgentRoute,
   authAuthorizationIndexRoute: authAuthorizationIndexRoute,
   authLoginIndexRoute: authLoginIndexRoute,
 }
@@ -784,6 +806,7 @@ export const routeTree = rootRoute
       "children": [
         "/(features)",
         "/(public)/",
+        "/(public)/explore/rfid-agent",
         "/(auth)/authorization/",
         "/(auth)/login/"
       ]
@@ -833,6 +856,9 @@ export const routeTree = rootRoute
         "/(features)/preferences/_layout/appearance-settings/",
         "/(features)/preferences/_layout/keybindings/"
       ]
+    },
+    "/(public)/explore/rfid-agent": {
+      "filePath": "(public)/explore/rfid-agent.tsx"
     },
     "/(auth)/authorization/": {
       "filePath": "(auth)/authorization/index.tsx"
