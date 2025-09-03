@@ -1,5 +1,5 @@
 import { ErrorBoundaryFallback } from '@/app/-components/-errors/error-boundary-fallback'
-import { Div, Separator, SidebarProvider, Typography } from '@/components/ui'
+import { Div, Icon, Separator, SidebarProvider, Typography } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useRafState } from 'ahooks'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -18,7 +18,7 @@ export const Route = createLazyFileRoute('/(public)/rfid-agent/docs/')({
 })
 
 function RouteComponent() {
-	const [windowSize, setWindowSize] = useRafState({
+	const [windowSize] = useRafState({
 		width: 0,
 		height: 0
 	})
@@ -27,7 +27,7 @@ function RouteComponent() {
 		<SidebarProvider className='h-screen !overflow-hidden [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
 			<NavSidebar />
 			<Div
-				className='relative h-full flex-1 overflow-y-scroll @container'
+				className='relative h-full flex-1 overflow-y-scroll scroll-smooth @container'
 				style={
 					{
 						'--header-height': 80 + 'px',
@@ -39,7 +39,7 @@ function RouteComponent() {
 				<Div
 					as='main'
 					id='outlet-wrapper'
-					className='container flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-4'>
+					className='container max-w-6xl flex-1 basis-full p-6 pb-[var(--outlet-padding-bottom)] sm:px-4'>
 					<ErrorBoundary
 						fallbackRender={({ error, resetErrorBoundary }) => {
 							return (
@@ -51,9 +51,11 @@ function RouteComponent() {
 								/>
 							)
 						}}>
-						<Div className='max-w-5xl space-y-20 scroll-smooth p-6'>
+						<Div className='space-y-20'>
 							<Div as='article' className='space-y-20'>
-								<Typography variant='h1'>Eclipse Mosquitto</Typography>
+								<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Icon name='Link' size={26} /> Eclipse Mosquitto
+								</Typography>
 								<MosquittoIntroduction />
 								<MosquittoUsageReason />
 								<MosquittoInstallation />
@@ -61,7 +63,9 @@ function RouteComponent() {
 							</Div>
 							<Separator />
 							<Div as='article' className='space-y-20'>
-								<Typography variant='h1'>RFID Agent</Typography>
+								<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Icon name='Link' size={26} /> RFID Agent
+								</Typography>
 								<RFIDAgentIntroduction />
 								<RFIDAgentUsageReason />
 								<RFIDAgentInstallation />

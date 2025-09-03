@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Badge, buttonVariants, Div, Icon, Typography } from '@/components/ui'
+import Terminal from './terminal'
 
 const RFIDAgentInstallation: React.FC = () => {
 	return (
@@ -46,12 +47,9 @@ const RFIDAgentInstallation: React.FC = () => {
 					<Typography as='span'>
 						Ping RFID Reader TCP/IP to check if communication between your computer and RFID Reader is available
 					</Typography>
-					<code className='relative my-6 block w-full rounded bg-accent p-3 text-accent-foreground'>
-						{`ping <your_reader_ip_address>`}
-						<button className='absolute right-2 top-1/2 -translate-y-1/2'>
-							<Icon name='Copy' />
-						</button>
-					</code>
+					<Terminal command='ping <your_reader_ip_address>' className='my-4'>
+						ping &lt;your_reader_ip_address&gt;
+					</Terminal>
 				</li>
 				<li>Connect your UHF reader to your computer using the appropriate interface (Wifi, LAN, etc.).</li>
 				<li>Ensure that the RFID Agent is running and properly communicating with your UHF reader.</li>

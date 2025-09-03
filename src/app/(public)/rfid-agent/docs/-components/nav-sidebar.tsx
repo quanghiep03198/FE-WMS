@@ -17,7 +17,7 @@ import { Link, useLocation } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 const menuGroups: Record<
-	'rfidAgent' | 'mosquitto' | 'tutorials' | 'faqs',
+	'rfidAgent' | 'mosquitto' | 'faqs',
 	Array<{
 		title: string
 		hash?: string
@@ -64,18 +64,6 @@ const menuGroups: Record<
 			hash: 'rfid-agent-configuration'
 		}
 	],
-
-	tutorials: [
-		{
-			title: 'Common issues',
-			hash: 'faq-common-issues'
-		},
-		{
-			title: 'Miscellaneous',
-			hash: 'faq-miscellaneous'
-		}
-	],
-
 	faqs: [
 		{
 			title: 'Common issues',
@@ -91,10 +79,10 @@ const menuGroups: Record<
 const NavSidebar: React.FC = () => {
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='none' className='border-r'>
-			<SidebarHeader>
-				<Link to='/rfid-agent' className='flex items-center gap-x-2 py-4 font-jetbrains'>
-					<Icon name='Radio' size={40} strokeWidth={1} />
-					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text font-jetbrains text-base font-semibold leading-normal tracking-widest text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
+			<SidebarHeader className='p-4'>
+				<Link to='/rfid-agent' className='flex items-center gap-x-2 font-jetbrains'>
+					<Icon name='Radio' size={36} strokeWidth={1.5} />
+					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text font-jetbrains text-base font-semibold leading-normal text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
 						RFID Agent
 					</span>
 				</Link>
@@ -108,20 +96,12 @@ const NavSidebar: React.FC = () => {
 						))}
 					</SidebarMenu>
 				</SidebarGroup>
+
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel className='text-base text-foreground'>RFID Agent</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Main menu'>
 						{menuGroups.rfidAgent.map((item) => (
-							<SidebarMenuLink key={item.hash} {...item} />
-						))}
-					</SidebarMenu>
-				</SidebarGroup>
-				<SidebarSeparator />
-				<SidebarGroup>
-					<SidebarGroupLabel className='text-base text-foreground'>Tutorials</SidebarGroupLabel>
-					<SidebarMenu role='menu' aria-label='Eclipse Mosquitto'>
-						{menuGroups.tutorials.map((item) => (
 							<SidebarMenuLink key={item.hash} {...item} />
 						))}
 					</SidebarMenu>
