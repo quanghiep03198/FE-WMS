@@ -69,13 +69,13 @@ export function Header() {
 										</a>
 									</NavigationMenuLink>
 								</li>
-								<ListItem href='/docs' title='Introduction'>
+								<ListItem to='/rfid-agent/docs#about-rfid-agent' title='About'>
 									RFID Agent makes it easy to connect and manage RFID readers.
 								</ListItem>
-								<ListItem href='/docs/primitives/typography' title='Download'>
+								<ListItem to='/rfid-agent/docs#download-rfid-agent' title='Download'>
 									Download the latest version of RFID Agent for your operating system.
 								</ListItem>
-								<ListItem href='/docs/installation' title='Installation'>
+								<ListItem to='/rfid-agent/docs#install-rfid-agent' title='Installation'>
 									Follow our step-by-step guide to get started quickly.
 								</ListItem>
 							</ul>
@@ -104,11 +104,17 @@ export function Header() {
 	)
 }
 
-const ListItem: React.FC<React.ComponentProps<'a'>> = ({ className, title, children, ref, ...props }) => {
+const ListItem: React.FC<React.PropsWithChildren & React.ComponentProps<typeof Link>> = ({
+	className,
+	title,
+	children,
+	ref,
+	...props
+}) => {
 	return (
 		<li>
 			<NavigationMenuLink asChild>
-				<a
+				<Link
 					ref={ref}
 					className={cn(
 						'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
@@ -117,7 +123,7 @@ const ListItem: React.FC<React.ComponentProps<'a'>> = ({ className, title, child
 					{...props}>
 					<div className='text-sm font-medium leading-none'>{title}</div>
 					<p className='line-clamp-2 text-sm leading-snug text-muted-foreground'>{children}</p>
-				</a>
+				</Link>
 			</NavigationMenuLink>
 		</li>
 	)

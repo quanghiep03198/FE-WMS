@@ -17,13 +17,18 @@ import { Route as publicIndexImport } from './app/(public)/index'
 import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
 import { Route as authAuthorizationIndexImport } from './app/(auth)/authorization/index'
-import { Route as publicExploreRfidAgentImport } from './app/(public)/explore/rfid-agent'
 import { Route as featuresPreferencesLayoutImport } from './app/(features)/preferences/_layout'
 
 // Create Virtual Routes
 
 const featuresImport = createFileRoute('/(features)')()
 const featuresPreferencesImport = createFileRoute('/(features)/preferences')()
+const publicRfidAgentIndexLazyImport = createFileRoute(
+  '/(public)/rfid-agent/',
+)()
+const publicRfidAgentDocsIndexLazyImport = createFileRoute(
+  '/(public)/rfid-agent/docs/',
+)()
 const featuresLayoutWarehouseIndexLazyImport = createFileRoute(
   '/(features)/_layout/warehouse/',
 )()
@@ -100,6 +105,16 @@ const featuresLayoutRoute = featuresLayoutImport.update({
   getParentRoute: () => featuresRoute,
 } as any)
 
+const publicRfidAgentIndexLazyRoute = publicRfidAgentIndexLazyImport
+  .update({
+    id: '/(public)/rfid-agent/',
+    path: '/rfid-agent/',
+    getParentRoute: () => rootRoute,
+  } as any)
+  .lazy(() =>
+    import('./app/(public)/rfid-agent/index.lazy').then((d) => d.Route),
+  )
+
 const authLoginIndexRoute = authLoginIndexImport.update({
   id: '/(auth)/login/',
   path: '/login/',
@@ -112,16 +127,20 @@ const authAuthorizationIndexRoute = authAuthorizationIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const publicExploreRfidAgentRoute = publicExploreRfidAgentImport.update({
-  id: '/(public)/explore/rfid-agent',
-  path: '/explore/rfid-agent',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const featuresPreferencesLayoutRoute = featuresPreferencesLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => featuresPreferencesRoute,
 } as any)
+
+const publicRfidAgentDocsIndexLazyRoute = publicRfidAgentDocsIndexLazyImport
+  .update({
+    id: '/(public)/rfid-agent/docs/',
+    path: '/rfid-agent/docs/',
+    getParentRoute: () => rootRoute,
+  } as any)
+  .lazy(() =>
+    import('./app/(public)/rfid-agent/docs/index.lazy').then((d) => d.Route),
+  )
 
 const featuresLayoutWarehouseIndexLazyRoute =
   featuresLayoutWarehouseIndexLazyImport
@@ -380,13 +399,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresPreferencesLayoutImport
       parentRoute: typeof featuresPreferencesRoute
     }
-    '/(public)/explore/rfid-agent': {
-      id: '/(public)/explore/rfid-agent'
-      path: '/explore/rfid-agent'
-      fullPath: '/explore/rfid-agent'
-      preLoaderRoute: typeof publicExploreRfidAgentImport
-      parentRoute: typeof rootRoute
-    }
     '/(auth)/authorization/': {
       id: '/(auth)/authorization/'
       path: '/authorization'
@@ -399,6 +411,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof authLoginIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/(public)/rfid-agent/': {
+      id: '/(public)/rfid-agent/'
+      path: '/rfid-agent'
+      fullPath: '/rfid-agent'
+      preLoaderRoute: typeof publicRfidAgentIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/(features)/_layout/b-grade-goods-inbound/': {
@@ -477,6 +496,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/warehouse'
       preLoaderRoute: typeof featuresLayoutWarehouseIndexLazyImport
       parentRoute: typeof featuresLayoutImport
+    }
+    '/(public)/rfid-agent/docs/': {
+      id: '/(public)/rfid-agent/docs/'
+      path: '/rfid-agent/docs'
+      fullPath: '/rfid-agent/docs'
+      preLoaderRoute: typeof publicRfidAgentDocsIndexLazyImport
+      parentRoute: typeof rootRoute
     }
     '/(features)/_layout/(rfid)/finished-goods-inbound/': {
       id: '/(features)/_layout/(rfid)/finished-goods-inbound/'
@@ -623,9 +649,9 @@ const featuresRouteWithChildren = featuresRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
-  '/explore/rfid-agent': typeof publicExploreRfidAgentRoute
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
+  '/rfid-agent': typeof publicRfidAgentIndexLazyRoute
   '/b-grade-goods-inbound': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
@@ -637,6 +663,7 @@ export interface FileRoutesByFullPath {
   '/report': typeof featuresLayoutReportIndexLazyRoute
   '/transfer-management': typeof featuresLayoutTransferManagementIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/rfid-agent/docs': typeof publicRfidAgentDocsIndexLazyRoute
   '/finished-goods-inbound': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
   '/finished-goods-outbound': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
   '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
@@ -648,9 +675,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
-  '/explore/rfid-agent': typeof publicExploreRfidAgentRoute
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
+  '/rfid-agent': typeof publicRfidAgentIndexLazyRoute
   '/b-grade-goods-inbound': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   '/cargo-weight-check': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   '/dashboard': typeof featuresLayoutDashboardIndexLazyRoute
@@ -662,6 +689,7 @@ export interface FileRoutesByTo {
   '/report': typeof featuresLayoutReportIndexLazyRoute
   '/transfer-management': typeof featuresLayoutTransferManagementIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/rfid-agent/docs': typeof publicRfidAgentDocsIndexLazyRoute
   '/finished-goods-inbound': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
   '/finished-goods-outbound': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
   '/preferences/account': typeof featuresPreferencesLayoutAccountIndexLazyRoute
@@ -677,9 +705,9 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRoute
   '/(features)/preferences': typeof featuresPreferencesRouteWithChildren
   '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
-  '/(public)/explore/rfid-agent': typeof publicExploreRfidAgentRoute
   '/(auth)/authorization/': typeof authAuthorizationIndexRoute
   '/(auth)/login/': typeof authLoginIndexRoute
+  '/(public)/rfid-agent/': typeof publicRfidAgentIndexLazyRoute
   '/(features)/_layout/b-grade-goods-inbound/': typeof featuresLayoutBGradeGoodsInboundIndexLazyRoute
   '/(features)/_layout/cargo-weight-check/': typeof featuresLayoutCargoWeightCheckIndexLazyRoute
   '/(features)/_layout/dashboard/': typeof featuresLayoutDashboardIndexLazyRoute
@@ -691,6 +719,7 @@ export interface FileRoutesById {
   '/(features)/_layout/report/': typeof featuresLayoutReportIndexLazyRoute
   '/(features)/_layout/transfer-management/': typeof featuresLayoutTransferManagementIndexLazyRoute
   '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/(public)/rfid-agent/docs/': typeof publicRfidAgentDocsIndexLazyRoute
   '/(features)/_layout/(rfid)/finished-goods-inbound/': typeof featuresLayoutrfidFinishedGoodsInboundIndexLazyRoute
   '/(features)/_layout/(rfid)/finished-goods-outbound/': typeof featuresLayoutrfidFinishedGoodsOutboundIndexLazyRoute
   '/(features)/preferences/_layout/account/': typeof featuresPreferencesLayoutAccountIndexLazyRoute
@@ -704,9 +733,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/preferences'
-    | '/explore/rfid-agent'
     | '/authorization'
     | '/login'
+    | '/rfid-agent'
     | '/b-grade-goods-inbound'
     | '/cargo-weight-check'
     | '/dashboard'
@@ -718,6 +747,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/transfer-management'
     | '/warehouse'
+    | '/rfid-agent/docs'
     | '/finished-goods-inbound'
     | '/finished-goods-outbound'
     | '/preferences/account'
@@ -728,9 +758,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/preferences'
-    | '/explore/rfid-agent'
     | '/authorization'
     | '/login'
+    | '/rfid-agent'
     | '/b-grade-goods-inbound'
     | '/cargo-weight-check'
     | '/dashboard'
@@ -742,6 +772,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/transfer-management'
     | '/warehouse'
+    | '/rfid-agent/docs'
     | '/finished-goods-inbound'
     | '/finished-goods-outbound'
     | '/preferences/account'
@@ -755,9 +786,9 @@ export interface FileRouteTypes {
     | '/(public)/'
     | '/(features)/preferences'
     | '/(features)/preferences/_layout'
-    | '/(public)/explore/rfid-agent'
     | '/(auth)/authorization/'
     | '/(auth)/login/'
+    | '/(public)/rfid-agent/'
     | '/(features)/_layout/b-grade-goods-inbound/'
     | '/(features)/_layout/cargo-weight-check/'
     | '/(features)/_layout/dashboard/'
@@ -769,6 +800,7 @@ export interface FileRouteTypes {
     | '/(features)/_layout/report/'
     | '/(features)/_layout/transfer-management/'
     | '/(features)/_layout/warehouse/'
+    | '/(public)/rfid-agent/docs/'
     | '/(features)/_layout/(rfid)/finished-goods-inbound/'
     | '/(features)/_layout/(rfid)/finished-goods-outbound/'
     | '/(features)/preferences/_layout/account/'
@@ -781,17 +813,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   featuresRoute: typeof featuresRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
-  publicExploreRfidAgentRoute: typeof publicExploreRfidAgentRoute
   authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
   authLoginIndexRoute: typeof authLoginIndexRoute
+  publicRfidAgentIndexLazyRoute: typeof publicRfidAgentIndexLazyRoute
+  publicRfidAgentDocsIndexLazyRoute: typeof publicRfidAgentDocsIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   featuresRoute: featuresRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
-  publicExploreRfidAgentRoute: publicExploreRfidAgentRoute,
   authAuthorizationIndexRoute: authAuthorizationIndexRoute,
   authLoginIndexRoute: authLoginIndexRoute,
+  publicRfidAgentIndexLazyRoute: publicRfidAgentIndexLazyRoute,
+  publicRfidAgentDocsIndexLazyRoute: publicRfidAgentDocsIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -806,9 +840,10 @@ export const routeTree = rootRoute
       "children": [
         "/(features)",
         "/(public)/",
-        "/(public)/explore/rfid-agent",
         "/(auth)/authorization/",
-        "/(auth)/login/"
+        "/(auth)/login/",
+        "/(public)/rfid-agent/",
+        "/(public)/rfid-agent/docs/"
       ]
     },
     "/(features)": {
@@ -857,14 +892,14 @@ export const routeTree = rootRoute
         "/(features)/preferences/_layout/keybindings/"
       ]
     },
-    "/(public)/explore/rfid-agent": {
-      "filePath": "(public)/explore/rfid-agent.tsx"
-    },
     "/(auth)/authorization/": {
       "filePath": "(auth)/authorization/index.tsx"
     },
     "/(auth)/login/": {
       "filePath": "(auth)/login/index.tsx"
+    },
+    "/(public)/rfid-agent/": {
+      "filePath": "(public)/rfid-agent/index.lazy.tsx"
     },
     "/(features)/_layout/b-grade-goods-inbound/": {
       "filePath": "(features)/_layout.b-grade-goods-inbound/index.lazy.tsx",
@@ -909,6 +944,9 @@ export const routeTree = rootRoute
     "/(features)/_layout/warehouse/": {
       "filePath": "(features)/_layout.warehouse/index.lazy.tsx",
       "parent": "/(features)/_layout"
+    },
+    "/(public)/rfid-agent/docs/": {
+      "filePath": "(public)/rfid-agent/docs/index.lazy.tsx"
     },
     "/(features)/_layout/(rfid)/finished-goods-inbound/": {
       "filePath": "(features)/_layout.(rfid)/finished-goods-inbound/index.lazy.tsx",

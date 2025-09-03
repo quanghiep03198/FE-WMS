@@ -10,7 +10,7 @@ export function ExploreRFIDAgentBanner() {
 						🚀 RFID Agent version 1.0.0 is finally out !!!
 					</Typography>
 					<Link
-						to='/explore/rfid-agent'
+						to='/rfid-agent'
 						className='relative inline-flex items-center gap-x-1.5 text-base font-medium text-blue-400 underline-offset-8 hover:underline dark:text-blue-500'>
 						Explore now <Icon name='ArrowRight' size={14} strokeWidth={2} className='translate-y-0.5' />
 					</Link>
