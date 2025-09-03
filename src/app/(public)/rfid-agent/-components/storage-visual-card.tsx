@@ -2,6 +2,7 @@ import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import { Icon } from '@/components/ui'
+import { cloneElement } from 'react'
 import { VisualCard } from './visual-card'
 
 export const range = (start: number, end?: number, step: number = 1): number[] => {
@@ -23,10 +24,6 @@ interface Props {
 
 const StorageVisual: React.FC<Props> = ({ className }) => {
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
-	const cols = [
-		<Icon key={0} name='FileArchive' className='h-6 w-6 md:h-6 md:w-6' />,
-		<Icon key={1} name='FileCode' className='h-6 w-6 md:h-6 md:w-6' />
-	]
 
 	return (
 		<VisualCard.Wrapper
@@ -46,27 +43,36 @@ const StorageVisual: React.FC<Props> = ({ className }) => {
 					className={cn('nowrap inset-0 flex overflow-hidden', className)}
 					role='img'
 					aria-label='Supabase Storage supports images, documents and videos'>
-					{range(0, 2).map((_, idx1: number) => (
-						<div
-							key={`row-${idx1}`}
-							className='pause motion-safe:group-hover:run relative left-0 z-10 flex h-full w-auto animate-marquee items-end pb-4 transition-transform will-change-transform'>
-							{range(0, 10).map((_, idx2: number) => (
-								<div key={`col-${idx2}`} className='ml-2 flex flex-col gap-2 md:gap-2'>
-									{cols.map((col: any, idx3: number) => (
-										<div
-											key={`icon-${idx3}`}
-											className='bg flex h-[60px] w-[60px] items-center justify-center rounded-lg border bg-card text-muted-foreground duration-150 hover:border-success hover:text-success md:h-[62px] md:w-[62px] md:min-w-[62px]'>
-											{col}
-										</div>
-									))}
-								</div>
-							))}
-						</div>
-					))}
+					<MarqueeList />
+					{cloneElement(<MarqueeList />, { 'aria-hidden': true })}
 				</figure>
 			</VisualCard.Content>
 		</VisualCard.Wrapper>
 	)
+}
+
+const MarqueeList: React.FC = () => {
+	const cols = [
+		<Icon key={0} name='FileArchive' className='h-6 w-6 md:h-6 md:w-6' />,
+		<Icon key={1} name='FileCode' className='h-6 w-6 md:h-6 md:w-6' />
+	]
+	return range(0, 2).map((_, idx1: number) => (
+		<div
+			key={`row-${idx1}`}
+			className='pause motion-safe:group-hover:run relative left-0 z-10 flex h-full w-auto animate-marquee items-end pb-4 transition-transform will-change-transform'>
+			{range(0, 8).map((_, idx2: number) => (
+				<div key={`col-${idx2}`} className='ml-2 flex flex-col gap-2 md:gap-2'>
+					{cols.map((col: any, idx3: number) => (
+						<div
+							key={`icon-${idx3}`}
+							className='bg flex h-[60px] w-[60px] items-center justify-center rounded-lg border bg-card text-muted-foreground duration-150 hover:border-success hover:text-success md:h-[62px] md:w-[62px] md:min-w-[62px]'>
+							{col}
+						</div>
+					))}
+				</div>
+			))}
+		</div>
+	))
 }
 
 export default StorageVisual
