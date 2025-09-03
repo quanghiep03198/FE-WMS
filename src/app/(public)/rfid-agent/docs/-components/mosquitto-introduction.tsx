@@ -1,11 +1,11 @@
 import { Div, Typography } from '@/components/ui'
 
-type Props = {}
-
-const MosquittoIntroduction = (props: Props) => {
+const MosquittoIntroduction: React.FC = () => {
 	return (
 		<Div as='section' className='space-y-3'>
-			<Typography variant='h2'>What is Eclipse Mosquitto</Typography>
+			<Typography variant='h2' id='about-mosquitto'>
+				What is Eclipse Mosquitto ?
+			</Typography>
 			<Typography>
 				Mosquitto is an open-source message broker that implements the MQTT (Message Queuing Telemetry Transport)
 				protocol. It is designed for lightweight, low-bandwidth, and low-power devices, making it ideal for Internet

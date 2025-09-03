@@ -3,7 +3,9 @@ import { Div, Typography } from '@/components/ui'
 const MosquittoUsageReason: React.FC = () => {
 	return (
 		<Div as='section' className='space-y-3'>
-			<Typography variant='h2'>Why Eclipse Mosquitto needed ?</Typography>
+			<Typography variant='h2' id='why-mosquitto'>
+				Why Eclipse Mosquitto is needed ?
+			</Typography>
 			<Typography>
 				Mosquitto is needed as a lightweight and efficient message broker to facilitate communication between the
 				RFID Agent and the web application. It enables real-time data exchange, allowing the RFID Agent to publish
