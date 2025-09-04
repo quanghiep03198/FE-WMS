@@ -1,13 +1,14 @@
-import { Badge, Div, Icon, Typography } from '@/components/ui'
+import { Badge, Icon, Typography } from '@/components/ui'
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
+import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import SectionHeading from './section-heading'
+import { Section } from './styled'
 import Terminal from './terminal'
 
 const MosquittoConfiguration: React.FC = () => {
 	return (
-		<Div as='section' className='space-y-3'>
-			<Typography variant='h2' id='mosquitto-configuration'>
-				Configuration
-			</Typography>
+		<Section>
+			<SectionHeading id={DocumentHashNavigation.MOSQUITTO_CONFIGURATION}>Configuration</SectionHeading>
 			<Typography>
 				To configure Mosquitto, you need to edit the mosquitto.conf file. This file contains various settings that
 				control the behavior of the Mosquitto broker. You can find the configuration file in the installation
@@ -88,7 +89,7 @@ const MosquittoConfiguration: React.FC = () => {
 					</Terminal>
 				</li>
 			</ol>
-		</Div>
+		</Section>
 	)
 }
 

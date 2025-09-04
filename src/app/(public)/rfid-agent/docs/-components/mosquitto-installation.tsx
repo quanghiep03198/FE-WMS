@@ -1,34 +1,37 @@
-import { cn } from '@/common/utils/cn'
-import { buttonVariants, Div, Icon, Typography } from '@/components/ui'
+import { Div, Icon, Typography } from '@/components/ui'
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
 import React from 'react'
+import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import { DownloadButton } from './download-button'
+import SectionHeading from './section-heading'
+import { ListItem, OrderedList, Section } from './styled'
 import Terminal from './terminal'
 
 const MosquittoInstallation: React.FC = () => {
 	return (
-		<Div as='section' className='space-y-3'>
-			<Typography variant='h2' id='mosquitto-installation'>
-				Installation
-			</Typography>
+		<Section>
+			<SectionHeading id={DocumentHashNavigation.MOSQUITTO_INSTALLATION}>Installation</SectionHeading>
 			<Typography>
 				To install Mosquitto on your system, follow the instructions below based on your operating system:
 			</Typography>
 
-			<ol className='list-inside list-decimal space-y-2 pl-4' data-level={1}>
-				<li>
+			<OrderedList>
+				<ListItem>
 					<Typography as='span'>
 						Download the latest version of Eclipse Mosquitto from official website.
 					</Typography>
 					<Div className='my-6'>
 						<Div className='inline-flex items-center gap-x-2'>
-							<a href='https://mosquitto.org/download/' className={cn(buttonVariants())}>
+							<DownloadButton
+								href='https://mosquitto.org/files/binary/win64/mosquitto-2.0.22-install-windows-x64.exe'
+								download>
 								<Icon name='CloudDownload' /> Mosquitto Windows Installer (.exe)
-							</a>
+							</DownloadButton>
 						</Div>
 					</Div>
-				</li>
-				<li>Run the installer and follow the on-screen instructions.</li>
-				<li>
+				</ListItem>
+				<ListItem>Run the installer and follow the on-screen instructions.</ListItem>
+				<ListItem>
 					<Typography className='inline'>
 						Once installed, add Eclipse Mosquitto into your Evironment variables Path. This allows you to run
 						Mosquitto from any command prompt. Press{' '}
@@ -45,8 +48,8 @@ const MosquittoInstallation: React.FC = () => {
 					<Terminal command={/* template */ `setx PATH "%PATH%;%MOSQUITTO_DIR%" /M`} className='my-4'>
 						{`setx PATH "%PATH%;%MOSQUITTO_DIR%" /M`}
 					</Terminal>
-				</li>
-				<li>
+				</ListItem>
+				<ListItem>
 					<Typography className='inline'>
 						Open new <b>Command Prompt</b> window and type the below command. If you see the following output, it
 						means Mosquitto is installed correctly and working.
@@ -79,9 +82,9 @@ const MosquittoInstallation: React.FC = () => {
 							See https://mosquitto.org/ for more information.
 						</span>
 					</Terminal>
-				</li>
-			</ol>
-		</Div>
+				</ListItem>
+			</OrderedList>
+		</Section>
 	)
 }
 

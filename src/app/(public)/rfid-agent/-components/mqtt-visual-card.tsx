@@ -29,7 +29,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 
 	return (
 		<VisualCard.Wrapper className='row-span-2'>
-			<VisualCard.Header className='space-y-2 p-6'>
+			<VisualCard.Header>
 				<VisualCard.Title>
 					<Icon name='Blocks' /> IoT Solution
 				</VisualCard.Title>

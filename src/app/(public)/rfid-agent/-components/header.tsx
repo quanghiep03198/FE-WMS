@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { cn } from '@/common/utils/cn'
 import {
 	Div,
@@ -13,35 +11,67 @@ import {
 	navigationMenuTriggerStyle
 } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { DocumentHashNavigation } from '../docs/-constants/document-hash-navigation'
 
-const thirdParties: { title: string; to: string; description: string }[] = [
-	{
-		title: 'About Mosquitto',
-		to: '/rfid-agent/docs#about-mosquitto',
-		description:
-			'Lightweight and open-source MQTT broker that facilitates efficient message exchange between IoT devices and applications.'
-	},
-	{
-		title: 'Mosquitto download',
-		to: 'https://mosquitto.org/',
-		description:
-			'Get the latest version of Mosquitto, a lightweight and open-source MQTT broker for efficient message exchange in IoT applications.'
-	},
-	{
-		title: 'Mosquitto installation',
-		to: '/rfid-agent/docs#mosquitto-installation',
-		description:
-			'Step-by-step guide to install Mosquitto, a lightweight and open-source MQTT broker, on various operating systems for efficient message exchange in IoT applications.'
-	},
-	{
-		title: 'Mosquitto configuration',
-		to: '/rfid-agent/docs#mosquitto-configuration',
-		description:
-			'Instructions to configure Mosquitto, a lightweight and open-source MQTT broker, for secure and efficient message exchange in IoT applications.'
-	}
-]
+type NavigationGroup = Record<
+	'rfidAgent' | 'thirdParty',
+	Array<{ title: string; hash?: DocumentHashNavigation; href?: string; description: string }>
+>
 
 export function Header() {
+	const { t, i18n } = useTranslation()
+
+	const navigationGroup: NavigationGroup = useMemo(
+		() => ({
+			rfidAgent: [
+				{
+					title: 'About',
+					hash: DocumentHashNavigation.RFID_AGENT_INTRODUCTION,
+					description: 'RFID Agent makes it easy to connect and manage RFID readers.'
+				},
+				{
+					title: 'Installation',
+					hash: DocumentHashNavigation.RFID_AGENT_INSTALLATION,
+					description: 'Download the latest version of RFID Agent for your operating system.'
+				},
+				{
+					title: 'Configuration',
+					hash: DocumentHashNavigation.RFID_AGENT_CONFIGURATION,
+					description: 'Follow our step-by-step guide to get started quickly.'
+				}
+			],
+			thirdParty: [
+				{
+					title: 'About Mosquitto',
+					hash: DocumentHashNavigation.MOSQUITTO_INTRODUCTION,
+					description:
+						'Lightweight and open-source MQTT broker that facilitates efficient message exchange between IoT devices and applications.'
+				},
+				{
+					title: 'Mosquitto download',
+					href: 'https://mosquitto.org/',
+					description:
+						'Get the latest version of Mosquitto, a lightweight and open-source MQTT broker for efficient message exchange in IoT applications.'
+				},
+				{
+					title: 'Mosquitto installation',
+					hash: DocumentHashNavigation.MOSQUITTO_INSTALLATION,
+					description:
+						'Step-by-step guide to install Mosquitto, a lightweight and open-source MQTT broker, on various operating systems for efficient message exchange in IoT applications.'
+				},
+				{
+					title: 'Mosquitto configuration',
+					hash: DocumentHashNavigation.MOSQUITTO_CONFIGURATION,
+					description:
+						'Instructions to configure Mosquitto, a lightweight and open-source MQTT broker, for secure and efficient message exchange in IoT applications.'
+				}
+			]
+		}),
+		[i18n.language]
+	)
+
 	return (
 		<Div as='header' className='sticky top-0 z-50 mx-auto max-w-2xl bg-transparent p-2'>
 			<NavigationMenu className='mx-auto w-fit rounded-lg border bg-background/50 p-1 backdrop-blur-sm'>
@@ -69,15 +99,16 @@ export function Header() {
 										</a>
 									</NavigationMenuLink>
 								</li>
-								<ListItem to='/rfid-agent/docs#about-rfid-agent' title='About'>
-									RFID Agent makes it easy to connect and manage RFID readers.
-								</ListItem>
-								<ListItem to='/rfid-agent/docs#download-rfid-agent' title='Download'>
-									Download the latest version of RFID Agent for your operating system.
-								</ListItem>
-								<ListItem to='/rfid-agent/docs#install-rfid-agent' title='Installation'>
-									Follow our step-by-step guide to get started quickly.
-								</ListItem>
+								{navigationGroup.rfidAgent.map((externalLink) => (
+									<ListItem
+										key={externalLink.hash}
+										to='/rfid-agent/docs'
+										hash={externalLink.hash}
+										title={externalLink.title}
+										href={externalLink.href}>
+										{externalLink.description}
+									</ListItem>
+								))}
 							</ul>
 						</NavigationMenuContent>
 					</NavigationMenuItem>
@@ -85,9 +116,14 @@ export function Header() {
 						<NavigationMenuTrigger>Third-party</NavigationMenuTrigger>
 						<NavigationMenuContent>
 							<ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]'>
-								{thirdParties.map((component) => (
-									<ListItem key={component.title} title={component.title} href={component.to}>
-										{component.description}
+								{navigationGroup.thirdParty.map((externalLink) => (
+									<ListItem
+										key={externalLink.hash}
+										to='/rfid-agent/docs'
+										hash={externalLink.hash}
+										title={externalLink.title}
+										href={externalLink.href}>
+										{externalLink.description}
 									</ListItem>
 								))}
 							</ul>

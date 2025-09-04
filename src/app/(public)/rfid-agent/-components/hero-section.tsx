@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
 						seamless, real-time inventory management. Experience effortless setup, minimal resource usage, and
 						long-term support.
 					</Typography>
-					<Div className='mt-6 flex items-center justify-center @7xl:justify-start'>
+					<Div className='mt-6 flex items-center justify-center gap-x-1 @7xl:justify-start'>
 						<Button>Get started</Button>
 						<Button variant='ghost'>Learn more</Button>
 					</Div>
