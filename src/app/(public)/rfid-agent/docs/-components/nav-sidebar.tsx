@@ -10,13 +10,15 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarRail,
 	SidebarSeparator,
 	useSidebar
 } from '@/components/ui'
 import { Link, useLocation } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 
-const menuGroups: Record<
+export const menuGroups: Record<
 	'rfidAgent' | 'mosquitto' | 'faqs',
 	Array<{
 		title: string
@@ -27,41 +29,49 @@ const menuGroups: Record<
 	mosquitto: [
 		{
 			title: 'What is Eclipse Mosquitto?',
-			hash: 'about-mosquitto'
+			hash: DocumentHashNavigation.MOSQUITTO_INTRODUCTION
 		},
 		{
-			title: 'Why Eclipse Mosquitto needed?',
-			hash: 'why-mosquitto'
+			title: 'Why Eclipse Mosquitto?',
+			hash: DocumentHashNavigation.MOSQUITTO_USAGE_REASON
 		},
 		{
 			title: 'Installation',
-			hash: 'mosquitto-installation'
+			hash: DocumentHashNavigation.MOSQUITTO_INSTALLATION
 		},
 		{
 			title: 'Configuration',
-			hash: 'mosquitto-configuration'
+			hash: DocumentHashNavigation.MOSQUITTO_CONFIGURATION
 		},
 		{
 			title: 'Learning Resources',
 			href: 'https://mosquitto.org/'
+		},
+		{
+			title: 'Troubleshooting',
+			hash: DocumentHashNavigation.MOSQUITTO_TROUBLESHOOTING
 		}
 	],
 	rfidAgent: [
 		{
 			title: 'Introduction',
-			hash: 'about-rfid-agent'
+			hash: DocumentHashNavigation.RFID_AGENT_INTRODUCTION
 		},
 		{
 			title: 'Why to use?',
-			hash: 'why-to-rfid-agent'
+			hash: DocumentHashNavigation.RFID_AGENT_BENEFITS
 		},
 		{
 			title: 'Installation',
-			hash: 'rfid-agent-installation'
+			hash: DocumentHashNavigation.RFID_AGENT_INSTALLATION
 		},
 		{
 			title: 'Configuration',
-			hash: 'rfid-agent-configuration'
+			hash: DocumentHashNavigation.RFID_AGENT_CONFIGURATION
+		},
+		{
+			title: 'Troubleshooting',
+			hash: DocumentHashNavigation.RFID_AGENT_TROUBLESHOOTING
 		}
 	],
 	faqs: [
@@ -78,7 +88,7 @@ const menuGroups: Record<
 
 const NavSidebar: React.FC = () => {
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='none' className='border-r'>
+		<Sidebar variant='sidebar' side='left' collapsible='none' className='h-screen border-r'>
 			<SidebarHeader className='p-4'>
 				<Link to='/rfid-agent' className='flex items-center gap-x-2 font-jetbrains'>
 					<Icon name='Radio' size={36} strokeWidth={1.5} />
@@ -96,7 +106,6 @@ const NavSidebar: React.FC = () => {
 						))}
 					</SidebarMenu>
 				</SidebarGroup>
-
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel className='text-base text-foreground'>RFID Agent</SidebarGroupLabel>
@@ -116,8 +125,7 @@ const NavSidebar: React.FC = () => {
 					</SidebarMenu>
 				</SidebarGroup>
 			</SidebarContent>
-
-			{/* <SidebarRail /> */}
+			<SidebarRail />
 		</Sidebar>
 	)
 }

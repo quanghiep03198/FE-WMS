@@ -72,22 +72,25 @@ const FeaturesSection: React.FunctionComponent = () => {
 						</Typography>
 					</Div>
 					<Div className='flex flex-wrap items-center justify-center gap-2 xl:justify-start'>
-						<Badge variant='secondary' className='bg-green-500/10 text-green-500'>
+						<Badge variant='secondary' className='bg-red-500/10 text-red-500'>
+							IoT
+						</Badge>
+						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500'>
 							RFID
 						</Badge>
 						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500'>
 							Reporting
 						</Badge>
-						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500'>
+						<Badge variant='secondary' className='bg-green-500/10 text-green-500'>
 							Multi-tenant
 						</Badge>
-						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500'>
+						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500'>
 							Multi-language
 						</Badge>
-						<Badge variant='secondary' className='bg-red-500/10 text-red-500'>
+						<Badge variant='secondary' className='bg-indigo-500/10 text-indigo-500'>
 							Realtime
 						</Badge>
-						<Badge variant='secondary' className='bg-pink-500/10 text-pink-500'>
+						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500'>
 							Data-streaming
 						</Badge>
 					</Div>

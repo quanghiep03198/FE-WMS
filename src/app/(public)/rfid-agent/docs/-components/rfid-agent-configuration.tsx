@@ -1,14 +1,12 @@
 import RFIDAgentConfigImage from '@/assets/images/rfid-agent-configuration.png'
 import { Dialog, DialogContent, DialogTrigger, Div, Typography } from '@/components/ui'
+import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import SectionHeading from './section-heading'
 
-type Props = {}
-
-const RFIDAgentConfiguration = (props: Props) => {
+const RFIDAgentConfiguration: React.FC = () => {
 	return (
 		<Div className='space-y-3'>
-			<Typography variant='h2' id='rfid-agent-configuration'>
-				Configuration
-			</Typography>
+			<SectionHeading id={DocumentHashNavigation.RFID_AGENT_CONFIGURATION}>Configuration</SectionHeading>
 			<Typography>
 				After installing the RFID Agent, you need to configure it to connect with your UHF RFID reader and our web.
 				The configuration form will look like this image below.
