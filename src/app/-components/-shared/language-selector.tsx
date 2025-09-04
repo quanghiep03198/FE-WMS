@@ -25,7 +25,7 @@ export const LanguageSelect: React.FC = () => {
 
 	return (
 		<Select onValueChange={(value) => i18n.changeLanguage(value)} value={i18n.language}>
-			<SelectTrigger aria-label='Languages' id='language'>
+			<SelectTrigger aria-label='Languages' id='language' className='bg-background'>
 				<SelectValue placeholder='Choose language' />
 			</SelectTrigger>
 			<SelectContent>
