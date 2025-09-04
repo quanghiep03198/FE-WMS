@@ -1,6 +1,7 @@
-import { Button, Div, Icon, Typography } from '@/components/ui'
+import { cn } from '@/common/utils/cn'
+import { Button, buttonVariants, Div, Icon, Typography } from '@/components/ui'
+import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
 const UnavailableConnection: React.FC = () => {
@@ -32,17 +33,9 @@ const UnavailableConnection: React.FC = () => {
 					<Icon name='RotateCcw' />
 					{t('ns_common:actions.retry')}
 				</Button>
-				<Button
-					size='sm'
-					variant='link'
-					onClick={() =>
-						toast.info('This feature is coming soon!', {
-							description: 'We are working hard to provide you the best experience.'
-						})
-					}>
+				<Link to='/rfid-agent' className={cn(buttonVariants({ variant: 'link', size: 'sm' }))}>
 					{t('ns_common:actions.learn_more')} <Icon name='ArrowUpRight' />
-				</Button>
-				{/* <RFIDAgentInstructionDialog /> */}
+				</Link>
 			</Div>
 		</Div>
 	)
