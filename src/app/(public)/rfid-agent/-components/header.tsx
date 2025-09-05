@@ -130,7 +130,7 @@ export function Header() {
 						</NavigationMenuContent>
 					</NavigationMenuItem>
 					<NavigationMenuItem>
-						<Link to='/docs'>
+						<Link to='/rfid-agent/docs'>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>Documentation</NavigationMenuLink>
 						</Link>
 					</NavigationMenuItem>

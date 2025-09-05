@@ -14,6 +14,7 @@ import RFIDAgentConfiguration from './-components/rfid-agent-configuration'
 import RFIDAgentInstallation from './-components/rfid-agent-installation'
 import RFIDAgentIntroduction from './-components/rfid-agent-introduction'
 import RFIDAgentTroubleShooting from './-components/rfid-agent-troubleshooting'
+import { PageProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(public)/rfid-agent/docs/')({
 	component: RouteComponent
@@ -22,47 +23,47 @@ export const Route = createLazyFileRoute('/(public)/rfid-agent/docs/')({
 function RouteComponent() {
 	return (
 		<SidebarProvider className='h-screen overflow-hidden'>
-			<NavSidebar />
-			<Div id='content' className='relative h-full flex-1 overflow-y-scroll @container'>
-				<NavHeader />
-				<Div
-					as='main'
-					className='relative max-w-6xl flex-1 basis-full space-y-20 !p-6 pb-[var(--outlet-padding-bottom)] sm:px-4'>
-					<ErrorBoundary
-						fallbackRender={({ error, resetErrorBoundary }) => {
-							return (
-								<ErrorBoundaryFallback
-									error={error as Error}
-									resetError={(args) => {
-										resetErrorBoundary(args)
-									}}
-								/>
-							)
-						}}>
-						<Div as='article' className='space-y-20'>
-							<Typography variant='h1' className='inline-flex items-center gap-x-3'>
-								<Icon name='Link' size={26} /> Eclipse Mosquitto
-							</Typography>
-							<MosquittoIntroduction />
-							<MosquittoUsageReason />
-							<MosquittoInstallation />
-							<MosquittoConfiguration />
-							<MosquittoTroubleshooting />
-						</Div>
-						<Separator className='!my-32' />
-						<Div as='article' className='space-y-20'>
-							<Typography variant='h1' className='inline-flex items-center gap-x-3'>
-								<Icon name='Link' size={26} /> RFID Agent
-							</Typography>
-							<RFIDAgentIntroduction />
-							<RFIDAgentUsageReason />
-							<RFIDAgentInstallation />
-							<RFIDAgentConfiguration />
-							<RFIDAgentTroubleShooting />
-						</Div>
-					</ErrorBoundary>
+			<PageProvider>
+				<NavSidebar />
+				<Div id='content' className='relative h-screen flex-1 overflow-y-scroll @container'>
+					<NavHeader />
+					<Div as='main' className='container relative flex-1 basis-full space-y-20 p-6 sm:p-4'>
+						<ErrorBoundary
+							fallbackRender={({ error, resetErrorBoundary }) => {
+								return (
+									<ErrorBoundaryFallback
+										error={error as Error}
+										resetError={(args) => {
+											resetErrorBoundary(args)
+										}}
+									/>
+								)
+							}}>
+							<Div as='article' className='space-y-20'>
+								<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Icon name='Link' size={26} /> Eclipse Mosquitto
+								</Typography>
+								<MosquittoIntroduction />
+								<MosquittoUsageReason />
+								<MosquittoInstallation />
+								<MosquittoConfiguration />
+								<MosquittoTroubleshooting />
+							</Div>
+							<Separator />
+							<Div as='article' className='space-y-20'>
+								<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Icon name='Link' size={26} /> RFID Agent
+								</Typography>
+								<RFIDAgentIntroduction />
+								<RFIDAgentUsageReason />
+								<RFIDAgentInstallation />
+								<RFIDAgentConfiguration />
+								<RFIDAgentTroubleShooting />
+							</Div>
+						</ErrorBoundary>
+					</Div>
 				</Div>
-			</Div>
+			</PageProvider>
 		</SidebarProvider>
 	)
 }

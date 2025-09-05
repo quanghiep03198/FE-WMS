@@ -50,7 +50,7 @@ const SearchDialog: React.FC = () => {
 			<Button
 				variant={isSmallScreen ? 'ghost' : 'outline'}
 				size={isSmallScreen ? 'icon' : 'default'}
-				className='min-w-56 basis-56 gap-x-2 bg-background px-2 sm:basis-auto'
+				className='min-w-56 basis-56 gap-x-2 bg-background px-2 sm:min-w-fit sm:basis-auto'
 				onClick={() => setOpen(!open)}>
 				<Icon name='Search' />
 				<Typography variant='small' className='sm:hidden'>

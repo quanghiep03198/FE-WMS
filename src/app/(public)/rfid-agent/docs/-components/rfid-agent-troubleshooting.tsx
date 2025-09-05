@@ -19,7 +19,7 @@ const RFIDAgentTroubleShooting: React.FC = () => {
 					</Link>
 					, followed{' '}
 					<Link
-						to='/rfid-agent'
+						to='/rfid-agent/docs'
 						hash={DocumentHashNavigation.MOSQUITTO_CONFIGURATION}
 						className='underline underline-offset-2'>
 						configuration steps

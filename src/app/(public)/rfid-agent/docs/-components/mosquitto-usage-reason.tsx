@@ -6,7 +6,7 @@ import { Section } from './styled'
 const MosquittoUsageReason: React.FC = () => {
 	return (
 		<Section>
-			<SectionHeading variant='h2' id={DocumentHashNavigation.MOSQUITTO_USAGE_REASON}>
+			<SectionHeading id={DocumentHashNavigation.MOSQUITTO_USAGE_REASON}>
 				Why Eclipse Mosquitto is needed ?
 			</SectionHeading>
 			<Typography>
