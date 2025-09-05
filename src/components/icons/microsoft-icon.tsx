@@ -1,6 +1,6 @@
 import React from 'react'
 
-const MicrosoftIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({ width = 16, height = 16, ...props }) => {
+export const MicrosoftIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({ width = 16, height = 16, ...props }) => {
 	return (
 		<svg
 			viewBox='0 0 256 256'
@@ -17,4 +17,4 @@ const MicrosoftIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({ width = 16, he
 	)
 }
 
-export default MicrosoftIcon
+// export default MicrosoftIcon
