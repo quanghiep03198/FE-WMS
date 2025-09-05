@@ -1,6 +1,5 @@
 import { cn } from '@/common/utils/cn'
 import { useScroll } from 'ahooks'
-import { usePageContext } from '../-contexts/page-context'
 
 type SpotlightProps = {
 	className?: string
@@ -8,8 +7,8 @@ type SpotlightProps = {
 }
 
 export default function Spotlight({ className, fill }: SpotlightProps) {
-	const pageContext = usePageContext()
-	const scroll = useScroll(pageContext?.contentScrollRef)
+	// const pageContext = usePageContext()
+	const scroll = useScroll(document.body)
 
 	return (
 		<svg

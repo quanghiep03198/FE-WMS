@@ -26,10 +26,8 @@ const StorageVisual: React.FC<Props> = ({ className }) => {
 	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
 	return (
-		<VisualCard.Wrapper
-			className='col-span-full row-span-1 gap-6 p-6'
-			orientation={isSmallScreen ? 'vertical' : 'horizontal'}>
-			<VisualCard.Header className='basis-[40%] space-y-2 self-center p-0'>
+		<VisualCard.Wrapper className='w-full p-6' orientation={isSmallScreen ? 'vertical' : 'horizontal'}>
+			<VisualCard.Header className='basis-1/3 space-y-2 self-center p-0 md:basis-1/2'>
 				<VisualCard.Title as='h5' className='inline-flex items-center gap-x-2 text-lg font-medium'>
 					<Icon name='FolderArchive' /> Lightweight
 				</VisualCard.Title>
@@ -38,7 +36,7 @@ const StorageVisual: React.FC<Props> = ({ className }) => {
 					while RFID Agent is running{' '}
 				</VisualCard.Description>
 			</VisualCard.Header>
-			<VisualCard.Content className='flex-1 [mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]'>
+			<VisualCard.Content className='mt-6 flex-1 [mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)] @xl:m-0'>
 				<figure
 					className={cn('nowrap inset-0 flex overflow-hidden', className)}
 					role='img'
@@ -59,13 +57,13 @@ const MarqueeList: React.FC = () => {
 	return range(0, 2).map((_, idx1: number) => (
 		<div
 			key={`row-${idx1}`}
-			className='pause motion-safe:group-hover:run relative left-0 z-10 flex h-full w-auto animate-marquee items-end pb-4 transition-transform will-change-transform'>
+			className='relative left-0 z-10 flex h-full w-auto animate-marquee items-end pb-4 transition-transform will-change-transform group-hover:paused'>
 			{range(0, 8).map((_, idx2: number) => (
 				<div key={`col-${idx2}`} className='ml-2 flex flex-col gap-2 md:gap-2'>
 					{cols.map((col: any, idx3: number) => (
 						<div
 							key={`icon-${idx3}`}
-							className='bg flex h-[60px] w-[60px] items-center justify-center rounded-lg border bg-card text-muted-foreground duration-150 hover:border-success hover:text-success md:h-[62px] md:w-[62px] md:min-w-[62px]'>
+							className='bg flex h-[60px] w-[60px] items-center justify-center rounded-lg border bg-card text-muted-foreground duration-100 hover:border-primary hover:text-primary md:h-[62px] md:w-[62px] md:min-w-[62px]'>
 							{col}
 						</div>
 					))}

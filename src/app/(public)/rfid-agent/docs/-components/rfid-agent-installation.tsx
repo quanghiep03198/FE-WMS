@@ -1,3 +1,4 @@
+import MicrosoftIcon from '@/components/icons/microsoft-icon'
 import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 import { DownloadButton } from './download-button'
@@ -16,7 +17,8 @@ const RFIDAgentInstallation: React.FC = () => {
 					<Div className='my-6'>
 						<Div className='inline-flex items-center gap-x-2'>
 							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-1.0.0-install-windows-x64.exe'>
-								<Icon name='CloudDownload' /> Windows Installer (.exe)
+								<MicrosoftIcon />
+								Windows Installer (.exe)
 							</DownloadButton>
 							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-1.0.0-portable.rar'>
 								<Icon name='FolderArchive' /> Portable Version (.rar)

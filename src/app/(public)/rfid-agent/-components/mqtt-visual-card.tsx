@@ -1,3 +1,6 @@
+import { Theme } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import { Icon } from '@/components/ui'
 import { useEventListener } from 'ahooks'
@@ -13,6 +16,8 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 	const containerRef = useRef(null)
 	const ref = useRef(null)
 	const [gradientPos, setGradientPos] = useState({ x: 0, y: 0 })
+	const { theme } = useTheme()
+	const isLargeScreen = useMediaQuery('( min-width: 600px )')
 
 	const handleGlow = (event: React.MouseEvent) => {
 		if (!ref.current || !containerRef.current) return null
@@ -25,10 +30,10 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 
 	useEventListener('mousemove', handleGlow, { target: window, capture: true })
 
-	const gradientTransform = /* CSS */ `translate(${gradientPos?.x / 9} ${gradientPos?.y / 9}) scale(2.5 2.5)`
+	const gradientTransform = /* CSS */ `translate(${gradientPos?.x / 10} ${gradientPos?.y / 10}) scale(2.5 2.5)`
 
 	return (
-		<VisualCard.Wrapper className='row-span-2'>
+		<VisualCard.Wrapper className='h-full @container/visual-card'>
 			<VisualCard.Header>
 				<VisualCard.Title>
 					<Icon name='Blocks' /> IoT Solution
@@ -48,8 +53,9 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						viewBox='0 0 24 24'
 						role='img'
 						fill='none'
-						width={160}
-						height={160}
+						className='w-full max-w-64 lg:max-w-72 xl:max-w-80'
+						// width={isLargeScreen ? 300 : 150}
+						// height={isLargeScreen ? 300 : 150}
 						strokeWidth={0.2}
 						xmlns='http://www.w3.org/2000/svg'>
 						<title>{'Eclipse Mosquitto icon'}</title>
@@ -65,7 +71,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 								r='3'
 								gradientUnits='userSpaceOnUse'
 								gradientTransform={gradientTransform}>
-								<stop stopColor='hsl(var(--success))' />
+								<stop stopColor={theme === Theme.DARK ? 'hsl(var(--success)' : 'hsl(var(--success)/50%)'} />
 								<stop offset='1' stopColor='hsl(var(--border))' />
 							</radialGradient>
 						</defs>
@@ -81,6 +87,10 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 					<li>
 						<Icon name='Check' />
 						Supports multiple protocols
+					</li>
+					<li>
+						<Icon name='Check' />
+						Multi-Platform and Embedded Support
 					</li>
 					<li>
 						<Icon name='Check' />
