@@ -90,11 +90,11 @@ const NavSidebar: React.FC = () => {
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='none' className='h-screen border-r'>
 			<SidebarHeader className='p-4'>
-				<Link to='/rfid-agent' className='flex items-center gap-x-2 font-jetbrains'>
+				<Link to='/rfid-agent' className='flex items-center gap-x-2 font-bold'>
 					<Icon name='Radio' size={36} strokeWidth={1.5} />
-					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text font-jetbrains text-base font-semibold leading-normal text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
-						RFID Agent
-					</span>
+					RFID Agent
+					{/* <span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text font-jetbrains text-base font-semibold leading-normal text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
+					</span> */}
 				</Link>
 			</SidebarHeader>
 			<SidebarContent>

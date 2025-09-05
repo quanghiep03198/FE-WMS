@@ -45,7 +45,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 	return (
 		<VisualCard.Wrapper
 			className={cn(
-				'col-span-full overflow-hidden rounded-lg border @lg:col-span-1 @lg:row-span-2 sm:col-span-full sm:row-span-full',
+				'overflow-hidden',
 				"hover:!cursor-[url('realtime-cursor-light.svg'),_auto]",
 				"dark:hover:!cursor-[url('realtime-cursor-dark.svg'),_auto]"
 			)}>
@@ -63,7 +63,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 				<figure
 					ref={cardRef}
 					className={cn(
-						'group pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_20%,hsl(var(--background))_100%)] xl:-bottom-2 2xl:bottom-0 xxl:h-80',
+						'group pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)] xl:-bottom-2 2xl:bottom-0 xxl:h-80',
 						className
 					)}
 					role='img'

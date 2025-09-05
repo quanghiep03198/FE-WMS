@@ -1,4 +1,5 @@
-import { Div, Icon, Typography } from '@/components/ui'
+import MicrosoftIcon from '@/components/icons/microsoft-icon'
+import { Div, Typography } from '@/components/ui'
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
 import React from 'react'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
@@ -25,7 +26,7 @@ const MosquittoInstallation: React.FC = () => {
 							<DownloadButton
 								href='https://mosquitto.org/files/binary/win64/mosquitto-2.0.22-install-windows-x64.exe'
 								download>
-								<Icon name='CloudDownload' /> Mosquitto Windows Installer (.exe)
+								<MicrosoftIcon /> Mosquitto Windows Installer (.exe)
 							</DownloadButton>
 						</Div>
 					</Div>
