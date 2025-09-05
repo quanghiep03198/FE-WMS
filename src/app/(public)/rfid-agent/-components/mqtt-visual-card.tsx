@@ -53,7 +53,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						viewBox='0 0 24 24'
 						role='img'
 						fill='none'
-						className='w-full max-w-64 lg:max-w-72 xl:max-w-80'
+						className='w-full max-w-48 xl:max-w-64'
 						// width={isLargeScreen ? 300 : 150}
 						// height={isLargeScreen ? 300 : 150}
 						strokeWidth={0.2}

@@ -27,8 +27,8 @@ const Hero: React.FC = () => {
 					<Icon name='Rocket' size={18} />
 					Just realeased v1.0.0
 				</Badge>
-				<Typography variant='h1' className='xxl:text-7xl'>
-					Empower your Inventory by Real-time UHF Reader connectivity with{' '}
+				<Typography variant='h1' className='xxl:text-5xl'>
+					Empower your Inventory by Real-time RFID Reader connectivity with{' '}
 					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
 						RFID Agent
 					</span>

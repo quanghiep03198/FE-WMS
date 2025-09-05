@@ -1,14 +1,14 @@
-import MicrosoftIcon from '@/components/icons/microsoft-icon'
+import { MicrosoftIcon } from '@/components/icons'
 import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 import { DownloadButton } from './download-button'
 import SectionHeading from './section-heading'
-import { ListItem, OrderedList, UnorderedList } from './styled'
+import { ListItem, OrderedList, Section, UnorderedList } from './styled'
 import Terminal from './terminal'
 
 const RFIDAgentInstallation: React.FC = () => {
 	return (
-		<Div as='section' className='space-y-3'>
+		<Section>
 			<SectionHeading id={DocumentHashNavigation.RFID_AGENT_INSTALLATION}>Installation and setup</SectionHeading>
 			<Typography>To install RFID Agent, please follow these steps:</Typography>
 			<OrderedList className='list-inside list-decimal space-y-2 pl-4' data-level={1}>
@@ -59,7 +59,7 @@ const RFIDAgentInstallation: React.FC = () => {
 				</ListItem>
 				<ListItem>Ensure that the RFID Agent is running and properly communicating with your UHF reader.</ListItem>
 			</OrderedList>
-		</Div>
+		</Section>
 	)
 }
 

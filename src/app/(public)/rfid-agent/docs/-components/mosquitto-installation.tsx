@@ -1,4 +1,4 @@
-import MicrosoftIcon from '@/components/icons/microsoft-icon'
+import { MicrosoftIcon } from '@/components/icons'
 import { Div, Typography } from '@/components/ui'
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
 import React from 'react'

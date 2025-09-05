@@ -43,12 +43,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 	}
 
 	return (
-		<VisualCard.Wrapper
-			className={cn(
-				'overflow-hidden',
-				"hover:!cursor-[url('realtime-cursor-light.svg'),_auto]",
-				"dark:hover:!cursor-[url('realtime-cursor-dark.svg'),_auto]"
-			)}>
+		<VisualCard.Wrapper className={cn('overflow-hidden')}>
 			<VisualCard.Header>
 				<VisualCard.Title>
 					<Icon name='MousePointerClick' /> Realtime
@@ -64,6 +59,8 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 					ref={cardRef}
 					className={cn(
 						'group pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)] xl:-bottom-2 2xl:bottom-0 xxl:h-80',
+						"hover:!cursor-[url('realtime-cursor-light.svg'),_auto]",
+						"dark:hover:!cursor-[url('realtime-cursor-dark.svg'),_auto]",
 						className
 					)}
 					role='img'

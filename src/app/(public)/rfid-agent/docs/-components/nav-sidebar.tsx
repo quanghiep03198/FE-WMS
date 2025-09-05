@@ -1,3 +1,4 @@
+import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
@@ -10,13 +11,13 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-	SidebarRail,
 	SidebarSeparator,
 	useSidebar
 } from '@/components/ui'
 import { Link, useLocation } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import { usePageContext } from '../-contexts/page-context'
 
 export const menuGroups: Record<
 	'rfidAgent' | 'mosquitto' | 'faqs',
@@ -45,7 +46,8 @@ export const menuGroups: Record<
 		},
 		{
 			title: 'Learning Resources',
-			href: 'https://mosquitto.org/'
+			href: 'https://mosquitto.org/',
+			hash: 'mosquitto-learning-resources'
 		},
 		{
 			title: 'Troubleshooting',
@@ -87,14 +89,14 @@ export const menuGroups: Record<
 }
 
 const NavSidebar: React.FC = () => {
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+
 	return (
-		<Sidebar variant='sidebar' side='left' collapsible='none' className='h-screen border-r'>
+		<Sidebar variant='sidebar' side='left' collapsible='offcanvas'>
 			<SidebarHeader className='p-4'>
 				<Link to='/rfid-agent' className='flex items-center gap-x-2 font-bold'>
 					<Icon name='Radio' size={36} strokeWidth={1.5} />
 					RFID Agent
-					{/* <span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text font-jetbrains text-base font-semibold leading-normal text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
-					</span> */}
 				</Link>
 			</SidebarHeader>
 			<SidebarContent>
@@ -125,16 +127,22 @@ const NavSidebar: React.FC = () => {
 					</SidebarMenu>
 				</SidebarGroup>
 			</SidebarContent>
-			<SidebarRail />
+			{/* <SidebarRail /> */}
 		</Sidebar>
 	)
 }
 
 const SidebarMenuLink: React.FC<any> = ({ hash, href, title, viewTransition }) => {
-	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { openMobile, setOpenMobile } = useSidebar()
 	const { hash: $hash } = useLocation()
+	const { event$ } = usePageContext()
+
+	const [isInViewport, setIsInViewport] = useState<boolean>(false)
+
+	event$.useSubscription((value) => {
+		setIsInViewport(value === hash)
+	})
 
 	return (
 		<SidebarMenuItem
@@ -156,7 +164,14 @@ const SidebarMenuLink: React.FC<any> = ({ hash, href, title, viewTransition }) =
 						hash={hash}
 						preload='intent'
 						viewTransition={viewTransition}
-						className={cn(hash === $hash ? 'bg-accent text-accent-foreground' : 'text-muted-foreground')}>
+						className={cn(
+							'transition-colors duration-200 ease-in-out',
+							isInViewport
+								? 'text-active'
+								: hash === $hash
+									? 'text-primary underline underline-offset-4'
+									: 'text-muted-foreground'
+						)}>
 						{title}
 					</Link>
 				)}
