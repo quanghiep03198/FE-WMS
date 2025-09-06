@@ -1,10 +1,9 @@
 import { Theme } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
-import { Icon } from '@/components/ui'
+import { Badge, Icon } from '@/components/ui'
 import { useEventListener } from 'ahooks'
-import React, { useRef, useState } from 'react'
+import React, { cloneElement, useRef, useState } from 'react'
 import { VisualCard } from './visual-card'
 
 interface Props {
@@ -17,7 +16,6 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 	const ref = useRef(null)
 	const [gradientPos, setGradientPos] = useState({ x: 0, y: 0 })
 	const { theme } = useTheme()
-	const isLargeScreen = useMediaQuery('( min-width: 600px )')
 
 	const handleGlow = (event: React.MouseEvent) => {
 		if (!ref.current || !containerRef.current) return null
@@ -53,9 +51,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						viewBox='0 0 24 24'
 						role='img'
 						fill='none'
-						className='w-full max-w-48 xl:max-w-64'
-						// width={isLargeScreen ? 300 : 150}
-						// height={isLargeScreen ? 300 : 150}
+						className='w-full max-w-40'
 						strokeWidth={0.2}
 						xmlns='http://www.w3.org/2000/svg'>
 						<title>{'Eclipse Mosquitto icon'}</title>
@@ -77,6 +73,11 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						</defs>
 					</svg>
 				</figure>
+				<div className='mx-auto my-4 w-full max-w-96 space-y-4 [&_div]:w-full'>
+					<AnimatedSignalFigure titleLeft='/request/signal' titleRight={`{"action": "connect`} />
+					<AnimatedSignalFigure titleLeft='/reply/data' titleRight={`{"data": "[...]"}`} animationReverse />
+					<AnimatedSignalFigure titleLeft='/request/settings' titleRight={`{"ip": "10.xx.xx.xx"}`} />
+				</div>
 			</VisualCard.Content>
 			<VisualCard.Footer>
 				<ul className='flex flex-col gap-y-2 [&_li]:inline-flex [&_li]:items-center [&_li]:gap-x-2'>
@@ -99,6 +100,58 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 				</ul>
 			</VisualCard.Footer>
 		</VisualCard.Wrapper>
+	)
+}
+
+const AnimatedSignalFigure: React.FC<{
+	titleLeft?: string
+	titleRight?: string
+	animationReverse?: true
+}> = ({ titleLeft, titleRight, animationReverse }) => {
+	return (
+		<div className='relative flex w-full items-center justify-between overflow-hidden'>
+			<Badge variant='secondary' className='z-10 max-w-fit font-mono text-xs font-normal'>
+				{titleLeft}
+			</Badge>
+			<Badge variant='outline' className='z-10 max-w-fit bg-background font-mono text-xs font-normal'>
+				{titleRight}
+			</Badge>
+			<div
+				className={cn(
+					'absolute inset-x-0 top-1/2 flex w-full max-w-full flex-1 -translate-y-1/2 items-center gap-1 *:will-change-transform',
+					animationReverse
+						? '*:animate-[marquee-reverse_10s_linear_infinite]'
+						: '*:animate-[marquee_10s_linear_infinite]'
+				)}>
+				<DashedLine />
+				{cloneElement(<DashedLine />, {
+					'aria-hidden': false
+				})}
+				{cloneElement(<DashedLine />, {
+					'aria-hidden': false
+				})}
+			</div>
+		</div>
+	)
+}
+
+const DashedLine: React.FC = () => {
+	return (
+		<svg
+			viewBox='0 0 100 1'
+			className='z-[-1]'
+			height={0.5}
+			width={216}
+			preserveAspectRatio='none'
+			xmlns='http://www.w3.org/2000/svg'>
+			<path
+				d='M0 0.5 L100 0.5'
+				stroke='hsl(var(--muted-foreground))'
+				strokeWidth='1'
+				strokeDasharray='4,2'
+				fill='none'
+			/>
+		</svg>
 	)
 }
 

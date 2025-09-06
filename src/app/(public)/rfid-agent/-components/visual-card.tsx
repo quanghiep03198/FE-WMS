@@ -3,7 +3,7 @@ import tw from 'tailwind-styled-components'
 const Wrapper = tw.div<{
 	orientation: 'horizontal' | 'vertical'
 }>`
-   flex flex-col rounded-lg border hover:border-primary/50 duration-500 transition-colors ease-in-out shadow h-full @container/visual-card
+   flex flex-col rounded-lg border hover:border-primary/50 duration-500 transition-colors ease-in-out shadow-sm h-full @container/visual-card
    ${(props) => (props.orientation === 'horizontal' ? 'flex-row' : 'flex-col')} 
    `
 const Header = tw.div`p-6 space-y-2`

@@ -1,4 +1,3 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
@@ -79,24 +78,23 @@ export const menuGroups: Record<
 	faqs: [
 		{
 			title: 'Common issues',
-			hash: 'faq-common-issues'
-		},
-		{
-			title: 'Miscellaneous',
-			hash: 'faq-miscellaneous'
+			hash: DocumentHashNavigation.FAQ_COMMON_QUESTIONS
 		}
 	]
 }
 
 const NavSidebar: React.FC = () => {
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+	// const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='offcanvas'>
 			<SidebarHeader className='p-4'>
-				<Link to='/rfid-agent' className='flex items-center gap-x-2 font-bold'>
-					<Icon name='Radio' size={36} strokeWidth={1.5} />
-					RFID Agent
+				<Link to='/rfid-agent' className='flex items-center gap-x-2'>
+					<Icon name='Radio' size={40} strokeWidth={1.5} />
+					<span className='flex flex-col font-bold'>
+						RFID Agent
+						<small className='font-normal text-muted-foreground'>v1.0.0</small>
+					</span>
 				</Link>
 			</SidebarHeader>
 			<SidebarContent>
