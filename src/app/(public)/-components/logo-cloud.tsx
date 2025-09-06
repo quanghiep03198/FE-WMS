@@ -59,6 +59,7 @@ const LogoCloud: React.FC = () => {
 					<LogoList />
 					{/* Clone element for infinite scroll effect */}
 					{cloneElement(<LogoList />, { 'aria-hidden': true })}
+					{cloneElement(<LogoList />, { 'aria-hidden': true })}
 				</Div>
 			</Div>
 		</Div>

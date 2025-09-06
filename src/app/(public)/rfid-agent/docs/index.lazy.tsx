@@ -2,6 +2,7 @@ import { ErrorBoundaryFallback } from '@/app/-components/-errors/error-boundary-
 import { Div, Icon, Separator, SidebarProvider, Typography } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { ErrorBoundary } from 'react-error-boundary'
+import FAQCommonQuestions from './-components/faq-common-issues'
 import MosquittoConfiguration from './-components/mosquitto-configuration'
 import MosquittoInstallation from './-components/mosquitto-installation'
 import MosquittoIntroduction from './-components/mosquitto-introduction'
@@ -59,6 +60,13 @@ function RouteComponent() {
 								<RFIDAgentInstallation />
 								<RFIDAgentConfiguration />
 								<RFIDAgentTroubleShooting />
+							</Div>
+							<Separator />
+							<Div as='article' className='space-y-20'>
+								<Typography variant='h1' className='inline-flex items-center gap-x-3'>
+									<Icon name='Link' size={26} /> FAQ
+								</Typography>
+								<FAQCommonQuestions />
 							</Div>
 						</ErrorBoundary>
 					</Div>

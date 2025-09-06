@@ -20,8 +20,8 @@ type NavigationGroup = Record<
 	Array<{ title: string; hash?: DocumentHashNavigation; href?: string; description: string }>
 >
 
-export function Header() {
-	const { t, i18n } = useTranslation()
+export const Header: React.FC = () => {
+	const { i18n } = useTranslation()
 
 	const navigationGroup: NavigationGroup = useMemo(
 		() => ({
@@ -73,8 +73,10 @@ export function Header() {
 	)
 
 	return (
-		<Div as='header' className='sticky top-0 z-50 mx-auto max-w-2xl bg-transparent p-2'>
-			<NavigationMenu className='mx-auto w-fit rounded-lg border bg-background/50 p-1 backdrop-blur-sm'>
+		<Div
+			as='header'
+			className='sticky top-0 z-50 mx-auto max-w-2xl overflow-x-auto bg-transparent p-2 scrollbar-none sm:border-b sm:bg-background'>
+			<NavigationMenu className='mx-auto w-fit rounded-lg border bg-background/50 p-1 backdrop-blur-sm sm:rounded-none sm:border-none sm:p-0'>
 				<NavigationMenuList>
 					<NavigationMenuItem>
 						<Link to='/'>

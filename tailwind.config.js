@@ -242,10 +242,18 @@ module.exports = {
 				},
 				['marquee']: {
 					from: {
-						transform: 'translateX(0)'
+						transform: 'translateX(0%)'
 					},
 					to: {
-						transform: 'translateX(calc(-100% - 1rem))'
+						transform: 'translateX(-100%)'
+					}
+				},
+				['marquee-reverse']: {
+					from: {
+						transform: 'translateX(-100%)'
+					},
+					to: {
+						transform: 'translateX(0%)'
 					}
 				},
 				['typing']: {
@@ -288,7 +296,7 @@ module.exports = {
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
 				['drop-down']: 'drop-down 1s linear',
-				['marquee']: 'marquee 10s linear infinite both!important',
+				// ['marquee']: 'marquee 0s linear infinite both!important',
 				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
 				['spotlight-off']: 'spotlight-off 6s ease forwards',
 				['shimmer']: 'shimmer 1.5s linear infinite',

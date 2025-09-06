@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { Badge, Button, Div, Icon, Typography } from '@/components/ui'
+import { Badge, buttonVariants, Div, Icon, Typography } from '@/components/ui'
+import { Link } from '@tanstack/react-router'
 
 const GridDotBackground: React.FC = () => {
 	return (
@@ -9,7 +10,7 @@ const GridDotBackground: React.FC = () => {
 				className={cn(
 					'absolute inset-0',
 					'[background-size:40px_40px]',
-					'[background-image:linear-gradient(to_right,hsl(var(--muted-foreground)/30%)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted-foreground)/30%)_1px,transparent_1px)]'
+					'[background-image:linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)]'
 				)}
 			/>
 		</Div>
@@ -20,33 +21,30 @@ const Hero: React.FC = () => {
 	return (
 		<Div
 			as='section'
-			className='min-h-[95vh] place-content-center place-items-center p-2 @container/hero lg:p-6 xl:p-6'>
+			className='min-h-[90vh] place-content-center place-items-center p-2 @container/hero lg:p-6 xl:p-6'>
 			<Div className='relative mx-auto flex max-w-5xl flex-col items-center justify-center gap-y-6 py-10 *:text-pretty *:text-center @7xl:items-start @7xl:text-left md:items-center md:text-center'>
 				<GridDotBackground />
-				<Badge className='gap-x-2 self-center px-3 py-1 text-sm'>
-					<Icon name='Rocket' size={18} />
-					Just realeased v1.0.0
+				<Badge variant='secondary' className='gap-x-2 self-center px-3 py-1 text-sm'>
+					Just released version 1.0.0
 				</Badge>
-				<Typography variant='h1' className='xxl:text-5xl'>
-					Empower your Inventory by Real-time RFID Reader connectivity with{' '}
+				<Typography variant='h1' className='xl:text-6xl'>
+					Empower your Inventory by <br className='hidden xl:inline-block' /> Real-time RFID Reader connectivity
+					with{' '}
 					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
 						RFID Agent
 					</span>
 				</Typography>
-				<Typography className='text-lg sm:text-sm md:text-base'>
+				<Typography className='text-lg sm:text-sm md:text-base xl:text-xl'>
 					A lightweight desktop application that connects your UHF RFID reader to our Web-application for seamless,
 					real-time inventory management. Experience effortless setup, minimal resource usage, and long-term
 					support.
 				</Typography>
-				<Div className='mt-6 flex w-full items-center justify-center gap-x-2 self-center'>
-					<Button size='lg'>Get started</Button>
-					<Button variant='secondary' size='lg'>
-						Learn more
-					</Button>
-				</Div>
+				<Link
+					hash='features'
+					className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'mt-6 self-center' }))}>
+					Explore features <Icon name='ArrowDown' className='animate-bounce' />
+				</Link>
 			</Div>
-			{/* <Div className='grid grid-cols-1 gap-20 @7xl:grid-cols-[1fr_1.25fr]'>
-			</Div> */}
 		</Div>
 	)
 }

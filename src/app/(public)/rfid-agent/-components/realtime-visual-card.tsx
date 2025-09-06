@@ -95,7 +95,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						<svg width='30' height='38' viewBox='0 0 30 38' fill='none' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M3.58385 1.69742C2.57836 0.865603 1.05859 1.58076 1.05859 2.88572V35.6296C1.05859 37.1049 2.93111 37.7381 3.8265 36.5656L12.5863 25.0943C12.6889 24.96 12.8483 24.8812 13.0173 24.8812H27.3245C28.7697 24.8812 29.4211 23.0719 28.3076 22.1507L3.58385 1.69742Z'
-								fill='hsl(var(--muted)/50%)'
+								fill='hsl(var(--muted))'
 								stroke='hsl(var(--border))'
 								strokeLinejoin='round'
 							/>
@@ -120,7 +120,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						<svg width='20' height='28' viewBox='0 0 30 38' fill='none' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M3.58385 1.69742C2.57836 0.865603 1.05859 1.58076 1.05859 2.88572V35.6296C1.05859 37.1049 2.93111 37.7381 3.8265 36.5656L12.5863 25.0943C12.6889 24.96 12.8483 24.8812 13.0173 24.8812H27.3245C28.7697 24.8812 29.4211 23.0719 28.3076 22.1507L3.58385 1.69742Z'
-								fill='hsl(var(--muted)/50%)'
+								fill='hsl(var(--muted))'
 								stroke='hsl(var(--border))'
 								strokeLinejoin='round'
 							/>
