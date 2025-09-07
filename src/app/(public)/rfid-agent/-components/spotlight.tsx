@@ -20,11 +20,11 @@ export default function Spotlight({ className, fill }: SpotlightProps) {
 							@keyframes spotlight {
 								0% {
 									opacity: 0;
-									transform: translate(-75%, -60%) scale(0.5);
+									transform: translate(-50%, -50%) scale(0.5);
 								}
 								100% {
 									opacity: 1;
-									transform:translate(-50%,-40%) scale(1);
+									transform:translate(-50%,-45%) scale(1);
 								}
 							}
 							@keyframes spotlight-off {

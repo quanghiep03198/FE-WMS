@@ -21,7 +21,7 @@ function RouteComponent() {
 					UHF reader to our web application'
 			/>
 			<main className='relative h-screen overflow-y-scroll scroll-smooth'>
-				<Spotlight fill='white' className='-left-16 -top-10 z-[-1] md:-top-20 md:left-20 xl:-top-60' />
+				<Spotlight fill='white' className='-top-10 left-20 z-[-1] sm:-top-20 sm:left-20 md:left-20 xl:-top-40' />
 				<Header />
 				<Hero />
 				<VisualBentoGrid />

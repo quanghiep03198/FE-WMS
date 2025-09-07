@@ -5,7 +5,7 @@ import tw from 'tailwind-styled-components'
 
 const GridDotBackground: React.FC = () => {
 	return (
-		<Div className='absolute left-1/2 top-1/2 z-[-2] mx-auto h-[50vh] w-full max-w-[40vw] -translate-x-1/2 -translate-y-1/2 skew-y-[24deg] transition-transform duration-500 ease-in-out group-hover/hero:skew-y-[16deg] group-hover/hero:scale-125'>
+		<Div className='absolute left-1/2 top-1/2 z-[-10] mx-auto h-[50vh] w-full max-w-[40vw] -translate-x-1/2 -translate-y-1/2 skew-y-[24deg] transition-transform duration-500 ease-in-out group-hover/hero:skew-y-[16deg] group-hover/hero:scale-125'>
 			<Div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background text-foreground [mask-image:radial-gradient(circle_at_center,transparent_10%,black)]' />
 			<Div
 				className={cn(
@@ -28,14 +28,14 @@ const Hero: React.FC = () => {
 				<GradientBadge>
 					<span className='relative z-[20]'>Just released version 1.0.0</span>
 				</GradientBadge>
-				<Typography variant='h1' className='xl:text-6xl'>
+				<Typography variant='h1' className='xl:text-5xl xxl:text-6xl'>
 					Empower your Inventory by <br className='hidden xl:inline-block' /> Real-time RFID Reader connectivity
 					with{' '}
 					<span className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
 						RFID Agent
 					</span>
 				</Typography>
-				<Typography className='text-lg sm:text-sm md:text-base xl:text-xl'>
+				<Typography className='text-lg sm:text-sm md:text-base xxl:text-xl'>
 					A lightweight desktop application that connects your UHF RFID reader to our Web-application for seamless,
 					real-time inventory management. Experience effortless setup, minimal resource usage, and long-term
 					support.
