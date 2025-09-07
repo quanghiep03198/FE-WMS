@@ -186,16 +186,6 @@ module.exports = {
 						opacity: '1'
 					}
 				},
-				['drop-down']: {
-					from: {
-						transform: 'translateY(0)'
-					},
-					to: {
-						transform: 'translateY(2rem)',
-						width: 0
-					}
-				},
-
 				['slide-in']: {
 					from: {
 						transform: 'translate3d(0,-100%,0)'
@@ -218,26 +208,6 @@ module.exports = {
 					},
 					to: {
 						backgroundPosition: '-200% 0'
-					}
-				},
-				['spotlight']: {
-					from: {
-						opacity: '0',
-						transform: 'translate(-75%, -60%) scale(0.5)'
-					},
-					to: {
-						opacity: '1',
-						transform: 'translate(-50%,-40%) scale(1)'
-					}
-				},
-				['spotlight-off']: {
-					from: {
-						opacity: '1',
-						transform: 'translate(-50%,-40%) scale(1)'
-					},
-					to: {
-						opacity: '0',
-						transform: 'translate(-75%, -60%) scale(0.95)'
 					}
 				},
 				['marquee']: {
@@ -295,10 +265,6 @@ module.exports = {
 				['collapsible-down-reverse']: 'collapsible-down-reverse 0.2s ease-out',
 				['fade-in']: 'fade-in .5s cubic-bezier(.25,.25,0,1) .5s both!important',
 				['slide-in']: 'slide-in .3s ease-out 0.75s both',
-				['drop-down']: 'drop-down 1s linear',
-				// ['marquee']: 'marquee 0s linear infinite both!important',
-				['spotlight']: 'spotlight 1.5s ease 0.5s forwards',
-				['spotlight-off']: 'spotlight-off 6s ease forwards',
 				['shimmer']: 'shimmer 1.5s linear infinite',
 				['typing']: 'typing 1.125s steps(25), 0.65s step-end 0s infinite alternate'
 			}
