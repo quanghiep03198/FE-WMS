@@ -20,8 +20,8 @@ function RouteComponent() {
 				content='RFID Agent is a lightweight desktop application that connects your
 					UHF reader to our web application'
 			/>
-			<main className='h-screen overflow-y-scroll scroll-smooth'>
-				<Spotlight fill='white' className='-left-20 -top-10 z-[-1] md:-top-20 md:left-20 xl:-top-40' />
+			<main className='relative h-screen overflow-y-scroll scroll-smooth'>
+				<Spotlight fill='white' className='-left-16 -top-10 z-[-1] md:-top-20 md:left-20 xl:-top-60' />
 				<Header />
 				<Hero />
 				<VisualBentoGrid />

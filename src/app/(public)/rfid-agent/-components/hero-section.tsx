@@ -1,10 +1,11 @@
 import { cn } from '@/common/utils/cn'
-import { Badge, buttonVariants, Div, Icon, Typography } from '@/components/ui'
+import { buttonVariants, Div, Icon, Typography } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
+import tw from 'tailwind-styled-components'
 
 const GridDotBackground: React.FC = () => {
 	return (
-		<Div className='absolute left-1/2 top-1/2 z-[-2] mx-auto h-[50vh] w-full max-w-[40vw] -translate-x-1/2 -translate-y-1/2 skew-y-[24deg]'>
+		<Div className='absolute left-1/2 top-1/2 z-[-2] mx-auto h-[50vh] w-full max-w-[40vw] -translate-x-1/2 -translate-y-1/2 skew-y-[24deg] transition-transform duration-500 ease-in-out group-hover/hero:skew-y-[16deg] group-hover/hero:scale-125'>
 			<Div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background text-foreground [mask-image:radial-gradient(circle_at_center,transparent_10%,black)]' />
 			<Div
 				className={cn(
@@ -22,11 +23,11 @@ const Hero: React.FC = () => {
 		<Div
 			as='section'
 			className='min-h-[90vh] place-content-center place-items-center p-2 @container/hero lg:p-6 xl:p-6'>
-			<Div className='relative mx-auto flex max-w-5xl flex-col items-center justify-center gap-y-6 py-10 *:text-pretty *:text-center @7xl:items-start @7xl:text-left md:items-center md:text-center'>
+			<Div className='group/hero relative mx-auto flex max-w-5xl flex-col items-center justify-center gap-y-6 py-10 *:text-pretty *:text-center @7xl:items-start @7xl:text-left md:items-center md:text-center'>
 				<GridDotBackground />
-				<Badge variant='secondary' className='gap-x-2 self-center px-3 py-1 text-sm'>
-					Just released version 1.0.0
-				</Badge>
+				<GradientBadge>
+					<span className='relative z-[20]'>Just released version 1.0.0</span>
+				</GradientBadge>
 				<Typography variant='h1' className='xl:text-6xl'>
 					Empower your Inventory by <br className='hidden xl:inline-block' /> Real-time RFID Reader connectivity
 					with{' '}
@@ -48,5 +49,29 @@ const Hero: React.FC = () => {
 		</Div>
 	)
 }
+
+const GradientBadge = tw.div`
+	relative h-8 self-center px-3 py-1.5 font-medium rounded-md text-sm shadow-md
+
+	before:absolute 
+	before:inset-0 
+	before:z-0 
+	before:rounded-md
+	before:-translate-y-px 
+	before:bg-[conic-gradient(from_100deg_at_50%_50%,hsl(var(--accent))_90deg,hsl(var(--accent))_180deg,#00adef_270deg,hsl(var(--accent))_0.95turn)] 
+	before:content-[""]
+	
+	after:absolute 
+	after:inset-0 
+	after:left-1/2 
+	after:top-1/2 
+	after:z-[10] 
+	after:h-[calc(100%-1.5px)] 
+	after:w-[calc(100%-2px)] 
+	after:-translate-x-1/2 
+	after:-translate-y-[calc(50%+1px)]
+	after:rounded-md 
+	after:bg-background 
+`
 
 export default Hero

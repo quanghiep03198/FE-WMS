@@ -74,7 +74,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 					</svg>
 				</figure>
 				<div className='mx-auto my-4 w-full max-w-96 space-y-4 [&_div]:w-full'>
-					<AnimatedSignalFigure titleLeft='/request/signal' titleRight={`{"action": "connect`} />
+					<AnimatedSignalFigure titleLeft='/request/signal' titleRight={`{"action": "connect"}`} />
 					<AnimatedSignalFigure titleLeft='/reply/data' titleRight={`{"data": "[...]"}`} animationReverse />
 					<AnimatedSignalFigure titleLeft='/request/settings' titleRight={`{"ip": "10.xx.xx.xx"}`} />
 				</div>
@@ -113,15 +113,17 @@ const AnimatedSignalFigure: React.FC<{
 			<Badge variant='secondary' className='z-10 max-w-fit font-mono text-xs font-normal'>
 				{titleLeft}
 			</Badge>
-			<Badge variant='outline' className='z-10 max-w-fit bg-background font-mono text-xs font-normal'>
+			<Badge
+				variant='outline'
+				className='z-10 max-w-fit bg-background font-mono text-xs font-normal text-muted-foreground'>
 				{titleRight}
 			</Badge>
 			<div
 				className={cn(
 					'absolute inset-x-0 top-1/2 flex w-full max-w-full flex-1 -translate-y-1/2 items-center gap-1 *:will-change-transform',
 					animationReverse
-						? '*:animate-[marquee-reverse_10s_linear_infinite]'
-						: '*:animate-[marquee_10s_linear_infinite]'
+						? '*:animate-[marquee-reverse_5s_linear_infinite]'
+						: '*:animate-[marquee_5s_linear_infinite]'
 				)}>
 				<DashedLine />
 				{cloneElement(<DashedLine />, {
