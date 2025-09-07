@@ -1,10 +1,10 @@
-import { Monitor, Moon, Sun } from 'lucide-react'
-
 import { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
-import { Div } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
+import { Monitor, Moon, Sun } from 'lucide-react'
+import { useRef } from 'react'
+
 const themes = [
 	{
 		key: Theme.SYSTEM,
@@ -30,7 +30,8 @@ export type ThemeSwitcherProps = {
 }
 export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 	const { theme, setTheme } = useTheme()
-
+	const activeRef = useRef<HTMLDivElement>(null)
+	const firstButtonRef = useRef<HTMLButtonElement | null>(null)
 	const toggleTheme = () => setTheme(theme === Theme.DARK ? Theme.LIGHT : Theme.DARK)
 
 	useKeyPress('ctrl.alt.t', (e) => {
@@ -38,32 +39,51 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
 		toggleTheme()
 	})
 
+	const handleSelectTheme = (theme: Theme) => {
+		setTheme(theme)
+		requestAnimationFrame(() => {
+			activeRef.current.style.transform = (() => {
+				switch (theme) {
+					case Theme.SYSTEM:
+						return `translateX(0px)`
+					case Theme.LIGHT:
+						return `translateX(${firstButtonRef.current.offsetWidth}px)`
+					case Theme.DARK:
+						return `translateX(${firstButtonRef.current.offsetWidth * 2}px)`
+					default:
+						return `translateX(0px)`
+				}
+			})()
+		})
+	}
+
 	return (
-		<div className={cn('relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border', className)}>
+		<div
+			className={cn(
+				'relative isolate grid h-8 grid-cols-3 rounded-full bg-background p-1 ring-1 ring-border',
+				className
+			)}>
+			<div className='absolute inset-x-1 top-1/2 z-[-1] w-full -translate-y-1/2'>
+				<div
+					ref={activeRef}
+					className='aspect-square size-6 rounded-full bg-accent transition-all duration-200 ease-in-out'
+				/>
+			</div>
 			{themes.map(({ key, icon: Icon, label }) => {
 				const isActive = theme === key
 				return (
 					<button
 						aria-label={label}
-						className='relative h-6 w-6 rounded-full'
+						ref={(e) => {
+							if (key === Theme.SYSTEM) firstButtonRef.current = e
+						}}
+						className='first relative h-6 w-6 rounded-full'
 						key={key}
-						onClick={() => setTheme(key as Theme)}
+						onClick={() => handleSelectTheme(key as Theme)}
 						type='button'>
-						{isActive && (
-							<Div
-								className={cn(
-									'absolute top-1/2 z-0 aspect-square size-6 -translate-y-1/2 rounded-full bg-accent transition-all duration-500',
-									{
-										'right-[anchor(right)]': theme === Theme.DARK,
-										'left-[anchor(center)]': theme === Theme.LIGHT,
-										'left-[anchor(left)]': theme === Theme.SYSTEM
-									}
-								)}
-							/>
-						)}
 						<Icon
 							className={cn(
-								'relative z-10 m-auto h-4 w-4',
+								'relative z-10 m-auto size-4',
 								isActive ? 'text-foreground' : 'text-muted-foreground'
 							)}
 						/>
