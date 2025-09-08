@@ -5,8 +5,10 @@ import {
 	InoutboundPayload,
 	OutboundFormValues
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-inoutbound.schema'
-import { ExchangeEpcFormValue } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
-import { UpdateEpcFormValues } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/fill-epc-data.schema'
+import {
+	ExchangeEpcFormValue,
+	ExchangeEpcPayload
+} from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
 import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
@@ -43,7 +45,11 @@ export class RFIDService {
 		)
 	}
 
-	static async upsertInboundInventory(tenantId: string, orderCode: string, payload: InoutboundPayload) {
+	static async upsertInboundInventory(
+		tenantId: string,
+		orderCode: string,
+		payload: Omit<InoutboundPayload, 'default_tenant' | 'target_tenant'>
+	) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
 			`/rfid/inbound/update-stock/${orderCode}`,
 			payload,
@@ -65,7 +71,7 @@ export class RFIDService {
 		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {})
 	}
 
-	static async upsertEpcInformation(payload: UpdateEpcFormValues) {
+	static async upsertEpcInformation(payload: ExchangeEpcPayload) {
 		return await axiosInstance.put(`/rfid/inbound/upsert-epc-information`, payload, {})
 	}
 
