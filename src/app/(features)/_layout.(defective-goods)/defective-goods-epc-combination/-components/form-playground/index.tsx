@@ -30,15 +30,18 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gunzipSync, gzipSync } from 'zlib'
-import { DefectiveCategory, DefectiveCategoryI18n, DefectiveLocation } from '../../-constants'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
-import { usePageContext } from '../../-contexts/page-context'
-import { useCreateDefectiveGoodsMutation, useUpdateDefectiveGoodsMutation } from '../../-hooks/use-defective-goods-asm'
-import { useSwitchRFIDDevice } from '../../-hooks/use-switch-rfid-device'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
-import { useGetProductSpecificationQuery } from '../../../-hooks/use-product-specification-asm'
-import CommandNumberComboboxFieldControl from '../rfid-reader-playground/command-number-combobox-field-control'
-import PurchaseOrderComboboxFieldControl from '../rfid-reader-playground/purchase-order-combobox-field-control'
+import PurchaseOrderComboboxFieldControl from '../../../-components/rfid-reader-playground/purchase-order-combobox-field-control'
+import { DefectiveCategory, DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
+import { usePageContext } from '../../../-contexts/page-context'
+import {
+	useCreateDefectiveGoodsMutation,
+	useUpdateDefectiveGoodsMutation
+} from '../../../-hooks/use-defective-goods-asm'
+import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
+import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
+import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import DeviceRadioGroup from './device-radio-group'
 import ListPanelToggleButton from './list-panel-toggle-button'
 import ToggleFullscreen from './toggle-fullscreen'
@@ -487,15 +490,6 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					<Div className='col-span-full'>
-						<InputFieldControl
-							name='storage_location'
-							label={t('ns_warehouse:fields.storage_name')}
-							placeholder='A1.1'
-							disabled={isNil(formAction)}
-						/>
-					</Div>
-
 					<Div className='relative col-span-full'>
 						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>
 							<Label htmlFor='toggle-use-desc-template' className='inline-flex items-center gap-x-2'>

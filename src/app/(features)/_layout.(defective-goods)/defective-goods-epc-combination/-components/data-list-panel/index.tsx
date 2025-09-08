@@ -1,6 +1,7 @@
 import { CommonActions } from '@/common/constants/enums'
 import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
+import useQueryParams from '@/common/hooks/use-query-params'
 import { IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -25,28 +26,54 @@ import {
 	Typography
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
+import { DefectiveGoodsService } from '@/services/defective-goods.service'
+import { useQueryClient } from '@tanstack/react-query'
 import { Link, useLocation } from '@tanstack/react-router'
 import { formatRelative } from 'date-fns'
-import { omit } from 'lodash'
+import { omit, pickBy } from 'lodash'
 import { Fragment, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { DefectiveCategoryI18n } from '../../-constants'
-import { usePageContext } from '../../-contexts/page-context'
-import { useDeleteDefectiveGoodsMutation, useGetDefectiveGoodsQuery } from '../../-hooks/use-defective-goods-asm'
-import { useSwitchRFIDDevice } from '../../-hooks/use-switch-rfid-device'
+import { DefectiveCategoryI18n } from '../../../-constants'
+import { usePageContext } from '../../../-contexts/page-context'
+import {
+	DefectiveGoodsQueryKey,
+	useDeleteDefectiveGoodsMutation,
+	useGetDefectiveGoodsQuery
+} from '../../../-hooks/use-defective-goods-asm'
+import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 import EmptySection from './emtpy-section'
 import SearchInput from './search-input'
 
 const DefectiveGoodList: React.FC = () => {
-	const { data } = useGetDefectiveGoodsQuery()
+	const { data, isLoading } = useGetDefectiveGoodsQuery()
+	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'> & { q?: string }>()
+
+	const queryClient = useQueryClient()
+
+	const handlePrefetch = useCallback((page) => {
+		const params = pickBy({ ...searchParams, page }, (item) => !!item) as {
+			page: number
+			q?: string
+		}
+		queryClient.prefetchQuery({
+			queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
+			queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
+		})
+	}, [])
+
+	console.log(typeof handlePrefetch)
 
 	return (
 		<Fragment>
 			<Div className='hidden h-full flex-col items-stretch gap-y-4 p-4 @7xl:flex'>
 				<SearchInput />
-				{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
+				{isLoading ? (
+					<Div className='h-full flex-1 place-content-center place-items-center'>
+						<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+					</Div>
+				) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
 						{data.data.map((item) => {
 							return <DefectiveGoodsItem key={item.id} data={item} />
@@ -55,7 +82,7 @@ const DefectiveGoodList: React.FC = () => {
 				) : (
 					<EmptySection />
 				)}
-				<Pagination {...omit(data, ['data'])} />
+				<Pagination {...omit(data, ['data'])} onPrefetch={handlePrefetch} />
 			</Div>
 			<Sheet defaultOpen={false}>
 				<SheetTrigger className='hidden' id='list-sheet-trigger' />
@@ -63,7 +90,11 @@ const DefectiveGoodList: React.FC = () => {
 					<SheetHeader className='mt-4'>
 						<SearchInput />
 					</SheetHeader>
-					{Array.isArray(data?.data) && data?.totalDocs > 0 ? (
+					{isLoading ? (
+						<Div className='h-full flex-1 place-content-center place-items-center'>
+							<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+						</Div>
+					) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 						<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
 							{data.data.map((item) => {
 								return <DefectiveGoodsItem key={item.id} data={item} />
@@ -73,7 +104,7 @@ const DefectiveGoodList: React.FC = () => {
 						<EmptySection />
 					)}
 					<SheetFooter>
-						<Pagination {...omit(data, ['data'])} />
+						<Pagination {...omit(data, ['data'])} onPrefetch={handlePrefetch} />
 					</SheetFooter>
 				</SheetContent>
 			</Sheet>
@@ -202,6 +233,6 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 }
 
 const DescriptionList = tw.ul`grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
-const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap`
+const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
 
 export default DefectiveGoodList

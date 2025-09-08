@@ -2,7 +2,7 @@
 import {
 	CreateDefectiveGoodsFormValues,
 	UpdateDefectiveGoodsFormValues
-} from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
+} from '@/app/(features)/_layout.(defective-goods)/defective-goods-epc-combination/-schemas/defective-goods.schema'
 import { IDefectiveGoods } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 

@@ -4,17 +4,17 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
+import RFIDReaderPlayground from '../-components/rfid-reader-playground'
+import { PageContextProvider } from '../-contexts/page-context'
+import { ReaderPlaygroundProvider } from '../-contexts/rfid-reader-playground.context'
+import { useSwitchRFIDDevice } from '../-hooks/use-switch-rfid-device'
+import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import DefectiveGoodList from './-components/data-list-panel'
 import DefectiveDetailDialog from './-components/data-list-panel/defective-detail-dialog'
 import DefectiveGoodsForm from './-components/form-playground'
-import RFIDReaderPlayground from './-components/rfid-reader-playground'
-import { PageContextProvider } from './-contexts/page-context'
-import { ReaderPlaygroundProvider } from './-contexts/rfid-reader-playground.context'
-import { useSwitchRFIDDevice } from './-hooks/use-switch-rfid-device'
 import { useToggleListPanel } from './-hooks/use-toggle-list-panel'
 
-export const Route = createLazyFileRoute('/(features)/_layout/b-grade-goods-inbound/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-epc-combination/')({
 	component: RouteComponent
 })
 
@@ -23,7 +23,9 @@ function RouteComponent() {
 	const { setBreadcrumb } = useBreadcrumbContext()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/b-grade-goods-inbound', text: t('ns_common:navigation.b_grade_goods_inbound') }])
+		setBreadcrumb([
+			{ to: '/defective-goods-epc-combination', text: t('ns_common:navigation.defective_goods_epc_combination') }
+		])
 	}, [i18n.language])
 
 	const { currentDevice } = useSwitchRFIDDevice()
@@ -33,7 +35,7 @@ function RouteComponent() {
 
 	return (
 		<Fragment>
-			<title>{t('ns_common:navigation.b_grade_goods_inbound')}</title>
+			<title>{t('ns_common:navigation.defective_goods_epc_combination')}</title>
 			<meta name='description' content='Matching EPCs for defective goods' />
 
 			<Container>
@@ -59,7 +61,7 @@ function RouteComponent() {
 							maxSize={isUsingUHFReader ? 25 : 0}
 							defaultSize={isUsingUHFReader ? 25 : 0}
 							className={cn(
-								'transtion-max-width linear h-full duration-200 will-change-transform',
+								'transtion-max-width linear h-[var(--outlet-wrapper-height)] duration-200 will-change-transform',
 								!isUsingUHFReader && 'border-0'
 							)}>
 							<ReaderPlaygroundProvider>{isUsingUHFReader && <RFIDReaderPlayground />}</ReaderPlaygroundProvider>

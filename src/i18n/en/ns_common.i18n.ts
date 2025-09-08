@@ -190,7 +190,8 @@ export default {
 	navigation: {
 		account: 'Account',
 		appearance: 'Appearance',
-		b_grade_goods_inbound: 'B-grade goods inbound',
+		defective_goods_inoutbound: 'Defective goods inoutbound',
+		defective_goods_epc_combination: 'Defective goods EPC combination',
 		dashboard: 'Dashboard',
 		daily_outbound_report: 'Export management',
 		finished_goods_inbound: 'Finished goods inbound',

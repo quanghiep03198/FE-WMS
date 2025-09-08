@@ -44,7 +44,7 @@ export const PlaygroundEpcList: React.FC = () => {
 			ref={containerRef}
 			className={cn(
 				'z-10 flex w-full flex-col items-stretch justify-start divide-y divide-border overflow-y-scroll bg-background p-2 will-change-transform contain-paint scrollbar-track-accent/50',
-				'h-[calc(var(--outlet-wrapper-height)-var(--playground-header-height)-var(--playground-actions-height))]'
+				'h-[calc(100%-var(--playground-header-height)-var(--playground-actions-height))]'
 			)}>
 			<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 				{virtualizer.getVirtualItems().map((virtualItem) => {

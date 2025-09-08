@@ -194,7 +194,8 @@ export default {
 	navigation: {
 		account: '账户管理',
 		appearance: '外观',
-		b_grade_goods_inbound: 'B级品入库管理',
+		defective_goods_inoutbound: '第二级品进入库',
+		defective_goods_epc_combination: '第二级品配标',
 		dashboard: '首頁',
 		finished_goods_inbound: '倉庫出入庫作業',
 		finished_goods_outbound: '成品倉出庫作業',

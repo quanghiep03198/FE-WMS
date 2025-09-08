@@ -4,7 +4,7 @@ import { debounce } from 'lodash'
 import React, { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useSearchCommandNumberQuery } from '../../../-hooks/use-order-asm'
+import { useSearchCommandNumberQuery } from '../../../../-hooks/use-order-asm'
 
 type CommandNumberComboboxFieldControlProps = Pick<
 	ComboboxFieldControlProps<FieldValues, Record<'mo_no', string>>,

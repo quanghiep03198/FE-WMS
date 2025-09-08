@@ -16,7 +16,7 @@ const PlaygroundHeader: React.FC = () => {
 					<Icon
 						name='Dot'
 						className={cn(
-							'scale-[0.55] rounded-full ring-8',
+							'scale-[0.5] rounded-full ring-8',
 							Object.values(connectionStatus).every((value) => value)
 								? 'bg-success fill-success stroke-success ring-success/30'
 								: 'bg-warning fill-warning stroke-warning ring-warning/30'

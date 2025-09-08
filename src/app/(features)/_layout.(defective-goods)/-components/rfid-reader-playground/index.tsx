@@ -1,3 +1,4 @@
+import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
 import { memo } from 'react'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
@@ -13,12 +14,12 @@ Set.prototype.at = function (index: number) {
 	return Array.from(this).at(index)
 }
 
-const RFIDReaderPlayground: React.FC = () => {
+const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className }) => {
 	const { connectionStatus, scannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'connectionStatus')
 
 	return (
 		<Div
-			className='flex h-full min-w-80 flex-col divide-y'
+			className={cn('flex h-full min-w-80 flex-col divide-y', className)}
 			style={
 				{
 					'--playground-header-height': '52px',

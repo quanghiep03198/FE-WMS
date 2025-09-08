@@ -1,6 +1,6 @@
 import { Div, Icon, Label, RadioGroup, RadioGroupItem } from '@/components/ui'
 import { memo } from 'react'
-import { useSwitchRFIDDevice } from '../../-hooks/use-switch-rfid-device'
+import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 
 const DeviceRadioGroup: React.FC = () => {
 	const { currentDevice, setCurrentDevice } = useSwitchRFIDDevice()

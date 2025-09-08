@@ -46,9 +46,16 @@ export const navigationConfig: NavigationConfig[] = [
 	},
 	{
 		id: uuidv4(),
+		icon: 'Combine',
+		title: 'navigation.defective_goods_epc_combination',
+		path: '/defective-goods-epc-combination',
+		type: 'main'
+	},
+	{
+		id: uuidv4(),
 		icon: 'PackagePlus',
-		title: 'navigation.b_grade_goods_inbound',
-		path: '/b-grade-goods-inbound',
+		title: 'navigation.defective_goods_inoutbound',
+		path: '/defective-goods-inoutbound',
 		type: 'main'
 	},
 	{
