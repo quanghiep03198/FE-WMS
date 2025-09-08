@@ -41,7 +41,7 @@ import tw from 'tailwind-styled-components'
 import { FormActionEnum, FormActionReasonEnum } from '../../-constants'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
 import { useGetInboundEpcQuery, useUpdateStockInMutation } from '../../-hooks/use-rfid-inbound-asm'
-import { FormValues, InboundFormValues, inboundSchema, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
+import { FormValues, inboundSchema, InoutboundPayload, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const { connection, selectedOrder, scanningStatus, currentFactoryProduce, setScannedEpc } = usePageContext(
@@ -131,13 +131,13 @@ const InoutboundForm: React.FC = () => {
 		[writableTenants, form.watch('target_tenant')]
 	)
 
-	const handleSubmit = async (data: InboundFormValues) => {
+	const handleSubmit = async (data: FormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
 				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder
-			})
+			} as InoutboundPayload)
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)
 			toast.success(t('ns_common:notification.success'), { id: 'UPDATE_STOCK' })
