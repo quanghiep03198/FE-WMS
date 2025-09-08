@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import tw from 'tailwind-styled-components'
 
-type PaginationProps = Omit<Pagination<unknown>, 'data'> & { onPrefetch?: () => void }
+type PaginationProps = Omit<Pagination<unknown>, 'data'> & { onPrefetch?: (page: number) => void }
 
 export const calculatePaginationRange = (currentPage: number, totalPages: number): number[] => {
 	const range = 2
@@ -22,8 +22,15 @@ export const calculatePaginationRange = (currentPage: number, totalPages: number
 	return Array.from({ length: end - start + 1 }, (_, i) => start + i)
 }
 
-const Pagination: React.FC<PaginationProps> = (props) => {
-	const { page, totalPages, hasNextPage, hasPrevPage, onPrefetch: handlePrefetch } = props
+const Pagination: React.FC<PaginationProps> = ({
+	page,
+	totalPages,
+	hasNextPage,
+	hasPrevPage,
+	nextPage,
+	onPrefetch: handlePrefetch
+}) => {
+	// const  = props
 	const { setParams } = useQueryParams<{ page: number }>()
 	const paginationRange = calculatePaginationRange(page, totalPages)
 	const { t } = useTranslation()
@@ -40,6 +47,9 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 					<Button
 						key={pageIndex}
 						onClick={() => setParams({ page: pageIndex })}
+						onMouseEnter={() => {
+							if (typeof handlePrefetch === 'function') handlePrefetch(pageIndex)
+						}}
 						variant={page == pageIndex ? 'outline' : 'ghost'}
 						className='size-8 text-sm'
 						size='icon'>
@@ -53,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 				size='sm'
 				onClick={() => setParams({ page: page + 1 })}
 				onMouseEnter={() => {
-					if (handlePrefetch) handlePrefetch()
+					if (typeof handlePrefetch === 'function') handlePrefetch(nextPage)
 				}}>
 				{t('ns_common:pagination.next_page')}
 				<Icon name='ChevronRight' />
