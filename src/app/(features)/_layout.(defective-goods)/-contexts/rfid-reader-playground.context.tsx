@@ -3,7 +3,7 @@ import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { pick, throttle, uniq } from 'lodash'
 import mqtt from 'mqtt'
-import { createContext, use, useEffect, useRef } from 'react'
+import { createContext, use, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { gunzipSync } from 'zlib'
@@ -80,11 +80,9 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	const { data: agent } = useGetAgentIPv4()
 	const clientRef = useRef<mqtt.MqttClient>(null)
 
-	useEffect(() => {
-		if (!clientRef.current && !!agent) {
-			clientRef.current = mqtt.connect(mqttSocket({ host: agent?.ip ?? env<string>('VITE_APP_HOST'), port: 9001 }))
-		}
-	}, [agent])
+	if (!clientRef.current && !!agent) {
+		clientRef.current = mqtt.connect(mqttSocket({ host: agent.ip, port: 9001 }))
+	}
 
 	const store = useRef<StoreApi<ReaderPlaygroundContextStore>>(null)
 	if (!store.current)
@@ -122,8 +120,8 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	const handleConnectMQTT: mqtt.OnConnectCallback = async (): Promise<void> => {
 		if (!clientRef.current) return
 		await Promise.all([
-			clientRef.current.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ act: 'ping' })),
-			clientRef.current.publishAsync(PublishedTopics.REQUEST_SETTINGS, Json.stringify({ act: 'get' }))
+			clientRef.current.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' })),
+			clientRef.current.publishAsync(PublishedTopics.REQUEST_SETTINGS, Json.stringify({ action: 'get' }))
 		])
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_DATA)
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SIGNAL)
@@ -169,7 +167,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 		}
 	}
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!clientRef.current) return
 
 		clientRef.current.on('connect', handleConnectMQTT)

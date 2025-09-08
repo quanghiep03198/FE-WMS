@@ -3,7 +3,7 @@ import { IDefectiveGoods } from '@/common/types/entities'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { pickBy } from 'lodash'
-import { CreateDefectiveGoodsFormValues } from '../-schemas/defective-goods.schema'
+import { CreateDefectiveGoodsFormValues } from '../defective-goods-epc-combination/-schemas/defective-goods.schema'
 
 export enum DefectiveGoodsQueryKey {
 	DEFECTIVE_GOODS = 'DEFECTIVE_GOODS'

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DefectiveCategory, DefectiveLocation } from '../-constants'
+import { DefectiveCategory, DefectiveLocation } from '../../-constants'
 
 export const baseDefectiveGoodsSchema = z.object({
 	epc: z
