@@ -19,10 +19,6 @@ export enum RFIDInboundQueryKeys {
 	INBOUND_ORDER_DETAIL = 'INBOUND_ORDER_DETAIL'
 }
 
-// export const SHAPING_DEPT_PROVIDE_TAG = 'SHAPING_DEPARTMENT'
-// export const RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL = 'INBOUND_ORDER_DETAIL'
-// export const RFIDInboundQueryKeys.INBOUND_EPC = 'INBOUND_EPC_LIST'
-
 export type FetchEpcQueryKey = [typeof RFIDInboundQueryKeys.INBOUND_EPC, number, string]
 
 export const useGetInboundEpcQuery = () => {
