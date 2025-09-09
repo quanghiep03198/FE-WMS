@@ -1,7 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
+import { useUnmount } from 'ahooks'
 import { memo } from 'react'
-import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
+import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 import { PlaygroundActions } from './playground-actions'
 import { PlaygroundEmptyDataState } from './playground-empty-data-state'
 import { PlaygroundEpcList } from './playground-epc-list'
@@ -14,8 +15,16 @@ Set.prototype.at = function (index: number) {
 	return Array.from(this).at(index)
 }
 
-const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className }) => {
-	const { connectionStatus, scannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'connectionStatus')
+const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className, style }) => {
+	const { connectionStatus, scannedEpcs, publishMessage } = useReaderPlaygroundStore(
+		'scannedEpcs',
+		'connectionStatus',
+		'publishMessage'
+	)
+
+	useUnmount(() => {
+		publishMessage(PublishedTopics.REQUEST_DATA, { action: 'reset' })
+	})
 
 	return (
 		<Div
@@ -23,7 +32,8 @@ const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className
 			style={
 				{
 					'--playground-header-height': '52px',
-					'--playground-actions-height': '52px'
+					'--playground-actions-height': '52px',
+					...style
 				} as React.CSSProperties
 			}>
 			<PlaygroundHeader />

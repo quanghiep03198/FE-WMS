@@ -16,10 +16,6 @@ export const baseDefectiveGoodsSchema = z.object({
 	color_sn: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	size_code: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	defect_location: z.enum(DefectiveLocation, { message: 'ns_validation:required' }),
-	storage_location: z
-		.string({ message: 'ns_validation:required' })
-		.trim()
-		.nonempty({ message: 'ns_validation:required' }),
 	defect_description: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
 })
 

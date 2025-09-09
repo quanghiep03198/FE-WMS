@@ -1,8 +1,11 @@
+import { CommonActions } from '@/common/constants/enums'
 import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
+import { usePageContext } from '../../-contexts/page-context'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
 export const PlaygroundActions: React.FC = () => {
+	const { event$ } = usePageContext()
 	const { connectionStatus, resetScannedEpcs, publishMessage } = useReaderPlaygroundStore(
 		'connectionStatus',
 		'setConnectionStatus',
@@ -47,6 +50,7 @@ export const PlaygroundActions: React.FC = () => {
 					publishMessage(PublishedTopics.REQUEST_DATA, {
 						action: 'reset'
 					})
+					event$.emit({ action: CommonActions.IMPORT, payload: [] })
 				}}>
 				<Icon name='RotateCw' /> {t('ns_common:actions.reset')}
 			</Button>

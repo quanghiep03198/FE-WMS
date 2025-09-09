@@ -1,4 +1,4 @@
-import { Div, Typography } from '@/components/ui'
+import { Div, ResizableHandle, ResizablePanel, ResizablePanelGroup, Typography } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,21 +30,38 @@ function RouteComponent() {
 			<meta name='description' content='Defective goods inoutbound' />
 
 			<PageContextProvider>
-				<Div className='grid h-[var(--outlet-wrapper-height)] border-collapse grid-cols-3 grid-rows-[auto_1fr] overflow-hidden rounded-md border *:!box-border'>
-					<Div className='col-span-full flex h-[52px] items-center justify-between border-b p-2'>
-						<Typography variant='h4' className='ml-2'>
-							Inoutbound
-						</Typography>
-						<InoutboundForm />
-					</Div>
-					<Div className='col-span-2 box-border h-[calc(var(--outlet-wrapper-height)-52px)] overflow-y-scroll border-r scrollbar-track-accent/50'>
-						<DetailTable />
-					</Div>
-					<Div className='col-span-1 h-[calc(var(--outlet-wrapper-height)-52px)]'>
-						<ReaderPlaygroundProvider>
-							<RfidReaderPlayground />
-						</ReaderPlaygroundProvider>
-					</Div>
+				<Div
+					style={
+						{
+							'--header-height': '64px',
+							'--row-height': '48px'
+						} as React.CSSProperties
+					}
+					className='flex h-[var(--outlet-wrapper-height)] border-collapse flex-col divide-y divide-border overflow-hidden rounded-md border *:!box-border'>
+					<ReaderPlaygroundProvider>
+						<Div className='col-span-full flex h-[var(--header-height)] items-center justify-between px-4 py-2'>
+							<Typography variant='h4'>{t('ns_common:navigation.defective_goods_inoutbound')}</Typography>
+							<InoutboundForm />
+						</Div>
+						<ResizablePanelGroup
+							direction='horizontal'
+							className='h-[calc(var(--outlet-wrapper-height)-var(--header-height))]'>
+							<ResizablePanel minSize={70} maxSize={80}>
+								<DetailTable />
+							</ResizablePanel>
+							<ResizableHandle withHandle={true} className='z-20' />
+							<ResizablePanel maxSize={30} minSize={20} defaultSize={25}>
+								<RfidReaderPlayground
+									style={
+										{
+											'--playground-header-height': 'var(--row-height)',
+											'--playground-actions-height': 'var(--row-height)'
+										} as React.CSSProperties
+									}
+								/>
+							</ResizablePanel>
+						</ResizablePanelGroup>
+					</ReaderPlaygroundProvider>
 				</Div>
 			</PageContextProvider>
 		</Fragment>
