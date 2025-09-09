@@ -7,9 +7,9 @@ const SearchInput: React.FC = () => {
 	const [value, setValue, resetValue] = useResetState<string>(searchParams.q ?? '')
 
 	const handleEpcChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		if (e.currentTarget.value.length >= 24) {
-			return
-		}
+		// if (e.currentTarget.value.length >= 24) {
+		// 	return
+		// }
 		setValue(e.currentTarget.value.toUpperCase())
 	}
 
