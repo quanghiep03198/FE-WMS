@@ -3,6 +3,10 @@ import {
 	CreateDefectiveGoodsFormValues,
 	UpdateDefectiveGoodsFormValues
 } from '@/app/(features)/_layout.(defective-goods)/defective-goods-epc-combination/-schemas/defective-goods.schema'
+import {
+	DefectiveGoodsInboundFormValues,
+	DefectiveGoodsOutboundFormValues
+} from '@/app/(features)/_layout.(defective-goods)/defective-goods-inoutbound/-schemas'
 import { IDefectiveGoods } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
@@ -26,5 +30,19 @@ export class DefectiveGoodsService {
 
 	static async deleteDefectiveGoods(id: string) {
 		return await axiosInstance.delete<void, ResponseBody<unknown>>(`/defective-goods/delete/${id}`)
+	}
+
+	static async updateInboundStatus(payload: DefectiveGoodsInboundFormValues) {
+		return await axiosInstance.patch<DefectiveGoodsInboundFormValues, ResponseBody<unknown>>(
+			'/defective-goods/inbound',
+			payload
+		)
+	}
+
+	static async updateOutboundStatus(payload: DefectiveGoodsOutboundFormValues) {
+		return await axiosInstance.patch<DefectiveGoodsOutboundFormValues, ResponseBody<unknown>>(
+			'/defective-goods/outbound',
+			payload
+		)
 	}
 }

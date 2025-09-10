@@ -24,7 +24,7 @@ export default {
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
 		order_sizing_list: 'The table below shows the sizing information of the scanned orders.',
-		outbound_table_caption: 'The table above summarizes the scanned EPC data.',
+		inoutbound_table_caption: 'The table above summarizes the scanned EPC data.',
 		po_outbound: 'The scanned EPC data will be counted according to this order after performing stock out.',
 		inventory_estimation: 'Estimate the inventory levels based on the current production and shipping status.',
 		select_readable_database:
@@ -62,8 +62,10 @@ export default {
 	inoutbound_actions: {
 		normal_export: 'Normal export',
 		normal_import: 'Normal import',
+		giveaway: 'Giveaway',
 		recycling: 'Recycling',
 		return_for_repair: 'Return for Repair',
+		sell: 'Sell',
 		scrap: 'Scrap',
 		transfer_inbound: 'Transfer inbound',
 		transfer_outbound: 'Transfer outbound'
@@ -105,6 +107,10 @@ export default {
 		[OrderStatus.CANCELLED]: 'Cancelled',
 		[OrderStatus.NOT_APPROVED]: 'Not approved',
 		[OrderStatus.REAPPROVED]: 'Reapproved'
+	},
+	placeholders: {
+		enter_storage_location: 'Enter storage location ...',
+		outbound_purpose: 'Outbound purpose ...'
 	},
 	rfid_process: {
 		cutting_inbound: 'Cutting Inbound',
