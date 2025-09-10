@@ -67,14 +67,16 @@ const DefectiveGoodList: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='hidden h-full flex-col items-stretch gap-y-4 p-4 @7xl:flex'>
-				<SearchInput />
+			<Div className='hidden h-full grid-rows-[var(--bar-height)_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'>
+				<Div className='place-content-stretch place-items-center p-4'>
+					<SearchInput />
+				</Div>
 				{isLoading ? (
 					<Div className='h-full flex-1 place-content-center place-items-center'>
 						<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
 					</Div>
 				) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
-					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
+					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll py-4 pl-4 pr-2'>
 						{data.data.map((item) => {
 							return <DefectiveGoodsItem key={item.id} data={item} />
 						})}
@@ -82,7 +84,9 @@ const DefectiveGoodList: React.FC = () => {
 				) : (
 					<EmptySection />
 				)}
-				<Pagination {...omit(data, ['data'])} onPrefetch={handlePrefetch} />
+				<Div className='place-content-center place-items-center'>
+					<Pagination {...omit(data, ['data'])} onPrefetch={handlePrefetch} />
+				</Div>
 			</Div>
 			<Sheet defaultOpen={false}>
 				<SheetTrigger className='hidden' id='list-sheet-trigger' />
