@@ -7,9 +7,6 @@ const SearchInput: React.FC = () => {
 	const [value, setValue, resetValue] = useResetState<string>(searchParams.q ?? '')
 
 	const handleEpcChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		// if (e.currentTarget.value.length >= 24) {
-		// 	return
-		// }
 		setValue(e.currentTarget.value.toUpperCase())
 	}
 
@@ -22,7 +19,7 @@ const SearchInput: React.FC = () => {
 	)
 
 	return (
-		<Div className='flex h-9 items-center space-x-2 overflow-clip rounded-md border px-2 focus-within:border-primary'>
+		<Div className='flex h-full w-full items-center space-x-2 px-2'>
 			<Icon name='Search' />
 			<Input
 				placeholder='Scan EPC to search specific item ...'

@@ -40,7 +40,14 @@ function RouteComponent() {
 
 			<Container>
 				<PageContextProvider>
-					<ResizablePanelGroup direction='horizontal' className='rounded-md border'>
+					<ResizablePanelGroup
+						direction='horizontal'
+						className='rounded-md border'
+						style={
+							{
+								'--bar-height': '52px'
+							} as React.CSSProperties
+						}>
 						<ResizablePanel
 							minSize={listPanelOpen ? 30 : 0}
 							maxSize={listPanelOpen ? 40 : 0}
@@ -52,7 +59,7 @@ function RouteComponent() {
 							<DefectiveGoodList />
 						</ResizablePanel>
 						{listPanelOpen && <ResizableHandle withHandle className='hidden @7xl:flex' />}
-						<ResizablePanel defaultSize={50} minSize={40}>
+						<ResizablePanel defaultSize={50} minSize={40} className='h-full'>
 							<DefectiveGoodsForm />
 						</ResizablePanel>
 						{isUsingUHFReader && <ResizableHandle disabled />}
@@ -61,7 +68,7 @@ function RouteComponent() {
 							maxSize={isUsingUHFReader ? 25 : 0}
 							defaultSize={isUsingUHFReader ? 25 : 0}
 							className={cn(
-								'transtion-max-width linear h-[var(--outlet-wrapper-height)] duration-200 will-change-transform',
+								'transtion-max-width linear h-full duration-200 will-change-transform',
 								!isUsingUHFReader && 'border-0'
 							)}>
 							<ReaderPlaygroundProvider>{isUsingUHFReader && <RFIDReaderPlayground />}</ReaderPlaygroundProvider>
@@ -75,7 +82,7 @@ function RouteComponent() {
 }
 
 const Container = tw.div`
-	bg-background h-[var(--outlet-wrapper-height)] @container
+	group/container bg-background h-[var(--outlet-wrapper-height)] @container
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50

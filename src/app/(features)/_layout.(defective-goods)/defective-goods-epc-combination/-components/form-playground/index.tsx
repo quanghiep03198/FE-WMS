@@ -1,12 +1,8 @@
 import { CommonActions } from '@/common/constants/enums'
-import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { IBaseEntity, IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
-import generateAvatar from '@/common/utils/generate-avatar'
 import {
 	AutoCompleteFieldControl,
-	Avatar,
-	AvatarImage,
 	Button,
 	buttonVariants,
 	Div,
@@ -15,14 +11,12 @@ import {
 	InputFieldControl,
 	Label,
 	SelectFieldControl,
-	Switch,
-	Typography
+	Switch
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
-import { format, formatRelative } from 'date-fns'
 import { has, isNil, omit } from 'lodash'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -45,10 +39,11 @@ import CommandNumberComboboxFieldControl from './command-number-combobox-field-c
 import DeviceRadioGroup from './device-radio-group'
 import ListPanelToggleButton from './list-panel-toggle-button'
 import ToggleFullscreen from './toggle-fullscreen'
+import UserActivityInfo from './user-activity-info'
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const dateLocale = useDateLocale()
+
 	const { hash } = useLocation()
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
@@ -245,8 +240,9 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	return (
 		<FormProvider {...form}>
-			<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
-				<Div className='sticky top-0 z-20 col-span-full flex h-[52px] items-center justify-between gap-x-6 border-b bg-background px-3 py-2'>
+			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
+				{/* Form controls */}
+				<Div className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
 					<Div className='hidden @7xl:block'>
 						<ListPanelToggleButton />
 					</Div>
@@ -306,43 +302,16 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Div>
 					)}
 				</Div>
-
+				{/* User activities timestamp */}
 				{formAction === CommonActions.UPDATE && has(form.getValues(), 'created') && (
-					<Fragment>
-						<Div className='mx-6 flex items-center gap-x-2 border-b py-6'>
-							<Avatar>
-								<AvatarImage src={generateAvatar({ name: form.getValues().user_code_created })} />
-							</Avatar>
-							<Div className='flex flex-col space-y-1'>
-								<Typography variant='small' className='font-medium'>
-									@{form.getValues().user_code_created}
-								</Typography>
-								<Typography variant='small' color='muted' className='first-letter:uppercase'>
-									{format(new Date(form.getValues().created), 'MMM dd, YYY - hh:mm:ss ', {
-										locale: dateLocale
-									})}
-								</Typography>
-							</Div>
-							{form.getValues().updated && (
-								<Typography
-									variant='small'
-									color='muted'
-									className='ml-auto inline-flex items-center gap-x-2 self-start'>
-									<Icon name='FileCog' size={18} />
-
-									{t('ns_common:timestamps.last_updated', {
-										timestamp: formatRelative(new Date(form.getValues().updated), new Date(), {
-											locale: dateLocale
-										}),
-										defaultValue: null
-									})}
-								</Typography>
-							)}
-						</Div>
-					</Fragment>
+					<UserActivityInfo
+						createdAt={String(form.getValues('created'))}
+						createdBy={String(form.getValues('user_code_created'))}
+						lastUpdatedAt={String(form.getValues('updated'))}
+					/>
 				)}
-
-				<Div as='fieldset' className='grid grid-cols-6 gap-x-2 gap-y-6 p-6'>
+				{/* Form fields */}
+				<Div as='fieldset' className='grid flex-1 basis-full grid-cols-6 gap-x-2 gap-y-6 overflow-y-auto p-6'>
 					{currentDevice === 'usb' && (
 						<Div className='col-span-full'>
 							<InputFieldControl
@@ -507,15 +476,15 @@ const DefectiveGoodsForm: React.FC = () => {
 						<EditorFieldControl
 							name='defect_description'
 							label={t('ns_erp:fields.defect_description')}
-							className='h-60'
+							className='group/container-has-[#toggle-fullscreen[data-state=checked]]:h-screen h-60'
 							errorMessage={t('ns_validation:required')}
 							defaultValue={defaultEditorContent}
 							disabled={!formAction}
 						/>
 					</Div>
 				</Div>
-
-				<Div className='sticky bottom-0 flex items-center justify-between gap-x-6 border-t bg-background px-3 py-4'>
+				{/* Footer bar */}
+				<Div className='flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-4'>
 					<ToggleFullscreen />
 					<DeviceRadioGroup />
 				</Div>
@@ -524,6 +493,6 @@ const DefectiveGoodsForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`h-full overflow-y-auto scrollbar-track-accent/50`
+const Form = tw.form`h-full overflow-y-auto scrollbar-track-accent/50 grid divide-y divide-border data-[action=CREATE]:grid-rows-[var(--bar-height)_auto_var(--bar-height)] data-[action=UPDATE]:grid-rows-[var(--bar-height)_auto_auto_var(--bar-height)] *:box-border`
 
 export default DefectiveGoodsForm

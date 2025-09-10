@@ -11,7 +11,7 @@ const OrderDetailTableFooter: React.FC<OrderDetailTableFooterProps> = ({ totalFi
 
 	return (
 		<Div className='flex basis-[var(--table-footer-height)] items-center justify-center gap-x-2 p-3 px-4 text-center text-sm text-muted-foreground'>
-			<Typography variant='small'>{t('ns_inoutbound:description.outbound_table_caption')}</Typography>
+			<Typography variant='small'>{t('ns_inoutbound:description.inoutbound_table_caption')}</Typography>
 			<Div className='inline-flex flex-1 items-center justify-end gap-x-2 bg-background'>
 				<Typography color='muted' className='font-medium'>
 					{t('ns_common:common_fields.total')}
