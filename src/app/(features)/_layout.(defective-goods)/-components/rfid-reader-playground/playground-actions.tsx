@@ -15,7 +15,7 @@ export const PlaygroundActions: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='grid h-[var(--playground-actions-height)] grid-cols-3 items-center gap-x-2 p-2'>
+		<Div className='grid grid-cols-3 items-center gap-x-2 p-2 @container/playground-actions'>
 			<Button
 				size='sm'
 				disabled={!connectionStatus.isMQTTConnectionReady}
@@ -25,7 +25,10 @@ export const PlaygroundActions: React.FC = () => {
 						action: connectionStatus.isReaderConnectionReady ? 'disconnect' : 'connect'
 					})
 				}}>
-				<Icon name={connectionStatus.isReaderConnectionReady ? 'Unplug' : 'PlugZap'} />
+				<Icon
+					name={connectionStatus.isReaderConnectionReady ? 'Unplug' : 'PlugZap'}
+					className='hidden @sm/playground-actions:block'
+				/>
 				{connectionStatus.isReaderConnectionReady
 					? t('ns_common:actions.disconnect')
 					: t('ns_common:actions.connect')}
@@ -39,7 +42,10 @@ export const PlaygroundActions: React.FC = () => {
 						action: connectionStatus.isReaderPlaying ? 'stop' : 'start'
 					})
 				}}>
-				<Icon name={connectionStatus.isReaderPlaying ? 'Pause' : 'Play'} />
+				<Icon
+					name={connectionStatus.isReaderPlaying ? 'Pause' : 'Play'}
+					className='hidden @sm/playground-actions:block'
+				/>
 				{connectionStatus.isReaderPlaying ? t('ns_common:actions.stop') : t('ns_common:actions.start')}
 			</Button>
 			<Button
@@ -52,7 +58,7 @@ export const PlaygroundActions: React.FC = () => {
 					})
 					event$.emit({ action: CommonActions.IMPORT, payload: [] })
 				}}>
-				<Icon name='RotateCw' /> {t('ns_common:actions.reset')}
+				<Icon name='RotateCw' className='hidden @sm/playground-actions:block' /> {t('ns_common:actions.reset')}
 			</Button>
 		</Div>
 	)
