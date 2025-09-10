@@ -24,7 +24,7 @@ export default {
 		no_exchangable_order: '没有可交换的订单',
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
-		outbound_table_caption: '上表总结了扫描的EPC数据',
+		inoutbound_table_caption: '上表总结了扫描的EPC数据',
 		po_outbound: '按容器出库的订单代码. 根据此订单计算当天扫描的EPC数据.',
 		inventory_estimation: '根据当前生产和出货状态估算库存水平.',
 		select_readable_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',
@@ -56,6 +56,8 @@ export default {
 		normal_export: '正常出庫',
 		normal_import: '正常入庫',
 		recycling: '翻箱',
+		sell: '銷售',
+		giveaway: '送干部',
 		return_for_repair: '返修',
 		scrap: '報廢',
 		transfer_inbound: '調攒入庫',
@@ -95,6 +97,10 @@ export default {
 		[OrderStatus.CANCELLED]: '取消審核 ',
 		[OrderStatus.NOT_APPROVED]: '未審核',
 		[OrderStatus.REAPPROVED]: '重新審核'
+	},
+	placeholders: {
+		enter_storage_location: '输入储位 ...',
+		outbound_purpose: '选择出库类别 ...'
 	},
 	rfid_process: {
 		cutting_inbound: '裁断入库',
