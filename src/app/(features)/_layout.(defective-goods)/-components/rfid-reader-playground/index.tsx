@@ -28,7 +28,10 @@ const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className
 
 	return (
 		<Div
-			className={cn('flex h-full min-w-80 flex-col divide-y', className)}
+			className={cn(
+				'grid h-full min-w-80 grid-rows-[var(--playground-header-height)_auto_var(--playground-actions-height)] divide-y @container/playground',
+				className
+			)}
 			style={
 				{
 					'--playground-header-height': '52px',

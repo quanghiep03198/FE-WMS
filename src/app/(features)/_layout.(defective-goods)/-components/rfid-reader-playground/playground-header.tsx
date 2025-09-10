@@ -10,7 +10,7 @@ const PlaygroundHeader: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='flex h-[var(--playground-header-height)] items-center justify-between gap-x-2 p-2'>
+		<Div className='flex items-center justify-between gap-x-2 p-2'>
 			<Div className='inline-flex items-center gap-x-2 text-base'>
 				<Typography className='ml-2 inline-flex items-center gap-x-2 font-medium'>
 					<Icon
