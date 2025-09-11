@@ -211,6 +211,6 @@ const ReaderSettingSheet: React.FC = () => {
 	)
 }
 
-const SheetForm = tw.form`flex h-full flex-1 flex-col gap-y-10`
+const SheetForm = tw.form`flex h-full flex-1 flex-col gap-y-10 overflow-y-auto scrollbar-none`
 
 export default ReaderSettingSheet
