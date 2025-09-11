@@ -38,7 +38,7 @@ import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-
 import BrandFieldControl from './brand-field-control'
 import CategoryFieldControl from './category-field-control'
 import ColorFieldControl from './color-field-control'
-import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
+import CommandNumberFieldControl from './command-number-field-control'
 import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
 import DeviceRadioGroup from './device-radio-group'
 import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
@@ -280,7 +280,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								<PurchaseOrderComboboxFieldControl />
 							</Div>
 							<Div className='col-span-3'>
-								<CommandNumberComboboxFieldControl />
+								<CommandNumberFieldControl />
 							</Div>
 						</Fragment>
 					)}

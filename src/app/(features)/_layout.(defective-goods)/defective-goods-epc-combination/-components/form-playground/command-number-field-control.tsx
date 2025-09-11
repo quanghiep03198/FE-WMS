@@ -6,9 +6,9 @@ import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSearchCommandNumberQuery } from '../../../../-hooks/use-order-asm'
 
-type CommandNumberComboboxFieldControlProps = Partial<ComboboxFieldControlProps<FieldValues, Record<'mo_no', string>>>
+type CommandNumberFieldControlProps = Partial<ComboboxFieldControlProps<FieldValues, Record<'mo_no', string>>>
 
-const CommandNumberComboboxFieldControl: React.FC<CommandNumberComboboxFieldControlProps> = (props) => {
+const CommandNumberFieldControl: React.FC<CommandNumberFieldControlProps> = (props) => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const { t } = useTranslation()
 	const { data } = useSearchCommandNumberQuery(searchTerm)
@@ -27,4 +27,4 @@ const CommandNumberComboboxFieldControl: React.FC<CommandNumberComboboxFieldCont
 	)
 }
 
-export default CommandNumberComboboxFieldControl
+export default CommandNumberFieldControl
