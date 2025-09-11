@@ -5,7 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefAutoCompleteFieldControlProps } from './type'
 
-const CustShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled }) => {
+const CustShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
+	loading,
+	readOnly,
+	disabled,
+	...props
+}) => {
 	const { t } = useTranslation()
 	const { reset, getValues, control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
@@ -35,6 +40,7 @@ const CustShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 
 	return (
 		<AutoCompleteFieldControl
+			{...props}
 			name='cust_shoes_style'
 			label={t('ns_erp:fields.cust_shoes_style')}
 			placeholder={t('ns_common:form_placeholder.fill', {

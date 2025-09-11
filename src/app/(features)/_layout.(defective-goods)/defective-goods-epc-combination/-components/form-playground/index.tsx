@@ -17,7 +17,7 @@ import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
-import { has, isNil, omit } from 'lodash'
+import { has, isNil } from 'lodash'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FormProviderProps, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ import { gunzipSync, gzipSync } from 'zlib'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
 import PurchaseOrderComboboxFieldControl from '../../../-components/rfid-reader-playground/purchase-order-combobox-field-control'
-import { DefectiveCategory, DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
+import { DefectiveCategory, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
 import {
 	useCreateDefectiveGoodsMutation,
@@ -36,6 +36,7 @@ import {
 import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
 import BrandFieldControl from './brand-field-control'
+import CategoryFieldControl from './category-field-control'
 import ColorFieldControl from './color-field-control'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
 import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
@@ -270,41 +271,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Div>
 					)}
 					<Div className='col-span-full'>
-						<SelectFieldControl
-							name='category'
-							label={t('ns_erp:fields.category')}
-							datalist={[
-								{
-									label: t(DefectiveCategoryI18n['B'], {
-										ns: 'ns_inoutbound',
-										defaultValue: DefectiveCategory.B_GRADE
-									}),
-									value: DefectiveCategory.B_GRADE
-								},
-								{
-									label: t(DefectiveCategoryI18n['C'], {
-										ns: 'ns_inoutbound',
-										defaultValue: DefectiveCategory.C_GRADE
-									}),
-									value: DefectiveCategory.C_GRADE
-								},
-								{
-									label: t(DefectiveCategoryI18n['RD'], {
-										ns: 'ns_inoutbound',
-										defaultValue: DefectiveCategory.RESEARCH_DEVELOPMENT
-									}),
-									value: DefectiveCategory.RESEARCH_DEVELOPMENT
-								}
-							]}
-							disabled={isNil(formAction)}
-							onValueChange={(value) => {
-								if (value === DefectiveCategory.RESEARCH_DEVELOPMENT) {
-									form.reset(omit(form.getValues(), ['po', 'mo_no']))
-								}
-							}}
-							labelField='label'
-							valueField='value'
-						/>
+						<CategoryFieldControl disabled={isNil(formAction)} />
 					</Div>
 
 					{shouldRequireFullInfo && !isNil(formAction) && (

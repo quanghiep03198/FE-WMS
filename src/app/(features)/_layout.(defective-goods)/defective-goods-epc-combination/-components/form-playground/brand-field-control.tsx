@@ -9,7 +9,7 @@ type BrandFieldControl = Partial<
 	SelectFieldControlProps<DefectiveGoodsCombinationFormValues, Record<'label' | 'value', string>>
 >
 
-const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled }) => {
+const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) => {
 	const { t } = useTranslation()
 	const { reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
@@ -24,6 +24,7 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled }) => {
 
 	return (
 		<SelectFieldControl
+			{...props}
 			name='brand_name'
 			label={t('ns_erp:fields.brand_name')}
 			placeholder={t('ns_common:form_placeholder.fill', {

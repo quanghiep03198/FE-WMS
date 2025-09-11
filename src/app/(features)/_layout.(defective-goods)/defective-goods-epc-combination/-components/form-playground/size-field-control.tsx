@@ -6,7 +6,7 @@ import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-go
 import { DefectiveCategory } from '../../../-constants'
 import { DefAutoCompleteFieldControlProps } from './type'
 
-const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, disabled, datalist }) => {
+const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, disabled, datalist, ...props }) => {
 	const { t } = useTranslation()
 	const { control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
@@ -37,6 +37,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading,
 
 	return (
 		<AutoCompleteFieldControl
+			{...props}
 			name='size_code'
 			label='Size'
 			placeholder={t('ns_common:form_placeholder.fill', {

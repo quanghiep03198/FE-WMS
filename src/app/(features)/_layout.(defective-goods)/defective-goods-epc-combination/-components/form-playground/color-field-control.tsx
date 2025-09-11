@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefAutoCompleteFieldControlProps } from './type'
 
-const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled }) => {
+const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
 	const { control, reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
@@ -25,6 +25,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 
 	return (
 		<AutoCompleteFieldControl
+			{...props}
 			name='color_sn'
 			label={t('ns_erp:fields.color_sn')}
 			placeholder={t('ns_common:form_placeholder.fill', {
