@@ -1,10 +1,19 @@
 import { Div, Label, Switch, Typography } from '@/components/ui'
-import { useFullscreen } from 'ahooks'
+import { useFullscreen, useKeyPress, useUnmount } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 
 const FullscreenToggleBox: React.FC = () => {
 	const { t } = useTranslation()
-	const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.body)
+	const [isFullscreen, { toggleFullscreen, exitFullscreen }] = useFullscreen(document.body)
+
+	useKeyPress('F11', (e) => {
+		e.preventDefault()
+		toggleFullscreen()
+	})
+
+	useUnmount(() => {
+		exitFullscreen()
+	})
 
 	return (
 		<Div as='section' className='flex w-full flex-col gap-y-3'>
