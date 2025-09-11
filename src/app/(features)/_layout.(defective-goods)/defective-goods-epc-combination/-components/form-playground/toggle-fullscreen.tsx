@@ -1,11 +1,20 @@
 import { Div, Label, Switch } from '@/components/ui'
-import { useFullscreen } from 'ahooks'
+import { useFullscreen, useKeyPress, useUnmount } from 'ahooks'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const ToggleFullscreen: React.FC = () => {
-	const [isFullscreen, { toggleFullscreen }] = useFullscreen(document.body)
+	const [isFullscreen, { exitFullscreen, toggleFullscreen }] = useFullscreen(document.body)
 	const { t } = useTranslation()
+
+	useKeyPress('F11', (e) => {
+		e.preventDefault()
+		toggleFullscreen()
+	})
+
+	useUnmount(() => {
+		exitFullscreen()
+	})
 
 	return (
 		<Div className='inline-flex items-center gap-x-2'>
