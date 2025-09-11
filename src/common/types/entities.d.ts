@@ -248,7 +248,8 @@ export interface IOutboundHistory {
 export interface IProductSpecification {
 	brand_name: string
 	product_variants: Array<{
-		shoes_style: string
+		factory_shoes_style: string
+		cust_shoes_style: string
 		specs: Array<{
 			color_sn: string
 			sizes: Array<{ size: string }>

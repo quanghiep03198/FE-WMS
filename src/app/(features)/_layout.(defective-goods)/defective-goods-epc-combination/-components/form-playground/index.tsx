@@ -1,8 +1,8 @@
+import { useGetCommandNumberDetailQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { CommonActions } from '@/common/constants/enums'
 import { IBaseEntity, IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
-	AutoCompleteFieldControl,
 	Button,
 	buttonVariants,
 	Div,
@@ -18,8 +18,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
 import { has, isNil, omit } from 'lodash'
-import { Fragment, useCallback, useMemo, useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { Fragment, useCallback, useEffect, useState } from 'react'
+import { FormProviderProps, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -35,33 +35,40 @@ import {
 } from '../../../-hooks/use-defective-goods-asm'
 import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
+import BrandFieldControl from './brand-field-control'
+import ColorFieldControl from './color-field-control'
 import CommandNumberComboboxFieldControl from './command-number-combobox-field-control'
+import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
 import DeviceRadioGroup from './device-radio-group'
+import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
 import ListPanelToggleButton from './list-panel-toggle-button'
+import SizeFieldControl from './size-field-control'
 import ToggleFullscreen from './toggle-fullscreen'
 import UserActivityInfo from './user-activity-info'
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
-
 	const { hash } = useLocation()
+	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
 			defect_description: DefectDescriptionTemplate[i18n.language]
 		}
 	})
-	const { data, isLoading } = useGetProductSpecificationQuery()
+
 	const {
 		mutateAsync: createAsync,
 		isPending: isCreating,
 		isError: isFailedToCreate
 	} = useCreateDefectiveGoodsMutation()
+
 	const {
 		mutateAsync: updateAsync,
 		isPending: isUpdating,
 		isError: isFailedToUpdate
 	} = useUpdateDefectiveGoodsMutation()
+
 	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(null)
 	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
 		defaultValue: true,
@@ -94,90 +101,27 @@ const DefectiveGoodsForm: React.FC = () => {
 	})
 
 	// Watch form fields
+	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
 	const currentCategory = useWatch({ control: form.control, name: 'category' })
-	const currentBrand = useWatch({ control: form.control, name: 'brand_name' })
-	const currentShoeStyle = useWatch({ control: form.control, name: 'factory_shoes_style' })
-	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
 
-	// Memoized options for brand select
-	const brandOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		return data.map(({ brand_name }) => ({
-			label: brand_name,
-			value: brand_name
-		}))
-	}, [data])
+	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
 
-	// Memoized options for shoe style select
-	const shoeStyleOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		if (!currentBrand)
-			return [...new Set(data.flatMap((item) => item.product_variants?.map((item) => item.shoes_style)))]
-				.sort()
-				.map((item) => ({
-					label: item,
-					value: item
-				}))
-		const brand = data.find((item) => item.brand_name === currentBrand)
-		if (!brand?.product_variants) return []
-		return brand.product_variants.map(({ shoes_style }) => ({
-			label: shoes_style,
-			value: shoes_style
-		}))
-	}, [data, currentBrand])
+	const isPending: boolean = isCreating || isUpdating
+	const isError: boolean = isFailedToCreate || isFailedToUpdate
+	const shouldRequireFullInfo: boolean =
+		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
 
-	// Memoized options for color select
-	const colorOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		if (!currentBrand || !currentShoeStyle)
-			return [
-				...new Set(
-					data.flatMap((item) =>
-						item.product_variants?.flatMap((item) => item.specs?.map((item) => item.color_sn))
-					)
-				)
-			].map((item) => ({
-				label: item,
-				value: item
-			}))
-		const brand = data.find((item) => item.brand_name === currentBrand)
-		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
-		if (!variant?.specs) return []
-		return variant.specs.map(({ color_sn }) => ({
-			label: color_sn,
-			value: color_sn
-		}))
-	}, [data, currentBrand, currentShoeStyle])
-
-	// Memoized options for size select
-	const sizeOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		if (!currentBrand || !currentShoeStyle || !currentColor)
-			return [
-				...new Set(
-					data.flatMap((item) =>
-						item.product_variants?.flatMap((variant) =>
-							variant.specs?.flatMap((spec) => spec.sizes?.map((size) => size.size))
-						)
-					)
-				)
-			]
-				.sort((a, b) => Number(a) - Number(b))
-				.map((size) => ({
-					label: size,
-					value: size
-				}))
-		const brand = data.find((item) => item.brand_name === currentBrand)
-		const variant = brand?.product_variants?.find((item) => item.shoes_style === currentShoeStyle)
-		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
-		if (!spec?.sizes) return []
-		return spec.sizes
-			.sort((a, b) => Number(a.size) - Number(b.size))
-			.map(({ size }) => ({
-				label: size,
-				value: size
-			}))
-	}, [data, currentBrand, currentShoeStyle, currentColor])
+	useEffect(() => {
+		if (!orderDetail) return
+		const orderInfo = orderDetail.orders.at(0)
+		form.reset({
+			...form.getValues(),
+			cust_shoes_style: orderInfo.cust_shoes_style,
+			factory_shoes_style: orderInfo.factory_shoes_style,
+			brand_name: orderInfo.brand_name,
+			color_sn: orderInfo.color_sn
+		})
+	}, [orderDetail])
 
 	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
 		if (e.key === 'Backspace') {
@@ -235,11 +179,8 @@ const DefectiveGoodsForm: React.FC = () => {
 		[formAction]
 	)
 
-	const isPending = isCreating || isUpdating
-	const isError = isFailedToCreate || isFailedToUpdate
-
 	return (
-		<FormProvider {...form}>
+		<FormProvider {...({ ...form, productSpecification } as unknown as FormProviderProps)}>
 			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
 				<Div className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
@@ -357,7 +298,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							]}
 							disabled={isNil(formAction)}
 							onValueChange={(value) => {
-								if (value !== DefectiveCategory.B_GRADE) {
+								if (value === DefectiveCategory.RESEARCH_DEVELOPMENT) {
 									form.reset(omit(form.getValues(), ['po', 'mo_no']))
 								}
 							}}
@@ -366,7 +307,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 
-					{currentCategory === DefectiveCategory.B_GRADE && !isNil(formAction) && (
+					{shouldRequireFullInfo && !isNil(formAction) && (
 						<Fragment>
 							<Div className='col-span-3'>
 								<PurchaseOrderComboboxFieldControl />
@@ -376,72 +317,42 @@ const DefectiveGoodsForm: React.FC = () => {
 							</Div>
 						</Fragment>
 					)}
-					<Div className='col-span-3'>
-						<SelectFieldControl
-							name='brand_name'
-							label={t('ns_erp:fields.brand_name')}
-							placeholder={t('ns_common:form_placeholder.fill', {
-								object: String(t('ns_erp:fields.brand_name')).toLowerCase(),
-								defaultValue: null
-							})}
+					<Div className='col-span-full'>
+						<BrandFieldControl
 							disabled={isNil(formAction)}
-							datalist={brandOptions}
-							onValueChange={() => {
-								form.reset({ ...form.getValues(), factory_shoes_style: '', color_sn: '', size_code: '' })
-							}}
-							labelField='label'
-							valueField='value'
+							className={shouldRequireFullInfo && 'pointer-event-none'}
 						/>
 					</Div>
 					<Div className='col-span-3'>
-						<AutoCompleteFieldControl
-							name='factory_shoes_style'
-							label={t('ns_erp:fields.shoestyle_codefactory')}
-							placeholder={t('ns_common:form_placeholder.fill', {
-								object: String(t('ns_erp:fields.shoestyle_codefactory')).toLowerCase(),
-								defaultValue: null
-							})}
+						<CustShoeStyleFieldControl
 							loading={isLoading}
-							datalist={shoeStyleOptions}
-							labelField='label'
-							valueField='value'
+							readOnly={shouldRequireFullInfo}
 							disabled={isNil(formAction)}
-							onInput={() => {
-								form.reset({ ...form.getValues(), color_sn: '', size_code: '' })
-							}}
 						/>
 					</Div>
 					<Div className='col-span-3'>
-						<AutoCompleteFieldControl
-							name='color_sn'
-							label={t('ns_erp:fields.color_sn')}
-							placeholder={t('ns_common:form_placeholder.fill', {
-								object: String(t('ns_erp:fields.color_sn')).toLowerCase(),
-								defaultValue: null
-							})}
-							disabled={isNil(formAction) || colorOptions.length === 0}
+						<FactoryShoeStyleFieldControl
 							loading={isLoading}
-							datalist={colorOptions}
-							labelField='label'
-							valueField='value'
-							onInput={() => {
-								form.reset({ ...form.getValues(), size_code: '' })
-							}}
+							readOnly={shouldRequireFullInfo}
+							disabled={isNil(formAction)}
 						/>
 					</Div>
 					<Div className='col-span-3'>
-						<AutoCompleteFieldControl
-							name='size_code'
-							label='Size'
-							placeholder={t('ns_common:form_placeholder.fill', {
-								object: 'size',
-								defaultValue: null
-							})}
-							disabled={isNil(formAction) || sizeOptions.length === 0}
+						<ColorFieldControl
+							disabled={isNil(formAction)}
 							loading={isLoading}
-							datalist={sizeOptions}
-							labelField='label'
-							valueField='value'
+							readOnly={shouldRequireFullInfo}
+						/>
+					</Div>
+					<Div className='col-span-3'>
+						<SizeFieldControl
+							disabled={isNil(formAction)}
+							loading={isLoading}
+							datalist={
+								Array.isArray(orderDetail?.sizes)
+									? orderDetail.sizes.map((item) => ({ label: item.size_numcode, value: item.size_numcode }))
+									: []
+							}
 						/>
 					</Div>
 					<Div className='col-span-full'>

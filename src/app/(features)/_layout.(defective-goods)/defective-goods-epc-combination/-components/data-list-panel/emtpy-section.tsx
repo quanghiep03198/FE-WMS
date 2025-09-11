@@ -7,7 +7,7 @@ const EmptySection: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='h-full place-content-center place-items-center'>
+		<Div className='h-full place-content-center place-items-center p-10'>
 			<Div className='flex flex-col items-center justify-center gap-y-2'>
 				<Div className='relative grid h-28 w-full place-content-center place-items-center'>
 					<PlaceholderItem className='absolute top-0 z-20' />

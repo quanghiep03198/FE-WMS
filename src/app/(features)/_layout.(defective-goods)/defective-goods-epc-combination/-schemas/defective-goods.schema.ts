@@ -9,6 +9,10 @@ export const baseDefectiveGoodsSchema = z.object({
 	po: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	mo_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	brand_name: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	cust_shoes_style: z
+		.string({ message: 'ns_validation:required' })
+		.trim()
+		.nonempty({ message: 'ns_validation:required' }),
 	factory_shoes_style: z
 		.string({ message: 'ns_validation:required' })
 		.trim()
@@ -31,3 +35,5 @@ export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().ref
 
 export type CreateDefectiveGoodsFormValues = z.infer<typeof createDefectiveGoodsSchema>
 export type UpdateDefectiveGoodsFormValues = z.infer<typeof updateDefectiveGoodsSchema>
+
+export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues | UpdateDefectiveGoodsFormValues
