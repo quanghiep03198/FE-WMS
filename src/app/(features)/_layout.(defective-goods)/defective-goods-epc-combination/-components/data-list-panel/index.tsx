@@ -63,12 +63,10 @@ const DefectiveGoodList: React.FC = () => {
 		})
 	}, [])
 
-	console.log(typeof handlePrefetch)
-
 	return (
 		<Fragment>
 			<Div className='hidden h-full grid-rows-[var(--bar-height)_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'>
-				<Div className='place-content-stretch place-items-center p-4'>
+				<Div className='place-content-stretch place-items-center'>
 					<SearchInput />
 				</Div>
 				{isLoading ? (
@@ -196,39 +194,38 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 				<CardContent className='space-y-4'>
 					<DescriptionList>
 						<DescriptionItem>
-							<Icon name='Album' />
+							<Typography variant='small'>{t('ns_erp:fields.cust_shoes_style')}:</Typography>
+							<Typography variant='small'>{data.cust_shoes_style}</Typography>
+						</DescriptionItem>
+						<DescriptionItem>
 							<Typography variant='small'>{t('ns_erp:fields.shoestyle_codefactory')}:</Typography>
 							<Typography variant='small'>{data.factory_shoes_style}</Typography>
 						</DescriptionItem>
 						<DescriptionItem>
-							<Icon name='Palette' />
 							<Typography variant='small'>{t('ns_erp:fields.color_sn')}:</Typography>
 							<Typography variant='small'>{data.color_sn}</Typography>
 						</DescriptionItem>
 						<DescriptionItem>
-							<Icon name='RulerDimensionLine' />
 							<Typography variant='small'>Size: </Typography>
 							<Typography variant='small'>#{data.size_code}</Typography>
 						</DescriptionItem>
-						<DescriptionItem>
-							<Icon name='MapPinHouse' />
-							<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
-							<Typography className='uppercase'>{data.storage_location}</Typography>
-						</DescriptionItem>
+
 						{data.po && (
 							<DescriptionItem>
-								<Icon name='ReceiptText' />
-								<Typography>{t('ns_erp:fields.po')}: </Typography>
-								<Typography>{data.po}</Typography>
+								<Typography variant='small'>{t('ns_erp:fields.po')}:</Typography>
+								<Typography variant='small'>{data.po}</Typography>
 							</DescriptionItem>
 						)}
 						{data.mo_no && (
 							<DescriptionItem>
-								<Icon name='ReceiptText' />
 								<Typography>{t('ns_erp:fields.mo_no')}: </Typography>
 								<Typography>{data.mo_no}</Typography>
 							</DescriptionItem>
 						)}
+						<DescriptionItem>
+							<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
+							<Typography className='uppercase'>{data.storage_location ?? '?'}</Typography>
+						</DescriptionItem>
 					</DescriptionList>
 				</CardContent>
 			</Card>
@@ -236,7 +233,7 @@ const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
 	)
 }
 
-const DescriptionList = tw.ul`grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
-const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
+const DescriptionList = tw.ul`!list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
+const DescriptionItem = tw.li`list- flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
 
 export default DefectiveGoodList

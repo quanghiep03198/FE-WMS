@@ -43,7 +43,6 @@ const SyncDataTrigger: React.FC = () => {
 	const [factory, setFactory] = useState<Factory>()
 
 	useEffect(() => {
-		console.log(data)
 		if (data?.error) toast.error('Synchronize failed!', { id: 'sync_decker_data_failed' })
 	}, [data])
 

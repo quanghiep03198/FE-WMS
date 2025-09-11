@@ -76,7 +76,6 @@ const ReaderSettingSheet: React.FC = () => {
 				<Form {...form}>
 					<SheetForm
 						onSubmit={form.handleSubmit((data) => {
-							console.log(data)
 							publishMessage<ReaderSettingsFormValues>(PublishedTopics.REQUEST_SETTINGS, {
 								action: 'update',
 								payload: data
