@@ -49,7 +49,10 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		shouldFilter = true,
 		description,
 		disabled,
+		readOnly,
 		orientation = 'vertical',
+		onInput,
+		onSelect,
 		template: CustomAutoCompleteItem,
 		ref: forwardedRef
 	} = props
@@ -112,8 +115,12 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 											className='pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
 											onKeyDown={handleKeyDown}
 											onClick={() => setOpen(true)}
-											onChange={field.onChange}
+											onChange={(e) => {
+												field.onChange(e)
+												if (typeof onInput === 'function') onInput(e.target.value)
+											}}
 											disabled={disabled}
+											readOnly={readOnly}
 										/>
 										<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50' />
 									</PopoverTrigger>
@@ -136,6 +143,8 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 													onClick={(e) => {
 														e.stopPropagation()
 														setValue(name, item[valueField])
+														setOpen(false)
+														if (typeof onSelect === 'function') onSelect(String(item[valueField]))
 													}}>
 													<Typography variant='small' className='line-clamp-1 flex-1'>
 														{String(item[labelField])}
