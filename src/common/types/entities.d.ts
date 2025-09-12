@@ -5,7 +5,7 @@ import { InventoryType } from '../constants/enums'
 // #region In use Entities
 
 export interface IBaseEntity {
-	id: string
+	id: number
 	updated?: Date | string
 	created?: Date | string
 	remark?: string | null
