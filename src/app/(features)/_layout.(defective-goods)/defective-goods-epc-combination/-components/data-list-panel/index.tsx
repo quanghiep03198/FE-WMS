@@ -1,21 +1,9 @@
-import { CommonActions } from '@/common/constants/enums'
-import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
-import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IDefectiveGoods } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import {
-	Badge,
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
+	Button,
+	Checkbox,
 	Div,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
 	Icon,
 	Sheet,
 	SheetContent,
@@ -27,29 +15,23 @@ import {
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
+import { CheckedState } from '@radix-ui/react-checkbox'
 import { useQueryClient } from '@tanstack/react-query'
-import { Link, useLocation } from '@tanstack/react-router'
-import { formatRelative } from 'date-fns'
+import { useSet } from 'ahooks'
 import { omit, pickBy } from 'lodash'
-import { Fragment, useCallback, useRef } from 'react'
+import { Fragment, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import tw from 'tailwind-styled-components'
-import { DefectiveCategoryI18n } from '../../../-constants'
-import { usePageContext } from '../../../-contexts/page-context'
-import {
-	DefectiveGoodsQueryKey,
-	useDeleteDefectiveGoodsMutation,
-	useGetDefectiveGoodsQuery
-} from '../../../-hooks/use-defective-goods-asm'
-import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
+import { DefectiveGoodsQueryKey, useGetDefectiveGoodsQuery } from '../../../-hooks/use-defective-goods-asm'
+import DefectiveGoodInfoCard from './defective-goods-info-card'
+import DeleteButton from './delete-button'
 import EmptySection from './emtpy-section'
-import SearchInput from './search-input'
+import SearchBox from './search-box'
 
 const DefectiveGoodList: React.FC = () => {
-	const { data, isLoading } = useGetDefectiveGoodsQuery()
+	const { data, isLoading, refetch } = useGetDefectiveGoodsQuery()
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'> & { q?: string }>()
-
+	const [selectedItems, { add, remove, reset }] = useSet(new Set<number>())
+	const { t } = useTranslation()
 	const queryClient = useQueryClient()
 
 	const handlePrefetch = useCallback((page) => {
@@ -63,20 +45,80 @@ const DefectiveGoodList: React.FC = () => {
 		})
 	}, [])
 
+	const handleSelect = useCallback((checked: boolean, id: number) => {
+		if (!checked) remove(id)
+		else add(id)
+	}, [])
+
+	const handleToggleSelect = (checked: CheckedState) => {
+		if (checked)
+			data.data.forEach((item) => {
+				add(item.id)
+			})
+		else reset()
+	}
+
 	return (
 		<Fragment>
-			<Div className='hidden h-full grid-rows-[var(--bar-height)_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'>
-				<Div className='place-content-stretch place-items-center'>
-					<SearchInput />
+			<Div
+				className='hidden h-full grid-rows-[var(--bar-height)_4rem_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'
+				style={
+					{
+						'--indent-space': '24px'
+					} as React.CSSProperties
+				}>
+				<Div className='place-content-stretch place-items-center p-4'>
+					<SearchBox />
+				</Div>
+				<Div className='flex w-full items-center justify-between bg-accent/25 px-4 py-2'>
+					<Div className='inline-flex items-center gap-x-3'>
+						<Checkbox
+							className='ml-[calc(var(--indent-space)+1px)]'
+							onCheckedChange={handleToggleSelect}
+							checked={
+								selectedItems.size === 0
+									? false
+									: selectedItems.size === data.limit || selectedItems.size === data.totalDocs
+										? true
+										: 'indeterminate'
+							}
+						/>
+						<Typography variant='small' color='muted'>
+							{t('ns_common:pagination.selected_records', {
+								count: selectedItems.size,
+								defaultValue: `${selectedItems.size} selected`
+							})}
+						</Typography>
+					</Div>
+					<Div className='ml-auto flex flex-1 items-center justify-end gap-x-1'>
+						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+							<Button size='icon' variant='ghost' onClick={() => refetch}>
+								<Icon name='RotateCcw' />
+							</Button>
+						</Tooltip>
+						{/* <Separator orientation='vertical' className='h-6 w-0.5' /> */}
+						<DeleteButton
+							disabled={selectedItems.size === 0}
+							selectedItems={selectedItems}
+							onAfterDelete={reset}
+						/>
+					</Div>
 				</Div>
 				{isLoading ? (
 					<Div className='h-full flex-1 place-content-center place-items-center'>
-						<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+						<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' size={18} />
 					</Div>
 				) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll py-4 pl-4 pr-2'>
 						{data.data.map((item) => {
-							return <DefectiveGoodsItem key={item.id} data={item} />
+							return (
+								<DefectiveGoodInfoCard
+									key={item.id}
+									data={item}
+									selected={selectedItems.has(item.id)}
+									onSelect={handleSelect}
+								/>
+							)
 						})}
 					</Div>
 				) : (
@@ -90,7 +132,7 @@ const DefectiveGoodList: React.FC = () => {
 				<SheetTrigger className='hidden' id='list-sheet-trigger' />
 				<SheetContent className='max-w-2xl overflow-hidden'>
 					<SheetHeader className='mt-4'>
-						<SearchInput />
+						<SearchBox />
 					</SheetHeader>
 					{isLoading ? (
 						<Div className='h-full flex-1 place-content-center place-items-center'>
@@ -99,7 +141,14 @@ const DefectiveGoodList: React.FC = () => {
 					) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 						<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll pr-2'>
 							{data.data.map((item) => {
-								return <DefectiveGoodsItem key={item.id} data={item} />
+								return (
+									<DefectiveGoodInfoCard
+										key={item.id}
+										data={item}
+										selected={selectedItems.has(item.id)}
+										onSelect={handleSelect}
+									/>
+								)
 							})}
 						</Div>
 					) : (
@@ -113,127 +162,5 @@ const DefectiveGoodList: React.FC = () => {
 		</Fragment>
 	)
 }
-
-const DefectiveGoodsItem: React.FC<{ data: IDefectiveGoods }> = ({ data }) => {
-	const { t } = useTranslation()
-	const { event$ } = usePageContext()
-	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
-	const toastIdRef = useRef<string | number | null>(null)
-	const { hash, search } = useLocation()
-	const dateLocale = useDateLocale()
-	const { setCurrentDevice } = useSwitchRFIDDevice()
-
-	const handleDelete = useCallback(async () => {
-		try {
-			toastIdRef.current = toast.loading(t('ns_common:notification.processing_request'))
-			await deleteAsync(data.id)
-			toast.success(t('ns_common:notification.success'), { id: toastIdRef.current })
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: toastIdRef.current })
-		}
-	}, [data])
-
-	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
-
-	return (
-		<Link search={search} hash={data.id}>
-			<Card
-				className={cn(
-					'relative overflow-hidden rounded-md border transition-colors duration-200 @container/card *:text-left *:text-sm',
-					hash === String(data.id) && 'bg-accent/50'
-				)}>
-				<CardHeader>
-					<DropdownMenu>
-						<DropdownMenuTrigger className='absolute right-3 top-3 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
-							<Icon name='Ellipsis' />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenu>
-								<DropdownMenuItem
-									className='gap-x-2'
-									onClick={() =>
-										event$.emit({ action: CommonActions.READ, payload: data.defect_description })
-									}>
-									<Icon name='MousePointerClick' /> {t('ns_common:actions.detail')}
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className='gap-x-2'
-									onClick={() => {
-										event$.emit({ action: CommonActions.UPDATE, payload: data })
-										setCurrentDevice('usb')
-									}}>
-									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
-								</DropdownMenuItem>
-								<DropdownMenuItem className='gap-x-2 text-destructive' onClick={() => handleDelete()}>
-									<Icon name='Trash2' /> {t('ns_common:actions.delete')}
-								</DropdownMenuItem>
-							</DropdownMenu>
-						</DropdownMenuContent>
-					</DropdownMenu>
-					<Div className='!mb-3 flex items-center gap-x-1'>
-						<Badge>{data.brand_name}</Badge>
-						<Badge variant='outline' className='w-fit'>
-							{t(DefectiveCategoryI18n[data.category], { ns: 'ns_inoutbound' })}
-						</Badge>
-					</Div>
-					<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
-						#ID: {data.epc}{' '}
-						<Tooltip message='Copy' triggerProps={{ asChild: true }}>
-							<button onClick={() => copyToClipboard(data.epc)} className={cn('ml-2')}>
-								<Icon name={isCoppied ? 'CopyCheck' : 'Copy'} />
-							</button>
-						</Tooltip>
-					</CardTitle>
-					<CardDescription className='first-letter:uppercase'>
-						{t('ns_common:timestamps.created_at', {
-							timestamp: formatRelative(new Date(data.created), new Date(), { locale: dateLocale }),
-							defaultValue: formatRelative(new Date(data.created), new Date(), { locale: dateLocale })
-						})}
-					</CardDescription>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					<DescriptionList>
-						<DescriptionItem>
-							<Typography variant='small'>{t('ns_erp:fields.cust_shoes_style')}:</Typography>
-							<Typography variant='small'>{data.cust_shoes_style}</Typography>
-						</DescriptionItem>
-						<DescriptionItem>
-							<Typography variant='small'>{t('ns_erp:fields.shoestyle_codefactory')}:</Typography>
-							<Typography variant='small'>{data.factory_shoes_style}</Typography>
-						</DescriptionItem>
-						<DescriptionItem>
-							<Typography variant='small'>{t('ns_erp:fields.color_sn')}:</Typography>
-							<Typography variant='small'>{data.color_sn}</Typography>
-						</DescriptionItem>
-						<DescriptionItem>
-							<Typography variant='small'>Size: </Typography>
-							<Typography variant='small'>#{data.size_code}</Typography>
-						</DescriptionItem>
-
-						{data.po && (
-							<DescriptionItem>
-								<Typography variant='small'>{t('ns_erp:fields.po')}:</Typography>
-								<Typography variant='small'>{data.po}</Typography>
-							</DescriptionItem>
-						)}
-						{data.mo_no && (
-							<DescriptionItem>
-								<Typography>{t('ns_erp:fields.mo_no')}: </Typography>
-								<Typography>{data.mo_no}</Typography>
-							</DescriptionItem>
-						)}
-						<DescriptionItem>
-							<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
-							<Typography className='uppercase'>{data.storage_location ?? '?'}</Typography>
-						</DescriptionItem>
-					</DescriptionList>
-				</CardContent>
-			</Card>
-		</Link>
-	)
-}
-
-const DescriptionList = tw.ul`!list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
-const DescriptionItem = tw.li`list- flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
 
 export default DefectiveGoodList

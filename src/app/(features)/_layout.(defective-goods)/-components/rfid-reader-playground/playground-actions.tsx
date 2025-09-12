@@ -36,7 +36,7 @@ export const PlaygroundActions: React.FC = () => {
 			<Button
 				size='sm'
 				variant='secondary'
-				disabled={!connectionStatus.isReaderConnectionReady}
+				disabled={!connectionStatus.isReaderConnectionReady || !connectionStatus.isMQTTConnectionReady}
 				onClick={async () => {
 					publishMessage(PublishedTopics.REQUEST_SIGNAL, {
 						action: connectionStatus.isReaderPlaying ? 'stop' : 'start'

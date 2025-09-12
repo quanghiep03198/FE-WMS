@@ -37,3 +37,7 @@ export type CreateDefectiveGoodsFormValues = z.infer<typeof createDefectiveGoods
 export type UpdateDefectiveGoodsFormValues = z.infer<typeof updateDefectiveGoodsSchema>
 
 export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues | UpdateDefectiveGoodsFormValues
+export type DefectiveGoodQueryParams = Partial<Omit<DefectiveGoodsCombinationFormValues, 'defect_description'>> & {
+	page: number
+	epc: string
+}

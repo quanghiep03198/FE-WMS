@@ -15,9 +15,9 @@ import {
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocation } from '@tanstack/react-router'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
-import { has, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { FormProviderProps, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -49,7 +49,8 @@ import UserActivityInfo from './user-activity-info'
 
 const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { hash } = useLocation()
+	const { hash, search } = useLocation()
+	const navigate = useNavigate()
 	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
@@ -165,7 +166,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			}
 			const mutateAsync = async () =>
 				formAction === CommonActions.UPDATE
-					? await updateAsync({ id: hash, data: payload })
+					? await updateAsync({ id: +hash, data: payload })
 					: await createAsync(payload)
 			toast.promise(mutateAsync(), {
 				loading: t('ns_common:notification.processing_request'),
@@ -209,10 +210,11 @@ const DefectiveGoodsForm: React.FC = () => {
 								variant='ghost'
 								size='sm'
 								type='button'
-								className='text-destructive hover:bg-destructive/10 hover:text-destructive'
+								className='text-destructive hover:bg-destructive/20 hover:text-destructive'
 								onClick={() => {
 									resetFormAction()
 									handleResetForm()
+									navigate({ hash: undefined, search })
 								}}>
 								<Icon name='X' /> {t('ns_common:actions.cancel')}
 							</Button>
@@ -245,11 +247,11 @@ const DefectiveGoodsForm: React.FC = () => {
 					)}
 				</Div>
 				{/* User activities timestamp */}
-				{formAction === CommonActions.UPDATE && has(form.getValues(), 'created') && (
+				{formAction === CommonActions.UPDATE && (
 					<UserActivityInfo
-						createdAt={String(form.getValues('created'))}
-						createdBy={String(form.getValues('user_code_created'))}
-						lastUpdatedAt={String(form.getValues('updated'))}
+						createdAt={form.getValues('created')}
+						createdBy={form.getValues('user_code_created')}
+						lastUpdatedAt={form.getValues('updated')}
 					/>
 				)}
 				{/* Form fields */}

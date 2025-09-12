@@ -1,6 +1,7 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
 import {
 	CreateDefectiveGoodsFormValues,
+	DefectiveGoodQueryParams,
 	UpdateDefectiveGoodsFormValues
 } from '@/app/(features)/_layout.(defective-goods)/defective-goods-epc-combination/-schemas/defective-goods.schema'
 import {
@@ -11,7 +12,7 @@ import { IDefectiveGoods } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class DefectiveGoodsService {
-	static async getDefectiveGoods(params: { page: number; q?: string }) {
+	static async getDefectiveGoods(params: Partial<DefectiveGoodQueryParams>) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IDefectiveGoods>>>('/defective-goods', {
 			params
 		})
@@ -24,12 +25,16 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async updateDefectiveGoods(id: string, payload: UpdateDefectiveGoodsFormValues) {
+	static async updateDefectiveGoods(id: number, payload: UpdateDefectiveGoodsFormValues) {
 		return await axiosInstance.patch(`/defective-goods/update/${id}`, payload)
 	}
 
-	static async deleteDefectiveGoods(id: string) {
+	static async deleteDefectiveGoods(id: number) {
 		return await axiosInstance.delete<void, ResponseBody<unknown>>(`/defective-goods/delete/${id}`)
+	}
+
+	static async deleteManyDefectiveGoods(ids: number[]) {
+		return await axiosInstance.post<unknown, ResponseBody<unknown>, number[]>(`/defective-goods/delete`, ids)
 	}
 
 	static async updateInboundStatus(payload: DefectiveGoodsInboundFormValues) {

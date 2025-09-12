@@ -226,7 +226,8 @@ export default {
 		first_page: 'First page',
 		last_page: 'Last page',
 		next_page: 'Next page',
-		previous_page: 'Previous page'
+		previous_page: 'Previous page',
+		selected_records: '{{count}} selected'
 	},
 	settings: {
 		font: 'Font',
@@ -261,6 +262,7 @@ export default {
 		rows_per_page: 'Rows per page',
 		search_in_column: 'Search in column',
 		selected_rows: '{{selectedRows}} row(s) selected',
+
 		sort_asc: 'Sort ascending',
 		sort_desc: 'Sort descending',
 		total_rows: '{{count}} records',
