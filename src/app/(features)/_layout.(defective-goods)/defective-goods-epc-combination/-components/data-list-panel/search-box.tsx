@@ -124,7 +124,15 @@ const SearchBox: React.FC = () => {
 									<Icon name='Search' />
 									{t('ns_common:actions.search')}
 								</Button>
-								<Button type='reset' variant='secondary' size='sm'>
+								<Button
+									type='reset'
+									variant='secondary'
+									size='sm'
+									onClick={() => {
+										form.reset(DEFAULT_SEARCH_TERMS)
+										resetValue()
+										setSearchTerms(DEFAULT_SEARCH_TERMS)
+									}}>
 									<Icon name='Undo2' />
 									{t('ns_common:actions.reset')}
 								</Button>
