@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { cn } from '@/common/utils/cn'
 import {
 	Button,

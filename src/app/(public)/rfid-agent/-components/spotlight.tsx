@@ -50,7 +50,7 @@ export default function Spotlight({ className, fill }: SpotlightProps) {
 			)}
 			<svg
 				className={cn(
-					'pointer-events-none absolute z-[1] h-[169%] w-[138%] animate-spotlight opacity-0 transition-width lg:w-[84%]',
+					'animate-spotlight pointer-events-none absolute z-[1] h-[169%] w-[138%] opacity-0 transition-width lg:w-[84%]',
 					{
 						'animate-spotlight-off': scroll?.top > 10
 					},

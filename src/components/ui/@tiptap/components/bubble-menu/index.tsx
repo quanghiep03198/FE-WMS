@@ -59,7 +59,11 @@ const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 			shouldShow={(props) => props.editor.isActive('link')}>
 			<Div className='flex items-center gap-x-2 px-2'>
 				<Icon name='Globe' className='basis-[32px] text-muted-foreground' />
-				<a href={editor.getAttributes('link').href} target='_blank' className='line-clamp-1 flex-1 text-xs'>
+				<a
+					href={editor.getAttributes('link').href}
+					target='_blank'
+					className='line-clamp-1 flex-1 text-xs'
+					rel='noreferrer'>
 					{editor.getAttributes('link').href}
 				</a>
 			</Div>
