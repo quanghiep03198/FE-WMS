@@ -9,13 +9,16 @@ import {
 	AlertDialogDescription,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogTitle
+	AlertDialogTitle,
+	Icon
 } from '..'
 
 type ConfirmDialogProps = {
 	open: boolean
 	title: string
 	description: string
+	isPending?: boolean
+	isError?: boolean
 	onOpenChange?: React.Dispatch<React.SetStateAction<boolean>>
 	onConfirm: (...args: any[]) => unknown
 	onCancel?: (...args: any[]) => unknown
@@ -25,6 +28,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 	open,
 	title,
 	description,
+	isPending,
+	isError,
 	onOpenChange,
 	onConfirm,
 	onCancel
@@ -51,10 +56,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 						{t('ns_common:actions.cancel')}
 					</AlertDialogCancel>
 					<AlertDialogAction
+						className='[&:has(svg)]:gap-x-2'
+						disabled={isPending}
 						onClick={() => {
 							if (onConfirm) onConfirm()
 						}}>
-						{t('ns_common:actions.confirm')}
+						{isPending && <Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />}
+						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.confirm')}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
