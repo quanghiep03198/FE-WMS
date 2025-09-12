@@ -95,7 +95,7 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 			reactive.pingCount++
 		},
 		1000,
-		{ immediate: clientRef?.current?.connected && reactive.pingCount === 0 }
+		{ immediate: clientRef?.current?.connected && reactive.pingCount > 0 }
 	)
 
 	const store = useRef<StoreApi<ReaderPlaygroundContextStore>>(null)
