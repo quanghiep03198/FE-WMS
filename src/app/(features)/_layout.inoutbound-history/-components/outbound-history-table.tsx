@@ -47,7 +47,7 @@ const OutboundHistoryTable: React.FC = () => {
 						minSize: 100,
 						filterFn: 'includesString'
 					}),
-					columnHelper.accessor('factory_shoes_style', {
+					columnHelper.accessor('shoe_style', {
 						header: t('ns_erp:fields.shoestyle_codefactory'),
 						enableColumnFilter: true,
 						enableSorting: true,

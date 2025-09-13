@@ -230,7 +230,7 @@ export interface IInboundHistory {
 	mo_no: string
 	mo_qty: number
 	brand_name: string
-	factory_shoes_style: string
+	shoe_style: string
 	color_sn: string
 	inbound_qty: number
 	inbound_date: Date
@@ -240,7 +240,7 @@ export interface IOutboundHistory {
 	po_qty: number
 	outbound_qty: number
 	brand_name: string
-	factory_shoes_style: string
+	shoe_style: string
 	color_sn: string
 	outbound_date: Date
 }

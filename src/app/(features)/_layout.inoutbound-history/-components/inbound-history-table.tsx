@@ -66,7 +66,7 @@ const InboundHistoryTable: React.FC = () => {
 						enablePinning: true,
 						filterFn: 'includesString'
 					}),
-					columnHelper.accessor('factory_shoes_style', {
+					columnHelper.accessor('shoe_style', {
 						header: t('ns_erp:fields.shoestyle_codefactory'),
 						enableResizing: true,
 						enableColumnFilter: true,
