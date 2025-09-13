@@ -17,6 +17,7 @@ import { Link, useLocation } from '@tanstack/react-router'
 import { useState } from 'react'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 import { usePageContext } from '../-contexts/page-context'
+import { RFID_AGENT_VERSION } from '../../-constants'
 
 export const menuGroups: Record<
 	'rfidAgent' | 'mosquitto' | 'faqs',
@@ -93,7 +94,7 @@ const NavSidebar: React.FC = () => {
 					<Icon name='Radio' size={40} strokeWidth={1.5} />
 					<span className='flex flex-col font-bold'>
 						RFID Agent
-						<small className='font-normal text-muted-foreground'>v1.0.0</small>
+						<small className='font-normal text-muted-foreground'>v{RFID_AGENT_VERSION}</small>
 					</span>
 				</Link>
 			</SidebarHeader>
