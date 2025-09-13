@@ -61,7 +61,7 @@ const DefectiveGoodList: React.FC = () => {
 	return (
 		<Fragment>
 			<Div
-				className='hidden h-full grid-rows-[var(--bar-height)_4rem_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'
+				className='hidden h-full grid-rows-[var(--bar-height)_var(--bar-height)_auto_var(--bar-height)] items-stretch divide-y divide-border @7xl:grid'
 				style={
 					{
 						'--indent-space': '24px'
@@ -70,7 +70,7 @@ const DefectiveGoodList: React.FC = () => {
 				<Div className='place-content-stretch place-items-center p-4'>
 					<SearchBox />
 				</Div>
-				<Div className='flex w-full items-center justify-between bg-accent/25 px-4 py-2'>
+				<Div className='flex w-full items-center justify-between px-4 py-2'>
 					<Div className='inline-flex items-center gap-x-3'>
 						<Checkbox
 							className='ml-[calc(var(--indent-space)+1px)]'
@@ -92,7 +92,7 @@ const DefectiveGoodList: React.FC = () => {
 					</Div>
 					<Div className='ml-auto flex flex-1 items-center justify-end gap-x-1'>
 						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-							<Button size='icon' variant='ghost' onClick={() => refetch}>
+							<Button size='icon' variant='ghost' onClick={() => refetch()}>
 								<Icon name='RotateCcw' />
 							</Button>
 						</Tooltip>
