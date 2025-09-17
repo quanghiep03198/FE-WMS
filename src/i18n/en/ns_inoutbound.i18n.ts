@@ -139,6 +139,7 @@ export default {
 	},
 	titles: {
 		archived_restoration: 'Archived restoration',
+		combination_history: 'Combination history',
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
 		exchange_epc: 'Exchange EPC',

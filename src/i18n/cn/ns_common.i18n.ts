@@ -279,6 +279,7 @@ export default {
 	},
 
 	titles: {
+		advanced_search: '高级搜索',
 		caution: '警告',
 		general_settings: '常规设置',
 		import_data: '上传数据',

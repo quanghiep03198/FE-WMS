@@ -130,6 +130,7 @@ export default {
 	},
 	titles: {
 		archived_restoration: '已存档数据恢复',
+		combination_history: '配标历史',
 		daily_inbound_report: '入庫报表',
 		daily_outbound_report: '出庫报表',
 		monthly_inventory_report: '库存报表',

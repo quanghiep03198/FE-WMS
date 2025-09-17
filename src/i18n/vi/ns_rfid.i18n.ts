@@ -9,6 +9,9 @@ export default {
 		step_3: 'Cập nhật thông tin cho các EPC',
 		step_4: 'Hoàn thành Job'
 	},
+	placeholders: {
+		search_epc: 'Quét hoặc nhập EPC để tìm kiếm ...'
+	},
 	status: {
 		scannable: 'Có thể quét',
 		scanned: 'Đã quét',

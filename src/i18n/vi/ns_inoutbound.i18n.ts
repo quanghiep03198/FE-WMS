@@ -137,6 +137,7 @@ export default {
 	},
 	titles: {
 		archived_restoration: 'Khôi phục dữ liệu',
+		combination_history: 'Lịch sử phối tem',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',

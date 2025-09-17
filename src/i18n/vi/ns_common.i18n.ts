@@ -235,7 +235,7 @@ export default {
 		last_page: 'Trang cuối',
 		next_page: 'Trang sau',
 		previous_page: 'Trang trước',
-		selected_record: '{{count}} đã chọn'
+		selected_records: '{{count}} đã chọn'
 	},
 	settings: {
 		font: 'Phông chữ',
@@ -276,6 +276,7 @@ export default {
 		unpin: 'Bỏ ghim'
 	},
 	titles: {
+		advanced_search: 'Tìm kiếm nâng cao',
 		caution: 'Cảnh báo',
 		general_settings: 'Cài đặt chung',
 		original_data: 'Dữ liệu gốc',

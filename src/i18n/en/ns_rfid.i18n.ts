@@ -3,6 +3,9 @@ export default {
 	devices_description: 'List of RFID devices currently available in the warehouse',
 	no_sync_process: 'No synchronization process is running',
 	use_rfid_device: 'Use handheld device',
+	placeholders: {
+		search_epc: 'Scan or type EPC to search ...'
+	},
 	sync_data_steps: {
 		step_1: "Authenticate Decker's API",
 		step_2: "Fetch Decker's orders and EPC data",

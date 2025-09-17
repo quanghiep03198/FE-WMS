@@ -269,6 +269,7 @@ export default {
 		unpin: 'Unpin'
 	},
 	titles: {
+		advanced_search: 'Advanced Search',
 		caution: 'Caution',
 		general_settings: 'General settings',
 		import_data: 'Import data',
