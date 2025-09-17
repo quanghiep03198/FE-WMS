@@ -1,7 +1,7 @@
 import { useMemoizedFn, useSessionStorageState } from 'ahooks'
 
 export const useToggleListPanel = () => {
-	const [listPanelOpen, setListPanelOpen] = useSessionStorageState<boolean>('b-grade-list-panel-open', {
+	const [listPanelOpen, setListPanelOpen] = useSessionStorageState<boolean>('combinationHistoryListOpen', {
 		listenStorageChange: true,
 		defaultValue: true
 	})
