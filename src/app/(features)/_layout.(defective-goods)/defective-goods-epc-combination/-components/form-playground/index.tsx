@@ -274,13 +274,13 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Div>
 					)}
 					<Div className='col-span-full'>
-						<CategoryFieldControl disabled={isNil(formAction)} />
-					</Div>
-					<Div className='col-span-full'>
 						<BrandFieldControl
 							disabled={isNil(formAction)}
 							className={shouldRequireFullInfo && 'pointer-event-none'}
 						/>
+					</Div>
+					<Div className='col-span-full'>
+						<CategoryFieldControl disabled={isNil(formAction)} />
 					</Div>
 					{shouldRequireFullInfo && !isNil(formAction) && (
 						<Fragment>
