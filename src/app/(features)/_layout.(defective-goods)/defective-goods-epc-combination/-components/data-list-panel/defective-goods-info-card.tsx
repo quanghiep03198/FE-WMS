@@ -71,7 +71,7 @@ const DefectiveGoodInfoCard: React.FC<{
 				'relative min-h-fit overflow-hidden rounded-md border shadow-sm transition-colors duration-200 @container/card *:text-left *:text-sm has-[data-state=checked]:bg-red-500',
 				hash === String(data.id) && 'bg-accent/50'
 			)}>
-			<CardHeader className='p-[var(--indent-space)]'>
+			<CardHeader>
 				<DropdownMenu>
 					<DropdownMenuTrigger className='absolute right-3 top-3 !m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
 						<Icon name='Ellipsis' />

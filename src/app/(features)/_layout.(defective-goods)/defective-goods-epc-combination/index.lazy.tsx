@@ -54,12 +54,18 @@ function RouteComponent() {
 								maxSize={listPanelOpen ? 40 : 0}
 								defaultSize={listPanelOpen ? 30 : 0}
 								className={cn(
-									'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl:block',
+									'transtion-max-width linear hidden h-full duration-150 will-change-transform @7xl:block',
+									'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
 									listPanelOpen && 'border-0'
 								)}>
 								<DefectiveGoodList />
 							</ResizablePanel>
-							{listPanelOpen && <ResizableHandle withHandle className='hidden @7xl:flex' />}
+							{listPanelOpen && (
+								<ResizableHandle
+									withHandle
+									className='hidden w-[0.5px] border-0 shadow-none ring-transparent @7xl:flex'
+								/>
+							)}
 							<ResizablePanel defaultSize={50} minSize={40} className='h-full'>
 								<DefectiveGoodsForm />
 							</ResizablePanel>
@@ -69,7 +75,8 @@ function RouteComponent() {
 								maxSize={isUsingUHFReader ? 25 : 0}
 								defaultSize={isUsingUHFReader ? 25 : 0}
 								className={cn(
-									'transtion-max-width linear h-full duration-200 will-change-transform',
+									'transtion-max-width linear h-full duration-150 will-change-transform',
+									'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
 									!isUsingUHFReader && 'border-0'
 								)}>
 								<ReaderPlaygroundProvider>

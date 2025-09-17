@@ -2,7 +2,6 @@ import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-pro
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
-	buttonVariants,
 	Div,
 	Form as FormProvider,
 	Icon,
@@ -77,7 +76,7 @@ const SearchBox: React.FC = () => {
 		<Div ref={ref} className='flex h-full w-full items-center space-x-2'>
 			<Icon name='Search' className='basis-6' />
 			<Input
-				placeholder='Scan EPC to search specific item ...'
+				placeholder={t('ns_rfid:placeholders.search_epc')}
 				className='border-none px-0 shadow-none'
 				type='search'
 				value={value}
@@ -88,15 +87,15 @@ const SearchBox: React.FC = () => {
 			/>
 			<FormProvider {...{ ...form, productSpecification }}>
 				<Popover>
-					<PopoverTrigger
-						className={buttonVariants({
-							variant: 'ghost',
-							size: 'icon',
-							className: 'aspect-square aria-expanded:text-active aria-expanded:hover:text-active'
-						})}>
+					<PopoverTrigger className='aspect-square text-muted-foreground transition-colors duration-200 aria-expanded:text-active hover:text-foreground aria-expanded:hover:text-active'>
 						<Icon name='ListFilter' />
 					</PopoverTrigger>
-					<PopoverContent align='end' sideOffset={6} style={{ width: size?.width }} className='relative'>
+					<PopoverContent
+						align='end'
+						sideOffset={20}
+						style={{ width: size?.width + 16 }}
+						alignOffset={-8}
+						className='relative'>
 						<PopoverClose className='absolute right-4 top-4 text-muted-foreground transition-colors duration-200 hover:text-foreground'>
 							<Icon name='X' />
 						</PopoverClose>
@@ -104,10 +103,10 @@ const SearchBox: React.FC = () => {
 							className={cn('space-y-6', isLoading && 'opacity-50')}
 							onSubmit={form.handleSubmit((data) => setSearchTerms(data))}>
 							<fieldset className='space-y-6'>
-								<legend className='text-lg font-semibold'>Advanced Search</legend>
+								<legend className='text-base font-semibold'>{t('ns_common:titles.advanced_search')}</legend>
 								<ScrollShadow
 									className={cn(
-										'grid max-h-96 overflow-y-auto',
+										'grid max-h-96 overflow-y-auto scrollbar-none',
 										formFieldOrientation === 'horizontal' ? 'gap-y-3' : 'gap-y-6'
 									)}>
 									<CategoryFieldControl orientation={formFieldOrientation} />

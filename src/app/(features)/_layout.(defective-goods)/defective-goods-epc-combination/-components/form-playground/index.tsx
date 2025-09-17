@@ -192,7 +192,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Label
 						className={cn(buttonVariants({ variant: 'secondary', className: 'inline-flex @7xl:hidden' }))}
 						htmlFor='list-sheet-trigger'>
-						<Icon name='Clock' /> {t('ns_inoutbound:titles.inbound_history')}
+						<Icon name='Clock' /> {t('ns_inoutbound:titles.combination_history')}
 					</Label>
 					{isNil(formAction) ? (
 						<Button
@@ -264,7 +264,8 @@ const DefectiveGoodsForm: React.FC = () => {
 								autoFocus
 								autoComplete='off'
 								type='search'
-								placeholder='Scan EPC tag here'
+								tabIndex={0}
+								placeholder='E28*********************'
 								onKeyDown={handleEpcChange}
 								onKeyDownCapture={handleEpcChange}
 								disabled={isNil(formAction)}
