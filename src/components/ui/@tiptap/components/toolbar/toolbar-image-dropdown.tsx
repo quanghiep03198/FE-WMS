@@ -34,15 +34,7 @@ const ImageDropdown: React.FC = () => {
 	const form = useForm({
 		resolver: zodResolver(UploadSchema)
 	})
-	const [altText, setAltText] = useState<string>('')
-
-	// const { previewUrl, fileInputRef, handleFileChange, handleRemove, uploading, error } = useImageUpload({
-	// 	onUpload: (imageUrl) => {
-
-	// 		handleRemove()
-	// 		// setIsExpanded(false)
-	// 	}
-	// })
+	const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
 	return (
 		<Fragment>
@@ -73,7 +65,7 @@ const ImageDropdown: React.FC = () => {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			<Dialog>
+			<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 				<DialogTrigger id={dialogTriggerId} className='hidden' />
 				<DialogContent className='items-stretch'>
 					<DialogHeader className='text-left'>{t('ns_common:editor.add_image')}</DialogHeader>
@@ -84,6 +76,7 @@ const ImageDropdown: React.FC = () => {
 								form.handleSubmit((value) => {
 									editor.commands.setImage({ src: value.url, alt: 'Image' })
 									form.reset()
+									setDialogOpen(false)
 								})(e)
 							}}>
 							<InputFieldControl
