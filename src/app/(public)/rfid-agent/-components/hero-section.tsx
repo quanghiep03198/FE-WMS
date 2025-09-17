@@ -2,6 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { buttonVariants, Div, Icon, Typography } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import tw from 'tailwind-styled-components'
+import { RFID_AGENT_VERSION } from '../-constants'
 
 const GridDotBackground: React.FC = () => {
 	return (
@@ -26,7 +27,7 @@ const Hero: React.FC = () => {
 			<Div className='group/hero relative mx-auto flex max-w-5xl flex-col items-center justify-center gap-y-6 py-10 *:text-pretty *:text-center @7xl:items-start @7xl:text-left md:items-center md:text-center'>
 				<GridDotBackground />
 				<GradientBadge>
-					<span className='relative z-[20]'>Just released version 1.0.0</span>
+					<span className='relative z-[20]'>Just released version {RFID_AGENT_VERSION}</span>
 				</GradientBadge>
 				<Typography variant='h1' className='xl:text-5xl xxl:text-6xl'>
 					Empower your Inventory by <br className='hidden xl:inline-block' /> Real-time RFID Reader connectivity
