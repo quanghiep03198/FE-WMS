@@ -128,6 +128,7 @@ export default {
 		bullet_list: 'Danh sách không thứ tự',
 		task_list: 'Danh sách kiểm tra',
 		link: 'Liên kết',
+		choose_from_url: 'Chọn từ ảnh từ liên kết',
 		insert_link_title: 'Chèn liên kết',
 		insert_link_description:
 			'Chèn 1 đường liên kết vào văn bản đã chọn. Bạn cũng có thể liên kết đến địa chỉ email hoặc số điện thoại.',
