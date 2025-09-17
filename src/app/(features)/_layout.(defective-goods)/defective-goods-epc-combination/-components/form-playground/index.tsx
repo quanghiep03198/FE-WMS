@@ -276,7 +276,12 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div className='col-span-full'>
 						<CategoryFieldControl disabled={isNil(formAction)} />
 					</Div>
-
+					<Div className='col-span-full'>
+						<BrandFieldControl
+							disabled={isNil(formAction)}
+							className={shouldRequireFullInfo && 'pointer-event-none'}
+						/>
+					</Div>
 					{shouldRequireFullInfo && !isNil(formAction) && (
 						<Fragment>
 							<Div className='col-span-3'>
@@ -287,12 +292,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							</Div>
 						</Fragment>
 					)}
-					<Div className='col-span-full'>
-						<BrandFieldControl
-							disabled={isNil(formAction)}
-							className={shouldRequireFullInfo && 'pointer-event-none'}
-						/>
-					</Div>
+
 					<Div className='col-span-3'>
 						<CustShoeStyleFieldControl
 							loading={isLoading}
