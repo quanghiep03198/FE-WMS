@@ -16,11 +16,11 @@ const RFIDAgentInstallation: React.FC = () => {
 					<Typography as='span'>Download the latest version of RFID Agent from our official website.</Typography>
 					<Div className='my-6'>
 						<Div className='inline-flex items-center gap-x-2'>
-							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-1.0.0-install-windows-x64.exe'>
+							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-v1.0.1-install-windows-x64.exe'>
 								<MicrosoftIcon />
 								Windows Installer (.exe)
 							</DownloadButton>
-							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-1.0.0-portable.rar'>
+							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-v1.0.1-portable-version.rar'>
 								<Icon name='FolderArchive' /> Portable Version (.rar)
 							</DownloadButton>
 						</Div>
