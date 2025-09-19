@@ -27,24 +27,46 @@ import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { useListPanelContext } from '../../-contexts/list-panel-context'
 import { DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
 import { useDeleteDefectiveGoodsMutation } from '../../../-hooks/use-defective-goods-asm'
 import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 
-const DefectiveGoodInfoCard: React.FC<{
+const DefectiveGoodsInfoCard: React.FC<{
 	data: IDefectiveGoods
-	selected: boolean
-	onSelect: (checked: boolean, id: number) => void
-}> = ({ data, selected, onSelect }) => {
+}> = ({ data }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
+	const { selectedItems, deselectedItems, isAllItemsSelected, addSelectedItem, removeSelectedItem } =
+		useListPanelContext()
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
 	const { hash, search } = useLocation()
 	const dateLocale = useDateLocale()
 	const { setCurrentDevice } = useSwitchRFIDDevice()
 	const navigate = useNavigate()
+
+	const handleSelect = useCallback(
+		(checked: boolean, id: number) => {
+			if (isAllItemsSelected === true) {
+				// Khi đang ở trạng thái "select all"
+				if (!checked) {
+					// Bỏ check item -> thêm vào deselectedItems
+					removeSelectedItem(id) // này sẽ thêm vào deselectedItems
+				}
+				// Nếu checked = true thì không làm gì (vì đã select all rồi)
+			} else {
+				// Khi không phải trạng thái "select all"
+				if (checked) {
+					addSelectedItem(id)
+				} else {
+					removeSelectedItem(id)
+				}
+			}
+		},
+		[isAllItemsSelected, addSelectedItem, removeSelectedItem]
+	)
 
 	const handleDelete = useCallback(async () => {
 		try {
@@ -87,7 +109,6 @@ const DefectiveGoodInfoCard: React.FC<{
 								className='gap-x-2'
 								onClick={() => {
 									navigate({ hash: String(data.id), search })
-									console.log('data :>>>', data)
 									event$.emit({ action: CommonActions.UPDATE, payload: data })
 									setCurrentDevice('usb')
 								}}>
@@ -103,9 +124,12 @@ const DefectiveGoodInfoCard: React.FC<{
 				</DropdownMenu>
 				<Div className='!mb-3 flex items-center gap-x-1'>
 					<Checkbox
-						checked={selected}
+						checked={
+							selectedItems.includes(data.id) ||
+							(isAllItemsSelected !== false && !deselectedItems.includes(data.id))
+						}
 						onCheckedChange={(checked) => {
-							onSelect(Boolean(checked), data.id)
+							handleSelect(Boolean(checked), data.id)
 						}}
 					/>
 					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
@@ -176,4 +200,4 @@ const DefectiveGoodInfoCard: React.FC<{
 const DescriptionList = tw.ul`list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
 const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
 
-export default DefectiveGoodInfoCard
+export default DefectiveGoodsInfoCard

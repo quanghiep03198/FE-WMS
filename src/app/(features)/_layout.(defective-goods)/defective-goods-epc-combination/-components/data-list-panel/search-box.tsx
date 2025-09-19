@@ -2,6 +2,7 @@ import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-pro
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	DatePickerFieldControl,
 	Div,
 	Form as FormProvider,
 	Icon,
@@ -13,7 +14,8 @@ import {
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSessionStorageState, useSize, useUnmount } from 'ahooks'
-import { useRef } from 'react'
+import { format, isAfter } from 'date-fns'
+import { memo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
@@ -26,7 +28,7 @@ import CustShoeStyleFieldControl from '../form-playground/cust-shoe-style-field-
 import FactoryShoeStyleFieldControl from '../form-playground/factory-shoe-style-field-control'
 import SizeFieldControl from '../form-playground/size-field-control'
 
-const DEFAULT_SEARCH_TERMS: DefectiveGoodQueryParams = {
+const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
 	brand_name: '',
 	category: '' as DefectiveCategory,
 	po: '',
@@ -35,15 +37,17 @@ const DEFAULT_SEARCH_TERMS: DefectiveGoodQueryParams = {
 	factory_shoes_style: '',
 	color_sn: '',
 	size_code: '',
-	epc: '',
-	page: 1
+	epc: ''
 }
 
 const SearchBox: React.FC = () => {
-	const [searchTerms, setSearchTerms] = useSessionStorageState<DefectiveGoodQueryParams>('defectiveGoodsSearchTerms', {
-		listenStorageChange: true,
-		defaultValue: DEFAULT_SEARCH_TERMS
-	})
+	const [searchTerms, setSearchTerms] = useSessionStorageState<Omit<DefectiveGoodQueryParams, 'page'>>(
+		'defectiveGoodsSearchTerms',
+		{
+			listenStorageChange: true,
+			defaultValue: DEFAULT_SEARCH_TERMS
+		}
+	)
 	const [value, setValue, resetValue] = useResetState<string>(searchTerms.epc ?? '')
 	const { t } = useTranslation()
 	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
@@ -101,7 +105,12 @@ const SearchBox: React.FC = () => {
 						</PopoverClose>
 						<form
 							className={cn('space-y-6', isLoading && 'opacity-50')}
-							onSubmit={form.handleSubmit((data) => setSearchTerms(data))}>
+							onSubmit={form.handleSubmit((data) =>
+								setSearchTerms({
+									...data,
+									...(data.created && { created: format(new Date(data.created), 'yyyy-MM-dd') })
+								})
+							)}>
 							<fieldset className='space-y-6'>
 								<legend className='text-base font-semibold'>{t('ns_common:titles.advanced_search')}</legend>
 								<ScrollShadow
@@ -109,6 +118,12 @@ const SearchBox: React.FC = () => {
 										'grid max-h-96 overflow-y-auto scrollbar-none',
 										formFieldOrientation === 'horizontal' ? 'gap-y-3' : 'gap-y-6'
 									)}>
+									<DatePickerFieldControl
+										name='created'
+										label={t('ns_common:common_fields.created_at')}
+										calendarProps={{ disabled: (value) => isAfter(value, new Date()) }}
+										orientation={formFieldOrientation}
+									/>
 									<CategoryFieldControl orientation={formFieldOrientation} />
 									<BrandFieldControl orientation={formFieldOrientation} />
 									<CustShoeStyleFieldControl orientation={formFieldOrientation} />
@@ -144,4 +159,4 @@ const SearchBox: React.FC = () => {
 	)
 }
 
-export default SearchBox
+export default memo(SearchBox)

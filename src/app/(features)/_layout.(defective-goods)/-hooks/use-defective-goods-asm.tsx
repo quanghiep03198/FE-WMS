@@ -4,6 +4,7 @@ import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { pickBy } from 'lodash'
+import { useCallback } from 'react'
 import {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams
@@ -82,3 +83,17 @@ const useInvalidateQuery = () => {
 
 	return invalidateQueries
 }
+
+export const usePrefetchDefectiveGoodsQuery = () =>
+	useCallback((page) => {
+		const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
+		const queryClient = useQueryClient()
+
+		const params = pickBy({ ...searchParams, page }, (item) => !!item) as {
+			page: number
+		}
+		queryClient.prefetchQuery({
+			queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
+			queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
+		})
+	}, [])

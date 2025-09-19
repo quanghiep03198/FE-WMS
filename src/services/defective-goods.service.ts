@@ -33,8 +33,12 @@ export class DefectiveGoodsService {
 		return await axiosInstance.delete<void, ResponseBody<unknown>>(`/defective-goods/delete/${id}`)
 	}
 
-	static async deleteManyDefectiveGoods(ids: number[]) {
-		return await axiosInstance.post<unknown, ResponseBody<unknown>, number[]>(`/defective-goods/delete`, ids)
+	static async deleteManyDefectiveGoods(payload: { ids: number[] | 'all' } & DefectiveGoodQueryParams) {
+		return await axiosInstance.post<
+			unknown,
+			ResponseBody<unknown>,
+			{ ids: number[] | 'all' } & DefectiveGoodQueryParams
+		>(`/defective-goods/delete`, payload)
 	}
 
 	static async updateInboundStatus(payload: DefectiveGoodsInboundFormValues) {

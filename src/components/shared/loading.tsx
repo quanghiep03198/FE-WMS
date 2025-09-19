@@ -5,7 +5,7 @@ import nProgress from 'nprogress'
 import { Fragment, useEffect } from 'react'
 import { Div } from '../ui'
 
-export default function Loading() {
+export default function Loading({ withContent = true }: { withContent?: boolean }) {
 	nProgress.configure({
 		showSpinner: false
 	})
@@ -25,12 +25,14 @@ export default function Loading() {
 	return (
 		<Fragment>
 			<title>Loading ...</title>
-			<Div data-state='expanded' className='group relative flex h-screen items-center justify-center'>
-				<Div className='z-10 animate-[fade-in_0.25s_ease-out_forwards]'>
-					<AppLogo />
+			{withContent && (
+				<Div data-state='expanded' className='group relative h-screen place-content-center place-items-center'>
+					<Div className='z-10 animate-[fade-in_0.25s_ease-out_forwards]'>
+						<AppLogo />
+					</Div>
+					<GridBackground />
 				</Div>
-				<GridBackground />
-			</Div>
+			)}
 		</Fragment>
 	)
 }

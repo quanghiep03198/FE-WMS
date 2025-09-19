@@ -1,6 +1,6 @@
 import { ErrorBoundaryFallback } from '@/app/-components/-errors/error-boundary-fallback'
 import { Div, Icon, Separator, SidebarProvider, Typography } from '@/components/ui'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { ErrorBoundary } from 'react-error-boundary'
 import FAQCommonQuestions from './-components/faq-common-issues'
 import MosquittoConfiguration from './-components/mosquitto-configuration'
@@ -17,7 +17,7 @@ import RFIDAgentIntroduction from './-components/rfid-agent-introduction'
 import RFIDAgentTroubleShooting from './-components/rfid-agent-troubleshooting'
 import { PageProvider } from './-contexts/page-context'
 
-export const Route = createLazyFileRoute('/(public)/rfid-agent/docs/')({
+export const Route = createFileRoute('/(public)/rfid-agent/docs/')({
 	component: RouteComponent
 })
 

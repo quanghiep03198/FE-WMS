@@ -86,7 +86,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 							</PopoverTrigger>
 							<PopoverContent className='w-auto p-0' align='start'>
 								<Calendar
-									mode={calendarProps.mode}
+									mode={calendarProps.mode ?? 'single'}
 									selected={field.value}
 									onSelect={field.onChange}
 									initialFocus={true}
