@@ -1,14 +1,16 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 
+import Loading from '@/components/shared/loading'
 import Footer from './-components/footer'
 import { Header } from './-components/header'
 import Hero from './-components/hero-section'
 import Spotlight from './-components/spotlight'
 import VisualBentoGrid from './-components/visual-bento-grid'
 
-export const Route = createLazyFileRoute('/(public)/rfid-agent/')({
-	component: RouteComponent
+export const Route = createFileRoute('/(public)/rfid-agent/')({
+	component: RouteComponent,
+	pendingComponent: () => <Loading withContent={false} />
 })
 
 function RouteComponent() {

@@ -40,4 +40,5 @@ export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues
 export type DefectiveGoodQueryParams = Partial<Omit<DefectiveGoodsCombinationFormValues, 'defect_description'>> & {
 	page: number
 	epc: string
+	created?: string | Date
 }
