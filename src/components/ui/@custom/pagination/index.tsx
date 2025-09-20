@@ -69,7 +69,7 @@ const Pagination: React.FC<PaginationProps> = ({
 	range,
 	onPrefetch: handlePrefetch,
 	maxContinuousPrefetch = 5,
-	continuousInterval = 500
+	continuousInterval = 200
 }) => {
 	const { setParams } = useQueryParams<{ page: number }>()
 	const paginationRange = calculatePaginationRange(currentPage, totalPages, range)
