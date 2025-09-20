@@ -96,8 +96,6 @@ const SearchBox: React.FC = () => {
 	const formFieldOrientation: 'horizontal' | 'vertical' = size?.width >= 480 ? 'horizontal' : 'vertical'
 	const isFilterDirty = Object.values(searchTerms).some((value) => !isEmpty(value))
 
-	console.log('searchTerms :>> ', searchTerms)
-
 	return (
 		<Div ref={ref} className='flex h-full w-full items-center space-x-2'>
 			<Icon name='Search' className='basis-6' />
