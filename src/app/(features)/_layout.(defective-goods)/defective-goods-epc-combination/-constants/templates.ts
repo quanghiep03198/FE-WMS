@@ -2,7 +2,6 @@ import { Languages } from '@/common/constants/enums'
 
 export class DefectDescriptionTemplate {
 	static readonly [Languages.VIETNAMESE] = /* template */ `
-   
       <h3>1. Loại lỗi phát hiện</h3>
       <ul data-type="taskList">
          <li data-type="taskItem" data-checked="false">Trầy xước bề mặt da/vải</li>

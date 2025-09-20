@@ -15,11 +15,11 @@ import {
 	Typography
 } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
+import { CheckedState } from '@radix-ui/react-checkbox'
 import { UseQueryResult } from '@tanstack/react-query'
-import { usePrevious } from 'ahooks'
 import { AxiosError } from 'axios'
-import { difference, omit, pick } from 'lodash'
-import React, { Fragment, useEffect } from 'react'
+import { omit, pick } from 'lodash'
+import React, { Fragment, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ListPanelProvider, useListPanelContext } from '../../-contexts/list-panel-context'
 import { useGetDefectiveGoodsQuery, usePrefetchDefectiveGoodsQuery } from '../../../-hooks/use-defective-goods-asm'
@@ -123,58 +123,45 @@ const DataList: React.FC<
 DataList.displayName = 'DataList'
 
 const RecordSelectionCheckbox: React.FC<Pick<Pagination<IDefectiveGoods>, 'data' | 'totalDocs' | 'limit'>> = ({
+	data,
 	totalDocs
 }) => {
 	const { t } = useTranslation()
-	const {
-		selectedItems,
-		deselectedItems,
-		isAllItemsSelected: checked,
-		setIsAllItemsSelected: setChecked
-	} = useListPanelContext()
+	const { updatePageItems, getSelectedCount, getCheckboxState, toggleAll, clearSelection } = useListPanelContext()
 
-	const previousChecked = usePrevious(checked)
+	// Update page items when data changes
 	useEffect(() => {
-		setChecked((prev) => {
-			// Fix syntax error: thêm điều kiện sau &&
-			if (selectedItems.length === totalDocs && deselectedItems.length === 0) {
-				return true
+		if (data?.length) {
+			const pageItemIds = data.map((item) => item.id)
+			updatePageItems(pageItemIds, totalDocs)
+		}
+	}, [data, totalDocs, updatePageItems])
+
+	// Get current checkbox state and selected count
+	const checkboxState = getCheckboxState()
+	const selectedCount = getSelectedCount()
+
+	// Handle checkbox change
+	const handleCheckboxChange = useCallback(
+		(checked: CheckedState) => {
+			if (checked === true) {
+				toggleAll()
+			} else if (checked === false) {
+				clearSelection()
 			}
-
-			// Nếu có một số items được chọn nhưng chưa đầy đủ, hoặc trước đó đã chọn hết nhưng bỏ đi một số items
-			if (
-				(selectedItems.length > 0 && selectedItems.length < totalDocs) ||
-				(prev === true && deselectedItems.length > 0)
-			) {
-				return 'indeterminate'
-			}
-
-			// Các trường hợp còn lại trả về false
-			return false
-		})
-	}, [selectedItems, deselectedItems, totalDocs, setChecked])
-
-	// console.log('selectedItems :>> ', selectedItems, 'deselectedItems :>> ', deselectedItems)
+			// Indeterminate state is computed, no action needed
+		},
+		[toggleAll, clearSelection]
+	)
 
 	return (
 		<Div className='inline-flex items-center gap-x-3'>
-			<Checkbox checked={checked} onCheckedChange={(checked) => setChecked(checked)} />
+			<Checkbox checked={checkboxState} onCheckedChange={handleCheckboxChange} />
 
 			<Typography variant='small' color='muted'>
 				{t('ns_common:pagination.selected_records', {
-					count: (() => {
-						switch (true) {
-							case checked === true:
-								return totalDocs
-							case checked === 'indeterminate':
-								if (previousChecked === true) return totalDocs - deselectedItems.length
-								else if (selectedItems.length > 0) return difference(selectedItems, deselectedItems).length
-								return 0
-							case checked === false:
-								return selectedItems.length
-						}
-					})(),
-					defaultValue: `${selectedItems.length} selected`
+					count: selectedCount,
+					defaultValue: `${selectedCount} selected`
 				})}
 			</Typography>
 		</Div>

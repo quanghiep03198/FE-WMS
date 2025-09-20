@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { pickBy } from 'lodash'
 import { useCallback } from 'react'
+import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../defective-goods-epc-combination/-constants'
 import {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams
@@ -16,7 +17,7 @@ export enum DefectiveGoodsQueryKey {
 
 export const useGetDefectiveGoodsQuery = () => {
 	const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>('defectiveGoodsSearchTerms', {
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
 		listenStorageChange: true
 	})
 
@@ -84,16 +85,22 @@ const useInvalidateQuery = () => {
 	return invalidateQueries
 }
 
-export const usePrefetchDefectiveGoodsQuery = () =>
-	useCallback((page) => {
-		const { searchParams } = useQueryParams<Pick<Pagination<IDefectiveGoods>, 'page'>>({ page: 1 })
-		const queryClient = useQueryClient()
+export const usePrefetchDefectiveGoodsQuery = () => {
+	const [searchTerms] = useSessionStorageState<DefectiveGoodQueryParams>(PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY, {
+		listenStorageChange: true
+	})
+	const queryClient = useQueryClient()
 
-		const params = pickBy({ ...searchParams, page }, (item) => !!item) as {
-			page: number
-		}
-		queryClient.prefetchQuery({
-			queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
-			queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
-		})
-	}, [])
+	return useCallback(
+		(page) => {
+			const params = pickBy({ ...searchTerms, page }, (item) => !!item) as {
+				page: number
+			}
+			queryClient.prefetchQuery({
+				queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
+				queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
+			})
+		},
+		[searchTerms]
+	)
+}

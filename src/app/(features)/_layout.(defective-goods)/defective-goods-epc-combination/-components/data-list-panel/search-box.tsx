@@ -1,4 +1,6 @@
+import { GhostButton } from '@/app/(features)/-components/-shared/ghost-button'
 import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
+import useQueryParams from '@/common/hooks/use-query-params'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -9,15 +11,18 @@ import {
 	Input,
 	Popover,
 	PopoverContent,
-	PopoverTrigger
+	PopoverTrigger,
+	Separator
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSessionStorageState, useSize, useUnmount } from 'ahooks'
 import { format, isAfter } from 'date-fns'
+import { isEmpty } from 'lodash'
 import { memo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../-constants'
 import { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
 import BrandFieldControl from '../form-playground/brand-field-control'
@@ -41,29 +46,32 @@ const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
 }
 
 const SearchBox: React.FC = () => {
+	const { setParams } = useQueryParams<{ page: number }>()
 	const [searchTerms, setSearchTerms] = useSessionStorageState<Omit<DefectiveGoodQueryParams, 'page'>>(
-		'defectiveGoodsSearchTerms',
+		PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY,
 		{
 			listenStorageChange: true,
 			defaultValue: DEFAULT_SEARCH_TERMS
 		}
 	)
-	const [value, setValue, resetValue] = useResetState<string>(searchTerms.epc ?? '')
+	const [epcSearchTerm, setEpcSearchTerm, resetEpcSearchTerm] = useResetState<string>(searchTerms.epc ?? '')
 	const { t } = useTranslation()
 	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
 	const form = useForm<DefectiveGoodQueryParams>({
 		defaultValues: searchTerms
 	})
+	const ref = useRef<HTMLDivElement>(null)
+	const size = useSize(ref)
 
 	const handleEpcChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		setValue(e.currentTarget.value.toUpperCase())
+		setEpcSearchTerm(e.currentTarget.value.toUpperCase())
 	}
 
 	useDebounceEffect(
 		() => {
-			setSearchTerms({ ...searchTerms, epc: value })
+			setSearchTerms({ ...searchTerms, epc: epcSearchTerm })
 		},
-		[value],
+		[epcSearchTerm],
 		{ wait: 200 }
 	)
 
@@ -71,10 +79,24 @@ const SearchBox: React.FC = () => {
 		setSearchTerms(DEFAULT_SEARCH_TERMS)
 	})
 
-	const ref = useRef<HTMLDivElement>(null)
-	const size = useSize(ref)
+	const handleSearchSubmission = (data: DefectiveGoodQueryParams): void => {
+		setSearchTerms({
+			...data,
+			...(data.created && { created: format(new Date(data.created), 'yyyy-MM-dd') })
+		})
+		setParams({ page: 1 })
+	}
+
+	const handleResetAllSearchTerms = () => {
+		form.reset(DEFAULT_SEARCH_TERMS)
+		resetEpcSearchTerm()
+		setSearchTerms(DEFAULT_SEARCH_TERMS)
+	}
 
 	const formFieldOrientation: 'horizontal' | 'vertical' = size?.width >= 480 ? 'horizontal' : 'vertical'
+	const isFilterDirty = Object.values(searchTerms).some((value) => !isEmpty(value))
+
+	console.log('searchTerms :>> ', searchTerms)
 
 	return (
 		<Div ref={ref} className='flex h-full w-full items-center space-x-2'>
@@ -82,12 +104,27 @@ const SearchBox: React.FC = () => {
 			<Input
 				placeholder={t('ns_rfid:placeholders.search_epc')}
 				className='border-none px-0 shadow-none'
-				type='search'
-				value={value}
+				type='text'
+				value={epcSearchTerm}
 				onChange={handleEpcChange}
 				onKeyDown={(e) => {
-					if (e.key === 'Backspace') resetValue()
+					if (e.key === 'Backspace') resetEpcSearchTerm()
 				}}
+			/>
+			<GhostButton
+				onClick={handleResetAllSearchTerms}
+				className={cn(
+					'duration-300 transition-allow-discrete',
+					isFilterDirty ? 'animate-in fade-in-0' : 'hidden animate-out fade-out-0'
+				)}>
+				<Icon name='X' />
+			</GhostButton>
+			<Separator
+				orientation='vertical'
+				className={cn(
+					'mx-1 w-0.5 duration-300 transition-allow-discrete',
+					isFilterDirty ? 'animate-in fade-in-0' : 'hidden animate-out fade-out-0'
+				)}
 			/>
 			<FormProvider {...{ ...form, productSpecification }}>
 				<Popover>
@@ -105,12 +142,7 @@ const SearchBox: React.FC = () => {
 						</PopoverClose>
 						<form
 							className={cn('space-y-6', isLoading && 'opacity-50')}
-							onSubmit={form.handleSubmit((data) =>
-								setSearchTerms({
-									...data,
-									...(data.created && { created: format(new Date(data.created), 'yyyy-MM-dd') })
-								})
-							)}>
+							onSubmit={form.handleSubmit(handleSearchSubmission)}>
 							<fieldset className='space-y-6'>
 								<legend className='text-base font-semibold'>{t('ns_common:titles.advanced_search')}</legend>
 								<ScrollShadow
@@ -144,7 +176,7 @@ const SearchBox: React.FC = () => {
 									size='sm'
 									onClick={() => {
 										form.reset(DEFAULT_SEARCH_TERMS)
-										resetValue()
+										resetEpcSearchTerm()
 										setSearchTerms(DEFAULT_SEARCH_TERMS)
 									}}>
 									<Icon name='Undo2' />
