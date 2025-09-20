@@ -38,8 +38,7 @@ const DefectiveGoodsInfoCard: React.FC<{
 }> = ({ data }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { selectedItems, deselectedItems, isAllItemsSelected, addSelectedItem, removeSelectedItem } =
-		useListPanelContext()
+	const { isItemSelected, toggleItem } = useListPanelContext()
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
 	const { hash, search } = useLocation()
@@ -47,25 +46,13 @@ const DefectiveGoodsInfoCard: React.FC<{
 	const { setCurrentDevice } = useSwitchRFIDDevice()
 	const navigate = useNavigate()
 
+	// Simplified selection handler using new optimized API
 	const handleSelect = useCallback(
-		(checked: boolean, id: number) => {
-			if (isAllItemsSelected === true) {
-				// Khi đang ở trạng thái "select all"
-				if (!checked) {
-					// Bỏ check item -> thêm vào deselectedItems
-					removeSelectedItem(id) // này sẽ thêm vào deselectedItems
-				}
-				// Nếu checked = true thì không làm gì (vì đã select all rồi)
-			} else {
-				// Khi không phải trạng thái "select all"
-				if (checked) {
-					addSelectedItem(id)
-				} else {
-					removeSelectedItem(id)
-				}
-			}
+		(_checked: boolean, id: number) => {
+			// Use the new toggleItem method - much simpler!
+			toggleItem(id)
 		},
-		[isAllItemsSelected, addSelectedItem, removeSelectedItem]
+		[toggleItem]
 	)
 
 	const handleDelete = useCallback(async () => {
@@ -98,12 +85,12 @@ const DefectiveGoodsInfoCard: React.FC<{
 					<DropdownMenuTrigger className='absolute right-3 top-3 !m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
 						<Icon name='Ellipsis' />
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
+					<DropdownMenuContent align='start' side='left'>
 						<DropdownMenu>
 							<DropdownMenuItem
 								className='gap-x-2'
 								onClick={() => event$.emit({ action: CommonActions.READ, payload: data.defect_description })}>
-								<Icon name='MousePointerClick' /> {t('ns_common:actions.detail')}
+								<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 							</DropdownMenuItem>
 							<DropdownMenuItem
 								className='gap-x-2'
@@ -123,15 +110,7 @@ const DefectiveGoodsInfoCard: React.FC<{
 					</DropdownMenuContent>
 				</DropdownMenu>
 				<Div className='!mb-3 flex items-center gap-x-1'>
-					<Checkbox
-						checked={
-							selectedItems.includes(data.id) ||
-							(isAllItemsSelected !== false && !deselectedItems.includes(data.id))
-						}
-						onCheckedChange={(checked) => {
-							handleSelect(Boolean(checked), data.id)
-						}}
-					/>
+					<Checkbox checked={isItemSelected(data.id)} onCheckedChange={() => handleSelect(false, data.id)} />
 					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
 					<Badge>{data.brand_name}</Badge>
 					<Badge variant='outline' className='w-fit'>
@@ -139,7 +118,7 @@ const DefectiveGoodsInfoCard: React.FC<{
 					</Badge>
 				</Div>
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
-					#ID: {data.epc}{' '}
+					ID: {data.epc}{' '}
 					<Tooltip message='Copy' triggerProps={{ asChild: true }}>
 						<button onClick={() => copyToClipboard(data.epc)} className={cn('ml-2')}>
 							<Icon name={isCoppied ? 'CopyCheck' : 'Copy'} />
