@@ -72,25 +72,25 @@ const FeaturesSection: React.FunctionComponent = () => {
 						</Typography>
 					</Div>
 					<Div className='flex flex-wrap items-center justify-center gap-2 xl:justify-start'>
-						<Badge variant='secondary' className='bg-red-500/10 text-red-500'>
+						<Badge variant='secondary' className='bg-red-500/10 text-red-500 hover:bg-red-500/20'>
 							IoT
 						</Badge>
-						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500'>
+						<Badge variant='secondary' className='bg-orange-500/10 text-orange-500 hover:bg-orange-500/20'>
 							RFID
 						</Badge>
-						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500'>
+						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20'>
 							Reporting
 						</Badge>
-						<Badge variant='secondary' className='bg-green-500/10 text-green-500'>
+						<Badge variant='secondary' className='bg-green-500/10 text-green-500 hover:bg-green-500/20'>
 							Multi-tenant
 						</Badge>
-						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500'>
+						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'>
 							Multi-language
 						</Badge>
-						<Badge variant='secondary' className='bg-indigo-500/10 text-indigo-500'>
+						<Badge variant='secondary' className='bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20'>
 							Realtime
 						</Badge>
-						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500'>
+						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500 hover:bg-purple-500/20'>
 							Data-streaming
 						</Badge>
 					</Div>
