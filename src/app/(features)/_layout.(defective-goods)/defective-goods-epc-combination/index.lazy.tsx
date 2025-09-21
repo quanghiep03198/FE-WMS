@@ -10,8 +10,8 @@ import { PageContextProvider } from '../-contexts/page-context'
 import { ReaderPlaygroundProvider } from '../-contexts/rfid-reader-playground.context'
 import { useSwitchRFIDDevice } from '../-hooks/use-switch-rfid-device'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
-import DefectiveGoodList from './-components/data-list-panel'
-import DefectiveDetailDialog from './-components/data-list-panel/defective-detail-dialog'
+import DatalistPanel from './-components/data-list-panel'
+import DetailDialog from './-components/data-list-panel/detail-dialog'
 import DefectiveGoodsForm from './-components/form-playground'
 import { useToggleListPanel } from './-hooks/use-toggle-list-panel'
 
@@ -58,7 +58,7 @@ function RouteComponent() {
 									'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
 									listPanelOpen && 'border-0'
 								)}>
-								<DefectiveGoodList />
+								<DatalistPanel />
 							</ResizablePanel>
 							{listPanelOpen && (
 								<ResizableHandle
@@ -84,7 +84,7 @@ function RouteComponent() {
 								</ReaderPlaygroundProvider>
 							</ResizablePanel>
 						</ResizablePanelGroup>
-						<DefectiveDetailDialog />
+						<DetailDialog />
 					</PageContextProvider>
 				</Container>
 			</HostCompatibleGuard>

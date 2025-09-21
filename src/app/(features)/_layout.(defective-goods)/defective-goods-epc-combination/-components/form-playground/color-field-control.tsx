@@ -38,9 +38,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 			datalist={colorOptions}
 			labelField='label'
 			valueField='value'
-			onInput={() => {
-				reset({ ...getValues(), size_code: '' })
-			}}
+			onInput={() => reset({ ...getValues(), size_code: '' })}
 		/>
 	)
 }

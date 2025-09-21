@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { gunzipSync } from 'zlib'
 import { usePageContext } from '../../../-contexts/page-context'
 
-const DefectiveDetailDialog: React.FC = () => {
+const DetailDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const [open, setOpen] = useState<boolean>(false)
@@ -38,4 +38,4 @@ const DefectiveDetailDialog: React.FC = () => {
 	)
 }
 
-export default DefectiveDetailDialog
+export default DetailDialog

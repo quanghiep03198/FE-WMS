@@ -19,7 +19,7 @@ import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSessionStorageState, useSize, useUnmount } from 'ahooks'
 import { format, isAfter } from 'date-fns'
 import { isEmpty } from 'lodash'
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../-constants'
@@ -189,4 +189,4 @@ const SearchBox: React.FC = () => {
 	)
 }
 
-export default memo(SearchBox)
+export default SearchBox

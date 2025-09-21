@@ -19,7 +19,7 @@ import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
 import { isNil } from 'lodash'
 import { Fragment, useCallback, useEffect, useState } from 'react'
-import { FormProviderProps, useForm, useWatch } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -51,13 +51,30 @@ const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { hash, search } = useLocation()
 	const navigate = useNavigate()
-	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
+
+	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(null)
+	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
+		defaultValue: true,
+		listenStorageChange: true
+	})
+	const { currentDevice } = useSwitchRFIDDevice()
+	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
+		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
+	)
+
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
 			defect_description: DefectDescriptionTemplate[i18n.language]
 		}
 	})
+
+	// Watch form fields
+	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
+	const currentCategory = useWatch({ control: form.control, name: 'category' })
+
+	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
+	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
 
 	const {
 		mutateAsync: createAsync,
@@ -70,20 +87,6 @@ const DefectiveGoodsForm: React.FC = () => {
 		isPending: isUpdating,
 		isError: isFailedToUpdate
 	} = useUpdateDefectiveGoodsMutation()
-
-	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(null)
-	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
-		defaultValue: true,
-		listenStorageChange: true
-	})
-	const { currentDevice } = useSwitchRFIDDevice()
-	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
-		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
-	)
-
-	useUpdateEffect(() => {
-		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
-	}, [i18n.language, useAvailableTemplate])
 
 	const { event$ } = usePageContext()
 
@@ -102,17 +105,6 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 	})
 
-	// Watch form fields
-	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
-	const currentCategory = useWatch({ control: form.control, name: 'category' })
-
-	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
-
-	const isPending: boolean = isCreating || isUpdating
-	const isError: boolean = isFailedToCreate || isFailedToUpdate
-	const shouldRequireFullInfo: boolean =
-		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
-
 	useEffect(() => {
 		if (!orderDetail) return
 		const orderInfo = orderDetail.orders.at(0)
@@ -124,6 +116,10 @@ const DefectiveGoodsForm: React.FC = () => {
 			color_sn: orderInfo.color_sn
 		})
 	}, [orderDetail])
+
+	useUpdateEffect(() => {
+		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
+	}, [i18n.language, useAvailableTemplate])
 
 	const handleEpcChange: React.KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
 		if (e.key === 'Backspace') {
@@ -181,8 +177,13 @@ const DefectiveGoodsForm: React.FC = () => {
 		[formAction]
 	)
 
+	const isPending: boolean = isCreating || isUpdating
+	const isError: boolean = isFailedToCreate || isFailedToUpdate
+	const shouldRequireFullInfo: boolean =
+		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
+
 	return (
-		<FormProvider {...({ ...form, productSpecification } as unknown as FormProviderProps)}>
+		<FormProvider {...{ ...form, productSpecification }}>
 			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
 				<Div className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
@@ -309,15 +310,15 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 					<Div className='col-span-3'>
 						<ColorFieldControl
-							disabled={isNil(formAction)}
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
+							disabled={isNil(formAction)}
 						/>
 					</Div>
 					<Div className='col-span-3'>
 						<SizeFieldControl
-							disabled={isNil(formAction)}
 							loading={isLoading}
+							disabled={isNil(formAction)}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
 									? orderDetail.sizes.map((item) => ({ label: item.size_numcode, value: item.size_numcode }))
@@ -374,6 +375,10 @@ const DefectiveGoodsForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`h-full overflow-y-auto scrollbar-track-accent/50 grid divide-y divide-border data-[action=CREATE]:grid-rows-[var(--bar-height)_auto_var(--bar-height)] data-[action=UPDATE]:grid-rows-[var(--bar-height)_auto_auto_var(--bar-height)] *:box-border`
+const Form = tw.form`
+	h-full overflow-y-auto scrollbar-track-accent/50 grid divide-y divide-border 
+	data-[action=CREATE]:grid-rows-[var(--bar-height)_auto_var(--bar-height)] 
+	data-[action=UPDATE]:grid-rows-[var(--bar-height)_auto_auto_var(--bar-height)] 
+`
 
 export default DefectiveGoodsForm

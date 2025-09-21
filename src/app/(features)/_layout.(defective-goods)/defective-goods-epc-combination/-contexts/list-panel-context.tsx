@@ -190,7 +190,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 			}
 			// Persist to localStorage
 			try {
-				localStorage.setItem(
+				sessionStorage.setItem(
 					SELECTION_STORAGE_KEY,
 					JSON.stringify({
 						mode: newState.mode,
@@ -226,7 +226,7 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 	// Auto-persist selection state changes
 	useEffect(() => {
 		try {
-			localStorage.setItem(
+			sessionStorage.setItem(
 				SELECTION_STORAGE_KEY,
 				JSON.stringify({
 					mode: selectionState.mode,

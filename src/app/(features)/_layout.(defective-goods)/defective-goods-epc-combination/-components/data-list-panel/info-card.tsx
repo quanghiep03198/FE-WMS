@@ -33,7 +33,7 @@ import { usePageContext } from '../../../-contexts/page-context'
 import { useDeleteDefectiveGoodsMutation } from '../../../-hooks/use-defective-goods-asm'
 import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 
-const DefectiveGoodsInfoCard: React.FC<{
+const InfoCard: React.FC<{
 	data: IDefectiveGoods
 }> = ({ data }) => {
 	const { t } = useTranslation()
@@ -77,7 +77,7 @@ const DefectiveGoodsInfoCard: React.FC<{
 	return (
 		<Card
 			className={cn(
-				'relative min-h-fit overflow-hidden rounded-md border shadow-sm transition-colors duration-200 @container/card *:text-left *:text-sm has-[data-state=checked]:bg-red-500',
+				'relative min-h-fit overflow-hidden rounded-md border shadow-sm transition-colors duration-200 @container/card *:text-left *:text-sm',
 				hash === String(data.id) && 'bg-accent/50'
 			)}>
 			<CardHeader>
@@ -179,4 +179,4 @@ const DefectiveGoodsInfoCard: React.FC<{
 const DescriptionList = tw.ul`list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
 const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
 
-export default DefectiveGoodsInfoCard
+export default InfoCard
