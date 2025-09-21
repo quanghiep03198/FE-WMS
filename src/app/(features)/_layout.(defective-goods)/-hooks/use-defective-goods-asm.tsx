@@ -92,10 +92,8 @@ export const usePrefetchDefectiveGoodsQuery = () => {
 	const queryClient = useQueryClient()
 
 	return useCallback(
-		(page) => {
-			const params = pickBy({ ...searchTerms, page }, (item) => !!item) as {
-				page: number
-			}
+		(page: number) => {
+			const params = pickBy({ ...searchTerms, page }, (item) => !!item)
 			queryClient.prefetchQuery({
 				queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS, params],
 				queryFn: async () => await DefectiveGoodsService.getDefectiveGoods(params)
