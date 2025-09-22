@@ -122,7 +122,7 @@ module.exports = {
 					min: '1366px'
 				},
 				xxl: {
-					min: '1920px'
+					min: '1600px'
 				}
 			},
 			borderRadius: {
