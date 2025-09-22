@@ -1,6 +1,5 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div } from '@/components/ui'
-import { sortBy } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -20,7 +19,11 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 			</Div>
 		)
 
-	const sortedData = sortBy(data, (item) => item.size_numcode)
+	const sortedData = data.sort((a, b) => {
+		if (!isNaN(Number(a.size_numcode)) && !isNaN(Number(b.size_numcode)))
+			return Number(a.size_numcode) - Number(b.size_numcode)
+		return a.size_numcode.localeCompare(b.size_numcode)
+	})
 
 	return (
 		<Table {...props}>
