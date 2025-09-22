@@ -18,7 +18,7 @@ export const Kbd = ({ className, separator = <DefaultKbdSeparator />, children, 
 		{...props}>
 		{Array.isArray(children)
 			? children.map((child, index) => (
-					<Fragment key={index}>
+					<Fragment key={index.toString()}>
 						{child}
 						{index < children.length - 1 && separator}
 					</Fragment>
@@ -26,7 +26,6 @@ export const Kbd = ({ className, separator = <DefaultKbdSeparator />, children, 
 			: children}
 	</span>
 )
-export type KbdKeyProps = Omit<ComponentProps<'kbd'>, 'aria-label'> & {
-	'aria-label'?: string & {}
-}
-export const KbdKey = ({ className, ...props }: KbdKeyProps) => <kbd {...props} />
+export type KbdKeyProps = ComponentProps<'kbd'>
+
+export const KbdKey = (props: KbdKeyProps) => <kbd {...props} />
