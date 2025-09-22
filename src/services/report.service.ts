@@ -19,7 +19,7 @@ export class ReportService {
 
 	static async getDailyWeighingReport(params: { 'date.eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IPackingReport[]>>('/report/daily-weighing', {
-			headers: { [RequestHeaders.TENANT_ID]: 'tenant-main' },
+			headers: { [RequestHeaders.TENANT_ID]: 'tenant-central' },
 			params: params
 		})
 	}
@@ -46,7 +46,7 @@ export class ReportService {
 
 	static async downloadWeighingReport(filter: { 'date.eq': string }) {
 		return await axiosInstance.get<void, Blob>('/report/daily-weighing/export', {
-			headers: { [RequestHeaders.TENANT_ID]: 'tenant-main' },
+			headers: { [RequestHeaders.TENANT_ID]: 'tenant-central' },
 			params: filter,
 			responseType: 'blob'
 		})
