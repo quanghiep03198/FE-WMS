@@ -8,7 +8,6 @@ import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/p
 import InoutboundOverview from './-components/inoutbound-overview'
 import RFIDDeviceList from './-components/rfid-device-list'
 import Statistics from './-components/statistics'
-import SystemTime from './-components/system-time'
 
 export const Route = createLazyFileRoute('/(features)/_layout/dashboard/')({
 	component: Page
@@ -37,16 +36,16 @@ function Page() {
 				</Div>
 				<Separator />
 				<Div className='grid grid-cols-12 gap-4'>
-					<Div className='order-2 col-span-12 @[1280px]:order-first @[1280px]:col-span-9'>
+					<Div className='order-2 col-span-12 @[1280px]:order-first xxl:col-span-5'>
 						<Statistics />
 					</Div>
-					<Div className='order-first col-span-12 @[1280px]:order-2 @[1280px]:col-span-3'>
+					{/* <Div className='order-first col-span-12 @[1280px]:order-2 @[1280px]:col-span-2'>
 						<SystemTime />
-					</Div>
-					<Div className='order-3 col-span-full @[1280px]:col-span-8'>
+					</Div> */}
+					<Div className='order-3 col-span-full xxl:col-span-7'>
 						<InoutboundOverview />
 					</Div>
-					<Div className='order-last col-span-12 @[1280px]:col-span-4'>
+					<Div className='order-last col-span-12 @[1280px]:col-span-full'>
 						<RFIDDeviceList />
 					</Div>
 				</Div>

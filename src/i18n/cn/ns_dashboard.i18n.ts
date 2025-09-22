@@ -7,6 +7,6 @@ export default {
 		inventory_number: '库存总量',
 		inbound_number: '入库总量',
 		outbound_number: '出库总量',
-		defective_rate: '不良率'
+		defective_rate: '次品率'
 	}
 } as const

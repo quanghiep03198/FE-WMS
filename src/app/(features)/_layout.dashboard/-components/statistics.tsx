@@ -18,18 +18,11 @@ const Statistics: React.FC = () => {
 
 	const statistics = useMemo<TStatistic[]>(
 		() => [
-			// {
-			// 	category: t('ns_dashboard:statistic.order_number'),
-			// 	dataField: 'order_number',
-			// 	value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-			// 	icon: 'ReceiptText',
-			// 	comparision: 25
-			// },
 			{
 				category: t('ns_dashboard:statistic.inventory_number'),
 				dataField: 'inventory_number',
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'Container',
+				icon: 'Archive',
 				comparision: 25
 			},
 			{
@@ -45,6 +38,13 @@ const Statistics: React.FC = () => {
 				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
 				icon: 'GitBranchPlus',
 				comparision: 8
+			},
+			{
+				category: t('ns_dashboard:statistic.defective_rate'),
+				dataField: 'inventory_number',
+				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
+				icon: 'PackageX',
+				comparision: 25
 			}
 		],
 		[t, i18n.language]
@@ -60,37 +60,37 @@ const Statistics: React.FC = () => {
 	)
 
 	return (
-		<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-3 xxl:grid-cols-3'>
+		<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-4 xxl:grid-cols-2'>
 			{statistics.map((stats, index) => (
 				<Card key={index}>
 					<CardHeader className='@container'>
-						<CardTitle className='@[200px]:text-sm'>{stats.category}</CardTitle>
-						<Icon name={stats.icon} size={20} />
+						<CardTitle>{stats.category}</CardTitle>
+						<Icon name={stats.icon} size={20} strokeWidth={1.5} />
 					</CardHeader>
 					<CardContent>
 						<Div className='space-y-0.5'>
-							<Typography variant='h4' className='font-bold'>
+							<Typography variant='h3' className='font-bold'>
 								{stats.value}
 							</Typography>
-							<Typography variant='small' color='muted' className='text-xs'>
+							<Typography variant='small' color='muted'>
 								{t('ns_dashboard:compare_from_last_month', { value: stats.comparision + '%' })}
 							</Typography>
 						</Div>
 
-						<ChartContainer config={chartConfig} className='h-24 xl:h-20 xxl:h-20'>
+						<ChartContainer config={chartConfig} className='h-24 xl:h-20 xxl:h-24'>
 							<AreaChart data={overalStatistics}>
 								<defs>
 									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
-										<stop offset='1%' stopColor='hsl(var(--chart-1))' stopOpacity={0.8} />
+										<stop offset='1%' stopColor='hsl(var(--chart-1))' stopOpacity={0.5} />
 										<stop offset='99%' stopColor='hsl(var(--chart-1))' stopOpacity={0} />
 									</linearGradient>
 								</defs>
 								<Area
 									type='monotone'
 									dataKey={stats.dataField}
-									fillOpacity={0.8}
+									fillOpacity={0.5}
 									stroke='hsl(var(--chart-1))'
-									fill='url(#colorPv)'
+									fill='hsl(var(--chart-1)/50%)'
 								/>
 							</AreaChart>
 						</ChartContainer>
@@ -104,6 +104,6 @@ const Statistics: React.FC = () => {
 const Card = tw.div`rounded-[var(--radius)] p-4 sm:p-3 flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
 const CardContent = tw.div`flex flex-col gap-6 justify-between flex-1`
 const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
-const CardTitle = tw.h6`font-medium text-xs`
+const CardTitle = tw.h6`font-medium`
 
 export default Statistics
