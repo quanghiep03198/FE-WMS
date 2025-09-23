@@ -22,7 +22,7 @@ import {
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { RFIDService } from '@/services/rfid.service'
 import { useQuery } from '@tanstack/react-query'
-import { formatDistance } from 'date-fns'
+import { formatRelative } from 'date-fns'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -31,6 +31,7 @@ const RFIDDeviceList: React.FC = () => {
 	const { data, isLoading } = useQuery({
 		queryKey: ['WAREHOUSE_RFID_DEVICES'],
 		queryFn: () => RFIDService.getWarehouseRFIDDevices(),
+		refetchInterval: 5000,
 		select: (response) => response.metadata
 	})
 
@@ -51,15 +52,14 @@ const RFIDDeviceList: React.FC = () => {
 				<Table className='w-full table-fixed'>
 					<TableHeader className='sticky top-0 border-b'>
 						<TableRow className='[&_th]:border-x-0'>
-							<TableHead align='left' className='w-10'>
-								{/* <Icon name='Grip' /> */}
-							</TableHead>
 							<TableHead align='left' className='w-16'>
 								<Checkbox />
 							</TableHead>
 							<TableHead align='left'>Device name</TableHead>
 							<TableHead align='left'>Created by</TableHead>
 							<TableHead align='left'>Device type</TableHead>
+							<TableHead align='left'>TCP/IP</TableHead>
+							<TableHead align='left'>Port</TableHead>
 							<TableHead align='left'>Attena</TableHead>
 							<TableHead align='left'>Device status</TableHead>
 							<TableHead align='left'>
@@ -76,23 +76,20 @@ const RFIDDeviceList: React.FC = () => {
 						{Array.isArray(data) && data.length > 0 ? (
 							data.map((device, index) => (
 								<TableRow key={index} className='divide-x-0 [&_td]:!border-b-0'>
-									<TableCell align='left' className='w-16 text-muted-foreground'>
-										<Icon name='GripVertical' />
-									</TableCell>
 									<TableCell align='left' className='w-16'>
 										<Checkbox />
 									</TableCell>
 									<TableCell>
 										<Div>
 											<Typography variant='small' className='font-medium'>
-												{device?.device_name}
+												{device?.device_sn}
 											</Typography>
 											<Typography variant='small' color='muted' className='block'>
-												{device?.device_sn}
+												{device?.device_name}
 											</Typography>
 										</Div>
 									</TableCell>
-									<TableCell>Admin</TableCell>
+									<TableCell>{device?.created ?? 'Administrator'}</TableCell>
 									<TableCell align='left'>
 										<Badge
 											variant='outline'
@@ -104,6 +101,8 @@ const RFIDDeviceList: React.FC = () => {
 											{device.device_name?.includes('WH103') ? 'Handhold' : 'Attenna'}
 										</Badge>
 									</TableCell>
+									<TableCell>{device?.ip_address}</TableCell>
+									<TableCell>{device?.ip_port}</TableCell>
 									<TableCell align='left'>
 										{device.device_name?.includes('WH103') ? (
 											<Badge variant='secondary'>N/A</Badge>
@@ -135,7 +134,9 @@ const RFIDDeviceList: React.FC = () => {
 										</Badge>
 									</TableCell>
 									<TableCell className='lowercase first-letter:uppercase'>
-										{formatDistance(new Date(Date.now()), new Date('2025-06-28'))}
+										{device.last_usage_time
+											? formatRelative(new Date(Date.now()), new Date(device.last_usage_time))
+											: '-'}
 									</TableCell>
 
 									<TableCell align='center' className='w-16'>
@@ -158,15 +159,17 @@ const RFIDDeviceList: React.FC = () => {
 								</TableRow>
 							))
 						) : (
-							<Div className='grid h-full place-content-center rounded-md bg-muted text-muted-foreground'>
-								<Typography
-									as='small'
-									variant='small'
-									className='inline-flex items-center justify-center gap-x-2'>
-									<Icon name='Inbox' className='size-6' strokeWidth={1.25} />
-									{t('ns_common:table.no_data')}
-								</Typography>
-							</Div>
+							<TableRow>
+								<TableCell colSpan={10} align='center' className='h-64'>
+									<Typography
+										as='small'
+										variant='small'
+										className='inline-flex items-center justify-center gap-x-2'>
+										<Icon name='Inbox' className='size-6' strokeWidth={1.25} />
+										{t('ns_common:table.no_data')}
+									</Typography>
+								</TableCell>
+							</TableRow>
 						)}
 					</TableBody>
 				</Table>
