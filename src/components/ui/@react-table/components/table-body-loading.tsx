@@ -10,7 +10,7 @@ export const TableBodyLoading: React.FC = () => {
 	const preRenderColumns = table.getAllLeafColumns()
 
 	return preRenderRows.map((rowIndex) => (
-		<TableRow key={rowIndex}>
+		<TableRow key={rowIndex} data-role='data-grid-row'>
 			{preRenderColumns.map((column, columnIndex) => {
 				return (
 					<TableCell

@@ -35,7 +35,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 	const { table } = useTableContext('table')
 
 	return (
-		<TableRow className='divide-x [&_th]:border-x-0'>
+		<TableRow data-role='data-grid-row' className='divide-x [&_th]:border-x-0'>
 			{headerGroup.headers.map((header) => {
 				const rowSpan = header.column.columnDef.meta?.rowSpan
 				if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
@@ -44,6 +44,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 
 				return (
 					<TableHead
+						data-role='data-grid-head'
 						key={header.id}
 						colSpan={header.colSpan}
 						rowSpan={rowSpan}
