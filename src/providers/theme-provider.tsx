@@ -25,10 +25,10 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: The
 	useEffect(() => {
 		const root = window.document.documentElement
 		root.classList.add('no-transition')
-
 		root.classList.remove(Theme.DARK, Theme.LIGHT)
-		root.classList.add(theme as Theme)
-
+		if (theme === Theme.SYSTEM) {
+			root.classList.add(window.matchMedia('(prefers-color-scheme:dark)').matches ? Theme.DARK : Theme.LIGHT)
+		} else root.classList.add(theme as Theme)
 		requestAnimationFrame(() => {
 			root.classList.remove('no-transition')
 		})
