@@ -3,6 +3,14 @@ export default {
 	devices_description: 'List of RFID devices currently available in the warehouse',
 	no_sync_process: 'No synchronization process is running',
 	use_rfid_device: 'Use handheld device',
+	recently_use: 'Recently use',
+	fields: {
+		device_sn: 'Device serial number',
+		device_name: 'Device name',
+		device_type: 'Device type',
+		station_no: ' Số trạm',
+		last_used_time: 'Last used time'
+	},
 	placeholders: {
 		search_epc: 'Scan or type EPC to search ...'
 	},

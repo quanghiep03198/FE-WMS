@@ -3,6 +3,15 @@ export default {
 	devices_description: 'Danh sách các thiết bị RFID hiện có trong kho',
 	no_sync_process: 'Không có tiến trình đồng bộ đang hoạt động',
 	use_rfid_device: 'Sử dụng thiết bị cầm tay',
+	fields: {
+		device_sn: 'Số serial thiết bị',
+		station_no: ' Số trạm',
+		device_name: 'Tên thiết bị',
+		device_type: 'Loại thiết bị',
+		last_used_time: 'Thời gian sử dụng gần nhất'
+	},
+
+	recently_use: 'Sử dụng gần đây',
 	sync_data_steps: {
 		step_1: 'Xác thực Decker API',
 		step_2: 'Lấy dữ liệu các đơn hàng và thông tin của EPC',
