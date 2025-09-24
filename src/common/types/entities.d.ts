@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { InventoryType } from '../constants/enums'
+import { RecordStatus } from '../constants/enums'
 
 // #region In use Entities
 
@@ -165,7 +165,7 @@ export interface IMonthlyInventoryAudit {
 	total_outstock_qty: number
 	actual_inv_qty: number
 	final_inv_qty: number
-	inv_type: InventoryType
+	inv_type: 'FG' | 'IH' // Finished goods | Insole house
 	inv_year_month: string
 	// prettier-ignore
 	detail: Array<{
@@ -255,6 +255,17 @@ export interface IProductSpecification {
 			sizes: Array<{ size: string }>
 		}>
 	}>
+}
+
+export interface IRFIDReaderDevice {
+	device_name: string
+	device_ant: string
+	device_sn: string
+	ip_address: string
+	ip_port: string
+	is_active: RecordStatus
+	created: string | Date
+	last_used_time: string | Date | null
 }
 
 export interface IDefectiveGoods extends IBaseEntity {
