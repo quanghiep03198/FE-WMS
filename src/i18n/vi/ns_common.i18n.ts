@@ -1,6 +1,7 @@
 export default {
 	actions: {
 		add: 'Thêm mới',
+		activate: 'Kích hoạt',
 		adjust: 'Điều chỉnh',
 		approve: 'Duyệt',
 		apply: 'Áp dụng',
@@ -14,6 +15,7 @@ export default {
 		connect: 'Kết nối',
 		continue: 'Tiếp tục',
 		csv_upload: 'Nhấp để tải lên hoặc kéo và thả tệp CSV',
+		deactivate: 'Vô hiệu hóa',
 		decrement: 'Giảm số lượng',
 		delete: 'Xóa',
 		detail: 'Chi tiết',

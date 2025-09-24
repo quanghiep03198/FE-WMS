@@ -3,6 +3,13 @@ export default {
 	devices_description: '当前仓库中的RFID设备列表',
 	no_sync_process: '没有同步进程正在运行',
 	use_rfid_device: '使用手持机',
+	fields: {
+		device_sn: '设备序列号',
+		device_name: '设备名称',
+		device_type: '设备类型',
+		station_no: '站点号',
+		last_used_time: '最后使用时间'
+	},
 	placeholders: {
 		search_epc: '扫描或输入EPC以搜索 ...'
 	},

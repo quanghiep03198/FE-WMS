@@ -1,5 +1,6 @@
 export default {
 	actions: {
+		activate: '激活',
 		add: '添加',
 		adjust: '调整',
 		apply: '应用',
@@ -14,6 +15,7 @@ export default {
 		connect: '连接',
 		continue: '继续',
 		csv_upload: '点击上传或拖放 CSV 文件',
+		deactivate: '停用',
 		decrement: '减量',
 		delete: '删除',
 		detail: '细节',

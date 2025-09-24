@@ -1,5 +1,6 @@
 export default {
 	actions: {
+		activate: 'Activate',
 		add: 'Add',
 		adjust: 'Adjust',
 		apply: 'Apply',
@@ -14,6 +15,7 @@ export default {
 		connect: 'Connect',
 		continue: 'Continue',
 		csv_upload: 'Click to upload or drag and drop CSV files',
+		deactivate: 'Deactivate',
 		decrement: 'Decrement',
 		delete: 'Delete',
 		detail: 'Detail',
