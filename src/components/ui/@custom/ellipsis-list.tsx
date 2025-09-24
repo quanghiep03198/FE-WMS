@@ -20,7 +20,7 @@ export default function EllipsisList<T>({ threshhold, data, template: ListItemTe
 	const isTruncated = data.length > threshhold
 
 	return (
-		<Div className='space-x-1'>
+		<Div className='flex items-center space-x-1'>
 			{isTruncated ? (
 				<Fragment>
 					{visibleData.map((item) => (
