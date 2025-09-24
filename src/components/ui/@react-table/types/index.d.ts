@@ -104,6 +104,12 @@ export type DataTableProps<TData = any, TValue = any> = {
 	 * Array of column definitions for the table. Each column can have various properties such as header, accessor, etc.
 	 */
 	columns: ColumnDef<TData & any, TValue>[]
+
+	/**
+	 * Table border style. Can be 'all' for full borders or 'bottom-only' for minimal borders.
+	 * @default 'all'
+	 */
+	border?: 'all' | 'bottom-only'
 	/**
 	 * Table caption, which can be used to provide a title or description for the table.
 	 * This is useful for accessibility and can be used by screen readers to describe the table content.

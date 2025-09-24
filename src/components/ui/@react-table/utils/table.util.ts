@@ -34,7 +34,9 @@ export function getStickyOffsetPosition<TData = any, TValue = any>(column: Colum
 			return {
 				position: 'sticky',
 				zIndex: 10,
-				right: column.getAfter('right')
+				right: column.getAfter('right'),
+				boxShadow: column.getIsLastColumn('right') ? '-1px 0px hsl(var(--border))' : undefined,
+				borderLeft: 'none'
 			}
 		}
 		default: {

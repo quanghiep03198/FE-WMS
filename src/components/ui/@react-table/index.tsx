@@ -66,6 +66,7 @@ function DataGrid<TData, TValue>({
 	columnFilters,
 	globalFilter,
 	virtualizerOptions,
+	border = 'all',
 	onGlobalFilterChange,
 	onColumnFiltersChange,
 	renderSubComponent,
@@ -262,7 +263,7 @@ function DataGrid<TData, TValue>({
 
 	return (
 		<TableContext.Provider value={store.current}>
-			<DataTableWrapper>
+			<DataTableWrapper data-border={border}>
 				{!toolbarProps.hidden &&
 					(isResizingColumn ? (
 						<MemoizedTableToolbar slotLeft={toolbarProps.slotLeft} slotRight={toolbarProps.slotRight} />
@@ -314,7 +315,11 @@ function DataGrid<TData, TValue>({
 	)
 }
 
-const DataTableWrapper = tw.div`*:box-border space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200`
+const DataTableWrapper = tw.div`
+	*:box-border space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200 
+	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:!border-x-0 
+	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!border-x-0
+`
 const FooterGroup = memo(tw.div`flex items-center justify-between`, (prevProps, nextProps) => prevProps === nextProps)
 
 export default DataGrid

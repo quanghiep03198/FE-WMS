@@ -20,12 +20,14 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubC
 	return (
 		<Fragment>
 			<TableRow
+				data-role='data-grid-row'
 				aria-selected={row.getIsSelected()}
 				aria-expanded={row.getIsExpanded()}
 				className='group border-spacing-0'>
 				{row.getVisibleCells().map((cell) => {
 					return (
 						<TableCell
+							data-role='data-grid-cell'
 							{...cell.column.columnDef?.meta?.tableCellProps}
 							key={cell.id}
 							align={cell.column.columnDef.meta?.align}
@@ -49,7 +51,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubC
 			</TableRow>
 			{/* Sub-component */}
 			{typeof renderSubComponent === 'function' && (
-				<TableRow>
+				<TableRow data-role='expandable-row'>
 					<TableCell
 						colSpan={row.getVisibleCells().length}
 						className={cn(

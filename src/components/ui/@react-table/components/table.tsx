@@ -68,7 +68,8 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea ref={containerRef} {...containerProps}>
 				<Table
-					className='border-separate border-spacing-0 border-none'
+					data-role='data-grid'
+					className='table-fixed border-separate border-spacing-0 border-none'
 					style={
 						{
 							...computedColumnSizes,
@@ -92,7 +93,9 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	)
 }
 
-const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
+const Wrapper = tw.div<
+	React.ComponentProps<'div'>
+>`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
 const ScrollArea = tw.div` relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
 
 DataTable.displayName = 'DataTable'
