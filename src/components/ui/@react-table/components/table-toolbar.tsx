@@ -1,24 +1,19 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
-import { Table } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash'
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
+import { ToolbarProps } from '../types'
 import ColumnFilterToggle from './column-filter-toggle'
 import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
-type TableToolbarProps<TData> = {
-	slotLeft?: React.FC<{ table?: Table<TData> }>
-	slotRight?: React.FC<{ table?: Table<TData> }>
-}
-
-function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: TableToolbarProps<TData>) {
+function TableToolbar<TData>(props: ToolbarProps<TData>) {
 	const { table, event$ } = useTableContext('table', 'event$')
 	const {
 		columnPinning: { left, right },
@@ -38,8 +33,15 @@ function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: Table
 		table.resetColumnFilters(true)
 	})
 
+	// Handle override case
+	if (props.override === true) {
+		return props.render({ table, event$ })
+	}
+
+	const { slotLeft: SlotLeft, slotRight: SlotRight, rtl } = props
+
 	return (
-		<Div role='toolbar' className='flex items-center justify-between py-0.5'>
+		<Div role='toolbar' className={cn('flex items-center justify-between py-0.5', rtl && 'flex-row-reverse')}>
 			{SlotLeft && <SlotLeft table={table} />}
 			<Div className='ml-auto grid auto-cols-fr grid-flow-col items-center gap-x-1'>
 				<Tooltip message={t('ns_common:actions.unpin_all_columns')} triggerProps={{ asChild: true }}>
@@ -64,11 +66,13 @@ function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: Table
 					</Button>
 				</Tooltip>
 				{SlotRight && <SlotRight table={table} />}
-				<GlobalFilterPopover
-					enableGlobalFilter={table.options.enableGlobalFilter}
-					globalFilter={table.getState().globalFilter}
-					onGlobalFilterChange={table.setGlobalFilter}
-				/>
+				{table.options.enableGlobalFilter && (
+					<GlobalFilterPopover
+						enableGlobalFilter={table.options.enableGlobalFilter}
+						globalFilter={table.getState().globalFilter}
+						onGlobalFilterChange={table.setGlobalFilter}
+					/>
+				)}
 				{table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableColumnFilter) && <ColumnFilterToggle />}
 				{(table.getAllLeafColumns().some(({ columnDef }) => columnDef.enableResizing) ||
 					table.options.enableColumnResizing) && (
@@ -78,7 +82,7 @@ function TableToolbar<TData>({ slotLeft: SlotLeft, slotRight: SlotRight }: Table
 						</Button>
 					</Tooltip>
 				)}
-				<TableViewOptions />
+				{table.options.enableHiding && <TableViewOptions />}
 			</Div>
 		</Div>
 	)
