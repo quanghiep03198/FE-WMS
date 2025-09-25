@@ -48,7 +48,7 @@ function DataGrid<TData, TValue>({
 	defaultFilterOpen = false,
 	expanded = {},
 	paginationProps,
-	toolbarProps = { hidden: false, slotRight: null },
+	toolbarProps,
 	footerProps = { hidden: true, slot: null },
 	manualExpanding = false,
 	manualPagination = false,
@@ -56,6 +56,7 @@ function DataGrid<TData, TValue>({
 	manualFiltering = false,
 	enableColumnResizing = true,
 	enableRowSelection = false,
+	enableHiding = true,
 	enableColumnFilters = true,
 	enableSorting = true,
 	enableExpanding = true,
@@ -145,6 +146,7 @@ function DataGrid<TData, TValue>({
 		enableGlobalFilter,
 		enableColumnPinning,
 		enableColumnResizing,
+		enableHiding,
 		filterFromLeafRows: false,
 		columnResizeMode: 'onChange',
 		debugAll: false,
@@ -216,11 +218,11 @@ function DataGrid<TData, TValue>({
 	 * * Forward table instance to ref if provided
 	 * * This is useful for parent components to access the table instance methods and properties
 	 */
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (ref && typeof ref === 'object' && 'current' in ref) {
 			ref.current = table
 		}
-	}, [table.getState(), ref])
+	}, [table.getState()])
 
 	/**
 	 * * Avoid infinite loop if data is empty
@@ -264,12 +266,7 @@ function DataGrid<TData, TValue>({
 	return (
 		<TableContext.Provider value={store.current}>
 			<DataTableWrapper data-border={border}>
-				{!toolbarProps.hidden &&
-					(isResizingColumn ? (
-						<MemoizedTableToolbar slotLeft={toolbarProps.slotLeft} slotRight={toolbarProps.slotRight} />
-					) : (
-						<TableToolbar slotLeft={toolbarProps.slotLeft} slotRight={toolbarProps.slotRight} />
-					))}
+				{isResizingColumn ? <MemoizedTableToolbar {...toolbarProps} /> : <TableToolbar {...toolbarProps} />}
 				<DataTable
 					columns={columns}
 					loading={loading}
@@ -316,10 +313,10 @@ function DataGrid<TData, TValue>({
 }
 
 const DataTableWrapper = tw.div`
-	*:box-border space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200 
+	group/data-grid-wrapper *:box-border space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200 
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:!border-x-0 
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!border-x-0
 `
-const FooterGroup = memo(tw.div`flex items-center justify-between`, (prevProps, nextProps) => prevProps === nextProps)
+const FooterGroup = memo(tw.div`flex items-center justify-between`)
 
-export default DataGrid
+export default memo(DataGrid)
