@@ -1,6 +1,7 @@
 import { Column } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
-import { useState } from 'react'
+import { pick } from 'lodash'
+import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'
 import { Div, DropdownSelect, Icon } from '../..'
@@ -20,7 +21,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 	const filterVariant = column.columnDef.meta?.filterVariant
 	const columnFilterValue = column.getFilterValue()
 	const [isAllFiltersCleared, setIsAllFiltersCleared] = useState(true)
-	const { event$ } = useTableContext('event$')
+	const { table, event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 
 	event$.useSubscription((value: { isAllFiltersCleared?: boolean }) => {
@@ -44,6 +45,10 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		})
 		return uniqueValues
 	}
+
+	useEffect(() => {
+		event$.emit(pick(table.getState(), ['rowSelection']))
+	}, [columnFilterValue])
 
 	// * Useful for server side filtering
 	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
