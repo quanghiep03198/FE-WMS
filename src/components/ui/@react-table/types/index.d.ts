@@ -9,14 +9,26 @@ import {
 	type TableOptions,
 	type TableState
 } from '@tanstack/react-table'
+import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React from 'react'
 
-export type ToolbarProps<TData = any> = {
-	hidden?: boolean
-	rtl?: boolean
-	slotLeft?: React.FC<{ table: Table<TData> }>
-	slotRight?: React.FC<{ table: Table<TData> }>
-}
+export type ToolbarProps<TData = any> =
+	| {
+			override: true
+			render: ({
+				table,
+				event$
+			}: {
+				table: Table<TData>
+				event$: EventEmitter<Record<string, unknown>>
+			}) => React.ReactElement
+	  }
+	| {
+			override?: false
+			rtl?: boolean
+			slotLeft?: React.FC<{ table: Table<TData> }>
+			slotRight?: React.FC<{ table: Table<TData> }>
+	  }
 
 export type TableFooterProps<TData = any> = {
 	hidden?: boolean
