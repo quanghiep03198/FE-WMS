@@ -33,7 +33,12 @@ export function IndeterminateCheckbox<TData extends RowData>({
 
 	return (
 		<Checkbox
-			checked={(table.getIsAllRowsSelected() || (table.getIsSomeRowsSelected() && 'indeterminate')) as CheckedState}
+			checked={
+				(table.getIsAllRowsSelected() ||
+					(table.getIsSomeRowsSelected() &&
+						table.getFilteredSelectedRowModel().flatRows.length > 0 &&
+						'indeterminate')) as CheckedState
+			}
 			onCheckedChange={handleCheckedChange}
 		/>
 	)
