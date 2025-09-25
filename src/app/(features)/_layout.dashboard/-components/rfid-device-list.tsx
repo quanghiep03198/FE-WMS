@@ -11,25 +11,32 @@ import {
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon,
 	Tabs,
 	TabsContent,
 	TabsList,
-	TabsTrigger,
-	Typography
+	TabsTrigger
 } from '@/components/ui'
-import EllipsisList from '@/components/ui/@custom/ellipsis-list'
-import { ROW_ACTIONS_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { createColumnHelper } from '@tanstack/react-table'
+import {
+	IndeterminateCheckbox,
+	RowSelectionCheckbox
+} from '@/components/ui/@react-table/components/row-selection-checkbox'
+import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { createColumnHelper, Table } from '@tanstack/react-table'
 import { useEventEmitter } from 'ahooks'
 import { formatRelative } from 'date-fns'
-import { capitalize, isNil } from 'lodash'
-import React, { Fragment, useMemo, useState } from 'react'
+import { capitalize, isNil, pick } from 'lodash'
+import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useGetRFIDDeviceQuery } from '../-hooks/use-rfid-device-asm'
+import {
+	useDeleteRFIDDeviceMutation,
+	useGetRFIDDeviceQuery,
+	useUpdateRFIDDeviceMutation
+} from '../-hooks/use-rfid-device-asm'
+import { UpdateRFIDReaderFormValues } from '../-schemas/rfid-reader.schema'
 import RFIDDeviceFormDialog from './rfid-device-form-dialog'
 
 type TabValue = 'all' | 'recently-use' | 'deactivated'
@@ -41,35 +48,59 @@ const RFIDDeviceList: React.FC = () => {
 	const dateLocale = useDateLocale()
 	const event$ = useEventEmitter<
 		| { action: CommonActions.CREATE; defaultValues: null }
-		| { action: CommonActions.UPDATE; defaultValues: Partial<IRFIDReaderDevice> }
+		| { action: CommonActions.UPDATE; defaultValues: UpdateRFIDReaderFormValues }
 	>()
 
 	const columnHelper = createColumnHelper<IRFIDReaderDevice>()
+	const tableRef = useRef<Table<IRFIDReaderDevice>>(null)
+
+	const { mutateAsync: updateAsync } = useUpdateRFIDDeviceMutation()
+	const { mutateAsync: deleteAsync } = useDeleteRFIDDeviceMutation()
+
+	const handleUpdateDeviceStatus = useCallback(async (payload: { device_sn: string; is_active: RecordStatus }) => {
+		return await toast.promise(updateAsync(payload), {
+			loading: t('ns_common:notification.processing_request'),
+			success: t('ns_common:notification.success'),
+			error: t('ns_common:notification.error')
+		})
+	}, [])
+
+	const handleDeleteDevices = useCallback(async (deviceSeriesNumbers: string[]) => {
+		return await toast.promise(deleteAsync(deviceSeriesNumbers), {
+			loading: t('ns_common:notification.processing_request'),
+			success: t('ns_common:notification.success'),
+			error: t('ns_common:notification.error')
+		})
+	}, [])
 
 	const columns = useMemo(() => {
 		return [
+			columnHelper.display({
+				id: ROW_SELECTION_COLUMN_ID,
+				header: (props) => <IndeterminateCheckbox {...props} />,
+				cell: (props) => <RowSelectionCheckbox {...props} />,
+				size: 60,
+				maxSize: 60,
+				enableResizing: false
+			}),
 			columnHelper.accessor('device_sn', {
-				id: t('ns_rfid:fields.device_name'),
-				header: t('ns_rfid:fields.device_name'),
+				id: t('ns_rfid:fields.device_sn'),
+				header: t('ns_rfid:fields.device_sn'),
 				enableResizing: true,
-				maxSize: 200,
-				cell: ({ row }) => (
-					<Div className='flex flex-col'>
-						<Typography variant='small' className='font-medium'>
-							{row.original?.device_sn}
-						</Typography>
-						<Typography variant='small' color='muted' className='text-xs'>
-							{row.original?.device_name}
-						</Typography>
-					</Div>
-				)
+				maxSize: 200
+			}),
+			columnHelper.accessor('station_no', {
+				id: t('ns_rfid:fields.station_no'),
+				header: t('ns_rfid:fields.station_no'),
+				enableResizing: true,
+				maxSize: 200
 			}),
 			columnHelper.display({
 				id: t('ns_rfid:fields.device_type'),
 				header: t('ns_rfid:fields.device_type'),
 				enableResizing: true,
 				cell: ({ row }) =>
-					isNil(row.original.device_ant) ? (
+					isNil(row.original.device_ant) || row.original.device_ant === '0' ? (
 						<Badge variant='secondary' className='gap-x-2'>
 							<Icon name='SmartphoneNfc' /> Handhold
 						</Badge>
@@ -92,28 +123,6 @@ const RFIDDeviceList: React.FC = () => {
 				maxSize: 100,
 				enableResizing: true,
 				cell: (info) => info.getValue()
-			}),
-			columnHelper.accessor('device_ant', {
-				id: 'Atenna',
-				header: 'Atenna',
-				enableResizing: true,
-				minSize: 250,
-				cell: (info) => {
-					const value = info.getValue()
-					return isNil(value) || value === '0' ? (
-						<Icon name='CircleSlash2' stroke='hsl(var(--muted-foreground))' />
-					) : (
-						<EllipsisList
-							threshhold={2}
-							data={typeof value === 'string' ? value.split(',') : []}
-							template={({ data }) => (
-								<Badge variant='secondary' className='whitespace-nowrap'>
-									Attena {data}
-								</Badge>
-							)}
-						/>
-					)
-				}
 			}),
 			columnHelper.accessor('is_active', {
 				id: t('ns_common:common_fields.status'),
@@ -162,17 +171,47 @@ const RFIDDeviceList: React.FC = () => {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent side='left' align='start'>
 							<DropdownMenuItem
-								onClick={() => event$.emit({ action: CommonActions.UPDATE, defaultValues: row.original })}>
+								onClick={() =>
+									event$.emit({
+										action: CommonActions.UPDATE,
+										defaultValues: {
+											...pick(row.original, ['station_no', 'device_sn', 'ip_address', 'ip_port']),
+											device_ant:
+												row.original.device_ant === '0' || isNil(row.original.device_ant) ? '0' : '1'
+										}
+									})
+								}>
 								{t('ns_common:actions.update')}
 							</DropdownMenuItem>
-							<DropdownMenuSeparator />
+
 							<DropdownMenuGroup>
-								<DropdownMenuItem>{t('ns_common:actions.activate')}</DropdownMenuItem>
-								<DropdownMenuItem>{t('ns_common:actions.deactivate')}</DropdownMenuItem>
+								{row.original.is_active === RecordStatus.INACTIVE ? (
+									<DropdownMenuItem
+										onClick={() =>
+											handleUpdateDeviceStatus({
+												device_sn: row.original.device_sn,
+												is_active: RecordStatus.ACTIVE
+											})
+										}>
+										{t('ns_common:actions.activate')}
+									</DropdownMenuItem>
+								) : (
+									<DropdownMenuItem
+										onClick={() =>
+											handleUpdateDeviceStatus({
+												device_sn: row.original.device_sn,
+												is_active: RecordStatus.INACTIVE
+											})
+										}>
+										{t('ns_common:actions.deactivate')}
+									</DropdownMenuItem>
+								)}
 							</DropdownMenuGroup>
-							<DropdownMenuSeparator />
+
 							<DropdownMenuGroup>
-								<DropdownMenuItem>{t('ns_common:actions.delete')}</DropdownMenuItem>
+								<DropdownMenuItem onClick={() => handleDeleteDevices([row.original.device_sn])}>
+									{t('ns_common:actions.delete')}
+								</DropdownMenuItem>
 							</DropdownMenuGroup>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -205,89 +244,91 @@ const RFIDDeviceList: React.FC = () => {
 		}
 	}, [data, currentTab])
 
+	console.log('tableRef.current?.getSelectedRowModel() :>> ', tableRef.current?.getSelectedRowModel())
+
 	return (
 		<Fragment>
-			<Div className='flex h-full flex-col space-y-8 overflow-hidden py-6'>
-				<Div className='sticky top-0 flex items-start justify-between'>
-					<Div>
-						<Typography className='font-medium'>{t('ns_rfid:devices')}</Typography>
-						<Typography variant='small' className='text-pretty text-muted-foreground'>
-							{t('ns_rfid:devices_description')}
-						</Typography>
-					</Div>
+			<Tabs
+				defaultValue='all'
+				className='mt-6 flex flex-col'
+				onValueChange={(value) => setCurrentTab(value as TabValue)}>
+				<Div className='flex items-center justify-between'>
+					<TabsList>
+						<TabsTrigger value='all' className='group/tab-trigger gap-x-2'>
+							{t('ns_common:others.all')}
+						</TabsTrigger>
+						<TabsTrigger value='recently-use' className='group/tab-trigger gap-x-2'>
+							{t('ns_rfid:recently_use')}
+							<Badge className='opacity-50 group-data-[state=active]/tab-trigger:opacity-100'>
+								{recentlyUseCount}
+							</Badge>
+						</TabsTrigger>
+						<TabsTrigger value='deactivated' className='group/tab-trigger gap-x-2'>
+							{t('ns_common:status.deactivated')}
+							<Badge className='opacity-50 group-data-[state=active]/tab-trigger:opacity-100'>
+								{deactivatedCount}
+							</Badge>
+						</TabsTrigger>
+					</TabsList>
+					<ButtonsGroup>
+						{tableRef.current?.getSelectedRowModel()?.flatRows?.length > 0 && (
+							<Button variant='destructive' onClick={() => refetch()}>
+								<Icon name='Trash2' /> {t('ns_common:actions.delete')}
+							</Button>
+						)}
+						<Button variant='outline' onClick={() => refetch()}>
+							<Icon name='RotateCcw' /> {t('ns_common:actions.reload')}
+						</Button>
+						<Button
+							variant='outline'
+							onClick={() => event$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
+							<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
+						</Button>
+					</ButtonsGroup>
 				</Div>
-				<Tabs
-					defaultValue='all'
-					className='flex flex-col'
-					onValueChange={(value) => setCurrentTab(value as TabValue)}>
-					<Div className='flex items-center justify-between'>
-						<TabsList>
-							<TabsTrigger value='all'>{t('ns_common:others.all')}</TabsTrigger>
-							<TabsTrigger value='recently-use' className='gap-x-2'>
-								{t('ns_rfid:recently_use')}
-								<Badge className='aspect-square max-h-full min-h-3 w-3 justify-center rounded-full'>
-									{recentlyUseCount}
-								</Badge>
-							</TabsTrigger>
-							<TabsTrigger value='deactivated' className='gap-x-2 py-1'>
-								{t('ns_common:status.deactivated')}
-								<Badge className='aspect-square max-h-full min-h-3 w-3 justify-center rounded-full'>
-									{deactivatedCount}
-								</Badge>
-							</TabsTrigger>
-						</TabsList>
-						<ButtonsGroup>
-							<Button variant='outline' onClick={() => refetch()}>
-								<Icon name='RotateCcw' /> {t('ns_common:actions.reload')}
-							</Button>
-							<Button
-								variant='outline'
-								onClick={() => event$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
-								<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
-							</Button>
-						</ButtonsGroup>
-					</Div>
-					<TabsContent value='all'>
-						<DataTable
-							border='bottom-only'
-							data={tableData}
-							columns={columns}
-							loading={isLoading}
-							containerProps={{
-								className: 'h-96 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
-							}}
-							toolbarProps={{ hidden: true }}
-							enableColumnResizing={true}
-						/>
-					</TabsContent>
-					<TabsContent value='recently-use'>
-						<DataTable
-							border='bottom-only'
-							data={tableData}
-							columns={columns}
-							loading={isLoading}
-							containerProps={{
-								className: 'h-96 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
-							}}
-							toolbarProps={{ hidden: true }}
-							enableColumnResizing={true}
-						/>
-					</TabsContent>
-					<TabsContent value='deactivated'>
-						<DataTable
-							border='bottom-only'
-							data={tableData}
-							columns={columns}
-							loading={isLoading}
-							containerProps={{
-								className: 'h-96 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
-							}}
-							toolbarProps={{ hidden: true }}
-							enableColumnResizing={true}
-						/>
-					</TabsContent>
-				</Tabs>
-			</Div>
+				<TabsContent value='all'>
+					<DataTable
+						ref={tableRef}
+						border='bottom-only'
+						data={tableData}
+						columns={columns}
+						loading={isLoading}
+						containerProps={{
+							className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
+						}}
+						toolbarProps={{ hidden: true }}
+						enableColumnResizing={true}
+					/>
+				</TabsContent>
+				<TabsContent value='recently-use'>
+					<DataTable
+						ref={tableRef}
+						border='bottom-only'
+						data={tableData}
+						columns={columns}
+						loading={isLoading}
+						containerProps={{
+							className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
+						}}
+						toolbarProps={{ hidden: true }}
+						enableColumnResizing={true}
+					/>
+				</TabsContent>
+				<TabsContent value='deactivated'>
+					<DataTable
+						ref={tableRef}
+						border='bottom-only'
+						data={tableData}
+						columns={columns}
+						loading={isLoading}
+						containerProps={{
+							className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
+						}}
+						toolbarProps={{ hidden: true }}
+						enableColumnResizing={true}
+					/>
+				</TabsContent>
+			</Tabs>
 			<RFIDDeviceFormDialog event$={event$} />
 		</Fragment>
 	)

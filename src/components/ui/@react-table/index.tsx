@@ -220,7 +220,7 @@ function DataGrid<TData, TValue>({
 		if (ref && typeof ref === 'object' && 'current' in ref) {
 			ref.current = table
 		}
-	}, [table, ref])
+	}, [table.getState(), ref])
 
 	/**
 	 * * Avoid infinite loop if data is empty

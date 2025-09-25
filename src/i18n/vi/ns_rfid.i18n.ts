@@ -1,16 +1,23 @@
 export default {
-	devices: 'Thiết bị RFID',
-	devices_description: 'Danh sách các thiết bị RFID hiện có trong kho',
 	no_sync_process: 'Không có tiến trình đồng bộ đang hoạt động',
 	use_rfid_device: 'Sử dụng thiết bị cầm tay',
 	fields: {
 		device_sn: 'Số serial thiết bị',
-		station_no: ' Số trạm',
+		station_no: 'Số hiệu trạm sử dụng',
 		device_name: 'Tên thiết bị',
 		device_type: 'Loại thiết bị',
 		last_used_time: 'Thời gian sử dụng gần nhất'
 	},
-
+	titles: {
+		add_device: 'Thêm thiết bị',
+		edit_device: 'Chỉnh sửa thông tin thiết bị'
+	},
+	descriptions: {
+		dialog_form: 'Vui lòng điền thông tin bên dưới để thêm hoặc cập nhật thông tin thiết bị RFID vào hệ thống.',
+		device_sn: 'Số serial thường được tìm thấy trên nhãn dán ở mặt sau của thiết bị.',
+		device_name: 'Một tên duy nhất để nhận diện trạm trong hệ thống sản xuất.',
+		device_type: 'Chọn loại thiết bị để cấu hình các cài đặt phù hợp.'
+	},
 	recently_use: 'Sử dụng gần đây',
 	sync_data_steps: {
 		step_1: 'Xác thực Decker API',

@@ -1,6 +1,4 @@
 export default {
-	devices: 'RFID Devices',
-	devices_description: 'List of RFID devices currently available in the warehouse',
 	no_sync_process: 'No synchronization process is running',
 	use_rfid_device: 'Use handheld device',
 	recently_use: 'Recently use',
@@ -8,8 +6,18 @@ export default {
 		device_sn: 'Device serial number',
 		device_name: 'Device name',
 		device_type: 'Device type',
-		station_no: ' Số trạm',
+		station_no: 'Station NO',
 		last_used_time: 'Last used time'
+	},
+	titles: {
+		add_device: 'Add device',
+		edit_device: 'Edit device info'
+	},
+	descriptions: {
+		dialog_form: 'Please fill in the information below to add or update RFID device information to the system.',
+		device_sn: 'The serial number is usually found on a sticker on the back of the device.',
+		device_name: 'A unique name to identify the station in the production system.',
+		device_type: 'Select device type to configure the appropriate settings.'
 	},
 	placeholders: {
 		search_epc: 'Scan or type EPC to search ...'

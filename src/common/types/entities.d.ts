@@ -258,7 +258,7 @@ export interface IProductSpecification {
 }
 
 export interface IRFIDReaderDevice {
-	device_name: string
+	station_no: string
 	device_ant: string
 	device_sn: string
 	ip_address: string

@@ -10,10 +10,14 @@ import {
 	ExchangeEpcPayload
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
 import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
+import {
+	CreateRFIDReaderFormValues,
+	UpdateRFIDReaderFormValues
+} from '@/app/(features)/_layout.dashboard/-schemas/rfid-reader.schema'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { omitBy } from 'lodash'
+import { omit, omitBy } from 'lodash'
 
 export class RFIDService {
 	// #region Inbound
@@ -124,11 +128,35 @@ export class RFIDService {
 		)
 	}
 	static async restoreArchivedEpcs(type: RFIDDataType, payload: Array<IElectronicProductCode>) {
-		return await axiosInstance.patch<Array<string>, ResponseBody<any>>(`/rfid/restore-archived-epcs/${type}`, payload)
+		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(
+			`/rfid/restore-archived-epcs/${type}`,
+			payload
+		)
 	}
 
 	// #endregion
 	static async getWarehouseRFIDDevices() {
 		return await axiosInstance.get<unknown, ResponseBody<Record<string, string>[]>>(`/rfid/devices`)
+	}
+
+	static async createWarehouseRFIDDevice(payload: CreateRFIDReaderFormValues) {
+		return await axiosInstance.post<unknown, ResponseBody<unknown>, CreateRFIDReaderFormValues>(
+			'/rfid/devices/create',
+			payload
+		)
+	}
+
+	static async updateWarehouseRFIDDevice(payload: UpdateRFIDReaderFormValues) {
+		return await axiosInstance.patch<unknown, ResponseBody<unknown>, UpdateRFIDReaderFormValues>(
+			`/rfid/devices/update/${payload.device_sn}`,
+			omit(payload, ['device_sn'])
+		)
+	}
+
+	static async deleteWarehouseRFIDDevice(deviceSeriesNumbers: string[]) {
+		return await axiosInstance.post<unknown, ResponseBody<unknown>, string[]>(
+			`/rfid/devices/delete`,
+			deviceSeriesNumbers
+		)
 	}
 }
