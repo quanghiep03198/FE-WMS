@@ -1,14 +1,22 @@
 export default {
-	devices: 'RFID设备',
-	devices_description: '当前仓库中的RFID设备列表',
 	no_sync_process: '没有同步进程正在运行',
 	use_rfid_device: '使用手持机',
 	fields: {
 		device_sn: '设备序列号',
 		device_name: '设备名称',
 		device_type: '设备类型',
-		station_no: '站点号',
+		station_no: '站点编号',
 		last_used_time: '最后使用时间'
+	},
+	titles: {
+		add_device: '添加设备',
+		edit_device: '编辑设备信息'
+	},
+	descriptions: {
+		dialog_form: '请填写以下信息以向系统添加或更新RFID设备信息.',
+		device_sn: '设备序列号通常可以在设备背面的标签上找到.',
+		device_name: '在生产系统中识别站点的唯一名称.',
+		device_type: '选择设备类型以配置适当的设置.'
 	},
 	placeholders: {
 		search_epc: '扫描或输入EPC以搜索 ...'
