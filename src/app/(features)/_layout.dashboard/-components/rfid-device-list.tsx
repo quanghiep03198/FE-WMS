@@ -1,5 +1,6 @@
 import { CommonActions, RecordStatus } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
+import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { IRFIDReaderDevice } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -9,25 +10,23 @@ import {
 	Div,
 	DropdownMenu,
 	DropdownMenuContent,
-	DropdownMenuGroup,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-	Icon,
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger
+	Icon
 } from '@/components/ui'
+import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import {
 	IndeterminateCheckbox,
 	RowSelectionCheckbox
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { notNullFilter } from '@/components/ui/@react-table/utils/not-full-filter.util'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { useEventEmitter } from 'ahooks'
 import { formatRelative } from 'date-fns'
 import { capitalize, isNil, pick } from 'lodash'
-import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -39,39 +38,41 @@ import {
 import { UpdateRFIDReaderFormValues } from '../-schemas/rfid-reader.schema'
 import RFIDDeviceFormDialog from './rfid-device-form-dialog'
 
-type TabValue = 'all' | 'recently-use' | 'deactivated'
-
 const RFIDDeviceList: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const [currentTab, setCurrentTab] = useState<TabValue>('all')
 	const { data, isLoading, refetch } = useGetRFIDDeviceQuery()
+	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const dateLocale = useDateLocale()
-	const event$ = useEventEmitter<
+	const ev$ = useEventEmitter<
 		| { action: CommonActions.CREATE; defaultValues: null }
 		| { action: CommonActions.UPDATE; defaultValues: UpdateRFIDReaderFormValues }
 	>()
 
 	const columnHelper = createColumnHelper<IRFIDReaderDevice>()
-	const tableRef = useRef<Table<IRFIDReaderDevice>>(null)
+	const tableRef = useReactiveRef<Table<IRFIDReaderDevice>>(null)
+	const deleteItemsRef = useRef<string[]>(null)
 
 	const { mutateAsync: updateAsync } = useUpdateRFIDDeviceMutation()
-	const { mutateAsync: deleteAsync } = useDeleteRFIDDeviceMutation()
+	const { mutateAsync: deleteAsync, isPending: isDeleting, isError: isFailedToDelete } = useDeleteRFIDDeviceMutation()
 
-	const handleUpdateDeviceStatus = useCallback(async (payload: { device_sn: string; is_active: RecordStatus }) => {
-		return await toast.promise(updateAsync(payload), {
+	const handleUpdateDeviceStatus = useCallback((payload: { device_sn: string; is_active: RecordStatus }) => {
+		return toast.promise(updateAsync(payload), {
 			loading: t('ns_common:notification.processing_request'),
 			success: t('ns_common:notification.success'),
 			error: t('ns_common:notification.error')
 		})
 	}, [])
 
-	const handleDeleteDevices = useCallback(async (deviceSeriesNumbers: string[]) => {
-		return await toast.promise(deleteAsync(deviceSeriesNumbers), {
+	const handleDeleteDevices = useCallback(() => {
+		return toast.promise(deleteAsync(deleteItemsRef.current), {
 			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_common:notification.success'),
+			success: () => {
+				deleteItemsRef.current = []
+				return t('ns_common:notification.success')
+			},
 			error: t('ns_common:notification.error')
 		})
-	}, [])
+	}, [deleteItemsRef.current])
 
 	const columns = useMemo(() => {
 		return [
@@ -93,12 +94,18 @@ const RFIDDeviceList: React.FC = () => {
 				id: t('ns_rfid:fields.station_no'),
 				header: t('ns_rfid:fields.station_no'),
 				enableResizing: true,
-				maxSize: 200
+				maxSize: 200,
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return value.split('_').at(-1)
+				}
 			}),
 			columnHelper.display({
 				id: t('ns_rfid:fields.device_type'),
 				header: t('ns_rfid:fields.device_type'),
 				enableResizing: true,
+				enableColumnFilter: false,
+				minSize: 250,
 				cell: ({ row }) =>
 					isNil(row.original.device_ant) || row.original.device_ant === '0' ? (
 						<Badge variant='secondary' className='gap-x-2'>
@@ -109,6 +116,22 @@ const RFIDDeviceList: React.FC = () => {
 							<Icon name='Router' /> Attenna
 						</Badge>
 					)
+			}),
+			columnHelper.accessor('last_used_time', {
+				id: t('ns_rfid:fields.last_used_time'),
+				header: t('ns_rfid:fields.last_used_time'),
+				enableHiding: false,
+				enableResizing: true,
+				filterFn: notNullFilter,
+				enableColumnFilter: true,
+				minSize: 250,
+				cell: (info) =>
+					info.getValue() ? (
+						capitalize(formatRelative(new Date(info.getValue()!), new Date(Date.now()), { locale: dateLocale }))
+					) : (
+						<Icon name='AlarmClockOff' stroke='hsl(var(--muted-foreground))' />
+					),
+				sortDescFirst: true
 			}),
 			columnHelper.accessor('ip_address', {
 				id: 'TCP/IP',
@@ -144,19 +167,7 @@ const RFIDDeviceList: React.FC = () => {
 					</Badge>
 				)
 			}),
-			columnHelper.accessor('last_used_time', {
-				id: t('ns_rfid:fields.last_used_time'),
-				header: t('ns_rfid:fields.last_used_time'),
-				enableHiding: false,
-				enableResizing: true,
-				cell: (info) =>
-					info.getValue() ? (
-						capitalize(formatRelative(new Date(info.getValue()!), new Date(Date.now()), { locale: dateLocale }))
-					) : (
-						<Icon name='AlarmClockOff' stroke='hsl(var(--muted-foreground))' />
-					),
-				sortDescFirst: true
-			}),
+
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: '-',
@@ -172,7 +183,7 @@ const RFIDDeviceList: React.FC = () => {
 						<DropdownMenuContent side='left' align='start'>
 							<DropdownMenuItem
 								onClick={() =>
-									event$.emit({
+									ev$.emit({
 										action: CommonActions.UPDATE,
 										defaultValues: {
 											...pick(row.original, ['station_no', 'device_sn', 'ip_address', 'ip_port']),
@@ -184,35 +195,35 @@ const RFIDDeviceList: React.FC = () => {
 								{t('ns_common:actions.update')}
 							</DropdownMenuItem>
 
-							<DropdownMenuGroup>
-								{row.original.is_active === RecordStatus.INACTIVE ? (
-									<DropdownMenuItem
-										onClick={() =>
-											handleUpdateDeviceStatus({
-												device_sn: row.original.device_sn,
-												is_active: RecordStatus.ACTIVE
-											})
-										}>
-										{t('ns_common:actions.activate')}
-									</DropdownMenuItem>
-								) : (
-									<DropdownMenuItem
-										onClick={() =>
-											handleUpdateDeviceStatus({
-												device_sn: row.original.device_sn,
-												is_active: RecordStatus.INACTIVE
-											})
-										}>
-										{t('ns_common:actions.deactivate')}
-									</DropdownMenuItem>
-								)}
-							</DropdownMenuGroup>
-
-							<DropdownMenuGroup>
-								<DropdownMenuItem onClick={() => handleDeleteDevices([row.original.device_sn])}>
-									{t('ns_common:actions.delete')}
+							{row.original.is_active === RecordStatus.INACTIVE ? (
+								<DropdownMenuItem
+									onClick={() =>
+										handleUpdateDeviceStatus({
+											device_sn: row.original.device_sn,
+											is_active: RecordStatus.ACTIVE
+										})
+									}>
+									{t('ns_common:actions.activate')}
 								</DropdownMenuItem>
-							</DropdownMenuGroup>
+							) : (
+								<DropdownMenuItem
+									onClick={() =>
+										handleUpdateDeviceStatus({
+											device_sn: row.original.device_sn,
+											is_active: RecordStatus.INACTIVE
+										})
+									}>
+									{t('ns_common:actions.deactivate')}
+								</DropdownMenuItem>
+							)}
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								onClick={() => {
+									deleteItemsRef.current = [row.original.device_sn]
+									setConfirmDialogOpen(true)
+								}}>
+								{t('ns_common:actions.delete')}
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				)
@@ -230,110 +241,151 @@ const RFIDDeviceList: React.FC = () => {
 		return data.filter((item) => item.is_active === RecordStatus.INACTIVE).length
 	}, [data])
 
-	const tableData = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		switch (currentTab) {
-			case 'all':
-				return data
-			case 'recently-use':
-				return data.filter((item) => !isNil(item.last_used_time))
-			case 'deactivated':
-				return data.filter((item) => item.is_active === RecordStatus.INACTIVE)
-			default:
-				return data
-		}
-	}, [data, currentTab])
+	const tabIndicatorRef = useRef<HTMLDivElement>(null)
+	const tabTriggerRefs = useRef<Array<HTMLButtonElement | null>>([])
+	const currentTabValue = tableRef.current?.getColumn(t('ns_common:common_fields.status'))?.getFilterValue()
 
-	console.log('tableRef.current?.getSelectedRowModel() :>> ', tableRef.current?.getSelectedRowModel())
+	useEffect(() => {
+		// deleteItemsRef.current =
+		// 	tableRef.current?.getFilteredSelectedRowModel()?.flatRows?.map((row) => row.original.device_sn) ?? []
+		switch (currentTabValue) {
+			case RecordStatus.ACTIVE:
+				requestAnimationFrame(() => {
+					tabIndicatorRef.current.style.transform = `translate(${tabTriggerRefs.current?.[0]?.offsetWidth}px, -50%)`
+					tabIndicatorRef.current.style.width = `${tabTriggerRefs.current?.[1].offsetWidth}px`
+				})
+				break
+			case RecordStatus.INACTIVE:
+				requestAnimationFrame(() => {
+					tabIndicatorRef.current.style.transform = `translate(${tabTriggerRefs.current?.[0]?.offsetWidth + tabTriggerRefs.current?.[1]?.offsetWidth}px, -50%)`
+					tabIndicatorRef.current.style.width = `${tabTriggerRefs.current?.[2].offsetWidth}px`
+				})
+				break
+			default:
+				requestAnimationFrame(() => {
+					tabIndicatorRef.current.style.transform = `translate(0px, -50%)`
+					tabIndicatorRef.current.style.width = `${tabTriggerRefs.current?.[0].offsetWidth}px`
+				})
+				break
+		}
+	}, [currentTabValue])
 
 	return (
 		<Fragment>
-			<Tabs
-				defaultValue='all'
-				className='mt-6 flex flex-col'
-				onValueChange={(value) => setCurrentTab(value as TabValue)}>
-				<Div className='flex items-center justify-between'>
-					<TabsList>
-						<TabsTrigger value='all' className='group/tab-trigger gap-x-2'>
-							{t('ns_common:others.all')}
-						</TabsTrigger>
-						<TabsTrigger value='recently-use' className='group/tab-trigger gap-x-2'>
-							{t('ns_rfid:recently_use')}
-							<Badge className='opacity-50 group-data-[state=active]/tab-trigger:opacity-100'>
-								{recentlyUseCount}
-							</Badge>
-						</TabsTrigger>
-						<TabsTrigger value='deactivated' className='group/tab-trigger gap-x-2'>
-							{t('ns_common:status.deactivated')}
-							<Badge className='opacity-50 group-data-[state=active]/tab-trigger:opacity-100'>
-								{deactivatedCount}
-							</Badge>
-						</TabsTrigger>
-					</TabsList>
-					<ButtonsGroup>
-						{tableRef.current?.getSelectedRowModel()?.flatRows?.length > 0 && (
-							<Button variant='destructive' onClick={() => refetch()}>
-								<Icon name='Trash2' /> {t('ns_common:actions.delete')}
-							</Button>
-						)}
-						<Button variant='outline' onClick={() => refetch()}>
-							<Icon name='RotateCcw' /> {t('ns_common:actions.reload')}
-						</Button>
-						<Button
-							variant='outline'
-							onClick={() => event$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
-							<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
-						</Button>
-					</ButtonsGroup>
-				</Div>
-				<TabsContent value='all'>
-					<DataTable
-						ref={tableRef}
-						border='bottom-only'
-						data={tableData}
-						columns={columns}
-						loading={isLoading}
-						containerProps={{
-							className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
-						}}
-						toolbarProps={{ hidden: true }}
-						enableColumnResizing={true}
-					/>
-				</TabsContent>
-				<TabsContent value='recently-use'>
-					<DataTable
-						ref={tableRef}
-						border='bottom-only'
-						data={tableData}
-						columns={columns}
-						loading={isLoading}
-						containerProps={{
-							className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
-						}}
-						toolbarProps={{ hidden: true }}
-						enableColumnResizing={true}
-					/>
-				</TabsContent>
-				<TabsContent value='deactivated'>
-					<DataTable
-						ref={tableRef}
-						border='bottom-only'
-						data={tableData}
-						columns={columns}
-						loading={isLoading}
-						containerProps={{
-							className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
-						}}
-						toolbarProps={{ hidden: true }}
-						enableColumnResizing={true}
-					/>
-				</TabsContent>
-			</Tabs>
-			<RFIDDeviceFormDialog event$={event$} />
+			<DataTable
+				ref={tableRef}
+				border='bottom-only'
+				data={data}
+				columns={columns}
+				loading={isLoading}
+				enableHiding={false}
+				enableGlobalFilter={false}
+				containerProps={{
+					className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
+				}}
+				toolbarProps={{
+					override: true,
+					render: ({ table, event$ }) => (
+						<Div className='flex items-center justify-between py-1'>
+							<TabsList role='tab'>
+								<TabsIndicator ref={tabIndicatorRef} />
+								<TabsTrigger
+									data-state={!currentTabValue ? 'active' : 'inactive'}
+									ref={(e) => {
+										tabTriggerRefs.current[0] = e
+									}}
+									onClick={() => {
+										table.resetColumnFilters()
+										event$.emit(pick(table.getState(), ['rowSelection']))
+									}}>
+									{t('ns_common:others.all')}
+									<Badge data-role='badge'>{data.length}</Badge>
+								</TabsTrigger>
+								<TabsTrigger
+									data-state={currentTabValue === RecordStatus.ACTIVE ? 'active' : 'inactive'}
+									ref={(e) => {
+										tabTriggerRefs.current[1] = e
+									}}
+									onClick={() => {
+										table.resetColumnFilters()
+										table.getColumn(t('ns_common:common_fields.status')).setFilterValue(RecordStatus.ACTIVE)
+										table
+											.getColumn(t('ns_rfid:fields.last_used_time'))
+											.setFilterValue(new Date().toISOString())
+										event$.emit(pick(table.getState(), ['rowSelection']))
+									}}>
+									{t('ns_rfid:recently_use')}
+									<Badge data-role='badge'>{recentlyUseCount}</Badge>
+								</TabsTrigger>
+								<TabsTrigger
+									data-state={currentTabValue === RecordStatus.INACTIVE ? 'active' : 'inactive'}
+									ref={(e) => {
+										tabTriggerRefs.current[2] = e
+									}}
+									onClick={() => {
+										table.resetColumnFilters()
+										table.getColumn(t('ns_common:common_fields.status')).setFilterValue(RecordStatus.INACTIVE)
+										event$.emit(pick(table.getState(), ['rowSelection']))
+									}}>
+									{t('ns_common:status.deactivated')}
+									<Badge data-role='badge'>{deactivatedCount}</Badge>
+								</TabsTrigger>
+							</TabsList>
+							<ButtonsGroup>
+								{tableRef.current?.getFilteredSelectedRowModel()?.flatRows?.length > 0 && (
+									<Button
+										variant='destructive'
+										onClick={() => {
+											deleteItemsRef.current =
+												tableRef.current
+													?.getFilteredSelectedRowModel()
+													?.flatRows?.map((row) => row.original.device_sn) ?? []
+											setConfirmDialogOpen(true)
+										}}>
+										<Icon name='Trash2' /> {t('ns_common:actions.delete')}
+									</Button>
+								)}
+								<Button variant='outline' onClick={() => refetch()}>
+									<Icon name='RotateCcw' /> {t('ns_common:actions.reload')}
+								</Button>
+								<Button onClick={() => ev$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
+									<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
+								</Button>
+							</ButtonsGroup>
+						</Div>
+					)
+				}}
+				enableColumnResizing={true}
+			/>
+			<RFIDDeviceFormDialog event$={ev$} />
+			<ConfirmDialog
+				open={confirmDialogOpen || isDeleting || isFailedToDelete}
+				onOpenChange={setConfirmDialogOpen}
+				isPending={isDeleting}
+				isError={isFailedToDelete}
+				title={t('ns_common:confirmation.delete_title')}
+				description={t('ns_common:confirmation.delete_description')}
+				onConfirm={handleDeleteDevices}
+				onCancel={() => {
+					deleteItemsRef.current = []
+				}}
+			/>
 		</Fragment>
 	)
 }
 
+const TabsList = tw.div`isolate flex items-center p-1 bg-accent rounded-md relative overflow-hidden`
+const TabsTrigger = tw.button`
+	text-sm inline-flex items-center justify-between gap-x-2 z-20 px-3 h-8 font-medium text-accent-foreground
+	[&_div[data-role=badge]]:rounded-sm
+	[&_div[data-role=badge]]:!text-xs
+	[&_div[data-role=badge]]:opacity-50 
+	[&_div[data-role=badge]]:transition-opacity 
+	[&_div[data-role=badge]]:duration-500 
+	[&_div[data-role=badge]]:ease 
+	[&[data-state=active]_*[data-role=badge]]:opacity-100 
+	`
+const TabsIndicator = tw.div`absolute rounded-md top-1/2 h-[calc(100%-8px)] w-auto z-0 bg-background transition-[transform,width] duration-200 ease-in-out`
 const ButtonsGroup = tw.div`flex items-center gap-x-2`
 
 export default RFIDDeviceList
