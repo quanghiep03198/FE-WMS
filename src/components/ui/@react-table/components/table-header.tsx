@@ -57,7 +57,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 							...getStickyOffsetPosition(header?.column)
 						}}>
 						<TableCellHead header={header} />
-						{<ColumnResizer header={header} />}
+						{table?.options?.enableColumnResizing && <ColumnResizer header={header} />}
 					</TableHead>
 				)
 			})}
