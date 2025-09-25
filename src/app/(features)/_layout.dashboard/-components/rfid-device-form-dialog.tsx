@@ -27,7 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { isNil } from 'lodash'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -53,16 +53,9 @@ const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) =
 	const { t } = useTranslation()
 	const { user } = useAuth()
 
-	const form =
-		action === CommonActions.CREATE
-			? useForm<CreateRFIDReaderFormValues>({
-					resolver: zodResolver(createRFIDReaderSchema)
-				})
-			: action === CommonActions.UPDATE
-				? useForm<UpdateRFIDReaderFormValues>({
-						resolver: zodResolver(updateRFIDReaderSchema)
-					})
-				: useForm<any>()
+	const form = useForm<CreateRFIDReaderFormValues | UpdateRFIDReaderFormValues>({
+		resolver: zodResolver(action === CommonActions.UPDATE ? updateRFIDReaderSchema : createRFIDReaderSchema)
+	})
 
 	event$.useSubscription(({ action, defaultValues }) => {
 		setOpen((prev) => !prev)
@@ -85,13 +78,14 @@ const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) =
 			if (action === CommonActions.CREATE) createAsync(data)
 			else if (action === CommonActions.UPDATE) updateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id })
+			setOpen(false)
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id })
 		}
 	}
 
 	return (
-		<Dialog defaultOpen={false} open={open} onOpenChange={setOpen}>
+		<Dialog defaultOpen={false} open={open || isPending || isError} onOpenChange={setOpen}>
 			<DialogContent className='max-w-xl'>
 				<DialogHeader>
 					<DialogTitle>
@@ -194,4 +188,4 @@ const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) =
 const Form = tw.form`space-y-6`
 const Fieldset = tw.fieldset`grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-1`
 
-export default RFIDDeviceFormDialog
+export default memo(RFIDDeviceFormDialog)
