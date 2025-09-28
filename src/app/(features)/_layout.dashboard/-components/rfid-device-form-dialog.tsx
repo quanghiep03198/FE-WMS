@@ -26,7 +26,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import { isNil } from 'lodash'
+import { capitalize, isNil } from 'lodash'
 import React, { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -116,7 +116,12 @@ const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) =
 								<SelectFieldControl
 									name='station_no'
 									label={t('ns_rfid:fields.station_no')}
-									placeholder='xxx xxx xxx'
+									placeholder={capitalize(
+										t('ns_common:form_placeholder.select', {
+											object: t('ns_rfid:fields.station_no'),
+											defaultValue: 'Select station'
+										})
+									)}
 									datalist={[
 										{ label: 'WH101', value: `CUS_${user?.company_code}_WH101` },
 										{ label: 'WH102', value: `CUS_${user?.company_code}_WH102` },

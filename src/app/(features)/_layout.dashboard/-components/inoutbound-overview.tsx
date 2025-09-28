@@ -1,5 +1,12 @@
+import { useDateLocale } from '@/common/hooks/use-date-locale'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
-	ChartConfig,
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 	ChartContainer,
 	ChartLegend,
 	ChartLegendContent,
@@ -11,74 +18,107 @@ import {
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
-	SelectValue
+	SelectValue,
+	Skeleton
 } from '@/components/ui'
-import _ from 'lodash'
+import { format } from 'date-fns'
+import { capitalize } from 'lodash'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import tw from 'tailwind-styled-components'
-import { annuallInOutBoundStatistics } from '../-mocks/data'
-
-const chartConfig = {
-	import: {
-		label: 'Inbound',
-		color: 'hsl(var(--chart-1))'
-	},
-	export: {
-		label: 'Outbound',
-		color: 'hsl(var(--chart-2))'
-	}
-} satisfies ChartConfig
+import { useDashboardFilterSessionState } from '../-hooks/use-dashboard-filter-session-state'
+import { useGetAnnualInoutboundOverviewQuery } from '../-hooks/use-statistic-asm'
 
 const InoutboundOverview: React.FC = () => {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
+	const dateLocale = useDateLocale()
+	const { data, isLoading } = useGetAnnualInoutboundOverviewQuery()
+	const [dashboardFilters, setDashboardFilters] = useDashboardFilterSessionState()
+
+	const chartConfig = useMemo(
+		() => ({
+			inbound_qty: {
+				label: t('ns_dashboard:statistic.inbound_quantity'),
+				color: 'hsl(var(--chart-1))'
+			},
+			outbound_qty: {
+				label: t('ns_dashboard:statistic.outbound_quantity'),
+				color: 'hsl(var(--chart-2))'
+			}
+		}),
+		[i18n.language]
+	)
 
 	return (
 		<Div className='flex h-full flex-col items-stretch justify-end'>
-			<Card className='col-span-full max-h-full w-full flex-1 basis-full self-end xl:col-span-2'>
+			<Card className='ease transition-colors duration-200 hover:border-primary/50'>
 				<CardHeader>
 					<CardTitle>{t('ns_dashboard:inoutbound_overview')}</CardTitle>
-					<Div className='inline-flex items-center gap-x-3'>
-						<Icon name='CalendarDays' size={18} />
-						<Select defaultValue={new Date().getFullYear().toString()}>
-							<SelectTrigger className='w-[180px]' defaultChecked>
-								<SelectValue placeholder='-- Select --' />
+					<CardDescription className='capitalize'>
+						{format(new Date(new Date().getFullYear(), 0), 'MMMM', { locale: dateLocale })}
+						{' - '}
+						{format(new Date(new Date().getFullYear(), 11), 'MMMM', { locale: dateLocale })}{' '}
+						{dashboardFilters.inoutboundOverviewYear}
+					</CardDescription>
+					<CardAction className='inline-flex items-center gap-x-3'>
+						<Select
+							defaultValue={new Date().getFullYear().toString()}
+							onValueChange={(value) =>
+								setDashboardFilters({ ...dashboardFilters, inoutboundOverviewYear: Number.parseInt(value) })
+							}>
+							<SelectTrigger className='inline-flex w-[180px] items-center gap-x-2' defaultChecked>
+								<Icon name='CalendarDays' size={18} />
+								<SelectValue placeholder='Select' />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value={new Date().getFullYear().toString()}>
-									{new Date().getFullYear().toString()}
-								</SelectItem>
+								{Array.from({ length: 3 }).map((_, index) => (
+									<SelectItem
+										key={new Date().getFullYear() - index}
+										value={String(new Date().getFullYear() - index)}>
+										{new Date().getFullYear() - index}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
-					</Div>
+					</CardAction>
 				</CardHeader>
-				<CardContent className='@container-norma @container'>
-					<ChartContainer className='@xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-[400px]' config={chartConfig}>
-						<BarChart accessibilityLayer data={annuallInOutBoundStatistics}>
-							<CartesianGrid vertical={false} />
-							<XAxis
-								dataKey='month'
-								tickLine={false}
-								tickMargin={10}
-								axisLine={false}
-								tickFormatter={(value) => value.slice(0, 3)}
-							/>
-							<YAxis stroke='hsl(var(--muted-foreground))' />
-							<ChartTooltip content={<ChartTooltipContent />} />
-							<Bar dataKey='import' fill='var(--color-import)' opacity={0.75} radius={3} />
-							<Bar dataKey='export' fill='var(--color-export)' opacity={0.75} radius={3} />
-							<ChartLegend content={<ChartLegendContent />} formatter={(value) => _.capitalize(value)} />
-						</BarChart>
-					</ChartContainer>
+				<CardContent className='relative w-full'>
+					{isLoading ? (
+						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]' />
+					) : !Array.isArray(data) || data.length === 0 ? (
+						<Div className='flex w-full items-center justify-center gap-x-2 text-sm @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]'>
+							<Icon name='ChartColumnBig' size={28} strokeWidth={1.5} />
+							{t('ns_common:table.no_data')}
+						</Div>
+					) : (
+						<ChartContainer
+							className='w-full @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]'
+							config={chartConfig}>
+							<BarChart
+								accessibilityLayer
+								data={data.map((item) => ({
+									...item,
+									month: capitalize(
+										format(new Date(new Date().getFullYear(), item.month - 1), 'MMMM', { locale: dateLocale })
+									)
+								}))}>
+								<CartesianGrid vertical={false} />
+								<XAxis dataKey='month' tickLine={false} tickMargin={10} axisLine={false} />
+								<ChartTooltip
+									cursor={false}
+									content={<ChartTooltipContent indicator='dot' className='min-w-48' />}
+								/>
+								<YAxis stroke='hsl(var(--muted-foreground))' tickFormatter={formatIntlNumber} />
+								<Bar dataKey='inbound_qty' fill='var(--color-inbound_qty)' radius={3} />
+								<Bar dataKey='outbound_qty' fill='var(--color-outbound_qty)' radius={3} />
+								<ChartLegend content={<ChartLegendContent />} formatter={capitalize} />
+							</BarChart>
+						</ChartContainer>
+					)}
 				</CardContent>
 			</Card>
 		</Div>
 	)
 }
-
-const Card = tw.div`rounded-[var(--radius)] p-4 flex flex-col gap-4 shadow border justify-between bg-background`
-const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
-const CardContent = tw.div`flex flex-col gap-6`
-const CardTitle = tw.h6`font-medium text-sm`
 
 export default InoutboundOverview

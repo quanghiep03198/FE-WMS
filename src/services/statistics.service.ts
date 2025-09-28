@@ -1,0 +1,42 @@
+import { RequestHeaders } from '@/common/constants/enums'
+import {
+	IAnnuallyInOutboundStatistics,
+	IAssemblyProductionVolumn,
+	IMonthlyInventoryComparison
+} from '@/common/types/entities'
+import axiosInstance from '@/configs/axios.config'
+
+export class StatisticsService {
+	static async getMonthlyInventoryComparison(tenantId: string) {
+		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryComparison>>(
+			'/statistics/inventory-comparison',
+			{
+				headers: {
+					[RequestHeaders.TENANT_ID]: tenantId
+				}
+			}
+		)
+	}
+
+	static async getAnnualInoutboundOverview(tenantId: string) {
+		return await axiosInstance.get<void, ResponseBody<IAnnuallyInOutboundStatistics[]>>(
+			'/statistics/annual-inoutbound-overview',
+			{
+				headers: {
+					[RequestHeaders.TENANT_ID]: tenantId
+				}
+			}
+		)
+	}
+
+	static async getAssemblyProductivity(tenantId: string) {
+		return await axiosInstance.get<void, ResponseBody<IAssemblyProductionVolumn[]>>(
+			'/statistics/assembly-production-volumn',
+			{
+				headers: {
+					[RequestHeaders.TENANT_ID]: tenantId
+				}
+			}
+		)
+	}
+}

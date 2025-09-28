@@ -80,20 +80,20 @@ const RFIDDeviceList: React.FC = () => {
 				id: ROW_SELECTION_COLUMN_ID,
 				header: (props) => <IndeterminateCheckbox {...props} />,
 				cell: (props) => <RowSelectionCheckbox {...props} />,
-				size: 60,
-				maxSize: 60,
+				size: 80,
+				maxSize: 80,
 				enableResizing: false
 			}),
 			columnHelper.accessor('device_sn', {
-				id: t('ns_rfid:fields.device_sn'),
+				id: 'device_sn',
 				header: t('ns_rfid:fields.device_sn'),
-				enableResizing: true,
-				maxSize: 200
+				maxSize: 150
 			}),
 			columnHelper.accessor('station_no', {
-				id: t('ns_rfid:fields.station_no'),
+				id: 'station_no',
 				header: t('ns_rfid:fields.station_no'),
 				enableResizing: true,
+				size: 100,
 				maxSize: 200,
 				cell: ({ getValue }) => {
 					const value = getValue()
@@ -101,11 +101,11 @@ const RFIDDeviceList: React.FC = () => {
 				}
 			}),
 			columnHelper.display({
-				id: t('ns_rfid:fields.device_type'),
+				id: 'device_type',
 				header: t('ns_rfid:fields.device_type'),
 				enableResizing: true,
 				enableColumnFilter: false,
-				minSize: 250,
+				minSize: 200,
 				cell: ({ row }) =>
 					isNil(row.original.device_ant) || row.original.device_ant === '0' ? (
 						<Badge variant='secondary' className='gap-x-2'>
@@ -117,8 +117,23 @@ const RFIDDeviceList: React.FC = () => {
 						</Badge>
 					)
 			}),
+
+			columnHelper.accessor('ip_address', {
+				id: 'ip_address',
+				header: 'TCP/IP',
+				maxSize: 100,
+				enableResizing: true,
+				cell: (info) => info.getValue()
+			}),
+			columnHelper.accessor('ip_port', {
+				id: 'ip_port',
+				header: 'TCP/IP Port',
+				maxSize: 100,
+				enableResizing: true,
+				cell: (info) => info.getValue()
+			}),
 			columnHelper.accessor('last_used_time', {
-				id: t('ns_rfid:fields.last_used_time'),
+				id: 'last_used_time',
 				header: t('ns_rfid:fields.last_used_time'),
 				enableHiding: false,
 				enableResizing: true,
@@ -133,22 +148,8 @@ const RFIDDeviceList: React.FC = () => {
 					),
 				sortDescFirst: true
 			}),
-			columnHelper.accessor('ip_address', {
-				id: 'TCP/IP',
-				header: 'TCP/IP',
-				maxSize: 100,
-				enableResizing: true,
-				cell: (info) => info.getValue()
-			}),
-			columnHelper.accessor('ip_port', {
-				id: 'TCP/IP Port',
-				header: 'TCP/IP Port',
-				maxSize: 100,
-				enableResizing: true,
-				cell: (info) => info.getValue()
-			}),
 			columnHelper.accessor('is_active', {
-				id: t('ns_common:common_fields.status'),
+				id: 'is_active',
 				header: t('ns_common:common_fields.status'),
 				enableResizing: true,
 				cell: (info) => (
@@ -243,7 +244,7 @@ const RFIDDeviceList: React.FC = () => {
 
 	const tabIndicatorRef = useRef<HTMLDivElement>(null)
 	const tabTriggerRefs = useRef<Array<HTMLButtonElement | null>>([])
-	const currentTabValue = tableRef.current?.getColumn(t('ns_common:common_fields.status'))?.getFilterValue()
+	const currentTabValue = tableRef.current?.getColumn('is_active')?.getFilterValue()
 
 	useEffect(() => {
 		// deleteItemsRef.current =
@@ -299,7 +300,7 @@ const RFIDDeviceList: React.FC = () => {
 										event$.emit(pick(table.getState(), ['rowSelection']))
 									}}>
 									{t('ns_common:others.all')}
-									<Badge data-role='badge'>{data.length}</Badge>
+									<Badge data-role='badge'>{data?.length}</Badge>
 								</TabsTrigger>
 								<TabsTrigger
 									data-state={currentTabValue === RecordStatus.ACTIVE ? 'active' : 'inactive'}
@@ -308,10 +309,8 @@ const RFIDDeviceList: React.FC = () => {
 									}}
 									onClick={() => {
 										table.resetColumnFilters()
-										table.getColumn(t('ns_common:common_fields.status')).setFilterValue(RecordStatus.ACTIVE)
-										table
-											.getColumn(t('ns_rfid:fields.last_used_time'))
-											.setFilterValue(new Date().toISOString())
+										table.getColumn('is_active').setFilterValue(RecordStatus.ACTIVE)
+										table.getColumn('last_used_time').setFilterValue(new Date().toISOString())
 										event$.emit(pick(table.getState(), ['rowSelection']))
 									}}>
 									{t('ns_rfid:recently_use')}
@@ -324,7 +323,7 @@ const RFIDDeviceList: React.FC = () => {
 									}}
 									onClick={() => {
 										table.resetColumnFilters()
-										table.getColumn(t('ns_common:common_fields.status')).setFilterValue(RecordStatus.INACTIVE)
+										table.getColumn('is_active').setFilterValue(RecordStatus.INACTIVE)
 										event$.emit(pick(table.getState(), ['rowSelection']))
 									}}>
 									{t('ns_common:status.deactivated')}
@@ -335,6 +334,7 @@ const RFIDDeviceList: React.FC = () => {
 								{tableRef.current?.getFilteredSelectedRowModel()?.flatRows?.length > 0 && (
 									<Button
 										variant='destructive'
+										size='sm'
 										onClick={() => {
 											deleteItemsRef.current =
 												tableRef.current
@@ -345,10 +345,12 @@ const RFIDDeviceList: React.FC = () => {
 										<Icon name='Trash2' /> {t('ns_common:actions.delete')}
 									</Button>
 								)}
-								<Button variant='outline' onClick={() => refetch()}>
+								<Button variant='outline' size='sm' onClick={() => refetch()}>
 									<Icon name='RotateCcw' /> {t('ns_common:actions.reload')}
 								</Button>
-								<Button onClick={() => ev$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
+								<Button
+									size='sm'
+									onClick={() => ev$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
 									<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
 								</Button>
 							</ButtonsGroup>
