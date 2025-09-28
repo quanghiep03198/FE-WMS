@@ -1,109 +1,178 @@
-import { ChartContainer, Div, Icon, Typography } from '@/components/ui'
-import React, { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Area, AreaChart } from 'recharts'
-import tw from 'tailwind-styled-components'
-import { overalStatistics } from '../-mocks/data'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import {
+	Badge,
+	Card,
+	CardAction,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+	Div,
+	Icon,
+	Skeleton,
+	Typography
+} from '@/components/ui'
 
-type TStatistic = {
-	category: string
-	value: number | string
-	dataField: 'order_number' | 'inventory_number' | 'import_number' | 'export_number'
-	icon: React.ComponentProps<typeof Icon>['name']
-	comparision: number
-}
+import { capitalize } from 'lodash'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useGetStatisticsQuery } from '../-hooks/use-statistic-asm'
+import {
+	formatPercentageChange,
+	getAnalysisSentence,
+	getDetailDescription,
+	getIconColor,
+	getTrendingIcon
+} from '../-utils'
 
 const Statistics: React.FC = () => {
-	const { t, i18n } = useTranslation(['ns_dashboard'])
+	const { t } = useTranslation(['ns_dashboard'])
+	const { data, isLoading } = useGetStatisticsQuery()
 
-	const statistics = useMemo<TStatistic[]>(
-		() => [
-			{
-				category: t('ns_dashboard:statistic.inventory_number'),
-				dataField: 'inventory_number',
-				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'Archive',
-				comparision: 25
-			},
-			{
-				category: t('ns_dashboard:statistic.inbound_number'),
-				dataField: 'import_number',
-				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'GitPullRequestCreate',
-				comparision: 5
-			},
-			{
-				category: t('ns_dashboard:statistic.outbound_number'),
-				dataField: 'export_number',
-				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'GitBranchPlus',
-				comparision: 8
-			},
-			{
-				category: t('ns_dashboard:statistic.defective_rate'),
-				dataField: 'inventory_number',
-				value: new Intl.NumberFormat().format(Math.round(Math.random() * 10000)),
-				icon: 'PackageX',
-				comparision: 25
-			}
-		],
-		[t, i18n.language]
+	const PercentageBadge: React.FC<{ percentage: number | null }> = ({ percentage }) => (
+		<Badge variant='outline' className='gap-x-2'>
+			<Icon size={12} name={getTrendingIcon(percentage)} style={{ color: getIconColor(percentage) }} />
+			{formatPercentageChange(percentage)}
+		</Badge>
 	)
 
-	const chartConfig = useMemo(
-		() =>
-			statistics.reduce((acc, curr) => {
-				acc[curr.dataField] = { color: 'hsl(var(--chart-5))' }
-				return acc
-			}, {}),
-		[statistics]
-	)
+	if (isLoading)
+		return (
+			<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-4'>
+				{Array.from({ length: 4 }).map((_, idx) => (
+					<Card key={idx} className='min-h-52'>
+						<CardHeader>
+							<CardDescription>
+								<Skeleton className='h-3' />
+							</CardDescription>
+							<CardTitle>
+								<Skeleton className='h-9 w-32' />
+							</CardTitle>
+							<CardAction>
+								<Skeleton className='h-6 w-12' />
+							</CardAction>
+						</CardHeader>
+						<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+							<Skeleton className='h-5 w-3/4' />
+							<Skeleton className='h-3 w-2/3' />
+							<Skeleton className='h-3 w-1/2' />
+						</CardFooter>
+					</Card>
+				))}
+			</Div>
+		)
 
 	return (
-		<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-4 xxl:grid-cols-2'>
-			{statistics.map((stats, index) => (
-				<Card key={index}>
-					<CardHeader className='@container'>
-						<CardTitle>{stats.category}</CardTitle>
-						<Icon name={stats.icon} size={20} strokeWidth={1.5} />
-					</CardHeader>
-					<CardContent>
-						<Div className='space-y-0.5'>
-							<Typography variant='h3' className='font-bold'>
-								{stats.value}
-							</Typography>
-							<Typography variant='small' color='muted'>
-								{t('ns_dashboard:compare_from_last_month', { value: stats.comparision + '%' })}
-							</Typography>
-						</Div>
-
-						<ChartContainer config={chartConfig} className='h-24 xl:h-20 xxl:h-24'>
-							<AreaChart data={overalStatistics}>
-								<defs>
-									<linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='100%'>
-										<stop offset='1%' stopColor='hsl(var(--chart-1))' stopOpacity={0.5} />
-										<stop offset='99%' stopColor='hsl(var(--chart-1))' stopOpacity={0} />
-									</linearGradient>
-								</defs>
-								<Area
-									type='monotone'
-									dataKey={stats.dataField}
-									fillOpacity={0.5}
-									stroke='hsl(var(--chart-1))'
-									fill='hsl(var(--chart-1)/50%)'
-								/>
-							</AreaChart>
-						</ChartContainer>
-					</CardContent>
-				</Card>
-			))}
+		<Div className='grid h-full w-full gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+			<Card className='transition-colors duration-300 ease-in-out hover:border-primary/50'>
+				<CardHeader>
+					<CardDescription>{t('ns_dashboard:statistic.inventory_number')}</CardDescription>
+					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+						{formatIntlNumber(data?.curr_period_inventory_qty ?? 0)}
+					</CardTitle>
+					<CardAction>
+						<PercentageBadge percentage={data?.inventory_percentage_change} />
+					</CardAction>
+				</CardHeader>
+				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+						{t(getAnalysisSentence(data?.inventory_percentage_change), {
+							ns: 'ns_dashboard',
+							defaultValue: null
+						})}
+						<Icon name={getTrendingIcon(data?.inventory_percentage_change)} />
+					</Typography>
+					<Typography variant='small' className='text-muted-foreground'>
+						{(() => {
+							const { key, params } = getDetailDescription(
+								data?.inventory_percentage_change,
+								data?.inventory_difference
+							)
+							const translated = t(key, params)
+							return capitalize(translated)
+						})()}
+					</Typography>
+				</CardFooter>
+			</Card>
+			<Card className='transition-colors duration-300 ease-in-out hover:border-primary/50'>
+				<CardHeader>
+					<CardDescription>{t('ns_dashboard:statistic.inbound_quantity')}</CardDescription>
+					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+						{formatIntlNumber(data?.curr_month_inbound ?? 0)}
+					</CardTitle>
+					<CardAction>
+						<PercentageBadge percentage={data?.inbound_percentage_change} />
+					</CardAction>
+				</CardHeader>
+				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+						{t(getAnalysisSentence(data?.inbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
+						<Icon name={getTrendingIcon(data?.inbound_percentage_change)} />
+					</Typography>
+					<Typography variant='small' className='text-muted-foreground'>
+						{(() => {
+							const { key, params } = getDetailDescription(
+								data?.inbound_percentage_change,
+								data?.inbound_difference
+							)
+							const translated = t(key, params)
+							return capitalize(translated)
+						})()}
+					</Typography>
+				</CardFooter>
+			</Card>
+			<Card className='transition-colors duration-300 ease-in-out hover:border-primary/50'>
+				<CardHeader>
+					<CardDescription>{t('ns_dashboard:statistic.outbound_quantity')}</CardDescription>
+					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+						{formatIntlNumber(data?.curr_month_outbound ?? 0)}
+					</CardTitle>
+					<CardAction>
+						<PercentageBadge percentage={data?.outbound_percentage_change} />
+					</CardAction>
+				</CardHeader>
+				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium'>
+						{t(getAnalysisSentence(data?.outbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
+						<Icon name={getTrendingIcon(data?.outbound_percentage_change)} />
+					</Typography>
+					<Typography variant='small' className='text-muted-foreground'>
+						{(() => {
+							const { key, params } = getDetailDescription(
+								data?.outbound_percentage_change,
+								data?.outbound_difference
+							)
+							const translated = t(key, params)
+							return capitalize(translated)
+						})()}
+					</Typography>
+				</CardFooter>
+			</Card>
+			<Card className='transition-colors duration-300 ease-in-out hover:border-primary/50'>
+				<CardHeader>
+					<CardDescription>{t('ns_dashboard:statistic.defective_rate')}</CardDescription>
+					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+						0% {/* Placeholder - add defective rate to API */}
+					</CardTitle>
+					<CardAction>
+						<Badge variant='outline' className='gap-x-2'>
+							<Icon size={12} name='TrendingDown' />
+							0%
+						</Badge>
+					</CardAction>
+				</CardHeader>
+				<CardFooter className='flex-col items-start gap-1.5 text-sm'>
+					<Typography variant='small' className='line-clamp-1 flex gap-2 font-medium capitalize'>
+						{t('ns_dashboard:comparison.no_change')}{' '}
+						<Icon name={getTrendingIcon(data?.inventory_percentage_change)} />
+					</Typography>
+					<Typography variant='small' className='capitalize text-muted-foreground'>
+						{t('ns_dashboard:comparison.no_change')}
+					</Typography>
+				</CardFooter>
+			</Card>
 		</Div>
 	)
 }
-
-const Card = tw.div`rounded-[var(--radius)] p-4 sm:p-3 flex flex-col gap-2 xxl:gap-3 shadow border bg-background md:aspect-[2/1] lg:aspect-[2/1]`
-const CardContent = tw.div`flex flex-col gap-6 justify-between flex-1`
-const CardHeader = tw.div`flex flex-row items-center justify-between space-y-0 font-medium text-sm`
-const CardTitle = tw.h6`font-medium`
 
 export default Statistics
