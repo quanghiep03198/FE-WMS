@@ -291,5 +291,9 @@ export default {
 		created_at: 'Đã tạo {{timestamp}}',
 		updated_at: 'Đã cập nhật {{timestamp}}',
 		last_updated: 'Cập nhật lần cuối: {{timestamp}}'
+	},
+	unit: {
+		times: 'lần',
+		prs: 'đôi'
 	}
 } as const

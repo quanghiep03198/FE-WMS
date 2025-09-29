@@ -2,9 +2,10 @@ export default {
 	compare_from_last_month: '{{value}} 与上月比较',
 	dashboard_description: '提供关键指标的概览，包括统计数据和入出库操作',
 	inoutbound_overview: '入库/出库概览',
-	net_flow_description: '仓库随时间变化的净流量(入库 - 出库平衡).',
+	net_flow_description: '仓库过去6个月的净流量 (入库-出库平衡)',
 	assembly_productivity_overview: '装配生产力概览',
-	assembly_productivity_description: '显示每个客户品牌的生产力',
+	assembly_productivity_description: '显示各客户品牌的生产效率',
+	// inventory_turnover_description: '显示过去12个月的库存周转率',
 	period_options: {
 		last_3_months: '最近3个月',
 		last_30_days: '最近30天',
@@ -15,6 +16,7 @@ export default {
 		inventory_number: '库存总量',
 		inbound_quantity: '入库总量',
 		outbound_quantity: '出库总量',
+		inventory_turnover: '库存周转率',
 		net_flow: '净流量',
 		defective_rate: '次品率'
 	},
@@ -23,18 +25,19 @@ export default {
 		increase: '增长',
 		decrease: '下降',
 		no_change: '无变化',
-		trend_up: '上升趋势',
-		trend_down: '下降趋势',
-		trend_stable: '稳定趋势',
+		significant_trend_up_by: '本月显著上升趋势 {{percent}}%',
+		significant_trend_down_by: '本月显著下降趋势 {{percent}}%',
+		slight_trend_up_by: '本月轻微上升趋势 {{percent}}%',
+		slight_trend_down_by: '本月轻微下降趋势 {{percent}}%',
 
 		// 详细变化描述
-		significantly_increased_by: '较上期增长{{count}} ({{unit}})单位',
-		significantly_decreased_by: '较上期减少{{count}} ({{unit}})单位',
-		slightly_increased_by: '较上期轻微增长{{count}} ({{unit}})单位',
-		slightly_decreased_by: '较上期轻微减少{{count}} ({{unit}})单位',
-		increased_by: '增长{{count}} ({{unit}})',
-		decreased_by: '减少{{count}} ({{unit}})',
-		changed_by: '变化{{count}} ({{unit}})',
+		significantly_increased_by: '较上期增长 {{count}} ({{unit}}) 单位',
+		significantly_decreased_by: '较上期减少 {{count}} ({{unit}}) 单位',
+		slightly_increased_by: '较上期轻微增长 {{count}} ({{unit}}) 单位',
+		slightly_decreased_by: '较上期轻微减少 {{count}} ({{unit}}) 单位',
+		increased_by: '增长 {{count}} ({{unit}})',
+		decreased_by: '减少 {{count}} ({{unit}})',
+		changed_by: '变化 {{count}} ({{unit}})',
 		remained_unchanged: '与上期相比无变化',
 
 		// 比较短语
@@ -69,8 +72,8 @@ export default {
 		decrease_exceptional: '异常下降',
 
 		// 百分比助手
-		pct_up: '上升{{percent}}%',
-		pct_down: '下降{{percent}}%',
+		pct_up: '上升 {{percent}}%',
+		pct_down: '下降 {{percent}}%',
 		pct_flat: '变化 < 1%'
 	}
 } as const

@@ -18,13 +18,14 @@ export class StatisticsService {
 		)
 	}
 
-	static async getAnnualInoutboundOverview(tenantId: string) {
+	static async getAnnualInoutboundOverview(tenantId: string, params: { 'year.eq': number }) {
 		return await axiosInstance.get<void, ResponseBody<IAnnuallyInOutboundStatistics[]>>(
 			'/statistics/annual-inoutbound-overview',
 			{
 				headers: {
 					[RequestHeaders.TENANT_ID]: tenantId
-				}
+				},
+				params
 			}
 		)
 	}
@@ -38,5 +39,13 @@ export class StatisticsService {
 				}
 			}
 		)
+	}
+
+	static async getLastSixMonthsNetFlow(tenantId: string) {
+		return await axiosInstance.get<void, ResponseBody<IAnnuallyInOutboundStatistics[]>>('/statistics/net-flow', {
+			headers: {
+				[RequestHeaders.TENANT_ID]: tenantId
+			}
+		})
 	}
 }

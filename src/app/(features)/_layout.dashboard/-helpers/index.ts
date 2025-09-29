@@ -11,7 +11,8 @@ import { isNil } from 'lodash'
  */
 export function getDetailedChangeDescription(
 	percent: number | null,
-	difference: number | null
+	difference: number | null,
+	unit
 ): { key: string; params: Record<string, any> } {
 	if (!difference || difference === 0) {
 		return { key: 'maintaining_steady_performance', params: {} }
@@ -24,13 +25,37 @@ export function getDetailedChangeDescription(
 	if (absPercent >= 20) {
 		return {
 			key: isIncrease ? 'significantly_increased_by' : 'significantly_decreased_by',
-			params: { count: absDifference, unit: 'prs' }
+			params: { count: absDifference, unit }
 		}
 	}
 
 	return {
 		key: isIncrease ? 'slightly_increased_by' : 'slightly_decreased_by',
-		params: { count: absDifference, unit: 'prs' }
+		params: { count: absDifference, unit }
+	}
+}
+
+export function getTrendingPercentageChange(percent): {
+	key: ResourceKeys['ns_dashboard']
+	params: { [key in string]: any }
+} {
+	if (!percent || percent === 0) {
+		return { key: 'comparison.trend_stable', params: {} }
+	}
+	const absPercent = Math.abs(percent || 0)
+
+	const isIncrease = (percent ?? 0) > 0
+
+	if (absPercent >= 20) {
+		return {
+			key: isIncrease ? 'comparison.significant_trend_up_by' : 'comparison.significant_trend_down_by',
+			params: { percent: absPercent, unit: '%' }
+		}
+	}
+
+	return {
+		key: isIncrease ? 'comparison.slight_trend_up_by' : 'comparison.slight_trend_up_by',
+		params: { percent: absPercent }
 	}
 }
 
@@ -95,8 +120,9 @@ export function getAnalysisSentence(percentageChange: number | null): ResourceKe
  */
 export function getDetailDescription(
 	percent: number | null,
-	difference: number | null
+	difference: number | null,
+	unit: string
 ): { key: string; params: Record<string, any> } {
-	const { key, params } = getDetailedChangeDescription(percent, difference)
+	const { key, params } = getDetailedChangeDescription(percent, difference, unit)
 	return { key: `ns_dashboard:comparison.${key}`, params }
 }

@@ -3,7 +3,8 @@ export default {
 	dashboard_description:
 		'Cung cấp số liệu tổng quan về các chỉ số chính, bao gồm thống kê và hoạt động nhập/xuất kho và các hoạt động khác',
 	inoutbound_overview: 'Tổng quan nhập/xuất kho',
-	net_flow_description: 'Dòng chảy ròng hàng hóa (chênh lệch giữa nhập và xuất của kho theo thời gian).',
+	net_flow_description:
+		'Dòng chảy ròng hàng hóa (chênh lệch giữa nhập và xuất của kho theo thời gian) trong 6 tháng vừa qua.',
 	assembly_productivity_overview: 'Tổng quan sản lượng thành hình',
 	assembly_productivity_description: 'Chi tiết sản lượng thành hình của các nhãn hàng.',
 	period_options: {
@@ -17,38 +18,37 @@ export default {
 		inbound_quantity: 'Số lượng nhập kho',
 		outbound_quantity: 'Số lượng xuất kho',
 		net_flow: 'Dòng hàng ròng',
+		inventory_turnover: 'Vòng quay tồn kho',
 		defective_rate: 'Tỷ lệ hàng lỗi'
 	},
 	comparison: {
 		// Mô tả xu hướng cơ bản
-		increase: 'tăng',
-		decrease: 'giảm',
 		no_change: 'không thay đổi',
-		trend_up: 'xu hướng tăng',
-		trend_down: 'xu hướng giảm',
-		trend_stable: 'xu hướng ổn định',
+		significant_trend_up_by: 'Xu hướng tăng mạnh (+{{percent}}%) tháng này',
+		significant_trend_down_by: 'Xu hướng giảm mạnh (-{{percent}}%) tháng này',
+		slight_trend_up_by: 'Xu hướng tăng nhẹ (+{{percent}}%) tháng này',
+		slight_trend_down_by: 'Xu hướng giảm nhẹ (-{{percent}}%) tháng này',
+		trend_stable: 'Xu hướng ổn định',
 
 		// Mô tả thay đổi chi tiết
-		significantly_increased_by: 'tăng {{count}} ({{unit}}) so với kỳ trước',
-		significantly_decreased_by: 'giảm {{count}} ({{unit}}) so với kỳ trước',
-		slightly_increased_by: 'tăng nhẹ {{count}} ({{unit}}) so với kỳ trước',
-		slightly_decreased_by: 'giảm nhẹ {{count}} ({{unit}}) so với kỳ trước',
-		increased_by: 'tăng {{count}} ({{unit}})',
-		decreased_by: 'giảm {{count}} ({{unit}})',
-		changed_by: 'thay đổi {{count}} ({{unit}})',
-		remained_unchanged: 'không thay đổi so với kỳ trước',
+		significantly_increased_by: 'Tăng mạnh ({{count}} {{unit}}) so với kỳ trước',
+		significantly_decreased_by: 'Giảm mạnh ({{count}} {{unit}}) so với kỳ trước',
+		slightly_increased_by: 'Tăng nhẹ ({{count}} {{unit}}) so với kỳ trước',
+		slightly_decreased_by: 'Giảm nhẹ ({{count}} {{unit}}) so với kỳ trước',
+		increased_by: 'Tăng {{count}} ({{unit}})',
+		decreased_by: 'Giảm {{count}} ({{unit}})',
+		changed_by: 'Thay đổi {{count}} ({{unit}})',
+		remained_unchanged: 'Không thay đổi so với kỳ trước',
 
 		// Cụm từ so sánh
 		higher_than_last_month: 'Cao hơn tháng trước',
 		lower_than_last_month: 'Thấp hơn tháng trước',
 		same_as_last_month: 'Bằng với tháng trước',
-		compared_to_previous_period: 'so với kỳ trước',
-		from_previous_month: 'so với tháng trước',
 
 		// Mô tả trạng thái
-		performance_improved: 'hiệu suất được cải thiện',
-		performance_declined: 'hiệu suất giảm sút',
-		maintaining_steady_performance: 'duy trì hiệu suất ổn định',
+		performance_improved: 'Hiệu suất được cải thiện',
+		performance_declined: 'Hiệu suất giảm sút',
+		maintaining_steady_performance: 'Duy trì hiệu suất ổn định',
 
 		// Cấp độ thay đổi chi tiết
 		increase_minimal: 'Tăng tối thiểu',

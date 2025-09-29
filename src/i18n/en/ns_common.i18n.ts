@@ -61,6 +61,7 @@ export default {
 		undo: 'Undo',
 		redo: 'Redo'
 	},
+
 	common_fields: {
 		actions: 'Actions',
 		approver: 'Approver',
@@ -290,5 +291,9 @@ export default {
 		lookup_question: 'What are you looking for ?',
 		other: 'Other',
 		or: 'Or'
+	},
+	unit: {
+		times: 'times',
+		prs: 'pairs'
 	}
 } as const
