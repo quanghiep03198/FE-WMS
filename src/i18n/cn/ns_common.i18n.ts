@@ -61,6 +61,7 @@ export default {
 		undo: '撤销',
 		redo: '重做'
 	},
+
 	common_fields: {
 		actions: '操作',
 		approver: '審核人',
@@ -288,5 +289,9 @@ export default {
 		original_data: '原资料',
 		overall: '总体数据',
 		target_data: '目标资料'
+	},
+	unit: {
+		times: '次',
+		prs: '双'
 	}
 } as const

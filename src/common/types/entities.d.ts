@@ -300,6 +300,10 @@ export interface IMonthlyInventoryComparison {
 	inbound_percentage_change: number
 	outbound_difference: number
 	outbound_percentage_change: number
+	curr_month_turnover: number
+	prev_month_turnover: number
+	inventory_turnover_difference: number
+	turnover_percentage_change: number
 }
 
 export interface IAnnuallyInOutboundStatistics {

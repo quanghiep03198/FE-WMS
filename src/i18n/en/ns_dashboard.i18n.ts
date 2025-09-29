@@ -1,11 +1,11 @@
 export default {
 	compare_from_last_month: '{{value}} from last month',
 	dashboard_description:
-		'Providing an overview of key metrics, including statistics and inbound/outbound operations and more.',
-	net_flow_description: 'Net flow (inflow - outflow balance) of the warehouse over time.',
+		'Providing an overview of key metrics including statistics, analysis, inbound/outbound operations and more.',
+	net_flow_description: 'Net flow (inflow - outflow balance) of the warehouse last 6 months.',
 	inoutbound_overview: 'Inbound/Outbound overview',
-	assembly_productivity_overview: 'Assembly productivity overview',
-	assembly_productivity_description: 'Showing productivity of each customer brands',
+	assembly_productivity_overview: 'Assembly line production volumn',
+	assembly_productivity_description: 'Illustrate productivity of each customer brands',
 	period_options: {
 		last_3_months: 'Last 3 months',
 		last_30_days: 'Last 30 days',
@@ -16,62 +16,57 @@ export default {
 		inventory_number: 'Inventory number',
 		inbound_quantity: 'Inbound quantity',
 		outbound_quantity: 'Outbound quantity',
+		inventory_turnover: 'Inventory Turnover',
 		net_flow: 'Net flow',
 		defective_rate: 'Defective rate'
 	},
 	comparison: {
-		// Basic trend descriptions
-		increase: 'increase',
-		decrease: 'decrease',
-		no_change: 'no change',
-		trend_up: 'upward trend',
-		trend_down: 'downward trend',
-		trend_stable: 'stable trend',
+		increase: 'Increase',
+		decrease: 'Decrease',
+		no_change: 'No change',
+		significant_trend_up_by: 'Significant upward trend +{{percent}}% this month',
+		significant_trend_down_by: 'Significant downward trend -{{percent}}% this month',
+		slight_trend_up_by: 'Slight upward trend +{{percent}}% this month',
+		slight_trend_down_by: 'Slight downward trend -{{percent}}% this month',
+		trend_stable: 'Stable trend',
 
-		// Detailed change descriptions
 		significantly_increased_by: 'Significantly increased by {{count}} ({{unit}}) compared to previous period',
 		significantly_decreased_by: 'Significantly decreased by {{count}} ({{unit}}) compared to previous period',
 		slightly_increased_by: 'Slightly increased by {{count}} ({{unit}}) compared to previous period',
 		slightly_decreased_by: 'Slightly decreased by {{count}} ({{unit}}) compared to previous period',
-		increased_by: 'Increased by {{count}} ({{unit}})',
-		decreased_by: 'Decreased by {{count}} ({{unit}})',
+		increased_by: 'Increased by {{count}} {{unit}}',
+		decreased_by: 'Decreased by {{count}} {{unit}}',
 		changed_by: 'Changed by {{count}} {{unit}}',
-		remained_unchanged: 'no change versus prior period',
+		remained_unchanged: 'No change versus prior period',
 
-		// Comparative phrases
 		higher_than_last_month: 'Higher than last month',
 		lower_than_last_month: 'Lower than last month',
 		same_as_last_month: 'Same as last month',
-		compared_to_previous_period: 'compared to previous period',
-		from_previous_month: 'vs previous month',
 
-		// Status descriptions
-		performance_improved: 'performance improved',
-		performance_declined: 'performance declined',
-		maintaining_steady_performance: 'performance holding steady',
+		performance_improved: 'Performance improved',
+		performance_declined: 'Performance declined',
+		maintaining_steady_performance: 'Performance holding steady',
 
-		// Granular change intensity levels
-		increase_minimal: 'minimal increase',
-		increase_slight: 'slight increase',
-		increase_moderate: 'moderate increase',
-		increase_notable: 'notable increase',
-		increase_strong: 'strong increase',
-		increase_sharp: 'sharp increase',
-		increase_surge: 'surge',
-		increase_exceptional: 'exceptional increase',
+		increase_minimal: 'Minimal increase',
+		increase_slight: 'Slight increase',
+		increase_moderate: 'Moderate increase',
+		increase_notable: 'Notable increase',
+		increase_strong: 'Strong increase',
+		increase_sharp: 'Sharp increase',
+		increase_surge: 'Surge',
+		increase_exceptional: 'Exceptional increase',
 
-		decrease_minimal: 'minimal decrease',
-		decrease_slight: 'slight decrease',
-		decrease_moderate: 'moderate decrease',
-		decrease_notable: 'notable decrease',
-		decrease_strong: 'strong decrease',
-		decrease_sharp: 'sharp decrease',
-		decrease_drop: 'drop',
-		decrease_exceptional: 'exceptional decrease',
+		decrease_minimal: 'Minimal decrease',
+		decrease_slight: 'Slight decrease',
+		decrease_moderate: 'Moderate decrease',
+		decrease_notable: 'Notable decrease',
+		decrease_strong: 'Strong decrease',
+		decrease_sharp: 'Sharp decrease',
+		decrease_drop: 'Drop',
+		decrease_exceptional: 'Exceptional decrease',
 
-		// Percentage helpers
-		pct_up: 'up {{percent}}%',
-		pct_down: 'down {{percent}}%',
+		pct_up: 'Up {{percent}}%',
+		pct_down: 'Down {{percent}}%',
 		pct_flat: '< 1% change'
 	}
 } as const

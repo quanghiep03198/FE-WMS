@@ -13,9 +13,11 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 	Div,
+	Icon,
 	Label,
 	RadioGroup,
 	RadioGroupItem,
+	Skeleton,
 	Typography
 } from '@/components/ui'
 
@@ -24,7 +26,6 @@ import { format, subDays, subMonths } from 'date-fns'
 import { capitalize } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useDashboardFilterSessionState } from '../-hooks/use-dashboard-filter-session-state'
 import { useGetDailyAssemblyProductivityQuery } from '../-hooks/use-statistic-asm'
 
 export const description = 'An interactive line chart'
@@ -47,9 +48,8 @@ const chartConfig = {
 export function AssemblyProductivityOverview() {
 	const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('UGG')
 	const [activePeriod, setActivePeriod] = useState<string>(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
-	const { data } = useGetDailyAssemblyProductivityQuery()
+	const { data, isLoading } = useGetDailyAssemblyProductivityQuery()
 	const { t, i18n } = useTranslation(['ns_dashboard'])
-	const [dashboardFilters, setDashboardFilters] = useDashboardFilterSessionState()
 
 	const total = useMemo(() => {
 		if (!Array.isArray(data)) return { UGG: 0, KOOLABURRA: 0, TEVA: 0 }
@@ -58,7 +58,7 @@ export function AssemblyProductivityOverview() {
 			TEVA: data.filter((item) => item.brand_name === 'TEVA').reduce((acc, curr) => acc + curr.volumn, 0),
 			KOOLABURRA: data.filter((item) => item.brand_name === 'KOOLABURRA').reduce((acc, curr) => acc + curr.volumn, 0)
 		}
-	}, [])
+	}, [data])
 
 	const chartData = useMemo(() => {
 		if (!Array.isArray(data)) return []
@@ -79,7 +79,7 @@ export function AssemblyProductivityOverview() {
 	}, [i18n.language])
 
 	return (
-		<Card className='h-full transition-colors duration-300 ease-in-out hover:border-primary/50'>
+		<Card>
 			<CardHeader className='flex flex-col items-stretch divide-y border-b !p-0 sm:flex-row'>
 				<Div className='flex items-center justify-between px-6 pb-3 sm:pb-0'>
 					<Div className='flex flex-1 flex-col justify-center gap-1'>
@@ -91,7 +91,7 @@ export function AssemblyProductivityOverview() {
 							value={activePeriod}
 							onValueChange={setActivePeriod}
 							className={cn(
-								'isolate inline-grid cursor-pointer grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border *:!cursor-pointer',
+								'isolate inline-grid grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border [&_*]:!cursor-pointer',
 								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center [&_button[role=radio]]:hidden'
 							)}>
 							<Div role='radio'>
@@ -110,80 +110,99 @@ export function AssemblyProductivityOverview() {
 					</CardAction>
 				</Div>
 				<Tabs>
-					{Object.entries(total).map(([brand, volumn]) => {
-						const chart = brand as keyof typeof chartConfig
-						return (
-							<TabsTrigger key={chart} data-active={activeChart === chart} onClick={() => setActiveChart(chart)}>
-								<Typography variant='small' className='text-xs uppercase text-muted-foreground'>
-									{chartConfig[chart].label}
-								</Typography>
-								<Typography variant='h3' as='span'>
-									{volumn.toLocaleString()}
-								</Typography>
-							</TabsTrigger>
-						)
-					})}
+					{isLoading
+						? Array.from({ length: 3 }).map((_, index) => (
+								<TabsTrigger key={index.toString()}>
+									<Skeleton className='h-3 w-12' />
+									<Skeleton className='h-8 w-24' />
+								</TabsTrigger>
+							))
+						: Object.entries(total).map(([brand, volumn]) => {
+								const chart = brand as keyof typeof chartConfig
+								return (
+									<TabsTrigger
+										key={chart}
+										data-active={activeChart === chart}
+										onClick={() => setActiveChart(chart)}>
+										<Typography variant='small' className='text-xs uppercase text-muted-foreground'>
+											{chartConfig[chart].label}
+										</Typography>
+										<Typography variant='h3' as='span'>
+											{volumn.toLocaleString()}
+										</Typography>
+									</TabsTrigger>
+								)
+							})}
 				</Tabs>
 			</CardHeader>
 			<CardContent className='px-2 sm:p-6'>
-				<ChartContainer config={chartConfig} className='aspect-auto h-[250px] w-full'>
-					<AreaChart
-						accessibilityLayer
-						data={chartData}
-						margin={{
-							left: 12,
-							right: 12
-						}}>
-						<CartesianGrid vertical={false} />
-						<XAxis
-							dataKey='work_date'
-							tickLine={false}
-							axisLine={false}
-							tickMargin={8}
-							minTickGap={32}
-							tickFormatter={(value) => {
-								const date = new Date(value)
-								return capitalize(
-									date.toLocaleDateString(locale, {
-										month: 'short',
-										day: 'numeric'
-									})
-								)
-							}}
-						/>
-						<ChartTooltip
-							content={
-								<ChartTooltipContent
-									className='w-[150px]'
-									nameKey='brand_name'
-									labelFormatter={(value) => {
-										return capitalize(
-											new Date(value).toLocaleDateString(locale, {
-												month: 'short',
-												day: 'numeric',
-												year: 'numeric'
-											})
-										)
-									}}
-								/>
-							}
-						/>
-						<defs>
-							<linearGradient id={`fill-${activeChart}`} x1='0' y1='0' x2='0' y2='1'>
-								<stop offset='5%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.8} />
-								<stop offset='95%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.2} />
-							</linearGradient>
-						</defs>
-						<Area
-							dataKey='volumn'
-							type='natural'
-							fill={`url(#fill-${activeChart})`}
-							fillOpacity={0.6}
-							stroke={`var(--color-${activeChart})`}
-							stackId='a'
-						/>
-					</AreaChart>
-				</ChartContainer>
+				{isLoading ? (
+					<Skeleton className='h-[250px] w-full' />
+				) : !Array.isArray(chartData) || chartData.length === 0 ? (
+					<Div className='flex h-64 items-center justify-center gap-x-2'>
+						<Icon name='ChartArea' size={32} strokeWidth={1} />
+						{t('ns_common:table.no_data')}
+					</Div>
+				) : (
+					<ChartContainer config={chartConfig} className='aspect-auto h-64 w-full'>
+						<AreaChart
+							accessibilityLayer
+							data={chartData}
+							margin={{
+								left: 12,
+								right: 12
+							}}>
+							<CartesianGrid vertical={false} />
+							<XAxis
+								dataKey='work_date'
+								tickLine={false}
+								axisLine={false}
+								tickMargin={8}
+								minTickGap={32}
+								tickFormatter={(value) => {
+									const date = new Date(value)
+									return capitalize(
+										date.toLocaleDateString(locale, {
+											month: 'short',
+											day: 'numeric'
+										})
+									)
+								}}
+							/>
+							<ChartTooltip
+								content={
+									<ChartTooltipContent
+										className='w-[150px]'
+										nameKey='brand_name'
+										labelFormatter={(value) => {
+											return capitalize(
+												new Date(value).toLocaleDateString(locale, {
+													month: 'short',
+													day: 'numeric',
+													year: 'numeric'
+												})
+											)
+										}}
+									/>
+								}
+							/>
+							<defs>
+								<linearGradient id={`fill-${activeChart}`} x1='0' y1='0' x2='0' y2='1'>
+									<stop offset='5%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.8} />
+									<stop offset='95%' stopColor={`var(--color-${activeChart})`} stopOpacity={0.2} />
+								</linearGradient>
+							</defs>
+							<Area
+								dataKey='volumn'
+								type='natural'
+								fill={`url(#fill-${activeChart})`}
+								fillOpacity={0.6}
+								stroke={`var(--color-${activeChart})`}
+								stackId='a'
+							/>
+						</AreaChart>
+					</ChartContainer>
+				)}
 			</CardContent>
 		</Card>
 	)

@@ -23,17 +23,16 @@ import {
 } from '@/components/ui'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { useDashboardFilterSessionState } from '../-hooks/use-dashboard-filter-session-state'
 import { useGetAnnualInoutboundOverviewQuery } from '../-hooks/use-statistic-asm'
 
 const InoutboundOverview: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const dateLocale = useDateLocale()
-	const { data, isLoading } = useGetAnnualInoutboundOverviewQuery()
-	const [dashboardFilters, setDashboardFilters] = useDashboardFilterSessionState()
+	const [year, setYear] = useState<number>(new Date().getFullYear())
+	const { data, isLoading } = useGetAnnualInoutboundOverviewQuery(year)
 
 	const chartConfig = useMemo(
 		() => ({
@@ -51,21 +50,19 @@ const InoutboundOverview: React.FC = () => {
 
 	return (
 		<Div className='flex h-full flex-col items-stretch justify-end'>
-			<Card className='ease transition-colors duration-200 hover:border-primary/50'>
+			<Card data-role='card'>
 				<CardHeader>
 					<CardTitle>{t('ns_dashboard:inoutbound_overview')}</CardTitle>
 					<CardDescription className='capitalize'>
 						{format(new Date(new Date().getFullYear(), 0), 'MMMM', { locale: dateLocale })}
 						{' - '}
-						{format(new Date(new Date().getFullYear(), 11), 'MMMM', { locale: dateLocale })}{' '}
-						{dashboardFilters.inoutboundOverviewYear}
+						{format(new Date(new Date().getFullYear(), 11), 'MMMM', { locale: dateLocale })} {year}
 					</CardDescription>
 					<CardAction className='inline-flex items-center gap-x-3'>
 						<Select
+							value={year.toString()}
 							defaultValue={new Date().getFullYear().toString()}
-							onValueChange={(value) =>
-								setDashboardFilters({ ...dashboardFilters, inoutboundOverviewYear: Number.parseInt(value) })
-							}>
+							onValueChange={(value) => setYear(Number.parseInt(value))}>
 							<SelectTrigger className='inline-flex w-[180px] items-center gap-x-2' defaultChecked>
 								<Icon name='CalendarDays' size={18} />
 								<SelectValue placeholder='Select' />
@@ -86,8 +83,8 @@ const InoutboundOverview: React.FC = () => {
 					{isLoading ? (
 						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]' />
 					) : !Array.isArray(data) || data.length === 0 ? (
-						<Div className='flex w-full items-center justify-center gap-x-2 text-sm @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]'>
-							<Icon name='ChartColumnBig' size={28} strokeWidth={1.5} />
+						<Div className='flex w-full items-center justify-center gap-x-2 @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]'>
+							<Icon name='ChartColumnBig' size={32} strokeWidth={1} />
 							{t('ns_common:table.no_data')}
 						</Div>
 					) : (
