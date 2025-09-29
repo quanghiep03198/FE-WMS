@@ -25,7 +25,10 @@
 		"-hooks": "Hook",
 		"-partials": "Include",
 		"-schemas": "Class",
-		"-shared": "Shared"
+		"-shared": "Shared",
+		"-utils": "Utils",
+		"-helpers": "Helper",
+		"-mocks": "Mock"
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
