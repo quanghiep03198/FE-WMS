@@ -1,0 +1,42 @@
+import { Div } from '@/components/ui'
+import { createLazyFileRoute } from '@tanstack/react-router'
+import { Fragment, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { PageDescription, PageHeader, PageTitle } from '../../-components/-shared/page-header'
+import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import DefectiveGoodsInventoryMasterTable from './-components/report-master-table'
+
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inventory/')({
+	component: Page
+})
+
+function Page() {
+	const { t, i18n } = useTranslation()
+	// Set page breadcrumb navigation
+	const { setBreadcrumb } = useBreadcrumbContext()
+
+	useEffect(() => {
+		setBreadcrumb([
+			{
+				to: '/inbound-report',
+				text: t('ns_common:navigation.daily_inbound_report')
+			}
+		])
+	}, [i18n.language])
+
+	return (
+		<Fragment>
+			<title>{t('ns_common:navigation.daily_inbound_report')}</title>
+			<meta name='description' content={t('ns_inoutbound:description.daily_inbound_report')} />
+
+			<Div as='section' className='mt-4 space-y-4 @container'>
+				<PageHeader className='flex-1'>
+					<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
+					<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
+				</PageHeader>
+
+				<DefectiveGoodsInventoryMasterTable />
+			</Div>
+		</Fragment>
+	)
+}
