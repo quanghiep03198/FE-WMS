@@ -13,7 +13,7 @@ import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finishe
 import {
 	CreateRFIDReaderFormValues,
 	UpdateRFIDReaderFormValues
-} from '@/app/(features)/_layout.dashboard/-schemas/rfid-reader.schema'
+} from '@/app/(features)/_layout.rfid-devices-management/-schemas/rfid-device.schema'
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'

@@ -38,7 +38,7 @@ import {
 	createRFIDReaderSchema,
 	UpdateRFIDReaderFormValues,
 	updateRFIDReaderSchema
-} from '../-schemas/rfid-reader.schema'
+} from '../-schemas/rfid-device.schema'
 
 type RFIDDeviceFormDialogProps = {
 	event$: EventEmitter<
