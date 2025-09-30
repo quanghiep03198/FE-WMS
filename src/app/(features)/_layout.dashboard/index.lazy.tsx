@@ -34,7 +34,7 @@ function Page() {
 				</PageHeader>
 				<Separator />
 				<Div className='grid grid-cols-12 gap-4'>
-					<Div className='col-span-12 @[1280px]:order-first'>
+					<Div className='col-span-12 @container/statistics @[1280px]:order-first'>
 						<Statistics />
 					</Div>
 					<Div className='col-span-full xxl:col-span-7'>

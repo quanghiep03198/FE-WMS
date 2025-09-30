@@ -38,7 +38,7 @@ const Statistics: React.FC = () => {
 
 	if (isLoading)
 		return (
-			<Div className='grid h-full w-full grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-4'>
+			<Div className='grid h-full w-full grid-cols-2 gap-4 @6xl/statistics:grid-cols-4'>
 				{Array.from({ length: 4 }).map((_, idx) => (
 					<Card key={idx} className='min-h-52'>
 						<CardHeader>
@@ -63,8 +63,8 @@ const Statistics: React.FC = () => {
 		)
 
 	return (
-		<Div className='grid h-full w-full gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-			<Card data-role='card' className='@container/card'>
+		<Div className='grid h-full w-full grid-cols-2 gap-4 @6xl/statistics:grid-cols-4'>
+			<Card className='@container/card'>
 				<CardHeader>
 					<CardDescription>{t('ns_dashboard:statistic.inbound_quantity')}</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -92,7 +92,7 @@ const Statistics: React.FC = () => {
 					</Typography>
 				</CardFooter>
 			</Card>
-			<Card data-role='card' className='@container/card'>
+			<Card className='@container/card'>
 				<CardHeader>
 					<CardDescription>{t('ns_dashboard:statistic.outbound_quantity')}</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -120,7 +120,7 @@ const Statistics: React.FC = () => {
 					</Typography>
 				</CardFooter>
 			</Card>
-			<Card data-role='card' className='@container/card'>
+			<Card className='@container/card'>
 				<CardHeader>
 					<CardDescription>{t('ns_dashboard:statistic.inventory_number')}</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -151,7 +151,7 @@ const Statistics: React.FC = () => {
 					</Typography>
 				</CardFooter>
 			</Card>
-			<Card data-role='card' className='@container/card'>
+			<Card className='@container/card'>
 				<CardHeader>
 					<CardDescription>{t('ns_dashboard:statistic.inventory_turnover')}</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
