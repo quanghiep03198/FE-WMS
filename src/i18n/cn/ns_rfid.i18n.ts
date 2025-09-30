@@ -10,13 +10,15 @@ export default {
 	},
 	titles: {
 		add_device: '添加设备',
-		edit_device: '编辑设备信息'
+		edit_device: '编辑设备信息',
+		rfid_device_management: 'RFID设备管理'
 	},
 	descriptions: {
 		dialog_form: '请填写以下信息以向系统添加或更新RFID设备信息.',
 		device_sn: '设备序列号通常可以在设备背面的标签上找到.',
 		device_name: '在生产系统中识别站点的唯一名称.',
-		device_type: '选择设备类型以配置适当的设置.'
+		device_type: '选择设备类型以配置适当的设置.',
+		rfid_device_management: '管理仓库中使用的RFID设备.'
 	},
 	placeholders: {
 		search_epc: '扫描或输入EPC以搜索 ...'

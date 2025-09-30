@@ -10,13 +10,15 @@ export default {
 	},
 	titles: {
 		add_device: 'Thêm thiết bị',
-		edit_device: 'Chỉnh sửa thông tin thiết bị'
+		edit_device: 'Chỉnh sửa thông tin thiết bị',
+		rfid_device_management: 'Quản lý thiết bị RFID'
 	},
 	descriptions: {
 		dialog_form: 'Vui lòng điền thông tin bên dưới để thêm hoặc cập nhật thông tin thiết bị RFID vào hệ thống.',
 		device_sn: 'Số serial thường được tìm thấy trên nhãn dán ở mặt sau của thiết bị.',
 		device_name: 'Một tên duy nhất để nhận diện trạm trong hệ thống sản xuất.',
-		device_type: 'Chọn loại thiết bị để cấu hình các cài đặt phù hợp.'
+		device_type: 'Chọn loại thiết bị để cấu hình các cài đặt phù hợp.',
+		rfid_device_management: 'Quản lý các thiết bị RFID sử dụng trong kho.'
 	},
 	recently_use: 'Sử dụng gần đây',
 	sync_data_steps: {

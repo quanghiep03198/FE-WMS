@@ -7,7 +7,6 @@ import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/p
 import { AssemblyProductivityOverview } from './-components/assembly-production-volumn-overview'
 import InoutboundOverview from './-components/inoutbound-overview'
 import { NetFlowOverview } from './-components/net-flow-overview'
-import RFIDDeviceList from './-components/rfid-device-list'
 import Statistics from './-components/statistics'
 
 export const Route = createLazyFileRoute('/(features)/_layout/dashboard/')({
@@ -45,9 +44,6 @@ function Page() {
 					</Div>
 					<Div className='col-span-12'>
 						<AssemblyProductivityOverview />
-					</Div>
-					<Div className='order-last col-span-12 @[1280px]:col-span-full'>
-						<RFIDDeviceList />
 					</Div>
 				</Div>
 			</Div>

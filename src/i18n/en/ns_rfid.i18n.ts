@@ -11,9 +11,11 @@ export default {
 	},
 	titles: {
 		add_device: 'Add device',
-		edit_device: 'Edit device info'
+		edit_device: 'Edit device info',
+		rfid_device_management: 'RFID device management'
 	},
 	descriptions: {
+		rfid_device_management: 'Manage RFID devices used in the warehouse.',
 		dialog_form: 'Please fill in the information below to add or update RFID device information to the system.',
 		device_sn: 'The serial number is usually found on a sticker on the back of the device.',
 		device_name: 'A unique name to identify the station in the production system.',

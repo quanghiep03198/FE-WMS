@@ -30,13 +30,14 @@ import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } fr
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+
 import {
 	useDeleteRFIDDeviceMutation,
 	useGetRFIDDeviceQuery,
 	useUpdateRFIDDeviceMutation
 } from '../-hooks/use-rfid-device-asm'
-import { UpdateRFIDReaderFormValues } from '../-schemas/rfid-reader.schema'
-import RFIDDeviceFormDialog from './rfid-device-form-dialog'
+import { UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
+import RfidDeviceFormDialog from './rfid-device-form-dialog'
 
 const RFIDDeviceList: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -87,12 +88,16 @@ const RFIDDeviceList: React.FC = () => {
 			columnHelper.accessor('device_sn', {
 				id: 'device_sn',
 				header: t('ns_rfid:fields.device_sn'),
+				enableColumnFilter: true,
+
 				maxSize: 150
 			}),
 			columnHelper.accessor('station_no', {
 				id: 'station_no',
 				header: t('ns_rfid:fields.station_no'),
 				enableResizing: true,
+				enableColumnFilter: true,
+
 				size: 100,
 				maxSize: 200,
 				cell: ({ getValue }) => {
@@ -137,8 +142,9 @@ const RFIDDeviceList: React.FC = () => {
 				header: t('ns_rfid:fields.last_used_time'),
 				enableHiding: false,
 				enableResizing: true,
-				filterFn: notNullFilter,
 				enableColumnFilter: true,
+
+				filterFn: notNullFilter,
 				minSize: 250,
 				cell: (info) =>
 					info.getValue() ? (
@@ -152,6 +158,8 @@ const RFIDDeviceList: React.FC = () => {
 				id: 'is_active',
 				header: t('ns_common:common_fields.status'),
 				enableResizing: true,
+				enableColumnFilter: true,
+
 				cell: (info) => (
 					<Badge variant='outline' className={cn('justify-center gap-x-2 whitespace-nowrap rounded')}>
 						{info.getValue() === RecordStatus.ACTIVE ? (
@@ -275,14 +283,15 @@ const RFIDDeviceList: React.FC = () => {
 		<Fragment>
 			<DataTable
 				ref={tableRef}
-				border='bottom-only'
+				defaultFilterOpen={true}
 				data={data}
 				columns={columns}
 				loading={isLoading}
 				enableHiding={false}
 				enableGlobalFilter={false}
 				containerProps={{
-					className: 'h-80 [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
+					className: 'h-[50vh]'
+					//  [&_th]:!border-x-0 [&_td]:!border-x-0 [&_td]:!shadow-none [&_th]:!shadow-none'
 				}}
 				toolbarProps={{
 					override: true,
@@ -331,26 +340,23 @@ const RFIDDeviceList: React.FC = () => {
 								</TabsTrigger>
 							</TabsList>
 							<ButtonsGroup>
-								{tableRef.current?.getFilteredSelectedRowModel()?.flatRows?.length > 0 && (
-									<Button
-										variant='destructive'
-										size='sm'
-										onClick={() => {
-											deleteItemsRef.current =
-												tableRef.current
-													?.getFilteredSelectedRowModel()
-													?.flatRows?.map((row) => row.original.device_sn) ?? []
-											setConfirmDialogOpen(true)
-										}}>
-										<Icon name='Trash2' /> {t('ns_common:actions.delete')}
-									</Button>
-								)}
-								<Button variant='outline' size='sm' onClick={() => refetch()}>
+								<Button
+									variant='destructive'
+									disabled={tableRef.current?.getFilteredSelectedRowModel()?.flatRows?.length === 0}
+									onClick={() => {
+										deleteItemsRef.current =
+											tableRef.current
+												?.getFilteredSelectedRowModel()
+												?.flatRows?.map((row) => row.original.device_sn) ?? []
+										setConfirmDialogOpen(true)
+									}}>
+									<Icon name='Trash2' /> {t('ns_common:actions.delete')}
+								</Button>
+
+								<Button variant='outline' onClick={() => refetch()}>
 									<Icon name='RotateCcw' /> {t('ns_common:actions.reload')}
 								</Button>
-								<Button
-									size='sm'
-									onClick={() => ev$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
+								<Button onClick={() => ev$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
 									<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
 								</Button>
 							</ButtonsGroup>
@@ -359,7 +365,7 @@ const RFIDDeviceList: React.FC = () => {
 				}}
 				enableColumnResizing={true}
 			/>
-			<RFIDDeviceFormDialog event$={ev$} />
+			<RfidDeviceFormDialog event$={ev$} />
 			<ConfirmDialog
 				open={confirmDialogOpen || isDeleting || isFailedToDelete}
 				onOpenChange={setConfirmDialogOpen}
@@ -384,6 +390,7 @@ const TabsTrigger = tw.button`
 	[&_div[data-role=badge]]:opacity-50 
 	[&_div[data-role=badge]]:transition-opacity 
 	[&_div[data-role=badge]]:duration-500 
+	[&_div[data-role=badge]]:!font-bold
 	[&_div[data-role=badge]]:ease 
 	[&[data-state=active]_*[data-role=badge]]:opacity-100 
 	`
