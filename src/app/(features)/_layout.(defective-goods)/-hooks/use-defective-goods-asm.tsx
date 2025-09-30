@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { pickBy } from 'lodash'
 import { useCallback } from 'react'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../defective-goods-epc-combination/-constants'
 import {
 	CreateDefectiveGoodsFormValues,
@@ -12,7 +13,34 @@ import {
 } from '../defective-goods-epc-combination/-schemas/defective-goods.schema'
 
 export enum DefectiveGoodsQueryKey {
-	DEFECTIVE_GOODS = 'DEFECTIVE_GOODS'
+	DEFECTIVE_GOODS = 'DEFECTIVE_GOODS',
+	DEFECTIVE_GOODS_INVENTORY = 'DEFECTIVE_GOODS_INVENTORY'
+}
+
+const useInvalidateQuery = () => {
+	const queryClient = useQueryClient()
+	const invalidateQueries = () =>
+		queryClient.invalidateQueries({
+			predicate: (query) =>
+				query.queryKey.some(
+					(key) =>
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS ||
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY
+				)
+		})
+
+	return invalidateQueries
+}
+
+export const useGetDefectiveGoodsInventoryQuery = () => {
+	const { data: tenant } = useGetTenantByFactory()
+
+	return useQuery({
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY, tenant?.id],
+		queryFn: async () => await DefectiveGoodsService.getDefectiveGoodsInventory(tenant?.id),
+		enabled: !!tenant?.id,
+		select: (response) => response.metadata
+	})
 }
 
 export const useGetDefectiveGoodsQuery = () => {
@@ -73,16 +101,6 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 			invalidateQueries()
 		}
 	})
-}
-
-const useInvalidateQuery = () => {
-	const queryClient = useQueryClient()
-	const invalidateQueries = () =>
-		queryClient.invalidateQueries({
-			predicate: (query) => query.queryKey.some((key) => key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS)
-		})
-
-	return invalidateQueries
 }
 
 export const usePrefetchDefectiveGoodsQuery = () => {

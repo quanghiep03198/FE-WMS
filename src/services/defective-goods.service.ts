@@ -8,13 +8,22 @@ import {
 	DefectiveGoodsInboundFormValues,
 	DefectiveGoodsOutboundFormValues
 } from '@/app/(features)/_layout.(defective-goods)/defective-goods-inoutbound/-schemas'
-import { IDefectiveGoods } from '@/common/types/entities'
+import { RequestHeaders } from '@/common/constants/enums'
+import { IDefectiveGoods, IDefectiveGoodsInventory } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class DefectiveGoodsService {
 	static async getDefectiveGoods(params: Partial<DefectiveGoodQueryParams>) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IDefectiveGoods>>>('/defective-goods', {
 			params
+		})
+	}
+
+	static async getDefectiveGoodsInventory(tenantId: string) {
+		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsInventory[]>>('/defective-goods/inventory', {
+			headers: {
+				[RequestHeaders.TENANT_ID]: tenantId
+			}
 		})
 	}
 
