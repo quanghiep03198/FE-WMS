@@ -35,7 +35,7 @@ import SizeFieldControl from '../form-playground/size-field-control'
 
 const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
 	brand_name: '',
-	category: '' as DefectiveCategory,
+	defective_category: '' as DefectiveCategory,
 	po: '',
 	mo_no: '',
 	cust_shoes_style: '',

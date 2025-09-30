@@ -5,7 +5,7 @@ export const baseDefectiveGoodsSchema = z.object({
 	epc: z
 		.array(z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.or(z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })),
-	category: z.enum(DefectiveCategory, { message: 'ns_validation:required' }),
+	defective_category: z.enum(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	mo_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	brand_name: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
@@ -19,17 +19,19 @@ export const baseDefectiveGoodsSchema = z.object({
 		.nonempty({ message: 'ns_validation:required' }),
 	color_sn: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	size_code: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-	defect_location: z.enum(DefectiveLocation, { message: 'ns_validation:required' }),
-	defect_description: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
+	defective_location: z.enum(DefectiveLocation, { message: 'ns_validation:required' }),
+	defective_description: z
+		.string({ message: 'ns_validation:required' })
+		.nonempty({ message: 'ns_validation:required' })
 })
 
 export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema.refine((values) => {
-	if (values.category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
+	if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
 	return true
 })
 
 export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().refine((values) => {
-	if (values.category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
+	if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
 	return true
 })
 
@@ -37,7 +39,7 @@ export type CreateDefectiveGoodsFormValues = z.infer<typeof createDefectiveGoods
 export type UpdateDefectiveGoodsFormValues = z.infer<typeof updateDefectiveGoodsSchema>
 
 export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues | UpdateDefectiveGoodsFormValues
-export type DefectiveGoodQueryParams = Partial<Omit<DefectiveGoodsCombinationFormValues, 'defect_description'>> & {
+export type DefectiveGoodQueryParams = Partial<Omit<DefectiveGoodsCombinationFormValues, 'defective_description'>> & {
 	page: number
 	epc: string
 	created?: string | Date
