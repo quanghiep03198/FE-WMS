@@ -1,10 +1,13 @@
 import { useGetUserCompany } from '@/app/(auth)/-hooks/use-department-asm'
+import { navigationConfig, type NavigationConfig } from '@/app/(features)/-configs/navigation.config'
 import AppLogo from '@/app/-components/-shared/app-logo'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	Collapsible,
+	CollapsibleContent,
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
@@ -21,34 +24,26 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarMenuSub,
+	SidebarMenuSubButton,
+	SidebarMenuSubItem,
 	SidebarRail,
 	SidebarSeparator,
 	useSidebar
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { navigationConfig, type NavigationConfig } from '@/configs/navigation.config'
-import { FileRouteTypes } from '@/route-tree.gen'
+import { CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
-import { Fragment, useMemo } from 'react'
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
+import { v4 as uuid } from 'uuid'
 
-type NavLinkProps = Pick<NavigationConfig, 'path' | 'title' | 'icon'> & { viewTransition?: boolean }
+type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & { viewTransition?: boolean }
 
 const NavSidebar: React.FC = () => {
-	const { t } = useTranslation()
-
-	const mainMenu = useMemo(() => {
-		return navigationConfig.filter((item) => item.type === 'main')
-	}, [])
-
-	const preferenceMenu = useMemo(() => {
-		return navigationConfig.filter((item) => {
-			const matches: Array<FileRouteTypes['to']> = ['/preferences/keybindings', '/preferences/appearance-settings']
-			return item.type === 'preference' && matches.includes(item.path)
-		})
-	}, [])
+	const { t } = useTranslation('ns_common')
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon'>
@@ -60,11 +55,34 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
-					<ScrollShadow className='max-h-80 overflow-y-auto overflow-x-hidden !scrollbar-none xxl:max-h-96'>
+					<ScrollShadow className='max-h-[50vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
-							{mainMenu.map((item) => (
-								<SidebarMenuLink key={item.id} {...item} />
-							))}
+							{navigationConfig.main.map((item) => {
+								if (!Array.isArray(item.items)) return <SidebarMenuLink key={item.id} {...item} />
+								return (
+									<Collapsible key={uuid()} defaultOpen={true} className='group/collapsible w-full'>
+										<CollapsibleTrigger asChild={true}>
+											<SidebarMenuButton tooltip={item.title} size='sm' className='w-full'>
+												{item.icon && (
+													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
+												)}
+												<span className='font-medium'>{t(item.title)}</span>
+												<Icon
+													name='ChevronRight'
+													className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90'
+												/>
+											</SidebarMenuButton>
+										</CollapsibleTrigger>
+										<CollapsibleContent className='w-full overflow-auto transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+											<SidebarMenuSub>
+												{item.items?.map((subItem) => (
+													<SidebarMenuSubLink key={uuid()} title={subItem.title} url={subItem.url} />
+												))}
+											</SidebarMenuSub>
+										</CollapsibleContent>
+									</Collapsible>
+								)
+							})}
 						</SidebarMenu>
 					</ScrollShadow>
 				</SidebarGroup>
@@ -72,7 +90,7 @@ const NavSidebar: React.FC = () => {
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Preferences menu'>
-						{preferenceMenu.map((item) => (
+						{navigationConfig.preferences.map((item) => (
 							<SidebarMenuLink key={item.id} {...item} />
 						))}
 					</SidebarMenu>
@@ -86,7 +104,7 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon, viewTransition }) => {
+const SidebarMenuLink: React.FC<NavLinkProps> = ({ url, title, icon, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { openMobile, setOpenMobile } = useSidebar()
@@ -97,19 +115,45 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ path, title, icon, viewTransi
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuButton asChild size='default' tooltip={t(title, { defaultValue: title })}>
+			<SidebarMenuButton asChild size='sm' tooltip={t(title, { defaultValue: title })}>
 				<Link
-					to={path}
+					to={url}
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
-					<Icon className='!size-5' name={icon} size={20} strokeWidth={2} />
+					<Icon name={icon} size={18} className='!size-[18px]' />
 					<span className='font-medium'>{t(title, { defaultValue: title })}</span>
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
+	)
+}
+
+const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ url, title, viewTransition }) => {
+	const { t } = useTranslation('ns_common')
+	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
+	const { openMobile, setOpenMobile } = useSidebar()
+
+	return (
+		<SidebarMenuSubItem
+			role='menuitem'
+			onClick={() => {
+				if (isSmallScreen) setOpenMobile(!openMobile)
+			}}>
+			<SidebarMenuSubButton asChild size='md'>
+				<Link
+					to={url}
+					preload='intent'
+					viewTransition={viewTransition}
+					activeProps={{
+						className: 'text-primary hover:text-primary bg-primary/10'
+					}}>
+					<span className='font-medium'>{t(title, { ns: 'ns_common', defaultValue: title })}</span>
+				</Link>
+			</SidebarMenuSubButton>
+		</SidebarMenuSubItem>
 	)
 }
 

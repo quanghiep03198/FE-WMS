@@ -54,8 +54,8 @@ export function NetFlowOverview() {
 					{isLoading ? (
 						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-80' />
 					) : !Array.isArray(data) || data.length === 0 ? (
-						<Div className='flex h-full w-full items-center justify-center gap-x-2'>
-							<Icon name='ChartLine' size={32} strokeWidth={1} />
+						<Div className='flex h-full w-full flex-1 items-center justify-center gap-x-2 rounded-lg text-base text-muted-foreground'>
+							<Icon name='ChartSpline' size={32} strokeWidth={1} />
 							{t('ns_common:table.no_data')}
 						</Div>
 					) : (
@@ -83,15 +83,18 @@ export function NetFlowOverview() {
 					)}
 				</ChartContainer>
 			</CardContent>
-			<CardFooter>
-				{isLoading ? (
+
+			{isLoading ? (
+				<CardFooter>
 					<Div className='space-y-1'>
 						<Skeleton className='h-4 w-40' />
 						<Skeleton className='h-4 w-20' />
 					</Div>
-				) : (
-					Array.isArray(data) &&
-					data.length > 0 && (
+				</CardFooter>
+			) : (
+				Array.isArray(data) &&
+				data.length > 0 && (
+					<CardFooter>
 						<Div className='space-y-1 *:text-sm'>
 							<Typography className='flex items-center gap-2 font-medium leading-loose'>
 								{(() => {
@@ -112,9 +115,9 @@ export function NetFlowOverview() {
 								})}{' '}
 							</Typography>
 						</Div>
-					)
-				)}
-			</CardFooter>
+					</CardFooter>
+				)
+			)}
 		</Card>
 	)
 }

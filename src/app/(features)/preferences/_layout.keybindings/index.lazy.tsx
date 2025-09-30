@@ -1,7 +1,7 @@
+import { NavigationConfig, navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import { Badge, Div, Separator } from '@/components/ui'
 import DataTable from '@/components/ui/@react-table'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
-import { NavigationConfig, navigationConfig } from '@/configs/navigation.config'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Fragment } from 'react'
@@ -17,7 +17,8 @@ export const Route = createLazyFileRoute('/(features)/preferences/_layout/keybin
 function KeybindingsPage() {
 	const { t } = useTranslation<'ns_common', undefined>('ns_common')
 
-	const navigationCommands = navigationConfig
+	const navigationCommands = Object.values(navigationConfig)
+		.flat()
 		.filter((item) => !!item.keybinding)
 		.map((item, index) => ({
 			id: String(index + 1),
@@ -35,7 +36,10 @@ function KeybindingsPage() {
 			title: t('actions.logout', { defaultValue: null }),
 			keybinding: 'ctrl + q'
 		}
-	].map((item, index) => ({ ...item, id: String(navigationConfig.length + index + 1) })) as CommandList
+	].map((item, index) => ({
+		...item,
+		id: String(Object.values(navigationConfig).flat().length + index + 1)
+	})) as CommandList
 
 	const columnHelper = createColumnHelper<Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>>()
 
