@@ -2,7 +2,6 @@ import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
-	Badge,
 	Button,
 	Command,
 	CommandDialog,
@@ -16,7 +15,7 @@ import {
 	Icon,
 	Typography
 } from '@/components/ui'
-import { GearIcon, PersonIcon } from '@radix-ui/react-icons'
+import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
 import { debounce } from 'lodash'
@@ -37,14 +36,20 @@ const SearchDialog: React.FC = () => {
 
 	const filteredItems = Object.values(navigationConfig)
 		.flat()
+		.flatMap((item) => {
+			if (Array.isArray(item.items)) return item.items
+			return item
+		})
 		.filter((item) => {
 			return (
-				!!item.url &&
+				typeof item.url === 'string' &&
 				String(t(item.title, { defaultValue: item.title }))
 					.toLowerCase()
 					.includes(searchTerm.toLowerCase())
 			)
 		})
+
+	console.log('flatten navigation :>> ', filteredItems)
 
 	useEffect(() => {
 		if (!open) resetSearchTerm()
@@ -58,12 +63,13 @@ const SearchDialog: React.FC = () => {
 				className='basis-56 gap-x-2 px-2 sm:basis-auto'
 				onClick={() => setOpen(!open)}>
 				<Icon name='Search' />
-				<Typography variant='small' className='sm:hidden'>
+				<Typography variant='small' className='flex-1 text-left sm:hidden'>
 					Search ...
 				</Typography>
-				<Badge variant='secondary' className='ml-auto font-mono font-normal tracking-widest sm:hidden'>
-					ctrl+k
-				</Badge>
+				<Kbd className='text-xs'>
+					<KbdKey>ctrl</KbdKey>
+					<KbdKey>K</KbdKey>
+				</Kbd>
 			</Button>
 
 			{createPortal(
@@ -75,37 +81,37 @@ const SearchDialog: React.FC = () => {
 							onValueChange={debounce((value) => setSearchTerm(value), 200)}
 						/>
 						<CommandEmpty>No results found.</CommandEmpty>
-						<CommandList className='scrollbar sm:max-h-full xxl:max-h-none'>
+						<CommandList className='max-h-[50vh] min-h-full'>
 							{!searchTerm ? (
 								<Fragment>
 									<CommandGroup heading='Suggestions'>
-										{navigationConfig.main.slice(0, 5).map((item) => (
-											<CommandItem asChild className='text-sm' key={item.id}>
-												<Link to={item.url} onClick={() => setOpen(false)}>
-													<Icon name={item.icon} />
-													{t(item.title, { defaultValue: item.title })}
-													{item.keybinding && (
-														<CommandShortcut>
-															{String(item.keybinding).split('.').join('+')}
-														</CommandShortcut>
-													)}
-												</Link>
-											</CommandItem>
-										))}
+										{navigationConfig.main
+											.flatMap((item) => (Array.isArray(item.items) ? item.items : [item]))
+											.slice(0, 5)
+											.map((item, index) => (
+												<CommandItem asChild className='h-9 text-sm' key={index.toString()}>
+													<Link to={item.url} onClick={() => setOpen(false)}>
+														{t(item.title, { defaultValue: item.title })}
+														{item.keybinding && (
+															<CommandShortcut>
+																{String(item.keybinding).split('.').join('+')}
+															</CommandShortcut>
+														)}
+													</Link>
+												</CommandItem>
+											))}
 									</CommandGroup>
 									<CommandSeparator />
 									<CommandGroup heading='Settings'>
-										<CommandItem asChild className=''>
+										<CommandItem asChild className='h-9 text-sm'>
 											<Link to='/preferences/account'>
-												<PersonIcon />
-												<Typography>{t('ns_common:navigation.profile')}</Typography>
+												{t('ns_common:navigation.profile')}
 												<CommandShortcut>ctrl+alt+P</CommandShortcut>
 											</Link>
 										</CommandItem>
-										<CommandItem asChild className=''>
+										<CommandItem asChild className='h-9 text-sm'>
 											<Link to='/preferences/appearance-settings'>
-												<GearIcon />
-												<Typography>{t('ns_common:navigation.settings')}</Typography>
+												{t('ns_common:navigation.settings')}
 												<CommandShortcut>ctrl+alt+S</CommandShortcut>
 											</Link>
 										</CommandItem>
@@ -114,13 +120,12 @@ const SearchDialog: React.FC = () => {
 							) : (
 								filteredItems.length > 0 && (
 									<CommandGroup heading={`${filteredItems.length} results`}>
-										{filteredItems.map((item) => (
-											<CommandItem className='h-8' key={item.id} asChild>
+										{filteredItems.map((item, index) => (
+											<CommandItem key={index.toString()} asChild={true} className='h-9 text-sm'>
 												<Link
 													className='flex items-center gap-x-2'
 													to={item.url}
 													onClick={() => setOpen(false)}>
-													<Icon name={item.icon} />
 													{t(item.title, { defaultValue: item.title })}
 													<CommandShortcut>{String(item.keybinding).split('.').join('+')}</CommandShortcut>
 												</Link>

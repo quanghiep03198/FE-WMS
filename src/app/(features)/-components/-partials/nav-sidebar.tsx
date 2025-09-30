@@ -44,6 +44,8 @@ type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & { viewTra
 
 const NavSidebar: React.FC = () => {
 	const { t } = useTranslation('ns_common')
+	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
+	const { open, setOpen } = useSidebar()
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon'>
@@ -57,26 +59,36 @@ const NavSidebar: React.FC = () => {
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
 					<ScrollShadow className='max-h-[50vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
-							{navigationConfig.main.map((item) => {
-								if (!Array.isArray(item.items)) return <SidebarMenuLink key={item.id} {...item} />
+							{navigationConfig.main.map((item, index) => {
+								if (!Array.isArray(item.items)) return <SidebarMenuLink key={index.toString()} {...item} />
 								return (
 									<Collapsible key={uuid()} defaultOpen={true} className='group/collapsible w-full'>
 										<CollapsibleTrigger asChild={true}>
-											<SidebarMenuButton tooltip={item.title} size='sm' className='w-full'>
+											<SidebarMenuButton
+												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
+												size='sm'
+												className='w-full font-medium'
+												onClick={() => {
+													if (!isSmallScreen && !open) setOpen(true)
+												}}>
 												{item.icon && (
 													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
 												)}
-												<span className='font-medium'>{t(item.title)}</span>
+												{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												<Icon
 													name='ChevronRight'
 													className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90'
 												/>
 											</SidebarMenuButton>
 										</CollapsibleTrigger>
-										<CollapsibleContent className='w-full overflow-auto transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+										<CollapsibleContent className='w-full overflow-auto transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 											<SidebarMenuSub>
-												{item.items?.map((subItem) => (
-													<SidebarMenuSubLink key={uuid()} title={subItem.title} url={subItem.url} />
+												{item.items?.map((subItem, index) => (
+													<SidebarMenuSubLink
+														key={index.toString()}
+														title={subItem.title}
+														url={subItem.url}
+													/>
 												))}
 											</SidebarMenuSub>
 										</CollapsibleContent>
@@ -90,9 +102,11 @@ const NavSidebar: React.FC = () => {
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Preferences menu'>
-						{navigationConfig.preferences.map((item) => (
-							<SidebarMenuLink key={item.id} {...item} />
-						))}
+						{navigationConfig.preferences
+							.filter((item) => item.url !== '/preferences/account')
+							.map((item, index) => (
+								<SidebarMenuLink key={index.toString()} {...item} />
+							))}
 					</SidebarMenu>
 				</SidebarGroup>
 			</SidebarContent>
