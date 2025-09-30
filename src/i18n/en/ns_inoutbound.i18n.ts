@@ -14,6 +14,7 @@ export default {
 		archived_restoration: 'Restore archived data. Use only when necessary.',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
+		defective_goods_inventory_report: 'Manage and track the inventory of defective goods in the warehouse.',
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
@@ -142,6 +143,7 @@ export default {
 		combination_history: 'Combination history',
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
+		defective_goods_inventory_report: 'Defective goods inventory report',
 		exchange_epc: 'Exchange EPC',
 		exchange_order: 'Exchange manufacturing order',
 		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',
