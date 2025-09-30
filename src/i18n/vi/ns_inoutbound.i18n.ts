@@ -32,6 +32,7 @@ export default {
 		archived_restoration: 'Khôi phục dữ liệu đã lưu trữ. Chỉ sử dụng khi cần thiết.',
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
 		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
+		defective_goods_inventory_report: 'Quản lý và theo dõi tồn kho hàng loại 2',
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn',
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
@@ -137,6 +138,7 @@ export default {
 	},
 	titles: {
 		archived_restoration: 'Khôi phục dữ liệu',
+		defective_goods_inventory_report: 'Báo biểu tồn kho hàng loại 2',
 		combination_history: 'Lịch sử phối tem',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
