@@ -7,17 +7,28 @@ import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { DefectiveCategoryI18n } from '../../-constants'
+import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
-
-export type UrlQueryParams = {
-	'date.eq': string
-	'auto-refresh': number | false
-}
 
 const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 	const { data, isLoading, refetch } = useGetDefectiveGoodsInventoryQuery()
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDefectiveGoodsInventory>()
+	const defectiveCategoryList = useDefectiveCategoryList()
+	const factedUniqueStorageLocations = useMemo(() => {
+		const locationSet = new Set<string>()
+		if (Array.isArray(data)) {
+			data.forEach((item) => {
+				if (Array.isArray(item.storage_location)) {
+					item.storage_location.forEach((loc) => locationSet.add(loc))
+				}
+			})
+		}
+		return Array.from(locationSet)
+			.sort((a, b) => a.localeCompare(b))
+			.map((loc) => ({ value: loc, label: loc }))
+	}, [data])
 
 	const columns = useMemo(
 		() => [
@@ -89,15 +100,34 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'fuzzy',
+
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('defective_category', {
+				header: t('ns_erp:fields.category'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableHiding: false,
+				filterFn: 'equalsString',
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: defectiveCategoryList
+				},
 				cell: ({ getValue }) => {
-					return getValue() ?? 'Unknown'
+					const value = getValue()
+					return t(DefectiveCategoryI18n[value], {
+						ns: 'ns_inoutbound',
+						defaultValue: 'Unknown'
+					})
 				}
 			}),
 			columnHelper.accessor('storage_location', {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
-				filterFn: 'fuzzy',
+				filterFn: 'arrIncludesSome',
+				meta: { filterVariant: 'multi-select', facetedUniqueValues: factedUniqueStorageLocations },
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return (
@@ -142,7 +172,16 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 			containerProps={{ className: 'h-[60vh]' }}
 			renderSubComponent={
 				(({ row }) => {
-					return <SizeTable data={row.original?.size_data} />
+					return (
+						<SizeTable
+							data={row.original.size_data}
+							total={
+								Array.isArray(row.original.size_data)
+									? row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
+									: 0
+							}
+						/>
+					)
 				}) satisfies RenderSubComponent<IDefectiveGoodsInventory>
 			}
 			toolbarProps={{
