@@ -1,3 +1,4 @@
+import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
@@ -15,7 +16,6 @@ import {
 	Icon,
 	Typography
 } from '@/components/ui'
-import { navigationConfig } from '@/configs/navigation.config'
 import { GearIcon, PersonIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
@@ -35,11 +35,16 @@ const SearchDialog: React.FC = () => {
 		setOpen(true)
 	})
 
-	const filteredItems = navigationConfig.filter((item) =>
-		String(t(item.title, { defaultValue: item.title }))
-			.toLowerCase()
-			.includes(searchTerm.toLowerCase())
-	)
+	const filteredItems = Object.values(navigationConfig)
+		.flat()
+		.filter((item) => {
+			return (
+				!!item.url &&
+				String(t(item.title, { defaultValue: item.title }))
+					.toLowerCase()
+					.includes(searchTerm.toLowerCase())
+			)
+		})
 
 	useEffect(() => {
 		if (!open) resetSearchTerm()
@@ -74,9 +79,9 @@ const SearchDialog: React.FC = () => {
 							{!searchTerm ? (
 								<Fragment>
 									<CommandGroup heading='Suggestions'>
-										{navigationConfig.slice(0, 5).map((item) => (
+										{navigationConfig.main.slice(0, 5).map((item) => (
 											<CommandItem asChild className='text-sm' key={item.id}>
-												<Link to={item.path} onClick={() => setOpen(false)}>
+												<Link to={item.url} onClick={() => setOpen(false)}>
 													<Icon name={item.icon} />
 													{t(item.title, { defaultValue: item.title })}
 													{item.keybinding && (
@@ -113,7 +118,7 @@ const SearchDialog: React.FC = () => {
 											<CommandItem className='h-8' key={item.id} asChild>
 												<Link
 													className='flex items-center gap-x-2'
-													to={item.path}
+													to={item.url}
 													onClick={() => setOpen(false)}>
 													<Icon name={item.icon} />
 													{t(item.title, { defaultValue: item.title })}

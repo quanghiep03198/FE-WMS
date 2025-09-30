@@ -1,3 +1,4 @@
+import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import useAuth from '@/common/hooks/use-auth'
 import {
 	Avatar,
@@ -12,7 +13,6 @@ import {
 	DropdownMenuTrigger,
 	Icon
 } from '@/components/ui'
-import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
@@ -31,11 +31,11 @@ const NavUserControl: React.FC = () => {
 			<DropdownMenuContent align='end' sideOffset={8} className='w-64'>
 				<DropdownMenuLabel className='capitalize'>{user?.display_name ?? 'Unknown'}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{navigationConfig
-					.filter((item) => item.type === 'preference' && item.path !== '/preferences/keybindings')
+				{navigationConfig.preferences
+					.filter((item) => item.url !== '/preferences/keybindings')
 					.map((item) => (
 						<DropdownMenuItem asChild key={item.id}>
-							<Link to={item.path} className='whitespace-nowrap'>
+							<Link to={item.url} className='whitespace-nowrap'>
 								<Icon name={item.icon} className='mr-2' /> {t(item.title as any)}
 								<DropdownMenuShortcut>{item.keybinding.split('.').join('+')}</DropdownMenuShortcut>
 							</Link>

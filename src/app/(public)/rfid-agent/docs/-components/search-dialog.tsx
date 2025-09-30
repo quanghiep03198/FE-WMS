@@ -1,3 +1,4 @@
+import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
@@ -15,7 +16,6 @@ import {
 	Icon,
 	Typography
 } from '@/components/ui'
-import { navigationConfig } from '@/configs/navigation.config'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
 import { debounce } from 'lodash'
@@ -35,11 +35,13 @@ const SearchDialog: React.FC = () => {
 		setOpen(true)
 	})
 
-	const filteredItems = navigationConfig.filter((item) =>
-		String(t(item.title, { defaultValue: item.title }))
-			.toLowerCase()
-			.includes(searchTerm.toLowerCase())
-	)
+	const filteredItems = Object.values(navigationConfig)
+		.flat()
+		.filter((item) =>
+			String(t(item.title, { defaultValue: item.title }))
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase())
+		)
 
 	useEffect(() => {
 		if (!open) resetSearchTerm()
@@ -108,7 +110,7 @@ const SearchDialog: React.FC = () => {
 											<CommandItem className='h-8' key={item.id} asChild>
 												<Link
 													className='flex items-center gap-x-2'
-													to={item.path}
+													to={item.url}
 													onClick={() => setOpen(false)}>
 													<Icon name={item.icon} />
 													{t(item.title, { defaultValue: item.title })}

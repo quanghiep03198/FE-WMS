@@ -1,27 +1,15 @@
+import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import AppLogo from '@/app/-components/-shared/app-logo'
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, Separator, Sheet, SheetContent, SheetTrigger, buttonVariants } from '@/components/ui'
-import { navigationConfig } from '@/configs/navigation.config'
-import { FileRouteTypes } from '@/route-tree.gen'
 import { Link } from '@tanstack/react-router'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
 const NavDrawerSidebar: React.FC = () => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState(false)
-
-	const mainMenu = useMemo(() => {
-		return navigationConfig.filter((item) => item.type === 'main')
-	}, [])
-
-	const preferenceMenu = useMemo(() => {
-		return navigationConfig.filter((item) => {
-			const matches: Array<FileRouteTypes['to']> = ['/preferences/keybindings', '/preferences/appearance-settings']
-			return item.type === 'preference' && matches.includes(item.path)
-		})
-	}, [])
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
@@ -35,11 +23,11 @@ const NavDrawerSidebar: React.FC = () => {
 				</Div>
 				{/* Navigation menu */}
 				<Menu>
-					{mainMenu.map((item) => {
+					{navigationConfig.main.map((item) => {
 						return (
 							<MenuItem key={item.id} onClick={() => setOpen(!open)}>
 								<Link
-									to={item.path}
+									to={item.url}
 									activeProps={{ className: 'text-primary hover:text-primary' }}
 									className={cn(
 										buttonVariants({ variant: 'ghost' }),
@@ -51,11 +39,11 @@ const NavDrawerSidebar: React.FC = () => {
 						)
 					})}
 					<Separator className='my-4' />
-					{preferenceMenu.map((item) => {
+					{navigationConfig.preferences.map((item) => {
 						return (
 							<MenuItem key={item.id} onClick={() => setOpen(!open)}>
 								<Link
-									to={item.path}
+									to={item.url}
 									activeProps={{ className: 'text-primary hover:text-primary' }}
 									className={cn(
 										buttonVariants({ variant: 'ghost' }),
