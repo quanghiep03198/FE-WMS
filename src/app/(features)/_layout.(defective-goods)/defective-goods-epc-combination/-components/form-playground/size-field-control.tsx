@@ -11,7 +11,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading,
 	const { control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
 	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
-	const currentCategory = useWatch({ control: control, name: 'category' })
+	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: control, name: 'color_sn' })

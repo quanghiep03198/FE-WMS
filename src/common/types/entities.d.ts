@@ -271,15 +271,15 @@ export interface IRFIDReaderDevice {
 export interface IDefectiveGoods extends IBaseEntity {
 	epc: string
 	brand_name: string
-	category: DefectiveType
+	defective_category: DefectiveType
 	color_sn: string
 	mo_no?: string
 	po?: string
 	storage_location: string
 	factory_shoes_style: string
 	size: string
-	defect_location: DefectiveLocation
-	defect_description: string
+	defective_location: DefectiveLocation
+	defective_description: string
 }
 
 export interface IMonthlyInventoryComparison {
@@ -323,13 +323,8 @@ export interface IAssemblyProductionVolumn {
 	volumn: number
 }
 
-export interface IDefectiveGoodsInventory {
-	brand_name: string
-	po: string
-	mo_no: string
-	factory_shoes_style: string
-	cust_shoes_style: string
+export interface IDefectiveGoodsInventory
+	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description' | 'storage_location'> {
 	storage_location: string[]
-	color_sn: string
 	size_data: Array<{ size_numcode: string; qty: number }>
 }

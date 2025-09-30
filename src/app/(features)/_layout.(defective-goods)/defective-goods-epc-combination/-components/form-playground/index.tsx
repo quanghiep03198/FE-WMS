@@ -51,7 +51,6 @@ const DefectiveGoodsForm: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { hash, search } = useLocation()
 	const navigate = useNavigate()
-
 	const [formAction, setFormAction, resetFormAction] = useResetState<CommonActions>(null)
 	const [useAvailableTemplate, setUseAvailabelTemplate] = useLocalStorageState('useAvailableTemplate', {
 		defaultValue: true,
@@ -65,13 +64,13 @@ const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
-			defect_description: DefectDescriptionTemplate[i18n.language]
+			defective_description: DefectDescriptionTemplate[i18n.language]
 		}
 	})
 
 	// Watch form fields
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
-	const currentCategory = useWatch({ control: form.control, name: 'category' })
+	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
 	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
 	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
@@ -93,8 +92,10 @@ const DefectiveGoodsForm: React.FC = () => {
 	event$.useSubscription((e: { action: CommonActions; payload: IDefectiveGoods }) => {
 		if (e.action === CommonActions.UPDATE) {
 			setFormAction(CommonActions.UPDATE)
-			const extractedDescription: string = gunzipSync(Buffer.from(e.payload.defect_description, 'base64')).toString()
-			form.reset({ ...e.payload, defect_description: extractedDescription })
+			const extractedDescription: string = gunzipSync(
+				Buffer.from(e.payload.defective_description, 'base64')
+			).toString()
+			form.reset({ ...e.payload, defective_description: extractedDescription })
 			setDefaultEditorContent(extractedDescription)
 		}
 	})
@@ -140,7 +141,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		const currentFormValues = form.getValues()
 		for (const key in currentFormValues) {
 			switch (key) {
-				case 'defect_description':
+				case 'defective_description':
 					currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
 					break
 				case 'epc':
@@ -158,7 +159,9 @@ const DefectiveGoodsForm: React.FC = () => {
 		(data: CreateDefectiveGoodsFormValues) => {
 			const payload = {
 				...data,
-				defect_description: gzipSync(data.defect_description, { level: 6, chunkSize: 1024 }).toString('base64')
+				defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString(
+					'base64'
+				)
 			}
 			const mutateAsync = async () =>
 				formAction === CommonActions.UPDATE
@@ -328,8 +331,8 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 					<Div className='col-span-full'>
 						<SelectFieldControl
-							name='defect_location'
-							label={t('ns_erp:fields.defect_location')}
+							name='defective_location'
+							label={t('ns_erp:fields.defective_location')}
 							disabled={isNil(formAction)}
 							datalist={[
 								{ label: t('ns_common:others.all'), value: DefectiveLocation.ALL },
@@ -356,8 +359,8 @@ const DefectiveGoodsForm: React.FC = () => {
 							/>
 						</Div>
 						<EditorFieldControl
-							name='defect_description'
-							label={t('ns_erp:fields.defect_description')}
+							name='defective_description'
+							label={t('ns_erp:fields.defective_description')}
 							className='group/container-has-[#toggle-fullscreen[data-state=checked]]:h-screen h-60'
 							errorMessage={t('ns_validation:required')}
 							defaultValue={defaultEditorContent}

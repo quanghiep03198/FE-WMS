@@ -89,7 +89,9 @@ const InfoCard: React.FC<{
 						<DropdownMenu>
 							<DropdownMenuItem
 								className='gap-x-2'
-								onClick={() => event$.emit({ action: CommonActions.READ, payload: data.defect_description })}>
+								onClick={() =>
+									event$.emit({ action: CommonActions.READ, payload: data.defective_description })
+								}>
 								<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 							</DropdownMenuItem>
 							<DropdownMenuItem
@@ -114,7 +116,7 @@ const InfoCard: React.FC<{
 					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
 					<Badge>{data.brand_name}</Badge>
 					<Badge variant='outline' className='w-fit'>
-						{t(DefectiveCategoryI18n[data.category], { ns: 'ns_inoutbound' })}
+						{t(DefectiveCategoryI18n[data.defective_category], { ns: 'ns_inoutbound' })}
 					</Badge>
 				</Div>
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
@@ -163,8 +165,8 @@ const InfoCard: React.FC<{
 						</DescriptionItem>
 					)}
 					<DescriptionItem>
-						<Typography variant='small'>{t('ns_erp:fields.defect_location')} : </Typography>
-						<Typography>{defectLocation.get(data.defect_location) ?? '?'}</Typography>
+						<Typography variant='small'>{t('ns_erp:fields.defective_location')} : </Typography>
+						<Typography>{defectLocation.get(data.defective_location) ?? '?'}</Typography>
 					</DescriptionItem>
 					<DescriptionItem>
 						<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
