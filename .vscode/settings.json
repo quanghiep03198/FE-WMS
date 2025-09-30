@@ -28,7 +28,8 @@
 		"-shared": "Shared",
 		"-utils": "Utils",
 		"-helpers": "Helper",
-		"-mocks": "Mock"
+		"-mocks": "Mock",
+		"-configs": "Config"
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
