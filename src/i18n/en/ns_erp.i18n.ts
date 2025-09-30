@@ -19,8 +19,8 @@ export default {
 		daily_inbound_qty: 'Daily inbound quantity',
 		daily_outbound_qty: 'Daily outbound quantity',
 		daily_productivity: 'Daily productivity',
-		defect_location: 'Defect location',
-		defect_description: 'Defect description',
+		defective_location: 'Defect location',
+		defective_description: 'Defect description',
 		dept_name: 'Department',
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
@@ -94,8 +94,8 @@ export default {
 	},
 	labels: {
 		goods_category: 'Shoes category',
-		defect_location: 'Defect location',
-		defect_description: 'Defect description'
+		defective_location: 'Defect location',
+		defective_description: 'Defect description'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Finished Product Delivery Order',
