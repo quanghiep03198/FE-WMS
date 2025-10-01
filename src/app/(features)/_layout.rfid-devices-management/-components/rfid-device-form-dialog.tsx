@@ -1,13 +1,16 @@
 import { CommonActions } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
+import { cn } from '@/common/utils/cn'
 import {
 	Button,
+	buttonVariants,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
+	DialogTrigger,
 	Div,
 	FormControl,
 	FormDescription,
@@ -25,13 +28,13 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { capitalize, isNil } from 'lodash'
 import React, { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { usePageContext } from '../-contexts/page-context'
 import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../-hooks/use-rfid-device-asm'
 import {
 	CreateRFIDReaderFormValues,
@@ -40,16 +43,10 @@ import {
 	updateRFIDReaderSchema
 } from '../-schemas/rfid-device.schema'
 
-type RFIDDeviceFormDialogProps = {
-	event$: EventEmitter<
-		| { action: CommonActions.CREATE; defaultValues: null }
-		| { action: CommonActions.UPDATE; defaultValues: UpdateRFIDReaderFormValues }
-	>
-}
-
-const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) => {
+const RFIDDeviceFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)
 	const [action, setAction, resetAction] = useResetState<CommonActions.CREATE | CommonActions.UPDATE>(null)
+	const { event$ } = usePageContext()
 	const { t } = useTranslation()
 	const { user } = useAuth()
 
@@ -60,6 +57,7 @@ const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) =
 	event$.useSubscription(({ action, defaultValues }) => {
 		setOpen((prev) => !prev)
 		setAction(action)
+		console.log('action :>> ', action)
 		if (action === CommonActions.UPDATE && defaultValues) {
 			form.reset(defaultValues)
 		}
@@ -86,6 +84,10 @@ const RFIDDeviceFormDialog: React.FC<RFIDDeviceFormDialogProps> = ({ event$ }) =
 
 	return (
 		<Dialog defaultOpen={false} open={open || isPending || isError} onOpenChange={setOpen}>
+			<DialogTrigger className={cn(buttonVariants({ variant: 'default' }))}>
+				<Icon name='CircleFadingPlus' />
+				{t('ns_common:actions.add')}
+			</DialogTrigger>
 			<DialogContent className='max-w-xl'>
 				<DialogHeader>
 					<DialogTitle>
