@@ -9,7 +9,7 @@ import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { isEmpty, isNil } from 'lodash'
+import { isNil, split } from 'lodash'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDownloadReport } from '../-hooks/use-download-report'
@@ -23,13 +23,6 @@ import ReportTableSummary from './report-table-summary'
 export type UrlQueryParams = {
 	'date.eq': string
 	'auto-refresh': number | false
-}
-
-const stringSplit = (value: string | null | undefined, separator = ',') => {
-	if (typeof value === 'string' && !isEmpty(value)) {
-		return value.split(separator).sort((a, b) => a.localeCompare(b))
-	}
-	return []
 }
 
 const InboundReportMasterTable: React.FC = () => {
@@ -132,7 +125,9 @@ const InboundReportMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={stringSplit(getValue())}
+							data={split(getValue(), ',')
+								.filter((item) => !!item)
+								.sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
 								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
 									{data}
@@ -151,7 +146,9 @@ const InboundReportMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={stringSplit(getValue())}
+							data={split(getValue(), ',')
+								.filter((item) => !!item)
+								.sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
 								<Badge variant='secondary' className='whitespace-nowrap'>
 									{data.trim()}
