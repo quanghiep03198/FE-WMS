@@ -148,6 +148,7 @@ export default {
 		exchange_order: 'Exchange manufacturing order',
 		file_daily_inbound_report: 'Daily Inbound Report {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Daily Outbound Report {{factory}} - {{date}}',
+		file_defective_goods_inventory_report: 'Defective goods inventory - {{factory}}',
 		file_production_inventory_summary: 'Production Inventory Summary - {{factory}}',
 		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
 		inbound_history: 'Inbound history',

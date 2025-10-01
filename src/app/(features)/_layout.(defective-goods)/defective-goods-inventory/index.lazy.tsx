@@ -1,10 +1,10 @@
-import { Div } from '@/components/ui'
+import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../../-components/-shared/page-header'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
-import DefectiveGoodsInventoryMasterTable from './-components/report-master-table'
+import DefectiveGoodsInventoryTable from './-components/report-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inventory/')({
 	component: Page
@@ -34,7 +34,8 @@ function Page() {
 					<PageTitle>{t('ns_inoutbound:titles.defective_goods_inventory_report')}</PageTitle>
 					<PageDescription>{t('ns_inoutbound:description.defective_goods_inventory_report')}</PageDescription>
 				</PageHeader>
-				<DefectiveGoodsInventoryMasterTable />
+				<Separator />
+				<DefectiveGoodsInventoryTable />
 			</Div>
 		</Fragment>
 	)

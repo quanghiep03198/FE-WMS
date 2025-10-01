@@ -324,7 +324,6 @@ export interface IAssemblyProductionVolumn {
 }
 
 export interface IDefectiveGoodsInventory
-	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description' | 'storage_location'> {
-	storage_location: string[]
+	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
 	size_data: Array<{ size_numcode: string; qty: number }>
 }

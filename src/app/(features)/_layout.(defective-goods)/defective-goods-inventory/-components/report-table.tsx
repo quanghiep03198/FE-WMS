@@ -1,21 +1,31 @@
+import { useGetTenantByFactory } from '@/app/(features)/-hooks/use-tenacy-asm'
 import SizeTable from '@/app/(features)/_layout.production-inventory/-components/partials/size-table'
+import { factories } from '@/common/constants/constants'
+import useAuth from '@/common/hooks/use-auth'
 import { IDefectiveGoodsInventory } from '@/common/types/entities'
 import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
+import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Fragment, useMemo } from 'react'
+import { saveAs } from 'file-saver'
+import { split } from 'lodash'
+import { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
+import ReportTableSummary from './report-table-footer'
 
-const DefectiveGoodsInventoryMasterTable: React.FC = () => {
+const DefectiveGoodsInventoryTable: React.FC = () => {
 	const { data, isLoading, refetch } = useGetDefectiveGoodsInventoryQuery()
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDefectiveGoodsInventory>()
 	const defectiveCategoryList = useDefectiveCategoryList()
+	const { user } = useAuth()
+	const { data: tenant } = useGetTenantByFactory()
 	const factedUniqueStorageLocations = useMemo(() => {
 		const locationSet = new Set<string>()
 		if (Array.isArray(data)) {
@@ -133,7 +143,7 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={value.sort((a, b) => a.localeCompare(b))}
+							data={split(value, ',').sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
 								<Badge variant='secondary' className='whitespace-nowrap'>
 									{data.trim()}
@@ -145,7 +155,7 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 			}),
 			columnHelper.display({
 				id: 'total_qty',
-				header: t('ns_common:common_fields.total'),
+				header: t('ns_erp:fields.actual_inventory_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -160,7 +170,51 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	// const handleDownloadExcel = useDownloadReport()
+	const handleDownloadExcel = async () => {
+		const id = toast.loading(t('ns_common:notification.downloading'))
+		const factory = t(factories[user.company_code], { ns: 'ns_common', defaultValue: user.company_code }) as string
+
+		try {
+			const blob = await DefectiveGoodsService.downloadDefectiveGoodsInventoryReport(tenant?.id)
+			saveAs(
+				blob,
+				t('ns_inoutbound:titles.file_defective_goods_inventory_report', {
+					factory,
+					defaultValue: `Defective goods inventory  ~ ${factory}`
+				}) + '.xlsx'
+			)
+			toast.success(t('ns_common:notification.success'), { id })
+		} catch {
+			toast.error('ns_common:notification.error', { id })
+		}
+	}
+
+	const renderSubComponent = useCallback(
+		(({ row }) => {
+			return (
+				<SizeTable
+					data={row.original.size_data}
+					total={
+						Array.isArray(row.original.size_data)
+							? row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
+							: 0
+					}
+				/>
+			)
+		}) satisfies RenderSubComponent<IDefectiveGoodsInventory>,
+		[data]
+	)
+
+	const total = useMemo(() => {
+		if (!Array.isArray(data)) return 0
+		return data.reduce((acc, curr) => {
+			return acc + curr.size_data.reduce((a, b) => a + b.qty, 0)
+		}, 0)
+	}, [data])
+
+	const renderFooterComponent = useCallback(() => {
+		return <ReportTableSummary total={total} />
+	}, [total])
 
 	return (
 		<DataTable
@@ -170,20 +224,7 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 			enableExpanding={true}
 			enableColumnResizing={true}
 			containerProps={{ className: 'h-[60vh]' }}
-			renderSubComponent={
-				(({ row }) => {
-					return (
-						<SizeTable
-							data={row.original.size_data}
-							total={
-								Array.isArray(row.original.size_data)
-									? row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
-									: 0
-							}
-						/>
-					)
-				}) satisfies RenderSubComponent<IDefectiveGoodsInventory>
-			}
+			renderSubComponent={renderSubComponent}
 			toolbarProps={{
 				slotRight: () => (
 					<Fragment>
@@ -191,7 +232,7 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 							<Button
 								size='icon'
 								variant='outline'
-								// onClick={handleDownloadExcel}
+								onClick={handleDownloadExcel}
 								disabled={!data || data.length === 0}>
 								<Icon name='Download' />
 							</Button>
@@ -204,11 +245,11 @@ const DefectiveGoodsInventoryMasterTable: React.FC = () => {
 					</Fragment>
 				)
 			}}
-			// footerProps={{
-			// 	slot: () => <ReportTableSummary data={data} />
-			// }}
+			footerProps={{
+				slot: renderFooterComponent
+			}}
 		/>
 	)
 }
 
-export default DefectiveGoodsInventoryMasterTable
+export default DefectiveGoodsInventoryTable

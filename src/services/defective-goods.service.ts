@@ -65,4 +65,13 @@ export class DefectiveGoodsService {
 			payload
 		)
 	}
+
+	static async downloadDefectiveGoodsInventoryReport(tenantId: string) {
+		return await axiosInstance.get<void, Blob>('/defective-goods/export-inventory-report', {
+			responseType: 'blob',
+			headers: {
+				[RequestHeaders.TENANT_ID]: tenantId
+			}
+		})
+	}
 }
