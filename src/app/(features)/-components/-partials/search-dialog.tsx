@@ -49,8 +49,6 @@ const SearchDialog: React.FC = () => {
 			)
 		})
 
-	console.log('flatten navigation :>> ', filteredItems)
-
 	useEffect(() => {
 		if (!open) resetSearchTerm()
 	}, [open])
