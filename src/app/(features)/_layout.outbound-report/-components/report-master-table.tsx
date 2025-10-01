@@ -160,7 +160,7 @@ const ReportDatalist: React.FC = () => {
 				loading={isLoading}
 				enableExpanding={true}
 				renderSubComponent={({ row }) => {
-					const data = pick(row.original, ['detail', 'overall'])
+					const data = pick(row.original as IOutboundReport, ['detail', 'overall'])
 					return <OutboundReportDetailTable {...data} />
 				}}
 				toolbarProps={{
