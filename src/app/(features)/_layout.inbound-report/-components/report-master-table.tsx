@@ -25,6 +25,13 @@ export type UrlQueryParams = {
 	'auto-refresh': number | false
 }
 
+const stringSplit = (value: string | null | undefined, separator = ',') => {
+	if (typeof value === 'string' && !isEmpty(value)) {
+		return value.split(separator).sort((a, b) => a.localeCompare(b))
+	}
+	return []
+}
+
 const InboundReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>({
 		'date.eq': format(new Date(), 'yyyy-MM-dd'),
@@ -122,15 +129,10 @@ const InboundReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
-					const value = getValue()
-					const data =
-						typeof value === 'string' && !isEmpty(value)
-							? value.split(',').sort((a, b) => a.localeCompare(b))
-							: []
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={data}
+							data={stringSplit(getValue())}
 							template={({ data }) => (
 								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
 									{data}
@@ -146,11 +148,10 @@ const InboundReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
-					const value = getValue()
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={value.split(',').sort((a, b) => a.localeCompare(b))}
+							data={stringSplit(getValue())}
 							template={({ data }) => (
 								<Badge variant='secondary' className='whitespace-nowrap'>
 									{data.trim()}
