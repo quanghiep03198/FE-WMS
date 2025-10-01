@@ -17,6 +17,11 @@ import {
 	Label,
 	RadioGroup,
 	RadioGroupItem,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 	Skeleton,
 	Typography
 } from '@/components/ui'
@@ -79,7 +84,7 @@ export function AssemblyProductivityOverview() {
 	}, [i18n.language])
 
 	return (
-		<Card>
+		<Card className='@container/card'>
 			<CardHeader className='flex flex-col items-stretch divide-y border-b !p-0 sm:flex-row'>
 				<Div className='flex items-center justify-between px-6 pb-3 sm:pb-0'>
 					<Div className='flex flex-1 flex-col justify-center gap-1'>
@@ -91,22 +96,38 @@ export function AssemblyProductivityOverview() {
 							value={activePeriod}
 							onValueChange={setActivePeriod}
 							className={cn(
-								'isolate inline-grid grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border [&_*]:!cursor-pointer',
+								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border @[1024px]/card:inline-grid [&_*]:!cursor-pointer',
 								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center [&_button[role=radio]]:hidden'
 							)}>
 							<Div role='radio'>
-								<Label htmlFor='last-3m-option'>{t('ns_dashboard:period_options.last_3_months' as any)}</Label>
+								<Label htmlFor='last-3m-option'>{t('ns_dashboard:period_options.last_3_months')}</Label>
 								<RadioGroupItem value={format(subMonths(new Date(), 3), 'yyyy-MM-dd')} id='last-3m-option' />
 							</Div>
 							<Div role='radio'>
-								<Label htmlFor='last-30d-option'>{t('ns_dashboard:period_options.last_30_days' as any)}</Label>
+								<Label htmlFor='last-30d-option'>{t('ns_dashboard:period_options.last_30_days')}</Label>
 								<RadioGroupItem value={format(subDays(new Date(), 30), 'yyyy-MM-dd')} id='last-30d-option' />
 							</Div>
 							<Div role='radio'>
-								<Label htmlFor='last-7d-option'>{t('ns_dashboard:period_options.last_7_days' as any)}</Label>
+								<Label htmlFor='last-7d-option'>{t('ns_dashboard:period_options.last_7_days')}</Label>
 								<RadioGroupItem value={format(subDays(new Date(), 7), 'yyyy-MM-dd')} id='last-7d-option' />
 							</Div>
 						</RadioGroup>
+						<Select defaultValue={format(subMonths(new Date(), 3), 'yyyy-MM-dd')}>
+							<SelectTrigger className='flex w-full min-w-40 @[1024px]/card:hidden'>
+								<SelectValue placeholder='Select' />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value={format(subMonths(new Date(), 3), 'yyyy-MM-dd')}>
+									{t('ns_dashboard:period_options.last_3_months' as any)}
+								</SelectItem>
+								<SelectItem value={format(subDays(new Date(), 30), 'yyyy-MM-dd')}>
+									{t('ns_dashboard:period_options.last_30_days' as any)}
+								</SelectItem>
+								<SelectItem value={format(subDays(new Date(), 7), 'yyyy-MM-dd')}>
+									{t('ns_dashboard:period_options.last_7_days')}
+								</SelectItem>
+							</SelectContent>
+						</Select>
 					</CardAction>
 				</Div>
 				<Tabs>
