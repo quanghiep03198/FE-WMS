@@ -67,6 +67,15 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					</button>
 				)
 			}),
+			columnHelper.accessor('brand_name', {
+				header: t('ns_erp:fields.brand_name'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableHiding: false,
+				filterFn: 'includesString',
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
 				enableColumnFilter: true,
