@@ -164,6 +164,7 @@ const WarehouseList: React.FC = () => {
 				id: 'is_disable',
 				header: t('ns_warehouse:fields.is_disable'),
 				size: 100,
+				meta: { align: 'center' },
 				cell: ({ getValue, row: { original } }) => {
 					const value = getValue()
 					return (
@@ -187,6 +188,7 @@ const WarehouseList: React.FC = () => {
 				id: 'is_default',
 				header: t('ns_warehouse:fields.is_default'),
 				minSize: 100,
+				meta: { align: 'center' },
 				cell: ({ getValue, row: { original } }) => {
 					const value = Boolean(getValue())
 					return (
@@ -240,6 +242,7 @@ const WarehouseList: React.FC = () => {
 				enableColumnResizing={true}
 				enableRowSelection={true}
 				ref={tableRef}
+				containerProps={{ className: 'h-[40vh]' }}
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>

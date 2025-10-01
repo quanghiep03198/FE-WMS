@@ -122,6 +122,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 			columnHelper.accessor('is_disable', {
 				header: t('ns_warehouse:fields.is_disable'),
 				size: 100,
+				meta: { align: 'center' },
 				cell: ({ getValue, row }) => {
 					const value = getValue()
 					const { original } = row
@@ -146,6 +147,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 			columnHelper.accessor('is_default', {
 				header: t('ns_warehouse:fields.is_default'),
 				minSize: 100,
+				meta: { align: 'center' },
 				cell: ({ getValue, row: { original } }) => {
 					const value = Boolean(getValue())
 					return (
@@ -177,7 +179,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 			columnHelper.accessor('remark', {
 				header: t('ns_common:common_fields.remark'),
 				cell: ({ getValue }) =>
-					getValue() ?? (
+					getValue() || (
 						<Typography variant='small' color='muted'>
 							-
 						</Typography>
@@ -226,6 +228,9 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				enableColumnResizing={true}
 				enableColumnFilters={true}
 				enableRowSelection={true}
+				containerProps={{
+					className: 'h-[60vh]'
+				}}
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>

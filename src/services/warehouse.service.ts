@@ -28,12 +28,12 @@ export class WarehouseService {
 		return axiosInstance.post<WarehouseFormValue, ResponseBody<null>>(`/warehouse`, payload)
 	}
 
-	static async updateWarehouse({ id, payload }: { id: string; payload: PartialWarehouseFormValue }) {
+	static async updateWarehouse({ id, payload }: { id: number; payload: PartialWarehouseFormValue }) {
 		return axiosInstance.patch<PartialWarehouseFormValue, ResponseBody<null>>(`/warehouse/${id}`, payload)
 	}
 
-	static async deleteWarehouse(selectedRecords: Array<string>) {
-		return await axiosInstance.delete<{ id: string[] }, ResponseBody<null>>(`/warehouse`, {
+	static async deleteWarehouse(selectedRecords: Array<number>) {
+		return await axiosInstance.delete<{ id: number[] }, ResponseBody<null>>(`/warehouse`, {
 			data: { id: selectedRecords }
 		})
 	}

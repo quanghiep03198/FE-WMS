@@ -13,14 +13,14 @@ export class WarehouseStorageService {
 		return axiosInstance.post<Required<StorageFormValue>, ResponseBody<null>>(`/warehouse/storage-detail`, payload)
 	}
 
-	static async updateWarehouseStorage(id: string | number, payload: PartialStorageFormValue) {
+	static async updateWarehouseStorage(id: number, payload: PartialStorageFormValue) {
 		return axiosInstance.patch<PartialStorageFormValue, ResponseBody<null>>(
 			`/warehouse/storage-detail/${id}`,
 			payload
 		)
 	}
 
-	static async deleteWarehouseStorage(selectedRecords: Array<string>) {
+	static async deleteWarehouseStorage(selectedRecords: Array<number>) {
 		return axiosInstance.delete(`/warehouse/storage-detail`, { data: { id: selectedRecords } })
 	}
 }
