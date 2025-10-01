@@ -9,7 +9,7 @@ import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDownloadReport } from '../-hooks/use-download-report'
@@ -123,10 +123,14 @@ const InboundReportMasterTable: React.FC = () => {
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
 					const value = getValue()
+					const data =
+						typeof value === 'string' && !isEmpty(value)
+							? value.split(',').sort((a, b) => a.localeCompare(b))
+							: []
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={value.split(',').sort((a, b) => a.localeCompare(b))}
+							data={data}
 							template={({ data }) => (
 								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
 									{data}
