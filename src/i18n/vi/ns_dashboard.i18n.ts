@@ -1,12 +1,15 @@
 export default {
+	all_time_defective_goods_inventory_qty: 'Tổng số lượng tồn kho được cập nhật theo kiểm kê mới nhất.',
 	compare_from_last_month: '{{value}} so với tháng trước',
 	dashboard_description:
-		'Cung cấp số liệu tổng quan về các chỉ số chính, bao gồm thống kê và hoạt động nhập/xuất kho và các hoạt động khác',
-	inoutbound_overview: 'Tổng quan nhập/xuất kho',
+		'Cung cấp số liệu tổng quan về các chỉ số chính, bao gồm thống kê và hoạt động nhập/xuất kho và các hoạt động khác.',
+	inoutbound_overview: 'Tổng Quan Nhập/Xuất Kho',
 	net_flow_description:
 		'Dòng chảy ròng hàng hóa (chênh lệch giữa nhập và xuất của kho theo thời gian) trong 6 tháng vừa qua.',
-	assembly_productivity_overview: 'Tổng quan sản lượng thành hình',
+	assembly_productivity_overview: 'Tổng Quan Sản Lượng Thành Phẩm',
 	assembly_productivity_description: 'Chi tiết sản lượng thành hình của các nhãn hàng.',
+	defective_goods_inventory_overview: 'Tổng Quan Tồn Kho Hàng Lỗi',
+	defective_goods_inventory_overview_description: 'Cơ cấu tồn kho hàng lỗi theo từng loại.',
 	period_options: {
 		last_3_months: '3 tháng gần nhất',
 		last_30_days: '30 ngày gần nhất',
@@ -23,7 +26,7 @@ export default {
 	},
 	comparison: {
 		// Mô tả xu hướng cơ bản
-		no_change: 'không thay đổi',
+		no_change: 'Không thay đổi',
 		significant_trend_up_by: 'Xu hướng tăng mạnh (+{{percent}}%) tháng này',
 		significant_trend_down_by: 'Xu hướng giảm mạnh (-{{percent}}%) tháng này',
 		slight_trend_up_by: 'Xu hướng tăng nhẹ (+{{percent}}%) tháng này',
@@ -70,8 +73,8 @@ export default {
 		decrease_exceptional: 'Giảm đặc biệt',
 
 		// Trợ giúp phần trăm
-		pct_up: 'tăng {{percent}}%',
-		pct_down: 'giảm {{percent}}%',
-		pct_flat: 'thay đổi < 1%'
+		pct_up: 'Tăng {{percent}}%',
+		pct_down: 'Giảm {{percent}}%',
+		pct_flat: 'Thay đổi < 1%'
 	}
 } as const

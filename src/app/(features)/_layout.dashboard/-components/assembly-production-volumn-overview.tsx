@@ -96,7 +96,7 @@ export function AssemblyProductivityOverview() {
 							value={activePeriod}
 							onValueChange={setActivePeriod}
 							className={cn(
-								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border @[1024px]/card:inline-grid [&_*]:!cursor-pointer',
+								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border @4xl/card:inline-grid [&_*]:!cursor-pointer',
 								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center [&_button[role=radio]]:hidden'
 							)}>
 							<Div role='radio'>
@@ -113,7 +113,7 @@ export function AssemblyProductivityOverview() {
 							</Div>
 						</RadioGroup>
 						<Select defaultValue={format(subMonths(new Date(), 3), 'yyyy-MM-dd')}>
-							<SelectTrigger className='flex w-full min-w-40 @[1024px]/card:hidden'>
+							<SelectTrigger className='flex w-full min-w-40 @4xl/card:hidden'>
 								<SelectValue placeholder='Select' />
 							</SelectTrigger>
 							<SelectContent>
@@ -160,12 +160,12 @@ export function AssemblyProductivityOverview() {
 				{isLoading ? (
 					<Skeleton className='h-[250px] w-full' />
 				) : !Array.isArray(chartData) || chartData.length === 0 ? (
-					<Div className='flex h-64 items-center justify-center gap-x-2'>
+					<Div className='flex h-64 items-center justify-center gap-x-2 text-muted-foreground'>
 						<Icon name='ChartArea' size={32} strokeWidth={1} />
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer config={chartConfig} className='aspect-auto h-64 w-full'>
+					<ChartContainer config={chartConfig} className='aspect-auto h-72 w-full'>
 						<AreaChart
 							accessibilityLayer
 							data={chartData}

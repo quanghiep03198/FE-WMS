@@ -1,11 +1,14 @@
 export default {
+	all_time_defective_goods_inventory_qty: 'Latest total defective inventory based on stock count.',
 	compare_from_last_month: '{{value}} from last month',
 	dashboard_description:
 		'Providing an overview of key metrics including statistics, analysis, inbound/outbound operations and more.',
 	net_flow_description: 'Net flow (inflow - outflow balance) of the warehouse last 6 months.',
 	inoutbound_overview: 'Inbound/Outbound overview',
 	assembly_productivity_overview: 'Assembly line production volumn',
-	assembly_productivity_description: 'Illustrate productivity of each customer brands',
+	assembly_productivity_description: 'Illustrate productivity of each customer brands.',
+	defective_goods_inventory_overview: 'Defective goods inventory overview',
+	defective_goods_inventory_overview_description: 'Breakdown of defective goods inventory by category.',
 	period_options: {
 		last_3_months: 'Last 3 months',
 		last_30_days: 'Last 30 days',
@@ -13,11 +16,11 @@ export default {
 	},
 	statistic: {
 		order_number: 'Total of orders',
-		inventory_number: 'Inventory number',
+		inventory_number: 'Inventory quantity',
 		inbound_quantity: 'Inbound quantity',
 		outbound_quantity: 'Outbound quantity',
-		inventory_turnover: 'Inventory Turnover',
-		net_flow: 'Net flow',
+		inventory_turnover: 'Inventory turnover',
+		net_flow: 'Net Flow',
 		defective_rate: 'Defective rate'
 	},
 	comparison: {

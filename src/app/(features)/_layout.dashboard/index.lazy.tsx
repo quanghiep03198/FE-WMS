@@ -5,7 +5,7 @@ import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/page-header'
 import { AssemblyProductivityOverview } from './-components/assembly-production-volumn-overview'
-import { ChartPieDonutActive } from './-components/defective-goods-overview'
+import DefectiveGoodsInventoryOverview from './-components/defective-goods-inventory-composition'
 import InoutboundOverview from './-components/inoutbound-overview'
 import { NetFlowOverview } from './-components/net-flow-overview'
 import Statistics from './-components/statistics'
@@ -33,7 +33,7 @@ function Page() {
 					<PageDescription>{t('ns_dashboard:dashboard_description')}</PageDescription>
 				</PageHeader>
 				<Separator />
-				<Div className='grid grid-cols-12 gap-4'>
+				<Div className='grid grid-cols-12 gap-4 [&_div[data-slot=card-title]]:!capitalize'>
 					<Div className='col-span-full @container/statistics @[1280px]:order-first'>
 						<Statistics />
 					</Div>
@@ -44,10 +44,11 @@ function Page() {
 						<NetFlowOverview />
 					</Div>
 					<Div className='col-span-full @[1280px]:col-span-4'>
-						<ChartPieDonutActive />
+						<DefectiveGoodsInventoryOverview />
 					</Div>
 					<Div className='col-span-full @[1280px]:col-span-8'>
 						<AssemblyProductivityOverview />
+						{/* <DefectiveGoodsTrendingOverview /> */}
 					</Div>
 				</Div>
 			</Div>

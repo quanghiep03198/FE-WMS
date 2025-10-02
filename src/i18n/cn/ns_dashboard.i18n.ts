@@ -1,11 +1,13 @@
 export default {
+	all_time_defective_goods_inventory_qty: '最新次品库存总量, 基于最新盘点',
 	compare_from_last_month: '{{value}} 与上月比较',
 	dashboard_description: '提供关键指标的概览，包括统计数据和入出库操作',
 	inoutbound_overview: '入库/出库概览',
 	net_flow_description: '仓库过去6个月的净流量 (入库-出库平衡)',
 	assembly_productivity_overview: '装配生产力概览',
 	assembly_productivity_description: '显示各客户品牌的生产效率',
-	// inventory_turnover_description: '显示过去12个月的库存周转率',
+	defective_goods_inventory_overview: '次品库存总览',
+	defective_goods_inventory_overview_description: '按类别划分的次品库存结构',
 	period_options: {
 		last_3_months: '最近3个月',
 		last_30_days: '最近30天',
