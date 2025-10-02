@@ -66,7 +66,7 @@ export function getTrendingPercentageChange(percent): {
  */
 export function getTrendDescription(percent: number | null): string {
 	if (percent === null || percent === undefined || Math.abs(percent) < 1) {
-		return 'no_change'
+		return 'remained_unchanged'
 	}
 	return percent > 0 ? 'higher_than_last_month' : 'lower_than_last_month'
 }

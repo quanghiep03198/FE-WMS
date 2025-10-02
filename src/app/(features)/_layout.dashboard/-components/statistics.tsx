@@ -63,7 +63,7 @@ const Statistics: React.FC = () => {
 		)
 
 	return (
-		<Div className='grid h-full w-full grid-cols-2 gap-4 @6xl/statistics:grid-cols-4'>
+		<Div className='grid h-full w-full grid-cols-2 gap-4 @6xl/statistics:grid-cols-4 [&_div[data-slot=card-description]]:!capitalize'>
 			<Card className='@container/card'>
 				<CardHeader>
 					<CardDescription>{t('ns_dashboard:statistic.inbound_quantity')}</CardDescription>
