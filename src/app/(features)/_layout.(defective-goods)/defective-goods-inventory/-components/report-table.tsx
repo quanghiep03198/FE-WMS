@@ -217,6 +217,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 	const total = useMemo(() => {
 		if (!Array.isArray(data)) return 0
 		return data.reduce((acc, curr) => {
+			if (!Array.isArray(curr.size_data)) return acc
 			return acc + curr.size_data.reduce((a, b) => a + b.qty, 0)
 		}, 0)
 	}, [data])
