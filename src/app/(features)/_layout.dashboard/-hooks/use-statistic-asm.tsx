@@ -7,6 +7,7 @@ export enum StatisticsQueryKeys {
 	MONTHLY_INVENTORY_COMPARISON = 'MONTHLY_INVENTORY_COMPARISON',
 	LAST_6_MONTHS_NET_FLOW = 'LAST_6_MONTHS_NET_FLOW',
 	ANNUAL_INOUTBOUND_OVERVIEW = 'ANNUAL_INOUTBOUND_OVERVIEW',
+	DEFECTIVE_GOODS_INVENTORY_COMPOSITION = 'DEFECTIVE_GOODS_INVENTORY_COMPOSITION',
 	ASSEMBLY_PRODUCTIVITY = 'ASSEMBLY_PRODUCTIVITY'
 }
 
@@ -54,6 +55,18 @@ export const useGetLastSixMonthsNetFlow = () => {
 	return useQuery({
 		queryKey: [StatisticsQueryKeys.LAST_6_MONTHS_NET_FLOW, tenant?.id],
 		queryFn: () => StatisticsService.getLastSixMonthsNetFlow(tenant?.id),
+		refetchInterval: POLLING_INTERVAL,
+		enabled: !!tenant?.id,
+		select: (response) => response.metadata
+	})
+}
+
+export const useGetDefectiveGoodsInventoryCompositionQuery = () => {
+	const { data: tenant } = useGetTenantByFactory()
+
+	return useQuery({
+		queryKey: [StatisticsQueryKeys.DEFECTIVE_GOODS_INVENTORY_COMPOSITION, tenant?.id],
+		queryFn: () => StatisticsService.getDefectiveGoodsInventoryComposition(tenant?.id),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: !!tenant?.id,
 		select: (response) => response.metadata
