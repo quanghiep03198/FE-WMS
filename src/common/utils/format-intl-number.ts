@@ -1,3 +1,3 @@
-export default function formatIntlNumber(value: unknown) {
-	return typeof value === 'number' ? new Intl.NumberFormat().format(value) : 'Unknown'
+export default function formatIntlNumber(value: any) {
+	return new Intl.NumberFormat().format(value)
 }
