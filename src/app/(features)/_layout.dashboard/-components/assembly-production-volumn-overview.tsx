@@ -160,7 +160,7 @@ export function AssemblyProductivityOverview() {
 				{isLoading ? (
 					<Skeleton className='h-[250px] w-full' />
 				) : !Array.isArray(chartData) || chartData.length === 0 ? (
-					<Div className='flex h-64 items-center justify-center gap-x-2 text-muted-foreground'>
+					<Div className='mx-3 flex h-64 items-center justify-center gap-x-2 rounded-lg bg-muted text-muted-foreground'>
 						<Icon name='ChartArea' size={32} strokeWidth={1} />
 						{t('ns_common:table.no_data')}
 					</Div>

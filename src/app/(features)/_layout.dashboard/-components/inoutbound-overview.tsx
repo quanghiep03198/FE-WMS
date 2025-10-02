@@ -48,6 +48,8 @@ const InoutboundOverview: React.FC = () => {
 		[i18n.language]
 	)
 
+	const isEmpty = !Array.isArray(data) || data.every((item) => item.inbound_qty === 0 && item.outbound_qty === 0)
+
 	return (
 		<Div className='flex h-full flex-col items-stretch justify-end'>
 			<Card data-role='card'>
@@ -82,8 +84,8 @@ const InoutboundOverview: React.FC = () => {
 				<CardContent className='relative w-full'>
 					{isLoading ? (
 						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]' />
-					) : !Array.isArray(data) || data.length === 0 ? (
-						<Div className='flex w-full items-center justify-center gap-x-2 @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]'>
+					) : isEmpty ? (
+						<Div className='flex w-full items-center justify-center gap-x-2 rounded-lg bg-muted text-muted-foreground @xs:h-72 @xl:h-96 @3xl:min-h-[26rem]'>
 							<Icon name='ChartColumnBig' size={32} strokeWidth={1} />
 							{t('ns_common:table.no_data')}
 						</Div>
