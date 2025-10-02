@@ -34,7 +34,6 @@ import { pick } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-
 import { InventoryAuditQueryKeys, useGetInventoryAuditReport } from '../-hooks/use-inventory-audit-asm'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { InventoryReportDetailTable } from './report-detail-table'
@@ -225,7 +224,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnResizing={true}
 				manualExpanding={true}
 				renderSubComponent={DataDetailTable}
-				containerProps={{ className: 'xl:h-[50vh] h-[40vh]' }}
+				containerProps={{ className: 'xxl:h-[55vh] h-[40vh]' }}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
 					slotLeft: () => <SyncDataTrigger />,
