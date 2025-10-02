@@ -15,11 +15,13 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 	Div,
+	Icon,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
-	SelectValue
+	SelectValue,
+	Skeleton
 } from '@/components/ui'
 import { SelectProps } from '@radix-ui/react-select'
 import { capitalize } from 'lodash'
@@ -57,58 +59,81 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 				<CardDescription className='text-pretty'>
 					{t('ns_dashboard:defective_goods_inventory_overview_description')}
 				</CardDescription>
-				<CardAction className='hidden w-full @2xl:block'>
-					<PieCateogrySelect
-						value={activeCategory}
-						onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
-					/>
-				</CardAction>
+				{isLoading ? (
+					<Skeleton className='h-9 w-full max-w-56' />
+				) : (
+					<CardAction className='hidden w-full @2xl:block'>
+						<PieCateogrySelect
+							value={activeCategory}
+							onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
+						/>
+					</CardAction>
+				)}
 			</CardHeader>
 			<CardContent className='flex-1 pb-0'>
-				<ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-72 @2xl/card:max-h-80'>
-					<PieChart>
-						<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-						<Pie
-							data={chartData}
-							dataKey='qty'
-							nameKey='defective_category'
-							innerRadius={64}
-							strokeWidth={8}
-							activeIndex={activeIndex}
-							activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
-								<g>
-									<Sector {...props} outerRadius={outerRadius + 6} />
-									<Sector {...props} outerRadius={outerRadius + 16} innerRadius={outerRadius + 8} />
-								</g>
-							)}>
-							<Label
-								content={({ viewBox }) => {
-									if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-										return (
-											<text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
-												<tspan
-													x={viewBox.cx}
-													y={viewBox.cy}
-													className='fill-foreground text-3xl font-bold tabular-nums'>
-													{chartData[activeIndex]?.qty?.toLocaleString()}
-												</tspan>
-												<tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className='fill-muted-foreground'>
-													{capitalize(t('ns_common:unit.prs'))}
-												</tspan>
-											</text>
-										)
-									}
-								}}
+				{isLoading ? (
+					<Skeleton className='mx-auto aspect-square max-h-64 rounded-full @2xl/card:max-h-80' />
+				) : chartData.every((item) => item.qty === 0) ? (
+					<Div className='mx-auto flex h-full items-center justify-center gap-2 rounded-lg bg-muted text-muted-foreground'>
+						<Icon name='ChartPie' size={32} strokeWidth={1} />
+						{t('ns_common:table.no_data')}
+					</Div>
+				) : (
+					<ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-64 @2xl/card:max-h-80'>
+						<PieChart>
+							<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+							<Pie
+								data={chartData}
+								dataKey='qty'
+								nameKey='defective_category'
+								innerRadius={64}
+								strokeWidth={8}
+								activeIndex={activeIndex}
+								activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
+									<g>
+										<Sector {...props} outerRadius={outerRadius + 6} />
+										<Sector {...props} outerRadius={outerRadius + 16} innerRadius={outerRadius + 8} />
+									</g>
+								)}>
+								<Label
+									content={({ viewBox }) => {
+										if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+											return (
+												<text x={viewBox.cx} y={viewBox.cy} textAnchor='middle' dominantBaseline='middle'>
+													<tspan
+														x={viewBox.cx}
+														y={viewBox.cy}
+														className='fill-foreground text-3xl font-bold tabular-nums'>
+														{chartData[activeIndex]?.qty?.toLocaleString()}
+													</tspan>
+													<tspan
+														x={viewBox.cx}
+														y={(viewBox.cy || 0) + 24}
+														className='fill-muted-foreground'>
+														{capitalize(t('ns_common:unit.prs'))}
+													</tspan>
+												</text>
+											)
+										}
+									}}
+								/>
+							</Pie>
+						</PieChart>
+					</ChartContainer>
+				)}
+
+				{isLoading ? (
+					<Skeleton className='h-9 w-full max-w-56' />
+				) : (
+					<Div className='mt-3 block @2xl:hidden'>
+						<CardAction className='hidden w-full @2xl:block'>
+							<PieCateogrySelect
+								value={activeCategory}
+								onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
 							/>
-						</Pie>
-					</PieChart>
-				</ChartContainer>
-				<Div className='block @2xl:hidden'>
-					<PieCateogrySelect
-						value={activeCategory}
-						onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
-					/>
-				</Div>
+						</CardAction>{' '}
+					</Div>
+				)}
 			</CardContent>
 			<CardFooter className='flex-col items-start gap-2 text-sm'>
 				<Div className='flex items-start gap-2 font-medium leading-none'>
@@ -130,7 +155,7 @@ const PieCateogrySelect: React.FC<SelectProps> = ({ value, onValueChange }) => {
 			defaultValue={DefectiveCategory.B_GRADE}
 			value={value}
 			onValueChange={(value) => onValueChange(value as DefectiveCategory)}>
-			<SelectTrigger className='mx-auto w-2/3 max-w-1/2 @md/card:max-w-full @2xl/card:ml-auto @2xl/card:max-w-full @2xl:mr-0'>
+			<SelectTrigger className='mx-auto max-w-56 @2xl/card:ml-auto @2xl/card:max-w-full @2xl:mr-0'>
 				<SelectValue placeholder='Select category' />
 			</SelectTrigger>
 			<SelectContent>

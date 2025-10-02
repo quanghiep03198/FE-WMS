@@ -36,13 +36,15 @@ export function NetFlowOverview() {
 		return Number.parseFloat(percent.toFixed(2))
 	}, [data])
 
+	const isEmpty = !Array.isArray(data) || data.length === 0
+
 	return (
 		<Card data-role='card' className='h-full'>
 			<CardHeader>
 				<CardTitle>{t('ns_dashboard:statistic.net_flow')}</CardTitle>
 				<CardDescription>{t('ns_dashboard:net_flow_description')}</CardDescription>
 			</CardHeader>
-			<CardContent>
+			<CardContent className='flex-1'>
 				<ChartContainer
 					config={{
 						net_flow: {
@@ -50,11 +52,11 @@ export function NetFlowOverview() {
 							color: 'hsl(var(--chart-1))'
 						}
 					}}
-					className={'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}>
+					className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}>
 					{isLoading ? (
 						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-80' />
-					) : !Array.isArray(data) || data.length === 0 ? (
-						<Div className='flex h-full w-full flex-1 items-center justify-center gap-x-2 rounded-lg text-base text-muted-foreground'>
+					) : isEmpty ? (
+						<Div className='flex h-full min-h-80 w-full flex-1 items-center justify-center gap-x-2 rounded-lg bg-muted text-base text-muted-foreground'>
 							<Icon name='ChartSpline' size={32} strokeWidth={1} />
 							{t('ns_common:table.no_data')}
 						</Div>
@@ -83,7 +85,6 @@ export function NetFlowOverview() {
 					)}
 				</ChartContainer>
 			</CardContent>
-
 			{isLoading ? (
 				<CardFooter>
 					<Div className='space-y-1'>
@@ -92,8 +93,7 @@ export function NetFlowOverview() {
 					</Div>
 				</CardFooter>
 			) : (
-				Array.isArray(data) &&
-				data.length > 0 && (
+				!isEmpty && (
 					<CardFooter>
 						<Div className='space-y-1 *:text-sm'>
 							<Typography className='flex items-center gap-2 font-medium leading-loose'>
