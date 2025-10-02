@@ -32,8 +32,6 @@ import { useGetDefectiveGoodsInventoryCompositionQuery } from '../-hooks/use-sta
 import { DefectiveCategory } from '../../_layout.(defective-goods)/-constants'
 import { useDefectiveCategoryList } from '../../_layout.(defective-goods)/-hooks/use-defective-category-list'
 
-export const description = 'A donut chart with an active sector'
-
 const DefectiveGoodsInventoryOverview: React.FC = () => {
 	const { t } = useTranslation()
 	const [activeCategory, setActiveCategory] = useState<DefectiveCategory>(DefectiveCategory.B_GRADE)
@@ -50,7 +48,7 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 		return data.findIndex((item) => item.defective_category === activeCategory)
 	}, [activeCategory, chartData])
 
-	console.log(activeCategory)
+	const isEmpty = !Array.isArray(chartData) || chartData.every((item) => item.qty === 0)
 
 	return (
 		<Card className='h-full @container/card'>
@@ -59,27 +57,29 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 				<CardDescription className='text-pretty'>
 					{t('ns_dashboard:defective_goods_inventory_overview_description')}
 				</CardDescription>
-				{isLoading ? (
-					<Skeleton className='h-9 w-full max-w-56' />
-				) : (
-					<CardAction className='hidden w-full @2xl:block'>
-						<PieCateogrySelect
-							value={activeCategory}
-							onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
-						/>
-					</CardAction>
-				)}
+				<CardAction className='hidden w-full @2xl/card:block'>
+					{isLoading ? (
+						<Skeleton className='h-9 w-full max-w-56' />
+					) : (
+						!isEmpty && (
+							<PieCateogrySelect
+								value={activeCategory}
+								onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
+							/>
+						)
+					)}
+				</CardAction>
 			</CardHeader>
 			<CardContent className='flex-1 pb-0'>
 				{isLoading ? (
-					<Skeleton className='mx-auto aspect-square max-h-64 rounded-full @2xl/card:max-h-80' />
-				) : chartData.every((item) => item.qty === 0) ? (
-					<Div className='mx-auto flex h-full items-center justify-center gap-2 rounded-lg bg-muted text-muted-foreground'>
+					<Skeleton className='mx-auto aspect-square max-h-64 rounded-full @xl/card:max-h-80' />
+				) : isEmpty ? (
+					<Div className='mx-auto flex h-full min-h-64 items-center justify-center gap-2 rounded-lg bg-muted text-muted-foreground'>
 						<Icon name='ChartPie' size={32} strokeWidth={1} />
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-64 @2xl/card:max-h-80'>
+					<ChartContainer config={chartConfig} className='mx-auto aspect-square max-h-64 @xl/card:max-h-80'>
 						<PieChart>
 							<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
 							<Pie
@@ -121,24 +121,24 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 						</PieChart>
 					</ChartContainer>
 				)}
-
 				{isLoading ? (
 					<Skeleton className='h-9 w-full max-w-56' />
 				) : (
-					<Div className='mt-3 block @2xl:hidden'>
-						<CardAction className='hidden w-full @2xl:block'>
+					!isEmpty && (
+						<Div className='block w-full @2xl/card:hidden'>
 							<PieCateogrySelect
 								value={activeCategory}
 								onValueChange={(value) => setActiveCategory(value as DefectiveCategory)}
 							/>
-						</CardAction>{' '}
-					</Div>
+						</Div>
+					)
 				)}
 			</CardContent>
 			<CardFooter className='flex-col items-start gap-2 text-sm'>
-				<Div className='flex items-start gap-2 font-medium leading-none'>
-					{t('ns_erp:fields.actual_inventory_qty')} -{' '}
-					{chartData.reduce((acc, curr) => acc + curr.qty, 0).toLocaleString()} {t('ns_common:unit.prs')}
+				<Div className='font-medium leading-none'>
+					{t('ns_erp:fields.actual_inventory_qty')} {' : '}
+					{isEmpty ? 0 : chartData.reduce((acc, curr) => acc + curr.qty, 0).toLocaleString()}{' '}
+					{t('ns_common:unit.prs')}
 				</Div>
 				<Div className='leading-none text-muted-foreground'>
 					{t('ns_dashboard:all_time_defective_goods_inventory_qty')}
@@ -150,12 +150,13 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 
 const PieCateogrySelect: React.FC<SelectProps> = ({ value, onValueChange }) => {
 	const defectiveCategoryList = useDefectiveCategoryList()
+
 	return (
 		<Select
 			defaultValue={DefectiveCategory.B_GRADE}
 			value={value}
 			onValueChange={(value) => onValueChange(value as DefectiveCategory)}>
-			<SelectTrigger className='mx-auto max-w-56 @2xl/card:ml-auto @2xl/card:max-w-full @2xl:mr-0'>
+			<SelectTrigger className='mx-auto max-w-56 @xl/card:ml-auto @2xl/card:mr-0'>
 				<SelectValue placeholder='Select category' />
 			</SelectTrigger>
 			<SelectContent>
@@ -166,7 +167,6 @@ const PieCateogrySelect: React.FC<SelectProps> = ({ value, onValueChange }) => {
 								className='aspect-square !size-3 rounded'
 								style={{ backgroundColor: `hsl(var(--chart-${index + 1}))` }}
 							/>
-
 							{category.label}
 						</Div>
 					</SelectItem>
