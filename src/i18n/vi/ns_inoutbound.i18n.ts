@@ -132,7 +132,7 @@ export default {
 		decker_data_synchronization: 'Đồng bộ dữ liệu Decker',
 		decker_data_synchronization_description:
 			'Chọn nhà máy nơi các chỉ lệnh không có dữ liệu được sản xuất để tiến hành đồng bộ',
-		toggle_fullscreen: 'Chuyển đổi chế độ toàn màn hình',
+		toggle_fullscreen: 'Chế độ toàn màn hình',
 		toggle_fullscreen_note: 'Sử dụng chế độ toàn màn hình để có góc nhìn rộng hơn',
 		transferred_data: 'Dữ liệu đã chuyển'
 	},
