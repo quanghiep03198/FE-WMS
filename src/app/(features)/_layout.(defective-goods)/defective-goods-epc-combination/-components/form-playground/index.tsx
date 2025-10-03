@@ -5,13 +5,13 @@ import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	buttonVariants,
+	Checkbox,
 	Div,
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
 	Label,
-	SelectFieldControl,
-	Switch
+	SelectFieldControl
 } from '@/components/ui'
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -347,13 +347,14 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div className='relative col-span-full'>
 						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>
 							<Label htmlFor='toggle-use-desc-template' className='inline-flex items-center gap-x-2'>
-								<Icon name='Sparkles' strokeWidth={1.5} /> {t('ns_common:editor.use_available_template')}
+								<Icon name='Sparkles' strokeWidth={1.5} />
+								{t('ns_common:editor.use_available_template')}
 							</Label>
-							<Switch
+							<Checkbox
 								id='toggle-use-desc-template'
 								checked={useAvailableTemplate}
 								onCheckedChange={(checked) => {
-									setUseAvailabelTemplate(checked)
+									setUseAvailabelTemplate(Boolean(checked))
 									if (!checked) setDefaultEditorContent('')
 								}}
 							/>
