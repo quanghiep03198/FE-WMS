@@ -6,7 +6,7 @@ import { RFID_AGENT_VERSION } from '../-constants'
 
 const GridDotBackground: React.FC = () => {
 	return (
-		<Div className='absolute left-1/2 top-1/2 z-[-10] mx-auto h-[50vh] w-full max-w-[40vw] -translate-x-1/2 -translate-y-1/2 skew-y-[24deg] transition-transform duration-500 ease-in-out group-hover/hero:skew-y-[16deg] group-hover/hero:scale-125'>
+		<Div className='absolute left-1/2 top-1/2 z-[-10] mx-auto h-[50vh] w-full max-w-[50vw] -translate-x-1/2 -translate-y-1/2 skew-y-[18deg] scale-110 transition-transform duration-500 ease-in-out xxl:scale-125'>
 			<Div className='pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background text-foreground [mask-image:radial-gradient(circle_at_center,transparent_10%,black)]' />
 			<Div
 				className={cn(
