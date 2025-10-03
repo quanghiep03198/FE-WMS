@@ -4,8 +4,8 @@ import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClie
 import { omitBy, uniqBy } from 'lodash'
 import { RFIDDataType } from '../-constants'
 import { RFIDInboundQueryKeys } from '../finished-goods-inbound/-hooks/use-rfid-inbound-asm'
-import { FilterArchivedEpcParams } from '../finished-goods-outbound'
 import { RFIDOutboundQueryKeys } from '../finished-goods-outbound/-hooks/use-rfid-outbound-asm'
+import { SearchFormValues } from './use-persistent-filter-state'
 
 export enum ArchiviedDataQueryKeys {
 	ARCHIVED_EPCS = 'ARCHIVED_EPCS',
@@ -14,15 +14,15 @@ export enum ArchiviedDataQueryKeys {
 
 type InvalidateQueryKeys = ArchiviedDataQueryKeys | RFIDInboundQueryKeys | RFIDOutboundQueryKeys
 
-export const useGetArchivedEpcQuery = (type: RFIDDataType, params) => {
+export const useGetArchivedEpcQuery = (type: RFIDDataType, params: SearchFormValues & { limit: number }) => {
 	return useInfiniteQuery({
 		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS, type, params],
 		queryFn: async ({ pageParam }) => {
-			const filterQueries = omitBy<Partial<FilterArchivedEpcParams>>(
+			const filterQueries = omitBy(
 				{
 					_page: pageParam,
 					_limit: params.limit ?? 100,
-					q: params.searchTerm,
+					q: params.epc,
 					'shoes_style.eq': params.shoes_style,
 					'color_sn.eq': params.color_sn,
 					'mo_no.eq': params.mo_no,
@@ -30,7 +30,8 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params) => {
 					'scanned.eq': params.scanned,
 					'scannable.eq': params.scannable
 				},
-				(value) => value === undefined || value === null || (typeof value === 'string' && value === '')
+				(value) =>
+					value === undefined || value === null || (typeof value === 'string' && (value === '' || value === 'all'))
 			)
 			return await RFIDService.getArchivedEpcs(type, filterQueries)
 		},

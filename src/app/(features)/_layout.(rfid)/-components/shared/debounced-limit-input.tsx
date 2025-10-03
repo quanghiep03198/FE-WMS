@@ -2,16 +2,17 @@ import { Div, Input, Label } from '@/components/ui'
 import { useDebounceEffect } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
+import { RFIDDataType } from '../../-constants'
+import { usePersistentFilterState } from '../../-hooks/use-persistent-filter-state'
 
-const DebouncedLimitInput: React.FC = () => {
+const DebouncedLimitInput: React.FC<{ dataType: RFIDDataType }> = ({ dataType }) => {
 	const { t } = useTranslation()
-	const { limit, setLimit } = useDataRestorationContext('limit', 'setLimit')
-	const [value, setValue] = useState<number>(limit)
+	const [persistentFormValues, setPersistentFormValues] = usePersistentFilterState(dataType)
+	const [value, setValue] = useState<number>(persistentFormValues.limit)
 
 	useDebounceEffect(
 		() => {
-			setLimit(value)
+			setPersistentFormValues({ ...persistentFormValues, limit: +value })
 		},
 		[value],
 		{ wait: 300, leading: true, trailing: true }

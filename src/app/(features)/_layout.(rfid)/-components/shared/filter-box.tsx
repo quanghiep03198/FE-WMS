@@ -27,18 +27,9 @@ import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType, ScanCapability, ScannedStatus } from '../../-constants'
-import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
 import { useGetArchivedEpcFeatureQuery } from '../../-hooks/use-data-restoration-asm'
+import { SearchFormValues, usePersistentFilterState } from '../../-hooks/use-persistent-filter-state'
 import { FilterForm, GhostButton } from './styled'
-
-type SearchFormValues = {
-	shoes_style: string
-	color_sn: string
-	mo_no: string
-	size_numcode: string
-	scannable?: ScanCapability | 'all'
-	scanned?: ScannedStatus | 'all'
-}
 
 type ArchivedEpcFilterProps = {
 	dataType: RFIDDataType
@@ -50,14 +41,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 	const { data } = useGetArchivedEpcFeatureQuery(dataType)
 	const [search, setSearch, resetSearch] = useResetState<string>('')
 
-	const { searchTerm, advancedFilters, setSearchTerm, setAdvancedFilters } = useDataRestorationContext(
-		'limit',
-		'searchTerm',
-		'setSearchTerm',
-		'advancedFilters',
-		'setAdvancedFilters'
-	)
-
 	const defaultFormValues = useMemo(() => {
 		const values: Partial<SearchFormValues> = {
 			shoes_style: '',
@@ -65,7 +48,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 			mo_no: '',
 			size_numcode: ''
 		}
-
 		switch (dataType) {
 			case RFIDDataType.INBOUND:
 				values['scannable'] = 'all'
@@ -73,7 +55,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 			case RFIDDataType.OUTBOUND:
 				values['scanned'] = 'all'
 				break
-
 			default:
 				break
 		}
@@ -81,9 +62,11 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 		return values
 	}, [dataType])
 
+	const [persistentFormValues, setPersistentFormValues] = usePersistentFilterState(dataType)
+
 	const form = useForm<SearchFormValues>({
 		mode: 'onChange',
-		defaultValues: defaultFormValues
+		defaultValues: persistentFormValues
 	})
 
 	const currentShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
@@ -145,7 +128,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 
 	useDebounceEffect(
 		() => {
-			setSearchTerm(search)
+			setPersistentFormValues({ ...persistentFormValues, epc: search })
 		},
 		[search],
 		{ wait: 300 }
@@ -154,17 +137,18 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 	const handleSearch = (data: SearchFormValues) => {
 		switch (dataType) {
 			case RFIDDataType.INBOUND:
-				setAdvancedFilters({
+				setPersistentFormValues({
 					...data,
-					scanned: null,
-					scannable: data.scannable === 'all' ? null : data.scannable === ScanCapability.SCANNABLE ? true : false
+					scanned: null
+					// scannable: data.scannable === 'all' ? null : data.scannable === ScanCapability.SCANNABLE ? true : false
 				})
 				break
+
 			case RFIDDataType.OUTBOUND:
-				setAdvancedFilters({
+				setPersistentFormValues({
 					...data,
-					scannable: null,
-					scanned: data.scanned === 'all' ? null : data.scanned === ScannedStatus.SCANNED ? true : false
+					scannable: null
+					// scanned: data.scanned === 'all' ? null : data.scanned === ScannedStatus.SCANNED ? true : false
 				})
 				break
 
@@ -193,7 +177,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 					onFocus={(e) => e.stopPropagation()}
 					onInput={(e) => setSearch(e.currentTarget.value)}
 				/>
-				{(searchTerm || !Object.values(advancedFilters).every(isEmpty)) && (
+				{!Object.values(persistentFormValues).every(isEmpty) && (
 					<Fragment>
 						<Tooltip message={t('ns_common:actions.clear_filter')} triggerProps={{ asChild: true }}>
 							<GhostButton

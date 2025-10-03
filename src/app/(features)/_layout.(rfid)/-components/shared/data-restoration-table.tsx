@@ -22,9 +22,10 @@ import { CheckedState } from '@radix-ui/react-checkbox'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RFIDDataType } from '../../-constants'
+import { RFIDDataType, ScanCapability, ScannedStatus } from '../../-constants'
 import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
 import { useGetArchivedEpcFeatureQuery, useGetArchivedEpcQuery } from '../../-hooks/use-data-restoration-asm'
+import { SearchFormValues, usePersistentFilterState } from '../../-hooks/use-persistent-filter-state'
 import { DataRestorationRow, MemoizedDataRestorationRow } from './data-restoration-row'
 import DebouncedLimitInput from './debounced-limit-input'
 import { GhostButton } from './styled'
@@ -36,16 +37,12 @@ const PRERENDERED_ITEMS: number = 5
 
 const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType }) => {
 	const { t } = useTranslation()
-	const { limit, selectedItems, searchTerm, advancedFilters, addAllItemsToSet, removeAllItemsFromSet } =
-		useDataRestorationContext(
-			'limit',
-			'selectedItems',
-			'advancedFilters',
-			'addAllItemsToSet',
-			'removeAllItemsFromSet',
-			'searchTerm'
-		)
-
+	const { selectedItems, addAllItemsToSet, removeAllItemsFromSet } = useDataRestorationContext(
+		'selectedItems',
+		'addAllItemsToSet',
+		'removeAllItemsFromSet'
+	)
+	const [persistentFormValues] = usePersistentFilterState(dataType)
 	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery(dataType)
 	const {
 		data,
@@ -56,9 +53,18 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 		refetch: refetchArchivedEpc,
 		fetchNextPage
 	} = useGetArchivedEpcQuery(dataType, {
-		limit,
-		searchTerm,
-		...advancedFilters
+		...persistentFormValues,
+		...(dataType === RFIDDataType.INBOUND && {
+			scannable:
+				persistentFormValues.scanned === 'all' ? null : persistentFormValues.scannable === ScanCapability.SCANNABLE
+		}),
+		...(dataType === RFIDDataType.OUTBOUND && {
+			scanned: persistentFormValues.scanned === 'all' ? null : persistentFormValues.scanned === ScannedStatus.SCANNED
+		})
+	} as SearchFormValues & {
+		limit: number
+		scanned?: boolean | null
+		scannable?: boolean | null
 	})
 
 	const datalist = useMemo(() => (Array.isArray(data) ? data : []), [data])
@@ -208,7 +214,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 				<TableFooter>
 					<TableRow className='sticky -bottom-px z-10 [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
 						<TableCell colSpan={2}>
-							<DebouncedLimitInput />
+							<DebouncedLimitInput dataType={dataType} />
 						</TableCell>
 						<TableCell align='right' colSpan={2}>
 							{t('ns_common:table.selected_rows', {
