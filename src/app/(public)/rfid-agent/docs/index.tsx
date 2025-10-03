@@ -23,7 +23,7 @@ export const Route = createFileRoute('/(public)/rfid-agent/docs/')({
 
 function RouteComponent() {
 	return (
-		<SidebarProvider className='h-screen overflow-hidden'>
+		<SidebarProvider data-state-persistent-key='rfidAgentDocSidebarOpen' className='h-screen overflow-hidden'>
 			<PageProvider>
 				<NavSidebar />
 				<Div id='content' className='relative h-screen flex-1 overflow-y-scroll scroll-smooth @container'>

@@ -61,7 +61,9 @@ function Layout() {
 		<Fragment>
 			{isUnsupportedScreen && <UnsupportedScreen />}
 			<AuthGuard>
-				<SidebarProvider className='h-screen !overflow-hidden [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
+				<SidebarProvider
+					data-state-persistent-key='appSidebarOpen'
+					className='h-screen !overflow-hidden [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
 					<NavSidebar />
 					<Div
 						className='relative h-full flex-1 overflow-y-scroll @container'

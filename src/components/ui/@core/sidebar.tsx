@@ -44,6 +44,7 @@ const SidebarProvider = React.forwardRef<
 		defaultOpen?: boolean
 		open?: boolean
 		onOpenChange?: (open: boolean) => void
+		storageKey?: string
 	}
 >(({ defaultOpen = true, open: openProp, onOpenChange: setOpenProp, className, style, children, ...props }, ref) => {
 	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
@@ -51,7 +52,7 @@ const SidebarProvider = React.forwardRef<
 
 	// This is the internal state of the sidebar.
 	// We use openProp and setOpenProp for control from outside the component.
-	const [_open, _setOpen] = useLocalStorageState('sidebarOpen', {
+	const [_open, _setOpen] = useLocalStorageState(props['data-state-persistent-key'] ?? 'sidebarOpen', {
 		defaultValue: defaultOpen,
 		listenStorageChange: true
 	})
