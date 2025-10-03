@@ -1,7 +1,7 @@
 import { useLocalStorageState } from 'ahooks'
 
 export const useSwitchRFIDDevice = () => {
-	const [currentDevice, setCurrentDevice] = useLocalStorageState<'usb' | 'uhf'>('def_rfid_device', {
+	const [currentDevice, setCurrentDevice] = useLocalStorageState<'usb' | 'uhf'>('epcCombinationPlaygroundDevice', {
 		listenStorageChange: true,
 		defaultValue: 'uhf'
 	})
