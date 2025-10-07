@@ -1,4 +1,4 @@
-import { useStoreSelector } from '@/common/hooks/use-store-selector'
+import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { uniqBy } from 'lodash'
 import { createContext, useRef } from 'react'
 import { StoreApi, create } from 'zustand'
@@ -95,4 +95,4 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 	return <OrderDetailContext.Provider value={storeRef.current}>{children}</OrderDetailContext.Provider>
 }
 
-export const useOrderDetailContext = useStoreSelector(OrderDetailContext)
+export const useOrderDetailContext = createStoreSelector(OrderDetailContext)

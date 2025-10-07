@@ -1,5 +1,5 @@
 import { useGetAgentIPv4 } from '@/app/-hooks/use-agent-ipv4'
-import { useStoreSelector } from '@/common/hooks/use-store-selector'
+import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { useInterval, useReactive } from 'ahooks'
@@ -213,4 +213,4 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	return <ReaderPlaygroundContext.Provider value={store.current}>{children}</ReaderPlaygroundContext.Provider>
 }
 
-export const useReaderPlaygroundStore = useStoreSelector(ReaderPlaygroundContext)
+export const useReaderPlaygroundStore = createStoreSelector(ReaderPlaygroundContext)

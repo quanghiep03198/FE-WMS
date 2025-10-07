@@ -1,6 +1,6 @@
 'use no memo'
 
-import { useStoreSelector } from '@/common/hooks/use-store-selector'
+import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { IElectronicProductCode } from '@/common/types/entities'
 import React, { createContext, useRef } from 'react'
 import { StoreApi, create } from 'zustand'
@@ -134,4 +134,4 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }
 
-export const usePageContext = useStoreSelector(PageContext)
+export const usePageContext = createStoreSelector(PageContext)

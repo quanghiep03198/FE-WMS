@@ -1,4 +1,4 @@
-import { useStoreSelector } from '@/common/hooks/use-store-selector'
+import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { uniqBy } from 'lodash'
 import { createContext, useRef } from 'react'
@@ -55,4 +55,4 @@ export const DataRestorationProvider: React.FC<React.PropsWithChildren> = ({ chi
 	return <RestorationFilterContext.Provider value={store.current}>{children}</RestorationFilterContext.Provider>
 }
 
-export const useDataRestorationContext = useStoreSelector(RestorationFilterContext)
+export const useDataRestorationContext = createStoreSelector(RestorationFilterContext)
