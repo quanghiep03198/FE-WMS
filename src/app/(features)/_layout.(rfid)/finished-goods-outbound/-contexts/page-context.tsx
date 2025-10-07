@@ -1,11 +1,10 @@
 'use no memo'
 
+import { useStoreSelector } from '@/common/hooks/use-store-selector'
 import { IElectronicProductCode } from '@/common/types/entities'
-import { pick } from 'lodash'
-import React, { createContext, use, useRef } from 'react'
-import { StoreApi, create, useStore } from 'zustand'
+import React, { createContext, useRef } from 'react'
+import { StoreApi, create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import { useShallow } from 'zustand/react/shallow'
 import { type OrderItem } from '../..'
 
 export type ScanningState = 'pending' | 'success' | 'error'
@@ -82,12 +81,4 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 	return <PageContext.Provider value={storeRef.current}>{children}</PageContext.Provider>
 }
 
-export const usePageContext = <T extends PageContextStore, K extends keyof PageContextStore>(...selectors: K[]) => {
-	const store = use(PageContext)
-	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
-}
+export const usePageContext = useStoreSelector(PageContext)

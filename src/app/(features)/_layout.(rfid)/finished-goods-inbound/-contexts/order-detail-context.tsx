@@ -1,8 +1,8 @@
-import { pick, uniqBy } from 'lodash'
-import { createContext, use, useRef } from 'react'
-import { StoreApi, create, useStore } from 'zustand'
+import { useStoreSelector } from '@/common/hooks/use-store-selector'
+import { uniqBy } from 'lodash'
+import { createContext, useRef } from 'react'
+import { StoreApi, create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import { useShallow } from 'zustand/react/shallow'
 // import { OrderSize } from './-page-context'
 
 type SelectedRow = {
@@ -95,14 +95,4 @@ export const OrderDetailProvider: React.FC<React.PropsWithChildren> = ({ childre
 	return <OrderDetailContext.Provider value={storeRef.current}>{children}</OrderDetailContext.Provider>
 }
 
-export const useOrderDetailContext = <T extends TOrderDetailContext, K extends keyof TOrderDetailContext>(
-	...selectors: K[]
-) => {
-	const store = use(OrderDetailContext)
-	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
-}
+export const useOrderDetailContext = useStoreSelector(OrderDetailContext)

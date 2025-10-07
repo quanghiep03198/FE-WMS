@@ -1,15 +1,15 @@
 import { useGetAgentIPv4 } from '@/app/-hooks/use-agent-ipv4'
+import { useStoreSelector } from '@/common/hooks/use-store-selector'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { useInterval, useReactive } from 'ahooks'
-import { pick, throttle, uniq } from 'lodash'
+import { throttle, uniq } from 'lodash'
 import mqtt from 'mqtt'
-import { createContext, use, useEffect, useLayoutEffect, useRef } from 'react'
+import { createContext, useEffect, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { gunzipSync } from 'zlib'
 import { create, StoreApi, useStore } from 'zustand'
-import { useShallow } from 'zustand/react/shallow'
 import { ReaderAntenna } from '../-constants'
 
 type RFIDPlaygroundActions = 'connect' | 'disconnect' | 'start' | 'stop' | 'ping' | 'reset' | 'get' | 'update'
@@ -213,17 +213,4 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	return <ReaderPlaygroundContext.Provider value={store.current}>{children}</ReaderPlaygroundContext.Provider>
 }
 
-export const useReaderPlaygroundStore = <
-	T extends ReaderPlaygroundContextStore,
-	K extends keyof ReaderPlaygroundContextStore
->(
-	...selectors: K[]
-) => {
-	const store = use(ReaderPlaygroundContext)
-	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
-}
+export const useReaderPlaygroundStore = useStoreSelector(ReaderPlaygroundContext)

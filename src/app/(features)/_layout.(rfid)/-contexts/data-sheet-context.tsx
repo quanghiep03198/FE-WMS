@@ -1,9 +1,9 @@
+import { useStoreSelector } from '@/common/hooks/use-store-selector'
 import { IElectronicProductCode } from '@/common/types/entities'
-import { pick, uniqBy } from 'lodash'
-import { createContext, use, useRef } from 'react'
-import { create, StoreApi, useStore } from 'zustand'
+import { uniqBy } from 'lodash'
+import { createContext, useRef } from 'react'
+import { create, StoreApi } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import { useShallow } from 'zustand/react/shallow'
 
 type RestorableElectronicProductCode = IElectronicProductCode & { scanned?: boolean }
 
@@ -55,17 +55,4 @@ export const DataRestorationProvider: React.FC<React.PropsWithChildren> = ({ chi
 	return <RestorationFilterContext.Provider value={store.current}>{children}</RestorationFilterContext.Provider>
 }
 
-export const useDataRestorationContext = <
-	T extends DataRestorationFilterStore,
-	K extends keyof DataRestorationFilterStore
->(
-	...selectors: K[]
-) => {
-	const store = use(RestorationFilterContext)
-	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
-}
+export const useDataRestorationContext = useStoreSelector(RestorationFilterContext)

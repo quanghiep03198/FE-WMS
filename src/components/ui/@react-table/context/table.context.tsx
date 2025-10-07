@@ -1,9 +1,8 @@
+import { useStoreSelector } from '@/common/hooks/use-store-selector'
 import { Table } from '@tanstack/react-table'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import { pick } from 'lodash'
-import { createContext, useContext } from 'react'
-import { StoreApi, useStore } from 'zustand'
-import { useShallow } from 'zustand/react/shallow'
+import { createContext } from 'react'
+import { StoreApi } from 'zustand'
 
 export type TableContextStore = {
 	table: Table<any>
@@ -14,12 +13,4 @@ export type TableContextStore = {
 
 export const TableContext = createContext<StoreApi<TableContextStore>>(null)
 
-export const useTableContext = <T extends TableContextStore, K extends keyof TableContextStore>(...selectors: K[]) => {
-	const store = useContext(TableContext)
-	if (!store) throw new Error('Missing store provider')
-	if (!selectors) return useStore(store)
-	return useStore(
-		store,
-		useShallow((state) => pick(state, selectors))
-	) as Pick<T, K>
-}
+export const useTableContext = useStoreSelector(TableContext)
