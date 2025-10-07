@@ -109,8 +109,8 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 	const fieldsetSizeVerticalPadding = useMemo(() => {
 		if (fieldsetRef.current) {
 			const computedStyle = window.getComputedStyle(fieldsetRef.current)
-			const paddingTop = parseInt(computedStyle.paddingTop) || 0
-			const paddingBottom = parseInt(computedStyle.paddingBottom) || 0
+			const paddingTop = Number.parseInt(computedStyle.paddingTop) || 0
+			const paddingBottom = Number.parseInt(computedStyle.paddingBottom) || 0
 			return paddingTop + paddingBottom
 		}
 		return 0
@@ -222,7 +222,7 @@ const ArrayFieldControl: React.FC<{
 	const handleAppendField: React.MouseEventHandler<HTMLButtonElement> = (e) => {
 		if (shouldAllowAdditionalSizes) e.preventDefault()
 		else {
-			onAppend({})
+			onAppend({} as DetailedOutBoundFormValues['sizes'][number])
 			e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' })
 		}
 	}
