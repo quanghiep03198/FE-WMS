@@ -279,7 +279,7 @@ const EpcDataList: React.FC = () => {
 					ref={containerRef}
 					className={cn(
 						'z-10 flex w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 will-change-transform contain-paint',
-						'h-[400px] @3xl:h-[calc(var(--outlet-wrapper-height))] @7xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-2px)]',
+						'h-[400px] @3xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-48px)] @7xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-2px)]',
 						'group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-48px)]'
 					)}>
 					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
@@ -321,7 +321,7 @@ const EpcDataList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[400px] place-content-center @3xl:h-[calc(var(--outlet-wrapper-height))] @7xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-2px)] group-has-[#toggle-fullscreen[data-state=checked]]:xl:h-[calc(var(--outlet-wrapper-height)-168px)] xxl:h-[calc(var(--outlet-wrapper-height)-168px)]'>
+				<Div className='z-10 grid h-[400px] place-content-center @3xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-48px)] @7xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-2px)] group-has-[#toggle-fullscreen[data-state=checked]]:xl:h-[calc(var(--outlet-wrapper-height)-168px)] xxl:h-[calc(var(--outlet-wrapper-height)-168px)]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
