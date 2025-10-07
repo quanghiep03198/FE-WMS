@@ -30,7 +30,7 @@ export class AuthService {
 		return await axiosInstance.post<void, ResponseBody<null>>('/logout')
 	}
 
-	static async refreshToken(id: string, signal: GenericAbortSignal): Promise<ResponseBody<string>> {
+	static async refreshToken(id: number, signal: GenericAbortSignal): Promise<ResponseBody<string>> {
 		try {
 			return await axiosInstance.get(`/refresh-token/${id}`, { signal })
 		} catch {
