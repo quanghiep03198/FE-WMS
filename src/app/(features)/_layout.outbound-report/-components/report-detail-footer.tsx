@@ -47,7 +47,7 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 					<Div
 						className='flex flex-grow border-collapse flex-nowrap divide-x'
 						onContextMenu={(e) => e.preventDefault()}>
-						{Array(data) &&
+						{Array.isArray(data) &&
 							sortBy(data, 'size_numcode').map((size) => (
 								<NestedRow key={size?.size_numcode} className='!grid-rows-3'>
 									<NestedCell className='px-4 py-2 font-medium text-table-head-foreground first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0'>

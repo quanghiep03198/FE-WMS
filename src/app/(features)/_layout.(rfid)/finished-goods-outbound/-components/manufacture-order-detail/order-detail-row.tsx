@@ -47,7 +47,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 				<Div
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
-					{Array(data?.sizes) &&
+					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
 							<NestedRow
 								key={size?.size_numcode}
