@@ -83,8 +83,8 @@ export const Header: React.FC = () => {
 	)
 
 	return (
-		<Div as='header' className='sticky top-0 z-50 p-2 sm:p-0'>
-			<NavigationMenu className='mx-auto w-full max-w-fit list-none rounded-lg border bg-background/50 p-1 backdrop-blur-sm sm:w-full sm:max-w-full sm:rounded-none sm:border-none sm:bg-transparent sm:p-0 sm:p-2'>
+		<Div as='header' className='sticky top-0 z-50 p-2 sm:p-2'>
+			<NavigationMenu className='mx-auto w-full list-none rounded-lg border bg-background/50 p-1 backdrop-blur-sm sm:w-full sm:max-w-full sm:rounded-none sm:border-none sm:bg-transparent sm:p-0'>
 				<NavigationMenuItem className='sm:!bg-transparent'>
 					<Link to='/'>
 						<NavigationMenuLink

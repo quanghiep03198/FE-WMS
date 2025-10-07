@@ -41,7 +41,9 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 					suitable for Internet of Things messaging
 				</VisualCard.Description>
 			</VisualCard.Header>
-			<VisualCard.Content ref={containerRef}>
+			<VisualCard.Content
+				ref={containerRef}
+				className='@md/visual-card:px-6 md:grid md:grid-cols-[1fr_2fr] md:gap-6 md:px-6'>
 				<figure
 					className={cn('z-0 place-content-center place-items-center', className)}
 					role='img'
@@ -51,7 +53,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						viewBox='0 0 24 24'
 						role='img'
 						fill='none'
-						className='w-full max-w-40'
+						className='w-full max-w-40 md:max-w-48'
 						strokeWidth={0.2}
 						xmlns='http://www.w3.org/2000/svg'>
 						<title>{'Eclipse Mosquitto icon'}</title>
@@ -73,7 +75,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 						</defs>
 					</svg>
 				</figure>
-				<div className='mx-auto my-4 w-full max-w-96 space-y-4 [&_div]:w-full'>
+				<div className='mx-auto my-4 w-full max-w-96 space-y-4 @md/visual-card:max-w-full md:max-w-full md:space-y-6 [&_div]:w-full'>
 					<AnimatedSignalFigure titleLeft='/request/signal' titleRight={`{"action": "connect"}`} />
 					<AnimatedSignalFigure titleLeft='/reply/data' titleRight={`{"data": "[...]"}`} animationReverse />
 					<AnimatedSignalFigure titleLeft='/request/settings' titleRight={`{"ip": "10.xx.xx.xx"}`} />
