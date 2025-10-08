@@ -111,7 +111,9 @@ const InoutboundForm: React.FC = () => {
 
 	useEffect(() => {
 		if (Array.isArray(writableTenants)) {
-			const currentTenant = writableTenants.find((item) => item.factory === currentFactoryProduce)
+			const currentTenant = writableTenants.find((item) => {
+				return item.factory.includes(currentFactoryProduce)
+			})
 			form.setValue('target_tenant', currentTenant?.id ?? '')
 		}
 	}, [currentFactoryProduce])
@@ -123,13 +125,11 @@ const InoutboundForm: React.FC = () => {
 		)
 	}, [action])
 
-	const currentWritableTenant = useMemo<Partial<ITenancy>>(
-		() =>
-			Array.isArray(writableTenants)
-				? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
-				: undefined,
-		[writableTenants, form.watch('target_tenant')]
-	)
+	const currentWritableTenant = useMemo<Partial<ITenancy>>(() => {
+		return Array.isArray(writableTenants)
+			? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
+			: null
+	}, [writableTenants, form.watch('target_tenant')])
 
 	const handleSubmit = async (data: FormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })

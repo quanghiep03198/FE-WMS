@@ -57,7 +57,6 @@ const RFIDDeviceFormDialog: React.FC = () => {
 	event$.useSubscription(({ action, defaultValues }) => {
 		setOpen((prev) => !prev)
 		setAction(action)
-		console.log('action :>> ', action)
 		if (action === CommonActions.UPDATE && defaultValues) {
 			form.reset(defaultValues)
 		}

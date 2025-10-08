@@ -17,7 +17,7 @@ export interface IBaseEntity {
 export interface ITenancy {
 	id: Tenant
 	default?: boolean
-	factory: Array<FactoryCode> | FactoryCode
+	factory: Array<string> | string
 	alias: string
 	host: string
 }
