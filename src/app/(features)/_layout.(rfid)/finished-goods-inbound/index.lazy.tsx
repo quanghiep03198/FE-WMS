@@ -3,6 +3,7 @@ import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import AlreadyScannedEpcsAlert from './-components/already-scanned-epcs-alert'
 import ScannedEPCsCounter from './-components/epc-counter'
 import EpcListBox from './-components/epc-data-list'
 import InoutboundForm from './-components/inoutbound-form'
@@ -39,6 +40,7 @@ function Page() {
 
 			<HostCompatibleGuard>
 				<PageProvider>
+					<AlreadyScannedEpcsAlert />
 					<PageComposition.Container
 						style={{
 							'--toolbar-height': '60px'

@@ -67,5 +67,5 @@ export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = fa
 		instanceIO.current.connect()
 	}, [])
 
-	return { socket: instanceIO.current, isConnected, data, emit, connect, disconnect }
+	return { socket: instanceIO.current, isConnected, data, setData, emit, connect, disconnect }
 }

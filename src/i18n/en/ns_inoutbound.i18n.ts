@@ -19,6 +19,7 @@ export default {
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
 		inoutbound_form_note: 'Stop reading from RFID device and disconnect before updating stock moves.',
+		list_of_already_scanned_epcs: 'List of EPCs that have been previously scanned for inbound.',
 		monthly_inventory_report: 'Manage and track the monthly inventory of finished goods in the warehouse.',
 		no_added_size: 'No size added',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
@@ -86,6 +87,7 @@ export default {
 		order_count: '{{ count }} order(s) found.'
 	},
 	notification: {
+		already_inbound_epcs: 'Previously scanned inbound EPCs detected, check details and notify shaping department.',
 		browser_tab_resumed: 'Welcome back',
 		browser_tab_resumed_message:
 			'Due to inactivity, the connection was temporarily closed to save system resources. Would you like to reconnect?',

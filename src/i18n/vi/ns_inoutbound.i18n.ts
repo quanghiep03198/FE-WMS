@@ -6,6 +6,8 @@ export default {
 		warehouse_output: 'Xuất kho'
 	},
 	notification: {
+		already_inbound_epcs:
+			'Phát hiện các tem đã quét nhập kho trước đây, kiểm tra chi tiết sau đó thông báo lại bộ phận thành hình.',
 		browser_tab_resumed: 'Chào mừng quay lại',
 		browser_tab_resumed_message:
 			'Do không có hoạt động trong một thời gian, kết nối đã bị ngắt tạm thời để tiết kiệm tài nguyên. Bạn có muốn kết nối lại không?',
@@ -37,6 +39,7 @@ export default {
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',
 		exchange_qty: 'Số lượng sản phẩm được hoán đổi cho đơn hàng thực tế',
 		inoutbound_form_note: 'Dừng thiết bị RFID và ngắt kết nối trước khi thao tác nhập/xuất',
+		list_of_already_scanned_epcs: 'Danh sách các EPC đã quét nhập kho trước đây.',
 		monthly_inventory_report: 'Quản lý và theo dõi tồn kho hàng kho thành phẩm hàng tháng',
 		no_added_size: 'Chưa có size nào được thêm',
 		no_exchangable_order: 'Chỉ những tem có cùng mã thành phẩm và size mới có thể đổi.',

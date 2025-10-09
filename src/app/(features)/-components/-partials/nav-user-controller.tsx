@@ -34,7 +34,7 @@ const NavUserControl: React.FC = () => {
 				{navigationConfig.preferences
 					.filter((item) => item.url !== '/preferences/keybindings')
 					.map((item) => (
-						<DropdownMenuItem asChild key={item.id}>
+						<DropdownMenuItem asChild key={item.title}>
 							<Link to={item.url} className='whitespace-nowrap'>
 								<Icon name={item.icon} className='mr-2' /> {t(item.title as any)}
 								<DropdownMenuShortcut>{item.keybinding.split('.').join('+')}</DropdownMenuShortcut>

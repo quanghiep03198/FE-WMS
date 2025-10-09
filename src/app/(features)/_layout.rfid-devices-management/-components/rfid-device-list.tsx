@@ -21,7 +21,7 @@ import {
 	RowSelectionCheckbox
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { notNullFilter } from '@/components/ui/@react-table/utils/not-full-filter.util'
+import { notNullFilter } from '@/components/ui/@react-table/utils/not-null-filter.util'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { formatRelative } from 'date-fns'
 import { capitalize, isNil, pick } from 'lodash'

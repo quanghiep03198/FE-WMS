@@ -7,7 +7,7 @@ import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
-import { TableBody } from './table-body'
+import { MemoizedTableBody, TableBody } from './table-body'
 import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
@@ -84,7 +84,14 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 						</TableCaption>
 					)}
 					<DataTableHeader />
-					{loading ? <TableBodyLoading /> : <TableBody {...{ virtualizer, renderSubComponent }} />}
+					{loading ? (
+						<TableBodyLoading />
+					) : table.getState().columnSizingInfo.isResizingColumn ? (
+						<MemoizedTableBody {...{ virtualizer, renderSubComponent }} />
+					) : (
+						<TableBody {...{ virtualizer, renderSubComponent }} />
+					)}
+					{/* {loading ? <TableBodyLoading /> : <TableBody {...{ virtualizer, renderSubComponent }} />} */}
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</ScrollArea>

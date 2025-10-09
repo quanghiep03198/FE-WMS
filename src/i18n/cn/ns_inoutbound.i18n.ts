@@ -20,6 +20,7 @@ export default {
 		exchange_qty: '实际订单的交换商品数量',
 		inventory_by_size: '按尺码查询成品仓库库存数量',
 		inoutbound_form_note: '更新库存移动之前断开连接',
+		list_of_already_scanned_epcs: '以前扫描入库的EPC列表.',
 		monthly_inventory_report: '管理和跟踪成品仓库的每月库存',
 		no_added_size: '没有添加尺码',
 		no_exchangable_order: '没有可交换的订单',
@@ -79,6 +80,7 @@ export default {
 		order_count: '找到 {{ count }} 个订单'
 	},
 	notification: {
+		already_inbound_epcs: '發現標簽已入庫, 請通知給成型人員.',
 		browser_tab_resumed: '浏览器标签已恢复',
 		browser_tab_resumed_message: '由于长时间未操作，连接已暂时断开以节省系统资源。是否重新连接?',
 
