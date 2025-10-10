@@ -178,7 +178,9 @@ export type DataTableProps<TData = any, TValue = any> = {
 	 * @param {RenderSubComponentProps<TData, TValue>} props
 	 * @returns
 	 */
-	renderSubComponent?: (props: RenderSubComponentProps<TData, TValue>) => React.ReactElement
+	renderSubComponent?: (
+		props: RenderSubComponentProps<TData, TValue>
+	) => React.ReactElement | React.JSX.Element | React.ReactNode
 } & Partial<TableOptions<any>> &
 	/**
 	 * Additional props in case you want to control pagination state from outside like server-side pagination.

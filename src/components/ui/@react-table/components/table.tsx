@@ -12,7 +12,7 @@ import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-import { DataTableHeader } from './table-header'
+import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
 
 type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
@@ -69,7 +69,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 			<ScrollArea ref={containerRef} {...containerProps}>
 				<Table
 					data-role='data-grid'
-					className='border-separate border-spacing-0 border-none'
+					className='table-fixed border-separate border-spacing-0 border-none'
 					style={
 						{
 							...computedColumnSizes,
@@ -83,7 +83,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					<DataTableHeader />
+					{table.getState().columnSizingInfo.isResizingColumn ? <MemoizedDataTableHeader /> : <DataTableHeader />}
 					{loading ? (
 						<TableBodyLoading />
 					) : table.getState().columnSizingInfo.isResizingColumn ? (
