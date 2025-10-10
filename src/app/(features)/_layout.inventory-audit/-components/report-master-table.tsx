@@ -4,6 +4,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryAudit } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
+	Badge,
 	Button,
 	DataTable,
 	Div,
@@ -16,6 +17,7 @@ import {
 	TableRow,
 	Tooltip
 } from '@/components/ui'
+import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import {
 	IndeterminateCheckbox,
@@ -30,7 +32,7 @@ import { createColumnHelper, ExpandedState, type Table as TTable } from '@tansta
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { pick } from 'lodash'
+import { pick, split } from 'lodash'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -56,6 +58,23 @@ export const InventoryReportMasterTable: React.FC = () => {
 	useEffect(() => {
 		resetExpanded()
 	}, [searchParams['month.eq']])
+
+	const renderSubComponents = useCallback(
+		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit, unknown>) => (
+			<InventoryReportDetailTable
+				queries={pick(row.original, [
+					'actual_po',
+					'mo_no',
+					'cust_shoes_style',
+					'factory_shoes_style',
+					'inv_type',
+					'inv_year_month'
+				])}
+				data={row.original?.detail}
+			/>
+		),
+		[]
+	)
 
 	const columns = useMemo(
 		() => [
@@ -145,6 +164,27 @@ export const InventoryReportMasterTable: React.FC = () => {
 					return getValue() ?? 'Unknown'
 				}
 			}),
+			columnHelper.accessor('storage', {
+				header: t('ns_warehouse:fields.storage_name'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => {
+					return (
+						<EllipsisList
+							threshhold={3}
+							data={split(getValue(), ',')
+								.filter((item) => !!item)
+								.sort((a, b) => a.localeCompare(b))}
+							template={({ data }) => (
+								<Badge variant='secondary' className='whitespace-nowrap'>
+									{data.trim()}
+								</Badge>
+							)}
+						/>
+					)
+				}
+			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.mo_qty'),
 				enableColumnFilter: true,
@@ -223,7 +263,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableExpanding={true}
 				enableColumnResizing={true}
 				manualExpanding={true}
-				renderSubComponent={DataDetailTable}
+				renderSubComponent={renderSubComponents}
 				containerProps={{ className: 'xxl:h-[55vh] h-[40vh]' }}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
@@ -290,21 +330,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 	)
 }
 
-const DataDetailTable = ({ row }: RenderSubComponentProps<IMonthlyInventoryAudit, unknown>) => (
-	<InventoryReportDetailTable
-		queries={pick(row.original, [
-			'actual_po',
-			'mo_no',
-			'cust_shoes_style',
-			'factory_shoes_style',
-			'inv_type',
-			'inv_year_month'
-		])}
-		data={row.original?.detail}
-	/>
-)
-
-const DataTableSummary = ({ data, isLoading }: { data: IMonthlyInventoryAudit[]; isLoading: boolean }) => {
+const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: boolean }> = ({ data, isLoading }) => {
 	const { t } = useTranslation()
 
 	const totalInitialQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.init_inv_qty, 0) : 0

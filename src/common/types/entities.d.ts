@@ -159,6 +159,7 @@ export interface IMonthlyInventoryAudit {
 	or_no: string
 	color_sn: string
 	factory_shoes_style: string | null
+	storage: string
 	cust_shoes_style: string
 	init_inv_qty: number
 	total_instock_qty: number
