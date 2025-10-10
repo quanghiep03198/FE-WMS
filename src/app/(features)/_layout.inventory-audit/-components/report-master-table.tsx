@@ -60,7 +60,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	}, [searchParams['month.eq']])
 
 	const renderSubComponents = useCallback(
-		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit, unknown>) => (
+		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit, unknown>): React.ReactElement => (
 			<InventoryReportDetailTable
 				queries={pick(row.original, [
 					'actual_po',
