@@ -168,11 +168,13 @@ export const InventoryReportMasterTable: React.FC = () => {
 				header: t('ns_warehouse:fields.storage_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
+				enableResizing: false,
+				size: 260,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
 					return (
 						<EllipsisList
-							threshhold={3}
+							threshhold={2}
 							data={split(getValue(), ',')
 								.filter((item) => !!item)
 								.sort((a, b) => a.localeCompare(b))}
