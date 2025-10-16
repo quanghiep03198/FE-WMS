@@ -45,22 +45,22 @@ export function NetFlowOverview() {
 				<CardDescription>{t('ns_dashboard:net_flow_description')}</CardDescription>
 			</CardHeader>
 			<CardContent className='flex-1'>
-				<ChartContainer
-					config={{
-						net_flow: {
-							label: t('ns_dashboard:statistic.net_flow'),
-							color: 'hsl(var(--chart-1))'
-						}
-					}}
-					className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}>
-					{isLoading ? (
-						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-80' />
-					) : isEmpty ? (
-						<Div className='flex h-full min-h-80 w-full flex-1 items-center justify-center gap-x-2 rounded-lg bg-muted text-base text-muted-foreground'>
-							<Icon name='ChartSpline' size={32} strokeWidth={1} />
-							{t('ns_common:table.no_data')}
-						</Div>
-					) : (
+				{isLoading ? (
+					<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-80' />
+				) : isEmpty ? (
+					<Div className='flex h-full min-h-80 w-full flex-1 items-center justify-center gap-x-2 rounded-lg bg-muted text-base text-muted-foreground'>
+						<Icon name='ChartSpline' size={32} strokeWidth={1} />
+						{t('ns_common:table.no_data')}
+					</Div>
+				) : (
+					<ChartContainer
+						config={{
+							net_flow: {
+								label: t('ns_dashboard:statistic.net_flow'),
+								color: 'hsl(var(--chart-1))'
+							}
+						}}
+						className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}>
 						<LineChart
 							accessibilityLayer
 							data={data.map((period) => ({
@@ -68,8 +68,8 @@ export function NetFlowOverview() {
 								month: capitalize(format(new Date(new Date().getFullYear(), period.month - 1), 'MMM'))
 							}))}
 							margin={{
-								top: 12,
-								bottom: 12,
+								top: 24,
+								bottom: 0,
 								left: 12,
 								right: 12
 							}}>
@@ -82,8 +82,8 @@ export function NetFlowOverview() {
 							/>
 							<Line dataKey='net_flow' type='natural' stroke='var(--color-net_flow)' strokeWidth={2} />
 						</LineChart>
-					)}
-				</ChartContainer>
+					</ChartContainer>
+				)}
 			</CardContent>
 			{isLoading ? (
 				<CardFooter>
@@ -112,7 +112,7 @@ export function NetFlowOverview() {
 								{' - '}
 								{format(new Date(), 'PPP', {
 									locale: dateLocale
-								})}{' '}
+								})}
 							</Typography>
 						</Div>
 					</CardFooter>
