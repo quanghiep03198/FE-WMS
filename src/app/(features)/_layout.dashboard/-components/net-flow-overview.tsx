@@ -97,10 +97,7 @@ export function NetFlowOverview() {
 					<CardFooter>
 						<Div className='space-y-1 *:text-sm'>
 							<Typography className='flex items-center gap-2 font-medium leading-loose'>
-								{(() => {
-									const { key, params } = getTrendingPercentageChange(percentageChange)
-									return t(key, params)
-								})()}
+								{t(...getTrendingPercentageChange(percentageChange))}
 								<Icon name={getTrendingIcon(percentageChange)} />
 							</Typography>
 							<Typography

@@ -35,28 +35,24 @@ export function getDetailedChangeDescription(
 	}
 }
 
-export function getTrendingPercentageChange(percent): {
-	key: ResourceKeys['ns_dashboard']
-	params: { [key in string]: any }
-} {
+export function getTrendingPercentageChange(
+	percent
+): [key: ResourceKeys['ns_dashboard'], params: { [key in string]: any }] {
 	if (!percent || percent === 0) {
-		return { key: 'comparison.trend_stable', params: {} }
+		return ['comparison.trend_stable', {}]
 	}
 	const absPercent = Math.abs(percent || 0)
 
-	const isIncrease = (percent ?? 0) > 0
+	const isIncrease = percent > 0
 
 	if (absPercent >= 20) {
-		return {
-			key: isIncrease ? 'comparison.significant_trend_up_by' : 'comparison.significant_trend_down_by',
-			params: { percent: absPercent, unit: '%' }
-		}
+		return [
+			isIncrease ? 'comparison.significant_trend_up_by' : 'comparison.significant_trend_down_by',
+			{ percent: absPercent, unit: '%' }
+		]
 	}
 
-	return {
-		key: isIncrease ? 'comparison.slight_trend_up_by' : 'comparison.slight_trend_up_by',
-		params: { percent: absPercent }
-	}
+	return [isIncrease ? 'comparison.slight_trend_up_by' : 'comparison.slight_trend_down_by', { percent: absPercent }]
 }
 
 /**
@@ -122,7 +118,7 @@ export function getDetailDescription(
 	percent: number | null,
 	difference: number | null,
 	unit: string
-): { key: string; params: Record<string, any> } {
+): [key: string, params: Record<string, any>] {
 	const { key, params } = getDetailedChangeDescription(percent, difference, unit)
-	return { key: `ns_dashboard:comparison.${key}`, params }
+	return [`ns_dashboard:comparison.${key}`, params]
 }

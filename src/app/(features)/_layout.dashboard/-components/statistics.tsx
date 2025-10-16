@@ -13,7 +13,6 @@ import {
 	Typography
 } from '@/components/ui'
 
-import { capitalize } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -79,16 +78,14 @@ const Statistics: React.FC = () => {
 						{t(getAnalysisSentence(data?.inbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
 						<Icon name={getTrendingIcon(data?.inbound_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground'>
-						{(() => {
-							const { key, params } = getDetailDescription(
+					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+						{t(
+							...getDetailDescription(
 								data?.inbound_percentage_change,
 								data?.inbound_difference,
 								t('ns_common:unit.prs')
 							)
-							const translated = t(key, params)
-							return capitalize(translated)
-						})()}
+						)}
 					</Typography>
 				</CardFooter>
 			</Card>
@@ -107,16 +104,14 @@ const Statistics: React.FC = () => {
 						{t(getAnalysisSentence(data?.outbound_percentage_change), { ns: 'ns_dashboard', defaultValue: null })}{' '}
 						<Icon name={getTrendingIcon(data?.outbound_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground'>
-						{(() => {
-							const { key, params } = getDetailDescription(
+					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+						{t(
+							...getDetailDescription(
 								data?.outbound_percentage_change,
 								data?.outbound_difference,
 								t('ns_common:unit.prs')
 							)
-							const translated = t(key, params)
-							return capitalize(translated)
-						})()}
+						)}
 					</Typography>
 				</CardFooter>
 			</Card>
@@ -138,16 +133,14 @@ const Statistics: React.FC = () => {
 						})}
 						<Icon name={getTrendingIcon(data?.inventory_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground'>
-						{(() => {
-							const { key, params } = getDetailDescription(
+					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+						{t(
+							...getDetailDescription(
 								data?.inventory_percentage_change,
 								data?.inventory_difference,
 								t('ns_common:unit.prs')
 							)
-							const translated = t(key, params)
-							return capitalize(translated)
-						})()}
+						)}
 					</Typography>
 				</CardFooter>
 			</Card>
@@ -169,16 +162,14 @@ const Statistics: React.FC = () => {
 						})}
 						<Icon name={getTrendingIcon(data?.turnover_percentage_change)} />
 					</Typography>
-					<Typography variant='small' className='text-muted-foreground'>
-						{(() => {
-							const { key, params } = getDetailDescription(
+					<Typography variant='small' className='lowercase text-muted-foreground first-letter:uppercase'>
+						{t(
+							...getDetailDescription(
 								data?.turnover_percentage_change,
 								data?.inventory_turnover_difference,
 								t('ns_common:unit.times')
 							)
-							const translated = t(key, params)
-							return capitalize(translated)
-						})()}
+						)}
 					</Typography>
 				</CardFooter>
 			</Card>
