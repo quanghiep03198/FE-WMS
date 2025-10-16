@@ -46,3 +46,4 @@ dev-dist
 # Vitest
 html
 coverage
+ssl/
