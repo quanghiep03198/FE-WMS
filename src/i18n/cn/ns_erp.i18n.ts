@@ -1,7 +1,8 @@
 export default {
 	descriptions: {
 		centralized_po: '多个生产指令被汇总到同一个采购订单中.',
-		decentralized_po: '多个生产指令被分配到不同的采购订单中.'
+		decentralized_po: '多个生产指令被分配到不同的采购订单中.',
+		purchase_order_seeking: '通过采购订单编号查询采购订单的信息及数量.'
 	},
 	fields: {
 		accumulated_qty: '累计',
@@ -55,6 +56,7 @@ export default {
 		outbound_qty: '出庫數量',
 		packaging_code: '裝箱單號',
 		po: '订单编号',
+		po_size_qty: '订单尺寸数量',
 		prod_color: '产品颜色',
 		required_date: '需求日期',
 		returned_qty: '已退貨量',
@@ -93,7 +95,8 @@ export default {
 
 	titles: {
 		product_info: '产品信息',
-		report_type: '报告类型'
+		report_type: '报告类型',
+		purchase_order_seeking: '采购订单查询'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: '成品出庫單',

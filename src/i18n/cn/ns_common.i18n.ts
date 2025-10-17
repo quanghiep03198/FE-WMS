@@ -214,6 +214,8 @@ export default {
 		report_management: '報表管理',
 		rfid_system: 'RFID系统',
 		rfid_device_management: 'RFID设备管理',
+		purchase_order_search: '查询PO',
+		seeking: '查询',
 		settings: '建立',
 		storage_detail: '仓库存储详情',
 		transfer_managment: '調撥管理',

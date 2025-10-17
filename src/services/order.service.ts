@@ -30,4 +30,20 @@ export class OrderService {
 			ResponseBody<{ orders: Array<IManufacturingOrder>; sizes: Array<{ size_numcode: string; size_qty: number }> }>
 		>(`/order/command-number/${commandNumber}`)
 	}
+
+	static async getPurchaseOrderSizeRun(purchaseOrder: string) {
+		return await axiosInstance.get<
+			unknown,
+			ResponseBody<{
+				po: string
+				brand_name: string
+				shoes_style: string
+				color_sn: string
+				sizes: Array<{
+					size_numcode: string
+					qty: number
+				}>
+			}>
+		>(`/order/purchase-order/size-run/${purchaseOrder}`)
+	}
 }

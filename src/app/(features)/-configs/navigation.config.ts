@@ -65,10 +65,7 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 					title: 'navigation.daily_outbound_report',
 					url: '/outbound-report'
 				},
-				{
-					title: 'navigation.inoutbound_history',
-					url: '/inoutbound-history'
-				},
+
 				{
 					title: 'navigation.monthly_inventory_audit',
 					url: '/inventory-audit'
@@ -84,6 +81,20 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 				{
 					title: 'navigation.cargo_weight_check',
 					url: '/cargo-weight-check'
+				}
+			]
+		},
+		{
+			title: 'navigation.seeking',
+			icon: 'FileSearch',
+			items: [
+				{
+					title: 'navigation.inoutbound_history',
+					url: '/inoutbound-history'
+				},
+				{
+					title: 'navigation.purchase_order_search',
+					url: '/purchase-order-seeking'
 				}
 			]
 		}

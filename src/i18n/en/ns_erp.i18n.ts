@@ -1,7 +1,8 @@
 export default {
 	descriptions: {
 		centralized_po: 'Multiple production orders are consolidated into a single purchase order.',
-		decentralized_po: 'Multiple production orders are distributed into different purchase orders.'
+		decentralized_po: 'Multiple production orders are distributed into different purchase orders.',
+		purchase_order_seeking: 'Seeking information and quantity of purchase orders by PO code.'
 	},
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
@@ -54,6 +55,7 @@ export default {
 		order_qty: 'Order quantity',
 		packaging_code: 'Packaging number',
 		po: 'Purchase order',
+		po_size_qty: 'Purchase order quantity by size',
 		prod_color: 'Product color',
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',
@@ -90,7 +92,8 @@ export default {
 	},
 	titles: {
 		product_info: 'Product Information',
-		report_type: 'Report Type'
+		report_type: 'Report Type',
+		purchase_order_seeking: 'Seeking purchase order information'
 	},
 	labels: {
 		goods_category: 'Shoes category',

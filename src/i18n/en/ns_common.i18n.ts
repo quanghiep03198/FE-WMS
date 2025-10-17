@@ -195,7 +195,7 @@ export default {
 		appearance: 'Appearance',
 		common_management: 'Common management',
 		defective_goods_inoutbound: 'Defective goods inoutbound',
-		defective_goods_epc_combination: 'Defective goods EPC combination',
+		defective_goods_epc_combination: 'D.G EPC combination',
 		defective_goods_inventory: 'Defective goods inventory',
 		dashboard: 'Dashboard',
 		daily_outbound_report: 'Export management',
@@ -211,10 +211,13 @@ export default {
 		report_management: 'Report',
 		rfid_system: 'RFID system',
 		rfid_device_management: 'RFID device Management',
+		purchase_order_search: 'Purchase order search',
+		seeking: 'Seeking',
 		settings: 'Settings',
 		storage_detail: 'Storage details',
 		transfer_managment: 'Transfer management',
 		warehouse_management: 'Warehouse management',
+
 		// labels
 		main_menu_label: 'Main',
 		preference_menu_label: ' Preference'

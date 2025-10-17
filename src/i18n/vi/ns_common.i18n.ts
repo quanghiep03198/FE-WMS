@@ -213,6 +213,8 @@ export default {
 		report_management: 'Báo biểu',
 		rfid_system: 'Hệ thống RFID',
 		rfid_device_management: 'Quản lý thiết bị RFID',
+		seeking: 'Tra cứu',
+		purchase_order_search: 'Tra cứu đơn hàng',
 		settings: 'Cài đặt',
 		storage_detail: 'Chi tiết vị trí lưu kho',
 		transfer_managment: 'Quản lý chuyển giao',
