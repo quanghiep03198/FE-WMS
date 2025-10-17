@@ -2,7 +2,8 @@ export default {
 	descriptions: {
 		centralized_po: '多个生产指令被汇总到同一个采购订单中.',
 		decentralized_po: '多个生产指令被分配到不同的采购订单中.',
-		purchase_order_seeking: '通过采购订单编号查询采购订单的信息及数量.'
+		purchase_order_seeking: '通过采购订单编号查询采购订单的信息及数量.',
+		no_purchase_order_found: '訂單可能不存在、沒有對應的尺碼資料，或已經結案.'
 	},
 	fields: {
 		accumulated_qty: '累计',
@@ -65,7 +66,9 @@ export default {
 		shaping_dept_name: '成型線',
 		shaping_dept_productivity: '成型产量',
 		ship_order: '裝貨號碼',
+		shipping_id: '運輸編號',
 		shipping_destination: '港口名稱',
+		shipping_type: '運輸方式',
 		shipment_confirm_date: '确认出货日',
 		shoes_type_b: 'B级鞋',
 		shoestyle_codefactory: '工廠形體',

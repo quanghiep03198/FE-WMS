@@ -2,7 +2,9 @@ export default {
 	descriptions: {
 		centralized_po: 'Multiple production orders are consolidated into a single purchase order.',
 		decentralized_po: 'Multiple production orders are distributed into different purchase orders.',
-		purchase_order_seeking: 'Seeking information and quantity of purchase orders by PO code.'
+		purchase_order_seeking: 'Seeking information and quantity of processing purchase orders by PO code.',
+		no_purchase_order_found:
+			'The purchase order may not exist or has no associated size run data or already finished.'
 	},
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
@@ -61,7 +63,9 @@ export default {
 		returned_qty: 'Returned quantity',
 		decentralized_po: 'Decentralized PO',
 		ship_order: 'Shipping order number',
+		shipping_id: 'Shipping ID',
 		shipping_destination: 'Shipping destination',
+		shipping_type: 'Shipping type',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
 		shoes_type_b: 'Shoes type B', //: Giày cấp B
 		shoestyle_codefactory: 'Shoes style',

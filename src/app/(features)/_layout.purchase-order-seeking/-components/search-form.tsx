@@ -63,7 +63,7 @@ const SearchForm: React.FC = () => {
 					</Button>
 				</Div>
 				{recentlySearch.length > 0 && (
-					<Div className='flex flex-col items-center justify-center gap-6'>
+					<Div className='flex items-center justify-center gap-6'>
 						<Typography variant='small' color='muted' className='inline-flex items-center gap-x-2'>
 							<Icon name='History' size={20} strokeWidth={1.5} />
 							Recently search
@@ -77,8 +77,17 @@ const SearchForm: React.FC = () => {
 								orientation='horizontal'
 								className='flex max-w-md snap-mandatory items-center gap-x-2 scroll-smooth px-2 scrollbar-none'>
 								{recentlySearch.map((term) => (
-									<Badge key={term} variant='outline'>
-										{term}
+									<Badge
+										key={term}
+										variant='outline'
+										className='min-w-24 cursor-pointer justify-between'
+										onClick={() => form.setValue('po', term)}>
+										{term}{' '}
+										<GhostButton
+											className='ml-auto'
+											onClick={() => setRecentlySearch(recentlySearch.filter((item) => item !== term))}>
+											<Icon name='X' size={12} />
+										</GhostButton>
 									</Badge>
 								))}
 							</ScrollShadow>

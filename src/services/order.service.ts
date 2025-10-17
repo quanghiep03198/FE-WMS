@@ -1,5 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import { IManufacturingOrder } from '@/common/types/entities'
+import { IManufacturingOrder, IPurchaseOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class OrderService {
@@ -32,18 +32,8 @@ export class OrderService {
 	}
 
 	static async getPurchaseOrderSizeRun(purchaseOrder: string) {
-		return await axiosInstance.get<
-			unknown,
-			ResponseBody<{
-				po: string
-				brand_name: string
-				shoes_style: string
-				color_sn: string
-				sizes: Array<{
-					size_numcode: string
-					qty: number
-				}>
-			}>
-		>(`/order/purchase-order/size-run/${purchaseOrder}`)
+		return await axiosInstance.get<unknown, ResponseBody<IPurchaseOrderDetail>>(
+			`/order/purchase-order/size-run/${purchaseOrder}`
+		)
 	}
 }

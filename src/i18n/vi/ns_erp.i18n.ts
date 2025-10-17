@@ -2,7 +2,9 @@ export default {
 	descriptions: {
 		centralized_po: 'Nhiều lệnh sản xuất được gom chung vào một PO duy nhất.',
 		decentralized_po: 'Nhiều lệnh sản xuất được phân vào nhiều PO khác nhau.',
-		purchase_order_seeking: 'Tìm kiếm thông tin, số lượng đơn đặt hàng theo mã PO.'
+		purchase_order_seeking: 'Tìm kiếm thông tin, số lượng đơn đặt hàng theo mã PO.',
+		no_purchase_order_found:
+			'Đơn đặt hàng có thể không tồn tại hoặc không có dữ liệu chạy size liên quan hoặc đã hoàn tất.'
 	},
 	fields: {
 		accumulated_qty: 'Số lượng tích lũy',
@@ -62,7 +64,9 @@ export default {
 		decentralized_po: 'PO phân tách',
 		ship_order: 'Mã đóng hàng',
 		shipment_confirm_date: 'Ngày xác nhận xuất hàng',
+		shipping_id: 'Mã vận chuyển',
 		shipping_destination: 'Địa điểm giao hàng',
+		shipping_type: 'Phương thức vận chuyển',
 		shoes_type_b: 'Giày loại B',
 		shoestyle_codefactory: 'Hình thể',
 		shaping_dept_code: 'Mã chuyền thành hình',

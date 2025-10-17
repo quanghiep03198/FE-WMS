@@ -328,3 +328,18 @@ export interface IDefectiveGoodsInventory
 	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
 	size_data: Array<{ size_numcode: string; qty: number }>
 }
+
+export interface IPurchaseOrderDetail {
+	po: string
+	mo_no: string
+	brand_name: string
+	shoes_style: string
+	color_sn: string
+	ship_id: string
+	ship_dest_country: string
+	ship_type: string
+	sizes: Array<{
+		size_numcode: string
+		qty: number
+	}>
+}
