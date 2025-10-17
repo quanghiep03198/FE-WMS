@@ -5,6 +5,11 @@ import { __hostRegistry } from '@/configs/host-registry.config'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { z } from 'zod'
+
+const isIPv4 = (ip: string): boolean => {
+	return z.ipv4().safeParse(ip).success
+}
 
 const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
@@ -12,10 +17,11 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 	const currentHostRegistry = __hostRegistry.get(user.company_code)
 	const movedPermanentlyURL = `${window.location.protocol}//${currentHostRegistry}/${window.location.pathname}`
 
+	const shouldValidate = env('VITE_NODE_ENV') === 'production'
 	const isNotCompatible =
-		(window.location.hostname !== currentHostRegistry.domain ||
-			window.location.hostname !== currentHostRegistry.ip) &&
-		env('VITE_NODE_ENV') === 'production'
+		(isIPv4(window.location.hostname)
+			? window.location.hostname !== currentHostRegistry.ip
+			: window.location.hostname !== currentHostRegistry.domain) && shouldValidate
 
 	if (isNotCompatible)
 		return (
