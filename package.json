@@ -210,5 +210,8 @@
 			"msw",
 			"sharp"
 		]
+	},
+	"optionalDependencies": {
+		"@rolldown/binding-win32-x64-msvc": "1.0.0-beta.43"
 	}
 }

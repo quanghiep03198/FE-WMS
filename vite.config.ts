@@ -9,6 +9,7 @@ import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
+
 /**
  * @see https://vitejs.dev/config/
  */
@@ -165,17 +166,6 @@ export default defineConfig(({ mode }) => {
 				ignoreEmptyLines: true
 			}
 		},
-		optimizeDeps: {
-			rollupOptions: {
-				target: 'esnext'
-			}
-		},
-		esbuild: {
-			drop: mode === 'production' ? ['console', 'debugger'] : undefined,
-			logOverride: {
-				'this-is-undefined-in-esm': 'silent'
-			}
-		},
 		server: {
 			port: 3000,
 			host: true,
@@ -203,7 +193,9 @@ export default defineConfig(({ mode }) => {
 			cssCodeSplit: true,
 			reportCompressedSize: true,
 			chunkSizeWarningLimit: 1024,
-			rollupOptions: {
+			rolldownOptions: {
+				dropLabels: mode === 'production' ? ['console', 'debugger'] : undefined,
+				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
 					advancedChunks: {
 						groups: [
