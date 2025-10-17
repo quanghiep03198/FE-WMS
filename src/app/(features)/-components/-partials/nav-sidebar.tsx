@@ -114,7 +114,7 @@ const NavSidebar: React.FC = () => {
 						{navigationConfig.preferences
 							.filter((item) => item.url !== '/preferences/account')
 							.map((item, index) => (
-								<SidebarMenuLink indice={`${index + 1}.`} key={index.toString()} {...item} />
+								<SidebarMenuLink indice={String(index + 1)} key={index.toString()} {...item} />
 							))}
 					</SidebarMenu>
 				</SidebarGroup>
