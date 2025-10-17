@@ -9,9 +9,12 @@ export declare global {
 		readonly VITE_APP_HOST: string
 		readonly VITE_APP_VERSION: string
 
-		readonly VITE_LIANYING_APP_HOST: string
-		readonly VITE_LIANSHUN_APP_HOST: string
-		readonly VITE_KHRU_APP_HOST: string
+		readonly VITE_LIANYING_APP_DOMAIN: string
+		readonly VITE_LIANSHUN_APP_DOMAIN: string
+		readonly VITE_KHRU_APP_DOMAIN: string
+		readonly VITE_LIANYING_APP_IP: string
+		readonly VITE_LIANSHUN_APP_IP: string
+		readonly VITE_KHRU_APP_IP: string
 		// * Backend
 		readonly VITE_API_BASE_URL: string
 		readonly VITE_WEBSOCKET_URL: string
