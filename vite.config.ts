@@ -185,13 +185,13 @@ export default defineConfig(({ mode }) => {
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/api/, '')
 				}
-			},
-			headers: {
-				['Content-Security-Policy']:
-					"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
-				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
-				['Cross-Origin-Resource-Policy']: 'cross-origin'
 			}
+			// headers: {
+			// 	['Content-Security-Policy']:
+			// 		"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
+			// 	['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
+			// 	['Cross-Origin-Resource-Policy']: 'cross-origin'
+			// }
 		},
 		preview: {
 			port: mode === 'test' ? 5000 : 4000,
