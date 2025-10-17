@@ -38,10 +38,11 @@ import { Link } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
+import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 
 type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & {
-	indice: string
+	indice: `${number}` | `${number}.${number}` | 'none'
 	viewTransition?: boolean
 }
 
@@ -64,7 +65,7 @@ const NavSidebar: React.FC = () => {
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
-									return <SidebarMenuLink indice={String(index + 1)} key={index.toString()} {...item} />
+									return <SidebarMenuLink indice={`${index + 1}`} key={index.toString()} {...item} />
 								return (
 									<Collapsible key={uuid()} defaultOpen={true} className='group/collapsible w-full'>
 										<CollapsibleTrigger asChild={true}>
@@ -78,11 +79,9 @@ const NavSidebar: React.FC = () => {
 												{item.icon && (
 													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
 												)}
-												<span
-													data-indice={index + 1}
-													className='font-medium before:mr-2 before:content-[attr(data-indice)]'>
+												<SidebarMenuTitle data-indice={index + 1}>
 													{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
-												</span>
+												</SidebarMenuTitle>
 												<Icon
 													name='ChevronRight'
 													className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90'
@@ -93,7 +92,7 @@ const NavSidebar: React.FC = () => {
 											<SidebarMenuSub>
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
-														indice={`${(index + 1 + (subIndex + 1) / 10).toFixed(1)}`}
+														indice={`${index + 1}.${subIndex + 1}`}
 														key={subIndex.toString()}
 														title={subItem.title}
 														url={subItem.url}
@@ -114,7 +113,7 @@ const NavSidebar: React.FC = () => {
 						{navigationConfig.preferences
 							.filter((item) => item.url !== '/preferences/account')
 							.map((item, index) => (
-								<SidebarMenuLink indice={String(index + 1)} key={index.toString()} {...item} />
+								<SidebarMenuLink indice='none' key={index.toString()} {...item} />
 							))}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -147,9 +146,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
 					<Icon name={icon} size={18} className='!size-[18px]' />
-					<span data-indice={indice} className='font-medium before:mr-2 before:content-[attr(data-indice)]'>
-						{t(title, { defaultValue: title })}
-					</span>
+					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
@@ -175,9 +172,9 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
-					<span data-indice={indice} className='font-medium before:mr-2 before:content-[attr(data-indice)]'>
+					<SidebarMenuTitle data-indice={indice}>
 						{t(title, { ns: 'ns_common', defaultValue: title })}
-					</span>
+					</SidebarMenuTitle>
 				</Link>
 			</SidebarMenuSubButton>
 		</SidebarMenuSubItem>
@@ -230,5 +227,15 @@ const SwitchUserCompany: React.FC = () => {
 		</DropdownMenu>
 	)
 }
+
+const SidebarMenuTitle = tw.span`
+	font-medium 
+	before:mr-2
+	before:text-xs
+	before:text-muted-foreground 
+	before:content-[attr(data-indice)'.'] 
+	data-[indice='none']:before:hidden 
+	data-[indice='none']:before:content-['']
+`
 
 export default NavSidebar
