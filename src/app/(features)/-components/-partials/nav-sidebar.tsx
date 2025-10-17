@@ -40,7 +40,10 @@ import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 
-type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & { viewTransition?: boolean }
+type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & {
+	indice: string
+	viewTransition?: boolean
+}
 
 const NavSidebar: React.FC = () => {
 	const { t } = useTranslation('ns_common')
@@ -60,7 +63,8 @@ const NavSidebar: React.FC = () => {
 					<ScrollShadow className='max-h-[50vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
-								if (!Array.isArray(item.items)) return <SidebarMenuLink key={index.toString()} {...item} />
+								if (!Array.isArray(item.items))
+									return <SidebarMenuLink indice={String(index + 1)} key={index.toString()} {...item} />
 								return (
 									<Collapsible key={uuid()} defaultOpen={true} className='group/collapsible w-full'>
 										<CollapsibleTrigger asChild={true}>
@@ -74,7 +78,11 @@ const NavSidebar: React.FC = () => {
 												{item.icon && (
 													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
 												)}
-												{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
+												<span
+													data-indice={index + 1}
+													className='font-medium before:mr-2 before:content-[attr(data-indice)]'>
+													{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
+												</span>
 												<Icon
 													name='ChevronRight'
 													className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90'
@@ -83,9 +91,10 @@ const NavSidebar: React.FC = () => {
 										</CollapsibleTrigger>
 										<CollapsibleContent className='w-full overflow-auto transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 											<SidebarMenuSub>
-												{item.items?.map((subItem, index) => (
+												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
-														key={index.toString()}
+														indice={`${(index + 1 + (subIndex + 1) / 10).toFixed(1)}`}
+														key={subIndex.toString()}
 														title={subItem.title}
 														url={subItem.url}
 													/>
@@ -105,7 +114,7 @@ const NavSidebar: React.FC = () => {
 						{navigationConfig.preferences
 							.filter((item) => item.url !== '/preferences/account')
 							.map((item, index) => (
-								<SidebarMenuLink key={index.toString()} {...item} />
+								<SidebarMenuLink indice={`${index + 1}.`} key={index.toString()} {...item} />
 							))}
 					</SidebarMenu>
 				</SidebarGroup>
@@ -118,7 +127,7 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const SidebarMenuLink: React.FC<NavLinkProps> = ({ url, title, icon, viewTransition }) => {
+const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { openMobile, setOpenMobile } = useSidebar()
@@ -138,14 +147,16 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ url, title, icon, viewTransit
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
 					<Icon name={icon} size={18} className='!size-[18px]' />
-					<span className='font-medium'>{t(title, { defaultValue: title })}</span>
+					<span data-indice={indice} className='font-medium before:mr-2 before:content-[attr(data-indice)]'>
+						{t(title, { defaultValue: title })}
+					</span>
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
 	)
 }
 
-const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ url, title, viewTransition }) => {
+const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url, title, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { openMobile, setOpenMobile } = useSidebar()
@@ -159,12 +170,14 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ url, title, 
 			<SidebarMenuSubButton asChild size='md'>
 				<Link
 					to={url}
+					data-indice={indice}
 					preload='intent'
 					viewTransition={viewTransition}
+					className='font-medium before:mr-2 before:content-[attr(data-indice)]'
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
-					<span className='font-medium'>{t(title, { ns: 'ns_common', defaultValue: title })}</span>
+					{t(title, { ns: 'ns_common', defaultValue: title })}
 				</Link>
 			</SidebarMenuSubButton>
 		</SidebarMenuSubItem>
