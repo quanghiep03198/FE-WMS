@@ -170,14 +170,14 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 			<SidebarMenuSubButton asChild size='md'>
 				<Link
 					to={url}
-					data-indice={indice}
 					preload='intent'
 					viewTransition={viewTransition}
-					className='font-medium before:mr-2 before:content-[attr(data-indice)]'
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10'
 					}}>
-					{t(title, { ns: 'ns_common', defaultValue: title })}
+					<span data-indice={indice} className='font-medium before:mr-2 before:content-[attr(data-indice)]'>
+						{t(title, { ns: 'ns_common', defaultValue: title })}
+					</span>
 				</Link>
 			</SidebarMenuSubButton>
 		</SidebarMenuSubItem>
