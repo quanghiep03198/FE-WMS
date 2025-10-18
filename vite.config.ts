@@ -183,6 +183,7 @@ export default defineConfig(({ mode }) => {
 				'/api': {
 					target: process.env.VITE_API_BASE_URL,
 					changeOrigin: true,
+					secure: false, // * Accept self-signed cert
 					rewrite: (path) => path.replace(/^\/api/, '')
 				}
 			}
