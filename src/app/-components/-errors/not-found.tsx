@@ -1,32 +1,27 @@
-import { Div, Icon, Typography, buttonVariants } from '@/components/ui'
-import { Link } from '@tanstack/react-router'
+import { Button, Div, Icon, Typography } from '@/components/ui'
+import { useRouter } from '@tanstack/react-router'
+import { HttpStatusCode } from 'axios'
+import { useTranslation } from 'react-i18next'
 
 export default function NotFoundPage() {
+	const { t } = useTranslation()
+	const router = useRouter()
+
 	return (
 		<Div className='min-h-screen place-content-center px-6 py-24 sm:py-32 xl:px-8'>
 			<Div className='text-center'>
 				<Typography variant='code' color='destructive' className='font-semibold'>
-					404
+					{HttpStatusCode.NotFound}
 				</Typography>
 				<Typography variant='h1' className='mt-4'>
-					Page not found
+					{t('ns_common:errors.404')}
 				</Typography>
-				<Typography variant='p' className='mt-2 text-base leading-7' color='muted'>
-					{`Sorry, we couldn't find the page you're looking for.`}
+				<Typography variant='p' className='mb-6 mt-2 text-base leading-7' color='muted'>
+					{t('ns_common:errors.404_message')}
 				</Typography>
-				<Div className='mt-10 flex items-center justify-center gap-x-1'>
-					<Link to='/' className={buttonVariants({ variant: 'default' })}>
-						Go back home
-					</Link>
-					<Link
-						to='/'
-						className={buttonVariants({
-							variant: 'link',
-							className: 'gap-x-2 text-foreground'
-						})}>
-						Contact support <Icon name='ArrowRight' size={12} />
-					</Link>
-				</Div>
+				<Button onClick={() => router.history.back()}>
+					{t('ns_common:actions.back')} <Icon name='ArrowRight' />
+				</Button>
 			</Div>
 		</Div>
 	)
