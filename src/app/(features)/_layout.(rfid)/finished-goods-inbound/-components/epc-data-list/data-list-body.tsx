@@ -5,7 +5,6 @@ import useAuth from '@/common/hooks/use-auth'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
-import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { Button, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
@@ -83,7 +82,7 @@ const EpcDataList: React.FC = () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/inbound/sse', {
+			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/inbound/sse', {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,

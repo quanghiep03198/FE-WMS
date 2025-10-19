@@ -6,10 +6,10 @@ import useAuth from '@/common/hooks/use-auth'
 import useEffectOnce from '@/common/hooks/use-effect-once'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
-import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
 import { Button, buttonVariants, Div, Icon, Label, Separator, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -99,7 +99,7 @@ const ScannedEpcList: React.FC = () => {
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(env('VITE_API_BASE_URL') + '/rfid/outbound/sse', {
+			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/outbound/sse', {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
