@@ -6,7 +6,7 @@ const PageHeader: React.FC = () => {
 
 	return (
 		<Div className='relative mt-4 place-content-end place-items-center space-y-2 text-center'>
-			<Icon name='FileSearch' size={48} strokeWidth={1} />
+			<Icon name='FileSearch2' size={48} strokeWidth={1} stroke='hsl(var(--muted-foreground))' />
 			<Typography variant='h3' className='z-10 bg-background font-medium'>
 				{t('ns_erp:titles.purchase_order_seeking')}
 			</Typography>
