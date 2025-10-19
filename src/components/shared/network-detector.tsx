@@ -1,4 +1,5 @@
 import env from '@/common/utils/env'
+import { AppConfigs } from '@/configs/app.config'
 import { useInterval } from 'ahooks'
 import axios, { AxiosError } from 'axios'
 import { useRef } from 'react'
@@ -18,7 +19,7 @@ export default function NetworkDetector() {
 	useInterval(
 		() => {
 			axios
-				.request({ baseURL: env('VITE_API_BASE_URL').replace('api', ''), url: '/metrics', method: 'GET' })
+				.request({ baseURL: AppConfigs.BASE_API_URL.replace('api', ''), url: '/metrics', method: 'GET' })
 				.then(() => {
 					window.dispatchEvent(new CustomEvent(NETWORK_CONNECTION_CHANGE, { detail: true }))
 					if (statusRef.current !== 'success') {
