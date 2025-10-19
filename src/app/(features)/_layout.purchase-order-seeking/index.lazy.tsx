@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import DataTable from './-components/data-table'
 import PageHeader from './-components/header'
+import PlaceholderSection from './-components/placeholder-section'
 import SearchForm from './-components/search-form'
 
 export const Route = createLazyFileRoute('/(features)/_layout/purchase-order-seeking/')({
@@ -14,6 +15,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/purchase-order-see
 
 function Page() {
 	const { t, i18n } = useTranslation()
+
 	const { setBreadcrumb } = useBreadcrumbContext()
 	const { searchParams } = useQueryParams<{ po: string }>()
 
@@ -30,6 +32,7 @@ function Page() {
 				<PageHeader />
 				<SearchForm />
 				{searchParams.po && <DataTable />}
+				{!searchParams.po && <PlaceholderSection />}
 			</Div>
 		</Fragment>
 	)
