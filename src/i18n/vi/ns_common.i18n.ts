@@ -101,6 +101,9 @@ export default {
 		'500_message':
 			'Chúng tôi xin lỗi về sự bất tiện này. Bạn có thể thử lại hành động trước đó, nếu vẫn không giải quyết được, vui lòng gửi phản hồi cho chúng tôi mô tả lỗi bạn gặp phải. Chúng tôi sẽ khắc phục nhanh nhất có thể.',
 		'501': 'Yêu Cầu Chuyển Hướng Vĩnh Viễn',
+		'502': 'Máy Chủ Không Phản Hồi',
+		'502_message':
+			'Máy chủ hiện không thể xử lý yêu cầu do chính sách IP. Vui lòng thử truy cập vào {{url}} để tiếp tục sử dụng chức năng này với nhà máy {{factory}}. Để biết thêm thông tin chi tiết, vui lòng liên hệ với bộ phận IT.',
 		'503': 'Tính Năng Không Khả Dụng',
 		'503_message': 'Tính năng đang trong quá trình phát triển / bảo trì. Vui lòng thử lại sau'
 	},
