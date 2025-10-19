@@ -1,6 +1,7 @@
 import { RequestHeaders } from '@/common/constants/enums'
 import { UnauthorizedError } from '@/common/errors'
 import env from '@/common/utils/env'
+import { isIPv4 } from '@/common/utils/ip'
 import { i18n } from '@/i18n'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
@@ -136,6 +137,7 @@ export class AxiosClient {
 	}
 }
 
-const axiosInstance = new AxiosClient(env('VITE_API_BASE_URL'), '1.0').instance
+const baseURL = isIPv4(window.location.hostname) ? env('VITE_API_BASE_URL') : env('VITE_API_BASE_CLF_URL')
+const axiosInstance = new AxiosClient(baseURL, '1.0').instance
 
 export default axiosInstance
