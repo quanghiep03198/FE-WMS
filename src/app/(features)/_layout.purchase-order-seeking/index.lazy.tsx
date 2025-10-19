@@ -18,13 +18,13 @@ function Page() {
 	const { searchParams } = useQueryParams<{ po: string }>()
 
 	useEffect(() => {
-		setBreadcrumb([{ to: '/inoutbound-history', text: t('ns_common:navigation.inoutbound_history') }])
+		setBreadcrumb([{ to: '/purchase-order-seeking', text: t('ns_common:navigation.purchase_order_search') }])
 	}, [i18n.language])
 
 	return (
 		<Fragment>
-			<title>{t('ns_common:navigation.inoutbound_history')}</title>
-			<meta name='description' content='Search in/outbound progress by order' />
+			<title>{t('ns_common:navigation.purchase_order_search')}</title>
+			<meta name='description' content='Search processing purchase order' />
 
 			<Div as='section' className='min-h-[var(--outlet-wrapper-height)] place-content-center space-y-6'>
 				<PageHeader />
