@@ -13,8 +13,8 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const currentHostRegistry = __hostRegistry.get(user.company_code)
 
 	const shouldCheck = env('VITE_NODE_ENV') === 'production'
-	const isNotCompatible = shouldCheck && isIPv4(window.location.hostname)
-	const movedPermanentlyURL = `${window.location.protocol}//${currentHostRegistry.domain}/${window.location.pathname}`
+	const isNotCompatible = shouldCheck && !isIPv4(window.location.hostname)
+	const movedPermanentlyURL = `http://${currentHostRegistry.ip}:${env('VITE_APP_PORT')}/${window.location.pathname}`
 
 	if (isNotCompatible)
 		return (
