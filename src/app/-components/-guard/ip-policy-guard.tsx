@@ -26,7 +26,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 				<Typography
 					variant='p'
 					color='muted'
-					className='mx-auto max-w-2xl text-pretty text-center'
+					className='mx-auto max-w-3xl text-pretty text-center'
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.502_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,

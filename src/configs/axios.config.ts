@@ -1,13 +1,13 @@
 import { RequestHeaders } from '@/common/constants/enums'
 import { UnauthorizedError } from '@/common/errors'
 import env from '@/common/utils/env'
-import { isIPv4 } from '@/common/utils/ip'
 import { i18n } from '@/i18n'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import qs from 'qs'
 import { toast } from 'sonner'
+import { AppConfigs } from './app.config'
 
 type PromiseExecutor<T = unknown> = {
 	resolve: (value: T) => void
@@ -137,7 +137,6 @@ export class AxiosClient {
 	}
 }
 
-const baseURL = isIPv4(window.location.hostname) ? env('VITE_API_BASE_URL') : env('VITE_API_BASE_CLF_URL')
-const axiosInstance = new AxiosClient(baseURL, '1.0').instance
+const axiosInstance = new AxiosClient(AppConfigs.BASE_API_URL, '1.0').instance
 
 export default axiosInstance

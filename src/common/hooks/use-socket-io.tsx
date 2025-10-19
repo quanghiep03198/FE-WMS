@@ -1,10 +1,10 @@
+import { AppConfigs } from '@/configs/app.config'
 import { useAuthStore } from '@/stores/auth.store'
 import { useMemoizedFn, useRafState } from 'ahooks'
 import { throttle } from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { RequestHeaders } from '../constants/enums'
-import env from '../utils/env'
 import { Json } from '../utils/json'
 
 export type UseWebSocketOptions<TResponse> = {
@@ -17,7 +17,7 @@ export type UseWebSocketOptions<TResponse> = {
 
 const { user, token } = useAuthStore.getState()
 
-const socket = io(env('VITE_WEBSOCKET_URL'), {
+const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
 	extraHeaders: {
 		[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
 		[RequestHeaders.USER_COMPANY]: user?.company_code
