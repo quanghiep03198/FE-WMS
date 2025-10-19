@@ -79,19 +79,19 @@ const FeaturesSection: React.FunctionComponent = () => {
 							RFID
 						</Badge>
 						<Badge variant='secondary' className='bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20'>
-							Reporting
-						</Badge>
-						<Badge variant='secondary' className='bg-green-500/10 text-green-500 hover:bg-green-500/20'>
 							Multi-tenant
 						</Badge>
+						<Badge variant='secondary' className='bg-green-500/10 text-green-500 hover:bg-green-500/20'>
+							Data-streaming
+						</Badge>
 						<Badge variant='secondary' className='bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'>
-							Multi-language
+							Real-time
 						</Badge>
 						<Badge variant='secondary' className='bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20'>
-							Realtime
+							Internationalization
 						</Badge>
 						<Badge variant='secondary' className='bg-purple-500/10 text-purple-500 hover:bg-purple-500/20'>
-							Data-streaming
+							Reporting
 						</Badge>
 					</Div>
 				</Div>

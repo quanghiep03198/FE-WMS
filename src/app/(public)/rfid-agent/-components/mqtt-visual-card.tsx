@@ -31,7 +31,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 	const gradientTransform = /* CSS */ `translate(${gradientPos?.x / 10} ${gradientPos?.y / 10}) scale(2.5 2.5)`
 
 	return (
-		<VisualCard.Wrapper className='h-full @container/visual-card'>
+		<VisualCard.Wrapper className='h-full'>
 			<VisualCard.Header>
 				<VisualCard.Title>
 					<Icon name='Blocks' /> IoT Solution
@@ -82,7 +82,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 				</div>
 			</VisualCard.Content>
 			<VisualCard.Footer>
-				<ul className='flex flex-col gap-y-2 [&_li]:inline-flex [&_li]:items-center [&_li]:gap-x-2'>
+				<ul className='flex flex-col gap-y-2 @2xl/visual-card:grid @2xl/visual-card:grid-cols-2 @2xl/visual-card:gap-x-4 [&_li]:inline-flex [&_li]:items-center [&_li]:gap-x-2'>
 					<li>
 						<Icon name='Check' />
 						Lightweight and efficient

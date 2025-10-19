@@ -257,11 +257,11 @@ const BeamAnimated: React.FC = () => {
 			<div
 				style={{
 					transform: 'translate(-50%,-50%) rotateX(50deg) rotateY(-5deg) rotateZ(44deg)',
-					boxShadow: '16px 16px 24px #0a0a0a50'
+					boxShadow: '16px 16px 24px #0a0a0a80'
 				}}
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700',
-					'rounded-lg bg-[linear-gradient(130deg,#e5e5e5,35%,#fafafa,65%,#e5e5e5)] bg-[length:100%_100%] dark:bg-[linear-gradient(125deg,#262626,45%,#525252,55%,#262626)]',
+					'bg-gradient-to-br from-background to-accent to-[30%]',
 					'left-[58%] sm:max-w-[144px]',
 					'left-[56%] md:max-w-[196px]',
 					'left-[52%] lg:max-w-[210px]',
@@ -273,7 +273,7 @@ const BeamAnimated: React.FC = () => {
 						className={cn(
 							'flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg p-4 sm:size-16 sm:gap-y-2 sm:p-2 sm:text-lg md:gap-y-4 md:p-4',
 							renderCount > 0
-								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1500ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1500ms,box-shadow_300ms_ease-out_1500ms] sm:-translate-x-3 sm:-translate-y-3'
+								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1600ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1600ms,box-shadow_300ms_ease-out_1600ms] sm:-translate-x-3 sm:-translate-y-3'
 								: 'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
 						)}>
 						<span className='h-6 text-center font-jetbrains text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-base md:text-2xl xl:text-2xl'>

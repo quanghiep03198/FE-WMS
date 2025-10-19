@@ -72,18 +72,18 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 		className='mx-auto flex w-max animate-[marquee_10s_forwards_linear_infinite] flex-nowrap items-center space-x-4 py-8 will-change-transform group-hover/scroll:paused'>
 		<LinkCard href='#'>
 			<img
-				src='/typescript.svg'
-				alt='TypeScript logo'
-				loading='lazy'
-				className='max-w-7 saturate-[0] transition-all group-hover/card:saturate-100'
-			/>
-		</LinkCard>
-		<LinkCard href='#'>
-			<img
 				src='/react.svg'
 				alt='React'
 				loading='lazy'
 				className='max-w-7 saturate-0 transition-all group-hover/card:saturate-100'
+			/>
+		</LinkCard>
+		<LinkCard href='#'>
+			<img
+				src='/tanstack.png'
+				alt='Tanstack'
+				loading='lazy'
+				className='max-w-9 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-9'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
@@ -147,15 +147,6 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 			</svg>
 		</LinkCard>
 		<LinkCard href='#'>
-			<img
-				src='/reactquery.svg'
-				alt='Tanstack'
-				loading='lazy'
-				className='max-w-8 object-contain saturate-0 transition-all group-hover/card:saturate-100 xl:max-w-9'
-			/>
-		</LinkCard>
-
-		<LinkCard href='#'>
 			<svg
 				viewBox='0 0 256 256'
 				xmlns='http://www.w3.org/2000/svg'
@@ -197,6 +188,14 @@ const LogoList: React.FC<React.ComponentProps<'div'>> = (props) => (
 				alt='Redis'
 				loading='lazy'
 				className='max-w-8 saturate-0 transition-all group-hover/card:saturate-100'
+			/>
+		</LinkCard>
+		<LinkCard href='#'>
+			<img
+				src='/mosquitto.png'
+				alt='Mosquitto'
+				loading='lazy'
+				className='max-w-8 saturate-[0] transition-all group-hover/card:saturate-100'
 			/>
 		</LinkCard>
 		<LinkCard href='#'>
