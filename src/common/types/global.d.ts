@@ -17,7 +17,9 @@ export declare global {
 		readonly VITE_KHRU_APP_IP: string
 		// * Backend
 		readonly VITE_API_BASE_URL: string
+		readonly VITE_API_BASE_CLF_URL: string
 		readonly VITE_WEBSOCKET_URL: string
+		readonly VITE_WEBSOCKET_CLF_URL: string
 		readonly VITE_DEFAULT_TTL: number
 		readonly VITE_REQUEST_TIMEOUT: number
 		// * Bcrypt
