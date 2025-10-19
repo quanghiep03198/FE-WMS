@@ -178,7 +178,7 @@ export default {
 		'501': 'Not Implemented',
 		'502': 'Bad Gateway',
 		'502_message':
-			'The server is currently unable to handle the request due to IP policy. Please try accessing {{url}} to continue using this feature for factory {{factory}}. For more details, please contact the IT department.',
+			'The server is currently unable to handle the request due to IP policy. Please try accessing {{url}} to continue using this feature for factory {{factoryCode}}. For more details, please contact the IT department.',
 		'503': 'Service Unavailable',
 		'503_message': 'This feature is currently under development/maintenance. Please try again later.'
 	},

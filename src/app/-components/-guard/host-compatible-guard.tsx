@@ -22,8 +22,8 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 			: window.location.hostname !== currentHostRegistry.domain)
 
 	const movedPermanentlyURL = isIPv4(window.location.hostname)
-		? `${window.location.protocol}//${currentHostRegistry.ip}:${window.location.port}/${window.location.pathname}`
-		: `${window.location.protocol}//${currentHostRegistry.domain}/${window.location.pathname}`
+		? `${window.location.protocol}//${currentHostRegistry.ip}:${window.location.port}${window.location.pathname}`
+		: `${window.location.protocol}//${currentHostRegistry.domain}${window.location.pathname}`
 
 	if (isNotCompatible)
 		return (
