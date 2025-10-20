@@ -101,6 +101,9 @@ export function OrderSearchFieldControl() {
 													<Icon name='X' />
 												</GhostButton>
 											)}
+											{isLoading && (
+												<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+											)}
 										</Div>
 										<Div className='flex items-center justify-between'>
 											<SearchHistory />
@@ -155,7 +158,7 @@ export function OrderSearchFieldControl() {
 }
 
 const AutoCompleteItem = tw.div`
-	flex cursor-pointer items-center rounded-md p-2 h-8 text-sm
+	flex cursor-pointer items-center rounded-md p-2 h-9 text-base
 	hover:bg-secondary 
 	hover:text-secondary-foreground 
 	aria-disabled:cursor-auto 

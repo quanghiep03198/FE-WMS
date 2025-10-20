@@ -1,19 +1,15 @@
-import { Theme } from '@/common/constants/enums'
-import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import { Card, CardAction, CardDescription, CardHeader, CardTitle, Div, Icon } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import tw from 'tailwind-styled-components'
 
 const PlaceholderSection: React.FC = () => {
-	const { theme } = useTheme()
 	const { t } = useTranslation()
 
 	return (
 		<Fragment>
-			<Div className='mr-auto mt-4 flex items-center'>
+			<Div className='mx-auto mt-4 flex items-center'>
 				<Icon name='BotMessageSquare' size={24} className='mr-2' />
 				&quot;
 				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} className='italic' />
@@ -22,8 +18,9 @@ const PlaceholderSection: React.FC = () => {
 			<Div
 				as='section'
 				className={cn(
-					'grid w-full grid-cols-3 gap-x-4 gap-y-3 xxl:grid-cols-6 xxl:grid-rows-3 xxl:gap-x-9',
-					'[&_*[data-slot=card]]:transition-opacity [&_*[data-slot=card]]:duration-200 [&_*[data-slot=card]]:animate-in [&_*[data-slot=card]]:fade-in-0 xxl:[&_*[data-slot=card]]:col-span-2 xxl:[&_*[data-slot=card]]:col-start-1 xxl:[&_*[data-slot=card]]:row-span-1'
+					'grid grid-cols-3 gap-x-4',
+					'[&_*[data-slot=card]]:rounded-lg'
+					// 'grid w-full grid-cols-3 gap-x-4 gap-y-3 xxl:grid-cols-6 xxl:grid-rows-3 xxl:gap-x-9',
 				)}>
 				<Card>
 					<CardHeader className='gap-x-4'>
@@ -52,15 +49,15 @@ const PlaceholderSection: React.FC = () => {
 						<CardDescription className='col-start-2'>{t('ns_erp:descriptions.shipping_detail')}</CardDescription>
 					</CardHeader>
 				</Card>
-				<Figure>
+				{/* <Figure>
 					<Image src={theme === Theme.DARK ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
-				</Figure>
+				</Figure> */}
 			</Div>
 		</Fragment>
 	)
 }
 
-const Figure = tw.figure`col-span-4 col-start-3 xxl:block hidden row-span-3 row-start-1 place-content-center`
-const Image = tw.img`mx-auto w-full max-w-xl`
+// const Figure = tw.figure`col-span-4 col-start-3 xxl:block hidden row-span-3 row-start-1 place-content-center`
+// const Image = tw.img`mx-auto w-full max-w-xl`
 
 export default PlaceholderSection

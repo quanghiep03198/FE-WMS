@@ -30,7 +30,7 @@ function Page() {
 			<Div
 				as='section'
 				className='mx-auto flex min-h-[var(--outlet-wrapper-height)] flex-col place-content-center gap-y-6 xxl:max-w-7xl'>
-				<Typography variant='h3' className='z-10 bg-background font-medium capitalize'>
+				<Typography variant='h2' className='z-10 bg-background text-center font-medium capitalize'>
 					{t('ns_erp:titles.purchase_order_seeking')}
 				</Typography>
 				<SearchForm />
