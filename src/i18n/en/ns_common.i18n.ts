@@ -288,7 +288,9 @@ export default {
 		import_data: 'Import data',
 		original_data: 'Original data',
 		overall: 'Overall',
-		target_data: 'Target data'
+		target_data: 'Target data',
+		recently_search: 'Recently searched',
+		no_recently_search_yet: 'No recently searched yet'
 	},
 	timestamps: {
 		created_at: 'Created {{timestamp}}',

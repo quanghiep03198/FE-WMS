@@ -294,7 +294,9 @@ export default {
 		original_data: 'Dữ liệu gốc',
 		import_data: 'Tải lên dữ liệu',
 		overall: 'Tổng quan',
-		target_data: 'Dữ liệu cập nhật'
+		target_data: 'Dữ liệu cập nhật',
+		recently_search: 'Tìm kiếm gần đây',
+		no_recently_search_yet: 'Chưa có tìm kiếm gần đây'
 	},
 	timestamps: {
 		created_at: 'Đã tạo {{timestamp}}',

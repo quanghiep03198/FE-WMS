@@ -2,12 +2,14 @@ import { Badge, Div, Icon, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import React, { useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useSearchPoHistory } from '../-hooks/use-search-po-history'
 import { GhostButton } from '../../-components/-shared/ghost-button'
 
 const SearchHistory: React.FC = () => {
 	const { setValue } = useFormContext()
 	const [recentlySearch, setRecentlySearch] = useSearchPoHistory()
+	const { t } = useTranslation()
 
 	const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -36,7 +38,9 @@ const SearchHistory: React.FC = () => {
 		<Div className='flex items-center gap-6'>
 			<Typography variant='small' color='muted' className='inline-flex items-center gap-x-2'>
 				<Icon name='History' size={20} strokeWidth={1.5} />
-				{recentlySearch.length > 0 ? 'Recently search' : 'No recent searches yet'}
+				{recentlySearch.length > 0
+					? t('ns_common:titles.recently_search')
+					: t('ns_common:titles.no_recently_search_yet')}
 			</Typography>
 			{recentlySearch.length > 0 && (
 				<Div className='flex items-center gap-x-2'>
@@ -46,7 +50,7 @@ const SearchHistory: React.FC = () => {
 					<ScrollShadow
 						ref={scrollRef}
 						orientation='horizontal'
-						className='flex max-w-sm snap-mandatory items-center gap-x-2 scroll-smooth px-2 scrollbar-none xxl:max-w-lg'>
+						className='flex max-w-sm snap-mandatory items-center gap-x-2 scroll-smooth px-1 scrollbar-none xxl:max-w-lg'>
 						{recentlySearch.map((term) => (
 							<Badge
 								key={term}

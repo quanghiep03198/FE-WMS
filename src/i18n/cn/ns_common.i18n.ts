@@ -297,7 +297,9 @@ export default {
 		import_data: '上传数据',
 		original_data: '原资料',
 		overall: '总体数据',
-		target_data: '目标资料'
+		target_data: '目标资料',
+		recently_search: '最近搜索',
+		no_recently_search_yet: '还没有最近搜索'
 	},
 	unit: {
 		times: '次',
