@@ -1,19 +1,14 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { Badge, Button, Div, Form as FormProvider, Icon, Typography } from '@/components/ui'
-import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { useLocalStorageState } from 'ahooks'
-import { useRef } from 'react'
+import { Button, Div, Form as FormProvider, Icon } from '@/components/ui'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { GhostButton } from '../../-components/-shared/ghost-button'
+import { useSearchPoHistory } from '../-hooks/use-search-po-history'
 import { OrderSearchFieldControl } from './order-search-field-control'
 
 const SearchForm: React.FC = () => {
 	const { t } = useTranslation()
 	const { searchParams, setParams } = useQueryParams<{ po?: string }>()
-
-	const scrollRef = useRef<HTMLDivElement>(null)
 
 	const form = useForm({
 		defaultValues: {
@@ -21,31 +16,7 @@ const SearchForm: React.FC = () => {
 		}
 	})
 
-	const [recentlySearch, setRecentlySearch] = useLocalStorageState('recentPurchaseOrderSearchTerms', {
-		listenStorageChange: true,
-		defaultValue: []
-	})
-
-	// Handle scroll
-	const scrollLeft = () => {
-		if (scrollRef.current) {
-			const scrollAmount = scrollRef.current.clientWidth
-			scrollRef.current.scrollBy({
-				left: -scrollAmount,
-				behavior: 'smooth'
-			})
-		}
-	}
-
-	const scrollRight = () => {
-		if (scrollRef.current) {
-			const scrollAmount = scrollRef.current.clientWidth
-			scrollRef.current.scrollBy({
-				left: scrollAmount,
-				behavior: 'smooth'
-			})
-		}
-	}
+	const [recentlySearch, setRecentlySearch] = useSearchPoHistory()
 
 	return (
 		<FormProvider {...form}>
@@ -57,51 +28,16 @@ const SearchForm: React.FC = () => {
 				})}>
 				<Div className='flex items-center gap-x-2'>
 					<OrderSearchFieldControl />
-					<Button size='lg'>
+					<Button id='search-po-button' type='submit' className='hidden'>
 						<Icon name='Search' />
 						{t('ns_common:actions.search')}
 					</Button>
 				</Div>
-				{recentlySearch.length > 0 && (
-					<Div className='flex items-center justify-center gap-6'>
-						<Typography variant='small' color='muted' className='inline-flex items-center gap-x-2'>
-							<Icon name='History' size={20} strokeWidth={1.5} />
-							Recently search
-						</Typography>
-						<Div className='flex items-center gap-x-2'>
-							<GhostButton type='button' onClick={scrollLeft}>
-								<Icon name='ChevronLeft' />
-							</GhostButton>
-							<ScrollShadow
-								ref={scrollRef}
-								orientation='horizontal'
-								className='flex max-w-md snap-mandatory items-center gap-x-2 scroll-smooth px-2 scrollbar-none'>
-								{recentlySearch.map((term) => (
-									<Badge
-										key={term}
-										variant='outline'
-										className='min-w-24 cursor-pointer justify-between'
-										onClick={() => form.setValue('po', term)}>
-										{term}{' '}
-										<GhostButton
-											className='ml-auto'
-											onClick={() => setRecentlySearch(recentlySearch.filter((item) => item !== term))}>
-											<Icon name='X' size={12} />
-										</GhostButton>
-									</Badge>
-								))}
-							</ScrollShadow>
-							<GhostButton type='button' onClick={scrollRight}>
-								<Icon name='ChevronRight' />
-							</GhostButton>
-						</Div>
-					</Div>
-				)}
 			</Form>
 		</FormProvider>
 	)
 }
 
-const Form = tw.form`max-w-4xl mx-auto w-full grid gap-y-10`
+const Form = tw.form`w-full grid gap-y-10`
 
 export default SearchForm

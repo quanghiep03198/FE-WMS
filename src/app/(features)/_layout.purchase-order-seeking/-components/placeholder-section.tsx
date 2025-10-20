@@ -1,55 +1,66 @@
 import { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
+import { cn } from '@/common/utils/cn'
 import { Card, CardAction, CardDescription, CardHeader, CardTitle, Div, Icon } from '@/components/ui'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
+import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 
 const PlaceholderSection: React.FC = () => {
 	const { theme } = useTheme()
+	const { t } = useTranslation()
 
 	return (
-		<Div as='section' className='mx-auto grid max-w-4xl grid-cols-5 grid-rows-3 gap-x-9 gap-y-3'>
-			<Card className='col-span-2 col-start-1 row-span-1'>
-				<CardHeader className='gap-x-4'>
-					<CardAction className='col-start-1'>
-						<Icon name='SearchCheck' size={32} strokeWidth={1.5} />
-					</CardAction>
-					<CardTitle className='col-start-2'>Quick Search</CardTitle>
-					<CardDescription className='col-start-2'>
-						Instantly find your purchase order by entering the PO number.
-					</CardDescription>
-				</CardHeader>
-			</Card>
-			<Card className='col-span-2 col-start-1 row-span-1'>
-				<CardHeader className='gap-x-4'>
-					<CardAction className='col-start-1'>
-						<Icon name='ReceiptText' size={32} strokeWidth={1.5} />
-					</CardAction>
-					<CardTitle className='col-start-2'>Order Summary</CardTitle>
-					<CardDescription className='col-start-2'>
-						Get a complete overview of your order including items, quantities, supplier, and delivery timeline —
-						all in one place.
-					</CardDescription>
-				</CardHeader>
-			</Card>
-			<Card className='col-span-2 col-start-1 row-span-1'>
-				<CardHeader className='gap-x-4'>
-					<CardAction className='col-start-1'>
-						<Icon name='Ship' size={32} strokeWidth={1.5} />
-					</CardAction>
-					<CardTitle className='col-start-2'>Shipping Detail</CardTitle>
-					<CardDescription className='col-start-2'>
-						Track shipping status and logistics information for your purchase orders with ease.
-					</CardDescription>
-				</CardHeader>
-			</Card>
-			<Figure>
-				<Image src={theme === Theme.DARK ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
-			</Figure>
-		</Div>
+		<Fragment>
+			<Div className='mx-auto mt-4 flex items-center xxl:ml-0 xxl:mr-auto'>
+				<Icon name='BotMessageSquare' size={24} className='mr-2' />
+				&quot;
+				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} className='italic' />
+				&quot;
+			</Div>
+			<Div
+				as='section'
+				className={cn(
+					'grid w-full grid-cols-3 gap-x-4 gap-y-3 xxl:grid-cols-6 xxl:grid-rows-3 xxl:gap-x-9',
+					'[&_*[data-slot=card]]:transition-opacity [&_*[data-slot=card]]:duration-200 [&_*[data-slot=card]]:animate-in [&_*[data-slot=card]]:fade-in-0 xxl:[&_*[data-slot=card]]:col-span-2 xxl:[&_*[data-slot=card]]:col-start-1 xxl:[&_*[data-slot=card]]:row-span-1'
+				)}>
+				<Card>
+					<CardHeader className='gap-x-4'>
+						<CardAction className='col-start-1'>
+							<Icon name='SearchCheck' size={32} strokeWidth={1.5} />
+						</CardAction>
+						<CardTitle className='col-start-2'>{t('ns_erp:titles.quick_po_search')}</CardTitle>
+						<CardDescription className='col-start-2'>{t('ns_erp:descriptions.quick_po_search')}</CardDescription>
+					</CardHeader>
+				</Card>
+				<Card>
+					<CardHeader className='gap-x-4'>
+						<CardAction className='col-start-1'>
+							<Icon name='ReceiptText' size={32} strokeWidth={1.5} />
+						</CardAction>
+						<CardTitle className='col-start-2'>{t('ns_erp:titles.order_detail')}</CardTitle>
+						<CardDescription className='col-start-2'>{t('ns_erp:descriptions.order_detail')}</CardDescription>
+					</CardHeader>
+				</Card>
+				<Card>
+					<CardHeader className='gap-x-4'>
+						<CardAction className='col-start-1'>
+							<Icon name='Ship' size={32} strokeWidth={1.5} />
+						</CardAction>
+						<CardTitle className='col-start-2'>{t('ns_erp:titles.shipping_detail')}</CardTitle>
+						<CardDescription className='col-start-2'>{t('ns_erp:descriptions.shipping_detail')}</CardDescription>
+					</CardHeader>
+				</Card>
+				<Figure>
+					<Image src={theme === Theme.DARK ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
+				</Figure>
+			</Div>
+		</Fragment>
 	)
 }
 
-const Figure = tw.figure`col-span-3 col-start-3 row-span-3 row-start-1`
+const Figure = tw.figure`col-span-4 col-start-3 xxl:block hidden row-span-3 row-start-1 place-content-center`
 const Image = tw.img`mx-auto w-full max-w-xl`
 
 export default PlaceholderSection

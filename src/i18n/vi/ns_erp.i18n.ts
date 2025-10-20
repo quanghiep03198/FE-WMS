@@ -4,7 +4,11 @@ export default {
 		decentralized_po: 'Nhiều lệnh sản xuất được phân vào nhiều PO khác nhau.',
 		purchase_order_seeking: 'Tìm kiếm thông tin, số lượng đơn đặt hàng theo mã PO.',
 		no_purchase_order_found:
-			'Đơn đặt hàng có thể không tồn tại hoặc không có dữ liệu chạy size liên quan hoặc đã hoàn tất.'
+			'Đơn đặt hàng có thể không tồn tại hoặc không có dữ liệu chạy size liên quan hoặc đã hoàn tất.',
+		quick_po_search: 'Tìm kiếm nhanh đơn đặt hàng đang xử lý bằng cách nhập mã PO.',
+		order_detail: 'Xem chi tiết đơn hàng bao gồm thông tin sản phẩm, số lượng một cách nhanh chóng.',
+		shipping_detail: 'Truy cập thông tin vận chuyển chung cho từng đơn hàng.',
+		provide_po_info: 'Truy cập nhanh mọi thông tin liên quan đến đơn đặt hàng của bạn.'
 	},
 	fields: {
 		accumulated_qty: 'Số lượng tích lũy',
@@ -97,7 +101,10 @@ export default {
 	titles: {
 		product_info: 'Thông tin sản phẩm',
 		report_type: 'Loại báo cáo',
-		purchase_order_seeking: 'Tra cứu đơn đặt hàng'
+		purchase_order_seeking: 'Tra cứu đơn đặt hàng',
+		quick_po_search: 'Tìm kiếm nhanh PO',
+		order_detail: 'Chi tiết đơn hàng',
+		shipping_detail: 'Chi tiết vận chuyển'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: 'Đơn xuất kho thành phẩm',

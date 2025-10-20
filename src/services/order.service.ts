@@ -32,7 +32,7 @@ export class OrderService {
 	}
 
 	static async getPurchaseOrderSizeRun(purchaseOrder: string) {
-		return await axiosInstance.get<unknown, ResponseBody<IPurchaseOrderDetail>>(
+		return await axiosInstance.get<unknown, ResponseBody<IPurchaseOrderDetail[]>>(
 			`/order/purchase-order/size-run/${purchaseOrder}`
 		)
 	}

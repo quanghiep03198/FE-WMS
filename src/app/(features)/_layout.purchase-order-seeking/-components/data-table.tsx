@@ -1,26 +1,16 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IPurchaseOrderDetail } from '@/common/types/entities'
-import {
-	Badge,
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Typography
-} from '@/components/ui'
-import EllipsisList from '@/components/ui/@custom/ellipsis-list'
+import { DataTable, Div, Icon, Typography } from '@/components/ui'
+
+import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { OrderService } from '@/services/order.service'
 import { useQuery } from '@tanstack/react-query'
+import { createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import PlaceHolderItems from '../../-components/-shared/placeholder-items'
-import SizeTable from '../../_layout.production-inventory/-components/partials/size-table'
 
-const DataTable: React.FC = () => {
+const DataSection: React.FC = () => {
 	const { t, i18n } = useTranslation()
 
 	const { searchParams } = useQueryParams<{ po?: string }>()
@@ -32,16 +22,49 @@ const DataTable: React.FC = () => {
 		select: (response) => response.metadata
 	})
 
-	const columns: Array<{ header: string; accessorKey: keyof IPurchaseOrderDetail }> = useMemo(
+	const columnHelper = createColumnHelper<IPurchaseOrderDetail>()
+
+	const columns = useMemo(
 		() => [
-			{ header: t('ns_erp:fields.po'), accessorKey: 'po' },
-			{ header: t('ns_erp:fields.mo_no'), accessorKey: 'mo_no' },
-			{ header: t('ns_erp:fields.brand_name'), accessorKey: 'brand_name' },
-			{ header: t('ns_erp:fields.shoestyle_codefactory'), accessorKey: 'shoes_style' },
-			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color_sn' },
-			{ header: t('ns_erp:fields.shipping_id'), accessorKey: 'ship_id' },
-			{ header: t('ns_erp:fields.shipping_destination'), accessorKey: 'ship_dest_country' },
-			{ header: t('ns_erp:fields.shipping_type'), accessorKey: 'ship_type' }
+			columnHelper.accessor('po', { header: t('ns_erp:fields.po'), enableSorting: false, enablePinning: true }),
+			columnHelper.accessor('mo_no', {
+				header: t('ns_erp:fields.mo_no'),
+				enableSorting: false,
+				enablePinning: true
+			}),
+			columnHelper.accessor('brand_name', { header: t('ns_erp:fields.brand_name'), enableSorting: false }),
+			columnHelper.accessor('shoes_style', {
+				header: t('ns_erp:fields.shoestyle_codefactory'),
+				enableSorting: false
+			}),
+			columnHelper.accessor('color_sn', { header: t('ns_erp:fields.color_sn'), enableSorting: false }),
+			columnHelper.accessor('ship_id', {
+				header: t('ns_erp:fields.shipping_id'),
+				enableSorting: false,
+				cell: ({ getValue }) => getValue() ?? FALLBACK_VALUE
+			}),
+			columnHelper.accessor('ship_dest_country', {
+				header: t('ns_erp:fields.shipping_destination'),
+				enableSorting: false,
+				cell: ({ getValue }) => getValue() ?? FALLBACK_VALUE
+			}),
+			columnHelper.accessor('ship_type', {
+				header: t('ns_erp:fields.shipping_type'),
+				enableSorting: false,
+				cell: ({ getValue }) => getValue() ?? FALLBACK_VALUE
+			}),
+			columnHelper.accessor('size_numcode', {
+				id: 'size_numcode',
+				header: 'Size',
+				enableSorting: true,
+				enablePinning: true
+			}),
+			columnHelper.accessor('qty', {
+				id: 'qty',
+				header: t('ns_erp:fields.po_size_qty'),
+				enableSorting: true,
+				enablePinning: true
+			})
 		],
 		[i18n.language]
 	)
@@ -66,53 +89,24 @@ const DataTable: React.FC = () => {
 		)
 
 	return (
-		<Div as='section' className='overflow-clip rounded-md border'>
-			<Table className='table-fixed [&_tr_*>span]:line-clamp-1'>
-				<TableHeader>
-					<TableRow>
-						{columns.map((column) => (
-							<TableHead align='left' key={column.accessorKey} title={column.header}>
-								<span>{column.header}</span>
-							</TableHead>
-						))}
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					<TableRow>
-						{columns
-							.filter((column) => column.accessorKey !== 'sizes')
-							.map((column) => {
-								if (column.accessorKey === 'mo_no')
-									return (
-										<TableCell key={column.accessorKey} align='left'>
-											<EllipsisList
-												data={data?.mo_no?.split(',') ?? []}
-												threshhold={1}
-												template={({ data }) => <Badge variant='outline'>{data}</Badge>}
-											/>
-										</TableCell>
-									)
-								return (
-									<TableCell key={column.accessorKey} align='left'>
-										<span>{String(data[column.accessorKey])}</span>
-									</TableCell>
-								)
-							})}
-					</TableRow>
-					<TableRow>
-						<TableHead colSpan={8} align='center'>
-							{t('ns_erp:fields.po_size_qty')}
-						</TableHead>
-					</TableRow>
-					<TableRow>
-						<TableCell colSpan={8} className='!p-0'>
-							<SizeTable data={data.sizes} />
-						</TableCell>
-					</TableRow>
-				</TableBody>
-			</Table>
-		</Div>
+		<DataTable
+			columns={columns}
+			data={data}
+			loading={isLoading}
+			border='bottom-only'
+			toolbarProps={{ override: true, render: () => null }}
+			enableSorting={true}
+			enableColumnPinning={true}
+			initialState={{
+				pagination: { pageIndex: 0, pageSize: 50 },
+				columnPinning: {
+					left: ['po', 'mo_no'],
+					right: ['size_numcode', 'qty']
+				}
+			}}
+			containerProps={{ className: 'h-80' }}
+		/>
 	)
 }
 
-export default DataTable
+export default DataSection
