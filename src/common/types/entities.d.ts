@@ -338,8 +338,6 @@ export interface IPurchaseOrderDetail {
 	ship_id: string
 	ship_dest_country: string
 	ship_type: string
-	sizes: Array<{
-		size_numcode: string
-		qty: number
-	}>
+	size_numcode: string
+	qty: number
 }

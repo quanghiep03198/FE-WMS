@@ -3,7 +3,11 @@ export default {
 		centralized_po: '多个生产指令被汇总到同一个采购订单中.',
 		decentralized_po: '多个生产指令被分配到不同的采购订单中.',
 		purchase_order_seeking: '通过采购订单编号查询采购订单的信息及数量.',
-		no_purchase_order_found: '訂單可能不存在、沒有對應的尺碼資料，或已經結案.'
+		no_purchase_order_found: '訂單可能不存在、沒有對應的尺碼資料，或已經結案.',
+		quick_po_search: '通过输入采购订单编号快速搜索正在处理的采购订单.',
+		order_detail: '查看订单详情，包括产品信息、数量一目了然.',
+		shipping_detail: '访问每个订单的常用运输信息.',
+		provide_po_info: '在几秒内提供订单, 产品和运输信息.'
 	},
 	fields: {
 		accumulated_qty: '累计',
@@ -99,7 +103,10 @@ export default {
 	titles: {
 		product_info: '产品信息',
 		report_type: '报告类型',
-		purchase_order_seeking: '采购订单查询'
+		purchase_order_seeking: '采购订单查询',
+		quick_po_search: '快速采购订单查询',
+		order_detail: '订单详情',
+		shipping_detail: '运输详情'
 	},
 	inventory_list_type: {
 		finished_goods_dispatch: '成品出庫單',

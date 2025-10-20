@@ -4,7 +4,11 @@ export default {
 		decentralized_po: 'Multiple production orders are distributed into different purchase orders.',
 		purchase_order_seeking: 'Seeking information and quantity of processing purchase orders by PO code.',
 		no_purchase_order_found:
-			'The purchase order may not exist or has no associated size run data or already finished.'
+			'The purchase order may not exist or has no associated size run data or already finished.',
+		quick_po_search: 'Quickly search for processing purchase orders by entering PO code.',
+		order_detail: 'View order details including product information, quantities at a glance.',
+		shipping_detail: 'Access common shipping information for each order.',
+		provide_po_info: 'Provide order, product, and shipment details in seconds.'
 	},
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
@@ -97,7 +101,10 @@ export default {
 	titles: {
 		product_info: 'Product Information',
 		report_type: 'Report Type',
-		purchase_order_seeking: 'Seeking purchase order information'
+		purchase_order_seeking: 'Seeking purchase order information',
+		quick_po_search: 'Quick PO Search',
+		order_detail: 'Order Detail',
+		shipping_detail: 'Shipping Detail'
 	},
 	labels: {
 		goods_category: 'Shoes category',

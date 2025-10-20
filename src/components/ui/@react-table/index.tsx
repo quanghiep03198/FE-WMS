@@ -92,10 +92,14 @@ function DataGrid<TData, TValue>({
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>(initialState?.rowSelection ?? {})
 	const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
 	const [editedRows, setEditedRows, resetEditedRows] = useResetState({})
-	const [pagination, setPagination] = useState<PaginationState>(() => ({
-		pageIndex: 0,
-		pageSize: 10
-	}))
+	const [pagination, setPagination] = useState<PaginationState>(() =>
+		initialState?.pagination
+			? initialState.pagination
+			: {
+					pageIndex: 0,
+					pageSize: 10
+				}
+	)
 
 	const event$ = useEventEmitter<Record<string, unknown>>()
 
