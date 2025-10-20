@@ -13,7 +13,7 @@ const PlaceholderSection: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Div className='mx-auto mt-4 flex items-center xxl:ml-0 xxl:mr-auto'>
+			<Div className='mr-auto mt-4 flex items-center'>
 				<Icon name='BotMessageSquare' size={24} className='mr-2' />
 				&quot;
 				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} className='italic' />

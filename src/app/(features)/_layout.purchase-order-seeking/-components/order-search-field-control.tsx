@@ -106,12 +106,11 @@ export function OrderSearchFieldControl() {
 											<SearchHistory />
 											<Label
 												htmlFor='search-po-button'
-												className={cn(buttonVariants({}))}
+												className={cn(buttonVariants({ size: 'lg' }))}
 												onClick={(e) => {
 													e.stopPropagation()
 												}}>
 												<Icon name='Search' />
-
 												{t('ns_common:actions.search')}
 											</Label>
 										</Div>
