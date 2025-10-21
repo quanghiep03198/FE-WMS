@@ -13,6 +13,8 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
+	Separator,
+	Tooltip,
 	Typography
 } from '@/components/ui'
 import { capitalize } from 'lodash'
@@ -20,6 +22,7 @@ import React, { useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
 import { GhostButton } from '../../-components/-shared/ghost-button'
 import { useSearchPurchaseOrderQuery } from '../../-hooks/use-order-asm'
 import SearchHistory from './search-history'
@@ -35,6 +38,7 @@ export function OrderSearchFieldControl() {
 	const currentOrderValue = useWatch({ control, name: 'po' })
 
 	const { data: availablePurchaseOrders, isLoading } = useSearchPurchaseOrderQuery(currentOrderValue, true)
+	const { refetch } = usePurchaseOrderDetailQuery()
 
 	const availableOrders = useMemo(() => {
 		return Array.isArray(availablePurchaseOrders)
@@ -78,7 +82,7 @@ export function OrderSearchFieldControl() {
 									<PopoverTrigger
 										className='relative flex w-full flex-1 flex-col items-stretch gap-6 rounded-lg border px-6 py-3 transition-colors duration-200 focus-within:border-primary aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
 										onClick={(e) => e.preventDefault()}>
-										<Div className='flex items-center'>
+										<Div className='flex items-center gap-x-2'>
 											<Input
 												id={id}
 												ref={ref}
@@ -91,19 +95,32 @@ export function OrderSearchFieldControl() {
 													})
 												)}
 												aria-invalid={!!getFieldState('po').error}
-												className='focus-border-0 rounded-none border-0 px-0 text-base shadow-none'
+												className={cn(
+													'focus-border-0 rounded-none border-0 px-0 text-base shadow-none',
+													isLoading && 'animate-pulse'
+												)}
 												onKeyDown={handleKeyDown}
 												onClick={() => setOpen(true)}
 												onChange={(e) => field.onChange(e)}
 											/>
-											{field.value && (
-												<GhostButton type='button' onClick={() => setValue('po', '')}>
+
+											<Tooltip message={t('ns_common:actions.reset')} triggerProps={{ asChild: true }}>
+												<GhostButton
+													type='button'
+													onClick={() => setValue('po', '')}
+													disabled={!field.value}>
 													<Icon name='X' />
 												</GhostButton>
-											)}
-											{isLoading && (
-												<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
-											)}
+											</Tooltip>
+											<Separator orientation='vertical' className='h-4 w-0.5' />
+											<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+												<GhostButton onClick={() => refetch()} disabled={isLoading}>
+													<Icon
+														name='RotateCw'
+														className={isLoading && 'animate-[spin_1s_linear_infinite]'}
+													/>
+												</GhostButton>
+											</Tooltip>
 										</Div>
 										<Div className='flex items-center justify-between'>
 											<SearchHistory />
@@ -158,7 +175,7 @@ export function OrderSearchFieldControl() {
 }
 
 const AutoCompleteItem = tw.div`
-	flex cursor-pointer items-center rounded-md p-2 h-9 text-base
+	flex cursor-pointer items-center rounded-md p-2 h-9 text-base gap-x-2
 	hover:bg-secondary 
 	hover:text-secondary-foreground 
 	aria-disabled:cursor-auto 

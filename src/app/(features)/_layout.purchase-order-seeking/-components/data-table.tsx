@@ -1,26 +1,18 @@
-import useQueryParams from '@/common/hooks/use-query-params'
 import { IPurchaseOrderDetail } from '@/common/types/entities'
 import { DataTable, Div, Icon, Typography } from '@/components/ui'
 
 import { FALLBACK_VALUE } from '@/common/constants/constants'
-import { OrderService } from '@/services/order.service'
-import { useQuery } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
 import PlaceHolderItems from '../../-components/-shared/placeholder-items'
+import ReportTableSummary from './report-table-summary'
 
 const DataSection: React.FC = () => {
 	const { t, i18n } = useTranslation()
 
-	const { searchParams } = useQueryParams<{ po?: string }>()
-
-	const { data, isLoading } = useQuery({
-		queryKey: ['PURCHASE_ORDER_SEEKING', searchParams.po],
-		queryFn: async () => await OrderService.getPurchaseOrderSizeRun(searchParams.po),
-		enabled: !!searchParams.po,
-		select: (response) => response.metadata
-	})
+	const { data, isLoading } = usePurchaseOrderDetailQuery()
 
 	const columnHelper = createColumnHelper<IPurchaseOrderDetail>()
 
@@ -69,6 +61,14 @@ const DataSection: React.FC = () => {
 		[i18n.language]
 	)
 
+	if (isLoading)
+		return (
+			<Div className='mx-auto flex h-80 max-w-4xl items-center justify-center gap-x-2'>
+				<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+				<Typography variant='small'>{t('ns_common:status.loading')}</Typography>
+			</Div>
+		)
+
 	if (!data)
 		return (
 			<Div className='mx-auto flex h-80 max-w-4xl flex-col items-center justify-center gap-y-2 rounded-lg border-2 border-dashed bg-background p-6 text-center text-muted-foreground'>
@@ -77,14 +77,6 @@ const DataSection: React.FC = () => {
 				<Typography variant='small' color='muted' className='mx-auto max-w-xl text-pretty text-center'>
 					{t('ns_erp:descriptions.no_purchase_order_found')}
 				</Typography>
-			</Div>
-		)
-
-	if (isLoading)
-		return (
-			<Div className='mx-auto flex h-80 max-w-4xl items-center justify-center gap-x-2'>
-				<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
-				<Typography variant='small'>{t('ns_common:status.loading')}</Typography>
 			</Div>
 		)
 
@@ -104,7 +96,14 @@ const DataSection: React.FC = () => {
 					right: ['size_numcode', 'qty']
 				}
 			}}
-			containerProps={{ className: 'h-80' }}
+			containerProps={{ className: 'h-96' }}
+			footerProps={{
+				slot: () => (
+					<Div className='flex w-full items-center justify-between p-2 md:flex-col'>
+						<ReportTableSummary data={data} />
+					</Div>
+				)
+			}}
 		/>
 	)
 }
