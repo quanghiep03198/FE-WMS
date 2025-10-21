@@ -8,9 +8,10 @@ export default {
 		quick_po_search: 'Tìm kiếm nhanh đơn đặt hàng đang xử lý bằng cách nhập mã PO.',
 		order_detail: 'Xem chi tiết đơn hàng bao gồm thông tin sản phẩm, số lượng một cách nhanh chóng.',
 		shipping_detail: 'Truy cập thông tin vận chuyển chung cho từng đơn hàng.',
-		provide_po_info: 'Truy cập nhanh mọi thông tin liên quan đến đơn đặt hàng của bạn.'
+		provide_po_info: 'Truy cập nhanh mọi thông tin liên quan đến đơn đặt hàng của khách hàng.'
 	},
 	fields: {
+		actual_weight: 'Trọng lượng thực tế (kg)',
 		accumulated_qty: 'Số lượng tích lũy',
 		actual_instock_qty: 'Số lượng nhập thực tế',
 		actual_inventory_qty: 'Số lượng kiểm kê',
@@ -31,6 +32,7 @@ export default {
 		dept_name: 'Bộ phận cập nhật',
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
+		factory_code_produce: 'Nhà máy sản xuất',
 		final_inventory_qty: 'Tồn kho cuối kỳ',
 		inbound_date: 'Ngày Nhập Kho', // Inbound Date
 		inbound_qty: 'Số Lượng Nhập Kho', // Inbound Quantity
@@ -87,6 +89,7 @@ export default {
 		sno_total: 'Tổng số đôi',
 		sno_total_boxes: 'Số lượng đóng thùng',
 		sno_type: 'Loại',
+		standard_weight: 'Trọng lượng tiêu chuẩn (kg)',
 		status_approve: 'Trạng thái duyệt đơn',
 		target_box_qty: 'Số thùng cần cân',
 		target_item_qty: 'Số đôi cần cân',

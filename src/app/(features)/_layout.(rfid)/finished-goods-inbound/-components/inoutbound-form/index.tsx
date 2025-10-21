@@ -337,14 +337,20 @@ const InoutboundForm: React.FC = () => {
 						</Button>
 					</Div>
 					<Separator className='col-span-full' />
-					<Div className='col-span-full inline-flex items-center gap-x-2'>
+
+					<Div className='col-span-full inline-flex items-center'>
 						<Icon
 							name='BotMessageSquare'
 							size={24}
-							strokeWidth={1.5}
-							className='duration-500 animate-in zoom-in-90 slide-in-from-bottom-1'
+							className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
 						/>
-						<Typewriter className='text-sm italic' text={t('ns_inoutbound:description.inoutbound_form_note')} />
+						&quot;
+						<Typewriter
+							className='text-sm italic'
+							text={t('ns_inoutbound:description.inoutbound_form_note')}
+							delay={200}
+						/>
+						&quot;
 					</Div>
 				</Form>
 			</FormProvider>

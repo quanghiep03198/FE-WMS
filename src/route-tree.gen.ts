@@ -37,6 +37,9 @@ const featuresLayoutPurchaseOrderSeekingIndexLazyImport = createFileRoute(
 const featuresLayoutProductionInventoryIndexLazyImport = createFileRoute(
   '/(features)/_layout/production-inventory/',
 )()
+const featuresLayoutPackingManifestIndexLazyImport = createFileRoute(
+  '/(features)/_layout/packing-manifest/',
+)()
 const featuresLayoutOutboundReportIndexLazyImport = createFileRoute(
   '/(features)/_layout/outbound-report/',
 )()
@@ -181,6 +184,19 @@ const featuresLayoutProductionInventoryIndexLazyRoute =
     } as any)
     .lazy(() =>
       import('./app/(features)/_layout.production-inventory/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+
+const featuresLayoutPackingManifestIndexLazyRoute =
+  featuresLayoutPackingManifestIndexLazyImport
+    .update({
+      id: '/packing-manifest/',
+      path: '/packing-manifest/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.packing-manifest/index.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -495,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutOutboundReportIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
+    '/(features)/_layout/packing-manifest/': {
+      id: '/(features)/_layout/packing-manifest/'
+      path: '/packing-manifest'
+      fullPath: '/packing-manifest'
+      preLoaderRoute: typeof featuresLayoutPackingManifestIndexLazyImport
+      parentRoute: typeof featuresLayoutImport
+    }
     '/(features)/_layout/production-inventory/': {
       id: '/(features)/_layout/production-inventory/'
       path: '/production-inventory'
@@ -598,6 +621,7 @@ interface featuresLayoutRouteChildren {
   featuresLayoutInoutboundHistoryIndexLazyRoute: typeof featuresLayoutInoutboundHistoryIndexLazyRoute
   featuresLayoutInventoryAuditIndexLazyRoute: typeof featuresLayoutInventoryAuditIndexLazyRoute
   featuresLayoutOutboundReportIndexLazyRoute: typeof featuresLayoutOutboundReportIndexLazyRoute
+  featuresLayoutPackingManifestIndexLazyRoute: typeof featuresLayoutPackingManifestIndexLazyRoute
   featuresLayoutProductionInventoryIndexLazyRoute: typeof featuresLayoutProductionInventoryIndexLazyRoute
   featuresLayoutPurchaseOrderSeekingIndexLazyRoute: typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   featuresLayoutRfidDevicesManagementIndexLazyRoute: typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
@@ -622,6 +646,8 @@ const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
     featuresLayoutInventoryAuditIndexLazyRoute,
   featuresLayoutOutboundReportIndexLazyRoute:
     featuresLayoutOutboundReportIndexLazyRoute,
+  featuresLayoutPackingManifestIndexLazyRoute:
+    featuresLayoutPackingManifestIndexLazyRoute,
   featuresLayoutProductionInventoryIndexLazyRoute:
     featuresLayoutProductionInventoryIndexLazyRoute,
   featuresLayoutPurchaseOrderSeekingIndexLazyRoute:
@@ -706,6 +732,7 @@ export interface FileRoutesByFullPath {
   '/inoutbound-history': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
   '/inventory-audit': typeof featuresLayoutInventoryAuditIndexLazyRoute
   '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
+  '/packing-manifest': typeof featuresLayoutPackingManifestIndexLazyRoute
   '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
@@ -734,6 +761,7 @@ export interface FileRoutesByTo {
   '/inoutbound-history': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
   '/inventory-audit': typeof featuresLayoutInventoryAuditIndexLazyRoute
   '/outbound-report': typeof featuresLayoutOutboundReportIndexLazyRoute
+  '/packing-manifest': typeof featuresLayoutPackingManifestIndexLazyRoute
   '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
@@ -766,6 +794,7 @@ export interface FileRoutesById {
   '/(features)/_layout/inoutbound-history/': typeof featuresLayoutInoutboundHistoryIndexLazyRoute
   '/(features)/_layout/inventory-audit/': typeof featuresLayoutInventoryAuditIndexLazyRoute
   '/(features)/_layout/outbound-report/': typeof featuresLayoutOutboundReportIndexLazyRoute
+  '/(features)/_layout/packing-manifest/': typeof featuresLayoutPackingManifestIndexLazyRoute
   '/(features)/_layout/production-inventory/': typeof featuresLayoutProductionInventoryIndexLazyRoute
   '/(features)/_layout/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/(features)/_layout/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
@@ -796,6 +825,7 @@ export interface FileRouteTypes {
     | '/inoutbound-history'
     | '/inventory-audit'
     | '/outbound-report'
+    | '/packing-manifest'
     | '/production-inventory'
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
@@ -823,6 +853,7 @@ export interface FileRouteTypes {
     | '/inoutbound-history'
     | '/inventory-audit'
     | '/outbound-report'
+    | '/packing-manifest'
     | '/production-inventory'
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
@@ -853,6 +884,7 @@ export interface FileRouteTypes {
     | '/(features)/_layout/inoutbound-history/'
     | '/(features)/_layout/inventory-audit/'
     | '/(features)/_layout/outbound-report/'
+    | '/(features)/_layout/packing-manifest/'
     | '/(features)/_layout/production-inventory/'
     | '/(features)/_layout/purchase-order-seeking/'
     | '/(features)/_layout/rfid-devices-management/'
@@ -922,6 +954,7 @@ export const routeTree = rootRoute
         "/(features)/_layout/inoutbound-history/",
         "/(features)/_layout/inventory-audit/",
         "/(features)/_layout/outbound-report/",
+        "/(features)/_layout/packing-manifest/",
         "/(features)/_layout/production-inventory/",
         "/(features)/_layout/purchase-order-seeking/",
         "/(features)/_layout/rfid-devices-management/",
@@ -987,6 +1020,10 @@ export const routeTree = rootRoute
     },
     "/(features)/_layout/outbound-report/": {
       "filePath": "(features)/_layout.outbound-report/index.lazy.tsx",
+      "parent": "/(features)/_layout"
+    },
+    "/(features)/_layout/packing-manifest/": {
+      "filePath": "(features)/_layout.packing-manifest/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/production-inventory/": {

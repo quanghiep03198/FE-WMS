@@ -1,49 +1,29 @@
 import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
-import useQueryParams from '@/common/hooks/use-query-params'
-import { IPackingReport } from '@/common/types/entities'
+import { IPackingManifest } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, DataTable, Icon } from '@/components/ui'
+import { Badge, Button, DataTable, Icon } from '@/components/ui'
+import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { DataTableProps } from '@/components/ui/@react-table/types'
-import { ReportService } from '@/services/report.service'
+import { PackingService } from '@/services/packing.service'
 import { useQuery } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
-import { format } from 'date-fns'
-import { saveAs } from 'file-saver'
-import { pick } from 'lodash'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
 
 const ReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { user } = useAuth()
-	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>({
-		'date.eq': format(new Date(), 'yyyy-MM-dd'),
-		'auto-refresh': false
-	})
 	const { data, isLoading, refetch } = useQuery({
-		queryKey: ['PACKING_REPORT', pick(searchParams, 'date.eq')],
-		queryFn: () => ReportService.getDailyWeighingReport(pick(searchParams, 'date.eq')),
-		refetchInterval: searchParams['auto-refresh'],
+		queryKey: ['PACKING_MANIFEST'],
+		queryFn: () => PackingService.getPackingManifest(),
 		select: (response) => response.metadata
 	})
 
-	const columnHelper = createColumnHelper<IPackingReport>()
+	const columnHelper = createColumnHelper<IPackingManifest>()
 
-	const columns: DataTableProps<IPackingReport>['columns'] = useMemo(
+	const columns: DataTableProps<IPackingManifest>['columns'] = useMemo(
 		() => [
-			columnHelper.accessor('brand_name', {
-				header: t('ns_erp:fields.brand_name'),
-				enableSorting: true,
-				enableColumnFilter: true,
-				enablePinning: true,
-				filterFn: 'fuzzy',
-				size: 200,
-				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
-			}),
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
 				enableSorting: true,
@@ -54,35 +34,101 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'left' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
-			columnHelper.accessor('factory_shoes_style', {
+			columnHelper.accessor('brand_name', {
+				header: t('ns_erp:fields.brand_name'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'equalsString',
+				size: 200,
+				meta: { align: 'left', filterVariant: 'select' },
+				cell: ({ getValue }) => getValue() ?? 'Unknown'
+			}),
+			columnHelper.accessor('shoes_style', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				size: 200,
-				meta: { align: 'left' },
+				meta: { align: 'left', filterVariant: 'select' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
-			columnHelper.accessor('color_sn', {
+			columnHelper.accessor('color', {
 				header: t('ns_erp:fields.color_sn'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				filterFn: 'equalsString',
 				size: 200,
-				meta: { align: 'left' },
+				meta: { align: 'left', filterVariant: 'select' },
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('size_data', {
 				header: 'Size',
 				enableSorting: true,
-				enableColumnFilter: true,
+				enableColumnFilter: false,
 				enablePinning: true,
 				filterFn: 'fuzzy',
 				size: 200,
+				maxSize: 400,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return typeof value === 'string' ? (
+						<EllipsisList
+							data={value.split(';')}
+							template={({ data }) => (
+								<Badge variant='outline' className='whitespace-nowrap'>
+									{data.trim().replace(/\((\d+)\)/, ' ($1 prs)')}
+								</Badge>
+							)}
+							threshhold={2}
+						/>
+					) : (
+						'Unknown'
+					)
+				}
+			}),
+			columnHelper.accessor('factory_code_produce', {
+				header: t('ns_erp:fields.factory_code_produce'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				size: 120,
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
+						label: t(val, { ns: 'ns_common', defaultValue: val }),
+						value: key
+					}))
+				},
+				cell: ({ getValue }) => {
+					const factoryCode = getValue()
+					return factoryCode
+						? t(factories[factoryCode], { ns: 'ns_common', defaultValue: factoryCode })
+						: 'Unknown'
+				}
+			}),
+			columnHelper.accessor('standard_weight', {
+				header: t('ns_erp:fields.standard_weight'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'inNumberRange',
+				size: 200,
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
+			}),
+			columnHelper.accessor('actual_weight', {
+				header: t('ns_erp:fields.actual_weight'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enablePinning: true,
+				filterFn: 'inNumberRange',
+				size: 200,
+				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
 			columnHelper.accessor('target_box_qty', {
 				header: t('ns_erp:fields.target_box_qty'),
@@ -129,37 +175,21 @@ const ReportMasterTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const handleDownloadExcel = async () => {
-		const id = toast.loading(t('ns_common:notification.downloading'))
-		try {
-			const blob = await ReportService.downloadWeighingReport(searchParams)
-			saveAs(
-				blob,
-				t('ns_packing:titles.file_daily_weighing_report', {
-					factory: t(factories[user.company_code], { ns: 'ns_common' }),
-					date: searchParams['date.eq'],
-					defaultValue: `Packing weight Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
-				}) + '.xlsx'
-			)
-			toast.success(t('ns_common:notification.success'), { id })
-		} catch {
-			toast.error('ns_common:notification.error', { id })
-		}
-	}
-
 	return (
 		<DataTable
 			data={data}
 			columns={columns}
 			loading={isLoading}
+			initialState={{
+				pagination: {
+					pageIndex: 0,
+					pageSize: 50
+				}
+			}}
 			toolbarProps={{
-				slotLeft: () => <AutoRefreshToggle />,
 				slotRight: () => {
 					return (
 						<Fragment>
-							<Button variant='outline' size='icon' onClick={() => handleDownloadExcel()}>
-								<Icon name='Download' />
-							</Button>
 							<Button variant='outline' size='icon' onClick={() => refetch()}>
 								<Icon name='RotateCw' />
 							</Button>

@@ -55,7 +55,7 @@ const SearchHistory: React.FC = () => {
 							<Badge
 								key={term}
 								variant='outline'
-								className='min-w-24 cursor-pointer justify-between'
+								className='min-w-28 cursor-pointer justify-between whitespace-nowrap'
 								onClick={() => setValue('po', term)}>
 								{term}{' '}
 								<GhostButton
