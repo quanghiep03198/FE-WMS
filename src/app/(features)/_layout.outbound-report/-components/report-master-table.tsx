@@ -163,6 +163,7 @@ const ReportDatalist: React.FC = () => {
 					const data = pick(row.original as IOutboundReport, ['detail', 'overall'])
 					return <OutboundReportDetailTable {...data} />
 				}}
+				containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
 				toolbarProps={{
 					slotLeft: () => isSmallScreen && <DatePickerFilter />,
 					slotRight: () => (

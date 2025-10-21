@@ -152,6 +152,13 @@ const ReportMasterTable: React.FC = () => {
 			data={data}
 			columns={columns}
 			loading={isLoading}
+			initialState={{
+				pagination: {
+					pageIndex: 0,
+					pageSize: 50
+				}
+			}}
+			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
 			toolbarProps={{
 				slotLeft: () => <AutoRefreshToggle />,
 				slotRight: () => {

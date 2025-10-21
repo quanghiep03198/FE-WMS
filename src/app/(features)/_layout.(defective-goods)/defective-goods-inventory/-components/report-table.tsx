@@ -1,5 +1,5 @@
+import SizeTable from '@/app/(features)/-components/-shared/size-table'
 import { useGetTenantByFactory } from '@/app/(features)/-hooks/use-tenacy-asm'
-import SizeTable from '@/app/(features)/_layout.production-inventory/-components/partials/size-table'
 import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import { IDefectiveGoodsInventory } from '@/common/types/entities'

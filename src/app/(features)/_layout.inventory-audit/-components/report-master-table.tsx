@@ -257,6 +257,12 @@ export const InventoryReportMasterTable: React.FC = () => {
 			<DataTable
 				ref={dataTableRef}
 				columns={columns}
+				initialState={{
+					pagination: {
+						pageIndex: 0,
+						pageSize: 50
+					}
+				}}
 				data={data}
 				loading={isLoading}
 				expanded={expanded}
@@ -266,7 +272,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnResizing={true}
 				manualExpanding={true}
 				renderSubComponent={renderSubComponents}
-				containerProps={{ className: 'xxl:h-[55vh] h-[40vh]' }}
+				containerProps={{ className: 'xxl:h-[52.5vh] h-[50vh]' }}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
 					slotLeft: () => <SyncDataTrigger />,

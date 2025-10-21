@@ -15,9 +15,9 @@ import { useTranslation } from 'react-i18next'
 import { useDownloadReport } from '../-hooks/use-download-report'
 import { useGetInboundReport } from '../-hooks/use-inbound-report-asm'
 import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
+import SizeTable from '../../-components/-shared/size-table'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import DownloadExcelDropdown from './download-excel-dropdown'
-import InboundReportDetailTable from './report-detail-table'
 import ReportTableSummary from './report-table-summary'
 
 export type UrlQueryParams = {
@@ -212,10 +212,10 @@ const InboundReportMasterTable: React.FC = () => {
 			enableExpanding={true}
 			enableColumnResizing={true}
 			ref={dataTableRef}
-			containerProps={{ className: 'h-[60vh]' }}
+			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
 			renderSubComponent={
 				(({ row }) => {
-					return <InboundReportDetailTable data={row.original?.size_data} />
+					return <SizeTable data={row.original?.size_data} />
 				}) satisfies RenderSubComponent<IInboundReport>
 			}
 			toolbarProps={{

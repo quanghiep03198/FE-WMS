@@ -1,4 +1,4 @@
-import { factories } from '@/common/constants/constants'
+import { factories, FALLBACK_VALUE } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import { IPackingManifest } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
@@ -128,7 +128,10 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				size: 200,
 				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
-				cell: ({ getValue }) => formatIntlNumber(getValue())
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return typeof value === 'number' ? formatIntlNumber(getValue()) : FALLBACK_VALUE
+				}
 			}),
 			columnHelper.accessor('target_box_qty', {
 				header: t('ns_erp:fields.target_box_qty'),

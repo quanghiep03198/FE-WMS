@@ -5,7 +5,7 @@ import { Collapsible, CollapsibleContent, Div, TableCell, TableRow } from '@/com
 import { flexRender, Row } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
 import { TableRowData } from '.'
-import SizeTable from '../partials/size-table'
+import SizeTable from '../../../-components/-shared/size-table'
 import { getCanSticky } from './utils'
 
 type DataTableRowProps = {
