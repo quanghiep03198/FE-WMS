@@ -21,7 +21,7 @@ const DataSection: React.FC = () => {
 			columnHelper.accessor('po', { header: t('ns_erp:fields.po'), enableSorting: false, enablePinning: true }),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
-				enableSorting: false,
+				enableSorting: true,
 				enablePinning: true
 			}),
 			columnHelper.accessor('brand_name', { header: t('ns_erp:fields.brand_name'), enableSorting: false }),
