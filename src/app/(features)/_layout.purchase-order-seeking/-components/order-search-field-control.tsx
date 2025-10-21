@@ -156,6 +156,9 @@ export function OrderSearchFieldControl() {
 													}}>
 													{item.value.po}
 													{item.value.isCompleted && <Icon name='BadgeCheck' size={18} />}
+													{item.value.po === currentOrderValue && (
+														<Icon name='Check' className='ml-auto' />
+													)}
 												</AutoCompleteItem>
 											)
 										})

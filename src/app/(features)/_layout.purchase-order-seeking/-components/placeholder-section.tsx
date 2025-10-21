@@ -10,9 +10,13 @@ const PlaceholderSection: React.FC = () => {
 	return (
 		<Fragment>
 			<Div className='mx-auto mt-4 flex items-center'>
-				<Icon name='BotMessageSquare' size={24} className='mr-2' />
+				<Icon
+					name='BotMessageSquare'
+					size={24}
+					className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+				/>
 				&quot;
-				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} className='italic' />
+				<Typewriter text={t('ns_erp:descriptions.provide_po_info')} delay={200} className='italic' />
 				&quot;
 			</Div>
 			<Div

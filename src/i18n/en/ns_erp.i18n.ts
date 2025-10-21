@@ -16,6 +16,7 @@ export default {
 		actual_instock_qty: 'Actual instock quantity',
 		actual_missing_qty: 'Actual missing quantity',
 		actual_outstock_qty: 'Actual outstock quantity',
+		actual_weight: 'Actual weight (kg)',
 		brand_name: 'Customer branch name',
 		category: 'Category', //: Phân loại hàng hóa
 		container_order_code: 'Container Order Code',
@@ -31,6 +32,7 @@ export default {
 		dept_name: 'Department',
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
+		factory_code_produce: 'Producing factory',
 		final_inventory_qty: 'Final inventory',
 		inbound_date: 'Inbound date',
 		inbound_qty: 'Inbound quantity',
@@ -87,6 +89,7 @@ export default {
 		sno_total: 'Total',
 		sno_total_boxes: 'Total boxes',
 		sno_type: 'Type',
+		standard_weight: 'Standard weight (kg)',
 		status_approve: 'Approval status',
 		target_box_qty: 'Target box quantity',
 		target_item_qty: 'Target item quantity',

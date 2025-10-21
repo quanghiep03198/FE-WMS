@@ -23,9 +23,15 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 
 	return (
 		<Div className='place-content-center place-items-center space-y-4'>
-			<Div className='flex items-center gap-x-2'>
-				<Icon name='Bot' size={24} />
-				<Typewriter text={t('ns_common:others.lookup_question')} className='italic' />
+			<Div className='flex items-center'>
+				<Icon
+					name='BotMessageSquare'
+					size={24}
+					className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+				/>
+				&quot;
+				<Typewriter text={t('ns_common:others.lookup_question')} delay={200} className='italic' />
+				&quot;
 			</Div>
 			<FormField
 				name='type'

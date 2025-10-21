@@ -218,6 +218,7 @@ export default {
 		rfid_system: 'RFID系统',
 		rfid_device_management: 'RFID设备管理',
 		purchase_order_search: '查询PO',
+		packing_manifest: '包装信息',
 		seeking: '查询',
 		settings: '建立',
 		storage_detail: '仓库存储详情',

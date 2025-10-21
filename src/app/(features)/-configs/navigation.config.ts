@@ -95,6 +95,10 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 				{
 					title: 'navigation.purchase_order_search',
 					url: '/purchase-order-seeking'
+				},
+				{
+					title: 'navigation.packing_manifest',
+					url: '/packing-manifest'
 				}
 			]
 		}

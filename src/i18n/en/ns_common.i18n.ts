@@ -214,6 +214,7 @@ export default {
 		report_management: 'Report',
 		rfid_system: 'RFID system',
 		rfid_device_management: 'RFID device Management',
+		packing_manifest: 'Packing manifest',
 		purchase_order_search: 'Purchase order search',
 		seeking: 'Seeking',
 		settings: 'Settings',
