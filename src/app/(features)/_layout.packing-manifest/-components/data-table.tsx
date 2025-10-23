@@ -1,5 +1,4 @@
 import { factories, FALLBACK_VALUE } from '@/common/constants/constants'
-import useAuth from '@/common/hooks/use-auth'
 import { IPackingManifest } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon } from '@/components/ui'
@@ -13,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 
 const ReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const { user } = useAuth()
 	const { data, isLoading, refetch } = useQuery({
 		queryKey: ['PACKING_MANIFEST'],
 		queryFn: () => PackingService.getPackingManifest(),
