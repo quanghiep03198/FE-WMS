@@ -128,7 +128,7 @@ export default {
 		toggle_fullscreen: '切换全屏模式',
 		toggle_fullscreen_note: '使用全屏模式以获得更大的视图',
 		transferred_data: '已传输的数据',
-		decker_data_synchronization: 'Decker 数据同步',
+		decker_data_synchronization: 'Deckers 数据同步',
 		decker_data_synchronization_description: '选择没有生产数据的工厂以进行同步'
 	},
 	titles: {

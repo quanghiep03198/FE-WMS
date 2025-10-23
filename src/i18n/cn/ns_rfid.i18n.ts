@@ -24,7 +24,7 @@ export default {
 		search_epc: '扫描或输入EPC以搜索 ...'
 	},
 	sync_data_steps: {
-		step_1: '验证 Decker API',
+		step_1: '验证 Deckers API',
 		step_2: '获取订单和 EPC 数据',
 		step_3: '更新 EPC 数据',
 		step_4: '完成 Job'

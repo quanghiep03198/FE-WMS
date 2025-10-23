@@ -4,7 +4,7 @@ import axiosInstance from '@/configs/axios.config'
 export class ThirdPartyApiService {
 	static async syncDeckerData(tenantId: string, factoryCode: string) {
 		return await axiosInstance.put(
-			`/third-party-api/sync-decker-data`,
+			`/third-party-api/sync-deckers-data`,
 			{},
 			{
 				headers: {

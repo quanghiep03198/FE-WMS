@@ -134,7 +134,7 @@ export default {
 		server_connection: 'Server connection',
 		latency: 'Latency',
 		network_status: 'Network status',
-		decker_data_synchronization: "Decker's data synchronization",
+		decker_data_synchronization: "Deckers's data synchronization",
 		decker_data_synchronization_description: 'Select a factory that the unknown manufacturing orders belong to',
 		toggle_fullscreen: 'Toggle full screen',
 		toggle_fullscreen_note: 'Use full screen mode for a larger view.',

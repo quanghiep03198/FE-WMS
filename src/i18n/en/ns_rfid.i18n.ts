@@ -25,8 +25,8 @@ export default {
 		search_epc: 'Scan or type EPC to search ...'
 	},
 	sync_data_steps: {
-		step_1: "Authenticate Decker's API",
-		step_2: "Fetch Decker's orders and EPC data",
+		step_1: "Authenticate Deckers's API",
+		step_2: "Fetch Deckers's orders and EPC data",
 		step_3: 'Update EPC data',
 		step_4: 'Complete Job'
 	},
