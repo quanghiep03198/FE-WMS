@@ -132,7 +132,7 @@ export default {
 		server_connection: 'Kết nối máy chủ',
 		latency: 'Độ trễ',
 		network_status: 'Trạng thái kết nối',
-		decker_data_synchronization: 'Đồng bộ dữ liệu Decker',
+		decker_data_synchronization: 'Đồng bộ dữ liệu Deckers',
 		decker_data_synchronization_description:
 			'Chọn nhà máy nơi các chỉ lệnh không có dữ liệu được sản xuất để tiến hành đồng bộ',
 		toggle_fullscreen: 'Chế độ toàn màn hình',
