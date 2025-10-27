@@ -43,7 +43,7 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 			<Checkbox checked={checkboxState} onCheckedChange={handleCheckboxChange} />
 			<Typography variant='small' color='muted'>
 				{t('ns_common:pagination.selected_records', {
-					selectedRecords: `${selectedCount}/${totalDocs}`,
+					selectedRecords: `${selectedCount}/${totalDocs ?? 0}`,
 					defaultValue: `${selectedCount}/${totalDocs} selected`
 				})}
 			</Typography>
