@@ -44,6 +44,7 @@ function DataGrid<TData, TValue>({
 	columns,
 	loading,
 	initialState = { rowSelection: {} },
+	ref,
 	containerProps,
 	defaultFilterOpen = false,
 	expanded = {},
@@ -62,6 +63,7 @@ function DataGrid<TData, TValue>({
 	enableExpanding = true,
 	enableColumnPinning = true,
 	enableGlobalFilter = true,
+	enableMultiSort = true,
 	globalFilterFn = fuzzyFilter,
 	sorting,
 	columnFilters,
@@ -76,7 +78,6 @@ function DataGrid<TData, TValue>({
 	onSortingChange,
 	onExpandedChange,
 	onRowSelectionChange,
-	ref,
 	...props
 }: DataTableProps<TData, TValue>) {
 	const originalData = useMemo(() => data ?? [], [data])
@@ -118,6 +119,7 @@ function DataGrid<TData, TValue>({
 			},
 			expanded,
 			columnOrder,
+			sorting,
 			globalFilter: '',
 			columnFilters: [],
 			pagination: {
@@ -150,6 +152,7 @@ function DataGrid<TData, TValue>({
 		enableGlobalFilter,
 		enableColumnPinning,
 		enableColumnResizing,
+		enableMultiSort,
 		enableHiding,
 		filterFromLeafRows: false,
 		columnResizeMode: 'onChange',
