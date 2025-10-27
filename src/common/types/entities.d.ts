@@ -198,7 +198,7 @@ export interface IPackingManifest extends Omit<IPackingReport, 'color_sn' | 'fac
 	shoes_style: string
 	color: string
 	standard_weight: number
-	actual_weight: number | null
+	actual_avg_weight: number | null
 	factory_code_produce: string
 }
 

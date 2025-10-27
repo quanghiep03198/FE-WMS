@@ -17,6 +17,7 @@ export default {
 		actual_missing_qty: 'Actual missing quantity',
 		actual_outstock_qty: 'Actual outstock quantity',
 		actual_weight: 'Actual weight (kg)',
+		actual_avg_weight: 'Actual average weight (kg)',
 		brand_name: 'Customer branch name',
 		category: 'Category', //: Phân loại hàng hóa
 		container_order_code: 'Container Order Code',

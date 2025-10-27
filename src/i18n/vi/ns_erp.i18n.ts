@@ -12,6 +12,7 @@ export default {
 	},
 	fields: {
 		actual_weight: 'Trọng lượng thực tế (kg)',
+		actual_avg_weight: 'Trọng lượng TB thực tế (kg)',
 		accumulated_qty: 'Số lượng tích lũy',
 		actual_instock_qty: 'Số lượng nhập thực tế',
 		actual_inventory_qty: 'Số lượng kiểm kê',
