@@ -250,7 +250,7 @@ export default {
 		last_page: '最后一页',
 		next_page: '下页',
 		previous_page: '上页',
-		selected_records: '已选择 {{count}} 项'
+		selected_records: '已选择 {{selectedRecords}} 项'
 	},
 	settings: {
 		font: '字体',

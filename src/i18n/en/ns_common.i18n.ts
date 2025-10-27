@@ -241,7 +241,7 @@ export default {
 		last_page: 'Last page',
 		next_page: 'Next page',
 		previous_page: 'Previous page',
-		selected_records: '{{count}} selected'
+		selected_records: '{{selectedRecords}} selected'
 	},
 	settings: {
 		font: 'Font',

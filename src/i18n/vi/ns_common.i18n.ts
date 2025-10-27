@@ -248,7 +248,7 @@ export default {
 		last_page: 'Trang cuối',
 		next_page: 'Trang sau',
 		previous_page: 'Trang trước',
-		selected_records: '{{count}} đã chọn'
+		selected_records: '{{selectedRecords}} đã chọn'
 	},
 	settings: {
 		font: 'Phông chữ',
