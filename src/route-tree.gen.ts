@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './app/__root'
 import { Route as publicIndexImport } from './app/(public)/index'
+import { Route as AdminLayoutImport } from './app/admin/_layout'
 import { Route as featuresLayoutImport } from './app/(features)/_layout'
 import { Route as publicRfidAgentIndexImport } from './app/(public)/rfid-agent/index'
 import { Route as authLoginIndexImport } from './app/(auth)/login/index'
@@ -23,8 +24,12 @@ import { Route as publicRfidAgentDocsIndexImport } from './app/(public)/rfid-age
 
 // Create Virtual Routes
 
+const AdminImport = createFileRoute('/admin')()
 const featuresImport = createFileRoute('/(features)')()
 const featuresPreferencesImport = createFileRoute('/(features)/preferences')()
+const AdminLayoutUserManagementIndexLazyImport = createFileRoute(
+  '/admin/_layout/user-management/',
+)()
 const featuresLayoutWarehouseIndexLazyImport = createFileRoute(
   '/(features)/_layout/warehouse/',
 )()
@@ -91,6 +96,12 @@ const featuresLayoutWarehouseLayoutStorageDetailsWarehouseNumIndexLazyImport =
 
 // Create/Update Routes
 
+const AdminRoute = AdminImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const featuresRoute = featuresImport.update({
   id: '/(features)',
   getParentRoute: () => rootRoute,
@@ -106,6 +117,11 @@ const publicIndexRoute = publicIndexImport.update({
   id: '/(public)/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AdminLayoutRoute = AdminLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 const featuresLayoutRoute = featuresLayoutImport.update({
@@ -135,6 +151,17 @@ const featuresPreferencesLayoutRoute = featuresPreferencesLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => featuresPreferencesRoute,
 } as any)
+
+const AdminLayoutUserManagementIndexLazyRoute =
+  AdminLayoutUserManagementIndexLazyImport.update({
+    id: '/user-management/',
+    path: '/user-management/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any).lazy(() =>
+    import('./app/admin/_layout.user-management/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const featuresLayoutWarehouseIndexLazyRoute =
   featuresLayoutWarehouseIndexLazyImport
@@ -420,6 +447,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutImport
       parentRoute: typeof featuresRoute
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/_layout': {
+      id: '/admin/_layout'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminLayoutImport
+      parentRoute: typeof AdminRoute
+    }
     '/(public)/': {
       id: '/(public)/'
       path: '/'
@@ -545,6 +586,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/warehouse'
       preLoaderRoute: typeof featuresLayoutWarehouseIndexLazyImport
       parentRoute: typeof featuresLayoutImport
+    }
+    '/admin/_layout/user-management/': {
+      id: '/admin/_layout/user-management/'
+      path: '/user-management'
+      fullPath: '/admin/user-management'
+      preLoaderRoute: typeof AdminLayoutUserManagementIndexLazyImport
+      parentRoute: typeof AdminLayoutImport
     }
     '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': {
       id: '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
@@ -719,8 +767,32 @@ const featuresRouteWithChildren = featuresRoute._addFileChildren(
   featuresRouteChildren,
 )
 
+interface AdminLayoutRouteChildren {
+  AdminLayoutUserManagementIndexLazyRoute: typeof AdminLayoutUserManagementIndexLazyRoute
+}
+
+const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
+  AdminLayoutUserManagementIndexLazyRoute:
+    AdminLayoutUserManagementIndexLazyRoute,
+}
+
+const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
+  AdminLayoutRouteChildren,
+)
+
+interface AdminRouteChildren {
+  AdminLayoutRoute: typeof AdminLayoutRouteWithChildren
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLayoutRoute: AdminLayoutRouteWithChildren,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof publicIndexRoute
+  '/admin': typeof AdminLayoutRouteWithChildren
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
@@ -737,6 +809,7 @@ export interface FileRoutesByFullPath {
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/admin/user-management': typeof AdminLayoutUserManagementIndexLazyRoute
   '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
   '/defective-goods-inventory': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
@@ -750,6 +823,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
+  '/admin': typeof AdminLayoutRouteWithChildren
   '/preferences': typeof featuresPreferencesLayoutRouteWithChildren
   '/authorization': typeof authAuthorizationIndexRoute
   '/login': typeof authLoginIndexRoute
@@ -766,6 +840,7 @@ export interface FileRoutesByTo {
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/admin/user-management': typeof AdminLayoutUserManagementIndexLazyRoute
   '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
   '/defective-goods-inventory': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
@@ -781,6 +856,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/(features)': typeof featuresRouteWithChildren
   '/(features)/_layout': typeof featuresLayoutRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/_layout': typeof AdminLayoutRouteWithChildren
   '/(public)/': typeof publicIndexRoute
   '/(features)/preferences': typeof featuresPreferencesRouteWithChildren
   '/(features)/preferences/_layout': typeof featuresPreferencesLayoutRouteWithChildren
@@ -799,6 +876,7 @@ export interface FileRoutesById {
   '/(features)/_layout/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/(features)/_layout/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
   '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/admin/_layout/user-management/': typeof AdminLayoutUserManagementIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-inventory/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInventoryIndexLazyRoute
@@ -814,6 +892,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/preferences'
     | '/authorization'
     | '/login'
@@ -830,6 +909,7 @@ export interface FileRouteTypes {
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
     | '/warehouse'
+    | '/admin/user-management'
     | '/defective-goods-epc-combination'
     | '/defective-goods-inoutbound'
     | '/defective-goods-inventory'
@@ -842,6 +922,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/preferences'
     | '/authorization'
     | '/login'
@@ -858,6 +939,7 @@ export interface FileRouteTypes {
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
     | '/warehouse'
+    | '/admin/user-management'
     | '/defective-goods-epc-combination'
     | '/defective-goods-inoutbound'
     | '/defective-goods-inventory'
@@ -871,6 +953,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/(features)'
     | '/(features)/_layout'
+    | '/admin'
+    | '/admin/_layout'
     | '/(public)/'
     | '/(features)/preferences'
     | '/(features)/preferences/_layout'
@@ -889,6 +973,7 @@ export interface FileRouteTypes {
     | '/(features)/_layout/purchase-order-seeking/'
     | '/(features)/_layout/rfid-devices-management/'
     | '/(features)/_layout/warehouse/'
+    | '/admin/_layout/user-management/'
     | '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
     | '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/'
     | '/(features)/_layout/(defective-goods)/defective-goods-inventory/'
@@ -903,6 +988,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   featuresRoute: typeof featuresRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
   authAuthorizationIndexRoute: typeof authAuthorizationIndexRoute
   authLoginIndexRoute: typeof authLoginIndexRoute
@@ -912,6 +998,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   featuresRoute: featuresRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
   authAuthorizationIndexRoute: authAuthorizationIndexRoute,
   authLoginIndexRoute: authLoginIndexRoute,
@@ -930,6 +1017,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/(features)",
+        "/admin",
         "/(public)/",
         "/(auth)/authorization/",
         "/(auth)/login/",
@@ -965,6 +1053,19 @@ export const routeTree = rootRoute
         "/(features)/_layout/(rfid)/finished-goods-inbound/",
         "/(features)/_layout/(rfid)/finished-goods-outbound/",
         "/(features)/_layout/warehouse/_layout/storage-details/$warehouseNum/"
+      ]
+    },
+    "/admin": {
+      "filePath": "admin",
+      "children": [
+        "/admin/_layout"
+      ]
+    },
+    "/admin/_layout": {
+      "filePath": "admin/_layout.tsx",
+      "parent": "/admin",
+      "children": [
+        "/admin/_layout/user-management/"
       ]
     },
     "/(public)/": {
@@ -1041,6 +1142,10 @@ export const routeTree = rootRoute
     "/(features)/_layout/warehouse/": {
       "filePath": "(features)/_layout.warehouse/index.lazy.tsx",
       "parent": "/(features)/_layout"
+    },
+    "/admin/_layout/user-management/": {
+      "filePath": "admin/_layout.user-management/index.lazy.tsx",
+      "parent": "/admin/_layout"
     },
     "/(features)/_layout/(defective-goods)/defective-goods-epc-combination/": {
       "filePath": "(features)/_layout.(defective-goods)/defective-goods-epc-combination/index.lazy.tsx",

@@ -348,3 +348,11 @@ export interface IPurchaseOrderDetail {
 	size_numcode: string
 	qty: number
 }
+
+export interface IUserManagement extends IBaseEntity {
+	keyid: int
+	user_code: string
+	employee_code: string
+	user_password: string
+	role: 'Admin' | 'Manager' | 'Assistant' | 'QC' | 'Employee'
+}

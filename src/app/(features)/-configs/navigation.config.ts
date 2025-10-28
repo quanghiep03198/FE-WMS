@@ -10,7 +10,7 @@ export type NavigationConfig = {
 	items?: Omit<NavigationConfig, 'icon'>[]
 }
 
-export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]> = {
+export const navigationConfig: Record<'main' | 'preferences' | 'admin_dashboard', NavigationConfig[]> = {
 	main: [
 		{
 			icon: 'Gauge',
@@ -121,6 +121,13 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 			title: 'navigation.settings',
 			url: '/preferences/appearance-settings',
 			keybinding: 'ctrl.alt.s'
+		}
+	],
+	admin_dashboard: [
+		{
+			icon: 'User',
+			title: 'navigation.dashboard',
+			url: '/admin/user-management'
 		}
 	]
 }
