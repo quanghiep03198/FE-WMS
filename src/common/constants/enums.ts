@@ -75,3 +75,11 @@ export enum RecordStatus {
 	ACTIVE = 'Y',
 	INACTIVE = 'N'
 }
+
+export enum Role {
+	ADMIN = 'admin',
+	MANAGER = 'manager',
+	ASSISTANT = 'assistant',
+	QC = 'qc',
+	EMPLOYEE = 'employee'
+}

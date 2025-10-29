@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { RecordStatus } from '../constants/enums'
+import { RecordStatus, Role } from '../constants/enums'
 
 // #region In use Entities
 
@@ -349,10 +349,19 @@ export interface IPurchaseOrderDetail {
 	qty: number
 }
 
-export interface IUserManagement extends IBaseEntity {
-	keyid: int
+export interface IUserManagement {
+	keyid: number
+	isactive: 'Y' | 'N' | null
 	user_code: string
-	employee_code: string
 	user_password: string
-	role: 'Admin' | 'Manager' | 'Assistant' | 'QC' | 'Employee'
+	user_password_updated: string | null
+	current_dept_code: string | null
+	remark: string | null
+	employee_code: string
+	role: Role | null
+	employee_name: string | null
+	sex: 'M' | 'F' | null
+	birthday: string | null
+	email: string | null
+	dept_code: string | null
 }
