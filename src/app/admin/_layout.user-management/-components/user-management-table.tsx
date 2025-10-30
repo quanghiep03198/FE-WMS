@@ -17,9 +17,8 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { createColumnHelper } from '@tanstack/react-table'
 import { ClipboardList, Eye, EyeOff, Pencil, Trash, UserCheck, UserCog, UserPlus, Users } from 'lucide-react'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 
 const UserManagementTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -34,19 +33,22 @@ const UserManagementTable: React.FC = () => {
 		console.log(users)
 	}, [users, i18n.language])
 
-	const handleDelete = async (row: IUserManagement) => {
-		try {
-			await mutateAsync(row.keyid)
-		} catch (err) {
-			toast.error('Xóa thất bại')
-		}
-	}
+	const handleDelete = useCallback(
+		async (row: IUserManagement) => {
+			try {
+				await mutateAsync(row.keyid)
+				await refetch()
+			} catch (error) {
+				console.error('Delete user failed:', error)
+			}
+		},
+		[mutateAsync, refetch]
+	)
 
-	const handleUpdate = (row: IUserManagement) => {
-		console.log('Update:', row)
+	const handleUpdate = useCallback((row: IUserManagement) => {
 		setSelectedRow(row)
 		setIsOpenModal(true)
-	}
+	}, [])
 
 	const columns = useMemo(
 		() => [

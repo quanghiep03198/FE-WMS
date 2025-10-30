@@ -1,4 +1,4 @@
-import LayoutComposition from '@/app/admin/_layout.user-management/-components/-partials/layout-composition'
+import LayoutComposition from '@/app/admin/-components/-partials/layout-composition'
 import Loading from '@/components/shared/loading'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Fragment } from 'react'

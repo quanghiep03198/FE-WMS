@@ -7,7 +7,10 @@ export const UserFormSchema = z.object({
 	isactive: z.enum(RecordStatus),
 
 	user_code: z.string().min(1, { message: 'User code is required' }),
+
 	employee_name: z.string().min(1, { message: 'Employee name is required' }),
+
+	employee_code: z.string(),
 
 	user_password: z
 		.union([z.string(), z.null()])
@@ -27,4 +30,4 @@ export const UserFormSchema = z.object({
 	}, z.date().nullable())
 })
 
-export type UserFormValue = z.infer<typeof UserFormSchema>
+export type UserFormValueDTO = z.infer<typeof UserFormSchema>

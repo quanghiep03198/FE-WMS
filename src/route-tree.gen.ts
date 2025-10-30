@@ -30,6 +30,9 @@ const featuresPreferencesImport = createFileRoute('/(features)/preferences')()
 const AdminLayoutUserManagementIndexLazyImport = createFileRoute(
   '/admin/_layout/user-management/',
 )()
+const AdminLayoutPermissionManagementIndexLazyImport = createFileRoute(
+  '/admin/_layout/permission-management/',
+)()
 const featuresLayoutWarehouseIndexLazyImport = createFileRoute(
   '/(features)/_layout/warehouse/',
 )()
@@ -159,6 +162,17 @@ const AdminLayoutUserManagementIndexLazyRoute =
     getParentRoute: () => AdminLayoutRoute,
   } as any).lazy(() =>
     import('./app/admin/_layout.user-management/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AdminLayoutPermissionManagementIndexLazyRoute =
+  AdminLayoutPermissionManagementIndexLazyImport.update({
+    id: '/permission-management/',
+    path: '/permission-management/',
+    getParentRoute: () => AdminLayoutRoute,
+  } as any).lazy(() =>
+    import('./app/admin/_layout.permission-management/index.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -587,6 +601,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutWarehouseIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
+    '/admin/_layout/permission-management/': {
+      id: '/admin/_layout/permission-management/'
+      path: '/permission-management'
+      fullPath: '/admin/permission-management'
+      preLoaderRoute: typeof AdminLayoutPermissionManagementIndexLazyImport
+      parentRoute: typeof AdminLayoutImport
+    }
     '/admin/_layout/user-management/': {
       id: '/admin/_layout/user-management/'
       path: '/user-management'
@@ -768,10 +789,13 @@ const featuresRouteWithChildren = featuresRoute._addFileChildren(
 )
 
 interface AdminLayoutRouteChildren {
+  AdminLayoutPermissionManagementIndexLazyRoute: typeof AdminLayoutPermissionManagementIndexLazyRoute
   AdminLayoutUserManagementIndexLazyRoute: typeof AdminLayoutUserManagementIndexLazyRoute
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
+  AdminLayoutPermissionManagementIndexLazyRoute:
+    AdminLayoutPermissionManagementIndexLazyRoute,
   AdminLayoutUserManagementIndexLazyRoute:
     AdminLayoutUserManagementIndexLazyRoute,
 }
@@ -809,6 +833,7 @@ export interface FileRoutesByFullPath {
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/admin/permission-management': typeof AdminLayoutPermissionManagementIndexLazyRoute
   '/admin/user-management': typeof AdminLayoutUserManagementIndexLazyRoute
   '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -840,6 +865,7 @@ export interface FileRoutesByTo {
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/admin/permission-management': typeof AdminLayoutPermissionManagementIndexLazyRoute
   '/admin/user-management': typeof AdminLayoutUserManagementIndexLazyRoute
   '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -876,6 +902,7 @@ export interface FileRoutesById {
   '/(features)/_layout/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/(features)/_layout/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
   '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
+  '/admin/_layout/permission-management/': typeof AdminLayoutPermissionManagementIndexLazyRoute
   '/admin/_layout/user-management/': typeof AdminLayoutUserManagementIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -909,6 +936,7 @@ export interface FileRouteTypes {
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
     | '/warehouse'
+    | '/admin/permission-management'
     | '/admin/user-management'
     | '/defective-goods-epc-combination'
     | '/defective-goods-inoutbound'
@@ -939,6 +967,7 @@ export interface FileRouteTypes {
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
     | '/warehouse'
+    | '/admin/permission-management'
     | '/admin/user-management'
     | '/defective-goods-epc-combination'
     | '/defective-goods-inoutbound'
@@ -973,6 +1002,7 @@ export interface FileRouteTypes {
     | '/(features)/_layout/purchase-order-seeking/'
     | '/(features)/_layout/rfid-devices-management/'
     | '/(features)/_layout/warehouse/'
+    | '/admin/_layout/permission-management/'
     | '/admin/_layout/user-management/'
     | '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
     | '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/'
@@ -1065,6 +1095,7 @@ export const routeTree = rootRoute
       "filePath": "admin/_layout.tsx",
       "parent": "/admin",
       "children": [
+        "/admin/_layout/permission-management/",
         "/admin/_layout/user-management/"
       ]
     },
@@ -1142,6 +1173,10 @@ export const routeTree = rootRoute
     "/(features)/_layout/warehouse/": {
       "filePath": "(features)/_layout.warehouse/index.lazy.tsx",
       "parent": "/(features)/_layout"
+    },
+    "/admin/_layout/permission-management/": {
+      "filePath": "admin/_layout.permission-management/index.lazy.tsx",
+      "parent": "/admin/_layout"
     },
     "/admin/_layout/user-management/": {
       "filePath": "admin/_layout.user-management/index.lazy.tsx",

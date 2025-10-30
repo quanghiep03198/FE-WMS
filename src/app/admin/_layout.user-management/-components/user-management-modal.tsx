@@ -1,4 +1,5 @@
-import { UserFormSchema, UserFormValue } from '@/app/admin/_layout.user-management/-schemas/user-form-value.schema'
+import { useUpdateUserManagement } from '@/app/admin/_layout.user-management/-hooks/use-user-management'
+import { UserFormSchema, UserFormValueDTO } from '@/app/admin/_layout.user-management/-schemas/user-form-value.schema'
 import { RecordStatus, Role } from '@/common/constants/enums'
 import { IUserManagement } from '@/common/types/entities'
 import {
@@ -7,14 +8,13 @@ import {
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	InputFieldControl
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 export type UserManagementModalProps = {
@@ -24,92 +24,98 @@ export type UserManagementModalProps = {
 }
 
 const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen = false, onOpenChange }) => {
-	const form = useForm<UserFormValue>({
+	const { mutateAsync: updateUserFn } = useUpdateUserManagement()
+
+	const form = useForm<UserFormValueDTO>({
 		resolver: zodResolver(UserFormSchema),
-		mode: 'all',
+		mode: 'onSubmit',
 		defaultValues: {
 			keyid: row?.keyid ?? null,
 			isactive: (row?.isactive as RecordStatus) ?? RecordStatus.ACTIVE,
-			user_code: row?.user_code,
-			employee_name: row?.employee_name,
-			user_password: row?.user_password,
-			role: row?.role,
-			email: row?.email,
-			sex: row?.sex,
-			birthday: row?.birthday ? new Date(row?.birthday) : null
+			user_code: row?.user_code ?? '',
+			employee_name: row?.employee_name ?? '',
+			employee_code: row?.employee_code ?? '',
+			user_password: row?.user_password ?? '',
+			role: row?.role ?? '',
+			email: row?.email ?? '',
+			sex: row?.sex ?? '',
+			birthday: row?.birthday ? new Date(row.birthday) : ('' as any)
 		}
 	})
 
 	useEffect(() => {
-		if (row) {
+		if (isOpen) {
 			form.reset({
-				keyid: row.keyid ?? null,
-				isactive: (row.isactive as RecordStatus) ?? RecordStatus.ACTIVE,
-				user_code: row.user_code,
-				employee_name: row.employee_name,
-				user_password: row.user_password,
-				role: row.role,
-				email: row.email,
-				sex: row.sex,
-				birthday: row.birthday ? new Date(row.birthday) : null
-			})
-		} else {
-			form.reset({
-				keyid: null,
-				isactive: RecordStatus.ACTIVE,
-				user_code: '',
-				employee_name: '',
-				user_password: '',
-				role: '',
-				email: '',
-				sex: '',
-				birthday: null
+				keyid: row?.keyid ?? null,
+				isactive: (row?.isactive as RecordStatus) ?? RecordStatus.ACTIVE,
+				user_code: row?.user_code ?? '',
+				employee_name: row?.employee_name ?? '',
+				employee_code: row?.employee_code ?? '',
+				user_password: row?.user_password ?? '',
+				role: row?.role ?? '',
+				email: row?.email ?? '',
+				sex: row?.sex ?? '',
+				birthday: row?.birthday ? new Date(row.birthday) : ('' as any)
 			})
 		}
-	}, [row, form])
+	}, [isOpen, row])
 
-	const RoleOptions = Object.values(Role).map((role) => ({
-		label: role,
-		value: role
-	}))
+	const RoleOptions = useMemo(
+		() =>
+			Object.values(Role).map((role) => ({
+				label: role,
+				value: role
+			})),
+		[]
+	)
 
-	const ActiveOptions = Object.values(RecordStatus).map((status) => ({
-		label: status,
-		value: status
-	}))
+	const ActiveOptions = useMemo(
+		() =>
+			Object.values(RecordStatus).map((status) => ({
+				label: status,
+				value: status
+			})),
+		[]
+	)
 
-	const SexOptions = [
-		{ label: 'Male', value: 'M' },
-		{ label: 'Female', value: 'F' }
-	]
+	const SexOptions = useMemo(
+		() => [
+			{ label: 'Male', value: 'M' },
+			{ label: 'Female', value: 'F' }
+		],
+		[]
+	)
 
-	const onSubmit: SubmitHandler<UserFormValue> = (data) => {
-		console.log('✅ Form data:', data)
+	const onSubmit: SubmitHandler<UserFormValueDTO> = (data) => {
+		console.log('Form Submitted:', data)
+		if (data.keyid) {
+			updateUserFn(data)
+		}
 	}
 
 	return (
-		<Dialog open={isOpen} onOpenChange={() => onOpenChange(false)}>
+		<Dialog open={isOpen} onOpenChange={onOpenChange}>
 			<FormProvider {...form}>
 				<DialogContent>
-					<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4 p-4 sm:max-w-lg'>
-						<DialogHeader>
+					<form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2 p-4'>
+						<DialogHeader className='pb-3'>
 							<DialogTitle>Edit Profile</DialogTitle>
-							<DialogDescription>Make changes to your profile. Click save when you're done.</DialogDescription>
+							<hr />
 						</DialogHeader>
 
+						{/* Hidden key */}
 						<InputFieldControl name='keyid' type='hidden' />
+						<InputFieldControl name='employee_code' type='hidden' />
 
-						{/* Status */}
 						<ComboboxFieldControl
 							name='isactive'
 							label='Status'
 							datalist={ActiveOptions}
 							labelField='label'
 							valueField='value'
-							shouldFilter={true}
+							shouldFilter
 						/>
 
-						{/* User code */}
 						<InputFieldControl
 							name='user_code'
 							label='User Code'
@@ -117,7 +123,6 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 							autoComplete='off'
 						/>
 
-						{/* Employee name */}
 						<InputFieldControl
 							name='employee_name'
 							label='Employee Name'
@@ -125,7 +130,6 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 							autoComplete='off'
 						/>
 
-						{/* Password */}
 						<InputFieldControl
 							name='user_password'
 							type='password'
@@ -134,17 +138,15 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 							autoComplete='off'
 						/>
 
-						{/* Role */}
 						<ComboboxFieldControl
 							name='role'
 							label='Role'
 							datalist={RoleOptions}
 							labelField='label'
 							valueField='value'
-							shouldFilter={true}
+							shouldFilter
 						/>
 
-						{/* Email */}
 						<InputFieldControl
 							name='email'
 							type='email'
@@ -153,17 +155,15 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 							autoComplete='off'
 						/>
 
-						{/* Gender */}
 						<ComboboxFieldControl
 							name='sex'
 							label='Gender'
 							datalist={SexOptions}
 							labelField='label'
 							valueField='value'
-							shouldFilter={true}
+							shouldFilter
 						/>
 
-						{/* Birthday */}
 						<InputFieldControl name='birthday' type='date' label='Birthday' />
 
 						<DialogFooter className='pt-4'>
