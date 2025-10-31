@@ -9,7 +9,7 @@ import { NestedCell, NestedCellHead, NestedRow, NestedTable } from '../../-compo
 import PlaceHolderItems from '../../-components/-shared/placeholder-items'
 
 const InboundHistoryTable: React.FC = () => {
-	const { data, isLoading, refetch } = useGetInboundHistoryQuery()
+	const { data, isLoading } = useGetInboundHistoryQuery()
 	const { t, i18n } = useTranslation()
 
 	const columns = useMemo<
@@ -46,7 +46,7 @@ const InboundHistoryTable: React.FC = () => {
 			{
 				header: t('ns_erp:fields.progress'),
 				accessorKey: 'progress',
-				meta: { align: 'right' }
+				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } }
 			}
 		],
 		[i18n.language]
@@ -54,7 +54,7 @@ const InboundHistoryTable: React.FC = () => {
 
 	if (isLoading)
 		return (
-			<Div className='h-20 place-content-center text-center text-muted-foreground'>
+			<Div className='h-20 w-full place-content-center place-items-center text-center text-muted-foreground'>
 				<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
 			</Div>
 		)
@@ -71,33 +71,46 @@ const InboundHistoryTable: React.FC = () => {
 
 	return (
 		<Div className='relative h-[50vh] overflow-auto rounded-lg border'>
-			<Table className='table-fixed border-separate border-spacing-0 [&_span]:line-clamp-1'>
+			<Table className='w-full table-auto border-separate border-spacing-0 [&_span]:line-clamp-1'>
 				<TableHeader className='sticky top-0 z-20'>
 					<TableRow>
 						{columns.map((column) => (
-							<TableHead key={column.accessorKey} title={column.header} {...column.meta}>
+							<TableHead
+								key={column.accessorKey}
+								title={column.header}
+								style={{ maxWidth: 200, minWidth: 200 }}
+								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
 						))}
 					</TableRow>
 					<TableRow>
 						{columns.map((column) => (
-							<TableHead key={column.accessorKey} {...column.meta} className='font-normal text-foreground'>
+							<TableHead
+								key={column.accessorKey}
+								style={{ maxWidth: 200, minWidth: 200 }}
+								className='font-normal text-foreground'
+								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
 										? column.cell(data[column.accessorKey])
-										: data[column.accessorKey].toString()}
+										: data[column.accessorKey]?.toString?.()}
 								</span>
 							</TableHead>
 						))}
 					</TableRow>
 					<TableRow>
-						<TableHead align='left' className='sticky left-0 z-10'>
-							{t('ns_erp:fields.inbound_date')}
+						<TableHead
+							align='left'
+							className='!sticky left-0 z-10'
+							style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+							<span>{t('ns_erp:fields.inbound_date')}</span>
 						</TableHead>
-						<TableHead colSpan={6}>{t('ns_erp:fields.daily_inbound_qty')}</TableHead>
-						<TableHead align='right' className='!sticky right-0 z-10'>
-							{t('ns_common:common_fields.total')}
+						<TableHead colSpan={6}>
+							<span>{t('ns_erp:fields.daily_inbound_qty')}</span>
+						</TableHead>
+						<TableHead align='left' className='!sticky right-0 z-10'>
+							<span>{t('ns_common:common_fields.total')}</span>
 						</TableHead>
 					</TableRow>
 				</TableHeader>
@@ -111,8 +124,12 @@ const InboundHistoryTable: React.FC = () => {
 						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
 						return (
 							<TableRow key={date}>
-								<TableCell align='left' colSpan={1} className='sticky left-0 z-10'>
-									{date}
+								<TableCell
+									align='left'
+									colSpan={1}
+									className='sticky left-0 z-10'
+									style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+									<span>{date}</span>
 								</TableCell>
 								<TableCell colSpan={6} className='p-0'>
 									<NestedTable>
@@ -124,8 +141,8 @@ const InboundHistoryTable: React.FC = () => {
 										))}
 									</NestedTable>
 								</TableCell>
-								<TableCell align='right' className='sticky right-0 z-10 font-medium'>
-									{formatIntlNumber(totalQty)}
+								<TableCell align='left' className='!sticky right-0 z-10 font-medium'>
+									<span>{formatIntlNumber(totalQty)}</span>
 								</TableCell>
 							</TableRow>
 						)
