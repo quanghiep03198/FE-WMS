@@ -234,15 +234,22 @@ export interface IInboundInventory extends IBaseInventory {
 }
 
 export interface IInboundHistory {
-	factory_code: string
+	factory_code_produce: string
 	mo_no: string
-	mo_qty: number
 	brand_name: string
 	shoe_style: string
-	color_sn: string
-	inbound_qty: number
-	inbound_date: Date
+	color: string
+	mo_qty: number
+	accumulated_inbound_qty: number
+	missing_qty: number
+	progress: number
+	inbound_history: Array<{
+		size_numcode: string
+		qty: number
+		inbound_date: string | Date
+	}>
 }
+
 export interface IOutboundHistory {
 	po: string
 	po_qty: number

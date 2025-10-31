@@ -66,6 +66,7 @@ export default {
 		po: '订单编号',
 		po_size_qty: '订单尺寸数量',
 		prod_color: '产品颜色',
+		progress: '进度',
 		required_date: '需求日期',
 		returned_qty: '已退貨量',
 		decentralized_po: '分散采购订单',

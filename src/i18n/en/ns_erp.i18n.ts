@@ -66,6 +66,7 @@ export default {
 		po: 'Purchase order',
 		po_size_qty: 'Purchase order quantity by size',
 		prod_color: 'Product color',
+		progress: 'Progress',
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',
 		decentralized_po: 'Decentralized PO',

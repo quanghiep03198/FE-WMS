@@ -1,171 +1,138 @@
-import { factories } from '@/common/constants/constants'
 import { IInboundHistory } from '@/common/types/entities'
-import { Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
-import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
-import { format } from 'date-fns'
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
+import { orderBy, sortBy } from 'lodash'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
-import DataTableSummary from './data-table-summary'
+import { NestedCell, NestedCellHead, NestedRow, NestedTable } from '../../-components/-shared/horizontal-nested-table'
+import PlaceHolderItems from '../../-components/-shared/placeholder-items'
 
 const InboundHistoryTable: React.FC = () => {
 	const { data, isLoading, refetch } = useGetInboundHistoryQuery()
 	const { t, i18n } = useTranslation()
-	const dataTableRef = useRef<TTable<IInboundHistory>>(null)
-	const columnHelper = createColumnHelper<IInboundHistory>()
 
-	useEffect(() => {
-		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
-	}, [data])
-
-	const columns = useMemo(
+	const columns = useMemo<
+		Array<{
+			header: string
+			accessorKey: keyof IInboundHistory
+			meta: React.ThHTMLAttributes<HTMLTableCellElement>
+			cell?: (value: IInboundHistory[keyof IInboundHistory]) => string | number | React.ReactNode
+		}>
+	>(
 		() => [
-			columnHelper.group({
-				id: 'inbound_history',
-				header: () => (
-					<Typography as='span' variant='small' className='inline-flex items-center gap-x-2 text-foreground'>
-						<Icon name='History' size={20} />
-						{t('ns_inoutbound:titles.inbound_history')}
-					</Typography>
-				),
-				columns: [
-					columnHelper.accessor('factory_code', {
-						header: t('ns_common:common_fields.factory_code'),
-						enableResizing: true,
-						enableColumnFilter: true,
-						enableSorting: true,
-						enablePinning: true,
-						meta: {
-							filterVariant: 'select',
-							facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
-								label: t(val, { ns: 'ns_common', defaultValue: val }),
-								value: key
-							}))
-						},
-						cell: ({ getValue }) => {
-							const factoryCode = getValue()
-							return factoryCode
-								? t(factories[factoryCode], { ns: 'ns_common', defaultValue: factoryCode })
-								: 'Unknown'
-						}
-					}),
-					columnHelper.accessor('brand_name', {
-						header: t('ns_erp:fields.brand_name'),
-						enableResizing: true,
-						enableColumnFilter: true,
-						enableSorting: true,
-						enablePinning: true,
-						filterFn: 'includesString'
-					}),
-					columnHelper.accessor('mo_no', {
-						header: t('ns_erp:fields.mo_no'),
-						enableResizing: true,
-						enableColumnFilter: true,
-						enableSorting: true,
-						enablePinning: true,
-						filterFn: 'includesString'
-					}),
-					columnHelper.accessor('shoe_style', {
-						header: t('ns_erp:fields.shoestyle_codefactory'),
-						enableResizing: true,
-						enableColumnFilter: true,
-						enableSorting: true,
-						enablePinning: true,
-						filterFn: 'fuzzy',
-						cell: ({ getValue }) => getValue() ?? 'Unknown'
-					}),
-					columnHelper.accessor('color_sn', {
-						header: t('ns_erp:fields.color_sn'),
-						enableColumnFilter: true,
-						enableSorting: true,
-						enableResizing: true,
-						filterFn: 'fuzzy',
-						cell: ({ getValue }) => {
-							return getValue() ?? 'Unknown'
-						}
-					}),
-					columnHelper.accessor('mo_qty', {
-						header: t('ns_erp:fields.mo_qty'),
-						enableColumnFilter: true,
-						enableSorting: true,
-						enableResizing: true,
-						enablePinning: true,
-						filterFn: 'inNumberRange',
-						cell: ({ getValue }) => {
-							return getValue() ?? 'Unknown'
-						},
-						meta: { align: 'right', filterVariant: 'range' }
-					}),
-
-					columnHelper.accessor('inbound_qty', {
-						header: t('ns_erp:fields.inbound_qty'),
-						enableColumnFilter: true,
-						enableSorting: true,
-						enablePinning: true,
-						filterFn: 'inNumberRange',
-						cell: ({ getValue }) => {
-							return getValue() ?? 'Unknown'
-						},
-						meta: { align: 'right', filterVariant: 'range' }
-					}),
-
-					columnHelper.accessor('inbound_date', {
-						header: t('ns_erp:fields.inbound_date'),
-						enableColumnFilter: true,
-						enableSorting: true,
-						enableResizing: true,
-						enablePinning: true,
-						filterFn: 'inDateRange',
-						cell: ({ getValue }) => {
-							const value = getValue()
-							return value ? format(value, 'yyyy-MM-dd') : 'Unknown'
-						},
-						meta: { align: 'left', filterVariant: 'date' }
-					})
-				]
-			})
+			{ header: t('ns_erp:fields.mo_no'), accessorKey: 'mo_no', meta: { align: 'left' } },
+			{ header: t('ns_erp:fields.brand_name'), accessorKey: 'brand_name', meta: { align: 'left' } },
+			{ header: t('ns_erp:fields.shoestyle_codefactory'), accessorKey: 'shoe_style', meta: { align: 'left' } },
+			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color', meta: { align: 'left' } },
+			{
+				header: t('ns_erp:fields.mo_qty'),
+				accessorKey: 'mo_qty',
+				meta: { align: 'right' },
+				cell: (value) => formatIntlNumber(value)
+			},
+			{
+				header: t('ns_erp:fields.accumulated_qty'),
+				accessorKey: 'accumulated_inbound_qty',
+				meta: { align: 'right' },
+				cell: (value) => formatIntlNumber(value)
+			},
+			{
+				header: t('ns_erp:fields.missing_qty'),
+				accessorKey: 'missing_qty',
+				meta: { align: 'right' },
+				cell: (value) => formatIntlNumber(value)
+			},
+			{
+				header: t('ns_erp:fields.progress'),
+				accessorKey: 'progress',
+				meta: { align: 'right' }
+			}
 		],
 		[i18n.language]
 	)
 
-	const hasData = Array.isArray(data) && data.length > 0
-	const orderQuantity = hasData ? Math.max(...data.map((item) => item.mo_qty)) : 0
-	const accumulatedQuantity = hasData ? data.reduce((acc, curr) => acc + curr.inbound_qty, 0) : 0
-	const missingQuantity = hasData ? orderQuantity - accumulatedQuantity : 0
+	if (isLoading)
+		return (
+			<Div className='h-20 place-content-center text-center text-muted-foreground'>
+				<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+			</Div>
+		)
+
+	if (!data)
+		return (
+			<Div className='mx-auto flex h-80 max-w-4xl flex-col items-center justify-center rounded-lg border-2 border-dashed p-6'>
+				<PlaceHolderItems />
+				<Typography variant='small' color='muted'>
+					{t('ns_common:table.no_data')}
+				</Typography>
+			</Div>
+		)
 
 	return (
-		<DataTable
-			data={data}
-			loading={isLoading}
-			columns={columns}
-			defaultFilterOpen={true}
-			enableColumnPinning={false}
-			containerProps={{ style: { height: 380 } }}
-			toolbarProps={{
-				slotRight: () => (
-					<Fragment>
-						<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-							<Button
-								size='icon'
-								variant='outline'
-								disabled={!data || data.length === 0}
-								onClick={() => toast('Alert', { description: t('ns_common:errors.503_message') })}>
-								<Icon name='Download' />
-							</Button>
-						</Tooltip>
-						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-							<Button size='icon' variant='outline' onClick={() => refetch()}>
-								<Icon name='RotateCw' />
-							</Button>
-						</Tooltip>
-					</Fragment>
-				)
-			}}
-			footerProps={{
-				slot: () => <DataTableSummary {...{ isLoading, accumulatedQuantity, missingQuantity }} />
-			}}
-		/>
+		<Div className='relative h-[50vh] overflow-auto rounded-lg border'>
+			<Table className='table-fixed border-separate border-spacing-0 [&_span]:line-clamp-1'>
+				<TableHeader className='sticky top-0 z-20'>
+					<TableRow>
+						{columns.map((column) => (
+							<TableHead key={column.accessorKey} title={column.header} {...column.meta}>
+								<span>{column.header}</span>
+							</TableHead>
+						))}
+					</TableRow>
+					<TableRow>
+						{columns.map((column) => (
+							<TableHead key={column.accessorKey} {...column.meta} className='font-normal text-foreground'>
+								<span>
+									{typeof column.cell === 'function'
+										? column.cell(data[column.accessorKey])
+										: data[column.accessorKey].toString()}
+								</span>
+							</TableHead>
+						))}
+					</TableRow>
+					<TableRow>
+						<TableHead align='left' className='sticky left-0 z-10'>
+							{t('ns_erp:fields.inbound_date')}
+						</TableHead>
+						<TableHead colSpan={6}>{t('ns_erp:fields.daily_inbound_qty')}</TableHead>
+						<TableHead align='right' className='!sticky right-0 z-10'>
+							{t('ns_common:common_fields.total')}
+						</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{Object.entries(
+						Object.groupBy(
+							orderBy(data.inbound_history, 'inbound_date', 'desc'),
+							(item) => item.inbound_date as string
+						)
+					).map(([date, history]) => {
+						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
+						return (
+							<TableRow key={date}>
+								<TableCell align='left' colSpan={1} className='sticky left-0 z-10'>
+									{date}
+								</TableCell>
+								<TableCell colSpan={6} className='p-0'>
+									<NestedTable>
+										{sortBy(history, 'size_numcode').map((item) => (
+											<NestedRow key={item.size_numcode}>
+												<NestedCellHead>{item.size_numcode}</NestedCellHead>
+												<NestedCell>{item.qty}</NestedCell>
+											</NestedRow>
+										))}
+									</NestedTable>
+								</TableCell>
+								<TableCell align='right' className='sticky right-0 z-10 font-medium'>
+									{formatIntlNumber(totalQty)}
+								</TableCell>
+							</TableRow>
+						)
+					})}
+				</TableBody>
+			</Table>
+		</Div>
 	)
 }
 
