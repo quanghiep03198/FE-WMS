@@ -1,4 +1,4 @@
-import { NestedCell, NestedRow } from '@/app/(features)/-components/-shared/horizontal-nested-table'
+import { NestedCell, NestedRow, NestedTable } from '@/app/(features)/-components/-shared/horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { cn } from '@/common/utils/cn'
@@ -85,7 +85,6 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
-
 					{data?.mo_no === FALLBACK_VALUE ? (
 						<button
 							className='opacity-0 duration-100 group-hover/cell:opacity-100'
@@ -116,7 +115,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				{data?.color_sn}
 			</TableCell>
 			<TableCell className={cn('!p-0')}>
-				<Div
+				<NestedTable
 					className='flex flex-grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
@@ -154,7 +153,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								<NestedCell>{formatIntlNumber(size?.count)}</NestedCell>
 							</NestedRow>
 						))}
-				</Div>
+				</NestedTable>
 			</TableCell>
 			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] w-28 min-w-28 font-medium'>
 				{formatIntlNumber(aggregateSizeCount)}
