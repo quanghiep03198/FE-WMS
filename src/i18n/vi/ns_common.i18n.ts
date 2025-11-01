@@ -32,6 +32,7 @@ export default {
 		logout: 'Đăng xuất',
 		open: 'Mở',
 		pin: 'Ghim',
+		pick_a_date: 'Chọn ngày',
 		proceed: 'Tiếp tục',
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',

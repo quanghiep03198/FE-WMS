@@ -1,6 +1,8 @@
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { addMonths, format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import { Button } from './button'
 import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
@@ -14,6 +16,9 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 	triggerProps,
 	calendarProps = { numberOfMonths: 1, selected: { from: new Date(), to: addMonths(new Date(), 1) } }
 }) => {
+	const locale = useDateLocale()
+	const { t } = useTranslation()
+
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -30,14 +35,14 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 					{calendarProps.selected?.from ? (
 						calendarProps.selected.to ? (
 							<>
-								{format(calendarProps.selected.from, 'LLL dd, y')} {' - '}
-								{format(calendarProps.selected.to, 'LLL dd, y')}
+								{format(calendarProps.selected.from, 'LLL dd, y', { locale })} {' - '}
+								{format(calendarProps.selected.to, 'LLL dd, y', { locale })}
 							</>
 						) : (
-							format(calendarProps.selected.from, 'LLL dd, y')
+							format(calendarProps.selected.from, 'LLL dd, y', { locale })
 						)
 					) : (
-						<>Pick a date</>
+						t('ns_common:actions.pick_a_date')
 					)}
 				</Button>
 			</PopoverTrigger>

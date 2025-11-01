@@ -1,5 +1,7 @@
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
+import { format } from 'date-fns'
 import * as React from 'react'
 import { DayPicker } from 'react-day-picker'
 import { buttonVariants } from './button'
@@ -7,8 +9,14 @@ import { buttonVariants } from './button'
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+	const locale = useDateLocale()
+
 	return (
 		<DayPicker
+			formatters={{
+				formatWeekdayName: (day) => format(day, 'EEEEE', { locale }),
+				formatCaption: (date) => format(date, 'LLL, y', { locale })
+			}}
 			showOutsideDays={showOutsideDays}
 			className={cn('p-3', className)}
 			classNames={{

@@ -33,6 +33,7 @@ export default {
 		open_list_panel: 'Open list panel',
 		collapse_list_panel: 'Collapse list panel',
 		open: 'Open',
+		pick_a_date: 'Pick a date',
 		pin: 'Pin',
 		proceed: 'Proceed',
 		reapprove: 'Reapprove',
@@ -61,7 +62,6 @@ export default {
 		undo: 'Undo',
 		redo: 'Redo'
 	},
-
 	common_fields: {
 		actions: 'Actions',
 		approver: 'Approver',
@@ -276,7 +276,6 @@ export default {
 		rows_per_page: 'Rows per page',
 		search_in_column: 'Search in column',
 		selected_rows: '{{selectedRows}} row(s) selected',
-
 		sort_asc: 'Sort ascending',
 		sort_desc: 'Sort descending',
 		total_rows: '{{count}} records',

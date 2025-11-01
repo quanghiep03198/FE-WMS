@@ -1,11 +1,16 @@
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import { Button } from './button'
 import { Calendar, CalendarProps } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 export const DatePicker: React.FC<CalendarProps> = ({ selected, ...props }) => {
+	const locale = useDateLocale()
+	const { t } = useTranslation()
+
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -13,7 +18,9 @@ export const DatePicker: React.FC<CalendarProps> = ({ selected, ...props }) => {
 					variant={'outline'}
 					className={cn('min-w-60 justify-start text-left font-normal', !selected && 'text-muted-foreground')}>
 					<CalendarIcon className='mr-2 size-4' />
-					{selected ? format(selected as Date, 'PPP') : <span>Pick a date</span>}
+					<span className='first-letter:uppercase'>
+						{selected ? format(selected as Date, 'PPP', { locale }) : t('ns_common:actions.pick_a_date')}
+					</span>
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className='w-auto p-0'>
