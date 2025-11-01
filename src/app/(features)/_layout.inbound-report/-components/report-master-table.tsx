@@ -102,7 +102,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableSorting: true,
 				enableHiding: false,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('color_sn', {

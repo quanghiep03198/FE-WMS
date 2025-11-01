@@ -76,7 +76,7 @@ const ReportDatalist: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: false,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('color_sn', {
