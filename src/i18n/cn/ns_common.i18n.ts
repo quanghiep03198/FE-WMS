@@ -291,7 +291,6 @@ export default {
 		sort_asc: '升序排序',
 		sort_desc: '降序排序'
 	},
-
 	titles: {
 		advanced_search: '高级搜索',
 		caution: '警告',
@@ -301,6 +300,7 @@ export default {
 		overall: '总体数据',
 		target_data: '目标资料',
 		recently_search: '最近搜索',
+		suggestion: '建议',
 		no_recently_search_yet: '还没有最近搜索'
 	},
 	unit: {

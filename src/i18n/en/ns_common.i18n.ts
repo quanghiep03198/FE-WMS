@@ -289,6 +289,7 @@ export default {
 		original_data: 'Original data',
 		overall: 'Overall',
 		target_data: 'Target data',
+		suggestion: 'Suggestion',
 		recently_search: 'Recently searched',
 		no_recently_search_yet: 'No recently searched yet'
 	},
