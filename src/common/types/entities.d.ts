@@ -365,3 +365,10 @@ export interface IUserManagement {
 	email: string | null
 	dept_code: string | null
 }
+
+export interface IPermission extends IBaseEntity {
+	is_active: 'Y' | 'N' | null
+	permission_name: string
+	role: string
+	parent_id: number
+}
