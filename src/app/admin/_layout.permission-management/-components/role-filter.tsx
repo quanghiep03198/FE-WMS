@@ -16,8 +16,10 @@ type RoleFilterProps = {
 }
 
 const RoleFilter: React.FC<RoleFilterProps> = ({ onChange }) => {
+	// state to manage selected roles
 	const [selectedRoles, setSelectedRoles] = useState<Set<Role>>(new Set([]))
 
+	// function to toggle role selection
 	const toggleRoles = (Roles: Role) => {
 		setSelectedRoles((prev) => {
 			const newSet = new Set(prev)

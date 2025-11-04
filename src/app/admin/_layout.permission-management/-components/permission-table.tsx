@@ -1,9 +1,11 @@
 import RoleFilter from '@/app/admin/_layout.permission-management/-components/role-filter'
 import StatusFilter from '@/app/admin/_layout.permission-management/-components/status-filter'
+import { usePageProvider } from '@/app/admin/_layout.permission-management/-contexts/page-context'
 import {
 	useGetPermissionManagement,
 	useSoftDeletePermission
 } from '@/app/admin/_layout.permission-management/-hooks/use-permission-management'
+import { CommonActions } from '@/common/constants/enums'
 import { IPermission } from '@/common/types/entities'
 import {
 	Badge,
@@ -18,15 +20,62 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { DebouncedInput } from '@/components/ui/@react-table/components/debounced-input'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Pencil, Trash } from 'lucide-react'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { CircleFadingPlus, Pencil, Trash } from 'lucide-react'
+import { Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const PermissionTable = () => {
 	const { t, i18n } = useTranslation()
-	const [selectedRow, setSelectedRow] = useState<IPermission | null>(null)
-	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
+	const { event$ } = usePageProvider()
 	const columnHelper = createColumnHelper<IPermission>()
+
+	//state management for row selection to delete confirmation
+	const [selectedRow, setSelectedRow] = useState<IPermission | null>(null)
+
+	//state management for open confirmation dialog
+	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
+
+	// data of permissions get from api
+	const { data: permissions = [], isLoading, refetch } = useGetPermissionManagement()
+
+	// mutation for soft delete permission
+	const { mutateAsync: mutateAsyncDelete } = useSoftDeletePermission()
+
+	/**
+	 * TODO: Emit events for create
+	 * - `rows`: list permission for build parent permission combobox
+	 */
+	const handleCreate = () => {
+		event$.emit({
+			action: CommonActions.CREATE,
+			rows: permissions as IPermission[]
+		})
+	}
+
+	/**
+	 * TODO: Emit events for update
+	 * - `payload`: selected row data for update form
+	 * - `rows`: list permission for build parent permission combobox
+	 */
+	const handleUpdate = (payload) => {
+		event$.emit({
+			action: CommonActions.UPDATE,
+			payload: payload as Partial<IPermission> & Required<Pick<IPermission, 'id'>>,
+			rows: permissions as IPermission[]
+		})
+	}
+
+	// TODO: Handle delete permission
+	const handleDelete = async (row: IPermission) => {
+		try {
+			await mutateAsyncDelete(row.id)
+			await refetch()
+		} catch (error) {
+			console.error('Delete user failed:', error)
+		}
+	}
+
+	// Define table columns with useMemo
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
@@ -59,16 +108,6 @@ const PermissionTable = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
 				size: 100
 			}),
-			columnHelper.accessor('parent_id', {
-				header: 'Parent ID',
-				enableColumnFilter: true,
-				enableSorting: true,
-				enablePinning: true,
-				enableHiding: true,
-				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				size: 80
-			}),
 			columnHelper.accessor('is_active', {
 				header: 'Active',
 				enableColumnFilter: true,
@@ -76,12 +115,10 @@ const PermissionTable = () => {
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: (row, id, filterValues) => {
-					console.log('Filtering isactive with values:', filterValues)
 					if (!filterValues?.length) return true
 					return filterValues.includes(row.getValue(id))
 				},
 				cell: ({ getValue }) => {
-					console.log('Rendering isactive cell with value:', getValue())
 					switch (getValue()) {
 						case 'Y':
 							return <Badge variant='default'>Active</Badge>
@@ -93,6 +130,41 @@ const PermissionTable = () => {
 				},
 				size: 100,
 				maxSize: 100
+			}),
+			columnHelper.display({
+				id: 'parent_permission_name',
+				header: 'Parent Name',
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableHiding: true,
+				filterFn: 'includesString',
+				cell: ({ row, table }) => {
+					const data = table.options.data
+					const parentId = row.original.parent_id
+					const parent = data.find((item) => item.id === parentId)
+					return parent ? parent.permission_name : 'No Parent'
+				}
+			}),
+			columnHelper.accessor('remark', {
+				header: 'Remark',
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableHiding: true,
+				filterFn: 'includesString',
+				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				size: 80
+			}),
+			columnHelper.accessor('parent_id', {
+				header: 'Parent ID',
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableHiding: true,
+				filterFn: 'includesString',
+				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				size: 80
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
@@ -107,7 +179,7 @@ const PermissionTable = () => {
 								<DropdownMenuItem>
 									<button
 										onClick={() => {
-											setSelectedRow(row.original)
+											handleUpdate(row.original)
 										}}
 										className='p-1'>
 										<div className='flex items-center gap-2'>
@@ -141,20 +213,6 @@ const PermissionTable = () => {
 		],
 		[]
 	)
-	const { data: permissions = [], isLoading, refetch } = useGetPermissionManagement()
-	const { mutateAsync: mutateAsyncDelete } = useSoftDeletePermission()
-
-	const handleDelete = useCallback(
-		async (row: IPermission) => {
-			try {
-				await mutateAsyncDelete(row.id)
-				await refetch()
-			} catch (error) {
-				console.error('Delete user failed:', error)
-			}
-		},
-		[mutateAsyncDelete, refetch]
-	)
 
 	return (
 		<Fragment>
@@ -166,13 +224,15 @@ const PermissionTable = () => {
 				enableExpanding={true}
 				enableColumnResizing={true}
 				containerProps={{ className: 'h-[50vh] w-full' }}
+				//custom toolbar with filter and add button
 				toolbarProps={{
 					override: true,
-					render({ table, event$ }) {
+					render({ table }) {
 						return (
 							<div className='flex items-center justify-between'>
 								{/* Left slot */}
 								<div className='flex items-center gap-x-1'>
+									{/* Global input filterFn */}
 									<div className='flex w-48 min-w-[150px] items-center rounded-md border border-gray-500/40 bg-transparent px-2'>
 										<DebouncedInput
 											type='search'
@@ -182,6 +242,8 @@ const PermissionTable = () => {
 											placeholder='Filter users...'
 										/>
 									</div>
+
+									{/* Custom column filterFn components */}
 									<StatusFilter
 										onChange={(selectedStatuses) => {
 											table.getColumn('is_active')?.setFilterValue(selectedStatuses)
@@ -197,33 +259,33 @@ const PermissionTable = () => {
 
 								{/* Right slot */}
 								<div>
-									<Button>Add</Button>
+									{/* button add handler */}
+									<Button
+										onClick={() => {
+											handleCreate()
+										}}>
+										<CircleFadingPlus className='h-4 w-4' />
+										Add
+									</Button>
 								</div>
 							</div>
 						)
 					}
 				}}
 			/>
+
+			{/* dialog delete components */}
 			<ConfirmDialog
 				open={confirmDialogOpen}
 				title='Xoá'
-				description='Xác nhận vô hiệu hoá permission?'
+				description='Xác nhận vô hiệu hóa quyền này?'
 				onConfirm={() => handleDelete(selectedRow)}
 				onOpenChange={setConfirmDialogOpen}
 				onCancel={() => {
-					console.log('Cancelled')
 					setConfirmDialogOpen(false)
 					setSelectedRow(null)
 				}}
 			/>
-
-			{selectedRow ? (
-				<span>update</span>
-			) : (
-				// <UserManagementModal row={selectedRow} isOpen={isOpenModal} onOpenChange={setIsOpenModal} />
-				// <UserManagementModal isOpen={isOpenModal} onOpenChange={setIsOpenModal} />
-				<span>add</span>
-			)}
 		</Fragment>
 	)
 }
