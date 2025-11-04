@@ -1,9 +1,9 @@
-import UserManagementModal from '@/app/admin/_layout.user-management/-components/user-management-modal'
+import { usePageProvider } from '@/app/admin/_layout.user-management/-contexts/page-content'
 import {
 	useDeleteUserManagement,
 	useGetUserManagement
 } from '@/app/admin/_layout.user-management/-hooks/use-user-management'
-import { Role } from '@/common/constants/enums'
+import { CommonActions, Role } from '@/common/constants/enums'
 import { IUserManagement } from '@/common/types/entities'
 import {
 	Badge,
@@ -22,12 +22,16 @@ import { useTranslation } from 'react-i18next'
 
 const UserManagementTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
-	const [selectedRow, setSelectedRow] = useState<IUserManagement | null>(null)
+	const { event$ } = usePageProvider()
 	const columnHelper = createColumnHelper<IUserManagement>()
+
+	//state management for row selection to delete confirmation
+	const [selectedRow, setSelectedRow] = useState<IUserManagement | null>(null)
+
+	//state mama
+	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const { data: users = [], isLoading, refetch } = useGetUserManagement()
 	const { mutateAsync } = useDeleteUserManagement()
-	const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
 
 	const handleDelete = useCallback(
 		async (row: IUserManagement) => {
@@ -41,10 +45,12 @@ const UserManagementTable: React.FC = () => {
 		[mutateAsync, refetch]
 	)
 
-	const handleUpdate = useCallback((row: IUserManagement) => {
-		setSelectedRow(row)
-		setIsOpenModal(true)
-	}, [])
+	const handleUpdate = (row: IUserManagement) => {
+		event$.emit({
+			action: CommonActions.UPDATE,
+			payload: row
+		})
+	}
 
 	const columns = useMemo(
 		() => [
@@ -267,12 +273,6 @@ const UserManagementTable: React.FC = () => {
 					setSelectedRow(null)
 				}}
 			/>
-
-			{selectedRow ? (
-				<UserManagementModal row={selectedRow} isOpen={isOpenModal} onOpenChange={setIsOpenModal} />
-			) : (
-				<UserManagementModal isOpen={isOpenModal} onOpenChange={setIsOpenModal} />
-			)}
 		</Fragment>
 	)
 }

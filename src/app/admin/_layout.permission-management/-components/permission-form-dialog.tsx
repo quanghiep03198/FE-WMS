@@ -39,7 +39,7 @@ const PermissionFormDialog: React.FC = () => {
 	// define form with react-hook-form
 	const form = useForm<PermissionValueDTO>({
 		resolver: zodResolver(permissionValidator),
-		mode: 'onSubmit',
+		mode: 'all',
 		defaultValues: {
 			keyid: undefined,
 			permission_name: '',

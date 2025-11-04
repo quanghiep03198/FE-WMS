@@ -1,7 +1,7 @@
+import { usePageProvider } from '@/app/admin/_layout.user-management/-contexts/page-content'
 import { useUpdateUserManagement } from '@/app/admin/_layout.user-management/-hooks/use-user-management'
 import { UserFormSchema, UserFormValueDTO } from '@/app/admin/_layout.user-management/-schemas/user-form-value.schema'
-import { RecordStatus, Role } from '@/common/constants/enums'
-import { IUserManagement } from '@/common/types/entities'
+import { CommonActions, RecordStatus, Role } from '@/common/constants/enums'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -14,51 +14,43 @@ import {
 	InputFieldControl
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
-export type UserManagementModalProps = {
-	row?: IUserManagement
-	isOpen: boolean
-	onOpenChange: (isOpen: boolean) => void
-}
-
-const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen = false, onOpenChange }) => {
+const UserFormDialog: React.FC = () => {
+	const { event$ } = usePageProvider()
 	const { mutateAsync: updateUserFn } = useUpdateUserManagement()
+	const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
 	const form = useForm<UserFormValueDTO>({
 		resolver: zodResolver(UserFormSchema),
-		mode: 'onSubmit',
+		mode: 'all',
 		defaultValues: {
-			keyid: row?.keyid ?? null,
-			isactive: (row?.isactive as RecordStatus) ?? RecordStatus.ACTIVE,
-			user_code: row?.user_code ?? '',
-			employee_name: row?.employee_name ?? '',
-			employee_code: row?.employee_code ?? '',
-			user_password: row?.user_password ?? '',
-			role: row?.role ?? '',
-			email: row?.email ?? '',
-			sex: row?.sex ?? '',
-			birthday: row?.birthday ? new Date(row.birthday) : ('' as any)
+			keyid: undefined,
+			isactive: RecordStatus.ACTIVE,
+			user_code: '',
+			employee_name: '',
+			employee_code: '',
+			user_password: '',
+			role: '',
+			email: '',
+			sex: '',
+			birthday: '' as any
 		}
 	})
 
-	useEffect(() => {
-		if (isOpen) {
+	// subscribe to event bus
+	event$.useSubscription((event) => {
+		if (event.action === CommonActions.UPDATE) {
+			setIsOpen(true)
 			form.reset({
-				keyid: row?.keyid ?? null,
-				isactive: (row?.isactive as RecordStatus) ?? RecordStatus.ACTIVE,
-				user_code: row?.user_code ?? '',
-				employee_name: row?.employee_name ?? '',
-				employee_code: row?.employee_code ?? '',
-				user_password: row?.user_password ?? '',
-				role: row?.role ?? '',
-				email: row?.email ?? '',
-				sex: row?.sex ?? '',
-				birthday: row?.birthday ? new Date(row.birthday) : ('' as any)
+				...event.payload,
+				role: event.payload.role || '',
+				isactive: event.payload.isactive === 'Y' ? RecordStatus.ACTIVE : RecordStatus.INACTIVE,
+				birthday: event.payload.birthday ? new Date(event.payload.birthday) : ('' as any)
 			})
 		}
-	}, [isOpen, row])
+	})
 
 	const RoleOptions = useMemo(
 		() =>
@@ -91,10 +83,11 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 		if (data.keyid) {
 			updateUserFn(data)
 		}
+		setIsOpen(false)
 	}
 
 	return (
-		<Dialog open={isOpen} onOpenChange={onOpenChange}>
+		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<FormProvider {...form}>
 				<DialogContent>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2 p-4'>
@@ -102,10 +95,6 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 							<DialogTitle>Edit Profile</DialogTitle>
 							<hr />
 						</DialogHeader>
-
-						{/* Hidden key */}
-						<InputFieldControl name='keyid' type='hidden' />
-						<InputFieldControl name='employee_code' type='hidden' />
 
 						<ComboboxFieldControl
 							name='isactive'
@@ -179,4 +168,4 @@ const UserManagementModal: React.FC<UserManagementModalProps> = ({ row, isOpen =
 	)
 }
 
-export default UserManagementModal
+export default UserFormDialog
