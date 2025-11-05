@@ -126,12 +126,12 @@ export const navigationConfig: Record<'main' | 'preferences' | 'admin_dashboard'
 	admin_dashboard: [
 		{
 			icon: 'User',
-			title: 'navigation.dashboard',
+			title: 'navigation.user_management',
 			url: '/admin/user-management'
 		},
 		{
 			icon: 'KeyRound',
-			title: 'navigation.profile',
+			title: 'navigation.permission_management',
 			url: '/admin/permission-management'
 		}
 	]
