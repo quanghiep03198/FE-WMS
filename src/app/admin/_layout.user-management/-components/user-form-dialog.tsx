@@ -16,8 +16,10 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 const UserFormDialog: React.FC = () => {
+	const { t } = useTranslation()
 	const { event$ } = usePageProvider()
 	const { mutateAsync: updateUserFn } = useUpdateUserManagement()
 	const [isOpen, setIsOpen] = React.useState<boolean>(false)
@@ -55,7 +57,7 @@ const UserFormDialog: React.FC = () => {
 	const RoleOptions = useMemo(
 		() =>
 			Object.values(Role).map((role) => ({
-				label: role,
+				label: role ? t(`ns_common:role.${role}`) : 'Unknown',
 				value: role
 			})),
 		[]
@@ -64,7 +66,7 @@ const UserFormDialog: React.FC = () => {
 	const ActiveOptions = useMemo(
 		() =>
 			Object.values(RecordStatus).map((status) => ({
-				label: status,
+				label: status === 'Y' ? t('ns_common:status.active') : t('ns_common:status.idle'),
 				value: status
 			})),
 		[]
@@ -72,14 +74,13 @@ const UserFormDialog: React.FC = () => {
 
 	const SexOptions = useMemo(
 		() => [
-			{ label: 'Male', value: 'M' },
-			{ label: 'Female', value: 'F' }
+			{ label: t('ns_common:sex.male'), value: 'M' },
+			{ label: t('ns_common:sex.female'), value: 'F' }
 		],
 		[]
 	)
 
 	const onSubmit: SubmitHandler<UserFormValueDTO> = (data) => {
-		console.log('Form Submitted:', data)
 		if (data.keyid) {
 			updateUserFn(data)
 		}
@@ -92,13 +93,13 @@ const UserFormDialog: React.FC = () => {
 				<DialogContent>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2 p-4'>
 						<DialogHeader className='pb-3'>
-							<DialogTitle>Edit Profile</DialogTitle>
+							<DialogTitle>{t('ns_common:actions.update')}</DialogTitle>
 							<hr />
 						</DialogHeader>
 
 						<ComboboxFieldControl
 							name='isactive'
-							label='Status'
+							label={t('ns_common:common_fields.status')}
 							datalist={ActiveOptions}
 							labelField='label'
 							valueField='value'
@@ -107,14 +108,14 @@ const UserFormDialog: React.FC = () => {
 
 						<InputFieldControl
 							name='user_code'
-							label='User Code'
+							label={t('ns_admin:user_management.user_code')}
 							placeholder='Enter user code'
 							autoComplete='off'
 						/>
 
 						<InputFieldControl
 							name='employee_name'
-							label='Employee Name'
+							label={t('ns_admin:user_management.employee_name')}
 							placeholder='Enter employee name'
 							autoComplete='off'
 						/>
@@ -122,14 +123,14 @@ const UserFormDialog: React.FC = () => {
 						<InputFieldControl
 							name='user_password'
 							type='password'
-							label='Password'
+							label={t('ns_admin:user_management.password')}
 							placeholder='Enter password'
 							autoComplete='off'
 						/>
 
 						<ComboboxFieldControl
 							name='role'
-							label='Role'
+							label={t('ns_admin:user_management.role')}
 							datalist={RoleOptions}
 							labelField='label'
 							valueField='value'
@@ -139,27 +140,27 @@ const UserFormDialog: React.FC = () => {
 						<InputFieldControl
 							name='email'
 							type='email'
-							label='Email'
+							label={t('ns_admin:user_management.email')}
 							placeholder='Enter email address'
 							autoComplete='off'
 						/>
 
 						<ComboboxFieldControl
 							name='sex'
-							label='Gender'
+							label={t('ns_admin:user_management.sex')}
 							datalist={SexOptions}
 							labelField='label'
 							valueField='value'
 							shouldFilter
 						/>
 
-						<InputFieldControl name='birthday' type='date' label='Birthday' />
+						<InputFieldControl name='birthday' type='date' label={t('ns_admin:user_management.dob')} />
 
 						<DialogFooter className='pt-4'>
 							<DialogClose asChild>
-								<Button variant='outline'>Cancel</Button>
+								<Button variant='outline'>{t('ns_common:actions.cancel')}</Button>
 							</DialogClose>
-							<Button type='submit'>Save changes</Button>
+							<Button type='submit'>{t('ns_common:actions.save')}</Button>
 						</DialogFooter>
 					</form>
 				</DialogContent>

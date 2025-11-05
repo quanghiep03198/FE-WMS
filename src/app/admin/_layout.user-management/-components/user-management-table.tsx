@@ -21,7 +21,7 @@ import React, { Fragment, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const UserManagementTable: React.FC = () => {
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 	const { event$ } = usePageProvider()
 	const columnHelper = createColumnHelper<IUserManagement>()
 
@@ -54,43 +54,57 @@ const UserManagementTable: React.FC = () => {
 
 	const columns = useMemo(
 		() => [
+			// # Column (row index)
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: '#',
 				cell: ({ row }) => <span>{row.index + 1}</span>,
-				size: 60,
+				size: 50,
 				maxSize: 60
 			}),
+
+			// User Code
 			columnHelper.accessor('user_code', {
-				header: 'User Code',
+				header: t('ns_admin:user_management.user_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				size: 100
+				size: 120,
+				minSize: 100
 			}),
+
+			// Employee Code
 			columnHelper.accessor('employee_code', {
-				header: 'Employee Code',
+				header: t('ns_admin:user_management.employee_code'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				size: 120,
+				minSize: 100
 			}),
+
+			// Employee Name
 			columnHelper.accessor('employee_name', {
-				header: 'Employee Name',
+				header: t('ns_admin:user_management.employee_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				size: 160,
+				minSize: 140
 			}),
+
+			// Password (hidden text + toggle)
 			columnHelper.accessor('user_password', {
-				header: 'Password',
+				header: t('ns_admin:user_management.password'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -102,22 +116,28 @@ const UserManagementTable: React.FC = () => {
 
 					if (!password) return 'Unknown'
 
+					const masked = '•'.repeat(Math.min(password.length, 8))
+
 					return (
 						<div className='flex items-center gap-2'>
-							<span className='font-mono'>{show ? password : '•'.repeat(password.length)}</span>
+							<span className='font-mono'>{show ? password : masked}</span>
 							<button
 								type='button'
 								onClick={() => setShow(!show)}
-								className='text-muted-foreground transition hover:text-foreground'>
+								className='text-muted-foreground transition hover:text-foreground'
+								title={show ? 'Hide password' : 'Show password'}>
 								{show ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
 							</button>
 						</div>
 					)
 				},
-				minSize: 100
+				size: 140,
+				minSize: 120
 			}),
+
+			// Status
 			columnHelper.accessor('isactive', {
-				header: 'Active',
+				header: t('ns_common:common_fields.status'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -126,19 +146,20 @@ const UserManagementTable: React.FC = () => {
 				cell: ({ getValue }) => {
 					switch (getValue()) {
 						case 'Y':
-							return <Badge variant='default'>Active</Badge>
+							return <Badge variant='default'>{t('ns_common:status.active')}</Badge>
 						case 'N':
-							return <Badge variant='destructive'>Inactive</Badge>
+							return <Badge variant='destructive'>{t('ns_common:status.idle')}</Badge>
 						default:
-							return <Badge variant='secondary'>Unknown</Badge>
+							return <Badge variant='secondary'>-</Badge>
 					}
 				},
-				size: 100,
-				maxSize: 100
+				size: 100
 			}),
+
+			// Role
 			columnHelper.accessor('role', {
 				id: 'role_with_icon',
-				header: 'Role',
+				header: t('ns_admin:user_management.role'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -146,7 +167,6 @@ const UserManagementTable: React.FC = () => {
 				filterFn: 'includesString',
 				cell: ({ getValue }) => {
 					const role = getValue() as IUserManagement['role']
-
 					const getRoleIcon = (role: IUserManagement['role']) => {
 						switch (role) {
 							case Role.ADMIN:
@@ -167,48 +187,69 @@ const UserManagementTable: React.FC = () => {
 					return (
 						<div className='flex items-center gap-2'>
 							{getRoleIcon(role)}
-							<span className='font-medium text-foreground'>{role ?? 'Unknown'}</span>
+							<span className='font-medium text-foreground'>
+								{role ? t(`ns_common:role.${role}`) : 'Unknown'}
+							</span>
 						</div>
 					)
 				},
-				size: 150
+				size: 150,
+				minSize: 130
 			}),
+
+			// Email
 			columnHelper.accessor('email', {
-				header: 'Email',
+				header: t('ns_admin:user_management.email'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				size: 200,
+				minSize: 160
 			}),
+
+			// Department
 			columnHelper.accessor('dept_code', {
-				header: 'Department',
+				header: t('ns_admin:user_management.department'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => getValue() ?? 'Unknown',
+				size: 140,
+				minSize: 120
 			}),
+
+			// Sex
 			columnHelper.accessor('sex', {
-				header: 'Sex',
+				header: t('ns_admin:user_management.sex'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'equalsString',
-				cell: ({ getValue }) => (getValue() === 'M' ? 'Male' : getValue() === 'F' ? 'Female' : 'Unknown')
+				cell: ({ getValue }) => (getValue() === 'M' ? 'Male' : getValue() === 'F' ? 'Female' : 'Unknown'),
+				size: 100,
+				maxSize: 150
 			}),
+
+			// Birthday
 			columnHelper.accessor('birthday', {
-				header: 'Birthday',
+				header: t('ns_admin:user_management.dob'),
 				enableColumnFilter: false,
 				enableSorting: true,
-				cell: ({ getValue }) => (getValue() ? new Date(getValue()).toLocaleDateString() : 'Unknown')
+				cell: ({ getValue }) => (getValue() ? new Date(getValue()).toLocaleDateString() : 'Unknown'),
+				size: 120,
+				minSize: 100
 			}),
+
+			// Actions
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
-				header: 'Actions',
+				header: t('ns_common:common_fields.actions'),
 				cell: ({ row }) => (
 					<div className='text-center'>
 						<DropdownMenu>
@@ -220,7 +261,7 @@ const UserManagementTable: React.FC = () => {
 									<button onClick={() => handleUpdate(row.original)} className='p-1'>
 										<div className='flex items-center gap-2'>
 											<Pencil size={16} />
-											<span className='mx-1'>Update</span>
+											<span className='mx-1'>{t('ns_common:actions.update')}</span>
 										</div>
 									</button>
 								</DropdownMenuItem>
@@ -233,7 +274,7 @@ const UserManagementTable: React.FC = () => {
 										className='p-1'>
 										<div className='flex items-center gap-2'>
 											<Trash size={16} />
-											<span>Delete</span>
+											<span>{t('ns_common:actions.delete')}</span>
 										</div>
 									</button>
 								</DropdownMenuItem>
@@ -243,8 +284,8 @@ const UserManagementTable: React.FC = () => {
 				),
 				enableHiding: false,
 				enableResizing: true,
-				size: 70,
-				maxSize: 70
+				size: 80,
+				maxSize: 100
 			})
 		],
 		[]
@@ -263,12 +304,11 @@ const UserManagementTable: React.FC = () => {
 			/>
 			<ConfirmDialog
 				open={confirmDialogOpen}
-				title='Xoá'
-				description='Xác nhận vô hiệu hoá người dùng?'
+				title={t('ns_common:actions.delete')}
+				description={t('ns_common:confirmation.delete_title')}
 				onConfirm={() => handleDelete(selectedRow)}
 				onOpenChange={setConfirmDialogOpen}
 				onCancel={() => {
-					console.log('Cancelled')
 					setConfirmDialogOpen(false)
 					setSelectedRow(null)
 				}}

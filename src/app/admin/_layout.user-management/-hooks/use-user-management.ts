@@ -27,6 +27,7 @@ export function useGetUserManagement(
 }
 
 export function useDeleteUserManagement() {
+	const { t } = useTranslation()
 	const queryClient = useQueryClient()
 
 	return useMutation({
@@ -34,14 +35,15 @@ export function useDeleteUserManagement() {
 		mutationFn: (id: number) => UserManagement.softDeleteUser(id),
 
 		onSuccess: () => {
-			toast.success('User deleted successfully')
+			toast.success(t('ns_common:notification.success'))
 			queryClient.invalidateQueries({
 				queryKey: [UserManagementQueryKeys.GET_USER]
 			})
 		},
 
 		onError: (error: AxiosError<any>) => {
-			const message = error.response?.data?.message || error.response?.data?.error || 'Failed to delete user'
+			const message =
+				error.response?.data?.message || error.response?.data?.error || t('ns_common:notification.error')
 			toast.error(message)
 		}
 	})

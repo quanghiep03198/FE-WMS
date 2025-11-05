@@ -227,7 +227,9 @@ export default {
 		daily_outbound_report: '出庫管理',
 		// labels
 		main_menu_label: '主菜单',
-		preference_menu_label: ' 偏好设置'
+		preference_menu_label: ' 偏好设置',
+		user_management: '用户管理',
+		permission_management: '访问权管理'
 	},
 	notification: {
 		downloading: '下载 ...',
@@ -305,5 +307,16 @@ export default {
 	unit: {
 		times: '次',
 		prs: '双'
+	},
+	sex: {
+		female: '女',
+		male: '男'
+	},
+	role: {
+		admin: '管理员',
+		manager: '经理',
+		assistant: '现场助理',
+		qc: '质检员',
+		employee: '员工'
 	}
 } as const

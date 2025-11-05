@@ -224,7 +224,9 @@ export default {
 		transfer_managment: 'Quản lý chuyển giao',
 		warehouse_management: 'Quản lý kho',
 		main_menu_label: 'Menu chính',
-		preference_menu_label: 'Tùy chỉnh'
+		preference_menu_label: 'Tùy chỉnh',
+		user_management: 'Quản lý người dùng',
+		permission_management: 'Quản lý quyền truy cập'
 	},
 	notification: {
 		downloading: 'Đang tải xuống ...',
@@ -307,5 +309,16 @@ export default {
 	unit: {
 		times: 'lần',
 		prs: 'đôi'
+	},
+	sex: {
+		female: 'Nữ',
+		male: 'Nam'
+	},
+	role: {
+		admin: 'Quản trị viên',
+		manager: 'Quản lý',
+		assistant: 'Hỗ trợ hiện trường',
+		qc: 'Kiểm soát chất lượng',
+		employee: 'Nhân viên'
 	}
 } as const

@@ -224,7 +224,9 @@ export default {
 
 		// labels
 		main_menu_label: 'Main',
-		preference_menu_label: ' Preference'
+		preference_menu_label: ' Preference',
+		user_management: 'User management',
+		permission_management: 'Permission management'
 	},
 	notification: {
 		downloading: 'Downloading ...',
@@ -308,5 +310,16 @@ export default {
 	unit: {
 		times: 'times',
 		prs: 'pairs'
+	},
+	sex: {
+		female: 'Female',
+		male: 'Male'
+	},
+	role: {
+		admin: 'Administrator',
+		manager: 'Manager',
+		assistant: 'Field Assistant',
+		qc: 'Quality Control',
+		employee: 'Employee'
 	}
 } as const
