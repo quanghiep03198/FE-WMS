@@ -61,6 +61,6 @@ export function useUpdateUserManagement() {
 			toast.success(t('ns_common:notification.success'), { id: context })
 			queryClient.invalidateQueries({ queryKey: [UserManagementQueryKeys.GET_USER] })
 		},
-		onError: (_data, _variables, context) => toast.success(t('ns_common:notification.error'), { id: context })
+		onError: (_data, _variables, context) => toast.error(t('ns_common:notification.error'), { id: context })
 	})
 }

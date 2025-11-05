@@ -5,7 +5,7 @@ import {
 	useGetPermissionManagement,
 	useSoftDeletePermission
 } from '@/app/admin/_layout.permission-management/-hooks/use-permission-management'
-import { CommonActions } from '@/common/constants/enums'
+import { CommonActions, Role } from '@/common/constants/enums'
 import { IPermission } from '@/common/types/entities'
 import {
 	Badge,
@@ -20,7 +20,7 @@ import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { DebouncedInput } from '@/components/ui/@react-table/components/debounced-input'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { createColumnHelper } from '@tanstack/react-table'
-import { CircleFadingPlus, Pencil, Trash } from 'lucide-react'
+import { CircleFadingPlus, ClipboardList, Pencil, Trash, UserCheck, UserCog, UserPlus, Users } from 'lucide-react'
 import { Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -82,58 +82,83 @@ const PermissionTable = () => {
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: '#',
 				cell: ({ row }) => <span>{row.index + 1}</span>,
-				size: 60,
+				size: 50,
 				maxSize: 60
 			}),
 			columnHelper.accessor('permission_name', {
-				header: 'Permission name',
+				header: t('ns_admin:permission_management.permission_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				size: 100
+				size: 180,
+				minSize: 150
 			}),
+			// Role
 			columnHelper.accessor('role', {
-				header: 'Role',
+				id: 'role_with_icon',
+				header: t('ns_admin:user_management.role'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
-				filterFn: (row, id, filterValues) => {
-					if (!filterValues?.length) return true
-					return filterValues.includes(row.getValue(id))
+				filterFn: 'includesString',
+				cell: ({ getValue }) => {
+					const role = getValue() as IPermission['role']
+					const getRoleIcon = (role: IPermission['role']) => {
+						switch (role) {
+							case Role.ADMIN:
+								return <UserCog className='h-4 w-4 text-red-500' />
+							case Role.MANAGER:
+								return <UserCheck className='h-4 w-4 text-emerald-500' />
+							case Role.ASSISTANT:
+								return <UserPlus className='h-4 w-4 text-sky-500' />
+							case Role.QC:
+								return <ClipboardList className='h-4 w-4 text-yellow-500' />
+							case Role.EMPLOYEE:
+								return <Users className='h-4 w-4 text-purple-500' />
+							default:
+								return <Users className='h-4 w-4 text-muted-foreground' />
+						}
+					}
+
+					return (
+						<div className='flex items-center gap-2'>
+							{getRoleIcon(role)}
+							<span className='font-medium text-foreground'>
+								{role ? t(`ns_common:role.${role}`) : 'Unknown'}
+							</span>
+						</div>
+					)
 				},
-				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				size: 100
+				size: 140,
+				minSize: 120
 			}),
+			// Status
 			columnHelper.accessor('is_active', {
-				header: 'Active',
+				header: t('ns_common:common_fields.status'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
-				filterFn: (row, id, filterValues) => {
-					if (!filterValues?.length) return true
-					return filterValues.includes(row.getValue(id))
-				},
+				filterFn: 'includesString',
 				cell: ({ getValue }) => {
 					switch (getValue()) {
 						case 'Y':
-							return <Badge variant='default'>Active</Badge>
+							return <Badge variant='default'>{t('ns_common:status.active')}</Badge>
 						case 'N':
-							return <Badge variant='destructive'>Inactive</Badge>
+							return <Badge variant='destructive'>{t('ns_common:status.idle')}</Badge>
 						default:
-							return <Badge variant='secondary'>Unknown</Badge>
+							return <Badge variant='secondary'>-</Badge>
 					}
 				},
-				size: 100,
-				maxSize: 100
+				size: 100
 			}),
 			columnHelper.display({
 				id: 'parent_permission_name',
-				header: 'Parent Name',
+				header: t('ns_admin:permission_management.parent_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -144,31 +169,40 @@ const PermissionTable = () => {
 					const parentId = row.original.parent_id
 					const parent = data.find((item) => item.id === parentId)
 					return parent ? parent.permission_name : 'No Parent'
-				}
+				},
+				size: 180,
+				minSize: 150
 			}),
+			//remark
 			columnHelper.accessor('remark', {
-				header: 'Remark',
+				header: t('ns_common:common_fields.remark'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				size: 80
+				size: 160,
+				minSize: 120
 			}),
+
+			//parent id
 			columnHelper.accessor('parent_id', {
-				header: 'Parent ID',
+				header: t('ns_admin:permission_management.parent_id'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: true,
 				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown',
-				size: 80
+				size: 120,
+				minSize: 100
 			}),
+
+			//actions
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
-				header: 'Actions',
+				header: t('ns_common:common_fields.actions'),
 				cell: ({ row }) => (
 					<div className='text-center'>
 						<DropdownMenu>
@@ -184,7 +218,7 @@ const PermissionTable = () => {
 										className='p-1'>
 										<div className='flex items-center gap-2'>
 											<Pencil size={16} />
-											<span className='mx-1'>Update</span>
+											<span className='mx-1'>{t('ns_common:actions.update')}</span>
 										</div>
 									</button>
 								</DropdownMenuItem>
@@ -197,7 +231,7 @@ const PermissionTable = () => {
 										className='p-1'>
 										<div className='flex items-center gap-2'>
 											<Trash size={16} />
-											<span>Delete</span>
+											<span>{t('ns_common:actions.delete')}</span>
 										</div>
 									</button>
 								</DropdownMenuItem>
@@ -207,11 +241,11 @@ const PermissionTable = () => {
 				),
 				enableHiding: false,
 				enableResizing: true,
-				size: 70,
-				maxSize: 70
+				size: 80,
+				maxSize: 100
 			})
 		],
-		[]
+		[t]
 	)
 
 	return (
@@ -265,7 +299,7 @@ const PermissionTable = () => {
 											handleCreate()
 										}}>
 										<CircleFadingPlus className='h-4 w-4' />
-										Add
+										{t('ns_common:actions.add')}
 									</Button>
 								</div>
 							</div>
@@ -277,8 +311,8 @@ const PermissionTable = () => {
 			{/* dialog delete components */}
 			<ConfirmDialog
 				open={confirmDialogOpen}
-				title='Xoá'
-				description='Xác nhận vô hiệu hóa quyền này?'
+				title={t('ns_common:actions.delete')}
+				description={t('ns_common:confirmation.delete_title')}
 				onConfirm={() => handleDelete(selectedRow)}
 				onOpenChange={setConfirmDialogOpen}
 				onCancel={() => {

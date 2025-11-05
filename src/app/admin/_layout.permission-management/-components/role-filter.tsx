@@ -10,12 +10,15 @@ import {
 } from '@/components/ui'
 import { CirclePlus } from 'lucide-react'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type RoleFilterProps = {
 	onChange?: (selectedRoles: Role[]) => void
 }
 
 const RoleFilter: React.FC<RoleFilterProps> = ({ onChange }) => {
+	const { t } = useTranslation()
+
 	// state to manage selected roles
 	const [selectedRoles, setSelectedRoles] = useState<Set<Role>>(new Set([]))
 
@@ -40,7 +43,7 @@ const RoleFilter: React.FC<RoleFilterProps> = ({ onChange }) => {
 					variant='outline'
 					className='flex items-center gap-2 rounded-md border border-dashed border-gray-400 p-2'>
 					<CirclePlus className='h-4 w-4' />
-					Roles
+					{t('ns_admin:user_management.role')}
 					{selectedRoles.size > 0 && (
 						<span className='ml-1 rounded-full bg-gray-600 px-2 py-0.5 text-xs'>{selectedRoles.size}</span>
 					)}
@@ -48,14 +51,14 @@ const RoleFilter: React.FC<RoleFilterProps> = ({ onChange }) => {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent className='w-48'>
-				<DropdownMenuLabel>Roles</DropdownMenuLabel>
+				<DropdownMenuLabel>{t('ns_admin:user_management.role')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{Object.values(Role).map((Roles) => (
 					<DropdownMenuCheckboxItem
 						key={Roles}
 						checked={selectedRoles.has(Roles)}
 						onCheckedChange={() => toggleRoles(Roles)}>
-						<span>{Roles}</span>
+						<span>{Roles ? t(`ns_common:role.${Roles}`) : 'Unknown'}</span>
 					</DropdownMenuCheckboxItem>
 				))}
 			</DropdownMenuContent>

@@ -23,8 +23,10 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 const PermissionFormDialog: React.FC = () => {
+	const { t } = useTranslation()
 	const { event$ } = usePageProvider()
 	const [rows, setRows] = React.useState<IPermission[]>([])
 
@@ -83,7 +85,7 @@ const PermissionFormDialog: React.FC = () => {
 	const RoleOptions = useMemo(
 		() =>
 			Object.values(Role).map((role) => ({
-				label: role,
+				label: role ? t(`ns_common:role.${role}`) : 'Unknown',
 				value: role
 			})),
 		[]
@@ -93,7 +95,7 @@ const PermissionFormDialog: React.FC = () => {
 	const ActiveOptions = useMemo(
 		() =>
 			Object.values(RecordStatus).map((status) => ({
-				label: status,
+				label: status === 'Y' ? t('ns_common:status.active') : t('ns_common:status.idle'),
 				value: status
 			})),
 		[]
@@ -129,13 +131,13 @@ const PermissionFormDialog: React.FC = () => {
 				<DialogContent>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2 p-4'>
 						<DialogHeader className='pb-3'>
-							<DialogTitle>{isUpdate ? 'Edit Role' : 'Add Role'}</DialogTitle>
+							<DialogTitle>{isUpdate ? t('ns_common:actions.update') : t('ns_common:actions.add')}</DialogTitle>
 							<hr />
 						</DialogHeader>
 
 						<ComboboxFieldControl
 							name='is_active'
-							label='Status'
+							label={t('ns_common:common_fields.status')}
 							datalist={ActiveOptions}
 							labelField='label'
 							valueField='value'
@@ -144,7 +146,7 @@ const PermissionFormDialog: React.FC = () => {
 
 						<InputFieldControl
 							name='permission_name'
-							label='Permission Name'
+							label={t('ns_admin:permission_management.permission_name')}
 							placeholder='Enter permission name'
 							autoComplete='off'
 						/>
@@ -152,14 +154,14 @@ const PermissionFormDialog: React.FC = () => {
 						<InputFieldControl
 							name='remark'
 							type='remark'
-							label='Remark'
+							label={t('ns_common:common_fields.remark')}
 							placeholder='Enter remark'
 							autoComplete='off'
 						/>
 
 						<ComboboxFieldControl
 							name='role'
-							label='Role'
+							label={t('ns_admin:user_management.role')}
 							datalist={RoleOptions}
 							labelField='label'
 							valueField='value'
@@ -168,7 +170,7 @@ const PermissionFormDialog: React.FC = () => {
 
 						<ComboboxFieldControl
 							name='parent_id'
-							label='Parent'
+							label={t('ns_admin:permission_management.parent_name')}
 							datalist={ParentOptions}
 							labelField='label'
 							valueField='value'
@@ -177,9 +179,9 @@ const PermissionFormDialog: React.FC = () => {
 
 						<DialogFooter className='pt-4'>
 							<DialogClose asChild>
-								<Button variant='outline'>Cancel</Button>
+								<Button variant='outline'>{t('ns_common:actions.cancel')}</Button>
 							</DialogClose>
-							<Button type='submit'>Save changes</Button>
+							<Button type='submit'>{t('ns_common:actions.save')}</Button>
 						</DialogFooter>
 					</form>
 				</DialogContent>

@@ -10,12 +10,14 @@ import {
 } from '@/components/ui'
 import { CirclePlus } from 'lucide-react'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type StatusFilterProps = {
 	onChange?: (selectedStatuses: RecordStatus[]) => void
 }
 
 const StatusFilter: React.FC<StatusFilterProps> = ({ onChange }) => {
+	const { t } = useTranslation()
 	const [selectedStatuses, setSelectedStatuses] = useState<Set<RecordStatus>>(new Set([]))
 
 	const toggleStatus = (status: RecordStatus) => {
@@ -38,7 +40,7 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ onChange }) => {
 					variant='outline'
 					className='flex items-center gap-2 rounded-md border border-dashed border-gray-400 p-2'>
 					<CirclePlus className='h-4 w-4' />
-					Status
+					{t('ns_common:common_fields.status')}
 					{selectedStatuses.size > 0 && (
 						<span className='ml-1 rounded-full bg-gray-600 px-2 py-0.5 text-xs'>{selectedStatuses.size}</span>
 					)}
@@ -46,14 +48,14 @@ const StatusFilter: React.FC<StatusFilterProps> = ({ onChange }) => {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent className='w-48'>
-				<DropdownMenuLabel>Status</DropdownMenuLabel>
+				<DropdownMenuLabel>{t('ns_common:common_fields.status')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{Object.values(RecordStatus).map((status) => (
 					<DropdownMenuCheckboxItem
 						key={status}
 						checked={selectedStatuses.has(status)}
 						onCheckedChange={() => toggleStatus(status)}>
-						<span>{status}</span>
+						<span>{status === 'Y' ? t('ns_common:status.active') : t('ns_common:status.idle')}</span>
 					</DropdownMenuCheckboxItem>
 				))}
 			</DropdownMenuContent>
