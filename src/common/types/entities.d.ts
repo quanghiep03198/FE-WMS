@@ -369,6 +369,6 @@ export interface IUserManagement {
 export interface IPermission extends IBaseEntity {
 	is_active: 'Y' | 'N' | null
 	permission_name: string
-	role: string
+	role: Role | null
 	parent_id: number
 }
