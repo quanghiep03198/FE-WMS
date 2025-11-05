@@ -25,6 +25,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'includesString',
@@ -35,6 +36,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('brand_name', {
 				header: t('ns_erp:fields.brand_name'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'equalsString',
@@ -45,6 +47,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('shoes_style', {
 				header: t('ns_erp:fields.shoestyle_codefactory'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'fuzzy',
@@ -55,6 +58,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('color', {
 				header: t('ns_erp:fields.color_sn'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'equalsString',
@@ -65,6 +69,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('size_data', {
 				header: 'Size',
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: false,
 				enablePinning: true,
 				filterFn: 'fuzzy',
@@ -90,17 +95,11 @@ const ReportMasterTable: React.FC = () => {
 			}),
 			columnHelper.accessor('factory_code_produce', {
 				header: t('ns_erp:fields.factory_code_produce'),
-				enableColumnFilter: true,
-				enableSorting: true,
-				enablePinning: true,
+				enableSorting: false,
+				enableMultiSort: false,
+				enableColumnFilter: false,
+				enablePinning: false,
 				size: 120,
-				meta: {
-					filterVariant: 'select',
-					facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
-						label: t(val, { ns: 'ns_common', defaultValue: val }),
-						value: key
-					}))
-				},
 				cell: ({ getValue }) => {
 					const factoryCode = getValue()
 					return factoryCode
@@ -111,6 +110,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('standard_weight', {
 				header: t('ns_erp:fields.standard_weight'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'inNumberRange',
@@ -118,9 +118,10 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('actual_weight', {
-				header: t('ns_erp:fields.actual_weight'),
+			columnHelper.accessor('actual_avg_weight', {
+				header: t('ns_erp:fields.actual_avg_weight'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'inNumberRange',
@@ -134,6 +135,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('target_box_qty', {
 				header: t('ns_erp:fields.target_box_qty'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'inNumberRange',
@@ -144,6 +146,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('target_item_qty', {
 				header: t('ns_erp:fields.target_item_qty'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'inNumberRange',
@@ -154,6 +157,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('weighed_box_qty', {
 				header: t('ns_erp:fields.weighed_box_qty'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'inNumberRange',
@@ -165,6 +169,7 @@ const ReportMasterTable: React.FC = () => {
 			columnHelper.accessor('unweighed_box_qty', {
 				header: t('ns_erp:fields.unweighed_box_qty'),
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: true,
 				enablePinning: true,
 				filterFn: 'inNumberRange',
@@ -181,6 +186,7 @@ const ReportMasterTable: React.FC = () => {
 			data={data}
 			columns={columns}
 			loading={isLoading}
+			enableMultiSort={true}
 			initialState={{
 				pagination: {
 					pageIndex: 0,

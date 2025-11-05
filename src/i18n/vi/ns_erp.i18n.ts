@@ -12,6 +12,7 @@ export default {
 	},
 	fields: {
 		actual_weight: 'Trọng lượng thực tế (kg)',
+		actual_avg_weight: 'Trọng lượng TB thực tế (kg)',
 		accumulated_qty: 'Số lượng tích lũy',
 		actual_instock_qty: 'Số lượng nhập thực tế',
 		actual_inventory_qty: 'Số lượng kiểm kê',
@@ -65,6 +66,7 @@ export default {
 		po: 'Mã đơn đặt hàng',
 		po_size_qty: 'Số lượng đặt đơn theo cỡ',
 		prod_color: 'Màu sắc sản phẩm',
+		progress: 'Tiến độ',
 		required_date: 'Ngày Yêu Cầu', // Required Date
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		decentralized_po: 'PO phân tách',

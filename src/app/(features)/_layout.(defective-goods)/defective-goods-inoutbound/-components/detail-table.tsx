@@ -90,7 +90,9 @@ const DetailTable: React.FC = () => {
 							</TableRow>
 						) : (
 							data.map((item) => (
-								<TableRow key={item.factory_shoes_style + item.color_sn}>
+								<TableRow
+									key={item.factory_shoes_style + item.color_sn}
+									className={loading && '[&_td]:animate-pulse'}>
 									<TableCell align='left'>{item.factory_shoes_style}</TableCell>
 									<TableCell align='left'>{item.color_sn}</TableCell>
 									<TableCell className='p-0'>

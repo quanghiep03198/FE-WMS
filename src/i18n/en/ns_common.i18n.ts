@@ -33,6 +33,7 @@ export default {
 		open_list_panel: 'Open list panel',
 		collapse_list_panel: 'Collapse list panel',
 		open: 'Open',
+		pick_a_date: 'Pick a date',
 		pin: 'Pin',
 		proceed: 'Proceed',
 		reapprove: 'Reapprove',
@@ -61,7 +62,6 @@ export default {
 		undo: 'Undo',
 		redo: 'Redo'
 	},
-
 	common_fields: {
 		actions: 'Actions',
 		approver: 'Approver',
@@ -243,7 +243,7 @@ export default {
 		last_page: 'Last page',
 		next_page: 'Next page',
 		previous_page: 'Previous page',
-		selected_records: '{{count}} selected'
+		selected_records: '{{selectedRecords}} selected'
 	},
 	settings: {
 		font: 'Font',
@@ -278,7 +278,6 @@ export default {
 		rows_per_page: 'Rows per page',
 		search_in_column: 'Search in column',
 		selected_rows: '{{selectedRows}} row(s) selected',
-
 		sort_asc: 'Sort ascending',
 		sort_desc: 'Sort descending',
 		total_rows: '{{count}} records',
@@ -292,6 +291,7 @@ export default {
 		original_data: 'Original data',
 		overall: 'Overall',
 		target_data: 'Target data',
+		suggestion: 'Suggestion',
 		recently_search: 'Recently searched',
 		no_recently_search_yet: 'No recently searched yet'
 	},

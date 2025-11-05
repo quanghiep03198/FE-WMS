@@ -62,7 +62,7 @@ const SearchDialog: React.FC = () => {
 				onClick={() => setOpen(!open)}>
 				<Icon name='Search' />
 				<Typography variant='small' className='flex-1 text-left sm:hidden'>
-					Search ...
+					{t('ns_common:actions.search') + ' ...'}
 				</Typography>
 				<Kbd className='text-xs'>
 					<KbdKey>ctrl</KbdKey>
@@ -74,7 +74,7 @@ const SearchDialog: React.FC = () => {
 				<CommandDialog open={open} onOpenChange={setOpen}>
 					<Command shouldFilter={false}>
 						<CommandInput
-							placeholder='Type a command or search...'
+							placeholder={t('ns_common:actions.search') + ' ...'}
 							className='h-9 items-center'
 							onValueChange={debounce((value) => setSearchTerm(value), 200)}
 						/>
@@ -82,7 +82,7 @@ const SearchDialog: React.FC = () => {
 						<CommandList className='max-h-[50vh] min-h-full'>
 							{!searchTerm ? (
 								<Fragment>
-									<CommandGroup heading='Suggestions'>
+									<CommandGroup heading={t('ns_common:titles.suggestion')}>
 										{navigationConfig.main
 											.flatMap((item) => (Array.isArray(item.items) ? item.items : [item]))
 											.slice(0, 5)
@@ -100,7 +100,7 @@ const SearchDialog: React.FC = () => {
 											))}
 									</CommandGroup>
 									<CommandSeparator />
-									<CommandGroup heading='Settings'>
+									<CommandGroup heading={t('ns_common:navigation.settings')}>
 										<CommandItem asChild className='h-9 text-sm'>
 											<Link to='/preferences/account'>
 												{t('ns_common:navigation.profile')}

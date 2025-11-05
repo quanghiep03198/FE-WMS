@@ -41,11 +41,10 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 	return (
 		<Div className='inline-flex items-center gap-x-3'>
 			<Checkbox checked={checkboxState} onCheckedChange={handleCheckboxChange} />
-
 			<Typography variant='small' color='muted'>
 				{t('ns_common:pagination.selected_records', {
-					count: selectedCount,
-					defaultValue: `${selectedCount} selected`
+					selectedRecords: `${selectedCount}/${totalDocs ?? 0}`,
+					defaultValue: `${selectedCount}/${totalDocs} selected`
 				})}
 			</Typography>
 		</Div>

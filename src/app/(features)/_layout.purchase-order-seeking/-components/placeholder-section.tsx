@@ -53,15 +53,9 @@ const PlaceholderSection: React.FC = () => {
 						<CardDescription className='col-start-2'>{t('ns_erp:descriptions.shipping_detail')}</CardDescription>
 					</CardHeader>
 				</Card>
-				{/* <Figure>
-					<Image src={theme === Theme.DARK ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' />
-				</Figure> */}
 			</Div>
 		</Fragment>
 	)
 }
-
-// const Figure = tw.figure`col-span-4 col-start-3 xxl:block hidden row-span-3 row-start-1 place-content-center`
-// const Image = tw.img`mx-auto w-full max-w-xl`
 
 export default PlaceholderSection

@@ -129,6 +129,7 @@ export function OrderSearchFieldControl() {
 												className={cn(buttonVariants({ size: 'lg' }))}
 												onClick={(e) => {
 													e.stopPropagation()
+													setOpen(false)
 												}}>
 												<Icon name='Search' />
 												{t('ns_common:actions.search')}

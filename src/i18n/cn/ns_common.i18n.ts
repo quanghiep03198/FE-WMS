@@ -33,6 +33,7 @@ export default {
 		login: '登入',
 		logout: '登出',
 		open: '打开',
+		pick_a_date: '选择日期',
 		pin: '固定',
 		proceed: '确认',
 		reapprove: '重新批准',
@@ -116,7 +117,7 @@ export default {
 		task_list: '任务列表',
 		link: '链接',
 		insert_link_title: '插入链接',
-		insert_link_description: '在选中的文本中插入一个链接。您也可以链接到电子邮件地址或电话号码.',
+		insert_link_description: '在选中的文本中插入一个链接. 您也可以链接到电子邮件地址或电话号码.',
 		insert_link_placeholder: '粘贴链接 ...',
 		image: '相片',
 		code_block: '代码块',
@@ -173,13 +174,13 @@ export default {
 		'404_message': '页面不存在. 请检查链接.',
 		'500': '服务器错误',
 		'500_message':
-			'我们对此不便深感抱歉。您可以重试之前的操作，如果仍然无法解决，请向我们发送反馈，描述您遇到的错误。我们会尽快修复。',
+			'我们对此不便深感抱歉. 您可以重试之前的操作，如果仍然无法解决，请向我们发送反馈，描述您遇到的错误. 我们会尽快修复.',
 		'501': '功能不可用',
 		'502': '错误的网关',
 		'502_message':
-			'服务器由于 IP 策略当前无法处理请求. 请尝试访问 {{url}} 以继续使用工厂 {{factoryCode}} 的此功能. 有关更多详细信息, 请联系 IT 部门.',
+			'主機目前因 IP 政策限制, 無法處理您的請求. 請用公司內部網路的 IP 位址訪問 {{url}} 及繼續 {{factoryCode}} 的此功能. 若需要了解更多詳細訊息, 請聯繫 IT 部門',
 		'503': '功能不可用',
-		'503_message': '功能正在开发/维护中。请稍后再试'
+		'503_message': '功能正在开发/维护中. 请稍后再试'
 	},
 	factory: {
 		VA1: '联盈',
@@ -252,7 +253,7 @@ export default {
 		last_page: '最后一页',
 		next_page: '下页',
 		previous_page: '上页',
-		selected_records: '已选择 {{count}} 项'
+		selected_records: '已选择 {{selectedRecords}} 项'
 	},
 	settings: {
 		font: '字体',
@@ -292,7 +293,6 @@ export default {
 		sort_asc: '升序排序',
 		sort_desc: '降序排序'
 	},
-
 	titles: {
 		advanced_search: '高级搜索',
 		caution: '警告',
@@ -302,6 +302,7 @@ export default {
 		overall: '总体数据',
 		target_data: '目标资料',
 		recently_search: '最近搜索',
+		suggestion: '建议',
 		no_recently_search_yet: '还没有最近搜索'
 	},
 	unit: {

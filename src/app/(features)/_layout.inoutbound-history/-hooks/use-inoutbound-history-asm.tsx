@@ -17,14 +17,11 @@ export const useGetInboundHistoryQuery = () => {
 	return useQuery({
 		queryKey: [InOutBoundHistoryQueryKeys.INBOUND_HISTORY, searchParams.order, currentTenant?.id],
 		queryFn: async () =>
-			await axiosInstance.get<void, ResponseBody<IInboundHistory[]>>(
-				`/report/inbound-history/${searchParams.order}`,
-				{
-					headers: {
-						[RequestHeaders.TENANT_ID]: currentTenant?.id
-					}
+			await axiosInstance.get<void, ResponseBody<IInboundHistory>>(`/report/inbound-history/${searchParams.order}`, {
+				headers: {
+					[RequestHeaders.TENANT_ID]: currentTenant?.id
 				}
-			),
+			}),
 		select: (response) => response.metadata
 	})
 }

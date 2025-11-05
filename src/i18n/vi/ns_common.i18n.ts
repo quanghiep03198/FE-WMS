@@ -32,6 +32,7 @@ export default {
 		logout: 'Đăng xuất',
 		open: 'Mở',
 		pin: 'Ghim',
+		pick_a_date: 'Chọn ngày',
 		proceed: 'Tiếp tục',
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',
@@ -250,7 +251,7 @@ export default {
 		last_page: 'Trang cuối',
 		next_page: 'Trang sau',
 		previous_page: 'Trang trước',
-		selected_records: '{{count}} đã chọn'
+		selected_records: '{{selectedRecords}} đã chọn'
 	},
 	settings: {
 		font: 'Phông chữ',
@@ -298,6 +299,7 @@ export default {
 		import_data: 'Tải lên dữ liệu',
 		overall: 'Tổng quan',
 		target_data: 'Dữ liệu cập nhật',
+		suggestion: 'Gợi ý',
 		recently_search: 'Tìm kiếm gần đây',
 		no_recently_search_yet: 'Chưa có tìm kiếm gần đây'
 	},
