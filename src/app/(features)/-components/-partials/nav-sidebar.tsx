@@ -34,9 +34,9 @@ import {
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { useQueryClient } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
@@ -73,9 +73,7 @@ const NavSidebar: React.FC = () => {
 												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												size='sm'
 												className='w-full font-medium'
-												onClick={() => {
-													if (!isSmallScreen && !open) setOpen(true)
-												}}>
+												onClick={() => setOpen(!isSmallScreen && !open)}>
 												{item.icon && (
 													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
 												)}
@@ -155,12 +153,21 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 
 const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url, title, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
+	const ref = useRef<HTMLLIElement>(null)
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
-	const { openMobile, setOpenMobile } = useSidebar()
+	const { open, openMobile, setOpenMobile } = useSidebar()
+	const location = useRouterState({ select: (s) => s.location })
+
+	useEffect(() => {
+		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
+			ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+		}
+	}, [open, location.pathname])
 
 	return (
 		<SidebarMenuSubItem
 			role='menuitem'
+			ref={ref}
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>

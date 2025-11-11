@@ -1,5 +1,4 @@
 import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
-import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
@@ -13,6 +12,7 @@ import {
 	CommandSeparator,
 	CommandShortcut,
 	Icon,
+	Tooltip,
 	Typography
 } from '@/components/ui'
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
@@ -27,7 +27,7 @@ const SearchDialog: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const [open, setOpen] = React.useState<boolean>(false)
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+	const isSmallScreen = useMediaQuery('(min-width: 360px) and (max-width: 1023px)')
 
 	useKeyPress('ctrl.k', (e) => {
 		e.preventDefault()
@@ -55,20 +55,25 @@ const SearchDialog: React.FC = () => {
 
 	return (
 		<Fragment>
-			<Button
-				variant={isSmallScreen ? 'ghost' : 'outline'}
-				size={isSmallScreen ? 'icon' : 'default'}
-				className='basis-56 gap-x-2 px-2 sm:basis-auto'
-				onClick={() => setOpen(!open)}>
-				<Icon name='Search' />
-				<Typography variant='small' className='flex-1 text-left sm:hidden'>
-					{t('ns_common:actions.search') + ' ...'}
-				</Typography>
-				<Kbd className='text-xs'>
-					<KbdKey>ctrl</KbdKey>
-					<KbdKey>K</KbdKey>
-				</Kbd>
-			</Button>
+			<Tooltip
+				message={t('ns_common:actions.search')}
+				triggerProps={{ asChild: true }}
+				contentProps={{ hidden: !isSmallScreen }}>
+				<Button
+					variant={isSmallScreen ? 'ghost' : 'outline'}
+					size={isSmallScreen ? 'icon' : 'default'}
+					className='basis-56 gap-x-2 px-2 sm:basis-auto md:basis-auto'
+					onClick={() => setOpen(!open)}>
+					<Icon name='Search' />
+					<Typography variant='small' className='flex-1 text-left sm:hidden md:hidden'>
+						{t('ns_common:actions.search') + ' ...'}
+					</Typography>
+					<Kbd className='text-xs sm:hidden md:hidden'>
+						<KbdKey>ctrl</KbdKey>
+						<KbdKey>K</KbdKey>
+					</Kbd>
+				</Button>
+			</Tooltip>
 
 			{createPortal(
 				<CommandDialog open={open} onOpenChange={setOpen}>
