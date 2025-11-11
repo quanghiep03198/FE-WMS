@@ -1,7 +1,9 @@
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import { format } from 'date-fns'
 import { Fragment, useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
 	Calendar,
 	CalendarProps,
@@ -25,10 +27,12 @@ export type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldContro
 }
 
 export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerFieldControlProps<T>) {
-	const { control, getFieldState } = useFormContext()
-
 	const { name, description, label, orientation, hidden, calendarProps = { mode: 'single' } } = props
+
+	const { control, getFieldState } = useFormContext()
 	const id = useId()
+	const locale = useDateLocale()
+	const { t } = useTranslation()
 
 	return (
 		<FormField
@@ -63,24 +67,30 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 								<FormControl>
 									<Fragment>
 										<Icon name='Calendar' />
-										{calendarProps.mode === 'range' || calendarProps.mode === 'multiple' ? (
-											<Fragment>
-												{field.value?.from ? (
-													field.value.to ? (
-														<Fragment>
-															{format(field.value.from, 'LLL dd, y')} -{' '}
-															{format(field.value.to, 'LLL dd, y')}
-														</Fragment>
+										<span className='first-letter:uppercase'>
+											{calendarProps.mode === 'range' || calendarProps.mode === 'multiple' ? (
+												<Fragment>
+													{field.value?.from ? (
+														field.value.to ? (
+															<Fragment>
+																{format(field.value.from, 'LLL dd, y', { locale })} -{' '}
+																{format(field.value.to, 'LLL dd, y', { locale })}
+															</Fragment>
+														) : (
+															format(field.value.from, 'LLL dd, y', { locale })
+														)
 													) : (
-														format(field.value.from, 'LLL dd, y')
-													)
-												) : (
-													'Pick a date'
-												)}
-											</Fragment>
-										) : (
-											<Fragment>{field.value ? format(field.value, 'PPP') : 'Pick a date'}</Fragment>
-										)}
+														t('ns_common:actions.pick_a_date')
+													)}
+												</Fragment>
+											) : (
+												<Fragment>
+													{field.value
+														? format(field.value, 'PPP', { locale })
+														: t('ns_common:actions.pick_a_date')}
+												</Fragment>
+											)}
+										</span>
 									</Fragment>
 								</FormControl>
 							</PopoverTrigger>
