@@ -1,8 +1,11 @@
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
+import { chunk } from 'lodash'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button, ButtonProps, buttonVariants } from '../@core/button'
 import { Popover, PopoverContent, PopoverTrigger } from '../@core/popover'
 
@@ -10,27 +13,6 @@ type Month = {
 	number: number
 	name: string
 }
-
-const MONTHS: Month[][] = [
-	[
-		{ number: 0, name: 'Jan' },
-		{ number: 1, name: 'Feb' },
-		{ number: 2, name: 'Mar' },
-		{ number: 3, name: 'Apr' }
-	],
-	[
-		{ number: 4, name: 'May' },
-		{ number: 5, name: 'Jun' },
-		{ number: 6, name: 'Jul' },
-		{ number: 7, name: 'Aug' }
-	],
-	[
-		{ number: 8, name: 'Sep' },
-		{ number: 9, name: 'Oct' },
-		{ number: 10, name: 'Nov' },
-		{ number: 11, name: 'Dec' }
-	]
-]
 
 type MonthCalendarProps = {
 	selectedMonth?: Date
@@ -54,6 +36,9 @@ type MonthCalendarProps = {
 }
 
 const MonthPicker: React.FC<MonthCalendarProps> = (props) => {
+	const locale = useDateLocale()
+	const { t } = useTranslation()
+
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -64,7 +49,11 @@ const MonthPicker: React.FC<MonthCalendarProps> = (props) => {
 						!props?.selectedMonth && 'text-muted-foreground'
 					)}>
 					<CalendarIcon className='mr-2 h-4 w-4' />
-					{props?.selectedMonth ? format(new Date(props.selectedMonth), 'MMM yyyy') : <span>Pick a month</span>}
+					<span className='first-letter:uppercase'>
+						{props?.selectedMonth
+							? format(new Date(props.selectedMonth), 'MMMM, yyyy', { locale })
+							: t('ns_common:actions.pick_a_month')}
+					</span>
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className='w-[var(--radix-popover-trigger-width)] space-y-4'>
@@ -88,12 +77,26 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({
 	const [year, setYear] = React.useState<number>(selectedMonth?.getFullYear() ?? new Date().getFullYear())
 	const [month, setMonth] = React.useState<number>(selectedMonth?.getMonth() ?? new Date().getMonth())
 	const [menuYear, setMenuYear] = React.useState<number>(year)
+	const locale = useDateLocale()
+	const { i18n } = useTranslation()
 
 	if (minDate && maxDate && minDate > maxDate) minDate = maxDate
 
 	const disabledDatesMapped = disabledDates?.map((d) => {
 		return { year: d.getFullYear(), month: d.getMonth() }
 	})
+
+	const months: Month[][] = React.useMemo(
+		() =>
+			chunk(
+				Array.from({ length: 12 }).map((_, index) => ({
+					number: index,
+					name: format(new Date(year, index), 'LLL', { locale }) // 'LLL' là định dạng 3 chữ cái
+				})),
+				4
+			),
+		[i18n.language, locale, year]
+	)
 
 	return (
 		<>
@@ -128,7 +131,7 @@ const MonthCalendar: React.FC<MonthCalendarProps> = ({
 			</div>
 			<table className='w-full border-collapse space-y-1'>
 				<tbody>
-					{MONTHS.map((monthRow, a) => {
+					{months.map((monthRow, a) => {
 						return (
 							<tr key={'row-' + a} className='mt-2 flex w-full'>
 								{monthRow.map((m) => {
