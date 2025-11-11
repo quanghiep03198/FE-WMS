@@ -3,7 +3,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IInboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
@@ -12,7 +12,6 @@ import { format } from 'date-fns'
 import { isNil, split } from 'lodash'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDownloadReport } from '../-hooks/use-download-report'
 import { useGetInboundReport } from '../-hooks/use-inbound-report-asm'
 import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
 import SizeTable from '../../-components/-shared/size-table'
@@ -202,8 +201,6 @@ const InboundReportMasterTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const handleDownloadExcel = useDownloadReport()
-
 	return (
 		<DataTable
 			columns={columns}
@@ -232,16 +229,7 @@ const InboundReportMasterTable: React.FC = () => {
 				)
 			}}
 			footerProps={{
-				slot: () => (
-					<Div className='flex w-full items-center justify-between p-2 md:flex-col'>
-						<Div className='hidden md:block'>
-							<Button onClick={() => handleDownloadExcel('shaping-department-productivity')}>
-								<Icon name='FileDown' size={18} /> {t('ns_erp:fields.shaping_dept_productivity')}
-							</Button>
-						</Div>
-						<ReportTableSummary data={data} />
-					</Div>
-				)
+				slot: () => <ReportTableSummary data={data} />
 			}}
 		/>
 	)
