@@ -25,9 +25,7 @@ function RouteComponent() {
 	const isSmallScreen = useMediaQuery('(max-width: 1279px)')
 
 	useEffect(() => {
-		setBreadcrumb([
-			{ to: '/defective-goods-epc-combination', text: t('ns_common:navigation.defective_goods_inoutbound') }
-		])
+		setBreadcrumb([{ to: '/defective-goods-inoutbound', text: t('ns_common:navigation.defective_goods_inoutbound') }])
 	}, [i18n.language])
 
 	const detailTablePanelRef = useRef<HTMLDivElement>(null)
