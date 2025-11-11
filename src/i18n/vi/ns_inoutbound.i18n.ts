@@ -73,7 +73,8 @@ export default {
 		outbound_order_estimation_desc: 'Đánh giá tiến độ xuất hàng của từng PO dựa trên số lượng tem đã quét.',
 		size_qty_caption: 'Tổng quan số lượng theo từng cỡ',
 		empty_defect_item_caption: 'Chưa có dữ liệu. Hãy thêm bản ghi mới với biểu mẫu bên.',
-		defective_epc_caption: 'Hãy chọn ô nhập này và quét mã EPC của hàng lỗi. Mã EPC phải đủ 24 ký tự.'
+		defective_epc_caption: 'Hãy chọn ô nhập này và quét mã EPC của hàng lỗi. Mã EPC phải đủ 24 ký tự.',
+		truckload_delivery: 'Quản lý thông tin đóng container xuất hàng khỏi nhà máy'
 	},
 	errors: {
 		wrong_stamp: 'Dán sai tem'

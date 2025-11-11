@@ -34,6 +34,7 @@ export default {
 		logout: '登出',
 		open: '打开',
 		pick_a_date: '选择日期',
+		pick_a_month: '选择月份',
 		pin: '固定',
 		proceed: '确认',
 		reapprove: '重新批准',
@@ -226,6 +227,7 @@ export default {
 		transfer_managment: '調撥管理',
 		warehouse_management: '倉庫管理',
 		daily_outbound_report: '出庫管理',
+		truckload_delivery_management: '卡車裝運管理',
 		// labels
 		main_menu_label: '主菜单',
 		preference_menu_label: ' 偏好设置'

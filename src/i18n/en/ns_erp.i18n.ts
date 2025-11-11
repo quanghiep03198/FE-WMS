@@ -34,6 +34,8 @@ export default {
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
 		factory_code_produce: 'Producing factory',
+		factory_departure_date: 'Factory departure date',
+		factory_departure_time: 'Factory departure time',
 		final_inventory_qty: 'Final inventory',
 		inbound_date: 'Inbound date',
 		inbound_qty: 'Inbound quantity',
@@ -43,6 +45,7 @@ export default {
 		kg_nostart: 'Starting Box Number',
 		last_inbound_time: 'Last inbound time', // Last Inbound Time
 		last_outbound_time: 'Last Outbound Time', // Last Outbound Time
+		license_plate: 'License plate',
 		mat_code: 'Finished production code',
 		color_sn: 'Product color',
 		missing_qty: 'Missing quantity',

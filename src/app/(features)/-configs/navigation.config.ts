@@ -17,6 +17,7 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 			title: 'navigation.dashboard',
 			url: '/dashboard'
 		},
+
 		{
 			icon: 'LayoutList',
 			title: 'navigation.common_management',
@@ -83,6 +84,11 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 					url: '/cargo-weight-check'
 				}
 			]
+		},
+		{
+			icon: 'Truck',
+			title: 'navigation.truckload_delivery_management',
+			url: '/truckload-delivery'
 		},
 		{
 			title: 'navigation.seeking',

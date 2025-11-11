@@ -34,6 +34,7 @@ export default {
 		collapse_list_panel: 'Collapse list panel',
 		open: 'Open',
 		pick_a_date: 'Pick a date',
+		pick_a_month: 'Pick a month',
 		pin: 'Pin',
 		proceed: 'Proceed',
 		reapprove: 'Reapprove',
@@ -220,6 +221,7 @@ export default {
 		settings: 'Settings',
 		storage_detail: 'Storage details',
 		transfer_managment: 'Transfer management',
+		truckload_delivery_management: 'Truckload delivery management',
 		warehouse_management: 'Warehouse management',
 
 		// labels

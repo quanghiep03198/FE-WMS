@@ -35,6 +35,8 @@ export default {
 		export_num: '已出库量',
 		factory_code_produce: '生产工厂',
 		final_inventory_qty: '期末库存',
+		factory_departure_date: '出厂日期',
+		factory_departure_time: 'Thời gian xuất xưởng',
 		inbound_date: '入庫日期',
 		inbound_qty: '入庫數量',
 		inspected_qty: '已驗收量',
@@ -43,6 +45,7 @@ export default {
 		kg_nostart: '起始箱號',
 		last_inbound_time: '最后入库时间', // Last Inbound Time
 		last_outbound_time: '最后出库时间', // Last Outbound Time
+		license_plate: '车牌号',
 		mat_code: '成品料号',
 		color_sn: '产品颜色',
 		missing_qty: '缺貨量',

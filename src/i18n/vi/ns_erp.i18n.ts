@@ -34,6 +34,8 @@ export default {
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
 		factory_code_produce: 'Nhà máy sản xuất',
+		factory_departure_date: 'Ngày xuất xưởng',
+		factory_departure_time: 'Thời gian xuất xưởng',
 		final_inventory_qty: 'Tồn kho cuối kỳ',
 		inbound_date: 'Ngày Nhập Kho', // Inbound Date
 		inbound_qty: 'Số Lượng Nhập Kho', // Inbound Quantity
@@ -43,6 +45,7 @@ export default {
 		kg_nostart: 'Thứ tự thùng đầu',
 		last_inbound_time: 'Thời gian nhập kho gần nhất', // Last Inbound Time
 		last_outbound_time: 'Thời gian xuất kho gần nhất', // Last Outbound Time
+		license_plate: 'Biển số xe',
 		mat_code: 'Mã thành phẩm',
 		color_sn: 'Màu sắc sản phẩm',
 		missing_qty: 'Số lượng còn thiếu',
