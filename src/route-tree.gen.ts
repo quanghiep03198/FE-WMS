@@ -28,6 +28,9 @@ const featuresPreferencesImport = createFileRoute('/(features)/preferences')()
 const featuresLayoutWarehouseIndexLazyImport = createFileRoute(
   '/(features)/_layout/warehouse/',
 )()
+const featuresLayoutTruckloadDeliveryIndexLazyImport = createFileRoute(
+  '/(features)/_layout/truckload-delivery/',
+)()
 const featuresLayoutRfidDevicesManagementIndexLazyImport = createFileRoute(
   '/(features)/_layout/rfid-devices-management/',
 )()
@@ -145,6 +148,19 @@ const featuresLayoutWarehouseIndexLazyRoute =
     } as any)
     .lazy(() =>
       import('./app/(features)/_layout.warehouse/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+
+const featuresLayoutTruckloadDeliveryIndexLazyRoute =
+  featuresLayoutTruckloadDeliveryIndexLazyImport
+    .update({
+      id: '/truckload-delivery/',
+      path: '/truckload-delivery/',
+      getParentRoute: () => featuresLayoutRoute,
+    } as any)
+    .lazy(() =>
+      import('./app/(features)/_layout.truckload-delivery/index.lazy').then(
         (d) => d.Route,
       ),
     )
@@ -539,6 +555,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof featuresLayoutRfidDevicesManagementIndexLazyImport
       parentRoute: typeof featuresLayoutImport
     }
+    '/(features)/_layout/truckload-delivery/': {
+      id: '/(features)/_layout/truckload-delivery/'
+      path: '/truckload-delivery'
+      fullPath: '/truckload-delivery'
+      preLoaderRoute: typeof featuresLayoutTruckloadDeliveryIndexLazyImport
+      parentRoute: typeof featuresLayoutImport
+    }
     '/(features)/_layout/warehouse/': {
       id: '/(features)/_layout/warehouse/'
       path: '/warehouse'
@@ -625,6 +648,7 @@ interface featuresLayoutRouteChildren {
   featuresLayoutProductionInventoryIndexLazyRoute: typeof featuresLayoutProductionInventoryIndexLazyRoute
   featuresLayoutPurchaseOrderSeekingIndexLazyRoute: typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   featuresLayoutRfidDevicesManagementIndexLazyRoute: typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  featuresLayoutTruckloadDeliveryIndexLazyRoute: typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
   featuresLayoutWarehouseIndexLazyRoute: typeof featuresLayoutWarehouseIndexLazyRoute
   featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute: typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -654,6 +678,8 @@ const featuresLayoutRouteChildren: featuresLayoutRouteChildren = {
     featuresLayoutPurchaseOrderSeekingIndexLazyRoute,
   featuresLayoutRfidDevicesManagementIndexLazyRoute:
     featuresLayoutRfidDevicesManagementIndexLazyRoute,
+  featuresLayoutTruckloadDeliveryIndexLazyRoute:
+    featuresLayoutTruckloadDeliveryIndexLazyRoute,
   featuresLayoutWarehouseIndexLazyRoute: featuresLayoutWarehouseIndexLazyRoute,
   featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute:
     featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute,
@@ -736,6 +762,7 @@ export interface FileRoutesByFullPath {
   '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
   '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -765,6 +792,7 @@ export interface FileRoutesByTo {
   '/production-inventory': typeof featuresLayoutProductionInventoryIndexLazyRoute
   '/purchase-order-seeking': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/rfid-devices-management': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  '/truckload-delivery': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
   '/warehouse': typeof featuresLayoutWarehouseIndexLazyRoute
   '/defective-goods-epc-combination': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/defective-goods-inoutbound': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -798,6 +826,7 @@ export interface FileRoutesById {
   '/(features)/_layout/production-inventory/': typeof featuresLayoutProductionInventoryIndexLazyRoute
   '/(features)/_layout/purchase-order-seeking/': typeof featuresLayoutPurchaseOrderSeekingIndexLazyRoute
   '/(features)/_layout/rfid-devices-management/': typeof featuresLayoutRfidDevicesManagementIndexLazyRoute
+  '/(features)/_layout/truckload-delivery/': typeof featuresLayoutTruckloadDeliveryIndexLazyRoute
   '/(features)/_layout/warehouse/': typeof featuresLayoutWarehouseIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsEpcCombinationIndexLazyRoute
   '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/': typeof featuresLayoutdefectiveGoodsDefectiveGoodsInoutboundIndexLazyRoute
@@ -829,6 +858,7 @@ export interface FileRouteTypes {
     | '/production-inventory'
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
+    | '/truckload-delivery'
     | '/warehouse'
     | '/defective-goods-epc-combination'
     | '/defective-goods-inoutbound'
@@ -857,6 +887,7 @@ export interface FileRouteTypes {
     | '/production-inventory'
     | '/purchase-order-seeking'
     | '/rfid-devices-management'
+    | '/truckload-delivery'
     | '/warehouse'
     | '/defective-goods-epc-combination'
     | '/defective-goods-inoutbound'
@@ -888,6 +919,7 @@ export interface FileRouteTypes {
     | '/(features)/_layout/production-inventory/'
     | '/(features)/_layout/purchase-order-seeking/'
     | '/(features)/_layout/rfid-devices-management/'
+    | '/(features)/_layout/truckload-delivery/'
     | '/(features)/_layout/warehouse/'
     | '/(features)/_layout/(defective-goods)/defective-goods-epc-combination/'
     | '/(features)/_layout/(defective-goods)/defective-goods-inoutbound/'
@@ -958,6 +990,7 @@ export const routeTree = rootRoute
         "/(features)/_layout/production-inventory/",
         "/(features)/_layout/purchase-order-seeking/",
         "/(features)/_layout/rfid-devices-management/",
+        "/(features)/_layout/truckload-delivery/",
         "/(features)/_layout/warehouse/",
         "/(features)/_layout/(defective-goods)/defective-goods-epc-combination/",
         "/(features)/_layout/(defective-goods)/defective-goods-inoutbound/",
@@ -1036,6 +1069,10 @@ export const routeTree = rootRoute
     },
     "/(features)/_layout/rfid-devices-management/": {
       "filePath": "(features)/_layout.rfid-devices-management/index.lazy.tsx",
+      "parent": "/(features)/_layout"
+    },
+    "/(features)/_layout/truckload-delivery/": {
+      "filePath": "(features)/_layout.truckload-delivery/index.lazy.tsx",
       "parent": "/(features)/_layout"
     },
     "/(features)/_layout/warehouse/": {

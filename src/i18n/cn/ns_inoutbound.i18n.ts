@@ -49,7 +49,8 @@ export default {
 		outbound_order_estimation_desc: '执行出库预估查询后，结果将自动加载至此区域.',
 		size_qty_caption: '按尺码统计的总产品数量',
 		empty_defect_item_caption: '没有不良品数据. 请使用旁边的表单添加不良品.',
-		defective_epc_caption: '请将输入框聚焦, 然后扫描不良品的EPC标签. EPC应为24个字符.'
+		defective_epc_caption: '请将输入框聚焦, 然后扫描不良品的EPC标签. EPC应为24个字符.',
+		truckload_delivery: '管理从工厂出货的集装箱装载信息.'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'

@@ -33,6 +33,7 @@ export default {
 		open: 'Mở',
 		pin: 'Ghim',
 		pick_a_date: 'Chọn ngày',
+		pick_a_month: 'Chọn tháng',
 		proceed: 'Tiếp tục',
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',
@@ -223,6 +224,7 @@ export default {
 		settings: 'Cài đặt',
 		storage_detail: 'Chi tiết vị trí lưu kho',
 		transfer_managment: 'Quản lý chuyển giao',
+		truckload_delivery_management: 'Quản lý vận chuyển',
 		warehouse_management: 'Quản lý kho',
 		main_menu_label: 'Menu chính',
 		preference_menu_label: 'Tùy chỉnh'

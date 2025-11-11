@@ -56,7 +56,8 @@ export default {
 		empty_defect_item_caption:
 			'No defective goods found. Please add defective goods to the list with the form beside.',
 		defective_epc_caption:
-			'Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.'
+			'Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.',
+		truckload_delivery: 'Manage container loading information for outbound shipments from the factory'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'
