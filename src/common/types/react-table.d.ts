@@ -21,6 +21,7 @@ declare module '@tanstack/react-table' {
 		filterVariant?: ColumnFilterVariant
 		filterComponentProps?: FilterComponentProps[FilterComponentProps]
 		title?: string
+		hidden?: boolean
 		sticky?: 'left' | 'right'
 		rowSpan?: number
 		align?: 'left' | 'center' | 'right'

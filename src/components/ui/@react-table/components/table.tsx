@@ -75,6 +75,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							...computedColumnSizes,
 							minWidth: table.getTotalSize(),
 							height: loading ? 'auto' : virtualizer.getTotalSize(),
+							'--header-row-height': '40px',
 							'--row-height': `${virtualizerOptions.estimateSize}px`
 						} as React.CSSProperties
 					}>

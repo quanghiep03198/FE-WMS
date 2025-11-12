@@ -52,7 +52,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 						align={header.column.columnDef.meta?.align}
 						ref={(node) => columnSizingHandler(node, table, header.column)}
 						style={{
-							height: 'var(--row-height)',
+							height: 'var(--header-row-height)',
 							width: `calc(var(--header-${header?.id}-size) * 1px)`,
 							...getStickyOffsetPosition(header?.column)
 						}}>
@@ -80,15 +80,16 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 						<TableHead
 							key={header.id}
 							colSpan={header.colSpan}
+							data-role='data-grid-row'
 							className={cn('group relative z-40 p-0', filterOpen ? 'border-border' : 'border-transparent')}
 							rowSpan={header.column.getIsPinned() ? headerGroup.headers.length : 1}
 							style={{
 								width: `calc(var(--header-${header?.id}-size) * 1px)`,
-								maxHeight: 'var(--row-height)',
+								maxHeight: 'var(--header-row-height)',
 								...getStickyOffsetPosition(header?.column)
 							}}>
 							<Collapsible open={filterOpen} data-state={filterOpen ? 'open' : 'closed'}>
-								<CollapsibleContent className='h-[var(--row-height)] overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+								<CollapsibleContent className='h-[var(--header-row-height)] overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 									<TableColumnFilter column={header.column} />
 								</CollapsibleContent>
 							</Collapsible>

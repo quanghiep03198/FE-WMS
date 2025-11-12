@@ -107,7 +107,7 @@ function DataGrid<TData, TValue>({
 	// * Table declaration
 	const table = useReactTable({
 		data: _data,
-		columns,
+		columns: columns.filter((col) => !col.meta?.hidden),
 		defaultColumn: {
 			minSize: 180,
 			maxSize: 800
@@ -275,7 +275,7 @@ function DataGrid<TData, TValue>({
 			<DataTableWrapper data-border={border}>
 				{isResizingColumn ? <MemoizedTableToolbar {...toolbarProps} /> : <TableToolbar {...toolbarProps} />}
 				<DataTable
-					columns={columns}
+					columns={columns.filter((col) => !col.meta?.hidden)}
 					loading={loading}
 					caption={caption}
 					virtualizerOptions={virtualizerOptions}

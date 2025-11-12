@@ -37,7 +37,7 @@ export const GlobalFilterPopover: React.FC<GlobalFilterPopoverProps> = ({
 						onGlobalFilterChange(String(value))
 					}}
 					className='font-lg border p-2 pl-8'
-					placeholder='Tìm kiếm ...'
+					placeholder={t('ns_common:form_placeholder.search')}
 					type='search'
 				/>
 			</PopoverContent>
