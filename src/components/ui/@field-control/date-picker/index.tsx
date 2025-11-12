@@ -59,7 +59,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 									buttonVariants({
 										variant: 'outline',
 										className:
-											'w-full justify-start text-left font-normal hover:bg-background focus:border-primary'
+											'w-full justify-start bg-background text-left font-normal hover:bg-background focus:border-primary'
 									}),
 									!field.value && 'text-muted-foreground',
 									!!getFieldState(name).error && 'border-destructive'
