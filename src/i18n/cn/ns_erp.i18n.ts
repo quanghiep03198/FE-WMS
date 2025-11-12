@@ -84,7 +84,7 @@ export default {
 		shoes_type_b: 'B级鞋',
 		shoestyle_codefactory: '工廠形體',
 		sno_car_number: '車號',
-		sno_container: '貨櫃號碼',
+		container_number: '货柜号',
 		sno_date: '驗收日期',
 		sno_location: '存放位置',
 		sno_no: '驗收單號',

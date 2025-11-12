@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
-import TruckloadDeliveryForm from './-components/truckload-delivery-form-dialog'
+import TruckloadDeliveryFormDialog from './-components/truckload-delivery-form-dialog'
+import TruckloadDeliveryMasterTable from './-components/truckload-delivery-master-table'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/truckload-delivery/')({
@@ -35,7 +36,9 @@ function Page() {
 						<CreateTruckloadDialogButton />
 					</Div>
 					<Separator />
-					<TruckloadDeliveryForm />
+
+					<TruckloadDeliveryFormDialog />
+					<TruckloadDeliveryMasterTable />
 				</Div>
 			</PageContextProvider>
 		</Fragment>

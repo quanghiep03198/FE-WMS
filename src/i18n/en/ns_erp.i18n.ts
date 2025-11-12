@@ -84,7 +84,7 @@ export default {
 		shaping_dept_code: 'Shaping department code',
 		shaping_dept_name: 'Shaping department name',
 		sno_car_number: 'Container number',
-		sno_container: 'Container number',
+		container_number: 'Container number',
 		sno_date: 'Order date',
 		sno_no: 'Order code',
 		sno_qty: 'Box Quantity',
