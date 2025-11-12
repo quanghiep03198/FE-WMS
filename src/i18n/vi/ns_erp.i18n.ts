@@ -84,7 +84,7 @@ export default {
 		shaping_dept_name: 'Chuyền thành hình',
 		shaping_dept_productivity: 'Sản lượng thành hình', // Shaping Department Productivity
 		sno_car_number: 'Số xe container',
-		sno_container: 'Mã container',
+		container_number: 'Mã container',
 		sno_date: 'Ngày tạo đơn',
 		sno_no: 'Mã đơn hàng nhập/xuất',
 		sno_qty: 'Số lượng đóng thùng',

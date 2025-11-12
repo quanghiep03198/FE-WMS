@@ -9,7 +9,7 @@ const CreateTruckloadDialogButton: React.FC = () => {
 
 	return (
 		<Button onClick={() => event$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
-			<Icon name='Plus' /> {t('ns_common:actions.add')}
+			<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
 		</Button>
 	)
 }
