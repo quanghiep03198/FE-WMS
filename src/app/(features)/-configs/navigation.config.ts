@@ -86,7 +86,7 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 			]
 		},
 		{
-			icon: 'Truck',
+			icon: 'Container',
 			title: 'navigation.truckload_delivery_management',
 			url: '/truckload-delivery'
 		},

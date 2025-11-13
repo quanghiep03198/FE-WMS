@@ -4,8 +4,10 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
 type EventPayload =
-	| { action: CommonActions.CREATE; defaultValues: null }
-	| { action: CommonActions.UPDATE; defaultValues: any }
+	| { action: CommonActions.CREATE; payload: null }
+	| { action: CommonActions.UPDATE; payload: any }
+	| { action: CommonActions.CONFIRM; payload: any }
+	| { action: CommonActions.DELETE; payload: number | number[] }
 
 type PageContextValue = {
 	event$: EventEmitter<EventPayload>

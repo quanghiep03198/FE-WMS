@@ -261,12 +261,14 @@ export default {
 	},
 	status: {
 		active: 'Đang hoạt động',
+		confirmed: 'Đã xác nhận',
 		connected: 'Đã kết nối',
 		connecting: 'Đang kết nối',
+		deactivated: 'Đã vô hiệu hóa',
 		disconnected: 'Đã ngắt kết nối',
 		idle: 'Không hoạt động',
 		loading: 'Đang tải ...',
-		deactivated: 'Đã vô hiệu hóa',
+		pending: 'Chờ xử lý',
 		processing: 'Đang xử lý',
 		running: 'Đang hoạt động'
 	},

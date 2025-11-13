@@ -263,12 +263,14 @@ export default {
 	},
 	status: {
 		active: '活动',
+		confirmed: '已确认',
 		connected: '已连接',
 		connecting: '连接中',
 		deactivated: '停用',
 		disconnected: '已断开连接',
 		idle: '空闲',
 		loading: '载入中 ...',
+		pending: '待处理',
 		processing: '处理中 ...',
 		running: '运行中'
 	},

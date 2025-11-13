@@ -253,12 +253,14 @@ export default {
 	},
 	status: {
 		active: 'Active',
+		confirmed: 'Confirmed',
 		connected: 'Connected',
 		connecting: 'Connnecting',
 		deactivated: 'Deactivated',
 		disconnected: 'Disconnected',
 		idle: 'Idle',
 		loading: 'Loading ...',
+		pending: 'Pending',
 		processing: 'Processing ...',
 		running: 'Running'
 	},

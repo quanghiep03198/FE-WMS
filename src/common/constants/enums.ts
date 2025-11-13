@@ -45,6 +45,7 @@ export enum CommonActions {
 	CANCEL = 'CANCEL',
 	SAVE = 'SAVE',
 	DELETE = 'DELETE',
+	CONFIRM = 'CONFIRM',
 	IMPORT = 'IMPORT',
 	EXPORT = 'EXPORT'
 }

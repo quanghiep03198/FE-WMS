@@ -8,7 +8,7 @@ const CreateTruckloadDialogButton: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Button onClick={() => event$.emit({ action: CommonActions.CREATE, defaultValues: null })}>
+		<Button onClick={() => event$.emit({ action: CommonActions.CREATE, payload: null })}>
 			<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
 		</Button>
 	)

@@ -12,6 +12,7 @@ export default {
 	description: {
 		add_outbound_size: '添加尺码和数量以执行出库操作',
 		archived_restoration: '恢复已存档的数据. 仅在必要时使用.',
+		create_truckload_delivery: '创建卡车装运信息以从工厂出货',
 		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
 		daily_outbound_report: '跟踪和管理每日成品仓库出库进度',
 		defective_goods_inventory_report: '管理和跟踪仓库中次品的库存',
@@ -50,7 +51,8 @@ export default {
 		size_qty_caption: '按尺码统计的总产品数量',
 		empty_defect_item_caption: '没有不良品数据. 请使用旁边的表单添加不良品.',
 		defective_epc_caption: '请将输入框聚焦, 然后扫描不良品的EPC标签. EPC应为24个字符.',
-		truckload_delivery: '管理从工厂出货的集装箱装载信息.'
+		truckload_delivery: '管理从工厂出货的集装箱装载信息.',
+		update_truckload_delivery: '更新卡车装运信息以反映任何更改或修改.'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'
@@ -135,6 +137,7 @@ export default {
 	titles: {
 		archived_restoration: '已存档数据恢复',
 		combination_history: '配标历史',
+		create_truckload_delivery: '创建卡车装运',
 		daily_inbound_report: '入庫报表',
 		daily_outbound_report: '出庫报表',
 		defective_goods_inventory_report: '二级鞋存库报表',
@@ -153,7 +156,8 @@ export default {
 		order_sizing_list: '指令及尺码列表',
 		production_inventory_summary: '成品库存总表',
 		transfer_order_datalist: '转移订单数据列表',
-		transfer_order_list: '转移订单列表'
+		transfer_order_list: '转移订单列表',
+		update_truckload_delivery: '更新卡车装运.'
 	},
 	shoes_category: {
 		b_grade: 'B级品',

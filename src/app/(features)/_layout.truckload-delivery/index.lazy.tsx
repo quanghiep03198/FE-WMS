@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
+import DeleteConfirmDialog from './-components/delete-confirm-dialog'
 import TruckloadDeliveryFormDialog from './-components/truckload-delivery-form-dialog'
-import TruckloadDeliveryMasterTable from './-components/truckload-delivery-master-table'
+import TruckloadDeliveryTable from './-components/truckload-delivery-table'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/truckload-delivery/')({
@@ -29,16 +30,18 @@ function Page() {
 			<PageContextProvider>
 				<Div as='section' className='mt-4 space-y-6'>
 					<Div className='flex items-start justify-between'>
-						<PageHeader>
+						<PageHeader className='md:basis-3/5'>
 							<PageTitle>{t('ns_common:navigation.truckload_delivery_management')}</PageTitle>
 							<PageDescription>{t('ns_inoutbound:description.truckload_delivery')}</PageDescription>
 						</PageHeader>
-						<CreateTruckloadDialogButton />
+						<Div className='inline-flex items-center gap-x-1'>
+							<DeleteConfirmDialog />
+							<CreateTruckloadDialogButton />
+						</Div>
 					</Div>
 					<Separator />
-
 					<TruckloadDeliveryFormDialog />
-					<TruckloadDeliveryMasterTable />
+					<TruckloadDeliveryTable />
 				</Div>
 			</PageContextProvider>
 		</Fragment>

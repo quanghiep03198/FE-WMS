@@ -1,3 +1,4 @@
+import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-delivery/-constants'
 import {
 	CreateTruckloadDeliveryFormValues,
 	UpdateTruckloadDeliveryFormValues
@@ -12,6 +13,7 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	factory_departure_time: string
 	container_number: string
 	outbound_qty: number
+	status: TruckloadDeliveryStatus
 }
 
 export class TruckloadDeliveryService {
