@@ -32,6 +32,7 @@ export default {
 	description: {
 		add_outbound_size: 'Thêm size và số lượng để tiến hành xuất tách đơn.',
 		archived_restoration: 'Khôi phục dữ liệu đã lưu trữ. Chỉ sử dụng khi cần thiết.',
+		create_truckload_delivery: 'Tạo mới thông tin đóng container xuất hàng khỏi nhà máy',
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
 		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
 		defective_goods_inventory_report: 'Quản lý và theo dõi tồn kho hàng loại 2',
@@ -71,6 +72,7 @@ export default {
 		outbound_history_lookup: 'Xem chi tiết lịch sử xuất kho, thông tin đơn hàng và số lượng xuất từng ngày.',
 		outbound_order_estimation: 'Đánh giá tiến độ xuất hàng',
 		outbound_order_estimation_desc: 'Đánh giá tiến độ xuất hàng của từng PO dựa trên số lượng tem đã quét.',
+		update_truckload_delivery: 'Cập nhật thông tin đóng container xuất hàng khỏi nhà máy',
 		size_qty_caption: 'Tổng quan số lượng theo từng cỡ',
 		empty_defect_item_caption: 'Chưa có dữ liệu. Hãy thêm bản ghi mới với biểu mẫu bên.',
 		defective_epc_caption: 'Hãy chọn ô nhập này và quét mã EPC của hàng lỗi. Mã EPC phải đủ 24 ký tự.',
@@ -144,6 +146,7 @@ export default {
 		archived_restoration: 'Khôi phục dữ liệu',
 		defective_goods_inventory_report: 'Báo biểu tồn kho hàng loại 2',
 		combination_history: 'Lịch sử phối tem',
+		create_truckload_delivery: 'Tạo mới thông tin đóng container',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',
@@ -156,12 +159,13 @@ export default {
 		exchange_order: 'Hoán đổi đơn hàng',
 		inbound_history: 'Lịch sử nhập kho',
 		inoutbound_history_lookup: 'Tìm kiếm lịch sử nhập/xuất kho',
-		outbound_history: 'Lịch sử xuất kho',
 		monthly_inventory_report: 'Báo biểu tồn kho hàng tháng',
+		outbound_history: 'Lịch sử xuất kho',
 		order_sizing_list: 'Danh sách Size theo đơn',
 		production_inventory_summary: 'Tổng quan tồn kho thành phẩm',
 		transfer_order_datalist: 'Dữ liệu đơn chuyển kho',
-		transfer_order_list: 'Danh sách đơn chuyển kho'
+		transfer_order_list: 'Danh sách đơn chuyển kho',
+		update_truckload_delivery: 'Cập nhật thông tin đóng container'
 	},
 
 	shoes_category: {

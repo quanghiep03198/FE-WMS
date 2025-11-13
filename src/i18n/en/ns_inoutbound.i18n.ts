@@ -12,6 +12,7 @@ export default {
 	description: {
 		add_outbound_size: 'Add size and quantity for this order to perform the outbound process.',
 		archived_restoration: 'Restore archived data. Use only when necessary.',
+		create_truckload_delivery: 'Create new container loading information for outbound shipments from the factory',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
 		defective_goods_inventory_report: 'Manage and track the inventory of defective goods in the warehouse.',
@@ -57,7 +58,8 @@ export default {
 			'No defective goods found. Please add defective goods to the list with the form beside.',
 		defective_epc_caption:
 			'Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.',
-		truckload_delivery: 'Manage container loading information for outbound shipments from the factory'
+		truckload_delivery: 'Manage container loading information for outbound shipments from the factory',
+		update_truckload_delivery: 'Update container loading information for outbound shipments from the factory'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'
@@ -144,6 +146,7 @@ export default {
 	titles: {
 		archived_restoration: 'Archived restoration',
 		combination_history: 'Combination history',
+		create_truckload_delivery: 'Create truckload delivery',
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
 		defective_goods_inventory_report: 'Defective goods inventory report',
@@ -161,7 +164,8 @@ export default {
 		order_sizing_list: 'Order sizing list',
 		production_inventory_summary: 'Production inventory summary',
 		transfer_order_datalist: 'Transfer order datalist',
-		transfer_order_list: 'Transfer orders list'
+		transfer_order_list: 'Transfer orders list',
+		update_truckload_delivery: 'Update truckload delivery'
 	},
 	shoes_category: {
 		b_grade: 'B Grade',
