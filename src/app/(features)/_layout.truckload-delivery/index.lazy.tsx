@@ -4,6 +4,7 @@ import { Fragment, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
+import CreatePurchaseOrdersFormDialog from './-components/create-po-form-dialog'
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
 import DeleteConfirmDialog from './-components/delete-confirm-dialog'
 import TruckloadDeliveryFormDialog from './-components/truckload-delivery-form-dialog'
@@ -40,6 +41,7 @@ function Page() {
 						</Div>
 					</Div>
 					<Separator />
+					<CreatePurchaseOrdersFormDialog />
 					<TruckloadDeliveryFormDialog />
 					<TruckloadDeliveryTable />
 				</Div>

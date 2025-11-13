@@ -1,7 +1,7 @@
 import z from 'zod'
 
 export const createTruckloadDeliverySchema = z.object({
-	outbound_purchase_orders: z.array(
+	purchase_orders: z.array(
 		z.object({
 			po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 			outbound_qty: z.number().nonnegative()
