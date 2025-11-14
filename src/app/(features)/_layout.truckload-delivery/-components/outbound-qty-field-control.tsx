@@ -1,16 +1,21 @@
+'use no memo'
+
 import { InputFieldControl, InputFieldControlProps } from '@/components/ui/@field-control/input'
 import React from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { CreateTruckloadDeliveryFormValues } from '../-schemas/truckload-delivery.schema'
+import { CreateTruckloadDeliveryFormValues } from '../-schemas'
 
 const OutboundQtyInputFieldControl: React.FC<
 	InputFieldControlProps<CreateTruckloadDeliveryFormValues> & { ['data-index']: number }
 > = (props) => {
-	const fieldName = `purchase_orders.${props['data-index']}.outbound_qty`
+	const fieldName = `outbound_purchase_orders.${props['data-index']}.outbound_qty`
 	const { control } = useFormContext<CreateTruckloadDeliveryFormValues>()
 	const { t } = useTranslation()
-	const maxOutboundQty = useWatch({ control, name: `purchase_orders.${props['data-index']}.max_outbound_qty` })
+	const maxOutboundQty = useWatch({
+		control,
+		name: `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
+	})
 
 	return (
 		<InputFieldControl

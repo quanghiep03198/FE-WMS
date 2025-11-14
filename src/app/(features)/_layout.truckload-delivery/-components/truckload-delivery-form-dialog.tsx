@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
-import { UpdateTruckloadDeliveryFormValues, updateTruckloadDeliverySchema } from '../-schemas/truckload-delivery.schema'
+import { UpdateTruckloadDeliveryFormValues, updateTruckloadDeliverySchema } from '../-schemas'
 import PurchaseOrderAutoComplete from '../../_layout.(rfid)/finished-goods-outbound/-components/outbound-form/purchase-order-autocomplete'
 
 const TruckloadDeliveryFormDialog: React.FC = () => {

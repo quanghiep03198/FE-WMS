@@ -2,7 +2,7 @@ import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-deli
 import {
 	CreateTruckloadDeliveryFormValues,
 	UpdateTruckloadDeliveryFormValues
-} from '@/app/(features)/_layout.truckload-delivery/-schemas/truckload-delivery.schema'
+} from '@/app/(features)/_layout.truckload-delivery/-schemas'
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
