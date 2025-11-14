@@ -13,15 +13,15 @@ export class OrderService {
 	}
 
 	static async searchPurchaseOrder(tenantId: string, params: { q: string }) {
-		return await axiosInstance.get<unknown, ResponseBody<Array<{ po: string; is_completed: boolean }>>>(
-			'/order/purchase-order/search',
-			{
-				headers: {
-					[RequestHeaders.TENANT_ID]: tenantId
-				},
-				params
-			}
-		)
+		return await axiosInstance.get<
+			unknown,
+			ResponseBody<Array<{ po: string; po_qty: number; accumulated_outbound_qty: number; is_completed: boolean }>>
+		>('/order/purchase-order/search', {
+			headers: {
+				[RequestHeaders.TENANT_ID]: tenantId
+			},
+			params
+		})
 	}
 
 	static async getCommandNumberDetail(commandNumber: string) {
