@@ -164,6 +164,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																		option[labelField].toString(),
 																		option[valueField].toString()
 																	]}
+																	disabled={option['disabled']}
 																	value={option[valueField]}
 																	className='line-clamp-1 flex items-center gap-x-4'
 																	onSelect={(value) => {
