@@ -265,6 +265,7 @@ export default {
 		running: 'Running'
 	},
 	table: {
+		add_row: 'Add row',
 		auto_refresh: 'Auto refresh',
 		clear_sort: 'Clear sort',
 		filter: 'Filter',

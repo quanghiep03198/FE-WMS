@@ -114,7 +114,8 @@ export default {
 	},
 	placeholders: {
 		enter_storage_location: 'Nhập vị trí lưu kho ...',
-		outbound_purpose: 'Chọn lý do xuất kho ...'
+		outbound_purpose: 'Chọn lý do xuất kho ...',
+		max_qty: 'Tối đa {{qty}} (prs)'
 	},
 	rfid_process: {
 		cutting_inbound: 'Quét tem pha cắt',

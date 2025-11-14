@@ -273,6 +273,7 @@ export default {
 		running: 'Đang hoạt động'
 	},
 	table: {
+		add_row: 'Thêm hàng',
 		auto_refresh: 'Tự động làm mới',
 		clear_sort: 'Xóa sắp xếp',
 		filter: 'Bộ lọc',
