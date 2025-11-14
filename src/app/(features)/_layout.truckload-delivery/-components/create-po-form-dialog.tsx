@@ -22,12 +22,14 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { useRef, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
+import { createTruckloadDeliverySchema } from '../-schemas'
 import { GhostButton } from '../../-components/-shared/ghost-button'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PoComboboxFieldControl from './po-combobox-field-control'
@@ -36,7 +38,9 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
 	const { event$ } = usePageContext()
-	const form = useForm({})
+	const form = useForm({
+		resolver: zodResolver(createTruckloadDeliverySchema)
+	})
 	const { fields, append, remove, move } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
 	const scrollRef = useRef<HTMLDivElement | null>(null)
 
@@ -92,26 +96,28 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											{fields.map((field, index) => (
 												<TableRow key={field.id} className='*:border-none'>
 													<TableCell>
-														<Typography variant='small' color='muted' className='before:content-["#"]'>
+														<Typography
+															color='muted'
+															className='h-9 py-2 align-middle text-sm before:content-["#"]'>
 															{index + 1}
 														</Typography>
 													</TableCell>
-													<TableCell className='px-1'>
+													<TableCell className='self-start px-1'>
 														<PoComboboxFieldControl
 															data-index={index}
-															name={`purchase_orders.${index}.po`}
+															name={`outbound_purchase_orders.${index}.po`}
 														/>
 													</TableCell>
-													<TableCell className='px-1'>
+													<TableCell className='self-start px-1'>
 														<OutboundQtyInputFieldControl
 															data-index={index}
-															name={`purchase_orders.${index}.outbound_qty`}
+															name={`outbound_purchase_orders.${index}.outbound_qty`}
 														/>
 													</TableCell>
 													<TableCell>
 														<GhostButton
 															type='button'
-															className='place-self-center self-center'
+															className='h-9 place-self-center self-center py-2'
 															onClick={() => remove(index)}>
 															<Icon name='X' />
 														</GhostButton>
@@ -163,16 +169,18 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 									</EmptyContent>
 								</Empty>
 							)}
-							<DialogFooter>
-								<Button type='submit'>
-									<Icon name='Check' />
-									{t('ns_common:actions.save_changes')}
-								</Button>
-								<DialogClose className={buttonVariants({ variant: 'secondary' })}>
-									<Icon name='X' />
-									{t('ns_common:actions.cancel')}
-								</DialogClose>
-							</DialogFooter>
+							{fields.length > 0 && (
+								<DialogFooter>
+									<Button type='submit'>
+										<Icon name='Check' />
+										{t('ns_common:actions.save_changes')}
+									</Button>
+									<DialogClose className={buttonVariants({ variant: 'secondary' })}>
+										<Icon name='X' />
+										{t('ns_common:actions.cancel')}
+									</DialogClose>
+								</DialogFooter>
+							)}
 						</Form>
 					</FormProvider>
 				</Div>
@@ -184,10 +192,10 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 const Form = tw.form`flex flex-col gap-y-6 *:text-sm`
 const Table = tw.div`flex flex-col relative`
 const TableHeader = tw.div`sticky top-0 z-10 bg-table-head text-table-headed-foreground`
-const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-center gap-x-2 [&>:first-child]:px-3`
+const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 [&>:first-child]:px-3`
 const TableHead = tw.div`py-2 bg-table-head text-table-head-foreground font-medium`
 const TableBody = tw(ScrollShadow)<ScrollShadowProps>`max-h-[50vh] flex-1`
 const TableCell = tw.div`py-2`
-const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6`
+const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6`
 
 export default CreatePurchaseOrdersFormDialog
