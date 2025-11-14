@@ -31,7 +31,7 @@ export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = tr
 		enabled: shouldFetch && !!currentTenant?.id,
 		select: (response) => {
 			if (!Array.isArray(response.metadata)) return []
-			return response.metadata
+			return response.metadata.map((item) => ({ ...item, disabled: Boolean(item?.is_completed) }))
 		}
 	})
 }

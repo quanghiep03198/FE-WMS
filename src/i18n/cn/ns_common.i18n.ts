@@ -275,6 +275,7 @@ export default {
 		running: '运行中'
 	},
 	table: {
+		add_row: '添加行',
 		auto_refresh: '自动刷新',
 		clear_sort: '清除排序',
 		filter: '过滤',

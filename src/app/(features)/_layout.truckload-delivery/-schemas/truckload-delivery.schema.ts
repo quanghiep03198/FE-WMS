@@ -2,10 +2,20 @@ import z from 'zod'
 
 export const createTruckloadDeliverySchema = z.object({
 	purchase_orders: z.array(
-		z.object({
-			po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-			outbound_qty: z.number().nonnegative()
-		})
+		z
+			.object({
+				po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+				outbound_qty: z.number().int().positive(),
+				max_outbound_qty: z.number().nonnegative()
+			})
+			.refine((data) => data.outbound_qty <= data.max_outbound_qty, {
+				error: () => {
+					return {
+						paths: ['outbound_qty'],
+						message: 'ns_validation:invalid_value'
+					}
+				}
+			})
 	)
 })
 
