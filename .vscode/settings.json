@@ -1,4 +1,9 @@
 {
+	"eslint.workingDirectories": [{ "pattern": "src/*/" }],
+	"tailwindCSS.classFunctions": ["cva", "cn"],
+	"files.exclude": {
+		"deprecated": true
+	},
 	"files.readonlyInclude": {
 		"**/route-tree.gen.ts": true,
 		"pnpm-lock.yaml": true
