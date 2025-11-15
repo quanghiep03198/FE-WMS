@@ -1,20 +1,17 @@
-import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
+import { PresetBreakPoints } from '@/common/constants/enums'
+import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, BadgeProps, DataTable, Div, Icon, IconProps, Typography } from '@/components/ui'
-import {
-	IndeterminateCheckbox,
-	RowSelectionCheckbox
-} from '@/components/ui/@react-table/components/row-selection-checkbox'
-import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { Badge, BadgeProps, Button, DataTable, Div, Icon, IconProps, Typography } from '@/components/ui'
+import { ROW_ACTIONS_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table } from '@tanstack/react-table'
-import { format, formatRelative, subHours } from 'date-fns'
-import { useEffect, useMemo } from 'react'
+import { format, formatRelative } from 'date-fns'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { usePageContext } from '../-contexts/page-context'
+import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import GlobalFilterInput from './global-filter-input'
 import PurchaseOrderFilterInput from './purchase-order-filter-input'
 import RowActionsDropdown from './row-actions-dropdown'
@@ -24,24 +21,12 @@ const TruckloadDeliveryTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const isMediumScreen = useMediaQuery(PresetBreakPoints.MEDIUM)
-	const { event$ } = usePageContext()
 	const tableRef = useReactiveRef<Table<ITruckloadDelivery>>(null)
+	const { data, isLoading, refetch } = useGetTruckloadDeliveryQuery()
+	const dateLocale = useDateLocale()
 
 	const columns = useMemo(
 		() => [
-			columnHelper.accessor('id', {
-				id: ROW_SELECTION_COLUMN_ID,
-				header: (props) => <IndeterminateCheckbox {...props} />,
-				cell: (props) => <RowSelectionCheckbox {...props} />,
-				size: 50,
-				maxSize: 50,
-				enableSorting: false,
-				enableHiding: false,
-				enableResizing: false,
-				enablePinning: false,
-				enableGlobalFilter: false,
-				enableColumnFilter: false
-			}),
 			columnHelper.accessor('license_plate', {
 				header: t('ns_erp:fields.license_plate'),
 				enableResizing: true,
@@ -50,7 +35,18 @@ const TruckloadDeliveryTable: React.FC = () => {
 				meta: { hidden: isMediumScreen },
 				filterFn: 'includesStringSensitive',
 				minSize: 150,
-				maxSize: 200
+				maxSize: 200,
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value)
+						return (
+							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+								<Icon name='RectangleEllipsis' />
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+					return value
+				}
 			}),
 			columnHelper.accessor('container_number', {
 				header: t('ns_erp:fields.container_number'),
@@ -61,7 +57,15 @@ const TruckloadDeliveryTable: React.FC = () => {
 				minSize: 150,
 				maxSize: 200,
 				cell: ({ row, getValue }) => {
-					if (!isMediumScreen) return getValue()
+					const value = getValue()
+					if (!value)
+						return (
+							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+								<Icon name='Container' />
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+					if (!isMediumScreen) return value
 					return (
 						<Div className='flex flex-col space-y-0.5'>
 							<Typography variant='small' className='font-medium'>
@@ -108,7 +112,7 @@ const TruckloadDeliveryTable: React.FC = () => {
 				meta: { hidden: isMediumScreen },
 				cell: ({ getValue }) => formatIntlNumber(getValue())
 			}),
-			columnHelper.accessor('user_name_created', {
+			columnHelper.accessor('user_code_created', {
 				header: 'Created by',
 				enableResizing: true,
 				enableSorting: true,
@@ -118,9 +122,11 @@ const TruckloadDeliveryTable: React.FC = () => {
 				maxSize: 200,
 				cell: ({ getValue, row }) => (
 					<Div className='flex flex-col space-y-0.5'>
-						<Typography variant='small'>{getValue()}</Typography>
-						<Typography variant='small' color='muted' className='first-letter:!uppercase'>
-							{String(row.original.created) as string}
+						<Typography variant='small' className='before:content-["@"]'>
+							{getValue()}
+						</Typography>
+						<Typography variant='small' color='muted' className='first-letter:uppercase'>
+							{formatRelative(row.original.created, new Date(), { locale: dateLocale }) as string}
 						</Typography>
 					</Div>
 				)
@@ -157,11 +163,22 @@ const TruckloadDeliveryTable: React.FC = () => {
 				enableGlobalFilter: false,
 				filterFn: 'inDateRange',
 				minSize: 150,
-				maxSize: 200,
+				size: 225,
+				maxSize: 250,
 				meta: {
 					filterVariant: 'date'
 				},
-				cell: ({ getValue }) => format(new Date(getValue()), 'yyyy-MM-dd HH:mm')
+				cell: ({ getValue }) => {
+					const factoryDepartureTime = getValue()
+					return factoryDepartureTime ? (
+						format(new Date(factoryDepartureTime), 'yyyy-MM-dd HH:mm')
+					) : (
+						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
+				}
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
@@ -181,41 +198,12 @@ const TruckloadDeliveryTable: React.FC = () => {
 		[i18n.language, isMediumScreen]
 	)
 
-	useEffect(() => {
-		event$.emit({
-			action: CommonActions.DELETE,
-			payload: tableRef.current?.getFilteredSelectedRowModel().flatRows.map((row) => row.original.id)
-		})
-	}, [tableRef.current?.getState()?.rowSelection])
-
 	return (
 		<DataTable
-			columns={columns}
 			ref={tableRef}
-			data={[
-				{
-					id: 1,
-					license_plate: '15B3-59014',
-					container_number: '31109332',
-					po: '100384872',
-					created: formatRelative(subHours(new Date(), 6), new Date()),
-					factory_departure_time: null,
-					outbound_qty: 2500,
-					user_name_created: 'Admin',
-					status: TruckloadDeliveryStatus.PENDING
-				},
-				{
-					id: 2,
-					license_plate: '15B3-43002',
-					container_number: '11109333',
-					po: '500384872',
-					created: formatRelative(subHours(new Date(), 6), new Date()),
-					factory_departure_time: new Date(),
-					outbound_qty: 4200,
-					user_name_created: 'Admin',
-					status: TruckloadDeliveryStatus.CONFIRMED
-				}
-			]}
+			columns={columns}
+			data={data}
+			loading={isLoading}
 			border='bottom-only'
 			initialState={{
 				pagination: {
@@ -223,7 +211,7 @@ const TruckloadDeliveryTable: React.FC = () => {
 					pageSize: 50
 				},
 				columnPinning: {
-					left: [ROW_SELECTION_COLUMN_ID],
+					left: [],
 					right: ['status', ROW_ACTIONS_COLUMN_ID]
 				}
 			}}
@@ -239,6 +227,9 @@ const TruckloadDeliveryTable: React.FC = () => {
 							<GlobalFilterInput {...{ table, event$ }} />
 							{!isMediumScreen && <PurchaseOrderFilterInput table={table} />}
 							<StatusDropdownMenu table={table} />
+							<Button variant='outline' className='ml-auto' onClick={() => refetch()}>
+								<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
+							</Button>
 						</Div>
 					)
 				}

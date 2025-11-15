@@ -270,6 +270,7 @@ export default {
 		loading: 'Đang tải ...',
 		pending: 'Chờ xử lý',
 		processing: 'Đang xử lý',
+		request_change: 'Yêu cầu thay đổi',
 		running: 'Đang hoạt động'
 	},
 	table: {
@@ -304,7 +305,8 @@ export default {
 		target_data: 'Dữ liệu cập nhật',
 		suggestion: 'Gợi ý',
 		recently_search: 'Tìm kiếm gần đây',
-		no_recently_search_yet: 'Chưa có tìm kiếm gần đây'
+		no_recently_search_yet: 'Chưa có tìm kiếm gần đây',
+		unknown: 'Chưa xác định'
 	},
 	timestamps: {
 		created_at: 'Đã tạo {{timestamp}}',

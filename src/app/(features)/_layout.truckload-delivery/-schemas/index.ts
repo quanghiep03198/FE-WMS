@@ -1,6 +1,6 @@
 import z from 'zod'
 
-export const createTruckloadDeliverySchema = z
+export const createDeliverySchema = z
 	.object({
 		outbound_purchase_orders: z.array(
 			z.object({
@@ -32,23 +32,24 @@ export const createTruckloadDeliverySchema = z
 		})
 	})
 
-export const updateTruckloadDeliverySchema = z
-	.object({
-		po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-		license_plate: z
-			.string({ message: 'ns_validation:required' })
-			.trim()
-			.nonempty({ message: 'ns_validation:required' })
-			.transform((value) => value.toUpperCase()),
-		container_number: z
-			.string({ message: 'ns_validation:required' })
-			.trim()
-			.nonempty({ message: 'ns_validation:required' }),
-		outbound_qty: z.number().nonnegative()
-	})
-	.partial()
+export const updateDeliverySchema = z.object({
+	po: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }).optional(),
+	license_plate: z
+		.string({ error: 'ns_validation:required' })
+		.trim()
+		.nonempty({ error: 'ns_validation:required' })
+		.transform((value) => value.toUpperCase())
+		.optional(),
+	container_number: z
+		.string({ error: 'ns_validation:required' })
+		.trim()
+		.nonempty({ message: 'ns_validation:required' }),
+	outbound_qty: z
+		.number({ error: 'ns_validation:required' })
+		.nonnegative({ error: 'ns_validation:invalid_value' })
+		.optional(),
+	max_outbound_qty: z.number().nonnegative()
+})
 
-export type CreateTruckloadDeliveryFormValues = z.infer<typeof createTruckloadDeliverySchema>
-export type UpdateTruckloadDeliveryFormValues = z.infer<typeof updateTruckloadDeliverySchema>
-
-export type TruckloadDeliveryFormValues = CreateTruckloadDeliveryFormValues | UpdateTruckloadDeliveryFormValues
+export type CreateDeliveryFormValues = z.infer<typeof createDeliverySchema>
+export type UpdateDeliveryFormValues = z.infer<typeof updateDeliverySchema>

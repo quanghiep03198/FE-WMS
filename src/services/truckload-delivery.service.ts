@@ -1,10 +1,11 @@
 import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-delivery/-constants'
 import {
-	CreateTruckloadDeliveryFormValues,
-	UpdateTruckloadDeliveryFormValues
+	CreateDeliveryFormValues,
+	UpdateDeliveryFormValues
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import { omit } from 'lodash'
 
 export interface ITruckloadDelivery extends IBaseEntity {
 	po: string
@@ -18,25 +19,24 @@ export interface ITruckloadDelivery extends IBaseEntity {
 
 export class TruckloadDeliveryService {
 	static async getAll() {
-		return await axiosInstance.get<void, ITruckloadDelivery[]>('/truckload-delivery')
+		return await axiosInstance.get<void, ResponseBody<ITruckloadDelivery[]>>('/truckload-delivery')
 	}
 
-	static async createOne(payload: CreateTruckloadDeliveryFormValues) {
-		return await axiosInstance.post<unknown, CreateTruckloadDeliveryFormValues>('/truckload-delivery', payload)
+	static async insertMany(payload: CreateDeliveryFormValues) {
+		return await axiosInstance.post<unknown, CreateDeliveryFormValues>(
+			'/truckload-delivery/create',
+			payload.outbound_purchase_orders.map((item) => omit(item, ['max_outbound_qty']))
+		)
 	}
 
-	static async updateOneById(id: number, payload: UpdateTruckloadDeliveryFormValues) {
+	static async updateOneById(id: number, payload: UpdateDeliveryFormValues) {
 		return await axiosInstance.patch(`/truckload-delivery/${id}`, payload)
 	}
 
 	static async deleteOne(id: number, shouldPermanentlyDelete?: true) {
-		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/${id}`, {
+		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/delete/${id}`, {
 			params: { permanently: shouldPermanentlyDelete }
 		})
-	}
-
-	static async deleteMany(ids: number[]) {
-		return await axiosInstance.post<unknown, unknown, number[]>(`/truckload-delivery/delete-multiple`, ids)
 	}
 
 	static async restoreOneById(id: number) {

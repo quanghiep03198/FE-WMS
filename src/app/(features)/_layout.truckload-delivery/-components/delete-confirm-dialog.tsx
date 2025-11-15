@@ -1,46 +1,38 @@
 import { CommonActions } from '@/common/constants/enums'
-import { Button, Icon } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { Fragment, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
+import { useDeleteTruckloadDeliveryMutation } from '../-hooks/use-truckload-delivery-asm'
 
 const DeleteConfirmDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const ref = useRef<HTMLButtonElement>(null)
-	const [shouldShowDeleteButton, setShouldShowDeleteButton] = useState<boolean>(false)
+	const { mutateAsync, isPending, isError } = useDeleteTruckloadDeliveryMutation()
 	const [shouldConfirmDialogOpen, setShouldConfirmDialogOpen] = useState<boolean>(false)
+	const currentlyDeletingIdsRef = useRef<number>(null)
 
 	event$.useSubscription(({ action, payload }) => {
-		console.log(payload)
-		if (action !== CommonActions.DELETE) return
-		setShouldShowDeleteButton(Array.isArray(payload) && payload.length > 0)
+		if (action === CommonActions.DELETE) console.log(payload)
 		setShouldConfirmDialogOpen(typeof payload === 'number')
+		currentlyDeletingIdsRef.current = typeof payload === 'number' ? payload : null
 	})
 
-	return (
-		<Fragment>
-			<Button
-				variant='destructive'
-				ref={ref}
-				className={!shouldShowDeleteButton && 'hidden'}
-				onClick={() => setShouldConfirmDialogOpen(true)}>
-				<Icon name='Trash2' />
-				{t('ns_common:actions.delete')}
-			</Button>
-			{createPortal(
-				<ConfirmDialog
-					title='Confirm Deletion'
-					description='Are you sure you want to delete the selected truckload deliveries? This action cannot be undone.'
-					open={shouldConfirmDialogOpen}
-					onOpenChange={setShouldConfirmDialogOpen}
-					onConfirm={() => {}}
-				/>,
-				document.body
-			)}
-		</Fragment>
+	return createPortal(
+		<ConfirmDialog
+			title='Confirm Deletion'
+			description='Are you sure you want to delete the selected truckload deliveries? This action cannot be undone.'
+			open={shouldConfirmDialogOpen}
+			onOpenChange={setShouldConfirmDialogOpen}
+			onConfirm={() => mutateAsync({ id: currentlyDeletingIdsRef.current, shouldPermanentlyDelete: true })}
+			onCancel={() => {
+				currentlyDeletingIdsRef.current = null
+			}}
+			isPending={isPending}
+			isError={isError}
+		/>,
+		document.body
 	)
 }
 
