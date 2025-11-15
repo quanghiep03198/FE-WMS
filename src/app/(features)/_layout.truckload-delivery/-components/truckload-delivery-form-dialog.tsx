@@ -20,16 +20,17 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
-import { UpdateTruckloadDeliveryFormValues, updateTruckloadDeliverySchema } from '../-schemas'
-import PurchaseOrderAutoComplete from '../../_layout.(rfid)/finished-goods-outbound/-components/outbound-form/purchase-order-autocomplete'
+import { UpdateDeliveryFormValues, updateDeliverySchema } from '../-schemas'
+import OutboundQtyInputFieldControl from './outbound-qty-field-control'
+import PoComboboxFieldControl from './po-combobox-field-control'
 
 const TruckloadDeliveryFormDialog: React.FC = () => {
 	const [open, setOpen] = useState(false)
 	const { event$ } = usePageContext()
 	const { t } = useTranslation()
 
-	const form = useForm<UpdateTruckloadDeliveryFormValues>({
-		resolver: zodResolver(updateTruckloadDeliverySchema)
+	const form = useForm<UpdateDeliveryFormValues>({
+		resolver: zodResolver(updateDeliverySchema)
 	})
 
 	event$.useSubscription(({ action, payload }) => {
@@ -58,7 +59,7 @@ const TruckloadDeliveryFormDialog: React.FC = () => {
 									label={t('ns_erp:fields.license_plate')}
 									name='license_plate'
 									placeholder='xxx-xxxxx'
-									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
+									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.trim().toUpperCase())}
 								/>
 							</Div>
 							<Div className='col-span-1 sm:col-span-full md:col-span-1'>
@@ -66,18 +67,19 @@ const TruckloadDeliveryFormDialog: React.FC = () => {
 									label={t('ns_erp:fields.container_number')}
 									name='container_number'
 									placeholder='xxxxxx'
+									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.trim().toUpperCase())}
 								/>
 							</Div>
 							<Div className='col-span-full'>
-								<PurchaseOrderAutoComplete />
+								<PoComboboxFieldControl
+									// data-id={}
+									data-action={CommonActions.UPDATE}
+									label={t('ns_erp:fields.po')}
+									name='po'
+								/>
 							</Div>
 							<Div className='col-span-full'>
-								<InputFieldControl
-									label={t('ns_erp:fields.outbound_qty')}
-									name='outbound_qty'
-									type='number'
-									placeholder='1000'
-								/>
+								<OutboundQtyInputFieldControl label={t('ns_erp:fields.outbound_qty')} name='outbound_qty' />
 							</Div>
 						</FieldSet>
 						<DialogFooter className='justify-end'>

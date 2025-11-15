@@ -272,6 +272,7 @@ export default {
 		loading: '载入中 ...',
 		pending: '待处理',
 		processing: '处理中 ...',
+		request_change: '请求更改',
 		running: '运行中'
 	},
 	table: {
@@ -306,7 +307,8 @@ export default {
 		target_data: '目标资料',
 		recently_search: '最近搜索',
 		suggestion: '建议',
-		no_recently_search_yet: '还没有最近搜索'
+		no_recently_search_yet: '还没有最近搜索',
+		unknown: '未知'
 	},
 	unit: {
 		times: '次',

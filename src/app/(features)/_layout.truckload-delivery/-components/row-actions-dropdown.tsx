@@ -11,6 +11,7 @@ import {
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 
 type RowActionsDropdownProps = Record<'data', ITruckloadDelivery>
@@ -34,10 +35,11 @@ const RowActionsDropdown: React.FC<RowActionsDropdownProps> = ({ data }) => {
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => event$.emit({ action: CommonActions.CONFIRM, payload: data })}>
 						<Icon name='BookmarkCheck' />
-						{data.status === 'confirmed' ? t('ns_common:actions.reapprove') : t('ns_common:actions.approve')}
+						{t('ns_common:actions.approve')}
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem
+						disabled={data.status !== TruckloadDeliveryStatus.PENDING}
 						className='text-destructive hover:!text-destructive'
 						onClick={() => event$.emit({ action: CommonActions.DELETE, payload: data.id })}>
 						<Icon name='Trash2' />

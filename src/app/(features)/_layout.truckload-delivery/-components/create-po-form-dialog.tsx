@@ -27,9 +27,11 @@ import { useUpdateEffect } from 'ahooks'
 import { useRef, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
-import { createTruckloadDeliverySchema } from '../-schemas'
+import { useCreateTruckloadDeliveryMutation } from '../-hooks/use-truckload-delivery-asm'
+import { CreateDeliveryFormValues, createDeliverySchema } from '../-schemas'
 import { GhostButton } from '../../-components/-shared/ghost-button'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PoComboboxFieldControl from './po-combobox-field-control'
@@ -39,9 +41,11 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)
 	const { event$ } = usePageContext()
 	const form = useForm({
-		resolver: zodResolver(createTruckloadDeliverySchema)
+		resolver: zodResolver(createDeliverySchema)
 	})
-	const { fields, append, remove, move } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
+	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
+	const { mutateAsync, isPending, isError } = useCreateTruckloadDeliveryMutation()
+
 	const scrollRef = useRef<HTMLDivElement | null>(null)
 
 	event$.useSubscription(({ action }) => {
@@ -49,21 +53,24 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 		setOpen(true)
 	})
 
-	const handleAppendField: React.MouseEventHandler<HTMLButtonElement> = () => {
-		// if (shouldAllowAdditionalSizes) e.preventDefault()
-
-		append({})
-	}
-
 	useUpdateEffect(() => {
 		if (scrollRef.current) {
-			const scrollAmount = scrollRef.current.scrollHeight
 			scrollRef.current.scrollTo({
-				top: scrollAmount,
+				top: scrollRef.current.scrollHeight,
 				behavior: 'smooth'
 			})
 		}
 	}, [fields.length])
+
+	const handleCreateSubmit = async (data: CreateDeliveryFormValues) => {
+		toast.loading(t('ns_common:notification.processing_request'), { id: 'create_truckload_delivery' })
+		try {
+			await mutateAsync(data)
+			toast.success(t('ns_common:notification.success'), { id: 'create_truckload_delivery' })
+		} catch {
+			toast.error(t('ns_common:notification.error'), { id: 'create_truckload_delivery' })
+		}
+	}
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -74,7 +81,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 				</DialogHeader>
 				<Div className='grid gap-6'>
 					<FormProvider {...form}>
-						<Form onSubmit={form.handleSubmit((data) => console.log(data))}>
+						<Form onSubmit={form.handleSubmit(handleCreateSubmit)}>
 							{fields.length > 0 ? (
 								<Div className='flex-1'>
 									<Table className='w-full table-fixed'>
@@ -105,6 +112,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 													<TableCell className='self-start px-1'>
 														<PoComboboxFieldControl
 															data-index={index}
+															data-action={CommonActions.CREATE}
 															name={`outbound_purchase_orders.${index}.po`}
 														/>
 													</TableCell>
@@ -127,7 +135,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 										</TableBody>
 										<TableFooter>
 											<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
-												<Button type='button' variant='outline' size='sm' onClick={handleAppendField}>
+												<Button type='button' variant='outline' size='sm' onClick={() => append({})}>
 													<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
 													{t('ns_common:table.add_row')}
 												</Button>
@@ -163,7 +171,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											variant='outline'
 											size='sm'
 											className='border-dashed'
-											onClick={handleAppendField}>
+											onClick={() => append({})}>
 											<Icon name='Plus' /> {t('ns_common:actions.add')}
 										</Button>
 									</EmptyContent>
@@ -171,9 +179,12 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 							)}
 							{fields.length > 0 && (
 								<DialogFooter>
-									<Button type='submit'>
-										<Icon name='Check' />
-										{t('ns_common:actions.save_changes')}
+									<Button type='submit' disabled={isPending}>
+										<Icon
+											name={isPending ? 'LoaderCircle' : 'Check'}
+											className={isPending && 'animate-spin'}
+										/>
+										{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 									</Button>
 									<DialogClose className={buttonVariants({ variant: 'secondary' })}>
 										<Icon name='X' />
@@ -193,9 +204,9 @@ const Form = tw.form`flex flex-col gap-y-6 *:text-sm`
 const Table = tw.div`flex flex-col relative`
 const TableHeader = tw.div`sticky top-0 z-10 bg-table-head text-table-headed-foreground`
 const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 [&>:first-child]:px-3`
-const TableHead = tw.div`py-2 bg-table-head text-table-head-foreground font-medium`
+const TableHead = tw.div`py-2 bg-table-head h-9 text-table-head-foreground font-medium`
 const TableBody = tw(ScrollShadow)<ScrollShadowProps>`max-h-[50vh] flex-1`
-const TableCell = tw.div`py-2`
+const TableCell = tw.div`py-2 min-h-9`
 const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6`
 
 export default CreatePurchaseOrdersFormDialog

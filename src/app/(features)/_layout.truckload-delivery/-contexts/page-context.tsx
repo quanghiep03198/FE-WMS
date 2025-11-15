@@ -7,7 +7,7 @@ type EventPayload =
 	| { action: CommonActions.CREATE; payload: null }
 	| { action: CommonActions.UPDATE; payload: any }
 	| { action: CommonActions.CONFIRM; payload: any }
-	| { action: CommonActions.DELETE; payload: number | number[] }
+	| { action: CommonActions.DELETE; payload: number }
 
 type PageContextValue = {
 	event$: EventEmitter<EventPayload>
