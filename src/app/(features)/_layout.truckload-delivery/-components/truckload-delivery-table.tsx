@@ -119,13 +119,14 @@ const TruckloadDeliveryTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
 				minSize: 150,
-				maxSize: 200,
+				size: 225,
+				maxSize: 250,
 				cell: ({ getValue, row }) => (
 					<Div className='flex flex-col space-y-0.5'>
 						<Typography variant='small' className='before:content-["@"]'>
 							{getValue()}
 						</Typography>
-						<Typography variant='small' color='muted' className='first-letter:uppercase'>
+						<Typography variant='small' color='muted' className='line-clamp-1 first-letter:uppercase'>
 							{formatRelative(row.original.created, new Date(), { locale: dateLocale }) as string}
 						</Typography>
 					</Div>
