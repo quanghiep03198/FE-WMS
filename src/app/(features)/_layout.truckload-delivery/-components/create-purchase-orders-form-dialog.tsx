@@ -34,7 +34,7 @@ import { useCreateTruckloadDeliveryMutation } from '../-hooks/use-truckload-deli
 import { CreateDeliveryFormValues, createDeliverySchema } from '../-schemas'
 import { GhostButton } from '../../-components/-shared/ghost-button'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
-import PoComboboxFieldControl from './po-combobox-field-control'
+import PurchaseOrderFieldControl from './purchase-order-field-control'
 
 const CreatePurchaseOrdersFormDialog: React.FC = () => {
 	const { t } = useTranslation()
@@ -67,6 +67,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 		try {
 			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id: 'create_truckload_delivery' })
+			setOpen(false)
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: 'create_truckload_delivery' })
 		}
@@ -110,7 +111,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 														</Typography>
 													</TableCell>
 													<TableCell className='self-start px-1'>
-														<PoComboboxFieldControl
+														<PurchaseOrderFieldControl
 															data-index={index}
 															data-action={CommonActions.CREATE}
 															name={`outbound_purchase_orders.${index}.po`}
@@ -119,6 +120,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 													<TableCell className='self-start px-1'>
 														<OutboundQtyInputFieldControl
 															data-index={index}
+															data-action={CommonActions.CREATE}
 															name={`outbound_purchase_orders.${index}.outbound_qty`}
 														/>
 													</TableCell>

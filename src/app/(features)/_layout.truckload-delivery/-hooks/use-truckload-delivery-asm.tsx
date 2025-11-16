@@ -1,5 +1,6 @@
 import { TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { omit } from 'lodash'
 import { UpdateDeliveryFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
@@ -27,8 +28,8 @@ export const useUpdateTruckloadDeliveryMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationFn: ({ id, payload }: { id: number; payload: UpdateDeliveryFormValues }) => {
-			return TruckloadDeliveryService.updateOneById(id, payload)
+		mutationFn: (payload: UpdateDeliveryFormValues) => {
+			return TruckloadDeliveryService.updateOneById(payload.id, omit(payload, ['id', 'max_outbound_qty']))
 		},
 		onSuccess: invalidateQueries
 	})

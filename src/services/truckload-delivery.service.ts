@@ -29,8 +29,8 @@ export class TruckloadDeliveryService {
 		)
 	}
 
-	static async updateOneById(id: number, payload: UpdateDeliveryFormValues) {
-		return await axiosInstance.patch(`/truckload-delivery/${id}`, payload)
+	static async updateOneById(id: number, payload: Omit<UpdateDeliveryFormValues, 'id'>) {
+		return await axiosInstance.patch(`/truckload-delivery/update/${id}`, payload)
 	}
 
 	static async deleteOne(id: number, shouldPermanentlyDelete?: true) {

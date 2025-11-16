@@ -15,14 +15,17 @@ import {
 	InputFieldControl
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { pick } from 'lodash'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
+import { useUpdateTruckloadDeliveryMutation } from '../-hooks/use-truckload-delivery-asm'
 import { UpdateDeliveryFormValues, updateDeliverySchema } from '../-schemas'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
-import PoComboboxFieldControl from './po-combobox-field-control'
+import PurchaseOrderFieldControl from './purchase-order-field-control'
 
 const TruckloadDeliveryFormDialog: React.FC = () => {
 	const [open, setOpen] = useState(false)
@@ -33,11 +36,24 @@ const TruckloadDeliveryFormDialog: React.FC = () => {
 		resolver: zodResolver(updateDeliverySchema)
 	})
 
+	const { mutateAsync, isPending, isError } = useUpdateTruckloadDeliveryMutation()
+
 	event$.useSubscription(({ action, payload }) => {
 		if (action !== CommonActions.UPDATE) return
 		setOpen(true)
-		form.reset(payload)
+		form.reset(pick(payload, ['id', 'po', 'license_plate', 'container_number', 'outbound_qty', 'max_outbound_qty']))
 	})
+
+	const handleSaveChanges = async (data: UpdateDeliveryFormValues) => {
+		toast.loading(t('ns_common:notification.processing_request'), { id: 'update_truckload_delivery' })
+		try {
+			await mutateAsync(data)
+			toast.success(t('ns_common:notification.success'), { id: 'update_truckload_delivery' })
+			setOpen(false)
+		} catch {
+			toast.error(t('ns_common:notification.error'), { id: 'update_truckload_delivery' })
+		}
+	}
 
 	return (
 		<Dialog
@@ -52,14 +68,14 @@ const TruckloadDeliveryFormDialog: React.FC = () => {
 					<DialogDescription>{t('ns_inoutbound:description.update_truckload_delivery')}</DialogDescription>
 				</DialogHeader>
 				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit((data) => console.log(data))}>
+					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
 						<FieldSet>
 							<Div className='col-span-1 sm:col-span-full md:col-span-1'>
 								<InputFieldControl
 									label={t('ns_erp:fields.license_plate')}
 									name='license_plate'
 									placeholder='xxx-xxxxx'
-									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.trim().toUpperCase())}
+									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
 								/>
 							</Div>
 							<Div className='col-span-1 sm:col-span-full md:col-span-1'>
@@ -67,25 +83,28 @@ const TruckloadDeliveryFormDialog: React.FC = () => {
 									label={t('ns_erp:fields.container_number')}
 									name='container_number'
 									placeholder='xxxxxx'
-									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.trim().toUpperCase())}
+									onChange={(e) => form.setValue('container_number', e.currentTarget.value.toUpperCase())}
 								/>
 							</Div>
-							<Div className='col-span-full'>
-								<PoComboboxFieldControl
-									// data-id={}
+							<Div className='col-span-1'>
+								<PurchaseOrderFieldControl
 									data-action={CommonActions.UPDATE}
 									label={t('ns_erp:fields.po')}
 									name='po'
 								/>
 							</Div>
-							<Div className='col-span-full'>
-								<OutboundQtyInputFieldControl label={t('ns_erp:fields.outbound_qty')} name='outbound_qty' />
+							<Div className='col-span-1'>
+								<OutboundQtyInputFieldControl
+									data-action={CommonActions.UPDATE}
+									label={t('ns_erp:fields.outbound_qty')}
+									name='outbound_qty'
+								/>
 							</Div>
 						</FieldSet>
-						<DialogFooter className='justify-end'>
+						<DialogFooter className='mt-4 justify-end'>
 							<Button>
-								<Icon name='Check' />
-								{t('ns_common:actions.save_changes')}
+								<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
+								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save_changes')}
 							</Button>
 							<DialogClose className={buttonVariants({ variant: 'secondary' })}>
 								<Icon name='X' />
