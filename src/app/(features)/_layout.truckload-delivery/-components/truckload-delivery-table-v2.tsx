@@ -8,6 +8,7 @@ import { ROW_ACTIONS_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { format, formatRelative } from 'date-fns'
+import { pick } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
@@ -17,7 +18,7 @@ import PurchaseOrderFilterInput from './purchase-order-filter-input'
 import RowActionsDropdown from './row-actions-dropdown'
 import StatusDropdownMenu from './truckload-delivery-status-filter'
 
-const TruckloadDeliveryTable: React.FC = () => {
+const TruckloadDeliveryTableV2: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const isMediumScreen = useMediaQuery(PresetBreakPoints.MEDIUM)
@@ -206,6 +207,33 @@ const TruckloadDeliveryTable: React.FC = () => {
 		[i18n.language, isMediumScreen]
 	)
 
+	const tableData = useMemo(() => {
+		if (!Array.isArray(data)) return []
+
+		return Object.entries(
+			Object.groupBy(
+				data,
+				(item) =>
+					`${item.license_plate}.${item.container_number}.${item.status}.${item.user_code_created}.${item.created}.${item.factory_departure_time}`
+			)
+		).map(([truckInfor, packing]) => {
+			const [license_plate, container_number, status, user_code_created, created, factory_departure_time] =
+				truckInfor.split('.')
+
+			return {
+				license_plate,
+				container_number,
+				status,
+				user_code_created,
+				created,
+				factory_departure_time,
+				packing: packing.map((item) => pick(item, ['id', 'po', 'outbound_qty']))
+			}
+		})
+	}, [data])
+
+	console.log('tableData :>> ', tableData)
+
 	return (
 		<DataTable
 			ref={tableRef}
@@ -261,4 +289,4 @@ const TruckloadDeliveryTable: React.FC = () => {
 	)
 }
 
-export default TruckloadDeliveryTable
+export default TruckloadDeliveryTableV2

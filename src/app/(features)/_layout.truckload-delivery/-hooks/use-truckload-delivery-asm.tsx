@@ -1,6 +1,6 @@
 import { TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { omit } from 'lodash'
+import { TruckloadDeliveryStatus } from '../-constants'
 import { UpdateDeliveryFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
@@ -28,8 +28,8 @@ export const useUpdateTruckloadDeliveryMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationFn: (payload: UpdateDeliveryFormValues) => {
-			return TruckloadDeliveryService.updateOneById(payload.id, omit(payload, ['id', 'max_outbound_qty']))
+		mutationFn: ({ id, ...update }: UpdateDeliveryFormValues) => {
+			return TruckloadDeliveryService.updateOneById(id, update)
 		},
 		onSuccess: invalidateQueries
 	})
@@ -42,6 +42,21 @@ export const useDeleteTruckloadDeliveryMutation = () => {
 		mutationFn: ({ id, shouldPermanentlyDelete }: { id: number; shouldPermanentlyDelete?: true }) => {
 			return TruckloadDeliveryService.deleteOne(id, shouldPermanentlyDelete)
 		},
+		onSuccess: invalidateQueries
+	})
+}
+
+export const useSetTruckloadDeliveryStatusMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+
+	return useMutation({
+		mutationFn: ({
+			id,
+			status
+		}: {
+			id: number
+			status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+		}) => TruckloadDeliveryService.setStatusById(id, status),
 		onSuccess: invalidateQueries
 	})
 }

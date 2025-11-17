@@ -40,6 +40,7 @@ export default {
 		reapprove: 'Reapprove',
 		reload: 'Reload',
 		report_bug: 'Report bug',
+		request_change: 'Request Change',
 		reset: 'Reset',
 		restore: 'Restore',
 		retry: 'Retry',

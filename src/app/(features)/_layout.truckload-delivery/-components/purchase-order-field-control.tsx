@@ -2,8 +2,8 @@
 
 import { useSearchPurchaseOrderQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { CommonActions } from '@/common/constants/enums'
-import { ComboboxFieldControl } from '@/components/ui'
-import { ComboboxFieldControlProps } from '@/components/ui/@field-control/combobox'
+import { AutoCompleteFieldControl } from '@/components/ui'
+import { AutoCompleteFieldControlProps } from '@/components/ui/@field-control/auto-complete'
 import { useDebounce } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
@@ -12,7 +12,7 @@ import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-a
 import { CreateDeliveryFormValues, UpdateDeliveryFormValues } from '../-schemas'
 
 type PurchaseOrderFieldControlProps = Partial<
-	ComboboxFieldControlProps<{
+	AutoCompleteFieldControlProps<{
 		po: string
 		po_qty: number
 		accumulated_outbound_qty: number
@@ -25,7 +25,9 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 	const { control, getValues, setValue } = useFormContext<CreateDeliveryFormValues | UpdateDeliveryFormValues>()
 	const { data } = useGetTruckloadDeliveryQuery()
 	const currentPurchaseOrderValue = useWatch({ control, name })
-	const [searchTerm, setSearchTerm] = useState(currentPurchaseOrderValue || '')
+	const [searchTerm, setSearchTerm] = useState(
+		typeof props['data-index'] === 'number' ? (currentPurchaseOrderValue ?? '') : ''
+	)
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
 	const { data: purchaseOrders, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
 	const currentId = getValues('id')
@@ -52,15 +54,14 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 			typeof props['data-index'] === 'number'
 				? `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
 				: 'max_outbound_qty'
-
+		console.log('maxQtyFieldName :>> ', maxQtyFieldName)
 		setValue(maxQtyFieldName, purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty)
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
 	return (
-		<ComboboxFieldControl
+		<AutoCompleteFieldControl
 			name={name}
 			placeholder={t('ns_common:form_placeholder.fill', { object: 'PO', defaultValue: 'PO' })}
-			shouldFilter={false}
 			labelField='po'
 			valueField='po'
 			loading={isLoading}

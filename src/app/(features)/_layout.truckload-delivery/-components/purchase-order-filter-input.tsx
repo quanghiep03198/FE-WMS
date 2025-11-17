@@ -19,7 +19,6 @@ const PurchaseOrderFilterInput: React.FC<{
 			<DebouncedInput
 				value={(table.getColumn('po').getFilterValue() as string) ?? ''}
 				onChange={(value) => {
-					// event$.emit(pick(table.getState(), ['rowSelection']))
 					table.getColumn('po').setFilterValue(value)
 				}}
 				className='h-full min-w-48 p-0 pl-2 shadow-none placeholder:text-sm'

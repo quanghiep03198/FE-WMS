@@ -38,6 +38,7 @@ export default {
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',
 		report_bug: 'Báo cáo lỗi',
+		request_change: 'Yêu cầu thay đổi',
 		reset: 'Đặt lại',
 		restore: 'Khôi phục',
 		retry: 'Thử lại',

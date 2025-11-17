@@ -5,7 +5,6 @@ import {
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { omit } from 'lodash'
 
 export interface ITruckloadDelivery extends IBaseEntity {
 	po: string
@@ -23,10 +22,7 @@ export class TruckloadDeliveryService {
 	}
 
 	static async insertMany(payload: CreateDeliveryFormValues) {
-		return await axiosInstance.post<unknown, CreateDeliveryFormValues>(
-			'/truckload-delivery/create',
-			payload.outbound_purchase_orders.map((item) => omit(item, ['max_outbound_qty']))
-		)
+		return await axiosInstance.post<unknown, CreateDeliveryFormValues>('/truckload-delivery/create', payload)
 	}
 
 	static async updateOneById(id: number, payload: Omit<UpdateDeliveryFormValues, 'id'>) {
@@ -37,6 +33,13 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/delete/${id}`, {
 			params: { permanently: shouldPermanentlyDelete }
 		})
+	}
+
+	static async setStatusById(
+		id: number,
+		status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+	) {
+		return await axiosInstance.patch(`/truckload-delivery/set-status/${id}`, { status })
 	}
 
 	static async restoreOneById(id: number) {

@@ -42,7 +42,17 @@ const StatusDropdownMenu: React.FC<{ table: Table<ITruckloadDelivery> }> = ({ ta
 						<Icon name='CircleCheckBig' />
 						{t('ns_common:status.confirmed')}
 						<Badge variant='outline' className='ml-auto font-normal'>
-							{table.options.data.filter((item) => item.status === TruckloadDeliveryStatus.PENDING).length}
+							{table.options.data.filter((item) => item.status === TruckloadDeliveryStatus.CONFIRMED).length}
+						</Badge>
+					</DropdownMenuRadioItem>
+					<DropdownMenuRadioItem value={TruckloadDeliveryStatus.CONFIRMED} className='gap-x-2'>
+						<Icon name='UndoDot' />
+						{t('ns_common:status.request_change')}
+						<Badge variant='outline' className='ml-auto font-normal'>
+							{
+								table.options.data.filter((item) => item.status === TruckloadDeliveryStatus.REQUEST_CHANGE)
+									.length
+							}
 						</Badge>
 					</DropdownMenuRadioItem>
 				</DropdownMenuRadioGroup>
