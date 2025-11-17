@@ -8,7 +8,7 @@ import CreatePurchaseOrdersFormDialog from './-components/create-purchase-orders
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
 import DeleteConfirmDialog from './-components/delete-confirm-dialog'
 import TruckloadDeliveryFormDialog from './-components/truckload-delivery-form-dialog'
-import TruckloadDeliveryTable from './-components/truckload-delivery-table'
+import TruckloadDeliveryTableV2 from './-components/truckload-delivery-table-v2'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/truckload-delivery/')({
@@ -43,7 +43,7 @@ function Page() {
 					<Separator />
 					<CreatePurchaseOrdersFormDialog />
 					<TruckloadDeliveryFormDialog />
-					<TruckloadDeliveryTable />
+					<TruckloadDeliveryTableV2 />
 				</Div>
 			</PageContextProvider>
 		</Fragment>

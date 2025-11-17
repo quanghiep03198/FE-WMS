@@ -19,12 +19,13 @@ import {
 	EmptyTitle,
 	Form as FormProvider,
 	Icon,
+	InputFieldControl,
 	Typography
 } from '@/components/ui'
 import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -68,6 +69,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id: 'create_truckload_delivery' })
 			setOpen(false)
+			form.reset()
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: 'create_truckload_delivery' })
 		}
@@ -84,75 +86,93 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 					<FormProvider {...form}>
 						<Form onSubmit={form.handleSubmit(handleCreateSubmit)}>
 							{fields.length > 0 ? (
-								<Div className='flex-1'>
-									<Table className='w-full table-fixed'>
-										<TableHeader className='sticky top-0 z-10 rounded-md'>
-											<TableRow className='*:border-none *:bg-table-head *:text-table-head-foreground'>
-												<TableHead align='left'>#</TableHead>
-												<TableHead align='left' className='px-1'>
-													{t('ns_erp:fields.po')}
-												</TableHead>
-												<TableHead align='left' className='px-1'>
-													{t('ns_erp:fields.outbound_qty')}
-												</TableHead>
-												<TableHead align='center'>
-													<Typography className='sr-only'>Actions</Typography>
-												</TableHead>
-											</TableRow>
-										</TableHeader>
-										<TableBody ref={scrollRef}>
-											{fields.map((field, index) => (
-												<TableRow key={field.id} className='*:border-none'>
-													<TableCell>
-														<Typography
-															color='muted'
-															className='h-9 py-2 align-middle text-sm before:content-["#"]'>
-															{index + 1}
-														</Typography>
-													</TableCell>
-													<TableCell className='self-start px-1'>
-														<PurchaseOrderFieldControl
-															data-index={index}
-															data-action={CommonActions.CREATE}
-															name={`outbound_purchase_orders.${index}.po`}
-														/>
-													</TableCell>
-													<TableCell className='self-start px-1'>
-														<OutboundQtyInputFieldControl
-															data-index={index}
-															data-action={CommonActions.CREATE}
-															name={`outbound_purchase_orders.${index}.outbound_qty`}
-														/>
-													</TableCell>
-													<TableCell>
-														<GhostButton
-															type='button'
-															className='h-9 place-self-center self-center py-2'
-															onClick={() => remove(index)}>
-															<Icon name='X' />
-														</GhostButton>
-													</TableCell>
+								<Fragment>
+									<Div className='grid grid-cols-2 gap-x-2'>
+										<InputFieldControl
+											label={t('ns_erp:fields.license_plate')}
+											name='license_plate'
+											placeholder='xxx-xxxxx'
+											onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
+										/>
+										<InputFieldControl
+											label={t('ns_erp:fields.container_number')}
+											name='container_number'
+											placeholder='xxxxxx'
+											onChange={(e) =>
+												form.setValue('container_number', e.currentTarget.value.toUpperCase())
+											}
+										/>
+									</Div>
+									<Div className='flex-1'>
+										<Table className='w-full table-fixed'>
+											<TableHeader className='sticky top-0 z-10 rounded-md'>
+												<TableRow className='*:border-none *:bg-table-head *:text-table-head-foreground'>
+													<TableHead align='left'>#</TableHead>
+													<TableHead align='left' className='px-1'>
+														{t('ns_erp:fields.po')}
+													</TableHead>
+													<TableHead align='left' className='px-1'>
+														{t('ns_erp:fields.outbound_qty')}
+													</TableHead>
+													<TableHead align='center'>
+														<Typography className='sr-only'>Actions</Typography>
+													</TableHead>
 												</TableRow>
-											))}
-										</TableBody>
-										<TableFooter>
-											<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
-												<Button type='button' variant='outline' size='sm' onClick={() => append({})}>
-													<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
-													{t('ns_common:table.add_row')}
-												</Button>
-												<Button
-													type='button'
-													variant='outline'
-													size='sm'
-													onClick={() => remove(fields.map((_, idx) => idx))}>
-													<Icon name='ListX' size={20} strokeWidth={1.5} />{' '}
-													{t('ns_inoutbound:labels.delete_all')}
-												</Button>
-											</ButtonGroup>
-										</TableFooter>
-									</Table>
-								</Div>
+											</TableHeader>
+											<TableBody ref={scrollRef}>
+												{fields.map((field, index) => (
+													<TableRow key={field.id} className='*:border-none'>
+														<TableCell>
+															<Typography
+																color='muted'
+																className='h-9 py-2 align-middle text-sm before:content-["#"]'>
+																{index + 1}
+															</Typography>
+														</TableCell>
+														<TableCell className='self-start px-1'>
+															<PurchaseOrderFieldControl
+																data-index={index}
+																data-action={CommonActions.CREATE}
+																name={`outbound_purchase_orders.${index}.po`}
+															/>
+														</TableCell>
+														<TableCell className='self-start px-1'>
+															<OutboundQtyInputFieldControl
+																data-index={index}
+																data-action={CommonActions.CREATE}
+																name={`outbound_purchase_orders.${index}.outbound_qty`}
+															/>
+														</TableCell>
+														<TableCell>
+															<GhostButton
+																type='button'
+																className='h-9 place-self-center self-center py-2'
+																onClick={() => remove(index)}>
+																<Icon name='X' />
+															</GhostButton>
+														</TableCell>
+													</TableRow>
+												))}
+											</TableBody>
+											<TableFooter>
+												<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
+													<Button type='button' variant='outline' size='sm' onClick={() => append({})}>
+														<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
+														{t('ns_common:table.add_row')}
+													</Button>
+													<Button
+														type='button'
+														variant='outline'
+														size='sm'
+														onClick={() => remove(fields.map((_, idx) => idx))}>
+														<Icon name='ListX' size={20} strokeWidth={1.5} />{' '}
+														{t('ns_inoutbound:labels.delete_all')}
+													</Button>
+												</ButtonGroup>
+											</TableFooter>
+										</Table>
+									</Div>
+								</Fragment>
 							) : (
 								<Empty className='border border-dashed'>
 									<EmptyHeader>
