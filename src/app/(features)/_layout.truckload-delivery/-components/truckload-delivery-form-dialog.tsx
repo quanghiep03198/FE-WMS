@@ -75,6 +75,7 @@ const TruckloadDeliveryFormDialog: React.FC = () => {
 									label={t('ns_erp:fields.license_plate')}
 									name='license_plate'
 									placeholder='xxx-xxxxx'
+									description='Format: ABC-12345'
 									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
 								/>
 							</Div>

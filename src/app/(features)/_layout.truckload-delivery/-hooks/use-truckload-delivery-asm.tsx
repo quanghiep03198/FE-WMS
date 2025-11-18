@@ -1,4 +1,4 @@
-import { TruckloadDeliveryService } from '@/services/truckload-delivery.service'
+import { TruckloadDeliveryDispatchOrder, TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { UpdateDeliveryFormValues } from '../-schemas'
@@ -51,12 +51,12 @@ export const useSetTruckloadDeliveryStatusMutation = () => {
 
 	return useMutation({
 		mutationFn: ({
-			id,
+			dispatchOrder,
 			status
 		}: {
-			id: number
+			dispatchOrder: TruckloadDeliveryDispatchOrder
 			status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-		}) => TruckloadDeliveryService.setStatusById(id, status),
+		}) => TruckloadDeliveryService.setStatusById(dispatchOrder, status),
 		onSuccess: invalidateQueries
 	})
 }
