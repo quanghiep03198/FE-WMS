@@ -31,6 +31,7 @@ export default {
 		defective_location: 'Vị trí lỗi',
 		defective_description: 'Mô tả lỗi',
 		dept_name: 'Bộ phận cập nhật',
+		dispatch_order: 'Mã đơn xuất hàng',
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
 		factory_code_produce: 'Nhà máy sản xuất',

@@ -31,6 +31,7 @@ export default {
 		defective_description: '故障描述',
 		dept_code: '成型線',
 		dept_name: '更新部門',
+		dispatch_order: '出货单号',
 		employee_name: '建檔人姓名',
 		export_num: '已出库量',
 		factory_code_produce: '生产工厂',

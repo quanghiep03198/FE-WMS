@@ -31,6 +31,7 @@ export default {
 		defective_location: 'Defect location',
 		defective_description: 'Defect description',
 		dept_name: 'Department',
+		dispatch_order: 'Dispatch order',
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
 		factory_code_produce: 'Producing factory',

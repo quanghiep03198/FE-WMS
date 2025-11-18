@@ -29,7 +29,7 @@ const OutboundQtyInputFieldControl: React.FC<
 	})
 
 	const actualMaxOutboundQty = useMemo(() => {
-		if (!currentMaxOutboundQty) return 0
+		if (!currentMaxOutboundQty) return Infinity
 		if (props['data-action'] === CommonActions.UPDATE) return currentMaxOutboundQty + (currentOutboundQty ?? 0)
 		return currentMaxOutboundQty
 	}, [currentPurchaseOrder, currentOutboundQty, currentMaxOutboundQty])
@@ -38,7 +38,11 @@ const OutboundQtyInputFieldControl: React.FC<
 		<InputFieldControl
 			name={name}
 			type='number'
-			placeholder={t('ns_inoutbound:placeholders.max_qty', { qty: actualMaxOutboundQty, defaultValue: null })}
+			placeholder={
+				actualMaxOutboundQty === Infinity
+					? 'Unlimited (∞)'
+					: t('ns_inoutbound:placeholders.max_qty', { qty: actualMaxOutboundQty, defaultValue: null })
+			}
 			{...props}
 		/>
 	)

@@ -16,7 +16,10 @@ import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 import { useSetTruckloadDeliveryStatusMutation } from '../-hooks/use-truckload-delivery-asm'
 
-type RowActionsDropdownProps = Record<'data', ITruckloadDelivery>
+type RowActionsDropdownProps = Record<
+	'data',
+	Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'status'>
+>
 
 const RowActionsDropdown: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	const { t } = useTranslation()
@@ -24,7 +27,7 @@ const RowActionsDropdown: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	const { mutateAsync: setStatusAsync } = useSetTruckloadDeliveryStatusMutation()
 
 	const handleSetStatus = (status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE) => {
-		return toast.promise(setStatusAsync({ id: data.id, status }), {
+		return toast.promise(setStatusAsync({ dispatchOrder: data.dispatch_order, status }), {
 			loading: t('ns_common:notification.processing_request'),
 			success: t('ns_common:notification.success'),
 			error: t('ns_common:notification.error')
@@ -61,7 +64,7 @@ const RowActionsDropdown: React.FC<RowActionsDropdownProps> = ({ data }) => {
 					<DropdownMenuItem
 						disabled={data.status !== TruckloadDeliveryStatus.PENDING}
 						className='text-destructive hover:!text-destructive'
-						onClick={() => event$.emit({ action: CommonActions.DELETE, payload: data.id })}>
+						onClick={() => event$.emit({ action: CommonActions.DELETE, payload: data.dispatch_order })}>
 						<Icon name='Trash2' />
 						{t('ns_common:actions.delete')}
 					</DropdownMenuItem>

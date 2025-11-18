@@ -1,27 +1,25 @@
 import z from 'zod'
 
 // BIC container code pattern: 4 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
-const BIC_CONTAINER_PATTERN = /^[A-Z]{4}\d{6}\d$/
+const BIC_CONTAINER_PATTERN = /^[A-Z]{3}[UJZ]{1}\d{6}\d{1}$/
 
 export const createDeliverySchema = z
 	.object({
 		license_plate: z
 			.string({ error: 'ns_validation:required' })
 			.trim()
-			// .nonempty({ error: 'ns_validation:required' })
 			.transform((value) => value.toUpperCase())
 			.optional(),
 		container_number: z
 			.string({ error: 'ns_validation:required' })
 			.trim()
-			// .nonempty({ message: 'ns_validation:required' })
+			// .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
 			.optional(),
-		// .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }),
 		outbound_purchase_orders: z.array(
 			z.object({
 				po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 				outbound_qty: z.number({ message: 'ns_validation:required' }).int().positive(),
-				max_outbound_qty: z.number().nonnegative().optional()
+				max_outbound_qty: z.number().nonnegative().default(Infinity)
 			})
 		)
 	})
@@ -59,7 +57,7 @@ export const updateDeliverySchema = z.object({
 		.string({ error: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
-	// .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }),
+	// .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
 	outbound_qty: z.int({ error: 'ns_validation:required' }).positive({ error: 'ns_validation:invalid_value' }),
 	max_outbound_qty: z.int().positive().optional()
 })

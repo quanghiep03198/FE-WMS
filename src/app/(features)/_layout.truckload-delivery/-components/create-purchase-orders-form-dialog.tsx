@@ -23,6 +23,7 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { Fragment, useRef, useState } from 'react'
@@ -77,7 +78,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className='max-w-2xl'>
+			<DialogContent className='max-w-3xl'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.create_truckload_delivery')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.create_truckload_delivery')}</DialogDescription>
@@ -89,24 +90,28 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 								<Fragment>
 									<Div className='grid grid-cols-2 gap-x-2'>
 										<InputFieldControl
-											label={t('ns_erp:fields.license_plate')}
-											name='license_plate'
-											placeholder='xxx-xxxxx'
-											onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
-										/>
-										<InputFieldControl
 											label={t('ns_erp:fields.container_number')}
 											name='container_number'
-											placeholder='xxxxxx'
-											onChange={(e) =>
+											placeholder='e.g., ABCU1234567'
+											description='BIC container code format. Skip this field in case container number is not available now.'
+											onChange={(e) => {
+												if (e.currentTarget.value.length === 4 || e.currentTarget.value.length === 11)
+													form.setValue('container_number', e.currentTarget.value.toUpperCase() + ' ')
 												form.setValue('container_number', e.currentTarget.value.toUpperCase())
-											}
+											}}
+										/>
+										<InputFieldControl
+											label={t('ns_erp:fields.license_plate')}
+											name='license_plate'
+											placeholder='e.g., ABC-12345'
+											description='License plate that coresponding to container number. Also skip entering license plate if container number is unknown.'
+											onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
 										/>
 									</Div>
 									<Div className='flex-1'>
 										<Table className='w-full table-fixed'>
-											<TableHeader className='sticky top-0 z-10 rounded-md'>
-												<TableRow className='*:border-none *:bg-table-head *:text-table-head-foreground'>
+											<TableHeader>
+												<TableRow>
 													<TableHead align='left'>#</TableHead>
 													<TableHead align='left' className='px-1'>
 														{t('ns_erp:fields.po')}
@@ -155,6 +160,22 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 												))}
 											</TableBody>
 											<TableFooter>
+												<Div className='col-span-full inline-flex items-center'>
+													<Icon
+														name='BotMessageSquare'
+														size={24}
+														className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+													/>
+													&quot;
+													<Typewriter
+														className='text-sm italic'
+														text={
+															'Do not add duplicate purchase orders and double check the outbound quantities.'
+														}
+														delay={200}
+													/>
+													&quot;
+												</Div>
 												<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
 													<Button type='button' variant='outline' size='sm' onClick={() => append({})}>
 														<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
@@ -224,11 +245,11 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 
 const Form = tw.form`flex flex-col gap-y-6 *:text-sm`
 const Table = tw.div`flex flex-col relative`
-const TableHeader = tw.div`sticky top-0 z-10 bg-table-head text-table-headed-foreground`
+const TableHeader = tw.div`sticky top-0 z-10 bg-accent text-accent-foreground`
 const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 [&>:first-child]:px-3`
-const TableHead = tw.div`py-2 bg-table-head h-9 text-table-head-foreground font-medium`
-const TableBody = tw(ScrollShadow)<ScrollShadowProps>`max-h-[50vh] flex-1`
-const TableCell = tw.div`py-2 min-h-9`
-const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6`
+const TableHead = tw.div`py-2 h-9 font-medium bg-accent`
+const TableBody = tw(ScrollShadow)<ScrollShadowProps>`max-h-[40vh] flex-1`
+const TableCell = tw.div`py-2 min-h-9 [&:has(input)]:px-0`
+const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6 flex flex-col justify-center items-center space-y-6`
 
 export default CreatePurchaseOrdersFormDialog

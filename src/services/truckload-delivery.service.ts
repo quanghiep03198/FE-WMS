@@ -6,14 +6,23 @@ import {
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
+export type TruckloadDeliveryDispatchOrder = `DO-${string}-${string}`
+
 export interface ITruckloadDelivery extends IBaseEntity {
-	po: string
+	dispatch_order: TruckloadDeliveryDispatchOrder
+	factory_code: string
+	// po: string
 	license_plate: string
-	factory_depature_date: Date
 	factory_departure_time: string
-	container_number: string
+	// container_number: string
 	outbound_qty: number
 	status: TruckloadDeliveryStatus
+	delivery_details: Array<{
+		po: string
+		factory_shoes_style: string
+		color_sn: string
+		outbound_qty: number
+	}>
 }
 
 export class TruckloadDeliveryService {
@@ -36,10 +45,10 @@ export class TruckloadDeliveryService {
 	}
 
 	static async setStatusById(
-		id: number,
+		dispatchOrder: TruckloadDeliveryDispatchOrder,
 		status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 	) {
-		return await axiosInstance.patch(`/truckload-delivery/set-status/${id}`, { status })
+		return await axiosInstance.patch(`/truckload-delivery/set-status/${dispatchOrder}`, { status })
 	}
 
 	static async restoreOneById(id: number) {

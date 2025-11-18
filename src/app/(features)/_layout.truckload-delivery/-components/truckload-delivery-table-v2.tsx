@@ -1,54 +1,86 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
+import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, BadgeProps, Button, DataTable, Div, Icon, IconProps, Typography } from '@/components/ui'
-import { ROW_ACTIONS_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import {
+	Badge,
+	BadgeProps,
+	Button,
+	DataTable,
+	Div,
+	Icon,
+	IconProps,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Tooltip,
+	Typography
+} from '@/components/ui'
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { createColumnHelper, Table } from '@tanstack/react-table'
+import { createColumnHelper, Table as TanstackTable } from '@tanstack/react-table'
 import { format, formatRelative } from 'date-fns'
-import { pick } from 'lodash'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
+import { usePageContext } from '../-contexts/page-context'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import GlobalFilterInput from './global-filter-input'
-import PurchaseOrderFilterInput from './purchase-order-filter-input'
-import RowActionsDropdown from './row-actions-dropdown'
 import StatusDropdownMenu from './truckload-delivery-status-filter'
 
 const TruckloadDeliveryTableV2: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const isMediumScreen = useMediaQuery(PresetBreakPoints.MEDIUM)
-	const tableRef = useReactiveRef<Table<ITruckloadDelivery>>(null)
+	const tableRef = useReactiveRef<TanstackTable<ITruckloadDelivery>>(null)
 	const { data, isLoading, refetch } = useGetTruckloadDeliveryQuery()
 	const dateLocale = useDateLocale()
+	const { event$ } = usePageContext()
+
+	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
 	const columns = useMemo(
 		() => [
-			columnHelper.accessor('license_plate', {
-				header: t('ns_erp:fields.license_plate'),
+			columnHelper.display({
+				id: ROW_EXPANSION_COLUMN_ID,
+				header: ({ table }) => (
+					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
+						<button
+							className='absolute inset-0 flex h-full w-full items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground'
+							onClick={() => table.toggleAllRowsExpanded(false)}>
+							<Icon name='ListCollapse' size={18} />
+						</button>
+					</Tooltip>
+				),
+				size: 50,
+				maxSize: 50,
+				enableHiding: false,
+				cell: ({ row, table }) => (
+					<button
+						className='absolute inset-0 flex h-full w-full items-center justify-center'
+						onClick={() => {
+							table.toggleAllRowsExpanded(false)
+							row.toggleExpanded(!row.getIsExpanded())
+						}}>
+						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
+					</button>
+				)
+			}),
+			columnHelper.accessor('dispatch_order', {
+				header: t('ns_erp:fields.dispatch_order'),
 				enableResizing: true,
 				enableSorting: true,
 				enableColumnFilter: true,
 				meta: { hidden: isMediumScreen },
 				filterFn: 'includesStringSensitive',
 				minSize: 150,
-				maxSize: 200,
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (!value)
-						return (
-							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-								<Icon name='RectangleEllipsis' />
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-					return value
-				}
+				maxSize: 200
 			}),
+
 			columnHelper.accessor('container_number', {
 				header: t('ns_erp:fields.container_number'),
 				enableResizing: true,
@@ -66,7 +98,7 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					if (!isMediumScreen) return value
+					// if (!isMediumScreen) return value
 					return (
 						<Div className='flex flex-col space-y-0.5'>
 							<Typography variant='small' className='font-medium'>
@@ -79,40 +111,7 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 					)
 				}
 			}),
-			columnHelper.accessor('po', {
-				header: t('ns_erp:fields.po'),
-				enableResizing: true,
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableGlobalFilter: isMediumScreen,
-				filterFn: 'fuzzy',
-				minSize: 150,
-				maxSize: 200,
-				cell: ({ row, getValue }) => {
-					if (!isMediumScreen) return getValue()
-					return (
-						<Div className='flex flex-col space-y-0.5'>
-							<Typography variant='small' className='font-medium'>
-								{row.original.po}
-							</Typography>
-							<Typography variant='small' color='muted'>
-								{formatIntlNumber(row.original.outbound_qty)} (prs)
-							</Typography>
-						</Div>
-					)
-				}
-			}),
-			columnHelper.accessor('outbound_qty', {
-				header: t('ns_erp:fields.outbound_qty'),
-				enableResizing: true,
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableGlobalFilter: false,
-				minSize: 150,
-				maxSize: 200,
-				meta: { hidden: isMediumScreen },
-				cell: ({ getValue }) => formatIntlNumber(getValue())
-			}),
+
 			columnHelper.accessor('user_code_created', {
 				header: 'Created by',
 				enableResizing: true,
@@ -123,7 +122,7 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 				size: 225,
 				maxSize: 250,
 				cell: ({ getValue, row }) => (
-					<Div className='flex flex-col space-y-0.5'>
+					<Div className='flex flex-col'>
 						<Typography variant='small' className='before:content-["@"]'>
 							{getValue()}
 						</Typography>
@@ -191,48 +190,48 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
-				header: '-',
+				header: t('ns_common:common_fields.actions'),
 				enableResizing: false,
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
-				size: 60,
-				maxSize: 60,
+				size: 200,
+				maxSize: 200,
 				meta: { align: 'center' },
 				cell: ({ row }) => {
-					return <RowActionsDropdown data={row.original} />
+					return (
+						<Div className='flex items-center gap-x-0.5'>
+							<Button variant='ghost' size='sm'>
+								{row.original.status !== TruckloadDeliveryStatus.PENDING
+									? t('ns_common:actions.reapprove')
+									: t('ns_common:actions.approve')}
+							</Button>
+							<Button
+								variant='ghost'
+								size='sm'
+								onClick={() =>
+									event$.emit({ action: CommonActions.UPDATE, payload: row.original.dispatch_order })
+								}>
+								{t('ns_common:actions.update')}
+							</Button>
+							<Button
+								variant='ghost'
+								size='sm'
+								className='text-destructive hover:text-destructive'
+								onClick={() =>
+									event$.emit({ action: CommonActions.DELETE, payload: row.original.dispatch_order })
+								}>
+								{t('ns_common:actions.delete')}
+							</Button>
+						</Div>
+					)
 				}
 			})
 		],
 		[i18n.language, isMediumScreen]
 	)
 
-	const tableData = useMemo(() => {
-		if (!Array.isArray(data)) return []
-
-		return Object.entries(
-			Object.groupBy(
-				data,
-				(item) =>
-					`${item.license_plate}.${item.container_number}.${item.status}.${item.user_code_created}.${item.created}.${item.factory_departure_time}`
-			)
-		).map(([truckInfor, packing]) => {
-			const [license_plate, container_number, status, user_code_created, created, factory_departure_time] =
-				truckInfor.split('.')
-
-			return {
-				license_plate,
-				container_number,
-				status,
-				user_code_created,
-				created,
-				factory_departure_time,
-				packing: packing.map((item) => pick(item, ['id', 'po', 'outbound_qty']))
-			}
-		})
-	}, [data])
-
-	console.log('tableData :>> ', tableData)
+	// console.log('tableData :>> ', tableData)
 
 	return (
 		<DataTable
@@ -264,7 +263,7 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 					return (
 						<Div className='flex items-center gap-x-1'>
 							<GlobalFilterInput {...{ table, event$ }} />
-							{!isMediumScreen && <PurchaseOrderFilterInput table={table} />}
+							{/* {!isMediumScreen && <PurchaseOrderFilterInput table={table} />} */}
 							<StatusDropdownMenu table={table} />
 							<Div className='ml-auto flex items-center justify-end gap-x-1'>
 								{isFilterDirty && (
@@ -285,6 +284,39 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 					)
 				}
 			}}
+			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery>) => (
+				<Div className='relative h-80 overflow-scroll rounded-md border'>
+					<Table className='w-full table-fixed [&_td]:border-x-0 [&_th]:border-x-0 [&_th]:bg-table-head'>
+						<TableHeader className='sticky top-0 z-10'>
+							<TableRow>
+								<TableHead align='left'>{t('ns_erp:fields.po')}</TableHead>
+								<TableHead align='left'>{t('ns_erp:fields.shoestyle_codefactory')}</TableHead>
+								<TableHead align='left'>{t('ns_erp:fields.color_sn')}</TableHead>
+								<TableHead align='left'>{t('ns_erp:fields.outbound_qty')}</TableHead>
+								<TableHead align='right'></TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{row.original.delivery_details.map((item) => (
+								<TableRow key={item.po}>
+									<TableCell align='left'>{item.po}</TableCell>
+									<TableCell align='left'>{item.factory_shoes_style}</TableCell>
+									<TableCell align='left'>{item.color_sn}</TableCell>
+									<TableCell align='left'>{formatIntlNumber(item.outbound_qty)}</TableCell>
+									<TableCell align='right'>
+										<Button variant='ghost' size='sm'>
+											{t('ns_common:actions.update')}
+										</Button>
+										<Button variant='ghost' size='sm' className='text-destructive hover:text-destructive'>
+											{t('ns_common:actions.delete')}
+										</Button>
+									</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</Div>
+			)}
 		/>
 	)
 }
