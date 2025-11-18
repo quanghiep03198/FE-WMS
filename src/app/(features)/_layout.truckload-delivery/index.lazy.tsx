@@ -7,8 +7,8 @@ import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import CreatePurchaseOrdersFormDialog from './-components/create-purchase-orders-form-dialog'
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
 import DeleteConfirmDialog from './-components/delete-confirm-dialog'
-import TruckloadDeliveryFormDialog from './-components/truckload-delivery-form-dialog'
-import TruckloadDeliveryTableV2 from './-components/truckload-delivery-table-v2'
+import DispatchOrderUpdateFormDialog from './-components/dispatch-order-update-form-dialog'
+import TruckloadDeliveryMasterTable from './-components/truckload-delivery-master-table'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/truckload-delivery/')({
@@ -42,8 +42,8 @@ function Page() {
 					</Div>
 					<Separator />
 					<CreatePurchaseOrdersFormDialog />
-					<TruckloadDeliveryFormDialog />
-					<TruckloadDeliveryTableV2 />
+					<DispatchOrderUpdateFormDialog />
+					<TruckloadDeliveryMasterTable />
 				</Div>
 			</PageContextProvider>
 		</Fragment>

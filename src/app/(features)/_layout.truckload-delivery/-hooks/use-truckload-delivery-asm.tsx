@@ -1,7 +1,7 @@
 import { TruckloadDeliveryDispatchOrder, TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { UpdateDeliveryFormValues } from '../-schemas'
+import { UpdateDeliveryFormValues, UpdateDispatchOrderFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
 	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY'
@@ -11,7 +11,10 @@ export const useGetTruckloadDeliveryQuery = () => {
 	return useQuery({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 		queryFn: TruckloadDeliveryService.getAll,
-		select: (response) => response.metadata ?? []
+		select: (response) =>
+			Array.isArray(response.metadata)
+				? response.metadata.map((item) => ({ ...item, purchase_orders: item.delivery_details.map(({ po }) => po) }))
+				: []
 	})
 }
 
@@ -20,6 +23,17 @@ export const useCreateTruckloadDeliveryMutation = () => {
 
 	return useMutation({
 		mutationFn: TruckloadDeliveryService.insertMany,
+		onSuccess: invalidateQueries
+	})
+}
+
+export const useUpdateDispatchOrderMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+
+	return useMutation({
+		mutationFn: ({ dispatch_order, ...update }: UpdateDispatchOrderFormValues) => {
+			return TruckloadDeliveryService.bulkUpdate(dispatch_order, update)
+		},
 		onSuccess: invalidateQueries
 	})
 }

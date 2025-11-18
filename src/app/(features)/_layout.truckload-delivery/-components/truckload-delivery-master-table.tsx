@@ -1,45 +1,27 @@
-import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
-import formatIntlNumber from '@/common/utils/format-intl-number'
-import {
-	Badge,
-	BadgeProps,
-	Button,
-	DataTable,
-	Div,
-	Icon,
-	IconProps,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip,
-	Typography
-} from '@/components/ui'
+import { Badge, BadgeProps, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table as TanstackTable } from '@tanstack/react-table'
 import { format, formatRelative } from 'date-fns'
-import { useMemo } from 'react'
+import { pick } from 'lodash'
+import { useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { usePageContext } from '../-contexts/page-context'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
-import GlobalFilterInput from './global-filter-input'
-import StatusDropdownMenu from './truckload-delivery-status-filter'
+import RowActions from './row-actions'
+import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
+import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
-const TruckloadDeliveryTableV2: React.FC = () => {
+const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMediumScreen = useMediaQuery(PresetBreakPoints.MEDIUM)
 	const tableRef = useReactiveRef<TanstackTable<ITruckloadDelivery>>(null)
-	const { data, isLoading, refetch } = useGetTruckloadDeliveryQuery()
+	const { data, isLoading } = useGetTruckloadDeliveryQuery()
 	const dateLocale = useDateLocale()
-	const { event$ } = usePageContext()
 
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
@@ -80,13 +62,34 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 				minSize: 150,
 				maxSize: 200
 			}),
+			columnHelper.accessor('license_plate', {
+				header: t('ns_erp:fields.license_plate'),
+				enableResizing: true,
+				enableSorting: true,
+				filterFn: 'fuzzy',
+				enableGlobalFilter: true,
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value)
+						return (
+							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+								<Icon name='Truck' />
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
 
+					return value
+				}
+			}),
 			columnHelper.accessor('container_number', {
-				header: t('ns_erp:fields.container_number'),
+				header: !isMediumScreen
+					? t('ns_erp:fields.container_number')
+					: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number'),
 				enableResizing: true,
 				enableSorting: true,
 				enableColumnFilter: true,
-				filterFn: 'fuzzy',
+				enableGlobalFilter: true,
+				filterFn: 'auto',
 				minSize: 150,
 				maxSize: 200,
 				cell: ({ row, getValue }) => {
@@ -98,22 +101,28 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					// if (!isMediumScreen) return value
+					if (!isMediumScreen) return value
 					return (
-						<Div className='flex flex-col space-y-0.5'>
-							<Typography variant='small' className='font-medium'>
+						<Div className='flex flex-col space-y-1'>
+							<Typography variant='small' className='inline-grid grid-cols-[auto_1fr] gap-x-2 font-medium'>
+								<Icon name='Truck' className='self-center stroke-muted-foreground' />
 								{row.original.license_plate}
-							</Typography>
-							<Typography variant='small' color='muted'>
-								{row.original.container_number}
+								<Typography
+									variant='small'
+									color='muted'
+									className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
+									{row.original.container_number}
+								</Typography>
 							</Typography>
 						</Div>
 					)
 				}
 			}),
-
+			columnHelper.accessor('purchase_orders', {
+				filterFn: 'arrIncludes'
+			}),
 			columnHelper.accessor('user_code_created', {
-				header: 'Created by',
+				header: t('ns_common:common_fields.created_by'),
 				enableResizing: true,
 				enableSorting: true,
 				enableColumnFilter: true,
@@ -121,15 +130,39 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 				minSize: 150,
 				size: 225,
 				maxSize: 250,
-				cell: ({ getValue, row }) => (
-					<Div className='flex flex-col'>
-						<Typography variant='small' className='before:content-["@"]'>
+				cell: ({ getValue, row }) => {
+					if (isMediumScreen)
+						return (
+							<Div className='flex flex-col space-y-1'>
+								<Typography variant='small' className='font-medium before:content-["@"]'>
+									{getValue()}
+								</Typography>
+								<Typography variant='small' color='muted' className='line-clamp-1 first-letter:uppercase'>
+									{formatRelative(row.original.created, new Date(), { locale: dateLocale }) as string}
+								</Typography>
+							</Div>
+						)
+					return (
+						<Typography variant='small' className='flex items-center gap-x-2'>
+							<Icon name='User' />
 							{getValue()}
 						</Typography>
-						<Typography variant='small' color='muted' className='line-clamp-1 first-letter:uppercase'>
-							{formatRelative(row.original.created, new Date(), { locale: dateLocale }) as string}
-						</Typography>
-					</Div>
+					)
+				}
+			}),
+			columnHelper.accessor('created', {
+				header: t('ns_common:common_fields.created_at'),
+				enableResizing: true,
+				enableSorting: true,
+				enableColumnFilter: false,
+				enableGlobalFilter: false,
+				minSize: 150,
+				size: 225,
+				maxSize: 250,
+				cell: ({ getValue }) => (
+					<Typography variant='small' className='line-clamp-1 first-letter:uppercase'>
+						{formatRelative(getValue(), new Date(), { locale: dateLocale }) as string}
+					</Typography>
 				)
 			}),
 			columnHelper.accessor('status', {
@@ -169,13 +202,9 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 				enableSorting: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
-				filterFn: 'inDateRange',
 				minSize: 150,
 				size: 225,
 				maxSize: 250,
-				meta: {
-					filterVariant: 'date'
-				},
 				cell: ({ getValue }) => {
 					const factoryDepartureTime = getValue()
 					return factoryDepartureTime ? (
@@ -195,35 +224,14 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
-				size: 200,
-				maxSize: 200,
+				size: 250,
+				maxSize: 250,
 				meta: { align: 'center' },
 				cell: ({ row }) => {
 					return (
-						<Div className='flex items-center gap-x-0.5'>
-							<Button variant='ghost' size='sm'>
-								{row.original.status !== TruckloadDeliveryStatus.PENDING
-									? t('ns_common:actions.reapprove')
-									: t('ns_common:actions.approve')}
-							</Button>
-							<Button
-								variant='ghost'
-								size='sm'
-								onClick={() =>
-									event$.emit({ action: CommonActions.UPDATE, payload: row.original.dispatch_order })
-								}>
-								{t('ns_common:actions.update')}
-							</Button>
-							<Button
-								variant='ghost'
-								size='sm'
-								className='text-destructive hover:text-destructive'
-								onClick={() =>
-									event$.emit({ action: CommonActions.DELETE, payload: row.original.dispatch_order })
-								}>
-								{t('ns_common:actions.delete')}
-							</Button>
-						</Div>
+						<RowActions
+							data={pick(row.original, ['dispatch_order', 'license_plate', 'container_number', 'status'])}
+						/>
 					)
 				}
 			})
@@ -231,7 +239,13 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 		[i18n.language, isMediumScreen]
 	)
 
-	// console.log('tableData :>> ', tableData)
+	useLayoutEffect(() => {
+		if (tableRef.current)
+			tableRef.current.setColumnVisibility({
+				...tableRef.current.getState().columnVisibility,
+				license_plate: !isMediumScreen
+			})
+	}, [tableRef.current, isMediumScreen])
 
 	return (
 		<DataTable
@@ -239,86 +253,38 @@ const TruckloadDeliveryTableV2: React.FC = () => {
 			columns={columns}
 			data={data}
 			loading={isLoading}
+			enableColumnFilters={true}
 			border='bottom-only'
 			initialState={{
 				pagination: {
 					pageIndex: 0,
 					pageSize: 50
 				},
+				columnVisibility: {
+					purchase_orders: false,
+					...(isMediumScreen && { license_plate: false })
+				},
 				columnPinning: {
-					left: [],
+					left: [ROW_EXPANSION_COLUMN_ID],
 					right: ['status', ROW_ACTIONS_COLUMN_ID]
 				}
 			}}
 			virtualizerOptions={{
-				estimateSize: 80,
+				estimateSize: isMediumScreen ? 80 : 40,
 				overscan: 10
 			}}
 			toolbarProps={{
 				override: true,
-				render: ({ table, event$ }) => {
-					const { globalFilter, columnFilters } = table.getState()
-					const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
-
-					return (
-						<Div className='flex items-center gap-x-1'>
-							<GlobalFilterInput {...{ table, event$ }} />
-							{/* {!isMediumScreen && <PurchaseOrderFilterInput table={table} />} */}
-							<StatusDropdownMenu table={table} />
-							<Div className='ml-auto flex items-center justify-end gap-x-1'>
-								{isFilterDirty && (
-									<Button
-										variant='destructive'
-										onClick={() => {
-											table.resetGlobalFilter(table.initialState.globalFilter)
-											table.resetColumnFilters(true)
-										}}>
-										<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
-									</Button>
-								)}
-								<Button variant='outline' onClick={() => refetch()}>
-									<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
-								</Button>
-							</Div>
-						</Div>
-					)
-				}
+				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
-			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery>) => (
-				<Div className='relative h-80 overflow-scroll rounded-md border'>
-					<Table className='w-full table-fixed [&_td]:border-x-0 [&_th]:border-x-0 [&_th]:bg-table-head'>
-						<TableHeader className='sticky top-0 z-10'>
-							<TableRow>
-								<TableHead align='left'>{t('ns_erp:fields.po')}</TableHead>
-								<TableHead align='left'>{t('ns_erp:fields.shoestyle_codefactory')}</TableHead>
-								<TableHead align='left'>{t('ns_erp:fields.color_sn')}</TableHead>
-								<TableHead align='left'>{t('ns_erp:fields.outbound_qty')}</TableHead>
-								<TableHead align='right'></TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{row.original.delivery_details.map((item) => (
-								<TableRow key={item.po}>
-									<TableCell align='left'>{item.po}</TableCell>
-									<TableCell align='left'>{item.factory_shoes_style}</TableCell>
-									<TableCell align='left'>{item.color_sn}</TableCell>
-									<TableCell align='left'>{formatIntlNumber(item.outbound_qty)}</TableCell>
-									<TableCell align='right'>
-										<Button variant='ghost' size='sm'>
-											{t('ns_common:actions.update')}
-										</Button>
-										<Button variant='ghost' size='sm' className='text-destructive hover:text-destructive'>
-											{t('ns_common:actions.delete')}
-										</Button>
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				</Div>
-			)}
+			renderSubComponent={({ row }) => {
+				const data = Array.isArray((row.original as ITruckloadDelivery)?.delivery_details)
+					? (row.original as ITruckloadDelivery).delivery_details
+					: []
+				return <TruckloadDeliveryDetailTable data={data} />
+			}}
 		/>
 	)
 }
 
-export default TruckloadDeliveryTableV2
+export default TruckloadDeliveryMasterTable

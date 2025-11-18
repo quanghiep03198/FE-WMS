@@ -17,9 +17,9 @@ const PurchaseOrderFilterInput: React.FC<{
 		<Div className='flex h-9 items-center gap-x-1 rounded-md border px-3 shadow-sm'>
 			<Icon name='Search' />
 			<DebouncedInput
-				value={(table.getColumn('po').getFilterValue() as string) ?? ''}
+				value={(table?.getColumn('purchase_orders')?.getFilterValue() as string) ?? ''}
 				onChange={(value) => {
-					table.getColumn('po').setFilterValue(value)
+					table?.getColumn('purchase_orders')?.setFilterValue(value)
 				}}
 				className='h-full min-w-48 p-0 pl-2 shadow-none placeholder:text-sm'
 				placeholder={capitalize(

@@ -41,6 +41,8 @@ export enum PresetBreakPoints {
 export enum CommonActions {
 	CREATE = 'CREATE',
 	READ = 'READ',
+	DELETE_MANY = 'DELETE_MANY',
+	UPDATE_MANY = 'UPDATE_MANY',
 	UPDATE = 'UPDATE',
 	CANCEL = 'CANCEL',
 	SAVE = 'SAVE',

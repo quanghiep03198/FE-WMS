@@ -51,6 +51,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		disabled,
 		readOnly,
 		orientation = 'vertical',
+		className,
 		onInput,
 		onSelect,
 		template: CustomAutoCompleteItem,
@@ -112,7 +113,11 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 											autoComplete='off'
 											placeholder={placeholder}
 											aria-invalid={!!getFieldState(name).error}
-											className='pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
+											className={cn(
+												'peer pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+												className
+											)}
+											data-icon={props['data-icon']}
 											onKeyDown={handleKeyDown}
 											onClick={() => setOpen(true)}
 											onChange={(e) => {
@@ -122,7 +127,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 											disabled={disabled}
 											readOnly={readOnly}
 										/>
-										<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50' />
+										<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
 									</PopoverTrigger>
 								</FormControl>
 								<PopoverContent

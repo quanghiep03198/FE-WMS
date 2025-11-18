@@ -19,6 +19,7 @@ export default {
 		decrement: '减量',
 		delete: '删除',
 		detail: '细节',
+		disapprove: '取消审核',
 		disconnect: '断开',
 		dismiss: '忽略',
 		download_excel: '下载 Excel',
@@ -39,6 +40,7 @@ export default {
 		proceed: '确认',
 		reapprove: '重新批准',
 		reload: '重新加载',
+		report: '报告',
 		report_bug: '报告错误',
 		request_change: '请求更改',
 		reset: '重置',
@@ -62,6 +64,7 @@ export default {
 		update: '編輯',
 		upload: '上传',
 		undo: '撤销',
+		reconfirm: '再次确认',
 		redo: '重做'
 	},
 
@@ -70,6 +73,7 @@ export default {
 		approver: '審核人',
 		approver_time: '審核時間',
 		created_at: '创建日期',
+		created_by: '创建人',
 		factory_code: '工厂',
 		quantity: '數量',
 		quantity_with_limit: '數量 (最大 {{limit}})',
