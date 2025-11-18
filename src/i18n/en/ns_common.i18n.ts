@@ -19,6 +19,7 @@ export default {
 		decrement: 'Decrement',
 		delete: 'Delete',
 		detail: 'Detail',
+		disapprove: 'Disapprove',
 		disconnect: 'Disconnect',
 		dismiss: 'Dismiss',
 		download_excel: 'Download Excel',
@@ -39,6 +40,7 @@ export default {
 		proceed: 'Proceed',
 		reapprove: 'Reapprove',
 		reload: 'Reload',
+		report: 'Report',
 		report_bug: 'Report bug',
 		request_change: 'Request Change',
 		reset: 'Reset',
@@ -62,6 +64,7 @@ export default {
 		update: 'Update',
 		upload: 'Upload',
 		undo: 'Undo',
+		reconfirm: 'Reconfirm',
 		redo: 'Redo'
 	},
 	common_fields: {
@@ -69,6 +72,7 @@ export default {
 		approver: 'Approver',
 		approver_time: 'Approval time',
 		created_at: 'Created at',
+		created_by: 'Created by',
 		factory_code: 'Factory code',
 		quantity: 'Quantity',
 		quantity_with_limit: 'Quantity (max {{limit}})',

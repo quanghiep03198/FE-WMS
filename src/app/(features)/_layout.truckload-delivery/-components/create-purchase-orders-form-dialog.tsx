@@ -95,8 +95,6 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											placeholder='e.g., ABCU1234567'
 											description='BIC container code format. Skip this field in case container number is not available now.'
 											onChange={(e) => {
-												if (e.currentTarget.value.length === 4 || e.currentTarget.value.length === 11)
-													form.setValue('container_number', e.currentTarget.value.toUpperCase() + ' ')
 												form.setValue('container_number', e.currentTarget.value.toUpperCase())
 											}}
 										/>

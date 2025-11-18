@@ -4,8 +4,8 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext } from 'react'
 import { StoreApi } from 'zustand'
 
-export type TableContextStore = {
-	table: Table<any>
+export type TableContextStore<TData = any> = {
+	table: Table<TData>
 	filterOpen: boolean
 	setFilterOpen: (open: boolean) => void
 	event$: EventEmitter<Record<string, unknown>>

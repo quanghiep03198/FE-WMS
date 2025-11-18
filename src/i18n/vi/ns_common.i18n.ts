@@ -37,6 +37,7 @@ export default {
 		proceed: 'Tiếp tục',
 		reapprove: 'Duyệt lại',
 		reload: 'Tải lại',
+		report: 'Báo cáo',
 		report_bug: 'Báo cáo lỗi',
 		request_change: 'Yêu cầu thay đổi',
 		reset: 'Đặt lại',
@@ -63,12 +64,14 @@ export default {
 		update: 'Chỉnh sửa',
 		upload: 'Tải lên',
 		undo: 'Hoàn tác',
+		reconfirm: 'Xác nhận lại',
 		redo: 'Làm lại'
 	},
 	common_fields: {
 		actions: 'Thao tác',
 		approver: 'Người phê duyệt',
 		approver_time: 'Thời gian phê duyệt',
+		created_by: 'Người tạo',
 		created_at: 'Ngày tạo',
 		factory_code: 'Xưởng',
 		quantity: 'Số lượng',

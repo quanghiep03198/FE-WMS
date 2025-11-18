@@ -45,6 +45,10 @@ export const createDeliverySchema = z
 		})
 	})
 
+export const updateDispatchOrderSchema = createDeliverySchema.extend({
+	dispatch_order: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' })
+})
+
 export const updateDeliverySchema = z.object({
 	id: z.int().positive(),
 	po: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
@@ -57,10 +61,11 @@ export const updateDeliverySchema = z.object({
 		.string({ error: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
-	// .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
+	// // .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
 	outbound_qty: z.int({ error: 'ns_validation:required' }).positive({ error: 'ns_validation:invalid_value' }),
 	max_outbound_qty: z.int().positive().optional()
 })
 
 export type CreateDeliveryFormValues = z.infer<typeof createDeliverySchema>
+export type UpdateDispatchOrderFormValues = z.infer<typeof updateDispatchOrderSchema>
 export type UpdateDeliveryFormValues = z.infer<typeof updateDeliverySchema>

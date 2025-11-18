@@ -41,6 +41,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		// * For update action, need to exclude current record's outbound qty
 
 		const alreadyAddedOutboundQty = data
+			.flatMap((delivery) => delivery.delivery_details)
 			.filter((item) => {
 				if (props['data-action'] === CommonActions.UPDATE)
 					return item.po === currentPurchaseOrderValue && item.id !== currentId
@@ -54,7 +55,6 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 			typeof props['data-index'] === 'number'
 				? `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
 				: 'max_outbound_qty'
-		console.log('maxQtyFieldName :>> ', maxQtyFieldName)
 		setValue(maxQtyFieldName, purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty)
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
