@@ -15,7 +15,17 @@ export class OrderService {
 	static async searchPurchaseOrder(tenantId: string, params: { q: string }) {
 		return await axiosInstance.get<
 			unknown,
-			ResponseBody<Array<{ po: string; po_qty: number; accumulated_outbound_qty: number; is_completed: boolean }>>
+			ResponseBody<
+				Array<{
+					po: string
+					brand_name: string
+					factory_shoes_style: string
+					color_sn: string
+					po_qty: number
+					accumulated_outbound_qty: number
+					is_completed: boolean
+				}>
+			>
 		>('/order/purchase-order/search', {
 			headers: {
 				[RequestHeaders.TENANT_ID]: tenantId

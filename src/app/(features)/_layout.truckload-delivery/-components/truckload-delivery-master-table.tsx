@@ -278,9 +278,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			renderSubComponent={({ row }) => {
-				const data = Array.isArray((row.original as ITruckloadDelivery)?.delivery_details)
-					? (row.original as ITruckloadDelivery).delivery_details
-					: []
+				const data = pick(row.original as ITruckloadDelivery, ['dispatch_order', 'delivery_details'])
 				return <TruckloadDeliveryDetailTable data={data} />
 			}}
 		/>
