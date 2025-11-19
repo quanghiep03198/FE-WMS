@@ -66,6 +66,19 @@ export const updateDeliverySchema = z.object({
 	max_outbound_qty: z.int().positive().optional()
 })
 
+export const upsertPurchaseOrdersSchema = z.object({
+	dispatch_order: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
+	outbound_purchase_orders: z.array(
+		z.object({
+			id: z.number().nullable().default(null),
+			po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+			outbound_qty: z.number({ message: 'ns_validation:required' }).int().positive(),
+			max_outbound_qty: z.number().nonnegative().default(Infinity)
+		})
+	)
+})
+
 export type CreateDeliveryFormValues = z.infer<typeof createDeliverySchema>
 export type UpdateDispatchOrderFormValues = z.infer<typeof updateDispatchOrderSchema>
 export type UpdateDeliveryFormValues = z.infer<typeof updateDeliverySchema>
+export type UpsertPurchaseOrdersFormValues = z.infer<typeof upsertPurchaseOrdersSchema>

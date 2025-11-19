@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
-import { CreateDeliveryFormValues, UpdateDeliveryFormValues } from '../-schemas'
+import { CreateDeliveryFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 type PurchaseOrderFieldControlProps = Partial<
 	AutoCompleteFieldControlProps<{
@@ -18,19 +18,32 @@ type PurchaseOrderFieldControlProps = Partial<
 		accumulated_outbound_qty: number
 		is_completed: boolean
 	}>
-> & { ['data-action']: CommonActions.CREATE | CommonActions.UPDATE; ['data-index']?: number }
+> & {
+	onSelect?: (selectedItem: {
+		po: string
+		brand_name: string
+		factory_shoes_style: string
+		color_sn: string
+		po_qty: number
+		accumulated_outbound_qty: number
+		is_completed: boolean
+	}) => any
+	['data-action']: CommonActions.CREATE | CommonActions.UPDATE
+	['data-index']?: number
+}
 
-const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ name, ...props }) => {
+const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ name, onSelect, ...props }) => {
+	const fieldIndex: number | undefined = props['data-index']
+	const fieldAction: CommonActions.CREATE | CommonActions.UPDATE = props['data-action']
+
 	const { t } = useTranslation()
-	const { control, getValues, setValue } = useFormContext<CreateDeliveryFormValues | UpdateDeliveryFormValues>()
+	const { control, getValues, setValue } = useFormContext<CreateDeliveryFormValues | UpsertPurchaseOrdersFormValues>()
 	const { data } = useGetTruckloadDeliveryQuery()
 	const currentPurchaseOrderValue = useWatch({ control, name })
-	const [searchTerm, setSearchTerm] = useState(
-		typeof props['data-index'] === 'number' ? (currentPurchaseOrderValue ?? '') : ''
-	)
+	const [searchTerm, setSearchTerm] = useState(typeof fieldIndex === 'number' ? (currentPurchaseOrderValue ?? '') : '')
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
 	const { data: purchaseOrders, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
-	const currentId = getValues('id')
+	const currentId = getValues(`outbound_purchase_orders.${fieldIndex}.id`)
 
 	useEffect(() => {
 		if (!currentPurchaseOrderValue) return
@@ -43,7 +56,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		const alreadyAddedOutboundQty = data
 			.flatMap((delivery) => delivery.delivery_details)
 			.filter((item) => {
-				if (props['data-action'] === CommonActions.UPDATE)
+				if (fieldAction === CommonActions.UPDATE)
 					return item.po === currentPurchaseOrderValue && item.id !== currentId
 				return item.po === currentPurchaseOrderValue
 			})
@@ -51,11 +64,10 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 
 		const { po_qty: purchaseOrderQty, accumulated_outbound_qty: accumulatedOutboundQty } = matchPurchaseOrder
 
-		const maxQtyFieldName: FirstParameter<typeof setValue> =
-			typeof props['data-index'] === 'number'
-				? `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
-				: 'max_outbound_qty'
-		setValue(maxQtyFieldName, purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty)
+		setValue(
+			`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`,
+			purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty
+		)
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
 	return (
@@ -67,6 +79,9 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 			loading={isLoading}
 			datalist={purchaseOrders}
 			onInput={setSearchTerm}
+			onSelect={(value) => {
+				if (typeof onSelect === 'function') onSelect(purchaseOrders?.find((item) => item?.po === value))
+			}}
 			{...props}
 		/>
 	)

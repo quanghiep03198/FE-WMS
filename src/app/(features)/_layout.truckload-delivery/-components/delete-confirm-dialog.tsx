@@ -14,9 +14,10 @@ const DeleteConfirmDialog: React.FC = () => {
 	const currentlyDeletingIdsRef = useRef<number>(null)
 
 	event$.useSubscription(({ action, payload }) => {
-		if (action === CommonActions.DELETE) console.log(payload)
-		setShouldConfirmDialogOpen(typeof payload === 'number')
-		currentlyDeletingIdsRef.current = typeof payload === 'number' ? payload : null
+		if (action === CommonActions.DELETE) {
+			setShouldConfirmDialogOpen(typeof payload === 'number')
+			currentlyDeletingIdsRef.current = typeof payload === 'number' ? payload : null
+		}
 	})
 
 	return createPortal(

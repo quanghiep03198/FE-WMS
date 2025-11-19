@@ -1,7 +1,7 @@
 import { TruckloadDeliveryDispatchOrder, TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { UpdateDeliveryFormValues, UpdateDispatchOrderFormValues } from '../-schemas'
+import { UpdateDeliveryFormValues, UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
 	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY'
@@ -56,6 +56,15 @@ export const useDeleteTruckloadDeliveryMutation = () => {
 		mutationFn: ({ id, shouldPermanentlyDelete }: { id: number; shouldPermanentlyDelete?: true }) => {
 			return TruckloadDeliveryService.deleteOne(id, shouldPermanentlyDelete)
 		},
+		onSuccess: invalidateQueries
+	})
+}
+
+export const useUpsertPurchaseOrdersMutation = ()=>{
+	const invalidateQueries = useInvalidateQueries()
+
+	return useMutation({
+		mutationFn: (payload: UpsertPurchaseOrdersFormValues)=> TruckloadDeliveryService.upsertPurchaseOrders(payload),
 		onSuccess: invalidateQueries
 	})
 }

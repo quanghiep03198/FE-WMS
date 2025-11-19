@@ -2,7 +2,8 @@ import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-deli
 import {
 	CreateDeliveryFormValues,
 	UpdateDeliveryFormValues,
-	UpdateDispatchOrderFormValues
+	UpdateDispatchOrderFormValues,
+	UpsertPurchaseOrdersFormValues
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
@@ -17,8 +18,9 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	outbound_qty: number
 	status: TruckloadDeliveryStatus
 	delivery_details: Array<{
-		id: number
+		id?: number | null
 		po: string
+		brand_name: string
 		factory_shoes_style: string
 		color_sn: string
 		outbound_qty: number
@@ -46,6 +48,10 @@ export class TruckloadDeliveryService {
 
 	static async bulkUpdate(dispatchOrder: string, payload: Omit<UpdateDispatchOrderFormValues, 'dispatch_order'>) {
 		return await axiosInstance.patch(`/truckload-delivery/bulk-update/${dispatchOrder}`, payload)
+	}
+
+	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {
+		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, update)
 	}
 
 	static async setStatusById(
