@@ -4,6 +4,7 @@ import { useSearchPurchaseOrderQuery } from '@/app/(features)/-hooks/use-order-a
 import { CommonActions } from '@/common/constants/enums'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import { AutoCompleteFieldControlProps } from '@/components/ui/@field-control/auto-complete'
+import { IPurchaseOrderResult } from '@/services/order.service'
 import { useDebounce } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
@@ -12,22 +13,17 @@ import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-a
 import { CreateDeliveryFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 type PurchaseOrderFieldControlProps = Partial<
-	AutoCompleteFieldControlProps<{
-		po: string
-		po_qty: number
-		accumulated_outbound_qty: number
-		is_completed: boolean
-	}>
+	Omit<
+		AutoCompleteFieldControlProps<{
+			po: string
+			po_qty: number
+			accumulated_outbound_qty: number
+			is_completed: boolean
+		}>,
+		'onSelect'
+	>
 > & {
-	onSelect?: (selectedItem: {
-		po: string
-		brand_name: string
-		factory_shoes_style: string
-		color_sn: string
-		po_qty: number
-		accumulated_outbound_qty: number
-		is_completed: boolean
-	}) => any
+	onSelect?: (selectedItem: IPurchaseOrderResult) => any
 	['data-action']: CommonActions.CREATE | CommonActions.UPDATE
 	['data-index']?: number
 }
@@ -64,10 +60,8 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 
 		const { po_qty: purchaseOrderQty, accumulated_outbound_qty: accumulatedOutboundQty } = matchPurchaseOrder
 
-		setValue(
-			`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`,
-			purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty
-		)
+		const maxOutboundQty = purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty
+		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, Math.max(0, maxOutboundQty))
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
 	return (

@@ -23,6 +23,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
 	const dateLocale = useDateLocale()
 
+	console.log('data :>> ', data)
+
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
 	const columns = useMemo(
@@ -161,7 +163,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				maxSize: 250,
 				cell: ({ getValue }) => (
 					<Typography variant='small' className='line-clamp-1 first-letter:uppercase'>
-						{formatRelative(getValue(), new Date(), { locale: dateLocale }) as string}
+						{format(new Date(getValue()), 'yyyy-MM-dd', { locale: dateLocale }) as string}
 					</Typography>
 				)
 			}),
@@ -173,7 +175,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
 				filterFn: 'equals',
-				minSize: 150,
+				minSize: 200,
+				size: 200,
 				maxSize: 200,
 				cell: ({ getValue }) => {
 					const value = getValue() as TruckloadDeliveryStatus
@@ -278,8 +281,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			renderSubComponent={({ row }) => {
-				const data = pick(row.original as ITruckloadDelivery, ['dispatch_order', 'delivery_details'])
-				return <TruckloadDeliveryDetailTable data={data} />
+				const subTableData = pick(row.original as ITruckloadDelivery, ['dispatch_order', 'delivery_details'])
+				return (
+					<TruckloadDeliveryDetailTable
+						data={subTableData}
+						onCollapse={() => row.toggleExpanded(!row.getIsExpanded())}
+					/>
+				)
 			}}
 		/>
 	)

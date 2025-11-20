@@ -12,17 +12,25 @@ export default {
 	description: {
 		add_outbound_size: 'Add size and quantity for this order to perform the outbound process.',
 		archived_restoration: 'Restore archived data. Use only when necessary.',
+		container_number_field:
+			'BIC container code format. Skip this field in case container number is not available now.',
 		create_truckload_delivery: 'Create new container loading information for outbound shipments from the factory',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
 		defective_goods_inventory_report: 'Manage and track the inventory of defective goods in the warehouse.',
+		duplicate_po_added:
+			'Do not add duplicate purchase orders, outbound quantity must not exceed the total ordered quantity.',
 		exchange_all: 'You can exchange the entire EPC belonging to the selected size.',
 		exchange_epc_dialog_desc:
 			'Allows users to replace or update EPC tags on a product with a new manufacturing order.',
 		inoutbound_form_note: 'Stop reading from RFID device and disconnect before updating stock moves.',
 		list_of_already_scanned_epcs: 'List of EPCs that have been previously scanned for inbound.',
+		license_plate_field:
+			'License plate that coresponding to container number. Also skip entering license plate if container number is unknown.',
 		monthly_inventory_report: 'Manage and track the monthly inventory of finished goods in the warehouse.',
 		no_added_size: 'No size added',
+		no_dispatch_order_item_added: 'No dispatch order item added',
+		no_dispatch_order_item_added_caption: 'Please add at least one purchase order and outbound quantity to proceed.',
 		no_exchangable_order: 'Only items with the same production code and size number can be exchanged.',
 		order_size_detail:
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',

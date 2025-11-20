@@ -4,13 +4,17 @@ import { TruckloadDeliveryStatus } from '../-constants'
 import { UpdateDeliveryFormValues, UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
-	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY'
+	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY',
+	UPSERT_PURCHASE_ORDERS = 'UPSERT_PURCHASE_ORDERS',
+	DELETE_PURCHASE_ORDER = 'DELETE_PURCHASE_ORDER'
 }
 
 export const useGetTruckloadDeliveryQuery = () => {
 	return useQuery({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 		queryFn: TruckloadDeliveryService.getAll,
+		refetchOnMount: false,
+		refetchOnWindowFocus: false,
 		select: (response) =>
 			Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({ ...item, purchase_orders: item.delivery_details.map(({ po }) => po) }))
@@ -53,18 +57,52 @@ export const useDeleteTruckloadDeliveryMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationFn: ({ id, shouldPermanentlyDelete }: { id: number; shouldPermanentlyDelete?: true }) => {
-			return TruckloadDeliveryService.deleteOne(id, shouldPermanentlyDelete)
+		mutationKey: [TruckloadDeliveryQueryKeys.DELETE_PURCHASE_ORDER],
+		mutationFn: (id: number) => {
+			return TruckloadDeliveryService.deleteOne(id)
 		},
 		onSuccess: invalidateQueries
 	})
 }
 
-export const useUpsertPurchaseOrdersMutation = ()=>{
+export const useDeleteDispatchOrdersMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationFn: (payload: UpsertPurchaseOrdersFormValues)=> TruckloadDeliveryService.upsertPurchaseOrders(payload),
+		mutationFn: (dispatchOrder: TruckloadDeliveryDispatchOrder) => {
+			return TruckloadDeliveryService.bulkDelete(dispatchOrder)
+		},
+		onSuccess: invalidateQueries
+	})
+}
+
+export const useUpsertPurchaseOrdersMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationKey: [TruckloadDeliveryQueryKeys.UPSERT_PURCHASE_ORDERS],
+		mutationFn: (payload: UpsertPurchaseOrdersFormValues) => TruckloadDeliveryService.upsertPurchaseOrders(payload),
+		// onMutate: async (_, context) => {
+		// 	// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+		// 	await context.client.cancelQueries({
+		// 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
+		// 		predicate: (query) => query.queryKey.some((key) => Object.values(TruckloadDeliveryQueryKeys).includes(key))
+		// 	})
+
+		// 	// Snapshot the previous value
+		// 	const currentQueryData = context.client.getQueryData<ITruckloadDelivery[]>([
+		// 		TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY
+		// 	])
+
+		// 	return { currentQueryData }
+		// },
+		// onError: (_err, _payload, context) => {
+		// 	queryClient.setQueryData<ITruckloadDelivery[]>(
+		// 		[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
+		// 		context.currentQueryData
+		// 	)
+		// },
 		onSuccess: invalidateQueries
 	})
 }

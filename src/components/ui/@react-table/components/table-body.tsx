@@ -29,6 +29,7 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 				{Array.isArray(virtualItems) &&
 					virtualItems.map((virtualRow) => {
 						const row = rows[virtualRow.index] as TRow<any>
+
 						return shouldSkipRerender ? (
 							<MemoizedVirtualTableRow
 								key={row.id}

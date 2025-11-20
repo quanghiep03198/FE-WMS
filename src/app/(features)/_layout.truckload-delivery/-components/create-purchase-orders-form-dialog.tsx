@@ -93,7 +93,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											label={t('ns_erp:fields.container_number')}
 											name='container_number'
 											placeholder='e.g., ABCU1234567'
-											description='BIC container code format. Skip this field in case container number is not available now.'
+											description={t('ns_inoutbound:description.container_number_field')}
 											onChange={(e) => {
 												form.setValue('container_number', e.currentTarget.value.toUpperCase())
 											}}
@@ -102,7 +102,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											label={t('ns_erp:fields.license_plate')}
 											name='license_plate'
 											placeholder='e.g., ABC-12345'
-											description='License plate that coresponding to container number. Also skip entering license plate if container number is unknown.'
+											description={t('ns_inoutbound:description.license_plate_field')}
 											onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
 										/>
 									</Div>
@@ -167,9 +167,8 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 													&quot;
 													<Typewriter
 														className='text-sm italic'
-														text={
-															'Do not add duplicate purchase orders and double check the outbound quantities.'
-														}
+														text={t('ns_inoutbound:description.duplicate_po_added')}
+														typeSpeed={20}
 														delay={200}
 													/>
 													&quot;
@@ -194,7 +193,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 								</Fragment>
 							) : (
 								<Empty className='border border-dashed'>
-									<EmptyHeader>
+									<EmptyHeader className='w-full max-w-md'>
 										<EmptyMedia variant='default' className='place-items place-content-center'>
 											<Icon
 												name='CircleFadingPlus'
@@ -203,8 +202,10 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 												stroke='hsl(var(--muted-foreground))'
 											/>
 										</EmptyMedia>
-										<EmptyTitle>{t('ns_inoutbound:description.no_added_size')}</EmptyTitle>
-										<EmptyDescription>{t('ns_inoutbound:description.add_outbound_size')}</EmptyDescription>
+										<EmptyTitle>{t('ns_inoutbound:description.no_dispatch_order_item_added')}</EmptyTitle>
+										<EmptyDescription className='w-full'>
+											{t('ns_inoutbound:description.no_dispatch_order_item_added_caption')}
+										</EmptyDescription>
 									</EmptyHeader>
 									<EmptyContent>
 										<Button

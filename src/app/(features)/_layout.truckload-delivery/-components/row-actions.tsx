@@ -11,6 +11,7 @@ import {
 	Icon
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import { pick } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -37,21 +38,25 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	}
 
 	return (
-		<Div className='justify flex items-center'>
-			<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
-				<Icon name='CircleCheck' />
-				{data.status !== TruckloadDeliveryStatus.PENDING
-					? t('ns_common:actions.reconfirm')
-					: t('ns_common:actions.confirm')}
-			</Button>
-			<Button
-				variant='ghost'
-				className='text-destructive hover:text-destructive'
-				size='sm'
-				onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}>
-				<Icon name='CircleAlert' />
-				{t('ns_common:actions.report')}
-			</Button>
+		<Div className='flex items-center justify-end'>
+			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
+				<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
+					<Icon name='CircleCheck' />
+					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
+						? t('ns_common:actions.reconfirm')
+						: t('ns_common:actions.confirm')}
+				</Button>
+			)}
+			{data.status !== TruckloadDeliveryStatus.REQUEST_CHANGE && (
+				<Button
+					variant='ghost'
+					className='text-destructive hover:text-destructive'
+					size='sm'
+					onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}>
+					<Icon name='CircleAlert' />
+					{t('ns_common:actions.report')}
+				</Button>
+			)}
 			<DropdownMenu modal={false}>
 				<DropdownMenuTrigger className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
 					<Icon name='Ellipsis' />
@@ -60,14 +65,17 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 					<DropdownMenuGroup>
 						<DropdownMenuItem
 							onClick={() => {
-								event$.emit({ action: CommonActions.UPDATE_MANY, payload: data })
+								event$.emit({
+									action: CommonActions.UPDATE_MANY,
+									payload: pick(data, ['dispatch_order', 'license_plate', 'container_number'])
+								})
 							}}>
 							{t('ns_common:actions.update')}
 						</DropdownMenuItem>
 						<DropdownMenuItem
-							disabled={data.status !== TruckloadDeliveryStatus.PENDING}
+							disabled={data.status === TruckloadDeliveryStatus.CONFIRMED}
 							className='text-destructive hover:!text-destructive'
-							onClick={() => event$.emit({ action: CommonActions.DELETE, payload: data.dispatch_order })}>
+							onClick={() => event$.emit({ action: CommonActions.DELETE_MANY, payload: data.dispatch_order })}>
 							{t('ns_common:actions.delete')}
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
