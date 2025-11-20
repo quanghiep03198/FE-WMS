@@ -29,7 +29,7 @@ const OutboundQtyInputFieldControl: React.FC<
 	})
 
 	const actualMaxOutboundQty = useMemo(() => {
-		if (!currentMaxOutboundQty) return Infinity
+		if (!currentMaxOutboundQty && typeof currentMaxOutboundQty !== 'number') return Infinity
 		if (props['data-action'] === CommonActions.UPDATE) return currentMaxOutboundQty + (currentOutboundQty ?? 0)
 		return currentMaxOutboundQty
 	}, [currentPurchaseOrder, currentOutboundQty, currentMaxOutboundQty])

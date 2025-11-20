@@ -1,5 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
-import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
 import { useEventEmitter } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
@@ -16,10 +16,11 @@ type EventPayload =
 	  }
 	| {
 			action: CommonActions.UPDATE_MANY
-			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'status'>
+			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number'>
 	  }
-	| { action: CommonActions.SET_STATUS; payload: any }
-	| { action: CommonActions.DELETE; payload: number | string }
+	| { action: CommonActions.SET_STATUS; payload: string }
+	| { action: CommonActions.DELETE; payload: number }
+	| { action: CommonActions.DELETE_MANY; payload: TruckloadDeliveryDispatchOrder }
 
 type PageContextValue = {
 	event$: EventEmitter<EventPayload>

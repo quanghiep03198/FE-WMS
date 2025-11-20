@@ -1,7 +1,7 @@
 import z from 'zod'
 
 // BIC container code pattern: 4 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
-const BIC_CONTAINER_PATTERN = /^[A-Z]{3}[UJZ]{1}\d{6}\d{1}$/
+// const BIC_CONTAINER_PATTERN = /^[A-Z]{3}[UJZ]{1}\d{6}\d{1}$/
 
 export const createDeliverySchema = z
 	.object({
@@ -45,8 +45,17 @@ export const createDeliverySchema = z
 		})
 	})
 
-export const updateDispatchOrderSchema = createDeliverySchema.extend({
-	dispatch_order: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' })
+export const updateDispatchOrderSchema = z.object({
+	dispatch_order: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
+	license_plate: z
+		.string({ error: 'ns_validation:required' })
+		.trim()
+		.nonempty({ error: 'ns_validation:required' })
+		.transform((value) => value.toUpperCase()),
+	container_number: z
+		.string({ error: 'ns_validation:required' })
+		.trim()
+		.nonempty({ message: 'ns_validation:required' })
 })
 
 export const updateDeliverySchema = z.object({

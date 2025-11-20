@@ -8,7 +8,7 @@ import {
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
-export type TruckloadDeliveryDispatchOrder = `DO-${string}-${string}`
+export type TruckloadDeliveryDispatchOrder = `GL${number}-EXP-${string}-${string}`
 
 export interface ITruckloadDelivery extends IBaseEntity {
 	dispatch_order: TruckloadDeliveryDispatchOrder
@@ -40,10 +40,8 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.patch(`/truckload-delivery/update/${id}`, payload)
 	}
 
-	static async deleteOne(id: number, shouldPermanentlyDelete?: true) {
-		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/delete/${id}`, {
-			params: { permanently: shouldPermanentlyDelete }
-		})
+	static async deleteOne(id: number) {
+		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/delete/${id}`)
 	}
 
 	static async bulkUpdate(dispatchOrder: string, payload: Omit<UpdateDispatchOrderFormValues, 'dispatch_order'>) {
@@ -54,18 +52,14 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, update)
 	}
 
+	static async bulkDelete(dispatchOrder: TruckloadDeliveryDispatchOrder) {
+		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/bulk-delete/${dispatchOrder}`)
+	}
+
 	static async setStatusById(
 		dispatchOrder: TruckloadDeliveryDispatchOrder,
 		status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 	) {
 		return await axiosInstance.patch(`/truckload-delivery/set-status/${dispatchOrder}`, { status })
-	}
-
-	static async restoreOneById(id: number) {
-		return await axiosInstance.post<unknown, unknown, void>(`/truckload-delivery/restore/${id}`)
-	}
-
-	static async restoreMany(ids: number[]) {
-		return await axiosInstance.post<unknown, unknown, number[]>(`/truckload-delivery/restore-multiple`, ids)
 	}
 }

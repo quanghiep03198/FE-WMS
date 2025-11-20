@@ -1,78 +1,99 @@
-'use no memo'
-
 import { CommonActions } from '@/common/constants/enums'
-import {
-	Button,
-	Div,
-	Icon,
-	Separator,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip,
-	Typography
-} from '@/components/ui'
+import { Button, Div, Icon, Separator, Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { pick, uniqBy } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { isNil, pick, sortBy, uniqBy } from 'lodash'
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { usePageContext } from '../-contexts/page-context'
-import { useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
+import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
-import { GhostButton } from '../../-components/-shared/ghost-button'
-import OutboundQtyInputFieldControl from './outbound-qty-field-control'
-import PurchaseOrderFieldControl from './purchase-order-field-control'
+import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
-const TruckloadDeliveryDetailTable: React.FC<
-	Record<'data', Pick<ITruckloadDelivery, 'dispatch_order' | 'delivery_details'>>
-> = ({ data }) => {
+type TruckloadDeliveryDetailTableProps = {
+	data: Pick<ITruckloadDelivery, 'dispatch_order' | 'delivery_details'>
+	onCollapse?: () => void
+}
+
+const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> = ({ data, onCollapse }) => {
 	const { t } = useTranslation()
 	const [action, setAction] = useState<CommonActions.UPDATE | null>(null)
 	const form = useForm<UpsertPurchaseOrdersFormValues>({
 		resolver: zodResolver(upsertPurchaseOrdersSchema)
 	})
-
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
 
 	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation()
 	const toastRef = useRef<string | number | null>(null)
+	const queryClient = useQueryClient()
+
+	useEffect(() => {
+		if (isPending) return
+		handleResetDeliveryDetails(true, true)
+	}, [data])
+
+	const handleResetDeliveryDetails = (
+		shouldKeepUpdating: boolean = true,
+		shouldRestoreUpdatingData: boolean = true
+	) => {
+		if (isPending) return
+		if (!shouldKeepUpdating) setAction(null)
+
+		if (!shouldRestoreUpdatingData) {
+			queryClient.setQueryData(
+				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
+				(oldData: ResponseBody<ITruckloadDelivery[]>) => {
+					return {
+						...oldData,
+						metadata: oldData.metadata.map((item) => ({
+							...item,
+							delivery_details: item.delivery_details.filter((item) => !isNil(item.id))
+						}))
+					}
+				}
+			)
+			queryClient.invalidateQueries({
+				queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
+				refetchType: 'none'
+			})
+		}
+
+		const defaultFormValues = Array.isArray(data.delivery_details)
+			? uniqBy(
+					data.delivery_details
+						.filter((item) => !isNil(item.id))
+						.map((item) => pick(item, ['id', 'po', 'outbound_qty'])),
+					(item) => item.id
+				)
+			: []
+
+		const addedItems = form.getValues('outbound_purchase_orders').filter(({ id }) => isNil(id))
+
+		form.reset({
+			dispatch_order: data.dispatch_order,
+			outbound_purchase_orders: sortBy(
+				[...defaultFormValues, ...(shouldRestoreUpdatingData ? addedItems : [])],
+				(item) => item.id
+			)
+		})
+	}
 
 	const handleSaveChanges = async (data: UpsertPurchaseOrdersFormValues) => {
 		toastRef.current = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id: toastRef.current })
+			handleResetDeliveryDetails(false, false)
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: toastRef.current })
 		}
 	}
 
-	useEffect(() => {
-		form.reset({
-			dispatch_order: data.dispatch_order,
-			outbound_purchase_orders: uniqBy(
-				data?.delivery_details?.map((item) => pick(item, ['id', 'po', 'outbound_qty'])),
-				(item) => item.po
-			)
-		})
-	}, [data])
-
-	const handleCancelChange = () => {
-		setAction(null)
-		form.reset({
-			dispatch_order: data.dispatch_order,
-			outbound_purchase_orders: uniqBy(data.delivery_details, (item) => item.po).map((item) =>
-				pick(item, ['id', 'po', 'outbound_qty'])
-			)
-		})
-	}
+	const handleRemoveFieldItem = useCallback(remove, [])
 
 	return (
 		<Div className='relative rounded-md border bg-background'>
@@ -113,12 +134,13 @@ const TruckloadDeliveryDetailTable: React.FC<
 									}
 
 									return (
-										<ArrayFieldItem
+										<TruckloadDeliveryDetailRow
 											key={field.id}
 											index={index}
-											readonly={!action}
+											parentId={data.dispatch_order}
+											readonly={!action || isPending}
 											defaultValues={rowData}
-											onRemove={remove}
+											onRemove={handleRemoveFieldItem}
 										/>
 									)
 								})}
@@ -126,43 +148,64 @@ const TruckloadDeliveryDetailTable: React.FC<
 						</Table>
 					</FieldSet>
 					<Div className='m-4 grid place-content-center place-items-center gap-y-4 rounded-md border border-dashed p-4'>
-						{!action ? (
-							<Button variant='outline' type='button' size='sm' onClick={() => setAction(CommonActions.UPDATE)}>
-								<Icon name='PenLine' /> {t('ns_common:actions.update')}
+						<Div className='flex items-center gap-x-1'>
+							{!action ? (
+								<Button
+									variant='default'
+									type='button'
+									size='sm'
+									onClick={() => setAction(CommonActions.UPDATE)}>
+									<Icon name='PenLine' /> {t('ns_common:actions.update')}
+								</Button>
+							) : (
+								<Fragment>
+									<Button
+										variant='outline'
+										type='button'
+										size='sm'
+										className='border-dashed'
+										disabled={isPending}
+										onClick={() =>
+											append({
+												id: null,
+												po: '',
+												outbound_qty: null,
+												max_outbound_qty: null
+											})
+										}>
+										<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
+									</Button>
+									<Separator orientation='vertical' className='mx-2 h-8' />
+									<Button type='submit' size='sm' disabled={isPending}>
+										<Icon
+											name={isPending ? 'LoaderCircle' : 'Check'}
+											className={isPending && 'animate-spin'}
+										/>
+										{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+									</Button>
+									<Button
+										type='button'
+										size='sm'
+										variant='secondary'
+										onClick={() => handleResetDeliveryDetails(false, false)}
+										disabled={isPending}>
+										<Icon name='X' />
+										{t('ns_common:actions.cancel')}
+									</Button>
+								</Fragment>
+							)}
+							{action && <Separator orientation='vertical' className='mx-2 h-8' />}
+							<Button
+								variant='outline'
+								type='button'
+								size='sm'
+								onClick={() => {
+									onCollapse()
+									handleResetDeliveryDetails(false, false)
+								}}>
+								<Icon name='ChevronsUp' /> {t('ns_common:actions.fold')}
 							</Button>
-						) : (
-							<Div className='flex items-center gap-x-1'>
-								<Button
-									variant='outline'
-									type='button'
-									size='sm'
-									disabled={isPending}
-									onClick={() =>
-										append({
-											id: null,
-											po: '',
-											outbound_qty: null,
-											max_outbound_qty: null
-										})
-									}>
-									<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
-								</Button>
-								<Separator orientation='vertical' className='mx-2 h-8' />
-								<Button type='submit' size='sm' disabled={isPending}>
-									<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
-									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-								</Button>
-								<Button
-									type='button'
-									size='sm'
-									variant='outline'
-									onClick={handleCancelChange}
-									disabled={isPending}>
-									<Icon name='X' />
-									{t('ns_common:actions.cancel')}
-								</Button>
-							</Div>
-						)}
+						</Div>
 
 						{action && (
 							<Div className='col-span-full inline-flex items-center'>
@@ -172,9 +215,12 @@ const TruckloadDeliveryDetailTable: React.FC<
 									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
 								/>
 								&quot;
-								<Typography variant='small' className='italic'>
-									Do not add duplicate purchase orders and double check the outbound quantities.
-								</Typography>
+								<Typewriter
+									className='text-sm italic'
+									text={t('ns_inoutbound:description.duplicate_po_added')}
+									typeSpeed={25}
+									delay={0}
+								/>
 								&quot;
 							</Div>
 						)}
@@ -182,82 +228,6 @@ const TruckloadDeliveryDetailTable: React.FC<
 				</Form>
 			</FormProvider>
 		</Div>
-	)
-}
-
-type ArrayFieldItemProps = {
-	index: number
-	readonly: boolean
-	defaultValues: ITruckloadDelivery['delivery_details'][number]
-	onRemove: (index?: number | number[]) => void
-}
-
-const ArrayFieldItem: React.FC<ArrayFieldItemProps> = ({ index, readonly, defaultValues, onRemove }) => {
-	const { t } = useTranslation()
-	const { event$ } = usePageContext()
-	const [data, setData] = useState<ITruckloadDelivery['delivery_details'][number] | null>(defaultValues)
-
-	return (
-		<TableRow aria-readonly={readonly}>
-			<TableCell align='left'>
-				{readonly ? (
-					<span>{data?.po}</span>
-				) : (
-					<PurchaseOrderFieldControl
-						name={`outbound_purchase_orders.${index}.po`}
-						className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary'
-						tabIndex={index}
-						autoFocus={true}
-						data-index={index}
-						data-icon={false}
-						data-action={CommonActions.UPDATE}
-						onSelect={(selectedItem) => {
-							setData(selectedItem)
-						}}
-					/>
-				)}
-			</TableCell>
-			<TableCell align='left'>
-				<span>{data?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
-			</TableCell>
-			<TableCell align='left'>
-				<span>{data?.factory_shoes_style ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
-			</TableCell>
-			<TableCell align='left'>
-				<span>{data?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
-			</TableCell>
-			<TableCell align='left'>
-				{readonly ? (
-					<span>{data?.outbound_qty}</span>
-				) : (
-					<OutboundQtyInputFieldControl
-						name={`outbound_purchase_orders.${index}.outbound_qty`}
-						className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary'
-						autoFocus={false}
-						autoComplete='off'
-						tabIndex={index + 1}
-						data-action={CommonActions.CREATE}
-						data-index={index}
-					/>
-				)}
-			</TableCell>
-			<TableCell align='right'>
-				<Tooltip message={t('ns_common:actions.delete')}>
-					<GhostButton
-						type='button'
-						className={typeof data?.id === 'number' ? 'text-destructive' : 'text-muted-foreground'}
-						onClick={() => {
-							if (typeof data?.id === 'number') {
-								event$.emit({ action: CommonActions.DELETE, payload: data.id })
-								return
-							}
-							onRemove(index)
-						}}>
-						<Icon name='X' />
-					</GhostButton>
-				</Tooltip>
-			</TableCell>
-		</TableRow>
 	)
 }
 
