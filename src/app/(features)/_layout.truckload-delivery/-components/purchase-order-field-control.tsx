@@ -64,7 +64,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
 	useUpdateEffect(() => {
-		onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
+		if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
 	}, [searchTerm, purchaseOrders])
 
 	return (
