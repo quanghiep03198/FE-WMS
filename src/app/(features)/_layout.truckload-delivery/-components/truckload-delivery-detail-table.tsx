@@ -1,82 +1,99 @@
 import { CommonActions } from '@/common/constants/enums'
-import { Button, Div, Icon, Separator, Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui'
+import useAuth from '@/common/hooks/use-auth'
+import {
+	Button,
+	Div,
+	Icon,
+	Separator,
+	Table,
+	TableBody,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Typography
+} from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueryClient } from '@tanstack/react-query'
-import { isNil, pick, sortBy, uniqBy } from 'lodash'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { useResetState } from 'ahooks'
+import { format } from 'date-fns'
+import { pick, sortBy, uniqBy } from 'lodash'
+import React, { Fragment, useCallback, useEffect, useRef } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
+import { v4 as uuid } from 'uuid'
+import z from 'zod'
+import { useInvalidateDeliveryQueries, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
 type TruckloadDeliveryDetailTableProps = {
-	data: Pick<ITruckloadDelivery, 'dispatch_order' | 'delivery_details'>
+	data: ITruckloadDelivery
 	onCollapse?: () => void
+}
+
+/**
+ * @description Determine if the item is already stored to database
+ * @param item
+ * @returns {boolean}
+ */
+const getIsStoredToDatabase = (item: ITruckloadDelivery['delivery_details'][number]): boolean => {
+	return typeof item.id === 'number'
+}
+
+/**
+ * @description Determine if the item is newly added and not yet stored to database
+ * @param item
+ * @returns {boolean}
+ */
+const getIsCurrentlyAdded = (item: UpsertPurchaseOrdersFormValues['outbound_purchase_orders'][number]): boolean => {
+	return z.uuidv4().safeParse(item.id).success
 }
 
 const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> = ({ data, onCollapse }) => {
 	const { t } = useTranslation()
-	const [action, setAction] = useState<CommonActions.UPDATE | null>(null)
+	const [action, setAction, resetAction] = useResetState<CommonActions.UPDATE | null>(null)
 	const form = useForm<UpsertPurchaseOrdersFormValues>({
 		resolver: zodResolver(upsertPurchaseOrdersSchema)
 	})
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
-
+	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation()
 	const toastRef = useRef<string | number | null>(null)
-	const queryClient = useQueryClient()
+	const invalidateQuery = useInvalidateDeliveryQueries()
 
 	useEffect(() => {
-		if (isPending) return
-		handleResetDeliveryDetails(true, true)
+		handleResetDeliveryDetails(true)
 	}, [data])
 
-	const handleResetDeliveryDetails = (
-		shouldKeepUpdating: boolean = true,
-		shouldRestoreUpdatingData: boolean = true
-	) => {
+	const handleResetDeliveryDetails = (shouldKeepUpdating: boolean) => {
 		if (isPending) return
-		if (!shouldKeepUpdating) setAction(null)
-
-		if (!shouldRestoreUpdatingData) {
-			queryClient.setQueryData(
-				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-				(oldData: ResponseBody<ITruckloadDelivery[]>) => {
-					return {
-						...oldData,
-						metadata: oldData.metadata.map((item) => ({
-							...item,
-							delivery_details: item.delivery_details.filter((item) => !isNil(item.id))
-						}))
-					}
-				}
-			)
-			queryClient.invalidateQueries({
-				queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-				refetchType: 'none'
-			})
+		if (!shouldKeepUpdating) {
+			resetAction()
+			invalidateQuery('none')
 		}
-
+		// * Default form values from backend data
 		const defaultFormValues = Array.isArray(data.delivery_details)
 			? uniqBy(
 					data.delivery_details
-						.filter((item) => !isNil(item.id))
+						.filter(getIsStoredToDatabase)
 						.map((item) => pick(item, ['id', 'po', 'outbound_qty'])),
 					(item) => item.id
 				)
 			: []
 
-		const addedItems = form.getValues('outbound_purchase_orders').filter(({ id }) => isNil(id))
+		// * Include newly added item using UUID v4 format, which is not yet saved to backend
+		const addedItems = form.getValues('outbound_purchase_orders').filter(getIsCurrentlyAdded)
 
+		// * Reset form values
 		form.reset({
 			dispatch_order: data.dispatch_order,
 			outbound_purchase_orders: sortBy(
-				[...defaultFormValues, ...(shouldRestoreUpdatingData ? addedItems : [])],
+				[...defaultFormValues, ...(shouldKeepUpdating ? addedItems : [])],
 				(item) => item.id
 			)
 		})
@@ -87,7 +104,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		try {
 			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id: toastRef.current })
-			handleResetDeliveryDetails(false, false)
+			handleResetDeliveryDetails(false)
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: toastRef.current })
 		}
@@ -96,40 +113,63 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const handleRemoveFieldItem = useCallback(remove, [])
 
 	return (
-		<Div className='relative rounded-md border bg-background'>
+		<Div className='relative overflow-clip rounded-md border bg-background'>
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
 					<FieldSet>
 						<Table className='w-full table-fixed border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 							<TableHeader className='sticky top-0 z-10'>
 								<TableRow>
-									<TableHead align='left' title={t('ns_erp:fields.po')}>
+									<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-44'>
 										<span>{t('ns_erp:fields.po')}</span>
 									</TableHead>
-									<TableHead align='left' title={t('ns_erp:fields.brand_name')}>
+									<TableHead align='left' className='w-[30%] xl:hidden'>
+										<span>{t('ns_erp:titles.product_info')}</span>
+									</TableHead>
+									<TableHead
+										align='left'
+										title={t('ns_erp:fields.brand_name')}
+										className='md:hidden lg:hidden'>
 										<span>{t('ns_erp:fields.brand_name')}</span>
 									</TableHead>
-									<TableHead align='left' title={t('ns_erp:fields.shoestyle_codefactory')}>
+									<TableHead
+										align='left'
+										title={t('ns_erp:fields.shoestyle_codefactory')}
+										className='md:hidden lg:hidden'>
 										<span>{t('ns_erp:fields.shoestyle_codefactory')}</span>
 									</TableHead>
-									<TableHead align='left' title={t('ns_erp:fields.color_sn')}>
+									<TableHead align='left' title={t('ns_erp:fields.color_sn')} className='md:hidden lg:hidden'>
 										<span>{t('ns_erp:fields.color_sn')}</span>
 									</TableHead>
-									<TableHead align='left' title={t('ns_erp:fields.outbound_qty')}>
+									<TableHead align='left' title={t('ns_erp:fields.outbound_qty')} className='w-[30%] xl:w-40'>
 										<span>{t('ns_erp:fields.outbound_qty')}</span>
 									</TableHead>
-									<TableHead align='right'></TableHead>
+									<TableHead
+										align='left'
+										title={t('ns_common:common_fields.created_by')}
+										className='md:hidden lg:hidden'>
+										<span>{t('ns_common:common_fields.created_by')}</span>
+									</TableHead>
+									<TableHead
+										align='left'
+										title={t('ns_common:common_fields.created_at')}
+										className='md:hidden lg:hidden'>
+										<span>{t('ns_common:common_fields.created_at')}</span>
+									</TableHead>
+									<TableHead align='right' className='w-[10%] xl:w-14'></TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
 								{fields.map((field, index) => {
 									const rowData = data?.delivery_details?.[index] ?? {
-										id: null,
+										id: uuid(),
 										po: '',
 										brand_name: null,
 										factory_shoes_style: null,
 										color_sn: null,
 										outbound_qty: 0,
+										user_code_created: user.username,
+										created: new Date(),
 										max_outbound_qty: null
 									}
 
@@ -138,13 +178,45 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											key={field.id}
 											index={index}
 											parentId={data.dispatch_order}
-											readonly={!action || isPending}
+											readonly={!action}
+											isPending={isPending}
 											defaultValues={rowData}
 											onRemove={handleRemoveFieldItem}
 										/>
 									)
 								})}
 							</TableBody>
+							<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t xl:hidden'>
+								<TableRow>
+									<TableHead className='border-t' colSpan={1} align='left'>
+										<span>{t('ns_erp:fields.dispatch_order')}</span>
+									</TableHead>
+									<TableHead className='border-t' colSpan={1} align='left'>
+										<span>{t('ns_erp:fields.factory_departure_time')}</span>
+									</TableHead>
+									<TableHead className='border-t' colSpan={2} align='left'>
+										<span>{t('ns_common:common_fields.total')}</span>
+									</TableHead>
+								</TableRow>
+								<TableRow>
+									<TableCell colSpan={1} align='left' className='w-[40%]'>
+										{data.dispatch_order}
+									</TableCell>
+									<TableCell colSpan={1} align='left'>
+										{data.factory_departure_time ? (
+											format(new Date(data.factory_departure_time), 'yyyy-MM-dd HH:mm')
+										) : (
+											<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+												<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+												{t('ns_common:titles.unknown')}
+											</Typography>
+										)}
+									</TableCell>
+									<TableCell colSpan={2} align='left'>
+										{data?.total_outbound_qty}
+									</TableCell>
+								</TableRow>
+							</TableFooter>
 						</Table>
 					</FieldSet>
 					<Div className='m-4 grid place-content-center place-items-center gap-y-4 rounded-md border border-dashed p-4'>
@@ -155,7 +227,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									type='button'
 									size='sm'
 									onClick={() => setAction(CommonActions.UPDATE)}>
-									<Icon name='PenLine' /> {t('ns_common:actions.update')}
+									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 								</Button>
 							) : (
 								<Fragment>
@@ -167,7 +239,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										disabled={isPending}
 										onClick={() =>
 											append({
-												id: null,
+												id: uuid(),
 												po: '',
 												outbound_qty: null,
 												max_outbound_qty: null
@@ -187,7 +259,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										type='button'
 										size='sm'
 										variant='secondary'
-										onClick={() => handleResetDeliveryDetails(false, false)}
+										onClick={() => handleResetDeliveryDetails(false)}
 										disabled={isPending}>
 										<Icon name='X' />
 										{t('ns_common:actions.cancel')}
@@ -201,27 +273,26 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								size='sm'
 								onClick={() => {
 									onCollapse()
-									handleResetDeliveryDetails(false, false)
+									handleResetDeliveryDetails(false)
 								}}>
 								<Icon name='ChevronsUp' /> {t('ns_common:actions.fold')}
 							</Button>
 						</Div>
 
 						{action && (
-							<Div className='col-span-full inline-flex items-center'>
+							<Div className='col-span-full inline-flex items-stretch'>
 								<Icon
 									name='BotMessageSquare'
 									size={24}
 									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
 								/>
-								&quot;
+
 								<Typewriter
 									className='text-sm italic'
 									text={t('ns_inoutbound:description.duplicate_po_added')}
 									typeSpeed={25}
 									delay={0}
 								/>
-								&quot;
 							</Div>
 						)}
 					</Div>
@@ -231,7 +302,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	)
 }
 
-const Form = tw.form`flex flex-col gap-y-6`
-const FieldSet = tw.fieldset`h-64 overflow-scroll`
+const Form = tw.form`flex flex-col gap-y-6 md:gap-0`
+const FieldSet = tw.fieldset`h-80 md:h-96 overflow-scroll`
 
 export default TruckloadDeliveryDetailTable

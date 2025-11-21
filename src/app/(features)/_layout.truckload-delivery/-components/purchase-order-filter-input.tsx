@@ -20,7 +20,6 @@ const PurchaseOrderFilterInput: React.FC<{
 	const debounceSearchValue = useDebounce(search, { wait: 200 })
 	const { data, isLoading } = useSearchPurchaseOrderQuery(debounceSearchValue)
 	const [open, setOpen] = useState<boolean>(false)
-	const [activeIndex, setActiveIndex] = useState<number>(-1)
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		switch (e.key) {

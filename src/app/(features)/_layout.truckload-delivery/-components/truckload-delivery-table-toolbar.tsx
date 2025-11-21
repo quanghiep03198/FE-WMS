@@ -9,9 +9,9 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
+import DispatchOrderStatusFilter from './dispatch-order-status-filter'
 import GlobalFilterInput from './global-filter-input'
 import PurchaseOrderFilterInput from './purchase-order-filter-input'
-import StatusDropdownMenu from './truckload-delivery-status-filter'
 
 const TruckloadDeliveryTableToolbar: React.FC<{
 	table: Table<ITruckloadDelivery>
@@ -27,7 +27,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 		<Div className='flex items-center gap-x-1'>
 			<GlobalFilterInput {...{ table, event$ }} />
 			{!isMediumScreen && <PurchaseOrderFilterInput table={table} />}
-			<StatusDropdownMenu table={table} />
+			<DispatchOrderStatusFilter table={table} />
 			<Div className='ml-auto flex items-center justify-end gap-x-1'>
 				{isFilterDirty && (
 					<Button

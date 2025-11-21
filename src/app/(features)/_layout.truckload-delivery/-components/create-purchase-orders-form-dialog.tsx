@@ -108,7 +108,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 									</Div>
 									<Div className='flex-1'>
 										<Table className='w-full table-fixed'>
-											<TableHeader>
+											<TableHeader className='overflow-clip rounded-md'>
 												<TableRow>
 													<TableHead align='left'>#</TableHead>
 													<TableHead align='left' className='px-1'>
@@ -158,21 +158,6 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 												))}
 											</TableBody>
 											<TableFooter>
-												<Div className='col-span-full inline-flex items-center'>
-													<Icon
-														name='BotMessageSquare'
-														size={24}
-														className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
-													/>
-													&quot;
-													<Typewriter
-														className='text-sm italic'
-														text={t('ns_inoutbound:description.duplicate_po_added')}
-														typeSpeed={20}
-														delay={200}
-													/>
-													&quot;
-												</Div>
 												<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
 													<Button type='button' variant='outline' size='sm' onClick={() => append({})}>
 														<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
@@ -187,6 +172,21 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 														{t('ns_inoutbound:labels.delete_all')}
 													</Button>
 												</ButtonGroup>
+												<Div className='col-span-full inline-flex items-center'>
+													<Icon
+														name='BotMessageSquare'
+														size={24}
+														className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+													/>
+													&quot;
+													<Typewriter
+														className='text-sm italic'
+														text={t('ns_inoutbound:description.duplicate_po_added')}
+														typeSpeed={20}
+														delay={350}
+													/>
+													&quot;
+												</Div>
 											</TableFooter>
 										</Table>
 									</Div>
