@@ -3,17 +3,28 @@
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
+import { ResourceKey } from 'i18next'
 import React, { useId, useMemo, useRef } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuidv4 } from 'uuid'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../../@core/form'
-import { Icon } from '../../@core/icon'
-import { Input } from '../../@core/input'
-import { Popover, PopoverContent, PopoverTrigger } from '../../@core/popover'
-import { Div } from '../../@custom/div'
-import { Typography } from '../../@custom/typography'
+import {
+	Div,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Icon,
+	Input,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	Tooltip,
+	Typography
+} from '../..'
 
 export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,
@@ -51,6 +62,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		disabled,
 		readOnly,
 		orientation = 'vertical',
+		errorMessageVariant = 'inline',
 		className,
 		onInput,
 		onSelect,
@@ -80,6 +92,8 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		}
 	}
 
+	const { error } = getFieldState(name)
+
 	return (
 		<FormField
 			control={control}
@@ -105,30 +119,39 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 						<Div className='space-y-2'>
 							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
-									<PopoverTrigger className='relative w-full' onClick={(e) => e.preventDefault()}>
-										<Input
-											id={id}
-											ref={resolvedRef}
-											value={field.value}
-											autoComplete='off'
-											placeholder={placeholder}
-											aria-invalid={!!getFieldState(name).error}
-											className={cn(
-												'peer pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
-												className
-											)}
-											data-icon={props['data-icon']}
-											onKeyDown={handleKeyDown}
-											onClick={() => setOpen(true)}
-											onChange={(e) => {
-												field.onChange(e)
-												if (typeof onInput === 'function') onInput(e.target.value)
-											}}
-											disabled={disabled}
-											readOnly={readOnly}
-										/>
-										<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
-									</PopoverTrigger>
+									<Tooltip
+										message={t(error?.message as ResourceKey) || ''}
+										triggerProps={{ asChild: true }}
+										contentProps={{
+											hidden: !error || errorMessageVariant === 'inline',
+											className: 'bg-destructive text:text-destructive-foreground',
+											['aria-invalid']: !!error
+										}}>
+										<PopoverTrigger className='relative w-full' onClick={(e) => e.preventDefault()}>
+											<Input
+												id={id}
+												ref={resolvedRef}
+												value={field.value}
+												autoComplete='off'
+												placeholder={placeholder}
+												aria-invalid={!!getFieldState(name).error}
+												className={cn(
+													'peer pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+													className
+												)}
+												data-icon={props['data-icon']}
+												onKeyDown={handleKeyDown}
+												onClick={() => setOpen(true)}
+												onChange={(e) => {
+													field.onChange(e)
+													if (typeof onInput === 'function') onInput(e.target.value)
+												}}
+												disabled={disabled}
+												readOnly={readOnly}
+											/>
+											<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
+										</PopoverTrigger>
+									</Tooltip>
 								</FormControl>
 								<PopoverContent
 									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
@@ -171,7 +194,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 								</PopoverContent>
 							</Popover>
 							{description && <FormDescription>{description}</FormDescription>}
-							<FormMessage />
+							{error && errorMessageVariant === 'inline' && <FormMessage />}
 						</Div>
 					</FormItem>
 				)

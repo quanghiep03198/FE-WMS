@@ -1,9 +1,22 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
+import { ResourceKey } from 'i18next'
 import React, { useEffect, useId, useRef, useState } from 'react'
 import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
-import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Icon, Toggle } from '../..'
+import { useTranslation } from 'react-i18next'
+import {
+	Div,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Icon,
+	Toggle,
+	Tooltip
+} from '../..'
 import { BaseFieldControl } from '../../../../common/types/hook-form'
 import { Input } from '../../@core/input'
 
@@ -21,11 +34,13 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		type,
 		hidden,
 		orientation,
+		errorMessageVariant = 'inline',
 		defaultValue = getValues(name),
 		ref,
 		...restProps
 	} = props
 
+	const { t } = useTranslation('ns_validation')
 	const id = useId()
 	const [value, setValue] = useState<string>(defaultValue)
 	const localRef = useRef<typeof Input.prototype>(null)
@@ -53,6 +68,8 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		setValue(currentValue)
 	}, [currentValue])
 
+	const { error } = getFieldState(name)
+
 	return (
 		<FormField
 			control={control}
@@ -77,29 +94,36 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 						<FormControl>
 							<Div className='space-y-2'>
 								<Div className='relative'>
-									<Input
-										id={id}
-										aria-invalid={!!getFieldState(name).error}
-										type={currentType}
-										ref={(e) => {
-											field.ref(e)
-											if (resolvedRef.current) {
-												resolvedRef.current = e
-											}
-										}}
-										value={value}
-										placeholder={placeholder}
-										disabled={disabled}
-										className={cn(
-											className,
-											'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
-											orientation === 'horizontal' && 'mb-2 block',
-											type === 'password' && 'placeholder:font-pass'
-										)}
-										style={{ ...props.style, letterSpacing: type === 'password' ? '1px' : 'normal' }}
-										onChange={(e) => handleChange(e, field)}
-										{...restProps}
-									/>
+									<Tooltip
+										message={t(error?.message as ResourceKey) || ''}
+										contentProps={{
+											hidden: !getFieldState(name).error || errorMessageVariant === 'inline',
+											['aria-invalid']: !!error
+										}}>
+										<Input
+											id={id}
+											aria-invalid={!!getFieldState(name).error}
+											type={currentType}
+											ref={(e) => {
+												field.ref(e)
+												if (resolvedRef.current) {
+													resolvedRef.current = e
+												}
+											}}
+											value={value}
+											placeholder={placeholder}
+											disabled={disabled}
+											className={cn(
+												className,
+												'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive [&[type=password]]:appearance-none',
+												orientation === 'horizontal' && 'mb-2 block',
+												type === 'password' && 'placeholder:font-pass'
+											)}
+											style={{ ...props.style, letterSpacing: type === 'password' ? '1px' : 'normal' }}
+											onChange={(e) => handleChange(e, field)}
+											{...restProps}
+										/>
+									</Tooltip>
 									{type === 'password' && (
 										<Toggle
 											className={cn(
@@ -112,7 +136,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 									)}
 								</Div>
 								{description && <FormDescription>{description}</FormDescription>}
-								{!!getFieldState(name).error && <FormMessage />}
+								{!!getFieldState(name).error && errorMessageVariant === 'inline' && <FormMessage />}
 							</Div>
 						</FormControl>
 					</FormItem>
