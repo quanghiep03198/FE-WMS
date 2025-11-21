@@ -1,11 +1,7 @@
-import {
-	ITruckloadDelivery,
-	TruckloadDeliveryDispatchOrder,
-	TruckloadDeliveryService
-} from '@/services/truckload-delivery.service'
+import { TruckloadDeliveryDispatchOrder, TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { UpdateDeliveryFormValues, UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
+import { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
 	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY',
@@ -32,79 +28,60 @@ export const useGetTruckloadDeliveryQuery = () => {
 }
 
 export const useCreateTruckloadDeliveryMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationFn: TruckloadDeliveryService.insertMany,
-		onSuccess: () => invalidateQueries('all')
+		onSuccess: () => invalidateQueries()
 	})
 }
 
 export const useUpdateDispatchOrderMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationFn: ({ dispatch_order, ...update }: UpdateDispatchOrderFormValues) => {
 			return TruckloadDeliveryService.bulkUpdate(dispatch_order, update)
 		},
-		onSuccess: () => invalidateQueries('all')
-	})
-}
-
-export const useUpdateTruckloadDeliveryMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
-
-	return useMutation({
-		mutationFn: ({ id, ...update }: UpdateDeliveryFormValues) => {
-			return TruckloadDeliveryService.updateOneById(id, update)
-		},
-		onSuccess: () => invalidateQueries('all')
+		onSuccess: () => invalidateQueries()
 	})
 }
 
 export const useDeleteTruckloadDeliveryMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationKey: [TruckloadDeliveryQueryKeys.DELETE_PURCHASE_ORDER],
 		mutationFn: (id: number) => {
 			return TruckloadDeliveryService.deleteOne(id)
 		},
-		onSuccess: () => invalidateQueries('all')
+		onSuccess: () => invalidateQueries()
 	})
 }
 
 export const useDeleteDispatchOrdersMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationFn: (dispatchOrder: TruckloadDeliveryDispatchOrder) => {
 			return TruckloadDeliveryService.bulkDelete(dispatchOrder)
 		},
-		onSuccess: () => invalidateQueries('all')
+		onSuccess: () => invalidateQueries()
 	})
 }
 
 export const useUpsertPurchaseOrdersMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
-	const queryClient = useQueryClient()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationKey: [TruckloadDeliveryQueryKeys.UPSERT_PURCHASE_ORDERS],
 		mutationFn: (payload: UpsertPurchaseOrdersFormValues) => TruckloadDeliveryService.upsertPurchaseOrders(payload),
-		onMutate: async () => {
-			queryClient.cancelQueries({
-				queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-				predicate: (query) => query.queryKey.some((key) => Object.values(TruckloadDeliveryQueryKeys).includes(key)),
-				type: 'all'
-			})
-		},
-		onSuccess: () => invalidateQueries('all')
+		onSuccess: () => invalidateQueries()
 	})
 }
 
 export const useSetTruckloadDeliveryStatusMutation = () => {
-	const invalidateQueries = useInvalidateDeliveryQueries()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationFn: ({
@@ -114,31 +91,18 @@ export const useSetTruckloadDeliveryStatusMutation = () => {
 			dispatchOrder: TruckloadDeliveryDispatchOrder
 			status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 		}) => TruckloadDeliveryService.setStatusById(dispatchOrder, status),
-		onSuccess: () => invalidateQueries('all')
+		onSuccess: () => invalidateQueries()
 	})
 }
 
-export const useInvalidateDeliveryQueries = () => {
+const useInvalidateQueries = () => {
 	const queryClient = useQueryClient()
 
-	return (refetchType: 'none' | 'all' = 'all') => {
-		if (refetchType === 'none')
-			queryClient.setQueryData(
-				[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-				(oldData: ResponseBody<ITruckloadDelivery[]>) => {
-					return {
-						...oldData,
-						metadata: oldData.metadata.map((item) => ({
-							...item,
-							delivery_details: item.delivery_details.filter((item) => typeof item.id === 'number')
-						}))
-					}
-				}
-			)
+	return () => {
 		queryClient.invalidateQueries({
 			queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 			predicate: (query) => query.queryKey.some((key) => Object.values(TruckloadDeliveryQueryKeys).includes(key)),
-			refetchType: refetchType
+			refetchType: 'active'
 		})
 	}
 }

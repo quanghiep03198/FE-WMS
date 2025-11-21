@@ -5,7 +5,7 @@ import { InputFieldControl, InputFieldControlProps } from '@/components/ui/@fiel
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { CreateDeliveryFormValues, UpdateDeliveryFormValues } from '../-schemas'
+import { CreateDeliveryFormValues } from '../-schemas'
 
 const OutboundQtyInputFieldControl: React.FC<
 	InputFieldControlProps<CreateDeliveryFormValues> & {
@@ -13,19 +13,15 @@ const OutboundQtyInputFieldControl: React.FC<
 		['data-index']?: number
 	}
 > = ({ name, ...props }) => {
-	const { control, watch } = useFormContext<CreateDeliveryFormValues | UpdateDeliveryFormValues>()
+	const { control, watch, setValue } = useFormContext<CreateDeliveryFormValues>()
 	const { t } = useTranslation()
 
 	const currentOutboundQty = watch(name)
-	const currentMaxOutboundQty = watch(
-		typeof props['data-index'] === 'number'
-			? `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
-			: 'max_outbound_qty'
-	)
+	const currentMaxOutboundQty = watch(`outbound_purchase_orders.${props['data-index']}.max_outbound_qty`)
 
 	const currentPurchaseOrder = useWatch({
 		control,
-		name: typeof props['data-index'] === 'number' ? `outbound_purchase_orders.${props['data-index']}.po` : 'po'
+		name: `outbound_purchase_orders.${props['data-index']}.po`
 	})
 
 	const actualMaxOutboundQty = useMemo(() => {
@@ -38,6 +34,14 @@ const OutboundQtyInputFieldControl: React.FC<
 		<InputFieldControl
 			name={name}
 			type='number'
+			inputMode='numeric'
+			min={0}
+			max={actualMaxOutboundQty === Infinity ? undefined : actualMaxOutboundQty}
+			step={1}
+			errorMessageVariant='tooltip'
+			onChange={(e) =>
+				setValue(`outbound_purchase_orders.${props['data-index']}.outbound_qty`, Math.abs(+e.currentTarget.value))
+			}
 			placeholder={
 				actualMaxOutboundQty === Infinity
 					? 'Unlimited (∞)'

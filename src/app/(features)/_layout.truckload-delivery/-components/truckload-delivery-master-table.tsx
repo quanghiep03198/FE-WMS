@@ -17,11 +17,9 @@ import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const isMobile = useMediaQuery('(max-width: 767px)')
+	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const tableRef = useReactiveRef<TanstackTable<ITruckloadDelivery>>(null)
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
-
-	console.log('data :>> ', data)
 
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
@@ -250,7 +248,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			containerProps={{
-				className: 'h-[55vh] md:h-[65vh]'
+				className: 'h-[65vh]'
 			}}
 			renderSubComponent={({ row }) => {
 				const data = row.original as ITruckloadDelivery

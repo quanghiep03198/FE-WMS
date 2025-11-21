@@ -41,6 +41,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 		<Div className='flex items-center justify-end'>
 			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
+					<Icon name='Check' />
 					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
 						? t('ns_common:actions.reconfirm')
 						: t('ns_common:actions.confirm')}
@@ -52,6 +53,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 					className='text-destructive hover:text-destructive'
 					size='sm'
 					onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}>
+					<Icon name='TriangleAlert' />
 					{t('ns_common:actions.report')}
 				</Button>
 			)}
@@ -69,6 +71,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 										payload: pick(data, ['dispatch_order', 'license_plate', 'container_number'])
 									})
 								}}>
+								<Icon name='PencilLine' />
 								{t('ns_common:actions.update')}
 							</DropdownMenuItem>
 							<DropdownMenuItem
@@ -76,6 +79,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 								onClick={() =>
 									event$.emit({ action: CommonActions.DELETE_MANY, payload: data.dispatch_order })
 								}>
+								<Icon name='Trash2' />
 								{t('ns_common:actions.delete')}
 							</DropdownMenuItem>
 						</DropdownMenuGroup>

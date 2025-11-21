@@ -1,13 +1,15 @@
-import { CommonActions } from '@/common/constants/enums'
+import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import { Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
 import { IPurchaseOrderResult } from '@/services/order.service'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { useIsMutating, useQueryClient } from '@tanstack/react-query'
+import { useIsMutating } from '@tanstack/react-query'
 import { formatRelative } from 'date-fns'
 import { isNil, pick } from 'lodash'
-import React, { memo, useState } from 'react'
+import React, { Fragment, memo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
@@ -19,9 +21,7 @@ import PurchaseOrderFieldControl from './purchase-order-field-control'
 
 type TruckloadDeliveryDetailRowProps = {
 	index: number
-	parentId: string
 	readonly: boolean
-	isPending: boolean
 	defaultValues: ITruckloadDelivery['delivery_details'][number]
 	onRemove: (index?: number | number[]) => void
 }
@@ -29,80 +29,41 @@ type TruckloadDeliveryDetailRowProps = {
 const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	index,
 	readonly,
-	isPending,
-	parentId,
 	defaultValues,
 	onRemove
 }) => {
+	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const { watch } = useFormContext<UpsertPurchaseOrdersFormValues>()
 	const [snapshotData, setSnapshotData] = useState<ITruckloadDelivery['delivery_details'][number] | null>(
 		defaultValues
 	)
-	const queryClient = useQueryClient()
-	const currentId = watch(`outbound_purchase_orders.${index}.id`)
 	const dateLocale = useDateLocale()
-	const isDeleting =
-		useIsMutating({ mutationKey: [TruckloadDeliveryQueryKeys.DELETE_PURCHASE_ORDER], exact: false }) > 0
+	const isDeleting = useIsMutating({ mutationKey: [TruckloadDeliveryQueryKeys.DELETE_PURCHASE_ORDER] })
 
+	const currentId = watch(`outbound_purchase_orders.${index}.id`)
 	const handleSelectPurchaseOrder = (selectedItem: IPurchaseOrderResult) => {
 		setSnapshotData((prev) => {
-			console.log('prev :>> ', prev)
 			return {
 				...prev,
 				...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn'])
 			}
 		})
-
-		queryClient.setQueryData(
-			[TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-			(queryData: ResponseBody<ITruckloadDelivery[]>) => {
-				if (!Array.isArray(queryData?.metadata)) return queryData
-
-				// Clone to avoid direct mutation
-				const updatedMetadata = [...queryData.metadata]
-				const currentDispatchOrderIndex = updatedMetadata.findIndex((item) => item.dispatch_order === parentId)
-
-				if (currentDispatchOrderIndex === -1) return queryData
-
-				// Clone current dispatch order
-				const currentDispatchOrder = { ...updatedMetadata[currentDispatchOrderIndex] }
-				const updatedDeliveryDetails = [...currentDispatchOrder.delivery_details]
-
-				let currentPurchaseOrderIndex: number = updatedDeliveryDetails.findIndex(
-					(item) => item.po === selectedItem.po && String(item.id) === String(currentId)
-				)
-				currentPurchaseOrderIndex = currentPurchaseOrderIndex === -1 ? index : currentPurchaseOrderIndex
-
-				// Update delivery detail
-				updatedDeliveryDetails[currentPurchaseOrderIndex] = {
-					...snapshotData,
-					...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn'])
-				}
-
-				// Update arrays
-				currentDispatchOrder.delivery_details = updatedDeliveryDetails
-				updatedMetadata[currentDispatchOrderIndex] = currentDispatchOrder
-
-				return {
-					...queryData,
-					metadata: updatedMetadata
-				}
-			}
-		)
-
-		// Invalidate query to trigger re-render
-		queryClient.invalidateQueries({
-			queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-			refetchType: 'none' // Do not refetch, chỉ notify subscribers
-		})
 	}
+
+	const isCurrentRowIsDeleting = isDeleting && typeof currentId === 'number'
+
+	const isNewRow = typeof currentId === 'string'
 
 	return (
 		<TableRow
 			aria-readonly={readonly}
-			className={cn(isDeleting && 'animate-pulse', typeof currentId === 'string' && '[&_td]:opacity-80')}>
+			className={cn(
+				'transition-allow-discrete',
+				isCurrentRowIsDeleting && '[&_td]:duration-1000 [&_td]:ease-out [&_td]:animate-out [&_td]:fade-out-0',
+				isNewRow && 'duration-200 ease-out animate-in fade-in-0 slide-in-from-top-2 [&_td]:opacity-80'
+			)}>
 			<TableCell align='left' className='w-[30%] xl:w-44'>
 				{readonly ? (
 					<span>{snapshotData?.po}</span>
@@ -115,42 +76,49 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 						data-index={index}
 						data-icon={false}
 						data-action={CommonActions.UPDATE}
-						onSelect={(selectedItem: IPurchaseOrderResult) => handleSelectPurchaseOrder(selectedItem)}
+						onValueChange={(selectedItem: IPurchaseOrderResult) => handleSelectPurchaseOrder(selectedItem)}
 					/>
 				)}
 			</TableCell>
-			<TableCell className='w-[30%] xl:hidden'>
-				{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
-					(item) => !isNil(item)
-				) ? (
-					<ul>
-						<li className='font-medium'>
-							<span className='line-clamp-1'>{snapshotData?.brand_name}</span>
-						</li>
-						<li>
+			{!isLargeScreen ? (
+				<TableCell className='w-[30%]'>
+					{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
+						(item) => !isNil(item)
+					) ? (
+						<Div className='flex flex-col'>
+							<span className='line-clamp-1 font-medium'>{snapshotData?.brand_name}</span>
 							<span className='line-clamp-1'>
 								{snapshotData?.factory_shoes_style}/{snapshotData?.color_sn}
 							</span>
-						</li>
-					</ul>
-				) : (
-					<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
-				)}
-			</TableCell>
-			<TableCell align='left' className='md:hidden lg:hidden'>
-				<span>{snapshotData?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
-			</TableCell>
-			<TableCell align='left' className='md:hidden lg:hidden'>
-				<span>
-					{snapshotData?.factory_shoes_style ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
-				</span>
-			</TableCell>
-			<TableCell align='left' className='md:hidden lg:hidden'>
-				<span>{snapshotData?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
-			</TableCell>
+						</Div>
+					) : (
+						<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
+					)}
+				</TableCell>
+			) : (
+				<Fragment>
+					<TableCell align='left'>
+						<span>
+							{snapshotData?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
+						</span>
+					</TableCell>
+					<TableCell align='left'>
+						<span>
+							{snapshotData?.factory_shoes_style ?? (
+								<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
+							)}
+						</span>
+					</TableCell>
+					<TableCell align='left'>
+						<span>
+							{snapshotData?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
+						</span>
+					</TableCell>
+				</Fragment>
+			)}
 			<TableCell align='left' className='w-[30%] xl:w-[25%]'>
 				{readonly ? (
-					<span>{snapshotData?.outbound_qty}</span>
+					<span>{formatIntlNumber(snapshotData?.outbound_qty)}</span>
 				) : (
 					<OutboundQtyInputFieldControl
 						name={`outbound_purchase_orders.${index}.outbound_qty`}
@@ -163,21 +131,25 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					/>
 				)}
 			</TableCell>
-			<TableCell align='left' className='md:hidden lg:hidden'>
-				<span className='!inline-flex items-center gap-x-2'>
-					<Icon name='User' size={18} />
-					{snapshotData?.user_code_created}
-				</span>
-			</TableCell>
-			<TableCell align='left' className='md:hidden lg:hidden'>
-				<span className='first-letter:uppercase'>
-					{snapshotData?.created ? (
-						formatRelative(new Date(snapshotData?.created), new Date(), { locale: dateLocale })
-					) : (
-						<Icon name='CalendarClock' stroke='hsl(var(--muted-foreground))' />
-					)}
-				</span>
-			</TableCell>
+			{isLargeScreen && (
+				<Fragment>
+					<TableCell align='left'>
+						<span className='!inline-flex items-center gap-x-2'>
+							<Icon name='User' size={18} />
+							{snapshotData?.user_code_created}
+						</span>
+					</TableCell>
+					<TableCell align='left'>
+						<span className='first-letter:uppercase'>
+							{snapshotData?.created ? (
+								formatRelative(new Date(snapshotData?.created), new Date(), { locale: dateLocale })
+							) : (
+								<Icon name='CalendarClock' stroke='hsl(var(--muted-foreground))' />
+							)}
+						</span>
+					</TableCell>
+				</Fragment>
+			)}
 			<TableCell align='right' className='w-[10%] xl:w-14'>
 				<Tooltip message={t('ns_common:actions.delete')}>
 					<GhostButton

@@ -1,7 +1,6 @@
 import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-delivery/-constants'
 import {
 	CreateDeliveryFormValues,
-	UpdateDeliveryFormValues,
 	UpdateDispatchOrderFormValues,
 	UpsertPurchaseOrdersFormValues
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
@@ -36,10 +35,6 @@ export class TruckloadDeliveryService {
 
 	static async insertMany(payload: CreateDeliveryFormValues) {
 		return await axiosInstance.post<unknown, CreateDeliveryFormValues>('/truckload-delivery/create', payload)
-	}
-
-	static async updateOneById(id: number, payload: Omit<UpdateDeliveryFormValues, 'id'>) {
-		return await axiosInstance.patch(`/truckload-delivery/update/${id}`, payload)
 	}
 
 	static async deleteOne(id: number) {
