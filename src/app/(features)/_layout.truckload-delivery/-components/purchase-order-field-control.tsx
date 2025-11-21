@@ -5,7 +5,7 @@ import { CommonActions } from '@/common/constants/enums'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import { AutoCompleteFieldControlProps } from '@/components/ui/@field-control/auto-complete'
 import { IPurchaseOrderResult } from '@/services/order.service'
-import { useDebounce } from 'ahooks'
+import { useDebounce, useUpdateEffect } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -23,12 +23,12 @@ type PurchaseOrderFieldControlProps = Partial<
 		'onSelect'
 	>
 > & {
-	onSelect?: (selectedItem: IPurchaseOrderResult) => any
+	onValueChange?: (selectedItem: IPurchaseOrderResult) => any
 	['data-action']: CommonActions.CREATE | CommonActions.UPDATE
 	['data-index']?: number
 }
 
-const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ name, onSelect, ...props }) => {
+const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ name, onValueChange, ...props }) => {
 	const fieldIndex: number | undefined = props['data-index']
 	const fieldAction: CommonActions.CREATE | CommonActions.UPDATE = props['data-action']
 
@@ -63,6 +63,10 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, Math.max(0, maxOutboundQty))
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
+	useUpdateEffect(() => {
+		onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
+	}, [searchTerm, purchaseOrders])
+
 	return (
 		<AutoCompleteFieldControl
 			name={name}
@@ -72,9 +76,12 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 			valueField='po'
 			loading={isLoading}
 			datalist={purchaseOrders}
-			onInput={setSearchTerm}
+			errorMessageVariant='tooltip'
+			onInput={(value) => {
+				setSearchTerm(value)
+			}}
 			onSelect={(value) => {
-				if (typeof onSelect === 'function') onSelect(purchaseOrders?.find((item) => item?.po === value))
+				if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === value))
 			}}
 			{...props}
 		/>

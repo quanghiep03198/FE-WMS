@@ -1,5 +1,6 @@
-import { CommonActions } from '@/common/constants/enums'
+import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	Div,
@@ -17,6 +18,7 @@ import {
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useIsFetching } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { pick, sortBy, uniqBy } from 'lodash'
@@ -27,7 +29,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 import z from 'zod'
-import { useInvalidateDeliveryQueries, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
+import { TruckloadDeliveryStatus } from '../-constants'
+import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
@@ -64,18 +67,19 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation()
 	const toastRef = useRef<string | number | null>(null)
-	const invalidateQuery = useInvalidateDeliveryQueries()
+	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
+	const isFetching = useIsFetching({
+		predicate: (query) => query.queryKey.some((key) => key === TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY)
+	})
 
 	useEffect(() => {
+		if (isPending || isFetching) return
 		handleResetDeliveryDetails(true)
-	}, [data])
+	}, [data, isPending, isPending])
 
 	const handleResetDeliveryDetails = (shouldKeepUpdating: boolean) => {
-		if (isPending) return
-		if (!shouldKeepUpdating) {
-			resetAction()
-			invalidateQuery('none')
-		}
+		if (isPending || isFetching) return
+		if (!shouldKeepUpdating) resetAction()
 		// * Default form values from backend data
 		const defaultFormValues = Array.isArray(data.delivery_details)
 			? uniqBy(
@@ -99,10 +103,10 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		})
 	}
 
-	const handleSaveChanges = async (data: UpsertPurchaseOrdersFormValues) => {
+	const handleSaveChanges = async (payload: UpsertPurchaseOrdersFormValues) => {
 		toastRef.current = toast.loading(t('ns_common:notification.processing_request'))
 		try {
-			await mutateAsync(data)
+			await mutateAsync(payload)
 			toast.success(t('ns_common:notification.success'), { id: toastRef.current })
 			handleResetDeliveryDetails(false)
 		} catch {
@@ -123,39 +127,52 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-44'>
 										<span>{t('ns_erp:fields.po')}</span>
 									</TableHead>
-									<TableHead align='left' className='w-[30%] xl:hidden'>
-										<span>{t('ns_erp:titles.product_info')}</span>
-									</TableHead>
-									<TableHead
-										align='left'
-										title={t('ns_erp:fields.brand_name')}
-										className='md:hidden lg:hidden'>
-										<span>{t('ns_erp:fields.brand_name')}</span>
-									</TableHead>
-									<TableHead
-										align='left'
-										title={t('ns_erp:fields.shoestyle_codefactory')}
-										className='md:hidden lg:hidden'>
-										<span>{t('ns_erp:fields.shoestyle_codefactory')}</span>
-									</TableHead>
-									<TableHead align='left' title={t('ns_erp:fields.color_sn')} className='md:hidden lg:hidden'>
-										<span>{t('ns_erp:fields.color_sn')}</span>
-									</TableHead>
+									{isLargeScreen ? (
+										<Fragment>
+											<TableHead
+												align='left'
+												title={t('ns_erp:fields.brand_name')}
+												className='md:hidden lg:hidden'>
+												<span>{t('ns_erp:fields.brand_name')}</span>
+											</TableHead>
+											<TableHead
+												align='left'
+												title={t('ns_erp:fields.shoestyle_codefactory')}
+												className='md:hidden lg:hidden'>
+												<span>{t('ns_erp:fields.shoestyle_codefactory')}</span>
+											</TableHead>
+											<TableHead
+												align='left'
+												title={t('ns_erp:fields.color_sn')}
+												className='md:hidden lg:hidden'>
+												<span>{t('ns_erp:fields.color_sn')}</span>
+											</TableHead>
+										</Fragment>
+									) : (
+										<TableHead align='left' className='w-[30%] xl:hidden'>
+											<span>{t('ns_erp:titles.product_info')}</span>
+										</TableHead>
+									)}
+
 									<TableHead align='left' title={t('ns_erp:fields.outbound_qty')} className='w-[30%] xl:w-40'>
 										<span>{t('ns_erp:fields.outbound_qty')}</span>
 									</TableHead>
-									<TableHead
-										align='left'
-										title={t('ns_common:common_fields.created_by')}
-										className='md:hidden lg:hidden'>
-										<span>{t('ns_common:common_fields.created_by')}</span>
-									</TableHead>
-									<TableHead
-										align='left'
-										title={t('ns_common:common_fields.created_at')}
-										className='md:hidden lg:hidden'>
-										<span>{t('ns_common:common_fields.created_at')}</span>
-									</TableHead>
+									{isLargeScreen && (
+										<Fragment>
+											<TableHead
+												align='left'
+												title={t('ns_common:common_fields.created_by')}
+												className='md:hidden lg:hidden'>
+												<span>{t('ns_common:common_fields.created_by')}</span>
+											</TableHead>
+											<TableHead
+												align='left'
+												title={t('ns_common:common_fields.created_at')}
+												className='md:hidden lg:hidden'>
+												<span>{t('ns_common:common_fields.created_at')}</span>
+											</TableHead>
+										</Fragment>
+									)}
 									<TableHead align='right' className='w-[10%] xl:w-14'></TableHead>
 								</TableRow>
 							</TableHeader>
@@ -177,9 +194,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										<TruckloadDeliveryDetailRow
 											key={field.id}
 											index={index}
-											parentId={data.dispatch_order}
 											readonly={!action}
-											isPending={isPending}
 											defaultValues={rowData}
 											onRemove={handleRemoveFieldItem}
 										/>
@@ -226,6 +241,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									variant='default'
 									type='button'
 									size='sm'
+									disabled={data.status === TruckloadDeliveryStatus.CONFIRMED}
 									onClick={() => setAction(CommonActions.UPDATE)}>
 									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 								</Button>
@@ -286,13 +302,14 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									size={24}
 									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
 								/>
-
+								&quot;
 								<Typewriter
 									className='text-sm italic'
 									text={t('ns_inoutbound:description.duplicate_po_added')}
 									typeSpeed={25}
 									delay={0}
 								/>
+								&quot;
 							</Div>
 						)}
 					</Div>
