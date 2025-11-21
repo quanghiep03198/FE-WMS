@@ -48,7 +48,6 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		if (!matchPurchaseOrder) return
 
 		// * For update action, need to exclude current record's outbound qty
-
 		const alreadyAddedOutboundQty = data
 			.flatMap((delivery) => delivery.delivery_details)
 			.filter((item) => {
@@ -68,6 +67,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		<AutoCompleteFieldControl
 			name={name}
 			placeholder={t('ns_common:form_placeholder.fill', { object: 'PO', defaultValue: 'PO' })}
+			className='!bg-transparent'
 			labelField='po'
 			valueField='po'
 			loading={isLoading}

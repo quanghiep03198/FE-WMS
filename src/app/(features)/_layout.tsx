@@ -28,7 +28,7 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	const isUnsupportedScreen = useMediaQuery('(max-width: 767px)')
+	const isUnsupportedScreen = useMediaQuery('(max-width: 599px)')
 	const { updateServiceWorker }: RegisteredServiceWorker = useRouteContext({
 		from: '',
 		select: (context) => context.serviceWorker
@@ -80,7 +80,7 @@ function Layout() {
 							<Div
 								as='main'
 								id='outlet-wrapper'
-								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-4'>
+								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-2 md:px-2'>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
 										return (

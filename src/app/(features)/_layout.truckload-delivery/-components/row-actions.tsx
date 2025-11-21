@@ -41,7 +41,6 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 		<Div className='flex items-center justify-end'>
 			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
-					<Icon name='CircleCheck' />
 					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
 						? t('ns_common:actions.reconfirm')
 						: t('ns_common:actions.confirm')}
@@ -53,34 +52,36 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 					className='text-destructive hover:text-destructive'
 					size='sm'
 					onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}>
-					<Icon name='CircleAlert' />
 					{t('ns_common:actions.report')}
 				</Button>
 			)}
-			<DropdownMenu modal={false}>
-				<DropdownMenuTrigger className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
-					<Icon name='Ellipsis' />
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align='end' className='w-40'>
-					<DropdownMenuGroup>
-						<DropdownMenuItem
-							onClick={() => {
-								event$.emit({
-									action: CommonActions.UPDATE_MANY,
-									payload: pick(data, ['dispatch_order', 'license_plate', 'container_number'])
-								})
-							}}>
-							{t('ns_common:actions.update')}
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							disabled={data.status === TruckloadDeliveryStatus.CONFIRMED}
-							className='text-destructive hover:!text-destructive'
-							onClick={() => event$.emit({ action: CommonActions.DELETE_MANY, payload: data.dispatch_order })}>
-							{t('ns_common:actions.delete')}
-						</DropdownMenuItem>
-					</DropdownMenuGroup>
-				</DropdownMenuContent>
-			</DropdownMenu>
+			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
+				<DropdownMenu modal={false}>
+					<DropdownMenuTrigger className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+						<Icon name='Ellipsis' />
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align='end' className='w-40'>
+						<DropdownMenuGroup>
+							<DropdownMenuItem
+								onClick={() => {
+									event$.emit({
+										action: CommonActions.UPDATE_MANY,
+										payload: pick(data, ['dispatch_order', 'license_plate', 'container_number'])
+									})
+								}}>
+								{t('ns_common:actions.update')}
+							</DropdownMenuItem>
+							<DropdownMenuItem
+								className='text-destructive hover:!text-destructive'
+								onClick={() =>
+									event$.emit({ action: CommonActions.DELETE_MANY, payload: data.dispatch_order })
+								}>
+								{t('ns_common:actions.delete')}
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			)}
 		</Div>
 	)
 }

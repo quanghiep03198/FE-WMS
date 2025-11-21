@@ -18,12 +18,14 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	outbound_qty: number
 	status: TruckloadDeliveryStatus
 	delivery_details: Array<{
-		id?: number | null
+		id: number | string
 		po: string
 		brand_name: string
 		factory_shoes_style: string
 		color_sn: string
 		outbound_qty: number
+		user_code_created: string
+		created: Date | null
 	}>
 }
 
@@ -49,6 +51,11 @@ export class TruckloadDeliveryService {
 	}
 
 	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {
+		update.outbound_purchase_orders = update.outbound_purchase_orders.map((item) => ({
+			...item,
+			id: typeof item.id === 'number' ? item.id : null
+		}))
+
 		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, update)
 	}
 

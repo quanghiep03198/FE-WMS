@@ -61,15 +61,8 @@ export const updateDispatchOrderSchema = z.object({
 export const updateDeliverySchema = z.object({
 	id: z.int().positive(),
 	po: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
-	license_plate: z
-		.string({ error: 'ns_validation:required' })
-		.trim()
-		.nonempty({ error: 'ns_validation:required' })
-		.transform((value) => value.toUpperCase()),
-	container_number: z
-		.string({ error: 'ns_validation:required' })
-		.trim()
-		.nonempty({ message: 'ns_validation:required' }),
+	license_plate: z.string({ error: 'ns_validation:required' }).trim().optional(),
+	container_number: z.string({ error: 'ns_validation:required' }).trim().optional(),
 	// // .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
 	outbound_qty: z.int({ error: 'ns_validation:required' }).positive({ error: 'ns_validation:invalid_value' }),
 	max_outbound_qty: z.int().positive().optional()
@@ -79,7 +72,7 @@ export const upsertPurchaseOrdersSchema = z.object({
 	dispatch_order: z.string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
 	outbound_purchase_orders: z.array(
 		z.object({
-			id: z.number().nullable().default(null),
+			id: z.number().or(z.string()).default(null),
 			po: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 			outbound_qty: z.number({ message: 'ns_validation:required' }).int().positive(),
 			max_outbound_qty: z.number().nonnegative().default(Infinity)

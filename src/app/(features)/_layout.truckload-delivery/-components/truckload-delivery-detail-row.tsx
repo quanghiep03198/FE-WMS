@@ -1,10 +1,13 @@
 import { CommonActions } from '@/common/constants/enums'
+import { useDateLocale } from '@/common/hooks/use-date-locale'
+import { cn } from '@/common/utils/cn'
 import { Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
 import { IPurchaseOrderResult } from '@/services/order.service'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useIsMutating, useQueryClient } from '@tanstack/react-query'
-import { pick } from 'lodash'
-import React, { memo, useEffect, useRef, useState } from 'react'
+import { formatRelative } from 'date-fns'
+import { isNil, pick } from 'lodash'
+import React, { memo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
@@ -18,6 +21,7 @@ type TruckloadDeliveryDetailRowProps = {
 	index: number
 	parentId: string
 	readonly: boolean
+	isPending: boolean
 	defaultValues: ITruckloadDelivery['delivery_details'][number]
 	onRemove: (index?: number | number[]) => void
 }
@@ -25,26 +29,30 @@ type TruckloadDeliveryDetailRowProps = {
 const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	index,
 	readonly,
+	isPending,
 	parentId,
 	defaultValues,
 	onRemove
 }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { getValues, watch } = useFormContext<UpsertPurchaseOrdersFormValues>()
+	const { watch } = useFormContext<UpsertPurchaseOrdersFormValues>()
 	const [snapshotData, setSnapshotData] = useState<ITruckloadDelivery['delivery_details'][number] | null>(
 		defaultValues
 	)
 	const queryClient = useQueryClient()
 	const currentId = watch(`outbound_purchase_orders.${index}.id`)
+	const dateLocale = useDateLocale()
 	const isDeleting =
 		useIsMutating({ mutationKey: [TruckloadDeliveryQueryKeys.DELETE_PURCHASE_ORDER], exact: false }) > 0
 
 	const handleSelectPurchaseOrder = (selectedItem: IPurchaseOrderResult) => {
-		setSnapshotData({
-			id: currentId,
-			...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn']),
-			outbound_qty: null
+		setSnapshotData((prev) => {
+			console.log('prev :>> ', prev)
+			return {
+				...prev,
+				...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn'])
+			}
 		})
 
 		queryClient.setQueryData(
@@ -63,15 +71,14 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				const updatedDeliveryDetails = [...currentDispatchOrder.delivery_details]
 
 				let currentPurchaseOrderIndex: number = updatedDeliveryDetails.findIndex(
-					(item) => item.po === selectedItem.po
+					(item) => item.po === selectedItem.po && String(item.id) === String(currentId)
 				)
 				currentPurchaseOrderIndex = currentPurchaseOrderIndex === -1 ? index : currentPurchaseOrderIndex
 
 				// Update delivery detail
 				updatedDeliveryDetails[currentPurchaseOrderIndex] = {
-					id: currentId,
-					...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn']),
-					outbound_qty: getValues(`outbound_purchase_orders.${index}.outbound_qty`)
+					...snapshotData,
+					...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn'])
 				}
 
 				// Update arrays
@@ -92,20 +99,13 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 		})
 	}
 
-	const snapshotDataRef = useRef(snapshotData)
-
-	// Hoặc chỉ lưu khi readonly = false
-	useEffect(() => {
-		if (!readonly) {
-			snapshotDataRef.current = snapshotData
-		}
-	}, [snapshotData, readonly])
-
 	return (
-		<TableRow aria-readonly={readonly} className={isDeleting && 'animate-pulse'}>
-			<TableCell align='left'>
+		<TableRow
+			aria-readonly={readonly}
+			className={cn(isDeleting && 'animate-pulse', typeof currentId === 'string' && '[&_td]:opacity-80')}>
+			<TableCell align='left' className='w-[30%] xl:w-44'>
 				{readonly ? (
-					<span>{snapshotDataRef.current?.po}</span>
+					<span>{snapshotData?.po}</span>
 				) : (
 					<PurchaseOrderFieldControl
 						name={`outbound_purchase_orders.${index}.po`}
@@ -119,26 +119,38 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					/>
 				)}
 			</TableCell>
-			<TableCell align='left'>
+			<TableCell className='w-[30%] xl:hidden'>
+				{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
+					(item) => !isNil(item)
+				) ? (
+					<ul>
+						<li className='font-medium'>
+							<span className='line-clamp-1'>{snapshotData?.brand_name}</span>
+						</li>
+						<li>
+							<span className='line-clamp-1'>
+								{snapshotData?.factory_shoes_style}/{snapshotData?.color_sn}
+							</span>
+						</li>
+					</ul>
+				) : (
+					<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
+				)}
+			</TableCell>
+			<TableCell align='left' className='md:hidden lg:hidden'>
+				<span>{snapshotData?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
+			</TableCell>
+			<TableCell align='left' className='md:hidden lg:hidden'>
 				<span>
-					{snapshotDataRef.current?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
+					{snapshotData?.factory_shoes_style ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
 				</span>
 			</TableCell>
-			<TableCell align='left'>
-				<span>
-					{snapshotDataRef.current?.factory_shoes_style ?? (
-						<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
-					)}
-				</span>
+			<TableCell align='left' className='md:hidden lg:hidden'>
+				<span>{snapshotData?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}</span>
 			</TableCell>
-			<TableCell align='left'>
-				<span>
-					{snapshotDataRef.current?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
-				</span>
-			</TableCell>
-			<TableCell align='left'>
+			<TableCell align='left' className='w-[30%] xl:w-[25%]'>
 				{readonly ? (
-					<span>{snapshotDataRef.current?.outbound_qty}</span>
+					<span>{snapshotData?.outbound_qty}</span>
 				) : (
 					<OutboundQtyInputFieldControl
 						name={`outbound_purchase_orders.${index}.outbound_qty`}
@@ -151,7 +163,22 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					/>
 				)}
 			</TableCell>
-			<TableCell align='right'>
+			<TableCell align='left' className='md:hidden lg:hidden'>
+				<span className='!inline-flex items-center gap-x-2'>
+					<Icon name='User' size={18} />
+					{snapshotData?.user_code_created}
+				</span>
+			</TableCell>
+			<TableCell align='left' className='md:hidden lg:hidden'>
+				<span className='first-letter:uppercase'>
+					{snapshotData?.created ? (
+						formatRelative(new Date(snapshotData?.created), new Date(), { locale: dateLocale })
+					) : (
+						<Icon name='CalendarClock' stroke='hsl(var(--muted-foreground))' />
+					)}
+				</span>
+			</TableCell>
+			<TableCell align='right' className='w-[10%] xl:w-14'>
 				<Tooltip message={t('ns_common:actions.delete')}>
 					<GhostButton
 						type='button'

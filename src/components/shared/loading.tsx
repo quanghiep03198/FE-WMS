@@ -26,8 +26,10 @@ export default function Loading({ withContent = true }: { withContent?: boolean 
 		<Fragment>
 			<title>Loading ...</title>
 			{withContent && (
-				<Div data-state='expanded' className='group relative h-screen place-content-center place-items-center'>
-					<Div className='z-10 animate-[fade-in_0.25s_ease-out_forwards]'>
+				<Div
+					data-state='expanded'
+					className='group relative grid h-screen w-screen place-content-center place-items-center'>
+					<Div className='z-10 h-full w-full animate-[fade-in_0.25s_ease-out_forwards]'>
 						<AppLogo />
 					</Div>
 					<GridBackground />
