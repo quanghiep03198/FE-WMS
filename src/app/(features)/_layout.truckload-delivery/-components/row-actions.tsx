@@ -38,7 +38,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	}
 
 	return (
-		<Div className='flex items-center justify-end'>
+		<Div className='flex w-full items-center justify-end [&_svg]:hidden lg:[&_svg]:inline-block xl:[&_svg]:inline-block'>
 			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
 					<Icon name='Check' />
@@ -59,8 +59,9 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 			)}
 			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<DropdownMenu modal={false}>
-					<DropdownMenuTrigger className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
-						<Icon name='Ellipsis' />
+					<DropdownMenuTrigger
+						className={buttonVariants({ variant: 'ghost', size: 'icon', className: 'aspect-square' })}>
+						<Icon name='Ellipsis' className='!inline-block' />
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end' className='w-40'>
 						<DropdownMenuGroup>

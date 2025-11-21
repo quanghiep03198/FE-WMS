@@ -185,9 +185,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
-				size: isMobile ? 100 : 225,
-				maxSize: 225,
-				meta: { align: 'center' },
+				size: isMobile ? 100 : 250,
+				maxSize: 250,
+				meta: { align: 'right' },
 				cell: ({ row }) => {
 					return (
 						<RowActions
@@ -209,7 +209,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				factory_departure_time: !isMobile
 			})
 			tableRef.current.setColumnPinning({
-				left: [ROW_EXPANSION_COLUMN_ID, 'container_number'],
+				left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['container_number'] : [])],
 				right: [ROW_ACTIONS_COLUMN_ID]
 			})
 		}
