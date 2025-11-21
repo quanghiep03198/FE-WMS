@@ -121,13 +121,16 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 								<FormControl>
 									<Tooltip
 										message={t(error?.message as ResourceKey) || ''}
-										triggerProps={{ asChild: true }}
+										triggerProps={{ asChild: true, type: 'button', className: 'w-full' }}
 										contentProps={{
 											hidden: !error || errorMessageVariant === 'inline',
 											className: 'bg-destructive text:text-destructive-foreground',
 											['aria-invalid']: !!error
 										}}>
-										<PopoverTrigger className='relative w-full' onClick={(e) => e.preventDefault()}>
+										<PopoverTrigger
+											type='button'
+											className='relative w-full'
+											onClick={(e) => e.preventDefault()}>
 											<Input
 												id={id}
 												ref={resolvedRef}
