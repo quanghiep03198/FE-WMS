@@ -96,6 +96,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 								<Div className='relative'>
 									<Tooltip
 										message={t(error?.message as ResourceKey) || ''}
+										triggerProps={{ type: 'button', className: 'w-full' }}
 										contentProps={{
 											hidden: !getFieldState(name).error || errorMessageVariant === 'inline',
 											['aria-invalid']: !!error
