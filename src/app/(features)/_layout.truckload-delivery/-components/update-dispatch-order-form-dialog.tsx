@@ -35,7 +35,6 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 
 	event$.useSubscription(({ action, payload }) => {
 		if (action !== CommonActions.UPDATE_MANY) return
-		console.log('payload :>> ', payload)
 		setOpen(true)
 		form.reset(payload)
 	})

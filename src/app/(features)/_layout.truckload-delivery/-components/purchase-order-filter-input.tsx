@@ -77,7 +77,6 @@ const PurchaseOrderFilterInput: React.FC<{
 								onClick={(e) => {
 									e.stopPropagation()
 									table?.getColumn?.('purchase_orders')?.setFilterValue?.(item.po)
-									console.log('item.po :>> ', item.po)
 									setSearch(item.po)
 									setOpen(false)
 								}}>
