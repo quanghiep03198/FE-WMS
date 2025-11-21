@@ -22,6 +22,7 @@ import PurchaseOrderFieldControl from './purchase-order-field-control'
 type TruckloadDeliveryDetailRowProps = {
 	index: number
 	readonly: boolean
+	deletable: boolean
 	defaultValues: ITruckloadDelivery['delivery_details'][number]
 	onRemove: (index?: number | number[]) => void
 }
@@ -30,6 +31,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	index,
 	readonly,
 	defaultValues,
+	deletable,
 	onRemove
 }) => {
 	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
@@ -154,7 +156,12 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				<Tooltip message={t('ns_common:actions.delete')}>
 					<GhostButton
 						type='button'
-						className={typeof snapshotData?.id !== 'number' ? 'text-destructive' : 'text-muted-foreground'}
+						disabled={!deletable}
+						className={
+							typeof snapshotData?.id === 'number'
+								? 'text-destructive hover:text-destructive'
+								: 'text-muted-foreground'
+						}
 						onClick={() => {
 							if (typeof snapshotData?.id === 'number') {
 								event$.emit({ action: CommonActions.DELETE, payload: snapshotData.id })

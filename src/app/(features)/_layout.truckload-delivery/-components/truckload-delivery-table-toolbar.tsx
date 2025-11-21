@@ -24,11 +24,11 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
 
 	return (
-		<Div className='flex items-center gap-x-1'>
+		<Div className='flex items-center gap-x-2'>
 			<GlobalFilterInput {...{ table, event$ }} />
 			{!isMediumScreen && <PurchaseOrderFilterInput table={table} />}
 			<DispatchOrderStatusFilter table={table} />
-			<Div className='ml-auto flex items-center justify-end gap-x-1'>
+			<Div className='ml-auto flex items-center justify-end gap-x-2'>
 				{isFilterDirty && (
 					<Button
 						variant='destructive'

@@ -43,8 +43,8 @@ const DeleteConfirmDialog: React.FC = () => {
 
 	return createPortal(
 		<ConfirmDialog
-			title='Confirm Deletion'
-			description='Are you sure you want to delete the selected truckload deliveries? This action cannot be undone.'
+			title={t('ns_common:confirmation.delete_title')}
+			description={t('ns_common:confirmation.delete_description')}
 			open={shouldConfirmDialogOpen}
 			onOpenChange={setShouldConfirmDialogOpen}
 			onConfirm={() => {

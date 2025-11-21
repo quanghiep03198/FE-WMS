@@ -153,7 +153,6 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											<span>{t('ns_erp:titles.product_info')}</span>
 										</TableHead>
 									)}
-
 									<TableHead align='left' title={t('ns_erp:fields.outbound_qty')} className='w-[30%] xl:w-40'>
 										<span>{t('ns_erp:fields.outbound_qty')}</span>
 									</TableHead>
@@ -194,7 +193,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										<TruckloadDeliveryDetailRow
 											key={field.id}
 											index={index}
-											readonly={!action}
+											readonly={!action || data.status === TruckloadDeliveryStatus.CONFIRMED}
+											deletable={data.status !== TruckloadDeliveryStatus.CONFIRMED}
 											defaultValues={rowData}
 											onRemove={handleRemoveFieldItem}
 										/>
@@ -235,6 +235,23 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 						</Table>
 					</FieldSet>
 					<Div className='m-4 grid place-content-center place-items-center gap-y-4 rounded-md border border-dashed p-4'>
+						{action && (
+							<Div className='col-span-full inline-flex items-stretch'>
+								<Icon
+									name='BotMessageSquare'
+									size={24}
+									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+								/>
+								&quot;
+								<Typewriter
+									className='text-sm italic'
+									text={t('ns_inoutbound:description.duplicate_po_added')}
+									typeSpeed={25}
+									delay={0}
+								/>
+								&quot;
+							</Div>
+						)}
 						<Div className='flex items-center gap-x-1'>
 							{!action ? (
 								<Button
@@ -294,24 +311,6 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								<Icon name='ChevronsUp' /> {t('ns_common:actions.fold')}
 							</Button>
 						</Div>
-
-						{action && (
-							<Div className='col-span-full inline-flex items-stretch'>
-								<Icon
-									name='BotMessageSquare'
-									size={24}
-									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
-								/>
-								&quot;
-								<Typewriter
-									className='text-sm italic'
-									text={t('ns_inoutbound:description.duplicate_po_added')}
-									typeSpeed={25}
-									delay={0}
-								/>
-								&quot;
-							</Div>
-						)}
 					</Div>
 				</Form>
 			</FormProvider>
@@ -320,6 +319,6 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 }
 
 const Form = tw.form`flex flex-col gap-y-6 md:gap-0`
-const FieldSet = tw.fieldset`h-80 md:h-96 overflow-scroll`
+const FieldSet = tw.fieldset`h-64 md:h-96 overflow-scroll`
 
 export default TruckloadDeliveryDetailTable

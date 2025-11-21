@@ -1,5 +1,6 @@
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, BadgeProps, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
@@ -145,14 +146,22 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'destructive'
 					}
 					const statusIconVariants: Record<TruckloadDeliveryStatus, IconProps['name']> = {
-						[TruckloadDeliveryStatus.PENDING]: 'CircleDotDashed',
+						[TruckloadDeliveryStatus.PENDING]: 'Loader',
 						[TruckloadDeliveryStatus.CONFIRMED]: 'CircleCheckBig',
 						[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'Undo2'
 					}
 
 					return (
-						<Badge variant={badgeVariants[value] ?? 'secondary'}>
-							<Icon name={statusIconVariants[value] ?? 'CircleDotDashed'} size={14} strokeWidth={2.5} />
+						<Badge variant='outline' className='rounded-l-full rounded-r-full'>
+							<Icon
+								name={statusIconVariants[value] ?? 'CircleDotDashed'}
+								size={14}
+								className={cn({
+									'stroke-muted-foreground': value === TruckloadDeliveryStatus.PENDING,
+									'stroke-success': value === TruckloadDeliveryStatus.CONFIRMED,
+									'stroke-destructive': value === TruckloadDeliveryStatus.REQUEST_CHANGE
+								})}
+							/>
 							{t(`ns_common:status.${value}`)}
 						</Badge>
 					)

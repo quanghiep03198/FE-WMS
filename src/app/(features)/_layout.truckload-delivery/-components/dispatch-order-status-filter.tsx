@@ -33,7 +33,7 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 				{
 					label: String(t('ns_common:status.pending')),
 					value: TruckloadDeliveryStatus.PENDING,
-					icon: 'CircleDotDashed'
+					icon: 'Loader'
 				},
 				{
 					label: String(t('ns_common:status.confirmed')),
@@ -59,7 +59,14 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 					onValueChange={(value) => table.getColumn('status').setFilterValue(value)}>
 					{dropdownOptions.map((option) => (
 						<DropdownMenuRadioItem key={option.value} value={option.value} className='gap-x-2'>
-							<Icon name={option.icon} />
+							<Icon
+								name={option.icon}
+								className={cn({
+									'stroke-muted-foreground': option.value === TruckloadDeliveryStatus.PENDING,
+									'stroke-success': option.value === TruckloadDeliveryStatus.CONFIRMED,
+									'stroke-destructive': option.value === TruckloadDeliveryStatus.REQUEST_CHANGE
+								})}
+							/>
 							{option.label}
 							<Badge variant='outline' className='ml-auto font-normal'>
 								{option.count}
