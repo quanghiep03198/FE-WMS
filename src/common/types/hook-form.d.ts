@@ -10,4 +10,5 @@ export interface BaseFieldControl<T extends FieldValues> {
 	defaultValue?: string
 	className?: ClassValue
 	orientation?: 'vertical' | 'horizontal'
+	errorMessageVariant?: 'tooltip' | 'inline'
 }

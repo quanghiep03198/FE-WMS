@@ -20,7 +20,13 @@ export const Tooltip = ({
 		<TooltipProvider {...providerProps}>
 			<TooltipWrapper>
 				<TooltipTrigger {...triggerProps}>{children}</TooltipTrigger>
-				<TooltipContent {...contentProps} className={cn('z-50 whitespace-nowrap', contentProps.className)}>
+				<TooltipContent
+					aria-inva
+					{...contentProps}
+					className={cn(
+						'z-50 whitespace-nowrap aria-[invalid=true]:bg-destructive aria-[invalid=true]:text-destructive-foreground',
+						contentProps.className
+					)}>
 					{message}
 				</TooltipContent>
 			</TooltipWrapper>
