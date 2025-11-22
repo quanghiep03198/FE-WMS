@@ -4,6 +4,7 @@ import React, { memo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
+	ButtonGroup,
 	Div,
 	Icon,
 	Label,
@@ -13,7 +14,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 	Separator,
-	Tooltip
+	Tooltip,
+	Typography
 } from '../..'
 import { useTableContext } from '../context/table.context'
 import { type PaginationBaseProps } from '../types'
@@ -97,7 +99,9 @@ function TablePagination<TData>({
 	}, [pageCount])
 
 	return (
-		<Div role='navigation' className='ml-auto flex items-center space-x-6 py-0.5 lg:space-x-8'>
+		<Div
+			role='navigation'
+			className='ml-auto flex items-center space-x-2 py-0.5 sm:space-x-2 lg:space-x-4 xl:space-x-4'>
 			<Div className='flex items-center space-x-2'>
 				<Label className='font-medium'>{t('ns_common:table.rows_per_page')}</Label>
 				<Select
@@ -120,16 +124,16 @@ function TablePagination<TData>({
 					</SelectContent>
 				</Select>
 			</Div>
-			<Separator orientation='vertical' className='h-6 w-1 bg-border' />
-			<Div className='flex w-20 items-center justify-center whitespace-nowrap text-sm font-medium'>
+			<Separator orientation='vertical' className='h-6 w-1 bg-border sm:hidden md:hidden' />
+			<Typography variant='small' className='whitespace-nowrap text-center font-medium'>
 				{t('table.page', {
 					ns: 'ns_common',
 					defaultValue: pageIndexContext,
 					page: pageIndexContext
 				})}
-			</Div>
-			<Separator orientation='vertical' className='h-6 w-1 bg-border' />
-			<Div className='flex items-center space-x-1'>
+			</Typography>
+			<Separator orientation='vertical' className='h-6 w-1 bg-border sm:hidden md:hidden' />
+			<ButtonGroup>
 				<Tooltip
 					message={t('pagination.first_page', { defaultValue: 'First page' })}
 					triggerProps={{ asChild: true }}>
@@ -199,7 +203,7 @@ function TablePagination<TData>({
 						<Icon name='ChevronsRight' />
 					</Button>
 				</Tooltip>
-			</Div>
+			</ButtonGroup>
 		</Div>
 	)
 }
