@@ -40,7 +40,7 @@ export default {
 		proceed: '确认',
 		reapprove: '重新批准',
 		reload: '重新加载',
-		report: '报告',
+		report: '返审',
 		report_bug: '报告错误',
 		request_change: '请求更改',
 		reset: '重置',

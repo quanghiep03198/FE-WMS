@@ -72,7 +72,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 										payload: pick(data, ['dispatch_order', 'license_plate', 'container_number'])
 									})
 								}}>
-								<Icon name='PencilLine' />
+								<Icon name='PencilLine' className='hidden lg:inline-block xl:inline-block' />
 								{t('ns_common:actions.update')}
 							</DropdownMenuItem>
 							<DropdownMenuItem
@@ -80,7 +80,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 								onClick={() =>
 									event$.emit({ action: CommonActions.DELETE_MANY, payload: data.dispatch_order })
 								}>
-								<Icon name='Trash2' />
+								<Icon name='Trash2' className='hidden lg:inline-block xl:inline-block' />
 								{t('ns_common:actions.delete')}
 							</DropdownMenuItem>
 						</DropdownMenuGroup>

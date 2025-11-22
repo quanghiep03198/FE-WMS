@@ -124,7 +124,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 						<Table className='w-full table-fixed border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 							<TableHeader className='sticky top-0 z-10'>
 								<TableRow>
-									<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-44'>
+									<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[35%] xl:w-44'>
 										<span>{t('ns_erp:fields.po')}</span>
 									</TableHead>
 									{isLargeScreen ? (
@@ -149,7 +149,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											</TableHead>
 										</Fragment>
 									) : (
-										<TableHead align='left' className='w-[30%] xl:hidden'>
+										<TableHead align='left' className='w-[35%] xl:hidden'>
 											<span>{t('ns_erp:titles.product_info')}</span>
 										</TableHead>
 									)}
@@ -215,7 +215,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableRow>
 								<TableRow>
 									<TableCell colSpan={1} align='left' className='w-[40%]'>
-										{data.dispatch_order}
+										<Typography className='!text-pretty text-sm'>{data.dispatch_order}</Typography>
 									</TableCell>
 									<TableCell colSpan={1} align='left'>
 										{data.factory_departure_time ? (
@@ -319,6 +319,6 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 }
 
 const Form = tw.form`flex flex-col gap-y-6 md:gap-0`
-const FieldSet = tw.fieldset`h-64 md:h-96 overflow-scroll`
+const FieldSet = tw.fieldset`max-h-64 md:max-h-96 overflow-scroll`
 
 export default TruckloadDeliveryDetailTable

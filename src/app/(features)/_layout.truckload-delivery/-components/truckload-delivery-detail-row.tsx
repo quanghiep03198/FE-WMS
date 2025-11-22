@@ -66,7 +66,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				isCurrentRowIsDeleting && '[&_td]:duration-1000 [&_td]:ease-out [&_td]:animate-out [&_td]:fade-out-0',
 				isNewRow && 'duration-200 ease-out animate-in fade-in-0 slide-in-from-top-2 [&_td]:opacity-80'
 			)}>
-			<TableCell align='left' className='w-[30%] xl:w-44'>
+			<TableCell align='left' className='w-[25%] xl:w-44'>
 				{readonly ? (
 					<span>{snapshotData?.po}</span>
 				) : (
@@ -83,7 +83,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				)}
 			</TableCell>
 			{!isLargeScreen ? (
-				<TableCell className='w-[30%]'>
+				<TableCell className='w-[35%]'>
 					{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
 						(item) => !isNil(item)
 					) ? (

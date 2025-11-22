@@ -2,7 +2,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, BadgeProps, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
+import { Badge, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table as TanstackTable } from '@tanstack/react-table'
@@ -37,9 +37,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						</button>
 					</Tooltip>
 				),
-				size: 50,
+				size: 40,
 				maxSize: 50,
 				enableHiding: false,
+				enableResizing: false,
+				enableSorting: false,
+				enableGlobalFilter: false,
+				enableColumnFilter: false,
 				cell: ({ row, table }) => (
 					<button
 						className='absolute inset-0 flex h-full w-full items-center justify-center'
@@ -91,7 +95,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableGlobalFilter: true,
 				filterFn: 'auto',
 				minSize: 150,
-				size: isMobile ? 225 : 200,
+				size: 150,
 				maxSize: 250,
 				cell: ({ row, getValue }) => {
 					const value = getValue()
@@ -135,16 +139,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
 				filterFn: 'equals',
-				minSize: 200,
-				size: isMobile ? 150 : 200,
+				minSize: 150,
+				size: 180,
 				maxSize: 200,
 				cell: ({ getValue }) => {
 					const value = getValue() as TruckloadDeliveryStatus
-					const badgeVariants: Record<TruckloadDeliveryStatus, BadgeProps['variant']> = {
-						[TruckloadDeliveryStatus.PENDING]: 'outline',
-						[TruckloadDeliveryStatus.CONFIRMED]: 'default',
-						[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'destructive'
-					}
+
 					const statusIconVariants: Record<TruckloadDeliveryStatus, IconProps['name']> = {
 						[TruckloadDeliveryStatus.PENDING]: 'Loader',
 						[TruckloadDeliveryStatus.CONFIRMED]: 'CircleCheckBig',
@@ -194,7 +194,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
-				size: isMobile ? 100 : 250,
+				size: 200,
 				maxSize: 250,
 				meta: { align: 'right' },
 				cell: ({ row }) => {
@@ -257,7 +257,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			containerProps={{
-				className: 'h-[65vh]'
+				className: 'h-[65vh] md:h-[55vh]'
 			}}
 			renderSubComponent={({ row }) => {
 				const data = row.original as ITruckloadDelivery
