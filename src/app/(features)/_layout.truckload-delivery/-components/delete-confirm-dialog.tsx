@@ -34,10 +34,12 @@ const DeleteConfirmDialog: React.FC = () => {
 		if (action === CommonActions.DELETE) {
 			setShouldConfirmDialogOpen(true)
 			currentlyDeletingIdsRef.current = typeof payload === 'number' ? payload : null
+			currentlyDeletingDispatchOrdersRef.current = null
 		}
 		if (action === CommonActions.DELETE_MANY) {
 			setShouldConfirmDialogOpen(true)
 			currentlyDeletingDispatchOrdersRef.current = typeof payload === 'string' ? payload : null
+			currentlyDeletingIdsRef.current = null
 		}
 	})
 
@@ -48,10 +50,10 @@ const DeleteConfirmDialog: React.FC = () => {
 			open={shouldConfirmDialogOpen}
 			onOpenChange={setShouldConfirmDialogOpen}
 			onConfirm={() => {
-				if (currentlyDeletingIdsRef.current !== null) {
+				if (typeof currentlyDeletingIdsRef.current === 'number') {
 					return deleteOneById(currentlyDeletingIdsRef.current)
 				}
-				if (currentlyDeletingDispatchOrdersRef.current !== null) {
+				if (typeof currentlyDeletingDispatchOrdersRef.current === 'string') {
 					return bulkDeleteByDispatchOrder(currentlyDeletingDispatchOrdersRef.current)
 				}
 			}}
