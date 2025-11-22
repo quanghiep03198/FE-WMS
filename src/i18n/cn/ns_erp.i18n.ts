@@ -46,7 +46,7 @@ export default {
 		kg_nostart: '起始箱號',
 		last_inbound_time: '最后入库时间', // Last Inbound Time
 		last_outbound_time: '最后出库时间', // Last Outbound Time
-		license_plate: '车牌号',
+		license_plate: '车牌',
 		mat_code: '成品料号',
 		color_sn: '产品颜色',
 		missing_qty: '缺貨量',

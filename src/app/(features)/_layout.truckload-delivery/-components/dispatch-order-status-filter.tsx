@@ -51,7 +51,7 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', className: 'border-dashed' }))}>
-				<Icon name='CirclePlus' /> {t('ns_common:common_fields.status')}
+				<Icon name='CirclePlus' /> {t('ns_erp:fields.status_approve')}
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className='w-64' align='end'>
 				<DropdownMenuRadioGroup

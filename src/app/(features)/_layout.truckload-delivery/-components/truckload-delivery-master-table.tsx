@@ -128,7 +128,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
 			columnHelper.accessor('status', {
-				header: t('ns_common:common_fields.status'),
+				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,
 				enableSorting: true,
 				enablePinning: true,
