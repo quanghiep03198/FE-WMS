@@ -48,8 +48,6 @@ type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & {
 
 const NavSidebar: React.FC = () => {
 	const { t } = useTranslation('ns_common')
-	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
-	const { open, setOpen } = useSidebar()
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon'>
@@ -72,8 +70,7 @@ const NavSidebar: React.FC = () => {
 											<SidebarMenuButton
 												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												size='sm'
-												className='w-full font-medium'
-												onClick={() => setOpen(!isSmallScreen && !open)}>
+												className='w-full font-medium'>
 												{item.icon && (
 													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
 												)}
