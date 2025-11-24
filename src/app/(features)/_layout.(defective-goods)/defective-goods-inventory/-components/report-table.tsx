@@ -6,7 +6,6 @@ import { IDefectiveGoodsInventory } from '@/common/types/entities'
 import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { saveAs } from 'file-saver'
@@ -14,7 +13,7 @@ import { split } from 'lodash'
 import { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { DefectiveCategoryI18n } from '../../-constants'
+import { DefectiveCategory, DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
 import ReportTableSummary from './report-table-footer'
@@ -26,10 +25,11 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 	const defectiveCategoryList = useDefectiveCategoryList()
 	const { user } = useAuth()
 	const { data: tenant } = useGetTenantByFactory()
+
 	const factedUniqueStorageLocations = useMemo(() => {
 		const locationSet = new Set<string>()
 		if (Array.isArray(data)) {
-			data.forEach((item) => {
+			data.forEach((item: IDefectiveGoodsInventory) => {
 				if (Array.isArray(item.storage_location)) {
 					item.storage_location.forEach((loc) => locationSet.add(loc))
 				}
@@ -162,8 +162,8 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					)
 				}
 			}),
-			columnHelper.display({
-				id: 'total_qty',
+			columnHelper.accessor('total_qty', {
+				// id: 'total_qty',
 				header: t('ns_erp:fields.actual_inventory_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -199,7 +199,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 	}
 
 	const renderSubComponent = useCallback(
-		(({ row }) => {
+		({ row }) => {
 			return (
 				<SizeTable
 					data={row.original.size_data}
@@ -210,21 +210,26 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					}
 				/>
 			)
-		}) satisfies RenderSubComponent<IDefectiveGoodsInventory>,
+		},
 		[data]
 	)
 
-	const total = useMemo(() => {
-		if (!Array.isArray(data)) return 0
-		return data.reduce((acc, curr) => {
-			if (!Array.isArray(curr.size_data)) return acc
-			return acc + curr.size_data.reduce((a, b) => a + b.qty, 0)
-		}, 0)
+	const summaryData = useMemo(() => {
+		const result: Record<DefectiveCategory, number> = {
+			[DefectiveCategory.B_GRADE]: 0,
+			[DefectiveCategory.C_GRADE]: 0,
+			[DefectiveCategory.RESEARCH_DEVELOPMENT]: 0
+		}
+		if (!Array.isArray(data)) return result
+		const groupData = Object.groupBy(data, (item: IDefectiveGoodsInventory) => item.defective_category)
+		for (const category in groupData) {
+			result[category] = groupData[category].reduce((sum, curr) => {
+				if (!Array.isArray(curr.size_data)) return sum
+				return sum + curr.size_data.reduce((acc, size) => acc + size.qty, 0)
+			}, 0)
+		}
+		return result
 	}, [data])
-
-	const renderFooterComponent = useCallback(() => {
-		return <ReportTableSummary total={total} />
-	}, [total])
 
 	return (
 		<DataTable
@@ -256,7 +261,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				)
 			}}
 			footerProps={{
-				slot: renderFooterComponent
+				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 		/>
 	)

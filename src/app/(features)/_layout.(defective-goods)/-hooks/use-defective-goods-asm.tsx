@@ -1,5 +1,5 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IDefectiveGoods } from '@/common/types/entities'
+import { IDefectiveGoods, IDefectiveGoodsInventory } from '@/common/types/entities'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
@@ -39,7 +39,14 @@ export const useGetDefectiveGoodsInventoryQuery = () => {
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY, tenant?.id],
 		queryFn: async () => await DefectiveGoodsService.getDefectiveGoodsInventory(tenant?.id),
 		enabled: !!tenant?.id,
-		select: (response) => response.metadata
+		select: (response) => {
+			return Array.isArray(response.metadata)
+				? response.metadata.map((item: IDefectiveGoodsInventory) => ({
+						...item,
+						total_qty: item.size_data.reduce((sum, size) => sum + size.qty, 0)
+					}))
+				: []
+		}
 	})
 }
 
