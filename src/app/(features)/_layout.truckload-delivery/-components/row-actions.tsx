@@ -2,19 +2,39 @@ import { CommonActions } from '@/common/constants/enums'
 import {
 	Button,
 	buttonVariants,
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
 	Div,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-	Icon
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+	Icon,
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { useCountDown } from 'ahooks'
 import { pick } from 'lodash'
-import React from 'react'
+import React, { Fragment, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import z from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 import { useSetTruckloadDeliveryStatusMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -27,36 +47,10 @@ type RowActionsDropdownProps = Record<
 const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { mutateAsync: setStatusAsync } = useSetTruckloadDeliveryStatusMutation()
-
-	const handleSetStatus = (status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE) => {
-		return toast.promise(setStatusAsync({ dispatchOrder: data.dispatch_order, status }), {
-			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_common:notification.success'),
-			error: t('ns_common:notification.error')
-		})
-	}
 
 	return (
 		<Div className='flex w-full items-center justify-end [&_svg]:hidden lg:[&_svg]:inline-block xl:[&_svg]:inline-block'>
-			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
-				<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
-					<Icon name='Check' />
-					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
-						? t('ns_common:actions.reconfirm')
-						: t('ns_common:actions.confirm')}
-				</Button>
-			)}
-			{data.status !== TruckloadDeliveryStatus.REQUEST_CHANGE && (
-				<Button
-					variant='ghost'
-					className='text-destructive hover:text-destructive'
-					size='sm'
-					onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}>
-					<Icon name='TriangleAlert' />
-					{t('ns_common:actions.report')}
-				</Button>
-			)}
+			<StatusChangeButtonsGroup data={data} />
 			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<DropdownMenu modal={false}>
 					<DropdownMenuTrigger
@@ -88,6 +82,130 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 				</DropdownMenu>
 			)}
 		</Div>
+	)
+}
+
+const FormSchema = z.object({
+	pin: z.string().min(6, {
+		message: 'Your one-time password must be 6 characters.'
+	})
+})
+
+const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery, 'dispatch_order' | 'status'>>> = ({
+	data
+}) => {
+	const { t } = useTranslation()
+	const { mutateAsync: setStatusAsync } = useSetTruckloadDeliveryStatusMutation()
+	const [open, setOpen] = useState<boolean>(false)
+
+	const form = useForm<z.infer<typeof FormSchema>>({
+		resolver: zodResolver(FormSchema),
+		defaultValues: {
+			pin: ''
+		}
+	})
+
+	const [countdown] = useCountDown({
+		targetDate: Date.now() + 30_000,
+		onEnd: () => {
+			setOpen(false)
+		}
+	})
+
+	const handleSetStatus = (status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE) => {
+		return toast.promise(setStatusAsync({ dispatchOrder: data.dispatch_order, status }), {
+			loading: t('ns_common:notification.processing_request'),
+			success: t('ns_common:notification.success'),
+			error: t('ns_common:notification.error')
+		})
+	}
+
+	function onSubmit(data: z.infer<typeof FormSchema>) {
+		toast('You submitted the following values', {
+			description: (
+				<pre className='mt-2 w-[320px] rounded-md bg-neutral-950 p-4'>
+					<code className='text-white'>{JSON.stringify(data, null, 2)}</code>
+				</pre>
+			)
+		})
+	}
+
+	return (
+		<Fragment>
+			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
+				<Button
+					variant='ghost'
+					size='sm'
+					onClick={() => setOpen(true)}
+					// onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}
+				>
+					<Icon name='Check' />
+					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
+						? t('ns_common:actions.reconfirm')
+						: t('ns_common:actions.confirm')}
+				</Button>
+			)}
+			{data.status !== TruckloadDeliveryStatus.REQUEST_CHANGE && (
+				<Button
+					variant='ghost'
+					className='text-destructive hover:text-destructive'
+					size='sm'
+					onClick={() => setOpen(true)}
+					// onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}
+				>
+					<Icon name='TriangleAlert' />
+					{t('ns_common:actions.report')}
+				</Button>
+			)}
+			<Dialog open={open}>
+				<DialogContent>
+					<DialogHeader>
+						<Div className='mb-2 w-full place-content-center place-items-center'>
+							<Div className='aspect-square place-content-center place-items-center rounded-full bg-accent p-3 text-accent-foreground'>
+								<Icon name='ShieldUser' size={40} strokeWidth={1} />
+							</Div>
+						</Div>
+						<DialogTitle className='text-center'>2FA Security</DialogTitle>
+						<DialogDescription className='text-center'>
+							Please enter the PIN Code to verify that is you.
+						</DialogDescription>
+					</DialogHeader>
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-stretch space-y-6'>
+							<FormField
+								control={form.control}
+								name='pin'
+								render={({ field }) => (
+									<FormItem className='flex flex-col items-center rounded-md border border-dashed p-6 *:text-center'>
+										<FormLabel>PIN Code</FormLabel>
+										<FormControl>
+											<InputOTP maxLength={6} {...field} type='password'>
+												<InputOTPGroup>
+													<InputOTPSlot index={0} />
+													<InputOTPSlot index={1} />
+													<InputOTPSlot index={2} />
+													<InputOTPSlot index={3} />
+													<InputOTPSlot index={4} />
+													<InputOTPSlot index={5} />
+												</InputOTPGroup>
+											</InputOTP>
+										</FormControl>
+										<FormDescription className='text-destructive'>
+											Your account will be blocked if you enter wrong pin code 5 times
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button type='submit'>
+								<Icon name='Check' size={18} />
+								Verify (Expires after {Math.round(countdown / 1000)}s)
+							</Button>
+						</form>
+					</Form>
+				</DialogContent>
+			</Dialog>
+		</Fragment>
 	)
 }
 
