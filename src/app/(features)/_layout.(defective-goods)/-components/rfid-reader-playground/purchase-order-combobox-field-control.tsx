@@ -1,7 +1,7 @@
 import { ComboboxFieldControl } from '@/components/ui'
 import { ComboboxFieldControlProps } from '@/components/ui/@field-control/combobox'
-import { debounce } from 'lodash'
-import { useState } from 'react'
+import { debounce, omit } from 'lodash'
+import { useMemo, useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSearchPurchaseOrderQuery } from '../../../-hooks/use-order-asm'
@@ -22,13 +22,17 @@ const PurchaseOrderComboboxFieldControl: React.FC<PurchaseOrderComboboxFieldCont
 	const { data } = useSearchPurchaseOrderQuery(searchTerm)
 	const { t } = useTranslation()
 
+	const datalist = useMemo(() => {
+		return Array.isArray(data) ? data.map((item) => omit(item, 'disabled')) : []
+	}, [data])
+
 	return (
 		<ComboboxFieldControl
 			name='po'
 			label={t('ns_erp:fields.po')}
 			onInput={debounce((value: string) => setSearchTerm(value), 200)}
 			shouldFilter={false}
-			datalist={data}
+			datalist={datalist}
 			labelField='po'
 			valueField='po'
 			{...props}
