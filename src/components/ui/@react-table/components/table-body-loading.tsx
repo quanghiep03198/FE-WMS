@@ -20,7 +20,7 @@ export const TableBodyLoading: React.FC = () => {
 							width: `calc(var(--col-${column?.id}-size) * 1px)`,
 							height: 'var(--row-height)'
 						}}>
-						<Skeleton />
+						<Skeleton className='h-[calc(var(--row-height)/3)]' />
 					</TableCell>
 				)
 			})}
