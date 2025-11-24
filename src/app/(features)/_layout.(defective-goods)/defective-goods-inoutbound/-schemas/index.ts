@@ -2,7 +2,11 @@ import z from 'zod'
 
 export const defectiveGoodsInboundFormValues = z.object({
 	epcs: z.array(z.string()).nonempty(),
-	storage_location: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
+	storage_location: z
+		.string({ message: 'ns_validation:required' })
+		.trim()
+		.nonempty({ message: 'ns_validation:required' })
+		.transform((value) => value.toUpperCase())
 })
 
 export const defectiveGoodsOutboundFormValues = z.object({

@@ -37,7 +37,7 @@ const StorageLocationFieldControl: React.FC<StorageLocationFieldControlProps> = 
 							{...props}
 							name='storage_location'
 							aria-invalid={!isNil(error)}
-							onChange={field.onChange}
+							onChange={(e) => field.onChange(e.currentTarget.value.toUpperCase().trim())}
 							value={field.value}
 							placeholder={t('ns_inoutbound:placeholders.enter_storage_location')}
 							className={cn(
