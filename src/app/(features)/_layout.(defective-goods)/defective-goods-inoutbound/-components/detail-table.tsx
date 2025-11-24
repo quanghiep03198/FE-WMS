@@ -13,6 +13,7 @@ import {
 } from '@/components/ui'
 import axiosInstance from '@/configs/axios.config'
 
+import { FALLBACK_VALUE } from '@/common/constants/constants'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { useAsyncEffect, useDebounce } from 'ahooks'
 import { useMemo, useState } from 'react'
@@ -32,7 +33,7 @@ const DetailTable: React.FC = () => {
 	const [data, setData] = useState<DetailTableItem[]>([])
 	const [loading, setLoading] = useState<boolean>(false)
 
-	const debouncedScannedEpcs = useDebounce(scannedEpcs, { wait: 60 })
+	const debouncedScannedEpcs = useDebounce(scannedEpcs, { wait: 200, leading: true, trailing: true })
 
 	useAsyncEffect(async () => {
 		setLoading(true)
@@ -93,13 +94,23 @@ const DetailTable: React.FC = () => {
 								<TableRow
 									key={item.factory_shoes_style + item.color_sn}
 									className={loading && '[&_td]:animate-pulse'}>
-									<TableCell align='left'>{item.factory_shoes_style}</TableCell>
-									<TableCell align='left'>{item.color_sn}</TableCell>
+									<TableCell align='left'>
+										{item.factory_shoes_style === FALLBACK_VALUE
+											? t('ns_common:titles.unknown')
+											: item.factory_shoes_style}
+									</TableCell>
+									<TableCell align='left'>
+										{item.color_sn === FALLBACK_VALUE ? t('ns_common:titles.unknown') : item.color_sn}
+									</TableCell>
 									<TableCell className='p-0'>
 										<Div className='flex flex-grow border-collapse flex-nowrap divide-x'>
 											{item.sizes.map((size) => (
 												<NestedRow key={size.size_code}>
-													<NestedCell>{size.size_code}</NestedCell>
+													<NestedCell>
+														{size.size_code === FALLBACK_VALUE
+															? t('ns_common:titles.unknown')
+															: size.size_code}
+													</NestedCell>
 													<NestedCell>{size.qty}</NestedCell>
 												</NestedRow>
 											))}
