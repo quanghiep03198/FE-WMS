@@ -124,11 +124,20 @@ const NavSidebar: React.FC = () => {
 const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
-	const { openMobile, setOpenMobile } = useSidebar()
+	const { open, openMobile, setOpenMobile } = useSidebar()
+	const location = useRouterState({ select: (s) => s.location })
+	const ref = useRef<HTMLLIElement>(null)
+
+	useEffect(() => {
+		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
+			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
+		}
+	}, [open, location.pathname])
 
 	return (
 		<SidebarMenuItem
 			role='menuitem'
+			ref={ref}
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
@@ -157,7 +166,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
-			ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
 	}, [open, location.pathname])
 
