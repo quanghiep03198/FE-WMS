@@ -1,5 +1,6 @@
 import { CommonActions } from '@/common/constants/enums'
 import {
+	Badge,
 	Button,
 	buttonVariants,
 	Dialog,
@@ -29,11 +30,12 @@ import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useCountDown } from 'ahooks'
-import { pick } from 'lodash'
+import { padStart, pick } from 'lodash'
 import React, { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 import z from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
@@ -96,7 +98,7 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 }) => {
 	const { t } = useTranslation()
 	const { mutateAsync: setStatusAsync } = useSetTruckloadDeliveryStatusMutation()
-	const [open, setOpen] = useState<boolean>(false)
+	const [targetDate, setTargetDate] = useState<number>(30_000)
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
@@ -105,12 +107,7 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 		}
 	})
 
-	const [countdown] = useCountDown({
-		targetDate: Date.now() + 30_000,
-		onEnd: () => {
-			setOpen(false)
-		}
-	})
+	const [countdown, formattedRes] = useCountDown({ targetDate: targetDate })
 
 	const handleSetStatus = (status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE) => {
 		return toast.promise(setStatusAsync({ dispatchOrder: data.dispatch_order, status }), {
@@ -136,7 +133,7 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 				<Button
 					variant='ghost'
 					size='sm'
-					onClick={() => setOpen(true)}
+					onClick={() => setTargetDate(Date.now() + 60_000 * 5)}
 					// onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}
 				>
 					<Icon name='Check' />
@@ -150,21 +147,19 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 					variant='ghost'
 					className='text-destructive hover:text-destructive'
 					size='sm'
-					onClick={() => setOpen(true)}
+					onClick={() => setTargetDate(Date.now() + 30_000)}
 					// onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}
 				>
 					<Icon name='TriangleAlert' />
 					{t('ns_common:actions.report')}
 				</Button>
 			)}
-			<Dialog open={open}>
+			<Dialog open={countdown > 0}>
 				<DialogContent>
-					<DialogHeader>
-						<Div className='mb-2 w-full place-content-center place-items-center'>
-							<Div className='aspect-square place-content-center place-items-center rounded-full bg-accent p-3 text-accent-foreground'>
-								<Icon name='ShieldUser' size={40} strokeWidth={1} />
-							</Div>
-						</Div>
+					<DialogHeader className='items-center'>
+						<DialogMedia>
+							<Icon name='ShieldUser' size={40} strokeWidth={1} />
+						</DialogMedia>
 						<DialogTitle className='text-center'>2FA Security</DialogTitle>
 						<DialogDescription className='text-center'>
 							Please enter the PIN Code to verify that is you.
@@ -190,7 +185,12 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 												</InputOTPGroup>
 											</InputOTP>
 										</FormControl>
-										<FormDescription className='text-destructive'>
+										<Badge variant='secondary'>
+											Session end after {padStart(String(formattedRes.minutes), 2, '0')}:
+											{padStart(String(formattedRes.seconds), 2, '0')}
+										</Badge>
+										<FormDescription className='inline-flex items-center gap-x-1 text-warning'>
+											<Icon name='ShieldAlert' />
 											Your account will be blocked if you enter wrong pin code 5 times
 										</FormDescription>
 										<FormMessage />
@@ -199,7 +199,7 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 							/>
 							<Button type='submit'>
 								<Icon name='Check' size={18} />
-								Verify (Expires after {Math.round(countdown / 1000)}s)
+								Verify
 							</Button>
 						</form>
 					</Form>
@@ -208,5 +208,7 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 		</Fragment>
 	)
 }
+
+const DialogMedia = tw.div`mb-2 size-20 aspect-square place-content-center place-items-center bg-accent rounded-full text-accent-foreground`
 
 export default RowActions
