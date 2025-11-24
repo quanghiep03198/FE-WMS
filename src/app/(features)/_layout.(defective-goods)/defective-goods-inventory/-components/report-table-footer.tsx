@@ -15,11 +15,6 @@ const ReportTableSummary: React.FC<ReportTableSummaryProps> = ({ summaryData }) 
 		<Table className='table-fixed'>
 			<TableHeader>
 				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
-					<TableHead align='center' colSpan={4}>
-						{t('ns_common:titles.overall')}
-					</TableHead>
-				</TableRow>
-				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
 					<TableHead align='right'>{t('ns_inoutbound:shoes_category.b_grade')}</TableHead>
 					<TableHead align='right'>{t('ns_inoutbound:shoes_category.c_grade')}</TableHead>
 					<TableHead align='right'>{t('ns_inoutbound:shoes_category.research_development')}</TableHead>
@@ -41,18 +36,6 @@ const ReportTableSummary: React.FC<ReportTableSummaryProps> = ({ summaryData }) 
 				</TableRow>
 			</TableBody>
 		</Table>
-		// <Div role='row' className='flex w-full items-center justify-center gap-x-4 px-4 py-2'>
-		// 	<Typography color='muted' className='font-medium'>
-		// 		{t('ns_common:common_fields.total')}
-		// 	</Typography>
-		// 	<Separator orientation='horizontal' className='h-0.5 basis-4' />
-		// 	<Typography className='inline-flex items-baseline gap-x-1 font-medium'>
-		// 		{total}
-		// 		<Typography as='small' variant='small'>
-		// 			prs
-		// 		</Typography>
-		// 	</Typography>
-		// </Div>
 	)
 }
 
