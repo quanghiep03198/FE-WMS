@@ -6,6 +6,7 @@ import { cn } from '@/common/utils/cn'
 import {
 	Badge,
 	Card,
+	CardAction,
 	CardContent,
 	CardDescription,
 	CardHeader,
@@ -23,6 +24,7 @@ import {
 } from '@/components/ui'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { formatRelative } from 'date-fns'
+import { isNil } from 'lodash'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -68,14 +70,18 @@ const InfoCard: React.FC<{
 
 	const handleUpdate = useCallback(() => {
 		navigate({ hash: String(data.id), search })
+		const payload: IDefectiveGoods = {} as IDefectiveGoods
+
 		for (const prop in data) {
 			if (prop === 'defective_description') {
-				data[prop] = gunzipSync(Buffer.from(data.defective_description, 'base64')).toString()
+				payload[prop] = gunzipSync(Buffer.from(data.defective_description, 'base64')).toString()
+			} else if (isNil(data[prop])) {
+				payload[prop] = ''
 			} else {
-				data[prop] = data[prop as keyof IDefectiveGoods] ?? ''
+				payload[prop] = data[prop]
 			}
 		}
-		event$.emit({ action: CommonActions.UPDATE, payload: data })
+		event$.emit({ action: CommonActions.UPDATE, payload })
 		setCurrentDevice('usb')
 	}, [data])
 
@@ -95,30 +101,32 @@ const InfoCard: React.FC<{
 				hash === String(data.id) && 'bg-accent/50'
 			)}>
 			<CardHeader>
-				<DropdownMenu>
-					<DropdownMenuTrigger className='absolute right-3 top-3 !m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
-						<Icon name='Ellipsis' />
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='start' side='left'>
-						<DropdownMenu>
-							<DropdownMenuItem
-								className='gap-x-2'
-								onClick={() =>
-									event$.emit({ action: CommonActions.READ, payload: data.defective_description })
-								}>
-								<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
-							</DropdownMenuItem>
-							<DropdownMenuItem className='gap-x-2' onClick={() => handleUpdate()}>
-								<Icon name='PencilLine' /> {t('ns_common:actions.update')}
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								className='gap-x-2 !text-destructive hover:!bg-destructive/20'
-								onClick={() => handleDelete()}>
-								<Icon name='Trash2' /> {t('ns_common:actions.delete')}
-							</DropdownMenuItem>
-						</DropdownMenu>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<CardAction className='absolute right-3 top-3'>
+					<DropdownMenu modal={false}>
+						<DropdownMenuTrigger className='!m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
+							<Icon name='Ellipsis' />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='start' side='left'>
+							<DropdownMenu>
+								<DropdownMenuItem
+									className='gap-x-2'
+									onClick={() =>
+										event$.emit({ action: CommonActions.READ, payload: data.defective_description })
+									}>
+									<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
+								</DropdownMenuItem>
+								<DropdownMenuItem className='gap-x-2' onClick={() => handleUpdate()}>
+									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									className='gap-x-2 !text-destructive hover:!bg-destructive/20'
+									onClick={() => handleDelete()}>
+									<Icon name='Trash2' /> {t('ns_common:actions.delete')}
+								</DropdownMenuItem>
+							</DropdownMenu>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</CardAction>
 				<Div className='!mb-3 flex items-center gap-x-1'>
 					<Checkbox checked={isItemSelected(data.id)} onCheckedChange={() => handleSelect(false, data.id)} />
 					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />

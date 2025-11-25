@@ -26,7 +26,8 @@ import tw from 'tailwind-styled-components'
 import { gzipSync } from 'zlib'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
-import PurchaseOrderComboboxFieldControl from '../../../-components/rfid-reader-playground/purchase-order-combobox-field-control'
+
+import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
 import {
@@ -286,7 +287,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					{shouldRequireFullInfo && !isNil(formAction) && (
 						<Fragment>
 							<Div className='col-span-3'>
-								<PurchaseOrderComboboxFieldControl />
+								<PurchaseOrderFieldControl />
 							</Div>
 							<Div className='col-span-3'>
 								<CommandNumberFieldControl />
@@ -369,7 +370,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				{/* Footer bar */}
 				<Div className='flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-4'>
 					<ToggleFullscreen />
-					<DeviceRadioGroup />
+					<DeviceRadioGroup shouldNotAllowUhf={formAction === CommonActions.UPDATE} />
 				</Div>
 			</Form>
 		</FormProvider>
