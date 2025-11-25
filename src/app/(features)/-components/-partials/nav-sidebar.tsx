@@ -48,6 +48,8 @@ type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & {
 
 const NavSidebar: React.FC = () => {
 	const { t } = useTranslation('ns_common')
+	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
+	const { setOpen } = useSidebar()
 
 	return (
 		<Sidebar variant='sidebar' side='left' collapsible='icon'>
@@ -70,7 +72,11 @@ const NavSidebar: React.FC = () => {
 											<SidebarMenuButton
 												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												size='sm'
-												className='w-full font-medium'>
+												className='w-full font-medium'
+												onClick={() => {
+													if (isMobile) return
+													setOpen(true)
+												}}>
 												{item.icon && (
 													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
 												)}
@@ -123,7 +129,7 @@ const NavSidebar: React.FC = () => {
 
 const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition }) => {
 	const { t } = useTranslation('ns_common')
-	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
+	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
 	const location = useRouterState({ select: (s) => s.location })
 	const ref = useRef<HTMLLIElement>(null)
@@ -139,7 +145,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 			role='menuitem'
 			ref={ref}
 			onClick={() => {
-				if (isSmallScreen) setOpenMobile(!openMobile)
+				if (isMobile) setOpenMobile(!openMobile)
 			}}>
 			<SidebarMenuButton asChild size='sm' tooltip={t(title, { defaultValue: title })}>
 				<Link
