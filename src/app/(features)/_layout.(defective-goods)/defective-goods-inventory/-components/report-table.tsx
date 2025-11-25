@@ -1,18 +1,12 @@
 import SizeTable from '@/app/(features)/-components/-shared/size-table'
-import { useGetTenantByFactory } from '@/app/(features)/-hooks/use-tenacy-asm'
-import { factories } from '@/common/constants/constants'
-import useAuth from '@/common/hooks/use-auth'
 import { IDefectiveGoodsInventory } from '@/common/types/entities'
 import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { createColumnHelper } from '@tanstack/react-table'
-import { saveAs } from 'file-saver'
 import { split } from 'lodash'
-import { Fragment, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { DefectiveCategory, DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
@@ -23,15 +17,14 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDefectiveGoodsInventory>()
 	const defectiveCategoryList = useDefectiveCategoryList()
-	const { user } = useAuth()
-	const { data: tenant } = useGetTenantByFactory()
 
 	const factedUniqueStorageLocations = useMemo(() => {
 		const locationSet = new Set<string>()
 		if (Array.isArray(data)) {
 			data.forEach((item: IDefectiveGoodsInventory) => {
-				if (Array.isArray(item.storage_location)) {
-					item.storage_location.forEach((loc) => locationSet.add(loc))
+				const storageLocations = item.storage_location?.split(',')
+				if (Array.isArray(storageLocations)) {
+					storageLocations.forEach((loc) => locationSet.add(loc))
 				}
 			})
 		}
@@ -163,7 +156,6 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				}
 			}),
 			columnHelper.accessor('total_qty', {
-				// id: 'total_qty',
 				header: t('ns_erp:fields.actual_inventory_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
@@ -178,25 +170,6 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 		],
 		[i18n.language]
 	)
-
-	const handleDownloadExcel = async () => {
-		const id = toast.loading(t('ns_common:notification.downloading'))
-		const factory = t(factories[user.company_code], { ns: 'ns_common', defaultValue: user.company_code }) as string
-
-		try {
-			const blob = await DefectiveGoodsService.downloadDefectiveGoodsInventoryReport(tenant?.id)
-			saveAs(
-				blob,
-				t('ns_inoutbound:titles.file_defective_goods_inventory_report', {
-					factory,
-					defaultValue: `Defective goods inventory  ~ ${factory}`
-				}) + '.xlsx'
-			)
-			toast.success(t('ns_common:notification.success'), { id })
-		} catch {
-			toast.error('ns_common:notification.error', { id })
-		}
-	}
 
 	const renderSubComponent = useCallback(
 		({ row }) => {
@@ -242,22 +215,11 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 			renderSubComponent={renderSubComponent}
 			toolbarProps={{
 				slotRight: () => (
-					<Fragment>
-						<Tooltip message={`${t('ns_common:actions.export')} Excel`} triggerProps={{ asChild: true }}>
-							<Button
-								size='icon'
-								variant='outline'
-								onClick={handleDownloadExcel}
-								disabled={!data || data.length === 0}>
-								<Icon name='Download' />
-							</Button>
-						</Tooltip>
-						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-							<Button size='icon' variant='outline' onClick={() => refetch()}>
-								<Icon name='RotateCw' />
-							</Button>
-						</Tooltip>
-					</Fragment>
+					<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+						<Button size='icon' variant='outline' onClick={() => refetch()}>
+							<Icon name='RotateCw' />
+						</Button>
+					</Tooltip>
 				)
 			}}
 			footerProps={{
