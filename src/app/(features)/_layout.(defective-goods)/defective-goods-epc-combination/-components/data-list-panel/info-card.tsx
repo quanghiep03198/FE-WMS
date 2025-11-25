@@ -157,7 +157,7 @@ const InfoCard: React.FC<{
 						<Typography variant='small'>{data.cust_shoes_style}</Typography>
 					</DescriptionItem>
 					<DescriptionItem>
-						<Typography variant='small'>{t('ns_erp:fields.shoestyle_codefactory')}:</Typography>
+						<Typography variant='small'>{t('ns_erp:fields.factory_shoes_style')}:</Typography>
 						<Typography variant='small'>{data.factory_shoes_style}</Typography>
 					</DescriptionItem>
 					<DescriptionItem>

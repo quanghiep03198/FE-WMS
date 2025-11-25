@@ -148,8 +148,8 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 							valueField='value'
 						/>
 						<InputFieldControl
-							label={t('ns_erp:fields.shoestyle_codefactory')}
-							placeholder={t('ns_erp:fields.shoestyle_codefactory')}
+							label={t('ns_erp:fields.factory_shoes_style')}
+							placeholder={t('ns_erp:fields.factory_shoes_style')}
 							name='factory_shoes_style_actual'
 							readOnly={true}
 						/>

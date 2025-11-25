@@ -137,9 +137,9 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											</TableHead>
 											<TableHead
 												align='left'
-												title={t('ns_erp:fields.shoestyle_codefactory')}
+												title={t('ns_erp:fields.factory_shoes_style')}
 												className='md:hidden lg:hidden'>
-												<span>{t('ns_erp:fields.shoestyle_codefactory')}</span>
+												<span>{t('ns_erp:fields.factory_shoes_style')}</span>
 											</TableHead>
 											<TableHead
 												align='left'

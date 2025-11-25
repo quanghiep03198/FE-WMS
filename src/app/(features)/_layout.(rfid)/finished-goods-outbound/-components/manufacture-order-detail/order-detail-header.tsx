@@ -23,8 +23,8 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 				<TableHead
 					align='left'
 					className='z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-normal xl:sticky xl:left-[var(--sticky-left-col-width)]'>
-					<span className='line-clamp-1' title={t('ns_erp:fields.shoestyle_codefactory')}>
-						{t('ns_erp:fields.shoestyle_codefactory')}
+					<span className='line-clamp-1' title={t('ns_erp:fields.factory_shoes_style')}>
+						{t('ns_erp:fields.factory_shoes_style')}
 					</span>
 				</TableHead>
 				<TableHead

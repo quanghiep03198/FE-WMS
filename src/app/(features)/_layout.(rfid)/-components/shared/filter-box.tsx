@@ -217,7 +217,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 							</Typography>
 							<Div className='space-y-3'>
 								<ComboboxFieldControl
-									label={t('ns_erp:fields.shoestyle_codefactory')}
+									label={t('ns_erp:fields.factory_shoes_style')}
 									name='shoes_style'
 									orientation='horizontal'
 									datalist={shoesStyleOptions}

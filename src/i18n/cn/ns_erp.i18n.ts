@@ -83,7 +83,7 @@ export default {
 		shipping_type: '運輸方式',
 		shipment_confirm_date: '确认出货日',
 		shoes_type_b: 'B级鞋',
-		shoestyle_codefactory: '工廠形體',
+		factory_shoes_style: '工廠形體',
 		sno_car_number: '車號',
 		container_number: '货柜号',
 		sno_date: '驗收日期',

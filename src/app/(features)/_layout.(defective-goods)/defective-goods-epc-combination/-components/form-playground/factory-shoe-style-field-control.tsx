@@ -42,9 +42,9 @@ const FactoryShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> =
 		<AutoCompleteFieldControl
 			{...props}
 			name='factory_shoes_style'
-			label={t('ns_erp:fields.shoestyle_codefactory')}
+			label={t('ns_erp:fields.factory_shoes_style')}
 			placeholder={t('ns_common:form_placeholder.fill', {
-				object: String(t('ns_erp:fields.shoestyle_codefactory')).toLowerCase(),
+				object: String(t('ns_erp:fields.factory_shoes_style')).toLowerCase(),
 				defaultValue: null
 			})}
 			loading={loading}

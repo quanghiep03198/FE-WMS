@@ -45,7 +45,7 @@ const ReportMasterTable: React.FC = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('shoes_style', {
-				header: t('ns_erp:fields.shoestyle_codefactory'),
+				header: t('ns_erp:fields.factory_shoes_style'),
 				enableSorting: true,
 				enableMultiSort: true,
 				enableColumnFilter: true,

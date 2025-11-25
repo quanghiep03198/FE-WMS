@@ -168,7 +168,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 								<InputFieldControl label={t('ns_erp:fields.mo_no')} name='mo_no' readOnly={true} />
 								<InputFieldControl label={t('ns_erp:fields.color_sn')} name='color_sn' readOnly={true} />
 								<InputFieldControl
-									label={t('ns_erp:fields.shoestyle_codefactory')}
+									label={t('ns_erp:fields.factory_shoes_style')}
 									name='factory_shoes_style'
 									readOnly={true}
 								/>
@@ -212,7 +212,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 									onValueChange={handleSelectSubCommandNumber}
 								/>
 								<InputFieldControl
-									label={t('ns_erp:fields.shoestyle_codefactory')}
+									label={t('ns_erp:fields.factory_shoes_style')}
 									name='factory_shoes_style_actual'
 									placeholder='XX01 XX01-1'
 									readOnly={true}
