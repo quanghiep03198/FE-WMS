@@ -23,7 +23,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { gunzipSync, gzipSync } from 'zlib'
+import { gzipSync } from 'zlib'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
 import PurchaseOrderComboboxFieldControl from '../../../-components/rfid-reader-playground/purchase-order-combobox-field-control'
@@ -92,11 +92,8 @@ const DefectiveGoodsForm: React.FC = () => {
 	event$.useSubscription((e: { action: CommonActions; payload: IDefectiveGoods }) => {
 		if (e.action === CommonActions.UPDATE) {
 			setFormAction(CommonActions.UPDATE)
-			const extractedDescription: string = gunzipSync(
-				Buffer.from(e.payload.defective_description, 'base64')
-			).toString()
-			form.reset({ ...e.payload, defective_description: extractedDescription })
-			setDefaultEditorContent(extractedDescription)
+			form.reset(e.payload)
+			setDefaultEditorContent(e.payload.defective_description)
 		}
 	})
 

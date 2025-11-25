@@ -3,6 +3,7 @@ import { CaretSortIcon } from '@radix-ui/react-icons'
 import { CommandLoading } from 'cmdk'
 import { Fragment, useId, useMemo, useState } from 'react'
 import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
 	Button,
 	ButtonProps,
@@ -51,8 +52,6 @@ export type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, 
 export function ComboboxFieldControl<T extends FieldValues, D extends Record<string, any>>(
 	props: ComboboxFieldControlProps<T, D>
 ) {
-	const [searchTerm, setSearchTerm] = useState<string>('')
-
 	const {
 		name,
 		datalist: data,
@@ -74,15 +73,17 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 	} = props
 
 	const id = useId()
-	const { control, getFieldState, setValue, clearErrors } = useFormContext()
+	const { control, getFieldState, getValues, setValue, clearErrors } = useFormContext()
+	const [searchTerm, setSearchTerm] = useState<string>(getValues(name) ?? '')
+	const { t } = useTranslation()
 
 	const options = useMemo(() => {
 		if (!Array.isArray(data)) return []
 		return data.filter((option) => {
 			if (typeof shouldFilter === 'undefined' || shouldFilter === true) return true
 			return (
-				String(option[labelField]).toLowerCase().includes(searchTerm.toLowerCase()) ||
-				String(option[valueField]).toLowerCase().includes(searchTerm.toLowerCase())
+				String(option[labelField])?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+				String(option[valueField])?.toLowerCase()?.includes(searchTerm?.toLowerCase())
 			)
 		})
 	}, [data, shouldFilter, searchTerm])
@@ -131,7 +132,8 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 												'w-full justify-between bg-background px-3 font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
-												{renderCurrentValue(field.value)}
+												{field.value || placeholder}
+												{/* {renderCurrentValue(field.value)} */}
 											</Typography>
 											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
 										</Button>
@@ -140,8 +142,11 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' {...popoverContentProps}>
 									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
-											value={searchTerm}
-											placeholder='Search ...'
+											value={searchTerm ?? ''}
+											placeholder={t('ns_common:form_placeholder.search', {
+												object: '',
+												defaultValue: 'Search ...'
+											})}
 											onValueChange={(value) => {
 												if (typeof onInput === 'function') onInput(value)
 												setSearchTerm(value)
@@ -164,8 +169,8 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 																		option[labelField].toString(),
 																		option[valueField].toString()
 																	]}
-																	disabled={option['disabled']}
-																	value={option[valueField]}
+																	disabled={option?.['disabled'] ?? false}
+																	value={option[valueField] ?? ''}
 																	className='line-clamp-1 flex items-center gap-x-4'
 																	onSelect={(value) => {
 																		setValue(name, value as PathValue<T, Path<T>>)

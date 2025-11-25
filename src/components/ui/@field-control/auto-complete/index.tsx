@@ -42,7 +42,7 @@ export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<stri
 			'div' extends keyof HTMLElementTagNameMap ? keyof HTMLElementTagNameMap : React.ElementType
 		>
 	>
-	onInput?: (value: string) => unknown
+	onInput?: (value: string) => any
 	onSelect?: (value: string) => unknown
 } & React.ComponentProps<'input'>
 
