@@ -79,9 +79,14 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	const filteredDatalist = useMemo(() => {
 		if (!shouldFilter) return datalist ?? []
 
-		return Array.isArray(datalist)
-			? datalist.filter((item) => String(item[valueField]).toLowerCase().includes(currentValue.toLowerCase()))
-			: []
+		const filterFn = (item: D) => {
+			const value = item[valueField]
+			if (value === null || value === undefined) return false
+			const currVal = currentValue ?? ''
+			return String(value).toLowerCase().includes(String(currVal).toLowerCase())
+		}
+
+		return Array.isArray(datalist) ? datalist.filter(filterFn) : []
 	}, [datalist, shouldFilter, currentValue])
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
