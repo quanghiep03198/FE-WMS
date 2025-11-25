@@ -27,6 +27,7 @@ import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { gunzipSync } from 'zlib'
 import { useListPanelContext } from '../../-contexts/list-panel-context'
 import { DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
@@ -65,6 +66,19 @@ const InfoCard: React.FC<{
 		}
 	}, [data])
 
+	const handleUpdate = useCallback(() => {
+		navigate({ hash: String(data.id), search })
+		for (const prop in data) {
+			if (prop === 'defective_description') {
+				data[prop] = gunzipSync(Buffer.from(data.defective_description, 'base64')).toString()
+			} else {
+				data[prop] = data[prop as keyof IDefectiveGoods] ?? ''
+			}
+		}
+		event$.emit({ action: CommonActions.UPDATE, payload: data })
+		setCurrentDevice('usb')
+	}, [data])
+
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
 
 	const defectLocation: Map<DefectiveLocation, string> = new Map([
@@ -94,13 +108,7 @@ const InfoCard: React.FC<{
 								}>
 								<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 							</DropdownMenuItem>
-							<DropdownMenuItem
-								className='gap-x-2'
-								onClick={() => {
-									navigate({ hash: String(data.id), search })
-									event$.emit({ action: CommonActions.UPDATE, payload: data })
-									setCurrentDevice('usb')
-								}}>
+							<DropdownMenuItem className='gap-x-2' onClick={() => handleUpdate()}>
 								<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 							</DropdownMenuItem>
 							<DropdownMenuItem
