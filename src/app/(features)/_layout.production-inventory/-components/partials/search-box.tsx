@@ -137,7 +137,7 @@ const ShoesStyleCombobox: React.FC<ComboboxProps> = ({ data, isLoading }) => {
 				name='shoes_style'
 				placeholder={capitalize(
 					t('ns_common:form_placeholder.select', {
-						object: t('ns_erp:fields.shoestyle_codefactory'),
+						object: t('ns_erp:fields.factory_shoes_style'),
 						defaultValue: 'Select shoes style'
 					})
 				)}

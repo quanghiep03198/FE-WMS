@@ -97,7 +97,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('factory_shoes_style', {
-				header: t('ns_erp:fields.shoestyle_codefactory'),
+				header: t('ns_erp:fields.factory_shoes_style'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enableHiding: false,

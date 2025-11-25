@@ -189,7 +189,7 @@ const OrderSizeDetailTable: React.FC = () => {
 									<TableHead
 										align='left'
 										className='left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
-										{t('ns_erp:fields.shoestyle_codefactory')}
+										{t('ns_erp:fields.factory_shoes_style')}
 									</TableHead>
 									<TableHead
 										align='left'

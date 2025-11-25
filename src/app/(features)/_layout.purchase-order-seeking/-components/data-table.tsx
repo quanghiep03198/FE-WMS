@@ -26,7 +26,7 @@ const DataSection: React.FC = () => {
 			}),
 			columnHelper.accessor('brand_name', { header: t('ns_erp:fields.brand_name'), enableSorting: false }),
 			columnHelper.accessor('shoes_style', {
-				header: t('ns_erp:fields.shoestyle_codefactory'),
+				header: t('ns_erp:fields.factory_shoes_style'),
 				enableSorting: false
 			}),
 			columnHelper.accessor('color_sn', { header: t('ns_erp:fields.color_sn'), enableSorting: false }),

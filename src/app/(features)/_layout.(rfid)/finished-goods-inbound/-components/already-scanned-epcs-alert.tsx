@@ -68,7 +68,7 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 				enableSorting: true
 			}),
 			columnHelper.accessor('factory_shoes_style', {
-				header: t('ns_erp:fields.shoestyle_codefactory'),
+				header: t('ns_erp:fields.factory_shoes_style'),
 				enableSorting: true
 			}),
 			columnHelper.accessor('color_sn', {

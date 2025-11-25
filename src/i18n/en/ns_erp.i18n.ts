@@ -24,7 +24,7 @@ export default {
 		conversion_rate: 'Conversion rate',
 		customer_branch_id: 'Customer branch ID',
 		customer_order: 'Customer order code', //: Đặt đơn của khách
-		cust_shoes_style: 'Customer code',
+		cust_shoes_style: 'Customer shoes style',
 		daily_inbound_qty: 'Daily inbound quantity',
 		daily_outbound_qty: 'Daily outbound quantity',
 		daily_productivity: 'Daily productivity',
@@ -80,7 +80,7 @@ export default {
 		shipping_type: 'Shipping type',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
 		shoes_type_b: 'Shoes type B', //: Giày cấp B
-		shoestyle_codefactory: 'Shoes style',
+		factory_shoes_style: 'Factory shoes style',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
 		shaping_dept_code: 'Shaping department code',
 		shaping_dept_name: 'Shaping department name',
