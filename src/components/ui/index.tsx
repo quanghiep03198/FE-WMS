@@ -49,13 +49,13 @@ export * from './@core/toggle'
 // #endregion
 
 // #region Form field controls
-export { AutoCompleteFieldControl } from './@field-control/auto-complete'
-export { ComboboxFieldControl } from './@field-control/combobox'
-export { DatePickerFieldControl } from './@field-control/date-picker'
-export { InputFieldControl } from './@field-control/input'
-export { MultiSelectFieldControl } from './@field-control/multi-select'
-export { SelectFieldControl } from './@field-control/select'
-export { TextareaFieldControl } from './@field-control/textarea'
+export * from './@field-control/auto-complete'
+export * from './@field-control/combobox'
+export * from './@field-control/date-picker'
+export * from './@field-control/input'
+export * from './@field-control/multi-select'
+export * from './@field-control/select'
+export * from './@field-control/textarea'
 // #endregion
 
 // #region Override
