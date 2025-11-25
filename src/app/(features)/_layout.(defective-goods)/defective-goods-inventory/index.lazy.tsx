@@ -4,6 +4,7 @@ import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../../-components/-shared/page-header'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import DownloadExcelButton from './-components/download-excel-button'
 import DefectiveGoodsInventoryTable from './-components/report-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inventory/')({
@@ -30,10 +31,13 @@ function Page() {
 			<meta name='description' content={t('ns_inoutbound:description.defective_goods_inventory_report')} />
 
 			<Div as='section' className='mt-4 space-y-4 @container'>
-				<PageHeader className='flex-1'>
-					<PageTitle>{t('ns_inoutbound:titles.defective_goods_inventory_report')}</PageTitle>
-					<PageDescription>{t('ns_inoutbound:description.defective_goods_inventory_report')}</PageDescription>
-				</PageHeader>
+				<Div className='flex w-full justify-between'>
+					<PageHeader className='flex-1'>
+						<PageTitle>{t('ns_inoutbound:titles.defective_goods_inventory_report')}</PageTitle>
+						<PageDescription>{t('ns_inoutbound:description.defective_goods_inventory_report')}</PageDescription>
+					</PageHeader>
+					<DownloadExcelButton />
+				</Div>
 				<Separator />
 				<DefectiveGoodsInventoryTable />
 			</Div>
