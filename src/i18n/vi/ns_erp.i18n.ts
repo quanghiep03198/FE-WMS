@@ -24,7 +24,7 @@ export default {
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
 		customer_branch_id: 'ID nhã hiệu khách hàng',
 		customer_order: 'Đặt đơn của khách',
-		cust_shoes_style: 'Mã khách hàng',
+		cust_shoes_style: 'Hình thể khách',
 		daily_inbound_qty: 'Số lượng nhập trong ngày',
 		daily_outbound_qty: 'Số lượng xuất trong ngày',
 		daily_productivity: 'Sản lượng ngày',
@@ -80,7 +80,7 @@ export default {
 		shipping_destination: 'Địa điểm giao hàng',
 		shipping_type: 'Phương thức vận chuyển',
 		shoes_type_b: 'Giày loại B',
-		shoestyle_codefactory: 'Hình thể',
+		factory_shoes_style: 'Hình thể xưởng',
 		shaping_dept_code: 'Mã chuyền thành hình',
 		shaping_dept_name: 'Chuyền thành hình',
 		shaping_dept_productivity: 'Sản lượng thành hình', // Shaping Department Productivity

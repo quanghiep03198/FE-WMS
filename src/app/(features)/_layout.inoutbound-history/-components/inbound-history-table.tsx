@@ -23,7 +23,7 @@ const InboundHistoryTable: React.FC = () => {
 		() => [
 			{ header: t('ns_erp:fields.mo_no'), accessorKey: 'mo_no', meta: { align: 'left' } },
 			{ header: t('ns_erp:fields.brand_name'), accessorKey: 'brand_name', meta: { align: 'left' } },
-			{ header: t('ns_erp:fields.shoestyle_codefactory'), accessorKey: 'shoe_style', meta: { align: 'left' } },
+			{ header: t('ns_erp:fields.factory_shoes_style'), accessorKey: 'shoe_style', meta: { align: 'left' } },
 			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color', meta: { align: 'left' } },
 			{
 				header: t('ns_erp:fields.mo_qty'),

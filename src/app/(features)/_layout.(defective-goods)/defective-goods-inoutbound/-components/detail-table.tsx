@@ -68,7 +68,7 @@ const DetailTable: React.FC = () => {
 					<TableHeader className='sticky top-0 z-20 h-[calc(var(--bar-height)+1px)] [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:border-b [&_th]:bg-table-head'>
 						<TableRow className='z-20'>
 							<TableHead align='left' className='left-[var(--col-width)] top-0 w-[var(--col-width)]'>
-								{t('ns_erp:fields.shoestyle_codefactory')}
+								{t('ns_erp:fields.factory_shoes_style')}
 							</TableHead>
 							<TableHead align='left' className='left-[calc(2*var(--col-width))] top-0 w-[var(--col-width)]'>
 								{t('ns_erp:fields.color_sn')}
