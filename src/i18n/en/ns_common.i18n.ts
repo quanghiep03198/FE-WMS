@@ -77,6 +77,7 @@ export default {
 		quantity: 'Quantity',
 		quantity_with_limit: 'Quantity (max {{limit}})',
 		remark: 'Remark',
+		reviewed_by: 'Reviewed by',
 		status: 'Status',
 		total: 'Total',
 		updated_at: 'Updated at',

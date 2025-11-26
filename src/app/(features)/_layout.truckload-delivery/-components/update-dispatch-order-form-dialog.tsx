@@ -79,14 +79,14 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 							/>
 						</FieldSet>
 						<DialogFooter className='mt-4 justify-end'>
-							<Button>
-								<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
-								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save_changes')}
-							</Button>
 							<DialogClose className={buttonVariants({ variant: 'secondary' })}>
 								<Icon name='X' />
 								{t('ns_common:actions.cancel')}
 							</DialogClose>
+							<Button>
+								<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
+								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save_changes')}
+							</Button>
 						</DialogFooter>
 					</Form>
 				</FormProvider>

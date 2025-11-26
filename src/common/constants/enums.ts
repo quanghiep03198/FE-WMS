@@ -21,7 +21,8 @@ export enum RequestHeaders {
 	API_VERSION = 'X-Api-Version',
 	CONTENT_TYPE = 'Content-Type',
 	TENANT_ID = 'X-Tenant-Id',
-	USER_COMPANY = 'X-User-Company'
+	USER_COMPANY = 'X-User-Company',
+	OTP = 'X-Otp'
 }
 
 export enum Languages {

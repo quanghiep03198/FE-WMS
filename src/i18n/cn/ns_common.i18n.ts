@@ -78,6 +78,7 @@ export default {
 		quantity: '數量',
 		quantity_with_limit: '數量 (最大 {{limit}})',
 		remark: '管理人',
+		reviewed_by: '審核人',
 		status: '狀態',
 		total: '全部的',
 		updated_at: '编辑日期',

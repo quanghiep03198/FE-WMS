@@ -1,6 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
 import {
-	Button,
 	buttonVariants,
 	Div,
 	DropdownMenu,
@@ -14,50 +13,23 @@ import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { pick } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
-import { useSetTruckloadDeliveryStatusMutation } from '../-hooks/use-truckload-delivery-asm'
+import StatusChangeButtonsGroup from './status-buttons-group'
 
 type RowActionsDropdownProps = Record<
 	'data',
-	Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'status'>
+	Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'approval_status'>
 >
 
 const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { mutateAsync: setStatusAsync } = useSetTruckloadDeliveryStatusMutation()
-
-	const handleSetStatus = (status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE) => {
-		return toast.promise(setStatusAsync({ dispatchOrder: data.dispatch_order, status }), {
-			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_common:notification.success'),
-			error: t('ns_common:notification.error')
-		})
-	}
 
 	return (
 		<Div className='flex w-full items-center justify-end [&_svg]:hidden lg:[&_svg]:inline-block xl:[&_svg]:inline-block'>
-			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
-				<Button variant='ghost' size='sm' onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}>
-					<Icon name='Check' />
-					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
-						? t('ns_common:actions.reconfirm')
-						: t('ns_common:actions.confirm')}
-				</Button>
-			)}
-			{data.status !== TruckloadDeliveryStatus.REQUEST_CHANGE && (
-				<Button
-					variant='ghost'
-					className='text-destructive hover:text-destructive'
-					size='sm'
-					onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}>
-					<Icon name='TriangleAlert' />
-					{t('ns_common:actions.report')}
-				</Button>
-			)}
-			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
+			<StatusChangeButtonsGroup data={data} />
+			{data.approval_status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<DropdownMenu modal={false}>
 					<DropdownMenuTrigger
 						className={buttonVariants({ variant: 'ghost', size: 'icon', className: 'aspect-square' })}>

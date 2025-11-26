@@ -45,7 +45,10 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 					value: TruckloadDeliveryStatus.REQUEST_CHANGE,
 					icon: 'Undo2'
 				}
-			].map((item: DropdownOption) => ({ ...item, count: data.filter((d) => d.status === item.value).length })),
+			].map((item: DropdownOption) => ({
+				...item,
+				count: data.filter((d) => d.approval_status === item.value).length
+			})),
 		[data, i18n.language]
 	)
 	return (
@@ -55,8 +58,8 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className='w-64' align='end'>
 				<DropdownMenuRadioGroup
-					value={table.getColumn('status').getFilterValue() as string}
-					onValueChange={(value) => table.getColumn('status').setFilterValue(value)}>
+					value={table.getColumn('approval_status').getFilterValue() as string}
+					onValueChange={(value) => table.getColumn('approval_status').setFilterValue(value)}>
 					{dropdownOptions.map((option) => (
 						<DropdownMenuRadioItem key={option.value} value={option.value} className='gap-x-2'>
 							<Icon
@@ -76,9 +79,9 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 				</DropdownMenuRadioGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
-					disabled={!table.getColumn('status').getFilterValue()}
+					disabled={!table.getColumn('approval_status').getFilterValue()}
 					className='justify-center gap-x-2'
-					onClick={() => table.getColumn('status').setFilterValue(null)}>
+					onClick={() => table.getColumn('approval_status').setFilterValue(null)}>
 					<Icon name='X' />
 					{t('ns_common:actions.clear_filter')}
 				</DropdownMenuItem>

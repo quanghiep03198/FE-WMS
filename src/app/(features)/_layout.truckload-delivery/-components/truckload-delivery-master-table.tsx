@@ -62,9 +62,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				meta: { hidden: isMobile },
 				filterFn: 'includesStringSensitive',
-				minSize: 225,
-				size: 225,
-				maxSize: 225
+				minSize: 180,
+				size: 200,
+				maxSize: 220
 			}),
 			columnHelper.accessor('license_plate', {
 				header: t('ns_erp:fields.license_plate'),
@@ -131,7 +131,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: true,
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
-			columnHelper.accessor('status', {
+			columnHelper.accessor('approval_status', {
 				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,
 				enableSorting: true,
@@ -188,19 +188,35 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					)
 				}
 			}),
+			columnHelper.accessor('security_name_reviewed', {
+				header: t('ns_common:common_fields.reviewed_by'),
+				enableResizing: true,
+				enableSorting: true,
+				meta: { hidden: isMobile },
+				cell: ({ getValue }) => (
+					<Typography variant='small' className='line-clamp-1'>
+						{getValue()}
+					</Typography>
+				)
+			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
 				enableResizing: false,
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
-				size: 200,
+				size: 250,
 				maxSize: 250,
 				meta: { align: 'right' },
 				cell: ({ row }) => {
 					return (
 						<RowActions
-							data={pick(row.original, ['dispatch_order', 'license_plate', 'container_number', 'status'])}
+							data={pick(row.original, [
+								'dispatch_order',
+								'license_plate',
+								'container_number',
+								'approval_status'
+							])}
 						/>
 					)
 				}

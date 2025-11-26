@@ -15,7 +15,9 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	license_plate: string
 	factory_departure_time: string
 	outbound_qty: number
-	status: TruckloadDeliveryStatus
+	approval_status: TruckloadDeliveryStatus
+	security_name_reviewed: string
+	security_code_reviewed: string
 	delivery_details: Array<{
 		id: number | string
 		po: string
@@ -26,6 +28,11 @@ export interface ITruckloadDelivery extends IBaseEntity {
 		user_code_created: string
 		created: Date | null
 	}>
+}
+
+export type QrCodeScannedResult = {
+	employee_code: string
+	employee_name_show: string
 }
 
 export class TruckloadDeliveryService {
@@ -58,10 +65,14 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/bulk-delete/${dispatchOrder}`)
 	}
 
-	static async setStatusById(
-		dispatchOrder: TruckloadDeliveryDispatchOrder,
-		status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-	) {
-		return await axiosInstance.patch(`/truckload-delivery/set-status/${dispatchOrder}`, { status })
+	static async setStatusByDispatchOrder({
+		dispatch_order,
+		...payload
+	}: {
+		dispatch_order: TruckloadDeliveryDispatchOrder
+		approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+		security_code_reviewed: string
+	}) {
+		return await axiosInstance.patch(`/truckload-delivery/set-status/${dispatch_order}`, payload)
 	}
 }

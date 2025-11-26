@@ -77,6 +77,7 @@ export default {
 		quantity: 'Số lượng',
 		quantity_with_limit: 'Số lượng (tối đa {{limit}})',
 		remark: 'Ghi chú',
+		reviewed_by: 'Người duyệt',
 		status: 'Trạng thái',
 		total: 'Tổng cộng',
 		updated_at: 'Ngày cập nhật',
