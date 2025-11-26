@@ -124,6 +124,11 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 						<Table className='w-full table-fixed border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 							<TableHeader className='sticky top-0 z-10'>
 								<TableRow>
+									<TableHead colSpan={3} align='center' className='text-foreground'>
+										{data.dispatch_order}
+									</TableHead>
+								</TableRow>
+								<TableRow>
 									<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[35%] xl:w-44'>
 										<span>{t('ns_erp:fields.po')}</span>
 									</TableHead>
@@ -204,7 +209,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 							<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t xl:hidden'>
 								<TableRow>
 									<TableHead className='border-t' colSpan={1} align='left'>
-										<span>{t('ns_erp:fields.dispatch_order')}</span>
+										<span>{t('ns_common:common_fields.reviewed_by')}</span>
 									</TableHead>
 									<TableHead className='border-t' colSpan={1} align='left'>
 										<span>{t('ns_erp:fields.factory_departure_time')}</span>
@@ -215,7 +220,14 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableRow>
 								<TableRow>
 									<TableCell colSpan={1} align='left' className='w-[40%]'>
-										<Typography className='!text-pretty text-sm'>{data.dispatch_order}</Typography>
+										{data.security_name_reviewed ? (
+											data.security_name_reviewed
+										) : (
+											<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+												<Icon name='User' stroke='hsl(var(--muted-foreground))' />
+												{t('ns_common:titles.unknown')}
+											</Typography>
+										)}
 									</TableCell>
 									<TableCell colSpan={1} align='left'>
 										{data.factory_departure_time ? (
