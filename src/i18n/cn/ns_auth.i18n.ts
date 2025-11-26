@@ -37,7 +37,9 @@ export default {
 	},
 	texts: {
 		description: '进入用户和密码跟选择部门与可以登入系统',
-		title: '登入系统'
+		title: '登入系统',
+		qr_code_verification: 'QR 码确认',
+		qr_code_verification_description: '扫描您员工卡上的 QR 码以确认您的帐户.'
 	},
 	validation: {
 		password_incorrect: '目前密碼不正確',

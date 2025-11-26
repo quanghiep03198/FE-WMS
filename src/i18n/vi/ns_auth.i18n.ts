@@ -38,7 +38,9 @@ export default {
 	},
 	texts: {
 		description: 'Nhập tài khoản, mật khẩu và chọn bộ phận đang công tác để truy cập vào hệ thống',
-		title: 'Đăng nhập vào hệ thống'
+		title: 'Đăng nhập vào hệ thống',
+		qr_code_verification: 'Xác thực mã QR',
+		qr_code_verification_description: 'Quét mã QR trên thẻ nhân viên của bạn để xác thực tài khoản.'
 	},
 	validation: {
 		password_incorrect: 'Mật khẩu hiện tại không đúng',

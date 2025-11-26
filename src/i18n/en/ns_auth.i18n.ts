@@ -33,7 +33,9 @@ export default {
 	steps: { select_department: 'Select department', verify_account: 'Verify your account' },
 	texts: {
 		description: 'Enter account, password then select department access to the system',
-		title: 'Sign in to your account'
+		title: 'Sign in to your account',
+		qr_code_verification: 'QR Code Verification',
+		qr_code_verification_description: 'Scan the QR code on your employee card to verify your account.'
 	},
 	validation: {
 		password_incorrect: 'Current password is incorrect',

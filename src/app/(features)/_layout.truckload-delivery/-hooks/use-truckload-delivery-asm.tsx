@@ -84,15 +84,11 @@ export const useSetTruckloadDeliveryStatusMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationFn: ({
-			dispatchOrder,
-			approvalStatus,
-			otp
-		}: {
-			dispatchOrder: TruckloadDeliveryDispatchOrder
-			approvalStatus: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-			otp: string
-		}) => TruckloadDeliveryService.setStatusByDispatchOrder(dispatchOrder, approvalStatus, otp),
+		mutationFn: (payload: {
+			dispatch_order: TruckloadDeliveryDispatchOrder
+			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+			security_code_reviewed: string
+		}) => TruckloadDeliveryService.setStatusByDispatchOrder(payload),
 		onSuccess: () => invalidateQueries()
 	})
 }

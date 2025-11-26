@@ -1,3 +1,4 @@
+import { isNil } from 'lodash'
 import z from 'zod'
 
 // BIC container code pattern: 4 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
@@ -50,14 +51,13 @@ export const updateDispatchOrderSchema = z.object({
 	license_plate: z
 		.string({ error: 'ns_validation:required' })
 		.trim()
-		.nonempty({ error: 'ns_validation:required' })
-		.transform((value) => value.toUpperCase())
-		.optional(),
+		.nullish()
+		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	container_number: z
 		.string({ error: 'ns_validation:required' })
 		.trim()
-		.nonempty({ message: 'ns_validation:required' })
-		.optional()
+		.nullish()
+		.transform((value) => (isNil(value) ? null : value.toUpperCase()))
 })
 
 export const upsertPurchaseOrdersSchema = z
