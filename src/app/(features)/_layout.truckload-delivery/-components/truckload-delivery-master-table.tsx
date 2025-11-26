@@ -131,7 +131,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: true,
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
-			columnHelper.accessor('status', {
+			columnHelper.accessor('approval_status', {
 				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,
 				enableSorting: true,
@@ -200,7 +200,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: ({ row }) => {
 					return (
 						<RowActions
-							data={pick(row.original, ['dispatch_order', 'license_plate', 'container_number', 'status'])}
+							data={pick(row.original, [
+								'dispatch_order',
+								'license_plate',
+								'container_number',
+								'approval_status'
+							])}
 						/>
 					)
 				}

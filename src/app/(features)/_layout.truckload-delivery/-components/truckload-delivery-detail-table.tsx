@@ -193,8 +193,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										<TruckloadDeliveryDetailRow
 											key={field.id}
 											index={index}
-											readonly={!action || data.status === TruckloadDeliveryStatus.CONFIRMED}
-											deletable={data.status !== TruckloadDeliveryStatus.CONFIRMED}
+											readonly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+											deletable={data.approval_status !== TruckloadDeliveryStatus.CONFIRMED}
 											defaultValues={rowData}
 											onRemove={handleRemoveFieldItem}
 										/>
@@ -258,7 +258,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									variant='default'
 									type='button'
 									size='sm'
-									disabled={data.status === TruckloadDeliveryStatus.CONFIRMED}
+									disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 									onClick={() => setAction(CommonActions.UPDATE)}>
 									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 								</Button>

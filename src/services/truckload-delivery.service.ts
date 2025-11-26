@@ -4,6 +4,7 @@ import {
 	UpdateDispatchOrderFormValues,
 	UpsertPurchaseOrdersFormValues
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
+import { RequestHeaders } from '@/common/constants/enums'
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
@@ -15,7 +16,7 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	license_plate: string
 	factory_departure_time: string
 	outbound_qty: number
-	status: TruckloadDeliveryStatus
+	approval_status: TruckloadDeliveryStatus
 	delivery_details: Array<{
 		id: number | string
 		po: string
@@ -58,10 +59,19 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/bulk-delete/${dispatchOrder}`)
 	}
 
-	static async setStatusById(
+	static async setStatusByDispatchOrder(
 		dispatchOrder: TruckloadDeliveryDispatchOrder,
-		status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+		status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE,
+		otp: string
 	) {
-		return await axiosInstance.patch(`/truckload-delivery/set-status/${dispatchOrder}`, { status })
+		return await axiosInstance.patch(
+			`/truckload-delivery/set-status/${dispatchOrder}`,
+			{ status },
+			{
+				headers: {
+					[RequestHeaders.OTP]: otp
+				}
+			}
+		)
 	}
 }

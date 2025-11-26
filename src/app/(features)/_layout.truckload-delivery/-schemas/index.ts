@@ -51,11 +51,13 @@ export const updateDispatchOrderSchema = z.object({
 		.string({ error: 'ns_validation:required' })
 		.trim()
 		.nonempty({ error: 'ns_validation:required' })
-		.transform((value) => value.toUpperCase()),
+		.transform((value) => value.toUpperCase())
+		.optional(),
 	container_number: z
 		.string({ error: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' })
+		.optional()
 })
 
 export const upsertPurchaseOrdersSchema = z

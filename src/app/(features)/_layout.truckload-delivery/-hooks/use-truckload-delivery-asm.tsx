@@ -86,11 +86,13 @@ export const useSetTruckloadDeliveryStatusMutation = () => {
 	return useMutation({
 		mutationFn: ({
 			dispatchOrder,
-			status
+			approvalStatus,
+			otp
 		}: {
 			dispatchOrder: TruckloadDeliveryDispatchOrder
-			status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-		}) => TruckloadDeliveryService.setStatusById(dispatchOrder, status),
+			approvalStatus: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+			otp: string
+		}) => TruckloadDeliveryService.setStatusByDispatchOrder(dispatchOrder, approvalStatus, otp),
 		onSuccess: () => invalidateQueries()
 	})
 }

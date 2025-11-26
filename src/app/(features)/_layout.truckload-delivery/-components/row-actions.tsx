@@ -29,6 +29,10 @@ import {
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { cn } from '@/common/utils/cn'
+import { Json } from '@/common/utils/json'
+import { OtpService } from '@/services/otp.service'
+import { useMutation } from '@tanstack/react-query'
 import { useCountDown } from 'ahooks'
 import { padStart, pick } from 'lodash'
 import React, { Fragment, useState } from 'react'
@@ -40,10 +44,11 @@ import z from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 import { useSetTruckloadDeliveryStatusMutation } from '../-hooks/use-truckload-delivery-asm'
+import { QRScanner } from '../../-components/-shared/qr-scanner'
 
 type RowActionsDropdownProps = Record<
 	'data',
-	Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'status'>
+	Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'approval_status'>
 >
 
 const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
@@ -53,7 +58,7 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 	return (
 		<Div className='flex w-full items-center justify-end [&_svg]:hidden lg:[&_svg]:inline-block xl:[&_svg]:inline-block'>
 			<StatusChangeButtonsGroup data={data} />
-			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
+			{data.approval_status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<DropdownMenu modal={false}>
 					<DropdownMenuTrigger
 						className={buttonVariants({ variant: 'ghost', size: 'icon', className: 'aspect-square' })}>
@@ -88,36 +93,52 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 }
 
 const FormSchema = z.object({
-	pin: z.string().min(6, {
+	otp: z.string().min(6, {
 		message: 'Your one-time password must be 6 characters.'
 	})
 })
 
-const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery, 'dispatch_order' | 'status'>>> = ({
-	data
-}) => {
+const StatusChangeButtonsGroup: React.FC<
+	Record<'data', Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status'>>
+> = ({ data }) => {
 	const { t } = useTranslation()
 	const { mutateAsync: setStatusAsync } = useSetTruckloadDeliveryStatusMutation()
 	const [targetDate, setTargetDate] = useState<number>(30_000)
+	const [statusToUpdate, setStatusToUpdate] = useState<
+		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
+	>(null)
 
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
-			pin: ''
+			otp: ''
 		}
 	})
 
 	const [countdown, formattedRes] = useCountDown({ targetDate: targetDate })
 
-	const handleSetStatus = (status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE) => {
-		return toast.promise(setStatusAsync({ dispatchOrder: data.dispatch_order, status }), {
-			loading: t('ns_common:notification.processing_request'),
-			success: t('ns_common:notification.success'),
-			error: t('ns_common:notification.error')
-		})
-	}
+	const { mutateAsync: createOtpAsync, isPending } = useMutation({
+		mutationFn: OtpService.createOtp,
+		onSuccess: (data) => {
+			toast.success(`Your OTP is: ${data?.metadata?.otp}`)
+			form.reset({ otp: data?.metadata?.otp })
+		}
+	})
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {
+	const onSubmit = (payload: z.infer<typeof FormSchema>) => {
+		return toast.promise(
+			setStatusAsync({
+				dispatchOrder: data.dispatch_order,
+				approvalStatus: statusToUpdate,
+				otp: payload.otp
+			}),
+			{
+				loading: t('ns_common:notification.processing_request'),
+				success: t('ns_common:notification.success'),
+				error: t('ns_common:notification.error')
+			}
+		)
+
 		toast('You submitted the following values', {
 			description: (
 				<pre className='mt-2 w-[320px] rounded-md bg-neutral-950 p-4'>
@@ -129,32 +150,37 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 
 	return (
 		<Fragment>
-			{data.status !== TruckloadDeliveryStatus.CONFIRMED && (
+			{data.approval_status !== TruckloadDeliveryStatus.CONFIRMED && (
 				<Button
 					variant='ghost'
 					size='sm'
-					onClick={() => setTargetDate(Date.now() + 60_000 * 5)}
-					// onClick={() => handleSetStatus(TruckloadDeliveryStatus.CONFIRMED)}
-				>
+					onClick={() => {
+						// setTargetDate(Date.now() + 60_000 * 5)
+						setStatusToUpdate(TruckloadDeliveryStatus.CONFIRMED)
+					}}>
 					<Icon name='Check' />
-					{data.status === TruckloadDeliveryStatus.REQUEST_CHANGE
+					{data.approval_status === TruckloadDeliveryStatus.REQUEST_CHANGE
 						? t('ns_common:actions.reconfirm')
 						: t('ns_common:actions.confirm')}
 				</Button>
 			)}
-			{data.status !== TruckloadDeliveryStatus.REQUEST_CHANGE && (
+			{data.approval_status !== TruckloadDeliveryStatus.REQUEST_CHANGE && (
 				<Button
 					variant='ghost'
 					className='text-destructive hover:text-destructive'
 					size='sm'
-					onClick={() => setTargetDate(Date.now() + 30_000)}
-					// onClick={() => handleSetStatus(TruckloadDeliveryStatus.REQUEST_CHANGE)}
-				>
+					onClick={() => {
+						setStatusToUpdate(TruckloadDeliveryStatus.REQUEST_CHANGE)
+					}}>
 					<Icon name='TriangleAlert' />
 					{t('ns_common:actions.report')}
 				</Button>
 			)}
-			<Dialog open={countdown > 0}>
+			<Dialog
+				open={!!statusToUpdate}
+				onOpenChange={() => {
+					setStatusToUpdate(null)
+				}}>
 				<DialogContent>
 					<DialogHeader className='items-center'>
 						<DialogMedia>
@@ -165,11 +191,26 @@ const StatusChangeButtonsGroup: React.FC<Record<'data', Pick<ITruckloadDelivery,
 							Please enter the PIN Code to verify that is you.
 						</DialogDescription>
 					</DialogHeader>
+					<Div className='relative'>
+						{isPending && (
+							<Div className='absolute inset-0 z-10 place-content-center place-items-center bg-accent duration-200 animate-in fade-in-0'>
+								<Icon name='LoaderCircle' className='animate-spin' />
+							</Div>
+						)}
+						<QRScanner
+							onScan={(data) =>
+								// alert(Json.parseRawText<{ employee_code: string }>(data.at(0).rawValue)?.employee_code)
+								createOtpAsync(Json.parseRawText<{ employee_code: string }>(data.at(0).rawValue))
+							}
+						/>
+					</Div>
 					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-stretch space-y-6'>
+						<form
+							onSubmit={form.handleSubmit(onSubmit)}
+							className={cn(form.watch('otp') ? 'flex' : 'hidden', 'flex-col items-stretch gap-y-6')}>
 							<FormField
 								control={form.control}
-								name='pin'
+								name='otp'
 								render={({ field }) => (
 									<FormItem className='flex flex-col items-center rounded-md border border-dashed p-6 *:text-center'>
 										<FormLabel>PIN Code</FormLabel>
