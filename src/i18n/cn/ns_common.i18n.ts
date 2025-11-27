@@ -318,6 +318,7 @@ export default {
 	},
 	unit: {
 		times: '次',
-		prs: '双'
+		prs: '双',
+		pcs: '件'
 	}
 } as const

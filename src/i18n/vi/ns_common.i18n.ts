@@ -320,6 +320,7 @@ export default {
 	},
 	unit: {
 		times: 'lần',
-		prs: 'đôi'
+		prs: 'đôi',
+		pcs: 'chiếc'
 	}
 } as const

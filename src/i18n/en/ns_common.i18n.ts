@@ -320,6 +320,7 @@ export default {
 	},
 	unit: {
 		times: 'times',
-		prs: 'pairs'
+		prs: 'pairs',
+		pcs: 'pieces'
 	}
 } as const
