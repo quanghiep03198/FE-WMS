@@ -1,18 +1,17 @@
-import z from 'zod'
+import { array, object, string, type infer as Infer } from 'zod'
 
-export const defectiveGoodsInboundFormValues = z.object({
-	epcs: z.array(z.string()).nonempty(),
-	storage_location: z
-		.string({ message: 'ns_validation:required' })
+export const defectiveGoodsInboundFormValues = object({
+	epcs: array(string()).nonempty(),
+	storage_location: string({ message: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' })
 		.transform((value) => value.toUpperCase())
 })
 
-export const defectiveGoodsOutboundFormValues = z.object({
-	epcs: z.array(z.string()).nonempty(),
-	outbound_purpose: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
+export const defectiveGoodsOutboundFormValues = object({
+	epcs: array(string()).nonempty(),
+	outbound_purpose: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
 })
 
-export type DefectiveGoodsInboundFormValues = z.infer<typeof defectiveGoodsInboundFormValues>
-export type DefectiveGoodsOutboundFormValues = z.infer<typeof defectiveGoodsOutboundFormValues>
+export type DefectiveGoodsInboundFormValues = Infer<typeof defectiveGoodsInboundFormValues>
+export type DefectiveGoodsOutboundFormValues = Infer<typeof defectiveGoodsOutboundFormValues>

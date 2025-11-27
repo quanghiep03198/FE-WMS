@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {

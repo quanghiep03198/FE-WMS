@@ -22,30 +22,28 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { z } from 'zod'
+import { number, object, string, type infer as Infer } from 'zod'
 import { useEditorContext } from '../../context/editor-context'
 
-const TablePresetSchema = z.object({
-	rows: z
-		.number({ message: 'ns_common:editor.validations.' })
-		.or(z.string({ message: 'Vui lòng nhập số hàng' }))
+const tablePresetSchema = object({
+	rows: number({ message: 'ns_common:editor.validations.' })
+		.or(string({ message: 'Vui lòng nhập số hàng' }))
 		.transform((value) => +value)
 		.refine((value) => value >= 1, { message: 'Số hàng phải lớn hơn hoặc bằng 1' }),
-	cols: z
-		.number({ message: 'Vui lòng nhập số hàng' })
-		.or(z.string({ message: 'Vui lòng nhập số cột' }))
+	cols: number({ message: 'Vui lòng nhập số hàng' })
+		.or(string({ message: 'Vui lòng nhập số cột' }))
 		.transform((value) => +value)
 		.refine((value) => value >= 1, { message: 'Số cột phải lớn hơn hoặc bằng 1' })
 })
 
-type FormValue = z.infer<typeof TablePresetSchema>
+type FormValue = Infer<typeof tablePresetSchema>
 
 const TableDropdownMenu: React.FC = () => {
 	const { t } = useTranslation()
 
 	const { editor } = useEditorContext()
 	const form = useForm<FormValue>({
-		resolver: zodResolver(TablePresetSchema),
+		resolver: zodResolver(tablePresetSchema),
 		defaultValues: { rows: 2, cols: 2 },
 		mode: 'onChange'
 	})

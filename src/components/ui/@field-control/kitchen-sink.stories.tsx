@@ -19,7 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { array, boolean, coerce, email, enum as enums, object, string, type infer as Infer } from 'zod'
 
 import { isAfter } from 'date-fns'
 import { DatePickerFieldControl } from './date-picker'
@@ -32,47 +32,47 @@ export default {
 	args: {}
 } satisfies Meta<any>
 
-const schema = z.object({
+const schema = object({
 	// Personal Information
-	firstName: z.string().min(2, 'Tên phải có ít nhất 2 ký tự'),
-	lastName: z.string().min(2, 'Họ phải có ít nhất 2 ký tự'),
-	email: z.string().email('Email không hợp lệ'),
-	phone: z.string().min(10, 'Số điện thoại phải có ít nhất 10 số'),
-	dateOfBirth: z.date({
-		required_error: 'Vui lòng chọn ngày sinh'
+	firstName: string().min(2, 'Tên phải có ít nhất 2 ký tự'),
+	lastName: string().min(2, 'Họ phải có ít nhất 2 ký tự'),
+	email: email('Email không hợp lệ'),
+	phone: string().min(10, 'Số điện thoại phải có ít nhất 10 số'),
+	dateOfBirth: coerce.date({
+		error: 'Vui lòng chọn ngày sinh'
 	}),
-	gender: z.enum(['male', 'female', 'other'], {
-		required_error: 'Vui lòng chọn giới tính'
+	gender: enums(['male', 'female', 'other'], {
+		error: 'Vui lòng chọn giới tính'
 	}),
 
 	// Work Information
-	employeeId: z.string().min(3, 'Mã nhân viên phải có ít nhất 3 ký tự'),
-	department: z.string({
-		required_error: 'Vui lòng chọn phòng ban'
+	employeeId: string().min(3, 'Mã nhân viên phải có ít nhất 3 ký tự'),
+	department: string({
+		error: 'Vui lòng chọn phòng ban'
 	}),
-	position: z.string().min(2, 'Chức vụ phải có ít nhất 2 ký tự'),
-	salary: z.string().min(1, 'Vui lòng nhập mức lương'),
-	startDate: z.date({
-		required_error: 'Vui lòng chọn ngày bắt đầu làm việc'
+	position: string().min(2, 'Chức vụ phải có ít nhất 2 ký tự'),
+	salary: string().min(1, 'Vui lòng nhập mức lương'),
+	startDate: coerce.date({
+		error: 'Vui lòng chọn ngày bắt đầu làm việc'
 	}),
-	workType: z.enum(['full-time', 'part-time', 'contract'], {
-		required_error: 'Vui lòng chọn loại hình làm việc'
+	workType: enums(['full-time', 'part-time', 'contract'], {
+		error: 'Vui lòng chọn loại hình làm việc'
 	}),
 
 	// Additional Information
-	address: z.string().min(10, 'Địa chỉ phải có ít nhất 10 ký tự'),
-	skills: z.array(z.string()).refine((value) => value.some((item) => item), {
+	address: string().min(10, 'Địa chỉ phải có ít nhất 10 ký tự'),
+	skills: array(string()).refine((value) => value.some((item) => item), {
 		message: 'Vui lòng chọn ít nhất một kỹ năng'
 	}),
 
-	hasExperience: z.boolean(),
-	notes: z.string().optional()
+	hasExperience: boolean(),
+	notes: string().optional()
 })
 
 export const Template = () => {
 	'use no memo'
 
-	const form = useForm({
+	const form = useForm<Infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: {
 			firstName: '',
@@ -82,7 +82,7 @@ export const Template = () => {
 			employeeId: '',
 			position: '',
 			salary: '',
-			gender: '',
+			gender: 'male',
 			address: '',
 			skills: [],
 			hasExperience: false,

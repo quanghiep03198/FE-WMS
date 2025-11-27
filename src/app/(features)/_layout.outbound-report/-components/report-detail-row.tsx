@@ -2,7 +2,7 @@ import { NestedCell, NestedRow } from '@/app/(features)/-components/-shared/hori
 import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'
-import { sortBy } from 'lodash'
+import { sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 
 export const ReportDetailRow: React.FC<{ data: IOutboundReport['detail'][number] }> = ({ data }) => {

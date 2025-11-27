@@ -1,6 +1,6 @@
 import { InventoryService } from '@/services/inventory.service'
 import { useQuery } from '@tanstack/react-query'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 
 export enum ProductionInventoryQueryKeys {
 	PRODUCTION_INVENTORY = 'PRODUCTION_INVENTORY'

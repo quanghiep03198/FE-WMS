@@ -21,14 +21,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useIsFetching } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { pick, sortBy, uniqBy } from 'lodash'
+import { pick, sortBy, uniqBy } from 'lodash-es'
 import React, { Fragment, useCallback, useEffect, useRef } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
-import z from 'zod'
+import { uuidv4 } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
@@ -54,7 +54,7 @@ const getIsStoredToDatabase = (item: ITruckloadDelivery['delivery_details'][numb
  * @returns {boolean}
  */
 const getIsCurrentlyAdded = (item: UpsertPurchaseOrdersFormValues['outbound_purchase_orders'][number]): boolean => {
-	return z.uuidv4().safeParse(item.id).success
+	return uuidv4().safeParse(item.id).success
 }
 
 const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> = ({ data, onCollapse }) => {

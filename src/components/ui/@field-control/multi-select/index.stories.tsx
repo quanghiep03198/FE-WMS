@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { array, object, string, type infer as Infer } from 'zod'
 import { MultipleSelectFieldControlProps, MultiSelectFieldControl } from '.'
 
 export default {
@@ -79,18 +79,18 @@ export default {
 	}
 } satisfies Meta<typeof MultiSelectFieldControl>
 
-const schema = z.object({
-	fruits: z.array(z.string().nonempty()).nonempty({ message: 'Vui lòng chọn ít nhất một loại quả' })
+const schema = object({
+	fruits: array(string().nonempty()).nonempty({ error: 'Vui lòng chọn ít nhất một loại quả' })
 })
 
-type FormValues = z.infer<typeof schema>
+type FormValues = Infer<typeof schema>
 type StoryArgs = MultipleSelectFieldControlProps<any, Record<'name', string>>
 type Story = Meta<StoryArgs>['component'] extends React.ComponentType<infer P> ? StoryObj<P> : never
 
 const Template: StoryFn<StoryArgs> = (args) => {
 	'use no memo'
 
-	const form = useForm({
+	const form = useForm<FormValues>({
 		resolver: zodResolver(schema)
 	})
 

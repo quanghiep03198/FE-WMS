@@ -1,7 +1,7 @@
 import useAuth from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/stepper'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

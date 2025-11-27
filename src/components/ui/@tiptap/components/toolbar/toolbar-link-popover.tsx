@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { z } from 'zod'
+import { object, url, type infer as Infer } from 'zod'
 import {
 	Button,
 	Div,
@@ -17,7 +17,8 @@ import {
 } from '../../..'
 import { useEditorContext } from '../../context/editor-context'
 
-const UrlSchema = z.object({ url: z.string().url({ message: 'ns_common:editor.validations.invalid_url' }).optional() })
+const urlSchema = object({ url: url({ message: 'ns_common:editor.validations.invalid_url' }).optional() })
+type UrlSchema = Infer<typeof urlSchema>
 
 export const LinkPopover: React.FC = () => {
 	const { editor } = useEditorContext()
@@ -25,11 +26,11 @@ export const LinkPopover: React.FC = () => {
 
 	const [open, setOpen] = useState<boolean>(false)
 
-	const form = useForm<z.infer<typeof UrlSchema>>({
-		resolver: zodResolver(UrlSchema)
+	const form = useForm<UrlSchema>({
+		resolver: zodResolver(urlSchema)
 	})
 
-	const handleInsertLink = ({ url }: z.infer<typeof UrlSchema>) => {
+	const handleInsertLink = ({ url }: UrlSchema) => {
 		if (!url) return
 		// empty
 		if (url === '') {

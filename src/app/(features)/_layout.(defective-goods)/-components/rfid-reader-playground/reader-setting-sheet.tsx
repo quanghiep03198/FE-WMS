@@ -30,7 +30,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

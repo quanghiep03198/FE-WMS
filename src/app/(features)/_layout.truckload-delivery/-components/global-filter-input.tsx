@@ -7,7 +7,7 @@ import { DebouncedInput } from '@/components/ui/@react-table/components/debounce
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { Table } from '@tanstack/react-table'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import { capitalize, pick } from 'lodash'
+import { capitalize, pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

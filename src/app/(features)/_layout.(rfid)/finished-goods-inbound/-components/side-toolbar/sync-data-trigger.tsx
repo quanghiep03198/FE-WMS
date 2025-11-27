@@ -15,7 +15,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
-import { hasIn } from 'lodash'
+import { hasIn } from 'lodash-es'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

@@ -1,5 +1,5 @@
 import { Button, Icon, SheetClose } from '@/components/ui'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

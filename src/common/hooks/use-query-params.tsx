@@ -1,5 +1,5 @@
 import { useNavigate, UseNavigateResult, useSearch } from '@tanstack/react-router'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { useCallback, useLayoutEffect } from 'react'
 
 type NavigateFnOptions = Parameter<UseNavigateResult<string>>

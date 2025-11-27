@@ -24,7 +24,7 @@ import {
 } from '@/components/ui'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { formatRelative } from 'date-fns'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

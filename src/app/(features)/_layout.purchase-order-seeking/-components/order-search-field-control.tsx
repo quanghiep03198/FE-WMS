@@ -17,7 +17,7 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import React, { useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

@@ -10,7 +10,7 @@ import {
 	Icon
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../../@core/button'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { array, object, string, type infer as Infer } from 'zod'
 import { Form } from '../../@core/form'
 import { TagInputFieldControl, TagInputFieldControlProps } from './index'
 
@@ -32,13 +32,13 @@ export default {
 	}
 } satisfies Meta<typeof TagInputFieldControl>
 
-const schema = z.object({
-	frameworks: z
-		.array(z.string(), { required_error: 'This field is required at least 1 item' })
-		.nonempty({ message: 'This field is required at least 1 item' })
+const schema = object({
+	frameworks: array(string({ error: 'This field is required at least 1 item' })).nonempty({
+		error: 'This field is required at least 1 item'
+	})
 })
 
-type FormValues = z.infer<typeof schema>
+type FormValues = Infer<typeof schema>
 
 const Template = (args: TagInputFieldControlProps<any>) => {
 	'use no memo'

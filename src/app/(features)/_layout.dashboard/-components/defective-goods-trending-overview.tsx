@@ -16,7 +16,7 @@
 // 	ChartTooltipContent
 // } from '@/components/ui'
 // import { format } from 'date-fns'
-// import { capitalize } from 'lodash'
+// import { capitalize } from 'lodash-es'
 // import { useDefectiveCategoryChartConfig } from '../-hooks/use-defective-category-chart-configs'
 
 // export const description = 'A stacked bar chart with a legend'

@@ -24,7 +24,7 @@ import {
 	Skeleton
 } from '@/components/ui'
 import { SelectProps } from '@radix-ui/react-select'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDefectiveCategoryChartConfig } from '../-hooks/use-defective-category-chart-configs'

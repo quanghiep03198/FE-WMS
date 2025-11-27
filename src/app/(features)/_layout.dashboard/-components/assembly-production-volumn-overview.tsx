@@ -28,7 +28,7 @@ import {
 
 import { cn } from '@/common/utils/cn'
 import { format, subDays, subMonths } from 'date-fns'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useGetDailyAssemblyProductivityQuery } from '../-hooks/use-statistic-asm'

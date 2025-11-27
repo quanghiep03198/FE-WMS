@@ -4,7 +4,7 @@ import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { IAuthState, useAuthStore } from '@/stores/auth.store'
 import { GenericAbortSignal, type AxiosRequestConfig } from 'axios'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 export class AuthService {
 	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user' | 'token'>>> {

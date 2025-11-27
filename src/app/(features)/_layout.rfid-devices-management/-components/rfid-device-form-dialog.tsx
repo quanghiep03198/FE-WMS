@@ -28,7 +28,7 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
-import { capitalize, isNil } from 'lodash'
+import { capitalize, isNil } from 'lodash-es'
 import React, { memo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

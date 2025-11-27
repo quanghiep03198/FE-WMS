@@ -2,7 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import { FormControl, FormField, Input, Tooltip } from '@/components/ui'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

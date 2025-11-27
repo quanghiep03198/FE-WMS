@@ -20,19 +20,19 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { z } from 'zod'
+import { object, url, type infer as Infer } from 'zod'
 import { useEditorContext } from '../../context/editor-context'
 
-const UploadSchema = z.object({
-	url: z.url('Invalid image URL').optional()
+const uploadSchema = object({
+	url: url('Invalid image URL').optional()
 })
 
 const ImageDropdown: React.FC = () => {
 	const { editor } = useEditorContext()
 	const dialogTriggerId = useId()
 	const { t } = useTranslation()
-	const form = useForm({
-		resolver: zodResolver(UploadSchema)
+	const form = useForm<Infer<typeof uploadSchema>>({
+		resolver: zodResolver(uploadSchema)
 	})
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 

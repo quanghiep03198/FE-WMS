@@ -18,7 +18,7 @@ import {
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 import React, { Fragment, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'

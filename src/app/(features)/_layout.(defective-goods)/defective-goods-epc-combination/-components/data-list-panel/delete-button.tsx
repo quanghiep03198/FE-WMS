@@ -1,7 +1,7 @@
 import { Button, ButtonProps, Icon, Tooltip } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useSessionStorageState } from 'ahooks'
-import { isEmpty, isNil, pickBy } from 'lodash'
+import { isEmpty, isNil, pickBy } from 'lodash-es'
 import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

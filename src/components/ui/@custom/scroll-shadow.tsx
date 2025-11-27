@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { useRafState, useScroll } from 'ahooks'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {

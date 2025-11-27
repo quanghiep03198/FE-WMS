@@ -2,7 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import { useMemoizedFn } from 'ahooks'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Div, Icon, Tooltip } from '../..'

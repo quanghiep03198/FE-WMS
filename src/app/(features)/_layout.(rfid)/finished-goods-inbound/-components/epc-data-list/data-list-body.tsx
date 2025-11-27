@@ -15,7 +15,7 @@ import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@m
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUnmount, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { uniqBy } from 'lodash'
+import { uniqBy } from 'lodash-es'
 import { Fragment, useCallback, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'

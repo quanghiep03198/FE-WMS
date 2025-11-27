@@ -1,7 +1,7 @@
 import { useSearchCommandNumberQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@/components/ui'
 import { useDebounce } from 'ahooks'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import React from 'react'
 import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

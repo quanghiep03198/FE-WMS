@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import { format, isAfter } from 'date-fns'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { coerce, object, type infer as Infer } from 'zod'
 import { DatePickerFieldControl, DatePickerFieldControlProps } from '.'
 import { Button } from '../../@core/button'
 
@@ -59,11 +59,11 @@ export default {
 	}
 } satisfies Meta<typeof DatePickerFieldControl<any>>
 
-const formSchema = z.object({
-	date: z.date({ required_error: 'Date is required.' })
+const formSchema = object({
+	date: coerce.date({ error: 'Date is required.' })
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = Infer<typeof formSchema>
 
 const Template = (args: any) => {
 	'use no memo'

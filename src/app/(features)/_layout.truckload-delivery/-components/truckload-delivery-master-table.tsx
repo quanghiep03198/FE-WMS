@@ -7,7 +7,7 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table as TanstackTable } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 import { useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'

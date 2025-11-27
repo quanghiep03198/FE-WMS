@@ -1,6 +1,6 @@
 import { Column } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'

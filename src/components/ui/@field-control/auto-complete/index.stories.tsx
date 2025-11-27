@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta, StoryFn } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { object, string, type infer as Infer } from 'zod'
 import { AutoCompleteFieldControl, AutoCompleteFieldControlProps } from '.'
 import { Button } from '../../@core/button'
 import { Form } from '../../@core/form'
@@ -63,11 +63,11 @@ export default {
 	}
 } satisfies Meta<typeof AutoCompleteFieldControl>
 
-const formSchema = z.object({
-	fruit: z.string({ required_error: 'Please select a fruit' }).nonempty({ message: 'Please select a fruit' })
+const formSchema = object({
+	fruit: string({ error: 'Please select a fruit' }).nonempty({ message: 'Please select a fruit' })
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = Infer<typeof formSchema>
 
 const Template: StoryFn<StoryArgs> = (args) => {
 	'use no memo'

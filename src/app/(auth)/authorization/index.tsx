@@ -2,16 +2,16 @@ import { Div, Icon } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { Navigate, createFileRoute, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
-import { pick } from 'lodash'
-import { z } from 'zod'
+import { pick } from 'lodash-es'
+import { object, string, type infer as Infer } from 'zod'
 
-const authorizationSearchSchema = z.object({
-	token: z.string(),
-	company_code: z.string(),
-	company_name: z.string()
+const authorizationSearchSchema = object({
+	token: string(),
+	company_code: string(),
+	company_name: string()
 })
 
-type AuthorizationSearchParams = z.infer<typeof authorizationSearchSchema>
+type AuthorizationSearchParams = Infer<typeof authorizationSearchSchema>
 
 export const Route = createFileRoute('/(auth)/authorization/')({
 	validateSearch: (search: Record<string, unknown>): AuthorizationSearchParams =>

@@ -1,5 +1,5 @@
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
-import { uniqBy } from 'lodash'
+import { uniqBy } from 'lodash-es'
 import { createContext, useRef } from 'react'
 import { StoreApi, create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'

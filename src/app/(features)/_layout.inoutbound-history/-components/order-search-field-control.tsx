@@ -14,7 +14,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { CheckIcon } from '@radix-ui/react-icons'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

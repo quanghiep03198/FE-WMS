@@ -1,7 +1,7 @@
 import { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { omitBy, uniqBy } from 'lodash'
+import { omitBy, uniqBy } from 'lodash-es'
 import { RFIDDataType } from '../-constants'
 import { RFIDInboundQueryKeys } from '../finished-goods-inbound/-hooks/use-rfid-inbound-asm'
 import { RFIDOutboundQueryKeys } from '../finished-goods-outbound/-hooks/use-rfid-outbound-asm'
@@ -53,8 +53,8 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params: SearchFormVal
 
 export const useGetArchivedEpcFeatureQuery = (type: RFIDDataType) => {
 	return useQuery({
-		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES],
-		queryFn: async () => await RFIDService.getArchivedEpcFeatures(RFIDDataType.INBOUND),
+		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES, type],
+		queryFn: async () => await RFIDService.getArchivedEpcFeatures(type),
 		refetchOnMount: 'always',
 		select: (response) => response.metadata
 	})

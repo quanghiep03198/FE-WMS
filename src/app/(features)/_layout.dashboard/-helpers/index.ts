@@ -1,7 +1,7 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { IconProps } from '@/components/ui'
 import { ResourceKeys } from 'i18next'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 /**
  * Gets detailed change description with quantity for i18n

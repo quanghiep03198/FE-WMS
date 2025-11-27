@@ -1,6 +1,6 @@
 import { Div, Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
-import { omit, pick } from 'lodash'
+import { omit, pick } from 'lodash-es'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ListPanelProvider } from '../../-contexts/list-panel-context'

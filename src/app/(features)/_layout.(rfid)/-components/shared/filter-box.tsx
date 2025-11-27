@@ -22,7 +22,7 @@ import {
 } from '@/components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useDeepCompareEffect, useResetState } from 'ahooks'
-import { isEmpty, sortBy } from 'lodash'
+import { isEmpty, sortBy } from 'lodash-es'
 import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

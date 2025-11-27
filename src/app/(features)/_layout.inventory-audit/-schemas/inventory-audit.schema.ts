@@ -1,13 +1,13 @@
-import { z } from 'zod'
+import { array, number, object, string, type infer as Infer } from 'zod'
 
-export const reportDataSchema = z.object({
-	data: z.array(
-		z.object({
-			size_numcode: z.string(),
-			mn_ist_qty: z.number().min(0, { message: 'Invalid value' }),
-			mn_ost_qty: z.number().min(0, { message: 'Invalid value' })
+export const reportDataSchema = object({
+	data: array(
+		object({
+			size_numcode: string(),
+			mn_ist_qty: number().min(0, { message: 'Invalid value' }),
+			mn_ost_qty: number().min(0, { message: 'Invalid value' })
 		})
 	)
 })
 
-export type InventoryAuditFormValues = z.infer<typeof reportDataSchema>
+export type InventoryAuditFormValues = Infer<typeof reportDataSchema>

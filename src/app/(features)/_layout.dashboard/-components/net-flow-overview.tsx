@@ -17,7 +17,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { format } from 'date-fns'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getTrendingIcon, getTrendingPercentageChange } from '../-helpers'

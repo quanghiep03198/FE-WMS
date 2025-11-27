@@ -1,28 +1,24 @@
-import { z } from 'zod'
+import { array, enum as enums, object, string, type infer as Infer } from 'zod'
 import { DefectiveCategory, DefectiveLocation } from '../../-constants'
 
-export const baseDefectiveGoodsSchema = z.object({
-	epc: z
-		.array(z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
-		.or(z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })),
-	defective_category: z.enum(DefectiveCategory, { message: 'ns_validation:required' }),
-	po: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
-	mo_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
-	brand_name: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	cust_shoes_style: z
-		.string({ message: 'ns_validation:required' })
+export const baseDefectiveGoodsSchema = object({
+	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })).or(
+		string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
+	),
+	defective_category: enums(DefectiveCategory, { message: 'ns_validation:required' }),
+	po: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
+	mo_no: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
+	brand_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	cust_shoes_style: string({ message: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
-	factory_shoes_style: z
-		.string({ message: 'ns_validation:required' })
+	factory_shoes_style: string({ message: 'ns_validation:required' })
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
-	color_sn: z.string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	size_code: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-	defective_location: z.enum(DefectiveLocation, { message: 'ns_validation:required' }),
-	defective_description: z
-		.string({ message: 'ns_validation:required' })
-		.nonempty({ message: 'ns_validation:required' })
+	color_sn: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
+	size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	defective_location: enums(DefectiveLocation, { message: 'ns_validation:required' }),
+	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
 })
 
 export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema.refine((values) => {
@@ -35,8 +31,8 @@ export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().ref
 	return true
 })
 
-export type CreateDefectiveGoodsFormValues = z.infer<typeof createDefectiveGoodsSchema>
-export type UpdateDefectiveGoodsFormValues = z.infer<typeof updateDefectiveGoodsSchema>
+export type CreateDefectiveGoodsFormValues = Infer<typeof createDefectiveGoodsSchema>
+export type UpdateDefectiveGoodsFormValues = Infer<typeof updateDefectiveGoodsSchema>
 
 export type DefectiveGoodsCombinationFormValues = CreateDefectiveGoodsFormValues | UpdateDefectiveGoodsFormValues
 export type DefectiveGoodQueryParams = Partial<Omit<DefectiveGoodsCombinationFormValues, 'defective_description'>> & {

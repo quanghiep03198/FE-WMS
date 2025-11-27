@@ -1,6 +1,6 @@
 import { ReportService } from '@/services/report.service'
 import { useQuery } from '@tanstack/react-query'
-import { pick } from 'lodash'
+import { pick } from 'lodash-es'
 
 export enum InboundReportQueryKeys {
 	DAILY_INBOUND = 'DAILY_INBOUND'

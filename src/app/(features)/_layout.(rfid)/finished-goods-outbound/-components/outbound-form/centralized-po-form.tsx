@@ -5,7 +5,7 @@ import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useResetState } from 'ahooks'
 import { AxiosError, HttpStatusCode } from 'axios'
-import { sortedUniqBy } from 'lodash'
+import { sortedUniqBy } from 'lodash-es'
 import { Fragment, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'

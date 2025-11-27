@@ -3,7 +3,7 @@ import { InboundReportQueryKeys } from '@/app/(features)/_layout.inbound-report/
 import useAuth from '@/common/hooks/use-auth'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import { SearchCustOrderParams } from '..'
 import { DEFAULT_PROPS, usePageContext } from '../-contexts/page-context'

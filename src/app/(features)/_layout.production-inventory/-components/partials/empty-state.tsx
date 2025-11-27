@@ -1,6 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Div, Icon, Typography } from '@/components/ui'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import DownloadExcelButton from './download-excel-button'

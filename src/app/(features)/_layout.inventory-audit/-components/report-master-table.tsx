@@ -32,7 +32,7 @@ import { createColumnHelper, ExpandedState, type Table as TTable } from '@tansta
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
-import { pick, split } from 'lodash'
+import { pick, split } from 'lodash-es'
 import { Fragment, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

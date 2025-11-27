@@ -20,7 +20,7 @@ import { SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSize } from 'ahooks'
 import { AxiosError, HttpStatusCode } from 'axios'
-import { sortBy, sortedUniqBy } from 'lodash'
+import { sortBy, sortedUniqBy } from 'lodash-es'
 import React, { Fragment, use, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {

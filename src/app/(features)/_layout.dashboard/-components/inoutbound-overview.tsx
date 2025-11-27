@@ -22,7 +22,7 @@ import {
 	Skeleton
 } from '@/components/ui'
 import { format } from 'date-fns'
-import { capitalize } from 'lodash'
+import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'

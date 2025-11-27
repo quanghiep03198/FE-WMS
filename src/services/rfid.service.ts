@@ -17,7 +17,7 @@ import {
 import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { omit, omitBy } from 'lodash'
+import { omit, omitBy } from 'lodash-es'
 
 export class RFIDService {
 	// #region Inbound

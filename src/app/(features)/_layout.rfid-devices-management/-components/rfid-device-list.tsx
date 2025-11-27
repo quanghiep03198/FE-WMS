@@ -24,7 +24,7 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/
 import { notNullFilter } from '@/components/ui/@react-table/utils/not-null-filter.util'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { formatRelative } from 'date-fns'
-import { capitalize, isNil, pick } from 'lodash'
+import { capitalize, isNil, pick } from 'lodash-es'
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

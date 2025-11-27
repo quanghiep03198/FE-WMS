@@ -15,7 +15,7 @@ import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@m
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
-import { isEqualWith, uniqBy } from 'lodash'
+import { isEqualWith, uniqBy } from 'lodash-es'
 import { Fragment, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

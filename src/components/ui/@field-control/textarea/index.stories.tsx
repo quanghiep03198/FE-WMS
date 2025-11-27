@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { object, string, type infer as Infer } from 'zod'
 import { TextareaFieldControl, TextareaFieldControlProps } from '.'
 import { Button } from '../../@core/button'
 
@@ -25,9 +25,9 @@ export default {
 	}
 } satisfies Meta<typeof TextareaFieldControl>
 
-const formSchema = z.object({})
+const formSchema = object({})
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = Infer<typeof formSchema>
 
 const Template: StoryFn<StoryArgs> = (args: any) => {
 	'use no memo'
@@ -35,7 +35,7 @@ const Template: StoryFn<StoryArgs> = (args: any) => {
 	const form = useForm<FormValues>({
 		resolver: zodResolver(
 			formSchema.extend({
-				[args.name]: z.string({ required_error: 'This field is required.' }).nonempty('This field is required.')
+				[args.name]: string({ error: 'This field is required.' }).nonempty('This field is required.')
 			})
 		),
 		mode: 'onSubmit'

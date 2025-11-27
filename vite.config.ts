@@ -199,7 +199,7 @@ export default defineConfig(({ mode }) => {
 							{ name: 'i18next', test: /i18next/ },
 							{ name: 'i18next-browser-languagedetector', test: /i18next-browser-languagedetector/ },
 							{ name: 'immer', test: /immer/ },
-							{ name: 'lodash', test: /lodash/ },
+							{ name: 'lodash-es', test: /lodash-es/ },
 							{ name: 'lucide', test: /lucide-react/ },
 							{ name: 'lz-string', test: /lz-string/ },
 							{ name: 'nprogress', test: /nprogress/ },

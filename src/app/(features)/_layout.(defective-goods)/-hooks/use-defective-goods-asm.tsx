@@ -3,7 +3,7 @@ import { IDefectiveGoods, IDefectiveGoodsInventory } from '@/common/types/entiti
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
-import { pickBy } from 'lodash'
+import { pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../defective-goods-epc-combination/-constants'

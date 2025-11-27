@@ -1,7 +1,7 @@
 import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableFooter, TableRow } from '@/components/ui'
-import { capitalize, sortBy } from 'lodash'
+import { capitalize, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NestedCell, NestedRow } from '../../-components/-shared/horizontal-nested-table'

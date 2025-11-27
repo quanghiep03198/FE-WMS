@@ -1,36 +1,29 @@
-import { z } from 'zod'
+import { number, object, string, type infer as Infer } from 'zod'
 
-export const updateEpcFormSchema = z
-	.object({
-		color_sn: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		color_sn_actual: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		cust_shoes_style: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		mat_code: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		mo_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		mo_no_actual: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		mo_noseq: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		or_cust_po: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		or_no: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		quantity: z.number({ message: 'ns_validation:required' }).nonnegative({ message: 'ns_validation:nonnegative' }),
-		factory_shoes_style: z
-			.string({ message: 'ns_validation:required' })
-			.nonempty({ message: 'ns_validation:required' }),
-		factory_shoes_style_actual: z
-			.string({ message: 'ns_validation:required' })
-			.nonempty({ message: 'ns_validation:required' }),
-		size_code: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		size_numcode: z.string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
-		size_numcode_actual: z
-			.string({ message: 'ns_validation:required' })
-			.nonempty({ message: 'ns_validation:required' }),
-		size_qty: z
-			.number({ message: 'ns_validation:required' })
-			.nonnegative({ message: 'ns_validation:nonnegative' })
-			.default(0)
-	})
-	.refine((values) => values.quantity <= values.size_qty, {
-		message: 'ns_validation:invalid_value',
-		path: ['quantity']
-	})
+export const updateEpcFormSchema = object({
+	color_sn: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	color_sn_actual: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	cust_shoes_style: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	mat_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	mo_no: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	mo_no_actual: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	mo_noseq: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	or_cust_po: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	or_no: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	quantity: number({ message: 'ns_validation:required' }).nonnegative({ message: 'ns_validation:nonnegative' }),
+	factory_shoes_style: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	factory_shoes_style_actual: string({ message: 'ns_validation:required' }).nonempty({
+		message: 'ns_validation:required'
+	}),
+	size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	size_numcode: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	size_numcode_actual: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	size_qty: number({ message: 'ns_validation:required' })
+		.nonnegative({ message: 'ns_validation:nonnegative' })
+		.default(0)
+}).refine((values) => values.quantity <= values.size_qty, {
+	message: 'ns_validation:invalid_value',
+	path: ['quantity']
+})
 
-export type UpdateEpcFormValues = z.infer<typeof updateEpcFormSchema>
+export type UpdateEpcFormValues = Infer<typeof updateEpcFormSchema>

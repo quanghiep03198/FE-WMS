@@ -1,6 +1,6 @@
 import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@/components/ui'
 import { useDebounce } from 'ahooks'
-import { omit } from 'lodash'
+import { omit } from 'lodash-es'
 import { useMemo } from 'react'
 import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

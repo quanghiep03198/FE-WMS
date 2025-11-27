@@ -1,7 +1,7 @@
 import { AppConfigs } from '@/configs/app.config'
 import { useAuthStore } from '@/stores/auth.store'
 import { useMemoizedFn, useRafState } from 'ahooks'
-import { throttle } from 'lodash'
+import { throttle } from 'lodash-es'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { RequestHeaders } from '../constants/enums'

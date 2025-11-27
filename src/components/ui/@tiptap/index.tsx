@@ -2,7 +2,7 @@
 
 import { cn } from '@/common/utils/cn'
 import { EditorContent, useEditor } from '@tiptap/react'
-import { uniqueId } from 'lodash'
+import { uniqueId } from 'lodash-es'
 import React, { memo, useState } from 'react'
 import { RefCallBack } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

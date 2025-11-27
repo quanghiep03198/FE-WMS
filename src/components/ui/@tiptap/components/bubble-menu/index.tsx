@@ -18,12 +18,12 @@ import { BubbleMenu as TiptapBubbleMenu } from '@tiptap/react/menus'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import { object, url, type infer as Infer } from 'zod'
 
-type FormValue = z.infer<typeof LinkSchema>
+type FormValue = Infer<typeof LinkSchema>
 
-const LinkSchema = z.object({
-	href: z.string().url().optional()
+const LinkSchema = object({
+	href: url().optional()
 })
 
 const BubbleMenu: React.FC<{ editor: Editor }> = ({ editor }) => {

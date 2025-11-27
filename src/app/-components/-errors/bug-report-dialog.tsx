@@ -16,20 +16,22 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { z } from 'zod'
+import { email, object, string, type infer as Infer } from 'zod'
 
-const reportValidator = z.object({
-	email: z.string().email('Invalid email').nonempty('Email is required'),
-	name: z.string().nonempty('Name is required'),
-	message: z.string().optional()
+const bugReportSchema = object({
+	email: email('Invalid email').nonempty('Email is required'),
+	name: string().nonempty('Name is required'),
+	message: string().optional()
 })
+
+type BugReportFormValues = Infer<typeof bugReportSchema>
 
 const BugReportDialog: React.FC<{ eventId: string }> = ({ eventId }) => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
 
-	const form = useForm({
-		resolver: zodResolver(reportValidator)
+	const form = useForm<BugReportFormValues>({
+		resolver: zodResolver(bugReportSchema)
 	})
 
 	const handleSubmit = (data) => {
