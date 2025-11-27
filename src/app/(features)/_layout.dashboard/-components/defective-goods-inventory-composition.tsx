@@ -110,7 +110,11 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 														x={viewBox.cx}
 														y={(viewBox.cy || 0) + 24}
 														className='fill-muted-foreground'>
-														{capitalize(t('ns_common:unit.prs'))}
+														{capitalize(
+															activeCategory === DefectiveCategory.C_GRADE
+																? t('ns_common:unit.pcs')
+																: t('ns_common:unit.prs')
+														)}
 													</tspan>
 												</text>
 											)
@@ -137,8 +141,7 @@ const DefectiveGoodsInventoryOverview: React.FC = () => {
 			<CardFooter className='flex-col items-start gap-2 text-sm'>
 				<Div className='font-medium leading-none'>
 					{t('ns_erp:fields.actual_inventory_qty')} {' : '}
-					{isEmpty ? 0 : chartData.reduce((acc, curr) => acc + curr.qty, 0).toLocaleString()}{' '}
-					{t('ns_common:unit.prs')}
+					{isEmpty ? 0 : chartData.reduce((acc, curr) => acc + curr.qty, 0).toLocaleString()} (prs/pcs)
 				</Div>
 				<Div className='leading-none text-muted-foreground'>
 					{t('ns_dashboard:all_time_defective_goods_inventory_qty')}
