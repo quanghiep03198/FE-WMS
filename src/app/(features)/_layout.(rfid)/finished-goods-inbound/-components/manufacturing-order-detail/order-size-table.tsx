@@ -114,9 +114,9 @@ const OrderSizeDetailTable: React.FC = () => {
 		const { mo_no, color_sn, factory_shoes_style } = columnFilters
 		return scannedOrders.filter((item) => {
 			return (
-				item.mo_no?.toLowerCase()?.includes(mo_no?.toLowerCase()) &&
-				item.color_sn?.toLowerCase()?.includes(color_sn?.toLowerCase()) &&
-				item.factory_shoes_style?.toLowerCase()?.includes(factory_shoes_style?.toLowerCase())
+				item.mo_no?.trim()?.toLowerCase()?.includes(mo_no?.trim()?.toLowerCase()) &&
+				item.color_sn?.trim()?.toLowerCase()?.includes(color_sn?.trim()?.toLowerCase()) &&
+				item.factory_shoes_style?.trim()?.toLowerCase()?.includes(factory_shoes_style?.trim()?.toLowerCase())
 			)
 		})
 	}, [scannedOrders, columnFilters, dialogOpen])

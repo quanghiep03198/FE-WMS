@@ -29,9 +29,9 @@ const OrderSizeDetailTable: React.FC = () => {
 			? scannedOrders.filter((item) => {
 					if (item)
 						return (
-							item.mo_no.toLowerCase().includes(mo_no?.toLowerCase()) &&
-							item.color_sn.toLowerCase().includes(color_sn.toLowerCase()) &&
-							item.factory_shoes_style.toLowerCase().includes(factory_shoes_style.toLowerCase())
+							item.mo_no.toLowerCase().includes(mo_no?.trim()?.toLowerCase()) &&
+							item.color_sn.toLowerCase().includes(color_sn?.trim()?.toLowerCase()) &&
+							item.factory_shoes_style.toLowerCase().includes(factory_shoes_style?.trim()?.toLowerCase())
 						)
 				})
 			: []
