@@ -179,7 +179,7 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)]'>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] xxl:rounded-t-none xxl:border-t-0'>
 			{/* Datalist header */}
 			<Div className='flex items-center justify-between border-b p-1.5'>
 				<Div className='ml-2'>
@@ -190,7 +190,6 @@ const ScannedEpcList: React.FC = () => {
 						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
-
 					<Label
 						role='button'
 						className={buttonVariants({ variant: 'ghost' })}
@@ -203,7 +202,7 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[calc(35vh-0.25rem)] w-full flex-col items-stretch justify-start divide-y bg-background p-2 will-change-transform contain-paint @4xl:h-[var(--outlet-wrapper-height)] md:h-[50vh]'>
+					className='z-10 flex h-[33.33vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 will-change-transform contain-paint @4xl:h-[var(--outlet-wrapper-height)]'>
 					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
@@ -251,7 +250,7 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[calc(35vh-0.25rem)] place-content-center @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)] md:h-[50vh]'>
+				<Div className='z-10 grid h-[33.33vh] place-content-center @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
