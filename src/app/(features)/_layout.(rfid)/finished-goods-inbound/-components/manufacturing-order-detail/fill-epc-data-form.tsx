@@ -47,7 +47,13 @@ const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {
 	mo_noseq: '',
 	size_numcode: FALLBACK_VALUE,
 	size_numcode_actual: '',
-	size_qty: 0
+	size_qty: 0,
+	cust_shoes_style: '',
+	mat_code: '',
+	or_cust_po: '',
+	or_no: '',
+	quantity: 0,
+	size_code: ''
 }
 
 const FillEpcDataFormDialog: React.FC<any> = () => {
