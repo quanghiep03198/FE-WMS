@@ -3,11 +3,22 @@ import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Icon, TableCell, TableRow, Tooltip } from '@/components/ui'
+import generateAvatar from '@/common/utils/generate-avatar'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+	Div,
+	Icon,
+	TableCell,
+	TableRow,
+	Tooltip,
+	Typography
+} from '@/components/ui'
 import { IPurchaseOrderResult } from '@/services/order.service'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useIsMutating } from '@tanstack/react-query'
-import { formatRelative } from 'date-fns'
+import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
 import React, { Fragment, memo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -66,7 +77,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				isCurrentRowIsDeleting && '[&_td]:duration-1000 [&_td]:ease-out [&_td]:animate-out [&_td]:fade-out-0',
 				isNewRow && 'duration-200 ease-out animate-in fade-in-0 slide-in-from-top-2 [&_td]:opacity-80'
 			)}>
-			<TableCell align='left' className='w-[25%] xl:w-44'>
+			<TableCell align='left' className='w-[30%] xl:w-44'>
 				{readonly ? (
 					<span>{snapshotData?.po}</span>
 				) : (
@@ -83,7 +94,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				)}
 			</TableCell>
 			{!isLargeScreen ? (
-				<TableCell className='w-[35%]'>
+				<TableCell>
 					{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
 						(item) => !isNil(item)
 					) ? (
@@ -136,19 +147,25 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 			{isLargeScreen && (
 				<Fragment>
 					<TableCell align='left'>
-						<span className='!inline-flex items-center gap-x-2'>
-							<Icon name='User' size={18} />
-							{snapshotData?.user_code_created}
-						</span>
-					</TableCell>
-					<TableCell align='left'>
-						<span className='first-letter:uppercase'>
-							{snapshotData?.created ? (
-								formatRelative(new Date(snapshotData?.created), new Date(), { locale: dateLocale })
-							) : (
-								<Icon name='CalendarClock' stroke='hsl(var(--muted-foreground))' />
-							)}
-						</span>
+						<Div className='grid grid-cols-[auto_1fr] items-center gap-x-2'>
+							<Avatar className='row-span-2 size-8'>
+								<AvatarImage
+									src={generateAvatar({ name: snapshotData?.user_code_created })}
+									alt={snapshotData?.user_code_created}
+								/>
+								<AvatarFallback>G</AvatarFallback>
+							</Avatar>
+							<Typography variant='small' className='col-start-2 font-medium before:content-["@"]'>
+								{snapshotData?.user_code_created}
+							</Typography>
+							<Typography variant='small' color='muted' className='col-start-2 first-letter:uppercase'>
+								{snapshotData?.created ? (
+									format(new Date(snapshotData?.created), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
+								) : (
+									<Icon name='CalendarClock' stroke='hsl(var(--muted-foreground))' />
+								)}
+							</Typography>
+						</Div>
 					</TableCell>
 				</Fragment>
 			)}
