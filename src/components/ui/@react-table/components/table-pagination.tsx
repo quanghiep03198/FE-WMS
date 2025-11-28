@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { PaginationState, RowData } from '@tanstack/react-table'
 import React, { memo, useEffect, useRef } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import {
 	Button,
@@ -210,9 +211,8 @@ function TablePagination<TData>({
 
 TablePagination.displayName = 'TablePagination'
 
-const MemoizedTablePagination = memo(
-	TablePagination,
-	(prevProps, nextProps) => prevProps.controlledPaginationProps === nextProps.controlledPaginationProps
+const MemoizedTablePagination = memo(TablePagination, (prevProps, nextProps) =>
+	isEqual(prevProps.controlledPaginationProps, nextProps.controlledPaginationProps)
 ) as typeof TablePagination
 
 export { MemoizedTablePagination, TablePagination }

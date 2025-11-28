@@ -2,6 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
 import { Header, flexRender } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
+import { pick } from 'lodash-es'
 import { icons } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,6 +18,7 @@ import {
 	Icon,
 	Typography
 } from '../..'
+import { useTableContext } from '../context/table.context'
 
 type TableCellHeadProps<TData, TValue> = {
 	header: Header<TData, TValue>
@@ -27,6 +29,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
 	const rerender = useUpdate()
+	const { table, event$ } = useTableContext('table', 'event$')
 
 	const currentSortingState: keyof typeof icons = (() => {
 		switch (getIsSorted()) {
@@ -113,6 +116,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 							checked={header.column.getIsPinned() === false}
 							onCheckedChange={() => {
 								header.column.pin(false)
+								event$.emit(pick(table.getState(), ['columnPinning']))
 							}}>
 							{t('ns_common:table.unpin')}
 						</ContextMenuCheckboxItem>
@@ -120,6 +124,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 							checked={header.column.getIsPinned() === 'left'}
 							onCheckedChange={() => {
 								header.column.pin('left')
+								event$.emit(pick(table.getState(), ['columnPinning']))
 							}}>
 							{t('ns_common:table.pin_left')}
 						</ContextMenuCheckboxItem>
@@ -127,6 +132,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 							checked={header.column.getIsPinned() === 'right'}
 							onCheckedChange={() => {
 								header.column.pin('right')
+								event$.emit(pick(table.getState(), ['columnPinning']))
 							}}>
 							{t('ns_common:table.pin_right')}
 						</ContextMenuCheckboxItem>

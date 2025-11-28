@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { RowData, type HeaderGroup } from '@tanstack/react-table'
+import { useUpdate } from 'ahooks'
 import { Fragment, memo } from 'react'
 import { useTableContext } from '../context/table.context'
 import { columnSizingHandler, getStickyOffsetPosition } from '../utils'
@@ -9,9 +10,18 @@ import TableCellHead from './table-cell-head'
 import { TableColumnFilter } from './table-column-filter'
 
 const DataTableHeader: React.FC = () => {
-	'use no memo'
+	// 'use no memo'
 
-	const { table } = useTableContext('table')
+	const rerender = useUpdate()
+
+	const { table, event$ } = useTableContext('table', 'event$')
+
+	event$.useSubscription((value) => {
+		if (value.columnPinning) {
+			console.log('value.columnPinning', value.columnPinning)
+			rerender()
+		}
+	})
 
 	return (
 		<TableHeader className='sticky top-0 z-20 bg-background'>
@@ -30,7 +40,7 @@ const DataTableHeader: React.FC = () => {
 DataTableHeader.displayName = 'DataTableHeader'
 
 const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ headerGroup }) => {
-	'use no memo'
+	// 'use no memo'
 
 	const { table } = useTableContext('table')
 
@@ -68,7 +78,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 TableHeaderRow.displayName = 'TableHeaderRow'
 
 const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ headerGroup }) => {
-	'use no memo'
+	// 'use no memo'
 
 	const { filterOpen } = useTableContext('filterOpen')
 

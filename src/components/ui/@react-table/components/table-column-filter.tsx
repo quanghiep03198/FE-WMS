@@ -24,7 +24,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 	const { table, event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 
-	event$.useSubscription((value: { isAllFiltersCleared?: boolean }) => {
+	event$.useSubscription((value) => {
 		if (typeof value.isAllFiltersCleared === 'boolean') setIsAllFiltersCleared(value.isAllFiltersCleared)
 	})
 

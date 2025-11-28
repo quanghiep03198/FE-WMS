@@ -1,10 +1,11 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useMemoizedFn, useSize } from 'ahooks'
+import { useMemoizedFn, useSize, useUpdateEffect } from 'ahooks'
 import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
+import { ROW_ACTIONS_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
 import { MemoizedTableBody, TableBody } from './table-body'
@@ -12,7 +13,7 @@ import { TableBodyLoading } from './table-body-loading'
 import TableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
-import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
+import { DataTableHeader } from './table-header'
 
 type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
@@ -63,6 +64,15 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		return columnSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
+	useUpdateEffect(() => {
+		table.setColumnPinning((prev) => {
+			if (prev.right.includes(ROW_ACTIONS_COLUMN_ID)) {
+				prev.right = prev.right.filter((id) => id !== ROW_ACTIONS_COLUMN_ID).concat(ROW_ACTIONS_COLUMN_ID)
+			}
+			return prev
+		})
+	}, [table.getState().columnPinning])
+
 	return (
 		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
@@ -84,7 +94,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							{caption}
 						</TableCaption>
 					)}
-					{table.getState().columnSizingInfo.isResizingColumn ? <MemoizedDataTableHeader /> : <DataTableHeader />}
+					<DataTableHeader />
 					{loading ? (
 						<TableBodyLoading />
 					) : table.getState().columnSizingInfo.isResizingColumn ? (
