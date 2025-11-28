@@ -1,3 +1,5 @@
+'use no memo'
+
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { cn } from '@/common/utils/cn'
@@ -76,9 +78,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
 	const scrollingRef = useRef<number>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
-		if (node) {
-			setScrollElement(node)
-		}
+		if (node) setScrollElement(node)
 	}, [])
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
@@ -95,6 +95,8 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 	const { before, after } = useVirutalScrollOffset(virtualizer)
 
 	const virtualItems = virtualizer.getVirtualItems()
+
+	console.log('virtualItems', virtualItems)
 
 	const handleFetchNextPage = () => {
 		const [lastItem] = [...virtualItems].reverse()

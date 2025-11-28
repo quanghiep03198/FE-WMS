@@ -24,17 +24,9 @@ export const usePersistentFilterState = (dataType: RFIDDataType) => {
 			shoes_style: '',
 			color_sn: '',
 			mo_no: '',
-			size_numcode: ''
-		}
-		switch (dataType) {
-			case RFIDDataType.INBOUND:
-				values['scannable'] = 'all'
-				break
-			case RFIDDataType.OUTBOUND:
-				values['scanned'] = 'all'
-				break
-			default:
-				break
+			size_numcode: '',
+			...(dataType === RFIDDataType.INBOUND && { scannable: 'all' }),
+			...(dataType === RFIDDataType.OUTBOUND && { scanned: 'all' })
 		}
 
 		return values

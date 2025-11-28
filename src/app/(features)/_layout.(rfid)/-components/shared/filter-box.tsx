@@ -157,6 +157,21 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 		}
 	}
 
+	const handleReset = () => {
+		const defaultValues: Partial<SearchFormValues> = {
+			limit: 100,
+			epc: '',
+			shoes_style: '',
+			color_sn: '',
+			mo_no: '',
+			size_numcode: '',
+			...(dataType === RFIDDataType.INBOUND && { scannable: 'all' }),
+			...(dataType === RFIDDataType.OUTBOUND && { scanned: 'all' })
+		}
+		form.reset(defaultValues)
+		setPersistentFormValues(defaultValues)
+	}
+
 	return (
 		<Popover open={filterOpen} onOpenChange={setFilterOpen}>
 			<PopoverTrigger className='group relative flex h-10 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
@@ -314,7 +329,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									<Icon name='Search' /> {t('ns_common:actions.search')}
 								</Button>
 							</PopoverClose>
-							<Button type='button' variant='secondary' onClick={() => form.reset()}>
+							<Button type='button' variant='secondary' onClick={() => handleReset()}>
 								<Icon name='Undo' />
 								{t('ns_common:actions.reset')}
 							</Button>
