@@ -65,14 +65,15 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/bulk-delete/${dispatchOrder}`)
 	}
 
-	static async setStatusByDispatchOrder({
+	static async updateDispatchOrderSignature({
 		dispatch_order,
 		...payload
 	}: {
 		dispatch_order: TruckloadDeliveryDispatchOrder
+		role: 'QC' | 'WAREHOUSE_OFFICER' | 'SECURITY_GUARD'
 		approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-		security_code_reviewed: string
+		signature: string
 	}) {
-		return await axiosInstance.patch(`/truckload-delivery/set-status/${dispatch_order}`, payload)
+		return await axiosInstance.patch(`/truckload-delivery/update-signature/${dispatch_order}`, payload)
 	}
 }
