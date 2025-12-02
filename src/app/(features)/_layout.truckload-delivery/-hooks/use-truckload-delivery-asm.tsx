@@ -80,15 +80,16 @@ export const useUpsertPurchaseOrdersMutation = () => {
 	})
 }
 
-export const useSetTruckloadDeliveryStatusMutation = () => {
+export const useUpdateDispatchOrderSignatureMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
 		mutationFn: (payload: {
 			dispatch_order: TruckloadDeliveryDispatchOrder
+			role: 'QC' | 'WAREHOUSE_OFFICER' | 'SECURITY_GUARD'
 			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
-			security_code_reviewed: string
-		}) => TruckloadDeliveryService.setStatusByDispatchOrder(payload),
+			signature: string
+		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload),
 		onSuccess: () => invalidateQueries()
 	})
 }

@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import RowActions from './row-actions'
+import SignatureEditor from './signature-editor'
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
@@ -54,17 +55,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
 				)
-			}),
-			columnHelper.accessor('dispatch_order', {
-				header: t('ns_erp:fields.dispatch_order'),
-				enableResizing: true,
-				enableSorting: true,
-				enableColumnFilter: true,
-				meta: { hidden: isMobile },
-				filterFn: 'includesStringSensitive',
-				minSize: 180,
-				size: 200,
-				maxSize: 220
 			}),
 			columnHelper.accessor('license_plate', {
 				header: t('ns_erp:fields.license_plate'),
@@ -131,6 +121,45 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: true,
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
+			columnHelper.accessor('qc_signature', {
+				header: 'QC Signature',
+				cell: ({ getValue, row }) => {
+					return (
+						<SignatureEditor
+							title='QC Signature'
+							description='Please sign after verifying the delivery details'
+							data={{ ...pick(row.original, ['dispatch_order', 'approval_status']), signature: getValue() }}
+							role='QC'
+						/>
+					)
+				}
+			}),
+			columnHelper.accessor('warehouse_officer_signature', {
+				header: "Warehouse Officer's Signature",
+				cell: ({ getValue, row }) => {
+					return (
+						<SignatureEditor
+							title='QC Signature'
+							description='Please sign after verifying the delivery details'
+							data={{ ...pick(row.original, ['dispatch_order', 'approval_status']), signature: getValue() }}
+							role='WAREHOUSE_OFFICER'
+						/>
+					)
+				}
+			}),
+			columnHelper.accessor('security_guard_signature', {
+				header: `Security Guard's Signature`,
+				cell: ({ getValue, row }) => {
+					return (
+						<SignatureEditor
+							title='Security Guard Signature'
+							description='Please sign and set approval status to confirm the delivery'
+							data={{ ...pick(row.original, ['dispatch_order', 'approval_status']), signature: getValue() }}
+							role='SECURITY_GUARD'
+						/>
+					)
+				}
+			}),
 			columnHelper.accessor('approval_status', {
 				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,
@@ -187,17 +216,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						</Typography>
 					)
 				}
-			}),
-			columnHelper.accessor('security_name_reviewed', {
-				header: t('ns_common:common_fields.reviewed_by'),
-				enableResizing: true,
-				enableSorting: true,
-				meta: { hidden: isMobile },
-				cell: ({ getValue }) => (
-					<Typography variant='small' className='line-clamp-1'>
-						{getValue()}
-					</Typography>
-				)
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
@@ -273,7 +291,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			containerProps={{
-				className: 'h-[65vh] md:h-[55vh]'
+				className: 'h-[65vh] md:h-[55vh] [&_td:has(img)]:py-0'
 			}}
 			renderSubComponent={({ row }) => {
 				const data = row.original as ITruckloadDelivery

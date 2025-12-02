@@ -8,14 +8,14 @@ import React, { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { useSetTruckloadDeliveryStatusMutation } from '../-hooks/use-truckload-delivery-asm'
+import { useUpdateDispatchOrderSignatureMutation } from '../-hooks/use-truckload-delivery-asm'
 import { QRScanner } from '../../-components/-shared/qr-scanner'
 
 const StatusChangeButtonsGroup: React.FC<
 	Record<'data', Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status'>>
 > = ({ data }) => {
 	const { t } = useTranslation()
-	const { mutateAsync: setStatusAsync, isPending } = useSetTruckloadDeliveryStatusMutation()
+	const { mutateAsync: setStatusAsync, isPending } = useUpdateDispatchOrderSignatureMutation()
 	const [statusToUpdate, setStatusToUpdate, resetStatusToUpdate] = useResetState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 	>(null)
