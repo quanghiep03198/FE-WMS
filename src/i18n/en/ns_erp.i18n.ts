@@ -8,7 +8,8 @@ export default {
 		quick_po_search: 'Quickly search for processing purchase orders by entering PO code.',
 		order_detail: 'View order details including product information, quantities at a glance.',
 		shipping_detail: 'Access common shipping information for each order.',
-		provide_po_info: 'Provide order, product, and shipment details in seconds.'
+		provide_po_info: 'Provide order, product, and shipment details in seconds.',
+		update_dispatch_order_signature: 'Update dispatch order signature information.'
 	},
 	fields: {
 		accumulated_qty: 'Accumulated quantity',
@@ -71,6 +72,12 @@ export default {
 		po_size_qty: 'Purchase order quantity by size',
 		prod_color: 'Product color',
 		progress: 'Progress',
+		punctured_container: 'Punctured container',
+		smelling_container: 'Smelling container',
+		moist_container: 'Moist container',
+		qc_signature: 'QC signature',
+		warehouse_officer_signature: 'Warehouse officer signature',
+		security_guard_signature: 'Security guard signature',
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',
 		decentralized_po: 'Decentralized PO',
@@ -80,6 +87,7 @@ export default {
 		shipping_type: 'Shipping type',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
 		shoes_type_b: 'Shoes type B', //: Giày cấp B
+
 		factory_shoes_style: 'Factory shoes style',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
 		shaping_dept_code: 'Shaping department code',

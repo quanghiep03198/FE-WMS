@@ -7,6 +7,8 @@ import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import CreatePurchaseOrdersFormDialog from './-components/create-purchase-orders-form-dialog'
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
 import DeleteConfirmDialog from './-components/delete-confirm-dialog'
+import DownloadExcelButton from './-components/download-excel-button'
+import SignatureEditorDialog from './-components/signature-editor-dialog'
 import TruckloadDeliveryMasterTable from './-components/truckload-delivery-master-table'
 import UpdateDispatchOrderFormDialog from './-components/update-dispatch-order-form-dialog'
 import { PageContextProvider } from './-contexts/page-context'
@@ -35,14 +37,16 @@ function Page() {
 							<PageTitle>{t('ns_common:navigation.truckload_delivery_management')}</PageTitle>
 							<PageDescription>{t('ns_inoutbound:description.truckload_delivery')}</PageDescription>
 						</PageHeader>
-						<Div className='inline-flex items-center gap-x-1'>
-							<DeleteConfirmDialog />
+						<Div className='inline-flex items-center gap-x-2'>
+							<DownloadExcelButton />
 							<CreateTruckloadDialogButton />
 						</Div>
 					</Div>
 					<Separator />
 					<CreatePurchaseOrdersFormDialog />
 					<UpdateDispatchOrderFormDialog />
+					<DeleteConfirmDialog />
+					<SignatureEditorDialog />
 					<TruckloadDeliveryMasterTable />
 				</Div>
 			</PageContextProvider>

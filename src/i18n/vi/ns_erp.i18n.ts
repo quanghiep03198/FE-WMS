@@ -71,6 +71,12 @@ export default {
 		po_size_qty: 'Số lượng đặt đơn theo cỡ',
 		prod_color: 'Màu sắc sản phẩm',
 		progress: 'Tiến độ',
+		qc_signature: 'Chữ ký QC',
+		punctured_container: 'Container bị thủng',
+		smelling_container: 'Container có mùi',
+		moist_container: 'Container bị ẩm',
+		warehouse_officer_signature: 'Chữ ký KTP',
+		security_guard_signature: 'Chữ ký Bảo Vệ',
 		required_date: 'Ngày Yêu Cầu', // Required Date
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		decentralized_po: 'PO phân tách',

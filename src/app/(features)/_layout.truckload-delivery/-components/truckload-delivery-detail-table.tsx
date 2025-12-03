@@ -4,6 +4,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	Div,
+	FieldSet,
 	Icon,
 	Separator,
 	Table,
@@ -30,6 +31,7 @@ import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 import { uuidv4 } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
+import { usePageContext } from '../-contexts/page-context'
 import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
@@ -117,212 +119,270 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const handleRemoveFieldItem = useCallback(remove, [])
 
 	return (
-		<Div className='relative overflow-clip rounded-md border bg-background'>
-			<FormProvider {...form}>
-				<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
-					<FieldSet>
-						<Table className='w-full table-fixed border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
-							<TableHeader className='sticky top-0 z-10'>
-								<TableRow>
-									<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
-										{data.dispatch_order}
-									</TableHead>
-								</TableRow>
-								<TableRow>
-									<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-44'>
-										<span>{t('ns_erp:fields.po')}</span>
-									</TableHead>
-									{isLargeScreen ? (
-										<Fragment>
-											<TableHead
-												align='left'
-												title={t('ns_erp:fields.brand_name')}
-												className='md:hidden lg:hidden'>
-												<span>{t('ns_erp:fields.brand_name')}</span>
-											</TableHead>
-											<TableHead
-												align='left'
-												title={t('ns_erp:fields.factory_shoes_style')}
-												className='md:hidden lg:hidden'>
-												<span>{t('ns_erp:fields.factory_shoes_style')}</span>
-											</TableHead>
-											<TableHead
-												align='left'
-												title={t('ns_erp:fields.color_sn')}
-												className='md:hidden lg:hidden'>
-												<span>{t('ns_erp:fields.color_sn')}</span>
-											</TableHead>
-										</Fragment>
-									) : (
-										<TableHead align='left' className='w-[30%] xl:hidden'>
-											<span>{t('ns_erp:titles.product_info')}</span>
+		<Div className='space-y-6 overflow-clip rounded-md border bg-background'>
+			<Div className='relative'>
+				<FormProvider {...form}>
+					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
+						<FieldSet className='h-[400px] overflow-scroll md:max-h-96'>
+							<Table className='w-full table-fixed border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
+								<TableHeader className='sticky top-0 z-10'>
+									<TableRow>
+										<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
+											{data.dispatch_order}
 										</TableHead>
-									)}
-									<TableHead align='left' title={t('ns_erp:fields.outbound_qty')} className='w-[30%] xl:w-40'>
-										<span>{t('ns_erp:fields.outbound_qty')}</span>
-									</TableHead>
-									{isLargeScreen && (
+									</TableRow>
+									<TableRow>
+										<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-44'>
+											<span>{t('ns_erp:fields.po')}</span>
+										</TableHead>
+										{isLargeScreen ? (
+											<Fragment>
+												<TableHead
+													align='left'
+													title={t('ns_erp:fields.brand_name')}
+													className='md:hidden lg:hidden'>
+													<span>{t('ns_erp:fields.brand_name')}</span>
+												</TableHead>
+												<TableHead
+													align='left'
+													title={t('ns_erp:fields.factory_shoes_style')}
+													className='md:hidden lg:hidden'>
+													<span>{t('ns_erp:fields.factory_shoes_style')}</span>
+												</TableHead>
+												<TableHead
+													align='left'
+													title={t('ns_erp:fields.color_sn')}
+													className='md:hidden lg:hidden'>
+													<span>{t('ns_erp:fields.color_sn')}</span>
+												</TableHead>
+											</Fragment>
+										) : (
+											<TableHead align='left' className='w-[30%] xl:hidden'>
+												<span>{t('ns_erp:titles.product_info')}</span>
+											</TableHead>
+										)}
 										<TableHead
 											align='left'
-											title={t('ns_common:common_fields.created_by')}
-											className='md:hidden lg:hidden'>
-											<span>{t('ns_common:common_fields.created_by')}</span>
+											title={t('ns_erp:fields.outbound_qty')}
+											className='w-[30%] xl:w-40'>
+											<span>{t('ns_erp:fields.outbound_qty')}</span>
 										</TableHead>
-									)}
-									<TableHead align='right' className='w-[10%] xl:w-14'></TableHead>
-								</TableRow>
-							</TableHeader>
-							<TableBody>
-								{fields.map((field, index) => {
-									const rowData = data?.delivery_details?.[index] ?? {
-										id: uuid(),
-										po: '',
-										brand_name: null,
-										factory_shoes_style: null,
-										color_sn: null,
-										outbound_qty: 0,
-										user_code_created: user.username,
-										created: new Date(),
-										max_outbound_qty: null
-									}
+										{isLargeScreen && (
+											<TableHead
+												align='left'
+												title={t('ns_common:common_fields.created_by')}
+												className='md:hidden lg:hidden'>
+												<span>{t('ns_common:common_fields.created_by')}</span>
+											</TableHead>
+										)}
+										<TableHead align='right' className='w-[10%] xl:w-14'></TableHead>
+									</TableRow>
+								</TableHeader>
+								<TableBody>
+									{fields.map((field, index) => {
+										const rowData = data?.delivery_details?.[index] ?? {
+											id: uuid(),
+											po: '',
+											brand_name: null,
+											factory_shoes_style: null,
+											color_sn: null,
+											outbound_qty: 0,
+											user_code_created: user.username,
+											created: new Date(),
+											max_outbound_qty: null
+										}
 
-									return (
-										<TruckloadDeliveryDetailRow
-											key={field.id}
-											index={index}
-											readonly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-											deletable={data.approval_status !== TruckloadDeliveryStatus.CONFIRMED}
-											defaultValues={rowData}
-											onRemove={handleRemoveFieldItem}
-										/>
-									)
-								})}
-							</TableBody>
-							<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t xl:hidden'>
-								<TableRow>
-									<TableHead className='border-t' colSpan={1} align='left'>
-										<span>{t('ns_common:common_fields.reviewed_by')}</span>
-									</TableHead>
-									<TableHead className='border-t' colSpan={1} align='left'>
-										<span>{t('ns_erp:fields.factory_departure_time')}</span>
-									</TableHead>
-									<TableHead className='border-t' colSpan={2} align='left'>
-										<span>{t('ns_common:common_fields.total')}</span>
-									</TableHead>
-								</TableRow>
-								<TableRow>
-									<TableCell colSpan={1} align='left' className='w-[30%]'>
-										{data.security_name_reviewed ? (
-											data.security_name_reviewed
-										) : (
-											<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-												<Icon name='User' stroke='hsl(var(--muted-foreground))' />
-												{t('ns_common:titles.unknown')}
-											</Typography>
-										)}
-									</TableCell>
-									<TableCell colSpan={1} align='left'>
-										{data.factory_departure_time ? (
-											format(new Date(data.factory_departure_time), 'yyyy-MM-dd HH:mm')
-										) : (
-											<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-												<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
-												{t('ns_common:titles.unknown')}
-											</Typography>
-										)}
-									</TableCell>
-									<TableCell colSpan={2} align='left'>
-										{data?.total_outbound_qty}
-									</TableCell>
-								</TableRow>
-							</TableFooter>
-						</Table>
-					</FieldSet>
-					<Div className='m-4 grid place-content-center place-items-center gap-y-4 rounded-md border border-dashed p-4'>
-						{action && (
-							<Div className='col-span-full inline-flex items-stretch'>
-								<Icon
-									name='BotMessageSquare'
-									size={24}
-									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
-								/>
-								&quot;
-								<Typewriter
-									className='text-sm italic'
-									text={t('ns_inoutbound:description.duplicate_po_added')}
-									typeSpeed={25}
-									delay={0}
-								/>
-								&quot;
-							</Div>
-						)}
-						<Div className='flex items-center gap-x-1'>
-							{!action ? (
+										return (
+											<TruckloadDeliveryDetailRow
+												key={field.id}
+												index={index}
+												readonly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+												deletable={data.approval_status !== TruckloadDeliveryStatus.CONFIRMED}
+												defaultValues={rowData}
+												onRemove={handleRemoveFieldItem}
+											/>
+										)
+									})}
+								</TableBody>
+								<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t'>
+									<TableRow className='xl:hidden'>
+										<TableHead className='border-t' colSpan={1} align='left'>
+											<span>{t('ns_common:common_fields.reviewed_by')}</span>
+										</TableHead>
+										<TableHead className='border-t' colSpan={1} align='left'>
+											<span>{t('ns_erp:fields.factory_departure_time')}</span>
+										</TableHead>
+										<TableHead className='border-t' colSpan={2} align='left'>
+											<span>{t('ns_common:common_fields.total')}</span>
+										</TableHead>
+									</TableRow>
+									<TableRow className='xl:hidden'>
+										<TableCell colSpan={1} align='left' className='w-[30%]'>
+											{data.security_name_reviewed ? (
+												data.security_name_reviewed
+											) : (
+												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+													<Icon name='User' stroke='hsl(var(--muted-foreground))' />
+													{t('ns_common:titles.unknown')}
+												</Typography>
+											)}
+										</TableCell>
+										<TableCell colSpan={1} align='left'>
+											{data.factory_departure_time ? (
+												format(new Date(data.factory_departure_time), 'yyyy-MM-dd HH:mm')
+											) : (
+												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+													{t('ns_common:titles.unknown')}
+												</Typography>
+											)}
+										</TableCell>
+										<TableCell colSpan={2} align='left'>
+											{data?.total_outbound_qty}
+										</TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell
+											colSpan={'100%' as unknown as React.ComponentProps<typeof TableCell>['colSpan']}
+											className='border-t p-0'>
+											<Div className='grid grid-cols-3 [&>div]:place-content-center [&>div]:place-items-center [&>div]:px-3 [&>div]:text-center'>
+												<Div className='h-9 border-b py-1'>{t('ns_erp:fields.qc_signature')}</Div>
+												<Div className='h-9 border-b py-1'>
+													{t('ns_erp:fields.warehouse_officer_signature')}
+												</Div>
+												<Div className='h-9 border-b py-1'>
+													{t('ns_erp:fields.security_guard_signature')}
+												</Div>
+												<Div>
+													<Signature data={data} type='qc_signature' />
+												</Div>
+												<Div>
+													<Signature data={data} type='warehouse_officer_signature' />
+												</Div>
+												<Div>
+													<Signature data={data} type='security_guard_signature' />
+												</Div>
+											</Div>
+										</TableCell>
+									</TableRow>
+								</TableFooter>
+							</Table>
+						</FieldSet>
+						<Div className='m-4 grid place-content-center place-items-center gap-y-4 rounded-md border border-dashed p-4'>
+							{action && (
+								<Div className='col-span-full inline-flex items-stretch'>
+									<Icon
+										name='BotMessageSquare'
+										size={24}
+										className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+									/>
+									&quot;
+									<Typewriter
+										className='text-sm italic'
+										text={t('ns_inoutbound:description.duplicate_po_added')}
+										typeSpeed={25}
+										delay={0}
+									/>
+									&quot;
+								</Div>
+							)}
+							<Div className='flex items-center gap-x-1'>
+								{!action ? (
+									<Button
+										variant='default'
+										type='button'
+										size='sm'
+										disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+										onClick={() => setAction(CommonActions.UPDATE)}>
+										<Icon name='PencilLine' /> {t('ns_common:actions.update')}
+									</Button>
+								) : (
+									<Fragment>
+										<Button
+											variant='outline'
+											type='button'
+											size='sm'
+											className='border-dashed'
+											disabled={isPending}
+											onClick={() =>
+												append({
+													id: uuid(),
+													po: '',
+													outbound_qty: null,
+													max_outbound_qty: null
+												})
+											}>
+											<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
+										</Button>
+										<Separator orientation='vertical' className='mx-2 h-8' />
+										<Button type='submit' size='sm' disabled={isPending}>
+											<Icon
+												name={isPending ? 'LoaderCircle' : 'Check'}
+												className={isPending && 'animate-spin'}
+											/>
+											{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+										</Button>
+										<Button
+											type='button'
+											size='sm'
+											variant='secondary'
+											onClick={() => handleResetDeliveryDetails(false)}
+											disabled={isPending}>
+											<Icon name='X' />
+											{t('ns_common:actions.cancel')}
+										</Button>
+									</Fragment>
+								)}
+								{action && <Separator orientation='vertical' className='mx-2 h-8' />}
 								<Button
-									variant='default'
+									variant='outline'
 									type='button'
 									size='sm'
-									disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-									onClick={() => setAction(CommonActions.UPDATE)}>
-									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
+									onClick={() => {
+										onCollapse()
+										handleResetDeliveryDetails(false)
+									}}>
+									<Icon name='ChevronsUp' /> {t('ns_common:actions.fold')}
 								</Button>
-							) : (
-								<Fragment>
-									<Button
-										variant='outline'
-										type='button'
-										size='sm'
-										className='border-dashed'
-										disabled={isPending}
-										onClick={() =>
-											append({
-												id: uuid(),
-												po: '',
-												outbound_qty: null,
-												max_outbound_qty: null
-											})
-										}>
-										<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
-									</Button>
-									<Separator orientation='vertical' className='mx-2 h-8' />
-									<Button type='submit' size='sm' disabled={isPending}>
-										<Icon
-											name={isPending ? 'LoaderCircle' : 'Check'}
-											className={isPending && 'animate-spin'}
-										/>
-										{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-									</Button>
-									<Button
-										type='button'
-										size='sm'
-										variant='secondary'
-										onClick={() => handleResetDeliveryDetails(false)}
-										disabled={isPending}>
-										<Icon name='X' />
-										{t('ns_common:actions.cancel')}
-									</Button>
-								</Fragment>
-							)}
-							{action && <Separator orientation='vertical' className='mx-2 h-8' />}
-							<Button
-								variant='outline'
-								type='button'
-								size='sm'
-								onClick={() => {
-									onCollapse()
-									handleResetDeliveryDetails(false)
-								}}>
-								<Icon name='ChevronsUp' /> {t('ns_common:actions.fold')}
-							</Button>
+							</Div>
 						</Div>
-					</Div>
-				</Form>
-			</FormProvider>
+					</Form>
+				</FormProvider>
+			</Div>
+		</Div>
+	)
+}
+
+const Signature: React.FC<{
+	data: ITruckloadDelivery
+	type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+}> = ({ data, type }) => {
+	const { event$ } = usePageContext()
+
+	return (
+		<Div className='space-y-2'>
+			<img loading='lazy' className='aspect-video max-w-40 object-contain object-center' src={data[type]} />
+			<Button
+				size='sm'
+				variant='secondary'
+				type='button'
+				onClick={(e) => {
+					e.stopPropagation()
+					event$.emit({
+						action: 'UPDATE_DISPATCH_ORDER_SIGNATURE',
+						payload: {
+							...pick(data, ['dispatch_order', 'license_plate', 'approval_status']),
+							signature_type: type
+						}
+					})
+				}}>
+				<Icon name='PenTool' className='rotate-[270deg]' />
+				Sign
+			</Button>
 		</Div>
 	)
 }
 
 const Form = tw.form`flex flex-col`
-const FieldSet = tw.fieldset`max-h-72 md:max-h-96 overflow-scroll`
 
 export default TruckloadDeliveryDetailTable

@@ -18,6 +18,9 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	approval_status: TruckloadDeliveryStatus
 	security_name_reviewed: string
 	security_code_reviewed: string
+	punctured_container: boolean
+	smelling_container: boolean
+	moist_container: boolean
 	delivery_details: Array<{
 		id: number | string
 		po: string
@@ -65,12 +68,16 @@ export class TruckloadDeliveryService {
 		return await axiosInstance.delete<void, unknown>(`/truckload-delivery/bulk-delete/${dispatchOrder}`)
 	}
 
+	static async updateContainerCondition({ dispatch_order, ...update }) {
+		return await axiosInstance.patch(`/truckload-delivery/update-container-condition/${dispatch_order}`, update)
+	}
+
 	static async updateDispatchOrderSignature({
 		dispatch_order,
 		...payload
 	}: {
 		dispatch_order: TruckloadDeliveryDispatchOrder
-		role: 'QC' | 'WAREHOUSE_OFFICER' | 'SECURITY_GUARD'
+		signature_type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
 		approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 		signature: string
 	}) {
