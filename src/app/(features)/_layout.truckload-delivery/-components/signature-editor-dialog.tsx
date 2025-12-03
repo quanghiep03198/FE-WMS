@@ -166,20 +166,19 @@ const SignatureEditorDialog: React.FC = () => {
 			open={open}
 			onOpenChange={(open) => {
 				setOpen(open)
-				if (!open) {
-					resetPoints()
-					// resetImageURL()
-				}
+				if (!open) resetPoints()
 			}}>
-			<DialogContent className='max-w-3xl'>
+			<DialogContent className='max-w-2xl xl:max-w-3xl'>
 				<DialogHeader className='mb-6'>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
-					<DialogDescription>{t('ns_erp:descriptions.update_dispatch_order_signature')}</DialogDescription>
+					<DialogDescription>
+						{t('ns_inoutbound:description.update_dispatch_order_signature_info')}
+					</DialogDescription>
 				</DialogHeader>
 				<Div className='flex flex-col gap-y-6'>
 					{dialogData.current.signature_type === 'security_guard_signature' && (
 						<Div className='flex flex-col gap-y-3'>
-							<Label htmlFor='confirmation'>Security Confirmation</Label>
+							<Label htmlFor='confirmation'>{t('ns_inoutbound:labels.security_confirmation')}</Label>
 							<RadioGroup
 								id='confirmation'
 								orientation='horizontal'
@@ -199,8 +198,7 @@ const SignatureEditorDialog: React.FC = () => {
 										<FieldContent>
 											<FieldTitle>{t('ns_common:actions.confirm')}</FieldTitle>
 											<FieldDescription>
-												Confirm that the dispatch information is accurate and authorize the shipment to
-												leave the factory.
+												{t('ns_inoutbound:description.confirm_dispatch_order_info')}
 											</FieldDescription>
 										</FieldContent>
 										<RadioGroupItem value={TruckloadDeliveryStatus.CONFIRMED} id='confirm-radio' />
@@ -211,8 +209,7 @@ const SignatureEditorDialog: React.FC = () => {
 										<FieldContent>
 											<FieldTitle>{t('ns_common:actions.request_change')}</FieldTitle>
 											<FieldDescription>
-												A discrepancy in the shipment information has been detected; QC and warehouse
-												officer must update the records.
+												{t('ns_inoutbound:description.request_change_dispatch_order_info')}
 											</FieldDescription>
 										</FieldContent>
 										<RadioGroupItem
@@ -229,7 +226,7 @@ const SignatureEditorDialog: React.FC = () => {
 							htmlFor='signature'
 							aria-invalid={isMissingSignature}
 							className='aria-[invalid=true]:text-destructive'>
-							Signature
+							{t('ns_inoutbound:labels.signature')}
 						</Label>
 						<Div
 							id='signature'

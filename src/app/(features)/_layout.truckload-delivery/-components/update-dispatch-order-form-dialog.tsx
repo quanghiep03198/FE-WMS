@@ -23,9 +23,11 @@ import {
 	FormLabel,
 	Form as FormProvider,
 	Icon,
-	InputFieldControl
+	InputFieldControl,
+	TextareaFieldControl
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { capitalize } from 'lodash-es'
 import { Fragment, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -98,9 +100,11 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 								<FieldSeparator />
 								<FieldGroup>
 									<FieldSet>
-										<FieldLegend variant='label'>Container condition assessment</FieldLegend>
+										<FieldLegend variant='label' className='mb-2'>
+											Container condition assessment
+										</FieldLegend>
 										<FieldDescription>
-											Please select all that apply regarding the condition of the container:
+											Please select all that apply regarding the condition of the container
 										</FieldDescription>
 										<FieldGroup className='gap-3'>
 											<FormField
@@ -160,6 +164,20 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 								</FieldGroup>
 							</Fragment>
 						)}
+						<FieldGroup>
+							<FieldSet>
+								<TextareaFieldControl
+									name='remark'
+									label={t('ns_common:common_fields.remark')}
+									placeholder={capitalize(
+										t('ns_common:form_placeholder.fill', {
+											object: t('ns_common:common_fields.remark'),
+											defaultValue: null
+										})
+									)}
+								/>
+							</FieldSet>
+						</FieldGroup>
 						<DialogFooter className='mt-4 justify-end'>
 							<DialogClose className={buttonVariants({ variant: 'secondary' })}>
 								<Icon name='X' />

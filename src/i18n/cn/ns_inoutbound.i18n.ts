@@ -57,7 +57,10 @@ export default {
 		empty_defect_item_caption: '没有不良品数据. 请使用旁边的表单添加不良品.',
 		defective_epc_caption: '请将输入框聚焦, 然后扫描不良品的EPC标签. EPC应为24个字符.',
 		truckload_delivery: '管理从工厂出货的集装箱装载信息.',
-		update_truckload_delivery: '更新卡车装运信息以反映任何更改或修改.'
+		update_truckload_delivery: '更新卡车装运信息以反映任何更改或修改.',
+		request_change_dispatch_order_info: '已发现出货信息存在差异; 品管和仓库人员必须更新相关记录.',
+		confirm_dispatch_order_info: '确认出货信息准确无误, 并批准货物离开工厂.',
+		update_dispatch_order_signature_info: '更新确认出货信息的签名'
 	},
 	errors: {
 		wrong_stamp: '错误的标签'
@@ -81,7 +84,9 @@ export default {
 		io_reason: '出入庫類别',
 		io_storage_location: '储位',
 		order_information: '订单信息',
-		transfer_information: '转仓信息'
+		transfer_information: '转仓信息',
+		security_confirmation: '保安确认',
+		signature: '签名'
 	},
 	mo_no_box: {
 		caption: '您可以选择需要导入/导出的指令',
@@ -156,6 +161,7 @@ export default {
 		file_monthly_inventory_report: '{{factory}}库存报表 - {{month}}',
 		file_production_inventory_summary: '{{factory}}二级鞋存库报表',
 		file_shaping_department_productivity_report: '{{factory}}成型产量报表 - {{date}}',
+		file_truckload_delivery_report: '{{factory}}成品仓按车辆出货报告',
 		inbound_history: '入库历史',
 		inoutbound_history_lookup: '入/出库历史查询',
 		outbound_history: '出库历史',

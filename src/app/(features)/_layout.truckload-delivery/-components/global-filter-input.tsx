@@ -27,7 +27,7 @@ const GlobalFilterInput: React.FC<{
 					event$.emit(pick(table.getState(), ['rowSelection']))
 					table.setGlobalFilter(String(value))
 				}}
-				className='h-full min-w-56 p-0 pl-2 shadow-none placeholder:text-sm'
+				className='h-full min-w-44 p-0 pl-2 shadow-none placeholder:text-sm xl:min-w-56'
 				placeholder={
 					isMediumScreen
 						? t('ns_common:actions.search') + ' ...'

@@ -17,15 +17,11 @@ import {
 } from '@/components/ui'
 import { IPurchaseOrderResult } from '@/services/order.service'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { useIsMutating } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
 import React, { Fragment, memo, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
-import { TruckloadDeliveryQueryKeys } from '../-hooks/use-truckload-delivery-asm'
-import { type UpsertPurchaseOrdersFormValues } from '../-schemas'
 import { GhostButton } from '../../-components/-shared/ghost-button'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PurchaseOrderFieldControl from './purchase-order-field-control'
@@ -48,14 +44,11 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const { watch } = useFormContext<UpsertPurchaseOrdersFormValues>()
 	const [snapshotData, setSnapshotData] = useState<ITruckloadDelivery['delivery_details'][number] | null>(
 		defaultValues
 	)
 	const dateLocale = useDateLocale()
-	const isDeleting = useIsMutating({ mutationKey: [TruckloadDeliveryQueryKeys.DELETE_PURCHASE_ORDER] })
 
-	const currentId = watch(`outbound_purchase_orders.${index}.id`)
 	const handleSelectPurchaseOrder = (selectedItem: IPurchaseOrderResult) => {
 		setSnapshotData((prev) => {
 			return {
@@ -84,7 +77,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				)}
 			</TableCell>
 			{!isLargeScreen ? (
-				<TableCell>
+				<TableCell className='w-[30%] xl:hidden' align='left'>
 					{Object.values(pick(snapshotData, ['brand_name', 'factory_shoes_style', 'color_sn'])).every(
 						(item) => !isNil(item)
 					) ? (
@@ -159,7 +152,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					</TableCell>
 				</Fragment>
 			)}
-			<TableCell align='right' className='w-[10%] xl:w-14'>
+			<TableCell align='right' className='w-[10%]'>
 				<Tooltip message={t('ns_common:actions.delete')}>
 					<GhostButton
 						type='button'

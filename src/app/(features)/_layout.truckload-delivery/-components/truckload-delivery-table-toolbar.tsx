@@ -1,8 +1,7 @@
 'use no memo'
 
-import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { Button, Div, Icon } from '@/components/ui'
+import { Button, Div, Icon, Tooltip } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { Table } from '@tanstack/react-table'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
@@ -10,6 +9,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import DispatchOrderStatusFilter from './dispatch-order-status-filter'
+import DownloadExcelButton from './download-excel-button'
 import GlobalFilterInput from './global-filter-input'
 import PurchaseOrderFilterInput from './purchase-order-filter-input'
 
@@ -18,7 +18,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 	event$: EventEmitter<Record<string, unknown>>
 }> = ({ table, event$ }) => {
 	const { t } = useTranslation()
-	const isMediumScreen = useMediaQuery(PresetBreakPoints.MEDIUM)
+	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { refetch } = useGetTruckloadDeliveryQuery()
 	const { globalFilter, columnFilters } = table.getState()
 	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
@@ -26,22 +26,41 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 	return (
 		<Div className='flex items-center gap-x-2'>
 			<GlobalFilterInput {...{ table, event$ }} />
-			{!isMediumScreen && <PurchaseOrderFilterInput table={table} />}
+			{!isMobile && <PurchaseOrderFilterInput table={table} />}
 			<DispatchOrderStatusFilter table={table} />
 			<Div className='ml-auto flex items-center justify-end gap-x-2'>
 				{isFilterDirty && (
-					<Button
-						variant='destructive'
-						onClick={() => {
-							table.resetGlobalFilter(table.initialState.globalFilter)
-							table.resetColumnFilters(true)
-						}}>
-						<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
-					</Button>
+					<Tooltip
+						message={t('ns_common:actions.clear_filter')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ hidden: !isMobile }}>
+						<Button
+							variant='destructive'
+							size={isMobile ? 'icon' : 'default'}
+							onClick={() => {
+								table.resetGlobalFilter(table.initialState.globalFilter)
+								table.resetColumnFilters(true)
+							}}>
+							<Icon name='FunnelX' /> {!isMobile && t('ns_common:actions.clear_filter')}
+						</Button>
+					</Tooltip>
 				)}
-				<Button variant='outline' onClick={() => refetch()}>
-					<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
-				</Button>
+
+				<Tooltip
+					message={t('ns_common:actions.download_excel')}
+					triggerProps={{ asChild: true }}
+					contentProps={{ hidden: !isMobile }}>
+					<DownloadExcelButton />
+				</Tooltip>
+
+				<Tooltip
+					message={t('ns_common:actions.reload')}
+					triggerProps={{ asChild: true }}
+					contentProps={{ hidden: !isMobile }}>
+					<Button variant='outline' size={isMobile ? 'icon' : 'default'} onClick={() => refetch()}>
+						<Icon name='RotateCw' /> {!isMobile && t('ns_common:actions.reload')}
+					</Button>
+				</Tooltip>
 			</Div>
 		</Div>
 	)

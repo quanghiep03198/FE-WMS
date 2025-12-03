@@ -83,7 +83,12 @@ export default {
 		size_qty_caption: 'Tổng quan số lượng theo từng cỡ',
 		empty_defect_item_caption: 'Chưa có dữ liệu. Hãy thêm bản ghi mới với biểu mẫu bên.',
 		defective_epc_caption: 'Hãy chọn ô nhập này và quét mã EPC của hàng lỗi. Mã EPC phải đủ 24 ký tự.',
-		truckload_delivery: 'Quản lý thông tin đóng container xuất hàng khỏi nhà máy'
+		truckload_delivery: 'Quản lý thông tin đóng container xuất hàng khỏi nhà máy',
+		request_change_dispatch_order_info:
+			'Phát hiện sự sai lệch trong thông tin xuất hàng; QC và nhân viên kho cần cập nhật lại dữ liệu.',
+		confirm_dispatch_order_info:
+			'Xác nhận thông tin xuất hàng là chính xác và phê duyệt cho lô hàng rời khỏi nhà máy.',
+		update_dispatch_order_signature_info: 'Cập nhật chữ ký xác nhận thông tin xuất hàng'
 	},
 	errors: {
 		wrong_stamp: 'Dán sai tem'
@@ -107,7 +112,9 @@ export default {
 		io_reason: 'Lý do nhập/xuất',
 		io_storage_location: 'Vị trí lưu kho',
 		order_information: 'Thông tin đơn hàng',
-		transfer_information: 'Thông tin chuyển kho'
+		transfer_information: 'Thông tin chuyển kho',
+		security_confirmation: 'Xác nhận của bảo vệ',
+		signature: 'Chữ ký'
 	},
 	mo_no_box: {
 		caption: 'Bạn có thể tùy chọn các chỉ lệnh được sủ dụng để thao tác nhập/xuất',
@@ -163,6 +170,7 @@ export default {
 		file_shaping_department_productivity_report: 'Báo biểu sản lượng thành hình {{factory}} - {{date}}',
 		file_monthly_inventory_report: 'Báo biểu tồn kho {{factory}} - {{month}}',
 		file_production_inventory_summary: 'Tổng Quan Tồn Kho Thành Phẩm - {{factory}}',
+		file_truckload_delivery_report: 'Báo cáo xuất hàng KTP theo xe - {{factory}}',
 		exchange_epc: 'Hoán đổi EPC',
 		exchange_order: 'Hoán đổi đơn hàng',
 		inbound_history: 'Lịch sử nhập kho',
