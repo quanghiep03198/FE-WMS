@@ -123,8 +123,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 			<Div className='relative'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
-						<FieldSet className='h-[400px] overflow-scroll md:max-h-96'>
-							<Table className='w-full table-fixed border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
+						<FieldSet className='max-h-[28rem] overflow-scroll md:max-h-96'>
+							<Table className='w-full table-auto border-separate border-spacing-0 xl:table-fixed [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 								<TableHeader className='sticky top-0 z-10'>
 									<TableRow>
 										<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
@@ -157,7 +157,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												</TableHead>
 											</Fragment>
 										) : (
-											<TableHead align='left' className='w-[30%] xl:hidden'>
+											<TableHead align='left' className='w-44 xl:hidden'>
 												<span>{t('ns_erp:titles.product_info')}</span>
 											</TableHead>
 										)}
@@ -175,7 +175,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												<span>{t('ns_common:common_fields.created_by')}</span>
 											</TableHead>
 										)}
-										<TableHead align='right' className='w-[10%] xl:w-14'></TableHead>
+										<TableHead align='right' className='w-[10%]'></TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -206,10 +206,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableBody>
 								<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t'>
 									<TableRow className='xl:hidden'>
-										<TableHead className='border-t' colSpan={1} align='left'>
-											<span>{t('ns_common:common_fields.reviewed_by')}</span>
-										</TableHead>
-										<TableHead className='border-t' colSpan={1} align='left'>
+										<TableHead className='border-t' colSpan={2} align='left'>
 											<span>{t('ns_erp:fields.factory_departure_time')}</span>
 										</TableHead>
 										<TableHead className='border-t' colSpan={2} align='left'>
@@ -217,17 +214,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										</TableHead>
 									</TableRow>
 									<TableRow className='xl:hidden'>
-										<TableCell colSpan={1} align='left' className='w-[30%]'>
-											{data.security_name_reviewed ? (
-												data.security_name_reviewed
-											) : (
-												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-													<Icon name='User' stroke='hsl(var(--muted-foreground))' />
-													{t('ns_common:titles.unknown')}
-												</Typography>
-											)}
-										</TableCell>
-										<TableCell colSpan={1} align='left'>
+										<TableCell colSpan={2} align='left'>
 											{data.factory_departure_time ? (
 												format(new Date(data.factory_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
@@ -246,20 +233,20 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											colSpan={'100%' as unknown as React.ComponentProps<typeof TableCell>['colSpan']}
 											className='border-t p-0'>
 											<Div className='grid grid-cols-3 [&>div]:place-content-center [&>div]:place-items-center [&>div]:px-3 [&>div]:text-center'>
-												<Div className='h-9 border-b py-1'>{t('ns_erp:fields.qc_signature')}</Div>
-												<Div className='h-9 border-b py-1'>
+												<Div className='h-10 border-b py-2'>{t('ns_erp:fields.qc_signature')}</Div>
+												<Div className='h-10 border-b py-2'>
 													{t('ns_erp:fields.warehouse_officer_signature')}
 												</Div>
-												<Div className='h-9 border-b py-1'>
+												<Div className='h-10 border-b py-2'>
 													{t('ns_erp:fields.security_guard_signature')}
 												</Div>
-												<Div>
+												<Div className='has-[button]:py-2'>
 													<Signature data={data} type='qc_signature' />
 												</Div>
-												<Div>
+												<Div className='has-[button]:py-2'>
 													<Signature data={data} type='warehouse_officer_signature' />
 												</Div>
-												<Div>
+												<Div className='has-[button]:py-2'>
 													<Signature data={data} type='security_guard_signature' />
 												</Div>
 											</Div>
@@ -359,26 +346,31 @@ const Signature: React.FC<{
 }> = ({ data, type }) => {
 	const { event$ } = usePageContext()
 
+	function handleUpdateSignature<Element extends HTMLElement>(e: React.MouseEvent<Element, MouseEvent>) {
+		e.stopPropagation()
+		event$.emit({
+			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE',
+			payload: {
+				...pick(data, ['dispatch_order', 'license_plate', 'approval_status']),
+				signature_type: type
+			}
+		})
+	}
+
 	return (
 		<Div className='space-y-2'>
-			<img loading='lazy' className='aspect-video max-w-40 object-contain object-center' src={data[type]} />
-			<Button
-				size='sm'
-				variant='secondary'
-				type='button'
-				onClick={(e) => {
-					e.stopPropagation()
-					event$.emit({
-						action: 'UPDATE_DISPATCH_ORDER_SIGNATURE',
-						payload: {
-							...pick(data, ['dispatch_order', 'license_plate', 'approval_status']),
-							signature_type: type
-						}
-					})
-				}}>
-				<Icon name='PenTool' className='rotate-[270deg]' />
-				Sign
-			</Button>
+			{data[type] ? (
+				<img
+					loading='lazy'
+					className='aspect-video max-w-28 cursor-pointer object-contain object-center'
+					src={data[type]}
+					onClick={handleUpdateSignature}
+				/>
+			) : (
+				<Button size='icon' variant='secondary' type='button' onClick={handleUpdateSignature}>
+					<Icon name='PenTool' className='rotate-[-90deg]' />
+				</Button>
+			)}
 		</Div>
 	)
 }

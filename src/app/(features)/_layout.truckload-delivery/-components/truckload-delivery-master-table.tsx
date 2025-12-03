@@ -119,6 +119,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
+				meta: { align: 'right' },
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
 			columnHelper.accessor('punctured_container', {
@@ -127,6 +128,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: ({ getValue, row }) => {
 					return (
 						<Checkbox
+							disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 							defaultChecked={Boolean(getValue())}
 							checked={Boolean(getValue())}
 							onCheckedChange={async (value) =>
@@ -145,6 +147,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: ({ getValue, row }) => {
 					return (
 						<Checkbox
+							disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 							defaultChecked={Boolean(getValue())}
 							checked={Boolean(getValue())}
 							onCheckedChange={async (value) =>
@@ -163,6 +166,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: ({ getValue, row }) => {
 					return (
 						<Checkbox
+							disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 							defaultChecked={Boolean(getValue())}
 							checked={Boolean(getValue())}
 							onCheckedChange={async (value) =>
@@ -175,54 +179,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					)
 				}
 			}),
-			// columnHelper.accessor('qc_signature', {
-			// 	header: t('ns_erp:fields.qc_signature'),
-			// 	cell: ({ getValue, row }) => {
-			// 		return (
-			// 			<SignatureEditor
-			// 				title='QC Signature'
-			// 				description='Please sign after verifying the delivery details'
-			// 				data={{
-			// 					...pick(row.original, ['dispatch_order', 'license_plate', 'approval_status']),
-			// 					signature: getValue()
-			// 				}}
-			// 				role='QC'
-			// 			/>
-			// 		)
-			// 	}
-			// }),
-			// columnHelper.accessor('warehouse_officer_signature', {
-			// 	header: t('ns_erp:fields.warehouse_officer_signature'),
-			// 	cell: ({ getValue, row }) => {
-			// 		return (
-			// 			<SignatureEditor
-			// 				title='QC Signature'
-			// 				description='Please sign after verifying the delivery details'
-			// 				data={{
-			// 					...pick(row.original, ['dispatch_order', 'license_plate', 'approval_status']),
-			// 					signature: getValue()
-			// 				}}
-			// 				role='WAREHOUSE_OFFICER'
-			// 			/>
-			// 		)
-			// 	}
-			// }),
-			// columnHelper.accessor('security_guard_signature', {
-			// 	header: t('ns_erp:fields.security_guard_signature'),
-			// 	cell: ({ getValue, row }) => {
-			// 		return (
-			// 			<SignatureEditor
-			// 				title='Security Guard Signature'
-			// 				description='Please sign and set approval status to confirm the delivery'
-			// 				data={{
-			// 					...pick(row.original, ['dispatch_order', 'license_plate', 'approval_status']),
-			// 					signature: getValue()
-			// 				}}
-			// 				role='SECURITY_GUARD'
-			// 			/>
-			// 		)
-			// 	}
-			// }),
 			columnHelper.accessor('approval_status', {
 				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,

@@ -4,5 +4,6 @@ export default {
 	invalid_value: '无效的值',
 	nonnegative: '值不能为负',
 	not_match: '值不匹配',
-	invalid_ipv4: '无效的 IPv4 地址'
+	invalid_ipv4: '无效的 IPv4 地址',
+	too_long: '值过长'
 }

@@ -4,5 +4,6 @@ export default {
 	nonnegative: 'Value must be non-nagative',
 	invalid_value: 'Invalid value',
 	not_match: 'Value does not match',
-	invalid_ipv4: 'Invalid IPv4 address'
+	invalid_ipv4: 'Invalid IPv4 address',
+	too_long: 'Value is too long'
 }

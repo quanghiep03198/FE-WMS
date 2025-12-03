@@ -67,7 +67,12 @@ export default {
 		defective_epc_caption:
 			'Focus this input and scan the EPC tag of the defective goods. The EPC should be 24 characters long.',
 		truckload_delivery: 'Manage container loading information for outbound shipments from the factory',
-		update_truckload_delivery: 'Update container loading information for outbound shipments from the factory'
+		update_truckload_delivery: 'Update container loading information for outbound shipments from the factory',
+		request_change_dispatch_order_info:
+			'A discrepancy in the shipment information has been detected; QC and warehouse officer must update the records.',
+		confirm_dispatch_order_info:
+			'Confirm that the dispatch information is accurate and authorize the shipment to leave the factory.',
+		update_dispatch_order_signature_info: 'Update the signature confirming the dispatch information'
 	},
 	errors: {
 		wrong_stamp: 'Wrong stamp.'
@@ -91,7 +96,9 @@ export default {
 		io_reason: 'Import/Export reason',
 		io_storage_location: 'Storage location',
 		order_information: 'Order information',
-		transfer_information: 'Transfer information'
+		transfer_information: 'Transfer information',
+		security_confirmation: 'Security guard confirmation',
+		signature: 'Signature'
 	},
 	mo_no_box: {
 		caption: 'You can determine which order should be used to import/export.',
@@ -166,6 +173,7 @@ export default {
 		file_defective_goods_inventory_report: 'Defective goods inventory - {{factory}}',
 		file_production_inventory_summary: 'Production Inventory Summary - {{factory}}',
 		file_monthly_inventory_report: 'Monthly Inventory Report {{factory}} - {{month}}',
+		file_truckload_delivery_report: 'Warehouse Truckload Delivery Report - {{factory}}',
 		inbound_history: 'Inbound history',
 		inoutbound_history_lookup: 'In/Outbound history lookup',
 		outbound_history: 'Outbound history',

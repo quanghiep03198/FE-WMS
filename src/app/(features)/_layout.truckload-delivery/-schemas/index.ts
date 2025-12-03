@@ -60,7 +60,8 @@ export const updateDispatchOrderSchema = object({
 		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	punctured_container: boolean().optional(),
 	smelling_container: boolean().optional(),
-	moist_container: boolean().optional()
+	moist_container: boolean().optional(),
+	remark: string().trim().max(255, { error: 'ns_validation:too_long' }).nullish()
 })
 
 export const upsertPurchaseOrdersSchema = object({

@@ -83,4 +83,10 @@ export class TruckloadDeliveryService {
 	}) {
 		return await axiosInstance.patch(`/truckload-delivery/update-signature/${dispatch_order}`, payload)
 	}
+
+	static async downloadExcel() {
+		return await axiosInstance.get<void, Blob>('/truckload-delivery/export', {
+			responseType: 'blob'
+		})
+	}
 }
