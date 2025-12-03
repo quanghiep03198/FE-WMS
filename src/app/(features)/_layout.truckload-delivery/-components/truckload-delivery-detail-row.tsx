@@ -60,7 +60,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 
 	return (
 		<TableRow aria-readonly={readonly} className={cn('transition-allow-discrete')}>
-			<TableCell align='left' className='w-[30%] xl:w-44'>
+			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
 				{readonly ? (
 					<span>{snapshotData?.po}</span>
 				) : (
@@ -93,26 +93,26 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 				</TableCell>
 			) : (
 				<Fragment>
-					<TableCell align='left'>
+					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
 							{snapshotData?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
 						</span>
 					</TableCell>
-					<TableCell align='left'>
+					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
 							{snapshotData?.factory_shoes_style ?? (
 								<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
 							)}
 						</span>
 					</TableCell>
-					<TableCell align='left'>
+					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
 							{snapshotData?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
 						</span>
 					</TableCell>
 				</Fragment>
 			)}
-			<TableCell align='left' className='w-[30%] xl:w-[25%]'>
+			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
 				{readonly ? (
 					<span>{formatIntlNumber(snapshotData?.outbound_qty)}</span>
 				) : (
@@ -129,7 +129,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 			</TableCell>
 			{isLargeScreen && (
 				<Fragment>
-					<TableCell align='left'>
+					<TableCell align='left' className='xl:w-[15%]'>
 						<Div className='grid grid-cols-[auto_1fr] items-center gap-x-2'>
 							<Avatar className='row-span-2 size-8'>
 								<AvatarImage
@@ -141,7 +141,14 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 							<Typography variant='small' className='col-start-2 font-medium before:content-["@"]'>
 								{snapshotData?.user_code_created}
 							</Typography>
-							<Typography variant='small' color='muted' className='col-start-2 first-letter:uppercase'>
+							<Typography
+								variant='small'
+								color='muted'
+								className='col-start-2 line-clamp-1 first-letter:uppercase'
+								title={
+									snapshotData?.created &&
+									format(new Date(snapshotData?.created), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
+								}>
 								{snapshotData?.created ? (
 									format(new Date(snapshotData?.created), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
 								) : (

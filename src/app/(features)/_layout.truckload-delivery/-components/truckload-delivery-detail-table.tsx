@@ -124,7 +124,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
 						<FieldSet className='max-h-[28rem] overflow-scroll md:max-h-96'>
-							<Table className='w-full table-auto border-separate border-spacing-0 xl:table-fixed [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
+							<Table className='w-full table-auto border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 								<TableHeader className='sticky top-0 z-10'>
 									<TableRow>
 										<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
@@ -132,7 +132,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										</TableHead>
 									</TableRow>
 									<TableRow>
-										<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-44'>
+										<TableHead align='left' title={t('ns_erp:fields.po')} className='w-[30%] xl:w-[15%]'>
 											<span>{t('ns_erp:fields.po')}</span>
 										</TableHead>
 										{isLargeScreen ? (
@@ -140,31 +140,31 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												<TableHead
 													align='left'
 													title={t('ns_erp:fields.brand_name')}
-													className='md:hidden lg:hidden'>
+													className='md:hidden lg:hidden xl:w-[15%]'>
 													<span>{t('ns_erp:fields.brand_name')}</span>
 												</TableHead>
 												<TableHead
 													align='left'
 													title={t('ns_erp:fields.factory_shoes_style')}
-													className='md:hidden lg:hidden'>
+													className='md:hidden lg:hidden xl:w-[15%]'>
 													<span>{t('ns_erp:fields.factory_shoes_style')}</span>
 												</TableHead>
 												<TableHead
 													align='left'
 													title={t('ns_erp:fields.color_sn')}
-													className='md:hidden lg:hidden'>
+													className='md:hidden lg:hidden xl:w-[15%]'>
 													<span>{t('ns_erp:fields.color_sn')}</span>
 												</TableHead>
 											</Fragment>
 										) : (
-											<TableHead align='left' className='w-44 xl:hidden'>
+											<TableHead align='left' className='w-[30%] xl:hidden'>
 												<span>{t('ns_erp:titles.product_info')}</span>
 											</TableHead>
 										)}
 										<TableHead
 											align='left'
 											title={t('ns_erp:fields.outbound_qty')}
-											className='w-[30%] xl:w-40'>
+											className='w-[30%] xl:w-[15%]'>
 											<span>{t('ns_erp:fields.outbound_qty')}</span>
 										</TableHead>
 										{isLargeScreen && (

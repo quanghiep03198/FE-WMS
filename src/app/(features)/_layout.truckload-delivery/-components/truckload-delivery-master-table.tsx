@@ -321,7 +321,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			containerProps={{
-				className: 'h-[65vh] md:h-[55vh] [&_td:has(img)]:py-0'
+				className: 'h-[65vh] md:h-[55vh]'
 			}}
 			renderSubComponent={({ row }) => {
 				const data = row.original as ITruckloadDelivery
