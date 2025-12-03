@@ -21,6 +21,12 @@ type EventPayload =
 	| { action: CommonActions.SET_STATUS; payload: string }
 	| { action: CommonActions.DELETE; payload: number }
 	| { action: CommonActions.DELETE_MANY; payload: TruckloadDeliveryDispatchOrder }
+	| {
+			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE'
+			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
+				signature_type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+			}
+	  }
 
 type PageContextValue = {
 	event$: EventEmitter<EventPayload>

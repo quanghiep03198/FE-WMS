@@ -86,11 +86,27 @@ export const useUpdateDispatchOrderSignatureMutation = () => {
 	return useMutation({
 		mutationFn: (payload: {
 			dispatch_order: TruckloadDeliveryDispatchOrder
-			role: 'QC' | 'WAREHOUSE_OFFICER' | 'SECURITY_GUARD'
+			signature_type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
 			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 			signature: string
 		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload),
 		onSuccess: () => invalidateQueries()
+	})
+}
+
+export const useUpdateContainerConditionMutation = () => {
+	const invalidateQueries = useInvalidateQueries()
+
+	return useMutation({
+		mutationFn: async (payload: {
+			dispatch_order: TruckloadDeliveryDispatchOrder
+			punctured_container?: boolean
+			smelling_container?: boolean
+			moist_container?: boolean
+		}) => {
+			return await TruckloadDeliveryService.updateContainerCondition(payload)
+		},
+		onSuccess: invalidateQueries
 	})
 }
 

@@ -7,7 +7,8 @@ export default {
 		quick_po_search: '通过输入采购订单编号快速搜索正在处理的采购订单.',
 		order_detail: '查看订单详情，包括产品信息、数量一目了然.',
 		shipping_detail: '访问每个订单的常用运输信息.',
-		provide_po_info: '在几秒内提供订单, 产品和运输信息.'
+		provide_po_info: '在几秒内提供订单, 产品和运输信息.',
+		update_dispatch_order_signature: '更新出货单签名信息.'
 	},
 	fields: {
 		accumulated_qty: '累计',
@@ -71,6 +72,12 @@ export default {
 		po_size_qty: '订单尺寸数量',
 		prod_color: '产品颜色',
 		progress: '进度',
+		qc_signature: 'QC签名',
+		punctured_container: '穿孔集装箱',
+		smelling_container: '有气味的集装箱',
+		moist_container: '潮湿的集装箱',
+		warehouse_officer_signature: '成品仓干部签名',
+		security_guard_signature: '保卫科签名',
 		required_date: '需求日期',
 		returned_qty: '已退貨量',
 		decentralized_po: '分散采购订单',

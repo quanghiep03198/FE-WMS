@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import { array, number, object, string, type infer as Infer } from 'zod'
+import { array, boolean, number, object, string, type infer as Infer } from 'zod'
 
 // BIC container code pattern: 4 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
 // const BIC_CONTAINER_PATTERN = /^[A-Z]{3}[UJZ]{1}\d{6}\d{1}$/
@@ -42,6 +42,12 @@ export const createDeliverySchema = object({
 	})
 })
 
+export const updateContainerConditionSchema = object({
+	punctured_container: boolean().optional(),
+	smelling_container: boolean().optional(),
+	moist_container: boolean().optional()
+})
+
 export const updateDispatchOrderSchema = object({
 	dispatch_order: string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
 	license_plate: string({ error: 'ns_validation:required' })
@@ -51,7 +57,10 @@ export const updateDispatchOrderSchema = object({
 	container_number: string({ error: 'ns_validation:required' })
 		.trim()
 		.nullish()
-		.transform((value) => (isNil(value) ? null : value.toUpperCase()))
+		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
+	punctured_container: boolean().optional(),
+	smelling_container: boolean().optional(),
+	moist_container: boolean().optional()
 })
 
 export const upsertPurchaseOrdersSchema = object({
@@ -87,5 +96,7 @@ export const upsertPurchaseOrdersSchema = object({
 })
 
 export type CreateDeliveryFormValues = Infer<typeof createDeliverySchema>
-export type UpdateDispatchOrderFormValues = Infer<typeof updateDispatchOrderSchema>
 export type UpsertPurchaseOrdersFormValues = Infer<typeof upsertPurchaseOrdersSchema>
+export type UpdateContainerConditionFormValues = Infer<typeof updateContainerConditionSchema>
+export type UpdateDispatchOrderFormValues = Infer<typeof updateDispatchOrderSchema> &
+	Partial<UpdateContainerConditionFormValues>

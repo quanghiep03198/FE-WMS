@@ -1,7 +1,9 @@
 import { CommonActions } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	buttonVariants,
+	Checkbox,
 	Dialog,
 	DialogClose,
 	DialogContent,
@@ -9,12 +11,22 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
+	Field,
+	FieldDescription,
+	FieldGroup,
+	FieldLegend,
+	FieldSeparator,
+	FieldSet,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
 	Form as FormProvider,
 	Icon,
 	InputFieldControl
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -30,6 +42,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 	const form = useForm<UpdateDispatchOrderFormValues>({
 		resolver: zodResolver(updateDispatchOrderSchema)
 	})
+	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { mutateAsync, isPending, isError } = useUpdateDispatchOrderMutation()
 	const toastRef = useRef<string | number | null>(null)
 
@@ -60,24 +73,93 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 				</DialogHeader>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
-						<FieldSet>
-							<InputFieldControl
-								label={t('ns_erp:fields.container_number')}
-								name='container_number'
-								placeholder='e.g., ABCU1234567'
-								description={t('ns_inoutbound:description.container_number_field')}
-								onChange={(e) => {
-									form.setValue('container_number', e.currentTarget.value.toUpperCase())
-								}}
-							/>
-							<InputFieldControl
-								label={t('ns_erp:fields.license_plate')}
-								name='license_plate'
-								placeholder='e.g., ABC-12345'
-								description={t('ns_inoutbound:description.license_plate_field')}
-								onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
-							/>
-						</FieldSet>
+						<FieldGroup>
+							<FieldSet>
+								<InputFieldControl
+									label={t('ns_erp:fields.container_number')}
+									name='container_number'
+									placeholder='e.g., ABCU1234567'
+									description={t('ns_inoutbound:description.container_number_field')}
+									onChange={(e) => {
+										form.setValue('container_number', e.currentTarget.value.toUpperCase())
+									}}
+								/>
+								<InputFieldControl
+									label={t('ns_erp:fields.license_plate')}
+									name='license_plate'
+									placeholder='e.g., ABC-12345'
+									description={t('ns_inoutbound:description.license_plate_field')}
+									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
+								/>
+							</FieldSet>
+						</FieldGroup>
+						{isMobile && (
+							<Fragment>
+								<FieldSeparator />
+								<FieldGroup>
+									<FieldSet>
+										<FieldLegend variant='label'>Container condition assessment</FieldLegend>
+										<FieldDescription>
+											Please select all that apply regarding the condition of the container:
+										</FieldDescription>
+										<FieldGroup className='gap-3'>
+											<FormField
+												name='punctured_container'
+												control={form.control}
+												render={({ field }) => (
+													<FormItem>
+														<Field orientation='horizontal'>
+															<FormControl>
+																<Checkbox
+																	checked={Boolean(field.value)}
+																	onCheckedChange={field.onChange}
+																/>
+															</FormControl>
+															<FormLabel>{t('ns_erp:fields.punctured_container')}</FormLabel>
+														</Field>
+													</FormItem>
+												)}
+											/>
+											<FormField
+												name='smelling_container'
+												control={form.control}
+												render={({ field }) => (
+													<FormItem>
+														<Field orientation='horizontal'>
+															<FormControl>
+																<Checkbox
+																	checked={Boolean(field.value)}
+																	onCheckedChange={field.onChange}
+																/>
+															</FormControl>
+
+															<FormLabel>{t('ns_erp:fields.smelling_container')}</FormLabel>
+														</Field>
+													</FormItem>
+												)}
+											/>
+											<FormField
+												name='moist_container'
+												control={form.control}
+												render={({ field }) => (
+													<FormItem>
+														<Field orientation='horizontal'>
+															<FormControl>
+																<Checkbox
+																	checked={Boolean(field.value)}
+																	onCheckedChange={field.onChange}
+																/>
+															</FormControl>
+															<FormLabel>{t('ns_erp:fields.moist_container')}</FormLabel>
+														</Field>
+													</FormItem>
+												)}
+											/>
+										</FieldGroup>
+									</FieldSet>
+								</FieldGroup>
+							</Fragment>
+						)}
 						<DialogFooter className='mt-4 justify-end'>
 							<DialogClose className={buttonVariants({ variant: 'secondary' })}>
 								<Icon name='X' />
@@ -96,7 +178,6 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 }
 
 export const Form = tw.form`flex flex-col gap-y-4`
-export const FieldSet = tw.fieldset`flex flex-col gap-y-6`
 
 export default UpdateDispatchOrderFormDialog
 

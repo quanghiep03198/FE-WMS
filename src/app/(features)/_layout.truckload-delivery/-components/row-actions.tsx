@@ -17,7 +17,16 @@ import { usePageContext } from '../-contexts/page-context'
 
 type RowActionsDropdownProps = Record<
 	'data',
-	Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'container_number' | 'approval_status'>
+	Pick<
+		ITruckloadDelivery,
+		| 'dispatch_order'
+		| 'license_plate'
+		| 'container_number'
+		| 'approval_status'
+		| 'punctured_container'
+		| 'smelling_container'
+		| 'moist_container'
+	>
 >
 
 const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
@@ -37,7 +46,14 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 						onClick={() => {
 							event$.emit({
 								action: CommonActions.UPDATE_MANY,
-								payload: pick(data, ['dispatch_order', 'license_plate', 'container_number'])
+								payload: pick(data, [
+									'dispatch_order',
+									'license_plate',
+									'container_number',
+									'punctured_container',
+									'smelling_container',
+									'moist_container'
+								])
 							})
 						}}>
 						<Icon name='PencilLine' className='hidden lg:inline-block xl:inline-block' />
