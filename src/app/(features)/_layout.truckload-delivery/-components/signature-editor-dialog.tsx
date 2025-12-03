@@ -259,7 +259,7 @@ const SignatureEditorDialog: React.FC = () => {
 						</Div>
 						{isMissingSignature && (
 							<Typography variant='small' color='destructive' className='font-medium'>
-								Please give a signature
+								{t('ns_validation:missing_signature')}
 							</Typography>
 						)}
 					</Div>

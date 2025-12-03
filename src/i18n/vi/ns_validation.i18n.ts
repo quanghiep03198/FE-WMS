@@ -5,5 +5,6 @@ export default {
 	invalid_value: 'Giá trị không hợp lệ',
 	not_match: 'Giá trị không khớp',
 	too_long: 'Giá trị quá dài',
-	invalid_ipv4: 'Địa chỉ IPv4 không hợp lệ'
+	invalid_ipv4: 'Địa chỉ IPv4 không hợp lệ',
+	missing_signature: 'Vui lòng cung cấp chữ ký'
 }

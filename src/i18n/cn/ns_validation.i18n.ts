@@ -5,5 +5,6 @@ export default {
 	nonnegative: '值不能为负',
 	not_match: '值不匹配',
 	invalid_ipv4: '无效的 IPv4 地址',
-	too_long: '值过长'
+	too_long: '值过长',
+	missing_signature: '请提供签名'
 }

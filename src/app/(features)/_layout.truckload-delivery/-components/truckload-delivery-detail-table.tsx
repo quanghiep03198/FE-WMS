@@ -348,6 +348,7 @@ const Signature: React.FC<{
 
 	function handleUpdateSignature<Element extends HTMLElement>(e: React.MouseEvent<Element, MouseEvent>) {
 		e.stopPropagation()
+		if (!data.license_plate) return
 		event$.emit({
 			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE',
 			payload: {
@@ -367,7 +368,12 @@ const Signature: React.FC<{
 					onClick={handleUpdateSignature}
 				/>
 			) : (
-				<Button size='icon' variant='secondary' type='button' onClick={handleUpdateSignature}>
+				<Button
+					disabled={!data.license_plate}
+					size='icon'
+					variant='secondary'
+					type='button'
+					onClick={handleUpdateSignature}>
 					<Icon name='PenTool' className='rotate-[-90deg]' />
 				</Button>
 			)}
