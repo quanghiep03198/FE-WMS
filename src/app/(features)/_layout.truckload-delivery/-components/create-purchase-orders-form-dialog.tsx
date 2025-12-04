@@ -42,7 +42,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useState<boolean>(false)
 	const { event$ } = usePageContext()
-	const form = useForm({
+	const form = useForm<CreateDeliveryFormValues>({
 		resolver: zodResolver(createDeliverySchema)
 	})
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
@@ -70,7 +70,11 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'), { id: 'create_truckload_delivery' })
 			setOpen(false)
-			form.reset()
+			form.reset({
+				license_plate: null,
+				container_number: null,
+				outbound_purchase_orders: []
+			})
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: 'create_truckload_delivery' })
 		}
@@ -159,7 +163,13 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											</TableBody>
 											<TableFooter>
 												<ButtonGroup className='h-fit w-fit' aria-label='Dynamic field controls'>
-													<Button type='button' variant='outline' size='sm' onClick={() => append({})}>
+													<Button
+														type='button'
+														variant='outline'
+														size='sm'
+														onClick={() =>
+															append({ po: '', outbound_qty: null, max_outbound_qty: Infinity })
+														}>
 														<Icon name='ListPlus' size={20} strokeWidth={1.5} />{' '}
 														{t('ns_common:table.add_row')}
 													</Button>
@@ -213,7 +223,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 											variant='outline'
 											size='sm'
 											className='border-dashed'
-											onClick={() => append({})}>
+											onClick={() => append({ po: '', outbound_qty: null, max_outbound_qty: Infinity })}>
 											<Icon name='Plus' /> {t('ns_common:actions.add')}
 										</Button>
 									</EmptyContent>
@@ -228,7 +238,15 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 										/>
 										{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 									</Button>
-									<DialogClose className={buttonVariants({ variant: 'secondary' })}>
+									<DialogClose
+										className={buttonVariants({ variant: 'secondary' })}
+										onClick={() =>
+											form.reset({
+												license_plate: null,
+												container_number: null,
+												outbound_purchase_orders: []
+											})
+										}>
 										<Icon name='X' />
 										{t('ns_common:actions.cancel')}
 									</DialogClose>

@@ -2,17 +2,17 @@ import { isNil } from 'lodash-es'
 import { array, boolean, number, object, string, type infer as Infer } from 'zod'
 
 // BIC container code pattern: 4 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
-// const BIC_CONTAINER_PATTERN = /^[A-Z]{3}[UJZ]{1}\d{6}\d{1}$/
+const BIC_CONTAINER_PATTERN = /^[A-Z]{3}[UJZ]{1}\d{6}\d{1}$/
 
 export const createDeliverySchema = object({
 	license_plate: string({ error: 'ns_validation:required' })
 		.trim()
 		.transform((value) => value.toUpperCase())
-		.optional(),
+		.nullish(),
 	container_number: string({ error: 'ns_validation:required' })
 		.trim()
-		// .regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
-		.optional(),
+		.regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' }) // ? Should follow BIC format
+		.nullish(),
 	outbound_purchase_orders: array(
 		object({
 			po: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
@@ -56,6 +56,7 @@ export const updateDispatchOrderSchema = object({
 		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	container_number: string({ error: 'ns_validation:required' })
 		.trim()
+		.regex(BIC_CONTAINER_PATTERN, { message: 'ns_validation:invalid_value' })
 		.nullish()
 		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	punctured_container: boolean().optional(),
