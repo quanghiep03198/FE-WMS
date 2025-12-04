@@ -18,7 +18,6 @@ const DataTableHeader: React.FC = () => {
 
 	event$.useSubscription((value) => {
 		if (value.columnPinning) {
-			console.log('value.columnPinning', value.columnPinning)
 			rerender()
 		}
 	})

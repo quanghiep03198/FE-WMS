@@ -30,7 +30,6 @@ export function useImageUpload({ onUpload }: UseImageUploadOptions = {}) {
 				previewRef.current = localUrl
 				try {
 					const base64Url = await convertBase64(file)
-					console.log('base64Url', base64Url)
 					const compressedBase64 = await compress(base64Url.toString(), { quality: 1 })
 					if (typeof onUpload === 'function') onUpload(compressedBase64)
 				} catch (err) {

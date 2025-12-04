@@ -96,8 +96,6 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 
 	const virtualItems = virtualizer.getVirtualItems()
 
-	console.log('virtualItems', virtualItems)
-
 	const handleFetchNextPage = () => {
 		const [lastItem] = [...virtualItems].reverse()
 		if (!lastItem) return
