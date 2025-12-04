@@ -273,6 +273,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		if (tableRef.current) {
 			tableRef.current.setColumnVisibility({
 				...tableRef.current.getState().columnVisibility,
+				created_at: false,
 				purchase_orders: false,
 				license_plate: !isMobile,
 				total_outbound_qty: !isMobile,
@@ -302,6 +303,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					pageSize: 50
 				},
 				columnVisibility: {
+					created_at: false,
 					purchase_orders: false,
 					license_plate: !isMobile,
 					total_outbound_qty: !isMobile,
