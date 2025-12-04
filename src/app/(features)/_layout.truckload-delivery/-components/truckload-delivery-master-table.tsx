@@ -116,6 +116,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('purchase_orders', {
 				filterFn: 'arrIncludes'
 			}),
+			columnHelper.accessor('created_at', {
+				filterFn: 'inDateRange'
+			}),
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,

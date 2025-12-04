@@ -19,11 +19,13 @@ import { Table } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
+import { usePageQueryParams } from '../-hooks/use-page-query-params'
 
 type DropdownOption = { label: string; value: TruckloadDeliveryStatus; icon: IconProps['name']; count: number }
 
 const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> = ({ table }) => {
 	const { t, i18n } = useTranslation()
+	const { searchParams, setParams } = usePageQueryParams()
 
 	const { data } = table.options
 
@@ -51,6 +53,12 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 			})),
 		[data, i18n.language]
 	)
+
+	const handleValueChange = (value: string) => {
+		table.getColumn('approval_status').setFilterValue(value)
+		setParams({ ...searchParams, status: value as TruckloadDeliveryStatus })
+	}
+
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', className: 'border-dashed' }))}>
@@ -59,7 +67,7 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 			<DropdownMenuContent className='w-64' align='end'>
 				<DropdownMenuRadioGroup
 					value={table.getColumn('approval_status').getFilterValue() as string}
-					onValueChange={(value) => table.getColumn('approval_status').setFilterValue(value)}>
+					onValueChange={handleValueChange}>
 					{dropdownOptions.map((option) => (
 						<DropdownMenuRadioItem key={option.value} value={option.value} className='gap-x-2'>
 							<Icon

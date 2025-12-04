@@ -6,23 +6,25 @@ import { TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { usePageQueryParams } from '../-hooks/use-page-query-params'
 
 const DownloadExcelButton: React.FC = () => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
+	const { searchParams } = usePageQueryParams()
 
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		const factory = t(factories[user.company_code], { ns: 'ns_common', defaultValue: user.company_code }) as string
 
 		try {
-			const blob = await TruckloadDeliveryService.downloadExcel()
+			const blob = await TruckloadDeliveryService.downloadExcel(searchParams)
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_truckload_delivery_report', {
 					factory,
-					defaultValue: `Truckload Delivery Report  ~ ${factory}`
+					defaultValue: null
 				}) + '.xlsx'
 			)
 			toast.success(t('ns_common:notification.success'), { id })
@@ -32,7 +34,10 @@ const DownloadExcelButton: React.FC = () => {
 	}
 
 	return (
-		<Button variant='outline' size={isMobile ? 'icon' : 'default'} onClick={handleDownloadExcel}>
+		<Button
+			variant={isMobile ? 'outline' : 'default'}
+			size={isMobile ? 'icon' : 'default'}
+			onClick={handleDownloadExcel}>
 			<Icon name='Download' /> {!isMobile && t('ns_common:actions.download_excel')}
 		</Button>
 	)
