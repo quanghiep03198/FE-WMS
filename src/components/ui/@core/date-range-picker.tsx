@@ -24,16 +24,15 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 			<PopoverTrigger asChild>
 				<Button
 					{...triggerProps}
-					id='date'
 					variant={'outline'}
 					className={cn(
 						'w-full max-w-xs justify-start text-left font-normal',
-						!calendarProps.selected && 'text-muted-foreground',
-						triggerProps.className
+						!calendarProps?.selected && 'text-muted-foreground',
+						triggerProps?.className
 					)}>
 					<CalendarIcon className='mr-2 h-4 w-4' />
-					{calendarProps.selected?.from ? (
-						calendarProps.selected.to ? (
+					{calendarProps?.selected?.from ? (
+						calendarProps?.selected.to ? (
 							<>
 								{format(calendarProps.selected.from, 'LLL dd, y', { locale })} {' - '}
 								{format(calendarProps.selected.to, 'LLL dd, y', { locale })}
@@ -46,19 +45,19 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
 					)}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className='sm:max-h-1/2 w-auto overflow-auto p-0 scrollbar-none' align='start'>
+			<PopoverContent className='sm:max-h-1/2 w-auto overflow-auto p-0 scrollbar-none' align='center'>
 				<Calendar
 					{...calendarProps}
 					initialFocus
 					mode='range'
 					selected={
-						calendarProps.selected ?? {
+						calendarProps?.selected ?? {
 							from: new Date(),
-							to: addMonths(new Date(), 1)
+							to: new Date()
 						}
 					}
 					onSelect={(value) => {
-						if (typeof calendarProps.onSelect === 'function') calendarProps.onSelect(value)
+						if (typeof calendarProps?.onSelect === 'function') calendarProps.onSelect(value)
 					}}
 				/>
 			</PopoverContent>
