@@ -278,13 +278,13 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Div>
 					)}
 					<Div className='col-span-full'>
+						<CategoryFieldControl disabled={isNil(formAction)} />
+					</Div>
+					<Div className='col-span-full'>
 						<BrandFieldControl
 							disabled={isNil(formAction)}
 							className={shouldRequireFullInfo && 'pointer-event-none'}
 						/>
-					</Div>
-					<Div className='col-span-full'>
-						<CategoryFieldControl disabled={isNil(formAction)} />
 					</Div>
 					{shouldRequireFullInfo && !isNil(formAction) && (
 						<Fragment>
@@ -296,7 +296,6 @@ const DefectiveGoodsForm: React.FC = () => {
 							</Div>
 						</Fragment>
 					)}
-
 					<Div className='col-span-3'>
 						<CustShoeStyleFieldControl
 							loading={isLoading}
@@ -329,6 +328,12 @@ const DefectiveGoodsForm: React.FC = () => {
 							}
 						/>
 					</Div>
+					<Div className='col-span-3'>
+						<SewingLineFieldControl />
+					</Div>
+					<Div className='col-span-3'>
+						<AssemblyLineFieldControl />
+					</Div>
 					<Div className='col-span-full'>
 						<SelectFieldControl
 							name='defective_location'
@@ -343,12 +348,6 @@ const DefectiveGoodsForm: React.FC = () => {
 							labelField='label'
 							valueField='value'
 						/>
-					</Div>
-					<Div className='col-span-3'>
-						<SewingLineFieldControl />
-					</Div>
-					<Div className='col-span-3'>
-						<AssemblyLineFieldControl />
 					</Div>
 					<Div className='relative col-span-full'>
 						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>

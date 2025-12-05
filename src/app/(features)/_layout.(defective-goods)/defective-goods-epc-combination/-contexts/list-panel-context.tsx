@@ -1,5 +1,6 @@
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { createContext, use, useCallback, useEffect, useState } from 'react'
+import { useLocalStorageState } from 'ahooks'
+import { createContext, use, useCallback, useEffect, useState, useTransition } from 'react'
 
 // Persistent storage key
 const SELECTION_STORAGE_KEY = 'defectiveGoodsSelectionState'
@@ -15,7 +16,8 @@ type SelectionState = {
 }
 
 type TListPanelContext = {
-	isAllCardExpaned: boolean
+	isAllCardsExpanded: boolean
+	isTogglingExpand: boolean
 	toggleAllCardExpaned: () => void
 
 	// Core selection state
@@ -38,10 +40,14 @@ type TListPanelContext = {
 const ListPanelContext = createContext<TListPanelContext>(null)
 
 export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-	const [isAllCardExpaned, setIsAllCardExpaned] = useState<boolean>(false)
+	const [isAllCardsExpanded, setIsAllCardExpaned] = useLocalStorageState<boolean>('defectiveGoodsExpandAllCards', {
+		defaultValue: true,
+		listenStorageChange: true
+	})
 
+	const [isTogglingExpand, startTransition] = useTransition()
 	const toggleAllCardExpaned = useCallback(() => {
-		setIsAllCardExpaned((prev) => !prev)
+		startTransition(() => setIsAllCardExpaned((prev) => !prev))
 	}, [])
 
 	const [selectionState, setSelectionState] = useState<SelectionState>({
@@ -300,7 +306,8 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 	return (
 		<ListPanelContext.Provider
 			value={{
-				isAllCardExpaned,
+				isTogglingExpand,
+				isAllCardsExpanded,
 				toggleAllCardExpaned,
 
 				// Core state

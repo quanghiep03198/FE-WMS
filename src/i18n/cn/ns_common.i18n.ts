@@ -28,6 +28,7 @@ export default {
 		export: '导出',
 		finish: '完成',
 		fold: '折叠',
+		unfold: '展开',
 		increment: '增量',
 		learn_more: '了解更多',
 		load_more: '加载更多',

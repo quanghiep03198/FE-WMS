@@ -5,7 +5,6 @@ import { IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
-	buttonVariants,
 	Card,
 	CardAction,
 	CardContent,
@@ -15,7 +14,6 @@ import {
 	Checkbox,
 	Collapsible,
 	CollapsibleContent,
-	CollapsibleTrigger,
 	Div,
 	DropdownMenu,
 	DropdownMenuContent,
@@ -45,8 +43,8 @@ const InfoCard: React.FC<{
 	data: IDefectiveGoods
 }> = ({ data }) => {
 	const { t } = useTranslation()
-	const { isItemSelected, toggleItem, isAllCardExpaned } = useListPanelContext()
-	const [isOpen, setIsOpen] = useState<boolean>(isAllCardExpaned)
+	const { isAllCardsExpanded, isTogglingExpand, isItemSelected, toggleItem } = useListPanelContext()
+	const [isOpen, setIsOpen] = useState<boolean>(isAllCardsExpanded)
 	const { event$ } = usePageContext()
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
@@ -94,8 +92,8 @@ const InfoCard: React.FC<{
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
 
 	useUpdateEffect(() => {
-		setIsOpen(isAllCardExpaned)
-	}, [isAllCardExpaned])
+		setIsOpen(isAllCardsExpanded)
+	}, [isAllCardsExpanded])
 
 	const defectLocation: Map<DefectiveLocation, string> = new Map([
 		[DefectiveLocation.ALL, t('ns_common:others.all')],
@@ -107,30 +105,42 @@ const InfoCard: React.FC<{
 	return (
 		<Card
 			className={cn(
-				'relative min-h-fit overflow-hidden rounded-md border pb-2 shadow-sm transition-colors duration-200 @container/card *:text-left *:text-sm',
+				'relative min-h-fit gap-4 overflow-hidden rounded-md border pb-2 pt-4 shadow-sm @container/card *:text-left *:text-sm',
+				isTogglingExpand && 'duration-200 animate-out fade-out-50',
 				hash === String(data.id) && 'bg-accent/50'
 			)}>
-			<CardHeader>
+			<CardHeader className='px-4' onClick={() => setIsOpen(!isOpen)}>
 				<CardAction className='absolute right-3 top-3'>
 					<DropdownMenu modal={false}>
-						<DropdownMenuTrigger className='!m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
+						<DropdownMenuTrigger
+							onClick={(e) => e.stopPropagation()}
+							className='!m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
 							<Icon name='Ellipsis' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start' side='left'>
 							<DropdownMenu>
 								<DropdownMenuItem
 									className='gap-x-2'
-									onClick={() =>
+									onClick={(e) => {
+										e.stopPropagation()
 										event$.emit({ action: CommonActions.READ, payload: data.defective_description })
-									}>
+									}}>
 									<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 								</DropdownMenuItem>
-								<DropdownMenuItem className='gap-x-2' onClick={() => handleUpdate()}>
+								<DropdownMenuItem
+									className='gap-x-2'
+									onClick={(e) => {
+										e.stopPropagation()
+										handleUpdate()
+									}}>
 									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									className='gap-x-2 !text-destructive hover:!bg-destructive/20'
-									onClick={() => handleDelete()}>
+									onClick={(e) => {
+										e.stopPropagation()
+										handleDelete()
+									}}>
 									<Icon name='Trash2' /> {t('ns_common:actions.delete')}
 								</DropdownMenuItem>
 							</DropdownMenu>
@@ -138,7 +148,11 @@ const InfoCard: React.FC<{
 					</DropdownMenu>
 				</CardAction>
 				<Div className='!mb-3 flex items-center gap-x-1'>
-					<Checkbox checked={isItemSelected(data.id)} onCheckedChange={() => handleSelect(false, data.id)} />
+					<Checkbox
+						checked={isItemSelected(data.id)}
+						onCheckedChange={() => handleSelect(false, data.id)}
+						onClick={(e) => e.stopPropagation()}
+					/>
 					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
 					<Badge>{data.brand_name}</Badge>
 					<Badge variant='outline' className='w-fit'>
@@ -148,7 +162,12 @@ const InfoCard: React.FC<{
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
 					ID: {data.epc}{' '}
 					<Tooltip message='Copy' triggerProps={{ asChild: true }}>
-						<button onClick={() => copyToClipboard(data.epc)} className={cn('ml-2')}>
+						<button
+							onClick={(e) => {
+								e.stopPropagation()
+								copyToClipboard(data.epc)
+							}}
+							className={cn('ml-2')}>
 							<Icon name={isCoppied ? 'CopyCheck' : 'Copy'} />
 						</button>
 					</Tooltip>
@@ -160,12 +179,10 @@ const InfoCard: React.FC<{
 					})}
 				</CardDescription>
 			</CardHeader>
-			<CardContent className='space-y-4'>
+			<CardContent className='space-y-4 px-4 pb-2'>
 				<Collapsible defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>
-					<CollapsibleTrigger className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}>
-						<Icon name='ChevronDown' />
-					</CollapsibleTrigger>
-					<CollapsibleContent className='w-full overflow-auto py-4 pt-2 transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+					<CollapsibleContent className='w-full overflow-auto transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+						<Separator className='mb-4' />
 						<DescriptionList>
 							<DescriptionItem>
 								<Typography variant='small'>{t('ns_erp:fields.cust_shoes_style')}:</Typography>

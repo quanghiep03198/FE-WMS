@@ -26,6 +26,7 @@ export default {
 		export: 'Export',
 		finish: 'Finish',
 		fold: 'Fold',
+		unfold: 'Unfold',
 		increment: 'Increment',
 		learn_more: 'Learn more',
 		load_more: 'Load more',

@@ -107,8 +107,4 @@ const Container = tw.div`
    has-[#toggle-fullscreen[data-state=checked]]:flex
    has-[#toggle-fullscreen[data-state=checked]]:justify-center
    has-[#toggle-fullscreen[data-state=checked]]:items-center
-	has-[#toggle-fullscreen[data-state=checked]]:animate-in
-	has-[#toggle-fullscreen[data-state=checked]]:fade-in-0
-	has-[#toggle-fullscreen[data-state=unchecked]]:fade-out-0
-	has-[#toggle-fullscreen[data-state=unchecked]]:zoom-out-95
 `

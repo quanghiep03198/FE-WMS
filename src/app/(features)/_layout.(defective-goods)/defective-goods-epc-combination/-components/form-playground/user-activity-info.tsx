@@ -13,15 +13,15 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 
 	return (
 		<ErrorBoundary fallbackRender={() => <Typography color='destructive'>Error</Typography>}>
-			<Div className='flex items-center gap-x-2 border-b p-6'>
-				<Avatar>
+			<Div className='flex h-[var(--bar-height)] items-center gap-x-2 border-b px-6 py-2'>
+				<Avatar className='size-9'>
 					<AvatarImage src={generateAvatar({ name: createdBy })} />
 				</Avatar>
-				<Div className='flex flex-col space-y-1'>
+				<Div className='flex flex-col space-y-0.5'>
 					<Typography variant='small' className='font-medium'>
 						@{createdBy}
 					</Typography>
-					<Typography variant='small' color='muted' className='first-letter:uppercase'>
+					<Typography variant='small' color='muted' className='text-xs first-letter:uppercase'>
 						{format(new Date(createdAt), 'MMM dd, YYY - hh:mm:ss ', {
 							locale: dateLocale
 						})}

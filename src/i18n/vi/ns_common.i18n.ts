@@ -25,6 +25,7 @@ export default {
 		export: 'Xuất',
 		finish: 'Hoàn thành',
 		fold: 'Thu gọn',
+		unfold: 'Mở rộng',
 		increment: 'Tăng số lượng',
 		learn_more: 'Tìm hiểu thêm',
 		load_more: 'Tải thêm',
