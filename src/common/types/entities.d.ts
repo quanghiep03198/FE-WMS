@@ -40,7 +40,6 @@ export interface ICompany extends IBaseEntity {
 export interface IDepartment extends IBaseEntity, Pick<ICompany, 'company_code'> {
 	dept_code: string
 	dept_name: string
-	dept_code_upper: string
 }
 
 export interface IWarehouse extends IBaseEntity {
@@ -295,6 +294,9 @@ export interface IDefectiveGoods extends IBaseEntity {
 	size: string
 	defective_location: DefectiveLocation
 	defective_description: string
+	assembly_line: string | null
+	sewing_line: string | null
+	ri_cancel: boolean
 }
 
 export interface IMonthlyInventoryComparison {

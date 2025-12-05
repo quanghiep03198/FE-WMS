@@ -87,7 +87,8 @@ export default {
 		shipping_type: 'Shipping type',
 		shipment_confirm_date: 'Shipment confirm date', //: Ngày xác nhận xuất hàng
 		shoes_type_b: 'Shoes type B', //: Giày cấp B
-
+		sewing_line: 'Sewing line',
+		assembly_line: 'Assembly line',
 		factory_shoes_style: 'Factory shoes style',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
 		shaping_dept_code: 'Shaping department code',

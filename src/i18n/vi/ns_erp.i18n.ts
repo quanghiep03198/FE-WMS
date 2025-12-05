@@ -87,6 +87,8 @@ export default {
 		shipping_type: 'Phương thức vận chuyển',
 		shoes_type_b: 'Giày loại B',
 		factory_shoes_style: 'Hình thể xưởng',
+		sewing_line: 'Chuyền may',
+		assembly_line: 'Chuyền thành hình',
 		shaping_dept_code: 'Mã chuyền thành hình',
 		shaping_dept_name: 'Chuyền thành hình',
 		shaping_dept_productivity: 'Sản lượng thành hình', // Shaping Department Productivity

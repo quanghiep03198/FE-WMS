@@ -36,6 +36,7 @@ import {
 } from '../../../-hooks/use-defective-goods-asm'
 import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
+import AssemblyLineFieldControl from './assembly-line-field-control'
 import BrandFieldControl from './brand-field-control'
 import CategoryFieldControl from './category-field-control'
 import ColorFieldControl from './color-field-control'
@@ -44,6 +45,7 @@ import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
 import DeviceRadioGroup from './device-radio-group'
 import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
 import ListPanelToggleButton from './list-panel-toggle-button'
+import SewingLineFieldControl from './sewing-line-field-control'
 import SizeFieldControl from './size-field-control'
 import ToggleFullscreen from './toggle-fullscreen'
 import UserActivityInfo from './user-activity-info'
@@ -341,6 +343,12 @@ const DefectiveGoodsForm: React.FC = () => {
 							labelField='label'
 							valueField='value'
 						/>
+					</Div>
+					<Div className='col-span-3'>
+						<SewingLineFieldControl />
+					</Div>
+					<Div className='col-span-3'>
+						<AssemblyLineFieldControl />
 					</Div>
 					<Div className='relative col-span-full'>
 						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>

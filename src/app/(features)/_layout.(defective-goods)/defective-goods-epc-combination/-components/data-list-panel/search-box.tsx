@@ -25,12 +25,14 @@ import { useTranslation } from 'react-i18next'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../-constants'
 import { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
+import AssemblyLineFieldControl from '../form-playground/assembly-line-field-control'
 import BrandFieldControl from '../form-playground/brand-field-control'
 import CategoryFieldControl from '../form-playground/category-field-control'
 import ColorFieldControl from '../form-playground/color-field-control'
 import CommandNumberFieldControl from '../form-playground/command-number-field-control'
 import CustShoeStyleFieldControl from '../form-playground/cust-shoe-style-field-control'
 import FactoryShoeStyleFieldControl from '../form-playground/factory-shoe-style-field-control'
+import SewingLineFieldControl from '../form-playground/sewing-line-field-control'
 import SizeFieldControl from '../form-playground/size-field-control'
 
 const DEFAULT_SEARCH_TERMS: Omit<DefectiveGoodQueryParams, 'page'> = {
@@ -161,6 +163,8 @@ const SearchBox: React.FC = () => {
 									<CommandNumberFieldControl orientation={formFieldOrientation} />
 									<ColorFieldControl orientation={formFieldOrientation} />
 									<SizeFieldControl orientation={formFieldOrientation} />
+									<SewingLineFieldControl orientation={formFieldOrientation} />
+									<AssemblyLineFieldControl orientation={formFieldOrientation} />
 								</ScrollShadow>
 							</fieldset>
 							<fieldset className='flex items-center justify-end gap-x-2'>

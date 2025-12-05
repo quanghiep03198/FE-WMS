@@ -5,6 +5,7 @@ import { IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
+	buttonVariants,
 	Card,
 	CardAction,
 	CardContent,
@@ -12,6 +13,9 @@ import {
 	CardHeader,
 	CardTitle,
 	Checkbox,
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
 	Div,
 	DropdownMenu,
 	DropdownMenuContent,
@@ -23,9 +27,10 @@ import {
 	Typography
 } from '@/components/ui'
 import { useLocation, useNavigate } from '@tanstack/react-router'
+import { useUpdateEffect } from 'ahooks'
 import { formatRelative } from 'date-fns'
 import { isNil } from 'lodash-es'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -40,8 +45,9 @@ const InfoCard: React.FC<{
 	data: IDefectiveGoods
 }> = ({ data }) => {
 	const { t } = useTranslation()
+	const { isItemSelected, toggleItem, isAllCardExpaned } = useListPanelContext()
+	const [isOpen, setIsOpen] = useState<boolean>(isAllCardExpaned)
 	const { event$ } = usePageContext()
-	const { isItemSelected, toggleItem } = useListPanelContext()
 	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
 	const toastIdRef = useRef<string | number | null>(null)
 	const { hash, search } = useLocation()
@@ -87,6 +93,10 @@ const InfoCard: React.FC<{
 
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()
 
+	useUpdateEffect(() => {
+		setIsOpen(isAllCardExpaned)
+	}, [isAllCardExpaned])
+
 	const defectLocation: Map<DefectiveLocation, string> = new Map([
 		[DefectiveLocation.ALL, t('ns_common:others.all')],
 		[DefectiveLocation.UPPER, t('ns_erp:shoes_parts.upper')],
@@ -97,7 +107,7 @@ const InfoCard: React.FC<{
 	return (
 		<Card
 			className={cn(
-				'relative min-h-fit overflow-hidden rounded-md border shadow-sm transition-colors duration-200 @container/card *:text-left *:text-sm',
+				'relative min-h-fit overflow-hidden rounded-md border pb-2 shadow-sm transition-colors duration-200 @container/card *:text-left *:text-sm',
 				hash === String(data.id) && 'bg-accent/50'
 			)}>
 			<CardHeader>
@@ -151,50 +161,75 @@ const InfoCard: React.FC<{
 				</CardDescription>
 			</CardHeader>
 			<CardContent className='space-y-4'>
-				<DescriptionList>
-					<DescriptionItem>
-						<Typography variant='small'>{t('ns_erp:fields.cust_shoes_style')}:</Typography>
-						<Typography variant='small'>{data.cust_shoes_style}</Typography>
-					</DescriptionItem>
-					<DescriptionItem>
-						<Typography variant='small'>{t('ns_erp:fields.factory_shoes_style')}:</Typography>
-						<Typography variant='small'>{data.factory_shoes_style}</Typography>
-					</DescriptionItem>
-					<DescriptionItem>
-						<Typography variant='small'>{t('ns_erp:fields.color_sn')}:</Typography>
-						<Typography variant='small'>{data.color_sn}</Typography>
-					</DescriptionItem>
-					<DescriptionItem>
-						<Typography variant='small'>Size: </Typography>
-						<Typography variant='small'>#{data.size_code}</Typography>
-					</DescriptionItem>
-					{data.po && (
-						<DescriptionItem>
-							<Typography variant='small'>{t('ns_erp:fields.po')}:</Typography>
-							<Typography variant='small'>{data.po}</Typography>
-						</DescriptionItem>
-					)}
-					{data.mo_no && (
-						<DescriptionItem>
-							<Typography>{t('ns_erp:fields.mo_no')}: </Typography>
-							<Typography>{data.mo_no}</Typography>
-						</DescriptionItem>
-					)}
-					<DescriptionItem>
-						<Typography variant='small'>{t('ns_erp:fields.defective_location')} : </Typography>
-						<Typography>{defectLocation.get(data.defective_location) ?? '?'}</Typography>
-					</DescriptionItem>
-					<DescriptionItem>
-						<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
-						<Typography className='uppercase'>{data.storage_location ?? '?'}</Typography>
-					</DescriptionItem>
-				</DescriptionList>
+				<Collapsible defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>
+					<CollapsibleTrigger className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}>
+						<Icon name='ChevronDown' />
+					</CollapsibleTrigger>
+					<CollapsibleContent className='w-full overflow-auto py-4 pt-2 transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+						<DescriptionList>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.cust_shoes_style')}:</Typography>
+								<Typography variant='small'>{data.cust_shoes_style}</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.factory_shoes_style')}:</Typography>
+								<Typography variant='small'>{data.factory_shoes_style}</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.color_sn')}:</Typography>
+								<Typography variant='small'>{data.color_sn}</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>Size: </Typography>
+								<Typography variant='small'>#{data.size_code}</Typography>
+							</DescriptionItem>
+							{data.po && (
+								<DescriptionItem>
+									<Typography variant='small'>{t('ns_erp:fields.po')}:</Typography>
+									<Typography variant='small'>{data.po}</Typography>
+								</DescriptionItem>
+							)}
+							{data.mo_no && (
+								<DescriptionItem>
+									<Typography>{t('ns_erp:fields.mo_no')}: </Typography>
+									<Typography variant='small' title={data.mo_no}>
+										{data.mo_no}
+									</Typography>
+								</DescriptionItem>
+							)}
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.sewing_line')} : </Typography>
+								<Typography variant='small' className='uppercase' title={data.sewing_line ?? '?'}>
+									{data.sewing_line ?? '?'}
+								</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.assembly_line')} : </Typography>
+								<Typography variant='small' className='uppercase' title={data.assembly_line ?? '?'}>
+									{data.assembly_line ?? '?'}
+								</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.defective_location')} : </Typography>
+								<Typography variant='small' title={defectLocation.get(data.defective_location) ?? '?'}>
+									{defectLocation.get(data.defective_location) ?? '?'}
+								</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
+								<Typography variant='small' className='uppercase' title={data.storage_location ?? '?'}>
+									{data.storage_location ?? '?'}
+								</Typography>
+							</DescriptionItem>
+						</DescriptionList>
+					</CollapsibleContent>
+				</Collapsible>
 			</CardContent>
 		</Card>
 	)
 }
 
 const DescriptionList = tw.ul`list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
-const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium whitespace-nowrap [&_svg]:stroke-muted-foreground`
+const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium [&_*:last-child]:line-clamp-1 whitespace-nowrap [&_svg]:stroke-muted-foreground`
 
 export default InfoCard

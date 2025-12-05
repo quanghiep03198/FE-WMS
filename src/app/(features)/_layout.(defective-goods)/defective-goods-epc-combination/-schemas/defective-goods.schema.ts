@@ -18,7 +18,15 @@ export const baseDefectiveGoodsSchema = object({
 	color_sn: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	defective_location: enums(DefectiveLocation, { message: 'ns_validation:required' }),
-	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
+	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	assembly_line: string({ message: 'ns_validation:required' })
+		.trim()
+		.nonempty({ message: 'ns_validation:required' })
+		.nullish(),
+	sewing_line: string({ message: 'ns_validation:required' })
+		.trim()
+		.nonempty({ message: 'ns_validation:required' })
+		.nullish()
 })
 
 export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema.refine((values) => {

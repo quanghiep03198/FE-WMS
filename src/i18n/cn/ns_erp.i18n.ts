@@ -81,6 +81,8 @@ export default {
 		required_date: '需求日期',
 		returned_qty: '已退貨量',
 		decentralized_po: '分散采购订单',
+		sewing_line: '縫製線',
+		assembly_line: '成型線',
 		shaping_dept_code: '成型線福號',
 		shaping_dept_name: '成型線',
 		shaping_dept_productivity: '成型产量',

@@ -15,6 +15,9 @@ type SelectionState = {
 }
 
 type TListPanelContext = {
+	isAllCardExpaned: boolean
+	toggleAllCardExpaned: () => void
+
 	// Core selection state
 	selectionState: SelectionState
 
@@ -35,6 +38,12 @@ type TListPanelContext = {
 const ListPanelContext = createContext<TListPanelContext>(null)
 
 export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+	const [isAllCardExpaned, setIsAllCardExpaned] = useState<boolean>(false)
+
+	const toggleAllCardExpaned = useCallback(() => {
+		setIsAllCardExpaned((prev) => !prev)
+	}, [])
+
 	const [selectionState, setSelectionState] = useState<SelectionState>({
 		mode: 'none',
 		selectedIds: new Set(),
@@ -291,6 +300,9 @@ export const ListPanelProvider: React.FC<React.PropsWithChildren> = ({ children 
 	return (
 		<ListPanelContext.Provider
 			value={{
+				isAllCardExpaned,
+				toggleAllCardExpaned,
+
 				// Core state
 				selectionState,
 
