@@ -6,6 +6,10 @@ export class DepartmentService {
 		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/department/shaping-product-line')
 	}
 
+	static async getSewingDepartments() {
+		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/department/sewing-product-line')
+	}
+
 	static async getWarehouseDepartments() {
 		return await axiosInstance.get<void, ResponseBody<IDepartment[]>>('/department/warehouse')
 	}

@@ -1,4 +1,4 @@
-import { useGetShapingProductLineQuery } from '@/app/(features)/-hooks/use-shaping-department-asm'
+import { useGetShapingProductLineQuery } from '@/app/(features)/-hooks/use-department-asm'
 import { useGetAllTenants } from '@/app/(features)/-hooks/use-tenacy-asm'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-asm'
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
