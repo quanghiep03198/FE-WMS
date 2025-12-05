@@ -56,6 +56,17 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					</button>
 				)
 			}),
+			columnHelper.accessor('dispatch_order', {
+				sortDescFirst: true,
+				enableSorting: true,
+				enableMultiSort: true
+			}),
+			columnHelper.accessor('purchase_orders', {
+				filterFn: 'arrIncludes'
+			}),
+			columnHelper.accessor('created_at', {
+				filterFn: 'inDateRange'
+			}),
 			columnHelper.accessor('license_plate', {
 				header: t('ns_erp:fields.license_plate'),
 				enableResizing: true,
@@ -112,12 +123,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						</Div>
 					)
 				}
-			}),
-			columnHelper.accessor('purchase_orders', {
-				filterFn: 'arrIncludes'
-			}),
-			columnHelper.accessor('created_at', {
-				filterFn: 'inDateRange'
 			}),
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
@@ -273,6 +278,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		if (tableRef.current) {
 			tableRef.current.setColumnVisibility({
 				...tableRef.current.getState().columnVisibility,
+				dispatch_order: false,
 				created_at: false,
 				purchase_orders: false,
 				license_plate: !isMobile,
@@ -298,12 +304,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			enableColumnFilters={true}
 			border='bottom-only'
 			initialState={{
+				sorting: [{ id: 'dispatch_order', desc: true }],
 				pagination: {
 					pageIndex: 0,
 					pageSize: 50
 				},
 				columnVisibility: {
 					created_at: false,
+					dispatch_order: false,
 					purchase_orders: false,
 					license_plate: !isMobile,
 					total_outbound_qty: !isMobile,
