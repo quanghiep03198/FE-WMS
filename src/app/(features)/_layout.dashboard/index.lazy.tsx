@@ -34,21 +34,20 @@ function Page() {
 				</PageHeader>
 				<Separator />
 				<Div className='grid grid-cols-12 gap-4 [&_div[data-slot=card-title]]:!capitalize'>
-					<Div className='col-span-full @container/statistics @[1280px]:order-first'>
+					<Div className='col-span-full @container/statistics'>
 						<Statistics />
 					</Div>
-					<Div className='col-span-full xxl:col-span-7'>
+					<Div className='col-span-full @[1366px]:col-span-7'>
 						<InoutboundOverview />
 					</Div>
-					<Div className='col-span-full xxl:col-span-5'>
+					<Div className='col-span-full @[960px]:col-span-7 @[1366px]:col-span-5'>
 						<NetFlowOverview />
 					</Div>
-					<Div className='col-span-full @[1280px]:col-span-4'>
+					<Div className='col-span-full @[960px]:col-span-5 @[1366px]:col-span-4'>
 						<DefectiveGoodsInventoryOverview />
 					</Div>
-					<Div className='col-span-full @[1280px]:col-span-8'>
+					<Div className='col-span-full @[1366px]:col-span-8'>
 						<AssemblyProductivityOverview />
-						{/* <DefectiveGoodsTrendingOverview /> */}
 					</Div>
 				</Div>
 			</Div>
