@@ -177,7 +177,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				error: t('ns_common:notification.error')
 			})
 		},
-		[formAction]
+		[formAction, hash]
 	)
 
 	const isPending: boolean = isCreating || isUpdating
