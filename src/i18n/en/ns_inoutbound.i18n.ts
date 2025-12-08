@@ -17,6 +17,8 @@ export default {
 		create_truckload_delivery: 'Create new container loading information for outbound shipments from the factory',
 		daily_inbound_report: 'View the scanned EPC data and perform warehouse inbound operations daily.',
 		daily_outbound_report: 'View the scanned EPC data and perform warehouse outbound operations daily.',
+		defective_goods_inbound_report: 'Manage and track the inbound of defective goods in the warehouse.',
+		defective_goods_outbound_report: 'Manage and track the outbound of defective goods in the warehouse.',
 		defective_goods_inventory_report: 'Manage and track the inventory of defective goods in the warehouse.',
 		duplicate_po_added:
 			'Do not add duplicate purchase orders, outbound quantity must not exceed the total ordered quantity.',

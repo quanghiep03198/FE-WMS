@@ -38,6 +38,8 @@ export default {
 		daily_inbound_report: 'Theo dõi và quản lý tiến độ nhập hàng kho thành phẩm hàng ngày',
 		daily_outbound_report: 'Theo dõi và quản lý tiến độ xuất hàng kho thành phẩm hàng ngày',
 		defective_goods_inventory_report: 'Quản lý và theo dõi tồn kho hàng loại 2',
+		defective_goods_inbound_report: 'Theo dõi và quản lý nhập hàng giày loại 2 hàng ngày',
+		defective_goods_outbound_report: 'Theo dõi và quản lý xuất hàng giày loại 2 hàng ngày',
 		duplicate_po_added: 'Không được thêm trùng đơn hàng, số lượng xuất không được vượt quá tổng số lượng đặt đơn.',
 		exchange_all: 'Bạn có thể hoán đổi toàn bộ EPC thuộc mã thành phẩm kích cỡ đã chọn',
 		exchange_epc_dialog_desc: 'Cho phép người dùng thay thế hoặc cập nhật tem EPC hiện tại sang chỉ lệnh mới.',

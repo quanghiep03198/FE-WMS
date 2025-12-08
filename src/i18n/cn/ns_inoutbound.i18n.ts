@@ -16,6 +16,8 @@ export default {
 		create_truckload_delivery: '创建卡车装运信息以从工厂出货',
 		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
 		daily_outbound_report: '跟踪和管理每日成品仓库出库进度',
+		defective_goods_inbound_report: '管理和跟踪仓库中次品的入库',
+		defective_goods_outbound_report: '管理和跟踪仓库中次品的出库',
 		defective_goods_inventory_report: '管理和跟踪仓库中次品的库存',
 		duplicate_po_added: '不要添加重复的采购订单, 出库数量不得超过订购的总数量.',
 		exchange_all: '您可以交换属于所选尺码的整个 EPC',
