@@ -29,13 +29,13 @@ function Page() {
 	return (
 		<Fragment>
 			<title>{t('ns_common:navigation.daily_inbound_report')}</title>
-			<meta name='description' content={t('ns_inoutbound:description.daily_inbound_report')} />
+			<meta name='description' content={t('ns_inoutbound:description.defective_goods_inbound_report')} />
 
 			<Div as='section' className='mt-4 space-y-4 @container'>
 				<Div className='flex w-full'>
 					<PageHeader className='flex-1'>
 						<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
-						<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
+						<PageDescription>{t('ns_inoutbound:description.defective_goods_inbound_report')}</PageDescription>
 					</PageHeader>
 					<Div className='ml-auto flex gap-x-2'>
 						<DatePickerFilter />

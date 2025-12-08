@@ -1,25 +1,25 @@
 import useMediaQuery from '@/common/hooks/use-media-query'
 import useQueryParams from '@/common/hooks/use-query-params'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
-import EllipsisList from '@/components/ui/@custom/ellipsis-list'
+import { Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { IDefectiveGoodsOutboundReport } from '@/services/defective-goods.service'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { lowerCase, split } from 'lodash-es'
+import { lowerCase } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import ReportTableSummary from '../../-components/report-table-footer'
 import { DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
-import { useGetDefectiveGoodInboundReportQuery } from '../../-hooks/use-defective-goods-asm'
+import { useGetDefectiveGoodsOutboundReportQuery } from '../../-hooks/use-defective-goods-asm'
+import { useGetCategoriesQty } from '../../-hooks/use-get-category-qty'
 import AutoRefreshToggle from '../../../-components/-shared/auto-refresh-toggle'
 import SizeTable from '../../../-components/-shared/size-table'
 import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
 import { DefectiveGoodsOutboundPurpose } from '../../defective-goods-inoutbound/-constants'
 import DownloadExcelButton from './download-excel-button'
-import ReportTableSummary from './report-table-summary'
 
 export type PageQueryParams = {
 	'date.eq': string
@@ -33,27 +33,12 @@ const InboundReportMasterTable: React.FC = () => {
 	})
 	const { data: currentTenant } = useGetTenantByFactory()
 	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
-	const { data, isLoading, refetch } = useGetDefectiveGoodInboundReportQuery(currentTenant?.id, searchParams)
+	const { data, isLoading, refetch } = useGetDefectiveGoodsOutboundReportQuery(currentTenant?.id, searchParams)
+	const summaryData = useGetCategoriesQty(data)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<TTable<IDefectiveGoodsOutboundReport>>(null)
 	const columnHelper = createColumnHelper<IDefectiveGoodsOutboundReport>()
-
 	const defectiveCategoryList = useDefectiveCategoryList()
-
-	const factedUniqueStorageLocations = useMemo(() => {
-		const locationSet = new Set<string>()
-		if (Array.isArray(data)) {
-			data.forEach((item: IDefectiveGoodsOutboundReport) => {
-				const storageLocations = item.storage_location?.split(',')
-				if (Array.isArray(storageLocations)) {
-					storageLocations.forEach((loc) => locationSet.add(loc))
-				}
-			})
-		}
-		return Array.from(locationSet)
-			.sort((a, b) => a.localeCompare(b))
-			.map((loc) => ({ value: loc, label: loc }))
-	}, [data])
 
 	useEffect(() => {
 		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
@@ -118,7 +103,12 @@ const InboundReportMasterTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -127,7 +117,12 @@ const InboundReportMasterTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -145,56 +140,24 @@ const InboundReportMasterTable: React.FC = () => {
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (typeof value !== 'string' || !value.trim())
-						return (
-							<Typography variant='small' color='muted' className='line-clamp-1'>
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-					return (
-						<EllipsisList
-							threshhold={3}
-							data={split(value, ',')
-								.filter((item) => !!item)
-								.sort((a, b) => a.localeCompare(b))}
-							template={({ data }) => (
-								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
-									{data}
-								</Badge>
-							)}
-						/>
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
 					)
-				}
 			}),
 			columnHelper.accessor('assembly_line', {
 				header: t('ns_erp:fields.assembly_line'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (typeof value !== 'string' || !value.trim())
-						return (
-							<Typography variant='small' color='muted' className='line-clamp-1'>
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-					return (
-						<EllipsisList
-							threshhold={3}
-							data={split(value, ',')
-								.filter((item) => !!item)
-								.sort((a, b) => a.localeCompare(b))}
-							template={({ data }) => (
-								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
-									{data}
-								</Badge>
-							)}
-						/>
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
 					)
-				}
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
@@ -267,6 +230,12 @@ const InboundReportMasterTable: React.FC = () => {
 			enableColumnResizing={true}
 			ref={dataTableRef}
 			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
+			initialState={{
+				columnPinning: {
+					left: [ROW_EXPANSION_COLUMN_ID],
+					right: ['daily_outbound_qty']
+				}
+			}}
 			renderSubComponent={
 				(({ row }) => {
 					return <SizeTable data={row.original?.size_data} />
@@ -286,7 +255,7 @@ const InboundReportMasterTable: React.FC = () => {
 				)
 			}}
 			footerProps={{
-				slot: () => <ReportTableSummary data={data} />
+				slot: () => <ReportTableSummary summaryData={summaryData} />
 			}}
 		/>
 	)

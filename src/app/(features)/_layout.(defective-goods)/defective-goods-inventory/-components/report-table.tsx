@@ -1,5 +1,5 @@
 import SizeTable from '@/app/(features)/-components/-shared/size-table'
-import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { IDefectiveGoodsInventory } from '@/services/defective-goods.service'
@@ -7,31 +7,20 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { split } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory, DefectiveCategoryI18n } from '../../-constants'
+import ReportTableSummary from '../../-components/report-table-footer'
+import { DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
-import ReportTableSummary from './report-table-footer'
+import { useGetCategoriesQty } from '../../-hooks/use-get-category-qty'
+import { useGetUniqStorageLocation } from '../../-hooks/use-get-uniq-storage-location'
 
 const DefectiveGoodsInventoryTable: React.FC = () => {
 	const { data, isLoading, refetch } = useGetDefectiveGoodsInventoryQuery()
+	const summaryData = useGetCategoriesQty(data)
 	const { t, i18n } = useTranslation()
 	const columnHelper = createColumnHelper<IDefectiveGoodsInventory>()
 	const defectiveCategoryList = useDefectiveCategoryList()
-
-	const factedUniqueStorageLocations = useMemo(() => {
-		const locationSet = new Set<string>()
-		if (Array.isArray(data)) {
-			data.forEach((item: IDefectiveGoodsInventory) => {
-				const storageLocations = item.storage_location?.split(',')
-				if (Array.isArray(storageLocations)) {
-					storageLocations.forEach((loc) => locationSet.add(loc))
-				}
-			})
-		}
-		return Array.from(locationSet)
-			.sort((a, b) => a.localeCompare(b))
-			.map((loc) => ({ value: loc, label: loc }))
-	}, [data])
+	const factedUniqueStorageLocations = useGetUniqStorageLocation(data)
 
 	const columns = useMemo(
 		() => [
@@ -67,7 +56,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
@@ -76,7 +70,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -85,7 +84,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('cust_shoes_style', {
 				header: t('ns_erp:fields.cust_shoes_style'),
@@ -94,7 +98,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -103,7 +112,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -112,8 +126,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'fuzzy',
-
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) =>
+					getValue() ?? (
+						<Typography variant='small' color='muted' className='line-clamp-1'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
@@ -141,11 +159,12 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				filterFn: 'arrIncludesSome',
 				meta: { filterVariant: 'multi-select', facetedUniqueValues: factedUniqueStorageLocations },
 				cell: ({ getValue }) => {
-					const value = getValue()
+					const value = getValue<string | null>()
+					if (typeof value !== 'string' || !value) return t('ns_common:titles.unknown')
 					return (
 						<EllipsisList
 							threshhold={3}
-							data={split(value, ',').sort((a, b) => a.localeCompare(b))}
+							data={split(value, ',').sort((a: string, b: string) => a.localeCompare(b)) as string[]}
 							template={({ data }) => (
 								<Badge variant='secondary' className='whitespace-nowrap'>
 									{data.trim()}
@@ -186,23 +205,6 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 		},
 		[data]
 	)
-
-	const summaryData = useMemo(() => {
-		const result: Record<DefectiveCategory, number> = {
-			[DefectiveCategory.B_GRADE]: 0,
-			[DefectiveCategory.C_GRADE]: 0,
-			[DefectiveCategory.RESEARCH_DEVELOPMENT]: 0
-		}
-		if (!Array.isArray(data)) return result
-		const groupData = Object.groupBy(data, (item: IDefectiveGoodsInventory) => item.defective_category)
-		for (const category in groupData) {
-			result[category] = groupData[category].reduce((sum, curr) => {
-				if (!Array.isArray(curr.size_data)) return sum
-				return sum + curr.size_data.reduce((acc, size) => acc + size.qty, 0)
-			}, 0)
-		}
-		return result
-	}, [data])
 
 	return (
 		<DataTable

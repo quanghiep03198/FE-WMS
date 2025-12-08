@@ -15,7 +15,8 @@ import {
 export enum DefectiveGoodsQueryKey {
 	DEFECTIVE_GOODS = 'DEFECTIVE_GOODS',
 	DEFECTIVE_GOODS_INVENTORY = 'DEFECTIVE_GOODS_INVENTORY',
-	DEFECTIVE_GOODS_INBOUND_REPORT = 'DEFECTIVE_GOODS_INBOUND_REPORT'
+	DEFECTIVE_GOODS_INBOUND_REPORT = 'DEFECTIVE_GOODS_INBOUND_REPORT',
+	DEFECTIVE_GOODS_OUTBOUND_REPORT = 'DEFECTIVE_GOODS_OUTBOUND_REPORT'
 }
 
 const useInvalidateQuery = () => {
@@ -26,7 +27,9 @@ const useInvalidateQuery = () => {
 				query.queryKey.some(
 					(key) =>
 						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS ||
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY ||
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT ||
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT
 				)
 		})
 
@@ -111,7 +114,7 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 	})
 }
 
-export const useGetDefectiveGoodInboundReportQuery = (
+export const useGetDefectiveGoodsInboundReportQuery = (
 	tenantId: string,
 	params: {
 		'auto-refresh'?: false | number
@@ -120,14 +123,14 @@ export const useGetDefectiveGoodInboundReportQuery = (
 ) => {
 	return useQuery({
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenantId, pick(params, 'date.eq')],
-		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenantId, pick(params, 'date.eq')),
+		queryFn: async () => await DefectiveGoodsService.getInboundReport(tenantId, pick(params, 'date.eq')),
 		enabled: !!tenantId,
 		refetchInterval: params['auto-refresh'],
 		select: (response) => response.metadata
 	})
 }
 
-export const useGetDefectiveGoodOutboundReportQuery = (
+export const useGetDefectiveGoodsOutboundReportQuery = (
 	tenantId: string,
 	params: {
 		'auto-refresh'?: false | number
@@ -135,7 +138,7 @@ export const useGetDefectiveGoodOutboundReportQuery = (
 	}
 ) => {
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenantId, pick(params, 'date.eq')],
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, tenantId, pick(params, 'date.eq')],
 		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenantId, pick(params, 'date.eq')),
 		enabled: !!tenantId,
 		refetchInterval: params['auto-refresh'],
