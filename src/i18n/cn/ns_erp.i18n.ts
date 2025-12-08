@@ -59,6 +59,7 @@ export default {
 		no_crates_in_stock: '入库箱数',
 		no_pair_in_stock: '入库数量',
 		centralized_po: '集中采购订单',
+		outbound_purpose: '出庫目的',
 		or_custpo: '客戶訂單',
 		or_custpoone: '订单编号',
 		or_no: '訂單編號',

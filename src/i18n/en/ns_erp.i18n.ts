@@ -59,6 +59,7 @@ export default {
 		no_crates_in_stock: 'No. crates in stock', //: Số thùng nhập kho
 		no_pair_in_stock: 'No. pairs in stock', //: Số đôi nhập kho
 		centralized_po: 'Centralized PO',
+		outbound_purpose: 'Outbound purpose',
 		or_custpo: 'Customer order code',
 		or_custpoone: 'Customer purchase code', //：Mã đặt đơn
 		or_no: 'Sub-manufacturing order',

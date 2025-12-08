@@ -68,7 +68,7 @@ export default {
 	inoutbound_actions: {
 		normal_export: '正常出庫',
 		normal_import: '正常入庫',
-		recycling: '翻箱',
+		recycle: '翻箱',
 		sell: '銷售',
 		giveaway: '送干部',
 		return_for_repair: '返修',

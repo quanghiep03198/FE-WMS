@@ -282,23 +282,6 @@ export interface IRFIDReaderDevice {
 	last_used_time: string | Date | null
 }
 
-export interface IDefectiveGoods extends IBaseEntity {
-	epc: string
-	brand_name: string
-	defective_category: DefectiveType
-	color_sn: string
-	mo_no?: string
-	po?: string
-	storage_location: string
-	factory_shoes_style: string
-	size: string
-	defective_location: DefectiveLocation
-	defective_description: string
-	assembly_line: string | null
-	sewing_line: string | null
-	ri_cancel: boolean
-}
-
 export interface IMonthlyInventoryComparison {
 	comparison_date: string
 	current_period: string
@@ -338,11 +321,6 @@ export interface IAssemblyProductionVolumn {
 	brand_name: string
 	work_date: string
 	volumn: number
-}
-
-export interface IDefectiveGoodsInventory
-	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
-	size_data: Array<{ size_numcode: string; qty: number }>
 }
 
 export interface IPurchaseOrderDetail {

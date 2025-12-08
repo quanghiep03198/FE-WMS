@@ -31,7 +31,7 @@ const OutboundPurposeFieldControl = ({ ...props }) => {
 				value: DefectiveGoodsOutboundPurpose.SELL
 			},
 			{
-				label: t('ns_inoutbound:inoutbound_actions.recycling'),
+				label: t('ns_inoutbound:inoutbound_actions.recycle'),
 				value: DefectiveGoodsOutboundPurpose.RECYCLE
 			},
 			{

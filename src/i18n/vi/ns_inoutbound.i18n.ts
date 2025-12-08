@@ -96,7 +96,7 @@ export default {
 	inoutbound_actions: {
 		normal_export: 'Xuất kho bình thường',
 		normal_import: 'Nhập kho bình thường',
-		recycling: 'Tái chế',
+		recycle: 'Tái chế',
 		return_for_repair: 'Hàng trả về để sửa chữa',
 		sell: 'Bán',
 		giveaway: 'Tặng quà',
@@ -166,6 +166,8 @@ export default {
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',
 		file_daily_inbound_report: 'Báo biểu nhập kho {{factory}} - {{date}}',
 		file_daily_outbound_report: 'Báo biểu xuất kho {{factory}} - {{date}}',
+		daily_defective_gooods_inbound_report: 'Báo biểu nhập kho hàng loại 2 {{factory}} - {{date}}',
+		daily_defective_gooods_outbound_report: 'Báo biểu xuất kho hàng loại 2 {{factory}} - {{date}}',
 		file_defective_goods_inventory_report: 'Tồn kho hàng loại 2 - {{factory}}',
 		file_shaping_department_productivity_report: 'Báo biểu sản lượng thành hình {{factory}} - {{date}}',
 		file_monthly_inventory_report: 'Báo biểu tồn kho {{factory}} - {{month}}',

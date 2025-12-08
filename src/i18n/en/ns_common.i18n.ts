@@ -206,6 +206,8 @@ export default {
 		appearance: 'Appearance',
 		common_management: 'Common management',
 		defective_goods_inoutbound: 'Defective goods inoutbound',
+		defective_goods_inbound_report: 'Defective goods inbound report',
+		defective_goods_outbound_report: 'Defective goods outbound report',
 		defective_goods_epc_combination: 'B/C grade EPC combination',
 		defective_goods_inventory: 'Defective goods inventory',
 		dashboard: 'Dashboard',

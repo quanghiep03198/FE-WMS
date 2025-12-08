@@ -76,6 +76,14 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 					url: '/production-inventory'
 				},
 				{
+					title: 'navigation.defective_goods_inbound_report',
+					url: '/defective-goods-inbound-report'
+				},
+				{
+					title: 'navigation.defective_goods_outbound_report',
+					url: '/defective-goods-outbound-report'
+				},
+				{
 					title: 'navigation.defective_goods_inventory',
 					url: '/defective-goods-inventory'
 				},

@@ -58,6 +58,7 @@ export default {
 		no_crates_in_stock: 'Số thùng nhập kho',
 		no_pair_in_stock: 'Số đôi nhập kho',
 		centralized_po: 'PO không phân tách',
+		outbound_purpose: 'Mục đích xuất kho',
 		or_custpo: 'Mã đơn đặt hàng của khách',
 		or_custpoone: 'Mã đặt đơn',
 		or_no: 'Mã đơn hàng',

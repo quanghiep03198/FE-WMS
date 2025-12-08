@@ -1,4 +1,5 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
+import { DefectiveCategory, DefectiveLocation } from '@/app/(features)/_layout.(defective-goods)/-constants'
 import {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams,
@@ -9,9 +10,43 @@ import {
 	DefectiveGoodsOutboundFormValues
 } from '@/app/(features)/_layout.(defective-goods)/defective-goods-inoutbound/-schemas'
 import { RequestHeaders } from '@/common/constants/enums'
-import { IDefectiveGoods, IDefectiveGoodsInventory } from '@/common/types/entities'
+import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
+export interface IDefectiveGoods extends IBaseEntity {
+	epc: string
+	brand_name: string
+	defective_category: DefectiveCategory
+	color_sn: string
+	mo_no?: string
+	po?: string
+	storage_location: string
+	factory_shoes_style: string
+	size: string
+	defective_location: DefectiveLocation
+	defective_description: string
+	assembly_line: string | null
+	sewing_line: string | null
+	ri_cancel: boolean
+}
+
+export interface IDefectiveGoodsInventory
+	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
+	size_data: Array<{ size_numcode: string; qty: number }>
+}
+
+export interface IDefectiveGoodsInboundReport
+	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
+	size_data: Array<{ size_numcode: string; qty: number }>
+}
+export interface IDefectiveGoodsOutboundReport
+	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description' | 'storage_location'> {
+	size_data: Array<{ size_numcode: string; qty: number }>
+}
+
+/**
+ * @classdesc Service for managing defective goods operations.
+ */
 export class DefectiveGoodsService {
 	static async getDefectiveGoods(params: Partial<DefectiveGoodQueryParams>) {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IDefectiveGoods>>>('/defective-goods', {
@@ -57,6 +92,46 @@ export class DefectiveGoodsService {
 			'/defective-goods/inbound',
 			payload
 		)
+	}
+
+	static async getInboundReport(tenantId: string, params: { 'date.eq': string }) {
+		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsInboundReport[]>>(
+			'/defective-goods/daily-inbound',
+			{
+				headers: {
+					[RequestHeaders.TENANT_ID]: tenantId
+				},
+				params
+			}
+		)
+	}
+
+	static async getOutboundReport(tenantId: string, params: { 'date.eq': string }) {
+		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsOutboundReport[]>>(
+			'/defective-goods/daily-outbound',
+			{
+				headers: {
+					[RequestHeaders.TENANT_ID]: tenantId
+				},
+				params
+			}
+		)
+	}
+
+	static async downloadInboundReport(tenantId: string, filter: { 'date.eq': string }) {
+		return await axiosInstance.get<void, Blob>(`/defective-goods/export-daily-inbound`, {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params: filter,
+			responseType: 'blob'
+		})
+	}
+
+	static async downloadOutboundReport(tenantId: string, filter: { 'date.eq': string }) {
+		return await axiosInstance.get<void, Blob>(`/defective-goods/export-daily-outbound`, {
+			headers: { [RequestHeaders.TENANT_ID]: tenantId },
+			params: filter,
+			responseType: 'blob'
+		})
 	}
 
 	static async updateOutboundStatus(payload: DefectiveGoodsOutboundFormValues) {

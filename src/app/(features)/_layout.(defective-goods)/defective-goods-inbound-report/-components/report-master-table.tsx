@@ -1,27 +1,48 @@
-import SizeTable from '@/app/(features)/-components/-shared/size-table'
-import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import useQueryParams from '@/common/hooks/use-query-params'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { IDefectiveGoodsInventory } from '@/services/defective-goods.service'
-import { createColumnHelper } from '@tanstack/react-table'
+import { RenderSubComponent } from '@/components/ui/@react-table/types'
+import { IDefectiveGoodsInboundReport } from '@/services/defective-goods.service'
+import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import { split } from 'lodash-es'
-import { useCallback, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory, DefectiveCategoryI18n } from '../../-constants'
+import { DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
-import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
-import ReportTableSummary from './report-table-footer'
+import { useGetDefectiveGoodInboundReportQuery } from '../../-hooks/use-defective-goods-asm'
+import AutoRefreshToggle from '../../../-components/-shared/auto-refresh-toggle'
+import SizeTable from '../../../-components/-shared/size-table'
+import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
+import DownloadExcelButton from './download-excel-button'
+import ReportTableSummary from './report-table-summary'
 
-const DefectiveGoodsInventoryTable: React.FC = () => {
-	const { data, isLoading, refetch } = useGetDefectiveGoodsInventoryQuery()
+export type PageQueryParams = {
+	'date.eq': string
+	'auto-refresh': number | false
+}
+
+const InboundReportMasterTable: React.FC = () => {
+	const { searchParams } = useQueryParams<PageQueryParams>({
+		'date.eq': format(new Date(), 'yyyy-MM-dd'),
+		'auto-refresh': false
+	})
+	const { data: currentTenant } = useGetTenantByFactory()
+	const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+	const { data, isLoading, refetch } = useGetDefectiveGoodInboundReportQuery(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
-	const columnHelper = createColumnHelper<IDefectiveGoodsInventory>()
+	const dataTableRef = useRef<TTable<IDefectiveGoodsInboundReport>>(null)
+	const columnHelper = createColumnHelper<IDefectiveGoodsInboundReport>()
+
 	const defectiveCategoryList = useDefectiveCategoryList()
 
 	const factedUniqueStorageLocations = useMemo(() => {
 		const locationSet = new Set<string>()
 		if (Array.isArray(data)) {
-			data.forEach((item: IDefectiveGoodsInventory) => {
+			data.forEach((item: IDefectiveGoodsInboundReport) => {
 				const storageLocations = item.storage_location?.split(',')
 				if (Array.isArray(storageLocations)) {
 					storageLocations.forEach((loc) => locationSet.add(loc))
@@ -31,6 +52,10 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 		return Array.from(locationSet)
 			.sort((a, b) => a.localeCompare(b))
 			.map((loc) => ({ value: loc, label: loc }))
+	}, [data])
+
+	useEffect(() => {
+		if (dataTableRef.current) dataTableRef.current.toggleAllRowsExpanded(false)
 	}, [data])
 
 	const columns = useMemo(
@@ -60,14 +85,14 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					</button>
 				)
 			}),
+
 			columnHelper.accessor('brand_name', {
 				header: t('ns_erp:fields.brand_name'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: false,
-				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
@@ -75,8 +100,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: false,
-				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -84,8 +108,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableHiding: false,
-				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				filterFn: 'includesString'
 			}),
 			columnHelper.accessor('cust_shoes_style', {
 				header: t('ns_erp:fields.cust_shoes_style'),
@@ -93,7 +116,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableSorting: true,
 				enableHiding: false,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('factory_shoes_style', {
@@ -102,7 +125,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableSorting: true,
 				enableHiding: false,
 				enablePinning: true,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
 				cell: ({ getValue }) => getValue() ?? 'Unknown'
 			}),
 			columnHelper.accessor('color_sn', {
@@ -112,8 +135,65 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'fuzzy',
-
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: ({ getValue }) => {
+					return getValue() ?? 'Unknown'
+				}
+			}),
+			columnHelper.accessor('sewing_line', {
+				header: t('ns_erp:fields.sewing_line'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				filterFn: 'includesString',
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (typeof value !== 'string' || !value.trim())
+						return (
+							<Typography variant='small' color='muted' className='line-clamp-1'>
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+					return (
+						<EllipsisList
+							threshhold={3}
+							data={split(value, ',')
+								.filter((item) => !!item)
+								.sort((a, b) => a.localeCompare(b))}
+							template={({ data }) => (
+								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
+									{data}
+								</Badge>
+							)}
+						/>
+					)
+				}
+			}),
+			columnHelper.accessor('assembly_line', {
+				header: t('ns_erp:fields.assembly_line'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				filterFn: 'includesString',
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (typeof value !== 'string' || !value.trim())
+						return (
+							<Typography variant='small' color='muted' className='line-clamp-1'>
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+					return (
+						<EllipsisList
+							threshhold={3}
+							data={split(value, ',')
+								.filter((item) => !!item)
+								.sort((a, b) => a.localeCompare(b))}
+							template={({ data }) => (
+								<Badge variant='outline' className='max-h-fit whitespace-nowrap font-normal'>
+									{data}
+								</Badge>
+							)}
+						/>
+					)
+				}
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
@@ -155,54 +235,20 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					)
 				}
 			}),
-			columnHelper.accessor('total_qty', {
-				header: t('ns_erp:fields.actual_inventory_qty'),
+
+			columnHelper.accessor('daily_inbound_qty', {
+				header: t('ns_erp:fields.daily_inbound_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
+				enableHiding: false,
 				meta: { filterVariant: 'range', align: 'right' },
 				filterFn: 'inNumberRange',
-				cell: ({ row }) => {
-					if (!Array.isArray(row.original.size_data)) return 0
-					return row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
-				}
+				cell: ({ getValue }) => formatIntlNumber(getValue())
 			})
 		],
 		[i18n.language]
 	)
-
-	const renderSubComponent = useCallback(
-		({ row }) => {
-			return (
-				<SizeTable
-					data={row.original.size_data}
-					total={
-						Array.isArray(row.original.size_data)
-							? row.original.size_data.reduce((acc, curr) => acc + curr.qty, 0)
-							: 0
-					}
-				/>
-			)
-		},
-		[data]
-	)
-
-	const summaryData = useMemo(() => {
-		const result: Record<DefectiveCategory, number> = {
-			[DefectiveCategory.B_GRADE]: 0,
-			[DefectiveCategory.C_GRADE]: 0,
-			[DefectiveCategory.RESEARCH_DEVELOPMENT]: 0
-		}
-		if (!Array.isArray(data)) return result
-		const groupData = Object.groupBy(data, (item: IDefectiveGoodsInventory) => item.defective_category)
-		for (const category in groupData) {
-			result[category] = groupData[category].reduce((sum, curr) => {
-				if (!Array.isArray(curr.size_data)) return sum
-				return sum + curr.size_data.reduce((acc, size) => acc + size.qty, 0)
-			}, 0)
-		}
-		return result
-	}, [data])
 
 	return (
 		<DataTable
@@ -211,22 +257,31 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 			loading={isLoading}
 			enableExpanding={true}
 			enableColumnResizing={true}
-			containerProps={{ className: 'h-[60vh]' }}
-			renderSubComponent={renderSubComponent}
+			ref={dataTableRef}
+			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
+			renderSubComponent={
+				(({ row }) => {
+					return <SizeTable data={row.original?.size_data} />
+				}) satisfies RenderSubComponent<IDefectiveGoodsInboundReport>
+			}
 			toolbarProps={{
+				slotLeft: () => <AutoRefreshToggle />,
 				slotRight: () => (
-					<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-						<Button size='icon' variant='outline' onClick={() => refetch()}>
-							<Icon name='RotateCw' />
-						</Button>
-					</Tooltip>
+					<Fragment>
+						{!isLargeScreen && <DownloadExcelButton />}
+						<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
+							<Button size='icon' variant='outline' onClick={() => refetch()}>
+								<Icon name='RotateCw' />
+							</Button>
+						</Tooltip>
+					</Fragment>
 				)
 			}}
 			footerProps={{
-				slot: () => <ReportTableSummary summaryData={summaryData} />
+				slot: () => <ReportTableSummary data={data} />
 			}}
 		/>
 	)
 }
 
-export default DefectiveGoodsInventoryTable
+export default InboundReportMasterTable
