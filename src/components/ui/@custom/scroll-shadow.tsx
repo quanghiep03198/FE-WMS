@@ -37,7 +37,7 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 		}
 	}, [containerScroll, localRef])
 
-	const handleScheckScrollable = useCallback(
+	const handleCheckIsScrollable = useCallback(
 		debounce(() => {
 			const element: HTMLDivElement = localRef.current
 			if (element) {
@@ -54,10 +54,10 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 	useEffect(() => {
 		const element = localRef.current
 
-		handleScheckScrollable()
+		handleCheckIsScrollable()
 
-		const mutationObserver = new MutationObserver(handleScheckScrollable)
-		const resizeObserver = new ResizeObserver(handleScheckScrollable)
+		const mutationObserver = new MutationObserver(handleCheckIsScrollable)
+		const resizeObserver = new ResizeObserver(handleCheckIsScrollable)
 
 		if (element) {
 			mutationObserver.observe(element, { childList: true, subtree: true })
