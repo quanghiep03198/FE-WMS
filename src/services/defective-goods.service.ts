@@ -30,18 +30,17 @@ export interface IDefectiveGoods extends IBaseEntity {
 	ri_cancel: boolean
 }
 
-export interface IDefectiveGoodsInventory
-	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
-	size_data: Array<{ size_numcode: string; qty: number }>
+type SizeData = Array<{ size_numcode: string; qty: number }>
+
+export interface IDefectiveGoodsInventory extends Partial<IDefectiveGoods> {
+	size_data: SizeData
 }
 
-export interface IDefectiveGoodsInboundReport
-	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description'> {
-	size_data: Array<{ size_numcode: string; qty: number }>
+export interface IDefectiveGoodsInboundReport extends Partial<IDefectiveGoods> {
+	size_data: SizeData
 }
-export interface IDefectiveGoodsOutboundReport
-	extends Omit<IDefectiveGoods, 'defective_location' | 'defective_description' | 'storage_location'> {
-	size_data: Array<{ size_numcode: string; qty: number }>
+export interface IDefectiveGoodsOutboundReport extends Partial<IDefectiveGoods> {
+	size_data: SizeData
 }
 
 /**
