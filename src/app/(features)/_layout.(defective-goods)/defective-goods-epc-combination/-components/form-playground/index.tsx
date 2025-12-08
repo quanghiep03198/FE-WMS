@@ -137,7 +137,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 	}, [])
 
-	const handleResetForm = useCallback(() => {
+	const handleResetForm = () => {
 		const currentFormValues = form.getValues()
 		for (const key in currentFormValues) {
 			switch (key) {
@@ -153,32 +153,27 @@ const DefectiveGoodsForm: React.FC = () => {
 			}
 		}
 		form.reset(currentFormValues)
-	}, [formAction])
+	}
 
-	const handleSubmitForm = useCallback(
-		(data: CreateDefectiveGoodsFormValues) => {
-			const payload = {
-				...data,
-				defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString(
-					'base64'
-				)
-			}
-			const mutateAsync = async () =>
-				formAction === CommonActions.UPDATE
-					? await updateAsync({ id: +hash, data: payload })
-					: await createAsync(payload)
-			toast.promise(mutateAsync(), {
-				loading: t('ns_common:notification.processing_request'),
-				success: () => {
-					if (formAction === CommonActions.CREATE) form.reset({ ...form.getValues(), epc: '' })
-					event$.emit({ action: CommonActions.SAVE, payload: [] })
-					return t('ns_common:notification.success')
-				},
-				error: t('ns_common:notification.error')
-			})
-		},
-		[formAction, hash]
-	)
+	const handleSubmitForm = (data: CreateDefectiveGoodsFormValues) => {
+		const payload = {
+			...data,
+			defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString('base64')
+		}
+		const mutateAsync = async () =>
+			formAction === CommonActions.UPDATE
+				? await updateAsync({ id: +hash, data: payload })
+				: await createAsync(payload)
+		toast.promise(mutateAsync(), {
+			loading: t('ns_common:notification.processing_request'),
+			success: () => {
+				if (formAction === CommonActions.CREATE) form.reset({ ...form.getValues(), epc: '' })
+				event$.emit({ action: CommonActions.SAVE, payload: [] })
+				return t('ns_common:notification.success')
+			},
+			error: t('ns_common:notification.error')
+		})
+	}
 
 	const isPending: boolean = isCreating || isUpdating
 	const isError: boolean = isFailedToCreate || isFailedToUpdate
