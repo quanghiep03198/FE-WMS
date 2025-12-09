@@ -233,15 +233,27 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											colSpan={'100%' as unknown as React.ComponentProps<typeof TableCell>['colSpan']}
 											className='border-t p-0'>
 											<Div className='grid grid-cols-3 [&>div]:place-content-center [&>div]:place-items-center [&>div]:px-3 [&>div]:text-center'>
-												<Div className='h-10 border-b py-2'>{t('ns_erp:fields.qc_signature')}</Div>
 												<Div className='h-10 border-b py-2'>
-													{t('ns_erp:fields.warehouse_officer_signature')}
+													<span className='line-clamp-1' title={t('ns_erp:fields.ie_signature')}>
+														{t('ns_erp:fields.ie_signature')}
+													</span>
 												</Div>
 												<Div className='h-10 border-b py-2'>
-													{t('ns_erp:fields.security_guard_signature')}
+													<span
+														className='line-clamp-1'
+														title={t('ns_erp:fields.warehouse_officer_signature')}>
+														{t('ns_erp:fields.warehouse_officer_signature')}
+													</span>
+												</Div>
+												<Div className='h-10 border-b py-2'>
+													<span
+														className='line-clamp-1'
+														title={t('ns_erp:fields.security_guard_signature')}>
+														{t('ns_erp:fields.security_guard_signature')}
+													</span>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature data={data} type='qc_signature' />
+													<Signature data={data} type='ie_signature' />
 												</Div>
 												<Div className='has-[button]:py-2'>
 													<Signature data={data} type='warehouse_officer_signature' />
@@ -342,7 +354,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 
 const Signature: React.FC<{
 	data: ITruckloadDelivery
-	type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+	type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
 }> = ({ data, type }) => {
 	const { event$ } = usePageContext()
 

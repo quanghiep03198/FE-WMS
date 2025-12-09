@@ -73,7 +73,7 @@ export default {
 		po_size_qty: '订单尺寸数量',
 		prod_color: '产品颜色',
 		progress: '进度',
-		qc_signature: 'QC签名',
+		ie_signature: '進出口簽名',
 		punctured_container: '櫃子漏洞',
 		smelling_container: '櫃子有異味',
 		moist_container: '櫃子潮濕',

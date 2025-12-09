@@ -24,7 +24,7 @@ type EventPayload =
 	| {
 			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE'
 			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
-				signature_type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+				signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
 			}
 	  }
 

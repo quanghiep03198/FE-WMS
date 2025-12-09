@@ -86,7 +86,7 @@ export const useUpdateDispatchOrderSignatureMutation = () => {
 	return useMutation({
 		mutationFn: (payload: {
 			dispatch_order: TruckloadDeliveryDispatchOrder
-			signature_type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+			signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
 			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 			signature: string
 		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload),

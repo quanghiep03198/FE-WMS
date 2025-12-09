@@ -76,7 +76,7 @@ export default {
 		punctured_container: 'Punctured container',
 		smelling_container: 'Smelling container',
 		moist_container: 'Moist container',
-		qc_signature: 'QC signature',
+		ie_signature: 'Import-Export department signature',
 		warehouse_officer_signature: 'Warehouse officer signature',
 		security_guard_signature: 'Security guard signature',
 		required_date: 'Required date',

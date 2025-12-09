@@ -48,7 +48,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const { event$ } = usePageContext()
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
-			signature_type: 'qc_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+			signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
 			title: string | null
 		}
 	>({
@@ -63,7 +63,7 @@ const SignatureEditorDialog: React.FC = () => {
 		if (action === 'UPDATE_DISPATCH_ORDER_SIGNATURE') {
 			setOpen(true)
 			const title = {
-				qc_signature: t('ns_erp:fields.qc_signature'),
+				ie_signature: t('ns_erp:fields.ie_signature'),
 				warehouse_officer_signature: t('ns_erp:fields.warehouse_officer_signature'),
 				security_guard_signature: t('ns_erp:fields.security_guard_signature')
 			}

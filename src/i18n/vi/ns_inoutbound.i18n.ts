@@ -87,7 +87,7 @@ export default {
 		defective_epc_caption: 'Hãy chọn ô nhập này và quét mã EPC của hàng lỗi. Mã EPC phải đủ 24 ký tự.',
 		truckload_delivery: 'Quản lý thông tin đóng container xuất hàng khỏi nhà máy',
 		request_change_dispatch_order_info:
-			'Phát hiện sự sai lệch trong thông tin xuất hàng; QC và nhân viên kho cần cập nhật lại dữ liệu.',
+			'Phát hiện sự sai lệch trong thông tin xuất hàng; XNK và nhân viên kho cần cập nhật lại dữ liệu.',
 		confirm_dispatch_order_info:
 			'Xác nhận thông tin xuất hàng là chính xác và phê duyệt cho lô hàng rời khỏi nhà máy.',
 		update_dispatch_order_signature_info: 'Cập nhật chữ ký xác nhận thông tin xuất hàng'

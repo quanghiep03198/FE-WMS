@@ -71,7 +71,7 @@ export default {
 		truckload_delivery: 'Manage container loading information for outbound shipments from the factory',
 		update_truckload_delivery: 'Update container loading information for outbound shipments from the factory',
 		request_change_dispatch_order_info:
-			'A discrepancy in the shipment information has been detected; QC and warehouse officer must update the records.',
+			'A discrepancy in the shipment information has been detected; Import-Export department and warehouse officer must update the records.',
 		confirm_dispatch_order_info:
 			'Confirm that the dispatch information is accurate and authorize the shipment to leave the factory.',
 		update_dispatch_order_signature_info: 'Update the signature confirming the dispatch information'
