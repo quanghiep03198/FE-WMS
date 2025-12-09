@@ -214,8 +214,6 @@ export default {
 		defective_goods_inbound_report: '第二级品入库报表',
 		defective_goods_outbound_report: '第二级品出库报表',
 		defective_goods_epc_combination: '第二级品配标',
-		daily_defective_gooods_inbound_report: '{{factory}}二級品每日入庫報表 - {{date}}',
-		daily_defective_gooods_outbound_report: '{{factory}}二級品每日出庫報表 - {{date}}',
 		defective_goods_inventory: '第二级品库存',
 		dashboard: '首頁',
 		finished_goods_inbound: '倉庫出入庫作業',
