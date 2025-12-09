@@ -23,7 +23,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
-import { GhostButton } from '../../-components/-shared/ghost-button'
+import { GhostButton } from '../../-components/shared/ghost-button'
 import { useSearchPurchaseOrderQuery } from '../../-hooks/use-order-asm'
 import SearchHistory from './search-history'
 

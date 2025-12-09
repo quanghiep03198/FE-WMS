@@ -1,8 +1,9 @@
-import { factories, FALLBACK_VALUE } from '@/common/constants/constants'
+import { factories } from '@/common/constants/constants'
 import { IPackingManifest } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { DataTableProps } from '@/components/ui/@react-table/types'
 import { PackingService } from '@/services/packing.service'
 import { useQuery } from '@tanstack/react-query'
@@ -31,7 +32,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'includesString',
 				size: 200,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('brand_name', {
 				header: t('ns_erp:fields.brand_name'),
@@ -42,7 +43,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'equalsString',
 				size: 200,
 				meta: { align: 'left', filterVariant: 'select' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -53,7 +54,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				size: 200,
 				meta: { align: 'left', filterVariant: 'select' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('color', {
 				header: t('ns_erp:fields.color_sn'),
@@ -64,7 +65,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'equalsString',
 				size: 200,
 				meta: { align: 'left', filterVariant: 'select' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('size_data', {
 				header: 'Size',
@@ -89,7 +90,7 @@ const ReportMasterTable: React.FC = () => {
 							threshhold={2}
 						/>
 					) : (
-						'Unknown'
+						t('ns_common:titles.unknown')
 					)
 				}
 			}),
@@ -102,9 +103,7 @@ const ReportMasterTable: React.FC = () => {
 				size: 120,
 				cell: ({ getValue }) => {
 					const factoryCode = getValue()
-					return factoryCode
-						? t(factories[factoryCode], { ns: 'ns_common', defaultValue: factoryCode })
-						: 'Unknown'
+					return t(factories[factoryCode], { ns: 'ns_common', defaultValue: t('ns_common:titles.unknown') })
 				}
 			}),
 			columnHelper.accessor('standard_weight', {
@@ -129,7 +128,7 @@ const ReportMasterTable: React.FC = () => {
 				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
 				cell: ({ getValue }) => {
 					const value = getValue()
-					return typeof value === 'number' ? formatIntlNumber(getValue()) : FALLBACK_VALUE
+					return typeof value === 'number' ? formatIntlNumber(getValue()) : t('ns_common:titles.unknown')
 				}
 			}),
 			columnHelper.accessor('target_box_qty', {

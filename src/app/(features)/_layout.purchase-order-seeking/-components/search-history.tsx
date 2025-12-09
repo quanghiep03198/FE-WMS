@@ -4,7 +4,7 @@ import React, { useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSearchPoHistory } from '../-hooks/use-search-po-history'
-import { GhostButton } from '../../-components/-shared/ghost-button'
+import { GhostButton } from '../../-components/shared/ghost-button'
 
 const SearchHistory: React.FC = () => {
 	const { setValue } = useFormContext()

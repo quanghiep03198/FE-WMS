@@ -1,6 +1,7 @@
 import { IOutboundHistory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -53,7 +54,7 @@ const OutboundHistoryTable: React.FC = () => {
 						enableSorting: true,
 						filterFn: 'fuzzy',
 						minSize: 100,
-						cell: ({ getValue }) => getValue() ?? 'Unknown'
+						cell: TableCellText
 					}),
 					columnHelper.accessor('color_sn', {
 						header: t('ns_erp:fields.color_sn'),
@@ -61,9 +62,7 @@ const OutboundHistoryTable: React.FC = () => {
 						enableSorting: true,
 						minSize: 100,
 						filterFn: 'fuzzy',
-						cell: ({ getValue }) => {
-							return getValue() ?? 'Unknown'
-						}
+						cell: TableCellText
 					}),
 					columnHelper.accessor('po_qty', {
 						header: t('ns_erp:fields.order_qty'),
@@ -71,9 +70,7 @@ const OutboundHistoryTable: React.FC = () => {
 						enableSorting: true,
 						minSize: 100,
 						filterFn: 'inNumberRange',
-						cell: ({ getValue }) => {
-							return formatIntlNumber(getValue())
-						},
+						cell: ({ getValue }) => formatIntlNumber(getValue()),
 						meta: { align: 'right', filterVariant: 'range' }
 					}),
 					columnHelper.accessor('outbound_qty', {
@@ -82,9 +79,7 @@ const OutboundHistoryTable: React.FC = () => {
 						enableSorting: true,
 						minSize: 100,
 						filterFn: 'inNumberRange',
-						cell: ({ getValue }) => {
-							return formatIntlNumber(getValue())
-						},
+						cell: ({ getValue }) => formatIntlNumber(getValue()),
 						meta: { align: 'right', filterVariant: 'range' }
 					}),
 					columnHelper.accessor('outbound_date', {
@@ -95,7 +90,7 @@ const OutboundHistoryTable: React.FC = () => {
 						filterFn: 'inDateRange',
 						cell: ({ getValue }) => {
 							const value = getValue()
-							return value ? format(value, 'yyyy-MM-dd') : 'Unknown'
+							return !value ? format(value, 'yyyy-MM-dd') : t('ns_common:titles.unknown')
 						},
 						meta: { align: 'left', filterVariant: 'date' }
 					})

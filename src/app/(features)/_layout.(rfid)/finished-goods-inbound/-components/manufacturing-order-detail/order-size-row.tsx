@@ -1,4 +1,4 @@
-import { NestedCell, NestedRow, NestedTable } from '@/app/(features)/-components/-shared/horizontal-nested-table'
+import { NestedCell, NestedRow, NestedTable } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { cn } from '@/common/utils/cn'

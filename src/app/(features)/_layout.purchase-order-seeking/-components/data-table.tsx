@@ -6,7 +6,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
-import PlaceHolderItems from '../../-components/-shared/placeholder-items'
+import PlaceHolderItems from '../../-components/shared/placeholder-items'
 import ReportTableSummary from './report-table-summary'
 
 const DataSection: React.FC = () => {

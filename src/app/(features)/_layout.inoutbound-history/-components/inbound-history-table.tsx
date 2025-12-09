@@ -5,8 +5,8 @@ import { orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
-import { NestedCell, NestedCellHead, NestedRow, NestedTable } from '../../-components/-shared/horizontal-nested-table'
-import PlaceHolderItems from '../../-components/-shared/placeholder-items'
+import { NestedCell, NestedCellHead, NestedRow, NestedTable } from '../../-components/shared/horizontal-nested-table'
+import PlaceHolderItems from '../../-components/shared/placeholder-items'
 
 const InboundHistoryTable: React.FC = () => {
 	const { data, isLoading } = useGetInboundHistoryQuery()

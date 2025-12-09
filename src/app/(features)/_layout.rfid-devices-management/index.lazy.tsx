@@ -3,7 +3,7 @@ import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Div, Separator } from '@/components/ui'
-import { PageDescription, PageHeader, PageTitle } from '../-components/-shared/page-header'
+import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import RFIDDeviceFormDialog from './-components/rfid-device-form-dialog'
 import RFIDDeviceList from './-components/rfid-device-list'

@@ -12,8 +12,8 @@ import { ErrorBoundaryFallback } from '../-components/-errors/error-boundary-fal
 import UnsupportedScreen from '../-components/-errors/unsupported-screen'
 import AuthGuard from '../-components/-guard/auth-guard'
 import { AuthQueryKeys } from '../-hooks/use-user-asm'
-import NavSidebar from './-components/-partials/nav-sidebar'
-import Navbar from './-components/-partials/navbar'
+import NavSidebar from './-components/partials/nav-sidebar'
+import Navbar from './-components/partials/navbar'
 import { BreadcrumbProvider } from './-contexts/breadcrumb-context'
 
 export const Route = createFileRoute('/(features)/_layout')({

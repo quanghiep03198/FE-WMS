@@ -14,7 +14,7 @@ import { pick } from 'lodash-es'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
+import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
 
 const ReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -42,7 +42,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				size: 200,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
@@ -52,7 +52,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'includesString',
 				size: 200,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -62,7 +62,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				size: 200,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -72,7 +72,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				size: 200,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('size_data', {
 				header: 'Size',
@@ -82,7 +82,7 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'fuzzy',
 				size: 200,
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('target_box_qty', {
 				header: t('ns_erp:fields.target_box_qty'),

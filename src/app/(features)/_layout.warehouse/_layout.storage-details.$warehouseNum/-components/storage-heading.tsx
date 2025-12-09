@@ -1,4 +1,4 @@
-import { PageDescription, PageHeader, PageTitle } from '@/app/(features)/-components/-shared/page-header'
+import { PageDescription, PageHeader, PageTitle } from '@/app/(features)/-components/shared/page-header'
 import { CommonActions } from '@/common/constants/enums'
 import { Button, Div, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'

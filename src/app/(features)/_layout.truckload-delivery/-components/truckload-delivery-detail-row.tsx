@@ -22,7 +22,7 @@ import { isNil, pick } from 'lodash-es'
 import React, { Fragment, memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
-import { GhostButton } from '../../-components/-shared/ghost-button'
+import { GhostButton } from '../../-components/shared/ghost-button'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PurchaseOrderFieldControl from './purchase-order-field-control'
 

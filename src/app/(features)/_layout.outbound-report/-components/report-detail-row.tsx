@@ -1,4 +1,4 @@
-import { NestedCell, NestedRow } from '@/app/(features)/-components/-shared/horizontal-nested-table'
+import { NestedCell, NestedRow } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'

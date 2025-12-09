@@ -1,4 +1,4 @@
-import { GhostButton } from '@/app/(features)/-components/-shared/ghost-button'
+import { GhostButton } from '@/app/(features)/-components/shared/ghost-button'
 import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { cn } from '@/common/utils/cn'

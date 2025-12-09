@@ -35,11 +35,11 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 	}, [searchParams])
 
 	return (
-		<Div className='flex items-center gap-x-2'>
+		<Div className='flex items-center gap-x-2 sm:gap-x-1 md:gap-x-1'>
 			<GlobalFilterInput {...{ table, event$ }} />
 			{!isMobile && <PurchaseOrderFilterInput table={table} />}
 			<DispatchOrderStatusFilter table={table} />
-			<Div className='ml-auto flex items-center justify-end gap-x-2'>
+			<Div className='ml-auto flex items-center justify-end gap-x-2 sm:gap-x-1 md:gap-x-1'>
 				{isFilterDirty && (
 					<Tooltip
 						message={t('ns_common:actions.clear_filter')}

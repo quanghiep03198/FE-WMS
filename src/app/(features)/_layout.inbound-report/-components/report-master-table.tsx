@@ -5,6 +5,7 @@ import { IInboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { RenderSubComponent } from '@/components/ui/@react-table/types'
 import { createColumnHelper, Table as TTable } from '@tanstack/react-table'
@@ -13,8 +14,8 @@ import { isNil, split } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundReport } from '../-hooks/use-inbound-report-asm'
-import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
-import SizeTable from '../../-components/-shared/size-table'
+import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
+import SizeTable from '../../-components/shared/size-table'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import DownloadExcelDropdown from './download-excel-dropdown'
 import ReportTableSummary from './report-table-summary'
@@ -82,9 +83,7 @@ const InboundReportMasterTable: React.FC = () => {
 				},
 				cell: ({ getValue }) => {
 					const factoryCode = getValue()
-					return factoryCode
-						? t(factories[factoryCode], { ns: 'ns_common', defaultValue: factoryCode })
-						: 'Unknown'
+					return t(factories[factoryCode], { ns: 'ns_common', defaultValue: t('ns_common:titles.unknown') })
 				}
 			}),
 			columnHelper.accessor('mo_no', {
@@ -102,7 +101,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -111,9 +110,7 @@ const InboundReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) => {
-					return getValue() ?? 'Unknown'
-				}
+				cell: TableCellText
 			}),
 			columnHelper.accessor('shaping_dept_name', {
 				header: t('ns_erp:fields.shaping_dept_name'),

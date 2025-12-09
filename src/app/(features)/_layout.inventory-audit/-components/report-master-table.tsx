@@ -23,6 +23,7 @@ import {
 	IndeterminateCheckbox,
 	RowSelectionCheckbox
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { useTableContext } from '@/components/ui/@react-table/context/table.context'
 import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
@@ -120,7 +121,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableResizing: true,
 				filterFn: 'fuzzy',
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -129,7 +130,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				enableResizing: true,
 				meta: { align: 'left' },
-				filterFn: 'includesString'
+				filterFn: 'includesString',
+				cell: TableCellText
 			}),
 			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -139,7 +141,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableResizing: true,
 				filterFn: 'fuzzy',
 				meta: { align: 'left' },
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('cust_shoes_style', {
 				header: t('ns_erp:fields.cust_shoes_style'),
@@ -148,10 +150,8 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				enableResizing: true,
 				filterFn: 'fuzzy',
-				meta: {
-					align: 'left'
-				},
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				meta: { align: 'left' },
+				cell: TableCellText
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -160,9 +160,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enablePinning: true,
 				enableResizing: true,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) => {
-					return getValue() ?? 'Unknown'
-				}
+				cell: TableCellText
 			}),
 			columnHelper.accessor('storage', {
 				header: t('ns_warehouse:fields.storage_name'),

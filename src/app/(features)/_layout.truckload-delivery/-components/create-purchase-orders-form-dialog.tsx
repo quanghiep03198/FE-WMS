@@ -34,7 +34,7 @@ import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
 import { useCreateTruckloadDeliveryMutation } from '../-hooks/use-truckload-delivery-asm'
 import { CreateDeliveryFormValues, createDeliverySchema } from '../-schemas'
-import { GhostButton } from '../../-components/-shared/ghost-button'
+import { GhostButton } from '../../-components/shared/ghost-button'
 import OutboundQtyInputFieldControl from './outbound-qty-field-control'
 import PurchaseOrderFieldControl from './purchase-order-field-control'
 

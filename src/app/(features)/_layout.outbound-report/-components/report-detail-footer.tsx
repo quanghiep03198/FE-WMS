@@ -4,7 +4,7 @@ import { Div, TableCell, TableFooter, TableRow } from '@/components/ui'
 import { capitalize, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NestedCell, NestedRow } from '../../-components/-shared/horizontal-nested-table'
+import { NestedCell, NestedRow } from '../../-components/shared/horizontal-nested-table'
 
 const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ data }) => {
 	const { t } = useTranslation()

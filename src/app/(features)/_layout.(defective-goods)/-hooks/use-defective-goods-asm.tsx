@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
+import { useReportPageQueryParams } from '../../-hooks/use-report-page-query-params'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../defective-goods-epc-combination/-constants'
 import {
@@ -114,34 +115,28 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 	})
 }
 
-export const useGetDefectiveGoodsInboundReportQuery = (
-	tenantId: string,
-	params: {
-		'auto-refresh'?: false | number
-		'date.eq': string
-	}
-) => {
+export const useGetDefectiveGoodsInboundReportQuery = () => {
+	const { data: tenant } = useGetTenantByFactory()
+	const { searchParams } = useReportPageQueryParams()
+
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenantId, pick(params, 'date.eq')],
-		queryFn: async () => await DefectiveGoodsService.getInboundReport(tenantId, pick(params, 'date.eq')),
-		enabled: !!tenantId,
-		refetchInterval: params['auto-refresh'],
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenant?.id, pick(searchParams, 'date.eq')],
+		queryFn: async () => await DefectiveGoodsService.getInboundReport(tenant?.id, pick(searchParams, 'date.eq')),
+		enabled: !!tenant?.id,
+		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
 	})
 }
 
-export const useGetDefectiveGoodsOutboundReportQuery = (
-	tenantId: string,
-	params: {
-		'auto-refresh'?: false | number
-		'date.eq': string
-	}
-) => {
+export const useGetDefectiveGoodsOutboundReportQuery = () => {
+	const { data: tenant } = useGetTenantByFactory()
+	const { searchParams } = useReportPageQueryParams()
+
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, tenantId, pick(params, 'date.eq')],
-		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenantId, pick(params, 'date.eq')),
-		enabled: !!tenantId,
-		refetchInterval: params['auto-refresh'],
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, tenant?.id, pick(searchParams, 'date.eq')],
+		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenant?.id, pick(searchParams, 'date.eq')),
+		enabled: !!tenant?.id,
+		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
 	})
 }

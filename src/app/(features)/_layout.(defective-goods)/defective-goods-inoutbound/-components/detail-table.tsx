@@ -1,4 +1,4 @@
-import { NestedCell, NestedRow } from '@/app/(features)/-components/-shared/horizontal-nested-table'
+import { NestedCell, NestedRow } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import {
 	Div,
 	Icon,

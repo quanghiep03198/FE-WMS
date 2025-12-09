@@ -1,13 +1,14 @@
-import SizeTable from '@/app/(features)/-components/-shared/size-table'
-import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
+import SizeTable from '@/app/(features)/-components/shared/size-table'
+import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { IDefectiveGoodsInventory } from '@/services/defective-goods.service'
 import { createColumnHelper } from '@tanstack/react-table'
 import { split } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import ReportTableSummary from '../../-components/report-table-footer'
+import ReportTableSummary from '../../-components/shared/report-table-footer'
 import { DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
@@ -56,12 +57,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) =>
-					getValue() ?? (
-						<Typography variant='small' color='muted' className='line-clamp-1'>
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
+				cell: TableCellText
 			}),
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
@@ -70,12 +66,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) =>
-					getValue() ?? (
-						<Typography variant='small' color='muted' className='line-clamp-1'>
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
+				cell: TableCellText
 			}),
 			columnHelper.accessor('mo_no', {
 				header: t('ns_erp:fields.mo_no'),
@@ -84,12 +75,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) =>
-					getValue() ?? (
-						<Typography variant='small' color='muted' className='line-clamp-1'>
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
+				cell: TableCellText
 			}),
 			columnHelper.accessor('cust_shoes_style', {
 				header: t('ns_erp:fields.cust_shoes_style'),
@@ -98,12 +84,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) =>
-					getValue() ?? (
-						<Typography variant='small' color='muted' className='line-clamp-1'>
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
+				cell: TableCellText
 			}),
 			columnHelper.accessor('factory_shoes_style', {
 				header: t('ns_erp:fields.factory_shoes_style'),
@@ -112,12 +93,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableHiding: false,
 				enablePinning: true,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) =>
-					getValue() ?? (
-						<Typography variant='small' color='muted' className='line-clamp-1'>
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
+				cell: TableCellText
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -126,12 +102,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) =>
-					getValue() ?? (
-						<Typography variant='small' color='muted' className='line-clamp-1'>
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
+				cell: TableCellText
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
@@ -148,7 +119,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 					const value = getValue()
 					return t(DefectiveCategoryI18n[value], {
 						ns: 'ns_inoutbound',
-						defaultValue: 'Unknown'
+						defaultValue: t('ns_common:titles.unknown')
 					})
 				}
 			}),

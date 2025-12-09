@@ -6,6 +6,7 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ReportService } from '@/services/report.service'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -16,9 +17,9 @@ import { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetOutboundReport } from '../-hooks/use-outbound-report-asm'
-import AutoRefreshToggle from '../../-components/-shared/auto-refresh-toggle'
+import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
+import DatePickerFilter from '../../-components/shared/date-picker-filter'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
-import DatePickerFilter from './date-picker-filter'
 import OutboundReportDetailTable from './report-detail-table'
 import ReportTableSummary from './report-table-footer'
 
@@ -77,7 +78,7 @@ const ReportDatalist: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'includesString',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('color_sn', {
 				header: t('ns_erp:fields.color_sn'),
@@ -87,7 +88,7 @@ const ReportDatalist: React.FC = () => {
 				enablePinning: true,
 				enableHiding: false,
 				filterFn: 'fuzzy',
-				cell: ({ getValue }) => getValue() ?? 'Unknown'
+				cell: TableCellText
 			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.order_qty'),

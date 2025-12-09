@@ -1,4 +1,4 @@
-import UploadDataFileDialog from '@/app/(features)/-components/-shared/upload-dialog'
+import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
