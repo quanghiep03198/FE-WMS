@@ -21,8 +21,8 @@ const LogoCloud: React.FC = () => {
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}
-			className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%] duration-700 animate-in fade-in-0 slide-in-from-bottom-4'>
-			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 xxl:max-w-8xl'>
+			className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%] duration-700 animate-in fade-in-0 slide-in-from-bottom-4 sm:px-2'>
+			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center xxl:max-w-8xl'>
 				<Div className='size-56 translate-y-12 place-content-center place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
 					<Div className='size-40 place-content-center place-items-center rounded-full border-[1.5px] border-foreground/35'>
 						<Div className='relative size-24 place-content-center place-items-center rounded-full border border-foreground/50'>
@@ -52,7 +52,7 @@ const LogoCloud: React.FC = () => {
 				<Typography variant='h1' className='mb-2 mt-4'>
 					Developed with trusted technologies
 				</Typography>
-				<Typography className='xl:text-lg'>
+				<Typography className='text-pretty xl:text-lg'>
 					We use the latest and most reliable technologies to build i-WMS, ensuring a robust and scalable solution.
 				</Typography>
 				<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>

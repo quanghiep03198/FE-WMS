@@ -25,7 +25,7 @@ const Header: React.FunctionComponent = () => {
 	return (
 		<Div
 			className={cn(
-				'peer sticky top-10 z-40 h-20 border-b bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:p-4'
+				'peer sticky top-10 z-40 h-20 border-b bg-background/90 p-6 bg-blend-screen backdrop-blur-2xl sm:top-16 sm:p-4'
 			)}>
 			<Div
 				as='nav'
@@ -69,11 +69,9 @@ const NavHeaderMenu: React.FC = () => {
 
 const NavHeaderActions: React.FC = () => {
 	const { isAuthenticated } = useAuth()
-	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
 
 	return (
 		<Div className='flex items-center justify-end gap-x-1 self-center *:text-sm sm:gap-0 md:gap-0'>
-			{/* {!isSmallScreen && <ThemeToggle />} */}
 			{isAuthenticated ? (
 				<Link
 					to='/dashboard'
