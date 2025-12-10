@@ -246,7 +246,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
-				header: '-',
 				enableResizing: false,
 				enableSorting: false,
 				enableGlobalFilter: false,

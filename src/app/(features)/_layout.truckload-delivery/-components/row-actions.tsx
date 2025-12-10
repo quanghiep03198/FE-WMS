@@ -1,6 +1,5 @@
 import { CommonActions } from '@/common/constants/enums'
 import {
-	buttonVariants,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
@@ -14,6 +13,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
+import { GhostButton } from '../../-components/shared/ghost-button'
 
 type RowActionsDropdownProps = Record<
 	'data',
@@ -35,10 +35,10 @@ const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
 
 	return (
 		<DropdownMenu modal={false}>
-			<DropdownMenuTrigger
-				disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-				className={buttonVariants({ variant: 'ghost', size: 'icon', className: 'aspect-square' })}>
-				<Icon name='Ellipsis' className='!inline-block' />
+			<DropdownMenuTrigger disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED} asChild>
+				<GhostButton>
+					<Icon name='Ellipsis' className='!inline-block' />
+				</GhostButton>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='w-40'>
 				<DropdownMenuGroup>
