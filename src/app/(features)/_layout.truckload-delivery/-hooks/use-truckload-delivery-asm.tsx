@@ -1,5 +1,6 @@
 import { TruckloadDeliveryDispatchOrder, TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { uniqBy } from 'lodash-es'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
@@ -20,7 +21,10 @@ export const useGetTruckloadDeliveryQuery = () => {
 				? response.metadata.map((item) => ({
 						...item,
 						purchase_orders: item.delivery_details.map(({ po }) => po),
-						total_outbound_qty: item.delivery_details.reduce((sum, detail) => sum + (detail.outbound_qty || 0), 0)
+						total_outbound_qty: uniqBy(item.delivery_details, 'po').reduce(
+							(sum, detail) => sum + (detail.outbound_qty || 0),
+							0
+						)
 					}))
 				: []
 		}
