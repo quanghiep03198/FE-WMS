@@ -1,11 +1,11 @@
 import { CommonActions } from '@/common/constants/enums'
-import { IDefectiveGoods } from '@/common/types/entities'
+import { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useEventEmitter } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
 const PageContext = createContext<{
-	event$: EventEmitter<{ action: CommonActions; payload: IDefectiveGoods | string | string[] }>
+	event$: EventEmitter<{ action: CommonActions; payload: IDefectiveGoods | number | string | string[] }>
 }>(null)
 
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {

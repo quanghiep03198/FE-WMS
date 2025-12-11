@@ -7,6 +7,7 @@ import { ListPanelProvider } from '../../-contexts/list-panel-context'
 import { useGetDefectiveGoodsQuery, usePrefetchDefectiveGoodsQuery } from '../../../-hooks/use-defective-goods-asm'
 import ActionButtonsGroup from './action-buttons-group'
 import DataList from './data-list'
+import DeleteConfirmDialog from './delete-confirm-dialog'
 import ItemSelectionCheckbox from './item-selection-checkbox'
 import SearchBox from './search-box'
 
@@ -61,6 +62,8 @@ const DatalistPanel: React.FC = () => {
 					</SheetFooter>
 				</SheetContent>
 			</Sheet>
+			{/* Confirm delete on by ID */}
+			<DeleteConfirmDialog />
 		</Fragment>
 	)
 }

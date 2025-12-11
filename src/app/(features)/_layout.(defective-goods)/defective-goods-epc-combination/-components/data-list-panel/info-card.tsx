@@ -1,7 +1,6 @@
 import { CommonActions } from '@/common/constants/enums'
 import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
-import { IDefectiveGoods } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
@@ -24,19 +23,18 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
+import { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
 import { formatRelative } from 'date-fns'
 import { isNil } from 'lodash-es'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gunzipSync } from 'zlib'
 import { useListPanelContext } from '../../-contexts/list-panel-context'
 import { DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
-import { useDeleteDefectiveGoodsMutation } from '../../../-hooks/use-defective-goods-asm'
 import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
 
 const InfoCard: React.FC<{
@@ -46,8 +44,7 @@ const InfoCard: React.FC<{
 	const { isAllCardsExpanded, isTogglingExpand, isItemSelected, toggleItem } = useListPanelContext()
 	const [isOpen, setIsOpen] = useState<boolean>(isAllCardsExpanded)
 	const { event$ } = usePageContext()
-	const { mutateAsync: deleteAsync } = useDeleteDefectiveGoodsMutation()
-	const toastIdRef = useRef<string | number | null>(null)
+
 	const { hash, search } = useLocation()
 	const dateLocale = useDateLocale()
 	const { setCurrentDevice } = useSwitchRFIDDevice()
@@ -61,16 +58,6 @@ const InfoCard: React.FC<{
 		},
 		[toggleItem]
 	)
-
-	const handleDelete = useCallback(async () => {
-		try {
-			toastIdRef.current = toast.loading(t('ns_common:notification.processing_request'))
-			await deleteAsync(data.id)
-			toast.success(t('ns_common:notification.success'), { id: toastIdRef.current })
-		} catch {
-			toast.error(t('ns_common:notification.error'), { id: toastIdRef.current })
-		}
-	}, [data])
 
 	const handleUpdate = useCallback(() => {
 		navigate({ hash: String(data.id), search })
@@ -139,7 +126,7 @@ const InfoCard: React.FC<{
 									className='gap-x-2 !text-destructive hover:!bg-destructive/20'
 									onClick={(e) => {
 										e.stopPropagation()
-										handleDelete()
+										event$.emit({ action: CommonActions.DELETE, payload: data.id })
 									}}>
 									<Icon name='Trash2' /> {t('ns_common:actions.delete')}
 								</DropdownMenuItem>
@@ -156,7 +143,7 @@ const InfoCard: React.FC<{
 					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
 					<Badge>{data.brand_name}</Badge>
 					<Badge variant='outline' className='w-fit'>
-						{t(DefectiveCategoryI18n[data.defective_category], { ns: 'ns_inoutbound' })}
+						{t(DefectiveCategoryI18n[data.defective_category], { ns: 'ns_inoutbound', defaultValue: null })}
 					</Badge>
 				</Div>
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>

@@ -60,6 +60,7 @@ const DeleteButton: React.FC<ButtonProps> = () => {
 				isError={isError}
 				title={t('ns_common:confirmation.delete_title')}
 				description={t('ns_common:confirmation.delete_description')}
+				dialogActionProps={{ variant: 'destructive', children: t('ns_common:actions.delete') }}
 				onConfirm={() =>
 					toast.promise(
 						deleteAsync({
