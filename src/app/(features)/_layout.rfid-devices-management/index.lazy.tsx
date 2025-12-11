@@ -2,6 +2,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import { Div, Separator } from '@/components/ui'
 import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
@@ -26,19 +27,21 @@ function Page() {
 			<title>{t('ns_common:navigation.rfid_device_management')}</title>
 			<meta name='description' content={t('ns_rfid:descriptions.rfid_device_management')} />
 
-			<PageContextProvider>
-				<Div as='section' className='mt-4 space-y-6'>
-					<Div className='flex items-start justify-between'>
-						<PageHeader>
-							<PageTitle>{t('ns_rfid:titles.rfid_device_management')}</PageTitle>
-							<PageDescription>{t('ns_rfid:descriptions.rfid_device_management')}</PageDescription>
-						</PageHeader>
-						<RFIDDeviceFormDialog />
+			<HostCompatibleGuard>
+				<PageContextProvider>
+					<Div as='section' className='mt-4 space-y-6'>
+						<Div className='flex items-start justify-between'>
+							<PageHeader>
+								<PageTitle>{t('ns_rfid:titles.rfid_device_management')}</PageTitle>
+								<PageDescription>{t('ns_rfid:descriptions.rfid_device_management')}</PageDescription>
+							</PageHeader>
+							<RFIDDeviceFormDialog />
+						</Div>
+						<Separator />
+						<RFIDDeviceList />
 					</Div>
-					<Separator />
-					<RFIDDeviceList />
-				</Div>
-			</PageContextProvider>
+				</PageContextProvider>
+			</HostCompatibleGuard>
 		</Fragment>
 	)
 }
