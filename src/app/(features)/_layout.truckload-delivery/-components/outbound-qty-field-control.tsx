@@ -36,7 +36,7 @@ const OutboundQtyInputFieldControl: React.FC<
 			type='number'
 			inputMode='numeric'
 			min={0}
-			max={actualMaxOutboundQty === Infinity ? undefined : actualMaxOutboundQty}
+			// max={actualMaxOutboundQty === Infinity ? undefined : actualMaxOutboundQty}
 			step={1}
 			errorMessageVariant='tooltip'
 			onChange={(e) =>
