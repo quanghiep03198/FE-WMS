@@ -35,8 +35,8 @@ export default {
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
 		factory_code_produce: 'Nhà máy sản xuất',
-		factory_departure_date: 'Ngày xuất xưởng',
 		factory_departure_time: 'Thời gian xuất xưởng',
+		container_sealing_time: 'Thời gian niêm phong container',
 		final_inventory_qty: 'Tồn kho cuối kỳ',
 		inbound_date: 'Ngày Nhập Kho', // Inbound Date
 		inbound_qty: 'Số Lượng Nhập Kho', // Inbound Quantity
@@ -77,7 +77,7 @@ export default {
 		smelling_container: 'Container có mùi',
 		moist_container: 'Container bị ẩm',
 		warehouse_officer_signature: 'Chữ ký KTP',
-		security_guard_signature: 'Chữ ký Bảo Vệ',
+		security_guard_signature: 'Chữ ký Bảo Vệ {{number}}',
 		required_date: 'Ngày Yêu Cầu', // Required Date
 		returned_qty: 'Số Lượng Đã Trả Hàng', // Returned Quantity
 		decentralized_po: 'PO phân tách',

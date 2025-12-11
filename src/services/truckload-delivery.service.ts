@@ -1,4 +1,5 @@
 import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-delivery/-constants'
+import { SignatureType } from '@/app/(features)/_layout.truckload-delivery/-contexts/page-context'
 import {
 	CreateDeliveryFormValues,
 	UpdateDispatchOrderFormValues,
@@ -16,8 +17,10 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	factory_departure_time: string
 	outbound_qty: number
 	approval_status: TruckloadDeliveryStatus
-	security_name_reviewed: string
-	security_code_reviewed: string
+	ie_signature: string
+	warehouse_officer_signature: string
+	security_1_signature: string
+	security_2_signature: string
 	punctured_container: boolean
 	smelling_container: boolean
 	moist_container: boolean
@@ -77,7 +80,7 @@ export class TruckloadDeliveryService {
 		...payload
 	}: {
 		dispatch_order: TruckloadDeliveryDispatchOrder
-		signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+		signature_type: SignatureType
 		approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 		signature: string
 	}) {

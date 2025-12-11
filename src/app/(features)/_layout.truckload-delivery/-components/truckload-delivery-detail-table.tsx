@@ -31,7 +31,7 @@ import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 import { uuidv4 } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { usePageContext } from '../-contexts/page-context'
+import { SignatureType, usePageContext } from '../-contexts/page-context'
 import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
@@ -232,7 +232,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										<TableCell
 											colSpan={'100%' as unknown as React.ComponentProps<typeof TableCell>['colSpan']}
 											className='border-t p-0'>
-											<Div className='grid grid-cols-3 [&>div]:place-content-center [&>div]:place-items-center [&>div]:px-3 [&>div]:text-center'>
+											<Div className='grid grid-cols-4 [&>div]:place-content-center [&>div]:place-items-center [&>div]:px-3 [&>div]:text-center'>
 												<Div className='h-10 border-b py-2'>
 													<span className='line-clamp-1' title={t('ns_erp:fields.ie_signature')}>
 														{t('ns_erp:fields.ie_signature')}
@@ -248,18 +248,61 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												<Div className='h-10 border-b py-2'>
 													<span
 														className='line-clamp-1'
-														title={t('ns_erp:fields.security_guard_signature')}>
-														{t('ns_erp:fields.security_guard_signature')}
+														title={t('ns_erp:fields.security_guard_signature', {
+															number: 1,
+															defaultValue: null
+														})}>
+														{t('ns_erp:fields.security_guard_signature', {
+															number: 1,
+															defaultValue: null
+														})}
+													</span>
+												</Div>
+												<Div className='h-10 border-b py-2'>
+													<span
+														className='line-clamp-1'
+														title={t('ns_erp:fields.security_guard_signature', {
+															number: 2,
+															defaultValue: null
+														})}>
+														{t('ns_erp:fields.security_guard_signature', {
+															number: 2,
+															defaultValue: null
+														})}
 													</span>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature data={data} type='ie_signature' />
+													<Signature
+														data={data}
+														type='ie_signature'
+														disabled={
+															!!data.security_2_signature &&
+															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+														}
+													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature data={data} type='warehouse_officer_signature' />
+													<Signature
+														data={data}
+														type='warehouse_officer_signature'
+														disabled={
+															!!data.security_2_signature &&
+															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+														}
+													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature data={data} type='security_guard_signature' />
+													<Signature
+														data={data}
+														type='security_1_signature'
+														disabled={
+															!!data.security_2_signature &&
+															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+														}
+													/>
+												</Div>
+												<Div className='has-[button]:py-2'>
+													<Signature data={data} type='security_2_signature' />
 												</Div>
 											</Div>
 										</TableCell>
@@ -354,13 +397,14 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 
 const Signature: React.FC<{
 	data: ITruckloadDelivery
-	type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
-}> = ({ data, type }) => {
+	type: SignatureType
+	disabled?: boolean
+}> = ({ data, type, disabled }) => {
 	const { event$ } = usePageContext()
 
 	function handleUpdateSignature<Element extends HTMLElement>(e: React.MouseEvent<Element, MouseEvent>) {
 		e.stopPropagation()
-		if (!data.license_plate) return
+		if (disabled) return
 		event$.emit({
 			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE',
 			payload: {
@@ -380,12 +424,7 @@ const Signature: React.FC<{
 					onClick={handleUpdateSignature}
 				/>
 			) : (
-				<Button
-					disabled={!data.license_plate}
-					size='icon'
-					variant='secondary'
-					type='button'
-					onClick={handleUpdateSignature}>
+				<Button disabled={disabled} size='icon' variant='secondary' type='button' onClick={handleUpdateSignature}>
 					<Icon name='PenTool' className='rotate-[-90deg]' />
 				</Button>
 			)}

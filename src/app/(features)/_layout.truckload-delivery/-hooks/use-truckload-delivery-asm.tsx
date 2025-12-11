@@ -2,6 +2,7 @@ import { TruckloadDeliveryDispatchOrder, TruckloadDeliveryService } from '@/serv
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { TruckloadDeliveryStatus } from '../-constants'
+import { SignatureType } from '../-contexts/page-context'
 import { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 export enum TruckloadDeliveryQueryKeys {
@@ -90,7 +91,7 @@ export const useUpdateDispatchOrderSignatureMutation = () => {
 	return useMutation({
 		mutationFn: (payload: {
 			dispatch_order: TruckloadDeliveryDispatchOrder
-			signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+			signature_type: SignatureType
 			approval_status: TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 			signature: string
 		}) => TruckloadDeliveryService.updateDispatchOrderSignature(payload),

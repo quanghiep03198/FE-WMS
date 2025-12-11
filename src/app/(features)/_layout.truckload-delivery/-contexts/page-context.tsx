@@ -4,6 +4,12 @@ import { useEventEmitter } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
+export type SignatureType =
+	| 'ie_signature'
+	| 'warehouse_officer_signature'
+	| 'security_1_signature'
+	| 'security_2_signature'
+
 type EventPayload =
 	| { action: CommonActions.CREATE; payload: null }
 	| {
@@ -24,7 +30,7 @@ type EventPayload =
 	| {
 			action: 'UPDATE_DISPATCH_ORDER_SIGNATURE'
 			payload: Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
-				signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+				signature_type: SignatureType
 			}
 	  }
 

@@ -12,6 +12,7 @@ import { useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
+import { GhostButton } from '../../-components/shared/ghost-button'
 import RowActions from './row-actions'
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
@@ -22,7 +23,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const tableRef = useReactiveRef<TanstackTable<ITruckloadDelivery>>(null)
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
 	const { mutateAsync } = useUpdateContainerConditionMutation()
-
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
 	const columns = useMemo(
@@ -31,11 +31,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
-						<button
-							className='absolute inset-0 flex h-full w-full items-center justify-center text-muted-foreground transition-colors duration-200 hover:text-foreground'
-							onClick={() => table.toggleAllRowsExpanded(false)}>
+						<GhostButton className='absolute inset-0' onClick={() => table.toggleAllRowsExpanded(false)}>
 							<Icon name='ListCollapse' size={18} />
-						</button>
+						</GhostButton>
 					</Tooltip>
 				),
 				size: 40,
@@ -46,14 +44,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
 				cell: ({ row, table }) => (
-					<button
-						className='absolute inset-0 flex h-full w-full items-center justify-center'
+					<GhostButton
+						className='absolute inset-0'
 						onClick={() => {
 							table.toggleAllRowsExpanded(false)
 							row.toggleExpanded(!row.getIsExpanded())
 						}}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
-					</button>
+					</GhostButton>
 				)
 			}),
 			columnHelper.accessor('dispatch_order', {
@@ -220,6 +218,27 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 							/>
 							{t(`ns_common:status.${value}`)}
 						</Badge>
+					)
+				}
+			}),
+			columnHelper.accessor('container_sealing_time', {
+				header: t('ns_erp:fields.container_sealing_time'),
+				enableResizing: true,
+				enableSorting: true,
+				enableColumnFilter: true,
+				enableGlobalFilter: false,
+				minSize: 150,
+				size: 200,
+				maxSize: 250,
+				cell: ({ getValue }) => {
+					const factoryDepartureTime = getValue()
+					return factoryDepartureTime ? (
+						format(new Date(factoryDepartureTime), 'yyyy-MM-dd HH:mm')
+					) : (
+						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+							{t('ns_common:titles.unknown')}
+						</Typography>
 					)
 				}
 			}),

@@ -36,8 +36,8 @@ export default {
 		employee_name: "Employee's name",
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
 		factory_code_produce: 'Producing factory',
-		factory_departure_date: 'Factory departure date',
 		factory_departure_time: 'Factory departure time',
+		container_sealing_time: 'Container sealing time',
 		final_inventory_qty: 'Final inventory',
 		inbound_date: 'Inbound date',
 		inbound_qty: 'Inbound quantity',
@@ -78,7 +78,7 @@ export default {
 		moist_container: 'Moist container',
 		ie_signature: 'Import-Export department signature',
 		warehouse_officer_signature: 'Warehouse officer signature',
-		security_guard_signature: 'Security guard signature',
+		security_guard_signature: 'Security guard signature {{number}}',
 		required_date: 'Required date',
 		returned_qty: 'Returned quantity',
 		decentralized_po: 'Decentralized PO',

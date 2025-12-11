@@ -30,7 +30,7 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { usePageContext } from '../-contexts/page-context'
+import { SignatureType, usePageContext } from '../-contexts/page-context'
 import { useUpdateDispatchOrderSignatureMutation } from '../-hooks/use-truckload-delivery-asm'
 
 const SignatureEditorDialog: React.FC = () => {
@@ -38,8 +38,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const $svg = useRef(null)
 	const [open, setOpen] = useResetState<boolean>(false)
 	const [points, setPoints, resetPoints] = useResetState([])
-	// const [imageURL, setImageURL, resetImageURL] = useResetState<string>(data.signature)
-	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'png' | null>('svg')
+	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'png' | null>('png')
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
 	const [statusToUpdate, setStatusToUpdate] = useState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
@@ -48,7 +47,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const { event$ } = usePageContext()
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
-			signature_type: 'ie_signature' | 'warehouse_officer_signature' | 'security_guard_signature'
+			signature_type: SignatureType
 			title: string | null
 		}
 	>({
@@ -65,7 +64,8 @@ const SignatureEditorDialog: React.FC = () => {
 			const title = {
 				ie_signature: t('ns_erp:fields.ie_signature'),
 				warehouse_officer_signature: t('ns_erp:fields.warehouse_officer_signature'),
-				security_guard_signature: t('ns_erp:fields.security_guard_signature')
+				security_1_signature: t('ns_erp:fields.security_guard_signature', { number: 1, defaultValue: null }),
+				security_2_signature: t('ns_erp:fields.security_guard_signature', { number: 2, defaultValue: null })
 			}
 			dialogData.current = { ...payload, title: title[payload.signature_type] }
 		}
@@ -143,7 +143,8 @@ const SignatureEditorDialog: React.FC = () => {
 				signature_type: dialogData.current.signature_type,
 				dispatch_order: dialogData.current.dispatch_order,
 				signature: optimizedBase64 ?? '',
-				...(dialogData.current.signature_type === 'security_guard_signature' && { approval_status: statusToUpdate })
+				...((dialogData.current.signature_type === 'security_1_signature' ||
+					dialogData.current.signature_type === 'security_2_signature') && { approval_status: statusToUpdate })
 			})
 			toast.success(t('ns_common:notification.success'), { id: 'update_signature' })
 			setIsSubmitted(false)
@@ -176,7 +177,7 @@ const SignatureEditorDialog: React.FC = () => {
 					</DialogDescription>
 				</DialogHeader>
 				<Div className='flex flex-col gap-y-6'>
-					{dialogData.current.signature_type === 'security_guard_signature' && (
+					{['security_1_signature', 'security_2_signature'].includes(dialogData.current.signature_type) && (
 						<Div className='flex flex-col gap-y-3'>
 							<Label htmlFor='confirmation'>{t('ns_inoutbound:labels.security_confirmation')}</Label>
 							<RadioGroup
@@ -235,8 +236,6 @@ const SignatureEditorDialog: React.FC = () => {
 							{isCompressing && <OptimizingLoader />}
 							<Signature
 								ref={$svg}
-								readonly={!dialogData.current.license_plate}
-								aria-readonly={!dialogData.current.license_plate}
 								fill='hsl(var(--foreground))'
 								className='aria-readonly:cursor-not-allowed'
 								style={{ '--w-signature-background': 'hsl(var(--background))' } as React.CSSProperties}
@@ -245,7 +244,7 @@ const SignatureEditorDialog: React.FC = () => {
 									size: 5,
 									smoothing: 0.5,
 									thinning: 0.5,
-									streamline: 0.99,
+									streamline: 0.95,
 									start: {
 										taper: 0,
 										cap: true
@@ -269,18 +268,18 @@ const SignatureEditorDialog: React.FC = () => {
 						<RadioGroup
 							className='flex items-center gap-x-6'
 							value={base64ImageFormat}
-							defaultValue={'svg'}
+							defaultValue={'png'}
 							onValueChange={(value) => setBase64ImageFormat(value as 'svg' | 'png')}>
 							<Div className='flex items-center gap-3'>
-								<RadioGroupItem value={'svg'} id='svg' />
-								<Label htmlFor='svg' className='inline-flex items-center gap-x-2'>
-									SVG (Optimized)
+								<RadioGroupItem value='png' id='png' />
+								<Label htmlFor='png' className='inline-flex items-center gap-x-2'>
+									PNG (Compressed)
 								</Label>
 							</Div>
 							<Div className='flex items-center gap-3'>
-								<RadioGroupItem value={'png'} id='png' />
-								<Label htmlFor='png' className='inline-flex items-center gap-x-2'>
-									PNG (Compressed)
+								<RadioGroupItem value='svg' id='svg' />
+								<Label htmlFor='svg' className='inline-flex items-center gap-x-2'>
+									SVG (Optimized)
 								</Label>
 							</Div>
 						</RadioGroup>
