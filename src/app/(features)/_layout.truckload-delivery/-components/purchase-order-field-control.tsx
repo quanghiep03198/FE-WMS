@@ -57,9 +57,11 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 			})
 			.reduce((acc, curr) => acc + curr.outbound_qty, 0)
 
-		const { po_qty: purchaseOrderQty, accumulated_outbound_qty: accumulatedOutboundQty } = matchPurchaseOrder
+		// const { po_qty: purchaseOrderQty, accumulated_outbound_qty: accumulatedOutboundQty } = matchPurchaseOrder
+		// const maxOutboundQty = purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty
 
-		const maxOutboundQty = purchaseOrderQty - accumulatedOutboundQty - alreadyAddedOutboundQty
+		const { po_qty: purchaseOrderQty } = matchPurchaseOrder
+		const maxOutboundQty = purchaseOrderQty - alreadyAddedOutboundQty
 		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, Math.max(0, maxOutboundQty))
 	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
 
