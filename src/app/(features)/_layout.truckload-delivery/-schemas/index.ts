@@ -20,27 +20,28 @@ export const createDeliverySchema = object({
 			max_outbound_qty: number().nonnegative().default(Infinity)
 		})
 	)
-}).superRefine((values, context) => {
-	values.outbound_purchase_orders.forEach((item, index) => {
-		if (item.outbound_qty > item.max_outbound_qty)
-			context.addIssue({
-				code: 'too_big',
-				message: 'ns_validation:invalid_value',
-				maximum: item.max_outbound_qty,
-				type: 'number',
-				origin: 'number',
-				inclusive: true,
-				path: [`outbound_purchase_orders.${index}.outbound_qty`]
-			})
-		if (values.outbound_purchase_orders.findIndex((otherItem) => otherItem.po === item.po) !== index)
-			context.addIssue({
-				code: 'custom',
-				message: 'Do not select the same PO',
-				fatal: true,
-				path: [`outbound_purchase_orders.${index}.po`]
-			})
-	})
 })
+// .superRefine((values, context) => {
+// 	values.outbound_purchase_orders.forEach((item, index) => {
+// 		if (item.outbound_qty > item.max_outbound_qty)
+// 			context.addIssue({
+// 				code: 'too_big',
+// 				message: 'ns_validation:invalid_value',
+// 				maximum: item.max_outbound_qty,
+// 				type: 'number',
+// 				origin: 'number',
+// 				inclusive: true,
+// 				path: [`outbound_purchase_orders.${index}.outbound_qty`]
+// 			})
+// 		if (values.outbound_purchase_orders.findIndex((otherItem) => otherItem.po === item.po) !== index)
+// 			context.addIssue({
+// 				code: 'custom',
+// 				message: 'Do not select the same PO',
+// 				fatal: true,
+// 				path: [`outbound_purchase_orders.${index}.po`]
+// 			})
+// 	})
+// })
 
 export const updateContainerConditionSchema = object({
 	punctured_container: boolean().optional(),
