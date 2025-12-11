@@ -1,3 +1,4 @@
+import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -32,26 +33,28 @@ function Page() {
 			<title>{t('ns_common:navigation.truckload_delivery_management')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.truckload_delivery')} />
 
-			<PageContextProvider>
-				<Div as='section' className='mt-4 space-y-6'>
-					<Div className='flex items-start justify-between'>
-						<PageHeader className='md:basis-3/5'>
-							<PageTitle>{t('ns_common:navigation.truckload_delivery_management')}</PageTitle>
-							<PageDescription>{t('ns_inoutbound:description.truckload_delivery')}</PageDescription>
-						</PageHeader>
-						<Div className='flex items-center gap-x-2'>
-							<DateRangeFilter />
-							{!isMobile && <DownloadExcelButton />}
+			<HostCompatibleGuard>
+				<PageContextProvider>
+					<Div as='section' className='mt-4 space-y-6'>
+						<Div className='flex items-start justify-between'>
+							<PageHeader className='md:basis-3/5'>
+								<PageTitle>{t('ns_common:navigation.truckload_delivery_management')}</PageTitle>
+								<PageDescription>{t('ns_inoutbound:description.truckload_delivery')}</PageDescription>
+							</PageHeader>
+							<Div className='flex items-center gap-x-2'>
+								<DateRangeFilter />
+								{!isMobile && <DownloadExcelButton />}
+							</Div>
 						</Div>
+						<Separator />
+						<CreatePurchaseOrdersFormDialog />
+						<UpdateDispatchOrderFormDialog />
+						<DeleteConfirmDialog />
+						<SignatureEditorDialog />
+						<TruckloadDeliveryMasterTable />
 					</Div>
-					<Separator />
-					<CreatePurchaseOrdersFormDialog />
-					<UpdateDispatchOrderFormDialog />
-					<DeleteConfirmDialog />
-					<SignatureEditorDialog />
-					<TruckloadDeliveryMasterTable />
-				</Div>
-			</PageContextProvider>
+				</PageContextProvider>
+			</HostCompatibleGuard>
 		</Fragment>
 	)
 }
