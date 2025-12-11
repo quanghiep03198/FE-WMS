@@ -112,7 +112,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div` relative flex flex-col items-stretch overflow-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
+const ScrollArea = tw.div` relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
 
 DataTable.displayName = 'DataTable'
 

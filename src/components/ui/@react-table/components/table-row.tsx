@@ -37,12 +37,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubC
 								height: size,
 								...getStickyOffsetPosition(cell.column)
 							}}>
-							<Div
-								className={cn('!line-clamp-1', {
-									'text-left': cell.column.columnDef.meta?.align === 'left',
-									'text-center': cell.column.columnDef.meta?.align === 'center',
-									'text-right': cell.column.columnDef.meta?.align === 'right'
-								})}>
+							<Div align={cell.column.columnDef.meta?.align} className={cn('!line-clamp-1', {})}>
 								{flexRender(cell.column.columnDef.cell, cell.getContext())}
 							</Div>
 						</TableCell>
