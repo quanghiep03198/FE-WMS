@@ -68,7 +68,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 
 	return (
 		<Dialog defaultOpen={false} open={open} onOpenChange={setOpen}>
-			<DialogContent className='max-w-lg'>
+			<DialogContent className='max-h-[80vh] max-w-lg overflow-auto scrollbar-none'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.update_truckload_delivery')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.update_truckload_delivery')}</DialogDescription>
