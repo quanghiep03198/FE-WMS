@@ -79,7 +79,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 			<ScrollArea ref={containerRef} {...containerProps}>
 				<Table
 					data-role='data-grid'
-					className='table-fixed border-separate border-spacing-0 border-none'
+					className='table-auto border-separate border-spacing-0 border-none'
 					style={
 						{
 							...computedColumnSizes,
