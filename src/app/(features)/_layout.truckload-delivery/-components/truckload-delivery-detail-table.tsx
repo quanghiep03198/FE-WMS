@@ -286,8 +286,9 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 														data={data}
 														type='warehouse_officer_signature'
 														disabled={
-															!!data.security_2_signature &&
-															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+															!data.license_plate ||
+															(!!data.security_2_signature &&
+																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
 														}
 													/>
 												</Div>
@@ -296,13 +297,18 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 														data={data}
 														type='security_1_signature'
 														disabled={
-															!!data.security_2_signature &&
-															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+															!data.license_plate ||
+															(!!data.security_2_signature &&
+																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
 														}
 													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature data={data} type='security_2_signature' />
+													<Signature
+														data={data}
+														type='security_2_signature'
+														disabled={!data.license_plate}
+													/>
 												</Div>
 											</Div>
 										</TableCell>

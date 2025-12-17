@@ -66,42 +66,19 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				filterFn: 'inDateRange'
 			}),
 			columnHelper.accessor('license_plate', {
-				header: t('ns_erp:fields.license_plate'),
+				header: !isMobile
+					? t('ns_erp:fields.license_plate')
+					: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number'),
 				enableResizing: true,
 				enableSorting: true,
 				filterFn: 'fuzzy',
 				enableGlobalFilter: true,
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (!value)
-						return (
-							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-								<Icon name='Truck' />
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-
-					return value
-				}
-			}),
-			columnHelper.accessor('container_number', {
-				header: !isMobile
-					? t('ns_erp:fields.container_number')
-					: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number'),
-				enableResizing: true,
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableGlobalFilter: true,
-				filterFn: 'auto',
-				minSize: 150,
-				size: 150,
-				maxSize: 250,
 				cell: ({ row, getValue }) => {
 					const value = getValue()
 					if (!value)
 						return (
 							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-								<Icon name='Container' />
+								<Icon name='Truck' className='self-center stroke-muted-foreground' />
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
@@ -109,7 +86,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					return (
 						<Div className='flex flex-col space-y-1'>
 							<Typography variant='small' className='inline-grid grid-cols-[auto_1fr] gap-x-2 font-medium'>
-								<Icon name='Truck' className='self-center stroke-muted-foreground' />
+								<Icon name='Container' />
 								{row.original.license_plate}
 								<Typography
 									variant='small'
@@ -120,6 +97,29 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 							</Typography>
 						</Div>
 					)
+				}
+			}),
+			columnHelper.accessor('container_number', {
+				header: t('ns_erp:fields.container_number'),
+				enableResizing: true,
+				enableSorting: true,
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				filterFn: 'auto',
+				minSize: 150,
+				size: 150,
+				maxSize: 250,
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value)
+						return (
+							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+								<Icon name='Container' />
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+
+					return value
 				}
 			}),
 			columnHelper.accessor('total_outbound_qty', {
@@ -299,7 +299,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				dispatch_order: false,
 				created_at: false,
 				purchase_orders: false,
-				license_plate: !isMobile,
+				container_number: !isMobile,
 				total_outbound_qty: !isMobile,
 				factory_departure_time: !isMobile,
 				punctured_container: !isMobile,
@@ -307,7 +307,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				moist_container: !isMobile
 			})
 			tableRef.current.setColumnPinning({
-				left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['container_number'] : [])],
+				left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['licence_plate'] : [])],
 				right: [ROW_ACTIONS_COLUMN_ID]
 			})
 		}
@@ -331,7 +331,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					created_at: false,
 					dispatch_order: false,
 					purchase_orders: false,
-					license_plate: !isMobile,
+					container_number: !isMobile,
 					total_outbound_qty: !isMobile,
 					factory_departure_time: !isMobile,
 					punctured_container: !isMobile,
