@@ -68,7 +68,7 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 				style={
 					{
 						'--icon-size': '14px',
-						minWidth: `calc(var(--header-${header?.id}-size)*1px)`
+						minWidth: `var(--header-${header?.id}-size)`
 					} as React.CSSProperties
 				}
 				onClick={(e) => {

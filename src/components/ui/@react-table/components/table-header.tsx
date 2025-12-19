@@ -62,7 +62,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 						ref={(node) => columnSizingHandler(node, table, header.column)}
 						style={{
 							height: 'var(--header-row-height)',
-							width: `calc(var(--header-${header?.id}-size) * 1px)`,
+							width: `var(--header-${header?.id}-size)`,
 							...getStickyOffsetPosition(header?.column)
 						}}>
 						<TableCellHead header={header} />
@@ -93,7 +93,7 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 							className={cn('group relative z-40 p-0', filterOpen ? 'border-border' : 'border-transparent')}
 							rowSpan={header.column.getIsPinned() ? headerGroup.headers.length : 1}
 							style={{
-								width: `calc(var(--header-${header?.id}-size) * 1px)`,
+								width: `var(--header-${header?.id}-size)`,
 								maxHeight: 'var(--header-row-height)',
 								...getStickyOffsetPosition(header?.column)
 							}}>

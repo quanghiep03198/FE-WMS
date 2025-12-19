@@ -56,10 +56,10 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
-		const columnSizes: Record<string, number> = {}
+		const columnSizes: Record<string, string> = {}
 		headers.forEach((header) => {
-			columnSizes[`--header-${header.id}-size`] = header.getSize()
-			columnSizes[`--column-${header.column.id}-size`] = header.column.getSize()
+			columnSizes[`--header-${header.id}-size`] = header.getSize() + 'px'
+			columnSizes[`--column-${header.column.id}-size`] = header.column.getSize() + 'px'
 		})
 		return columnSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
@@ -102,7 +102,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 					) : (
 						<TableBody {...{ virtualizer, renderSubComponent }} />
 					)}
-					{/* {loading ? <TableBodyLoading /> : <TableBody {...{ virtualizer, renderSubComponent }} />} */}
 				</Table>
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</ScrollArea>
@@ -112,7 +111,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div` relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent`
+const ScrollArea = tw.div`scroll-smooth relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden [overflow-anchor:none]`
 
 DataTable.displayName = 'DataTable'
 

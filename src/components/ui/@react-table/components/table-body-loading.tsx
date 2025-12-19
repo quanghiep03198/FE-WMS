@@ -17,7 +17,7 @@ export const TableBodyLoading: React.FC = () => {
 						key={`${rowIndex}-${columnIndex}`}
 						style={{
 							...getStickyOffsetPosition(column),
-							width: `calc(var(--col-${column?.id}-size) * 1px)`,
+							width: `var(--column-${column?.id}-size)`,
 							height: 'var(--row-height)'
 						}}>
 						<Skeleton className='h-[calc(var(--row-height)/3)]' />

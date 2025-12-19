@@ -1,10 +1,11 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { flexRender, type Row } from '@tanstack/react-table'
+import { useMemoizedFn } from 'ahooks'
 import { Fragment, memo } from 'react'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
-import { columnSizingHandler, getStickyOffsetPosition } from '../utils/table.util'
+import { getStickyOffsetPosition } from '../utils/table.util'
 import { type TableBodyProps } from './table-body'
 
 type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
@@ -16,6 +17,8 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubC
 	'use no memo'
 
 	const { table } = useTableContext('table')
+
+	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
 		<Fragment>
@@ -31,11 +34,10 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, renderSubC
 							{...cell.column.columnDef?.meta?.tableCellProps}
 							key={cell.id}
 							align={cell.column.columnDef.meta?.align}
-							ref={(node) => columnSizingHandler(node, table, cell.column)}
 							style={{
-								width: `calc(var(--column-${cell.column.id}-size) * 1px)`,
+								width: `var(--column-${cell.column.id}-size)`,
 								height: size,
-								...getStickyOffsetPosition(cell.column)
+								...computeStickyOffsetPosition(cell.column)
 							}}>
 							<Div align={cell.column.columnDef.meta?.align} className={cn('!line-clamp-1', {})}>
 								{flexRender(cell.column.columnDef.cell, cell.getContext())}
