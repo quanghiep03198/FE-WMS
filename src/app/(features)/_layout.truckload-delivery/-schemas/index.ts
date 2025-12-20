@@ -3,10 +3,12 @@ import { array, boolean, number, object, string, type infer as Infer } from 'zod
 
 // BIC container code pattern: 3 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
 // const BIC_CONTAINER_PATTERN = /^[A-Z]\d{7}$/
+const ALPHANUMERIC_PATTERN = /^[A-Za-z0-9]+$/
 
 export const createDeliverySchema = object({
 	license_plate: string({ error: 'ns_validation:required' })
 		.trim()
+		.regex(ALPHANUMERIC_PATTERN, { message: 'ns_validation:invalid_value' })
 		.transform((value) => value.toUpperCase())
 		.nullish(),
 	container_number: string({ error: 'ns_validation:required' })
@@ -53,6 +55,7 @@ export const updateDispatchOrderSchema = object({
 	dispatch_order: string({ error: 'ns_validation:required' }).trim().nonempty({ error: 'ns_validation:required' }),
 	license_plate: string({ error: 'ns_validation:required' })
 		.trim()
+		.regex(ALPHANUMERIC_PATTERN, { message: 'ns_validation:invalid_value' })
 		.nullish()
 		.transform((value) => (isNil(value) ? null : value.toUpperCase())),
 	container_number: string({ error: 'ns_validation:required' })
