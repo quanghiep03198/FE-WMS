@@ -1,7 +1,8 @@
 import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
 import { type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
-import { Fragment, memo } from 'react'
+import { useMemoizedFn } from 'ahooks'
+import { Activity, memo } from 'react'
 import { TableBody as TableRowGroup } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
@@ -20,34 +21,47 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 	const virtualItems = virtualizer.getVirtualItems()
 	const colSpan = table.getAllColumns().length
 	const { rows } = table.getRowModel()
-	const shouldSkipRerender = virtualizer.isScrolling && !table.getIsSomeRowsExpanded()
+	const shouldSkipRerender = virtualizer.isScrolling
+
+	const scrollToIndex = useMemoizedFn((index: number) =>
+		virtualizer.scrollToIndex(index, { align: 'start', behavior: 'auto' })
+	)
+
+	const measureElement = useMemoizedFn(virtualizer.measureElement)
 
 	return (
 		<TableRowGroup>
-			<Fragment>
-				{before > 0 && <VirtualPlaceholderRow colSpan={colSpan} style={{ height: before }} />}
-				{Array.isArray(virtualItems) &&
-					virtualItems.map((virtualRow) => {
-						const row = rows[virtualRow.index] as TRow<any>
-
-						return shouldSkipRerender ? (
-							<MemoizedVirtualTableRow
-								key={row.id}
-								row={row}
-								size={virtualRow.size}
-								renderSubComponent={renderSubComponent}
-							/>
-						) : (
-							<VirtualTableRow
-								key={row.id}
-								row={row}
-								size={virtualRow.size}
-								renderSubComponent={renderSubComponent}
-							/>
-						)
-					})}
-				{after > 0 && <VirtualPlaceholderRow colSpan={colSpan} style={{ height: after }} />}
-			</Fragment>
+			<Activity mode={before > 0 ? 'visible' : 'hidden'}>
+				<VirtualPlaceholderRow colSpan={colSpan} style={{ height: before }} />
+			</Activity>
+			{Array.isArray(virtualItems) &&
+				virtualItems.map((virtualRow) => {
+					const row = rows[virtualRow.index] as TRow<any>
+					return shouldSkipRerender ? (
+						<MemoizedVirtualTableRow
+							key={row.id}
+							row={row}
+							index={virtualRow.index}
+							size={virtualRow.size}
+							scrollToIndex={scrollToIndex}
+							measureElement={measureElement}
+							renderSubComponent={renderSubComponent}
+						/>
+					) : (
+						<VirtualTableRow
+							key={row.id}
+							row={row}
+							index={virtualRow.index}
+							size={virtualRow.size}
+							scrollToIndex={scrollToIndex}
+							measureElement={measureElement}
+							renderSubComponent={renderSubComponent}
+						/>
+					)
+				})}
+			<Activity mode={after > 0 ? 'visible' : 'hidden'}>
+				<VirtualPlaceholderRow colSpan={colSpan} style={{ height: after }} />
+			</Activity>
 		</TableRowGroup>
 	)
 }

@@ -32,8 +32,8 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		caption,
 		loading,
 		virtualizerOptions = {
-			estimateSize: 40,
-			overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().flatRows.length : 5
+			estimateSize: devicePixelRatio >= 1 ? 36 : 40,
+			overscan: 5
 		},
 		renderSubComponent
 	} = props
@@ -45,10 +45,13 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
 		overscan: virtualizerOptions.overscan,
+		useAnimationFrameWithResizeObserver: true,
 		horizontal: false,
+		getItemKey: (index) => table.getRowModel().rows[index]?.id,
 		getScrollElement,
 		estimateSize,
 		scrollToFn
+		// measureElement
 	})
 
 	const wrapperRef = useRef<HTMLDivElement>(null)
@@ -85,7 +88,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 							...computedColumnSizes,
 							minWidth: table.getTotalSize(),
 							height: loading ? 'auto' : virtualizer.getTotalSize(),
-							'--header-row-height': '40px',
+							'--header-row-height': devicePixelRatio >= 1 ? '36px' : '40px',
 							'--row-height': `${virtualizerOptions.estimateSize}px`
 						} as React.CSSProperties
 					}>
@@ -111,7 +114,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div`scroll-smooth relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden [overflow-anchor:none]`
+const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden [overflow-anchor:none]`
 
 DataTable.displayName = 'DataTable'
 

@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { RowData, type HeaderGroup } from '@tanstack/react-table'
-import { useUpdate } from 'ahooks'
+import { useMemoizedFn, useUpdate } from 'ahooks'
 import { Fragment, memo } from 'react'
 import { useTableContext } from '../context/table.context'
 import { columnSizingHandler, getStickyOffsetPosition } from '../utils'
@@ -42,6 +42,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 	// 'use no memo'
 
 	const { table } = useTableContext('table')
+	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
 		<TableRow data-role='data-grid-row' className='divide-x [&_th]:border-x-0'>
@@ -63,7 +64,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 						style={{
 							height: 'var(--header-row-height)',
 							width: `var(--header-${header?.id}-size)`,
-							...getStickyOffsetPosition(header?.column)
+							...computeStickyOffsetPosition(header?.column)
 						}}>
 						<TableCellHead header={header} />
 						{table?.options?.enableColumnResizing && <ColumnResizer header={header} />}
@@ -80,6 +81,7 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 	// 'use no memo'
 
 	const { filterOpen } = useTableContext('filterOpen')
+	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
 		<TableRow>
@@ -95,10 +97,10 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 							style={{
 								width: `var(--header-${header?.id}-size)`,
 								maxHeight: 'var(--header-row-height)',
-								...getStickyOffsetPosition(header?.column)
+								...computeStickyOffsetPosition(header?.column)
 							}}>
 							<Collapsible open={filterOpen} data-state={filterOpen ? 'open' : 'closed'}>
-								<CollapsibleContent className='h-[var(--header-row-height)] overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+								<CollapsibleContent className='h-[var(--header-row-height)] overflow-hidden'>
 									<TableColumnFilter column={header.column} />
 								</CollapsibleContent>
 							</Collapsible>
