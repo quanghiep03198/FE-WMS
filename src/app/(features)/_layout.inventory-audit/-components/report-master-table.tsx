@@ -2,6 +2,7 @@ import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryAudit } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Badge,
@@ -270,7 +271,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnResizing={true}
 				manualExpanding={true}
 				renderSubComponent={renderSubComponents}
-				containerProps={{ className: 'xxl:h-[52.5vh] h-[50vh]' }}
+				containerProps={{
+					className: cn(devicePixelRatio < 1 ? 'xxl:h-[65vh] h-[55vh]' : 'xxl:h-[58vh] h-[55vh]')
+				}}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
 					slotLeft: () => <SyncDataTrigger />,
@@ -348,11 +351,6 @@ const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: bo
 	return (
 		<Table className='w-full table-fixed'>
 			<TableHeader>
-				<TableRow>
-					<TableHead colSpan={5} className='bg-muted text-muted-foreground'>
-						{t('ns_common:titles.overall')}
-					</TableHead>
-				</TableRow>
 				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
 					<TableHead align='right'>{t('ns_erp:fields.total_init_qty')}</TableHead>
 					<TableHead align='right'>{t('ns_erp:fields.inbound_qty')}</TableHead>
