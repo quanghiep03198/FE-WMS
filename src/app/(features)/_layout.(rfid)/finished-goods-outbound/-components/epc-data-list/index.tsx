@@ -52,7 +52,6 @@ const ScannedEpcList: React.FC = () => {
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
-	const scrollingRef = useRef<number>(null)
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {
@@ -162,7 +161,7 @@ const ScannedEpcList: React.FC = () => {
 		fetchServerEvent()
 	})
 
-	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
 	const overscan = containerRef.current?.getBoundingClientRect().height > 400 ? 5 : 0

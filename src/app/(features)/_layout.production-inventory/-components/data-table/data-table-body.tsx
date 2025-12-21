@@ -1,4 +1,4 @@
-import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
+import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { TableBody } from '@/components/ui'
 import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
 import { Row } from '@tanstack/react-table'
@@ -19,7 +19,7 @@ const DataTableBody: React.FC<DataTableBodyProps> = ({ virtualizer, rows, column
 	'use no memo'
 
 	const virtualItems = virtualizer.getVirtualItems()
-	const { before, after } = useVirutalScrollOffset(virtualizer)
+	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	return (
 		<TableBody className='[&_tr:last-child_td]:!border-b-0 [&_tr>td]:border-b'>

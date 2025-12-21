@@ -70,7 +70,6 @@ const EpcDataList: React.FC = () => {
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)
-	const scrollingRef = useRef<number>(null)
 
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
@@ -235,7 +234,7 @@ const EpcDataList: React.FC = () => {
 		abortControllerRef.current.abort()
 	})
 
-	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
 	const getScrollElement = useCallback(() => containerRef.current, [])
 

@@ -1,15 +1,16 @@
-import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
+import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { type Row as TRow } from '@tanstack/react-table'
 import { Virtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn } from 'ahooks'
 import { Activity, memo } from 'react'
+import isEqual from 'react-fast-compare'
 import { TableBody as TableRowGroup } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { MemoizedVirtualTableRow, VirtualPlaceholderRow, VirtualTableRow } from './table-row'
 
 type TableBodyProps = {
-	virtualizer: Virtualizer<HTMLDivElement, Element>
+	virtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>
 	renderSubComponent: RenderSubComponent<any>
 }
 
@@ -17,7 +18,7 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 	'use no memo'
 
 	const { table } = useTableContext('table')
-	const { before, after } = useVirutalScrollOffset(virtualizer)
+	const { before, after } = useVirtualScrollPadding<HTMLDivElement, HTMLTableRowElement>(virtualizer)
 	const virtualItems = virtualizer.getVirtualItems()
 	const colSpan = table.getAllColumns().length
 	const { rows } = table.getRowModel()
@@ -26,8 +27,6 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 	const scrollToIndex = useMemoizedFn((index: number) =>
 		virtualizer.scrollToIndex(index, { align: 'start', behavior: 'auto' })
 	)
-
-	const measureElement = useMemoizedFn(virtualizer.measureElement)
 
 	return (
 		<TableRowGroup>
@@ -44,7 +43,6 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 							index={virtualRow.index}
 							size={virtualRow.size}
 							scrollToIndex={scrollToIndex}
-							measureElement={measureElement}
 							renderSubComponent={renderSubComponent}
 						/>
 					) : (
@@ -54,7 +52,6 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 							index={virtualRow.index}
 							size={virtualRow.size}
 							scrollToIndex={scrollToIndex}
-							measureElement={measureElement}
 							renderSubComponent={renderSubComponent}
 						/>
 					)
@@ -66,6 +63,8 @@ const TableBody: React.FC<TableBodyProps> = ({ virtualizer, renderSubComponent }
 	)
 }
 
-const MemoizedTableBody = memo(TableBody) as typeof TableBody
+const MemoizedTableBody = memo(TableBody, (prevProps, nextProps) =>
+	isEqual(prevProps.virtualizer.isScrolling, nextProps.virtualizer.isScrolling)
+) as typeof TableBody
 
 export { MemoizedTableBody, TableBody, type TableBodyProps }

@@ -1,15 +1,15 @@
-import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
+import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { Virtualizer } from '@tanstack/react-virtual'
 import React, { Fragment, memo } from 'react'
 import { VirtualPlaceholderRow } from './table-row'
 
 type TableBodyVirtualViewportProps = React.PropsWithChildren & {
-	virtualizer: Virtualizer<HTMLDivElement, Element>
+	virtualizer: Virtualizer<HTMLElement, HTMLElement>
 	columnCount: number
 }
 
 const TableBodyVirtualViewport: React.FC<TableBodyVirtualViewportProps> = ({ children, virtualizer, columnCount }) => {
-	const { before, after } = useVirutalScrollOffset(virtualizer)
+	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	return (
 		<Fragment>

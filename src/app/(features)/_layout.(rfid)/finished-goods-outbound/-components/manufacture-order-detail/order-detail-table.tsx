@@ -53,9 +53,8 @@ const OrderSizeDetailTable: React.FC = () => {
 	)
 
 	const containerRef = useRef<HTMLDivElement>(null)
-	const scrollingRef = useRef<number>(0)
 
-	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ROW_HEIGHT)
 	const measureElement = useMeasureElement()
 

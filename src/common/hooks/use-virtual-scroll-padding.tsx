@@ -1,7 +1,10 @@
 import { notUndefined, Virtualizer } from '@tanstack/react-virtual'
 import { useRef } from 'react'
 
-export default function useVirutalScrollOffset(virtualizer: Virtualizer<any, any>) {
+export default function useVirtualScrollPadding<
+	ContainerElement extends HTMLElement,
+	VirtualItemElement extends HTMLElement
+>(virtualizer: Virtualizer<ContainerElement, VirtualItemElement>) {
 	const virtualItems = virtualizer.getVirtualItems()
 
 	const offsetRef = useRef<Record<'before' | 'after', number>>({ before: 0, after: 0 })

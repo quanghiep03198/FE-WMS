@@ -1,5 +1,5 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
-import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
+import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
@@ -206,9 +206,7 @@ export function MultiSelect<D = Record<string, any>>({
 		}
 	}, [])
 
-	const scrollingRef = useRef<number>(0)
-
-	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
+	const scrollToFn = useScrollToFn({ current: scrollElement })
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
 	const estimateSize = useCallback(() => ESTIMATE_SIZE, [])
 
@@ -223,7 +221,7 @@ export function MultiSelect<D = Record<string, any>>({
 
 	const virtualItems = virtualizer.getVirtualItems()
 
-	const { before, after } = useVirutalScrollOffset(virtualizer)
+	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	useDeepCompareEffect(() => {
 		if (Array.isArray(value)) setSelectedValues(value)

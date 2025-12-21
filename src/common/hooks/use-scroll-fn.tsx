@@ -1,5 +1,5 @@
 import { elementScroll, VirtualizerOptions } from '@tanstack/react-virtual'
-import { RefObject, useCallback } from 'react'
+import { RefObject, useCallback, useRef } from 'react'
 
 type ScrollToFnArgs = Parameters<VirtualizerOptions<any, any>['scrollToFn']>
 
@@ -7,7 +7,9 @@ const easeInOutQuint = (t: number) => {
 	return t <= 0.5 ? 16 * t ** 5 : 1 + 16 * (--t) ** 5
 }
 
-export default function useScrollToFn(containerRef: RefObject<HTMLElement>, scrollingRef: RefObject<number>) {
+export default function useScrollToFn(containerRef: RefObject<HTMLElement>) {
+	const scrollingRef = useRef<number>(0)
+
 	return useCallback<VirtualizerOptions<any, any>['scrollToFn']>((...args: ScrollToFnArgs) => {
 		const [offset, canSmooth, instance] = args
 		const duration = 1000

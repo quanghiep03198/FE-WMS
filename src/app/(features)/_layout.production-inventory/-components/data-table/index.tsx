@@ -86,8 +86,7 @@ function DataTable<T extends TableRowData>({
 	const { rows } = table.getRowModel()
 	const isSomeRowsExpanded = table.getIsSomeRowsExpanded()
 
-	const scrollingRef = useRef<number>(0)
-	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
+	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ROW_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
 

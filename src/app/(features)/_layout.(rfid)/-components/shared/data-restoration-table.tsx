@@ -1,7 +1,7 @@
 'use no memo'
 
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
-import useVirutalScrollOffset from '@/common/hooks/use-virtual-scroll-offset'
+import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -22,7 +22,7 @@ import Skeleton from '@/components/ui/@custom/skeleton'
 import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import React, { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType, ScanCapability, ScannedStatus } from '../../-constants'
 import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
@@ -76,12 +76,11 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 	}, [datalist])
 
 	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
-	const scrollingRef = useRef<number>(null)
 	const refCallback = useCallback((node: HTMLDivElement) => {
 		if (node) setScrollElement(node)
 	}, [])
 	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
-	const scrollToFn = useScrollToFn({ current: scrollElement }, scrollingRef)
+	const scrollToFn = useScrollToFn({ current: scrollElement })
 	const estimateSize = useCallback(() => VIRTUAL_ITEM_SIZE, [])
 
 	const virtualizer = useVirtualizer({
@@ -92,7 +91,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 		estimateSize
 	})
 
-	const { before, after } = useVirutalScrollOffset(virtualizer)
+	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	const virtualItems = virtualizer.getVirtualItems()
 
