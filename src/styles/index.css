@@ -157,7 +157,13 @@
 
 	/* Global styles */
 	* {
-		@apply box-border border-border scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar selection:bg-neutral-300 dark:selection:bg-neutral-600;
+		@apply border-border scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar selection:bg-neutral-300 dark:selection:bg-neutral-600;
+	}
+
+	*,
+	*:before,
+	*:after {
+		@apply box-border;
 	}
 
 	body {
