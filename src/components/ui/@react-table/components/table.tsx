@@ -1,7 +1,7 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useMemoizedFn, useSize, useUpdateEffect } from 'ahooks'
+import { useSize, useUpdateEffect } from 'ahooks'
 import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
@@ -23,7 +23,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const { table } = useTableContext('table')
 	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
-	const scrollingRef = useRef<number>(0)
 	const captionId = useId()
 
 	const {
@@ -32,26 +31,31 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		caption,
 		loading,
 		virtualizerOptions = {
-			estimateSize: devicePixelRatio >= 1 ? 36 : 40,
+			estimateSize: 42,
 			overscan: 5
 		},
 		renderSubComponent
 	} = props
 
-	const scrollToFn = useScrollToFn(containerRef, scrollingRef)
-	const estimateSize = useMemoizedFn(() => virtualizerOptions.estimateSize)
-	const getScrollElement = useMemoizedFn(() => containerRef.current)
+	const scrollToFn = useScrollToFn(containerRef)
+	const estimateSize = () => virtualizerOptions.estimateSize
+	const getScrollElement = () => containerRef.current
+	// const measureElement = useMeasureElement<HTMLTableRowElement>(
+	// 	{ shouldMeasure: true, estimateSize: virtualizerOptions.estimateSize },
+	// 	[virtualizerOptions]
+	// )
 
 	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
-		overscan: virtualizerOptions.overscan,
-		useAnimationFrameWithResizeObserver: true,
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel()?.rows?.length : 5,
+		useAnimationFrameWithResizeObserver: devicePixelRatio === 1,
 		horizontal: false,
 		getItemKey: (index) => table.getRowModel().rows[index]?.id,
 		getScrollElement,
 		estimateSize,
-		scrollToFn
-		// measureElement
+		// measureElement,
+		scrollToFn,
+		debug: true
 	})
 
 	const wrapperRef = useRef<HTMLDivElement>(null)
@@ -79,16 +83,24 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	return (
 		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
-			<ScrollArea ref={containerRef} {...containerProps}>
+			<ScrollArea
+				ref={containerRef}
+				style={{
+					scrollbarGutter: 'stable',
+					overflowAnchor: 'none',
+					touchAction: 'pan-y',
+					WebkitOverflowScrolling: 'touch'
+				}}
+				{...containerProps}>
 				<Table
 					data-role='data-grid'
-					className='table-auto border-separate border-spacing-0 border-none'
+					className='table-fixed border-separate border-spacing-0 border-none'
 					style={
 						{
 							...computedColumnSizes,
-							minWidth: table.getTotalSize(),
-							height: loading ? 'auto' : virtualizer.getTotalSize(),
-							'--header-row-height': devicePixelRatio >= 1 ? '36px' : '40px',
+							minWidth: `${table.getTotalSize()}px`,
+							height: `${virtualizer.getTotalSize()}px`,
+							'--header-row-height': '42px',
 							'--row-height': `${virtualizerOptions.estimateSize}px`
 						} as React.CSSProperties
 					}>
@@ -106,6 +118,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 						<TableBody {...{ virtualizer, renderSubComponent }} />
 					)}
 				</Table>
+
 				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</ScrollArea>
 			{footerProps && <TableFooter {...footerProps} />}
@@ -114,7 +127,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll max-w-full w-full scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden [overflow-anchor:none]`
+const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
 
 DataTable.displayName = 'DataTable'
 

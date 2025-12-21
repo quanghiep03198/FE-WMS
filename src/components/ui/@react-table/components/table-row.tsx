@@ -1,8 +1,7 @@
-import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { flexRender, type Row } from '@tanstack/react-table'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Fragment, memo, useRef } from 'react'
+import { Fragment, memo, startTransition } from 'react'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { getStickyOffsetPosition } from '../utils/table.util'
@@ -12,36 +11,20 @@ type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
 	row: Row<any>
 	index: number
 	size: number
-	measureElement: (node: HTMLTableRowElement) => void
 	scrollToIndex: (index) => void
 }
 
-const VirtualTableRow: React.FC<VirtualTableRowProps> = ({
-	row,
-	index,
-	size,
-	measureElement,
-	scrollToIndex,
-	renderSubComponent
-}) => {
+const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, size, index, scrollToIndex, renderSubComponent }) => {
 	'use no memo'
 
 	const { table } = useTableContext('table')
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
-	const requestAnimationFrameRef = useRef<number>(null)
 
 	const isSelected = row.getIsSelected()
 	const isExpanded = row.getIsExpanded()
 
 	useUpdateEffect(() => {
-		if (isExpanded) requestAnimationFrameRef.current = requestAnimationFrame(() => scrollToIndex(index))
-
-		return () => {
-			if (requestAnimationFrameRef.current) {
-				cancelAnimationFrame(requestAnimationFrameRef.current)
-				requestAnimationFrameRef.current = null
-			}
-		}
+		if (isExpanded) startTransition(() => scrollToIndex(index))
 	}, [isExpanded])
 
 	return (
@@ -52,23 +35,20 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({
 				aria-selected={isSelected}
 				aria-expanded={isExpanded}
 				className='group'
-				// ref={measureElement}
-			>
+				style={{ height: size }}>
 				{row.getVisibleCells().map((cell) => {
 					return (
 						<TableCell
-							data-role='data-grid-cell'
 							{...cell.column.columnDef?.meta?.tableCellProps}
+							data-role='data-grid-cell'
 							key={cell.id}
 							align={cell.column.columnDef.meta?.align}
-							className={cn(devicePixelRatio > 1 ? 'py-1.5' : 'py-2')}
 							style={{
 								width: `var(--column-${cell.column.id}-size)`,
-								height: size,
-								maxHeight: size,
+
 								...computeStickyOffsetPosition(cell.column)
 							}}>
-							<Div align={cell.column.columnDef.meta?.align} className={cn('!line-clamp-1', {})}>
+							<Div align={cell.column.columnDef.meta?.align} className='line-clamp-1'>
 								{flexRender(cell.column.columnDef.cell, cell.getContext())}
 							</Div>
 						</TableCell>
@@ -97,8 +77,8 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({
 
 const VirtualPlaceholderRow: React.FC<React.ComponentProps<'td'>> = memo((props) => {
 	return (
-		<TableRow role='placeholder-row'>
-			<TableCell {...props} />
+		<TableRow role='placeholder-row' style={props.style}>
+			<TableCell colSpan={props.colSpan} />
 		</TableRow>
 	)
 })
