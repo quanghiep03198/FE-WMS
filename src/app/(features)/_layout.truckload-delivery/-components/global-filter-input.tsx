@@ -7,14 +7,14 @@ import { DebouncedInput } from '@/components/ui/@react-table/components/debounce
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { Table } from '@tanstack/react-table'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import { capitalize, pick } from 'lodash-es'
+import { capitalize } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const GlobalFilterInput: React.FC<{
 	table: Table<ITruckloadDelivery>
 	event$: EventEmitter<Record<string, unknown>>
-}> = ({ table, event$ }) => {
+}> = ({ table }) => {
 	const { t } = useTranslation()
 	const isMediumScreen = useMediaQuery(PresetBreakPoints.MEDIUM)
 
@@ -24,7 +24,6 @@ const GlobalFilterInput: React.FC<{
 			<DebouncedInput
 				value={table.getState().globalFilter}
 				onChange={(value) => {
-					event$.emit(pick(table.getState(), ['rowSelection']))
 					table.setGlobalFilter(String(value))
 				}}
 				className='h-full min-w-44 p-0 pl-2 shadow-none placeholder:text-sm xl:min-w-56'
