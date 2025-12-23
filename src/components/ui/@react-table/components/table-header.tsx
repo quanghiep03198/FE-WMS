@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { Collapsible, CollapsibleContent, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Div, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { RowData, type HeaderGroup } from '@tanstack/react-table'
 import { useMemoizedFn, useUpdate } from 'ahooks'
 import { Fragment, memo } from 'react'
@@ -10,7 +10,7 @@ import TableCellHead from './table-cell-head'
 import { TableColumnFilter } from './table-column-filter'
 
 const DataTableHeader: React.FC = () => {
-	// 'use no memo'
+	'use no memo'
 
 	const rerender = useUpdate()
 
@@ -45,7 +45,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow data-role='data-grid-row' className='divide-x [&_th]:border-x-0'>
+		<TableRow data-role='data-grid-row' className='h-[var(--header-row-height,40px)] divide-x [&_th]:border-x-0'>
 			{headerGroup.headers.map((header) => {
 				const rowSpan = header.column.columnDef.meta?.rowSpan
 				if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
@@ -84,7 +84,7 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow>
+		<TableRow className='max-h-[var(--header-row-height,40px)]'>
 			{headerGroup.headers.map((header) => {
 				if (header.column.columns.length === 0)
 					return (
@@ -99,11 +99,15 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 								maxHeight: 'var(--header-row-height)',
 								...computeStickyOffsetPosition(header?.column)
 							}}>
-							<Collapsible open={filterOpen} data-state={filterOpen ? 'open' : 'closed'}>
-								<CollapsibleContent className='h-[var(--header-row-height)] overflow-hidden'>
+							<Div
+								data-state={filterOpen ? 'open' : 'closed'}
+								className={
+									'overflow-hidden transition-height duration-200 transition-allow-discrete data-[state=closed]:h-0 data-[state=open]:h-[var(--header-row-height)]'
+								}>
+								<Div className='h-[var(--header-row-height)]'>
 									<TableColumnFilter column={header.column} />
-								</CollapsibleContent>
-							</Collapsible>
+								</Div>
+							</Div>
 						</TableHead>
 					)
 			})}

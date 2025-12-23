@@ -1,3 +1,4 @@
+import env from '@/common/utils/env'
 import {
 	ColumnOrderState,
 	getCoreRowModel,
@@ -23,8 +24,8 @@ import tw from 'tailwind-styled-components'
 import { create, StoreApi } from 'zustand'
 import { MemoizedTableRowCount, TableRowCount } from './components/row-count'
 import DataTable from './components/table'
-import { MemoizedTablePagination, TablePagination } from './components/table-pagination'
-import { MemoizedTableToolbar, TableToolbar } from './components/table-toolbar'
+import DataTablePagination from './components/table-pagination'
+import TableToolbar from './components/table-toolbar'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from './constants'
 import { TableContext, TableContextStore } from './context/table.context'
 import { type DataTableProps } from './types'
@@ -64,7 +65,7 @@ function DataGrid<TData, TValue>({
 	enableColumnPinning = true,
 	enableGlobalFilter = true,
 	enableMultiSort = true,
-	globalFilterFn = fuzzyFilter,
+	globalFilterFn = 'fuzzy',
 	sorting,
 	columnFilters,
 	globalFilter,
@@ -107,11 +108,7 @@ function DataGrid<TData, TValue>({
 	// * Table declaration
 	const table = useReactTable({
 		data: _data,
-		columns: columns.filter((col) => !col.meta?.hidden),
-		defaultColumn: {
-			minSize: 180,
-			maxSize: 800
-		},
+		columns,
 		initialState: {
 			columnPinning: {
 				left: [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID],
@@ -156,7 +153,7 @@ function DataGrid<TData, TValue>({
 		enableHiding,
 		filterFromLeafRows: false,
 		columnResizeMode: 'onChange',
-		debugAll: false,
+		debugAll: env('VITE_NODE_ENV') === 'development',
 		sortingFns: { fuzzy: fuzzySort },
 		filterFns: {
 			fuzzy: fuzzyFilter,
@@ -270,10 +267,12 @@ function DataGrid<TData, TValue>({
 
 	const { isResizingColumn } = table.getState().columnSizingInfo
 
+	console.log('Rerender at DataGrid')
+
 	return (
 		<TableContext.Provider value={store.current}>
 			<DataTableWrapper data-border={border}>
-				{isResizingColumn ? <MemoizedTableToolbar {...toolbarProps} /> : <TableToolbar {...toolbarProps} />}
+				<TableToolbar {...{ ...toolbarProps, table }} />
 				<DataTable
 					columns={columns.filter((col) => !col.meta?.hidden)}
 					loading={loading}
@@ -298,21 +297,14 @@ function DataGrid<TData, TValue>({
 							manualTotalDocs={paginationProps?.totalDocs ?? 0}
 						/>
 					)}
-					{isResizingColumn ? (
-						<MemoizedTablePagination
-							loading={loading}
-							manualPagination={manualPagination}
-							controlledPaginationProps={paginationProps}
-							onPaginationChange={onPaginationChange}
-						/>
-					) : (
-						<TablePagination
-							loading={loading}
-							manualPagination={manualPagination}
-							controlledPaginationProps={paginationProps}
-							onPaginationChange={onPaginationChange}
-						/>
-					)}
+
+					<DataTablePagination
+						table={table}
+						loading={loading}
+						manualPagination={manualPagination}
+						controlledPaginationProps={paginationProps}
+						onPaginationChange={onPaginationChange}
+					/>
 				</FooterGroup>
 			</DataTableWrapper>
 		</TableContext.Provider>
@@ -326,6 +318,6 @@ const DataTableWrapper = tw.div`
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!border-x-0
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!shadow-none
 `
-const FooterGroup = memo(tw.div`flex items-center justify-between`)
+const FooterGroup = tw.div`flex items-center justify-between`
 
 export default memo(DataGrid)

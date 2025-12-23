@@ -1,6 +1,7 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
+import { Table } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash-es'
 import { memo } from 'react'
@@ -14,7 +15,8 @@ import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
 function TableToolbar<TData>(props: ToolbarProps<TData>) {
-	const { table, event$ } = useTableContext('table', 'event$')
+	const table = props['table'] as Table<TData>
+	const { event$ } = useTableContext('event$')
 	const {
 		columnPinning: { left, right },
 		globalFilter,
@@ -90,6 +92,7 @@ function TableToolbar<TData>(props: ToolbarProps<TData>) {
 
 TableToolbar.displayName = 'TableToolbar'
 
-const MemoizedTableToolbar = memo(TableToolbar) as typeof TableToolbar
-
-export { MemoizedTableToolbar, TableToolbar }
+export default memo(
+	TableToolbar,
+	(_, nextProps) => nextProps['table'].getState().columnSizingInfo.isResizingColumn !== false
+) as typeof TableToolbar

@@ -1,6 +1,4 @@
-import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
-import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSize, useUpdateEffect } from 'ahooks'
 import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
@@ -8,9 +6,9 @@ import { Table, TableCaption } from '../..'
 import { ROW_ACTIONS_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 import { type DataTableProps } from '../types'
-import { MemoizedTableBody, TableBody } from './table-body'
-import { TableBodyLoading } from './table-body-loading'
-import TableEmpty from './table-empty'
+import DataTableBody from './table-body'
+import DataTableBodyLoading from './table-body-loading'
+import DataTableEmpty from './table-empty'
 import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
 import { DataTableHeader } from './table-header'
@@ -21,45 +19,24 @@ type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 's
 
 function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const { table } = useTableContext('table')
-	const { rows } = table.getRowModel()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const captionId = useId()
 
 	const {
-		containerProps = { className: cn('h-[52.5dvh] xxl:h-[62.5dvh]') },
+		containerProps = { className: cn('h-[350px] xxl:h-[500px]') },
 		footerProps = { hidden: true, slot: null },
 		caption,
 		loading,
 		virtualizerOptions = {
-			estimateSize: 42,
+			estimateSize: 40,
 			overscan: 5
 		},
 		renderSubComponent
 	} = props
 
-	const scrollToFn = useScrollToFn(containerRef)
-	const estimateSize = () => virtualizerOptions.estimateSize
-	const getScrollElement = () => containerRef.current
-	// const measureElement = useMeasureElement<HTMLTableRowElement>(
-	// 	{ shouldMeasure: true, estimateSize: virtualizerOptions.estimateSize },
-	// 	[virtualizerOptions]
-	// )
-
-	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
-		count: rows.length,
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel()?.rows?.length : 5,
-		useAnimationFrameWithResizeObserver: devicePixelRatio === 1,
-		horizontal: false,
-		getItemKey: (index) => table.getRowModel().rows[index]?.id,
-		getScrollElement,
-		estimateSize,
-		// measureElement,
-		scrollToFn,
-		debug: true
-	})
-
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
+	const containerSize = useSize(containerRef)
 
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
@@ -81,7 +58,14 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	}, [table.getState().columnPinning])
 
 	return (
-		<Wrapper ref={wrapperRef} style={{ '--table-width': wrapperSize?.width - 10 + 'px' }}>
+		<Wrapper
+			ref={wrapperRef}
+			style={{
+				'--table-width': wrapperSize?.width - 10 + 'px',
+				'--table-height': containerSize?.height + 'px',
+				'--header-row-height': '40px',
+				'--row-height': `${virtualizerOptions.estimateSize}px`
+			}}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea
 				ref={containerRef}
@@ -94,14 +78,10 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				{...containerProps}>
 				<Table
 					data-role='data-grid'
-					className='table-fixed border-separate border-spacing-0 border-none'
+					className='table-auto border-separate border-spacing-0 border-none'
 					style={
 						{
-							...computedColumnSizes,
-							minWidth: `${table.getTotalSize()}px`,
-							height: `${virtualizer.getTotalSize()}px`,
-							'--header-row-height': '42px',
-							'--row-height': `${virtualizerOptions.estimateSize}px`
+							...computedColumnSizes
 						} as React.CSSProperties
 					}>
 					{caption && (
@@ -111,15 +91,18 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 					)}
 					<DataTableHeader />
 					{loading ? (
-						<TableBodyLoading />
-					) : table.getState().columnSizingInfo.isResizingColumn ? (
-						<MemoizedTableBody {...{ virtualizer, renderSubComponent }} />
+						<DataTableBodyLoading />
+					) : table.getRowModel().rows.length === 0 ? (
+						<DataTableEmpty />
 					) : (
-						<TableBody {...{ virtualizer, renderSubComponent }} />
+						<DataTableBody
+							table={table}
+							containerRef={containerRef}
+							estimatedRowHeight={virtualizerOptions.estimateSize}
+							renderSubComponent={renderSubComponent}
+						/>
 					)}
 				</Table>
-
-				{!loading && table.getRowModel().rows.length === 0 && <TableEmpty />}
 			</ScrollArea>
 			{footerProps && <TableFooter {...footerProps} />}
 		</Wrapper>

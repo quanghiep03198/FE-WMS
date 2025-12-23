@@ -103,11 +103,11 @@ export type RenderSubComponent<TData, TValue = any> = (props: {
 }) => React.ReactElement
 
 // #region Data table prop types
-export type DataTableProps<TData = any, TValue = any> = {
+export type DataTableProps<TData extends RowData, TValue = any> = {
 	/**
 	 * Reference to the table instance. Useful for accessing table methods and properties.
 	 */
-	ref?: React.RefObject<Table<TData, TValue>>
+	ref?: React.RefObject<Table<TData>>
 	/**
 	 * Array of data objects to be displayed in the table.
 	 */

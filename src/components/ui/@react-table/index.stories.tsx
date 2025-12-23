@@ -71,21 +71,30 @@ interface IUser {
 	status: 'active' | 'inactive' | 'pending'
 }
 
-const users: IUser[] = Array.from(new Array(100)).map((_, index) => ({
-	id: '#' + String(index + 1),
-	first_name: faker.person.firstName(),
-	last_name: faker.person.lastName(),
-	email: faker.internet.email(),
-	phone: faker.phone.number(),
-	address: faker.location.streetAddress(),
-	age: faker.number.int({ min: 18, max: 60 }),
-	job_title: faker.person.jobTitle(),
-	company: faker.company.name(),
-	department: faker.commerce.department(),
-	salary: faker.number.int({ min: 30000, max: 120000 }),
-	hire_date: faker.date.past().toISOString().split('T')[0],
-	status: faker.helpers.arrayElement(['active', 'inactive', 'pending'] as const)
-}))
+const users: IUser[] = Array.from(new Array(10_000)).map((_, index) => {
+	const person = {
+		id: '#' + String(index + 1),
+		first_name: faker.person.firstName(),
+		last_name: faker.person.lastName(),
+		phone: faker.phone.number(),
+		address: faker.location.streetAddress(),
+		age: faker.number.int({ min: 18, max: 60 }),
+		job_title: faker.person.jobTitle(),
+		company: faker.company.name(),
+		department: faker.commerce.department(),
+		salary: faker.number.int({ min: 30000, max: 120000 }),
+		hire_date: faker.date.past().toISOString().split('T')[0],
+		status: faker.helpers.arrayElement(['active', 'inactive', 'pending'] as const)
+	}
+
+	person['email'] = faker.internet.email({
+		firstName: person.first_name,
+		lastName: person.last_name,
+		provider: 'gmail.com'
+	})
+
+	return person
+})
 
 export const Default = () => {
 	const columnHelper = createColumnHelper<IUser>()

@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { PaginationState, RowData } from '@tanstack/react-table'
+import { PaginationState, RowData, Table } from '@tanstack/react-table'
 import React, { memo, useEffect, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -18,10 +18,10 @@ import {
 	Tooltip,
 	Typography
 } from '../..'
-import { useTableContext } from '../context/table.context'
 import { type PaginationBaseProps } from '../types'
 
 export type DataTablePaginationProps<TData extends RowData> = {
+	table: Table<TData>
 	manualPagination?: boolean
 	controlledPaginationProps: Partial<Omit<Pagination<TData>, 'data'>>
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
@@ -29,6 +29,7 @@ export type DataTablePaginationProps<TData extends RowData> = {
 } & PaginationBaseProps<TData>
 
 function TablePagination<TData>({
+	table,
 	loading,
 	manualPagination,
 	controlledPaginationProps,
@@ -38,7 +39,6 @@ function TablePagination<TData>({
 	'use no memo'
 
 	const { t } = useTranslation('ns_common')
-	const { table } = useTableContext('table')
 	const { firstPage, lastPage, nextPage, previousPage, setPageSize } = table
 	const timeoutRef = useRef<NodeJS.Timeout>(null)
 	const prefetchCountRef = useRef<number>(0)
@@ -114,7 +114,7 @@ function TablePagination<TData>({
 						<SelectValue placeholder={pageSize} />
 					</SelectTrigger>
 					<SelectContent>
-						{[10, 20, 30, 40, 50].map((pageSize) => (
+						{[10, 20, 30, 40, 50, 1000].map((pageSize) => (
 							<SelectItem
 								key={pageSize}
 								value={String(pageSize)}
@@ -211,8 +211,9 @@ function TablePagination<TData>({
 
 TablePagination.displayName = 'TablePagination'
 
-const MemoizedTablePagination = memo(TablePagination, (prevProps, nextProps) =>
-	isEqual(prevProps.controlledPaginationProps, nextProps.controlledPaginationProps)
+export default memo(
+	TablePagination,
+	(prevProps, nextProps) =>
+		isEqual(prevProps.controlledPaginationProps, nextProps.controlledPaginationProps) &&
+		nextProps.table.getState().columnSizingInfo.isResizingColumn !== false
 ) as typeof TablePagination
-
-export { MemoizedTablePagination, TablePagination }

@@ -3,7 +3,7 @@ import Skeleton from '../../@custom/skeleton'
 import { useTableContext } from '../context/table.context'
 import { getStickyOffsetPosition } from '../utils'
 
-export const TableBodyLoading: React.FC = () => {
+const DataTableBodyLoading: React.FC = () => {
 	const { table } = useTableContext('table')
 
 	const preRenderRows = Array.from(new Array(10), (_, index) => index)
@@ -27,3 +27,5 @@ export const TableBodyLoading: React.FC = () => {
 		</TableRow>
 	))
 }
+
+export default DataTableBodyLoading
