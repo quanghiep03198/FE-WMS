@@ -5,7 +5,7 @@ import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { createColumnHelper, Table as TanstackTable } from '@tanstack/react-table'
+import { createColumnHelper, Table } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { pick } from 'lodash-es'
 import { useLayoutEffect, useMemo } from 'react'
@@ -20,7 +20,7 @@ import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
-	const tableRef = useReactiveRef<TanstackTable<ITruckloadDelivery>>(null)
+	const tableRef = useReactiveRef<Table<ITruckloadDelivery>>(null)
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
 	const { mutateAsync } = useUpdateContainerConditionMutation()
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
@@ -103,9 +103,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.container_number'),
 				enableResizing: true,
 				enableSorting: true,
-				enableColumnFilter: true,
 				enableGlobalFilter: true,
-				filterFn: 'auto',
+				filterFn: 'fuzzy',
 				minSize: 150,
 				size: 150,
 				maxSize: 250,
@@ -289,7 +288,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				}
 			})
 		],
-		[i18n.language, isMobile]
+		[i18n.language, isMobile, tableRef]
 	)
 
 	useLayoutEffect(() => {
@@ -320,6 +319,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			data={data}
 			loading={isLoading}
 			enableColumnFilters={true}
+			enableGlobalFilter={true}
+			getColumnCanGlobalFilter={() => true}
+			globalFilterFn='includesString'
 			border='bottom-only'
 			initialState={{
 				sorting: [{ id: 'dispatch_order', desc: true }],
