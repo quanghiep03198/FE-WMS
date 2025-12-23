@@ -1,12 +1,12 @@
 import { cn } from '@/common/utils/cn'
-import React, { forwardRef, useRef } from 'react'
+import React, { useRef } from 'react'
 
 export type DivProps = { as?: React.ElementType | keyof HTMLElementTagNameMap } & React.ComponentProps<
 	'div' extends keyof HTMLElementTagNameMap ? keyof HTMLElementTagNameMap : React.ElementType
 >
 
-export const Div: React.ForwardRefExoticComponent<DivProps> = forwardRef((props, ref) => {
-	const { as: Component = 'div', className, style, children, ...restProps } = props
+export const Div: React.FC<DivProps> = (props) => {
+	const { as: Component = 'div', className, style, children, ref, ...restProps } = props
 
 	const localRef = useRef(null)
 	const resolvedRef = ref || localRef
@@ -16,4 +16,4 @@ export const Div: React.ForwardRefExoticComponent<DivProps> = forwardRef((props,
 			{children}
 		</Component>
 	)
-})
+}
