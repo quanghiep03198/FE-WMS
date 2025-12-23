@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import { array, boolean, number, object, string, type infer as Infer } from 'zod'
+import { any, array, boolean, number, object, string, type infer as Infer } from 'zod'
 
 // BIC container code pattern: 3 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
 // const BIC_CONTAINER_PATTERN = /^[A-Z]\d{7}$/
@@ -19,7 +19,13 @@ export const createDeliverySchema = object({
 		object({
 			po: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 			outbound_qty: number({ message: 'ns_validation:required' }).int().positive(),
-			max_outbound_qty: number().nonnegative().default(Infinity)
+			max_outbound_qty: any()
+				.nullish()
+				.refine((value) => {
+					if (value === null || value === undefined) return true
+					return !isNaN(+value)
+				})
+				.default(Infinity)
 		})
 	)
 })
