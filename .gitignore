@@ -39,6 +39,7 @@ private
 
 # Storybook log
 *storybook.log
+storybook-static
 
 # PWA dev
 dev-dist
