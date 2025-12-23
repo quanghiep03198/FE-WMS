@@ -157,7 +157,7 @@
 
 	/* Global styles */
 	* {
-		@apply border-border scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar selection:bg-neutral-300 dark:selection:bg-neutral-600;
+		@apply border-border antialiased scrollbar-thin scrollbar-track-transparent scrollbar-thumb-scrollbar selection:bg-neutral-300 dark:selection:bg-neutral-600;
 	}
 
 	*,
