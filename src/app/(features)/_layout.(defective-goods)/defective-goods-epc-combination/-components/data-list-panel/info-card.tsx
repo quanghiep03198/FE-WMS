@@ -35,7 +35,7 @@ import { gunzipSync } from 'zlib'
 import { useListPanelContext } from '../../-contexts/list-panel-context'
 import { DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
-import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
+import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 
 const InfoCard: React.FC<{
 	data: IDefectiveGoods
@@ -47,7 +47,7 @@ const InfoCard: React.FC<{
 
 	const { hash, search } = useLocation()
 	const dateLocale = useDateLocale()
-	const { setCurrentDevice } = useSwitchRFIDDevice()
+	const { setStrategy } = useSwitchCombinationStrategy()
 	const navigate = useNavigate()
 
 	// Simplified selection handler using new optimized API
@@ -73,7 +73,7 @@ const InfoCard: React.FC<{
 			}
 		}
 		event$.emit({ action: CommonActions.UPDATE, payload })
-		setCurrentDevice('usb')
+		setStrategy('usb')
 	}, [data])
 
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()

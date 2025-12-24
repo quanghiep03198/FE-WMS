@@ -1,6 +1,6 @@
 import { useGetCommandNumberDetailQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { CommonActions } from '@/common/constants/enums'
-import { IBaseEntity, IDefectiveGoods } from '@/common/types/entities'
+import { IBaseEntity } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -16,7 +16,7 @@ import {
 import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
-import { useLocalStorageState, useResetState, useUpdateEffect } from 'ahooks'
+import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isNil } from 'lodash-es'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -27,6 +27,7 @@ import { gzipSync } from 'zlib'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
 import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
 
+import { IDefectiveGoods } from '@/services/defective-goods.service'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
@@ -34,15 +35,15 @@ import {
 	useCreateDefectiveGoodsMutation,
 	useUpdateDefectiveGoodsMutation
 } from '../../../-hooks/use-defective-goods-asm'
-import { useSwitchRFIDDevice } from '../../../-hooks/use-switch-rfid-device'
+import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
 import AssemblyLineFieldControl from './assembly-line-field-control'
 import BrandFieldControl from './brand-field-control'
 import CategoryFieldControl from './category-field-control'
 import ColorFieldControl from './color-field-control'
+import CombinationStrategyRadioGroup from './combination-strategy-group'
 import CommandNumberFieldControl from './command-number-field-control'
 import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
-import DeviceRadioGroup from './device-radio-group'
 import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
 import ListPanelToggleButton from './list-panel-toggle-button'
 import SewingLineFieldControl from './sewing-line-field-control'
@@ -59,7 +60,8 @@ const DefectiveGoodsForm: React.FC = () => {
 		defaultValue: true,
 		listenStorageChange: true
 	})
-	const { currentDevice } = useSwitchRFIDDevice()
+	const { currentStrategy, setStrategy } = useSwitchCombinationStrategy()
+	const previousStrategy = usePrevious(currentStrategy)
 	const [defaultEditorContent, setDefaultEditorContent] = useState<string>(() =>
 		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
 	)
@@ -108,7 +110,8 @@ const DefectiveGoodsForm: React.FC = () => {
 
 	useEffect(() => {
 		if (!orderDetail) return
-		const orderInfo = orderDetail.orders.at(0)
+		const orderInfo = orderDetail?.orders?.at(0)
+		if (!orderInfo) return
 		form.reset({
 			...form.getValues(),
 			cust_shoes_style: orderInfo.cust_shoes_style,
@@ -117,6 +120,14 @@ const DefectiveGoodsForm: React.FC = () => {
 			color_sn: orderInfo.color_sn
 		})
 	}, [orderDetail])
+
+	useEffect(() => {
+		form.setValue('combination_strategy', currentStrategy)
+	}, [currentStrategy])
+
+	useEffect(() => {
+		if (formAction === CommonActions.UPDATE) setStrategy(null)
+	}, [formAction])
 
 	useUpdateEffect(() => {
 		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
@@ -145,7 +156,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					currentFormValues[key] = DefectDescriptionTemplate[i18n.language]
 					break
 				case 'epc':
-					if (currentDevice === 'usb') currentFormValues[key] = ''
+					if (currentStrategy === 'usb') currentFormValues[key] = ''
 					break
 				default:
 					currentFormValues[key] = ''
@@ -155,7 +166,16 @@ const DefectiveGoodsForm: React.FC = () => {
 		form.reset(currentFormValues)
 	}
 
+	console.log('form.getValues()', form.getValues())
+
 	const handleSubmitForm = (data: CreateDefectiveGoodsFormValues) => {
+		if (data.combination_strategy === 'manually') {
+			delete data.epc
+			delete data.size_code
+		}
+
+		console.log('data', data)
+
 		const payload = {
 			...data,
 			defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString('base64')
@@ -167,12 +187,20 @@ const DefectiveGoodsForm: React.FC = () => {
 		toast.promise(mutateAsync(), {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
-				if (formAction === CommonActions.CREATE) form.reset({ ...form.getValues(), epc: '' })
+				if (formAction === CommonActions.CREATE)
+					form.reset({ ...form.getValues(), ...(data.combination_strategy === 'usb' && { epc: '' }) })
 				event$.emit({ action: CommonActions.SAVE, payload: [] })
 				return t('ns_common:notification.success')
 			},
 			error: t('ns_common:notification.error')
 		})
+	}
+
+	const handleCancel = () => {
+		resetFormAction()
+		handleResetForm()
+		setStrategy(previousStrategy)
+		navigate({ hash: undefined, search })
 	}
 
 	const isPending: boolean = isCreating || isUpdating
@@ -210,11 +238,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								size='sm'
 								type='button'
 								className='text-destructive hover:bg-destructive/20 hover:text-destructive'
-								onClick={() => {
-									resetFormAction()
-									handleResetForm()
-									navigate({ hash: undefined, search })
-								}}>
+								onClick={handleCancel}>
 								<Icon name='X' /> {t('ns_common:actions.cancel')}
 							</Button>
 							<Button
@@ -255,23 +279,24 @@ const DefectiveGoodsForm: React.FC = () => {
 				)}
 				{/* Form fields */}
 				<Div as='fieldset' className='grid flex-1 basis-full grid-cols-6 gap-x-2 gap-y-6 overflow-y-auto p-6'>
-					{currentDevice === 'usb' && (
-						<Div className='col-span-full'>
-							<InputFieldControl
-								name='epc'
-								label='EPC'
-								autoFocus
-								autoComplete='off'
-								type='search'
-								tabIndex={0}
-								placeholder='E28*********************'
-								onKeyDown={handleEpcChange}
-								onKeyDownCapture={handleEpcChange}
-								disabled={isNil(formAction)}
-								description={t('ns_inoutbound:description.defective_epc_caption')}
-							/>
-						</Div>
-					)}
+					{currentStrategy === 'usb' ||
+						(isNil(currentStrategy) && (
+							<Div className='col-span-full'>
+								<InputFieldControl
+									name='epc'
+									label='EPC'
+									autoFocus
+									autoComplete='off'
+									type='search'
+									tabIndex={0}
+									placeholder='E28*********************'
+									onKeyDown={handleEpcChange}
+									onKeyDownCapture={handleEpcChange}
+									disabled={isNil(formAction)}
+									description={t('ns_inoutbound:description.defective_epc_caption')}
+								/>
+							</Div>
+						))}
 					<Div className='col-span-full'>
 						<CategoryFieldControl disabled={isNil(formAction)} />
 					</Div>
@@ -291,38 +316,55 @@ const DefectiveGoodsForm: React.FC = () => {
 							</Div>
 						</Fragment>
 					)}
-					<Div className='col-span-3'>
+					<Div
+						className={cn(
+							'col-span-full',
+							currentStrategy === 'manually' ? '@3xl:col-span-2' : '@3xl:col-span-3'
+						)}>
 						<CustShoeStyleFieldControl
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
 							disabled={isNil(formAction)}
 						/>
 					</Div>
-					<Div className='col-span-3'>
+					<Div
+						className={cn(
+							'col-span-full',
+							currentStrategy === 'manually' ? '@3xl:col-span-2' : '@3xl:col-span-3'
+						)}>
 						<FactoryShoeStyleFieldControl
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
 							disabled={isNil(formAction)}
 						/>
 					</Div>
-					<Div className='col-span-3'>
+					<Div
+						className={cn(
+							'col-span-full',
+							currentStrategy === 'manually' ? '@3xl:col-span-2' : '@3xl:col-span-3'
+						)}>
 						<ColorFieldControl
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
 							disabled={isNil(formAction)}
 						/>
 					</Div>
-					<Div className='col-span-3'>
+
+					<Div className={cn(currentStrategy === 'manually' ? 'col-span-full' : '@3xl:col-span-3')}>
 						<SizeFieldControl
 							loading={isLoading}
 							disabled={isNil(formAction)}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
-									? orderDetail.sizes.map((item) => ({ label: item.size_numcode, value: item.size_numcode }))
+									? orderDetail.sizes.map((item) => ({
+											label: item.size_numcode,
+											value: item.size_numcode
+										}))
 									: []
 							}
 						/>
 					</Div>
+
 					<Div className='col-span-3'>
 						<SewingLineFieldControl />
 					</Div>
@@ -372,7 +414,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				{/* Footer bar */}
 				<Div className='flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-4'>
 					<ToggleFullscreen />
-					<DeviceRadioGroup shouldNotAllowUhf={formAction === CommonActions.UPDATE} />
+					<CombinationStrategyRadioGroup shouldNotAllowUhf={formAction === CommonActions.UPDATE} />
 				</Div>
 			</Form>
 		</FormProvider>
