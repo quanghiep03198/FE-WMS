@@ -168,8 +168,8 @@ export interface IMonthlyInventoryAudit {
 	final_inv_qty: number
 	inv_type: 'FG' | 'IH' // Finished goods | Insole house
 	inv_year_month: string
-	storage_capacity: number
 	total_number_of_storage: number
+	total_storage_capacity: number
 	// prettier-ignore
 	detail: Array<{
 		size: string							// * Size code

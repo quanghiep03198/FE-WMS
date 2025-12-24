@@ -15,7 +15,7 @@ const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: bo
 	const totalNumberOfStorageLocation = Array.isArray(data)
 		? Math.max(...data.map((item) => item.total_number_of_storage))
 		: 0
-	const totalStorageCapacity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.storage_capacity, 0) : 0
+	const totalStorageCapacity = Array.isArray(data) ? Math.max(...data.map((item) => item.total_storage_capacity)) : 0
 
 	return (
 		<Table className='w-full table-fixed'>
