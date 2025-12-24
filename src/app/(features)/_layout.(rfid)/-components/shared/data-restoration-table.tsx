@@ -45,7 +45,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 		'removeAllItemsFromSet'
 	)
 	const [persistentFormValues] = usePersistentFilterState(dataType)
-	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery(dataType)
+	const { refetch: refetchArchivedEpcFeature } = useGetArchivedEpcFeatureQuery()
 	const {
 		data,
 		isFetching,

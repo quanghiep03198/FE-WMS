@@ -122,10 +122,8 @@ export class RFIDService {
 		)
 	}
 
-	static async getArchivedEpcFeatures(type: RFIDDataType) {
-		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(
-			`/rfid/archived-epc-features/${type}`
-		)
+	static async getArchivedEpcFeatures() {
+		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/archived-epc-features`)
 	}
 	static async restoreArchivedEpcs(type: RFIDDataType, payload: Array<IElectronicProductCode>) {
 		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(

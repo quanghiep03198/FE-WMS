@@ -1,7 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import {
+	AutoCompleteFieldControl,
 	Button,
-	ComboboxFieldControl,
 	Div,
 	Form,
 	FormControl,
@@ -15,7 +15,6 @@ import {
 	PopoverTrigger,
 	RadioGroup,
 	RadioGroupItem,
-	SelectFieldControl,
 	Separator,
 	Tooltip,
 	Typography
@@ -38,7 +37,7 @@ type ArchivedEpcFilterProps = {
 const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 	const { t } = useTranslation()
 	const [filterOpen, setFilterOpen] = useState<boolean>(false)
-	const { data } = useGetArchivedEpcFeatureQuery(dataType)
+	const { data } = useGetArchivedEpcFeatureQuery()
 	const [search, setSearch, resetSearch] = useResetState<string>('')
 
 	const defaultFormValues = useMemo(() => {
@@ -231,7 +230,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 								{t('ns_erp:titles.product_info')}
 							</Typography>
 							<Div className='space-y-3'>
-								<ComboboxFieldControl
+								<AutoCompleteFieldControl
 									label={t('ns_erp:fields.factory_shoes_style')}
 									name='shoes_style'
 									orientation='horizontal'
@@ -239,7 +238,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									labelField='shoes_style_factory_code'
 									valueField='shoes_style_factory_code'
 								/>
-								<ComboboxFieldControl
+								<AutoCompleteFieldControl
 									label={t('ns_erp:fields.color_sn')}
 									name='color_sn'
 									orientation='horizontal'
@@ -247,7 +246,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									labelField='color_sn'
 									valueField='color_sn'
 								/>
-								<ComboboxFieldControl
+								<AutoCompleteFieldControl
 									label={t('ns_erp:fields.mo_no')}
 									name='mo_no'
 									orientation='horizontal'
@@ -255,7 +254,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									labelField='mo_no'
 									valueField='mo_no'
 								/>
-								<SelectFieldControl
+								<AutoCompleteFieldControl
 									label='Size'
 									name='size_numcode'
 									orientation='horizontal'

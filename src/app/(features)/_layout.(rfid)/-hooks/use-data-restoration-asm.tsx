@@ -51,10 +51,10 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params: SearchFormVal
 	})
 }
 
-export const useGetArchivedEpcFeatureQuery = (type: RFIDDataType) => {
+export const useGetArchivedEpcFeatureQuery = () => {
 	return useQuery({
-		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES, type],
-		queryFn: async () => await RFIDService.getArchivedEpcFeatures(type),
+		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES],
+		queryFn: async () => await RFIDService.getArchivedEpcFeatures(),
 		refetchOnMount: 'always',
 		select: (response) => response.metadata
 	})
