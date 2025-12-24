@@ -1,6 +1,6 @@
-import { IDefectiveGoods } from '@/common/types/entities'
 import { Checkbox, Div, Typography } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
+import { IDefectiveGoods } from '@/services/defective-goods.service'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

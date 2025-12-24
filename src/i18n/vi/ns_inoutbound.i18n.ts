@@ -110,6 +110,7 @@ export default {
 		delete_all: 'Xóa tất cả',
 		delete_and_unscannable: 'Xóa và không quét lại',
 		exchange_all: 'Hoán đổi tất cả',
+		inoutbound_method: 'Phương thức nhập/xuất',
 		io_archive_warehouse: 'Kho lưu trữ',
 		io_reason: 'Lý do nhập/xuất',
 		io_storage_location: 'Vị trí lưu kho',

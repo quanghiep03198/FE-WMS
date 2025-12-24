@@ -1,6 +1,6 @@
-import { IDefectiveGoods } from '@/common/types/entities'
 import { Div, Icon } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
+import { IDefectiveGoods } from '@/services/defective-goods.service'
 import { UseQueryResult } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import React from 'react'

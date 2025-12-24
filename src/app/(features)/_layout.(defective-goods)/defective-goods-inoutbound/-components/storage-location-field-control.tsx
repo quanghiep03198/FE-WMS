@@ -41,7 +41,7 @@ const StorageLocationFieldControl: React.FC<StorageLocationFieldControlProps> = 
 							value={field.value}
 							placeholder={t('ns_inoutbound:placeholders.enter_storage_location')}
 							className={cn(
-								'min-w-[var(--form-field-width)] aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+								'w-full aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
 								className
 							)}
 							ref={(e) => {
