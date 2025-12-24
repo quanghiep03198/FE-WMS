@@ -21,7 +21,7 @@ import {
 } from '@/components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useDeepCompareEffect, useResetState } from 'ahooks'
-import { isEmpty, sortBy } from 'lodash-es'
+import { capitalize, isEmpty, sortBy } from 'lodash-es'
 import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -42,10 +42,10 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 
 	const defaultFormValues = useMemo(() => {
 		const values: Partial<SearchFormValues> = {
-			shoes_style: '',
-			color_sn: '',
-			mo_no: '',
-			size_numcode: ''
+			shoes_style: null,
+			color_sn: null,
+			mo_no: null,
+			size_numcode: null
 		}
 		switch (dataType) {
 			case RFIDDataType.INBOUND:
@@ -233,6 +233,12 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 								<AutoCompleteFieldControl
 									label={t('ns_erp:fields.factory_shoes_style')}
 									name='shoes_style'
+									placeholder={capitalize(
+										t('ns_common:form_placeholder.fill', {
+											object: t('ns_erp:fields.factory_shoes_style'),
+											defaultValue: null
+										})
+									)}
 									orientation='horizontal'
 									datalist={shoesStyleOptions}
 									labelField='shoes_style_factory_code'
@@ -241,6 +247,12 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 								<AutoCompleteFieldControl
 									label={t('ns_erp:fields.color_sn')}
 									name='color_sn'
+									placeholder={capitalize(
+										t('ns_common:form_placeholder.fill', {
+											object: t('ns_erp:fields.color_sn'),
+											defaultValue: null
+										})
+									)}
 									orientation='horizontal'
 									datalist={colorOptions}
 									labelField='color_sn'
@@ -249,6 +261,12 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 								<AutoCompleteFieldControl
 									label={t('ns_erp:fields.mo_no')}
 									name='mo_no'
+									placeholder={capitalize(
+										t('ns_common:form_placeholder.fill', {
+											object: t('ns_erp:fields.mo_no'),
+											defaultValue: null
+										})
+									)}
 									orientation='horizontal'
 									datalist={commandNumberOptions}
 									labelField='mo_no'
@@ -259,6 +277,9 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									name='size_numcode'
 									orientation='horizontal'
 									datalist={sizeOptions}
+									placeholder={capitalize(
+										t('ns_common:form_placeholder.fill', { object: 'Size', defaultValue: null })
+									)}
 									labelField='size_numcode'
 									valueField='size_numcode'
 								/>
