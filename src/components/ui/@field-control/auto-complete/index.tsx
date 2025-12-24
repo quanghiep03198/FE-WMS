@@ -5,7 +5,7 @@ import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { ResourceKey } from 'i18next'
 import React, { useId, useMemo, useRef } from 'react'
-import { FieldValues, useFormContext } from 'react-hook-form'
+import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuidv4 } from 'uuid'
@@ -48,7 +48,7 @@ export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<stri
 
 export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlProps<T, D>) {
 	const { t } = useTranslation()
-	const { control, getFieldState, watch, setValue } = useFormContext()
+	const { control, getFieldState, setValue } = useFormContext()
 	const {
 		name,
 		placeholder,
@@ -74,7 +74,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	const resolvedRef = (forwardedRef || internalRef) as React.RefObject<HTMLInputElement>
 	const [open, setOpen] = React.useState(false)
 
-	const currentValue = watch(name) ?? ''
+	const currentValue = useWatch({ name, control }) ?? ''
 
 	const filteredDatalist = useMemo(() => {
 		if (!shouldFilter) return datalist ?? []
