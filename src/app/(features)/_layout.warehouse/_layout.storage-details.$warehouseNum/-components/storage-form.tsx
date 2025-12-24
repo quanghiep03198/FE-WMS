@@ -104,6 +104,12 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 							name='storage_name'
 							label={t('ns_warehouse:fields.storage_name')}
 						/>
+						<InputFieldControl
+							placeholder='100 prs'
+							name='storage_capacity'
+							type='number'
+							label={t('ns_warehouse:fields.storage_capacity')}
+						/>
 						<SelectFieldControl
 							name='type_storage'
 							label={t('ns_warehouse:fields.type_storage')}

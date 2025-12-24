@@ -25,6 +25,10 @@ export const warehouseFormSchema = object({
 
 export const storageFormSchema = object({
 	storage_name: string().trim().nonempty({ message: 'ns_validation:required' }),
+	storage_capacity: number({ message: 'ns_validation:required' })
+		.int()
+		.nonnegative()
+		.transform((value) => Math.abs(value)),
 	type_storage: string()
 		.trim()
 		.nonempty({ message: 'ns_validation:required' })

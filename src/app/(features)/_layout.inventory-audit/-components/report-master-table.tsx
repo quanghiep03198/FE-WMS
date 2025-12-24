@@ -16,7 +16,8 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-	Tooltip
+	Tooltip,
+	Typography
 } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import Skeleton from '@/components/ui/@custom/skeleton'
@@ -171,10 +172,17 @@ export const InventoryReportMasterTable: React.FC = () => {
 				size: 260,
 				filterFn: 'fuzzy',
 				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value)
+						return (
+							<Typography variant='small' color='muted'>
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
 					return (
 						<EllipsisList
 							threshhold={2}
-							data={split(getValue(), ',')
+							data={split(value, ',')
 								.filter((item) => !!item)
 								.sort((a, b) => a.localeCompare(b))}
 							template={({ data }) => (
@@ -184,6 +192,26 @@ export const InventoryReportMasterTable: React.FC = () => {
 							)}
 						/>
 					)
+				}
+			}),
+			columnHelper.accessor('storage_capacity', {
+				header: t('ns_warehouse:fields.storage_capacity'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enableHiding: false,
+				filterFn: 'inNumberRange',
+				meta: {
+					filterVariant: 'range'
+				},
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value)
+						return (
+							<Typography variant='small' color='muted'>
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+					formatIntlNumber(value)
 				}
 			}),
 			columnHelper.accessor('order_qty', {
@@ -347,16 +375,18 @@ const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: bo
 	const totalOutboundQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.total_outstock_qty, 0) : 0
 	const actualInventoryQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.actual_inv_qty, 0) : 0
 	const finalInventoryQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.final_inv_qty, 0) : 0
+	const totalStorageCapacity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.storage_capacity, 0) : 0
 
 	return (
 		<Table className='w-full table-fixed'>
 			<TableHeader>
-				<TableRow className='[&_th]:bg-table-head [&_th]:text-table-head-foreground'>
+				<TableRow className='[&_th]:bg-table-head [&_th]:capitalize [&_th]:text-table-head-foreground'>
 					<TableHead align='right'>{t('ns_erp:fields.total_init_qty')}</TableHead>
 					<TableHead align='right'>{t('ns_erp:fields.inbound_qty')}</TableHead>
 					<TableHead align='right'>{t('ns_erp:fields.outbound_qty')}</TableHead>
 					<TableHead align='right'>{t('ns_erp:fields.actual_inventory_qty')}</TableHead>
 					<TableHead align='right'>{t('ns_erp:fields.final_inventory_qty')}</TableHead>
+					<TableHead align='right'>{t('ns_warehouse:fields.total_storage_capacity')}</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
@@ -370,6 +400,7 @@ const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: bo
 					<TableCell align='right'>
 						{isLoading ? <Skeleton /> : formatIntlNumber(finalInventoryQuantity)}
 					</TableCell>
+					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalStorageCapacity)}</TableCell>
 				</TableRow>
 			</TableBody>
 		</Table>

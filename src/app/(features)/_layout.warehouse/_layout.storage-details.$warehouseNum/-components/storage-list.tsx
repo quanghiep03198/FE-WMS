@@ -111,6 +111,16 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 					return t(warehouseStorageTypes[originalValue], { ns: 'ns_warehouse' })
 				}
 			}),
+			columnHelper.accessor('storage_capacity', {
+				header: t('ns_warehouse:fields.storage_capacity'),
+				enableSorting: true,
+				enableColumnFilter: true,
+				enableHiding: false,
+				filterFn: 'inNumberRange',
+				meta: {
+					filterVariant: 'range'
+				}
+			}),
 			columnHelper.accessor('warehouse_name', {
 				header: t('ns_warehouse:fields.warehouse_name'),
 				enableSorting: true,
