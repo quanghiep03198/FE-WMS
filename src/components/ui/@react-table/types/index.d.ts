@@ -1,4 +1,5 @@
 import {
+	RowData,
 	type ColumnDef,
 	type ColumnFiltersState,
 	type ExpandedState,
@@ -12,7 +13,7 @@ import {
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React from 'react'
 
-export type ToolbarProps<TData = any> =
+export type ToolbarProps<TData extends RowData = any> =
 	| {
 			override: true
 			render: ({
@@ -30,14 +31,14 @@ export type ToolbarProps<TData = any> =
 			slotRight?: React.FC<{ table: Table<TData> }>
 	  }
 
-export type TableFooterProps<TData = any> = {
+export type TableFooterProps<TData extends RowData = any> = {
 	hidden?: boolean
 	rtl?: boolean
 	slot?: React.FC<{ table: Table<TData> }>
 } & React.PropsWithChildren
 
 // #region Pagination prop types
-type PaginationBaseProps<TData = any> = {
+type PaginationBaseProps<TData extends RowData = any> = {
 	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<TData>, 'data'>>
 
@@ -92,22 +93,22 @@ type SortingProps =
 			onSortingChange?: React.Dispatch<React.SetStateAction<SortingState>>
 	  }
 
-type RenderSubComponentProps<TData = any, TValue = any> = {
+type RenderSubComponentProps<TData extends RowData = any, TValue = any> = {
 	row: Row<TData>
 	table: Table<TData, TValue>
 }
 
-export type RenderSubComponent<TData, TValue = any> = (props: {
+export type RenderSubComponent<TData extends RowData = any, TValue = any> = (props: {
 	row: Row<TData>
 	table: Table<TData, TValue>
 }) => React.ReactElement
 
 // #region Data table prop types
-export type DataTableProps<TData extends RowData, TValue = any> = {
+export type DataTableProps<TData extends RowData = any, TValue = any> = {
 	/**
 	 * Reference to the table instance. Useful for accessing table methods and properties.
 	 */
-	ref?: React.RefObject<Table<TData>>
+	ref?: React.RefObject<Table<any>>
 	/**
 	 * Array of data objects to be displayed in the table.
 	 */
