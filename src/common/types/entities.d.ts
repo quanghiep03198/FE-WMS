@@ -62,6 +62,7 @@ export interface IWarehouseStorage
 		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
 	storage_name: string
 	storage_num: string
+	storage_capacity: number
 	type_storage: WarehouseStorageTypes | string
 }
 
@@ -167,6 +168,8 @@ export interface IMonthlyInventoryAudit {
 	final_inv_qty: number
 	inv_type: 'FG' | 'IH' // Finished goods | Insole house
 	inv_year_month: string
+	storage_capacity: number
+	total_number_of_storage: number
 	// prettier-ignore
 	detail: Array<{
 		size: string							// * Size code

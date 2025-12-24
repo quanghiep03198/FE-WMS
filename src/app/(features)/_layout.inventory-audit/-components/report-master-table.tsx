@@ -4,23 +4,8 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryAudit } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import {
-	Badge,
-	Button,
-	DataTable,
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Tooltip,
-	Typography
-} from '@/components/ui'
+import { Badge, Button, DataTable, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
-import Skeleton from '@/components/ui/@custom/skeleton'
 import {
 	IndeterminateCheckbox,
 	RowSelectionCheckbox
@@ -42,6 +27,7 @@ import { toast } from 'sonner'
 import { InventoryAuditQueryKeys, useGetInventoryAuditReport } from '../-hooks/use-inventory-audit-asm'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { InventoryReportDetailTable } from './report-detail-table'
+import DataTableSummary from './report-summary-table'
 import SyncDataTrigger from './sync-data-trigger'
 
 export const InventoryReportMasterTable: React.FC = () => {
@@ -194,26 +180,6 @@ export const InventoryReportMasterTable: React.FC = () => {
 					)
 				}
 			}),
-			columnHelper.accessor('storage_capacity', {
-				header: t('ns_warehouse:fields.storage_capacity'),
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableHiding: false,
-				filterFn: 'inNumberRange',
-				meta: {
-					filterVariant: 'range'
-				},
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (!value)
-						return (
-							<Typography variant='small' color='muted'>
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-					formatIntlNumber(value)
-				}
-			}),
 			columnHelper.accessor('order_qty', {
 				header: t('ns_erp:fields.mo_qty'),
 				enableColumnFilter: true,
@@ -364,46 +330,6 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 				</Button>
 			</Tooltip>
 		</Fragment>
-	)
-}
-
-const DataTableSummary: React.FC<{ data: IMonthlyInventoryAudit[]; isLoading: boolean }> = ({ data, isLoading }) => {
-	const { t } = useTranslation()
-
-	const totalInitialQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.init_inv_qty, 0) : 0
-	const totalInboundQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.total_instock_qty, 0) : 0
-	const totalOutboundQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.total_outstock_qty, 0) : 0
-	const actualInventoryQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.actual_inv_qty, 0) : 0
-	const finalInventoryQuantity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.final_inv_qty, 0) : 0
-	const totalStorageCapacity = Array.isArray(data) ? data.reduce((acc, curr) => acc + curr.storage_capacity, 0) : 0
-
-	return (
-		<Table className='w-full table-fixed'>
-			<TableHeader>
-				<TableRow className='[&_th]:bg-table-head [&_th]:capitalize [&_th]:text-table-head-foreground'>
-					<TableHead align='right'>{t('ns_erp:fields.total_init_qty')}</TableHead>
-					<TableHead align='right'>{t('ns_erp:fields.inbound_qty')}</TableHead>
-					<TableHead align='right'>{t('ns_erp:fields.outbound_qty')}</TableHead>
-					<TableHead align='right'>{t('ns_erp:fields.actual_inventory_qty')}</TableHead>
-					<TableHead align='right'>{t('ns_erp:fields.final_inventory_qty')}</TableHead>
-					<TableHead align='right'>{t('ns_warehouse:fields.total_storage_capacity')}</TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				<TableRow className='divide-x *:font-medium'>
-					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalInitialQuantity)}</TableCell>
-					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalInboundQuantity)}</TableCell>
-					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalOutboundQuantity)}</TableCell>
-					<TableCell align='right'>
-						{isLoading ? <Skeleton /> : formatIntlNumber(actualInventoryQuantity)}
-					</TableCell>
-					<TableCell align='right'>
-						{isLoading ? <Skeleton /> : formatIntlNumber(finalInventoryQuantity)}
-					</TableCell>
-					<TableCell align='right'>{isLoading ? <Skeleton /> : formatIntlNumber(totalStorageCapacity)}</TableCell>
-				</TableRow>
-			</TableBody>
-		</Table>
 	)
 }
 
