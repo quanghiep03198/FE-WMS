@@ -241,7 +241,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									)}
 									orientation='horizontal'
 									datalist={shoesStyleOptions}
-									shouldFilter={true}
 									labelField='shoes_style_factory_code'
 									valueField='shoes_style_factory_code'
 								/>
@@ -256,7 +255,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									)}
 									orientation='horizontal'
 									datalist={colorOptions}
-									shouldFilter={true}
 									labelField='color_sn'
 									valueField='color_sn'
 								/>
@@ -271,7 +269,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									)}
 									orientation='horizontal'
 									datalist={commandNumberOptions}
-									shouldFilter={true}
 									labelField='mo_no'
 									valueField='mo_no'
 								/>
@@ -280,7 +277,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 									name='size_numcode'
 									orientation='horizontal'
 									datalist={sizeOptions}
-									shouldFilter={true}
 									placeholder={capitalize(
 										t('ns_common:form_placeholder.fill', { object: 'Size', defaultValue: null })
 									)}
