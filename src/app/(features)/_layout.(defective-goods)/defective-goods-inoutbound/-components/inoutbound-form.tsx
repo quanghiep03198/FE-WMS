@@ -1,5 +1,15 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
-import { Button, Div, Form as FormProvider, Icon, Label, RadioGroup, RadioGroupItem, Separator } from '@/components/ui'
+import {
+	Button,
+	Div,
+	Form as FormProvider,
+	Icon,
+	InputFieldControl,
+	Label,
+	RadioGroup,
+	RadioGroupItem,
+	Separator
+} from '@/components/ui'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -9,6 +19,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { useInoutboundMethod } from '../-hooks/use-select-inoutbound-method'
 import {
 	DefectiveGoodsInboundFormValues,
 	defectiveGoodsInboundFormValues,
@@ -24,6 +35,7 @@ export type FormValues = DefectiveGoodsInboundFormValues | DefectiveGoodsOutboun
 const InoutboundForm: React.FC = () => {
 	const { t } = useTranslation()
 	const { scannedEpcs, resetScannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'resetScannedEpcs')
+	const [currentInoutboundMethod] = useInoutboundMethod()
 	const [action, setAction] = useState<RFIDDataType>(RFIDDataType.INBOUND)
 	const schemaRef = useRef(
 		action === RFIDDataType.INBOUND ? defectiveGoodsInboundFormValues : defectiveGoodsOutboundFormValues
@@ -94,11 +106,12 @@ const InoutboundForm: React.FC = () => {
 					style={{
 						'--form-field-width': '250px'
 					}}>
-					{action === RFIDDataType.OUTBOUND ? (
-						<OutboundPurposeFieldControl disabled={disabled} />
-					) : (
-						<StorageLocationFieldControl disabled={disabled} />
-					)}
+					<Div className='grid max-w-[360px] auto-cols-fr grid-flow-col gap-x-2'>
+						{currentInoutboundMethod === 'manually' && (
+							<InputFieldControl name='qty' type='number' placeholder={t('ns_common:common_fields.quantity')} />
+						)}
+						{action === RFIDDataType.OUTBOUND ? <OutboundPurposeFieldControl /> : <StorageLocationFieldControl />}
+					</Div>
 					<Separator orientation='vertical' className='h-6 w-0.5' />
 					<Button type='submit' size='sm' disabled={disabled}>
 						<Icon name='Check' />

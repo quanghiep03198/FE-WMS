@@ -4,6 +4,7 @@ import { cn } from '@/common/utils/cn'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import RFIDReaderPlayground from '../-components/rfid-reader-playground'
@@ -45,7 +46,7 @@ function RouteComponent() {
 						<PageContextProvider>
 							<ResizablePanelGroup
 								direction='horizontal'
-								className='rounded-md border'
+								className='h-full rounded-md border'
 								style={
 									{
 										'--bar-height': '52px'
@@ -86,7 +87,7 @@ function RouteComponent() {
 									</ReaderPlaygroundProvider>
 								</ResizablePanel>
 							</ResizablePanelGroup>
-							<DetailDialog />
+							{createPortal(<DetailDialog />, document.body)}
 						</PageContextProvider>
 					</Container>
 				</HostCompatibleGuard>
@@ -96,7 +97,7 @@ function RouteComponent() {
 }
 
 const Container = tw.div`
-	group/container bg-background h-[var(--outlet-wrapper-height)] @container
+	group/container bg-background h-[var(--outlet-wrapper-height)] @container overflow-hidden
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50

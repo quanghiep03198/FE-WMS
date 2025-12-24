@@ -20,7 +20,7 @@ type PurchaseOrderFieldControlProps = Pick<
 const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = (props) => {
 	const { control } = useFormContext()
 	const { t } = useTranslation()
-	const value = useWatch({ control, name: 'po' })
+	const value = useWatch({ control, name: 'po' }) ?? ''
 	const debouncedSearchTerm = useDebounce(value, { wait: 200 })
 	const { data, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
 

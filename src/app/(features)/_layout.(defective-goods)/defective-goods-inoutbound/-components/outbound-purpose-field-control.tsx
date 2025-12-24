@@ -66,7 +66,7 @@ const OutboundPurposeFieldControl = ({ ...props }) => {
 									id={id}
 									disabled={field.disabled}
 									className={cn(
-										'min-w-[var(--form-field-width)] bg-background focus:border-primary',
+										'w-full bg-background focus:border-primary',
 										!!error && 'w-full border-destructive focus:border-destructive active:border-destructive'
 									)}>
 									<SelectValue

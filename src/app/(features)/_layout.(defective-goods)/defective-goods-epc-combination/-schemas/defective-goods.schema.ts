@@ -3,7 +3,7 @@ import { array, enum as enums, number, object, string, type infer as Infer } fro
 import { DefectiveCategory, DefectiveLocation } from '../../-constants'
 
 export const baseDefectiveGoodsSchema = object({
-	combination_strategy: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }),
+	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }),
 	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.or(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.optional(),
@@ -40,7 +40,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 		return true
 	})
 	.superRefine((values, context) => {
-		switch (values.combination_strategy) {
+		switch (values.ri_type) {
 			case 'uhf': {
 				if (!Array.isArray(values.epc) || values.epc.length === 0)
 					context.addIssue({

@@ -122,7 +122,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	}, [orderDetail])
 
 	useEffect(() => {
-		form.setValue('combination_strategy', currentStrategy)
+		form.setValue('ri_type', currentStrategy)
 	}, [currentStrategy])
 
 	useEffect(() => {
@@ -166,15 +166,11 @@ const DefectiveGoodsForm: React.FC = () => {
 		form.reset(currentFormValues)
 	}
 
-	console.log('form.getValues()', form.getValues())
-
 	const handleSubmitForm = (data: CreateDefectiveGoodsFormValues) => {
-		if (data.combination_strategy === 'manually') {
+		if (data.ri_type === 'manually') {
 			delete data.epc
 			delete data.size_code
 		}
-
-		console.log('data', data)
 
 		const payload = {
 			...data,
@@ -188,7 +184,7 @@ const DefectiveGoodsForm: React.FC = () => {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
 				if (formAction === CommonActions.CREATE)
-					form.reset({ ...form.getValues(), ...(data.combination_strategy === 'usb' && { epc: '' }) })
+					form.reset({ ...form.getValues(), ...(data.ri_type === 'usb' && { epc: '' }) })
 				event$.emit({ action: CommonActions.SAVE, payload: [] })
 				return t('ns_common:notification.success')
 			},

@@ -82,6 +82,7 @@ export default {
 		delete_all: '删除全部',
 		delete_and_unscannable: '删除并不再扫描',
 		exchange_all: '全部交换',
+		inoutbound_method: '入/出库方法',
 		io_archive_warehouse: '仓库别',
 		io_reason: '出入庫類别',
 		io_storage_location: '储位',

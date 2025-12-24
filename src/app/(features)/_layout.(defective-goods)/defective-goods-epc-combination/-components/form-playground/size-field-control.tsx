@@ -15,7 +15,7 @@ import {
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useLocation } from '@tanstack/react-router'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
@@ -33,13 +33,14 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	const { hash } = useLocation()
 	const { control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 	const { fields, append, remove } = useFieldArray({ control, name: 'sizes' })
+	const scrollRef = useRef<HTMLDivElement>(null)
 
 	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: control, name: 'color_sn' })
-	const currentCombinationStrategy = useWatch({ control, name: 'combination_strategy' })
+	const currentCombinationStrategy = useWatch({ control, name: 'ri_type' })
 
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
@@ -63,7 +64,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	if (currentCombinationStrategy === 'manually' && !hash)
 		return (
 			<Div className='col-span-full space-y-4 rounded-md border border-dashed py-3'>
-				<ScrollShadow className={cn('px-3', fields.length > 0 && 'h-40')}>
+				<ScrollShadow ref={scrollRef} className={cn('px-3', fields.length > 0 && 'max-h-40')}>
 					{fields.length === 0 ? (
 						<Empty className='border border-dashed'>
 							<EmptyHeader>
@@ -124,7 +125,10 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 							type='button'
 							size='sm'
 							disabled={disabled}
-							onClick={() => append({ size_code: null, qty: null })}>
+							onClick={() => {
+								append({ size_code: null, qty: null })
+								scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+							}}>
 							<Icon name='ListPlus' />
 							{t('ns_common:actions.add')}
 						</Button>
