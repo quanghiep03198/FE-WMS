@@ -22,12 +22,16 @@ export const useSearchCommandNumberQuery = (searchTerm: string, shouldFetch = tr
 	})
 }
 
-export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = true) => {
+export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = true, shouldFilterAllBrands = false) => {
 	const { data: currentTenant } = useGetTenantByFactory()
 
 	return useQuery({
-		queryKey: [OrderQueryKeys.SEARCH_PURCHASE_ORDER, currentTenant?.id, searchTerm],
-		queryFn: async () => await OrderService.searchPurchaseOrder(currentTenant?.id, { q: searchTerm }),
+		queryKey: [OrderQueryKeys.SEARCH_PURCHASE_ORDER, currentTenant?.id, searchTerm, shouldFilterAllBrands],
+		queryFn: async () =>
+			await OrderService.searchPurchaseOrder(currentTenant?.id, {
+				q: searchTerm,
+				filter_all_brands: shouldFilterAllBrands
+			}),
 		enabled: shouldFetch && !!currentTenant?.id,
 		select: (response) => {
 			if (!Array.isArray(response.metadata)) return []

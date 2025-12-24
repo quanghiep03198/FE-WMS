@@ -22,7 +22,7 @@ export class OrderService {
 		})
 	}
 
-	static async searchPurchaseOrder(tenantId: string, params: { q: string }) {
+	static async searchPurchaseOrder(tenantId: string, params: { q: string; filter_all_brands: boolean }) {
 		return await axiosInstance.get<unknown, ResponseBody<Array<IPurchaseOrderResult>>>(
 			'/order/purchase-order/search',
 			{

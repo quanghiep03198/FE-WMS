@@ -38,7 +38,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 	const currentPurchaseOrderValue = useWatch({ control, name })
 	const [searchTerm, setSearchTerm] = useState(typeof fieldIndex === 'number' ? (currentPurchaseOrderValue ?? '') : '')
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
-	const { data: purchaseOrders, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
+	const { data: purchaseOrders, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm, true, true)
 	const currentId = getValues(`outbound_purchase_orders.${fieldIndex}.id`)
 
 	useEffect(() => {
