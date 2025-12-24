@@ -307,7 +307,8 @@ export default {
 		suggestion: 'Suggestion',
 		recently_search: 'Recently searched',
 		no_recently_search_yet: 'No recently searched yet',
-		unknown: 'Unknown'
+		unknown: 'Unknown',
+		manually: 'Manually'
 	},
 	timestamps: {
 		created_at: 'Created {{timestamp}}',

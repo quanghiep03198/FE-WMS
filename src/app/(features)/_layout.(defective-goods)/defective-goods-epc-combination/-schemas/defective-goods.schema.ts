@@ -1,10 +1,12 @@
-import { array, enum as enums, object, string, type infer as Infer } from 'zod'
+import { isEmpty, isNil } from 'lodash-es'
+import { array, enum as enums, number, object, string, type infer as Infer } from 'zod'
 import { DefectiveCategory, DefectiveLocation } from '../../-constants'
 
 export const baseDefectiveGoodsSchema = object({
-	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })).or(
-		string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' })
-	),
+	combination_strategy: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }),
+	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
+		.or(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
+		.optional(),
 	defective_category: enums(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	mo_no: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
@@ -16,17 +18,85 @@ export const baseDefectiveGoodsSchema = object({
 		.trim()
 		.nonempty({ message: 'ns_validation:required' }),
 	color_sn: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
-	size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	size_code: string({ message: 'ns_validation:required' }).trim().nullish(),
 	defective_location: enums(DefectiveLocation, { message: 'ns_validation:required' }),
 	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	assembly_line: string({ message: 'ns_validation:required' }).trim().nullish(),
 	sewing_line: string({ message: 'ns_validation:required' }).trim().nullish()
 })
 
-export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema.refine((values) => {
-	if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
-	return true
-})
+export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
+	.extend({
+		sizes: array(
+			object({
+				size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+				qty: number({ message: 'ns_validation:required' }).min(1, { message: 'ns_validation:invalid_value' })
+			})
+		)
+	})
+	.optional()
+	.refine((values) => {
+		if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
+		return true
+	})
+	.superRefine((values, context) => {
+		switch (values.combination_strategy) {
+			case 'uhf': {
+				if (!Array.isArray(values.epc) || values.epc.length === 0)
+					context.addIssue({
+						code: 'custom',
+						message: 'EPCs are required when combination strategy is UHF',
+						fatal: true
+					})
+				if (isNil(values.size_code) || isEmpty(values.size_code.trim()))
+					context.addIssue({
+						code: 'custom',
+						message: 'ns_validation:required',
+						fatal: true
+					})
+
+				break
+			}
+			case 'usb': {
+				if (typeof values.epc !== 'string' || values.epc.trim() === '')
+					context.addIssue({
+						code: 'custom',
+						message: 'EPCs are required when combination strategy is USB',
+						fatal: true
+					})
+				if (isNil(values.size_code) || isEmpty(values.size_code.trim()))
+					context.addIssue({
+						code: 'custom',
+						message: 'ns_validation:required',
+						fatal: true
+					})
+
+				break
+			}
+			case 'manually': {
+				if (!Array.isArray(values.sizes))
+					context.addIssue({
+						code: 'custom',
+						message: 'Sizes are required when combination strategy is manually',
+						fatal: true
+					})
+				break
+			}
+			default:
+				break
+		}
+	})
+	.superRefine((values, context) => {
+		values.sizes.forEach((item, index) => {
+			if (values.sizes.findIndex((otherItem) => otherItem.size_code === item.size_code) !== index)
+				context.addIssue({
+					code: 'custom',
+					message: 'Do not select the same Size',
+					fatal: true,
+					path: [`sizes.${index}.size_code`]
+				})
+		})
+	})
 
 export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().refine((values) => {
 	if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no

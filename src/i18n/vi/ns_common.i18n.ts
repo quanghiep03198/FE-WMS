@@ -314,7 +314,8 @@ export default {
 		suggestion: 'Gợi ý',
 		recently_search: 'Tìm kiếm gần đây',
 		no_recently_search_yet: 'Chưa có tìm kiếm gần đây',
-		unknown: 'Chưa xác định'
+		unknown: 'Chưa xác định',
+		manually: 'Thủ công'
 	},
 	timestamps: {
 		created_at: 'Đã tạo {{timestamp}}',

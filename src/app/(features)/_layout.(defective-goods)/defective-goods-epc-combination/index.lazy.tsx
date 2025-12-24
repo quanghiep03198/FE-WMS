@@ -9,7 +9,7 @@ import tw from 'tailwind-styled-components'
 import RFIDReaderPlayground from '../-components/rfid-reader-playground'
 import { PageContextProvider } from '../-contexts/page-context'
 import { ReaderPlaygroundProvider } from '../-contexts/rfid-reader-playground.context'
-import { useSwitchRFIDDevice } from '../-hooks/use-switch-rfid-device'
+import { useSwitchCombinationStrategy } from '../-hooks/use-switch-combination-strategy'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import DatalistPanel from './-components/data-list-panel'
 import DetailDialog from './-components/data-list-panel/detail-dialog'
@@ -30,10 +30,10 @@ function RouteComponent() {
 		])
 	}, [i18n.language])
 
-	const { currentDevice } = useSwitchRFIDDevice()
+	const { currentStrategy } = useSwitchCombinationStrategy()
 	const { listPanelOpen } = useToggleListPanel()
 
-	const isUsingUHFReader = currentDevice === 'uhf'
+	const isUsingUHFReader = currentStrategy === 'uhf'
 
 	return (
 		<Fragment>

@@ -317,7 +317,8 @@ export default {
 		recently_search: '最近搜索',
 		suggestion: '建议',
 		no_recently_search_yet: '还没有最近搜索',
-		unknown: '未知'
+		unknown: '未知',
+		manually: '手动'
 	},
 	unit: {
 		times: '次',
