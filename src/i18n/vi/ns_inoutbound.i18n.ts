@@ -1,3 +1,4 @@
+import { DefectiveGoodsSource } from '@/app/(features)/_layout.(defective-goods)/-constants'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -188,10 +189,15 @@ export default {
 		transfer_order_list: 'Danh sách đơn chuyển kho',
 		update_truckload_delivery: 'Cập nhật thông tin đóng container'
 	},
-
 	shoes_category: {
 		b_grade: 'Loại B',
 		c_grade: 'Loại C',
 		research_development: 'Hàng mẫu'
+	},
+	shoes_source: {
+		[DefectiveGoodsSource.FINAL_INSPECTION]: 'Kiểm tra thành phẩm',
+		[DefectiveGoodsSource.ASSEMBLY]: 'Thành hình',
+		[DefectiveGoodsSource.REPACKING_INSPECTION]: 'Kiểm tra đóng gói',
+		[DefectiveGoodsSource.OTHER]: 'Khác'
 	}
 }

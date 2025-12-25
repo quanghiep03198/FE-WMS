@@ -91,9 +91,11 @@ export default {
 		sewing_line: 'Sewing line',
 		assembly_line: 'Assembly line',
 		factory_shoes_style: 'Factory shoes style',
+		ri_type: 'Combination type',
 		shaping_dept_productivity: 'Shaping department productivity', // Shaping Department Productivity
 		shaping_dept_code: 'Shaping department code',
 		shaping_dept_name: 'Shaping department name',
+		shoe_source: 'Shoes source',
 		sno_car_number: 'Container number',
 		container_number: 'Container number',
 		sno_date: 'Order date',

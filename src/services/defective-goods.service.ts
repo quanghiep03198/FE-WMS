@@ -1,5 +1,9 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
-import { DefectiveCategory, DefectiveLocation } from '@/app/(features)/_layout.(defective-goods)/-constants'
+import {
+	DefectiveCategory,
+	DefectiveGoodsSource,
+	DefectiveLocation
+} from '@/app/(features)/_layout.(defective-goods)/-constants'
 import {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams,
@@ -12,6 +16,7 @@ import {
 import { RequestHeaders } from '@/common/constants/enums'
 import { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import { omitBy } from 'lodash-es'
 
 export interface IDefectiveGoods extends IBaseEntity {
 	epc: string
@@ -25,6 +30,7 @@ export interface IDefectiveGoods extends IBaseEntity {
 	size: string
 	defective_location: DefectiveLocation
 	defective_description: string
+	shoe_source: DefectiveGoodsSource
 	assembly_line: string | null
 	sewing_line: string | null
 	ri_cancel: boolean
@@ -51,6 +57,16 @@ export class DefectiveGoodsService {
 		return await axiosInstance.get<void, ResponseBody<Pagination<IDefectiveGoods>>>('/defective-goods', {
 			params
 		})
+	}
+
+	static async getCanInboundEpc({ action, ...params }: Partial<IDefectiveGoods> & { take?: number }) {
+		const filterQueries = omitBy(params, (value) => value === undefined || value === null || value === '')
+		return await axiosInstance.get<void, ResponseBody<IDefectiveGoods[]>>(
+			`/defective-goods/inoutbound-epcs/${action}`,
+			{
+				params: filterQueries
+			}
+		)
 	}
 
 	static async getDefectiveGoodsInventory(tenantId: string) {

@@ -13,6 +13,13 @@ export enum DefectiveLocation {
 	OTHER = 'D'
 }
 
+export enum DefectiveGoodsSource {
+	FINAL_INSPECTION = 'A',
+	ASSEMBLY = 'B',
+	REPACKING_INSPECTION = 'C',
+	OTHER = 'D'
+}
+
 export const DefectiveCategoryI18n: Record<DefectiveCategory, ResourceKeys['ns_inoutbound']> = {
 	[DefectiveCategory.B_GRADE]: 'shoes_category.b_grade',
 	[DefectiveCategory.C_GRADE]: 'shoes_category.c_grade',

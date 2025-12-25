@@ -220,6 +220,24 @@ const InfoCard: React.FC<{
 								</Typography>
 							</DescriptionItem>
 							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.shoe_source')} : </Typography>
+								<Typography
+									variant='small'
+									title={
+										t(`ns_inoutbound:shoes_source.${data.shoe_source}`, { defaultValue: data.shoe_source }) ??
+										'?'
+									}>
+									{t(`ns_inoutbound:shoes_source.${data.shoe_source}`, { defaultValue: data.shoe_source }) ??
+										'?'}
+								</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
+								<Typography variant='small'>{t('ns_erp:fields.ri_type')} : </Typography>
+								<Typography variant='small' className='uppercase' title={data.ri_type ?? '?'}>
+									{data.ri_type ?? '?'}
+								</Typography>
+							</DescriptionItem>
+							<DescriptionItem>
 								<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
 								<Typography variant='small' className='uppercase' title={data.storage_location ?? '?'}>
 									{data.storage_location ?? '?'}

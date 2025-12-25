@@ -1,6 +1,6 @@
 import { isEmpty, isNil } from 'lodash-es'
 import { array, enum as enums, number, object, string, type infer as Infer } from 'zod'
-import { DefectiveCategory, DefectiveLocation } from '../../-constants'
+import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../-constants'
 
 export const baseDefectiveGoodsSchema = object({
 	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }),
@@ -19,6 +19,7 @@ export const baseDefectiveGoodsSchema = object({
 		.nonempty({ message: 'ns_validation:required' }),
 	color_sn: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	size_code: string({ message: 'ns_validation:required' }).trim().nullish(),
+	shoe_source: enums(DefectiveGoodsSource).optional(),
 	defective_location: enums(DefectiveLocation, { message: 'ns_validation:required' }),
 	defective_description: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	assembly_line: string({ message: 'ns_validation:required' }).trim().nullish(),
