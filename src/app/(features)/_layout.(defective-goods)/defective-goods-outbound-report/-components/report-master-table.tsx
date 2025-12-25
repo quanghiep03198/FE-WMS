@@ -147,6 +147,15 @@ const InboundReportMasterTable: React.FC = () => {
 					})
 				}
 			}),
+			columnHelper.accessor('shoe_source', {
+				header: t('ns_erp:fields.shoe_source'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableResizing: true,
+				filterFn: 'fuzzy',
+				cell: TableCellText
+			}),
 			columnHelper.accessor('daily_outbound_qty', {
 				header: t('ns_erp:fields.daily_outbound_qty'),
 				enableColumnFilter: true,

@@ -45,8 +45,8 @@ declare module '@tanstack/react-table' {
 
 	//add fuzzy filter to the filterFns
 	interface FilterFns {
-		fuzzy: FilterFn<unknown>
-		inDateRange: FilterFn<any>
+		fuzzy?: FilterFn<unknown>
+		inDateRange?: FilterFn<any>
 	}
 	interface FilterMeta {
 		itemRank: RankingInfo

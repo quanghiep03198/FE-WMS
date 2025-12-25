@@ -1,3 +1,4 @@
+import { DefectiveGoodsSource } from '@/app/(features)/_layout.(defective-goods)/-constants'
 import { OrderStatus } from '@/common/constants/enums'
 
 export default {
@@ -193,5 +194,11 @@ export default {
 		b_grade: 'B Grade',
 		c_grade: 'C Grade',
 		research_development: 'Research & Development'
+	},
+	shoes_source: {
+		[DefectiveGoodsSource.FINAL_INSPECTION]: 'Final inspection',
+		[DefectiveGoodsSource.ASSEMBLY]: 'Assembly',
+		[DefectiveGoodsSource.REPACKING_INSPECTION]: 'Repacking inspection',
+		[DefectiveGoodsSource.OTHER]: 'Other'
 	}
 }

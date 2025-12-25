@@ -3,19 +3,27 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { DefectiveGoodsService, IDefectiveGoods, IDefectiveGoodsInventory } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
-import { pick, pickBy } from 'lodash-es'
+import { omitBy, pick, pickBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { useReportPageQueryParams } from '../../-hooks/use-report-page-query-params'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../defective-goods-epc-combination/-constants'
 import {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams
 } from '../defective-goods-epc-combination/-schemas/defective-goods.schema'
+import { FormValues } from '../defective-goods-inoutbound/-components/inoutbound-form'
+import { useFilterQuery } from '../defective-goods-inoutbound/-hooks/use-filter-query'
+import {
+	DefectiveGoodsInboundFormValues,
+	DefectiveGoodsOutboundFormValues
+} from '../defective-goods-inoutbound/-schemas'
 
 export enum DefectiveGoodsQueryKey {
 	DEFECTIVE_GOODS = 'DEFECTIVE_GOODS',
 	DEFECTIVE_GOODS_INVENTORY = 'DEFECTIVE_GOODS_INVENTORY',
+	DEFECTIVE_GOODS_INOUTBOUND_EPC = 'DEFECTIVE_GOODS_INOUTBOUND_EPC',
 	DEFECTIVE_GOODS_INBOUND_REPORT = 'DEFECTIVE_GOODS_INBOUND_REPORT',
 	DEFECTIVE_GOODS_OUTBOUND_REPORT = 'DEFECTIVE_GOODS_OUTBOUND_REPORT'
 }
@@ -30,7 +38,8 @@ const useInvalidateQuery = () => {
 						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS ||
 						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INVENTORY ||
 						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT ||
-						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT ||
+						key === DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC
 				)
 		})
 
@@ -115,6 +124,18 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 	})
 }
 
+export const useGetCanInboundEpcQuery = () => {
+	const { searchParams } = useFilterQuery()
+
+	const params = omitBy(searchParams, (value) => value === undefined || value === null || value === '')
+
+	return useQuery({
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params],
+		queryFn: async () => await DefectiveGoodsService.getCanInboundEpc(params),
+		select: (response) => response.metadata
+	})
+}
+
 export const useGetDefectiveGoodsInboundReportQuery = () => {
 	const { data: tenant } = useGetTenantByFactory()
 	const { searchParams } = useReportPageQueryParams()
@@ -138,6 +159,23 @@ export const useGetDefectiveGoodsOutboundReportQuery = () => {
 		enabled: !!tenant?.id,
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
+	})
+}
+
+export const useUpdateDefectiveGoodsStockMutation = () => {
+	const { searchParams } = useFilterQuery()
+	const invalidateQueries = useInvalidateQuery()
+
+	return useMutation({
+		mutationFn: async (payload: FormValues) =>
+			searchParams.action === RFIDDataType.INBOUND
+				? DefectiveGoodsService.updateInboundStatus(
+						payload as Exclude<FormValues, DefectiveGoodsOutboundFormValues>
+					)
+				: DefectiveGoodsService.updateOutboundStatus(
+						payload as Exclude<FormValues, DefectiveGoodsInboundFormValues>
+					),
+		onSuccess: () => invalidateQueries()
 	})
 }
 

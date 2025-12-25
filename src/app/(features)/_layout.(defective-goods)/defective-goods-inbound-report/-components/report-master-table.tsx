@@ -11,7 +11,7 @@ import { split } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReportTableSummary from '../../-components/shared/report-table-footer'
-import { DefectiveCategoryI18n } from '../../-constants'
+import { DefectiveCategoryI18n, DefectiveGoodsSource } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInboundReportQuery } from '../../-hooks/use-defective-goods-asm'
 import { useGetCategoriesQty } from '../../-hooks/use-get-category-qty'
@@ -177,7 +177,26 @@ const InboundReportMasterTable: React.FC = () => {
 					)
 				}
 			}),
-
+			columnHelper.accessor('shoe_source', {
+				header: t('ns_erp:fields.shoe_source'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableResizing: true,
+				filterFn: 'equalsString',
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: Object.values(DefectiveGoodsSource).map((source) => ({
+						label: t(`ns_inoutbound:shoe_source.${source}`, { defaultValue: source }),
+						value: source
+					}))
+				},
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (!value) return t('ns_common:titles.unknown')
+					return t(`ns_inoutbound:shoe_source.${value}`, { defaultValue: value })
+				}
+			}),
 			columnHelper.accessor('daily_inbound_qty', {
 				header: t('ns_erp:fields.daily_inbound_qty'),
 				enableColumnFilter: true,

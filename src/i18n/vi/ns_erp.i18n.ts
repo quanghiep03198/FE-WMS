@@ -93,8 +93,10 @@ export default {
 		shaping_dept_code: 'Mã chuyền thành hình',
 		shaping_dept_name: 'Chuyền thành hình',
 		shaping_dept_productivity: 'Sản lượng thành hình', // Shaping Department Productivity
+		shoe_source: 'Nguồn giày',
 		sno_car_number: 'Số xe container',
 		container_number: 'Mã container',
+		ri_type: 'Kiểu phối',
 		sno_date: 'Ngày tạo đơn',
 		sno_no: 'Mã đơn hàng nhập/xuất',
 		sno_qty: 'Số lượng đóng thùng',

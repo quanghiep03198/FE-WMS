@@ -47,6 +47,7 @@ import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
 import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
 import ListPanelToggleButton from './list-panel-toggle-button'
 import SewingLineFieldControl from './sewing-line-field-control'
+import { ShoeSourceFieldControl } from './shoe-source-field-control'
 import SizeFieldControl from './size-field-control'
 import ToggleFullscreen from './toggle-fullscreen'
 import UserActivityInfo from './user-activity-info'
@@ -367,7 +368,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div className='col-span-3'>
 						<AssemblyLineFieldControl />
 					</Div>
-					<Div className='col-span-full'>
+					<Div className='col-span-3'>
 						<SelectFieldControl
 							name='defective_location'
 							label={t('ns_erp:fields.defective_location')}
@@ -381,6 +382,9 @@ const DefectiveGoodsForm: React.FC = () => {
 							labelField='label'
 							valueField='value'
 						/>
+					</Div>
+					<Div className='col-span-3'>
+						<ShoeSourceFieldControl />
 					</Div>
 					<Div className='relative col-span-full'>
 						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>
