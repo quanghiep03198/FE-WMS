@@ -1,27 +1,24 @@
 import { TableHead, TableHeader, TableRow } from '@/components/ui'
-import { DebouncedInput } from '@/components/ui/@react-table/components/debounced-input'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
-import { flexRender, HeaderGroup } from '@tanstack/react-table'
+import { flexRender, Table } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useFilterQuery } from '../../-hooks/use-filter-query'
+import { TableColumnFilter } from './table-column-filter'
 
-export const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<IDefectiveGoods>[] }> = ({ headerGroups }) => {
-	const { t } = useTranslation()
-	const { searchParams, setParams } = useFilterQuery()
+export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ table }) => {
+	'use no memo'
 
 	return (
-		<TableHeader className='sticky top-0 z-50 bg-background'>
-			{headerGroups.map((headerGroup) => (
+		<TableHeader className='sticky top-0 z-50 bg-background [&_tr]:h-[var(--row-height)]'>
+			{table.getHeaderGroups().map((headerGroup) => (
 				<Fragment key={headerGroup.id}>
-					<TableRow className='border-b'>
+					<TableRow>
 						{headerGroup.headers.map((header) => {
 							const { columnDef } = header.column
 							return (
 								<TableHead
 									key={header.id}
 									colSpan={header.colSpan}
-									className='border-b bg-table-head text-table-head-foreground'
+									className='border-b border-b-border bg-accent/80 text-accent-foreground'
 									style={{ width: header.getSize() }}
 									align={columnDef.meta?.align}>
 									{header.isPlaceholder ? null : (
@@ -33,20 +30,16 @@ export const DataTableHeader: React.FC<{ headerGroups: HeaderGroup<IDefectiveGoo
 							)
 						})}
 					</TableRow>
-					<TableRow className='border-b'>
+					<TableRow>
 						{headerGroup.headers.map((header) => {
 							const { columnDef } = header.column
-
 							return (
 								<TableHead
 									key={header.id}
+									className='border-b border-b-border bg-table-head text-table-head-foreground'
 									style={{ width: header.getSize(), padding: 0 }}
 									align={columnDef.meta?.align}>
-									<DebouncedInput
-										value={searchParams[header.id]}
-										onChange={(value) => setParams({ ...searchParams, [header.id]: value })}
-										placeholder={t('ns_common:actions.search') + '...'}
-									/>
+									<TableColumnFilter column={header.column} />
 								</TableHead>
 							)
 						})}

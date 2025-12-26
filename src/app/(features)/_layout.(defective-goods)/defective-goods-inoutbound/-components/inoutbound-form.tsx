@@ -1,8 +1,6 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import { Button, Div, Form as FormProvider, Icon, Label, RadioGroup, RadioGroupItem, Separator } from '@/components/ui'
-import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
 import { useUpdateEffect } from 'ahooks'
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
@@ -17,6 +15,7 @@ import {
 	defectiveGoodsOutboundFormValues
 } from '../-schemas'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
+import { useUpdateDefectiveGoodsStockMutation } from '../../-hooks/use-defective-goods-asm'
 import OutboundPurposeFieldControl from './outbound-purpose-field-control'
 import QuantityFiledControl from './quantity-field-control'
 import StorageLocationFieldControl from './storage-location-field-control'
@@ -48,16 +47,7 @@ const InoutboundForm: React.FC = () => {
 		else form.setValue('epcs', scannedEpcs)
 	}, [scannedEpcs])
 
-	const { mutateAsync, isPending, isError } = useMutation({
-		mutationFn: async (payload: FormValues) =>
-			searchParams.action === RFIDDataType.INBOUND
-				? DefectiveGoodsService.updateInboundStatus(
-						payload as Exclude<FormValues, DefectiveGoodsOutboundFormValues>
-					)
-				: DefectiveGoodsService.updateOutboundStatus(
-						payload as Exclude<FormValues, DefectiveGoodsInboundFormValues>
-					)
-	})
+	const { mutateAsync, isPending, isError } = useUpdateDefectiveGoodsStockMutation()
 
 	const handleFormSubmission = (data: FormValues) => {
 		toast.promise(mutateAsync(data), {
@@ -100,7 +90,7 @@ const InoutboundForm: React.FC = () => {
 					style={{
 						'--form-field-width': '250px'
 					}}>
-					<Div className='grid max-w-[360px] auto-cols-fr grid-flow-col gap-x-2'>
+					<Div className='grid max-w-96 auto-cols-fr grid-flow-col gap-x-2'>
 						<QuantityFiledControl />
 						{searchParams.action === RFIDDataType.OUTBOUND ? (
 							<OutboundPurposeFieldControl />

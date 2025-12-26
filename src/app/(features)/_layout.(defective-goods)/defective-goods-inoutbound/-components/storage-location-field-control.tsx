@@ -40,6 +40,7 @@ const StorageLocationFieldControl: React.FC<StorageLocationFieldControlProps> = 
 							onChange={(e) => field.onChange(e.currentTarget.value.toUpperCase().trim())}
 							value={field.value}
 							placeholder={t('ns_inoutbound:placeholders.enter_storage_location')}
+							autoComplete='off'
 							className={cn(
 								'w-full aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
 								className

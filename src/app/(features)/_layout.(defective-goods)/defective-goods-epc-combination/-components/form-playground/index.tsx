@@ -29,7 +29,7 @@ import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../.
 
 import { IDefectiveGoods } from '@/services/defective-goods.service'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
-import { DefectiveCategory, DefectiveLocation } from '../../../-constants'
+import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'
 import {
 	useCreateDefectiveGoodsMutation,
@@ -70,6 +70,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
 		resolver: zodResolver(createDefectiveGoodsSchema),
 		defaultValues: {
+			shoe_source: DefectiveGoodsSource.FINAL_INSPECTION,
 			defective_description: DefectDescriptionTemplate[i18n.language]
 		}
 	})
