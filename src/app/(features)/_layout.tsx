@@ -4,8 +4,8 @@ import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { Div, SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
-import { useLocalStorageState } from 'ahooks'
-import { Fragment } from 'react'
+import { useLocalStorageState, useRafState } from 'ahooks'
+import { Fragment, useLayoutEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from '../-components/-errors/error-boundary-fallback'
@@ -44,6 +44,20 @@ function Layout() {
 		document.body.classList.add(font)
 	})
 
+	const [windowSize, setWindowSize] = useRafState({
+		width: 0,
+		height: 0
+	})
+
+	useLayoutEffect(() => {
+		const onResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+		onResize()
+		window.addEventListener('resize', onResize)
+		return () => {
+			window.removeEventListener('resize', onResize)
+		}
+	}, [])
+
 	return (
 		<Fragment>
 			{isUnsupportedScreen && <UnsupportedScreen />}
@@ -58,7 +72,7 @@ function Layout() {
 							{
 								'--header-height': 80 + 'px',
 								'--outlet-padding-bottom': 24 + 'px',
-								'--outlet-wrapper-height': window.innerHeight - 104 + 'px',
+								'--outlet-wrapper-height': windowSize.height - 104 + 'px',
 								'--scrollbar-thickness': '10px'
 							} as React.CSSProperties
 						}>

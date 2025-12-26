@@ -1,15 +1,17 @@
 import { TableCell, TableRow } from '@/components/ui'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
 import { flexRender, Row } from '@tanstack/react-table'
+import { VirtualItem } from '@tanstack/react-virtual'
 import React, { memo } from 'react'
 
 export const DataTableRow: React.FC<{
 	row: Row<IDefectiveGoods>
-}> = ({ row }) => {
+	virtualRow: VirtualItem
+}> = ({ row, virtualRow }) => {
 	'use no memo'
 
 	return (
-		<TableRow key={row.id}>
+		<TableRow key={row.id} style={{ width: '100%', height: virtualRow.size }}>
 			{row.getVisibleCells().map((cell) => {
 				const { columnDef } = cell.column
 				return (

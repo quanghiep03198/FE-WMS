@@ -163,7 +163,7 @@ export const useGetDefectiveGoodsOutboundReportQuery = () => {
 }
 
 export const useUpdateDefectiveGoodsStockMutation = () => {
-	const { searchParams } = useFilterQuery()
+	const { searchParams, removeParam } = useFilterQuery()
 	const invalidateQueries = useInvalidateQuery()
 
 	return useMutation({
@@ -175,7 +175,13 @@ export const useUpdateDefectiveGoodsStockMutation = () => {
 				: DefectiveGoodsService.updateOutboundStatus(
 						payload as Exclude<FormValues, DefectiveGoodsInboundFormValues>
 					),
-		onSuccess: () => invalidateQueries()
+		onSuccess: () => {
+			for (const key in searchParams) {
+				if (key === 'action') continue
+				removeParam(key)
+			}
+			invalidateQueries()
+		}
 	})
 }
 
