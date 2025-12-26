@@ -15,8 +15,9 @@ export const useGetTruckloadDeliveryQuery = () => {
 	return useQuery({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 		queryFn: TruckloadDeliveryService.getAll,
-		refetchOnMount: false,
-		refetchOnWindowFocus: false,
+		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+		refetchInterval: 5000,
 		select: (response) => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({
