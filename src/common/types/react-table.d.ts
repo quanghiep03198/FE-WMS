@@ -1,6 +1,6 @@
 import { DropdownSelectProps, MultiSelectProps, TableCell } from '@/components/ui'
 import { DateRangePickerProps } from '@/components/ui/@core/date-range-picker'
-import { DebouncedInputProps } from '@/components/ui/@react-table/components/debounced-input'
+import { DebouncedInputProps } from '@/components/ui/@custom/debounced-input'
 import { NumberRangeFilterProps } from '@/components/ui/@react-table/components/number-range-filter'
 import '@tanstack/react-table'
 import { Row, RowData } from '@tanstack/react-table'
