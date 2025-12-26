@@ -1,8 +1,8 @@
 import { Div, Separator } from '@/components/ui'
 import { Column } from '@tanstack/react-table'
 import { useState } from 'react'
+import { DebouncedInput } from '../../@custom/debounced-input'
 import { useTableContext } from '../context/table.context'
-import { DebouncedInput } from './debounced-input'
 
 export type NumberRangeFilterProps<TData, TValue> = { column: Column<TData, TValue> }
 

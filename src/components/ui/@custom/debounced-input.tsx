@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { useEffect, useState } from 'react'
-import { Input } from '../..'
+import { Input } from '..'
 
 export type DebouncedInputProps = {
 	value: string | number

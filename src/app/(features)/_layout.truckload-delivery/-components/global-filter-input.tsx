@@ -3,7 +3,7 @@
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Div, Icon } from '@/components/ui'
-import { DebouncedInput } from '@/components/ui/@react-table/components/debounced-input'
+import { DebouncedInput } from '@/components/ui/@custom/debounced-input'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { Table } from '@tanstack/react-table'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'

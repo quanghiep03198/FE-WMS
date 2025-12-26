@@ -3,8 +3,8 @@ import { Table } from '@tanstack/react-table'
 import { pick } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'
+import { DebouncedInput } from '../../@custom/debounced-input'
 import { useTableContext } from '../context/table.context'
-import { DebouncedInput } from './debounced-input'
 
 type GlobalFilterPopoverProps = {
 	enableGlobalFilter: boolean
