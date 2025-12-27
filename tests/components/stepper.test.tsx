@@ -41,11 +41,13 @@ describe('Stepper Component', () => {
 
 	it('should go to the next step', async () => {
 		const { getByText } = render(
-			<Stepper.Provider data={steps}>
-				<Stepper.Panel value={1}>Step panel 1</Stepper.Panel>
-				<Stepper.Panel value={2}>Step panel 2</Stepper.Panel>
-				<StepTriggers />
-			</Stepper.Provider>
+			<I18nextProvider i18n={i18n}>
+				<Stepper.Provider data={steps}>
+					<Stepper.Panel value={1}>Step panel 1</Stepper.Panel>
+					<Stepper.Panel value={2}>Step panel 2</Stepper.Panel>
+					<StepTriggers />
+				</Stepper.Provider>
+			</I18nextProvider>
 		)
 
 		await fireEvent.click(getByText('Next'))
@@ -54,11 +56,13 @@ describe('Stepper Component', () => {
 
 	it('should go to the previous step', async () => {
 		const { getByText } = render(
-			<Stepper.Provider data={steps}>
-				<Stepper.Panel value={1}>Step panel 1</Stepper.Panel>
-				<Stepper.Panel value={2}>Step panel 2</Stepper.Panel>
-				<StepTriggers />
-			</Stepper.Provider>
+			<I18nextProvider i18n={i18n}>
+				<Stepper.Provider data={steps}>
+					<Stepper.Panel value={1}>Step panel 1</Stepper.Panel>
+					<Stepper.Panel value={2}>Step panel 2</Stepper.Panel>
+					<StepTriggers />
+				</Stepper.Provider>
+			</I18nextProvider>
 		)
 
 		await fireEvent.click(getByText('Next'))
@@ -69,14 +73,17 @@ describe('Stepper Component', () => {
 
 	it('should go to the previous by step indicator', async () => {
 		const { getByText } = render(
-			<Stepper.Provider data={steps}>
-				<Stepper.Panel value={1}>Step panel 1</Stepper.Panel>
-				<Stepper.Panel value={2}>Step panel 2</Stepper.Panel>
-				<Stepper.Panel value={3}>Step panel 3</Stepper.Panel>
-				<StepTriggers />
-			</Stepper.Provider>
+			<I18nextProvider i18n={i18n}>
+				<Stepper.Provider data={steps}>
+					<Stepper.Panel value={1}>Step panel 1</Stepper.Panel>
+					<Stepper.Panel value={2}>Step panel 2</Stepper.Panel>
+					<Stepper.Panel value={3}>Step panel 3</Stepper.Panel>
+					<StepTriggers />
+				</Stepper.Provider>
+			</I18nextProvider>
 		)
 
+		await fireEvent.click(getByText('Next'))
 		await fireEvent.click(getByText('Step 1'))
 		await fireEvent.click(getByText('Step 2'))
 		await fireEvent.click(getByText('Step 1'))
