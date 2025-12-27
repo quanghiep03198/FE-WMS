@@ -1,4 +1,4 @@
-import { notUndefined, Virtualizer } from '@tanstack/react-virtual'
+import { Virtualizer } from '@tanstack/react-virtual'
 import { useRef } from 'react'
 
 export default function useVirtualScrollPadding<
@@ -11,12 +11,12 @@ export default function useVirtualScrollPadding<
 
 	if (virtualItems?.length > 0)
 		offsetRef.current = {
-			before: notUndefined(virtualItems[0]).start - virtualizer.options.scrollMargin,
-			after:
-				virtualItems?.length > 0
-					? virtualizer.getTotalSize() - notUndefined(virtualItems[virtualItems?.length - 1]).end
-					: 0
+			before: Math.max(0, virtualItems[0].start - virtualizer.options.scrollMargin),
+			after: Math.max(0, virtualizer.getTotalSize() - virtualItems[virtualItems.length - 1].end)
 		}
+	else {
+		offsetRef.current = { before: 0, after: 0 }
+	}
 
 	return offsetRef.current
 }
