@@ -36,7 +36,6 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 
 	const wrapperRef = useRef<HTMLDivElement>(null)
 	const wrapperSize = useSize(wrapperRef)
-	const containerSize = useSize(containerRef)
 
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
@@ -48,6 +47,17 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		return columnSizes
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
+	const tableStyles = useMemo(
+		() =>
+			({
+				'--table-width': wrapperSize?.width - 10 + 'px',
+				'--table-height': wrapperSize?.height + 'px',
+				'--header-row-height': '40px',
+				'--row-height': `${virtualizerOptions.estimateSize}px`
+			}) as React.CSSProperties,
+		[wrapperSize, virtualizerOptions.estimateSize] // Chỉ tạo lại khi width thực sự thay đổi
+	)
+
 	useUpdateEffect(() => {
 		table.setColumnPinning((prev) => {
 			if (prev.right.includes(ROW_ACTIONS_COLUMN_ID)) {
@@ -58,14 +68,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	}, [table.getState().columnPinning])
 
 	return (
-		<Wrapper
-			ref={wrapperRef}
-			style={{
-				'--table-width': wrapperSize?.width - 10 + 'px',
-				'--table-height': containerSize?.height + 'px',
-				'--header-row-height': '40px',
-				'--row-height': `${virtualizerOptions.estimateSize}px`
-			}}>
+		<Wrapper ref={wrapperRef} style={tableStyles}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea
 				ref={containerRef}
@@ -79,11 +82,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 				<Table
 					data-role='data-grid'
 					className='table-auto border-separate border-spacing-0 border-none'
-					style={
-						{
-							...computedColumnSizes
-						} as React.CSSProperties
-					}>
+					style={computedColumnSizes}>
 					{caption && (
 						<TableCaption aria-labelledby={captionId} className='hidden'>
 							{caption}

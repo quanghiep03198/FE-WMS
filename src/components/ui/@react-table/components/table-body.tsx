@@ -1,11 +1,11 @@
+import { useReducedMotion } from '@/common/hooks/use-reduce-motion'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import env from '@/common/utils/env'
 import { RowData, Table, type Row as TRow } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useMemoizedFn } from 'ahooks'
 import { Activity, memo, useCallback } from 'react'
-import { TableBody as TableRowGroup } from '../../@core/table'
+import { TableBody } from '../..'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { MemoizedVirtualTableRow, VirtualPlaceholderRow } from './table-row'
@@ -26,29 +26,29 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 	const estimateSize = useCallback(() => estimatedRowHeight, [estimatedRowHeight])
 	const getScrollElement = () => containerRef.current
 	const getItemKey = useCallback((index) => table.getRowModel().rows[index]?.id, [table.options.data])
+	const reduceMotion = typeof window !== 'undefined' && useReducedMotion()
 
 	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().rows.length : 5,
+		overscan: 10,
 		horizontal: false,
 		getItemKey,
 		getScrollElement,
 		estimateSize,
-		scrollToFn,
+		scrollToFn: reduceMotion ? undefined : scrollToFn,
+		measureElement: undefined, // Disable auto measurement
+		initialRect: containerRef?.current?.getBoundingClientRect?.(),
 		debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
 	})
 	const virtualRowIndexes = virtualizer.getVirtualIndexes()
 
 	const { before, after } = useVirtualScrollPadding<HTMLDivElement, HTMLTableRowElement>(virtualizer)
+
 	const virtualItems = virtualizer.getVirtualItems()
 	const colSpan = table.getAllColumns().length
 
-	const scrollToIndex = useMemoizedFn((index: number) =>
-		virtualizer.scrollToIndex(index, { align: 'start', behavior: 'auto' })
-	)
-
 	return (
-		<TableRowGroup style={{ height: virtualizer.getTotalSize() }}>
+		<TableBody style={{ height: virtualizer.getTotalSize() }}>
 			<Activity mode={before > 0 ? 'visible' : 'hidden'}>
 				<VirtualPlaceholderRow colSpan={colSpan} style={{ height: before }} />
 			</Activity>
@@ -61,7 +61,6 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 							row={row}
 							index={index}
 							isScrolling={virtualizer.isScrolling}
-							scrollToIndex={scrollToIndex}
 							renderSubComponent={renderSubComponent}
 						/>
 					)
@@ -69,7 +68,7 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 			<Activity mode={after > 0 ? 'visible' : 'hidden'}>
 				<VirtualPlaceholderRow colSpan={colSpan} style={{ height: after }} />
 			</Activity>
-		</TableRowGroup>
+		</TableBody>
 	)
 }
 

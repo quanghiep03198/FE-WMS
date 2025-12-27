@@ -1,8 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
 import { flexRender, RowData, type Row } from '@tanstack/react-table'
-import { useMemoizedFn, useUpdateEffect } from 'ahooks'
-import { Fragment, memo, startTransition } from 'react'
+import { useMemoizedFn } from 'ahooks'
+import { Fragment, memo } from 'react'
 import { TableCell, TableRow } from '../../@core/table'
 import { useTableContext } from '../context/table.context'
 import { getStickyOffsetPosition } from '../utils/table.util'
@@ -12,16 +12,9 @@ type VirtualTableRowProps<TData extends RowData> = Pick<TableBodyProps<TData>, '
 	isScrolling: boolean
 	row: Row<any>
 	index: number
-	scrollToIndex: (index: number) => void
 }
 
-function VirtualTableRow<TData>({
-	row,
-	isScrolling,
-	index,
-	scrollToIndex,
-	renderSubComponent
-}: VirtualTableRowProps<TData>) {
+function VirtualTableRow<TData>({ row, isScrolling, index, renderSubComponent }: VirtualTableRowProps<TData>) {
 	'use no memo'
 
 	const { table } = useTableContext('table')
@@ -29,12 +22,6 @@ function VirtualTableRow<TData>({
 
 	const isSelected = row.getIsSelected()
 	const isExpanded = row.getIsExpanded()
-
-	useUpdateEffect(() => {
-		if (isExpanded) {
-			startTransition(() => scrollToIndex(index))
-		}
-	}, [isExpanded])
 
 	return (
 		<Fragment>
@@ -70,7 +57,7 @@ function VirtualTableRow<TData>({
 						colSpan={row.getVisibleCells().length}
 						className={cn('p-0', isExpanded ? 'border-b shadow-[inset_0_0px_4px_#17171725]' : 'border-none')}>
 						<Collapsible open={isExpanded}>
-							<CollapsibleContent className='sticky left-0 w-[var(--table-width)] overflow-auto bg-secondary/50 transition-none transition-allow-discrete [scrollbar-gutter:stable] data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+							<CollapsibleContent className='sticky left-0 w-[var(--table-width)] overflow-auto bg-secondary/50 transition-allow-discrete [scrollbar-gutter:stable] data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>
 							</CollapsibleContent>
 						</Collapsible>

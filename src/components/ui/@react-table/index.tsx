@@ -297,7 +297,6 @@ function DataGrid<TData, TValue>({
 							manualTotalDocs={paginationProps?.totalDocs ?? 0}
 						/>
 					)}
-
 					<DataTablePagination
 						table={table}
 						loading={loading}
@@ -312,7 +311,7 @@ function DataGrid<TData, TValue>({
 }
 
 const DataTableWrapper = tw.div`
-	group/data-grid-wrapper *:box-border space-y-2 max-w-full w-full overflow-x-hidden transition-width duration-200 
+	group/data-grid-wrapper space-y-2 max-w-full w-full overflow-x-hidden
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:!border-x-0 
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:!shadow-none
 	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!border-x-0
