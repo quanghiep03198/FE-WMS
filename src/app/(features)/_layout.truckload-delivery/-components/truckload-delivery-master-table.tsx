@@ -62,9 +62,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('purchase_orders', {
 				filterFn: 'arrIncludes'
 			}),
-			columnHelper.accessor('created_at', {
-				filterFn: 'inDateRange'
-			}),
 			columnHelper.accessor('license_plate', {
 				header: !isMobile
 					? t('ns_erp:fields.license_plate')
@@ -220,19 +217,40 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					)
 				}
 			}),
-			columnHelper.accessor('container_sealing_time', {
-				header: t('ns_erp:fields.container_sealing_time'),
+			columnHelper.accessor('created_at', {
+				header: t('ns_common:common_fields.created_at'),
 				enableResizing: true,
 				enableSorting: true,
-				enableColumnFilter: true,
+				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
 				cell: ({ getValue }) => {
-					const factoryDepartureTime = getValue()
-					return factoryDepartureTime ? (
-						format(new Date(factoryDepartureTime), 'yyyy-MM-dd HH:mm')
+					const createdAt = getValue()
+					return createdAt ? (
+						format(new Date(createdAt), 'yyyy-MM-dd HH:mm')
+					) : (
+						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
+				}
+			}),
+			columnHelper.accessor('container_sealing_time', {
+				header: t('ns_erp:fields.container_sealing_time'),
+				enableResizing: true,
+				enableSorting: true,
+				enableColumnFilter: false,
+				enableGlobalFilter: false,
+				minSize: 150,
+				size: 200,
+				maxSize: 250,
+				cell: ({ getValue }) => {
+					const containerSealingTime = getValue()
+					return containerSealingTime ? (
+						format(new Date(containerSealingTime), 'yyyy-MM-dd HH:mm')
 					) : (
 						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
@@ -245,7 +263,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.factory_departure_time'),
 				enableResizing: true,
 				enableSorting: true,
-				enableColumnFilter: true,
+				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
 				size: 200,
@@ -296,10 +314,10 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			tableRef.current.setColumnVisibility({
 				...tableRef.current.getState().columnVisibility,
 				dispatch_order: false,
-				created_at: false,
 				purchase_orders: false,
 				container_number: !isMobile,
 				total_outbound_qty: !isMobile,
+				container_sealing_time: !isMobile,
 				factory_departure_time: !isMobile,
 				punctured_container: !isMobile,
 				smelling_container: !isMobile,
@@ -321,6 +339,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			enableColumnFilters={true}
 			enableGlobalFilter={true}
 			getColumnCanGlobalFilter={() => true}
+			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
 			globalFilterFn='includesString'
 			border='bottom-only'
 			initialState={{
@@ -330,11 +349,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					pageSize: 50
 				},
 				columnVisibility: {
-					created_at: false,
 					dispatch_order: false,
 					purchase_orders: false,
 					container_number: !isMobile,
 					total_outbound_qty: !isMobile,
+					container_sealing_time: !isMobile,
 					factory_departure_time: !isMobile,
 					punctured_container: !isMobile,
 					smelling_container: !isMobile,
