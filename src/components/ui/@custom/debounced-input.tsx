@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react'
 import { Input } from '..'
 
 export type DebouncedInputProps = {
-	value: string | number
-	onChange: (value: string | number) => void
+	onChange: (value: any) => void
 	debounce?: number
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
+} & Omit<React.ComponentProps<'input'>, 'onChange'>
 
 export const DebouncedInput: React.FC<DebouncedInputProps> = ({
 	value,
