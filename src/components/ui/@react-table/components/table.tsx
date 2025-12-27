@@ -34,8 +34,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		renderSubComponent
 	} = props
 
-	const wrapperRef = useRef<HTMLDivElement>(null)
-	const wrapperSize = useSize(wrapperRef)
+	const containerSize = useSize(containerRef)
 
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
@@ -50,12 +49,12 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const tableStyles = useMemo(
 		() =>
 			({
-				'--table-width': wrapperSize?.width - 10 + 'px',
-				'--table-height': wrapperSize?.height + 'px',
+				'--table-width': containerSize?.width - 10 + 'px',
+				'--table-height': containerSize?.height + 'px',
 				'--header-row-height': '40px',
 				'--row-height': `${virtualizerOptions.estimateSize}px`
 			}) as React.CSSProperties,
-		[wrapperSize, virtualizerOptions.estimateSize] // Chỉ tạo lại khi width thực sự thay đổi
+		[containerSize, virtualizerOptions.estimateSize] // Chỉ tạo lại khi width thực sự thay đổi
 	)
 
 	useUpdateEffect(() => {
@@ -68,7 +67,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	}, [table.getState().columnPinning])
 
 	return (
-		<Wrapper ref={wrapperRef} style={tableStyles}>
+		<Wrapper style={{ ...computedColumnSizes, ...tableStyles }}>
 			{caption && <TableHeadCaption id={captionId} aria-description={caption} />}
 			<ScrollArea
 				ref={containerRef}
@@ -79,10 +78,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 					WebkitOverflowScrolling: 'touch'
 				}}
 				{...containerProps}>
-				<Table
-					data-role='data-grid'
-					className='table-auto border-separate border-spacing-0 border-none'
-					style={computedColumnSizes}>
+				<Table data-role='data-grid' className='table-auto border-separate border-spacing-0 border-none'>
 					{caption && (
 						<TableCaption aria-labelledby={captionId} className='hidden'>
 							{caption}

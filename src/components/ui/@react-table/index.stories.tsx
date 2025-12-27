@@ -105,7 +105,7 @@ export const Default = () => {
 				header: '#',
 				minSize: 80,
 				size: 80,
-				enableColumnFilter: true,
+				enableColumnFilter: false,
 				enableResizing: true,
 				enableSorting: true
 			}),
@@ -135,8 +135,7 @@ export const Default = () => {
 				enableResizing: true,
 				enableColumnFilter: true,
 				enablePinning: true,
-				enableSorting: true,
-				cell: ({ getValue }) => new Intl.NumberFormat('en-US', { minimumSignificantDigits: 3 }).format(getValue())
+				enableSorting: true
 			}),
 			columnHelper.accessor('email', {
 				header: 'Email',
@@ -227,7 +226,18 @@ export const Default = () => {
 					</Typography>
 				</Div>
 				<Separator />
-				<DataTable data={users} columns={columns} enableColumnPinning={true} />
+				<DataTable
+					data={users}
+					columns={columns}
+					enableColumnPinning={true}
+					initialState={{
+						pagination: {
+							pageSize: 500,
+							pageIndex: 0
+						}
+					}}
+					containerProps={{ style: { height: window.innerHeight - 300 } }}
+				/>
 			</Div>
 		</I18nextProvider>
 	)

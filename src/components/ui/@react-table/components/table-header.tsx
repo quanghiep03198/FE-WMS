@@ -92,12 +92,13 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 							key={header.id}
 							colSpan={header.colSpan}
 							data-role='data-grid-row'
-							className={cn('group relative z-40 p-0', filterOpen ? 'border-border' : 'border-transparent')}
+							className='group relative z-40 p-0'
 							rowSpan={header.column.getIsPinned() ? headerGroup.headers.length : 1}
 							style={{
+								...computeStickyOffsetPosition(header?.column),
+								borderBottomWidth: filterOpen ? '1px' : '0px',
 								width: `var(--header-${header?.id}-size)`,
-								maxHeight: 'var(--header-row-height)',
-								...computeStickyOffsetPosition(header?.column)
+								maxHeight: 'var(--header-row-height)'
 							}}>
 							<Div
 								data-state={filterOpen ? 'open' : 'closed'}

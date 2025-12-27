@@ -3,21 +3,8 @@ import { PaginationState, RowData, Table } from '@tanstack/react-table'
 import React, { memo, useEffect, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
-import {
-	Button,
-	ButtonGroup,
-	Div,
-	Icon,
-	Label,
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-	Separator,
-	Tooltip,
-	Typography
-} from '../..'
+import { Button, ButtonGroup, Div, Icon, Label, Separator, Tooltip, Typography } from '../..'
+import AutoComplete from '../../@custom/auto-complete'
 import { type PaginationBaseProps } from '../types'
 
 export type DataTablePaginationProps<TData extends RowData> = {
@@ -52,11 +39,13 @@ function TablePagination<TData>({
 
 	const pageIndexContext = String(pageIndex) + '/' + String(pageCount)
 
-	const changePageSize = (value: number) => {
-		if (value > rowCount) {
+	const changePageSize = (value: string) => {
+		if (isNaN(+value)) return
+
+		if (+value > rowCount) {
 			goToFirstPage()
 		}
-		setPageSize(value)
+		setPageSize(+value)
 	}
 
 	const handlePrefetch = (params: Record<string, unknown>) => {
@@ -104,17 +93,39 @@ function TablePagination<TData>({
 			role='navigation'
 			className='ml-auto flex items-center space-x-2 py-0.5 sm:space-x-2 lg:space-x-4 xl:space-x-4'>
 			<Div className='flex items-center space-x-2'>
-				<Label className='font-medium'>{t('ns_common:table.rows_per_page')}</Label>
-				<Select
-					value={pageSize?.toString()}
+				<Label className='whitespace-nowrap font-medium'>{t('ns_common:table.rows_per_page')}</Label>
+				<AutoComplete
+					type='number'
+					value={pageSize === 1 ? null : pageSize}
+					defaultValue={10}
+					min={10}
+					onInput={(value) => changePageSize(value)}
+					onSelect={(value) => changePageSize(value)}
+					placeholder={'0'}
+					shouldFilter={false}
+					className='w-24'
+					datalist={[10, 20, 30, 40, 50].map((size) => ({ label: String(size), value: size }))}
+					labelField='label'
+					valueField='value'
+				/>
+				{/* <Select
+					value={customPageSize?.toString() || pageSize?.toString()}
 					onValueChange={(value) => {
+						if (value === 'custom') {
+							setCustomPageSize('custom')
+							return
+						}
 						changePageSize(+value)
 					}}>
 					<SelectTrigger className='w-20'>
-						<SelectValue placeholder={pageSize} />
+						{pageSize?.toString() === 'custom' ? (
+							<Input type='number' min={10} className='h-8 border-none shadow-none outline-none' />
+						) : (
+							<SelectValue placeholder={pageSize} />
+						)}
 					</SelectTrigger>
 					<SelectContent>
-						{[10, 20, 30, 40, 50, 1000].map((pageSize) => (
+						{[10, 20, 30, 40, 50].map((pageSize) => (
 							<SelectItem
 								key={pageSize}
 								value={String(pageSize)}
@@ -122,8 +133,9 @@ function TablePagination<TData>({
 								{pageSize}
 							</SelectItem>
 						))}
+						<SelectItem value='custom'>{t('ns_common:others.other')}</SelectItem>
 					</SelectContent>
-				</Select>
+				</Select> */}
 			</Div>
 			<Separator orientation='vertical' className='h-6 w-1 bg-border sm:hidden md:hidden' />
 			<Typography variant='small' className='whitespace-nowrap text-center font-medium'>

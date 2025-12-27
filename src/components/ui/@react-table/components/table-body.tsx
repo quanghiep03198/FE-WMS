@@ -40,7 +40,6 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 		initialRect: containerRef?.current?.getBoundingClientRect?.(),
 		debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
 	})
-	const virtualRowIndexes = virtualizer.getVirtualIndexes()
 
 	const { before, after } = useVirtualScrollPadding<HTMLDivElement, HTMLTableRowElement>(virtualizer)
 
@@ -53,13 +52,13 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 				<VirtualPlaceholderRow colSpan={colSpan} style={{ height: before }} />
 			</Activity>
 			{Array.isArray(virtualItems) &&
-				virtualRowIndexes.map((index) => {
-					const row = rows[index] as TRow<any>
+				virtualItems.map((virtualItem) => {
+					const row = rows[virtualItem.index] as TRow<any>
 					return (
 						<MemoizedVirtualTableRow
 							key={row.id}
 							row={row}
-							index={index}
+							index={virtualItem.index}
 							isScrolling={virtualizer.isScrolling}
 							renderSubComponent={renderSubComponent}
 						/>
