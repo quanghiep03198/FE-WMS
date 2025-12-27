@@ -160,6 +160,7 @@ const ReportDatalist: React.FC = () => {
 				data={data}
 				loading={isLoading}
 				enableExpanding={true}
+				getRowId={(originalRow: IOutboundReport) => originalRow.po}
 				renderSubComponent={({ row }) => {
 					const data = pick(row.original as IOutboundReport, ['detail', 'overall'])
 					return <OutboundReportDetailTable {...data} />

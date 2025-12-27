@@ -206,7 +206,10 @@ const InboundReportMasterTable: React.FC = () => {
 			enableExpanding={true}
 			enableColumnResizing={true}
 			ref={dataTableRef}
-			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
+			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 300px)' }
+			}}
+			getRowId={(originalRow: IInboundReport) => originalRow.mo_no}
 			renderSubComponent={
 				(({ row }) => {
 					return <SizeTable data={row.original?.size_data} />

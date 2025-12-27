@@ -2,7 +2,6 @@ import { factories } from '@/common/constants/constants'
 import useAuth from '@/common/hooks/use-auth'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryAudit } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
@@ -49,7 +48,12 @@ export const InventoryReportMasterTable: React.FC = () => {
 	}, [searchParams['month.eq']])
 
 	const renderSubComponents = useCallback(
-		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit, unknown>): React.ReactElement => (
+		({
+			row
+		}: RenderSubComponentProps<
+			IMonthlyInventoryAudit,
+			IMonthlyInventoryAudit[keyof IMonthlyInventoryAudit]
+		>): React.ReactElement => (
 			<InventoryReportDetailTable
 				queries={pick(row.original, [
 					'actual_po',
@@ -85,7 +89,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				cell: ({ row }) => (
 					<button
 						className='absolute inset-0 flex h-full w-full items-center justify-center'
-						onClick={() => setExpanded({ [row.index]: !row.getIsExpanded() })}>
+						onClick={() => setExpanded({ [row.original.mo_no]: !row.getIsExpanded() })}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</button>
 				)
@@ -265,8 +269,9 @@ export const InventoryReportMasterTable: React.FC = () => {
 				enableColumnResizing={true}
 				manualExpanding={true}
 				renderSubComponent={renderSubComponents}
+				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
 				containerProps={{
-					className: cn(devicePixelRatio < 1 ? 'xxl:h-[65vh] h-[55vh]' : 'xxl:h-[58vh] h-[55vh]')
+					style: { height: 'calc(var(--outlet-wrapper-height) - 300px)' }
 				}}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{

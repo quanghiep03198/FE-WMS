@@ -71,7 +71,7 @@ function Layout() {
 							{
 								'--header-height': 80 + 'px',
 								'--outlet-padding-bottom': 24 + 'px',
-								'--outlet-wrapper-height': windowSize.height - 104 + 'px',
+								'--outlet-wrapper-height': Math.round(windowSize.height - 104) + 'px',
 								'--scrollbar-thickness': '10px'
 							} as React.CSSProperties
 						}>
