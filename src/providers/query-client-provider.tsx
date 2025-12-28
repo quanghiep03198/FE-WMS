@@ -1,4 +1,5 @@
 import { AppConfigs } from '@/configs/app.config'
+import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -29,6 +30,12 @@ export const queryClient = new QueryClient({
 			networkMode: 'always'
 		}
 	}
+})
+
+broadcastQueryClient({
+	queryClient: queryClient as unknown as Parameter<typeof broadcastQueryClient>['queryClient'],
+	broadcastChannel: 'wms-client', // Optional: defaults to 'react-query'
+	options: { webWorkerSupport: true, type: 'localstorage' }
 })
 
 export const QueryClientProvider: React.FC<React.PropsWithChildren> = ({ children }) => (
