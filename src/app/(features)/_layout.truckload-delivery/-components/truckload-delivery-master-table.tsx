@@ -365,7 +365,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				}
 			}}
 			virtualizerOptions={{
-				estimateSize: isMobile ? 80 : 40,
+				estimateSize: isMobile ? 60 : 40,
 				overscan: 10
 			}}
 			toolbarProps={{

@@ -16,8 +16,11 @@ const OutboundQtyInputFieldControl: React.FC<
 	const { control, watch, setValue } = useFormContext<CreateDeliveryFormValues>()
 	const { t } = useTranslation()
 
-	const currentOutboundQty = watch(name)
-	const currentMaxOutboundQty = watch(`outbound_purchase_orders.${props['data-index']}.max_outbound_qty`)
+	const currentOutboundQty = useWatch({ name, control })
+	const currentMaxOutboundQty = useWatch({
+		control,
+		name: `outbound_purchase_orders.${props['data-index']}.max_outbound_qty`
+	})
 
 	const currentPurchaseOrder = useWatch({
 		control,
