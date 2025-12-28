@@ -1,5 +1,5 @@
 import AppLogo from '@/app/-components/-shared/app-logo'
-import ThemeDropdownSelect from '@/app/-components/-shared/theme-dropdown-select'
+import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -115,7 +115,7 @@ const NavHeaderDrawerMenu: React.FC = () => {
 					<Icon name='Menu' />
 				</Button>
 			</SheetTrigger>
-			<SheetContent className='max-w-sm'>
+			<SheetContent className='max-w-full' side='top'>
 				<SheetHeader>
 					<Link to='/' className='text-left'>
 						<AppLogo />
@@ -142,7 +142,7 @@ const NavHeaderDrawerMenu: React.FC = () => {
 							<Icon name='SunMoon' className='size-4' />
 							Theme
 						</Label>
-						<ThemeDropdownSelect />
+						<ThemeSwitcher />
 					</Div>
 				</Div>
 			</SheetContent>

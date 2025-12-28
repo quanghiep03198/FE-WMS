@@ -119,13 +119,13 @@ const FAQsSection: React.FunctionComponent = () => {
 						</Fragment>
 					))}
 				</ScrollShadow>
-				<Div className='flex min-h-12 items-center gap-x-3 overflow-hidden border-t px-4 py-2 text-sm'>
+				<Div className='flex min-h-12 items-center gap-x-3 overflow-hidden border-t px-4 py-2 text-sm sm:flex-col sm:items-stretch'>
 					<Typewriter
 						playState={containerInViewPort ? 'running' : 'paused'}
 						className='max-h-10 flex-1 overflow-y-auto text-foreground !scrollbar-none'
 						text={`I have some question, can you help me?`}
 					/>
-					<Div className='inline-flex items-center gap-x-3 bg-background'>
+					<Div className='inline-flex items-center gap-x-3 bg-background sm:self-end'>
 						<Icon name='SmilePlus' />
 						<Icon name='Paperclip' />
 						<Icon name='Send' />

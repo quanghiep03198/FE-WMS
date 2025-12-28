@@ -72,8 +72,8 @@ const CTASection: React.FC = () => {
 					alt='Shipping'
 				/>
 				{/* <Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' /> */}
-				<Div className='block basis-1/2 space-y-10 lg:space-y-12 xl:hidden'>
-					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-1 md:gap-x-6 lg:-translate-x-8'>
+				<Div className='block basis-1/2 space-y-10 sm:basis-full md:basis-full lg:space-y-12 xl:hidden'>
+					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:-translate-x-8'>
 						{outstandingFeatures.map((feature, index) => (
 							<ListItem key={index.toString()}>
 								<Icon name='Check' size={18} />{' '}
@@ -83,7 +83,7 @@ const CTASection: React.FC = () => {
 							</ListItem>
 						))}
 					</List>
-					<Div className='flex items-center justify-start gap-x-1 md:justify-center'>
+					<Div className='flex items-center justify-start gap-x-1 sm:justify-center md:justify-center'>
 						<Link to='/login' className={cn(buttonVariants())}>
 							Get started
 						</Link>
@@ -102,7 +102,7 @@ const CTASection: React.FC = () => {
 }
 
 const List = tw.ul`grid gap-y-2 mb-8 sm:gap-y-2`
-const ListItem = tw.li`flex items-center gap-x-2 text-base text-muted-foreground [&>svg]:text-foreground [&>svg]:min-w-6 whitespace-nowrap text-left`
-const Image = tw.img`w-full max-w-lg md:max-w-full lg:max-w-xl sm:max-w-sm xl:max-w-3xl xxl:max-w-3xl flex-1`
+const ListItem = tw.li`flex w-full gap-x-2 text-base text-pretty text-muted-foreground [&>svg]:text-foreground [&>svg]:min-w-6 [&>svg]:translate-y-1.5 text-left`
+const Image = tw.img`w-full max-w-lg md:max-w-xl lg:max-w-xl sm:max-w-sm xl:max-w-3xl xxl:max-w-3xl flex-1`
 
 export default CTASection

@@ -33,7 +33,7 @@ const BeamAnimated: React.FC = () => {
 					'--yellow': '#eab308'
 				} as React.CSSProperties
 			}
-			className='group/chip container relative w-full'>
+			className='group/chip container relative w-full sm:[zoom:1.1]'>
 			<svg
 				width='100%'
 				height='200'
@@ -96,7 +96,7 @@ const BeamAnimated: React.FC = () => {
 						</stop>
 					</linearGradient>
 				</defs>
-				<g>
+				<g className='sm:w-full'>
 					{/* Standalone */}
 					<g className='standalone-chip__base'>
 						<rect
@@ -167,7 +167,7 @@ const BeamAnimated: React.FC = () => {
 							height='35.0923'
 							rx='5.87331'
 							transform='matrix(0.845602 -0.533814 0.895247 0.44557 76.1337 105.512)'
-							className='fill-neutral-100 dark:fill-neutral-800'
+							className='fill-neutral-100 dark:fill-neutral-800 sm:zoom-in-110'
 							shapeRendering='crispEdges'
 						/>
 						<rect
@@ -260,9 +260,9 @@ const BeamAnimated: React.FC = () => {
 					boxShadow: '16px 16px 24px #0a0a0a80'
 				}}
 				className={cn(
-					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700',
+					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700 sm:rounded-md',
 					'bg-gradient-to-br from-background to-accent to-[30%]',
-					'left-[58%] sm:max-w-[144px]',
+					'left-[58%] sm:max-w-[80px]',
 					'left-[56%] md:max-w-[196px]',
 					'left-[52%] lg:max-w-[210px]',
 					'xl:left-[60%] xl:max-w-[200px] xl:-translate-x-1/2 xxl:left-[calc(60%+1rem)] xxl:max-w-[216px]',
@@ -271,12 +271,12 @@ const BeamAnimated: React.FC = () => {
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
 						className={cn(
-							'flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg p-4 sm:size-16 sm:gap-y-2 sm:p-2 sm:text-lg md:gap-y-4 md:p-4',
+							'flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg p-4 sm:size-11 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:gap-y-4 md:p-4',
 							renderCount > 0
-								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1600ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1600ms,box-shadow_300ms_ease-out_1600ms] sm:-translate-x-3 sm:-translate-y-3'
+								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1600ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1600ms,box-shadow_300ms_ease-out_1600ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border'
 								: 'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
 						)}>
-						<span className='h-6 text-center font-jetbrains text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-base md:text-2xl xl:text-2xl'>
+						<span className='h-6 text-center font-jetbrains text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-xs md:text-2xl xl:text-2xl'>
 							WMS
 						</span>
 						<Separator className='h-1 w-full bg-primary-foreground sm:h-0.5 md:h-1 lg:h-1' />
