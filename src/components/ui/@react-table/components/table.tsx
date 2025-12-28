@@ -49,7 +49,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 	const tableStyles = useMemo(
 		() =>
 			({
-				'--table-width': containerSize?.width - 10 + 'px',
+				'--table-width': containerSize?.width + 'px',
 				'--table-height': containerSize?.height + 'px',
 				'--header-row-height': '40px',
 				'--row-height': `${virtualizerOptions.estimateSize}px`
@@ -105,7 +105,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div`relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
+const ScrollArea = tw.div`@container/1 relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
 
 DataTable.displayName = 'DataTable'
 
