@@ -95,7 +95,7 @@ const WarehouseFormDialog: React.FC = () => {
 		defaultFormValues.employee_code ??= ''
 		form.reset({
 			...defaultFormValues,
-			company_code: user.company_code
+			company_code: user?.company_code
 		})
 	}, [type, defaultFormValues, open])
 

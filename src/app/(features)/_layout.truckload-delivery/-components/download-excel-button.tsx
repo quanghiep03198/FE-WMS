@@ -16,7 +16,7 @@ const DownloadExcelButton: React.FC = () => {
 
 	const handleDownloadExcel = async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
-		const factory = t(factories[user.company_code], { ns: 'ns_common', defaultValue: user.company_code }) as string
+		const factory = t(factories[user?.company_code], { ns: 'ns_common', defaultValue: user?.company_code }) as string
 
 		try {
 			const blob = await TruckloadDeliveryService.downloadExcel(searchParams)

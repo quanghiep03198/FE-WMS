@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
-	const currentHostRegistry = __hostRegistry.get(user.company_code)
+	const currentHostRegistry = __hostRegistry.get(user?.company_code)
 
 	const shouldCheck = env('VITE_NODE_ENV') === 'production'
 	const isNotCompatible = shouldCheck && !isIPv4(window.location.hostname)
@@ -30,7 +30,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.502_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,
-							factoryCode: t(`ns_common:factory.${user.company_code}`, { defaultValue: user.company_code }),
+							factoryCode: t(`ns_common:factory.${user?.company_code}`, { defaultValue: user?.company_code }),
 							defaultValue: null
 						})
 					}}

@@ -237,7 +237,7 @@ const SwitchUserCompany: React.FC = () => {
 					data.map((item) => (
 						<DropdownMenuCheckboxItem
 							key={item.company_code}
-							checked={user.company_code === item.company_code}
+							checked={user?.company_code === item.company_code}
 							onCheckedChange={() => setUserCompany(item)}>
 							{item.company_name}
 						</DropdownMenuCheckboxItem>

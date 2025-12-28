@@ -137,7 +137,7 @@ const ReportDatalist: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_outbound_report', {
-					factory: t(factories[user.company_code], { ns: 'ns_common' }),
+					factory: t(factories[user?.company_code], { ns: 'ns_common' }),
 					date: searchParams['date.eq'],
 					defaultValue: `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'

@@ -17,7 +17,7 @@ export const useDownloadReport = () => {
 
 	return useMemoizedFn(async (reportType: 'daily-productivity' | 'shaping-department-productivity') => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
-		const translatedFactory = t(factories[user.company_code], { ns: 'ns_common' })
+		const translatedFactory = t(factories[user?.company_code], { ns: 'ns_common' })
 		const fallbackFileTitle =
 			reportType === 'daily-productivity'
 				? `Daily Inbound Report ${translatedFactory} - ${searchParams['date.eq']}`

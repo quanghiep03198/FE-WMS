@@ -11,7 +11,7 @@ export const useGetTenantByFactory = () => {
 	const { user } = useAuth()
 
 	return useQuery({
-		queryKey: [TenancyQueryKeys.TENANT_BY_FACTORY, user.company_code],
+		queryKey: [TenancyQueryKeys.TENANT_BY_FACTORY, user?.company_code],
 		queryFn: TenancyService.getTenantsByFactory,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,

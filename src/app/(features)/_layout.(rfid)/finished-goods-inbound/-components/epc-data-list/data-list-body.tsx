@@ -85,7 +85,7 @@ const EpcDataList: React.FC = () => {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.USER_COMPANY]: user.company_code
+					[RequestHeaders.USER_COMPANY]: user?.company_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
