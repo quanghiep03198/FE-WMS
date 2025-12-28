@@ -267,8 +267,6 @@ function DataGrid<TData, TValue>({
 
 	const { isResizingColumn } = table.getState().columnSizingInfo
 
-	console.log('Rerender at DataGrid')
-
 	return (
 		<TableContext.Provider value={store.current}>
 			<DataTableWrapper data-border={border}>
