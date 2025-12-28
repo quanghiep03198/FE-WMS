@@ -99,6 +99,8 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 										triggerProps={{ type: 'button', className: 'w-full' }}
 										contentProps={{
 											hidden: !getFieldState(name).error || errorMessageVariant === 'inline',
+											side: 'bottom',
+											align: 'start',
 											['aria-invalid']: !!error
 										}}>
 										<Input

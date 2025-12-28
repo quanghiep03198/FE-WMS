@@ -129,6 +129,8 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 										triggerProps={{ asChild: true, type: 'button', className: 'w-full' }}
 										contentProps={{
 											hidden: !error || errorMessageVariant === 'inline',
+											side: 'bottom',
+											align: 'start',
 											className: 'bg-destructive text:text-destructive-foreground',
 											['aria-invalid']: !!error
 										}}>
