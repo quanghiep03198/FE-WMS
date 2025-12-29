@@ -7,14 +7,15 @@ import { useInoutboundMethod } from '../-hooks/use-select-inoutbound-method'
 
 const QuantityFiledControl = () => {
 	const { t } = useTranslation()
-	const { searchParams, setParams } = useFilterQuery()
+	const { searchParams, setParams, removeParam } = useFilterQuery()
 	const [currentInoutboundMethod] = useInoutboundMethod()
 
-	const [currentValue, setCurrentValue] = useState<number>(searchParams.take)
+	const [currentValue, setCurrentValue] = useState<number>(searchParams.take || null)
 
 	useDebounceEffect(
 		() => {
-			setParams({ ...searchParams, take: currentValue })
+			if (currentValue > 0) setParams({ ...searchParams, take: currentValue })
+			else removeParam('take')
 		},
 		[currentValue],
 		{ wait: 200 }
@@ -27,7 +28,7 @@ const QuantityFiledControl = () => {
 			name='qty'
 			type='number'
 			min={1}
-			value={currentValue}
+			value={currentValue || null}
 			placeholder={t('ns_common:common_fields.quantity')}
 			onChange={(e) => setCurrentValue(+e.currentTarget.value)}
 		/>

@@ -1,6 +1,7 @@
 'use no memo'
 
 import { Div, DropdownSelect, Icon, Input } from '@/components/ui'
+import AutoComplete from '@/components/ui/@custom/auto-complete'
 import { Column } from '@tanstack/react-table'
 import { useDebounceEffect } from 'ahooks'
 import { useEffect, useState } from 'react'
@@ -14,12 +15,11 @@ type ColumnFilterProps<TData, TValue> = {
 export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
 	const { t } = useTranslation()
 	const filterVariant = column.columnDef.meta?.filterVariant
-	const { searchParams, setParams } = useFilterQuery()
+	const { searchParams, setParams, removeParam } = useFilterQuery()
 
 	const [currentFilterValue, setCurrentFilterValue] = useState(searchParams[column.id])
 
 	useEffect(() => {
-		console.log(searchParams)
 		setCurrentFilterValue(searchParams[column.id])
 	}, [searchParams])
 
@@ -52,7 +52,8 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 
 	useDebounceEffect(
 		() => {
-			setParams({ ...searchParams, [column.id]: currentFilterValue })
+			if (currentFilterValue) setParams({ ...searchParams, [column.id]: currentFilterValue })
+			else removeParam(column.id)
 		},
 		[currentFilterValue],
 		{ wait: 200, leading: true, trailing: true }
@@ -74,6 +75,30 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 							setCurrentFilterValue(value)
 						}
 					}}
+					placeholder={t('ns_common:table.search_in_column')}
+					datalist={
+						Array.isArray(metaUniqueValues)
+							? metaUniqueValues
+							: getSortedUniqueValues()
+									.filter((value) => Boolean(value))
+									.map((value: any) => ({
+										label: value,
+										value: value
+									}))
+					}
+					labelField='label'
+					valueField='value'
+				/>
+			)
+		}
+
+		case 'autocomplete': {
+			return (
+				<AutoComplete
+					className='h-[var(--row-height)] w-full rounded-none !border-none bg-transparent px-4 text-sm font-normal text-muted-foreground shadow-none outline-none ring-0 placeholder:text-sm hover:text-foreground focus:border-none focus:ring-0'
+					value={currentFilterValue ?? ''}
+					onInput={setCurrentFilterValue}
+					onSelect={setCurrentFilterValue}
 					placeholder={t('ns_common:table.search_in_column')}
 					datalist={
 						Array.isArray(metaUniqueValues)

@@ -1,9 +1,18 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
+import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, Div, Icon, Table, TableBody, TableCell, TableRow, Typography } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
-import { createColumnHelper, getCoreRowModel, getFilteredRowModel, useReactTable } from '@tanstack/react-table'
+import {
+	createColumnHelper,
+	getCoreRowModel,
+	getFacetedRowModel,
+	getFacetedUniqueValues,
+	getFilteredRowModel,
+	TableOptions,
+	useReactTable
+} from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useDeepCompareEffect, useMemoizedFn } from 'ahooks'
 import { format, isValid } from 'date-fns'
@@ -16,6 +25,7 @@ import { DefectiveCategoryI18n } from '../../../-constants'
 import { useReaderPlaygroundStore } from '../../../-contexts/rfid-reader-playground.context'
 import { useDefectiveCategoryList } from '../../../-hooks/use-defective-category-list'
 import { useGetCanInboundEpcQuery } from '../../../-hooks/use-defective-goods-asm'
+import InoutboundStrategySelect from '../inoutbound-strategy-select'
 import DataTableEmpty from './table-empty'
 import { DataTableHeader, MemoizedDataTableHeader } from './table-header'
 import DataTableLoading from './table-loading'
@@ -41,6 +51,7 @@ const EpcTable: React.FC = () => {
 				enableResizing: true,
 				filterFn: 'includesString',
 				meta: { align: 'left' },
+				size: 180,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('brand_name', {
@@ -49,8 +60,12 @@ const EpcTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableResizing: true,
-				filterFn: 'fuzzy',
-				meta: { align: 'left' },
+				meta: {
+					align: 'left',
+					filterVariant: 'autocomplete',
+					facetedUniqueValues: ['KOOLABURRA', 'TEVA', 'UGG'].map((item) => ({ label: item, value: item }))
+				},
+				size: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('po', {
@@ -59,8 +74,12 @@ const EpcTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableResizing: true,
-				meta: { align: 'left' },
 				filterFn: 'includesString',
+				meta: {
+					align: 'left',
+					filterVariant: 'autocomplete'
+				},
+				size: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('mo_no', {
@@ -69,8 +88,11 @@ const EpcTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableResizing: true,
-				meta: { align: 'left' },
-				filterFn: 'includesString',
+				meta: {
+					align: 'left',
+					filterVariant: 'autocomplete'
+				},
+				size: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('factory_shoes_style', {
@@ -79,8 +101,11 @@ const EpcTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableResizing: true,
-				filterFn: 'fuzzy',
-				meta: { align: 'left' },
+				filterFn: 'includesString',
+				meta: {
+					filterVariant: 'autocomplete'
+				},
+				size: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('color_sn', {
@@ -89,7 +114,11 @@ const EpcTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableResizing: true,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
+				meta: {
+					filterVariant: 'autocomplete'
+				},
+				size: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('defective_category', {
@@ -103,6 +132,7 @@ const EpcTable: React.FC = () => {
 					filterVariant: 'select',
 					facetedUniqueValues: defectiveCategoryList
 				},
+				size: 160,
 				cell: ({ getValue }) => {
 					const value = getValue()
 					return t(DefectiveCategoryI18n[value], {
@@ -117,7 +147,8 @@ const EpcTable: React.FC = () => {
 				enableSorting: true,
 				enablePinning: true,
 				enableResizing: true,
-				filterFn: 'fuzzy',
+				filterFn: 'includesString',
+				size: 120,
 				cell: TableCellText
 			}),
 			...(searchParams.action === RFIDDataType.OUTBOUND
@@ -126,7 +157,7 @@ const EpcTable: React.FC = () => {
 							header: t('ns_erp:fields.inbound_date'),
 							enableColumnFilter: false,
 							filterFn: 'fuzzy',
-							size: 200,
+							size: 160,
 							cell: ({ getValue }) => {
 								const value = getValue()
 								return isValid(new Date(value)) ? (
@@ -156,17 +187,19 @@ const EpcTable: React.FC = () => {
 	const table = useReactTable({
 		columns,
 		data: tableData,
-		manualFiltering: true,
 		initialState: {
 			columnVisibility: {
 				inbound_date: searchParams.action === RFIDDataType.OUTBOUND
 			}
 		},
+		manualFiltering: true,
+		enableColumnFilters: true,
+		enableHiding: true,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
-		enableHiding: true,
-		filterFns: null
-	})
+		getFacetedRowModel: getFacetedRowModel(),
+		getFacetedUniqueValues: getFacetedUniqueValues()
+	} as unknown as TableOptions<IDefectiveGoods>)
 
 	const { rows } = table.getRowModel()
 	const totalColumns = table.getAllColumns().length
@@ -209,7 +242,7 @@ const EpcTable: React.FC = () => {
 						'--row-height': `${estimateSize()}px`
 					} as React.CSSProperties
 				}>
-				<Table className='table-auto border-separate border-spacing-0 divide-y'>
+				<Table className='table-fixed border-separate border-spacing-0 divide-y'>
 					{rowVirtualizer.isScrolling ? (
 						<MemoizedDataTableHeader table={table} />
 					) : (
@@ -247,16 +280,19 @@ const EpcTable: React.FC = () => {
 			</Div>
 			<Div
 				role='row'
-				className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between bg-table-head px-4 py-2'>
+				className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between gap-x-2 bg-table-head px-4 py-2'>
+				<Div className='@7xl:hidden'>
+					<InoutboundStrategySelect />
+				</Div>
 				<Button
 					variant='destructive'
-					size='default'
+					size='sm'
 					disabled={Object.keys(omit(searchParams, ['action'])).length === 0}
 					onClick={handleClearFilters}>
 					<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
 				</Button>
 				<Typography role='cell' className='ml-auto text-right font-medium'>
-					{`${t('ns_common:common_fields.total')}: ${Array.isArray(data) ? data.length : 0}`}
+					{`${t('ns_common:common_fields.total')}: ${Array.isArray(data) ? formatIntlNumber(data.length) : 0}`}
 				</Typography>
 			</Div>
 		</Div>

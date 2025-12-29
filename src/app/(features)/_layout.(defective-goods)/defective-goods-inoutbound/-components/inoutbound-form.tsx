@@ -63,7 +63,7 @@ const InoutboundForm: React.FC = () => {
 	const disabled = !Array.isArray(scannedEpcs) || scannedEpcs.length === 0 || isPending
 
 	return (
-		<Div className='flex w-full flex-1 flex-row items-center justify-center gap-x-6 @5xl:justify-end'>
+		<Div className='flex w-full flex-row items-center justify-between gap-x-6 @6xl:flex-1 @6xl:justify-end'>
 			<RadioGroup
 				disabled={isPending}
 				onValueChange={(value) => setParams({ ...searchParams, action: value as RFIDDataType })}
@@ -83,14 +83,10 @@ const InoutboundForm: React.FC = () => {
 					</Label>
 				</Div>
 			</RadioGroup>
-			<Separator orientation='vertical' className='h-6 w-0.5' />
+			<Separator orientation='vertical' className='h-6 min-w-0.5 max-w-0.5' />
 			<FormProvider {...form}>
-				<Form
-					onSubmit={form.handleSubmit(handleFormSubmission)}
-					style={{
-						'--form-field-width': '250px'
-					}}>
-					<Div className='grid max-w-96 auto-cols-fr grid-flow-col gap-x-2'>
+				<Form onSubmit={form.handleSubmit(handleFormSubmission)}>
+					<Div className='grid w-full max-w-full flex-1 auto-cols-fr grid-flow-col gap-x-2 *:flex-1 @6xl:max-w-96'>
 						<QuantityFiledControl />
 						{searchParams.action === RFIDDataType.OUTBOUND ? (
 							<OutboundPurposeFieldControl />
@@ -98,7 +94,7 @@ const InoutboundForm: React.FC = () => {
 							<StorageLocationFieldControl />
 						)}
 					</Div>
-					<Separator orientation='vertical' className='h-6 w-0.5' />
+					<Separator orientation='vertical' className='h-6 min-w-0.5 max-w-0.5' />
 					<Button type='submit' size='sm' disabled={disabled}>
 						<Icon name='Check' />
 						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
@@ -109,6 +105,6 @@ const InoutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`flex flex-row items-center gap-x-6`
+const Form = tw.form`flex flex-row items-center gap-x-6 flex-1 @6xl:flex-initial`
 
 export default InoutboundForm

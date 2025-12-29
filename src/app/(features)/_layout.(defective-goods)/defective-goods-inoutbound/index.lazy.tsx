@@ -62,7 +62,9 @@ function RouteComponent() {
 										'col-span-full flex h-[var(--header-height)] items-center bg-background px-4 py-2',
 										isSmallScreen ? 'justify-end' : 'justify-between'
 									)}>
-									<InoutboundStrategySelect />
+									<Div className='hidden @6xl:block'>
+										<InoutboundStrategySelect />
+									</Div>
 									<InoutboundForm />
 								</Div>
 								{currInoutboundMethod === 'manually' ? (
