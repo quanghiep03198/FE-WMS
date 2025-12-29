@@ -1,5 +1,16 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
-import { Button, Div, Form as FormProvider, Icon, Label, RadioGroup, RadioGroupItem, Separator } from '@/components/ui'
+import {
+	Button,
+	Div,
+	Form as FormProvider,
+	Icon,
+	InputFieldControl,
+	Label,
+	RadioGroup,
+	RadioGroupItem,
+	SelectFieldControl,
+	Separator
+} from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { useRef } from 'react'
@@ -7,6 +18,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
+import { DefectiveGoodsOutboundPurpose } from '../-constants'
 import { useFilterQuery } from '../-hooks/use-filter-query'
 import {
 	DefectiveGoodsInboundFormValues,
@@ -16,9 +28,7 @@ import {
 } from '../-schemas'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 import { useUpdateDefectiveGoodsStockMutation } from '../../-hooks/use-defective-goods-asm'
-import OutboundPurposeFieldControl from './outbound-purpose-field-control'
 import QuantityFiledControl from './quantity-field-control'
-import StorageLocationFieldControl from './storage-location-field-control'
 
 export type FormValues = DefectiveGoodsInboundFormValues | DefectiveGoodsOutboundFormValues
 
@@ -89,13 +99,38 @@ const InoutboundForm: React.FC = () => {
 					<Div className='grid w-full max-w-full flex-1 auto-cols-fr grid-flow-col gap-x-2 *:flex-1 @6xl:max-w-96'>
 						<QuantityFiledControl />
 						{searchParams.action === RFIDDataType.OUTBOUND ? (
-							<OutboundPurposeFieldControl />
+							<SelectFieldControl
+								name='outbound_purpose'
+								errorMessageVariant='tooltip'
+								placeholder={t('ns_inoutbound:placeholders.outbound_purpose')}
+								datalist={[
+									{
+										label: t('ns_inoutbound:inoutbound_actions.sell'),
+										value: DefectiveGoodsOutboundPurpose.SELL
+									},
+									{
+										label: t('ns_inoutbound:inoutbound_actions.recycle'),
+										value: DefectiveGoodsOutboundPurpose.RECYCLE
+									},
+									{
+										label: t('ns_inoutbound:inoutbound_actions.giveaway'),
+										value: DefectiveGoodsOutboundPurpose.GIVEAWAY
+									}
+								]}
+								labelField='label'
+								valueField='value'
+							/>
 						) : (
-							<StorageLocationFieldControl />
+							<InputFieldControl
+								name='storage_location'
+								errorMessageVariant='tooltip'
+								placeholder={t('ns_inoutbound:placeholders.enter_storage_location')}
+								autoComplete='off'
+							/>
 						)}
 					</Div>
 					<Separator orientation='vertical' className='h-6 min-w-0.5 max-w-0.5' />
-					<Button type='submit' size='sm' disabled={disabled}>
+					<Button type='submit' disabled={disabled}>
 						<Icon name='Check' />
 						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 					</Button>

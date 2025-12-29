@@ -286,7 +286,6 @@ const EpcTable: React.FC = () => {
 				</Div>
 				<Button
 					variant='destructive'
-					size='sm'
 					disabled={Object.keys(omit(searchParams, ['action'])).length === 0}
 					onClick={handleClearFilters}>
 					<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
