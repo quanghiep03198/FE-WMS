@@ -3,8 +3,8 @@ import { OrderStatus } from '@/common/constants/enums'
 
 export default {
 	action_types: {
-		warehouse_input: 'Warehouse input',
-		warehouse_output: 'Warehouse output'
+		warehouse_input: 'Inbound',
+		warehouse_output: 'Outbound'
 	},
 	counter_box: {
 		label: 'Scanned EPCs',
