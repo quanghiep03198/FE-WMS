@@ -125,6 +125,7 @@ const InoutboundForm: React.FC = () => {
 								name='storage_location'
 								errorMessageVariant='tooltip'
 								placeholder={t('ns_inoutbound:placeholders.enter_storage_location')}
+								onChange={(e) => form.setValue('storage_location', e.currentTarget.value.toUpperCase())}
 								autoComplete='off'
 							/>
 						)}
