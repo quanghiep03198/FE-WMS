@@ -6,6 +6,7 @@ import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography }
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table } from '@tanstack/react-table'
+import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { pick } from 'lodash-es'
 import { useLayoutEffect, useMemo } from 'react'
@@ -24,14 +25,15 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
 	const { mutateAsync } = useUpdateContainerConditionMutation()
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
+	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
 
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
-				header: ({ table }) => (
+				header: () => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
-						<GhostButton className='absolute inset-0' onClick={() => table.toggleAllRowsExpanded(false)}>
+						<GhostButton className='absolute inset-0' onClick={() => resetExpanded()}>
 							<Icon name='ListCollapse' size={18} />
 						</GhostButton>
 					</Tooltip>
@@ -43,12 +45,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
-				cell: ({ row, table }) => (
+				cell: ({ row }) => (
 					<GhostButton
 						className='absolute inset-0'
+						disabled={false}
 						onClick={() => {
-							table.toggleAllRowsExpanded(false)
-							row.toggleExpanded(!row.getIsExpanded())
+							setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })
 						}}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</GhostButton>
@@ -226,6 +228,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
+				sortingFn: 'datetime',
 				cell: ({ getValue }) => {
 					const createdAt = getValue()
 					return createdAt ? (
@@ -247,6 +250,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
+				sortingFn: 'datetime',
 				cell: ({ getValue }) => {
 					const containerSealingTime = getValue()
 					return containerSealingTime ? (
@@ -268,6 +272,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
+				sortingFn: 'datetime',
 				cell: ({ getValue }) => {
 					const factoryDepartureTime = getValue()
 					return factoryDepartureTime ? (
@@ -335,13 +340,17 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			ref={tableRef}
 			columns={columns}
 			data={data}
+			border='bottom-only'
 			loading={isLoading}
+			expanded={expanded}
 			enableColumnFilters={true}
 			enableGlobalFilter={true}
+			enableExpanding={true}
+			getRowCanExpand={() => true}
 			getColumnCanGlobalFilter={() => true}
 			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
+			manualExpanding={true}
 			globalFilterFn='includesString'
-			border='bottom-only'
 			initialState={{
 				sorting: [{ id: 'dispatch_order', desc: true }],
 				pagination: {
