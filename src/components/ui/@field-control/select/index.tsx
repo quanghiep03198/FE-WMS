@@ -1,8 +1,10 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
+import { ResourceKey } from 'i18next'
 import React, { useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import {
 	Div,
 	FormControl,
@@ -15,7 +17,8 @@ import {
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
-	SelectValue
+	SelectValue,
+	Tooltip
 } from '../..'
 import { BaseFieldControl } from '../../../../common/types/hook-form'
 
@@ -29,11 +32,12 @@ export type SelectFieldControlProps<T extends FieldValues, D> = BaseFieldControl
 export function SelectFieldControl<T extends FieldValues, D extends Record<string, any>>(
 	props: SelectFieldControlProps<T, D>
 ) {
+	const { t } = useTranslation()
 	const { control, getValues, getFieldState } = useFormContext()
 	const id = useId()
-
 	const {
 		name,
+		description,
 		hidden,
 		label,
 		orientation,
@@ -42,11 +46,13 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 		datalist,
 		labelField,
 		valueField,
+		errorMessageVariant = 'inline',
 		onValueChange,
 		...restProps
 	} = props
 
-	const isError = Boolean(getFieldState(name).error)
+	const { error } = getFieldState(name)
+	const isError = Boolean(error)
 
 	return (
 		<FormField
@@ -83,19 +89,29 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 										onValueChange(value)
 									}
 								}}>
-								<FormControl>
-									<SelectTrigger
-										id={id}
-										disabled={field.disabled}
-										className={cn(
-											'bg-background focus:border-primary',
-											className,
-											isError &&
-												'w-full border-destructive focus:border-destructive active:border-destructive'
-										)}>
-										<SelectValue placeholder={!field.value && placeholder} />
-									</SelectTrigger>
-								</FormControl>
+								<Tooltip
+									message={t(error?.message as ResourceKey) || ''}
+									triggerProps={{ type: 'button', className: 'w-full' }}
+									contentProps={{
+										hidden: !error || errorMessageVariant === 'inline',
+										side: 'bottom',
+										align: 'start',
+										['aria-invalid']: !!error
+									}}>
+									<FormControl>
+										<SelectTrigger
+											id={id}
+											disabled={field.disabled}
+											className={cn(
+												'bg-background focus:border-primary',
+												className,
+												isError &&
+													'w-full border-destructive focus:border-destructive active:border-destructive'
+											)}>
+											<SelectValue placeholder={!field.value && placeholder} />
+										</SelectTrigger>
+									</FormControl>
+								</Tooltip>
 								<SelectContent>
 									{Array.isArray(datalist) && datalist.length > 0 ? (
 										datalist.map((option) => (
@@ -113,8 +129,8 @@ export function SelectFieldControl<T extends FieldValues, D extends Record<strin
 									)}
 								</SelectContent>
 							</Select>
-							{props.description && <FormDescription>{props.description}</FormDescription>}
-							<FormMessage />
+							{description && <FormDescription>{description}</FormDescription>}
+							{!!error && errorMessageVariant === 'inline' && <FormMessage />}
 						</Div>
 					</FormItem>
 				)

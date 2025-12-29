@@ -46,6 +46,12 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 	const localRef = useRef<typeof Input.prototype>(null)
 	const resolvedRef = (ref ?? localRef) as typeof localRef
 	const [currentType, setCurrentType] = useState<React.HTMLInputTypeAttribute>(type)
+	const currentValue = watch(name)
+	const { error } = getFieldState(name)
+
+	useEffect(() => {
+		setValue(currentValue)
+	}, [currentValue])
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement>,
@@ -61,14 +67,6 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		}
 		if (typeof restProps.onChange === 'function') restProps.onChange(e)
 	}
-
-	const currentValue = watch(name)
-
-	useEffect(() => {
-		setValue(currentValue)
-	}, [currentValue])
-
-	const { error } = getFieldState(name)
 
 	return (
 		<FormField
@@ -139,7 +137,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 									)}
 								</Div>
 								{description && <FormDescription>{description}</FormDescription>}
-								{!!getFieldState(name).error && errorMessageVariant === 'inline' && <FormMessage />}
+								{!!error && errorMessageVariant === 'inline' && <FormMessage />}
 							</Div>
 						</FormControl>
 					</FormItem>
