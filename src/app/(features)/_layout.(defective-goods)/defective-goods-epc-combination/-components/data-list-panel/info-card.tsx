@@ -73,7 +73,7 @@ const InfoCard: React.FC<{
 			}
 		}
 		event$.emit({ action: CommonActions.UPDATE, payload })
-		setStrategy('usb')
+		setStrategy(null)
 	}, [data])
 
 	const [copyToClipboard, { isCoppied }] = useCopyToClipboard()

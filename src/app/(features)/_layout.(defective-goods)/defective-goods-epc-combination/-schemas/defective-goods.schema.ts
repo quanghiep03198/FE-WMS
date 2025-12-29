@@ -3,7 +3,7 @@ import { array, enum as enums, number, object, string, type infer as Infer } fro
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../-constants'
 
 export const baseDefectiveGoodsSchema = object({
-	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }),
+	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }).nullish(),
 	epc: array(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.or(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.optional(),
@@ -55,7 +55,6 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 						message: 'ns_validation:required',
 						fatal: true
 					})
-
 				break
 			}
 			case 'usb': {
@@ -71,7 +70,6 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 						message: 'ns_validation:required',
 						fatal: true
 					})
-
 				break
 			}
 			case 'manually': {

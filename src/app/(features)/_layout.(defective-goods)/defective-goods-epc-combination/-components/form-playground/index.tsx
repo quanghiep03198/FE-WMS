@@ -18,14 +18,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
 import { isNil } from 'lodash-es'
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gzipSync } from 'zlib'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
-import { CreateDefectiveGoodsFormValues, createDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
+import {
+	CreateDefectiveGoodsFormValues,
+	createDefectiveGoodsSchema,
+	updateDefectiveGoodsSchema
+} from '../../-schemas/defective-goods.schema'
 
 import { IDefectiveGoods } from '@/services/defective-goods.service'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
@@ -67,8 +71,12 @@ const DefectiveGoodsForm: React.FC = () => {
 		useAvailableTemplate ? DefectDescriptionTemplate[i18n.language] : ''
 	)
 
+	const schemaRef = useRef(
+		formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
+	)
+
 	const form = useForm<CreateDefectiveGoodsFormValues & Partial<IBaseEntity>>({
-		resolver: zodResolver(createDefectiveGoodsSchema),
+		resolver: zodResolver(schemaRef.current),
 		defaultValues: {
 			shoe_source: DefectiveGoodsSource.FINAL_INSPECTION,
 			defective_description: DefectDescriptionTemplate[i18n.language]
@@ -124,10 +132,11 @@ const DefectiveGoodsForm: React.FC = () => {
 	}, [orderDetail])
 
 	useEffect(() => {
-		form.setValue('ri_type', currentStrategy)
-	}, [currentStrategy])
+		if (formAction === CommonActions.CREATE) form.setValue('ri_type', currentStrategy)
+	}, [currentStrategy, formAction])
 
 	useEffect(() => {
+		schemaRef.current = formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
 		if (formAction === CommonActions.UPDATE) setStrategy(null)
 	}, [formAction])
 
@@ -160,6 +169,9 @@ const DefectiveGoodsForm: React.FC = () => {
 				case 'epc':
 					if (currentStrategy === 'usb') currentFormValues[key] = ''
 					break
+				case 'shoe_source':
+					currentFormValues[key] = DefectiveGoodsSource.FINAL_INSPECTION
+					break
 				default:
 					currentFormValues[key] = ''
 					break
@@ -168,12 +180,18 @@ const DefectiveGoodsForm: React.FC = () => {
 		form.reset(currentFormValues)
 	}
 
+	const handleCancel = () => {
+		resetFormAction()
+		handleResetForm()
+		if (!currentStrategy) setStrategy(previousStrategy)
+		navigate({ search })
+	}
+
 	const handleSubmitForm = (data: CreateDefectiveGoodsFormValues) => {
-		if (data.ri_type === 'manually') {
+		if (data.ri_type === 'manually' && formAction === CommonActions.CREATE) {
 			delete data.epc
 			delete data.size_code
 		}
-
 		const payload = {
 			...data,
 			defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString('base64')
@@ -186,19 +204,19 @@ const DefectiveGoodsForm: React.FC = () => {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
 				if (formAction === CommonActions.CREATE)
-					form.reset({ ...form.getValues(), ...(data.ri_type === 'usb' && { epc: '' }) })
-				event$.emit({ action: CommonActions.SAVE, payload: [] })
+					form.reset({
+						...form.getValues(),
+						...(data.ri_type === 'usb' && { epc: '' }),
+						...(data.ri_type === 'manually' && { sizes: [{}] })
+					})
+				if (formAction === CommonActions.UPDATE) {
+					handleCancel()
+				}
+				if (data.ri_type === 'uhf') event$.emit({ action: CommonActions.SAVE, payload: [] })
 				return t('ns_common:notification.success')
 			},
 			error: t('ns_common:notification.error')
 		})
-	}
-
-	const handleCancel = () => {
-		resetFormAction()
-		handleResetForm()
-		setStrategy(previousStrategy)
-		navigate({ hash: undefined, search })
 	}
 
 	const isPending: boolean = isCreating || isUpdating
