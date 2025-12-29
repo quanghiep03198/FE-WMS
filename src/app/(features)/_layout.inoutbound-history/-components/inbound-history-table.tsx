@@ -1,7 +1,7 @@
 import { IInboundHistory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
-import { orderBy, sortBy } from 'lodash-es'
+import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
@@ -116,10 +116,7 @@ const InboundHistoryTable: React.FC = () => {
 				</TableHeader>
 				<TableBody>
 					{Object.entries(
-						Object.groupBy(
-							orderBy(data.inbound_history, 'inbound_date', 'desc'),
-							(item) => item.inbound_date as string
-						)
+						groupBy(orderBy(data.inbound_history, 'inbound_date', 'desc'), (item) => item.inbound_date as string)
 					).map(([date, history]) => {
 						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
 						return (

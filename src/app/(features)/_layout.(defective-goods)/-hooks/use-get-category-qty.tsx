@@ -1,4 +1,5 @@
 import { IDefectiveGoods } from '@/services/defective-goods.service'
+import { groupBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { DefectiveCategory } from '../-constants'
 
@@ -12,7 +13,7 @@ export function useGetCategoriesQty<T extends TData>(data: T[]) {
 			[DefectiveCategory.RESEARCH_DEVELOPMENT]: 0
 		}
 		if (!Array.isArray(data)) return result
-		const groupData = Object.groupBy(data, (item) => item.defective_category)
+		const groupData = groupBy(data, (item) => item.defective_category)
 		for (const category in groupData) {
 			result[category] = groupData[category].reduce((sum, curr) => {
 				if (!Array.isArray(curr.size_data)) return sum
