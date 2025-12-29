@@ -14,7 +14,7 @@ declare module '@tanstack/react-table' {
 		['multi-select']?: MultiSelectProps<any>
 	}
 
-	export type ColumnFilterVariant = 'text' | 'range' | 'select' | 'date' | 'multi-select'
+	export type ColumnFilterVariant = 'text' | 'range' | 'select' | 'date' | 'multi-select' | 'autocomplete'
 
 	interface ColumnMeta<TData extends RowData, TValue> {
 		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
