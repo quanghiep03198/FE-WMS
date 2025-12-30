@@ -123,7 +123,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 			<Div className='relative'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
-						<FieldSet className='max-h-[28rem] overflow-scroll md:max-h-96'>
+						<FieldSet className='max-h-[28rem] overflow-scroll md:max-h-[500px]'>
 							<Table className='w-full table-auto border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 								<TableHeader className='sticky top-0 z-10'>
 									<TableRow>
@@ -204,21 +204,23 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										)
 									})}
 								</TableBody>
-								<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t'>
-									<TableRow className='xl:hidden'>
-										<TableHead className='w-[25%] border-t' colSpan={1} align='left'>
+								<TableFooter className='sticky bottom-0 z-10 table-footer-group'>
+									{/* Summary table header */}
+									<TableRow className='xl:hidden [&>th]:border-t'>
+										<TableHead className='w-[25%]' colSpan={1} align='left'>
 											<span>{t('ns_erp:fields.container_sealing_time')}</span>
 										</TableHead>
-										<TableHead className='w-[25%] border-t' colSpan={1} align='left'>
+										<TableHead className='w-[25%]' colSpan={1} align='left'>
 											<span>{t('ns_erp:fields.factory_departure_time')}</span>
 										</TableHead>
-										<TableHead className='w-[25%] border-t' colSpan={1} align='left'>
+										<TableHead className='w-[25%]' colSpan={1} align='left'>
 											<span>{t('ns_erp:fields.actual_factory_departure_time')}</span>
 										</TableHead>
-										<TableHead className='border-t' colSpan={1} align='left'>
+										<TableHead colSpan={1} align='left'>
 											<span>{t('ns_common:common_fields.total')}</span>
 										</TableHead>
 									</TableRow>
+									{/* Summary table body */}
 									<TableRow className='xl:hidden'>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
 											{data.container_sealing_time ? (
@@ -254,7 +256,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											{data?.total_outbound_qty}
 										</TableCell>
 									</TableRow>
-									<TableRow>
+									{/* Signatures */}
+									<TableRow className='xl:[&>td]:border-t'>
 										<TableCell
 											colSpan={'100%' as unknown as React.ComponentProps<typeof TableCell>['colSpan']}
 											className='p-0'>
