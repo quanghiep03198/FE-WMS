@@ -35,8 +35,9 @@ export default {
 		employee_name: 'Nhân viên tạo đơn',
 		export_num: 'Số đã xuất kho',
 		factory_code_produce: 'Nhà máy sản xuất',
-		factory_departure_time: 'Thời gian xuất xưởng',
-		container_sealing_time: 'Thời gian niêm phong container',
+		factory_departure_time: 'TG xuất xưởng',
+		actual_factory_departure_time: 'TG xuất xưởng thực tế',
+		container_sealing_time: 'TG niêm phong container',
 		final_inventory_qty: 'Tồn kho cuối kỳ',
 		inbound_date: 'Ngày Nhập Kho', // Inbound Date
 		inbound_qty: 'Số Lượng Nhập Kho', // Inbound Quantity

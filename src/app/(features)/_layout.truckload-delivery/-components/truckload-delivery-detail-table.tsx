@@ -207,16 +207,29 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								<TableFooter className='sticky bottom-0 z-10 table-footer-group border-t'>
 									<TableRow className='xl:hidden'>
 										<TableHead className='w-[25%] border-t' colSpan={1} align='left'>
+											<span>{t('ns_erp:fields.container_sealing_time')}</span>
+										</TableHead>
+										<TableHead className='w-[25%] border-t' colSpan={1} align='left'>
 											<span>{t('ns_erp:fields.factory_departure_time')}</span>
 										</TableHead>
 										<TableHead className='w-[25%] border-t' colSpan={1} align='left'>
-											<span>{t('ns_erp:fields.container_sealing_time')}</span>
+											<span>{t('ns_erp:fields.actual_factory_departure_time')}</span>
 										</TableHead>
-										<TableHead className='border-t' colSpan={2} align='left'>
+										<TableHead className='border-t' colSpan={1} align='left'>
 											<span>{t('ns_common:common_fields.total')}</span>
 										</TableHead>
 									</TableRow>
 									<TableRow className='xl:hidden'>
+										<TableCell colSpan={1} align='left' className='w-[25%]'>
+											{data.container_sealing_time ? (
+												format(new Date(data.container_sealing_time), 'yyyy-MM-dd HH:mm')
+											) : (
+												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+													{t('ns_common:titles.unknown')}
+												</Typography>
+											)}
+										</TableCell>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
 											{data.factory_departure_time ? (
 												format(new Date(data.factory_departure_time), 'yyyy-MM-dd HH:mm')
@@ -228,8 +241,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											)}
 										</TableCell>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
-											{data.container_sealing_time ? (
-												format(new Date(data.container_sealing_time), 'yyyy-MM-dd HH:mm')
+											{data.actual_factory_departure_time ? (
+												format(new Date(data.actual_factory_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
@@ -237,14 +250,14 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												</Typography>
 											)}
 										</TableCell>
-										<TableCell colSpan={2} align='left'>
+										<TableCell colSpan={1} align='left'>
 											{data?.total_outbound_qty}
 										</TableCell>
 									</TableRow>
 									<TableRow>
 										<TableCell
 											colSpan={'100%' as unknown as React.ComponentProps<typeof TableCell>['colSpan']}
-											className='border-t p-0'>
+											className='p-0'>
 											<Div className='grid grid-cols-4 [&>div]:place-content-center [&>div]:place-items-center [&>div]:px-3 [&>div]:text-center'>
 												<Div className='h-10 border-b py-2'>
 													<span className='line-clamp-1' title={t('ns_erp:fields.ie_signature')}>

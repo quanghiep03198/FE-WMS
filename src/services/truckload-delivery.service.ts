@@ -14,7 +14,6 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	dispatch_order: TruckloadDeliveryDispatchOrder
 	factory_code: string
 	license_plate: string
-	factory_departure_time: string
 	outbound_qty: number
 	approval_status: TruckloadDeliveryStatus
 	ie_signature: string
@@ -24,6 +23,10 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	punctured_container: boolean
 	smelling_container: boolean
 	moist_container: boolean
+	container_sealing_time: Date | null
+	factory_departure_time: Date | null
+	actual_factory_departure_time: Date | null
+	license_plate_image: string | null
 	delivery_details: Array<{
 		id: number | string
 		po: string

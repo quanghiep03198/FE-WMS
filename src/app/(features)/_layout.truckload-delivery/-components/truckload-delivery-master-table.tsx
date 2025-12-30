@@ -2,7 +2,19 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
+import {
+	Badge,
+	Checkbox,
+	DataTable,
+	Div,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+	Icon,
+	IconProps,
+	Tooltip,
+	Typography
+} from '@/components/ui'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { createColumnHelper, Table } from '@tanstack/react-table'
@@ -11,6 +23,7 @@ import { format } from 'date-fns'
 import { pick } from 'lodash-es'
 import { useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { url } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
@@ -81,18 +94,24 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					if (!isMobile) return value
+					if (!isMobile)
+						return (
+							<LicensePlateHoverCard
+								licensePlate={row.original.license_plate}
+								licensePlateImage={row.original.license_plate_image}
+							/>
+						)
 					return (
-						<Div className='flex flex-col space-y-1'>
-							<Typography variant='small' className='inline-grid grid-cols-[auto_1fr] gap-x-2 font-medium'>
-								<Icon name='Container' />
-								{row.original.license_plate}
-								<Typography
-									variant='small'
-									color='muted'
-									className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
-									{row.original.container_number}
-								</Typography>
+						<Div className='flex flex-col'>
+							<LicensePlateHoverCard
+								licensePlate={row.original.license_plate}
+								licensePlateImage={row.original.license_plate_image}
+							/>
+							<Typography
+								variant='small'
+								color='muted'
+								className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
+								{row.original.container_number}
 							</Typography>
 						</Div>
 					)
@@ -228,7 +247,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'datetime',
+				sortingFn: 'auto',
 				cell: ({ getValue }) => {
 					const createdAt = getValue()
 					return createdAt ? (
@@ -250,7 +269,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'datetime',
+				sortingFn: 'auto',
 				cell: ({ getValue }) => {
 					const containerSealingTime = getValue()
 					return containerSealingTime ? (
@@ -272,7 +291,29 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'datetime',
+				sortingFn: 'auto',
+				cell: ({ getValue }) => {
+					const factoryDepartureTime = getValue()
+					return factoryDepartureTime ? (
+						format(new Date(factoryDepartureTime), 'yyyy-MM-dd HH:mm')
+					) : (
+						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
+				}
+			}),
+			columnHelper.accessor('actual_factory_departure_time', {
+				header: t('ns_erp:fields.actual_factory_departure_time'),
+				enableResizing: true,
+				enableSorting: true,
+				enableColumnFilter: false,
+				enableGlobalFilter: false,
+				minSize: 150,
+				size: 200,
+				maxSize: 250,
+				sortingFn: 'auto',
 				cell: ({ getValue }) => {
 					const factoryDepartureTime = getValue()
 					return factoryDepartureTime ? (
@@ -349,6 +390,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			getRowCanExpand={() => true}
 			getColumnCanGlobalFilter={() => true}
 			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
+			enableMultiSort={true}
 			manualExpanding={true}
 			globalFilterFn='includesString'
 			initialState={{
@@ -391,6 +433,35 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				)
 			}}
 		/>
+	)
+}
+
+const LicensePlateHoverCard: React.FC<{ licensePlate: string; licensePlateImage: string | null }> = ({
+	licensePlate,
+	licensePlateImage
+}) => {
+	const disabled = !url().safeParse(licensePlateImage).success
+	const isMobile = useMediaQuery('(max-width: 1023px)')
+
+	return (
+		<HoverCard openDelay={0} closeDelay={0}>
+			<HoverCardTrigger
+				className={cn(
+					'inline-grid cursor-default grid-cols-[auto_1fr] items-center gap-x-2 !p-0',
+					isMobile ? 'font-medium' : 'font-normal',
+					disabled ? 'hover:no-underline' : 'hover:underline hover:underline-offset-2'
+				)}>
+				<Icon name='Container' />
+				{licensePlate}
+			</HoverCardTrigger>
+			<HoverCardContent hidden={disabled} className='max-w-60' align='start'>
+				<img
+					loading='lazy'
+					src={licensePlateImage}
+					className='aspect-video max-w-full rounded-[inherit] object-cover object-center'
+				/>
+			</HoverCardContent>
+		</HoverCard>
 	)
 }
 
