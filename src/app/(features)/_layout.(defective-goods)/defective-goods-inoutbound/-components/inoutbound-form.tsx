@@ -93,7 +93,7 @@ const InoutboundForm: React.FC = () => {
 					</Label>
 				</Div>
 			</RadioGroup>
-			<Separator orientation='vertical' className='h-6 min-w-0.5 max-w-0.5' />
+			<Separator orientation='vertical' className='h-6 w-0.5' />
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit(handleFormSubmission)}>
 					<Div className='grid w-full max-w-full flex-1 auto-cols-fr grid-flow-col gap-x-2 *:flex-1 @6xl:max-w-96'>
@@ -130,7 +130,7 @@ const InoutboundForm: React.FC = () => {
 							/>
 						)}
 					</Div>
-					<Separator orientation='vertical' className='h-6 min-w-0.5 max-w-0.5' />
+					<Separator orientation='vertical' className='h-6 w-0.5' />
 					<Button type='submit' disabled={disabled}>
 						<Icon name='Check' />
 						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}

@@ -1,7 +1,8 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
+import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Button, Div, Icon, Table, TableBody, TableCell, TableRow, Typography } from '@/components/ui'
+import { Button, Div, Icon, Separator, Table, TableBody, TableCell, TableRow, Typography } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
 import {
@@ -39,7 +40,7 @@ const EpcTable: React.FC = () => {
 	const columnHelper = createColumnHelper<IDefectiveGoods>()
 	const defectiveCategoryList = useDefectiveCategoryList()
 
-	const { data, isLoading } = useGetCanInboundEpcQuery()
+	const { data, isLoading, refetch } = useGetCanInboundEpcQuery()
 
 	const columns = useMemo(
 		() => [
@@ -195,6 +196,7 @@ const EpcTable: React.FC = () => {
 		manualFiltering: true,
 		enableColumnFilters: true,
 		enableHiding: true,
+		getRowId: (row: IDefectiveGoods) => row.epc,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getFacetedRowModel: getFacetedRowModel(),
@@ -206,11 +208,13 @@ const EpcTable: React.FC = () => {
 
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
 	const estimateSize = useMemoizedFn(() => 42)
+	const scrollToFn = useScrollToFn(containerRef)
 
 	const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
 		getScrollElement,
 		estimateSize,
+		scrollToFn,
 		overscan: 5
 	})
 
@@ -284,6 +288,15 @@ const EpcTable: React.FC = () => {
 				<Div className='@7xl:hidden'>
 					<InoutboundStrategySelect />
 				</Div>
+				<Separator className='mx-2 h-6 w-0.5 @7xl:hidden' />
+				<Button variant='outline' disabled={isLoading} onClick={() => refetch()}>
+					{isLoading ? (
+						<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+					) : (
+						<Icon name='RotateCw' />
+					)}
+					{t('ns_common:actions.reload')}
+				</Button>
 				<Button
 					variant='destructive'
 					disabled={Object.keys(omit(searchParams, ['action'])).length === 0}
