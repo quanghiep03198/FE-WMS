@@ -124,14 +124,14 @@ export const useDeleteManyDefectiveGoodsMutation = () => {
 	})
 }
 
-export const useGetCanInboundEpcQuery = () => {
+export const useGetCanInoutboundEpcQuery = () => {
 	const { searchParams } = useFilterQuery()
 
 	const params = omitBy(searchParams, (value) => value === undefined || value === null || value === '')
 
 	return useQuery({
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params],
-		queryFn: async () => await DefectiveGoodsService.getCanInboundEpc(params),
+		queryFn: async () => await DefectiveGoodsService.getCanInoutboundEpc(params),
 		select: (response) => response.metadata
 	})
 }

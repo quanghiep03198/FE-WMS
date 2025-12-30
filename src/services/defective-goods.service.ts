@@ -59,7 +59,7 @@ export class DefectiveGoodsService {
 		})
 	}
 
-	static async getCanInboundEpc({ action, ...params }: Partial<IDefectiveGoods> & { take?: number }) {
+	static async getCanInoutboundEpc({ action, ...params }: Partial<IDefectiveGoods> & { take?: number }) {
 		const filterQueries = omitBy(params, (value) => value === undefined || value === null || value === '')
 		return await axiosInstance.get<void, ResponseBody<IDefectiveGoods[]>>(
 			`/defective-goods/inoutbound-epcs/${action}`,

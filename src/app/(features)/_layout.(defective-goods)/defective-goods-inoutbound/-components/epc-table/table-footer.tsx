@@ -1,0 +1,56 @@
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Button, Div, Icon, Separator, Typography } from '@/components/ui'
+import { omit } from 'lodash-es'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useFilterQuery } from '../../-hooks/use-filter-query'
+import { useGetCanInoutboundEpcQuery } from '../../../-hooks/use-defective-goods-asm'
+import InoutboundStrategySelect from '../inoutbound-strategy-select'
+
+type TableFooterProps = {
+	onResetColumnFilter: () => void
+}
+
+const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) => {
+	const { t } = useTranslation()
+	const { data, isLoading, refetch } = useGetCanInoutboundEpcQuery()
+	const { searchParams, removeParam } = useFilterQuery()
+
+	const handleClearFilters = () => {
+		for (const key in searchParams) {
+			if (key === 'action') continue
+			removeParam(key)
+		}
+		onResetColumnFilter()
+	}
+
+	return (
+		<Div
+			role='row'
+			className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between gap-x-2 bg-table-head px-4 py-2'>
+			<Div className='@7xl:hidden'>
+				<InoutboundStrategySelect />
+			</Div>
+			<Separator className='mx-2 h-6 w-0.5 @7xl:hidden' />
+			<Button variant='outline' disabled={isLoading} onClick={() => refetch()}>
+				{isLoading ? (
+					<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+				) : (
+					<Icon name='RotateCw' />
+				)}
+				{t('ns_common:actions.reload')}
+			</Button>
+			<Button
+				variant='destructive'
+				disabled={Object.keys(omit(searchParams, ['action'])).length === 0}
+				onClick={handleClearFilters}>
+				<Icon name='FunnelX' /> {t('ns_common:actions.clear_filter')}
+			</Button>
+			<Typography role='cell' className='ml-auto text-right font-medium'>
+				{`${t('ns_common:common_fields.total')}: ${Array.isArray(data) ? formatIntlNumber(data.length) : 0}`}
+			</Typography>
+		</Div>
+	)
+}
+
+export default DataTableFooter

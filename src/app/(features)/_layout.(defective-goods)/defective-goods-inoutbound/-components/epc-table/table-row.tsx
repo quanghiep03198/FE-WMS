@@ -18,9 +18,9 @@ export const DataTableRow: React.FC<{
 					<TableCell
 						key={cell.id}
 						className='dark:bg-table-head'
-						style={{ width: cell.column.getSize() }}
+						style={{ width: `var(--column-${cell.column.id}-size)` }}
 						align={columnDef.meta?.align}>
-						<span className='line-clamp-1'>{flexRender(columnDef.cell, cell.getContext())}</span>
+						<span className='line-clamp-1 text-left'>{flexRender(columnDef.cell, cell.getContext())}</span>
 					</TableCell>
 				)
 			})}
