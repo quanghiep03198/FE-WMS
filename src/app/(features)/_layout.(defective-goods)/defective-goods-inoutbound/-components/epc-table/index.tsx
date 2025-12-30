@@ -34,12 +34,12 @@ import { DataTableRow, MemoizedDataTableRow } from './table-row'
 const EpcTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const containerRef = useRef<HTMLDivElement>(null)
-	const { searchParams, removeParam } = useFilterQuery()
+	const { searchParams } = useFilterQuery()
 	const { setScannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'setScannedEpcs')
 	const columnHelper = createColumnHelper<IDefectiveGoods>()
 	const defectiveCategoryList = useDefectiveCategoryList()
 
-	const { data, isLoading, refetch } = useGetCanInoutboundEpcQuery()
+	const { data, isLoading } = useGetCanInoutboundEpcQuery()
 
 	const columns = useMemo(
 		() => [
@@ -230,7 +230,7 @@ const EpcTable: React.FC = () => {
 	}, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
-	const estimateSize = useMemoizedFn(() => 42)
+	const estimateSize = useMemoizedFn(() => 40)
 	const scrollToFn = useScrollToFn(containerRef)
 
 	const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
@@ -300,6 +300,6 @@ const EpcTable: React.FC = () => {
 }
 
 const DataTableContainer = tw.div`flex h-[calc(var(--outlet-wrapper-height)-var(--header-height))] flex-col justify-between divide-y divide-border`
-const DataTableScrollArea = tw.div`flex-1 overflow-scroll will-change-scroll contain-strict`
+const DataTableScrollArea = tw.div`flex-1 overflow-scroll will-change-scroll contain-strict scrollbar-track-accent/20`
 
 export default EpcTable

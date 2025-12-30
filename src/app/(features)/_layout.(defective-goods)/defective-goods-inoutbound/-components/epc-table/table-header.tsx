@@ -19,13 +19,11 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 								<TableHead
 									key={header.id}
 									colSpan={header.colSpan}
-									className='group relative z-20 border-b border-b-border bg-accent/80 text-accent-foreground'
+									className='group relative z-20 border-b border-b-border bg-accent/50 text-accent-foreground'
 									style={{ width: `var(--header-${header?.id}-size)` }}
-									align={columnDef.meta?.align}>
+									align={columnDef.meta?.align ?? 'left'}>
 									{header.isPlaceholder ? null : (
-										<span className='line-clamp-1 text-left text-sm text-inherit'>
-											{flexRender(columnDef.header, header.getContext())}
-										</span>
+										<span className='line-clamp-1'>{flexRender(columnDef.header, header.getContext())}</span>
 									)}
 									<Separator
 										onDoubleClick={() => header.column.resetSize()}

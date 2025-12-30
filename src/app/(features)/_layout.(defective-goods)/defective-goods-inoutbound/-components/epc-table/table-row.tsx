@@ -11,16 +11,17 @@ export const DataTableRow: React.FC<{
 	'use no memo'
 
 	return (
-		<TableRow key={row.id} style={{ width: '100%', height: virtualRow.size }} className='group'>
+		<TableRow style={{ width: '100%', height: virtualRow.size }} className='group'>
 			{row.getVisibleCells().map((cell) => {
 				const { columnDef } = cell.column
 				return (
 					<TableCell
 						key={cell.id}
-						className='dark:bg-table-head'
 						style={{ width: `var(--column-${cell.column.id}-size)` }}
-						align={columnDef.meta?.align}>
-						<span className='line-clamp-1 text-left'>{flexRender(columnDef.cell, cell.getContext())}</span>
+						align={columnDef.meta?.align ?? 'left'}>
+						<span className='line-clamp-1 overflow-ellipsis'>
+							{flexRender(columnDef.cell, cell.getContext())}
+						</span>
 					</TableCell>
 				)
 			})}

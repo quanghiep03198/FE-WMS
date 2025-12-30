@@ -27,11 +27,11 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 	return (
 		<Div
 			role='row'
-			className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between gap-x-2 bg-table-head px-4 py-2'>
-			<Div className='@7xl:hidden'>
+			className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between gap-x-2 bg-background px-4 py-2'>
+			<Div className='@6xl:hidden'>
 				<InoutboundStrategySelect />
 			</Div>
-			<Separator className='mx-2 h-6 w-0.5 @7xl:hidden' />
+			<Separator className='mx-2 h-6 w-0.5 @6xl:hidden' />
 			<Button variant='outline' disabled={isLoading} onClick={() => refetch()}>
 				{isLoading ? (
 					<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
