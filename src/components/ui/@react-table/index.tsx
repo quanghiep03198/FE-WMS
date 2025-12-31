@@ -1,4 +1,3 @@
-import env from '@/common/utils/env'
 import {
 	ColumnOrderState,
 	getCoreRowModel,
@@ -153,7 +152,6 @@ function DataGrid<TData, TValue>({
 		enableHiding,
 		filterFromLeafRows: false,
 		columnResizeMode: 'onChange',
-		debugAll: env('VITE_NODE_ENV') === 'development',
 		sortingFns: { fuzzy: fuzzySort },
 		filterFns: {
 			fuzzy: fuzzyFilter,
