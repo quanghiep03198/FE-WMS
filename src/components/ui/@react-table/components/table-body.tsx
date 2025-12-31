@@ -3,7 +3,7 @@ import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import env from '@/common/utils/env'
 import { RowData, Table, type Row as TRow } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { Activity, memo, useCallback } from 'react'
+import { Activity, memo, useCallback, useMemo } from 'react'
 import { TableBody } from '../..'
 import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
@@ -21,6 +21,7 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 
 	const { table } = useTableContext('table')
 	const { rows } = table.getRowModel()
+	const overscan = useMemo(() => (table.getIsSomeRowsExpanded() ? 20 : 10), [table.getState().expanded])
 	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useCallback(() => estimatedRowHeight, [estimatedRowHeight])
 	const getScrollElement = () => containerRef.current
@@ -28,7 +29,7 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 
 	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
-		overscan: 10,
+		overscan,
 		horizontal: false,
 		getItemKey,
 		getScrollElement,
