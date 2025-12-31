@@ -49,6 +49,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: false,
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
+				meta: { align: 'center' },
 				cell: ({ row }) => (
 					<GhostButton
 						className='absolute inset-0'
@@ -94,16 +95,19 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('punctured_container', {
 				header: t('ns_erp:fields.punctured_container'),
 				enableSorting: true,
+				meta: { align: 'center' },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('smelling_container', {
 				header: t('ns_erp:fields.smelling_container'),
 				enableSorting: true,
+				meta: { align: 'center' },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('moist_container', {
 				header: t('ns_erp:fields.moist_container'),
 				enableSorting: true,
+				meta: { align: 'center' },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('approval_status', {
