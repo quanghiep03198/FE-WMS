@@ -1,4 +1,3 @@
-import { useReducedMotion } from '@/common/hooks/use-reduce-motion'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import env from '@/common/utils/env'
@@ -26,7 +25,6 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 	const estimateSize = useCallback(() => estimatedRowHeight, [estimatedRowHeight])
 	const getScrollElement = () => containerRef.current
 	const getItemKey = useCallback((index) => table.getRowModel().rows[index]?.id, [table.options.data])
-	const reduceMotion = typeof window !== 'undefined' && useReducedMotion()
 
 	const virtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
 		count: rows.length,
@@ -35,7 +33,7 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 		getItemKey,
 		getScrollElement,
 		estimateSize,
-		scrollToFn: reduceMotion ? undefined : scrollToFn,
+		scrollToFn,
 		measureElement: undefined, // Disable auto measurement
 		initialRect: containerRef?.current?.getBoundingClientRect?.(),
 		debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
