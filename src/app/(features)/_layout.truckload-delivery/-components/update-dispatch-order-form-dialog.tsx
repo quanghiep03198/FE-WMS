@@ -83,7 +83,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 									placeholder='e.g., ABCU1234567'
 									description={t('ns_inoutbound:description.container_number_field')}
 									onChange={(e) => {
-										form.setValue('container_number', e.currentTarget.value.toUpperCase())
+										form.setValue('container_number', e.currentTarget.value.toUpperCase() || null)
 									}}
 								/>
 								<InputFieldControl
@@ -91,7 +91,7 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 									name='license_plate'
 									placeholder='e.g., ABC-12345'
 									description={t('ns_inoutbound:description.license_plate_field')}
-									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase())}
+									onChange={(e) => form.setValue('license_plate', e.currentTarget.value.toUpperCase() || null)}
 								/>
 							</FieldSet>
 						</FieldGroup>
