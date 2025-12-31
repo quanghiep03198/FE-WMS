@@ -2,7 +2,7 @@ import { isNil } from 'lodash-es'
 import { any, array, boolean, number, object, string, type infer as Infer } from 'zod'
 
 // BIC container code pattern: 3 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
-const BIC_CONTAINER_PATTERN = /^[A-Z]\d{7}$/
+const BIC_CONTAINER_PATTERN = /^[A-Z]{4}\d{7}$/
 const ALPHANUMERIC_PATTERN = /^[A-Za-z0-9]+$/
 
 export const createDeliverySchema = object({
