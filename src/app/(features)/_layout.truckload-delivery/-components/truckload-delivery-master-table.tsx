@@ -5,8 +5,9 @@ import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { ColumnDefBase, createColumnHelper, Table } from '@tanstack/react-table'
+import { type ColumnDefBase, createColumnHelper, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { useLayoutEffect, useMemo } from 'react'
@@ -183,7 +184,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: RowActions
 			})
 		],
-		[i18n.language, isMobile, tableRef]
+		[i18n.language, isMobile]
 	)
 
 	useLayoutEffect(() => {
@@ -257,8 +258,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			containerProps={{
 				className: 'h-[65vh] md:h-[55vh]'
 			}}
-			renderSubComponent={({ row }) => {
-				const data = row.original as ITruckloadDelivery
+			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
+				const data = row.original
 				return (
 					<TruckloadDeliveryDetailTable data={data} onCollapse={() => row.toggleExpanded(!row.getIsExpanded())} />
 				)
