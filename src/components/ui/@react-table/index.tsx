@@ -1,5 +1,4 @@
 import {
-	ColumnOrderState,
 	getCoreRowModel,
 	getExpandedRowModel,
 	getFacetedMinMaxValues,
@@ -8,12 +7,14 @@ import {
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	RowSelectionState,
 	useReactTable,
 	type ColumnFiltersState,
+	type ColumnOrderState,
 	type ExpandedState,
 	type GlobalFilterTableState,
 	type PaginationState,
+	type RowData,
+	type RowSelectionState,
 	type SortingState
 } from '@tanstack/react-table'
 import { useDeepCompareEffect, useEventEmitter, useResetState } from 'ahooks'
@@ -38,7 +39,7 @@ import { dateRangeFilter } from './utils/in-date-range-filter.util'
  * @param {DataTableProps<TData, TValue>} props - DataTableProps
  * @returns {JSX.Element} A React component that renders a data grid with various features and customization options.
  */
-function DataGrid<TData, TValue>({
+function DataGrid<TData extends RowData, TValue>({
 	data,
 	caption,
 	columns,
@@ -105,7 +106,7 @@ function DataGrid<TData, TValue>({
 	const event$ = useEventEmitter<Record<string, unknown>>()
 
 	// * Table declaration
-	const table = useReactTable({
+	const table = useReactTable<TData>({
 		data: _data,
 		columns,
 		initialState: {

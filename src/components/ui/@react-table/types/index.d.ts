@@ -1,10 +1,10 @@
 import {
-	RowData,
 	type ColumnDef,
 	type ColumnFiltersState,
 	type ExpandedState,
 	type GlobalFilterTableState,
 	type Row,
+	type RowData,
 	type SortingState,
 	type Table,
 	type TableOptions,
@@ -13,7 +13,7 @@ import {
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React from 'react'
 
-export type ToolbarProps<TData extends RowData = any> =
+export type ToolbarProps<TData extends RowData> =
 	| {
 			override: true
 			render: ({
@@ -31,18 +31,18 @@ export type ToolbarProps<TData extends RowData = any> =
 			slotRight?: React.FC<{ table: Table<TData> }>
 	  }
 
-export type TableFooterProps<TData extends RowData = any> = {
+export type TableFooterProps<TData extends RowData> = {
 	hidden?: boolean
 	rtl?: boolean
 	slot?: React.FC<{ table: Table<TData> }>
 } & React.PropsWithChildren
 
 // #region Pagination prop types
-type PaginationBaseProps<TData extends RowData = any> = {
+type PaginationBaseProps<TData extends RowData> = {
 	prefetch?: (params: Record<string, any>) => void
 } & Partial<Omit<Pagination<TData>, 'data'>>
 
-type PaginationProps<TData> =
+type PaginationProps<TData = RowData> =
 	| {
 			manualPagination: true
 			paginationProps: PaginationBaseProps<TData>
@@ -93,22 +93,22 @@ type SortingProps =
 			onSortingChange?: React.Dispatch<React.SetStateAction<SortingState>>
 	  }
 
-type RenderSubComponentProps<TData extends RowData = any, TValue = any> = {
+type RenderSubComponentProps<TData extends RowData, TValue = any> = {
 	row: Row<TData>
 	table: Table<TData, TValue>
 }
 
-export type RenderSubComponent<TData extends RowData = any, TValue = any> = (props: {
+export type RenderSubComponent<TData extends RowData, TValue = any> = (props: {
 	row: Row<TData>
 	table: Table<TData, TValue>
 }) => React.ReactElement
 
 // #region Data table prop types
-export type DataTableProps<TData extends RowData = any, TValue = any> = {
+export type DataTableProps<TData, TValue> = {
 	/**
 	 * Reference to the table instance. Useful for accessing table methods and properties.
 	 */
-	ref?: React.RefObject<Table<any>>
+	ref?: React.RefObject<Table<TData>>
 	/**
 	 * Array of data objects to be displayed in the table.
 	 */
@@ -116,7 +116,7 @@ export type DataTableProps<TData extends RowData = any, TValue = any> = {
 	/**
 	 * Array of column definitions for the table. Each column can have various properties such as header, accessor, etc.
 	 */
-	columns: ColumnDef<TData & any, TValue>[]
+	columns: ColumnDef<TData, TValue>[]
 
 	/**
 	 * Table border style. Can be 'all' for full borders or 'bottom-only' for minimal borders.
@@ -180,11 +180,11 @@ export type DataTableProps<TData extends RowData = any, TValue = any> = {
 	 * @returns
 	 */
 	renderSubComponent?: (props: RenderSubComponentProps<TData, TValue>) => React.ReactElement | React.JSX.Element
-} & Partial<TableOptions<any>> &
+} & Partial<TableOptions> &
 	/**
 	 * Additional props in case you want to control pagination state from outside like server-side pagination.
 	 */
-	PaginationProps<TData> &
+	PaginationProps &
 	/**
 	 * Additional props in case you want to control column filtering state from outside like server-side filter.
 	 */
