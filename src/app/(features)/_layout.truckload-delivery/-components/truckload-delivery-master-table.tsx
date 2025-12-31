@@ -2,31 +2,19 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import {
-	Badge,
-	Checkbox,
-	DataTable,
-	Div,
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-	Icon,
-	IconProps,
-	Tooltip,
-	Typography
-} from '@/components/ui'
+import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
+import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { createColumnHelper, Table } from '@tanstack/react-table'
+import { ColumnDefBase, createColumnHelper, Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { pick } from 'lodash-es'
 import { useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { url } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
+import LicensePlateHoverCard from './license-plate-hover-card'
 import RowActions from './row-actions'
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
@@ -36,9 +24,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const tableRef = useReactiveRef<Table<ITruckloadDelivery>>(null)
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
-	const { mutateAsync } = useUpdateContainerConditionMutation()
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
+
+	const licensePlateColumnHeader = !isMobile
+		? t('ns_erp:fields.license_plate')
+		: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number')
 
 	const columns = useMemo(
 		() => [
@@ -51,7 +42,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						</GhostButton>
 					</Tooltip>
 				),
-				size: 40,
+				size: 50,
 				maxSize: 50,
 				enableHiding: false,
 				enableResizing: false,
@@ -62,9 +53,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					<GhostButton
 						className='absolute inset-0'
 						disabled={false}
-						onClick={() => {
-							setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })
-						}}>
+						onClick={() => setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</GhostButton>
 				)
@@ -78,44 +67,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				filterFn: 'arrIncludes'
 			}),
 			columnHelper.accessor('license_plate', {
-				header: !isMobile
-					? t('ns_erp:fields.license_plate')
-					: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number'),
+				header: licensePlateColumnHeader,
 				enableResizing: true,
 				enableSorting: true,
 				filterFn: 'fuzzy',
 				enableGlobalFilter: true,
-				cell: ({ row, getValue }) => {
-					const value = getValue()
-					if (!value)
-						return (
-							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-								<Icon name='Truck' className='self-center stroke-muted-foreground' />
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-					if (!isMobile)
-						return (
-							<LicensePlateHoverCard
-								licensePlate={row.original.license_plate}
-								licensePlateImage={row.original.license_plate_image}
-							/>
-						)
-					return (
-						<Div className='flex flex-col'>
-							<LicensePlateHoverCard
-								licensePlate={row.original.license_plate}
-								licensePlateImage={row.original.license_plate_image}
-							/>
-							<Typography
-								variant='small'
-								color='muted'
-								className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
-								{row.original.container_number}
-							</Typography>
-						</Div>
-					)
-				}
+				cell: LicensePlateColumnCell
 			}),
 			columnHelper.accessor('container_number', {
 				header: t('ns_erp:fields.container_number'),
@@ -126,18 +83,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 150,
 				maxSize: 250,
-				cell: ({ getValue }) => {
-					const value = getValue()
-					if (!value)
-						return (
-							<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-								<Icon name='Container' />
-								{t('ns_common:titles.unknown')}
-							</Typography>
-						)
-
-					return value
-				}
+				cell: TableCellText
 			}),
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
@@ -148,59 +94,17 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('punctured_container', {
 				header: t('ns_erp:fields.punctured_container'),
 				enableSorting: true,
-				cell: ({ getValue, row }) => {
-					return (
-						<Checkbox
-							disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-							defaultChecked={Boolean(getValue())}
-							checked={Boolean(getValue())}
-							onCheckedChange={async (value) =>
-								await mutateAsync({
-									dispatch_order: row.original.dispatch_order,
-									punctured_container: Boolean(value)
-								})
-							}
-						/>
-					)
-				}
+				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('smelling_container', {
 				header: t('ns_erp:fields.smelling_container'),
 				enableSorting: true,
-				cell: ({ getValue, row }) => {
-					return (
-						<Checkbox
-							disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-							defaultChecked={Boolean(getValue())}
-							checked={Boolean(getValue())}
-							onCheckedChange={async (value) =>
-								await mutateAsync({
-									dispatch_order: row.original.dispatch_order,
-									smelling_container: Boolean(value)
-								})
-							}
-						/>
-					)
-				}
+				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('moist_container', {
 				header: t('ns_erp:fields.moist_container'),
 				enableSorting: true,
-				cell: ({ getValue, row }) => {
-					return (
-						<Checkbox
-							disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-							defaultChecked={Boolean(getValue())}
-							checked={Boolean(getValue())}
-							onCheckedChange={async (value) =>
-								await mutateAsync({
-									dispatch_order: row.original.dispatch_order,
-									moist_container: Boolean(value)
-								})
-							}
-						/>
-					)
-				}
+				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('approval_status', {
 				header: t('ns_erp:fields.status_approve'),
@@ -213,30 +117,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 180,
 				maxSize: 200,
-				cell: ({ getValue }) => {
-					const value = getValue() as TruckloadDeliveryStatus
-
-					const statusIconVariants: Record<TruckloadDeliveryStatus, IconProps['name']> = {
-						[TruckloadDeliveryStatus.PENDING]: 'Loader',
-						[TruckloadDeliveryStatus.CONFIRMED]: 'CircleCheckBig',
-						[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'Undo2'
-					}
-
-					return (
-						<Badge variant='outline' className='rounded-l-full rounded-r-full'>
-							<Icon
-								name={statusIconVariants[value] ?? 'CircleDotDashed'}
-								size={14}
-								className={cn({
-									'stroke-muted-foreground': value === TruckloadDeliveryStatus.PENDING,
-									'stroke-success': value === TruckloadDeliveryStatus.CONFIRMED,
-									'stroke-destructive': value === TruckloadDeliveryStatus.REQUEST_CHANGE
-								})}
-							/>
-							{t(`ns_common:status.${value}`)}
-						</Badge>
-					)
-				}
+				cell: DispatchOrderStatusBadge
 			}),
 			columnHelper.accessor('created_at', {
 				header: t('ns_common:common_fields.created_at'),
@@ -248,17 +129,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 200,
 				maxSize: 250,
 				sortingFn: 'auto',
-				cell: ({ getValue }) => {
-					const createdAt = getValue()
-					return createdAt ? (
-						format(new Date(createdAt), 'yyyy-MM-dd HH:mm')
-					) : (
-						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
-				}
+				cell: DateTimeCell
 			}),
 			columnHelper.accessor('container_sealing_time', {
 				header: t('ns_erp:fields.container_sealing_time'),
@@ -270,17 +141,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 200,
 				maxSize: 250,
 				sortingFn: 'auto',
-				cell: ({ getValue }) => {
-					const containerSealingTime = getValue()
-					return containerSealingTime ? (
-						format(new Date(containerSealingTime), 'yyyy-MM-dd HH:mm')
-					) : (
-						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
-				}
+				cell: DateTimeCell
 			}),
 			columnHelper.accessor('factory_departure_time', {
 				header: t('ns_erp:fields.factory_departure_time'),
@@ -292,17 +153,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 200,
 				maxSize: 250,
 				sortingFn: 'auto',
-				cell: ({ getValue }) => {
-					const factoryDepartureTime = getValue()
-					return factoryDepartureTime ? (
-						format(new Date(factoryDepartureTime), 'yyyy-MM-dd HH:mm')
-					) : (
-						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
-				}
+				cell: DateTimeCell
 			}),
 			columnHelper.accessor('actual_factory_departure_time', {
 				header: t('ns_erp:fields.actual_factory_departure_time'),
@@ -314,17 +165,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 200,
 				maxSize: 250,
 				sortingFn: 'auto',
-				cell: ({ getValue }) => {
-					const factoryDepartureTime = getValue()
-					return factoryDepartureTime ? (
-						format(new Date(factoryDepartureTime), 'yyyy-MM-dd HH:mm')
-					) : (
-						<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-							<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
-							{t('ns_common:titles.unknown')}
-						</Typography>
-					)
-				}
+				cell: DateTimeCell
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
@@ -335,21 +176,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				size: 60,
 				maxSize: 60,
 				meta: { align: 'center' },
-				cell: ({ row }) => {
-					return (
-						<RowActions
-							data={pick(row.original, [
-								'dispatch_order',
-								'license_plate',
-								'container_number',
-								'approval_status',
-								'punctured_container',
-								'smelling_container',
-								'moist_container'
-							])}
-						/>
-					)
-				}
+				cell: RowActions
 			})
 		],
 		[i18n.language, isMobile, tableRef]
@@ -436,32 +263,97 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	)
 }
 
-const LicensePlateHoverCard: React.FC<{ licensePlate: string; licensePlateImage: string | null }> = ({
-	licensePlate,
-	licensePlateImage
-}) => {
-	const disabled = !url().safeParse(licensePlateImage).success
-	const isMobile = useMediaQuery('(max-width: 1023px)')
+const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, TruckloadDeliveryStatus>['cell'] = ({ getValue }) => {
+	const { t } = useTranslation()
+
+	const value = getValue() as TruckloadDeliveryStatus
+
+	const statusIconVariants: Record<TruckloadDeliveryStatus, IconProps['name']> = {
+		[TruckloadDeliveryStatus.PENDING]: 'Loader',
+		[TruckloadDeliveryStatus.CONFIRMED]: 'CircleCheckBig',
+		[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'Undo2'
+	}
 
 	return (
-		<HoverCard openDelay={0} closeDelay={0}>
-			<HoverCardTrigger
-				className={cn(
-					'inline-grid cursor-default grid-cols-[auto_1fr] items-center gap-x-2 !p-0',
-					isMobile ? 'font-medium' : 'font-normal',
-					disabled ? 'hover:no-underline' : 'hover:underline hover:underline-offset-2'
-				)}>
-				<Icon name='Container' />
-				{licensePlate}
-			</HoverCardTrigger>
-			<HoverCardContent hidden={disabled} className='max-w-60' align='start'>
-				<img
-					loading='lazy'
-					src={licensePlateImage}
-					className='aspect-video max-w-full rounded-[inherit] object-cover object-center'
-				/>
-			</HoverCardContent>
-		</HoverCard>
+		<Badge variant='outline' className='rounded-l-full rounded-r-full'>
+			<Icon
+				name={statusIconVariants[value] ?? 'CircleDotDashed'}
+				size={14}
+				className={cn({
+					'stroke-muted-foreground': value === TruckloadDeliveryStatus.PENDING,
+					'stroke-success': value === TruckloadDeliveryStatus.CONFIRMED,
+					'stroke-destructive': value === TruckloadDeliveryStatus.REQUEST_CHANGE
+				})}
+			/>
+			{t(`ns_common:status.${value}`)}
+		</Badge>
+	)
+}
+
+const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['cell'] = ({ row, getValue }) => {
+	const { t } = useTranslation()
+	const isMobile = useMediaQuery('(max-width: 1023px)')
+
+	const value = getValue()
+	if (!value)
+		return (
+			<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+				<Icon name='Truck' className='self-center stroke-muted-foreground' />
+				{t('ns_common:titles.unknown')}
+			</Typography>
+		)
+	if (!isMobile)
+		return (
+			<LicensePlateHoverCard
+				licensePlate={row.original.license_plate}
+				licensePlateImage={row.original.license_plate_image}
+			/>
+		)
+	return (
+		<Div className='flex flex-col'>
+			<LicensePlateHoverCard
+				licensePlate={row.original.license_plate}
+				licensePlateImage={row.original.license_plate_image}
+			/>
+			<Typography
+				variant='small'
+				color='muted'
+				className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
+				{row.original.container_number}
+			</Typography>
+		</Div>
+	)
+}
+
+const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'] = ({ row, column, getValue }) => {
+	const { mutateAsync, isPending, isError, variables } = useUpdateContainerConditionMutation()
+	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
+
+	return (
+		<Checkbox
+			className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
+			disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
+			defaultChecked={currentValue}
+			checked={currentValue}
+			onCheckedChange={async (value) =>
+				await mutateAsync({
+					dispatch_order: row.original.dispatch_order,
+					[column.id]: Boolean(value)
+				})
+			}
+		/>
+	)
+}
+
+const DateTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = ({ getValue }) => {
+	const { t } = useTranslation()
+	const value = getValue()
+	if (value) return format(new Date(value), 'yyyy-MM-dd HH:mm')
+	return (
+		<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+			<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+			{t('ns_common:titles.unknown')}
+		</Typography>
 	)
 }
 

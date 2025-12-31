@@ -8,34 +8,32 @@ import {
 	Icon
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import { ColumnDefBase } from '@tanstack/react-table'
 import { pick } from 'lodash-es'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
 import { GhostButton } from '../../-components/shared/ghost-button'
 
-type RowActionsDropdownProps = Record<
-	'data',
-	Pick<
-		ITruckloadDelivery,
-		| 'dispatch_order'
-		| 'license_plate'
-		| 'container_number'
-		| 'approval_status'
-		| 'punctured_container'
-		| 'smelling_container'
-		| 'moist_container'
-	>
->
-
-const RowActions: React.FC<RowActionsDropdownProps> = ({ data }) => {
+const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => {
+	const data = pick(row.original, [
+		'dispatch_order',
+		'license_plate',
+		'container_number',
+		'approval_status',
+		'punctured_container',
+		'smelling_container',
+		'moist_container'
+	])
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 
 	return (
 		<DropdownMenu modal={false}>
-			<DropdownMenuTrigger disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED} asChild>
+			<DropdownMenuTrigger
+				asChild={true}
+				disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+				className='disabled:cursor-not-allowed'>
 				<GhostButton>
 					<Icon name='Ellipsis' className='!inline-block' />
 				</GhostButton>
