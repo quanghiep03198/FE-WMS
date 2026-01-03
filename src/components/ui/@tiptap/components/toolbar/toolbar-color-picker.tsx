@@ -1,6 +1,7 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
+import { debounce } from 'lodash-es'
 import { useEffect, useState } from 'react'
 import {
 	Button,
@@ -109,7 +110,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) => {
 				id='color-picker'
 				type='color'
 				className='invisible absolute inset-0 appearance-none border-none outline-none'
-				onChange={(e) => handleSelectColor(e.target.value)}
+				onChange={debounce((e) => handleSelectColor(e.target.value), 500)}
 			/>
 		</Div>
 	)
