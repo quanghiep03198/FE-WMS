@@ -3,7 +3,7 @@ import * as React from 'react'
 
 export type InputProps = React.ComponentProps<'input'>
 
-const Input: React.FC<InputProps> = ({ className, type, ref, ...props }) => {
+const Input: React.FC<InputProps> = ({ className, type, ...props }) => {
 	return (
 		<input
 			type={type}
@@ -13,7 +13,6 @@ const Input: React.FC<InputProps> = ({ className, type, ref, ...props }) => {
 					'appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none',
 				className
 			)}
-			ref={ref}
 			{...props}
 		/>
 	)

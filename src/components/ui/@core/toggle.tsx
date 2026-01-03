@@ -29,9 +29,8 @@ const Toggle: React.FC<React.ComponentProps<typeof TogglePrimitive.Root> & Varia
 	className,
 	variant,
 	size,
-	ref,
 	...props
-}) => <TogglePrimitive.Root ref={ref} className={cn(toggleVariants({ variant, size, className }))} {...props} />
+}) => <TogglePrimitive.Root className={cn(toggleVariants({ variant, size, className }))} {...props} />
 
 Toggle.displayName = TogglePrimitive.Root.displayName
 

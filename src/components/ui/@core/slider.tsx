@@ -3,12 +3,8 @@ import * as React from 'react'
 
 import { cn } from '@/common/utils/cn'
 
-const Slider = React.forwardRef<
-	React.ElementRef<typeof SliderPrimitive.Root>,
-	React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => (
+const Slider: React.FC<React.ComponentProps<typeof SliderPrimitive.Root>> = ({ className, ...props }) => (
 	<SliderPrimitive.Root
-		ref={ref}
 		className={cn('relative flex w-full touch-none select-none items-center data-[disabled]:opacity-50', className)}
 		{...props}>
 		<SliderPrimitive.Track className='relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20'>
@@ -16,7 +12,7 @@ const Slider = React.forwardRef<
 		</SliderPrimitive.Track>
 		<SliderPrimitive.Thumb className='block h-4 w-4 rounded-full border border-primary/50 bg-background shadow transition-colors data-[disabled]:pointer-events-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring' />
 	</SliderPrimitive.Root>
-))
+)
 Slider.displayName = SliderPrimitive.Root.displayName
 
 export { Slider }
