@@ -12,8 +12,8 @@ const CombinationStrategyRadioGroup: React.FC<{ shouldNotAllowUhf: boolean }> = 
 		<RadioGroup
 			value={currentStrategy}
 			onValueChange={(value: 'usb' | 'uhf' | 'manually') => setStrategy(value)}
-			className='flex items-center gap-x-6'>
-			<Div className='flex items-center gap-3'>
+			className='flex items-center gap-x-6 [&>div[role=radiogroup]]:inline-flex [&>div[role=radiogroup]]:items-center [&>div[role=radiogroup]]:gap-x-2'>
+			<Div role='radiogroup'>
 				<RadioGroupItem value='uhf' id='uhf-device-strategy' disabled={shouldNotAllowUhf} />
 				<Label
 					htmlFor='uhf-device-strategy'
@@ -21,13 +21,13 @@ const CombinationStrategyRadioGroup: React.FC<{ shouldNotAllowUhf: boolean }> = 
 					UHF <Icon name='Router' size={18} />
 				</Label>
 			</Div>
-			<Div className='flex items-center gap-3'>
+			<Div role='radiogroup'>
 				<RadioGroupItem value='usb' id='usb-strategy' />
 				<Label htmlFor='usb-strategy' className='inline-flex items-center gap-x-2'>
 					USB <Icon name='Usb' size={18} />
 				</Label>
 			</Div>
-			<Div className='flex items-center gap-3'>
+			<Div role='radiogroup'>
 				<RadioGroupItem value='manually' id='manually-strategy' />
 				<Label htmlFor='manually-strategy' className='inline-flex items-center gap-x-2'>
 					{t('ns_common:titles.manually')} <Icon name='Keyboard' size={18} />
