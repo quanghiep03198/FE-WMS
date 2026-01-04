@@ -165,6 +165,9 @@ export default {
 		delete_image: '删除图片',
 		use_available_template: '使用可用模板',
 		create_custom_template: '创建自定义模板',
+		preset_color: '默认',
+		custom_color: '自定义',
+		unset_color: '取消颜色',
 		validations: {
 			row_num_required: '行数是必需的',
 			row_num_min: '行数必须大于或等于 1',

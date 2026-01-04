@@ -1,6 +1,7 @@
 import { i18n } from '@/i18n'
 import { Color } from '@tiptap/extension-color'
 import Gapcursor from '@tiptap/extension-gapcursor'
+import Highlight from '@tiptap/extension-highlight'
 import { ListKit } from '@tiptap/extension-list'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table } from '@tiptap/extension-table'
@@ -19,7 +20,7 @@ export const editorExtensions = [
 	StarterKit.configure({
 		heading: {
 			levels: [1, 2, 3],
-			HTMLAttributes: { class: 'font-bold text-foreground' }
+			HTMLAttributes: { class: 'font-bold !text-foreground' }
 		},
 		bold: {
 			HTMLAttributes: {
@@ -110,11 +111,14 @@ export const editorExtensions = [
 			class: 'px-3 py-1 border [&.selectedCell]:bg-secondary/50 dark:[&.selectedCell]:bg-secondary/25 before:hidden align-top'
 		}
 	}),
-	// Highlight.configure(),
-
 	FontSize.configure(),
 	TextStyle.configure(),
 	Color.configure(),
+	Highlight.configure({
+		multicolor: true
+	}).extend({
+		priority: 1000
+	}),
 	SearchAndReplace.configure(),
 	ImagePlaceholder.configure(),
 	ImageExtension.configure({

@@ -5,7 +5,7 @@ import { Button, Div, Icon, Separator, Tooltip } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { useEditorContext } from '../../context/editor-context'
 import { AlignmentDropdownMenu } from './toolbar-alignment-dropdown'
-import ColorPicker from './toolbar-color-picker'
+import ToolbarColorPicker from './toolbar-color-picker'
 import FontSizeInput from './toolbar-font-size-input'
 import ImageDropdown from './toolbar-image-dropdown'
 import { LinkPopover } from './toolbar-link-popover'
@@ -146,8 +146,8 @@ const Toolbar: React.FC = () => {
 				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
 				{/* Text color and highlight */}
-				<ColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
-				<ColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
+				<ToolbarColorPicker label={t('ns_common:editor.text_color')} icon='Baseline' type='textStyle' />
+				<ToolbarColorPicker label={t('ns_common:editor.highlight')} icon='Highlighter' type='highlight' />
 
 				<Separator orientation='vertical' className='mx-3 h-6 w-[2px] min-w-[2px] basis-[2px]' />
 
