@@ -171,75 +171,74 @@ const InfoCard: React.FC<{
 					<CollapsibleContent className='w-full overflow-auto transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 						<Separator className='mb-4' />
 						<DescriptionList>
-							<DescriptionItem>
+							<DescriptionItem title={data.cust_shoes_style}>
 								<Typography variant='small'>{t('ns_erp:fields.cust_shoes_style')}:</Typography>
 								<Typography variant='small'>{data.cust_shoes_style}</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={data.factory_shoes_style}>
 								<Typography variant='small'>{t('ns_erp:fields.factory_shoes_style')}:</Typography>
 								<Typography variant='small'>{data.factory_shoes_style}</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={data.color_sn}>
 								<Typography variant='small'>{t('ns_erp:fields.color_sn')}:</Typography>
 								<Typography variant='small'>{data.color_sn}</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={data.po}>
 								<Typography variant='small'>Size: </Typography>
-								<Typography variant='small'>#{data.size_code}</Typography>
+								<Typography variant='small' title={data.size_code}>
+									#{data.size_code}
+								</Typography>
 							</DescriptionItem>
 							{data.po && (
-								<DescriptionItem>
+								<DescriptionItem title={data.po}>
 									<Typography variant='small'>{t('ns_erp:fields.po')}:</Typography>
-									<Typography variant='small'>{data.po}</Typography>
-								</DescriptionItem>
-							)}
-							{data.mo_no && (
-								<DescriptionItem>
-									<Typography>{t('ns_erp:fields.mo_no')}: </Typography>
-									<Typography variant='small' title={data.mo_no}>
-										{data.mo_no}
+									<Typography variant='small' title={data.po}>
+										{data.po}
 									</Typography>
 								</DescriptionItem>
 							)}
-							<DescriptionItem>
+							{data.mo_no && (
+								<DescriptionItem title={data.mo_no}>
+									<Typography>{t('ns_erp:fields.mo_no')}: </Typography>
+									<Typography variant='small'>{data.mo_no}</Typography>
+								</DescriptionItem>
+							)}
+							<DescriptionItem title={data.sewing_line ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.sewing_line')} : </Typography>
-								<Typography variant='small' className='uppercase' title={data.sewing_line ?? '?'}>
+								<Typography variant='small' className='uppercase'>
 									{data.sewing_line ?? '?'}
 								</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={data.assembly_line ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.assembly_line')} : </Typography>
-								<Typography variant='small' className='uppercase' title={data.assembly_line ?? '?'}>
+								<Typography variant='small' className='uppercase'>
 									{data.assembly_line ?? '?'}
 								</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={defectLocation.get(data.defective_location) ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.defective_location')} : </Typography>
-								<Typography variant='small' title={defectLocation.get(data.defective_location) ?? '?'}>
-									{defectLocation.get(data.defective_location) ?? '?'}
-								</Typography>
+								<Typography variant='small'>{defectLocation.get(data.defective_location) ?? '?'}</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem
+								title={
+									t(`ns_inoutbound:shoes_source.${data.shoe_source}`, { defaultValue: data.shoe_source }) ??
+									'?'
+								}>
 								<Typography variant='small'>{t('ns_erp:fields.shoe_source')} : </Typography>
-								<Typography
-									variant='small'
-									title={
-										t(`ns_inoutbound:shoes_source.${data.shoe_source}`, { defaultValue: data.shoe_source }) ??
-										'?'
-									}>
+								<Typography variant='small'>
 									{t(`ns_inoutbound:shoes_source.${data.shoe_source}`, { defaultValue: data.shoe_source }) ??
 										'?'}
 								</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={data.ri_type ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.ri_type')} : </Typography>
-								<Typography variant='small' className='uppercase' title={data.ri_type ?? '?'}>
+								<Typography variant='small' className='uppercase'>
 									{data.ri_type ?? '?'}
 								</Typography>
 							</DescriptionItem>
-							<DescriptionItem>
+							<DescriptionItem title={data.storage_location ?? '?'}>
 								<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
-								<Typography variant='small' className='uppercase' title={data.storage_location ?? '?'}>
+								<Typography variant='small' className='uppercase'>
 									{data.storage_location ?? '?'}
 								</Typography>
 							</DescriptionItem>
@@ -252,6 +251,6 @@ const InfoCard: React.FC<{
 }
 
 const DescriptionList = tw.ul`list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
-const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&_*:last-child]:!font-medium [&_*:last-child]:line-clamp-1 whitespace-nowrap [&_svg]:stroke-muted-foreground`
+const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&>:first-child]:text-nowrap [&>:last-child]:font-medium  [&>:last-child]:line-clamp-1 [&>:last-child]:overflow-ellipsis [&_svg]:stroke-muted-foreground`
 
 export default InfoCard
