@@ -94,6 +94,7 @@
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.0.4",
+		"color": "^5.0.3",
 		"copy-to-clipboard": "^3.3.3",
 		"d3-shape": "^3.2.0",
 		"date-fns": "^4.1.0",
