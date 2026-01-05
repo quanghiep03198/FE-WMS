@@ -13,7 +13,7 @@ const UnavailableConnection: React.FC = () => {
 		<Div className='flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center *:text-pretty'>
 			<Icon
 				name='ZapOff'
-				size={48}
+				size={44}
 				stroke='hsl(var(--muted-foreground))'
 				strokeWidth={1}
 				className='mb-6 rotate-12 stroke-muted-foreground'

@@ -1,11 +1,11 @@
-import useEffectOnce from '@/common/hooks/use-effect-once'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { Div, SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
-import { useLocalStorageState, useRafState } from 'ahooks'
-import { Fragment, useLayoutEffect } from 'react'
+import { useLocalStorageState, useSize } from 'ahooks'
+import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from '../-components/-errors/error-boundary-fallback'
@@ -38,24 +38,13 @@ function Layout() {
 		defaultValue: '*:!font-sans',
 		listenStorageChange: true
 	})
-	const [windowSize, setWindowSize] = useRafState({
-		width: 0,
-		height: 0
-	})
+
+	const windowSize = useSize(document.body)
 
 	useEffectOnce(() => {
 		if (document.body.classList.contains(font)) document.body.classList.remove(font)
 		document.body.classList.add(font)
 	})
-
-	useLayoutEffect(() => {
-		const onResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-		onResize()
-		window.addEventListener('resize', onResize)
-		return () => {
-			window.removeEventListener('resize', onResize)
-		}
-	}, [])
 
 	return (
 		<Fragment>

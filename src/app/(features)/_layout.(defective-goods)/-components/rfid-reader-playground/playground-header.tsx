@@ -1,6 +1,6 @@
-import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Icon, Typography } from '@/components/ui'
+import { Div, Typography } from '@/components/ui'
+import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
 import { useTranslation } from 'react-i18next'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 import ReaderSettingSheet from './reader-setting-sheet'
@@ -13,16 +13,12 @@ const PlaygroundHeader: React.FC = () => {
 		<Div className='flex items-center justify-between gap-x-2 p-2'>
 			<Div className='inline-flex items-center gap-x-2 text-base'>
 				<Typography className='ml-2 inline-flex items-center gap-x-2 font-medium'>
-					<Icon
-						name='Dot'
-						className={cn(
-							'scale-[0.5] rounded-full ring-8',
-							Object.values(connectionStatus).every((value) => value)
-								? 'bg-success fill-success stroke-success ring-success/30'
-								: 'bg-warning fill-warning stroke-warning ring-warning/30'
-						)}
+					<StatusIndicator
+						state={Object.values(connectionStatus).every((value) => value) ? 'active' : 'fixing'}
+						size='md'
+						label={t('ns_inoutbound:counter_box.label')}
+						labelClassName='text-base after:content-[":"] after:ml-1'
 					/>
-					{t('ns_inoutbound:counter_box.label')}:
 				</Typography>
 				<Typography className='inline-flex gap-x-1 text-lg font-semibold'>
 					{formatIntlNumber(scannedEpcs.length)}

@@ -1,5 +1,6 @@
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import IpPolicyGuard from '@/app/-components/-guard/ip-policy-guard'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -15,6 +16,7 @@ import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import DatalistPanel from './-components/data-list-panel'
 import DetailDialog from './-components/data-list-panel/detail-dialog'
 import DefectiveGoodsForm from './-components/form-playground'
+import { MobileRFIDReaderPlayground } from './-components/mobile-rfid-reader-playground'
 import { useToggleListPanel } from './-hooks/use-toggle-list-panel'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-epc-combination/')({
@@ -24,6 +26,7 @@ export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/
 function RouteComponent() {
 	const { t, i18n } = useTranslation()
 	const { setBreadcrumb } = useBreadcrumbContext()
+	const isMobile = useMediaQuery('(max-width: 1023px)')
 
 	useEffect(() => {
 		setBreadcrumb([
@@ -45,8 +48,8 @@ function RouteComponent() {
 					<Container>
 						<PageContextProvider>
 							<ResizablePanelGroup
-								direction='horizontal'
-								className='h-full rounded-md border'
+								className='relative'
+								direction={isMobile ? 'vertical' : 'horizontal'}
 								style={
 									{
 										'--bar-height': '52px'
@@ -69,14 +72,14 @@ function RouteComponent() {
 										className='hidden w-[0.5px] border-0 shadow-none ring-transparent @7xl:flex'
 									/>
 								)}
-								<ResizablePanel defaultSize={50} minSize={40} className='h-full'>
+								<ResizablePanel defaultSize={50} minSize={isMobile ? 50 : 40} className='h-full'>
 									<DefectiveGoodsForm />
 								</ResizablePanel>
-								{isUsingUHFReader && <ResizableHandle disabled />}
+								{isUsingUHFReader && !isMobile && <ResizableHandle disabled />}
 								<ResizablePanel
-									minSize={isUsingUHFReader ? 25 : 0}
-									maxSize={isUsingUHFReader ? 25 : 0}
-									defaultSize={isUsingUHFReader ? 25 : 0}
+									minSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+									maxSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+									defaultSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
 									className={cn(
 										'transtion-max-width linear h-full duration-200 will-change-transform',
 										'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
@@ -89,6 +92,7 @@ function RouteComponent() {
 							</ResizablePanelGroup>
 							{createPortal(<DetailDialog />, document.body)}
 						</PageContextProvider>
+						<MobileRFIDReaderPlayground />
 					</Container>
 				</HostCompatibleGuard>
 			</IpPolicyGuard>
@@ -97,7 +101,7 @@ function RouteComponent() {
 }
 
 const Container = tw.div`
-	group/container bg-background h-[var(--outlet-wrapper-height)] @container overflow-hidden
+	relative group/container bg-background h-[var(--outlet-wrapper-height)] @container/playground-wrapper overflow-hidden border rounded-md
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50
