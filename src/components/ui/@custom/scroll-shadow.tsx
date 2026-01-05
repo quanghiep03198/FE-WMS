@@ -1,7 +1,8 @@
+import { useLayoutEffectOnce } from '@/common/hooks/use-effect-once'
 import { cn } from '@/common/utils/cn'
 import { useRafState, useScroll } from 'ahooks'
 import { debounce } from 'lodash-es'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 export interface ScrollShadowProps extends React.PropsWithChildren, React.ComponentProps<'div'> {
 	orientation?: 'vertical' | 'horizontal'
@@ -47,11 +48,11 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 						: element.scrollWidth > element.clientWidth
 				setIsScrollable(_isScrollable)
 			}
-		}, 100),
-		[]
+		}, 1000 / 60),
+		[localRef]
 	)
 
-	useEffect(() => {
+	useLayoutEffectOnce(() => {
 		const element = localRef.current
 
 		handleCheckIsScrollable()
@@ -68,7 +69,7 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 			mutationObserver.disconnect()
 			resizeObserver.disconnect()
 		}
-	}, [])
+	})
 
 	return (
 		<div

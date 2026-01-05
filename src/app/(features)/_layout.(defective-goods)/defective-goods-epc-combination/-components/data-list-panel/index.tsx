@@ -1,4 +1,16 @@
-import { Div, Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui'
+import { cn } from '@/common/utils/cn'
+import {
+	buttonVariants,
+	Div,
+	Icon,
+	Label,
+	Sheet,
+	SheetContent,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger
+} from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import { omit, pick } from 'lodash-es'
 import React, { Fragment } from 'react'
@@ -65,6 +77,25 @@ const DatalistPanel: React.FC = () => {
 			{/* Confirm delete on by ID */}
 			<DeleteConfirmDialog />
 		</Fragment>
+	)
+}
+
+export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<typeof Label>> = (props) => {
+	const { t } = useTranslation()
+
+	return (
+		<Label
+			className={cn(
+				buttonVariants({
+					variant: 'secondary',
+					size: 'sm',
+					className: 'inline-flex @7xl/playground-wrapper:hidden'
+				})
+			)}
+			htmlFor='list-sheet-trigger'
+			{...props}>
+			<Icon name='Clock' /> {t('ns_inoutbound:titles.combination_history')}
+		</Label>
 	)
 }
 

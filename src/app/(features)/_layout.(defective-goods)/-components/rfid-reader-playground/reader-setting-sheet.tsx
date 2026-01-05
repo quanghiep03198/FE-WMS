@@ -1,4 +1,4 @@
-import useEffectOnce from '@/common/hooks/use-effect-once'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,

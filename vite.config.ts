@@ -189,6 +189,7 @@ export default defineConfig(({ mode }) => {
 							{ name: 'axios', test: /axios/ },
 							{ name: 'bcryptjs-react', test: /bcryptjs-react/ },
 							{ name: 'clsx', test: /clsx/ },
+							{ name: 'color', test: /color/ },
 							{ name: 'cmdk', test: /cmdk/ },
 							{ name: 'copy-to-clipboard', test: /copy-to-clipboard/ },
 							{ name: 'd3-shape', test: /d3-shape/ },

@@ -83,7 +83,6 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 
 	const handleGetPickerValue = useCallback(() => {
 		try {
-			console.log('currentColor :>> ', currentColor)
 			return Color(currentColor ?? fallbackColor)
 				.rgb()
 				.string()

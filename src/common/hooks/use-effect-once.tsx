@@ -1,5 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 
-export default function useEffectOnce(callback: React.EffectCallback) {
+export function useEffectOnce(callback: React.EffectCallback) {
 	useEffect(callback, [])
+}
+
+export function useLayoutEffectOnce(callback: React.EffectCallback) {
+	useLayoutEffect(callback, [])
 }

@@ -4,7 +4,6 @@ import { IBaseEntity } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
-	buttonVariants,
 	Checkbox,
 	Div,
 	Form as FormProvider,
@@ -41,15 +40,17 @@ import {
 } from '../../../-hooks/use-defective-goods-asm'
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
+import { DataListPanelSheetTrigger } from '../data-list-panel'
+import { MobileRFIDReaderPlaygroundTrigger } from '../mobile-rfid-reader-playground'
 import AssemblyLineFieldControl from './assembly-line-field-control'
 import BrandFieldControl from './brand-field-control'
 import CategoryFieldControl from './category-field-control'
 import ColorFieldControl from './color-field-control'
-import CombinationStrategyRadioGroup from './combination-strategy-group'
+import CombinationStrategySelect from './combination-strategy-select'
 import CommandNumberFieldControl from './command-number-field-control'
 import CustShoeStyleFieldControl from './cust-shoe-style-field-control'
 import FactoryShoeStyleFieldControl from './factory-shoe-style-field-control'
-import ListPanelToggleButton from './list-panel-toggle-button'
+import ListPanelToggle from './list-panel-toggle'
 import SewingLineFieldControl from './sewing-line-field-control'
 import { ShoeSourceFieldControl } from './shoe-source-field-control'
 import SizeFieldControl from './size-field-control'
@@ -228,15 +229,12 @@ const DefectiveGoodsForm: React.FC = () => {
 		<FormProvider {...{ ...form, productSpecification }}>
 			<Form data-action={formAction === CommonActions.UPDATE} onSubmit={form.handleSubmit(handleSubmitForm)}>
 				{/* Form controls */}
-				<Div className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
-					<Div className='hidden @7xl:block'>
-						<ListPanelToggleButton />
-					</Div>
-					<Label
-						className={cn(buttonVariants({ variant: 'secondary', className: 'inline-flex @7xl:hidden' }))}
-						htmlFor='list-sheet-trigger'>
-						<Icon name='Clock' /> {t('ns_inoutbound:titles.combination_history')}
-					</Label>
+				<Div
+					id='combination-form-header'
+					className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
+					<MobileRFIDReaderPlaygroundTrigger />
+					<ListPanelToggle />
+					<DataListPanelSheetTrigger />
 					{isNil(formAction) ? (
 						<Button
 							type='button'
@@ -335,7 +333,9 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div
 						className={cn(
 							'col-span-full',
-							currentStrategy === 'manually' ? '@3xl:col-span-2' : '@3xl:col-span-3'
+							currentStrategy === 'manually'
+								? '@xl/combination-form:col-span-2'
+								: '@xl/combination-form:col-span-3'
 						)}>
 						<CustShoeStyleFieldControl
 							loading={isLoading}
@@ -346,7 +346,9 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div
 						className={cn(
 							'col-span-full',
-							currentStrategy === 'manually' ? '@3xl:col-span-2' : '@3xl:col-span-3'
+							currentStrategy === 'manually'
+								? '@xl/combination-form:col-span-2'
+								: '@xl/combination-form:col-span-3'
 						)}>
 						<FactoryShoeStyleFieldControl
 							loading={isLoading}
@@ -357,7 +359,9 @@ const DefectiveGoodsForm: React.FC = () => {
 					<Div
 						className={cn(
 							'col-span-full',
-							currentStrategy === 'manually' ? '@3xl:col-span-2' : '@3xl:col-span-3'
+							currentStrategy === 'manually'
+								? 'col-span-full @xl/combination-form:col-span-2'
+								: 'col-span-full @xl/combination-form:col-span-3'
 						)}>
 						<ColorFieldControl
 							loading={isLoading}
@@ -365,8 +369,10 @@ const DefectiveGoodsForm: React.FC = () => {
 							disabled={isNil(formAction)}
 						/>
 					</Div>
-
-					<Div className={cn(currentStrategy === 'manually' ? 'col-span-full' : '@3xl:col-span-3')}>
+					<Div
+						className={cn(
+							currentStrategy === 'manually' ? 'col-span-full' : 'col-span-full @xl/combination-form:col-span-3'
+						)}>
 						<SizeFieldControl
 							loading={isLoading}
 							disabled={isNil(formAction)}
@@ -380,14 +386,13 @@ const DefectiveGoodsForm: React.FC = () => {
 							}
 						/>
 					</Div>
-
-					<Div className='col-span-3'>
+					<Div className='col-span-full @xl/combination-form:col-span-3'>
 						<SewingLineFieldControl />
 					</Div>
-					<Div className='col-span-3'>
+					<Div className='col-span-full @xl/combination-form:col-span-3'>
 						<AssemblyLineFieldControl />
 					</Div>
-					<Div className='col-span-3'>
+					<Div className='col-span-full @xl/combination-form:col-span-3'>
 						<SelectFieldControl
 							name='defective_location'
 							label={t('ns_erp:fields.defective_location')}
@@ -402,7 +407,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							valueField='value'
 						/>
 					</Div>
-					<Div className='col-span-3'>
+					<Div className='col-span-full @xl/combination-form:col-span-3'>
 						<ShoeSourceFieldControl />
 					</Div>
 					<Div className='relative col-span-full'>
@@ -431,9 +436,9 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				{/* Footer bar */}
-				<Div className='flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-4'>
+				<Div className='relative flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-4'>
 					<ToggleFullscreen />
-					<CombinationStrategyRadioGroup shouldNotAllowUhf={formAction === CommonActions.UPDATE} />
+					<CombinationStrategySelect disabled={formAction === CommonActions.UPDATE} />
 				</Div>
 			</Form>
 		</FormProvider>
@@ -441,7 +446,7 @@ const DefectiveGoodsForm: React.FC = () => {
 }
 
 const Form = tw.form`
-	h-full overflow-y-auto scrollbar-track-accent/50 grid divide-y divide-border 
+	h-full overflow-y-auto scrollbar-track-accent/50 grid divide-y divide-border @container/combination-form
 	data-[action=CREATE]:grid-rows-[var(--bar-height)_auto_var(--bar-height)] 
 	data-[action=UPDATE]:grid-rows-[var(--bar-height)_auto_auto_var(--bar-height)] 
 `
