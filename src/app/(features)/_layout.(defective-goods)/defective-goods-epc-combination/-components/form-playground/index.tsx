@@ -41,7 +41,7 @@ import {
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 import { useGetProductSpecificationQuery } from '../../../../-hooks/use-product-specification-asm'
 import { DataListPanelSheetTrigger } from '../data-list-panel'
-import { MobileRFIDReaderPlaygroundTrigger } from '../mobile-rfid-reader-playground'
+import { MobileReaderPlaygroundTrigger } from '../mobile-rfid-reader-playground'
 import AssemblyLineFieldControl from './assembly-line-field-control'
 import BrandFieldControl from './brand-field-control'
 import CategoryFieldControl from './category-field-control'
@@ -232,7 +232,6 @@ const DefectiveGoodsForm: React.FC = () => {
 				<Div
 					id='combination-form-header'
 					className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
-					<MobileRFIDReaderPlaygroundTrigger />
 					<ListPanelToggle />
 					<DataListPanelSheetTrigger />
 					{isNil(formAction) ? (
@@ -246,13 +245,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						</Button>
 					) : (
 						<Div className='ml-auto flex items-center gap-x-2'>
-							<Button
-								disabled={isPending}
-								variant='ghost'
-								size='sm'
-								type='button'
-								className='text-destructive hover:bg-destructive/20 hover:text-destructive'
-								onClick={handleCancel}>
+							<Button disabled={isPending} variant='destructive' size='sm' type='button' onClick={handleCancel}>
 								<Icon name='X' /> {t('ns_common:actions.cancel')}
 							</Button>
 							<Button
@@ -436,7 +429,8 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				{/* Footer bar */}
-				<Div className='relative flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-4'>
+				<Div className='flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-2 bg-background px-4'>
+					<MobileReaderPlaygroundTrigger />
 					<ToggleFullscreen />
 					<CombinationStrategySelect disabled={formAction === CommonActions.UPDATE} />
 				</Div>

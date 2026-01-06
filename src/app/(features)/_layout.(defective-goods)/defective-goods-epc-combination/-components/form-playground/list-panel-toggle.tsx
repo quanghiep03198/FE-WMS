@@ -11,7 +11,7 @@ const ListPanelToggle: React.FC = () => {
 			variant='ghost'
 			size='sm'
 			type='button'
-			className='hidden @7xl/playground-wrapper:block'
+			className='hidden @7xl/playground-wrapper:inline-flex'
 			onClick={() => toggleListPanelOpen()}>
 			<Icon name={listPanelOpen ? 'PanelLeftClose' : 'PanelLeftOpen'} size={18} />
 			{listPanelOpen ? t('ns_common:actions.collapse_list_panel') : t('ns_common:actions.open_list_panel')}

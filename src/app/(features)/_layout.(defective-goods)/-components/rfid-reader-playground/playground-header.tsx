@@ -12,14 +12,13 @@ const PlaygroundHeader: React.FC = () => {
 	return (
 		<Div className='flex items-center justify-between gap-x-2 p-2'>
 			<Div className='inline-flex items-center gap-x-2 text-base'>
-				<Typography className='ml-2 inline-flex items-center gap-x-2 font-medium'>
-					<StatusIndicator
-						state={Object.values(connectionStatus).every((value) => value) ? 'active' : 'fixing'}
-						size='md'
-						label={t('ns_inoutbound:counter_box.label')}
-						labelClassName='text-base after:content-[":"] after:ml-1'
-					/>
-				</Typography>
+				<StatusIndicator
+					state={Object.values(connectionStatus).every((value) => value) ? 'active' : 'fixing'}
+					label={t('ns_inoutbound:counter_box.label')}
+					className='ml-2'
+					labelClassName='text-base after:content-[":"] ml-1 inline-flex items-center gap-x-1 font-medium'
+				/>
+
 				<Typography className='inline-flex gap-x-1 text-lg font-semibold'>
 					{formatIntlNumber(scannedEpcs.length)}
 					<Typography as='small' variant='small' className='text-xs font-medium'>
