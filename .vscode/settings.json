@@ -34,7 +34,8 @@
 		"-utils": "Utils",
 		"-helpers": "Helper",
 		"-mocks": "Mock",
-		"-configs": "Config"
+		"-configs": "Config",
+		"-workers": "Taskfile"
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
