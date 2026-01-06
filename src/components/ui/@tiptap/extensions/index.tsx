@@ -1,4 +1,5 @@
 import { i18n } from '@/i18n'
+import { type Extension } from '@tiptap/core'
 import { Color } from '@tiptap/extension-color'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import Highlight from '@tiptap/extension-highlight'
@@ -16,7 +17,7 @@ import { ImagePlaceholder } from './image-placeholder.extension'
 import { ImageExtension } from './image.extension'
 import { SearchAndReplace } from './search-and-replace.extension'
 
-export const editorExtensions = [
+export const editorExtensions: Extension[] = [
 	StarterKit.configure({
 		heading: {
 			levels: [1, 2, 3],
