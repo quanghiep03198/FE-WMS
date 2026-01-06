@@ -45,16 +45,8 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 			if (type === 'textStyle') editor.commands.setColor(color)
 			if (type === 'highlight') editor.commands.setHighlight({ color })
 		},
-		[type]
+		[type, editor.commands.setColor, editor.commands.setHighlight]
 	)
-
-	const handleConvertHexToRgba = useCallback((hex: string, alpha: number) => {
-		try {
-			return Color(hex).alpha(alpha).rgb().string()
-		} catch {
-			return hex
-		}
-	}, [])
 
 	const handleConvertRgbaToHex = useCallback(
 		(value: number[]) => {
@@ -94,8 +86,6 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 	const { run: handleSetCustomColor, flush } = useDebounceFn(
 		(color: ColorLike) => {
 			const rgba = Array.isArray(color) ? (color as number[]) : []
-			// const alpha = typeof rgba[3] === 'number' ? rgba[3] : 1
-			// const colorValue = type === 'highlight' ? handleConvertHexToRgba(hex, alpha) : hex
 			const hex = handleConvertRgbaToHex(rgba)
 			handleSelectColor(hex)
 		},
@@ -191,12 +181,6 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 					</Div>
 				</PopoverContent>
 			</Popover>
-			{/* <Input
-				id='color-picker'
-				type='color'
-				className='invisible absolute inset-0 appearance-none border-none outline-none'
-				onChange={debounce((e) => handleSelectColor(e.target.value), 500)}
-			/> */}
 		</Div>
 	)
 }
