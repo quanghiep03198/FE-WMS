@@ -16,7 +16,7 @@ import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import DatalistPanel from './-components/data-list-panel'
 import DetailDialog from './-components/data-list-panel/detail-dialog'
 import DefectiveGoodsForm from './-components/form-playground'
-import { MobileRFIDReaderPlayground } from './-components/mobile-rfid-reader-playground'
+import { MobileReaderPlayground } from './-components/mobile-rfid-reader-playground'
 import { useToggleListPanel } from './-hooks/use-toggle-list-panel'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-epc-combination/')({
@@ -48,7 +48,7 @@ function RouteComponent() {
 					<Container>
 						<PageContextProvider>
 							<ResizablePanelGroup
-								className='relative'
+								className='relative rounded-md border'
 								direction={isMobile ? 'vertical' : 'horizontal'}
 								style={
 									{
@@ -60,7 +60,7 @@ function RouteComponent() {
 									maxSize={listPanelOpen ? 40 : 0}
 									defaultSize={listPanelOpen ? 30 : 0}
 									className={cn(
-										'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl:block',
+										'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl/playground-wrapper:block',
 										'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
 										listPanelOpen && 'border-0'
 									)}>
@@ -69,7 +69,7 @@ function RouteComponent() {
 								{listPanelOpen && (
 									<ResizableHandle
 										withHandle
-										className='hidden w-[0.5px] border-0 shadow-none ring-transparent @7xl:flex'
+										className='hidden w-[0.5px] border-0 shadow-none ring-transparent @7xl/playground-wrapper:flex'
 									/>
 								)}
 								<ResizablePanel defaultSize={50} minSize={isMobile ? 50 : 40} className='h-full'>
@@ -91,8 +91,8 @@ function RouteComponent() {
 								</ResizablePanel>
 							</ResizablePanelGroup>
 							{createPortal(<DetailDialog />, document.body)}
+							<MobileReaderPlayground />
 						</PageContextProvider>
-						<MobileRFIDReaderPlayground />
 					</Container>
 				</HostCompatibleGuard>
 			</IpPolicyGuard>
@@ -101,7 +101,7 @@ function RouteComponent() {
 }
 
 const Container = tw.div`
-	relative group/container bg-background h-[var(--outlet-wrapper-height)] @container/playground-wrapper overflow-hidden border rounded-md
+	relative group/container bg-background h-[var(--outlet-wrapper-height)] @container/playground-wrapper overflow-hidden 
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50

@@ -11,7 +11,7 @@ import {
 	SelectValue
 } from '@/components/ui'
 import { capitalize } from 'lodash-es'
-import { Fragment, memo } from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
@@ -21,7 +21,7 @@ const CombinationStrategySelect: React.FC<{ disabled: boolean }> = ({ disabled }
 	const { t } = useTranslation()
 
 	return (
-		<Fragment>
+		<Div className='ml-auto w-auto'>
 			<RadioGroup
 				disabled={disabled}
 				value={currentStrategy}
@@ -50,7 +50,7 @@ const CombinationStrategySelect: React.FC<{ disabled: boolean }> = ({ disabled }
 				disabled={disabled}
 				value={currentStrategy}
 				onValueChange={(value) => setStrategy(value as 'usb' | 'uhf' | 'manually')}>
-				<SelectTrigger className='flex max-w-1/4 @2xl/combination-form:hidden'>
+				<SelectTrigger className='flex w-32 @2xl/combination-form:hidden'>
 					<SelectValue placeholder={capitalize(t('ns_erp:fields.ri_type'))} />
 				</SelectTrigger>
 				<SelectContent>
@@ -72,7 +72,7 @@ const CombinationStrategySelect: React.FC<{ disabled: boolean }> = ({ disabled }
 					</SelectItem>
 				</SelectContent>
 			</Select>
-		</Fragment>
+		</Div>
 	)
 }
 

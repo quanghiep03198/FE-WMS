@@ -84,7 +84,7 @@ export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<typeof Lab
 	const { t } = useTranslation()
 
 	return (
-		<Label
+		<label
 			className={cn(
 				buttonVariants({
 					variant: 'secondary',
@@ -95,7 +95,7 @@ export const DataListPanelSheetTrigger: React.FC<React.ComponentProps<typeof Lab
 			htmlFor='list-sheet-trigger'
 			{...props}>
 			<Icon name='Clock' /> {t('ns_inoutbound:titles.combination_history')}
-		</Label>
+		</label>
 	)
 }
 

@@ -15,7 +15,11 @@ Set.prototype.at = function (index: number) {
 	return Array.from(this).at(index)
 }
 
-const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className, style }) => {
+const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'> & { resetOnUnmount?: boolean }> = ({
+	className,
+	style,
+	resetOnUnmount = true
+}) => {
 	const { connectionStatus, scannedEpcs, publishMessage } = useReaderPlaygroundStore(
 		'scannedEpcs',
 		'connectionStatus',
@@ -23,7 +27,7 @@ const RFIDReaderPlayground: React.FC<React.ComponentProps<'div'>> = ({ className
 	)
 
 	useUnmount(() => {
-		publishMessage(PublishedTopics.REQUEST_DATA, { action: 'reset' })
+		if (resetOnUnmount) publishMessage(PublishedTopics.REQUEST_DATA, { action: 'reset' })
 	})
 
 	return (
