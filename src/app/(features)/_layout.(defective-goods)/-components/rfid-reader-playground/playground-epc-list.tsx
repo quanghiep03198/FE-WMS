@@ -2,8 +2,9 @@ import { CommonActions } from '@/common/constants/enums'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
 import { Div } from '@/components/ui'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useCallback, useEffect, useRef } from 'react'
+import { useVirtualizer, VirtualItem } from '@tanstack/react-virtual'
+import { omit } from 'lodash-es'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { usePageContext } from '../../-contexts/page-context'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
@@ -25,6 +26,7 @@ export const PlaygroundEpcList: React.FC = () => {
 		count: scannedEpcs.length,
 		overscan: PRERENDERED_ITEMS,
 		indexAttribute: 'data-index',
+		getItemKey: (index) => scannedEpcs[index],
 		getScrollElement,
 		scrollToFn,
 		estimateSize
@@ -48,20 +50,26 @@ export const PlaygroundEpcList: React.FC = () => {
 			<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 				{virtualizer.getVirtualItems().map((virtualItem) => {
 					const item = scannedEpcs[virtualItem.index]
-					return (
-						<Div
-							key={virtualItem.index}
-							data-index={virtualItem.index}
-							className='absolute left-auto right-auto top-0 flex w-full justify-between whitespace-nowrap border-b px-4 py-2 font-medium uppercase transition-all duration-75 last:border-none hover:bg-secondary'
-							style={{
-								height: virtualItem.size,
-								transform: `translateY(${virtualItem.start}px)`
-							}}>
-							{item}
-						</Div>
-					)
+					return <ReaderVirtualRow key={virtualItem.key} data={item} {...omit(virtualItem, ['key'])} />
 				})}
 			</Div>
 		</Div>
 	)
 }
+
+const ReaderVirtualRow: React.FC<{ data: string } & VirtualItem> = memo(({ data, index, size, start }) => {
+	return (
+		<Div
+			key={index}
+			data-index={index}
+			className='absolute left-auto right-auto top-0 flex w-full justify-between whitespace-nowrap border-b px-4 py-2 font-medium uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+			style={{
+				height: size,
+				transform: `translateY(${start}px)`
+			}}>
+			{data}
+		</Div>
+	)
+})
+
+ReaderVirtualRow.displayName = 'ReaderVirtualRow'
