@@ -3,10 +3,10 @@ import { cn } from '@/common/utils/cn'
 import { HoverCard, HoverCardContent, HoverCardTrigger, Icon } from '@/components/ui'
 import { url } from 'zod'
 
-const LicensePlateHoverCard: React.FC<{ licensePlate: string; licensePlateImage: string | null }> = ({
-	licensePlate,
-	licensePlateImage
-}) => {
+const LicensePlateHoverCard: React.FC<{
+	licensePlate: string
+	licensePlateImage: string | null
+}> = ({ licensePlate, licensePlateImage }) => {
 	const disabled = !url().safeParse(licensePlateImage).success
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 
@@ -25,7 +25,7 @@ const LicensePlateHoverCard: React.FC<{ licensePlate: string; licensePlateImage:
 				<img
 					loading='lazy'
 					src={licensePlateImage}
-					className='aspect-video max-w-full rounded-[inherit] object-cover object-center'
+					className='aspect-video w-full max-w-full rounded-[inherit] object-cover object-center'
 				/>
 			</HoverCardContent>
 		</HoverCard>
