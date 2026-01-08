@@ -1,6 +1,5 @@
 import SearchDialog from './search-dialog'
 
-import { LanguageDropdown, LanguageSelect } from '@/app/-components/-shared/language-selector'
 import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
 import ThemeToggle from '@/app/-components/-shared/theme-toggle'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -42,9 +41,9 @@ const NavHeader: React.FC = () => {
 					<li>
 						<SearchDialog />
 					</li>
-					<li className='min-w-36 basis-36 sm:min-w-fit md:min-w-fit'>
+					{/* <li className='min-w-36 basis-36 sm:min-w-fit md:min-w-fit'>
 						{!isLargeScreen ? <LanguageDropdown /> : <LanguageSelect />}
-					</li>
+					</li> */}
 					<li>{!isLargeScreen ? <ThemeToggle /> : <ThemeSwitcher />}</li>
 					{!isLargeScreen && (
 						<li>
