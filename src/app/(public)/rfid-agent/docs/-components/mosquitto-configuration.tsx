@@ -63,6 +63,48 @@ const MosquittoConfiguration: React.FC = () => {
 				</li>
 				<li>
 					<Typography className='inline'>
+						In order to get your machine&apos;s IP address, press{' '}
+						<Kbd className='mx-1'>
+							<KbdKey aria-label='Meta'>Win</KbdKey>
+							<KbdKey>R</KbdKey>
+						</Kbd>
+						, type <code>&quot;cmd&quot;</code> and hit{' '}
+						<Kbd className='mx-1'>
+							<KbdKey aria-label='Meta'> ↳ Enter</KbdKey>
+						</Kbd>{' '}
+						to open <b>Command Prompt</b>. After that, run the following command to get your IP address.
+					</Typography>
+					<Terminal
+						command={
+							/* template */ `
+								ipconfig
+								
+							`
+						}
+						className='my-4'>
+						Ethernet adapter:
+						<br />
+						Connection-specific DNS Suffix . :
+						<br />
+						Link-local IPv6 Address . . . . . : xxxx::xxxx:xxxx:xxxx:xxxx%6
+						<br />
+						IPv4 Address. . . . . . . . . . . : 10.xxx.xxx.xxx // Copy this one
+						<br />
+						Subnet Mask . . . . . . . . . . . : 255.255.xxx.xxx
+						<br />
+						IPv4 Address. . . . . . . . . . . : xxx.xxx.xxx // Ignore this one
+						<br />
+						Subnet Mask . . . . . . . . . . . : 255.255.xxx.xxx
+						<br />
+						Default Gateway . . . . . . . . . : 10.xxx.xxx.xxx
+					</Terminal>
+					<Typography variant='blockquote' className='!mb-4'>
+						Look for the <code>IPv4 Address</code> under your active network connection. This is the IP address
+						you need to use in the <code>mosquitto.conf</code> file.
+					</Typography>
+				</li>
+				<li>
+					<Typography className='inline'>
 						Press{' '}
 						<Kbd className='mx-1'>
 							<KbdKey aria-label='Meta'>Win</KbdKey>

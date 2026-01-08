@@ -1,4 +1,3 @@
-import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
 import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
@@ -12,7 +11,6 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-	CommandShortcut,
 	Icon,
 	Typography
 } from '@/components/ui'
@@ -35,7 +33,7 @@ const SearchDialog: React.FC = () => {
 		setOpen(true)
 	})
 
-	const filteredItems = Object.values(navigationConfig)
+	const filteredItems = Object.values(menuGroups)
 		.flat()
 		.filter((item) =>
 			String(t(item.title, { defaultValue: item.title }))
@@ -76,13 +74,9 @@ const SearchDialog: React.FC = () => {
 							{!searchTerm ? (
 								<Fragment>
 									<CommandGroup heading='RFID Agent'>
-										{menuGroups.rfidAgent.map((item, index) => (
-											<CommandItem asChild className='h-9 text-sm' key={index}>
-												<Link
-													to='/rfid-agent/docs'
-													hash={item.hash}
-													href={item.href}
-													onClick={() => setOpen(false)}>
+										{menuGroups.rfidAgent.map((item) => (
+											<CommandItem key={item.hash} asChild className='h-8 text-sm' value={item.hash}>
+												<Link hash={item.hash} onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
 												</Link>
 											</CommandItem>
@@ -90,13 +84,9 @@ const SearchDialog: React.FC = () => {
 									</CommandGroup>
 									<CommandSeparator />
 									<CommandGroup heading='Eclipse Mosquitto'>
-										{menuGroups.mosquitto.map((item, index) => (
-											<CommandItem asChild className='text-sm' key={index}>
-												<Link
-													to='/rfid-agent/docs'
-													hash={item.hash}
-													href={item.href}
-													onClick={() => setOpen(false)}>
+										{menuGroups.mosquitto.map((item) => (
+											<CommandItem key={item.hash} asChild className='h-8 text-sm' value={item.hash}>
+												<Link hash={item.hash} onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
 												</Link>
 											</CommandItem>
@@ -107,14 +97,9 @@ const SearchDialog: React.FC = () => {
 								filteredItems.length > 0 && (
 									<CommandGroup heading={`${filteredItems.length} results`}>
 										{filteredItems.map((item) => (
-											<CommandItem className='h-8' key={item.id} asChild>
-												<Link
-													className='flex items-center gap-x-2'
-													to={item.url}
-													onClick={() => setOpen(false)}>
-													<Icon name={item.icon} />
+											<CommandItem key={item.hash} className='h-8 text-sm' value={item.hash} asChild>
+												<Link hash={item.hash} onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
-													<CommandShortcut>{String(item.keybinding).split('.').join('+')}</CommandShortcut>
 												</Link>
 											</CommandItem>
 										))}
