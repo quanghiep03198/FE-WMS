@@ -1,12 +1,15 @@
 import { MicrosoftIcon } from '@/components/icons'
 import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import { useGetLatestRelease } from '../../-hooks/use-get-latest-release'
 import { DownloadButton } from './download-button'
 import SectionHeading from './section-heading'
 import { ListItem, OrderedList, Section, UnorderedList } from './styled'
 import Terminal from './terminal'
 
 const RFIDAgentInstallation: React.FC = () => {
+	const { latestRelease, isLoading, isError } = useGetLatestRelease()
+
 	return (
 		<Section>
 			<SectionHeading id={DocumentHashNavigation.RFID_AGENT_INSTALLATION}>Installation and setup</SectionHeading>
@@ -16,12 +19,38 @@ const RFIDAgentInstallation: React.FC = () => {
 					<Typography as='span'>Download the latest version of RFID Agent from our official website.</Typography>
 					<Div className='my-6'>
 						<Div className='inline-flex items-center gap-x-2'>
-							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-v1.0.1-install-windows-x64.exe'>
-								<MicrosoftIcon />
+							<DownloadButton
+								href={
+									latestRelease?.assets.find((asset) => asset.content_type === 'application/x-msdos-program')
+										?.browser_download_url
+								}>
+								{isLoading ? <Icon name='LoaderCircle' className='animate-spin' /> : <MicrosoftIcon />}
 								Windows Installer (.exe)
+								{isError && (
+									<Icon
+										name='CircleAlert'
+										size={18}
+										className='absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 fill-destructive stroke-destructive-foreground'
+									/>
+								)}
 							</DownloadButton>
-							<DownloadButton href='https://raw.githubusercontent.com/quanghiep03198/rfid-agent/main/installation/rfid-agent-v1.0.1-portable-version.rar'>
-								<Icon name='FolderArchive' /> Portable Version (.rar)
+							<DownloadButton
+								href={
+									latestRelease?.assets.find((asset) => asset.content_type === 'application/zip')
+										?.browser_download_url
+								}>
+								<Icon
+									name={isLoading ? 'LoaderCircle' : 'FolderArchive'}
+									className={isLoading && 'animate-spin'}
+								/>{' '}
+								Portable Version (.rar)
+								{isError && (
+									<Icon
+										name='CircleAlert'
+										size={18}
+										className='absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 fill-destructive stroke-destructive-foreground'
+									/>
+								)}
 							</DownloadButton>
 						</Div>
 					</Div>

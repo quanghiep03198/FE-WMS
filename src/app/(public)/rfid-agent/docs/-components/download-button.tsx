@@ -3,7 +3,7 @@ import { buttonVariants } from '@/components/ui'
 
 export const DownloadButton: React.FC<React.ComponentProps<'a'>> = ({ children, ...props }) => {
 	return (
-		<a {...props} className={cn(buttonVariants())}>
+		<a {...props} className={cn(buttonVariants({ className: 'relative' }))}>
 			{children}
 		</a>
 	)
