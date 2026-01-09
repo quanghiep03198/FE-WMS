@@ -11,7 +11,6 @@ const PlaygroundHeader: React.FC = () => {
 		<Div className='flex items-center justify-between gap-x-2 p-2'>
 			<Div className='inline-flex items-center gap-x-2 text-base'>
 				<PlaygroundStatusIndicator />
-
 				<Typography className='inline-flex gap-x-1 text-lg font-semibold'>
 					{formatIntlNumber(scannedEpcs.length)}
 					<Typography as='small' variant='small' className='text-xs font-medium'>
