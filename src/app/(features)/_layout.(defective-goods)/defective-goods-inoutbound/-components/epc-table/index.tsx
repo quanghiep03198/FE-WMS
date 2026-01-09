@@ -1,4 +1,5 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
+import { CommonActions } from '@/common/constants/enums'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { Table, TableBody, TableCell, TableRow, Typography } from '@/components/ui'
@@ -22,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useFilterQuery } from '../../-hooks/use-filter-query'
 import { DefectiveCategoryI18n } from '../../../-constants'
-import { useReaderPlaygroundStore } from '../../../-contexts/rfid-reader-playground.context'
+import { usePageContext } from '../../../-contexts/page-context'
 import { useDefectiveCategoryList } from '../../../-hooks/use-defective-category-list'
 import { useGetCanInoutboundEpcQuery } from '../../../-hooks/use-defective-goods-asm'
 import DataTableEmpty from './table-empty'
@@ -35,9 +36,10 @@ const EpcTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const containerRef = useRef<HTMLDivElement>(null)
 	const { searchParams } = useFilterQuery()
-	const { setScannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'setScannedEpcs')
+	const { event$ } = usePageContext()
 	const columnHelper = createColumnHelper<IDefectiveGoods>()
 	const defectiveCategoryList = useDefectiveCategoryList()
+	// const { setScannedEpcs } = useReaderPlaygroundStore( 'setScannedEpcs')
 
 	const { data, isLoading } = useGetCanInoutboundEpcQuery()
 
@@ -189,7 +191,8 @@ const EpcTable: React.FC = () => {
 		if (isEqual(data, tableData)) return
 		const newData = Array.isArray(data) ? data : []
 		setTableData(newData)
-		setScannedEpcs(newData.map((item) => item.epc))
+		event$.emit({ action: CommonActions.IMPORT, payload: newData.map((item) => item.epc) })
+		// setScannedEpcs(newData.map((item) => item.epc))
 	}, [data, searchParams.action])
 
 	const table = useReactTable<IDefectiveGoods>({

@@ -2,8 +2,8 @@ import { Input } from '@/components/ui'
 import { useDebounceEffect } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFilterQuery } from '../-hooks/use-filter-query'
-import { useInoutboundMethod } from '../-hooks/use-select-inoutbound-method'
+import { useFilterQuery } from '../../-hooks/use-filter-query'
+import { useInoutboundMethod } from '../../-hooks/use-select-inoutbound-method'
 
 const QuantityFiledControl = () => {
 	const { t } = useTranslation()

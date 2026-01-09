@@ -1,4 +1,5 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
+import { CommonActions } from '@/common/constants/enums'
 import {
 	Button,
 	Div,
@@ -14,34 +15,36 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { DefectiveGoodsOutboundPurpose } from '../-constants'
-import { useFilterQuery } from '../-hooks/use-filter-query'
+import { DefectiveGoodsOutboundPurpose } from '../../-constants'
+import { useFilterQuery } from '../../-hooks/use-filter-query'
 import {
-	DefectiveGoodsInboundFormValues,
 	defectiveGoodsInboundFormValues,
-	DefectiveGoodsOutboundFormValues,
-	defectiveGoodsOutboundFormValues
-} from '../-schemas'
-import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
-import { useUpdateDefectiveGoodsStockMutation } from '../../-hooks/use-defective-goods-asm'
+	defectiveGoodsOutboundFormValues,
+	type InboundOutboundFormValues
+} from '../../-schemas'
+import { usePageContext } from '../../../-contexts/page-context'
+import { useUpdateDefectiveGoodsStockMutation } from '../../../-hooks/use-defective-goods-asm'
 import QuantityFiledControl from './quantity-field-control'
-
-export type FormValues = DefectiveGoodsInboundFormValues | DefectiveGoodsOutboundFormValues
 
 const InoutboundForm: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedEpcs, resetScannedEpcs } = useReaderPlaygroundStore('scannedEpcs', 'resetScannedEpcs')
+	const { event$ } = usePageContext()
 
 	const { searchParams, setParams } = useFilterQuery()
 	const schemaRef = useRef(
 		searchParams.action === RFIDDataType.INBOUND ? defectiveGoodsInboundFormValues : defectiveGoodsOutboundFormValues
 	)
-	const form = useForm<FormValues>({
+	const form = useForm<InboundOutboundFormValues>({
 		resolver: zodResolver(schemaRef.current)
+	})
+
+	const scannedEpcs = useWatch({
+		control: form.control,
+		name: 'epcs'
 	})
 
 	useUpdateEffect(() => {
@@ -52,18 +55,25 @@ const InoutboundForm: React.FC = () => {
 		form.reset()
 	}, [searchParams.action])
 
-	useUpdateEffect(() => {
-		if (scannedEpcs.length === 0) form.reset()
-		else form.setValue('epcs', scannedEpcs)
-	}, [scannedEpcs])
+	// useUpdateEffect(() => {
+	// 	if (scannedEpcs.length === 0) form.reset()
+	// 	else form.setValue('epcs', scannedEpcs)
+	// }, [scannedEpcs])
+
+	event$.useSubscription((e: { action: CommonActions; payload: string[] }) => {
+		if (e.action !== CommonActions.IMPORT) return
+		if (e.payload.length === 0) form.reset()
+		else form.setValue('epcs', e.payload)
+	})
 
 	const { mutateAsync, isPending, isError } = useUpdateDefectiveGoodsStockMutation()
 
-	const handleFormSubmission = (data: FormValues) => {
+	const handleFormSubmission = (data: InboundOutboundFormValues) => {
 		toast.promise(mutateAsync(data), {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
-				resetScannedEpcs()
+				// resetScannedEpcs()
+				event$.emit({ action: CommonActions.SAVE, payload: [] })
 				return t('ns_common:notification.success')
 			},
 			error: t('ns_common:notification.error')

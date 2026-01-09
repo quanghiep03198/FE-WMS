@@ -2,7 +2,7 @@ import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValu
 import { capitalize } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useInoutboundMethod } from '../-hooks/use-select-inoutbound-method'
+import { useInoutboundMethod } from '../../-hooks/use-select-inoutbound-method'
 
 const InoutboundStrategySelect: React.FC = () => {
 	const { t } = useTranslation()
