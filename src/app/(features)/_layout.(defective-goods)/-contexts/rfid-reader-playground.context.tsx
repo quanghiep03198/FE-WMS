@@ -1,11 +1,12 @@
 import { useGetAgentIPv4 } from '@/app/-hooks/use-agent-ipv4'
-import { useEffectOnce } from '@/common/hooks/use-effect-once'
+import { useLayoutEffectOnce } from '@/common/hooks/use-effect-once'
+import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { useInterval } from 'ahooks'
+import { useInterval, useUpdateEffect } from 'ahooks'
 import mqtt from 'mqtt'
-import { createContext, useCallback, useRef } from 'react'
+import { createContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { create, StoreApi, useStore } from 'zustand'
@@ -19,8 +20,6 @@ type PlaygroundConnectionStatus = Record<
 >
 
 type ReaderPlaygroundContextStore = {
-	pingCount: number
-	setPingCount: (value: number) => void
 	scannedEpcs: string[]
 	setScannedEpcs: (value: string[]) => void
 	resetScannedEpcs: () => void
@@ -56,11 +55,7 @@ const ReaderPlaygroundContext = createContext<StoreApi<ReaderPlaygroundContextSt
 const FPS = 60 // (fps) Frame per second to refresh the scanned EPC list
 const DURATION = 1000 // (ms) Duration to refresh the scanned EPC list
 const BUFFER_RATE = DURATION / FPS // (ms) Refresh rate to update the scanned EPC list
-const DEFAULT_PROPS: Pick<
-	ReaderPlaygroundContextStore,
-	'pingCount' | 'scannedEpcs' | 'connectionStatus' | 'readerSettings'
-> = {
-	pingCount: 0,
+const DEFAULT_PROPS: Pick<ReaderPlaygroundContextStore, 'scannedEpcs' | 'connectionStatus' | 'readerSettings'> = {
 	scannedEpcs: [],
 	connectionStatus: {
 		isMQTTConnectionReady: false,
@@ -83,22 +78,27 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 	const { t } = useTranslation()
 	const { data: agent } = useGetAgentIPv4()
 	const clientRef = useRef<mqtt.MqttClient>(null)
-	const bufferDataRef = useRef<Set<string>>(new Set())
-	// const pingCountRef = useReactiveRef<number>(0)
+	const dataRef = useRef<Set<string>>(new Set())
+	const pingCountRef = useReactiveRef<number>(0)
 
 	if (!clientRef.current && !!agent) {
 		clientRef.current = mqtt.connect(mqttSocket({ host: agent.ip, port: 9001 }))
 	}
 
+	const stopPingInterval = useInterval(
+		() => {
+			if (!clientRef.current) return
+			clientRef.current.publish(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' }))
+			pingCountRef.current++
+		},
+		clientRef.current ? 1000 : undefined,
+		{ immediate: clientRef?.current?.connected && pingCountRef.current > 1 }
+	)
+
 	const store = useRef<StoreApi<ReaderPlaygroundContextStore>>(null)
 	if (!store.current)
 		store.current = create<ReaderPlaygroundContextStore>((set) => ({
 			...DEFAULT_PROPS,
-			setPingCount: (value) => {
-				set((state) => {
-					return { ...state, pingCount: value }
-				})
-			},
 			setScannedEpcs: (value) => {
 				set((state) => {
 					return { ...state, scannedEpcs: value }
@@ -126,37 +126,24 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 			}
 		}))
 
-	const { pingCount, scannedEpcs, setScannedEpcs, setConnectionStatus, setReaderSettings, setPingCount } = useStore(
-		store.current
-	)
+	const { scannedEpcs, setScannedEpcs, setConnectionStatus, setReaderSettings } = useStore(store.current)
 
 	/**
 	 * Buffer incoming EPC data and update the scanned EPC list at a fixed interval
 	 */
 	useInterval(
 		() => {
-			if (bufferDataRef.current.size > 0) {
-				const newEpcs = Array.from(bufferDataRef.current)
+			if (dataRef.current.size > 0) {
+				const newEpcs = Array.from(dataRef.current)
 				setScannedEpcs([...new Set([...scannedEpcs, ...newEpcs])])
-				bufferDataRef.current.clear()
+				dataRef.current.clear()
 			}
 		},
 		BUFFER_RATE,
 		{ immediate: false }
 	)
 
-	// const stopPingInterval = useInterval(
-	// 	() => {
-	// 		if (!clientRef.current) return
-	// 		clientRef.current.publish(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' }))
-	// 		setPingCount(pingCount + 1)
-	// 		// pingCountRef.current++
-	// 	},
-	// 	1000,
-	// 	{ immediate: clientRef?.current?.connected && pingCount > 0 }
-	// )
-
-	const handleConnectMQTT: mqtt.OnConnectCallback = useCallback(async (): Promise<void> => {
+	const handleConnectMQTT: mqtt.OnConnectCallback = async (): Promise<void> => {
 		if (!clientRef.current) return
 		await Promise.all([
 			clientRef.current.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' })),
@@ -165,49 +152,51 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_DATA)
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SIGNAL)
 		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SETTINGS)
-	}, [clientRef.current])
+	}
 
-	const handleDisconnectMQTT: mqtt.OnDisconnectCallback = useCallback((): void => {
+	const handleDisconnectMQTT: mqtt.OnDisconnectCallback = (): void => {
 		toast.info('Stopped controlling the RFID reader')
-	}, [])
+	}
 
-	const handleMessageMQTT: mqtt.OnMessageCallback = useCallback(
-		(topic: string, message: Buffer): void => {
-			if (!clientRef.current) return
+	const handleMessageMQTT: mqtt.OnMessageCallback = (topic: string, message: Buffer): void => {
+		if (!clientRef.current) return
 
-			const rawMessage = message.toString()
-			switch (topic) {
-				case SubscribedTopics.REPLY_DATA: {
-					bufferDataRef.current.add(rawMessage)
-					break
-				}
-				case SubscribedTopics.REPLY_SIGNAL: {
-					setPingCount(0)
-					// pingCountRef.current = 0 // * Always reset ping count on every reply from RFID Agent
-					const data = Json.parse<PlaygroundConnectionStatus>(rawMessage)
-					setConnectionStatus(data)
-					break
-				}
-				case SubscribedTopics.REPLY_SETTINGS: {
-					const data = Json.parse<{ metadata: ReaderSettingsFormValues; message: string; error: any }>(rawMessage)
-					if (data.error) toast.error(t('ns_common:notification.error'), { id: 'rfid-settings-change' })
-					if (data.message && !data.error) toast.success(data.message, { id: 'rfid-settings-change' })
-					const parsed = readerSettingsFormSchema.safeParse(data.metadata)
-					if (parsed.success) setReaderSettings(parsed.data)
-					else console.error('[MQTT] Invalid reader settings from server:', parsed.error)
-					break
-				}
-				default: {
-					if (env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development')
-						console.warn('Unknown topic:', topic, rawMessage)
-					break
-				}
+		const rawMessage = message.toString()
+		switch (topic) {
+			case SubscribedTopics.REPLY_DATA: {
+				dataRef.current.add(rawMessage)
+				break
 			}
-		},
-		[clientRef.current]
-	)
+			case SubscribedTopics.REPLY_SIGNAL: {
+				pingCountRef.current = 0 // * Always reset ping count on every reply from RFID Agent
+				const data = Json.parse<PlaygroundConnectionStatus>(rawMessage)
+				setConnectionStatus(data)
+				break
+			}
+			case SubscribedTopics.REPLY_SETTINGS: {
+				const data = Json.parse<{ metadata: ReaderSettingsFormValues; message: string; error: any }>(rawMessage)
+				if (data.error) {
+					toast.error(t('ns_common:notification.error'), { id: 'rfid-settings-change' })
+					return
+				}
+				const validatedReaderSettings = readerSettingsFormSchema.safeParse(data.metadata)
+				if (validatedReaderSettings.success) {
+					if (data.message) toast.success(data.message, { id: 'rfid-settings-change' })
+					setReaderSettings(validatedReaderSettings.data)
+				} else {
+					console.error('[MQTT] Invalid reader settings from server:', validatedReaderSettings.error)
+				}
+				break
+			}
+			default: {
+				if (env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development')
+					console.warn('Unknown topic:', topic, rawMessage)
+				break
+			}
+		}
+	}
 
-	useEffectOnce(() => {
+	useLayoutEffectOnce(() => {
 		if (!clientRef.current) return
 
 		clientRef.current.on('connect', handleConnectMQTT)
@@ -223,6 +212,18 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 			clientRef.current.removeListener('message', handleMessageMQTT)
 		}
 	})
+
+	useUpdateEffect(() => {
+		if (pingCountRef.current > MAX_RETRY) {
+			stopPingInterval()
+			setScannedEpcs([])
+			setConnectionStatus({
+				isMQTTConnectionReady: false,
+				isReaderConnectionReady: false,
+				isReaderPlaying: false
+			})
+		}
+	}, [pingCountRef.current])
 
 	return <ReaderPlaygroundContext.Provider value={store.current}>{children}</ReaderPlaygroundContext.Provider>
 }
