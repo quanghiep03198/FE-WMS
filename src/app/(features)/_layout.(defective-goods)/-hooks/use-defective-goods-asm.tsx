@@ -1,5 +1,4 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-
 import { DefectiveGoodsService, IDefectiveGoods, IDefectiveGoodsInventory } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
@@ -10,14 +9,14 @@ import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../defective-goods-epc-combination/-constants'
 import {
-	CreateDefectiveGoodsFormValues,
-	DefectiveGoodQueryParams
+	type CreateDefectiveGoodsFormValues,
+	type DefectiveGoodQueryParams
 } from '../defective-goods-epc-combination/-schemas/defective-goods.schema'
-import { FormValues } from '../defective-goods-inoutbound/-components/inoutbound-form'
 import { useFilterQuery } from '../defective-goods-inoutbound/-hooks/use-filter-query'
 import {
-	DefectiveGoodsInboundFormValues,
-	DefectiveGoodsOutboundFormValues
+	type DefectiveGoodsInboundFormValues,
+	type DefectiveGoodsOutboundFormValues,
+	type InboundOutboundFormValues
 } from '../defective-goods-inoutbound/-schemas'
 
 export enum DefectiveGoodsQueryKey {
@@ -167,13 +166,13 @@ export const useUpdateDefectiveGoodsStockMutation = () => {
 	const invalidateQueries = useInvalidateQuery()
 
 	return useMutation({
-		mutationFn: async (payload: FormValues) =>
+		mutationFn: async (payload: InboundOutboundFormValues) =>
 			searchParams.action === RFIDDataType.INBOUND
 				? DefectiveGoodsService.updateInboundStatus(
-						payload as Exclude<FormValues, DefectiveGoodsOutboundFormValues>
+						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsOutboundFormValues>
 					)
 				: DefectiveGoodsService.updateOutboundStatus(
-						payload as Exclude<FormValues, DefectiveGoodsInboundFormValues>
+						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsInboundFormValues>
 					),
 		onSuccess: () => {
 			for (const key in searchParams) {

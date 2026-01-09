@@ -15,3 +15,4 @@ export const defectiveGoodsOutboundFormValues = object({
 
 export type DefectiveGoodsInboundFormValues = Infer<typeof defectiveGoodsInboundFormValues>
 export type DefectiveGoodsOutboundFormValues = Infer<typeof defectiveGoodsOutboundFormValues>
+export type InboundOutboundFormValues = DefectiveGoodsInboundFormValues | DefectiveGoodsOutboundFormValues
