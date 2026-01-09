@@ -14,9 +14,10 @@ import {
 import axiosInstance from '@/configs/axios.config'
 
 import { FALLBACK_VALUE } from '@/common/constants/constants'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { useAsyncEffect, useDebounce } from 'ahooks'
-import { useMemo, useState } from 'react'
+import { useDeepCompareEffect } from 'ahooks'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
@@ -32,21 +33,21 @@ const DetailTable: React.FC = () => {
 	const { scannedEpcs } = useReaderPlaygroundStore('scannedEpcs')
 	const [data, setData] = useState<DetailTableItem[]>([])
 	const [loading, setLoading] = useState<boolean>(false)
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-	const debouncedScannedEpcs = useDebounce(scannedEpcs, { wait: 200, leading: true, trailing: true })
+	useDeepCompareEffect(() => {
+		timeoutRef.current = setTimeout(() => {
+			setLoading(true)
+			axiosInstance
+				.post<string[], ResponseBody<DetailTableItem[]>>('/defective-goods/retrieve-size-qty', scannedEpcs)
+				.then((response) => setData(response.metadata))
+				.finally(() => setLoading(false))
+		}, 100)
 
-	useAsyncEffect(async () => {
-		setLoading(true)
-		try {
-			const response = await axiosInstance.post<string[], ResponseBody<DetailTableItem[]>>(
-				'/defective-goods/retrieve-size-qty',
-				debouncedScannedEpcs
-			)
-			setData(response.metadata)
-		} finally {
-			setLoading(false)
+		return () => {
+			clearTimeout(timeoutRef.current)
 		}
-	}, [debouncedScannedEpcs])
+	}, [scannedEpcs])
 
 	const totalQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
@@ -93,7 +94,10 @@ const DetailTable: React.FC = () => {
 							data.map((item) => (
 								<TableRow
 									key={item.factory_shoes_style + item.color_sn}
-									className={loading && '[&_td]:animate-pulse'}>
+									className={cn(
+										'duration-500 ease-in-out [&_td]:transition-opacity',
+										loading && '[&_td]:opacity-50'
+									)}>
 									<TableCell align='left'>
 										{item.factory_shoes_style === FALLBACK_VALUE
 											? t('ns_common:titles.unknown')
