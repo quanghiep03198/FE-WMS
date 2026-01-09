@@ -14,7 +14,7 @@ const getStateColors = (state: StatusIndicatorProps['state']) => {
 		case 'active':
 			return { dot: 'bg-success', ping: 'bg-success' }
 		case 'down':
-			return { dot: 'bg-destructive', ping: 'bg-red-300' }
+			return { dot: 'bg-destructive', ping: 'bg-destructive' }
 		case 'fixing':
 			return { dot: 'bg-warning', ping: 'bg-warning' }
 		case 'idle':
