@@ -286,24 +286,23 @@ const DefectiveGoodsForm: React.FC = () => {
 				)}
 				{/* Form fields */}
 				<Div as='fieldset' className='grid flex-1 basis-full grid-cols-6 gap-x-2 gap-y-6 overflow-y-auto p-6'>
-					{currentStrategy === 'usb' ||
-						(isNil(currentStrategy) && (
-							<Div className='col-span-full'>
-								<InputFieldControl
-									name='epc'
-									label='EPC'
-									autoFocus
-									autoComplete='off'
-									type='search'
-									tabIndex={0}
-									placeholder='E28*********************'
-									onKeyDown={handleEpcChange}
-									onKeyDownCapture={handleEpcChange}
-									disabled={isNil(formAction)}
-									description={t('ns_inoutbound:description.defective_epc_caption')}
-								/>
-							</Div>
-						))}
+					{(currentStrategy === 'usb' || formAction === CommonActions.UPDATE) && (
+						<Div className='col-span-full'>
+							<InputFieldControl
+								name='epc'
+								label='EPC'
+								autoFocus
+								autoComplete='off'
+								type='search'
+								tabIndex={0}
+								placeholder='E28*********************'
+								onKeyDown={handleEpcChange}
+								onKeyDownCapture={handleEpcChange}
+								disabled={isNil(formAction)}
+								description={t('ns_inoutbound:description.defective_epc_caption')}
+							/>
+						</Div>
+					)}
 					<Div className='col-span-full'>
 						<CategoryFieldControl disabled={isNil(formAction)} />
 					</Div>
