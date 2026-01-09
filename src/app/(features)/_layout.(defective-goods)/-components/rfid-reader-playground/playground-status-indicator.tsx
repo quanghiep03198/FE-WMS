@@ -1,44 +1,10 @@
 import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
-import { useDeepCompareEffect, useInterval } from 'ahooks'
 import { useTranslation } from 'react-i18next'
-import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
-
-const MAX_RETRY = 3
+import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
 
 const PlaygroundStatusIndicator: React.FC = () => {
-	const { connectionStatus, pingCount, setPingCount, setScannedEpcs, setConnectionStatus, publishMessage } =
-		useReaderPlaygroundStore(
-			'connectionStatus',
-			'pingCount',
-			'setPingCount',
-			'setScannedEpcs',
-			'setConnectionStatus',
-			'publishMessage'
-		)
+	const { connectionStatus } = useReaderPlaygroundStore('connectionStatus')
 	const { t } = useTranslation()
-
-	const stopPingInterval = useInterval(
-		() => {
-			publishMessage(PublishedTopics.REQUEST_SIGNAL, { action: 'ping' })
-			setPingCount(pingCount + 1)
-			// pingCountRef.current++
-		},
-		1000,
-		{ immediate: pingCount > 0 }
-	)
-
-	useDeepCompareEffect(() => {
-		console.log('pingCountRef', pingCount)
-		if (pingCount > MAX_RETRY) {
-			stopPingInterval()
-			setScannedEpcs([])
-			setConnectionStatus({
-				isMQTTConnectionReady: false,
-				isReaderConnectionReady: false,
-				isReaderPlaying: false
-			})
-		}
-	}, [pingCount])
 
 	return (
 		<StatusIndicator
