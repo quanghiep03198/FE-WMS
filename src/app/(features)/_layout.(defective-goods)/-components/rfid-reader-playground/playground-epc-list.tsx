@@ -62,7 +62,7 @@ const ReaderVirtualRow: React.FC<{ data: string } & VirtualItem> = memo(({ data,
 		<Div
 			key={index}
 			data-index={index}
-			className='absolute left-auto right-auto top-0 flex w-full justify-between whitespace-nowrap border-b px-4 py-2 font-medium uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+			className='absolute left-auto right-auto top-0 w-full whitespace-nowrap border-b px-4 py-2 font-medium uppercase last:border-none hover:bg-accent'
 			style={{
 				height: size,
 				transform: `translateY(${start}px)`
