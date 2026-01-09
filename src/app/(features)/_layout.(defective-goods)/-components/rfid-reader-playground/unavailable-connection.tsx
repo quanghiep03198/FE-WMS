@@ -23,13 +23,7 @@ const UnavailableConnection: React.FC = () => {
 				{t('ns_rfid:rfid_agent_connection_failure.description')}
 			</Typography>
 			<Div className='inline-flex items-center gap-x-1'>
-				<Button
-					size='sm'
-					onClick={() =>
-						publishMessage(PublishedTopics.REQUEST_SIGNAL, {
-							action: 'ping'
-						})
-					}>
+				<Button size='sm' onClick={() => publishMessage(PublishedTopics.REQUEST_SIGNAL, { action: 'ping' })}>
 					<Icon name='RotateCcw' />
 					{t('ns_common:actions.retry')}
 				</Button>
