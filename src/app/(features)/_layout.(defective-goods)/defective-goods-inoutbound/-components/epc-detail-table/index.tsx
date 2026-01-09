@@ -14,12 +14,13 @@ import {
 import axiosInstance from '@/configs/axios.config'
 
 import { FALLBACK_VALUE } from '@/common/constants/constants'
+import { CommonActions } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { useDeepCompareEffect } from 'ahooks'
-import { useMemo, useRef, useState } from 'react'
+import { debounce } from 'lodash-es'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
+import { usePageContext } from '../../../-contexts/page-context'
 
 type DetailTableItem = {
 	factory_shoes_style: string
@@ -27,27 +28,26 @@ type DetailTableItem = {
 	sizes: Array<{ size_code: string; qty: number }>
 }
 
-const DetailTable: React.FC = () => {
+const EpcDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-
-	const { scannedEpcs } = useReaderPlaygroundStore('scannedEpcs')
+	const { event$ } = usePageContext()
 	const [data, setData] = useState<DetailTableItem[]>([])
 	const [loading, setLoading] = useState<boolean>(false)
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-	useDeepCompareEffect(() => {
-		timeoutRef.current = setTimeout(() => {
-			setLoading(true)
-			axiosInstance
-				.post<string[], ResponseBody<DetailTableItem[]>>('/defective-goods/retrieve-size-qty', scannedEpcs)
-				.then((response) => setData(response.metadata))
-				.finally(() => setLoading(false))
-		}, 100)
-
-		return () => {
-			clearTimeout(timeoutRef.current)
-		}
-	}, [scannedEpcs])
+	event$.useSubscription(
+		debounce(
+			(e: { action: CommonActions; payload: string[] }) => {
+				if (e.action !== CommonActions.IMPORT) return
+				setLoading(true)
+				axiosInstance
+					.post<string[], ResponseBody<DetailTableItem[]>>('/defective-goods/retrieve-size-qty', e.payload)
+					.then((response) => setData(response.metadata))
+					.finally(() => setLoading(false))
+			},
+			100,
+			{ maxWait: 200, leading: true, trailing: false }
+		)
+	)
 
 	const totalQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
@@ -139,4 +139,4 @@ const DetailTable: React.FC = () => {
 	)
 }
 
-export default DetailTable
+export default EpcDetailTable

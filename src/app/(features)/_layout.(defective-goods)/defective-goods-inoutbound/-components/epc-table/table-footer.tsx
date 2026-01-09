@@ -5,7 +5,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFilterQuery } from '../../-hooks/use-filter-query'
 import { useGetCanInoutboundEpcQuery } from '../../../-hooks/use-defective-goods-asm'
-import InoutboundStrategySelect from '../inoutbound-strategy-select'
+import InoutboundStrategySelect from '../inoutbound-controller/inoutbound-strategy-select'
 
 type TableFooterProps = {
 	onResetColumnFilter: () => void
