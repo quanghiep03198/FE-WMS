@@ -13,7 +13,6 @@ export function ExploreRFIDAgentBanner() {
 			<Div className='mx-auto flex max-w-7xl items-center justify-center xxl:max-w-8xl'>
 				<Typography className='inline-flex flex-wrap items-center gap-x-2 sm:flex-col'>
 					<Typography as='span'>
-						{' '}
 						🚀 RFID Agent {!!latestRelease && latestRelease?.tag_name} has been released !!!
 					</Typography>
 					<Link
