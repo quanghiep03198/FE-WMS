@@ -4,13 +4,13 @@ import {
 	Button,
 	buttonVariants,
 	Div,
-	Form,
 	FormControl,
 	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
+	Form as FormProvider,
 	Icon,
 	InputFieldControl,
 	Label,
@@ -30,9 +30,10 @@ import {
 	Typography
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { isEmpty } from 'lodash-es'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useUpdateEffect } from 'ahooks'
+import { isEmpty, isEqual, isNil } from 'lodash-es'
+import { useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { ReaderAntenna } from '../../-constants'
@@ -41,24 +42,34 @@ import { readerSettingsFormSchema, ReaderSettingsFormValues } from '../../-schem
 
 const ReaderSettingSheet: React.FC = () => {
 	const { readerSettings, publishMessage } = useReaderPlaygroundStore('readerSettings', 'publishMessage')
+	const [open, setOpen] = useState<boolean>(false)
 	const { t } = useTranslation()
 	const form = useForm<ReaderSettingsFormValues>({
 		resolver: zodResolver(readerSettingsFormSchema),
-		mode: 'onChange',
-		defaultValues: { ...readerSettings, readerPower: Number(readerSettings.readerPower) }
+		defaultValues: readerSettings,
+		resetOptions: { keepErrors: false, keepDirty: false, keepValues: false }
 	})
 
+	const currentFormValues = useWatch({ control: form.control })
+
+	useUpdateEffect(() => {
+		form.reset(readerSettings, {
+			keepErrors: false,
+			keepDirty: false,
+			keepIsSubmitted: false,
+			keepTouched: false,
+			keepIsValid: false,
+			keepSubmitCount: false
+		})
+	}, [readerSettings])
+
 	useEffectOnce(() => {
-		if (Object.values(form.getValues()).some(isEmpty))
+		if (Object.values(form.watch()).some((value) => isEmpty(value) || isNil(value)))
 			publishMessage(PublishedTopics.REQUEST_SETTINGS, { action: 'get' })
 	})
 
-	useEffect(() => {
-		form.reset({ ...readerSettings, readerPower: Number(readerSettings.readerPower) })
-	}, [readerSettings])
-
 	return (
-		<Sheet>
+		<Sheet open={open} onOpenChange={setOpen}>
 			<Tooltip
 				message={t('ns_rfid:reader_settings_form.title')}
 				triggerProps={{ asChild: true }}
@@ -73,7 +84,7 @@ const ReaderSettingSheet: React.FC = () => {
 					<SheetDescription>{t('ns_rfid:reader_settings_form.description')}</SheetDescription>
 				</SheetHeader>
 				<Separator />
-				<Form {...form}>
+				<FormProvider {...form}>
 					<SheetForm
 						onSubmit={form.handleSubmit((data) => {
 							publishMessage<ReaderSettingsFormValues>(PublishedTopics.REQUEST_SETTINGS, {
@@ -84,24 +95,21 @@ const ReaderSettingSheet: React.FC = () => {
 						<InputFieldControl
 							label={t('ns_rfid:reader_settings_form.reader_ip.label')}
 							name='readerIP'
-							defaultValue={readerSettings.readerIP}
 							orientation='horizontal'
-							placeholder='10.xx.xx.xx'
+							placeholder='192.xxx.xxx.xxx'
 							autoFocus={false}
 							description={t('ns_rfid:reader_settings_form.reader_ip.description')}
 						/>
 						<FormField
 							name='readerAnt'
 							control={form.control}
-							defaultValue={readerSettings.readerAnt}
 							render={({ field }) => (
 								<FormItem className='grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'>
 									<FormLabel>Antenna</FormLabel>
 									<Div className='flex flex-col gap-y-2'>
 										<RadioGroup
-											onValueChange={field.onChange}
 											value={field.value}
-											defaultValue={field.value}
+											onValueChange={field.onChange}
 											className='flex flex-col space-y-2'>
 											{[
 												{ label: 'Antenna 1', value: ReaderAntenna.ANT_1 },
@@ -128,6 +136,7 @@ const ReaderSettingSheet: React.FC = () => {
 						<FormField
 							control={form.control}
 							name='readerPower'
+							disabled={false}
 							render={({ field }) => (
 								<FormItem className='grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'>
 									<FormLabel>{t('ns_rfid:reader_settings_form.reader_power.label')}</FormLabel>
@@ -147,6 +156,7 @@ const ReaderSettingSheet: React.FC = () => {
 														max={30}
 														value={[field.value]}
 														onValueChange={(value) => field.onChange(value[0])}
+														className='cursor-pointer focus:cursor-grabbing [&_span[role=slider]]:cursor-grab'
 													/>
 													<Div className='flex items-baseline justify-between px-1'>
 														{Array.from({ length: 6 }, (_, i) => (
@@ -188,13 +198,14 @@ const ReaderSettingSheet: React.FC = () => {
 							<Button
 								type='button'
 								size='sm'
+								disabled={isEqual(currentFormValues, readerSettings)}
 								onClick={() => publishMessage(PublishedTopics.REQUEST_SETTINGS, { action: 'get' })}>
 								<Icon name='RefreshCcw' /> {t('ns_common:actions.sync')}
 							</Button>
 						</Div>
 						<Button id='submit' type='submit' className='hidden' value='Submit' />
 					</SheetForm>
-				</Form>
+				</FormProvider>
 				<Separator />
 				<SheetFooter className='gap-2'>
 					<SheetClose className={cn(buttonVariants({ variant: 'secondary' }))}>
