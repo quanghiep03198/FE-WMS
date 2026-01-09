@@ -147,7 +147,6 @@ export const useUpdateContainerConditionMutation = () => {
 			)
 
 			// Return a context object with the snapshotted value
-			console.log('previousData :>> ', previousData)
 			return { previousData }
 		},
 		onError: (_error, _variables, context) => {
