@@ -187,14 +187,14 @@ const InboundReportMasterTable: React.FC = () => {
 				meta: {
 					filterVariant: 'select',
 					facetedUniqueValues: Object.values(DefectiveGoodsSource).map((source) => ({
-						label: t(`ns_inoutbound:shoe_source.${source}`, { defaultValue: source }),
+						label: t(`ns_inoutbound:shoes_source.${source}`, { defaultValue: source }),
 						value: source
 					}))
 				},
 				cell: ({ getValue }) => {
 					const value = getValue()
 					if (!value) return t('ns_common:titles.unknown')
-					return t(`ns_inoutbound:shoe_source.${value}`, { defaultValue: value })
+					return t(`ns_inoutbound:shoes_source.${value}`, { defaultValue: value })
 				}
 			}),
 			columnHelper.accessor('daily_inbound_qty', {
