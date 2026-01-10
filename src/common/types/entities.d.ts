@@ -245,10 +245,18 @@ export interface IInboundHistory {
 	accumulated_inbound_qty: number
 	missing_qty: number
 	progress: number
-	inbound_history: Array<{
+	order_size_run: Array<{
 		size_numcode: string
 		qty: number
-		inbound_date: string | Date
+	}>
+	inbound_history_by_size: Array<{
+		size_numcode: string
+		qty: number
+	}>
+	daily_inbound_history: Array<{
+		size_numcode: string
+		qty: number
+		inbound_date: Date
 	}>
 }
 

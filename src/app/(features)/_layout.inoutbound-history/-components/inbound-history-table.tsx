@@ -1,6 +1,17 @@
 import { IInboundHistory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
+import {
+	Div,
+	Icon,
+	Table,
+	TableBody,
+	TableCell,
+	TableFooter,
+	TableHead,
+	TableHeader,
+	TableRow,
+	Typography
+} from '@/components/ui'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -52,6 +63,18 @@ const InboundHistoryTable: React.FC = () => {
 		[i18n.language]
 	)
 
+	const inboundHistoryByDate = useMemo(() => {
+		if (!data) return []
+		return Object.entries(
+			groupBy(orderBy(data.daily_inbound_history, 'inbound_date', 'desc'), (item) => item.inbound_date)
+		)
+	}, [data])
+
+	const inboundHistoryBySize = useMemo(() => {
+		if (!data) return []
+		return orderBy(data.inbound_history_by_size, 'size_numcode', 'asc')
+	}, [data])
+
 	if (isLoading)
 		return (
 			<Div className='h-20 w-full place-content-center place-items-center text-center text-muted-foreground'>
@@ -70,15 +93,17 @@ const InboundHistoryTable: React.FC = () => {
 		)
 
 	return (
-		<Div className='relative h-[50vh] overflow-auto rounded-lg border'>
-			<Table className='w-full table-auto border-separate border-spacing-0 [&_span]:line-clamp-1'>
+		<Div className='relative h-[600px] overflow-auto rounded-lg border scrollbar-track-accent/50 @container xxl:h-[65vh]'>
+			<Table
+				className='w-full table-fixed border-separate border-spacing-0 [&_span]:line-clamp-1'
+				style={{ '--column-width': '180px' } as React.CSSProperties}>
 				<TableHeader className='sticky top-0 z-20'>
 					<TableRow>
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								style={{ maxWidth: 200, minWidth: 200 }}
+								className='w-[var(--column-width)] !bg-table-row-active capitalize text-table-head-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -88,8 +113,7 @@ const InboundHistoryTable: React.FC = () => {
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
-								style={{ maxWidth: 200, minWidth: 200 }}
-								className='font-normal text-foreground'
+								className='w-[var(--column-width)] font-normal text-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -99,15 +123,17 @@ const InboundHistoryTable: React.FC = () => {
 							</TableHead>
 						))}
 					</TableRow>
-					<TableRow>
+					<TableRow className='[&>*]:!bg-table-row-active [&>*]:capitalize'>
 						<TableHead
 							align='left'
 							className='!sticky left-0 z-10'
-							style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+							style={{ boxShadow: '1px 0px hsl(var(--border))', maxWidth: 200, minWidth: 200 }}>
 							<span>{t('ns_erp:fields.inbound_date')}</span>
 						</TableHead>
-						<TableHead colSpan={6}>
-							<span>{t('ns_erp:fields.daily_inbound_qty')}</span>
+						<TableHead colSpan={6} align='left' className='p-0'>
+							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
+								{t('ns_erp:fields.daily_inbound_qty')}
+							</span>
 						</TableHead>
 						<TableHead align='left' className='!sticky right-0 z-10'>
 							<span>{t('ns_common:common_fields.total')}</span>
@@ -115,9 +141,7 @@ const InboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{Object.entries(
-						groupBy(orderBy(data.inbound_history, 'inbound_date', 'desc'), (item) => item.inbound_date as string)
-					).map(([date, history]) => {
+					{inboundHistoryByDate.map(([date, history]) => {
 						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
 						return (
 							<TableRow key={date}>
@@ -131,9 +155,9 @@ const InboundHistoryTable: React.FC = () => {
 								<TableCell colSpan={6} className='p-0'>
 									<NestedTable>
 										{sortBy(history, 'size_numcode').map((item) => (
-											<NestedRow key={item.size_numcode}>
+											<NestedRow key={item.size_numcode} className='[&>*]:h-9'>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
-												<NestedCell>{item.qty}</NestedCell>
+												<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
 											</NestedRow>
 										))}
 									</NestedTable>
@@ -145,6 +169,49 @@ const InboundHistoryTable: React.FC = () => {
 						)
 					})}
 				</TableBody>
+				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
+					<TableRow>
+						<TableCell
+							colSpan={8}
+							align='left'
+							className='!border-b-0 bg-table-row-active p-0 text-table-head-foreground'>
+							<Div className='sticky left-0 max-w-[calc(100cqw-10px)] px-4 py-2 text-center'>
+								{t('ns_common:titles.overall')}
+							</Div>
+						</TableCell>
+					</TableRow>
+					<TableRow>
+						<TableCell colSpan={8} align='left' className='border-t p-0 font-normal'>
+							<NestedTable className='w-full'>
+								<NestedRow className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_hsl(var(--border))] [&>*]:h-9 [&>*]:capitalize'>
+									<NestedCellHead>Size</NestedCellHead>
+									<NestedCellHead>
+										<span>{t('ns_erp:fields.mo_size_qty')}</span>
+									</NestedCellHead>
+									<NestedCellHead>
+										<span>{t('ns_erp:fields.inbound_qty')}</span>
+									</NestedCellHead>
+									<NestedCellHead>
+										<span>{t('ns_erp:fields.missing_qty')}</span>
+									</NestedCellHead>
+								</NestedRow>
+								{sortBy(data.order_size_run, 'size_numcode').map((item) => {
+									const matchedSizeQty = inboundHistoryBySize.find((s) => s.size_numcode === item.size_numcode)
+									if (!matchedSizeQty && item.qty === 0) return null
+									const sizeInboundQty = matchedSizeQty.qty
+									return (
+										<NestedRow key={item.size_numcode} className='w-full [&>*]:h-9'>
+											<NestedCellHead>{item.size_numcode}</NestedCellHead>
+											<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(sizeInboundQty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(item.qty - sizeInboundQty)}</NestedCell>
+										</NestedRow>
+									)
+								})}
+							</NestedTable>
+						</TableCell>
+					</TableRow>
+				</TableFooter>
 			</Table>
 		</Div>
 	)
