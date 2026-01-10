@@ -39,7 +39,13 @@ const InoutboundForm: React.FC = () => {
 		searchParams.action === RFIDDataType.INBOUND ? defectiveGoodsInboundFormValues : defectiveGoodsOutboundFormValues
 	)
 	const form = useForm<InboundOutboundFormValues>({
-		resolver: zodResolver(schemaRef.current)
+		resolver: zodResolver(schemaRef.current),
+		defaultValues: {
+			epcs: [],
+			...(searchParams.action === RFIDDataType.INBOUND && { storage_location: null }),
+			...(searchParams.action === RFIDDataType.OUTBOUND && { outbound_purpose: null })
+		},
+		resetOptions: { keepErrors: false, keepDirty: false, keepValues: false }
 	})
 
 	const scannedEpcs = useWatch({
@@ -55,11 +61,6 @@ const InoutboundForm: React.FC = () => {
 		form.reset()
 	}, [searchParams.action])
 
-	// useUpdateEffect(() => {
-	// 	if (scannedEpcs.length === 0) form.reset()
-	// 	else form.setValue('epcs', scannedEpcs)
-	// }, [scannedEpcs])
-
 	event$.useSubscription((e: { action: CommonActions; payload: string[] }) => {
 		if (e.action !== CommonActions.IMPORT) return
 		if (e.payload.length === 0) form.reset()
@@ -72,8 +73,12 @@ const InoutboundForm: React.FC = () => {
 		toast.promise(mutateAsync(data), {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
-				// resetScannedEpcs()
 				event$.emit({ action: CommonActions.SAVE, payload: [] })
+				form.reset({
+					epcs: [],
+					...(searchParams.action === RFIDDataType.INBOUND && { storage_location: '' }),
+					...(searchParams.action === RFIDDataType.OUTBOUND && { outbound_purpose: '' })
+				})
 				return t('ns_common:notification.success')
 			},
 			error: t('ns_common:notification.error')
