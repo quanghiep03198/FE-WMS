@@ -147,14 +147,7 @@ export function OrderSearchFieldControl() {
 												<AutoCompleteItem
 													key={item.value.po}
 													aria-disabled={item.value.isCompleted}
-													onClick={(e) => {
-														if (item.value.isCompleted) {
-															e.stopPropagation()
-															e.preventDefault()
-															return
-														}
-														setValue('po', item.value.po)
-													}}>
+													onClick={() => setValue('po', item.value.po)}>
 													{item.value.po}
 													{item.value.isCompleted && <Icon name='BadgeCheck' size={18} />}
 													{item.value.po === currentOrderValue && (
