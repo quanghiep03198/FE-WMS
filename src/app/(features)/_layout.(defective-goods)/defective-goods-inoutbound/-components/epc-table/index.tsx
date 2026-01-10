@@ -68,8 +68,8 @@ const EpcTable: React.FC = () => {
 					filterVariant: 'autocomplete',
 					facetedUniqueValues: ['KOOLABURRA', 'TEVA', 'UGG'].map((item) => ({ label: item, value: item }))
 				},
-				size: 150,
-				minSize: 120,
+				size: 180,
+				minSize: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('po', {
@@ -83,8 +83,8 @@ const EpcTable: React.FC = () => {
 					align: 'left',
 					filterVariant: 'autocomplete'
 				},
-				size: 150,
-				minSize: 120,
+				size: 180,
+				minSize: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('mo_no', {
@@ -97,8 +97,8 @@ const EpcTable: React.FC = () => {
 					align: 'left',
 					filterVariant: 'autocomplete'
 				},
-				size: 150,
-				minSize: 120,
+				size: 180,
+				minSize: 150,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('factory_shoes_style', {
@@ -111,7 +111,7 @@ const EpcTable: React.FC = () => {
 				meta: {
 					filterVariant: 'autocomplete'
 				},
-				size: 150,
+				size: 180,
 				minSize: 150,
 				cell: TableCellText
 			}),
@@ -125,7 +125,7 @@ const EpcTable: React.FC = () => {
 				meta: {
 					filterVariant: 'autocomplete'
 				},
-				size: 150,
+				size: 180,
 				minSize: 150,
 				cell: TableCellText
 			}),
@@ -157,8 +157,8 @@ const EpcTable: React.FC = () => {
 				enablePinning: true,
 				enableResizing: true,
 				filterFn: 'includesString',
-				size: 120,
-				minSize: 100,
+				size: 150,
+				minSize: 120,
 				cell: TableCellText
 			}),
 			...(searchParams.action === RFIDDataType.OUTBOUND
@@ -168,6 +168,7 @@ const EpcTable: React.FC = () => {
 							enableColumnFilter: false,
 							filterFn: 'fuzzy',
 							size: 160,
+							maxSize: 150,
 							cell: ({ getValue }) => {
 								const value = getValue()
 								return isValid(new Date(value)) ? (
@@ -265,7 +266,9 @@ const EpcTable: React.FC = () => {
 						...computedColumnSizes
 					} as React.CSSProperties
 				}>
-				<Table className='table-fixed border-separate border-spacing-0 divide-y'>
+				<Table
+					className='table-auto border-separate border-spacing-0 divide-y'
+					style={{ minWidth: table.getTotalSize() + 'px' }}>
 					{shouldMemoize ? <MemoizedDataTableHeader table={table} /> : <DataTableHeader table={table} />}
 					{isLoading ? (
 						<DataTableLoading columns={table.getAllColumns()} />
