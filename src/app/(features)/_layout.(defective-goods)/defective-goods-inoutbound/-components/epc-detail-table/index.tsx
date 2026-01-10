@@ -11,14 +11,15 @@ import {
 	TableRow,
 	Typography
 } from '@/components/ui'
-import axiosInstance from '@/configs/axios.config'
 
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { CommonActions } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { debounce } from 'lodash-es'
-import { useMemo, useState } from 'react'
+import axiosInstance from '@/configs/axios.config'
+import { useMemoizedFn, useResetState, useThrottleFn, useUpdateEffect } from 'ahooks'
+import { useMemo, useRef } from 'react'
+import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../../-contexts/page-context'
 
@@ -31,23 +32,68 @@ type DetailTableItem = {
 const EpcDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
-	const [data, setData] = useState<DetailTableItem[]>([])
-	const [loading, setLoading] = useState<boolean>(false)
+	const [data, setData, resetData] = useResetState<DetailTableItem[]>([])
+	const [isFetching, setIsFetching, resetIsFetching] = useResetState<boolean>(false)
+	const [scannedEpcs, setScannedEpcs, resetScannedEpcs] = useResetState<string[]>([])
+	const abortControllerRef = useRef<AbortController | null>(new AbortController())
 
-	event$.useSubscription(
-		debounce(
-			(e: { action: CommonActions; payload: string[] }) => {
-				if (e.action !== CommonActions.IMPORT) return
-				setLoading(true)
-				axiosInstance
-					.post<string[], ResponseBody<DetailTableItem[]>>('/defective-goods/retrieve-size-qty', e.payload)
-					.then((response) => setData(response.metadata))
-					.finally(() => setLoading(false))
-			},
-			100,
-			{ maxWait: 200, leading: true, trailing: false }
-		)
+	const { run: captureDataChangeHandler, cancel: cancelCaptureDataChange } = useThrottleFn(
+		(e: { action: CommonActions; payload: string[] }) => {
+			if (e.action !== CommonActions.IMPORT || !Array.isArray(e.payload)) return
+			if (isEqual(scannedEpcs, e.payload)) {
+				cancelCaptureDataChange()
+				return
+			}
+			// If payload is empty, reset data and abort ongoing requests, else set scanned EPCs
+			if (!e.payload.length) {
+				resetData()
+				resetScannedEpcs()
+				// Always abort ongoing fetch requests on reset scanned EPCs
+				if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+					abortControllerRef.current?.abort()
+					abortControllerRef.current = null
+				}
+				return
+			}
+			setScannedEpcs(e.payload)
+		},
+		{ wait: 100 }
 	)
+
+	const inoutboundFormSubmissionHandler = useMemoizedFn((e: { action: CommonActions; payload: [] }) => {
+		if (e.action === CommonActions.SAVE) {
+			resetData()
+			resetScannedEpcs()
+		}
+	})
+
+	event$.useSubscription(captureDataChangeHandler)
+	event$.useSubscription(inoutboundFormSubmissionHandler)
+
+	const terminateFetchRequests = () => {
+		if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+			abortControllerRef.current?.abort()
+			abortControllerRef.current = null
+		}
+		cancelCaptureDataChange()
+	}
+
+	useUpdateEffect(() => {
+		if (scannedEpcs.length === 0) return terminateFetchRequests
+
+		// Ensure AbortController is initialized, avoid race condition when aborting previous requests
+		if (!abortControllerRef.current || abortControllerRef.current.signal.aborted) {
+			abortControllerRef.current = new AbortController()
+		}
+		setIsFetching(true)
+		axiosInstance
+			.post<string[], ResponseBody<DetailTableItem[]>>('/defective-goods/retrieve-size-qty', scannedEpcs, {
+				signal: abortControllerRef.current?.signal
+			})
+			.then((response) => setData(response.metadata))
+			.finally(() => resetIsFetching())
+		return terminateFetchRequests
+	}, [scannedEpcs])
 
 	const totalQty = useMemo(() => {
 		if (!Array.isArray(data)) return 0
@@ -95,8 +141,8 @@ const EpcDetailTable: React.FC = () => {
 								<TableRow
 									key={item.factory_shoes_style + item.color_sn}
 									className={cn(
-										'duration-500 ease-in-out [&_td]:transition-opacity',
-										loading && '[&_td]:opacity-50'
+										'duration-200 ease-in-out [&_td]:transition-opacity',
+										isFetching && '[&_td]:opacity-50'
 									)}>
 									<TableCell align='left'>
 										{item.factory_shoes_style === FALLBACK_VALUE
