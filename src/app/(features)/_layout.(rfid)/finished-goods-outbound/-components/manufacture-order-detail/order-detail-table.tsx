@@ -1,5 +1,6 @@
 import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Table } from '@/components/ui'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -80,15 +81,62 @@ const OrderSizeDetailTable: React.FC = () => {
 			}>
 			<Div
 				ref={containerRef}
-				className='h-[calc(var(--outlet-wrapper-height)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20'>
+				className='h-[calc(var(--outlet-wrapper-height)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20 @container'
+				style={
+					{
+						'--sticky-left-col-width': '168px',
+						'--sticky-right-col-width': '112px',
+						'--row-action-col-width': '56px'
+					} as React.CSSProperties
+				}>
 				<Table
-					className='w-full border-separate border-spacing-0 rounded-lg'
-					style={
-						{
-							'--sticky-left-col-width': '9rem',
-							'--row-action-col-width': '4rem'
-						} as React.CSSProperties
-					}>
+					className={cn(
+						'w-auto table-fixed [&_span]:line-clamp-1',
+						'[&_tr>:first-child]:sticky [&_tr>:first-child]:left-0 [&_tr>:first-child]:z-10',
+						'[&_tr>:nth-child(2)]:sticky [&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] [&_tr>:nth-child(2)]:z-10',
+						'[&_tr>:nth-child(3)]:sticky [&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width))] [&_tr>:nth-child(3)]:z-10 [&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
+						'[&_tr>:nth-last-child(2)]:sticky [&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] [&_tr>:nth-last-child(2)]:z-10',
+						'[&_tr>:last-child]:sticky [&_tr>:last-child]:right-0 [&_tr>:last-child]:z-10'
+					)}>
+					<colgroup>
+						<col
+							style={{
+								minWidth: 'var(--sticky-left-col-width)',
+								maxWidth: 'var(--sticky-left-col-width)'
+							}}
+						/>
+						<col
+							style={{
+								minWidth: 'var(--sticky-left-col-width)',
+								maxWidth: 'var(--sticky-left-col-width)'
+							}}
+						/>
+						<col
+							style={{
+								minWidth: 'var(--sticky-left-col-width)',
+								maxWidth: 'var(--sticky-left-col-width)'
+							}}
+						/>
+						<col
+							style={{
+								minWidth:
+									'calc(100cqw - 3*var(--sticky-left-col-width) - var(--sticky-right-col-width) - var(--row-action-col-width))'
+							}}
+						/>
+						<col
+							style={{
+								maxWidth: 'var(--sticky-right-col-width)',
+								minWidth: 'var(--sticky-right-col-width)'
+							}}
+						/>
+
+						<col
+							style={{
+								maxWidth: 'var(--row-action-col-width)',
+								minWidth: 'var(--row-action-col-width)'
+							}}
+						/>
+					</colgroup>
 					<TableHeader onColumnFilterChange={handleColumnFilterChange} />
 					{!Array.isArray(filteredScannedOrders) || filteredScannedOrders.length === 0 ? (
 						<TableEmptyState />
