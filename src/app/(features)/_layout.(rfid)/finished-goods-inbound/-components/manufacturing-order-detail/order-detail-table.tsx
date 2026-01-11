@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { usePageContext } from '../../-contexts/page-context'
 import { useGetInboundOrderDetail } from '../../-hooks/use-rfid-inbound-asm'
-import TableDataRow from './order-size-row'
+import TableDataRow from './order-detail-row'
 
 const OrderSizeDetailTable: React.FC = () => {
 	const { t } = useTranslation()
@@ -152,25 +152,81 @@ const OrderSizeDetailTable: React.FC = () => {
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
-			<DialogContent className='h-screen max-w-[screen] overflow-hidden rounded-none border-none focus-visible:outline-none focus-visible:ring-0'>
+			<DialogContent className='static h-screen max-w-[screen] overflow-hidden rounded-none border-none focus-visible:outline-none focus-visible:ring-0'>
 				<DialogHeader>
 					<DialogTitle>{t('ns_inoutbound:titles.order_sizing_list')}</DialogTitle>
 					<DialogDescription>{t('ns_inoutbound:description.order_sizing_list')}</DialogDescription>
 				</DialogHeader>
-				<Div className='relative flex h-[calc(85vh-4rem)] flex-col divide-y overflow-hidden rounded-lg border'>
-					<Div className='flow-root h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20'>
+				<Div className='static flex h-[calc(85vh-2rem)] flex-col items-stretch divide-y overflow-hidden rounded-lg border'>
+					<Div
+						className='relative h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20 @container [scrollbar-gutter:stable]'
+						style={
+							{
+								'--row-selection-col-width': '48px',
+								'--sticky-left-col-width': '168px',
+								'--sticky-right-col-width': '112px',
+								'--row-action-col-width': '56px'
+							} as React.CSSProperties
+						}>
 						<Table
-							className='border-separate border-spacing-0 rounded-lg'
-							style={
-								{
-									'--row-selection-col-width': '3rem',
-									'--sticky-left-col-width': '10rem',
-									'--row-action-col-width': '5rem'
-								} as React.CSSProperties
-							}>
-							<TableHeader className='sticky top-0 z-20'>
-								<TableRow className='sticky *:bg-table-head'>
-									<TableHead className='sticky left-0 z-20 w-[var(--row-selection-col-width)]'>
+							className={cn(
+								'w-full table-auto [&_span]:line-clamp-1',
+								'[&_tr>:first-child]:sticky [&_tr>:first-child]:left-0 [&_tr>:first-child]:z-10',
+								'[&_tr>:nth-child(2)]:sticky [&_tr>:nth-child(2)]:left-[var(--row-selection-col-width)] [&_tr>:nth-child(2)]:z-10',
+								'[&_tr>:nth-child(3)]:sticky [&_tr>:nth-child(3)]:left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] [&_tr>:nth-child(3)]:z-10',
+								'[&_tr>:nth-child(4)]:sticky [&_tr>:nth-child(4)]:left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] [&_tr>:nth-child(4)]:z-10 [&_tr>:nth-child(4)]:shadow-[1px_0px_hsl(var(--border))]',
+								'[&_tr>:nth-last-child(2)]:sticky [&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] [&_tr>:nth-last-child(2)]:z-10',
+								'[&_tr>:last-child]:sticky [&_tr>:last-child]:right-0 [&_tr>:last-child]:z-10'
+							)}>
+							<colgroup>
+								<col
+									style={{
+										minWidth: 'var(--row-selection-col-width)',
+										maxWidth: 'var(--row-selection-col-width)'
+									}}
+								/>
+								<col
+									style={{
+										width: 'var(--sticky-left-col-width) !important',
+										minWidth: 'var(--sticky-left-col-width)',
+										maxWidth: 'var(--sticky-left-col-width)'
+									}}
+								/>
+								<col
+									style={{
+										width: 'var(--sticky-left-col-width)',
+										minWidth: 'var(--sticky-left-col-width)',
+										maxWidth: 'var(--sticky-left-col-width)'
+									}}
+								/>
+								<col
+									style={{
+										minWidth: 'var(--sticky-left-col-width)',
+										maxWidth: 'var(--sticky-left-col-width)'
+									}}
+								/>
+								<col
+									style={{
+										minWidth:
+											'calc(100cqw - var(--row-selection-col-width) - 3 * var(--sticky-left-col-width) - var(--sticky-right-col-width) - var(--row-action-col-width))'
+									}}
+								/>
+								<col
+									style={{
+										maxWidth: 'var(--sticky-right-col-width)',
+										minWidth: 'var(--sticky-right-col-width)'
+									}}
+								/>
+								<col
+									style={{
+										minWidth: 'var(--row-action-col-width)',
+										maxWidth: 'var(--row-action-col-width)'
+									}}
+								/>
+							</colgroup>
+							<TableHeader className={cn('sticky top-0 z-20')}>
+								<TableRow className='*:bg-table-head'>
+									<TableHead className=''>
 										<Checkbox
 											role='checkbox'
 											checked={
@@ -181,39 +237,33 @@ const OrderSizeDetailTable: React.FC = () => {
 											onCheckedChange={toggleAllMatchedRowsSelected}
 										/>
 									</TableHead>
-									<TableHead
-										align='left'
-										className='left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
+									<TableHead align='left' className=''>
 										{t('ns_erp:fields.mo_no')}
 									</TableHead>
-									<TableHead
-										align='left'
-										className='left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap xl:sticky'>
-										{t('ns_erp:fields.factory_shoes_style')}
+									<TableHead align='left'>
+										<span>{t('ns_erp:fields.factory_shoes_style')}</span>
 									</TableHead>
-									<TableHead
-										align='left'
-										className='left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] whitespace-nowrap border-r-0 drop-shadow-[1px_0px_hsl(var(--border))] xl:sticky'>
-										{t('ns_erp:fields.color_sn')}
+									<TableHead align='left'>
+										<span>{t('ns_erp:fields.color_sn')}</span>
 									</TableHead>
-									<TableHead>Size</TableHead>
+									<TableHead align='left' className='p-0'>
+										<span className='sticky left-[calc(var(--row-selection-col-width)+3*var(--sticky-left-col-width))] block w-full max-w-[calc(100cqw-var(--row-selection-col-width)-3*var(--sticky-left-col-width)-var(--sticky-right-col-width)-var(--row-action-col-width))] px-4 py-2 text-center'>
+											Size
+										</span>
+									</TableHead>
 									<TableHead
 										align='right'
-										className='right-[var(--row-action-col-width)] z-20 w-28 min-w-28 bg-background xl:sticky'>
+										className='right-[var(--row-action-col-width)] z-20 w-[var(--sticky-right-col-width)] bg-background xl:sticky'>
 										{t('ns_common:common_fields.total')}
 									</TableHead>
-									<TableHead className='right-0 z-20 w-[var(--row-action-col-width)] min-w-[var(--row-action-col-width)] bg-background xl:sticky'>
+									<TableHead className=''>
 										<span className='sr-only'></span>
 									</TableHead>
 								</TableRow>
 								{/* Column Filters */}
-								<TableRow className='sticky'>
-									<TableHead
-										align='center'
-										className='sticky left-0 z-20 w-[var(--row-selection-col-width)] min-w-[var(--row-selection-col-width)]'></TableHead>
-									<TableHead
-										align='center'
-										className='sticky left-[var(--row-selection-col-width)] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
+								<TableRow>
+									<TableHead align='center'></TableHead>
+									<TableHead align='center'>
 										<Input
 											role='textbox'
 											placeholder='Search ...'
@@ -221,9 +271,7 @@ const OrderSizeDetailTable: React.FC = () => {
 											onChange={(e) => setColumnFilters((prev) => ({ ...prev, mo_no: e.target.value }))}
 										/>
 									</TableHead>
-									<TableHead
-										align='center'
-										className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
+									<TableHead align='center'>
 										<Input
 											role='textbox'
 											placeholder='Search ...'
@@ -236,9 +284,7 @@ const OrderSizeDetailTable: React.FC = () => {
 											}
 										/>
 									</TableHead>
-									<TableHead
-										align='center'
-										className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-20 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
+									<TableHead align='center'>
 										<Input
 											role='textbox'
 											placeholder='Search ...'
@@ -249,12 +295,10 @@ const OrderSizeDetailTable: React.FC = () => {
 									<TableHead>
 										<span className='sr-only'></span>
 									</TableHead>
-									<TableHead
-										align='center'
-										className='sticky right-[var(--row-action-col-width)] z-20 w-28 min-w-28'>
+									<TableHead align='center'>
 										<span className='sr-only'></span>
 									</TableHead>
-									<TableHead align='center' className='sticky right-0 z-20 w-[var(--row-action-col-width)]'>
+									<TableHead align='center'>
 										<span className='sr-only'></span>
 									</TableHead>
 								</TableRow>
@@ -276,9 +320,9 @@ const OrderSizeDetailTable: React.FC = () => {
 							</Div>
 						)}
 					</Div>
-					<Div className='flex basis-16 items-center justify-between bg-background p-4'>
+					<Div className='flex basis-16 items-center justify-between bg-background px-2 pr-4'>
 						<ExchangeOrderDialogTrigger />
-						<Div className='flex flex-1 items-center justify-end gap-x-2 bg-background'>
+						<Div className='mr-2 flex flex-1 items-center justify-end gap-x-2 bg-background'>
 							<Typography color='muted' className='font-medium'>
 								{t('ns_common:common_fields.total')}
 							</Typography>

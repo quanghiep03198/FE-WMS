@@ -1,4 +1,4 @@
-import { NestedCell, NestedRow, NestedTable } from '@/app/(features)/-components/shared/horizontal-nested-table'
+import { NestedCell, NestedColumn, NestedTable } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { cn } from '@/common/utils/cn'
@@ -65,10 +65,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	return (
 		<TableRow
 			className={cn(
-				'transition-all duration-500',
+				'w-full transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
-			<TableCell className='sticky left-0 z-10 w-[var(--row-selection-col-width)] min-w-[var(--row-selection-col-width)] py-4'>
+			<TableCell>
 				<Checkbox
 					disabled={!hasSomeRowMatch && selectedRows.length > 0}
 					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
@@ -82,7 +82,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					}
 				/>
 			</TableCell>
-			<TableCell className='group/cell sticky left-[var(--row-selection-col-width)] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 text-center'>
+			<TableCell>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
 					{data?.mo_no === FALLBACK_VALUE ? (
@@ -108,21 +108,15 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 					)}
 				</Div>
 			</TableCell>
-			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)]'>
-				{data?.factory_shoes_style}
-			</TableCell>
-			<TableCell className='sticky left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] border-r-0 drop-shadow-[1px_0px_hsl(var(--border))]'>
-				{data?.color_sn}
-			</TableCell>
-			<TableCell className={cn('!p-0')}>
-				<NestedTable
-					className='flex flex-grow border-collapse flex-nowrap divide-x'
-					onContextMenu={(e) => e.preventDefault()}>
+			<TableCell>{data?.factory_shoes_style}</TableCell>
+			<TableCell>{data?.color_sn}</TableCell>
+			<TableCell className='p-0'>
+				<NestedTable onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<NestedRow
+							<NestedColumn
 								key={size?.size_numcode}
-								className='group/cell inline-grid min-w-28 shrink-0 basis-28 grid-rows-2 divide-y last:flex-1'>
+								className='group/cell inline-grid shrink-0 grid-rows-2 divide-y last:flex-1'>
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
@@ -151,14 +145,14 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 									</Div>
 								</NestedCell>
 								<NestedCell>{formatIntlNumber(size?.count)}</NestedCell>
-							</NestedRow>
+							</NestedColumn>
 						))}
 				</NestedTable>
 			</TableCell>
-			<TableCell align='right' className='sticky right-[var(--row-action-col-width)] w-28 min-w-28 font-medium'>
+			<TableCell align='right' className='font-medium'>
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
-			<TableCell align='center' className='sticky right-0 w-[var(--sticky-right-col-width)] !opacity-100'>
+			<TableCell align='center'>
 				<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
 			</TableCell>
 		</TableRow>
