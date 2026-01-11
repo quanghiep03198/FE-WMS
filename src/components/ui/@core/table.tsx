@@ -5,7 +5,7 @@ import { cn } from '@/common/utils/cn'
 const Table: React.FC<React.ComponentProps<'table'>> = ({ className, ...props }) => (
 	<table
 		cellSpacing={0}
-		className={cn('w-full caption-bottom border-collapse rounded-md text-sm', className)}
+		className={cn('w-full caption-bottom border-separate border-spacing-0 text-sm', className)}
 		{...props}
 	/>
 )
@@ -43,7 +43,6 @@ TableRow.displayName = 'TableRow'
 
 const TableHead: React.FC<React.ComponentProps<'th'>> = ({ className, ...props }) => (
 	<th
-		style={{ position: 'inherit' }}
 		className={cn(
 			'w-full bg-background px-4 py-2 font-semibold text-table-head-foreground group-hover:bg-secondary/50 data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
 			className
