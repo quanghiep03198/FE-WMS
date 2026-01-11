@@ -1,4 +1,4 @@
-import { NestedCell, NestedRow } from '@/app/(features)/-components/shared/horizontal-nested-table'
+import { NestedCell, NestedColumn } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import {
 	Div,
 	Icon,
@@ -155,14 +155,14 @@ const EpcDetailTable: React.FC = () => {
 									<TableCell className='p-0'>
 										<Div className='flex flex-grow border-collapse flex-nowrap divide-x'>
 											{item.sizes.map((size) => (
-												<NestedRow key={size.size_code}>
+												<NestedColumn key={size.size_code}>
 													<NestedCell>
 														{size.size_code === FALLBACK_VALUE
 															? t('ns_common:titles.unknown')
 															: size.size_code}
 													</NestedCell>
 													<NestedCell>{size.qty}</NestedCell>
-												</NestedRow>
+												</NestedColumn>
 											))}
 										</Div>
 									</TableCell>
