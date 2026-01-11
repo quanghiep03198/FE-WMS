@@ -34,7 +34,7 @@ import { usePageContext } from '../../-contexts/page-context'
 import { useGetInboundOrderDetail } from '../../-hooks/use-rfid-inbound-asm'
 import TableDataRow from './order-detail-row'
 
-const OrderSizeDetailTable: React.FC = () => {
+const OrderDetailTable: React.FC = () => {
 	const { t } = useTranslation()
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 	const { scannedOrders, scanningStatus, setScannedOrders } = usePageContext(
@@ -370,4 +370,4 @@ const ExchangeOrderDialogTrigger: React.FC = () => {
 	)
 }
 
-export default OrderSizeDetailTable
+export default OrderDetailTable
