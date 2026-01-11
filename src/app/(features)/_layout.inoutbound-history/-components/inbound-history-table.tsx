@@ -16,7 +16,7 @@ import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
-import { NestedCell, NestedCellHead, NestedRow, NestedTable } from '../../-components/shared/horizontal-nested-table'
+import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
 import PlaceHolderItems from '../../-components/shared/placeholder-items'
 
 const InboundHistoryTable: React.FC = () => {
@@ -39,19 +39,19 @@ const InboundHistoryTable: React.FC = () => {
 			{
 				header: t('ns_erp:fields.mo_qty'),
 				accessorKey: 'mo_qty',
-				meta: { align: 'right' },
+				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
 			{
 				header: t('ns_erp:fields.accumulated_qty'),
 				accessorKey: 'accumulated_inbound_qty',
-				meta: { align: 'right' },
+				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
 			{
 				header: t('ns_erp:fields.missing_qty'),
 				accessorKey: 'missing_qty',
-				meta: { align: 'right' },
+				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
 			},
 			{
@@ -93,10 +93,10 @@ const InboundHistoryTable: React.FC = () => {
 		)
 
 	return (
-		<Div className='relative h-[600px] overflow-auto rounded-lg border scrollbar-track-accent/50 @container xxl:h-[65vh]'>
+		<Div className='relative max-h-[600px] overflow-auto rounded-lg border scrollbar-track-accent/50 @container xxl:max-h-[65vh]'>
 			<Table
-				className='w-full table-fixed border-separate border-spacing-0 [&_span]:line-clamp-1'
-				style={{ '--column-width': '180px' } as React.CSSProperties}>
+				className='table-fixed [&_span]:line-clamp-1'
+				style={{ '--column-width': '200px' } as React.CSSProperties}>
 				<TableHeader className='sticky top-0 z-20'>
 					<TableRow>
 						{columns.map((column) => (
@@ -155,10 +155,10 @@ const InboundHistoryTable: React.FC = () => {
 								<TableCell colSpan={6} className='p-0'>
 									<NestedTable>
 										{sortBy(history, 'size_numcode').map((item) => (
-											<NestedRow key={item.size_numcode} className='[&>*]:h-9'>
+											<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
 												<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
-											</NestedRow>
+											</NestedColumn>
 										))}
 									</NestedTable>
 								</TableCell>
@@ -183,7 +183,7 @@ const InboundHistoryTable: React.FC = () => {
 					<TableRow>
 						<TableCell colSpan={8} align='left' className='border-t p-0 font-normal'>
 							<NestedTable className='w-full'>
-								<NestedRow className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_hsl(var(--border))] [&>*]:h-9 [&>*]:capitalize'>
+								<NestedColumn className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_hsl(var(--border))] [&>*]:h-9 [&>*]:capitalize'>
 									<NestedCellHead>Size</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
@@ -194,18 +194,18 @@ const InboundHistoryTable: React.FC = () => {
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.missing_qty')}</span>
 									</NestedCellHead>
-								</NestedRow>
+								</NestedColumn>
 								{sortBy(data.order_size_run, 'size_numcode').map((item) => {
 									const matchedSizeQty = inboundHistoryBySize.find((s) => s.size_numcode === item.size_numcode)
 									if (!matchedSizeQty && item.qty === 0) return null
 									const sizeInboundQty = matchedSizeQty.qty
 									return (
-										<NestedRow key={item.size_numcode} className='w-full [&>*]:h-9'>
+										<NestedColumn key={item.size_numcode} className='w-full [&>*]:h-9'>
 											<NestedCellHead>{item.size_numcode}</NestedCellHead>
 											<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
 											<NestedCell>{formatIntlNumber(sizeInboundQty)}</NestedCell>
 											<NestedCell>{formatIntlNumber(item.qty - sizeInboundQty)}</NestedCell>
-										</NestedRow>
+										</NestedColumn>
 									)
 								})}
 							</NestedTable>
