@@ -6,15 +6,14 @@ import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSearchPurchaseOrderQuery } from '../../../-hooks/use-order-asm'
 
-type PurchaseOrderFieldControlProps = Pick<
+type PurchaseOrderFieldControlProps = Partial<
 	AutoCompleteFieldControlProps<
 		FieldValues,
 		{
 			po: string
 			is_completed: boolean
 		}
-	>,
-	'disabled'
+	>
 >
 
 const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = (props) => {
