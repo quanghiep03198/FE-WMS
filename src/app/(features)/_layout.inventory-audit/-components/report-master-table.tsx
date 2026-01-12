@@ -271,7 +271,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				renderSubComponent={renderSubComponents}
 				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
 				containerProps={{
-					style: { height: 'calc(var(--outlet-wrapper-height) - 300px)' }
+					className: 'h-[60dvh]'
 				}}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
