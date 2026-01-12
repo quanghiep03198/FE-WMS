@@ -98,7 +98,7 @@ const EpcDataList: React.FC = () => {
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
-						const response = await AuthService.refreshToken(user.id, abortControllerRef.current?.signal)
+						const response = await AuthService.refreshToken(user.username, abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
 						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one

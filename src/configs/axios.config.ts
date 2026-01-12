@@ -94,16 +94,17 @@ export class AxiosClient {
 					this.isRefreshingToken = true
 
 					const credentials = AuthService.getCredentials()
-					if (!credentials?.id) {
+					if (!credentials?.username) {
 						AuthService.logout()
 						abortController.abort()
 						toast.error(i18n.t('ns_auth:notification.authenticate_failed'))
 					}
 
 					try {
-						if (!credentials?.id) throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
+						if (!credentials?.username)
+							throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
 						const { metadata: refreshToken } = await AuthService.refreshToken(
-							credentials.id,
+							credentials.username,
 							abortController.signal
 						)
 						AuthService.setAccessToken(refreshToken)
