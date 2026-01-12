@@ -226,7 +226,7 @@ const OrderDetailTable: React.FC = () => {
 							</colgroup>
 							<TableHeader className={cn('sticky top-0 z-20')}>
 								<TableRow className='*:bg-table-head'>
-									<TableHead className=''>
+									<TableHead>
 										<Checkbox
 											role='checkbox'
 											checked={
@@ -237,9 +237,7 @@ const OrderDetailTable: React.FC = () => {
 											onCheckedChange={toggleAllMatchedRowsSelected}
 										/>
 									</TableHead>
-									<TableHead align='left' className=''>
-										{t('ns_erp:fields.mo_no')}
-									</TableHead>
+									<TableHead align='left'>{t('ns_erp:fields.mo_no')}</TableHead>
 									<TableHead align='left'>
 										<span>{t('ns_erp:fields.factory_shoes_style')}</span>
 									</TableHead>
@@ -256,7 +254,7 @@ const OrderDetailTable: React.FC = () => {
 										className='right-[var(--row-action-col-width)] z-20 w-[var(--sticky-right-col-width)] bg-background xl:sticky'>
 										{t('ns_common:common_fields.total')}
 									</TableHead>
-									<TableHead className=''>
+									<TableHead>
 										<span className='sr-only'></span>
 									</TableHead>
 								</TableRow>

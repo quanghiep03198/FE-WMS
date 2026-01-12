@@ -114,9 +114,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				<NestedTable onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<NestedColumn
-								key={size?.size_numcode}
-								className='group/cell inline-grid shrink-0 grid-rows-2 divide-y last:flex-1'>
+							<NestedColumn key={size?.size_numcode}>
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
