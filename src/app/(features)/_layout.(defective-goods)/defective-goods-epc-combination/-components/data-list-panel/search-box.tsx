@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../-constants'
 import { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
+import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory } from '../../../-constants'
 import AssemblyLineFieldControl from '../form-playground/assembly-line-field-control'
 import BrandFieldControl from '../form-playground/brand-field-control'
@@ -160,6 +161,7 @@ const SearchBox: React.FC = () => {
 									<BrandFieldControl orientation={formFieldOrientation} />
 									<CustShoeStyleFieldControl orientation={formFieldOrientation} />
 									<FactoryShoeStyleFieldControl orientation={formFieldOrientation} />
+									<PurchaseOrderFieldControl orientation={formFieldOrientation} />
 									<CommandNumberFieldControl orientation={formFieldOrientation} />
 									<ColorFieldControl orientation={formFieldOrientation} />
 									<SizeFieldControl orientation={formFieldOrientation} />
