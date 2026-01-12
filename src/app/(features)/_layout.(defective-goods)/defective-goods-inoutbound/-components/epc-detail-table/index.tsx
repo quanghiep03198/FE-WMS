@@ -1,4 +1,4 @@
-import { NestedCell, NestedColumn } from '@/app/(features)/-components/shared/horizontal-nested-table'
+import { NestedCell, NestedColumn, NestedTable } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import {
 	Div,
 	Icon,
@@ -103,24 +103,38 @@ const EpcDetailTable: React.FC = () => {
 	}, [data])
 
 	return (
-		<Div className='grid grid-rows-[auto_var(--bar-height)] divide-y divide-border'>
-			<Div className='h-[calc(var(--detail-table-panel-height)-var(--bar-height))] flex-1 basis-full overflow-scroll scrollbar-track-accent/50'>
+		<Div className='grid grid-rows-[auto_var(--bar-height)] divide-y divide-border overflow-hidden'>
+			<Div
+				className='!relative h-[calc(var(--detail-table-panel-height)-var(--bar-height))] w-full overflow-scroll scrollbar-track-accent/50 @container/1'
+				style={
+					{
+						'--col-width': '160px'
+					} as React.CSSProperties
+				}>
 				<Table
-					className='table-fixed border-separate border-spacing-0 [&_th]:bg-table-head [&_th]:text-table-head-foreground'
-					style={
-						{
-							'--col-width': '160px'
-						} as React.CSSProperties
-					}>
-					<TableHeader className='sticky top-0 z-20 h-[calc(var(--bar-height)+1px)] [&_th]:sticky [&_th]:top-0 [&_th]:z-20 [&_th]:border-b [&_th]:bg-table-head'>
-						<TableRow className='z-20'>
-							<TableHead align='left' className='left-[var(--col-width)] top-0 w-[var(--col-width)]'>
-								{t('ns_erp:fields.factory_shoes_style')}
+					className={cn(
+						'w-full table-auto [&_span]:line-clamp-1 [&_th]:bg-table-head [&_th]:text-table-head-foreground'
+					)}>
+					<colgroup>
+						<col style={{ minWidth: 'var(--col-width)', maxWidth: 'var(--col-width)' }} />
+						<col style={{ minWidth: 'var(--col-width)', maxWidth: 'var(--col-width)' }} />
+						<col style={{ minWidth: 'calc(100cqw - 2 * var(--col-width))' }} />
+					</colgroup>
+					<TableHeader className='sticky top-0 z-20 h-[calc(var(--bar-height)+1px)] [&_th]:border-b [&_th]:bg-table-head'>
+						<TableRow>
+							<TableHead align='left' className='sticky left-0 z-20'>
+								<span>{t('ns_erp:fields.factory_shoes_style')}</span>
 							</TableHead>
-							<TableHead align='left' className='left-[calc(2*var(--col-width))] top-0 w-[var(--col-width)]'>
-								{t('ns_erp:fields.color_sn')}
+							<TableHead
+								align='left'
+								className='sticky left-[var(--col-width)] z-20 border-r-0 shadow-[1px_0px_0px_hsl(var(--border))]'>
+								<span>{t('ns_erp:fields.color_sn')}</span>
 							</TableHead>
-							<TableHead>Size</TableHead>
+							<TableHead align='left' className='px-0'>
+								<span className='sticky left-[calc(2*var(--col-width))] z-10 block h-max max-w-[calc(100cqw-2*var(--col-width))] px-4 text-center align-middle'>
+									Size
+								</span>
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -141,21 +155,23 @@ const EpcDetailTable: React.FC = () => {
 								<TableRow
 									key={item.factory_shoes_style + item.color_sn}
 									className={cn(
-										'duration-200 ease-in-out [&_td]:transition-opacity',
+										'[&_td]:transition-opacity [&_td]:duration-200 [&_td]:ease-in-out',
 										isFetching && '[&_td]:opacity-50'
 									)}>
-									<TableCell align='left'>
+									<TableCell align='left' className='sticky left-0 z-20'>
 										{item.factory_shoes_style === FALLBACK_VALUE
 											? t('ns_common:titles.unknown')
 											: item.factory_shoes_style}
 									</TableCell>
-									<TableCell align='left'>
+									<TableCell
+										align='left'
+										className='sticky left-[var(--col-width)] z-20 border-r-0 shadow-[1px_0px_0px_hsl(var(--border))]'>
 										{item.color_sn === FALLBACK_VALUE ? t('ns_common:titles.unknown') : item.color_sn}
 									</TableCell>
-									<TableCell className='p-0'>
-										<Div className='flex flex-grow border-collapse flex-nowrap divide-x'>
+									<TableCell align='left' className='p-0'>
+										<NestedTable>
 											{item.sizes.map((size) => (
-												<NestedColumn key={size.size_code}>
+												<NestedColumn key={size.size_code} className='min-w-24 basis-24'>
 													<NestedCell>
 														{size.size_code === FALLBACK_VALUE
 															? t('ns_common:titles.unknown')
@@ -164,7 +180,7 @@ const EpcDetailTable: React.FC = () => {
 													<NestedCell>{size.qty}</NestedCell>
 												</NestedColumn>
 											))}
-										</Div>
+										</NestedTable>
 									</TableCell>
 								</TableRow>
 							))
