@@ -260,9 +260,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}}
 			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
 				const data = row.original
-				return (
-					<TruckloadDeliveryDetailTable data={data} onCollapse={() => row.toggleExpanded(!row.getIsExpanded())} />
-				)
+				return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
 			}}
 		/>
 	)
