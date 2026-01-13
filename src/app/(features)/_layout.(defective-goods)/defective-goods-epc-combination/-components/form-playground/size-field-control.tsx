@@ -21,27 +21,28 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
+import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 import { DefAutoCompleteFieldControlProps } from './type'
 
 const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
+	name,
 	loading,
 	disabled,
 	datalist,
-
 	...props
 }) => {
 	const { t } = useTranslation()
 	const { hash } = useLocation()
 	const { control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
-	const { fields, append, remove } = useFieldArray({ control, name: 'sizes' })
+	const { fields, append, remove } = useFieldArray({ control, name })
 	const scrollRef = useRef<HTMLDivElement>(null)
+	const { currentStrategy } = useSwitchCombinationStrategy()
 
 	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: control, name: 'color_sn' })
-	const currentCombinationStrategy = useWatch({ control, name: 'ri_type' })
 
 	const shouldRequireFullInfo: boolean =
 		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
@@ -62,7 +63,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 			}))
 	}, [datalist, productSpecification, currentBrand, currentFactoryShoeStyle, currentColor, shouldRequireFullInfo])
 
-	if (currentCombinationStrategy === 'manually' && !hash)
+	if (name === 'sizes' && currentStrategy === 'manually' && !hash)
 		return (
 			<Div className='col-span-full space-y-2'>
 				<Label>Sizes</Label>
@@ -144,7 +145,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	return (
 		<AutoCompleteFieldControl
 			{...props}
-			name='size_code'
+			name={name}
 			label='Size'
 			placeholder={t('ns_common:form_placeholder.fill', {
 				object: 'size',

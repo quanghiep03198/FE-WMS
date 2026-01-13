@@ -164,7 +164,7 @@ const SearchBox: React.FC = () => {
 									<PurchaseOrderFieldControl orientation={formFieldOrientation} />
 									<CommandNumberFieldControl orientation={formFieldOrientation} />
 									<ColorFieldControl orientation={formFieldOrientation} />
-									<SizeFieldControl orientation={formFieldOrientation} />
+									<SizeFieldControl name='size_code' orientation={formFieldOrientation} />
 									<SewingLineFieldControl orientation={formFieldOrientation} />
 									<AssemblyLineFieldControl orientation={formFieldOrientation} />
 								</ScrollShadow>

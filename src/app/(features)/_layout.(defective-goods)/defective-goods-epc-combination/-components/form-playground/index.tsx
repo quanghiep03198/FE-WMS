@@ -368,6 +368,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						<SizeFieldControl
 							loading={isLoading}
 							disabled={isNil(formAction)}
+							name={currentStrategy === 'manually' ? 'sizes' : 'size_code'}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
 									? orderDetail.sizes.map((item) => ({
