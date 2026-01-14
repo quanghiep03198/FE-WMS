@@ -454,7 +454,7 @@ const Signature: React.FC<{
 			{data[type] ? (
 				<img
 					loading='lazy'
-					className='aspect-video max-w-28 cursor-pointer object-contain object-center'
+					className='aspect-video max-w-28 cursor-pointer object-contain object-center dark:invert'
 					src={data[type]}
 					onClick={handleUpdateSignature}
 				/>

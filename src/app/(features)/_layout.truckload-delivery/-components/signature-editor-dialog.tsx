@@ -95,7 +95,7 @@ const SignatureEditorDialog: React.FC = () => {
 		svgClone.setAttribute('width', `${clientWidth}px`)
 		svgClone.setAttribute('height', `${clientHeight}px`)
 		svgClone.setAttribute('viewBox', `0 0 ${clientWidth} ${clientHeight}`)
-		svgClone.setAttribute('fill', '#737373')
+		svgClone.setAttribute('fill', '#0a0a0a')
 
 		const optimizedBase64 = svgToOptimizedBase64(svgClone, {
 			removeUnusedAttrs: true,
@@ -114,7 +114,7 @@ const SignatureEditorDialog: React.FC = () => {
 
 		const pngBase64 = await convertSvgToPng($svg.current?.svg, {
 			backgroundColor: 'transparent',
-			fillColor: '#737373',
+			fillColor: '#0a0a0a',
 			quality: 1.0
 		})
 
