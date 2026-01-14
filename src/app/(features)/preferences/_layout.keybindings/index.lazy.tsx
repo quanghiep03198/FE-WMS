@@ -1,14 +1,15 @@
 import { NavigationConfig, navigationConfig } from '@/app/(features)/-configs/navigation.config'
-import { Badge, Div, Separator } from '@/components/ui'
+import { Badge, Div, Icon, Separator } from '@/components/ui'
+import { DebouncedInput } from '@/components/ui/@custom/debounced-input'
 import DataTable from '@/components/ui/@react-table'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, Table } from '@tanstack/react-table'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageTitle } from '../../-components/shared/page-header'
 
-type CommandList = Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>[]
+type CommandList = Pick<NavigationConfig, 'title' | 'keybinding'>[]
 
 export const Route = createLazyFileRoute('/(features)/preferences/_layout/keybindings/')({
 	component: KeybindingsPage
@@ -29,8 +30,16 @@ function KeybindingsPage() {
 
 	const extendedCommands = [
 		{
+			title: t('actions.search', { defaultValue: null }),
+			keybinding: 'ctrl + k'
+		},
+		{
 			title: t('actions.toggle_theme', { defaultValue: null }),
 			keybinding: 'ctrl + alt + t'
+		},
+		{
+			title: t('actions.toggle_sidebar', { defaultValue: null }),
+			keybinding: 'ctrl + b'
 		},
 		{
 			title: t('actions.logout', { defaultValue: null }),
@@ -41,25 +50,26 @@ function KeybindingsPage() {
 		id: String(Object.values(navigationConfig).flat().length + index + 1)
 	})) as CommandList
 
-	const columnHelper = createColumnHelper<Pick<NavigationConfig, 'id' | 'title' | 'keybinding'>>()
+	const columnHelper = createColumnHelper<Pick<NavigationConfig, 'title' | 'keybinding'>>()
 
 	const columns = [
 		columnHelper.accessor('title', {
 			header: t('ns_common:settings.function'),
 			enableSorting: true,
 			enableColumnFilter: true,
+			enableResizing: false,
 			filterFn: 'fuzzy',
 			sortingFn: fuzzySort,
-			minSize: 240
+			minSize: 200
 		}),
 		columnHelper.accessor('keybinding', {
 			header: t('ns_common:navigation.keyboard_shortcut'),
 			enableSorting: true,
 			enableColumnFilter: true,
-			enableResizing: true,
+			enableResizing: false,
 			filterFn: 'fuzzy',
 			sortingFn: fuzzySort,
-			minSize: 240,
+			minSize: 300,
 			cell: ({ getValue }) => (
 				<Badge variant='secondary'>
 					<kbd>{getValue()}</kbd>
@@ -81,9 +91,30 @@ function KeybindingsPage() {
 				<Separator />
 				<DataTable
 					data={navigationCommands.concat(extendedCommands)}
-					enableColumnResizing
 					columns={columns}
-					containerProps={{ className: 'xxl:h-[50vh]' }}
+					border='bottom-only'
+					initialState={{
+						pagination: {
+							pageSize: 100,
+							pageIndex: 0
+						}
+					}}
+					enableColumnResizing
+					containerProps={{ className: 'h-[50vh]' }}
+					toolbarProps={{
+						override: true,
+						render: ({ table }: { table: Table<Pick<NavigationConfig, 'title' | 'keybinding'>> }) => (
+							<Div className='flex h-10 w-1/3 items-center gap-x-2 self-end overflow-hidden rounded-md border px-4 py-2'>
+								<Icon name='Search' />
+								<DebouncedInput
+									value={table.getState().globalFilter}
+									onChange={(value) => table.setGlobalFilter(value)}
+									placeholder={t('ns_common:actions.search') + '...'}
+									className='p-0'
+								/>
+							</Div>
+						)
+					}}
 				/>
 			</Div>
 		</Fragment>
