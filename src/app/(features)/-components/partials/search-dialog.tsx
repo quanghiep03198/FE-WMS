@@ -108,14 +108,14 @@ const SearchDialog: React.FC = () => {
 									<CommandGroup heading={t('ns_common:navigation.settings')}>
 										<CommandItem asChild className='h-9 text-sm'>
 											<Link to='/preferences/account'>
-												{t('ns_common:navigation.profile')}
-												<CommandShortcut>ctrl+alt+P</CommandShortcut>
+												{t('ns_common:navigation.account')}
+												<CommandShortcut>ctrl+alt+a</CommandShortcut>
 											</Link>
 										</CommandItem>
 										<CommandItem asChild className='h-9 text-sm'>
 											<Link to='/preferences/appearance-settings'>
 												{t('ns_common:navigation.settings')}
-												<CommandShortcut>ctrl+alt+S</CommandShortcut>
+												<CommandShortcut>ctrl+alt+s</CommandShortcut>
 											</Link>
 										</CommandItem>
 									</CommandGroup>
@@ -130,7 +130,11 @@ const SearchDialog: React.FC = () => {
 													to={item.url}
 													onClick={() => setOpen(false)}>
 													{t(item.title, { defaultValue: item.title })}
-													<CommandShortcut>{String(item.keybinding).split('.').join('+')}</CommandShortcut>
+													{item.keybinding && (
+														<CommandShortcut>
+															{String(item.keybinding).split('.').join('+')}
+														</CommandShortcut>
+													)}
 												</Link>
 											</CommandItem>
 										))}
