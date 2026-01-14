@@ -215,6 +215,11 @@
 	strong {
 		color: inherit !important;
 	}
+	mark {
+		border-radius: 4px;
+		box-decoration-break: clone;
+		padding: 0.1rem 0.3rem;
+	}
 }
 
 @layer utilities {
@@ -228,11 +233,5 @@
 .tiptap {
 	&:first-child {
 		margin-top: 0;
-	}
-
-	mark {
-		border-radius: 4px;
-		box-decoration-break: clone;
-		padding: 0.1rem 0.3rem;
 	}
 }

@@ -332,7 +332,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
-						<CustShoeStyleFieldControl
+						<FactoryShoeStyleFieldControl
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
 							disabled={isNil(formAction)}
@@ -345,7 +345,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
-						<FactoryShoeStyleFieldControl
+						<CustShoeStyleFieldControl
 							loading={isLoading}
 							readOnly={shouldRequireFullInfo}
 							disabled={isNil(formAction)}

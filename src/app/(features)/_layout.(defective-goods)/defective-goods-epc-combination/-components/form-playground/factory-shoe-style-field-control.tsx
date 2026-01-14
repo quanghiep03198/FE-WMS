@@ -20,10 +20,12 @@ const FactoryShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> =
 		if (!currentBrand || !Array.isArray(ctx['productSpecification'])) return []
 		const brand = ctx['productSpecification'].find((item) => item.brand_name === currentBrand)
 		if (!brand?.product_variants) return []
-		return brand.product_variants.map(({ factory_shoes_style }) => ({
-			label: factory_shoes_style,
-			value: factory_shoes_style
-		}))
+		return brand.product_variants
+			.map(({ factory_shoes_style }) => ({
+				label: factory_shoes_style,
+				value: factory_shoes_style
+			}))
+			.sort((a, b) => b.label.localeCompare(a.label))
 	}, [ctx['productSpecification'], currentBrand])
 
 	const handleValueChange = (value) => {

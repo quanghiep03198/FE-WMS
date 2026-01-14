@@ -56,11 +56,11 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
 		if (!spec?.sizes) return []
 		return spec.sizes
-			.sort((a, b) => Number(a.size) - Number(b.size))
 			.map(({ size }) => ({
 				label: size,
-				value: size
+				value: String(size)
 			}))
+			.sort((a, b) => a.label.localeCompare(b.label))
 	}, [datalist, productSpecification, currentBrand, currentFactoryShoeStyle, currentColor, shouldRequireFullInfo])
 
 	if (name === 'sizes' && currentStrategy === 'manually' && !hash)
@@ -96,6 +96,7 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 									<Div className='flex-1'>
 										<AutoCompleteFieldControl
 											{...props}
+											type='text'
 											name={`sizes.${index}.size_code`}
 											placeholder={t('ns_common:form_placeholder.fill', {
 												object: 'size',

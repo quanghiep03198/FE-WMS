@@ -17,10 +17,12 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 		const brand = ctx['productSpecification'].find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
 		if (!variant?.specs) return []
-		return variant.specs.map(({ color_sn }) => ({
-			label: color_sn,
-			value: color_sn
-		}))
+		return variant.specs
+			.map(({ color_sn }) => ({
+				label: color_sn,
+				value: color_sn
+			}))
+			.sort((a, b) => a.label.localeCompare(b.label))
 	}, [ctx['productSpecification'], currentBrand, currentFactoryShoeStyle])
 
 	return (
