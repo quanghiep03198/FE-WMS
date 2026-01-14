@@ -170,6 +170,9 @@ const DefectiveGoodsForm: React.FC = () => {
 				case 'epc':
 					if (currentStrategy === 'usb') currentFormValues[key] = ''
 					break
+				case 'sizes':
+					if (currentStrategy === 'manually') currentFormValues[key] = []
+					break
 				case 'shoe_source':
 					currentFormValues[key] = DefectiveGoodsSource.FINAL_INSPECTION
 					break
