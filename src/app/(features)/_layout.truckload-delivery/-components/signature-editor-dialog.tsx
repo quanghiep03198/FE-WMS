@@ -1,3 +1,4 @@
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
@@ -39,6 +40,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const [open, setOpen] = useResetState<boolean>(false)
 	const [points, setPoints, resetPoints] = useResetState([])
 	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'png' | null>('png')
+	const isMobile = useMediaQuery('(max-width: 1279px)')
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
 	const [statusToUpdate, setStatusToUpdate] = useState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
@@ -169,14 +171,14 @@ const SignatureEditorDialog: React.FC = () => {
 				setOpen(open)
 				if (!open) resetPoints()
 			}}>
-			<DialogContent className='max-w-2xl xl:max-w-3xl'>
+			<DialogContent className='max-w-2xl grid-rows-[auto_1fr_auto] md:h-[85vh] xl:max-w-4xl'>
 				<DialogHeader className='mb-6'>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
 					<DialogDescription>
 						{t('ns_inoutbound:description.update_dispatch_order_signature_info')}
 					</DialogDescription>
 				</DialogHeader>
-				<Div className='flex flex-col gap-y-6'>
+				<Div className='flex h-full flex-1 basis-full flex-col gap-y-6'>
 					{['security_1_signature', 'security_2_signature'].includes(dialogData.current.signature_type) && (
 						<Div className='flex flex-col gap-y-3'>
 							<Label htmlFor='confirmation'>{t('ns_inoutbound:labels.security_confirmation')}</Label>
@@ -222,7 +224,7 @@ const SignatureEditorDialog: React.FC = () => {
 							</RadioGroup>
 						</Div>
 					)}
-					<Div className='flex flex-col gap-y-3'>
+					<Div className='flex flex-1 flex-col gap-y-3'>
 						<Label
 							htmlFor='signature'
 							aria-invalid={isMissingSignature}
@@ -232,7 +234,7 @@ const SignatureEditorDialog: React.FC = () => {
 						<Div
 							id='signature'
 							aria-invalid={isMissingSignature}
-							className='relative aspect-video overflow-clip rounded-md border duration-200 aria-[readonly=true]:!border aria-[invalid=true]:border-destructive hover:border-primary aria-[invalid=true]:hover:border-destructive aria-[readonly=true]:hover:border-border'>
+							className='relative max-h-full min-h-[50vh] flex-1 basis-full overflow-clip rounded-md border duration-200 aria-[readonly=true]:!border aria-[invalid=true]:border-destructive hover:border-primary aria-[invalid=true]:hover:border-destructive aria-[readonly=true]:hover:border-border'>
 							{isCompressing && <OptimizingLoader />}
 							<Signature
 								ref={$svg}
@@ -244,7 +246,7 @@ const SignatureEditorDialog: React.FC = () => {
 									size: 5,
 									smoothing: 0.5,
 									thinning: 0.5,
-									streamline: 0.95,
+									streamline: isMobile ? 0.3 : 0.9,
 									start: {
 										taper: 0,
 										cap: true
