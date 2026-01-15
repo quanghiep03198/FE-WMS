@@ -1,8 +1,11 @@
-import { SelectFieldControl } from '@/components/ui'
+import { SelectFieldControl, SelectFieldControlProps } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
+import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveGoodsSource } from '../../../-constants'
 
-export const ShoeSourceFieldControl: React.FC = () => {
+export const ShoeSourceFieldControl: React.FC<
+	Partial<SelectFieldControlProps<DefectiveGoodsCombinationFormValues, Record<'label' | 'value', string>>>
+> = (props) => {
 	const { t } = useTranslation()
 
 	return (
@@ -15,6 +18,7 @@ export const ShoeSourceFieldControl: React.FC = () => {
 			}))}
 			labelField='label'
 			valueField='value'
+			{...props}
 		/>
 	)
 }

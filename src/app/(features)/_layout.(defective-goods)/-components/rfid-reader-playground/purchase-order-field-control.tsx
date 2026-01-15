@@ -4,6 +4,7 @@ import { omit } from 'lodash-es'
 import { useMemo } from 'react'
 import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { DefectiveCategory } from '../../-constants'
 import { useSearchPurchaseOrderQuery } from '../../../-hooks/use-order-asm'
 
 type PurchaseOrderFieldControlProps = Partial<
@@ -20,8 +21,13 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = (pro
 	const { control } = useFormContext()
 	const { t } = useTranslation()
 	const value = useWatch({ control, name: 'po' }) ?? ''
+	const currentCategory = useWatch({ control, name: 'defective_category' })
 	const debouncedSearchTerm = useDebounce(value, { wait: 200 })
-	const { data, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm)
+	const { data, isLoading } = useSearchPurchaseOrderQuery(
+		debouncedSearchTerm,
+		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE,
+		false
+	)
 
 	const datalist = useMemo(() => {
 		return Array.isArray(data) ? data.map((item) => omit(item, ['disabled'])) : []

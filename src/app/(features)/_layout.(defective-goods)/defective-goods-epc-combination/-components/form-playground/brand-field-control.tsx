@@ -4,6 +4,7 @@ import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
+import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 
 type BrandFieldControl = Partial<
 	SelectFieldControlProps<DefectiveGoodsCombinationFormValues, Record<'label' | 'value', string>>
@@ -14,6 +15,7 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) 
 	const { reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
 	// Memoized options for brand select
+	const { currentStrategy } = useSwitchCombinationStrategy()
 	const brandOptions = useMemo(() => {
 		if (!Array.isArray(ctx['productSpecification'])) return []
 		return ctx['productSpecification'].map(({ brand_name }) => ({
@@ -34,7 +36,13 @@ const BrandFieldControl: React.FC<BrandFieldControl> = ({ disabled, ...props }) 
 			disabled={disabled}
 			datalist={brandOptions}
 			onValueChange={() => {
-				reset({ ...getValues(), factory_shoes_style: '', color_sn: '', size_code: '' })
+				reset({
+					...getValues(),
+					factory_shoes_style: '',
+					cust_shoes_style: '',
+					color_sn: '',
+					...(currentStrategy !== 'manually' ? { size_code: '' } : { sizes: [] })
+				})
 			}}
 			labelField='label'
 			valueField='value'

@@ -16,6 +16,7 @@ import {
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useLocation } from '@tanstack/react-router'
+import { uniqBy } from 'lodash-es'
 import React, { useMemo, useRef } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -44,30 +45,56 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
 	const currentColor = useWatch({ control: control, name: 'color_sn' })
 
+	const shouldFilterAllSizes: boolean =
+		currentCategory === DefectiveCategory.RESEARCH_DEVELOPMENT ||
+		!currentCategory ||
+		!currentBrand ||
+		!currentFactoryShoeStyle ||
+		!currentColor
 	const shouldRequireFullInfo: boolean =
-		currentCategory === DefectiveCategory.B_GRADE || currentCategory === DefectiveCategory.C_GRADE
+		currentCategory === DefectiveCategory.B_GRADE ||
+		(currentCategory === DefectiveCategory.C_GRADE && Array.isArray(datalist))
 
 	// Memoized options for size select
 	const sizeOptions = useMemo(() => {
-		if (!Array.isArray(productSpecification) || !currentBrand || !currentFactoryShoeStyle || !currentColor) return []
-		if (shouldRequireFullInfo && Array.isArray(datalist)) return datalist
+		if (!productSpecification.length) return []
+		if (shouldFilterAllSizes)
+			return uniqBy(
+				productSpecification
+					.flatMap((item) => {
+						return item.product_variants.flatMap((variant) => {
+							return variant.specs.flatMap((spec) => {
+								return spec.sizes.map(({ size }) => ({
+									label: size,
+									value: String(size)
+								}))
+							})
+						})
+					})
+					.sort((a, b) => Number.parseFloat(a.value) - Number.parseFloat(b.value)),
+				(size) => size.value
+			)
+
+		if (shouldRequireFullInfo) return datalist
 		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
 		const variant = brand?.product_variants?.find((item) => item.factory_shoes_style === currentFactoryShoeStyle)
 		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
 		if (!spec?.sizes) return []
 		return spec.sizes
 			.map(({ size }) => ({
-				label: size,
+				label: String(size),
 				value: String(size)
 			}))
-			.sort((a, b) => a.label.localeCompare(b.label))
+			.sort((a, b) => Number.parseFloat(a.value) - Number.parseFloat(b.value))
 	}, [datalist, productSpecification, currentBrand, currentFactoryShoeStyle, currentColor, shouldRequireFullInfo])
 
 	if (name === 'sizes' && currentStrategy === 'manually' && !hash)
 		return (
 			<Div className='col-span-full space-y-2'>
 				<Label>Sizes</Label>
-				<Div className='flex-1 space-y-4 rounded-md border border-dashed py-3'>
+				<Div
+					aria-disabled={disabled}
+					className='flex-1 space-y-4 rounded-md border border-dashed py-3 aria-disabled:opacity-50'>
 					<ScrollShadow ref={scrollRef} className={cn('px-3', fields.length > 0 && 'max-h-40')}>
 						{fields.length === 0 ? (
 							<Empty>

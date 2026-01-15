@@ -1,40 +1,49 @@
-import { AutoCompleteFieldControl } from '@/components/ui'
+import { AutoCompleteFieldControl, AutoCompleteFieldControlProps } from '@/components/ui'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
-import { DefAutoCompleteFieldControlProps } from './type'
 
-const FactoryShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
-	loading,
-	readOnly,
-	disabled,
-	...props
-}) => {
+const FactoryShoeStyleFieldControl: React.FC<
+	Partial<
+		AutoCompleteFieldControlProps<
+			DefectiveGoodsCombinationFormValues,
+			Record<'factory_shoes_style' | 'cust_shoes_style', string>
+		>
+	>
+> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
 	const { reset, getValues, control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
+	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentBrand = useWatch({ name: 'brand_name', control })
+
 	// Memoized options for shoe style select
 	const factoryShoeStyleOptions = useMemo(() => {
-		if (!currentBrand || !Array.isArray(ctx['productSpecification'])) return []
-		const brand = ctx['productSpecification'].find((item) => item.brand_name === currentBrand)
+		if (!productSpecification.length) return []
+		if (!currentBrand)
+			return productSpecification
+				.flatMap((item) =>
+					item.product_variants.map(({ factory_shoes_style, cust_shoes_style }) => ({
+						factory_shoes_style,
+						cust_shoes_style
+					}))
+				)
+				.sort((a, b) => b.factory_shoes_style.localeCompare(a.factory_shoes_style))
+		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
 		if (!brand?.product_variants) return []
 		return brand.product_variants
-			.map(({ factory_shoes_style }) => ({
-				label: factory_shoes_style,
-				value: factory_shoes_style
+			.map(({ factory_shoes_style, cust_shoes_style }) => ({
+				factory_shoes_style,
+				cust_shoes_style
 			}))
-			.sort((a, b) => b.label.localeCompare(a.label))
-	}, [ctx['productSpecification'], currentBrand])
+			.sort((a, b) => b.factory_shoes_style.localeCompare(a.factory_shoes_style))
+	}, [productSpecification, currentBrand])
 
 	const handleValueChange = (value) => {
 		reset({
 			...getValues(),
-			cust_shoes_style:
-				ctx['productSpecification']
-					.find((item) => item.brand_name === currentBrand)
-					?.product_variants?.find((item) => item.factory_shoes_style === value)?.cust_shoes_style ?? '',
+			...value,
 			color_sn: '',
 			size_code: ''
 		})
@@ -51,12 +60,11 @@ const FactoryShoeStyleFieldControl: React.FC<DefAutoCompleteFieldControlProps> =
 			})}
 			loading={loading}
 			datalist={factoryShoeStyleOptions}
-			labelField='label'
-			valueField='value'
+			labelField='factory_shoes_style'
+			valueField='factory_shoes_style'
 			readOnly={readOnly}
 			disabled={disabled}
-			onInput={handleValueChange}
-			onSelect={handleValueChange}
+			onItemClick={handleValueChange}
 		/>
 	)
 }

@@ -16,7 +16,7 @@ import { EditorFieldControl } from '@/components/ui/@field-control/editor'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useLocalStorageState, usePrevious, useResetState, useUpdateEffect } from 'ahooks'
-import { isNil } from 'lodash-es'
+import { isEmpty, isNil } from 'lodash-es'
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -85,6 +85,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	})
 
 	// Watch form fields
+	const currentPurchaseOrder = useWatch({ control: form.control, name: 'po' })
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
 	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
@@ -132,12 +133,22 @@ const DefectiveGoodsForm: React.FC = () => {
 		})
 	}, [orderDetail])
 
-	useEffect(() => {
-		if (formAction === CommonActions.CREATE) form.setValue('ri_type', currentStrategy)
-	}, [currentStrategy, formAction])
+	useUpdateEffect(() => {
+		if (formAction !== CommonActions.CREATE) return
+		form.reset({
+			...form.getValues(),
+			po: '',
+			mo_no: '',
+			factory_shoes_style: '',
+			cust_shoes_style: '',
+			color_sn: '',
+			...(currentStrategy === 'manually' ? { sizes: [] } : { size_code: '' })
+		})
+	}, [formAction, currentCategory])
 
 	useEffect(() => {
 		schemaRef.current = formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
+		if (formAction === CommonActions.CREATE) form.setValue('ri_type', currentStrategy)
 		if (formAction === CommonActions.UPDATE) setStrategy(null)
 	}, [formAction])
 
@@ -198,6 +209,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 		const payload = {
 			...data,
+			po: isNil(data.po) || isEmpty(data.po) ? 'PRELOAD' : data.po,
 			defective_description: gzipSync(data.defective_description, { level: 6, chunkSize: 1024 }).toString('base64')
 		}
 		const mutateAsync = async () =>
@@ -318,10 +330,10 @@ const DefectiveGoodsForm: React.FC = () => {
 					{shouldRequireFullInfo && !isNil(formAction) && (
 						<Fragment>
 							<Div className='col-span-3'>
-								<PurchaseOrderFieldControl />
+								<PurchaseOrderFieldControl disabled={isNil(formAction)} />
 							</Div>
 							<Div className='col-span-3'>
-								<CommandNumberFieldControl />
+								<CommandNumberFieldControl disabled={isNil(formAction)} />
 							</Div>
 						</Fragment>
 					)}
@@ -332,11 +344,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
-						<FactoryShoeStyleFieldControl
-							loading={isLoading}
-							readOnly={shouldRequireFullInfo}
-							disabled={isNil(formAction)}
-						/>
+						<FactoryShoeStyleFieldControl loading={isLoading} disabled={isNil(formAction)} />
 					</Div>
 					<Div
 						className={cn(
@@ -345,11 +353,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								? '@xl/combination-form:col-span-2'
 								: '@xl/combination-form:col-span-3'
 						)}>
-						<CustShoeStyleFieldControl
-							loading={isLoading}
-							readOnly={shouldRequireFullInfo}
-							disabled={isNil(formAction)}
-						/>
+						<CustShoeStyleFieldControl loading={isLoading} disabled={isNil(formAction)} />
 					</Div>
 					<Div
 						className={cn(
@@ -383,10 +387,10 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 					<Div className='col-span-full @xl/combination-form:col-span-3'>
-						<SewingLineFieldControl />
+						<SewingLineFieldControl disabled={!formAction} />
 					</Div>
 					<Div className='col-span-full @xl/combination-form:col-span-3'>
-						<AssemblyLineFieldControl />
+						<AssemblyLineFieldControl disabled={!formAction} />
 					</Div>
 					<Div className='col-span-full @xl/combination-form:col-span-3'>
 						<SelectFieldControl
@@ -404,7 +408,7 @@ const DefectiveGoodsForm: React.FC = () => {
 						/>
 					</Div>
 					<Div className='col-span-full @xl/combination-form:col-span-3'>
-						<ShoeSourceFieldControl />
+						<ShoeSourceFieldControl disabled={isNil(formAction)} />
 					</Div>
 					<Div className='relative col-span-full'>
 						<Div className='absolute right-0 top-0 inline-flex items-center gap-x-3'>
