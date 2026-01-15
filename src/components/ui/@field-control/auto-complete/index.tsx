@@ -4,7 +4,7 @@ import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { ResourceKey } from 'i18next'
-import React, { useId, useMemo, useRef } from 'react'
+import { useId, useMemo, useRef, useState } from 'react'
 import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -44,6 +44,7 @@ export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<stri
 	>
 	onInput?: (value: string) => any
 	onSelect?: (value: string) => unknown
+	onItemClick?: (value: D) => unknown
 } & React.ComponentProps<'input'>
 
 export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlProps<T, D>) {
@@ -66,13 +67,14 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		className,
 		onInput,
 		onSelect,
+		onItemClick,
 		template: CustomAutoCompleteItem,
 		ref: forwardedRef
 	} = props
 	const id = useId()
 	const internalRef = useRef<HTMLInputElement>(null)
 	const resolvedRef = (forwardedRef || internalRef) as React.RefObject<HTMLInputElement>
-	const [open, setOpen] = React.useState(false)
+	const [open, setOpen] = useState(false)
 
 	const currentValue = useWatch({ name, control }) ?? ''
 
@@ -122,7 +124,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 							</FormLabel>
 						)}
 						<Div className='space-y-2'>
-							<Popover open={open} onOpenChange={setOpen} modal={false}>
+							<Popover open={open && props['aria-haspopup'] !== 'false'} onOpenChange={setOpen} modal={false}>
 								<FormControl>
 									<Tooltip
 										message={t(error?.message as ResourceKey) || ''}
@@ -136,7 +138,8 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 										}}>
 										<PopoverTrigger
 											type='button'
-											className='relative w-full'
+											aria-disabled={disabled}
+											className='relative w-full aria-disabled:opacity-50'
 											onClick={(e) => e.preventDefault()}>
 											<Input
 												id={id}
@@ -183,6 +186,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 														setValue(name, item[valueField])
 														setOpen(false)
 														if (typeof onSelect === 'function') onSelect(String(item[valueField]))
+														if (typeof onItemClick === 'function') onItemClick(item)
 													}}>
 													<Typography variant='small' className='line-clamp-1 flex-1'>
 														{String(item[labelField])}
