@@ -8,7 +8,7 @@ export const baseDefectiveGoodsSchema = object({
 		.or(string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }))
 		.optional(),
 	defective_category: enums(DefectiveCategory, { message: 'ns_validation:required' }),
-	po: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
+	po: string({ message: 'ns_validation:required' }).nullish(),
 	mo_no: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
 	brand_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	cust_shoes_style: string({ message: 'ns_validation:required' })
@@ -37,7 +37,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 	})
 	.optional()
 	.refine((values) => {
-		if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
+		if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.mo_no
 		return true
 	})
 	.superRefine((values, context) => {
@@ -98,7 +98,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 	})
 
 export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().refine((values) => {
-	if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.po && !!values.mo_no
+	if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.mo_no
 	return true
 })
 
