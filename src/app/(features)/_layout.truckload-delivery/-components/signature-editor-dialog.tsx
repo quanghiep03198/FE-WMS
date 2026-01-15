@@ -243,10 +243,10 @@ const SignatureEditorDialog: React.FC = () => {
 								style={{ '--w-signature-background': 'hsl(var(--background))' } as React.CSSProperties}
 								onPointer={handlePoints}
 								options={{
-									size: 5,
-									smoothing: 0.5,
-									thinning: 0.5,
-									streamline: isMobile ? 0.3 : 0.9,
+									size: 6,
+									smoothing: isMobile ? 0.25 : 0.5,
+									thinning: 0.25,
+									streamline: isMobile ? 0 : 0.9,
 									start: {
 										taper: 0,
 										cap: true
