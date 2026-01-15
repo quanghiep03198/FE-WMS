@@ -27,7 +27,7 @@ import { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
 import { formatRelative } from 'date-fns'
-import { isNil } from 'lodash-es'
+import { capitalize, isNil, upperCase } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -232,8 +232,10 @@ const InfoCard: React.FC<{
 							</DescriptionItem>
 							<DescriptionItem title={data.ri_type ?? '?'}>
 								<Typography variant='small'>{t('ns_erp:fields.ri_type')} : </Typography>
-								<Typography variant='small' className='uppercase'>
-									{data.ri_type ?? '?'}
+								<Typography variant='small'>
+									{data.ri_type === 'manually'
+										? capitalize(t('ns_common:titles.manually'))
+										: upperCase(data.ri_type)}
 								</Typography>
 							</DescriptionItem>
 							<DescriptionItem title={data.storage_location ?? '?'}>
