@@ -5,17 +5,16 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
-import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 import { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
 	const { control, reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
-	const { currentStrategy } = useSwitchCombinationStrategy()
 	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
 	const currentFactoryShoeStyle = useWatch({ control: control, name: 'factory_shoes_style' })
+	const currentStrategy = useWatch({ control: control, name: 'ri_type' })
 
 	// Memoized options for color select
 	const colorOptions = useMemo(() => {
