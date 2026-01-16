@@ -85,7 +85,6 @@ const DefectiveGoodsForm: React.FC = () => {
 	})
 
 	// Watch form fields
-	const currentPurchaseOrder = useWatch({ control: form.control, name: 'po' })
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
 	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
@@ -137,11 +136,10 @@ const DefectiveGoodsForm: React.FC = () => {
 		if (formAction !== CommonActions.CREATE) return
 		form.reset({
 			...form.getValues(),
-			po: '',
-			mo_no: '',
 			factory_shoes_style: '',
 			cust_shoes_style: '',
 			color_sn: '',
+			...(shouldRequireFullInfo && { po: '', mo_no: '' }),
 			...(currentStrategy === 'manually' ? { sizes: [] } : { size_code: '' })
 		})
 	}, [formAction, currentCategory])
@@ -150,7 +148,7 @@ const DefectiveGoodsForm: React.FC = () => {
 		schemaRef.current = formAction === CommonActions.UPDATE ? updateDefectiveGoodsSchema : createDefectiveGoodsSchema
 		if (formAction === CommonActions.CREATE) form.setValue('ri_type', currentStrategy)
 		if (formAction === CommonActions.UPDATE) setStrategy(null)
-	}, [formAction])
+	}, [formAction, currentStrategy])
 
 	useUpdateEffect(() => {
 		if (useAvailableTemplate) setDefaultEditorContent(DefectDescriptionTemplate[i18n.language])
@@ -194,6 +192,8 @@ const DefectiveGoodsForm: React.FC = () => {
 		}
 		form.reset(currentFormValues)
 	}
+
+	console.log(form.formState.errors)
 
 	const handleCancel = () => {
 		resetFormAction()
