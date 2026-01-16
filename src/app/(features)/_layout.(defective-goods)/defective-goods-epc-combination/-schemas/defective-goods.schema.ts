@@ -9,7 +9,7 @@ export const baseDefectiveGoodsSchema = object({
 		.optional(),
 	defective_category: enums(DefectiveCategory, { message: 'ns_validation:required' }),
 	po: string({ message: 'ns_validation:required' }).nullish(),
-	mo_no: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }).optional(),
+	mo_no: string({ message: 'ns_validation:required' }).nullish(),
 	brand_name: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 	cust_shoes_style: string({ message: 'ns_validation:required' })
 		.trim()
@@ -36,21 +36,32 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 		)
 	})
 	.optional()
-	.refine((values) => {
-		if (values.defective_category === DefectiveCategory.B_GRADE) return !!values.mo_no
-		return true
+	.superRefine((values, context) => {
+		if (
+			(values.defective_category === DefectiveCategory.B_GRADE ||
+				values.defective_category === DefectiveCategory.C_GRADE) &&
+			!values.mo_no
+		)
+			context.addIssue({
+				path: ['mo_no'],
+				code: 'custom',
+				message: 'ns_validation:required',
+				fatal: true
+			})
 	})
 	.superRefine((values, context) => {
 		switch (values.ri_type) {
 			case 'uhf': {
 				if (!Array.isArray(values.epc) || values.epc.length === 0)
 					context.addIssue({
+						path: ['epc'],
 						code: 'custom',
 						message: 'EPCs are required when combination strategy is UHF',
 						fatal: true
 					})
 				if (isNil(values.size_code) || isEmpty(values.size_code.trim()))
 					context.addIssue({
+						path: ['size_code'],
 						code: 'custom',
 						message: 'ns_validation:required',
 						fatal: true
@@ -60,6 +71,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 			case 'usb': {
 				if (typeof values.epc !== 'string' || values.epc.trim() === '')
 					context.addIssue({
+						path: ['epc'],
 						code: 'custom',
 						message: 'EPCs are required when combination strategy is USB',
 						fatal: true
@@ -75,6 +87,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 			case 'manually': {
 				if (!Array.isArray(values.sizes))
 					context.addIssue({
+						path: ['sizes'],
 						code: 'custom',
 						message: 'Sizes are required when combination strategy is manually',
 						fatal: true
