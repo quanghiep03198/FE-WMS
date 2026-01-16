@@ -5,11 +5,13 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
+import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 import { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
 	const { control, reset, getValues, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { currentStrategy } = useSwitchCombinationStrategy()
 	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentCategory = useWatch({ control: control, name: 'defective_category' })
 	const currentBrand = useWatch({ control: control, name: 'brand_name' })
@@ -80,7 +82,13 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 			datalist={colorOptions}
 			labelField='label'
 			valueField='value'
-			onInput={() => reset({ ...getValues(), size_code: '' })}
+			onInput={(value) =>
+				reset({
+					...getValues(),
+					...(currentStrategy === 'manually' ? { sizes: [] } : { size_code: '' }),
+					color_sn: value.toUpperCase()
+				})
+			}
 		/>
 	)
 }
