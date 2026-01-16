@@ -13,7 +13,7 @@ const FactoryShoeStyleFieldControl: React.FC<
 	>
 > = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()
-	const { reset, getValues, control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
+	const { reset, setValue, getValues, control, ...ctx } = useFormContext<DefectiveGoodsCombinationFormValues>()
 
 	const productSpecification = Array.isArray(ctx['productSpecification']) ? ctx['productSpecification'] : []
 	const currentBrand = useWatch({ name: 'brand_name', control })
@@ -64,6 +64,7 @@ const FactoryShoeStyleFieldControl: React.FC<
 			valueField='factory_shoes_style'
 			readOnly={readOnly}
 			disabled={disabled}
+			onInput={(value) => setValue('factory_shoes_style', value.toUpperCase())}
 			onItemClick={handleValueChange}
 		/>
 	)
