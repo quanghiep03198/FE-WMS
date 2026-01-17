@@ -82,7 +82,8 @@ export default {
 		status: 'Trạng thái',
 		total: 'Tổng cộng',
 		updated_at: 'Ngày cập nhật',
-		user_name_updated: 'Người cập nhật gần nhất'
+		user_name_updated: 'Người cập nhật gần nhất',
+		unit: 'Đơn vị'
 	},
 	common_form_titles: {
 		create: 'Thêm mới {{object}}',

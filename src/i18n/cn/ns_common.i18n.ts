@@ -83,7 +83,8 @@ export default {
 		status: '狀態',
 		total: '全部的',
 		updated_at: '编辑日期',
-		user_name_updated: '更新人員'
+		user_name_updated: '更新人員',
+		unit: '单位'
 	},
 	common_form_titles: {
 		create: '加新{{object}}',
@@ -326,6 +327,6 @@ export default {
 	unit: {
 		times: '次',
 		prs: '双',
-		pcs: '件'
+		pcs: '只'
 	}
 } as const

@@ -82,7 +82,8 @@ export default {
 		status: 'Status',
 		total: 'Total',
 		updated_at: 'Updated at',
-		user_name_updated: 'Last updated by'
+		user_name_updated: 'Last updated by',
+		unit: 'Unit'
 	},
 	common_form_titles: {
 		create: 'Create new {{object}}',
