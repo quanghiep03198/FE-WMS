@@ -1,4 +1,5 @@
 import { array, object, string, type infer as Infer } from 'zod'
+import { DefectiveGoodsOutboundPurpose } from '../-constants'
 
 export const defectiveGoodsInboundFormValues = object({
 	epcs: array(string()).nonempty(),
@@ -10,7 +11,16 @@ export const defectiveGoodsInboundFormValues = object({
 
 export const defectiveGoodsOutboundFormValues = object({
 	epcs: array(string()).nonempty(),
-	outbound_purpose: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' })
+	outbound_purpose: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
+	po: string({ message: 'ns_validation:required' }).trim().optional() // optional field for outbound
+}).superRefine((values, ctx) => {
+	if (values.outbound_purpose === DefectiveGoodsOutboundPurpose.SELL && !values.po) {
+		ctx.addIssue({
+			path: ['po'],
+			code: 'custom',
+			message: 'ns_validation:required'
+		})
+	}
 })
 
 export type DefectiveGoodsInboundFormValues = Infer<typeof defectiveGoodsInboundFormValues>

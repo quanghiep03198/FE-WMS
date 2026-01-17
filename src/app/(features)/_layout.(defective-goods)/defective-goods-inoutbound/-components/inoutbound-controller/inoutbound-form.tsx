@@ -1,8 +1,10 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import { CommonActions } from '@/common/constants/enums'
+import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	Div,
+	DropdownSelect,
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
@@ -14,7 +16,7 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -26,6 +28,7 @@ import {
 	defectiveGoodsOutboundFormValues,
 	type InboundOutboundFormValues
 } from '../../-schemas'
+import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { usePageContext } from '../../../-contexts/page-context'
 import { useUpdateDefectiveGoodsStockMutation } from '../../../-hooks/use-defective-goods-asm'
 import QuantityFiledControl from './quantity-field-control'
@@ -51,6 +54,10 @@ const InoutboundForm: React.FC = () => {
 	const scannedEpcs = useWatch({
 		control: form.control,
 		name: 'epcs'
+	})
+	const currentOutboundPurpose = useWatch({
+		control: form.control,
+		name: 'outbound_purpose'
 	})
 
 	useUpdateEffect(() => {
@@ -88,13 +95,31 @@ const InoutboundForm: React.FC = () => {
 	const disabled = !Array.isArray(scannedEpcs) || scannedEpcs.length === 0 || isPending
 
 	return (
-		<Div className='flex w-full flex-row items-center justify-between gap-x-6 @6xl:flex-1 @6xl:justify-end'>
+		<Div className='flex w-full flex-row items-center justify-between gap-x-3 @4xl:gap-x-6 @6xl:flex-1 @6xl:justify-end'>
+			<DropdownSelect
+				datalist={[
+					{ label: t('ns_inoutbound:action_types.warehouse_input'), value: RFIDDataType.INBOUND },
+					{ label: t('ns_inoutbound:action_types.warehouse_output'), value: RFIDDataType.OUTBOUND }
+				]}
+				labelField='label'
+				valueField='value'
+				placeholder={t('ns_common:common_fields.actions')}
+				selectProps={{
+					value: searchParams.action,
+					onValueChange: (value) => {
+						setParams({ ...searchParams, action: value as RFIDDataType })
+					}
+				}}
+				selectTriggerProps={{
+					className: 'flex @4xl:hidden max-w-28'
+				}}
+			/>
 			<RadioGroup
 				disabled={isPending}
 				onValueChange={(value) => setParams({ ...searchParams, action: value as RFIDDataType })}
 				defaultValue={searchParams.action}
 				value={searchParams.action}
-				className='flex items-center gap-x-6'>
+				className='hidden items-center gap-x-6 @4xl:flex'>
 				<Div className='flex items-center space-x-3 space-y-0'>
 					<RadioGroupItem value={RFIDDataType.INBOUND} id='action-inbound' />
 					<Label className='font-normal' htmlFor='action-inbound'>
@@ -111,30 +136,45 @@ const InoutboundForm: React.FC = () => {
 			<Separator orientation='vertical' className='h-6 w-0.5' />
 			<FormProvider {...form}>
 				<Form onSubmit={form.handleSubmit(handleFormSubmission)}>
-					<Div className='grid w-full max-w-full flex-1 auto-cols-fr grid-flow-col gap-x-2 *:flex-1 @6xl:max-w-96'>
+					<Div
+						className={cn(
+							'grid w-full max-w-full flex-1 grid-flow-col gap-x-1 @4xl:gap-x-2 @6xl:max-w-[calc(100cqw/3)]',
+							currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SELL
+								? 'auto-cols-[1fr_1.5fr_1.5fr] @4xl:auto-cols-fr'
+								: 'auto-cols-fr'
+						)}>
 						<QuantityFiledControl />
 						{searchParams.action === RFIDDataType.OUTBOUND ? (
-							<SelectFieldControl
-								name='outbound_purpose'
-								errorMessageVariant='tooltip'
-								placeholder={t('ns_inoutbound:placeholders.outbound_purpose')}
-								datalist={[
-									{
-										label: t('ns_inoutbound:inoutbound_actions.sell'),
-										value: DefectiveGoodsOutboundPurpose.SELL
-									},
-									{
-										label: t('ns_inoutbound:inoutbound_actions.recycle'),
-										value: DefectiveGoodsOutboundPurpose.RECYCLE
-									},
-									{
-										label: t('ns_inoutbound:inoutbound_actions.giveaway'),
-										value: DefectiveGoodsOutboundPurpose.GIVEAWAY
-									}
-								]}
-								labelField='label'
-								valueField='value'
-							/>
+							<Fragment>
+								<SelectFieldControl
+									name='outbound_purpose'
+									errorMessageVariant='tooltip'
+									placeholder={t('ns_inoutbound:placeholders.outbound_purpose')}
+									datalist={[
+										{
+											label: t('ns_inoutbound:inoutbound_actions.sell'),
+											value: DefectiveGoodsOutboundPurpose.SELL
+										},
+										{
+											label: t('ns_inoutbound:inoutbound_actions.eliminate'),
+											value: DefectiveGoodsOutboundPurpose.ELIMINATE
+										},
+										{
+											label: t('ns_inoutbound:inoutbound_actions.giveaway'),
+											value: DefectiveGoodsOutboundPurpose.GIVEAWAY
+										}
+									]}
+									labelField='label'
+									valueField='value'
+								/>
+								{currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SELL && (
+									<PurchaseOrderFieldControl
+										label={null}
+										errorMessageVariant='tooltip'
+										placeholder={t('ns_erp:fields.po')}
+									/>
+								)}
+							</Fragment>
 						) : (
 							<InputFieldControl
 								name='storage_location'
@@ -156,6 +196,6 @@ const InoutboundForm: React.FC = () => {
 	)
 }
 
-const Form = tw.form`flex flex-row items-center gap-x-6 flex-1 @6xl:flex-initial`
+const Form = tw.form`flex flex-row items-center @4xl:gap-x-6 gap-x-3 flex-1 @6xl:flex-initial`
 
 export default InoutboundForm
