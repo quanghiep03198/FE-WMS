@@ -81,6 +81,7 @@ export default {
 		wrong_stamp: 'Wrong stamp.'
 	},
 	inoutbound_actions: {
+		eliminate: 'Eliminate',
 		normal_export: 'Normal export',
 		normal_import: 'Normal import',
 		giveaway: 'Giveaway',

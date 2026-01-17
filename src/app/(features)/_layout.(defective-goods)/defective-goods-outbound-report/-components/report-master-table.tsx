@@ -180,8 +180,8 @@ const InboundReportMasterTable: React.FC = () => {
 							value: DefectiveGoodsOutboundPurpose.SELL
 						},
 						{
-							label: t('ns_inoutbound:inoutbound_actions.recycle'),
-							value: DefectiveGoodsOutboundPurpose.RECYCLE
+							label: t('ns_inoutbound:inoutbound_actions.eliminate'),
+							value: DefectiveGoodsOutboundPurpose.ELIMINATE
 						},
 						{
 							label: t('ns_inoutbound:inoutbound_actions.giveaway'),

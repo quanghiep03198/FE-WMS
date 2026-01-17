@@ -97,6 +97,7 @@ export default {
 		wrong_stamp: 'Dán sai tem'
 	},
 	inoutbound_actions: {
+		eliminate: 'Chặt bỏ',
 		normal_export: 'Xuất kho bình thường',
 		normal_import: 'Nhập kho bình thường',
 		recycle: 'Tái chế',

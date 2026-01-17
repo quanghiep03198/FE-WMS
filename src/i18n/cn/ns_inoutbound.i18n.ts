@@ -69,6 +69,7 @@ export default {
 		wrong_stamp: '错误的标签'
 	},
 	inoutbound_actions: {
+		eliminate: '破坏',
 		normal_export: '正常出庫',
 		normal_import: '正常入庫',
 		recycle: '翻箱',
