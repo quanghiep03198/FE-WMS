@@ -145,6 +145,7 @@ const InfoCard: React.FC<{
 					<Badge variant='outline' className='w-fit'>
 						{t(DefectiveCategoryI18n[data.defective_category], { ns: 'ns_inoutbound', defaultValue: null })}
 					</Badge>
+					<Badge variant='secondary'>{data.storage_location}</Badge>
 				</Div>
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
 					ID: {data.epc}{' '}
@@ -238,10 +239,10 @@ const InfoCard: React.FC<{
 										: upperCase(data.ri_type)}
 								</Typography>
 							</DescriptionItem>
-							<DescriptionItem title={data.storage_location ?? '?'}>
-								<Typography variant='small'>{t('ns_warehouse:fields.storage_position')} : </Typography>
-								<Typography variant='small' className='uppercase'>
-									{data.storage_location ?? '?'}
+							<DescriptionItem title={data.unit ?? '?'}>
+								<Typography variant='small'>{t('ns_common:common_fields.unit')} : </Typography>
+								<Typography variant='small' className='capitalize'>
+									{t(`ns_common:unit.${data.unit}`, { defaultValue: data.unit })}
 								</Typography>
 							</DescriptionItem>
 						</DescriptionList>

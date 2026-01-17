@@ -17,6 +17,7 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useDeepCompareEffect, useMemoizedFn } from 'ahooks'
 import { format, isValid } from 'date-fns'
+import { capitalize } from 'lodash-es'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -161,14 +162,31 @@ const EpcTable: React.FC = () => {
 				minSize: 120,
 				cell: TableCellText
 			}),
+			columnHelper.accessor('unit', {
+				header: t('ns_common:common_fields.unit'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enableResizing: true,
+				meta: {
+					filterVariant: 'select',
+					facetedUniqueValues: [
+						{ label: capitalize(t('ns_common:unit.pcs')), value: 'pcs' },
+						{ label: capitalize(t('ns_common:unit.prs')), value: 'prs' }
+					]
+				},
+				cell: ({ getValue }) => {
+					const value = getValue()
+					return capitalize(t(`ns_common:unit.${value}`, { defaultValue: value }))
+				}
+			}),
 			...(searchParams.action === RFIDDataType.OUTBOUND
 				? [
 						columnHelper.accessor('inbound_date', {
 							header: t('ns_erp:fields.inbound_date'),
 							enableColumnFilter: false,
 							filterFn: 'fuzzy',
-							size: 160,
-							maxSize: 150,
+							size: 180,
+							maxSize: 180,
 							cell: ({ getValue }) => {
 								const value = getValue()
 								return isValid(new Date(value)) ? (
