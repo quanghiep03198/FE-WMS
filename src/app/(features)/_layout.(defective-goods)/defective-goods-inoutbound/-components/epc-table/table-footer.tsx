@@ -27,7 +27,7 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 	return (
 		<Div
 			role='row'
-			className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between gap-x-2 bg-background px-4 py-2'>
+			className='sticky bottom-0 z-50 mt-auto flex h-[var(--row-height)] items-center justify-between gap-x-1 bg-background px-4 py-2 @4xl:gap-x-2'>
 			<Div className='@6xl:hidden'>
 				<InoutboundStrategySelect />
 			</Div>
