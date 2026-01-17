@@ -31,6 +31,7 @@ export interface IDefectiveGoods extends IBaseEntity {
 	defective_location: DefectiveLocation
 	defective_description: string
 	shoe_source: DefectiveGoodsSource
+	unit: 'pcs' | 'prs'
 	assembly_line: string | null
 	sewing_line: string | null
 	ri_cancel: boolean
