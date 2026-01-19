@@ -69,7 +69,7 @@ function RouteComponent() {
 								{listPanelOpen && (
 									<ResizableHandle
 										withHandle
-										className='hidden w-[0.5px] border-0 shadow-none ring-transparent @7xl/playground-wrapper:flex'
+										className='hidden w-px border-0 shadow-none ring-transparent @7xl/playground-wrapper:flex'
 									/>
 								)}
 								<ResizablePanel defaultSize={50} minSize={isMobile ? 50 : 40} className='h-full'>

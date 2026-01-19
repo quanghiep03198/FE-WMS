@@ -15,7 +15,7 @@ const DataList: React.FC<DataListProps> = ({ isLoading, data }) => {
 			<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' size={18} />
 		</Div>
 	) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
-		<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-y-4 !overflow-y-scroll py-4 pl-4 pr-2 group-data-[state=open]:p-0'>
+		<Div className='space-y-4 overflow-y-scroll p-4 group-data-[state=open]:p-0'>
 			{data.data.map((item) => {
 				return <InfoCard key={item.id} data={item} />
 			})}

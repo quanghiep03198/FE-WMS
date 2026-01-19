@@ -167,9 +167,9 @@ const InfoCard: React.FC<{
 					})}
 				</CardDescription>
 			</CardHeader>
-			<CardContent className='space-y-4 px-4 pb-2'>
+			<CardContent className='px-4 pb-2'>
 				<Collapsible defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>
-					<CollapsibleContent className='w-full overflow-auto transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+					<CollapsibleContent className='w-full'>
 						<Separator className='mb-4' />
 						<DescriptionList>
 							<DescriptionItem title={data.cust_shoes_style}>
