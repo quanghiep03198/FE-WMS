@@ -214,6 +214,7 @@ export default defineConfig(({ mode }) => {
 							{ name: 'socket.io-client', test: /socket.io-client/ },
 							{ name: 'tailwind-merge', test: /tailwind-merge/ },
 							{ name: 'tailwind-styled-components', test: /tailwind-styled-components/ },
+							{ name: '@uiw/react-signature', test: /@uiw\/react-signature/ },
 							{ name: 'uuid', test: /uuid/ },
 							{ name: 'zod', test: /zod/ },
 							{ name: 'zustand', test: /zustand/ }
