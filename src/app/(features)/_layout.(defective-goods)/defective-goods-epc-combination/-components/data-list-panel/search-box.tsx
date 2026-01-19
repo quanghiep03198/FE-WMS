@@ -16,7 +16,7 @@ import {
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useDebounceEffect, useResetState, useSessionStorageState, useSize, useUnmount } from 'ahooks'
+import { useDebounceEffect, useResetState, useSessionStorageState, useSize } from 'ahooks'
 import { format, isAfter } from 'date-fns'
 import { isEmpty } from 'lodash-es'
 import { useRef } from 'react'
@@ -77,10 +77,6 @@ const SearchBox: React.FC = () => {
 		[epcSearchTerm],
 		{ wait: 200 }
 	)
-
-	useUnmount(() => {
-		setSearchTerms(DEFAULT_SEARCH_TERMS)
-	})
 
 	const handleSearchSubmission = (data: DefectiveGoodQueryParams): void => {
 		setSearchTerms({
