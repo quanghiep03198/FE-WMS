@@ -58,9 +58,7 @@ function VirtualTableRow<TData>({ row, isScrolling, index, renderSubComponent }:
 						className={cn('p-0', isExpanded ? 'border-b shadow-[inset_0_0px_4px_#17171725]' : 'border-none')}>
 						<Collapsible open={isExpanded}>
 							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 transition-allow-discrete [scrollbar-gutter:stable] data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
-								<Div className='p-3 duration-1000 group-data-[state=closed]/detail:ease-out group-data-[state=open]/detail:ease-in group-data-[state=open]/detail:animate-in group-data-[state=closed]/detail:animate-out group-data-[state=closed]/detail:fade-out-20 group-data-[state=open]/detail:fade-in-20'>
-									{renderSubComponent({ table, row })}
-								</Div>
+								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>
 							</CollapsibleContent>
 						</Collapsible>
 					</TableCell>
