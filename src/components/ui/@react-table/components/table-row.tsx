@@ -57,7 +57,7 @@ function VirtualTableRow<TData>({ row, isScrolling, index, renderSubComponent }:
 						colSpan={row.getVisibleCells().length}
 						className={cn('p-0', isExpanded ? 'border-b shadow-[inset_0_0px_4px_#17171725]' : 'border-none')}>
 						<Collapsible open={isExpanded}>
-							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 transition-allow-discrete [scrollbar-gutter:stable] data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 [scrollbar-gutter:stable]'>
 								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>
 							</CollapsibleContent>
 						</Collapsible>
