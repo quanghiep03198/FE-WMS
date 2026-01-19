@@ -8,7 +8,7 @@ import { ListItem, OrderedList, Section, UnorderedList } from './styled'
 import Terminal from './terminal'
 
 const RFIDAgentInstallation: React.FC = () => {
-	const { latestRelease, isLoading, isError } = useGetLatestRelease()
+	const { data, isLoading, isError } = useGetLatestRelease()
 
 	return (
 		<Section>
@@ -21,7 +21,7 @@ const RFIDAgentInstallation: React.FC = () => {
 						<Div className='inline-flex items-center gap-x-2'>
 							<DownloadButton
 								href={
-									latestRelease?.assets.find((asset) => asset.content_type === 'application/x-msdos-program')
+									data?.assets.find((asset) => asset.content_type === 'application/x-msdos-program')
 										?.browser_download_url
 								}>
 								{isLoading ? <Icon name='LoaderCircle' className='animate-spin' /> : <MicrosoftIcon />}
@@ -36,8 +36,7 @@ const RFIDAgentInstallation: React.FC = () => {
 							</DownloadButton>
 							<DownloadButton
 								href={
-									latestRelease?.assets.find((asset) => asset.content_type === 'application/zip')
-										?.browser_download_url
+									data?.assets.find((asset) => asset.content_type === 'application/zip')?.browser_download_url
 								}>
 								<Icon
 									name={isLoading ? 'LoaderCircle' : 'FolderArchive'}

@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { useGetLatestRelease } from '../rfid-agent/-hooks/use-get-latest-release'
 
 export function ExploreRFIDAgentBanner() {
-	const { latestRelease } = useGetLatestRelease()
+	const { data } = useGetLatestRelease()
 
 	return (
 		<Div
@@ -12,9 +12,7 @@ export function ExploreRFIDAgentBanner() {
 			}>
 			<Div className='mx-auto flex h-full max-w-7xl items-center justify-center xxl:max-w-8xl'>
 				<Typography className='inline-flex flex-wrap items-center gap-x-2 sm:flex-col'>
-					<Typography as='span'>
-						🚀 RFID Agent {!!latestRelease && latestRelease?.tag_name} has been released !!!
-					</Typography>
+					<Typography as='span'>🚀 RFID Agent {!!data && data?.tag_name} has been released !!!</Typography>
 					<Link
 						to='/rfid-agent'
 						className='relative inline-flex items-center gap-x-1 text-base text-success underline-offset-4 hover:underline'>

@@ -1,5 +1,4 @@
-import { useEffectOnce } from '@/common/hooks/use-effect-once'
-import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 type GithubUser = {
 	login: string
@@ -64,21 +63,16 @@ export type GithubRelease = {
 }
 
 export const useGetLatestRelease = () => {
-	const [isLoading, setIsLoading] = useState<boolean>(true)
-	const [isError, setIsError] = useState<boolean>(false)
-	const [latestRelease, setLatestRelease] = useState<GithubRelease | null>(null)
-
-	useEffectOnce(() => {
-		setIsLoading(true)
-		fetch('https://api.github.com/repos/quanghiep03198/rfid-agent/releases/latest')
-			.then((res) => res.json())
-			.then((data: GithubRelease) => setLatestRelease(data))
-			.catch((error) => {
-				setIsError(true)
-				console.error('Failed to fetch latest release:', error)
-			})
-			.finally(() => setIsLoading(false))
+	return useQuery({
+		queryKey: ['RFID_AGENT_LATEST_RELEASE'],
+		queryFn: async (): Promise<GithubRelease> => {
+			const response = await fetch('https://api.github.com/repos/quanghiep03198/rfid-agent/releases/latest')
+			if (!response.ok) {
+				throw new Error('Failed to fetch the latest release data from GitHub')
+			}
+			return response.json()
+		},
+		refetchOnMount: true,
+		refetchOnWindowFocus: true
 	})
-
-	return { latestRelease, isLoading, isError }
 }
