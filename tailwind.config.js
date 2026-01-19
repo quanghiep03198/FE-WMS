@@ -16,6 +16,9 @@ module.exports = {
 			}
 		},
 		extend: {
+			fontWeight: {
+				medium: '501' // to fix font weight issue with Mozilla Firefox
+			},
 			maxWidth: {
 				'8xl': '1440px',
 				'1/4': '25%',
