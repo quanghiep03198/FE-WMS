@@ -2,7 +2,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
-import { convertSvgToPng } from '@/common/libs/convert-png'
+import { convertSvgToWebp } from '@/common/libs/convert-webp'
 import { svgToOptimizedBase64 } from '@/common/libs/optimize-svg'
 import {
 	Button,
@@ -39,7 +39,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const $svg = useRef(null)
 	const [open, setOpen] = useResetState<boolean>(false)
 	const [points, setPoints, resetPoints] = useResetState([])
-	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'png' | null>('png')
+	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'webp' | null>('webp')
 	const isMobile = useMediaQuery('(max-width: 1279px)')
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
 	const [statusToUpdate, setStatusToUpdate] = useState<
@@ -112,20 +112,21 @@ const SignatureEditorDialog: React.FC = () => {
 	const handleBase64PngImage = async () => {
 		if (!points.length) return
 
-		const pngBase64 = await convertSvgToPng($svg.current?.svg, {
+		const pngBase64 = await convertSvgToWebp($svg.current?.svg, {
 			backgroundColor: 'transparent',
 			fillColor: '#0a0a0a',
 			quality: 1.0
 		})
 
 		const compressedBase64 = await compress(pngBase64, {
-			type: 'image/png',
+			type: 'image/webp',
 			width: 300,
 			height: 200,
 			max: 20, // Max 50KB
 			quality: 1
 		})
 
+		console.log(compressedBase64)
 		// setImageURL(compressedBase64)
 
 		return compressedBase64
@@ -270,12 +271,12 @@ const SignatureEditorDialog: React.FC = () => {
 						<RadioGroup
 							className='flex items-center gap-x-6'
 							value={base64ImageFormat}
-							defaultValue={'png'}
-							onValueChange={(value) => setBase64ImageFormat(value as 'svg' | 'png')}>
+							defaultValue={'webp'}
+							onValueChange={(value) => setBase64ImageFormat(value as 'svg' | 'webp')}>
 							<Div className='flex items-center gap-3'>
-								<RadioGroupItem value='png' id='png' />
-								<Label htmlFor='png' className='inline-flex items-center gap-x-2'>
-									PNG (Compressed)
+								<RadioGroupItem value='webp' id='webp' />
+								<Label htmlFor='webp' className='inline-flex items-center gap-x-2'>
+									WEBP (Compressed)
 								</Label>
 							</Div>
 							<Div className='flex items-center gap-3'>

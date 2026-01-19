@@ -5,17 +5,17 @@ type ConvertSvgToPngOptions = {
 	height?: number
 	/** Background color (default: transparent). Use 'transparent' or any CSS color like '#ffffff', 'rgba(255,255,255,0.5)' */
 	backgroundColor?: string | 'transparent'
-	/** PNG quality (0-1, default: 1.0 for lossless) */
+	/** WEBP quality (0-1, default: 1.0 for lossless) */
 	quality?: number
 	/** Custom fill color for SVG elements (default: keep original) */
 	fillColor?: string
 }
 
 /**
- * Convert SVG element to PNG base64
+ * Convert SVG element to WEBP base64
  * @param svgElement - SVG DOM element or HTMLElement containing SVG
  * @param options - Conversion options
- * @returns Promise<string> - PNG base64 data URL
+ * @returns Promise<string> - WEBP base64 data URL
  * @throws Error if SVG element is invalid or conversion fails
  *
  * @example
@@ -36,7 +36,7 @@ type ConvertSvgToPngOptions = {
  * })
  * ```
  */
-export async function convertSvgToPng(
+export async function convertSvgToWebp(
 	svgElement: SVGSVGElement | HTMLElement | null | undefined,
 	options?: ConvertSvgToPngOptions
 ): Promise<string> {
@@ -111,8 +111,8 @@ export async function convertSvgToPng(
 				// Draw SVG image onto canvas
 				ctx.drawImage(img, 0, 0)
 
-				// Convert canvas to PNG base64
-				const pngBase64 = canvas.toDataURL('image/png', quality)
+				// Convert canvas to WEBP base64
+				const pngBase64 = canvas.toDataURL('image/webp', quality)
 
 				// Cleanup
 				URL.revokeObjectURL(url)
@@ -120,7 +120,9 @@ export async function convertSvgToPng(
 				resolve(pngBase64)
 			} catch (error) {
 				URL.revokeObjectURL(url)
-				reject(new Error(`Failed to convert SVG to PNG: ${error instanceof Error ? error.message : String(error)}`))
+				reject(
+					new Error(`Failed to convert SVG to WEBP: ${error instanceof Error ? error.message : String(error)}`)
+				)
 			}
 		}
 
@@ -134,10 +136,10 @@ export async function convertSvgToPng(
 }
 
 /**
- * Convert SVG string to PNG base64
+ * Convert SVG string to WEBP base64
  * @param svgString - SVG XML string
  * @param options - Conversion options
- * @returns Promise<string> - PNG base64 data URL
+ * @returns Promise<string> - WEBP base64 data URL
  *
  * @example
  * ```typescript
@@ -145,7 +147,7 @@ export async function convertSvgToPng(
  * const pngBase64 = await convertSvgStringToPng(svgString, { backgroundColor: 'white' })
  * ```
  */
-export async function convertSvgStringToPng(svgString: string, options?: ConvertSvgToPngOptions): Promise<string> {
+export async function convertSvgStringToWebp(svgString: string, options?: ConvertSvgToPngOptions): Promise<string> {
 	return new Promise((resolve, reject) => {
 		try {
 			// Parse SVG string to DOM
@@ -159,7 +161,7 @@ export async function convertSvgStringToPng(svgString: string, options?: Convert
 			}
 
 			// Use main convert function
-			convertSvgToPng(svgElement, options).then(resolve).catch(reject)
+			convertSvgToWebp(svgElement, options).then(resolve).catch(reject)
 		} catch (error) {
 			reject(new Error(`Failed to parse SVG string: ${error instanceof Error ? error.message : String(error)}`))
 		}
@@ -167,25 +169,25 @@ export async function convertSvgStringToPng(svgString: string, options?: Convert
 }
 
 /**
- * Download PNG from SVG element
+ * Download WEBP from SVG element
  * @param svgElement - SVG element to convert
- * @param filename - Download filename (default: 'image.png')
+ * @param filename - Download filename (default: 'image.webp')
  * @param options - Conversion options
  *
  * @example
  * ```typescript
- * await downloadPngFromSvg(svgRef.current, 'signature.png', {
+ * await downloadPngFromSvg(svgRef.current, 'signature.webp', {
  *   backgroundColor: 'white'
  * })
  * ```
  */
-export async function downloadPngFromSvg(
+export async function downloadWebpFromSvg(
 	svgElement: SVGSVGElement | HTMLElement | null | undefined,
-	filename: string = 'image.png',
+	filename: string = 'image.webp',
 	options?: ConvertSvgToPngOptions
 ): Promise<void> {
 	try {
-		const pngBase64 = await convertSvgToPng(svgElement, options)
+		const pngBase64 = await convertSvgToWebp(svgElement, options)
 
 		// Create download link
 		const link = document.createElement('a')
@@ -193,6 +195,6 @@ export async function downloadPngFromSvg(
 		link.download = filename
 		link.click()
 	} catch (error) {
-		throw new Error(`Failed to download PNG: ${error instanceof Error ? error.message : String(error)}`)
+		throw new Error(`Failed to download WEBP: ${error instanceof Error ? error.message : String(error)}`)
 	}
 }
