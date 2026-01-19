@@ -45,7 +45,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 				ref={containerRef}
 				className='@md/visual-card:px-6 md:grid md:grid-cols-[1fr_2fr] md:gap-6 md:px-6'>
 				<figure
-					className={cn('z-0 place-content-center place-items-center', className)}
+					className={cn('z-0 grid place-items-center', className)}
 					role='img'
 					aria-label='Eclipse Mosquitto visual composition'>
 					<svg
@@ -144,7 +144,7 @@ const DashedLine: React.FC = () => {
 		<svg
 			viewBox='0 0 100 1'
 			className='z-[-1]'
-			height={0.5}
+			height={typeof window !== 'undefined' && navigator.userAgent.toLowerCase().includes('firefox') ? 1 : 0.5}
 			width={216}
 			preserveAspectRatio='none'
 			xmlns='http://www.w3.org/2000/svg'>

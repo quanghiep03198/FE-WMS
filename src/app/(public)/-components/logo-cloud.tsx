@@ -23,9 +23,9 @@ const LogoCloud: React.FC = () => {
 			}}
 			className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%] duration-700 animate-in fade-in-0 slide-in-from-bottom-4 sm:px-2'>
 			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center xxl:max-w-8xl'>
-				<Div className='size-56 translate-y-12 place-content-center place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
-					<Div className='size-40 place-content-center place-items-center rounded-full border-[1.5px] border-foreground/35'>
-						<Div className='relative size-24 place-content-center place-items-center rounded-full border border-foreground/50'>
+				<Div className='inline-grid size-56 translate-y-12 place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
+					<Div className='inline-grid size-40 place-items-center rounded-full border-[1.5px] border-foreground/35'>
+						<Div className='relative inline-grid size-24 place-items-center rounded-full border border-foreground/50'>
 							<Icon
 								name='Codesandbox'
 								className='z-20'
