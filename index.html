@@ -14,6 +14,9 @@
 		<meta name="robots" content="index, follow" />
 		<meta name="revisit-after" content="1 days" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="module">
+			if (import.meta.env.VITE_NODE_ENV === 'development') import('react-grab')
+		</script>
 	</head>
 	<body>
 		<div id="root" class="antialiased"></div>
