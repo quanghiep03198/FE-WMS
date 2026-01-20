@@ -65,8 +65,8 @@ const InboundHistoryTable: React.FC = () => {
 
 	if (isLoading)
 		return (
-			<Div className='h-20 w-full place-content-center place-items-center text-center text-muted-foreground'>
-				<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+			<Div className='grid h-20 w-full place-items-center text-center text-muted-foreground'>
+				<Icon name='LoaderCircle' className='animate-spin' />
 			</Div>
 		)
 
