@@ -23,7 +23,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 
 	return (
 		<Div className='place-content-center place-items-center space-y-4'>
-			<Div className='flex items-center'>
+			<Div className='flex items-center justify-center'>
 				<Icon
 					name='BotMessageSquare'
 					size={24}

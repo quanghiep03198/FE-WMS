@@ -5,8 +5,14 @@ const PageHeader: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative mt-4 place-content-end place-items-center space-y-2 text-center'>
-			<Icon name='FileSearch' size={48} strokeWidth={1} stroke='hsl(var(--muted-foreground))' />
+		<Div className='relative mt-4 place-content-center place-items-center space-y-2 text-center'>
+			<Icon
+				name='FileSearch'
+				size={48}
+				strokeWidth={1}
+				stroke='hsl(var(--muted-foreground))'
+				className='inline-block'
+			/>
 			<Typography variant='h3' className='z-10 bg-background font-medium'>
 				{t('ns_inoutbound:titles.inoutbound_history_lookup')}
 			</Typography>

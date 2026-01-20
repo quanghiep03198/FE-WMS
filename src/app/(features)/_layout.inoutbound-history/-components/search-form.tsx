@@ -1,6 +1,7 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
+import { useUpdateEffect } from 'ahooks'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -32,6 +33,10 @@ const SearchForm: React.FC = () => {
 		} else return
 	}
 
+	useUpdateEffect(() => {
+		if (!hasSearch) form.setValue('order', '')
+	}, [hasSearch])
+
 	return (
 		<FormProvider {...form}>
 			<Form className='flex flex-col justify-center' onSubmit={form.handleSubmit((data) => setParams(data))}>
@@ -62,7 +67,7 @@ const SearchForm: React.FC = () => {
 					</Button>
 					{hasSearch && (
 						<Button size='lg' variant='secondary' type='button' onClick={() => refetch()}>
-							<Icon name='RotateCcw' />
+							<Icon name='RefreshCcw' />
 							{t('ns_common:actions.reload')}
 						</Button>
 					)}

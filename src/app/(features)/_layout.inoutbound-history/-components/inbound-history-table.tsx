@@ -1,28 +1,16 @@
 import { IInboundHistory } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import {
-	Div,
-	Icon,
-	Table,
-	TableBody,
-	TableCell,
-	TableFooter,
-	TableHead,
-	TableHeader,
-	TableRow,
-	Typography
-} from '@/components/ui'
+import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
 import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
-import PlaceHolderItems from '../../-components/shared/placeholder-items'
+import EmptyHistory from './empty-history'
 
 const InboundHistoryTable: React.FC = () => {
 	const { data, isLoading } = useGetInboundHistoryQuery()
 	const { t, i18n } = useTranslation()
-
 	const columns = useMemo<
 		Array<{
 			header: string
@@ -82,15 +70,7 @@ const InboundHistoryTable: React.FC = () => {
 			</Div>
 		)
 
-	if (!data)
-		return (
-			<Div className='mx-auto flex h-80 max-w-4xl flex-col items-center justify-center rounded-lg border-2 border-dashed p-6'>
-				<PlaceHolderItems />
-				<Typography variant='small' color='muted'>
-					{t('ns_common:table.no_data')}
-				</Typography>
-			</Div>
-		)
+	if (!data) return <EmptyHistory />
 
 	return (
 		<Div className='relative max-h-[600px] overflow-auto rounded-lg border scrollbar-track-accent/50 @container xxl:max-h-[65vh]'>
