@@ -124,9 +124,9 @@ const RFIDDeviceFormDialog: React.FC = () => {
 										})
 									)}
 									datalist={[
-										{ label: 'WH101', value: `CUS_${user?.company_code}_WH101` },
-										{ label: 'WH102', value: `CUS_${user?.company_code}_WH102` },
-										{ label: 'WH103', value: `CUS_${user?.company_code}_WH103` }
+										{ label: 'WH101', value: `CUS_${user?.factory_code}_WH101` },
+										{ label: 'WH102', value: `CUS_${user?.factory_code}_WH102` },
+										{ label: 'WH103', value: `CUS_${user?.factory_code}_WH103` }
 									]}
 									labelField='label'
 									valueField='value'

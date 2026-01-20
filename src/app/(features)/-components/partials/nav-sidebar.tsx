@@ -1,4 +1,3 @@
-import { useGetUserCompany } from '@/app/(auth)/-hooks/use-department-asm'
 import { navigationConfig, type NavigationConfig } from '@/app/(features)/-configs/navigation.config'
 import AppLogo from '@/app/-components/-shared/app-logo'
 import useAuth from '@/common/hooks/use-auth'
@@ -201,15 +200,14 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 }
 
 const SwitchUserCompany: React.FC = () => {
-	const { user, setUserCompany } = useAuth()
-	const { data } = useGetUserCompany()
+	const { user, setCurrentFactory } = useAuth()
 	const { t } = useTranslation()
 	const { open } = useSidebar()
 	const queryClient = useQueryClient()
 
 	useUpdateEffect(() => {
 		queryClient.invalidateQueries({ type: 'all', refetchType: 'all' })
-	}, [user?.company_code])
+	}, [user?.factory_code])
 
 	return (
 		<DropdownMenu>
@@ -221,7 +219,7 @@ const SwitchUserCompany: React.FC = () => {
 					<Icon name='Factory' />
 					{open && (
 						<Fragment>
-							{user?.company_name}
+							{user?.current_factory_code}
 							<Icon name='ChevronsUpDown' className='ml-auto' />
 						</Fragment>
 					)}
@@ -233,13 +231,13 @@ const SwitchUserCompany: React.FC = () => {
 				align='end'>
 				<DropdownMenuLabel>{t('ns_company:company')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{Array.isArray(data) &&
-					data.map((item) => (
+				{Array.isArray(user?.authorized_factory_codes) &&
+					user.authorized_factory_codes.map((item) => (
 						<DropdownMenuCheckboxItem
-							key={item.company_code}
-							checked={user?.company_code === item.company_code}
-							onCheckedChange={() => setUserCompany(item)}>
-							{item.company_name}
+							key={item}
+							checked={user?.current_factory_code === item}
+							onCheckedChange={() => setCurrentFactory(item)}>
+							{t(`ns_common:factory.${item}`, { defaultValue: item })}
 						</DropdownMenuCheckboxItem>
 					))}
 			</DropdownMenuContent>

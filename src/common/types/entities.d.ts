@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { RecordStatus } from '../constants/enums'
+import { FactoryCode, RecordStatus } from '../constants/enums'
 
 // #region In use Entities
 
@@ -21,14 +21,14 @@ export interface ITenancy {
 	alias: string
 	host: string
 }
-export interface IUser extends IBaseEntity, Pick<ICompany, 'company_code' | 'company_name'> {
+export interface IUser extends IBaseEntity {
 	username: string
 	display_name: string
 	password: string
 	employee_code: string
 	picture: string
-	has_accessibility: boolean | null
-	isadmin: boolean | null
+	authorized_factory_codes: Array<FactoryCode>
+	current_factory_code: FactoryCode
 }
 
 export interface ICompany extends IBaseEntity {

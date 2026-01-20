@@ -85,7 +85,7 @@ const EpcDataList: React.FC = () => {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.USER_COMPANY]: user?.company_code
+					[RequestHeaders.USER_COMPANY]: user?.factory_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -175,7 +175,7 @@ const EpcDataList: React.FC = () => {
 
 	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
-	}, [user?.company_code])
+	}, [user?.factory_code])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {

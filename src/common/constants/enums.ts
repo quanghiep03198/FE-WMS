@@ -67,6 +67,14 @@ export enum OrderStatus {
 	CANCELLED = 'E'
 }
 
+export enum FactoryCode {
+	VA1 = 'VA1',
+	VB1 = 'VB1',
+	VB2 = 'VB2',
+	CA1 = 'CA1',
+	MA1 = 'MA1'
+}
+
 export enum FactoryAgencyCode {
 	VA1 = 'GL1',
 	VB1 = 'GL2',

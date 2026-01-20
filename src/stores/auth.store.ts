@@ -1,4 +1,5 @@
-import { ICompany, IUser } from '@/common/types/entities'
+import { FactoryCode } from '@/common/constants/enums'
+import { IUser } from '@/common/types/entities'
 import generateAvatar from '@/common/utils/generate-avatar'
 import { shared } from 'use-broadcast-ts'
 import { create } from 'zustand'
@@ -9,7 +10,7 @@ export interface IAuthState {
 	user: IUser | null
 	token: string
 	setUserProfile: (profile: Partial<IUser>) => void
-	setUserCompany: (company: Omit<ICompany, 'factory_code'>) => void
+	setCurrentFactory: (factoryCode: FactoryCode) => void
 	setAccessToken: (token: string, meta?: { expires_time: string }) => void
 	resetCredentials: () => void
 }
@@ -35,9 +36,9 @@ export const useAuthStore = create(
 					setAccessToken: (token) => {
 						set({ token })
 					},
-					setUserCompany: (company: Omit<ICompany, 'factory_code'>) => {
+					setCurrentFactory: (factoryCode: FactoryCode) => {
 						const state = get()
-						set({ user: { ...state.user, ...company } })
+						set({ user: { ...state.user, current_factory_code: factoryCode } })
 					},
 					resetCredentials: () => {
 						set(initialState)

@@ -1,52 +1,41 @@
+import { FactoryCode } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { Button, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/stepper'
-import { pick } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetUserCompany } from '../../-hooks/use-department-asm'
 
-type FormValues = { company_code: string }
+type FormValues = { factory_code: FactoryCode }
 
 const WorkplaceSelectionForm: React.FC = () => {
-	const { setUserCompany } = useAuth()
+	const { user, setCurrentFactory } = useAuth()
 	const { dispatch } = useStepContext()
 	const { t, i18n } = useTranslation(['ns_auth', 'ns_company'])
 	const form = useForm<FormValues>()
-	const companyCode = form.watch('company_code')
+	const currentFactoryCode = form.watch('factory_code')
 
-	const { data, isFetching } = useGetUserCompany()
-
-	const selectedCompany = useMemo(() => {
-		if (!Array.isArray(data)) return null
-		return data.find((item) => item.company_code === companyCode)
-	}, [data, companyCode])
-
-	const companies = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		return data.map((item) => ({
-			...item,
-			company_name: t(`ns_common:factory.${item.company_code}`, { defaultValue: item.company_name })
+	const authorizedFactories = useMemo(() => {
+		if (!user || !Array.isArray(user.authorized_factory_codes)) return []
+		return user.authorized_factory_codes.map((item) => ({
+			factory_code: item,
+			factory_name: t(`ns_common:factory.${item}`, { defaultValue: item })
 		}))
-	}, [data, i18n.language])
+	}, [user, i18n.language])
 
 	return (
 		<FormProvider {...form}>
-			<Form
-				onSubmit={form.handleSubmit(() => setUserCompany(pick(selectedCompany, ['company_name', 'company_code'])))}>
+			<Form onSubmit={form.handleSubmit((data) => setCurrentFactory(data.factory_code))}>
 				<SelectFieldControl
 					label={t('ns_company:company')}
-					name='company_code'
-					placeholder={isFetching ? 'Loading ...' : 'Select'}
-					datalist={companies}
-					labelField='company_name'
-					valueField='company_code'
+					name='factory_code'
+					datalist={authorizedFactories}
+					labelField='factory_name'
+					valueField='factory_code'
 					onValueChange={() => dispatch({ type: 'COMPLETE' })}
-					disabled={isFetching}
 				/>
-				<Button type='submit' className='gap-x-2' disabled={!companyCode}>
+				<Button type='submit' className='gap-x-2' disabled={!currentFactoryCode}>
 					{t('ns_auth:actions.go_to_dashboard')} <Icon name='ArrowRight' />
 				</Button>
 			</Form>

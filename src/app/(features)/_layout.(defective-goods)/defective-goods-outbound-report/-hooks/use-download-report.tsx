@@ -19,7 +19,7 @@ export const useDownloadReport = () => {
 
 	return useMemoizedFn(async () => {
 		toast.loading(t('ns_common:notification.downloading'), { id: TOAST_ID })
-		const translatedFactory = t(factories[user?.company_code], { ns: 'ns_common' })
+		const translatedFactory = t(factories[user?.factory_code], { ns: 'ns_common' })
 
 		try {
 			const blob = await DefectiveGoodsService.downloadOutboundReport(

@@ -20,7 +20,7 @@ const { user, token } = useAuthStore.getState()
 const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
 	extraHeaders: {
 		[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-		[RequestHeaders.USER_COMPANY]: user?.company_code
+		[RequestHeaders.USER_COMPANY]: user?.factory_code
 	},
 	timeout: 10000,
 	reconnection: true,
