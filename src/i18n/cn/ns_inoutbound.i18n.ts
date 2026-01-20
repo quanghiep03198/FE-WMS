@@ -36,6 +36,7 @@ export default {
 		order_size_detail: '根据生产订单查看每个尺码的详细数量信息. 如有必要，您可以调整标签.',
 		order_sizing_list: '下列表显示这次扫描的指令及尺码',
 		inoutbound_table_caption: '上表总结了扫描的EPC数据',
+		inoutbound_history_not_found: '未找到此订单的入库/出库历史记录. 请再次检查您输入的订单代码.',
 		po_outbound: '按容器出库的订单代码. 根据此订单计算当天扫描的EPC数据.',
 		inventory_estimation: '根据当前生产和出货状态估算库存水平.',
 		select_readable_database: '选择数据库连接以读取数据. 当没有连接或当前连接已断开时，您可以更改.',

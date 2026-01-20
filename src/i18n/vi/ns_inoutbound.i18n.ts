@@ -61,6 +61,8 @@ export default {
 			'Xem thông tin chi tiết số lượng của từng size theo chỉ lệnh sản xuất. Bạn có thể bù tem nếu cần thiết.',
 		order_sizing_list: 'Bảng dưới đây biểu thị danh sách chi tiết số lượng của từng Size theo chỉ lệnh',
 		inoutbound_table_caption: 'Bảng trên thống kê dữ liệu các chi tiết các tem đã quét',
+		inoutbound_history_not_found:
+			'Không tìm thấy lịch sử nhập/xuất kho cho đơn hàng này. Vui lòng kiểm tra lại mã đơn hàng bạn đã nhập.',
 		po_outbound: 'Dữ liệu xuất kho các tem đã quét sẽ được tính theo đơn hàng này.',
 		select_readable_database:
 			'Chọn kết nối database để đọc dữ liệu. Bạn có thể thay đổi khi không có kết nối nào hoặc kết nối hiện tại đã ngắt',

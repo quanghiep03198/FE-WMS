@@ -39,6 +39,8 @@ export default {
 			'View detailed quantity information for each size according to the production order. You can exchange EPC if necessary.',
 		order_sizing_list: 'The table below shows the sizing information of the scanned orders.',
 		inoutbound_table_caption: 'The table above summarizes the scanned EPC data.',
+		inoutbound_history_not_found:
+			'No inbound/outbound history found for this order. Please check the order code you entered again.',
 		po_outbound: 'The scanned EPC data will be counted according to this order after performing stock out.',
 		inventory_estimation: 'Estimate the inventory levels based on the current production and shipping status.',
 		select_readable_database:

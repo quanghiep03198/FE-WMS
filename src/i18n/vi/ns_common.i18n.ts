@@ -221,7 +221,7 @@ export default {
 		defective_goods_inoutbound: 'Nhập xuất hàng loại 2',
 		defective_goods_inbound_report: 'Báo biểu nhập hàng loại 2',
 		defective_goods_outbound_report: 'Báo biểu xuất hàng loại 2',
-		defective_goods_epc_combination: 'Phối tem hàng loại 2',
+		defective_goods_epc_combination: 'Phối đôi hàng loại 2',
 		defective_goods_inventory: 'Tồn kho hàng loại 2',
 		monthly_inventory_audit: 'Kết đơn tồn kho thành phẩm',
 		keyboard_shortcut: 'Phím tắt',
