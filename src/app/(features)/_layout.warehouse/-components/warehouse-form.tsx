@@ -95,7 +95,7 @@ const WarehouseFormDialog: React.FC = () => {
 		defaultFormValues.employee_code ??= ''
 		form.reset({
 			...defaultFormValues,
-			company_code: user?.factory_code
+			company_code: user?.current_factory_code
 		})
 	}, [type, defaultFormValues, open])
 
@@ -143,7 +143,7 @@ const WarehouseFormDialog: React.FC = () => {
 								placeholder='Some warehouse name ...'
 								name='company_code'
 								label={t('ns_company:company')}
-								defaultValue={user?.factory_code}
+								defaultValue={user?.current_factory_code}
 							/>
 						</FormItem>
 						<FormItem>

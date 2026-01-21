@@ -21,7 +21,7 @@ const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (prop
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_production_inventory_summary', {
-					factory: FactoryAgencyCode[user?.factory_code],
+					factory: FactoryAgencyCode[user?.current_factory_code],
 					defaultValue: null
 				}) + '.xlsx'
 			)

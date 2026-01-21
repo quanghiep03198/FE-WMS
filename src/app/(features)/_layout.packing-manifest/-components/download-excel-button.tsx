@@ -18,7 +18,7 @@ const DownloadExcelButton: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_packing:titles.file_packing_manifest', {
-					factory: t(factories[user?.factory_code], { ns: 'ns_common' }),
+					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
 					defaultValue: `Packing manifest ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
 			)

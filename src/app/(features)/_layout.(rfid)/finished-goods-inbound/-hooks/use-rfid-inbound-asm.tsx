@@ -75,7 +75,7 @@ export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) =>
 	const { user } = useAuth()
 
 	return useQuery({
-		queryKey: ['EXCHANGABLE_ORDER', user?.company_code, params],
+		queryKey: ['EXCHANGABLE_ORDER', user?.current_factory_code, params],
 		queryFn: async () => await RFIDService.searchExchangableOrder(params),
 		enabled: false,
 		select: (response) => response.metadata

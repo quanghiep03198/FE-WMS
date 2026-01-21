@@ -40,12 +40,13 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 
-type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & {
+type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon' | 'authorizedRoles'> & {
 	indice: `${number}` | `${number}.${number}` | 'none'
 	viewTransition?: boolean
 }
 
 const NavSidebar: React.FC = () => {
+	const { user } = useAuth()
 	const { t } = useTranslation('ns_common')
 	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { setOpen } = useSidebar()
@@ -72,6 +73,11 @@ const NavSidebar: React.FC = () => {
 												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												size='sm'
 												className='w-full font-medium'
+												aria-disabled={item.items.every(
+													(subItem) =>
+														subItem.authorizedRoles !== '*' &&
+														!subItem.authorizedRoles?.includes(user.role)
+												)}
 												onClick={() => {
 													if (isMobile) return
 													setOpen(true)
@@ -93,9 +99,8 @@ const NavSidebar: React.FC = () => {
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
 														indice={`${index + 1}.${subIndex + 1}`}
-														key={subIndex.toString()}
-														title={subItem.title}
-														url={subItem.url}
+														key={`${index + 1}.${subIndex + 1}`}
+														{...subItem}
 													/>
 												))}
 											</SidebarMenuSub>
@@ -126,12 +131,15 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition }) => {
+const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition, authorizedRoles }) => {
 	const { t } = useTranslation('ns_common')
 	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
 	const location = useRouterState({ select: (s) => s.location })
 	const ref = useRef<HTMLLIElement>(null)
+	const { user } = useAuth()
+
+	const isAccessible = authorizedRoles?.includes(user.role) || authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
@@ -142,6 +150,8 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	return (
 		<SidebarMenuItem
 			role='menuitem'
+			aria-disabled={!isAccessible}
+			className='aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
 			ref={ref}
 			onClick={() => {
 				if (isMobile) setOpenMobile(!openMobile)
@@ -152,22 +162,34 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
-						className: 'text-primary hover:text-primary bg-primary/10'
+						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
 					<Icon name={icon} size={18} className='!size-[18px]' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
+					{!isAccessible && (
+						<Icon name='Lock' size={14} className='ml-auto !size-[14px] stroke-muted-foreground' />
+					)}
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
 	)
 }
 
-const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url, title, viewTransition }) => {
+const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
+	indice,
+	url,
+	title,
+	viewTransition,
+	authorizedRoles
+}) => {
 	const { t } = useTranslation('ns_common')
 	const ref = useRef<HTMLLIElement>(null)
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
 	const location = useRouterState({ select: (s) => s.location })
+	const { user } = useAuth()
+
+	const isAccessible = authorizedRoles?.includes(user.role) || authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
@@ -179,6 +201,8 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 		<SidebarMenuSubItem
 			role='menuitem'
 			ref={ref}
+			aria-disabled={!isAccessible}
+			className='relative aria-disabled:opacity-50'
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
@@ -195,6 +219,13 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 					</SidebarMenuTitle>
 				</Link>
 			</SidebarMenuSubButton>
+			{!isAccessible && (
+				<Icon
+					name='Lock'
+					size={14}
+					className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-3.5 stroke-muted-foreground'
+				/>
+			)}
 		</SidebarMenuSubItem>
 	)
 }
@@ -207,7 +238,7 @@ const SwitchUserCompany: React.FC = () => {
 
 	useUpdateEffect(() => {
 		queryClient.invalidateQueries({ type: 'all', refetchType: 'all' })
-	}, [user?.factory_code])
+	}, [user?.current_factory_code])
 
 	return (
 		<DropdownMenu>
@@ -219,7 +250,10 @@ const SwitchUserCompany: React.FC = () => {
 					<Icon name='Factory' />
 					{open && (
 						<Fragment>
-							{user?.current_factory_code}
+							{t(`ns_common:factory.${user?.current_factory_code}`, {
+								defaultValue: user?.current_factory_code
+							})}
+
 							<Icon name='ChevronsUpDown' className='ml-auto' />
 						</Fragment>
 					)}

@@ -49,7 +49,7 @@ const FormFieldset: React.FC = () => {
 			<Stepper.Panel value={1}>
 				<LoginForm />
 			</Stepper.Panel>
-			<Stepper.Panel value={2}>
+			<Stepper.Panel value={2} className='duration-500 animate-in fade-in-0 slide-in-from-left-4'>
 				<WorkplaceSelectionForm />
 			</Stepper.Panel>
 		</Stepper.Provider>

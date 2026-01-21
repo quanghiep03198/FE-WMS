@@ -19,7 +19,7 @@ export class AuthService {
 	}
 
 	static async profile(config?: AxiosRequestConfig): Promise<IUser> {
-		return await axiosInstance.get('/profile', config)
+		return await axiosInstance.get('/user/profile', config)
 	}
 
 	static getCredentials(): IAuthState['user'] {
@@ -38,6 +38,10 @@ export class AuthService {
 		}
 	}
 
+	static async updatePassword(newPassword: string) {
+		return await axiosInstance.patch(`/user/change-password`, newPassword)
+	}
+
 	static getAccessToken(): string | null {
 		const accessToken = useAuthStore.getState().token
 		return isNil(accessToken) ? null : `Bearer ${accessToken}`
@@ -50,8 +54,5 @@ export class AuthService {
 	static getHasAccessToken(): boolean {
 		const accessToken = useAuthStore.getState().token
 		return !isNil(accessToken)
-	}
-	static async updatePassword(newPassword: string) {
-		return await axiosInstance.patch(`/change-password`, newPassword)
 	}
 }

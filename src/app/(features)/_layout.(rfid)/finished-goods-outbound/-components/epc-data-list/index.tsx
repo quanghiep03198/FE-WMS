@@ -102,7 +102,7 @@ const ScannedEpcList: React.FC = () => {
 				method: RequestMethod.GET,
 				headers: {
 					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.USER_COMPANY]: user?.factory_code
+					[RequestHeaders.USER_COMPANY]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,

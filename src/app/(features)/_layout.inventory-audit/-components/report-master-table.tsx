@@ -303,7 +303,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {
-					factory: t(factories[user?.factory_code], { ns: 'ns_common' }),
+					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
 					month: searchParams['month.eq'],
 					defaultValue: `Monthly Inventory Report ~ ${searchParams['month.eq']}`
 				}) + '.xlsx'

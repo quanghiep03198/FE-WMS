@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
-	const currentHostRegistry = __hostRegistry.get(user?.factory_code)
+	const currentHostRegistry = __hostRegistry.get(user?.current_factory_code)
 
 	const shouldCheck = env('VITE_NODE_ENV') === 'production'
 	const isNotCompatible = shouldCheck && !isIPv4(window.location.hostname)
@@ -19,7 +19,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	if (isNotCompatible)
 		return (
 			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-3'>
-				<Typography variant='code' color='destructive' className='font-semibold'>
+				<Typography variant='code' color='muted' className='font-semibold'>
 					{HttpStatusCode.BadGateway}
 				</Typography>
 				<Typography variant='h1'>{t('ns_common:errors.502')}</Typography>
@@ -30,7 +30,9 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.502_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,
-							factoryCode: t(`ns_common:factory.${user?.factory_code}`, { defaultValue: user?.factory_code }),
+							factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
+								defaultValue: user?.current_factory_code
+							}),
 							defaultValue: null
 						})
 					}}

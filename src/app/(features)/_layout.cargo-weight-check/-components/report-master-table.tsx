@@ -137,7 +137,7 @@ const ReportMasterTable: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_packing:titles.file_daily_weighing_report', {
-					factory: t(factories[user?.factory_code], { ns: 'ns_common' }),
+					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
 					date: searchParams['date.eq'],
 					defaultValue: `Packing weight Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'

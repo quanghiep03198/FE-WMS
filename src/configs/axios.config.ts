@@ -54,7 +54,7 @@ export class AxiosClient {
 				const locale = StorageService.getLocale()
 				const user = AuthService.getCredentials()
 				config.headers[RequestHeaders.AUTHORIZATION] = config.headers[RequestHeaders.AUTHORIZATION] ?? accessToken
-				config.headers[RequestHeaders.USER_COMPANY] = user?.factory_code
+				config.headers[RequestHeaders.USER_COMPANY] = user?.current_factory_code
 				config.headers[RequestHeaders.ACCEPT_LANGUAGE] = locale
 				return config
 			},

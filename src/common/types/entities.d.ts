@@ -1,6 +1,6 @@
 import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
 import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { FactoryCode, RecordStatus } from '../constants/enums'
+import { FactoryCode, RecordStatus, UserRole } from '../constants/enums'
 
 // #region In use Entities
 
@@ -28,6 +28,7 @@ export interface IUser extends IBaseEntity {
 	employee_code: string
 	picture: string
 	authorized_factory_codes: Array<FactoryCode>
+	role: UserRole
 	current_factory_code: FactoryCode
 }
 

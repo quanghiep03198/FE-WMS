@@ -11,9 +11,8 @@ const ProfileForm: React.FC = () => {
 
 	const form = useForm({
 		defaultValues: {
-			display_name: user.display_name,
-			email: user.email ?? 'example@email.com',
-			company_name: user.company_name
+			display_name: user?.display_name,
+			email: user?.email ?? ''
 		}
 	})
 
@@ -30,7 +29,6 @@ const ProfileForm: React.FC = () => {
 					<Div className='space-y-6'>
 						<InputFieldControl label={t('ns_auth:profile.display_name')} name='display_name' />
 						<InputFieldControl label={t('ns_auth:profile.email')} name='email' />
-						<InputFieldControl label={t('ns_auth:profile.company')} name='company_name' disabled />
 						<Button>{t('ns_auth:profile.save_changes')}</Button>
 					</Div>
 				</Fieldset>
