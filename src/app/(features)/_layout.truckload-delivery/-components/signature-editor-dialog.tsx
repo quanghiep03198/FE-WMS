@@ -183,7 +183,7 @@ const SignatureEditorDialog: React.FC = () => {
 						<Div
 							id='signature'
 							aria-invalid={isMissingSignature}
-							className='relative grid max-h-full min-h-[50vh] w-fit flex-1 basis-full place-items-center self-center overflow-clip rounded-md border bg-white shadow-sm aria-[invalid=true]:border-2 aria-[invalid=true]:border-destructive'
+							className='relative grid max-h-full w-fit flex-1 basis-full place-items-center self-center overflow-clip rounded-md border bg-white shadow-sm aria-[invalid=true]:border-2 aria-[invalid=true]:border-destructive'
 							style={{
 								willChange: 'transform',
 								transform: 'translateZ(0)',
@@ -200,10 +200,11 @@ const SignatureEditorDialog: React.FC = () => {
 								throttle={32}
 								clearOnResize={false}
 								canvasProps={{
-									className: 'w-full h-full touch-none',
+									className: 'touch-none',
 									width: 600,
 									height: 400,
 									style: {
+										msTouchAction: 'none',
 										maxWidth: '600px',
 										maxHeight: '400px',
 										touchAction: 'none',
