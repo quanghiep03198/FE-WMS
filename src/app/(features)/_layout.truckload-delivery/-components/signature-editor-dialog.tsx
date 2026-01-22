@@ -25,11 +25,12 @@ import {
 	Typography
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import Signature, { StrokeOptions } from '@uiw/react-signature'
+import { StrokeOptions } from '@uiw/react-signature'
 import { useDebounce, useRafState, useResetState } from 'ahooks'
 import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType, usePageContext } from '../-contexts/page-context'
@@ -272,7 +273,13 @@ const SignatureEditorDialog: React.FC = () => {
 							aria-invalid={isMissingSignature}
 							className='relative max-h-full min-h-[50vh] flex-1 basis-full overflow-clip rounded-md border duration-200 aria-[readonly=true]:!border aria-[invalid=true]:border-destructive hover:border-primary aria-[invalid=true]:hover:border-destructive aria-[readonly=true]:hover:border-border'>
 							{isCompressing && <OptimizingLoader />}
-							<Signature
+							<SignatureCanvas
+								penColor='black'
+								ref={$svg}
+								canvasProps={{ className: 'sigCanvas' }}
+								onBegin={(e) => console.log(e)}
+							/>
+							{/* <Signature
 								ref={$svg}
 								fill='hsl(var(--foreground))'
 								className='aria-readonly:cursor-not-allowed'
@@ -297,7 +304,7 @@ const SignatureEditorDialog: React.FC = () => {
 										easing: (t) => t
 									}
 								}}
-							/>
+							/> */}
 						</Div>
 						{isMissingSignature && (
 							<Typography variant='small' color='destructive' className='font-medium'>
