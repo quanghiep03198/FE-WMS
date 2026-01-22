@@ -1,9 +1,6 @@
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
-import { convertSvgToWebp } from '@/common/libs/convert-webp'
-import { svgToOptimizedBase64 } from '@/common/libs/optimize-svg'
 import {
 	Button,
 	Dialog,
@@ -25,10 +22,8 @@ import {
 	Typography
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { StrokeOptions } from '@uiw/react-signature'
-import { useDebounce, useRafState, useResetState } from 'ahooks'
-import { debounce } from 'lodash-es'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { useResetState, useThrottleFn } from 'ahooks'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
@@ -38,11 +33,7 @@ import { useUpdateDispatchOrderSignatureMutation } from '../-hooks/use-truckload
 
 const SignatureEditorDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const $svg = useRef(null)
 	const [open, setOpen] = useResetState<boolean>(false)
-	const [points, setPoints] = useRafState([])
-	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'webp' | null>('webp')
-	const isMobile = useMediaQuery('(max-width: 1279px)')
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
 	const [statusToUpdate, setStatusToUpdate] = useState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
@@ -61,8 +52,19 @@ const SignatureEditorDialog: React.FC = () => {
 		license_plate: null,
 		signature_type: null
 	})
+	const canvasRef = useRef<SignatureCanvas>(null)
+	const isEmpty = useReactiveRef<boolean>(canvasRef.current?.isEmpty() ?? true)
 
-	const debouncedPoints = useDebounce(points, { wait: 200, leading: false, trailing: true })
+	const { run: handleCanvasEnd } = useThrottleFn(
+		() => {
+			if (canvasRef.current) {
+				requestAnimationFrame(() => {
+					isEmpty.current = canvasRef.current?.isEmpty() ?? true
+				})
+			}
+		},
+		{ wait: 200 }
+	)
 
 	event$.useSubscription(({ action, payload }) => {
 		if (action === 'UPDATE_DISPATCH_ORDER_SIGNATURE') {
@@ -79,109 +81,28 @@ const SignatureEditorDialog: React.FC = () => {
 
 	const { execute: compress, isPending: isCompressing } = useWorkerFn(compressBase64)
 
-	const handlePoints = useCallback(
-		debounce(
-			(data) => {
-				if (data.length > 0) {
-					setPoints((prev) => [...prev, JSON.stringify(data)])
-				}
-			},
-			1000,
-			{ leading: false, trailing: true }
-		),
-		[setPoints]
-	)
-
-	const signatureOptions = useMemo<StrokeOptions>(
-		() => ({
-			size: 6,
-			smoothing: isMobile ? 0.25 : 0.5,
-			thinning: 0.1,
-			streamline: isMobile ? 0 : 0.9,
-			simulatePressure: true,
-			easing(pressure) {
-				return pressure <= 0.5 ? 16 * pressure ** 5 : 1 + 16 * (--pressure) ** 5
-			},
-			start: {
-				taper: 0,
-				cap: true
-			},
-			end: {
-				taper: 0,
-				cap: true
-			}
-		}),
-		[isMobile]
-	)
-
-	const signatureStyle = useMemo(
-		() =>
-			({
-				'--w-signature-background': 'hsl(var(--background))'
-			}) as React.CSSProperties,
-		[]
-	)
-
-	const handleBase64SvgImage = useCallback(async () => {
-		if (!debouncedPoints.length || !$svg.current?.svg) return
-
-		const svgElement = $svg.current.svg
-
-		// Setup SVG attributes
-		const svgClone = svgElement.cloneNode(true) as SVGSVGElement
-		const clientWidth = svgElement.clientWidth || 300
-		const clientHeight = svgElement.clientHeight || 200
-
-		svgClone.removeAttribute('style')
-		svgClone.setAttribute('width', `${clientWidth}px`)
-		svgClone.setAttribute('height', `${clientHeight}px`)
-		svgClone.setAttribute('viewBox', `0 0 ${clientWidth} ${clientHeight}`)
-		svgClone.setAttribute('fill', '#0a0a0a')
-
-		const optimizedBase64 = svgToOptimizedBase64(svgClone, {
-			removeUnusedAttrs: true,
-			removeComments: true,
-			minifyPathData: true,
-			decimalPrecision: 2
-		})
-
-		return optimizedBase64
-	}, [debouncedPoints])
-
-	const handleBase64PngImage = useCallback(async () => {
-		if (!debouncedPoints.length) return
-
-		const pngBase64 = await convertSvgToWebp($svg.current?.svg, {
-			backgroundColor: 'transparent',
-			fillColor: '#0a0a0a',
-			quality: 1.0
-		})
-
-		const compressedBase64 = await compress(pngBase64, {
-			type: 'image/webp',
-			width: 300,
-			height: 200,
-			max: 20, // Max 50KB
-			quality: 1
-		})
-
-		return compressedBase64
-	}, [debouncedPoints, compress])
+	const isMissingSignature = isEmpty.current && isSubmitted
 
 	const handleSignSignature = async () => {
 		setIsSubmitted(true)
+		if (isEmpty.current) return
+		toast.loading(t('ns_common:notification.processing_request'), { id: 'update_signature' })
 		try {
-			const optimizedBase64 =
-				base64ImageFormat === 'svg' ? await handleBase64SvgImage() : await handleBase64PngImage()
-			if (!optimizedBase64) return
-
-			toast.loading(t('ns_common:notification.processing_request'), { id: 'update_signature' })
-
-			// setImageURL(optimizedBase64)
+			const base64Image = canvasRef.current?.toDataURL('image/webp', 0.8)
+			const compressedBase64 = await compress(base64Image, {
+				type: 'image/webp',
+				width: 300,
+				height: 200,
+				max: 5, // Max 10KB
+				quality: 1
+			})
+			const originalSizeInKB = (base64Image.length * 3) / 4 / 1024
+			const sizeInKB = (compressedBase64.length * 3) / 4 / 1024
+			console.info(`Signature image compressed from ${originalSizeInKB.toFixed(2)} KB to ${sizeInKB.toFixed(2)} KB`)
 			await setStatusAsync({
 				signature_type: dialogData.current.signature_type,
 				dispatch_order: dialogData.current.dispatch_order,
-				signature: optimizedBase64 ?? '',
+				signature: compressedBase64,
 				...((dialogData.current.signature_type === 'security_1_signature' ||
 					dialogData.current.signature_type === 'security_2_signature') && { approval_status: statusToUpdate })
 			})
@@ -194,21 +115,14 @@ const SignatureEditorDialog: React.FC = () => {
 		}
 	}
 
-	const handleClearSignature = () => {
-		$svg.current?.clear()
-		setPoints([])
-	}
-
-	const isMissingSignature = !debouncedPoints.length && isSubmitted
+	const handleClearSignature = useCallback(() => {
+		canvasRef.current?.clear()
+		isEmpty.current = true
+	}, [isEmpty])
 
 	return (
-		<Dialog
-			open={open}
-			onOpenChange={(open) => {
-				setOpen(open)
-				if (!open) setPoints([])
-			}}>
-			<DialogContent className='max-w-2xl grid-rows-[auto_1fr_auto] md:h-[85vh] xl:max-w-4xl'>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogContent className='max-w-xl grid-rows-[auto_1fr_auto] md:h-[85vh] xl:max-w-2xl'>
 				<DialogHeader className='mb-6'>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
 					<DialogDescription>
@@ -229,9 +143,7 @@ const SignatureEditorDialog: React.FC = () => {
 									setStatusToUpdate(
 										value as TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 									)
-									if (value === TruckloadDeliveryStatus.REQUEST_CHANGE) {
-										handleClearSignature()
-									}
+									if (value === TruckloadDeliveryStatus.REQUEST_CHANGE) handleClearSignature()
 								}}>
 								<FieldLabel htmlFor='confirm-radio' className='p-4 duration-200 hover:border-primary'>
 									<Field orientation='horizontal'>
@@ -271,40 +183,35 @@ const SignatureEditorDialog: React.FC = () => {
 						<Div
 							id='signature'
 							aria-invalid={isMissingSignature}
-							className='relative max-h-full min-h-[50vh] flex-1 basis-full overflow-clip rounded-md border duration-200 aria-[readonly=true]:!border aria-[invalid=true]:border-destructive hover:border-primary aria-[invalid=true]:hover:border-destructive aria-[readonly=true]:hover:border-border'>
+							className='relative grid max-h-full min-h-[50vh] w-fit flex-1 basis-full place-items-center self-center overflow-clip rounded-md border bg-white shadow-sm aria-[invalid=true]:border-2 aria-[invalid=true]:border-destructive'
+							style={{
+								willChange: 'transform',
+								transform: 'translateZ(0)',
+								WebkitTransform: 'translateZ(0)'
+							}}>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
-								penColor='black'
-								ref={$svg}
-								canvasProps={{ className: 'sigCanvas' }}
-								onBegin={(e) => console.log(e)}
-							/>
-							{/* <Signature
-								ref={$svg}
-								fill='hsl(var(--foreground))'
-								className='aria-readonly:cursor-not-allowed'
-								style={signatureStyle}
-								onPointer={handlePoints}
-								options={{
-									size: 6,
-									smoothing: 0.46,
-									thinning: 0.73,
-									streamline: 0.5,
-									easing: (t) => t,
-									simulatePressure: true,
-									last: true,
-									start: {
-										cap: true,
-										taper: 0,
-										easing: (t) => t
-									},
-									end: {
-										cap: true,
-										taper: 0,
-										easing: (t) => t
+								ref={canvasRef}
+								backgroundColor='transparent'
+								minWidth={1.5}
+								maxWidth={4}
+								velocityFilterWeight={0.8}
+								dotSize={1.5}
+								throttle={32}
+								clearOnResize={false}
+								canvasProps={{
+									className: 'w-full h-full touch-none',
+									width: 600,
+									height: 400,
+									style: {
+										maxWidth: '600px',
+										maxHeight: '400px',
+										touchAction: 'none',
+										WebkitTapHighlightColor: 'transparent'
 									}
 								}}
-							/> */}
+								onEnd={handleCanvasEnd}
+							/>
 						</Div>
 						{isMissingSignature && (
 							<Typography variant='small' color='destructive' className='font-medium'>
@@ -313,36 +220,14 @@ const SignatureEditorDialog: React.FC = () => {
 						)}
 					</Div>
 				</Div>
-				<DialogFooter className='flex-row items-center justify-between'>
-					<Div className='flex items-center gap-x-2'>
-						<RadioGroup
-							className='flex items-center gap-x-6'
-							value={base64ImageFormat}
-							defaultValue={'webp'}
-							onValueChange={(value) => setBase64ImageFormat(value as 'svg' | 'webp')}>
-							<Div className='flex items-center gap-3'>
-								<RadioGroupItem value='webp' id='webp' />
-								<Label htmlFor='webp' className='inline-flex items-center gap-x-2'>
-									WEBP (Compressed)
-								</Label>
-							</Div>
-							<Div className='flex items-center gap-3'>
-								<RadioGroupItem value='svg' id='svg' />
-								<Label htmlFor='svg' className='inline-flex items-center gap-x-2'>
-									SVG (Optimized)
-								</Label>
-							</Div>
-						</RadioGroup>
-					</Div>
-					<Div className='flex items-center gap-x-2'>
-						<Button variant='secondary' onClick={() => handleClearSignature()}>
-							{t('ns_common:actions.reset')}
-						</Button>
-						<Button disabled={isPending} onClick={() => handleSignSignature()}>
-							{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
-							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.confirm')}
-						</Button>
-					</Div>
+				<DialogFooter>
+					<Button variant='secondary' onClick={() => handleClearSignature()}>
+						{t('ns_common:actions.reset')}
+					</Button>
+					<Button disabled={isPending} onClick={() => handleSignSignature()}>
+						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.confirm')}
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
@@ -351,32 +236,8 @@ const SignatureEditorDialog: React.FC = () => {
 
 const OptimizingLoader: React.FC = () => {
 	return (
-		<div className='absolute inset-0 z-10 flex flex-col place-content-center place-items-center items-center justify-center gap-x-2 bg-muted/50 backdrop-blur duration-200 animate-in fade-in-0'>
-			<style>{
-				/* CSS */ `
-               .loader {
-                  --c:no-repeat linear-gradient(#fafafa 0 0);
-                  background:
-                     var(--c),var(--c),var(--c),
-                     var(--c),var(--c),var(--c),
-                     var(--c),var(--c),var(--c);
-                  background-size: 8px 8px;
-                  border-radius: 2px;
-                  animation:
-                     l32-1 1s infinite,
-                     l32-2 1s infinite;
-                  }
-                  @keyframes l32-1 {
-                  0%,100% {width:24px;height: 24px}
-                  35%,65% {width:32px;height: 32px}
-                  }
-                  @keyframes l32-2 {
-                  0%,40%  {background-position: 0 0,0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,  50% 50% }
-                  60%,100%{background-position: 0 50%, 0 100%,50% 100%,100% 100%,100% 50%,100% 0,50% 0,0 0,  50% 50% }
-                  }
-            `
-			}</style>
-			<div className='loader' />
+		<div className='absolute inset-0 z-10 grid flex-col place-items-center gap-x-2 bg-muted/50 backdrop-blur duration-200 animate-in fade-in-0'>
+			<Icon name='LoaderCircle' className='animate-spin' />
 		</div>
 	)
 }
