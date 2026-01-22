@@ -182,7 +182,8 @@ export default {
 		'303': 'See Other',
 		'303_message': 'Please access {{url}} to use this feature for factory {{factoryCode}}',
 		'403': 'Permission Denied',
-		'403_message': "You don't have permission to access this page.",
+		'403_message':
+			"You don't have permission to access this page. Please contact the administrator to request access.",
 		'404': 'Page Not Found',
 		'404_message': 'The page you are looking for does not exist.',
 		'500': 'Something went wrong',

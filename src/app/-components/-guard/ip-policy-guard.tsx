@@ -19,7 +19,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	if (isNotCompatible)
 		return (
 			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-3'>
-				<Typography variant='code' color='muted' className='font-semibold'>
+				<Typography variant='code' color='destructive' className='font-semibold'>
 					{HttpStatusCode.BadGateway}
 				</Typography>
 				<Typography variant='h1'>{t('ns_common:errors.502')}</Typography>

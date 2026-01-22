@@ -1,5 +1,7 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -39,33 +41,35 @@ function Page() {
 			<meta name='description' content='RFID Scanner integration for inbound process' />
 
 			<HostCompatibleGuard>
-				<PageProvider>
-					<AlreadyScannedEpcsAlert />
-					<PageComposition.Container
-						style={{
-							'--toolbar-height': '60px'
-						}}>
-						<PageComposition.Wrapper>
-							<PageComposition.Main>
-								<ScannerToolbar />
-								<PageComposition.InnerWrapper>
-									<PageComposition.ListBoxPanel>
-										<EpcListBox />
-									</PageComposition.ListBoxPanel>
-									<PageComposition.CounterPanel>
-										<ScannedEPCsCounter />
-									</PageComposition.CounterPanel>
-									<PageComposition.FormPanel>
-										<InoutboundForm />
-									</PageComposition.FormPanel>
-								</PageComposition.InnerWrapper>
-							</PageComposition.Main>
-							<ScannerSettings />
-						</PageComposition.Wrapper>
-					</PageComposition.Container>
-					{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
-					{/* <PageNavigationBlocker /> */}
-				</PageProvider>
+				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]}>
+					<PageProvider>
+						<AlreadyScannedEpcsAlert />
+						<PageComposition.Container
+							style={{
+								'--toolbar-height': '60px'
+							}}>
+							<PageComposition.Wrapper>
+								<PageComposition.Main>
+									<ScannerToolbar />
+									<PageComposition.InnerWrapper>
+										<PageComposition.ListBoxPanel>
+											<EpcListBox />
+										</PageComposition.ListBoxPanel>
+										<PageComposition.CounterPanel>
+											<ScannedEPCsCounter />
+										</PageComposition.CounterPanel>
+										<PageComposition.FormPanel>
+											<InoutboundForm />
+										</PageComposition.FormPanel>
+									</PageComposition.InnerWrapper>
+								</PageComposition.Main>
+								<ScannerSettings />
+							</PageComposition.Wrapper>
+						</PageComposition.Container>
+						{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
+						{/* <PageNavigationBlocker /> */}
+					</PageProvider>
+				</RoleGuard>
 			</HostCompatibleGuard>
 		</Fragment>
 	)

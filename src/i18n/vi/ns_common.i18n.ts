@@ -103,7 +103,8 @@ export default {
 		'303': 'Đã chuyển hướng đến tài nguyên khác',
 		'303_message': 'Vui lòng truy cập vào {{url}} để sử dụng tính năng này cho nhà máy {{factoryCode}}',
 		'403': 'Yêu Cầu Quyền Truy Cập',
-		'403_message': 'Bạn không được phép truy cập trang này.',
+		'403_message':
+			'Bạn không được phép truy cập trang này. Vui lòng liên hệ quản trị viên để được cấp quyền truy cập',
 		'404': 'Không Tìm Thấy Trang.',
 		'404_message': 'Trang không tồn tại. Vui lòng kiểm tra lại đường dẫn.',
 		'500': 'Đã xảy ra lỗi',

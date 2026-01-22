@@ -1,37 +1,29 @@
 import { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
-import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui'
-import { LockIcon } from 'lucide-react'
-import { Fragment } from 'react'
+import { Div, Typography } from '@/components/ui'
+import { HttpStatusCode } from 'axios'
+import { useTranslation } from 'react-i18next'
 
-export const RoleGuard: React.FC<React.PropsWithChildren & { authorizedRoles: UserRole[] }> = ({
+export const RoleGuard: React.FC<React.PropsWithChildren & { authorizedRoles: UserRole[] | '*' }> = ({
 	children,
 	authorizedRoles
 }) => {
 	const { user } = useAuth()
+	const { t } = useTranslation()
 	const isAccessible = user && authorizedRoles.includes(user.role) && authorizedRoles !== '*'
 
-	return (
-		<Fragment>
-			{!isAccessible && (
-				<div className='fixed inset-0 z-[9999] grid place-items-center bg-background/80 backdrop-blur-md'>
-					<Empty className='h-full bg-muted/30'>
-						<EmptyHeader>
-							<EmptyMedia variant='icon'>
-								<LockIcon />
-							</EmptyMedia>
-							<EmptyTitle></EmptyTitle>
-							<EmptyDescription className='max-w-xs text-pretty'>
-								You&apos;re all caught up. New notifications will appear here.
-							</EmptyDescription>
-						</EmptyHeader>
-						<EmptyContent>
-							<Button variant='outline'>Request access</Button>
-						</EmptyContent>
-					</Empty>
-				</div>
-			)}
-			{children}
-		</Fragment>
-	)
+	if (!isAccessible)
+		return (
+			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-3'>
+				<Typography variant='code' color='destructive' className='font-semibold'>
+					{HttpStatusCode.Forbidden}
+				</Typography>
+				<Typography variant='h1'>{t('ns_common:errors.403')}</Typography>
+				<Typography variant='p' className='mb-6 mt-2 text-base leading-7' color='muted'>
+					{t('ns_common:errors.403_message')}
+				</Typography>
+			</Div>
+		)
+
+	return children
 }
