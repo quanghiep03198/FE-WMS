@@ -122,7 +122,7 @@ const SignatureEditorDialog: React.FC = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className='max-w-xl grid-rows-[auto_1fr_auto] md:h-[85vh] xl:max-w-2xl'>
+			<DialogContent className='max-w-xl grid-rows-[auto_1fr_auto] xl:max-w-2xl'>
 				<DialogHeader className='mb-6'>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
 					<DialogDescription>
@@ -183,7 +183,7 @@ const SignatureEditorDialog: React.FC = () => {
 						<Div
 							id='signature'
 							aria-invalid={isMissingSignature}
-							className='relative grid max-h-full w-fit flex-1 basis-full place-items-center self-center overflow-clip rounded-md border bg-white shadow-sm aria-[invalid=true]:border-2 aria-[invalid=true]:border-destructive'
+							className='relative grid basis-full place-items-center self-center overflow-clip rounded-md border bg-white shadow-sm aria-[invalid=true]:border-2 aria-[invalid=true]:border-destructive'
 							style={{
 								willChange: 'transform',
 								transform: 'translateZ(0)',
@@ -192,21 +192,17 @@ const SignatureEditorDialog: React.FC = () => {
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
-								backgroundColor='transparent'
 								minWidth={1.5}
 								maxWidth={4}
 								velocityFilterWeight={0.8}
 								dotSize={1.5}
-								throttle={32}
 								clearOnResize={false}
 								canvasProps={{
 									className: 'touch-none',
-									width: 600,
+									width: 500,
 									height: 400,
 									style: {
 										msTouchAction: 'none',
-										maxWidth: '600px',
-										maxHeight: '400px',
 										touchAction: 'none',
 										WebkitTapHighlightColor: 'transparent'
 									}
