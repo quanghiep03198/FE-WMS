@@ -25,9 +25,10 @@ import {
 	Typography
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import Signature from '@uiw/react-signature'
-import { useResetState } from 'ahooks'
-import React, { useRef, useState } from 'react'
+import Signature, { StrokeOptions } from '@uiw/react-signature'
+import { useDebounce, useRafState, useResetState } from 'ahooks'
+import { debounce } from 'lodash-es'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { TruckloadDeliveryStatus } from '../-constants'
@@ -38,7 +39,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const $svg = useRef(null)
 	const [open, setOpen] = useResetState<boolean>(false)
-	const [points, setPoints, resetPoints] = useResetState([])
+	const [points, setPoints] = useRafState([])
 	const [base64ImageFormat, setBase64ImageFormat] = useResetState<'svg' | 'webp' | null>('webp')
 	const isMobile = useMediaQuery('(max-width: 1279px)')
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
@@ -60,6 +61,8 @@ const SignatureEditorDialog: React.FC = () => {
 		signature_type: null
 	})
 
+	const debouncedPoints = useDebounce(points, { wait: 200, leading: false, trailing: true })
+
 	event$.useSubscription(({ action, payload }) => {
 		if (action === 'UPDATE_DISPATCH_ORDER_SIGNATURE') {
 			setOpen(true)
@@ -75,14 +78,51 @@ const SignatureEditorDialog: React.FC = () => {
 
 	const { execute: compress, isPending: isCompressing } = useWorkerFn(compressBase64)
 
-	const handlePoints = (data) => {
-		if (data.length > 0) {
-			setPoints([...points, JSON.stringify(data)])
-		}
-	}
+	const handlePoints = useCallback(
+		debounce(
+			(data) => {
+				if (data.length > 0) {
+					setPoints((prev) => [...prev, JSON.stringify(data)])
+				}
+			},
+			1000,
+			{ leading: false, trailing: true }
+		),
+		[setPoints]
+	)
 
-	const handleBase64SvgImage = async () => {
-		if (!points.length || !$svg.current?.svg) return
+	const signatureOptions = useMemo<StrokeOptions>(
+		() => ({
+			size: 6,
+			smoothing: isMobile ? 0.25 : 0.5,
+			thinning: 0.1,
+			streamline: isMobile ? 0 : 0.9,
+			simulatePressure: true,
+			easing(pressure) {
+				return pressure <= 0.5 ? 16 * pressure ** 5 : 1 + 16 * (--pressure) ** 5
+			},
+			start: {
+				taper: 0,
+				cap: true
+			},
+			end: {
+				taper: 0,
+				cap: true
+			}
+		}),
+		[isMobile]
+	)
+
+	const signatureStyle = useMemo(
+		() =>
+			({
+				'--w-signature-background': 'hsl(var(--background))'
+			}) as React.CSSProperties,
+		[]
+	)
+
+	const handleBase64SvgImage = useCallback(async () => {
+		if (!debouncedPoints.length || !$svg.current?.svg) return
 
 		const svgElement = $svg.current.svg
 
@@ -104,13 +144,11 @@ const SignatureEditorDialog: React.FC = () => {
 			decimalPrecision: 2
 		})
 
-		// setImageURL(optimizedBase64)
-
 		return optimizedBase64
-	}
+	}, [debouncedPoints])
 
-	const handleBase64PngImage = async () => {
-		if (!points.length) return
+	const handleBase64PngImage = useCallback(async () => {
+		if (!debouncedPoints.length) return
 
 		const pngBase64 = await convertSvgToWebp($svg.current?.svg, {
 			backgroundColor: 'transparent',
@@ -126,11 +164,8 @@ const SignatureEditorDialog: React.FC = () => {
 			quality: 1
 		})
 
-		console.log(compressedBase64)
-		// setImageURL(compressedBase64)
-
 		return compressedBase64
-	}
+	}, [debouncedPoints, compress])
 
 	const handleSignSignature = async () => {
 		setIsSubmitted(true)
@@ -160,17 +195,17 @@ const SignatureEditorDialog: React.FC = () => {
 
 	const handleClearSignature = () => {
 		$svg.current?.clear()
-		resetPoints()
+		setPoints([])
 	}
 
-	const isMissingSignature = !points.length && isSubmitted
+	const isMissingSignature = !debouncedPoints.length && isSubmitted
 
 	return (
 		<Dialog
 			open={open}
 			onOpenChange={(open) => {
 				setOpen(open)
-				if (!open) resetPoints()
+				if (!open) setPoints([])
 			}}>
 			<DialogContent className='max-w-2xl grid-rows-[auto_1fr_auto] md:h-[85vh] xl:max-w-4xl'>
 				<DialogHeader className='mb-6'>
@@ -241,20 +276,25 @@ const SignatureEditorDialog: React.FC = () => {
 								ref={$svg}
 								fill='hsl(var(--foreground))'
 								className='aria-readonly:cursor-not-allowed'
-								style={{ '--w-signature-background': 'hsl(var(--background))' } as React.CSSProperties}
+								style={signatureStyle}
 								onPointer={handlePoints}
 								options={{
 									size: 6,
-									smoothing: isMobile ? 0.25 : 0.5,
-									thinning: 0.25,
-									streamline: isMobile ? 0 : 0.9,
+									smoothing: 0.46,
+									thinning: 0.73,
+									streamline: 0.5,
+									easing: (t) => t,
+									simulatePressure: true,
+									last: true,
 									start: {
+										cap: true,
 										taper: 0,
-										cap: true
+										easing: (t) => t
 									},
 									end: {
+										cap: true,
 										taper: 0,
-										cap: true
+										easing: (t) => t
 									}
 								}}
 							/>
@@ -291,11 +331,7 @@ const SignatureEditorDialog: React.FC = () => {
 						<Button variant='secondary' onClick={() => handleClearSignature()}>
 							{t('ns_common:actions.reset')}
 						</Button>
-						<Button
-							disabled={isPending}
-							onClick={() => {
-								handleSignSignature()
-							}}>
+						<Button disabled={isPending} onClick={() => handleSignSignature()}>
 							{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
 							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.confirm')}
 						</Button>
