@@ -23,7 +23,7 @@ import {
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useResetState, useThrottleFn } from 'ahooks'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
@@ -120,9 +120,29 @@ const SignatureEditorDialog: React.FC = () => {
 		isEmpty.current = true
 	}, [isEmpty])
 
+	useEffect(() => {
+		function resizeCanvas() {
+			if (!canvasRef.current) return
+			const ratio = Math.max(window.devicePixelRatio || 1, 1)
+			const canvas = canvasRef.current?.getCanvas()
+			const signaturePad = canvasRef.current.getSignaturePad()
+			canvas.width = canvas.offsetWidth * ratio
+			canvas.height = canvas.offsetHeight * ratio
+			canvas.getContext('2d').scale(ratio, ratio)
+			signaturePad.clear() // otherwise isEmpty() might return incorrect value
+		}
+
+		window.addEventListener('resize', resizeCanvas)
+		resizeCanvas()
+
+		return () => {
+			window.removeEventListener('resize', resizeCanvas)
+		}
+	}, [])
+
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className='max-w-xl grid-rows-[auto_1fr_auto] xl:max-w-2xl'>
+			<DialogContent className='max-w-xl grid-rows-[auto_1fr_auto] xl:max-w-xl'>
 				<DialogHeader className='mb-6'>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
 					<DialogDescription>
@@ -192,10 +212,10 @@ const SignatureEditorDialog: React.FC = () => {
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
-								minWidth={1.5}
+								minWidth={2}
 								maxWidth={4}
 								velocityFilterWeight={0.8}
-								dotSize={1.5}
+								dotSize={2}
 								clearOnResize={false}
 								canvasProps={{
 									className: 'touch-none',
