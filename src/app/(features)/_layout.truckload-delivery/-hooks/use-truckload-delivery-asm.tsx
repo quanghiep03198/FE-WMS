@@ -25,7 +25,7 @@ export const useGetTruckloadDeliveryQuery = () => {
 		queryFn: TruckloadDeliveryService.getAll,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,
-		refetchInterval: 5000,
+		refetchInterval: 15000,
 		select: (response) => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({
