@@ -25,10 +25,10 @@ import {
 	RadioGroupItem,
 	Typography
 } from '@/components/ui'
+import { SignatureCanvas, type SignatureCanvasInstance } from '@/components/ui/@custom/signature'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { TruckloadDeliveryStatus } from '../-constants'
@@ -58,7 +58,7 @@ const SignatureEditorDialog: React.FC = () => {
 		license_plate: null,
 		signature_type: null
 	})
-	const canvasRef = useRef<SignatureCanvas>(null)
+	const canvasRef = useRef<SignatureCanvasInstance>(null)
 
 	event$.useSubscription(({ action, payload }) => {
 		if (action === 'UPDATE_DISPATCH_ORDER_SIGNATURE') {
@@ -81,11 +81,12 @@ const SignatureEditorDialog: React.FC = () => {
 
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'update_signature' })
 		try {
-			const base64Image = canvasRef.current?.toDataURL('image/webp', 0.8)
+			// * compress image
+			const base64Image = canvasRef.current.toDataURL({ trim: true })
 			const compressedBase64 = await compress(base64Image, {
 				type: 'image/webp',
-				width: 300,
-				height: 200,
+				width: 192,
+				height: 128,
 				max: 10, // Max 10KB
 				quality: 0.8,
 				debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
@@ -178,23 +179,21 @@ const SignatureEditorDialog: React.FC = () => {
 						</Label>
 						<Div
 							id='signature'
-							className='relative cursor-[url("/pen-tool.svg"),_auto] overflow-clip rounded-lg border bg-white duration-200 @container group-aria-[invalid=true]/signature:border-2 group-aria-[invalid=true]/signature:border-destructive'>
+							className='relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 @container group-aria-[invalid=true]/signature:border-2 group-aria-[invalid=true]/signature:border-destructive'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
-								canvasProps={{
-									style: {
-										overscrollBehavior: 'none',
-										touchAction: 'none',
-										width: '100cqw',
-										height: isDesktop ? '50vh' : '45vh'
-									}
+								style={{
+									overscrollBehavior: 'none',
+									touchAction: 'none',
+									width: '100cqw',
+									height: isDesktop ? '50vh' : '45vh'
 								}}
-								minWidth={1.5}
-								maxWidth={2.5}
-								onEnd={() => {
-									setIsEmpty(canvasRef.current?.isEmpty())
+								padOptions={{
+									minWidth: 2,
+									maxWidth: 2
 								}}
+								onEnd={() => setIsEmpty(canvasRef.current?.isEmpty())}
 							/>
 						</Div>
 						{isMissingSignature && (
