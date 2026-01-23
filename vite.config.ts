@@ -149,11 +149,11 @@ export default defineConfig(({ mode }) => {
 		},
 		build: {
 			emptyOutDir: true,
-			sourcemap: true,
+			sourcemap: mode === 'production' ? false : true, // Tắt sourcemap trong production
 			cssCodeSplit: true,
-			reportCompressedSize: true,
-			chunkSizeWarningLimit: 1024,
-			assetsInlineLimit: 0,
+			reportCompressedSize: false, // Tắt để build nhanh hơn
+			chunkSizeWarningLimit: 500, // Giảm xuống 500KB
+			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
 				dropLabels: mode === 'production' ? ['console', 'debugger'] : undefined,
 				logLevel: mode === 'production' ? 'silent' : 'debug',
@@ -214,7 +214,7 @@ export default defineConfig(({ mode }) => {
 							{ name: 'socket.io-client', test: /socket.io-client/ },
 							{ name: 'tailwind-merge', test: /tailwind-merge/ },
 							{ name: 'tailwind-styled-components', test: /tailwind-styled-components/ },
-							{ name: '@uiw/react-signature', test: /@uiw\/react-signature/ },
+							{ name: 'react-signature-canvas', test: /react-signature-canvas/ },
 							{ name: 'uuid', test: /uuid/ },
 							{ name: 'zod', test: /zod/ },
 							{ name: 'zustand', test: /zustand/ }

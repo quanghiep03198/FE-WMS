@@ -4,13 +4,32 @@ type CompressBase64Options = {
 	height?: number
 	min?: number // KB
 	max?: number // KB
-	quality?: number // quality ưa thích ban đầu
-	// ...có thể mở rộng thêm các option khác nếu cần...
+	quality?: number // Preferred initial quality
+	debug?: boolean
+	// Can be extended with more options if needed
 }
 
+/**
+ * @author quanghiep03198
+ * @createdDate 2025-08-19
+ * @lastModified 2026-01-19
+ * @description Compress and resize a base64 image string with specified constraints.
+ * @example
+ * ```ts
+ * // Basic example, use webp format and run in web worker is recommended
+ * const compressedBase64 = await compressBase64(originalBase64, {
+ * 	type: 'image/webp',
+ * 	width: 300,
+ * 	height: 200,
+ * 	max: 50, // Max 50KB
+ * 	quality: 0.8,
+ * 	debug: true
+ * })
+ * ```
+ */
 export default async function compressBase64(base64: string, options?: CompressBase64Options) {
-	// 🚀 Optimization: Use WebP by default (20-40% smaller than PNG)
-	const { type = 'image/webp', width, height, min = 0, max = 200, quality = 0.85 } = options ?? {}
+	// Optimization: Use WebP by default (20-40% smaller than PNG)
+	const { type = 'image/webp', width, height, min = 0, max = 200, quality = 0.85, debug = true } = options ?? {}
 
 	function blobToBase64(blob: Blob): Promise<string> {
 		return new Promise((resolve) => {
@@ -29,7 +48,7 @@ export default async function compressBase64(base64: string, options?: CompressB
 		let targetWidth = originalWidth
 		let targetHeight = originalHeight
 
-		// Tính kích thước đích theo tỉ lệ (không méo)
+		// Calculate target dimensions proportionally (no distortion)
 		if (width && height) {
 			const widthRatio = width / originalWidth
 			const heightRatio = height / originalHeight
@@ -44,7 +63,7 @@ export default async function compressBase64(base64: string, options?: CompressB
 			targetWidth = Math.max(1, Math.round((height / originalHeight) * originalWidth))
 		}
 
-		// Helper: vẽ ra blob với chất lượng smoothing cao
+		// Helper: render to blob with high smoothing quality
 		async function renderToBlob(w: number, h: number, q: number): Promise<Blob> {
 			const canvas = new OffscreenCanvas(w, h)
 			const ctx = canvas.getContext('2d')
@@ -59,20 +78,20 @@ export default async function compressBase64(base64: string, options?: CompressB
 			return await canvas.convertToBlob({ type, quality: qSafe })
 		}
 
-		// Binary search quality cao nhất nhưng vẫn <= max (KB)
+		// Binary search for the highest quality while staying <= max (KB)
 		async function fitUnderMax(w: number, h: number) {
 			if (max <= 0) {
-				// Không giới hạn max -> render với quality yêu thích
+				// No max limit -> render with preferred quality
 				const b = await renderToBlob(w, h, quality)
 				return { q: quality, blob: b }
 			}
 
-			// 🚀 Optimization: Lower quality threshold for more aggressive compression
-			let low = 0.2 // giảm từ 0.3 → 0.2 (nén sâu hơn ~15-20%)
+			// Optimization: Lower quality threshold for more aggressive compression
+			let low = 0.2 // Reduced from 0.3 to 0.2 (deeper compression ~15-20%)
 			let high = 1
 			let best: { q: number; blob: Blob } | null = null
 
-			// Thử trước với quality ưa thích
+			// Try with preferred quality first
 			const firstBlob = await renderToBlob(w, h, quality)
 			if (firstBlob.size / 1024 <= max) {
 				best = { q: quality, blob: firstBlob }
@@ -81,20 +100,20 @@ export default async function compressBase64(base64: string, options?: CompressB
 				high = Math.min(high, quality)
 			}
 
-			// 🚀 Optimization: Increase binary search iterations for better precision
+			// Optimization: Increase binary search iterations for better precision
 			for (let i = 0; i < 12; i++) {
 				const mid = (low + high) / 2
 				const b = await renderToBlob(w, h, mid)
 				const kb = b.size / 1024
 				if (kb <= max) {
 					best = { q: mid, blob: b }
-					low = mid // thử tăng chất lượng thêm
+					low = mid // Try to increase quality further
 				} else {
-					high = mid // giảm chất lượng
+					high = mid // Reduce quality
 				}
 			}
 
-			// Nếu vẫn chưa đạt, thử ở low (cận dưới)
+			// If still not achieved, try at low (lower bound)
 			if (!best) {
 				const b = await renderToBlob(w, h, low)
 				if (b.size / 1024 <= max) best = { q: low, blob: b }
@@ -103,18 +122,18 @@ export default async function compressBase64(base64: string, options?: CompressB
 			return best
 		}
 
-		// Chiến lược: ưu tiên giữ kích thước (theo width/height đã chọn) và tối ưu quality.
-		// Nếu vẫn vượt max, giảm kích thước theo tỉ lệ rồi thử lại.
+		// Strategy: prioritize maintaining dimensions (per selected width/height) and optimize quality.
+		// If still exceeds max, reduce dimensions proportionally and try again.
 		let w = targetWidth
 		let h = targetHeight
 
 		let fitted = await fitUnderMax(w, h)
 
-		// 🚀 Optimization: More aggressive downscaling (0.8x instead of 0.85x per iteration)
-		// Nếu không fit nổi theo max, downscale dần và thử lại
+		// Optimization: More aggressive downscaling (0.8x instead of 0.85x per iteration)
+		// If can't fit within max, downscale gradually and retry
 		if (!fitted && max > 0) {
 			for (let i = 0; i < 10; i++) {
-				// Giảm kích thước 20% mỗi vòng (aggressive hơn 15% cũ)
+				// Reduce dimensions by 20% each iteration (more aggressive than the old 15%)
 				w = Math.max(1, Math.round(w * 0.8))
 				h = Math.max(1, Math.round(h * 0.8))
 				fitted = await fitUnderMax(w, h)
@@ -129,7 +148,7 @@ export default async function compressBase64(base64: string, options?: CompressB
 			finalBlob = fitted.blob
 			finalQ = fitted.q
 
-			// Nếu có min (KB), cố gắng tăng quality tối đa nhưng không vượt max
+			// If min (KB) is specified, try to maximize quality without exceeding max
 			if (min > 0) {
 				const kb = finalBlob.size / 1024
 				if (kb < min) {
@@ -155,15 +174,21 @@ export default async function compressBase64(base64: string, options?: CompressB
 				}
 			}
 		} else {
-			// fallback: không có ràng buộc hoặc không thể đạt max, render theo quality ưa thích
+			// Fallback: no constraints or unable to reach max, render with preferred quality
 			finalBlob = await renderToBlob(w, h, quality)
 		}
 
-		// Chỉ convert sang base64 một lần ở cuối
+		// Convert to base64 only once at the end
 		const base64Result = await blobToBase64(finalBlob)
 
-		// Giải phóng bitmap
+		// Release bitmap
 		if ('close' in imgBitmap) (imgBitmap as any).close?.()
+
+		if (debug) {
+			const originalSizeInKB = (base64.length * 3) / 4 / 1024
+			const sizeInKB = (base64Result.length * 3) / 4 / 1024
+			console.info(`Base64 image compressed from ${originalSizeInKB.toFixed(2)} KB to ${sizeInKB.toFixed(2)} KB`)
+		}
 
 		return base64Result
 	} catch (error) {

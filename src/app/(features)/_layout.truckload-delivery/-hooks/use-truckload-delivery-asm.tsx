@@ -1,3 +1,5 @@
+import { PresetBreakPoints } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	ITruckloadDelivery,
 	TruckloadDeliveryDispatchOrder,
@@ -20,12 +22,14 @@ export enum TruckloadDeliveryMutationKeys {
 }
 
 export const useGetTruckloadDeliveryQuery = () => {
+	const isDesktop = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
+
 	return useQuery({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 		queryFn: TruckloadDeliveryService.getAll,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,
-		refetchInterval: 5000,
+		refetchInterval: isDesktop ? 5000 : false, // * Only support auto refetch on desktop devices
 		select: (response) => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item) => ({
