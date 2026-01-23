@@ -1,4 +1,5 @@
-import { useEffectOnce } from '@/common/hooks/use-effect-once'
+import { PresetBreakPoints } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
@@ -30,6 +31,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
+import tw from 'tailwind-styled-components'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType, usePageContext } from '../-contexts/page-context'
 import { useUpdateDispatchOrderSignatureMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -40,6 +42,7 @@ const SignatureEditorDialog: React.FC = () => {
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 	const [isEmpty, setIsEmpty] = useState<boolean>(false)
+	const isDesktop = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const [statusToUpdate, setStatusToUpdate] = useState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 	>(TruckloadDeliveryStatus.CONFIRMED)
@@ -111,32 +114,8 @@ const SignatureEditorDialog: React.FC = () => {
 	}
 
 	useEffect(() => {
-		setIsEmpty(canvasRef.current?.isEmpty() ?? true)
-	}, [canvasRef.current?.isEmpty()])
-
-	useEffectOnce(() => {
-		if (!canvasRef.current) return
-
-		const canvas = canvasRef.current.getCanvas()
-		const signaturePad = canvasRef.current.getSignaturePad()
-
-		function resizeCanvas() {
-			if (!canvas || !signaturePad) return
-			const ratio = Math.max(window.devicePixelRatio || 1, 1)
-			canvas.width = canvas.offsetWidth * ratio
-			canvas.height = canvas.offsetHeight * ratio
-			canvas.getContext('2d').scale(ratio, ratio)
-			signaturePad.clear() // otherwise isEmpty() might return incorrect value
-		}
-
-		resizeCanvas()
-
-		window.addEventListener('resize', resizeCanvas)
-
-		return () => {
-			window.removeEventListener('resize', resizeCanvas)
-		}
-	})
+		if (canvasRef.current) setIsEmpty(canvasRef.current.isEmpty())
+	}, [canvasRef.current])
 
 	const isMissingSignature = isEmpty && isSubmitted
 
@@ -144,16 +123,16 @@ const SignatureEditorDialog: React.FC = () => {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent
 				className={cn(
-					'md:max-w-screen max-w-2xl grid-rows-[auto_1fr_auto] md:max-h-screen md:rounded-none xl:max-w-4xl',
+					'flex max-w-xl flex-col gap-6 overflow-auto md:max-h-screen lg:max-w-3xl xl:max-w-4xl',
 					'md:*:!transiton-none md:*:before:!transtion-none md:!animate-none md:!transition-none md:*:!animate-none md:*:after:!animate-none'
 				)}>
-				<DialogHeader className='mb-6'>
+				<DialogHeader>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
 					<DialogDescription>
 						{t('ns_inoutbound:description.update_dispatch_order_signature_info')}
 					</DialogDescription>
 				</DialogHeader>
-				<Div className='flex h-full flex-1 basis-full flex-col gap-y-6'>
+				<DialogBody>
 					{['security_1_signature', 'security_2_signature'].includes(dialogData.current.signature_type) && (
 						<Div className='flex flex-col gap-y-3'>
 							<Label htmlFor='confirmation'>{t('ns_inoutbound:labels.security_confirmation')}</Label>
@@ -197,16 +176,13 @@ const SignatureEditorDialog: React.FC = () => {
 							</RadioGroup>
 						</Div>
 					)}
-					<Div className='flex flex-1 flex-col gap-y-3'>
-						<Label
-							htmlFor='signature'
-							aria-invalid={isMissingSignature}
-							className='aria-[invalid=true]:text-destructive'>
+					<Div className='group/signature flex h-full flex-col gap-y-3' aria-invalid={isMissingSignature}>
+						<Label htmlFor='signature' className='group-aria-[invalid=true]/signature:text-destructive'>
 							{t('ns_inoutbound:labels.signature')}
 						</Label>
 						<Div
 							id='signature'
-							className='relative overflow-clip rounded-md border bg-white shadow-sm duration-200 aria-[invalid=true]:border-destructive'>
+							className='relative overflow-clip rounded-lg border bg-white duration-200 @container group-aria-[invalid=true]/signature:border-2 group-aria-[invalid=true]/signature:border-destructive'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
@@ -214,22 +190,28 @@ const SignatureEditorDialog: React.FC = () => {
 									style: {
 										overscrollBehavior: 'none',
 										touchAction: 'none',
-										width: '100%',
-										height: '50dvh',
-										willChange: 'contents'
+										width: '100cqw',
+										height: isDesktop ? '50vh' : '45vh'
 									}
 								}}
 								minWidth={1.5}
 								maxWidth={2.5}
+								onEnd={() => {
+									setIsEmpty(canvasRef.current?.isEmpty() ?? true)
+								}}
 							/>
 						</Div>
 						{isMissingSignature && (
-							<Typography variant='small' color='destructive' className='font-medium'>
+							<Typography
+								variant='small'
+								color='destructive'
+								className='inline-flex items-center gap-x-2 font-medium'>
+								<Icon name='TriangleAlert' />
 								{t('ns_validation:missing_signature')}
 							</Typography>
 						)}
 					</Div>
-				</Div>
+				</DialogBody>
 				<DialogFooter>
 					<Button variant='secondary' onClick={() => handleClearSignature()}>
 						{t('ns_common:actions.reset')}
@@ -243,6 +225,8 @@ const SignatureEditorDialog: React.FC = () => {
 		</Dialog>
 	)
 }
+
+const DialogBody = tw.div`flex-1 space-y-6`
 
 const OptimizingLoader: React.FC = () => {
 	return (
