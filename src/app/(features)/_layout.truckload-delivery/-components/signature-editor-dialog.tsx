@@ -125,9 +125,7 @@ const SignatureEditorDialog: React.FC = () => {
 			const ratio = Math.max(window.devicePixelRatio || 1, 1)
 			canvas.width = canvas.offsetWidth * ratio
 			canvas.height = canvas.offsetHeight * ratio
-			const ctx = canvas.getContext('2d')
-			ctx.scale(ratio, ratio)
-			ctx.setTransform(1, 0, 0, 1, 0, 0)
+			canvas.getContext('2d').scale(ratio, ratio)
 			signaturePad.clear() // otherwise isEmpty() might return incorrect value
 		}
 
