@@ -61,8 +61,8 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 		window.addEventListener('resize', resizeCanvas)
 		resizeCanvas()
 
-		signaturePadRef.current.addEventListener('beginStroke', onBegin, { once: true })
-		signaturePadRef.current.addEventListener('endStroke', onEnd, { once: true })
+		signaturePadRef.current.addEventListener('beginStroke', onBegin)
+		signaturePadRef.current.addEventListener('endStroke', onEnd)
 
 		return () => {
 			signaturePadRef.current.removeEventListener('beginStroke', onBegin)
