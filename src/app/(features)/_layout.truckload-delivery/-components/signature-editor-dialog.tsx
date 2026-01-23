@@ -26,8 +26,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { useResetState } from 'ahooks'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
@@ -37,16 +36,16 @@ import { SignatureType, usePageContext } from '../-contexts/page-context'
 import { useUpdateDispatchOrderSignatureMutation } from '../-hooks/use-truckload-delivery-asm'
 
 const SignatureEditorDialog: React.FC = () => {
-	const { t } = useTranslation()
-	const [open, setOpen] = useResetState<boolean>(false)
-	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
+	const [open, setOpen] = useState<boolean>(false)
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 	const [isEmpty, setIsEmpty] = useState<boolean>(false)
-	const isDesktop = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const [statusToUpdate, setStatusToUpdate] = useState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 	>(TruckloadDeliveryStatus.CONFIRMED)
+	const { t } = useTranslation()
 	const { event$ } = usePageContext()
+	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
+	const isDesktop = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
 			signature_type: SignatureType
@@ -108,13 +107,11 @@ const SignatureEditorDialog: React.FC = () => {
 		}
 	}
 
-	const handleClearSignature = () => {
+	const handleReset = () => {
 		canvasRef.current.clear()
+		setIsEmpty(true)
+		setIsSubmitted(false)
 	}
-
-	useEffect(() => {
-		if (canvasRef.current) setIsEmpty(canvasRef.current.isEmpty())
-	}, [canvasRef.current])
 
 	const isMissingSignature = isEmpty && isSubmitted
 
@@ -145,7 +142,7 @@ const SignatureEditorDialog: React.FC = () => {
 									setStatusToUpdate(
 										value as TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 									)
-									if (value === TruckloadDeliveryStatus.REQUEST_CHANGE) handleClearSignature()
+									if (value === TruckloadDeliveryStatus.REQUEST_CHANGE) handleReset()
 								}}>
 								<FieldLabel htmlFor='confirm-radio' className='p-4 duration-200 hover:border-primary'>
 									<Field orientation='horizontal'>
@@ -181,7 +178,7 @@ const SignatureEditorDialog: React.FC = () => {
 						</Label>
 						<Div
 							id='signature'
-							className='relative overflow-clip rounded-lg border bg-white duration-200 @container group-aria-[invalid=true]/signature:border-2 group-aria-[invalid=true]/signature:border-destructive'>
+							className='relative cursor-[url("/pen-tool.svg"),_auto] overflow-clip rounded-lg border bg-white duration-200 @container group-aria-[invalid=true]/signature:border-2 group-aria-[invalid=true]/signature:border-destructive'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
@@ -196,7 +193,7 @@ const SignatureEditorDialog: React.FC = () => {
 								minWidth={1.5}
 								maxWidth={2.5}
 								onEnd={() => {
-									setIsEmpty(canvasRef.current?.isEmpty() ?? true)
+									setIsEmpty(canvasRef.current?.isEmpty())
 								}}
 							/>
 						</Div>
@@ -212,7 +209,7 @@ const SignatureEditorDialog: React.FC = () => {
 					</Div>
 				</DialogBody>
 				<DialogFooter>
-					<Button variant='secondary' onClick={() => handleClearSignature()}>
+					<Button variant='secondary' onClick={() => handleReset()}>
 						{t('ns_common:actions.reset')}
 					</Button>
 					<Button disabled={isPending} onClick={() => handleSignSignature()}>
