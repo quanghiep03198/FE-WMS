@@ -1,6 +1,8 @@
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
+import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	Dialog,
@@ -22,8 +24,8 @@ import {
 	Typography
 } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { useResetState, useThrottleFn } from 'ahooks'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useResetState } from 'ahooks'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SignatureCanvas from 'react-signature-canvas'
 import { toast } from 'sonner'
@@ -35,10 +37,11 @@ const SignatureEditorDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const [open, setOpen] = useResetState<boolean>(false)
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
+	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+	const [isEmpty, setIsEmpty] = useState<boolean>(false)
 	const [statusToUpdate, setStatusToUpdate] = useState<
 		TruckloadDeliveryStatus.CONFIRMED | TruckloadDeliveryStatus.REQUEST_CHANGE
 	>(TruckloadDeliveryStatus.CONFIRMED)
-	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
 	const { event$ } = usePageContext()
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
@@ -53,18 +56,6 @@ const SignatureEditorDialog: React.FC = () => {
 		signature_type: null
 	})
 	const canvasRef = useRef<SignatureCanvas>(null)
-	const isEmpty = useReactiveRef<boolean>(canvasRef.current?.isEmpty() ?? true)
-
-	const { run: handleCanvasEnd } = useThrottleFn(
-		() => {
-			if (canvasRef.current) {
-				requestAnimationFrame(() => {
-					isEmpty.current = canvasRef.current?.isEmpty() ?? true
-				})
-			}
-		},
-		{ wait: 200 }
-	)
 
 	event$.useSubscription(({ action, payload }) => {
 		if (action === 'UPDATE_DISPATCH_ORDER_SIGNATURE') {
@@ -81,11 +72,10 @@ const SignatureEditorDialog: React.FC = () => {
 
 	const { execute: compress, isPending: isCompressing } = useWorkerFn(compressBase64)
 
-	const isMissingSignature = isEmpty.current && isSubmitted
-
 	const handleSignSignature = async () => {
 		setIsSubmitted(true)
-		if (isEmpty.current) return
+		if (!canvasRef.current || !canvasRef.current.toData().length) return
+
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'update_signature' })
 		try {
 			const base64Image = canvasRef.current?.toDataURL('image/webp', 0.8)
@@ -107,42 +97,67 @@ const SignatureEditorDialog: React.FC = () => {
 					dialogData.current.signature_type === 'security_2_signature') && { approval_status: statusToUpdate })
 			})
 			toast.success(t('ns_common:notification.success'), { id: 'update_signature' })
-			setIsSubmitted(false)
 			setOpen(false)
+			setIsSubmitted(false)
 		} catch (error) {
 			console.warn('Signature error:', error)
 			toast.error(t('ns_common:notification.error'), { id: 'update_signature' })
 		}
 	}
 
-	const handleClearSignature = useCallback(() => {
-		canvasRef.current?.clear()
-		isEmpty.current = true
-	}, [isEmpty])
+	const handleClearSignature = () => {
+		canvasRef.current.clear()
+		setIsSubmitted(false)
+	}
 
 	useEffect(() => {
+		setIsEmpty(canvasRef.current?.isEmpty() ?? true)
+	}, [canvasRef.current?.isEmpty()])
+
+	useEffectOnce(() => {
+		if (!canvasRef.current) return
+
+		const canvas = canvasRef.current.getCanvas()
+		const signaturePad = canvasRef.current.getSignaturePad()
+
 		function resizeCanvas() {
-			if (!canvasRef.current) return
+			if (!canvas) return
 			const ratio = Math.max(window.devicePixelRatio || 1, 1)
-			const canvas = canvasRef.current?.getCanvas()
-			const signaturePad = canvasRef.current.getSignaturePad()
 			canvas.width = canvas.offsetWidth * ratio
 			canvas.height = canvas.offsetHeight * ratio
-			canvas.getContext('2d').scale(ratio, ratio)
+			const ctx = canvas.getContext('2d')
+			ctx.scale(ratio, ratio)
+			ctx.setTransform(1, 0, 0, 1, 0, 0)
 			signaturePad.clear() // otherwise isEmpty() might return incorrect value
 		}
 
-		window.addEventListener('resize', resizeCanvas)
+		function handleTouchMove(e: TouchEvent) {
+			console.log('ahihihi')
+			e.preventDefault()
+		}
+
 		resizeCanvas()
+
+		window.addEventListener('resize', resizeCanvas)
+		canvas.addEventListener('pointermove', handleTouchMove, { passive: false })
 
 		return () => {
 			window.removeEventListener('resize', resizeCanvas)
+			canvas.removeEventListener('pointermove', handleTouchMove)
 		}
-	}, [])
+	})
+
+	const isMissingSignature = isEmpty && isSubmitted
+
+	console.log('isEmpty', isEmpty)
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className='max-w-xl grid-rows-[auto_1fr_auto] xl:max-w-xl'>
+			<DialogContent
+				className={cn(
+					'max-w-2xl grid-rows-[auto_1fr_auto] md:h-[85vh] xl:max-w-4xl',
+					'md:*:!transiton-none md:*:before:!transtion-none md:!animate-none md:!transition-none md:*:!animate-none md:*:after:!animate-none'
+				)}>
 				<DialogHeader className='mb-6'>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
 					<DialogDescription>
@@ -202,32 +217,26 @@ const SignatureEditorDialog: React.FC = () => {
 						</Label>
 						<Div
 							id='signature'
-							aria-invalid={isMissingSignature}
-							className='relative grid basis-full place-items-center self-center overflow-clip rounded-md border bg-white shadow-sm aria-[invalid=true]:border-2 aria-[invalid=true]:border-destructive'
-							style={{
-								willChange: 'transform',
-								transform: 'translateZ(0)',
-								WebkitTransform: 'translateZ(0)'
-							}}>
+							className='relative max-h-full min-h-[50vh] flex-1 basis-full overflow-clip rounded-md border bg-white shadow-sm duration-200 aria-[invalid=true]:border-destructive'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
-								minWidth={2}
-								maxWidth={4}
-								velocityFilterWeight={0.8}
-								dotSize={2}
-								clearOnResize={false}
+								backgroundColor='transparent'
 								canvasProps={{
-									className: 'touch-none',
-									width: 500,
-									height: 400,
+									onPointerMove: (e) => {
+										e.preventDefault()
+									},
 									style: {
-										msTouchAction: 'none',
+										overscrollBehavior: 'none',
 										touchAction: 'none',
-										WebkitTapHighlightColor: 'transparent'
+										width: '100%',
+										height: '100%',
+										willChange: 'contents'
 									}
 								}}
-								onEnd={handleCanvasEnd}
+								throttle={16}
+								minWidth={1.5}
+								maxWidth={2.5}
 							/>
 						</Div>
 						{isMissingSignature && (
@@ -260,4 +269,3 @@ const OptimizingLoader: React.FC = () => {
 }
 
 export default SignatureEditorDialog
-/* HTML: <div class="loader"></div> */

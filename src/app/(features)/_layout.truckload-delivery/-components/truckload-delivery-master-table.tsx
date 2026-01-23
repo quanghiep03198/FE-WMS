@@ -256,7 +256,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			containerProps={{
-				className: 'h-[65vh] md:h-[55vh]'
+				className:
+					'h-[65vh] md:h-[55vh] md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
 			}}
 			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
 				const data = row.original
