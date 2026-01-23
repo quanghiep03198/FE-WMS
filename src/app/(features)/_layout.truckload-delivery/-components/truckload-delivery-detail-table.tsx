@@ -450,11 +450,11 @@ const Signature: React.FC<{
 	}
 
 	return (
-		<Div className='space-y-2'>
+		<Div className='grid place-items-center p-2'>
 			{data[type] ? (
 				<img
 					loading='lazy'
-					className='aspect-video max-w-28 cursor-pointer object-contain object-center dark:invert'
+					className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
 					src={data[type]}
 					onClick={handleUpdateSignature}
 				/>
