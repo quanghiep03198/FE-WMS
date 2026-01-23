@@ -110,7 +110,6 @@ const SignatureEditorDialog: React.FC = () => {
 
 	const handleClearSignature = () => {
 		canvasRef.current.clear()
-		setIsSubmitted(false)
 	}
 
 	useEffect(() => {
