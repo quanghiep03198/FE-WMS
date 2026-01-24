@@ -1,12 +1,10 @@
 import { Div, Typography } from '@/components/ui'
 import React from 'react'
-import tw from 'tailwind-styled-components'
 
 const UnsupportedScreen: React.FC = () => {
 	return (
 		<Div className='fixed inset-0 z-[9999] flex h-screen w-full items-center justify-center bg-background p-6 sm:p-4'>
 			<Div className='z-10 flex flex-row items-center justify-center gap-6 sm:flex-col'>
-				<Image src='/onboarding.svg' />
 				<Div className='duration-700 animate-in fade-in-0 slide-in-from-bottom-4 *:text-pretty'>
 					<Typography variant='h4' color='destructive' className='mb-2'>
 						Unsupported Screen
@@ -23,7 +21,5 @@ const UnsupportedScreen: React.FC = () => {
 		</Div>
 	)
 }
-
-const Image = tw.img`max-w-sm object-center object-contain w-full animate-[fade-in_0.35s_ease-out_0s]`
 
 export default UnsupportedScreen
