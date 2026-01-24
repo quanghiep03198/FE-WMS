@@ -26,7 +26,12 @@ export default defineConfig(({ mode }) => {
 			}),
 			reactRouter(),
 			staticCopy({
-				targets: [{ src: './infrastructure/*', dest: '' }]
+				targets: [
+					{
+						src: './infrastructure/*',
+						dest: '' // Copy all files from infrastructure to dist root
+					}
+				]
 			}),
 			nodePolyfills(),
 			pwa({
@@ -50,9 +55,9 @@ export default defineConfig(({ mode }) => {
 							options: {
 								cacheName: 'js-cache',
 								expiration: {
-									maxEntries: 100,
+									maxEntries: 100, // Increase max entries for JS files
 									maxAgeSeconds: 60 * 60 * 24, // 24 hours
-									purgeOnQuotaError: true
+									purgeOnQuotaError: true // Automatically cleanup if quota is exceeded
 								},
 								cacheableResponse: {
 									statuses: [0, 200]
@@ -66,9 +71,9 @@ export default defineConfig(({ mode }) => {
 							options: {
 								cacheName: 'resources-cache',
 								expiration: {
-									maxEntries: 200,
+									maxEntries: 200, // Increase max entries for resources
 									maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
-									purgeOnQuotaError: true
+									purgeOnQuotaError: true // Automatically cleanup if quota is exceeded
 								},
 								cacheableResponse: {
 									statuses: [0, 200]
@@ -82,8 +87,9 @@ export default defineConfig(({ mode }) => {
 							options: {
 								cacheName: 'static-cache',
 								expiration: {
-									maxEntries: 50,
-									maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+									maxEntries: 50, // Increase max entries for static assets
+									maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+									purgeOnQuotaError: true // Automatically cleanup if quota is exceeded
 								}
 							}
 						},
@@ -107,7 +113,11 @@ export default defineConfig(({ mode }) => {
 				authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
 				org: process.env.VITE_SENTRY_ORG,
 				project: process.env.VITE_SENTRY_PROJECT,
-				telemetry: mode === 'production'
+				telemetry: mode === 'production',
+				sourcemaps: {
+					// Delete sourcemap after they're uploaded to Sentry.
+					filesToDeleteAfterUpload: ['./dist/**/*.map']
+				}
 			})
 		],
 		resolve: {
@@ -149,10 +159,10 @@ export default defineConfig(({ mode }) => {
 		},
 		build: {
 			emptyOutDir: true,
-			sourcemap: mode === 'production' ? false : true, // Tắt sourcemap trong production
+			sourcemap: true,
 			cssCodeSplit: true,
-			reportCompressedSize: false, // Tắt để build nhanh hơn
-			chunkSizeWarningLimit: 500, // Giảm xuống 500KB
+			reportCompressedSize: false,
+			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
 				dropLabels: mode === 'production' ? ['console', 'debugger'] : undefined,

@@ -47,11 +47,6 @@ dev-dist
 # Vitest
 html
 coverage
-ssl/
 
-# Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+# Sentry Config File
+.sentryclirc
