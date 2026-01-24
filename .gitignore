@@ -48,3 +48,5 @@ dev-dist
 html
 coverage
 ssl/
+# Sentry Config File
+.sentryclirc
