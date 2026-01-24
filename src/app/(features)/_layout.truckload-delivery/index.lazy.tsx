@@ -1,4 +1,6 @@
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -33,28 +35,37 @@ function Page() {
 			<title>{t('ns_common:navigation.truckload_delivery_management')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.truckload_delivery')} />
 
-			<HostCompatibleGuard>
-				<PageContextProvider>
-					<Div as='section' className='mt-4 space-y-6'>
-						<Div className='flex items-start justify-between'>
-							<PageHeader className='md:basis-3/5'>
-								<PageTitle>{t('ns_common:navigation.truckload_delivery_management')}</PageTitle>
-								<PageDescription>{t('ns_inoutbound:description.truckload_delivery')}</PageDescription>
-							</PageHeader>
-							<Div className='flex items-center gap-x-2'>
-								<DateRangeFilter />
-								{!isMobile && <DownloadExcelButton />}
+			<RoleGuard
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.WAREHOUSE_OFFICER,
+					UserRole.IMPORT_EXPORT_OFFICER,
+					UserRole.SECURITY_GUARD
+				]}>
+				<HostCompatibleGuard>
+					<PageContextProvider>
+						<Div as='section' className='mt-4 space-y-6'>
+							<Div className='flex items-start justify-between'>
+								<PageHeader className='md:basis-3/5'>
+									<PageTitle>{t('ns_common:navigation.truckload_delivery_management')}</PageTitle>
+									<PageDescription>{t('ns_inoutbound:description.truckload_delivery')}</PageDescription>
+								</PageHeader>
+								<Div className='flex items-center gap-x-2'>
+									<DateRangeFilter />
+									{!isMobile && <DownloadExcelButton />}
+								</Div>
 							</Div>
+							<Separator />
+							<CreatePurchaseOrdersFormDialog />
+							<UpdateDispatchOrderFormDialog />
+							<DeleteConfirmDialog />
+							<SignatureEditorDialog />
+							<TruckloadDeliveryMasterTable />
 						</Div>
-						<Separator />
-						<CreatePurchaseOrdersFormDialog />
-						<UpdateDispatchOrderFormDialog />
-						<DeleteConfirmDialog />
-						<SignatureEditorDialog />
-						<TruckloadDeliveryMasterTable />
-					</Div>
-				</PageContextProvider>
-			</HostCompatibleGuard>
+					</PageContextProvider>
+				</HostCompatibleGuard>
+			</RoleGuard>
 		</Fragment>
 	)
 }

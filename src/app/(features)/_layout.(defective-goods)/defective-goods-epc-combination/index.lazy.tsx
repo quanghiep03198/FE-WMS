@@ -1,5 +1,7 @@
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import IpPolicyGuard from '@/app/-components/-guard/ip-policy-guard'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
@@ -43,59 +45,63 @@ function RouteComponent() {
 		<Fragment>
 			<title>{t('ns_common:navigation.defective_goods_epc_combination')}</title>
 			<meta name='description' content='Matching EPCs for defective goods' />
-			<IpPolicyGuard>
-				<HostCompatibleGuard>
-					<Container>
-						<PageContextProvider>
-							<ResizablePanelGroup
-								className='relative rounded-md border'
-								direction={isMobile ? 'vertical' : 'horizontal'}
-								style={
-									{
-										'--bar-height': '52px'
-									} as React.CSSProperties
-								}>
-								<ResizablePanel
-									minSize={listPanelOpen ? 30 : 0}
-									maxSize={listPanelOpen ? 40 : 0}
-									defaultSize={listPanelOpen ? 30 : 0}
-									className={cn(
-										'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl/playground-wrapper:block',
-										'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
-										listPanelOpen && 'border-0'
-									)}>
-									<DatalistPanel />
-								</ResizablePanel>
-								{listPanelOpen && (
-									<ResizableHandle
-										withHandle
-										className='hidden w-px border-0 shadow-none ring-transparent @7xl/playground-wrapper:flex'
-									/>
-								)}
-								<ResizablePanel defaultSize={50} minSize={isMobile ? 50 : 40} className='h-full'>
-									<DefectiveGoodsForm />
-								</ResizablePanel>
-								{isUsingUHFReader && !isMobile && <ResizableHandle disabled />}
-								<ResizablePanel
-									minSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
-									maxSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
-									defaultSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
-									className={cn(
-										'transtion-max-width linear h-full duration-200 will-change-transform',
-										'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
-										!isUsingUHFReader && 'border-0'
-									)}>
-									<ReaderPlaygroundProvider>
-										{isUsingUHFReader && <RFIDReaderPlayground />}
-									</ReaderPlaygroundProvider>
-								</ResizablePanel>
-							</ResizablePanelGroup>
-							{createPortal(<DetailDialog />, document.body)}
-							<MobileReaderPlayground />
-						</PageContextProvider>
-					</Container>
-				</HostCompatibleGuard>
-			</IpPolicyGuard>
+
+			<RoleGuard
+				authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]}>
+				<IpPolicyGuard>
+					<HostCompatibleGuard>
+						<Container>
+							<PageContextProvider>
+								<ResizablePanelGroup
+									className='relative rounded-md border'
+									direction={isMobile ? 'vertical' : 'horizontal'}
+									style={
+										{
+											'--bar-height': '52px'
+										} as React.CSSProperties
+									}>
+									<ResizablePanel
+										minSize={listPanelOpen ? 30 : 0}
+										maxSize={listPanelOpen ? 40 : 0}
+										defaultSize={listPanelOpen ? 30 : 0}
+										className={cn(
+											'transtion-max-width linear hidden h-full duration-200 will-change-transform @7xl/playground-wrapper:block',
+											'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
+											listPanelOpen && 'border-0'
+										)}>
+										<DatalistPanel />
+									</ResizablePanel>
+									{listPanelOpen && (
+										<ResizableHandle
+											withHandle
+											className='hidden w-px border-0 shadow-none ring-transparent @7xl/playground-wrapper:flex'
+										/>
+									)}
+									<ResizablePanel defaultSize={50} minSize={isMobile ? 50 : 40} className='h-full'>
+										<DefectiveGoodsForm />
+									</ResizablePanel>
+									{isUsingUHFReader && !isMobile && <ResizableHandle disabled />}
+									<ResizablePanel
+										minSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+										maxSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+										defaultSize={!isUsingUHFReader ? 0 : isMobile ? 0 : 25}
+										className={cn(
+											'transtion-max-width linear h-full duration-200 will-change-transform',
+											'group-has-[div[data-resize-handle-state=drag]]/container:transition-none',
+											!isUsingUHFReader && 'border-0'
+										)}>
+										<ReaderPlaygroundProvider>
+											{isUsingUHFReader && <RFIDReaderPlayground />}
+										</ReaderPlaygroundProvider>
+									</ResizablePanel>
+								</ResizablePanelGroup>
+								{createPortal(<DetailDialog />, document.body)}
+								<MobileReaderPlayground />
+							</PageContextProvider>
+						</Container>
+					</HostCompatibleGuard>
+				</IpPolicyGuard>
+			</RoleGuard>
 		</Fragment>
 	)
 }

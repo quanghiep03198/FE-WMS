@@ -1,4 +1,6 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -31,22 +33,24 @@ function Page() {
 			<title>{t('ns_common:navigation.daily_inbound_report')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.daily_inbound_report')} />
 
-			<Div as='section' className='mt-4 space-y-4 @container'>
-				<Div className='flex w-full'>
-					<PageHeader className='flex-1'>
-						<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
-						<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
-					</PageHeader>
-					<Div className='ml-auto flex gap-x-2'>
-						<DatePickerFilter />
-						<Div className='hidden @[1024px]:block'>
-							<DownloadExcelDropdown />
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+				<Div as='section' className='mt-4 space-y-4 @container'>
+					<Div className='flex w-full'>
+						<PageHeader className='flex-1'>
+							<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
+							<PageDescription>{t('ns_inoutbound:description.daily_inbound_report')}</PageDescription>
+						</PageHeader>
+						<Div className='ml-auto flex gap-x-2'>
+							<DatePickerFilter />
+							<Div className='hidden @[1024px]:block'>
+								<DownloadExcelDropdown />
+							</Div>
 						</Div>
 					</Div>
+					<Separator />
+					<InboundReportMasterTable />
 				</Div>
-				<Separator />
-				<InboundReportMasterTable />
-			</Div>
+			</RoleGuard>
 		</Fragment>
 	)
 }

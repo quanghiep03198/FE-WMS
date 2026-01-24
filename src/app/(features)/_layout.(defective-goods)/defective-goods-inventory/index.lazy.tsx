@@ -1,3 +1,5 @@
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -30,17 +32,22 @@ function Page() {
 			<title>{t('ns_common:navigation.defective_goods_inventory')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.defective_goods_inventory_report')} />
 
-			<Div as='section' className='mt-4 space-y-4 @container'>
-				<Div className='flex w-full justify-between'>
-					<PageHeader className='flex-1'>
-						<PageTitle>{t('ns_inoutbound:titles.defective_goods_inventory_report')}</PageTitle>
-						<PageDescription>{t('ns_inoutbound:description.defective_goods_inventory_report')}</PageDescription>
-					</PageHeader>
-					<DownloadExcelButton />
+			<RoleGuard
+				authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]}>
+				<Div as='section' className='mt-4 space-y-4 @container'>
+					<Div className='flex w-full justify-between'>
+						<PageHeader className='flex-1'>
+							<PageTitle>{t('ns_inoutbound:titles.defective_goods_inventory_report')}</PageTitle>
+							<PageDescription>
+								{t('ns_inoutbound:description.defective_goods_inventory_report')}
+							</PageDescription>
+						</PageHeader>
+						<DownloadExcelButton />
+					</Div>
+					<Separator />
+					<DefectiveGoodsInventoryTable />
 				</Div>
-				<Separator />
-				<DefectiveGoodsInventoryTable />
-			</Div>
+			</RoleGuard>
 		</Fragment>
 	)
 }

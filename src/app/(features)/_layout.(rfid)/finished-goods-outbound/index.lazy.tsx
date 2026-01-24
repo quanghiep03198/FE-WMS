@@ -32,7 +32,7 @@ function Page() {
 			<HostCompatibleGuard>
 				{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
 				{/* <PageNavigationBlocker /> */}
-				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]}>
+				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
 					<PageProvider>
 						<Div className='static gap-4 xxl:grid xxl:grid-cols-12'>
 							<Div className='h-full @container xxl:col-span-4'>

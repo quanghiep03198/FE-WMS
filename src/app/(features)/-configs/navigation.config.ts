@@ -21,9 +21,9 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 			authorizedRoles: [
 				UserRole.ADMIN,
 				UserRole.MANAGER,
-				UserRole.WAREHOUSE_STAFF,
-				UserRole.OPERATIONS_STAFF,
-				UserRole.QUALITY_CONTROL_INSPECTOR
+				UserRole.WAREHOUSE_OFFICER,
+				UserRole.QC_OFFICER,
+				UserRole.IMPORT_EXPORT_OFFICER
 			]
 		},
 		{
@@ -33,12 +33,12 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 				{
 					title: 'navigation.warehouse_management',
 					url: '/warehouse',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.rfid_device_management',
 					url: '/rfid-devices-management',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				}
 			]
 		},
@@ -49,32 +49,22 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 				{
 					title: 'navigation.finished_goods_inbound',
 					url: '/finished-goods-inbound',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.finished_goods_outbound',
 					url: '/finished-goods-outbound',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.defective_goods_epc_combination',
 					url: '/defective-goods-epc-combination',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.WAREHOUSE_STAFF,
-						UserRole.QUALITY_CONTROL_INSPECTOR
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]
 				},
 				{
 					title: 'navigation.defective_goods_inoutbound',
 					url: '/defective-goods-inoutbound',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.WAREHOUSE_STAFF,
-						UserRole.QUALITY_CONTROL_INSPECTOR
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]
 				}
 			]
 		},
@@ -85,58 +75,43 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 				{
 					title: 'navigation.daily_inbound_report',
 					url: '/inbound-report',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.daily_outbound_report',
 					url: '/outbound-report',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 
 				{
 					title: 'navigation.monthly_inventory_audit',
 					url: '/inventory-audit',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.inventory_estimation',
 					url: '/production-inventory',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.defective_goods_inbound_report',
 					url: '/defective-goods-inbound-report',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.WAREHOUSE_STAFF,
-						UserRole.QUALITY_CONTROL_INSPECTOR
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]
 				},
 				{
 					title: 'navigation.defective_goods_outbound_report',
 					url: '/defective-goods-outbound-report',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.WAREHOUSE_STAFF,
-						UserRole.QUALITY_CONTROL_INSPECTOR
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]
 				},
 				{
 					title: 'navigation.defective_goods_inventory',
 					url: '/defective-goods-inventory',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.WAREHOUSE_STAFF,
-						UserRole.QUALITY_CONTROL_INSPECTOR
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]
 				},
 				{
 					title: 'navigation.cargo_weight_check',
 					url: '/cargo-weight-check',
-					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				}
 			]
 		},
@@ -144,7 +119,13 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 			icon: 'Container',
 			title: 'navigation.truckload_delivery_management',
 			url: '/truckload-delivery',
-			authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+			authorizedRoles: [
+				UserRole.ADMIN,
+				UserRole.MANAGER,
+				UserRole.WAREHOUSE_OFFICER,
+				UserRole.IMPORT_EXPORT_OFFICER,
+				UserRole.SECURITY_GUARD
+			]
 		},
 		{
 			title: 'navigation.seeking',
@@ -152,18 +133,26 @@ export const navigationConfig: Record<'main' | 'preferences', NavigationConfig[]
 			items: [
 				{
 					title: 'navigation.inoutbound_history',
-					url: '/inoutbound-history'
+					url: '/inoutbound-history',
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				},
 				{
 					title: 'navigation.purchase_order_search',
-					url: '/purchase-order-seeking'
+					url: '/purchase-order-seeking',
+					authorizedRoles: [
+						UserRole.ADMIN,
+						UserRole.MANAGER,
+						UserRole.WAREHOUSE_OFFICER,
+						UserRole.IMPORT_EXPORT_OFFICER
+					]
 				},
 				{
 					title: 'navigation.packing_manifest',
-					url: '/packing-manifest'
+					url: '/packing-manifest',
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 				}
 			],
-			authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]
+			authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]
 		}
 	],
 	preferences: [

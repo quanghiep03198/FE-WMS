@@ -41,7 +41,7 @@ function Page() {
 			<meta name='description' content='RFID Scanner integration for inbound process' />
 
 			<HostCompatibleGuard>
-				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_STAFF]}>
+				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
 					<PageProvider>
 						<AlreadyScannedEpcsAlert />
 						<PageComposition.Container

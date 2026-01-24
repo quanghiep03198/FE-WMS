@@ -1,4 +1,5 @@
-import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/permission-restrict'
+import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
@@ -301,43 +302,51 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 													</span>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature
-														data={data}
-														type='ie_signature'
-														disabled={
-															!!data.security_2_signature &&
-															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
-														}
-													/>
+													<RoleBaseAccessControl authorizedRoles={[UserRole.IMPORT_EXPORT_OFFICER]}>
+														<Signature
+															data={data}
+															type='ie_signature'
+															disabled={
+																!!data.security_2_signature &&
+																data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+															}
+														/>
+													</RoleBaseAccessControl>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature
-														data={data}
-														type='warehouse_officer_signature'
-														disabled={
-															!data.license_plate ||
-															(!!data.security_2_signature &&
-																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
-														}
-													/>
+													<RoleBaseAccessControl authorizedRoles={[UserRole.WAREHOUSE_OFFICER]}>
+														<Signature
+															data={data}
+															type='warehouse_officer_signature'
+															disabled={
+																!data.license_plate ||
+																(!!data.security_2_signature &&
+																	data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
+															}
+														/>
+													</RoleBaseAccessControl>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature
-														data={data}
-														type='security_1_signature'
-														disabled={
-															!data.license_plate ||
-															(!!data.security_2_signature &&
-																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
-														}
-													/>
+													<RoleBaseAccessControl authorizedRoles={[UserRole.SECURITY_GUARD]}>
+														<Signature
+															data={data}
+															type='security_1_signature'
+															disabled={
+																!data.license_plate ||
+																(!!data.security_2_signature &&
+																	data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
+															}
+														/>
+													</RoleBaseAccessControl>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<Signature
-														data={data}
-														type='security_2_signature'
-														disabled={!data.license_plate}
-													/>
+													<RoleBaseAccessControl authorizedRoles={[UserRole.SECURITY_GUARD]}>
+														<Signature
+															data={data}
+															type='security_2_signature'
+															disabled={!data.license_plate}
+														/>{' '}
+													</RoleBaseAccessControl>
 												</Div>
 											</Div>
 										</TableCell>

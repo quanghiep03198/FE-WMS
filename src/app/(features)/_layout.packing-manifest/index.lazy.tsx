@@ -1,3 +1,5 @@
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -26,19 +28,21 @@ function Page() {
 			<title>{t('ns_common:navigation.cargo_weight_check')}</title>
 			<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
 
-			<Div as='section' className='mt-4 space-y-4'>
-				<Div className='flex w-full'>
-					<PageHeader className='flex-1'>
-						<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>
-						<PageDescription>{t('ns_packing:descriptions.packing_manifest')}</PageDescription>
-					</PageHeader>
-					<Div className='ml-auto'>
-						<DownloadExcelButton />
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+				<Div as='section' className='mt-4 space-y-4'>
+					<Div className='flex w-full'>
+						<PageHeader className='flex-1'>
+							<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>
+							<PageDescription>{t('ns_packing:descriptions.packing_manifest')}</PageDescription>
+						</PageHeader>
+						<Div className='ml-auto'>
+							<DownloadExcelButton />
+						</Div>
 					</Div>
+					<Separator />
+					<ReportMasterTable />
 				</Div>
-				<Separator />
-				<ReportMasterTable />
-			</Div>
+			</RoleGuard>
 		</Fragment>
 	)
 }

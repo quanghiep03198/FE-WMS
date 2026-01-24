@@ -1,3 +1,5 @@
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -27,11 +29,13 @@ function RouteComponent() {
 			<title>{t('ns_common:navigation.inoutbound_history')}</title>
 			<meta name='description' content='Search in/outbound progress by order' />
 
-			<Div as='section' className='min-h-[var(--outlet-wrapper-height)] place-content-center space-y-6'>
-				<PageHeader />
-				<SearchForm />
-				{searchParams.order && Object.values(RFIDDataType).includes(searchParams.type) && <DataSection />}
-			</Div>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+				<Div as='section' className='min-h-[var(--outlet-wrapper-height)] place-content-center space-y-6'>
+					<PageHeader />
+					<SearchForm />
+					{searchParams.order && Object.values(RFIDDataType).includes(searchParams.type) && <DataSection />}
+				</Div>
+			</RoleGuard>
 		</Fragment>
 	)
 }

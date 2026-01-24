@@ -151,12 +151,16 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 		<SidebarMenuItem
 			role='menuitem'
 			aria-disabled={!isAccessible}
-			className='aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
+			className='group/menuitem aria-disabled:opacity-50'
 			ref={ref}
 			onClick={() => {
 				if (isMobile) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuButton asChild size='sm' tooltip={t(title, { defaultValue: title })}>
+			<SidebarMenuButton
+				asChild
+				size='sm'
+				className='group-aria-disabled/menuitem:cursor-not-allowed'
+				tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={url}
 					preload='intent'
@@ -202,11 +206,11 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			role='menuitem'
 			ref={ref}
 			aria-disabled={!isAccessible}
-			className='relative aria-disabled:opacity-50'
+			className='group/menuitem relative aria-disabled:cursor-help aria-disabled:opacity-50'
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuSubButton asChild size='md'>
+			<SidebarMenuSubButton asChild size='md' className='group-aria-disabled/menuitem:cursor-not-allowed'>
 				<Link
 					to={url}
 					preload='intent'

@@ -1,5 +1,7 @@
 // #region Modules
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div, Separator } from '@/components/ui'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
@@ -62,14 +64,16 @@ function Page() {
 			<title>{t('ns_common:navigation.warehouse_management')}</title>
 			<meta name='description' content={t('ns_warehouse:headings.storage_list_description')} />
 
-			<PageProvider>
-				<Div className='mt-4 space-y-6'>
-					<StorageListHeading />
-					<Separator />
-					<StorageList {...warehouseStorageQueryResult} />
-				</Div>
-				<WarehouseStorageFormDialog {...warehouseDetailQueryResult} />
-			</PageProvider>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+				<PageProvider>
+					<Div className='mt-4 space-y-6'>
+						<StorageListHeading />
+						<Separator />
+						<StorageList {...warehouseStorageQueryResult} />
+					</Div>
+					<WarehouseStorageFormDialog {...warehouseDetailQueryResult} />
+				</PageProvider>
+			</RoleGuard>
 		</Fragment>
 	)
 }
