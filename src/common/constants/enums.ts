@@ -1,9 +1,9 @@
 export enum UserRole {
 	ADMIN = 'admin',
 	MANAGER = 'manager',
-	WAREHOUSE_STAFF = 'warehouse_staff',
-	OPERATIONS_STAFF = 'operations_staff',
-	QUALITY_CONTROL_INSPECTOR = 'qc_inspector',
+	WAREHOUSE_OFFICER = 'warehouse_officer',
+	IMPORT_EXPORT_OFFICER = 'ie_officer',
+	QC_OFFICER = 'qc_officer',
 	SECURITY_GUARD = 'security_guard'
 }
 
