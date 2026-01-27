@@ -1,6 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
 import { UnauthorizedError } from '@/common/errors'
-import env from '@/common/utils/env'
 import { i18n } from '@/i18n'
 import { AuthService } from '@/services/auth.service'
 import { StorageService } from '@/services/storage.service'
@@ -35,7 +34,7 @@ export class AxiosClient {
 		// * Instance configuration
 		this.instance = axios.create({
 			baseURL: baseURL,
-			timeout: env('VITE_API_BASE_URL', 10_000),
+			timeout: 10_000,
 			headers: {
 				[RequestHeaders.CONTENT_TYPE]: 'application/json',
 				[RequestHeaders.API_VERSION]: version
