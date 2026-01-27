@@ -28,7 +28,7 @@ function Page() {
 			<title>{t('ns_common:navigation.monthly_inventory_audit')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
 
-			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<Div as='section' className='mt-4 space-y-4'>
 					<Div className='flex w-full'>
 						<PageHeader className='flex-1'>

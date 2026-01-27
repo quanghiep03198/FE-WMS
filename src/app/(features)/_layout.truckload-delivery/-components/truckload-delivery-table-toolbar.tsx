@@ -1,5 +1,3 @@
-'use no memo'
-
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, Div, Icon, Tooltip } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'

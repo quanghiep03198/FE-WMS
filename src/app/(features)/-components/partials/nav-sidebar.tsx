@@ -1,5 +1,6 @@
 import { navigationConfig, type NavigationConfig } from '@/app/(features)/-configs/navigation.config'
 import AppLogo from '@/app/-components/-shared/app-logo'
+import { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -76,7 +77,7 @@ const NavSidebar: React.FC = () => {
 												aria-disabled={item.items.every(
 													(subItem) =>
 														subItem.authorizedRoles !== '*' &&
-														!subItem.authorizedRoles?.includes(user.role)
+														!user.roles.some((role) => subItem.authorizedRoles.includes(role))
 												)}
 												onClick={() => {
 													if (isMobile) return
@@ -111,6 +112,21 @@ const NavSidebar: React.FC = () => {
 						</SidebarMenu>
 					</ScrollShadow>
 				</SidebarGroup>
+				{user.roles.includes(UserRole.ADMIN) && (
+					<Fragment>
+						<SidebarSeparator />
+						<SidebarGroup>
+							<SidebarGroupLabel>
+								{t('ns_common:navigation.administration', { defaultValue: 'Administration' })}
+							</SidebarGroupLabel>
+							<SidebarMenu role='menu' aria-label='Administration'>
+								{navigationConfig.administration.map((item) => {
+									return <SidebarMenuLink indice='none' key={uuid()} {...item} />
+								})}
+							</SidebarMenu>
+						</SidebarGroup>
+					</Fragment>
+				)}
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
@@ -139,7 +155,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	const ref = useRef<HTMLLIElement>(null)
 	const { user } = useAuth()
 
-	const isAccessible = authorizedRoles?.includes(user.role) || authorizedRoles === '*'
+	const isAccessible = user.roles.some((role) => authorizedRoles.includes(role)) || authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
@@ -193,7 +209,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 	const location = useRouterState({ select: (s) => s.location })
 	const { user } = useAuth()
 
-	const isAccessible = authorizedRoles?.includes(user.role) || authorizedRoles === '*'
+	const isAccessible = user.roles.some((role) => authorizedRoles.includes(role)) || authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {

@@ -34,7 +34,7 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 	}, [error])
 
 	return (
-		<Div className='grid min-h-[var(--outlet-wrapper-height)] w-full place-items-center gap-y-6 @3xl:grid-cols-[1fr_1.5fr] @5xl:grid-cols-2'>
+		<Div className='grid min-h-[var(--outlet-wrapper-height,100vh)] w-full place-items-center gap-y-6 @3xl:grid-cols-[1fr_1.5fr] @5xl:grid-cols-2'>
 			<Div className='mx-auto flex max-w-3xl flex-col items-start gap-y-3'>
 				<Div className='flex items-center gap-x-4'>
 					<Typography color='destructive' className='font-semibold'>

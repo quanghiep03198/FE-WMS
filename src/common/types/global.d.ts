@@ -6,7 +6,7 @@ export declare global {
 		// * Application
 		readonly VITE_NODE_ENV: RuntimeEnvironment
 		readonly VITE_APP_PORT: string
-		readonly VITE_APP_HOST: string
+		readonly VITE_APP_IP: string
 		readonly VITE_APP_VERSION: string
 
 		readonly VITE_LIANYING_APP_DOMAIN: string

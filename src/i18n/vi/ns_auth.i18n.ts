@@ -1,14 +1,25 @@
+import { UserRole } from '@/common/constants/enums'
+
 export default {
 	actions: {
 		go_to_dashboard: 'Đi đến màn hình chính'
 	},
-	labels: {
+	descriptions: {
+		access_management: 'Quản lý người dùng và quyền truy cập hệ thống'
+	},
+	fields: {
 		email: 'Email',
+		employee_code: 'Mã nhân viên',
+		password: 'Mật khẩu',
+		role: 'Vai trò',
+		last_login_at: 'Lần đăng nhập cuối',
+		is_online: 'Trạng thái hoạt động',
+		username: 'Tài khoản'
+	},
+	labels: {
 		forgot_password: 'Quên mật khẩu?',
 		logged_in_with: 'Đã đăng nhập vào',
-		password: 'Mật khẩu',
-		remember_account: 'Ghi nhớ tài khoản',
-		username: 'Tài khoản'
+		remember_account: 'Ghi nhớ tài khoản'
 	},
 	notification: {
 		authenticate_success: 'Đã xác thực tài khoản',
@@ -31,6 +42,14 @@ export default {
 		save_changes: 'Lưu thay đổi',
 		this_will_be: 'Các thông tin này sẽ được hiển thị trên hồ sơ của bạn',
 		update_password: 'Cập nhật mật khẩu'
+	},
+	roles: {
+		[UserRole.ADMIN]: 'Quản trị viên',
+		[UserRole.MANAGER]: 'Quản lý',
+		[UserRole.FG_WAREHOUSE_STAFF]: 'Nhân viên kho thành phẩm',
+		[UserRole.DG_WAREHOUSE_STAFF]: 'Nhân viên kho giày B',
+		[UserRole.IE_STAFF]: 'Nhân viên xuất nhập khẩu',
+		[UserRole.SECURITY_GUARD]: 'Bảo vệ'
 	},
 	steps: {
 		select_department: 'Chọn đơn vị công tác',

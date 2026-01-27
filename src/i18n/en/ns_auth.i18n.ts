@@ -1,12 +1,22 @@
+import { UserRole } from '@/common/constants/enums'
+
 export default {
 	actions: { go_to_dashboard: 'Go to dashboard' },
-	labels: {
+	descriptions: {
+		access_management: 'Manage users and access to the system'
+	},
+	fields: {
 		email: 'Email',
+		password: 'Password',
+		username: 'User name',
+		employee_code: 'Employee code',
+		last_login_at: 'Last login',
+		role: 'Role'
+	},
+	labels: {
 		forgot_password: 'Forgot your password?',
 		logged_in_with: 'Logged in with',
-		password: 'Password',
-		remember_account: 'Remember me',
-		username: 'User name'
+		remember_account: 'Remember me'
 	},
 	notification: {
 		authenticate_success: 'Verified your account',
@@ -29,6 +39,14 @@ export default {
 		save_changes: 'Save changes',
 		this_will_be: 'This will be displayed on your profile',
 		update_password: 'Update password'
+	},
+	roles: {
+		[UserRole.ADMIN]: 'Administrator',
+		[UserRole.MANAGER]: 'Manager',
+		[UserRole.FG_WAREHOUSE_STAFF]: 'Finished Goods Warehouse Staff',
+		[UserRole.DG_WAREHOUSE_STAFF]: 'Defective Goods Warehouse Staff',
+		[UserRole.IE_STAFF]: 'Import-Export Staff',
+		[UserRole.SECURITY_GUARD]: 'Security Guard'
 	},
 	steps: { select_department: 'Select department', verify_account: 'Verify your account' },
 	texts: {

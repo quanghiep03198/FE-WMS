@@ -1,4 +1,5 @@
 import { AuthService } from '@/services/auth.service'
+import { UserService } from '@/services/user.service'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosRequestConfig } from 'axios'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +14,7 @@ export const getUserProfileQuery = (config?: AxiosRequestConfig) => {
 
 	return queryOptions({
 		queryKey: [AuthQueryKeys.PROFILE, config],
-		queryFn: async () => await AuthService.profile(config),
+		queryFn: async () => await UserService.profile(config),
 		refetchOnMount: 'always',
 		refetchOnReconnect: 'always',
 		networkMode: 'always',
@@ -36,7 +37,7 @@ export const useUpdatePasswordMutation = () => {
 
 	return useMutation({
 		mutationKey: [AuthQueryKeys.PROFILE],
-		mutationFn: AuthService.updatePassword,
+		mutationFn: UserService.updatePassword,
 		onMutate: () => toast.loading(t('ns_common:notification.processing_request')),
 		onSuccess: (_data, _variables, context) => {
 			toast.success(t('ns_common:notification.success'), { id: context })

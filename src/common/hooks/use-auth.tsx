@@ -33,6 +33,11 @@ export default function useAuth() {
 	const isAuthenticated =
 		!isNil(authStore.user) && !isNil(authStore.user?.current_factory_code) && !isNil(authStore.token)
 
+	console.log('isAuthenticated', isAuthenticated)
+	console.log('authStore.user', authStore.user)
+	console.log('authStore.user?.current_factory_code', authStore.user?.current_factory_code)
+	console.log('authStore.token', authStore.token)
+
 	return {
 		...authStore,
 		isAuthenticated,

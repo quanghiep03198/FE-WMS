@@ -182,6 +182,7 @@ export default {
 		'303_message': '请访问 {{url}} 以使用工厂 {{factoryCode}} 的此功能',
 		'403': '要就使用权',
 		'403_message': '你不许访问页面. 请联系管理员以请求访问权限',
+		'403_notification': '你无权执行此操作.',
 		'404': '不找到页面.',
 		'404_message': '页面不存在. 请检查链接.',
 		'500': '服务器错误',
@@ -211,6 +212,7 @@ export default {
 		last_updated: '上次更新时间: {{timestamp}}'
 	},
 	navigation: {
+		access_management: '访问管理',
 		account: '账户管理',
 		appearance: '外观',
 		common_management: '通用管理',
@@ -242,6 +244,7 @@ export default {
 		daily_outbound_report: '出庫管理',
 		truckload_delivery_management: '卡車裝運管理',
 		// labels
+		administration_label: '管理',
 		main_menu_label: '主菜单',
 		preference_menu_label: ' 偏好设置'
 	},

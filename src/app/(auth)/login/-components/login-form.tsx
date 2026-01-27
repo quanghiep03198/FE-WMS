@@ -67,14 +67,14 @@ const LoginForm: React.FC = () => {
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit((data) => login(data))}>
 				<InputFieldControl
-					label={t('ns_auth:labels.username')}
-					placeholder={t('ns_auth:labels.username')}
+					label={t('ns_auth:fields.username')}
+					placeholder={t('ns_auth:fields.username')}
 					name='username'
 					autoComplete='username'
 					defaultValue={persistedAccount}
 				/>
 				<InputFieldControl
-					label={t('ns_auth:labels.password')}
+					label={t('ns_auth:fields.password')}
 					placeholder='********'
 					autoComplete='current-password'
 					type='password'

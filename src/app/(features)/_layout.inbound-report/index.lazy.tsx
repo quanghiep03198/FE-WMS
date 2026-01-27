@@ -33,7 +33,7 @@ function Page() {
 			<title>{t('ns_common:navigation.daily_inbound_report')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.daily_inbound_report')} />
 
-			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<Div as='section' className='mt-4 space-y-4 @container'>
 					<Div className='flex w-full'>
 						<PageHeader className='flex-1'>

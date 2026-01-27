@@ -1,6 +1,7 @@
 import { FactoryCode } from '@/common/constants/enums'
 import { Div, Icon } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
+import { UserService } from '@/services/user.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { Navigate, createFileRoute, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { object, string, type infer as Infer } from 'zod'
@@ -21,7 +22,7 @@ export const Route = createFileRoute('/(auth)/authorization/')({
 	pendingComponent: Loading,
 	loader: async ({ deps, abortController }) => {
 		AuthService.setAccessToken(deps.search.token) // Persist access token
-		await AuthService.profile({ signal: abortController.signal })
+		await UserService.profile({ signal: abortController.signal })
 		useAuthStore.getState().setCurrentFactory(deps.search.factory_code as FactoryCode)
 	}
 })

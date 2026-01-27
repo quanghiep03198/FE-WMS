@@ -10,7 +10,7 @@ import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { type ColumnDefBase, createColumnHelper, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { useLayoutEffect, useMemo } from 'react'
+import { useCallback, useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -208,6 +208,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		}
 	}, [tableRef.current, isMobile])
 
+	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
+		const data = row.original
+		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
+	}, [])
+
 	return (
 		<DataTable
 			ref={tableRef}
@@ -249,7 +254,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}}
 			virtualizerOptions={{
 				estimateSize: isMobile ? 60 : 40,
-				overscan: 10
+				overscan: 10,
+				enabled: false
 			}}
 			toolbarProps={{
 				override: true,
@@ -259,10 +265,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				className:
 					'h-[65vh] md:h-[55vh] md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
 			}}
-			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
-				const data = row.original
-				return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
-			}}
+			renderSubComponent={renderSubTable}
 		/>
 	)
 }

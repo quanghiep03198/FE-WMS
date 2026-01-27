@@ -181,9 +181,10 @@ export default {
 	errors: {
 		'303': 'See Other',
 		'303_message': 'Please access {{url}} to use this feature for factory {{factoryCode}}',
-		'403': 'Permission Denied',
+		'403': 'Access Denied',
 		'403_message':
 			"You don't have permission to access this page. Please contact the administrator to request access.",
+		'403_notification': 'You do not have permission to perform this action.',
 		'404': 'Page Not Found',
 		'404_message': 'The page you are looking for does not exist.',
 		'500': 'Something went wrong',
@@ -208,6 +209,7 @@ export default {
 		select: 'Select {{object}}'
 	},
 	navigation: {
+		access_management: 'Access management',
 		account: 'Account',
 		appearance: 'Appearance',
 		common_management: 'Common management',
@@ -240,6 +242,7 @@ export default {
 		warehouse_management: 'Warehouse management',
 
 		// labels
+		administration_label: 'Administration',
 		main_menu_label: 'Main',
 		preference_menu_label: ' Preference'
 	},

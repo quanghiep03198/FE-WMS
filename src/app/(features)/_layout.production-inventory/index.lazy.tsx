@@ -22,7 +22,7 @@ function Page() {
 	}, [i18n.language])
 
 	return (
-		<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+		<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 			<Div as='section' className='pt-4 @container xxl:min-h-[var(--outlet-wrapper-height)]'>
 				<PageHeader />
 				<SearchBox />

@@ -30,12 +30,7 @@ function Page() {
 			<meta name='description' content='Search processing purchase order' />
 
 			<RoleGuard
-				authorizedRoles={[
-					UserRole.ADMIN,
-					UserRole.MANAGER,
-					UserRole.WAREHOUSE_OFFICER,
-					UserRole.IMPORT_EXPORT_OFFICER
-				]}>
+				authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
 				<Div
 					as='section'
 					className='mx-auto flex min-h-[var(--outlet-wrapper-height)] flex-col place-content-center gap-y-6 xxl:max-w-7xl'>

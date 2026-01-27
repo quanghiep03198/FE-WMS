@@ -33,7 +33,12 @@ function Page() {
 			<meta name='description' content={t('ns_inoutbound:description.defective_goods_inventory_report')} />
 
 			<RoleGuard
-				authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]}>
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.DG_WAREHOUSE_STAFF
+				]}>
 				<Div as='section' className='mt-4 space-y-4 @container'>
 					<Div className='flex w-full justify-between'>
 						<PageHeader className='flex-1'>

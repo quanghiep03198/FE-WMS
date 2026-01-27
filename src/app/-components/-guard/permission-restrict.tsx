@@ -2,6 +2,8 @@ import { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { Icon } from '@/components/ui'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 const RoleBaseAccessControl: React.FC<React.PropsWithChildren & { authorizedRoles: UserRole[] }> = ({
 	children,
@@ -9,12 +11,17 @@ const RoleBaseAccessControl: React.FC<React.PropsWithChildren & { authorizedRole
 }) => {
 	const { user } = useAuth()
 	const isAccessible = user && authorizedRoles.includes(user.role)
+	const { t } = useTranslation()
 
 	const preventActionIfUnauthorized = (e: React.MouseEvent) => {
 		if (!isAccessible) {
 			e.preventDefault()
 			e.stopPropagation()
-			// Hiển thị thông báo không có quyền
+			toast.warning(t('ns_common:errors.403_notification'), {
+				id: 'permission-denied',
+				dismissible: true,
+				duration: 5000
+			})
 		}
 	}
 

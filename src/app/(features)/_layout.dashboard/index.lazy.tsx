@@ -33,9 +33,9 @@ function Page() {
 				authorizedRoles={[
 					UserRole.ADMIN,
 					UserRole.MANAGER,
-					UserRole.WAREHOUSE_OFFICER,
-					UserRole.QC_OFFICER,
-					UserRole.IMPORT_EXPORT_OFFICER
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.DG_WAREHOUSE_STAFF,
+					UserRole.IE_STAFF
 				]}>
 				<Div className='z-10 mt-4 flex flex-col gap-y-6 @container'>
 					<PageHeader className='basis-1/2 xl:basis-full'>

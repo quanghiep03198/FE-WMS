@@ -46,8 +46,7 @@ function RouteComponent() {
 			<title>{t('ns_common:navigation.defective_goods_epc_combination')}</title>
 			<meta name='description' content='Matching EPCs for defective goods' />
 
-			<RoleGuard
-				authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
 				<IpPolicyGuard>
 					<HostCompatibleGuard>
 						<Container>

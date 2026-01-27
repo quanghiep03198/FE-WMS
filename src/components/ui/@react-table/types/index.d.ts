@@ -10,6 +10,7 @@ import {
 	type TableOptions,
 	type TableState
 } from '@tanstack/react-table'
+import { VirtualizerOptions } from '@tanstack/react-virtual'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React from 'react'
 
@@ -167,7 +168,10 @@ export type DataTableProps<TData, TValue> = {
 	/**
 	 * Optional function to render a custom caption for the table.
 	 */
-	virtualizerOptions?: { estimateSize?: number; overscan?: number }
+	virtualizerOptions?: Pick<
+		VirtualizerOptions<HTMLDivElement, HTMLTableRowElement>,
+		'enabled' | 'estimateSize' | 'overscan'
+	>
 	/**
 	 * Optional function to handle state changes in the table. This can be used to perform side effects when the table state changes.
 	 * @param {Table<TData, TValue>} instance

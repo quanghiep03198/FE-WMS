@@ -44,7 +44,12 @@ function RouteComponent() {
 			<meta name='description' content='Defective goods inoutbound' />
 
 			<RoleGuard
-				authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER, UserRole.QC_OFFICER]}>
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.DG_WAREHOUSE_STAFF
+				]}>
 				<IpPolicyGuard>
 					<HostCompatibleGuard>
 						<PageContextProvider>

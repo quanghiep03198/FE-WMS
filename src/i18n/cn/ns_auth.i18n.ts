@@ -1,13 +1,24 @@
+import { UserRole } from '@/common/constants/enums'
+
 export default {
 	actions: {
 		go_to_dashboard: '转回主页'
 	},
+	descriptions: {
+		access_management: '管理用户和系统访问权限'
+	},
+	fields: {
+		email: 'Email',
+		password: '密码',
+		username: '用户名',
+		employee_code: '员工编号',
+		last_login_at: '最后登录时间',
+		role: '角色'
+	},
 	labels: {
 		forgot_password: '忘记密码?',
 		logged_in_with: '已登入',
-		password: '密码',
-		remember_account: '记住我',
-		username: '账号'
+		remember_account: '记住我'
 	},
 	notification: {
 		authenticate_success: '确认登录成功',
@@ -30,6 +41,14 @@ export default {
 		save_changes: '儲存變更',
 		this_will_be: '這將顯示在您的個人資料上',
 		update_password: '更新密碼'
+	},
+	roles: {
+		[UserRole.ADMIN]: '系统管理员',
+		[UserRole.MANAGER]: '经理',
+		[UserRole.FG_WAREHOUSE_STAFF]: '成品仓库员工',
+		[UserRole.DG_WAREHOUSE_STAFF]: 'B级鞋仓库员工',
+		[UserRole.IE_STAFF]: '进出口员工',
+		[UserRole.SECURITY_GUARD]: '保卫'
 	},
 	steps: {
 		select_department: '选择部门',

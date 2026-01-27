@@ -302,51 +302,43 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 													</span>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<RoleBaseAccessControl authorizedRoles={[UserRole.IMPORT_EXPORT_OFFICER]}>
-														<Signature
-															data={data}
-															type='ie_signature'
-															disabled={
-																!!data.security_2_signature &&
-																data.approval_status === TruckloadDeliveryStatus.CONFIRMED
-															}
-														/>
-													</RoleBaseAccessControl>
+													<Signature
+														data={data}
+														type='ie_signature'
+														disabled={
+															!!data.security_2_signature &&
+															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+														}
+													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<RoleBaseAccessControl authorizedRoles={[UserRole.WAREHOUSE_OFFICER]}>
-														<Signature
-															data={data}
-															type='warehouse_officer_signature'
-															disabled={
-																!data.license_plate ||
-																(!!data.security_2_signature &&
-																	data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
-															}
-														/>
-													</RoleBaseAccessControl>
+													<Signature
+														data={data}
+														type='warehouse_officer_signature'
+														disabled={
+															!data.license_plate ||
+															(!!data.security_2_signature &&
+																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
+														}
+													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<RoleBaseAccessControl authorizedRoles={[UserRole.SECURITY_GUARD]}>
-														<Signature
-															data={data}
-															type='security_1_signature'
-															disabled={
-																!data.license_plate ||
-																(!!data.security_2_signature &&
-																	data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
-															}
-														/>
-													</RoleBaseAccessControl>
+													<Signature
+														data={data}
+														type='security_1_signature'
+														disabled={
+															!data.license_plate ||
+															(!!data.security_2_signature &&
+																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
+														}
+													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
-													<RoleBaseAccessControl authorizedRoles={[UserRole.SECURITY_GUARD]}>
-														<Signature
-															data={data}
-															type='security_2_signature'
-															disabled={!data.license_plate}
-														/>{' '}
-													</RoleBaseAccessControl>
+													<Signature
+														data={data}
+														type='security_2_signature'
+														disabled={!data.license_plate}
+													/>
 												</Div>
 											</Div>
 										</TableCell>
@@ -439,6 +431,13 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	)
 }
 
+const signatureRolesMap: Map<SignatureType, UserRole[]> = new Map([
+	['ie_signature', [UserRole.IE_STAFF]],
+	['warehouse_officer_signature', [UserRole.FG_WAREHOUSE_STAFF]],
+	['security_1_signature', [UserRole.SECURITY_GUARD]],
+	['security_2_signature', [UserRole.SECURITY_GUARD]]
+])
+
 const Signature: React.FC<{
 	data: ITruckloadDelivery
 	type: SignatureType
@@ -459,20 +458,27 @@ const Signature: React.FC<{
 	}
 
 	return (
-		<Div className='grid place-items-center p-2'>
-			{data[type] ? (
-				<img
-					loading='lazy'
-					className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
-					src={data[type]}
-					onClick={handleUpdateSignature}
-				/>
-			) : (
-				<Button disabled={disabled} size='icon' variant='secondary' type='button' onClick={handleUpdateSignature}>
-					<Icon name='PenTool' className='rotate-[-90deg]' />
-				</Button>
-			)}
-		</Div>
+		<RoleBaseAccessControl authorizedRoles={signatureRolesMap.get(type)}>
+			<Div className='grid place-items-center p-2'>
+				{data[type] ? (
+					<img
+						loading='lazy'
+						className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
+						src={data[type]}
+						onClick={handleUpdateSignature}
+					/>
+				) : (
+					<Button
+						disabled={disabled}
+						size='icon'
+						variant='secondary'
+						type='button'
+						onClick={handleUpdateSignature}>
+						<Icon name='PenTool' className='rotate-[-90deg]' />
+					</Button>
+				)}
+			</Div>
+		</RoleBaseAccessControl>
 	)
 }
 

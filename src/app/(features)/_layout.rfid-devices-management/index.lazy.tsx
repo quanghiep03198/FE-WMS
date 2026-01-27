@@ -29,7 +29,7 @@ function Page() {
 			<title>{t('ns_common:navigation.rfid_device_management')}</title>
 			<meta name='description' content={t('ns_rfid:descriptions.rfid_device_management')} />
 
-			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.WAREHOUSE_OFFICER]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<HostCompatibleGuard>
 					<PageContextProvider>
 						<Div as='section' className='mt-4 space-y-6'>

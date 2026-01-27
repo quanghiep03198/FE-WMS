@@ -105,6 +105,7 @@ export default {
 		'403': 'Yêu Cầu Quyền Truy Cập',
 		'403_message':
 			'Bạn không được phép truy cập trang này. Vui lòng liên hệ quản trị viên để được cấp quyền truy cập',
+		'403_notification': 'Bạn chưa được cấp quyền thực hiện thao tác này.',
 		'404': 'Không Tìm Thấy Trang.',
 		'404_message': 'Trang không tồn tại. Vui lòng kiểm tra lại đường dẫn.',
 		'500': 'Đã xảy ra lỗi',
@@ -211,6 +212,7 @@ export default {
 		select: 'Chọn {{object}}'
 	},
 	navigation: {
+		access_management: 'Quản lý truy cập',
 		account: 'Tài khoản',
 		appearance: 'Giao diện',
 		dashboard: 'Màn hình chính',
@@ -241,6 +243,9 @@ export default {
 		transfer_managment: 'Quản lý chuyển giao',
 		truckload_delivery_management: 'Quản lý vận chuyển',
 		warehouse_management: 'Quản lý kho',
+
+		// Labels
+		administration_label: 'Quản trị',
 		main_menu_label: 'Menu chính',
 		preference_menu_label: 'Tùy chỉnh'
 	},

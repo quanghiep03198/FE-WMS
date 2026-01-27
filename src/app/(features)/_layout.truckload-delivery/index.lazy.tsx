@@ -39,8 +39,8 @@ function Page() {
 				authorizedRoles={[
 					UserRole.ADMIN,
 					UserRole.MANAGER,
-					UserRole.WAREHOUSE_OFFICER,
-					UserRole.IMPORT_EXPORT_OFFICER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.IE_STAFF,
 					UserRole.SECURITY_GUARD
 				]}>
 				<HostCompatibleGuard>

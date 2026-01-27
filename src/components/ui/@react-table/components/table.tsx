@@ -29,7 +29,8 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 		loading,
 		virtualizerOptions = {
 			estimateSize: 40,
-			overscan: 5
+			overscan: 5,
+			enabled: true
 		},
 		renderSubComponent
 	} = props
@@ -93,6 +94,7 @@ function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
 						<DataTableBody
 							table={table}
 							containerRef={containerRef}
+							shouldEnableVirtualizer={virtualizerOptions.enabled}
 							estimatedRowHeight={virtualizerOptions.estimateSize}
 							renderSubComponent={renderSubComponent}
 						/>
