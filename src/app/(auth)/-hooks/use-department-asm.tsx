@@ -24,14 +24,19 @@ export function useGetDepartmentQuery(
 	})
 }
 
+/**
+ *
+ * @deprecated
+ * @returns
+ */
 export const useGetUserCompany = () => {
-	const { token } = useAuth()
+	const { accessToken } = useAuth()
 	const { t } = useTranslation()
 
 	return useQuery({
 		queryKey: [WorkplaceQueryKeys.COMPANY],
 		queryFn: () => CompanyService.getCompanies(),
-		enabled: !!token,
+		enabled: !!accessToken,
 		select: (data) => {
 			return Array.isArray(data.metadata)
 				? data.metadata.map((item) => ({

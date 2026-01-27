@@ -8,14 +8,19 @@ import { immer } from 'zustand/middleware/immer'
 
 export interface IAuthState {
 	user: IUser | null
-	token: string
+	accessToken: string
+	refreshToken: string
 	setUserProfile: (profile: Partial<IUser>) => void
 	setCurrentFactory: (factoryCode: FactoryCode) => void
 	setAccessToken: (token: string, meta?: { expires_time: string }) => void
 	resetCredentials: () => void
 }
 
-const initialState: Pick<IAuthState, 'user' | 'token'> = { user: null, token: null }
+const initialState: Pick<IAuthState, 'user' | 'accessToken' | 'refreshToken'> = {
+	user: null,
+	accessToken: null,
+	refreshToken: null
+}
 
 export const useAuthStore = create(
 	shared(
@@ -34,7 +39,7 @@ export const useAuthStore = create(
 						})
 					},
 					setAccessToken: (token) => {
-						set({ token })
+						set({ accessToken: token })
 					},
 					setCurrentFactory: (factoryCode: FactoryCode) => {
 						const state = get()

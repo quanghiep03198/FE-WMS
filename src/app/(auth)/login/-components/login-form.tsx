@@ -18,7 +18,7 @@ import { AuthQueryKeys } from '../../../-hooks/use-user-asm'
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
 	const { dispatch } = useStepContext()
-	const { token: accessToken, setAccessToken, setUserProfile } = useAuth()
+	const { accessToken, setAccessToken, setUserProfile } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true
@@ -39,7 +39,7 @@ const LoginForm: React.FC = () => {
 			return toast.loading(t('ns_common:notification.processing_request'))
 		},
 		onSuccess: async (data, _variables, context) => {
-			setAccessToken(data?.metadata?.token) // Store user's access token
+			setAccessToken(data?.metadata?.accessToken) // Store user's access token
 			setUserProfile(data?.metadata?.user)
 			toast.success(t('ns_common:notification.success'), { id: context })
 		},

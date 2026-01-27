@@ -6,7 +6,9 @@ import { GenericAbortSignal } from 'axios'
 import { isNil } from 'lodash-es'
 
 export class AuthService {
-	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user' | 'token'>>> {
+	static async login(
+		data: LoginFormValues
+	): Promise<ResponseBody<Pick<IAuthState, 'user' | 'accessToken' | 'refreshToken'>>> {
 		return await axiosInstance.post('/login', data)
 	}
 
@@ -34,7 +36,7 @@ export class AuthService {
 	}
 
 	static getAccessToken(): string | null {
-		const accessToken = useAuthStore.getState().token
+		const accessToken = useAuthStore.getState().accessToken
 		return isNil(accessToken) ? null : `Bearer ${accessToken}`
 	}
 
@@ -43,7 +45,7 @@ export class AuthService {
 	}
 
 	static getHasAccessToken(): boolean {
-		const accessToken = useAuthStore.getState().token
+		const accessToken = useAuthStore.getState().accessToken
 		return !isNil(accessToken)
 	}
 }
