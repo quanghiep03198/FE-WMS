@@ -31,7 +31,7 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
-	const { user, token, setAccessToken } = useAuth()
+	const { user, accessToken, setAccessToken } = useAuth()
 	const {
 		currentPage,
 		selectedOrder,
@@ -84,7 +84,7 @@ const EpcDataList: React.FC = () => {
 			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/inbound/sse', {
 				method: RequestMethod.GET,
 				headers: {
-					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
+					[RequestHeaders.AUTHORIZATION]: `Bearer ${accessToken}`,
 					[RequestHeaders.USER_COMPANY]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
@@ -171,7 +171,7 @@ const EpcDataList: React.FC = () => {
 				}
 			}
 		}
-	}, [scanningStatus, token])
+	}, [scanningStatus, accessToken])
 
 	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
