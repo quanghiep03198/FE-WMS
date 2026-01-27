@@ -173,7 +173,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 	],
 	administration: [
 		{
-			icon: 'ShieldUser',
+			icon: 'Users',
 			title: 'navigation.access_management',
 			url: '/access-management',
 			keybinding: 'ctrl.alt.u',

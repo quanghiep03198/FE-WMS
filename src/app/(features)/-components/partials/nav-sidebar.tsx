@@ -62,7 +62,11 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
-					<ScrollShadow className='max-h-[50vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
+					<ScrollShadow
+						className={cn(
+							'overflow-y-auto overflow-x-hidden !scrollbar-none',
+							user.roles.includes(UserRole.ADMIN) ? 'max-h-[35vh] xxl:max-h-[45vh]' : 'max-h-[55vh]'
+						)}>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
