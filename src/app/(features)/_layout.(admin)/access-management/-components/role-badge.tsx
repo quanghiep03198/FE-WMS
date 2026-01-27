@@ -3,21 +3,28 @@ import { Badge, Icon } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-const roleColorMap: Map<UserRole, string> = new Map([
-	[UserRole.ADMIN, '#ef4444'],
-	[UserRole.MANAGER, 'blue'],
-	[UserRole.FG_WAREHOUSE_STAFF, '#22c55e'],
-	[UserRole.DG_WAREHOUSE_STAFF, 'orange'],
-	[UserRole.IE_STAFF, 'purple'],
-	[UserRole.SECURITY_GUARD, '#3b82f6']
-])
-
 const RoleBadge: React.FC<{ value: UserRole }> = ({ value }) => {
 	const { t } = useTranslation()
 
+	const roleConfig = {
+		[UserRole.ADMIN]: {
+			icon: 'UserCog' as const,
+			color: 'hsl(var(--active))'
+		},
+		[UserRole.MANAGER]: {
+			icon: 'User' as const,
+			color: 'hsl(var(--success))'
+		}
+	} as const
+
+	const config = roleConfig[value] ?? {
+		icon: 'User' as const,
+		color: 'hsl(var(--muted-foreground))'
+	}
+
 	return (
 		<Badge variant='outline'>
-			<Icon name='User' stroke={roleColorMap[value]} /> {t(`ns_auth:roles.${value}`)}
+			<Icon name={config.icon} stroke={config.color} /> {t(`ns_auth:roles.${value}`)}
 		</Badge>
 	)
 }

@@ -10,6 +10,7 @@ export default {
 	fields: {
 		email: 'Email',
 		employee_code: 'Mã nhân viên',
+		display_name: 'Tên hiển thị',
 		password: 'Mật khẩu',
 		role: 'Vai trò',
 		last_login_at: 'Lần đăng nhập cuối',

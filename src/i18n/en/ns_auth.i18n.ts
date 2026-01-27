@@ -7,6 +7,7 @@ export default {
 	},
 	fields: {
 		email: 'Email',
+		display_name: 'Display name',
 		password: 'Password',
 		username: 'User name',
 		employee_code: 'Employee code',

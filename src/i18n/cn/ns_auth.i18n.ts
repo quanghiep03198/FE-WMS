@@ -9,6 +9,7 @@ export default {
 	},
 	fields: {
 		email: 'Email',
+		display_name: '显示名称',
 		password: '密码',
 		username: '用户名',
 		employee_code: '员工编号',
