@@ -3,12 +3,9 @@ import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { IAuthState, useAuthStore } from '@/stores/auth.store'
 import { GenericAbortSignal } from 'axios'
-import { isNil } from 'lodash-es'
 
 export class AuthService {
-	static async login(
-		data: LoginFormValues
-	): Promise<ResponseBody<Pick<IAuthState, 'user' | 'accessToken' | 'refreshToken'>>> {
+	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user'>>> {
 		return await axiosInstance.post('/login', data)
 	}
 
@@ -27,25 +24,11 @@ export class AuthService {
 		return await axiosInstance.post<void, ResponseBody<null>>('/logout')
 	}
 
-	static async refreshToken(username: string, signal: GenericAbortSignal): Promise<ResponseBody<string>> {
+	static async refreshToken(signal: GenericAbortSignal): Promise<ResponseBody<string>> {
 		try {
-			return await axiosInstance.get(`/refresh-token/${username}`, { signal })
+			return await axiosInstance.get('refresh-token', { signal })
 		} catch {
 			AuthService.logout()
 		}
-	}
-
-	static getAccessToken(): string | null {
-		const accessToken = useAuthStore.getState().accessToken
-		return isNil(accessToken) ? null : `Bearer ${accessToken}`
-	}
-
-	static setAccessToken(token: string): void {
-		useAuthStore.getState().setAccessToken(token)
-	}
-
-	static getHasAccessToken(): boolean {
-		const accessToken = useAuthStore.getState().accessToken
-		return !isNil(accessToken)
 	}
 }

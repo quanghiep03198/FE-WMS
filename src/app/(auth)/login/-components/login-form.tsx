@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { isEmpty } from 'lodash-es'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -18,11 +18,12 @@ import { AuthQueryKeys } from '../../../-hooks/use-user-asm'
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()
 	const { dispatch } = useStepContext()
-	const { accessToken, setAccessToken, setUserProfile } = useAuth()
+	const { setUserProfile } = useAuth()
 	const [persistedAccount, setPersistedAccount] = useLocalStorageState<string>('persistedAccount', {
 		defaultValue: undefined,
 		listenStorageChange: true
 	})
+
 	const form = useForm<LoginFormValues>({
 		resolver: zodResolver(loginSchema),
 		mode: 'onChange',
@@ -39,9 +40,9 @@ const LoginForm: React.FC = () => {
 			return toast.loading(t('ns_common:notification.processing_request'))
 		},
 		onSuccess: async (data, _variables, context) => {
-			setAccessToken(data?.metadata?.accessToken) // Store user's access token
 			setUserProfile(data?.metadata?.user)
 			toast.success(t('ns_common:notification.success'), { id: context })
+			dispatch({ type: 'NEXT_STEP' })
 		},
 		onError(_error, _variables, context) {
 			toast.error(t('ns_auth:notification.login_failed'), { id: context })
@@ -57,11 +58,6 @@ const LoginForm: React.FC = () => {
 		},
 		[username]
 	)
-
-	useEffect(() => {
-		// If user's profile is retrieved successfully, then go to next step
-		if (accessToken) dispatch({ type: 'NEXT_STEP' })
-	}, [accessToken])
 
 	return (
 		<FormProvider {...form}>

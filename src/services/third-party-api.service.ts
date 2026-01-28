@@ -9,7 +9,7 @@ export class ThirdPartyApiService {
 			{
 				headers: {
 					[RequestHeaders.TENANT_ID]: tenantId,
-					[RequestHeaders.USER_COMPANY]: factoryCode
+					[RequestHeaders.FACTORY_CODE]: factoryCode
 				}
 			}
 		)

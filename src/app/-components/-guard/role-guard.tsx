@@ -7,7 +7,11 @@ export const RoleGuard: React.FC<React.PropsWithChildren & { authorizedRoles: Us
 	authorizedRoles
 }) => {
 	const { user } = useAuth()
-	const isAccessible = user && user.roles.some((role) => authorizedRoles.includes(role)) && authorizedRoles !== '*'
+	const isAccessible =
+		user &&
+		Array.isArray(user?.roles) &&
+		user?.roles?.some((role) => authorizedRoles.includes(role)) &&
+		authorizedRoles !== '*'
 
 	if (!isAccessible) return <PermissionDenied />
 

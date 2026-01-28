@@ -15,12 +15,13 @@ export type UseWebSocketOptions<TResponse> = {
 	rateLimit?: false | number
 }
 
-const { user, accessToken } = useAuthStore.getState()
+const { user } = useAuthStore.getState()
 
 const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
+	withCredentials: true,
 	extraHeaders: {
-		[RequestHeaders.AUTHORIZATION]: `Bearer ${accessToken}`,
-		[RequestHeaders.USER_COMPANY]: user?.current_factory_code
+		[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
+		[RequestHeaders.USER]: user?.username
 	},
 	timeout: 10000,
 	reconnection: true,

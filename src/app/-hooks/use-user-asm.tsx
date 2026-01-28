@@ -1,7 +1,8 @@
-import { AuthService } from '@/services/auth.service'
+import useAuth from '@/common/hooks/use-auth'
 import { UserService } from '@/services/user.service'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosRequestConfig } from 'axios'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -9,7 +10,7 @@ export enum AuthQueryKeys {
 	PROFILE = 'PROFILE'
 }
 
-export const getUserProfileQuery = (config?: AxiosRequestConfig) => {
+export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConfig) => {
 	const unexpectedErrorCodes = [AxiosError.ERR_NETWORK, AxiosError.ETIMEDOUT, AxiosError.ECONNABORTED]
 
 	return queryOptions({
@@ -18,17 +19,22 @@ export const getUserProfileQuery = (config?: AxiosRequestConfig) => {
 		refetchOnMount: 'always',
 		refetchOnReconnect: 'always',
 		networkMode: 'always',
-		enabled: AuthService.getHasAccessToken(),
+		enabled,
 		select: (response) => response.metadata,
 		retry: (failureCount, error) => {
-			if (unexpectedErrorCodes.includes(error.code)) return AuthService.getHasAccessToken()
-			return failureCount <= 2 && AuthService.getHasAccessToken()
+			if (unexpectedErrorCodes.includes(error.code)) return enabled
+			return failureCount <= 2 && enabled
 		}
 	})
 }
 
 export const useGetUserProfileQuery = () => {
-	return useQuery(getUserProfileQuery())
+	const { isAuthenticated } = useAuth()
+	const abortControllerRef = useRef<AbortController>(null)
+	if(!abortControllerRef.current) {
+		abortControllerRef.current = new AbortController()
+	}
+	return useQuery(getUserProfileQuery(isAuthenticated, {signal: abortControllerRef.current.signal}))
 }
 
 export const useUpdatePasswordMutation = () => {

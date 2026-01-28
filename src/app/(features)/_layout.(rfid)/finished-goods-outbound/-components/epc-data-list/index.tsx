@@ -33,8 +33,9 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
 	const abortControllerRef = useRef<AbortController | null>(null)
-	const { user, accessToken, setAccessToken } = useAuth()
 	const [isPending, startTransition] = useTransition()
+	const { user } = useAuth()
+
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
 		usePageContext(
@@ -100,9 +101,9 @@ const ScannedEpcList: React.FC = () => {
 		try {
 			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/outbound/sse', {
 				method: RequestMethod.GET,
+				credentials: 'include',
 				headers: {
-					[RequestHeaders.AUTHORIZATION]: `Bearer ${accessToken}`,
-					[RequestHeaders.USER_COMPANY]: user?.current_factory_code
+					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -112,11 +113,9 @@ const ScannedEpcList: React.FC = () => {
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 					} else if (response.status === HttpStatusCode.Unauthorized) {
 						abortControllerRef.current.abort()
-						const response = await AuthService.refreshToken(user.username, abortControllerRef.current?.signal)
+						const response = await AuthService.refreshToken(abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
-						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one
-						setAccessToken(refreshToken)
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
 						response.status < HttpStatusCode.InternalServerError &&

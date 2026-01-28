@@ -48,7 +48,8 @@ export enum RequestHeaders {
 	API_VERSION = 'X-Api-Version',
 	CONTENT_TYPE = 'Content-Type',
 	TENANT_ID = 'X-Tenant-Id',
-	USER_COMPANY = 'X-User-Company',
+	FACTORY_CODE = 'X-User-Factory',
+	USER = 'X-User',
 	OTP = 'X-Otp'
 }
 

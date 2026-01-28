@@ -65,7 +65,7 @@ const NavSidebar: React.FC = () => {
 					<ScrollShadow
 						className={cn(
 							'overflow-y-auto overflow-x-hidden !scrollbar-none',
-							user.roles.includes(UserRole.ADMIN) ? 'max-h-[35vh] xxl:max-h-[45vh]' : 'max-h-[55vh]'
+							user?.roles?.includes(UserRole.ADMIN) ? 'max-h-[35vh] xxl:max-h-[45vh]' : 'max-h-[55vh]'
 						)}>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
@@ -81,7 +81,7 @@ const NavSidebar: React.FC = () => {
 												aria-disabled={item.items.every(
 													(subItem) =>
 														subItem.authorizedRoles !== '*' &&
-														!user.roles.some((role) => subItem.authorizedRoles.includes(role))
+														!user?.roles?.some((role) => subItem.authorizedRoles.includes(role))
 												)}
 												onClick={() => {
 													if (isMobile) return
@@ -116,7 +116,7 @@ const NavSidebar: React.FC = () => {
 						</SidebarMenu>
 					</ScrollShadow>
 				</SidebarGroup>
-				{user.roles.includes(UserRole.ADMIN) && (
+				{user?.roles?.includes(UserRole.ADMIN) && (
 					<Fragment>
 						<SidebarSeparator />
 						<SidebarGroup>
@@ -159,7 +159,9 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	const ref = useRef<HTMLLIElement>(null)
 	const { user } = useAuth()
 
-	const isAccessible = user.roles.some((role) => authorizedRoles.includes(role)) || authorizedRoles === '*'
+	const isAccessible =
+		(user && Array.isArray(user.roles) && user.roles.some((role) => authorizedRoles.includes(role))) ||
+		authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
@@ -213,7 +215,9 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 	const location = useRouterState({ select: (s) => s.location })
 	const { user } = useAuth()
 
-	const isAccessible = user.roles.some((role) => authorizedRoles.includes(role)) || authorizedRoles === '*'
+	const isAccessible =
+		(user && Array.isArray(user?.roles) && user?.roles?.some((role) => authorizedRoles.includes(role))) ||
+		authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {

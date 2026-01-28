@@ -35,6 +35,7 @@ export class AxiosClient {
 		this.instance = axios.create({
 			baseURL: baseURL,
 			timeout: 10_000,
+			withCredentials: true,
 			headers: {
 				[RequestHeaders.CONTENT_TYPE]: 'application/json',
 				[RequestHeaders.API_VERSION]: version
@@ -42,18 +43,17 @@ export class AxiosClient {
 			paramsSerializer: (params) => {
 				return qs.stringify(params, {
 					skipNulls: true,
-					format: 'RFC1738'
+					format: 'RFC1738' // use RFC1738 to encode spaces as '+'
 				})
 			}
 		})
 		// * Instance request interceptor
 		this.instance.interceptors.request.use(
 			(config) => {
-				const accessToken = AuthService.getAccessToken()
 				const locale = StorageService.getLocale()
 				const user = AuthService.getCredentials()
-				config.headers[RequestHeaders.AUTHORIZATION] = config.headers[RequestHeaders.AUTHORIZATION] ?? accessToken
-				config.headers[RequestHeaders.USER_COMPANY] = user?.current_factory_code
+				config.headers[RequestHeaders.USER] = user?.username
+				config.headers[RequestHeaders.FACTORY_CODE] = user?.current_factory_code
 				config.headers[RequestHeaders.ACCEPT_LANGUAGE] = locale
 				return config
 			},
@@ -102,13 +102,9 @@ export class AxiosClient {
 					try {
 						if (!credentials?.username)
 							throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
-						const { metadata: refreshToken } = await AuthService.refreshToken(
-							credentials.username,
-							abortController.signal
-						)
-						AuthService.setAccessToken(refreshToken)
+						const { metadata: refreshToken } = await AuthService.refreshToken(abortController.signal)
 						this.processQueue(null, refreshToken)
-						originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
+						// originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
 						const response = await this.instance(originalRequest)
 						originalRequest.retry = true
 						return response
