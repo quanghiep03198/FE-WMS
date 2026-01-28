@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import { buttonVariants, Div, Label, Typography } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import DataRestorationSheet from '../../../-components/shared'
@@ -22,13 +24,21 @@ const DataRestoration: React.FC = () => {
 					</Typography>
 				</Div>
 				<Div className='place-self-center justify-self-end'>
-					<Label
-						role='button'
-						className={buttonVariants({ variant: 'outline', size: 'sm' })}
-						htmlFor='data-restoration-sheet-trigger'>
-						{t('ns_common:actions.open')}
-					</Label>
-					<DataRestorationSheet dataType={RFIDDataType.INBOUND} />
+					<RoleBaseAccessControl authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+						<Label
+							role='button'
+							className={buttonVariants({ variant: 'outline', size: 'sm' })}
+							htmlFor='data-restoration-sheet-trigger'>
+							{t('ns_common:actions.open')}
+						</Label>
+						<DataRestorationSheet dataType={RFIDDataType.INBOUND} />
+						<RoleBaseAccessControl
+							authorizedRoles={[
+								UserRole.ADMIN,
+								UserRole.MANAGER,
+								UserRole.FG_WAREHOUSE_STAFF
+							]}></RoleBaseAccessControl>
+					</RoleBaseAccessControl>
 				</Div>
 			</Div>
 		</Div>

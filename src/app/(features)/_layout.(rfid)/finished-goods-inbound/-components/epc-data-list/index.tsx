@@ -1,4 +1,6 @@
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../manufacturing-order-detail'
 import EpcDataList from './data-list-body'
@@ -17,7 +19,9 @@ const EpcListBox: React.FC = () => {
 			</ListBoxBody>
 			<ListBoxFooter>
 				<OrderDetails />
-				<UploadDataFileDialog station='WH101' maxFiles={200} />
+				<RoleBaseAccessControl authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+					<UploadDataFileDialog station='WH101' maxFiles={200} />
+				</RoleBaseAccessControl>
 			</ListBoxFooter>
 		</ListBoxWrapper>
 	)

@@ -1,4 +1,4 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/permission-restrict'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -365,52 +365,54 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</Div>
 							)}
 							<Div className='flex items-center gap-x-1'>
-								{!action ? (
-									<Button
-										variant='default'
-										type='button'
-										size='sm'
-										disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-										onClick={() => setAction(CommonActions.UPDATE)}>
-										<Icon name='PencilLine' /> {t('ns_common:actions.update')}
-									</Button>
-								) : (
-									<Fragment>
+								<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+									{!action ? (
 										<Button
-											variant='outline'
+											variant='default'
 											type='button'
 											size='sm'
-											className='border-dashed'
-											disabled={isPending}
-											onClick={() =>
-												append({
-													id: uuid(),
-													po: '',
-													outbound_qty: null,
-													max_outbound_qty: null
-												})
-											}>
-											<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
+											disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+											onClick={() => setAction(CommonActions.UPDATE)}>
+											<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 										</Button>
-										<Separator orientation='vertical' className='mx-2 h-8' />
-										<Button type='submit' size='sm' disabled={isPending}>
-											<Icon
-												name={isPending ? 'LoaderCircle' : 'Check'}
-												className={isPending && 'animate-spin'}
-											/>
-											{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-										</Button>
-										<Button
-											type='button'
-											size='sm'
-											variant='secondary'
-											onClick={() => handleResetDeliveryDetails(false)}
-											disabled={isPending}>
-											<Icon name='X' />
-											{t('ns_common:actions.cancel')}
-										</Button>
-									</Fragment>
-								)}
+									) : (
+										<Fragment>
+											<Button
+												variant='outline'
+												type='button'
+												size='sm'
+												className='border-dashed'
+												disabled={isPending}
+												onClick={() =>
+													append({
+														id: uuid(),
+														po: '',
+														outbound_qty: null,
+														max_outbound_qty: null
+													})
+												}>
+												<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
+											</Button>
+											<Separator orientation='vertical' className='mx-2 h-8' />
+											<Button type='submit' size='sm' disabled={isPending}>
+												<Icon
+													name={isPending ? 'LoaderCircle' : 'Check'}
+													className={isPending && 'animate-spin'}
+												/>
+												{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+											</Button>
+											<Button
+												type='button'
+												size='sm'
+												variant='secondary'
+												onClick={() => handleResetDeliveryDetails(false)}
+												disabled={isPending}>
+												<Icon name='X' />
+												{t('ns_common:actions.cancel')}
+											</Button>
+										</Fragment>
+									)}
+								</RoleBaseAccessControl>
 								{action && <Separator orientation='vertical' className='mx-2 h-8' />}
 								<Button
 									variant='outline'

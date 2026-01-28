@@ -1,4 +1,5 @@
-import { Languages } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { Languages, UserRole } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryAudit } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -197,33 +198,35 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 						)}
 						<TableRow className='*:border-none'>
 							<TableVerticalHeader className='sticky left-0 !w-full flex-1'>
-								<Div className='inline-grid grid-cols-2 gap-x-2'>
-									{isEditing ? (
-										<Button
-											type='button'
-											size='sm'
-											variant='destructive'
-											onClick={() => handleCancelUpdate()}>
-											<Icon name='X' />
-											{t('ns_common:actions.cancel')}
+								<RoleBaseAccessControl authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+									<Div className='inline-grid grid-cols-2 gap-x-2'>
+										{isEditing ? (
+											<Button
+												type='button'
+												size='sm'
+												variant='destructive'
+												onClick={() => handleCancelUpdate()}>
+												<Icon name='X' />
+												{t('ns_common:actions.cancel')}
+											</Button>
+										) : (
+											<Button type='button' size='sm' variant='outline' onClick={() => handleStartUpdate()}>
+												<Icon name='Pencil' /> {t('ns_common:actions.update')}
+											</Button>
+										)}
+										<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
+											<Icon
+												name={isPending ? 'LoaderCircle' : 'Check'}
+												className={isPending && 'animate-spin'}
+											/>{' '}
+											{isPending
+												? t('ns_common:status.processing')
+												: isError
+													? t('ns_common:actions.retry')
+													: t('ns_common:actions.save')}
 										</Button>
-									) : (
-										<Button type='button' size='sm' variant='outline' onClick={() => handleStartUpdate()}>
-											<Icon name='Pencil' /> {t('ns_common:actions.update')}
-										</Button>
-									)}
-									<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
-										<Icon
-											name={isPending ? 'LoaderCircle' : 'Check'}
-											className={isPending && 'animate-spin'}
-										/>{' '}
-										{isPending
-											? t('ns_common:status.processing')
-											: isError
-												? t('ns_common:actions.retry')
-												: t('ns_common:actions.save')}
-									</Button>
-								</Div>
+									</Div>
+								</RoleBaseAccessControl>
 							</TableVerticalHeader>
 							<TableCell className='flex-1' />
 						</TableRow>

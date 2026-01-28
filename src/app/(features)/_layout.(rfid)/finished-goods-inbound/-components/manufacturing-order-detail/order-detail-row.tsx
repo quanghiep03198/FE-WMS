@@ -1,6 +1,8 @@
 import { NestedCell, NestedColumn, NestedTable } from '@/app/(features)/-components/shared/horizontal-nested-table'
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
+import { UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Checkbox, Div, Icon, TableCell, TableRow } from '@/components/ui'
@@ -86,25 +88,29 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
 					{data?.mo_no === FALLBACK_VALUE ? (
-						<button
-							className='opacity-0 duration-100 group-hover/cell:opacity-100'
-							onClick={() => setFillEpcDataDialogOpen(true)}>
-							<Icon name='Replace' size={18} />
-						</button>
+						<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+							<button
+								className='opacity-0 duration-100 group-hover/cell:opacity-100'
+								onClick={() => setFillEpcDataDialogOpen(true)}>
+								<Icon name='Replace' size={18} />
+							</button>
+						</RoleBaseAccessControl>
 					) : (
-						<button
-							className='opacity-0 duration-100 group-hover/cell:opacity-100'
-							onClick={() => {
-								setExchangeOrderDialogOpen(true)
-								setDefaultExchangeOrderFormValues({
-									mo_no: data?.mo_no,
-									color_sn: data?.color_sn,
-									factory_shoes_style: data?.factory_shoes_style,
-									scanned_size_qty: aggregateSizeCount
-								})
-							}}>
-							<Icon name='ArrowLeftRight' className='stroke-active' />
-						</button>
+						<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+							<button
+								className='opacity-0 duration-100 group-hover/cell:opacity-100'
+								onClick={() => {
+									setExchangeOrderDialogOpen(true)
+									setDefaultExchangeOrderFormValues({
+										mo_no: data?.mo_no,
+										color_sn: data?.color_sn,
+										factory_shoes_style: data?.factory_shoes_style,
+										scanned_size_qty: aggregateSizeCount
+									})
+								}}>
+								<Icon name='ArrowLeftRight' className='stroke-active' />
+							</button>
+						</RoleBaseAccessControl>
 					)}
 				</Div>
 			</TableCell>
@@ -118,28 +124,33 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
-										<button
-											onClick={() => {
-												setExchangeEpcDialogOpen(true)
-												setDefaultExchangeEpcFormValues({
+										<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+											<button
+												onClick={() => {
+													setExchangeEpcDialogOpen(true)
+													setDefaultExchangeEpcFormValues({
+														mo_no: data?.mo_no,
+														color_sn: data?.color_sn,
+														factory_shoes_style: data?.factory_shoes_style,
+														size_numcode: size?.size_numcode,
+														scanned_size_qty: size?.count
+													})
+												}}>
+												<Icon
+													name='ArrowLeftRight'
+													className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
+												/>
+											</button>{' '}
+										</RoleBaseAccessControl>
+
+										<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+											<DeleteSizePopover
+												data={{
 													mo_no: data?.mo_no,
-													color_sn: data?.color_sn,
-													factory_shoes_style: data?.factory_shoes_style,
-													size_numcode: size?.size_numcode,
-													scanned_size_qty: size?.count
-												})
-											}}>
-											<Icon
-												name='ArrowLeftRight'
-												className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
+													size_numcode: size?.size_numcode
+												}}
 											/>
-										</button>
-										<DeleteSizePopover
-											data={{
-												mo_no: data?.mo_no,
-												size_numcode: size?.size_numcode
-											}}
-										/>
+										</RoleBaseAccessControl>
 									</Div>
 								</NestedCell>
 								<NestedCell>{formatIntlNumber(size?.count)}</NestedCell>

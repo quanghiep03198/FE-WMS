@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, Div, Icon, Tooltip } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
@@ -46,6 +48,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 						<Button
 							variant='destructive'
 							size={isMobile ? 'icon' : 'default'}
+							className='w-full'
 							onClick={() => {
 								table.resetGlobalFilter(table.initialState.globalFilter)
 								table.resetColumnFilters(true)
@@ -73,12 +76,14 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 						<DownloadExcelButton />
 					</Tooltip>
 				)}
-				<Tooltip
-					message={t('ns_common:actions.add')}
-					triggerProps={{ asChild: true }}
-					contentProps={{ hidden: !isMobile }}>
-					<CreateTruckloadDialogButton />
-				</Tooltip>
+				<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+					<Tooltip
+						message={t('ns_common:actions.add')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ hidden: !isMobile }}>
+						<CreateTruckloadDialogButton />
+					</Tooltip>
+				</RoleBaseAccessControl>
 			</Div>
 		</Div>
 	)

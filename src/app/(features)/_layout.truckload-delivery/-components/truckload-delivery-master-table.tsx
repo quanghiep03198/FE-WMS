@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { cn } from '@/common/utils/cn'
@@ -337,18 +339,20 @@ const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'
 	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
 
 	return (
-		<Checkbox
-			className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
-			disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
-			defaultChecked={currentValue}
-			checked={currentValue}
-			onCheckedChange={async (value) =>
-				await mutateAsync({
-					dispatch_order: row.original.dispatch_order,
-					[column.id]: Boolean(value)
-				})
-			}
-		/>
+		<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
+			<Checkbox
+				className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
+				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
+				defaultChecked={currentValue}
+				checked={currentValue}
+				onCheckedChange={async (value) =>
+					await mutateAsync({
+						dispatch_order: row.original.dispatch_order,
+						[column.id]: Boolean(value)
+					})
+				}
+			/>
+		</RoleBaseAccessControl>
 	)
 }
 

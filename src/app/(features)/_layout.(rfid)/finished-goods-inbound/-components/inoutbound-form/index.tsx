@@ -2,7 +2,9 @@ import { useGetShapingProductLineQuery } from '@/app/(features)/-hooks/use-depar
 import { useGetAllTenants } from '@/app/(features)/-hooks/use-tenacy-asm'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-asm'
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { ITenancy, IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -320,13 +322,15 @@ const InoutboundForm: React.FC = () => {
 						</Fragment>
 					)}
 					<Div className='col-span-full grid grid-cols-2 gap-x-2'>
-						<Button
-							type='submit'
-							size={isMobileScreen ? 'lg' : 'default'}
-							className='gap-x-2 sm:w-full md:w-full'
-							disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
-							<Icon name='Check' /> {t('ns_common:actions.save')}
-						</Button>
+						<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
+							<Button
+								type='submit'
+								size={isMobileScreen ? 'lg' : 'default'}
+								className='w-full gap-x-2'
+								disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
+								<Icon name='Check' /> {t('ns_common:actions.save')}
+							</Button>
+						</RoleBaseAccessControl>
 						<Button
 							type='reset'
 							variant='outline'
