@@ -61,7 +61,6 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 					<Icon name='Pencil' />
 					{t('ns_common:actions.update')}
 				</DropdownMenuItem>
-
 				<DropdownMenuItem
 					className='flex items-center gap-x-3'
 					onClick={() => {
