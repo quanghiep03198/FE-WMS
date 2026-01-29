@@ -1,6 +1,4 @@
 import { type OrderItem } from '@/app/(features)/_layout.(rfid)'
-import { UserRole } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
@@ -38,7 +36,6 @@ import TableDataRow from './order-detail-row'
 
 const OrderDetailTable: React.FC = () => {
 	const { t } = useTranslation()
-	const { user } = useAuth()
 	const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 	const { scannedOrders, scanningStatus, setScannedOrders } = usePageContext(
 		'scannedOrders',
@@ -137,11 +134,6 @@ const OrderDetailTable: React.FC = () => {
 		[filteredScannedOrders]
 	)
 
-	const isMutable =
-		user &&
-		Array.isArray(user.roles) &&
-		user.roles.some((role) => [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF].includes(role))
-
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<HoverCard openDelay={50} closeDelay={50}>
@@ -170,10 +162,10 @@ const OrderDetailTable: React.FC = () => {
 						className='relative h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20 @container [scrollbar-gutter:stable]'
 						style={
 							{
-								'--row-selection-col-width': isMutable ? '48px' : '0px',
+								'--row-selection-col-width': '48px',
 								'--sticky-left-col-width': '168px',
 								'--sticky-right-col-width': '112px',
-								'--row-action-col-width': isMutable ? '56px' : '0px'
+								'--row-action-col-width': '56px'
 							} as React.CSSProperties
 						}>
 						<Table
@@ -187,14 +179,12 @@ const OrderDetailTable: React.FC = () => {
 								'[&_tr>:last-child]:sticky [&_tr>:last-child]:right-0 [&_tr>:last-child]:z-10'
 							)}>
 							<colgroup>
-								{isMutable && (
-									<col
-										style={{
-											minWidth: 'var(--row-selection-col-width)',
-											maxWidth: 'var(--row-selection-col-width)'
-										}}
-									/>
-								)}
+								<col
+									style={{
+										minWidth: 'var(--row-selection-col-width)',
+										maxWidth: 'var(--row-selection-col-width)'
+									}}
+								/>
 								<col
 									style={{
 										width: 'var(--sticky-left-col-width) !important',
@@ -227,30 +217,26 @@ const OrderDetailTable: React.FC = () => {
 										minWidth: 'var(--sticky-right-col-width)'
 									}}
 								/>
-								{isMutable && (
-									<col
-										style={{
-											minWidth: 'var(--row-action-col-width)',
-											maxWidth: 'var(--row-action-col-width)'
-										}}
-									/>
-								)}
+								<col
+									style={{
+										minWidth: 'var(--row-action-col-width)',
+										maxWidth: 'var(--row-action-col-width)'
+									}}
+								/>
 							</colgroup>
 							<TableHeader className={cn('sticky top-0 z-20')}>
 								<TableRow className='*:bg-table-head'>
-									{isMutable && (
-										<TableHead>
-											<Checkbox
-												role='checkbox'
-												checked={
-													(isAllMatchingRowsSelected ||
-														(isSomeMatchingRowsSelected && 'indeterminate')) as CheckedState
-												}
-												disabled={!selectedRows || selectedRows?.length === 0}
-												onCheckedChange={toggleAllMatchedRowsSelected}
-											/>
-										</TableHead>
-									)}
+									<TableHead>
+										<Checkbox
+											role='checkbox'
+											checked={
+												(isAllMatchingRowsSelected ||
+													(isSomeMatchingRowsSelected && 'indeterminate')) as CheckedState
+											}
+											disabled={!selectedRows || selectedRows?.length === 0}
+											onCheckedChange={toggleAllMatchedRowsSelected}
+										/>
+									</TableHead>
 									<TableHead align='left'>{t('ns_erp:fields.mo_no')}</TableHead>
 									<TableHead align='left'>
 										<span>{t('ns_erp:fields.factory_shoes_style')}</span>
@@ -268,15 +254,13 @@ const OrderDetailTable: React.FC = () => {
 										className='right-[var(--row-action-col-width)] z-20 w-[var(--sticky-right-col-width)] bg-background xl:sticky'>
 										{t('ns_common:common_fields.total')}
 									</TableHead>
-									{isMutable && (
-										<TableHead>
-											<span className='sr-only'></span>
-										</TableHead>
-									)}
+									<TableHead>
+										<span className='sr-only'></span>
+									</TableHead>
 								</TableRow>
 								{/* Column Filters */}
 								<TableRow>
-									{isMutable && <TableHead align='center'></TableHead>}
+									<TableHead align='center'></TableHead>
 									<TableHead align='center'>
 										<Input
 											role='textbox'
@@ -312,17 +296,16 @@ const OrderDetailTable: React.FC = () => {
 									<TableHead align='center'>
 										<span className='sr-only'></span>
 									</TableHead>
-									{isMutable && (
-										<TableHead align='center'>
-											<span className='sr-only'></span>
-										</TableHead>
-									)}
+
+									<TableHead align='center'>
+										<span className='sr-only'></span>
+									</TableHead>
 								</TableRow>
 							</TableHeader>
 							{Array.isArray(filteredScannedOrders) && filteredScannedOrders.length > 0 && (
 								<TableBody>
 									{filteredScannedOrders.map((order) => {
-										return <TableDataRow key={order.mo_no} data={order} isMutable={isMutable} />
+										return <TableDataRow key={order.mo_no} data={order} />
 									})}
 								</TableBody>
 							)}
@@ -337,17 +320,7 @@ const OrderDetailTable: React.FC = () => {
 						)}
 					</Div>
 					<Div className='flex basis-16 items-center justify-between bg-background px-2 pr-4'>
-						{isMutable ? (
-							<ExchangeOrderDialogTrigger />
-						) : (
-							<Typography
-								variant='small'
-								color='destructive'
-								className='inline-flex items-center gap-x-2 font-normal [text-transform:none]'>
-								<Icon name='TriangleAlert' />
-								{t('ns_auth:notification.viewonly')}
-							</Typography>
-						)}
+						<ExchangeOrderDialogTrigger />
 						<Div className='mr-2 flex flex-1 items-center justify-end gap-x-2 bg-background'>
 							<Typography color='muted' className='font-medium'>
 								{t('ns_common:common_fields.total')}

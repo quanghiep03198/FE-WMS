@@ -15,7 +15,8 @@ import {
 	MultiSelectFieldControl,
 	Popover,
 	PopoverContent,
-	PopoverTrigger
+	PopoverTrigger,
+	Separator
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
@@ -40,7 +41,8 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const form = useForm<DeleteScannedEpcsFormValues>({
 		resolver: zodResolver(deleteScannedEpcsSchema),
-		mode: 'onChange'
+		mode: 'onSubmit',
+		reValidateMode: 'onChange'
 	})
 
 	const queryClient = useQueryClient()
@@ -95,7 +97,6 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 							loading={isLoading}
 							maxCount={2}
 						/>
-
 						<FormField
 							control={form.control}
 							name='rescannable'
@@ -110,22 +111,20 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 								</FormItem>
 							)}
 						/>
-
-						<Div className='flex items-center justify-end gap-x-2'>
-							<Div className='flex items-stretch justify-end gap-x-1'>
-								<PopoverClose
-									type='button'
-									className={cn(
-										buttonVariants({
-											variant: 'outline'
-										})
-									)}>
-									{t('ns_common:actions.cancel')}
-								</PopoverClose>
-								<Button variant='destructive' type='submit' disabled={isPending}>
-									{t('ns_common:actions.delete')}
-								</Button>
-							</Div>
+						<Separator />
+						<Div className='flex items-center justify-end gap-x-1'>
+							<Button variant='destructive' type='submit' disabled={isPending}>
+								{t('ns_common:actions.delete')}
+							</Button>
+							<PopoverClose
+								type='button'
+								className={cn(
+									buttonVariants({
+										variant: 'outline'
+									})
+								)}>
+								{t('ns_common:actions.cancel')}
+							</PopoverClose>
 						</Div>
 					</Form>
 				</FormProvider>

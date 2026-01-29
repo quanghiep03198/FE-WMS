@@ -137,7 +137,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 
 						<Div className='col-span-full space-y-4'>
 							<Div className='space-y-1.5 leading-none'>
-								<Typography className='inline-flex items-center gap-x-2 font-semibold text-warning'>
+								<Typography className='inline-flex items-center gap-x-2 font-semibold' color='destructive'>
 									<Icon name='TriangleAlert' /> {t('ns_common:titles.caution')}
 								</Typography>
 								<Typography className='text-sm'>

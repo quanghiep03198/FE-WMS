@@ -15,10 +15,9 @@ import DeleteSizePopover from './delete-size-popover'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
-	isMutable: boolean
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, isMutable }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 	const {
 		selectedRows,
 		pushSelectedRow,
@@ -71,22 +70,20 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, isMutab
 				'w-full transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
-			{isMutable && (
-				<TableCell>
-					<Checkbox
-						disabled={!hasSomeRowMatch && selectedRows.length > 0}
-						checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
-						onCheckedChange={(checked) =>
-							handleToggleSelectRow(checked, {
-								mo_no: data?.mo_no,
-								factory_shoes_style: data?.factory_shoes_style,
-								color_sn: data?.color_sn,
-								count: aggregateSizeCount
-							})
-						}
-					/>
-				</TableCell>
-			)}
+			<TableCell>
+				<Checkbox
+					disabled={!hasSomeRowMatch && selectedRows.length > 0}
+					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
+					onCheckedChange={(checked) =>
+						handleToggleSelectRow(checked, {
+							mo_no: data?.mo_no,
+							factory_shoes_style: data?.factory_shoes_style,
+							color_sn: data?.color_sn,
+							count: aggregateSizeCount
+						})
+					}
+				/>
+			</TableCell>
 			<TableCell className='group/cell'>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
@@ -127,32 +124,31 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, isMutab
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
-										{isMutable && (
-											<Fragment>
-												<button
-													onClick={() => {
-														setExchangeEpcDialogOpen(true)
-														setDefaultExchangeEpcFormValues({
-															mo_no: data?.mo_no,
-															color_sn: data?.color_sn,
-															factory_shoes_style: data?.factory_shoes_style,
-															size_numcode: size?.size_numcode,
-															scanned_size_qty: size?.count
-														})
-													}}>
-													<Icon
-														name='ArrowLeftRight'
-														className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
-													/>
-												</button>
-												<DeleteSizePopover
-													data={{
+
+										<Fragment>
+											<button
+												onClick={() => {
+													setExchangeEpcDialogOpen(true)
+													setDefaultExchangeEpcFormValues({
 														mo_no: data?.mo_no,
-														size_numcode: size?.size_numcode
-													}}
+														color_sn: data?.color_sn,
+														factory_shoes_style: data?.factory_shoes_style,
+														size_numcode: size?.size_numcode,
+														scanned_size_qty: size?.count
+													})
+												}}>
+												<Icon
+													name='ArrowLeftRight'
+													className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
 												/>
-											</Fragment>
-										)}
+											</button>
+											<DeleteSizePopover
+												data={{
+													mo_no: data?.mo_no,
+													size_numcode: size?.size_numcode
+												}}
+											/>
+										</Fragment>
 									</Div>
 								</NestedCell>
 								<NestedCell>{formatIntlNumber(size?.count)}</NestedCell>
@@ -163,11 +159,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, isMutab
 			<TableCell align='right' className='font-medium'>
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
-			{isMutable && (
-				<TableCell align='center'>
-					<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
-				</TableCell>
-			)}
+			<TableCell align='center'>
+				<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
+			</TableCell>
 		</TableRow>
 	)
 }
