@@ -11,6 +11,7 @@ const ConnectionInsight: React.FC = () => {
 			size='md'
 			state={scanningState === 'success' ? 'active' : scanningState === 'error' ? 'down' : 'fixing'}
 			label={scanningState === 'success' ? t('ns_common:status.running') : t('ns_common:status.idle')}
+			className='px-3'
 			labelClassName='font-medium'
 		/>
 	)

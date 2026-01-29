@@ -1,12 +1,13 @@
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
-import { RequestHeaders, RequestMethod, UserRole } from '@/common/constants/enums'
+import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import { Json } from '@/common/utils/json'
 import { Button, buttonVariants, Div, Icon, Label, Separator, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
@@ -17,7 +18,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdate, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash-es'
-import { Fragment, useRef, useState, useTransition } from 'react'
+import { Fragment, useLayoutEffect, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
@@ -36,7 +37,9 @@ const ScannedEpcList: React.FC = () => {
 	const abortControllerRef = useRef<AbortController | null>(null)
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
-
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
+	const [open, setOpen] = useState(isExtraLargeScreen)
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
 		usePageContext(
@@ -166,6 +169,10 @@ const ScannedEpcList: React.FC = () => {
 		fetchServerEvent()
 	})
 
+	useLayoutEffect(() => {
+		if (!isExtraLargeScreen) setOpen(true)
+	}, [isExtraLargeScreen])
+
 	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
@@ -185,42 +192,37 @@ const ScannedEpcList: React.FC = () => {
 	return (
 		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] xxl:rounded-t-none xxl:border-t-0'>
 			{/* Datalist header */}
-			<Div className='flex items-center justify-between border-b p-1.5'>
-				<Div className='ml-2'>
-					<ConnectionInsight />
-				</Div>
-				<Div className='inline-flex items-center gap-x-2'>
-					<Button variant='ghost' onClick={() => fetchServerEvent()}>
-						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
-					</Button>
-					<Separator orientation='vertical' className='h-6' />
-					<RoleBaseAccessControl
-						mode='fallback'
-						authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
-						fallbackComponent={
-							<Button
-								variant='ghost'
-								type='button'
-								onClick={() =>
-									toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })
-								}>
-								<Icon name='Lock' size={18} /> {t('ns_common:actions.archived')}
-							</Button>
-						}>
-						<Label
-							role='button'
-							className={buttonVariants({ variant: 'ghost' })}
-							htmlFor='data-restoration-sheet-trigger'>
-							<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
-						</Label>
-						<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
-					</RoleBaseAccessControl>
-				</Div>
+			<Div className='flex w-full items-center justify-between gap-x-1 border-b p-1.5 xxl:justify-center'>
+				<ConnectionInsight />
+				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
+				<Button variant='ghost' size='sm' className='ml-auto xxl:ml-0' onClick={() => fetchServerEvent()}>
+					<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
+				</Button>
+				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
+				<Label
+					role='button'
+					className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+					htmlFor='data-restoration-sheet-trigger'>
+					<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
+				</Label>
+				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
+				<Label
+					role='button'
+					className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'hidden xxl:inline-flex' })}
+					htmlFor='epc-data-upload-dialog-trigger'>
+					<Icon name='Upload' size={18} /> {t('ns_common:actions.upload')}
+				</Label>
+				<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
 			</Div>
+			{/* Datalist body */}
+			{/* <Activity mode={open ? 'visible' : 'hidden'}> */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[33.33vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 will-change-transform contain-paint @4xl:h-[var(--outlet-wrapper-height)]'>
+					className={cn(
+						'linear z-10 divide-y bg-background transition-height duration-200 will-change-transform contain-paint',
+						open ? 'h-[33.33vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
+					)}>
 					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
@@ -268,19 +270,29 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[33.33vh] place-content-center @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]'>
+				<Div
+					className={cn(
+						'linear grid place-items-center transition-height duration-200',
+						open ? 'h-[33.33vh] @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]' : 'h-0'
+					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
+			{/* </Activity> */}
+			{open && <Separator aria-hidden={!open} className='aria-hidden:hidden' />}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5'>
+			<Div className='grid basis-auto grid-cols-2 gap-1.5 bg-background p-1.5'>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />
 				</Div>
-				<Div className='col-span-full @2xl:col-span-1'>
+				<Div className='col-span-full @2xl:col-span-1 xxl:[&>button[aria-haspopup=dialog]]:hidden'>
+					<Button variant='secondary' className='hidden w-full xxl:flex' onClick={() => setOpen(!open)}>
+						<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
+						{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
+					</Button>
 					<UploadDataFileDialog station='WH103' maxFiles={500} />
 				</Div>
 			</Div>
