@@ -1,20 +1,10 @@
-import { CommonActions, RecordStatus } from '@/common/constants/enums'
+import { RecordStatus, UserRole } from '@/common/constants/enums'
+import useAuth from '@/common/hooks/use-auth'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { IRFIDReaderDevice } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
-import {
-	Badge,
-	Button,
-	DataTable,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-	Icon,
-	Tooltip
-} from '@/components/ui'
+import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import {
 	IndeterminateCheckbox,
@@ -24,24 +14,23 @@ import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/
 import { notNullFilter } from '@/components/ui/@react-table/utils/not-null-filter.util'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { formatRelative } from 'date-fns'
-import { capitalize, isNil, pick } from 'lodash-es'
+import { capitalize, isNil } from 'lodash-es'
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-
-import { usePageContext } from '../-contexts/page-context'
 import {
 	useDeleteRFIDDeviceMutation,
 	useGetRFIDDeviceQuery,
 	useUpdateRFIDDeviceMutation
 } from '../-hooks/use-rfid-device-asm'
+import ActionDropdown from './action-dropdown'
 
 const RFIDDeviceList: React.FC = () => {
 	const { t, i18n } = useTranslation()
+	const { user } = useAuth()
 	const { data, isLoading, refetch } = useGetRFIDDeviceQuery()
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
 	const dateLocale = useDateLocale()
-	const { event$ } = usePageContext()
 
 	const columnHelper = createColumnHelper<IRFIDReaderDevice>()
 	const tableRef = useReactiveRef<Table<IRFIDReaderDevice>>(null)
@@ -69,12 +58,17 @@ const RFIDDeviceList: React.FC = () => {
 		})
 	}, [deleteItemsRef.current])
 
+	const shouldDisableDelete = useMemo(
+		() => user && Array.isArray(user.roles) && !user.roles.some((role) => role === UserRole.ADMIN),
+		[user]
+	)
+
 	const columns = useMemo(() => {
 		return [
 			columnHelper.display({
 				id: ROW_SELECTION_COLUMN_ID,
-				header: (props) => <IndeterminateCheckbox {...props} />,
-				cell: (props) => <RowSelectionCheckbox {...props} />,
+				header: (props) => <IndeterminateCheckbox {...props} disabled={shouldDisableDelete} />,
+				cell: (props) => <RowSelectionCheckbox {...props} disabled={shouldDisableDelete} />,
 				size: 60,
 				maxSize: 60,
 				enableResizing: false
@@ -114,7 +108,6 @@ const RFIDDeviceList: React.FC = () => {
 						</Badge>
 					)
 			}),
-
 			columnHelper.accessor('ip_address', {
 				id: 'ip_address',
 				header: 'TCP/IP',
@@ -166,7 +159,6 @@ const RFIDDeviceList: React.FC = () => {
 					</Badge>
 				)
 			}),
-
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
 				header: '-',
@@ -174,57 +166,15 @@ const RFIDDeviceList: React.FC = () => {
 				size: 60,
 				maxSize: 60,
 				enableHiding: false,
-				cell: ({ row }) => (
-					<DropdownMenu>
-						<DropdownMenuTrigger className='text-muted-foreground transition-colors duration-200 ease-in-out hover:text-foreground'>
-							<Icon name='Ellipsis' />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent side='left' align='start'>
-							<DropdownMenuItem
-								onClick={() =>
-									event$.emit({
-										action: CommonActions.UPDATE,
-										defaultValues: {
-											...pick(row.original, ['station_no', 'device_sn', 'ip_address', 'ip_port']),
-											device_ant:
-												row.original.device_ant === '0' || isNil(row.original.device_ant) ? '0' : '1'
-										}
-									})
-								}>
-								{t('ns_common:actions.update')}
-							</DropdownMenuItem>
-
-							{row.original.is_active === RecordStatus.INACTIVE ? (
-								<DropdownMenuItem
-									onClick={() =>
-										handleUpdateDeviceStatus({
-											device_sn: row.original.device_sn,
-											is_active: RecordStatus.ACTIVE
-										})
-									}>
-									{t('ns_common:actions.activate')}
-								</DropdownMenuItem>
-							) : (
-								<DropdownMenuItem
-									onClick={() =>
-										handleUpdateDeviceStatus({
-											device_sn: row.original.device_sn,
-											is_active: RecordStatus.INACTIVE
-										})
-									}>
-									{t('ns_common:actions.deactivate')}
-								</DropdownMenuItem>
-							)}
-							<DropdownMenuSeparator />
-							<DropdownMenuItem
-								onClick={() => {
-									deleteItemsRef.current = [row.original.device_sn]
-									setConfirmDialogOpen(true)
-								}}>
-								{t('ns_common:actions.delete')}
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+				cell: (props) => (
+					<ActionDropdown
+						{...props}
+						onUpdateStatus={handleUpdateDeviceStatus}
+						onDelete={() => {
+							deleteItemsRef.current = [props.row.original.device_sn]
+							setConfirmDialogOpen(true)
+						}}
+					/>
 				)
 			})
 		]

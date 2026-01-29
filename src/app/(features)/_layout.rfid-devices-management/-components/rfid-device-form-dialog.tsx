@@ -1,4 +1,5 @@
-import { CommonActions } from '@/common/constants/enums'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
+import { CommonActions, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
 import {
@@ -82,112 +83,127 @@ const RFIDDeviceFormDialog: React.FC = () => {
 	}
 
 	return (
-		<Dialog defaultOpen={false} open={open || isPending || isError} onOpenChange={setOpen}>
-			<DialogTrigger className={cn(buttonVariants({ variant: 'default' }))}>
-				<Icon name='CircleFadingPlus' />
-				{t('ns_common:actions.add')}
-			</DialogTrigger>
-			<DialogContent className='max-w-xl'>
-				<DialogHeader>
-					<DialogTitle>
-						{action === CommonActions.UPDATE ? t('ns_rfid:titles.edit_device') : t('ns_rfid:titles.add_device')}
-					</DialogTitle>
-					<DialogDescription>{t('ns_rfid:descriptions.dialog_form')}</DialogDescription>
-				</DialogHeader>
+		<RoleBaseAccessControl
+			mode='fallback'
+			authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+			fallbackComponent={
+				<Button
+					onClick={() =>
+						toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
+					}>
+					<Icon name='Lock' />
+					{t('ns_common:actions.add')}
+				</Button>
+			}>
+			<Dialog defaultOpen={false} open={open || isPending || isError} onOpenChange={setOpen}>
+				<DialogTrigger className={cn(buttonVariants({ variant: 'default' }))}>
+					<Icon name='CircleFadingPlus' />
+					{t('ns_common:actions.add')}
+				</DialogTrigger>
+				<DialogContent className='max-w-xl'>
+					<DialogHeader>
+						<DialogTitle>
+							{action === CommonActions.UPDATE
+								? t('ns_rfid:titles.edit_device')
+								: t('ns_rfid:titles.add_device')}
+						</DialogTitle>
+						<DialogDescription>{t('ns_rfid:descriptions.dialog_form')}</DialogDescription>
+					</DialogHeader>
 
-				<FormProvider {...form}>
-					<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
-						<Fieldset>
-							<Div className='col-span-full'>
-								<InputFieldControl
-									name='device_sn'
-									label={t('ns_rfid:fields.device_sn')}
-									disabled={action === CommonActions.UPDATE}
-									placeholder='xxx xxx xxx'
-									description={t('ns_rfid:descriptions.device_sn')}
-								/>
-							</Div>
-							<Div className='col-span-1'>
-								<InputFieldControl name='ip_address' label='TCP/IP' placeholder='192.xxx.xxx.xxx' />
-							</Div>
-							<Div className='col-span-1'>
-								<InputFieldControl name='ip_port' label='TCP/IP port' placeholder='8160' />
-							</Div>
-							<Div className='col-span-full'>
-								<SelectFieldControl
-									name='station_no'
-									label={t('ns_rfid:fields.station_no')}
-									placeholder={capitalize(
-										t('ns_common:form_placeholder.select', {
-											object: t('ns_rfid:fields.station_no'),
-											defaultValue: 'Select station'
-										})
-									)}
-									datalist={[
-										{ label: 'WH101', value: `CUS_${user?.current_factory_code}_WH101` },
-										{ label: 'WH102', value: `CUS_${user?.current_factory_code}_WH102` },
-										{ label: 'WH103', value: `CUS_${user?.current_factory_code}_WH103` }
-									]}
-									labelField='label'
-									valueField='value'
-									description={t('ns_rfid:descriptions.device_name')}
-								/>
-							</Div>
-							<Div className='col-span-full space-y-4'>
-								<FormField
-									control={form.control}
-									name='device_ant'
-									render={({ field }) => (
-										<FormItem className='space-y-3'>
-											<FormLabel>{t('ns_rfid:fields.device_type')}</FormLabel>
-											<FormControl>
-												<RadioGroup
-													value={field.value}
-													onValueChange={field.onChange}
-													className='flex items-center gap-x-6'>
-													<FormItem className='flex items-center gap-3 space-y-0'>
-														<FormControl>
-															<RadioGroupItem value='1' />
-														</FormControl>
-														<FormLabel>Atenna</FormLabel>
-													</FormItem>
-													<FormItem className='flex items-center gap-3 space-y-0'>
-														<FormControl>
-															<RadioGroupItem value='0' />
-														</FormControl>
-														<FormLabel>Handhold</FormLabel>
-													</FormItem>
-												</RadioGroup>
-											</FormControl>
-											<FormMessage />
-											<FormDescription>{t('ns_rfid:descriptions.device_type')}</FormDescription>
-										</FormItem>
-									)}
-								/>
-							</Div>
-						</Fieldset>
-						<Separator className='col-span-full' />
-						<Div className='col-span-full flex items-center justify-end gap-x-1 self-end'>
-							<Button type='submit' disabled={isPending}>
-								<Icon name={isError ? 'RotateCw' : 'Check'} />{' '}
-								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-							</Button>
-							<DialogClose asChild>
-								<Button
-									variant='outline'
-									disabled={isPending}
-									onClick={() => {
-										form.reset()
-										resetAction()
-									}}>
-									<Icon name='X' /> {t('ns_common:actions.cancel')}
+					<FormProvider {...form}>
+						<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
+							<Fieldset>
+								<Div className='col-span-full'>
+									<InputFieldControl
+										name='device_sn'
+										label={t('ns_rfid:fields.device_sn')}
+										disabled={action === CommonActions.UPDATE}
+										placeholder='xxx xxx xxx'
+										description={t('ns_rfid:descriptions.device_sn')}
+									/>
+								</Div>
+								<Div className='col-span-1'>
+									<InputFieldControl name='ip_address' label='TCP/IP' placeholder='192.xxx.xxx.xxx' />
+								</Div>
+								<Div className='col-span-1'>
+									<InputFieldControl name='ip_port' label='TCP/IP port' placeholder='8160' />
+								</Div>
+								<Div className='col-span-full'>
+									<SelectFieldControl
+										name='station_no'
+										label={t('ns_rfid:fields.station_no')}
+										placeholder={capitalize(
+											t('ns_common:form_placeholder.select', {
+												object: t('ns_rfid:fields.station_no'),
+												defaultValue: 'Select station'
+											})
+										)}
+										datalist={[
+											{ label: 'WH101', value: `CUS_${user?.current_factory_code}_WH101` },
+											{ label: 'WH102', value: `CUS_${user?.current_factory_code}_WH102` },
+											{ label: 'WH103', value: `CUS_${user?.current_factory_code}_WH103` }
+										]}
+										labelField='label'
+										valueField='value'
+										description={t('ns_rfid:descriptions.device_name')}
+									/>
+								</Div>
+								<Div className='col-span-full space-y-4'>
+									<FormField
+										control={form.control}
+										name='device_ant'
+										render={({ field }) => (
+											<FormItem className='space-y-3'>
+												<FormLabel>{t('ns_rfid:fields.device_type')}</FormLabel>
+												<FormControl>
+													<RadioGroup
+														value={field.value}
+														onValueChange={field.onChange}
+														className='flex items-center gap-x-6'>
+														<FormItem className='flex items-center gap-3 space-y-0'>
+															<FormControl>
+																<RadioGroupItem value='1' />
+															</FormControl>
+															<FormLabel>Atenna</FormLabel>
+														</FormItem>
+														<FormItem className='flex items-center gap-3 space-y-0'>
+															<FormControl>
+																<RadioGroupItem value='0' />
+															</FormControl>
+															<FormLabel>Handhold</FormLabel>
+														</FormItem>
+													</RadioGroup>
+												</FormControl>
+												<FormMessage />
+												<FormDescription>{t('ns_rfid:descriptions.device_type')}</FormDescription>
+											</FormItem>
+										)}
+									/>
+								</Div>
+							</Fieldset>
+							<Separator className='col-span-full' />
+							<Div className='col-span-full flex items-center justify-end gap-x-1 self-end'>
+								<Button type='submit' disabled={isPending}>
+									<Icon name={isError ? 'RotateCw' : 'Check'} />{' '}
+									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 								</Button>
-							</DialogClose>
-						</Div>
-					</Form>
-				</FormProvider>
-			</DialogContent>
-		</Dialog>
+								<DialogClose asChild>
+									<Button
+										variant='outline'
+										disabled={isPending}
+										onClick={() => {
+											form.reset()
+											resetAction()
+										}}>
+										<Icon name='X' /> {t('ns_common:actions.cancel')}
+									</Button>
+								</DialogClose>
+							</Div>
+						</Form>
+					</FormProvider>
+				</DialogContent>
+			</Dialog>
+		</RoleBaseAccessControl>
 	)
 }
 
