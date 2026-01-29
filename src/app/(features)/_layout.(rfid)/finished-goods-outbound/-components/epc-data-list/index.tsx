@@ -13,7 +13,7 @@ import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdate, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash-es'
 import { Fragment, useRef, useState, useTransition } from 'react'
@@ -90,6 +90,8 @@ const ScannedEpcList: React.FC = () => {
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 
+	const update = useUpdate()
+
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
 		setScanningState('pending')
@@ -103,6 +105,7 @@ const ScannedEpcList: React.FC = () => {
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {
+					[RequestHeaders.REQUEST_USER]: user?.username,
 					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
@@ -112,10 +115,10 @@ const ScannedEpcList: React.FC = () => {
 						setScanningState('success')
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						abortControllerRef.current.abort()
 						const response = await AuthService.refreshToken(abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
+						throw new RetriableError()
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
 						response.status < HttpStatusCode.InternalServerError &&
@@ -142,11 +145,13 @@ const ScannedEpcList: React.FC = () => {
 					throw new RetriableError()
 				},
 				onerror(error) {
-					setScanningState('error')
-					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 					// * Depend on error type, retry or not
-					if (error instanceof FatalError) throw error
-					else throw new RetriableError()
+					if (error instanceof FatalError) {
+						setScanningState('error')
+						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
+						throw error
+					}
+					update() // * Force re-render to reset the SSE connection
 				}
 			})
 		} catch (e) {
