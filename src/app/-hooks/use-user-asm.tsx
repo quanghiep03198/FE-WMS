@@ -2,7 +2,7 @@ import useAuth from '@/common/hooks/use-auth'
 import { UserService } from '@/services/user.service'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosRequestConfig } from 'axios'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -31,10 +31,19 @@ export const getUserProfileQuery = (enabled?: boolean, config?: AxiosRequestConf
 export const useGetUserProfileQuery = () => {
 	const { isAuthenticated } = useAuth()
 	const abortControllerRef = useRef<AbortController>(null)
-	if(!abortControllerRef.current) {
+
+	if (!abortControllerRef.current) {
 		abortControllerRef.current = new AbortController()
 	}
-	return useQuery(getUserProfileQuery(isAuthenticated, {signal: abortControllerRef.current.signal}))
+
+	useEffect(() => {
+		if (!isAuthenticated) {
+			abortControllerRef.current.abort()
+			abortControllerRef.current = null
+		}
+	}, [isAuthenticated])
+
+	return useQuery(getUserProfileQuery(isAuthenticated, { signal: abortControllerRef.current.signal }))
 }
 
 export const useUpdatePasswordMutation = () => {
