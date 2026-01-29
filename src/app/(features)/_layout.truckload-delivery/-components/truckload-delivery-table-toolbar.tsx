@@ -1,4 +1,4 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, Div, Icon, Tooltip } from '@/components/ui'
@@ -83,7 +83,9 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 					fallbackComponent={
 						<Button
 							type='button'
-							onClick={() => toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })}
+							onClick={() =>
+								toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
+							}
 							size='sm'
 							className='w-full'>
 							<Icon name='Lock' />

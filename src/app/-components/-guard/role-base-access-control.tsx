@@ -24,6 +24,8 @@ type RoleBaseAccessControlProps = React.PropsWithChildren &
 		}
 	}
 
+export const ACTION_RESTRICTED_TOAST_ID = 'action-restricted-toast'
+
 const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 	children,
 	classNames,
@@ -40,7 +42,7 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 			e.preventDefault()
 			e.stopPropagation()
 			toast.warning(t('ns_common:errors.403_notification'), {
-				id: 'permission-denied',
+				id: ACTION_RESTRICTED_TOAST_ID,
 				dismissible: true,
 				duration: 5000
 			})

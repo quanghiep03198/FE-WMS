@@ -30,7 +30,7 @@ import {
 	updateDefectiveGoodsSchema
 } from '../../-schemas/defective-goods.schema'
 
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../-constants'
@@ -259,7 +259,7 @@ const DefectiveGoodsForm: React.FC = () => {
 								type='button'
 								className='cursor-not-allowed'
 								onClick={() =>
-									toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })
+									toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
 								}>
 								<Icon name='Lock' /> {t('ns_common:actions.add')}
 							</Button>

@@ -1,4 +1,4 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
@@ -372,7 +372,9 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 										<Button
 											type='button'
 											onClick={() =>
-												toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })
+												toast.warning(t('ns_common:errors.403_notification'), {
+													id: ACTION_RESTRICTED_TOAST_ID
+												})
 											}
 											size='sm'
 											className='w-full'>
