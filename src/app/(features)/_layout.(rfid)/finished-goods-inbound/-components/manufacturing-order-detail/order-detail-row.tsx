@@ -87,16 +87,16 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			<TableCell>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
-					{data?.mo_no === FALLBACK_VALUE ? (
-						<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+					<RoleBaseAccessControl
+						mode='invisible'
+						authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+						{data?.mo_no === FALLBACK_VALUE ? (
 							<button
 								className='opacity-0 duration-100 group-hover/cell:opacity-100'
 								onClick={() => setFillEpcDataDialogOpen(true)}>
 								<Icon name='Replace' size={18} />
 							</button>
-						</RoleBaseAccessControl>
-					) : (
-						<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+						) : (
 							<button
 								className='opacity-0 duration-100 group-hover/cell:opacity-100'
 								onClick={() => {
@@ -110,8 +110,8 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								}}>
 								<Icon name='ArrowLeftRight' className='stroke-active' />
 							</button>
-						</RoleBaseAccessControl>
-					)}
+						)}
+					</RoleBaseAccessControl>
 				</Div>
 			</TableCell>
 			<TableCell>{data?.factory_shoes_style}</TableCell>
@@ -124,7 +124,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
-										<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+										<RoleBaseAccessControl
+											mode='invisible'
+											authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
 											<button
 												onClick={() => {
 													setExchangeEpcDialogOpen(true)
@@ -140,10 +142,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 													name='ArrowLeftRight'
 													className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
 												/>
-											</button>{' '}
-										</RoleBaseAccessControl>
-
-										<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+											</button>
 											<DeleteSizePopover
 												data={{
 													mo_no: data?.mo_no,
@@ -162,7 +161,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
 			<TableCell align='center'>
-				<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
+				<RoleBaseAccessControl mode='mask' authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+					<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
+				</RoleBaseAccessControl>
 			</TableCell>
 		</TableRow>
 	)
