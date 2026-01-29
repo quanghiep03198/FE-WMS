@@ -1,10 +1,11 @@
-import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
+import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
 import { useEventListener } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { ScanningStatus } from '../..'
 import { usePageContext } from '../../-contexts/page-context'
 
 const NetworkInsight: React.FC = () => {
@@ -22,9 +23,9 @@ const NetworkInsight: React.FC = () => {
 			</Typography>
 			<StatusItemDetail>
 				{isNetworkAvailable ? (
-					<Icon name='Server' size={18} className='stroke-success' />
+					<Icon name='Server' className='stroke-success' />
 				) : (
-					<Icon name='ServerCrash' size={18} className='stroke-muted-foreground' />
+					<Icon name='ServerCrash' className='stroke-muted-foreground' />
 				)}
 				<Typography variant='small' className='font-medium'>
 					{isNetworkAvailable ? t('ns_common:status.connected') : t('ns_common:status.disconnected')}
@@ -37,6 +38,18 @@ const NetworkInsight: React.FC = () => {
 const JobStatus: React.FC = () => {
 	const { t } = useTranslation()
 	const { scanningStatus } = usePageContext('scanningStatus')
+	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
+
+	useEventListener(NETWORK_CONNECTION_CHANGE, (e: CustomEvent<boolean>) => {
+		setIsNetworkAvailable(e.detail)
+	})
+
+	const indicatorState: Record<ScanningStatus | 'error', 'active' | 'idle' | 'down' | 'fixing'> = {
+		connected: 'active',
+		disconnected: 'idle',
+		error: 'down',
+		connecting: 'fixing'
+	}
 
 	return (
 		<StatusItem>
@@ -44,7 +57,11 @@ const JobStatus: React.FC = () => {
 				{t('ns_inoutbound:scanner_setting.cron_job')}
 			</Typography>
 			<StatusItemDetail>
-				<Icon
+				<StatusIndicator
+					state={!isNetworkAvailable ? indicatorState.error : indicatorState[scanningStatus]}
+					className='justify-center'
+				/>
+				{/* <Icon
 					name='Dot'
 					className={cn(
 						'scale-50 rounded-full ring-8',
@@ -52,7 +69,7 @@ const JobStatus: React.FC = () => {
 							? 'bg-success fill-success stroke-success ring-success/40'
 							: 'bg-warning fill-warning stroke-warning ring-warning/40'
 					)}
-				/>
+				/> */}
 				<Typography variant='small' className='font-medium'>
 					{scanningStatus === 'connected' ? t('ns_common:status.running') : t('ns_common:status.idle')}
 				</Typography>
@@ -78,6 +95,6 @@ const ConnectionInsight: React.FC = () => {
 }
 
 const StatusItem = tw.div`grid grid-cols-[9rem_auto] gap-x-20 sm:gap-x-6 xl:gap-x-4`
-const StatusItemDetail = tw.div`inline-grid grid-cols-[24px_auto] items-center gap-x-2 text-sm`
+const StatusItemDetail = tw.div`inline-grid grid-cols-[18px_auto] items-center gap-x-3 text-sm`
 
 export default ConnectionInsight
