@@ -365,7 +365,21 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</Div>
 							)}
 							<Div className='flex items-center gap-x-1'>
-								<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+								<RoleBaseAccessControl
+									authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
+									mode='fallback'
+									fallbackComponent={
+										<Button
+											type='button'
+											onClick={() =>
+												toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })
+											}
+											size='sm'
+											className='w-full'>
+											<Icon name='Lock' />
+											{t('ns_common:actions.update')}
+										</Button>
+									}>
 									{!action ? (
 										<Button
 											variant='default'
@@ -460,7 +474,9 @@ const Signature: React.FC<{
 	}
 
 	return (
-		<RoleBaseAccessControl authorizedRoles={signatureRolesMap.get(type)}>
+		<RoleBaseAccessControl
+			authorizedRoles={signatureRolesMap.get(type)}
+			classNames={{ wrapper: '[&>[data-slot=rbac-mask]>svg]:size-[18px]' }}>
 			<Div className='grid place-items-center p-2'>
 				{data[type] ? (
 					<img

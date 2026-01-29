@@ -29,7 +29,8 @@ export default {
 		login_success: 'Đăng nhập thành công',
 		logout_failed: 'Đăng xuất thất bại',
 		logout_success: 'Đã đăng xuất',
-		session_expired: 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại'
+		session_expired: 'Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại',
+		viewonly: 'Bạn hiện đang ở chế độ chỉ xem. Quyền chỉnh sửa đã bị hạn chế.'
 	},
 	profile: {
 		change_password: 'Đổi mật khẩu',

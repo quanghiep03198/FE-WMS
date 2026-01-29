@@ -13,16 +13,20 @@ type RoleBaseAccessControlVariant =
 			mode?: Exclude<VisibilityMode, 'fallback'>
 			fallbackComponent?: never
 	  }
-	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: React.ReactNode }
+	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: Required<React.ReactNode> }
 
 type RoleBaseAccessControlProps = React.PropsWithChildren &
-	Pick<React.ComponentProps<'div'>, 'style' | 'className'> &
-	RoleBaseAccessControlVariant & { authorizedRoles: UserRole[] }
+	RoleBaseAccessControlVariant & {
+		authorizedRoles: UserRole[]
+		classNames?: {
+			wrapper?: string
+			innerWrapper?: string
+		}
+	}
 
 const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 	children,
-	className,
-	style,
+	classNames,
 	mode = 'mask',
 	authorizedRoles,
 	fallbackComponent
@@ -47,19 +51,27 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 		mask: (
 			<div
 				aria-disabled={!isAccessible}
-				className={cn('group/rbac relative h-full w-full', className)}
-				style={style}
+				className={cn('group/rbac relative', classNames?.wrapper)}
 				onClick={preventActionIfUnauthorized}
 				onContextMenu={preventActionIfUnauthorized}>
 				{!isAccessible && (
-					<div className='absolute inset-0 z-20 flex items-center justify-center gap-x-2 group-aria-disabled/rbac:cursor-not-allowed group-aria-disabled/rbac:select-none'>
+					<div
+						data-slot='rbac-mask'
+						className='ease absolute inset-0 z-20 flex items-center justify-center gap-x-2 opacity-0 transition-opacity duration-200 group-hover/rbac:opacity-100 group-aria-disabled/rbac:cursor-not-allowed group-aria-disabled/rbac:select-none'>
 						<Icon
 							name='Lock'
-							className='ease stroke-muted-foreground opacity-0 duration-200 group-hover/rbac:opacity-100'
+							className='ease-in-out group-hover/rbac:duration-200 group-hover/rbac:animate-in group-hover/rbac:zoom-in-0'
 						/>
 					</div>
 				)}
-				<div className='ease opacity-100 duration-200 group-hover/rbac:opacity-0'>{children}</div>
+				<div
+					data-slot='rbac-element'
+					className={cn(
+						'ease opacity-100 transition-opacity duration-200 group-hover/rbac:opacity-15',
+						classNames?.innerWrapper
+					)}>
+					{children}
+				</div>
 			</div>
 		),
 		invisible: null,

@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { SearchCustOrderParams } from '..'
 import { DEFAULT_PROPS, usePageContext } from '../-contexts/page-context'
 import { InoutboundPayload } from '../-schemas/epc-inoutbound.schema'
-import { type ExchangeEpcPayload } from '../-schemas/exchange-epc.schema'
+import { ExchangeOrderFormValue, type ExchangeEpcPayload } from '../-schemas/exchange-epc.schema'
 import { SearchEpcParams } from '../..'
 import { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
 
@@ -142,7 +142,7 @@ export const useExchangeEpcMutation = () => {
 	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
-		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.exchangeEpc(payload),
+		mutationFn: async (payload: ExchangeOrderFormValue) => await RFIDService.exchangeEpc(payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)

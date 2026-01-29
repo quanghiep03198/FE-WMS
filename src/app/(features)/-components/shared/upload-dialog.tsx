@@ -1,4 +1,5 @@
-import { PresetBreakPoints, RequestHeaders } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { PresetBreakPoints, RequestHeaders, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -117,74 +118,87 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 	}
 
 	return (
-		<Dialog>
-			<DialogTrigger
-				className={cn(
-					buttonVariants({
-						variant: 'secondary',
-						size: isExtraLargeScreen ? 'default' : 'lg',
-						className: 'w-full'
-					})
-				)}>
-				<Icon name='Upload' size={18} />
-				Upload
-			</DialogTrigger>
-			<DialogContent className='max-w-xl'>
-				<DialogHeader>
-					<DialogTitle>{t('ns_common:titles.import_data')}</DialogTitle>
-					<DialogDescription>{t('ns_common:descriptions.import_data')}</DialogDescription>
-				</DialogHeader>
-				<DroppableArea
-					htmlFor={dropFileAreaId}
-					data-drag-active={isDragActive}
-					aria-disabled={files.length >= maxFiles}
-					onDrop={onDrop}
-					onDragOver={onDragOver}
-					onDragLeave={onDragLeave}>
-					<Input
-						id={dropFileAreaId}
-						ref={inputRef}
-						type='file'
-						accept='.csv'
-						multiple
-						className='hidden'
-						onChange={handleFileChange}
-					/>
-					<Icon name='CloudUpload' size={40} strokeWidth={1} stroke={'hsl(var(--active))'} />
-					<Typography color='muted'>{t('ns_common:actions.csv_upload')}</Typography>
-				</DroppableArea>
-				{files.length > 0 && (
-					<ScrollShadow className='max-h-32'>
-						{files.map((file, idx) => (
-							<FileItem
-								key={file.name + idx}
-								file={file}
-								disabled={isPending}
-								onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
-							/>
-						))}
-					</ScrollShadow>
-				)}
-				<Div className='flex items-center justify-between'>
-					<Typography variant='small' color='muted'>
-						{t('ns_common:descriptions.chosen_files', {
-							qty: `${files.length}/${maxFiles}`,
-							defaultValue: `${files.length}/${maxFiles}`
-						})}
-					</Typography>
-					<Typography variant='small' color='muted'>
-						{filesize(files.map((item) => item.size).reduce<number>((acc, curr) => acc + curr, 0))}
-					</Typography>
-				</Div>
-				<Button size='lg' disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
-					<Icon
-						name={isPending ? 'LoaderCircle' : 'Upload'}
-						className={cn({ 'animate-[spin_1s_linear_infinite]': isPending })}
-					/>{' '}
-					Upload
+		<RoleBaseAccessControl
+			mode='fallback'
+			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+			fallbackComponent={
+				<Button
+					variant='secondary'
+					size={isExtraLargeScreen ? 'lg' : 'default'}
+					className='w-full'
+					onClick={() => toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })}>
+					<Icon name='Lock' size={18} /> {t('ns_common:actions.upload')}
 				</Button>
-			</DialogContent>
-		</Dialog>
+			}>
+			<Dialog>
+				<DialogTrigger
+					className={cn(
+						buttonVariants({
+							variant: 'secondary',
+							size: isExtraLargeScreen ? 'default' : 'lg',
+							className: 'w-full'
+						})
+					)}>
+					<Icon name='Upload' size={18} />
+					Upload
+				</DialogTrigger>
+				<DialogContent className='max-w-xl'>
+					<DialogHeader>
+						<DialogTitle>{t('ns_common:titles.import_data')}</DialogTitle>
+						<DialogDescription>{t('ns_common:descriptions.import_data')}</DialogDescription>
+					</DialogHeader>
+					<DroppableArea
+						htmlFor={dropFileAreaId}
+						data-drag-active={isDragActive}
+						aria-disabled={files.length >= maxFiles}
+						onDrop={onDrop}
+						onDragOver={onDragOver}
+						onDragLeave={onDragLeave}>
+						<Input
+							id={dropFileAreaId}
+							ref={inputRef}
+							type='file'
+							accept='.csv'
+							multiple
+							className='hidden'
+							onChange={handleFileChange}
+						/>
+						<Icon name='CloudUpload' size={40} strokeWidth={1} stroke={'hsl(var(--active))'} />
+						<Typography color='muted'>{t('ns_common:actions.csv_upload')}</Typography>
+					</DroppableArea>
+					{files.length > 0 && (
+						<ScrollShadow className='max-h-32'>
+							{files.map((file, idx) => (
+								<FileItem
+									key={file.name + idx}
+									file={file}
+									disabled={isPending}
+									onRemove={() => setFiles((prev) => prev.filter((_, i) => i !== idx))}
+								/>
+							))}
+						</ScrollShadow>
+					)}
+					<Div className='flex items-center justify-between'>
+						<Typography variant='small' color='muted'>
+							{t('ns_common:descriptions.chosen_files', {
+								qty: `${files.length}/${maxFiles}`,
+								defaultValue: `${files.length}/${maxFiles}`
+							})}
+						</Typography>
+						<Typography variant='small' color='muted'>
+							{filesize(files.map((item) => item.size).reduce<number>((acc, curr) => acc + curr, 0))}
+						</Typography>
+					</Div>
+					<Button size='lg' disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
+						<Icon
+							name={isPending ? 'LoaderCircle' : 'Upload'}
+							className={cn({ 'animate-[spin_1s_linear_infinite]': isPending })}
+						/>{' '}
+						Upload
+					</Button>
+				</DialogContent>
+			</Dialog>{' '}
+		</RoleBaseAccessControl>
 	)
 }
 

@@ -1,6 +1,7 @@
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
-import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { RequestHeaders, RequestMethod, UserRole } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
@@ -193,13 +194,27 @@ const ScannedEpcList: React.FC = () => {
 						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
 					</Button>
 					<Separator orientation='vertical' className='h-6' />
-					<Label
-						role='button'
-						className={buttonVariants({ variant: 'ghost' })}
-						htmlFor='data-restoration-sheet-trigger'>
-						<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
-					</Label>
-					<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
+					<RoleBaseAccessControl
+						mode='fallback'
+						authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
+						fallbackComponent={
+							<Button
+								variant='ghost'
+								type='button'
+								onClick={() =>
+									toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })
+								}>
+								<Icon name='Lock' size={18} /> {t('ns_common:actions.archived')}
+							</Button>
+						}>
+						<Label
+							role='button'
+							className={buttonVariants({ variant: 'ghost' })}
+							htmlFor='data-restoration-sheet-trigger'>
+							<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
+						</Label>
+						<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
+					</RoleBaseAccessControl>
 				</Div>
 			</Div>
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (

@@ -26,7 +26,8 @@ export default {
 		login_success: 'Logged in succesfully',
 		logout_failed: 'Failed to log out',
 		logout_success: 'Logged out',
-		session_expired: 'Your session has expired, please log in again'
+		session_expired: 'Your session has expired, please log in again',
+		viewonly: 'You are currently in view-only mode. Editing access is restricted.'
 	},
 	profile: {
 		change_password: 'Change password',

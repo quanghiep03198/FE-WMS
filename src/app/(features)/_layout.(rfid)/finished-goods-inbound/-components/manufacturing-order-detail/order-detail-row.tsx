@@ -8,16 +8,17 @@ import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Checkbox, Div, Icon, TableCell, TableRow } from '@/components/ui'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { sortBy } from 'lodash-es'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import DeleteOrderPopover from './delete-order-popover'
 import DeleteSizePopover from './delete-size-popover'
 
 type OrderDetailTableRowProps = {
 	data: OrderItem
+	isMutable: boolean
 }
 
-const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
+const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, isMutable }) => {
 	const {
 		selectedRows,
 		pushSelectedRow,
@@ -70,26 +71,28 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				'w-full transition-all duration-500',
 				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
 			)}>
-			<TableCell>
-				<Checkbox
-					disabled={!hasSomeRowMatch && selectedRows.length > 0}
-					checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
-					onCheckedChange={(checked) =>
-						handleToggleSelectRow(checked, {
-							mo_no: data?.mo_no,
-							factory_shoes_style: data?.factory_shoes_style,
-							color_sn: data?.color_sn,
-							count: aggregateSizeCount
-						})
-					}
-				/>
-			</TableCell>
-			<TableCell>
+			{isMutable && (
+				<TableCell>
+					<Checkbox
+						disabled={!hasSomeRowMatch && selectedRows.length > 0}
+						checked={selectedRows.some((row) => row.mo_no === data?.mo_no)}
+						onCheckedChange={(checked) =>
+							handleToggleSelectRow(checked, {
+								mo_no: data?.mo_no,
+								factory_shoes_style: data?.factory_shoes_style,
+								color_sn: data?.color_sn,
+								count: aggregateSizeCount
+							})
+						}
+					/>
+				</TableCell>
+			)}
+			<TableCell className='group/cell'>
 				<Div className='flex items-center gap-x-2'>
 					{data?.mo_no ?? FALLBACK_VALUE}
 					<RoleBaseAccessControl
 						mode='invisible'
-						authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+						authorizedRoles={[UserRole.ADMIN, UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
 						{data?.mo_no === FALLBACK_VALUE ? (
 							<button
 								className='opacity-0 duration-100 group-hover/cell:opacity-100'
@@ -124,32 +127,32 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
-										<RoleBaseAccessControl
-											mode='invisible'
-											authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
-											<button
-												onClick={() => {
-													setExchangeEpcDialogOpen(true)
-													setDefaultExchangeEpcFormValues({
+										{isMutable && (
+											<Fragment>
+												<button
+													onClick={() => {
+														setExchangeEpcDialogOpen(true)
+														setDefaultExchangeEpcFormValues({
+															mo_no: data?.mo_no,
+															color_sn: data?.color_sn,
+															factory_shoes_style: data?.factory_shoes_style,
+															size_numcode: size?.size_numcode,
+															scanned_size_qty: size?.count
+														})
+													}}>
+													<Icon
+														name='ArrowLeftRight'
+														className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
+													/>
+												</button>
+												<DeleteSizePopover
+													data={{
 														mo_no: data?.mo_no,
-														color_sn: data?.color_sn,
-														factory_shoes_style: data?.factory_shoes_style,
-														size_numcode: size?.size_numcode,
-														scanned_size_qty: size?.count
-													})
-												}}>
-												<Icon
-													name='ArrowLeftRight'
-													className='stroke-active opacity-0 duration-100 group-hover/cell:opacity-100 group-has-[button[data-state=open]]/cell:opacity-100'
+														size_numcode: size?.size_numcode
+													}}
 												/>
-											</button>
-											<DeleteSizePopover
-												data={{
-													mo_no: data?.mo_no,
-													size_numcode: size?.size_numcode
-												}}
-											/>
-										</RoleBaseAccessControl>
+											</Fragment>
+										)}
 									</Div>
 								</NestedCell>
 								<NestedCell>{formatIntlNumber(size?.count)}</NestedCell>
@@ -160,11 +163,11 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 			<TableCell align='right' className='font-medium'>
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
-			<TableCell align='center'>
-				<RoleBaseAccessControl mode='mask' authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
+			{isMutable && (
+				<TableCell align='center'>
 					<DeleteOrderPopover data={{ mo_no: data?.mo_no }} />
-				</RoleBaseAccessControl>
-			</TableCell>
+				</TableCell>
+			)}
 		</TableRow>
 	)
 }

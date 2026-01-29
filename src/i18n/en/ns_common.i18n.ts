@@ -181,7 +181,7 @@ export default {
 	errors: {
 		'303': 'See Other',
 		'303_message': 'Please access {{url}} to use this feature for factory {{factoryCode}}',
-		'403': 'Access Denied',
+		'403': 'Forbidden',
 		'403_message':
 			"You don't have permission to access this page. Please contact the administrator to request access.",
 		'403_notification': 'You do not have permission to perform this action.',

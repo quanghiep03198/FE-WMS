@@ -1,5 +1,6 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
-import { CommonActions } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { CommonActions, UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -186,10 +187,25 @@ const InoutboundForm: React.FC = () => {
 						)}
 					</Div>
 					<Separator orientation='vertical' className='h-6 w-0.5' />
-					<Button type='submit' disabled={disabled}>
-						<Icon name='Check' />
-						{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-					</Button>
+					<RoleBaseAccessControl
+						mode='fallback'
+						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+						fallbackComponent={
+							<Button
+								size='sm'
+								type='button'
+								className='cursor-not-allowed'
+								onClick={() =>
+									toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })
+								}>
+								<Icon name='Lock' /> {t('ns_common:actions.save')}
+							</Button>
+						}>
+						<Button type='submit' disabled={disabled}>
+							<Icon name='Check' />
+							{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+						</Button>
+					</RoleBaseAccessControl>
 				</Form>
 			</FormProvider>
 		</Div>

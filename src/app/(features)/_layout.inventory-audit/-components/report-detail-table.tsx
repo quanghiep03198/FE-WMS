@@ -3,7 +3,7 @@ import { Languages, UserRole } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
 import { IMonthlyInventoryAudit } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
-import { Button, Div, Form, Icon, InputFieldControl } from '@/components/ui'
+import { Button, Div, Form, Icon, InputFieldControl, Typography } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useIsFetching } from '@tanstack/react-query'
 import { useBoolean, useUpdateEffect } from 'ahooks'
@@ -198,7 +198,18 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 						)}
 						<TableRow className='*:border-none'>
 							<TableVerticalHeader className='sticky left-0 !w-full flex-1'>
-								<RoleBaseAccessControl authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+								<RoleBaseAccessControl
+									mode='fallback'
+									authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
+									fallbackComponent={
+										<Typography
+											variant='small'
+											color='destructive'
+											className='inline-flex items-center gap-x-2 font-normal [text-transform:none]'>
+											<Icon name='TriangleAlert' />
+											{t('ns_auth:notification.viewonly')}
+										</Typography>
+									}>
 									<Div className='inline-grid grid-cols-2 gap-x-2'>
 										{isEditing ? (
 											<Button

@@ -1,12 +1,16 @@
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
-import { UserRole } from '@/common/constants/enums'
+import { PresetBreakPoints } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../manufacturing-order-detail'
 import EpcDataList from './data-list-body'
 import ListBoxHeader from './data-list-header'
 
 const EpcListBox: React.FC = () => {
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const { t } = useTranslation()
+
 	return (
 		<ListBoxWrapper
 			style={{
@@ -19,9 +23,7 @@ const EpcListBox: React.FC = () => {
 			</ListBoxBody>
 			<ListBoxFooter>
 				<OrderDetails />
-				<RoleBaseAccessControl authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
-					<UploadDataFileDialog station='WH101' maxFiles={200} />
-				</RoleBaseAccessControl>
+				<UploadDataFileDialog station='WH101' maxFiles={200} />
 			</ListBoxFooter>
 		</ListBoxWrapper>
 	)

@@ -21,7 +21,7 @@ import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
-import { debounce, omit, uniqBy } from 'lodash-es'
+import { debounce, uniqBy } from 'lodash-es'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -90,7 +90,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 
 	const handleExchangeEpc = async (data: ExchangeOrderFormValue) => {
 		try {
-			await mutateAsync(omit(data, ['exchange_all', 'scanned_size_qty']))
+			await mutateAsync(data)
 			toast.success(t('ns_common:notification.success'))
 			if (scanningStatus === 'disconnected' && Array.isArray(currentEpcData?.data)) {
 				setScannedEpc({ ...currentEpcData, data: uniqBy([...scannedEpc.data, ...currentEpcData.data], 'epc') })

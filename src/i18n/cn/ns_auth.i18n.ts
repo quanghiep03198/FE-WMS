@@ -28,7 +28,8 @@ export default {
 		login_success: '登入成功',
 		logout_failed: '登出失败',
 		logout_success: '登出',
-		session_expired: '您的会话已过期，请重新登录'
+		session_expired: '您的会话已过期，请重新登录',
+		viewonly: '您目前处于"仅限查看"模式. 编辑权限受限.'
 	},
 	profile: {
 		change_password: '更改密碼',

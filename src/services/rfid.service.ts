@@ -6,8 +6,8 @@ import {
 	OutboundFormValues
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-inoutbound.schema'
 import {
-	ExchangeEpcFormValue,
-	ExchangeEpcPayload
+	ExchangeEpcPayload,
+	ExchangeOrderFormValue
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
 import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
 import {
@@ -71,7 +71,7 @@ export class RFIDService {
 		return await axiosInstance.delete(`/rfid/inbound/delete-scanned-order/${commandNumber}`, { params })
 	}
 
-	static async exchangeEpc(payload: Omit<ExchangeEpcFormValue, 'maxExchangableQuantity'>) {
+	static async exchangeEpc(payload: Omit<ExchangeOrderFormValue, 'maxExchangableQuantity'>) {
 		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {})
 	}
 

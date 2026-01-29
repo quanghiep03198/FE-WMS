@@ -339,7 +339,12 @@ const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'
 	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
 
 	return (
-		<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
+		<RoleBaseAccessControl
+			mode='mask'
+			classNames={{
+				innerWrapper: cn('grid place-items-center group-hover/rbac:opacity-0')
+			}}
+			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
 			<Checkbox
 				className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
 				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}

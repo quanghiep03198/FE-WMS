@@ -9,6 +9,7 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { usePageQueryParams } from '../-hooks/use-page-query-params'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import CreateTruckloadDialogButton from './create-truckload-delivery-button'
@@ -76,7 +77,19 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 						<DownloadExcelButton />
 					</Tooltip>
 				)}
-				<RoleBaseAccessControl authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+				<RoleBaseAccessControl
+					authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
+					mode='fallback'
+					fallbackComponent={
+						<Button
+							type='button'
+							onClick={() => toast.warning(t('ns_common:errors.403_notification'), { id: 'action-403-warning' })}
+							size='sm'
+							className='w-full'>
+							<Icon name='Lock' />
+							{t('ns_common:actions.add')}
+						</Button>
+					}>
 					<Tooltip
 						message={t('ns_common:actions.add')}
 						triggerProps={{ asChild: true }}

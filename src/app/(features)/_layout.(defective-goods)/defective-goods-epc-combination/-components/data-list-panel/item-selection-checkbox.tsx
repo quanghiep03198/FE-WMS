@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import { Checkbox, Div, Typography } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
@@ -39,15 +41,27 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 	)
 
 	return (
-		<Div className='inline-flex items-center gap-x-3'>
-			<Checkbox checked={checkboxState} onCheckedChange={handleCheckboxChange} />
-			<Typography variant='small' color='muted'>
-				{t('ns_common:pagination.selected_records', {
-					selectedRecords: `${selectedCount}/${totalDocs ?? 0}`,
-					defaultValue: `${selectedCount}/${totalDocs} selected`
-				})}
-			</Typography>
-		</Div>
+		<RoleBaseAccessControl
+			mode='fallback'
+			authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}
+			fallbackComponent={
+				<Typography variant='small' color='muted'>
+					{t('ns_common:table.total_rows', {
+						count: totalDocs,
+						defaultValue: `${selectedCount}/${totalDocs} selected`
+					})}
+				</Typography>
+			}>
+			<Div className='inline-flex items-center gap-x-3'>
+				<Checkbox checked={checkboxState} onCheckedChange={handleCheckboxChange} />
+				<Typography variant='small' color='muted'>
+					{t('ns_common:pagination.selected_records', {
+						selectedRecords: `${selectedCount}/${totalDocs ?? 0}`,
+						defaultValue: `${selectedCount}/${totalDocs} selected`
+					})}
+				</Typography>
+			</Div>
+		</RoleBaseAccessControl>
 	)
 }
 

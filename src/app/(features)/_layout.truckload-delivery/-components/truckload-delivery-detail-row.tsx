@@ -1,4 +1,5 @@
-import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -161,23 +162,27 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 			)}
 			<TableCell align='right' className='w-[10%]'>
 				<Tooltip message={t('ns_common:actions.delete')}>
-					<GhostButton
-						type='button'
-						disabled={!deletable}
-						className={
-							typeof snapshotData?.id === 'number'
-								? 'text-destructive hover:text-destructive'
-								: 'text-muted-foreground'
-						}
-						onClick={() => {
-							if (typeof snapshotData?.id === 'number') {
-								event$.emit({ action: CommonActions.DELETE, payload: snapshotData.id })
-								return
+					<RoleBaseAccessControl
+						mode='mask'
+						authorizedRoles={[UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}>
+						<GhostButton
+							type='button'
+							disabled={!deletable}
+							className={
+								typeof snapshotData?.id === 'number'
+									? 'text-destructive hover:text-destructive'
+									: 'text-muted-foreground'
 							}
-							onRemove(index)
-						}}>
-						<Icon name='X' />
-					</GhostButton>
+							onClick={() => {
+								if (typeof snapshotData?.id === 'number') {
+									event$.emit({ action: CommonActions.DELETE, payload: snapshotData.id })
+									return
+								}
+								onRemove(index)
+							}}>
+							<Icon name='X' />
+						</GhostButton>
+					</RoleBaseAccessControl>
 				</Tooltip>
 			</TableCell>
 		</TableRow>

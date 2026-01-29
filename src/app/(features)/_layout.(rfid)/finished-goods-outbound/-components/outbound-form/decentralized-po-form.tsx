@@ -1,5 +1,7 @@
 'use no memo'
 
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon, Tooltip, Typography } from '@/components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
@@ -143,67 +145,82 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 				</Alert>,
 				document.body
 			)}
-			<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
-				<FormProvider {...form}>
-					<Form
-						onSubmit={form.handleSubmit((data) => {
-							mutateAsync({
-								...data,
-								sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
-							}).then(() => form.reset())
-						})}>
-						<Div className='col-span-1'>
-							<PurchaseOrderAutoComplete />
-						</Div>
-						<Div className='col-span-1'>
-							<CommandNumberFieldControl />
-						</Div>
-						<Div
-							className='col-span-full'
-							style={
-								{
-									'--draggable-item-width': fieldsetSize?.width - fieldsetSizeVerticalPadding + 'px'
-								} as React.CSSProperties
-							}>
-							<DndContext
-								collisionDetection={closestCenter}
-								modifiers={[restrictToVerticalAxis]}
-								sensors={sensors}
-								onDragStart={handleDragStart}
-								onDragEnd={handleDragEnd}>
-								<SortableContext items={fields}>
-									<Div
-										ref={fieldsetRef}
-										as='fieldset'
-										className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border-2 border-dashed p-4 duration-100'>
-										{fields.length > 0 ? (
-											fields.map((field, index) => (
-												<DroppableFieldItem key={field.id} id={field.id} index={index} onRemove={remove} />
-											))
-										) : (
-											<EmptyState />
-										)}
-										<ArrayFieldControl fields={fields} onAppend={append} />
-									</Div>
-									<DragOverlay
-										className='min-w-[var(--draggable-item-width)] max-w-[var(--draggable-item-width)]'
-										dropAnimation={{
-											duration: 300,
-											easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
-										}}>
-										{activeState.id && activeState.index ? (
-											<DroppableFieldItem {...activeState} onRemove={remove} />
-										) : null}
-									</DragOverlay>
-								</SortableContext>
-							</DndContext>
-						</Div>
-						<Div className='col-span-full'>
-							<FormSubmission isPending={isPending} isError={isError} />
-						</Div>
-					</Form>
-				</FormProvider>
-			</DecentralizedPoFormProvider>
+			<RoleBaseAccessControl
+				mode='mask'
+				authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+				classNames={{
+					wrapper: cn('[&>[data-slot=rbac-mask]>svg]:size-6')
+					// innerWrapper: 'grid grid-cols-2 gap-x-2 gap-y-6'
+				}}>
+				<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
+					<FormProvider {...form}>
+						{' '}
+						<Form
+							onSubmit={form.handleSubmit((data) => {
+								mutateAsync({
+									...data,
+									sizes: data.sizes.map((item) => ({ size_numcode: item.size_numcode, qty: item.qty }))
+								}).then(() => form.reset())
+							})}>
+							<Div className='col-span-1'>
+								<PurchaseOrderAutoComplete />
+							</Div>
+							<Div className='col-span-1'>
+								<CommandNumberFieldControl />
+							</Div>
+							<Div
+								className='col-span-full'
+								style={
+									{
+										'--draggable-item-width': fieldsetSize?.width - fieldsetSizeVerticalPadding + 'px'
+									} as React.CSSProperties
+								}>
+								<DndContext
+									collisionDetection={closestCenter}
+									modifiers={[restrictToVerticalAxis]}
+									sensors={sensors}
+									onDragStart={handleDragStart}
+									onDragEnd={handleDragEnd}>
+									<SortableContext items={fields}>
+										<Div
+											ref={fieldsetRef}
+											as='fieldset'
+											className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border-2 border-dashed p-4 duration-100'>
+											{fields.length > 0 ? (
+												fields.map((field, index) => (
+													<DroppableFieldItem
+														key={field.id}
+														id={field.id}
+														index={index}
+														onRemove={remove}
+													/>
+												))
+											) : (
+												<EmptyState />
+											)}
+											<ArrayFieldControl fields={fields} onAppend={append} />
+										</Div>
+										<DragOverlay
+											className='min-w-[var(--draggable-item-width)] max-w-[var(--draggable-item-width)]'
+											dropAnimation={{
+												duration: 300,
+												easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
+											}}>
+											{activeState.id && activeState.index ? (
+												<DroppableFieldItem {...activeState} onRemove={remove} />
+											) : null}
+										</DragOverlay>
+									</SortableContext>
+								</DndContext>
+							</Div>
+
+							<Div className='col-span-full'>
+								<FormSubmission isPending={isPending} isError={isError} />
+							</Div>
+						</Form>{' '}
+					</FormProvider>
+				</DecentralizedPoFormProvider>
+			</RoleBaseAccessControl>
 		</Fragment>
 	)
 }

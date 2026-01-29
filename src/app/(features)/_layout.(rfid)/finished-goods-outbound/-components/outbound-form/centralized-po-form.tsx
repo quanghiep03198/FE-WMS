@@ -1,5 +1,8 @@
 'use no memo'
 
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
+import { cn } from '@/common/utils/cn'
 import { Form as FormProvider, Icon, MultiSelectFieldControl, Tooltip } from '@/components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -68,28 +71,37 @@ const CentralizedPoOutboundForm: React.FC = () => {
 				</Alert>,
 				document.body
 			)}
-			<FormProvider {...form}>
-				<Form
-					onSubmit={form.handleSubmit((data) =>
-						mutateAsync(data).then(() => {
-							form.reset()
-							resetSearchTerm()
-						})
-					)}>
-					<PurchaseOrderAutoComplete />
-					<MultiSelectFieldControl
-						name='mo_no'
-						label={t('ns_erp:fields.mo_no')}
-						shouldFilter={false}
-						search={searchTerm}
-						onInput={(value) => setSearchTerm(value)}
-						datalist={filteredOrders}
-						labelField='mo_no'
-						valueField='mo_no'
-					/>
-					<FormSubmission isPending={isPending} isError={isError} />
-				</Form>
-			</FormProvider>
+			<RoleBaseAccessControl
+				mode='mask'
+				authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+				classNames={{
+					wrapper: cn('[&>[data-slot=rbac-mask]>svg]:size-6')
+				}}>
+				{' '}
+				<FormProvider {...form}>
+					<Form
+						onSubmit={form.handleSubmit((data) =>
+							mutateAsync(data).then(() => {
+								form.reset()
+								resetSearchTerm()
+							})
+						)}>
+						<PurchaseOrderAutoComplete />
+						<MultiSelectFieldControl
+							name='mo_no'
+							label={t('ns_erp:fields.mo_no')}
+							shouldFilter={false}
+							search={searchTerm}
+							onInput={(value) => setSearchTerm(value)}
+							datalist={filteredOrders}
+							labelField='mo_no'
+							valueField='mo_no'
+						/>
+
+						<FormSubmission isPending={isPending} isError={isError} />
+					</Form>
+				</FormProvider>{' '}
+			</RoleBaseAccessControl>
 		</Fragment>
 	)
 }

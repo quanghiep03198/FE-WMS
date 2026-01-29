@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import { Button, Div, Icon, Separator, Toggle, Tooltip } from '@/components/ui'
 import React from 'react'
@@ -38,7 +40,9 @@ const ActionButtonsGroup: React.FC = () => {
 				</Button>
 			</Tooltip>
 			<Separator orientation='vertical' className='h-4 w-0.5' />
-			<DeleteButton />
+			<RoleBaseAccessControl mode='mask' authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
+				<DeleteButton />
+			</RoleBaseAccessControl>
 		</Div>
 	)
 }
