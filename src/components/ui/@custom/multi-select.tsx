@@ -27,6 +27,7 @@ import { useClickAway, useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
 import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
 import React, { Fragment, useCallback, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import ScrollShadow from './scroll-shadow'
 
 /**
@@ -143,6 +144,7 @@ export function MultiSelect<D = Record<string, any>>({
 }: MultiSelectProps<D>) {
 	'use no memo'
 
+	const { t } = useTranslation()
 	const [selectedValues, setSelectedValues] = useState<Array<D[keyof D]>>(defaultValue)
 	const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -400,8 +402,11 @@ export function MultiSelect<D = Record<string, any>>({
 						<Div className='flex items-center justify-between gap-x-1'>
 							{Array.isArray(selectedValues) && selectedValues?.length > 0 && (
 								<Fragment>
-									<CommandItem onSelect={handleClear} className='flex-1 cursor-pointer justify-center'>
-										Clear
+									<CommandItem
+										onClick={(e) => e.stopPropagation()}
+										onSelect={handleClear}
+										className='flex-1 cursor-pointer justify-center'>
+										{t('ns_common:actions.reset')}
 									</CommandItem>
 									<Separator orientation='vertical' className='flex h-full min-h-6' />
 								</Fragment>
