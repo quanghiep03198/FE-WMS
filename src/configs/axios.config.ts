@@ -52,7 +52,7 @@ export class AxiosClient {
 			(config) => {
 				const locale = StorageService.getLocale()
 				const user = AuthService.getCredentials()
-				config.headers[RequestHeaders.USER] = user?.username
+				config.headers[RequestHeaders.REQUEST_USER] = user?.username
 				config.headers[RequestHeaders.FACTORY_CODE] = user?.current_factory_code
 				config.headers[RequestHeaders.ACCEPT_LANGUAGE] = locale
 				return config
@@ -104,7 +104,6 @@ export class AxiosClient {
 							throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
 						const { metadata: refreshToken } = await AuthService.refreshToken(abortController.signal)
 						this.processQueue(null, refreshToken)
-						// originalRequest.headers['Authorization'] = `Bearer ${refreshToken}`
 						const response = await this.instance(originalRequest)
 						originalRequest.retry = true
 						return response

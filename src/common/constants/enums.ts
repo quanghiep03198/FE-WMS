@@ -49,7 +49,7 @@ export enum RequestHeaders {
 	CONTENT_TYPE = 'Content-Type',
 	TENANT_ID = 'X-Tenant-Id',
 	FACTORY_CODE = 'X-User-Factory',
-	USER = 'X-User',
+	REQUEST_USER = 'X-User-Request',
 	OTP = 'X-Otp'
 }
 
