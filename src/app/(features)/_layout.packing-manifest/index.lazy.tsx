@@ -1,10 +1,10 @@
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div, Separator } from '@/components/ui'
+import { Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
+import { PageAction, PageDescription, PageHeader, PageTitle, PageWrapper } from '../-components/shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import ReportMasterTable from './-components/data-table'
 import DownloadExcelButton from './-components/download-excel-button'
@@ -29,19 +29,17 @@ function Page() {
 			<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
-				<Div as='section' className='mt-4 space-y-4'>
-					<Div className='flex w-full'>
-						<PageHeader className='flex-1'>
-							<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>
-							<PageDescription>{t('ns_packing:descriptions.packing_manifest')}</PageDescription>
-						</PageHeader>
-						<Div className='ml-auto'>
+				<PageWrapper>
+					<PageHeader>
+						<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>
+						<PageDescription>{t('ns_packing:descriptions.packing_manifest')}</PageDescription>
+						<PageAction>
 							<DownloadExcelButton />
-						</Div>
-					</Div>
+						</PageAction>
+					</PageHeader>
 					<Separator />
 					<ReportMasterTable />
-				</Div>
+				</PageWrapper>
 			</RoleGuard>
 		</Fragment>
 	)

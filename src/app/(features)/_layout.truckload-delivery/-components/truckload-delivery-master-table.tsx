@@ -342,7 +342,7 @@ const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'
 		<RoleBaseAccessControl
 			mode='mask'
 			classNames={{
-				innerWrapper: cn('grid place-items-center group-hover/rbac:opacity-0')
+				innerWrapper: 'grid place-items-center group-hover/rbac:opacity-0'
 			}}
 			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
 			<Checkbox

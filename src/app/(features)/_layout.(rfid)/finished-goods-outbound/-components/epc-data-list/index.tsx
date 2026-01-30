@@ -109,7 +109,7 @@ const ScannedEpcList: React.FC = () => {
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {
-					[RequestHeaders.REQUEST_USER]: user?.username,
+					[RequestHeaders.USER_REQUEST]: user?.username,
 					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
@@ -192,7 +192,7 @@ const ScannedEpcList: React.FC = () => {
 	return (
 		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] xxl:rounded-t-none xxl:border-t-0'>
 			{/* Datalist header */}
-			<Div className='flex w-full items-center justify-between gap-x-1 border-b p-1.5 xxl:justify-center'>
+			<Div className='flex w-full items-center justify-between gap-x-1 border-b p-1.5 *:text-sm xxl:justify-around'>
 				<ConnectionInsight />
 				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
 				<Button variant='ghost' size='sm' className='ml-auto xxl:ml-0' onClick={() => fetchServerEvent()}>
@@ -215,15 +215,19 @@ const ScannedEpcList: React.FC = () => {
 				<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
 			</Div>
 			{/* Datalist body */}
-			{/* <Activity mode={open ? 'visible' : 'hidden'}> */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
 					className={cn(
 						'linear z-10 divide-y bg-background transition-height duration-200 will-change-transform contain-paint',
-						open ? 'h-[33.33vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
+						open ? 'h-[33.33vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0 animate-out'
 					)}>
-					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
+					<Div
+						className={cn('relative w-full duration-500 ease-in', {
+							'animate-in fade-in-0': open,
+							'animate-out fade-out-0': !open
+						})}
+						style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
@@ -281,7 +285,7 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</Div>
 			)}
-			{/* </Activity> */}
+
 			{open && <Separator aria-hidden={!open} className='aria-hidden:hidden' />}
 			{/* Datalist footer */}
 			<Div className='grid basis-auto grid-cols-2 gap-1.5 bg-background p-1.5'>

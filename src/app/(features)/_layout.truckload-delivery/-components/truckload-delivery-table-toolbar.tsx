@@ -86,7 +86,6 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 							onClick={() =>
 								toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
 							}
-							size='sm'
 							className='w-full'>
 							<Icon name='Lock' />
 							{t('ns_common:actions.add')}

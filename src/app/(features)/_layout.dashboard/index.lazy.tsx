@@ -1,11 +1,11 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div, Separator } from '@/components/ui'
+import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
+import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../-components/shared/page-header'
 import { AssemblyProductivityOverview } from './-components/assembly-production-volumn-overview'
 import DefectiveGoodsInventoryOverview from './-components/defective-goods-inventory-composition'
 import InoutboundOverview from './-components/inoutbound-overview'
@@ -37,12 +37,12 @@ function Page() {
 					UserRole.DG_WAREHOUSE_STAFF,
 					UserRole.IE_STAFF
 				]}>
-				<Div className='z-10 mt-4 flex flex-col gap-y-6 @container'>
+				<PageWrapper className='@container'>
 					<PageHeader className='basis-1/2 xl:basis-full'>
 						<PageTitle>Dashboard</PageTitle>
 						<PageDescription>{t('ns_dashboard:dashboard_description')}</PageDescription>
 					</PageHeader>
-					<Separator />
+					<PageSeparator />
 					<Div className='grid grid-cols-12 gap-4 [&_div[data-slot=card-title]]:!capitalize'>
 						<Div className='col-span-full @container/statistics'>
 							<Statistics />
@@ -60,7 +60,7 @@ function Page() {
 							<AssemblyProductivityOverview />
 						</Div>
 					</Div>
-				</Div>{' '}
+				</PageWrapper>
 			</RoleGuard>
 		</Fragment>
 	)

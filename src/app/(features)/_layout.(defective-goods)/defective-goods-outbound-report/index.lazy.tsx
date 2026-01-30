@@ -1,12 +1,19 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div, Separator } from '@/components/ui'
+import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import DatePickerFilter from '../../-components/shared/date-picker-filter'
-import { PageDescription, PageHeader, PageTitle } from '../../-components/shared/page-header'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../../-components/shared/page-header'
 import DownloadExcelButton from './-components/download-excel-button'
 import InboundReportMasterTable from './-components/report-master-table'
 
@@ -40,22 +47,20 @@ function Page() {
 					UserRole.FG_WAREHOUSE_STAFF,
 					UserRole.DG_WAREHOUSE_STAFF
 				]}>
-				<Div as='section' className='mt-4 space-y-4 @container'>
-					<Div className='flex w-full'>
-						<PageHeader className='flex-1'>
-							<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>
-							<PageDescription>{t('ns_inoutbound:description.defective_goods_outbound_report')}</PageDescription>
-						</PageHeader>
-						<Div className='ml-auto flex gap-x-2'>
+				<PageWrapper>
+					<PageHeader>
+						<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>
+						<PageDescription>{t('ns_inoutbound:description.defective_goods_outbound_report')}</PageDescription>
+						<PageAction>
 							<DatePickerFilter />
 							<Div className='hidden @[1024px]:block'>
 								<DownloadExcelButton />
 							</Div>
-						</Div>
-					</Div>
-					<Separator />
+						</PageAction>
+					</PageHeader>
+					<PageSeparator />
 					<InboundReportMasterTable />
-				</Div>
+				</PageWrapper>
 			</RoleGuard>
 		</Fragment>
 	)
