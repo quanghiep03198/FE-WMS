@@ -31,10 +31,12 @@ import React, { Fragment, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ScrollShadow from './scroll-shadow'
 
+type SelectItem = { disabled?: boolean; [key: string]: any }
+
 /**
  * Props for MultiSelect component
  */
-export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAttributes<HTMLButtonElement> &
+export type MultiSelectProps<T extends SelectItem> = React.ButtonHTMLAttributes<HTMLButtonElement> &
 	Pick<React.ComponentProps<typeof CommandInput>, 'onInput'> & {
 		ref?: React.RefObject<HTMLButtonElement>
 
@@ -44,6 +46,11 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 * Determines whether command should filter the datalist automatically or manually.
 		 */
 		shouldFilter?: boolean
+
+		/**
+		 * If true, allows selecting all options at once.
+		 */
+		canSelectAll?: boolean
 
 		/**
 		 * An array of option objects to be displayed in the multi-select component.
@@ -125,10 +132,11 @@ const PRERENDER_COUNT = 5
 
 const normalizeString = (value: string) => value.trim().toLowerCase()
 
-export function MultiSelect<D = Record<string, any>>({
+export function MultiSelect<D extends SelectItem>({
 	datalist,
 	labelField,
 	valueField,
+	canSelectAll = true,
 	shouldFilter = true,
 	onValueChange,
 	onInput,
@@ -284,7 +292,7 @@ export function MultiSelect<D = Record<string, any>>({
 											/>
 										</Badge>
 									</HoverCardTrigger>
-									<HoverCardContent className='flex max-h-56 max-w-md flex-wrap items-center gap-x-1 gap-y-2 overflow-y-auto p-2'>
+									<HoverCardContent className='flex max-h-56 max-w-sm flex-wrap items-center gap-x-1 gap-y-2 overflow-y-auto p-2'>
 										{Array.isArray(selectedValues) &&
 											selectedValues.slice(maxCount).map((item) => (
 												<Badge key={String(item)} variant='secondary'>
@@ -359,24 +367,26 @@ export function MultiSelect<D = Record<string, any>>({
 							<Fragment>
 								<CommandEmpty>No results found.</CommandEmpty>
 								<CommandGroup>
-									<CommandItem
-										key='all'
-										disabled={datalist?.length === 0}
-										keywords={['all']}
-										onSelect={toggleAll}
-										onClick={(e) => e.stopPropagation()}
-										className='cursor-pointer'>
-										<Div
-											className={cn(
-												'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-												selectedValues?.length === datalist?.length && datalist?.length > 0
-													? 'bg-primary text-primary-foreground'
-													: 'opacity-50 [&_svg]:invisible'
-											)}>
-											<CheckIcon className='!size-3' />
-										</Div>
-										<Typography variant='small'>({t('ns_common:actions.select_all')})</Typography>
-									</CommandItem>
+									{canSelectAll && (
+										<CommandItem
+											key='all'
+											disabled={datalist?.length === 0}
+											keywords={['all']}
+											onSelect={toggleAll}
+											onClick={(e) => e.stopPropagation()}
+											className='cursor-pointer'>
+											<Div
+												className={cn(
+													'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+													selectedValues?.length === datalist?.length && datalist?.length > 0
+														? 'bg-primary text-primary-foreground'
+														: 'opacity-50 [&_svg]:invisible'
+												)}>
+												<CheckIcon className='!size-3' />
+											</Div>
+											<Typography variant='small'>({t('ns_common:actions.select_all')})</Typography>
+										</CommandItem>
+									)}
 									{before > 0 && <CommandItem disabled style={{ width: '100%', height: before }} />}
 									{virtualItems.map((item) => {
 										const option = datalist[item.index]
@@ -387,6 +397,7 @@ export function MultiSelect<D = Record<string, any>>({
 												data-index={item.index}
 												value={String(option[valueField])}
 												keywords={[String(option[labelField])]}
+												disabled={option.disabled}
 												onSelect={() => toggleOption(option[valueField])}>
 												<Checkbox checked={isSelected} />
 												<Typography variant='small'>{String(option?.[labelField])}</Typography>
