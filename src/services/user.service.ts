@@ -11,8 +11,8 @@ export class UserService {
 		return await axiosInstance.post<void, unknown, unknown>('/user', payload)
 	}
 
-	static async deactivateUser(username: string) {
-		return await axiosInstance.delete(`/user/deactivate/${username}`)
+	static async updateUserStatus(username: string) {
+		return await axiosInstance.delete(`/user/update-status/${username}`)
 	}
 
 	static async profile(config?: AxiosRequestConfig): Promise<IUser> {

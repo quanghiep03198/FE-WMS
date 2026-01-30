@@ -14,7 +14,6 @@ import {
 	Icon,
 	Typography
 } from '@/components/ui'
-import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
 import {
 	IndeterminateCheckbox,
 	RowSelectionCheckbox
@@ -22,8 +21,7 @@ import {
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { createColumnHelper } from '@tanstack/react-table'
-import { formatRelative } from 'date-fns'
-import { capitalize } from 'lodash-es'
+import { format } from 'date-fns'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetUsersQuery } from '../-hooks/use-user-asm'
@@ -79,6 +77,14 @@ const UserTable: React.FC = () => {
 				enableGlobalFilter: true,
 				enableResizing: true
 			}),
+			columnHelper.accessor('employee_code', {
+				header: t('ns_auth:fields.employee_code'),
+				cell: TableCellText,
+				enableSorting: true,
+				enableColumnFilter: true,
+				enableGlobalFilter: true,
+				enableResizing: true
+			}),
 			columnHelper.accessor('roles', {
 				header: t('ns_auth:fields.role'),
 				cell: ({ getValue }) => {
@@ -90,8 +96,10 @@ const UserTable: React.FC = () => {
 				enableGlobalFilter: true,
 				enableResizing: true
 			}),
-			columnHelper.accessor('last_login_at', {
-				header: t('ns_auth:fields.last_login_at'),
+			columnHelper.accessor('created', {
+				enableSorting: true,
+				enableResizing: true,
+				header: t('ns_common:common_fields.created_at'),
 				cell: ({ getValue }) => {
 					const value = getValue()
 					if (!value)
@@ -100,12 +108,8 @@ const UserTable: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					return capitalize(formatRelative(new Date(value), new Date(), { locale: dateLocale }))
-				},
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableGlobalFilter: true,
-				enableResizing: true
+					return format(new Date(value), 'PPp', { locale: dateLocale })
+				}
 			}),
 			columnHelper.accessor('is_active', {
 				header: t('ns_common:common_fields.status'),
@@ -113,25 +117,15 @@ const UserTable: React.FC = () => {
 					const isActive = getValue()
 					return (
 						<Badge variant='outline' className='justify-center gap-x-2 whitespace-nowrap rounded'>
-							{isActive ? (
-								<StatusIndicator
-									state='active'
-									size='sm'
-									label={t('ns_common:status.active')}
-									labelClassName='text-xs'
-								/>
-							) : (
-								<StatusIndicator
-									state='idle'
-									size='sm'
-									label={t('ns_common:status.deactivated')}
-									labelClassName='text-xs'
-								/>
-							)}
+							<Icon
+								name={isActive ? 'CircleCheck' : 'CircleMinus'}
+								aria-current={isActive}
+								className='stroke-muted-foreground aria-[current=true]:stroke-success'
+							/>
+							{t(isActive ? 'ns_common:status.active' : 'ns_common:status.deactivated')}
 						</Badge>
 					)
 				},
-				// cell: (info) => info.getValue().join(', '),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: true,
@@ -150,7 +144,6 @@ const UserTable: React.FC = () => {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent side='left' align='start'>
 							<DropdownMenuItem>{t('ns_common:actions.update')}</DropdownMenuItem>
-
 							{!row.original.is_active ? (
 								<DropdownMenuItem>{t('ns_common:actions.activate')}</DropdownMenuItem>
 							) : (
@@ -163,7 +156,15 @@ const UserTable: React.FC = () => {
 		]
 	}, [i18n.language])
 
-	return <DataTable columns={columns} data={data} loading={isLoading} border='bottom-only' />
+	return (
+		<DataTable
+			columns={columns}
+			data={data}
+			loading={isLoading}
+			border='bottom-only'
+			containerProps={{ className: 'h-[65vh]' }}
+		/>
+	)
 }
 
 export default UserTable

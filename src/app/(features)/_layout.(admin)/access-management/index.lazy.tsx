@@ -1,12 +1,21 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../-components/shared/page-header'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../../-components/shared/page-header'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import { UserFormDialog, UserFormDialogTrigger } from './-components/user-form-dialog'
 import UserTable from './-components/user-table'
+import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(admin)/access-management/')({
 	component: Page
@@ -24,17 +33,25 @@ function Page() {
 		<Fragment>
 			<title>{t('ns_common:navigation.access_management')}</title>
 			<meta name='description' content='Manage users' />
+
 			<RoleGuard authorizedRoles={[UserRole.ADMIN]}>
-				<Div as='section' className='space-y-4'>
-					<Div className='flex items-start justify-between'>
+				<RoleBaseAccessControl
+					authorizedRoles={[UserRole.ADMIN]}
+					classNames={{ wrapper: 'pb' }}></RoleBaseAccessControl>
+				<PageContextProvider>
+					<PageWrapper>
 						<PageHeader>
-							<PageTitle>{t('ns_common:navigation.access_management')}</PageTitle>
-							<PageDescription>{t('ns_auth:descriptions.access_management')}</PageDescription>
+							<PageTitle>{t('ns_auth:titles.page_title')}</PageTitle>
+							<PageDescription>{t('ns_auth:descriptions.page_description')}</PageDescription>
+							<PageAction>
+								<UserFormDialogTrigger />
+							</PageAction>
 						</PageHeader>
-					</Div>
-					<Separator />
-				</Div>
-				<UserTable />
+						<PageSeparator />
+						<UserTable />
+					</PageWrapper>
+					<UserFormDialog />
+				</PageContextProvider>
 			</RoleGuard>
 		</Fragment>
 	)
