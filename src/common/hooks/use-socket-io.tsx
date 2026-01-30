@@ -22,7 +22,7 @@ const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
 	withCredentials: true,
 	extraHeaders: {
 		[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
-		[RequestHeaders.REQUEST_USER]: user?.username
+		[RequestHeaders.USER_REQUEST]: user?.username
 	},
 	closeOnBeforeunload: true,
 	timeout: 10000,

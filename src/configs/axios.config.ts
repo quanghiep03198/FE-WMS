@@ -52,7 +52,7 @@ export class AxiosClient {
 			(config) => {
 				const locale = StorageService.getLocale()
 				const user = AuthService.getCredentials()
-				config.headers[RequestHeaders.REQUEST_USER] = user?.username
+				config.headers[RequestHeaders.USER_REQUEST] = user?.username
 				config.headers[RequestHeaders.FACTORY_CODE] = user?.current_factory_code
 				config.headers[RequestHeaders.ACCEPT_LANGUAGE] = locale
 				return config
