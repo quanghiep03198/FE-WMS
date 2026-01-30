@@ -22,10 +22,11 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { CaretSortIcon, Cross2Icon, CrossCircledIcon } from '@radix-ui/react-icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useClickAway, useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
-import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
+import { CheckIcon, XCircle } from 'lucide-react'
 import React, { Fragment, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ScrollShadow from './scroll-shadow'
@@ -240,14 +241,14 @@ export function MultiSelect<D = Record<string, any>>({
 				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
-					'w-full justify-stretch rounded-md border bg-inherit py-0 pl-2 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+					'grid w-full grid-cols-[1fr_auto] items-center overflow-hidden bg-background px-3 py-0 !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
 					className
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
-					<Div className='flex flex-1 items-center justify-stretch gap-x-2 overflow-x-hidden'>
+					<>
 						<ScrollShadow
 							orientation='horizontal'
-							className='flex w-full max-w-full flex-1 items-center gap-x-1 overflow-x-auto overflow-y-hidden !scrollbar-none'>
+							className='flex items-center gap-x-1 overflow-x-auto overflow-y-hidden !scrollbar-none'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
@@ -259,7 +260,7 @@ export function MultiSelect<D = Record<string, any>>({
 												title={String(option?.[labelField])}>
 												{String(option?.[labelField])}
 											</Typography>
-											<XCircle
+											<CrossCircledIcon
 												className='ml-2 size-4 min-w-4 basis-4 cursor-pointer'
 												onClick={(event) => {
 													event.stopPropagation()
@@ -301,25 +302,25 @@ export function MultiSelect<D = Record<string, any>>({
 								</HoverCard>
 							)}
 						</ScrollShadow>
-						<Div className='ml-auto flex items-center justify-end gap-x-2 bg-background px-2'>
-							<XIcon
-								className='size-4 cursor-pointer text-muted-foreground'
+						<Div className='flex items-center justify-end gap-x-2 bg-background'>
+							<Cross2Icon
+								className='size-3.5 cursor-pointer text-muted-foreground'
 								onClick={(event) => {
 									event.stopPropagation()
 									handleClear()
 								}}
 							/>
-							<Separator orientation='vertical' className='flex h-full min-h-6' />
-							<ChevronDown className='size-4 cursor-pointer text-muted-foreground' />
+							<Separator orientation='vertical' className='flex h-full min-h-4' />
+							<CaretSortIcon className='size-4 cursor-pointer text-muted-foreground' />
 						</Div>
-					</Div>
+					</>
 				) : (
-					<Div className='mx-auto flex w-full items-center justify-between'>
-						<Typography variant='small' className='mx-3 text-sm font-normal text-muted-foreground'>
+					<>
+						<Typography variant='small' className='block text-left text-sm font-normal text-muted-foreground'>
 							{placeholder}
 						</Typography>
-						<ChevronDown className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground' />
-					</Div>
+						<CaretSortIcon className='ml-auto size-4 cursor-pointer text-muted-foreground' />
+					</>
 				)}
 			</PopoverTrigger>
 			<PopoverContent
@@ -341,7 +342,7 @@ export function MultiSelect<D = Record<string, any>>({
 					}}>
 					<CommandInput
 						value={search ?? searchTerm}
-						placeholder='Search...'
+						placeholder={`${t('ns_common:actions.search')}...`}
 						onKeyDown={handleInputKeyDown}
 						onInput={(e) => {
 							e.stopPropagation()
@@ -374,7 +375,7 @@ export function MultiSelect<D = Record<string, any>>({
 											)}>
 											<CheckIcon className='!size-3' />
 										</Div>
-										<Typography variant='small'>(Select All)</Typography>
+										<Typography variant='small'>({t('ns_common:actions.select_all')})</Typography>
 									</CommandItem>
 									{before > 0 && <CommandItem disabled style={{ width: '100%', height: before }} />}
 									{virtualItems.map((item) => {
@@ -414,7 +415,7 @@ export function MultiSelect<D = Record<string, any>>({
 							<CommandItem
 								onSelect={() => setIsPopoverOpen(false)}
 								className='max-w-full flex-1 cursor-pointer justify-center'>
-								Close
+								{t('ns_common:actions.close')}
 							</CommandItem>
 						</Div>
 					</CommandGroup>
