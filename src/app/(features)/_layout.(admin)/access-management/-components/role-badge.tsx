@@ -23,8 +23,8 @@ const RoleBadge: React.FC<{ value: UserRole }> = ({ value }) => {
 	}
 
 	return (
-		<Badge variant='outline'>
-			<Icon name={config.icon} stroke={config.color} /> {t(`ns_auth:roles.${value}`)}
+		<Badge variant='outline' className='text-nowrap'>
+			<Icon name={config.icon} stroke={config.color} className='' /> {t(`ns_auth:roles.${value}`)}
 		</Badge>
 	)
 }

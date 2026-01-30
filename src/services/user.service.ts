@@ -8,7 +8,7 @@ export class UserService {
 	}
 
 	static async createUser(payload: unknown) {
-		return await axiosInstance.post<void, unknown, unknown>('/user', payload)
+		return await axiosInstance.post<void, unknown, unknown>('/user/create', payload)
 	}
 
 	static async updateUserStatus(username: string) {

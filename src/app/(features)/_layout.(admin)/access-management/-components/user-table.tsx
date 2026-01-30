@@ -51,7 +51,7 @@ const UserTable: React.FC = () => {
 							<AvatarImage src={row.original?.picture} alt={getValue()} />
 							<AvatarFallback>G</AvatarFallback>
 						</Avatar>
-						<Typography variant='small' className='capitalize'>
+						<Typography variant='small' className='line-clamp-1'>
 							{getValue()}
 						</Typography>
 					</Div>
@@ -108,7 +108,7 @@ const UserTable: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					return format(new Date(value), 'PPp', { locale: dateLocale })
+					return format(new Date(value), 'yyyy-MM-dd', { locale: dateLocale })
 				}
 			}),
 			columnHelper.accessor('is_active', {
