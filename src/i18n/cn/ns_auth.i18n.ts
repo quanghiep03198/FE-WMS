@@ -4,8 +4,16 @@ export default {
 	actions: {
 		go_to_dashboard: '转回主页'
 	},
+	titles: {
+		page_title: '用户与权限管理',
+		create_user: '创建用户',
+		update_user: '更新用户'
+	},
 	descriptions: {
-		access_management: '管理用户和系统访问权限'
+		page_description: '管理用户基本信息并分配角色以控制系统访问权限.',
+		access_management: '管理用户和系统访问权限',
+		create_user: '创建一个新用户以允许他们访问系统',
+		update_user: '更新现有用户的信息和权限'
 	},
 	fields: {
 		email: 'Email',
@@ -14,6 +22,7 @@ export default {
 		username: '用户名',
 		employee_code: '员工编号',
 		last_login_at: '最后登录时间',
+		joined_at: '加入时间',
 		role: '角色'
 	},
 	labels: {

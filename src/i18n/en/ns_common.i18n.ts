@@ -51,6 +51,7 @@ export default {
 		save: 'Save',
 		save_changes: 'Save changes',
 		search: 'Search',
+		select_all: 'Select all',
 		select_database: 'Select database',
 		select_server: 'Select server',
 		set_approval_status: 'Set approval status',

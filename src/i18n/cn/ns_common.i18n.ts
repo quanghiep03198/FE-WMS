@@ -50,6 +50,7 @@ export default {
 		revert_changes: '恢复更改',
 		save: '保存',
 		save_changes: '保存更改',
+		select_all: '全选',
 		search: '查詢',
 		select_database: '选择数据库',
 		select_server: '选择服务器',

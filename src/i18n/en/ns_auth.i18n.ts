@@ -3,13 +3,21 @@ import { UserRole } from '@/common/constants/enums'
 export default {
 	actions: { go_to_dashboard: 'Go to dashboard' },
 	descriptions: {
-		access_management: 'Manage users and access to the system'
+		page_description: 'Manage user profiles and assign roles to control system access permissions.',
+		create_user: 'Fill in the details below to create a new account.',
+		update_user: 'Update existing user information and permissions'
+	},
+	titles: {
+		page_title: 'User & Access Management',
+		create_user: 'Create New User',
+		update_user: 'Update Information'
 	},
 	fields: {
 		email: 'Email',
 		display_name: 'Display name',
 		password: 'Password',
 		username: 'User name',
+		joined_at: 'Joined at',
 		employee_code: 'Employee code',
 		last_login_at: 'Last login',
 		role: 'Role'

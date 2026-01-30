@@ -49,6 +49,7 @@ export default {
 		save_changes: 'Lưu thay đổi',
 		search: 'Tìm kiếm',
 		select: 'Chọn',
+		select_all: 'Chọn tất cả',
 		select_database: 'Chọn cơ sở dữ liệu',
 		select_server: 'Chọn máy chủ',
 		set_approval_status: 'Đặt trạng thái phê duyệt',

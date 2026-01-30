@@ -4,8 +4,16 @@ export default {
 	actions: {
 		go_to_dashboard: 'Đi đến màn hình chính'
 	},
+	titles: {
+		page_title: 'Quản lý Người dùng & Phân quyền',
+		create_user: 'Thêm người dùng mới',
+		update_user: 'Cập nhật thông tin'
+	},
 	descriptions: {
-		access_management: 'Quản lý người dùng và quyền truy cập hệ thống'
+		page_description: 'Quản lý thông tin tài khoản và thiết lập vai trò để kiểm soát quyền truy cập hệ thống.',
+		create_user: 'Điền thông tin bên dưới để tạo tài khoản mới.',
+		update_user: 'Cập nhật thông tin và quyền hạn của người dùng hiện tại',
+		role_helper_text: 'Vai trò sẽ quyết định các tính năng người dùng có thể sử dụng.'
 	},
 	fields: {
 		email: 'Email',
@@ -13,6 +21,7 @@ export default {
 		display_name: 'Tên hiển thị',
 		password: 'Mật khẩu',
 		role: 'Vai trò',
+		joined_at: 'Tham gia lúc',
 		last_login_at: 'Lần đăng nhập cuối',
 		is_online: 'Trạng thái hoạt động',
 		username: 'Tài khoản'
