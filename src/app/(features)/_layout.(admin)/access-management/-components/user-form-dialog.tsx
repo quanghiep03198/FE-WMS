@@ -9,6 +9,7 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
+	Div,
 	Form as FormProvider,
 	Icon,
 	InputFieldControl,
@@ -45,7 +46,8 @@ const UserFormDialog: React.FC = () => {
 		title: '',
 		description: ''
 	})
-	const formSchemaRef = useRef<any>(createUserSchema)
+	const formSchemaRef = useRef<typeof createUserSchema | typeof updateUserSchema>(createUserSchema)
+
 	const form = useForm({
 		resolver: zodResolver(formSchemaRef.current)
 	})
@@ -117,7 +119,7 @@ const UserFormDialog: React.FC = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent>
+			<DialogContent className='max-w-xl'>
 				<DialogHeader>
 					<DialogTitle>{dialogHelperTexts.title}</DialogTitle>
 					<DialogDescription>{dialogHelperTexts.description}</DialogDescription>
@@ -156,29 +158,43 @@ const UserFormDialog: React.FC = () => {
 							placeholder='e.g., S000001'
 							onChange={(e) => form.setValue('employee_code', e.target.value.toUpperCase())}
 						/>
-						<MultiSelectFieldControl
-							name='roles'
-							label={t('ns_auth:fields.role')}
-							placeholder={capitalize(
-								t('ns_common:form_placeholder.select', { object: t('ns_auth:fields.role'), defaultValue: null })
-							)}
-							canSelectAll={false}
-							datalist={rolesDatalist}
-							labelField='label'
-							valueField='value'
-						/>
-						<MultiSelectFieldControl
-							name='authorized_factory_codes'
-							label={t('ns_company:factory')}
-							placeholder={capitalize(
-								t('ns_common:form_placeholder.select', { object: t('ns_company:factory'), defaultValue: null })
-							)}
-							datalist={factoryCodesDatalist}
-							labelField='label'
-							maxCount={3}
-							valueField='value'
-						/>
-						<DialogFooter>
+						<Div className='col-span-full *:aria-[roledescription=selected-item]:!max-w-32'>
+							<MultiSelectFieldControl
+								name='roles'
+								label={t('ns_auth:fields.role')}
+								placeholder={capitalize(
+									t('ns_common:form_placeholder.select', {
+										object: t('ns_auth:fields.role'),
+										defaultValue: null
+									})
+								)}
+								classNames={{
+									selectedItem: 'max-w-32'
+								}}
+								// className='*:aria-[roledescription=selected-item]:!max-w-32'
+								canSelectAll={false}
+								datalist={rolesDatalist}
+								labelField='label'
+								valueField='value'
+							/>
+						</Div>
+						<Div className='col-span-full'>
+							<MultiSelectFieldControl
+								name='authorized_factory_codes'
+								label={t('ns_company:factory')}
+								placeholder={capitalize(
+									t('ns_common:form_placeholder.select', {
+										object: t('ns_company:factory'),
+										defaultValue: null
+									})
+								)}
+								datalist={factoryCodesDatalist}
+								labelField='label'
+								maxCount={3}
+								valueField='value'
+							/>
+						</Div>
+						<DialogFooter className='col-span-full'>
 							<Button type='submit' disabled={isPending}>
 								<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
 								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
@@ -195,6 +211,6 @@ const UserFormDialog: React.FC = () => {
 	)
 }
 
-const DialogForm: React.FC<React.FormHTMLAttributes<HTMLFormElement>> = tw.form`grid gap-6`
+const DialogForm: React.FC<React.FormHTMLAttributes<HTMLFormElement>> = tw.form`grid gap-y-6 gap-x-2 grid-cols-2`
 
 export { UserFormDialog, UserFormDialogTrigger }

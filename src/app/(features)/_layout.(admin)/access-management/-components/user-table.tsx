@@ -1,19 +1,7 @@
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { IUser } from '@/common/types/entities'
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Badge,
-	DataTable,
-	Div,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-	Icon,
-	Typography
-} from '@/components/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, DataTable, Div, Icon, Typography } from '@/components/ui'
+import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import {
 	IndeterminateCheckbox,
 	RowSelectionCheckbox
@@ -22,10 +10,13 @@ import TableCellText from '@/components/ui/@react-table/components/table-cell-te
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
+import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetUsersQuery } from '../-hooks/use-user-asm'
 import RoleBadge from './role-badge'
+import UserActionDropdown from './user-action-dropdown'
+import UserTableToolbar from './user-table-toolbar'
 
 const UserTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -41,32 +32,37 @@ const UserTable: React.FC = () => {
 				cell: (props) => <RowSelectionCheckbox {...props} />,
 				size: 60,
 				maxSize: 60,
+				enableGlobalFilter: false,
+				enableColumnFilter: false,
+				enableHiding: false,
 				enableResizing: false
-			}),
-			columnHelper.accessor('display_name', {
-				header: t('ns_auth:fields.display_name'),
-				cell: ({ row, getValue }) => (
-					<Div className='inline-flex items-center gap-x-2'>
-						<Avatar className='size-8'>
-							<AvatarImage src={row.original?.picture} alt={getValue()} />
-							<AvatarFallback>G</AvatarFallback>
-						</Avatar>
-						<Typography variant='small' className='line-clamp-1'>
-							{getValue()}
-						</Typography>
-					</Div>
-				),
-				enableSorting: true,
-				enableColumnFilter: true,
-				enableGlobalFilter: true,
-				enableResizing: true
 			}),
 			columnHelper.accessor('username', {
 				header: t('ns_auth:fields.username'),
+				enableGlobalFilter: true,
+				enableColumnFilter: true,
+				enableHiding: false,
+				enableSorting: true,
+				enableResizing: true,
+				cell: ({ row, getValue }) => (
+					<Div className='inline-flex items-center gap-x-2'>
+						<Avatar className='size-7'>
+							<AvatarImage src={row.original?.picture} alt={getValue()} />
+							<AvatarFallback>G</AvatarFallback>
+						</Avatar>
+						<Typography variant='small' className='line-clamp-1 font-medium'>
+							{getValue()}
+						</Typography>
+					</Div>
+				)
+			}),
+			columnHelper.accessor('display_name', {
+				header: t('ns_auth:fields.display_name'),
 				enableSorting: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: true,
 				enableResizing: true,
+				enableHiding: true,
 				cell: TableCellText
 			}),
 			columnHelper.accessor('email', {
@@ -75,7 +71,8 @@ const UserTable: React.FC = () => {
 				enableSorting: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: true,
-				enableResizing: true
+				enableResizing: true,
+				enableHiding: false
 			}),
 			columnHelper.accessor('employee_code', {
 				header: t('ns_auth:fields.employee_code'),
@@ -89,17 +86,20 @@ const UserTable: React.FC = () => {
 				header: t('ns_auth:fields.role'),
 				cell: ({ getValue }) => {
 					const roles = getValue()
-					return roles.map((role) => <RoleBadge key={role} value={role} />)
+					return <EllipsisList data={roles} template={RoleBadge} threshhold={1} />
 				},
+				filterFn: 'arrIncludesSome',
 				enableSorting: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: true,
-				enableResizing: true
+				enableResizing: true,
+				enableHiding: true
 			}),
 			columnHelper.accessor('created', {
+				header: t('ns_auth:fields.joined_system_date'),
 				enableSorting: true,
 				enableResizing: true,
-				header: t('ns_common:common_fields.created_at'),
+				enableHiding: true,
 				cell: ({ getValue }) => {
 					const value = getValue()
 					if (!value)
@@ -108,11 +108,13 @@ const UserTable: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					return format(new Date(value), 'yyyy-MM-dd', { locale: dateLocale })
+					return capitalize(format(new Date(value), 'PPP', { locale: dateLocale }))
 				}
 			}),
 			columnHelper.accessor('is_active', {
+				id: 'is_active',
 				header: t('ns_common:common_fields.status'),
+				enableHiding: true,
 				cell: ({ getValue }) => {
 					const isActive = getValue()
 					return (
@@ -137,21 +139,7 @@ const UserTable: React.FC = () => {
 				size: 60,
 				maxSize: 60,
 				enableHiding: false,
-				cell: ({ row }) => (
-					<DropdownMenu>
-						<DropdownMenuTrigger className='text-muted-foreground transition-colors duration-200 ease-in-out hover:text-foreground'>
-							<Icon name='Ellipsis' />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent side='left' align='start'>
-							<DropdownMenuItem>{t('ns_common:actions.update')}</DropdownMenuItem>
-							{!row.original.is_active ? (
-								<DropdownMenuItem>{t('ns_common:actions.activate')}</DropdownMenuItem>
-							) : (
-								<DropdownMenuItem>{t('ns_common:actions.deactivate')}</DropdownMenuItem>
-							)}
-						</DropdownMenuContent>
-					</DropdownMenu>
-				)
+				cell: UserActionDropdown
 			})
 		]
 	}, [i18n.language])
@@ -163,6 +151,11 @@ const UserTable: React.FC = () => {
 			loading={isLoading}
 			border='bottom-only'
 			containerProps={{ className: 'h-[65vh]' }}
+			virtualizationProps={{ estimateSize: 64 }}
+			toolbarProps={{
+				override: true,
+				render: UserTableToolbar
+			}}
 		/>
 	)
 }
