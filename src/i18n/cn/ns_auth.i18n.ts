@@ -22,7 +22,7 @@ export default {
 		username: '用户名',
 		employee_code: '员工编号',
 		last_login_at: '最后登录时间',
-		joined_at: '加入时间',
+		joined_system_date: '加入系统时间',
 		role: '角色'
 	},
 	labels: {

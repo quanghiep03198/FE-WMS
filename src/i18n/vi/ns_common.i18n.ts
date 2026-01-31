@@ -314,7 +314,9 @@ export default {
 		sort_asc: 'Sắp xếp tăng dần',
 		sort_desc: 'Sắp xếp giảm dần',
 		total_rows: '{{count}} bản ghi',
-		unpin: 'Bỏ ghim'
+		toggle_columns: 'Tùy chọn hiển thị cột',
+		unpin: 'Bỏ ghim',
+		column_settings: 'Thiết lập cột'
 	},
 	titles: {
 		advanced_search: 'Tìm kiếm nâng cao',

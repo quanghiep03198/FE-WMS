@@ -304,7 +304,9 @@ export default {
 		sort_asc: 'Sort ascending',
 		sort_desc: 'Sort descending',
 		total_rows: '{{count}} records',
-		unpin: 'Unpin'
+		toggle_columns: 'Toggle columns',
+		unpin: 'Unpin',
+		column_settings: 'Column settings'
 	},
 	titles: {
 		advanced_search: 'Advanced Search',

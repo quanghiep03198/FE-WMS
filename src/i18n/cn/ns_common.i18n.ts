@@ -312,7 +312,9 @@ export default {
 		pin_right: '固定右侧',
 		reset_size: '重置大小',
 		sort_asc: '升序排序',
-		sort_desc: '降序排序'
+		sort_desc: '降序排序',
+		toggle_columns: '显示列',
+		column_settings: '列配置'
 	},
 	titles: {
 		advanced_search: '高级搜索',

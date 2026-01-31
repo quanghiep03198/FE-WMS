@@ -21,7 +21,7 @@ export default {
 		display_name: 'Tên hiển thị',
 		password: 'Mật khẩu',
 		role: 'Vai trò',
-		joined_at: 'Tham gia lúc',
+		joined_system_date: 'Ngày tham gia hệ thống',
 		last_login_at: 'Lần đăng nhập cuối',
 		is_online: 'Trạng thái hoạt động',
 		username: 'Tài khoản'

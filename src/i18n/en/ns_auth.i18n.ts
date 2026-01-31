@@ -17,7 +17,7 @@ export default {
 		display_name: 'Display name',
 		password: 'Password',
 		username: 'User name',
-		joined_at: 'Joined at',
+		joined_system_date: 'Joined system date',
 		employee_code: 'Employee code',
 		last_login_at: 'Last login',
 		role: 'Role'
