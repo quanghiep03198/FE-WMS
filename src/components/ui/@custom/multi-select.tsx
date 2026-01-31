@@ -118,7 +118,11 @@ export type MultiSelectProps<T extends SelectItem> = React.ButtonHTMLAttributes<
 		 * Additional class names to apply custom styles to the multi-select component.
 		 * Optional, can be used to add custom styles.
 		 */
-		className?: string
+		classNames?: {
+			popoverTrigger?: string
+			popoverContent?: string
+			selectedItem: string
+		}
 
 		/**
 		 * Additional class names to apply custom styles to the multi-select component.
@@ -147,7 +151,7 @@ export function MultiSelect<D extends SelectItem>({
 	placeholder = 'Select options',
 	maxCount = 3,
 	modalPopover = true,
-	className,
+	classNames,
 	ref,
 	...props
 }: MultiSelectProps<D>) {
@@ -250,7 +254,7 @@ export function MultiSelect<D extends SelectItem>({
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
 					'grid w-full grid-cols-[1fr_auto] items-center overflow-hidden bg-background px-3 py-0 !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
-					className
+					classNames?.popoverTrigger
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
 					<>
@@ -261,7 +265,7 @@ export function MultiSelect<D extends SelectItem>({
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
 									return (
-										<Badge key={String(value)} variant='secondary'>
+										<Badge key={String(value)} variant='secondary' className={classNames?.selectedItem}>
 											<Typography
 												variant='small'
 												className='max-w-16 truncate text-xs'
@@ -281,7 +285,7 @@ export function MultiSelect<D extends SelectItem>({
 							{Array.isArray(selectedValues) && selectedValues?.length > maxCount && (
 								<HoverCard>
 									<HoverCardTrigger>
-										<Badge variant='secondary' className='whitespace-nowrap'>
+										<Badge variant='secondary' className={'whitespace-nowrap'}>
 											{`+ ${selectedValues?.length - maxCount} more`}
 											<XCircle
 												className='ml-2 h-4 w-4 cursor-pointer'
@@ -333,7 +337,7 @@ export function MultiSelect<D extends SelectItem>({
 			</PopoverTrigger>
 			<PopoverContent
 				ref={popoverContentRef}
-				className='w-[var(--radix-popover-trigger-width)] p-0'
+				className={cn('w-[var(--radix-popover-trigger-width)] p-0', classNames?.popoverContent)}
 				align='start'
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				onOpenAutoFocus={(e) => e.preventDefault()}>
