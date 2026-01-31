@@ -5,8 +5,14 @@ import { useTranslation } from 'react-i18next'
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div } from '@/components/ui'
-import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../-components/shared/page-header'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../-components/shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import RFIDDeviceFormDialog from './-components/rfid-device-form-dialog'
 import RFIDDeviceList from './-components/rfid-device-list'
@@ -33,15 +39,15 @@ function Page() {
 				<HostCompatibleGuard>
 					<PageContextProvider>
 						<PageWrapper>
-							<Div className='flex items-start justify-between'>
-								<PageHeader>
-									<PageTitle>{t('ns_rfid:titles.rfid_device_management')}</PageTitle>
-									<PageDescription>{t('ns_rfid:descriptions.rfid_device_management')}</PageDescription>
-								</PageHeader>
-							</Div>
+							<PageHeader>
+								<PageTitle>{t('ns_rfid:titles.rfid_device_management')}</PageTitle>
+								<PageDescription>{t('ns_rfid:descriptions.rfid_device_management')}</PageDescription>
+								<PageAction>
+									<RFIDDeviceFormDialog />
+								</PageAction>
+							</PageHeader>
 							<PageSeparator />
 							<RFIDDeviceList />
-							<RFIDDeviceFormDialog />
 						</PageWrapper>
 					</PageContextProvider>
 				</HostCompatibleGuard>
