@@ -161,7 +161,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 		},
 		{
 			icon: 'ChartNetwork',
-			title: 'Metrics' as any,
+			title: 'navigation.metrics',
 			url: `https://${env('VITE_APP_IP')}/dashboard`,
 			authorizedRoles: [UserRole.ADMIN]
 		}

@@ -80,11 +80,11 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 					)}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className='w-64 p-0' align='start'>
+			<PopoverContent className='w-72 p-0' align='start'>
 				<Command>
 					<CommandInput placeholder={title} />
 					<CommandList>
-						<CommandEmpty>No results found.</CommandEmpty>
+						<CommandEmpty>{t('ns_common:table.no_data')}</CommandEmpty>
 						<CommandGroup>
 							{options.map((option) => {
 								const isSelected = selectedValues.has(option.value)
