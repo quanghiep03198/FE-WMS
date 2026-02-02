@@ -2,6 +2,7 @@ import {
 	CreateUserFormValues,
 	UpdateUserFormValues
 } from '@/app/(features)/_layout.(admin)/access-management/-schemas/user.schema'
+import { UpdatePasswordFormValues } from '@/app/(features)/preferences/_layout.account/-schemas/update-password.schema'
 import { IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { AxiosRequestConfig } from 'axios'
@@ -30,7 +31,7 @@ export class UserService {
 		return await axiosInstance.get('/user/profile', config)
 	}
 
-	static async updatePassword(newPassword: string) {
-		return await axiosInstance.patch(`/user/change-password`, newPassword)
+	static async updatePassword(payload: UpdatePasswordFormValues) {
+		return await axiosInstance.patch(`/user/change-password`, payload)
 	}
 }
