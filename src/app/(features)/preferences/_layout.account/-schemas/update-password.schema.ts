@@ -1,9 +1,4 @@
-import { useAuthStore } from '@/stores/auth.store'
 import { object, string, type infer as Infer } from 'zod'
-
-const user = useAuthStore.getState()?.user
-
-console.log(user)
 
 export const updatePasswordFormValues = object({
 	currentPassword: string({ error: 'ns_validation:required' }),
