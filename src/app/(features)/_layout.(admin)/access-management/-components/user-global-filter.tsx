@@ -21,7 +21,7 @@ const UserGlobalFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 				onChange={(value) => {
 					table.setGlobalFilter(String(value))
 				}}
-				className='h-full min-w-44 p-0 shadow-none placeholder:text-sm xl:min-w-56'
+				className='h-full min-w-44 p-0 shadow-none placeholder:text-sm md:min-w-32 md:max-w-32 xl:min-w-56'
 				placeholder={t('ns_common:actions.search') + ' ...'}
 				type='search'
 			/>

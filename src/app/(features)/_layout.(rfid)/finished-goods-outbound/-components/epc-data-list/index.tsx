@@ -15,7 +15,15 @@ import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdate, useUpdateEffect } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	useMemoizedFn,
+	usePrevious,
+	useUnmount,
+	useUpdate,
+	useUpdateEffect
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash-es'
 import { Fragment, useLayoutEffect, useRef, useState, useTransition } from 'react'
@@ -38,8 +46,8 @@ const ScannedEpcList: React.FC = () => {
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
-	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 	const [open, setOpen] = useState(isExtraLargeScreen)
+
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
 		usePageContext(
@@ -165,6 +173,12 @@ const ScannedEpcList: React.FC = () => {
 		}
 	}
 
+	useUnmount(() => {
+		if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+			abortControllerRef.current?.abort()
+		}
+	})
+
 	useEffectOnce(() => {
 		fetchServerEvent()
 	})
@@ -196,7 +210,7 @@ const ScannedEpcList: React.FC = () => {
 				<ConnectionInsight />
 				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
 				<Button variant='ghost' size='sm' className='ml-auto xxl:ml-0' onClick={() => fetchServerEvent()}>
-					<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
+					<Icon name='RefreshCcw' /> {t('ns_common:actions.reload')}
 				</Button>
 				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
 				<Label
@@ -219,11 +233,11 @@ const ScannedEpcList: React.FC = () => {
 				<ScrollShadow
 					ref={containerRef}
 					className={cn(
-						'linear z-10 divide-y bg-background transition-height duration-200 will-change-transform contain-paint',
-						open ? 'h-[33.33vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0 animate-out'
+						'linear z-10 divide-y bg-background duration-100 will-change-transform contain-paint',
+						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0 animate-out'
 					)}>
 					<Div
-						className={cn('relative w-full duration-500 ease-in', {
+						className={cn('relative w-full duration-300 ease-in', {
 							'animate-in fade-in-0': open,
 							'animate-out fade-out-0': !open
 						})}

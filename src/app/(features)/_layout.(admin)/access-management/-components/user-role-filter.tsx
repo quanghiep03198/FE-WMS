@@ -69,7 +69,6 @@ const UserRoleFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 
 	const handleValueChange = (value: RecordStatus) => {
 		table.getColumn('roles').setFilterValue(value === RecordStatus.ACTIVE)
-		// setParams({ ...searchParams, status: value as TruckloadDeliveryStatus })
 	}
 
 	return (

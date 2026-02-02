@@ -12,6 +12,7 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
+	Div,
 	Icon,
 	IconProps,
 	Popover,
@@ -42,8 +43,6 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 	const facets = column?.getFacetedUniqueValues()
 	const selectedValues = new Set(column?.getFilterValue() as string[])
 
-	console.log(selectedValues.size)
-
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -51,12 +50,12 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 					<Icon name='CirclePlus' />
 					{title}
 					{selectedValues?.size > 0 && (
-						<Fragment>
+						<Div className='inline-flex items-center gap-x-2 md:hidden'>
 							<Separator orientation='vertical' className='mx-2 h-4' />
 							<Badge variant='secondary' className='hidden rounded-sm px-1.5 font-normal'>
 								{selectedValues.size}
 							</Badge>
-							<div className='flex gap-1'>
+							<Div className='flex gap-1'>
 								{selectedValues.size > 2 ? (
 									<Badge variant='secondary' className='rounded-sm px-1.5 font-normal'>
 										{t('ns_common:pagination.selected_records', {
@@ -76,8 +75,8 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 											</Badge>
 										))
 								)}
-							</div>
-						</Fragment>
+							</Div>
+						</Div>
 					)}
 				</Button>
 			</PopoverTrigger>
@@ -101,7 +100,7 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 											const filterValues = Array.from(selectedValues)
 											column?.setFilterValue(filterValues.length ? filterValues : undefined)
 										}}>
-										<div
+										<Div
 											className={cn(
 												'flex size-4 items-center justify-center rounded-[4px] border',
 												isSelected
@@ -109,7 +108,7 @@ export function DataTableFacetedFilter({ column, title, options }: DataTableFace
 													: 'border-input [&_svg]:invisible'
 											)}>
 											<CheckIcon className='size-3.5 text-primary-foreground' />
-										</div>
+										</Div>
 										{option.icon && (
 											<Icon name={option.icon} size={18} className='size-[18px] text-muted-foreground' />
 										)}

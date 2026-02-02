@@ -6,6 +6,7 @@ import { cn } from '@/common/utils/cn'
 import {
 	Badge,
 	buttonVariants,
+	Div,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
@@ -19,7 +20,7 @@ import {
 } from '@/components/ui'
 import { Table } from '@tanstack/react-table'
 import { isNil } from 'lodash-es'
-import React, { Fragment, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type DropdownOption = { label: string; value: RecordStatus; icon: IconProps['name']; count: number }
@@ -63,12 +64,12 @@ const UserStatusFilter: React.FC<{ table: Table<IUser> }> = ({ table }) => {
 			<DropdownMenuTrigger className={cn(buttonVariants({ variant: 'outline', className: 'border-dashed' }))}>
 				<Icon name='CirclePlus' /> {t('ns_common:common_fields.status')}
 				{typeof currentFilterValue === 'boolean' && (
-					<Fragment>
+					<Div className='inline-flex items-center md:hidden'>
 						<Separator orientation='vertical' className='mx-2 h-4' />{' '}
-						<Badge variant='secondary' className='rounded-sm px-1.5 font-normal'>
+						<Badge variant='secondary' className='mx-1 rounded-sm px-1.5 font-normal'>
 							{currentFilterValue ? t('ns_common:status.active') : t('ns_common:status.deactivated')}
 						</Badge>
-					</Fragment>
+					</Div>
 				)}
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className='w-64' align='end'>

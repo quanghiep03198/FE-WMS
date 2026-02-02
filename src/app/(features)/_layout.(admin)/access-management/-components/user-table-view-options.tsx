@@ -1,5 +1,6 @@
 'use no memo'
 
+import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	DropdownMenu,
@@ -7,7 +8,8 @@ import {
 	DropdownMenuContent,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
-	Icon
+	Icon,
+	Tooltip
 } from '@/components/ui'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table } from '@tanstack/react-table'
@@ -15,15 +17,18 @@ import { useTranslation } from 'react-i18next'
 
 export function UserTableViewOptions<TData>({ table }: { table: Table<TData> }) {
 	const { t } = useTranslation()
+	const isMobile = useMediaQuery('(max-width: 768px)')
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant='outline' className='ml-auto flex sm:hidden md:hidden'>
-					<Icon name='Settings2' />
-					{t('ns_common:table.column_settings')}
-				</Button>
-			</DropdownMenuTrigger>
+			<Tooltip message={t('ns_common:table.column_settings')} contentProps={{ hidden: !isMobile }}>
+				<DropdownMenuTrigger asChild>
+					<Button variant={isMobile ? 'ghost' : 'outline'} size={isMobile ? 'icon' : 'default'}>
+						<Icon name='Settings2' />
+						{!isMobile && t('ns_common:table.column_settings')}
+					</Button>
+				</DropdownMenuTrigger>
+			</Tooltip>
 			<DropdownMenuContent align='end' className='w-60'>
 				<DropdownMenuLabel>{t('ns_common:table.toggle_columns')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />

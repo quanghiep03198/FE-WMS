@@ -1,8 +1,9 @@
 'use no memo'
 
 import { UserRole } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { IUser } from '@/common/types/entities'
-import { Button, Icon } from '@/components/ui'
+import { Button, Icon, Tooltip } from '@/components/ui'
 import { Table } from '@tanstack/react-table'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { useMemo } from 'react'
@@ -11,6 +12,7 @@ import tw from 'tailwind-styled-components'
 import { DataTableFacetedFilter, DataTableFacetedFilterProps } from './user-facted-filter'
 import UserGlobalFilter from './user-global-filter'
 import UserStatusFilter from './user-status-filter'
+import UserTableRefreshButton from './user-table-refetch-button'
 import { UserTableViewOptions } from './user-table-view-options'
 
 const UserTableToolbar: React.FC<{
@@ -18,6 +20,7 @@ const UserTableToolbar: React.FC<{
 	event$: EventEmitter<Record<string, unknown>>
 }> = ({ table }) => {
 	const { t, i18n } = useTranslation()
+	const isMobile = useMediaQuery('(max-width: 767px)')
 	const isFiltered = table.getState().columnFilters.length > 0 || table.getState().globalFilter
 
 	const roles: DataTableFacetedFilterProps['options'] = useMemo(
@@ -58,7 +61,7 @@ const UserTableToolbar: React.FC<{
 
 	return (
 		<Toolbar>
-			<ToolbarGroup>
+			<ToolbarGroup className='md:flex-1 md:basis-full'>
 				<UserGlobalFilter table={table} />
 				<UserStatusFilter table={table} />
 				{table.getColumn('roles') && (
@@ -69,19 +72,22 @@ const UserTableToolbar: React.FC<{
 					/>
 				)}
 				{isFiltered && (
-					<Button
-						variant='destructive'
-						size='sm'
-						onClick={() => {
-							table.resetGlobalFilter()
-							table.resetColumnFilters()
-						}}>
-						{t('ns_common:actions.clear_filter')}
-						<Icon name='X' />
-					</Button>
+					<Tooltip message={t('ns_common:actions.clear_filter')} contentProps={{ hidden: !isMobile }}>
+						<Button
+							variant='secondary'
+							size={isMobile ? 'icon' : 'default'}
+							onClick={() => {
+								table.resetGlobalFilter()
+								table.resetColumnFilters()
+							}}>
+							{!isMobile && t('ns_common:actions.clear_filter')}
+							<Icon name='FunnelX' />
+						</Button>
+					</Tooltip>
 				)}
 			</ToolbarGroup>
 			<ToolbarGroup>
+				<UserTableRefreshButton />
 				<UserTableViewOptions table={table} />
 			</ToolbarGroup>
 		</Toolbar>
@@ -89,6 +95,6 @@ const UserTableToolbar: React.FC<{
 }
 
 const Toolbar: React.FC<React.ComponentProps<'div'>> = tw.div`flex items-stretch justify-between`
-const ToolbarGroup: React.FC<React.ComponentProps<'div'>> = tw.div`flex items-center gap-x-1`
+const ToolbarGroup: React.FC<React.ComponentProps<'div'>> = tw.div`flex items-center gap-x-1.5`
 
 export default UserTableToolbar

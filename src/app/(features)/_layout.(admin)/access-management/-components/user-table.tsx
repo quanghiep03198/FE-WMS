@@ -2,12 +2,8 @@ import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { IUser } from '@/common/types/entities'
 import { Avatar, AvatarFallback, AvatarImage, Badge, DataTable, Div, Icon, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
-import {
-	IndeterminateCheckbox,
-	RowSelectionCheckbox
-} from '@/components/ui/@react-table/components/row-selection-checkbox'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
-import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { ROW_ACTIONS_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'
@@ -26,17 +22,6 @@ const UserTable: React.FC = () => {
 
 	const columns = useMemo(() => {
 		return [
-			columnHelper.display({
-				id: ROW_SELECTION_COLUMN_ID,
-				header: (props) => <IndeterminateCheckbox {...props} />,
-				cell: (props) => <RowSelectionCheckbox {...props} />,
-				size: 60,
-				maxSize: 60,
-				enableGlobalFilter: false,
-				enableColumnFilter: false,
-				enableHiding: false,
-				enableResizing: false
-			}),
 			columnHelper.accessor('username', {
 				header: t('ns_auth:fields.username'),
 				enableGlobalFilter: true,
@@ -151,7 +136,7 @@ const UserTable: React.FC = () => {
 			loading={isLoading}
 			border='bottom-only'
 			containerProps={{ className: 'h-[65vh]' }}
-			virtualizationProps={{ estimateSize: 64 }}
+			virtualizationProps={{ estimateSize: 50 }}
 			toolbarProps={{
 				override: true,
 				render: UserTableToolbar

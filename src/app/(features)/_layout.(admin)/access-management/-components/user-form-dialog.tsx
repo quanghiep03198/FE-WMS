@@ -23,12 +23,12 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
-import { useCreateUserMutation } from '../-hooks/use-user-asm'
+import { useCreateUserMutation, useUpdateUserMutation } from '../-hooks/use-user-asm'
 import { CreateUserFormValues, createUserSchema, updateUserSchema } from '../-schemas/user.schema'
 
 const UserFormDialogTrigger: React.FC = () => {
 	const { event$ } = usePageContext()
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 
 	return (
 		<Button onClick={() => event$.emit({ action: CommonActions.CREATE })}>
@@ -49,15 +49,31 @@ const UserFormDialog: React.FC = () => {
 	const formSchemaRef = useRef<typeof createUserSchema | typeof updateUserSchema>(createUserSchema)
 
 	const form = useForm({
-		resolver: zodResolver(formSchemaRef.current)
+		resolver: zodResolver(formSchemaRef.current),
+		context: { action: null }
 	})
 
-	const { mutateAsync, isPending, isError } = useCreateUserMutation()
+	const {
+		mutateAsync: createAsync,
+		isPending: isUpdateProcessing,
+		isError: isFailedToCreate
+	} = useCreateUserMutation()
+	const {
+		mutateAsync: updateAsync,
+		isPending: isCreationProcessing,
+		isError: isFailedToUpdate
+	} = useUpdateUserMutation()
+
+	const formActionRef = useRef<typeof createAsync | typeof updateAsync | null>(null)
+
+	const isPending = isCreationProcessing || isUpdateProcessing
+	const isError = isFailedToCreate || isFailedToUpdate
 
 	event$.useSubscription(({ action, payload }) => {
 		setOpen(true)
 		if (action === CommonActions.UPDATE) {
 			formSchemaRef.current = updateUserSchema
+			formActionRef.current = updateAsync
 			setDialogHelperTexts({
 				title: t('ns_auth:titles.create_user'),
 				description: t('ns_auth:descriptions.update_user')
@@ -65,6 +81,7 @@ const UserFormDialog: React.FC = () => {
 			form.reset(payload)
 		} else {
 			formSchemaRef.current = createUserSchema
+			formActionRef.current = createAsync
 			setDialogHelperTexts({
 				title: t('ns_auth:titles.create_user'),
 				description: t('ns_auth:descriptions.create_user')
@@ -107,7 +124,8 @@ const UserFormDialog: React.FC = () => {
 	}, [i18n.language, selectedRoles])
 
 	const handleCreateUser = (data: CreateUserFormValues) => {
-		toast.promise(mutateAsync({ ...data, password: data.username }), {
+		if (typeof formActionRef.current !== 'function') return
+		toast.promise(formActionRef.current({ ...data, password: data.username }), {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
 				setOpen(false)
@@ -168,10 +186,7 @@ const UserFormDialog: React.FC = () => {
 										defaultValue: null
 									})
 								)}
-								classNames={{
-									selectedItem: 'max-w-32'
-								}}
-								// className='*:aria-[roledescription=selected-item]:!max-w-32'
+								classNames={{ selectedItem: '[&>:first-child]:max-w-40' }}
 								canSelectAll={false}
 								datalist={rolesDatalist}
 								labelField='label'
@@ -188,6 +203,7 @@ const UserFormDialog: React.FC = () => {
 										defaultValue: null
 									})
 								)}
+								classNames={{ selectedItem: '[&>:first-child]:max-w-24' }}
 								datalist={factoryCodesDatalist}
 								labelField='label'
 								maxCount={3}
@@ -196,11 +212,10 @@ const UserFormDialog: React.FC = () => {
 						</Div>
 						<DialogFooter className='col-span-full'>
 							<Button type='submit' disabled={isPending}>
-								<Icon name={isPending ? 'LoaderCircle' : 'Check'} className={isPending && 'animate-spin'} />
-								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+								{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
+								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.submit')}
 							</Button>
 							<DialogClose className={buttonVariants({ variant: 'secondary' })} onClick={() => form.reset({})}>
-								<Icon name='X' />
 								{t('ns_common:actions.cancel')}
 							</DialogClose>
 						</DialogFooter>
