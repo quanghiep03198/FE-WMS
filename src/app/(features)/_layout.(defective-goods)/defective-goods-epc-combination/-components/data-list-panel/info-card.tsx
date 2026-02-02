@@ -99,7 +99,7 @@ const InfoCard: React.FC<{
 			)}>
 			<CardHeader className='px-4' onClick={() => setIsOpen(!isOpen)}>
 				<CardAction className='absolute right-3 top-3'>
-					<DropdownMenu modal={false}>
+					<DropdownMenu modal>
 						<DropdownMenuTrigger
 							onClick={(e) => e.stopPropagation()}
 							className='!m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
@@ -115,9 +115,7 @@ const InfoCard: React.FC<{
 									}}>
 									<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 								</DropdownMenuItem>
-								<RoleBaseAccessControl
-									mode='invisible'
-									authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
+								<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
 									<DropdownMenuItem
 										className='gap-x-2'
 										onClick={(e) => {
@@ -140,9 +138,7 @@ const InfoCard: React.FC<{
 					</DropdownMenu>
 				</CardAction>
 				<Div className='!mb-3 flex items-center gap-x-1'>
-					<RoleBaseAccessControl
-						mode='invisible'
-						authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
+					<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
 						<Checkbox
 							checked={isItemSelected(data.id)}
 							onCheckedChange={() => handleSelect(false, data.id)}
@@ -154,7 +150,7 @@ const InfoCard: React.FC<{
 					<Badge variant='outline' className='w-fit'>
 						{t(DefectiveCategoryI18n[data.defective_category], { ns: 'ns_inoutbound', defaultValue: null })}
 					</Badge>
-					<Badge variant='secondary'>{data.storage_location}</Badge>
+					{data.storage_location && <Badge variant='secondary'>{data.storage_location}</Badge>}
 				</Div>
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
 					ID: {data.epc}{' '}

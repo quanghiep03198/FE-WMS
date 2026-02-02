@@ -65,12 +65,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 				{
 					title: 'navigation.defective_goods_inoutbound',
 					url: '/defective-goods-inoutbound',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.FG_WAREHOUSE_STAFF,
-						UserRole.DG_WAREHOUSE_STAFF
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
 				}
 			]
 		},
@@ -102,32 +97,17 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 				{
 					title: 'navigation.defective_goods_inbound_report',
 					url: '/defective-goods-inbound-report',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.FG_WAREHOUSE_STAFF,
-						UserRole.DG_WAREHOUSE_STAFF
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
 				},
 				{
 					title: 'navigation.defective_goods_outbound_report',
 					url: '/defective-goods-outbound-report',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.FG_WAREHOUSE_STAFF,
-						UserRole.DG_WAREHOUSE_STAFF
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
 				},
 				{
 					title: 'navigation.defective_goods_inventory',
 					url: '/defective-goods-inventory',
-					authorizedRoles: [
-						UserRole.ADMIN,
-						UserRole.MANAGER,
-						UserRole.FG_WAREHOUSE_STAFF,
-						UserRole.DG_WAREHOUSE_STAFF
-					]
+					authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
 				},
 				{
 					title: 'navigation.cargo_weight_check',

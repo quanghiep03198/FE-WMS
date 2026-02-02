@@ -40,13 +40,7 @@ function Page() {
 			<title>{t('ns_common:navigation.defective_goods_outbound_report')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.defective_goods_outbound_report')} />
 
-			<RoleGuard
-				authorizedRoles={[
-					UserRole.ADMIN,
-					UserRole.MANAGER,
-					UserRole.FG_WAREHOUSE_STAFF,
-					UserRole.DG_WAREHOUSE_STAFF
-				]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
 				<PageWrapper>
 					<PageHeader>
 						<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>

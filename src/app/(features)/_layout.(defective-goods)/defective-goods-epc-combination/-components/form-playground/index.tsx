@@ -252,7 +252,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					<DataListPanelSheetTrigger />
 					<RoleBaseAccessControl
 						mode='fallback'
-						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
 						fallbackComponent={
 							<Button
 								size='sm'

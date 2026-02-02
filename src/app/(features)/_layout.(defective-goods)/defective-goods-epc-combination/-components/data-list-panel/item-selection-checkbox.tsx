@@ -43,7 +43,7 @@ const ItemSelectionCheckbox: React.FC<ItemSelectionCheckboxProps> = ({ data, tot
 	return (
 		<RoleBaseAccessControl
 			mode='fallback'
-			authorizedRoles={[UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}
+			authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
 			fallbackComponent={
 				<Typography variant='small' color='muted'>
 					{t('ns_common:table.total_rows', {

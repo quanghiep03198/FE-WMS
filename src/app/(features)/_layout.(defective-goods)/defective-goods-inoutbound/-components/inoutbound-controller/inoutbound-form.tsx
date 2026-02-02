@@ -189,7 +189,7 @@ const InoutboundForm: React.FC = () => {
 					<Separator orientation='vertical' className='h-6 w-0.5' />
 					<RoleBaseAccessControl
 						mode='fallback'
-						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF, UserRole.MANAGER]}
+						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
 						fallbackComponent={
 							<Button
 								size='sm'

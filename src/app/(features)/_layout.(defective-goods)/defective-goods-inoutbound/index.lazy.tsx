@@ -43,13 +43,7 @@ function RouteComponent() {
 			<title>{t('ns_common:navigation.defective_goods_inoutbound')}</title>
 			<meta name='description' content='Defective goods inoutbound' />
 
-			<RoleGuard
-				authorizedRoles={[
-					UserRole.ADMIN,
-					UserRole.MANAGER,
-					UserRole.FG_WAREHOUSE_STAFF,
-					UserRole.DG_WAREHOUSE_STAFF
-				]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]}>
 				<IpPolicyGuard>
 					<HostCompatibleGuard>
 						<PageContextProvider>
