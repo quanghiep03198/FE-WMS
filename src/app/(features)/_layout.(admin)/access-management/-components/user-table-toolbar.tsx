@@ -53,7 +53,7 @@ const UserTableToolbar: React.FC<{
 			{
 				label: t('ns_auth:roles.SECURITY_GUARD'),
 				value: UserRole.SECURITY_GUARD,
-				icon: 'User'
+				icon: 'ShieldUser'
 			}
 		],
 		[i18n.language]
