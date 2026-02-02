@@ -28,7 +28,7 @@ const WorkplaceSelectionForm: React.FC = () => {
 		<FormProvider {...form}>
 			<Form onSubmit={form.handleSubmit((data) => setCurrentFactory(data.factory_code))}>
 				<SelectFieldControl
-					label={t('ns_company:company')}
+					label={t('ns_company:factory')}
 					name='factory_code'
 					datalist={authorizedFactories}
 					labelField='factory_name'
