@@ -66,7 +66,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 					triggerProps={{ asChild: true }}
 					contentProps={{ hidden: !isMobile }}>
 					<Button variant='outline' size={isMobile ? 'icon' : 'default'} onClick={() => refetch()}>
-						<Icon name='RotateCw' /> {!isMobile && t('ns_common:actions.reload')}
+						<Icon name='RefreshCcw' /> {!isMobile && t('ns_common:actions.reload')}
 					</Button>
 				</Tooltip>
 				{isMobile && (

@@ -141,7 +141,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<GhostButton onClick={() => handleRefetch()}>
 									<Icon
-										name={isFetching ? 'Loader' : 'RotateCw'}
+										name={isFetching ? 'Loader' : 'RefreshCcw'}
 										className={cn('h-full', isFetching && 'animate-[spin_1s_linear_infinite]')}
 									/>
 								</GhostButton>

@@ -4,7 +4,6 @@ import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
-import { DataTableProps } from '@/components/ui/@react-table/types'
 import { PackingService } from '@/services/packing.service'
 import { useQuery } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -21,7 +20,7 @@ const ReportMasterTable: React.FC = () => {
 
 	const columnHelper = createColumnHelper<IPackingManifest>()
 
-	const columns: DataTableProps<IPackingManifest>['columns'] = useMemo(
+	const columns = useMemo(
 		() => [
 			columnHelper.accessor('po', {
 				header: t('ns_erp:fields.po'),
@@ -186,6 +185,7 @@ const ReportMasterTable: React.FC = () => {
 			columns={columns}
 			loading={isLoading}
 			enableMultiSort={true}
+			containerProps={{ className: 'h-[65vh]' }}
 			initialState={{
 				pagination: {
 					pageIndex: 0,
@@ -197,7 +197,7 @@ const ReportMasterTable: React.FC = () => {
 					return (
 						<Fragment>
 							<Button variant='outline' size='icon' onClick={() => refetch()}>
-								<Icon name='RotateCw' />
+								<Icon name='RefreshCcw' />
 							</Button>
 						</Fragment>
 					)

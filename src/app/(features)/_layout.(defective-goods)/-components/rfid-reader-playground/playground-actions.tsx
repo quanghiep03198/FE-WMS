@@ -58,7 +58,7 @@ export const PlaygroundActions: React.FC = () => {
 					})
 					event$.emit({ action: CommonActions.IMPORT, payload: [] })
 				}}>
-				<Icon name='RotateCw' className='hidden @sm/playground-actions:block' /> {t('ns_common:actions.reset')}
+				<Icon name='RefreshCcw' className='hidden @sm/playground-actions:block' /> {t('ns_common:actions.reset')}
 			</Button>
 		</Div>
 	)

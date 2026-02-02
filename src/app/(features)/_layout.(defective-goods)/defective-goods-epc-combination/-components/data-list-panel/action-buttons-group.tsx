@@ -36,7 +36,7 @@ const ActionButtonsGroup: React.FC = () => {
 					asChild: true
 				}}>
 				<Button size='icon' variant='ghost' onClick={() => refetch()}>
-					<Icon name='RotateCcw' />
+					<Icon name='RefreshCcw' />
 				</Button>
 			</Tooltip>
 			<Separator orientation='vertical' className='h-4 w-0.5' />

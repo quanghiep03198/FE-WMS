@@ -210,7 +210,7 @@ const RFIDDeviceList: React.FC = () => {
 							)}
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<Button size='sm' variant='outline' onClick={() => refetch()}>
-									<Icon name='RotateCcw' />
+									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
 						</Fragment>

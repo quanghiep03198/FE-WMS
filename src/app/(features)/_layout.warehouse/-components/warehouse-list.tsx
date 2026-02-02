@@ -257,7 +257,7 @@ const WarehouseList: React.FC = () => {
 							)}
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
 								<Button variant='outline' size='icon' onClick={() => refetch()}>
-									<Icon name='RotateCw' />
+									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
 						</Fragment>

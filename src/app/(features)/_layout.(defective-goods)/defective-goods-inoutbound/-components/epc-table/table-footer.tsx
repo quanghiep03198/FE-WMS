@@ -36,7 +36,7 @@ const DataTableFooter: React.FC<TableFooterProps> = ({ onResetColumnFilter }) =>
 				{isLoading ? (
 					<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
 				) : (
-					<Icon name='RotateCw' />
+					<Icon name='RefreshCcw' />
 				)}
 				{t('ns_common:actions.reload')}
 			</Button>

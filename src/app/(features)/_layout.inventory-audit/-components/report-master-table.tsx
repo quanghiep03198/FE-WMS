@@ -331,7 +331,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 								query.queryKey.some((queryKey) => queryKey === InventoryAuditQueryKeys.INVENTORY_AUDIT)
 						})
 					}>
-					<Icon name='RotateCw' />
+					<Icon name='RefreshCcw' />
 				</Button>
 			</Tooltip>
 		</Fragment>

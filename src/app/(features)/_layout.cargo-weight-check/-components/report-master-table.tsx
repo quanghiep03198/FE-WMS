@@ -169,7 +169,7 @@ const ReportMasterTable: React.FC = () => {
 								<Icon name='Download' />
 							</Button>
 							<Button variant='outline' size='icon' onClick={() => refetch()}>
-								<Icon name='RotateCw' />
+								<Icon name='RefreshCcw' />
 							</Button>
 						</Fragment>
 					)
