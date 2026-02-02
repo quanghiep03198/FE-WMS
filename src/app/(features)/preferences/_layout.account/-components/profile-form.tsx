@@ -1,35 +1,45 @@
+import { useUpdateProfileMutation } from '@/app/-hooks/use-user-asm'
 import useAuth from '@/common/hooks/use-auth'
-import { Button, Div, Form as FormProvider, InputFieldControl, Typography } from '@/components/ui'
+import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
+import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { UpdateProfileFormValues, updateProfileFormValues } from '../-schemas/update-profile.schema'
 
 const ProfileForm: React.FC = () => {
 	const { user } = useAuth()
 	const { t } = useTranslation()
 
-	const form = useForm({
+	const { mutateAsync, isPending, isError } = useUpdateProfileMutation()
+
+	const form = useForm<UpdateProfileFormValues>({
+		resolver: zodResolver(updateProfileFormValues),
 		defaultValues: {
 			display_name: user?.display_name,
-			email: user?.email ?? ''
+			email: user?.email ?? '',
+			employee_code: user?.employee_code ?? t('ns_common:titles.unknown')
 		}
 	})
 
 	return (
 		<FormProvider {...form}>
-			<Form>
+			<Form onSubmit={form.handleSubmit((data) => mutateAsync(data))}>
 				{/* Public profile */}
 				<Fieldset>
 					<Legend>{t('ns_auth:profile.public_profile')}</Legend>
 					<Typography variant='small' color='muted'>
 						{t('ns_auth:profile.this_will_be')}{' '}
 					</Typography>
-
 					<Div className='space-y-6'>
 						<InputFieldControl label={t('ns_auth:profile.display_name')} name='display_name' />
 						<InputFieldControl label={t('ns_auth:profile.email')} name='email' />
-						<Button>{t('ns_auth:profile.save_changes')}</Button>
+						<InputFieldControl disabled label={t('ns_auth:fields.employee_code')} name='employee_code' />
+						<Button disabled={isPending}>
+							{isPending && <Icon name='LoaderCircle' className='animate-spin' />}{' '}
+							{isError ? t('ns_common:actions.retry') : t('ns_auth:profile.save_changes')}
+						</Button>
 					</Div>
 				</Fieldset>
 			</Form>
