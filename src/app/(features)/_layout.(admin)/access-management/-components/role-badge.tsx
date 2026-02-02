@@ -12,6 +12,8 @@ const RoleBadge: React.FC<{ data: UserRole }> = ({ data }) => {
 				return 'UserCog'
 			case UserRole.MANAGER:
 				return 'UserStar'
+			case UserRole.SECURITY_GUARD:
+				return 'ShieldUser'
 			default:
 				return 'User'
 		}

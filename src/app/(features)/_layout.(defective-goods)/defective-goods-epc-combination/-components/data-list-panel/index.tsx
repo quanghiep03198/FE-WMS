@@ -52,15 +52,15 @@ const DatalistPanel: React.FC = () => {
 			{/* Combination history list panel sheet (Display on small screen). Display when viewport < 1440px */}
 			<Sheet defaultOpen={false}>
 				<SheetTrigger className='hidden' id='list-sheet-trigger' />
-				<SheetContent className='group max-w-2xl overflow-hidden'>
+				<SheetContent className='group grid max-w-2xl grid-rows-[auto_auto_auto_auto] overflow-hidden'>
 					<SheetHeader>
 						<SheetTitle>{t('ns_inoutbound:titles.combination_history')}</SheetTitle>
 					</SheetHeader>
-					<Div className='h-10 overflow-hidden rounded-md border px-2 py-1'>
+					<Div className='overflow-clip rounded-md border px-2 py-1'>
 						<SearchBox />
 					</Div>
 					<ListPanelProvider>
-						<Div className='flex w-full items-center justify-between rounded-md bg-table-head py-2 pl-6 pr-3 shadow-sm'>
+						<Div className='flex w-full items-center justify-between rounded-md bg-table-head px-3 py-2 shadow-sm'>
 							<ItemSelectionCheckbox
 								{...pick(data, ['data', 'totalDocs', 'limit'])}
 								disabled={isLoading || !Array.isArray(data.data) || data.data.length === 0}

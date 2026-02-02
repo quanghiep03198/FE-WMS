@@ -103,7 +103,9 @@ const UserTable: React.FC = () => {
 				cell: ({ getValue }) => {
 					const isActive = getValue()
 					return (
-						<Badge variant='outline' className='justify-center gap-x-2 whitespace-nowrap rounded'>
+						<Badge
+							variant='outline'
+							className='justify-center gap-x-2 whitespace-nowrap rounded-l-full rounded-r-full'>
 							<Icon
 								name={isActive ? 'CircleCheck' : 'CircleMinus'}
 								aria-current={isActive}
