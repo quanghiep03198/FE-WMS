@@ -1,5 +1,4 @@
 import { HttpStatusCode } from 'axios'
-// import './tiptap'
 
 export declare global {
 	interface InternalImportMetaEnv {
@@ -16,6 +15,7 @@ export declare global {
 		readonly VITE_LIANSHUN_APP_IP: string
 		readonly VITE_KHRU_APP_IP: string
 		// * Backend
+		readonly VITE_GRAFANA_URL: string
 		readonly VITE_API_BASE_URL: string
 		readonly VITE_API_BASE_CLF_URL: string
 		readonly VITE_WEBSOCKET_URL: string

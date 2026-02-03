@@ -162,7 +162,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 		{
 			icon: 'ChartNetwork',
 			title: 'navigation.metrics',
-			url: `https://${env('VITE_APP_IP')}/dashboard`,
+			url: env('VITE_GRAFANA_URL'),
 			authorizedRoles: [UserRole.ADMIN]
 		}
 	],
