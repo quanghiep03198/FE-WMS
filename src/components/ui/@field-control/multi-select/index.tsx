@@ -28,6 +28,7 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 		defaultValue = [],
 		orientation,
 		hidden,
+		classNames,
 		onValueChange,
 		onInput
 	} = props
@@ -66,6 +67,7 @@ export function MultiSelectFieldControl<T, D>(props: MultipleSelectFieldControlP
 								labelField={labelField}
 								valueField={valueField}
 								defaultValue={defaultValue}
+								classNames={classNames}
 								value={field.value}
 								onInput={(value) => {
 									if (typeof onInput === 'function') onInput(value)

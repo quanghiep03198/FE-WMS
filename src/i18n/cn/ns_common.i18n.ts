@@ -50,6 +50,7 @@ export default {
 		revert_changes: '恢复更改',
 		save: '保存',
 		save_changes: '保存更改',
+		select_all: '全选',
 		search: '查詢',
 		select_database: '选择数据库',
 		select_server: '选择服务器',
@@ -181,7 +182,8 @@ export default {
 		'303': '永久移动',
 		'303_message': '请访问 {{url}} 以使用工厂 {{factoryCode}} 的此功能',
 		'403': '要就使用权',
-		'403_message': '你不许访问页面.',
+		'403_message': '你不许访问页面. 请联系管理员以请求访问权限',
+		'403_notification': '你无权执行此操作.',
 		'404': '不找到页面.',
 		'404_message': '页面不存在. 请检查链接.',
 		'500': '服务器错误',
@@ -211,8 +213,10 @@ export default {
 		last_updated: '上次更新时间: {{timestamp}}'
 	},
 	navigation: {
+		access_management: '访问管理',
 		account: '账户管理',
 		appearance: '外观',
+		cargo_weight_check: '货物称重检查',
 		common_management: '通用管理',
 		defective_goods_inoutbound: '第二级品进入库',
 		defective_goods_inbound_report: '第二级品入库报表',
@@ -227,7 +231,7 @@ export default {
 		inoutbound_history: '出入庫歷史',
 		inventory_estimation: '生产库存估算',
 		keyboard_shortcut: '快捷键',
-		cargo_weight_check: '货物称重检查',
+		metrics: '系统监控',
 		profile: '个人信息',
 		report_management: '報表管理',
 		rfid_system: 'RFID系统',
@@ -242,6 +246,7 @@ export default {
 		daily_outbound_report: '出庫管理',
 		truckload_delivery_management: '卡車裝運管理',
 		// labels
+		administration_label: '管理',
 		main_menu_label: '主菜单',
 		preference_menu_label: ' 偏好设置'
 	},
@@ -308,7 +313,9 @@ export default {
 		pin_right: '固定右侧',
 		reset_size: '重置大小',
 		sort_asc: '升序排序',
-		sort_desc: '降序排序'
+		sort_desc: '降序排序',
+		toggle_columns: '显示列',
+		column_settings: '列配置'
 	},
 	titles: {
 		advanced_search: '高级搜索',

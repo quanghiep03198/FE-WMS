@@ -145,6 +145,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 			)}
 			<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
 				<FormProvider {...form}>
+					{' '}
 					<Form
 						onSubmit={form.handleSubmit((data) => {
 							mutateAsync({
@@ -175,7 +176,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 									<Div
 										ref={fieldsetRef}
 										as='fieldset'
-										className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border-2 border-dashed p-4 duration-100'>
+										className='relative col-span-full flex h-fit flex-col gap-y-6 rounded-md border border-dashed p-4 duration-100'>
 										{fields.length > 0 ? (
 											fields.map((field, index) => (
 												<DroppableFieldItem key={field.id} id={field.id} index={index} onRemove={remove} />

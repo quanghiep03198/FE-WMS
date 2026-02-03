@@ -1,4 +1,6 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -26,19 +28,21 @@ function Page() {
 			<title>{t('ns_common:navigation.monthly_inventory_audit')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
 
-			<Div as='section' className='mt-4 space-y-4'>
-				<Div className='flex w-full'>
-					<PageHeader className='flex-1'>
-						<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
-						<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
-					</PageHeader>
-					<Div className='ml-auto sm:hidden'>
-						<MonthPickerFilter />
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+				<Div as='section' className='mt-4 space-y-4'>
+					<Div className='flex w-full'>
+						<PageHeader className='flex-1'>
+							<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
+							<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
+						</PageHeader>
+						<Div className='ml-auto sm:hidden'>
+							<MonthPickerFilter />
+						</Div>
 					</Div>
+					<Separator />
+					<InventoryReportMasterTable />
 				</Div>
-				<Separator />
-				<InventoryReportMasterTable />
-			</Div>
+			</RoleGuard>
 		</Fragment>
 	)
 }

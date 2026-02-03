@@ -116,7 +116,7 @@ export function OrderSearchFieldControl() {
 											<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 												<GhostButton onClick={() => refetch()} disabled={isLoading}>
 													<Icon
-														name='RotateCw'
+														name='RefreshCcw'
 														className={isLoading && 'animate-[spin_1s_linear_infinite]'}
 													/>
 												</GhostButton>

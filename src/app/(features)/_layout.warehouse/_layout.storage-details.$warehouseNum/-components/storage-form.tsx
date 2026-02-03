@@ -52,7 +52,7 @@ const WarehouseStorageFormDialog: React.FC<UseQueryResult<IWarehouse>> = ({ data
 
 	useDeepCompareEffect(() => {
 		form.reset({
-			company_code: user?.company_code,
+			company_code: user?.current_factory_code,
 			...defaultFormValues,
 			...pick(warehouse, ['warehouse_num', 'warehouse_name'])
 		})

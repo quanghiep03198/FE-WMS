@@ -47,6 +47,6 @@ dev-dist
 # Vitest
 html
 coverage
-ssl/
+
 # Sentry Config File
 .sentryclirc

@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { cn } from '@/common/utils/cn'
@@ -10,7 +12,7 @@ import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { type ColumnDefBase, createColumnHelper, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { useLayoutEffect, useMemo } from 'react'
+import { useCallback, useLayoutEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -208,6 +210,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		}
 	}, [tableRef.current, isMobile])
 
+	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
+		const data = row.original
+		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
+	}, [])
+
 	return (
 		<DataTable
 			ref={tableRef}
@@ -249,7 +256,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}}
 			virtualizerOptions={{
 				estimateSize: isMobile ? 60 : 40,
-				overscan: 10
+				overscan: 10,
+				enabled: false
 			}}
 			toolbarProps={{
 				override: true,
@@ -259,10 +267,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				className:
 					'h-[65vh] md:h-[55vh] md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
 			}}
-			renderSubComponent={({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
-				const data = row.original
-				return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
-			}}
+			renderSubComponent={renderSubTable}
 		/>
 	)
 }
@@ -334,18 +339,25 @@ const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'
 	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
 
 	return (
-		<Checkbox
-			className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
-			disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
-			defaultChecked={currentValue}
-			checked={currentValue}
-			onCheckedChange={async (value) =>
-				await mutateAsync({
-					dispatch_order: row.original.dispatch_order,
-					[column.id]: Boolean(value)
-				})
-			}
-		/>
+		<RoleBaseAccessControl
+			mode='mask'
+			classNames={{
+				innerWrapper: 'grid place-items-center group-hover/rbac:opacity-0'
+			}}
+			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
+			<Checkbox
+				className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
+				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
+				defaultChecked={currentValue}
+				checked={currentValue}
+				onCheckedChange={async (value) =>
+					await mutateAsync({
+						dispatch_order: row.original.dispatch_order,
+						[column.id]: Boolean(value)
+					})
+				}
+			/>
+		</RoleBaseAccessControl>
 	)
 }
 

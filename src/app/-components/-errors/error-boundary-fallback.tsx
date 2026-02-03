@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	Div,
+	Separator,
 	Typography
 } from '@/components/ui'
 import { captureException, FallbackRender } from '@sentry/react'
@@ -33,18 +34,21 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 	}, [error])
 
 	return (
-		<Div className='mx-auto flex h-full min-h-[var(--outlet-wrapper-height)] max-w-7xl flex-col items-center gap-10 *:flex-1 @5xl:flex-row xxl:max-w-8xl'>
-			<Div className='flex flex-col items-center gap-y-3 @5xl:items-start'>
-				<Typography variant='code' className='text-lg font-semibold' color='destructive'>
-					{HttpStatusCode.InternalServerError}
-				</Typography>
-				<Typography variant='h1'>{t('ns_common:errors.500')}</Typography>
-				<Typography color='muted' className='text-center @5xl:text-left'>
+		<Div className='grid min-h-[var(--outlet-wrapper-height,100vh)] w-full place-items-center gap-y-6 @3xl:grid-cols-[1fr_1.5fr] @5xl:grid-cols-2'>
+			<Div className='mx-auto flex max-w-3xl flex-col items-start gap-y-3'>
+				<Div className='flex items-center gap-x-4'>
+					<Typography color='destructive' className='font-semibold'>
+						{HttpStatusCode.InternalServerError}
+					</Typography>
+					<Separator orientation='vertical' className='h-5 w-0.5' />
+					<Typography variant='h4'>{t('ns_common:errors.500')}</Typography>
+				</Div>
+				<Typography color='muted' className='text-pretty'>
 					{t('ns_common:errors.500_message')}
 				</Typography>
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button variant='link' size='lg' className='w-full p-0 text-base @5xl:w-auto'>
+						<Button variant='link' className='p-0'>
 							Show error details
 						</Button>
 					</DialogTrigger>
@@ -61,10 +65,10 @@ export const ErrorBoundaryFallback: React.FC<ErrorBoundaryFallbackProps> = ({
 				</Dialog>
 				<Div className='mt-6 inline-grid grid-cols-2 gap-x-2'>
 					<Button onClick={() => resetError()}>{t('ns_common:actions.retry')}</Button>
-					<FeedbackFormTrigger />
+					<FeedbackFormTrigger variant='secondary' />
 				</Div>
 			</Div>
-			<InternalServerError className='h-full w-full' />
+			<InternalServerError className='hidden h-full w-full @3xl:block' />
 		</Div>
 	)
 }

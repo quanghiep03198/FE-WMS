@@ -8,7 +8,6 @@ import {
 	RowSelectionCheckbox
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { DataTableProps } from '@/components/ui/@react-table/types'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
 import { Row, Table, createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
@@ -72,7 +71,7 @@ const WarehouseList: React.FC = () => {
 
 	const columnHelper = createColumnHelper<IWarehouse>()
 
-	const columns: DataTableProps<IWarehouse>['columns'] = useMemo(
+	const columns = useMemo(
 		() => [
 			columnHelper.accessor('id', {
 				id: ROW_SELECTION_COLUMN_ID,
@@ -258,7 +257,7 @@ const WarehouseList: React.FC = () => {
 							)}
 							<Tooltip triggerProps={{ asChild: true }} message={t('ns_common:actions.reload')}>
 								<Button variant='outline' size='icon' onClick={() => refetch()}>
-									<Icon name='RotateCw' />
+									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
 						</Fragment>

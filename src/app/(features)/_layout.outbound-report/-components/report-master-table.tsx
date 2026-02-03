@@ -137,7 +137,7 @@ const ReportDatalist: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_outbound_report', {
-					factory: t(factories[user?.company_code], { ns: 'ns_common' }),
+					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
 					date: searchParams['date.eq'],
 					defaultValue: `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
@@ -181,7 +181,7 @@ const ReportDatalist: React.FC = () => {
 							</Tooltip>
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 								<Button size='icon' variant='outline' onClick={() => refetch()}>
-									<Icon name='RotateCw' />
+									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
 						</Fragment>

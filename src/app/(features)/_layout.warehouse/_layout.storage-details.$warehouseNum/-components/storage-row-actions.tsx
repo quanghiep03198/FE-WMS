@@ -1,3 +1,5 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import { IWarehouseStorage } from '@/common/types/entities'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
@@ -29,15 +31,24 @@ const StorageRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 					<Icon name='Pencil' />
 					{t('ns_common:actions.update')}
 				</DropdownMenuItem>
-
-				<DropdownMenuItem
-					className='flex items-center gap-x-3'
-					onClick={() => {
-						if (props.onDelete && typeof props.onDelete === 'function') props.onDelete()
-					}}>
-					<Icon name='Trash2' />
-					{t('ns_common:actions.delete')}
-				</DropdownMenuItem>
+				<RoleBaseAccessControl
+					mode='fallback'
+					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					fallbackComponent={
+						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+							<Icon name='Lock' />
+							{t('ns_common:actions.delete')}
+						</DropdownMenuItem>
+					}>
+					<DropdownMenuItem
+						className='flex items-center gap-x-3'
+						onClick={() => {
+							if (props.onDelete && typeof props.onDelete === 'function') props.onDelete()
+						}}>
+						<Icon name='Trash2' />
+						{t('ns_common:actions.delete')}
+					</DropdownMenuItem>
+				</RoleBaseAccessControl>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)

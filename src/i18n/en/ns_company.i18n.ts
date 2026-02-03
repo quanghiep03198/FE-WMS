@@ -1,5 +1,5 @@
 export default {
-	company: 'Company',
+	factory: 'Company',
 	company_code: 'Company code',
 	department: 'Department',
 	factories: {

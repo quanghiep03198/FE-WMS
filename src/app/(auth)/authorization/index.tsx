@@ -1,14 +1,14 @@
+import { FactoryCode } from '@/common/constants/enums'
 import { Div, Icon } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
+import { UserService } from '@/services/user.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { Navigate, createFileRoute, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
-import { pick } from 'lodash-es'
 import { object, string, type infer as Infer } from 'zod'
 
 const authorizationSearchSchema = object({
 	token: string(),
-	company_code: string(),
-	company_name: string()
+	factory_code: string()
 })
 
 type AuthorizationSearchParams = Infer<typeof authorizationSearchSchema>
@@ -22,8 +22,8 @@ export const Route = createFileRoute('/(auth)/authorization/')({
 	pendingComponent: Loading,
 	loader: async ({ deps, abortController }) => {
 		AuthService.setAccessToken(deps.search.token) // Persist access token
-		await AuthService.profile({ signal: abortController.signal })
-		useAuthStore.getState().setUserCompany(pick(deps.search, ['company_code', 'company_name']))
+		await UserService.profile({ signal: abortController.signal })
+		useAuthStore.getState().setCurrentFactory(deps.search.factory_code as FactoryCode)
 	}
 })
 

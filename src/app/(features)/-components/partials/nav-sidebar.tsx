@@ -1,6 +1,6 @@
-import { useGetUserCompany } from '@/app/(auth)/-hooks/use-department-asm'
 import { navigationConfig, type NavigationConfig } from '@/app/(features)/-configs/navigation.config'
 import AppLogo from '@/app/-components/-shared/app-logo'
+import { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
@@ -41,12 +41,13 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 
-type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon'> & {
+type NavLinkProps = Pick<NavigationConfig, 'url' | 'title' | 'icon' | 'authorizedRoles'> & {
 	indice: `${number}` | `${number}.${number}` | 'none'
 	viewTransition?: boolean
 }
 
 const NavSidebar: React.FC = () => {
+	const { user } = useAuth()
 	const { t } = useTranslation('ns_common')
 	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { setOpen } = useSidebar()
@@ -61,7 +62,11 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
-					<ScrollShadow className='max-h-[50vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
+					<ScrollShadow
+						className={cn(
+							'overflow-y-auto overflow-x-hidden !scrollbar-none',
+							user?.roles?.includes(UserRole.ADMIN) ? 'max-h-[35vh] xxl:max-h-[45vh]' : 'max-h-[55vh]'
+						)}>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
@@ -73,6 +78,11 @@ const NavSidebar: React.FC = () => {
 												tooltip={t(item.title, { ns: 'ns_common', defaultValue: item.title })}
 												size='sm'
 												className='w-full font-medium'
+												aria-disabled={item.items.every(
+													(subItem) =>
+														subItem.authorizedRoles !== '*' &&
+														!user?.roles?.some((role) => subItem.authorizedRoles.includes(role))
+												)}
 												onClick={() => {
 													if (isMobile) return
 													setOpen(true)
@@ -94,9 +104,8 @@ const NavSidebar: React.FC = () => {
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
 														indice={`${index + 1}.${subIndex + 1}`}
-														key={subIndex.toString()}
-														title={subItem.title}
-														url={subItem.url}
+														key={`${index + 1}.${subIndex + 1}`}
+														{...subItem}
 													/>
 												))}
 											</SidebarMenuSub>
@@ -107,6 +116,21 @@ const NavSidebar: React.FC = () => {
 						</SidebarMenu>
 					</ScrollShadow>
 				</SidebarGroup>
+				{user?.roles?.includes(UserRole.ADMIN) && (
+					<Fragment>
+						<SidebarSeparator />
+						<SidebarGroup>
+							<SidebarGroupLabel>
+								{t('ns_common:navigation.administration', { defaultValue: 'Administration' })}
+							</SidebarGroupLabel>
+							<SidebarMenu role='menu' aria-label='Administration'>
+								{navigationConfig.administration.map((item) => {
+									return <SidebarMenuLink indice='none' key={uuid()} {...item} />
+								})}
+							</SidebarMenu>
+						</SidebarGroup>
+					</Fragment>
+				)}
 				<SidebarSeparator />
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
@@ -127,12 +151,17 @@ const NavSidebar: React.FC = () => {
 	)
 }
 
-const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition }) => {
+const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, viewTransition, authorizedRoles }) => {
 	const { t } = useTranslation('ns_common')
 	const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
 	const location = useRouterState({ select: (s) => s.location })
 	const ref = useRef<HTMLLIElement>(null)
+	const { user } = useAuth()
+
+	const isAccessible =
+		(user && Array.isArray(user.roles) && user.roles.some((role) => authorizedRoles.includes(role))) ||
+		authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
@@ -143,32 +172,52 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	return (
 		<SidebarMenuItem
 			role='menuitem'
+			aria-disabled={!isAccessible}
+			className='group/menuitem aria-disabled:opacity-50'
 			ref={ref}
 			onClick={() => {
 				if (isMobile) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuButton asChild size='sm' tooltip={t(title, { defaultValue: title })}>
+			<SidebarMenuButton
+				asChild
+				size='sm'
+				className='group-aria-disabled/menuitem:cursor-not-allowed'
+				tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={url}
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
-						className: 'text-primary hover:text-primary bg-primary/10'
+						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
 					<Icon name={icon} size={18} className='!size-[18px]' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
+					{!isAccessible && (
+						<Icon name='Lock' size={14} className='ml-auto !size-[14px] stroke-muted-foreground' />
+					)}
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
 	)
 }
 
-const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url, title, viewTransition }) => {
+const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
+	indice,
+	url,
+	title,
+	viewTransition,
+	authorizedRoles
+}) => {
 	const { t } = useTranslation('ns_common')
 	const ref = useRef<HTMLLIElement>(null)
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1365px)')
 	const { open, openMobile, setOpenMobile } = useSidebar()
 	const location = useRouterState({ select: (s) => s.location })
+	const { user } = useAuth()
+
+	const isAccessible =
+		(user && Array.isArray(user?.roles) && user?.roles?.some((role) => authorizedRoles.includes(role))) ||
+		authorizedRoles === '*'
 
 	useEffect(() => {
 		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
@@ -180,10 +229,12 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 		<SidebarMenuSubItem
 			role='menuitem'
 			ref={ref}
+			aria-disabled={!isAccessible}
+			className='group/menuitem relative aria-disabled:cursor-help aria-disabled:opacity-50'
 			onClick={() => {
 				if (isSmallScreen) setOpenMobile(!openMobile)
 			}}>
-			<SidebarMenuSubButton asChild size='md'>
+			<SidebarMenuSubButton asChild size='md' className='group-aria-disabled/menuitem:cursor-not-allowed'>
 				<Link
 					to={url}
 					preload='intent'
@@ -196,20 +247,26 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({ indice, url,
 					</SidebarMenuTitle>
 				</Link>
 			</SidebarMenuSubButton>
+			{!isAccessible && (
+				<Icon
+					name='Lock'
+					size={14}
+					className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-3.5 stroke-muted-foreground'
+				/>
+			)}
 		</SidebarMenuSubItem>
 	)
 }
 
 const SwitchUserCompany: React.FC = () => {
-	const { user, setUserCompany } = useAuth()
-	const { data } = useGetUserCompany()
+	const { user, setCurrentFactory } = useAuth()
 	const { t } = useTranslation()
 	const { open } = useSidebar()
 	const queryClient = useQueryClient()
 
 	useUpdateEffect(() => {
 		queryClient.invalidateQueries({ type: 'all', refetchType: 'all' })
-	}, [user?.company_code])
+	}, [user?.current_factory_code])
 
 	return (
 		<DropdownMenu>
@@ -221,7 +278,10 @@ const SwitchUserCompany: React.FC = () => {
 					<Icon name='Factory' />
 					{open && (
 						<Fragment>
-							{user?.company_name}
+							{t(`ns_common:factory.${user?.current_factory_code}`, {
+								defaultValue: user?.current_factory_code
+							})}
+
 							<Icon name='ChevronsUpDown' className='ml-auto' />
 						</Fragment>
 					)}
@@ -233,13 +293,13 @@ const SwitchUserCompany: React.FC = () => {
 				align='end'>
 				<DropdownMenuLabel>{t('ns_company:company')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{Array.isArray(data) &&
-					data.map((item) => (
+				{Array.isArray(user?.authorized_factory_codes) &&
+					user.authorized_factory_codes.map((item) => (
 						<DropdownMenuCheckboxItem
-							key={item.company_code}
-							checked={user?.company_code === item.company_code}
-							onCheckedChange={() => setUserCompany(item)}>
-							{item.company_name}
+							key={item}
+							checked={user?.current_factory_code === item}
+							onCheckedChange={() => setCurrentFactory(item)}>
+							{t(`ns_common:factory.${item}`, { defaultValue: item })}
 						</DropdownMenuCheckboxItem>
 					))}
 			</DropdownMenuContent>

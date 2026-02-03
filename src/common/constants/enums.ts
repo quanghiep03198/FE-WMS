@@ -1,3 +1,30 @@
+export enum UserRole {
+	/**
+	 * @descrition Administrator
+	 */
+	ADMIN = 'ADMIN',
+	/**
+	 * @descrition Manager
+	 */
+	MANAGER = 'MANAGER',
+	/**
+	 * @descrition Import-Export Staff
+	 */
+	IE_STAFF = 'IE_STAFF',
+	/**
+	 * @descrition Finished Goods Warehouse Staff
+	 */
+	FG_WAREHOUSE_STAFF = 'FG_WAREHOUSE_STAFF',
+	/**
+	 * @descrition Defective Goods Warehouse Staff
+	 */
+	DG_WAREHOUSE_STAFF = 'DG_WAREHOUSE_STAFF',
+	/**
+	 * @descrition Security Guard
+	 */
+	SECURITY_GUARD = 'SECURITY_GUARD'
+}
+
 export enum Theme {
 	LIGHT = 'light',
 	DARK = 'dark',
@@ -21,7 +48,8 @@ export enum RequestHeaders {
 	API_VERSION = 'X-Api-Version',
 	CONTENT_TYPE = 'Content-Type',
 	TENANT_ID = 'X-Tenant-Id',
-	USER_COMPANY = 'X-User-Company',
+	FACTORY_CODE = 'X-User-Factory',
+	USER_REQUEST = 'X-User-Request',
 	OTP = 'X-Otp'
 }
 
@@ -65,6 +93,14 @@ export enum OrderStatus {
 	APPROVED = 'B',
 	REAPPROVED = 'D',
 	CANCELLED = 'E'
+}
+
+export enum FactoryCode {
+	VA1 = 'VA1',
+	VB1 = 'VB1',
+	VB2 = 'VB2',
+	CA1 = 'CA1',
+	MA1 = 'MA1'
 }
 
 export enum FactoryAgencyCode {

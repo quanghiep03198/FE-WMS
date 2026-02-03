@@ -8,6 +8,7 @@ const DateRangeFilter: React.FC = () => {
 
 	return (
 		<DateRangePicker
+			triggerProps={{ className: 'max-w-72' }}
 			calendarProps={{
 				selected: {
 					from: isValid(new Date(searchParams.from)) ? new Date(searchParams.from) : undefined,

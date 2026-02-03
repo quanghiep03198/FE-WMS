@@ -9,7 +9,7 @@ import { getStickyOffsetPosition } from '../utils/table.util'
 import { type TableBodyProps } from './table-body'
 
 type VirtualTableRowProps<TData extends RowData> = Pick<TableBodyProps<TData>, 'renderSubComponent'> & {
-	isScrolling: boolean
+	isScrolling?: boolean
 	row: Row<any>
 	index: number
 }
@@ -78,6 +78,6 @@ const VirtualPlaceholderRow: React.FC<React.ComponentProps<'td'>> = memo((props)
 
 VirtualPlaceholderRow.displayName = 'VirtualPlaceholderRow'
 
-const MemoizedVirtualTableRow = memo(VirtualTableRow, (prevProps, nextProps) => nextProps.isScrolling)
+const MemoizedVirtualTableRow = memo(VirtualTableRow, (_, nextProps) => nextProps.isScrolling)
 
 export { MemoizedVirtualTableRow, VirtualPlaceholderRow }

@@ -22,17 +22,21 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { CaretSortIcon, Cross2Icon, CrossCircledIcon } from '@radix-ui/react-icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useClickAway, useDeepCompareEffect } from 'ahooks'
 import { CommandLoading } from 'cmdk'
-import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react'
+import { CheckIcon, XCircle } from 'lucide-react'
 import React, { Fragment, useCallback, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import ScrollShadow from './scroll-shadow'
+
+type SelectItem = { disabled?: boolean; [key: string]: any }
 
 /**
  * Props for MultiSelect component
  */
-export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAttributes<HTMLButtonElement> &
+export type MultiSelectProps<T extends SelectItem> = React.ButtonHTMLAttributes<HTMLButtonElement> &
 	Pick<React.ComponentProps<typeof CommandInput>, 'onInput'> & {
 		ref?: React.RefObject<HTMLButtonElement>
 
@@ -42,6 +46,11 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 * Determines whether command should filter the datalist automatically or manually.
 		 */
 		shouldFilter?: boolean
+
+		/**
+		 * If true, allows selecting all options at once.
+		 */
+		canSelectAll?: boolean
 
 		/**
 		 * An array of option objects to be displayed in the multi-select component.
@@ -109,7 +118,11 @@ export type MultiSelectProps<T extends Record<string, any>> = React.ButtonHTMLAt
 		 * Additional class names to apply custom styles to the multi-select component.
 		 * Optional, can be used to add custom styles.
 		 */
-		className?: string
+		classNames?: {
+			popoverTrigger?: string
+			popoverContent?: string
+			selectedItem: string
+		}
 
 		/**
 		 * Additional class names to apply custom styles to the multi-select component.
@@ -123,10 +136,11 @@ const PRERENDER_COUNT = 5
 
 const normalizeString = (value: string) => value.trim().toLowerCase()
 
-export function MultiSelect<D = Record<string, any>>({
+export function MultiSelect<D extends SelectItem>({
 	datalist,
 	labelField,
 	valueField,
+	canSelectAll = true,
 	shouldFilter = true,
 	onValueChange,
 	onInput,
@@ -137,12 +151,13 @@ export function MultiSelect<D = Record<string, any>>({
 	placeholder = 'Select options',
 	maxCount = 3,
 	modalPopover = true,
-	className,
+	classNames,
 	ref,
 	...props
 }: MultiSelectProps<D>) {
 	'use no memo'
 
+	const { t } = useTranslation()
 	const [selectedValues, setSelectedValues] = useState<Array<D[keyof D]>>(defaultValue)
 	const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false)
 	const [searchTerm, setSearchTerm] = useState<string>('')
@@ -238,26 +253,26 @@ export function MultiSelect<D = Record<string, any>>({
 				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
-					'w-full justify-stretch rounded-md border bg-inherit py-0 pl-2 pr-0 !shadow-sm !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
-					className
+					'grid w-full grid-cols-[1fr_auto] items-center overflow-hidden bg-background px-3 py-0 !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+					classNames?.popoverTrigger
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
-					<Div className='flex flex-1 items-center justify-stretch gap-x-2 overflow-x-hidden'>
+					<>
 						<ScrollShadow
 							orientation='horizontal'
-							className='flex w-full max-w-full flex-1 items-center gap-x-1 overflow-x-auto overflow-y-hidden !scrollbar-none'>
+							className='flex items-center gap-x-1 overflow-x-auto overflow-y-hidden !scrollbar-none'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
 									return (
-										<Badge key={String(value)} variant='secondary'>
+										<Badge key={String(value)} variant='secondary' className={classNames?.selectedItem}>
 											<Typography
 												variant='small'
 												className='max-w-16 truncate text-xs'
 												title={String(option?.[labelField])}>
 												{String(option?.[labelField])}
 											</Typography>
-											<XCircle
+											<CrossCircledIcon
 												className='ml-2 size-4 min-w-4 basis-4 cursor-pointer'
 												onClick={(event) => {
 													event.stopPropagation()
@@ -270,7 +285,7 @@ export function MultiSelect<D = Record<string, any>>({
 							{Array.isArray(selectedValues) && selectedValues?.length > maxCount && (
 								<HoverCard>
 									<HoverCardTrigger>
-										<Badge variant='secondary' className='whitespace-nowrap'>
+										<Badge variant='secondary' className={'whitespace-nowrap'}>
 											{`+ ${selectedValues?.length - maxCount} more`}
 											<XCircle
 												className='ml-2 h-4 w-4 cursor-pointer'
@@ -281,7 +296,7 @@ export function MultiSelect<D = Record<string, any>>({
 											/>
 										</Badge>
 									</HoverCardTrigger>
-									<HoverCardContent className='flex max-h-56 max-w-md flex-wrap items-center gap-x-1 gap-y-2 overflow-y-auto p-2'>
+									<HoverCardContent className='flex max-h-56 max-w-sm flex-wrap items-center gap-x-1 gap-y-2 overflow-y-auto p-2'>
 										{Array.isArray(selectedValues) &&
 											selectedValues.slice(maxCount).map((item) => (
 												<Badge key={String(item)} variant='secondary'>
@@ -299,30 +314,30 @@ export function MultiSelect<D = Record<string, any>>({
 								</HoverCard>
 							)}
 						</ScrollShadow>
-						<Div className='ml-auto flex items-center justify-end gap-x-2 bg-background px-2'>
-							<XIcon
-								className='size-4 cursor-pointer text-muted-foreground'
+						<Div className='flex items-center justify-end gap-x-2 bg-background'>
+							<Cross2Icon
+								className='size-3.5 cursor-pointer text-muted-foreground'
 								onClick={(event) => {
 									event.stopPropagation()
 									handleClear()
 								}}
 							/>
-							<Separator orientation='vertical' className='flex h-full min-h-6' />
-							<ChevronDown className='size-4 cursor-pointer text-muted-foreground' />
+							<Separator orientation='vertical' className='flex h-full min-h-4' />
+							<CaretSortIcon className='size-4 cursor-pointer text-muted-foreground' />
 						</Div>
-					</Div>
+					</>
 				) : (
-					<Div className='mx-auto flex w-full items-center justify-between'>
-						<Typography variant='small' className='mx-3 text-sm font-normal text-muted-foreground'>
+					<>
+						<Typography variant='small' className='block text-left text-sm font-normal text-muted-foreground'>
 							{placeholder}
 						</Typography>
-						<ChevronDown className='mx-2 h-4 w-4 cursor-pointer text-muted-foreground' />
-					</Div>
+						<CaretSortIcon className='ml-auto size-4 cursor-pointer text-muted-foreground' />
+					</>
 				)}
 			</PopoverTrigger>
 			<PopoverContent
 				ref={popoverContentRef}
-				className='w-[var(--radix-popover-trigger-width)] p-0'
+				className={cn('w-[var(--radix-popover-trigger-width)] p-0', classNames?.popoverContent)}
 				align='start'
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				onOpenAutoFocus={(e) => e.preventDefault()}>
@@ -339,7 +354,7 @@ export function MultiSelect<D = Record<string, any>>({
 					}}>
 					<CommandInput
 						value={search ?? searchTerm}
-						placeholder='Search...'
+						placeholder={`${t('ns_common:actions.search')}...`}
 						onKeyDown={handleInputKeyDown}
 						onInput={(e) => {
 							e.stopPropagation()
@@ -356,24 +371,26 @@ export function MultiSelect<D = Record<string, any>>({
 							<Fragment>
 								<CommandEmpty>No results found.</CommandEmpty>
 								<CommandGroup>
-									<CommandItem
-										key='all'
-										disabled={datalist?.length === 0}
-										keywords={['all']}
-										onSelect={toggleAll}
-										onClick={(e) => e.stopPropagation()}
-										className='cursor-pointer'>
-										<Div
-											className={cn(
-												'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-												selectedValues?.length === datalist?.length && datalist?.length > 0
-													? 'bg-primary text-primary-foreground'
-													: 'opacity-50 [&_svg]:invisible'
-											)}>
-											<CheckIcon className='!size-3' />
-										</Div>
-										<Typography variant='small'>(Select All)</Typography>
-									</CommandItem>
+									{canSelectAll && (
+										<CommandItem
+											key='all'
+											disabled={datalist?.length === 0}
+											keywords={['all']}
+											onSelect={toggleAll}
+											onClick={(e) => e.stopPropagation()}
+											className='cursor-pointer'>
+											<Div
+												className={cn(
+													'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+													selectedValues?.length === datalist?.length && datalist?.length > 0
+														? 'bg-primary text-primary-foreground'
+														: 'opacity-50 [&_svg]:invisible'
+												)}>
+												<CheckIcon className='!size-3' />
+											</Div>
+											<Typography variant='small'>({t('ns_common:actions.select_all')})</Typography>
+										</CommandItem>
+									)}
 									{before > 0 && <CommandItem disabled style={{ width: '100%', height: before }} />}
 									{virtualItems.map((item) => {
 										const option = datalist[item.index]
@@ -384,6 +401,7 @@ export function MultiSelect<D = Record<string, any>>({
 												data-index={item.index}
 												value={String(option[valueField])}
 												keywords={[String(option[labelField])]}
+												disabled={option.disabled}
 												onSelect={() => toggleOption(option[valueField])}>
 												<Checkbox checked={isSelected} />
 												<Typography variant='small'>{String(option?.[labelField])}</Typography>
@@ -400,8 +418,11 @@ export function MultiSelect<D = Record<string, any>>({
 						<Div className='flex items-center justify-between gap-x-1'>
 							{Array.isArray(selectedValues) && selectedValues?.length > 0 && (
 								<Fragment>
-									<CommandItem onSelect={handleClear} className='flex-1 cursor-pointer justify-center'>
-										Clear
+									<CommandItem
+										onClick={(e) => e.stopPropagation()}
+										onSelect={handleClear}
+										className='flex-1 cursor-pointer justify-center'>
+										{t('ns_common:actions.reset')}
 									</CommandItem>
 									<Separator orientation='vertical' className='flex h-full min-h-6' />
 								</Fragment>
@@ -409,7 +430,7 @@ export function MultiSelect<D = Record<string, any>>({
 							<CommandItem
 								onSelect={() => setIsPopoverOpen(false)}
 								className='max-w-full flex-1 cursor-pointer justify-center'>
-								Close
+								{t('ns_common:actions.close')}
 							</CommandItem>
 						</Div>
 					</CommandGroup>

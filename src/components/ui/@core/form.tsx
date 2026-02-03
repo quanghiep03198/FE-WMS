@@ -3,8 +3,9 @@ import * as React from 'react'
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from 'react-hook-form'
 
 import { cn } from '@/common/utils/cn'
+import { Json } from '@/common/utils/json'
 import { Label } from '@/components/ui/@core/label'
-import { ResourceKey } from 'i18next'
+import { type ResourceKey } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { Icon } from './icon'
 
@@ -103,15 +104,25 @@ const FormDescription: React.FC<React.ComponentProps<'p'>> = ({ className, ...pr
 
 FormDescription.displayName = 'FormDescription'
 
+type FormErrorMessage =
+	| Extract<ResourceKey, 'string'>
+	| { key: ResourceKey; bindings?: Record<string, string | number> }
+
 const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children, ...props }) => {
 	const { error, formMessageId } = useFormField()
 	const { t } = useTranslation()
-
 	const body = error ? String(error?.message) : children
 
 	if (!body) {
 		return null
 	}
+
+	const i18nErrorMessage = Json.parse<FormErrorMessage>(error?.message)
+
+	const message =
+		typeof i18nErrorMessage === 'string'
+			? t(i18nErrorMessage)
+			: t(i18nErrorMessage.key, { ...i18nErrorMessage.bindings })
 
 	return (
 		<p
@@ -119,7 +130,7 @@ const FormMessage: React.FC<React.ComponentProps<'p'>> = ({ className, children,
 			className={cn('inline-flex items-center gap-x-1 text-[0.8rem] font-medium text-destructive', className)}
 			{...props}>
 			<Icon name='TriangleAlert' />
-			{t(body as ResourceKey)}
+			{message}
 		</p>
 	)
 }

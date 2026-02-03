@@ -1,5 +1,5 @@
-'use no memo'
-
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, Div, Icon, Tooltip } from '@/components/ui'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
@@ -9,6 +9,7 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { usePageQueryParams } from '../-hooks/use-page-query-params'
 import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import CreateTruckloadDialogButton from './create-truckload-delivery-button'
@@ -48,6 +49,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 						<Button
 							variant='destructive'
 							size={isMobile ? 'icon' : 'default'}
+							className='w-full'
 							onClick={() => {
 								table.resetGlobalFilter(table.initialState.globalFilter)
 								table.resetColumnFilters(true)
@@ -64,7 +66,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 					triggerProps={{ asChild: true }}
 					contentProps={{ hidden: !isMobile }}>
 					<Button variant='outline' size={isMobile ? 'icon' : 'default'} onClick={() => refetch()}>
-						<Icon name='RotateCw' /> {!isMobile && t('ns_common:actions.reload')}
+						<Icon name='RefreshCcw' /> {!isMobile && t('ns_common:actions.reload')}
 					</Button>
 				</Tooltip>
 				{isMobile && (
@@ -75,12 +77,27 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 						<DownloadExcelButton />
 					</Tooltip>
 				)}
-				<Tooltip
-					message={t('ns_common:actions.add')}
-					triggerProps={{ asChild: true }}
-					contentProps={{ hidden: !isMobile }}>
-					<CreateTruckloadDialogButton />
-				</Tooltip>
+				<RoleBaseAccessControl
+					authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
+					mode='fallback'
+					fallbackComponent={
+						<Button
+							type='button'
+							onClick={() =>
+								toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
+							}
+							className='w-full'>
+							<Icon name='Lock' />
+							{t('ns_common:actions.add')}
+						</Button>
+					}>
+					<Tooltip
+						message={t('ns_common:actions.add')}
+						triggerProps={{ asChild: true }}
+						contentProps={{ hidden: !isMobile }}>
+						<CreateTruckloadDialogButton />
+					</Tooltip>
+				</RoleBaseAccessControl>
 			</Div>
 		</Div>
 	)

@@ -14,7 +14,8 @@ type RowSelectionCheckboxProps<TData extends RowData> = CellContext<TData, unkno
 
 export function IndeterminateCheckbox<TData extends RowData>({
 	table,
-	onCheckedChange
+	onCheckedChange,
+	...props
 }: IndeterminateCheckboxProps<TData>) {
 	const { event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
@@ -33,6 +34,7 @@ export function IndeterminateCheckbox<TData extends RowData>({
 
 	return (
 		<Checkbox
+			{...props}
 			checked={
 				(table.getIsAllRowsSelected() ||
 					(table.getIsSomeRowsSelected() &&

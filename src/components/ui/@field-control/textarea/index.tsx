@@ -3,9 +3,8 @@ import { forwardRef, useId, useRef } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '../..'
 import { BaseFieldControl } from '../../../../common/types/hook-form'
-import { TextareaProps } from '../../@core/textarea'
 
-export type TextareaFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & TextareaProps
+export type TextareaFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & React.ComponentProps<'textarea'>
 
 export function TextareaFieldControl<T extends FieldValues>(
 	props: TextareaFieldControlProps<T> & React.PropsWithoutRef<T> & React.RefAttributes<T>

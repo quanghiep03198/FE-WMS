@@ -1,4 +1,5 @@
-import { CommonActions, PresetBreakPoints } from '@/common/constants/enums'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
+import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
@@ -364,52 +365,70 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</Div>
 							)}
 							<Div className='flex items-center gap-x-1'>
-								{!action ? (
-									<Button
-										variant='default'
-										type='button'
-										size='sm'
-										disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-										onClick={() => setAction(CommonActions.UPDATE)}>
-										<Icon name='PencilLine' /> {t('ns_common:actions.update')}
-									</Button>
-								) : (
-									<Fragment>
+								<RoleBaseAccessControl
+									authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
+									mode='fallback'
+									fallbackComponent={
 										<Button
-											variant='outline'
 											type='button'
-											size='sm'
-											className='border-dashed'
-											disabled={isPending}
 											onClick={() =>
-												append({
-													id: uuid(),
-													po: '',
-													outbound_qty: null,
-													max_outbound_qty: null
+												toast.warning(t('ns_common:errors.403_notification'), {
+													id: ACTION_RESTRICTED_TOAST_ID
 												})
-											}>
-											<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
+											}
+											size='sm'
+											className='w-full'>
+											<Icon name='Lock' />
+											{t('ns_common:actions.update')}
 										</Button>
-										<Separator orientation='vertical' className='mx-2 h-8' />
-										<Button type='submit' size='sm' disabled={isPending}>
-											<Icon
-												name={isPending ? 'LoaderCircle' : 'Check'}
-												className={isPending && 'animate-spin'}
-											/>
-											{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
-										</Button>
+									}>
+									{!action ? (
 										<Button
+											variant='default'
 											type='button'
 											size='sm'
-											variant='secondary'
-											onClick={() => handleResetDeliveryDetails(false)}
-											disabled={isPending}>
-											<Icon name='X' />
-											{t('ns_common:actions.cancel')}
+											disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+											onClick={() => setAction(CommonActions.UPDATE)}>
+											<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 										</Button>
-									</Fragment>
-								)}
+									) : (
+										<Fragment>
+											<Button
+												variant='outline'
+												type='button'
+												size='sm'
+												className='border-dashed'
+												disabled={isPending}
+												onClick={() =>
+													append({
+														id: uuid(),
+														po: '',
+														outbound_qty: null,
+														max_outbound_qty: null
+													})
+												}>
+												<Icon name='ListPlus' /> {t('ns_common:table.add_row')}
+											</Button>
+											<Separator orientation='vertical' className='mx-2 h-8' />
+											<Button type='submit' size='sm' disabled={isPending}>
+												<Icon
+													name={isPending ? 'LoaderCircle' : 'Check'}
+													className={isPending && 'animate-spin'}
+												/>
+												{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+											</Button>
+											<Button
+												type='button'
+												size='sm'
+												variant='secondary'
+												onClick={() => handleResetDeliveryDetails(false)}
+												disabled={isPending}>
+												<Icon name='X' />
+												{t('ns_common:actions.cancel')}
+											</Button>
+										</Fragment>
+									)}
+								</RoleBaseAccessControl>
 								{action && <Separator orientation='vertical' className='mx-2 h-8' />}
 								<Button
 									variant='outline'
@@ -429,6 +448,13 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		</Div>
 	)
 }
+
+const signatureRolesMap: Map<SignatureType, UserRole[]> = new Map([
+	['ie_signature', [UserRole.IE_STAFF]],
+	['warehouse_officer_signature', [UserRole.FG_WAREHOUSE_STAFF]],
+	['security_1_signature', [UserRole.SECURITY_GUARD]],
+	['security_2_signature', [UserRole.SECURITY_GUARD]]
+])
 
 const Signature: React.FC<{
 	data: ITruckloadDelivery
@@ -450,20 +476,29 @@ const Signature: React.FC<{
 	}
 
 	return (
-		<Div className='grid place-items-center p-2'>
-			{data[type] ? (
-				<img
-					loading='lazy'
-					className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
-					src={data[type]}
-					onClick={handleUpdateSignature}
-				/>
-			) : (
-				<Button disabled={disabled} size='icon' variant='secondary' type='button' onClick={handleUpdateSignature}>
-					<Icon name='PenTool' className='rotate-[-90deg]' />
-				</Button>
-			)}
-		</Div>
+		<RoleBaseAccessControl
+			authorizedRoles={signatureRolesMap.get(type)}
+			classNames={{ wrapper: '[&>[data-slot=rbac-mask]>svg]:size-[18px]' }}>
+			<Div className='grid place-items-center p-2'>
+				{data[type] ? (
+					<img
+						loading='lazy'
+						className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
+						src={data[type]}
+						onClick={handleUpdateSignature}
+					/>
+				) : (
+					<Button
+						disabled={disabled}
+						size='icon'
+						variant='secondary'
+						type='button'
+						onClick={handleUpdateSignature}>
+						<Icon name='PenTool' className='rotate-[-90deg]' />
+					</Button>
+				)}
+			</Div>
+		</RoleBaseAccessControl>
 	)
 }
 

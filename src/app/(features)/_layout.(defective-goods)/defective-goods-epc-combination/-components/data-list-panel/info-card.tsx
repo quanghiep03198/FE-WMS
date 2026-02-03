@@ -1,4 +1,5 @@
-import { CommonActions } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { CommonActions, UserRole } from '@/common/constants/enums'
 import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
@@ -98,7 +99,7 @@ const InfoCard: React.FC<{
 			)}>
 			<CardHeader className='px-4' onClick={() => setIsOpen(!isOpen)}>
 				<CardAction className='absolute right-3 top-3'>
-					<DropdownMenu modal={false}>
+					<DropdownMenu modal>
 						<DropdownMenuTrigger
 							onClick={(e) => e.stopPropagation()}
 							className='!m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
@@ -114,38 +115,42 @@ const InfoCard: React.FC<{
 									}}>
 									<Icon name='MousePointerClick' size={18} /> {t('ns_common:actions.detail')}
 								</DropdownMenuItem>
-								<DropdownMenuItem
-									className='gap-x-2'
-									onClick={(e) => {
-										e.stopPropagation()
-										handleUpdate()
-									}}>
-									<Icon name='PencilLine' /> {t('ns_common:actions.update')}
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									className='gap-x-2 !text-destructive hover:!bg-destructive/20'
-									onClick={(e) => {
-										e.stopPropagation()
-										event$.emit({ action: CommonActions.DELETE, payload: data.id })
-									}}>
-									<Icon name='Trash2' /> {t('ns_common:actions.delete')}
-								</DropdownMenuItem>
+								<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
+									<DropdownMenuItem
+										className='gap-x-2'
+										onClick={(e) => {
+											e.stopPropagation()
+											handleUpdate()
+										}}>
+										<Icon name='PencilLine' /> {t('ns_common:actions.update')}
+									</DropdownMenuItem>
+									<DropdownMenuItem
+										className='gap-x-2 !text-destructive hover:!bg-destructive/20'
+										onClick={(e) => {
+											e.stopPropagation()
+											event$.emit({ action: CommonActions.DELETE, payload: data.id })
+										}}>
+										<Icon name='Trash2' /> {t('ns_common:actions.delete')}
+									</DropdownMenuItem>
+								</RoleBaseAccessControl>
 							</DropdownMenu>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</CardAction>
 				<Div className='!mb-3 flex items-center gap-x-1'>
-					<Checkbox
-						checked={isItemSelected(data.id)}
-						onCheckedChange={() => handleSelect(false, data.id)}
-						onClick={(e) => e.stopPropagation()}
-					/>
-					<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
+					<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
+						<Checkbox
+							checked={isItemSelected(data.id)}
+							onCheckedChange={() => handleSelect(false, data.id)}
+							onClick={(e) => e.stopPropagation()}
+						/>
+						<Separator orientation='vertical' className='mx-2 h-5 w-0.5' />
+					</RoleBaseAccessControl>
 					<Badge>{data.brand_name}</Badge>
 					<Badge variant='outline' className='w-fit'>
 						{t(DefectiveCategoryI18n[data.defective_category], { ns: 'ns_inoutbound', defaultValue: null })}
 					</Badge>
-					<Badge variant='secondary'>{data.storage_location}</Badge>
+					{data.storage_location && <Badge variant='secondary'>{data.storage_location}</Badge>}
 				</Div>
 				<CardTitle className='group/cart-title inline-flex items-center gap-x-1'>
 					ID: {data.epc}{' '}

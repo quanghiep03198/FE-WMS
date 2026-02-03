@@ -30,7 +30,7 @@ export function TableViewOptions() {
 				</DropdownMenuTrigger>
 			</Tooltip>
 			<DropdownMenuContent align='end' className='w-56'>
-				<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+				<DropdownMenuLabel>{t('ns_common:table.toggle_columns')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{table
 					.getAllLeafColumns()

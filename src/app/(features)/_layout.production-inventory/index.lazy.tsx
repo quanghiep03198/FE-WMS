@@ -1,3 +1,5 @@
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
@@ -20,10 +22,12 @@ function Page() {
 	}, [i18n.language])
 
 	return (
-		<Div as='section' className='pt-4 @container xxl:min-h-[var(--outlet-wrapper-height)]'>
-			<PageHeader />
-			<SearchBox />
-			<DataSection />
-		</Div>
+		<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+			<Div as='section' className='pt-4 @container xxl:min-h-[var(--outlet-wrapper-height)]'>
+				<PageHeader />
+				<SearchBox />
+				<DataSection />
+			</Div>
+		</RoleGuard>
 	)
 }

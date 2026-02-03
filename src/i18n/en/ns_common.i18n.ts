@@ -51,6 +51,7 @@ export default {
 		save: 'Save',
 		save_changes: 'Save changes',
 		search: 'Search',
+		select_all: 'Select all',
 		select_database: 'Select database',
 		select_server: 'Select server',
 		set_approval_status: 'Set approval status',
@@ -181,8 +182,10 @@ export default {
 	errors: {
 		'303': 'See Other',
 		'303_message': 'Please access {{url}} to use this feature for factory {{factoryCode}}',
-		'403': 'Permission Denied',
-		'403_message': "You don't have permission to access this page.",
+		'403': 'Forbidden',
+		'403_message':
+			"You don't have permission to access this page. Please contact the administrator to request access.",
+		'403_notification': 'You do not have permission to perform this action.',
 		'404': 'Page Not Found',
 		'404_message': 'The page you are looking for does not exist.',
 		'500': 'Something went wrong',
@@ -207,8 +210,10 @@ export default {
 		select: 'Select {{object}}'
 	},
 	navigation: {
+		access_management: 'Access management',
 		account: 'Account',
 		appearance: 'Appearance',
+		cargo_weight_check: 'Cargo weight check',
 		common_management: 'Common management',
 		defective_goods_inoutbound: 'B/C grade inoutbound',
 		defective_goods_inbound_report: 'B/C grade inbound report',
@@ -224,7 +229,7 @@ export default {
 		inoutbound_history: 'In/Outbound history',
 		inventory_estimation: 'Inventory estimation',
 		keyboard_shortcut: 'Keyboard shortcut',
-		cargo_weight_check: 'Cargo weight check',
+		metrics: 'System Monitoring',
 		profile: 'Profile',
 		report_management: 'Report',
 		rfid_system: 'RFID system',
@@ -239,6 +244,7 @@ export default {
 		warehouse_management: 'Warehouse management',
 
 		// labels
+		administration_label: 'Administration',
 		main_menu_label: 'Main',
 		preference_menu_label: ' Preference'
 	},
@@ -299,7 +305,9 @@ export default {
 		sort_asc: 'Sort ascending',
 		sort_desc: 'Sort descending',
 		total_rows: '{{count}} records',
-		unpin: 'Unpin'
+		toggle_columns: 'Toggle columns',
+		unpin: 'Unpin',
+		column_settings: 'Column settings'
 	},
 	titles: {
 		advanced_search: 'Advanced Search',

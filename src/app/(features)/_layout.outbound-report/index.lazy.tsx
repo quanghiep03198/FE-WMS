@@ -1,10 +1,18 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
-import { Div, Separator } from '@/components/ui'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import DatePickerFilter from '../-components/shared/date-picker-filter'
-import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../-components/shared/page-header'
 import ReportDatalist from './-components/report-master-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/outbound-report/')({
@@ -31,19 +39,19 @@ function Page() {
 			<title>{t('ns_common:navigation.daily_outbound_report')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.daily_outbound_report')} />
 
-			<Div as='section' className='mt-4 space-y-4'>
-				<Div className='flex w-full'>
-					<PageHeader className='flex-1'>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+				<PageWrapper>
+					<PageHeader>
 						<PageTitle>{t('ns_inoutbound:titles.daily_outbound_report')}</PageTitle>
 						<PageDescription>{t('ns_inoutbound:description.daily_outbound_report')}</PageDescription>
+						<PageAction className='sm:hidden'>
+							<DatePickerFilter />
+						</PageAction>
 					</PageHeader>
-					<Div className='ml-auto sm:hidden'>
-						<DatePickerFilter />
-					</Div>
-				</Div>
-				<Separator />
-				<ReportDatalist />
-			</Div>
+					<PageSeparator />
+					<ReportDatalist />
+				</PageWrapper>
+			</RoleGuard>
 		</Fragment>
 	)
 }

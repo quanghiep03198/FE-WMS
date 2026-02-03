@@ -1,4 +1,5 @@
 import { AppConfigs } from '@/configs/app.config'
+import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { useMemoizedFn, useRafState } from 'ahooks'
 import { throttle } from 'lodash-es'
@@ -15,13 +16,15 @@ export type UseWebSocketOptions<TResponse> = {
 	rateLimit?: false | number
 }
 
-const { user, token } = useAuthStore.getState()
+const { user } = useAuthStore.getState()
 
 const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
+	withCredentials: true,
 	extraHeaders: {
-		[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-		[RequestHeaders.USER_COMPANY]: user?.company_code
+		[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
+		[RequestHeaders.USER_REQUEST]: user?.username
 	},
+	closeOnBeforeunload: true,
 	timeout: 10000,
 	reconnection: true,
 	reconnectionAttempts: 5,
@@ -40,6 +43,7 @@ export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = fa
 	useEffect(() => {
 		instanceIO.current.on('connect', handleConnect)
 		instanceIO.current.on('disconnect', handleDisconnect)
+		instanceIO.current.on('auth_error', AuthService.refreshToken)
 		instanceIO.current.on(
 			event,
 			typeof rateLimit === 'number'
@@ -50,6 +54,7 @@ export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = fa
 		return () => {
 			instanceIO.current.off('connect', handleConnect)
 			instanceIO.current.off('disconnect', handleDisconnect)
+			instanceIO.current.off('auth_error', AuthService.refreshToken)
 			instanceIO.current.off(event, handleEvent)
 		}
 	}, [])

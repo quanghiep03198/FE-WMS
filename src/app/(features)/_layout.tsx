@@ -69,7 +69,7 @@ function Layout() {
 							<Div
 								as='main'
 								id='outlet-wrapper'
-								className='flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-2 md:px-2'>
+								className='relative flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-2 md:px-2'>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
 										return (

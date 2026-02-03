@@ -49,7 +49,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 			 * 'CUS' prefix represents the customer's EPC data.
 			 */
 			const STATION_PREFIX = 'CUS'
-			formData.append('station', `${STATION_PREFIX}_${user?.company_code}_${station}`)
+			formData.append('station', `${STATION_PREFIX}_${user?.current_factory_code}_${station}`)
 			files.forEach((file) => formData.append('files', file, uuid()))
 			return await axiosInstance.post(`/rfid/upload-data`, formData, {
 				headers: {
@@ -119,6 +119,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 	return (
 		<Dialog>
 			<DialogTrigger
+				id='epc-data-upload-dialog-trigger'
 				className={cn(
 					buttonVariants({
 						variant: 'secondary',
@@ -127,7 +128,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 					})
 				)}>
 				<Icon name='Upload' size={18} />
-				Upload
+				{t('ns_common:actions.upload')}
 			</DialogTrigger>
 			<DialogContent className='max-w-xl'>
 				<DialogHeader>

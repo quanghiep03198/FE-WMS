@@ -30,11 +30,7 @@ export default function useAuth() {
 		}
 	})
 
-	const isAuthenticated = !isNil(authStore.user) && !isNil(authStore.user?.company_code) && !isNil(authStore.token)
+	const isAuthenticated = !isNil(authStore.user) && !isNil(authStore.user?.current_factory_code)
 
-	return {
-		...authStore,
-		isAuthenticated,
-		logout
-	}
+	return { ...authStore, isAuthenticated, logout }
 }

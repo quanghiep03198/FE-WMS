@@ -32,7 +32,7 @@ TableFooter.displayName = 'TableFooter'
 const TableRow: React.FC<React.ComponentProps<'tr'>> = ({ className, ...props }) => (
 	<tr
 		className={cn(
-			'[&:has([aria-disabled=true])_td]:bg-muted [&:has([aria-disabled=true])_td]:text-muted-foreground [&:last-child>td]:border-b-0 [&>*:first-child]:border-l-0 [&>*]:border-b [&>*]:border-l',
+			'[&:has(td[aria-disabled=true])_td]:bg-muted [&:has(td[aria-disabled=true])_td]:text-muted-foreground [&:last-child>td]:border-b-0 [&>*:first-child]:border-l-0 [&>*]:border-b [&>*]:border-l',
 			className
 		)}
 		{...props}

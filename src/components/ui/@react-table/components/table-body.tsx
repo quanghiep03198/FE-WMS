@@ -13,10 +13,16 @@ export type TableBodyProps<TData extends RowData> = {
 	table: Table<TData>
 	containerRef: React.RefObject<HTMLDivElement>
 	estimatedRowHeight: number
+	shouldEnableVirtualizer: boolean
 	renderSubComponent: RenderSubComponent<any>
 }
 
-function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubComponent }: TableBodyProps<TData>) {
+function DataTableBody<TData>({
+	containerRef,
+	shouldEnableVirtualizer,
+	estimatedRowHeight,
+	renderSubComponent
+}: TableBodyProps<TData>) {
 	'use no memo'
 
 	const { table } = useTableContext('table')
@@ -35,6 +41,7 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 		getScrollElement,
 		estimateSize,
 		scrollToFn,
+		enabled: shouldEnableVirtualizer,
 		measureElement: undefined, // Disable auto measurement
 		initialRect: containerRef?.current?.getBoundingClientRect?.(),
 		debug: env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development'
@@ -44,6 +51,20 @@ function DataTableBody<TData>({ containerRef, estimatedRowHeight, renderSubCompo
 
 	const virtualItems = virtualizer.getVirtualItems()
 	const colSpan = table.getAllColumns().length
+
+	if (!shouldEnableVirtualizer)
+		return (
+			<TableBody>
+				{rows.map((row) => (
+					<MemoizedVirtualTableRow
+						key={row.id}
+						row={row}
+						index={row.index}
+						renderSubComponent={renderSubComponent}
+					/>
+				))}
+			</TableBody>
+		)
 
 	return (
 		<TableBody style={{ height: virtualizer.getTotalSize() }}>

@@ -1,11 +1,13 @@
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
-import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
+import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import { Json } from '@/common/utils/json'
 import { Button, buttonVariants, Div, Icon, Label, Separator, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
@@ -13,10 +15,18 @@ import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, useMemoizedFn, usePrevious, useUpdateEffect } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	useMemoizedFn,
+	usePrevious,
+	useUnmount,
+	useUpdate,
+	useUpdateEffect
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash-es'
-import { Fragment, useRef, useState, useTransition } from 'react'
+import { Fragment, useLayoutEffect, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
@@ -33,8 +43,11 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
 	const abortControllerRef = useRef<AbortController | null>(null)
-	const { user, token, setAccessToken } = useAuth()
 	const [isPending, startTransition] = useTransition()
+	const { user } = useAuth()
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const [open, setOpen] = useState(isExtraLargeScreen)
+
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
 		usePageContext(
@@ -89,6 +102,8 @@ const ScannedEpcList: React.FC = () => {
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 
+	const update = useUpdate()
+
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
 		setScanningState('pending')
@@ -100,9 +115,10 @@ const ScannedEpcList: React.FC = () => {
 		try {
 			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/outbound/sse', {
 				method: RequestMethod.GET,
+				credentials: 'include',
 				headers: {
-					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.USER_COMPANY]: user?.company_code
+					[RequestHeaders.USER_REQUEST]: user?.username,
+					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -111,12 +127,10 @@ const ScannedEpcList: React.FC = () => {
 						setScanningState('success')
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						abortControllerRef.current.abort()
-						const response = await AuthService.refreshToken(user.username, abortControllerRef.current?.signal)
+						const response = await AuthService.refreshToken(abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
-						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one
-						setAccessToken(refreshToken)
+						throw new RetriableError()
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
 						response.status < HttpStatusCode.InternalServerError &&
@@ -143,11 +157,13 @@ const ScannedEpcList: React.FC = () => {
 					throw new RetriableError()
 				},
 				onerror(error) {
-					setScanningState('error')
-					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 					// * Depend on error type, retry or not
-					if (error instanceof FatalError) throw error
-					else throw new RetriableError()
+					if (error instanceof FatalError) {
+						setScanningState('error')
+						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
+						throw error
+					}
+					update() // * Force re-render to reset the SSE connection
 				}
 			})
 		} catch (e) {
@@ -157,9 +173,19 @@ const ScannedEpcList: React.FC = () => {
 		}
 	}
 
+	useUnmount(() => {
+		if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+			abortControllerRef.current?.abort()
+		}
+	})
+
 	useEffectOnce(() => {
 		fetchServerEvent()
 	})
+
+	useLayoutEffect(() => {
+		if (!isExtraLargeScreen) setOpen(true)
+	}, [isExtraLargeScreen])
 
 	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
@@ -180,29 +206,42 @@ const ScannedEpcList: React.FC = () => {
 	return (
 		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] xxl:rounded-t-none xxl:border-t-0'>
 			{/* Datalist header */}
-			<Div className='flex items-center justify-between border-b p-1.5'>
-				<Div className='ml-2'>
-					<ConnectionInsight />
-				</Div>
-				<Div className='inline-flex items-center gap-x-2'>
-					<Button variant='ghost' onClick={() => fetchServerEvent()}>
-						<Icon name='RotateCw' /> {t('ns_common:actions.reload')}
-					</Button>
-					<Separator orientation='vertical' className='h-6' />
-					<Label
-						role='button'
-						className={buttonVariants({ variant: 'ghost' })}
-						htmlFor='data-restoration-sheet-trigger'>
-						<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
-					</Label>
-					<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
-				</Div>
+			<Div className='flex w-full items-center justify-between gap-x-1 border-b p-1.5 *:text-sm xxl:justify-around'>
+				<ConnectionInsight />
+				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
+				<Button variant='ghost' size='sm' className='ml-auto xxl:ml-0' onClick={() => fetchServerEvent()}>
+					<Icon name='RefreshCcw' /> {t('ns_common:actions.reload')}
+				</Button>
+				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
+				<Label
+					role='button'
+					className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+					htmlFor='data-restoration-sheet-trigger'>
+					<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
+				</Label>
+				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
+				<Label
+					role='button'
+					className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'hidden xxl:inline-flex' })}
+					htmlFor='epc-data-upload-dialog-trigger'>
+					<Icon name='Upload' size={18} /> {t('ns_common:actions.upload')}
+				</Label>
+				<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
 			</Div>
+			{/* Datalist body */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					className='z-10 flex h-[33.33vh] w-full flex-col items-stretch justify-start divide-y bg-background p-2 will-change-transform contain-paint @4xl:h-[var(--outlet-wrapper-height)]'>
-					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
+					className={cn(
+						'linear z-10 divide-y bg-background duration-100 will-change-transform contain-paint',
+						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0 animate-out'
+					)}>
+					<Div
+						className={cn('relative w-full duration-300 ease-in', {
+							'animate-in fade-in-0': open,
+							'animate-out fade-out-0': !open
+						})}
+						style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
@@ -249,19 +288,29 @@ const ScannedEpcList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-[33.33vh] place-content-center @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]'>
+				<Div
+					className={cn(
+						'linear grid place-items-center transition-height duration-200',
+						open ? 'h-[33.33vh] @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]' : 'h-0'
+					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
+
+			{open && <Separator aria-hidden={!open} className='aria-hidden:hidden' />}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto grid-cols-2 gap-1.5 border-t p-1.5'>
+			<Div className='grid basis-auto grid-cols-2 gap-1.5 bg-background p-1.5'>
 				<Div className='hidden @2xl:block'>
 					<OrderDetailTableDialog />
 				</Div>
-				<Div className='col-span-full @2xl:col-span-1'>
+				<Div className='col-span-full @2xl:col-span-1 xxl:[&>button[aria-haspopup=dialog]]:hidden'>
+					<Button variant='secondary' className='hidden w-full xxl:flex' onClick={() => setOpen(!open)}>
+						<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
+						{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
+					</Button>
 					<UploadDataFileDialog station='WH103' maxFiles={500} />
 				</Div>
 			</Div>

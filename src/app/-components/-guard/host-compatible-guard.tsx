@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
-	const currentHostRegistry = __hostRegistry.get(user?.company_code)
+	const currentHostRegistry = __hostRegistry.get(user?.current_factory_code)
 
 	const shouldCheck = env('VITE_NODE_ENV') === 'production'
 
@@ -38,7 +38,9 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.303_message', {
 							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color: hsl(var(--active));'>URL</a>`,
-							factoryCode: t(`ns_common:factory.${user?.company_code}`, { defaultValue: user?.company_code }),
+							factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
+								defaultValue: user?.current_factory_code
+							}),
 							defaultValue: null
 						})
 					}}

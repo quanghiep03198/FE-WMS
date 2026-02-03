@@ -3,11 +3,13 @@ import { TableBody, TableCell, TableRow } from '@/components/ui'
 import { notUndefined, Virtualizer } from '@tanstack/react-virtual'
 import TableDataRow from './order-detail-row'
 
-const OrderDetailTableBody: React.FC<{ virtualizer: Virtualizer<any, any>; data: OrderItem[] }> = ({
-	virtualizer,
-	data
-}) => {
-	'use no memo'
+type OrderDetailTableBodyProps = {
+	virtualizer: Virtualizer<any, any>
+	data: OrderItem[]
+}
+
+const OrderDetailTableBody: React.FC<OrderDetailTableBodyProps> = ({ virtualizer, data }) => {
+	// 'use no memo'
 
 	const virtualItems = virtualizer.getVirtualItems()
 

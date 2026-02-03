@@ -1,13 +1,11 @@
 import { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
-import { IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { IAuthState, useAuthStore } from '@/stores/auth.store'
-import { GenericAbortSignal, type AxiosRequestConfig } from 'axios'
-import { isNil } from 'lodash-es'
+import { GenericAbortSignal } from 'axios'
 
 export class AuthService {
-	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user' | 'token'>>> {
+	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user'>>> {
 		return await axiosInstance.post('/login', data)
 	}
 
@@ -18,10 +16,6 @@ export class AuthService {
 		queryClient.clear() // * clear cached queries
 	}
 
-	static async profile(config?: AxiosRequestConfig): Promise<IUser> {
-		return await axiosInstance.get('/profile', config)
-	}
-
 	static getCredentials(): IAuthState['user'] {
 		return useAuthStore.getState().user
 	}
@@ -30,28 +24,11 @@ export class AuthService {
 		return await axiosInstance.post<void, ResponseBody<null>>('/logout')
 	}
 
-	static async refreshToken(username: string, signal: GenericAbortSignal): Promise<ResponseBody<string>> {
+	static async refreshToken(signal: GenericAbortSignal): Promise<ResponseBody<string>> {
 		try {
-			return await axiosInstance.get(`/refresh-token/${username}`, { signal })
+			return await axiosInstance.get('refresh-token', { signal })
 		} catch {
 			AuthService.logout()
 		}
-	}
-
-	static getAccessToken(): string | null {
-		const accessToken = useAuthStore.getState().token
-		return isNil(accessToken) ? null : `Bearer ${accessToken}`
-	}
-
-	static setAccessToken(token: string): void {
-		useAuthStore.getState().setAccessToken(token)
-	}
-
-	static getHasAccessToken(): boolean {
-		const accessToken = useAuthStore.getState().token
-		return !isNil(accessToken)
-	}
-	static async updatePassword(newPassword: string) {
-		return await axiosInstance.patch(`/change-password`, newPassword)
 	}
 }

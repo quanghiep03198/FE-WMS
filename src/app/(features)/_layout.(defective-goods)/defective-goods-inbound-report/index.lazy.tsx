@@ -1,10 +1,19 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
-import { Div, Separator } from '@/components/ui'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
+import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import DatePickerFilter from '../../-components/shared/date-picker-filter'
-import { PageDescription, PageHeader, PageTitle } from '../../-components/shared/page-header'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../../-components/shared/page-header'
 import DownloadExcelButton from './-components/download-excel-button'
 import InboundReportMasterTable from './-components/report-master-table'
 
@@ -31,22 +40,29 @@ function Page() {
 			<title>{t('ns_common:navigation.daily_inbound_report')}</title>
 			<meta name='description' content={t('ns_inoutbound:description.defective_goods_inbound_report')} />
 
-			<Div as='section' className='mt-4 space-y-4 @container'>
-				<Div className='flex w-full'>
-					<PageHeader className='flex-1'>
+			<RoleGuard
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.DG_WAREHOUSE_STAFF
+				]}>
+				<PageWrapper>
+					<PageHeader>
 						<PageTitle>{t('ns_inoutbound:titles.daily_inbound_report')}</PageTitle>
 						<PageDescription>{t('ns_inoutbound:description.defective_goods_inbound_report')}</PageDescription>
+						<PageAction>
+							<DatePickerFilter />
+							<Div className='hidden @[1024px]:block'>
+								<DownloadExcelButton />
+							</Div>
+						</PageAction>
 					</PageHeader>
-					<Div className='ml-auto flex gap-x-2'>
-						<DatePickerFilter />
-						<Div className='hidden @[1024px]:block'>
-							<DownloadExcelButton />
-						</Div>
-					</Div>
-				</Div>
-				<Separator />
-				<InboundReportMasterTable />
-			</Div>
+
+					<PageSeparator />
+					<InboundReportMasterTable />
+				</PageWrapper>
+			</RoleGuard>
 		</Fragment>
 	)
 }

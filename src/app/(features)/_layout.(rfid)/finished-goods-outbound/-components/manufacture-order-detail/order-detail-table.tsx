@@ -1,3 +1,4 @@
+import useAuth from '@/common/hooks/use-auth'
 import useMeasureElement from '@/common/hooks/use-measure-element'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { cn } from '@/common/utils/cn'
@@ -17,6 +18,7 @@ import TableHeader from './order-detail-header'
 const VIRTUAL_ROW_HEIGHT = 75 // Default row height for virtualized table
 
 const OrderSizeDetailTable: React.FC = () => {
+	const { user } = useAuth()
 	const { scannedOrders } = usePageContext('scannedOrders')
 	const [columnFilters, setColumnFilters] = useResetState<Omit<OrderItem, 'sizes' | 'factory_code_produce'>>({
 		mo_no: '',
@@ -129,7 +131,6 @@ const OrderSizeDetailTable: React.FC = () => {
 								minWidth: 'var(--sticky-right-col-width)'
 							}}
 						/>
-
 						<col
 							style={{
 								maxWidth: 'var(--row-action-col-width)',

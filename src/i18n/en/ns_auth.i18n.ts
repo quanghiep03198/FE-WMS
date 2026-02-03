@@ -1,12 +1,31 @@
+import { UserRole } from '@/common/constants/enums'
+
 export default {
 	actions: { go_to_dashboard: 'Go to dashboard' },
-	labels: {
+	descriptions: {
+		page_description: 'Manage user profiles and assign roles to control system access permissions.',
+		create_user: 'Fill in the details below to create a new account.',
+		update_user: 'Update existing user information and permissions'
+	},
+	titles: {
+		page_title: 'User & Access Management',
+		create_user: 'Create New User',
+		update_user: 'Update Information'
+	},
+	fields: {
 		email: 'Email',
+		display_name: 'Display name',
+		password: 'Password',
+		username: 'User name',
+		joined_system_date: 'Joined system date',
+		employee_code: 'Employee code',
+		last_login_at: 'Last login',
+		role: 'Role'
+	},
+	labels: {
 		forgot_password: 'Forgot your password?',
 		logged_in_with: 'Logged in with',
-		password: 'Password',
-		remember_account: 'Remember me',
-		username: 'User name'
+		remember_account: 'Remember me'
 	},
 	notification: {
 		authenticate_success: 'Verified your account',
@@ -15,7 +34,8 @@ export default {
 		login_success: 'Logged in succesfully',
 		logout_failed: 'Failed to log out',
 		logout_success: 'Logged out',
-		session_expired: 'Your session has expired, please log in again'
+		session_expired: 'Your session has expired, please log in again',
+		viewonly: 'You are currently in view-only mode. Editing access is restricted.'
 	},
 	profile: {
 		change_password: 'Change password',
@@ -29,6 +49,14 @@ export default {
 		save_changes: 'Save changes',
 		this_will_be: 'This will be displayed on your profile',
 		update_password: 'Update password'
+	},
+	roles: {
+		[UserRole.ADMIN]: 'Administrator',
+		[UserRole.MANAGER]: 'Manager',
+		[UserRole.FG_WAREHOUSE_STAFF]: 'Finished Goods Warehouse Staff',
+		[UserRole.DG_WAREHOUSE_STAFF]: 'Defective Goods Warehouse Staff',
+		[UserRole.IE_STAFF]: 'Import-Export Staff',
+		[UserRole.SECURITY_GUARD]: 'Security Guard'
 	},
 	steps: { select_department: 'Select department', verify_account: 'Verify your account' },
 	texts: {

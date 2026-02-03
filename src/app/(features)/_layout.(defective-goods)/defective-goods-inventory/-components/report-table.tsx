@@ -190,7 +190,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				slotRight: () => (
 					<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
 						<Button size='icon' variant='outline' onClick={() => refetch()}>
-							<Icon name='RotateCw' />
+							<Icon name='RefreshCcw' />
 						</Button>
 					</Tooltip>
 				)

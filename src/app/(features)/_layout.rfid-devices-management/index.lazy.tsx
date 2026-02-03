@@ -3,8 +3,16 @@ import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
-import { Div, Separator } from '@/components/ui'
-import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../-components/shared/page-header'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import RFIDDeviceFormDialog from './-components/rfid-device-form-dialog'
 import RFIDDeviceList from './-components/rfid-device-list'
@@ -27,21 +35,23 @@ function Page() {
 			<title>{t('ns_common:navigation.rfid_device_management')}</title>
 			<meta name='description' content={t('ns_rfid:descriptions.rfid_device_management')} />
 
-			<HostCompatibleGuard>
-				<PageContextProvider>
-					<Div as='section' className='mt-4 space-y-6'>
-						<Div className='flex items-start justify-between'>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+				<HostCompatibleGuard>
+					<PageContextProvider>
+						<PageWrapper>
 							<PageHeader>
 								<PageTitle>{t('ns_rfid:titles.rfid_device_management')}</PageTitle>
 								<PageDescription>{t('ns_rfid:descriptions.rfid_device_management')}</PageDescription>
+								<PageAction>
+									<RFIDDeviceFormDialog />
+								</PageAction>
 							</PageHeader>
-							<RFIDDeviceFormDialog />
-						</Div>
-						<Separator />
-						<RFIDDeviceList />
-					</Div>
-				</PageContextProvider>
-			</HostCompatibleGuard>
+							<PageSeparator />
+							<RFIDDeviceList />
+						</PageWrapper>
+					</PageContextProvider>
+				</HostCompatibleGuard>
+			</RoleGuard>
 		</Fragment>
 	)
 }

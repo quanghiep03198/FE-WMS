@@ -1,6 +1,6 @@
 import { MicrosoftIcon } from '@/components/icons'
-import { Div, Typography } from '@/components/ui'
-import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
+import { Div, Kbd, KbdGroup, Typography } from '@/components/ui'
+
 import React from 'react'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 import { DownloadButton } from './download-button'
@@ -36,14 +36,15 @@ const MosquittoInstallation: React.FC = () => {
 					<Typography className='inline'>
 						Once installed, add Eclipse Mosquitto into your Evironment variables Path. This allows you to run
 						Mosquitto from any command prompt. Press{' '}
-						<Kbd className='mx-1'>
-							<KbdKey aria-label='Meta'>Win</KbdKey>
-							<KbdKey>R</KbdKey>
-						</Kbd>
+						<KbdGroup className='mx-1'>
+							<Kbd aria-label='Meta'>Win</Kbd>
+							<span>+</span>
+							<Kbd>R</Kbd>
+						</KbdGroup>
 						, type <code>&quot;cmd&quot;</code> and hit{' '}
-						<Kbd className='mx-1'>
-							<KbdKey aria-label='Meta'> ↳ Enter</KbdKey>
-						</Kbd>{' '}
+						<KbdGroup className='mx-1'>
+							<Kbd aria-label='Meta'> ↳ Enter</Kbd>
+						</KbdGroup>{' '}
 						to open <b>Command Prompt</b>.
 					</Typography>
 					<Terminal command={/* template */ `setx PATH "%PATH%;%MOSQUITTO_DIR%" /M`} className='my-4'>

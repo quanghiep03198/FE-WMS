@@ -1,5 +1,7 @@
 // #region Modules
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { RoleGuard } from '@/app/-components/-guard/role-guard'
+import { UserRole } from '@/common/constants/enums'
 import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -32,14 +34,16 @@ function Page() {
 			<title>{t('ns_common:navigation.warehouse_management')}</title>
 			<meta name='description' content={t('ns_warehouse:headings.warehouse_list_description')} />
 
-			<PageProvider>
-				<Div className='mt-4 space-y-6'>
-					<WarehouseListHeading />
-					<Separator />
-					<WarehouseList />
-				</Div>
-				<WarehouseFormDialog />
-			</PageProvider>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+				<PageProvider>
+					<Div className='mt-4 space-y-6'>
+						<WarehouseListHeading />
+						<Separator />
+						<WarehouseList />
+					</Div>
+					<WarehouseFormDialog />
+				</PageProvider>
+			</RoleGuard>
 		</Fragment>
 	)
 }

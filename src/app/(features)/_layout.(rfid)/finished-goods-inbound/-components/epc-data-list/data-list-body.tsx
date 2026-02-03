@@ -31,7 +31,7 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 
 const EpcDataList: React.FC = () => {
 	const { t } = useTranslation()
-	const { user, token, setAccessToken } = useAuth()
+	const { user } = useAuth()
 	const {
 		currentPage,
 		selectedOrder,
@@ -83,9 +83,9 @@ const EpcDataList: React.FC = () => {
 		try {
 			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/inbound/sse', {
 				method: RequestMethod.GET,
+				credentials: 'include',
 				headers: {
-					[RequestHeaders.AUTHORIZATION]: `Bearer ${token}`,
-					[RequestHeaders.USER_COMPANY]: user?.company_code
+					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
@@ -97,12 +97,10 @@ const EpcDataList: React.FC = () => {
 						}
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						abortControllerRef.current.abort()
-						const response = await AuthService.refreshToken(user.username, abortControllerRef.current?.signal)
+						const response = await AuthService.refreshToken(abortControllerRef.current?.signal)
 						const refreshToken = response.metadata
 						if (!refreshToken) throw new FatalError('Failed to refresh token')
-						// * If refresh token is success, set new access token and retry to trigger fetch server-sent event with the new one
-						setAccessToken(refreshToken)
+						throw new RetriableError()
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
 						response.status < HttpStatusCode.InternalServerError &&
@@ -129,17 +127,21 @@ const EpcDataList: React.FC = () => {
 					throw new RetriableError()
 				},
 				onerror(error) {
-					setScanningStatus('disconnected')
-					toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 					// * Depend on error type, retry or not
-					if (error instanceof FatalError) throw error
-					else throw new RetriableError()
+					if (!abortControllerRef.current.signal.aborted) abortControllerRef.current.abort()
+					if (error instanceof FatalError) {
+						setScanningStatus('disconnected')
+						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
+						throw error
+					}
+					// * Retry on other errors
+					setScanningStatus('connecting')
 				}
 			})
 		} catch (e) {
 			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
 		} finally {
-			toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
+			if (scanningStatus !== 'disconnected') toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 		}
 	}
 
@@ -171,11 +173,11 @@ const EpcDataList: React.FC = () => {
 				}
 			}
 		}
-	}, [scanningStatus, token])
+	}, [scanningStatus])
 
 	useUpdateEffect(() => {
 		setScanningStatus(DEFAULT_PROPS.scanningStatus)
-	}, [user?.company_code])
+	}, [user?.current_factory_code])
 
 	// * Triggered when incomming message comes
 	useDeepCompareEffect(() => {

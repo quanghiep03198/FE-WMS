@@ -1,10 +1,16 @@
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
+import { PresetBreakPoints } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import OrderDetails from '../manufacturing-order-detail'
 import EpcDataList from './data-list-body'
 import ListBoxHeader from './data-list-header'
 
 const EpcListBox: React.FC = () => {
+	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const { t } = useTranslation()
+
 	return (
 		<ListBoxWrapper
 			style={{

@@ -1,5 +1,5 @@
 import { useGetCommandNumberDetailQuery } from '@/app/(features)/-hooks/use-order-asm'
-import { CommonActions } from '@/common/constants/enums'
+import { CommonActions, UserRole } from '@/common/constants/enums'
 import { IBaseEntity } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
@@ -30,6 +30,7 @@ import {
 	updateDefectiveGoodsSchema
 } from '../../-schemas/defective-goods.schema'
 
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { IDefectiveGoods } from '@/services/defective-goods.service'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../-constants'
@@ -249,47 +250,67 @@ const DefectiveGoodsForm: React.FC = () => {
 					className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
 					<ListPanelToggle />
 					<DataListPanelSheetTrigger />
-					{isNil(formAction) ? (
-						<Button
-							type='button'
-							size='sm'
-							className='ml-auto'
-							onClick={() => setFormAction(CommonActions.CREATE)}>
-							<Icon name='CircleFadingPlus' size={18} />
-							{t('ns_common:actions.add')}
-						</Button>
-					) : (
-						<Div className='ml-auto flex items-center gap-x-2'>
-							<Button disabled={isPending} variant='destructive' size='sm' type='button' onClick={handleCancel}>
-								<Icon name='X' /> {t('ns_common:actions.cancel')}
-							</Button>
+					<RoleBaseAccessControl
+						mode='fallback'
+						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
+						fallbackComponent={
 							<Button
-								disabled={isPending}
-								variant='secondary'
 								size='sm'
 								type='button'
-								onClick={() => handleResetForm()}>
-								<Icon name='Undo2' /> {t('ns_common:actions.reset')}
+								className='cursor-not-allowed'
+								onClick={() =>
+									toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
+								}>
+								<Icon name='Lock' /> {t('ns_common:actions.add')}
 							</Button>
+						}>
+						{isNil(formAction) ? (
 							<Button
-								disabled={isPending}
+								type='button'
 								size='sm'
-								type='submit'
-								className={cn(
-									isNil(
-										formAction
-											? 'animate-out fade-out-0 slide-out-to-right-0'
-											: 'animate-in fade-in-100 slide-in-from-left-2'
-									)
-								)}>
-								<Icon
-									name={isPending ? 'LoaderCircle' : 'Check'}
-									className={isPending && 'animate-[spin_1s_linear_infinite]'}
-								/>{' '}
-								{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+								className='ml-auto'
+								onClick={() => setFormAction(CommonActions.CREATE)}>
+								<Icon name='CircleFadingPlus' size={18} />
+								{t('ns_common:actions.add')}
 							</Button>
-						</Div>
-					)}
+						) : (
+							<Div className='ml-auto flex items-center gap-x-2'>
+								<Button
+									disabled={isPending}
+									variant='destructive'
+									size='sm'
+									type='button'
+									onClick={handleCancel}>
+									<Icon name='X' /> {t('ns_common:actions.cancel')}
+								</Button>
+								<Button
+									disabled={isPending}
+									variant='secondary'
+									size='sm'
+									type='button'
+									onClick={() => handleResetForm()}>
+									<Icon name='Undo2' /> {t('ns_common:actions.reset')}
+								</Button>
+								<Button
+									disabled={isPending}
+									size='sm'
+									type='submit'
+									className={cn(
+										isNil(
+											formAction
+												? 'animate-out fade-out-0 slide-out-to-right-0'
+												: 'animate-in fade-in-100 slide-in-from-left-2'
+										)
+									)}>
+									<Icon
+										name={isPending ? 'LoaderCircle' : 'Check'}
+										className={isPending && 'animate-[spin_1s_linear_infinite]'}
+									/>{' '}
+									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
+								</Button>
+							</Div>
+						)}
+					</RoleBaseAccessControl>
 				</Div>
 				{/* User activities timestamp */}
 				{formAction === CommonActions.UPDATE && (
@@ -419,6 +440,7 @@ const DefectiveGoodsForm: React.FC = () => {
 							<Checkbox
 								id='toggle-use-desc-template'
 								checked={useAvailableTemplate}
+								disabled={isNil(formAction)}
 								onCheckedChange={(checked) => {
 									setUseAvailabelTemplate(Boolean(checked))
 									if (!checked) setDefaultEditorContent('')

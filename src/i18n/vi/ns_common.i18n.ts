@@ -49,6 +49,7 @@ export default {
 		save_changes: 'Lưu thay đổi',
 		search: 'Tìm kiếm',
 		select: 'Chọn',
+		select_all: 'Chọn tất cả',
 		select_database: 'Chọn cơ sở dữ liệu',
 		select_server: 'Chọn máy chủ',
 		set_approval_status: 'Đặt trạng thái phê duyệt',
@@ -103,7 +104,9 @@ export default {
 		'303': 'Đã chuyển hướng đến tài nguyên khác',
 		'303_message': 'Vui lòng truy cập vào {{url}} để sử dụng tính năng này cho nhà máy {{factoryCode}}',
 		'403': 'Yêu Cầu Quyền Truy Cập',
-		'403_message': 'Bạn không được phép truy cập trang này.',
+		'403_message':
+			'Bạn không được phép truy cập trang này. Vui lòng liên hệ quản trị viên để được cấp quyền truy cập',
+		'403_notification': 'Bạn chưa được cấp quyền thực hiện thao tác này.',
 		'404': 'Không Tìm Thấy Trang.',
 		'404_message': 'Trang không tồn tại. Vui lòng kiểm tra lại đường dẫn.',
 		'500': 'Đã xảy ra lỗi',
@@ -210,10 +213,12 @@ export default {
 		select: 'Chọn {{object}}'
 	},
 	navigation: {
+		access_management: 'Quản lý truy cập',
 		account: 'Tài khoản',
 		appearance: 'Giao diện',
-		dashboard: 'Màn hình chính',
+		cargo_weight_check: 'Kiểm tra & Cân Hàng',
 		common_management: 'Quản lý chung',
+		dashboard: 'Màn hình chính',
 		daily_outbound_report: 'Báo biểu xuất hàng',
 		finished_goods_inbound: 'Nhập xuất kho thành phẩm',
 		finished_goods_outbound: 'Xuất hàng kho thành phẩm',
@@ -225,9 +230,9 @@ export default {
 		defective_goods_inventory: 'Tồn kho hàng loại 2',
 		monthly_inventory_audit: 'Kết đơn tồn kho thành phẩm',
 		keyboard_shortcut: 'Phím tắt',
-		cargo_weight_check: 'Kiểm tra & Cân Hàng',
 		inoutbound_history: 'Lịch sử nhập/xuất hàng',
 		inventory_estimation: 'Kiểm kê tồn kho thành phẩm',
+		metrics: 'Giám sát hệ thống',
 		profile: 'Thông tin cá nhân',
 		report_management: 'Báo biểu',
 		rfid_system: 'Hệ thống RFID',
@@ -240,6 +245,9 @@ export default {
 		transfer_managment: 'Quản lý chuyển giao',
 		truckload_delivery_management: 'Quản lý vận chuyển',
 		warehouse_management: 'Quản lý kho',
+
+		// Labels
+		administration_label: 'Quản trị',
 		main_menu_label: 'Menu chính',
 		preference_menu_label: 'Tùy chỉnh'
 	},
@@ -307,7 +315,9 @@ export default {
 		sort_asc: 'Sắp xếp tăng dần',
 		sort_desc: 'Sắp xếp giảm dần',
 		total_rows: '{{count}} bản ghi',
-		unpin: 'Bỏ ghim'
+		toggle_columns: 'Tùy chọn hiển thị cột',
+		unpin: 'Bỏ ghim',
+		column_settings: 'Thiết lập cột'
 	},
 	titles: {
 		advanced_search: 'Tìm kiếm nâng cao',

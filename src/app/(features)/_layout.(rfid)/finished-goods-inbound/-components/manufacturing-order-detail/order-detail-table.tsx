@@ -296,6 +296,7 @@ const OrderDetailTable: React.FC = () => {
 									<TableHead align='center'>
 										<span className='sr-only'></span>
 									</TableHead>
+
 									<TableHead align='center'>
 										<span className='sr-only'></span>
 									</TableHead>
