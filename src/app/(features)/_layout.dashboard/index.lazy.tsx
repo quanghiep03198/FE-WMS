@@ -34,8 +34,7 @@ function Page() {
 					UserRole.ADMIN,
 					UserRole.MANAGER,
 					UserRole.FG_WAREHOUSE_STAFF,
-					UserRole.DG_WAREHOUSE_STAFF,
-					UserRole.IE_STAFF
+					UserRole.DG_WAREHOUSE_STAFF
 				]}>
 				<PageWrapper className='@container'>
 					<PageHeader className='basis-1/2 xl:basis-full'>

@@ -19,13 +19,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 			icon: 'Gauge',
 			title: 'navigation.dashboard',
 			url: '/dashboard',
-			authorizedRoles: [
-				UserRole.ADMIN,
-				UserRole.MANAGER,
-				UserRole.FG_WAREHOUSE_STAFF,
-				UserRole.DG_WAREHOUSE_STAFF,
-				UserRole.IE_STAFF
-			]
+			authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.DG_WAREHOUSE_STAFF]
 		},
 		{
 			icon: 'LayoutList',
