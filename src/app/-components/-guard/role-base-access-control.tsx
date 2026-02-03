@@ -11,7 +11,7 @@ type VisibilityMode = 'mask' | 'invisible' | 'fallback'
 type RoleBaseAccessControlVariant =
 	| {
 			mode?: Exclude<VisibilityMode, 'fallback'>
-			fallbackComponent?: never
+			fallbackComponent?: undefined
 	  }
 	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: Required<React.ReactNode> }
 

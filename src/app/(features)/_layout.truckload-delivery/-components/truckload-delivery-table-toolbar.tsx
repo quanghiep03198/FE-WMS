@@ -77,27 +77,28 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 						<DownloadExcelButton />
 					</Tooltip>
 				)}
-				<RoleBaseAccessControl
-					authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
-					mode='fallback'
-					fallbackComponent={
-						<Button
-							type='button'
-							onClick={() =>
-								toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
-							}
-							className='w-full'>
-							<Icon name='Lock' />
-							{t('ns_common:actions.add')}
-						</Button>
-					}>
-					<Tooltip
-						message={t('ns_common:actions.add')}
-						triggerProps={{ asChild: true }}
-						contentProps={{ hidden: !isMobile }}>
+				<Tooltip
+					message={t('ns_common:actions.add')}
+					triggerProps={{ asChild: true }}
+					contentProps={{ hidden: !isMobile }}>
+					<RoleBaseAccessControl
+						authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
+						mode='fallback'
+						fallbackComponent={
+							<Button
+								type='button'
+								variant='secondary'
+								className='sm:hidden md:hidden'
+								onClick={() =>
+									toast.warning(t('ns_common:errors.403_notification'), { id: ACTION_RESTRICTED_TOAST_ID })
+								}>
+								<Icon name='Lock' />
+								{t('ns_common:actions.add')}
+							</Button>
+						}>
 						<CreateTruckloadDialogButton />
-					</Tooltip>
-				</RoleBaseAccessControl>
+					</RoleBaseAccessControl>
+				</Tooltip>
 			</Div>
 		</Div>
 	)
