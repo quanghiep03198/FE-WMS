@@ -5,9 +5,9 @@ export const createUserSchema = object({
 	username: string({ error: 'ns_validation:required' })
 		.nonempty({ error: 'ns_validation:required' })
 		.min(4, { error: JSON.stringify({ key: 'ns_validation:min_length', bindings: { min: 3 } }) }),
-	password: string().optional(),
+	password: string().nullish(),
 	display_name: string().nonempty({ error: 'ns_validation:required' }),
-	email: email().optional(),
+	email: email().nullish(),
 	employee_code: string().optional(),
 	roles: array(enums(UserRole), { error: 'ns_validation:required' }).nonempty({ error: 'ns_validation:required' }),
 	authorized_factory_codes: array(enums(FactoryCode), { error: 'ns_validation:required' }).nonempty({

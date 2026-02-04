@@ -125,7 +125,11 @@ const UserFormDialog: React.FC = () => {
 
 	const handleCreateUser = (data: CreateUserFormValues) => {
 		if (typeof formActionRef.current !== 'function') return
-		toast.promise(formActionRef.current({ ...data, password: data.username }), {
+		const payload = { ...data, password: data.password ?? data.username }
+		for (const key in payload) {
+			if (payload[key] === '') payload[key] = null
+		}
+		toast.promise(formActionRef.current(payload), {
 			loading: t('ns_common:notification.processing_request'),
 			success: () => {
 				setOpen(false)
@@ -155,18 +159,27 @@ const UserFormDialog: React.FC = () => {
 							)}
 						/>
 						<InputFieldControl
-							name='display_name'
-							label={t('ns_auth:fields.display_name')}
-							onChange={(e) => form.setValue('display_name', e.target.value.toUpperCase())}
-							placeholder={capitalize(
-								t('ns_common:form_placeholder.fill', {
-									object: t('ns_auth:fields.display_name'),
-									defaultValue: null
-								})
-							)}
+							name='password'
+							label={t('ns_auth:fields.password')}
+							type='password'
+							placeholder={'******'}
 						/>
+						<Div className='col-span-full'>
+							<InputFieldControl
+								name='display_name'
+								label={t('ns_auth:fields.display_name')}
+								onChange={(e) => form.setValue('display_name', e.target.value.toUpperCase())}
+								placeholder={capitalize(
+									t('ns_common:form_placeholder.fill', {
+										object: t('ns_auth:fields.display_name'),
+										defaultValue: null
+									})
+								)}
+							/>
+						</Div>
 						<InputFieldControl
 							name='email'
+							type='email'
 							label={t('ns_auth:fields.email')}
 							placeholder={'example@vn.well-union.com'}
 						/>
