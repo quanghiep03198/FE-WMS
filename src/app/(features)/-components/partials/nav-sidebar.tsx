@@ -118,7 +118,7 @@ const NavSidebar: React.FC = () => {
 				</SidebarGroup>
 				<SidebarSeparator />
 				<SidebarGroup>
-					<SidebarGroupLabel>Ecosystem</SidebarGroupLabel>
+					<SidebarGroupLabel>{t('ns_common:navigation.integration_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Administration'>
 						{navigationConfig.ecosystem.map((item) => {
 							return <SidebarMenuLink indice='none' key={uuid()} {...item} />

@@ -248,8 +248,9 @@ export default {
 		truckload_delivery_management: '卡車裝運管理',
 		// labels
 		administration_menu_label: '管理',
-		main_menu_label: '主菜单',
-		preference_menu_label: ' 偏好设置'
+		integration_menu_label: ' 系統整合',
+		main_menu_label: '系统集成',
+		preference_menu_label: '偏好设置'
 	},
 	notification: {
 		downloading: '下载 ...',

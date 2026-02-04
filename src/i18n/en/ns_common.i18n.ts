@@ -246,8 +246,9 @@ export default {
 
 		// labels
 		administration_menu_label: 'Administration',
+		integration_menu_label: 'Integrations',
 		main_menu_label: 'Main',
-		preference_menu_label: ' Preference'
+		preference_menu_label: 'Preference'
 	},
 	notification: {
 		downloading: 'Downloading ...',

@@ -249,6 +249,7 @@ export default {
 
 		// Labels
 		administration_menu_label: 'Quản trị',
+		integration_menu_label: 'Liên kết hệ thống',
 		main_menu_label: 'Menu chính',
 		preference_menu_label: 'Tùy chỉnh'
 	},
