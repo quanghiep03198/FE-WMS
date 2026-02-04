@@ -129,9 +129,7 @@ const NavSidebar: React.FC = () => {
 					<Fragment>
 						<SidebarSeparator />
 						<SidebarGroup>
-							<SidebarGroupLabel>
-								{t('ns_common:navigation.administration', { defaultValue: 'Administration' })}
-							</SidebarGroupLabel>
+							<SidebarGroupLabel>{t('ns_common:navigation.administration_menu_label')}</SidebarGroupLabel>
 							<SidebarMenu role='menu' aria-label='Administration'>
 								{navigationConfig.administration.map((item) => {
 									return <SidebarMenuLink indice='none' key={uuid()} {...item} />

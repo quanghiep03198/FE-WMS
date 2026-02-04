@@ -247,7 +247,7 @@ export default {
 		daily_outbound_report: '出庫管理',
 		truckload_delivery_management: '卡車裝運管理',
 		// labels
-		administration_label: '管理',
+		administration_menu_label: '管理',
 		main_menu_label: '主菜单',
 		preference_menu_label: ' 偏好设置'
 	},

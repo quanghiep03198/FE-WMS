@@ -230,11 +230,11 @@ export default {
 		inventory_estimation: 'Inventory estimation',
 		keyboard_shortcut: 'Keyboard shortcut',
 		mes_system: 'i-MES system',
-		metrics: 'System Monitoring',
+		metrics: 'System monitoring',
 		profile: 'Profile',
 		report_management: 'Report',
 		rfid_system: 'RFID system',
-		rfid_device_management: 'RFID device Management',
+		rfid_device_management: 'RFID device management',
 		packing_manifest: 'Packing manifest',
 		purchase_order_search: 'Purchase order search',
 		seeking: 'Seeking',
@@ -245,7 +245,7 @@ export default {
 		warehouse_management: 'Warehouse management',
 
 		// labels
-		administration_label: 'Administration',
+		administration_menu_label: 'Administration',
 		main_menu_label: 'Main',
 		preference_menu_label: ' Preference'
 	},

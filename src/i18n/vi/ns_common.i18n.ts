@@ -248,7 +248,7 @@ export default {
 		warehouse_management: 'Quản lý kho',
 
 		// Labels
-		administration_label: 'Quản trị',
+		administration_menu_label: 'Quản trị',
 		main_menu_label: 'Menu chính',
 		preference_menu_label: 'Tùy chỉnh'
 	},
