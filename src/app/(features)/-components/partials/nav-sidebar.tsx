@@ -65,7 +65,7 @@ const NavSidebar: React.FC = () => {
 					<ScrollShadow
 						className={cn(
 							'overflow-y-auto overflow-x-hidden !scrollbar-none',
-							user?.roles?.includes(UserRole.ADMIN) ? 'max-h-[35vh] xxl:max-h-[45vh]' : 'max-h-[55vh]'
+							user?.roles?.includes(UserRole.ADMIN) ? 'max-h-[30vh] xxl:max-h-[40vh]' : 'max-h-[55vh]'
 						)}>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
@@ -115,6 +115,15 @@ const NavSidebar: React.FC = () => {
 							})}
 						</SidebarMenu>
 					</ScrollShadow>
+				</SidebarGroup>
+				<SidebarSeparator />
+				<SidebarGroup>
+					<SidebarGroupLabel>Ecosystem</SidebarGroupLabel>
+					<SidebarMenu role='menu' aria-label='Administration'>
+						{navigationConfig.ecosystem.map((item) => {
+							return <SidebarMenuLink indice='none' key={uuid()} {...item} />
+						})}
+					</SidebarMenu>
 				</SidebarGroup>
 				{user?.roles?.includes(UserRole.ADMIN) && (
 					<Fragment>
@@ -291,7 +300,7 @@ const SwitchUserCompany: React.FC = () => {
 				className='w-[var(--radix-dropdown-menu-trigger-width)] min-w-60'
 				side={open ? 'top' : 'right'}
 				align='end'>
-				<DropdownMenuLabel>{t('ns_company:company')}</DropdownMenuLabel>
+				<DropdownMenuLabel>{t('ns_company:factory')}</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{Array.isArray(user?.authorized_factory_codes) &&
 					user.authorized_factory_codes.map((item) => (

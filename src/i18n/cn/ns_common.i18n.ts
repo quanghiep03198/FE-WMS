@@ -231,6 +231,7 @@ export default {
 		inoutbound_history: '出入庫歷史',
 		inventory_estimation: '生产库存估算',
 		keyboard_shortcut: '快捷键',
+		mes_system: 'i-MES系统',
 		metrics: '系统监控',
 		profile: '个人信息',
 		report_management: '報表管理',

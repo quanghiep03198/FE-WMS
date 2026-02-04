@@ -13,7 +13,7 @@ export type NavigationConfig = {
 	authorizedRoles?: UserRole[] | '*'
 }
 
-export const navigationConfig: Record<'main' | 'preferences' | 'administration', NavigationConfig[]> = {
+export const navigationConfig: Record<'main' | 'preferences' | 'ecosystem' | 'administration', NavigationConfig[]> = {
 	main: [
 		{
 			icon: 'Gauge',
@@ -145,6 +145,14 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 			authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
 		}
 	],
+	ecosystem: [
+		{
+			icon: 'AppWindowMac',
+			title: 'navigation.mes_system',
+			url: env('VITE_MES_URL'),
+			authorizedRoles: '*'
+		}
+	],
 	administration: [
 		{
 			icon: 'Users',
@@ -153,6 +161,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'administration',
 			keybinding: 'ctrl.alt.u',
 			authorizedRoles: [UserRole.ADMIN]
 		},
+
 		{
 			icon: 'ChartNetwork',
 			title: 'navigation.metrics',

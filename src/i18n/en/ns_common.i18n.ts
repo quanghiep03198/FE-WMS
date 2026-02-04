@@ -229,6 +229,7 @@ export default {
 		inoutbound_history: 'In/Outbound history',
 		inventory_estimation: 'Inventory estimation',
 		keyboard_shortcut: 'Keyboard shortcut',
+		mes_system: 'i-MES system',
 		metrics: 'System Monitoring',
 		profile: 'Profile',
 		report_management: 'Report',
