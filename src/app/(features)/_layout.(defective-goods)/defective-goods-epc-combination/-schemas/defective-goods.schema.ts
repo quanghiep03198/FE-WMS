@@ -33,7 +33,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 				size_code: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 				qty: number({ message: 'ns_validation:required' }).min(1, { message: 'ns_validation:invalid_value' })
 			})
-		)
+		).nullish()
 	})
 	.optional()
 	.superRefine((values, context) => {
@@ -78,6 +78,7 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 					})
 				if (isNil(values.size_code) || isEmpty(values.size_code.trim()))
 					context.addIssue({
+						path: ['size_code'],
 						code: 'custom',
 						message: 'ns_validation:required',
 						fatal: true
@@ -99,15 +100,16 @@ export const createDefectiveGoodsSchema = baseDefectiveGoodsSchema
 		}
 	})
 	.superRefine((values, context) => {
-		values.sizes.forEach((item, index) => {
-			if (values.sizes.findIndex((otherItem) => otherItem.size_code === item.size_code) !== index)
-				context.addIssue({
-					code: 'custom',
-					message: 'Do not select the same Size',
-					fatal: true,
-					path: [`sizes.${index}.size_code`]
-				})
-		})
+		if (Array.isArray(values.sizes) && values.ri_type === 'manually')
+			values.sizes.forEach((item, index) => {
+				if (values.sizes.findIndex((otherItem) => otherItem.size_code === item.size_code) !== index)
+					context.addIssue({
+						path: [`sizes.${index}.size_code`],
+						code: 'custom',
+						message: 'Do not select the same Size',
+						fatal: true
+					})
+			})
 	})
 
 export const updateDefectiveGoodsSchema = baseDefectiveGoodsSchema.partial().refine((values) => {
