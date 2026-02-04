@@ -1,7 +1,7 @@
 import useAuth from '@/common/hooks/use-auth'
 import env from '@/common/utils/env'
 import { isIPv4 } from '@/common/utils/ip'
-import { Div, Typography } from '@/components/ui'
+import { Div, Separator, Typography } from '@/components/ui'
 import { __hostRegistry } from '@/configs/host-registry.config'
 import { HttpStatusCode } from 'axios'
 import React from 'react'
@@ -18,25 +18,30 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 	if (isNotCompatible)
 		return (
-			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-3'>
-				<Typography variant='code' color='destructive' className='font-semibold'>
-					{HttpStatusCode.BadGateway}
-				</Typography>
-				<Typography variant='h1'>{t('ns_common:errors.502')}</Typography>
-				<Typography
-					variant='p'
-					color='muted'
-					className='mx-auto max-w-3xl text-pretty text-center'
-					dangerouslySetInnerHTML={{
-						__html: t('ns_common:errors.502_message', {
-							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,
-							factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
-								defaultValue: user?.current_factory_code
-							}),
-							defaultValue: null
-						})
-					}}
-				/>
+			<Div className='grid min-h-[var(--outlet-wrapper-height)] w-full place-items-center gap-y-3'>
+				<Div>
+					<Div className='flex items-center gap-x-4'>
+						<Typography color='destructive' className='font-semibold'>
+							{HttpStatusCode.BadGateway}
+						</Typography>
+						<Separator orientation='vertical' className='h-5 w-0.5' />
+						<Typography variant='h4'>{t('ns_common:errors.502')}</Typography>
+					</Div>
+					<Typography
+						variant='p'
+						className='mb-6 mt-2 max-w-3xl text-pretty text-base leading-7'
+						color='muted'
+						dangerouslySetInnerHTML={{
+							__html: t('ns_common:errors.502_message', {
+								url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,
+								factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
+									defaultValue: user?.current_factory_code
+								}),
+								defaultValue: null
+							})
+						}}
+					/>
+				</Div>
 			</Div>
 		)
 
