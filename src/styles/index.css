@@ -197,8 +197,11 @@
 		appearance: textfield;
 	}
 	input[type='password'] {
-		font-family: 'pass';
+		-moz-appearance: none;
+		-webkit-appearance: none;
 		-webkit-text-security: disc;
+		appearance: none;
+		font-family: 'pass';
 		letter-spacing: 1px;
 		font-size: 18px;
 	}

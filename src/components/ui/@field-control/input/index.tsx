@@ -58,9 +58,9 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 		field: ControllerRenderProps<FieldValues, Path<FieldValues>>
 	) => {
 		setValue(e.target.value)
-		if (type === 'file') {
+		if (currentType === 'file') {
 			field.onChange(e.target.files)
-		} else if (type === 'number') {
+		} else if (currentType === 'number') {
 			field.onChange(+e.target.value)
 		} else {
 			field.onChange(e)
@@ -80,7 +80,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 							orientation === 'horizontal'
 								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
 								: 'space-y-2',
-							(type === 'hidden' || hidden) && 'hidden'
+							(currentType === 'hidden' || hidden) && 'hidden'
 						)}>
 						{label && (
 							<FormLabel
@@ -116,11 +116,10 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 											disabled={disabled}
 											className={cn(
 												className,
-												'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive [&[type=password]]:appearance-none',
-												orientation === 'horizontal' && 'mb-2 block',
-												type === 'password' && 'placeholder:font-pass'
+												'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+												orientation === 'horizontal' && 'mb-2 block'
 											)}
-											style={{ ...props.style, letterSpacing: type === 'password' ? '1px' : 'normal' }}
+											style={{ ...props.style }}
 											onChange={(e) => handleChange(e, field)}
 											{...restProps}
 										/>
