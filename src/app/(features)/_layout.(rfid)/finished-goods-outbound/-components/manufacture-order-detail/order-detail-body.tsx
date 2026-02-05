@@ -9,7 +9,7 @@ type OrderDetailTableBodyProps = {
 }
 
 const OrderDetailTableBody: React.FC<OrderDetailTableBodyProps> = ({ virtualizer, data }) => {
-	// 'use no memo'
+	'use no memo'
 
 	const virtualItems = virtualizer.getVirtualItems()
 
