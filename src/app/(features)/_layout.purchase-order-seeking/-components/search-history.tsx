@@ -35,12 +35,14 @@ const SearchHistory: React.FC = () => {
 	}
 
 	return (
-		<Div className='flex items-center gap-6'>
+		<Div className='flex items-center gap-6 md:gap-3'>
 			<Typography variant='small' color='muted' className='inline-flex items-center gap-x-2'>
 				<Icon name='History' size={20} strokeWidth={1.5} />
-				{recentlySearch.length > 0
-					? t('ns_common:titles.recently_search')
-					: t('ns_common:titles.no_recently_search_yet')}
+				<span className='sm:hidden md:hidden'>
+					{recentlySearch.length > 0
+						? t('ns_common:titles.recently_search')
+						: t('ns_common:titles.no_recently_search_yet')}
+				</span>
 			</Typography>
 			{recentlySearch.length > 0 && (
 				<Div className='flex items-center gap-x-2'>
@@ -50,7 +52,7 @@ const SearchHistory: React.FC = () => {
 					<ScrollShadow
 						ref={scrollRef}
 						orientation='horizontal'
-						className='flex max-w-sm snap-mandatory items-center gap-x-2 scroll-smooth px-1 scrollbar-none xxl:max-w-lg'>
+						className='flex max-w-sm snap-mandatory items-center gap-x-2 scroll-smooth px-1 scrollbar-none md:max-w-xs xxl:max-w-lg'>
 						{recentlySearch.map((term) => (
 							<Badge
 								key={term}

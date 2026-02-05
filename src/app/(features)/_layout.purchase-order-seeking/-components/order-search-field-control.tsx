@@ -1,5 +1,6 @@
 'use no memo'
 
+import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
 	buttonVariants,
@@ -32,8 +33,8 @@ export function OrderSearchFieldControl() {
 	const id = useId()
 	const ref = useRef<HTMLInputElement>(null)
 	const [open, setOpen] = useState(false)
-
 	const { control, getFieldState, setValue } = useFormContext()
+	const isMobile = useMediaQuery('(max-width: 1023px)')
 
 	const currentOrderValue = useWatch({ control, name: 'po' })
 
@@ -126,7 +127,7 @@ export function OrderSearchFieldControl() {
 											<SearchHistory />
 											<Label
 												htmlFor='search-po-button'
-												className={cn(buttonVariants({ size: 'lg' }))}
+												className={cn(buttonVariants({ size: isMobile ? 'default' : 'lg' }))}
 												onClick={(e) => {
 													e.stopPropagation()
 													setOpen(false)

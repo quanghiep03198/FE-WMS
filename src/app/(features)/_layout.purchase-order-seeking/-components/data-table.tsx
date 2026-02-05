@@ -1,65 +1,76 @@
 import { IPurchaseOrderDetail } from '@/common/types/entities'
-import { DataTable, Div, Icon, Typography } from '@/components/ui'
-
-import { FALLBACK_VALUE } from '@/common/constants/constants'
-import { createColumnHelper } from '@tanstack/react-table'
+import formatIntlNumber from '@/common/utils/format-intl-number'
+import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
+import { groupBy, orderBy, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
+import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
 import PlaceHolderItems from '../../-components/shared/placeholder-items'
-import ReportTableSummary from './report-table-summary'
 
 const DataSection: React.FC = () => {
 	const { t, i18n } = useTranslation()
-
 	const { data, isLoading } = usePurchaseOrderDetailQuery()
 
-	const columnHelper = createColumnHelper<IPurchaseOrderDetail>()
+	const orderQty = useMemo(() => {
+		if (!Array.isArray(data)) return 0
+		return formatIntlNumber(data.reduce((acc, curr) => acc + curr.qty, 0))
+	}, [data])
 
-	const columns = useMemo(
+	const columns = useMemo<
+		Array<{
+			header: string
+			accessorKey: keyof IPurchaseOrderDetail
+			meta: React.ThHTMLAttributes<HTMLTableCellElement>
+			cell?: (value: IPurchaseOrderDetail[keyof IPurchaseOrderDetail]) => string | number | React.ReactNode
+		}>
+	>(
 		() => [
-			columnHelper.accessor('po', { header: t('ns_erp:fields.po'), enableSorting: false, enablePinning: true }),
-			columnHelper.accessor('mo_no', {
-				header: t('ns_erp:fields.mo_no'),
-				enableSorting: true,
-				enablePinning: true
-			}),
-			columnHelper.accessor('brand_name', { header: t('ns_erp:fields.brand_name'), enableSorting: false }),
-			columnHelper.accessor('shoes_style', {
+			{
+				header: t('ns_erp:fields.po'),
+				accessorKey: 'po',
+				meta: { align: 'left' }
+			},
+			{
+				header: t('ns_erp:fields.brand_name'),
+				accessorKey: 'brand_name',
+				meta: { align: 'left' }
+			},
+			{
 				header: t('ns_erp:fields.factory_shoes_style'),
-				enableSorting: false
-			}),
-			columnHelper.accessor('color_sn', { header: t('ns_erp:fields.color_sn'), enableSorting: false }),
-			columnHelper.accessor('ship_id', {
-				header: t('ns_erp:fields.shipping_id'),
-				enableSorting: false,
-				cell: ({ getValue }) => getValue() ?? FALLBACK_VALUE
-			}),
-			columnHelper.accessor('ship_dest_country', {
+				accessorKey: 'shoes_style',
+				meta: { align: 'left' }
+			},
+			{
+				header: t('ns_erp:fields.color_sn'),
+				accessorKey: 'color_sn',
+				meta: { align: 'left' }
+			},
+
+			{
 				header: t('ns_erp:fields.shipping_destination'),
-				enableSorting: false,
-				cell: ({ getValue }) => getValue() ?? FALLBACK_VALUE
-			}),
-			columnHelper.accessor('ship_type', {
+				accessorKey: 'ship_dest_country',
+				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } }
+			},
+			{
 				header: t('ns_erp:fields.shipping_type'),
-				enableSorting: false,
-				cell: ({ getValue }) => getValue() ?? FALLBACK_VALUE
-			}),
-			columnHelper.accessor('size_numcode', {
-				id: 'size_numcode',
-				header: 'Size',
-				enableSorting: true,
-				enablePinning: true
-			}),
-			columnHelper.accessor('qty', {
-				id: 'qty',
-				header: t('ns_erp:fields.po_size_qty'),
-				enableSorting: true,
-				enablePinning: true
-			})
+				accessorKey: 'ship_type',
+				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } }
+			},
+			{
+				header: t('ns_erp:fields.order_qty'),
+				accessorKey: 'qty',
+				meta: { align: 'left', style: { minWidth: 150, maxWidth: 150 } },
+				cell: () => <span className='font-medium'>{orderQty}</span>
+			}
 		],
-		[i18n.language]
+		[orderQty, i18n.language]
 	)
+
+	const sizeQtyByOrder = useMemo(() => {
+		if (!data) return []
+		return Object.entries(groupBy(orderBy(data, 'mo_no', 'asc'), (item) => item.mo_no))
+	}, [data])
 
 	if (isLoading)
 		return (
@@ -69,9 +80,9 @@ const DataSection: React.FC = () => {
 			</Div>
 		)
 
-	if (!data)
+	if (!data.length)
 		return (
-			<Div className='mx-auto flex h-80 max-w-4xl flex-col items-center justify-center gap-y-2 rounded-lg border-2 border-dashed bg-background p-6 text-center text-muted-foreground'>
+			<Div className='mx-auto flex h-80 w-full max-w-8xl flex-col items-center justify-center gap-y-2 rounded-lg border-2 border-dashed bg-background p-6 text-center text-muted-foreground'>
 				<PlaceHolderItems />
 				<Typography className='font-medium'>{t('ns_common:table.no_data')}</Typography>
 				<Typography variant='small' color='muted' className='mx-auto max-w-xl text-pretty text-center'>
@@ -81,30 +92,128 @@ const DataSection: React.FC = () => {
 		)
 
 	return (
-		<DataTable
-			columns={columns}
-			data={data}
-			loading={isLoading}
-			border='bottom-only'
-			toolbarProps={{ override: true, render: () => null }}
-			enableSorting={true}
-			enableColumnPinning={true}
-			initialState={{
-				pagination: { pageIndex: 0, pageSize: 50 },
-				columnPinning: {
-					left: ['po', 'mo_no'],
-					right: ['size_numcode', 'qty']
-				}
-			}}
-			containerProps={{ className: 'h-96' }}
-			footerProps={{
-				slot: () => (
-					<Div className='flex w-full items-center justify-between p-2 md:flex-col'>
-						<ReportTableSummary data={data} />
-					</Div>
-				)
-			}}
-		/>
+		<Div className='relative max-h-96 overflow-auto rounded-lg border scrollbar-track-accent/50 @container'>
+			<Table
+				className='table-auto [&_span]:line-clamp-1'
+				style={{ '--column-width': '200px' } as React.CSSProperties}>
+				<colgroup>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+					<col
+						style={{
+							minWidth: 'var(--column-width)',
+							maxWidth: 'var(--column-width)'
+						}}
+					/>
+				</colgroup>
+				<TableHeader className='sticky top-0 z-20'>
+					<TableRow>
+						{columns.map((column) => (
+							<TableHead
+								key={column.accessorKey}
+								title={column.header}
+								className='!bg-table-row-active capitalize text-table-head-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+								{...column.meta}>
+								<span>{column.header}</span>
+							</TableHead>
+						))}
+					</TableRow>
+					<TableRow>
+						{columns.map((column) => (
+							<TableHead
+								key={column.accessorKey}
+								className='font-normal text-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+								{...column.meta}>
+								<span>
+									{typeof column.cell === 'function'
+										? column.cell(data[column.accessorKey])
+										: data[0]?.[column.accessorKey]?.toString?.()}
+								</span>
+							</TableHead>
+						))}
+					</TableRow>
+					<TableRow className='[&>*]:!bg-table-row-active [&>*]:capitalize'>
+						<TableHead
+							align='left'
+							className='!sticky left-0 z-10'
+							style={{ boxShadow: '1px 0px hsl(var(--border))', maxWidth: 200, minWidth: 200 }}>
+							<span>{t('ns_erp:fields.mo_no')}</span>
+						</TableHead>
+						<TableHead colSpan={5} align='left' className='p-0'>
+							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
+								Size
+							</span>
+						</TableHead>
+						<TableHead align='left' className='!sticky right-0 z-10'>
+							<span>{t('ns_common:common_fields.total')}</span>
+						</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{sizeQtyByOrder.map(([date, history]) => {
+						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
+						return (
+							<TableRow key={date}>
+								<TableCell
+									align='left'
+									colSpan={1}
+									className='sticky left-0 z-10'
+									style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+									<span>{date}</span>
+								</TableCell>
+								<TableCell colSpan={5} className='p-0'>
+									<NestedTable>
+										{sortBy(history, 'size_numcode').map((item) => (
+											<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
+												<NestedCellHead>{item.size_numcode}</NestedCellHead>
+												<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
+											</NestedColumn>
+										))}
+									</NestedTable>
+								</TableCell>
+								<TableCell align='left' className='!sticky right-0 z-10 font-medium'>
+									<span>{formatIntlNumber(totalQty)}</span>
+								</TableCell>
+							</TableRow>
+						)
+					})}
+				</TableBody>
+			</Table>
+		</Div>
 	)
 }
 
