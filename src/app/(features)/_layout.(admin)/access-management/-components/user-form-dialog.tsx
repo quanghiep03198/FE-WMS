@@ -108,7 +108,7 @@ const UserFormDialog: React.FC = () => {
 			{ value: UserRole.MANAGER, label: t('ns_auth:roles.MANAGER'), allowMultiple: false },
 			{ value: UserRole.FG_WAREHOUSE_STAFF, label: t('ns_auth:roles.FG_WAREHOUSE_STAFF'), allowMultiple: true },
 			{ value: UserRole.DG_WAREHOUSE_STAFF, label: t('ns_auth:roles.DG_WAREHOUSE_STAFF'), allowMultiple: true },
-			{ value: UserRole.IE_STAFF, label: t('ns_auth:roles.IE_STAFF'), allowMultiple: false },
+			{ value: UserRole.IE_STAFF, label: t('ns_auth:roles.IE_STAFF'), allowMultiple: true },
 			{ value: UserRole.SECURITY_GUARD, label: t('ns_auth:roles.SECURITY_GUARD'), allowMultiple: false }
 		]
 		if (!Array.isArray(selectedRoles) || selectedRoles.length === 0) return roles
