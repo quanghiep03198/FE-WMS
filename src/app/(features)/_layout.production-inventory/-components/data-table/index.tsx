@@ -137,6 +137,6 @@ function DataTable<T extends TableRowData>({
 }
 
 const Container = tw.div`space-y-4 rounded-md border p-5 shadow-sm`
-const ScrollArea = tw.div`relative h-72 overflow-auto rounded-sm scrollbar-track-accent/20 contain-paint will-change-transform`
+const ScrollArea = tw.div`[container-type:size] relative h-72 overflow-auto rounded-sm scrollbar-track-accent/20 contain-paint will-change-transform`
 
 export default DataTable

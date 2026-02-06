@@ -1,5 +1,3 @@
-'use no memo'
-
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div, TableCell, TableRow } from '@/components/ui'
 import { flexRender, Row } from '@tanstack/react-table'
@@ -16,9 +14,11 @@ type DataTableRowProps = {
 const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 	'use no memo'
 
+	const isExpanded = row.getIsExpanded()
+
 	return (
 		<Fragment>
-			<TableRow aria-expanded={row.getIsExpanded()} className={cn('[&_td]:border-x-0 [&_td]:border-b-0')}>
+			<TableRow aria-expanded={isExpanded} className={cn('[&_td]:border-x-0 [&_td]:border-b-0')}>
 				{row?.getVisibleCells()?.map((cell) => {
 					const meta = cell.column.columnDef.meta
 					return (
@@ -45,17 +45,10 @@ const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 			<TableRow>
 				<TableCell
 					colSpan={row.getVisibleCells().length}
-					className={cn('p-0', !row.getIsExpanded() && 'border-none shadow-none')}>
-					<Collapsible open={row.getIsExpanded()} data-state={row.getIsExpanded() ? 'open' : 'closed'}>
-						<CollapsibleContent
-							className='overflow-auto bg-accent/80 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'
-							style={{
-								width: 'var(--table-width)',
-								position: 'sticky',
-								left: '0',
-								scrollbarGutter: 'stable'
-							}}>
-							<Div className='p-4'>
+					className={cn('p-0', !isExpanded ? 'border-none shadow-none' : 'shadow-[inset_0_0px_4px_#17171725]')}>
+					<Collapsible open={isExpanded} data-state={isExpanded ? 'open' : 'closed'}>
+						<CollapsibleContent className='sticky left-0 w-[calc(100cqw-10px)] overflow-hidden bg-accent/50 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+							<Div className='p-3'>
 								<SizeTable
 									data={row.original.inv_sizes}
 									total={
