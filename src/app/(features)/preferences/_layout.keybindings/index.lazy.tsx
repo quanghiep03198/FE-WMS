@@ -95,7 +95,7 @@ function KeybindingsPage() {
 					border='bottom-only'
 					initialState={{
 						pagination: {
-							pageSize: 100,
+							pageSize: 50,
 							pageIndex: 0
 						}
 					}}

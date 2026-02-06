@@ -188,7 +188,9 @@ const RFIDDeviceList: React.FC = () => {
 				columns={columns}
 				loading={isLoading}
 				enableColumnFilters={true}
-				containerProps={{ className: 'h-[35vh]' }}
+				containerProps={{
+					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem' }
+				}}
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>

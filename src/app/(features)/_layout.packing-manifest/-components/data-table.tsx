@@ -185,7 +185,9 @@ const ReportMasterTable: React.FC = () => {
 			columns={columns}
 			loading={isLoading}
 			enableMultiSort={true}
-			containerProps={{ className: 'h-[65vh]' }}
+			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
+			}}
 			initialState={{
 				pagination: {
 					pageIndex: 0,

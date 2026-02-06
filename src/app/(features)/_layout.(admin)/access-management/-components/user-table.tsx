@@ -137,14 +137,10 @@ const UserTable: React.FC = () => {
 			data={data}
 			loading={isLoading}
 			border='bottom-only'
-			containerProps={{ className: 'h-[65vh]' }}
-			virtualizationProps={{ estimateSize: 50 }}
-			initialState={{
-				pagination: {
-					pageIndex: 0,
-					pageSize: 50
-				}
+			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 			}}
+			virtualizerOptions={{ estimateSize: 50 }}
 			toolbarProps={{
 				override: true,
 				render: UserTableToolbar

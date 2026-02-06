@@ -75,7 +75,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 				meta: { title: t('ns_erp:fields.last_inbound_time'), align: 'center' }
 			}),
 			columnHelper.accessor('mo_qty', {
-				header: t('ns_erp:fields.mo_qty'),
+				header: t('ns_erp:fields.order_qty'),
 				enableSorting: true,
 				enableGlobalFilter: false,
 				cell: (info) => formatIntlNumber(info.getValue()),

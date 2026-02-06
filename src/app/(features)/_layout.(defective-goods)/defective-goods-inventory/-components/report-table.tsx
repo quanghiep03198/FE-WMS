@@ -184,7 +184,9 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 			loading={isLoading}
 			enableExpanding={true}
 			enableColumnResizing={true}
-			containerProps={{ className: 'h-[60vh]' }}
+			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem - var(--row-height))' }
+			}}
 			renderSubComponent={renderSubComponent}
 			toolbarProps={{
 				slotRight: () => (

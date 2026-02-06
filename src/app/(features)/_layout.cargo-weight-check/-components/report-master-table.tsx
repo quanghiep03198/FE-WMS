@@ -5,10 +5,9 @@ import { IPackingReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Icon } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
-import { DataTableProps } from '@/components/ui/@react-table/types'
 import { ReportService } from '@/services/report.service'
 import { useQuery } from '@tanstack/react-query'
-import { createColumnHelper } from '@tanstack/react-table'
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { pick } from 'lodash-es'
@@ -33,7 +32,7 @@ const ReportMasterTable: React.FC = () => {
 
 	const columnHelper = createColumnHelper<IPackingReport>()
 
-	const columns: DataTableProps<IPackingReport>['columns'] = useMemo(
+	const columns: ColumnDef<IPackingReport, any>[] = useMemo(
 		() => [
 			columnHelper.accessor('brand_name', {
 				header: t('ns_erp:fields.brand_name'),
@@ -153,13 +152,9 @@ const ReportMasterTable: React.FC = () => {
 			data={data}
 			columns={columns}
 			loading={isLoading}
-			initialState={{
-				pagination: {
-					pageIndex: 0,
-					pageSize: 50
-				}
+			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 			}}
-			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
 			toolbarProps={{
 				slotLeft: () => <AutoRefreshToggle />,
 				slotRight: () => {

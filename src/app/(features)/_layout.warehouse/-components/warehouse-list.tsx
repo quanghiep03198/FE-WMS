@@ -241,7 +241,9 @@ const WarehouseList: React.FC = () => {
 				enableColumnResizing={true}
 				enableRowSelection={true}
 				ref={tableRef}
-				containerProps={{ className: 'h-[40vh]' }}
+				containerProps={{
+					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem' }
+				}}
 				toolbarProps={{
 					slotRight: ({ table }) => (
 						<Fragment>

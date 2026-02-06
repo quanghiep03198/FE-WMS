@@ -210,7 +210,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		}
 	}, [tableRef.current, isMobile])
 
-	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery, any>) => {
+	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 		const data = row.original
 		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
 	}, [])
@@ -223,7 +223,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			border='bottom-only'
 			loading={isLoading}
 			expanded={expanded}
-			enableColumnFilters={true}
 			enableGlobalFilter={true}
 			enableExpanding={true}
 			getRowCanExpand={() => true}
@@ -234,10 +233,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			globalFilterFn='includesString'
 			initialState={{
 				sorting: [{ id: 'dispatch_order', desc: true }],
-				pagination: {
-					pageIndex: 0,
-					pageSize: 50
-				},
 				columnVisibility: {
 					dispatch_order: false,
 					purchase_orders: false,
@@ -264,8 +259,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
 			}}
 			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' },
 				className:
-					'h-[65vh] md:h-[55vh] md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
+					'md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
 			}}
 			renderSubComponent={renderSubTable}
 		/>

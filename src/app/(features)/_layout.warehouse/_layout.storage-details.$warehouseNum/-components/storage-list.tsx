@@ -239,7 +239,7 @@ const StorageList: React.FC<UseQueryResult<IWarehouseStorage[]>> = ({ data, isLo
 				enableColumnFilters={true}
 				enableRowSelection={true}
 				containerProps={{
-					className: 'h-[60vh]'
+					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem' }
 				}}
 				toolbarProps={{
 					slotRight: ({ table }) => (

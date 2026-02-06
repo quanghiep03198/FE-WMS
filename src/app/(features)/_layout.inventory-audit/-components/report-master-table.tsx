@@ -15,7 +15,7 @@ import { useTableContext } from '@/components/ui/@react-table/context/table.cont
 import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { InventoryService } from '@/services/inventory.service'
 import { useQueryClient } from '@tanstack/react-query'
-import { createColumnHelper, ExpandedState, type Table as TTable } from '@tanstack/react-table'
+import { createColumnHelper, ExpandedState, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
@@ -35,7 +35,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 
 	const { data, isLoading } = useGetInventoryAuditReport(currentTenant?.id, searchParams)
 	const { t, i18n } = useTranslation()
-	const dataTableRef = useRef<TTable<IMonthlyInventoryAudit>>(null)
+	const dataTableRef = useRef<Table<IMonthlyInventoryAudit>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryAudit>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<ExpandedState>({})
 
@@ -48,12 +48,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 	}, [searchParams['month.eq']])
 
 	const renderSubComponents = useCallback(
-		({
-			row
-		}: RenderSubComponentProps<
-			IMonthlyInventoryAudit,
-			IMonthlyInventoryAudit[keyof IMonthlyInventoryAudit]
-		>): React.ReactElement => (
+		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit>): React.ReactElement => (
 			<InventoryReportDetailTable
 				queries={pick(row.original, [
 					'actual_po',
@@ -185,7 +180,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				}
 			}),
 			columnHelper.accessor('order_qty', {
-				header: t('ns_erp:fields.mo_qty'),
+				header: t('ns_erp:fields.order_qty'),
 				enableColumnFilter: true,
 				enableSorting: true,
 				enablePinning: true,
@@ -271,7 +266,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 				renderSubComponent={renderSubComponents}
 				getRowId={(originalRow: IMonthlyInventoryAudit) => originalRow.mo_no}
 				containerProps={{
-					className: 'h-[60dvh]'
+					style: { height: 'calc(var(--outlet-wrapper-height) - 15rem - var(--row-height))' }
 				}}
 				footerProps={{ slot: () => <DataTableSummary data={data} isLoading={isLoading} /> }}
 				toolbarProps={{
