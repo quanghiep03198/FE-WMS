@@ -62,11 +62,7 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
-					<ScrollShadow
-						className={cn(
-							'overflow-y-auto overflow-x-hidden !scrollbar-none',
-							user?.roles?.includes(UserRole.ADMIN) ? 'max-h-[40vh]' : 'max-h-[55vh]'
-						)}>
+					<ScrollShadow className='max-h-[40vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
@@ -138,8 +134,8 @@ const NavSidebar: React.FC = () => {
 						</SidebarGroup>
 					</Fragment>
 				)}
-				<SidebarSeparator className='hidden xxl:block' />
-				<SidebarGroup className='hidden xxl:flex'>
+				<SidebarSeparator className={cn(user?.roles?.includes(UserRole.ADMIN) && 'hidden xxl:block')} />
+				<SidebarGroup className={cn(user?.roles?.includes(UserRole.ADMIN) && 'hidden xxl:flex')}>
 					<SidebarGroupLabel>{t('ns_common:navigation.preference_menu_label')}</SidebarGroupLabel>
 					<SidebarMenu role='menu' aria-label='Preferences menu'>
 						{navigationConfig.preferences
