@@ -179,7 +179,7 @@ const InboundHistoryTable: React.FC = () => {
 								{sortBy(data.order_size_run, 'size_numcode').map((item) => {
 									const matchedSizeQty = inboundHistoryBySize.find((s) => s.size_numcode === item.size_numcode)
 									if (!matchedSizeQty && coalesce(item?.qty, 0) === 0) return null
-									const sizeInboundQty = matchedSizeQty.qty
+									const sizeInboundQty = coalesce(matchedSizeQty?.qty, 0)
 									return (
 										<NestedColumn key={item.size_numcode} className='w-full [&>*]:h-9'>
 											<NestedCellHead>{item.size_numcode}</NestedCellHead>

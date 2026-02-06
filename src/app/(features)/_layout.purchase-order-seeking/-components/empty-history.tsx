@@ -15,7 +15,7 @@ const EmptySearchResult: React.FC = () => {
 				<PlaceHolderItems className='w-full' />
 				<EmptyTitle>{t('ns_common:table.no_data')}</EmptyTitle>
 				<EmptyDescription className='text-pretty'>
-					{t('ns_inoutbound:description.inoutbound_history_not_found')}
+					{t('ns_erp:descriptions.no_purchase_order_found')}
 				</EmptyDescription>
 			</EmptyHeader>
 			<EmptyContent>
