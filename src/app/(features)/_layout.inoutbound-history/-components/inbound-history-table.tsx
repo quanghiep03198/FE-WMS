@@ -23,10 +23,26 @@ const InboundHistoryTable: React.FC = () => {
 		() => [
 			{ header: t('ns_erp:fields.mo_no'), accessorKey: 'mo_no', meta: { align: 'left' } },
 			{ header: t('ns_erp:fields.brand_name'), accessorKey: 'brand_name', meta: { align: 'left' } },
-			{ header: t('ns_erp:fields.factory_shoes_style'), accessorKey: 'shoe_style', meta: { align: 'left' } },
+			{
+				header: t('ns_erp:fields.factory_shoes_style'),
+				accessorKey: 'factory_shoes_style',
+				meta: { align: 'left' }
+			},
+			{
+				header: t('ns_erp:fields.cust_shoes_style'),
+				accessorKey: 'cust_shoes_style',
+				meta: { align: 'left' },
+				cell: (value: string) => {
+					if (!value) return t('ns_common:titles.unknown')
+					return value
+						.split('/')
+						.map((part) => part.trim())
+						.join('/')
+				}
+			},
 			{ header: t('ns_erp:fields.color_sn'), accessorKey: 'color', meta: { align: 'left' } },
 			{
-				header: t('ns_erp:fields.mo_qty'),
+				header: t('ns_erp:fields.order_qty'),
 				accessorKey: 'mo_qty',
 				meta: { align: 'left' },
 				cell: (value) => formatIntlNumber(value)
@@ -111,7 +127,7 @@ const InboundHistoryTable: React.FC = () => {
 							style={{ boxShadow: '1px 0px hsl(var(--border))', maxWidth: 200, minWidth: 200 }}>
 							<span>{t('ns_erp:fields.inbound_date')}</span>
 						</TableHead>
-						<TableHead colSpan={6} align='left' className='p-0'>
+						<TableHead colSpan={7} align='left' className='p-0'>
 							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
 								{t('ns_erp:fields.daily_inbound_qty')}
 							</span>
@@ -133,7 +149,7 @@ const InboundHistoryTable: React.FC = () => {
 									style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
 									<span>{date}</span>
 								</TableCell>
-								<TableCell colSpan={6} className='p-0'>
+								<TableCell colSpan={7} className='p-0'>
 									<NestedTable>
 										{sortBy(history, 'size_numcode').map((item) => (
 											<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
@@ -143,7 +159,7 @@ const InboundHistoryTable: React.FC = () => {
 										))}
 									</NestedTable>
 								</TableCell>
-								<TableCell align='left' className='!sticky right-0 z-10 font-medium'>
+								<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
 									<span>{formatIntlNumber(totalQty)}</span>
 								</TableCell>
 							</TableRow>
@@ -153,7 +169,7 @@ const InboundHistoryTable: React.FC = () => {
 				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
 					<TableRow>
 						<TableCell
-							colSpan={8}
+							colSpan={9}
 							align='left'
 							className='!border-b-0 bg-table-row-active p-0 text-table-head-foreground'>
 							<Div className='sticky left-0 max-w-[calc(100cqw-10px)] px-4 py-2 text-center'>
@@ -162,7 +178,7 @@ const InboundHistoryTable: React.FC = () => {
 						</TableCell>
 					</TableRow>
 					<TableRow>
-						<TableCell colSpan={8} align='left' className='border-t p-0 font-normal'>
+						<TableCell colSpan={9} align='left' className='border-t p-0 font-normal'>
 							<NestedTable className='w-full'>
 								<NestedColumn className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_hsl(var(--border))] [&>*]:h-9 [&>*]:capitalize'>
 									<NestedCellHead>Size</NestedCellHead>

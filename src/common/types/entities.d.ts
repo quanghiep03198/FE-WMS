@@ -240,12 +240,13 @@ export interface IInboundHistory {
 	factory_code_produce: string
 	mo_no: string
 	brand_name: string
-	shoe_style: string
+	factory_shoes_style: string
+	cust_shoes_style: string
 	color: string
 	mo_qty: number
 	accumulated_inbound_qty: number
 	missing_qty: number
-	progress: number
+	progress: `${number}%`
 	order_size_run: Array<{
 		size_numcode: string
 		qty: number
@@ -259,16 +260,33 @@ export interface IInboundHistory {
 		qty: number
 		inbound_date: Date
 	}>
+	progress: `${number}%`
 }
 
 export interface IOutboundHistory {
 	po: string
 	po_qty: number
-	outbound_qty: number
+	accumulated_outbound_qty: number
+	missing_qty: number
 	brand_name: string
-	shoe_style: string
+	factory_shoes_style: string
+	cust_shoes_style: string
 	color_sn: string
-	outbound_date: Date
+	outbound_history: Array<{
+		outbound_date: string
+		mo_no: string
+		sizes: Array<{
+			size_numcode: string
+			qty: number
+		}>
+	}>
+	overall: Array<{
+		size_numcode: string
+		po_size_qty: number
+		acc_qty: number
+		missing_qty: number
+	}>
+	progress: `${number}%`
 }
 
 export interface IProductSpecification {

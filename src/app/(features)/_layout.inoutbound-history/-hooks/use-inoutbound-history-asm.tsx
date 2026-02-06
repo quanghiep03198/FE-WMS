@@ -32,7 +32,7 @@ export const useGetOutboundHistoryQuery = () => {
 	return useQuery({
 		queryKey: [InOutBoundHistoryQueryKeys.OUTBOUND_HISTORY, searchParams.order, currentTenant?.id],
 		queryFn: async () =>
-			await axiosInstance.get<void, ResponseBody<IOutboundHistory[]>>(
+			await axiosInstance.get<void, ResponseBody<IOutboundHistory>>(
 				`/report/outbound-history/${searchParams.order}`,
 				{
 					headers: {
