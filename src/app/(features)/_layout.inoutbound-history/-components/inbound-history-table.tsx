@@ -1,4 +1,5 @@
 import { IInboundHistory } from '@/common/types/entities'
+import { coalesce } from '@/common/utils/common'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
@@ -122,7 +123,7 @@ const InboundHistoryTable: React.FC = () => {
 				</TableHeader>
 				<TableBody>
 					{inboundHistoryByDate.map(([date, history]) => {
-						const totalQty = history.reduce((acc, curr) => acc + curr.qty, 0)
+						const totalQty = history.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
 						return (
 							<TableRow key={date}>
 								<TableCell
@@ -137,7 +138,7 @@ const InboundHistoryTable: React.FC = () => {
 										{sortBy(history, 'size_numcode').map((item) => (
 											<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
-												<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
+												<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
 											</NestedColumn>
 										))}
 									</NestedTable>
@@ -177,14 +178,14 @@ const InboundHistoryTable: React.FC = () => {
 								</NestedColumn>
 								{sortBy(data.order_size_run, 'size_numcode').map((item) => {
 									const matchedSizeQty = inboundHistoryBySize.find((s) => s.size_numcode === item.size_numcode)
-									if (!matchedSizeQty && item.qty === 0) return null
+									if (!matchedSizeQty && coalesce(item?.qty, 0) === 0) return null
 									const sizeInboundQty = matchedSizeQty.qty
 									return (
 										<NestedColumn key={item.size_numcode} className='w-full [&>*]:h-9'>
 											<NestedCellHead>{item.size_numcode}</NestedCellHead>
-											<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
 											<NestedCell>{formatIntlNumber(sizeInboundQty)}</NestedCell>
-											<NestedCell>{formatIntlNumber(item.qty - sizeInboundQty)}</NestedCell>
+											<NestedCell>{formatIntlNumber(item?.qty - sizeInboundQty)}</NestedCell>
 										</NestedColumn>
 									)
 								})}
