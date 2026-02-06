@@ -4,7 +4,7 @@ import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { Div, SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
-import { useLocalStorageState, useSize } from 'ahooks'
+import { useLocalStorageState } from 'ahooks'
 import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
@@ -39,8 +39,6 @@ function Layout() {
 		listenStorageChange: true
 	})
 
-	const windowSize = useSize(document.body)
-
 	useEffectOnce(() => {
 		if (document.body.classList.contains(font)) document.body.classList.remove(font)
 		document.body.classList.add(font)
@@ -58,9 +56,11 @@ function Layout() {
 						className='relative h-full flex-1 overflow-y-scroll @container'
 						style={
 							{
+								counterReset: 'h var(--screen-height) w var(--screen-width)',
 								'--header-height': 80 + 'px',
 								'--outlet-padding-bottom': 24 + 'px',
-								'--outlet-wrapper-height': Math.round(windowSize.height - 104) + 'px',
+								'--outlet-wrapper-height':
+									'calc(var(--screen-height,100dvh) * 1px - var(--header-height) - var(--outlet-padding-bottom))',
 								'--scrollbar-thickness': '10px'
 							} as React.CSSProperties
 						}>
