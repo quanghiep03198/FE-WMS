@@ -1,5 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Button, Div, Form as FormProvider, Icon } from '@/components/ui'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -17,6 +18,10 @@ const SearchForm: React.FC = () => {
 	})
 
 	const [recentlySearch, setRecentlySearch] = useSearchPoHistory()
+
+	useEffect(() => {
+		if (!searchParams.po) form.reset()
+	}, [searchParams])
 
 	return (
 		<FormProvider {...form}>

@@ -6,7 +6,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
 import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
-import PlaceHolderItems from '../../-components/shared/placeholder-items'
+import EmptySearchResult from './empty-history'
 
 const DataSection: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -80,16 +80,7 @@ const DataSection: React.FC = () => {
 			</Div>
 		)
 
-	if (!data.length)
-		return (
-			<Div className='mx-auto flex h-80 w-full max-w-8xl flex-col items-center justify-center gap-y-2 rounded-lg border-2 border-dashed bg-background p-6 text-center text-muted-foreground'>
-				<PlaceHolderItems />
-				<Typography className='font-medium'>{t('ns_common:table.no_data')}</Typography>
-				<Typography variant='small' color='muted' className='mx-auto max-w-xl text-pretty text-center'>
-					{t('ns_erp:descriptions.no_purchase_order_found')}
-				</Typography>
-			</Div>
-		)
+	if (!Array.isArray(data) || !data.length) return <EmptySearchResult />
 
 	return (
 		<Div className='relative max-h-96 overflow-auto rounded-lg border scrollbar-track-accent/50 @container'>
