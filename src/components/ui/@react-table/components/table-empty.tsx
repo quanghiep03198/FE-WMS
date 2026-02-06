@@ -9,12 +9,12 @@ const DataTableEmpty: React.FC = () => {
 		<TableBody
 			className={
 				filterOpen
-					? 'h-[calc(var(--table-height)-2*var(--header-row-height)-2px)]'
-					: 'h-[calc(var(--table-height)-var(--header-row-height)-1px)]'
+					? 'h-[calc(100cqh-2*var(--header-row-height)-2px)]'
+					: 'h-[calc(100cqh-var(--header-row-height)-1px)]'
 			}>
 			<TableRow>
 				<TableCell colSpan={table.getAllColumns().length} className='p-0'>
-					<Div className='sticky left-0 top-0 flex w-[var(--table-width)] items-center justify-center gap-x-2 text-muted-foreground'>
+					<Div className='sticky left-0 top-0 flex w-[100cqw] items-center justify-center gap-x-2 text-muted-foreground'>
 						<Icon name='Database' strokeWidth={1} size={32} /> No data
 					</Div>
 				</TableCell>

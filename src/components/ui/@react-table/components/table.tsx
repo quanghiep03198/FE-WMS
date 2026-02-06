@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { useSize, useUpdateEffect } from 'ahooks'
+import { useUpdateEffect } from 'ahooks'
 import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { Table, TableCaption } from '../..'
@@ -35,8 +35,6 @@ const DataTable: React.FC<TableProps> = (props) => {
 		renderSubComponent
 	} = props
 
-	const containerSize = useSize(containerRef)
-
 	const computedColumnSizes = useMemo(() => {
 		const headers = table.getFlatHeaders()
 		const columnSizes: Record<string, string> = {}
@@ -50,12 +48,10 @@ const DataTable: React.FC<TableProps> = (props) => {
 	const tableStyles = useMemo(
 		() =>
 			({
-				'--table-width': containerSize?.width + 'px',
-				'--table-height': containerSize?.height + 'px',
 				'--header-row-height': '40px',
 				'--row-height': `${virtualizerOptions.estimateSize}px`
 			}) as React.CSSProperties,
-		[containerSize, virtualizerOptions.estimateSize] // Chỉ tạo lại khi width thực sự thay đổi
+		[virtualizerOptions.estimateSize]
 	)
 
 	useUpdateEffect(() => {
@@ -107,7 +103,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 }
 
 const Wrapper = tw.div`flex flex-col items-stretch border outline-none ring-0 ring-offset-0 ring-offset-transparent overflow-clip rounded-md`
-const ScrollArea = tw.div`@container/1 relative flex flex-col items-stretch overflow-scroll contain-strict will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
+const ScrollArea = tw.div`[container-type:size] relative flex flex-col items-stretch overflow-scroll will-change-scroll scrollbar-track-scrollbar/20 outline-none border-none ring-0 ring-offset-0 ring-offset-transparent backface-hidden`
 
 DataTable.displayName = 'DataTable'
 
