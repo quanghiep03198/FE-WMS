@@ -3,9 +3,7 @@ import { isEmpty, isNil } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../../@custom/typography'
 
-type TTableCellTextProps<TData = unknown, TValue = unknown> = CellContext<TData, TValue>
-
-export function TableCellText<TData, TValue>(props: TTableCellTextProps<TData, TValue>) {
+export const TableCellText: React.FC<CellContext<any, any>> = (props) => {
 	const { t } = useTranslation()
 
 	const value = props.getValue()

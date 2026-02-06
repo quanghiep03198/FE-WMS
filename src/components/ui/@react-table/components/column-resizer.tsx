@@ -2,11 +2,11 @@ import { cn } from '@/common/utils/cn'
 import { Header } from '@tanstack/react-table'
 import { Separator } from '../../@core/separator'
 
-type ColumnResizerProps<TData, TValue> = {
-	header: Header<TData, TValue>
+type ColumnResizerProps = {
+	header: Header<any, any>
 }
 
-export default function ColumnResizer<TData, TValue>({ header }: ColumnResizerProps<TData, TValue>) {
+const ColumnResizer: React.FC<ColumnResizerProps> = ({ header }) => {
 	return (
 		<Separator
 			onDoubleClick={() => header.column.resetSize()}
@@ -23,3 +23,5 @@ export default function ColumnResizer<TData, TValue>({ header }: ColumnResizerPr
 		/>
 	)
 }
+
+export default ColumnResizer

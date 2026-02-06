@@ -13,11 +13,11 @@ import TableFooter from './table-footer'
 import { TableHeadCaption } from './table-head-caption'
 import { DataTableHeader } from './table-header'
 
-type TableProps<TData, TValue> = Omit<DataTableProps<TData, TValue>, 'data' | 'slot'> &
+type TableProps = Omit<DataTableProps, 'data' | 'slot'> &
 	Omit<React.AllHTMLAttributes<HTMLTableElement>, 'data'> &
 	Pick<React.ComponentProps<'div'>, 'style'>
 
-function DataTable<TData, TValue>(props: TableProps<TData, TValue>) {
+const DataTable: React.FC<TableProps> = (props) => {
 	const { table } = useTableContext('table')
 	const containerRef = useRef<HTMLDivElement>(null)
 	const captionId = useId()

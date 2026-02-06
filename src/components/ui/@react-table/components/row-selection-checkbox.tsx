@@ -1,22 +1,16 @@
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { CellContext, HeaderContext, RowData, RowSelectionState, TableState } from '@tanstack/react-table'
+import { CellContext, HeaderContext, RowSelectionState, TableState } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import { pick } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { Checkbox } from '../../@core/checkbox'
 import { useTableContext } from '../context/table.context'
 
-type IndeterminateCheckboxProps<TData extends RowData> = HeaderContext<TData, unknown> &
-	React.ComponentProps<typeof Checkbox>
+type IndeterminateCheckboxProps = HeaderContext<any, unknown> & React.ComponentProps<typeof Checkbox>
 
-type RowSelectionCheckboxProps<TData extends RowData> = CellContext<TData, unknown> &
-	React.ComponentProps<typeof Checkbox>
+type RowSelectionCheckboxProps = CellContext<any, unknown> & React.ComponentProps<typeof Checkbox>
 
-export function IndeterminateCheckbox<TData extends RowData>({
-	table,
-	onCheckedChange,
-	...props
-}: IndeterminateCheckboxProps<TData>) {
+export const IndeterminateCheckbox: React.FC<IndeterminateCheckboxProps> = ({ table, onCheckedChange, ...props }) => {
 	const { event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 
@@ -48,11 +42,7 @@ export function IndeterminateCheckbox<TData extends RowData>({
 
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
-export function RowSelectionCheckbox<TData extends RowData>({
-	row,
-	disabled,
-	onCheckedChange
-}: RowSelectionCheckboxProps<TData>) {
+export const RowSelectionCheckbox: React.FC<RowSelectionCheckboxProps> = ({ row, disabled, onCheckedChange }) => {
 	const { table, event$ } = useTableContext('table', 'event$')
 	const rerender = useUpdate()
 

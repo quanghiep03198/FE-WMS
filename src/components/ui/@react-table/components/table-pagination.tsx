@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { PaginationState, RowData, Table } from '@tanstack/react-table'
+import { PaginationState, Table } from '@tanstack/react-table'
 import React, { memo, useEffect, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -7,22 +7,22 @@ import { Button, ButtonGroup, Div, Icon, Label, Separator, Tooltip, Typography }
 import AutoComplete from '../../@custom/auto-complete'
 import { type PaginationBaseProps } from '../types'
 
-export type DataTablePaginationProps<TData extends RowData> = {
-	table: Table<TData>
+export type DataTablePaginationProps = {
+	table: Table<any>
 	manualPagination?: boolean
-	controlledPaginationProps: Partial<Omit<Pagination<TData>, 'data'>>
+	controlledPaginationProps: Partial<Omit<Pagination<any>, 'data'>>
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
 	[key: string]: any
-} & PaginationBaseProps<TData>
+} & PaginationBaseProps
 
-function TablePagination<TData>({
+const TablePagination: React.FC<DataTablePaginationProps> = ({
 	table,
 	loading,
 	manualPagination,
 	controlledPaginationProps,
 	onPaginationChange,
 	prefetch
-}: DataTablePaginationProps<TData>) {
+}) => {
 	'use no memo'
 
 	const { t } = useTranslation('ns_common')
@@ -108,34 +108,6 @@ function TablePagination<TData>({
 					labelField='label'
 					valueField='value'
 				/>
-				{/* <Select
-					value={customPageSize?.toString() || pageSize?.toString()}
-					onValueChange={(value) => {
-						if (value === 'custom') {
-							setCustomPageSize('custom')
-							return
-						}
-						changePageSize(+value)
-					}}>
-					<SelectTrigger className='w-20'>
-						{pageSize?.toString() === 'custom' ? (
-							<Input type='number' min={10} className='h-8 border-none shadow-none outline-none' />
-						) : (
-							<SelectValue placeholder={pageSize} />
-						)}
-					</SelectTrigger>
-					<SelectContent>
-						{[10, 20, 30, 40, 50].map((pageSize) => (
-							<SelectItem
-								key={pageSize}
-								value={String(pageSize)}
-								onMouseEnter={() => handlePrefetch({ page: pageIndex, limit: +pageSize })}>
-								{pageSize}
-							</SelectItem>
-						))}
-						<SelectItem value='custom'>{t('ns_common:others.other')}</SelectItem>
-					</SelectContent>
-				</Select> */}
 			</Div>
 			<Separator orientation='vertical' className='h-6 w-1 bg-border sm:hidden md:hidden' />
 			<Typography variant='small' className='whitespace-nowrap text-center font-medium'>

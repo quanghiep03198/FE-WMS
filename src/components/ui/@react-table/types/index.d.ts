@@ -1,10 +1,9 @@
 import {
-	type ColumnDef,
+	ColumnDef,
 	type ColumnFiltersState,
 	type ExpandedState,
 	type GlobalFilterTableState,
 	type Row,
-	type RowData,
 	type SortingState,
 	type Table,
 	type TableOptions,
@@ -14,43 +13,43 @@ import { VirtualizerOptions } from '@tanstack/react-virtual'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React from 'react'
 
-export type ToolbarProps<TData extends RowData> =
+export type ToolbarProps =
 	| {
 			override: true
 			render: ({
 				table,
 				event$
 			}: {
-				table: Table<TData>
+				table: Table<any>
 				event$: EventEmitter<Record<string, unknown>>
 			}) => React.ReactElement
 	  }
 	| {
 			override?: false
 			rtl?: boolean
-			slotLeft?: React.FC<{ table: Table<TData> }>
-			slotRight?: React.FC<{ table: Table<TData> }>
+			slotLeft?: React.FC<{ table: Table<any> }>
+			slotRight?: React.FC<{ table: Table<any> }>
 	  }
 
-export type TableFooterProps<TData extends RowData> = {
+export type TableFooterProps = {
 	hidden?: boolean
 	rtl?: boolean
-	slot?: React.FC<{ table: Table<TData> }>
+	slot?: React.FC<{ table: Table<any> }>
 } & React.PropsWithChildren
 
 // #region Pagination prop types
-type PaginationBaseProps<TData extends RowData> = {
+type PaginationBaseProps = {
 	prefetch?: (params: Record<string, any>) => void
-} & Partial<Omit<Pagination<TData>, 'data'>>
+} & Partial<Omit<Pagination<any>, 'data'>>
 
-type PaginationProps<TData = RowData> =
+type PaginationProps =
 	| {
 			manualPagination: true
-			paginationProps: PaginationBaseProps<TData>
+			paginationProps: PaginationBaseProps
 	  }
 	| {
 			manualPagination?: false
-			paginationProps?: PaginationBaseProps<TData>
+			paginationProps?: PaginationBaseProps
 	  }
 
 // #region Column filters prop types
@@ -94,97 +93,15 @@ type SortingProps =
 			onSortingChange?: React.Dispatch<React.SetStateAction<SortingState>>
 	  }
 
-type RenderSubComponentProps<TData extends RowData, TValue = any> = {
+type RenderSubComponentProps<TData = any> = {
 	row: Row<TData>
-	table: Table<TData, TValue>
+	table: Table<TData>
 }
 
-export type RenderSubComponent<TData extends RowData, TValue = any> = (props: {
-	row: Row<TData>
-	table: Table<TData, TValue>
-}) => React.ReactElement
+export type RenderSubComponent<TData = any> = (props: { row: Row<TData>; table: Table<TData> }) => React.ReactElement
 
 // #region Data table prop types
-export type DataTableProps<TData, TValue> = {
-	/**
-	 * Reference to the table instance. Useful for accessing table methods and properties.
-	 */
-	ref?: React.RefObject<Table<TData>>
-	/**
-	 * Array of data objects to be displayed in the table.
-	 */
-	data: Array<TData>
-	/**
-	 * Array of column definitions for the table. Each column can have various properties such as header, accessor, etc.
-	 */
-	columns: ColumnDef<TData, TValue>[]
-
-	/**
-	 * Table border style. Can be 'all' for full borders or 'bottom-only' for minimal borders.
-	 * @default 'all'
-	 */
-	border?: 'all' | 'bottom-only'
-	/**
-	 * Table caption, which can be used to provide a title or description for the table.
-	 * This is useful for accessibility and can be used by screen readers to describe the table content.
-	 */
-	caption?: string
-	/**
-	 * Loading state of the table. If true, skeleton loading will be shown.
-	 */
-	loading?: boolean
-	/**
-	 * Enable column resizing feature. This allows users to adjust the width of columns by dragging the edges.
-	 */
-	enableColumnResizing?: boolean
-	/**
-	 * Add some additional props to the table container component, like height, width, ...etc.
-	 */
-	containerProps?: React.ComponentProps<'div'>
-	/**
-	 * Optional function to render a custom header for the table.
-	 */
-	toolbarProps?: ToolbarProps
-	/**
-	 * Optional function to render a custom footer for the table.
-	 */
-	footerProps?: TableFooterProps
-	/**
-	 * Optional external expanded state in case you want to control the sorting state of the table from outside like server-side sorting.
-	 */
-	sorting?: SortingState
-	/**
-	 * If true, the filter row will be shown by default
-	 */
-	defaultFilterOpen?: boolean
-	/**
-	 * Optional external expanded state in case you want to control the expanded state of the table from outside.
-	 */
-	expanded?: ExpandedState
-	/**
-	 * Intial state of the table. Can be used to set default values for sorting, filtering, etc.
-	 */
-	initialState?: Partial<TableState>
-	/**
-	 * Optional function to render a custom caption for the table.
-	 */
-	virtualizerOptions?: Pick<
-		VirtualizerOptions<HTMLDivElement, HTMLTableRowElement>,
-		'enabled' | 'estimateSize' | 'overscan'
-	>
-	/**
-	 * Optional function to handle state changes in the table. This can be used to perform side effects when the table state changes.
-	 * @param {Table<TData, TValue>} instance
-	 * @returns
-	 */
-	onStateChange?: (instance: Table<TData, TValue>) => void
-	/**
-	 * Optional function to render sub-component for each row. This can be used to display additional information or actions related to the row.
-	 * @param {RenderSubComponentProps<TData, TValue>} props
-	 * @returns
-	 */
-	renderSubComponent?: (props: RenderSubComponentProps<TData, TValue>) => React.ReactElement | React.JSX.Element
-} & Partial<TableOptions> &
+export type DataTableProps = Partial<TableOptions> &
 	/**
 	 * Additional props in case you want to control pagination state from outside like server-side pagination.
 	 */
@@ -200,6 +117,83 @@ export type DataTableProps<TData, TValue> = {
 	/**
 	 * Additional props in case you want to control column filtering state from outside like server-side searching by term.
 	 */
-	GlobalFilterProps
+	GlobalFilterProps & {
+		/**
+		 * Array of data objects to be displayed in the table.
+		 */
+		data: Array<any>
+		/**
+		 * Array of column definitions for the table. Each column can have various properties such as header, accessor, etc.
+		 */
+		columns: ColumnDef<any, any>[]
+		/**
+		 * Reference to the table instance. Useful for accessing table methods and properties.
+		 */
+		ref?: React.RefObject<Table<any>>
+		/**
+		 * Table border style. Can be 'all' for full borders or 'bottom-only' for minimal borders.
+		 * @default 'all'
+		 */
+		border?: 'all' | 'bottom-only'
+		/**
+		 * Table caption, which can be used to provide a title or description for the table.
+		 * This is useful for accessibility and can be used by screen readers to describe the table content.
+		 */
+		caption?: string
+		/**
+		 * Loading state of the table. If true, skeleton loading will be shown.
+		 */
+		loading?: boolean
+		/**
+		 * Enable column resizing feature. This allows users to adjust the width of columns by dragging the edges.
+		 */
+		enableColumnResizing?: boolean
+		/**
+		 * Add some additional props to the table container component, like height, width, ...etc.
+		 */
+		containerProps?: React.ComponentProps<'div'>
+		/**
+		 * Optional function to render a custom header for the table.
+		 */
+		toolbarProps?: ToolbarProps
+		/**
+		 * Optional function to render a custom footer for the table.
+		 */
+		footerProps?: TableFooterProps
+		/**
+		 * Optional external expanded state in case you want to control the sorting state of the table from outside like server-side sorting.
+		 */
+		sorting?: SortingState
+		/**
+		 * If true, the filter row will be shown by default
+		 */
+		defaultFilterOpen?: boolean
+		/**
+		 * Optional external expanded state in case you want to control the expanded state of the table from outside.
+		 */
+		expanded?: ExpandedState
+		/**
+		 * Intial state of the table. Can be used to set default values for sorting, filtering, etc.
+		 */
+		initialState?: Partial<TableState>
+		/**
+		 * Optional function to render a custom caption for the table.
+		 */
+		virtualizerOptions?: Pick<VirtualizerOptions<HTMLDivElement, HTMLTableRowElement>, 'enabled' | 'overscan'> & {
+			estimateSize?: number
+		}
+		/**
+		 * Optional function to handle state changes in the table. This can be used to perform side effects when the table state changes.
+		 * @param {Table<any, TValue>} instance
+		 * @returns
+		 */
+		onStateChange?: (instance: Table<any>) => void
+		/**
+		 * Optional function to render sub-component for each row. This can be used to display additional information or actions related to the row.
+		 * @param {RenderSubComponentProps<any>} props
+		 * @returns
+		 */
+		renderSubComponent?: (props: RenderSubComponentProps<any>) => React.ReactElement | React.JSX.Element
+	}
 
 export type RowSelectionType = 'single' | 'multiple' | undefined

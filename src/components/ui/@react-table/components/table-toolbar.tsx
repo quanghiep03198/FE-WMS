@@ -14,8 +14,8 @@ import ColumnFilterToggle from './column-filter-toggle'
 import { GlobalFilterPopover } from './global-filter'
 import { TableViewOptions } from './table-view-options'
 
-function TableToolbar<TData>(props: ToolbarProps<TData>) {
-	const table = props['table'] as Table<TData>
+const TableToolbar: React.FC<ToolbarProps> = (props) => {
+	const table = props['table'] as Table<any>
 	const { event$ } = useTableContext('event$')
 	const {
 		columnPinning: { left, right },

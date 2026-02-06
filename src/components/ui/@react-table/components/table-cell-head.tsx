@@ -20,11 +20,11 @@ import {
 } from '../..'
 import { useTableContext } from '../context/table.context'
 
-type TableCellHeadProps<TData, TValue> = {
-	header: Header<TData, TValue>
+type TableCellHeadProps = {
+	header: Header<any, any>
 }
 
-export default function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
+const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 	const { t } = useTranslation()
 	const { columnDef, getIsResizing, getIsSorted, getToggleSortingHandler, getNextSortingOrder } = header.column
 	const toggleSorting = columnDef.enableSorting ? getToggleSortingHandler() : undefined
@@ -149,3 +149,5 @@ export default function TableCellHead<TData, TValue>({ header }: TableCellHeadPr
 		</ContextMenu>
 	)
 }
+
+export default TableCellHead

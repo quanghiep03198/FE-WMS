@@ -1,7 +1,7 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import env from '@/common/utils/env'
-import { RowData, Table, type Row as TRow } from '@tanstack/react-table'
+import { Table, type Row as TRow } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Activity, memo, useCallback, useMemo } from 'react'
 import { TableBody } from '../..'
@@ -9,20 +9,20 @@ import { useTableContext } from '../context/table.context'
 import { RenderSubComponent } from '../types'
 import { MemoizedVirtualTableRow, VirtualPlaceholderRow } from './table-row'
 
-export type TableBodyProps<TData extends RowData> = {
-	table: Table<TData>
+export type TableBodyProps = {
+	table: Table<any>
 	containerRef: React.RefObject<HTMLDivElement>
 	estimatedRowHeight: number
 	shouldEnableVirtualizer: boolean
 	renderSubComponent: RenderSubComponent<any>
 }
 
-function DataTableBody<TData>({
+export const DataTableBody: React.FC<TableBodyProps> = ({
 	containerRef,
 	shouldEnableVirtualizer,
 	estimatedRowHeight,
 	renderSubComponent
-}: TableBodyProps<TData>) {
+}) => {
 	'use no memo'
 
 	const { table } = useTableContext('table')

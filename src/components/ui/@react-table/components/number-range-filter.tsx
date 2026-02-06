@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { DebouncedInput } from '../../@custom/debounced-input'
 import { useTableContext } from '../context/table.context'
 
-export type NumberRangeFilterProps<TData, TValue> = { column: Column<TData, TValue> }
+export type NumberRangeFilterProps = { column: Column<any, any> }
 
-export function NumberRangeFilter<TData, TValue>({ column }: NumberRangeFilterProps<TData, TValue>) {
+export const NumberRangeFilter: React.FC<NumberRangeFilterProps> = ({ column }) => {
 	const [isAllFiltersCleared, setIsAllFiltersCleared] = useState<boolean>(true)
 	const { event$ } = useTableContext('event$')
 

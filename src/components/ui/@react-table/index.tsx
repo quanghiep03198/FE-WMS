@@ -13,7 +13,6 @@ import {
 	type ExpandedState,
 	type GlobalFilterTableState,
 	type PaginationState,
-	type RowData,
 	type RowSelectionState,
 	type SortingState
 } from '@tanstack/react-table'
@@ -36,10 +35,10 @@ import { dateRangeFilter } from './utils/in-date-range-filter.util'
 /**
  * @author quanghiep03198
  * @description A highly customizable and feature-rich data grid component built with React and TanStack Table. Supports sorting, filtering, pagination, row selection, column resizing, row editting and more.
- * @param {DataTableProps<TData, TValue>} props - DataTableProps
+ * @param {DataTableProps<object>} props - DataTableProps
  * @returns {JSX.Element} A React component that renders a data grid with various features and customization options.
  */
-function DataGrid<TData extends RowData, TValue>({
+const DataGrid: React.FC<DataTableProps> = ({
 	data,
 	caption,
 	columns,
@@ -80,7 +79,7 @@ function DataGrid<TData extends RowData, TValue>({
 	onExpandedChange,
 	onRowSelectionChange,
 	...props
-}: DataTableProps<TData, TValue>) {
+}) => {
 	const originalData = useMemo(() => data ?? [], [data])
 
 	// * Table states declaration
@@ -99,14 +98,14 @@ function DataGrid<TData extends RowData, TValue>({
 			? initialState.pagination
 			: {
 					pageIndex: 0,
-					pageSize: 10
+					pageSize: 50
 				}
 	)
 
 	const event$ = useEventEmitter<Record<string, unknown>>()
 
 	// * Table declaration
-	const table = useReactTable<TData>({
+	const table = useReactTable<any>({
 		data: _data,
 		columns,
 		initialState: {
@@ -189,8 +188,9 @@ function DataGrid<TData extends RowData, TValue>({
 				setData((old) =>
 					old.map((row, index) => {
 						if (index === rowIndex) {
+							const rowValues = old[rowIndex]
 							return {
-								...old[rowIndex],
+								...rowValues,
 								[columnId]: value
 							}
 						}
@@ -206,7 +206,7 @@ function DataGrid<TData extends RowData, TValue>({
 				}
 				setData((old) => old.map((row, index) => (index === rowIndex ? originalData[rowIndex] : row)))
 			},
-			getUnsavedChanges: (): TData[] => {
+			getUnsavedChanges: () => {
 				return table
 					.getRowModel()
 					.flatRows.filter((row) => Object.keys(editedRows).some((id) => id === row.id))

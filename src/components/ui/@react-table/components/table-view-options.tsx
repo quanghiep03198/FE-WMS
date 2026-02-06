@@ -17,7 +17,7 @@ import {
 } from '../..'
 import { useTableContext } from '../context/table.context'
 
-export function TableViewOptions() {
+export const TableViewOptions: React.FC = () => {
 	const { table } = useTableContext('table')
 	const { t } = useTranslation()
 	const rerender = useUpdate()

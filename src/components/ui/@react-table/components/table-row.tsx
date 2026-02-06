@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div } from '@/components/ui'
-import { flexRender, RowData, type Row } from '@tanstack/react-table'
+import { flexRender, type Row } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
 import { Fragment, memo } from 'react'
 import { TableCell, TableRow } from '../../@core/table'
@@ -8,13 +8,13 @@ import { useTableContext } from '../context/table.context'
 import { getStickyOffsetPosition } from '../utils/table.util'
 import { type TableBodyProps } from './table-body'
 
-type VirtualTableRowProps<TData extends RowData> = Pick<TableBodyProps<TData>, 'renderSubComponent'> & {
+type VirtualTableRowProps = Pick<TableBodyProps, 'renderSubComponent'> & {
 	isScrolling?: boolean
 	row: Row<any>
 	index: number
 }
 
-function VirtualTableRow<TData>({ row, isScrolling, index, renderSubComponent }: VirtualTableRowProps<TData>) {
+const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, index, renderSubComponent }) => {
 	'use no memo'
 
 	const { table } = useTableContext('table')
