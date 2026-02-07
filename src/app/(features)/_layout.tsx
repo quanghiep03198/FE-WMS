@@ -57,8 +57,8 @@ function Layout() {
 						style={
 							{
 								counterReset: 'h var(--screen-height) w var(--screen-width)',
-								'--header-height': 80 + 'px',
-								'--outlet-padding-bottom': 24 + 'px',
+								'--header-height': '80px',
+								'--outlet-padding-bottom': '24px',
 								'--outlet-wrapper-height':
 									'calc(var(--screen-height,100dvh) * 1px - var(--header-height) - var(--outlet-padding-bottom))',
 								'--scrollbar-thickness': '10px'
