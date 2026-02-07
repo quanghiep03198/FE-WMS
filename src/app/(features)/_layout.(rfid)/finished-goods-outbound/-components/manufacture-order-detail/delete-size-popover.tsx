@@ -1,6 +1,4 @@
 import { DeleteScannedEpcsFormValues, deleteScannedEpcsSchema } from '@/app/(features)/-schemas/delete-epc.schema'
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
-import { UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -67,72 +65,70 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	}
 
 	return (
-		<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.MANAGER]}>
-			<Popover open={open} onOpenChange={setOpen}>
-				<PopoverTrigger
-					className='peer opacity-0 group-hover/cell:opacity-100 data-[state=open]:opacity-100'
-					onMouseEnter={() =>
-						queryClient.prefetchQuery({
-							queryKey: [
-								'OUTBOUND_EPC_BY_SIZE',
-								{
-									['mo_no.eq']: data.mo_no,
-									['size_numcode.eq']: data.size_numcode
-								}
-							]
-						})
-					}>
-					<Icon name='Trash2' className='stroke-destructive' />
-				</PopoverTrigger>
-				<PopoverContent className='w-96' side='bottom' align='start'>
-					<FormProvider {...form}>
-						<Form onSubmit={form.handleSubmit(handleDeleteEpcs)}>
-							<MultiSelectFieldControl
-								name='epcs'
-								label={t('ns_common:common_fields.quantity')}
-								datalist={availableEpcs}
-								labelField='epc'
-								valueField='epc'
-								loading={isLoading}
-								maxCount={2}
-							/>
+		<Popover open={open} onOpenChange={setOpen}>
+			<PopoverTrigger
+				className='peer opacity-0 group-hover/cell:opacity-100 data-[state=open]:opacity-100'
+				onMouseEnter={() =>
+					queryClient.prefetchQuery({
+						queryKey: [
+							'OUTBOUND_EPC_BY_SIZE',
+							{
+								['mo_no.eq']: data.mo_no,
+								['size_numcode.eq']: data.size_numcode
+							}
+						]
+					})
+				}>
+				<Icon name='Trash2' className='stroke-destructive' />
+			</PopoverTrigger>
+			<PopoverContent className='w-96' side='bottom' align='start'>
+				<FormProvider {...form}>
+					<Form onSubmit={form.handleSubmit(handleDeleteEpcs)}>
+						<MultiSelectFieldControl
+							name='epcs'
+							label={t('ns_common:common_fields.quantity')}
+							datalist={availableEpcs}
+							labelField='epc'
+							valueField='epc'
+							loading={isLoading}
+							maxCount={2}
+						/>
 
-							<FormField
-								control={form.control}
-								name='rescannable'
-								render={({ field }) => (
-									<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-										<FormControl>
-											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
-										</FormControl>
-										<Div className='space-y-1.5 leading-none'>
-											<FormLabel>{t('ns_inoutbound:labels.delete_and_unscannable')}</FormLabel>
-										</Div>
-									</FormItem>
-								)}
-							/>
+						<FormField
+							control={form.control}
+							name='rescannable'
+							render={({ field }) => (
+								<FormItem className='flex flex-row items-start space-x-3 space-y-0'>
+									<FormControl>
+										<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+									</FormControl>
+									<Div className='space-y-1.5 leading-none'>
+										<FormLabel>{t('ns_inoutbound:labels.delete_and_unscannable')}</FormLabel>
+									</Div>
+								</FormItem>
+							)}
+						/>
 
-							<Div className='flex items-center justify-end gap-x-2'>
-								<Div className='flex items-stretch justify-end gap-x-1'>
-									<PopoverClose
-										type='button'
-										className={cn(
-											buttonVariants({
-												variant: 'outline'
-											})
-										)}>
-										{t('ns_common:actions.cancel')}
-									</PopoverClose>
-									<Button variant='destructive' type='submit' disabled={isPending}>
-										{t('ns_common:actions.delete')}
-									</Button>
-								</Div>
+						<Div className='flex items-center justify-end gap-x-2'>
+							<Div className='flex items-stretch justify-end gap-x-1'>
+								<PopoverClose
+									type='button'
+									className={cn(
+										buttonVariants({
+											variant: 'outline'
+										})
+									)}>
+									{t('ns_common:actions.cancel')}
+								</PopoverClose>
+								<Button variant='destructive' type='submit' disabled={isPending}>
+									{t('ns_common:actions.delete')}
+								</Button>
 							</Div>
-						</Form>
-					</FormProvider>
-				</PopoverContent>
-			</Popover>{' '}
-		</RoleBaseAccessControl>
+						</Div>
+					</Form>
+				</FormProvider>
+			</PopoverContent>
+		</Popover>
 	)
 }
 
