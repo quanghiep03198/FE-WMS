@@ -1,6 +1,6 @@
 import { useEffectOnce, useLayoutEffectOnce } from '@/common/hooks/use-effect-once'
 import trimCanvas from '@/common/libs/trim-canvas'
-import { type RefObject, useRef } from 'react'
+import { type RefObject, useCallback, useRef } from 'react'
 import SignaturePad, { type Options, type PointGroup } from 'signature_pad'
 
 export type SignatureCanvasInstance = {
@@ -33,8 +33,8 @@ export type SignatureCanvasProps = Partial<React.ComponentPropsWithoutRef<'canva
  */
 export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 	ref,
-	onBegin = () => {},
-	onEnd = () => {},
+	onBegin,
+	onEnd,
 	padOptions = { penColor: 'black', minWidth: 2.5, maxWidth: 2.5 },
 	...props
 }) => {
@@ -46,28 +46,30 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 			signaturePadRef.current = new SignaturePad(canvasRef.current, padOptions)
 	})
 
-	useEffectOnce(() => {
-		if (!signaturePadRef.current || !canvasRef.current) return
+	const resizeCanvas = useCallback(() => {
+		if (!canvasRef.current || !signaturePadRef.current) return
+		const ratio = Math.max(window.devicePixelRatio || 1, 1)
+		canvasRef.current.width = canvasRef.current.offsetWidth * ratio
+		canvasRef.current.height = canvasRef.current.offsetHeight * ratio
+		canvasRef.current.getContext('2d').scale(ratio, ratio)
+		signaturePadRef.current.clear() // otherwise isEmpty() might return incorrect value
+	}, [])
 
-		function resizeCanvas() {
-			if (!canvasRef.current || !signaturePadRef.current) return
-			const ratio = Math.max(window.devicePixelRatio || 1, 1)
-			canvasRef.current.width = canvasRef.current.offsetWidth * ratio
-			canvasRef.current.height = canvasRef.current.offsetHeight * ratio
-			canvasRef.current.getContext('2d').scale(ratio, ratio)
-			signaturePadRef.current.clear() // otherwise isEmpty() might return incorrect value
-		}
+	useEffectOnce(() => {
+		if (!signaturePadRef?.current || !canvasRef?.current) return
 
 		window.addEventListener('resize', resizeCanvas)
+		window.screen.orientation.addEventListener('change', resizeCanvas)
 		resizeCanvas()
 
-		signaturePadRef.current.addEventListener('beginStroke', onBegin)
-		signaturePadRef.current.addEventListener('endStroke', onEnd)
+		if (typeof onBegin === 'function') signaturePadRef.current.addEventListener('beginStroke', onBegin)
+		if (typeof onEnd === 'function') signaturePadRef.current.addEventListener('endStroke', onEnd)
 
 		return () => {
-			signaturePadRef.current.removeEventListener('beginStroke', onBegin)
-			signaturePadRef.current.removeEventListener('endStroke', onEnd)
+			if (typeof onBegin === 'function') signaturePadRef.current?.removeEventListener('beginStroke', onBegin)
+			if (typeof onEnd === 'function') signaturePadRef.current?.removeEventListener('endStroke', onEnd)
 			window.removeEventListener('resize', resizeCanvas)
+			window.screen.orientation.removeEventListener('change', resizeCanvas)
 		}
 	})
 
@@ -81,7 +83,7 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
 		return trimCanvas(copy)
 	}
 
-	if (ref) {
+	if (ref && 'current' in ref) {
 		ref.current = {
 			getTrimmedCanvas() {
 				return getTrimmedCanvas()

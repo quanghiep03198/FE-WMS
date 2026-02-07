@@ -1,4 +1,5 @@
 import { PresetBreakPoints } from '@/common/constants/enums'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
@@ -107,6 +108,16 @@ const SignatureEditorDialog: React.FC = () => {
 			toast.error(t('ns_common:notification.error'), { id: 'update_signature' })
 		}
 	}
+
+	useEffectOnce(() => {
+		const handleDeviceScreenSizeChange = () => setOpen(false)
+		window.addEventListener('resize', handleDeviceScreenSizeChange)
+		window.screen.orientation.addEventListener('change', handleDeviceScreenSizeChange)
+		return () => {
+			window.removeEventListener('resize', handleDeviceScreenSizeChange)
+			window.screen.orientation.removeEventListener('change', handleDeviceScreenSizeChange)
+		}
+	})
 
 	const handleReset = () => {
 		canvasRef.current.clear()
