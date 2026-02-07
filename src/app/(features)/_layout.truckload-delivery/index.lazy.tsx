@@ -4,6 +4,7 @@ import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useLayoutEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useTranslation } from 'react-i18next'
 import {
 	PageAction,
@@ -65,7 +66,10 @@ function Page() {
 							<UpdateDispatchOrderFormDialog />
 							<DeleteConfirmDialog />
 							<SignatureEditorDialog />
-							<TruckloadDeliveryMasterTable />
+							<ErrorBoundary
+								fallbackRender={() => <div className='text-destructive'>Ooppps!!!! Something went wrong</div>}>
+								<TruckloadDeliveryMasterTable />
+							</ErrorBoundary>
 						</PageWrapper>
 					</PageContextProvider>
 				</HostCompatibleGuard>
