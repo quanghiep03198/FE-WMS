@@ -1,4 +1,5 @@
 import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
+import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
@@ -27,7 +28,7 @@ const SearchDialog: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 	const [searchTerm, setSearchTerm, resetSearchTerm] = useResetState<string>('')
 	const [open, setOpen] = React.useState<boolean>(false)
-	const isSmallScreen = useMediaQuery('(min-width: 360px) and (max-width: 1023px)')
+	const isSmallScreen = useMediaQuery(PresetBreakPoints.SMALL)
 
 	useKeyPress('ctrl.k', (e) => {
 		e.preventDefault()
@@ -62,13 +63,13 @@ const SearchDialog: React.FC = () => {
 				<Button
 					variant={isSmallScreen ? 'ghost' : 'outline'}
 					size={isSmallScreen ? 'icon' : 'default'}
-					className='basis-56 gap-x-2 px-2 sm:basis-auto md:basis-auto'
+					className='ml-auto basis-56 gap-x-2 px-2 sm:basis-auto'
 					onClick={() => setOpen(!open)}>
 					<Icon name='Search' />
-					<Typography variant='small' className='flex-1 text-left sm:hidden md:hidden'>
+					<Typography variant='small' className='flex-1 text-left sm:hidden'>
 						{t('ns_common:actions.search') + ' ...'}
 					</Typography>
-					<Kbd className='text-xs sm:hidden md:hidden'>
+					<Kbd className='text-xs sm:hidden'>
 						<KbdKey>ctrl</KbdKey>
 						<KbdKey>K</KbdKey>
 					</Kbd>

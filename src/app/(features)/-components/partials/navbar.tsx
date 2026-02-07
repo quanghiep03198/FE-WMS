@@ -4,10 +4,10 @@ import { Div, Separator } from '@/components/ui'
 import { useKeyPress } from 'ahooks'
 import React from 'react'
 import ThemeToggle from '../../../-components/-shared/theme-toggle'
+import FullScreenToggler from './full-screen-toggler'
 import NavBreadcrumb from './nav-breadcrumb'
 import NavSidebarToggler from './nav-sidebar-toggler'
 import NavUserControl from './nav-user-controller'
-import Notification from './notifications'
 import SearchDialog from './search-dialog'
 
 const Navbar: React.FC = () => {
@@ -22,23 +22,19 @@ const Navbar: React.FC = () => {
 		<Div
 			as='header'
 			role='menubar'
-			className='sticky top-0 z-20 flex h-[var(--header-height)] items-center bg-background px-6 sm:px-2 md:px-2'>
+			className='sticky top-0 z-20 flex h-[var(--header-height)] items-center bg-background px-6 sm:px-2 md:bottom-0 md:top-auto md:px-2'>
 			<Div
 				as='nav'
 				role='menu'
-				className='flex w-full basis-full items-center justify-between rounded-md border border-border px-3 py-2'>
-				<Div role='group' className='flex items-center gap-x-4'>
-					<NavSidebarToggler />
-					<Separator orientation='vertical' className='hidden h-5 w-1 xl:block' />
-					<NavBreadcrumb />
-				</Div>
-				<Div role='group' className='flex flex-1 items-center justify-end gap-x-2'>
-					<SearchDialog />
-					<LanguageDropdown triggerProps={{ variant: 'ghost' }} />
-					<ThemeToggle />
-					<Notification />
-					<NavUserControl />
-				</Div>
+				className='flex w-full basis-full items-center gap-x-2 rounded-md border border-border px-3 py-2'>
+				<NavSidebarToggler />
+				<Separator orientation='vertical' className='mx-2 h-5 w-1 sm:hidden md:hidden' />
+				<NavBreadcrumb />
+				<SearchDialog />
+				<FullScreenToggler />
+				<LanguageDropdown triggerProps={{ variant: 'ghost' }} />
+				<ThemeToggle />
+				<NavUserControl />
 			</Div>
 		</Div>
 	)
