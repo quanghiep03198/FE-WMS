@@ -12,7 +12,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../-components/shared/page-header'
+} from '../-components/shared/page'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import CreatePurchaseOrdersFormDialog from './-components/create-purchase-orders-form-dialog'
 import DateRangeFilter from './-components/date-range-filter'

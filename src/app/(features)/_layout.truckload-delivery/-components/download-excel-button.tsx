@@ -38,7 +38,7 @@ const DownloadExcelButton: React.FC = () => {
 
 	return (
 		<Button
-			variant={isMobile ? 'outline' : 'default'}
+			variant={isMobile ? 'ghost' : 'default'}
 			size={isMobile ? 'icon' : 'default'}
 			onClick={handleDownloadExcel}>
 			<Icon name='Download' /> {!isMobile && t('ns_common:actions.download_excel')}

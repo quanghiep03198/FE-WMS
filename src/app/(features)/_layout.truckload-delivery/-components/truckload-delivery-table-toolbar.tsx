@@ -65,7 +65,10 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 					message={t('ns_common:actions.reload')}
 					triggerProps={{ asChild: true }}
 					contentProps={{ hidden: !isMobile }}>
-					<Button variant='outline' size={isMobile ? 'icon' : 'default'} onClick={() => refetch()}>
+					<Button
+						variant={isMobile ? 'ghost' : 'outline'}
+						size={isMobile ? 'icon' : 'default'}
+						onClick={() => refetch()}>
 						<Icon name='RefreshCcw' /> {!isMobile && t('ns_common:actions.reload')}
 					</Button>
 				</Tooltip>

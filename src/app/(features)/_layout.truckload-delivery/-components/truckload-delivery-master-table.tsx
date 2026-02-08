@@ -1,17 +1,18 @@
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
-import { RenderSubComponentProps } from '@/components/ui/@react-table/types'
+import { DataTableProps, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { type ColumnDefBase, createColumnHelper, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -188,35 +189,54 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[i18n.language, isMobile]
 	)
 
-	useEffect(() => {
-		if (tableRef.current) {
-			tableRef.current.setColumnVisibility({
-				...tableRef.current.getState().columnVisibility,
-				dispatch_order: false,
-				purchase_orders: false,
-				container_number: !isMobile,
-				total_outbound_qty: !isMobile,
-				container_sealing_time: !isMobile,
-				factory_departure_time: !isMobile,
-				punctured_container: !isMobile,
-				smelling_container: !isMobile,
-				moist_container: !isMobile
-			})
-			tableRef.current.setColumnPinning({
-				left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['license_plate'] : [])],
-				right: [ROW_ACTIONS_COLUMN_ID]
-			})
+	const handleDisplayColumns = useCallback(() => {
+		if (!tableRef.current) return
+
+		tableRef.current.setColumnVisibility({
+			...tableRef.current.getState().columnVisibility,
+			dispatch_order: false,
+			purchase_orders: false,
+			container_number: !isMobile,
+			total_outbound_qty: !isMobile,
+			container_sealing_time: !isMobile,
+			factory_departure_time: !isMobile,
+			punctured_container: !isMobile,
+			smelling_container: !isMobile,
+			moist_container: !isMobile
+		})
+		tableRef.current.setColumnPinning({
+			left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['license_plate'] : [])],
+			right: [ROW_ACTIONS_COLUMN_ID]
+		})
+	}, [tableRef.current, isMobile])
+
+	useEffectOnce(() => {
+		handleDisplayColumns()
+
+		window.screen.orientation.addEventListener('change', handleDisplayColumns)
+
+		return () => {
+			window.screen.orientation.removeEventListener('change', handleDisplayColumns)
 		}
-	}, [isMobile])
+	})
 
 	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 		const data = row.original
 		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
 	}, [])
 
+	const toolbarProps: DataTableProps['toolbarProps'] = useMemo(
+		() => ({
+			override: true,
+			render: TruckloadDeliveryTableToolbar
+		}),
+		[]
+	)
+
 	const virtualizerOptions = useMemo(() => ({ estimateSize: isMobile ? 60 : 40 }), [isMobile])
 
 	return (
+		// @ts-ignore
 		<DataTable
 			ref={tableRef}
 			columns={columns}
@@ -234,12 +254,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			globalFilterFn='includesString'
 			initialState={{ sorting: [{ id: 'dispatch_order', desc: true }] }}
 			virtualizerOptions={virtualizerOptions}
-			toolbarProps={{
-				override: true,
-				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
-			}}
+			toolbarProps={toolbarProps}
 			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' },
+				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' },
 				className:
 					'md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
 			}}
