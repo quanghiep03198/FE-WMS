@@ -165,7 +165,7 @@ export function AssemblyProductivityOverview() {
 						{t('ns_common:table.no_data')}
 					</Div>
 				) : (
-					<ChartContainer config={chartConfig} className='aspect-auto h-72 w-full'>
+					<ChartContainer config={chartConfig} className='aspect-auto h-72 w-full xxl:h-80'>
 						<AreaChart
 							accessibilityLayer
 							data={chartData}
