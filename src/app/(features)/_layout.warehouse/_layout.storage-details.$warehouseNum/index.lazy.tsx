@@ -2,7 +2,6 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div, Separator } from '@/components/ui'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'
@@ -11,9 +10,10 @@ import { useTranslation } from 'react-i18next'
 import { PageProvider } from '../-contexts/page-context'
 import { WarehouseQueryKeys } from '../-hooks/use-warehouse-asm'
 import { getWarehouseStorageOptions } from '../-hooks/use-warehouse-storage-asm'
+import { PageSeparator, PageWrapper } from '../../-components/shared/page'
+import PageHeading from './-components/page-heading'
+import StorageList from './-components/storage-data-table'
 import WarehouseStorageFormDialog from './-components/storage-form'
-import StorageListHeading from './-components/storage-heading'
-import StorageList from './-components/storage-list'
 // #endregion
 
 // #region Router declaration
@@ -66,11 +66,11 @@ function Page() {
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<PageProvider>
-					<Div className='mt-4 space-y-6'>
-						<StorageListHeading />
-						<Separator />
+					<PageWrapper>
+						<PageHeading />
+						<PageSeparator />
 						<StorageList {...warehouseStorageQueryResult} />
-					</Div>
+					</PageWrapper>
 					<WarehouseStorageFormDialog {...warehouseDetailQueryResult} />
 				</PageProvider>
 			</RoleGuard>

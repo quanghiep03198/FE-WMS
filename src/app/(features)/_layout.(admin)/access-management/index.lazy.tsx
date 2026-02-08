@@ -11,7 +11,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../../-components/shared/page-header'
+} from '../../-components/shared/page'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import { UserFormDialog, UserFormDialogTrigger } from './-components/user-form-dialog'
 import UserTable from './-components/user-table'

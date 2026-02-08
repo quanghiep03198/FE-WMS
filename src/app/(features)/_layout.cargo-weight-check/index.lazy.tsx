@@ -12,7 +12,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../-components/shared/page-header'
+} from '../-components/shared/page'
 import ReportMasterTable from './-components/report-master-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/cargo-weight-check/')({

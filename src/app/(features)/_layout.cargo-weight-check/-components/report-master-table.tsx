@@ -153,7 +153,7 @@ const ReportMasterTable: React.FC = () => {
 			columns={columns}
 			loading={isLoading}
 			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
+				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 			}}
 			toolbarProps={{
 				slotLeft: () => <AutoRefreshToggle />,

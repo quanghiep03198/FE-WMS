@@ -8,7 +8,7 @@ export const PageHeader: React.FC<PageTitleProps> = ({ children, className, ref 
 	<div
 		ref={ref}
 		className={cn(
-			'grid auto-cols-auto grid-flow-col gap-x-6 gap-y-2 text-left sm:items-center sm:text-center',
+			'grid auto-cols-auto grid-flow-col gap-x-6 gap-y-1 text-left sm:items-center sm:text-center',
 			className
 		)}>
 		{children}
@@ -41,4 +41,6 @@ export const PageWrapper: React.FC<React.ComponentProps<'section'>> = ({ childre
 	)
 }
 
-export const PageSeparator = Separator
+export const PageSeparator: React.FC<React.ComponentProps<typeof Separator>> = ({ className, ...props }) => (
+	<Separator {...props} className={cn('hidden xxl:block', className)} />
+)

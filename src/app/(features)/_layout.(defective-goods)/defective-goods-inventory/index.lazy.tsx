@@ -10,7 +10,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../../-components/shared/page-header'
+} from '../../-components/shared/page'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import DownloadExcelButton from './-components/download-excel-button'
 import DefectiveGoodsInventoryTable from './-components/report-table'

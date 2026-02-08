@@ -6,7 +6,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import DatePickerFilter from '../-components/shared/date-picker-filter'
-import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page-header'
+import { PageDescription, PageHeader, PageTitle } from '../-components/shared/page'
 import DownloadExcelDropdown from './-components/download-excel-dropdown'
 import InboundReportMasterTable from './-components/report-master-table'
 

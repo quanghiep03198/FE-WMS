@@ -208,7 +208,7 @@ const InboundReportMasterTable: React.FC = () => {
 			enableColumnResizing={true}
 			ref={dataTableRef}
 			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 15rem - var(--row-height))' }
+				style: { height: 'calc(var(--outlet-wrapper-height) - 14.5rem - var(--row-height))' }
 			}}
 			initialState={{
 				columnPinning: {

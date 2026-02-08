@@ -25,7 +25,7 @@ import {
 } from '../-hooks/use-rfid-device-asm'
 import ActionDropdown from './action-dropdown'
 
-const RFIDDeviceList: React.FC = () => {
+const DeviceDataTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { user } = useAuth()
 	const { data, isLoading, refetch } = useGetRFIDDeviceQuery()
@@ -189,7 +189,7 @@ const RFIDDeviceList: React.FC = () => {
 				loading={isLoading}
 				enableColumnFilters={true}
 				containerProps={{
-					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem' }
+					style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 				}}
 				toolbarProps={{
 					slotRight: ({ table }) => (
@@ -237,4 +237,4 @@ const RFIDDeviceList: React.FC = () => {
 	)
 }
 
-export default RFIDDeviceList
+export default DeviceDataTable

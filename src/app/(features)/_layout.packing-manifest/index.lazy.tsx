@@ -1,10 +1,16 @@
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageAction, PageDescription, PageHeader, PageTitle, PageWrapper } from '../-components/shared/page-header'
+import {
+	PageAction,
+	PageDescription,
+	PageHeader,
+	PageSeparator,
+	PageTitle,
+	PageWrapper
+} from '../-components/shared/page'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import ReportMasterTable from './-components/data-table'
 import DownloadExcelButton from './-components/download-excel-button'
@@ -37,7 +43,7 @@ function Page() {
 							<DownloadExcelButton />
 						</PageAction>
 					</PageHeader>
-					<Separator />
+					<PageSeparator />
 					<ReportMasterTable />
 				</PageWrapper>
 			</RoleGuard>

@@ -13,7 +13,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../../-components/shared/page-header'
+} from '../../-components/shared/page'
 import DownloadExcelButton from './-components/download-excel-button'
 import InboundReportMasterTable from './-components/report-master-table'
 

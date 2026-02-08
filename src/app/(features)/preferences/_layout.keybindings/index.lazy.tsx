@@ -1,5 +1,5 @@
 import { NavigationConfig, navigationConfig } from '@/app/(features)/-configs/navigation.config'
-import { Badge, Div, Icon, Separator } from '@/components/ui'
+import { Badge, Div, Icon } from '@/components/ui'
 import { DebouncedInput } from '@/components/ui/@custom/debounced-input'
 import DataTable from '@/components/ui/@react-table'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
@@ -7,7 +7,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { createColumnHelper, Table } from '@tanstack/react-table'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageTitle } from '../../-components/shared/page-header'
+import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../../-components/shared/page'
 
 type CommandList = Pick<NavigationConfig, 'title' | 'keybinding'>[]
 
@@ -83,12 +83,12 @@ function KeybindingsPage() {
 			<title>{t('ns_common:navigation.keyboard_shortcut')}</title>
 			<meta name='description' content={t('ns_preference:captions.keybindings')} />
 
-			<Div className='space-y-6'>
+			<PageWrapper className='space-y-6'>
 				<PageHeader>
 					<PageTitle>{t('ns_common:navigation.keyboard_shortcut')}</PageTitle>
 					<PageDescription>{t('ns_preference:captions.keybindings')}</PageDescription>
 				</PageHeader>
-				<Separator />
+				<PageSeparator className='!block' />
 				<DataTable
 					data={navigationCommands.concat(extendedCommands)}
 					columns={columns}
@@ -116,7 +116,7 @@ function KeybindingsPage() {
 						)
 					}}
 				/>
-			</Div>
+			</PageWrapper>
 		</Fragment>
 	)
 }

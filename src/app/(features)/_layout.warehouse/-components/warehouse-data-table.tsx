@@ -24,7 +24,7 @@ import WarehouseRowActions from './warehouse-row-actions'
 // #endregion
 
 // #region React Component
-const WarehouseList: React.FC = () => {
+const WarehouseDataTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const [rowSelectionType, setRowSelectionType, resetRowSelectionType] = useResetState<RowDeletionType>(undefined)
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false)
@@ -242,7 +242,7 @@ const WarehouseList: React.FC = () => {
 				enableRowSelection={true}
 				ref={tableRef}
 				containerProps={{
-					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem' }
+					style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 				}}
 				toolbarProps={{
 					slotRight: ({ table }) => (
@@ -278,4 +278,4 @@ const WarehouseList: React.FC = () => {
 	)
 }
 
-export default WarehouseList
+export default WarehouseDataTable

@@ -138,7 +138,7 @@ const UserTable: React.FC = () => {
 			loading={isLoading}
 			border='bottom-only'
 			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
+				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' }
 			}}
 			virtualizerOptions={{ estimateSize: 50 }}
 			toolbarProps={{

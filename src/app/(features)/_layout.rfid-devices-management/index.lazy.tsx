@@ -12,10 +12,10 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../-components/shared/page-header'
+} from '../-components/shared/page'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
+import DeviceDataTable from './-components/device-data-table'
 import RFIDDeviceFormDialog from './-components/rfid-device-form-dialog'
-import RFIDDeviceList from './-components/rfid-device-list'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/rfid-devices-management/')({
@@ -47,7 +47,7 @@ function Page() {
 								</PageAction>
 							</PageHeader>
 							<PageSeparator />
-							<RFIDDeviceList />
+							<DeviceDataTable />
 						</PageWrapper>
 					</PageContextProvider>
 				</HostCompatibleGuard>

@@ -2,13 +2,13 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
-import { Div, Separator } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PageSeparator, PageWrapper } from '../-components/shared/page'
+import PageHeading from './-components/page-heading'
+import WarehouseDataTable from './-components/warehouse-data-table'
 import WarehouseFormDialog from './-components/warehouse-form'
-import WarehouseList from './-components/warehouse-list'
-import WarehouseListHeading from './-components/warehouse-list-heading'
 import { PageProvider } from './-contexts/page-context'
 // #endregion
 
@@ -36,11 +36,11 @@ function Page() {
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<PageProvider>
-					<Div className='mt-4 space-y-6'>
-						<WarehouseListHeading />
-						<Separator />
-						<WarehouseList />
-					</Div>
+					<PageWrapper>
+						<PageHeading />
+						<PageSeparator />
+						<WarehouseDataTable />
+					</PageWrapper>
 					<WarehouseFormDialog />
 				</PageProvider>
 			</RoleGuard>
