@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useRafState } from 'ahooks'
+import { useEffect } from 'react'
 
 /**
  * Custom React hook to determine if a given CSS media query matches the current viewport.
@@ -10,7 +11,7 @@ import { useEffect, useState } from 'react'
  * const isMobile = useMediaQuery('(max-width: 600px)');
  */
 export default function useMediaQuery(mediaQuery: string) {
-	const [isMatch, setIsMatch] = useState(false)
+	const [isMatch, setIsMatch] = useRafState(false)
 
 	useEffect(() => {
 		const mediaQueryList = window.matchMedia(mediaQuery)
