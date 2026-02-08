@@ -20,7 +20,7 @@ const DataTableBodyLoading: React.FC = () => {
 							width: `var(--column-${column?.id}-size)`,
 							height: 'var(--row-height)'
 						}}>
-						<Skeleton className='h-[calc(var(--row-height)/3)]' />
+						<Skeleton className='h-[calc(var(--row-height)/4)]' />
 					</TableCell>
 				)
 			})}

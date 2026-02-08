@@ -16,13 +16,10 @@ import React from 'react'
 export type ToolbarProps =
 	| {
 			override: true
-			render: ({
-				table,
-				event$
-			}: {
+			render: React.FC<{
 				table: Table<any>
 				event$: EventEmitter<Record<string, unknown>>
-			}) => React.ReactElement
+			}>
 	  }
 	| {
 			override?: false
@@ -100,8 +97,10 @@ type RenderSubComponentProps<TData = any> = {
 
 export type RenderSubComponent<TData = any> = (props: { row: Row<TData>; table: Table<TData> }) => React.ReactElement
 
+type PartialTableOptions = Partial<Omit<TableOptions<any>, 'data' | 'columns'>>
+
 // #region Data table prop types
-export type DataTableProps = Partial<TableOptions> &
+export type DataTableProps = PartialTableOptions &
 	/**
 	 * Additional props in case you want to control pagination state from outside like server-side pagination.
 	 */
