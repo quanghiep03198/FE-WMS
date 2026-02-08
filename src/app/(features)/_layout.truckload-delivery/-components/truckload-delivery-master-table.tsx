@@ -1,7 +1,6 @@
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
@@ -12,7 +11,7 @@ import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { type ColumnDefBase, createColumnHelper, type Table } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { useCallback, useLayoutEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useGetTruckloadDeliveryQuery, useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -25,7 +24,7 @@ import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
-	const tableRef = useReactiveRef<Table<ITruckloadDelivery>>(null)
+	const tableRef = useRef<Table<ITruckloadDelivery>>(null)
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
@@ -189,7 +188,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[i18n.language, isMobile]
 	)
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (tableRef.current) {
 			tableRef.current.setColumnVisibility({
 				...tableRef.current.getState().columnVisibility,
@@ -204,16 +203,18 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				moist_container: !isMobile
 			})
 			tableRef.current.setColumnPinning({
-				left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['licence_plate'] : [])],
+				left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['license_plate'] : [])],
 				right: [ROW_ACTIONS_COLUMN_ID]
 			})
 		}
-	}, [tableRef.current, isMobile])
+	}, [isMobile])
 
 	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 		const data = row.original
 		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
 	}, [])
+
+	const virtualizerOptions = useMemo(() => ({ estimateSize: isMobile ? 60 : 40 }), [isMobile])
 
 	return (
 		<DataTable
@@ -231,27 +232,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			enableMultiSort={true}
 			manualExpanding={true}
 			globalFilterFn='includesString'
-			initialState={{
-				sorting: [{ id: 'dispatch_order', desc: true }],
-				columnVisibility: {
-					dispatch_order: false,
-					purchase_orders: false,
-					container_number: !isMobile,
-					total_outbound_qty: !isMobile,
-					container_sealing_time: !isMobile,
-					factory_departure_time: !isMobile,
-					punctured_container: !isMobile,
-					smelling_container: !isMobile,
-					moist_container: !isMobile
-				},
-				columnPinning: {
-					left: [ROW_EXPANSION_COLUMN_ID],
-					right: [...(isMobile ? ['container_number'] : []), ROW_ACTIONS_COLUMN_ID]
-				}
-			}}
-			virtualizerOptions={{
-				estimateSize: isMobile ? 60 : 40
-			}}
+			initialState={{ sorting: [{ id: 'dispatch_order', desc: true }] }}
+			virtualizerOptions={virtualizerOptions}
 			toolbarProps={{
 				override: true,
 				render: (props) => <TruckloadDeliveryTableToolbar {...props} />
