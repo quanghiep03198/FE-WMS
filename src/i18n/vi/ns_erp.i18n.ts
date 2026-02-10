@@ -18,7 +18,7 @@ export default {
 		actual_inventory_qty: 'Số lượng kiểm kê',
 		actual_missing_qty: 'Số lượng thiếu thực tế',
 		actual_outstock_qty: 'Số lượng xuất thực tế',
-		brand_name: 'Nhãn hiệu khách hàng',
+		brand_name: 'Nhãn hàng',
 		category: 'Phân loại',
 		container_order_code: 'Mã Đơn Xuất Công', // Container Order Code
 		conversion_rate: 'Tỷ Lệ Chuyển Đổi', // Conversion Rate
@@ -49,7 +49,7 @@ export default {
 		last_outbound_time: 'Thời gian xuất kho gần nhất', // Last Outbound Time
 		license_plate: 'Biển số xe',
 		mat_code: 'Mã thành phẩm',
-		color_sn: 'Màu sắc sản phẩm',
+		color_sn: 'Màu sắc',
 		missing_qty: 'Số lượng còn thiếu',
 		mo_no: 'Chỉ lệnh',
 		mo_no_actual: 'Chỉ lệnh thực',
@@ -71,7 +71,7 @@ export default {
 		packaging_code: 'Mã đóng thùng',
 		po: 'Mã đơn đặt hàng',
 		po_size_qty: 'Số lượng đặt đơn theo cỡ',
-		prod_color: 'Màu sắc sản phẩm',
+		prod_color: 'Màu sắc',
 		progress: 'Tiến độ',
 		ie_signature: 'Chữ ký XNK',
 		punctured_container: 'Container bị thủng',
