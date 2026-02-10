@@ -215,27 +215,29 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 											<Button
 												type='button'
 												size='sm'
-												variant='destructive'
+												variant='secondary'
 												onClick={() => handleCancelUpdate()}>
 												<Icon name='X' />
-												{t('ns_common:actions.cancel')}
+												<span>{t('ns_common:actions.cancel')}</span>
 											</Button>
 										) : (
 											<Button type='button' size='sm' variant='outline' onClick={() => handleStartUpdate()}>
 												<Icon name='Pencil' /> {t('ns_common:actions.update')}
 											</Button>
 										)}
-										<Button type='submit' size='sm' disabled={!isEditing || isLoading}>
-											<Icon
-												name={isPending ? 'LoaderCircle' : 'Check'}
-												className={isPending && 'animate-spin'}
-											/>{' '}
-											{isPending
-												? t('ns_common:status.processing')
-												: isError
-													? t('ns_common:actions.retry')
-													: t('ns_common:actions.save')}
-										</Button>
+										{isEditing && (
+											<Button type='submit' size='sm' disabled={isLoading}>
+												<Icon
+													name={isPending ? 'LoaderCircle' : 'Check'}
+													className={isPending && 'animate-spin'}
+												/>{' '}
+												{isPending
+													? t('ns_common:status.processing')
+													: isError
+														? t('ns_common:actions.retry')
+														: t('ns_common:actions.save')}
+											</Button>
+										)}
 									</Div>
 								</RoleBaseAccessControl>
 							</TableVerticalHeader>
