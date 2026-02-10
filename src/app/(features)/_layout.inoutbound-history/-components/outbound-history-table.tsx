@@ -120,11 +120,11 @@ const OutboundHistoryTable: React.FC = () => {
 							align='left'
 							className='!sticky left-0 z-10'
 							style={{ boxShadow: '1px 0px hsl(var(--border))', maxWidth: 200, minWidth: 200 }}>
-							<span>{t('ns_erp:fields.inbound_date')}</span>
+							<span>{t('ns_erp:fields.outbound_date')}</span>
 						</TableHead>
 						<TableHead colSpan={7} align='left' className='p-0'>
 							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
-								{t('ns_erp:fields.daily_inbound_qty')}
+								{t('ns_erp:fields.daily_outbound_qty')}
 							</span>
 						</TableHead>
 						<TableHead align='left' className='!sticky right-0 z-10'>
@@ -198,7 +198,7 @@ const OutboundHistoryTable: React.FC = () => {
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
 									</NestedCellHead>
 									<NestedCellHead>
-										<span>{t('ns_erp:fields.inbound_qty')}</span>
+										<span>{t('ns_erp:fields.outbound_qty')}</span>
 									</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.missing_qty')}</span>
