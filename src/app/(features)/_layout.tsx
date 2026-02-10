@@ -2,11 +2,12 @@ import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
-import { Div, SidebarProvider } from '@/components/ui'
+import { SidebarProvider } from '@/components/ui'
 import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { Fragment } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import tw from 'tailwind-styled-components'
 import { type RegisteredServiceWorker } from 'virtual:pwa-register/react'
 import { ErrorBoundaryFallback } from '../-components/-errors/error-boundary-fallback'
 import UnsupportedScreen from '../-components/-errors/unsupported-screen'
@@ -50,26 +51,12 @@ function Layout() {
 			<AuthGuard>
 				<SidebarProvider
 					data-state-persistent-key='appSidebarOpen'
-					className='h-screen !overflow-hidden [&:has(#toggle-fullscreen[data-state="checked"])_header]:z-0'>
+					className='h-screen [&:has(#toggle-fullscreen[data-state=checked])_header]:z-0'>
 					<NavSidebar />
-					<Div
-						className='relative h-full flex-1 overflow-y-scroll @container'
-						style={
-							{
-								counterReset: 'h var(--screen-height) w var(--screen-width)',
-								'--header-height': '80px',
-								'--outlet-padding-bottom': '24px',
-								'--outlet-wrapper-height':
-									'calc(var(--screen-height,100dvh) * 1px - var(--header-height) - var(--outlet-padding-bottom))',
-								'--scrollbar-thickness': '10px'
-							} as React.CSSProperties
-						}>
+					<LayoutWrapper>
 						<BreadcrumbProvider>
 							<Navbar />
-							<Div
-								as='main'
-								id='outlet-wrapper'
-								className='relative flex-1 basis-full px-6 pb-[var(--outlet-padding-bottom)] sm:px-2 md:px-2'>
+							<OutletWrapper id='outlet-wrapper'>
 								<ErrorBoundary
 									fallbackRender={({ error, resetErrorBoundary }) => {
 										return (
@@ -84,12 +71,26 @@ function Layout() {
 									}}>
 									<Outlet />
 								</ErrorBoundary>
-							</Div>
+							</OutletWrapper>
 						</BreadcrumbProvider>
-					</Div>
+					</LayoutWrapper>
 				</SidebarProvider>
 			</AuthGuard>
 			<NetworkDetector />
 		</Fragment>
 	)
 }
+
+const LayoutWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
+	relative h-full flex-1 overflow-y-scroll @container 
+	[counter-reset:h_var(--screen-height)_w_var(--screen-width)]
+	[--scrollbar-thickness:10px] 
+	[--outlet-padding:12px] 
+	[--header-height:56px] 
+	[--outlet-wrapper-height:calc(var(--screen-height,100dvh)*1px-var(--header-height)-2*var(--outlet-padding))]
+	xxl:[--header-height:80px]
+`
+
+const OutletWrapper: React.FC<React.ComponentProps<'main'>> = tw.main`
+	relative flex-1 basis-full px-6 py-[--outlet-padding] sm:px-2 md:px-2
+`

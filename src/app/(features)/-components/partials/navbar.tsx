@@ -22,11 +22,11 @@ const Navbar: React.FC = () => {
 		<Div
 			as='header'
 			role='menubar'
-			className='sticky top-0 z-20 flex h-[var(--header-height)] items-center bg-background px-6 sm:px-2 md:bottom-0 md:top-auto md:px-2'>
+			className='sticky top-0 z-20 flex h-[var(--header-height)] items-center border-b bg-background px-6 md:top-auto md:shadow-sm lg:shadow-sm xxl:border-0 xxl:py-2 xxl:shadow-none'>
 			<Div
 				as='nav'
 				role='menu'
-				className='flex w-full basis-full items-center gap-x-2 rounded-md border border-border px-3 py-2'>
+				className='flex w-full basis-full items-center gap-x-2 rounded-md border-0 py-2 xxl:border xxl:px-3'>
 				<NavSidebarToggler />
 				<Separator orientation='vertical' className='mx-2 h-5 w-1 sm:hidden md:hidden' />
 				<NavBreadcrumb />
