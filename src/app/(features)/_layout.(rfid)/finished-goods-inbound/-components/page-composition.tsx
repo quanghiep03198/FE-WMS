@@ -27,7 +27,7 @@ const ListBoxPanel: React.FC<React.ComponentProps<'div'>> =
 	tw.div`xl:col-span-1 xl:row-span-full xl:order-1 order-2 lg:col-span-1 lg:row-span-full lg:order-1 lg:max-h-full xl:max-h-full`
 
 const CounterPanel: React.FC<React.ComponentProps<'div'>> =
-	tw.div`xl:col-span-1 xl:row-span-1 xl:order-2 order-1 lg:col-span-1 lg:row-span-1 lg:order-2`
+	tw.div`xl:col-span-1 xl:row-span-1 xl:order-2 order-1 lg:col-span-1 lg:row-span-1 lg:order-2 flex flex-col gap-y-3`
 
 const FormPanel: React.FC<React.ComponentProps<'div'>> =
 	tw.div`xl:col-span-1 xl:row-span-2 order-3 lg:col-span-1 lg:row-span-2`

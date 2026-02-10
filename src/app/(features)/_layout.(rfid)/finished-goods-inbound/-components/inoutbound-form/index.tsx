@@ -22,12 +22,10 @@ import {
 	RadioGroup,
 	RadioGroupItem,
 	SelectFieldControl,
-	Separator,
 	Tooltip,
 	Typography
 } from '@/components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
-import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
 import { AxiosError, HttpStatusCode } from 'axios'
@@ -342,21 +340,6 @@ const InoutboundForm: React.FC = () => {
 						</Div>
 					</Form>
 				</FormProvider>
-				<Separator />
-				<Div className='inline-flex items-center'>
-					<Icon
-						name='BotMessageSquare'
-						size={24}
-						className='mr-2 hidden duration-500 animate-in zoom-in-0 slide-in-from-bottom-2 xxl:block'
-					/>
-					&quot;
-					<Typewriter
-						className='text-sm italic'
-						text={t('ns_inoutbound:description.inoutbound_form_note')}
-						delay={200}
-					/>
-					&quot;
-				</Div>
 			</Div>
 		</Fragment>
 	)

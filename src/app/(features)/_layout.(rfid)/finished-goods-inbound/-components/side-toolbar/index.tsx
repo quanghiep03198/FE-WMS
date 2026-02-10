@@ -12,7 +12,7 @@ const ScannerSettings: React.FC = () => {
 		<ToolbarWrapper>
 			<ScrollShadow
 				className={cn(
-					'flex flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none xl:max-h-[calc(var(--outlet-wrapper-height)-var(--outlet-padding)-2px)]',
+					'flex flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none xl:max-h-[calc(var(--outlet-wrapper-height)-var(--outlet-padding)-4px)]',
 					'sm:max-h-[60vh] sm:px-0 md:max-h-[60vh] xxl:p-6',
 					'@5xl:grid @5xl:grid-cols-12 @5xl:grid-rows-3 @5xl:gap-x-10'
 				)}>

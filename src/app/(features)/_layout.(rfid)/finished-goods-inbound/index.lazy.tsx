@@ -6,10 +6,11 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import AlreadyScannedEpcsAlert from './-components/already-scanned-epcs-alert'
-import ScannedEPCsCounter from './-components/epc-counter'
+import ScannedEpcCounter from './-components/epc-counter'
 import EpcListBox from './-components/epc-data-list'
 import InoutboundForm from './-components/inoutbound-form'
 import PageComposition from './-components/page-composition'
+import RemindMessage from './-components/remind-message'
 import ScannerToolbar from './-components/scanner-toolbar'
 import ScannerSettings from './-components/side-toolbar'
 import { PageProvider } from './-contexts/page-context'
@@ -53,7 +54,8 @@ function Page() {
 											<EpcListBox />
 										</PageComposition.ListBoxPanel>
 										<PageComposition.CounterPanel>
-											<ScannedEPCsCounter />
+											<ScannedEpcCounter />
+											<RemindMessage />
 										</PageComposition.CounterPanel>
 										<PageComposition.FormPanel>
 											<InoutboundForm />

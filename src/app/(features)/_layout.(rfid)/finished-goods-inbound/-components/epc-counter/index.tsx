@@ -8,7 +8,7 @@ import { usePageContext } from '../../-contexts/page-context'
 
 const INTERVAL_TIME = 5 as const
 
-const ScannedEPCsCounter: React.FC = () => {
+const ScannedEpcCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -116,4 +116,4 @@ const ScanningTimer: React.FC = () => {
 	)
 }
 
-export default ScannedEPCsCounter
+export default ScannedEpcCounter
