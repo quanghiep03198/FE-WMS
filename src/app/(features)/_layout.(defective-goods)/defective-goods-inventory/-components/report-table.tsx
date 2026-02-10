@@ -185,7 +185,7 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 			enableExpanding={true}
 			enableColumnResizing={true}
 			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem - var(--row-height))' }
+				style: { height: 'calc(var(--outlet-wrapper-height) - 12rem - 2 * var(--row-height))' }
 			}}
 			renderSubComponent={renderSubComponent}
 			toolbarProps={{

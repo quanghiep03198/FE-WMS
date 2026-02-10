@@ -221,7 +221,9 @@ const InboundReportMasterTable: React.FC = () => {
 			enableExpanding={true}
 			enableColumnResizing={true}
 			ref={dataTableRef}
-			containerProps={{ className: 'xxl:h-[60vh] h-[50vh]' }}
+			containerProps={{
+				style: { height: 'calc(var(--outlet-wrapper-height) - 12rem - 2 * var(--row-height))' }
+			}}
 			initialState={{
 				columnPinning: {
 					left: [ROW_EXPANSION_COLUMN_ID],
