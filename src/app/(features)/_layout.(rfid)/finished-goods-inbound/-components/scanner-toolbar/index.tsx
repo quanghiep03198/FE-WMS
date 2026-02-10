@@ -5,7 +5,7 @@ import TenacyBox from './tenancy-box'
 
 const ScannerToolbar: React.FC = () => {
 	return (
-		<Div className='flex h-[var(--toolbar-height)] items-start justify-between bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto @4xl:sticky @4xl:top-[var(--header-height)] @4xl:z-20 sm:flex-col sm:items-stretch sm:justify-stretch sm:gap-y-2'>
+		<Div className='flex h-[var(--toolbar-height)] items-start justify-between bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto sm:flex-col sm:items-stretch sm:justify-stretch sm:gap-y-2 xl:bg-transparent'>
 			<TenacyBox />
 			<ScannerActions />
 		</Div>

@@ -44,10 +44,7 @@ function Page() {
 				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 					<PageProvider>
 						<AlreadyScannedEpcsAlert />
-						<PageComposition.Container
-							style={{
-								'--toolbar-height': '60px'
-							}}>
+						<PageComposition.Container>
 							<PageComposition.Wrapper>
 								<PageComposition.Main>
 									<ScannerToolbar />

@@ -12,7 +12,7 @@ const ScannerSettings: React.FC = () => {
 		<ToolbarWrapper>
 			<ScrollShadow
 				className={cn(
-					'flex h-full flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none',
+					'flex flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none xl:max-h-[calc(var(--outlet-wrapper-height)-var(--outlet-padding)-2px)]',
 					'sm:max-h-[60vh] sm:px-0 md:max-h-[60vh] xxl:p-6',
 					'@5xl:grid @5xl:grid-cols-12 @5xl:grid-rows-3 @5xl:gap-x-10'
 				)}>
@@ -34,9 +34,8 @@ const ScannerSettings: React.FC = () => {
 }
 
 const ToolbarWrapper = tw.div`
-	@container sticky top-[var(--header-height)] group sm:rounded-none sm:border-none border rounded-lg bg-sidebar 
+	@container sticky overflow-hidden xl:top-[var(--header-height)] top-auto group sm:rounded-none sm:border-none border rounded-lg bg-sidebar 
 	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto
-	group-has-[#toggle-fullscreen[data-state=unchecked]]:max-h-[var(--outlet-wrapper-height)] overflow-hidden
 	`
 
 export default ScannerSettings
