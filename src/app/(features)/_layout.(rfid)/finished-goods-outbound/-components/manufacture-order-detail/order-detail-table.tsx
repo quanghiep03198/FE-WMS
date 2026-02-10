@@ -81,7 +81,7 @@ const OrderSizeDetailTable: React.FC = () => {
 			}>
 			<Div
 				ref={containerRef}
-				className='h-[calc(var(--outlet-wrapper-height,100vh)-1.25*var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20 @container'
+				className='h-[calc(var(--outlet-wrapper-height,100vh)-var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20 @container'
 				style={
 					{
 						'--sticky-left-col-width': '168px',

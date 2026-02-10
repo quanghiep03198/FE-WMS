@@ -46,7 +46,12 @@ const ScannedEpcList: React.FC = () => {
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
-	const [open, setOpen] = useState(isExtraLargeScreen)
+	const [open, setOpen] = useState(true)
+	const hasMounted = useRef(false)
+
+	useLayoutEffect(() => {
+		hasMounted.current = true
+	}, [])
 
 	// * Incomming EPCs data from server-sent event
 	const { scannedEpc, currentPage, setScanningState, setScannedEpc, setCurrentPage, setScannedOrders } =
@@ -233,14 +238,19 @@ const ScannedEpcList: React.FC = () => {
 				<ScrollShadow
 					ref={containerRef}
 					className={cn(
-						'linear z-10 divide-y bg-background duration-100 will-change-transform contain-paint',
-						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0 animate-out'
+						'linear z-10 divide-y bg-background contain-size',
+						hasMounted.current && 'duration-100 will-change-transform',
+						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
 					)}>
 					<Div
-						className={cn('relative w-full duration-300 ease-in', {
-							'animate-in fade-in-0': open,
-							'animate-out fade-out-0': !open
-						})}
+						className={cn(
+							'relative w-full contain-paint',
+							hasMounted.current && 'duration-300 ease-in will-change-contents',
+							{
+								'animate-in fade-in-0': open && hasMounted.current,
+								'animate-out fade-out-0': !open && hasMounted.current
+							}
+						)}
 						style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
@@ -290,7 +300,8 @@ const ScannedEpcList: React.FC = () => {
 			) : (
 				<Div
 					className={cn(
-						'linear grid place-items-center transition-height duration-200',
+						'linear grid place-items-center',
+						hasMounted.current && 'transition-height duration-200',
 						open ? 'h-[33.33vh] @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]' : 'h-0'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>

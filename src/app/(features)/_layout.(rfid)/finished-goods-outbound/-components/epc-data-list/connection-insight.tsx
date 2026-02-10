@@ -12,7 +12,7 @@ const ConnectionInsight: React.FC = () => {
 			state={scanningState === 'success' ? 'active' : scanningState === 'error' ? 'down' : 'fixing'}
 			label={scanningState === 'success' ? t('ns_common:status.running') : t('ns_common:status.idle')}
 			className='px-3'
-			labelClassName='font-medium'
+			labelClassName='font-medium @md:block hidden'
 		/>
 	)
 }
