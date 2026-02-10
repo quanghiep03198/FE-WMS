@@ -166,7 +166,7 @@ const ReportDatalist: React.FC = () => {
 					return <OutboundReportDetailTable {...data} />
 				}}
 				containerProps={{
-					style: { height: 'calc(var(--outlet-wrapper-height) - 16rem' }
+					style: { height: 'calc(var(--outlet-wrapper-height) - 14rem)' }
 				}}
 				toolbarProps={{
 					slotLeft: () => isSmallScreen && <DatePickerFilter />,
