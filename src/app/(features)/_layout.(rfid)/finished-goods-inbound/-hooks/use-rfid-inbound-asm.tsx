@@ -1,5 +1,6 @@
 /* eslint-disable @tanstack/query/exhaustive-deps */
 import { InboundReportQueryKeys } from '@/app/(features)/_layout.inbound-report/-hooks/use-inbound-report-asm'
+import { InventoryAuditQueryKeys } from '@/app/(features)/_layout.inventory-audit/-hooks/use-inventory-audit-asm'
 import useAuth from '@/common/hooks/use-auth'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -10,6 +11,7 @@ import { DEFAULT_PROPS, usePageContext } from '../-contexts/page-context'
 import { InoutboundPayload } from '../-schemas/epc-inoutbound.schema'
 import { ExchangeOrderFormValue, type ExchangeEpcPayload } from '../-schemas/exchange-epc.schema'
 import { SearchEpcParams } from '../..'
+import { ArchiviedDataQueryKeys } from '../../-hooks/use-data-restoration-asm'
 import { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
 
 // * API Query Keys
@@ -113,7 +115,10 @@ export const useDeleteOrderMutation = () => {
 }
 
 export const useUpdateStockInMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+	const invalidateQueries = useInvalidateQueries(
+		InventoryAuditQueryKeys.INVENTORY_AUDIT,
+		InboundReportQueryKeys.DAILY_INBOUND
+	)
 	const { selectedOrder, setSelectedOrder, setCurrentPage } = usePageContext(
 		'selectedOrder',
 		'setSelectedOrder',
@@ -165,7 +170,7 @@ export const useUpsertEpcInfoMutation = () => {
 	})
 }
 
-const useInvalidateQueries = () => {
+const useInvalidateQueries = (...invalidateQueryKeys: string[]) => {
 	const { refetch: refetchScannedEpcs } = useGetInboundEpcQuery()
 	const { refetch: refetchOrderDetail } = useGetInboundOrderDetail()
 	const queryClient = useQueryClient()
@@ -177,10 +182,11 @@ const useInvalidateQueries = () => {
 			predicate: (query) => {
 				return query.queryKey.some((key) => {
 					const invalidateKeys: readonly string[] = [
+						...invalidateQueryKeys,
 						RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL,
 						RFIDInboundQueryKeys.INBOUND_EPC,
-						'ARCHIVED_EPCS',
-						'ARCHIVED_EPCS_FEATURES'
+						ArchiviedDataQueryKeys.ARCHIVED_EPCS,
+						ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES
 					]
 
 					return invalidateKeys.includes(key as string)
