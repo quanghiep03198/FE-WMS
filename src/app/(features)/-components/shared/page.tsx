@@ -35,7 +35,7 @@ export const PageAction: React.FC<React.ComponentProps<'div'>> = ({ children, cl
 
 export const PageWrapper: React.FC<React.ComponentProps<'section'>> = ({ children, className, ...props }) => {
 	return (
-		<section {...props} className={cn('mt-4 space-y-4', className)}>
+		<section {...props} className={cn('space-y-4', className)}>
 			{children}
 		</section>
 	)
