@@ -106,7 +106,7 @@ function RouteComponent() {
 }
 
 const Container = tw.div`
-	relative group/container bg-background h-[var(--outlet-wrapper-height)] @container/playground-wrapper overflow-hidden 
+	relative group/container bg-background h-[var(--outlet-wrapper-height)] @container/playground-wrapper overflow-hidden
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50

@@ -192,7 +192,6 @@ const InoutboundForm: React.FC = () => {
 						authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}
 						fallbackComponent={
 							<Button
-								size='sm'
 								type='button'
 								className='cursor-not-allowed'
 								onClick={() =>

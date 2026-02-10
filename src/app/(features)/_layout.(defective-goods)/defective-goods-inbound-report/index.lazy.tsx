@@ -58,7 +58,6 @@ function Page() {
 							</Div>
 						</PageAction>
 					</PageHeader>
-
 					<PageSeparator />
 					<InboundReportMasterTable />
 				</PageWrapper>
