@@ -274,10 +274,7 @@ const SwitchUserCompany: React.FC = () => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button
-					variant='outline'
-					size={open ? 'default' : 'icon'}
-					className={cn(open ? 'justify-start' : 'size-8')}>
+				<Button variant='ghost' size={open ? 'default' : 'icon'} className={cn(open ? 'justify-start' : 'size-8')}>
 					<Icon name='Factory' />
 					{open && (
 						<Fragment>
