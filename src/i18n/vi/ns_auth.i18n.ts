@@ -34,6 +34,7 @@ export default {
 	notification: {
 		authenticate_success: 'Đã xác thực tài khoản',
 		authenticate_failed: 'Xác thực tài khoản thất bại',
+		current_password_incorrect: 'Mật khẩu hiện tại không chính xác',
 		login_failed: 'Đăng nhập thất bại',
 		login_success: 'Đăng nhập thành công',
 		logout_failed: 'Đăng xuất thất bại',

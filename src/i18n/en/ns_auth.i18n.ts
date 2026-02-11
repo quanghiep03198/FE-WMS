@@ -30,6 +30,7 @@ export default {
 	notification: {
 		authenticate_success: 'Verified your account',
 		authenticate_failed: 'Failed to verify your account',
+		current_password_incorrect: 'Current password is incorrect',
 		login_failed: 'Failed to log in',
 		login_success: 'Logged in succesfully',
 		logout_failed: 'Failed to log out',

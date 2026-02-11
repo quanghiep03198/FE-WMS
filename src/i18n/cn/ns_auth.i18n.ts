@@ -33,6 +33,7 @@ export default {
 	notification: {
 		authenticate_success: '确认登录成功',
 		authenticate_failed: '确认登录失败',
+		current_password_incorrect: '当前密码不正确',
 		login_failed: '登入失败',
 		login_success: '登入成功',
 		logout_failed: '登出失败',

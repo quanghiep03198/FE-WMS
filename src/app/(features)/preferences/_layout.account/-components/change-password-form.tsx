@@ -1,6 +1,11 @@
+'use no memo'
+
 import { useUpdatePasswordMutation } from '@/app/-hooks/use-user-asm'
+import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useDebounceFn } from 'ahooks'
+import { compareSync } from 'bcryptjs-react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -10,16 +15,25 @@ import { type UpdatePasswordFormValues, updatePasswordFormValues } from '../-sch
 const ChangePasswordForm: React.FC = () => {
 	const { mutateAsync, isPending, isError } = useUpdatePasswordMutation()
 	const { t } = useTranslation()
+	const { user } = useAuth()
 
 	const form = useForm<UpdatePasswordFormValues>({
 		mode: 'onChange',
 		reValidateMode: 'onChange',
-		resolver: zodResolver(updatePasswordFormValues),
-		defaultValues: {
-			currentPassword: '',
-			password: ''
-		}
+		resolver: zodResolver(updatePasswordFormValues)
 	})
+
+	const { run: handleCheckMatchCurrPassword, flush } = useDebounceFn(
+		(value: string) => {
+			if (!compareSync(value, user.password))
+				form.setError('currentPassword', { message: 'ns_auth:notification.current_password_incorrect' })
+			else {
+				form.resetField('currentPassword')
+				flush()
+			}
+		},
+		{ wait: 200 }
+	)
 
 	return (
 		<FormProvider {...form}>
@@ -42,6 +56,7 @@ const ChangePasswordForm: React.FC = () => {
 							name='currentPassword'
 							placeholder='********'
 							type='password'
+							onChange={(e) => handleCheckMatchCurrPassword(e.currentTarget.value)}
 						/>
 						<InputFieldControl
 							label={t('ns_auth:profile.new_password')}
