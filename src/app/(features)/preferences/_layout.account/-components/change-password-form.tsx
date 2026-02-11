@@ -4,10 +4,10 @@ import { useUpdatePasswordMutation } from '@/app/-hooks/use-user-asm'
 import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDebounceFn } from 'ahooks'
+import { useDebounceEffect } from 'ahooks'
 import { compareSync } from 'bcryptjs-react'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { type UpdatePasswordFormValues, updatePasswordFormValues } from '../-schemas/update-password.schema'
@@ -23,15 +23,19 @@ const ChangePasswordForm: React.FC = () => {
 		resolver: zodResolver(updatePasswordFormValues)
 	})
 
-	const { run: handleCheckMatchCurrPassword, flush } = useDebounceFn(
-		(value: string) => {
-			if (!compareSync(value, user.password))
-				form.setError('currentPassword', { message: 'ns_auth:notification.current_password_incorrect' })
-			else {
-				form.resetField('currentPassword')
-				flush()
-			}
+	const currentPassword = useWatch({ name: 'currentPassword', control: form.control })
+
+	useDebounceEffect(
+		() => {
+			if (!currentPassword || !user?.password) return
+			if (!compareSync(currentPassword, user.password))
+				form.setError('currentPassword', {
+					type: 'pattern',
+					message: 'ns_auth:notification.current_password_incorrect'
+				})
+			else form.clearErrors('currentPassword')
 		},
+		[currentPassword],
 		{ wait: 200 }
 	)
 
@@ -56,7 +60,6 @@ const ChangePasswordForm: React.FC = () => {
 							name='currentPassword'
 							placeholder='********'
 							type='password'
-							onChange={(e) => handleCheckMatchCurrPassword(e.currentTarget.value)}
 						/>
 						<InputFieldControl
 							label={t('ns_auth:profile.new_password')}
