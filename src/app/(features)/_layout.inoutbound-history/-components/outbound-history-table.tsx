@@ -69,7 +69,7 @@ const OutboundHistoryTable: React.FC = () => {
 	)
 
 	const inboundHistoryByDate = useMemo(() => {
-		if (!data) return []
+		if (!data?.outbound_history) return []
 		return Object.entries(
 			groupBy(orderBy(data.outbound_history, 'outbound_date', 'desc'), (item) => item.outbound_date)
 		)
