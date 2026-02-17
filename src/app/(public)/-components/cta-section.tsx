@@ -5,6 +5,7 @@ import { Button, Div, Icon, Typography, buttonVariants } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
+import AnimatedScreen from './animated-screen'
 
 const CTASection: React.FC = () => {
 	const pageContext = usePageContext()
@@ -67,10 +68,11 @@ const CTASection: React.FC = () => {
 				</Div>
 			</Div>
 			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-10 lg:gap-x-12 xl:gap-y-0'>
-				<Image
+				{/* <Image
 					src={theme === 'dark' ? '/global-transport-dark.svg' : '/global-transport-light.svg'}
 					alt='Shipping'
-				/>
+				/> */}
+				<AnimatedScreen />
 				{/* <Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' /> */}
 				<Div className='block basis-1/2 space-y-10 sm:basis-full md:basis-full lg:space-y-12 xl:hidden'>
 					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:-translate-x-8'>

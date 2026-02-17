@@ -25,9 +25,7 @@ function RouteComponent() {
 			<main className='relative h-screen overflow-y-scroll scroll-smooth'>
 				<Spotlight
 					fill='white'
-					className={
-						'-top-10 left-20 z-[-1] sm:-left-20 sm:-top-10 sm:w-[250%] md:-left-10 md:w-[180%] xl:-top-40'
-					}
+					className={'-top-10 left-20 sm:-left-20 sm:-top-10 sm:w-[250%] md:-left-10 md:w-[180%] xl:-top-40'}
 				/>
 				<Header />
 				<Hero />
