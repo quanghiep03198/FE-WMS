@@ -1,6 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { useUpdateEffect } from 'ahooks'
-import { useEffect, useRef, useState } from 'react'
+import { useRafState, useUpdateEffect } from 'ahooks'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type TypewriterProps = {
@@ -19,7 +19,7 @@ export const Typewriter = ({
 	className
 }: TypewriterProps) => {
 	const { i18n } = useTranslation()
-	const [displayedText, setDisplayedText] = useState('')
+	const [displayedText, setDisplayedText] = useRafState('')
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
 	useEffect(() => {
