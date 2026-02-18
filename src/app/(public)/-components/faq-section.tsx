@@ -64,7 +64,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={containerRef}
-			className='mx-auto flex w-full max-w-7xl flex-grow flex-col-reverse items-center gap-10 px-3 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0 xxl:max-w-8xl'
+			className='mx-auto flex w-full max-w-7xl flex-grow flex-col-reverse items-center gap-14 px-3 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0 xxl:max-w-8xl'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'
@@ -85,7 +85,11 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex max-h-[32rem] w-full flex-grow basis-1/3 flex-col items-stretch overflow-hidden rounded-lg border bg-background'>
+			<Div
+				style={{
+					transform: 'perspective(999px) rotateX(35deg)'
+				}}
+				className='flex max-h-[32rem] w-full flex-grow basis-1/3 flex-col items-stretch rounded-lg border bg-background drop-shadow-[4px_4px_16px_hsl(var(--accent))]'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
 					<Div className='size-3 rounded-full bg-destructive' />
 					<Div className='size-3 rounded-full bg-warning' />
@@ -119,7 +123,7 @@ const FAQsSection: React.FunctionComponent = () => {
 						</Fragment>
 					))}
 				</ScrollShadow>
-				<Div className='flex min-h-12 items-center gap-x-3 overflow-hidden border-t px-4 py-2 text-sm sm:flex-col sm:items-stretch'>
+				<Div className='flex min-h-12 -translate-y-3 scale-[1.05] items-center gap-x-3 overflow-hidden rounded-md border bg-accent/50 px-4 py-2 text-sm text-accent-foreground backdrop-blur-sm sm:flex-col sm:items-stretch'>
 					<Typewriter
 						playState={containerInViewPort ? 'running' : 'paused'}
 						className='max-h-10 flex-1 overflow-y-auto text-foreground !scrollbar-none'

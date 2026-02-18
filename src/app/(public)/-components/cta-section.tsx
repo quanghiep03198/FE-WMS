@@ -1,4 +1,3 @@
-import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography, buttonVariants } from '@/components/ui'
@@ -9,7 +8,6 @@ import AnimatedScreen from './animated-screen'
 
 const CTASection: React.FC = () => {
 	const pageContext = usePageContext()
-	const { theme } = useTheme()
 
 	const outstandingFeatures = [
 		'High interactive user interface',
@@ -22,7 +20,7 @@ const CTASection: React.FC = () => {
 		<Div
 			id='cta'
 			as='section'
-			className='relative mx-auto flex min-h-[85vh] w-full max-w-7xl flex-grow flex-col items-center gap-10 px-6 sm:gap-y-6 sm:px-4 sm:py-4 xl:flex-row xl:gap-20 xl:px-0 xxl:max-w-8xl'>
+			className='relative mx-auto flex min-h-[85vh] w-full max-w-7xl flex-grow flex-col items-center gap-10 px-6 sm:gap-y-6 sm:px-4 sm:py-4 xl:flex-row xl:items-start xl:gap-20 xl:px-0 xxl:max-w-8xl xxl:items-center'>
 			<Div className='flex flex-col items-center text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:items-start xl:text-left'>
 				<Button
 					onClick={() => {
@@ -53,7 +51,6 @@ const CTASection: React.FC = () => {
 						</ListItem>
 					))}
 				</List>
-
 				<Div className='hidden items-center justify-center gap-x-1 xl:flex'>
 					<Link to='/login' className={cn(buttonVariants())}>
 						Get started
@@ -67,14 +64,11 @@ const CTASection: React.FC = () => {
 					</Button>
 				</Div>
 			</Div>
-			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-10 lg:gap-x-12 xl:gap-y-0'>
-				{/* <Image
-					src={theme === 'dark' ? '/global-transport-dark.svg' : '/global-transport-light.svg'}
-					alt='Shipping'
-				/> */}
-				<AnimatedScreen />
-				{/* <Image src={theme === 'dark' ? '/shipping-dark.svg' : '/shipping-light.svg'} alt='Shipping' /> */}
-				<Div className='block basis-1/2 space-y-10 sm:basis-full md:basis-full lg:space-y-12 xl:hidden'>
+			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-x-10 md:flex-col lg:items-start lg:gap-x-12 xl:gap-y-0 [&>*]:flex-1'>
+				<Div className='flex-1 basis-1/2 drop-shadow-[8px_8px_16px_hsl(var(--accent))] md:basis-full xl:basis-auto'>
+					<AnimatedScreen />
+				</Div>
+				<Div className='block flex-1 basis-1/2 space-y-10 sm:basis-full md:basis-full lg:space-y-12 xl:hidden'>
 					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:-translate-x-8'>
 						{outstandingFeatures.map((feature, index) => (
 							<ListItem key={index.toString()}>
@@ -105,6 +99,5 @@ const CTASection: React.FC = () => {
 
 const List = tw.ul`grid gap-y-2 mb-8 sm:gap-y-2`
 const ListItem = tw.li`flex w-full gap-x-2 text-base text-pretty text-muted-foreground [&>svg]:text-foreground [&>svg]:min-w-6 [&>svg]:translate-y-1.5 text-left`
-const Image = tw.img`w-full max-w-lg md:max-w-xl lg:max-w-xl sm:max-w-sm xl:max-w-3xl xxl:max-w-3xl flex-1`
 
 export default CTASection
