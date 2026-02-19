@@ -70,7 +70,7 @@ const SearchDialog: React.FC = () => {
 							onValueChange={debounce((value) => setSearchTerm(value), 200)}
 						/>
 						<CommandEmpty>No results found.</CommandEmpty>
-						<CommandList className='scrollbar sm:max-h-full xxl:max-h-none'>
+						<CommandList className='max-h-none sm:max-h-full'>
 							{!searchTerm ? (
 								<Fragment>
 									<CommandGroup heading='RFID Agent'>

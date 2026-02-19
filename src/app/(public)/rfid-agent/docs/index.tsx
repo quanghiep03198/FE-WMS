@@ -10,6 +10,7 @@ import MosquittoTroubleshooting from './-components/mosquitto-troubleshooting'
 import MosquittoUsageReason from './-components/mosquitto-usage-reason'
 import NavHeader from './-components/nav-header'
 import NavSidebar from './-components/nav-sidebar'
+import RFIDAgentAutoStartup from './-components/rfid-agent-auto-startup'
 import RFIDAgentUsageReason from './-components/rfid-agent-benefits'
 import RFIDAgentConfiguration from './-components/rfid-agent-configuration'
 import RFIDAgentInstallation from './-components/rfid-agent-installation'
@@ -59,6 +60,7 @@ function RouteComponent() {
 								<RFIDAgentUsageReason />
 								<RFIDAgentInstallation />
 								<RFIDAgentConfiguration />
+								<RFIDAgentAutoStartup />
 								<RFIDAgentTroubleShooting />
 							</Div>
 							<Separator />

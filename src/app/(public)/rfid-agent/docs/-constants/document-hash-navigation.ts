@@ -7,6 +7,7 @@ export enum DocumentHashNavigation {
 
 	RFID_AGENT_INTRODUCTION = 'rfid-agent-introduction',
 	RFID_AGENT_INSTALLATION = 'rfid-agent-installation',
+	RFID_AGENT_AUTO_STARTUP = 'rfid-agent-auto-startup',
 	RFID_AGENT_CONFIGURATION = 'rfid-agent-configuration',
 	RFID_AGENT_BENEFITS = 'rfid-agent-benefits',
 	RFID_AGENT_TROUBLESHOOTING = 'rfid-agent-troubleshooting',

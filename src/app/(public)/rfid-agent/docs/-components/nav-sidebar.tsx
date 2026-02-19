@@ -72,6 +72,10 @@ export const menuGroups: Record<
 			hash: DocumentHashNavigation.RFID_AGENT_CONFIGURATION
 		},
 		{
+			title: 'Auto Startup',
+			hash: DocumentHashNavigation.RFID_AGENT_AUTO_STARTUP
+		},
+		{
 			title: 'Troubleshooting',
 			hash: DocumentHashNavigation.RFID_AGENT_TROUBLESHOOTING
 		}
