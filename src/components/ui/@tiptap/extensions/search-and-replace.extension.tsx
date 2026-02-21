@@ -1,7 +1,4 @@
-// @ts-nocheck
-/* eslint-disable */
-
-import { type Editor as CoreEditor, Extension, type Range, Storage } from '@tiptap/core'
+import { type Editor as CoreEditor, Extension, type Range, type Storage } from '@tiptap/core'
 import type { Node as PMNode } from '@tiptap/pm/model'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet, type EditorView } from '@tiptap/pm/view'
@@ -197,10 +194,8 @@ const selectNext = (editor: CoreEditor) => {
 	const view: EditorView | undefined = editor.view
 
 	if (view) {
-		view
-			.domAtPos(from)
-			// @ts-ignore
-			.node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+		const node = view.domAtPos(from).node as HTMLElement
+		node.scrollIntoView({ behavior: 'smooth', block: 'center' })
 	}
 }
 
@@ -219,15 +214,15 @@ const selectPrevious = (editor: CoreEditor) => {
 		editor.storage.searchAndReplace.selectedResult -= 1
 	}
 
-	const { from } = results[editor.storage.searchAndReplace.selectedResult]
+	const result = results[editor.storage.searchAndReplace.selectedResult]
+	if (!result) return
 
+	const { from } = result
 	const view: EditorView | undefined = editor.view
 
 	if (view) {
-		view
-			.domAtPos(from)
-			// @ts-ignore
-			.node.scrollIntoView({ behavior: 'smooth', block: 'center' })
+		const node = view.domAtPos(from).node as HTMLElement
+		node.scrollIntoView({ behavior: 'smooth', block: 'center' })
 	}
 }
 
@@ -239,7 +234,7 @@ export interface SearchAndReplaceOptions {
 	disableRegex: boolean
 }
 
-export interface SearchAndReplaceStorage {
+export interface SearchAndReplaceStorage extends Partial<Storage> {
 	searchTerm: string
 	replaceTerm: string
 	results: Range[]
@@ -250,7 +245,7 @@ export interface SearchAndReplaceStorage {
 	lastCaseSensitiveState: boolean
 }
 
-export const SearchAndReplace = Extension.create<SearchAndReplaceOptions, Storage>({
+export const SearchAndReplace = Extension.create<SearchAndReplaceOptions, SearchAndReplaceStorage>({
 	name: 'searchAndReplace',
 
 	addOptions() {
@@ -260,7 +255,6 @@ export const SearchAndReplace = Extension.create<SearchAndReplaceOptions, Storag
 			disableRegex: true
 		}
 	},
-
 	addStorage() {
 		return {
 			searchTerm: '',
@@ -273,46 +267,38 @@ export const SearchAndReplace = Extension.create<SearchAndReplaceOptions, Storag
 			lastCaseSensitiveState: false
 		}
 	},
-
 	addCommands() {
 		return {
 			setSearchTerm:
 				(searchTerm: string) =>
 				({ editor }) => {
 					editor.storage.searchAndReplace.searchTerm = searchTerm
-
 					return false
 				},
 			setReplaceTerm:
 				(replaceTerm: string) =>
 				({ editor }) => {
 					editor.storage.searchAndReplace.replaceTerm = replaceTerm
-
 					return false
 				},
 			replace:
 				() =>
 				({ editor, state, dispatch }) => {
 					const { replaceTerm, results } = editor.storage.searchAndReplace
-
 					replace(replaceTerm, results, { state, dispatch })
-
 					return false
 				},
 			replaceAll:
 				() =>
 				({ editor, tr, dispatch }) => {
 					const { replaceTerm, results } = editor.storage.searchAndReplace
-
 					replaceAll(replaceTerm, results, { tr, dispatch })
-
 					return false
 				},
 			selectNextResult:
 				() =>
 				({ editor }) => {
 					selectNext(editor)
-
 					return false
 				},
 			selectPreviousResult:
@@ -409,5 +395,3 @@ export const SearchAndReplace = Extension.create<SearchAndReplaceOptions, Storag
 		]
 	}
 })
-
-export default SearchAndReplace
