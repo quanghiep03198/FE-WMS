@@ -75,7 +75,6 @@ export function Combobox<T extends Record<string, any>>({
 				<Button
 					{...triggerProps}
 					variant='outline'
-					role='combobox'
 					aria-expanded={open}
 					aria-placeholder={placeholder}
 					data-empty={!currentValue}
