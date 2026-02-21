@@ -25,6 +25,7 @@ const LicensePlateHoverCard: React.FC<{
 				<img
 					loading='lazy'
 					src={licensePlateImage}
+					alt={`${licensePlate} image`}
 					className='aspect-video w-full max-w-full rounded-[inherit] object-cover object-center'
 				/>
 			</HoverCardContent>
