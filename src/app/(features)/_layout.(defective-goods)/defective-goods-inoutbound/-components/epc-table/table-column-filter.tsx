@@ -65,7 +65,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'w-full px-4 h-[var(--row-height)] bg-transparent rounded-none border-none text-sm font-normal text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
+							'w-full px-4 h-[var(--row-height)] bg-transparent rounded-none border-none text-sm font-normal text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none',
 						tabIndex: 0
 					}}
 					selectProps={{
