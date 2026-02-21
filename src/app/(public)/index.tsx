@@ -8,7 +8,7 @@ export const Route = createFileRoute('/(public)/')({
 	staticData: {}
 })
 
-export default function Page() {
+function Page() {
 	return (
 		<Fragment>
 			<title>Warehouse Management System</title>
