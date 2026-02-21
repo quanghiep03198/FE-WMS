@@ -24,16 +24,16 @@ import {
 } from '../-helpers'
 import { useGetStatisticsQuery } from '../-hooks/use-statistic-asm'
 
+const PercentageBadge: React.FC<{ percentage: number | null }> = ({ percentage }) => (
+	<Badge variant='outline' className='gap-x-2'>
+		<Icon size={12} name={getTrendingIcon(percentage)} style={{ color: getIconColor(percentage) }} />
+		{formatPercentageChange(percentage)}
+	</Badge>
+)
+
 const Statistics: React.FC = () => {
 	const { t } = useTranslation(['ns_dashboard'])
 	const { data, isLoading } = useGetStatisticsQuery()
-
-	const PercentageBadge: React.FC<{ percentage: number | null }> = ({ percentage }) => (
-		<Badge variant='outline' className='gap-x-2'>
-			<Icon size={12} name={getTrendingIcon(percentage)} style={{ color: getIconColor(percentage) }} />
-			{formatPercentageChange(percentage)}
-		</Badge>
-	)
 
 	if (isLoading)
 		return (
