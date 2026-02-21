@@ -24,7 +24,7 @@ import { useIsFetching } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { pick, sortBy, uniqBy } from 'lodash-es'
-import React, { Fragment, useCallback, useEffect, useRef } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -69,16 +69,10 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
 	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation()
-	const toastRef = useRef<string | number | null>(null)
 	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const isFetching = useIsFetching({
 		predicate: (query) => query.queryKey.some((key) => key === TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY)
 	})
-
-	useEffect(() => {
-		if (isPending || isFetching) return
-		handleResetDeliveryDetails(true)
-	}, [data, isPending, isPending])
 
 	const handleResetDeliveryDetails = (shouldKeepUpdating: boolean) => {
 		if (isPending || isFetching) return
@@ -106,18 +100,21 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		})
 	}
 
+	useEffect(() => {
+		if (isPending || isFetching) return
+		handleResetDeliveryDetails(true)
+	}, [data, isPending, isPending])
+
 	const handleSaveChanges = async (payload: UpsertPurchaseOrdersFormValues) => {
-		toastRef.current = toast.loading(t('ns_common:notification.processing_request'))
+		const toastId = toast.loading(t('ns_common:notification.processing_request'))
 		try {
 			await mutateAsync(payload)
-			toast.success(t('ns_common:notification.success'), { id: toastRef.current })
+			toast.success(t('ns_common:notification.success'), { id: toastId })
 			handleResetDeliveryDetails(false)
 		} catch {
-			toast.error(t('ns_common:notification.error'), { id: toastRef.current })
+			toast.error(t('ns_common:notification.error'), { id: toastId })
 		}
 	}
-
-	const handleRemoveFieldItem = useCallback(remove, [])
 
 	return (
 		<Div className='space-y-6 overflow-clip rounded-md border bg-background'>
@@ -200,7 +197,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												readonly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 												deletable={data.approval_status !== TruckloadDeliveryStatus.CONFIRMED}
 												defaultValues={rowData}
-												onRemove={handleRemoveFieldItem}
+												onRemove={remove}
 											/>
 										)
 									})}
@@ -485,6 +482,7 @@ const Signature: React.FC<{
 						loading='lazy'
 						className='aspect-video max-w-24 cursor-pointer object-contain object-center dark:invert md:max-w-20'
 						src={data[type]}
+						alt={type}
 						onClick={handleUpdateSignature}
 					/>
 				) : (
