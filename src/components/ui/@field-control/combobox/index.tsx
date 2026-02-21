@@ -86,16 +86,9 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 				String(option[valueField])?.toLowerCase()?.includes(searchTerm?.toLowerCase())
 			)
 		})
-	}, [data, shouldFilter, searchTerm])
+	}, [data, shouldFilter, searchTerm, labelField, valueField])
 
 	const isError = Boolean(getFieldState(name).error)
-
-	const renderCurrentValue = (value) => {
-		if (Array.isArray(data) && data.length > 0) {
-			return data?.find((option) => option[valueField] === value)?.[labelField] ?? placeholder
-		}
-		return placeholder
-	}
 
 	return (
 		<FormField
@@ -133,7 +126,6 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
 												{field.value || placeholder}
-												{/* {renderCurrentValue(field.value)} */}
 											</Typography>
 											<CaretSortIcon className='ml-auto h-4 w-4 opacity-50' />
 										</Button>
