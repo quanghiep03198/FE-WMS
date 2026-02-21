@@ -13,7 +13,7 @@ const OutboundQtyInputFieldControl: React.FC<
 		['data-index']?: number
 	}
 > = ({ name, ...props }) => {
-	const { control, watch, setValue } = useFormContext<CreateDeliveryFormValues>()
+	const { control, setValue } = useFormContext<CreateDeliveryFormValues>()
 	const { t } = useTranslation()
 
 	const currentOutboundQty = useWatch({ name, control })
