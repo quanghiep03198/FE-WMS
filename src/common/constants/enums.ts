@@ -81,13 +81,6 @@ export enum CommonActions {
 	EXPORT = 'EXPORT'
 }
 
-export enum CofactoryRef {
-	VA1 = 'A',
-	VB1 = 'B',
-	VB2 = 'C',
-	CA1 = 'K'
-}
-
 export enum OrderStatus {
 	NOT_APPROVED = 'A',
 	APPROVED = 'B',
