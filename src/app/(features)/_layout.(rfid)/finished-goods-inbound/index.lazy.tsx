@@ -19,8 +19,6 @@ export const Route = createLazyFileRoute('/(features)/_layout/(rfid)/finished-go
 	component: Page
 })
 
-export type PageEventEmitter = { action: 'get' | 'delete'; payload: string }
-
 export type RFIDSettings = {
 	pollingDuration: number
 	fullscreenMode: boolean
