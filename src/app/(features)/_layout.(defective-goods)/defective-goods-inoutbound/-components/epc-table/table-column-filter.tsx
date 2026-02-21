@@ -19,10 +19,6 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 
 	const [currentFilterValue, setCurrentFilterValue] = useState(searchParams[column.id])
 
-	useEffect(() => {
-		setCurrentFilterValue(searchParams[column.id])
-	}, [searchParams])
-
 	const getFacetedUniqueValues = () => {
 		try {
 			return column.getFacetedUniqueValues()
@@ -41,14 +37,9 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		return uniqueValues
 	}
 
-	// * Useful for server side filtering
-	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
-	if (!column.columnDef.enableColumnFilter)
-		return (
-			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
-				<Icon name='Minus' />
-			</Div>
-		)
+	useEffect(() => {
+		setCurrentFilterValue(searchParams[column.id])
+	}, [searchParams])
 
 	useDebounceEffect(
 		() => {
@@ -58,6 +49,15 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		[currentFilterValue],
 		{ wait: 200, leading: true, trailing: true }
 	)
+
+	// * Useful for server side filtering
+	const metaUniqueValues = column.columnDef.meta?.facetedUniqueValues
+	if (!column.columnDef.enableColumnFilter)
+		return (
+			<Div className='flex h-full select-none items-center justify-center px-2 text-xs font-medium text-muted-foreground/50'>
+				<Icon name='Minus' />
+			</Div>
+		)
 
 	switch (filterVariant) {
 		case 'select': {
