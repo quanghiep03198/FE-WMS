@@ -24,8 +24,7 @@ export default function FeedbackFormTrigger(props: ButtonProps) {
 
 	return (
 		<Button type='button' ref={buttonRef} {...props}>
-			{/* {t('ns_common:actions.report_bug')} */}
-			Report bug
+			{t('ns_common:actions.report_bug')}
 			<Icon name='ArrowRight' size={12} />
 		</Button>
 	)
