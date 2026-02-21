@@ -11,7 +11,7 @@ type DraggableCellProps<TData = unknown, TValue = unknown> = {
 } & React.PropsWithChildren &
 	Partial<React.ComponentProps<typeof TableCell>>
 
-const DraggableCell: React.FC<DraggableCellProps> = ({ cell, row, style, children, ...props }) => {
+const DraggableCell: React.FC<DraggableCellProps> = ({ cell, style, children, ...props }) => {
 	const { setNodeRef, transform, isDragging } = useSortable({
 		id: cell.column.id
 	})
