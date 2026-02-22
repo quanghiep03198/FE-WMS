@@ -89,7 +89,7 @@ const FAQsSection: React.FunctionComponent = () => {
 				style={{
 					transform: 'perspective(1920px) rotateX(30deg)'
 				}}
-				className='flex max-h-[36rem] w-full max-w-xl flex-grow basis-1/3 flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_hsl(var(--accent))] *:antialiased sm:max-w-[18rem]'>
+				className='flex max-h-[36rem] w-full max-w-xl flex-grow basis-1/3 flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_hsl(var(--accent))] *:antialiased sm:max-w-[18rem] md:max-w-sm'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 p-2'>
 					<Div className='size-3 rounded-full bg-destructive' />
 					<Div className='size-3 rounded-full bg-warning' />
@@ -123,7 +123,7 @@ const FAQsSection: React.FunctionComponent = () => {
 						</Fragment>
 					))}
 				</ScrollShadow>
-				<Div className='flex min-h-12 w-[110%] -translate-y-3 items-center gap-x-3 self-center rounded-md border bg-background/50 px-4 py-2 text-sm backdrop-blur-sm sm:min-h-16 sm:-translate-y-6 sm:flex-col sm:items-stretch'>
+				<Div className='flex min-h-12 w-[calc(100%+1.5rem)] -translate-y-3 items-center gap-x-3 self-center rounded-md border bg-background/50 px-4 py-2 text-sm backdrop-blur-sm sm:min-h-16 sm:-translate-y-6 sm:flex-col sm:items-stretch'>
 					<Typewriter
 						playState={containerInViewPort ? 'running' : 'paused'}
 						className='max-h-10 flex-1 overflow-y-auto text-foreground !scrollbar-none'

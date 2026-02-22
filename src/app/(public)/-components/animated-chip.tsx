@@ -40,7 +40,7 @@ const BeamAnimated: React.FC = () => {
 				viewBox='0 0 650 200'
 				fill='none'
 				xmlns='http://www.w3.org/2000/svg'
-				className='mx-auto sm:max-w-xs sm:[zoom:1.2] xl:w-[650px]'
+				className='mx-auto sm:w-full sm:max-w-xs xl:w-[650px]'
 				ref={svgRef}>
 				<defs>
 					<linearGradient offset={1} id='right-to-left'>
@@ -259,12 +259,11 @@ const BeamAnimated: React.FC = () => {
 				}}
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700 sm:rounded-md',
-					'bg-gradient-to-br from-background to-accent to-[30%]',
-					'left-[58%] sm:max-w-[96px]',
-					'left-[56%] md:max-w-[196px]',
-					'left-[52%] lg:max-w-[210px]',
-					'sm:[zoom:0.8] xl:left-[60%] xl:max-w-[200px] xl:-translate-x-1/2 xxl:left-[calc(60%+1rem)] xxl:max-w-[216px]',
-					'-translate-y-1/2 xxl:left-[52%]'
+					'left-[calc(50%+1rem)] -translate-y-1/2 bg-gradient-to-br from-background to-accent to-[30%]',
+					'@xs:max-w-[96px] @sm:!max-w-[112px] sm:left-[calc(50%+6px)] sm:[zoom:0.85]',
+					'@md:[zoom:1] md:!max-w-[208px]',
+					'lg:!max-w-[208px]',
+					'xl:!max-w-[208px] xl:-translate-x-1/2 xxl:!max-w-[216px]'
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
