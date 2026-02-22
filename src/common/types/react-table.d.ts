@@ -16,7 +16,7 @@ declare module '@tanstack/react-table' {
 
 	export type ColumnFilterVariant = 'text' | 'range' | 'select' | 'date' | 'multi-select' | 'autocomplete'
 
-	interface ColumnMeta<TData extends RowData, TValue> {
+	interface ColumnMeta {
 		facetedUniqueValues?: Array<Record<'label' | 'value', any>>
 		filterVariant?: ColumnFilterVariant
 		filterComponentProps?: FilterComponentProps[FilterComponentProps]
@@ -27,12 +27,12 @@ declare module '@tanstack/react-table' {
 		align?: 'left' | 'center' | 'right'
 		cellDataType?: 'text' | 'number' | 'date' | 'boolean'
 		tableCellProps?: React.ComponentProps<typeof TableCell>
-		validate?: (value: TValue) => boolean
+		validate?: (value: any) => boolean
 	}
 
 	interface ColumnMetaWithFilterProps<TData extends RowData, TValue, Variant extends ColumnFilterVariant>
 		extends ColumnMeta<TData, TValue> {
-		filterComponentProps?: Partial<FilterComponentProps[FilterComponentProps]>
+		filterComponentProps?: Partial<FilterComponentProps[Variant]>
 	}
 
 	interface TableMeta<TData extends RowData> {
