@@ -20,81 +20,88 @@ const CTASection: React.FC = () => {
 		<Div
 			id='cta'
 			as='section'
-			className='relative mx-auto flex min-h-[85vh] w-full max-w-7xl flex-grow flex-col items-center gap-10 px-6 sm:gap-y-6 sm:px-4 sm:py-4 xl:flex-row xl:items-start xl:gap-20 xl:px-0 xxl:max-w-8xl xxl:items-center'>
-			<Div className='flex flex-col items-center text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 xl:items-start xl:text-left'>
+			className='relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 animate-in fade-in-0 slide-in-from-bottom-4 @container/cta sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:max-w-8xl xxl:py-20'>
+			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
 					onClick={() => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
 					}}
 					variant='outline'
-					className='mb-4 w-72 cursor-pointer justify-start gap-x-2 rounded-full px-5 tracking-wide transition-colors duration-200 hover:!border-success hover:bg-transparent hover:text-success'>
+					className='rounded-l-full rounded-r-full px-5 tracking-wide transition-colors duration-200 hover:border-success hover:bg-success hover:text-success-foreground'>
 					<Icon name='Tags' size={20} />
 					Introducing version {env('VITE_APP_VERSION')}
 					<Icon name='ArrowRight' className='ml-auto' />
 				</Button>
-				<Typography variant='h1' className='mb-4 max-w-xl text-pretty lg:max-w-full'>
-					Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
-				</Typography>
-				<Typography
-					variant='p'
-					className='mx-auto mb-6 max-w-4xl text-pretty leading-relaxed tracking-wide xl:max-w-6xl xl:text-lg'>
-					Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
-					comprehensive system provides the tools you need to manage your warehouse effortlessly.
-				</Typography>
-				<List className='mb-12 hidden grid-cols-1 gap-x-10 xl:grid'>
-					{outstandingFeatures.map((feature, index) => (
-						<ListItem key={index.toString()}>
-							<Icon name='Check' size={18} />{' '}
-							<Typography as='span' className='flex-1 !text-base'>
-								{feature}
-							</Typography>
-						</ListItem>
-					))}
-				</List>
-				<Div className='hidden items-center justify-center gap-x-1 xl:flex'>
-					<Link to='/login' className={cn(buttonVariants())}>
-						Get started
-					</Link>
-					<Button
-						variant='link'
-						onClick={() => {
-							if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
-						}}>
-						Learn more <Icon name='ArrowRight' size={12} />
-					</Button>
-				</Div>
 			</Div>
-			<Div className='flex h-full w-full flex-grow flex-wrap items-center justify-center gap-x-10 md:flex-col lg:items-start lg:gap-x-12 xl:gap-y-0 [&>*]:flex-1'>
-				<Div className='flex-1 basis-1/2 drop-shadow-[8px_8px_16px_hsl(var(--accent))] md:basis-full xl:basis-auto'>
-					<AnimatedScreen />
-				</Div>
-				<Div className='block flex-1 basis-1/2 space-y-10 sm:basis-full md:basis-full lg:space-y-12 xl:hidden'>
-					<List className='gap-y-6 *:font-medium *:text-foreground md:grid-cols-2 md:gap-x-6 lg:-translate-x-8'>
-						{outstandingFeatures.map((feature, index) => (
-							<ListItem key={index.toString()}>
-								<Icon name='Check' size={18} />{' '}
-								<Typography as='span' className='flex-1'>
-									{feature}
-								</Typography>
-							</ListItem>
-						))}
-					</List>
-					<Div className='flex items-center justify-start gap-x-1 sm:justify-center md:justify-center'>
-						<Link to='/login' className={cn(buttonVariants())}>
-							Get started
-						</Link>
-						<Button
-							variant='link'
-							onClick={() => {
-								if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
-							}}>
-							Learn more <Icon name='ArrowRight' size={12} />
-						</Button>
-					</Div>
-				</Div>
+			<Typography
+				variant='h1'
+				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
+				Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
+			</Typography>
+			<Typography
+				variant='p'
+				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-pretty text-center leading-relaxed tracking-wide @7xl/cta:text-left lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg'>
+				Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
+				comprehensive system provides the tools you need to manage your warehouse effortlessly.
+			</Typography>
+			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12'>
+				{outstandingFeatures.map((feature, index) => (
+					<ListItem key={index.toString()}>
+						<Icon name='Check' size={18} />{' '}
+						<Typography as='span' className='flex-1 !text-base'>
+							{feature}
+						</Typography>
+					</ListItem>
+				))}
+			</List>
+			<Div className='z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 lg:col-start-2 lg:row-start-5 lg:justify-start xl:justify-start'>
+				<Link to='/login' className={cn(buttonVariants())}>
+					Get started
+				</Link>
+				<Button
+					variant='link'
+					onClick={() => {
+						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
+					}}>
+					Learn more <Icon name='ArrowRight' size={12} />
+				</Button>
+			</Div>
+			<Div className='z-[-1] col-start-2 row-span-6 row-start-1 sm:inset-0 sm:col-start-1 sm:row-start-6 md:col-span-2 md:col-start-1 md:row-start-6 lg:z-[-1] lg:col-start-1 lg:row-start-4'>
+				<AnimatedScreen />
 			</Div>
 		</Div>
 	)
+}
+{
+	/* </Div> */
+}
+{
+	/* <Div className='relative flex h-full w-full flex-wrap justify-center gap-x-10 lg:items-start lg:gap-x-12 xl:gap-y-0 [&>*]:flex-1'>
+	<Div className='md:basis-fullmd:*:flex-1 z-20 block flex-1 space-y-10 sm:basis-full md:items-center lg:space-y-12 xl:hidden'>
+		<List className='w-full gap-y-6 *:font-medium *:text-foreground md:gap-x-6 lg:-translate-x-8'>
+			{outstandingFeatures.map((feature, index) => (
+				<ListItem key={index.toString()}>
+					<Icon name='Check' size={18} />{' '}
+					<Typography as='span' className='flex-1'>
+						{feature}
+					</Typography>
+				</ListItem>
+			))}
+		</List>
+		<Div className='flex items-center justify-start gap-x-1 sm:justify-center'>
+			<Link to='/login' className={cn(buttonVariants())}>
+				Get started
+			</Link>
+			<Button
+				variant='link'
+				onClick={() => {
+					if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
+				}}>
+				Learn more <Icon name='ArrowRight' size={12} />
+			</Button>
+		</Div>
+	</Div>
+</Div> */
 }
 
 const List = tw.ul`grid gap-y-2 mb-8 sm:gap-y-2`

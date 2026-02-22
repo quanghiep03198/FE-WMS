@@ -42,7 +42,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={ref}
-			className='relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 px-3 transition-opacity duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @container xl:px-0 xxl:max-w-8xl'
+			className='relative mx-auto flex w-full max-w-7xl flex-col justify-center space-y-16 px-3 py-10 transition-opacity duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @container xl:px-0 xxl:max-w-8xl'
 			id='outstanding-features'
 			as='section'
 			style={{

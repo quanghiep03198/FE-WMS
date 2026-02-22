@@ -1,4 +1,5 @@
 import AppLogo from '@/app/-components/-shared/app-logo'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import {
 	Badge,
@@ -53,12 +54,12 @@ const AnimatedScreen: React.FC = () => {
                      from {
                         opacity: 0.25;
                         filter: blur(4px);
-                        transform: translate3d(16rem, -24rem, -32rem) scale(0.85);
+                        transform: perspective(1024px) translate3d(16rem, -16rem, 32rem) scale(0.75);
                      }
                      to {
                         opacity: 1;
                         filter: none;
-                        transform: translate3d(0, 0, 0) scale(1);
+                        transform: perspective(1920px) translate3d(0, 0, 0) scale(1);
                      }
                   }
                   `
@@ -68,11 +69,19 @@ const AnimatedScreen: React.FC = () => {
 			)}
 			<div
 				style={{
-					maskImage:
-						'linear-gradient(to right, hsl(var(--background)) 15%, hsl(var(--background)) 65%, transparent)'
+					overflow: 'visible',
+					transformStyle: 'preserve-3d'
 				}}
-				className='pointer-events-none relative grid aspect-square min-h-[52rem] max-w-2xl rotate-45 select-none grid-cols-[14rem_auto] grid-rows-[64px_auto] gap-y-4 overflow-hidden rounded-md border bg-background antialiased [transform:perspective(1920px)_translateX(12.5%)_translateY(-17.5%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)] *:pointer-events-none *:select-none sm:[zoom:0.5] md:[transform:perspective(1920px)_translateX(-5%)_translateY(-17.5%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)] md:[zoom:0.8] lg:[zoom:0.6] xxl:max-w-3xl'>
-				<aside className='col-start-1 row-span-full animate-[fly-down_0.75s_ease_forwards] space-y-10 border-r p-4 text-sm duration-500'>
+				className={cn(
+					'pointer-events-none relative grid aspect-square h-auto max-h-[60rem] rotate-45 select-none grid-cols-[14rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-lg border bg-background antialiased *:pointer-events-none *:select-none',
+					'sm:[zoom:0.5] md:[zoom:0.8] lg:[zoom:0.6] xl:[zoom:0.8] xxl:[zoom:1]',
+					'[transform:perspective(1920px)_translateX(15%)_translateY(-20%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'lg:[transform:perspective(1920px)_translateX(10%)_translateY(-30%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'md:[transform:perspective(1920px)_translateX(10%)_translateY(-35%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'sm:[transform:perspective(1920px)_translateX(15%)_translateY(-40%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'via-[25%] to-[50%] after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-gradient-to-l after:from-background after:via-background/80 after:to-transparent md:via-[65%] md:after:to-background/50 lg:after:via-background lg:after:via-[60%] lg:after:to-[70%]'
+				)}>
+				<aside className='z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm'>
 					<div data-slot='sidebar-header'>
 						<AppLogo />
 					</div>
@@ -137,7 +146,7 @@ const AnimatedScreen: React.FC = () => {
 						</div>
 					</div>
 				</aside>
-				<header className='col-start-2 mb-4 animate-[fly-down_0.5s_ease_forwards] p-4'>
+				<header className='z-0 col-start-2 mb-4 animate-[fly-down_0.7s_ease_forwards] p-4'>
 					<nav className='flex items-center gap-x-2 rounded-md border px-4 py-3'>
 						<button>
 							<Icon name='Menu' />
@@ -154,8 +163,8 @@ const AnimatedScreen: React.FC = () => {
 						</Breadcrumb>
 					</nav>
 				</header>
-				<main className='col-start-2 h-fit space-y-4 p-4 pt-0'>
-					<div className='animate-[fly-down_0.75s_ease_forwards] space-y-1'>
+				<main className='z-0 col-start-2 h-fit space-y-6 p-4 pt-0'>
+					<div className='animate-[fly-down_0.7s_ease_forwards] space-y-1'>
 						<h1 className='text-xl font-semibold'>Dashboard</h1>
 						<small className='line-clamp-1 leading-none text-muted-foreground'>
 							Providing an overview of key metrics including statistics, analysis, inbound/outbound operations
@@ -164,7 +173,7 @@ const AnimatedScreen: React.FC = () => {
 					</div>
 					<Separator />
 					<section className='flex items-stretch gap-x-4 [&>*[data-slot=card]]:min-w-72'>
-						<Card className='animate-[fly-down_0.75s_ease-in-out_forwards]'>
+						<Card className='animate-[fly-down_0.8s_ease-in-out_forwards]'>
 							<CardHeader>
 								<CardDescription>Inbound Quantity</CardDescription>
 								<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -186,7 +195,7 @@ const AnimatedScreen: React.FC = () => {
 								</Typography>
 							</CardFooter>
 						</Card>
-						<Card className='animate-[fly-down_0.85s_ease-in-out_forwards]'>
+						<Card className='animate-[fly-down_0.9s_ease-in-out_forwards]'>
 							<CardHeader>
 								<CardDescription>Outbound Quantity</CardDescription>
 								<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -210,7 +219,7 @@ const AnimatedScreen: React.FC = () => {
 						</Card>
 					</section>
 					<section>
-						<Card data-role='card' className='min-w-[32rem] animate-[fly-down_0.95s_ease-in-out_forwards]'>
+						<Card data-role='card' className='min-w-[32rem] animate-[fly-down_1s_ease-in-out_forwards]'>
 							<CardHeader>
 								<CardTitle>Inbound overview</CardTitle>
 								<CardDescription className='capitalize'>
@@ -219,9 +228,9 @@ const AnimatedScreen: React.FC = () => {
 									{format(new Date(new Date().getFullYear(), 11), 'MMMM')} {new Date().getFullYear()}
 								</CardDescription>
 							</CardHeader>
-							<CardContent className='relative w-full'>
+							<CardContent className='relative w-full max-w-2xl'>
 								<ChartContainer
-									className='h-64 xl:h-80'
+									className='h-96 xl:h-80'
 									config={{
 										inbound_qty: {
 											label: 'Inbound Quantity',

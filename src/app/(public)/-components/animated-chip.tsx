@@ -40,13 +40,13 @@ const BeamAnimated: React.FC = () => {
 				viewBox='0 0 650 200'
 				fill='none'
 				xmlns='http://www.w3.org/2000/svg'
-				className='mx-auto sm:max-w-xs xl:w-[650px]'
+				className='mx-auto sm:max-w-xs sm:[zoom:1.2] xl:w-[650px]'
 				ref={svgRef}>
 				<defs>
 					<linearGradient offset={1} id='right-to-left'>
 						<stop offset={1} stopColor='hsl(var(--muted))'>
 							<animate
-								dur={0.5}
+								dur={0.35}
 								attributeName='offset'
 								fill='freeze'
 								from={1}
@@ -58,7 +58,7 @@ const BeamAnimated: React.FC = () => {
 						</stop>
 						<stop offset={1} stopColor='var(--green)'>
 							<animate
-								dur={0.5}
+								dur={0.35}
 								attributeName='offset'
 								fill='freeze'
 								from={1}
@@ -72,7 +72,7 @@ const BeamAnimated: React.FC = () => {
 					<linearGradient offset={0} id='left-to-right'>
 						<stop offset={0} begin={1.5} stopColor='var(--yellow)'>
 							<animate
-								dur={0.5}
+								dur={0.35}
 								attributeName='offset'
 								fill='freeze'
 								from={0}
@@ -84,7 +84,7 @@ const BeamAnimated: React.FC = () => {
 						</stop>
 						<stop offset={0} stopColor='hsl(var(--border))'>
 							<animate
-								dur={0.5}
+								dur={0.35}
 								attributeName='offset'
 								fill='freeze'
 								from={0}
@@ -189,7 +189,6 @@ const BeamAnimated: React.FC = () => {
 							transform='matrix(0.895247 0.44557 -0.845602 0.533814 330.028 12.7942)'
 							stroke='url(#gradient-vite-chip-right-specular)'
 							strokeWidth='1.2'
-							data-v-3ad4b943=''
 						/>
 						<rect
 							x='-0.0335319'
@@ -201,7 +200,6 @@ const BeamAnimated: React.FC = () => {
 							stroke='url(#gradient-vite-chip-left-specular)'
 							strokeOpacity='0.1'
 							strokeWidth='1.2'
-							data-v-3ad4b943=''
 						/>
 					</g>
 					<g
@@ -265,7 +263,7 @@ const BeamAnimated: React.FC = () => {
 					'left-[58%] sm:max-w-[96px]',
 					'left-[56%] md:max-w-[196px]',
 					'left-[52%] lg:max-w-[210px]',
-					'xl:left-[60%] xl:max-w-[200px] xl:-translate-x-1/2 xxl:left-[calc(60%+1rem)] xxl:max-w-[216px]',
+					'sm:[zoom:0.8] xl:left-[60%] xl:max-w-[200px] xl:-translate-x-1/2 xxl:left-[calc(60%+1rem)] xxl:max-w-[216px]',
 					'-translate-y-1/2 xxl:left-[52%]'
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
@@ -273,7 +271,7 @@ const BeamAnimated: React.FC = () => {
 						className={cn(
 							'flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg p-4 sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
 							renderCount > 0
-								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_800ms_ease-in-out_1600ms,transform_400ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1600ms,box-shadow_300ms_ease-out_1600ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border sm:shadow-[16px_16px_12px_#0a0a0a98]'
+								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_500ms_ease-in-out_1400ms,transform_350ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1400ms,box-shadow_300ms_ease-out_1400ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border sm:shadow-[16px_16px_12px_#0a0a0a98]'
 								: 'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
 						)}>
 						<span className='h-6 text-center font-jetbrains text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-sm md:text-2xl xl:text-2xl'>
