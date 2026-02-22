@@ -5,7 +5,7 @@ export type TAction = 'CREATE' | 'UPDATE' | 'RESET' | undefined
 type DialogFormActionPayload<TValue = any> = {
 	open?: boolean
 	dialogTitle: string | undefined
-	defaultFormValues?: TValue | {}
+	defaultFormValues?: TValue | object
 	type?: TAction
 }
 
