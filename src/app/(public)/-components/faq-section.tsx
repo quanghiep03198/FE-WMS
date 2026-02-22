@@ -123,7 +123,7 @@ const FAQsSection: React.FunctionComponent = () => {
 						</Fragment>
 					))}
 				</ScrollShadow>
-				<Div className='flex min-h-12 w-[110%] -translate-y-3 items-center gap-x-3 self-center overflow-hidden rounded-md border bg-background/50 px-4 py-2 text-sm backdrop-blur-sm sm:flex-col sm:items-stretch'>
+				<Div className='flex min-h-12 w-[110%] -translate-y-3 items-center gap-x-3 self-center rounded-md border bg-background/50 px-4 py-2 text-sm backdrop-blur-sm sm:min-h-16 sm:-translate-y-6 sm:flex-col sm:items-stretch'>
 					<Typewriter
 						playState={containerInViewPort ? 'running' : 'paused'}
 						className='max-h-10 flex-1 overflow-y-auto text-foreground !scrollbar-none'
