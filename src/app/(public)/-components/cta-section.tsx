@@ -72,37 +72,6 @@ const CTASection: React.FC = () => {
 		</Div>
 	)
 }
-{
-	/* </Div> */
-}
-{
-	/* <Div className='relative flex h-full w-full flex-wrap justify-center gap-x-10 lg:items-start lg:gap-x-12 xl:gap-y-0 [&>*]:flex-1'>
-	<Div className='md:basis-fullmd:*:flex-1 z-20 block flex-1 space-y-10 sm:basis-full md:items-center lg:space-y-12 xl:hidden'>
-		<List className='w-full gap-y-6 *:font-medium *:text-foreground md:gap-x-6 lg:-translate-x-8'>
-			{outstandingFeatures.map((feature, index) => (
-				<ListItem key={index.toString()}>
-					<Icon name='Check' size={18} />{' '}
-					<Typography as='span' className='flex-1'>
-						{feature}
-					</Typography>
-				</ListItem>
-			))}
-		</List>
-		<Div className='flex items-center justify-start gap-x-1 sm:justify-center'>
-			<Link to='/login' className={cn(buttonVariants())}>
-				Get started
-			</Link>
-			<Button
-				variant='link'
-				onClick={() => {
-					if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
-				}}>
-				Learn more <Icon name='ArrowRight' size={12} />
-			</Button>
-		</Div>
-	</Div>
-</Div> */
-}
 
 const List = tw.ul`grid gap-y-2 mb-8 sm:gap-y-2`
 const ListItem = tw.li`flex w-full gap-x-2 text-base text-pretty text-muted-foreground [&>svg]:text-foreground [&>svg]:min-w-6 [&>svg]:translate-y-1.5 text-left`
