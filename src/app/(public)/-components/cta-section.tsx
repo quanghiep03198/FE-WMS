@@ -20,8 +20,8 @@ const CTASection: React.FC = () => {
 		<Div
 			id='cta'
 			as='section'
-			className='relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 animate-in fade-in-0 slide-in-from-bottom-4 @container/cta sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:max-w-8xl xxl:py-20'>
-			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
+			className='relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 @container/cta sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:max-w-8xl xxl:py-20'>
+			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
 					onClick={() => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
@@ -35,16 +35,16 @@ const CTASection: React.FC = () => {
 			</Div>
 			<Typography
 				variant='h1'
-				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
+				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
 				Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
 			</Typography>
 			<Typography
 				variant='p'
-				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-pretty text-center leading-relaxed tracking-wide @7xl/cta:text-left lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg'>
+				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-pretty text-center leading-relaxed tracking-wide duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:text-left lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg'>
 				Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 				comprehensive system provides the tools you need to manage your warehouse effortlessly.
 			</Typography>
-			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12'>
+			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12'>
 				{outstandingFeatures.map((feature, index) => (
 					<ListItem key={index.toString()}>
 						<Icon name='Check' size={18} />{' '}
@@ -54,7 +54,7 @@ const CTASection: React.FC = () => {
 					</ListItem>
 				))}
 			</List>
-			<Div className='z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 lg:col-start-2 lg:row-start-5 lg:justify-start xl:justify-start'>
+			<Div className='z-10 col-start-1 row-span-1 row-start-5 flex items-center justify-center gap-x-1 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:col-start-2 lg:row-start-5 lg:justify-start xl:justify-start'>
 				<Link to='/login' className={cn(buttonVariants())}>
 					Get started
 				</Link>
@@ -66,7 +66,7 @@ const CTASection: React.FC = () => {
 					Learn more <Icon name='ArrowRight' size={12} />
 				</Button>
 			</Div>
-			<Div className='z-[-1] col-start-2 row-span-6 row-start-1 sm:inset-0 sm:col-start-1 sm:row-start-6 md:col-span-2 md:col-start-1 md:row-start-6 lg:z-[-1] lg:col-start-1 lg:row-start-4'>
+			<Div className='z-[-1] col-start-2 row-span-6 row-start-1 animate-none sm:inset-0 sm:col-start-1 sm:row-start-6 md:col-span-2 md:col-start-1 md:row-start-6 lg:z-[-1] lg:col-start-1 lg:row-start-4'>
 				<AnimatedScreen />
 			</Div>
 		</Div>

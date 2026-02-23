@@ -54,7 +54,7 @@ const AnimatedScreen: React.FC = () => {
                      from {
                         opacity: 0.25;
                         filter: blur(4px);
-                        transform: perspective(1024px) translate3d(16rem, -16rem, 32rem) scale(0.75);
+                        transform: perspective(1024px) translate3d(16rem, -8rem, 32rem) scale(0.75);
                      }
                      to {
                         opacity: 1;
