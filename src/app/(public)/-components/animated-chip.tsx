@@ -260,7 +260,7 @@ const BeamAnimated: React.FC = () => {
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700 sm:rounded-md',
 					'left-[calc(50%+1rem)] -translate-y-1/2 bg-gradient-to-br from-background to-accent to-[30%]',
-					'@xs:max-w-[96px] @sm:!max-w-[112px] sm:left-[calc(50%+6px)] sm:[zoom:0.85]',
+					'@xs:max-w-[96px] @sm:!max-w-[112px] sm:left-[calc(50%+6px)] sm:[zoom:0.9]',
 					'@md:[zoom:1] md:!max-w-[208px]',
 					'lg:!max-w-[208px]',
 					'xl:!max-w-[208px] xl:-translate-x-1/2 xxl:!max-w-[216px]'
