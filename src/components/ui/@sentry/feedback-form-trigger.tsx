@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, ButtonProps } from '../@core/button'
 import { Icon } from '../@core/icon'
 
-export default function FeedbackFormTrigger(props: ButtonProps) {
+export default function FeedbackFormTrigger({ children, ...props }: ButtonProps) {
 	const { t } = useTranslation()
 	const [feedback, setFeedback] = useState<ReturnType<typeof Sentry.feedbackIntegration>>()
 	const buttonRef = useRef<HTMLButtonElement>(null)
@@ -24,8 +24,14 @@ export default function FeedbackFormTrigger(props: ButtonProps) {
 
 	return (
 		<Button type='button' ref={buttonRef} {...props}>
-			{t('ns_common:actions.report_bug')}
-			<Icon name='ArrowRight' size={12} />
+			{children ? (
+				children
+			) : (
+				<>
+					{t('ns_common:actions.report_bug')}
+					<Icon name='ArrowRight' size={12} />
+				</>
+			)}
 		</Button>
 	)
 }
