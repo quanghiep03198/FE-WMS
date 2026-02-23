@@ -71,7 +71,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 							real-time analytics, boosting efficiency and accuracy.
 						</Typography>
 					</Div>
-					<Div className='flex flex-wrap items-center justify-center gap-2 xl:justify-start'>
+					<Div className='flex flex-wrap items-center justify-center gap-2 sm:mx-auto sm:max-w-lg xl:justify-start'>
 						<Badge variant='secondary' className='bg-red-500/10 text-red-500 hover:bg-red-500/20'>
 							IoT
 						</Badge>

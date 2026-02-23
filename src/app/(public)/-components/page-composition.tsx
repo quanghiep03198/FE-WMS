@@ -44,6 +44,6 @@ const Container: React.FC<React.ComponentProps<'div'>> =
 	tw.div`relative h-screen z-10 overflow-hidden scroll-m-2 text-foreground antialiased group`
 const Main: React.FC<React.ComponentProps<'div'>> =
 	tw.div`overflow-y-auto h-full scrollbar-none flex flex-col items-stretch`
-const Wrapper: React.FC<React.ComponentProps<'div'>> = tw.div`relative z-0 xl:min-h-[80vh]`
+const Wrapper: React.FC<React.ComponentProps<'div'>> = tw.div`relative z-0 xl:min-h-[80vh] xl:first:min-h-fit`
 
 export default PageComposition

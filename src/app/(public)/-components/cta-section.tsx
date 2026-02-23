@@ -20,7 +20,7 @@ const CTASection: React.FC = () => {
 		<Div
 			id='cta'
 			as='section'
-			className='relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 @container/cta sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:max-w-8xl xxl:py-20'>
+			className='relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 @container/cta sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:mt-32 xxl:max-w-8xl xxl:p-0'>
 			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
 					onClick={() => {
