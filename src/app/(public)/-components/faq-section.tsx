@@ -87,7 +87,7 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex max-h-[36rem] w-full max-w-xl flex-grow basis-1/3 transform-gpu flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_hsl(var(--accent))] *:antialiased sm:max-w-[18rem] md:max-w-sm'>
+			<Div className='flex w-full max-w-xl flex-grow basis-1/3 transform-gpu flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_hsl(var(--accent))] *:antialiased'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 px-3 py-1'>
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
@@ -106,7 +106,7 @@ const FAQsSection: React.FunctionComponent = () => {
 				</Div>
 				<ScrollShadow
 					ref={chatBoxRef}
-					className='flex h-64 flex-1 flex-col gap-y-3 overflow-hidden p-4 scrollbar-none *:select-none'>
+					className='flex h-80 max-h-80 flex-1 flex-col gap-y-4 overflow-y-auto p-4 scrollbar-none *:select-none'>
 					{faqs.map((faq, index) => (
 						<Fragment key={index}>
 							<Div
@@ -123,7 +123,7 @@ const FAQsSection: React.FunctionComponent = () => {
 									variant='small'
 									as='time'
 									color='muted'
-									className='col-start-1 row-start-2 inline-flex items-center gap-x-2'>
+									className='col-start-1 row-start-2 inline-flex items-center justify-end gap-x-2'>
 									{format(new Date(), 'p')} <Icon name='CheckCheck' />
 								</Typography>
 							</Div>
@@ -147,17 +147,15 @@ const FAQsSection: React.FunctionComponent = () => {
 						</Fragment>
 					))}
 				</ScrollShadow>
-				<Div className='select-none p-3'>
-					<Div className='flex min-h-40 w-full flex-col items-stretch gap-x-3 self-center rounded-md border bg-accent/20 p-3 text-sm backdrop-blur-sm delay-200 duration-700 animate-in fade-in-0 zoom-in-75 slide-in-from-bottom-4 sm:min-h-16 sm:-translate-y-6'>
-						<Div className='inline-flex gap-x-2'>
-							<Div className='rounded-md border-success bg-success/10 p-1 text-success'>@admin</Div>
-							<Typewriter
-								playState={containerInViewPort ? 'running' : 'paused'}
-								className='max-h-10 flex-1 overflow-y-auto text-foreground !scrollbar-none'
-								text='I have some question, can you help me?'
-							/>
-						</Div>
-						<Div className='mt-auto inline-flex items-center gap-x-3'>
+				<Div className='h-40 select-none p-3'>
+					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-x-3 rounded-md border bg-accent/20 p-3 text-sm backdrop-blur-sm delay-200 duration-700 animate-in fade-in-0 zoom-in-75 slide-in-from-bottom-4'>
+						<Typewriter
+							playState={containerInViewPort ? 'running' : 'paused'}
+							className='block h-full flex-1 basis-full text-foreground'
+							text='I have some question, can you help me?'
+						/>
+
+						<Div className='mt-auto flex items-center gap-x-3'>
 							<Div className='inline-flex size-8 items-center justify-center rounded-full bg-muted'>
 								<Icon name='Plus' size={20} stroke='hsl(var(--muted-foreground))' />
 							</Div>
