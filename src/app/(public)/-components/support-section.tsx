@@ -71,7 +71,10 @@ const SupportSection: React.FunctionComponent = () => {
 							Notice something not working right? Please let us know about any bugs you find so we can fix them
 							promptly.
 						</Typography>
-						<FeedbackFormTrigger variant='link' className='p-0' />
+						<FeedbackFormTrigger variant='link' className='p-0'>
+							Report bug
+							<Icon name='ArrowRight' size={12} />
+						</FeedbackFormTrigger>
 					</Div>
 				</Div>
 				<Div className='group/support flex gap-x-6'>
