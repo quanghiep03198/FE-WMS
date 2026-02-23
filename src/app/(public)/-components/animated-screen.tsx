@@ -54,7 +54,7 @@ const AnimatedScreen: React.FC = () => {
                      from {
                         opacity: 0.25;
                         filter: blur(4px);
-                        transform: perspective(1024px) translate3d(16rem, -8rem, 32rem) scale(0.75);
+                        transform: perspective(1024px) translate3d(8rem, -16rem, 8rem) scale(0.8);
                      }
                      to {
                         opacity: 1;
@@ -73,7 +73,7 @@ const AnimatedScreen: React.FC = () => {
 					transformStyle: 'preserve-3d'
 				}}
 				className={cn(
-					'pointer-events-none relative grid aspect-square h-auto max-h-[60rem] rotate-45 select-none grid-cols-[14rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-lg border bg-background antialiased *:pointer-events-none *:select-none',
+					'pointer-events-none relative grid aspect-square h-auto max-h-[60rem] rotate-45 select-none grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border bg-background antialiased *:pointer-events-none *:select-none',
 					'sm:[zoom:0.5] md:[zoom:0.8] lg:[zoom:0.6] xl:[zoom:0.8] xxl:[zoom:1]',
 					'[transform:perspective(1920px)_translateX(15%)_translateY(-20%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
 					'lg:[transform:perspective(1920px)_translateX(10%)_translateY(-30%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
@@ -87,7 +87,7 @@ const AnimatedScreen: React.FC = () => {
 					</div>
 					<div
 						data-slot='sidebar-menu'
-						className='space-y-6 [&>*[data-slot=sidebar-menu-group]]:space-y-3 [&_*[data-slot=menu-item]>svg]:size-[18px] [&_*[data-slot=menu-item]]:flex [&_*[data-slot=menu-item]]:items-center [&_*[data-slot=menu-item]]:gap-x-2 [&_*[data-slot=menu-label]]:text-xs [&_*[data-slot=menu-label]]:font-medium [&_*[data-slot=menu-label]]:text-muted-foreground [&_*[data-slot=menu]]:space-y-2'>
+						className='space-y-8 [&>*[data-slot=sidebar-menu-group]]:space-y-4 [&_*[data-slot=menu-item]>svg]:size-[18px] [&_*[data-slot=menu-item]]:flex [&_*[data-slot=menu-item]]:items-center [&_*[data-slot=menu-item]]:gap-x-2 [&_*[data-slot=menu-label]]:text-xs [&_*[data-slot=menu-label]]:font-medium [&_*[data-slot=menu-label]]:text-muted-foreground [&_*[data-slot=menu]]:space-y-3'>
 						<div data-slot='sidebar-menu-group'>
 							<h4 data-slot='menu-label'>Main</h4>
 							<ul data-slot='menu'>
@@ -104,7 +104,7 @@ const AnimatedScreen: React.FC = () => {
 									<Icon name='Files' /> Reports
 								</li>
 								<li data-slot='menu-item'>
-									<Icon name='Truck' /> Deliver management
+									<Icon name='Truck' /> Truckload delivery management
 								</li>
 								<li data-slot='menu-item'>
 									<Icon name='FileSearch' /> Seeking
@@ -158,7 +158,7 @@ const AnimatedScreen: React.FC = () => {
 									<HomeIcon className='size-[1.135rem]' />
 								</BreadcrumbLink>
 								<BreadcrumbSeparator />
-								<BreadcrumbLink>Dashboard</BreadcrumbLink>
+								<BreadcrumbLink className='text-primary'>Dashboard</BreadcrumbLink>
 							</BreadcrumbList>
 						</Breadcrumb>
 					</nav>
