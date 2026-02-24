@@ -33,14 +33,14 @@ const BeamAnimated: React.FC = () => {
 					'--yellow': '#eab308'
 				} as React.CSSProperties
 			}
-			className='group/chip container relative w-full sm:[zoom:1.1]'>
+			className='group/chip container relative mx-auto w-full sm:w-full sm:max-w-xs sm:[zoom:1.1] md:max-w-[650px] lg:max-w-3xl xl:max-w-3xl'>
 			<svg
 				width='100%'
 				height='200'
 				viewBox='0 0 650 200'
 				fill='none'
 				xmlns='http://www.w3.org/2000/svg'
-				className='mx-auto sm:w-full sm:max-w-xs xl:w-[650px]'
+				className='w-[inherit]'
 				ref={svgRef}>
 				<defs>
 					<linearGradient offset={1} id='right-to-left'>
@@ -98,7 +98,7 @@ const BeamAnimated: React.FC = () => {
 				</defs>
 				<g className='sm:w-full'>
 					{/* Standalone */}
-					<g className='standalone-chip__base'>
+					<g className='standalone-chip__base relative'>
 						<rect
 							width='35.0955'
 							height='35.0923'
@@ -259,11 +259,11 @@ const BeamAnimated: React.FC = () => {
 				}}
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700 sm:rounded-md',
-					'left-[calc(50%+1rem)] -translate-y-1/2 bg-gradient-to-br from-background to-accent to-[30%]',
-					'@xs:max-w-[96px] @sm:!max-w-[112px] sm:left-[calc(50%+6px)] sm:[zoom:0.9]',
-					'@md:[zoom:1] md:!max-w-[208px]',
-					'lg:!max-w-[208px]',
-					'xl:!max-w-[208px] xl:-translate-x-1/2 xxl:!max-w-[216px]'
+					'left-[calc(50%+2.5rem)] -translate-y-1/2 bg-gradient-to-br from-background to-accent to-[30%]',
+					'@xs:max-w-[96px] @sm:!max-w-[112px] sm:left-[calc(50%+6px)] sm:[zoom:0.85]',
+					'@[520px]:[zoom:0.85] @[620px]:[zoom:1] md:left-[calc(50%+0.5rem)] md:!max-w-[208px]',
+					'lg:left-[calc(50%+1rem)] lg:!max-w-[208px]',
+					'xl:left-[calc(50%+1rem)] xl:!max-w-[192px] xxl:!max-w-[216px]'
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
@@ -282,14 +282,14 @@ const BeamAnimated: React.FC = () => {
 			</div>
 			<div
 				className={cn(
-					'sm:size-18 absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[var(--yellow)] opacity-0 blur-3xl will-change-[opacity] sm:left-[6%] md:left-[18%] lg:left-[22%] lg:size-32 lg:blur-[80px] xl:left-[10%] xl:size-24 xxl:left-[12%] xxl:size-32 xxl:blur-[80px]',
+					'sm:size-18 absolute left-4 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-[var(--yellow)] opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
 					'transition-opacity delay-700 duration-500 ease-out',
 					renderCount > 0 ? 'opacity-100' : 'opacity-0'
 				)}
 			/>
 			<div
 				className={cn(
-					'sm:size-18 absolute top-1/2 z-[-1] size-20 -translate-y-1/2 bg-[var(--green)] opacity-0 blur-3xl will-change-[opacity] sm:right-[6%] md:right-[12%] lg:right-[22%] lg:size-32 lg:blur-[80px] xl:right-[-6%] xl:size-24 xxl:right-[6%] xxl:size-32 xxl:blur-[80px]',
+					'sm:size-18 absolute right-5 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-[var(--green)] opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
 					'transition-opacity delay-700 duration-500 ease-out',
 					renderCount > 0 ? 'opacity-100' : 'opacity-0'
 				)}
