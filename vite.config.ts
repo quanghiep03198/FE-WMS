@@ -43,15 +43,15 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					navigateFallback: '/index.html',
 					navigateFallbackDenylist: [/^\/api\//, /^\/sw\.js$/, /^\/workbox-.*\.js$/, /\.(wasm|map)$/],
-					globPatterns: ['**/*.{html,css,ico,png,jpg,svg,webp,woff2}'],
+					globPatterns: ['**/*.{css,ico,png,jpg,svg,webp,woff2}'],
 					skipWaiting: true,
 					clientsClaim: true,
 					navigationPreload: true,
 					runtimeCaching: [
 						{
-							// Handle versioned JS files (from build)
+							// Handle versioned JS files (from build) — NetworkFirst ensures fresh chunks are always served after a new deployment
 							urlPattern: /.*\.(js|mjs)$/,
-							handler: 'StaleWhileRevalidate',
+							handler: 'NetworkFirst',
 							options: {
 								cacheName: 'js-cache',
 								expiration: {

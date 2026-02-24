@@ -36,6 +36,28 @@ Sentry.init({
 	replaysOnErrorSampleRate: 1.0 // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 })
 
+// Global handler for stale JS chunk 404s that occur before the router is initialized
+// (e.g. dynamic imports triggered during app bootstrap after a new deployment)
+const CHUNK_RELOAD_KEY = 'chunk-reload-retry'
+window.addEventListener('unhandledrejection', (event) => {
+	const error = event.reason
+	if (!(error instanceof Error)) return
+	const message = error.message.toLowerCase()
+	const isChunkError =
+		message.includes('failed to fetch dynamically imported module') ||
+		message.includes('loading chunk') ||
+		message.includes('loading css chunk') ||
+		error.name === 'ChunkLoadError'
+	if (isChunkError) {
+		const lastReload = sessionStorage.getItem(CHUNK_RELOAD_KEY)
+		const now = Date.now()
+		if (!lastReload || now - Number(lastReload) > 10_000) {
+			sessionStorage.setItem(CHUNK_RELOAD_KEY, String(now))
+			window.location.reload()
+		}
+	}
+})
+
 // App Rendering
 const container = document.getElementById('root')
 
