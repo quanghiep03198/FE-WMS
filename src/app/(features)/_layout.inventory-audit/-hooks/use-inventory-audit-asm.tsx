@@ -11,18 +11,16 @@ export enum InventoryAuditQueryKeys {
 	INVENTORY_AUDIT = 'INVENTORY_AUDIT'
 }
 
-export const useGetInventoryAuditReport = (tenantId: string, params?: { 'month.eq': string }) => {
+export const useGetInventoryAuditReport = (params?: { 'month.eq': string }) => {
 	return useQuery({
-		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, tenantId, params],
-		queryFn: async () => await InventoryService.getInventoryAuditReport(tenantId, params),
-		enabled: !!tenantId,
+		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, params],
+		queryFn: async () => await InventoryService.getInventoryAuditReport(params),
 		refetchOnWindowFocus: false,
 		select: (response) => response.metadata
 	})
 }
 
 export const useInventoryAuditMutation = (
-	tenantId: string,
 	queries: Omit<BaseUpdateUpdateQuery, 'size_numcode'>,
 	signal: AbortSignal
 ) => {
@@ -33,7 +31,6 @@ export const useInventoryAuditMutation = (
 	return useMutation({
 		mutationFn: async (payload: InventoryAuditFormValues['data']) => {
 			return await InventoryService.updateInventoryAuditReport(
-				tenantId,
 				signal,
 				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month.eq'] },
 				payload
@@ -42,18 +39,14 @@ export const useInventoryAuditMutation = (
 		onMutate: async (variable) => {
 			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
 			await queryClient.cancelQueries({
-				queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, tenantId, searchParams],
+				queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams],
 				exact: true
 			})
 			// Snapshot the previous value
-			const previousData = queryClient.getQueryData([
-				InventoryAuditQueryKeys.INVENTORY_AUDIT,
-				tenantId,
-				searchParams
-			])
+			const previousData = queryClient.getQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams])
 
 			// Optimistically update to the new value
-			queryClient.setQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, tenantId, searchParams], variable)
+			queryClient.setQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams], variable)
 			return { previousData }
 		},
 		onSuccess: () => {
@@ -61,15 +54,13 @@ export const useInventoryAuditMutation = (
 		},
 		onError: (_error, _variable, context) => {
 			toast.error(t('ns_common:notification.error'))
-			queryClient.setQueryData(
-				[InventoryAuditQueryKeys.INVENTORY_AUDIT, tenantId, searchParams],
-				context.previousData
-			)
+			queryClient.setQueryData([InventoryAuditQueryKeys.INVENTORY_AUDIT, searchParams], context.previousData)
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({
-				queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, tenantId, searchParams],
-				exact: true
+				predicate: ({ queryKey }) => {
+					return queryKey.some((key) => key === InventoryAuditQueryKeys.INVENTORY_AUDIT)
+				}
 			})
 		}
 	})

@@ -1,4 +1,5 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -35,17 +36,19 @@ function Page() {
 			<meta name='description' content={t('ns_inoutbound:description.monthly_inventory_report')} />
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
-				<PageWrapper>
-					<PageHeader className='flex-1'>
-						<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
-						<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
-						<PageAction>
-							<MonthPickerFilter />
-						</PageAction>
-					</PageHeader>
-					<PageSeparator />
-					<InventoryReportMasterTable />
-				</PageWrapper>
+				<HostCompatibleGuard>
+					<PageWrapper>
+						<PageHeader className='flex-1'>
+							<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
+							<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
+							<PageAction>
+								<MonthPickerFilter />
+							</PageAction>
+						</PageHeader>
+						<PageSeparator />
+						<InventoryReportMasterTable />
+					</PageWrapper>
+				</HostCompatibleGuard>
 			</RoleGuard>
 		</Fragment>
 	)

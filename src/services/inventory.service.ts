@@ -10,29 +10,21 @@ import axiosInstance from '@/configs/axios.config'
 import { AxiosRequestConfig } from 'axios'
 
 export class InventoryService {
-	static async getInventoryAuditReport(tenantId: string, params: { 'month.eq': string }) {
+	static async getInventoryAuditReport(params: { 'month.eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryAudit[]>>('/inventory/audit', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: params
 		})
 	}
 
-	static async downloadInventoryAuditReport(tenantId: string, filter: { 'month.eq': string; 'mo_no.in': string[] }) {
+	static async downloadInventoryAuditReport(filter: { 'month.eq': string; 'mo_no.in': string[] }) {
 		return await axiosInstance.get<void, Blob>('/inventory/audit/export', {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
 			responseType: 'blob'
 		})
 	}
 
-	static async updateInventoryAuditReport(
-		tenantId: string,
-		signal: AbortSignal,
-		params: AxiosRequestConfig['params'],
-		payload: any
-	) {
+	static async updateInventoryAuditReport(signal: AbortSignal, params: AxiosRequestConfig['params'], payload: any) {
 		return await axiosInstance.patch('/inventory/audit/update', payload, {
-			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			signal,
 			params
 		})

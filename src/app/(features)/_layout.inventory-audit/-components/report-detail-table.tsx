@@ -50,7 +50,6 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 
 	// * Implement optimistic update on save manual changes
 	const { mutateAsync, isPending, isError, isSuccess } = useInventoryAuditMutation(
-		currentTenant?.id,
 		queries,
 		abortControllerRef?.current?.signal
 	)

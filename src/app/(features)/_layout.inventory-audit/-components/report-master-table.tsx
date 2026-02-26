@@ -31,9 +31,8 @@ import SyncDataTrigger from './sync-data-trigger'
 
 export const InventoryReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
-	const { data: currentTenant } = useGetTenantByFactory()
 
-	const { data, isLoading } = useGetInventoryAuditReport(currentTenant?.id, searchParams)
+	const { data, isLoading } = useGetInventoryAuditReport(searchParams)
 	const { t, i18n } = useTranslation()
 	const dataTableRef = useRef<Table<IMonthlyInventoryAudit>>(null)
 	const columnHelper = createColumnHelper<IMonthlyInventoryAudit>()
@@ -294,7 +293,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 	const handleDownloadExcel = useCallback(async () => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
-			const blob = await InventoryService.downloadInventoryAuditReport(currentTenant?.id, {
+			const blob = await InventoryService.downloadInventoryAuditReport({
 				...pick(searchParams, 'month.eq'),
 				'mo_no.in': selectedRows.map((row) => row.original.mo_no)
 			})
