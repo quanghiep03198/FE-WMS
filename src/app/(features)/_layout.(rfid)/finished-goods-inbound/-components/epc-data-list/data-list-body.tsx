@@ -315,7 +315,14 @@ const EpcDataList: React.FC = () => {
 									else setCurrentPage(currentPage + 1)
 								}}
 								disabled={isFetching}>
-								{isFetching ? 'Loading more ...' : 'Load more'}
+								{isFetching ? (
+									<Icon name='LoaderCircle' className='animate-spin' />
+								) : (
+									<Fragment>
+										<Icon name='Plus' />
+										{t('ns_common:actions.load_more')}
+									</Fragment>
+								)}
 							</Button>
 						)}
 					</Div>

@@ -273,7 +273,7 @@ const ScannedEpcList: React.FC = () => {
 							}}
 							disabled={isFetching}>
 							{isFetching ? (
-								<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+								<Icon name='LoaderCircle' className='animate-spin' />
 							) : (
 								<Fragment>
 									<Icon name='Plus' />

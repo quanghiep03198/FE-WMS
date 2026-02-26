@@ -1,4 +1,4 @@
-import { OutboundReportQueryKeys } from '@/app/(features)/_layout.outbound-report/-hooks/use-outbound-report-asm'
+import { InventoryAuditQueryKeys } from '@/app/(features)/_layout.inventory-audit/-hooks/use-inventory-audit-asm'
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
@@ -56,9 +56,9 @@ export const useUpdateStockOutMutation = (callback: () => unknown) => {
 	const { currentPage } = usePageContext('currentPage')
 	const toastId = useRef<string | number>(null)
 	const { t } = useTranslation()
+	const invalidateQueries = useInvalidateQueries()
 
 	return useMutation({
-		mutationKey: [RFIDOutboundQueryKeys.OUTBOUND_EPC, OutboundReportQueryKeys.DAILY_OUTBOUND, currentPage],
 		mutationFn: async (payload: any) => await RFIDService.upsertOutboundInventory(payload),
 		onMutate: () => {
 			toastId.current = toast.loading(t('ns_common:notification.processing_request'))
@@ -66,6 +66,7 @@ export const useUpdateStockOutMutation = (callback: () => unknown) => {
 		onSuccess: () => {
 			toast.success(t('ns_common:notification.success'), { id: toastId.current })
 			if (typeof callback === 'function') callback()
+			invalidateQueries()
 		},
 		onError: () => {
 			toast.error(t('ns_common:notification.error'), { id: toastId.current })
@@ -92,13 +93,15 @@ const useInvalidateQueries = () => {
 
 	return () => {
 		queryClient.invalidateQueries({
+			exact: false,
 			predicate: (query) =>
 				query.queryKey.some((key) => {
 					const invalidateKeys: readonly string[] = [
 						RFIDOutboundQueryKeys.OUTBOUND_EPC,
 						RFIDOutboundQueryKeys.OUTBOUND_EPC_BY_SIZE,
 						ArchiviedDataQueryKeys.ARCHIVED_EPCS,
-						ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES
+						ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES,
+						InventoryAuditQueryKeys.INVENTORY_AUDIT
 					]
 					return invalidateKeys.includes(key as string)
 				})
