@@ -39,8 +39,8 @@ function Page() {
 			<title>{t('ns_common:navigation.finished_goods_inbound')}</title>
 			<meta name='description' content='RFID Scanner integration for inbound process' />
 
-			<HostCompatibleGuard>
-				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+				<HostCompatibleGuard>
 					<PageProvider>
 						<AlreadyScannedEpcsAlert />
 						<PageComposition.Container>
@@ -66,8 +66,8 @@ function Page() {
 						{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
 						{/* <PageNavigationBlocker /> */}
 					</PageProvider>
-				</RoleGuard>
-			</HostCompatibleGuard>
+				</HostCompatibleGuard>
+			</RoleGuard>
 		</Fragment>
 	)
 }

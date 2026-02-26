@@ -29,10 +29,10 @@ function Page() {
 			<title>{t('ns_common:navigation.finished_goods_outbound')}</title>
 			<meta name='description' content='RFID Scanner integration for outbound process' />
 
-			<HostCompatibleGuard>
-				{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
-				{/* <PageNavigationBlocker /> */}
-				<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+				<HostCompatibleGuard>
+					{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
+					{/* <PageNavigationBlocker /> */}
 					<PageProvider>
 						<Div className='static gap-4 py-[--outlet-padding] xxl:grid xxl:grid-cols-12 xxl:p-0'>
 							<Div className='h-full @container xxl:col-span-4'>
@@ -56,8 +56,8 @@ function Page() {
 							</Div>
 						</Div>
 					</PageProvider>
-				</RoleGuard>
-			</HostCompatibleGuard>
+				</HostCompatibleGuard>
+			</RoleGuard>
 		</Fragment>
 	)
 }
