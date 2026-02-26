@@ -238,64 +238,50 @@ const ScannedEpcList: React.FC = () => {
 				<ScrollShadow
 					ref={containerRef}
 					className={cn(
-						'linear z-10 divide-y bg-background contain-size',
+						'linear relative z-10 divide-y bg-background contain-size',
 						hasMounted.current && 'duration-100 will-change-transform',
 						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
 					)}>
-					<Div
-						className={cn(
-							'relative w-full contain-paint',
-							hasMounted.current && 'duration-300 ease-in will-change-contents',
-							{
-								'animate-in fade-in-0': open && hasMounted.current,
-								'animate-out fade-out-0': !open && hasMounted.current
-							}
-						)}
-						style={{ height: virtualizer.getTotalSize() }}>
-						{virtualizer.getVirtualItems().map((virtualItem) => {
-							const item = scannedEpc.data[virtualItem.index]
-							return (
-								<Div
-									key={virtualItem.index}
-									className='absolute left-auto right-auto top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
-									style={{
-										height: virtualItem.size,
-										transform: `translateY(${virtualItem.start}px)`
-									}}>
-									<Typography className='font-medium sm:text-sm'>{item.epc}</Typography>
-									<Typography variant='small' className='capitalize text-foreground'>
-										{item.mo_no}
-									</Typography>
-								</Div>
-							)
-						})}
-						{scannedEpc.hasNextPage && (
-							<Button
-								variant='link'
-								className='w-full'
+					{virtualizer.getVirtualItems().map((virtualItem) => {
+						const item = scannedEpc.data[virtualItem.index]
+						return (
+							<Div
+								key={virtualItem.index}
+								className='absolute inset-x-0 top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
 								style={{
-									height: VIRTUAL_ITEM_SIZE,
-									position: 'absolute',
-									top: 0,
-									bottom: 0,
-									transform: `translateY(${virtualizer.getTotalSize()}px)`
-								}}
-								onClick={() => {
-									if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
-									else setCurrentPage(currentPage + 1)
-								}}
-								disabled={isFetching}>
-								{isFetching ? (
-									<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
-								) : (
-									<Fragment>
-										<Icon name='Plus' />
-										{t('ns_common:actions.load_more')}
-									</Fragment>
-								)}
-							</Button>
-						)}
-					</Div>
+									height: virtualItem.size,
+									transform: `translateY(${virtualItem.start}px)`
+								}}>
+								<Typography className='font-medium sm:text-sm'>{item.epc}</Typography>
+								<Typography variant='small' className='capitalize text-foreground'>
+									{item.mo_no}
+								</Typography>
+							</Div>
+						)
+					})}
+					{scannedEpc.hasNextPage && (
+						<Button
+							variant='link'
+							className='absolute inset-x-0'
+							style={{
+								height: VIRTUAL_ITEM_SIZE,
+								transform: `translateY(${virtualizer.getTotalSize()}px)`
+							}}
+							onClick={() => {
+								if (!currentPage) setCurrentPage(DEFAULT_NEXT_CURSOR)
+								else setCurrentPage(currentPage + 1)
+							}}
+							disabled={isFetching}>
+							{isFetching ? (
+								<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+							) : (
+								<Fragment>
+									<Icon name='Plus' />
+									{t('ns_common:actions.load_more')}
+								</Fragment>
+							)}
+						</Button>
+					)}
 				</ScrollShadow>
 			) : (
 				<Div
