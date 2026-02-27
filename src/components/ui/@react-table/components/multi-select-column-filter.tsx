@@ -26,7 +26,9 @@ function MultiSelectColumnFilter<TData extends Record<'label' | 'value', string>
 			valueField='value'
 			onInput={(search) => setSearchTerm(search)}
 			onValueChange={(value) => onValueChange(value)}
-			className='h-10 border-none shadow-none'
+			classNames={{
+				popoverTrigger: 'h-10 border-none shadow-none'
+			}}
 		/>
 	)
 }
