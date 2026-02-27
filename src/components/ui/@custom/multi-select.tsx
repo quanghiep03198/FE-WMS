@@ -121,7 +121,7 @@ export type MultiSelectProps<T extends SelectItem> = React.ButtonHTMLAttributes<
 		classNames?: {
 			popoverTrigger?: string
 			popoverContent?: string
-			selectedItem: string
+			selectedItem?: string
 		}
 
 		/**
