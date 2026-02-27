@@ -32,7 +32,7 @@ const DownloadExcelButton: React.FC = () => {
 			)
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch {
-			toast.error('ns_common:notification.error', { id })
+			toast.error(t('ns_common:notification.error'), { id })
 		}
 	}
 
