@@ -43,58 +43,46 @@ export default defineConfig(({ mode }) => {
 				workbox: {
 					navigateFallback: '/index.html',
 					navigateFallbackDenylist: [/^\/api\//, /^\/sw\.js$/, /^\/workbox-.*\.js$/, /\.(wasm|map)$/],
-					globPatterns: ['**/*.{css,ico,png,jpg,svg,webp,woff2}'],
+					globPatterns: ['**/*.{html,css,js,ico,png,jpg,svg,webp,woff2}'],
 					skipWaiting: true,
 					clientsClaim: true,
 					navigationPreload: true,
 					runtimeCaching: [
 						{
-							// Handle versioned JS files (from build) — NetworkFirst ensures fresh chunks are always served after a new deployment
-							urlPattern: /.*\.(js|mjs)$/,
-							handler: 'NetworkFirst',
-							options: {
-								cacheName: 'js-cache',
-								expiration: {
-									maxEntries: 100, // Increase max entries for JS files
-									maxAgeSeconds: 60 * 60 * 24, // 24 hours
-									purgeOnQuotaError: true // Automatically cleanup if quota is exceeded
-								},
-								cacheableResponse: {
-									statuses: [0, 200]
-								}
-							}
-						},
-						{
-							// Handle CSS and other resources
-							urlPattern: /.*\.(html|css|json|wasm)$/,
-							handler: 'StaleWhileRevalidate',
-							options: {
-								cacheName: 'resources-cache',
-								expiration: {
-									maxEntries: 200, // Increase max entries for resources
-									maxAgeSeconds: 60 * 60 * 24 * 7, // 1 week
-									purgeOnQuotaError: true // Automatically cleanup if quota is exceeded
-								},
-								cacheableResponse: {
-									statuses: [0, 200]
-								}
-							}
-						},
-						{
-							// Static assets - longer cache
-							urlPattern: /.*\.(ico|png|jpg|svg|webp|woff2?)$/,
+							// Hashed assets under /assets/ are already precached, but this ensures
+							// any dynamically loaded chunks are also cached with CacheFirst
+							urlPattern: ({ url }) => url.pathname.startsWith('/assets/'),
 							handler: 'CacheFirst',
 							options: {
-								cacheName: 'static-cache',
+								cacheName: 'assets-cache',
 								expiration: {
-									maxEntries: 50, // Increase max entries for static assets
-									maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-									purgeOnQuotaError: true // Automatically cleanup if quota is exceeded
+									maxEntries: 200,
+									maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year (hashed filenames)
+									purgeOnQuotaError: true
+								},
+								cacheableResponse: {
+									statuses: [0, 200]
 								}
 							}
 						},
 						{
-							// API calls
+							// Static resources in root (favicon, icons, images) - not hashed, use StaleWhileRevalidate
+							urlPattern: /\.(?:ico|png|jpg|jpeg|svg|webp|woff2?)$/i,
+							handler: 'StaleWhileRevalidate',
+							options: {
+								cacheName: 'static-resources-cache',
+								expiration: {
+									maxEntries: 60,
+									maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+									purgeOnQuotaError: true
+								},
+								cacheableResponse: {
+									statuses: [0, 200]
+								}
+							}
+						},
+						{
+							// API calls - never cache
 							urlPattern: ({ url }) => url.pathname.startsWith('/api'),
 							handler: 'NetworkOnly'
 						}
@@ -147,15 +135,25 @@ export default defineConfig(({ mode }) => {
 				}
 			},
 			headers: {
+				['Cache-Control']: 'public, max-age=0, must-revalidate',
 				['Content-Security-Policy']:
 					"script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; object-src 'self' 'unsafe-inline'; frame-ancestors 'self'",
 				['Strict-Transport-Security']: 'max-age=63072000; includeSubDomains; preload',
-				['Cross-Origin-Resource-Policy']: 'cross-origin'
+				['Cross-Origin-Resource-Policy']: 'cross-origin',
+				['X-Content-Type-Options']: 'nosniff',
+				['X-Frame-Options']: 'DENY',
+				['X-XSS-Protection']: '1; mode=block'
 			}
 		},
 		preview: {
 			port: mode === 'test' ? 5000 : 4000,
-			host: true
+			host: true,
+			headers: {
+				['Cache-Control']: 'public, max-age=0, must-revalidate',
+				['X-Content-Type-Options']: 'nosniff',
+				['X-Frame-Options']: 'DENY',
+				['X-XSS-Protection']: '1; mode=block'
+			}
 		},
 		build: {
 			emptyOutDir: true,
