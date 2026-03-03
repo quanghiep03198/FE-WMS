@@ -27,7 +27,7 @@ function Page() {
 	useEffect(() => {
 		setBreadcrumb([
 			{
-				to: '/inbound-report',
+				to: '/defective-goods-inventory',
 				text: t('ns_common:navigation.defective_goods_inventory')
 			}
 		])

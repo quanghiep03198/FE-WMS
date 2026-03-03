@@ -29,7 +29,7 @@ function Page() {
 	useEffect(() => {
 		setBreadcrumb([
 			{
-				to: '/defective-goods-inbound-report',
+				to: '/defective-goods-outbound-report',
 				text: t('ns_common:navigation.defective_goods_outbound_report')
 			}
 		])
