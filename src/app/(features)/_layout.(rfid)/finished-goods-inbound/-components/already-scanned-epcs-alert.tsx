@@ -105,7 +105,7 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 	useUpdateEffect(() => {
 		const shouldShowAlert =
 			Array.isArray(data) && data.length > 0 && !detailDialogOpen && scanningStatus === 'connected'
-		setHasScannedEpcs(shouldShowAlert)
+		if (shouldShowAlert) setHasScannedEpcs(true)
 	}, [data, scanningStatus])
 
 	return (
