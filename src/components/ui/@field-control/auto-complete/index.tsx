@@ -1,14 +1,16 @@
 'use no memo'
 
+import useScrollToFn from '@/common/hooks/use-scroll-fn'
+import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { ResourceKey } from 'i18next'
-import { useId, useMemo, useRef, useState } from 'react'
+import { useCallback, useId, useMemo, useRef, useState } from 'react'
 import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { v4 as uuidv4 } from 'uuid'
 import {
 	Div,
 	FormControl,
@@ -42,6 +44,7 @@ export type AutoCompleteFieldControlProps<T extends FieldValues, D = Record<stri
 			'div' extends keyof HTMLElementTagNameMap ? keyof HTMLElementTagNameMap : React.ElementType
 		>
 	>
+	estimateItemHeight?: number
 	onInput?: (value: string) => any
 	onSelect?: (value: string) => unknown
 	onItemClick?: (value: D) => unknown
@@ -64,6 +67,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		readOnly,
 		orientation = 'vertical',
 		errorMessageVariant = 'inline',
+		estimateItemHeight = 32,
 		className,
 		onInput,
 		onSelect,
@@ -89,7 +93,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 		}
 
 		return Array.isArray(datalist) ? datalist.filter(filterFn) : []
-	}, [datalist, shouldFilter, currentValue])
+	}, [datalist, valueField, shouldFilter, currentValue])
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === 'Enter') e.preventDefault()
@@ -100,6 +104,30 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	}
 
 	const { error } = getFieldState(name)
+	const [scrollElement, setScrollElement] = useState<HTMLDivElement>(null)
+	const refCallback = useCallback((node: HTMLDivElement) => {
+		if (node) {
+			setScrollElement(node)
+		}
+	}, [])
+
+	const scrollToFn = useScrollToFn({ current: scrollElement })
+	const getScrollElement = useCallback(() => scrollElement, [scrollElement])
+	const estimateSize = useCallback(() => estimateItemHeight, [])
+
+	const virtualizer = useVirtualizer({
+		count: filteredDatalist?.length,
+		overscan: 3,
+		estimateSize,
+		getScrollElement,
+		scrollToFn
+	})
+
+	const virtualItems = virtualizer.getVirtualItems()
+
+	console.log(virtualItems)
+
+	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	return (
 		<FormField
@@ -167,39 +195,49 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 									</Tooltip>
 								</FormControl>
 								<PopoverContent
-									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
+									ref={refCallback}
+									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto scroll-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{loading ? (
 										<Div className='flex items-center justify-center p-10 text-center'>
 											<Icon name='LoaderCircle' size={18} className='animate-[spin_1s_linear_infinite]' />
 										</Div>
-									) : filteredDatalist?.length > 0 ? (
-										filteredDatalist?.map((item) => {
-											if (CustomAutoCompleteItem)
-												return <CustomAutoCompleteItem key={uuidv4()} value={item} />
+									) : virtualItems?.length > 0 ? (
+										<Div style={{ height: virtualizer.getTotalSize() }}>
+											{before > 0 && <AutoCompleteItem style={{ height: before }} />}
+											{virtualItems?.map((item) => {
+												const option = filteredDatalist[item.index]
 
-											return (
-												<AutoCompleteItem
-													key={uuidv4()}
-													onClick={(e) => {
-														e.stopPropagation()
-														setValue(name, item[valueField])
-														setOpen(false)
-														if (typeof onSelect === 'function') onSelect(String(item[valueField]))
-														if (typeof onItemClick === 'function') onItemClick(item)
-													}}>
-													<Typography variant='small' className='line-clamp-1 flex-1'>
-														{String(item[labelField])}
-													</Typography>
-													<CheckIcon
-														className={cn(
-															'ml-auto transition-opacity duration-200',
-															field.value === item[valueField] ? 'opacity-100' : 'opacity-0'
-														)}
-													/>
-												</AutoCompleteItem>
-											)
-										})
+												if (CustomAutoCompleteItem)
+													return (
+														<CustomAutoCompleteItem
+															key={item.key}
+															value={option}
+															style={{ height: item.size }}
+														/>
+													)
+
+												return (
+													<AutoCompleteItem
+														key={item.key}
+														aria-selected={field.value === option[valueField]}
+														style={{ height: item.size }}
+														onClick={(e) => {
+															e.stopPropagation()
+															setValue(name, option[valueField])
+															setOpen(false)
+															if (typeof onSelect === 'function') onSelect(String(option[valueField]))
+															if (typeof onItemClick === 'function') onItemClick(option)
+														}}>
+														<Typography variant='small' className='line-clamp-1 flex-1'>
+															{String(option[labelField])}
+														</Typography>
+														<CheckIcon className='group-aria-selected:-item:opacity-100 ml-auto opacity-0 transition-opacity duration-200' />
+													</AutoCompleteItem>
+												)
+											})}
+											{after > 0 && <AutoCompleteItem style={{ height: after }} />}
+										</Div>
 									) : (
 										<Typography variant='small' color='muted' className='block h-full p-10 text-center'>
 											{t('ns_common:table.no_data')}
@@ -217,6 +255,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 	)
 }
 
-const AutoCompleteItem = tw.div`flex cursor-pointer items-center rounded-md p-2 h-8 hover:bg-secondary hover:text-secondary-foreground`
+const AutoCompleteItem: React.FC<React.ComponentProps<'div'>> =
+	tw.div`group flex cursor-pointer items-center rounded-md p-2 h-8 hover:bg-secondary hover:text-secondary-foreground`
 
 AutoCompleteFieldControl.displayName = 'AutoCompleteFieldControl'
