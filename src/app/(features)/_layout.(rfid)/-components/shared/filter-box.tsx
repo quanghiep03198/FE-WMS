@@ -20,8 +20,8 @@ import {
 	Typography
 } from '@/components/ui'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useDebounceEffect, useDeepCompareEffect, useResetState } from 'ahooks'
-import { capitalize, isEmpty, sortBy } from 'lodash-es'
+import { useDebounceEffect, useResetState } from 'ahooks'
+import { capitalize, isEmpty } from 'lodash-es'
 import { Fragment, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -71,59 +71,141 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 	const currentShoesStyle = useWatch({ control: form.control, name: 'shoes_style' })
 	const currentColor = useWatch({ control: form.control, name: 'color_sn' })
 	const currentCommandNumber = useWatch({ control: form.control, name: 'mo_no' })
-	const currentSize = useWatch({ control: form.control, name: 'size_numcode' })
 
-	const shoesStyleOptions = useMemo(() => {
-		if (!Array.isArray(data)) return []
-		return data.map((item) => ({ shoes_style_factory_code: item.factory_shoes_style }))
+	/**
+	 * Pre-build a lookup index from the flat API data once.
+	 * This avoids repeated flatMap/filter/uniqBy on every cascading filter change.
+	 *
+	 * Structure:
+	 *   styleToColors: Map<shoes_style, Set<color_sn>>
+	 *   colorToBatches: Map<"style|color", Set<mo_no>>
+	 *   batchToSizes: Map<"style|color|mo_no", Set<size>>
+	 *   allColors: Set<color_sn>
+	 *   allBatches: Set<mo_no>
+	 *   allSizes: Set<size>
+	 */
+	const index = useMemo(() => {
+		const styles = new Set<string>()
+		const allColors = new Set<string>()
+		const allBatches = new Set<string>()
+		const allSizes = new Set<string>()
+		const styleToColors = new Map<string, Set<string>>()
+		const colorToBatches = new Map<string, Set<string>>()
+		const batchToSizes = new Map<string, Set<string>>()
+
+		if (!Array.isArray(data))
+			return { styles, allColors, allBatches, allSizes, styleToColors, colorToBatches, batchToSizes }
+
+		for (const item of data) {
+			const style = item.factory_shoes_style
+			styles.add(style)
+
+			if (!styleToColors.has(style)) styleToColors.set(style, new Set())
+			const colorsForStyle = styleToColors.get(style)!
+
+			for (const clw of item.colorways ?? []) {
+				const color = clw.color_sn
+				allColors.add(color)
+				colorsForStyle.add(color)
+
+				const scKey = `${style}|${color}`
+				if (!colorToBatches.has(scKey)) colorToBatches.set(scKey, new Set())
+				const batchesForColor = colorToBatches.get(scKey)!
+
+				for (const batch of clw.batches ?? []) {
+					const mo = batch.mo_no
+					allBatches.add(mo)
+					batchesForColor.add(mo)
+
+					const scmKey = `${style}|${color}|${mo}`
+					if (!batchToSizes.has(scmKey)) batchToSizes.set(scmKey, new Set())
+					const sizesForBatch = batchToSizes.get(scmKey)!
+
+					for (const size of batch.sizes ?? []) {
+						allSizes.add(size)
+						sizesForBatch.add(size)
+					}
+				}
+			}
+		}
+
+		return { styles, allColors, allBatches, allSizes, styleToColors, colorToBatches, batchToSizes }
 	}, [data])
 
+	const compareSizes = (a: string, b: string) =>
+		Number.parseFloat(a.replace(/^0/, '')) - Number.parseFloat(b.replace(/^0/, ''))
+
+	const shoesStyleOptions = useMemo(
+		() =>
+			Array.from(index.styles)
+				.sort()
+				.map((v) => ({ shoes_style_factory_code: v })),
+		[index]
+	)
+
 	const colorOptions = useMemo(() => {
-		if (Array.isArray(data) && currentShoesStyle) {
-			const feature = data.find((item) => item.factory_shoes_style === currentShoesStyle)
-			const result = feature?.colorways?.map((color) => ({ color_sn: color?.color_sn })) ?? []
-			return sortBy(result, (item) => item?.color_sn)
-		} else {
-			return []
-		}
-	}, [data, currentShoesStyle])
+		const set = currentShoesStyle
+			? (index.styleToColors.get(currentShoesStyle) ?? new Set<string>())
+			: index.allColors
+		return Array.from(set)
+			.sort()
+			.map((v) => ({ color_sn: v }))
+	}, [index, currentShoesStyle])
 
 	const commandNumberOptions = useMemo(() => {
-		if (Array.isArray(data) && currentShoesStyle) {
-			const feature = data.find((item) => item.factory_shoes_style === currentShoesStyle)
-			const colorways = feature.colorways?.find((item) => item.color_sn === currentColor)
-			const result = colorways?.batches?.map((item) => ({ mo_no: item?.mo_no })) ?? []
-			return sortBy(result, (item) => item?.mo_no)
+		const result = new Set<string>()
+
+		if (currentShoesStyle && currentColor) {
+			const batches = index.colorToBatches.get(`${currentShoesStyle}|${currentColor}`)
+			if (batches) batches.forEach((v) => result.add(v))
+		} else if (currentShoesStyle) {
+			const colors = index.styleToColors.get(currentShoesStyle) ?? new Set<string>()
+			for (const color of colors) {
+				const batches = index.colorToBatches.get(`${currentShoesStyle}|${color}`)
+				if (batches) batches.forEach((v) => result.add(v))
+			}
+		} else if (currentColor) {
+			for (const [key, batches] of index.colorToBatches) {
+				if (key.endsWith(`|${currentColor}`)) batches.forEach((v) => result.add(v))
+			}
 		} else {
-			return []
+			return Array.from(index.allBatches)
+				.sort()
+				.map((v) => ({ mo_no: v }))
 		}
-	}, [data, currentShoesStyle, currentColor])
+
+		return Array.from(result)
+			.sort()
+			.map((v) => ({ mo_no: v }))
+	}, [index, currentShoesStyle, currentColor])
 
 	const sizeOptions = useMemo(() => {
-		if (Array.isArray(data) && currentShoesStyle && currentColor && currentCommandNumber) {
-			const feature = data.find((item) => item.factory_shoes_style === currentShoesStyle)
-			const colorways = feature.colorways?.find((item) => item.color_sn === currentColor)
-			if (!colorways) return []
-			const batch = colorways?.batches?.find((item) => item.mo_no === currentCommandNumber)
-			if (!batch) return []
-			const result = batch?.sizes?.map((size) => ({ size_numcode: size })) ?? []
-			return sortBy(result, (item) => item.size_numcode)
-		} else {
-			return []
-		}
-	}, [data, currentShoesStyle, currentColor, currentCommandNumber])
+		const result = new Set<string>()
 
-	useDeepCompareEffect(() => {
-		if (!colorOptions.some((item) => item.color_sn === currentColor)) {
-			form.setValue('color_sn', '')
+		if (currentShoesStyle || currentColor || currentCommandNumber) {
+			const styles = currentShoesStyle ? [currentShoesStyle] : Array.from(index.styles)
+			for (const style of styles) {
+				const colors = currentColor ? [currentColor] : Array.from(index.styleToColors.get(style) ?? [])
+				for (const color of colors) {
+					const batches = currentCommandNumber
+						? [currentCommandNumber]
+						: Array.from(index.colorToBatches.get(`${style}|${color}`) ?? [])
+					for (const mo of batches) {
+						const sizes = index.batchToSizes.get(`${style}|${color}|${mo}`)
+						if (sizes) sizes.forEach((v) => result.add(v))
+					}
+				}
+			}
+		} else {
+			return Array.from(index.allSizes)
+				.sort(compareSizes)
+				.map((v) => ({ size_numcode: v }))
 		}
-		if (!commandNumberOptions.some((item) => item.mo_no === currentCommandNumber)) {
-			form.setValue('mo_no', '')
-		}
-		if (!sizeOptions.some((item) => item.size_numcode === currentSize)) {
-			form.setValue('size_numcode', '')
-		}
-	}, [colorOptions, commandNumberOptions, sizeOptions])
+
+		return Array.from(result)
+			.sort(compareSizes)
+			.map((v) => ({ size_numcode: v }))
+	}, [index, currentShoesStyle, currentColor, currentCommandNumber])
 
 	useDebounceEffect(
 		() => {
