@@ -36,6 +36,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, ind
 						<TableCell
 							key={cell.id}
 							data-role='data-grid-cell'
+							className='has-[input]:p-0'
 							align={cell.column.columnDef.meta?.align}
 							style={{
 								width: `var(--column-${cell.column.id}-size)`,
