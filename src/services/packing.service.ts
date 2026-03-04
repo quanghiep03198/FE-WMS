@@ -11,4 +11,8 @@ export class PackingService {
 			responseType: 'blob'
 		})
 	}
+
+	static async bulkUpdatePacking(payload: { po: string; size: string; actual_weight_in: number }) {
+		return await axiosInstance.patch('/packing/manifest', payload)
+	}
 }

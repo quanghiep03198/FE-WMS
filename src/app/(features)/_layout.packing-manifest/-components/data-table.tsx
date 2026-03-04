@@ -1,11 +1,11 @@
 import { factories } from '@/common/constants/constants'
 import { IPackingManifest } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Button, DataTable, Icon } from '@/components/ui'
+import { Badge, Button, DataTable, Icon, Input } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { PackingService } from '@/services/packing.service'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,44 @@ const ReportMasterTable: React.FC = () => {
 		queryKey: ['PACKING_MANIFEST'],
 		queryFn: () => PackingService.getPackingManifest(),
 		select: (response) => response.metadata
+	})
+
+	const queryClient = useQueryClient()
+
+	const { mutateAsync, isPending, isError } = useMutation({
+		mutationFn: (payload: { po: string; size: string; actual_weight_in: number }) =>
+			PackingService.bulkUpdatePacking(payload),
+		onMutate: async (variables) => {
+			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+			await queryClient.cancelQueries({ queryKey: ['PACKING_MANIFEST'] })
+
+			// Snapshot the previous value
+			const previousData = queryClient.getQueryData<ResponseBody<IPackingManifest[]>>(['PACKING_MANIFEST'])
+
+			// Optimistically update to the new value
+			queryClient.setQueryData<ResponseBody<IPackingManifest[]>>(['PACKING_MANIFEST'], (oldData) => {
+				if (!oldData) return oldData
+				return {
+					...oldData,
+					metadata: oldData.metadata.map((item) => {
+						if (item.po === variables.po && item.original_size_data === variables.size)
+							return { ...item, ...variables }
+						return item
+					})
+				}
+			})
+
+			// Return a context object with the snapshotted value
+			return { previousData }
+		},
+		onError: (_error, _variables, context) => {
+			if (context && context.previousData) {
+				queryClient.setQueryData<ResponseBody<IPackingManifest[]>>(['PACKING_MANIFEST'], context.previousData)
+			}
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ predicate: ({ queryKey }) => queryKey.includes('PACKING_MANIFEST') })
+		}
 	})
 
 	const columnHelper = createColumnHelper<IPackingManifest>()
@@ -125,9 +163,26 @@ const ReportMasterTable: React.FC = () => {
 				filterFn: 'inNumberRange',
 				size: 200,
 				meta: { align: 'right', filterVariant: 'range', cellDataType: 'number' },
-				cell: ({ getValue }) => {
+				cell: ({ getValue, row }) => {
 					const value = getValue()
-					return typeof value === 'number' ? formatIntlNumber(getValue()) : t('ns_common:titles.unknown')
+					return (
+						<Input
+							aria-busy={isPending}
+							aria-invalid={isError}
+							className='aria-invalid:border-destructive block rounded-none border-none bg-inherit text-right shadow-none aria-busy:opacity-50'
+							placeholder={t('ns_common:titles.unknown')}
+							defaultValue={value}
+							type='number'
+							onBlur={(e) => {
+								if (e.currentTarget.value && parseFloat(e.target.value) !== value)
+									mutateAsync({
+										po: row.original.po,
+										size: row.original.original_size_data,
+										actual_weight_in: parseFloat(e.currentTarget.value)
+									})
+							}}
+						/>
+					)
 				}
 			}),
 			columnHelper.accessor('target_box_qty', {
