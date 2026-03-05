@@ -138,14 +138,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
-													className='p-0 aria-[invalid=true]:border aria-[invalid=true]:border-destructive'>
+													className='p-0 aria-[invalid=true]:bg-destructive'>
 													<InputFieldControl
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
-															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus:outline-none',
+															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none aria-[invalid=true]:bg-destructive/20 focus:outline-none',
 															form.watch(`data.${index}.mn_ist_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
@@ -168,14 +168,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
-													className='p-0 aria-[invalid=true]:border aria-[invalid=true]:border-destructive'>
+													className='p-0 aria-[invalid=true]:bg-destructive/20'>
 													<InputFieldControl
 														name={`data.${index}.mn_ost_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
-															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none focus:outline-none',
+															'h-auto w-full whitespace-nowrap rounded-none border-none p-0 shadow-none aria-[invalid=true]:bg-destructive/20 focus:outline-none',
 															form.watch(`data.${index}.mn_ost_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
