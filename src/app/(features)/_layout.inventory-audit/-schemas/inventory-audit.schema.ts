@@ -4,8 +4,8 @@ export const reportDataSchema = object({
 	data: array(
 		object({
 			size_numcode: string(),
-			mn_ist_qty: number().positive({ error: 'ns_validation:invalid_value' }),
-			mn_ost_qty: number().positive({ error: 'ns_validation:invalid_value' })
+			mn_ist_qty: number().nonnegative({ error: 'ns_validation:invalid_value' }),
+			mn_ost_qty: number().nonnegative({ error: 'ns_validation:invalid_value' })
 		})
 	)
 })
