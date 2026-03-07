@@ -56,7 +56,7 @@ const ScannedEpcList: React.FC = () => {
 	const [open, setOpen] = useState(true)
 
 	useEffect(() => {
-		if (outletWrapperSize?.width < 1200) setOpen(true)
+		if (outletWrapperSize?.width > 900 && outletWrapperSize?.width < 1200) setOpen(true)
 	}, [outletWrapperSize])
 
 	const hasMounted = useRef(false)
@@ -223,7 +223,7 @@ const ScannedEpcList: React.FC = () => {
 	return (
 		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
-			<Div className='grid w-full auto-cols-fr grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
+			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
