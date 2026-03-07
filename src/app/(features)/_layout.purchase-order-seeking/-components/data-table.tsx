@@ -144,18 +144,23 @@ const DataSection: React.FC = () => {
 						))}
 					</TableRow>
 					<TableRow>
-						{columns.map((column) => (
-							<TableHead
-								key={column.accessorKey}
-								className='font-normal text-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
-								{...column.meta}>
-								<span>
-									{typeof column.cell === 'function'
-										? column.cell(data[column.accessorKey])
-										: data[0]?.[column.accessorKey]?.toString?.()}
-								</span>
-							</TableHead>
-						))}
+						{columns.map((column) => {
+							const [rowData] = data
+							const cellValue =
+								typeof column.cell === 'function'
+									? column.cell(rowData[column.accessorKey])
+									: rowData?.[column.accessorKey]
+							return (
+								<TableHead
+									key={column.accessorKey}
+									className='font-normal text-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+									{...column.meta}>
+									<span data-empty={!cellValue} className='data-[empty=true]:text-muted-foreground'>
+										{cellValue ?? t('ns_common:titles.unknown')}
+									</span>
+								</TableHead>
+							)
+						})}
 					</TableRow>
 					<TableRow className='[&>*]:!bg-table-row-active [&>*]:capitalize'>
 						<TableHead
