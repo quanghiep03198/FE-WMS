@@ -82,7 +82,7 @@ function Layout() {
 }
 
 const LayoutWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
-	relative h-full flex-1 overflow-y-scroll @container 
+	relative h-full flex-1 overflow-y-scroll @container/layout-wrapper
 	[counter-reset:h_var(--screen-height)_w_var(--screen-width)]
 	[--scrollbar-thickness:10px] 
 	[--outlet-padding:12px] 
