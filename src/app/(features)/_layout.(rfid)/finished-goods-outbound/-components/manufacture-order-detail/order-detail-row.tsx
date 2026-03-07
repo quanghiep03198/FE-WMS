@@ -58,7 +58,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 						))}
 				</Div>
 			</TableCell>
-			<TableCell style={{ height: virtualRow.size }} align='right'>
+			<TableCell style={{ height: virtualRow.size }} align='right' className='font-medium'>
 				{formatIntlNumber(aggregateSizeCount)}
 			</TableCell>
 			<TableCell style={{ height: virtualRow.size }} align='center'>

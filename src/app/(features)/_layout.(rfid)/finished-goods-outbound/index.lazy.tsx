@@ -34,24 +34,24 @@ function Page() {
 					{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
 					{/* <PageNavigationBlocker /> */}
 					<PageProvider>
-						<Div className='static gap-4 py-[--outlet-padding] xxl:grid xxl:grid-cols-12 xxl:p-0'>
-							<Div className='h-full @container xxl:col-span-4'>
-								<Div className='flex flex-col items-stretch gap-6 @4xl:grid @4xl:grid-flow-col @4xl:auto-rows-auto @4xl:grid-cols-2 xxl:gap-4'>
-									<Div className='order-first col-span-full @4xl:col-span-1 xxl:hidden'>
+						<Div className='static gap-4 py-[--outlet-padding] @[1500px]:grid @[1500px]:grid-cols-12 @[1500px]:p-0'>
+							<Div className='h-full @container/playground @[1500px]:col-span-4'>
+								<Div className='flex flex-col items-stretch gap-4 @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @[1500px]/layout-wrapper:gap-0 @[1500px]/playground:gap-6'>
+									<Div className='order-first col-span-full @4xl/playground:col-span-1 @[1500px]/layout-wrapper:mb-0 @[1500px]:hidden'>
 										<ScannedEpcCounter />
 									</Div>
-									<Div className='col-span-full flex-1 @4xl:sticky @4xl:top-[var(--header-height)] @4xl:order-last @4xl:col-span-1 @4xl:col-start-2 @4xl:row-span-6 xxl:order-first'>
-										<Div className='hidden xxl:block'>
+									<Div className='col-span-full flex-1 @4xl/playground:sticky @4xl/playground:top-[var(--header-height)] @4xl/playground:order-last @4xl/playground:col-span-1 @4xl/playground:col-start-2 @4xl/playground:row-span-6 @[1500px]/layout-wrapper:mb-6 @[1500px]:order-first'>
+										<Div className='hidden @[1500px]:block'>
 											<ScannedEpcCounter />
 										</Div>
 										<ScannedEpcList />
 									</Div>
-									<Div className='order-last col-span-full @4xl:order-2 @4xl:col-span-1'>
+									<Div className='order-last col-span-full @4xl/playground:order-2 @4xl/playground:col-span-1'>
 										<OutboundForm />
 									</Div>
 								</Div>
 							</Div>
-							<Div className='hidden xxl:col-span-8 xxl:block'>
+							<Div className='hidden @[1500px]:col-span-8 @[1500px]:block'>
 								<OrderSizeDetailTable />
 							</Div>
 						</Div>

@@ -1,3 +1,5 @@
+'use no memo'
+
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
@@ -5,6 +7,7 @@ import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
+import useQuerySelector from '@/common/hooks/use-query-selector'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -20,13 +23,14 @@ import {
 	useDeepCompareEffect,
 	useMemoizedFn,
 	usePrevious,
+	useSize,
 	useUnmount,
 	useUpdate,
 	useUpdateEffect
 } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash-es'
-import { Fragment, useLayoutEffect, useRef, useState, useTransition } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
@@ -46,7 +50,15 @@ const ScannedEpcList: React.FC = () => {
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
+	const outletWrapper = useQuerySelector('#outlet-wrapper')
+	const outletWrapperSize = useSize(outletWrapper)
+
 	const [open, setOpen] = useState(true)
+
+	useEffect(() => {
+		if (outletWrapperSize?.width < 1200) setOpen(true)
+	}, [outletWrapperSize])
+
 	const hasMounted = useRef(false)
 
 	useLayoutEffect(() => {
@@ -209,29 +221,65 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] xxl:rounded-t-none xxl:border-t-0'>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
-			<Div className='flex w-full items-center justify-between gap-x-1 border-b p-1.5 *:text-sm xxl:justify-around'>
+			<Div className='grid w-full auto-cols-fr grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
-				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
-				<Button variant='ghost' size='sm' className='ml-auto xxl:ml-0' onClick={() => fetchServerEvent()}>
-					<Icon name='RefreshCcw' /> {t('ns_common:actions.reload')}
+				<Button
+					variant='ghost'
+					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+					onClick={() => fetchServerEvent()}>
+					<Icon name='RefreshCcw' />
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+						{t('ns_common:actions.reload')}
+					</Typography>
 				</Button>
-				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
 				<Label
 					role='button'
-					className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+					className={buttonVariants({
+						variant: 'ghost',
+						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+					})}
 					htmlFor='data-restoration-sheet-trigger'>
-					<Icon name='Archive' size={18} /> {t('ns_common:actions.archived')}
-				</Label>
-				<Separator orientation='vertical' className='hidden h-4 w-0.5 xxl:block' />
-				<Label
-					role='button'
-					className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'hidden xxl:inline-flex' })}
-					htmlFor='epc-data-upload-dialog-trigger'>
-					<Icon name='Upload' size={18} /> {t('ns_common:actions.upload')}
+					<Icon name='Archive' size={18} />
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+						{t('ns_common:actions.archived')}
+					</Typography>
 				</Label>
 				<DataRestorationSheet dataType={RFIDDataType.OUTBOUND} />
+				<Label
+					role='button'
+					className={buttonVariants({
+						variant: 'ghost',
+						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+					})}
+					htmlFor='epc-data-upload-dialog-trigger'>
+					<Icon name='Upload' size={18} />
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+						{t('ns_common:actions.upload')}
+					</Typography>
+				</Label>
+				<Label
+					role='button'
+					className={buttonVariants({
+						variant: 'ghost',
+						className:
+							'flex h-full w-full flex-col flex-wrap font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
+					})}
+					htmlFor='order-detail-dialog-trigger'>
+					<Icon name='ArrowUpRight' size={18} />
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+						{t('ns_common:actions.detail')}
+					</Typography>
+				</Label>
 			</Div>
 			{/* Datalist body */}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
@@ -247,7 +295,7 @@ const ScannedEpcList: React.FC = () => {
 						return (
 							<Div
 								key={virtualItem.index}
-								className='absolute inset-x-0 top-0 flex h-10 w-full justify-between whitespace-nowrap border-b px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
+								className='absolute inset-x-0 top-0 flex h-10 w-full justify-between whitespace-nowrap px-4 py-2 uppercase transition-all duration-75 last:border-none hover:bg-secondary'
 								style={{
 									height: virtualItem.size,
 									transform: `translateY(${virtualItem.start}px)`
@@ -292,22 +340,25 @@ const ScannedEpcList: React.FC = () => {
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
-						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
+						<Typography> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
 
 			{open && <Separator aria-hidden={!open} className='aria-hidden:hidden' />}
 			{/* Datalist footer */}
-			<Div className='grid basis-auto grid-cols-2 gap-1.5 bg-background p-1.5'>
-				<Div className='hidden @2xl:block'>
+			<Div className='basis-auto bg-background p-1.5'>
+				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @[1500px]/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
-				<Div className='col-span-full @2xl:col-span-1 xxl:[&>button[aria-haspopup=dialog]]:hidden'>
-					<Button variant='secondary' className='hidden w-full xxl:flex' onClick={() => setOpen(!open)}>
-						<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
-						{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
-					</Button>
+				<Button
+					variant='secondary'
+					className='hidden w-full @[900px]/layout-wrapper:!hidden @[1500px]/layout-wrapper:!flex md:flex lg:hidden'
+					onClick={() => setOpen(!open)}>
+					<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
+					{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
+				</Button>
+				<Div className='[&>button[aria-haspopup=dialog]]:hidden'>
 					<UploadDataFileDialog station='WH103' maxFiles={500} />
 				</Div>
 			</Div>

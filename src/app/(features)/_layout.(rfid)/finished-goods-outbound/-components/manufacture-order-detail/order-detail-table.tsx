@@ -84,9 +84,9 @@ const OrderSizeDetailTable: React.FC = () => {
 				className='h-[calc(var(--outlet-wrapper-height,100vh)-var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20 @container'
 				style={
 					{
-						'--sticky-left-col-width': '168px',
-						'--sticky-right-col-width': '112px',
-						'--row-action-col-width': '56px'
+						'--sticky-left-col-width': '140px',
+						'--sticky-right-col-width': '100px',
+						'--row-action-col-width': '50px'
 					} as React.CSSProperties
 				}>
 				<Table
