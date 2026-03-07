@@ -11,8 +11,8 @@ const ConnectionInsight: React.FC = () => {
 			size='md'
 			state={scanningState === 'success' ? 'active' : scanningState === 'error' ? 'down' : 'fixing'}
 			label={scanningState === 'success' ? t('ns_common:status.running') : t('ns_common:status.idle')}
-			className='justify-center px-3 @sm/toolbar:h-10'
-			labelClassName='font-medium @sm/toolbar:block hidden'
+			className='flex-col justify-center gap-y-0.5 px-3 @sm/toolbar:h-10 @lg/toolbar:flex-row'
+			labelClassName='@sm/toolbar:block hidden !text-muted-foreground @lg/toolbar:text-sm text-xs'
 		/>
 	)
 }

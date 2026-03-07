@@ -34,9 +34,9 @@ function Page() {
 					{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
 					{/* <PageNavigationBlocker /> */}
 					<PageProvider>
-						<Div className='static gap-4 py-[--outlet-padding] @[1500px]:grid @[1500px]:grid-cols-12 @[1500px]:p-0'>
+						<Div className='static gap-4 @[1500px]:grid @[1500px]:grid-cols-12 @[1500px]:p-0'>
 							<Div className='h-full @container/playground @[1500px]:col-span-4'>
-								<Div className='flex flex-col items-stretch gap-4 @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @[1500px]/layout-wrapper:gap-0 @[1500px]/playground:gap-6'>
+								<Div className='flex flex-col items-stretch @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @4xl/playground:gap-4 @[1500px]/playground:gap-6'>
 									<Div className='order-first col-span-full @4xl/playground:col-span-1 @[1500px]/layout-wrapper:mb-0 @[1500px]:hidden'>
 										<ScannedEpcCounter />
 									</Div>

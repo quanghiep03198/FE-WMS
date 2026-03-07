@@ -12,7 +12,7 @@ import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import { Json } from '@/common/utils/json'
-import { Button, buttonVariants, Div, Icon, Label, Separator, Typography } from '@/components/ui'
+import { Button, buttonVariants, Div, Icon, Label, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
@@ -30,7 +30,7 @@ import {
 } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { isEqualWith, uniqBy } from 'lodash-es'
-import { Fragment, useEffect, useLayoutEffect, useRef, useState, useTransition } from 'react'
+import { Fragment, useLayoutEffect, useRef, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
@@ -46,20 +46,18 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 
 const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
-	const abortControllerRef = useRef<AbortController | null>(null)
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
+	const [open, setOpen] = useState(true)
 	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	const outletWrapper = useQuerySelector('#outlet-wrapper')
 	const outletWrapperSize = useSize(outletWrapper)
+	const abortControllerRef = useRef<AbortController | null>(null)
+	const hasMounted = useRef(false)
 
-	const [open, setOpen] = useState(true)
-
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (outletWrapperSize?.width > 900 && outletWrapperSize?.width < 1200) setOpen(true)
 	}, [outletWrapperSize])
-
-	const hasMounted = useRef(false)
 
 	useLayoutEffect(() => {
 		hasMounted.current = true
@@ -221,18 +219,16 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
+		<Div className='relative flex flex-col items-stretch justify-between gap-0 overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
 			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
-					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+					className='flex h-full w-full flex-col flex-wrap gap-y-0.5 py-2 font-normal @lg/toolbar:flex-row'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
 						{t('ns_common:actions.reload')}
 					</Typography>
 				</Button>
@@ -240,13 +236,11 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+						className: 'flex h-full w-full flex-col gap-y-0.5 py-1 font-normal @lg/toolbar:flex-row'
 					})}
 					htmlFor='data-restoration-sheet-trigger'>
 					<Icon name='Archive' size={18} />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
 						{t('ns_common:actions.archived')}
 					</Typography>
 				</Label>
@@ -255,13 +249,11 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+						className: 'flex h-full w-full flex-col gap-y-0.5 py-1 font-normal @lg/toolbar:flex-row'
 					})}
 					htmlFor='epc-data-upload-dialog-trigger'>
 					<Icon name='Upload' size={18} />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
 						{t('ns_common:actions.upload')}
 					</Typography>
 				</Label>
@@ -270,13 +262,11 @@ const ScannedEpcList: React.FC = () => {
 					className={buttonVariants({
 						variant: 'ghost',
 						className:
-							'flex h-full w-full flex-col flex-wrap font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
+							'flex h-full w-full flex-col flex-wrap gap-y-0.5 font-normal @lg/toolbar:flex-row @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
 					})}
 					htmlFor='order-detail-dialog-trigger'>
 					<Icon name='ArrowUpRight' size={18} />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
 						{t('ns_common:actions.detail')}
 					</Typography>
 				</Label>
@@ -285,10 +275,12 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
+					aria-expanded={open}
+					data-mounted={hasMounted.current}
 					className={cn(
-						'linear relative z-10 divide-y bg-background contain-size',
-						hasMounted.current && 'duration-100 will-change-transform',
-						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
+						'linear relative z-10 h-0 divide-y border-b bg-background p-0 will-change-transform contain-size',
+						'aria-expanded:h-[30vh] aria-expanded:p-2 @4xl:aria-expanded:h-[var(--outlet-wrapper-height)]',
+						'data-[mounted=true]:transition-all data-[mounted=true]:duration-100'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
@@ -333,27 +325,27 @@ const ScannedEpcList: React.FC = () => {
 				</ScrollShadow>
 			) : (
 				<Div
+					aria-expanded={open}
+					data-mounted={hasMounted.current}
 					className={cn(
-						'linear grid place-items-center',
-						hasMounted.current && 'transition-height duration-200',
-						open ? 'h-[33.33vh] @4xl:h-[calc(var(--outlet-wrapper-height)-8rem)]' : 'h-0'
+						'linear grid h-0 place-items-center',
+						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
+						'aria-expanded:h-[33.33vh] @4xl:aria-expanded:h-[--outlet-wrapper-height]'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
-						<Typography> {t('ns_common:table.no_data')}</Typography>
+						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
-
-			{open && <Separator aria-hidden={!open} className='aria-hidden:hidden' />}
 			{/* Datalist footer */}
-			<Div className='basis-auto bg-background p-1.5'>
+			<Div className='basis-auto border-t bg-background p-1.5'>
 				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @[1500px]/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
 				<Button
 					variant='secondary'
-					className='hidden w-full @[900px]/layout-wrapper:!hidden @[1500px]/layout-wrapper:!flex md:flex lg:hidden'
+					className='hidden w-full @xs/playground:flex @4xl/playground:!hidden @[1500px]/playground:!flex lg:hidden'
 					onClick={() => setOpen(!open)}>
 					<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
 					{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
