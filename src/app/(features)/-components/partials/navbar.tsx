@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
 		<Div
 			as='header'
 			role='menubar'
-			className='sticky top-0 z-20 flex h-[var(--header-height)] items-center border-b bg-background px-6 md:top-auto md:shadow-sm lg:shadow-sm xxl:border-0 xxl:py-2 xxl:shadow-none'>
+			className='sticky top-0 z-20 flex h-[var(--header-height)] items-center border-b bg-background px-6 md:shadow-sm lg:shadow-sm xxl:border-0 xxl:py-2 xxl:shadow-none'>
 			<Div
 				as='nav'
 				role='menu'
