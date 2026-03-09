@@ -36,8 +36,8 @@ export const GlobalFilterPopover: React.FC<GlobalFilterPopoverProps> = ({
 						event$.emit(pick(table.getState(), ['rowSelection']))
 						onGlobalFilterChange(String(value))
 					}}
-					className='font-lg border p-2 pl-8'
-					placeholder={t('ns_common:form_placeholder.search')}
+					className='font-lg border p-2 pl-8 placeholder:text-sm'
+					placeholder={`${t('ns_common:actions.search')} ...`}
 					type='search'
 				/>
 			</PopoverContent>
