@@ -221,16 +221,14 @@ const ScannedEpcList: React.FC = () => {
 	return (
 		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
-			<Div className='grid w-full auto-cols-fr grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
+			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
-					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
 						{t('ns_common:actions.reload')}
 					</Typography>
 				</Button>
@@ -238,13 +236,12 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+						className:
+							'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium'
 					})}
 					htmlFor='data-restoration-sheet-trigger'>
 					<Icon name='Archive' size={18} />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
 						{t('ns_common:actions.archived')}
 					</Typography>
 				</Label>
@@ -253,13 +250,12 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
+						className:
+							'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium'
 					})}
 					htmlFor='epc-data-upload-dialog-trigger'>
 					<Icon name='Upload' size={18} />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
 						{t('ns_common:actions.upload')}
 					</Typography>
 				</Label>
@@ -268,13 +264,11 @@ const ScannedEpcList: React.FC = () => {
 					className={buttonVariants({
 						variant: 'ghost',
 						className:
-							'flex h-full w-full flex-col flex-wrap font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
+							'flex h-full w-full flex-col flex-wrap font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
 					})}
 					htmlFor='order-detail-dialog-trigger'>
 					<Icon name='ArrowUpRight' size={18} />
-					<Typography
-						variant='small'
-						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
+					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
 						{t('ns_common:actions.detail')}
 					</Typography>
 				</Label>
@@ -283,10 +277,12 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
+					aria-expanded={open}
+					data-mounted={hasMounted.current}
 					className={cn(
-						'linear relative z-10 divide-y bg-background contain-size',
-						hasMounted.current && 'duration-100 will-change-transform',
-						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
+						'linear grid h-0 place-items-center',
+						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
+						'aria-expanded:h-[30vh] @4xl:aria-expanded:h-[--outlet-wrapper-height]'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
@@ -336,7 +332,7 @@ const ScannedEpcList: React.FC = () => {
 					className={cn(
 						'linear grid h-0 place-items-center',
 						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
-						'aria-expanded:h-[33.33vh] @4xl:aria-expanded:h-[--outlet-wrapper-height]'
+						'aria-expanded:h-[30vh] @4xl:aria-expanded:h-[--outlet-wrapper-height]'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
