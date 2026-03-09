@@ -94,7 +94,7 @@ const ConnectionInsight: React.FC = () => {
 	)
 }
 
-const StatusItem = tw.div`grid grid-cols-[9rem_auto] gap-x-20 sm:gap-x-6 xl:gap-x-4`
+const StatusItem = tw.div`grid grid-cols-[2fr_3fr] gap-x-6`
 const StatusItemDetail = tw.div`inline-grid grid-cols-[18px_auto] items-center gap-x-3 text-sm`
 
 export default ConnectionInsight

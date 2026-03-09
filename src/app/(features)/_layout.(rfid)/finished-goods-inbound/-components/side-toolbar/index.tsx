@@ -14,18 +14,18 @@ const ScannerSettings: React.FC = () => {
 				className={cn(
 					'flex flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none xl:max-h-[calc(var(--outlet-wrapper-height)-var(--outlet-padding)-4px)]',
 					'sm:max-h-[60vh] sm:px-0 md:max-h-[60vh] xxl:p-6',
-					'@5xl:grid @5xl:grid-cols-12 @5xl:grid-rows-3 @5xl:gap-x-10'
+					'@4xl:grid @4xl:grid-cols-12 @4xl:grid-rows-3 @4xl:gap-x-10'
 				)}>
-				<Div className='w-full @5xl:col-span-5 @5xl:col-start-1 @5xl:row-span-1'>
+				<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
 					<ConnectionInsight />
 				</Div>
-				<Div className='w-full @5xl:col-span-5 @5xl:col-start-1 @5xl:row-span-1'>
+				<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
 					<FullscreenToggleBox />
 				</Div>
-				<Div className='w-full @5xl:col-span-5 @5xl:col-start-1 @5xl:row-span-1'>
+				<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
 					<DataRestoration />
 				</Div>
-				<Div className='w-full @5xl:col-span-7 @5xl:col-start-6 @5xl:row-span-full'>
+				<Div className='w-full @4xl:col-span-7 @4xl:col-start-6 @4xl:row-span-full'>
 					<SyncDataTrigger />
 				</Div>
 			</ScrollShadow>
