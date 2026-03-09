@@ -2,11 +2,10 @@
 
 import UploadDataFileDialog from '@/app/(features)/-components/shared/upload-dialog'
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
-import { PresetBreakPoints, RequestHeaders, RequestMethod } from '@/common/constants/enums'
+import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import useQuerySelector from '@/common/hooks/use-query-selector'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
@@ -46,17 +45,17 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 
 const ScannedEpcList: React.FC = () => {
 	const { t } = useTranslation()
+	const abortControllerRef = useRef<AbortController | null>(null)
 	const [isPending, startTransition] = useTransition()
 	const { user } = useAuth()
-	const [open, setOpen] = useState(true)
-	const isExtraLargeScreen = useMediaQuery(PresetBreakPoints.ULTIMATE_LARGE)
 	const outletWrapper = useQuerySelector('#outlet-wrapper')
 	const outletWrapperSize = useSize(outletWrapper)
-	const abortControllerRef = useRef<AbortController | null>(null)
-	const hasMounted = useRef(false)
 
+	const [open, setOpen] = useState(true)
+
+	const hasMounted = useRef(false)
 	useLayoutEffect(() => {
-		if (outletWrapperSize?.width > 900 && outletWrapperSize?.width < 1200) setOpen(true)
+		if (outletWrapperSize?.width > 920 && outletWrapperSize?.width < 1500) setOpen(true)
 	}, [outletWrapperSize])
 
 	useLayoutEffect(() => {
@@ -196,11 +195,12 @@ const ScannedEpcList: React.FC = () => {
 
 	useEffectOnce(() => {
 		fetchServerEvent()
+		return () => {
+			if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
+				abortControllerRef.current?.abort()
+			}
+		}
 	})
-
-	useLayoutEffect(() => {
-		if (!isExtraLargeScreen) setOpen(true)
-	}, [isExtraLargeScreen])
 
 	const scrollToFn = useScrollToFn(containerRef)
 	const estimateSize = useMemoizedFn(() => VIRTUAL_ITEM_SIZE)
@@ -219,16 +219,18 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between gap-0 overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
-			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
+			<Div className='grid w-full auto-cols-fr grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
-					className='flex h-full w-full flex-col flex-wrap gap-y-0.5 py-2 font-normal @lg/toolbar:flex-row'
+					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
-					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
 						{t('ns_common:actions.reload')}
 					</Typography>
 				</Button>
@@ -236,11 +238,13 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col gap-y-0.5 py-1 font-normal @lg/toolbar:flex-row'
+						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
 					})}
 					htmlFor='data-restoration-sheet-trigger'>
 					<Icon name='Archive' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
 						{t('ns_common:actions.archived')}
 					</Typography>
 				</Label>
@@ -249,11 +253,13 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col gap-y-0.5 py-1 font-normal @lg/toolbar:flex-row'
+						className: 'flex h-full w-full flex-col py-1 font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium'
 					})}
 					htmlFor='epc-data-upload-dialog-trigger'>
 					<Icon name='Upload' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
 						{t('ns_common:actions.upload')}
 					</Typography>
 				</Label>
@@ -262,11 +268,13 @@ const ScannedEpcList: React.FC = () => {
 					className={buttonVariants({
 						variant: 'ghost',
 						className:
-							'flex h-full w-full flex-col flex-wrap gap-y-0.5 font-normal @lg/toolbar:flex-row @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
+							'flex h-full w-full flex-col flex-wrap font-normal @lg/toolbar:flex-row @lg/toolbar:font-medium @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
 					})}
 					htmlFor='order-detail-dialog-trigger'>
 					<Icon name='ArrowUpRight' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @lg/toolbar:text-sm'>
+					<Typography
+						variant='small'
+						className='text-xs text-muted-foreground @lg/toolbar:text-sm @lg/toolbar:text-inherit'>
 						{t('ns_common:actions.detail')}
 					</Typography>
 				</Label>
@@ -275,12 +283,10 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					aria-expanded={open}
-					data-mounted={hasMounted.current}
 					className={cn(
-						'linear relative z-10 h-0 divide-y border-b bg-background p-0 will-change-transform contain-size',
-						'aria-expanded:h-[30vh] aria-expanded:p-2 @4xl:aria-expanded:h-[var(--outlet-wrapper-height)]',
-						'data-[mounted=true]:transition-all data-[mounted=true]:duration-100'
+						'linear relative z-10 divide-y bg-background contain-size',
+						hasMounted.current && 'duration-100 will-change-transform',
+						open ? 'h-[30vh] p-2 @4xl:h-[var(--outlet-wrapper-height)]' : 'h-0 p-0'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
