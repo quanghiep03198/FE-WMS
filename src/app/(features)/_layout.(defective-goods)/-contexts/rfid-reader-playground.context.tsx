@@ -1,15 +1,13 @@
 import { useGetAgentIPv4 } from '@/app/-hooks/use-agent-ipv4'
-import { useLayoutEffectOnce } from '@/common/hooks/use-effect-once'
-import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import env from '@/common/utils/env'
 import { Json } from '@/common/utils/json'
-import { useInterval, useUpdateEffect } from 'ahooks'
+import { useMemoizedFn, useUnmount } from 'ahooks'
 import mqtt from 'mqtt'
-import { createContext, useRef } from 'react'
+import { createContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { create, StoreApi, useStore } from 'zustand'
+import { create, StoreApi } from 'zustand'
 import { ReaderAntenna } from '../-constants'
 import { readerSettingsFormSchema, ReaderSettingsFormValues } from '../-schemas/reader-settings.schema'
 
@@ -52,9 +50,11 @@ export enum PublishedTopics {
 
 const ReaderPlaygroundContext = createContext<StoreApi<ReaderPlaygroundContextStore>>(null)
 
-const FPS = 60 // (fps) Frame per second to refresh the scanned EPC list
-const DURATION = 1000 // (ms) Duration to refresh the scanned EPC list
-const BUFFER_RATE = DURATION / FPS // (ms) Refresh rate to update the scanned EPC list
+const BUFFER_RATE_MS = 1000 / 60 // ~16ms — flush buffer at 60fps
+const PING_INTERVAL_MS = 1000
+const MAX_PING_RETRY = 3
+const MQTT_PORT = 9001
+
 const DEFAULT_PROPS: Pick<ReaderPlaygroundContextStore, 'scannedEpcs' | 'connectionStatus' | 'readerSettings'> = {
 	scannedEpcs: [],
 	connectionStatus: {
@@ -69,106 +69,142 @@ const DEFAULT_PROPS: Pick<ReaderPlaygroundContextStore, 'scannedEpcs' | 'connect
 	}
 }
 
-const mqttSocket = ({ host, port }: { host: string; readonly port: number }): `ws://${string}:${number}` =>
-	`ws://${host}:${port}`
-
-const MAX_RETRY = 3
+const buildMqttUrl = (host: string, port: number): `ws://${string}:${number}` => `ws://${host}:${port}`
 
 export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const { t } = useTranslation()
 	const { data: agent } = useGetAgentIPv4()
-	const clientRef = useRef<mqtt.MqttClient>(null)
-	const dataRef = useRef<Set<string>>(new Set())
-	const pingCountRef = useReactiveRef<number>(0)
 
-	if (!clientRef.current && !!agent) {
-		clientRef.current = mqtt.connect(mqttSocket({ host: agent.ip, port: 9001 }))
-	}
+	// Refs
+	const clientRef = useRef<mqtt.MqttClient | null>(null)
+	const dataBufferRef = useRef<Set<string>>(new Set())
+	const pingCountRef = useRef<number>(0)
+	const pingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+	const bufferIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-	const stopPingInterval = useInterval(
-		() => {
-			if (!clientRef.current) return
-			clientRef.current.publish(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' }))
-			pingCountRef.current++
-		},
-		clientRef.current ? 1000 : undefined,
-		{ immediate: clientRef?.current?.connected && pingCountRef.current > 1 }
-	)
-
-	const store = useRef<StoreApi<ReaderPlaygroundContextStore>>(null)
-	if (!store.current)
-		store.current = create<ReaderPlaygroundContextStore>((set) => ({
+	// Zustand store (created once, never recreated)
+	const storeRef = useRef<StoreApi<ReaderPlaygroundContextStore> | null>(null)
+	if (!storeRef.current) {
+		storeRef.current = create<ReaderPlaygroundContextStore>((set) => ({
 			...DEFAULT_PROPS,
-			setScannedEpcs: (value) => {
-				set((state) => {
-					return { ...state, scannedEpcs: value }
-				})
-			},
+			setScannedEpcs: (value) => set({ scannedEpcs: value }),
 			resetScannedEpcs: () => {
-				set((state) => {
-					state?.publishMessage?.(PublishedTopics.REQUEST_DATA, { action: 'reset' })
-					return { ...state, scannedEpcs: [] }
-				})
+				// Publish reset command then clear local state
+				const client = clientRef.current
+				if (client?.connected) {
+					client.publish(PublishedTopics.REQUEST_DATA, Json.stringify({ action: 'reset' }))
+				}
+				set({ scannedEpcs: [] })
 			},
-			setConnectionStatus: (value) => {
-				set((state) => {
-					return { ...state, connectionStatus: { ...state.connectionStatus, ...value } }
-				})
-			},
-			setReaderSettings: (value) => {
-				set((state) => {
-					return { ...state, readerSettings: value }
-				})
-			},
-			async publishMessage(topic: PublishedTopics, message: Record<'action', RFIDPlaygroundActions>) {
-				if (!clientRef.current) return
-				clientRef.current.publishAsync(topic, Json.stringify(message))
+			setConnectionStatus: (value) =>
+				set((state) => ({ connectionStatus: { ...state.connectionStatus, ...value } })),
+			setReaderSettings: (value) => set({ readerSettings: value }),
+			publishMessage: async (topic, message) => {
+				const client = clientRef.current
+				if (!client?.connected) return
+				await client.publishAsync(topic, Json.stringify(message))
 			}
 		}))
+	}
 
-	const { scannedEpcs, setScannedEpcs, setConnectionStatus, setReaderSettings } = useStore(store.current)
+	const store = storeRef.current
 
-	/**
-	 * Buffer incoming EPC data and update the scanned EPC list at a fixed interval
-	 */
-	useInterval(
-		() => {
-			if (dataRef.current.size > 0) {
-				const newEpcs = Array.from(dataRef.current)
-				setScannedEpcs([...new Set([...scannedEpcs, ...newEpcs])])
-				dataRef.current.clear()
+	// Helpers to read store without stale closures
+	const getState = useMemoizedFn(() => store.getState())
+	const setConnectionStatus = useMemoizedFn(store.getState().setConnectionStatus)
+	const setReaderSettings = useMemoizedFn(store.getState().setReaderSettings)
+	const setScannedEpcs = useMemoizedFn(store.getState().setScannedEpcs)
+
+	// Interval management
+	const stopPingInterval = useMemoizedFn(() => {
+		if (pingIntervalRef.current) {
+			clearInterval(pingIntervalRef.current)
+			pingIntervalRef.current = null
+		}
+	})
+
+	const startPingInterval = useMemoizedFn(() => {
+		stopPingInterval()
+		pingCountRef.current = 0
+		pingIntervalRef.current = setInterval(() => {
+			const client = clientRef.current
+			if (!client?.connected) return
+
+			client.publish(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' }))
+			pingCountRef.current++
+
+			if (pingCountRef.current > MAX_PING_RETRY) {
+				stopPingInterval()
+				setScannedEpcs([])
+				setConnectionStatus({
+					isMQTTConnectionReady: false,
+					isReaderConnectionReady: false,
+					isReaderPlaying: false
+				})
 			}
-		},
-		BUFFER_RATE,
-		{ immediate: false }
-	)
+		}, PING_INTERVAL_MS)
+	})
 
-	const handleConnectMQTT: mqtt.OnConnectCallback = async (): Promise<void> => {
-		if (!clientRef.current) return
+	const stopBufferInterval = useMemoizedFn(() => {
+		if (bufferIntervalRef.current) {
+			clearInterval(bufferIntervalRef.current)
+			bufferIntervalRef.current = null
+		}
+	})
+
+	const startBufferInterval = useMemoizedFn(() => {
+		stopBufferInterval()
+		bufferIntervalRef.current = setInterval(() => {
+			const buffer = dataBufferRef.current
+			if (buffer.size === 0) return
+
+			const newEpcs = Array.from(buffer)
+			buffer.clear()
+
+			// Read latest state directly from store — no stale closure
+			const { scannedEpcs: current } = getState()
+			setScannedEpcs([...new Set([...current, ...newEpcs])])
+		}, BUFFER_RATE_MS)
+	})
+
+	// MQTT event handlers (stable identity via useMemoizedFn)
+	const handleConnect = useMemoizedFn(async () => {
+		const client = clientRef.current
+		if (!client) return
+
 		await Promise.all([
-			clientRef.current.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' })),
-			clientRef.current.publishAsync(PublishedTopics.REQUEST_SETTINGS, Json.stringify({ action: 'get' }))
+			client.publishAsync(PublishedTopics.REQUEST_SIGNAL, Json.stringify({ action: 'ping' })),
+			client.publishAsync(PublishedTopics.REQUEST_SETTINGS, Json.stringify({ action: 'get' }))
 		])
-		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_DATA)
-		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SIGNAL)
-		clientRef.current.subscribeAsync(SubscribedTopics.REPLY_SETTINGS)
-	}
+		await Promise.all([
+			client.subscribeAsync(SubscribedTopics.REPLY_DATA),
+			client.subscribeAsync(SubscribedTopics.REPLY_SIGNAL),
+			client.subscribeAsync(SubscribedTopics.REPLY_SETTINGS)
+		])
 
-	const handleDisconnectMQTT: mqtt.OnDisconnectCallback = (): void => {
+		startPingInterval()
+		startBufferInterval()
+	})
+
+	const handleDisconnect = useMemoizedFn(() => {
+		stopPingInterval()
+		stopBufferInterval()
 		toast.info('Stopped controlling the RFID reader')
-	}
+	})
 
-	const handleMessageMQTT: mqtt.OnMessageCallback = (topic: string, message: Buffer): void => {
-		if (!clientRef.current) return
+	const handleMessage = useMemoizedFn((topic: string, message: Buffer) => {
+		const client = clientRef.current
+		if (!client) return
 
 		const rawMessage = message.toString()
+
 		switch (topic) {
 			case SubscribedTopics.REPLY_DATA: {
-				dataRef.current.add(rawMessage)
+				dataBufferRef.current.add(rawMessage)
 				break
 			}
 			case SubscribedTopics.REPLY_SIGNAL: {
-				pingCountRef.current = 0 // * Always reset ping count on every reply from RFID Agent
+				pingCountRef.current = 0 // Reset ping count on every reply
 				const data = Json.parse<PlaygroundConnectionStatus>(rawMessage)
 				setConnectionStatus(data)
 				break
@@ -189,43 +225,56 @@ export const ReaderPlaygroundProvider: React.FC<React.PropsWithChildren> = ({ ch
 				break
 			}
 			default: {
-				if (env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development')
-					console.warn('Unknown topic:', topic, rawMessage)
+				if (env<RuntimeEnvironment>('VITE_NODE_ENV') === 'development') {
+					console.warn('[MQTT] Unknown topic:', topic, rawMessage)
+				}
 				break
 			}
 		}
-	}
-
-	useLayoutEffectOnce(() => {
-		if (!clientRef.current) return
-
-		clientRef.current.on('connect', handleConnectMQTT)
-		clientRef.current.on('disconnect', handleDisconnectMQTT)
-		clientRef.current.on('message', handleMessageMQTT)
-
-		return () => {
-			clientRef.current.off('connect', handleConnectMQTT)
-			clientRef.current.off('disconnect', handleDisconnectMQTT)
-			clientRef.current.off('message', handleMessageMQTT)
-			clientRef.current.removeListener('connect', handleConnectMQTT)
-			clientRef.current.removeListener('disconnect', handleDisconnectMQTT)
-			clientRef.current.removeListener('message', handleMessageMQTT)
-		}
 	})
 
-	useUpdateEffect(() => {
-		if (pingCountRef.current > MAX_RETRY) {
-			stopPingInterval()
-			setScannedEpcs([])
-			setConnectionStatus({
-				isMQTTConnectionReady: false,
-				isReaderConnectionReady: false,
-				isReaderPlaying: false
-			})
-		}
-	}, [pingCountRef.current])
+	// ── MQTT lifecycle: connect when agent is available, cleanup on unmount ─
+	useEffect(() => {
+		if (!agent?.ip) return
 
-	return <ReaderPlaygroundContext.Provider value={store.current}>{children}</ReaderPlaygroundContext.Provider>
+		// Create MQTT connection inside effect (not in render phase)
+		const client = mqtt.connect(buildMqttUrl(agent.ip, MQTT_PORT))
+		clientRef.current = client
+
+		client.on('connect', handleConnect)
+		client.on('disconnect', handleDisconnect)
+		client.on('message', handleMessage)
+
+		return () => {
+			// Remove listeners first
+			client.off('connect', handleConnect)
+			client.off('disconnect', handleDisconnect)
+			client.off('message', handleMessage)
+
+			// Stop all intervals
+			stopPingInterval()
+			stopBufferInterval()
+
+			// Close MQTT connection — force=true to not wait for in-flight messages
+			client.end(true)
+			clientRef.current = null
+
+			// Clear data buffer
+			dataBufferRef.current.clear()
+		}
+	}, [agent?.ip])
+
+	// Cleanup safety net on unmount
+	useUnmount(() => {
+		if (clientRef.current) {
+			clientRef.current.end(true)
+			clientRef.current = null
+		}
+		stopPingInterval()
+		stopBufferInterval()
+	})
+
+	return <ReaderPlaygroundContext.Provider value={store}>{children}</ReaderPlaygroundContext.Provider>
 }
 
 export const useReaderPlaygroundStore = createStoreSelector(ReaderPlaygroundContext)
