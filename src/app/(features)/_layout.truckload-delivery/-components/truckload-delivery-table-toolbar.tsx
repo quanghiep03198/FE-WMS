@@ -23,7 +23,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 	event$: EventEmitter<Record<string, unknown>>
 }> = ({ table, event$ }) => {
 	const { t } = useTranslation()
-	const isMobile = useMediaQuery('(max-width: 1023px)')
+	const isMobile = useMediaQuery('(max-width: 919px)')
 	const { refetch } = useGetTruckloadDeliveryQuery()
 	const { searchParams, removeParam } = usePageQueryParams()
 	const { globalFilter, columnFilters } = table.getState()
@@ -40,7 +40,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 			<GlobalFilterInput {...{ table, event$ }} />
 			{!isMobile && <PurchaseOrderFilterInput table={table} />}
 			<DispatchOrderStatusFilter table={table} />
-			<Div className='ml-auto flex items-center justify-end gap-x-2 sm:gap-x-1 md:gap-x-1'>
+			<Div className='ml-auto flex items-center justify-end gap-x-2 *:flex-1 sm:gap-x-1 md:gap-x-1 md:[&>button]:size-9'>
 				{isFilterDirty && (
 					<Tooltip
 						message={t('ns_common:actions.clear_filter')}
@@ -66,7 +66,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 					triggerProps={{ asChild: true }}
 					contentProps={{ hidden: !isMobile }}>
 					<Button
-						variant={isMobile ? 'ghost' : 'outline'}
+						variant={isMobile ? 'outline' : 'outline'}
 						size={isMobile ? 'icon' : 'default'}
 						onClick={() => refetch()}>
 						<Icon name='RefreshCcw' /> {!isMobile && t('ns_common:actions.reload')}

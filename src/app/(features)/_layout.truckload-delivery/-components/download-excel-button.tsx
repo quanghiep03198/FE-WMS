@@ -11,7 +11,7 @@ import { usePageQueryParams } from '../-hooks/use-page-query-params'
 const DownloadExcelButton: React.FC = () => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
-	const isMobile = useMediaQuery('(max-width: 1023px)')
+	const isMobile = useMediaQuery('(max-width: 919px)')
 	const { searchParams } = usePageQueryParams()
 
 	const handleDownloadExcel = async () => {
@@ -38,7 +38,7 @@ const DownloadExcelButton: React.FC = () => {
 
 	return (
 		<Button
-			variant={isMobile ? 'ghost' : 'default'}
+			variant={isMobile ? 'outline' : 'default'}
 			size={isMobile ? 'icon' : 'default'}
 			onClick={handleDownloadExcel}>
 			<Icon name='Download' /> {!isMobile && t('ns_common:actions.download_excel')}
