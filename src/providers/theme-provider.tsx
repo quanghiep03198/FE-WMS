@@ -19,7 +19,8 @@ const ThemeProviderContext = createContext<ThemeProviderState>({
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: ThemeProviderProps) => {
 	const [theme, setTheme] = useLocalStorageState<Theme>('theme', {
-		defaultValue: window.matchMedia('(prefers-color-scheme:dark)').matches ? Theme.DARK : Theme.LIGHT
+		defaultValue: window.matchMedia('(prefers-color-scheme:dark)').matches ? Theme.DARK : Theme.LIGHT,
+		listenStorageChange: true
 	})
 
 	useEffect(() => {
