@@ -86,17 +86,17 @@ const OrderSizeDetailTable: React.FC = () => {
 					{
 						'--sticky-left-col-width': '140px',
 						'--sticky-right-col-width': '100px',
-						'--row-action-col-width': '50px'
+						'--row-action-col-width': '60px'
 					} as React.CSSProperties
 				}>
 				<Table
 					className={cn(
 						'w-auto table-fixed [&_span]:line-clamp-1',
-						'[&_tr>:first-child]:sticky [&_tr>:first-child]:left-0 [&_tr>:first-child]:z-10',
-						'[&_tr>:nth-child(2)]:sticky [&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] [&_tr>:nth-child(2)]:z-10',
-						'[&_tr>:nth-child(3)]:sticky [&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width))] [&_tr>:nth-child(3)]:z-10 [&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
-						'[&_tr>:nth-last-child(2)]:sticky [&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] [&_tr>:nth-last-child(2)]:z-10',
-						'[&_tr>:last-child]:sticky [&_tr>:last-child]:right-0 [&_tr>:last-child]:z-10'
+						'@4xl:[&_tr>:first-child]:sticky @4xl:[&_tr>:first-child]:left-0 @4xl:[&_tr>:first-child]:z-10',
+						'@4xl:[&_tr>:nth-child(2)]:sticky @4xl:[&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] @4xl:[&_tr>:nth-child(2)]:z-10',
+						'@4xl:[&_tr>:nth-child(3)]:sticky @4xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width))] @4xl:[&_tr>:nth-child(3)]:z-10 @4xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
+						'@4xl:[&_tr>:nth-last-child(2)]:sticky @4xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @4xl:[&_tr>:nth-last-child(2)]:z-10',
+						'@4xl:[&_tr>:last-child]:sticky @4xl:[&_tr>:last-child]:right-0 @4xl:[&_tr>:last-child]:z-10'
 					)}>
 					<colgroup>
 						<col
