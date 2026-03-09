@@ -21,7 +21,7 @@ const Wrapper: React.FC<React.ComponentProps<'div'>> =
 const Main: React.FC<React.ComponentProps<'div'>> = tw.div`flex flex-col items-stretch justify-start basis-full flex-1`
 
 const InnerWrapper: React.FC<React.ComponentProps<'div'>> =
-	tw.div`grid xl:grid-cols-2 lg:grid-cols-2 xxl:grid-rows-3 group-has-[#toggle-fullscreen[data-state=checked]]:grid-rows-[auto_auto_auto] xl:grid-rows-[auto_auto_auto] lg:grid-rows-3 gap-y-4 gap-x-6 flex-1`
+	tw.div`grid xl:grid-cols-2 lg:grid-cols-2 xxl:grid-rows-3 group-has-[#toggle-fullscreen[data-state=checked]]:grid-rows-[auto_auto_auto] xl:grid-rows-[auto_auto_auto] lg:grid-rows-3 gap-y-4 gap-x-6 lg:gap-x-4 flex-1`
 
 const ListBoxPanel: React.FC<React.ComponentProps<'div'>> =
 	tw.div`xl:col-span-1 xl:row-span-full xl:order-1 order-2 lg:col-span-1 lg:row-span-full lg:order-1 lg:max-h-full xl:max-h-full`
