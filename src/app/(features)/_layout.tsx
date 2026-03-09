@@ -92,5 +92,5 @@ const LayoutWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
 `
 
 const OutletWrapper: React.FC<React.ComponentProps<'main'>> = tw.main`
-	relative flex-1 basis-full px-6 py-[--outlet-padding] sm:px-2 md:px-2
+	relative flex-1 basis-full px-6 xxl:py-0 py-[--outlet-padding] sm:px-2 md:px-2
 `
