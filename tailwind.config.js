@@ -115,10 +115,10 @@ module.exports = {
 				},
 				md: {
 					min: '600px',
-					max: '1023px'
+					max: '919px'
 				},
 				lg: {
-					min: '1024px',
+					min: '920px',
 					max: '1365px'
 				},
 				xl: {
