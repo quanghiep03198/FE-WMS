@@ -163,7 +163,7 @@ export default defineConfig(({ mode }) => {
 			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
-				dropLabels: mode === 'production' ? ['console', 'debugger'] : undefined,
+				transform: { dropLabels: ['DEV', 'DEBUG'] },
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
 					advancedChunks: {
