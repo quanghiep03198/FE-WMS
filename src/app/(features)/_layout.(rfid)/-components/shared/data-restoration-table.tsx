@@ -111,17 +111,22 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 
 	return (
 		<Div
-			className='h-[40vh] space-y-1 overflow-y-auto !scroll-auto scrollbar-track-accent/10 xl:h-[55vh] xxl:h-[60vh]'
+			className='flex-1 space-y-1 overflow-y-auto scrollbar-track-accent/10'
+			style={{
+				container: 'table / size'
+			}}
 			ref={refCallback}>
 			<Table
 				className='border-separate border-spacing-0 [&_td]:border-x-0 [&_th]:border-x-0'
 				style={
 					{
 						'--row-selection-width': '4rem',
-						'--second-col-width': '15rem'
+						'--second-col-width': '15rem',
+						'--header-height': '3rem',
+						'--footer-height': '3rem'
 					} as React.CSSProperties
 				}>
-				<TableHeader className='sticky top-0 z-10 border-b [&_th]:bg-table-head [&_th]:text-table-head-foreground'>
+				<TableHeader className='sticky top-0 z-10 border-b [&_th]:h-[--header-height] [&_th]:bg-table-head [&_th]:text-table-head-foreground'>
 					<TableRow>
 						<TableHead className='w-[var(--row-selection-width)]'>
 							<Checkbox
@@ -162,8 +167,10 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 						))
 					) : !Array.isArray(datalist) || datalist?.length === 0 ? (
 						<TableRow>
-							<TableCell colSpan={4} className='h-full'>
-								<Div className='flex h-[calc(40vh-8rem)] items-center justify-center gap-x-3 xl:h-[calc(55vh-8rem)] xxl:h-[calc(60vh-8rem)]'>
+							<TableCell
+								colSpan={4}
+								className='h-[calc(100cqh-var(--header-height)-var(--footer-height)-2*var(--border-width,1px))]'>
+								<Div className='flex h-full items-center justify-center gap-x-3'>
 									<Icon name='PackageOpen' size={36} strokeWidth={1} stroke='hsl(var(--muted-foreground))' />
 									<Typography variant='small' color='muted' className='font-medium'>
 										{t('ns_common:table.no_data')}
@@ -176,7 +183,6 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 							{before > 0 && <VirtualPlaceholderRow colSpan={4} style={{ height: before }} />}
 							{virtualItems.map((virtualItem) => {
 								const item = datalist[virtualItem.index]
-
 								return virtualizer.isScrolling ? (
 									<MemoizedDataRestorationRow
 										key={item.epc}
@@ -211,7 +217,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 					)}
 				</TableBody>
 				<TableFooter>
-					<TableRow className='sticky -bottom-px z-10 [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
+					<TableRow className='sticky bottom-0 z-10 [&_td]:h-[--footer-height] [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
 						<TableCell colSpan={2}>
 							<DebouncedLimitInput dataType={dataType} />
 						</TableCell>
