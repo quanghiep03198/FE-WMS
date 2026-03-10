@@ -12,7 +12,7 @@ const ConnectionInsight: React.FC = () => {
 			state={scanningState === 'success' ? 'active' : scanningState === 'error' ? 'down' : 'fixing'}
 			label={scanningState === 'success' ? t('ns_common:status.running') : t('ns_common:status.idle')}
 			className='flex-col justify-center gap-y-0.5 px-3 @sm/toolbar:h-10 @2xl/toolbar:flex-row'
-			labelClassName='@sm/toolbar:block hidden !text-muted-foreground @lg/toolbar:text-sm text-xs'
+			labelClassName='@sm/toolbar:block hidden !text-muted-foreground @2xl/toolbar:text-sm text-xs'
 		/>
 	)
 }

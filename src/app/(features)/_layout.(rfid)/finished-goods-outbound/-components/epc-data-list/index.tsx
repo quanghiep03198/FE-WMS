@@ -225,7 +225,7 @@ const ScannedEpcList: React.FC = () => {
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
-					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium'
+					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @2xl/toolbar:flex-row'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
 					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
@@ -236,8 +236,7 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className:
-							'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium'
+						className: 'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row'
 					})}
 					htmlFor='data-restoration-sheet-trigger'>
 					<Icon name='Archive' size={18} />
@@ -250,8 +249,7 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className:
-							'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium'
+						className: 'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row'
 					})}
 					htmlFor='epc-data-upload-dialog-trigger'>
 					<Icon name='Upload' size={18} />
@@ -264,7 +262,7 @@ const ScannedEpcList: React.FC = () => {
 					className={buttonVariants({
 						variant: 'ghost',
 						className:
-							'flex h-full w-full flex-col flex-wrap font-normal @2xl/toolbar:flex-row @2xl/toolbar:font-medium @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
+							'flex h-full w-full flex-col flex-wrap font-normal @2xl/toolbar:flex-row @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
 					})}
 					htmlFor='order-detail-dialog-trigger'>
 					<Icon name='ArrowUpRight' size={18} />
@@ -280,9 +278,9 @@ const ScannedEpcList: React.FC = () => {
 					aria-expanded={open}
 					data-mounted={hasMounted.current}
 					className={cn(
-						'linear grid h-0 place-items-center',
-						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
-						'aria-expanded:h-[30vh] @4xl:aria-expanded:h-[--outlet-wrapper-height]'
+						'linear relative z-10 h-0 divide-y bg-background p-0 transition-height will-change-transform contain-size',
+						'data-[mounted=true]:duration-100',
+						'aria-expanded:h-[30vh] aria-expanded:p-2 @4xl:aria-expanded:h-[var(--outlet-wrapper-height)]'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
@@ -341,7 +339,7 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div className='basis-auto border-t bg-background p-1.5'>
+			<Div aria-expanded={open} className='basis-auto bg-background p-1.5 aria-expanded:border-t'>
 				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @[1500px]/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
