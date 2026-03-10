@@ -2,7 +2,7 @@ import { Div, Label, Switch, Typography } from '@/components/ui'
 import { useFullscreen, useKeyPress, useUnmount } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 
-const FullscreenToggleBox: React.FC = () => {
+const FullscreenToggleBox: React.FC<{ shouldExitOnUnmount?: boolean }> = ({ shouldExitOnUnmount = true }) => {
 	const { t } = useTranslation()
 	const [isFullscreen, { toggleFullscreen, exitFullscreen }] = useFullscreen(document.body)
 
@@ -12,7 +12,7 @@ const FullscreenToggleBox: React.FC = () => {
 	})
 
 	useUnmount(() => {
-		exitFullscreen()
+		if (shouldExitOnUnmount) exitFullscreen()
 	})
 
 	return (

@@ -15,7 +15,7 @@ const TenacyBox: React.FC = () => {
 	}, [data])
 
 	return (
-		<Div className='inline-flex h-9 w-full basis-1/5 items-center gap-x-2 rounded-md border px-3 py-2 sm:hidden sm:basis-full sm:justify-center md:basis-1/3 lg:basis-1/3'>
+		<Div className='mr-auto hidden h-9 w-full basis-1/5 items-center gap-x-2 rounded-md border px-3 py-2 @[1366px]:inline-flex sm:hidden sm:basis-full sm:justify-center md:basis-1/3 lg:basis-1/3'>
 			<Icon name='Server' size={18} />
 			<Typography variant='small'>
 				{isLoading

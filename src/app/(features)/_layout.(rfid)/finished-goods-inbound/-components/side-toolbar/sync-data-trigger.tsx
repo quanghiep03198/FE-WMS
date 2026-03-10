@@ -130,7 +130,7 @@ const SyncDataTrigger: React.FC = () => {
 						})}
 					</StepList>
 				) : (
-					<Div className='min-h-48 flex-1 place-content-center place-items-center rounded-md bg-muted text-center text-sm text-muted-foreground'>
+					<Div className='h-full flex-1 place-content-center place-items-center rounded-md bg-muted text-center text-sm text-muted-foreground xxl:min-h-44'>
 						{t('ns_rfid:no_sync_process')}
 					</Div>
 				)}

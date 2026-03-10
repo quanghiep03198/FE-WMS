@@ -1,3 +1,4 @@
+import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
 import { Div, Icon, Typography } from '@/components/ui'
 import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
@@ -8,7 +9,7 @@ import tw from 'tailwind-styled-components'
 import { ScanningStatus } from '../..'
 import { usePageContext } from '../../-contexts/page-context'
 
-const NetworkInsight: React.FC = () => {
+export const NetworkInsight: React.FC<React.ComponentProps<'div'>> = (props) => {
 	const { t } = useTranslation()
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
 
@@ -17,11 +18,11 @@ const NetworkInsight: React.FC = () => {
 	})
 
 	return (
-		<StatusItem>
-			<Typography variant='small' className='font-medium'>
+		<StatusItem {...props}>
+			<Typography data-slot='label' variant='small' className='font-medium'>
 				{t('ns_inoutbound:scanner_setting.server_connection')}
 			</Typography>
-			<StatusItemDetail>
+			<StatusItemDetail data-slot='detail'>
 				{isNetworkAvailable ? (
 					<Icon name='Server' className='stroke-success' />
 				) : (
@@ -35,7 +36,7 @@ const NetworkInsight: React.FC = () => {
 	)
 }
 
-const JobStatus: React.FC = () => {
+export const JobStatus: React.FC<React.ComponentProps<'div'>> = (props) => {
 	const { t } = useTranslation()
 	const { scanningStatus } = usePageContext('scanningStatus')
 	const [isNetworkAvailable, setIsNetworkAvailable] = useState<boolean>(true)
@@ -52,24 +53,15 @@ const JobStatus: React.FC = () => {
 	}
 
 	return (
-		<StatusItem>
-			<Typography variant='small' className='font-medium'>
+		<StatusItem {...props}>
+			<Typography data-slot='label' variant='small' className='font-medium'>
 				{t('ns_inoutbound:scanner_setting.cron_job')}
 			</Typography>
-			<StatusItemDetail>
+			<StatusItemDetail data-slot='detail'>
 				<StatusIndicator
 					state={!isNetworkAvailable ? indicatorState.error : indicatorState[scanningStatus]}
 					className='justify-center'
 				/>
-				{/* <Icon
-					name='Dot'
-					className={cn(
-						'scale-50 rounded-full ring-8',
-						scanningStatus === 'connected'
-							? 'bg-success fill-success stroke-success ring-success/40'
-							: 'bg-warning fill-warning stroke-warning ring-warning/40'
-					)}
-				/> */}
 				<Typography variant='small' className='font-medium'>
 					{scanningStatus === 'connected' ? t('ns_common:status.running') : t('ns_common:status.idle')}
 				</Typography>
@@ -78,7 +70,7 @@ const JobStatus: React.FC = () => {
 	)
 }
 
-const ConnectionInsight: React.FC = () => {
+export const VerticalConnectionInsight: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -94,7 +86,21 @@ const ConnectionInsight: React.FC = () => {
 	)
 }
 
-const StatusItem = tw.div`grid grid-cols-[2fr_3fr] gap-x-6`
-const StatusItemDetail = tw.div`inline-grid grid-cols-[18px_auto] items-center gap-x-3 text-sm`
+export const HorizontalConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
+	return (
+		<Div
+			data-slot='connection-insight'
+			className={cn(
+				'grid h-9 grid-cols-2 items-center gap-x-2 rounded-md border bg-background px-4 py-2 shadow-sm @[1366px]/page-container:hidden md:shadow-none',
+				className
+			)}
+			{...props}>
+			<NetworkInsight className='grid-cols-1 [&>[data-slot=detail]]:gap-x-2 [&>[data-slot=label]]:hidden' />
+			<JobStatus className='grid-cols-1 [&>[data-slot=detail]]:gap-x-2 [&>[data-slot=label]]:hidden' />
+		</Div>
+	)
+}
 
-export default ConnectionInsight
+const StatusItem: React.FC<React.ComponentProps<'div'>> = tw.div`grid grid-cols-[2fr_3fr] gap-x-6`
+const StatusItemDetail: React.FC<React.ComponentProps<'div'>> =
+	tw.div`inline-grid grid-cols-[18px_auto] items-center gap-x-3 text-sm`

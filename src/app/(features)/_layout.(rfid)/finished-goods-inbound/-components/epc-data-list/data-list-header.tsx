@@ -23,11 +23,7 @@ const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 
 const ListBoxHeader: React.FC = () => {
 	return (
-		<Div className='relative flex h-[var(--list-header-height)] items-center justify-between bg-table-head p-2'>
-			<Typography className='relative z-10 inline-flex items-center gap-x-2 px-2 text-center font-medium sm:hidden'>
-				<Icon name='ScanBarcode' size={20} />
-				EPC Data
-			</Typography>
+		<Div className='relative flex h-[var(--list-header-height)] items-center justify-between'>
 			<OrderListSelect />
 		</Div>
 	)
@@ -76,11 +72,11 @@ const OrderListSelect: React.FC = () => {
 	}
 
 	return (
-		<Div className='w-full basis-1/2 sm:basis-full'>
+		<Div className='w-full sm:basis-full'>
 			<Select value={selectedOrder} onValueChange={handleChangeOrder}>
 				<HoverCard openDelay={50} closeDelay={50}>
 					<HoverCardTrigger asChild>
-						<SelectTrigger className='flex w-full justify-start gap-x-2 bg-background'>
+						<SelectTrigger className='flex w-full justify-start gap-x-2 border-0 bg-inherit shadow-none'>
 							{selectedOrder !== previousSelectedOrder && isLoading ? (
 								<Icon name='LoaderCircle' className='animate-[spin_1.75s_linear_infinite]' />
 							) : (
@@ -89,11 +85,16 @@ const OrderListSelect: React.FC = () => {
 							<SelectValue placeholder={!selectedOrder && 'Select'} />
 						</SelectTrigger>
 					</HoverCardTrigger>
-					<HoverCardContent side='top' className='w-[var(--radix-hover-card-trigger-width)] *:text-pretty'>
-						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
+					<HoverCardContent
+						side='top'
+						sideOffset={10}
+						className='w-[var(--radix-hover-card-trigger-width)] *:text-pretty'>
+						<Typography variant='small' className='inline-flex items-center gap-x-2'>
+							<Icon name='Info' className='stroke-active' /> {t('ns_inoutbound:description.select_order')}
+						</Typography>
 					</HoverCardContent>
 				</HoverCard>
-				<SelectContent>
+				<SelectContent sideOffset={4}>
 					<SelectGroup>
 						<SelectItem value='all'>All</SelectItem>
 						{scannedOrders.map((item) => {

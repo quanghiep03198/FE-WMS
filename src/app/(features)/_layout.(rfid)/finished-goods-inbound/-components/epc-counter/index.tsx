@@ -12,7 +12,9 @@ const ScannedEpcCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex h-full flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 @5xl:py-8 lg:py-4'>
+		<Div
+			data-slot='epc-counter'
+			className='relative flex h-full flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 @5xl:py-8 lg:py-4'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography
@@ -30,6 +32,7 @@ const ScanningSkeleton: React.FC = () => {
 	const { scanningStatus } = usePageContext('scanningStatus')
 	return (
 		<Div
+			data-slot='epc-counter-skeleton'
 			data-status={scanningStatus}
 			className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=connected]:opacity-100'>
 			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite]' />
@@ -84,7 +87,7 @@ const ScanningTimer: React.FC = () => {
 		seconds: '00'
 	})
 
-	useInterval(() => {
+	const clearInterval = useInterval(() => {
 		duration.current++
 		const hours = Math.floor((duration.current / (60 * 60)) % 24)
 		const minutes = Math.floor((duration.current / 60) % 60)
@@ -106,6 +109,10 @@ const ScanningTimer: React.FC = () => {
 			setIntervalValue(1000)
 		} else {
 			resetInterval()
+		}
+
+		return () => {
+			clearInterval()
 		}
 	}, [scanningStatus])
 

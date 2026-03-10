@@ -1,3 +1,5 @@
+'use no memo'
+
 import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
@@ -16,7 +18,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUnmount, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash-es'
-import { Fragment, useCallback, useRef, useState } from 'react'
+import { Fragment, RefObject, useCallback, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -29,9 +31,10 @@ const PRERENDERED_ITEMS = 5
 const DEFAULT_NEXT_CURSOR = 2
 const SSE_TOAST_ID = 'FETCH_SSE'
 
-const EpcDataList: React.FC = () => {
+const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = ({ listBoxFooterRef }) => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
+	const [isExpanded, setIsExpanded] = useState<boolean>(true)
 	const {
 		currentPage,
 		selectedOrder,
@@ -276,11 +279,13 @@ const EpcDataList: React.FC = () => {
 			)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
+					onDoubleClick={() => setIsExpanded(!isExpanded)}
 					ref={containerRef}
+					aria-expanded={isExpanded}
 					className={cn(
-						'z-10 flex w-full flex-col items-stretch justify-start divide-y divide-border bg-background p-2 will-change-transform contain-paint',
-						'h-80 @4xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))] lg:h-[475px]',
-						'group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)]'
+						'z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y divide-border bg-background will-change-transform contain-paint',
+						'aria-expanded:p-2 @3xl:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]',
+						'group-has-[#toggle-fullscreen[data-state=checked]]:aria-expanded:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)]'
 					)}>
 					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
@@ -328,13 +333,26 @@ const EpcDataList: React.FC = () => {
 					</Div>
 				</ScrollShadow>
 			) : (
-				<Div className='z-10 grid h-80 place-items-center group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] @4xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))] lg:h-[475px]'>
+				<Div
+					onDoubleClick={() => setIsExpanded(!isExpanded)}
+					aria-expanded={isExpanded}
+					className='grid h-0 place-items-center overflow-clip group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] @3xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
+			{listBoxFooterRef?.current &&
+				createPortal(
+					<Button
+						variant='ghost'
+						className='absolute translate-y-9 lg:hidden xl:hidden'
+						onClick={() => setIsExpanded(!isExpanded)}>
+						<Icon name={isExpanded ? 'ChevronsUp' : 'ChevronsDown'} />
+					</Button>,
+					listBoxFooterRef.current
+				)}
 		</Fragment>
 	)
 }
