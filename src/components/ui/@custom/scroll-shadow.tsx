@@ -9,7 +9,13 @@ export interface ScrollShadowProps extends React.PropsWithChildren, React.Compon
 	ref?: React.RefObject<HTMLDivElement> | ((node: HTMLDivElement) => void)
 }
 
-const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'vertical', children, ref }) => {
+const ScrollShadow: React.FC<ScrollShadowProps> = ({
+	className,
+	orientation = 'vertical',
+	children,
+	ref,
+	...props
+}) => {
 	const localRef = useRef<HTMLDivElement>(null)
 
 	const [isScrollable, setIsScrollable] = useRafState<boolean>(true)
@@ -73,6 +79,7 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({ className, orientation = 'v
 
 	return (
 		<div
+			{...props}
 			ref={(e) => {
 				localRef.current = e
 				if (typeof ref === 'function') {
