@@ -44,7 +44,7 @@ const ScanningCounter: React.FC = () => {
 	const [interval, setInterval] = useState<number | undefined>(undefined)
 
 	// Counter increment/decrement effect
-	useInterval(() => {
+	const clearInterval = useInterval(() => {
 		if (total > count) {
 			setCount((count) => (count += Math.min(Math.ceil((total - count) / 100), total - count)))
 		} else if (total < count) {
@@ -55,6 +55,9 @@ const ScanningCounter: React.FC = () => {
 	useEffect(() => {
 		if (total !== count) setInterval(INTERVAL_TIME)
 		else setInterval(undefined)
+		return () => {
+			clearInterval()
+		}
 	}, [total, count])
 
 	return (
@@ -83,7 +86,7 @@ const ScanningTimer: React.FC = () => {
 		seconds: '00'
 	})
 
-	useInterval(() => {
+	const clearInterval = useInterval(() => {
 		duration.current++
 		const hours = Math.floor((duration.current / (60 * 60)) % 24)
 		const minutes = Math.floor((duration.current / 60) % 60)
@@ -105,6 +108,9 @@ const ScanningTimer: React.FC = () => {
 			setIntervalValue(1000)
 		} else {
 			resetInterval()
+		}
+		return () => {
+			clearInterval()
 		}
 	}, [scanningState])
 
