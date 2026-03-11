@@ -1,15 +1,25 @@
 import { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
+import { destroySharedSocket } from '@/common/hooks/use-socket-io'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import { IAuthState, useAuthStore } from '@/stores/auth.store'
 import { GenericAbortSignal } from 'axios'
 
+export type RefreshTokenResponse = ResponseBody<{ newAccessToken: string; newRefreshToken: string }>
+
 export class AuthService {
+	/**
+	 * @description In-flight refresh promise. Shared across ALL callers (axios interceptor, socket hook, etc.)
+	 * so that only ONE refresh request is ever in-flight at a time.
+	 */
+	private static __refreshTokenRequest: Promise<RefreshTokenResponse> | null = null
+
 	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user'>>> {
 		return await axiosInstance.post('/login', data)
 	}
 
 	static logout() {
+		destroySharedSocket() // * disconnect and release shared socket + clear pending queue
 		useAuthStore.getState().resetCredentials() // * reset auth state
 		queryClient.removeQueries({ type: 'all', exact: false }) // * remove all triggered queries
 		queryClient.cancelQueries({ fetchStatus: 'fetching' }) // * cancel all running queries
@@ -24,9 +34,26 @@ export class AuthService {
 		return await axiosInstance.post<void, ResponseBody<null>>('/logout')
 	}
 
-	static async refreshToken(signal: GenericAbortSignal): Promise<ResponseBody<string>> {
+	/**
+	 * @description Refresh the access token. Deduplicated: if a refresh is already in-flight,
+	 * subsequent callers receive the SAME promise instead of firing a new HTTP request.
+	 * This prevents duplicate refresh calls from axios interceptor + socket hook + any other consumer.
+	 */
+	static async refreshToken(signal?: GenericAbortSignal): Promise<RefreshTokenResponse> {
+		// If a refresh is already in-flight, piggyback on it
+		if (AuthService.__refreshTokenRequest) {
+			return AuthService.__refreshTokenRequest
+		}
+
+		AuthService.__refreshTokenRequest = axiosInstance
+			.get<void, RefreshTokenResponse>('refresh-token', { signal })
+			.finally(() => {
+				// Clear the singleton promise so the next call can start a fresh refresh
+				AuthService.__refreshTokenRequest = null
+			})
+
 		try {
-			return await axiosInstance.get('refresh-token', { signal })
+			return await AuthService.__refreshTokenRequest
 		} catch {
 			AuthService.logout()
 		}
