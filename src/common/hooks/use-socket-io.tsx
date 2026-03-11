@@ -1,10 +1,11 @@
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
-import { useMemoizedFn, useRafState } from 'ahooks'
+import { useRafState } from 'ahooks'
 import { throttle } from 'lodash-es'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
+import { v4 as uuid } from 'uuid'
 import { RequestHeaders } from '../constants/enums'
 import { Json } from '../utils/json'
 
@@ -25,26 +26,45 @@ const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
 		[RequestHeaders.USER_REQUEST]: user?.username
 	},
 	closeOnBeforeunload: true,
-	timeout: 10000,
-	reconnection: true,
-	reconnectionAttempts: 5,
-	reconnectionDelay: 1000
+	timeout: 10000
 })
 
-export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = false }: UseWebSocketOptions<TResponse>) {
-	const instanceIO = useRef<Socket>(client ?? socket)
-	const [isConnected, setIsConnected] = useState(instanceIO.current.connected)
-	const [data, setData] = useRafState<TResponse | null>(null)
+export function destroySharedSocket() {
+	socket.offAny()
+	socket.disconnect()
+}
 
-	const handleEvent = useMemoizedFn((data: string) => setData(Json.parse<TResponse>(data)))
-	const handleConnect = useMemoizedFn(() => setIsConnected(true))
-	const handleDisconnect = useMemoizedFn(() => setIsConnected(false))
+export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = false }: UseWebSocketOptions<TResponse>) {
+	const instanceIO = useMemo<Socket>(() => (client instanceof Socket ? client : socket), [client])
+	const [isConnected, setIsConnected] = useState(instanceIO.connected)
+	const [data, setData] = useRafState<TResponse | null>(null)
+	const lastEvent = useRef<{ id: string; data: TPayload }>(null)
+
+	const handleEvent = useCallback((data: TPayload) => setData(Json.parse<TResponse>(data)), [])
+	const handleConnect = useCallback(() => setIsConnected(true), [])
+	const handleDisconnect = useCallback(() => setIsConnected(false), [])
+	const handleRefreshToken = useCallback(() => {
+		const abortController = new AbortController()
+		AuthService.refreshToken(abortController.signal).then((response) => {
+			const newAccessToken = response.metadata.newAccessToken
+			instanceIO.io.opts.extraHeaders = {
+				...instanceIO.io.opts.extraHeaders,
+				[RequestHeaders.AUTHORIZATION]: `Bearer ${newAccessToken}`
+			}
+			instanceIO.disconnect()
+			instanceIO.connect()
+			if (lastEvent.current) {
+				emit(lastEvent.current.data)
+				lastEvent.current = null
+			}
+		})
+	}, [])
 
 	useEffect(() => {
-		instanceIO.current.on('connect', handleConnect)
-		instanceIO.current.on('disconnect', handleDisconnect)
-		instanceIO.current.on('auth_error', AuthService.refreshToken)
-		instanceIO.current.on(
+		instanceIO.on('connect', handleConnect)
+		instanceIO.on('disconnect', handleDisconnect)
+		instanceIO.on('jwt_expired', handleRefreshToken)
+		instanceIO.on(
 			event,
 			typeof rateLimit === 'number'
 				? throttle(handleEvent, rateLimit, { leading: true, trailing: true })
@@ -52,25 +72,26 @@ export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = fa
 		)
 
 		return () => {
-			instanceIO.current.off('connect', handleConnect)
-			instanceIO.current.off('disconnect', handleDisconnect)
-			instanceIO.current.off('auth_error', AuthService.refreshToken)
-			instanceIO.current.off(event, handleEvent)
+			instanceIO.off('connect', handleConnect)
+			instanceIO.off('disconnect', handleDisconnect)
+			instanceIO.off('jwt_expired', handleRefreshToken)
+			instanceIO.off(event, handleEvent)
 		}
 	}, [])
 
 	const emit = useCallback((payload: TPayload) => {
-		instanceIO.current.emit(event, payload)
+		lastEvent.current = { id: uuid(), data: payload }
+		instanceIO.emit(event, payload)
 	}, [])
 
 	const disconnect = useCallback(() => {
-		instanceIO.current.disconnect()
+		instanceIO.disconnect()
 	}, [])
 
 	const connect = useCallback(() => {
-		if (isConnected) instanceIO.current.disconnect()
-		instanceIO.current.connect()
+		if (isConnected) instanceIO.disconnect()
+		instanceIO.connect()
 	}, [])
 
-	return { socket: instanceIO.current, isConnected, data, setData, emit, connect, disconnect }
+	return { socket: instanceIO, isConnected, data, setData, emit, connect, disconnect }
 }
