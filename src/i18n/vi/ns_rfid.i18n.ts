@@ -25,7 +25,7 @@ export default {
 		step_1: 'Xác thực Deckers API',
 		step_2: 'Lấy dữ liệu các đơn hàng và thông tin của EPC',
 		step_3: 'Cập nhật thông tin cho các EPC',
-		step_4: 'Hoàn thành Job'
+		step_4: 'Hoàn thành'
 	},
 	placeholders: {
 		search_epc: 'Quét hoặc nhập EPC để tìm kiếm ...'

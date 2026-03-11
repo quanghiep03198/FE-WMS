@@ -28,7 +28,7 @@ export default {
 		step_1: "Authenticate Deckers's API",
 		step_2: "Fetch Deckers's orders and EPC data",
 		step_3: 'Update EPC data',
-		step_4: 'Complete Job'
+		step_4: 'Complete job'
 	},
 	status: {
 		scannable: 'Scannable',

@@ -27,7 +27,7 @@ export default {
 		step_1: '验证 Deckers API',
 		step_2: '获取订单和 EPC 数据',
 		step_3: '更新 EPC 数据',
-		step_4: '完成 Job'
+		step_4: '完成'
 	},
 	status: {
 		scannable: '可扫描',
