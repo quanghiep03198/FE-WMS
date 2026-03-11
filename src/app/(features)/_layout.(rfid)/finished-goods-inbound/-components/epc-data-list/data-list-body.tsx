@@ -4,6 +4,7 @@ import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
 import { RequestHeaders, RequestMethod } from '@/common/constants/enums'
 import { FatalError, RetriableError } from '@/common/errors'
 import useAuth from '@/common/hooks/use-auth'
+import useMediaQuery from '@/common/hooks/use-media-query'
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import { IElectronicProductCode } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -18,7 +19,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUnmount, useUpdateEffect } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash-es'
-import { Fragment, RefObject, useCallback, useRef, useState } from 'react'
+import { Fragment, RefObject, useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -34,7 +35,9 @@ const SSE_TOAST_ID = 'FETCH_SSE'
 const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = ({ listBoxFooterRef }) => {
 	const { t } = useTranslation()
 	const { user } = useAuth()
+	const isLargeScreen = useMediaQuery('(min-width: 920px)')
 	const [isExpanded, setIsExpanded] = useState<boolean>(true)
+
 	const {
 		currentPage,
 		selectedOrder,
@@ -235,6 +238,10 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			setScannedEpc({ ...retrievedEpcData, data: uniqBy([...scannedEpc.data, ...retrievedEpcData.data], 'epc') })
 	}, [retrievedEpcData])
 
+	useLayoutEffect(() => {
+		if (isLargeScreen) setIsExpanded(true)
+	}, [isLargeScreen])
+
 	useUnmount(() => {
 		abortControllerRef.current.abort()
 	})
@@ -279,15 +286,16 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			)}
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
-					onDoubleClick={() => setIsExpanded(!isExpanded)}
 					ref={containerRef}
 					aria-expanded={isExpanded}
 					className={cn(
-						'z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y divide-border bg-background will-change-transform contain-paint',
-						'aria-expanded:p-2 @3xl:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]',
+						'group/scrollable z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y divide-border bg-background contain-size',
+						'transition-height aria-expanded:p-2 @3xl:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))] md:aria-expanded:h-72',
 						'group-has-[#toggle-fullscreen[data-state=checked]]:aria-expanded:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)]'
 					)}>
-					<Div className='relative w-full' style={{ height: virtualizer.getTotalSize() }}>
+					<Div
+						className='relative w-full duration-200 ease-in group-aria-expanded/scrollable:animate-in group-aria-expanded/scrollable:fade-in-0 group-aria-[expanded=false]/scrollable:animate-out group-aria-[expanded=false]/scrollable:fade-out-0'
+						style={{ height: virtualizer.getTotalSize() }}>
 						{virtualizer.getVirtualItems().map((virtualItem) => {
 							const item = scannedEpc.data[virtualItem.index]
 							return (
@@ -334,9 +342,8 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				</ScrollShadow>
 			) : (
 				<Div
-					onDoubleClick={() => setIsExpanded(!isExpanded)}
 					aria-expanded={isExpanded}
-					className='grid h-0 place-items-center overflow-clip group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] @3xl:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
+					className='grid h-0 place-items-center overflow-clip transition-height duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] @3xl:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))] md:aria-expanded:h-64'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -347,9 +354,12 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				createPortal(
 					<Button
 						variant='ghost'
-						className='absolute translate-y-9 lg:hidden xl:hidden'
+						size='lg'
+						aria-expanded={isExpanded}
+						className='order-2 lg:hidden xl:hidden'
 						onClick={() => setIsExpanded(!isExpanded)}>
-						<Icon name={isExpanded ? 'ChevronsUp' : 'ChevronsDown'} />
+						<Icon name={isExpanded ? 'ChevronsUp' : 'ChevronsDown'} />{' '}
+						{isExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
 					</Button>,
 					listBoxFooterRef.current
 				)}

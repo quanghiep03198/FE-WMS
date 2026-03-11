@@ -120,11 +120,10 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 				<NestedTable onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (
-							<NestedColumn key={size?.size_numcode}>
+							<NestedColumn key={size?.size_numcode} className='min-w-24 basis-24'>
 								<NestedCell className='bg-table-head font-medium'>
 									<Div className='flex items-center gap-x-2'>
 										{size?.size_numcode}
-
 										<Fragment>
 											<button
 												onClick={() => {

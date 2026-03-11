@@ -47,7 +47,7 @@ const SyncDataTrigger: React.FC = () => {
 	}, [data])
 
 	return (
-		<Div as='section' className='flex h-full w-full flex-grow flex-col gap-y-3'>
+		<Div as='section' className='flex w-full flex-grow flex-col gap-y-3'>
 			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.synchronization')}
 			</Typography>
@@ -130,7 +130,7 @@ const SyncDataTrigger: React.FC = () => {
 						})}
 					</StepList>
 				) : (
-					<Div className='h-full flex-1 place-content-center place-items-center rounded-md bg-muted text-center text-sm text-muted-foreground xxl:min-h-44'>
+					<Div className='min-h-48 flex-1 place-content-center place-items-center rounded-md bg-muted text-center text-sm text-muted-foreground xxl:min-h-44'>
 						{t('ns_rfid:no_sync_process')}
 					</Div>
 				)}
@@ -139,7 +139,7 @@ const SyncDataTrigger: React.FC = () => {
 	)
 }
 
-const StepList = tw.ul`bg-secondary p-4 flex h-48 @5xl:p-6 @5xl:gap-3 @5xl:h-full flex-col gap-y-2 overflow-y-auto transition-height duration-300 ease-out rounded-[var(--radius)]`
+const StepList = tw.ul`bg-secondary p-4 flex h-48 will-change-contents @7xl/page-container:p-6 @7xl/page-container:gap-3 @7xl/page-container:h-full flex-col gap-y-2 overflow-y-auto transition-height duration-300 ease-out rounded-[var(--radius)]`
 const StepItem = tw.li`flex items-start text-sm gap-2 duration-300 ease-out animate-in fade-in-0`
 
 export default SyncDataTrigger

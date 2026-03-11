@@ -32,10 +32,10 @@ const ScanningSkeleton: React.FC = () => {
 	const { scanningStatus } = usePageContext('scanningStatus')
 	return (
 		<Div
-			data-slot='epc-counter-skeleton'
 			data-status={scanningStatus}
-			className='absolute inset-0 z-0 h-full opacity-0 transition-opacity duration-500 ease-in-out data-[status=connected]:opacity-100'>
-			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite]' />
+			data-slot='epc-counter-skeleton'
+			className='absolute inset-0 z-0 h-full rounded-[inherit] opacity-0 transition-opacity duration-500 ease-in-out data-[status=connected]:opacity-100'>
+			<Skeleton className='inset-0 h-full w-full animate-[pulse_1.25s_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-none' />
 		</Div>
 	)
 }

@@ -21,14 +21,6 @@ import { useGetInboundEpcQuery } from '../../-hooks/use-rfid-inbound-asm'
 
 const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 
-const ListBoxHeader: React.FC = () => {
-	return (
-		<Div className='relative flex h-[var(--list-header-height)] items-center justify-between'>
-			<OrderListSelect />
-		</Div>
-	)
-}
-
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
 	const { isLoading } = useGetInboundEpcQuery()
@@ -88,13 +80,12 @@ const OrderListSelect: React.FC = () => {
 					<HoverCardContent
 						side='top'
 						sideOffset={10}
-						className='w-[var(--radix-hover-card-trigger-width)] *:text-pretty'>
-						<Typography variant='small' className='inline-flex items-center gap-x-2'>
-							<Icon name='Info' className='stroke-active' /> {t('ns_inoutbound:description.select_order')}
-						</Typography>
+						className='inline-grid w-[var(--radix-hover-card-trigger-width)] auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
+						<Icon name='Info' className='my-0.5 stroke-active' size={18} />
+						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 					</HoverCardContent>
 				</HoverCard>
-				<SelectContent sideOffset={4}>
+				<SelectContent>
 					<SelectGroup>
 						<SelectItem value='all'>All</SelectItem>
 						{scannedOrders.map((item) => {
@@ -114,4 +105,4 @@ const OrderListSelect: React.FC = () => {
 	)
 }
 
-export default ListBoxHeader
+export default OrderListSelect

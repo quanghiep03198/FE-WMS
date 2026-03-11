@@ -162,21 +162,21 @@ const OrderDetailTable: React.FC = () => {
 						className='relative h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20 @container [scrollbar-gutter:stable]'
 						style={
 							{
-								'--row-selection-col-width': '48px',
-								'--sticky-left-col-width': '168px',
-								'--sticky-right-col-width': '112px',
-								'--row-action-col-width': '56px'
+								'--row-selection-col-width': '50px',
+								'--sticky-left-col-width': '140px',
+								'--sticky-right-col-width': '100px',
+								'--row-action-col-width': '60px'
 							} as React.CSSProperties
 						}>
 						<Table
 							className={cn(
 								'w-full table-auto [&_span]:line-clamp-1',
-								'[&_tr>:first-child]:sticky [&_tr>:first-child]:left-0 [&_tr>:first-child]:z-10',
-								'[&_tr>:nth-child(2)]:sticky [&_tr>:nth-child(2)]:left-[var(--row-selection-col-width)] [&_tr>:nth-child(2)]:z-10',
-								'[&_tr>:nth-child(3)]:sticky [&_tr>:nth-child(3)]:left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] [&_tr>:nth-child(3)]:z-10',
-								'[&_tr>:nth-child(4)]:sticky [&_tr>:nth-child(4)]:left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] [&_tr>:nth-child(4)]:z-10 [&_tr>:nth-child(4)]:shadow-[1px_0px_hsl(var(--border))]',
-								'[&_tr>:nth-last-child(2)]:sticky [&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] [&_tr>:nth-last-child(2)]:z-10',
-								'[&_tr>:last-child]:sticky [&_tr>:last-child]:right-0 [&_tr>:last-child]:z-10'
+								'@5xl:[&_tr>:first-child]:sticky @5xl:[&_tr>:first-child]:left-0 @5xl:[&_tr>:first-child]:z-10',
+								'@5xl:[&_tr>:nth-child(2)]:sticky @5xl:[&_tr>:nth-child(2)]:left-[var(--row-selection-col-width)] @5xl:[&_tr>:nth-child(2)]:z-10',
+								'@5xl:[&_tr>:nth-child(3)]:sticky @5xl:[&_tr>:nth-child(3)]:left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] @5xl:[&_tr>:nth-child(3)]:z-10',
+								'[&_tr>:nth-child(4)]:shadow-[1px_0px_hsl(var(--border))] @5xl:[&_tr>:nth-child(4)]:sticky @5xl:[&_tr>:nth-child(4)]:left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] @5xl:[&_tr>:nth-child(4)]:z-10',
+								'@5xl:[&_tr>:nth-last-child(2)]:sticky @5xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @5xl:[&_tr>:nth-last-child(2)]:z-10',
+								'@5xl:[&_tr>:last-child]:sticky @5xl:[&_tr>:last-child]:right-0 @5xl:[&_tr>:last-child]:z-10'
 							)}>
 							<colgroup>
 								<col
@@ -245,14 +245,14 @@ const OrderDetailTable: React.FC = () => {
 										<span>{t('ns_erp:fields.color_sn')}</span>
 									</TableHead>
 									<TableHead align='left' className='p-0'>
-										<span className='sticky left-[calc(var(--row-selection-col-width)+3*var(--sticky-left-col-width))] block w-full max-w-[calc(100cqw-var(--row-selection-col-width)-3*var(--sticky-left-col-width)-var(--sticky-right-col-width)-var(--row-action-col-width))] px-4 py-2 text-center'>
+										<span className='block w-full px-4 py-2 text-center @5xl:sticky @5xl:left-[calc(var(--row-selection-col-width)+3*var(--sticky-left-col-width))] @5xl:max-w-[calc(100cqw-var(--row-selection-col-width)-3*var(--sticky-left-col-width)-var(--sticky-right-col-width)-var(--row-action-col-width))]'>
 											Size
 										</span>
 									</TableHead>
 									<TableHead
 										align='right'
 										className='right-[var(--row-action-col-width)] z-20 w-[var(--sticky-right-col-width)] bg-background xl:sticky'>
-										{t('ns_common:common_fields.total')}
+										<span>{t('ns_common:common_fields.total')}</span>
 									</TableHead>
 									<TableHead>
 										<span className='sr-only'></span>

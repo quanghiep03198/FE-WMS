@@ -11,11 +11,11 @@ const ScannerToolbar: React.FC = () => {
 	const isLargeScreen = useMediaQuery('(min-width: 920px)')
 
 	return (
-		<Div className='flex h-[var(--toolbar-height)] items-center justify-between gap-x-2 gap-y-2 bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto md:justify-end'>
+		<Div className='flex h-[var(--toolbar-height)] items-start justify-between gap-2 bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto md:justify-end'>
 			<HorizontalConnectionInsight className='md:hidden' />
 			<TenacyBox />
 			<ScannerActions />
-			<Separator className='mx-2 hidden h-5 w-0.5 lg:block xl:block xxl:hidden' />
+			<Separator className='m-1.5 block h-6 w-0.5 @7xl/page-container:hidden md:hidden' />
 			<Tooltip
 				message={t('ns_common:navigation.settings')}
 				triggerProps={{

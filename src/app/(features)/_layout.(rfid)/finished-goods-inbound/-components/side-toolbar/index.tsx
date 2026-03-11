@@ -12,12 +12,15 @@ const ScannerSettings: React.FC = () => {
 		<>
 			<Sheet>
 				<SheetTrigger id='side-toolbar-sheet-trigger' className='hidden' />
-				<SheetContent autoFocus={false} side='right' className='max-w-lg'>
-					<Div className='space-y-6'>
+				<SheetContent
+					side='left'
+					className='max-w-lg !overflow-y-scroll'
+					onOpenAutoFocus={(e) => e.preventDefault()}>
+					<ScrollShadow className='max-h-full flex-1 space-y-6'>
 						<FullscreenToggleBox shouldExitOnUnmount={false} />
 						<DataRestoration />
 						<SyncDataTrigger />
-					</Div>
+					</ScrollShadow>
 				</SheetContent>
 			</Sheet>
 			<ToolbarWrapper>

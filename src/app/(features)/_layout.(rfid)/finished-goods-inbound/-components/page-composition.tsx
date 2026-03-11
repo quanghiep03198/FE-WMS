@@ -30,7 +30,7 @@ const CounterPanel: React.FC<React.ComponentProps<'div'>> = tw.div`
 	flex-col gap-y-3 
 	xl:col-span-1 xl:row-span-1 xl:order-2 order-1 xl:[&>*[data-slot=connection-insight]]:hidden
 	lg:col-span-1 lg:row-span-1 lg:order-2 flex lg:[&>*[data-slot=connection-insight]]:hidden
-	md:gap-y-0 md:[&>*[data-slot=epc-counter]]:rounded-b-none md:[&>*[data-slot=epc-counter-skeleton]]:rounded-b-none 
+	md:gap-y-0 md:[&>*[data-slot=epc-counter]]:rounded-b-none
 	md:[&>*[data-slot=connection-insight]]:mb-3 md:[&>*[data-slot=connection-insight]]:border-t-0 md:[&>*[data-slot=connection-insight]]:rounded-b-md md:[&>*[data-slot=connection-insight]]:rounded-t-none
 	md:[&>*[data-slot=connection-insight]_*[data-slot=detail]]:flex md:[&>*[data-slot=connection-insight]_*[data-slot=detail]]:justify-center
 	`
