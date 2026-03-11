@@ -102,8 +102,8 @@ export class AxiosClient {
 					try {
 						if (!credentials?.username)
 							throw new UnauthorizedError(i18n.t('ns_auth:notification.authenticate_failed'))
-						const { metadata: refreshToken } = await AuthService.refreshToken(abortController.signal)
-						this.processQueue(null, refreshToken)
+						const { metadata } = await AuthService.refreshToken(abortController.signal)
+						this.processQueue(null, metadata.newAccessToken)
 						const response = await this.instance(originalRequest)
 						originalRequest.retry = true
 						return response
@@ -132,6 +132,6 @@ export class AxiosClient {
 	}
 }
 
-const axiosInstance = new AxiosClient(AppConfigs.BASE_API_URL, '1.0').instance
+const { instance } = new AxiosClient(AppConfigs.BASE_API_URL, '1.0')
 
-export default axiosInstance
+export { instance as default }
