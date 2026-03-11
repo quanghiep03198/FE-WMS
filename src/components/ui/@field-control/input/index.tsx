@@ -128,7 +128,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 									{type === 'password' && (
 										<Toggle
 											type='button'
-											className='absolute right-1 top-1/2 z-20 size-8 -translate-y-1/2 bg-[inherit] p-0 focus-within:outline-none focus-within:ring-0 data-[state=on]:bg-[inherit] hover:bg-[inherit]'
+											className='absolute right-1 top-1/2 z-20 size-8 -translate-y-1/2 bg-transparent p-0 focus-within:outline-none focus-within:ring-0 data-[state=on]:bg-transparent hover:bg-transparent'
 											onPressedChange={(pressed) => setCurrentType(pressed ? 'text' : 'password')}>
 											<Icon name={currentType === 'password' ? 'Eye' : 'EyeOff'} />
 										</Toggle>
