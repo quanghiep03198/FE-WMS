@@ -1,6 +1,6 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Div, Separator, Skeleton, Typography } from '@/components/ui'
-import { useInterval, useResetState } from 'ahooks'
+import { useInterval, useResetState, useUnmount } from 'ahooks'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../-contexts/page-context'
@@ -55,10 +55,11 @@ const ScanningCounter: React.FC = () => {
 	useEffect(() => {
 		if (total !== count) setInterval(INTERVAL_TIME)
 		else setInterval(undefined)
-		return () => {
-			clearInterval()
-		}
 	}, [total, count])
+
+	useUnmount(() => {
+		clearInterval()
+	})
 
 	return (
 		<Div className='relative z-10 mb-2 flex items-center justify-center gap-x-3 *:font-medium sm:mb-4'>

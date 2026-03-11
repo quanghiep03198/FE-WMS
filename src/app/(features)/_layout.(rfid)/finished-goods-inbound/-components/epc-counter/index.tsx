@@ -1,7 +1,7 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Div, Skeleton, Typography } from '@/components/ui'
 import { Separator } from '@radix-ui/react-context-menu'
-import { useInterval, useResetState } from 'ahooks'
+import { useInterval, useResetState, useUnmount } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../../-contexts/page-context'
@@ -110,11 +110,11 @@ const ScanningTimer: React.FC = () => {
 		} else {
 			resetInterval()
 		}
-
-		return () => {
-			clearInterval()
-		}
 	}, [scanningStatus])
+
+	useUnmount(() => {
+		clearInterval()
+	})
 
 	return (
 		<Badge className='relative z-10 min-w-24 place-content-center text-sm'>
