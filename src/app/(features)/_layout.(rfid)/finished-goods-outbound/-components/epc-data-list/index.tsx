@@ -22,6 +22,7 @@ import {
 	useDeepCompareEffect,
 	useMemoizedFn,
 	usePrevious,
+	useSessionStorageState,
 	useSize,
 	useUnmount,
 	useUpdate,
@@ -51,11 +52,14 @@ const ScannedEpcList: React.FC = () => {
 	const outletWrapper = useQuerySelector('#outlet-wrapper')
 	const outletWrapperSize = useSize(outletWrapper)
 
-	const [open, setOpen] = useState(true)
+	const [isExpanded, setIsExpanded] = useSessionStorageState('rfid:outbound:epc_list_expanded', {
+		defaultValue: true,
+		listenStorageChange: true
+	})
 
 	const hasMounted = useRef(false)
 	useLayoutEffect(() => {
-		if (outletWrapperSize?.width > 920 && outletWrapperSize?.width < 1280) setOpen(true)
+		if (outletWrapperSize?.width > 920 && outletWrapperSize?.width < 1280) setIsExpanded(true)
 	}, [outletWrapperSize])
 
 	useLayoutEffect(() => {
@@ -275,12 +279,12 @@ const ScannedEpcList: React.FC = () => {
 			{Array.isArray(scannedEpc.data) && scannedEpc.totalDocs > 0 ? (
 				<ScrollShadow
 					ref={containerRef}
-					aria-expanded={open}
+					aria-expanded={isExpanded}
 					data-mounted={hasMounted.current}
 					className={cn(
 						'linear relative z-10 h-0 divide-y bg-background p-0 transition-height will-change-transform contain-size',
 						'data-[mounted=true]:duration-100',
-						'aria-expanded:h-[30vh] aria-expanded:p-2 @4xl/playground:aria-expanded:h-[var(--outlet-wrapper-height)]'
+						'aria-expanded:h-64 aria-expanded:p-2 @4xl/playground:aria-expanded:h-[var(--outlet-wrapper-height)]'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
@@ -327,12 +331,12 @@ const ScannedEpcList: React.FC = () => {
 				</ScrollShadow>
 			) : (
 				<Div
-					aria-expanded={open}
+					aria-expanded={isExpanded}
 					data-mounted={hasMounted.current}
 					className={cn(
 						'linear grid h-0 place-items-center',
 						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
-						'aria-expanded:h-[30vh] @4xl/playground:aria-expanded:h-[--outlet-wrapper-height]'
+						'aria-expanded:h-64 @4xl/playground:aria-expanded:h-[--outlet-wrapper-height]'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
@@ -341,16 +345,16 @@ const ScannedEpcList: React.FC = () => {
 				</Div>
 			)}
 			{/* Datalist footer */}
-			<Div aria-expanded={open} className='basis-auto bg-background p-1.5 aria-expanded:border-t'>
+			<Div aria-expanded={isExpanded} className='basis-auto bg-background p-1.5 aria-expanded:border-t'>
 				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @7xl/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
 				<Button
 					variant='secondary'
 					className='flex w-full @4xl/playground:hidden @[1440px]/playground:flex'
-					onClick={() => setOpen(!open)}>
-					<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
-					{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
+					onClick={() => setIsExpanded(!isExpanded)}>
+					<Icon name={isExpanded ? 'ChevronUp' : 'ChevronDown'} />{' '}
+					{isExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
 				</Button>
 				<Div className='[&>button[aria-haspopup=dialog]]:hidden'>
 					<UploadDataFileDialog station='WH103' maxFiles={500} />

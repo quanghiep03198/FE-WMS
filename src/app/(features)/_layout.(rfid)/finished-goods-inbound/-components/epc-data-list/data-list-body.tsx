@@ -16,7 +16,14 @@ import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/services/auth.service'
 import { EventSourceMessage, EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { useAsyncEffect, useDeepCompareEffect, usePrevious, useUnmount, useUpdateEffect } from 'ahooks'
+import {
+	useAsyncEffect,
+	useDeepCompareEffect,
+	usePrevious,
+	useSessionStorageState,
+	useUnmount,
+	useUpdateEffect
+} from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { uniqBy } from 'lodash-es'
 import { Fragment, RefObject, useCallback, useLayoutEffect, useRef, useState } from 'react'
@@ -36,7 +43,10 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 	const { t } = useTranslation()
 	const { user } = useAuth()
 	const isLargeScreen = useMediaQuery('(min-width: 920px)')
-	const [isExpanded, setIsExpanded] = useState<boolean>(true)
+	const [isExpanded, setIsExpanded] = useSessionStorageState<boolean>('rfid:inbound:epc_list_expanded', {
+		defaultValue: true,
+		listenStorageChange: true
+	})
 
 	const {
 		currentPage,
