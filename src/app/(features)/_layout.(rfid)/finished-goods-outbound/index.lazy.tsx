@@ -34,14 +34,14 @@ function Page() {
 					{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
 					{/* <PageNavigationBlocker /> */}
 					<PageProvider>
-						<Div className='static gap-4 @[1500px]:grid @[1500px]:grid-cols-12 @[1500px]:p-0'>
-							<Div className='h-full @container/playground @[1500px]:col-span-4'>
-								<Div className='flex flex-col items-stretch @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @4xl/playground:gap-4 md:gap-4'>
-									<Div className='order-first col-span-full @4xl/playground:col-span-1 @[1500px]:hidden'>
+						<Div className='static gap-4 @7xl/layout-wrapper:grid @7xl/layout-wrapper:grid-cols-12 @7xl/layout-wrapper:p-0'>
+							<Div className='h-full @container/playground @7xl/layout-wrapper:col-span-4'>
+								<Div className='flex flex-col items-stretch gap-0 @4xl/playground:grid @4xl/playground:grid-flow-col @4xl/playground:auto-rows-auto @4xl/playground:grid-cols-2 @4xl/playground:gap-4 @7xl/layout-wrapper:gap-0'>
+									<Div className='order-first col-span-full @4xl/playground:col-span-1 @[1400px]/playground:hidden'>
 										<ScannedEpcCounter />
 									</Div>
-									<Div className='col-span-full flex-1 @4xl/playground:sticky @4xl/playground:top-[var(--header-height)] @4xl/playground:order-last @4xl/playground:col-span-1 @4xl/playground:col-start-2 @4xl/playground:row-span-6 @[1500px]/layout-wrapper:mb-6 @[1500px]:order-first'>
-										<Div className='hidden @[1500px]:block'>
+									<Div className='col-span-full mb-4 flex-1 @4xl/playground:order-last @4xl/playground:col-span-1 @4xl/playground:col-start-2 @4xl/playground:row-span-6 @4xl/playground:mb-0 @7xl/layout-wrapper:order-first @7xl/layout-wrapper:mb-6'>
+										<Div className='hidden @[1400px]/playground:block'>
 											<ScannedEpcCounter />
 										</Div>
 										<ScannedEpcList />
@@ -51,7 +51,7 @@ function Page() {
 									</Div>
 								</Div>
 							</Div>
-							<Div className='hidden @[1500px]:col-span-8 @[1500px]:block'>
+							<Div className='hidden @7xl/layout-wrapper:col-span-8 @7xl/layout-wrapper:block'>
 								<OrderSizeDetailTable />
 							</Div>
 						</Div>

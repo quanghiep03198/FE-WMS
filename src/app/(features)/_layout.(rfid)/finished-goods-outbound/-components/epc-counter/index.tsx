@@ -11,7 +11,7 @@ const ScannedEpcCounter: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Div className='relative flex h-full basis-auto flex-col items-center justify-center overflow-clip rounded-lg border p-4 py-6 @md:py-8 @4xl:h-60 @[1500px]/layout-wrapper:rounded-b-none @[1500px]/layout-wrapper:px-6 sm:sticky'>
+		<Div className='relative flex h-full basis-auto flex-col items-center justify-center overflow-clip rounded-lg rounded-b-none border p-4 py-6 @md:py-8 @4xl/playground:rounded-b-md @4xl:h-60 @7xl/layout-wrapper:rounded-b-none @7xl/layout-wrapper:px-6'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography

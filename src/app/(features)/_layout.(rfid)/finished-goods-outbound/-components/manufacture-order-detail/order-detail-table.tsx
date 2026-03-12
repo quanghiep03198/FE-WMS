@@ -73,7 +73,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border xxl:sticky xxl:top-[var(--header-height)]'
+			className='relative z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border @7xl/layout-wrapper:sticky @7xl/layout-wrapper:top-[calc(var(--header-height)+var(--outlet-padding))] xxl:top-[var(--header-height)]'
 			style={
 				{
 					'--table-footer-height': '2rem'
@@ -84,19 +84,19 @@ const OrderSizeDetailTable: React.FC = () => {
 				className='h-[calc(var(--outlet-wrapper-height,100vh)-var(--table-footer-height))] w-full max-w-full overflow-scroll rounded-lg scrollbar-track-accent/20 @container'
 				style={
 					{
-						'--sticky-left-col-width': '140px',
-						'--sticky-right-col-width': '100px',
+						'--sticky-left-col-width': '130px',
+						'--sticky-right-col-width': '90px',
 						'--row-action-col-width': '60px'
 					} as React.CSSProperties
 				}>
 				<Table
 					className={cn(
 						'w-auto table-fixed [&_span]:line-clamp-1',
-						'@4xl:[&_tr>:first-child]:sticky @4xl:[&_tr>:first-child]:left-0 @4xl:[&_tr>:first-child]:z-10',
-						'@4xl:[&_tr>:nth-child(2)]:sticky @4xl:[&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] @4xl:[&_tr>:nth-child(2)]:z-10',
-						'@4xl:[&_tr>:nth-child(3)]:sticky @4xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width))] @4xl:[&_tr>:nth-child(3)]:z-10 @4xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
-						'@4xl:[&_tr>:nth-last-child(2)]:sticky @4xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @4xl:[&_tr>:nth-last-child(2)]:z-10',
-						'@4xl:[&_tr>:last-child]:sticky @4xl:[&_tr>:last-child]:right-0 @4xl:[&_tr>:last-child]:z-10'
+						'@3xl:[&_tr>:first-child]:sticky @3xl:[&_tr>:first-child]:left-0 @3xl:[&_tr>:first-child]:z-10',
+						'@3xl:[&_tr>:nth-child(2)]:sticky @3xl:[&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] @3xl:[&_tr>:nth-child(2)]:z-10',
+						'@3xl:[&_tr>:nth-child(3)]:sticky @3xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width))] @3xl:[&_tr>:nth-child(3)]:z-10 @3xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
+						'@3xl:[&_tr>:nth-last-child(2)]:sticky @3xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @3xl:[&_tr>:nth-last-child(2)]:z-10',
+						'@3xl:[&_tr>:last-child]:sticky @3xl:[&_tr>:last-child]:right-0 @3xl:[&_tr>:last-child]:z-10'
 					)}>
 					<colgroup>
 						<col

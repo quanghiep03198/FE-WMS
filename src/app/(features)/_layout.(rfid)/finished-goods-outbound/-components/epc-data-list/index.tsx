@@ -55,7 +55,7 @@ const ScannedEpcList: React.FC = () => {
 
 	const hasMounted = useRef(false)
 	useLayoutEffect(() => {
-		if (outletWrapperSize?.width > 920 && outletWrapperSize?.width < 1500) setOpen(true)
+		if (outletWrapperSize?.width > 920 && outletWrapperSize?.width < 1280) setOpen(true)
 	}, [outletWrapperSize])
 
 	useLayoutEffect(() => {
@@ -219,16 +219,16 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @[1500px]/layout-wrapper:rounded-t-none @[1500px]/layout-wrapper:border-t-0'>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md rounded-t-none border border-t-0 @4xl/playground:rounded-md @4xl/playground:border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @7xl/layout-wrapper:rounded-t-none @7xl/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
 			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
 				<Button
 					variant='ghost'
-					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @2xl/toolbar:flex-row'
+					className='flex h-full w-full flex-col flex-wrap py-2 font-normal @xl/toolbar:flex-row'
 					onClick={() => fetchServerEvent()}>
 					<Icon name='RefreshCcw' />
-					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
 						{t('ns_common:actions.reload')}
 					</Typography>
 				</Button>
@@ -236,11 +236,11 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row'
+						className: 'flex h-full w-full flex-col py-1 font-normal @xl/toolbar:flex-row'
 					})}
 					htmlFor='data-restoration-sheet-trigger'>
 					<Icon name='Archive' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
 						{t('ns_common:actions.archived')}
 					</Typography>
 				</Label>
@@ -249,11 +249,11 @@ const ScannedEpcList: React.FC = () => {
 					role='button'
 					className={buttonVariants({
 						variant: 'ghost',
-						className: 'flex h-full w-full flex-col py-1 font-normal @2xl/toolbar:flex-row'
+						className: 'flex h-full w-full flex-col py-1 font-normal @xl/toolbar:flex-row'
 					})}
 					htmlFor='epc-data-upload-dialog-trigger'>
 					<Icon name='Upload' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
 						{t('ns_common:actions.upload')}
 					</Typography>
 				</Label>
@@ -262,11 +262,11 @@ const ScannedEpcList: React.FC = () => {
 					className={buttonVariants({
 						variant: 'ghost',
 						className:
-							'flex h-full w-full flex-col flex-wrap font-normal @2xl/toolbar:flex-row @4xl/layout-wrapper:!hidden md:flex lg:hidden xl:hidden'
+							'flex h-full w-full flex-col flex-wrap font-normal @xl/toolbar:flex-row @4xl/playground:hidden @7xl/layout-wrapper:hidden'
 					})}
 					htmlFor='order-detail-dialog-trigger'>
 					<Icon name='ArrowUpRight' size={18} />
-					<Typography variant='small' className='text-xs text-muted-foreground @2xl/toolbar:text-sm'>
+					<Typography variant='small' className='text-xs text-muted-foreground @xl/toolbar:text-sm'>
 						{t('ns_common:actions.detail')}
 					</Typography>
 				</Label>
@@ -280,7 +280,7 @@ const ScannedEpcList: React.FC = () => {
 					className={cn(
 						'linear relative z-10 h-0 divide-y bg-background p-0 transition-height will-change-transform contain-size',
 						'data-[mounted=true]:duration-100',
-						'aria-expanded:h-[30vh] aria-expanded:p-2 @4xl:aria-expanded:h-[var(--outlet-wrapper-height)]'
+						'aria-expanded:h-[30vh] aria-expanded:p-2 @4xl/playground:aria-expanded:h-[var(--outlet-wrapper-height)]'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
@@ -292,7 +292,9 @@ const ScannedEpcList: React.FC = () => {
 									height: virtualItem.size,
 									transform: `translateY(${virtualItem.start}px)`
 								}}>
-								<Typography className='font-medium sm:text-sm'>{item.epc}</Typography>
+								<Typography variant='small' className='font-medium sm:text-sm'>
+									{item.epc}
+								</Typography>
 								<Typography variant='small' className='capitalize text-foreground'>
 									{item.mo_no}
 								</Typography>
@@ -330,7 +332,7 @@ const ScannedEpcList: React.FC = () => {
 					className={cn(
 						'linear grid h-0 place-items-center',
 						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
-						'aria-expanded:h-[30vh] @4xl:aria-expanded:h-[--outlet-wrapper-height]'
+						'aria-expanded:h-[30vh] @4xl/playground:aria-expanded:h-[--outlet-wrapper-height]'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
@@ -340,12 +342,12 @@ const ScannedEpcList: React.FC = () => {
 			)}
 			{/* Datalist footer */}
 			<Div aria-expanded={open} className='basis-auto bg-background p-1.5 aria-expanded:border-t'>
-				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @[1500px]/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
+				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @7xl/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
 				<Button
 					variant='secondary'
-					className='hidden w-full @xs/playground:flex @4xl/playground:!hidden @[1500px]/playground:!flex lg:hidden'
+					className='flex w-full @4xl/playground:hidden @[1440px]/playground:flex'
 					onClick={() => setOpen(!open)}>
 					<Icon name={open ? 'ChevronUp' : 'ChevronDown'} />{' '}
 					{open ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}
