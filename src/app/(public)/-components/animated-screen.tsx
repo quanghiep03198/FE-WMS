@@ -104,7 +104,7 @@ const AnimatedScreen: React.FC = () => {
 									<Icon name='Files' /> Reports
 								</li>
 								<li data-slot='menu-item'>
-									<Icon name='Truck' /> Truckload delivery management
+									<Icon name='Container' /> Truckload delivery management
 								</li>
 								<li data-slot='menu-item'>
 									<Icon name='FileSearch' /> Seeking
