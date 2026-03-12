@@ -25,8 +25,9 @@ const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
 		[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
 		[RequestHeaders.USER_REQUEST]: user?.username
 	},
-	closeOnBeforeunload: true,
-	timeout: 10000
+	timeout: 10000,
+	retries: 3,
+	reconnectionAttempts: 3
 })
 
 export function destroySharedSocket() {
