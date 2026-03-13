@@ -45,12 +45,7 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 					{
 						title: 'navigation.rfid_device_management',
 						url: '/rfid-devices-management',
-						authorizedRoles: [
-							UserRole.ADMIN,
-							UserRole.MANAGER,
-							UserRole.FG_WAREHOUSE_STAFF,
-							UserRole.INDUSTRIAL_ENGINEERING_STAFF
-						]
+						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
 					}
 				]
 			},
