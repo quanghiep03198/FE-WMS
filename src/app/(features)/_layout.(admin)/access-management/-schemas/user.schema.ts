@@ -8,7 +8,7 @@ export const createUserSchema = object({
 	password: string().nullish(),
 	display_name: string().nonempty({ error: 'ns_validation:required' }),
 	email: email().nullish(),
-	employee_code: string().optional(),
+	employee_code: string().nullish(),
 	roles: array(enums(UserRole), { error: 'ns_validation:required' }).nonempty({ error: 'ns_validation:required' }),
 	authorized_factory_codes: array(enums(FactoryCode), { error: 'ns_validation:required' }).nonempty({
 		error: 'ns_validation:required'
