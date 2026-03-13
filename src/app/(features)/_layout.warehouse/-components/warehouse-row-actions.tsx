@@ -54,15 +54,25 @@ const WarehouseRowActions: React.FC<WarehouseRowActionsProps> = ({ row, onEdit, 
 						{t('ns_common:actions.detail')}
 					</Link>
 				</DropdownMenuItem>
-				<DropdownMenuItem
-					className='flex items-center gap-x-3'
-					onMouseEnter={() => prefetchEmployee(row.original.dept_code, row.original?.manager_code)}
-					onClick={() => {
-						if (typeof onEdit === 'function') onEdit()
-					}}>
-					<Icon name='Pencil' />
-					{t('ns_common:actions.update')}
-				</DropdownMenuItem>
+				<RoleBaseAccessControl
+					mode='fallback'
+					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					fallbackComponent={
+						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+							<Icon name='Lock' />
+							{t('ns_common:actions.update')}
+						</DropdownMenuItem>
+					}>
+					<DropdownMenuItem
+						className='flex items-center gap-x-3'
+						onMouseEnter={() => prefetchEmployee(row.original.dept_code, row.original?.manager_code)}
+						onClick={() => {
+							if (typeof onEdit === 'function') onEdit()
+						}}>
+						<Icon name='Pencil' />
+						{t('ns_common:actions.update')}
+					</DropdownMenuItem>
+				</RoleBaseAccessControl>
 				<RoleBaseAccessControl
 					mode='fallback'
 					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}

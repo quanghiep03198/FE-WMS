@@ -60,7 +60,8 @@ export default {
 		[UserRole.FG_WAREHOUSE_STAFF]: '成品仓库员工',
 		[UserRole.DG_WAREHOUSE_STAFF]: 'B级鞋仓库员工',
 		[UserRole.IE_STAFF]: '进出口员工',
-		[UserRole.SECURITY_GUARD]: '保卫'
+		[UserRole.SECURITY_GUARD]: '保卫',
+		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'IE员工'
 	},
 	steps: {
 		select_department: '选择部门',

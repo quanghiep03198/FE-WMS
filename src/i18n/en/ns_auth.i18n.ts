@@ -57,7 +57,8 @@ export default {
 		[UserRole.FG_WAREHOUSE_STAFF]: 'Finished Goods Warehouse Staff',
 		[UserRole.DG_WAREHOUSE_STAFF]: 'Defective Goods Warehouse Staff',
 		[UserRole.IE_STAFF]: 'Import-Export Staff',
-		[UserRole.SECURITY_GUARD]: 'Security Guard'
+		[UserRole.SECURITY_GUARD]: 'Security Guard',
+		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'IE Staff'
 	},
 	steps: { select_department: 'Select department', verify_account: 'Verify your account' },
 	texts: {

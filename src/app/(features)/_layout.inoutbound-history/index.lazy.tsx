@@ -29,7 +29,13 @@ function RouteComponent() {
 			<title>{t('ns_common:navigation.inoutbound_history')}</title>
 			<meta name='description' content='Search in/outbound progress by order' />
 
-			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+			<RoleGuard
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
+				]}>
 				<Div as='section' className='min-h-[var(--outlet-wrapper-height)] place-content-center space-y-6'>
 					<PageHeader />
 					<SearchForm />

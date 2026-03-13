@@ -24,7 +24,8 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 					UserRole.ADMIN,
 					UserRole.MANAGER,
 					UserRole.FG_WAREHOUSE_STAFF,
-					UserRole.DG_WAREHOUSE_STAFF
+					UserRole.DG_WAREHOUSE_STAFF,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]
 			},
 			{
@@ -34,12 +35,22 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 					{
 						title: 'navigation.warehouse_management',
 						url: '/warehouse',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.rfid_device_management',
 						url: '/rfid-devices-management',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					}
 				]
 			},
@@ -76,43 +87,83 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 					{
 						title: 'navigation.daily_inbound_report',
 						url: '/inbound-report',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.daily_outbound_report',
 						url: '/outbound-report',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 
 					{
 						title: 'navigation.monthly_inventory_audit',
 						url: '/inventory-audit',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.inventory_estimation',
 						url: '/production-inventory',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.defective_goods_inbound_report',
 						url: '/defective-goods-inbound-report',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.DG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.defective_goods_outbound_report',
 						url: '/defective-goods-outbound-report',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.DG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.defective_goods_inventory',
 						url: '/defective-goods-inventory',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.DG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.DG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.cargo_weight_check',
 						url: '/cargo-weight-check',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					}
 				]
 			},
@@ -125,7 +176,8 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 					UserRole.MANAGER,
 					UserRole.FG_WAREHOUSE_STAFF,
 					UserRole.IE_STAFF,
-					UserRole.SECURITY_GUARD
+					UserRole.SECURITY_GUARD,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]
 			},
 			{
@@ -135,20 +187,41 @@ export const navigationConfig: Record<'main' | 'preferences' | 'integrations' | 
 					{
 						title: 'navigation.inoutbound_history',
 						url: '/inoutbound-history',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.purchase_order_search',
 						url: '/purchase-order-seeking',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.IE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					},
 					{
 						title: 'navigation.packing_manifest',
 						url: '/packing-manifest',
-						authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+						authorizedRoles: [
+							UserRole.ADMIN,
+							UserRole.MANAGER,
+							UserRole.FG_WAREHOUSE_STAFF,
+							UserRole.INDUSTRIAL_ENGINEERING_STAFF
+						]
 					}
 				],
-				authorizedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]
+				authorizedRoles: [
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
+				]
 			}
 		],
 		integrations: [

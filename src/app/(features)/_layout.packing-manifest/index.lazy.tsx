@@ -34,7 +34,13 @@ function Page() {
 			<title>{t('ns_common:navigation.cargo_weight_check')}</title>
 			<meta name='description' content={t('ns_packing:descriptions.daily_weighing_report')} />
 
-			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+			<RoleGuard
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
+				]}>
 				<PageWrapper>
 					<PageHeader>
 						<PageTitle>{t('ns_packing:titles.packing_manifest')}</PageTitle>

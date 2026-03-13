@@ -64,7 +64,13 @@ function Page() {
 			<title>{t('ns_common:navigation.warehouse_management')}</title>
 			<meta name='description' content={t('ns_warehouse:headings.storage_list_description')} />
 
-			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
+			<RoleGuard
+				authorizedRoles={[
+					UserRole.ADMIN,
+					UserRole.MANAGER,
+					UserRole.FG_WAREHOUSE_STAFF,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
+				]}>
 				<PageProvider>
 					<PageWrapper>
 						<PageHeading />

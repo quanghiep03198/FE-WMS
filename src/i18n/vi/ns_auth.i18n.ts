@@ -58,10 +58,11 @@ export default {
 	roles: {
 		[UserRole.ADMIN]: 'Quản trị viên',
 		[UserRole.MANAGER]: 'Quản lý',
-		[UserRole.FG_WAREHOUSE_STAFF]: 'Nhân viên kho thành phẩm',
-		[UserRole.DG_WAREHOUSE_STAFF]: 'Nhân viên kho giày B',
-		[UserRole.IE_STAFF]: 'Nhân viên xuất nhập khẩu',
-		[UserRole.SECURITY_GUARD]: 'Bảo vệ'
+		[UserRole.FG_WAREHOUSE_STAFF]: 'Nhân viên KTP',
+		[UserRole.DG_WAREHOUSE_STAFF]: 'Nhân viên kho B',
+		[UserRole.IE_STAFF]: 'Nhân viên XNK',
+		[UserRole.SECURITY_GUARD]: 'Bảo vệ',
+		[UserRole.INDUSTRIAL_ENGINEERING_STAFF]: 'Nhân viên IE'
 	},
 	steps: {
 		select_department: 'Chọn đơn vị công tác',

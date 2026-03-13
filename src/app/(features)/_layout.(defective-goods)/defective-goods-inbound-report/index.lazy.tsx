@@ -45,7 +45,8 @@ function Page() {
 					UserRole.ADMIN,
 					UserRole.MANAGER,
 					UserRole.FG_WAREHOUSE_STAFF,
-					UserRole.DG_WAREHOUSE_STAFF
+					UserRole.DG_WAREHOUSE_STAFF,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]}>
 				<PageWrapper>
 					<PageHeader>

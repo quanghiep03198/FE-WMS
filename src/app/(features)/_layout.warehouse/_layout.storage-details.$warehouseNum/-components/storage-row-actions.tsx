@@ -23,14 +23,24 @@ const StorageRowActions: React.FC<WarehouseRowActionsProps> = (props) => {
 				<span className='sr-only'>Open menu</span>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='min-w-40'>
-				<DropdownMenuItem
-					className='flex items-center gap-x-3'
-					onClick={() => {
-						if (props.onEdit && typeof props.onEdit === 'function') props.onEdit()
-					}}>
-					<Icon name='Pencil' />
-					{t('ns_common:actions.update')}
-				</DropdownMenuItem>
+				<RoleBaseAccessControl
+					mode='fallback'
+					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}
+					fallbackComponent={
+						<DropdownMenuItem className='flex items-center gap-x-3' disabled>
+							<Icon name='Lock' />
+							{t('ns_common:actions.update')}
+						</DropdownMenuItem>
+					}>
+					<DropdownMenuItem
+						className='flex items-center gap-x-3'
+						onClick={() => {
+							if (props.onEdit && typeof props.onEdit === 'function') props.onEdit()
+						}}>
+						<Icon name='Pencil' />
+						{t('ns_common:actions.update')}
+					</DropdownMenuItem>
+				</RoleBaseAccessControl>
 				<RoleBaseAccessControl
 					mode='fallback'
 					authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER]}

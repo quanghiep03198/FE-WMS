@@ -47,7 +47,8 @@ function Page() {
 					UserRole.MANAGER,
 					UserRole.FG_WAREHOUSE_STAFF,
 					UserRole.IE_STAFF,
-					UserRole.SECURITY_GUARD
+					UserRole.SECURITY_GUARD,
+					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]}>
 				<HostCompatibleGuard>
 					<PageContextProvider>

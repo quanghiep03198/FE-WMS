@@ -71,7 +71,7 @@ const WarehouseFormDialog: React.FC = () => {
 		mutationFn: (payload: FormValues<typeof type>) => {
 			switch (type) {
 				case CommonActions.CREATE: {
-					return WarehouseService.createWarehouse(payload)
+					return WarehouseService.createWarehouse(payload as WarehouseFormValue)
 				}
 				case CommonActions.UPDATE: {
 					const id = defaultFormValues.id
@@ -142,7 +142,7 @@ const WarehouseFormDialog: React.FC = () => {
 								disabled
 								placeholder='Some warehouse name ...'
 								name='company_code'
-								label={t('ns_company:company')}
+								label={t('ns_company:factory')}
 								defaultValue={user?.current_factory_code}
 							/>
 						</FormItem>
