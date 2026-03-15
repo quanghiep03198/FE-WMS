@@ -145,17 +145,15 @@ const ScannedEpcList: React.FC = () => {
 						setScanningState('success')
 						toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						const response = await AuthService.refreshToken(abortControllerRef.current?.signal)
-						const refreshToken = response.metadata
-						if (!refreshToken) throw new FatalError('Failed to refresh token')
-						throw new RetriableError()
+						await AuthService.refreshToken(abortControllerRef.current?.signal).catch((error) => {
+							throw new FatalError(error)
+						})
+						throw new RetriableError('JWT expired, retrying connection with new token...	')
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
-						response.status < HttpStatusCode.InternalServerError &&
-						response.status !== HttpStatusCode.Unauthorized &&
-						response.status !== HttpStatusCode.TooManyRequests
+						response.status !== HttpStatusCode.Unauthorized
 					) {
-						throw new FatalError() // client-side errors are usually non-retriable:
+						throw new FatalError()
 					} else {
 						throw new RetriableError()
 					}
@@ -176,7 +174,9 @@ const ScannedEpcList: React.FC = () => {
 				},
 				onerror(error) {
 					// * Depend on error type, retry or not
-					if (error instanceof FatalError) {
+					const isRetriable = error instanceof RetriableError
+					if (!isRetriable) {
+						abortControllerRef.current.abort()
 						setScanningState('error')
 						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 						throw error
@@ -191,19 +191,17 @@ const ScannedEpcList: React.FC = () => {
 		}
 	}
 
-	useUnmount(() => {
+	const releaseAbortController = () => {
 		if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
-			abortControllerRef.current?.abort()
+			abortControllerRef.current.abort()
 		}
-	})
+	}
+
+	useUnmount(releaseAbortController)
 
 	useEffectOnce(() => {
 		fetchServerEvent()
-		return () => {
-			if (abortControllerRef.current && !abortControllerRef.current.signal.aborted) {
-				abortControllerRef.current?.abort()
-			}
-		}
+		return () => releaseAbortController()
 	})
 
 	const scrollToFn = useScrollToFn(containerRef)
