@@ -145,7 +145,6 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 			)}
 			<DecentralizedPoFormProvider value={{ sizes: availableSizes }}>
 				<FormProvider {...form}>
-					{' '}
 					<Form
 						onSubmit={form.handleSubmit((data) => {
 							mutateAsync({
