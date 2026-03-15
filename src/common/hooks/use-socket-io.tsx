@@ -47,12 +47,12 @@ export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = fa
 	const handleRefreshToken = useCallback(() => {
 		const abortController = new AbortController()
 		AuthService.refreshToken(abortController.signal).then((response) => {
+			instanceIO.disconnect()
 			const newAccessToken = response.metadata.newAccessToken
 			instanceIO.io.opts.extraHeaders = {
 				...instanceIO.io.opts.extraHeaders,
 				[RequestHeaders.AUTHORIZATION]: `Bearer ${newAccessToken}`
 			}
-			instanceIO.disconnect()
 			instanceIO.connect()
 			if (lastEvent.current) {
 				emit(lastEvent.current.data)
