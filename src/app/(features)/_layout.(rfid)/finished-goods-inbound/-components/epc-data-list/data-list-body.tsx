@@ -47,6 +47,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 		defaultValue: true,
 		listenStorageChange: true
 	})
+	const retryCountRef = useRef<number>(0)
 
 	const {
 		currentPage,
@@ -94,6 +95,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {
+		if (retryCountRef.current > 3) return
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
@@ -106,22 +108,24 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
 				async onopen(response) {
+					console.log('response', response)
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
 						if (scanningStatus === 'connecting') {
 							setScanningStatus('connected')
 							toast.success(t('ns_common:status.connected'), { id: SSE_TOAST_ID })
 						}
+						retryCountRef.current = 0
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						const response = await AuthService.refreshToken(abortControllerRef.current?.signal)
-						const refreshToken = response.metadata
-						if (!refreshToken) throw new FatalError('Failed to refresh token')
-						throw new RetriableError()
+						alert('Session expired. Refreshing token...')
+						await AuthService.refreshToken(abortControllerRef.current?.signal).catch((error) => {
+							setScanningStatus(DEFAULT_PROPS.scanningStatus)
+							throw new FatalError(error)
+						})
+						throw new RetriableError('JWT expired, retrying connection with new token...	')
 					} else if (
 						response.status >= HttpStatusCode.BadRequest &&
-						response.status < HttpStatusCode.InternalServerError &&
-						response.status !== HttpStatusCode.Unauthorized &&
-						response.status !== HttpStatusCode.TooManyRequests
+						response.status !== HttpStatusCode.Unauthorized
 					) {
 						throw new FatalError() // client-side errors are usually non-retriable:
 					} else {
@@ -140,22 +144,33 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					}
 				},
 				onclose() {
-					throw new RetriableError()
+					setScanningStatus('disconnected')
 				},
-				onerror(error) {
+				onerror(error: Error) {
 					// * Depend on error type, retry or not
-					if (!abortControllerRef.current.signal.aborted) abortControllerRef.current.abort()
-					if (error instanceof FatalError) {
+					const isRetriable = error instanceof RetriableError
+					if (!isRetriable) {
+						setScanningStatus('disconnected')
+						if (!abortControllerRef.current.signal.aborted) abortControllerRef.current.abort()
+						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
+						throw error //! error is fatal, rethrow the error inside the callback to stop the entire
+					}
+
+					// * Stop retrying after 3 attempts
+					retryCountRef.current += 1
+					if (retryCountRef.current > 3) {
 						setScanningStatus('disconnected')
 						toast.error(t('ns_common:notification.error'), { id: SSE_TOAST_ID })
 						throw error
 					}
+
 					// * Retry on other errors
 					setScanningStatus('connecting')
 				}
 			})
 		} catch (e) {
 			toast('Failed to connect', { id: SSE_TOAST_ID, description: e.message })
+			setScanningStatus('disconnected')
 		} finally {
 			if (scanningStatus !== 'disconnected') toast.info(t('ns_common:status.disconnected'), { id: SSE_TOAST_ID })
 		}
@@ -253,6 +268,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 	}, [isLargeScreen])
 
 	useUnmount(() => {
+		setScanningStatus('disconnected')
 		abortControllerRef.current.abort()
 	})
 
