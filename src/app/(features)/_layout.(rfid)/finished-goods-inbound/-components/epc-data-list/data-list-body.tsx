@@ -117,7 +117,6 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 						retryCountRef.current = 0
 						return
 					} else if (response.status === HttpStatusCode.Unauthorized) {
-						alert('Session expired. Refreshing token...')
 						await AuthService.refreshToken(abortControllerRef.current?.signal).catch((error) => {
 							setScanningStatus(DEFAULT_PROPS.scanningStatus)
 							throw new FatalError(error)
