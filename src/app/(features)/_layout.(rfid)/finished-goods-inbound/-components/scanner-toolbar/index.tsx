@@ -2,9 +2,8 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import { buttonVariants, Div, Icon, Label, Separator, Tooltip } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { HorizontalConnectionInsight } from '../side-toolbar/connection-insight'
 import ScannerActions from './action-buttons'
-import TenacyBox from './tenancy-box'
+import { ConnectionInsight } from './connection-insight'
 
 const ScannerToolbar: React.FC = () => {
 	const { t } = useTranslation()
@@ -12,8 +11,8 @@ const ScannerToolbar: React.FC = () => {
 
 	return (
 		<Div className='flex h-[var(--toolbar-height)] items-start justify-between gap-2 bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto md:justify-end'>
-			<HorizontalConnectionInsight className='md:hidden' />
-			<TenacyBox />
+			<ConnectionInsight className='md:hidden' />
+			{/* <TenacyBox /> */}
 			<ScannerActions />
 			<Separator className='m-1.5 block h-6 w-0.5 @7xl/page-container:hidden md:hidden' />
 			<Tooltip

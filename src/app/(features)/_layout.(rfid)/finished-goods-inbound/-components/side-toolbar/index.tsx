@@ -2,7 +2,6 @@ import { cn } from '@/common/utils/cn'
 import { Div, Sheet, SheetContent, SheetTrigger } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import tw from 'tailwind-styled-components'
-import { VerticalConnectionInsight } from './connection-insight'
 import DataRestoration from './data-restoration'
 import FullscreenToggleBox from './fullscreen-toggle-box'
 import SyncDataTrigger from './sync-data-trigger'
@@ -30,9 +29,6 @@ const ScannerSettings: React.FC = () => {
 						'sm:px-0 xxl:p-6',
 						'@4xl:grid @4xl:grid-cols-12 @4xl:grid-rows-3 @4xl:gap-x-10'
 					)}>
-					<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
-						<VerticalConnectionInsight />
-					</Div>
 					<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
 						<FullscreenToggleBox />
 					</Div>

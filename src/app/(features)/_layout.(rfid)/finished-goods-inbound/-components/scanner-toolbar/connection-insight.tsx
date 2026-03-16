@@ -70,28 +70,12 @@ export const JobStatus: React.FC<React.ComponentProps<'div'>> = (props) => {
 	)
 }
 
-export const VerticalConnectionInsight: React.FC = () => {
-	const { t } = useTranslation()
-
-	return (
-		<Div as='section' className='flex flex-shrink flex-col gap-y-3 @5xl:flex-grow'>
-			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
-				{t('ns_inoutbound:scanner_setting.network_status')}
-			</Typography>
-			<Div className='flex-1 basis-full space-y-2 rounded-lg border p-4'>
-				<NetworkInsight />
-				<JobStatus />
-			</Div>
-		</Div>
-	)
-}
-
-export const HorizontalConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
+export const ConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
 	return (
 		<Div
 			data-slot='connection-insight'
 			className={cn(
-				'grid h-9 grid-cols-2 items-center gap-x-2 rounded-md border bg-background px-4 py-2 shadow-sm @[1366px]/page-container:hidden md:shadow-none',
+				'grid h-9 grid-cols-2 items-center gap-x-2 rounded-md border bg-background px-4 py-2 shadow-none',
 				className
 			)}
 			{...props}>
