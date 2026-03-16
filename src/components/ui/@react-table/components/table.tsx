@@ -49,7 +49,7 @@ const DataTable: React.FC<TableProps> = (props) => {
 		() =>
 			({
 				'--header-row-height': '40px',
-				'--row-height': `${virtualizerOptions.estimateSize}px`
+				'--row-height': `${virtualizerOptions.estimateSize ?? 40}px`
 			}) as React.CSSProperties,
 		[virtualizerOptions.estimateSize]
 	)

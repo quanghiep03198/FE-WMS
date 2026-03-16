@@ -51,12 +51,12 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, ind
 				})}
 			</TableRow>
 			{/* Sub-component */}
-
 			{typeof renderSubComponent === 'function' && (
 				<TableRow data-role='expandable-row' className='w-full'>
 					<TableCell
 						colSpan={row.getVisibleCells().length}
-						className={cn('p-0', isExpanded ? 'border-b shadow-[inset_0_0px_4px_#17171725]' : 'border-none')}>
+						aria-expanded={isExpanded}
+						className='border-none p-0 aria-expanded:border-b aria-expanded:shadow-[inset_0_0px_4px_#17171725]'>
 						<Collapsible open={isExpanded}>
 							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 [scrollbar-gutter:stable]'>
 								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>
