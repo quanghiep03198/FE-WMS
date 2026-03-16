@@ -3,9 +3,7 @@ import { FormActionEnum, FormActionReasonEnum } from '../-constants'
 
 export const outboundSchema = object({
 	rfid_status: enums(FormActionEnum),
-	rfid_use: enums(FormActionReasonEnum),
-	default_tenant: string(),
-	target_tenant: string().nullable().optional()
+	rfid_use: enums(FormActionReasonEnum)
 })
 
 export const inboundSchema = outboundSchema.extend({

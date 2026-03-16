@@ -14,14 +14,10 @@ type PageContextStore = {
 	scannedEpc: Pagination<IElectronicProductCode>
 	scannedOrders: Array<OrderItem>
 	scanningStatus: ScanningStatus
-	connection: string
 	selectedOrder: string
-	currentFactoryProduce: string | null
 	setCurrentPage: (page: number | null) => void
 	setScanningStatus: (status: ScanningStatus) => void
-	setConnection: (value: string) => void
 	setSelectedOrder: (value: string) => void
-	setCurrentFactoryProduce: (value: string) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
 	setScannedOrders: (data: Array<OrderItem>) => void
 	handleToggleScanning: () => void
@@ -29,19 +25,11 @@ type PageContextStore = {
 }
 export const DEFAULT_PROPS: Pick<
 	PageContextStore,
-	| 'currentPage'
-	| 'scannedEpc'
-	| 'scannedOrders'
-	| 'scanningStatus'
-	| 'connection'
-	| 'selectedOrder'
-	| 'currentFactoryProduce'
+	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scanningStatus' | 'selectedOrder'
 > = {
 	currentPage: 1,
 	scanningStatus: undefined,
-	connection: '',
 	selectedOrder: 'all',
-	currentFactoryProduce: '',
 	scannedEpc: {
 		data: [],
 		hasNextPage: false,
@@ -74,19 +62,9 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 					set((state) => {
 						state.scanningStatus = status
 					}),
-				setConnection: (value) => {
-					set((state) => {
-						state.connection = value
-					})
-				},
 				setSelectedOrder: (value) => {
 					set((state) => {
 						state.selectedOrder = value
-					})
-				},
-				setCurrentFactoryProduce: (value) => {
-					set((state) => {
-						state.currentFactoryProduce = value
 					})
 				},
 				setScannedEpc: (data) => {
@@ -120,7 +98,6 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 				reset: () => {
 					set((state) => {
 						state.currentPage = DEFAULT_PROPS.currentPage
-						state.connection = DEFAULT_PROPS.connection
 						state.scanningStatus = DEFAULT_PROPS.scanningStatus
 						state.scannedEpc = DEFAULT_PROPS.scannedEpc
 						state.scannedOrders = DEFAULT_PROPS.scannedOrders

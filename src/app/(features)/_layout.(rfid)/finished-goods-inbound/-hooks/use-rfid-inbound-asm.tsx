@@ -4,7 +4,6 @@ import { InventoryAuditQueryKeys } from '@/app/(features)/_layout.inventory-audi
 import useAuth from '@/common/hooks/use-auth'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { omit } from 'lodash-es'
 import { useEffect } from 'react'
 import { SearchCustOrderParams } from '..'
 import { DEFAULT_PROPS, usePageContext } from '../-contexts/page-context'
@@ -55,7 +54,7 @@ export const useGetInboundEpcQuery = () => {
 
 export const useGetInboundOrderDetail = () => {
 	const queryClient = useQueryClient()
-	const { scanningStatus } = usePageContext('connection', 'scanningStatus')
+	const { scanningStatus } = usePageContext('scanningStatus')
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
@@ -128,11 +127,7 @@ export const useUpdateStockInMutation = () => {
 	return useMutation({
 		mutationKey: [InboundReportQueryKeys.DAILY_INBOUND],
 		mutationFn: (payload: InoutboundPayload) => {
-			return RFIDService.upsertInboundInventory(
-				payload.target_tenant || payload.default_tenant,
-				selectedOrder,
-				omit(payload, ['default_tenant', 'target_tenant'])
-			)
+			return RFIDService.upsertInboundInventory(selectedOrder, payload)
 		},
 		onSuccess: () => {
 			setCurrentPage(null)
@@ -158,7 +153,7 @@ export const useExchangeEpcMutation = () => {
 
 export const useUpsertEpcInfoMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { setSelectedOrder, setCurrentPage } = usePageContext('connection', 'setSelectedOrder', 'setCurrentPage')
+	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
 		mutationFn: async (payload: ExchangeEpcPayload) => await RFIDService.upsertEpcInformation(payload),

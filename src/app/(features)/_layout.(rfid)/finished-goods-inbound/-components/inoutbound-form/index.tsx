@@ -1,10 +1,9 @@
 import { useGetShapingProductLineQuery } from '@/app/(features)/-hooks/use-department-asm'
-import { useGetAllTenants } from '@/app/(features)/-hooks/use-tenacy-asm'
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-asm'
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { ITenancy, IWarehouse, IWarehouseStorage } from '@/common/types/entities'
+import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -30,29 +29,26 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
 import { AxiosError, HttpStatusCode } from 'axios'
 import { omit } from 'lodash-es'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { FormActionEnum, FormActionReasonEnum } from '../../-constants'
-import { DEFAULT_PROPS, usePageContext } from '../../-contexts/page-context'
+import { usePageContext } from '../../-contexts/page-context'
 import { useGetInboundEpcQuery, useUpdateStockInMutation } from '../../-hooks/use-rfid-inbound-asm'
 import { FormValues, inboundSchema, InoutboundPayload, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { connection, selectedOrder, scanningStatus, currentFactoryProduce, setScannedEpc } = usePageContext(
-		'connection',
+	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
 		'selectedOrder',
 		'scanningStatus',
-		'setScannedEpc',
-		'currentFactoryProduce'
+		'setScannedEpc'
 	)
 	const { t } = useTranslation()
 	const [action, setAction] = useState<FormActionEnum>(FormActionEnum.IMPORT)
 	const isMobileScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')
-	const { data: writableTenants } = useGetAllTenants()
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(action === FormActionEnum.IMPORT ? inboundSchema : outboundSchema),
@@ -62,9 +58,7 @@ const InoutboundForm: React.FC = () => {
 			warehouse_num: '',
 			storage: '',
 			dept_code: '',
-			dept_name: '',
-			target_tenant: '',
-			default_tenant: connection
+			dept_name: ''
 		},
 		mode: 'onChange'
 	})
@@ -90,9 +84,7 @@ const InoutboundForm: React.FC = () => {
 			dept_code: '',
 			dept_name: '',
 			warehouse_num: '',
-			storage: '',
-			target_tenant: '',
-			default_tenant: connection
+			storage: ''
 		})
 	})
 
@@ -103,18 +95,18 @@ const InoutboundForm: React.FC = () => {
 		}
 	}, [scanningStatus])
 
-	useEffect(() => {
-		if (connection) form.setValue('default_tenant', connection)
-	}, [connection])
+	// useEffect(() => {
+	// 	if (connection) form.setValue('default_tenant', connection)
+	// }, [connection])
 
-	useEffect(() => {
-		if (Array.isArray(writableTenants)) {
-			const currentTenant = writableTenants.find((item) => {
-				return item.factory.includes(currentFactoryProduce)
-			})
-			form.setValue('target_tenant', currentTenant?.id ?? '')
-		}
-	}, [currentFactoryProduce])
+	// useEffect(() => {
+	// 	if (Array.isArray(writableTenants)) {
+	// 		const currentTenant = writableTenants.find((item) => {
+	// 			return item.factory.includes(currentFactoryProduce)
+	// 		})
+	// 		form.setValue('target_tenant', currentTenant?.id ?? '')
+	// 	}
+	// }, [currentFactoryProduce])
 
 	useEffect(() => {
 		form.setValue(
@@ -123,11 +115,11 @@ const InoutboundForm: React.FC = () => {
 		)
 	}, [action])
 
-	const currentWritableTenant = useMemo<Partial<ITenancy>>(() => {
-		return Array.isArray(writableTenants)
-			? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
-			: null
-	}, [writableTenants, form.watch('target_tenant')])
+	// const currentWritableTenant = useMemo<Partial<ITenancy>>(() => {
+	// 	return Array.isArray(writableTenants)
+	// 		? writableTenants.find((item) => item.id === form.getValues('target_tenant'))
+	// 		: null
+	// }, [writableTenants, form.watch('target_tenant')])
 
 	const handleSubmit = async (data: FormValues) => {
 		toast.loading(t('ns_common:notification.processing_request'), { id: 'UPDATE_STOCK' })
@@ -236,7 +228,7 @@ const InoutboundForm: React.FC = () => {
 								)}
 							/>
 						</Div>
-						<Div className='col-span-full'>
+						{/* <Div className='col-span-full'>
 							<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
 								<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
 								<Input
@@ -252,7 +244,7 @@ const InoutboundForm: React.FC = () => {
 									}
 								/>
 							</Div>
-						</Div>
+						</Div> */}
 						<Div
 							className={cn(
 								'sm:col-span-full',

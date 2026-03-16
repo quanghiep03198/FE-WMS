@@ -50,16 +50,14 @@ export class RFIDService {
 	}
 
 	static async upsertInboundInventory(
-		tenantId: string,
+
 		orderCode: string,
 		payload: Omit<InoutboundPayload, 'default_tenant' | 'target_tenant'>
 	) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
 			`/rfid/inbound/update-stock/${orderCode}`,
 			payload,
-			{
-				headers: { [RequestHeaders.TENANT_ID]: tenantId }
-			}
+			
 		)
 	}
 

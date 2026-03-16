@@ -42,12 +42,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	const checkboxId = useId()
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 	const [searchTerm, setSearchTerm] = useState<string>('')
-	const { scanningStatus, scannedEpc, connection, setScannedEpc } = usePageContext(
-		'scanningStatus',
-		'scannedEpc',
-		'connection',
-		'setScannedEpc'
-	)
+	const { scanningStatus, scannedEpc, setScannedEpc } = usePageContext('scanningStatus', 'scannedEpc', 'setScannedEpc')
 	const {
 		exchangeOrderDialogOpen: open,
 		setExchangeOrderDialogOpen: setOpen,
@@ -76,7 +71,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	})
 
 	useEffect(() => {
-		if (!connection || !defaultValues) return
+		if (!defaultValues) return
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		timeoutRef.current = setTimeout(() => fetchExchangableOrder(), 200)
 		return () => {

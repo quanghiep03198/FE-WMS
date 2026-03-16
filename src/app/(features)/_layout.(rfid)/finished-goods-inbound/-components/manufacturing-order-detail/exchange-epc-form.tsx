@@ -38,7 +38,7 @@ import { ExchangeEpcFormValue, exchangeEpcSchema } from '../../-schemas/exchange
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()
-	const { scannedOrders, connection } = usePageContext('scannedOrders', 'connection')
+	const { scannedOrders } = usePageContext('scannedOrders')
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
 	const [isExchangeAll, setIsExchangeAll] = useState<CheckedState>(false)
@@ -85,13 +85,13 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	}, [defaultValues])
 
 	useEffect(() => {
-		if (!connection || !defaultValues) return
+		if (!defaultValues) return
 		if (timeoutRef.current) clearTimeout(timeoutRef.current)
 		timeoutRef.current = setTimeout(() => fetchExchangableOrder(), 200)
 		return () => {
 			clearTimeout(timeoutRef.current)
 		}
-	}, [searchTerm, connection])
+	}, [searchTerm])
 
 	useEffect(() => {
 		if (orderDetail && orderDetail.orders && orderDetail.sizes) {
