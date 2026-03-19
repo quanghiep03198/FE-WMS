@@ -1,6 +1,8 @@
 import GridBackground from '@/app/-components/-shared/grid-background'
+import { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import Loading from '@/components/shared/loading'
+import { FileRouteTypes } from '@/route-tree.gen'
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import PageComposition from './-components/page-composition'
@@ -17,9 +19,17 @@ export const Route = createFileRoute('/(auth)/login/')({
 })
 
 function LoginPage() {
-	const { isAuthenticated } = useAuth()
+	const { isAuthenticated, user } = useAuth()
 
-	if (isAuthenticated) return <Navigate to='/dashboard' />
+	if (isAuthenticated) {
+		const redirectRoute: FileRouteTypes['to'] = user.roles.every(
+			(role) => role === UserRole.IE_STAFF || role === UserRole.SECURITY_GUARD
+		)
+			? '/truckload-delivery'
+			: '/dashboard'
+
+		return <Navigate to={redirectRoute} />
+	}
 
 	return (
 		<Fragment>
