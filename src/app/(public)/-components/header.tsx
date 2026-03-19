@@ -33,7 +33,7 @@ const Header: React.FunctionComponent = () => {
 				aria-label='Global'>
 				<Div className='inline-flex items-center gap-x-2'>
 					<NavHeaderDrawerMenu />
-					<Link to='/' className='group' data-state='expanded'>
+					<Link to='/' className='group sm:[zoom:0.8]' data-state='expanded'>
 						<AppLogo />
 					</Link>
 				</Div>
