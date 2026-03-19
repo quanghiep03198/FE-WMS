@@ -34,7 +34,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 155 284'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] [transform-origin:top] data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] data-[viewport=visible]:running data-[viewport=invisible]:paused'
 				style={{ width: '15.244%', height: '41.24%', left: '38.8%', top: '31.2%' }}>
 				<path
 					stroke='url(#lg-svg1)'
@@ -56,7 +56,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 272 235'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] [transform-origin:top_left] data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] data-[viewport=visible]:running data-[viewport=invisible]:paused'
 				style={{ width: '27.458%', height: '34.045%', left: '50.8%', top: '31.4%' }}>
 				<path
 					stroke='url(#lg-svg2)'
@@ -78,7 +78,7 @@ const DeploymentGlobe: React.FC = () => {
 				fill='none'
 				viewBox='0 0 261 144'
 				data-viewport={inViewport ? 'visible' : 'invisible'}
-				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] [transform-origin:top_right] data-[viewport=visible]:running data-[viewport=invisible]:paused'
+				className='absolute animate-[fade-in_1s_cubic-bezier(.25,.25,0,1)_1.5s_both] data-[viewport=visible]:running data-[viewport=invisible]:paused'
 				style={{ width: '26.687%', height: '20.49%', left: '25.1%', top: '31.4%' }}>
 				<path
 					stroke='url(#lg-svg3)'
