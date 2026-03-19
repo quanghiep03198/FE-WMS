@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { PaginationState, Table } from '@tanstack/react-table'
+import { AxiosRequestConfig } from 'axios'
 import React, { memo, useEffect, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
@@ -48,7 +48,23 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 		setPageSize(+value)
 	}
 
-	const handlePrefetch = (params: Record<string, unknown>) => {
+	const goToNextPage = () => {
+		if (!canNextPage) return
+		if (manualPagination && typeof onPaginationChange === 'function')
+			onPaginationChange({ pageIndex: pageIndex + 1, pageSize: pageSize })
+		else nextPage()
+	}
+
+	const goToPrevPage = () => {
+		if (!canPreviousPage) return
+		if (manualPagination && typeof onPaginationChange === 'function')
+			onPaginationChange({ pageIndex: pageIndex - 1, pageSize: pageSize })
+		else previousPage()
+	}
+
+	const handlePrefetch = (params: AxiosRequestConfig['params'] & Pick<Pagination<any>, 'page' | 'limit'>) => {
+		console.log('params', params)
+
 		if (!manualPagination || typeof prefetch !== 'function') return
 		prefetch(params)
 	}
@@ -70,7 +86,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 
 	const goToFirstPage = () => {
 		if (manualPagination && typeof onPaginationChange === 'function') {
-			onPaginationChange({ pageIndex: 0, pageSize })
+			onPaginationChange({ pageIndex: 1, pageSize })
 		} else {
 			firstPage()
 		}
@@ -78,7 +94,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 
 	const goToLastPage = () => {
 		if (manualPagination && typeof onPaginationChange === 'function') {
-			onPaginationChange({ pageIndex: pageCount - 1, pageSize })
+			onPaginationChange({ pageIndex: pageCount, pageSize })
 		} else {
 			lastPage()
 		}
@@ -125,13 +141,12 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					<Button
 						role='button'
 						aria-disabled={!canPreviousPage || loading}
-						aria-label='First page'
+						aria-label={t('ns_common:pagination.first_page')}
 						disabled={!canPreviousPage || loading}
 						variant='outline'
 						size='icon'
 						onClick={goToFirstPage}
-						onMouseEnter={() => handlePrefetch({ limit: pageSize, page: 1 })}
-						className={cn(!canPreviousPage && 'pointer-events-none bg-muted text-muted-foreground')}>
+						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: 1 })}>
 						<Icon name='ChevronsLeft' />
 					</Button>
 				</Tooltip>
@@ -141,13 +156,12 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					<Button
 						role='button'
 						aria-disabled={!canPreviousPage || loading}
-						aria-label='Previous page'
+						aria-label={t('ns_common:pagination.previous_page')}
 						disabled={!canPreviousPage || loading}
 						variant='outline'
 						size='icon'
-						onClick={previousPage}
-						onMouseEnter={() => handlePrefetch({ limit: pageSize, page: pageIndex - 1 })}
-						className={cn(!canPreviousPage && 'pointer-events-none bg-muted text-muted-foreground')}>
+						onClick={goToPrevPage}
+						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: pageIndex - 1 })}>
 						<Icon name='ChevronLeft' />
 					</Button>
 				</Tooltip>
@@ -157,17 +171,16 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					<Button
 						role='button'
 						aria-disabled={!canNextPage || loading}
-						aria-label='Next page'
+						aria-label={t('ns_common:pagination.next_page')}
 						disabled={!canNextPage || loading}
 						variant='outline'
 						size='icon'
-						onClick={nextPage}
-						onMouseEnter={handlePrefetchNextPage}
+						onClick={goToNextPage}
+						onPointerEnter={handlePrefetchNextPage}
 						onMouseLeave={() => {
 							clearInterval(timeoutRef.current)
 							prefetchCountRef.current = 0
-						}}
-						className={cn(!canNextPage && 'pointer-events-none bg-muted text-muted-foreground')}>
+						}}>
 						<Icon name='ChevronRight' />
 					</Button>
 				</Tooltip>
@@ -178,13 +191,12 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					<Button
 						role='button'
 						aria-disabled={!canNextPage || loading}
-						aria-label='Last page'
+						aria-label={t('ns_common:pagination.last_page')}
 						disabled={!canNextPage || loading}
 						variant='outline'
 						size='icon'
 						onClick={goToLastPage}
-						onMouseEnter={() => handlePrefetch({ limit: pageSize, page: pageCount })}
-						className={cn(!canNextPage && 'pointer-events-none bg-muted text-muted-foreground')}>
+						onPointerEnter={() => handlePrefetch({ limit: pageSize, page: pageCount })}>
 						<Icon name='ChevronsRight' />
 					</Button>
 				</Tooltip>

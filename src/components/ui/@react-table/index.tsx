@@ -299,6 +299,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 						loading={loading}
 						manualPagination={manualPagination}
 						controlledPaginationProps={paginationProps}
+						prefetch={paginationProps?.prefetch}
 						onPaginationChange={onPaginationChange}
 					/>
 				</FooterGroup>
