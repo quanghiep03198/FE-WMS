@@ -14,7 +14,6 @@ import {
 	CreateRFIDReaderFormValues,
 	UpdateRFIDReaderFormValues
 } from '@/app/(features)/_layout.rfid-devices-management/-schemas/rfid-device.schema'
-import { RequestHeaders } from '@/common/constants/enums'
 import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omit, omitBy } from 'lodash-es'
@@ -50,14 +49,12 @@ export class RFIDService {
 	}
 
 	static async upsertInboundInventory(
-
 		orderCode: string,
 		payload: Omit<InoutboundPayload, 'default_tenant' | 'target_tenant'>
 	) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
 			`/rfid/inbound/update-stock/${orderCode}`,
-			payload,
-			
+			payload
 		)
 	}
 
