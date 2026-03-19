@@ -202,7 +202,7 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.1",
-    "vite": "npm:rolldown-vite@latest",
+    "vite": "^8.0.1",
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-pwa": "^0.21.2",
     "vite-plugin-static-copy": "^2.3.2",

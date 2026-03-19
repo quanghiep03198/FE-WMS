@@ -166,7 +166,7 @@ export default defineConfig(({ mode }) => {
 				transform: { dropLabels: ['DEV', 'DEBUG'] },
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
-					advancedChunks: {
+					codeSplitting: {
 						groups: [
 							{ name: '@dnd-kit', test: /@dnd-kit/ },
 							{ name: '@radix-ui', test: /@radix-ui/ },
