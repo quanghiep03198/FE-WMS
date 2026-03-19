@@ -46,21 +46,13 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		const matchPurchaseOrder = purchaseOrders?.find?.((item) => item.po === currentPurchaseOrderValue)
 		if (!matchPurchaseOrder) return
 
-		// * For update action, need to exclude current record's outbound qty
-		data.data ??= []
+		matchPurchaseOrder.max_outbound_qty ??= 0
 
-		const alreadyAddedOutboundQty = data.data
-			.flatMap((delivery) => delivery.delivery_details)
-			.find((item) => {
-				if (fieldAction === CommonActions.UPDATE)
-					return item.po === currentPurchaseOrderValue && item.id !== currentId
-				return item.po === currentPurchaseOrderValue
-			}).dispatched_outbound_qty
-
-		const purchaseOrderQty = (matchPurchaseOrder.po_qty ??= 0)
-		const maxOutboundQty = purchaseOrderQty - alreadyAddedOutboundQty
-		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, Math.max(0, maxOutboundQty))
-	}, [data, purchaseOrders, currentPurchaseOrderValue, currentId])
+		setValue(
+			`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`,
+			Math.max(0, matchPurchaseOrder.max_outbound_qty)
+		)
+	}, [purchaseOrders, currentPurchaseOrderValue])
 
 	useUpdateEffect(() => {
 		if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
