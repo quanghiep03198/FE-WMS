@@ -1,6 +1,5 @@
 'use no memo'
 
-import { useSearchPurchaseOrderQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { CommonActions } from '@/common/constants/enums'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import { AutoCompleteFieldControlProps } from '@/components/ui/@field-control/auto-complete'
@@ -9,7 +8,7 @@ import { useDebounce, useUpdateEffect } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
+import { useGetTruckloadDeliveryQuery, useSearchDispatchPurchaseOrder } from '../-hooks/use-truckload-delivery-asm'
 import { CreateDeliveryFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 type PurchaseOrderFieldControlProps = Partial<
@@ -38,7 +37,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 	const currentPurchaseOrderValue = useWatch({ control, name })
 	const [searchTerm, setSearchTerm] = useState(typeof fieldIndex === 'number' ? (currentPurchaseOrderValue ?? '') : '')
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
-	const { data: purchaseOrders, isLoading } = useSearchPurchaseOrderQuery(debouncedSearchTerm, true, true)
+	const { data: purchaseOrders, isLoading } = useSearchDispatchPurchaseOrder(debouncedSearchTerm)
 	const currentId = getValues(`outbound_purchase_orders.${fieldIndex}.id`)
 
 	useEffect(() => {
@@ -48,14 +47,16 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		if (!matchPurchaseOrder) return
 
 		// * For update action, need to exclude current record's outbound qty
-		const alreadyAddedOutboundQty = data
+		data.data ??= []
+
+		const alreadyAddedOutboundQty = data.data
 			.flatMap((delivery) => delivery.delivery_details)
-			.filter((item) => {
+			.find((item) => {
 				if (fieldAction === CommonActions.UPDATE)
 					return item.po === currentPurchaseOrderValue && item.id !== currentId
 				return item.po === currentPurchaseOrderValue
-			})
-			.reduce((acc, curr) => acc + curr.outbound_qty, 0)
+			}).dispatched_outbound_qty
+
 		const purchaseOrderQty = (matchPurchaseOrder.po_qty ??= 0)
 		const maxOutboundQty = purchaseOrderQty - alreadyAddedOutboundQty
 		setValue(`outbound_purchase_orders.${fieldIndex}.max_outbound_qty`, Math.max(0, maxOutboundQty))

@@ -27,7 +27,9 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 	const { t, i18n } = useTranslation()
 	const { searchParams, setParams } = usePageQueryParams()
 
-	const { data } = table.options
+	table.options.data ??= []
+
+	const data = table.options.data
 
 	const dropdownOptions: DropdownOption[] = useMemo(
 		() =>
@@ -49,7 +51,7 @@ const DispatchOrderStatusFilter: React.FC<{ table: Table<ITruckloadDelivery> }> 
 				}
 			].map((item: DropdownOption) => ({
 				...item,
-				count: data.filter((d) => d.approval_status === item.value).length
+				count: Array.isArray(data) ? data.filter((d) => d.approval_status === item.value).length : 0
 			})),
 		[data, i18n.language]
 	)
