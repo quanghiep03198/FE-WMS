@@ -1,11 +1,20 @@
 import { OrderService } from '@/services/order.service'
-import { useQuery } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 import { useGetTenantByFactory } from './use-tenacy-asm'
 
 export enum OrderQueryKeys {
 	SEARCH_COMMAND_NUMBER = 'SEARCH_COMMAND_NUMBER',
 	SEARCH_PURCHASE_ORDER = 'SEARCH_PURCHASE_ORDER',
+	PURCHASE_ORDER_INFO = 'PURCHASE_ORDER_INFO',
 	COMMAND_NUMBER_DETAIL = 'COMMAND_NUMBER_DETAIL'
+}
+
+export const getPurchaseOrderInfoQueryOptions = (purchaseOrder: string) => {
+	return queryOptions({
+		queryKey: [OrderQueryKeys.PURCHASE_ORDER_INFO, purchaseOrder],
+		queryFn: async () => await OrderService.getPurchaseOrderInfo(purchaseOrder),
+		staleTime: Infinity
+	})
 }
 
 export const useSearchCommandNumberQuery = (searchTerm: string, shouldFetch = true) => {
@@ -21,6 +30,8 @@ export const useSearchCommandNumberQuery = (searchTerm: string, shouldFetch = tr
 		}
 	})
 }
+
+export const useGetPurchaseOrderInfoQuery = () => {}
 
 export const useSearchPurchaseOrderQuery = (searchTerm: string, shouldFetch = true, shouldFilterAllBrands = false) => {
 	const { data: currentTenant } = useGetTenantByFactory()

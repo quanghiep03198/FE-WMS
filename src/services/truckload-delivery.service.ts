@@ -27,16 +27,18 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	factory_departure_time: Date | null
 	actual_factory_departure_time: Date | null
 	license_plate_image: string | null
-	delivery_details: Array<{
-		id: number | string
-		po: string
-		brand_name: string
-		factory_shoes_style: string
-		color_sn: string
-		outbound_qty: number
-		user_code_created: string
-		created: Date | null
-	}>
+	delivery_details?: Array<ITruckloadDeliveryDetail>
+}
+
+export interface ITruckloadDeliveryDetail extends Omit<IBaseEntity, 'id'> {
+	id: string | number
+	po: string
+	brand_name?: string | null
+	factory_shoes_style?: string | null
+	color_sn?: string | null
+	outbound_qty: number
+	max_outbound_qty?: number | null
+	dispatched_outbound_qty: number
 }
 
 export type QrCodeScannedResult = {
@@ -45,8 +47,22 @@ export type QrCodeScannedResult = {
 }
 
 export class TruckloadDeliveryService {
-	static async getAll() {
-		return await axiosInstance.get<void, ResponseBody<ITruckloadDelivery[]>>('/truckload-delivery')
+	static async getDispatchOrders(
+		queries: {
+			from?: Date | string
+			to?: Date | string
+			status?: TruckloadDeliveryStatus
+		} & Pick<Pagination, 'page' | 'limit'>
+	) {
+		return await axiosInstance.get<void, ResponseBody<Pagination<ITruckloadDelivery>>>('/truckload-delivery', {
+			params: queries
+		})
+	}
+
+	public static async getDetail(dispatchOrder: string) {
+		return await axiosInstance.get<void, ResponseBody<ITruckloadDeliveryDetail[]>>(
+			`/truckload-delivery/${dispatchOrder}`
+		)
 	}
 
 	static async insertMany(payload: CreateDeliveryFormValues) {
@@ -59,6 +75,13 @@ export class TruckloadDeliveryService {
 
 	static async bulkUpdate(dispatchOrder: string, payload: Omit<UpdateDispatchOrderFormValues, 'dispatch_order'>) {
 		return await axiosInstance.patch(`/truckload-delivery/bulk-update/${dispatchOrder}`, payload)
+	}
+
+	static async searchDispatchPurchaseOrder(search: string) {
+		return await axiosInstance.get<void, ResponseBody<Array<{ po: string; max_outbound_qty: number }>>>(
+			`truckload-delivery/search-purchase-order`,
+			{ params: { search } }
+		)
 	}
 
 	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {

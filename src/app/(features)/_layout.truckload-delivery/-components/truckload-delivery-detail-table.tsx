@@ -18,9 +18,9 @@ import {
 	Typography
 } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
-import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useIsFetching } from '@tanstack/react-query'
+import { useIsFetching, useQueries } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { pick, sortBy, uniqBy } from 'lodash-es'
@@ -33,12 +33,17 @@ import { v4 as uuid } from 'uuid'
 import { uuidv4 } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType, usePageContext } from '../-contexts/page-context'
-import { TruckloadDeliveryQueryKeys, useUpsertPurchaseOrdersMutation } from '../-hooks/use-truckload-delivery-asm'
+import {
+	TruckloadDeliveryQueryData,
+	TruckloadDeliveryQueryKeys,
+	useUpsertPurchaseOrdersMutation
+} from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
+import { getPurchaseOrderInfoQueryOptions } from '../../-hooks/use-order-asm'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
 type TruckloadDeliveryDetailTableProps = {
-	data: ITruckloadDelivery
+	data: TruckloadDeliveryQueryData
 	onCollapse?: () => void
 }
 
@@ -73,6 +78,14 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const isFetching = useIsFetching({
 		predicate: (query) => query.queryKey.some((key) => key === TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY)
 	})
+	const purchaseOrderQueriesResult = useQueries({
+		queries: data.purchase_orders.map(getPurchaseOrderInfoQueryOptions),
+		combine(result) {
+			return result.map((res) => res.data.metadata)
+		}
+	})
+
+	console.table(purchaseOrderQueriesResult)
 
 	const handleResetDeliveryDetails = (shouldKeepUpdating: boolean) => {
 		if (isPending || isFetching) return
@@ -178,23 +191,31 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableHeader>
 								<TableBody>
 									{fields.map((field, index) => {
-										const rowData = data?.delivery_details?.[index] ?? {
-											id: uuid(),
-											po: '',
-											brand_name: null,
-											factory_shoes_style: null,
-											color_sn: null,
-											outbound_qty: 0,
-											user_code_created: user.username,
-											created: new Date(),
-											max_outbound_qty: null
-										}
+										const defautValues = data?.delivery_details?.[index]
+										const purchaseOrderDetail =
+											purchaseOrderQueriesResult.find((result) => result?.po === defautValues.po) ?? {}
+										const rowData: ITruckloadDeliveryDetail = defautValues
+											? {
+													...defautValues,
+													...purchaseOrderDetail
+												}
+											: {
+													id: uuid(),
+													po: '',
+													brand_name: null,
+													factory_shoes_style: null,
+													color_sn: null,
+													outbound_qty: 0,
+													user_code_created: user.username,
+													created: new Date(),
+													max_outbound_qty: null
+												}
 
 										return (
 											<TruckloadDeliveryDetailRow
 												key={field.id}
 												index={index}
-												readonly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+												readOnly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 												deletable={data.approval_status !== TruckloadDeliveryStatus.CONFIRMED}
 												defaultValues={rowData}
 												onRemove={remove}

@@ -3,14 +3,16 @@ import {
 	TruckloadDeliveryDispatchOrder,
 	TruckloadDeliveryService
 } from '@/services/truckload-delivery.service'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType } from '../-contexts/page-context'
 import { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
+import { usePageQueryParams } from './use-page-query-params'
 
 export enum TruckloadDeliveryQueryKeys {
-	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY'
+	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY',
+	DISPATCH_PURCHASE_ORDER = 'DISPATCH_PURCHASE_ORDER'
 }
 
 export enum TruckloadDeliveryMutationKeys {
@@ -19,17 +21,20 @@ export enum TruckloadDeliveryMutationKeys {
 	UPSERT_PURCHASE_ORDERS = 'UPSERT_PURCHASE_ORDERS'
 }
 
-export const useGetTruckloadDeliveryQuery = () => {
-	return useQuery({
-		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-		queryFn: TruckloadDeliveryService.getAll,
-		refetchOnMount: true,
+export type TruckloadDeliveryQueryData = ITruckloadDelivery & { purchase_orders: string[]; total_outbound_qty: number }
+
+export const getTruckloadDeliveryQueryOptions = (searchParams) =>
+	queryOptions({
+		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
+		queryFn: async () => await TruckloadDeliveryService.getDispatchOrders(searchParams),
 		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
-		staleTime: 0,
+		staleTime: 5000,
+		enabled: typeof searchParams.page === 'number' && typeof searchParams.limit === 'number',
+		placeholderData: keepPreviousData,
 		select: (response) => {
-			return Array.isArray(response.metadata)
-				? response.metadata.map((item) => ({
+			const data: TruckloadDeliveryQueryData[] = Array.isArray(response.metadata.data)
+				? response.metadata.data.map((item) => ({
 						...item,
 						purchase_orders: item.delivery_details.map(({ po }) => po),
 						total_outbound_qty: uniqBy(item.delivery_details, 'po').reduce(
@@ -37,6 +42,28 @@ export const useGetTruckloadDeliveryQuery = () => {
 							0
 						)
 					}))
+				: []
+			return {
+				...response.metadata,
+				data
+			}
+		}
+	})
+
+export const useGetTruckloadDeliveryQuery = () => {
+	const { searchParams } = usePageQueryParams()
+	const queryOptions = getTruckloadDeliveryQueryOptions(searchParams)
+	return useQuery(queryOptions)
+}
+
+export const useSearchDispatchPurchaseOrder = (search: string) => {
+	return useQuery({
+		queryKey: [TruckloadDeliveryQueryKeys.DISPATCH_PURCHASE_ORDER, search],
+		queryFn: async () => await TruckloadDeliveryService.searchDispatchPurchaseOrder(search),
+		staleTime: 5000,
+		select: (response) => {
+			return Array.isArray(response.metadata)
+				? response.metadata.map((po) => ({ ...po, max_outbound_qty: Math.abs(po.max_outbound_qty) }))
 				: []
 		}
 	})

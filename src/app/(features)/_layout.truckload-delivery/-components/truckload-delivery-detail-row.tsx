@@ -3,7 +3,6 @@ import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/e
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import generateAvatar from '@/common/utils/generate-avatar'
 import {
 	Avatar,
@@ -29,7 +28,7 @@ import PurchaseOrderFieldControl from './purchase-order-field-control'
 
 type TruckloadDeliveryDetailRowProps = {
 	index: number
-	readonly: boolean
+	readOnly: boolean
 	deletable: boolean
 	defaultValues: ITruckloadDelivery['delivery_details'][number]
 	onRemove: (index?: number | number[]) => void
@@ -37,7 +36,7 @@ type TruckloadDeliveryDetailRowProps = {
 
 const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	index,
-	readonly,
+	readOnly,
 	defaultValues,
 	deletable,
 	onRemove
@@ -60,9 +59,9 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	}
 
 	return (
-		<TableRow aria-readonly={readonly} className={cn('transition-allow-discrete')}>
+		<TableRow aria-readonly={readOnly} className={cn('transition-allow-discrete')}>
 			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
-				{readonly ? (
+				{readOnly ? (
 					<span>{snapshotData?.po}</span>
 				) : (
 					<PurchaseOrderFieldControl
@@ -89,44 +88,68 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 							</span>
 						</Div>
 					) : (
-						<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
+						<Typography variant='small' color='muted'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
 					)}
 				</TableCell>
 			) : (
 				<Fragment>
 					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
-							{snapshotData?.brand_name ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
-						</span>
-					</TableCell>
-					<TableCell align='left' className='xl:w-[15%]'>
-						<span>
-							{snapshotData?.factory_shoes_style ?? (
-								<Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />
+							{snapshotData?.brand_name ?? (
+								<Typography variant='small' color='muted'>
+									{t('ns_common:titles.unknown')}
+								</Typography>
 							)}
 						</span>
 					</TableCell>
 					<TableCell align='left' className='xl:w-[15%]'>
 						<span>
-							{snapshotData?.color_sn ?? <Icon name='Ellipsis' stroke='hsl(var(--muted-foreground))' />}
+							{snapshotData?.factory_shoes_style ?? (
+								<Typography variant='small' color='muted'>
+									{t('ns_common:titles.unknown')}
+								</Typography>
+							)}
+						</span>
+					</TableCell>
+					<TableCell align='left' className='xl:w-[15%]'>
+						<span>
+							{snapshotData?.color_sn ?? (
+								<Typography variant='small' color='muted'>
+									{t('ns_common:titles.unknown')}
+								</Typography>
+							)}
 						</span>
 					</TableCell>
 				</Fragment>
 			)}
 			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
-				{readonly ? (
-					<span>{formatIntlNumber(snapshotData?.outbound_qty)}</span>
+				<OutboundQtyInputFieldControl
+					aria-readonly={readOnly}
+					readOnly={readOnly}
+					name={`outbound_purchase_orders.${index}.outbound_qty`}
+					className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary aria-readonly:focus:border-none'
+					autoFocus={false}
+					autoComplete='off'
+					tabIndex={index + 1}
+					data-action={CommonActions.CREATE}
+					data-index={index}
+				/>
+				{/* {readonly ? (
+					<span aria-readonly={readonly}>{formatIntlNumber(snapshotData?.outbound_qty)}</span>
 				) : (
 					<OutboundQtyInputFieldControl
+						aria-readonly={readonly}
 						name={`outbound_purchase_orders.${index}.outbound_qty`}
-						className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary'
+						className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary aria-readonly:focus:border-none'
 						autoFocus={false}
 						autoComplete='off'
 						tabIndex={index + 1}
 						data-action={CommonActions.CREATE}
 						data-index={index}
 					/>
-				)}
+				)} */}
 			</TableCell>
 			{isLargeScreen && (
 				<Fragment>

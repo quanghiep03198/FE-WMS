@@ -22,6 +22,19 @@ export class OrderService {
 		})
 	}
 
+	static async getPurchaseOrderInfo(purchaseOrder: string) {
+		return await axiosInstance.get<
+			void,
+			ResponseBody<{
+				po: string
+				brand_name: string
+				cust_shoes_style?: string
+				factory_shoes_style: string
+				color_sn: string
+			}>
+		>(`/order/purchase-order/${purchaseOrder}`)
+	}
+
 	static async searchPurchaseOrder(tenantId: string, params: { q: string; filter_all_brands: boolean }) {
 		return await axiosInstance.get<unknown, ResponseBody<Array<IPurchaseOrderResult>>>(
 			'/order/purchase-order/search',
