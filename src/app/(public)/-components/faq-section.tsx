@@ -148,24 +148,27 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</ScrollShadow>
 				<Div className='h-40 select-none p-3'>
-					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-x-3 rounded-md border bg-accent/20 p-3 text-sm backdrop-blur-sm delay-200 duration-700 animate-in fade-in-0 zoom-in-75 slide-in-from-bottom-4'>
+					<Div className='flex h-full w-full flex-1 flex-col items-stretch gap-x-3 rounded-md border bg-accent/20 p-3 text-sm backdrop-blur-sm delay-200 duration-700 animate-in fade-in-0 zoom-in-75 slide-in-from-bottom-4 [&_svg[data-slot=icon-button]:hover]:stroke-foreground [&_svg[data-slot=icon-button]]:stroke-muted-foreground [&_svg[data-slot=icon-button]]:duration-200'>
 						<Typewriter
 							playState={containerInViewPort ? 'running' : 'paused'}
 							className='block h-full flex-1 basis-full text-foreground'
 							text='I have some question, can you help me?'
 						/>
-
 						<Div className='mt-auto flex items-center gap-x-3'>
-							<Div className='inline-flex size-8 items-center justify-center rounded-full bg-muted'>
-								<Icon name='Plus' size={20} stroke='hsl(var(--muted-foreground))' />
+							<Div
+								role='button'
+								className='inline-flex size-8 cursor-pointer items-center justify-center rounded-full bg-secondary text-muted-foreground duration-200 hover:bg-secondary/80 hover:text-foreground'>
+								<Icon name='Plus' size={20} />
 							</Div>
-							<Icon name='SmilePlus' size={18} stroke='hsl(var(--muted-foreground))' />
-							<Icon name='AtSign' size={18} stroke='hsl(var(--muted-foreground))' />
-							<Icon name='Paperclip' size={18} stroke='hsl(var(--muted-foreground))' />
+							<Icon data-slot='icon-button' name='SmilePlus' size={18} />
+							<Icon data-slot='icon-button' name='AtSign' size={18} />
+							<Icon data-slot='icon-button' name='Paperclip' size={18} />
 							<Separator orientation='vertical' className='h-4' />
-							<Icon name='Camera' size={18} stroke='hsl(var(--muted-foreground))' />
-							<Icon name='Mic' size={18} stroke='hsl(var(--muted-foreground))' />
-							<Div className='ml-auto inline-flex h-8 items-center gap-x-2 rounded-md bg-success p-2 text-success-foreground'>
+							<Icon data-slot='icon-button' name='Camera' size={18} />
+							<Icon data-slot='icon-button' name='Mic' size={18} />
+							<Div
+								role='button'
+								className='ml-auto inline-flex h-8 items-center gap-x-2 rounded-md bg-success p-2 text-success-foreground duration-200 hover:bg-success/80'>
 								<Icon name='Send' size={18} />
 								<Separator orientation='vertical' className='h-4' />
 								<Icon name='ChevronDown' size={18} />
