@@ -48,7 +48,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 	containerProps,
 	defaultFilterOpen = false,
 	expanded = {},
-	paginationProps,
+	paginationProps = { enableInputPageSize: true },
 	toolbarProps,
 	footerProps = { hidden: true, slot: null },
 	manualExpanding = false,
@@ -299,7 +299,8 @@ const DataGrid: React.FC<DataTableProps> = ({
 						loading={loading}
 						manualPagination={manualPagination}
 						controlledPaginationProps={paginationProps}
-						prefetch={paginationProps?.prefetch}
+						prefetch={paginationProps.prefetch}
+						enableInputPageSize={paginationProps.enableInputPageSize}
 						onPaginationChange={onPaginationChange}
 					/>
 				</FooterGroup>
