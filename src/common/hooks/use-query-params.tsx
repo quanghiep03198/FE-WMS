@@ -32,8 +32,8 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	 * @param { Record<string, any> } params
 	 * @returns {Promise<void>}
 	 */
-	const setParams = useCallback((params: T) => {
-		navigate({ search: (prev) => ({ ...prev, ...params }) } as NavigateFnOptions)
+	const setParams = useCallback((params: T, options: { overrideExisting: boolean } = { overrideExisting: false }) => {
+		navigate({ search: (prev) => ({ ...(options.overrideExisting && prev), ...params }) } as NavigateFnOptions)
 	}, [])
 
 	/**
