@@ -10,6 +10,7 @@ import { type PaginationBaseProps } from '../types'
 export type DataTablePaginationProps = {
 	table: Table<any>
 	manualPagination?: boolean
+	enableInputPageSize?: boolean
 	controlledPaginationProps: Partial<Omit<Pagination<any>, 'data'>>
 	onPaginationChange: React.Dispatch<React.SetStateAction<PaginationState>>
 	[key: string]: any
@@ -20,6 +21,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 	loading,
 	manualPagination,
 	controlledPaginationProps,
+	enableInputPageSize,
 	onPaginationChange,
 	prefetch
 }) => {
@@ -46,6 +48,8 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 			goToFirstPage()
 		}
 		setPageSize(+value)
+		if (manualPagination && typeof onPaginationChange === 'function')
+			onPaginationChange({ pageIndex, pageSize: +value })
 	}
 
 	const goToNextPage = () => {
@@ -118,6 +122,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 					onInput={(value) => changePageSize(value)}
 					onSelect={(value) => changePageSize(value)}
 					placeholder={'0'}
+					readOnly={!enableInputPageSize}
 					shouldFilter={false}
 					className='w-24'
 					datalist={[10, 20, 30, 40, 50].map((size) => ({ label: String(size), value: size }))}
