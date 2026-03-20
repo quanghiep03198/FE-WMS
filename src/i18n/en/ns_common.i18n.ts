@@ -198,6 +198,16 @@ export default {
 		'503': 'Service Unavailable',
 		'503_message': 'This feature is currently under development/maintenance. Please try again later.'
 	},
+	filter: {
+		contains: 'Contains',
+		equals: 'Equals',
+		begins_with: 'Begins with',
+		ends_with: 'Ends with',
+		greater_than: 'Greater than',
+		greater_than_or_equal: 'Greater than or equal to',
+		less_than: 'Less than',
+		less_than_or_equal: 'Less than or equal to'
+	},
 	factory: {
 		VA1: 'Lian Ying',
 		VB1: 'Lian Shun 1',

@@ -201,6 +201,16 @@ export default {
 			invalid_url: 'Liên kết không hợp lệ'
 		}
 	},
+	filter: {
+		contains: 'Chứa',
+		equals: 'Bằng',
+		begins_with: 'Bắt đầu với',
+		ends_with: 'Kết thúc với',
+		greater_than: 'Lớn hơn',
+		greater_than_or_equal: 'Lớn hơn hoặc bằng',
+		less_than: 'Nhỏ hơn',
+		less_than_or_equal: 'Nhỏ hơn hoặc bằng'
+	},
 	factory: {
 		VA1: 'Liên Dinh',
 		VB1: 'Liên Thuấn 1',

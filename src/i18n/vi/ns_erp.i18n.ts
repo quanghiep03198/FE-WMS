@@ -69,7 +69,7 @@ export default {
 		outbound_date: 'Ngày Xuất Kho', // Outbound Date
 		outbound_qty: 'Số lượng xuất kho',
 		packaging_code: 'Mã đóng thùng',
-		po: 'Mã đơn đặt hàng',
+		po: 'Mã đơn hàng',
 		po_size_qty: 'Số lượng đặt đơn theo cỡ',
 		prod_color: 'Màu sắc',
 		progress: 'Tiến độ',
