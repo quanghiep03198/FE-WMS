@@ -18,11 +18,12 @@ import {
 } from '@tanstack/react-table'
 import { useDebounce, useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
+import { unflatten } from 'flat'
 import { omit } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { usePageQueryParams } from '../-hooks/use-page-query-params'
+import { FlattenedPageQueryParams, PageQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
 import {
 	getTruckloadDeliveryDetailQueryOptions,
 	getTruckloadDeliveryQueryOptions,
@@ -45,8 +46,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
-	const [sorting, setSorting] = useState<SortingState>([])
-	const debouncedSorting = useDebounce(sorting, { wait: 200 })
+	const flattenedSearchParams = unflatten<PageQueryParams, FlattenedPageQueryParams>(searchParams)
+	const defaultSortingState = flattenedSearchParams?.sort
+		? Object.entries(flattenedSearchParams.sort).map(([key, value]) => ({ id: key, desc: value === 'desc' }))
+		: []
+	const [sorting, setSorting] = useState<SortingState>(defaultSortingState)
+	const debouncedSorting = useDebounce(sorting, { wait: 50 })
 
 	const licensePlateColumnHeader = !isMobile
 		? t('ns_erp:fields.license_plate')
@@ -84,11 +89,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				)
 			}),
 			columnHelper.accessor('dispatch_order', {
+				id: 'dispatch_order',
 				sortDescFirst: true,
 				enableSorting: true,
 				enableMultiSort: true
 			}),
 			columnHelper.accessor('license_plate', {
+				id: 'license_plate',
 				header: licensePlateColumnHeader,
 				enableResizing: true,
 				enableSorting: true,
@@ -98,11 +105,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: LicensePlateColumnCell
 			}),
 			columnHelper.accessor('container_number', {
+				id: 'container_number',
 				header: t('ns_erp:fields.container_number'),
 				enableResizing: true,
 				enableSorting: true,
 				enableMultiSort: true,
 				enableGlobalFilter: true,
+				sortDescFirst: true,
 				filterFn: 'fuzzy',
 				minSize: 150,
 				size: 150,
@@ -138,6 +147,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				enablePinning: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
@@ -157,7 +167,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'auto',
 				cell: DateTimeCell
 			}),
 			columnHelper.accessor('container_sealing_time', {
@@ -170,7 +179,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'auto',
 				cell: DateTimeCell
 			}),
 			columnHelper.accessor('factory_departure_time', {
@@ -183,20 +191,17 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'auto',
 				cell: DateTimeCell
 			}),
 			columnHelper.accessor('actual_factory_departure_time', {
 				header: t('ns_erp:fields.actual_factory_departure_time'),
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				sortingFn: 'auto',
 				cell: DateTimeCell
 			}),
 			columnHelper.display({
@@ -272,16 +277,15 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		// * Clone search params
 		const noneSortingSearchParams = { ...searchParams }
 		// * Delete sorting params
-		for (const key in noneSortingSearchParams) {
+		for (const key in searchParams) {
 			if (key.includes('sort')) delete noneSortingSearchParams[key]
 		}
-		console.log(noneSortingSearchParams)
 		// * Rebuild sorting params
-		const sortingSearchParams = sorting.reduce(
+		const sortingSearchParams = debouncedSorting.reduce(
 			(acc, curr) => ({ ...acc, [`sort.${curr.id}`]: curr.desc ? 'desc' : 'asc' }),
 			{}
 		)
-		setParams({ ...noneSortingSearchParams, ...sortingSearchParams })
+		setParams({ ...noneSortingSearchParams, ...sortingSearchParams }, { overrideExisting: true })
 	}, [debouncedSorting])
 
 	return (
@@ -302,10 +306,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			sorting={sorting}
 			enableMultiSort={true}
 			manualExpanding={true}
+			manualFiltering={true}
 			manualPagination={true}
 			manualSorting={true}
+			isMultiSortEvent={() => true}
+			sortDescFirst={true}
 			paginationProps={{
 				...omit(data, 'data'),
+				enableInputPageSize: false,
 				prefetch: async (params: Pick<Pagination<TruckloadDeliveryQueryData>, 'page' | 'limit'>) => {
 					return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
 				}

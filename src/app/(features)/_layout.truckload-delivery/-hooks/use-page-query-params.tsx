@@ -1,21 +1,39 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { SortDirection } from '@tanstack/react-table'
 import { TruckloadDeliveryStatus } from '../-constants'
+import { TruckloadDeliveryQueryData } from './use-truckload-delivery-asm'
 
-type PageQueryParams = {
-	'from.eq'?: Date | string
-	'to.eq'?: Date | string
-	'po.like'?: string
-	'container.like'?: string
-	'status.eq'?: TruckloadDeliveryStatus
-	'sort.container_number': SortDirection
+export type PageQueryParams = {
+	q?: string
+	from?: Date | string
+	to?: Date | string
+	approval_status?: TruckloadDeliveryStatus
+	'sort.container_number'?: SortDirection
 	'sort.license_plate'?: SortDirection
-	'sort.outbound_qty'?: SortDirection
-	'sort.created'?: SortDirection
+	'sort.total_outbound_qty'?: SortDirection
+	'sort.created_at'?: SortDirection
 	'sort.container_sealing_time'?: SortDirection
 	'sort.factory_departure_time'?: SortDirection
 	'sort.actual_departure_time'?: SortDirection
-} & Pick<Pagination, 'page' | 'limit'>
+} & Pick<Pagination<TruckloadDeliveryQueryData>, 'page' | 'limit'>
+
+export type FlattenedPageQueryParams = {
+	q?: string
+	from?: Date | string
+	to?: Date | string
+	approval_status?: TruckloadDeliveryStatus
+	sort: {
+		container_number?: SortDirection
+		license_plate?: SortDirection
+		total_outbound_qty?: SortDirection
+		created_at?: SortDirection
+		container_sealing_time?: SortDirection
+		factory_departure_time?: SortDirection
+		actual_departure_time?: SortDirection
+	}
+	page: number
+	limit: number
+}
 
 export const usePageQueryParams = () => {
 	return useQueryParams<PageQueryParams>({
