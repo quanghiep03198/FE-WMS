@@ -196,6 +196,16 @@ export default {
 		'503': '功能不可用',
 		'503_message': '功能正在开发/维护中. 请稍后再试'
 	},
+	filter: {
+		contains: '包含',
+		equals: '等于',
+		begins_with: '开始于',
+		ends_with: '结束于',
+		greater_than: '大于',
+		greater_than_or_equal: '大于或等于',
+		less_than: '小于',
+		less_than_or_equal: '小于或等于'
+	},
 	factory: {
 		VA1: '联盈',
 		VB1: '联舜一厂',
