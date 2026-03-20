@@ -33,12 +33,13 @@ export interface ITruckloadDelivery extends IBaseEntity {
 export interface ITruckloadDeliveryDetail extends Omit<IBaseEntity, 'id'> {
 	id: string | number
 	po: string
-	brand_name?: string | null
-	factory_shoes_style?: string | null
-	color_sn?: string | null
+	brand_name: string | null
+	factory_shoes_style: string | null
+	color_sn: string | null
+	po_qty: number
 	outbound_qty: number
-	max_outbound_qty?: number | null
 	dispatched_outbound_qty: number
+	max_outbound_qty?: number | null
 }
 
 export type QrCodeScannedResult = {
@@ -59,7 +60,7 @@ export class TruckloadDeliveryService {
 		})
 	}
 
-	public static async getDetail(dispatchOrder: string) {
+	public static async getDispatchOrderDetail(dispatchOrder: string) {
 		return await axiosInstance.get<void, ResponseBody<ITruckloadDeliveryDetail[]>>(
 			`/truckload-delivery/${dispatchOrder}`
 		)

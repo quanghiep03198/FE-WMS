@@ -9,22 +9,28 @@ import TableCellText from '@/components/ui/@react-table/components/table-cell-te
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { DataTableProps, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { useQueryClient } from '@tanstack/react-query'
-import { type ColumnDefBase, createColumnHelper, PaginationState, type Table } from '@tanstack/react-table'
-import { useResetState } from 'ahooks'
+import {
+	type ColumnDefBase,
+	createColumnHelper,
+	PaginationState,
+	SortingState,
+	type Table
+} from '@tanstack/react-table'
+import { useDebounce, useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { omit } from 'lodash-es'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageQueryParams } from '../-hooks/use-page-query-params'
 import {
+	getTruckloadDeliveryDetailQueryOptions,
 	getTruckloadDeliveryQueryOptions,
 	type TruckloadDeliveryQueryData,
 	useGetTruckloadDeliveryQuery,
 	useUpdateContainerConditionMutation
 } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
-import { getPurchaseOrderInfoQueryOptions } from '../../-hooks/use-order-asm'
 import LicensePlateHoverCard from './license-plate-hover-card'
 import RowActions from './row-actions'
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
@@ -39,6 +45,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
+	const [sorting, setSorting] = useState<SortingState>([])
+	const debouncedSorting = useDebounce(sorting, { wait: 200 })
 
 	const licensePlateColumnHeader = !isMobile
 		? t('ns_erp:fields.license_plate')
@@ -68,9 +76,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						className='absolute inset-0'
 						disabled={false}
 						onPointerEnter={() =>
-							row.original.purchase_orders.forEach((po) =>
-								queryClient.prefetchQuery(getPurchaseOrderInfoQueryOptions(po))
-							)
+							queryClient.prefetchQuery(getTruckloadDeliveryDetailQueryOptions(row.original.dispatch_order))
 						}
 						onClick={() => setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
@@ -82,13 +88,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableSorting: true,
 				enableMultiSort: true
 			}),
-			columnHelper.accessor('purchase_orders', {
-				filterFn: 'arrIncludes'
-			}),
 			columnHelper.accessor('license_plate', {
 				header: licensePlateColumnHeader,
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				filterFn: 'fuzzy',
 				enableGlobalFilter: true,
 				cell: LicensePlateColumnCell
@@ -97,6 +101,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.container_number'),
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				enableGlobalFilter: true,
 				filterFn: 'fuzzy',
 				minSize: 150,
@@ -107,24 +112,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
+				enableMultiSort: true,
 				meta: { align: 'right' },
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
 			columnHelper.accessor('punctured_container', {
 				header: t('ns_erp:fields.punctured_container'),
-				enableSorting: true,
+				enableSorting: false,
 				meta: { align: 'center' },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('smelling_container', {
 				header: t('ns_erp:fields.smelling_container'),
-				enableSorting: true,
+				enableSorting: false,
 				meta: { align: 'center' },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('moist_container', {
 				header: t('ns_erp:fields.moist_container'),
-				enableSorting: true,
+				enableSorting: false,
 				meta: { align: 'center' },
 				cell: ContainerStatusCheckbox
 			}),
@@ -145,6 +151,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_common:common_fields.created_at'),
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -157,6 +164,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.container_sealing_time'),
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -169,6 +177,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.factory_departure_time'),
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -181,6 +190,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.actual_factory_departure_time'),
 				enableResizing: true,
 				enableSorting: true,
+				enableMultiSort: true,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -258,7 +268,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[searchParams]
 	)
 
+	useDeepCompareEffect(() => {
+		// * Clone search params
+		const noneSortingSearchParams = { ...searchParams }
+		// * Delete sorting params
+		for (const key in noneSortingSearchParams) {
+			if (key.includes('sort')) delete noneSortingSearchParams[key]
+		}
+		console.log(noneSortingSearchParams)
+		// * Rebuild sorting params
+		const sortingSearchParams = sorting.reduce(
+			(acc, curr) => ({ ...acc, [`sort.${curr.id}`]: curr.desc ? 'desc' : 'asc' }),
+			{}
+		)
+		setParams({ ...noneSortingSearchParams, ...sortingSearchParams })
+	}, [debouncedSorting])
+
 	return (
+		/* eslint-disable */
+		// @ts-ignore
 		<DataTable
 			ref={tableRef}
 			columns={columns}
@@ -271,17 +299,19 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			getRowCanExpand={() => true}
 			getColumnCanGlobalFilter={() => true}
 			getRowId={(originalRow: TruckloadDeliveryQueryData) => originalRow.dispatch_order}
+			sorting={sorting}
 			enableMultiSort={true}
 			manualExpanding={true}
 			manualPagination={true}
+			manualSorting={true}
 			paginationProps={{
 				...omit(data, 'data'),
 				prefetch: async (params: Pick<Pagination<TruckloadDeliveryQueryData>, 'page' | 'limit'>) => {
-					console.log('params', { ...searchParams, params })
 					return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
 				}
 			}}
 			onPaginationChange={changePagination}
+			onSortingChange={setSorting}
 			globalFilterFn='includesString'
 			initialState={{ sorting: [{ id: 'dispatch_order', desc: true }] }}
 			virtualizerOptions={virtualizerOptions}

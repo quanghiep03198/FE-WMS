@@ -12,13 +12,15 @@ import { capitalize } from 'lodash-es'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { usePageQueryParams } from '../-hooks/use-page-query-params'
 import { useSearchPurchaseOrderQuery } from '../../-hooks/use-order-asm'
 
 const PurchaseOrderFilterInput: React.FC<{
 	table: Table<ITruckloadDelivery>
 }> = ({ table }) => {
 	const { t } = useTranslation()
-	const [search, setSearch] = useState<string>('')
+	const { searchParams, setParams } = usePageQueryParams()
+	const [search, setSearch] = useState<string>(searchParams?.['po.eq'] ?? '')
 	const debounceSearchValue = useDebounce(search, { wait: 200 })
 	const { data, isLoading } = useSearchPurchaseOrderQuery(debounceSearchValue)
 	const [open, setOpen] = useState<boolean>(false)
@@ -38,7 +40,8 @@ const PurchaseOrderFilterInput: React.FC<{
 	}
 
 	useUpdateEffect(() => {
-		table?.getColumn?.('purchase_orders')?.setFilterValue?.(debounceSearchValue)
+		searchParams['po.like'] = debounceSearchValue
+		setParams(searchParams)
 	}, [debounceSearchValue])
 
 	return (

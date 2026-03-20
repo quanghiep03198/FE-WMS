@@ -20,7 +20,7 @@ import {
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useIsFetching, useQueries } from '@tanstack/react-query'
+import { useIsFetching, useQuery } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { pick, sortBy, uniqBy } from 'lodash-es'
@@ -34,12 +34,12 @@ import { uuidv4 } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType, usePageContext } from '../-contexts/page-context'
 import {
+	getTruckloadDeliveryDetailQueryOptions,
 	TruckloadDeliveryQueryData,
 	TruckloadDeliveryQueryKeys,
 	useUpsertPurchaseOrdersMutation
 } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
-import { getPurchaseOrderInfoQueryOptions } from '../../-hooks/use-order-asm'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
 type TruckloadDeliveryDetailTableProps = {
@@ -65,7 +65,20 @@ const getIsCurrentlyAdded = (item: UpsertPurchaseOrdersFormValues['outbound_purc
 	return uuidv4().safeParse(item.id).success
 }
 
-const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> = ({ data, onCollapse }) => {
+const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> = ({
+	data: {
+		dispatch_order,
+		license_plate,
+		approval_status,
+		security_1_signature,
+		security_2_signature,
+		container_sealing_time,
+		factory_departure_time,
+		actual_factory_departure_time,
+		total_outbound_qty
+	},
+	onCollapse
+}) => {
 	const { t } = useTranslation()
 	const [action, setAction, resetAction] = useResetState<CommonActions.UPDATE | null>(null)
 	const form = useForm<UpsertPurchaseOrdersFormValues>({
@@ -73,29 +86,21 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	})
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
 	const { user } = useAuth()
-	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation()
+	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation(dispatch_order)
 	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const isFetching = useIsFetching({
 		predicate: (query) => query.queryKey.some((key) => key === TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY)
 	})
-	const purchaseOrderQueriesResult = useQueries({
-		queries: data.purchase_orders.map(getPurchaseOrderInfoQueryOptions),
-		combine(result) {
-			return result.map((res) => res.data.metadata)
-		}
-	})
-
-	console.table(purchaseOrderQueriesResult)
+	const { data } = useQuery(getTruckloadDeliveryDetailQueryOptions(dispatch_order))
+	console.table(data)
 
 	const handleResetDeliveryDetails = (shouldKeepUpdating: boolean) => {
 		if (isPending || isFetching) return
 		if (!shouldKeepUpdating) resetAction()
 		// * Default form values from backend data
-		const defaultFormValues = Array.isArray(data.delivery_details)
+		const defaultFormValues = Array.isArray(data)
 			? uniqBy(
-					data.delivery_details
-						.filter(getIsStoredToDatabase)
-						.map((item) => pick(item, ['id', 'po', 'outbound_qty'])),
+					data.filter(getIsStoredToDatabase).map((item) => pick(item, ['id', 'po', 'outbound_qty'])),
 					(item) => item.id
 				)
 			: []
@@ -105,7 +110,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 
 		// * Reset form values
 		form.reset({
-			dispatch_order: data.dispatch_order,
+			dispatch_order,
 			outbound_purchase_orders: sortBy(
 				[...defaultFormValues, ...(shouldKeepUpdating ? addedItems : [])],
 				(item) => item.id
@@ -129,6 +134,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		}
 	}
 
+	const signatureData = { dispatch_order, license_plate, approval_status }
+
 	return (
 		<Div className='space-y-6 overflow-clip rounded-md border bg-background'>
 			<Div className='relative'>
@@ -139,7 +146,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								<TableHeader className='sticky top-0 z-10'>
 									<TableRow>
 										<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
-											{data.dispatch_order}
+											{dispatch_order}
 										</TableHead>
 									</TableRow>
 									<TableRow>
@@ -191,13 +198,11 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableHeader>
 								<TableBody>
 									{fields.map((field, index) => {
-										const defautValues = data?.delivery_details?.[index]
-										const purchaseOrderDetail =
-											purchaseOrderQueriesResult.find((result) => result?.po === defautValues.po) ?? {}
-										const rowData: ITruckloadDeliveryDetail = defautValues
+										const defaultValues = data?.[index]
+										const rowData: ITruckloadDeliveryDetail = defaultValues
 											? {
-													...defautValues,
-													...purchaseOrderDetail
+													...defaultValues,
+													max_outbound_qty: defaultValues.po_qty - defaultValues.dispatched_outbound_qty
 												}
 											: {
 													id: uuid(),
@@ -206,6 +211,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 													factory_shoes_style: null,
 													color_sn: null,
 													outbound_qty: 0,
+													dispatched_outbound_qty: 0,
+													po_qty: 0,
 													user_code_created: user.username,
 													created: new Date(),
 													max_outbound_qty: null
@@ -215,8 +222,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											<TruckloadDeliveryDetailRow
 												key={field.id}
 												index={index}
-												readOnly={!action || data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
-												deletable={data.approval_status !== TruckloadDeliveryStatus.CONFIRMED}
+												readOnly={!action || approval_status === TruckloadDeliveryStatus.CONFIRMED}
+												deletable={approval_status !== TruckloadDeliveryStatus.CONFIRMED}
 												defaultValues={rowData}
 												onRemove={remove}
 											/>
@@ -242,8 +249,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									{/* Summary table body */}
 									<TableRow className='xl:hidden'>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
-											{data.container_sealing_time ? (
-												format(new Date(data.container_sealing_time), 'yyyy-MM-dd HH:mm')
+											{container_sealing_time ? (
+												format(new Date(container_sealing_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
@@ -252,8 +259,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											)}
 										</TableCell>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
-											{data.factory_departure_time ? (
-												format(new Date(data.factory_departure_time), 'yyyy-MM-dd HH:mm')
+											{factory_departure_time ? (
+												format(new Date(factory_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
@@ -262,8 +269,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											)}
 										</TableCell>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
-											{data.actual_factory_departure_time ? (
-												format(new Date(data.actual_factory_departure_time), 'yyyy-MM-dd HH:mm')
+											{actual_factory_departure_time ? (
+												format(new Date(actual_factory_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
@@ -272,7 +279,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											)}
 										</TableCell>
 										<TableCell colSpan={1} align='left'>
-											{data?.total_outbound_qty}
+											{total_outbound_qty}
 										</TableCell>
 									</TableRow>
 									{/* Signatures */}
@@ -321,41 +328,41 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												</Div>
 												<Div className='has-[button]:py-2'>
 													<Signature
-														data={data}
+														data={signatureData}
 														type='ie_signature'
 														disabled={
-															!!data.security_2_signature &&
-															data.approval_status === TruckloadDeliveryStatus.CONFIRMED
+															!!security_2_signature &&
+															approval_status === TruckloadDeliveryStatus.CONFIRMED
 														}
 													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
 													<Signature
-														data={data}
+														data={signatureData}
 														type='warehouse_officer_signature'
 														disabled={
-															!data.license_plate ||
-															(!!data.security_2_signature &&
-																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
+															!license_plate ||
+															(!!security_2_signature &&
+																approval_status === TruckloadDeliveryStatus.CONFIRMED)
 														}
 													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
 													<Signature
-														data={data}
+														data={signatureData}
 														type='security_1_signature'
 														disabled={
-															!data.license_plate ||
-															(!!data.security_2_signature &&
-																data.approval_status === TruckloadDeliveryStatus.CONFIRMED)
+															!license_plate ||
+															(!!security_2_signature &&
+																approval_status === TruckloadDeliveryStatus.CONFIRMED)
 														}
 													/>
 												</Div>
 												<Div className='has-[button]:py-2'>
 													<Signature
-														data={data}
+														data={signatureData}
 														type='security_2_signature'
-														disabled={!data.license_plate}
+														disabled={!license_plate}
 													/>
 												</Div>
 											</Div>
@@ -405,7 +412,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											variant='default'
 											type='button'
 											size='sm'
-											disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
+											disabled={approval_status === TruckloadDeliveryStatus.CONFIRMED}
 											onClick={() => setAction(CommonActions.UPDATE)}>
 											<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 										</Button>
@@ -475,7 +482,7 @@ const signatureRolesMap: Map<SignatureType, UserRole[]> = new Map([
 ])
 
 const Signature: React.FC<{
-	data: ITruckloadDelivery
+	data: Pick<ITruckloadDelivery, 'dispatch_order' | 'license_plate' | 'approval_status'>
 	type: SignatureType
 	disabled?: boolean
 }> = ({ data, type, disabled }) => {
