@@ -20,7 +20,7 @@ const PurchaseOrderFilterInput: React.FC<{
 }> = ({ table }) => {
 	const { t } = useTranslation()
 	const { searchParams, setParams } = usePageQueryParams()
-	const [search, setSearch] = useState<string>(searchParams?.['po.eq'] ?? '')
+	const [search, setSearch] = useState<string>(searchParams?.q ?? '')
 	const debounceSearchValue = useDebounce(search, { wait: 200 })
 	const { data, isLoading } = useSearchPurchaseOrderQuery(debounceSearchValue)
 	const [open, setOpen] = useState<boolean>(false)

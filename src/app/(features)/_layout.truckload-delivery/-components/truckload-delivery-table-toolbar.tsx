@@ -15,8 +15,7 @@ import { useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-a
 import CreateTruckloadDialogButton from './create-truckload-delivery-button'
 import DispatchOrderStatusFilter from './dispatch-order-status-filter'
 import DownloadExcelButton from './download-excel-button'
-import GlobalFilterInput from './global-filter-input'
-import PurchaseOrderFilterInput from './purchase-order-filter-input'
+import GlobalFilter from './global-filter'
 
 const TruckloadDeliveryTableToolbar: React.FC<{
 	table: Table<ITruckloadDelivery>
@@ -25,9 +24,7 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 	const { t } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 919px)')
 	const { refetch } = useGetTruckloadDeliveryQuery()
-	const { searchParams, removeParam } = usePageQueryParams()
-	const { globalFilter, columnFilters } = table.getState()
-	const isFilterDirty = globalFilter?.length !== 0 || columnFilters?.length !== 0
+	const { searchParams } = usePageQueryParams()
 
 	useUpdateEffect(() => {
 		if (searchParams.from || searchParams.to)
@@ -37,30 +34,9 @@ const TruckloadDeliveryTableToolbar: React.FC<{
 
 	return (
 		<Div className='flex items-center gap-x-2 sm:gap-x-1 md:gap-x-1'>
-			<GlobalFilterInput {...{ table, event$ }} />
-			{!isMobile && <PurchaseOrderFilterInput table={table} />}
+			<GlobalFilter {...{ table, event$ }} />
 			<DispatchOrderStatusFilter table={table} />
 			<Div className='ml-auto flex items-center justify-end gap-x-2 *:flex-1 sm:gap-x-1 md:gap-x-1 md:[&>button]:size-9'>
-				{isFilterDirty && (
-					<Tooltip
-						message={t('ns_common:actions.clear_filter')}
-						triggerProps={{ asChild: true }}
-						contentProps={{ hidden: !isMobile }}>
-						<Button
-							variant='destructive'
-							size={isMobile ? 'icon' : 'default'}
-							className='w-full'
-							onClick={() => {
-								table.resetGlobalFilter(table.initialState.globalFilter)
-								table.resetColumnFilters(true)
-								removeParam('from')
-								removeParam('to')
-								removeParam('status')
-							}}>
-							<Icon name='FunnelX' /> {!isMobile && t('ns_common:actions.clear_filter')}
-						</Button>
-					</Tooltip>
-				)}
 				<Tooltip
 					message={t('ns_common:actions.reload')}
 					triggerProps={{ asChild: true }}
