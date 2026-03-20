@@ -12,6 +12,7 @@ import { usePageQueryParams } from './use-page-query-params'
 
 export enum TruckloadDeliveryQueryKeys {
 	TRUCKLOAD_DELIVERY = 'TRUCKLOAD_DELIVERY',
+	TRUCKLOAD_DELIVERY_DETAIL = 'TRUCKLOAD_DELIVERY_DETAIL',
 	DISPATCH_PURCHASE_ORDER = 'DISPATCH_PURCHASE_ORDER'
 }
 
@@ -21,7 +22,7 @@ export enum TruckloadDeliveryMutationKeys {
 	UPSERT_PURCHASE_ORDERS = 'UPSERT_PURCHASE_ORDERS'
 }
 
-export type TruckloadDeliveryQueryData = ITruckloadDelivery & { purchase_orders: string[]; total_outbound_qty: number }
+export type TruckloadDeliveryQueryData = ITruckloadDelivery & { total_outbound_qty: number }
 
 export const getTruckloadDeliveryQueryOptions = (searchParams) =>
 	queryOptions({
@@ -49,6 +50,14 @@ export const getTruckloadDeliveryQueryOptions = (searchParams) =>
 			}
 		}
 	})
+
+export const getTruckloadDeliveryDetailQueryOptions = (dispatchOrder: string) => {
+	return queryOptions({
+		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY_DETAIL, dispatchOrder],
+		queryFn: async () => await TruckloadDeliveryService.getDispatchOrderDetail(dispatchOrder),
+		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
+	})
+}
 
 export const useGetTruckloadDeliveryQuery = () => {
 	const { searchParams } = usePageQueryParams()
@@ -112,8 +121,8 @@ export const useDeleteDispatchOrdersMutation = () => {
 	})
 }
 
-export const useUpsertPurchaseOrdersMutation = () => {
-	const invalidateQueries = useInvalidateQueries()
+export const useUpsertPurchaseOrdersMutation = (dispatchOrder: string) => {
+	const invalidateQueries = useInvalidateQueries(dispatchOrder)
 
 	return useMutation({
 		mutationKey: [TruckloadDeliveryMutationKeys.UPSERT_PURCHASE_ORDERS],
@@ -189,13 +198,14 @@ export const useUpdateContainerConditionMutation = () => {
 	})
 }
 
-const useInvalidateQueries = () => {
+const useInvalidateQueries = (...queryKeys: any[]) => {
 	const queryClient = useQueryClient()
 
 	return () => {
 		queryClient.invalidateQueries({
 			queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
-			predicate: (query) => query.queryKey.some((key) => Object.values(TruckloadDeliveryQueryKeys).includes(key)),
+			predicate: (query) =>
+				query.queryKey.some((key) => [...Object.values(TruckloadDeliveryQueryKeys), ...queryKeys].includes(key)),
 			refetchType: 'active'
 		})
 	}

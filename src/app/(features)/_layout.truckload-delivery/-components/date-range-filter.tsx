@@ -11,14 +11,14 @@ const DateRangeFilter: React.FC = () => {
 			triggerProps={{ className: 'max-w-72' }}
 			calendarProps={{
 				selected: {
-					from: isValid(new Date(searchParams.from)) ? new Date(searchParams.from) : undefined,
-					to: isValid(new Date(searchParams.to)) ? new Date(searchParams.to) : undefined
+					from: isValid(new Date(searchParams['from.eq'])) ? new Date(searchParams['from.eq']) : undefined,
+					to: isValid(new Date(searchParams['to.eq'])) ? new Date(searchParams['to.eq']) : undefined
 				},
 				onSelect: (value) => {
 					const update = {
 						...searchParams,
-						...(isValid(value?.from) && { from: format(value?.from, 'yyyy-MM-dd') }),
-						...(isValid(value?.to) && { to: format(value?.to, 'yyyy-MM-dd') })
+						...(isValid(value?.from) && { ['from.eq']: format(value?.from, 'yyyy-MM-dd') }),
+						...(isValid(value?.to) && { ['to.eq']: format(value?.to, 'yyyy-MM-dd') })
 					}
 					setParams(omitBy(update, isNil))
 				}

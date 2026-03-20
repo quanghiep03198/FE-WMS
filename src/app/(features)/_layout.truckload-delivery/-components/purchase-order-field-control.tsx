@@ -4,11 +4,11 @@ import { CommonActions } from '@/common/constants/enums'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import { AutoCompleteFieldControlProps } from '@/components/ui/@field-control/auto-complete'
 import { IPurchaseOrderResult } from '@/services/order.service'
-import { useDebounce, useUpdateEffect } from 'ahooks'
+import { useDebounce } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useGetTruckloadDeliveryQuery, useSearchDispatchPurchaseOrder } from '../-hooks/use-truckload-delivery-asm'
+import { useSearchDispatchPurchaseOrder } from '../-hooks/use-truckload-delivery-asm'
 import { CreateDeliveryFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 
 type PurchaseOrderFieldControlProps = Partial<
@@ -33,7 +33,6 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 
 	const { t } = useTranslation()
 	const { control, getValues, setValue } = useFormContext<CreateDeliveryFormValues | UpsertPurchaseOrdersFormValues>()
-	const { data } = useGetTruckloadDeliveryQuery()
 	const currentPurchaseOrderValue = useWatch({ control, name })
 	const [searchTerm, setSearchTerm] = useState(typeof fieldIndex === 'number' ? (currentPurchaseOrderValue ?? '') : '')
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
@@ -54,9 +53,9 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		)
 	}, [purchaseOrders, currentPurchaseOrderValue])
 
-	useUpdateEffect(() => {
-		if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
-	}, [searchTerm, purchaseOrders])
+	// useUpdateEffect(() => {
+	// 	if (typeof onValueChange === 'function') onValueChange(purchaseOrders?.find((item) => item?.po === searchTerm))
+	// }, [searchTerm, purchaseOrders])
 
 	return (
 		<AutoCompleteFieldControl
