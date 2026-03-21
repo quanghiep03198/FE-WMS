@@ -1,6 +1,6 @@
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
-import { format } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import { Fragment, useId } from 'react'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -70,14 +70,14 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 										<span className='first-letter:uppercase'>
 											{calendarProps.mode === 'range' || calendarProps.mode === 'multiple' ? (
 												<Fragment>
-													{field.value?.from ? (
-														field.value.to ? (
+													{isValid(field.value?.from) ? (
+														isValid(field.value?.to) ? (
 															<Fragment>
 																{format(field.value.from, 'LLL dd, y', { locale })} -{' '}
 																{format(field.value.to, 'LLL dd, y', { locale })}
 															</Fragment>
 														) : (
-															format(field.value.from, 'LLL dd, y', { locale })
+															format(field.value?.from, 'LLL dd, y', { locale })
 														)
 													) : (
 														t('ns_common:actions.pick_a_date')
@@ -85,7 +85,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 												</Fragment>
 											) : (
 												<Fragment>
-													{field.value
+													{isValid(field.value)
 														? format(field.value, 'PPP', { locale })
 														: t('ns_common:actions.pick_a_date')}
 												</Fragment>
