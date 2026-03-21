@@ -200,6 +200,7 @@ export default {
 	},
 	filter: {
 		contains: 'Contains',
+		between: 'Between',
 		equals: 'Equals',
 		begins_with: 'Begins with',
 		ends_with: 'Ends with',
