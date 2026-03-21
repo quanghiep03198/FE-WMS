@@ -204,6 +204,7 @@ export default {
 	filter: {
 		contains: 'Chứa',
 		equals: 'Bằng',
+		between: 'Trong khoảng',
 		begins_with: 'Bắt đầu với',
 		ends_with: 'Kết thúc với',
 		greater_than: 'Lớn hơn',

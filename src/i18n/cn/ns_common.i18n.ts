@@ -198,6 +198,7 @@ export default {
 	},
 	filter: {
 		contains: '包含',
+		between: '之间',
 		equals: '等于',
 		begins_with: '开始于',
 		ends_with: '结束于',
