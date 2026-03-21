@@ -19,7 +19,7 @@ import {
 import { useDebounce, useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { unflatten } from 'flat'
-import { omit } from 'lodash-es'
+import { omit, omitBy } from 'lodash-es'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
@@ -275,17 +275,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 
 	useDeepCompareEffect(() => {
 		// * Clone search params
-		const noneSortingSearchParams = { ...searchParams }
-		// * Delete sorting params
-		for (const key in searchParams) {
-			if (key.includes('sort')) delete noneSortingSearchParams[key]
-		}
+		const noneSortingSearchParams = omitBy(searchParams, (_value, key) => key.startsWith('sort'))
+
 		// * Rebuild sorting params
 		const sortingSearchParams = debouncedSorting.reduce(
 			(acc, curr) => ({ ...acc, [`sort.${curr.id}`]: curr.desc ? 'desc' : 'asc' }),
 			{}
 		)
-		setParams({ ...noneSortingSearchParams, ...sortingSearchParams }, { overrideExisting: true })
+		setParams({ ...noneSortingSearchParams, ...sortingSearchParams } as PageQueryParams, { overrideExisting: true })
 	}, [debouncedSorting])
 
 	return (

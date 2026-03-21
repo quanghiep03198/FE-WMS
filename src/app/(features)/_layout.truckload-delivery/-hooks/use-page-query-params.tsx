@@ -1,6 +1,7 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { SortDirection } from '@tanstack/react-table'
 import { TruckloadDeliveryStatus } from '../-constants'
+import { FilterOperator } from '../-schemas'
 import { TruckloadDeliveryQueryData } from './use-truckload-delivery-asm'
 
 export type PageQueryParams = {
@@ -15,6 +16,9 @@ export type PageQueryParams = {
 	'sort.container_sealing_time'?: SortDirection
 	'sort.factory_departure_time'?: SortDirection
 	'sort.actual_departure_time'?: SortDirection
+	'where.license_plate'?: FilterOperator
+	'where.container_number'?: FilterOperator
+	'where.po'?: FilterOperator
 } & Pick<Pagination<TruckloadDeliveryQueryData>, 'page' | 'limit'>
 
 export type FlattenedPageQueryParams = {
