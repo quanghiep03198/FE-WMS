@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import { any, array, boolean, number, object, string, type infer as Infer } from 'zod'
+import { any, array, boolean, enum as enumeration, number, object, string, type infer as Infer } from 'zod'
 
 // BIC container code pattern: 3 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
 const BIC_CONTAINER_PATTERN = /^[A-Z]{4}\d{7}$/
@@ -106,8 +106,44 @@ export const upsertPurchaseOrdersSchema = object({
 	})
 })
 
+export const truckloadDeliveryFilterSchema = object({
+	where: array(
+		object({
+			column: enumeration([
+				'license_plate',
+				'container_number',
+				'po',
+				'created_at',
+				'container_sealing_time',
+				'factory_departure_time',
+				'actual_factory_departure_time'
+			]).nullish(),
+			operator: enumeration([
+				'like_%@value%',
+				'=_@value',
+				'like_@value%',
+				'like_%@value',
+				'between_@value1_and_@value2'
+			]).nullish(),
+			value: any().nullish()
+		})
+	).superRefine((values, ctx) => {
+		values.forEach((item, index) => {
+			if (item.column && (!item.value || !item.operator))
+				ctx.addIssue({
+					code: 'custom',
+					message: 'ns_validation:required',
+					path: [`where.${index}.value`, `where.${index}.operator`]
+				})
+		})
+	})
+})
+
 export type CreateDeliveryFormValues = Infer<typeof createDeliverySchema>
 export type UpsertPurchaseOrdersFormValues = Infer<typeof upsertPurchaseOrdersSchema>
 export type UpdateContainerConditionFormValues = Infer<typeof updateContainerConditionSchema>
 export type UpdateDispatchOrderFormValues = Infer<typeof updateDispatchOrderSchema> &
 	Partial<UpdateContainerConditionFormValues>
+export type TruckloadDeliveryFilterFormValues = Infer<typeof truckloadDeliveryFilterSchema>
+export type FilterOperator = TruckloadDeliveryFilterFormValues['where'][number]['operator']
+export type FilterColumn = TruckloadDeliveryFilterFormValues['where'][number]['column']
