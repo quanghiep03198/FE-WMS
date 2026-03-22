@@ -36,7 +36,7 @@ import { CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
-import { Fragment, useEffect, useRef } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
@@ -188,6 +188,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 				tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={url}
+					search={location.search as React.ComponentProps<typeof Link>['search']}
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
