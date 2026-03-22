@@ -125,8 +125,6 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 
 	const virtualItems = virtualizer.getVirtualItems()
 
-	console.log(virtualItems)
-
 	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	return (

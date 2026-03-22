@@ -116,7 +116,7 @@ export function InputFieldControl<T extends FieldValues>(props: InputFieldContro
 											disabled={disabled}
 											className={cn(
 												className,
-												'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+												'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive disabled:opacity-50',
 												type === 'password' && 'placeholder:font-pass placeholder:tracking-wider',
 												orientation === 'horizontal' && 'mb-2 block'
 											)}

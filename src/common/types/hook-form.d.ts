@@ -6,6 +6,7 @@ export interface BaseFieldControl<T extends FieldValues> {
 	label?: string
 	description?: string
 	hidden?: boolean
+	disabled?: boolean
 	placeholder?: string
 	defaultValue?: string
 	className?: ClassValue
