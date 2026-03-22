@@ -20,7 +20,7 @@ type NavigateFnOptions = Parameter<UseNavigateResult<string>>
  * console.log(searchParams); // { filter: 'active' }
  * Note: This hook assumes that the component using it is wrapped within a `Router` context provided by `@tanstack/react-router`.
  */
-export default function useQueryParams<T extends Record<string, any>>(defaultParams?: T) {
+export default function useQueryParams<T = ReturnType<typeof useSearch>>(defaultParams?: T) {
 	const navigate = useNavigate()
 
 	const search = useSearch({
@@ -32,9 +32,12 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	 * @param { Record<string, any> } params
 	 * @returns {Promise<void>}
 	 */
-	const setParams = useCallback((params: T, options: { overrideExisting: boolean } = { overrideExisting: false }) => {
-		navigate({ search: (prev) => ({ ...(options.overrideExisting && prev), ...params }) } as NavigateFnOptions)
-	}, [])
+	const setParams = useCallback(
+		(params: T, options: { overrideExisting: boolean } = { overrideExisting: false }) => {
+			navigate({ search: (prev) => ({ ...(!options.overrideExisting && prev), ...params }) } as NavigateFnOptions)
+		},
+		[search]
+	)
 
 	/**
 	 * Remove search params from URL
@@ -46,7 +49,13 @@ export default function useQueryParams<T extends Record<string, any>>(defaultPar
 	}, [])
 
 	useLayoutEffect(() => {
-		if (defaultParams) navigate({ search: { ...defaultParams, ...search } })
+		console.log('defaultParams', defaultParams)
+		if (defaultParams)
+			navigate({
+				search: (prev) => {
+					return { ...defaultParams, ...prev }
+				}
+			} as NavigateFnOptions)
 	}, [])
 
 	return {
