@@ -1,3 +1,5 @@
+'use no memo'
+
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
@@ -129,27 +131,13 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					aria-readonly={readOnly}
 					readOnly={readOnly}
 					name={`outbound_purchase_orders.${index}.outbound_qty`}
-					className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary aria-readonly:focus:border-none'
+					className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary aria-readonly:focus:border-transparent'
 					autoFocus={false}
 					autoComplete='off'
 					tabIndex={index + 1}
 					data-action={CommonActions.CREATE}
 					data-index={index}
 				/>
-				{/* {readonly ? (
-					<span aria-readonly={readonly}>{formatIntlNumber(snapshotData?.outbound_qty)}</span>
-				) : (
-					<OutboundQtyInputFieldControl
-						aria-readonly={readonly}
-						name={`outbound_purchase_orders.${index}.outbound_qty`}
-						className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary aria-readonly:focus:border-none'
-						autoFocus={false}
-						autoComplete='off'
-						tabIndex={index + 1}
-						data-action={CommonActions.CREATE}
-						data-index={index}
-					/>
-				)} */}
 			</TableCell>
 			{isLargeScreen && (
 				<Fragment>

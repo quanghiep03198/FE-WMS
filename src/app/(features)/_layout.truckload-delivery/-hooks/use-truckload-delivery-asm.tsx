@@ -28,6 +28,7 @@ export const getTruckloadDeliveryQueryOptions = (searchParams) =>
 	queryOptions({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
 		queryFn: async () => await TruckloadDeliveryService.getDispatchOrders(searchParams),
+		refetchOnMount: true,
 		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
 		staleTime: 5000,
@@ -71,9 +72,7 @@ export const useSearchDispatchPurchaseOrder = (search: string) => {
 		queryFn: async () => await TruckloadDeliveryService.searchDispatchPurchaseOrder(search),
 		staleTime: 5000,
 		select: (response) => {
-			return Array.isArray(response.metadata)
-				? response.metadata.map((po) => ({ ...po, max_outbound_qty: Math.abs(po.max_outbound_qty) }))
-				: []
+			return Array.isArray(response.metadata) ? response.metadata : []
 		}
 	})
 }
@@ -203,10 +202,9 @@ const useInvalidateQueries = (...queryKeys: any[]) => {
 
 	return () => {
 		queryClient.invalidateQueries({
-			queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY],
 			predicate: (query) =>
 				query.queryKey.some((key) => [...Object.values(TruckloadDeliveryQueryKeys), ...queryKeys].includes(key)),
-			refetchType: 'active'
+			refetchType: 'all'
 		})
 	}
 }

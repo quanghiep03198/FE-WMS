@@ -1,7 +1,13 @@
 import useQueryParams from '@/common/hooks/use-query-params'
+import { useRouterState } from '@tanstack/react-router'
 import { SortDirection } from '@tanstack/react-table'
+import { format, isDate } from 'date-fns'
+import { omitBy } from 'lodash-es'
+import { useCallback } from 'react'
+import { isDateRange } from 'react-day-picker'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { FilterOperator } from '../-schemas'
+import { FilterOperator, TruckloadDeliveryFilterFormValues } from '../-schemas'
+import { useStoreFilterParams } from './use-store-filter-params'
 import { TruckloadDeliveryQueryData } from './use-truckload-delivery-asm'
 
 export type PageQueryParams = {
@@ -40,8 +46,50 @@ export type FlattenedPageQueryParams = {
 }
 
 export const usePageQueryParams = () => {
-	return useQueryParams<PageQueryParams>({
-		page: 1,
-		limit: 20
-	})
+	// * Set default pagination params if not present in URL
+	const location = useRouterState({ select: (s) => s.location })
+
+	location.search.page ??= 1
+	location.search.limit ??= 20
+
+	// * Get stored filter params from session storage
+	const [storedFilterParams] = useStoreFilterParams()
+
+	// * Build initial query params by merging URL params and stored filter params
+	const buildQueryParams = useBuildQueryParams()
+	const defaultParams = buildQueryParams(location.search, storedFilterParams)
+
+	return useQueryParams<PageQueryParams>(defaultParams)
+}
+
+export const useBuildQueryParams = () => {
+	return useCallback((currentSearchParams: PageQueryParams, value: TruckloadDeliveryFilterFormValues) => {
+		// * Extract non-filter params (not starting with 'where')
+		const noneFilterParams = omitBy<Partial<PageQueryParams>>(currentSearchParams, (_value, key) =>
+			key.startsWith('where')
+		)
+
+		// * Build filter params from the form values
+		const filterParams = value.where.reduce<Record<string, string>>((acc, { column, operator, value }) => {
+			if (!column) return acc
+
+			let paramValue: string
+			if (isDateRange(value)) {
+				paramValue = operator
+					.replace('@value1', format(value.from, 'yyyy-MM-dd'))
+					.replace('@value2', format(value.to, 'yyyy-MM-dd'))
+			} else if (isDate(value)) {
+				paramValue = operator.replace('@value', format(value as Date, 'yyyy-MM-dd'))
+			} else {
+				paramValue = operator.replace('@value', String(value ?? ''))
+			}
+
+			return {
+				...acc,
+				[`where.${column}`]: paramValue
+			}
+		}, {})
+
+		return { ...noneFilterParams, ...filterParams } as PageQueryParams
+	}, [])
 }
