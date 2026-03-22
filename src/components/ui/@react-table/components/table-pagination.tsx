@@ -67,8 +67,6 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 	}
 
 	const handlePrefetch = (params: AxiosRequestConfig['params'] & Pick<Pagination<any>, 'page' | 'limit'>) => {
-		console.log('params', params)
-
 		if (!manualPagination || typeof prefetch !== 'function') return
 		prefetch(params)
 	}
