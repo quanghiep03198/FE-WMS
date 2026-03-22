@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/common/utils/cn'
 
-const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = ({ className, ...props }) => {
+const Textarea: React.FC<React.ComponentProps<'textarea'>> = ({ className, ...props }) => {
 	return (
 		<textarea
 			className={cn(

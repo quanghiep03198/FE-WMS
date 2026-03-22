@@ -1,10 +1,13 @@
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import { format, isValid } from 'date-fns'
-import { Fragment, useId } from 'react'
+import { Fragment } from 'react'
+import { isDateRange } from 'react-day-picker'
 import { FieldValues, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
+	Button,
+	ButtonProps,
 	Calendar,
 	CalendarProps,
 	Div,
@@ -17,98 +20,100 @@ import {
 	Icon,
 	Popover,
 	PopoverContent,
-	PopoverTrigger,
-	buttonVariants
+	PopoverTrigger
 } from '../..'
 import { BaseFieldControl } from '../../../../common/types/hook-form'
 
 export type DatePickerFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
+	triggerProps?: ButtonProps
 	calendarProps?: Partial<CalendarProps>
 }
 
 export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerFieldControlProps<T>) {
-	const { name, description, label, orientation, hidden, calendarProps = { mode: 'single' } } = props
+	const {
+		name,
+		description,
+		disabled,
+		label,
+		orientation,
+		hidden,
+		triggerProps,
+		calendarProps = { mode: 'single' }
+	} = props
 
 	const { control, getFieldState } = useFormContext()
-	const id = useId()
 	const locale = useDateLocale()
 	const { t } = useTranslation()
+
+	const _isDateRange = calendarProps.mode === 'range' || calendarProps.mode === 'multiple'
 
 	return (
 		<FormField
 			control={control}
 			name={name}
-			render={({ field }) => (
-				<FormItem
-					className={cn(
-						orientation === 'horizontal' ? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0' : 'space-y-2',
-						hidden && 'hidden'
-					)}>
-					{label && (
-						<FormLabel
-							htmlFor={id}
-							className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
-							{label}
-						</FormLabel>
-					)}
-					<Div className='space-y-2'>
-						<Popover>
-							<PopoverTrigger
-								id={id}
-								className={cn(
-									buttonVariants({
-										variant: 'outline',
-										className:
-											'w-full justify-start bg-background text-left font-normal hover:bg-background focus:border-primary'
-									}),
-									!field.value && 'text-muted-foreground',
-									!!getFieldState(name).error && 'border-destructive'
-								)}>
-								<FormControl>
-									<Fragment>
-										<Icon name='Calendar' />
-										<span className='first-letter:uppercase'>
-											{calendarProps.mode === 'range' || calendarProps.mode === 'multiple' ? (
-												<Fragment>
-													{isValid(field.value?.from) ? (
-														isValid(field.value?.to) ? (
-															<Fragment>
-																{format(field.value.from, 'LLL dd, y', { locale })} -{' '}
-																{format(field.value.to, 'LLL dd, y', { locale })}
-															</Fragment>
-														) : (
-															format(field.value?.from, 'LLL dd, y', { locale })
-														)
-													) : (
-														t('ns_common:actions.pick_a_date')
-													)}
-												</Fragment>
-											) : (
-												<Fragment>
-													{isValid(field.value)
-														? format(field.value, 'PPP', { locale })
-														: t('ns_common:actions.pick_a_date')}
-												</Fragment>
-											)}
-										</span>
-									</Fragment>
-								</FormControl>
-							</PopoverTrigger>
-							<PopoverContent className='w-auto p-0' align='start'>
-								<Calendar
-									mode={calendarProps.mode ?? 'single'}
-									selected={field.value}
-									onSelect={field.onChange}
-									initialFocus={true}
-									{...calendarProps}
-								/>
-							</PopoverContent>
-						</Popover>
-						{description && <FormDescription>{description}</FormDescription>}
-						<FormMessage />
-					</Div>
-				</FormItem>
-			)}
+			render={({ field }) => {
+				console.log('[DatePickerFieldControl]', field.value)
+				return (
+					<FormItem
+						className={cn(
+							orientation === 'horizontal'
+								? 'grid grid-cols-[1fr_2fr] items-start gap-2 space-y-0'
+								: 'space-y-2',
+							hidden && 'hidden'
+						)}>
+						{label && (
+							<FormLabel className={orientation === 'horizontal' && 'translate-y-3/4 align-middle leading-none'}>
+								{label}
+							</FormLabel>
+						)}
+						<Div className='space-y-2'>
+							<Popover>
+								<PopoverTrigger asChild>
+									<FormControl>
+										<Button
+											{...triggerProps}
+											variant='outline'
+											aria-disabled={disabled}
+											className={cn(
+												'w-full justify-start bg-background text-left font-normal aria-disabled:opacity-50 hover:bg-background focus:border-primary',
+												!field.value && 'text-muted-foreground',
+												!!getFieldState(name).error && 'border-destructive',
+												triggerProps?.className
+											)}>
+											<Icon name='Calendar' />
+											<span className='first-letter:uppercase'>
+												{_isDateRange && isDateRange(field.value) && field.value.from && field.value.to ? (
+													<Fragment>
+														{format(field.value.from, 'LLL dd, y', { locale })}
+														{' - '}
+														{format(field.value.to, 'LLL dd, y', { locale })}
+													</Fragment>
+												) : isValid(field.value) ? (
+													format(field.value, 'PPP', { locale })
+												) : (
+													t('ns_common:actions.pick_a_date')
+												)}
+											</span>
+										</Button>
+									</FormControl>
+								</PopoverTrigger>
+								<PopoverContent className='w-auto p-0' align='start'>
+									<Calendar
+										mode={calendarProps.mode ?? 'single'}
+										selected={field.value ?? ''}
+										onSelect={field.onChange}
+										initialFocus={true}
+										disabled={disabled}
+										{...calendarProps}
+									/>
+								</PopoverContent>
+							</Popover>
+							{description && <FormDescription>{description}</FormDescription>}
+							<FormMessage />
+						</Div>
+					</FormItem>
+				)
+			}}
 		/>
 	)
 }
