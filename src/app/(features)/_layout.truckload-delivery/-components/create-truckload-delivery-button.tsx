@@ -10,10 +10,7 @@ const CreateTruckloadDialogButton: React.FC = () => {
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 
 	return (
-		<Button
-			size={isMobile ? 'icon' : 'default'}
-			variant={isMobile ? 'outline' : 'secondary'}
-			onClick={() => event$.emit({ action: CommonActions.CREATE, payload: null })}>
+		<Button size='default' onClick={() => event$.emit({ action: CommonActions.CREATE, payload: null })}>
 			<Icon name='CircleFadingPlus' /> {!isMobile && t('ns_common:actions.add')}
 		</Button>
 	)

@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import { any, array, boolean, enum as enumeration, number, object, string, type infer as Infer } from 'zod'
+import { any, array, boolean, coerce, enum as enumeration, number, object, string, type infer as Infer } from 'zod'
 
 // BIC container code pattern: 3 letters (owner code), 1 letter (equipment category), 6 digits (serial), 1 digit (check)
 const BIC_CONTAINER_PATTERN = /^[A-Z]{4}\d{7}$/
@@ -85,6 +85,7 @@ export const upsertPurchaseOrdersSchema = object({
 		})
 	)
 }).superRefine((values, context) => {
+	console.log('values', values)
 	values.outbound_purchase_orders.forEach((item, index) => {
 		if (item.outbound_qty > item.max_outbound_qty)
 			context.addIssue({
@@ -110,22 +111,26 @@ export const truckloadDeliveryFilterSchema = object({
 	where: array(
 		object({
 			column: enumeration([
+				'approval_status',
 				'license_plate',
 				'container_number',
 				'po',
 				'created_at',
 				'container_sealing_time',
 				'factory_departure_time',
-				'actual_factory_departure_time'
+				'actual_departure_time'
 			]).nullish(),
 			operator: enumeration([
-				'like_%@value%',
-				'=_@value',
-				'like_@value%',
-				'like_%@value',
-				'between_@value1_and_@value2'
+				'like:%@value%',
+				'=:@value',
+				'like:@value%',
+				'like:%@value',
+				'between:@value1,@value2'
 			]).nullish(),
-			value: any().nullish()
+			value: string()
+				.or(coerce.date())
+				.or(object({ from: coerce.date(), to: coerce.date() }))
+				.nullish()
 		})
 	).superRefine((values, ctx) => {
 		values.forEach((item, index) => {
@@ -137,6 +142,17 @@ export const truckloadDeliveryFilterSchema = object({
 				})
 		})
 	})
+}).default({
+	where: [
+		{ column: null, operator: '=:@value', value: null },
+		{ column: null, operator: 'like:%@value%', value: '' },
+		{ column: null, operator: 'like:%@value%', value: '' },
+		{ column: null, operator: 'like:%@value%', value: '' },
+		{ column: null, operator: 'between:@value1,@value2', value: null },
+		{ column: null, operator: 'between:@value1,@value2', value: null },
+		{ column: null, operator: 'between:@value1,@value2', value: null },
+		{ column: null, operator: 'between:@value1,@value2', value: null }
+	]
 })
 
 export type CreateDeliveryFormValues = Infer<typeof createDeliverySchema>
@@ -147,3 +163,4 @@ export type UpdateDispatchOrderFormValues = Infer<typeof updateDispatchOrderSche
 export type TruckloadDeliveryFilterFormValues = Infer<typeof truckloadDeliveryFilterSchema>
 export type FilterOperator = TruckloadDeliveryFilterFormValues['where'][number]['operator']
 export type FilterColumn = TruckloadDeliveryFilterFormValues['where'][number]['column']
+export type FilterValue = TruckloadDeliveryFilterFormValues['where'][number]['value']

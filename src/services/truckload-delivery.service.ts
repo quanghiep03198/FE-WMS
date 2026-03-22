@@ -25,7 +25,7 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	moist_container: boolean
 	container_sealing_time: Date | null
 	factory_departure_time: Date | null
-	actual_factory_departure_time: Date | null
+	actual_departure_time: Date | null
 	license_plate_image: string | null
 	delivery_details?: Array<ITruckloadDeliveryDetail>
 }
@@ -79,10 +79,15 @@ export class TruckloadDeliveryService {
 	}
 
 	static async searchDispatchPurchaseOrder(search: string) {
-		return await axiosInstance.get<void, ResponseBody<Array<{ po: string; max_outbound_qty: number }>>>(
-			`truckload-delivery/search-purchase-order`,
-			{ params: { search } }
-		)
+		return await axiosInstance.get<
+			void,
+			ResponseBody<
+				Pick<
+					ITruckloadDeliveryDetail,
+					'po' | 'brand_name' | 'factory_shoes_style' | 'color_sn' | 'max_outbound_qty'
+				>[]
+			>
+		>(`truckload-delivery/search-dispatch-purchase-order`, { params: { search } })
 	}
 
 	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {

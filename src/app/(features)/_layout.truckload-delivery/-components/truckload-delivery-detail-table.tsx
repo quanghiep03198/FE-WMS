@@ -1,3 +1,5 @@
+'use no memo'
+
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
@@ -20,7 +22,7 @@ import {
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useIsFetching, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { pick, sortBy, uniqBy } from 'lodash-es'
@@ -36,7 +38,6 @@ import { SignatureType, usePageContext } from '../-contexts/page-context'
 import {
 	getTruckloadDeliveryDetailQueryOptions,
 	TruckloadDeliveryQueryData,
-	TruckloadDeliveryQueryKeys,
 	useUpsertPurchaseOrdersMutation
 } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
@@ -70,11 +71,13 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		dispatch_order,
 		license_plate,
 		approval_status,
+		ie_signature,
+		warehouse_officer_signature,
 		security_1_signature,
 		security_2_signature,
 		container_sealing_time,
 		factory_departure_time,
-		actual_factory_departure_time,
+		actual_departure_time,
 		total_outbound_qty
 	},
 	onCollapse
@@ -88,14 +91,9 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation(dispatch_order)
 	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
-	const isFetching = useIsFetching({
-		predicate: (query) => query.queryKey.some((key) => key === TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY)
-	})
 	const { data } = useQuery(getTruckloadDeliveryDetailQueryOptions(dispatch_order))
-	console.table(data)
 
 	const handleResetDeliveryDetails = (shouldKeepUpdating: boolean) => {
-		if (isPending || isFetching) return
 		if (!shouldKeepUpdating) resetAction()
 		// * Default form values from backend data
 		const defaultFormValues = Array.isArray(data)
@@ -109,17 +107,18 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		const addedItems = form.getValues('outbound_purchase_orders').filter(getIsCurrentlyAdded)
 
 		// * Reset form values
-		form.reset({
+		const newFormValues = {
 			dispatch_order,
 			outbound_purchase_orders: sortBy(
 				[...defaultFormValues, ...(shouldKeepUpdating ? addedItems : [])],
 				(item) => item.id
 			)
-		})
+		}
+		form.reset(newFormValues)
 	}
 
 	useEffect(() => {
-		if (isPending || isFetching) return
+		// if (isPending || isFetching) return
 		handleResetDeliveryDetails(true)
 	}, [data, isPending, isPending])
 
@@ -129,15 +128,24 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 			await mutateAsync(payload)
 			toast.success(t('ns_common:notification.success'), { id: toastId })
 			handleResetDeliveryDetails(false)
+			// refetch()
 		} catch {
 			toast.error(t('ns_common:notification.error'), { id: toastId })
 		}
 	}
 
-	const signatureData = { dispatch_order, license_plate, approval_status }
+	const signatureData = {
+		dispatch_order,
+		license_plate,
+		approval_status,
+		ie_signature,
+		warehouse_officer_signature,
+		security_1_signature,
+		security_2_signature
+	}
 
 	return (
-		<Div className='space-y-6 overflow-clip rounded-md border bg-background'>
+		<Div className='space-y-6 overflow-clip rounded-md border bg-background [&<]:[scrollbar-gutter:auto]'>
 			<Div className='relative'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
@@ -240,7 +248,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											<span>{t('ns_erp:fields.factory_departure_time')}</span>
 										</TableHead>
 										<TableHead className='w-[25%]' colSpan={1} align='left'>
-											<span>{t('ns_erp:fields.actual_factory_departure_time')}</span>
+											<span>{t('ns_erp:fields.actual_departure_time')}</span>
 										</TableHead>
 										<TableHead colSpan={1} align='left'>
 											<span>{t('ns_common:common_fields.total')}</span>
@@ -269,8 +277,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 											)}
 										</TableCell>
 										<TableCell colSpan={1} align='left' className='w-[25%]'>
-											{actual_factory_departure_time ? (
-												format(new Date(actual_factory_departure_time), 'yyyy-MM-dd HH:mm')
+											{actual_departure_time ? (
+												format(new Date(actual_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />

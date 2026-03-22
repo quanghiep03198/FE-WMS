@@ -1,6 +1,5 @@
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
-import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
@@ -16,11 +15,11 @@ import {
 	SortingState,
 	type Table
 } from '@tanstack/react-table'
-import { useDebounce, useDeepCompareEffect, useResetState } from 'ahooks'
+import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { unflatten } from 'flat'
 import { omit, omitBy } from 'lodash-es'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { FlattenedPageQueryParams, PageQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
@@ -41,6 +40,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { data, isLoading } = useGetTruckloadDeliveryQuery()
+	const [tableData, setTableData, resetTableData] = useResetState<TruckloadDeliveryQueryData[]>(
+		Array.isArray(data?.data) ? data?.data : []
+	)
 	const tableRef = useRef<Table<TruckloadDeliveryQueryData>>(null)
 	const columnHelper = createColumnHelper<TruckloadDeliveryQueryData>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
@@ -51,7 +53,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		? Object.entries(flattenedSearchParams.sort).map(([key, value]) => ({ id: key, desc: value === 'desc' }))
 		: []
 	const [sorting, setSorting] = useState<SortingState>(defaultSortingState)
-	const debouncedSorting = useDebounce(sorting, { wait: 50 })
 
 	const licensePlateColumnHeader = !isMobile
 		? t('ns_erp:fields.license_plate')
@@ -83,7 +84,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 						onPointerEnter={() =>
 							queryClient.prefetchQuery(getTruckloadDeliveryDetailQueryOptions(row.original.dispatch_order))
 						}
-						onClick={() => setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })}>
+						onClick={() => {
+							setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })
+							if (row.getIsExpanded()) resetTableData()
+							else
+								setTableData((prev) =>
+									prev.filter((item) => item.dispatch_order === row.original.dispatch_order)
+								)
+						}}>
 						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
 					</GhostButton>
 				)
@@ -193,8 +201,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				maxSize: 250,
 				cell: DateTimeCell
 			}),
-			columnHelper.accessor('actual_factory_departure_time', {
-				header: t('ns_erp:fields.actual_factory_departure_time'),
+			columnHelper.accessor('actual_departure_time', {
+				header: t('ns_erp:fields.actual_departure_time'),
 				enableResizing: true,
 				enableSorting: true,
 				enableColumnFilter: false,
@@ -240,16 +248,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		})
 	}, [tableRef.current, isMobile])
 
-	useEffectOnce(() => {
-		handleDisplayColumns()
-
-		window.screen.orientation.addEventListener('change', handleDisplayColumns)
-
-		return () => {
-			window.screen.orientation.removeEventListener('change', handleDisplayColumns)
-		}
-	})
-
 	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<TruckloadDeliveryQueryData>) => {
 		const data = row.original
 		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
@@ -267,23 +265,52 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 
 	const changePagination = useCallback(
 		({ pageIndex, pageSize }: PaginationState) => {
-			if (typeof pageIndex === 'number' && typeof pageSize === 'number') console.log({ pageIndex, pageSize })
-			setParams({ ...searchParams, page: pageIndex, limit: pageSize })
+			console.log('[truckload-delivery-master-table.tsx] pageIndex', pageIndex)
+			if (typeof pageIndex === 'number' && typeof pageSize === 'number')
+				setParams({ ...searchParams, page: pageIndex, limit: pageSize }, { overrideExisting: true })
 		},
 		[searchParams]
 	)
 
-	useDeepCompareEffect(() => {
+	useEffect(() => {
+		handleDisplayColumns()
+		window.addEventListener('resize', handleDisplayColumns)
+		window.screen.orientation.addEventListener('change', handleDisplayColumns)
+		return () => {
+			window.screen.orientation.removeEventListener('change', handleDisplayColumns)
+			window.removeEventListener('resize', handleDisplayColumns)
+		}
+	}, [])
+
+	// Sync tableData with data and expanded state in a single effect
+	useEffect(() => {
+		const currentData = Array.isArray(data?.data) ? data.data : []
+		const expandedRowData = !Object.keys(expanded).length
+			? currentData
+			: currentData.filter((item) =>
+					Object.entries(expanded).every(([key, value]) => (value ? item.dispatch_order === key : true))
+				)
+		setTableData(expandedRowData)
+	}, [data, expanded])
+
+	useEffect(() => {
+		resetExpanded()
+	}, [searchParams.page])
+
+	useEffect(() => {
+		if (!('page' in searchParams) || !('limit' in searchParams)) return
 		// * Clone search params
-		const noneSortingSearchParams = omitBy(searchParams, (_value, key) => key.startsWith('sort'))
+		const noneSortingParams = omitBy(searchParams, (_value, key) => key.startsWith('sort'))
 
 		// * Rebuild sorting params
-		const sortingSearchParams = debouncedSorting.reduce(
+		const sortingParams = sorting.reduce(
 			(acc, curr) => ({ ...acc, [`sort.${curr.id}`]: curr.desc ? 'desc' : 'asc' }),
 			{}
 		)
-		setParams({ ...noneSortingSearchParams, ...sortingSearchParams } as PageQueryParams, { overrideExisting: true })
-	}, [debouncedSorting])
+
+		// * Set search params with new sorting params
+		setParams({ ...noneSortingParams, ...sortingParams } as PageQueryParams, { overrideExisting: true })
+	}, [sorting])
 
 	return (
 		/* eslint-disable */
@@ -291,7 +318,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		<DataTable
 			ref={tableRef}
 			columns={columns}
-			data={data?.data ?? []}
+			data={tableData}
 			border='bottom-only'
 			loading={isLoading}
 			expanded={expanded}
@@ -322,9 +349,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			virtualizerOptions={virtualizerOptions}
 			toolbarProps={toolbarProps}
 			containerProps={{
-				style: { height: 'calc(var(--outlet-wrapper-height) - 12.5rem)' },
+				style: { height: 'calc(var(--outlet-wrapper-height) - 10.5rem)' },
 				className:
-					'md:[&_tr[data-role=expandable-row]_*]:animate-none md:[&_tr[data-role=expandable-row]_*]:transition-none'
+					'[&_tr[data-role=expandable-row]_*]:animate-none [&_tr[data-role=expandable-row]_*]:transition-none [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!z-10 [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!sticky [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!top-[--header-row-height]'
 			}}
 			renderSubComponent={renderSubTable}
 		/>

@@ -1,10 +1,12 @@
 'use no memo'
 
 import {
+	Badge,
 	Button,
 	buttonVariants,
 	Checkbox,
 	DatePickerFieldControl,
+	Div,
 	Field,
 	FieldLegend,
 	FieldSet,
@@ -15,190 +17,242 @@ import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-	SelectFieldControl,
-	Typography
+	SelectFieldControl
 } from '@/components/ui'
-import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckedState } from '@radix-ui/react-checkbox'
-import { Table } from '@tanstack/react-table'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import { omit, omitBy } from 'lodash-es'
-import React, { useEffect, useMemo } from 'react'
+import { PopoverClose } from '@radix-ui/react-popover'
+import { useDeepCompareEffect } from 'ahooks'
+import { isNil, omit, omitBy } from 'lodash-es'
+import React, { useId, useMemo } from 'react'
 import { useForm, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { PageQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
+import { PageQueryParams, useBuildQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
+import { useStoreFilterParams } from '../-hooks/use-store-filter-params'
 import {
 	type FilterColumn,
 	type FilterOperator,
 	type TruckloadDeliveryFilterFormValues,
 	truckloadDeliveryFilterSchema
 } from '../-schemas'
+import { GhostButton } from '../../-components/shared/ghost-button'
+import StatusFieldControl from './status-field-control'
 
 type FieldItemProps = {
 	index: number
 	name: FilterColumn
 	label: string
 	icon: IconProps['name']
-	type: 'text' | 'date'
+	type: 'text' | 'date' | 'select'
 }
 
-const GlobalFilter: React.FC<{
-	table: Table<ITruckloadDelivery>
-	event$: EventEmitter<Record<string, unknown>>
-}> = () => {
-	const { t } = useTranslation()
+const defaultValue: TruckloadDeliveryFilterFormValues = {
+	where: [
+		{ column: null, operator: '=:@value', value: null },
+		{ column: null, operator: 'like:%@value%', value: '' },
+		{ column: null, operator: 'like:%@value%', value: '' },
+		{ column: null, operator: 'like:%@value%', value: '' },
+		{ column: null, operator: 'between:@value1,@value2', value: null },
+		{ column: null, operator: 'between:@value1,@value2', value: null },
+		{ column: null, operator: 'between:@value1,@value2', value: null },
+		{ column: null, operator: 'between:@value1,@value2', value: null }
+	]
+}
+
+const GlobalFilter: React.FC = () => {
+	const { t, i18n } = useTranslation()
 	const { searchParams, setParams } = usePageQueryParams()
+	const [storedGlobalFilters, setStoredGlobalFilters] = useStoreFilterParams()
 
 	const form = useForm<TruckloadDeliveryFilterFormValues>({
 		resolver: zodResolver(truckloadDeliveryFilterSchema),
-		defaultValues: {
-			where: [
-				{ column: null, operator: 'like_%@value%', value: null },
-				{ column: null, operator: 'like_%@value%', value: null },
-				{ column: null, operator: 'like_%@value%', value: null },
-				{ column: null, operator: 'between_@value1_and_@value2', value: null },
-				{ column: null, operator: 'between_@value1_and_@value2', value: null },
-				{ column: null, operator: 'between_@value1_and_@value2', value: null },
-				{ column: null, operator: 'between_@value1_and_@value2', value: null }
-			]
-		}
+		defaultValues: storedGlobalFilters
 	})
 
-	const handleSelectColumn = (checked: CheckedState) => {
-		// setGlobalFilterColumns((prev) => {
-		// if (checked) return [...new Set([...prev, 'po'])]
-		// return prev.filter((item) => item !== 'po')
-		// })
+	const fields: Omit<FieldItemProps, 'index'>[] = useMemo(
+		() => [
+			{
+				icon: 'BadgeCheck',
+				name: 'approval_status',
+				label: t('ns_erp:fields.status_approve'),
+				type: 'select'
+			},
+			{
+				icon: 'Truck',
+				name: 'license_plate',
+				label: t('ns_erp:fields.license_plate'),
+				type: 'text'
+			},
+			{
+				icon: 'Container',
+				name: 'container_number',
+				label: t('ns_erp:fields.container_number'),
+				type: 'text'
+			},
+			{
+				icon: 'NotepadText',
+				name: 'po',
+				label: t('ns_erp:fields.po'),
+				type: 'text'
+			},
+			{
+				icon: 'CalendarPlus',
+				name: 'created_at',
+				label: t('ns_common:common_fields.created_at'),
+				type: 'date'
+			},
+			{
+				icon: 'CalendarCheck',
+				name: 'container_sealing_time',
+				label: t('ns_erp:fields.container_sealing_time'),
+				type: 'date'
+			},
+			{
+				icon: 'CalendarCheck',
+				name: 'factory_departure_time',
+				label: t('ns_erp:fields.factory_departure_time'),
+				type: 'date'
+			},
+			{
+				icon: 'CalendarCheck',
+				name: 'actual_departure_time',
+				label: t('ns_erp:fields.actual_departure_time'),
+				type: 'date'
+			}
+		],
+		[i18n.language]
+	)
+
+	const buildQueryParams = useBuildQueryParams()
+
+	useDeepCompareEffect(() => {
+		if (!('page' in searchParams) || !('limit' in searchParams)) return
+		const nextParams = buildQueryParams(searchParams, storedGlobalFilters)
+		form.reset(storedGlobalFilters)
+		setParams(nextParams)
+	}, [storedGlobalFilters])
+
+	const handleSubmit = (value: TruckloadDeliveryFilterFormValues) => {
+		setStoredGlobalFilters(value)
+		const nextParams = buildQueryParams(searchParams, value)
+		nextParams.page = 1 // * Reset to first page when applying new filters
+		setParams(nextParams, { overrideExisting: true })
 	}
 
-	const fields: Omit<FieldItemProps, 'index'>[] = [
-		{ icon: 'Truck', name: 'license_plate', label: t('ns_erp:fields.license_plate'), type: 'text' },
-		{ icon: 'Container', name: 'container_number', label: t('ns_erp:fields.container_number'), type: 'text' },
-		{ icon: 'NotepadText', name: 'po', label: t('ns_erp:fields.po'), type: 'text' },
-		{ icon: 'CalendarPlus', name: 'created_at', label: t('ns_common:common_fields.created_at'), type: 'date' },
-		{
-			icon: 'CalendarCheck',
-			name: 'container_sealing_time',
-			label: t('ns_erp:fields.container_sealing_time'),
-			type: 'date'
-		},
-		{
-			icon: 'CalendarCheck',
-			name: 'factory_departure_time',
-			label: t('ns_erp:fields.factory_departure_time'),
-			type: 'date'
-		},
-		{
-			icon: 'CalendarCheck',
-			name: 'actual_factory_departure_time',
-			label: t('ns_erp:fields.actual_factory_departure_time'),
-			type: 'date'
-		}
-	]
+	const handleClearFilters: React.MouseEventHandler = (e) => {
+		e.stopPropagation()
+		form.reset(defaultValue)
+		setStoredGlobalFilters(defaultValue)
+		setParams(omitBy(searchParams, (_value, key) => key.startsWith('where')) as PageQueryParams, {
+			overrideExisting: true
+		})
+	}
+
+	const columnFilters = storedGlobalFilters.where
+
+	const appliedFilters = Array.isArray(columnFilters) ? columnFilters.filter((filter) => !isNil(filter.column)) : []
 
 	return (
-		<Popover>
-			<PopoverTrigger
-				className={buttonVariants({
-					variant: 'outline',
-					className: 'flex-1 !justify-start font-normal xl:flex-none xl:basis-1/2'
-				})}>
-				<Icon name='ListFilter' />
-				<Typography variant='small' color='muted'>
-					{t('ns_common:actions.search')} ...
-				</Typography>
-			</PopoverTrigger>
-			<PopoverContent
-				align='start'
-				className='w-[calc(100svw-16px)] space-y-6 xl:w-[--radix-popover-trigger-width]'
-				onOpenAutoFocus={(e) => e.preventDefault()}>
-				<FormProvider {...form}>
-					<Form
-						onSubmit={form.handleSubmit((value) => {
-							const filterParams = value.where
-								.filter((q) => !!q.column)
-								.reduce((acc, curr) => {
-									return { ...acc, [`where.${curr.column}`]: curr.operator.replace('@value', curr.value) }
-								}, {})
-							const noneFilterParams = omitBy<Partial<PageQueryParams>>(searchParams, (_value, key) =>
-								key.startsWith('where')
-							)
-
-							setParams({ ...noneFilterParams, ...filterParams } as PageQueryParams, { overrideExisting: true })
-						})}>
-						<FieldSet>
-							<FieldLegend>{t('ns_common:titles.advanced_search')}</FieldLegend>
-							<Field>
-								{fields.map((field, index) => (
-									<FormItem key={field.name} index={index} {...field} />
-								))}
-							</Field>
-							<Field orientation='horizontal' className='justify-end'>
-								<Button type='submit'>{t('ns_common:actions.search')}</Button>
-								<Button variant='outline' type='button' onClick={() => form.reset()}>
-									{t('ns_common:actions.cancel')}
-								</Button>
-							</Field>
-						</FieldSet>
-					</Form>
-				</FormProvider>
-			</PopoverContent>
-		</Popover>
+		<Div className='relative overflow-visible'>
+			<Popover>
+				<PopoverTrigger asChild>
+					<Div className={buttonVariants({ variant: 'outline' })}>
+						<Icon name='Funnel' />
+						{t('ns_common:table.filter')}
+						<Badge>{appliedFilters.length}</Badge>
+						{appliedFilters.length > 0 && (
+							<GhostButton onClick={handleClearFilters} className='aspect-square size-6 basis-6'>
+								<Icon name='X' />
+							</GhostButton>
+						)}
+					</Div>
+				</PopoverTrigger>
+				<PopoverContent
+					align='start'
+					className='w-[calc(100vw-1rem)] space-y-6 lg:w-auto xl:w-auto'
+					onOpenAutoFocus={(e) => e.preventDefault()}>
+					<FormProvider {...form}>
+						<Form onSubmit={form.handleSubmit(handleSubmit)}>
+							<FieldSet>
+								<FieldLegend>{t('ns_common:titles.advanced_search')}</FieldLegend>
+								<Field>
+									{fields.map((field, index) => (
+										<FormItem key={index} {...{ ...field, index }} />
+									))}
+								</Field>
+								<Field orientation='horizontal' className='justify-end gap-x-2'>
+									<Button type='submit'>{t('ns_common:actions.search')}</Button>
+									<PopoverClose asChild>
+										<Button variant='outline' type='button' onClick={handleClearFilters}>
+											{t('ns_common:actions.cancel')}
+										</Button>
+									</PopoverClose>
+								</Field>
+							</FieldSet>
+						</Form>
+					</FormProvider>
+				</PopoverContent>
+			</Popover>
+		</Div>
 	)
 }
 
 const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) => {
+	'use no memo'
+
 	const { t, i18n } = useTranslation()
-	const { control, setValue } = useFormContext()
+	const { control, setValue, resetField } = useFormContext()
 	const currentColumnValue = useWatch({ control, name: `where.${index}.column` })
 	const currentOperator = useWatch({ control, name: `where.${index}.operator` })
 
 	const operators: Array<{ label: string; value: FilterOperator }> = useMemo(() => {
 		const expressions: Array<{ label: string; value: FilterOperator; types: FieldItemProps['type'][] }> = [
-			{ label: t('ns_common:filter.contains'), value: 'like_%@value%', types: ['text'] },
-			{ label: t('ns_common:filter.begins_with'), value: 'like_@value%', types: ['text'] },
-			{ label: t('ns_common:filter.ends_with'), value: 'like_%@value', types: ['text'] },
-			{ label: t('ns_common:filter.between'), value: 'between_@value1_and_@value2', types: ['date'] },
-			{ label: t('ns_common:filter.equals'), value: '=_@value', types: ['text', 'date'] }
+			{ label: t('ns_common:filter.contains'), value: 'like:%@value%', types: ['text'] },
+			{ label: t('ns_common:filter.begins_with'), value: 'like:@value%', types: ['text'] },
+			{ label: t('ns_common:filter.ends_with'), value: 'like:%@value', types: ['text'] },
+			{ label: t('ns_common:filter.between'), value: 'between:@value1,@value2', types: ['date'] },
+			{ label: t('ns_common:filter.equals'), value: '=:@value', types: ['text', 'date', 'select'] }
 		]
 		return expressions.filter((expr) => expr.types.includes(type)).map((expr) => omit(expr, 'types'))
-	}, [i18n.language, type])
-
-	useEffect(() => {
-		if (type === 'date') setValue(`where.${index}.value`, null)
-	}, [currentColumnValue])
+	}, [i18n.language])
 
 	const isIncluded = !!currentColumnValue
 
+	const id = useId()
+
 	return (
-		<FieldGroup className='grid grid-cols-[1.5fr_1fr_2fr] gap-2 space-y-0.5'>
+		<FieldGroup>
 			<FieldLabel
-				htmlFor={name}
+				htmlFor={id}
 				aria-disabled={!isIncluded}
+				onClick={(e) => e.stopPropagation()}
 				className='font-normal aria-disabled:text-muted-foreground'>
 				<Checkbox
-					id={name}
+					id={id}
 					checked={isIncluded}
-					className='mr-2'
 					onCheckedChange={(checked) => {
 						if (checked) setValue(`where.${index}.column`, name)
-						else setValue(`where.${index}.column`, null)
+						else {
+							setValue(`where.${index}.column`, null)
+						}
 					}}
 				/>
 				<Icon name={icon} stroke='hsl(var(--muted-foreground))' />
-				{label}
+				<span className='line-clamp-1' title={label}>
+					{label}
+				</span>
 			</FieldLabel>
-
 			<SelectFieldControl
 				name={`where.${index}.operator`}
-				defaultValue='like_%@value%'
+				defaultValue={operators[0].value}
 				disabled={!isIncluded}
 				datalist={operators}
 				labelField='label'
 				valueField='value'
 				errorMessageVariant='tooltip'
+				onValueChange={() => {
+					if (type === 'date') resetField(`where.${index}.value`)
+				}}
 			/>
 			{type === 'text' && (
 				<InputFieldControl
@@ -211,15 +265,18 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 			{type === 'date' && (
 				<DatePickerFieldControl
 					name={`where.${index}.value`}
-					calendarProps={{ mode: currentOperator === '=_@value' ? 'single' : 'range', disabled: !isIncluded }}
+					disabled={!isIncluded}
+					calendarProps={{ mode: currentOperator === '=:@value' ? 'single' : 'range', disabled: !isIncluded }}
 				/>
 			)}
+			{type === 'select' && <StatusFieldControl name={`where.${index}.value`} disabled={!isIncluded} />}
 		</FieldGroup>
 	)
 }
 
-const FieldLabel: React.FC<React.ComponentProps<'label'>> = tw.label`text-sm flex items-center gap-x-2`
+const FieldLabel: React.FC<React.ComponentProps<'label'>> =
+	tw.label`text-sm flex items-center gap-x-2 [&_svg]:min-w-4 [&>:last-child]:flex-1`
 const Form: React.FC<React.ComponentProps<'form'>> = tw.form`space-y-2`
-const FieldGroup: React.FC<React.ComponentProps<'div'>> = tw.div`grid grid-cols-3 gap-x-2`
+const FieldGroup: React.FC<React.ComponentProps<'div'>> = tw.div`grid grid-cols-[1.5fr_1fr_2fr] gap-x-2`
 
 export default GlobalFilter

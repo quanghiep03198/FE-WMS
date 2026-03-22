@@ -1,5 +1,3 @@
-'use no memo'
-
 import { CommonActions } from '@/common/constants/enums'
 import { InputFieldControl, InputFieldControlProps } from '@/components/ui/@field-control/input'
 import React, { useMemo } from 'react'
@@ -38,7 +36,7 @@ const OutboundQtyInputFieldControl: React.FC<
 			name={name}
 			type='number'
 			inputMode='numeric'
-			min={0}
+			min={1}
 			// max={actualMaxOutboundQty === Infinity ? undefined : actualMaxOutboundQty}
 			step={1}
 			errorMessageVariant='tooltip'
