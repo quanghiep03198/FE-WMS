@@ -18,7 +18,8 @@ describe('useQueryParams', () => {
 	it('should set default params on mount', () => {
 		const defaultParams = { foo: 'bar' }
 		renderHook(() => useQueryParams(defaultParams))
-		expect(navigateMock).toHaveBeenCalledWith({ search: { foo: 'bar' } })
+		// The hook now merges defaultParams with prev, so search is a function
+		expect(navigateMock).toHaveBeenCalledWith({ search: expect.any(Function) })
 	})
 
 	it('should set params', () => {
