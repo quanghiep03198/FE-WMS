@@ -194,8 +194,6 @@ const DefectiveGoodsForm: React.FC = () => {
 		form.reset(currentFormValues)
 	}
 
-	console.log(form.formState.errors)
-
 	const handleCancel = () => {
 		resetFormAction()
 		handleResetForm()

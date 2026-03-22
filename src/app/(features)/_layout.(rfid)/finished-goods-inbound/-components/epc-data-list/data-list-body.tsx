@@ -108,7 +108,6 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
 				async onopen(response) {
-					console.log('response', response)
 					if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
 						if (scanningStatus === 'connecting') {
 							setScanningStatus('connected')
