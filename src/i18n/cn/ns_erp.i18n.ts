@@ -38,7 +38,7 @@ export default {
 		factory_code_produce: '生产工厂',
 		final_inventory_qty: '期末库存',
 		factory_departure_time: '出厂时间',
-		actual_factory_departure_time: '实际工厂出货时间',
+		actual_departure_time: '实际工厂出货时间',
 		container_sealing_time: '封柜时间',
 		inbound_date: '入庫日期',
 		inbound_qty: '入庫數量',
