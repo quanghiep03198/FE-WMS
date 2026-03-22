@@ -145,7 +145,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 	}
 
 	return (
-		<Div className='space-y-6 overflow-clip rounded-md border bg-background [&<]:[scrollbar-gutter:auto]'>
+		<Div className='space-y-6 overflow-clip rounded-md border bg-background'>
 			<Div className='relative'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
