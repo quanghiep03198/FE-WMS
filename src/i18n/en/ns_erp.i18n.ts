@@ -37,7 +37,7 @@ export default {
 		export_num: 'Qty. of goods shipped', //: Số đã xuất kho
 		factory_code_produce: 'Producing factory',
 		factory_departure_time: 'Factory departure time',
-		actual_factory_departure_time: 'Actual departure time',
+		actual_departure_time: 'Actual departure time',
 		container_sealing_time: 'Container sealing time',
 		final_inventory_qty: 'Final inventory',
 		inbound_date: 'Inbound date',
