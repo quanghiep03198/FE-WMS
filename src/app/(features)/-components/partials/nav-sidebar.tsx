@@ -166,10 +166,10 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 		(user && Array.isArray(user.roles) && user.roles.some((role) => authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
-	const isCurrentPageActive = location.pathname.match(new RegExp(`^${url}$`))
+	const isActive = location.pathname.match(new RegExp(`^${url}$`))
 
 	useEffect(() => {
-		if (open && isCurrentPageActive && ref.current) {
+		if (open && isActive && ref.current) {
 			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
 	}, [open, location.pathname])
@@ -190,7 +190,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 				tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={url}
-					search={isCurrentPageActive && location.search}
+					search={isActive && location.search}
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
@@ -224,15 +224,13 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 		(user && Array.isArray(user?.roles) && user?.roles?.some((role) => authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
-	const isCurrentPageActive = location.pathname.match(new RegExp(`^${url}$`))
+	const isActive = location.pathname.match(new RegExp(`^${url}$`))
 
 	useEffect(() => {
-		if (open && isCurrentPageActive && ref.current) {
+		if (open && isActive && ref.current) {
 			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
 	}, [open, location.pathname])
-
-	console.log('location.search', location.search)
 
 	return (
 		<SidebarMenuSubItem
@@ -246,7 +244,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			<SidebarMenuSubButton asChild size='md' className='group-aria-disabled/menuitem:cursor-not-allowed'>
 				<Link
 					to={url}
-					search={isCurrentPageActive && location.search}
+					search={isActive && location.search}
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
