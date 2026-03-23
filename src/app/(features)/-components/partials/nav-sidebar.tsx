@@ -162,12 +162,14 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	const ref = useRef<HTMLLIElement>(null)
 	const { user } = useAuth()
 
-	const isAccessible =
+	const isLinkActive =
 		(user && Array.isArray(user.roles) && user.roles.some((role) => authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
+	const isCurrentPageActive = location.pathname.match(new RegExp(`^${url}$`))
+
 	useEffect(() => {
-		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
+		if (open && isCurrentPageActive && ref.current) {
 			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
 	}, [open, location.pathname])
@@ -175,7 +177,7 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 	return (
 		<SidebarMenuItem
 			role='menuitem'
-			aria-disabled={!isAccessible}
+			aria-disabled={!isLinkActive}
 			className='group/menuitem aria-disabled:opacity-50'
 			ref={ref}
 			onClick={() => {
@@ -188,15 +190,14 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 				tooltip={t(title, { defaultValue: title })}>
 				<Link
 					to={url}
-					search={location.search as React.ComponentProps<typeof Link>['search']}
-					preload='intent'
+					search={isCurrentPageActive && location.search}
 					viewTransition={viewTransition}
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
 					<Icon name={icon} size={18} className='!size-[18px]' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
-					{!isAccessible && (
+					{!isLinkActive && (
 						<Icon name='Lock' size={14} className='ml-auto !size-[14px] stroke-muted-foreground' />
 					)}
 				</Link>
@@ -223,11 +224,15 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 		(user && Array.isArray(user?.roles) && user?.roles?.some((role) => authorizedRoles.includes(role))) ||
 		authorizedRoles === '*'
 
+	const isCurrentPageActive = location.pathname.match(new RegExp(`^${url}$`))
+
 	useEffect(() => {
-		if (open && location.href.match(new RegExp(`^${url}$`)) && ref.current) {
+		if (open && isCurrentPageActive && ref.current) {
 			ref.current.scrollIntoView({ behavior: 'auto', block: 'center' })
 		}
 	}, [open, location.pathname])
+
+	console.log('location.search', location.search)
 
 	return (
 		<SidebarMenuSubItem
@@ -241,6 +246,7 @@ const SidebarMenuSubLink: React.FC<Omit<NavLinkProps, 'icon'>> = ({
 			<SidebarMenuSubButton asChild size='md' className='group-aria-disabled/menuitem:cursor-not-allowed'>
 				<Link
 					to={url}
+					search={isCurrentPageActive && location.search}
 					preload='intent'
 					viewTransition={viewTransition}
 					activeProps={{
