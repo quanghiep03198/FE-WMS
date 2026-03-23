@@ -153,7 +153,7 @@ const GlobalFilter: React.FC = () => {
 		<Div className='relative overflow-visible'>
 			<Popover>
 				<PopoverTrigger asChild>
-					<Div className={buttonVariants({ variant: 'outline' })}>
+					<Div className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
 						<Icon name='Funnel' />
 						{t('ns_common:table.filter')}
 						<Badge>{appliedFilters.length}</Badge>

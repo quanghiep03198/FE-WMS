@@ -7,6 +7,7 @@ import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography }
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { DataTableProps, RenderSubComponentProps } from '@/components/ui/@react-table/types'
+import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import {
 	type ColumnDefBase,
@@ -26,7 +27,6 @@ import { FlattenedPageQueryParams, PageQueryParams, usePageQueryParams } from '.
 import {
 	getTruckloadDeliveryDetailQueryOptions,
 	getTruckloadDeliveryQueryOptions,
-	type TruckloadDeliveryQueryData,
 	useGetTruckloadDeliveryQuery,
 	useUpdateContainerConditionMutation
 } from '../-hooks/use-truckload-delivery-asm'
@@ -36,22 +36,26 @@ import RowActions from './row-actions'
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
+const FALLBACK_TABLE_DATA = []
+
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { data, isFetching } = useGetTruckloadDeliveryQuery()
-	const [tableData, setTableData, resetTableData] = useResetState<TruckloadDeliveryQueryData[]>(
-		Array.isArray(data?.data) ? data?.data : []
+	const [tableData, setTableData, resetTableData] = useResetState<ITruckloadDelivery[]>(
+		Array.isArray(data?.data) ? data?.data : FALLBACK_TABLE_DATA
 	)
-	const tableRef = useRef<Table<TruckloadDeliveryQueryData>>(null)
-	const columnHelper = createColumnHelper<TruckloadDeliveryQueryData>()
+	const tableRef = useRef<Table<ITruckloadDelivery>>(null)
+	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
-	const flattenedSearchParams = unflatten<PageQueryParams, FlattenedPageQueryParams>(searchParams)
-	const defaultSortingState = flattenedSearchParams?.sort
-		? Object.entries(flattenedSearchParams.sort).map(([key, value]) => ({ id: key, desc: value === 'desc' }))
-		: []
+	const defaultSortingState = useMemo(() => {
+		const flattenedSearchParams = unflatten<PageQueryParams, FlattenedPageQueryParams>(searchParams)
+		return flattenedSearchParams?.sort
+			? Object.entries(flattenedSearchParams.sort).map(([key, value]) => ({ id: key, desc: value === 'desc' }))
+			: []
+	}, [searchParams])
 	const [sorting, setSorting] = useState<SortingState>(defaultSortingState)
 
 	const licensePlateColumnHeader = !isMobile
@@ -248,7 +252,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		})
 	}, [tableRef.current, isMobile])
 
-	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<TruckloadDeliveryQueryData>) => {
+	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 		const data = row.original
 		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
 	}, [])
@@ -282,7 +286,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	}, [])
 
 	// Sync tableData with data and expanded state in a single effect
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		const currentData = Array.isArray(data?.data) ? data.data : []
 		const expandedRowData = !Object.keys(expanded).length
 			? currentData
@@ -290,13 +294,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					Object.entries(expanded).every(([key, value]) => (value ? item.dispatch_order === key : true))
 				)
 		setTableData(expandedRowData)
-	}, [data, expanded])
+	}, [data?.data, expanded])
 
 	useDeepCompareEffect(() => {
 		resetExpanded()
 	}, [data?.data, searchParams.page])
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		if (!('page' in searchParams) || !('limit' in searchParams)) return
 		// * Clone search params
 		const noneSortingParams = omitBy(searchParams, (_value, key) => key.startsWith('sort'))
@@ -325,7 +329,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			enableExpanding={true}
 			getRowCanExpand={() => true}
 			getColumnCanGlobalFilter={() => true}
-			getRowId={(originalRow: TruckloadDeliveryQueryData) => originalRow.dispatch_order}
+			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
 			sorting={sorting}
 			enableMultiSort={true}
 			manualExpanding={true}
@@ -337,7 +341,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			paginationProps={{
 				...omit(data, 'data'),
 				enableInputPageSize: false,
-				prefetch: async (params: Pick<Pagination<TruckloadDeliveryQueryData>, 'page' | 'limit'>) => {
+				prefetch: async (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) => {
 					return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
 				}
 			}}
@@ -357,9 +361,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	)
 }
 
-const DispatchOrderStatusBadge: ColumnDefBase<TruckloadDeliveryQueryData, TruckloadDeliveryStatus>['cell'] = ({
-	getValue
-}) => {
+const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, TruckloadDeliveryStatus>['cell'] = ({ getValue }) => {
 	const { t } = useTranslation()
 
 	const value = getValue() as TruckloadDeliveryStatus
@@ -386,7 +388,7 @@ const DispatchOrderStatusBadge: ColumnDefBase<TruckloadDeliveryQueryData, Truckl
 	)
 }
 
-const LicensePlateColumnCell: ColumnDefBase<TruckloadDeliveryQueryData, string>['cell'] = ({ row, getValue }) => {
+const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['cell'] = ({ row, getValue }) => {
 	const { t } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 
@@ -421,11 +423,7 @@ const LicensePlateColumnCell: ColumnDefBase<TruckloadDeliveryQueryData, string>[
 	)
 }
 
-const ContainerStatusCheckbox: ColumnDefBase<TruckloadDeliveryQueryData, boolean>['cell'] = ({
-	row,
-	column,
-	getValue
-}) => {
+const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'] = ({ row, column, getValue }) => {
 	const { mutateAsync, isPending, isError, variables } = useUpdateContainerConditionMutation()
 	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
 
@@ -452,7 +450,7 @@ const ContainerStatusCheckbox: ColumnDefBase<TruckloadDeliveryQueryData, boolean
 	)
 }
 
-const DateTimeCell: ColumnDefBase<TruckloadDeliveryQueryData, Date>['cell'] = ({ getValue }) => {
+const DateTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = ({ getValue }) => {
 	const { t } = useTranslation()
 	const value = getValue()
 	if (value) return format(new Date(value), 'yyyy-MM-dd HH:mm')

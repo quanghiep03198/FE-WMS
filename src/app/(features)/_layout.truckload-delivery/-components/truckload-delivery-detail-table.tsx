@@ -37,14 +37,13 @@ import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType, usePageContext } from '../-contexts/page-context'
 import {
 	getTruckloadDeliveryDetailQueryOptions,
-	TruckloadDeliveryQueryData,
 	useUpsertPurchaseOrdersMutation
 } from '../-hooks/use-truckload-delivery-asm'
 import { type UpsertPurchaseOrdersFormValues, upsertPurchaseOrdersSchema } from '../-schemas'
 import TruckloadDeliveryDetailRow from './truckload-delivery-detail-row'
 
 type TruckloadDeliveryDetailTableProps = {
-	data: TruckloadDeliveryQueryData
+	data: ITruckloadDelivery
 	onCollapse?: () => void
 }
 

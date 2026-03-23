@@ -4,7 +4,7 @@ import {
 	TruckloadDeliveryService
 } from '@/services/truckload-delivery.service'
 import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { uniqBy } from 'lodash-es'
+import { useMemo } from 'react'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { SignatureType } from '../-contexts/page-context'
 import { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
@@ -22,8 +22,6 @@ export enum TruckloadDeliveryMutationKeys {
 	UPSERT_PURCHASE_ORDERS = 'UPSERT_PURCHASE_ORDERS'
 }
 
-export type TruckloadDeliveryQueryData = ITruckloadDelivery & { total_outbound_qty: number }
-
 export const getTruckloadDeliveryQueryOptions = (searchParams) =>
 	queryOptions({
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
@@ -35,16 +33,7 @@ export const getTruckloadDeliveryQueryOptions = (searchParams) =>
 		enabled: typeof searchParams.page === 'number' && typeof searchParams.limit === 'number',
 		placeholderData: keepPreviousData,
 		select: (response) => {
-			const data: TruckloadDeliveryQueryData[] = Array.isArray(response.metadata.data)
-				? response.metadata.data.map((item) => ({
-						...item,
-						purchase_orders: item.delivery_details.map(({ po }) => po),
-						total_outbound_qty: uniqBy(item.delivery_details, 'po').reduce(
-							(sum, detail) => sum + (detail.outbound_qty || 0),
-							0
-						)
-					}))
-				: []
+			const data: ITruckloadDelivery[] = Array.isArray(response.metadata.data) ? response.metadata.data : []
 			return {
 				...response.metadata,
 				data
@@ -62,7 +51,7 @@ export const getTruckloadDeliveryDetailQueryOptions = (dispatchOrder: string) =>
 
 export const useGetTruckloadDeliveryQuery = () => {
 	const { searchParams } = usePageQueryParams()
-	const queryOptions = getTruckloadDeliveryQueryOptions(searchParams)
+	const queryOptions = useMemo(() => getTruckloadDeliveryQueryOptions(searchParams), [searchParams])
 	return useQuery(queryOptions)
 }
 

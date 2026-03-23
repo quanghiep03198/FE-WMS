@@ -13,10 +13,10 @@ import { pick } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { usePageContext } from '../-contexts/page-context'
-import { type TruckloadDeliveryQueryData } from '../-hooks/use-truckload-delivery-asm'
+import { type ITruckloadDelivery } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
 
-const RowActions: ColumnDefBase<TruckloadDeliveryQueryData, any>['cell'] = ({ row }) => {
+const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => {
 	const data = pick(row.original, [
 		'dispatch_order',
 		'license_plate',

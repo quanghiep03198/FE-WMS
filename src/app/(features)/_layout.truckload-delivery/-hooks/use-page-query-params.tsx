@@ -1,3 +1,4 @@
+import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { SortDirection } from '@tanstack/react-table'
 import { useSessionStorageState } from 'ahooks'
 import { format, isValid } from 'date-fns'
@@ -7,7 +8,6 @@ import { isDateRange } from 'react-day-picker'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { FilterOperator, TruckloadDeliveryFilterFormValues } from '../-schemas'
 import { useStoreFilterParams } from './use-store-filter-params'
-import { TruckloadDeliveryQueryData } from './use-truckload-delivery-asm'
 
 export type PageQueryParams = {
 	q?: string
@@ -24,7 +24,7 @@ export type PageQueryParams = {
 	'where.license_plate'?: FilterOperator
 	'where.container_number'?: FilterOperator
 	'where.po'?: FilterOperator
-} & Pick<Pagination<TruckloadDeliveryQueryData>, 'page' | 'limit'>
+} & Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>
 
 export type FlattenedPageQueryParams = {
 	q?: string

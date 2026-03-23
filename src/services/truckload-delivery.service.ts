@@ -27,6 +27,7 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	factory_departure_time: Date | null
 	actual_departure_time: Date | null
 	license_plate_image: string | null
+	total_outbound_qty: number
 	delivery_details?: Array<ITruckloadDeliveryDetail>
 }
 
