@@ -85,7 +85,6 @@ export const upsertPurchaseOrdersSchema = object({
 		})
 	)
 }).superRefine((values, context) => {
-	console.log('values', values)
 	values.outbound_purchase_orders.forEach((item, index) => {
 		if (item.outbound_qty > item.max_outbound_qty)
 			context.addIssue({

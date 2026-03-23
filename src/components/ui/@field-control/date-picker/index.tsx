@@ -52,7 +52,6 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 			control={control}
 			name={name}
 			render={({ field }) => {
-				console.log('[DatePickerFieldControl]', field.value)
 				return (
 					<FormItem
 						className={cn(

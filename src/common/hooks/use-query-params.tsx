@@ -49,7 +49,6 @@ export default function useQueryParams<T = ReturnType<typeof useSearch>>(default
 	}, [])
 
 	useLayoutEffect(() => {
-		console.log('defaultParams', defaultParams)
 		if (defaultParams)
 			navigate({
 				search: (prev) => {
