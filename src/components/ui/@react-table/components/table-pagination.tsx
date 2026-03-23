@@ -39,7 +39,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 	const pageIndex = manualPagination ? controlledPaginationProps?.page : table.getState().pagination.pageIndex + 1
 	const rowCount = manualPagination ? controlledPaginationProps.totalDocs : table.getRowCount()
 
-	const pageIndexContext = String(pageIndex) + '/' + String(pageCount)
+	const pageIndexContext = String(pageIndex ?? 1) + '/' + String(pageCount ?? 1)
 
 	const changePageSize = (value: string) => {
 		if (isNaN(+value)) return
