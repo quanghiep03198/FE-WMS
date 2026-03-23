@@ -315,6 +315,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		setParams({ ...noneSortingParams, ...sortingParams } as PageQueryParams)
 	}, [sorting])
 
+	const handlePrefetch = useCallback(
+		async (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) => {
+			return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
+		},
+		[searchParams]
+	)
+
 	return (
 		/* eslint-disable */
 		// @ts-ignore
@@ -341,9 +348,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			paginationProps={{
 				...omit(data, 'data'),
 				enableInputPageSize: false,
-				prefetch: async (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) => {
-					return await queryClient.prefetchQuery(getTruckloadDeliveryQueryOptions({ ...searchParams, ...params }))
-				}
+				prefetch: handlePrefetch
 			}}
 			onPaginationChange={changePagination}
 			onSortingChange={setSorting}
