@@ -1,15 +1,15 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
+import babel from '@rolldown/plugin-babel'
 import { sentryVitePlugin as sentry } from '@sentry/vite-plugin'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
-
 /**
  * @see https://vitejs.dev/config/
  */
@@ -19,11 +19,8 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [
-			react({
-				babel: {
-					plugins: [['babel-plugin-react-compiler', {}]]
-				}
-			}),
+			react(),
+			babel({ presets: [reactCompilerPreset()] }),
 			reactRouter(),
 			staticCopy({
 				targets: [
@@ -102,7 +99,7 @@ export default defineConfig(({ mode }) => {
 				authToken: process.env.VITE_SENTRY_AUTH_TOKEN,
 				org: process.env.VITE_SENTRY_ORG,
 				project: process.env.VITE_SENTRY_PROJECT,
-				telemetry: mode === 'production',
+				telemetry: false,
 				sourcemaps: {
 					// Delete sourcemap after they're uploaded to Sentry.
 					filesToDeleteAfterUpload: ['./dist/**/*.map']
@@ -164,6 +161,7 @@ export default defineConfig(({ mode }) => {
 			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
+				banner: undefined,
 				transform: { dropLabels: ['DEV', 'DEBUG'] },
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
