@@ -1,6 +1,6 @@
 import { PaginationState, Table } from '@tanstack/react-table'
 import { AxiosRequestConfig } from 'axios'
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo, useEffect } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
 import { Button, ButtonGroup, Div, Icon, Label, Separator, Tooltip, Typography } from '../..'
@@ -29,8 +29,6 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 
 	const { t } = useTranslation('ns_common')
 	const { firstPage, lastPage, nextPage, previousPage, setPageSize } = table
-	const intervalRef = useRef<NodeJS.Timeout>(null)
-	const prefetchCountRef = useRef<number>(0)
 
 	const canNextPage = manualPagination ? controlledPaginationProps?.hasNextPage : table.getCanNextPage()
 	const canPreviousPage = manualPagination ? controlledPaginationProps?.hasPrevPage : table.getCanPreviousPage()
@@ -67,31 +65,14 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 	}
 
 	const handlePrefetch = (params: AxiosRequestConfig['params'] & Pick<Pagination<any>, 'page' | 'limit'>) => {
-		if (!manualPagination || typeof prefetch !== 'function') return
+		if (!manualPagination || typeof prefetch !== 'function' || !canNextPage) return
 		prefetch(params)
 	}
 
 	useEffect(() => {
-		if (!manualPagination || typeof prefetch !== 'function' || !('requestIdleCallback' in window) || !canNextPage)
-			return
-
-		window.requestIdleCallback(() => {
-			intervalRef.current = setInterval(() => {
-				prefetchCountRef.current++
-				// Prefetch next 20 pages and will be cancelled on last page
-				const canPrefetch = pageIndex + prefetchCountRef.current <= pageCount && prefetchCountRef.current <= 20
-				if (!canPrefetch) {
-					clearInterval(intervalRef.current)
-					return
-				}
-				prefetch({ page: pageIndex + prefetchCountRef.current, limit: pageSize })
-			}, 100)
-		})
-
-		return () => {
-			if (intervalRef.current) clearInterval(intervalRef.current)
-		}
-	}, [canNextPage])
+		if (typeof pageIndex !== 'number' && typeof pageSize !== 'number') return
+		handlePrefetch({ page: pageIndex + 1, limit: pageSize })
+	}, [canNextPage, pageIndex, pageSize])
 
 	const goToFirstPage = () => {
 		if (manualPagination && typeof onPaginationChange === 'function') {
