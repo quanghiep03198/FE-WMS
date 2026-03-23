@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
 				targets: [
 					{
 						src: './infrastructure/*',
-						dest: '' // Copy all files from infrastructure to dist root
+						dest: '' // * Copy all files from infrastructure to dist root
 					}
 				]
 			}),
@@ -44,6 +44,7 @@ export default defineConfig(({ mode }) => {
 					navigateFallback: '/index.html',
 					navigateFallbackDenylist: [/^\/api\//, /^\/sw\.js$/, /^\/workbox-.*\.js$/, /\.(wasm|map)$/],
 					globPatterns: ['**/*.{html,css,js,ico,png,jpg,svg,webp,woff2}'],
+					maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 3 MiB
 					skipWaiting: true,
 					clientsClaim: true,
 					navigationPreload: true,
@@ -56,7 +57,7 @@ export default defineConfig(({ mode }) => {
 							options: {
 								cacheName: 'assets-cache',
 								expiration: {
-									maxEntries: 200,
+									maxEntries: 500,
 									maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year (hashed filenames)
 									purgeOnQuotaError: true
 								},
@@ -72,7 +73,7 @@ export default defineConfig(({ mode }) => {
 							options: {
 								cacheName: 'static-resources-cache',
 								expiration: {
-									maxEntries: 60,
+									maxEntries: 500,
 									maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
 									purgeOnQuotaError: true
 								},
