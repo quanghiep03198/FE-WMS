@@ -4,7 +4,7 @@ import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
 import { Button, Icon } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { Fragment, useLayoutEffect } from 'react'
+import { Fragment, lazy, Suspense, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import {
@@ -16,14 +16,16 @@ import {
 	PageWrapper
 } from '../-components/shared/page'
 import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
-import CreatePurchaseOrdersFormDialog from './-components/create-purchase-orders-form-dialog'
 import CreateTruckloadDialogButton from './-components/create-truckload-delivery-button'
-import DeleteConfirmDialog from './-components/delete-confirm-dialog'
-import SignatureEditorDialog from './-components/signature-editor-dialog'
 import TruckloadDeliveryMasterTable from './-components/truckload-delivery-master-table'
-import UpdateDispatchOrderFormDialog from './-components/update-dispatch-order-form-dialog'
 import { PageContextProvider } from './-contexts/page-context'
+import { STORED_DELIVERY_PAGE_QUERY_KEY } from './-hooks/use-page-query-params'
 import { STORAGE_DELIVERY_FILTER_KEY } from './-hooks/use-store-filter-params'
+
+const DeleteConfirmDialog = lazy(() => import('./-components/delete-confirm-dialog'))
+const SignatureEditorDialog = lazy(() => import('./-components/signature-editor-dialog'))
+const UpdateDispatchOrderFormDialog = lazy(() => import('./-components/update-dispatch-order-form-dialog'))
+const CreatePurchaseOrdersFormDialog = lazy(() => import('./-components/create-purchase-orders-form-dialog'))
 
 export const Route = createLazyFileRoute('/(features)/_layout/truckload-delivery/')({
 	component: Page
@@ -38,6 +40,7 @@ function Page() {
 
 		return () => {
 			sessionStorage.removeItem(STORAGE_DELIVERY_FILTER_KEY)
+			sessionStorage.removeItem(STORED_DELIVERY_PAGE_QUERY_KEY)
 		}
 	}, [i18n.language])
 
@@ -84,10 +87,18 @@ function Page() {
 								</PageAction>
 							</PageHeader>
 							<PageSeparator />
-							<CreatePurchaseOrdersFormDialog />
-							<UpdateDispatchOrderFormDialog />
-							<DeleteConfirmDialog />
-							<SignatureEditorDialog />
+							<Suspense fallback={null}>
+								<CreatePurchaseOrdersFormDialog />
+							</Suspense>
+							<Suspense fallback={null}>
+								<UpdateDispatchOrderFormDialog />
+							</Suspense>
+							<Suspense fallback={null}>
+								<DeleteConfirmDialog />
+							</Suspense>
+							<Suspense fallback={null}>
+								<SignatureEditorDialog />
+							</Suspense>
 							<TruckloadDeliveryMasterTable />
 						</PageWrapper>
 					</PageContextProvider>

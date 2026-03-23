@@ -1,7 +1,6 @@
-import useQueryParams from '@/common/hooks/use-query-params'
-import { useRouterState } from '@tanstack/react-router'
 import { SortDirection } from '@tanstack/react-table'
-import { format, isDate } from 'date-fns'
+import { useSessionStorageState } from 'ahooks'
+import { format, isValid } from 'date-fns'
 import { omitBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { isDateRange } from 'react-day-picker'
@@ -45,21 +44,42 @@ export type FlattenedPageQueryParams = {
 	limit: number
 }
 
+// export const _usePageQueryParams = () => {
+// 	// * Set default pagination params if not present in URL
+// 	const search = useRouterState({ select: (s) => s.location.search as PageQueryParams })
+
+// 	search['page'] ??= 1
+// 	search['limit'] ??= 20
+
+// 	// * Get stored filter params from session storage
+// 	const [storedFilterParams] = useStoreFilterParams()
+
+// 	// * Build initial query params by merging URL params and stored filter params
+// 	const buildQueryParams = useBuildQueryParams()
+// 	const defaultParams = buildQueryParams(search, storedFilterParams)
+
+// 	return useQueryParams<PageQueryParams>(defaultParams)
+// }
+
+export const STORED_DELIVERY_PAGE_QUERY_KEY = 'deliverySearchParams'
+
 export const usePageQueryParams = () => {
-	// * Set default pagination params if not present in URL
-	const location = useRouterState({ select: (s) => s.location })
-
-	location.search.page ??= 1
-	location.search.limit ??= 20
-
 	// * Get stored filter params from session storage
 	const [storedFilterParams] = useStoreFilterParams()
 
 	// * Build initial query params by merging URL params and stored filter params
 	const buildQueryParams = useBuildQueryParams()
-	const defaultParams = buildQueryParams(location.search, storedFilterParams)
+	const defaultParams = buildQueryParams({ page: 1, limit: 20 }, storedFilterParams)
 
-	return useQueryParams<PageQueryParams>(defaultParams)
+	const [searchParams, setParams] = useSessionStorageState<PageQueryParams>(STORED_DELIVERY_PAGE_QUERY_KEY, {
+		defaultValue: defaultParams,
+		listenStorageChange: true
+	})
+
+	return {
+		searchParams,
+		setParams
+	}
 }
 
 export const useBuildQueryParams = () => {
@@ -78,8 +98,8 @@ export const useBuildQueryParams = () => {
 				paramValue = operator
 					.replace('@value1', format(value.from, 'yyyy-MM-dd'))
 					.replace('@value2', format(value.to, 'yyyy-MM-dd'))
-			} else if (isDate(value)) {
-				paramValue = operator.replace('@value', format(value as Date, 'yyyy-MM-dd'))
+			} else if (isValid(new Date(value))) {
+				paramValue = operator.replace('@value', format(value, 'yyyy-MM-dd'))
 			} else {
 				paramValue = operator.replace('@value', String(value ?? ''))
 			}

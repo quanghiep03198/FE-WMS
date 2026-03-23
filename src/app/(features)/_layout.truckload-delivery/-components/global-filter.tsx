@@ -21,9 +21,8 @@ import {
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PopoverClose } from '@radix-ui/react-popover'
-import { useDeepCompareEffect } from 'ahooks'
 import { isNil, omit, omitBy } from 'lodash-es'
-import React, { useId, useMemo } from 'react'
+import React, { useEffect, useId, useMemo } from 'react'
 import { useForm, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
@@ -125,7 +124,7 @@ const GlobalFilter: React.FC = () => {
 
 	const buildQueryParams = useBuildQueryParams()
 
-	useDeepCompareEffect(() => {
+	useEffect(() => {
 		if (!('page' in searchParams) || !('limit' in searchParams)) return
 		const nextParams = buildQueryParams(searchParams, storedGlobalFilters)
 		form.reset(storedGlobalFilters)
@@ -136,16 +135,14 @@ const GlobalFilter: React.FC = () => {
 		setStoredGlobalFilters(value)
 		const nextParams = buildQueryParams(searchParams, value)
 		nextParams.page = 1 // * Reset to first page when applying new filters
-		setParams(nextParams, { overrideExisting: true })
+		setParams(nextParams)
 	}
 
 	const handleClearFilters: React.MouseEventHandler = (e) => {
 		e.stopPropagation()
 		form.reset(defaultValue)
 		setStoredGlobalFilters(defaultValue)
-		setParams(omitBy(searchParams, (_value, key) => key.startsWith('where')) as PageQueryParams, {
-			overrideExisting: true
-		})
+		setParams(omitBy(searchParams, (_value, key) => key.startsWith('where')) as PageQueryParams)
 	}
 
 	const columnFilters = storedGlobalFilters.where

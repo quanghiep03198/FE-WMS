@@ -15,7 +15,7 @@ import {
 	SortingState,
 	type Table
 } from '@tanstack/react-table'
-import { useResetState } from 'ahooks'
+import { useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { unflatten } from 'flat'
 import { omit, omitBy } from 'lodash-es'
@@ -39,7 +39,7 @@ import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
-	const { data, isLoading } = useGetTruckloadDeliveryQuery()
+	const { data, isFetching } = useGetTruckloadDeliveryQuery()
 	const [tableData, setTableData, resetTableData] = useResetState<TruckloadDeliveryQueryData[]>(
 		Array.isArray(data?.data) ? data?.data : []
 	)
@@ -265,9 +265,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 
 	const changePagination = useCallback(
 		({ pageIndex, pageSize }: PaginationState) => {
-			console.log('[truckload-delivery-master-table.tsx] pageIndex', pageIndex)
 			if (typeof pageIndex === 'number' && typeof pageSize === 'number')
-				setParams({ ...searchParams, page: pageIndex, limit: pageSize }, { overrideExisting: true })
+				setParams({ ...searchParams, page: pageIndex, limit: pageSize })
 		},
 		[searchParams]
 	)
@@ -293,9 +292,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		setTableData(expandedRowData)
 	}, [data, expanded])
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		resetExpanded()
-	}, [searchParams.page])
+	}, [data?.data, searchParams.page])
 
 	useEffect(() => {
 		if (!('page' in searchParams) || !('limit' in searchParams)) return
@@ -309,7 +308,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		)
 
 		// * Set search params with new sorting params
-		setParams({ ...noneSortingParams, ...sortingParams } as PageQueryParams, { overrideExisting: true })
+		setParams({ ...noneSortingParams, ...sortingParams } as PageQueryParams)
 	}, [sorting])
 
 	return (
@@ -320,7 +319,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columns={columns}
 			data={tableData}
 			border='bottom-only'
-			loading={isLoading}
+			loading={isFetching}
 			expanded={expanded}
 			enableGlobalFilter={true}
 			enableExpanding={true}
