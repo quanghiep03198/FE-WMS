@@ -103,11 +103,12 @@ const DataGrid: React.FC<DataTableProps> = ({
 	)
 
 	const event$ = useEventEmitter<Record<string, unknown>>()
+	const visibleColumns = columns.filter((col) => !col.meta?.hidden)
 
 	// * Table declaration
 	const table = useReactTable<any>({
 		data: _data,
-		columns,
+		columns: visibleColumns,
 		initialState: {
 			columnPinning: {
 				left: [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID],
@@ -271,7 +272,7 @@ const DataGrid: React.FC<DataTableProps> = ({
 			<DataTableWrapper data-border={border}>
 				<TableToolbar {...{ ...toolbarProps, table }} />
 				<DataTable
-					columns={columns.filter((col) => !col.meta?.hidden)}
+					columns={visibleColumns}
 					loading={loading}
 					caption={caption}
 					virtualizerOptions={virtualizerOptions}
