@@ -18,7 +18,7 @@ const LicensePlateHoverCard: React.FC<{
 					isMobile ? 'font-medium' : 'font-normal',
 					disabled ? 'hover:no-underline' : 'hover:underline hover:underline-offset-2'
 				)}>
-				<Icon name='Container' />
+				<Icon name='Truck' />
 				{licensePlate}
 			</HoverCardTrigger>
 			<HoverCardContent hidden={disabled} className='max-w-60' align='start'>

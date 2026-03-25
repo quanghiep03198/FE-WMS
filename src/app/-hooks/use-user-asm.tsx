@@ -2,7 +2,7 @@ import useAuth from '@/common/hooks/use-auth'
 import { UserService } from '@/services/user.service'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError, AxiosRequestConfig } from 'axios'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -43,7 +43,11 @@ export const useGetUserProfileQuery = () => {
 		}
 	}, [isAuthenticated])
 
-	return useQuery(getUserProfileQuery(isAuthenticated, { signal: abortControllerRef.current.signal }))
+	const queryOptions = useMemo(() => {
+		return getUserProfileQuery(isAuthenticated, { signal: abortControllerRef.current.signal })
+	}, [isAuthenticated, abortControllerRef.current.signal.aborted])
+
+	return useQuery(queryOptions)
 }
 
 export const useUpdateProfileMutation = () => {

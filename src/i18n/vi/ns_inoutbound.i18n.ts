@@ -33,6 +33,7 @@ export default {
 	description: {
 		add_outbound_size: 'Thêm size và số lượng để tiến hành xuất tách đơn.',
 		archived_restoration: 'Khôi phục dữ liệu đã lưu trữ. Chỉ sử dụng khi cần thiết.',
+		container_condition_assessment: 'Vui lòng đánh giá tình trạng container dưới đây (nếu có)',
 		container_number_field:
 			'Định dạng mã container BIC. Bỏ qua trường này trong trường hợp không có số container hiện tại.',
 		create_truckload_delivery: 'Tạo mới thông tin đóng container xuất hàng khỏi nhà máy',
@@ -168,6 +169,7 @@ export default {
 		archived_restoration: 'Khôi phục dữ liệu',
 		defective_goods_inventory_report: 'Báo biểu tồn kho hàng loại 2',
 		combination_history: 'Lịch sử phối tem',
+		container_condition_assessment: 'Đánh giá tình trạng container',
 		create_truckload_delivery: 'Tạo mới thông tin đóng container',
 		daily_inbound_report: 'Báo cáo nhập kho hàng ngày',
 		daily_outbound_report: 'Báo cáo xuất kho hàng ngày',

@@ -1,0 +1,151 @@
+import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import { UserRole } from '@/common/constants/enums'
+import useMediaQuery from '@/common/hooks/use-media-query'
+import { cn } from '@/common/utils/cn'
+import { Badge, Checkbox, Div, Icon, IconProps, Typography } from '@/components/ui'
+import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import { type ColumnDefBase } from '@tanstack/react-table'
+import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
+import { TruckloadDeliveryStatus } from '../-constants'
+import { useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
+import LicensePlateHoverCard from './license-plate-hover-card'
+
+export const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, TruckloadDeliveryStatus>['cell'] = ({
+	getValue
+}) => {
+	const { t } = useTranslation()
+
+	const value = getValue() as TruckloadDeliveryStatus
+
+	const statusIconVariants: Record<TruckloadDeliveryStatus, IconProps['name']> = {
+		[TruckloadDeliveryStatus.PENDING]: 'Loader',
+		[TruckloadDeliveryStatus.CONFIRMED]: 'CircleCheckBig',
+		[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'Undo2'
+	}
+
+	return (
+		<Badge variant='outline' className='rounded-l-full rounded-r-full'>
+			<Icon
+				name={statusIconVariants[value] ?? 'CircleDotDashed'}
+				size={14}
+				className={cn({
+					'stroke-muted-foreground': value === TruckloadDeliveryStatus.PENDING,
+					'stroke-success': value === TruckloadDeliveryStatus.CONFIRMED,
+					'stroke-destructive': value === TruckloadDeliveryStatus.REQUEST_CHANGE
+				})}
+			/>
+			{t(`ns_common:status.${value}`)}
+		</Badge>
+	)
+}
+
+export const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['cell'] = ({ row, getValue }) => {
+	const { t } = useTranslation()
+	const isMobile = useMediaQuery('(max-width: 1023px)')
+
+	const value = getValue()
+	if (!value)
+		return (
+			<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+				<Icon name='Truck' className='self-center stroke-muted-foreground' />
+				{t('ns_common:titles.unknown')}
+			</Typography>
+		)
+	if (!isMobile)
+		return (
+			<LicensePlateHoverCard
+				licensePlate={row.original.license_plate}
+				licensePlateImage={row.original.license_plate_image}
+			/>
+		)
+	return (
+		<Div className='flex flex-col space-y-0.5'>
+			<LicensePlateHoverCard
+				licensePlate={row.original.license_plate}
+				licensePlateImage={row.original.license_plate_image}
+			/>
+			{row.original.container_number && (
+				<Typography
+					variant='small'
+					color='muted'
+					className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
+					<Icon name='Container' />
+					{row.original.container_number}
+				</Typography>
+			)}
+		</Div>
+	)
+}
+
+export const DepartureTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = (props) => {
+	const isMobile = useMediaQuery('(max-width: 1023px)')
+	const { t } = useTranslation()
+
+	const value = props.getValue()
+
+	if (isMobile)
+		return (
+			<Div className='flex flex-col gap-y-0.5'>
+				<Typography
+					variant='small'
+					color={value ? 'default' : 'muted'}
+					className='inline-flex items-center gap-x-2'>
+					<Icon name={value ? 'LogOut' : 'ClockAlert'} />
+					{value ? format(new Date(value), 'yyyy-MM-dd HH:mm') : t('ns_common:titles.unknown')}
+				</Typography>
+
+				{props.row.original.actual_departure_time && (
+					<Typography variant='small' className='inline-flex items-center gap-x-2' color='muted'>
+						<Icon name='Cctv' />
+						{format(new Date(props.row.original.actual_departure_time), 'yyyy-MM-dd HH:mm')}
+					</Typography>
+				)}
+			</Div>
+		)
+
+	return <DateTimeCell {...props} />
+}
+
+export const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'] = ({
+	row,
+	column,
+	getValue
+}) => {
+	const { mutateAsync, isPending, isError, variables } = useUpdateContainerConditionMutation()
+	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
+
+	return (
+		<RoleBaseAccessControl
+			mode='mask'
+			classNames={{
+				innerWrapper: 'grid place-items-center group-hover/rbac:opacity-0'
+			}}
+			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
+			<Checkbox
+				className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
+				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
+				defaultChecked={currentValue}
+				checked={currentValue}
+				onCheckedChange={async (value) =>
+					await mutateAsync({
+						dispatch_order: row.original.dispatch_order,
+						[column.id]: Boolean(value)
+					})
+				}
+			/>
+		</RoleBaseAccessControl>
+	)
+}
+
+export const DateTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = ({ getValue }) => {
+	const { t } = useTranslation()
+	const value = getValue()
+	if (value) return format(new Date(value), 'yyyy-MM-dd HH:mm')
+	return (
+		<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+			<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+			{t('ns_common:titles.unknown')}
+		</Typography>
+	)
+}

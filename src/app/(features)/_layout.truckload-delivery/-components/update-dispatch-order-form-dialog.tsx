@@ -100,11 +100,11 @@ const UpdateDispatchOrderFormDialog: React.FC = () => {
 								<FieldSeparator />
 								<FieldGroup>
 									<FieldSet>
-										<FieldLegend variant='label' className='mb-2'>
-											Container condition assessment
+										<FieldLegend variant='label' className='mb-1'>
+											{t('ns_inoutbound:titles.container_condition_assessment')}
 										</FieldLegend>
 										<FieldDescription>
-											Please select all that apply regarding the condition of the container
+											{t('ns_inoutbound:description.container_condition_assessment')}
 										</FieldDescription>
 										<FieldGroup className='gap-3'>
 											<FormField

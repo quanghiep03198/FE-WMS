@@ -1,38 +1,32 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
-import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Badge, Checkbox, DataTable, Div, Icon, IconProps, Tooltip, Typography } from '@/components/ui'
+import { DataTable, Icon, Tooltip } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { DataTableProps, RenderSubComponentProps } from '@/components/ui/@react-table/types'
 import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
-import {
-	type ColumnDefBase,
-	createColumnHelper,
-	PaginationState,
-	SortingState,
-	type Table
-} from '@tanstack/react-table'
+import { createColumnHelper, PaginationState, SortingState } from '@tanstack/react-table'
 import { useDeepCompareEffect, useResetState } from 'ahooks'
-import { format } from 'date-fns'
 import { unflatten } from 'flat'
-import { omit, omitBy } from 'lodash-es'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { isNil, omit, omitBy } from 'lodash-es'
+import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TruckloadDeliveryStatus } from '../-constants'
 import { FlattenedPageQueryParams, PageQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
 import {
 	getTruckloadDeliveryDetailQueryOptions,
 	getTruckloadDeliveryQueryOptions,
-	useGetTruckloadDeliveryQuery,
-	useUpdateContainerConditionMutation
+	useGetTruckloadDeliveryQuery
 } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
-import LicensePlateHoverCard from './license-plate-hover-card'
 import RowActions from './row-actions'
+import {
+	ContainerStatusCheckbox,
+	DateTimeCell,
+	DepartureTimeCell,
+	DispatchOrderStatusBadge,
+	LicensePlateColumnCell
+} from './truck-load-delivery-table-cells'
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
@@ -45,7 +39,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const [tableData, setTableData, resetTableData] = useResetState<ITruckloadDelivery[]>(
 		Array.isArray(data?.data) ? data?.data : FALLBACK_TABLE_DATA
 	)
-	const tableRef = useRef<Table<ITruckloadDelivery>>(null)
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
 	const queryClient = useQueryClient()
@@ -102,9 +95,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}),
 			columnHelper.accessor('dispatch_order', {
 				id: 'dispatch_order',
-				sortDescFirst: true,
-				enableSorting: true,
-				enableMultiSort: true
+				meta: { hidden: true }
 			}),
 			columnHelper.accessor('license_plate', {
 				id: 'license_plate',
@@ -119,6 +110,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('container_number', {
 				id: 'container_number',
 				header: t('ns_erp:fields.container_number'),
+				meta: { hidden: isMobile },
 				enableResizing: true,
 				enableSorting: true,
 				enableMultiSort: true,
@@ -134,25 +126,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
 				enableMultiSort: true,
-				meta: { align: 'right' },
+				meta: { align: 'right', hidden: isMobile },
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
 			columnHelper.accessor('punctured_container', {
 				header: t('ns_erp:fields.punctured_container'),
 				enableSorting: false,
-				meta: { align: 'center' },
+				meta: { align: 'center', hidden: isMobile },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('smelling_container', {
 				header: t('ns_erp:fields.smelling_container'),
 				enableSorting: false,
-				meta: { align: 'center' },
+				meta: { align: 'center', hidden: isMobile },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('moist_container', {
 				header: t('ns_erp:fields.moist_container'),
 				enableSorting: false,
-				meta: { align: 'center' },
+				meta: { align: 'center', hidden: isMobile },
 				cell: ContainerStatusCheckbox
 			}),
 			columnHelper.accessor('approval_status', {
@@ -171,6 +163,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}),
 			columnHelper.accessor('created_at', {
 				header: t('ns_common:common_fields.created_at'),
+				meta: { hidden: isMobile },
 				enableResizing: true,
 				enableSorting: true,
 				enableMultiSort: true,
@@ -203,10 +196,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				cell: DateTimeCell
+				cell: DepartureTimeCell
 			}),
 			columnHelper.accessor('actual_departure_time', {
 				header: t('ns_erp:fields.actual_departure_time'),
+				meta: { hidden: isMobile },
 				enableResizing: true,
 				enableSorting: true,
 				enableColumnFilter: false,
@@ -231,27 +225,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[i18n.language, isMobile]
 	)
 
-	const handleDisplayColumns = useCallback(() => {
-		if (!tableRef.current) return
-
-		tableRef.current.setColumnVisibility({
-			...tableRef.current.getState().columnVisibility,
-			dispatch_order: false,
-			purchase_orders: false,
-			container_number: !isMobile,
-			total_outbound_qty: !isMobile,
-			container_sealing_time: !isMobile,
-			factory_departure_time: !isMobile,
-			punctured_container: !isMobile,
-			smelling_container: !isMobile,
-			moist_container: !isMobile
-		})
-		tableRef.current.setColumnPinning({
-			left: [ROW_EXPANSION_COLUMN_ID, ...(isMobile ? ['license_plate'] : [])],
-			right: [ROW_ACTIONS_COLUMN_ID]
-		})
-	}, [tableRef.current, isMobile])
-
 	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 		const data = row.original
 		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
@@ -275,30 +248,35 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[searchParams]
 	)
 
-	useEffect(() => {
-		handleDisplayColumns()
-		window.addEventListener('resize', handleDisplayColumns)
-		window.screen.orientation.addEventListener('change', handleDisplayColumns)
-		return () => {
-			window.screen.orientation.removeEventListener('change', handleDisplayColumns)
-			window.removeEventListener('resize', handleDisplayColumns)
+	const onExpandedChange = useEffectEvent(() => {
+		console.log('data?.data', data?.data)
+		const currentData = Array.isArray(data?.data) ? data.data : []
+		console.log('expanded', expanded)
+
+		let isSomeRowExpanded = false
+		for (const rowId in expanded) {
+			if (expanded[rowId]) {
+				isSomeRowExpanded = true
+				break
+			}
 		}
-	}, [])
+		const expandedRowData = !isSomeRowExpanded
+			? currentData
+			: [
+					currentData.find((item) =>
+						Object.entries(expanded).some(([rowId, isExpanded]) =>
+							isExpanded ? item.dispatch_order === rowId : true
+						)
+					)
+				].filter((item) => !isNil(item))
+		if (!expandedRowData.length) {
+			setTableData(currentData)
+			resetExpanded()
+		} else setTableData(expandedRowData)
+	})
 
 	// Sync tableData with data and expanded state in a single effect
-	useDeepCompareEffect(() => {
-		const currentData = Array.isArray(data?.data) ? data.data : []
-		const expandedRowData = !Object.keys(expanded).length
-			? currentData
-			: currentData.filter((item) =>
-					Object.entries(expanded).every(([key, value]) => (value ? item.dispatch_order === key : true))
-				)
-		setTableData(expandedRowData)
-	}, [data?.data, expanded])
-
-	useDeepCompareEffect(() => {
-		resetExpanded()
-	}, [data?.data, searchParams.page])
+	useEffect(onExpandedChange, [data?.data, expanded])
 
 	useDeepCompareEffect(() => {
 		if (!('page' in searchParams) || !('limit' in searchParams)) return
@@ -326,7 +304,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		/* eslint-disable */
 		// @ts-ignore
 		<DataTable
-			ref={tableRef}
 			columns={columns}
 			data={tableData}
 			border='bottom-only'
@@ -363,107 +340,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			}}
 			renderSubComponent={renderSubTable}
 		/>
-	)
-}
-
-const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, TruckloadDeliveryStatus>['cell'] = ({ getValue }) => {
-	const { t } = useTranslation()
-
-	const value = getValue() as TruckloadDeliveryStatus
-
-	const statusIconVariants: Record<TruckloadDeliveryStatus, IconProps['name']> = {
-		[TruckloadDeliveryStatus.PENDING]: 'Loader',
-		[TruckloadDeliveryStatus.CONFIRMED]: 'CircleCheckBig',
-		[TruckloadDeliveryStatus.REQUEST_CHANGE]: 'Undo2'
-	}
-
-	return (
-		<Badge variant='outline' className='rounded-l-full rounded-r-full'>
-			<Icon
-				name={statusIconVariants[value] ?? 'CircleDotDashed'}
-				size={14}
-				className={cn({
-					'stroke-muted-foreground': value === TruckloadDeliveryStatus.PENDING,
-					'stroke-success': value === TruckloadDeliveryStatus.CONFIRMED,
-					'stroke-destructive': value === TruckloadDeliveryStatus.REQUEST_CHANGE
-				})}
-			/>
-			{t(`ns_common:status.${value}`)}
-		</Badge>
-	)
-}
-
-const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['cell'] = ({ row, getValue }) => {
-	const { t } = useTranslation()
-	const isMobile = useMediaQuery('(max-width: 1023px)')
-
-	const value = getValue()
-	if (!value)
-		return (
-			<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-				<Icon name='Truck' className='self-center stroke-muted-foreground' />
-				{t('ns_common:titles.unknown')}
-			</Typography>
-		)
-	if (!isMobile)
-		return (
-			<LicensePlateHoverCard
-				licensePlate={row.original.license_plate}
-				licensePlateImage={row.original.license_plate_image}
-			/>
-		)
-	return (
-		<Div className='flex flex-col'>
-			<LicensePlateHoverCard
-				licensePlate={row.original.license_plate}
-				licensePlateImage={row.original.license_plate_image}
-			/>
-			<Typography
-				variant='small'
-				color='muted'
-				className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
-				{row.original.container_number}
-			</Typography>
-		</Div>
-	)
-}
-
-const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>['cell'] = ({ row, column, getValue }) => {
-	const { mutateAsync, isPending, isError, variables } = useUpdateContainerConditionMutation()
-	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
-
-	return (
-		<RoleBaseAccessControl
-			mode='mask'
-			classNames={{
-				innerWrapper: 'grid place-items-center group-hover/rbac:opacity-0'
-			}}
-			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
-			<Checkbox
-				className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
-				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
-				defaultChecked={currentValue}
-				checked={currentValue}
-				onCheckedChange={async (value) =>
-					await mutateAsync({
-						dispatch_order: row.original.dispatch_order,
-						[column.id]: Boolean(value)
-					})
-				}
-			/>
-		</RoleBaseAccessControl>
-	)
-}
-
-const DateTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = ({ getValue }) => {
-	const { t } = useTranslation()
-	const value = getValue()
-	if (value) return format(new Date(value), 'yyyy-MM-dd HH:mm')
-	return (
-		<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-			<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
-			{t('ns_common:titles.unknown')}
-		</Typography>
 	)
 }
 

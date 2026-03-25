@@ -13,6 +13,7 @@ export default {
 	description: {
 		add_outbound_size: '添加尺码和数量以执行出库操作',
 		archived_restoration: '恢复已存档的数据. 仅在必要时使用.',
+		container_condition_assessment: '请评估以下集装箱状况（如有）',
 		container_number_field: 'BIC 集装箱代码格式. 如果当前无法提供集装箱编号, 请跳过此字段.',
 		create_truckload_delivery: '创建卡车装运信息以从工厂出货',
 		daily_inbound_report: '跟踪和管理每日成品仓库入库进度',
@@ -153,6 +154,7 @@ export default {
 	},
 	titles: {
 		archived_restoration: '已存档数据恢复',
+		container_condition_assessment: '集装箱状况评估',
 		combination_history: '配标历史',
 		create_truckload_delivery: '创建卡车装运',
 		daily_inbound_report: '入庫报表',

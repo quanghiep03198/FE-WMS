@@ -13,6 +13,8 @@ export default {
 	description: {
 		add_outbound_size: 'Add size and quantity for this order to perform the outbound process.',
 		archived_restoration: 'Restore archived data. Use only when necessary.',
+		container_condition_assessment:
+			'Please select all that apply regarding the condition of the container (if exists)',
 		container_number_field:
 			'BIC container code format. Skip this field in case container number is not available now.',
 		create_truckload_delivery: 'Create new container loading information for outbound shipments from the factory',
@@ -169,6 +171,7 @@ export default {
 	titles: {
 		archived_restoration: 'Archived restoration',
 		combination_history: 'Combination history',
+		container_condition_assessment: 'Container condition assessment',
 		create_truckload_delivery: 'Create truckload delivery',
 		daily_inbound_report: 'Daily inbound report',
 		daily_outbound_report: 'Daily outbound report',
