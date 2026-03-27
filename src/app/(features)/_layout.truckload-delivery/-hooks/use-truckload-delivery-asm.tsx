@@ -27,7 +27,6 @@ export const getTruckloadDeliveryQueryOptions = (searchParams) =>
 		queryKey: [TruckloadDeliveryQueryKeys.TRUCKLOAD_DELIVERY, searchParams],
 		queryFn: async () => await TruckloadDeliveryService.getDispatchOrders(searchParams),
 		refetchOnMount: true,
-		refetchOnWindowFocus: true,
 		refetchOnReconnect: true,
 		staleTime: 5000,
 		enabled: typeof searchParams.page === 'number' && typeof searchParams.limit === 'number',
