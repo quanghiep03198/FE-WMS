@@ -1,5 +1,5 @@
 import { useDateLocale } from '@/common/hooks/use-date-locale'
-import { IUser } from '@/common/types/entities'
+import type { IUser } from '@/common/types/entities'
 import { Avatar, AvatarFallback, AvatarImage, Badge, DataTable, Div, Icon, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'

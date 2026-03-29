@@ -1,5 +1,5 @@
-import { CheckedState } from '@radix-ui/react-checkbox'
-import { CellContext, HeaderContext, RowSelectionState, TableState } from '@tanstack/react-table'
+import type { CheckedState } from '@radix-ui/react-checkbox'
+import type { CellContext, HeaderContext, RowSelectionState, TableState } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import { pick } from 'lodash-es'
 import React, { useEffect } from 'react'

@@ -1,11 +1,12 @@
 'use no memo'
 
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
-import { IElectronicProductCode } from '@/common/types/entities'
+import type { IElectronicProductCode } from '@/common/types/entities'
 import React, { createContext, useRef } from 'react'
-import { StoreApi, create } from 'zustand'
+import type { StoreApi } from 'zustand'
+import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import { OrderItem } from '../..'
+import type { OrderItem } from '../..'
 
 export type ScanningStatus = 'connecting' | 'connected' | 'disconnected' | undefined
 

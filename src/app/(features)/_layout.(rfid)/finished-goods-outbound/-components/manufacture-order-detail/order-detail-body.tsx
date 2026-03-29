@@ -1,6 +1,7 @@
-import { OrderItem } from '@/app/(features)/_layout.(rfid)'
+import type { OrderItem } from '@/app/(features)/_layout.(rfid)'
 import { TableBody, TableCell, TableRow } from '@/components/ui'
-import { notUndefined, Virtualizer } from '@tanstack/react-virtual'
+import type { Virtualizer } from '@tanstack/react-virtual'
+import { notUndefined } from '@tanstack/react-virtual'
 import TableDataRow from './order-detail-row'
 
 type OrderDetailTableBodyProps = {

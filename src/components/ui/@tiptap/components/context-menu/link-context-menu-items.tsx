@@ -1,6 +1,6 @@
 import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import { ContextMenuItem, ContextMenuSeparator, Icon } from '@/components/ui'
-import { Editor } from '@tiptap/react'
+import type { Editor } from '@tiptap/react'
 import { Fragment, useMemo } from 'react'
 import { toast } from 'sonner'
 

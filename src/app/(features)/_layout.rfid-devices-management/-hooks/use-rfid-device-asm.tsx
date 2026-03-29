@@ -1,6 +1,6 @@
 import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CreateRFIDReaderFormValues, UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
+import type { CreateRFIDReaderFormValues, UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
 
 enum RFIDDeviceQueryKeys {
 	WAREHOUSE_RFID_DEVICES = 'WAREHOUSE_RFID_DEVICES'

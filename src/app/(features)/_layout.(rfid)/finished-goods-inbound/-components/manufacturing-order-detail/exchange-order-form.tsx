@@ -19,7 +19,7 @@ import {
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckedState } from '@radix-ui/react-checkbox'
+import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
 import { debounce, uniqBy } from 'lodash-es'
 import { useEffect, useId, useRef, useState } from 'react'
@@ -34,7 +34,8 @@ import {
 	useGetInboundEpcQuery,
 	useSearchExchangableOrderQuery
 } from '../../-hooks/use-rfid-inbound-asm'
-import { ExchangeOrderFormValue, exchangeOrderSchema } from '../../-schemas/exchange-epc.schema'
+import type { ExchangeOrderFormValue } from '../../-schemas/exchange-epc.schema'
+import { exchangeOrderSchema } from '../../-schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()

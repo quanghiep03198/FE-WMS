@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '../../@core/button'
@@ -6,7 +6,8 @@ import { Button } from '../../@core/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { array, object, string, type infer as Infer } from 'zod'
 import { Form } from '../../@core/form'
-import { TagInputFieldControl, TagInputFieldControlProps } from './index'
+import type { TagInputFieldControlProps } from './index'
+import { TagInputFieldControl } from './index'
 
 export default {
 	title: 'Components/Field Controls/Tag Input',

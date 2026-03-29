@@ -6,7 +6,7 @@ import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { UrlQueryParams } from '../-components/report-master-table'
+import type { UrlQueryParams } from '../-components/report-master-table'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 
 export const useDownloadReport = () => {

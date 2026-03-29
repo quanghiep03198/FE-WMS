@@ -1,5 +1,5 @@
 import { ContextMenuItem, ContextMenuSeparator, Icon } from '@/components/ui'
-import { Editor } from '@tiptap/react'
+import type { Editor } from '@tiptap/react'
 import React, { Fragment, useMemo } from 'react'
 
 const TableContextMenuItems: React.FC<{ editor: Editor }> = ({ editor }) => {

@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { Div, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { RowData, type HeaderGroup } from '@tanstack/react-table'
+import type { RowData } from '@tanstack/react-table'
+import { type HeaderGroup } from '@tanstack/react-table'
 import { useMemoizedFn, useUpdate } from 'ahooks'
 import { Fragment, memo } from 'react'
 import { useTableContext } from '../context/table.context'

@@ -20,7 +20,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
-import { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
+import type { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { useResetState } from 'ahooks'
@@ -34,7 +34,8 @@ import tw from 'tailwind-styled-components'
 import { v4 as uuid } from 'uuid'
 import { uuidv4 } from 'zod'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { SignatureType, usePageContext } from '../-contexts/page-context'
+import type { SignatureType } from '../-contexts/page-context'
+import { usePageContext } from '../-contexts/page-context'
 import {
 	getTruckloadDeliveryDetailQueryOptions,
 	useUpsertPurchaseOrdersMutation

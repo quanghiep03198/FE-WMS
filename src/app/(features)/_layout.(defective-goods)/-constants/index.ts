@@ -1,4 +1,4 @@
-import { ResourceKeys } from 'i18next'
+import type { ResourceKeys } from 'i18next'
 
 export enum DefectiveCategory {
 	B_GRADE = 'B',

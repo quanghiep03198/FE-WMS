@@ -1,7 +1,7 @@
 import { useEventEmitter } from 'ahooks'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import React, { createContext, use } from 'react'
-import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import type { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 
 export const PageContext = createContext<{ event$: EventEmitter<DocumentHashNavigation> }>(null)
 

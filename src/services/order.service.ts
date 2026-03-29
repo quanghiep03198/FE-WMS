@@ -1,5 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import { IManufacturingOrder, IPurchaseOrderDetail } from '@/common/types/entities'
+import type { IManufacturingOrder, IPurchaseOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export interface IPurchaseOrderResult {

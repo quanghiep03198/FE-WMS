@@ -1,9 +1,10 @@
 import { cn } from '@/common/utils/cn'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
-import { Header, flexRender } from '@tanstack/react-table'
+import type { Header } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import { pick } from 'lodash-es'
-import { icons } from 'lucide-react'
+import type { icons } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
 	ContextMenu,

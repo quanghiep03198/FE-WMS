@@ -1,6 +1,7 @@
 import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import { cn } from '@/common/utils/cn'
-import { Icon, IconProps, Tooltip, Typography } from '@/components/ui'
+import type { IconProps } from '@/components/ui'
+import { Icon, Tooltip, Typography } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

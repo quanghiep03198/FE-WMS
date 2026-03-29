@@ -1,5 +1,6 @@
 'use no memo'
 
+import type { IconProps } from '@/components/ui'
 import {
 	Badge,
 	Button,
@@ -12,7 +13,6 @@ import {
 	FieldSet,
 	Form as FormProvider,
 	Icon,
-	IconProps,
 	InputFieldControl,
 	Popover,
 	PopoverContent,
@@ -26,7 +26,8 @@ import React, { useEffect, useId, useMemo } from 'react'
 import { useForm, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { PageQueryParams, useBuildQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
+import type { PageQueryParams } from '../-hooks/use-page-query-params'
+import { useBuildQueryParams, usePageQueryParams } from '../-hooks/use-page-query-params'
 import { useStoreFilterParams } from '../-hooks/use-store-filter-params'
 import {
 	type FilterColumn,

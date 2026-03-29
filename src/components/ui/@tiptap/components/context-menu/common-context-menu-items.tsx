@@ -1,5 +1,5 @@
 import { ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut, Icon } from '@/components/ui'
-import { Editor } from '@tiptap/react'
+import type { Editor } from '@tiptap/react'
 import { Fragment, useEffect, useState } from 'react'
 
 const getCopiedData = async () => {

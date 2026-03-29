@@ -6,7 +6,7 @@ import { useEventListener } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { ScanningStatus } from '../..'
+import type { ScanningStatus } from '../..'
 import { usePageContext } from '../../-contexts/page-context'
 
 export const NetworkInsight: React.FC<React.ComponentProps<'div'>> = (props) => {

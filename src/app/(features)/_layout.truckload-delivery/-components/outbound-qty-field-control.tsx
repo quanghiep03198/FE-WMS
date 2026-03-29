@@ -1,9 +1,10 @@
 import { CommonActions } from '@/common/constants/enums'
-import { InputFieldControl, InputFieldControlProps } from '@/components/ui/@field-control/input'
+import type { InputFieldControlProps } from '@/components/ui/@field-control/input'
+import { InputFieldControl } from '@/components/ui/@field-control/input'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { CreateDeliveryFormValues } from '../-schemas'
+import type { CreateDeliveryFormValues } from '../-schemas'
 
 const OutboundQtyInputFieldControl: React.FC<
 	InputFieldControlProps<CreateDeliveryFormValues> & {

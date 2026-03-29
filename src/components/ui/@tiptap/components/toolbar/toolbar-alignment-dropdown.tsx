@@ -1,6 +1,7 @@
 import { cn } from '@/common/utils/cn'
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { IconProps } from '../../..'
 import {
 	Button,
 	DropdownMenu,
@@ -9,7 +10,6 @@ import {
 	DropdownMenuRadioItem,
 	DropdownMenuTrigger,
 	Icon,
-	IconProps,
 	Tooltip
 } from '../../..'
 import { useEditorContext } from '../../context/editor-context'

@@ -2,8 +2,8 @@ import { PresetBreakPoints } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { TableBody, TableCell, TableRow } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
-import { ColumnDef } from '@tanstack/react-table'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
 
 const DataTableLoading: React.FC<{ columns: ColumnDef<IDefectiveGoods>[] }> = ({ columns }) => {

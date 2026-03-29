@@ -8,7 +8,7 @@ import {
 	SheetTrigger
 } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { RFIDDataType } from '../../-constants'
+import type { RFIDDataType } from '../../-constants'
 import { DataRestorationProvider } from '../../-contexts/data-sheet-context'
 import RestorationDataActions from './data-restoration-actions'
 import DataRestorationTable from './data-restoration-table'

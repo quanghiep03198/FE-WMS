@@ -1,7 +1,8 @@
 'use no memo'
 
-import { BaseFieldControl } from '@/common/types/hook-form'
+import type { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
+import type { TagsInputProps } from '@/components/ui'
 import {
 	Div,
 	FormControl,
@@ -10,11 +11,11 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	TagsInput,
-	TagsInputProps
+	TagsInput
 } from '@/components/ui'
 import { useId } from 'react'
-import { FieldValues, useFormContext } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 export type TagInputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & Partial<TagsInputProps>
 

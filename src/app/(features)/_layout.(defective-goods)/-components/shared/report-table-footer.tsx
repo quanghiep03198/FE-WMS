@@ -4,7 +4,7 @@ import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory } from '../../-constants'
+import type { DefectiveCategory } from '../../-constants'
 
 type ReportTableSummaryProps = { summaryData: Record<DefectiveCategory, number> }
 

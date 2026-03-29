@@ -1,5 +1,6 @@
 import { FactoryCode, UserRole } from '@/common/constants/enums'
-import { array, email, enum as enums, infer as Infer, object, string } from 'zod'
+import type { infer as Infer } from 'zod'
+import { array, email, enum as enums, object, string } from 'zod'
 
 export const createUserSchema = object({
 	username: string({ error: 'ns_validation:required' })

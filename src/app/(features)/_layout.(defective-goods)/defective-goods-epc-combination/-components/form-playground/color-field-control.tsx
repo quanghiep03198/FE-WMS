@@ -3,9 +3,9 @@ import { uniqBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
+import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
-import { DefAutoCompleteFieldControlProps } from './type'
+import type { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {
 	const { t } = useTranslation()

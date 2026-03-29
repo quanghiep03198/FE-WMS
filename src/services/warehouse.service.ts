@@ -1,8 +1,8 @@
-import {
+import type {
 	PartialWarehouseFormValue,
 	WarehouseFormValue
 } from '@/app/(features)/_layout.warehouse/-schemas/warehouse.schema'
-import { IDepartment, IWarehouse } from '@/common/types/entities'
+import type { IDepartment, IWarehouse } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class WarehouseService {

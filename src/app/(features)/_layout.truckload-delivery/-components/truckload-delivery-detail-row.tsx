@@ -17,8 +17,8 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import { IPurchaseOrderResult } from '@/services/order.service'
-import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import type { IPurchaseOrderResult } from '@/services/order.service'
+import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
 import React, { Fragment, memo, useState } from 'react'

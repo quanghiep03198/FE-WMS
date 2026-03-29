@@ -1,4 +1,4 @@
-import { DeleteScannedEpcsFormValues } from '@/app/(features)/-schemas/delete-epc.schema'
+import type { DeleteScannedEpcsFormValues } from '@/app/(features)/-schemas/delete-epc.schema'
 import { useSocketIo } from '@/common/hooks/use-socket-io'
 import {
 	AlertDialog,

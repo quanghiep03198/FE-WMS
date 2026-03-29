@@ -2,7 +2,7 @@ import { Div, Input, Label } from '@/components/ui'
 import { useDebounceEffect } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RFIDDataType } from '../../-constants'
+import type { RFIDDataType } from '../../-constants'
 import { usePersistentFilterState } from '../../-hooks/use-persistent-filter-state'
 
 const DebouncedLimitInput: React.FC<{ dataType: RFIDDataType }> = ({ dataType }) => {

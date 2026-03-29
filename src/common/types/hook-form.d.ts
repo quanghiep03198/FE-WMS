@@ -1,5 +1,5 @@
-import { ClassValue } from 'clsx'
-import { FieldValues } from 'react-hook-form'
+import type { ClassValue } from 'clsx'
+import type { FieldValues } from 'react-hook-form'
 
 export interface BaseFieldControl<T extends FieldValues> {
 	name: Path<T>

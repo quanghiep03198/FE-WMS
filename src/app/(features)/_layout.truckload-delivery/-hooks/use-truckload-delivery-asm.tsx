@@ -1,13 +1,10 @@
-import {
-	ITruckloadDelivery,
-	TruckloadDeliveryDispatchOrder,
-	TruckloadDeliveryService
-} from '@/services/truckload-delivery.service'
+import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
+import { TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { TruckloadDeliveryStatus } from '../-constants'
-import { SignatureType } from '../-contexts/page-context'
-import { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
+import type { TruckloadDeliveryStatus } from '../-constants'
+import type { SignatureType } from '../-contexts/page-context'
+import type { UpdateDispatchOrderFormValues, UpsertPurchaseOrdersFormValues } from '../-schemas'
 import { usePageQueryParams } from './use-page-query-params'
 
 export enum TruckloadDeliveryQueryKeys {

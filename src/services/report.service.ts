@@ -1,5 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import { IInboundReport, IOutboundReport, IPackingReport } from '@/common/types/entities'
+import type { IInboundReport, IOutboundReport, IPackingReport } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class ReportService {

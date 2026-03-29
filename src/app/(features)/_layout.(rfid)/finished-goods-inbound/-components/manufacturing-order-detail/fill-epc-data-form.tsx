@@ -25,7 +25,7 @@ import {
 } from '@/components/ui'
 import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckedState } from '@radix-ui/react-checkbox'
+import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
 import { omit } from 'lodash-es'
 import { useEffect, useId, useState } from 'react'
@@ -35,7 +35,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { useUpsertEpcInfoMutation } from '../../-hooks/use-rfid-inbound-asm'
-import { updateEpcFormSchema, UpdateEpcFormValues } from '../../-schemas/fill-epc-data.schema'
+import type { UpdateEpcFormValues } from '../../-schemas/fill-epc-data.schema'
+import { updateEpcFormSchema } from '../../-schemas/fill-epc-data.schema'
 
 const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {
 	mo_no: FALLBACK_VALUE,

@@ -1,7 +1,7 @@
-import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
+import type { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import { Div, Icon } from '@/components/ui'
 import { DebouncedInput } from '@/components/ui/@custom/debounced-input'
-import { Updater } from '@tanstack/react-table'
+import type { Updater } from '@tanstack/react-table'
 import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 

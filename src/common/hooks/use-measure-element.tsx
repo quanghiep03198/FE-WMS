@@ -1,4 +1,5 @@
-import { DependencyList, useMemo } from 'react'
+import type { DependencyList } from 'react'
+import { useMemo } from 'react'
 
 export default function useMeasureElement<T extends HTMLElement>(
 	{ shouldMeasure, estimateSize }: { shouldMeasure: boolean; estimateSize: number } = {

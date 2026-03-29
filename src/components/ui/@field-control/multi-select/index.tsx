@@ -1,11 +1,13 @@
 'use no memo'
 
-import { BaseFieldControl } from '@/common/types/hook-form'
+import type { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui'
 import { useId } from 'react'
-import { FieldValues, useFormContext } from 'react-hook-form'
-import { MultiSelect, MultiSelectProps } from '../../@custom/multi-select'
+import type { FieldValues } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
+import type { MultiSelectProps } from '../../@custom/multi-select'
+import { MultiSelect } from '../../@custom/multi-select'
 
 export type MultipleSelectFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,

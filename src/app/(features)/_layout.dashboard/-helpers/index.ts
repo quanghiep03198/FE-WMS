@@ -1,6 +1,6 @@
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { IconProps } from '@/components/ui'
-import { ResourceKeys } from 'i18next'
+import type { IconProps } from '@/components/ui'
+import type { ResourceKeys } from 'i18next'
 import { isNil } from 'lodash-es'
 
 /**

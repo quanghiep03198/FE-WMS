@@ -1,6 +1,7 @@
 import { sortBy, uniqBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
-import { MultiSelect, MultiSelectProps } from '../../@custom/multi-select'
+import type { MultiSelectProps } from '../../@custom/multi-select'
+import { MultiSelect } from '../../@custom/multi-select'
 
 function MultiSelectColumnFilter<TData extends Record<'label' | 'value', string>>({
 	datalist,

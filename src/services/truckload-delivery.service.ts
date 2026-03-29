@@ -1,11 +1,11 @@
-import { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-delivery/-constants'
-import { SignatureType } from '@/app/(features)/_layout.truckload-delivery/-contexts/page-context'
-import {
+import type { TruckloadDeliveryStatus } from '@/app/(features)/_layout.truckload-delivery/-constants'
+import type { SignatureType } from '@/app/(features)/_layout.truckload-delivery/-contexts/page-context'
+import type {
 	CreateDeliveryFormValues,
 	UpdateDispatchOrderFormValues,
 	UpsertPurchaseOrdersFormValues
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
-import { IBaseEntity } from '@/common/types/entities'
+import type { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export type TruckloadDeliveryDispatchOrder = `GL${number}-EXP-${string}-${string}`

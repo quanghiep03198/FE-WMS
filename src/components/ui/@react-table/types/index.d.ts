@@ -1,5 +1,5 @@
+import type { ColumnDef } from '@tanstack/react-table'
 import {
-	ColumnDef,
 	type ColumnFiltersState,
 	type ExpandedState,
 	type GlobalFilterTableState,
@@ -9,9 +9,9 @@ import {
 	type TableOptions,
 	type TableState
 } from '@tanstack/react-table'
-import { VirtualizerOptions } from '@tanstack/react-virtual'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import React from 'react'
+import type { VirtualizerOptions } from '@tanstack/react-virtual'
+import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import type React from 'react'
 
 export type ToolbarProps =
 	| {

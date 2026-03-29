@@ -1,6 +1,7 @@
-import { SelectFieldControl, SelectFieldControlProps } from '@/components/ui'
+import type { SelectFieldControlProps } from '@/components/ui'
+import { SelectFieldControl } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
-import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
+import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveGoodsSource } from '../../../-constants'
 
 export const ShoeSourceFieldControl: React.FC<

@@ -1,4 +1,4 @@
-import { IDepartment } from '@/common/types/entities'
+import type { IDepartment } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class DepartmentService {

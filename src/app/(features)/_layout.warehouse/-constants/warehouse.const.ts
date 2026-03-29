@@ -1,4 +1,4 @@
-import { ResourceKeys } from 'i18next'
+import type { ResourceKeys } from 'i18next'
 
 export const warehouseTypes: Record<'A' | 'B' | 'C' | 'D' | 'E', ResourceKeys['ns_warehouse']> = {
 	A: 'warehouse_types.production_warehouse',

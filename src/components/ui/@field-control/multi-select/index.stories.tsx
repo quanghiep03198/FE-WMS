@@ -1,10 +1,11 @@
 import { Button, Form } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Meta, StoryFn, StoryObj } from '@storybook/react'
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { array, object, string, type infer as Infer } from 'zod'
-import { MultipleSelectFieldControlProps, MultiSelectFieldControl } from '.'
+import type { MultipleSelectFieldControlProps } from '.'
+import { MultiSelectFieldControl } from '.'
 
 export default {
 	title: 'Components/Field Controls/Multi-select',

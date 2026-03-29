@@ -1,8 +1,9 @@
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
-import { IElectronicProductCode } from '@/common/types/entities'
+import type { IElectronicProductCode } from '@/common/types/entities'
 import { uniqBy } from 'lodash-es'
 import { createContext, useRef } from 'react'
-import { create, StoreApi } from 'zustand'
+import type { StoreApi } from 'zustand'
+import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 type RestorableElectronicProductCode = IElectronicProductCode & { scanned?: boolean }

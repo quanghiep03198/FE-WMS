@@ -1,5 +1,6 @@
 import { useLocation } from '@tanstack/react-router'
-import React, { useEffect } from 'react'
+import type React from 'react'
+import { useEffect } from 'react'
 import { flushSync } from 'react-dom'
 
 /**

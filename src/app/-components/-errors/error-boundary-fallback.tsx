@@ -9,7 +9,8 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { captureException, FallbackRender } from '@sentry/react'
+import type { FallbackRender } from '@sentry/react'
+import { captureException } from '@sentry/react'
 import React, { useEffect } from 'react'
 
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'

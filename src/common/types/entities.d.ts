@@ -1,6 +1,6 @@
-import { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
-import { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import { FactoryCode, RecordStatus, UserRole } from '../constants/enums'
+import type { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
+import type { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
+import type { FactoryCode, RecordStatus, UserRole } from '../constants/enums'
 
 // #region In use Entities
 

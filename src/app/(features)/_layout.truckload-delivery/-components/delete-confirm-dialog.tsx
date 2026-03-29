@@ -1,6 +1,6 @@
 import { CommonActions } from '@/common/constants/enums'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
+import type { TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'

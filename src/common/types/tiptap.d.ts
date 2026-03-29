@@ -1,4 +1,4 @@
-import { Range } from '@tiptap/core'
+import type { Range } from '@tiptap/core'
 
 export module '@tiptap/core' {
 	export interface Commands<ReturnType> {

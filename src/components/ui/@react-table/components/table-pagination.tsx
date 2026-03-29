@@ -1,5 +1,5 @@
-import { PaginationState, Table } from '@tanstack/react-table'
-import { AxiosRequestConfig } from 'axios'
+import type { PaginationState, Table } from '@tanstack/react-table'
+import type { AxiosRequestConfig } from 'axios'
 import React, { memo, useEffect } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'

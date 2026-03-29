@@ -8,7 +8,7 @@ import {
 	DropdownMenuTrigger,
 	Icon
 } from '@/components/ui'
-import { ColumnDefBase } from '@tanstack/react-table'
+import type { ColumnDefBase } from '@tanstack/react-table'
 import { pick } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'

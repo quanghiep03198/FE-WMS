@@ -1,20 +1,20 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
-import {
+import type {
 	DefectiveCategory,
 	DefectiveGoodsSource,
 	DefectiveLocation
 } from '@/app/(features)/_layout.(defective-goods)/-constants'
-import {
+import type {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams,
 	UpdateDefectiveGoodsFormValues
 } from '@/app/(features)/_layout.(defective-goods)/defective-goods-epc-combination/-schemas/defective-goods.schema'
-import {
+import type {
 	DefectiveGoodsInboundFormValues,
 	DefectiveGoodsOutboundFormValues
 } from '@/app/(features)/_layout.(defective-goods)/defective-goods-inoutbound/-schemas'
 import { RequestHeaders } from '@/common/constants/enums'
-import { IBaseEntity } from '@/common/types/entities'
+import type { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omitBy } from 'lodash-es'
 

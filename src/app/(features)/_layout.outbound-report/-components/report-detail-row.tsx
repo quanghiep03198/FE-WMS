@@ -1,5 +1,5 @@
 import { NestedCell, NestedColumn } from '@/app/(features)/-components/shared/horizontal-nested-table'
-import { IOutboundReport } from '@/common/types/entities'
+import type { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableRow } from '@/components/ui'
 import { sortBy } from 'lodash-es'

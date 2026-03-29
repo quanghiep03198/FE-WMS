@@ -1,5 +1,6 @@
 import { compareItems } from '@tanstack/match-sorter-utils'
-import { SortingFn, sortingFns } from '@tanstack/react-table'
+import type { SortingFn } from '@tanstack/react-table'
+import { sortingFns } from '@tanstack/react-table'
 
 export const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 	let dir = 0

@@ -1,4 +1,4 @@
-import { IProductSpecification } from '@/common/types/entities'
+import type { IProductSpecification } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { useQuery } from '@tanstack/react-query'
 

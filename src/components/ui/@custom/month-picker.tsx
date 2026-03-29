@@ -6,7 +6,8 @@ import { chunk } from 'lodash-es'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, ButtonProps, buttonVariants } from '../@core/button'
+import type { ButtonProps } from '../@core/button'
+import { Button, buttonVariants } from '../@core/button'
 import { Popover, PopoverContent, PopoverTrigger } from '../@core/popover'
 
 type Month = {

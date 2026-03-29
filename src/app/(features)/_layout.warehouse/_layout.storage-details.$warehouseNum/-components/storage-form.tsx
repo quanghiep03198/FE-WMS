@@ -2,7 +2,7 @@
 import { WarehouseStorageQueryKeys } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
 import { CommonActions } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
-import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
+import type { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import {
 	Button,
 	Dialog,
@@ -17,7 +17,8 @@ import {
 import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UseQueryResult, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import { useDeepCompareEffect } from 'ahooks'
 import { pick } from 'lodash-es'
@@ -28,7 +29,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { warehouseStorageTypes } from '../../-constants/warehouse.const'
 import { usePageContext } from '../../-contexts/page-context'
-import { PartialStorageFormValue, StorageFormValue, storageFormSchema } from '../../-schemas/warehouse.schema'
+import type { PartialStorageFormValue, StorageFormValue } from '../../-schemas/warehouse.schema'
+import { storageFormSchema } from '../../-schemas/warehouse.schema'
 // #endregion
 
 // #region Component declaration

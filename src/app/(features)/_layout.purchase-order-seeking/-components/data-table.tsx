@@ -1,4 +1,4 @@
-import { IPurchaseOrderDetail } from '@/common/types/entities'
+import type { IPurchaseOrderDetail } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
 import { groupBy, orderBy, sortBy } from 'lodash-es'

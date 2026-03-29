@@ -1,9 +1,10 @@
-import { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
+import type { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
 import { destroySharedSocket } from '@/common/hooks/use-socket-io'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
-import { IAuthState, useAuthStore } from '@/stores/auth.store'
-import { GenericAbortSignal } from 'axios'
+import type { IAuthState } from '@/stores/auth.store'
+import { useAuthStore } from '@/stores/auth.store'
+import type { GenericAbortSignal } from 'axios'
 
 export type RefreshTokenResponse = ResponseBody<{ newAccessToken: string; newRefreshToken: string }>
 

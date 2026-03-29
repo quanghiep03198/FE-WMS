@@ -1,5 +1,6 @@
 import { useSessionStorageState } from 'ahooks'
-import { TruckloadDeliveryFilterFormValues, truckloadDeliveryFilterSchema } from '../-schemas'
+import type { TruckloadDeliveryFilterFormValues } from '../-schemas'
+import { truckloadDeliveryFilterSchema } from '../-schemas'
 
 export const STORAGE_DELIVERY_FILTER_KEY = 'truckloadDeliveryFilters'
 

@@ -1,6 +1,7 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { Button, Div, Icon } from '@/components/ui'
-import { EllipsisIcon, LucideProps } from 'lucide-react'
+import type { LucideProps } from 'lucide-react'
+import { EllipsisIcon } from 'lucide-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'

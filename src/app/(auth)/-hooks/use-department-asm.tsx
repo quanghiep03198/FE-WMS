@@ -1,7 +1,8 @@
-import { IDepartment } from '@/common/types/entities'
+import type { IDepartment } from '@/common/types/entities'
 import { DepartmentService } from '@/services/department.service'
-import { UseQueryOptions, useQuery } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import type { UseQueryOptions } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
 
 export enum WorkplaceQueryKeys {
 	DEPARTMENT = 'WAREHOUSE_DEPARTMENT',

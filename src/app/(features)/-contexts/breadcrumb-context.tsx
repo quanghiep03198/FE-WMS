@@ -1,5 +1,5 @@
-import { FileRouteTypes } from '@/route-tree.gen'
-import { Link } from '@tanstack/react-router'
+import type { FileRouteTypes } from '@/route-tree.gen'
+import type { Link } from '@tanstack/react-router'
 import { createContext, use, useMemo, useState } from 'react'
 
 export type TBreadcrumb = {

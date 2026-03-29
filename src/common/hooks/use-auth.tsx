@@ -1,6 +1,7 @@
 import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
-import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { QueryKey } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { isNil } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

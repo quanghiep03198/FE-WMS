@@ -1,3 +1,4 @@
+import type { IconProps } from '@/components/ui'
 import {
 	Div,
 	FormControl,
@@ -5,7 +6,6 @@ import {
 	FormItem,
 	FormLabel,
 	Icon,
-	IconProps,
 	RadioGroup,
 	RadioGroupItem,
 	Typography

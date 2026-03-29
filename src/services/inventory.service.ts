@@ -1,5 +1,5 @@
 import { RequestHeaders } from '@/common/constants/enums'
-import {
+import type {
 	IInboundInventory,
 	IMonthlyInventoryAudit,
 	IOutboundEstimation,
@@ -7,7 +7,7 @@ import {
 	IProductSizeInventory
 } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 
 export class InventoryService {
 	static async getInventoryAuditReport(params: { 'month.eq': string }) {

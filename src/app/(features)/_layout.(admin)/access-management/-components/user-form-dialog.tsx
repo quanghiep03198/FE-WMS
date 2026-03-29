@@ -24,7 +24,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
 import { useCreateUserMutation, useUpdateUserMutation } from '../-hooks/use-user-asm'
-import { CreateUserFormValues, createUserSchema, updateUserSchema } from '../-schemas/user.schema'
+import type { CreateUserFormValues } from '../-schemas/user.schema'
+import { createUserSchema, updateUserSchema } from '../-schemas/user.schema'
 
 const UserFormDialogTrigger: React.FC = () => {
 	const { event$ } = usePageContext()

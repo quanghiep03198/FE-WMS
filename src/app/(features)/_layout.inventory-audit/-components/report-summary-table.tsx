@@ -1,4 +1,4 @@
-import { IMonthlyInventoryAudit } from '@/common/types/entities'
+import type { IMonthlyInventoryAudit } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'

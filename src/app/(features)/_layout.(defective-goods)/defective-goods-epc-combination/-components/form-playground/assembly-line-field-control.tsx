@@ -3,7 +3,7 @@ import { AutoCompleteFieldControl } from '@/components/ui'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DefAutoCompleteFieldControlProps } from './type'
+import type { DefAutoCompleteFieldControlProps } from './type'
 
 const AssemblyLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (props) => {
 	const { data } = useGetShapingProductLineQuery()

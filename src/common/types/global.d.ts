@@ -1,4 +1,4 @@
-import { HttpStatusCode } from 'axios'
+import type { HttpStatusCode } from 'axios'
 
 export declare global {
 	interface InternalImportMetaEnv {

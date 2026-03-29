@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Meta, StoryFn } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
-import { AutoCompleteFieldControl, AutoCompleteFieldControlProps } from '.'
+import type { AutoCompleteFieldControlProps } from '.'
+import { AutoCompleteFieldControl } from '.'
 import { Button } from '../../@core/button'
 import { Form } from '../../@core/form'
 

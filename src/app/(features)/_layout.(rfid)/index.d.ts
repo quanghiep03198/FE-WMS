@@ -1,4 +1,4 @@
-import { IElectronicProductCode } from '@/common/types/entities'
+import type { IElectronicProductCode } from '@/common/types/entities'
 
 export type OrderItem = {
 	mo_no: string

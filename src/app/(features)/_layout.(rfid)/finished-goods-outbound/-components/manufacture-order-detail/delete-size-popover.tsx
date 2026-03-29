@@ -1,4 +1,5 @@
-import { DeleteScannedEpcsFormValues, deleteScannedEpcsSchema } from '@/app/(features)/-schemas/delete-epc.schema'
+import type { DeleteScannedEpcsFormValues } from '@/app/(features)/-schemas/delete-epc.schema'
+import { deleteScannedEpcsSchema } from '@/app/(features)/-schemas/delete-epc.schema'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,

@@ -1,4 +1,5 @@
-import { Button, ButtonProps, Icon, Tooltip } from '@/components/ui'
+import type { ButtonProps } from '@/components/ui'
+import { Button, Icon, Tooltip } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useSessionStorageState } from 'ahooks'
 import { isEmpty, isNil, pickBy } from 'lodash-es'
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../-constants'
 import { useListPanelContext } from '../../-contexts/list-panel-context'
-import { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
+import type { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
 import { useDeleteManyDefectiveGoodsMutation } from '../../../-hooks/use-defective-goods-asm'
 
 const DeleteButton: React.FC<ButtonProps> = () => {

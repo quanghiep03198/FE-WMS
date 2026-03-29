@@ -1,4 +1,4 @@
-import { SelectContentProps, SelectProps, SelectTriggerProps } from '@radix-ui/react-select'
+import type { SelectContentProps, SelectProps, SelectTriggerProps } from '@radix-ui/react-select'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '..'
 
 export type DropdownSelectProps<T extends Record<string, any>> = {

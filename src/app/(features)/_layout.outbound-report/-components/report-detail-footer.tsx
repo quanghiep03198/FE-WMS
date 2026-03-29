@@ -1,4 +1,4 @@
-import { IOutboundReport } from '@/common/types/entities'
+import type { IOutboundReport } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableFooter, TableRow } from '@/components/ui'
 import { capitalize, sortBy } from 'lodash-es'

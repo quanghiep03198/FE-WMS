@@ -1,4 +1,4 @@
-import { IMonthlyInventoryAudit } from '@/common/types/entities'
+import type { IMonthlyInventoryAudit } from '@/common/types/entities'
 
 export declare type BaseUpdateUpdateQuery = Pick<
 	IMonthlyInventoryAudit,

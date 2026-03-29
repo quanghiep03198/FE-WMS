@@ -1,5 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { DefectiveGoodsService, IDefectiveGoods, IDefectiveGoodsInventory } from '@/services/defective-goods.service'
+import type { IDefectiveGoods, IDefectiveGoodsInventory } from '@/services/defective-goods.service'
+import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSessionStorageState } from 'ahooks'
 import { omitBy, pick, pickBy } from 'lodash-es'

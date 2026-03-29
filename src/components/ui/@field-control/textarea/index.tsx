@@ -1,8 +1,9 @@
 import { cn } from '@/common/utils/cn'
 import { useId, useRef } from 'react'
-import { FieldValues, useFormContext } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, Textarea } from '../..'
-import { BaseFieldControl } from '../../../../common/types/hook-form'
+import type { BaseFieldControl } from '../../../../common/types/hook-form'
 
 export type TextareaFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & React.ComponentProps<'textarea'>
 

@@ -1,10 +1,10 @@
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { TableBody } from '@/components/ui'
 import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
-import { Row } from '@tanstack/react-table'
-import { Virtualizer } from '@tanstack/react-virtual'
+import type { Row } from '@tanstack/react-table'
+import type { Virtualizer } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'
-import { TableRowData } from '.'
+import type { TableRowData } from '.'
 import DataTableEmptyState from './data-table-empty-state'
 import { DataTableRow, MemoizedDataTableRow } from './data-table-row'
 

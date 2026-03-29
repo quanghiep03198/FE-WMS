@@ -1,7 +1,7 @@
 import { locales } from '@/common/constants/constants'
+import type { ButtonProps } from '@/components/ui'
 import {
 	Button,
-	ButtonProps,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuLabel,

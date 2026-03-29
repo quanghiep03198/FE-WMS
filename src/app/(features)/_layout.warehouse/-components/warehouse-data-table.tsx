@@ -1,6 +1,6 @@
 // #region Modules
 import { CommonActions } from '@/common/constants/enums'
-import { IWarehouse } from '@/common/types/entities'
+import type { IWarehouse } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import {
@@ -9,7 +9,8 @@ import {
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
-import { Row, Table, createColumnHelper } from '@tanstack/react-table'
+import type { Row, Table } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { Fragment, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

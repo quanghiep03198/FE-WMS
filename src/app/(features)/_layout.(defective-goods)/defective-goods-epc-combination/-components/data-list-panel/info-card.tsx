@@ -24,7 +24,7 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
 import { formatRelative } from 'date-fns'

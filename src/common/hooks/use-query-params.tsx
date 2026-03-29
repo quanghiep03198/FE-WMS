@@ -1,4 +1,5 @@
-import { useNavigate, UseNavigateResult, useSearch } from '@tanstack/react-router'
+import type { UseNavigateResult } from '@tanstack/react-router'
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { omit } from 'lodash-es'
 import { useCallback, useLayoutEffect } from 'react'
 

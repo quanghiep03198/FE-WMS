@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useDataRestorationContext } from '../../-contexts/data-sheet-context'
 
-import { RFIDDataType } from '../../-constants'
+import type { RFIDDataType } from '../../-constants'
 import { useRestoreEpcMutation } from '../../-hooks/use-data-restoration-asm'
 
 type RestorationDataActionsProps = {

@@ -35,7 +35,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
 import { useUpdateDispatchOrderMutation } from '../-hooks/use-truckload-delivery-asm'
-import { UpdateDispatchOrderFormValues, updateDispatchOrderSchema } from '../-schemas'
+import type { UpdateDispatchOrderFormValues } from '../-schemas'
+import { updateDispatchOrderSchema } from '../-schemas'
 
 const UpdateDispatchOrderFormDialog: React.FC = () => {
 	const [open, setOpen] = useState(false)

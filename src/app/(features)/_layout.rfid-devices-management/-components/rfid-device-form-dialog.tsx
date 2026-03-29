@@ -37,12 +37,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
 import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../-hooks/use-rfid-device-asm'
-import {
-	CreateRFIDReaderFormValues,
-	createRFIDReaderSchema,
-	UpdateRFIDReaderFormValues,
-	updateRFIDReaderSchema
-} from '../-schemas/rfid-device.schema'
+import type { CreateRFIDReaderFormValues, UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
+import { createRFIDReaderSchema, updateRFIDReaderSchema } from '../-schemas/rfid-device.schema'
 
 const RFIDDeviceFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)

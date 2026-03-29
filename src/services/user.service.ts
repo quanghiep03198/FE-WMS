@@ -1,12 +1,12 @@
-import {
+import type {
 	CreateUserFormValues,
 	UpdateUserFormValues
 } from '@/app/(features)/_layout.(admin)/access-management/-schemas/user.schema'
-import { UpdatePasswordFormValues } from '@/app/(features)/preferences/_layout.account/-schemas/update-password.schema'
-import { UpdateProfileFormValues } from '@/app/(features)/preferences/_layout.account/-schemas/update-profile.schema'
-import { IUser } from '@/common/types/entities'
+import type { UpdatePasswordFormValues } from '@/app/(features)/preferences/_layout.account/-schemas/update-password.schema'
+import type { UpdateProfileFormValues } from '@/app/(features)/preferences/_layout.account/-schemas/update-profile.schema'
+import type { IUser } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 
 export class UserService {
 	static async getUsers() {

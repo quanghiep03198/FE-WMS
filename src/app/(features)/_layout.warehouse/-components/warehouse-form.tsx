@@ -1,6 +1,7 @@
 import { CommonActions } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
-import { IEmployee, type IWarehouse } from '@/common/types/entities'
+import type { IEmployee } from '@/common/types/entities'
+import { type IWarehouse } from '@/common/types/entities'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -31,7 +32,8 @@ import { warehouseTypes } from '../-constants/warehouse.const'
 import { usePageContext } from '../-contexts/page-context'
 
 import { WarehouseQueryKeys } from '../-hooks/use-warehouse-asm'
-import { PartialWarehouseFormValue, warehouseFormSchema, type WarehouseFormValue } from '../-schemas/warehouse.schema'
+import type { PartialWarehouseFormValue } from '../-schemas/warehouse.schema'
+import { warehouseFormSchema, type WarehouseFormValue } from '../-schemas/warehouse.schema'
 import { useGetDepartmentQuery } from '../../../(auth)/-hooks/use-department-asm'
 
 export type FormValues<T> = (T extends CommonActions.CREATE

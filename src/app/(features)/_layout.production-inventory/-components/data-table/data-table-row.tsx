@@ -1,8 +1,9 @@
 import { cn } from '@/common/utils/cn'
 import { Collapsible, CollapsibleContent, Div, TableCell, TableRow } from '@/components/ui'
-import { flexRender, Row } from '@tanstack/react-table'
+import type { Row } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
-import { TableRowData } from '.'
+import type { TableRowData } from '.'
 import SizeTable from '../../../-components/shared/size-table'
 import { getCanSticky } from './utils'
 

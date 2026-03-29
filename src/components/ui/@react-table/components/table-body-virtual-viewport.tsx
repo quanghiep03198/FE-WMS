@@ -1,5 +1,5 @@
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
-import { Virtualizer } from '@tanstack/react-virtual'
+import type { Virtualizer } from '@tanstack/react-virtual'
 import React, { Fragment, memo } from 'react'
 import { VirtualPlaceholderRow } from './table-row'
 

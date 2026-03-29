@@ -1,4 +1,5 @@
-import { IScannerProps, Scanner } from '@yudiel/react-qr-scanner'
+import type { IScannerProps } from '@yudiel/react-qr-scanner'
+import { Scanner } from '@yudiel/react-qr-scanner'
 
 export const QRScanner: React.FC<IScannerProps> = (props) => {
 	const highlightCodeOnCanvas = (detectedCodes, ctx) => {

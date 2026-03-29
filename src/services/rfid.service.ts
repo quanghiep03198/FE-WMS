@@ -1,20 +1,21 @@
-import { SearchEpcParams, type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
-import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
-import { SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
-import {
+import type { SearchEpcParams } from '@/app/(features)/_layout.(rfid)'
+import { type RFIDStreamEventData } from '@/app/(features)/_layout.(rfid)'
+import type { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
+import type { SearchCustOrderParams } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound'
+import type {
 	InoutboundPayload,
 	OutboundFormValues
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/epc-inoutbound.schema'
-import {
+import type {
 	ExchangeEpcPayload,
 	ExchangeOrderFormValue
 } from '@/app/(features)/_layout.(rfid)/finished-goods-inbound/-schemas/exchange-epc.schema'
-import { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
-import {
+import type { FilterArchivedEpcParams } from '@/app/(features)/_layout.(rfid)/finished-goods-outbound'
+import type {
 	CreateRFIDReaderFormValues,
 	UpdateRFIDReaderFormValues
 } from '@/app/(features)/_layout.rfid-devices-management/-schemas/rfid-device.schema'
-import { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
+import type { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omit, omitBy } from 'lodash-es'
 

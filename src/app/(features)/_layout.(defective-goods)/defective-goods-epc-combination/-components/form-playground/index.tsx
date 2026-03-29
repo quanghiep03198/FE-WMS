@@ -1,6 +1,6 @@
 import { useGetCommandNumberDetailQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { CommonActions, UserRole } from '@/common/constants/enums'
-import { IBaseEntity } from '@/common/types/entities'
+import type { IBaseEntity } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -24,14 +24,11 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { gzipSync } from 'zlib'
 import { DefectDescriptionTemplate } from '../../-constants/templates'
-import {
-	CreateDefectiveGoodsFormValues,
-	createDefectiveGoodsSchema,
-	updateDefectiveGoodsSchema
-} from '../../-schemas/defective-goods.schema'
+import type { CreateDefectiveGoodsFormValues } from '../../-schemas/defective-goods.schema'
+import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../-schemas/defective-goods.schema'
 
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../-constants'
 import { usePageContext } from '../../../-contexts/page-context'

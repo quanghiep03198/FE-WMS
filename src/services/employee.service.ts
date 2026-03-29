@@ -1,6 +1,6 @@
-import { IEmployee } from '@/common/types/entities'
+import type { IEmployee } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
-import { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 
 export class EmployeeService {
 	static searchEmployee(params: AxiosRequestConfig['params']) {

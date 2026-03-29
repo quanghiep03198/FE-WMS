@@ -3,8 +3,9 @@ import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
+import type { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
+import type { IconProps } from '@/components/ui'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -16,7 +17,6 @@ import {
 	FormMessage,
 	Form as FormProvider,
 	Icon,
-	IconProps,
 	Input,
 	RadioGroup,
 	RadioGroupItem,
@@ -27,7 +27,8 @@ import {
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
-import { AxiosError, HttpStatusCode } from 'axios'
+import type { AxiosError } from 'axios'
+import { HttpStatusCode } from 'axios'
 import { omit } from 'lodash-es'
 import React, { Fragment, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -38,7 +39,8 @@ import tw from 'tailwind-styled-components'
 import { FormActionEnum, FormActionReasonEnum } from '../../-constants'
 import { usePageContext } from '../../-contexts/page-context'
 import { useGetInboundEpcQuery, useUpdateStockInMutation } from '../../-hooks/use-rfid-inbound-asm'
-import { FormValues, inboundSchema, InoutboundPayload, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
+import type { FormValues, InoutboundPayload } from '../../-schemas/epc-inoutbound.schema'
+import { inboundSchema, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext(

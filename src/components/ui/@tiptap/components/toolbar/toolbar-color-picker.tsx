@@ -13,10 +13,12 @@ import {
 	ColorPickerSelection
 } from '@/components/ui/@custom/color-picker'
 import { useDebounceFn } from 'ahooks'
-import Color, { ColorLike } from 'color'
+import type { ColorLike } from 'color'
+import Color from 'color'
 import { Activity, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Div, Icon, IconProps, Popover, PopoverContent, PopoverTrigger, Separator, Tooltip } from '../../..'
+import type { IconProps } from '../../..'
+import { Button, Div, Icon, Popover, PopoverContent, PopoverTrigger, Separator, Tooltip } from '../../..'
 import { PresetColors } from '../../constants'
 import { useEditorContext } from '../../context/editor-context'
 

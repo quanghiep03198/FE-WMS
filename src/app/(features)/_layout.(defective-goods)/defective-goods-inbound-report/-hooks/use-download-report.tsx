@@ -6,7 +6,7 @@ import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { PageQueryParams } from '../-components/report-master-table'
+import type { PageQueryParams } from '../-components/report-master-table'
 import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
 
 const TOAST_ID = 'download_defective_goods_inbound_report'

@@ -1,5 +1,5 @@
-import { Column, Table } from '@tanstack/react-table'
-import { CSSProperties } from 'react'
+import type { Column, Table } from '@tanstack/react-table'
+import type { CSSProperties } from 'react'
 
 export function columnSizingHandler(node: HTMLTableCellElement | null, table: Table<any>, column: Column<any>) {
 	if (!node) return

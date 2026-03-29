@@ -1,12 +1,12 @@
-import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { SortDirection } from '@tanstack/react-table'
+import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import type { SortDirection } from '@tanstack/react-table'
 import { useSessionStorageState } from 'ahooks'
 import { format, isValid } from 'date-fns'
 import { omitBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { isDateRange } from 'react-day-picker'
-import { TruckloadDeliveryStatus } from '../-constants'
-import { FilterOperator, TruckloadDeliveryFilterFormValues } from '../-schemas'
+import type { TruckloadDeliveryStatus } from '../-constants'
+import type { FilterOperator, TruckloadDeliveryFilterFormValues } from '../-schemas'
 import { useStoreFilterParams } from './use-store-filter-params'
 
 export type PageQueryParams = {

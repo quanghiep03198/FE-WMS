@@ -4,7 +4,8 @@ import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { Button } from './button'
-import { Calendar, CalendarProps } from './calendar'
+import type { CalendarProps } from './calendar'
+import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 export const DatePicker: React.FC<CalendarProps> = ({ selected, ...props }) => {

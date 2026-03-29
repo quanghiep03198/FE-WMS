@@ -1,7 +1,8 @@
 import { TableCell, TableRow } from '@/components/ui'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
-import { flexRender, Row } from '@tanstack/react-table'
-import { VirtualItem } from '@tanstack/react-virtual'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { Row } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
+import type { VirtualItem } from '@tanstack/react-virtual'
 import React, { memo } from 'react'
 
 export const DataTableRow: React.FC<{

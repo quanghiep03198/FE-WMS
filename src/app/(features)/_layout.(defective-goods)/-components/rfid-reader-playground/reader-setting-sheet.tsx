@@ -38,7 +38,8 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { ReaderAntenna } from '../../-constants'
 import { PublishedTopics, useReaderPlaygroundStore } from '../../-contexts/rfid-reader-playground.context'
-import { readerSettingsFormSchema, ReaderSettingsFormValues } from '../../-schemas/reader-settings.schema'
+import type { ReaderSettingsFormValues } from '../../-schemas/reader-settings.schema'
+import { readerSettingsFormSchema } from '../../-schemas/reader-settings.schema'
 
 const ReaderSettingSheet: React.FC = () => {
 	const { readerSettings, publishMessage } = useReaderPlaygroundStore('readerSettings', 'publishMessage')

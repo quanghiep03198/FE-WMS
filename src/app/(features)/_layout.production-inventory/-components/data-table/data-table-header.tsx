@@ -1,9 +1,10 @@
 import { cn } from '@/common/utils/cn'
 import { Div, Icon, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
-import { flexRender, Header, HeaderGroup } from '@tanstack/react-table'
+import type { Header, HeaderGroup } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'
 import { memo, useMemo } from 'react'
-import { TableRowData } from '.'
+import type { TableRowData } from '.'
 import { getCanSticky } from './utils'
 
 export type DataTableHeaderProps<T> = {

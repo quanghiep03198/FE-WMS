@@ -1,4 +1,5 @@
-import { Div, DivProps } from '@/components/ui'
+import type { DivProps } from '@/components/ui'
+import { Div } from '@/components/ui'
 import tw from 'tailwind-styled-components'
 import Heading from './heading'
 import Navbar from './navbar'

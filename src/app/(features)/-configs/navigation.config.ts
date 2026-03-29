@@ -1,8 +1,8 @@
 import { UserRole } from '@/common/constants/enums'
 import env from '@/common/utils/env'
-import { IconProps } from '@/components/ui'
-import { FileRouteTypes } from '@/route-tree.gen'
-import { ResourceKeys } from 'i18next'
+import type { IconProps } from '@/components/ui'
+import type { FileRouteTypes } from '@/route-tree.gen'
+import type { ResourceKeys } from 'i18next'
 
 export type NavigationConfig = {
 	icon?: IconProps['name']

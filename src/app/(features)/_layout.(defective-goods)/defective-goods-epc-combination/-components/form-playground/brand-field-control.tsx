@@ -1,9 +1,9 @@
 import { SelectFieldControl } from '@/components/ui'
-import { SelectFieldControlProps } from '@/components/ui/@field-control/select'
+import type { SelectFieldControlProps } from '@/components/ui/@field-control/select'
 import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
+import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
 
 type BrandFieldControl = Partial<

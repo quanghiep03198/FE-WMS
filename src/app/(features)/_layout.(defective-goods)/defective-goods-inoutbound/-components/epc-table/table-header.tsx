@@ -1,7 +1,8 @@
 import { cn } from '@/common/utils/cn'
 import { Separator, TableHead, TableHeader, TableRow } from '@/components/ui'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
-import { flexRender, Table } from '@tanstack/react-table'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { Table } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import { Fragment, memo } from 'react'
 import { TableColumnFilter } from './table-column-filter'
 

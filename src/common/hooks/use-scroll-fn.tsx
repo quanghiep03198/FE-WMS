@@ -1,5 +1,7 @@
-import { elementScroll, VirtualizerOptions } from '@tanstack/react-virtual'
-import { RefObject, useCallback, useRef } from 'react'
+import type { VirtualizerOptions } from '@tanstack/react-virtual'
+import { elementScroll } from '@tanstack/react-virtual'
+import type { RefObject } from 'react'
+import { useCallback, useRef } from 'react'
 
 type ScrollToFnArgs = Parameters<VirtualizerOptions<any, any>['scrollToFn']>
 

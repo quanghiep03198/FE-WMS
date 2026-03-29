@@ -1,4 +1,4 @@
-import { UserRole } from '@/common/constants/enums'
+import type { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import PermissionDenied from '../-errors/permission-denied'
 

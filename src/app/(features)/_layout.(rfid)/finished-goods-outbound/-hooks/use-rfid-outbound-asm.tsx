@@ -5,9 +5,9 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../-contexts/page-context'
-import { SearchEpcParams } from '../..'
+import type { SearchEpcParams } from '../..'
 import { ArchiviedDataQueryKeys } from '../../-hooks/use-data-restoration-asm'
-import { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
+import type { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
 
 export enum RFIDOutboundQueryKeys {
 	OUTBOUND_EPC = 'OUTBOUND_EPC',

@@ -1,9 +1,9 @@
 import { cn } from '@/common/utils/cn'
+import type { Label } from '@/components/ui'
 import {
 	buttonVariants,
 	Div,
 	Icon,
-	Label,
 	Sheet,
 	SheetContent,
 	SheetFooter,

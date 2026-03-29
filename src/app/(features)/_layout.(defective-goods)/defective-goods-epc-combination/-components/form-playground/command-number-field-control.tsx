@@ -3,7 +3,8 @@ import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@/
 import { useDebounce } from 'ahooks'
 import { capitalize } from 'lodash-es'
 import React from 'react'
-import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 type CommandNumberFieldControlProps = Partial<AutoCompleteFieldControlProps<FieldValues, Record<'mo_no', string>>>

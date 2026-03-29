@@ -12,7 +12,8 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { LoginFormValues, loginSchema } from '../-schemas/login.schema'
+import type { LoginFormValues } from '../-schemas/login.schema'
+import { loginSchema } from '../-schemas/login.schema'
 import { AuthQueryKeys } from '../../../-hooks/use-user-asm'
 
 const LoginForm: React.FC = () => {

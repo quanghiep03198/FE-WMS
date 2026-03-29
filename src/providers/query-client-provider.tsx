@@ -4,7 +4,7 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { AxiosError } from 'axios'
+import type { AxiosError } from 'axios'
 import { compress, decompress } from 'lz-string'
 
 declare module '@tanstack/react-query' {

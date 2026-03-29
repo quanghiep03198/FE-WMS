@@ -27,13 +27,14 @@ import {
 	Typography
 } from '@/components/ui'
 import { SignatureCanvas, type SignatureCanvasInstance } from '@/components/ui/@custom/signature'
-import { ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { TruckloadDeliveryStatus } from '../-constants'
-import { SignatureType, usePageContext } from '../-contexts/page-context'
+import type { SignatureType } from '../-contexts/page-context'
+import { usePageContext } from '../-contexts/page-context'
 import { useUpdateDispatchOrderSignatureMutation } from '../-hooks/use-truckload-delivery-asm'
 
 const SignatureEditorDialog: React.FC = () => {

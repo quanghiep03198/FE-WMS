@@ -6,7 +6,8 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { UpdateProfileFormValues, updateProfileFormValues } from '../-schemas/update-profile.schema'
+import type { UpdateProfileFormValues } from '../-schemas/update-profile.schema'
+import { updateProfileFormValues } from '../-schemas/update-profile.schema'
 
 const ProfileForm: React.FC = () => {
 	const { user } = useAuth()

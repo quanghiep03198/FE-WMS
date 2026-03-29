@@ -1,5 +1,6 @@
 import useMediaQuery from '@/common/hooks/use-media-query'
-import { Button, ButtonProps, Icon, Tooltip } from '@/components/ui'
+import type { ButtonProps } from '@/components/ui'
+import { Button, Icon, Tooltip } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetUsersQuery } from '../-hooks/use-user-asm'

@@ -7,9 +7,11 @@ import mqtt from 'mqtt'
 import { createContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { create, StoreApi } from 'zustand'
+import type { StoreApi } from 'zustand'
+import { create } from 'zustand'
 import { ReaderAntenna } from '../-constants'
-import { readerSettingsFormSchema, ReaderSettingsFormValues } from '../-schemas/reader-settings.schema'
+import type { ReaderSettingsFormValues } from '../-schemas/reader-settings.schema'
+import { readerSettingsFormSchema } from '../-schemas/reader-settings.schema'
 
 type RFIDPlaygroundActions = 'connect' | 'disconnect' | 'start' | 'stop' | 'ping' | 'reset' | 'get' | 'update'
 type PlaygroundConnectionStatus = Record<

@@ -1,4 +1,5 @@
-import { Badge, Div, Icon, IconProps, Typography } from '@/components/ui'
+import type { IconProps } from '@/components/ui'
+import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'
 import tw from 'tailwind-styled-components'

@@ -1,7 +1,8 @@
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { uniqBy } from 'lodash-es'
 import { createContext, useRef } from 'react'
-import { StoreApi, create } from 'zustand'
+import type { StoreApi } from 'zustand'
+import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 // import { OrderSize } from './-page-context'
 

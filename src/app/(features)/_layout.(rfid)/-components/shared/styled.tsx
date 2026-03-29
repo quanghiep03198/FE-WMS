@@ -1,4 +1,5 @@
-import ScrollShadow, { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
+import type { ScrollShadowProps } from '@/components/ui/@custom/scroll-shadow'
+import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import tw from 'tailwind-styled-components'
 
 export const FilterForm = tw.form`grid gap-6 auto-rows-min`

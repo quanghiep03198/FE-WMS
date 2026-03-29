@@ -1,7 +1,7 @@
-import { IUser } from '@/common/types/entities'
+import type { IUser } from '@/common/types/entities'
 import { ButtonGroup, buttonVariants, Icon } from '@/components/ui'
 import { DebouncedInput } from '@/components/ui/@custom/debounced-input'
-import { Table } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

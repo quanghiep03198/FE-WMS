@@ -1,4 +1,4 @@
-import { Virtualizer } from '@tanstack/react-virtual'
+import type { Virtualizer } from '@tanstack/react-virtual'
 import { useRef } from 'react'
 
 export default function useVirtualScrollPadding<

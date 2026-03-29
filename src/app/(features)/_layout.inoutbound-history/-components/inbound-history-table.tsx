@@ -1,4 +1,4 @@
-import { IInboundHistory } from '@/common/types/entities'
+import type { IInboundHistory } from '@/common/types/entities'
 import { coalesce } from '@/common/utils/common'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'

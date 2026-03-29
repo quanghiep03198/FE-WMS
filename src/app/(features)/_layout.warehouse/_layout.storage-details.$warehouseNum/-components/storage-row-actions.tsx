@@ -1,9 +1,9 @@
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
-import { IWarehouseStorage } from '@/common/types/entities'
+import type { IWarehouseStorage } from '@/common/types/entities'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { Row } from '@tanstack/react-table'
+import type { Row } from '@tanstack/react-table'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -1,4 +1,4 @@
-import { ITenancy } from '@/common/types/entities'
+import type { ITenancy } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class TenancyService {

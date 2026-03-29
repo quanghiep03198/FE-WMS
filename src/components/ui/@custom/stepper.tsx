@@ -1,5 +1,5 @@
 import { Div, Icon, Typography } from '@/components/ui'
-import { TFunction } from 'i18next'
+import type { TFunction } from 'i18next'
 import React, { createContext, use, useReducer } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'

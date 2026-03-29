@@ -20,10 +20,10 @@ import { uniqBy } from 'lodash-es'
 import React, { useMemo, useRef } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
+import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
-import { DefAutoCompleteFieldControlProps } from './type'
+import type { DefAutoCompleteFieldControlProps } from './type'
 
 const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 	name,

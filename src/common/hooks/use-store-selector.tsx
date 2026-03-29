@@ -1,6 +1,7 @@
 import { pick } from 'lodash-es'
 import { use } from 'react'
-import { StoreApi, useStore } from 'zustand'
+import type { StoreApi } from 'zustand'
+import { useStore } from 'zustand'
 import { useShallow } from 'zustand/react/shallow'
 
 /**

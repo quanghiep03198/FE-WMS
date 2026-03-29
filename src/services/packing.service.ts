@@ -1,4 +1,4 @@
-import { IPackingManifest } from '@/common/types/entities'
+import type { IPackingManifest } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 
 export class PackingService {

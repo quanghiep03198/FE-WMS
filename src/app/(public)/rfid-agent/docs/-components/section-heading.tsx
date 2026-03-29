@@ -1,7 +1,8 @@
-import { Typography, TypographyProps } from '@/components/ui'
+import type { TypographyProps } from '@/components/ui'
+import { Typography } from '@/components/ui'
 import { useInViewport } from 'ahooks'
 import React, { useEffect, useRef } from 'react'
-import { DocumentHashNavigation } from '../-constants/document-hash-navigation'
+import type { DocumentHashNavigation } from '../-constants/document-hash-navigation'
 import { usePageContext } from '../-contexts/page-context'
 
 const SectionHeading: React.FC<TypographyProps & { id: DocumentHashNavigation }> = ({ children, id, ...props }) => {

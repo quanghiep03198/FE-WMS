@@ -1,11 +1,11 @@
-import { IElectronicProductCode } from '@/common/types/entities'
+import type { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash-es'
 import { RFIDDataType } from '../-constants'
 import { RFIDInboundQueryKeys } from '../finished-goods-inbound/-hooks/use-rfid-inbound-asm'
 import { RFIDOutboundQueryKeys } from '../finished-goods-outbound/-hooks/use-rfid-outbound-asm'
-import { SearchFormValues } from './use-persistent-filter-state'
+import type { SearchFormValues } from './use-persistent-filter-state'
 
 export enum ArchiviedDataQueryKeys {
 	ARCHIVED_EPCS = 'ARCHIVED_EPCS',

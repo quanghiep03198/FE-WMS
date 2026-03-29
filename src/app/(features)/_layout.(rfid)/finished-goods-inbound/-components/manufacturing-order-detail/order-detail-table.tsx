@@ -25,7 +25,7 @@ import {
 	Typography,
 	buttonVariants
 } from '@/components/ui'
-import { CheckedState } from '@radix-ui/react-checkbox'
+import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Meta, StoryFn, StoryObj } from '@storybook/react'
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
-import { InputFieldControl, InputFieldControlProps } from '.'
+import type { InputFieldControlProps } from '.'
+import { InputFieldControl } from '.'
 import { Button } from '../../@core/button'
 
 type Story = StoryObj<typeof InputFieldControl>

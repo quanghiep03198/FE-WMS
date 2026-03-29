@@ -1,4 +1,4 @@
-import { IPurchaseOrderDetail } from '@/common/types/entities'
+import type { IPurchaseOrderDetail } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Separator, Typography } from '@/components/ui'
 import React from 'react'

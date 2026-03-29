@@ -1,4 +1,4 @@
-import { IWarehouseStorage } from '@/common/types/entities'
+import type { IWarehouseStorage } from '@/common/types/entities'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import {
 	keepPreviousData,
@@ -8,10 +8,10 @@ import {
 	type UseMutationOptions,
 	type UseQueryOptions
 } from '@tanstack/react-query'
-import { AxiosError, AxiosResponse } from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { PartialStorageFormValue } from '../-schemas/warehouse.schema'
+import type { PartialStorageFormValue } from '../-schemas/warehouse.schema'
 
 export enum WarehouseStorageQueryKeys {
 	WAREHOUSE_STORAGE = 'WAREHOUSE_STORAGE'

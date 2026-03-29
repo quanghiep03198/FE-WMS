@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Meta, StoryFn, StoryObj } from '@storybook/react'
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { object, string, type infer as Infer } from 'zod'
-import { SelectFieldControl, SelectFieldControlProps } from '.'
+import type { SelectFieldControlProps } from '.'
+import { SelectFieldControl } from '.'
 import { Button } from '../../@core/button'
 import { Form } from '../../@core/form'
 

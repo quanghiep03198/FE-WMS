@@ -3,7 +3,7 @@ import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle,
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import PlaceHolderItems from '../../-components/shared/placeholder-items'
-import { RFIDDataType } from '../../_layout.(rfid)/-constants'
+import type { RFIDDataType } from '../../_layout.(rfid)/-constants'
 
 const EmptyHistory: React.FC = () => {
 	const { t } = useTranslation()

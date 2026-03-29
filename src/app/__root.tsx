@@ -1,6 +1,6 @@
-import { QueryClient } from '@tanstack/react-query'
+import type { QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
-import { useRegisterSW } from 'virtual:pwa-register/react'
+import type { useRegisterSW } from 'virtual:pwa-register/react'
 
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient

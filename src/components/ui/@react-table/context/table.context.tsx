@@ -1,8 +1,8 @@
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
-import { Table } from '@tanstack/react-table'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import type { Table } from '@tanstack/react-table'
+import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext } from 'react'
-import { StoreApi } from 'zustand'
+import type { StoreApi } from 'zustand'
 
 export type TableContextStore = {
 	table: Table<any>

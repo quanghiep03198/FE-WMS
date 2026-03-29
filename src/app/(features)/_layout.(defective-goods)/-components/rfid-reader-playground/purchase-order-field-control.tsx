@@ -2,7 +2,8 @@ import { AutoCompleteFieldControl, type AutoCompleteFieldControlProps } from '@/
 import { useDebounce } from 'ahooks'
 import { omit } from 'lodash-es'
 import { useMemo } from 'react'
-import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSearchPurchaseOrderQuery } from '../../../-hooks/use-order-asm'
 

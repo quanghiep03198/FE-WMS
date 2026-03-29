@@ -27,7 +27,8 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { RFIDDataType, ScanCapability, ScannedStatus } from '../../-constants'
 import { useGetArchivedEpcFeatureQuery } from '../../-hooks/use-data-restoration-asm'
-import { SearchFormValues, usePersistentFilterState } from '../../-hooks/use-persistent-filter-state'
+import type { SearchFormValues } from '../../-hooks/use-persistent-filter-state'
+import { usePersistentFilterState } from '../../-hooks/use-persistent-filter-state'
 import { FilterForm, GhostButton } from './styled'
 
 type ArchivedEpcFilterProps = {

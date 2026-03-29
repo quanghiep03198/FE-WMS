@@ -1,4 +1,4 @@
-import { CheckedState } from '@radix-ui/react-checkbox'
+import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useLocalStorageState } from 'ahooks'
 import { createContext, use, useCallback, useEffect, useState, useTransition } from 'react'
 

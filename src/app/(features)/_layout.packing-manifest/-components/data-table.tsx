@@ -1,5 +1,5 @@
 import { factories } from '@/common/constants/constants'
-import { IPackingManifest } from '@/common/types/entities'
+import type { IPackingManifest } from '@/common/types/entities'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon, Input } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'

@@ -5,7 +5,7 @@ import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { Table, TableBody, TableCell, TableRow, Typography } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import {
 	createColumnHelper,
 	getCoreRowModel,

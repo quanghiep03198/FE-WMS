@@ -1,26 +1,22 @@
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
-import { SizeQuantity } from '@/common/types/entities'
+import type { SizeQuantity } from '@/common/types/entities'
 import { Table, TableCaption, Typography } from '@/components/ui'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
+import type { ColumnDef, ColumnFiltersState, ExpandedState, Row, SortingState } from '@tanstack/react-table'
 import {
-	ColumnDef,
-	ColumnFiltersState,
-	ExpandedState,
 	getCoreRowModel,
 	getFacetedRowModel,
 	getFacetedUniqueValues,
 	getFilteredRowModel,
 	getSortedRowModel,
-	Row,
 	type RowData,
-	SortingState,
 	useReactTable
 } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useSize } from 'ahooks'
 import React, { useId, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
-import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
+import type { RFIDDataType } from '../../../_layout.(rfid)/-constants'
 import { DataTableBody } from './data-table-body'
 import DataTableGlobalFilter from './data-table-filter'
 import { DataTableHeader, MemoizedDataTableHeader } from './data-table-header'

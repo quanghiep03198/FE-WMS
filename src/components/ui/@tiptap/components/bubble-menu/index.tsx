@@ -13,7 +13,7 @@ import {
 } from '@/components/ui'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Editor } from '@tiptap/react'
+import type { Editor } from '@tiptap/react'
 import { BubbleMenu as TiptapBubbleMenu } from '@tiptap/react/menus'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'

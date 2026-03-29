@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { InventoryAuditFormValues } from '../-schemas/inventory-audit.schema'
-import { BaseUpdateUpdateQuery } from '../-types'
+import type { InventoryAuditFormValues } from '../-schemas/inventory-audit.schema'
+import type { BaseUpdateUpdateQuery } from '../-types'
 
 export enum InventoryAuditQueryKeys {
 	INVENTORY_AUDIT = 'INVENTORY_AUDIT'

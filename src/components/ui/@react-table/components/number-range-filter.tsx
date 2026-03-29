@@ -1,5 +1,5 @@
 import { Div, Separator } from '@/components/ui'
-import { Column } from '@tanstack/react-table'
+import type { Column } from '@tanstack/react-table'
 import { useState } from 'react'
 import { DebouncedInput } from '../../@custom/debounced-input'
 import { useTableContext } from '../context/table.context'

@@ -1,4 +1,4 @@
-import { Theme } from '@/common/constants/enums'
+import type { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
 import { Div, Label, RadioGroup, RadioGroupItem, Typography } from '@/components/ui'
 import React from 'react'

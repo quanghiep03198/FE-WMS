@@ -1,6 +1,7 @@
 import { useSessionStorageState } from 'ahooks'
 import { useMemo } from 'react'
-import { RFIDDataType, ScanCapability, ScannedStatus } from '../-constants'
+import type { ScanCapability, ScannedStatus } from '../-constants'
+import { RFIDDataType } from '../-constants'
 
 export type SearchFormValues = {
 	limit?: number

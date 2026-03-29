@@ -1,4 +1,4 @@
-import { IAnnuallyInOutboundStatistics } from '@/common/types/entities'
+import type { IAnnuallyInOutboundStatistics } from '@/common/types/entities'
 import { StatisticsService } from '@/services/statistics.service'
 import { useQuery } from '@tanstack/react-query'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'

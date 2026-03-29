@@ -1,7 +1,8 @@
 'use no memo'
 
-import { IUser } from '@/common/types/entities'
+import type { IUser } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
+import type { IconProps } from '@/components/ui'
 import {
 	Badge,
 	Button,
@@ -14,7 +15,6 @@ import {
 	CommandSeparator,
 	Div,
 	Icon,
-	IconProps,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,

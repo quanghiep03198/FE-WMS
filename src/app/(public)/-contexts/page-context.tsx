@@ -1,5 +1,6 @@
 import { useInViewport, useMemoizedFn } from 'ahooks'
-import { MutableRefObject, createContext, use, useRef, useState } from 'react'
+import type { MutableRefObject } from 'react'
+import { createContext, use, useRef, useState } from 'react'
 import CTASection from '../-components/cta-section'
 import CTA2Section from '../-components/cta2-section'
 import FAQsSection from '../-components/faq-section'

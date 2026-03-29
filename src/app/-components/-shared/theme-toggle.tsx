@@ -1,6 +1,7 @@
 import { Theme } from '@/common/constants/enums'
 import useTheme from '@/common/hooks/use-theme'
-import { Button, Icon, Tooltip, TooltipProps } from '@/components/ui'
+import type { TooltipProps } from '@/components/ui'
+import { Button, Icon, Tooltip } from '@/components/ui'
 import { useKeyPress, useUpdateEffect } from 'ahooks'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

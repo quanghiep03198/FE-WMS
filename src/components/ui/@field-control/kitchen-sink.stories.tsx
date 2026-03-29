@@ -16,7 +16,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Meta } from '@storybook/react'
+import type { Meta } from '@storybook/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { array, boolean, coerce, email, enum as enums, object, string, type infer as Infer } from 'zod'

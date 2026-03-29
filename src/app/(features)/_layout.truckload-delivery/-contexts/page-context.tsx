@@ -1,7 +1,7 @@
-import { CommonActions } from '@/common/constants/enums'
-import { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
+import type { CommonActions } from '@/common/constants/enums'
+import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
 import { useEventEmitter } from 'ahooks'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
 export type SignatureType =

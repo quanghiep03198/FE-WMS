@@ -1,4 +1,4 @@
-import { Row } from '@tanstack/react-table'
+import type { Row } from '@tanstack/react-table'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../../@custom/typography'

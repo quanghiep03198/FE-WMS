@@ -1,6 +1,6 @@
 import { RequestHeaders } from '@/common/constants/enums'
 import useQueryParams from '@/common/hooks/use-query-params'
-import { IInboundHistory, IOutboundHistory } from '@/common/types/entities'
+import type { IInboundHistory, IOutboundHistory } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { useQuery } from '@tanstack/react-query'
 import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'

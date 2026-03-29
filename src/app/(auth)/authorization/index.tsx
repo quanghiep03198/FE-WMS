@@ -1,4 +1,4 @@
-import { FactoryCode } from '@/common/constants/enums'
+import type { FactoryCode } from '@/common/constants/enums'
 import { Div, Icon } from '@/components/ui'
 import { AuthService } from '@/services/auth.service'
 import { UserService } from '@/services/user.service'

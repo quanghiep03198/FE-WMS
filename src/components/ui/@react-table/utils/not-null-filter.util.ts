@@ -1,4 +1,4 @@
-import { FilterFn } from '@tanstack/react-table'
+import type { FilterFn } from '@tanstack/react-table'
 import { isNil } from 'lodash-es'
 
 export const notNullFilter: FilterFn<any> = (row, columnId) => {

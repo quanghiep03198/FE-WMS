@@ -1,5 +1,6 @@
 import { cn } from '@/common/utils/cn'
-import { cva, VariantProps } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import React from 'react'
 
 const chatBubbleVariant = cva(

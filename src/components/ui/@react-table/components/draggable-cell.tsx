@@ -2,7 +2,7 @@ import { cn } from '@/common/utils/cn'
 import { TableCell } from '@/components/ui'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Cell, Row } from '@tanstack/react-table'
+import type { Cell, Row } from '@tanstack/react-table'
 import React from 'react'
 
 type DraggableCellProps<TData = unknown, TValue = unknown> = {

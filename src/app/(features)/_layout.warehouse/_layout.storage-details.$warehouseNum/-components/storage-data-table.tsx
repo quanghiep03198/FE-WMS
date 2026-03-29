@@ -1,6 +1,6 @@
 // #region Modules
 import { CommonActions } from '@/common/constants/enums'
-import { IWarehouseStorage } from '@/common/types/entities'
+import type { IWarehouseStorage } from '@/common/types/entities'
 import { Button, Checkbox, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import {
@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/@react-table/components/row-selection-checkbox'
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzySort } from '@/components/ui/@react-table/utils/fuzzy-sort.util'
-import { UseQueryResult } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
-import { Table, createColumnHelper } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { useResetState } from 'ahooks'
 import { format } from 'date-fns'
 import { Fragment, memo, useMemo, useRef, useState } from 'react'

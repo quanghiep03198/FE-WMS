@@ -1,14 +1,8 @@
-import { IWarehouse } from '@/common/types/entities'
+import type { IWarehouse } from '@/common/types/entities'
 import { WarehouseService } from '@/services/warehouse.service'
-import {
-	UseQueryOptions,
-	keepPreviousData,
-	queryOptions,
-	useMutation,
-	useQuery,
-	useQueryClient
-} from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import type { UseQueryOptions } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 

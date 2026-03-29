@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { Table } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
 import { pick } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { Icon, Popover, PopoverContent, PopoverTrigger, Tooltip, buttonVariants } from '../..'

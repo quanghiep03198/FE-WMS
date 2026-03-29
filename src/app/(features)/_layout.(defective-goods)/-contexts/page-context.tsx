@@ -1,7 +1,7 @@
-import { CommonActions } from '@/common/constants/enums'
-import { IDefectiveGoods } from '@/services/defective-goods.service'
+import type { CommonActions } from '@/common/constants/enums'
+import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useEventEmitter } from 'ahooks'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
 
 const PageContext = createContext<{

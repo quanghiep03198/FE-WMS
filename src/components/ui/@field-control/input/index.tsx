@@ -1,9 +1,10 @@
 'use no memo'
 
 import { cn } from '@/common/utils/cn'
-import { ResourceKey } from 'i18next'
+import type { ResourceKey } from 'i18next'
 import React, { useEffect, useId, useRef, useState } from 'react'
-import { ControllerRenderProps, FieldValues, Path, useFormContext } from 'react-hook-form'
+import type { ControllerRenderProps, FieldValues, Path } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import {
 	Div,
@@ -17,7 +18,7 @@ import {
 	Toggle,
 	Tooltip
 } from '../..'
-import { BaseFieldControl } from '../../../../common/types/hook-form'
+import type { BaseFieldControl } from '../../../../common/types/hook-form'
 import { Input } from '../../@core/input'
 
 export type InputFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & React.ComponentProps<'input'>

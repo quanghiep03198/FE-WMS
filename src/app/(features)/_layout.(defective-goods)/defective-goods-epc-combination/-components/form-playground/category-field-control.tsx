@@ -1,10 +1,10 @@
 import { SelectFieldControl } from '@/components/ui'
-import { SelectFieldControlProps } from '@/components/ui/@field-control/select'
+import type { SelectFieldControlProps } from '@/components/ui/@field-control/select'
 import { omit } from 'lodash-es'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
+import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
 import { DefectiveCategory } from '../../../-constants'
 import { useDefectiveCategoryList } from '../../../-hooks/use-defective-category-list'
 

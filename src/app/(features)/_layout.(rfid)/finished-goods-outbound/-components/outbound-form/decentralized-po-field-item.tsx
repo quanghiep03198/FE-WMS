@@ -5,7 +5,8 @@ import { Div, Icon, InputFieldControl, SelectFieldControl } from '@/components/u
 import { defaultAnimateLayoutChanges, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { use } from 'react'
-import { UseFieldArrayRemove, useFormContext } from 'react-hook-form'
+import type { UseFieldArrayRemove } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DecentralizedPoFormContext } from '../../-contexts/separated-form-context'
 

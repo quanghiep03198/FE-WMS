@@ -1,8 +1,9 @@
 'use no memo'
 
 import { RecordStatus } from '@/common/constants/enums'
-import { IUser } from '@/common/types/entities'
+import type { IUser } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
+import type { IconProps } from '@/components/ui'
 import {
 	Badge,
 	buttonVariants,
@@ -15,10 +16,9 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 	Icon,
-	IconProps,
 	Separator
 } from '@/components/ui'
-import { Table } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
 import { isNil } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

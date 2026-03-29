@@ -1,6 +1,6 @@
-import { DefectiveCategory } from '@/app/(features)/_layout.(defective-goods)/-constants'
+import type { DefectiveCategory } from '@/app/(features)/_layout.(defective-goods)/-constants'
 import { RequestHeaders } from '@/common/constants/enums'
-import {
+import type {
 	IAnnuallyInOutboundStatistics,
 	IAssemblyProductionVolumn,
 	IMonthlyInventoryComparison

@@ -2,13 +2,14 @@
 
 import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
-import { BaseFieldControl } from '@/common/types/hook-form'
+import type { BaseFieldControl } from '@/common/types/hook-form'
 import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { ResourceKey } from 'i18next'
+import type { ResourceKey } from 'i18next'
 import { useCallback, useId, useMemo, useRef, useState } from 'react'
-import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import {

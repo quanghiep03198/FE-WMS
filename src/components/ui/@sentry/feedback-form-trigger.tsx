@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, ButtonProps } from '../@core/button'
+import type { ButtonProps } from '../@core/button'
+import { Button } from '../@core/button'
 import { Icon } from '../@core/icon'
 
 export default function FeedbackFormTrigger({ children, ...props }: ButtonProps) {

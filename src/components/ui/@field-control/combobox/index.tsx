@@ -2,11 +2,12 @@ import { cn } from '@/common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { CommandLoading } from 'cmdk'
 import { Fragment, useId, useMemo, useState } from 'react'
-import { FieldValues, Path, PathValue, useFormContext } from 'react-hook-form'
+import type { FieldValues, Path, PathValue } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import type { ButtonProps } from '../..'
 import {
 	Button,
-	ButtonProps,
 	Command,
 	CommandEmpty,
 	CommandGroup,
@@ -26,7 +27,7 @@ import {
 	PopoverTrigger,
 	Typography
 } from '../..'
-import { BaseFieldControl } from '../../../../common/types/hook-form'
+import type { BaseFieldControl } from '../../../../common/types/hook-form'
 
 export type ComboboxFieldControlProps<T extends FieldValues, D = Record<string, any>> = Omit<
 	BaseFieldControl<T>,

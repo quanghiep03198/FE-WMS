@@ -1,4 +1,4 @@
-import { ResourceKeys } from 'i18next'
+import type { ResourceKeys } from 'i18next'
 import { Languages } from './enums'
 
 type LocaleOptions = Array<{ value: Languages; label: string }>
