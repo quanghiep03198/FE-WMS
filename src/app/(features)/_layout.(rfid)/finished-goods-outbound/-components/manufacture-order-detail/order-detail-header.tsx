@@ -29,7 +29,7 @@ const OrderDetailTableHeader: React.FC<OrderSizeHeaderProps> = ({ onColumnFilter
 					</span>
 				</TableHead>
 				<TableHead align='left' className='border-x-0 p-0' title='Size'>
-					<span className='left-[calc(3*var(--sticky-left-col-width))] block w-full px-4 py-2 text-center @3xl:sticky @4xl:w-[calc(100cqw-3*var(--sticky-left-col-width)-var(--sticky-right-col-width)-var(--row-action-col-width))]'>
+					<span className='left-[calc(3*var(--sticky-left-col-width)+0.6rem)] block w-full px-4 py-2 text-center @3xl:sticky @3xl:w-[calc(100cqw-3*var(--sticky-left-col-width)-var(--sticky-right-col-width)-var(--row-action-col-width)-0.6rem)]'>
 						Size
 					</span>
 				</TableHead>

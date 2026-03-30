@@ -94,7 +94,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						'w-auto table-fixed [&_span]:line-clamp-1',
 						'@3xl:[&_tr>:first-child]:sticky @3xl:[&_tr>:first-child]:left-0 @3xl:[&_tr>:first-child]:z-10',
 						'@3xl:[&_tr>:nth-child(2)]:sticky @3xl:[&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] @3xl:[&_tr>:nth-child(2)]:z-10',
-						'@3xl:[&_tr>:nth-child(3)]:sticky @3xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width))] @3xl:[&_tr>:nth-child(3)]:z-10 @3xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
+						'@3xl:[&_tr>:nth-child(3)]:sticky @3xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width)+0.5rem)] @3xl:[&_tr>:nth-child(3)]:z-10 @3xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
 						'@3xl:[&_tr>:nth-last-child(2)]:sticky @3xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @3xl:[&_tr>:nth-last-child(2)]:z-10',
 						'@3xl:[&_tr>:last-child]:sticky @3xl:[&_tr>:last-child]:right-0 @3xl:[&_tr>:last-child]:z-10'
 					)}>
@@ -107,8 +107,8 @@ const OrderSizeDetailTable: React.FC = () => {
 						/>
 						<col
 							style={{
-								minWidth: 'var(--sticky-left-col-width)',
-								maxWidth: 'var(--sticky-left-col-width)'
+								minWidth: 'calc(var(--sticky-left-col-width) + 0.5rem)',
+								maxWidth: 'calc(var(--sticky-left-col-width) + 0.5rem)'
 							}}
 						/>
 						<col
@@ -120,7 +120,7 @@ const OrderSizeDetailTable: React.FC = () => {
 						<col
 							style={{
 								minWidth:
-									'calc(100cqw - 3*var(--sticky-left-col-width) - var(--sticky-right-col-width) - var(--row-action-col-width))'
+									'calc(100cqw - 3*var(--sticky-left-col-width) - var(--sticky-right-col-width) - var(--row-action-col-width) - 0.5rem)'
 							}}
 						/>
 						<col
