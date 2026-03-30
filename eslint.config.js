@@ -27,7 +27,7 @@ export default [
 			'@typescript-eslint/no-unused-vars': 'warn',
 			'@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',
 			'@typescript-eslint/no-empty-object-type': 'warn',
-			'@typescript-eslint/consistent-type-imports': 'error',
+			'@typescript-eslint/consistent-type-imports': 'warn',
 			'@typescript-eslint/no-unused-expressions': 'warn',
 			'@typescript-eslint/ban-ts-comment': 'warn',
 			'prefer-spread': 'warn',

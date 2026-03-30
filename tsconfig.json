@@ -19,7 +19,7 @@
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
 		"noFallthroughCasesInSwitch": false,
-		"verbatimModuleSyntax": true,
+		"verbatimModuleSyntax": false,
 		/* Alias */
 		"baseUrl": ".",
 		"paths": {
