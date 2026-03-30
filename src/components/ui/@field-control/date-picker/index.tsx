@@ -87,7 +87,7 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
 														{' - '}
 														{format(field.value.to, 'LLL dd, y', { locale })}
 													</Fragment>
-												) : isValid(field.value) ? (
+												) : isValid(new Date(field.value)) ? (
 													format(field.value, 'PPP', { locale })
 												) : (
 													t('ns_common:actions.pick_a_date')
