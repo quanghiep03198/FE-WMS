@@ -61,7 +61,7 @@ export const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['
 			/>
 		)
 	return (
-		<Div className='flex flex-col space-y-0.5'>
+		<Div className='flex flex-col space-y-1'>
 			<LicensePlateHoverCard
 				licensePlate={row.original.license_plate}
 				licensePlateImage={row.original.license_plate_image}
@@ -87,7 +87,7 @@ export const DepartureTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] 
 
 	if (isMobile)
 		return (
-			<Div className='flex flex-col gap-y-0.5'>
+			<Div className='flex flex-col gap-y-1'>
 				<Typography
 					variant='small'
 					color={value ? 'default' : 'muted'}

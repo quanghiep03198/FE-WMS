@@ -95,16 +95,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					</GhostButton>
 				)
 			}),
-			columnHelper.accessor('dispatch_order', {
-				id: 'dispatch_order',
-				meta: { hidden: true }
-			}),
 			columnHelper.accessor('license_plate', {
 				id: 'license_plate',
 				header: licensePlateColumnHeader,
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				filterFn: 'fuzzy',
 				enableGlobalFilter: true,
 				cell: LicensePlateColumnCell
@@ -115,7 +111,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				meta: { hidden: isMobile },
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				enableGlobalFilter: true,
 				sortDescFirst: true,
 				filterFn: 'fuzzy',
@@ -127,7 +123,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columnHelper.accessor('total_outbound_qty', {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				meta: { align: 'right', hidden: isMobile },
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
@@ -153,7 +149,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.status_approve'),
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				enablePinning: true,
 				enableColumnFilter: true,
 				enableGlobalFilter: false,
@@ -168,7 +164,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				meta: { hidden: isMobile },
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -180,7 +176,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.container_sealing_time'),
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -192,7 +188,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.factory_departure_time'),
 				enableResizing: true,
 				enableSorting: true,
-				enableMultiSort: true,
+				enableMultiSort: false,
 				enableColumnFilter: false,
 				enableGlobalFilter: false,
 				minSize: 150,
@@ -317,12 +313,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			getColumnCanGlobalFilter={() => true}
 			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
 			sorting={sorting}
-			enableMultiSort={true}
+			enableMultiSort={false}
 			manualExpanding={true}
 			manualFiltering={true}
 			manualPagination={true}
 			manualSorting={true}
-			isMultiSortEvent={() => true}
+			isMultiSortEvent={() => false}
 			sortDescFirst={true}
 			paginationProps={{
 				...omit(data, 'data'),
