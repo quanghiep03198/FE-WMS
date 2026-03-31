@@ -76,7 +76,7 @@ const UserFormDialog: React.FC = () => {
 			formSchemaRef.current = updateUserSchema
 			formActionRef.current = updateAsync
 			setDialogHelperTexts({
-				title: t('ns_auth:titles.create_user'),
+				title: t('ns_auth:titles.update_user'),
 				description: t('ns_auth:descriptions.update_user')
 			})
 			form.reset(payload)
