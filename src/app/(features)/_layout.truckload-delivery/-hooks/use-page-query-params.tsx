@@ -98,7 +98,7 @@ export const useBuildQueryParams = () => {
 				paramValue = operator
 					.replace('@value1', format(value.from, 'yyyy-MM-dd'))
 					.replace('@value2', format(value.to, 'yyyy-MM-dd'))
-			} else if (typeof value === 'string' && isValid(new Date(value))) {
+			} else if (typeof value === 'string' && operator === '=:@value' && isValid(new Date(value))) {
 				paramValue = operator.replace('@value', format(value, 'yyyy-MM-dd'))
 			} else {
 				paramValue = operator.replace('@value', String(value ?? ''))
