@@ -2,11 +2,12 @@ import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-con
 import { UserRole } from '@/common/constants/enums'
 import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
-import type { IconProps } from '@/components/ui'
+import type { IconProps, TypographyProps } from '@/components/ui'
 import { Badge, Checkbox, Div, Icon, Typography } from '@/components/ui'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
-import { type ColumnDefBase } from '@tanstack/react-table'
+import type { CellContext, ColumnDefBase } from '@tanstack/react-table'
 import { format } from 'date-fns'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TruckloadDeliveryStatus } from '../-constants'
 import { useUpdateContainerConditionMutation } from '../-hooks/use-truckload-delivery-asm'
@@ -41,7 +42,7 @@ export const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, Trucklo
 	)
 }
 
-export const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['cell'] = ({ row, getValue }) => {
+export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, string>> = ({ row, getValue }) => {
 	const { t } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 
@@ -79,7 +80,7 @@ export const LicensePlateColumnCell: ColumnDefBase<ITruckloadDelivery, string>['
 	)
 }
 
-export const DepartureTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = (props) => {
+export const DepartureTimeCell: React.FC<CellContext<ITruckloadDelivery, Date> & TypographyProps> = (props) => {
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { t } = useTranslation()
 
@@ -91,7 +92,8 @@ export const DepartureTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] 
 				<Typography
 					variant='small'
 					color={value ? 'default' : 'muted'}
-					className='inline-flex items-center gap-x-2'>
+					className={cn('inline-flex items-center gap-x-2', props.className)}
+					aria-invalid={props['aria-invalid']}>
 					<Icon name={value ? 'LogOut' : 'ClockAlert'} />
 					{value ? format(new Date(value), 'yyyy-MM-dd HH:mm') : t('ns_common:titles.unknown')}
 				</Typography>
@@ -139,10 +141,21 @@ export const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>
 	)
 }
 
-export const DateTimeCell: ColumnDefBase<ITruckloadDelivery, Date>['cell'] = ({ getValue }) => {
+export const DateTimeCell: React.FC<
+	CellContext<ITruckloadDelivery, Date | null> & { fallbackValue?: Date } & TypographyProps
+> = ({ getValue, fallbackValue, className, ...props }) => {
 	const { t } = useTranslation()
-	const value = getValue()
-	if (value) return format(new Date(value), 'yyyy-MM-dd HH:mm')
+	const value = getValue() ?? fallbackValue
+
+	if (props['aria-invalid']) console.log('invalid', props['aria-invalid'])
+
+	if (value)
+		return (
+			<Typography {...props} variant='small' className={className}>
+				{format(new Date(value), 'yyyy-MM-dd HH:mm')}
+			</Typography>
+		)
+
 	return (
 		<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
 			<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />

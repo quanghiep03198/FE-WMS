@@ -25,9 +25,11 @@ export interface ITruckloadDelivery extends IBaseEntity {
 	moist_container: boolean
 	container_sealing_time: Date | null
 	factory_departure_time: Date | null
+	actual_snap_time: Date | null
 	actual_departure_time: Date | null
 	license_plate_image: string | null
 	total_outbound_qty: number
+	possible_signing_late?: boolean
 	delivery_details?: Array<ITruckloadDeliveryDetail>
 }
 

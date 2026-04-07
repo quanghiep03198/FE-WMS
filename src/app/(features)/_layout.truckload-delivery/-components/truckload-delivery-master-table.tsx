@@ -182,7 +182,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				cell: DateTimeCell
+				cell: (props) => (
+					<DateTimeCell
+						{...props}
+						aria-invalid={props.row.original.possible_signing_late}
+						className='aria-[invalid=true]:!text-destructive'
+					/>
+				)
 			}),
 			columnHelper.accessor('factory_departure_time', {
 				header: t('ns_erp:fields.factory_departure_time'),
@@ -194,7 +200,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				cell: DepartureTimeCell
+				cell: (props) => (
+					<DepartureTimeCell
+						{...props}
+						aria-invalid={props.row.original.possible_signing_late}
+						className='aria-[invalid=true]:!text-destructive'
+					/>
+				)
 			}),
 			columnHelper.accessor('actual_departure_time', {
 				header: t('ns_erp:fields.actual_departure_time'),
@@ -206,7 +218,16 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				minSize: 150,
 				size: 200,
 				maxSize: 250,
-				cell: DateTimeCell
+				cell: (props) => (
+					<DateTimeCell
+						{...{
+							...props,
+							fallbackValue: props.row.original.actual_snap_time,
+							['aria-invalid']: props.row.original.possible_signing_late,
+							className: 'aria-[invalid=true]:!text-destructive'
+						}}
+					/>
+				)
 			}),
 			columnHelper.display({
 				id: ROW_ACTIONS_COLUMN_ID,
