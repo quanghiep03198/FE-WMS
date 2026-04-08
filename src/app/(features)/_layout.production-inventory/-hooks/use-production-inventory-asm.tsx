@@ -1,15 +1,19 @@
+import useQueryParams from '@/common/hooks/use-query-params'
 import { InventoryService } from '@/services/inventory.service'
 import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash-es'
+import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 
 export enum ProductionInventoryQueryKeys {
 	PRODUCTION_INVENTORY = 'PRODUCTION_INVENTORY'
 }
 
-export const useGetProductionInventoryQuery = (
-	tenantId: string,
-	searchParams: Record<'brand_name' | 'shoes_style' | 'color', string>
-) => {
+export const useGetProductionInventoryQuery = () => {
+	const { data: tenant } = useGetTenantByFactory()
+	const tenantId = tenant?.id
+
+	const { searchParams } = useQueryParams<Record<'brand_name' | 'shoes_style' | 'color', string>>()
+
 	return useQuery({
 		queryKey: [ProductionInventoryQueryKeys.PRODUCTION_INVENTORY, tenantId, searchParams],
 		queryFn: () => InventoryService.getProductionInventoryReport(tenantId, searchParams),

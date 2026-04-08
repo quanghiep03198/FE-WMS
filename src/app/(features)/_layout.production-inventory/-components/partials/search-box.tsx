@@ -9,6 +9,7 @@ import { useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { useGetProductionInventoryQuery } from '../../-hooks/use-production-inventory-asm'
 import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
 import DownloadExcelButton from './download-excel-button'
 
@@ -18,6 +19,7 @@ const SearchBox: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isSmallScreen = useMediaQuery('(max-width:800px)')
 	const { data: tenant } = useGetTenantByFactory()
+	const { refetch } = useGetProductionInventoryQuery()
 	const { searchParams, setParams } = useQueryParams<Record<'shoes_style' | 'color', string>>(null)
 
 	const { data, isLoading } = useQuery({
@@ -78,6 +80,15 @@ const SearchBox: React.FC = () => {
 						disabled={!form.watch('shoes_style') || !form.watch('color')}>
 						<Icon name='Search' size={isSmallScreen ? 18 : 16} />{' '}
 						{!isSmallScreen && t('ns_common:actions.search')}
+					</Button>
+					<Button
+						type='button'
+						variant='outline'
+						size={isSmallScreen ? 'icon' : 'default'}
+						disabled={!form.watch('shoes_style') || !form.watch('color')}
+						onClick={() => refetch()}>
+						<Icon name='RefreshCcw' size={isSmallScreen ? 18 : 16} />{' '}
+						{!isSmallScreen && t('ns_common:actions.reload')}
 					</Button>
 				</Form>
 			</FormProvider>

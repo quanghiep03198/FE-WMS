@@ -5,17 +5,15 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetProductionInventoryQuery } from '../../-hooks/use-production-inventory-asm'
 import SizeTable from '../../../-components/shared/size-table'
-import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
 import EmptyState from './empty-state'
 import InboundOrderTable from './inbound-order-table'
 import { OutboundEstimationTable } from './outbound-estimation-table'
 
 const DataSection: React.FC = () => {
 	const { searchParams } = useQueryParams<Record<'brand_name' | 'shoes_style' | 'color', string>>()
-	const { data: tenant } = useGetTenantByFactory()
 	const { t } = useTranslation()
 
-	const { data, isLoading } = useGetProductionInventoryQuery(tenant?.id, searchParams)
+	const { data, isLoading } = useGetProductionInventoryQuery()
 
 	const shouldRender = !isEmpty(searchParams)
 
