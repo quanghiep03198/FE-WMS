@@ -3,8 +3,8 @@ import { AuthService } from '@/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import { useRafState } from 'ahooks'
 import { throttle } from 'lodash-es'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { io, type Socket } from 'socket.io-client'
 import { v4 as uuid } from 'uuid'
 import { RequestHeaders } from '../constants/enums'
 import { Json } from '../utils/json'
@@ -19,24 +19,21 @@ export type UseWebSocketOptions<TResponse> = {
 
 const { user } = useAuthStore.getState()
 
-const socket = io(AppConfigs.BASE_WEBSOCKET_URL, {
-	withCredentials: true,
-	extraHeaders: {
-		[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
-		[RequestHeaders.USER_REQUEST]: user?.username
-	},
-	timeout: 10000,
-	retries: 3,
-	reconnectionAttempts: 3
-})
-
-export function destroySharedSocket() {
-	socket.offAny()
-	socket.disconnect()
-}
-
 export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = false }: UseWebSocketOptions<TResponse>) {
-	const instanceIO = useMemo<Socket>(() => (client instanceof Socket ? client : socket), [client])
+	const socketRef = useRef<Socket | null>(null)
+	if (!socketRef.current)
+		socketRef.current = io(AppConfigs.BASE_WEBSOCKET_URL, {
+			withCredentials: true,
+			extraHeaders: {
+				[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
+				[RequestHeaders.USER_REQUEST]: user?.username
+			},
+			timeout: 10000,
+			retries: 3,
+			reconnectionAttempts: 3
+		})
+
+	const instanceIO = client ?? socketRef.current
 	const [isConnected, setIsConnected] = useState(instanceIO.connected)
 	const [data, setData] = useRafState<TResponse | null>(null)
 	const lastEvent = useRef<{ id: string; data: TPayload }>(null)
@@ -73,6 +70,8 @@ export function useSocketIo<TResponse, TPayload>({ client, event, rateLimit = fa
 		)
 
 		return () => {
+			instanceIO.disconnect()
+
 			instanceIO.off('connect', handleConnect)
 			instanceIO.off('disconnect', handleDisconnect)
 			instanceIO.off('jwt_expired', handleRefreshToken)

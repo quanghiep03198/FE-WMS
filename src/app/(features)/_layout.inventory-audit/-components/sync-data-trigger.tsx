@@ -1,31 +1,24 @@
 import { useSocketIo } from '@/common/hooks/use-socket-io'
 import { Button, Icon } from '@/components/ui'
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { InventoryAuditQueryKeys } from '../-hooks/use-inventory-audit-asm'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
 
 type WsResponseMessage = WsResponseBody<{ status: 'progress' | 'completed' | 'failed' }>
-type WsMessageData = { tenantId: string }
 
 const SyncDataTrigger: React.FC = () => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
-	const { data: currentTenant } = useGetTenantByFactory()
-	const toastRef = useRef<string | number | null>(null)
-	const { data, emit } = useSocketIo<WsResponseMessage, WsMessageData>({
+	const { data, emit } = useSocketIo<WsResponseMessage, void>({
 		event: 'sync_inventory_audit_data'
 	})
 
 	useEffect(() => {
 		switch (data?.metadata?.status) {
-			case 'progress':
-				toastRef.current = toast.loading(t('ns_common:notification.synchronizing_data'))
-				break
 			case 'completed':
-				toast.success(t('ns_common:notification.success'), { id: toastRef.current })
+				toast.success(t('ns_common:notification.success'))
 				queryClient.invalidateQueries({
 					predicate: ({ queryKey }) => {
 						return queryKey.some((key) => key === InventoryAuditQueryKeys.INVENTORY_AUDIT)
@@ -33,7 +26,7 @@ const SyncDataTrigger: React.FC = () => {
 				})
 				break
 			case 'failed':
-				toast.error(t('ns_common:notification.error'), { id: toastRef.current })
+				toast.error(t('ns_common:notification.error'))
 				break
 			default:
 				break
@@ -43,11 +36,15 @@ const SyncDataTrigger: React.FC = () => {
 	const isInSyncProgress = data?.metadata?.status === 'progress'
 
 	return (
-		<Button disabled={isInSyncProgress} onClick={() => emit({ tenantId: currentTenant?.id })}>
+		<Button
+			aria-busy={isInSyncProgress}
+			disabled={isInSyncProgress}
+			onClick={() => emit()}
+			className='group aria-busy:after:content-["..."]'>
 			<Icon
 				name={isInSyncProgress ? 'LoaderCircle' : 'DatabaseBackup'}
 				size={18}
-				className={isInSyncProgress && 'animate-[spin_1s_linear_infinite]'}
+				className='group-aria-busy:animate-[spin_1s_linear_infinite]'
 			/>{' '}
 			{t('ns_inoutbound:scanner_setting.synchronization')}
 		</Button>

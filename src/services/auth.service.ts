@@ -1,5 +1,5 @@
 import type { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
-import { destroySharedSocket } from '@/common/hooks/use-socket-io'
+// import { destroySharedSocket } from '@/common/hooks/use-socket-io'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/providers/query-client-provider'
 import type { IAuthState } from '@/stores/auth.store'
@@ -20,7 +20,6 @@ export class AuthService {
 	}
 
 	static logout() {
-		destroySharedSocket() // * disconnect and release shared socket + clear pending queue
 		useAuthStore.getState().resetCredentials() // * reset auth state
 		queryClient.removeQueries({ type: 'all', exact: false }) // * remove all triggered queries
 		queryClient.cancelQueries({ fetchStatus: 'fetching' }) // * cancel all running queries
