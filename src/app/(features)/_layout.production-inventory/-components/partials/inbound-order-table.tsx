@@ -114,7 +114,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 
 	return (
 		<DataTable
-			data={data}
+			data={data ?? []}
 			dataType={RFIDDataType.INBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.inbound_directive')}

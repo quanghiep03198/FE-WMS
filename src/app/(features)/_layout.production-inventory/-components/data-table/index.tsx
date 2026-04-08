@@ -87,8 +87,8 @@ function DataTable<T extends TableRowData>({
 	const getScrollElement = useMemoizedFn(() => containerRef.current)
 
 	const virtualizer = useVirtualizer({
-		count: rows.length,
-		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel().rows.length : 5,
+		count: rows?.length,
+		overscan: table.getIsSomeRowsExpanded() ? table.getExpandedRowModel()?.rows?.length : 5,
 		useAnimationFrameWithResizeObserver: true,
 		getScrollElement,
 		estimateSize,

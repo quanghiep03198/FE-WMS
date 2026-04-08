@@ -99,7 +99,7 @@ export const OutboundEstimationTable: React.FC<OutboundEstimationTableProps> = (
 
 	return (
 		<DataTable
-			data={data}
+			data={data ?? []}
 			dataType={RFIDDataType.OUTBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.outbound_estimation')}

@@ -23,7 +23,7 @@ const DataTableBody: React.FC<DataTableBodyProps> = ({ virtualizer, rows, column
 
 	return (
 		<TableBody className='[&_tr:last-child_td]:!border-b-0 [&_tr>td]:border-b'>
-			{virtualItems.length > 0 ? (
+			{virtualItems?.length > 0 ? (
 				<Fragment>
 					{before > 0 && <VirtualPlaceholderRow colSpan={columnCount} style={{ height: before }} />}
 					{virtualItems.map((virtualItem) => {

@@ -45,7 +45,7 @@ const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 			</TableRow>
 			<TableRow>
 				<TableCell
-					colSpan={row.getVisibleCells().length}
+					colSpan={row.getVisibleCells()?.length}
 					className={cn('p-0', !isExpanded ? 'border-none shadow-none' : 'shadow-[inset_0_0px_4px_#17171725]')}>
 					<Collapsible open={isExpanded} data-state={isExpanded ? 'open' : 'closed'}>
 						<CollapsibleContent className='sticky left-0 w-[calc(100cqw-10px)] overflow-hidden bg-accent/50 transition-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
