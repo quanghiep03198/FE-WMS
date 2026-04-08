@@ -320,6 +320,7 @@ export interface IMonthlyInventoryComparison {
 	curr_period_inventory_qty: number
 	prev_period_inventory_qty: number
 	curr_month_initial_qty: number
+	curr_month_final_qty: number
 	curr_month_inbound: number
 	curr_month_outbound: number
 	prev_month_initial_qty: number

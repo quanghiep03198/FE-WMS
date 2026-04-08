@@ -119,7 +119,7 @@ const Statistics: React.FC = () => {
 				<CardHeader>
 					<CardDescription>{t('ns_dashboard:statistic.inventory_number')}</CardDescription>
 					<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
-						{formatIntlNumber(data?.curr_period_inventory_qty ?? 0)}
+						{formatIntlNumber(data?.curr_month_final_qty ?? 0)}
 					</CardTitle>
 					<CardAction>
 						<PercentageBadge percentage={data?.inventory_percentage_change} />
