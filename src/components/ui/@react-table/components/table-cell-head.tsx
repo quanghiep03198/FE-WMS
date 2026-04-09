@@ -19,11 +19,14 @@ import {
 	Icon,
 	Typography
 } from '../..'
+import { ROW_ACTIONS_COLUMN_ID, ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '../constants'
 import { useTableContext } from '../context/table.context'
 
 type TableCellHeadProps = {
 	header: Header<any, any>
 }
+
+const FIXED_COLUMN_IDS = [ROW_EXPANSION_COLUMN_ID, ROW_SELECTION_COLUMN_ID, ROW_ACTIONS_COLUMN_ID]
 
 const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 	const { t } = useTranslation()
@@ -88,7 +91,7 @@ const TableCellHead: React.FC<TableCellHeadProps> = ({ header }) => {
 					{flexRender(columnDef.header, header.getContext())}
 				</Typography>
 			</ContextMenuTrigger>
-			<ContextMenuContent className='w-64'>
+			<ContextMenuContent className='w-64' hidden={FIXED_COLUMN_IDS.includes(header.column.id)}>
 				<ContextMenuItem
 					disabled={!columnDef.enableSorting}
 					className='gap-x-2'
