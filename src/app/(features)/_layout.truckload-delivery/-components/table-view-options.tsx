@@ -11,11 +11,12 @@ import {
 	Icon,
 	Tooltip
 } from '@/components/ui'
+import { type ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 
-export function TableViewOptions<TData>({ table }: { table: Table<TData> }) {
+export function TableViewOptions({ table }: { table: Table<ITruckloadDelivery> }) {
 	const { t } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 

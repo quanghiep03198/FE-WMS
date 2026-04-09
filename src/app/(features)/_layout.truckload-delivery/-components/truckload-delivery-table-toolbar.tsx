@@ -1,3 +1,5 @@
+'use no memo'
+
 import { Button, Div, Icon } from '@/components/ui'
 import { type ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { type Table } from '@tanstack/react-table'
