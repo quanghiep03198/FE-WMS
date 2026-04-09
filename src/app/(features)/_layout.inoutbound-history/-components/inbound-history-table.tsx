@@ -1,7 +1,7 @@
 import type { IInboundHistory } from '@/common/types/entities'
 import { coalesce } from '@/common/utils/common'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Div, Empty, EmptyContent, EmptyMedia, EmptyTitle, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -138,7 +138,7 @@ const InboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{inboundHistoryByDate.map(([date, history]) => {
+					{inboundHistoryByDate.length > 0 ? inboundHistoryByDate.map(([date, history]) => {
 						const totalQty = history.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
 						return (
 							<TableRow key={date}>
@@ -164,7 +164,13 @@ const InboundHistoryTable: React.FC = () => {
 								</TableCell>
 							</TableRow>
 						)
-					})}
+					}) : <TableRow >
+						<TableCell colSpan={9} className='!border-b-0 p-0'>
+							<Div className='sticky left-0 flex gap-x-2 items-center justify-center max-w-[calc(100cqw-10px)]'>
+								<EmptyHistory />
+							</Div>
+						</TableCell>
+					</TableRow>}
 				</TableBody>
 				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
 					<TableRow>

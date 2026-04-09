@@ -10,7 +10,7 @@ const EmptyHistory: React.FC = () => {
 	const { removeParam } = useQueryParams<{ order?: string; type: RFIDDataType }>()
 
 	return (
-		<Empty className='mx-auto h-full max-w-4xl border border-dashed'>
+		<Empty className='mx-auto h-full max-w-4xl'>
 			<EmptyHeader>
 				<PlaceHolderItems className='w-full' />
 				<EmptyTitle>{t('ns_common:table.no_data')}</EmptyTitle>

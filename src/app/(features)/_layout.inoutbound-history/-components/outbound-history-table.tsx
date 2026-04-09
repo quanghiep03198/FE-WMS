@@ -68,7 +68,7 @@ const OutboundHistoryTable: React.FC = () => {
 		[i18n.language]
 	)
 
-	const inboundHistoryByDate = useMemo(() => {
+	const outboundHistoryByDate = useMemo(() => {
 		if (!data?.outbound_history) return []
 		return Object.entries(
 			groupBy(orderBy(data.outbound_history, 'outbound_date', 'desc'), (item) => item.outbound_date)
@@ -133,7 +133,7 @@ const OutboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{inboundHistoryByDate.map(([date, order]) => {
+					{outboundHistoryByDate.length > 0 ? outboundHistoryByDate.map(([date, order]) => {
 						const totalQty = order.reduce(
 							(acc, curr) =>
 								acc +
@@ -176,7 +176,13 @@ const OutboundHistoryTable: React.FC = () => {
 								</TableCell>
 							</TableRow>
 						)
-					})}
+					}) : <TableRow >
+						<TableCell colSpan={9} className='!border-b-0 p-0 '>
+							<Div className='sticky left-0 flex gap-x-2 items-center justify-center max-w-[calc(100cqw-10px)]'>
+								<EmptyHistory />
+							</Div>
+						</TableCell>
+					</TableRow>}
 				</TableBody>
 				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
 					<TableRow>
