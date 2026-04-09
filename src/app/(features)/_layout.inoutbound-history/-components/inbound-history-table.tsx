@@ -1,7 +1,7 @@
 import type { IInboundHistory } from '@/common/types/entities'
 import { coalesce } from '@/common/utils/common'
 import formatIntlNumber from '@/common/utils/format-intl-number'
-import { Div, Empty, EmptyContent, EmptyMedia, EmptyTitle, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
+import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -138,39 +138,43 @@ const InboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{inboundHistoryByDate.length > 0 ? inboundHistoryByDate.map(([date, history]) => {
-						const totalQty = history.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
-						return (
-							<TableRow key={date}>
-								<TableCell
-									align='left'
-									colSpan={1}
-									className='sticky left-0 z-10'
-									style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
-									<span>{date}</span>
-								</TableCell>
-								<TableCell colSpan={7} className='p-0'>
-									<NestedTable>
-										{sortBy(history, 'size_numcode').map((item) => (
-											<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
-												<NestedCellHead>{item.size_numcode}</NestedCellHead>
-												<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
-											</NestedColumn>
-										))}
-									</NestedTable>
-								</TableCell>
-								<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
-									<span>{formatIntlNumber(totalQty)}</span>
-								</TableCell>
-							</TableRow>
-						)
-					}) : <TableRow >
-						<TableCell colSpan={9} className='!border-b-0 p-0'>
-							<Div className='sticky left-0 flex gap-x-2 items-center justify-center max-w-[calc(100cqw-10px)]'>
-								<EmptyHistory />
-							</Div>
-						</TableCell>
-					</TableRow>}
+					{inboundHistoryByDate.length > 0 ? (
+						inboundHistoryByDate.map(([date, history]) => {
+							const totalQty = history.reduce((acc, curr) => acc + coalesce(curr?.qty, 0), 0)
+							return (
+								<TableRow key={date}>
+									<TableCell
+										align='left'
+										colSpan={1}
+										className='sticky left-0 z-10'
+										style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+										<span>{date}</span>
+									</TableCell>
+									<TableCell colSpan={7} className='p-0'>
+										<NestedTable>
+											{sortBy(history, 'size_numcode').map((item) => (
+												<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
+													<NestedCellHead>{item.size_numcode}</NestedCellHead>
+													<NestedCell>{formatIntlNumber(item?.qty)}</NestedCell>
+												</NestedColumn>
+											))}
+										</NestedTable>
+									</TableCell>
+									<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
+										<span>{formatIntlNumber(totalQty)}</span>
+									</TableCell>
+								</TableRow>
+							)
+						})
+					) : (
+						<TableRow>
+							<TableCell colSpan={9} className='!border-b-0 p-0'>
+								<Div className='sticky left-0 flex max-w-[calc(100cqw-10px)] items-center justify-center gap-x-2'>
+									<EmptyHistory />
+								</Div>
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
 					<TableRow>

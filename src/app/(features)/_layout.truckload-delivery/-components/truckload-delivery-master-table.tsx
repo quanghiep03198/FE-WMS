@@ -288,12 +288,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		const expandedRowData = !isSomeRowExpanded
 			? currentData
 			: [
-				currentData.find((item) =>
-					Object.entries(expanded).some(([rowId, isExpanded]) =>
-						isExpanded ? item.dispatch_order === rowId : true
+					currentData.find((item) =>
+						Object.entries(expanded).some(([rowId, isExpanded]) =>
+							isExpanded ? item.dispatch_order === rowId : true
+						)
 					)
-				)
-			].filter((item) => !isNil(item))
+				].filter((item) => !isNil(item))
 		if (!expandedRowData.length) {
 			setTableData(currentData)
 			resetExpanded()

@@ -133,56 +133,60 @@ const OutboundHistoryTable: React.FC = () => {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{outboundHistoryByDate.length > 0 ? outboundHistoryByDate.map(([date, order]) => {
-						const totalQty = order.reduce(
-							(acc, curr) =>
-								acc +
-								curr.sizes.reduce((_acc, _curr) => {
-									return _acc + coalesce(_curr?.qty, 0)
-								}, 0),
-							0
-						)
-						return (
-							<TableRow key={date}>
-								<TableCell
-									align='left'
-									colSpan={1}
-									className='sticky left-0 z-10'
-									style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
-									<span>{date}</span>
-								</TableCell>
-								<TableCell colSpan={7} className='divide-y divide-border p-0'>
-									{order.map((item) => (
-										<NestedTable key={item.mo_no}>
-											<NestedColumn className='basis-32'>
-												<NestedCell
-													className='row-span-2 inline-flex items-center justify-start'
-													align='left'>
-													{item.mo_no}
-												</NestedCell>
-											</NestedColumn>
-											{Array.isArray(item.sizes) &&
-												item.sizes.map((size) => (
-													<NestedColumn key={size.size_numcode}>
-														<NestedCellHead>{size.size_numcode}</NestedCellHead>
-														<NestedCell>{formatIntlNumber(size.qty)}</NestedCell>
-													</NestedColumn>
-												))}
-										</NestedTable>
-									))}
-								</TableCell>
-								<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
-									<span>{formatIntlNumber(totalQty)}</span>
-								</TableCell>
-							</TableRow>
-						)
-					}) : <TableRow >
-						<TableCell colSpan={9} className='!border-b-0 p-0 '>
-							<Div className='sticky left-0 flex gap-x-2 items-center justify-center max-w-[calc(100cqw-10px)]'>
-								<EmptyHistory />
-							</Div>
-						</TableCell>
-					</TableRow>}
+					{outboundHistoryByDate.length > 0 ? (
+						outboundHistoryByDate.map(([date, order]) => {
+							const totalQty = order.reduce(
+								(acc, curr) =>
+									acc +
+									curr.sizes.reduce((_acc, _curr) => {
+										return _acc + coalesce(_curr?.qty, 0)
+									}, 0),
+								0
+							)
+							return (
+								<TableRow key={date}>
+									<TableCell
+										align='left'
+										colSpan={1}
+										className='sticky left-0 z-10'
+										style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+										<span>{date}</span>
+									</TableCell>
+									<TableCell colSpan={7} className='divide-y divide-border p-0'>
+										{order.map((item) => (
+											<NestedTable key={item.mo_no}>
+												<NestedColumn className='basis-32'>
+													<NestedCell
+														className='row-span-2 inline-flex items-center justify-start'
+														align='left'>
+														{item.mo_no}
+													</NestedCell>
+												</NestedColumn>
+												{Array.isArray(item.sizes) &&
+													item.sizes.map((size) => (
+														<NestedColumn key={size.size_numcode}>
+															<NestedCellHead>{size.size_numcode}</NestedCellHead>
+															<NestedCell>{formatIntlNumber(size.qty)}</NestedCell>
+														</NestedColumn>
+													))}
+											</NestedTable>
+										))}
+									</TableCell>
+									<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
+										<span>{formatIntlNumber(totalQty)}</span>
+									</TableCell>
+								</TableRow>
+							)
+						})
+					) : (
+						<TableRow>
+							<TableCell colSpan={9} className='!border-b-0 p-0'>
+								<Div className='sticky left-0 flex max-w-[calc(100cqw-10px)] items-center justify-center gap-x-2'>
+									<EmptyHistory />
+								</Div>
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 				<TableFooter className='sticky bottom-0 z-20 [&>tr:first-child>td]:border-t'>
 					<TableRow>

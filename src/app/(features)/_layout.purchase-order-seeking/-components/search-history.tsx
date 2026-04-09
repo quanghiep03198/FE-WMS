@@ -57,9 +57,9 @@ const SearchHistory: React.FC = () => {
 							<Badge
 								key={term}
 								variant='outline'
-								className='cursor-pointer justify-between overflow-hidden min-w-28'
+								className='min-w-28 cursor-pointer justify-between overflow-hidden'
 								onClick={() => setValue('po', term)}>
-								<span className="line-clamp-1 text-ellipsis text-left" title={term}>
+								<span className='line-clamp-1 text-ellipsis text-left' title={term}>
 									{term}
 								</span>
 								<GhostButton
