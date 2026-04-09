@@ -57,9 +57,11 @@ const SearchHistory: React.FC = () => {
 							<Badge
 								key={term}
 								variant='outline'
-								className='min-w-28 cursor-pointer justify-between whitespace-nowrap'
+								className='cursor-pointer justify-between overflow-hidden min-w-28'
 								onClick={() => setValue('po', term)}>
-								{term}{' '}
+								<span className="line-clamp-1 text-ellipsis text-left" title={term}>
+									{term}
+								</span>
 								<GhostButton
 									className='ml-auto'
 									onClick={() => setRecentlySearch(recentlySearch.filter((item) => item !== term))}>
