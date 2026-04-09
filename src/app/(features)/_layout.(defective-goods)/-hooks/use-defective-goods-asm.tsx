@@ -56,9 +56,9 @@ export const useGetDefectiveGoodsInventoryQuery = () => {
 		select: (response) => {
 			return Array.isArray(response.metadata)
 				? response.metadata.map((item: IDefectiveGoodsInventory) => ({
-						...item,
-						total_qty: item.size_data.reduce((sum, size) => sum + size.qty, 0)
-					}))
+					...item,
+					total_qty: item.size_data.reduce((sum, size) => sum + size.qty, 0)
+				}))
 				: []
 		}
 	})
@@ -132,6 +132,7 @@ export const useGetCanInoutboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INOUTBOUND_EPC, params],
 		queryFn: async () => await DefectiveGoodsService.getCanInoutboundEpc(params),
+		enabled: !!searchParams.action,
 		select: (response) => response.metadata
 	})
 }
@@ -170,11 +171,11 @@ export const useUpdateDefectiveGoodsStockMutation = () => {
 		mutationFn: async (payload: InboundOutboundFormValues) =>
 			searchParams.action === RFIDDataType.INBOUND
 				? DefectiveGoodsService.updateInboundStatus(
-						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsOutboundFormValues>
-					)
+					payload as Exclude<InboundOutboundFormValues, DefectiveGoodsOutboundFormValues>
+				)
 				: DefectiveGoodsService.updateOutboundStatus(
-						payload as Exclude<InboundOutboundFormValues, DefectiveGoodsInboundFormValues>
-					),
+					payload as Exclude<InboundOutboundFormValues, DefectiveGoodsInboundFormValues>
+				),
 		onSuccess: () => {
 			for (const key in searchParams) {
 				if (key === 'action') continue
