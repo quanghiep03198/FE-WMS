@@ -7,8 +7,8 @@ import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { isEmpty } from 'lodash-es'
-import { useCallback } from 'react'
-import { useForm } from 'react-hook-form'
+import { useCallback, useEffect, useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -24,6 +24,7 @@ const LoginForm: React.FC = () => {
 		defaultValue: undefined,
 		listenStorageChange: true
 	})
+	const [shouldPersistAccount, setShouldPersistAccount] = useState<boolean>(!!persistedAccount)
 
 	const form = useForm<LoginFormValues>({
 		resolver: zodResolver(loginSchema),
@@ -50,15 +51,20 @@ const LoginForm: React.FC = () => {
 		}
 	})
 
-	const username = form.watch('username')
+	const username = useWatch({ name: 'username', control: form.control })
 
-	const handlePersistAccount = useCallback(
-		(checked: boolean) => {
-			const persistValue = checked && !isEmpty(username) ? username : undefined
-			setPersistedAccount(persistValue)
-		},
-		[username]
-	)
+
+
+	useEffect(() => {
+		if (shouldPersistAccount) {
+			setPersistedAccount(username)
+		}
+		else {
+			setPersistedAccount(undefined)
+			localStorage.removeItem('persistedAccount')
+		}
+	}, [username, shouldPersistAccount])
+
 
 	return (
 		<FormProvider {...form}>
@@ -82,7 +88,8 @@ const LoginForm: React.FC = () => {
 						<Checkbox
 							type='button'
 							id='persist-account-checkbox'
-							onCheckedChange={handlePersistAccount}
+							checked={shouldPersistAccount}
+							onCheckedChange={value => setShouldPersistAccount(Boolean(value))}
 							defaultChecked={Boolean(persistedAccount)}
 						/>
 						<Label htmlFor='persist-account-checkbox'>{t('ns_auth:labels.remember_account')}</Label>
