@@ -30,6 +30,7 @@ export interface IUser extends IBaseEntity {
 	authorized_factory_codes: Array<FactoryCode>
 	roles: Array<UserRole>
 	current_factory_code: FactoryCode
+	is_system_user: boolean
 }
 
 export interface ICompany extends IBaseEntity {

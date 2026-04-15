@@ -1,8 +1,8 @@
-import type { UserRole } from '@/common/constants/enums'
+import { UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { cn } from '@/common/utils/cn'
 import { Icon } from '@/components/ui'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -10,9 +10,9 @@ type VisibilityMode = 'mask' | 'invisible' | 'fallback'
 
 type RoleBaseAccessControlVariant =
 	| {
-			mode?: Exclude<VisibilityMode, 'fallback'>
-			fallbackComponent?: undefined
-	  }
+		mode?: Exclude<VisibilityMode, 'fallback'>
+		fallbackComponent?: undefined
+	}
 	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: Required<React.ReactNode> }
 
 type RoleBaseAccessControlProps = React.PropsWithChildren &
@@ -34,7 +34,18 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 	fallbackComponent
 }) => {
 	const { user } = useAuth()
-	const isAccessible = user && Array.isArray(user.roles) && user.roles.some((role) => authorizedRoles.includes(role))
+
+	const isAccessible = useMemo(() => {
+		if (!user) return false
+		if (user.is_system_user && user.roles.every(role => role === UserRole.ADMIN)) return true
+
+		const roles = user.roles
+		if (!Array.isArray(roles) || roles.length === 0) return false
+
+		const allowed = new Set<UserRole>(authorizedRoles)
+		return roles.some((role) => allowed.has(role))
+	}, [user, authorizedRoles])
+
 	const { t } = useTranslation()
 
 	const preventActionIfUnauthorized = (e: React.MouseEvent) => {
