@@ -51,33 +51,19 @@ type PaginationProps =
 	  }
 
 // #region Column filters prop types
-type ColumnFilterProps =
-	| {
-			manualFiltering: true
-			columnFilters: ColumnFiltersState
-			onColumnFiltersChange: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
-	  }
-	| {
-			manualFiltering?: false
-			columnFilters?: ColumnFiltersState
-			onColumnFiltersChange?: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
-	  }
+type ColumnFilterProps = Partial<{
+	manualFiltering: boolean
+	columnFilters: ColumnFiltersState
+	onColumnFiltersChange: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
+}>
 
 // #region Global filter prop types
-type GlobalFilterProps =
-	| {
-			manualFiltering: true
-			enableGlobalFilter: true
-			globalFilter: GlobalFilterTableState['globalFilter']
-			onGlobalFilterChange: React.Dispatch<React.SetStateAction<GlobalFilterTableState['globalFilter']>>
-	  }
-	| {
-			manualFiltering?: true | false
-			enableGlobalFilter?: false
-			globalFilter?: GlobalFilterTableState['globalFilter']
-			onGlobalFilterChange?: React.Dispatch<React.SetStateAction<GlobalFilterTableState['globalFilter']>>
-	  }
-
+type GlobalFilterProps = Partial<{
+	manualFiltering: boolean
+	enableGlobalFilter: boolean
+	globalFilter: GlobalFilterTableState['globalFilter']
+	onGlobalFilterChange: React.Dispatch<React.SetStateAction<GlobalFilterTableState['globalFilter']>>
+}>
 // #region Sorting prop types
 type SortingProps =
 	| {
