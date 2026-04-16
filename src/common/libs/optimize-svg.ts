@@ -45,7 +45,6 @@ export function optimizeSvg(svgElement: SVGSVGElement | null | undefined, option
 	if (removeUnusedAttrs) {
 		svgClone.removeAttribute('style')
 		svgClone.removeAttribute('class')
-		svgClone.removeAttribute('data-testid')
 	}
 
 	// Remove default values
