@@ -10,7 +10,7 @@ export const readerSettingsFormSchema = object({
 		.max(30)
 		.or(
 			string()
-				.refine((value) => !isNaN(+value) && Number.parseInt(value) >= 5 && Number.parseInt(value) <= 30, {
+				.refine((value) => !Number.isNaN(+value) && Number.parseInt(value) >= 5 && Number.parseInt(value) <= 30, {
 					error: 'ns_validation:invalid_value'
 				})
 				.transform((value) => Number.parseInt(value))
