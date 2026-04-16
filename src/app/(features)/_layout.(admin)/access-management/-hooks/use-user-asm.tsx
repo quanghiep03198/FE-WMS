@@ -64,6 +64,6 @@ const useInvalidateQueries = () => {
 	const queryClient = useQueryClient()
 
 	return () => {
-		queryClient.invalidateQueries({ predicate: (query) => query.queryKey.some((key) => key === UserQueryKeys.USERS) })
+		queryClient.invalidateQueries({ predicate: (query) => query.queryKey.includes(UserQueryKeys.USERS) })
 	}
 }
