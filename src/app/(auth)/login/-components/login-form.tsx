@@ -6,8 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
-import { isEmpty } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -53,18 +52,14 @@ const LoginForm: React.FC = () => {
 
 	const username = useWatch({ name: 'username', control: form.control })
 
-
-
 	useEffect(() => {
 		if (shouldPersistAccount) {
 			setPersistedAccount(username)
-		}
-		else {
+		} else {
 			setPersistedAccount(undefined)
 			localStorage.removeItem('persistedAccount')
 		}
 	}, [username, shouldPersistAccount])
-
 
 	return (
 		<FormProvider {...form}>
@@ -89,7 +84,7 @@ const LoginForm: React.FC = () => {
 							type='button'
 							id='persist-account-checkbox'
 							checked={shouldPersistAccount}
-							onCheckedChange={value => setShouldPersistAccount(Boolean(value))}
+							onCheckedChange={(value) => setShouldPersistAccount(Boolean(value))}
 							defaultChecked={Boolean(persistedAccount)}
 						/>
 						<Label htmlFor='persist-account-checkbox'>{t('ns_auth:labels.remember_account')}</Label>
