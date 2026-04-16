@@ -6,12 +6,39 @@ import { useInViewport } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { usePageContext } from '../-contexts/page-context'
 
+const ACTIVE_STANDALONE_CUBE_CLASS =
+	'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
+const ACTIVE_CLUSTERED_CUBE_CLASS =
+	'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
+const INACTIVE_CUBE_CLASS = '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
+const ACTIVE_WMS_CARD_CLASS =
+	'-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_500ms_ease-in-out_1400ms,transform_350ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1400ms,box-shadow_300ms_ease-out_1400ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border sm:shadow-[16px_16px_12px_#0a0a0a98]'
+const INACTIVE_WMS_CARD_CLASS =
+	'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
+const VISIBLE_GLOW_CLASS = 'opacity-100'
+const HIDDEN_GLOW_CLASS = 'opacity-0'
+
+const getClusteredConnectionColor = (renderCount: number) => {
+	if (renderCount === 1) return 'url(#right-to-left)'
+	if (renderCount > 1) return 'var(--green)'
+	return 'hsl(var(--border))'
+}
+
+const getStandaloneConnectionColor = (renderCount: number) => {
+	if (renderCount > 1) return 'var(--yellow)'
+	if (renderCount === 1) return 'url(#left-to-right)'
+	return 'hsl(var(--muted))'
+}
+
 const BeamAnimated: React.FC = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const svgRef = useRef<SVGSVGElement>(null)
 
 	const pageContext = usePageContext()
 	const [renderCount, setRenderCount] = useState<number>(0)
+	const isAnimated = renderCount > 0
+	const clusteredConnectionColor = getClusteredConnectionColor(renderCount)
+	const standaloneConnectionColor = getStandaloneConnectionColor(renderCount)
 	const [inViewport] = useInViewport(containerRef, {
 		root: () => pageContext?.contentScrollRef?.current,
 		threshold: 0.75
@@ -119,9 +146,7 @@ const BeamAnimated: React.FC = () => {
 					<g
 						className={cn(
 							'standalone-cube transition-all ease-in-out',
-							renderCount > 0
-								? 'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
-								: '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
+							isAnimated ? ACTIVE_STANDALONE_CUBE_CLASS : INACTIVE_CUBE_CLASS
 						)}>
 						<path
 							stroke='hsl(var(--border))'
@@ -137,12 +162,8 @@ const BeamAnimated: React.FC = () => {
 						className='clustered-chip__connection'
 						fillRule='evenodd'
 						clipRule='evenodd'
-						fill={
-							renderCount === 1 ? 'url(#right-to-left)' : renderCount > 1 ? 'var(--green)' : 'hsl(var(--border))'
-						}
-						stroke={
-							renderCount === 1 ? 'url(#right-to-left)' : renderCount > 1 ? 'var(--green)' : 'hsl(var(--border))'
-						}
+						fill={clusteredConnectionColor}
+						stroke={clusteredConnectionColor}
 						d='M440.083 64.7972L456.9 53.3972C463.204 49.4177 473.724 48.8842 480.397 52.2055L565 94.5L562.717 95.9411L478.114 53.6466C472.776 50.9895 464.359 51.4164 459.316 54.6L442.5 66L440.083 64.7972Z'
 						strokeWidth='1.2'
 					/>
@@ -152,12 +173,8 @@ const BeamAnimated: React.FC = () => {
 						fillRule='evenodd'
 						clipRule='evenodd'
 						d='M270 130L230.567 154.669C224.263 158.648 213.743 159.182 207.07 155.86L122.717 113.941L125 112.5L209.353 154.419C214.691 157.076 223.108 156.65 228.151 153.466L267.583 128.797L270 130Z'
-						fill={
-							renderCount > 1 ? 'var(--yellow)' : renderCount === 1 ? 'url(#left-to-right)' : 'hsl(var(--muted))'
-						}
-						stroke={
-							renderCount > 1 ? 'var(--yellow)' : renderCount === 1 ? 'url(#left-to-right)' : 'hsl(var(--muted))'
-						}
+						fill={standaloneConnectionColor}
+						stroke={standaloneConnectionColor}
 						strokeWidth='1.2'
 					/>
 					{/* Clustered */}
@@ -205,9 +222,7 @@ const BeamAnimated: React.FC = () => {
 					<g
 						className={cn(
 							'clustered-cube transition-transform ease-in-out',
-							renderCount > 0
-								? 'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
-								: '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
+							isAnimated ? ACTIVE_CLUSTERED_CUBE_CLASS : INACTIVE_CUBE_CLASS
 						)}>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
@@ -269,9 +284,7 @@ const BeamAnimated: React.FC = () => {
 					<div
 						className={cn(
 							'flex aspect-square size-24 select-none flex-col items-center justify-center gap-y-6 rounded-lg p-4 sm:size-12 sm:gap-y-2 sm:rounded-sm sm:p-2 sm:text-lg md:p-4',
-							renderCount > 0
-								? '-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_500ms_ease-in-out_1400ms,transform_350ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1400ms,box-shadow_300ms_ease-out_1400ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border sm:shadow-[16px_16px_12px_#0a0a0a98]'
-								: 'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
+							isAnimated ? ACTIVE_WMS_CARD_CLASS : INACTIVE_WMS_CARD_CLASS
 						)}>
 						<span className='h-6 text-center font-jetbrains text-2xl font-semibold tracking-wider transition-none duration-0 sm:text-sm md:text-2xl xl:text-2xl'>
 							WMS
@@ -284,14 +297,14 @@ const BeamAnimated: React.FC = () => {
 				className={cn(
 					'sm:size-18 absolute left-4 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-[var(--yellow)] opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
 					'transition-opacity delay-700 duration-500 ease-out',
-					renderCount > 0 ? 'opacity-100' : 'opacity-0'
+					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}
 			/>
 			<div
 				className={cn(
 					'sm:size-18 absolute right-5 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-[var(--green)] opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
 					'transition-opacity delay-700 duration-500 ease-out',
-					renderCount > 0 ? 'opacity-100' : 'opacity-0'
+					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}
 			/>
 		</div>
