@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {
 	type CommandProps,
 	mergeAttributes,
@@ -58,7 +57,7 @@ export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
 })
 
 function ImagePlaceholderComponent(props: NodeViewProps) {
-	const { editor, extension, selected } = props
+	const { editor } = props
 	// const [isExpanded, setIsExpanded] = useState(false)
 	// const [activeTab, setActiveTab] = useState<'upload' | 'url'>('upload')
 	const [altText, setAltText] = useState('')
@@ -66,7 +65,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 	// const [isDragActive, setIsDragActive] = useState(false)
 	// const { t } = useTranslation()
 
-	const { previewUrl, fileInputRef, handleFileChange, handleRemove, isPending, error } = useImageUpload({
+	const { previewUrl, fileInputRef, handleFileChange, handleRemove } = useImageUpload({
 		onUpload: (imageUrl) => {
 			editor
 				.chain()

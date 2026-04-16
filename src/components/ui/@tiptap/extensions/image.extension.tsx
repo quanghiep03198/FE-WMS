@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Image from '@tiptap/extension-image'
 import { mergeAttributes, type NodeViewProps, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react'
 import { AlignCenter, AlignLeft, AlignRight, Edit, ImageIcon, Maximize, MoreVertical, Trash } from 'lucide-react'
@@ -107,7 +106,7 @@ function TiptapImage(props: NodeViewProps) {
 	const [altText, setAltText] = useState(node.attrs.alt || '')
 	const { t } = useTranslation()
 
-	const { previewUrl, fileInputRef, handleFileChange, handleRemove, isPending, error } = useImageUpload({
+	const { fileInputRef, handleFileChange, handleRemove, isPending, error } = useImageUpload({
 		onUpload: (imageUrl) => {
 			updateAttributes({
 				src: imageUrl,
