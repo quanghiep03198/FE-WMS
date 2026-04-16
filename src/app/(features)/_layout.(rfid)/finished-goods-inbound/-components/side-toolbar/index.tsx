@@ -1,12 +1,16 @@
 import { cn } from '@/common/utils/cn'
-import { Div, Sheet, SheetContent, SheetTrigger } from '@/components/ui'
+import { Div, Sheet, SheetContent, SheetTrigger, Typography } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import DataRestoration from './data-restoration'
+import EpcDeduplicationToggleBox from './epc-deduplication-toggle-box'
 import FullscreenToggleBox from './fullscreen-toggle-box'
 import SyncDataTrigger from './sync-data-trigger'
 
 const ScannerSettings: React.FC = () => {
+	const { t } = useTranslation()
+
 	return (
 		<>
 			<Sheet>
@@ -16,7 +20,13 @@ const ScannerSettings: React.FC = () => {
 					className='max-w-lg !overflow-y-scroll'
 					onOpenAutoFocus={(e) => e.preventDefault()}>
 					<ScrollShadow className='max-h-full flex-1 space-y-6'>
-						<FullscreenToggleBox shouldExitOnUnmount={false} />
+						<Div className='space-y-3'>
+							<Typography className='text-lg font-semibold sm:text-base md:text-base'>
+								{t('ns_common:titles.general_settings')}
+							</Typography>
+							<EpcDeduplicationToggleBox />
+							<FullscreenToggleBox />
+						</Div>
 						<DataRestoration />
 						<SyncDataTrigger />
 					</ScrollShadow>
@@ -29,7 +39,11 @@ const ScannerSettings: React.FC = () => {
 						'sm:px-0 xxl:p-6',
 						'@4xl:grid @4xl:grid-cols-12 @4xl:grid-rows-3 @4xl:gap-x-10'
 					)}>
-					<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
+					<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
+						<Typography className='text-lg font-semibold sm:text-base md:text-base'>
+							{t('ns_common:titles.general_settings')}
+						</Typography>
+						<EpcDeduplicationToggleBox />
 						<FullscreenToggleBox />
 					</Div>
 					<Div className='w-full @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>

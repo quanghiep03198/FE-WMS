@@ -20,6 +20,13 @@ import axiosInstance from '@/configs/axios.config'
 import { omit, omitBy } from 'lodash-es'
 
 export class RFIDService {
+	static async enableDeduplicationInboundEpc(payload: { enabled: boolean }) {
+		return await axiosInstance.put<unknown, ResponseBody<number>, { enabled: boolean }>(
+			'/rfid/inbound/enable_deduplicate_inbound_epc',
+			payload
+		)
+	}
+
 	// #region Inbound
 	static async fetchNextInboundEpc(params: { _page: number; 'mo_no.eq': string }) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(

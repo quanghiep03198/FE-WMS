@@ -11,9 +11,11 @@ export default {
 	titles: {
 		add_device: 'Thêm thiết bị',
 		edit_device: 'Chỉnh sửa thông tin thiết bị',
-		rfid_device_management: 'Quản lý thiết bị RFID'
+		rfid_device_management: 'Quản lý thiết bị RFID',
+		deduplicate_epc: 'Chặn quét lặp'
 	},
 	descriptions: {
+		deduplicate_epc: 'Chặn quét lặp các EPC đã lưu vào hệ thống trước đó.',
 		dialog_form: 'Vui lòng điền thông tin bên dưới để thêm hoặc cập nhật thông tin thiết bị RFID vào hệ thống.',
 		device_sn: 'Số serial thường được tìm thấy trên nhãn dán ở mặt sau của thiết bị.',
 		device_name: 'Một tên duy nhất để nhận diện trạm trong hệ thống sản xuất.',

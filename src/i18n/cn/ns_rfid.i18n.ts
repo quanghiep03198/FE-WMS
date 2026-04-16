@@ -10,10 +10,12 @@ export default {
 	},
 	titles: {
 		add_device: '添加设备',
+		deduplicate_epc: '防止重复扫描EPC',
 		edit_device: '编辑设备信息',
 		rfid_device_management: 'RFID设备管理'
 	},
 	descriptions: {
+		deduplicate_epc: '防止重复扫描已保存到系统中的EPC.',
 		dialog_form: '请填写以下信息以向系统添加或更新RFID设备信息.',
 		device_sn: '设备序列号通常可以在设备背面的标签上找到.',
 		device_name: '在生产系统中识别站点的唯一名称.',
