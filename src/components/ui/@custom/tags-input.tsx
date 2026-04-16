@@ -85,58 +85,62 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 	const shouldDisableItem = value?.length - 1 < minItems
 	const shouldDisableInput = value?.length + 1 > maxItems
 
+	const navigateLeft = useCallback(
+		(target: HTMLInputElement) => {
+			if (value.length === 0) return
+			if (dir === 'rtl') {
+				if (activeIndex !== -1) setActiveIndex((prev) => (prev + 1 > value.length - 1 ? -1 : prev + 1))
+			} else {
+				if (target.selectionStart === 0) setActiveIndex((prev) => (prev - 1 < 0 ? value.length - 1 : prev - 1))
+			}
+		},
+		[dir, value, activeIndex]
+	)
+
+	const navigateRight = useCallback(
+		(target: HTMLInputElement) => {
+			if (value.length === 0) return
+			if (dir === 'rtl') {
+				if (target.selectionStart === 0) setActiveIndex((prev) => (prev - 1 < 0 ? value.length - 1 : prev - 1))
+			} else {
+				if (activeIndex !== -1) setActiveIndex((prev) => (prev + 1 > value.length - 1 ? -1 : prev + 1))
+			}
+		},
+		[dir, value, activeIndex]
+	)
+
+	const handleDeleteKey = useCallback(
+		(target: HTMLInputElement) => {
+			if (value.length === 0) return
+			if (activeIndex !== -1 && activeIndex < value.length) {
+				removeValue(value[activeIndex])
+				setActiveIndex((prev) => (prev - 1 <= 0 ? (value.length - 1 === 0 ? -1 : 0) : prev - 1))
+				return
+			}
+			if (target.selectionStart === 0 && (selectedValue === inputValue || isValueSelected)) {
+				removeValue(value[value.length - 1])
+			}
+		},
+		[value, activeIndex, selectedValue, inputValue, isValueSelected, removeValue]
+	)
+
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		e.stopPropagation()
-
 		const target = e.currentTarget
-
 		switch (e.key) {
 			case 'ArrowLeft':
-				if (dir === 'rtl') {
-					if (value?.length > 0 && activeIndex !== -1) {
-						setActiveIndex((prev) => (prev + 1 > value?.length - 1 ? -1 : prev + 1))
-					}
-				} else {
-					if (value?.length > 0 && target.selectionStart === 0) {
-						setActiveIndex((prev) => (prev - 1 < 0 ? value?.length - 1 : prev - 1))
-					}
-				}
+				navigateLeft(target)
 				break
-
 			case 'ArrowRight':
-				if (dir === 'rtl') {
-					if (value?.length > 0 && target.selectionStart === 0) {
-						setActiveIndex((prev) => (prev - 1 < 0 ? value?.length - 1 : prev - 1))
-					}
-				} else {
-					if (value?.length > 0 && activeIndex !== -1) {
-						setActiveIndex((prev) => (prev + 1 > value?.length - 1 ? -1 : prev + 1))
-					}
-				}
+				navigateRight(target)
 				break
-
 			case 'Backspace':
 			case 'Delete':
-				if (value?.length > 0) {
-					if (activeIndex !== -1 && activeIndex < value?.length) {
-						removeValue(value[activeIndex])
-						setActiveIndex((prev) => (prev - 1 <= 0 ? (value?.length - 1 === 0 ? -1 : 0) : prev - 1))
-					} else {
-						if (target.selectionStart === 0) {
-							if (selectedValue === inputValue || isValueSelected) {
-								removeValue(value[value?.length - 1])
-							}
-						}
-					}
-				}
+				handleDeleteKey(target)
 				break
-
-			case 'Escape': {
-				const newIndex = activeIndex === -1 ? value?.length - 1 : -1
-				setActiveIndex(newIndex)
+			case 'Escape':
+				setActiveIndex(activeIndex === -1 ? value.length - 1 : -1)
 				break
-			}
-
 			case 'Enter':
 				if (inputValue.trim() !== '') {
 					e.preventDefault()
