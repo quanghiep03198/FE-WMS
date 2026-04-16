@@ -19,7 +19,7 @@ const SizeTable: React.FC<SizeTableProps> = ({ data, total, ...props }) => {
 			</Div>
 		)
 
-	const sortedData = data.sort((a, b) => {
+	const sortedData = data.toSorted((a, b) => {
 		if (!Number.isNaN(Number(a.size_numcode)) && !Number.isNaN(Number(b.size_numcode)))
 			return Number(a.size_numcode) - Number(b.size_numcode)
 		return a.size_numcode.localeCompare(b.size_numcode)
