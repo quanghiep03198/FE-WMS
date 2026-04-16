@@ -75,7 +75,7 @@ export const ConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ class
 		<Div
 			data-slot='connection-insight'
 			className={cn(
-				'grid h-9 grid-cols-2 items-center gap-x-2 rounded-md border bg-background px-4 py-2 shadow-none',
+				'grid h-9 grid-cols-2 items-center gap-x-6 rounded-md border bg-background px-4 py-2 shadow-none',
 				className
 			)}
 			{...props}>
