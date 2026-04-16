@@ -63,9 +63,10 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 	const Component: Record<VisibilityMode, React.ReactNode> = {
 		mask: (
 			<div
+				role='none'
 				aria-disabled={!isAccessible}
 				className={cn('group/rbac relative', classNames?.wrapper)}
-				onClick={preventActionIfUnauthorized}
+				onPointerDown={preventActionIfUnauthorized}
 				onContextMenu={preventActionIfUnauthorized}>
 				{!isAccessible && (
 					<div
