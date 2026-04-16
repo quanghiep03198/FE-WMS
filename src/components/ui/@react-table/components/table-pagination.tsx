@@ -40,7 +40,7 @@ const TablePagination: React.FC<DataTablePaginationProps> = ({
 	const pageIndexContext = String(pageIndex ?? 1) + '/' + String(pageCount ?? 1)
 
 	const changePageSize = (value: string) => {
-		if (isNaN(+value)) return
+		if (Number.isNaN(+value)) return
 
 		if (+value > rowCount) {
 			goToFirstPage()

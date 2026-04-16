@@ -23,7 +23,7 @@ export const createDeliverySchema = object({
 				.nullish()
 				.refine((value) => {
 					if (value === null || value === undefined) return true
-					return !isNaN(+value)
+					return !Number.isNaN(+value)
 				})
 				.default(Infinity)
 		})
