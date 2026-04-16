@@ -69,7 +69,7 @@ export function optimizeSvg(svgElement: SVGSVGElement | null | undefined, option
 			if (d) {
 				// Round numbers to reduce precision
 				const minified = d.replace(/(\d+\.\d+)/g, (match) => {
-					return parseFloat(match).toFixed(decimalPrecision)
+					return Number.parseFloat(match).toFixed(decimalPrecision)
 				})
 				path.setAttribute('d', minified)
 			}

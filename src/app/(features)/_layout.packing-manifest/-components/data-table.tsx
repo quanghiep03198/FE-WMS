@@ -174,11 +174,11 @@ const ReportMasterTable: React.FC = () => {
 							defaultValue={value}
 							type='number'
 							onBlur={(e) => {
-								if (e.currentTarget.value && parseFloat(e.target.value) !== value)
+								if (e.currentTarget.value && Number.parseFloat(e.target.value) !== value)
 									mutateAsync({
 										po: row.original.po,
 										size: row.original.original_size_data,
-										actual_weight_in: parseFloat(e.currentTarget.value)
+										actual_weight_in: Number.parseFloat(e.currentTarget.value)
 									})
 							}}
 						/>
