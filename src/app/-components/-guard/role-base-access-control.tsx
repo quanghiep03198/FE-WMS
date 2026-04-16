@@ -10,9 +10,9 @@ type VisibilityMode = 'mask' | 'invisible' | 'fallback'
 
 type RoleBaseAccessControlVariant =
 	| {
-		mode?: Exclude<VisibilityMode, 'fallback'>
-		fallbackComponent?: undefined
-	}
+			mode?: Exclude<VisibilityMode, 'fallback'>
+			fallbackComponent?: undefined
+	  }
 	| { mode?: Extract<VisibilityMode, 'fallback'>; fallbackComponent: Required<React.ReactNode> }
 
 type RoleBaseAccessControlProps = React.PropsWithChildren &
@@ -37,7 +37,7 @@ const RoleBaseAccessControl: React.FC<RoleBaseAccessControlProps> = ({
 
 	const isAccessible = useMemo(() => {
 		if (!user) return false
-		if (user.is_system_user && user.roles.every(role => role === UserRole.ADMIN)) return true
+		if (user.is_system_user && user.roles.every((role) => role === UserRole.ADMIN)) return true
 
 		const roles = user.roles
 		if (!Array.isArray(roles) || roles.length === 0) return false
