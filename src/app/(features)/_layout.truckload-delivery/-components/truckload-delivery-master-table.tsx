@@ -15,13 +15,10 @@ import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react
 import { useTranslation } from 'react-i18next'
 import type { FlattenedPageQueryParams, PageQueryParams } from '../-hooks/use-page-query-params'
 import { usePageQueryParams } from '../-hooks/use-page-query-params'
-import {
-	getTruckloadDeliveryDetailQueryOptions,
-	getTruckloadDeliveryQueryOptions,
-	useGetTruckloadDeliveryQuery
-} from '../-hooks/use-truckload-delivery-asm'
+import { getTruckloadDeliveryQueryOptions, useGetTruckloadDeliveryQuery } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
 import RowActions from './row-actions'
+import RowExpansionCell from './row-expansion-cell'
 import {
 	ContainerStatusCheckbox,
 	DateTimeCell,
@@ -76,23 +73,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
 				meta: { align: 'center' },
-				cell: ({ row }) => (
-					<GhostButton
-						className='absolute inset-0'
-						disabled={false}
-						onPointerEnter={() =>
-							queryClient.prefetchQuery(getTruckloadDeliveryDetailQueryOptions(row.original.dispatch_order))
-						}
-						onClick={() => {
-							setExpanded({ [row.original.dispatch_order]: !row.getIsExpanded() })
-							if (row.getIsExpanded()) resetTableData()
-							else
-								setTableData((prev) =>
-									prev.filter((item) => item.dispatch_order === row.original.dispatch_order)
-								)
-						}}>
-						<Icon name={row.getIsExpanded() ? 'ChevronDown' : 'ChevronRight'} />
-					</GhostButton>
+				cell: (props) => (
+					<RowExpansionCell
+						{...props}
+						onExpansionChange={setExpanded}
+						onResetTableData={resetTableData}
+						onTableDataChange={setTableData}
+					/>
 				)
 			}),
 			columnHelper.accessor('license_plate', {
@@ -250,10 +237,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[i18n.language, isMobile]
 	)
 
-	const renderSubTable = useCallback(({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
-		const data = row.original
-		return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
-	}, [])
+	const renderSubTable: DataTableProps['renderSubComponent'] = useCallback(
+		({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
+			const data = row.original
+			return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
+		},
+		[]
+	)
 
 	const toolbarProps: DataTableProps['toolbarProps'] = useMemo(
 		() => ({
@@ -326,15 +316,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	)
 
 	return (
-		/* eslint-disable */
-		// @ts-ignore
 		<DataTable
 			columns={columns}
 			data={tableData}
 			border='bottom-only'
 			loading={isFetching}
 			expanded={expanded}
-			enableGlobalFilter={true}
 			enableExpanding={true}
 			getRowCanExpand={() => true}
 			getColumnCanGlobalFilter={() => true}
@@ -345,7 +332,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			manualFiltering={true}
 			manualPagination={true}
 			manualSorting={true}
-			isMultiSortEvent={() => false}
 			sortDescFirst={true}
 			paginationProps={{
 				...omit(data, 'data'),
@@ -363,7 +349,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				className:
 					'[&_tr[data-role=expandable-row]_*]:animate-none [&_tr[data-role=expandable-row]_*]:transition-none [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!z-10 [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!sticky [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!top-[--header-row-height]'
 			}}
-			renderSubComponent={renderSubTable}
+			renderSubComponent={renderSubTable as any}
 		/>
 	)
 }
