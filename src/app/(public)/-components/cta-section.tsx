@@ -2,12 +2,20 @@ import { cn } from '@/common/utils/cn'
 import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography, buttonVariants } from '@/components/ui'
 import { Link } from '@tanstack/react-router'
+import { useInViewport } from 'ahooks'
+import { useRef } from 'react'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../-contexts/page-context'
 import AnimatedScreen from './animated-screen'
 
 const CTASection: React.FC = () => {
 	const pageContext = usePageContext()
+	const ref = useRef<HTMLElement>(null)
+
+	const [isSectionInViewPort] = useInViewport(ref, {
+		root: () => pageContext?.contentScrollRef?.current,
+		threshold: 0.5
+	})
 
 	const outstandingFeatures = [
 		'High interactive user interface',
@@ -20,8 +28,10 @@ const CTASection: React.FC = () => {
 		<Div
 			id='cta'
 			as='section'
-			className='relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 @container/cta sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:mt-32 xxl:max-w-8xl xxl:p-0'>
-			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:col-span-1 @7xl/cta:justify-start'>
+			ref={ref}
+			aria-current={isSectionInViewPort}
+			className='group/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 paused @container/cta aria-[current=true]:running sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:mt-32 xxl:max-w-8xl xxl:p-0'>
+			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
 					onClick={() => {
 						if (typeof pageContext?.handleMenuClick === 'function') pageContext.handleMenuClick(1)
@@ -35,16 +45,16 @@ const CTASection: React.FC = () => {
 			</Div>
 			<Typography
 				variant='h1'
-				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
+				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center duration-700 @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
 				Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
 			</Typography>
 			<Typography
 				variant='p'
-				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-pretty text-center leading-relaxed tracking-wide duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @7xl/cta:text-left lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg'>
+				className='col-start-1 row-span-1 row-start-3 mx-auto mb-6 max-w-4xl text-pretty text-center leading-relaxed tracking-wide @7xl/cta:text-left lg:col-span-2 lg:max-w-full lg:self-start xl:max-w-6xl xl:text-lg'>
 				Improve inventory visibility, automate warehouse processes, and boost productivity with i-WMS. Our
 				comprehensive system provides the tools you need to manage your warehouse effortlessly.
 			</Typography>
-			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12'>
+			<List className='col-start-1 row-start-4 mx-auto grid w-full max-w-3xl grid-cols-1 gap-x-10 @xl/cta:grid-cols-2 @7xl/cta:grid-cols-1 lg:col-start-2 lg:row-start-4 lg:mt-10 lg:grid-cols-1 xl:mb-12'>
 				{outstandingFeatures.map((feature, index) => (
 					<ListItem key={index.toString()}>
 						<Icon name='Check' size={18} />{' '}
