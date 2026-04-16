@@ -52,6 +52,11 @@ const UserTableToolbar: React.FC<{
 				icon: 'User'
 			},
 			{
+				label: t('ns_auth:roles.INDUSTRIAL_ENGINEERING_STAFF'),
+				value: UserRole.INDUSTRIAL_ENGINEERING_STAFF,
+				icon: 'User'
+			},
+			{
 				label: t('ns_auth:roles.SECURITY_GUARD'),
 				value: UserRole.SECURITY_GUARD,
 				icon: 'ShieldUser'

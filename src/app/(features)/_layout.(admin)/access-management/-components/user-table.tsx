@@ -71,7 +71,13 @@ const UserTable: React.FC = () => {
 				header: t('ns_auth:fields.role'),
 				cell: ({ getValue }) => {
 					const roles = getValue()
-					return <EllipsisList data={roles} template={RoleBadge} threshhold={1} />
+					return roles.length === 0 ? (
+						<Typography variant='small' color='muted'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					) : (
+						<EllipsisList data={roles} template={RoleBadge} threshhold={1} />
+					)
 				},
 				filterFn: 'arrIncludesSome',
 				enableSorting: true,
@@ -93,7 +99,7 @@ const UserTable: React.FC = () => {
 								{t('ns_common:titles.unknown')}
 							</Typography>
 						)
-					return capitalize(format(new Date(value), 'PPP', { locale: dateLocale }))
+					return capitalize(format(new Date(value), 'yyyy-MM-dd', { locale: dateLocale }))
 				}
 			}),
 			columnHelper.accessor('is_active', {
