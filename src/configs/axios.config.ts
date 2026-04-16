@@ -109,13 +109,13 @@ export class AxiosClient {
 						return response
 					} catch (error) {
 						this.processQueue(error, null)
-						return Promise.reject(error)
+						throw error
 					} finally {
 						this.isRefreshingToken = false
 					}
 				}
 
-				return Promise.reject(error)
+				throw error
 			}
 		)
 	}
