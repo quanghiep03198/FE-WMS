@@ -139,7 +139,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 	const shoesStyleOptions = useMemo(
 		() =>
 			Array.from(index.styles)
-				.sort()
+				.sort((a, b) => a.localeCompare(b))
 				.map((v) => ({ shoes_style_factory_code: v })),
 		[index]
 	)
@@ -149,7 +149,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 			? (index.styleToColors.get(currentShoesStyle) ?? new Set<string>())
 			: index.allColors
 		return Array.from(set)
-			.sort()
+			.sort((a, b) => a.localeCompare(b))
 			.map((v) => ({ color_sn: v }))
 	}, [index, currentShoesStyle])
 
@@ -171,12 +171,12 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ dataType }) => {
 			}
 		} else {
 			return Array.from(index.allBatches)
-				.sort()
+				.sort((a, b) => a.localeCompare(b))
 				.map((v) => ({ mo_no: v }))
 		}
 
 		return Array.from(result)
-			.sort()
+			.sort((a, b) => a.localeCompare(b))
 			.map((v) => ({ mo_no: v }))
 	}, [index, currentShoesStyle, currentColor])
 
