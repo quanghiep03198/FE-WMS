@@ -101,11 +101,17 @@ export default defineConfig(({ mode }) => {
 				project: process.env.VITE_SENTRY_PROJECT,
 				telemetry: false,
 				sourcemaps: {
-					// Delete sourcemap after they're uploaded to Sentry.
+					// * Delete sourcemap after they're uploaded to Sentry.
 					filesToDeleteAfterUpload: ['./dist/**/*.map']
 				}
 			})
 		],
+		oxc: {
+			inject: {
+				Buffer: ['vite-plugin-node-polyfills/shims/buffer', 'default']
+			},
+			include: ['buffer', 'zlib']
+		},
 		resolve: {
 			alias: {
 				'@': path.resolve(__dirname, './src')
@@ -161,7 +167,13 @@ export default defineConfig(({ mode }) => {
 			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
-				banner: undefined,
+				banner:
+					"import __buffer_polyfill from 'vite-plugin-node-polyfills/shims/buffer'\n" +
+					'globalThis.Buffer = globalThis.Buffer || __buffer_polyfill\n' +
+					"import __global_polyfill from 'vite-plugin-node-polyfills/shims/global'\n" +
+					'globalThis.global = globalThis.global || __global_polyfill\n' +
+					"import __process_polyfill from 'vite-plugin-node-polyfills/shims/process'\n" +
+					'globalThis.process = globalThis.process || __process_polyfill\n',
 				transform: { dropLabels: ['DEV', 'DEBUG'] },
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
@@ -195,6 +207,7 @@ export default defineConfig(({ mode }) => {
 							{ name: 'ahooks', test: /ahooks/ },
 							{ name: 'axios', test: /axios/ },
 							{ name: 'bcryptjs-react', test: /bcryptjs-react/ },
+							{ name: 'buffer', test: /buffer/ },
 							{ name: 'clsx', test: /clsx/ },
 							{ name: 'color', test: /color/ },
 							{ name: 'cmdk', test: /cmdk/ },
@@ -224,7 +237,8 @@ export default defineConfig(({ mode }) => {
 							{ name: 'signature_pad', test: /signature_pad/ },
 							{ name: 'uuid', test: /uuid/ },
 							{ name: 'zod', test: /zod/ },
-							{ name: 'zustand', test: /zustand/ }
+							{ name: 'zustand', test: /zustand/ },
+							{ name: 'zlib', test: /zlib/ }
 						]
 					}
 				}
