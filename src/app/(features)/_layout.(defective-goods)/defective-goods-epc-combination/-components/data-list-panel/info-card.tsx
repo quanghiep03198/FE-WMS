@@ -27,6 +27,7 @@ import {
 import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
+import { Buffer } from 'buffer'
 import { formatRelative } from 'date-fns'
 import { capitalize, isNil, upperCase } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
