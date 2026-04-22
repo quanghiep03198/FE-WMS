@@ -1,5 +1,5 @@
 import SizeTable from '@/app/(features)/-components/shared/size-table'
-import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
@@ -103,6 +103,23 @@ const DefectiveGoodsInventoryTable: React.FC = () => {
 				enableHiding: false,
 				filterFn: 'fuzzy',
 				cell: TableCellText
+			}),
+			columnHelper.accessor('shoe_source', {
+				header: t('ns_erp:fields.shoe_source'),
+				enableColumnFilter: true,
+				enableSorting: true,
+				enablePinning: true,
+				enableResizing: true,
+				filterFn: 'fuzzy',
+				cell: ({ getValue }) => {
+					const value = getValue()
+					if (value) return t(`ns_inoutbound:shoes_source.${value}`)
+					return (
+						<Typography variant='small' color='muted'>
+							{t('ns_common:titles.unknown')}
+						</Typography>
+					)
+				}
 			}),
 			columnHelper.accessor('defective_category', {
 				header: t('ns_erp:fields.category'),
