@@ -15,7 +15,7 @@ export class AuthService {
 	 */
 	private static __refreshTokenRequest: Promise<RefreshTokenResponse> | null = null
 
-	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user'>>> {
+	static async login(data: LoginFormValues): Promise<ResponseBody<Pick<IAuthState, 'user' | 'accessToken'>>> {
 		return await axiosInstance.post('/login', data)
 	}
 
@@ -53,7 +53,10 @@ export class AuthService {
 			})
 
 		try {
-			return await AuthService.__refreshTokenRequest
+			const response = await AuthService.__refreshTokenRequest
+			useAuthStore.getState().setAccessToken(response.metadata.newAccessToken)
+
+			return response
 		} catch {
 			AuthService.logout()
 		}

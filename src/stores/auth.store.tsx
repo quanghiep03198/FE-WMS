@@ -6,21 +6,27 @@ import { persist } from 'zustand/middleware'
 
 export interface IAuthState {
 	user: IUser | null
+	accessToken: string | null
+	setAccessToken: (token: string) => void
 	setUserProfile: (profile: Partial<IUser>) => void
 	setCurrentFactory: (factoryCode: FactoryCode) => void
 	resetCredentials: () => void
 }
 
-const initialState: Pick<IAuthState, 'user'> = { user: null }
+const initialState: Pick<IAuthState, 'user' | 'accessToken'> = { user: null, accessToken: null }
 
 export const useAuthStore = create(
 	shared(
 		persist<IAuthState>(
 			(set, get) => ({
 				...initialState,
+				setAccessToken: (accessToken: string) => {
+					set((prev) => ({ ...prev, accessToken }))
+				},
 				setUserProfile: (profile: IUser) => {
 					const state = get()
 					set({
+						...state,
 						user: {
 							...state.user,
 							...profile
