@@ -15,15 +15,11 @@ type TSocketContextStore = {
 
 export const SocketContext = createContext<StoreApi<TSocketContextStore>>(null)
 
-const DEFAULT_STATES = {
-	isConnected: false
-}
+const DEFAULT_STATES = { isConnected: false }
 
 export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const storeRef = useRef<StoreApi<TSocketContextStore>>(null)
-	const { user, isAuthenticated, accessToken } = useAuth()
-
-	console.log('[SocketProvider] accessToken :>> ', accessToken)
+	const { user, accessToken } = useAuth()
 
 	if (!storeRef.current)
 		storeRef.current = create<TSocketContextStore>((set) => {
@@ -59,24 +55,19 @@ export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 	}, [accessToken])
 
 	useEffect(() => {
-		if (!isAuthenticated) return
 		socket.connect()
 
 		socket.on('connect', handleConnect)
 		socket.on('disconnect', handleDisconnect)
-		// socket.on('jwt_expired', handleRefreshToken)
 
 		return () => {
 			socket.off('connect', handleConnect)
 			socket.off('disconnect', handleDisconnect)
-			// socket.off('jwt_expired', handleRefreshToken)
 
 			socket.removeAllListeners()
 			socket.disconnect()
 		}
-	}, [isAuthenticated])
-
-	console.log('socket', socket)
+	}, [])
 
 	return <SocketContext.Provider value={storeRef.current}>{children}</SocketContext.Provider>
 }
