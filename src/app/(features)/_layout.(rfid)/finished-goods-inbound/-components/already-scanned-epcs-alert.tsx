@@ -1,5 +1,6 @@
 import type { DeleteScannedEpcsFormValues } from '@/app/(features)/-schemas/delete-epc.schema'
-import { useSocketIo } from '@/common/hooks/use-socket-io'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
+import { Json } from '@/common/utils/json'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,10 +19,12 @@ import {
 	Icon
 } from '@/components/ui'
 import { ROW_ACTIONS_COLUMN_ID } from '@/components/ui/@react-table/constants'
+import { useSocketContext } from '@/stores/socket.store'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { format } from 'date-fns'
-import React, { Fragment, useMemo, useState } from 'react'
+import { uniqBy } from 'lodash-es'
+import React, { Fragment, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../-contexts/page-context'
@@ -38,12 +41,29 @@ type AlreadyScannedEpc = {
 }
 
 const AlreadyScannedEpcsAlert: React.FC = () => {
-	const { data, setData } = useSocketIo<AlreadyScannedEpc[], unknown>({ event: 'rfid.inbound.check', initialData: [] })
+	const { io } = useSocketContext('io')
+	const [data, setData] = useState<AlreadyScannedEpc[]>([])
 	const { t, i18n } = useTranslation()
 	const { scanningStatus } = usePageContext('scanningStatus')
 	const [detailDialogOpen, setDetailDialogOpen] = useState<boolean>(false)
 	const [hasScannedEpcs, setHasScannedEpcs] = useState<boolean>(false)
 	const { mutateAsync: deleteAsync, isPending } = useDeleteEpcMutation()
+
+	const handleDataChange = useCallback((data: string) => {
+		setData((prev) => {
+			const incommingData = Json.parse<AlreadyScannedEpc[]>(data)
+			if (!Array.isArray(incommingData) || incommingData.length === 0) return prev
+			return uniqBy([...prev, ...incommingData], (item: AlreadyScannedEpc) => item.epc)
+		})
+	}, [])
+
+	useEffectOnce(() => {
+		io.on('rfid.inbound.check', handleDataChange)
+
+		return () => {
+			io.off('rfid.inbound.check', handleDataChange)
+		}
+	})
 
 	const handleDeleteEpcs = useMemoizedFn(async (epc: string) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
