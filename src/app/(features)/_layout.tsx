@@ -3,6 +3,7 @@ import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { SidebarProvider } from '@/components/ui'
+import { SocketProvider } from '@/stores/socket.store'
 import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { Fragment } from 'react'
@@ -51,6 +52,7 @@ function Layout() {
 			<AuthGuard>
 				<SidebarProvider
 					data-state-persistent-key='appSidebarOpen'
+					suppressHydrationWarning={true}
 					className='h-screen [&:has(#toggle-fullscreen[data-state=checked])_header]:z-0'>
 					<NavSidebar />
 					<LayoutWrapper>
@@ -69,7 +71,9 @@ function Layout() {
 											/>
 										)
 									}}>
-									<Outlet />
+									<SocketProvider>
+										<Outlet />
+									</SocketProvider>
 								</ErrorBoundary>
 							</OutletWrapper>
 						</BreadcrumbProvider>
