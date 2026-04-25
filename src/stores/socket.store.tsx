@@ -1,4 +1,3 @@
-import { RequestHeaders } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { AppConfigs } from '@/configs/app.config'
@@ -15,8 +14,6 @@ type TSocketContextStore = {
 
 export const SocketContext = createContext<StoreApi<TSocketContextStore>>(null)
 
-const DEFAULT_STATES = { isConnected: false }
-
 export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const storeRef = useRef<StoreApi<TSocketContextStore>>(null)
 	const { user, accessToken } = useAuth()
@@ -24,18 +21,19 @@ export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 	if (!storeRef.current)
 		storeRef.current = create<TSocketContextStore>((set) => {
 			return {
-				...DEFAULT_STATES,
+				isConnected: false,
+				io: io(AppConfigs.BASE_WEBSOCKET_URL, {
+					autoConnect: true,
+					timeout: 10_000,
+					transports: ['websocket', 'polling', 'webtransport'],
+					auth: {
+						accessToken,
+						factoryCode: user?.current_factory_code
+					}
+				}),
 				setIsConnected: (isConnected) => {
 					set((state) => ({ ...state, isConnected }))
-				},
-				io: io(AppConfigs.BASE_WEBSOCKET_URL, {
-					autoConnect: false,
-					extraHeaders: {
-						[RequestHeaders.FACTORY_CODE]: user.current_factory_code,
-						...(accessToken && { [RequestHeaders.AUTHORIZATION]: `Bearer ${accessToken}` })
-					},
-					timeout: 10_000
-				})
+				}
 			}
 		})
 
@@ -47,27 +45,19 @@ export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 	useUpdateEffect(() => {
 		if (!accessToken) return
 		socket.disconnect()
-		socket.io.opts.extraHeaders = {
-			...socket.io.opts.extraHeaders,
-			[RequestHeaders.AUTHORIZATION]: `Bearer ${accessToken}`
-		}
+		socket.io.opts.forceNew = true
 		socket.connect()
 	}, [accessToken])
 
 	useEffect(() => {
-		socket.connect()
-
 		socket.on('connect', handleConnect)
 		socket.on('disconnect', handleDisconnect)
 
 		return () => {
 			socket.off('connect', handleConnect)
 			socket.off('disconnect', handleDisconnect)
-
-			socket.removeAllListeners()
-			socket.disconnect()
 		}
-	}, [])
+	}, [socket])
 
 	return <SocketContext.Provider value={storeRef.current}>{children}</SocketContext.Provider>
 }
