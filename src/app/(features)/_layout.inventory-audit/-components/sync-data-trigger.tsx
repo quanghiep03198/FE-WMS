@@ -1,7 +1,10 @@
-import { useSocketIo } from '@/common/hooks/use-socket-io'
+import useAuth from '@/common/hooks/use-auth'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
+import { Json } from '@/common/utils/json'
 import { Button, Icon } from '@/components/ui'
+import { useSocketContext } from '@/stores/socket.store'
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { InventoryAuditQueryKeys } from '../-hooks/use-inventory-audit-asm'
@@ -9,10 +12,20 @@ import { InventoryAuditQueryKeys } from '../-hooks/use-inventory-audit-asm'
 type WsResponseMessage = WsResponseBody<{ status: 'progress' | 'completed' | 'failed' }>
 
 const SyncDataTrigger: React.FC = () => {
+	const { user } = useAuth()
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
-	const { data, emit } = useSocketIo<WsResponseMessage, void>({
-		event: 'sync_inventory_audit_data'
+	const { io, isConnected } = useSocketContext('io', 'isConnected')
+	const [data, setData] = useState<WsResponseMessage>(null)
+
+	const handleDataChange = (data: string) => setData(Json.parse<WsResponseMessage>(data))
+
+	useEffectOnce(() => {
+		io.on('sync_inventory_audit_data', handleDataChange)
+
+		return () => {
+			io.off('sync_inventory_audit_data', handleDataChange)
+		}
 	})
 
 	useEffect(() => {
@@ -38,14 +51,14 @@ const SyncDataTrigger: React.FC = () => {
 	return (
 		<Button
 			aria-busy={isInSyncProgress}
-			disabled={isInSyncProgress}
-			onClick={() => emit()}
+			disabled={isInSyncProgress || !isConnected}
+			onClick={() => io.emit('sync_inventory_audit_data', { factoryCode: user.current_factory_code })}
 			className='group aria-busy:after:content-["..."]'>
 			<Icon
 				name={isInSyncProgress ? 'LoaderCircle' : 'DatabaseBackup'}
 				size={18}
 				className='group-aria-busy:animate-[spin_1s_linear_infinite]'
-			/>{' '}
+			/>
 			{t('ns_inoutbound:scanner_setting.synchronization')}
 		</Button>
 	)

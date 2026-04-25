@@ -1,6 +1,7 @@
 import { factories } from '@/common/constants/constants'
-import { useSocketIo } from '@/common/hooks/use-socket-io'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import { cn } from '@/common/utils/cn'
+import { Json } from '@/common/utils/json'
 import {
 	Button,
 	Div,
@@ -14,7 +15,9 @@ import {
 	Icon,
 	Typography
 } from '@/components/ui'
+import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
+import { useSocketContext } from '@/stores/socket.store'
 import { hasIn } from 'lodash-es'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,10 +40,20 @@ type SyncMessagePayload = {
 
 const SyncDataTrigger: React.FC = () => {
 	const { t } = useTranslation()
-	const { data, emit } = useSocketIo<WsResponseBody<SyncProcessState[]>, SyncMessagePayload>({
-		event: 'sync_decker_data'
-	})
+	const [data, setData] = useState<WsResponseBody<SyncProcessState[]>>(null)
+	const { io, isConnected } = useSocketContext('io', 'isConnected')
+
 	const [factory, setFactory] = useState<Factory>()
+
+	const handleSetData = (data: string) => setData(Json.parse(data))
+
+	useEffectOnce(() => {
+		io.on('sync_decker_data', handleSetData)
+
+		return () => {
+			io.off('sync_decker_data', handleSetData)
+		}
+	})
 
 	useEffect(() => {
 		if (data?.error) toast.error('Synchronize failed!', { id: 'sync_decker_data_failed' })
@@ -61,13 +74,24 @@ const SyncDataTrigger: React.FC = () => {
 							{t('ns_inoutbound:scanner_setting.decker_data_synchronization_description')}
 						</Typography>
 					</Div>
-					<Div className='group/trigger inline-flex h-8 w-full max-w-44 items-center divide-x justify-self-end overflow-clip rounded-md border'>
+					<Div className='group/trigger relative inline-flex h-8 w-full max-w-44 items-center divide-x justify-self-end rounded-md border'>
+						<StatusIndicator
+							aria-disabled={!factory}
+							state={isConnected ? 'active' : 'down'}
+							label={undefined}
+							size='sm'
+							className='absolute right-0 top-0 -translate-y-1/2 translate-x-1/2'
+						/>
 						<Button
 							variant='ghost'
 							size='sm'
 							disabled={!factory}
 							className='flex-1 rounded-none'
-							onClick={() => emit({ id: uuid(), factory })}>
+							onClick={() =>
+								io.emit('sync_decker_data', { id: uuid(), factory } satisfies SyncMessagePayload, (value) => {
+									console.log(value)
+								})
+							}>
 							{t('ns_common:actions.trigger')}
 						</Button>
 						<DropdownMenu>
