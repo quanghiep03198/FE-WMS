@@ -1,6 +1,7 @@
 import useAuth from '@/common/hooks/use-auth'
 import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { AppConfigs } from '@/configs/app.config'
+import { AuthService } from '@/services/auth.service'
 import { useUpdateEffect } from 'ahooks'
 import React, { createContext, useEffect, useRef } from 'react'
 import { io, type Socket } from 'socket.io-client'
@@ -52,10 +53,12 @@ export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 	useEffect(() => {
 		socket.on('connect', handleConnect)
 		socket.on('disconnect', handleDisconnect)
+		socket.on('jwt_expired', AuthService.refreshToken)
 
 		return () => {
 			socket.off('connect', handleConnect)
 			socket.off('disconnect', handleDisconnect)
+			socket.off('jwt_expired', AuthService.refreshToken)
 		}
 	}, [socket])
 
