@@ -206,7 +206,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableHeader>
 								<TableBody>
 									{fields.map((field, index) => {
-										const defaultValues = data?.[index]
+										const defaultValues = data.find((item) => item.po === field.po)
 										const rowData: ITruckloadDeliveryDetail = defaultValues
 											? {
 													...defaultValues,
