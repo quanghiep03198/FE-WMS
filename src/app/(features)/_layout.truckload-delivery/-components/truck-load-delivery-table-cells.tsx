@@ -147,8 +147,6 @@ export const DateTimeCell: React.FC<
 	const { t } = useTranslation()
 	const value = getValue() ?? fallbackValue
 
-	if (props['aria-invalid']) console.log('invalid', props['aria-invalid'])
-
 	if (value)
 		return (
 			<Typography {...props} variant='small' className={className}>

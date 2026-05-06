@@ -264,9 +264,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	)
 
 	const onExpandedChange = useEffectEvent(() => {
-		console.log('data?.data', data?.data)
 		const currentData = Array.isArray(data?.data) ? data.data : []
-		console.log('expanded', expanded)
 
 		let isSomeRowExpanded = false
 		for (const rowId in expanded) {

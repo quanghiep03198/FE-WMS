@@ -87,11 +87,7 @@ const SyncDataTrigger: React.FC = () => {
 							size='sm'
 							disabled={!factory}
 							className='flex-1 rounded-none'
-							onClick={() =>
-								io.emit('sync_decker_data', { id: uuid(), factory } satisfies SyncMessagePayload, (value) => {
-									console.log(value)
-								})
-							}>
+							onClick={() => io.emit('sync_decker_data', { id: uuid(), factory } satisfies SyncMessagePayload)}>
 							{t('ns_common:actions.trigger')}
 						</Button>
 						<DropdownMenu>
