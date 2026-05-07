@@ -64,10 +64,10 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 					.flatMap((item) => {
 						return item.product_variants.flatMap((variant) => {
 							return variant.specs.flatMap((spec) => {
-								return spec.sizes.map(({ size }) => ({
-									label: size,
-									value: String(size)
-								}))
+								return spec.sizes.map(({ size }) => {
+									size = Number.parseFloat(size).toString()
+									return { label: size, value: size }
+								})
 							})
 						})
 					})
@@ -81,10 +81,10 @@ const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({
 		const spec = variant?.specs?.find((item) => item.color_sn === currentColor)
 		if (!spec?.sizes) return []
 		return spec.sizes
-			.map(({ size }) => ({
-				label: String(size),
-				value: String(size)
-			}))
+			.map(({ size }) => {
+				size = Number.parseFloat(size).toString()
+				return { label: size, value: size }
+			})
 			.sort((a, b) => Number.parseFloat(a.value) - Number.parseFloat(b.value))
 	}, [datalist, productSpecification, currentBrand, currentFactoryShoeStyle, currentColor, shouldRequireFullInfo])
 

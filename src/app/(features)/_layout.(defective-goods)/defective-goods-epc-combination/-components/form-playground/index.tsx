@@ -394,10 +394,10 @@ const DefectiveGoodsForm: React.FC = () => {
 							name={currentStrategy === 'manually' ? 'sizes' : 'size_code'}
 							datalist={
 								Array.isArray(orderDetail?.sizes)
-									? orderDetail.sizes.map((item) => ({
-											label: item.size_numcode,
-											value: item.size_numcode
-										}))
+									? orderDetail.sizes.map((item) => {
+											const sizeCode = Number.parseFloat(item.size_numcode).toString()
+											return { label: sizeCode, value: sizeCode }
+										})
 									: []
 							}
 						/>
