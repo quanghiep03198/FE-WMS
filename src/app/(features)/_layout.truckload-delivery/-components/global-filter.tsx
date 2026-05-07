@@ -179,7 +179,9 @@ const GlobalFilter: React.FC = () => {
 									))}
 								</Field>
 								<Field orientation='horizontal' className='justify-end gap-x-2'>
-									<Button type='submit'>{t('ns_common:actions.search')}</Button>
+									<PopoverClose asChild>
+										<Button type='submit'>{t('ns_common:actions.search')}</Button>
+									</PopoverClose>
 									<PopoverClose asChild>
 										<Button variant='outline' type='button' onClick={handleClearFilters}>
 											{t('ns_common:actions.cancel')}
