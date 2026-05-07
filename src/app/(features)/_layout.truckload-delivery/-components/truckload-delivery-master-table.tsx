@@ -35,7 +35,7 @@ const FALLBACK_TABLE_DATA = []
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
-	const { data, isRefetching } = useGetTruckloadDeliveryQuery()
+	const { data, isLoading, isRefetching } = useGetTruckloadDeliveryQuery()
 	const [tableData, setTableData, resetTableData] = useResetState<ITruckloadDelivery[]>(() =>
 		Array.isArray(data?.data) ? data?.data : FALLBACK_TABLE_DATA
 	)
@@ -65,8 +65,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		startTransition(() => setExpanded(row))
 	)
 	const handleResetExpanded = useMemoizedFn(() => startTransition(() => resetExpanded()))
-
-	const handleSort = useMemoizedFn((sorting: SortingState) => startTransition(() => setSorting(sorting)))
 
 	const columns = useMemo(
 		() => [
@@ -332,7 +330,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columns={columns}
 			data={tableData}
 			border='bottom-only'
-			loading={isRefetching}
+			loading={isLoading || isRefetching}
 			expanded={expanded}
 			enableExpanding={true}
 			getRowCanExpand={() => true}
@@ -348,10 +346,11 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			paginationProps={{
 				...omit(data, 'data'),
 				enableInputPageSize: false,
-				prefetch: handlePrefetch
+				prefetch: (params: Pick<Pagination<ITruckloadDelivery>, 'page' | 'limit'>) =>
+					startTransition(() => handlePrefetch(params))
 			}}
 			onPaginationChange={changePagination}
-			onSortingChange={handleSort}
+			onSortingChange={setSorting}
 			globalFilterFn='includesString'
 			initialState={{ sorting: [{ id: 'dispatch_order', desc: true }] }}
 			virtualizerOptions={virtualizerOptions}
