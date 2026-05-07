@@ -1,7 +1,7 @@
 import { AppConfigs } from '@/configs/app.config'
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
-import { QueryClient } from '@tanstack/react-query'
+import { matchQuery, MutationCache, QueryClient, QueryKey } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import type { AxiosError } from 'axios'
@@ -10,6 +10,9 @@ import { compress, decompress } from 'lz-string'
 declare module '@tanstack/react-query' {
 	interface Register {
 		defaultError: AxiosError
+		mutationMeta: {
+			invalidates?: Array<QueryKey>
+		}
 	}
 }
 
@@ -30,7 +33,17 @@ export const queryClient = new QueryClient({
 		mutations: {
 			networkMode: 'always'
 		}
-	}
+	},
+	mutationCache: new MutationCache({
+		onSuccess: (_data, _variables, _context, mutation) => {
+			queryClient.invalidateQueries({
+				predicate: (query) =>
+					// invalidate all matching tags at once
+					// or everything if no meta is provided
+					mutation.meta?.invalidates?.some((queryKey) => matchQuery({ queryKey }, query)) ?? true
+			})
+		}
+	})
 })
 
 broadcastQueryClient({
