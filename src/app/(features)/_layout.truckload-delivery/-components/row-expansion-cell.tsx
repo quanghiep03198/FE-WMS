@@ -2,6 +2,7 @@ import { Icon } from '@/components/ui'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import type { CellContext } from '@tanstack/react-table'
+import { useRef } from 'react'
 import { getTruckloadDeliveryDetailQueryOptions } from '../-hooks/use-truckload-delivery-asm'
 import { GhostButton } from '../../-components/shared/ghost-button'
 
@@ -18,13 +19,27 @@ const RowExpansionCell: React.FC<RowExpansionCellProps> = ({
 	onTableDataChange
 }) => {
 	const queryClient = useQueryClient()
+	const intentRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+	const startPrefetchIntent = () => {
+		intentRef.current = setTimeout(() => {
+			queryClient.prefetchQuery(getTruckloadDeliveryDetailQueryOptions(row.original.dispatch_order))
+		}, 200)
+	}
+
+	const cancelPrefetchIntent = () => {
+		if (intentRef.current) {
+			clearTimeout(intentRef.current)
+			intentRef.current = null
+		}
+	}
+
 	return (
 		<GhostButton
 			className='absolute inset-0'
 			disabled={false}
-			onPointerEnter={() =>
-				queryClient.prefetchQuery(getTruckloadDeliveryDetailQueryOptions(row.original.dispatch_order))
-			}
+			onPointerEnter={startPrefetchIntent}
+			onPointerLeave={cancelPrefetchIntent}
 			onClick={() => {
 				onExpansionChange({ [row.original.dispatch_order]: !row.getIsExpanded() })
 				if (row.getIsExpanded()) onResetTableData()
