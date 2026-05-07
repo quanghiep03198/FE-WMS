@@ -325,12 +325,14 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		[searchParams]
 	)
 
+	const isPending = isLoading || isRefetching
+
 	return (
 		<DataTable
 			columns={columns}
 			data={tableData}
 			border='bottom-only'
-			loading={isLoading || isRefetching}
+			loading={isPending}
 			expanded={expanded}
 			enableExpanding={true}
 			getRowCanExpand={() => true}
@@ -356,10 +358,10 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			virtualizerOptions={virtualizerOptions}
 			toolbarProps={toolbarProps}
 			containerProps={{
-				'aria-busy': isTransitioning,
+				'aria-busy': !isPending && isTransitioning,
 				style: { height: 'calc(var(--outlet-wrapper-height) - 10.5rem)' },
 				className: cn(
-					'aria-busy:opacity-50 aria-busy:pointer-events-none ease-in-out transition-opacity duration-300',
+					'aria-busy:opacity-80 aria-busy:pointer-events-none ease-in-out transition-opacity duration-300',
 					'[&_tr[data-role=expandable-row]_*[data-state=open]]:!animate-none',
 					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:!animate-none',
 					'[&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!z-10 [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!sticky [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!top-[--header-row-height]'
