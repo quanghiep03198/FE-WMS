@@ -94,10 +94,13 @@ export class TruckloadDeliveryService {
 	}
 
 	static async upsertPurchaseOrders({ dispatch_order, ...update }: UpsertPurchaseOrdersFormValues) {
-		update.outbound_purchase_orders = update.outbound_purchase_orders.map((item) => ({
-			...item,
-			id: typeof item.id === 'number' ? item.id : null
-		}))
+		update.outbound_purchase_orders = update.outbound_purchase_orders.map((item) => {
+			delete item.keyid
+			return {
+				...item,
+				id: typeof item.id === 'number' ? item.id : null
+			}
+		})
 
 		return await axiosInstance.put(`/truckload-delivery/upsert-purchase-orders/${dispatch_order}`, update)
 	}

@@ -116,7 +116,7 @@ export const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>
 	getValue
 }) => {
 	const { mutateAsync, isPending, isError, variables } = useUpdateContainerConditionMutation()
-	const currentValue = isPending ? variables[column.id] : Boolean(getValue())
+	const currentValue = variables?.[column.id] ?? Boolean(getValue())
 
 	return (
 		<RoleBaseAccessControl
@@ -126,7 +126,9 @@ export const ContainerStatusCheckbox: ColumnDefBase<ITruckloadDelivery, boolean>
 			}}
 			authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF]}>
 			<Checkbox
-				className={cn(isPending ? 'opacity-50' : 'opacity-100', isError ? 'border-destructive' : 'border-primary')}
+				aria-busy={isPending}
+				aria-invalid={isError}
+				className='aria-invalid:border-destructive aria-busy:opacity-50'
 				disabled={row.original.approval_status === TruckloadDeliveryStatus.CONFIRMED || isPending}
 				defaultChecked={currentValue}
 				checked={currentValue}

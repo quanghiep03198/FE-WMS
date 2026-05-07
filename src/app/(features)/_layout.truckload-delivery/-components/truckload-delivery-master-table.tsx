@@ -1,4 +1,5 @@
 import useMediaQuery from '@/common/hooks/use-media-query'
+import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
 import { DataTable, Icon, Tooltip } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
@@ -8,10 +9,10 @@ import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useDeepCompareEffect, useResetState } from 'ahooks'
+import { useDeepCompareEffect, useMemoizedFn, useResetState } from 'ahooks'
 import { unflatten } from 'flat'
 import { isNil, omit, omitBy } from 'lodash-es'
-import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { useCallback, useEffectEvent, useMemo, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FlattenedPageQueryParams, PageQueryParams } from '../-hooks/use-page-query-params'
 import { usePageQueryParams } from '../-hooks/use-page-query-params'
@@ -34,12 +35,13 @@ const FALLBACK_TABLE_DATA = []
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
-	const { data, isFetching } = useGetTruckloadDeliveryQuery()
-	const [tableData, setTableData, resetTableData] = useResetState<ITruckloadDelivery[]>(
+	const { data, isRefetching } = useGetTruckloadDeliveryQuery()
+	const [tableData, setTableData, resetTableData] = useResetState<ITruckloadDelivery[]>(() =>
 		Array.isArray(data?.data) ? data?.data : FALLBACK_TABLE_DATA
 	)
 	const columnHelper = createColumnHelper<ITruckloadDelivery>()
 	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
+	const [isTransitioning, startTransition] = useTransition()
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
 	const defaultSortingState = useMemo(() => {
@@ -54,13 +56,25 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		? t('ns_erp:fields.license_plate')
 		: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number')
 
+	const handleTableDataChange = useMemoizedFn((data: ITruckloadDelivery[]) =>
+		startTransition(() => setTableData(data))
+	)
+	const handleResetTableData = useMemoizedFn(() => startTransition(() => resetTableData()))
+
+	const handleExpandedChange = useMemoizedFn((row: { [key: string]: boolean }) =>
+		startTransition(() => setExpanded(row))
+	)
+	const handleResetExpanded = useMemoizedFn(() => startTransition(() => resetExpanded()))
+
+	const handleSort = useMemoizedFn((sorting: SortingState) => startTransition(() => setSorting(sorting)))
+
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
 				header: () => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
-						<GhostButton className='absolute inset-0' onClick={() => resetExpanded()}>
+						<GhostButton className='absolute inset-0' onClick={handleResetExpanded}>
 							<Icon name='ListCollapse' size={18} />
 						</GhostButton>
 					</Tooltip>
@@ -76,9 +90,9 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				cell: (props) => (
 					<RowExpansionCell
 						{...props}
-						onExpansionChange={setExpanded}
-						onResetTableData={resetTableData}
-						onTableDataChange={setTableData}
+						onExpansionChange={handleExpandedChange}
+						onResetTableData={handleResetTableData}
+						onTableDataChange={handleTableDataChange}
 					/>
 				)
 			}),
@@ -240,7 +254,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const renderSubTable: DataTableProps['renderSubComponent'] = useCallback(
 		({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 			const data = row.original
-			return <TruckloadDeliveryDetailTable data={data} onCollapse={resetExpanded} />
+			return <TruckloadDeliveryDetailTable data={data} onCollapse={handleResetExpanded} />
 		},
 		[]
 	)
@@ -283,13 +297,13 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					)
 				].filter((item) => !isNil(item))
 		if (!expandedRowData.length) {
-			setTableData(currentData)
-			resetExpanded()
-		} else setTableData(expandedRowData)
+			handleTableDataChange(currentData)
+			handleResetExpanded()
+		} else handleTableDataChange(expandedRowData)
 	})
 
 	// Sync tableData with data and expanded state in a single effect
-	useEffect(onExpandedChange, [data?.data, expanded])
+	useDeepCompareEffect(onExpandedChange, [data?.data, expanded])
 
 	useDeepCompareEffect(() => {
 		if (!('page' in searchParams) || !('limit' in searchParams)) return
@@ -318,7 +332,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			columns={columns}
 			data={tableData}
 			border='bottom-only'
-			loading={isFetching}
+			loading={isRefetching}
 			expanded={expanded}
 			enableExpanding={true}
 			getRowCanExpand={() => true}
@@ -337,15 +351,20 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				prefetch: handlePrefetch
 			}}
 			onPaginationChange={changePagination}
-			onSortingChange={setSorting}
+			onSortingChange={handleSort}
 			globalFilterFn='includesString'
 			initialState={{ sorting: [{ id: 'dispatch_order', desc: true }] }}
 			virtualizerOptions={virtualizerOptions}
 			toolbarProps={toolbarProps}
 			containerProps={{
+				'aria-busy': isTransitioning,
 				style: { height: 'calc(var(--outlet-wrapper-height) - 10.5rem)' },
-				className:
-					'[&_tr[data-role=expandable-row]_*]:animate-none [&_tr[data-role=expandable-row]_*]:transition-none [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!z-10 [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!sticky [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!top-[--header-row-height]'
+				className: cn(
+					'aria-busy:opacity-50 aria-busy:pointer-events-none ease-in-out transition-opacity duration-300',
+					'[&_tr[data-role=expandable-row]_*[data-state=open]]:!animate-none',
+					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:!animate-none',
+					'[&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!z-10 [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!sticky [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!top-[--header-row-height]'
+				)
 			}}
 			renderSubComponent={renderSubTable as any}
 		/>

@@ -21,7 +21,7 @@ import type { IPurchaseOrderResult } from '@/services/order.service'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
-import React, { Fragment, memo, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
 import { GhostButton } from '../../-components/shared/ghost-button'
@@ -63,7 +63,19 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	return (
 		<TableRow aria-readonly={readOnly} className={cn('transition-allow-discrete')}>
 			<TableCell align='left' className='w-[30%] xl:w-[15%]'>
-				{readOnly ? (
+				<PurchaseOrderFieldControl
+					{...(readOnly && { 'aria-haspopup': 'false' })}
+					name={`outbound_purchase_orders.${index}.po`}
+					className='h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto focus:border-primary read-only:focus:border-transparent'
+					tabIndex={index}
+					autoFocus={true}
+					data-index={index}
+					readOnly={readOnly}
+					data-icon={false}
+					data-action={CommonActions.UPDATE}
+					onValueChange={(selectedItem: IPurchaseOrderResult) => handleSelectPurchaseOrder(selectedItem)}
+				/>
+				{/* {readOnly ? (
 					<span>{snapshotData?.po}</span>
 				) : (
 					<PurchaseOrderFieldControl
@@ -72,11 +84,12 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 						tabIndex={index}
 						autoFocus={true}
 						data-index={index}
+						readOnly={readOnly}
 						data-icon={false}
 						data-action={CommonActions.UPDATE}
 						onValueChange={(selectedItem: IPurchaseOrderResult) => handleSelectPurchaseOrder(selectedItem)}
 					/>
-				)}
+				)} */}
 			</TableCell>
 			{!isLargeScreen ? (
 				<TableCell className='w-[30%] xl:hidden' align='left'>
@@ -131,7 +144,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 					aria-readonly={readOnly}
 					readOnly={readOnly}
 					name={`outbound_purchase_orders.${index}.outbound_qty`}
-					className='h-8 rounded-sm border-transparent py-1.5 shadow-none focus:border-primary aria-readonly:focus:border-transparent'
+					className='h-8 rounded-sm border-transparent py-1.5 shadow-none read-only:cursor-auto focus:border-primary aria-readonly:focus:border-transparent'
 					autoFocus={false}
 					autoComplete='off'
 					tabIndex={index + 1}
@@ -202,4 +215,4 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 
 TruckloadDeliveryDetailRow.displayName = 'TruckloadDeliveryDetailRow'
 
-export default memo(TruckloadDeliveryDetailRow)
+export default TruckloadDeliveryDetailRow

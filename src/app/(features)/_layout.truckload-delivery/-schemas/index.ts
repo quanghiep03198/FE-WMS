@@ -79,6 +79,7 @@ export const upsertPurchaseOrdersSchema = object({
 	outbound_purchase_orders: array(
 		object({
 			id: number().or(string()).default(null),
+			keyid: number().or(string()).nullish(),
 			po: string({ message: 'ns_validation:required' }).trim().nonempty({ message: 'ns_validation:required' }),
 			outbound_qty: number({ message: 'ns_validation:required' }).int().positive(),
 			max_outbound_qty: number().nonnegative().default(Infinity)

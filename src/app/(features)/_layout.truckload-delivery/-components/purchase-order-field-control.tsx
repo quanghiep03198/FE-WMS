@@ -37,14 +37,12 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 	const fieldAction: CommonActions.CREATE | CommonActions.UPDATE = props['data-action']
 
 	const { t } = useTranslation()
-	const { control, getValues, setValue } = useFormContext<CreateDeliveryFormValues | UpsertPurchaseOrdersFormValues>()
+	const { control, setValue } = useFormContext<CreateDeliveryFormValues | UpsertPurchaseOrdersFormValues>()
 	const currentPurchaseOrderValue = useWatch({ control, name })
 	const currentOutboundQty = useWatch({ control, name: `outbound_purchase_orders.${fieldIndex}.outbound_qty` })
 	const [searchTerm, setSearchTerm] = useState(typeof fieldIndex === 'number' ? (currentPurchaseOrderValue ?? '') : '')
 	const debouncedSearchTerm = useDebounce(searchTerm, { wait: 500 })
 	const { data: purchaseOrders, isLoading } = useSearchDispatchPurchaseOrder(debouncedSearchTerm)
-
-	// const currentId = getValues(`outbound_purchase_orders.${fieldIndex}.id`)
 
 	useEffect(() => {
 		if (!currentPurchaseOrderValue) return

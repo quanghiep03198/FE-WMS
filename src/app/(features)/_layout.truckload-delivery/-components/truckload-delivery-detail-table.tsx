@@ -23,10 +23,10 @@ import { Typewriter } from '@/components/ui/@custom/type-writter'
 import type { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { useResetState } from 'ahooks'
+import { useDeepCompareEffect, useResetState } from 'ahooks'
 import { format } from 'date-fns'
-import { pick, sortBy, uniqBy } from 'lodash-es'
-import React, { Fragment, useEffect } from 'react'
+import { isNil, pick, sortBy, uniqBy } from 'lodash-es'
+import React, { Fragment } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -98,8 +98,13 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		// * Default form values from backend data
 		const defaultFormValues = Array.isArray(data)
 			? uniqBy(
-					data.filter(getIsStoredToDatabase).map((item) => pick(item, ['id', 'po', 'outbound_qty'])),
-					(item) => item.id
+					data.filter(getIsStoredToDatabase).map((item) => ({
+						...pick(item, ['id', 'keyid', 'po', 'outbound_qty']),
+						max_outbound_qty: !isNil(item.max_outbound_qty)
+							? item.outbound_qty
+							: item.po_qty - item.dispatched_outbound_qty + item.outbound_qty
+					})),
+					(item) => item.keyid
 				)
 			: []
 
@@ -117,10 +122,10 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		form.reset(newFormValues)
 	}
 
-	useEffect(() => {
+	useDeepCompareEffect(() => {
 		// if (isPending || isFetching) return
 		handleResetDeliveryDetails(true)
-	}, [data, isPending, isPending])
+	}, [data])
 
 	const handleSaveChanges = async (payload: UpsertPurchaseOrdersFormValues) => {
 		const toastId = toast.loading(t('ns_common:notification.processing_request'))
@@ -128,8 +133,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 			await mutateAsync(payload)
 			toast.success(t('ns_common:notification.success'), { id: toastId })
 			handleResetDeliveryDetails(false)
-			// refetch()
-		} catch {
+		} catch (e) {
+			console.error('Error on handleSaveChanges :>>', e)
 			toast.error(t('ns_common:notification.error'), { id: toastId })
 		}
 	}
@@ -206,7 +211,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 								</TableHeader>
 								<TableBody>
 									{fields.map((field, index) => {
-										const defaultValues = data.find((item) => item.po === field.po)
+										const defaultValues = data.find((item) => item.keyid === field.keyid)
 										const rowData: ITruckloadDeliveryDetail = defaultValues
 											? {
 													...defaultValues,
@@ -228,7 +233,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 
 										return (
 											<TruckloadDeliveryDetailRow
-												key={field.id}
+												key={String(field.keyid ?? field.id)}
 												index={index}
 												readOnly={!action || approval_status === TruckloadDeliveryStatus.CONFIRMED}
 												deletable={approval_status !== TruckloadDeliveryStatus.CONFIRMED}
@@ -380,23 +385,22 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 							</Table>
 						</FieldSet>
 						<Div className='m-4 grid place-content-center place-items-center gap-y-4 rounded-md border border-dashed p-4'>
-							{action && (
-								<Div className='col-span-full inline-flex items-stretch'>
-									<Icon
-										name='BotMessageSquare'
-										size={24}
-										className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
-									/>
-									&quot;
-									<Typewriter
-										className='text-sm italic'
-										text={t('ns_inoutbound:description.duplicate_po_added')}
-										typeSpeed={25}
-										delay={0}
-									/>
-									&quot;
-								</Div>
-							)}
+							<Div className='col-span-full inline-flex items-stretch'>
+								<Icon
+									name='BotMessageSquare'
+									size={24}
+									className='mr-2 duration-500 animate-in zoom-in-0 slide-in-from-bottom-2'
+								/>
+								&quot;
+								<Typewriter
+									className='text-sm italic'
+									text={t('ns_inoutbound:description.duplicate_po_added')}
+									typeSpeed={25}
+									delay={0}
+								/>
+								&quot;
+							</Div>
+
 							<Div className='flex items-center gap-x-1'>
 								<RoleBaseAccessControl
 									authorizedRoles={[UserRole.FG_WAREHOUSE_STAFF, UserRole.IE_STAFF]}
@@ -435,6 +439,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												onClick={() =>
 													append({
 														id: uuid(),
+														keyid: uuid(),
 														po: '',
 														outbound_qty: null,
 														max_outbound_qty: null
