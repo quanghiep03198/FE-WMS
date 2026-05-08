@@ -18,6 +18,7 @@ export default {
 		deactivate: 'Vô hiệu hóa',
 		decrement: 'Giảm số lượng',
 		delete: 'Xóa',
+		delete_all: 'Xóa tất cả',
 		detail: 'Chi tiết',
 		disconnect: 'Ngắt kết nối',
 		dismiss: 'Bỏ qua',

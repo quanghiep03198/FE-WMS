@@ -12,7 +12,8 @@ export default {
 		add_device: '添加设备',
 		deduplicate_epc: '防止重复扫描EPC',
 		edit_device: '编辑设备信息',
-		rfid_device_management: 'RFID设备管理'
+		rfid_device_management: 'RFID设备管理',
+		watching: '正在观看'
 	},
 	descriptions: {
 		deduplicate_epc: '防止重复扫描已保存到系统中的EPC.',

@@ -10,6 +10,7 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
+	Button,
 	DataTable,
 	Dialog,
 	DialogContent,
@@ -24,7 +25,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useMemoizedFn, useUpdateEffect } from 'ahooks'
 import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
-import React, { Fragment, useCallback, useMemo, useState } from 'react'
+import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../-contexts/page-context'
@@ -42,15 +43,16 @@ type AlreadyScannedEpc = {
 
 const AlreadyScannedEpcsAlert: React.FC = () => {
 	const { io } = useSocketContext('io')
-	const [data, setData] = useState<AlreadyScannedEpc[]>([])
+	const [duplicatedEpcs, setDuplicatedEpcs] = useState<AlreadyScannedEpc[]>([])
 	const { t, i18n } = useTranslation()
 	const { scanningStatus } = usePageContext('scanningStatus')
 	const [detailDialogOpen, setDetailDialogOpen] = useState<boolean>(false)
-	const [hasScannedEpcs, setHasScannedEpcs] = useState<boolean>(false)
+	const [shouldShowAlert, setShouldShowAlert] = useState<boolean>(false)
 	const { mutateAsync: deleteAsync, isPending } = useDeleteEpcMutation()
+	const dismissRef = useRef<boolean>(false)
 
 	const handleDataChange = useCallback((data: string) => {
-		setData((prev) => {
+		setDuplicatedEpcs((prev) => {
 			const incommingData = Json.parse<AlreadyScannedEpc[]>(data)
 			if (!Array.isArray(incommingData) || incommingData.length === 0) return prev
 			return uniqBy([...prev, ...incommingData], (item: AlreadyScannedEpc) => item.epc)
@@ -65,11 +67,18 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 		}
 	})
 
-	const handleDeleteEpcs = useMemoizedFn(async (epc: string) => {
+	const handleDeleteEpcs = useMemoizedFn(async (data: string | string[]) => {
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 		try {
-			await deleteAsync({ epcs: [epc], rescannable: false } satisfies DeleteScannedEpcsFormValues)
-			setData((prev) => prev?.filter((item) => item.epc !== epc))
+			await deleteAsync({
+				epcs: typeof data === 'string' ? [data] : data,
+				rescannable: false
+			} satisfies DeleteScannedEpcsFormValues)
+			setDuplicatedEpcs((prev) =>
+				prev?.filter((item) =>
+					typeof data === 'string' ? item.epc !== data : !data.some((epc) => epc === item.epc)
+				)
+			)
 			toast.success(t('ns_common:notification.success'), { id })
 		} catch (e) {
 			toast.error(e.message, { id })
@@ -124,13 +133,17 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 
 	useUpdateEffect(() => {
 		const shouldShowAlert =
-			Array.isArray(data) && data.length > 0 && !detailDialogOpen && scanningStatus === 'connected'
-		if (shouldShowAlert) setHasScannedEpcs(true)
-	}, [data, scanningStatus])
+			!dismissRef.current &&
+			Array.isArray(duplicatedEpcs) &&
+			duplicatedEpcs.length > 0 &&
+			!detailDialogOpen &&
+			scanningStatus === 'connected'
+		setShouldShowAlert(shouldShowAlert)
+	}, [duplicatedEpcs, scanningStatus])
 
 	return (
 		<Fragment>
-			<AlertDialog open={hasScannedEpcs}>
+			<AlertDialog open={shouldShowAlert}>
 				<AlertDialogContent>
 					<AlertDialogHeader className='text-left'>
 						<AlertDialogTitle>{t('ns_common:titles.caution')}</AlertDialogTitle>
@@ -141,14 +154,15 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 					<AlertDialogFooter>
 						<AlertDialogCancel
 							onClick={() => {
-								setHasScannedEpcs(false)
+								dismissRef.current = true
+								setShouldShowAlert(false)
 							}}>
 							{t('ns_common:actions.dismiss')}
 						</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={() => {
 								setDetailDialogOpen(true)
-								setHasScannedEpcs(false)
+								setShouldShowAlert(false)
 							}}>
 							{t('ns_common:actions.detail')}
 						</AlertDialogAction>
@@ -156,19 +170,32 @@ const AlreadyScannedEpcsAlert: React.FC = () => {
 				</AlertDialogContent>
 			</AlertDialog>
 			<Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-				<DialogContent className='max-w-[80vw]'>
-					<DialogHeader>
-						<DialogTitle>{t('ns_inoutbound:titles.inbound_history')}</DialogTitle>
-						<DialogDescription>{t('ns_inoutbound:description.list_of_already_scanned_epcs')}</DialogDescription>
+				<DialogContent className='max-w-[80vw] [&>button:first-of-type]:hidden'>
+					<DialogHeader className='flex-row justify-between'>
+						<div className='space-y-1'>
+							<DialogTitle>{t('ns_inoutbound:titles.inbound_history')}</DialogTitle>
+							<DialogDescription>
+								{t('ns_inoutbound:description.list_of_already_scanned_epcs')}
+							</DialogDescription>
+						</div>
+						<Button
+							variant='destructive'
+							onClick={() => handleDeleteEpcs(duplicatedEpcs.map((item) => item.epc))}>
+							<Icon name='Trash2' />
+							{t('ns_common:actions.delete_all')}
+						</Button>
 					</DialogHeader>
 					<DataTable
 						border='bottom-only'
 						columns={columns}
-						data={data ?? []}
+						data={duplicatedEpcs ?? []}
 						containerProps={{
 							className: 'h-96 [&_tr:has(button[data-pending=true])_td]:animate-pulse'
 						}}
-						toolbarProps={{ override: true, render: () => null }}
+						toolbarProps={{
+							override: true,
+							render: () => null
+						}}
 					/>
 				</DialogContent>
 			</Dialog>

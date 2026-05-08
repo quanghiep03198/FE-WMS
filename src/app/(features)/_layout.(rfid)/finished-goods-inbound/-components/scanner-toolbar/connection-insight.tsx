@@ -1,7 +1,9 @@
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import { cn } from '@/common/utils/cn'
 import { NETWORK_CONNECTION_CHANGE } from '@/components/shared/network-detector'
-import { Div, Icon, Typography } from '@/components/ui'
+import { Badge, Div, Icon, Typography } from '@/components/ui'
 import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
+import { useSocketContext } from '@/stores/socket.store'
 import { useEventListener } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -70,17 +72,46 @@ export const JobStatus: React.FC<React.ComponentProps<'div'>> = (props) => {
 	)
 }
 
+const Watchers: React.FC<React.ComponentProps<'div'>> = (props) => {
+	const { io } = useSocketContext('io', 'isConnected')
+	const [watchers, setWatchers] = useState<number | string>(0)
+	const { t } = useTranslation()
+
+	useEffectOnce(() => {
+		io.on('rfid_inbound_watcher', setWatchers)
+
+		return () => {
+			io.off('rfid_inbound_watcher', setWatchers)
+		}
+	})
+
+	return (
+		<StatusItem {...props}>
+			<StatusItemDetail data-slot='detail'>
+				<Icon name='Users' size={18} className='stroke-active' />
+				<div className='inline-flex items-center gap-x-2 font-medium'>
+					{t('ns_rfid:titles.watching')}
+					<Badge variant='outline' className='!w-fit justify-center'>
+						{watchers}
+					</Badge>
+				</div>
+			</StatusItemDetail>
+		</StatusItem>
+	)
+}
+
 export const ConnectionInsight: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {
 	return (
 		<Div
 			data-slot='connection-insight'
 			className={cn(
-				'grid h-9 grid-cols-2 items-center gap-x-4 rounded-md bg-background shadow-none md:border md:py-2',
+				'grid h-9 auto-cols-max grid-flow-col items-center gap-x-10 rounded-md bg-background shadow-none md:grid-cols-3 md:border md:py-2',
 				className
 			)}
 			{...props}>
 			<NetworkInsight className='grid-cols-1 [&>[data-slot=detail]]:gap-x-2 [&>[data-slot=label]]:hidden' />
 			<JobStatus className='grid-cols-1 [&>[data-slot=detail]]:gap-x-2 [&>[data-slot=label]]:hidden' />
+			<Watchers className='grid-cols-1 [&>[data-slot=detail]]:gap-x-2 [&>[data-slot=label]]:hidden' />
 		</Div>
 	)
 }

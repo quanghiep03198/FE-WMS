@@ -18,6 +18,7 @@ export default {
 		deactivate: '停用',
 		decrement: '减量',
 		delete: '删除',
+		delete_all: '删除所有',
 		detail: '细节',
 		disapprove: '取消审核',
 		disconnect: '断开',

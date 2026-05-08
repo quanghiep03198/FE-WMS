@@ -13,7 +13,8 @@ export default {
 		add_device: 'Add device',
 		deduplicate_epc: 'Deduplicate EPC',
 		edit_device: 'Edit device info',
-		rfid_device_management: 'RFID device management'
+		rfid_device_management: 'RFID device management',
+		watching: 'Watching'
 	},
 	descriptions: {
 		deduplicate_epc: 'Prevent duplicate scanning of EPCs that have been saved in the system before.',

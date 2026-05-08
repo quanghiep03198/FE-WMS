@@ -12,7 +12,8 @@ export default {
 		add_device: 'Thêm thiết bị',
 		edit_device: 'Chỉnh sửa thông tin thiết bị',
 		rfid_device_management: 'Quản lý thiết bị RFID',
-		deduplicate_epc: 'Chặn quét lặp'
+		deduplicate_epc: 'Chặn quét lặp',
+		watching: 'Đang theo dõi'
 	},
 	descriptions: {
 		deduplicate_epc: 'Chặn quét lặp các EPC đã lưu vào hệ thống trước đó.',

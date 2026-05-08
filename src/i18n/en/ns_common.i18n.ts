@@ -18,6 +18,7 @@ export default {
 		deactivate: 'Deactivate',
 		decrement: 'Decrement',
 		delete: 'Delete',
+		delete_all: 'Delete all',
 		detail: 'Detail',
 		disapprove: 'Disapprove',
 		disconnect: 'Disconnect',
