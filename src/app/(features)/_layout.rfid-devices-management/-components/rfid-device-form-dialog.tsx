@@ -92,7 +92,12 @@ const RFIDDeviceFormDialog: React.FC = () => {
 				</Button>
 			}>
 			<Dialog defaultOpen={false} open={open || isPending || isError} onOpenChange={setOpen}>
-				<DialogTrigger className={cn(buttonVariants({ variant: 'default' }))}>
+				<DialogTrigger
+					className={cn(buttonVariants({ variant: 'default' }))}
+					onClick={() => {
+						setAction(CommonActions.CREATE)
+						form.reset()
+					}}>
 					<Icon name='CircleFadingPlus' />
 					{t('ns_common:actions.add')}
 				</DialogTrigger>
@@ -113,7 +118,7 @@ const RFIDDeviceFormDialog: React.FC = () => {
 									<InputFieldControl
 										name='device_sn'
 										label={t('ns_rfid:fields.device_sn')}
-										disabled={action === CommonActions.UPDATE}
+										disabled={!user.roles.includes(UserRole.ADMIN)}
 										placeholder='xxx xxx xxx'
 										description={t('ns_rfid:descriptions.device_sn')}
 									/>
