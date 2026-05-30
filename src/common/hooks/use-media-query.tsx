@@ -16,7 +16,7 @@ export default function useMediaQuery(mediaQuery: string) {
 	const checkIsMatchMediaQuery = useCallback(() => {
 		const mediaQueryList = window.matchMedia(mediaQuery)
 		setIsMatch(mediaQueryList.matches)
-	}, [mediaQuery])
+	}, [])
 
 	useEffect(() => {
 		checkIsMatchMediaQuery()
@@ -25,7 +25,7 @@ export default function useMediaQuery(mediaQuery: string) {
 		return () => {
 			window.removeEventListener('resize', checkIsMatchMediaQuery)
 		}
-	}, [mediaQuery])
+	}, [])
 
 	return isMatch
 }
