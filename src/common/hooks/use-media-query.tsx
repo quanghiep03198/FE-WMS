@@ -1,5 +1,5 @@
 import { useRafState } from 'ahooks'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 /**
  * Custom React hook to determine if a given CSS media query matches the current viewport.
@@ -13,11 +13,12 @@ import { useEffect } from 'react'
 export default function useMediaQuery(mediaQuery: string) {
 	const [isMatch, setIsMatch] = useRafState(false)
 
-	useEffect(() => {
+	const checkIsMatchMediaQuery = useCallback(() => {
 		const mediaQueryList = window.matchMedia(mediaQuery)
-		const checkIsMatchMediaQuery = () => {
-			setIsMatch(mediaQueryList.matches)
-		}
+		setIsMatch(mediaQueryList.matches)
+	}, [mediaQuery])
+
+	useEffect(() => {
 		checkIsMatchMediaQuery()
 		window.addEventListener('resize', checkIsMatchMediaQuery)
 
