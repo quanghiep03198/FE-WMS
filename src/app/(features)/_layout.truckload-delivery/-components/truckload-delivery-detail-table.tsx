@@ -1,5 +1,3 @@
-'use no memo'
-
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
@@ -20,6 +18,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
+import { useTableContext } from '@/components/ui/@react-table/context/table.context'
 import type { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
@@ -79,14 +78,15 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 		factory_departure_time,
 		actual_departure_time,
 		total_outbound_qty
-	},
-	onCollapse
+	}
+	// onCollapse
 }) => {
 	const { t } = useTranslation()
 	const [action, setAction, resetAction] = useResetState<CommonActions.UPDATE | null>(null)
 	const form = useForm<UpsertPurchaseOrdersFormValues>({
 		resolver: zodResolver(upsertPurchaseOrdersSchema)
 	})
+	const { table } = useTableContext('table')
 	const { fields, append, remove } = useFieldArray({ control: form.control, name: 'outbound_purchase_orders' })
 	const { user } = useAuth()
 	const { mutateAsync, isPending, isError } = useUpsertPurchaseOrdersMutation(dispatch_order)
@@ -237,6 +237,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												index={index}
 												readOnly={!action || approval_status === TruckloadDeliveryStatus.CONFIRMED}
 												deletable={approval_status !== TruckloadDeliveryStatus.CONFIRMED}
+												isLargeScreen={isLargeScreen}
 												defaultValues={rowData}
 												onRemove={remove}
 											/>
@@ -473,7 +474,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 									type='button'
 									size='sm'
 									onClick={() => {
-										onCollapse()
+										table.resetExpanded()
+										table.resetColumnFilters()
 										handleResetDeliveryDetails(false)
 									}}>
 									<Icon name='ChevronsUp' /> {t('ns_common:actions.fold')}
@@ -543,4 +545,4 @@ const Signature: React.FC<{
 
 const Form = tw.form`flex flex-col`
 
-export default TruckloadDeliveryDetailTable
+export default React.memo(TruckloadDeliveryDetailTable)

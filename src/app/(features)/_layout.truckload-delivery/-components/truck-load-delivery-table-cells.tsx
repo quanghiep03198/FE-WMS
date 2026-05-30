@@ -1,6 +1,5 @@
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import type { IconProps, TypographyProps } from '@/components/ui'
 import { Badge, Checkbox, Div, Icon, Typography } from '@/components/ui'
@@ -44,7 +43,7 @@ export const DispatchOrderStatusBadge: ColumnDefBase<ITruckloadDelivery, Trucklo
 
 export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, string>> = ({ row, getValue }) => {
 	const { t } = useTranslation()
-	const isMobile = useMediaQuery('(max-width: 1023px)')
+	// const isMobile = useMediaQuery('(max-width: 1023px)')
 
 	const value = getValue()
 	if (!value)
@@ -54,15 +53,9 @@ export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, st
 				{t('ns_common:titles.unknown')}
 			</Typography>
 		)
-	if (!isMobile)
-		return (
-			<LicensePlateHoverCard
-				licensePlate={row.original.license_plate}
-				licensePlateImage={row.original.license_plate_image}
-			/>
-		)
+
 	return (
-		<Div className='flex flex-col space-y-1'>
+		<Div className='flex flex-col gap-y-1'>
 			<LicensePlateHoverCard
 				licensePlate={row.original.license_plate}
 				licensePlateImage={row.original.license_plate_image}
@@ -71,7 +64,7 @@ export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, st
 				<Typography
 					variant='small'
 					color='muted'
-					className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal'>
+					className='col-start-2 inline-grid grid-cols-[auto_1fr] gap-x-2 font-normal @5xl:hidden'>
 					<Icon name='Container' />
 					{row.original.container_number}
 				</Typography>
@@ -81,14 +74,16 @@ export const LicensePlateColumnCell: React.FC<CellContext<ITruckloadDelivery, st
 }
 
 export const DepartureTimeCell: React.FC<CellContext<ITruckloadDelivery, Date> & TypographyProps> = (props) => {
-	const isMobile = useMediaQuery('(max-width: 1023px)')
+	// const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { t } = useTranslation()
 
 	const value = props.getValue()
 
-	if (isMobile)
-		return (
-			<Div className='flex flex-col gap-y-1'>
+	// if (isMobile)
+	return (
+		<>
+			<DateTimeCell {...props} className='hidden @5xl:flex' />
+			<Div className='flex flex-col gap-y-1 @5xl:hidden'>
 				<Typography
 					variant='small'
 					color={value ? 'default' : 'muted'}
@@ -105,7 +100,8 @@ export const DepartureTimeCell: React.FC<CellContext<ITruckloadDelivery, Date> &
 					</Typography>
 				)}
 			</Div>
-		)
+		</>
+	)
 
 	return <DateTimeCell {...props} />
 }
@@ -157,7 +153,7 @@ export const DateTimeCell: React.FC<
 		)
 
 	return (
-		<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
+		<Typography variant='small' color='muted' className={cn('flex items-center gap-x-2', className)} {...props}>
 			<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
 			{t('ns_common:titles.unknown')}
 		</Typography>

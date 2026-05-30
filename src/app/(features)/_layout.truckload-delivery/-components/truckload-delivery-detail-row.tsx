@@ -1,9 +1,6 @@
-'use no memo'
-
 import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
-import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
+import { CommonActions, UserRole } from '@/common/constants/enums'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import generateAvatar from '@/common/utils/generate-avatar'
 import {
@@ -21,7 +18,7 @@ import type { IPurchaseOrderResult } from '@/services/order.service'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
 import { GhostButton } from '../../-components/shared/ghost-button'
@@ -32,6 +29,7 @@ type TruckloadDeliveryDetailRowProps = {
 	index: number
 	readOnly: boolean
 	deletable: boolean
+	isLargeScreen: boolean
 	defaultValues: ITruckloadDelivery['delivery_details'][number]
 	onRemove: (index?: number | number[]) => void
 }
@@ -41,9 +39,9 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	readOnly,
 	defaultValues,
 	deletable,
+	isLargeScreen,
 	onRemove
 }) => {
-	const isLargeScreen = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const [snapshotData, setSnapshotData] = useState<ITruckloadDelivery['delivery_details'][number] | null>(
@@ -51,14 +49,14 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 	)
 	const dateLocale = useDateLocale()
 
-	const handleSelectPurchaseOrder = (selectedItem: IPurchaseOrderResult) => {
+	const handleSelectPurchaseOrder = useCallback((selectedItem: IPurchaseOrderResult) => {
 		setSnapshotData((prev) => {
 			return {
 				...prev,
 				...pick(selectedItem, ['po', 'brand_name', 'factory_shoes_style', 'color_sn'])
 			}
 		})
-	}
+	}, [])
 
 	return (
 		<TableRow aria-readonly={readOnly} className={cn('transition-allow-discrete')}>
@@ -215,4 +213,13 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 
 TruckloadDeliveryDetailRow.displayName = 'TruckloadDeliveryDetailRow'
 
-export default TruckloadDeliveryDetailRow
+export default React.memo(
+	TruckloadDeliveryDetailRow,
+	(prev, next) =>
+		prev.index === next.index &&
+		prev.readOnly === next.readOnly &&
+		prev.deletable === next.deletable &&
+		prev.isLargeScreen === next.isLargeScreen &&
+		prev.defaultValues?.id === next.defaultValues?.id &&
+		prev.onRemove === next.onRemove
+)

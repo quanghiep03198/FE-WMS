@@ -1,5 +1,3 @@
-'use no memo'
-
 import { CommonActions } from '@/common/constants/enums'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import type { AutoCompleteFieldControlProps } from '@/components/ui/@field-control/auto-complete'

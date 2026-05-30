@@ -9,10 +9,10 @@ import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { useQueryClient } from '@tanstack/react-query'
 import type { PaginationState, SortingState } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
-import { useDeepCompareEffect, useMemoizedFn, useResetState } from 'ahooks'
+import { useDeepCompareEffect } from 'ahooks'
 import { unflatten } from 'flat'
-import { isNil, omit, omitBy } from 'lodash-es'
-import { useCallback, useEffectEvent, useMemo, useState, useTransition } from 'react'
+import { omit, omitBy } from 'lodash-es'
+import { useCallback, useMemo, useState, useTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FlattenedPageQueryParams, PageQueryParams } from '../-hooks/use-page-query-params'
 import { usePageQueryParams } from '../-hooks/use-page-query-params'
@@ -30,17 +30,12 @@ import {
 import TruckloadDeliveryDetailTable from './truckload-delivery-detail-table'
 import TruckloadDeliveryTableToolbar from './truckload-delivery-table-toolbar'
 
-const FALLBACK_TABLE_DATA = []
+const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const isMobile = useMediaQuery('(max-width: 1023px)')
 	const { data, isLoading, isRefetching } = useGetTruckloadDeliveryQuery()
-	const [tableData, setTableData, resetTableData] = useResetState<ITruckloadDelivery[]>(() =>
-		Array.isArray(data?.data) ? data?.data : FALLBACK_TABLE_DATA
-	)
-	const columnHelper = createColumnHelper<ITruckloadDelivery>()
-	const [expanded, setExpanded, resetExpanded] = useResetState<{ [key: string]: boolean }>({})
 	const [isTransitioning, startTransition] = useTransition()
 	const queryClient = useQueryClient()
 	const { searchParams, setParams } = usePageQueryParams()
@@ -56,23 +51,18 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		? t('ns_erp:fields.license_plate')
 		: t('ns_erp:fields.license_plate') + ' / ' + t('ns_erp:fields.container_number')
 
-	const handleTableDataChange = useMemoizedFn((data: ITruckloadDelivery[]) =>
-		startTransition(() => setTableData(data))
-	)
-	const handleResetTableData = useMemoizedFn(() => startTransition(() => resetTableData()))
-
-	const handleExpandedChange = useMemoizedFn((row: { [key: string]: boolean }) =>
-		startTransition(() => setExpanded(row))
-	)
-	const handleResetExpanded = useMemoizedFn(() => startTransition(() => resetExpanded()))
-
 	const columns = useMemo(
 		() => [
 			columnHelper.display({
 				id: ROW_EXPANSION_COLUMN_ID,
-				header: () => (
+				header: ({ table }) => (
 					<Tooltip message={t('ns_common:actions.fold')} triggerProps={{ asChild: true }}>
-						<GhostButton className='absolute inset-0' onClick={handleResetExpanded}>
+						<GhostButton
+							className='absolute inset-0'
+							onClick={() => {
+								table.resetExpanded()
+								table.resetColumnFilters()
+							}}>
 							<Icon name='ListCollapse' size={18} />
 						</GhostButton>
 					</Tooltip>
@@ -85,14 +75,12 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				enableGlobalFilter: false,
 				enableColumnFilter: false,
 				meta: { align: 'center' },
-				cell: (props) => (
-					<RowExpansionCell
-						{...props}
-						onExpansionChange={handleExpandedChange}
-						onResetTableData={handleResetTableData}
-						onTableDataChange={handleTableDataChange}
-					/>
-				)
+				cell: (props) => <RowExpansionCell {...props} />
+			}),
+			columnHelper.accessor('dispatch_order', {
+				id: 'dispatch_order',
+				header: t('ns_erp:fields.dispatch_order'),
+				enableHiding: false
 			}),
 			columnHelper.accessor('license_plate', {
 				id: 'license_plate',
@@ -252,7 +240,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	const renderSubTable: DataTableProps['renderSubComponent'] = useCallback(
 		({ row }: RenderSubComponentProps<ITruckloadDelivery>) => {
 			const data = row.original
-			return <TruckloadDeliveryDetailTable data={data} onCollapse={handleResetExpanded} />
+			return <TruckloadDeliveryDetailTable data={data} />
 		},
 		[]
 	)
@@ -274,34 +262,6 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 		},
 		[searchParams]
 	)
-
-	const onExpandedChange = useEffectEvent(() => {
-		const currentData = Array.isArray(data?.data) ? data.data : []
-
-		let isSomeRowExpanded = false
-		for (const rowId in expanded) {
-			if (expanded[rowId]) {
-				isSomeRowExpanded = true
-				break
-			}
-		}
-		const expandedRowData = !isSomeRowExpanded
-			? currentData
-			: [
-					currentData.find((item) =>
-						Object.entries(expanded).some(([rowId, isExpanded]) =>
-							isExpanded ? item.dispatch_order === rowId : true
-						)
-					)
-				].filter((item) => !isNil(item))
-		if (!expandedRowData.length) {
-			handleTableDataChange(currentData)
-			handleResetExpanded()
-		} else handleTableDataChange(expandedRowData)
-	})
-
-	// Sync tableData with data and expanded state in a single effect
-	useDeepCompareEffect(onExpandedChange, [data?.data, expanded])
 
 	useDeepCompareEffect(() => {
 		if (!('page' in searchParams) || !('limit' in searchParams)) return
@@ -330,18 +290,17 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 	return (
 		<DataTable
 			columns={columns}
-			data={tableData}
+			data={data?.data ?? []}
 			border='bottom-only'
 			loading={isPending}
-			expanded={expanded}
 			enableExpanding={true}
 			getRowCanExpand={() => true}
 			getColumnCanGlobalFilter={() => true}
 			getRowId={(originalRow: ITruckloadDelivery) => originalRow.dispatch_order}
 			sorting={sorting}
 			enableMultiSort={false}
-			manualExpanding={true}
-			manualFiltering={true}
+			manualExpanding={false}
+			manualFiltering={false}
 			manualPagination={true}
 			manualSorting={true}
 			sortDescFirst={true}
@@ -354,7 +313,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 			onPaginationChange={changePagination}
 			onSortingChange={setSorting}
 			globalFilterFn='includesString'
-			initialState={{ sorting: [{ id: 'dispatch_order', desc: true }] }}
+			initialState={{ columnVisibility: { dispatch_order: false }, sorting: [{ id: 'dispatch_order', desc: true }] }}
 			virtualizerOptions={virtualizerOptions}
 			toolbarProps={toolbarProps}
 			containerProps={{
