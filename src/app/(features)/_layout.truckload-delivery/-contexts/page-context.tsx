@@ -1,8 +1,16 @@
 import type { CommonActions } from '@/common/constants/enums'
 import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
-import { useEventEmitter } from 'ahooks'
+import { useEventEmitter, useSessionStorageState } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
-import { createContext, use } from 'react'
+import { createContext, use, useMemo } from 'react'
+import type { TruckloadDeliveryFilterFormValues } from '../-schemas'
+import { truckloadDeliveryFilterSchema } from '../-schemas'
+// type-only import — safe for circular module resolution (erased at runtime)
+import type { PageQueryParams } from '../-hooks/use-page-query-params'
+
+// Mirror the string literals from the hook files to avoid circular runtime imports
+const _STORAGE_FILTER_KEY = 'truckloadDeliveryFilters'
+const _STORAGE_PARAMS_KEY = 'deliverySearchParams'
 
 export type SignatureType =
 	| 'ie_signature'
@@ -34,8 +42,14 @@ type EventPayload =
 			}
 	  }
 
+type SetStorageState<T> = (value?: T | ((prevState: T) => T)) => void
+
 type PageContextValue = {
 	event$: EventEmitter<EventPayload>
+	searchParams: PageQueryParams
+	setParams: SetStorageState<PageQueryParams>
+	storedFilterParams: TruckloadDeliveryFilterFormValues
+	setStoredFilterParams: SetStorageState<TruckloadDeliveryFilterFormValues>
 }
 
 const PageContext = createContext<PageContextValue>(null)
@@ -43,7 +57,23 @@ const PageContext = createContext<PageContextValue>(null)
 export const PageContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const event$ = useEventEmitter<EventPayload>()
 
-	return <PageContext.Provider value={{ event$ }}>{children}</PageContext.Provider>
+	// ─── Registered ONCE here — all consumers read from context, no extra listeners ───
+	const [storedFilterParams, setStoredFilterParams] = useSessionStorageState<TruckloadDeliveryFilterFormValues>(
+		_STORAGE_FILTER_KEY,
+		{ defaultValue: truckloadDeliveryFilterSchema.parse(undefined), listenStorageChange: true }
+	)
+
+	const [searchParams, setParams] = useSessionStorageState<PageQueryParams>(_STORAGE_PARAMS_KEY, {
+		defaultValue: { page: 1, limit: 20 } as PageQueryParams,
+		listenStorageChange: true
+	})
+
+	const value = useMemo(
+		() => ({ event$, searchParams, setParams, storedFilterParams, setStoredFilterParams }),
+		[event$, searchParams, setParams, storedFilterParams, setStoredFilterParams]
+	)
+
+	return <PageContext.Provider value={value}>{children}</PageContext.Provider>
 }
 
 export const usePageContext = () => use(PageContext)

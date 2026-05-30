@@ -8,8 +8,11 @@ const CreateTruckloadDialogButton: React.FC = () => {
 	const { t } = useTranslation()
 
 	return (
-		<Button size='default' onClick={() => event$.emit({ action: CommonActions.CREATE, payload: null })}>
-			<Icon name='CircleFadingPlus' /> {t('ns_common:actions.add')}
+		<Button
+			className='size-9 @5xl:w-auto'
+			onClick={() => event$.emit({ action: CommonActions.CREATE, payload: null })}>
+			<Icon name='CircleFadingPlus' />
+			<span className='hidden @5xl:inline-block'>{t('ns_common:actions.add')}</span>
 		</Button>
 	)
 }

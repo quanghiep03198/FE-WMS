@@ -1,6 +1,4 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import { useWorkerFn } from '@/common/hooks/use-worker-fn'
 import compressBase64 from '@/common/libs/compress-base64'
@@ -47,7 +45,6 @@ const SignatureEditorDialog: React.FC = () => {
 	const { t } = useTranslation()
 	const { event$ } = usePageContext()
 	const { mutateAsync: setStatusAsync, isPending, isError } = useUpdateDispatchOrderSignatureMutation()
-	const isDesktop = useMediaQuery(PresetBreakPoints.EXTRA_LARGE)
 	const dialogData = useReactiveRef<
 		Pick<ITruckloadDelivery, 'dispatch_order' | 'approval_status' | 'license_plate'> & {
 			signature_type: SignatureType
@@ -195,12 +192,7 @@ const SignatureEditorDialog: React.FC = () => {
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}
-								style={{
-									overscrollBehavior: 'none',
-									touchAction: 'none',
-									width: '100cqw',
-									height: isDesktop ? '50vh' : '45vh'
-								}}
+								className='h-[40vh] w-[100cqw] touch-none overscroll-none @[1366px]:h-[50vh]'
 								padOptions={{
 									minWidth: 2,
 									maxWidth: 2

@@ -1,13 +1,12 @@
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import type { SortDirection } from '@tanstack/react-table'
-import { useSessionStorageState } from 'ahooks'
 import { format, isValid } from 'date-fns'
 import { omitBy } from 'lodash-es'
 import { useCallback } from 'react'
 import { isDateRange } from 'react-day-picker'
 import type { TruckloadDeliveryStatus } from '../-constants'
+import { usePageContext } from '../-contexts/page-context'
 import type { FilterOperator, TruckloadDeliveryFilterFormValues } from '../-schemas'
-import { useStoreFilterParams } from './use-store-filter-params'
 
 export type PageQueryParams = {
 	q?: string
@@ -43,43 +42,11 @@ export type FlattenedPageQueryParams = {
 	page: number
 	limit: number
 }
-
-// export const _usePageQueryParams = () => {
-// 	// * Set default pagination params if not present in URL
-// 	const search = useRouterState({ select: (s) => s.location.search as PageQueryParams })
-
-// 	search['page'] ??= 1
-// 	search['limit'] ??= 20
-
-// 	// * Get stored filter params from session storage
-// 	const [storedFilterParams] = useStoreFilterParams()
-
-// 	// * Build initial query params by merging URL params and stored filter params
-// 	const buildQueryParams = useBuildQueryParams()
-// 	const defaultParams = buildQueryParams(search, storedFilterParams)
-
-// 	return useQueryParams<PageQueryParams>(defaultParams)
-// }
-
 export const STORED_DELIVERY_PAGE_QUERY_KEY = 'deliverySearchParams'
 
 export const usePageQueryParams = () => {
-	// * Get stored filter params from session storage
-	const [storedFilterParams] = useStoreFilterParams()
-
-	// * Build initial query params by merging URL params and stored filter params
-	const buildQueryParams = useBuildQueryParams()
-	const defaultParams = buildQueryParams({ page: 1, limit: 20 }, storedFilterParams)
-
-	const [searchParams, setParams] = useSessionStorageState<PageQueryParams>(STORED_DELIVERY_PAGE_QUERY_KEY, {
-		defaultValue: defaultParams,
-		listenStorageChange: true
-	})
-
-	return {
-		searchParams,
-		setParams
-	}
+	const { searchParams, setParams } = usePageContext()
+	return { searchParams, setParams }
 }
 
 export const useBuildQueryParams = () => {
