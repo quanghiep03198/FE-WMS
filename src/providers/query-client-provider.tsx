@@ -1,7 +1,8 @@
 import { AppConfigs } from '@/configs/app.config'
 import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
-import { matchQuery, MutationCache, QueryClient, QueryKey } from '@tanstack/react-query'
+import type { QueryKey } from '@tanstack/react-query';
+import { matchQuery, MutationCache, QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import type { AxiosError } from 'axios'
