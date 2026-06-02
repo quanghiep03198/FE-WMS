@@ -84,7 +84,7 @@ const DeviceDataTable: React.FC = () => {
 				id: 'device_name',
 				header: t('ns_rfid:fields.device_name'),
 				enableColumnFilter: true,
-				maxSize: 150,
+				maxSize: 250,
 				cell: ({ row }) => {
 					const deviceNameLocalization = {
 						[Languages.VIETNAMESE]: row.original.device_name_vi,
