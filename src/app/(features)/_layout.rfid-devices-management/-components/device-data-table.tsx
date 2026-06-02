@@ -232,7 +232,7 @@ const DeviceDataTable: React.FC = () => {
 								</Tooltip>
 							)}
 							<Tooltip message={t('ns_common:actions.reload')} triggerProps={{ asChild: true }}>
-								<Button size='sm' variant='outline' onClick={() => refetch()}>
+								<Button variant='outline' size='icon' onClick={() => refetch()}>
 									<Icon name='RefreshCcw' />
 								</Button>
 							</Tooltip>
