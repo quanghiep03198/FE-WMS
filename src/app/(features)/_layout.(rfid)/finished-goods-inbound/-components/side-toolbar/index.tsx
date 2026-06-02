@@ -3,6 +3,7 @@ import { Div, Sheet, SheetContent, SheetTrigger, Typography } from '@/components
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
+import { ConnectionInsight } from './connection-insight'
 import DataRestoration from './data-restoration'
 import EpcDeduplicationToggleBox from './epc-deduplication-toggle-box'
 import FullscreenToggleBox from './fullscreen-toggle-box'
@@ -39,6 +40,13 @@ const ScannerSettings: React.FC = () => {
 						'sm:px-0 xxl:p-6',
 						'@4xl:grid @4xl:grid-cols-12 @4xl:grid-rows-3 @4xl:gap-x-10'
 					)}>
+					<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
+						<Typography className='text-lg font-semibold sm:text-base md:text-base'>
+							{t('ns_inoutbound:scanner_setting.network_status')}
+						</Typography>
+						<ConnectionInsight className='md:hidden' />
+					</Div>
+
 					<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>
 						<Typography className='text-lg font-semibold sm:text-base md:text-base'>
 							{t('ns_common:titles.general_settings')}

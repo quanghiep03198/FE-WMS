@@ -19,11 +19,12 @@ const ScannerActions: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const queryClient = useQueryClient()
 	const {
+		selectedDevice,
 		scanningStatus,
 		setScanningStatus,
 		reset: resetScanningAction,
 		handleToggleScanning
-	} = usePageContext('scanningStatus', 'setScanningStatus', 'handleToggleScanning', 'reset')
+	} = usePageContext('scanningStatus', 'selectedDevice', 'setScanningStatus', 'handleToggleScanning', 'reset')
 	const previousStatus = usePrevious(scanningStatus)
 
 	const scanningButtonProps = useMemo<TScanningButtonProps>(() => {
@@ -98,7 +99,11 @@ const ScannerActions: React.FC = () => {
 				<Icon name='Redo' />
 				{t('ns_common:actions.reset')}
 			</Button>
-			<Button className='w-auto md:w-full' onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
+			<Button
+				className='w-auto md:w-full'
+				disabled={!selectedDevice}
+				onClick={handleToggleScanning}
+				variant={scanningButtonProps.variant}>
 				<Icon name={scanningButtonProps.icon} />
 				{scanningButtonProps.children}
 			</Button>

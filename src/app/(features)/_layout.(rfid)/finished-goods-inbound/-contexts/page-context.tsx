@@ -16,20 +16,23 @@ type PageContextStore = {
 	scannedOrders: Array<OrderItem>
 	scanningStatus: ScanningStatus
 	selectedOrder: string
+	selectedDevice: string | null
 	setCurrentPage: (page: number | null) => void
 	setScanningStatus: (status: ScanningStatus) => void
 	setSelectedOrder: (value: string) => void
 	setScannedEpc: (data: Pagination<IElectronicProductCode>) => void
 	setScannedOrders: (data: Array<OrderItem>) => void
+	setSelectedDevice: (deviceSerialNumber: string) => void
 	handleToggleScanning: () => void
 	reset: () => void
 }
 export const DEFAULT_PROPS: Pick<
 	PageContextStore,
-	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scanningStatus' | 'selectedOrder'
+	'currentPage' | 'scannedEpc' | 'scannedOrders' | 'scanningStatus' | 'selectedOrder' | 'selectedDevice'
 > = {
 	currentPage: 1,
 	scanningStatus: undefined,
+	selectedDevice: null,
 	selectedOrder: 'all',
 	scannedEpc: {
 		data: [],
@@ -94,6 +97,11 @@ export const PageProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 								break
 							}
 						}
+					})
+				},
+				setSelectedDevice: (deviceSerialNumber) => {
+					set((state) => {
+						state.selectedDevice = deviceSerialNumber
 					})
 				},
 				reset: () => {

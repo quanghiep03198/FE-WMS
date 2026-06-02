@@ -53,6 +53,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 
 	const {
 		currentPage,
+		selectedDevice,
 		selectedOrder,
 		scannedEpc,
 		scanningStatus,
@@ -64,6 +65,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 		reset
 	} = usePageContext(
 		'currentPage',
+		'selectedDevice',
 		'selectedOrder',
 		'scannedEpc',
 		'scanningStatus',
@@ -101,7 +103,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/inbound/sse', {
+			await fetchEventSource(AppConfigs.BASE_API_URL + `/rfid/inbound/sse/${selectedDevice}`, {
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {

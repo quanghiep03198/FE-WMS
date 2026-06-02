@@ -55,7 +55,7 @@ export const useGetInboundEpcQuery = () => {
 
 export const useGetInboundOrderDetail = () => {
 	const queryClient = useQueryClient()
-	const { scanningStatus } = usePageContext('scanningStatus')
+	const { scanningStatus, selectedDevice } = usePageContext('scanningStatus', 'selectedDevice')
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') {
@@ -65,7 +65,7 @@ export const useGetInboundOrderDetail = () => {
 
 	return useQuery({
 		queryKey: [RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL],
-		queryFn: async () => await RFIDService.getInboundOrderDetail(),
+		queryFn: async () => await RFIDService.getInboundOrderDetail(selectedDevice),
 		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,

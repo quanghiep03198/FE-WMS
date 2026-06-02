@@ -12,8 +12,8 @@ import InoutboundForm from './-components/inoutbound-form'
 import PageComposition from './-components/page-composition'
 import RemindMessage from './-components/remind-message'
 import ScannerToolbar from './-components/scanner-toolbar'
-import { ConnectionInsight } from './-components/scanner-toolbar/connection-insight'
 import ScannerSettings from './-components/side-toolbar'
+import { ConnectionInsight } from './-components/side-toolbar/connection-insight'
 import { PageProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(rfid)/finished-goods-inbound/')({
