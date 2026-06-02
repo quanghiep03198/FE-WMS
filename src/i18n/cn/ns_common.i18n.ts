@@ -219,6 +219,11 @@ export default {
 		search: '搜索{{object}}...',
 		select: '选择{{object}}'
 	},
+	languages: {
+		vi: '越南语',
+		en: '英语',
+		cn: '中文'
+	},
 	timestamps: {
 		created_at: '创建时间 {{timestamp}}',
 		updated_at: '创建时间 {{timestamp}}',

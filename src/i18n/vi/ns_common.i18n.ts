@@ -224,6 +224,11 @@ export default {
 		search: 'Tìm kiếm {{object}} ...',
 		select: 'Chọn {{object}}'
 	},
+	languages: {
+		vi: 'Tiếng Việt',
+		en: 'Tiếng Anh',
+		cn: 'Tiếng Trung'
+	},
 	navigation: {
 		access_management: 'Quản lý truy cập',
 		account: 'Tài khoản',

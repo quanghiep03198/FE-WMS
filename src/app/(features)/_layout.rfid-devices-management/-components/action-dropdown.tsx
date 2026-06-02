@@ -47,7 +47,15 @@ const ActionDropdown: React.FC<
 							event$.emit({
 								action: CommonActions.UPDATE,
 								defaultValues: {
-									...pick(row.original, ['station_no', 'device_sn', 'ip_address', 'ip_port']),
+									...pick(row.original, [
+										'station_no',
+										'device_sn',
+										'ip_address',
+										'ip_port',
+										'device_name_vi',
+										'device_name_en',
+										'device_name_cn'
+									]),
 									device_ant: row.original.device_ant === '0' || isNil(row.original.device_ant) ? '0' : '1'
 								}
 							})

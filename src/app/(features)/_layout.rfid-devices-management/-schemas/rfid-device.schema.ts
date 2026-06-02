@@ -9,7 +9,10 @@ export const createRFIDReaderSchema = object({
 		.nonempty({ message: 'ns_validation:required' })
 		.regex(/^\d+$/, { message: 'ns_validation:invalid_value' }),
 	device_ant: enums(['0', '1'], { message: 'ns_validation:required' }),
-	is_active: enums(RecordStatus).optional()
+	is_active: enums(RecordStatus).optional(),
+	device_name_vi: string().nullish(),
+	device_name_en: string().nullish(),
+	device_name_cn: string().nullish()
 })
 export const updateRFIDReaderSchema = createRFIDReaderSchema.partial()
 

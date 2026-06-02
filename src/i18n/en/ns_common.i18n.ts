@@ -221,6 +221,11 @@ export default {
 		search: 'Search {{object}} ...',
 		select: 'Select {{object}}'
 	},
+	languages: {
+		vi: 'Vietnamese',
+		en: 'English',
+		cn: 'Chinese'
+	},
 	navigation: {
 		access_management: 'Access management',
 		account: 'Account',

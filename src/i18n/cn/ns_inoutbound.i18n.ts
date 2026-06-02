@@ -124,7 +124,8 @@ export default {
 	placeholders: {
 		enter_storage_location: '输入储位 ...',
 		outbound_purpose: '选择出库类别 ...',
-		max_qty: '最大 {{qty}} (prs)'
+		max_qty: '最大 {{qty}} (prs)',
+		select_rfid_device: '选择 RFID 设备'
 	},
 	rfid_process: {
 		cutting_inbound: '裁断入库',

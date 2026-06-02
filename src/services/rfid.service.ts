@@ -15,7 +15,7 @@ import type {
 	CreateRFIDReaderFormValues,
 	UpdateRFIDReaderFormValues
 } from '@/app/(features)/_layout.rfid-devices-management/-schemas/rfid-device.schema'
-import type { IArchivedFilterFeature, IElectronicProductCode } from '@/common/types/entities'
+import type { IArchivedFilterFeature, IElectronicProductCode, IRFIDReaderDevice } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omit, omitBy } from 'lodash-es'
 
@@ -37,9 +37,9 @@ export class RFIDService {
 		)
 	}
 
-	static async getInboundOrderDetail() {
+	static async getInboundOrderDetail(deviceSerialNumber: string) {
 		return await axiosInstance.get<unknown, ResponseBody<RFIDStreamEventData['orders']>>(
-			`/rfid/inbound/manufacturing-order-detail`
+			`/rfid/inbound/manufacturing-order-detail/${deviceSerialNumber}`
 		)
 	}
 
@@ -128,6 +128,7 @@ export class RFIDService {
 	static async getArchivedEpcFeatures() {
 		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/archived-epc-features`)
 	}
+
 	static async restoreArchivedEpcs(type: RFIDDataType, payload: Array<IElectronicProductCode>) {
 		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(
 			`/rfid/restore-archived-epcs/${type}`,
@@ -137,7 +138,7 @@ export class RFIDService {
 
 	// #endregion
 	static async getWarehouseRFIDDevices() {
-		return await axiosInstance.get<unknown, ResponseBody<Record<string, string>[]>>(`/rfid/devices`)
+		return await axiosInstance.get<unknown, ResponseBody<IRFIDReaderDevice[]>>(`/rfid/devices`)
 	}
 
 	static async createWarehouseRFIDDevice(payload: CreateRFIDReaderFormValues) {

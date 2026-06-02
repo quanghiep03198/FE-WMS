@@ -304,6 +304,9 @@ export interface IProductSpecification {
 }
 
 export interface IRFIDReaderDevice {
+	device_name_vi: string | null
+	device_name_en: string | null
+	device_name_cn: string | null
 	station_no: string
 	device_ant: string
 	device_sn: string

@@ -101,7 +101,7 @@ const RFIDDeviceFormDialog: React.FC = () => {
 					<Icon name='CircleFadingPlus' />
 					{t('ns_common:actions.add')}
 				</DialogTrigger>
-				<DialogContent className='max-w-xl'>
+				<DialogContent className='max-w-2xl'>
 					<DialogHeader>
 						<DialogTitle>
 							{action === CommonActions.UPDATE
@@ -114,6 +114,30 @@ const RFIDDeviceFormDialog: React.FC = () => {
 					<FormProvider {...form}>
 						<Form onSubmit={form.handleSubmit(handleSubmitForm)}>
 							<Fieldset>
+								<Div className='col-span-2'>
+									<InputFieldControl
+										name='device_name_vi'
+										label={t('ns_common:languages.vi')}
+										disabled={!user.roles.includes(UserRole.ADMIN)}
+										placeholder='Tên hiển thị'
+									/>
+								</Div>
+								<Div className='col-span-2'>
+									<InputFieldControl
+										name='device_name_en'
+										label={t('ns_common:languages.en')}
+										disabled={!user.roles.includes(UserRole.ADMIN)}
+										placeholder='Display name'
+									/>
+								</Div>
+								<Div className='col-span-2'>
+									<InputFieldControl
+										name='device_name_cn'
+										label={t('ns_common:languages.cn')}
+										disabled={!user.roles.includes(UserRole.ADMIN)}
+										placeholder='显示名称'
+									/>
+								</Div>
 								<Div className='col-span-full'>
 									<InputFieldControl
 										name='device_sn'
@@ -123,10 +147,10 @@ const RFIDDeviceFormDialog: React.FC = () => {
 										description={t('ns_rfid:descriptions.device_sn')}
 									/>
 								</Div>
-								<Div className='col-span-1'>
+								<Div className='col-span-3'>
 									<InputFieldControl name='ip_address' label='TCP/IP' placeholder='192.xxx.xxx.xxx' />
 								</Div>
-								<Div className='col-span-1'>
+								<Div className='col-span-3'>
 									<InputFieldControl name='ip_port' label='TCP/IP port' placeholder='8160' />
 								</Div>
 								<Div className='col-span-full'>
@@ -209,6 +233,6 @@ const RFIDDeviceFormDialog: React.FC = () => {
 }
 
 const Form = tw.form`space-y-6`
-const Fieldset = tw.fieldset`grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-1`
+const Fieldset = tw.fieldset`grid grid-cols-6 gap-x-2 gap-y-6 sm:grid-cols-1`
 
 export default memo(RFIDDeviceFormDialog)

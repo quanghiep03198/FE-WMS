@@ -141,7 +141,8 @@ export default {
 	placeholders: {
 		enter_storage_location: 'Enter storage location ...',
 		outbound_purpose: 'Outbound purpose ...',
-		max_qty: 'Max {{qty}} (prs)'
+		max_qty: 'Max {{qty}} (prs)',
+		select_rfid_device: 'Select RFID device'
 	},
 	rfid_process: {
 		cutting_inbound: 'Cutting Inbound',

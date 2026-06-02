@@ -1,10 +1,10 @@
-import { RecordStatus, UserRole } from '@/common/constants/enums'
+import { Languages, RecordStatus, UserRole } from '@/common/constants/enums'
 import useAuth from '@/common/hooks/use-auth'
 import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { useReactiveRef } from '@/common/hooks/use-reactive-ref'
 import type { IRFIDReaderDevice } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
-import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
+import { Badge, Button, DataTable, Icon, Tooltip, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import {
 	IndeterminateCheckbox,
@@ -79,6 +79,26 @@ const DeviceDataTable: React.FC = () => {
 				header: t('ns_rfid:fields.device_sn'),
 				enableColumnFilter: true,
 				maxSize: 150
+			}),
+			columnHelper.display({
+				id: 'device_name',
+				header: t('ns_rfid:fields.device_name'),
+				enableColumnFilter: true,
+				maxSize: 150,
+				cell: ({ row }) => {
+					const deviceNameLocalization = {
+						[Languages.VIETNAMESE]: row.original.device_name_vi,
+						[Languages.ENGLISH]: row.original.device_name_en,
+						[Languages.CHINESE]: row.original.device_name_cn
+					}
+					return (
+						deviceNameLocalization[i18n.language] ?? (
+							<Typography variant='small' color='muted'>
+								{t('ns_common:titles.unknown')}
+							</Typography>
+						)
+					)
+				}
 			}),
 			columnHelper.accessor('station_no', {
 				id: 'station_no',
