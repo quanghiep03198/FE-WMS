@@ -322,8 +322,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				className: cn(
 					'aria-busy:opacity-80 aria-busy:pointer-events-none ease-in-out transition-opacity duration-300',
 					'[&_tr[data-role=expandable-row]_*[data-state=open]]:!animate-none',
-					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:!animate-none',
-					'[&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!z-10 [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!sticky [&_tr[data-role=data-grid-row][aria-expanded=true]>td[data-role=data-grid-cell]]:!top-[--header-row-height]'
+					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:!animate-none'
 				)
 			}}
 			renderSubComponent={renderSubTable as any}
