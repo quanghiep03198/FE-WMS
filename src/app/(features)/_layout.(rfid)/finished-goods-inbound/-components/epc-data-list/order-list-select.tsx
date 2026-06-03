@@ -24,15 +24,13 @@ const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
 	const { isLoading } = useGetInboundEpcQuery()
-	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder, setCurrentFactoryProduce } =
-		usePageContext(
-			'selectedOrder',
-			'scannedOrders',
-			'scanningStatus',
-			'setCurrentPage',
-			'setSelectedOrder',
-			'setCurrentFactoryProduce'
-		)
+	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder } = usePageContext(
+		'selectedOrder',
+		'scannedOrders',
+		'scanningStatus',
+		'setCurrentPage',
+		'setSelectedOrder'
+	)
 	const previousSelectedOrder = usePrevious(selectedOrder)
 
 	// * Ignore too many orders warning
@@ -59,7 +57,6 @@ const OrderListSelect: React.FC = () => {
 
 	const handleChangeOrder = (value: string) => {
 		setSelectedOrder(value)
-		setCurrentFactoryProduce(scannedOrders.find((item) => item.mo_no === value)?.factory_code_produce)
 		setCurrentPage(null)
 	}
 
@@ -78,7 +75,7 @@ const OrderListSelect: React.FC = () => {
 						</SelectTrigger>
 					</HoverCardTrigger>
 					<HoverCardContent
-						side='top'
+						side='bottom'
 						sideOffset={10}
 						className='inline-grid w-[var(--radix-hover-card-trigger-width)] auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
 						<Icon name='Info' className='my-0.5 stroke-active' size={18} />
