@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 
+import env from '@/common/utils/env'
 import Loading from '@/components/shared/loading'
 import Footer from './-components/footer'
 import { Header } from './-components/header'
@@ -14,6 +15,8 @@ export const Route = createFileRoute('/(public)/rfid-agent/')({
 })
 
 function RouteComponent() {
+	const url = env('VITE_APP_DOMAIN')
+
 	return (
 		<Fragment>
 			<title>RFID Agent</title>
@@ -22,6 +25,15 @@ function RouteComponent() {
 				content='RFID Agent is a lightweight desktop application that connects your
 					UHF reader to our web application'
 			/>
+			<script type='application/ld+json'>
+				{JSON.stringify({
+					'@context': 'https://schema.org',
+					'@type': 'Organization',
+					name: 'Greenland Warehouse Management System',
+					url: url,
+					logo: new URL('logo.svg', url)
+				})}
+			</script>
 			<main className='relative h-screen overflow-y-scroll scroll-smooth'>
 				<Spotlight
 					fill='white'
