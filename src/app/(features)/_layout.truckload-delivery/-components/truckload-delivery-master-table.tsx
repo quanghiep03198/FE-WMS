@@ -34,7 +34,7 @@ const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const isMobile = useMediaQuery('(max-width: 1023px)')
+	const isMobile = useMediaQuery('(max-width: 1279px)')
 	const { data, isLoading, isRefetching } = useGetTruckloadDeliveryQuery()
 	const [isTransitioning, startTransition] = useTransition()
 	const queryClient = useQueryClient()
