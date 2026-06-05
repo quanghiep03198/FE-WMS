@@ -21,9 +21,11 @@ export default function useMediaQuery(mediaQuery: string) {
 	useEffect(() => {
 		checkIsMatchMediaQuery()
 		window.addEventListener('resize', checkIsMatchMediaQuery)
+		window.screen.orientation.addEventListener('change', checkIsMatchMediaQuery)
 
 		return () => {
 			window.removeEventListener('resize', checkIsMatchMediaQuery)
+			window.screen.orientation.removeEventListener('change', checkIsMatchMediaQuery)
 		}
 	}, [])
 
