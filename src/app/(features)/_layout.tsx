@@ -1,5 +1,4 @@
 import { useEffectOnce } from '@/common/hooks/use-effect-once'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { SidebarProvider } from '@/components/ui'
@@ -30,7 +29,6 @@ export const Route = createFileRoute('/(features)/_layout')({
 })
 
 function Layout() {
-	const isUnsupportedScreen = useMediaQuery('(max-width: 599px)')
 	const { updateServiceWorker }: RegisteredServiceWorker = useRouteContext({
 		from: '',
 		select: (context) => context.serviceWorker
@@ -48,7 +46,7 @@ function Layout() {
 
 	return (
 		<Fragment>
-			{isUnsupportedScreen && <UnsupportedScreen />}
+			<UnsupportedScreen />
 			<AuthGuard>
 				<SidebarProvider
 					data-state-persistent-key='appSidebarOpen'
