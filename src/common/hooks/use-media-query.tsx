@@ -14,20 +14,37 @@ export default function useMediaQuery(mediaQuery: string) {
 	const [isMatch, setIsMatch] = useRafState(false)
 
 	const checkIsMatchMediaQuery = useCallback(() => {
+		if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+			return
+		}
+
 		const mediaQueryList = window.matchMedia(mediaQuery)
 		setIsMatch(mediaQueryList.matches)
-	}, [])
+	}, [mediaQuery, setIsMatch])
 
 	useEffect(() => {
+		if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+			return
+		}
+
 		checkIsMatchMediaQuery()
-		window.addEventListener('resize', checkIsMatchMediaQuery)
-		window.screen.orientation.addEventListener('change', checkIsMatchMediaQuery)
+
+		const mediaQueryList = window.matchMedia(mediaQuery)
+
+		if (typeof mediaQueryList.addEventListener === 'function') {
+			mediaQueryList.addEventListener('change', checkIsMatchMediaQuery)
+		} else if (typeof mediaQueryList.addListener === 'function') {
+			mediaQueryList.addListener(checkIsMatchMediaQuery)
+		}
 
 		return () => {
-			window.removeEventListener('resize', checkIsMatchMediaQuery)
-			window.screen.orientation.removeEventListener('change', checkIsMatchMediaQuery)
+			if (typeof mediaQueryList.removeEventListener === 'function') {
+				mediaQueryList.removeEventListener('change', checkIsMatchMediaQuery)
+			} else if (typeof mediaQueryList.removeListener === 'function') {
+				mediaQueryList.removeListener(checkIsMatchMediaQuery)
+			}
 		}
-	}, [])
+	}, [checkIsMatchMediaQuery, mediaQuery])
 
 	return isMatch
 }
