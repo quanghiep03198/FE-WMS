@@ -34,7 +34,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 							}))
 						)
 					)
-					.sort((a, b) => a.label.localeCompare(b.label)),
+					.sort((a, b) => a.label?.localeCompare(b.label)),
 				(color) => color.value
 			)
 		}
@@ -51,7 +51,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 								}))
 							)
 					)
-					.sort((a, b) => a.label.localeCompare(b.label)),
+					.sort((a, b) => a.label?.localeCompare(b.label)),
 				(color) => color.value
 			)
 		}
@@ -63,7 +63,7 @@ const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading
 				label: color_sn,
 				value: color_sn
 			}))
-			.sort((a, b) => a.label.localeCompare(b.label))
+			.sort((a, b) => a.label?.localeCompare(b.label))
 	}, [productSpecification, currentCategory, currentBrand, currentFactoryShoeStyle])
 
 	return (

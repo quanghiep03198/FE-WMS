@@ -29,7 +29,7 @@ const CustShoeStyleFieldControl: React.FC<
 						cust_shoes_style
 					}))
 				)
-				.sort((a, b) => b.cust_shoes_style.localeCompare(a.cust_shoes_style))
+				.sort((a, b) => b.cust_shoes_style?.localeCompare(a.cust_shoes_style))
 		const brand = productSpecification.find((item) => item.brand_name === currentBrand)
 		if (!brand?.product_variants) return []
 		return brand.product_variants
@@ -37,7 +37,7 @@ const CustShoeStyleFieldControl: React.FC<
 				factory_shoes_style,
 				cust_shoes_style
 			}))
-			.sort((a, b) => b.cust_shoes_style.localeCompare(a.cust_shoes_style))
+			.sort((a, b) => b.cust_shoes_style?.localeCompare(a.cust_shoes_style))
 	}, [productSpecification, currentBrand])
 
 	const handleValueChange = (value: Record<'factory_shoes_style' | 'cust_shoes_style', string>) => {

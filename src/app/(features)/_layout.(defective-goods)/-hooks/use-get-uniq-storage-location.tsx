@@ -13,7 +13,7 @@ export const useGetUniqStorageLocation = <T extends Partial<IDefectiveGoods>>(da
 			})
 		}
 		return Array.from(locationSet)
-			.sort((a, b) => a.localeCompare(b))
+			.sort((a, b) => a?.localeCompare(b))
 			.map((loc) => ({ value: loc, label: loc }))
 	}, [data])
 }
