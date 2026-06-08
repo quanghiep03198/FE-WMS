@@ -34,7 +34,7 @@ const columnHelper = createColumnHelper<ITruckloadDelivery>()
 
 const TruckloadDeliveryMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
-	const isMobile = useMediaQuery('(max-width: 1279px)')
+	const isMobile = useMediaQuery('(max-width: 1179px)')
 	const { data, isLoading, isRefetching } = useGetTruckloadDeliveryQuery()
 	const [isTransitioning, startTransition] = useTransition()
 	const queryClient = useQueryClient()
@@ -113,7 +113,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				header: t('ns_erp:fields.outbound_qty'),
 				enableSorting: true,
 				enableMultiSort: false,
-				meta: { align: 'right', hidden: isMobile },
+				meta: { align: 'right' },
 				cell: ({ getValue }) => formatIntlNumber(getValue() as number)
 			}),
 			columnHelper.accessor('punctured_container', {
