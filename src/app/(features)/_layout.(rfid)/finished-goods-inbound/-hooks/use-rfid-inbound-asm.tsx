@@ -26,10 +26,11 @@ export type FetchEpcQueryKey = [typeof RFIDInboundQueryKeys.INBOUND_EPC, number,
 export const useGetInboundEpcQuery = () => {
 	const queryClient = useQueryClient()
 
-	const { currentPage, selectedOrder, scanningStatus } = usePageContext(
-		'currentPage',
+	const { selectedDevice, currentPage, selectedOrder, scanningStatus } = usePageContext(
+		'selectedDevice',
 		'selectedOrder',
-		'scanningStatus'
+		'scanningStatus',
+		'currentPage'
 	)
 
 	useEffect(() => {
@@ -41,11 +42,11 @@ export const useGetInboundEpcQuery = () => {
 	return useQuery({
 		queryKey: [RFIDInboundQueryKeys.INBOUND_EPC],
 		queryFn: async () =>
-			RFIDService.fetchNextInboundEpc({
+			RFIDService.fetchNextInboundEpc(selectedDevice, {
 				_page: currentPage,
 				'mo_no.eq': selectedOrder
 			}),
-		enabled: scanningStatus === 'disconnected',
+		enabled: scanningStatus === 'disconnected' && !!selectedDevice,
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		placeholderData: keepPreviousData,

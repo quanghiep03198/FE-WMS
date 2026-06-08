@@ -28,9 +28,9 @@ export class RFIDService {
 	}
 
 	// #region Inbound
-	static async fetchNextInboundEpc(params: { _page: number; 'mo_no.eq': string }) {
+	static async fetchNextInboundEpc(deviceSerialNumber: string, params: { _page: number; 'mo_no.eq': string }) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
-			`/rfid/inbound/fetch-epc`,
+			`/rfid/inbound/fetch-epc/${deviceSerialNumber}`,
 			{
 				params: omitBy(params, (value) => !value || value === 'all')
 			}
