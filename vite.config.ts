@@ -167,13 +167,6 @@ export default defineConfig(({ mode }) => {
 			chunkSizeWarningLimit: 500,
 			assetsInlineLimit: 4096, // Inline files < 4KB
 			rolldownOptions: {
-				banner:
-					"import __buffer_polyfill from 'vite-plugin-node-polyfills/shims/buffer'\n" +
-					'globalThis.Buffer = globalThis.Buffer || __buffer_polyfill\n' +
-					"import __global_polyfill from 'vite-plugin-node-polyfills/shims/global'\n" +
-					'globalThis.global = globalThis.global || __global_polyfill\n' +
-					"import __process_polyfill from 'vite-plugin-node-polyfills/shims/process'\n" +
-					'globalThis.process = globalThis.process || __process_polyfill\n',
 				transform: { dropLabels: ['DEV', 'DEBUG'] },
 				logLevel: mode === 'production' ? 'silent' : 'debug',
 				output: {
