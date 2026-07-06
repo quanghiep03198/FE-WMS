@@ -91,7 +91,7 @@ export const useDeleteEpcMutation = () => {
 
 	return useMutation({
 		mutationFn: async ({ rescannable, epcs }: DeleteScannedEpcsFormValues) =>
-			await RFIDService.deleteScannedInboundEpcs(epcs, { rescannable: !rescannable }),
+			await RFIDService.deleteScanningEpcs(epcs, { rescannable: !rescannable }),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
@@ -120,16 +120,12 @@ export const useUpdateStockInMutation = () => {
 		InventoryAuditQueryKeys.INVENTORY_AUDIT,
 		InboundReportQueryKeys.DAILY_INBOUND
 	)
-	const { selectedOrder, setSelectedOrder, setCurrentPage } = usePageContext(
-		'selectedOrder',
-		'setSelectedOrder',
-		'setCurrentPage'
-	)
+	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
 
 	return useMutation({
 		mutationKey: [InboundReportQueryKeys.DAILY_INBOUND],
 		mutationFn: (payload: InoutboundPayload) => {
-			return RFIDService.upsertInboundInventory(selectedOrder, payload)
+			return RFIDService.upsertInboundInventory(payload)
 		},
 		onSuccess: () => {
 			setCurrentPage(null)

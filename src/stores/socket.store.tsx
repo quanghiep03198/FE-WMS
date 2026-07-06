@@ -15,7 +15,10 @@ type TSocketContextStore = {
 
 export const SocketContext = createContext<StoreApi<TSocketContextStore>>(null)
 
-export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const SocketProvider: React.FC<React.PropsWithChildren & { namespace?: string }> = ({
+	children,
+	namespace = ''
+}) => {
 	const storeRef = useRef<StoreApi<TSocketContextStore>>(null)
 	const { user, accessToken } = useAuth()
 
@@ -23,7 +26,7 @@ export const SocketProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 		storeRef.current = create<TSocketContextStore>((set) => {
 			return {
 				isConnected: false,
-				io: io(AppConfigs.BASE_WEBSOCKET_URL, {
+				io: io(new URL(namespace, AppConfigs.BASE_WEBSOCKET_URL).toString(), {
 					autoConnect: true,
 					timeout: 10_000,
 					transports: ['websocket', 'polling', 'webtransport'],

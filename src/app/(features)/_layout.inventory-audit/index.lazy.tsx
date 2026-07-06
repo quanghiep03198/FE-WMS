@@ -2,6 +2,7 @@ import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-cont
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
+import { SocketProvider } from '@/stores/socket.store'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -43,17 +44,19 @@ function Page() {
 					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]}>
 				<HostCompatibleGuard>
-					<PageWrapper>
-						<PageHeader className='flex-1'>
-							<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
-							<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
-							<PageAction>
-								<MonthPickerFilter />
-							</PageAction>
-						</PageHeader>
-						<PageSeparator />
-						<InventoryReportMasterTable />
-					</PageWrapper>
+					<SocketProvider namespace='/inventory'>
+						<PageWrapper>
+							<PageHeader className='flex-1'>
+								<PageTitle>{t('ns_inoutbound:titles.monthly_inventory_report')}</PageTitle>
+								<PageDescription>{t('ns_inoutbound:description.monthly_inventory_report')}</PageDescription>
+								<PageAction>
+									<MonthPickerFilter />
+								</PageAction>
+							</PageHeader>
+							<PageSeparator />
+							<InventoryReportMasterTable />
+						</PageWrapper>
+					</SocketProvider>
 				</HostCompatibleGuard>
 			</RoleGuard>
 		</Fragment>

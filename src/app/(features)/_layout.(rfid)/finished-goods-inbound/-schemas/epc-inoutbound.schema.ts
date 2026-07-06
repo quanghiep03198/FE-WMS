@@ -16,4 +16,4 @@ export const inboundSchema = outboundSchema.extend({
 export type InboundFormValues = Infer<typeof inboundSchema>
 export type OutboundFormValues = Infer<typeof outboundSchema>
 export type FormValues = InboundFormValues | OutboundFormValues
-export type InoutboundPayload = { mo_no: string } & FormValues
+export type InoutboundPayload = FormValues & { mo_no: string; inbound_device_sn: string }

@@ -2,7 +2,6 @@ import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import Loading from '@/components/shared/loading'
 import NetworkDetector from '@/components/shared/network-detector'
 import { SidebarProvider } from '@/components/ui'
-import { SocketProvider } from '@/stores/socket.store'
 import { Outlet, createFileRoute, redirect, useRouteContext } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
 import { Fragment } from 'react'
@@ -69,9 +68,7 @@ function Layout() {
 											/>
 										)
 									}}>
-									<SocketProvider>
-										<Outlet />
-									</SocketProvider>
+									<Outlet />
 								</ErrorBoundary>
 							</OutletWrapper>
 						</BreadcrumbProvider>

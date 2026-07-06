@@ -43,7 +43,8 @@ import type { FormValues, InoutboundPayload } from '../../-schemas/epc-inoutboun
 import { inboundSchema, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
-	const { selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
+	const { selectedDevice, selectedOrder, scanningStatus, setScannedEpc } = usePageContext(
+		'selectedDevice',
 		'selectedOrder',
 		'scanningStatus',
 		'setScannedEpc'
@@ -128,7 +129,8 @@ const InoutboundForm: React.FC = () => {
 		try {
 			await mutateAsync({
 				...omit(data, ['warehouse_num']),
-				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder
+				mo_no: selectedOrder === FALLBACK_VALUE ? null : selectedOrder,
+				inbound_device_sn: selectedDevice
 			} as InoutboundPayload)
 			// * Always select all scanned order after performing update stock
 			setScannedEpc(currentEpcData)

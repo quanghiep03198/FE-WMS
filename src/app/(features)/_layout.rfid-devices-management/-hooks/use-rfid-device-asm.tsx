@@ -10,7 +10,6 @@ export const useGetRFIDDeviceQuery = () => {
 	return useQuery({
 		queryKey: [RFIDDeviceQueryKeys.WAREHOUSE_RFID_DEVICES],
 		queryFn: () => RFIDService.getWarehouseRFIDDevices(),
-		refetchInterval: 5000,
 		select: (response) => response.metadata
 	})
 }

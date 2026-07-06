@@ -54,6 +54,7 @@ export enum RequestHeaders {
 	TENANT_ID = 'X-Tenant-Id',
 	FACTORY_CODE = 'X-User-Factory',
 	USER_REQUEST = 'X-User-Request',
+	RFID_READER_ID = 'X-Reader-Id',
 	OTP = 'X-Otp'
 }
 

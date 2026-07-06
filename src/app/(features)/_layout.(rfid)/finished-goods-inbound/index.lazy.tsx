@@ -2,6 +2,7 @@ import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-cont
 import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
 import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
+import { SocketProvider } from '@/stores/socket.store'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -42,32 +43,34 @@ function Page() {
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<HostCompatibleGuard>
-					<PageProvider>
-						<AlreadyScannedEpcsAlert />
-						<PageComposition.Container>
-							<PageComposition.Wrapper>
-								<PageComposition.Main>
-									<ScannerToolbar />
-									<PageComposition.InnerWrapper>
-										<PageComposition.ListBoxPanel>
-											<EpcListBox />
-										</PageComposition.ListBoxPanel>
-										<PageComposition.CounterPanel>
-											<ScannedEpcCounter />
-											<ConnectionInsight />
-											<RemindMessage />
-										</PageComposition.CounterPanel>
-										<PageComposition.FormPanel>
-											<InoutboundForm />
-										</PageComposition.FormPanel>
-									</PageComposition.InnerWrapper>
-								</PageComposition.Main>
-								<ScannerSettings />
-							</PageComposition.Wrapper>
-						</PageComposition.Container>
-						{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
-						{/* <PageNavigationBlocker /> */}
-					</PageProvider>
+					<SocketProvider namespace='/rfid'>
+						<PageProvider>
+							<AlreadyScannedEpcsAlert />
+							<PageComposition.Container>
+								<PageComposition.Wrapper>
+									<PageComposition.Main>
+										<ScannerToolbar />
+										<PageComposition.InnerWrapper>
+											<PageComposition.ListBoxPanel>
+												<EpcListBox />
+											</PageComposition.ListBoxPanel>
+											<PageComposition.CounterPanel>
+												<ScannedEpcCounter />
+												<ConnectionInsight />
+												<RemindMessage />
+											</PageComposition.CounterPanel>
+											<PageComposition.FormPanel>
+												<InoutboundForm />
+											</PageComposition.FormPanel>
+										</PageComposition.InnerWrapper>
+									</PageComposition.Main>
+									<ScannerSettings />
+								</PageComposition.Wrapper>
+							</PageComposition.Container>
+							{/* Temporarily disable navigation blocker because of potential preventing update service worker  */}
+							{/* <PageNavigationBlocker /> */}
+						</PageProvider>
+					</SocketProvider>
 				</HostCompatibleGuard>
 			</RoleGuard>
 		</Fragment>

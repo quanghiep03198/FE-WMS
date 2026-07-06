@@ -15,6 +15,7 @@ import type {
 	CreateRFIDReaderFormValues,
 	UpdateRFIDReaderFormValues
 } from '@/app/(features)/_layout.rfid-devices-management/-schemas/rfid-device.schema'
+import { RequestHeaders } from '@/common/constants/enums'
 import type { IArchivedFilterFeature, IElectronicProductCode, IRFIDReaderDevice } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
 import { omit, omitBy } from 'lodash-es'
@@ -30,8 +31,11 @@ export class RFIDService {
 	// #region Inbound
 	static async fetchNextInboundEpc(deviceSerialNumber: string, params: { _page: number; 'mo_no.eq': string }) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
-			`/rfid/inbound/fetch-epc/${deviceSerialNumber}`,
+			`/rfid/inbound/fetch-epc`,
 			{
+				headers: {
+					[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
+				},
 				params: omitBy(params, (value) => !value || value === 'all')
 			}
 		)
@@ -39,7 +43,12 @@ export class RFIDService {
 
 	static async getInboundOrderDetail(deviceSerialNumber: string) {
 		return await axiosInstance.get<unknown, ResponseBody<RFIDStreamEventData['orders']>>(
-			`/rfid/inbound/manufacturing-order-detail/${deviceSerialNumber}`
+			`/rfid/inbound/manufacturing-order-detail`,
+			{
+				headers: {
+					[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
+				}
+			}
 		)
 	}
 
@@ -56,38 +65,31 @@ export class RFIDService {
 		)
 	}
 
-	static async upsertInboundInventory(
-		orderCode: string,
-		payload: Omit<InoutboundPayload, 'default_tenant' | 'target_tenant'>
-	) {
-		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
-			`/rfid/inbound/update-stock/${orderCode}`,
-			payload
-		)
+	static async upsertInboundInventory(payload: InoutboundPayload) {
+		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(`/rfid/inbound/stock-in`, payload)
 	}
 
-	static async deleteScannedInboundEpcs(data: string[], params: { rescannable: boolean }) {
-		return await axiosInstance.post(`/rfid/inbound/delete-scanned-epcs`, data, { params })
+	static async deleteScanningEpcs(data: string[], params: { rescannable: boolean }) {
+		return await axiosInstance.post(`/rfid/delete-scanning-epcs`, data, { params })
 	}
 
 	static async deleteScannedInboundOrder(commandNumber: string, params: { rescannable: boolean }) {
 		return await axiosInstance.delete(`/rfid/inbound/delete-scanned-order/${commandNumber}`, { params })
 	}
 
-	static async exchangeEpc(payload: Omit<ExchangeOrderFormValue, 'maxExchangableQuantity'>) {
-		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {})
+	static async exchangeEpc(
+		deviceSerialNumber: string,
+		payload: Omit<ExchangeOrderFormValue, 'maxExchangableQuantity'>
+	) {
+		return await axiosInstance.patch(`/rfid/inbound/exchange-epc`, payload, {
+			headers: {
+				[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
+			}
+		})
 	}
 
 	static async upsertEpcInformation(payload: ExchangeEpcPayload) {
 		return await axiosInstance.put(`/rfid/inbound/upsert-epc-information`, payload, {})
-	}
-
-	static async getDeletedEpcs(params) {
-		return await axiosInstance.get('/rfid/inbound/deleted-epcs', { params })
-	}
-
-	static async restoreDeleted(params) {
-		return await axiosInstance.get('/rfid/inbound/deleted-epcs', { params })
 	}
 
 	// #region Outbound

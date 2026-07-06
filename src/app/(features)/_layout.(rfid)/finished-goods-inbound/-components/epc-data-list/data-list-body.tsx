@@ -103,11 +103,12 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 		abortControllerRef.current = new AbortController()
 		toast.loading(t('ns_common:notification.establish_connection'), { id: SSE_TOAST_ID })
 		try {
-			await fetchEventSource(AppConfigs.BASE_API_URL + `/rfid/inbound/sse/${selectedDevice}`, {
+			await fetchEventSource(AppConfigs.BASE_API_URL + `/rfid/inbound/sse`, {
 				method: RequestMethod.GET,
 				credentials: 'include',
 				headers: {
-					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code
+					[RequestHeaders.FACTORY_CODE]: user?.current_factory_code,
+					[RequestHeaders.RFID_READER_ID]: selectedDevice
 				},
 				signal: abortControllerRef.current.signal,
 				openWhenHidden: true,
