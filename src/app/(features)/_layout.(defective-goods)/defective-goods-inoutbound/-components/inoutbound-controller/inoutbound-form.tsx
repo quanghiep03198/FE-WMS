@@ -157,16 +157,16 @@ const InoutboundForm: React.FC = () => {
 											value: DefectiveGoodsOutboundPurpose.SHIPPING
 										},
 										{
-											label: t('ns_inoutbound:inoutbound_actions.ruin'),
-											value: DefectiveGoodsOutboundPurpose.RUIN
+											label: t('ns_inoutbound:inoutbound_actions.downgrade'),
+											value: DefectiveGoodsOutboundPurpose.DOWNGRADE
 										},
 										{
 											label: t('ns_inoutbound:inoutbound_actions.lab'),
 											value: DefectiveGoodsOutboundPurpose.LAB
 										},
 										{
-											label: t('ns_inoutbound:inoutbound_actions.downgrade'),
-											value: DefectiveGoodsOutboundPurpose.DOWNGRADE
+											label: t('ns_inoutbound:inoutbound_actions.ruin'),
+											value: DefectiveGoodsOutboundPurpose.RUIN
 										}
 									]}
 									labelField='label'
