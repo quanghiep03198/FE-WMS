@@ -16,8 +16,8 @@ export enum DefectiveLocation {
 export enum DefectiveGoodsSource {
 	FINAL_INSPECTION = 'A',
 	ASSEMBLY = 'B',
-	REPACKING_INSPECTION = 'C',
-	OTHER = 'D'
+	REPACKING = 'C',
+	OVERRUN = 'D'
 }
 
 export const DefectiveCategoryI18n: Record<DefectiveCategory, ResourceKeys['ns_inoutbound']> = {

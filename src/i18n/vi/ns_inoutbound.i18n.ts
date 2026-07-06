@@ -100,13 +100,14 @@ export default {
 		wrong_stamp: 'Dán sai tem'
 	},
 	inoutbound_actions: {
-		eliminate: 'Chặt bỏ',
+		downgrade: 'B chuyển C',
+		lab: 'Phòng thí nghiệm',
 		normal_export: 'Xuất kho bình thường',
 		normal_import: 'Nhập kho bình thường',
 		recycle: 'Tái chế',
 		return_for_repair: 'Hàng trả về để sửa chữa',
-		sell: 'Bán',
-		giveaway: 'Tặng quà',
+		ruin: 'Chặt bỏ',
+		shipping: 'Xuất hàng',
 		scrap: 'Báo phế',
 		transfer_inbound: 'Điều động nhập kho',
 		transfer_outbound: 'Điều động xuất kho'
@@ -203,7 +204,7 @@ export default {
 	shoes_source: {
 		[DefectiveGoodsSource.FINAL_INSPECTION]: 'Kiểm tra thành phẩm',
 		[DefectiveGoodsSource.ASSEMBLY]: 'Thành hình',
-		[DefectiveGoodsSource.REPACKING_INSPECTION]: 'Kiểm tra đóng gói',
-		[DefectiveGoodsSource.OTHER]: 'Khác'
+		[DefectiveGoodsSource.REPACKING]: 'Đóng lại',
+		[DefectiveGoodsSource.OVERRUN]: 'Sản xuất dư'
 	}
 }

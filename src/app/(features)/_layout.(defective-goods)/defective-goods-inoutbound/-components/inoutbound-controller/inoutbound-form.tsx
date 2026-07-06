@@ -140,7 +140,7 @@ const InoutboundForm: React.FC = () => {
 					<Div
 						className={cn(
 							'grid w-full max-w-full flex-1 grid-flow-col gap-x-1 @4xl:gap-x-2 @6xl:max-w-[calc(100cqw/3)]',
-							currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SELL
+							currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SHIPPING
 								? 'auto-cols-[1fr_1.5fr_1.5fr] @4xl:auto-cols-fr'
 								: 'auto-cols-fr'
 						)}>
@@ -153,22 +153,26 @@ const InoutboundForm: React.FC = () => {
 									placeholder={t('ns_inoutbound:placeholders.outbound_purpose')}
 									datalist={[
 										{
-											label: t('ns_inoutbound:inoutbound_actions.sell'),
-											value: DefectiveGoodsOutboundPurpose.SELL
+											label: t('ns_inoutbound:inoutbound_actions.shipping'),
+											value: DefectiveGoodsOutboundPurpose.SHIPPING
 										},
 										{
-											label: t('ns_inoutbound:inoutbound_actions.eliminate'),
-											value: DefectiveGoodsOutboundPurpose.ELIMINATE
+											label: t('ns_inoutbound:inoutbound_actions.ruin'),
+											value: DefectiveGoodsOutboundPurpose.RUIN
 										},
 										{
-											label: t('ns_inoutbound:inoutbound_actions.giveaway'),
-											value: DefectiveGoodsOutboundPurpose.GIVEAWAY
+											label: t('ns_inoutbound:inoutbound_actions.lab'),
+											value: DefectiveGoodsOutboundPurpose.LAB
+										},
+										{
+											label: t('ns_inoutbound:inoutbound_actions.downgrade'),
+											value: DefectiveGoodsOutboundPurpose.DOWNGRADE
 										}
 									]}
 									labelField='label'
 									valueField='value'
 								/>
-								{currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SELL && (
+								{currentOutboundPurpose === DefectiveGoodsOutboundPurpose.SHIPPING && (
 									<PurchaseOrderFieldControl
 										label={null}
 										errorMessageVariant='tooltip'

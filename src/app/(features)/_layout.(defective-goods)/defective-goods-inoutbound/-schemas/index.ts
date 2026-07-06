@@ -14,7 +14,7 @@ export const defectiveGoodsOutboundFormValues = object({
 	outbound_purpose: string({ message: 'ns_validation:required' }).nonempty({ message: 'ns_validation:required' }),
 	po: string({ message: 'ns_validation:required' }).trim().optional() // optional field for outbound
 }).superRefine((values, ctx) => {
-	if (values.outbound_purpose === DefectiveGoodsOutboundPurpose.SELL && !values.po) {
+	if (values.outbound_purpose === DefectiveGoodsOutboundPurpose.SHIPPING && !values.po) {
 		ctx.addIssue({
 			path: ['po'],
 			code: 'custom',

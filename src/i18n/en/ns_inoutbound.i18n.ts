@@ -85,14 +85,16 @@ export default {
 		wrong_stamp: 'Wrong stamp.'
 	},
 	inoutbound_actions: {
-		eliminate: 'Eliminate',
+		downgrade: 'B to C-Grade',
+		giveaway: 'Giveaway',
+		lab: 'Lab',
 		normal_export: 'Normal export',
 		normal_import: 'Normal import',
-		giveaway: 'Giveaway',
 		recycle: 'Recycling',
 		return_for_repair: 'Return for Repair',
-		sell: 'Sell',
+		ruin: 'Ruin',
 		scrap: 'Scrap',
+		shipping: 'Shipping',
 		transfer_inbound: 'Transfer inbound',
 		transfer_outbound: 'Transfer outbound'
 	},
@@ -205,7 +207,7 @@ export default {
 	shoes_source: {
 		[DefectiveGoodsSource.FINAL_INSPECTION]: 'Final inspection',
 		[DefectiveGoodsSource.ASSEMBLY]: 'Assembly',
-		[DefectiveGoodsSource.REPACKING_INSPECTION]: 'Repacking inspection',
-		[DefectiveGoodsSource.OTHER]: 'Other'
+		[DefectiveGoodsSource.REPACKING]: 'Repacking',
+		[DefectiveGoodsSource.OVERRUN]: 'Overrun'
 	}
 }

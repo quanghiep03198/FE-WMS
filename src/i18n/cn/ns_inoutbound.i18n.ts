@@ -71,13 +71,15 @@ export default {
 		wrong_stamp: '错误的标签'
 	},
 	inoutbound_actions: {
-		eliminate: '破坏',
+		downgrade: 'B转C',
+		giveaway: '給客人',
+		lab: '实验室检验',
 		normal_export: '正常出庫',
 		normal_import: '正常入庫',
 		recycle: '翻箱',
-		sell: '出貨',
-		giveaway: '給客人',
+		shipping: '出货',
 		return_for_repair: '返修',
+		ruin: 'C品销毁',
 		scrap: '報廢',
 		transfer_inbound: '調攒入庫',
 		transfer_outbound: '調撥出庫'
@@ -189,8 +191,8 @@ export default {
 	},
 	shoes_source: {
 		[DefectiveGoodsSource.FINAL_INSPECTION]: '成品检验',
-		[DefectiveGoodsSource.ASSEMBLY]: '组装',
-		[DefectiveGoodsSource.REPACKING_INSPECTION]: '重包装检验',
-		[DefectiveGoodsSource.OTHER]: '其他'
+		[DefectiveGoodsSource.ASSEMBLY]: '成型线',
+		[DefectiveGoodsSource.REPACKING]: '翻箱',
+		[DefectiveGoodsSource.OVERRUN]: '多生产'
 	}
 }

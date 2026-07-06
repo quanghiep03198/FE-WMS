@@ -1,5 +1,6 @@
 export enum DefectiveGoodsOutboundPurpose {
-	SELL = 'SELL',
-	GIVEAWAY = 'GIVEAWAY',
-	ELIMINATE = 'ELIMINATE'
+	SHIPPING = 'SHIPPING',
+	LAB = 'LAB',
+	RUIN = 'RUIN',
+	DOWNGRADE = 'B_TO_C'
 }

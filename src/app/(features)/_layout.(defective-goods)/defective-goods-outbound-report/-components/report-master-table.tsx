@@ -177,16 +177,20 @@ const InboundReportMasterTable: React.FC = () => {
 					filterVariant: 'select',
 					facetedUniqueValues: [
 						{
-							label: t('ns_inoutbound:inoutbound_actions.sell'),
-							value: DefectiveGoodsOutboundPurpose.SELL
+							label: t('ns_inoutbound:inoutbound_actions.shipping'),
+							value: DefectiveGoodsOutboundPurpose.SHIPPING
 						},
 						{
-							label: t('ns_inoutbound:inoutbound_actions.eliminate'),
-							value: DefectiveGoodsOutboundPurpose.ELIMINATE
+							label: t('ns_inoutbound:inoutbound_actions.ruin'),
+							value: DefectiveGoodsOutboundPurpose.RUIN
 						},
 						{
-							label: t('ns_inoutbound:inoutbound_actions.giveaway'),
-							value: DefectiveGoodsOutboundPurpose.GIVEAWAY
+							label: t('ns_inoutbound:inoutbound_actions.lab'),
+							value: DefectiveGoodsOutboundPurpose.LAB
+						},
+						{
+							label: t('ns_inoutbound:inoutbound_actions.downgrade'),
+							value: DefectiveGoodsOutboundPurpose.DOWNGRADE
 						}
 					]
 				},
