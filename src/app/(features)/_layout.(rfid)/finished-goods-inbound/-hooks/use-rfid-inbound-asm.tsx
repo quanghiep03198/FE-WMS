@@ -137,10 +137,14 @@ export const useUpdateStockInMutation = () => {
 
 export const useExchangeEpcMutation = () => {
 	const invalidateQueries = useInvalidateQueries()
-	const { setSelectedOrder, setCurrentPage } = usePageContext('setSelectedOrder', 'setCurrentPage')
+	const { selectedDevice, setSelectedOrder, setCurrentPage } = usePageContext(
+		'selectedDevice',
+		'setSelectedOrder',
+		'setCurrentPage'
+	)
 
 	return useMutation({
-		mutationFn: async (payload: ExchangeOrderFormValue) => await RFIDService.exchangeEpc(payload),
+		mutationFn: async (payload: ExchangeOrderFormValue) => await RFIDService.exchangeEpc(selectedDevice, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
