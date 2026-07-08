@@ -1,4 +1,5 @@
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/app/(features)/-hooks/use-order-asm'
+import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import type { DivProps, TypographyProps } from '@/components/ui'
 import {
 	Button,
@@ -21,6 +22,7 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useSocketContext } from '@/stores/socket.store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { usePrevious } from 'ahooks'
@@ -68,6 +70,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const previousQuantity = usePrevious(quantity)
 	const { data: availableCommandNumbers, refetch: fetchExchangableOrder } = useSearchCommandNumberQuery(searchTerm)
 	const { data: orderDetail } = useGetCommandNumberDetailQuery(actualOrder)
+	const { io } = useSocketContext('io')
 
 	const exchangableOrders = useMemo(() => {
 		return uniqBy(
@@ -110,20 +113,21 @@ const ExchangeEpcFormDialog: React.FC = () => {
 			const matchedSize = orderDetail.sizes.find((item) => item.size_numcode === defaultValues?.size_numcode)
 			form.reset({
 				...form.getValues(),
+				color_sn_actual: currOrderInfo.color_sn,
+				cust_shoes_style: currOrderInfo.cust_shoes_style,
+				factory_shoes_style_actual: currOrderInfo.factory_shoes_style,
 				mat_code: currOrderInfo.mat_code,
+				mo_no_actual: currOrderInfo.mo_no,
 				or_no: currOrderInfo.or_no,
 				or_cust_po: currOrderInfo.or_cust_po,
 				size_code: currOrderInfo.size_code,
 				size_qty: currOrderInfo.size_sumqty,
-				cust_shoes_style: currOrderInfo.cust_shoes_style,
-				mo_no: defaultValues.mo_no,
+				size_numcode_actual: matchedSize?.size_numcode ?? 'N/A',
+				// filter values
 				factory_shoes_style: defaultValues.factory_shoes_style,
 				color_sn: defaultValues.color_sn,
-				size_numcode: defaultValues.size_numcode,
-				mo_no_actual: currOrderInfo.mo_no,
-				color_sn_actual: currOrderInfo.color_sn,
-				factory_shoes_style_actual: currOrderInfo.factory_shoes_style,
-				size_numcode_actual: matchedSize?.size_numcode ?? 'N/A'
+				mo_no: defaultValues.mo_no,
+				size_numcode: defaultValues.size_numcode
 			})
 		}
 	}
@@ -134,16 +138,27 @@ const ExchangeEpcFormDialog: React.FC = () => {
 		else form.setValue('quantity', previousQuantity ?? 0)
 	}
 
+	const toastId = useRef<string | number>(null)
+
 	const handleExchangeEpc = async (data: ExchangeEpcFormValue) => {
-		try {
-			await mutateAsync(data)
-			toast.success(t('ns_common:notification.success'))
-			resetSelectedRows()
-			setOpen(!open)
-		} catch {
-			toast.error(t('ns_common:notification.error'))
-		}
+		toastId.current = toast.loading(t('ns_common:notification.processing_request'))
+		await mutateAsync(data)
+
+		resetSelectedRows()
+		setOpen(!open)
 	}
+
+	useEffectOnce(() => {
+		const notifySuccess = (message: string) => toast.success(message, { id: toastId.current })
+		const notifyError = (message: string) => toast.error(message, { id: toastId.current })
+		io.on('exchange_mo.success', notifySuccess)
+		io.on('exchange_mo.error', notifyError)
+
+		return () => {
+			io.off('exchange_mo.success', notifySuccess)
+			io.off('exchange_mo.error', notifyError)
+		}
+	})
 
 	const handleOpenChange = (open: boolean) => {
 		setOpen(open)

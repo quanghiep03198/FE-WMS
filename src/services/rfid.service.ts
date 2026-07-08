@@ -88,8 +88,12 @@ export class RFIDService {
 		})
 	}
 
-	static async upsertEpcInformation(payload: ExchangeEpcPayload) {
-		return await axiosInstance.put(`/rfid/inbound/upsert-epc-information`, payload, {})
+	static async upsertEpcInformation(deviceSerialNumber: string, payload: ExchangeEpcPayload) {
+		return await axiosInstance.put(`/rfid/inbound/upsert-epc-information`, payload, {
+			headers: {
+				[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
+			}
+		})
 	}
 
 	// #region Outbound
