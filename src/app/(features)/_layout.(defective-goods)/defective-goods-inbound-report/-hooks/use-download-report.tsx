@@ -27,7 +27,7 @@ export const useDownloadReport = () => {
 				blob,
 				t('ns_inoutbound:titles.file_daily_defective_goods_inbound_report', {
 					factory: translatedFactory,
-					date: searchParams['date.eq'],
+					date: searchParams['date:eq'],
 					defaultValue: null
 				}) + '.xlsx'
 			)

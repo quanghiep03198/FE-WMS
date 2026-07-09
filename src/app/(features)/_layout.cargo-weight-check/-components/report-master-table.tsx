@@ -20,13 +20,13 @@ import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
 const ReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
 	const { user } = useAuth()
-	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>({
-		'date.eq': format(new Date(), 'yyyy-MM-dd'),
+	const { searchParams } = useQueryParams<{ 'date:eq': string; 'auto-refresh': number | false }>({
+		'date:eq': format(new Date(), 'yyyy-MM-dd'),
 		'auto-refresh': false
 	})
 	const { data, isLoading, refetch } = useQuery({
-		queryKey: ['PACKING_REPORT', pick(searchParams, 'date.eq')],
-		queryFn: () => ReportService.getDailyWeighingReport(pick(searchParams, 'date.eq')),
+		queryKey: ['PACKING_REPORT', pick(searchParams, 'date:eq')],
+		queryFn: () => ReportService.getDailyWeighingReport(pick(searchParams, 'date:eq')),
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
 	})
@@ -138,7 +138,7 @@ const ReportMasterTable: React.FC = () => {
 				blob,
 				t('ns_packing:titles.file_daily_weighing_report', {
 					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
-					date: searchParams['date.eq'],
+					date: searchParams['date:eq'],
 					defaultValue: `Packing weight Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
 			)

@@ -9,9 +9,9 @@ export enum InboundReportQueryKeys {
 
 export const useGetInboundReport = (
 	tenantId: string,
-	params?: { 'auto-refresh': false | number; 'date.eq': string }
+	params?: { 'auto-refresh': false | number; 'date:eq': string }
 ) => {
-	const queryParams = params?.['date.eq'] ? pick(params, 'date.eq') : { ['date.eq']: format(new Date(), 'yyyy-MM-dd') }
+	const queryParams = params?.['date:eq'] ? pick(params, 'date:eq') : { ['date:eq']: format(new Date(), 'yyyy-MM-dd') }
 
 	return useQuery({
 		queryKey: [InboundReportQueryKeys.DAILY_INBOUND, tenantId, queryParams],

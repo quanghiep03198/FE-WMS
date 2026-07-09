@@ -44,7 +44,7 @@ export const useGetInboundEpcQuery = () => {
 		queryFn: async () =>
 			RFIDService.fetchNextInboundEpc(selectedDevice, {
 				_page: currentPage,
-				'mo_no.eq': selectedOrder
+				'mo_no:eq': selectedOrder
 			}),
 		enabled: scanningStatus === 'disconnected' && !!selectedDevice,
 		refetchOnMount: false,

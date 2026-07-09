@@ -18,6 +18,6 @@ export type RFIDStreamEventData = {
 }
 
 export type SearchEpcParams = {
-	'mo_no.eq': string
-	'size_numcode.eq': string
+	'mo_no:eq': string
+	'size_numcode:eq': string
 }

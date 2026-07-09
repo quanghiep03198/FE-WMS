@@ -22,7 +22,7 @@ import SizeTable from '../../../-components/shared/size-table'
 import DownloadExcelButton from './download-excel-button'
 
 export type PageQueryParams = {
-	'date.eq': string
+	'date:eq': string
 	'auto-refresh': number | false
 }
 

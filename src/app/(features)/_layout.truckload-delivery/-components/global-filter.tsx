@@ -211,7 +211,7 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 			{ label: t('ns_common:filter.begins_with'), value: 'like:@value%', types: ['text'] },
 			{ label: t('ns_common:filter.ends_with'), value: 'like:%@value', types: ['text'] },
 			{ label: t('ns_common:filter.between'), value: 'between:@value1,@value2', types: ['date'] },
-			{ label: t('ns_common:filter.equals'), value: '=:@value', types: ['text', 'date', 'select'] }
+			{ label: t('ns_common:filter:equals'), value: '=:@value', types: ['text', 'date', 'select'] }
 		]
 		return expressions.filter((expr) => expr.types.includes(type)).map((expr) => omit(expr, 'types'))
 	}, [i18n.language])

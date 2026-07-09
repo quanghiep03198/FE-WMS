@@ -30,7 +30,7 @@ import DataTableSummary from './report-summary-table'
 import SyncDataTrigger from './sync-data-trigger'
 
 export const InventoryReportMasterTable: React.FC = () => {
-	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
+	const { searchParams } = useQueryParams<{ 'month:eq': string }>({ 'month:eq': format(new Date(), 'yyyy-MM') })
 
 	const { data, isLoading } = useGetInventoryAuditReport(searchParams)
 	const { t, i18n } = useTranslation()
@@ -44,7 +44,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 
 	useEffect(() => {
 		resetExpanded()
-	}, [searchParams['month.eq']])
+	}, [searchParams['month:eq']])
 
 	const renderSubComponents = useCallback(
 		({ row }: RenderSubComponentProps<IMonthlyInventoryAudit>): React.ReactElement => (
@@ -283,7 +283,7 @@ export const InventoryReportMasterTable: React.FC = () => {
 const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 	const { t } = useTranslation()
 	const { table } = useTableContext('table')
-	const { searchParams } = useQueryParams<{ 'month.eq': string }>()
+	const { searchParams } = useQueryParams<{ 'month:eq': string }>()
 	const queryClient = useQueryClient()
 	const { user } = useAuth()
 
@@ -293,15 +293,15 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
 		try {
 			const blob = await InventoryService.downloadInventoryAuditReport({
-				...pick(searchParams, 'month.eq'),
-				'mo_no.in': selectedRows.map((row) => row.original.mo_no)
+				...pick(searchParams, 'month:eq'),
+				'mo_no:in': selectedRows.map((row) => row.original.mo_no)
 			})
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {
 					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
-					month: searchParams['month.eq'],
-					defaultValue: `Monthly Inventory Report ~ ${searchParams['month.eq']}`
+					month: searchParams['month:eq'],
+					defaultValue: `Monthly Inventory Report ~ ${searchParams['month:eq']}`
 				}) + '.xlsx'
 			)
 			toast.success(t('ns_common:notification.success'), { id })

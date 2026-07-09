@@ -1,4 +1,3 @@
-import type { IElectronicProductCode } from '@/common/types/entities'
 import { RFIDService } from '@/services/rfid.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash-es'
@@ -23,12 +22,12 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params: SearchFormVal
 					_page: pageParam,
 					_limit: params.limit ?? 100,
 					q: params.epc,
-					'shoes_style.eq': params.shoes_style,
-					'color_sn.eq': params.color_sn,
-					'mo_no.eq': params.mo_no,
-					'size_numcode.eq': params.size_numcode,
-					'scanned.eq': params.scanned,
-					'scannable.eq': params.scannable
+					'shoes_style:eq': params.shoes_style,
+					'color_sn:eq': params.color_sn,
+					'mo_no:eq': params.mo_no,
+					'size_numcode:eq': params.size_numcode,
+					'scanned:eq': params.scanned,
+					'scannable:eq': params.scannable
 				},
 				(value) =>
 					value === undefined || value === null || (typeof value === 'string' && (value === '' || value === 'all'))
@@ -64,7 +63,7 @@ export const useRestoreEpcMutation = (type: RFIDDataType) => {
 	const invalidateQueries = useInvalidateQueries(type)
 
 	return useMutation({
-		mutationFn: async (epcs: Array<IElectronicProductCode>) => await RFIDService.restoreArchivedEpcs(type, epcs),
+		mutationFn: async (epcs: Array<string>) => await RFIDService.restoreArchivedEpcs(epcs),
 		onSettled: invalidateQueries
 	})
 }

@@ -142,8 +142,8 @@ export const useGetDefectiveGoodsInboundReportQuery = () => {
 	const { searchParams } = useReportPageQueryParams()
 
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenant?.id, pick(searchParams, 'date.eq')],
-		queryFn: async () => await DefectiveGoodsService.getInboundReport(tenant?.id, pick(searchParams, 'date.eq')),
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT, tenant?.id, pick(searchParams, 'date:eq')],
+		queryFn: async () => await DefectiveGoodsService.getInboundReport(tenant?.id, pick(searchParams, 'date:eq')),
 		enabled: !!tenant?.id,
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata
@@ -155,8 +155,8 @@ export const useGetDefectiveGoodsOutboundReportQuery = () => {
 	const { searchParams } = useReportPageQueryParams()
 
 	return useQuery({
-		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, tenant?.id, pick(searchParams, 'date.eq')],
-		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenant?.id, pick(searchParams, 'date.eq')),
+		queryKey: [DefectiveGoodsQueryKey.DEFECTIVE_GOODS_OUTBOUND_REPORT, tenant?.id, pick(searchParams, 'date:eq')],
+		queryFn: async () => await DefectiveGoodsService.getOutboundReport(tenant?.id, pick(searchParams, 'date:eq')),
 		enabled: !!tenant?.id,
 		refetchInterval: searchParams['auto-refresh'],
 		select: (response) => response.metadata

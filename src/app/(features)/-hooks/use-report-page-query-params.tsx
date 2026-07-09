@@ -2,12 +2,12 @@ import useQueryParams from '@/common/hooks/use-query-params'
 import { format } from 'date-fns'
 
 export type PageQueryParams = {
-	'date.eq': string
+	'date:eq': string
 	'auto-refresh'?: number | false
 }
 
 export const useReportPageQueryParams = () => {
 	return useQueryParams<PageQueryParams>({
-		'date.eq': format(new Date(), 'yyyy-MM-dd')
+		'date:eq': format(new Date(), 'yyyy-MM-dd')
 	})
 }

@@ -110,7 +110,7 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async getInboundReport(tenantId: string, params: { 'date.eq': string }) {
+	static async getInboundReport(tenantId: string, params: { 'date:eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsInboundReport[]>>(
 			'/defective-goods/daily-inbound',
 			{
@@ -122,7 +122,7 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async getOutboundReport(tenantId: string, params: { 'date.eq': string }) {
+	static async getOutboundReport(tenantId: string, params: { 'date:eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IDefectiveGoodsOutboundReport[]>>(
 			'/defective-goods/daily-outbound',
 			{
@@ -134,7 +134,7 @@ export class DefectiveGoodsService {
 		)
 	}
 
-	static async downloadInboundReport(tenantId: string, filter: { 'date.eq': string }) {
+	static async downloadInboundReport(tenantId: string, filter: { 'date:eq': string }) {
 		return await axiosInstance.get<void, Blob>(`/defective-goods/export-daily-inbound`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,
@@ -142,7 +142,7 @@ export class DefectiveGoodsService {
 		})
 	}
 
-	static async downloadOutboundReport(tenantId: string, filter: { 'date.eq': string }) {
+	static async downloadOutboundReport(tenantId: string, filter: { 'date:eq': string }) {
 		return await axiosInstance.get<void, Blob>(`/defective-goods/export-daily-outbound`, {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: filter,

@@ -24,7 +24,7 @@ import OutboundReportDetailTable from './report-detail-table'
 import ReportTableSummary from './report-table-footer'
 
 const ReportDatalist: React.FC = () => {
-	const { searchParams } = useQueryParams<{ 'date.eq': string; 'auto-refresh': number | false }>()
+	const { searchParams } = useQueryParams<{ 'date:eq': string; 'auto-refresh': number | false }>()
 	const { user } = useAuth()
 	const { data: currentTenant } = useGetTenantByFactory()
 	const { data, isLoading, refetch } = useGetOutboundReport(currentTenant?.id, searchParams)
@@ -138,7 +138,7 @@ const ReportDatalist: React.FC = () => {
 				blob,
 				t('ns_inoutbound:titles.file_daily_outbound_report', {
 					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
-					date: searchParams['date.eq'],
+					date: searchParams['date:eq'],
 					defaultValue: `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
 			)

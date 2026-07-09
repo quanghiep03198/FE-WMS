@@ -30,7 +30,7 @@ export class StatisticsService {
 		)
 	}
 
-	static async getAnnualInoutboundOverview(tenantId: string, params: { 'year.eq': number }) {
+	static async getAnnualInoutboundOverview(tenantId: string, params: { 'year:eq': number }) {
 		return await axiosInstance.get<void, ResponseBody<IAnnuallyInOutboundStatistics[]>>(
 			'/statistics/annual-inoutbound-overview',
 			{

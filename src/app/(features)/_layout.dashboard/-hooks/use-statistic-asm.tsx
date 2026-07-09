@@ -30,7 +30,7 @@ export const useGetAnnualInoutboundOverviewQuery = (year: number) => {
 
 	return useQuery({
 		queryKey: [StatisticsQueryKeys.ANNUAL_INOUTBOUND_OVERVIEW, year, tenant?.id],
-		queryFn: () => StatisticsService.getAnnualInoutboundOverview(tenant?.id, { 'year.eq': year }),
+		queryFn: () => StatisticsService.getAnnualInoutboundOverview(tenant?.id, { 'year:eq': year }),
 		refetchInterval: POLLING_INTERVAL,
 		enabled: !!tenant?.id,
 		select: (response): IAnnuallyInOutboundStatistics[] => response.metadata

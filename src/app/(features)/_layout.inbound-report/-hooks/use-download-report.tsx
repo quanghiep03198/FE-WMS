@@ -20,8 +20,8 @@ export const useDownloadReport = () => {
 		const translatedFactory = t(factories[user?.current_factory_code], { ns: 'ns_common' })
 		const fallbackFileTitle =
 			reportType === 'daily-productivity'
-				? `Daily Inbound Report ${translatedFactory} - ${searchParams['date.eq']}`
-				: `Shaping Department Productivity Report ${translatedFactory} - ${searchParams['date.eq']}`
+				? `Daily Inbound Report ${translatedFactory} - ${searchParams['date:eq']}`
+				: `Shaping Department Productivity Report ${translatedFactory} - ${searchParams['date:eq']}`
 
 		try {
 			const blob = await ReportService.downloadInboundReport(reportType, currentTenant?.id, searchParams)
@@ -33,7 +33,7 @@ export const useDownloadReport = () => {
 						: 'ns_inoutbound:titles.file_shaping_department_productivity_report',
 					{
 						factory: translatedFactory,
-						date: searchParams['date.eq'],
+						date: searchParams['date:eq'],
 						defaultValue: fallbackFileTitle
 					}
 				) + '.xlsx'

@@ -22,13 +22,13 @@ import DownloadExcelDropdown from './download-excel-dropdown'
 import ReportTableSummary from './report-table-summary'
 
 export type UrlQueryParams = {
-	'date.eq': string
+	'date:eq': string
 	'auto-refresh': number | false
 }
 
 const InboundReportMasterTable: React.FC = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>({
-		'date.eq': format(new Date(), 'yyyy-MM-dd'),
+		'date:eq': format(new Date(), 'yyyy-MM-dd'),
 		'auto-refresh': false
 	})
 	const { data: currentTenant } = useGetTenantByFactory()

@@ -11,7 +11,7 @@ export enum InventoryAuditQueryKeys {
 	INVENTORY_AUDIT = 'INVENTORY_AUDIT'
 }
 
-export const useGetInventoryAuditReport = (params?: { 'month.eq': string }) => {
+export const useGetInventoryAuditReport = (params?: { 'month:eq': string }) => {
 	return useQuery({
 		queryKey: [InventoryAuditQueryKeys.INVENTORY_AUDIT, params],
 		queryFn: async () => await InventoryService.getInventoryAuditReport(params),
@@ -26,13 +26,13 @@ export const useInventoryAuditMutation = (
 ) => {
 	const { t } = useTranslation()
 	const queryClient = useQueryClient()
-	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
+	const { searchParams } = useQueryParams<{ 'month:eq': string }>({ 'month:eq': format(new Date(), 'yyyy-MM') })
 
 	return useMutation({
 		mutationFn: async (payload: InventoryAuditFormValues['data']) => {
 			return await InventoryService.updateInventoryAuditReport(
 				signal,
-				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month.eq'] },
+				{ ...queries, po: queries.actual_po, inv_year_month: searchParams['month:eq'] },
 				payload
 			)
 		},

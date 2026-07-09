@@ -24,13 +24,13 @@ export const useDownloadReport = () => {
 		try {
 			const blob = await DefectiveGoodsService.downloadOutboundReport(
 				currentTenant?.id,
-				pick(searchParams, ['date.eq'])
+				pick(searchParams, ['date:eq'])
 			)
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_defective_goods_outbound_report', {
 					factory: translatedFactory,
-					date: searchParams['date.eq'],
+					date: searchParams['date:eq'],
 					defaultValue: null
 				}) + '.xlsx'
 			)

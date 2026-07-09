@@ -20,7 +20,7 @@ const DownloadExcelButton: React.FC = () => {
 	const queryData = queryClient.getQueryData<ResponseBody<IDefectiveGoodsInboundReport>>([
 		DefectiveGoodsQueryKey.DEFECTIVE_GOODS_INBOUND_REPORT,
 		currentTenant?.id,
-		pick(searchParams, ['date.eq'])
+		pick(searchParams, ['date:eq'])
 	])
 
 	return (

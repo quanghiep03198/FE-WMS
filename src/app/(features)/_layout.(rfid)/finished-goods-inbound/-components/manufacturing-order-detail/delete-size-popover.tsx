@@ -49,8 +49,8 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 	const queryClient = useQueryClient()
 	const { data: availableEpcs, isLoading } = useGetInboundEpcsBySize(
 		{
-			['mo_no.eq']: data.mo_no,
-			['size_numcode.eq']: data.size_numcode
+			['mo_no:eq']: data.mo_no,
+			['size_numcode:eq']: data.size_numcode
 		},
 		{ enabled: open }
 	)
@@ -78,8 +78,8 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 						queryKey: [
 							'INBOUND_EPC_BY_SIZE',
 							{
-								['mo_no.eq']: data.mo_no,
-								['size_numcode.eq']: data.size_numcode
+								['mo_no:eq']: data.mo_no,
+								['size_numcode:eq']: data.size_numcode
 							}
 						]
 					})

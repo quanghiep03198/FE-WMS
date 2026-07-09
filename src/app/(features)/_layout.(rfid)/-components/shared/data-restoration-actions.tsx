@@ -1,5 +1,4 @@
 import { Button, Icon, SheetClose } from '@/components/ui'
-import { omit } from 'lodash-es'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -21,7 +20,7 @@ const RestorationDataActions: React.FC<RestorationDataActionsProps> = ({ dataTyp
 		const id = toast.loading(t('ns_common:notification.processing_request'))
 
 		try {
-			await mutateAsync(selectedItems.map((item) => omit(item, ['scanned'])))
+			await mutateAsync(selectedItems.map((item) => item.epc))
 			toast.success(t('ns_common:notification.success'), { id })
 			removeAllItemsFromSet()
 		} catch {

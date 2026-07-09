@@ -29,7 +29,7 @@ export class RFIDService {
 	}
 
 	// #region Inbound
-	static async fetchNextInboundEpc(deviceSerialNumber: string, params: { _page: number; 'mo_no.eq': string }) {
+	static async fetchNextInboundEpc(deviceSerialNumber: string, params: { _page: number; 'mo_no:eq': string }) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode>>>(
 			`/rfid/inbound/fetch-epc`,
 			{
@@ -135,11 +135,8 @@ export class RFIDService {
 		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/archived-epc-features`)
 	}
 
-	static async restoreArchivedEpcs(type: RFIDDataType, payload: Array<IElectronicProductCode>) {
-		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(
-			`/rfid/restore-archived-epcs/${type}`,
-			payload
-		)
+	static async restoreArchivedEpcs(payload: Array<string>) {
+		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(`/rfid/restore-archived-epcs`, payload)
 	}
 
 	// #endregion

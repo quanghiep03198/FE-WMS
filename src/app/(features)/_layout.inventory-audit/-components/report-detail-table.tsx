@@ -26,7 +26,7 @@ type InventoryReportDetailTableProps = {
 export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProps> = ({ queries, data }) => {
 	const { t, i18n } = useTranslation()
 
-	const { searchParams } = useQueryParams<{ 'month.eq': string }>({ 'month.eq': format(new Date(), 'yyyy-MM') })
+	const { searchParams } = useQueryParams<{ 'month:eq': string }>({ 'month:eq': format(new Date(), 'yyyy-MM') })
 
 	// * Handle toggle enable editing
 	const [isEditing, { setTrue: enableEditing, setFalse: disableEditing }] = useBoolean(false)

@@ -10,13 +10,13 @@ import axiosInstance from '@/configs/axios.config'
 import type { AxiosRequestConfig } from 'axios'
 
 export class InventoryService {
-	static async getInventoryAuditReport(params: { 'month.eq': string }) {
+	static async getInventoryAuditReport(params: { 'month:eq': string }) {
 		return await axiosInstance.get<void, ResponseBody<IMonthlyInventoryAudit[]>>('/inventory/audit', {
 			params: params
 		})
 	}
 
-	static async downloadInventoryAuditReport(filter: { 'month.eq': string; 'mo_no.in': string[] }) {
+	static async downloadInventoryAuditReport(filter: { 'month:eq': string; 'mo_no:in': string[] }) {
 		return await axiosInstance.get<void, Blob>('/inventory/audit/export', {
 			params: filter,
 			responseType: 'blob'
@@ -44,9 +44,9 @@ export class InventoryService {
 		>('/inventory/summary', {
 			headers: { [RequestHeaders.TENANT_ID]: tenantId },
 			params: {
-				'brand_name.eq': params.brand_name,
-				'shoes_style.eq': params.shoes_style,
-				'color.eq': params.color
+				'brand_name:eq': params.brand_name,
+				'shoes_style:eq': params.shoes_style,
+				'color:eq': params.color
 			}
 		})
 	}
