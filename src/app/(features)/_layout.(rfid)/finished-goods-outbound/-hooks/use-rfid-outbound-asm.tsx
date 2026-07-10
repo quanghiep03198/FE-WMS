@@ -32,7 +32,7 @@ export const useDeleteEpcMutation = () => {
 
 	return useMutation({
 		mutationFn: async ({ rescannable, epcs }: DeleteScannedEpcsFormValues) =>
-			await RFIDService.deleteScannedOutboundEpcs(epcs, { rescannable: !rescannable }),
+			await RFIDService.deleteScanningEpcs(epcs, { rescannable: !rescannable }),
 		onSettled: invalidateQueries
 	})
 }
@@ -48,7 +48,7 @@ export const useDeleteOrderMutation = () => {
 			currentPage
 		],
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
-			await RFIDService.deleteScannedOutboundOrder(commandNumber, { rescannable: !rescannable })
+			await RFIDService.deleteScanningMo('outbound', commandNumber, { rescannable: !rescannable })
 	})
 }
 

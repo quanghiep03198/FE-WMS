@@ -32,7 +32,7 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params: SearchFormVal
 				(value) =>
 					value === undefined || value === null || (typeof value === 'string' && (value === '' || value === 'all'))
 			)
-			return await RFIDService.getArchivedEpcs(type, filterQueries)
+			return await RFIDService.getDeletedEpcs(type, filterQueries)
 		},
 		initialPageParam: 1,
 		refetchOnMount: true,
@@ -53,7 +53,7 @@ export const useGetArchivedEpcQuery = (type: RFIDDataType, params: SearchFormVal
 export const useGetArchivedEpcFeatureQuery = () => {
 	return useQuery({
 		queryKey: [ArchiviedDataQueryKeys.ARCHIVED_EPCS_FEATURES],
-		queryFn: async () => await RFIDService.getArchivedEpcFeatures(),
+		queryFn: async () => await RFIDService.getDeletedEpcSepcs(),
 		refetchOnMount: 'always',
 		select: (response) => response.metadata
 	})
@@ -63,7 +63,7 @@ export const useRestoreEpcMutation = (type: RFIDDataType) => {
 	const invalidateQueries = useInvalidateQueries(type)
 
 	return useMutation({
-		mutationFn: async (epcs: Array<string>) => await RFIDService.restoreArchivedEpcs(epcs),
+		mutationFn: async (epcs: Array<string>) => await RFIDService.restoreDeletedEpcs(epcs),
 		onSettled: invalidateQueries
 	})
 }

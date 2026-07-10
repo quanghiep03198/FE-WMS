@@ -52,12 +52,6 @@ export class RFIDService {
 		)
 	}
 
-	static async getInboundEpcBySize(params: SearchEpcParams) {
-		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/inbound/get-epc-by-size`, {
-			params
-		})
-	}
-
 	static async searchExchangableOrder(params: SearchCustOrderParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
 			`/rfid/inbound/search-exchangable-order`,
@@ -67,10 +61,6 @@ export class RFIDService {
 
 	static async upsertInboundInventory(payload: InoutboundPayload) {
 		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(`/rfid/inbound/stock-in`, payload)
-	}
-
-	static async deleteScanningEpcs(data: string[], params: { rescannable: boolean }) {
-		return await axiosInstance.post(`/rfid/delete-scanning-epcs`, data, { params })
 	}
 
 	static async deleteScannedInboundOrder(commandNumber: string, params: { rescannable: boolean }) {
@@ -108,14 +98,6 @@ export class RFIDService {
 		return await axiosInstance.put<OutboundFormValues, ResponseBody<unknown>>('/rfid/outbound/update-stock', payload)
 	}
 
-	static async deleteScannedOutboundEpcs(data: string[], params: { rescannable: boolean }) {
-		return await axiosInstance.post(`/rfid/outbound/delete-scanned-epcs`, data, { params })
-	}
-
-	static async deleteScannedOutboundOrder(commandNumber: string, params: { rescannable: boolean }) {
-		return await axiosInstance.delete(`/rfid/outbound/delete-scanned-order/${commandNumber}`, { params })
-	}
-
 	static async getOutboundEpcBySize(params: SearchEpcParams) {
 		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(`/rfid/outbound/get-epc-by-size`, {
 			params
@@ -124,19 +106,37 @@ export class RFIDService {
 	// #endregion
 
 	// #region Shared
-	static async getArchivedEpcs(type: RFIDDataType, params: Partial<FilterArchivedEpcParams>) {
+
+	static async getScanningEpcsBySize(stockFlow: 'inbound' | 'outbound', params: SearchEpcParams) {
+		return await axiosInstance.get<unknown, ResponseBody<Record<'epc', string>[]>>(
+			`/rfid/epcs-by-size/${stockFlow}`,
+			{
+				params
+			}
+		)
+	}
+
+	static async getDeletedEpcs(type: RFIDDataType, params: Partial<FilterArchivedEpcParams>) {
 		return await axiosInstance.get<unknown, ResponseBody<Pagination<IElectronicProductCode & { scanned: boolean }>>>(
-			`/rfid/archived-epcs/${type}`,
+			`/rfid/deleted-epcs/${type}`,
 			{ params }
 		)
 	}
 
-	static async getArchivedEpcFeatures() {
-		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/archived-epc-features`)
+	static async deleteScanningEpcs(data: string[], params: { rescannable: boolean }) {
+		return await axiosInstance.post(`/rfid/delete-scanning-epcs`, data, { params })
 	}
 
-	static async restoreArchivedEpcs(payload: Array<string>) {
-		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(`/rfid/restore-archived-epcs`, payload)
+	static async deleteScanningMo(stockFlow: 'inbound' | 'outbound', mo: string, params: { rescannable: boolean }) {
+		return await axiosInstance.delete(`/rfid/delete-scanning-mo/${stockFlow}/${mo}`, { params })
+	}
+
+	static async getDeletedEpcSepcs() {
+		return await axiosInstance.get<unknown, ResponseBody<IArchivedFilterFeature[]>>(`/rfid/deleted-epc-specs`)
+	}
+
+	static async restoreDeletedEpcs(payload: Array<string>) {
+		return await axiosInstance.patch<Array<string>, ResponseBody<unknown>>(`/rfid/restore-deleted-epcs`, payload)
 	}
 
 	// #endregion

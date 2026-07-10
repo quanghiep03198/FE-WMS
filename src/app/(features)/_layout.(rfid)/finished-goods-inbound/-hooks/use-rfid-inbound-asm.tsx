@@ -205,7 +205,7 @@ export const useGetInboundEpcsBySize = (
 	return useQuery({
 		...options,
 		queryKey: ['INBOUND_EPC_BY_SIZE', params],
-		queryFn: async () => await RFIDService.getInboundEpcBySize(params),
+		queryFn: async () => await RFIDService.getScanningEpcsBySize('inbound', params),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		select: (response) => (Array.isArray(response.metadata) ? response.metadata : [])
