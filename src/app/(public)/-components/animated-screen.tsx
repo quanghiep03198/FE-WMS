@@ -1,6 +1,6 @@
-import AppLogo from '@/app/-components/-shared/app-logo'
 import { cn } from '@/common/utils/cn'
 import formatIntlNumber from '@/common/utils/format-intl-number'
+import AppLogo from '@/components/shared/app-logo'
 import {
 	Badge,
 	Breadcrumb,

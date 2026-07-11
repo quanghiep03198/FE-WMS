@@ -1,5 +1,5 @@
-import { DefectiveGoodsSource } from '@/app/(features)/_layout.(defective-goods)/-constants'
 import { OrderStatus } from '@/common/constants/enums'
+import { DefectiveGoodsSource } from '@/features/defective-goods/constants'
 
 export default {
 	action_types: {

@@ -1,5 +1,4 @@
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/app/(features)/-hooks/use-order-asm'
-import { useEffectOnce } from '@/common/hooks/use-effect-once'
 import type { DivProps, TypographyProps } from '@/components/ui'
 import {
 	Button,
@@ -22,6 +21,7 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useEffectOnce } from '@/hooks/use-effect-once'
 import { useSocketContext } from '@/stores/socket.store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
@@ -35,8 +35,8 @@ import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { usePageContext } from '../../-contexts/page-context'
 import { useUpsertEpcInfoMutation } from '../../-hooks/use-rfid-inbound-asm'
-import type { ExchangeEpcFormValue } from '../../-schemas/exchange-epc.schema'
-import { exchangeEpcSchema } from '../../-schemas/exchange-epc.schema'
+import type { ExchangeEpcFormValue } from '../../../../../../apis/finished-goods-inoutbound/schemas/exchange-epc.schema'
+import { exchangeEpcSchema } from '../../../../../../apis/finished-goods-inoutbound/schemas/exchange-epc.schema'
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()

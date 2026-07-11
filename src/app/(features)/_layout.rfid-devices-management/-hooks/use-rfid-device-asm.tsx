@@ -1,4 +1,4 @@
-import { RFIDService } from '@/services/rfid.service'
+import { RFIDService } from '@/apis/finished-goods-inoutbound/inoutbound.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { CreateRFIDReaderFormValues, UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
 

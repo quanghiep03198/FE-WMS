@@ -1,6 +1,6 @@
-import { useDateLocale } from '@/common/hooks/use-date-locale'
 import generateAvatar from '@/common/utils/generate-avatar'
 import { Avatar, AvatarImage, Div, Icon, Typography } from '@/components/ui'
+import { useDateLocale } from '@/hooks/use-date-locale'
 import { format, formatRelative, isValid } from 'date-fns'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useTranslation } from 'react-i18next'

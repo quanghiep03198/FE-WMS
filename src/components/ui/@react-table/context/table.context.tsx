@@ -1,4 +1,4 @@
-import { createStoreSelector } from '@/common/hooks/use-store-selector'
+import { createStoreSelector } from '@/hooks/use-store-selector'
 import type { Table } from '@tanstack/react-table'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext } from 'react'

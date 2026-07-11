@@ -1,7 +1,8 @@
 import type { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
 // import { destroySharedSocket } from '@/common/hooks/use-socket-io'
 import axiosInstance from '@/configs/axios.config'
-import { queryClient } from '@/providers/query-client-provider'
+import { queryClient } from '@/integrations/tanstack-query'
+
 import type { IAuthState } from '@/stores/auth.store'
 import { useAuthStore } from '@/stores/auth.store'
 import type { GenericAbortSignal } from 'axios'

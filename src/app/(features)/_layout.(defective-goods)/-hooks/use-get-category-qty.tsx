@@ -1,7 +1,7 @@
 import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import { groupBy } from 'lodash-es'
 import { useMemo } from 'react'
-import { DefectiveCategory } from '../-constants'
+import { DefectiveCategory } from '../../../../features/defective-goods/constants'
 
 type TData = Partial<IDefectiveGoods> & { size_data: Array<{ size_numcode: string; qty: number }> }
 

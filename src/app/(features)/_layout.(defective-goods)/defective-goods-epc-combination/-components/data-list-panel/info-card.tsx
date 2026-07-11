@@ -1,8 +1,6 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, UserRole } from '@/common/constants/enums'
-import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
-import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import {
 	Badge,
 	Card,
@@ -24,6 +22,8 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
+import useCopyToClipboard from '@/hooks/use-copy-to-clipboard'
+import { useDateLocale } from '@/hooks/use-date-locale'
 import type { IDefectiveGoods } from '@/services/defective-goods.service'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
@@ -35,9 +35,9 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { gunzipSync } from 'zlib'
 import { useListPanelContext } from '../../-contexts/list-panel-context'
-import { DefectiveCategoryI18n, DefectiveLocation } from '../../../-constants'
-import { usePageContext } from '../../../-contexts/page-context'
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
+import { DefectiveCategoryI18n, DefectiveLocation } from '../../../../../../features/defective-goods/constants'
+import { usePageContext } from '../../../../../../features/defective-goods/contexts/page-context'
 
 const InfoCard: React.FC<{
 	data: IDefectiveGoods

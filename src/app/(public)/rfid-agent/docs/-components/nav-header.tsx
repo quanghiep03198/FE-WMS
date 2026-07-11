@@ -1,10 +1,10 @@
 import SearchDialog from './search-dialog'
 
-import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
-import ThemeToggle from '@/app/-components/-shared/theme-toggle'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { GithubIcon } from '@/components/icons'
+import { ThemeSwitcher } from '@/components/shared/theme-switcher'
+import ThemeToggle from '@/components/shared/theme-toggle'
 import { Button, Icon, useSidebar } from '@/components/ui'
+import useMediaQuery from '@/hooks/use-media-query'
 
 const GithubLinkButton: React.FC = () => {
 	const isSmallScreen = useMediaQuery('(min-width: 320px) and (max-width: 1023px)')

@@ -1,6 +1,6 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import type { IconProps, TypographyProps } from '@/components/ui'
 import { Badge, Checkbox, Div, Icon, Typography } from '@/components/ui'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'

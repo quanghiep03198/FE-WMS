@@ -1,5 +1,4 @@
 import { PresetBreakPoints } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
 	buttonVariants,
@@ -19,6 +18,7 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import useMediaQuery from '@/hooks/use-media-query'
 import { Link } from '@tanstack/react-router'
 import { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

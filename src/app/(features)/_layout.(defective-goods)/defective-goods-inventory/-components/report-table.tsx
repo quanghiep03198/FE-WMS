@@ -9,11 +9,11 @@ import { split } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReportTableSummary from '../../-components/shared/report-table-footer'
-import { DefectiveCategoryI18n } from '../../-constants'
 import { useDefectiveCategoryList } from '../../-hooks/use-defective-category-list'
 import { useGetDefectiveGoodsInventoryQuery } from '../../-hooks/use-defective-goods-asm'
 import { useGetCategoriesQty } from '../../-hooks/use-get-category-qty'
 import { useGetUniqStorageLocation } from '../../-hooks/use-get-uniq-storage-location'
+import { DefectiveCategoryI18n } from '../../../../../features/defective-goods/constants'
 
 const DefectiveGoodsInventoryTable: React.FC = () => {
 	const { data, isLoading, refetch } = useGetDefectiveGoodsInventoryQuery()

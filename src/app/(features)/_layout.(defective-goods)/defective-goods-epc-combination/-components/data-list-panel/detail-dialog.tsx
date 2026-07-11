@@ -3,7 +3,7 @@ import { Dialog, DialogContent, Div } from '@/components/ui'
 import { Buffer } from 'buffer'
 import React, { useState } from 'react'
 import { gunzipSync } from 'zlib'
-import { usePageContext } from '../../../-contexts/page-context'
+import { usePageContext } from '../../../../../../features/defective-goods/contexts/page-context'
 
 const DetailDialog: React.FC = () => {
 	const { event$ } = usePageContext()

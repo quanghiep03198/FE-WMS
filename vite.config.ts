@@ -3,6 +3,7 @@
 
 import babel from '@rolldown/plugin-babel'
 import { sentryVitePlugin as sentry } from '@sentry/vite-plugin'
+import { devtools } from '@tanstack/devtools-vite'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import path from 'path'
@@ -18,8 +19,15 @@ export default defineConfig(({ mode }) => {
 	normalizePath(path.resolve(__dirname, './infrastructure'))
 
 	return {
+		resolve: {
+			tsconfigPaths: true,
+			alias: {
+				'@': path.resolve(__dirname, './src')
+			}
+		},
 		plugins: [
 			react(),
+			devtools({ removeDevtoolsOnBuild: true, consolePiping: { enabled: mode === 'development' } }),
 			babel({ presets: [reactCompilerPreset()] }),
 			reactRouter(),
 			staticCopy({
@@ -112,11 +120,7 @@ export default defineConfig(({ mode }) => {
 			},
 			include: ['buffer', 'zlib']
 		},
-		resolve: {
-			alias: {
-				'@': path.resolve(__dirname, './src')
-			}
-		},
+
 		envDir: '.',
 		test: {
 			globals: true,

@@ -1,4 +1,3 @@
-import useCopyToClipboard from '@/common/hooks/use-copy-to-clipboard'
 import {
 	Button,
 	Div,
@@ -11,6 +10,7 @@ import {
 	Separator,
 	Tooltip
 } from '@/components/ui'
+import useCopyToClipboard from '@/hooks/use-copy-to-clipboard'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Editor } from '@tiptap/react'

@@ -1,6 +1,9 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
-import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
+import { RoleGuard } from '@/components/guards/role-guard'
+import { UserFormDialog, UserFormDialogTrigger } from '@features/access-management/components/user-form-dialog'
+import UserTable from '@features/access-management/components/user-table'
+import { PageContextProvider } from '@features/access-management/contexts'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,9 +16,6 @@ import {
 	PageWrapper
 } from '../../-components/shared/page'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
-import { UserFormDialog, UserFormDialogTrigger } from './-components/user-form-dialog'
-import UserTable from './-components/user-table'
-import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(admin)/access-management/')({
 	component: Page

@@ -1,6 +1,6 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import { Button, Div, Icon, Separator, Toggle, Tooltip } from '@/components/ui'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

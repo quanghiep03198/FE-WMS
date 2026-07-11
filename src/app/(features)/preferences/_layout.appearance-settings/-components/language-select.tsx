@@ -1,4 +1,4 @@
-import { LanguageSelect } from '@/app/-components/-shared/language-selector'
+import { LanguageSelect } from '@/components/shared/language-selector'
 import { Div, Label } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 

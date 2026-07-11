@@ -1,6 +1,6 @@
 import { useUpdateProfileMutation } from '@/app/-hooks/use-user-asm'
-import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
+import useAuth from '@/hooks/use-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'

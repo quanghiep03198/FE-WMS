@@ -1,4 +1,5 @@
 import { FALLBACK_VALUE } from '@/common/constants/constants'
+import { InputFieldControl } from '@/components/forms/input'
 import {
 	Button,
 	Checkbox,
@@ -17,7 +18,6 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
@@ -34,8 +34,8 @@ import {
 	useGetInboundEpcQuery,
 	useSearchExchangableOrderQuery
 } from '../../-hooks/use-rfid-inbound-asm'
-import type { ExchangeOrderFormValue } from '../../-schemas/exchange-epc.schema'
-import { exchangeOrderSchema } from '../../-schemas/exchange-epc.schema'
+import type { ExchangeOrderFormValue } from '../../../../../../apis/finished-goods-inoutbound/schemas/exchange-epc.schema'
+import { exchangeOrderSchema } from '../../../../../../apis/finished-goods-inoutbound/schemas/exchange-epc.schema'
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()

@@ -1,4 +1,4 @@
-import GridBackground from '@/app/-components/-shared/grid-background'
+import GridBackground from '@/components/shared/grid-background'
 import { Div, Icon, Typography } from '@/components/ui'
 import FeedbackFormTrigger from '@/components/ui/@sentry/feedback-form-trigger'
 import { useInViewport } from 'ahooks'

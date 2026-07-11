@@ -1,4 +1,3 @@
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
 import {
 	buttonVariants,
@@ -12,6 +11,7 @@ import {
 	Icon,
 	Tooltip
 } from '@/components/ui'
+import useMediaQuery from '@/hooks/use-media-query'
 import { useTranslation } from 'react-i18next'
 import { useDownloadReport } from '../-hooks/use-download-report'
 

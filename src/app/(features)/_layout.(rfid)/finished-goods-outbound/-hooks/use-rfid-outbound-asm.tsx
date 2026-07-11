@@ -1,5 +1,5 @@
+import { RFIDService } from '@/apis/finished-goods-inoutbound/inoutbound.service'
 import { InventoryAuditQueryKeys } from '@/app/(features)/_layout.inventory-audit/-hooks/use-inventory-audit-asm'
-import { RFIDService } from '@/services/rfid.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

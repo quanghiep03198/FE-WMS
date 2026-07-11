@@ -1,5 +1,5 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
-import useQueryParams from '@/common/hooks/use-query-params'
+import useQueryParams from '@/hooks/use-query-params'
 import type { IDefectiveGoods } from '@/services/defective-goods.service'
 
 export const useFilterQuery = () => {

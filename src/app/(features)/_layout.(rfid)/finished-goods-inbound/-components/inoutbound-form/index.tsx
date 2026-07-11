@@ -2,7 +2,6 @@ import { useGetShapingProductLineQuery } from '@/app/(features)/-hooks/use-depar
 import { useGetWarehouseQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-asm'
 import { useGetWarehouseStorageQuery } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import type { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import type { IconProps } from '@/components/ui'
@@ -25,6 +24,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@/components/ui/@custom/alert'
+import useMediaQuery from '@/hooks/use-media-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
@@ -39,8 +39,14 @@ import tw from 'tailwind-styled-components'
 import { FormActionEnum, FormActionReasonEnum } from '../../-constants'
 import { usePageContext } from '../../-contexts/page-context'
 import { useGetInboundEpcQuery, useUpdateStockInMutation } from '../../-hooks/use-rfid-inbound-asm'
-import type { FormValues, InoutboundPayload } from '../../-schemas/epc-inoutbound.schema'
-import { inboundSchema, outboundSchema } from '../../-schemas/epc-inoutbound.schema'
+import type {
+	FormValues,
+	InoutboundPayload
+} from '../../../../../../apis/finished-goods-inoutbound/schemas/epc-inoutbound.schema'
+import {
+	inboundSchema,
+	outboundSchema
+} from '../../../../../../apis/finished-goods-inoutbound/schemas/epc-inoutbound.schema'
 
 const InoutboundForm: React.FC = () => {
 	const { selectedDevice, selectedOrder, scanningStatus, setScannedEpc } = usePageContext(

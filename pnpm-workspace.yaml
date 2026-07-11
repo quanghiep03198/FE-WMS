@@ -1,8 +1,15 @@
 packages:
-  - "packages/*"
-  - "."
+  - packages/*
+  - .
+
 allowBuilds:
-  "@sentry/cli": true
+  '@sentry/cli': true
   esbuild: true
   msw: true
   sharp: true
+
+onlyBuiltDependencies:
+  - '@sentry/cli'
+  - esbuild
+  - msw
+  - sharp

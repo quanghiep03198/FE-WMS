@@ -1,5 +1,5 @@
-import useQueryParams from '@/common/hooks/use-query-params'
 import { Div, Icon, Typography } from '@/components/ui'
+import useQueryParams from '@/hooks/use-query-params'
 import { isEmpty } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

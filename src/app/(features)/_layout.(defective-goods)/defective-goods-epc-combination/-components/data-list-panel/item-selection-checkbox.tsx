@@ -1,5 +1,5 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import { Checkbox, Div, Typography } from '@/components/ui'
 import type Pagination from '@/components/ui/@custom/pagination'
 import type { IDefectiveGoods } from '@/services/defective-goods.service'

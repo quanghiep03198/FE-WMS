@@ -1,6 +1,6 @@
-import { useBrowserTabStatus } from '@/common/hooks/use-browser-tab-status'
 import type { ButtonProps } from '@/components/ui'
 import { Button, Div, Icon, Typography } from '@/components/ui'
+import { useBrowserTabStatus } from '@/hooks/use-browser-tab-status'
 import { useQueryClient } from '@tanstack/react-query'
 import { usePrevious } from 'ahooks'
 import React, { useMemo } from 'react'

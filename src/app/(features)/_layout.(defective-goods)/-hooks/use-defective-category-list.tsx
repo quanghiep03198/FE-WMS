@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory, DefectiveCategoryI18n } from '../-constants'
+import { DefectiveCategory, DefectiveCategoryI18n } from '../../../../features/defective-goods/constants'
 
 export const useDefectiveCategoryList = () => {
 	const { t } = useTranslation('ns_inoutbound')

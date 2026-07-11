@@ -1,6 +1,6 @@
-import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { TableBody } from '@/components/ui'
 import { VirtualPlaceholderRow } from '@/components/ui/@react-table/components/table-row'
+import useVirtualScrollPadding from '@/hooks/use-virtual-scroll-padding'
 import type { Row } from '@tanstack/react-table'
 import type { Virtualizer } from '@tanstack/react-virtual'
 import { Fragment, memo } from 'react'

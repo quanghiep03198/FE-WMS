@@ -1,6 +1,6 @@
-import { LanguageSelect } from '@/app/-components/-shared/language-selector'
-import ThemeToggle from '@/app/-components/-shared/theme-toggle'
 import { cn } from '@/common/utils/cn'
+import { LanguageSelect } from '@/components/shared/language-selector'
+import ThemeToggle from '@/components/shared/theme-toggle'
 import { Div, Icon, Label, Tooltip, Typography, buttonVariants } from '@/components/ui'
 import { Stepper, type TStep } from '@/components/ui/@custom/stepper'
 import { Link } from '@tanstack/react-router'

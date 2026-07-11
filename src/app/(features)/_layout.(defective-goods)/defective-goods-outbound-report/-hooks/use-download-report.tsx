@@ -1,5 +1,5 @@
 import { factories } from '@/common/constants/constants'
-import useAuth from '@/common/hooks/use-auth'
+import useAuth from '@/hooks/use-auth'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'

@@ -1,6 +1,6 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
 import type { IWarehouse } from '@/common/types/entities'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Icon } from '@/components/ui'
 import { EmployeeService } from '@/services/employee.service'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'

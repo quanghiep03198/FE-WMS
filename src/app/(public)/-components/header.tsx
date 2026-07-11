@@ -1,9 +1,7 @@
-import AppLogo from '@/app/-components/-shared/app-logo'
-import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
 import { PresetBreakPoints } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
+import AppLogo from '@/components/shared/app-logo'
+import { ThemeSwitcher } from '@/components/shared/theme-switcher'
 import {
 	Button,
 	Div,
@@ -16,6 +14,8 @@ import {
 	SheetTrigger,
 	buttonVariants
 } from '@/components/ui'
+import useAuth from '@/hooks/use-auth'
+import useMediaQuery from '@/hooks/use-media-query'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'

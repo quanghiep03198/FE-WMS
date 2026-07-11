@@ -1,9 +1,7 @@
 import { navigationConfig, type NavigationConfig } from '@/app/(features)/-configs/navigation.config'
-import AppLogo from '@/app/-components/-shared/app-logo'
 import { UserRole } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { cn } from '@/common/utils/cn'
+import AppLogo from '@/components/shared/app-logo'
 import {
 	Button,
 	Collapsible,
@@ -32,6 +30,8 @@ import {
 	useSidebar
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import useAuth from '@/hooks/use-auth'
+import useMediaQuery from '@/hooks/use-media-query'
 import { CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useRouterState } from '@tanstack/react-router'

@@ -1,6 +1,5 @@
 import { GhostButton } from '@/app/(features)/-components/shared/ghost-button'
 import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
-import useQueryParams from '@/common/hooks/use-query-params'
 import { cn } from '@/common/utils/cn'
 import {
 	Button,
@@ -15,6 +14,7 @@ import {
 	Separator
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import useQueryParams from '@/hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
 import { useDebounceEffect, useResetState, useSessionStorageState, useSize } from 'ahooks'
 import { format, isAfter } from 'date-fns'
@@ -24,8 +24,8 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PERSISTENT_DEFECTIVE_GOODS_SEARCH_TERMS_KEY } from '../../-constants'
 import type { DefectiveGoodQueryParams } from '../../-schemas/defective-goods.schema'
-import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
-import type { DefectiveCategory } from '../../../-constants'
+import type { DefectiveCategory } from '../../../../../../features/defective-goods/constants'
+import PurchaseOrderFieldControl from '../../../../../../features/rfid-agent/components/purchase-order-field-control'
 import AssemblyLineFieldControl from '../form-playground/assembly-line-field-control'
 import BrandFieldControl from '../form-playground/brand-field-control'
 import CategoryFieldControl from '../form-playground/category-field-control'

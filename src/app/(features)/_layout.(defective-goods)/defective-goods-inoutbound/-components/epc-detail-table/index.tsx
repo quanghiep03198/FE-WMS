@@ -21,7 +21,7 @@ import { useMemoizedFn, useResetState, useThrottleFn, useUpdateEffect } from 'ah
 import { useMemo, useRef } from 'react'
 import isEqual from 'react-fast-compare'
 import { useTranslation } from 'react-i18next'
-import { usePageContext } from '../../../-contexts/page-context'
+import { usePageContext } from '../../../../../../features/defective-goods/contexts/page-context'
 
 type DetailTableItem = {
 	factory_shoes_style: string

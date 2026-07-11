@@ -1,10 +1,5 @@
 // import { CreateDefectiveGoodsFormValues } from '@/app/(features)/_layout.b-grade-goods-inbound/-schemas/defective-goods.schema'
 import type {
-	DefectiveCategory,
-	DefectiveGoodsSource,
-	DefectiveLocation
-} from '@/app/(features)/_layout.(defective-goods)/-constants'
-import type {
 	CreateDefectiveGoodsFormValues,
 	DefectiveGoodQueryParams,
 	UpdateDefectiveGoodsFormValues
@@ -16,6 +11,7 @@ import type {
 import { RequestHeaders } from '@/common/constants/enums'
 import type { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import type { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '@/features/defective-goods/constants'
 import { omitBy } from 'lodash-es'
 
 export interface IDefectiveGoods extends IBaseEntity {

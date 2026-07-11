@@ -21,8 +21,8 @@ import React, { useMemo, useRef } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
-import { DefectiveCategory } from '../../../-constants'
 import { useSwitchCombinationStrategy } from '../../../-hooks/use-switch-combination-strategy'
+import { DefectiveCategory } from '../../../../../../features/defective-goods/constants'
 import type { DefAutoCompleteFieldControlProps } from './type'
 
 const SizeFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({

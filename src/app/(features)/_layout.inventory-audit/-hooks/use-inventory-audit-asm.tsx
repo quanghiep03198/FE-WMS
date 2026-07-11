@@ -1,4 +1,4 @@
-import useQueryParams from '@/common/hooks/use-query-params'
+import useQueryParams from '@/hooks/use-query-params'
 import { InventoryService } from '@/services/inventory.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'

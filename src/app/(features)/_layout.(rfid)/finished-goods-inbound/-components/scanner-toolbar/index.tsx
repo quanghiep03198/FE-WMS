@@ -1,5 +1,5 @@
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { buttonVariants, Div, Icon, Label, Separator, Tooltip } from '@/components/ui'
+import useMediaQuery from '@/hooks/use-media-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import ScannerActions from './action-buttons'

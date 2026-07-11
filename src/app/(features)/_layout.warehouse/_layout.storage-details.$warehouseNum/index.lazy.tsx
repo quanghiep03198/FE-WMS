@@ -1,7 +1,7 @@
 // #region Modules
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
-import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
+import { RoleGuard } from '@/components/guards/role-guard'
 import { WarehouseService } from '@/services/warehouse.service'
 import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, useParams } from '@tanstack/react-router'

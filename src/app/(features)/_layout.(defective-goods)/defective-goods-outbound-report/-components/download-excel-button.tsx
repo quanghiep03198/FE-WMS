@@ -1,5 +1,5 @@
-import useMediaQuery from '@/common/hooks/use-media-query'
 import { Button, Icon } from '@/components/ui'
+import useMediaQuery from '@/hooks/use-media-query'
 import { useTranslation } from 'react-i18next'
 import { useDownloadReport } from '../-hooks/use-download-report'
 

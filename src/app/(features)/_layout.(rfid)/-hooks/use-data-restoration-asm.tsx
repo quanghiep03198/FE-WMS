@@ -1,4 +1,4 @@
-import { RFIDService } from '@/services/rfid.service'
+import { RFIDService } from '@/apis/finished-goods-inoutbound/inoutbound.service'
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash-es'
 import { RFIDDataType } from '../-constants'

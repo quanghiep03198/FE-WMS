@@ -1,5 +1,5 @@
-import useQueryParams from '@/common/hooks/use-query-params'
 import { MonthPicker } from '@/components/ui'
+import useQueryParams from '@/hooks/use-query-params'
 import { format } from 'date-fns'
 
 export const MonthPickerFilter: React.FC = () => {

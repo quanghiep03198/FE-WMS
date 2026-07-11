@@ -1,7 +1,7 @@
 import { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
-import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, UserRole } from '@/common/constants/enums'
 import { cn } from '@/common/utils/cn'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
 import {
 	Button,
 	Div,
@@ -29,9 +29,9 @@ import {
 	defectiveGoodsOutboundFormValues,
 	type InboundOutboundFormValues
 } from '../../-schemas'
-import PurchaseOrderFieldControl from '../../../-components/rfid-reader-playground/purchase-order-field-control'
-import { usePageContext } from '../../../-contexts/page-context'
 import { useUpdateDefectiveGoodsStockMutation } from '../../../-hooks/use-defective-goods-asm'
+import { usePageContext } from '../../../../../../features/defective-goods/contexts/page-context'
+import PurchaseOrderFieldControl from '../../../../../../features/rfid-agent/components/purchase-order-field-control'
 import QuantityFiledControl from './quantity-field-control'
 
 const InoutboundForm: React.FC = () => {

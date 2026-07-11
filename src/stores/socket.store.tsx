@@ -1,6 +1,6 @@
-import useAuth from '@/common/hooks/use-auth'
-import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import { AppConfigs } from '@/configs/app.config'
+import useAuth from '@/hooks/use-auth'
+import { createStoreSelector } from '@/hooks/use-store-selector'
 import { AuthService } from '@/services/auth.service'
 import { useUpdateEffect } from 'ahooks'
 import React, { createContext, useEffect, useRef } from 'react'

@@ -13,7 +13,7 @@ import { isNil, pick } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import { usePageContext } from '../-contexts/page-context'
 
 type UpdateStatusHandler = (payload: { device_sn: string; is_active: RecordStatus }) =>

@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import useQueryParams from '../../src/common/hooks/use-query-params'
+import useQueryParams from '../../src/hooks/use-query-params'
 
 vi.mock('@tanstack/react-router', () => ({
 	useNavigate: vi.fn(),

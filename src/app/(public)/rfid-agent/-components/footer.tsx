@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
+import { ThemeSwitcher } from '@/components/shared/theme-switcher'
 import { Typography } from '@/components/ui'
 import React from 'react'
 

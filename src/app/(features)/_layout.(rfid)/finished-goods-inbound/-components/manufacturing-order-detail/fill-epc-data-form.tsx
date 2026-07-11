@@ -3,6 +3,7 @@
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/app/(features)/-hooks/use-order-asm'
 import { FALLBACK_VALUE } from '@/common/constants/constants'
 import { cn } from '@/common/utils/cn'
+import { InputFieldControl } from '@/components/forms/input'
 import {
 	Button,
 	buttonVariants,
@@ -23,7 +24,6 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@field-control/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import { useResetState } from 'ahooks'
@@ -35,8 +35,8 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../-contexts/order-detail-context'
 import { useUpsertEpcInfoMutation } from '../../-hooks/use-rfid-inbound-asm'
-import type { UpdateEpcFormValues } from '../../-schemas/fill-epc-data.schema'
-import { updateEpcFormSchema } from '../../-schemas/fill-epc-data.schema'
+import type { UpdateEpcFormValues } from '../../../../../../apis/finished-goods-inoutbound/schemas/fill-epc-data.schema'
+import { updateEpcFormSchema } from '../../../../../../apis/finished-goods-inoutbound/schemas/fill-epc-data.schema'
 
 const DEFAULT_FORM_VALUES: UpdateEpcFormValues = {
 	mo_no: FALLBACK_VALUE,

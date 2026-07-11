@@ -1,4 +1,4 @@
-import useAuth from '@/common/hooks/use-auth'
+import useAuth from '@/hooks/use-auth'
 import { UserService } from '@/services/user.service'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { AxiosRequestConfig } from 'axios'

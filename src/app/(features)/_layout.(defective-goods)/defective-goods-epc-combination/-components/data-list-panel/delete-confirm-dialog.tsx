@@ -4,8 +4,8 @@ import { useResetState } from 'ahooks'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { usePageContext } from '../../../-contexts/page-context'
 import { useDeleteDefectiveGoodsMutation } from '../../../-hooks/use-defective-goods-asm'
+import { usePageContext } from '../../../../../../features/defective-goods/contexts/page-context'
 
 const DeleteConfirmDialog: React.FC = () => {
 	const { t } = useTranslation()

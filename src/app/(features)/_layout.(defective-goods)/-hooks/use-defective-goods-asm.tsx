@@ -1,4 +1,4 @@
-import useQueryParams from '@/common/hooks/use-query-params'
+import useQueryParams from '@/hooks/use-query-params'
 import type { IDefectiveGoods, IDefectiveGoodsInventory } from '@/services/defective-goods.service'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'

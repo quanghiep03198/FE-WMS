@@ -1,7 +1,7 @@
 import type { ChartConfig } from '@/components/ui'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DefectiveCategory, DefectiveCategoryI18n } from '../../_layout.(defective-goods)/-constants'
+import { DefectiveCategory, DefectiveCategoryI18n } from '../../../../features/defective-goods/constants'
 
 export const useDefectiveCategoryChartConfig = () => {
 	const { t, i18n } = useTranslation()

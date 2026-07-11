@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import useMediaQuery from '../../src/common/hooks/use-media-query'
+import useMediaQuery from '../../src/hooks/use-media-query'
 
 function mockMatchMedia(matches: boolean) {
 	window.matchMedia = vi.fn().mockImplementation(() => ({

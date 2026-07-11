@@ -1,6 +1,5 @@
 'use no memo'
 
-import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	DropdownMenu,
@@ -11,6 +10,7 @@ import {
 	Icon,
 	Tooltip
 } from '@/components/ui'
+import useMediaQuery from '@/hooks/use-media-query'
 import { type ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table } from '@tanstack/react-table'

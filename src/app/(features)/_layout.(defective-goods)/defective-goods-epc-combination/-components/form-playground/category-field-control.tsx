@@ -1,12 +1,12 @@
+import type { SelectFieldControlProps } from '@/components/forms/select'
 import { SelectFieldControl } from '@/components/ui'
-import type { SelectFieldControlProps } from '@/components/ui/@field-control/select'
 import { omit } from 'lodash-es'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
-import { DefectiveCategory } from '../../../-constants'
 import { useDefectiveCategoryList } from '../../../-hooks/use-defective-category-list'
+import { DefectiveCategory } from '../../../../../../features/defective-goods/constants'
 
 type CategoryFieldControlProps = Partial<
 	SelectFieldControlProps<DefectiveGoodsCombinationFormValues, Record<'label' | 'value', string>>

@@ -1,5 +1,4 @@
 import { CommonActions } from '@/common/constants/enums'
-import useMediaQuery from '@/common/hooks/use-media-query'
 import {
 	Button,
 	buttonVariants,
@@ -26,6 +25,7 @@ import {
 	InputFieldControl,
 	TextareaFieldControl
 } from '@/components/ui'
+import useMediaQuery from '@/hooks/use-media-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { capitalize } from 'lodash-es'
 import { Fragment, useRef, useState } from 'react'

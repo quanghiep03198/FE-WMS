@@ -1,6 +1,6 @@
 import { factories } from '@/common/constants/constants'
-import useAuth from '@/common/hooks/use-auth'
-import useQueryParams from '@/common/hooks/use-query-params'
+import useAuth from '@/hooks/use-auth'
+import useQueryParams from '@/hooks/use-query-params'
 import { ReportService } from '@/services/report.service'
 import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'

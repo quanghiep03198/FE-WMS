@@ -1,7 +1,7 @@
 'use no memo'
 
-import { createStoreSelector } from '@/common/hooks/use-store-selector'
 import type { IElectronicProductCode } from '@/common/types/entities'
+import { createStoreSelector } from '@/hooks/use-store-selector'
 import React, { createContext, useRef } from 'react'
 import type { StoreApi } from 'zustand'
 import { create } from 'zustand'

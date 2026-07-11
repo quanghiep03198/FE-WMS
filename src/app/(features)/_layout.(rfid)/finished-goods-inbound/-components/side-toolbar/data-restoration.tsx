@@ -1,5 +1,5 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { UserRole } from '@/common/constants/enums'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import { buttonVariants, Div, Label, Typography } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import DataRestorationSheet from '../../../-components/shared'

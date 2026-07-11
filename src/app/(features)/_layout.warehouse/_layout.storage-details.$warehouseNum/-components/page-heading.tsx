@@ -1,6 +1,6 @@
 import { PageAction, PageDescription, PageHeader, PageTitle } from '@/app/(features)/-components/shared/page'
-import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, UserRole } from '@/common/constants/enums'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
 import { Button, Icon } from '@/components/ui'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

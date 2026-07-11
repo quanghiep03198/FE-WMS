@@ -1,8 +1,7 @@
-import RoleBaseAccessControl from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, UserRole } from '@/common/constants/enums'
-import { useDateLocale } from '@/common/hooks/use-date-locale'
 import { cn } from '@/common/utils/cn'
 import generateAvatar from '@/common/utils/generate-avatar'
+import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import {
 	Avatar,
 	AvatarFallback,
@@ -14,6 +13,7 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
+import { useDateLocale } from '@/hooks/use-date-locale'
 import type { IPurchaseOrderResult } from '@/services/order.service'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { format } from 'date-fns'

@@ -1,8 +1,8 @@
 // #region Modules
 import { WarehouseStorageQueryKeys } from '@/app/(features)/_layout.warehouse/-hooks/use-warehouse-storage-asm'
 import { CommonActions } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
 import type { IWarehouse, IWarehouseStorage } from '@/common/types/entities'
+import { InputFieldControl } from '@/components/forms/input'
 import {
 	Button,
 	Dialog,
@@ -14,7 +14,7 @@ import {
 	SelectFieldControl,
 	TextareaFieldControl
 } from '@/components/ui'
-import { InputFieldControl } from '@/components/ui/@field-control/input'
+import useAuth from '@/hooks/use-auth'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { UseQueryResult } from '@tanstack/react-query'

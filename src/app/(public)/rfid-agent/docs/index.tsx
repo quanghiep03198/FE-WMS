@@ -1,4 +1,4 @@
-import { ErrorBoundaryFallback } from '@/app/-components/-errors/error-boundary-fallback'
+import { ErrorBoundaryFallback } from '@/components/errors/error-boundary-fallback'
 import { Div, Icon, Separator, SidebarProvider, Typography } from '@/components/ui'
 import { createFileRoute } from '@tanstack/react-router'
 import { ErrorBoundary } from 'react-error-boundary'

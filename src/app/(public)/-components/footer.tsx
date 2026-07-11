@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from '@/app/-components/-shared/theme-switcher'
+import { ThemeSwitcher } from '@/components/shared/theme-switcher'
 import { Button, Div, Input, Label, Typography } from '@/components/ui'
 import { Separator } from '@radix-ui/react-context-menu'
 

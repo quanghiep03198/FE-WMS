@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import type { DefectiveGoodsCombinationFormValues } from '../../-schemas/defective-goods.schema'
-import { DefectiveCategory } from '../../../-constants'
+import { DefectiveCategory } from '../../../../../../features/defective-goods/constants'
 import type { DefAutoCompleteFieldControlProps } from './type'
 
 const ColorFieldControl: React.FC<DefAutoCompleteFieldControlProps> = ({ loading, readOnly, disabled, ...props }) => {

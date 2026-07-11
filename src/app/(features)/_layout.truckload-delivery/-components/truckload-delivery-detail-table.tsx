@@ -1,7 +1,5 @@
-import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/app/-components/-guard/role-base-access-control'
 import { CommonActions, PresetBreakPoints, UserRole } from '@/common/constants/enums'
-import useAuth from '@/common/hooks/use-auth'
-import useMediaQuery from '@/common/hooks/use-media-query'
+import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
 import {
 	Button,
 	Div,
@@ -19,6 +17,8 @@ import {
 } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
 import { useTableContext } from '@/components/ui/@react-table/context/table.context'
+import useAuth from '@/hooks/use-auth'
+import useMediaQuery from '@/hooks/use-media-query'
 import type { ITruckloadDelivery, ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'

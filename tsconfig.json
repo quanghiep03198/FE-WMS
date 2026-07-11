@@ -23,7 +23,20 @@
 		/* Alias */
 		"ignoreDeprecations": "6.0",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@features/*": ["./src/features/*"],
+			"@auth/*": ["./src/app/(auth)/*"],
+			"@public/*": ["./src/app/(public)/*"],
+			"@assets/*": ["./src/assets/*"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@components/*": ["./src/components/*"],
+			"@common/*": ["./src/common/*"],
+			"@configs/*": ["./src/configs/*"],
+			"@i18n/*": ["./src/i18n/*"],
+			"@providers": ["./src/providers/*"],
+			"@stores/*": ["./src/stores/*"],
+			"@styles/*": ["./src/styles/*"],
+			"@tests/*": ["./tests/*"]
 		},
 		/* Types */
 		"types": ["vite-plugin-pwa", "vite-plugin-pwa/client", "vite-plugin-pwa/pwa-assets", "vitest/globals"]

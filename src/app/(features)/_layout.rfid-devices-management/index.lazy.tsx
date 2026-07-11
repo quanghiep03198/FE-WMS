@@ -2,9 +2,9 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import HostCompatibleGuard from '@/app/-components/-guard/host-compatible-guard'
-import { RoleGuard } from '@/app/-components/-guard/role-guard'
 import { UserRole } from '@/common/constants/enums'
+import HostCompatibleGuard from '@/components/guards/host-compatible-guard'
+import { RoleGuard } from '@/components/guards/role-guard'
 import {
 	PageAction,
 	PageDescription,

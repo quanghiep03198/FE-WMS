@@ -1,6 +1,10 @@
 import { isEmpty, isNil } from 'lodash-es'
 import { array, enum as enums, number, object, string, type infer as Infer } from 'zod'
-import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../-constants'
+import {
+	DefectiveCategory,
+	DefectiveGoodsSource,
+	DefectiveLocation
+} from '../../../../../features/defective-goods/constants'
 
 export const baseDefectiveGoodsSchema = object({
 	ri_type: enums(['uhf', 'usb', 'manually'], { message: 'ns_validation:required' }).nullish(),

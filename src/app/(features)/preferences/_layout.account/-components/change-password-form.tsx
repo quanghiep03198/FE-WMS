@@ -1,8 +1,8 @@
 'use no memo'
 
 import { useUpdatePasswordMutation } from '@/app/-hooks/use-user-asm'
-import useAuth from '@/common/hooks/use-auth'
 import { Button, Div, Form as FormProvider, Icon, InputFieldControl, Typography } from '@/components/ui'
+import useAuth from '@/hooks/use-auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDebounceEffect } from 'ahooks'
 import { compareSync } from 'bcryptjs-react'

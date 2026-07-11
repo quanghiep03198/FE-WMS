@@ -1,7 +1,7 @@
 import { useGetTenantByFactory } from '@/app/(features)/-hooks/use-tenacy-asm'
 import { factories } from '@/common/constants/constants'
-import useAuth from '@/common/hooks/use-auth'
 import { Button, Icon } from '@/components/ui'
+import useAuth from '@/hooks/use-auth'
 import { DefectiveGoodsService } from '@/services/defective-goods.service'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'

@@ -1,18 +1,20 @@
 /* eslint-disable @tanstack/query/exhaustive-deps */
+
 import { InboundReportQueryKeys } from '@/app/(features)/_layout.inbound-report/-hooks/use-inbound-report-asm'
 import { InventoryAuditQueryKeys } from '@/app/(features)/_layout.inventory-audit/-hooks/use-inventory-audit-asm'
-import useAuth from '@/common/hooks/use-auth'
-import { RFIDService } from '@/services/rfid.service'
+
+import { RFIDService } from '@/apis/finished-goods-inoutbound/inoutbound.service'
+import useAuth from '@/hooks/use-auth'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import type { SearchCustOrderParams } from '..'
 import { DEFAULT_PROPS, usePageContext } from '../-contexts/page-context'
-import type { InoutboundPayload } from '../-schemas/epc-inoutbound.schema'
-import type { ExchangeOrderFormValue } from '../-schemas/exchange-epc.schema'
-import { type ExchangeEpcPayload } from '../-schemas/exchange-epc.schema'
 import type { SearchEpcParams } from '../..'
 import { ArchiviedDataQueryKeys } from '../../-hooks/use-data-restoration-asm'
 import type { DeleteScannedEpcsFormValues } from '../../../-schemas/delete-epc.schema'
+import type { InoutboundPayload } from '../../../../../apis/finished-goods-inoutbound/schemas/epc-inoutbound.schema'
+import type { ExchangeOrderFormValue } from '../../../../../apis/finished-goods-inoutbound/schemas/exchange-epc.schema'
+import { type ExchangeEpcPayload } from '../../../../../apis/finished-goods-inoutbound/schemas/exchange-epc.schema'
 
 // * API Query Keys
 export enum RFIDInboundQueryKeys {

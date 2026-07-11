@@ -1,4 +1,4 @@
-import useQueryParams from '@/common/hooks/use-query-params'
+import useQueryParams from '@/hooks/use-query-params'
 import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 import InboundHistoryTable from './inbound-history-table'
 import OutboundHistoryTable from './outbound-history-table'

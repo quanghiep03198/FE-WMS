@@ -1,7 +1,7 @@
-import useScrollToFn from '@/common/hooks/use-scroll-fn'
 import type { SizeQuantity } from '@/common/types/entities'
 import { Table, TableCaption, Typography } from '@/components/ui'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
+import useScrollToFn from '@/hooks/use-scroll-fn'
 import type { ColumnDef, ColumnFiltersState, ExpandedState, Row, SortingState } from '@tanstack/react-table'
 import {
 	getCoreRowModel,

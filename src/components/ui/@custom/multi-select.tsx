@@ -1,5 +1,3 @@
-import useScrollToFn from '@/common/hooks/use-scroll-fn'
-import useVirtualScrollPadding from '@/common/hooks/use-virtual-scroll-padding'
 import { cn } from '@/common/utils/cn'
 import {
 	Badge,
@@ -22,6 +20,8 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import useScrollToFn from '@/hooks/use-scroll-fn'
+import useVirtualScrollPadding from '@/hooks/use-virtual-scroll-padding'
 import { CaretSortIcon, Cross2Icon, CrossCircledIcon } from '@radix-ui/react-icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useClickAway, useDeepCompareEffect } from 'ahooks'
