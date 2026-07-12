@@ -1,7 +1,7 @@
-import { UserRole } from '@/common/constants/enums'
-import env from '@/common/utils/env'
 import type { IconProps } from '@/components/ui'
 import type { FileRouteTypes } from '@/route-tree.gen'
+import { UserRole } from '@common/constants/enums'
+import env from '@common/utils/env'
 import type { ResourceKeys } from 'i18next'
 
 export type NavigationConfig = {

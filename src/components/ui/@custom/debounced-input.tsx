@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useEffect, useState } from 'react'
 import { Input } from '..'
 

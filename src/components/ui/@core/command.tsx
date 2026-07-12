@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import { cn } from '@/common/utils/cn'
 import { Dialog, DialogContent } from '@/components/ui/@core/dialog'
+import { cn } from '@common/utils/cn'
 import { type DialogProps } from '@radix-ui/react-dialog'
 import { Command as CommandPrimitive } from 'cmdk'
 import { SearchIcon } from 'lucide-react'

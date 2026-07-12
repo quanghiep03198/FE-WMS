@@ -1,6 +1,5 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
 import {
 	Div,
 	FormControl,
@@ -13,14 +12,18 @@ import {
 	PopoverTrigger,
 	Typography
 } from '@/components/ui'
+import { StockFlow } from '@/features/finished-goods/constants/enums'
+import { cn } from '@common/utils/cn'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { capitalize } from 'lodash-es'
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useSearchCommandNumberQuery, useSearchPurchaseOrderQuery } from '../../-hooks/use-order-asm'
-import { RFIDDataType } from '../../_layout.(rfid)/-constants'
+import {
+	useSearchCommandNumberQuery,
+	useSearchPurchaseOrderQuery
+} from '../../../../features/order/hooks/use-order-request'
 
 export function OrderSearchFieldControl() {
 	const { t } = useTranslation()
@@ -35,22 +38,22 @@ export function OrderSearchFieldControl() {
 
 	const { data: availableCommandNumbers, isLoading: isLoadingCommandNumber } = useSearchCommandNumberQuery(
 		currentOrderValue,
-		currentDataType === RFIDDataType.INBOUND
+		currentDataType === StockFlow.INBOUND
 	)
 	const { data: availablePurchaseOrders, isLoading: isLoadingPurchaseOrder } = useSearchPurchaseOrderQuery(
 		currentOrderValue,
-		currentDataType === RFIDDataType.OUTBOUND
+		currentDataType === StockFlow.OUTBOUND
 	)
 
 	const isLoading = isLoadingCommandNumber || isLoadingPurchaseOrder
 
 	const availableOrders = useMemo(() => {
 		switch (currentDataType) {
-			case RFIDDataType.INBOUND:
+			case StockFlow.INBOUND:
 				return Array.isArray(availableCommandNumbers)
 					? availableCommandNumbers.map((item) => ({ label: item.mo_no, value: item.mo_no }))
 					: []
-			case RFIDDataType.OUTBOUND:
+			case StockFlow.OUTBOUND:
 				return Array.isArray(availablePurchaseOrders)
 					? availablePurchaseOrders.map((item) => ({ label: item.po, value: item.po }))
 					: []
@@ -103,7 +106,7 @@ export function OrderSearchFieldControl() {
 											value={field.value}
 											autoComplete='off'
 											placeholder={capitalize(
-												currentDataType === RFIDDataType.INBOUND
+												currentDataType === StockFlow.INBOUND
 													? t('ns_common:form_placeholder.search', {
 															object: t('ns_erp:fields.mo_no'),
 															defaultValue: null

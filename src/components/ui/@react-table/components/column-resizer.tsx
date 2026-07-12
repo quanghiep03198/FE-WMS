@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import type { Header } from '@tanstack/react-table'
 import { Separator } from '../../@core/separator'
 

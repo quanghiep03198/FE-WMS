@@ -1,4 +1,3 @@
-import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	buttonVariants,
@@ -29,6 +28,7 @@ import {
 	Typography
 } from '@/components/ui'
 import { useEffectOnce } from '@/hooks/use-effect-once'
+import { cn } from '@common/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateEffect } from 'ahooks'
 import { isEmpty, isEqual, isNil } from 'lodash-es'
@@ -42,7 +42,7 @@ import {
 } from '../../../app/(features)/_layout.(defective-goods)/-contexts/rfid-reader-playground.context'
 import type { ReaderSettingsFormValues } from '../../../app/(features)/_layout.(defective-goods)/-schemas/reader-settings.schema'
 import { readerSettingsFormSchema } from '../../../app/(features)/_layout.(defective-goods)/-schemas/reader-settings.schema'
-import { ReaderAntenna } from '../../defective-goods/constants'
+import { ReaderAntenna } from '../../defective-goods/constants/enums'
 
 const ReaderSettingSheet: React.FC = () => {
 	const { readerSettings, publishMessage } = useReaderPlaygroundStore('readerSettings', 'publishMessage')

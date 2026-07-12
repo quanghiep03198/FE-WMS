@@ -1,4 +1,3 @@
-import generateAvatar from '@/common/utils/generate-avatar'
 import {
 	Accordion,
 	AccordionContent,
@@ -14,6 +13,7 @@ import {
 import ChatBubble from '@/components/ui/@custom/chat-bubble'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
+import generateAvatar from '@common/utils/generate-avatar'
 import { useInViewport } from 'ahooks'
 import { format } from 'date-fns'
 import { Fragment, useLayoutEffect, useRef } from 'react'

@@ -1,7 +1,7 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
 import { Separator } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { useInViewport } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { usePageContext } from '../-contexts/page-context'

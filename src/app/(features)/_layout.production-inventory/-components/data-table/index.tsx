@@ -1,7 +1,8 @@
-import type { SizeQuantity } from '@/common/types/entities'
 import { Table, TableCaption, Typography } from '@/components/ui'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
+import type { StockFlow } from '@/features/finished-goods/constants/enums'
 import useScrollToFn from '@/hooks/use-scroll-fn'
+import type { SizeQuantity } from '@common/types/entities'
 import type { ColumnDef, ColumnFiltersState, ExpandedState, Row, SortingState } from '@tanstack/react-table'
 import {
 	getCoreRowModel,
@@ -16,7 +17,6 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMemoizedFn, useSize } from 'ahooks'
 import React, { useId, useRef, useState } from 'react'
 import tw from 'tailwind-styled-components'
-import type { RFIDDataType } from '../../../_layout.(rfid)/-constants'
 import { DataTableBody } from './data-table-body'
 import DataTableGlobalFilter from './data-table-filter'
 import { DataTableHeader, MemoizedDataTableHeader } from './data-table-header'
@@ -27,7 +27,7 @@ type DataTableProps<T extends TableRowData> = {
 	data: Array<T>
 	columns: ColumnDef<T, any>[]
 	caption: string
-	dataType: RFIDDataType
+	dataType: StockFlow
 	footer: React.FC<{ rows: Row<T>[] }>
 }
 

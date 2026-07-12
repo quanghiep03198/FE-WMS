@@ -1,6 +1,6 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import type { ResourceKey } from 'i18next'
 import React, { useEffect, useId, useRef, useState } from 'react'
 import type { ControllerRenderProps, FieldValues, Path } from 'react-hook-form'

@@ -1,6 +1,6 @@
-import { UserRole } from '@/common/constants/enums'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { Div } from '@/components/ui'
+import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

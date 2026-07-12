@@ -11,11 +11,11 @@ import {
 	Typography
 } from '@/components/ui'
 import { Typewriter } from '@/components/ui/@custom/type-writter'
+import { StockFlow } from '@/features/finished-goods/constants/enums'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 
 const WarehouseDataTypeFieldControl: React.FC = () => {
 	const { t } = useTranslation()
@@ -40,21 +40,15 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 						<RadioGroup
 							className='mx-auto grid max-w-3xl grid-cols-2 items-stretch gap-x-4'
 							value={field.value}
-							defaultValue={RFIDDataType.INBOUND}
+							defaultValue={StockFlow.INBOUND}
 							onValueChange={(value) => {
 								field.onChange(value)
 								setValue('order', '')
 							}}>
 							<FormItem>
-								<StyledFormLabel
-									aria-checked={field.value === RFIDDataType.INBOUND}
-									htmlFor={RFIDDataType.INBOUND}>
+								<StyledFormLabel aria-checked={field.value === StockFlow.INBOUND} htmlFor={StockFlow.INBOUND}>
 									<FormControl>
-										<RadioGroupItem
-											id={RFIDDataType.INBOUND}
-											value={RFIDDataType.INBOUND}
-											className='hidden'
-										/>
+										<RadioGroupItem id={StockFlow.INBOUND} value={StockFlow.INBOUND} className='hidden' />
 									</FormControl>
 									<Icon name='Forklift' size={32} strokeWidth={1} className='mr-2' />
 									<Div className='space-y-1.5'>
@@ -69,20 +63,14 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 										name='Check'
 										size={28}
 										className='absolute right-4 top-4'
-										aria-checked={field.value === RFIDDataType.INBOUND}
+										aria-checked={field.value === StockFlow.INBOUND}
 									/>
 								</StyledFormLabel>
 							</FormItem>
 							<FormItem>
-								<StyledFormLabel
-									htmlFor={RFIDDataType.OUTBOUND}
-									aria-checked={field.value == RFIDDataType.OUTBOUND}>
+								<StyledFormLabel htmlFor={StockFlow.OUTBOUND} aria-checked={field.value == StockFlow.OUTBOUND}>
 									<FormControl>
-										<RadioGroupItem
-											id={RFIDDataType.OUTBOUND}
-											value={RFIDDataType.OUTBOUND}
-											className='sr-only'
-										/>
+										<RadioGroupItem id={StockFlow.OUTBOUND} value={StockFlow.OUTBOUND} className='sr-only' />
 									</FormControl>
 									<Icon name='Truck' size={32} strokeWidth={1} className='mr-2 scale-x-[-1]' />
 									<Div className='space-y-1.5'>
@@ -96,7 +84,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 									<CheckIcon
 										name='Check'
 										size={28}
-										aria-checked={field.value === RFIDDataType.OUTBOUND}
+										aria-checked={field.value === StockFlow.OUTBOUND}
 										className='absolute right-4 top-4'
 									/>
 								</StyledFormLabel>

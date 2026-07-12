@@ -1,7 +1,3 @@
-import type { warehouseTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.constant'
-import type { WarehouseStorageTypes } from '@/app/(features)/_layout.warehouse/_constants/-warehouse.enum'
-import type { FactoryCode, RecordStatus, UserRole } from '../constants/enums'
-
 // #region In use Entities
 
 export interface IBaseEntity {
@@ -14,64 +10,10 @@ export interface IBaseEntity {
 	[key: string]: any
 }
 
-export interface ITenancy {
-	id: Tenant
-	default?: boolean
-	factory: Array<string> | string
-	alias: string
-	host: string
-}
-export interface IUser extends IBaseEntity {
-	username: string
-	display_name: string
-	password: string
-	employee_code: string
-	picture: string
-	authorized_factory_codes: Array<FactoryCode>
-	roles: Array<UserRole>
-	current_factory_code: FactoryCode
-	is_system_user: boolean
-}
-
 export interface ICompany extends IBaseEntity {
 	company_code: string
 	company_name: string
 	factory_code: string
-}
-
-export interface IDepartment extends IBaseEntity, Pick<ICompany, 'company_code'> {
-	dept_code: string
-	dept_name: string
-}
-
-export interface IWarehouse extends IBaseEntity {
-	company_code: string
-	warehouse_num: string
-	warehouse_name: string
-	type_warehouse: keyof typeof warehouseTypes
-	area: number
-	dept_code: string
-	dept_name: string
-	remark: string | null
-	is_disable: boolean
-	is_default: boolean
-	employee_code: string | null
-	employee_name: string | null
-}
-
-export interface IWarehouseStorage
-	extends IBaseEntity,
-		Pick<IWarehouse, 'warehouse_num' | 'warehouse_name' | 'is_disabled' | 'is_default' | 'remark'> {
-	storage_name: string
-	storage_num: string
-	storage_capacity: number
-	type_storage: WarehouseStorageTypes | string
-}
-
-export interface IEmployee extends IBaseEntity {
-	id: number
-	employee_name: string
-	employee_code: string
 }
 
 export interface IManufacturingOrder extends IBaseEntity {
@@ -85,17 +27,6 @@ export interface IManufacturingOrder extends IBaseEntity {
 	cust_shoes_style: string
 	size_code: string
 	size_sumqty: number
-}
-
-export interface IElectronicProductCode {
-	epc: string
-	mo_no: string
-	factory_shoes_style?: string
-	color_sn?: string
-	size_numcode?: string
-	factory_code_produce?: string
-	station_no?: string
-	scannable?: boolean
 }
 
 export interface IArchivedFilterFeature {
@@ -185,28 +116,6 @@ export interface IMonthlyInventoryAudit {
 	}>
 }
 
-export interface IPackingReport {
-	brand_name: string
-	po: string
-	factory_shoes_style: string
-	color_sn: string
-	size_data: string
-	po_qty: number
-	target_box_qty: number
-	target_item_qty: number
-	weighed_box_qty: number
-	unweighed_box_qty: number
-}
-
-export interface IPackingManifest extends Omit<IPackingReport, 'color_sn' | 'factory_shoes_style'> {
-	shoes_style: string
-	original_size_data: string
-	color: string
-	standard_weight: number
-	actual_avg_weight: number | null
-	factory_code_produce: string
-}
-
 export type SizeQuantity = Array<{ size_numcode: string; qty: number }>
 
 export interface IProductSizeInventory {
@@ -289,74 +198,6 @@ export interface IOutboundHistory {
 		missing_qty: number
 	}>
 	progress: `${number}%`
-}
-
-export interface IProductSpecification {
-	brand_name: string
-	product_variants: Array<{
-		factory_shoes_style: string
-		cust_shoes_style: string
-		specs: Array<{
-			color_sn: string
-			sizes: Array<{ size: string }>
-		}>
-	}>
-}
-
-export interface IRFIDReaderDevice {
-	device_name_vi: string | null
-	device_name_en: string | null
-	device_name_cn: string | null
-	station_no: string
-	device_ant: string
-	device_sn: string
-	ip_address: string
-	ip_port: string
-	is_active: RecordStatus
-	created: string | Date
-	last_used_time: string | Date | null
-}
-
-export interface IMonthlyInventoryComparison {
-	comparison_date: string
-	current_period: string
-	previous_period: string
-	curr_period_inventory_qty: number
-	prev_period_inventory_qty: number
-	curr_month_initial_qty: number
-	curr_month_final_qty: number
-	curr_month_inbound: number
-	curr_month_outbound: number
-	prev_month_initial_qty: number
-	prev_month_inbound: number
-	prev_month_outbound: number
-	inventory_difference: number
-	inventory_percentage_change: number
-	inbound_difference: number
-	inbound_percentage_change: number
-	outbound_difference: number
-	outbound_percentage_change: number
-	curr_month_turnover: number
-	prev_month_turnover: number
-	inventory_turnover_difference: number
-	turnover_percentage_change: number
-}
-
-export interface IAnnuallyInOutboundStatistics {
-	year: number
-	month: number
-	inbound_qty: number
-	outbound_qty: number
-	net_flow: number
-	inbound_outbound_ratio: number
-	total_transactions: number
-	period_range: string
-}
-
-export interface IAssemblyProductionVolumn {
-	brand_name: string
-	work_date: string
-	volumn: number
 }
 
 export interface IPurchaseOrderDetail {

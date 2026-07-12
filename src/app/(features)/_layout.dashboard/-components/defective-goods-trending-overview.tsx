@@ -1,7 +1,7 @@
 // import { TrendingUp } from 'lucide-react'
 // import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
-// import { useDateLocale } from '@/common/hooks/use-date-locale'
+// import { useDateLocale } from '@common/hooks/use-date-locale'
 // import {
 // 	Card,
 // 	CardContent,

@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { useLayoutEffectOnce } from '@/hooks/use-effect-once'
+import { cn } from '@common/utils/cn'
 import { useRafState, useScroll } from 'ahooks'
 import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useRef } from 'react'

@@ -1,7 +1,7 @@
 import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
-import { cn } from '@/common/utils/cn'
 import AppLogo from '@/components/shared/app-logo'
 import { Div, Icon, Separator, Sheet, SheetContent, SheetTrigger, buttonVariants } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { Link } from '@tanstack/react-router'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'

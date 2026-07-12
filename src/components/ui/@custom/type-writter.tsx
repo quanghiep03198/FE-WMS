@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useRafState, useUpdateEffect } from 'ahooks'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

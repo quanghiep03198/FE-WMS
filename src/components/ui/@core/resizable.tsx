@@ -1,7 +1,7 @@
 import { DragHandleDots2Icon } from '@radix-ui/react-icons'
 import * as ResizablePrimitive from 'react-resizable-panels'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 
 const ResizablePanelGroup = ({ className, ...props }: React.ComponentProps<typeof ResizablePrimitive.PanelGroup>) => (
 	<ResizablePrimitive.PanelGroup

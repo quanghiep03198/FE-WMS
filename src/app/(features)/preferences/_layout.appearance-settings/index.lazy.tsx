@@ -2,7 +2,7 @@ import { Div } from '@/components/ui'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../../-components/shared/page'
+import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../../../../components/shared/page'
 import FontSelect from './-components/font-select'
 
 import LanguageSelect from './-components/language-select'

@@ -1,8 +1,8 @@
-import type { FactoryCode } from '@/common/constants/enums'
 import { Div, Icon } from '@/components/ui'
-import { AuthService } from '@/services/auth.service'
-import { UserService } from '@/services/user.service'
+import { AuthService } from '@/features/auth/services/auth.service'
+import { UserService } from '@/features/user/services/user.service'
 import { useAuthStore } from '@/stores/auth.store'
+import type { FactoryCode } from '@common/constants/enums'
 import { Navigate, createFileRoute, useRouter, type ErrorComponentProps } from '@tanstack/react-router'
 import { object, string, type infer as Infer } from 'zod'
 

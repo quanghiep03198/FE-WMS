@@ -1,6 +1,6 @@
-import { cn } from '@/common/utils/cn'
-import env from '@/common/utils/env'
 import { Button, Div, Icon, Typography, buttonVariants } from '@/components/ui'
+import { cn } from '@common/utils/cn'
+import env from '@common/utils/env'
 import { Link } from '@tanstack/react-router'
 import { useInViewport } from 'ahooks'
 import { useRef } from 'react'

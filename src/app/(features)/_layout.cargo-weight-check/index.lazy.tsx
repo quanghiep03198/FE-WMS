@@ -1,10 +1,10 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
-import { UserRole } from '@/common/constants/enums'
 import { RoleGuard } from '@/components/guards/role-guard'
+import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import DatePickerFilter from '../-components/shared/date-picker-filter'
+import DatePickerFilter from '../../../components/shared/date-picker-filter'
 import {
 	PageAction,
 	PageDescription,
@@ -12,7 +12,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../-components/shared/page'
+} from '../../../components/shared/page'
 import ReportMasterTable from './-components/report-master-table'
 
 export const Route = createLazyFileRoute('/(features)/_layout/cargo-weight-check/')({

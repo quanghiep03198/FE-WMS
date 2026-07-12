@@ -1,11 +1,11 @@
-import { RequestHeaders } from '@/common/constants/enums'
+import axiosInstance from '@/configs/axios.config'
 import type {
 	IAnnuallyInOutboundStatistics,
 	IAssemblyProductionVolumn,
 	IMonthlyInventoryComparison
-} from '@/common/types/entities'
-import axiosInstance from '@/configs/axios.config'
-import type { DefectiveCategory } from '@/features/defective-goods/constants'
+} from '@/features/dashboard/types'
+import type { DefectiveCategory } from '@/features/defective-goods/constants/enums'
+import { RequestHeaders } from '@common/constants/enums'
 
 export class StatisticsService {
 	static async getMonthlyInventoryComparison(tenantId: string) {

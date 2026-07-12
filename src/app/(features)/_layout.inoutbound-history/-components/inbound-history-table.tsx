@@ -1,12 +1,17 @@
-import type { IInboundHistory } from '@/common/types/entities'
-import { coalesce } from '@/common/utils/common'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui'
+import type { IInboundHistory } from '@common/types/entities'
+import { coalesce } from '@common/utils/common'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
-import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
+import {
+	NestedCell,
+	NestedCellHead,
+	NestedColumn,
+	NestedTable
+} from '../../../../components/shared/horizontal-nested-table'
 import EmptyHistory from './empty-history'
 
 const InboundHistoryTable: React.FC = () => {

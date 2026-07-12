@@ -1,6 +1,7 @@
-import { RequestHeaders } from '@/common/constants/enums'
-import type { IInboundReport, IOutboundReport, IPackingReport } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import type { IPackingReport } from '@/features/packing-manifest/types'
+import { RequestHeaders } from '@common/constants/enums'
+import type { IInboundReport, IOutboundReport } from '@common/types/entities'
 
 export class ReportService {
 	static async getInboundReport(tenantId: string, params?: { 'date:eq': string }) {

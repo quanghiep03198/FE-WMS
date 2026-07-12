@@ -1,6 +1,3 @@
-import { CommonActions } from '@/common/constants/enums'
-import type { IEmployee } from '@/common/types/entities'
-import { type IWarehouse } from '@/common/types/entities'
 import {
 	Button,
 	ComboboxFieldControl,
@@ -16,9 +13,12 @@ import {
 	TextareaFieldControl,
 	Typography
 } from '@/components/ui'
+import { EmployeeService } from '@/features/employee/services/employee.service'
+import type { IEmployee } from '@/features/employee/types'
+import { type IWarehouse } from '@/features/warehouse/types'
 import useAuth from '@/hooks/use-auth'
-import { EmployeeService } from '@/services/employee.service'
 import { WarehouseService } from '@/services/warehouse.service'
+import { CommonActions } from '@common/constants/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'

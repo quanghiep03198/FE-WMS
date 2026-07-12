@@ -1,7 +1,7 @@
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/stepper'
+import { AuthService } from '@/features/auth/services/auth.service'
 import useAuth from '@/hooks/use-auth'
-import { AuthService } from '@/services/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'

@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useId, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'

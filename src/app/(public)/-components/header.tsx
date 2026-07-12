@@ -1,5 +1,3 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
-import { cn } from '@/common/utils/cn'
 import AppLogo from '@/components/shared/app-logo'
 import { ThemeSwitcher } from '@/components/shared/theme-switcher'
 import {
@@ -16,6 +14,8 @@ import {
 } from '@/components/ui'
 import useAuth from '@/hooks/use-auth'
 import useMediaQuery from '@/hooks/use-media-query'
+import { PresetBreakPoints } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'

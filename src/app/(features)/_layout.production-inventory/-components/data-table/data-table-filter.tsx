@@ -1,6 +1,6 @@
-import type { RFIDDataType } from '@/app/(features)/_layout.(rfid)/-constants'
 import { Div, Icon } from '@/components/ui'
 import { DebouncedInput } from '@/components/ui/@custom/debounced-input'
+import type { StockFlow } from '@/features/finished-goods/constants/enums'
 import type { Updater } from '@tanstack/react-table'
 import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 type DataTableGlobalFilterProps = {
 	globalFilter: any
 	onGlobalFilterChange: (updater: Updater<any>) => void
-	dataType: RFIDDataType
+	dataType: StockFlow
 }
 
 const DataTableGlobalFilter: React.FC<DataTableGlobalFilterProps> = ({

@@ -1,8 +1,8 @@
 'use no memo'
 
-import type { BaseFieldControl } from '@/common/types/hook-form'
-import { cn } from '@/common/utils/cn'
 import { Div, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui'
+import type { BaseFieldControl } from '@common/types/hook-form'
+import { cn } from '@common/utils/cn'
 import { useId } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'

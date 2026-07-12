@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { IconProps } from '../../..'

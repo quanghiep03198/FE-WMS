@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { TableCell } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { Cell, Row } from '@tanstack/react-table'

@@ -1,4 +1,4 @@
-import { UserRole } from '@/common/constants/enums'
+import { UserRole } from '@common/constants/enums'
 
 export default {
 	actions: { go_to_dashboard: 'Go to dashboard' },

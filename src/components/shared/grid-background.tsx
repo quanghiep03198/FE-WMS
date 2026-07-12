@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import type { ClassNameValue } from 'tailwind-merge'
 
 const GridBackground: React.FC<{ className?: ClassNameValue }> = ({ className }) => {

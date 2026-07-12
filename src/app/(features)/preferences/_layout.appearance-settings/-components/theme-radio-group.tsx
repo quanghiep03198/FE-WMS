@@ -1,6 +1,6 @@
-import type { Theme } from '@/common/constants/enums'
 import { Div, Label, RadioGroup, RadioGroupItem, Typography } from '@/components/ui'
 import useTheme from '@/hooks/use-theme'
+import type { Theme } from '@common/constants/enums'
 import React from 'react'
 
 const ThemeRadioGroup: React.FC = () => {

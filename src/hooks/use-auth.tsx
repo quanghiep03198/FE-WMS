@@ -1,4 +1,4 @@
-import { AuthService } from '@/services/auth.service'
+import { AuthService } from '@/features/auth/services/auth.service'
 import { useAuthStore } from '@/stores/auth.store'
 import type { QueryKey } from '@tanstack/react-query'
 import { useMutation, useQueryClient } from '@tanstack/react-query'

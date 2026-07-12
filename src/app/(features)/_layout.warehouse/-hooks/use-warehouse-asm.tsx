@@ -1,4 +1,4 @@
-import type { IWarehouse } from '@/common/types/entities'
+import type { IWarehouse } from '@/features/warehouse/types'
 import { WarehouseService } from '@/services/warehouse.service'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { keepPreviousData, queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'

@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useUpdateEffect } from 'ahooks'
 import React, { useId, useMemo, useRef } from 'react'
 import tw from 'tailwind-styled-components'

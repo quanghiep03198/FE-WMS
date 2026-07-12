@@ -1,10 +1,10 @@
-import { RequestHeaders } from '@/common/constants/enums'
-import type { IInboundHistory, IOutboundHistory } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import { StockFlow } from '@/features/finished-goods/constants/enums'
 import useQueryParams from '@/hooks/use-query-params'
+import { RequestHeaders } from '@common/constants/enums'
+import type { IInboundHistory, IOutboundHistory } from '@common/types/entities'
 import { useQuery } from '@tanstack/react-query'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
-import { RFIDDataType } from '../../_layout.(rfid)/-constants'
+import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'
 
 export enum InOutBoundHistoryQueryKeys {
 	INBOUND_HISTORY = 'INBOUND_HISTORY',
@@ -13,7 +13,7 @@ export enum InOutBoundHistoryQueryKeys {
 
 export const useGetInboundHistoryQuery = () => {
 	const { data: currentTenant } = useGetTenantByFactory()
-	const { searchParams } = useQueryParams<{ order: string; type: RFIDDataType }>()
+	const { searchParams } = useQueryParams<{ order: string; type: StockFlow }>()
 
 	return useQuery({
 		queryKey: [InOutBoundHistoryQueryKeys.INBOUND_HISTORY, searchParams.order, currentTenant?.id],
@@ -23,13 +23,13 @@ export const useGetInboundHistoryQuery = () => {
 					[RequestHeaders.TENANT_ID]: currentTenant?.id
 				}
 			}),
-		enabled: searchParams.type === RFIDDataType.INBOUND,
+		enabled: searchParams.type === StockFlow.INBOUND,
 		select: (response) => response.metadata
 	})
 }
 export const useGetOutboundHistoryQuery = () => {
 	const { data: currentTenant } = useGetTenantByFactory()
-	const { searchParams } = useQueryParams<{ order: string; type: RFIDDataType }>()
+	const { searchParams } = useQueryParams<{ order: string; type: StockFlow }>()
 
 	return useQuery({
 		queryKey: [InOutBoundHistoryQueryKeys.OUTBOUND_HISTORY, searchParams.order, currentTenant?.id],
@@ -42,7 +42,7 @@ export const useGetOutboundHistoryQuery = () => {
 					}
 				}
 			),
-		enabled: searchParams.type === RFIDDataType.OUTBOUND,
+		enabled: searchParams.type === StockFlow.OUTBOUND,
 		select: (response) => response.metadata
 	})
 }

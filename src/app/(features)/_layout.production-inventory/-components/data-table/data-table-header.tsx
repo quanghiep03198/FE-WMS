@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { Div, Icon, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import type { Header, HeaderGroup } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import { useUpdate } from 'ahooks'

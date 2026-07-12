@@ -1,13 +1,13 @@
 import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle, Icon } from '@/components/ui'
+import type { StockFlow } from '@/features/finished-goods/constants/enums'
 import useQueryParams from '@/hooks/use-query-params'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import PlaceHolderItems from '../../-components/shared/placeholder-items'
-import type { RFIDDataType } from '../../_layout.(rfid)/-constants'
+import PlaceHolderItems from '../../../../components/shared/placeholder-items'
 
 const EmptySearchResult: React.FC = () => {
 	const { t } = useTranslation()
-	const { removeParam } = useQueryParams<{ order?: string; type: RFIDDataType }>()
+	const { removeParam } = useQueryParams<{ order?: string; type: StockFlow }>()
 
 	return (
 		<Empty className='mx-auto max-h-fit w-full border border-dashed'>

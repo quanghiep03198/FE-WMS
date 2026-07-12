@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useSearchPurchaseOrderQuery } from '../../../app/(features)/-hooks/use-order-asm'
+import { useSearchPurchaseOrderQuery } from '../../order/hooks/use-order-request'
 
 type PurchaseOrderFieldControlProps = Partial<
 	AutoCompleteFieldControlProps<

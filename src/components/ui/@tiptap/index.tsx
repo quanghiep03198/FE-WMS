@@ -1,6 +1,6 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { uniqueId } from 'lodash-es'
 import React, { memo, useState } from 'react'

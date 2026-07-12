@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import React, { useRef } from 'react'
 
 export type DivProps = { as?: React.ElementType | keyof HTMLElementTagNameMap } & React.ComponentProps<

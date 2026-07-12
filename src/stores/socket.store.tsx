@@ -1,7 +1,7 @@
 import { AppConfigs } from '@/configs/app.config'
+import { AuthService } from '@/features/auth/services/auth.service'
 import useAuth from '@/hooks/use-auth'
 import { createStoreSelector } from '@/hooks/use-store-selector'
-import { AuthService } from '@/services/auth.service'
 import { useUpdateEffect } from 'ahooks'
 import React, { createContext, useEffect, useRef } from 'react'
 import { io, type Socket } from 'socket.io-client'

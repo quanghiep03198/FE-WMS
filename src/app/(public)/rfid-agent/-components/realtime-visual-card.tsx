@@ -1,6 +1,6 @@
-import { cn } from '@/common/utils/cn'
 import { Icon } from '@/components/ui'
 import { useReducedMotion } from '@/hooks/use-reduce-motion'
+import { cn } from '@common/utils/cn'
 import React, { useRef, useState } from 'react'
 import { VisualCard } from './visual-card'
 

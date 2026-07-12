@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useScroll } from 'ahooks'
 import { Fragment } from 'react'
 import { createPortal } from 'react-dom'

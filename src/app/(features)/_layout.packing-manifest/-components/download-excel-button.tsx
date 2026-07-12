@@ -1,7 +1,7 @@
-import { factories } from '@/common/constants/constants'
 import { Button, Icon } from '@/components/ui'
 import useAuth from '@/hooks/use-auth'
 import { PackingService } from '@/services/packing.service'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { format } from 'date-fns'
 import saveAs from 'file-saver'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,7 @@ const DownloadExcelButton: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_packing:titles.file_packing_manifest', {
-					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' }),
 					defaultValue: `Packing manifest ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'
 			)

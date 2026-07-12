@@ -1,5 +1,3 @@
-import { cn } from '@/common/utils/cn'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import AppLogo from '@/components/shared/app-logo'
 import {
 	Badge,
@@ -21,6 +19,8 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { cn } from '@common/utils/cn'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { HomeIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'

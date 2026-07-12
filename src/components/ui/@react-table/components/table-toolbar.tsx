@@ -1,6 +1,6 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import type { Table } from '@tanstack/react-table'
 import { useMemoizedFn } from 'ahooks'
 import { pick } from 'lodash-es'

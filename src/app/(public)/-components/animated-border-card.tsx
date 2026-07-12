@@ -1,6 +1,6 @@
-import { cn } from '@/common/utils/cn'
 import type { DivProps } from '@/components/ui'
 import { Div } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import React from 'react'
 
 const AnimatedBorderCard: React.FC<DivProps> = ({ className, children, ...props }) => {

@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { ArrowDownIcon, ArrowUpIcon, EyeClosedIcon, WidthIcon } from '@radix-ui/react-icons'
 import type { Header } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'

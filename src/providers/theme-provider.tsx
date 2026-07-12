@@ -1,4 +1,4 @@
-import { Theme } from '@/common/constants/enums'
+import { Theme } from '@common/constants/enums'
 import { useLocalStorageState } from 'ahooks'
 import type { SetState } from 'ahooks/lib/createUseStorageState'
 import React, { createContext, useEffect } from 'react'

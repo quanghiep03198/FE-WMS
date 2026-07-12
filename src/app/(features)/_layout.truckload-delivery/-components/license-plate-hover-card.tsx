@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { HoverCard, HoverCardContent, HoverCardTrigger, Icon } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { url } from 'zod'
 
 const LicensePlateHoverCard: React.FC<{

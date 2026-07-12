@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority'
 import * as React from 'react'
 import { Icon } from './icon'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 
 const NavigationMenu: React.FC<React.ComponentProps<typeof NavigationMenuPrimitive.Root>> = ({
 	className,

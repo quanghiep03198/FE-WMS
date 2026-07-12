@@ -1,8 +1,8 @@
-import env from '@/common/utils/env'
-import { isIPv4 } from '@/common/utils/ip'
 import { Div, Typography } from '@/components/ui'
 import { __hostRegistry } from '@/configs/host-registry.config'
 import useAuth from '@/hooks/use-auth'
+import env from '@common/utils/env'
+import { isIPv4 } from '@common/utils/ip'
 import { HttpStatusCode } from 'axios'
 
 import React from 'react'

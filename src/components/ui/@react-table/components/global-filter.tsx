@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import type { Table } from '@tanstack/react-table'
 import { pick } from 'lodash-es'
 import { useTranslation } from 'react-i18next'

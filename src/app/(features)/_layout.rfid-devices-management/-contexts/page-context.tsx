@@ -1,4 +1,4 @@
-import type { CommonActions } from '@/common/constants/enums'
+import type { CommonActions } from '@common/constants/enums'
 import { useEventEmitter } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'

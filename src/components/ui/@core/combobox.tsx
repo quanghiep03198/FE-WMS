@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash-es'
 import { useMemo, useState } from 'react'

@@ -3,7 +3,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 
 const Sheet = SheetPrimitive.Root
 

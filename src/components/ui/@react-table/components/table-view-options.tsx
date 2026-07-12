@@ -1,6 +1,6 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { useUpdate } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 import {

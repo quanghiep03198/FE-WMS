@@ -1,9 +1,9 @@
-import { Languages, UserRole } from '@/common/constants/enums'
-import type { IMonthlyInventoryAudit } from '@/common/types/entities'
-import { cn } from '@/common/utils/cn'
 import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
 import { Button, Div, Form, Icon, InputFieldControl, Typography } from '@/components/ui'
 import useQueryParams from '@/hooks/use-query-params'
+import { Languages, UserRole } from '@common/constants/enums'
+import type { IMonthlyInventoryAudit } from '@common/types/entities'
+import { cn } from '@common/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useIsFetching } from '@tanstack/react-query'
 import { useBoolean, useUpdateEffect } from 'ahooks'
@@ -16,7 +16,7 @@ import { InventoryAuditQueryKeys, useInventoryAuditMutation } from '../-hooks/us
 import type { InventoryAuditFormValues } from '../-schemas/inventory-audit.schema'
 import { reportDataSchema } from '../-schemas/inventory-audit.schema'
 import type { BaseUpdateUpdateQuery } from '../-types'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'
 
 type InventoryReportDetailTableProps = {
 	queries: Omit<BaseUpdateUpdateQuery, 'size_numcode'>

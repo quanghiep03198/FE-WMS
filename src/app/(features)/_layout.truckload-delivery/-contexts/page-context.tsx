@@ -1,5 +1,5 @@
-import type { CommonActions } from '@/common/constants/enums'
 import type { ITruckloadDelivery, TruckloadDeliveryDispatchOrder } from '@/services/truckload-delivery.service'
+import type { CommonActions } from '@common/constants/enums'
 import { useEventEmitter, useSessionStorageState } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use, useMemo } from 'react'

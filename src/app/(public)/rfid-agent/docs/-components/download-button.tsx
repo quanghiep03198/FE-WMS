@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { buttonVariants } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 
 export const DownloadButton: React.FC<React.ComponentProps<'a'>> = ({ children, ...props }) => {
 	return (

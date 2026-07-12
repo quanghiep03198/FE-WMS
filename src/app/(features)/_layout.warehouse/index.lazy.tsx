@@ -1,11 +1,11 @@
 // #region Modules
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
-import { UserRole } from '@/common/constants/enums'
 import { RoleGuard } from '@/components/guards/role-guard'
+import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageSeparator, PageWrapper } from '../-components/shared/page'
+import { PageSeparator, PageWrapper } from '../../../components/shared/page'
 import PageHeading from './-components/page-heading'
 import WarehouseDataTable from './-components/warehouse-data-table'
 import WarehouseFormDialog from './-components/warehouse-form'

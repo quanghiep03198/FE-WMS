@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { MinusIcon } from '@radix-ui/react-icons'
 import { OTPInput, OTPInputContext } from 'input-otp'
 import * as React from 'react'

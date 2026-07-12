@@ -1,6 +1,6 @@
 import { navigationConfig } from '@/app/(features)/-configs/navigation.config'
-import { cn } from '@/common/utils/cn'
 import { Div, Typography, buttonVariants } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 

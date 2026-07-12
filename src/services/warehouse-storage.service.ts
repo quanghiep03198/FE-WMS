@@ -2,8 +2,8 @@ import type {
 	PartialStorageFormValue,
 	StorageFormValue
 } from '@/app/(features)/_layout.warehouse/-schemas/warehouse.schema'
-import type { IWarehouseStorage } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import type { IWarehouseStorage } from '@/features/warehouse/types'
 
 export class WarehouseStorageService {
 	static async getWarehouseStorages(warehouseNum: string): Promise<ResponseBody<IWarehouseStorage[]>> {

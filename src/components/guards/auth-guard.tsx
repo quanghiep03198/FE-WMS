@@ -1,7 +1,7 @@
 import { useGetUserProfileQuery } from '@/app/-hooks/use-user-asm'
 import { Div, Icon, Typography } from '@/components/ui'
+import { AuthService } from '@/features/auth/services/auth.service'
 import useAuth from '@/hooks/use-auth'
-import { AuthService } from '@/services/auth.service'
 import { useRouter } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import GridBackground from '../shared/grid-background'

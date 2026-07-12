@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { Div, Separator } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { Fragment, memo } from 'react'
 import { useTableContext } from '../context/table.context'
 import { type TableFooterProps } from '../types'

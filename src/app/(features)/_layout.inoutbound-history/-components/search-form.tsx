@@ -1,34 +1,34 @@
-import { cn } from '@/common/utils/cn'
 import { Button, Div, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
+import { StockFlow } from '@/features/finished-goods/constants/enums'
 import useQueryParams from '@/hooks/use-query-params'
+import { cn } from '@common/utils/cn'
 import { useUpdateEffect } from 'ahooks'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useGetInboundHistoryQuery, useGetOutboundHistoryQuery } from '../-hooks/use-inoutbound-history-asm'
-import { RFIDDataType } from '../../_layout.(rfid)/-constants'
 import WarehouseDataTypeFieldControl from './data-type-field-control'
 import { OrderSearchFieldControl } from './order-search-field-control'
 
 const SearchForm: React.FC = () => {
 	const { t } = useTranslation()
-	const { searchParams, setParams } = useQueryParams<{ order?: string; type: RFIDDataType }>()
+	const { searchParams, setParams } = useQueryParams<{ order?: string; type: StockFlow }>()
 	const { refetch: refetchInboundHistory } = useGetInboundHistoryQuery()
 	const { refetch: refetchOutboundHistory } = useGetOutboundHistoryQuery()
 
 	const form = useForm({
 		defaultValues: {
-			type: searchParams.type ?? RFIDDataType.INBOUND,
+			type: searchParams.type ?? StockFlow.INBOUND,
 			order: searchParams.order ?? ''
 		}
 	})
 
-	const hasSearch = searchParams.order && Object.values(RFIDDataType).includes(searchParams.type)
+	const hasSearch = searchParams.order && Object.values(StockFlow).includes(searchParams.type)
 
 	const refetch = () => {
-		if (searchParams.type === RFIDDataType.INBOUND) {
+		if (searchParams.type === StockFlow.INBOUND) {
 			refetchInboundHistory()
-		} else if (searchParams.type === RFIDDataType.OUTBOUND) {
+		} else if (searchParams.type === StockFlow.OUTBOUND) {
 			refetchOutboundHistory()
 		} else return
 	}
@@ -50,8 +50,8 @@ const SearchForm: React.FC = () => {
 						<SelectFieldControl
 							name='type'
 							datalist={[
-								{ label: t('ns_inoutbound:action_types.warehouse_input'), value: RFIDDataType.INBOUND },
-								{ label: t('ns_inoutbound:action_types.warehouse_output'), value: RFIDDataType.OUTBOUND }
+								{ label: t('ns_inoutbound:action_types.warehouse_input'), value: StockFlow.INBOUND },
+								{ label: t('ns_inoutbound:action_types.warehouse_output'), value: StockFlow.OUTBOUND }
 							]}
 							onValueChange={() => {
 								form.setValue('order', '')

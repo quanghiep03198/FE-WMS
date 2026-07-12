@@ -1,0 +1,35 @@
+import { AutoCompleteFieldControl } from '@/components/ui'
+import { useGetSewingProductLineQuery } from '@/features/department/hooks/use-department-request'
+import { capitalize } from 'lodash-es'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { DefAutoCompleteFieldControlProps } from './type'
+
+const SewingLineFieldControl: React.FC<DefAutoCompleteFieldControlProps> = (props) => {
+	const { data } = useGetSewingProductLineQuery()
+	const { t } = useTranslation()
+
+	const datalist = useMemo(() => {
+		if (!Array.isArray(data)) return []
+		return data.map(({ dept_name }) => ({ label: dept_name, value: dept_name }))
+	}, [data])
+
+	return (
+		<AutoCompleteFieldControl
+			name='sewing_line'
+			label={t('ns_erp:fields.sewing_line')}
+			placeholder={capitalize(
+				t('ns_common:form_placeholder.fill', {
+					object: t('ns_erp:fields.sewing_line'),
+					defaultValue: null
+				})
+			)}
+			datalist={datalist}
+			labelField='label'
+			valueField='value'
+			{...props}
+		/>
+	)
+}
+
+export default SewingLineFieldControl

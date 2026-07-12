@@ -1,5 +1,5 @@
-import type { IDepartment } from '@/common/types/entities'
-import { DepartmentService } from '@/services/department.service'
+import type { IDepartment } from '@/common/types'
+import { DepartmentService } from '@/features/department/services/department.service'
 import type { UseQueryOptions } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'

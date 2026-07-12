@@ -1,12 +1,12 @@
-import { RequestHeaders } from '@/common/constants/enums'
+import axiosInstance from '@/configs/axios.config'
+import { RequestHeaders } from '@common/constants/enums'
 import type {
 	IInboundInventory,
 	IMonthlyInventoryAudit,
 	IOutboundEstimation,
 	IProductionInventoryFeature,
 	IProductSizeInventory
-} from '@/common/types/entities'
-import axiosInstance from '@/configs/axios.config'
+} from '@common/types/entities'
 import type { AxiosRequestConfig } from 'axios'
 
 export class InventoryService {

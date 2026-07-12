@@ -1,12 +1,12 @@
-import { FactoryAgencyCode } from '@/common/constants/enums'
 import { Button, Icon } from '@/components/ui'
 import useAuth from '@/hooks/use-auth'
 import useMediaQuery from '@/hooks/use-media-query'
 import { InventoryService } from '@/services/inventory.service'
+import { FactoryAgencyCode } from '@common/constants/enums'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
+import { useGetTenantByFactory } from '../../../../../features/tenancy/hooks/use-tenacy-request'
 
 const DownloadExcelButton: React.FC<React.ComponentProps<typeof Button>> = (props) => {
 	const { t } = useTranslation()

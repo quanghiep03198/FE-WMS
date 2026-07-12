@@ -1,6 +1,6 @@
-import { RequestHeaders } from '@/common/constants/enums'
-import type { IManufacturingOrder, IPurchaseOrderDetail } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import { RequestHeaders } from '@common/constants/enums'
+import type { IManufacturingOrder, IPurchaseOrderDetail } from '@common/types/entities'
 
 export interface IPurchaseOrderResult {
 	po: string

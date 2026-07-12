@@ -1,10 +1,10 @@
-import { CommonActions, UserRole } from '@/common/constants/enums'
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
 import { Button, Icon } from '@/components/ui'
+import { CommonActions, UserRole } from '@common/constants/enums'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { usePageContext } from '../-contexts/page-context'
-import { PageAction, PageDescription, PageHeader, PageTitle } from '../../-components/shared/page'
+import { PageAction, PageDescription, PageHeader, PageTitle } from '../../../../components/shared/page'
 
 const PageHeading: React.FC = () => {
 	const { dispatch } = usePageContext()

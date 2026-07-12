@@ -1,4 +1,3 @@
-import { locales } from '@/common/constants/constants'
 import type { ButtonProps } from '@/components/ui'
 import {
 	Button,
@@ -17,6 +16,7 @@ import {
 	SelectValue,
 	Tooltip
 } from '@/components/ui'
+import { LOCALES } from '@common/constants/constants'
 
 import { useTranslation } from 'react-i18next'
 
@@ -29,7 +29,7 @@ export const LanguageSelect: React.FC = () => {
 				<SelectValue placeholder='Choose language' />
 			</SelectTrigger>
 			<SelectContent>
-				{locales.map((item) => (
+				{LOCALES.map((item) => (
 					<SelectItem key={item.value} value={item.value}>
 						{item.label}
 					</SelectItem>
@@ -55,7 +55,7 @@ export const LanguageDropdown: React.FC<{ triggerProps?: ButtonProps }> = ({ tri
 				<DropdownMenuLabel>Languages</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuRadioGroup value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
-					{locales.map((item) => (
+					{LOCALES.map((item) => (
 						<DropdownMenuRadioItem value={item.value} key={item.value}>
 							{item.label}
 						</DropdownMenuRadioItem>

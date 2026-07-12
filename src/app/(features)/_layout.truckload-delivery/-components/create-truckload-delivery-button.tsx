@@ -1,5 +1,5 @@
-import { CommonActions } from '@/common/constants/enums'
 import { Button, Icon } from '@/components/ui'
+import { CommonActions } from '@common/constants/enums'
 import { useTranslation } from 'react-i18next'
 import { usePageContext } from '../-contexts/page-context'
 

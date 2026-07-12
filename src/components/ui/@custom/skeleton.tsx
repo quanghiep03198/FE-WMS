@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import React from 'react'
 
 const Skeleton: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => {

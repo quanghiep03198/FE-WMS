@@ -1,4 +1,3 @@
-import { cn } from '@/common/utils/cn'
 import {
 	Button,
 	Checkbox,
@@ -12,6 +11,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { ArrowLeftIcon, ArrowRightIcon, Repeat, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

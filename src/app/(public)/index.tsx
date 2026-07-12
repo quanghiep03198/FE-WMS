@@ -1,4 +1,4 @@
-import env from '@/common/utils/env'
+import env from '@common/utils/env'
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 import PageComposition from './-components/page-composition'

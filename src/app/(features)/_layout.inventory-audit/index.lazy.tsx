@@ -1,8 +1,8 @@
 import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
-import { UserRole } from '@/common/constants/enums'
 import HostCompatibleGuard from '@/components/guards/host-compatible-guard'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { SocketProvider } from '@/stores/socket.store'
+import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../-components/shared/page'
+} from '../../../components/shared/page'
 import { MonthPickerFilter } from './-components/month-picker-filter'
 import { InventoryReportMasterTable } from './-components/report-master-table'
 

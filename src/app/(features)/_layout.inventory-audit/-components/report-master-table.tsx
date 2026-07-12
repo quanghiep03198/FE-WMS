@@ -1,6 +1,3 @@
-import { factories } from '@/common/constants/constants'
-import type { IMonthlyInventoryAudit } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Div, Icon, Tooltip, Typography } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import {
@@ -14,6 +11,9 @@ import type { RenderSubComponentProps } from '@/components/ui/@react-table/types
 import useAuth from '@/hooks/use-auth'
 import useQueryParams from '@/hooks/use-query-params'
 import { InventoryService } from '@/services/inventory.service'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import type { IMonthlyInventoryAudit } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { useQueryClient } from '@tanstack/react-query'
 import type { ExpandedState } from '@tanstack/react-table'
 import { createColumnHelper, type Table } from '@tanstack/react-table'
@@ -299,7 +299,7 @@ const DataTableSlotRight = ({ downloadable }: { downloadable: boolean }) => {
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_monthly_inventory_report', {
-					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' }),
 					month: searchParams['month:eq'],
 					defaultValue: `Monthly Inventory Report ~ ${searchParams['month:eq']}`
 				}) + '.xlsx'

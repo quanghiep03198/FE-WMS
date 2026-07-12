@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import type { CellContext } from '@tanstack/react-table'
 import { isEmpty, isNil } from 'lodash-es'
 import { useTranslation } from 'react-i18next'

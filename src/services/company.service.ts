@@ -1,5 +1,5 @@
-import type { ICompany } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import type { ICompany } from '@common/types/entities'
 
 export class CompanyService {
 	static async getCompanies() {

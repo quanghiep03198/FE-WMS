@@ -1,13 +1,13 @@
-import { factories } from '@/common/constants/constants'
 import useAuth from '@/hooks/use-auth'
 import useQueryParams from '@/hooks/use-query-params'
 import { ReportService } from '@/services/report.service'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
 import { useMemoizedFn } from 'ahooks'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import type { UrlQueryParams } from '../-components/report-master-table'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'
 
 export const useDownloadReport = () => {
 	const { searchParams } = useQueryParams<UrlQueryParams>()
@@ -17,7 +17,7 @@ export const useDownloadReport = () => {
 
 	return useMemoizedFn(async (reportType: 'daily-productivity' | 'shaping-department-productivity') => {
 		const id = toast.loading(t('ns_common:notification.downloading'))
-		const translatedFactory = t(factories[user?.current_factory_code], { ns: 'ns_common' })
+		const translatedFactory = t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' })
 		const fallbackFileTitle =
 			reportType === 'daily-productivity'
 				? `Daily Inbound Report ${translatedFactory} - ${searchParams['date:eq']}`

@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { Div, Typography } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import React from 'react'
 
 const OSVisualCard: React.FC = () => {

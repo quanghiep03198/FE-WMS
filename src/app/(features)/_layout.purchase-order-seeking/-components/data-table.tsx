@@ -1,11 +1,16 @@
-import type { IPurchaseOrderDetail } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Typography } from '@/components/ui'
+import type { IPurchaseOrderDetail } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { groupBy, orderBy, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePurchaseOrderDetailQuery } from '../-hooks/use-po-detail-asm'
-import { NestedCell, NestedCellHead, NestedColumn, NestedTable } from '../../-components/shared/horizontal-nested-table'
+import {
+	NestedCell,
+	NestedCellHead,
+	NestedColumn,
+	NestedTable
+} from '../../../../components/shared/horizontal-nested-table'
 import EmptySearchResult from './empty-history'
 
 const DataSection: React.FC = () => {

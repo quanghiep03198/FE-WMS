@@ -1,6 +1,3 @@
-import { factories } from '@/common/constants/constants'
-import type { IInboundReport } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon, Tooltip } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
@@ -8,6 +5,9 @@ import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import type { RenderSubComponent } from '@/components/ui/@react-table/types'
 import useMediaQuery from '@/hooks/use-media-query'
 import useQueryParams from '@/hooks/use-query-params'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import type { IInboundReport } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import type { Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -15,9 +15,9 @@ import { isNil, split } from 'lodash-es'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetInboundReport } from '../-hooks/use-inbound-report-asm'
-import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
-import SizeTable from '../../-components/shared/size-table'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import AutoRefreshToggle from '../../../../components/shared/auto-refresh-toggle'
+import SizeTable from '../../../../components/shared/size-table'
+import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'
 import DownloadExcelDropdown from './download-excel-dropdown'
 import ReportTableSummary from './report-table-summary'
 
@@ -77,14 +77,17 @@ const InboundReportMasterTable: React.FC = () => {
 				size: 120,
 				meta: {
 					filterVariant: 'select',
-					facetedUniqueValues: Object.entries(factories).map(([key, val]) => ({
+					facetedUniqueValues: Object.entries(TRANSLATED_FACTORY).map(([key, val]) => ({
 						label: t(val, { ns: 'ns_common', defaultValue: val }),
 						value: key
 					}))
 				},
 				cell: ({ getValue }) => {
 					const factoryCode = getValue()
-					return t(factories[factoryCode], { ns: 'ns_common', defaultValue: t('ns_common:titles.unknown') })
+					return t(TRANSLATED_FACTORY[factoryCode], {
+						ns: 'ns_common',
+						defaultValue: t('ns_common:titles.unknown')
+					})
 				}
 			}),
 			columnHelper.accessor('mo_no', {

@@ -1,4 +1,4 @@
-import env from '@/common/utils/env'
+import env from '@common/utils/env'
 
 /**
  * A registry mapping company codes to their respective hostnames.

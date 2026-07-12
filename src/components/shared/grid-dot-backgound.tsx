@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import React, { Fragment } from 'react'
 
 const GridDotBackground: React.FC = () => {

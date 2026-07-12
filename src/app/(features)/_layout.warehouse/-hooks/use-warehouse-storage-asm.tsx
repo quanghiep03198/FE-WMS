@@ -1,4 +1,4 @@
-import type { IWarehouseStorage } from '@/common/types/entities'
+import type { IWarehouseStorage } from '@/features/warehouse/types'
 import { WarehouseStorageService } from '@/services/warehouse-storage.service'
 import {
 	keepPreviousData,

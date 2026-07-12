@@ -9,7 +9,7 @@ import type { Table } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../../-components/shared/page'
+import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../../../../components/shared/page'
 
 type CommandList = Pick<NavigationConfig, 'title' | 'keybinding'>[]
 

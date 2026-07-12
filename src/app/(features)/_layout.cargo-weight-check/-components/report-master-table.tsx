@@ -1,11 +1,11 @@
-import { factories } from '@/common/constants/constants'
-import type { IPackingReport } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Icon } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
+import type { IPackingReport } from '@/features/packing-manifest/types'
 import useAuth from '@/hooks/use-auth'
 import useQueryParams from '@/hooks/use-query-params'
 import { ReportService } from '@/services/report.service'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { useQuery } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -15,7 +15,7 @@ import { pick } from 'lodash-es'
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
+import AutoRefreshToggle from '../../../../components/shared/auto-refresh-toggle'
 
 const ReportMasterTable: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -137,7 +137,7 @@ const ReportMasterTable: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_packing:titles.file_daily_weighing_report', {
-					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' }),
 					date: searchParams['date:eq'],
 					defaultValue: `Packing weight Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'

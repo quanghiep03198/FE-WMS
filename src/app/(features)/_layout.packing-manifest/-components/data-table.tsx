@@ -1,10 +1,10 @@
-import { factories } from '@/common/constants/constants'
-import type { IPackingManifest } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Badge, Button, DataTable, Icon, Input } from '@/components/ui'
 import EllipsisList from '@/components/ui/@custom/ellipsis-list'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
+import type { IPackingManifest } from '@/features/packing-manifest/types'
 import { PackingService } from '@/services/packing.service'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createColumnHelper } from '@tanstack/react-table'
 import React, { Fragment, useMemo } from 'react'
@@ -140,7 +140,10 @@ const ReportMasterTable: React.FC = () => {
 				size: 120,
 				cell: ({ getValue }) => {
 					const factoryCode = getValue()
-					return t(factories[factoryCode], { ns: 'ns_common', defaultValue: t('ns_common:titles.unknown') })
+					return t(TRANSLATED_FACTORY[factoryCode], {
+						ns: 'ns_common',
+						defaultValue: t('ns_common:titles.unknown')
+					})
 				}
 			}),
 			columnHelper.accessor('standard_weight', {

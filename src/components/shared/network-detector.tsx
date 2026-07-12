@@ -1,5 +1,5 @@
-import env from '@/common/utils/env'
 import { AppConfigs } from '@/configs/app.config'
+import env from '@common/utils/env'
 import { useInterval } from 'ahooks'
 import axios, { AxiosError } from 'axios'
 import { useRef } from 'react'

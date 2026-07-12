@@ -1,6 +1,6 @@
-import { Theme } from '@/common/constants/enums'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'
 import useTheme from '@/hooks/use-theme'
+import { Theme } from '@common/constants/enums'
 
 const ThemeDropdownSelect: React.FC = () => {
 	const { theme, setTheme } = useTheme()

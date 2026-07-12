@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 
 const Textarea: React.FC<React.ComponentProps<'textarea'>> = ({ className, ...props }) => {
 	return (

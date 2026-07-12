@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import type { CellContext } from '@tanstack/react-table'
 import { useRef, useTransition } from 'react'
 import { getTruckloadDeliveryDetailQueryOptions } from '../-hooks/use-truckload-delivery-asm'
-import { GhostButton } from '../../-components/shared/ghost-button'
+import { GhostButton } from '../../../../components/shared/ghost-button'
 
 type RowExpansionCellProps = CellContext<ITruckloadDelivery, any>
 

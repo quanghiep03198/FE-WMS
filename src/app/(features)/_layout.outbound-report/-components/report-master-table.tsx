@@ -1,7 +1,3 @@
-import { factories } from '@/common/constants/constants'
-import { PresetBreakPoints } from '@/common/constants/enums'
-import type { IOutboundReport } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Button, DataTable, Div, Icon, Tooltip } from '@/components/ui'
 import TableCellText from '@/components/ui/@react-table/components/table-cell-text'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
@@ -9,6 +5,12 @@ import useAuth from '@/hooks/use-auth'
 import useMediaQuery from '@/hooks/use-media-query'
 import useQueryParams from '@/hooks/use-query-params'
 import { ReportService } from '@/services/report.service'
+import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import { PresetBreakPoints } from '@common/constants/enums'
+import type { IOutboundReport } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
+import AutoRefreshToggle from '@components/shared/auto-refresh-toggle'
+import DatePickerFilter from '@components/shared/date-picker-filter'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { saveAs } from 'file-saver'
@@ -17,9 +19,7 @@ import { Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useGetOutboundReport } from '../-hooks/use-outbound-report-asm'
-import AutoRefreshToggle from '../../-components/shared/auto-refresh-toggle'
-import DatePickerFilter from '../../-components/shared/date-picker-filter'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'
 import OutboundReportDetailTable from './report-detail-table'
 import ReportTableSummary from './report-table-footer'
 
@@ -137,7 +137,7 @@ const ReportDatalist: React.FC = () => {
 			saveAs(
 				blob,
 				t('ns_inoutbound:titles.file_daily_outbound_report', {
-					factory: t(factories[user?.current_factory_code], { ns: 'ns_common' }),
+					factory: t(TRANSLATED_FACTORY[user?.current_factory_code], { ns: 'ns_common' }),
 					date: searchParams['date:eq'],
 					defaultValue: `Outbound Report ~ ${format(new Date(), 'yyyy-MM-dd')}`
 				}) + '.xlsx'

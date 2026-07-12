@@ -1,6 +1,5 @@
 'use no memo'
 
-import { cn } from '@/common/utils/cn'
 import type { IconProps } from '@/components/ui'
 import {
 	FormControl,
@@ -14,6 +13,7 @@ import {
 	SelectValue,
 	Tooltip
 } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import type { ResourceKey } from 'i18next'
 import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'

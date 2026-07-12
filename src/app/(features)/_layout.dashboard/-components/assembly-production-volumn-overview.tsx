@@ -26,7 +26,7 @@ import {
 	Typography
 } from '@/components/ui'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { format, subDays, subMonths } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'

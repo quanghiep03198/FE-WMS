@@ -1,5 +1,5 @@
-import { RequestHeaders } from '@/common/constants/enums'
 import axiosInstance from '@/configs/axios.config'
+import { RequestHeaders } from '@common/constants/enums'
 
 export class ThirdPartyApiService {
 	static async syncDeckerData(tenantId: string, factoryCode: string) {

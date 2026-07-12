@@ -5,8 +5,8 @@ import type {
 	UpdateDispatchOrderFormValues,
 	UpsertPurchaseOrdersFormValues
 } from '@/app/(features)/_layout.truckload-delivery/-schemas'
-import type { IBaseEntity } from '@/common/types/entities'
 import axiosInstance from '@/configs/axios.config'
+import type { IBaseEntity } from '@common/types/entities'
 
 export type TruckloadDeliveryDispatchOrder = `GL${number}-EXP-${string}-${string}`
 

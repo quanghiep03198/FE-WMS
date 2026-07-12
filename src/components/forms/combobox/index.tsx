@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { CommandLoading } from 'cmdk'
 import { Fragment, useId, useMemo, useState } from 'react'

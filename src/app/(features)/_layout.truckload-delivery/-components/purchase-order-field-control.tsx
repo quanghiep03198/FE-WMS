@@ -1,7 +1,7 @@
-import { CommonActions } from '@/common/constants/enums'
 import type { AutoCompleteFieldControlProps } from '@/components/forms/auto-complete'
 import { AutoCompleteFieldControl } from '@/components/ui'
 import type { ITruckloadDeliveryDetail } from '@/services/truckload-delivery.service'
+import { CommonActions } from '@common/constants/enums'
 import { useDebounce, useUpdateEffect } from 'ahooks'
 import React, { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'

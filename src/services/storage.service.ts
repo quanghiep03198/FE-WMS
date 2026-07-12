@@ -1,6 +1,6 @@
-import { Languages } from '@/common/constants/enums'
-import { Json } from '@/common/utils/json'
 import { AppConfigs } from '@/configs/app.config'
+import { Languages } from '@common/constants/enums'
+import { Json } from '@common/utils/json'
 
 export class StorageService {
 	static getLocale() {

@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import React from 'react'
 
 interface StatusIndicatorProps {

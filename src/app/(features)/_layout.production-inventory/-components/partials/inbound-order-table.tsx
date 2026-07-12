@@ -1,14 +1,14 @@
-import type { IInboundInventory } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, Icon, TableCell, TableFooter, TableRow, Tooltip } from '@/components/ui'
 import { ROW_EXPANSION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
+import { StockFlow } from '@/features/finished-goods/constants/enums'
+import type { IInboundInventory } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import type { ColumnDef, Row } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import React, { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RFIDDataType } from '../../../_layout.(rfid)/-constants'
 import DataTable from '../data-table'
 
 type InboundOrderTableProps = {
@@ -115,7 +115,7 @@ const InboundOrderTable: React.FC<InboundOrderTableProps> = ({ data }) => {
 	return (
 		<DataTable
 			data={data ?? []}
-			dataType={RFIDDataType.INBOUND}
+			dataType={StockFlow.INBOUND}
 			columns={columns}
 			caption={t('ns_inoutbound:description.inbound_directive')}
 			footer={({ rows }) => <DataTableFooter rows={rows} />}

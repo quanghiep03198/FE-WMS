@@ -1,5 +1,5 @@
-import { cn } from '@/common/utils/cn'
 import { buttonVariants, Div, Icon, Typography } from '@/components/ui'
+import { cn } from '@common/utils/cn'
 import { Link } from '@tanstack/react-router'
 import tw from 'tailwind-styled-components'
 import { RFID_AGENT_VERSION } from '../-constants'

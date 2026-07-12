@@ -1,7 +1,7 @@
 'use no memo'
 
-import type { BaseFieldControl } from '@/common/types/hook-form'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui'
+import type { BaseFieldControl } from '@common/types/hook-form'
 import { useUpdateEffect } from 'ahooks'
 import { isEmpty } from 'lodash-es'
 import { useLayoutEffect, useState } from 'react'

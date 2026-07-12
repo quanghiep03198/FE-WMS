@@ -1,6 +1,6 @@
-import compressBase64 from '@/common/libs/compress-base64'
-import { convertBase64 } from '@/common/utils/convert-base64'
 import { useWorkerFn } from '@/hooks/use-worker-fn'
+import compressBase64 from '@common/libs/compress-base64'
+import { convertBase64 } from '@common/utils/convert-base64'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 type UseImageUploadOptions = {

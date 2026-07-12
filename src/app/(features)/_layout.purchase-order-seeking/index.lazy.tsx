@@ -1,7 +1,7 @@
-import { UserRole } from '@/common/constants/enums'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { Div, Typography } from '@/components/ui'
 import useQueryParams from '@/hooks/use-query-params'
+import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,5 +1,3 @@
-import { CommonActions, RecordStatus, UserRole } from '@/common/constants/enums'
-import type { IRFIDReaderDevice } from '@/common/types/entities'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,6 +6,8 @@ import {
 	DropdownMenuTrigger,
 	Icon
 } from '@/components/ui'
+import type { IRFIDReaderDevice } from '@/features/rfid-device/types'
+import { CommonActions, RecordStatus, UserRole } from '@common/constants/enums'
 import type { CellContext } from '@tanstack/react-table'
 import { isNil, pick } from 'lodash-es'
 import React from 'react'

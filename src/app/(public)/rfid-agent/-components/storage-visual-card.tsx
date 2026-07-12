@@ -1,7 +1,7 @@
-import { PresetBreakPoints } from '@/common/constants/enums'
-import { cn } from '@/common/utils/cn'
 import { Icon } from '@/components/ui'
 import useMediaQuery from '@/hooks/use-media-query'
+import { PresetBreakPoints } from '@common/constants/enums'
+import { cn } from '@common/utils/cn'
 import { cloneElement } from 'react'
 import { VisualCard } from './visual-card'
 

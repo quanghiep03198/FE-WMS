@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Fragment } from 'react'
 
-import env from '@/common/utils/env'
 import Loading from '@/components/shared/loading'
+import env from '@common/utils/env'
 import Footer from './-components/footer'
 import { Header } from './-components/header'
 import Hero from './-components/hero-section'

@@ -1,7 +1,7 @@
-import { NestedCell, NestedColumn } from '@/app/(features)/-components/shared/horizontal-nested-table'
-import type { IOutboundReport } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
+import { NestedCell, NestedColumn } from '@/components/shared/horizontal-nested-table'
 import { Div, TableCell, TableRow } from '@/components/ui'
+import type { IOutboundReport } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 

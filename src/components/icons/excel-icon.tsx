@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 
 export const ExcelIcon: React.FC<React.ComponentProps<'svg'>> = ({ className, ...props }) => {
 	return (

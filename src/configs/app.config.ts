@@ -1,5 +1,5 @@
-import env from '@/common/utils/env'
-import { isIPv4 } from '@/common/utils/ip'
+import env from '@common/utils/env'
+import { isIPv4 } from '@common/utils/ip'
 
 export class AppConfigs {
 	public static readonly I18N_STORAGE_KEY = 'i18nextLng'

@@ -29,8 +29,8 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDefectiveCategoryChartConfig } from '../-hooks/use-defective-category-chart-configs'
 import { useGetDefectiveGoodsInventoryCompositionQuery } from '../-hooks/use-statistic-asm'
-import { DefectiveCategory } from '../../../../features/defective-goods/constants'
-import { useDefectiveCategoryList } from '../../_layout.(defective-goods)/-hooks/use-defective-category-list'
+import { DefectiveCategory } from '../../../../features/defective-goods/constants/enums'
+import { useDefectiveCategoryList } from '../../../../features/defective-goods/hooks/use-defective-category-list'
 
 const DefectiveGoodsInventoryOverview: React.FC = () => {
 	const { t } = useTranslation()

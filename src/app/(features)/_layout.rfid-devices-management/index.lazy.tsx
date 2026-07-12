@@ -2,9 +2,10 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { UserRole } from '@/common/constants/enums'
 import HostCompatibleGuard from '@/components/guards/host-compatible-guard'
 import { RoleGuard } from '@/components/guards/role-guard'
+import { UserRole } from '@common/constants/enums'
+import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
 import {
 	PageAction,
 	PageDescription,
@@ -12,8 +13,7 @@ import {
 	PageSeparator,
 	PageTitle,
 	PageWrapper
-} from '../-components/shared/page'
-import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
+} from '../../../components/shared/page'
 import DeviceDataTable from './-components/device-data-table'
 import RFIDDeviceFormDialog from './-components/rfid-device-form-dialog'
 import { PageContextProvider } from './-contexts/page-context'

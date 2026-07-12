@@ -1,4 +1,4 @@
-import { isPrimitive } from '@/common/utils/common'
+import { isPrimitive } from '@common/utils/common'
 import { describe, expect, it } from 'vitest'
 
 describe('Check if value has primitive datatype', () => {

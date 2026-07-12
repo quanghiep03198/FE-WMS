@@ -1,4 +1,4 @@
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 import { type ComponentProps, Fragment, type ReactNode } from 'react'
 
 const DefaultKbdSeparator = ({ className, children = '+', ...props }: ComponentProps<'span'>) => (

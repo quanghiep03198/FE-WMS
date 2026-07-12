@@ -1,4 +1,4 @@
-import { RFIDService } from '@/apis/finished-goods-inoutbound/inoutbound.service'
+import { FinishedGoodsInboundService } from '@/features/finished-goods/services/finished-goods-inbound.service'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { CreateRFIDReaderFormValues, UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
 
@@ -9,7 +9,7 @@ enum RFIDDeviceQueryKeys {
 export const useGetRFIDDeviceQuery = () => {
 	return useQuery({
 		queryKey: [RFIDDeviceQueryKeys.WAREHOUSE_RFID_DEVICES],
-		queryFn: () => RFIDService.getWarehouseRFIDDevices(),
+		queryFn: () => FinishedGoodsInboundService.getWarehouseRFIDDevices(),
 		select: (response) => response.metadata
 	})
 }
@@ -19,7 +19,7 @@ export const useCreateRFIDDeviceMutation = () => {
 
 	return useMutation({
 		mutationKey: [RFIDDeviceQueryKeys.WAREHOUSE_RFID_DEVICES],
-		mutationFn: (data: CreateRFIDReaderFormValues) => RFIDService.createWarehouseRFIDDevice(data),
+		mutationFn: (data: CreateRFIDReaderFormValues) => FinishedGoodsInboundService.createWarehouseRFIDDevice(data),
 		onSuccess: () => invalidateQuery()
 	})
 }
@@ -29,7 +29,7 @@ export const useUpdateRFIDDeviceMutation = () => {
 
 	return useMutation({
 		mutationKey: [RFIDDeviceQueryKeys.WAREHOUSE_RFID_DEVICES],
-		mutationFn: (data: UpdateRFIDReaderFormValues) => RFIDService.updateWarehouseRFIDDevice(data),
+		mutationFn: (data: UpdateRFIDReaderFormValues) => FinishedGoodsInboundService.updateWarehouseRFIDDevice(data),
 		onSuccess: () => invalidateQuery()
 	})
 }
@@ -39,7 +39,8 @@ export const useDeleteRFIDDeviceMutation = () => {
 
 	return useMutation({
 		mutationKey: [RFIDDeviceQueryKeys.WAREHOUSE_RFID_DEVICES],
-		mutationFn: (deviceSeriesNumbers: string[]) => RFIDService.deleteWarehouseRFIDDevice(deviceSeriesNumbers),
+		mutationFn: (deviceSeriesNumbers: string[]) =>
+			FinishedGoodsInboundService.deleteWarehouseRFIDDevice(deviceSeriesNumbers),
 		onSuccess: () => invalidateQuery()
 	})
 }

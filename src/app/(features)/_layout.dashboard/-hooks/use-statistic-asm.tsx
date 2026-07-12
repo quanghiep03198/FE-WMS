@@ -1,7 +1,7 @@
-import type { IAnnuallyInOutboundStatistics } from '@/common/types/entities'
+import type { IAnnuallyInOutboundStatistics } from '@/features/dashboard/types'
 import { StatisticsService } from '@/services/statistics.service'
 import { useQuery } from '@tanstack/react-query'
-import { useGetTenantByFactory } from '../../-hooks/use-tenacy-asm'
+import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'
 
 export enum StatisticsQueryKeys {
 	MONTHLY_INVENTORY_COMPARISON = 'MONTHLY_INVENTORY_COMPARISON',

@@ -1,10 +1,10 @@
-import type { IOutboundReport } from '@/common/types/entities'
-import formatIntlNumber from '@/common/utils/format-intl-number'
 import { Div, TableCell, TableFooter, TableRow } from '@/components/ui'
+import type { IOutboundReport } from '@common/types/entities'
+import formatIntlNumber from '@common/utils/format-intl-number'
 import { capitalize, sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NestedCell, NestedColumn } from '../../-components/shared/horizontal-nested-table'
+import { NestedCell, NestedColumn } from '../../../../components/shared/horizontal-nested-table'
 
 const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ data }) => {
 	const { t } = useTranslation()

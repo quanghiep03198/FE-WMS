@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { cn } from '@/common/utils/cn'
+import { cn } from '@common/utils/cn'
 
 const Table: React.FC<React.ComponentProps<'table'>> = ({ className, ...props }) => (
 	<table

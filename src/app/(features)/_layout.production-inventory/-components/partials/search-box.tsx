@@ -1,8 +1,8 @@
-import { cn } from '@/common/utils/cn'
 import { Button, ComboboxFieldControl, Div, Form as FormProvider, Icon } from '@/components/ui'
 import useMediaQuery from '@/hooks/use-media-query'
 import useQueryParams from '@/hooks/use-query-params'
 import { InventoryService } from '@/services/inventory.service'
+import { cn } from '@common/utils/cn'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, isEmpty } from 'lodash-es'
 import { useMemo, useState } from 'react'
@@ -10,7 +10,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useGetProductionInventoryQuery } from '../../-hooks/use-production-inventory-asm'
-import { useGetTenantByFactory } from '../../../-hooks/use-tenacy-asm'
+import { useGetTenantByFactory } from '../../../../../features/tenancy/hooks/use-tenacy-request'
 import DownloadExcelButton from './download-excel-button'
 
 type ComboboxProps = { data: Record<'label' | 'value', string>[]; isLoading: boolean }
