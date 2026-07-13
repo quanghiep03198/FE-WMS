@@ -1,7 +1,7 @@
 import { Div } from '@/components/ui'
-import useScrollToFn from '@/hooks/use-scroll-fn'
 import { CommonActions } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import useScrollToFn from '@hooks/use-scroll-fn'
 import type { VirtualItem } from '@tanstack/react-virtual'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { omit } from 'lodash-es'

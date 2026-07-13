@@ -1,6 +1,6 @@
 import type { ButtonProps } from '@/components/ui'
 import { Button, Icon, Tooltip } from '@/components/ui'
-import useMediaQuery from '@/hooks/use-media-query'
+import useMediaQuery from '@hooks/use-media-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGetUsersQuery } from '../hooks/use-user-request'

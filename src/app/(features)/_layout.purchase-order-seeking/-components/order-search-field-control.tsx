@@ -16,8 +16,8 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import useMediaQuery from '@/hooks/use-media-query'
 import { cn } from '@common/utils/cn'
+import useMediaQuery from '@hooks/use-media-query'
 import { capitalize } from 'lodash-es'
 import React, { useId, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'

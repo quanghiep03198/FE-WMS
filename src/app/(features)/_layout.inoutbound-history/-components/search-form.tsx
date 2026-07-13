@@ -1,7 +1,7 @@
 import { Button, Div, Form as FormProvider, Icon, SelectFieldControl } from '@/components/ui'
 import { StockFlow } from '@/features/finished-goods/constants/enums'
-import useQueryParams from '@/hooks/use-query-params'
 import { cn } from '@common/utils/cn'
+import useQueryParams from '@hooks/use-query-params'
 import { useUpdateEffect } from 'ahooks'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

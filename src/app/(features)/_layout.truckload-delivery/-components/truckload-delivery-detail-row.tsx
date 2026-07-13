@@ -10,12 +10,12 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import { useDateLocale } from '@/hooks/use-date-locale'
 import type { IPurchaseOrderResult } from '@/services/order.service'
 import type { ITruckloadDelivery } from '@/services/truckload-delivery.service'
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import generateAvatar from '@common/utils/generate-avatar'
+import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { isNil, pick } from 'lodash-es'
 import React, { Fragment, useCallback, useState } from 'react'

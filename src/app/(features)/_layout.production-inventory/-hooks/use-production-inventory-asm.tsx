@@ -1,5 +1,5 @@
-import useQueryParams from '@/hooks/use-query-params'
 import { InventoryService } from '@/services/inventory.service'
+import useQueryParams from '@hooks/use-query-params'
 import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash-es'
 import { useGetTenantByFactory } from '../../../../features/tenancy/hooks/use-tenacy-request'

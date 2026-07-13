@@ -1,7 +1,7 @@
 import type { TooltipProps } from '@/components/ui'
 import { Button, Icon, Tooltip } from '@/components/ui'
-import useTheme from '@/hooks/use-theme'
 import { Theme } from '@common/constants/enums'
+import useTheme from '@hooks/use-theme'
 import { useKeyPress, useUpdateEffect } from 'ahooks'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,6 +1,6 @@
 import { buttonVariants, Icon, Sheet, SheetContent, SheetTrigger } from '@/components/ui'
 import { useSwitchCombinationStrategy } from '@/features/defective-goods/hooks/use-switch-combination-strategy'
-import useMediaQuery from '@/hooks/use-media-query'
+import useMediaQuery from '@hooks/use-media-query'
 import { ReaderPlaygroundProvider } from '../contexts/rfid-reader-playground.context'
 import RFIDReaderPlayground from './playground'
 

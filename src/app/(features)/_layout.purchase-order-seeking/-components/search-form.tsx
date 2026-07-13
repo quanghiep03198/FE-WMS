@@ -1,5 +1,5 @@
 import { Button, Div, Form as FormProvider, Icon } from '@/components/ui'
-import useQueryParams from '@/hooks/use-query-params'
+import useQueryParams from '@hooks/use-query-params'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

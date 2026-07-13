@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage, Div, Icon, Typography } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
+import useAuth from '@hooks/use-auth'
 
 const ProfileWallpaper: React.FC = () => {
 	const { user } = useAuth()

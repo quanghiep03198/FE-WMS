@@ -1,6 +1,6 @@
-import { useGetRFIDDeviceQuery } from '@/app/(features)/_layout.rfid-devices-management/-hooks/use-rfid-device-asm'
 import { Div, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Typography } from '@/components/ui'
 import { Languages, RecordStatus } from '@common/constants/enums'
+import { useGetRFIDDeviceQuery } from '@features/rfid-device/hooks/use-rfid-device-request'
 import { useQueryClient } from '@tanstack/react-query'
 import { isNil } from 'lodash-es'
 import React, { useMemo } from 'react'

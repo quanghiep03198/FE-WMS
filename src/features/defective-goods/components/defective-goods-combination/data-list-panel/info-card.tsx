@@ -20,11 +20,11 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
-import useCopyToClipboard from '@/hooks/use-copy-to-clipboard'
-import { useDateLocale } from '@/hooks/use-date-locale'
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import type { IDefectiveGoods } from '@features/defective-goods/types'
+import useCopyToClipboard from '@hooks/use-copy-to-clipboard'
+import { useDateLocale } from '@hooks/use-date-locale'
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { useUpdateEffect } from 'ahooks'
 import { Buffer } from 'buffer'

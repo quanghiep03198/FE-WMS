@@ -1,8 +1,8 @@
 import { TableBody, TableCell, TableRow } from '@/components/ui'
 import Skeleton from '@/components/ui/@custom/skeleton'
 import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
-import useMediaQuery from '@/hooks/use-media-query'
 import { PresetBreakPoints } from '@common/constants/enums'
+import useMediaQuery from '@hooks/use-media-query'
 import type { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
 

@@ -1,5 +1,5 @@
-import { UserService } from '@/features/user/services/user.service'
-import useAuth from '@/hooks/use-auth'
+import { UserService } from '@features/user/services/user.service'
+import useAuth from '@hooks/use-auth'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { AxiosRequestConfig } from 'axios'
 import { AxiosError } from 'axios'

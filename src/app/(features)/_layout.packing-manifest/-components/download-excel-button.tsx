@@ -1,7 +1,7 @@
 import { Button, Icon } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
 import { PackingService } from '@/services/packing.service'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import useAuth from '@hooks/use-auth'
 import { format } from 'date-fns'
 import saveAs from 'file-saver'
 import { useTranslation } from 'react-i18next'

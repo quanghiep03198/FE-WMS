@@ -7,11 +7,11 @@ import {
 import { ROW_ACTIONS_COLUMN_ID, ROW_SELECTION_COLUMN_ID } from '@/components/ui/@react-table/constants'
 import { notNullFilter } from '@/components/ui/@react-table/utils/not-null-filter.util'
 import type { IRFIDReaderDevice } from '@/features/rfid-device/types'
-import useAuth from '@/hooks/use-auth'
-import { useDateLocale } from '@/hooks/use-date-locale'
-import { useReactiveRef } from '@/hooks/use-reactive-ref'
 import { Languages, RecordStatus, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import useAuth from '@hooks/use-auth'
+import { useDateLocale } from '@hooks/use-date-locale'
+import { useReactiveRef } from '@hooks/use-reactive-ref'
 import type { Table } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatRelative } from 'date-fns'
@@ -23,7 +23,7 @@ import {
 	useDeleteRFIDDeviceMutation,
 	useGetRFIDDeviceQuery,
 	useUpdateRFIDDeviceMutation
-} from '../-hooks/use-rfid-device-asm'
+} from '../hooks/use-rfid-device-request'
 import ActionDropdown from './action-dropdown'
 
 const DeviceDataTable: React.FC = () => {

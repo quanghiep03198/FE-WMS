@@ -1,5 +1,5 @@
-import useAuth from '@/hooks/use-auth'
 import { TenancyService } from '@/services/tenancy.service'
+import useAuth from '@hooks/use-auth'
 import { useQuery } from '@tanstack/react-query'
 
 export enum TenancyQueryKeys {

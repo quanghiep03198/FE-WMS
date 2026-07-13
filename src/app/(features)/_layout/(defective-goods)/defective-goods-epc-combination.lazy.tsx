@@ -5,13 +5,13 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import DatalistPanel from '@/features/defective-goods/components/defective-goods-combination/data-list-panel'
 import DetailDialog from '@/features/defective-goods/components/defective-goods-combination/data-list-panel/detail-dialog'
 import DefectiveGoodsForm from '@/features/defective-goods/components/defective-goods-combination/form-playground'
-import useMediaQuery from '@/hooks/use-media-query'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import { PageContextProvider } from '@features/defective-goods/contexts/page-context'
 import { MobileReaderPlayground } from '@features/rfid-agent/components/mobile-playground'
 import RFIDReaderPlayground from '@features/rfid-agent/components/playground'
 import { ReaderPlaygroundProvider } from '@features/rfid-agent/contexts/rfid-reader-playground.context'
+import useMediaQuery from '@hooks/use-media-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { createPortal } from 'react-dom'
@@ -21,7 +21,7 @@ import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import { useSwitchCombinationStrategy } from '../../../../features/defective-goods/hooks/use-switch-combination-strategy'
 import { useToggleListPanel } from '../../../../features/defective-goods/hooks/use-toggle-list-panel'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-epc-combination/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-epc-combination')({
 	component: RouteComponent
 })
 

@@ -10,8 +10,8 @@ import {
 	Icon,
 	Tooltip
 } from '@/components/ui'
-import useMediaQuery from '@/hooks/use-media-query'
 import { type ITruckloadDelivery } from '@/services/truckload-delivery.service'
+import useMediaQuery from '@hooks/use-media-query'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { type Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'

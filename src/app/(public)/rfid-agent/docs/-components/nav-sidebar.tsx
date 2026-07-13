@@ -11,8 +11,8 @@ import {
 	SidebarSeparator,
 	useSidebar
 } from '@/components/ui'
-import useMediaQuery from '@/hooks/use-media-query'
 import { cn } from '@common/utils/cn'
+import useMediaQuery from '@hooks/use-media-query'
 import { Link, useLocation } from '@tanstack/react-router'
 import { useState } from 'react'
 import { DocumentHashNavigation } from '../-constants/document-hash-navigation'

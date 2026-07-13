@@ -23,10 +23,10 @@ import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@
 import { useGetShapingProductLineQuery } from '@/features/department/hooks/use-department-request'
 import { FinishedGoodsAction, FinishedGoodsOutboundReason } from '@/features/finished-goods/constants/enums'
 import type { IWarehouse, IWarehouseStorage } from '@/features/warehouse/types'
-import useMediaQuery from '@/hooks/use-media-query'
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useMediaQuery from '@hooks/use-media-query'
 import { useMemoizedFn } from 'ahooks'
 import type { AxiosError } from 'axios'
 import { HttpStatusCode } from 'axios'
@@ -38,7 +38,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
-import { useGetScanningInboundEpcsQuery, useUpdateStockInMutation } from '../../../hooks/use-inbound-request'
+import { useGetPaginatedScanningInboundEpcQuery, useUpdateStockInMutation } from '../../../hooks/use-inbound-request'
 import type { FormValues, InoutboundPayload } from '../../../schemas/inoutbound.schema'
 import { inboundSchema, outboundSchema } from '../../../schemas/inoutbound.schema'
 
@@ -73,7 +73,7 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
-	const { data: currentEpcData } = useGetScanningInboundEpcsQuery()
+	const { data: currentEpcData } = useGetPaginatedScanningInboundEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata

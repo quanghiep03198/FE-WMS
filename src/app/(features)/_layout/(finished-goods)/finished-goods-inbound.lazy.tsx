@@ -18,7 +18,7 @@ import ScannerToolbar from '@features/finished-goods/components/finished-goods-i
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 import { PageProvider } from '../../../../features/finished-goods/contexts/finished-goods-inbound/page-contenxt'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(rfid)/finished-goods-inbound/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(finished-goods)/finished-goods-inbound')({
 	component: Page
 })
 

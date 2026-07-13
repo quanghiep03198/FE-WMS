@@ -1,13 +1,13 @@
 import GridBackground from '@/components/shared/grid-background'
 import Loading from '@/components/shared/loading'
-import useAuth from '@/hooks/use-auth'
 import type { FileRouteTypes } from '@/route-tree.gen'
 import { UserRole } from '@common/constants/enums'
+import useAuth from '@hooks/use-auth'
 import { createFileRoute, Navigate, redirect } from '@tanstack/react-router'
 import { Fragment } from 'react'
-import PageComposition from './-components/page-composition'
+import PageComposition from '../../features/auth/components/login/page-composition'
 
-export const Route = createFileRoute('/(auth)/login/')({
+export const Route = createFileRoute('/(auth)/login')({
 	component: LoginPage,
 	pendingComponent: Loading,
 	beforeLoad: ({ context: { isAuthenticated } }) => {

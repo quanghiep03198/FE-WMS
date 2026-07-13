@@ -12,7 +12,7 @@ import {
 	DropdownMenuTrigger,
 	Icon
 } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
+import useAuth from '@hooks/use-auth'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 

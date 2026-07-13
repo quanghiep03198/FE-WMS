@@ -1,4 +1,4 @@
-import useQueryParams from '@/hooks/use-query-params'
+import useQueryParams from '@hooks/use-query-params'
 import { format } from 'date-fns'
 
 export type PageQueryParams = {

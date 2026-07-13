@@ -1,9 +1,9 @@
 'use no memo'
 
-import useScrollToFn from '@/hooks/use-scroll-fn'
-import useVirtualScrollPadding from '@/hooks/use-virtual-scroll-padding'
 import type { BaseFieldControl } from '@common/types/hook-form'
 import { cn } from '@common/utils/cn'
+import useScrollToFn from '@hooks/use-scroll-fn'
+import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { ResourceKey } from 'i18next'

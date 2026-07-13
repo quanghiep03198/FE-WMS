@@ -28,7 +28,7 @@ import type { CreateDefectiveGoodsFormValues } from '../../../schemas/defective-
 import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../../schemas/defective-goods.schema'
 
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
-import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
+import type { IDefectiveGoods } from '@features/defective-goods/types'
 import { useGetProductSpecificationQuery } from '../../../../../app/(features)/-hooks/use-product-specification-asm'
 import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/mobile-playground'
 import PurchaseOrderFieldControl from '../../../../rfid-agent/components/purchase-order-field-control'

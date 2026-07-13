@@ -1,8 +1,9 @@
 import { Button, Checkbox, Div, Form as FormProvider, Icon, InputFieldControl, Label } from '@/components/ui'
 import { useStepContext } from '@/components/ui/@custom/stepper'
 import { AuthService } from '@/features/auth/services/auth.service'
-import useAuth from '@/hooks/use-auth'
+import { AuthQueryKeys } from '@features/auth/hooks/use-profile-request'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useAuth from '@hooks/use-auth'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useLocalStorageState } from 'ahooks'
@@ -11,9 +12,8 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import type { LoginFormValues } from '../-schemas/login.schema'
-import { loginSchema } from '../-schemas/login.schema'
-import { AuthQueryKeys } from '../../../-hooks/use-user-asm'
+import type { LoginFormValues } from '../../schemas/login.schema'
+import { loginSchema } from '../../schemas/login.schema'
 
 const LoginForm: React.FC = () => {
 	const { t } = useTranslation()

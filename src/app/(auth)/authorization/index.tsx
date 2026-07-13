@@ -21,7 +21,7 @@ export const Route = createFileRoute('/(auth)/authorization/')({
 	loaderDeps: ({ search }) => ({ search }),
 	pendingComponent: Loading,
 	loader: async ({ deps, abortController }) => {
-		AuthService.setAccessToken(deps.search.token) // Persist access token
+		// AuthService.setAccessToken(deps.search.token) // Persist access token
 		await UserService.profile({ signal: abortController.signal })
 		useAuthStore.getState().setCurrentFactory(deps.search.factory_code as FactoryCode)
 	}

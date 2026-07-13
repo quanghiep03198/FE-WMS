@@ -1,6 +1,6 @@
 import AuthGuard from '@/components/guards/auth-guard'
 import Loading from '@/components/shared/loading'
-import useAuth from '@/hooks/use-auth'
+import useAuth from '@hooks/use-auth'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useKeyPress } from 'ahooks'
 import { useTranslation } from 'react-i18next'

@@ -1,5 +1,5 @@
-import useAuth from '@/hooks/use-auth'
 import type { UserRole } from '@common/constants/enums'
+import useAuth from '@hooks/use-auth'
 import PermissionDenied from '../errors/permission-denied'
 
 export const RoleGuard: React.FC<React.PropsWithChildren & { authorizedRoles: UserRole[] | '*' }> = ({

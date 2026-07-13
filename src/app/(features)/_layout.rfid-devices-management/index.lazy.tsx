@@ -14,8 +14,8 @@ import {
 	PageTitle,
 	PageWrapper
 } from '../../../components/shared/page'
-import DeviceDataTable from './-components/device-data-table'
-import RFIDDeviceFormDialog from './-components/rfid-device-form-dialog'
+import DeviceDataTable from '../../../features/rfid-device/components/device-data-table'
+import RFIDDeviceFormDialog from '../../../features/rfid-device/components/rfid-device-form-dialog'
 import { PageContextProvider } from './-contexts/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/rfid-devices-management/')({

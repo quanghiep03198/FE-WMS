@@ -17,7 +17,7 @@ import {
 	PageWrapper
 } from '../../../../components/shared/page'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(admin)/access-management/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(admin)/access-management')({
 	component: Page
 })
 

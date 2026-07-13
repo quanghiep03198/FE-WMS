@@ -1,5 +1,5 @@
-import { useDateLocale } from '@/hooks/use-date-locale'
 import { cn } from '@common/utils/cn'
+import { useDateLocale } from '@hooks/use-date-locale'
 import { format, isValid } from 'date-fns'
 import { Fragment } from 'react'
 import { isDateRange } from 'react-day-picker'

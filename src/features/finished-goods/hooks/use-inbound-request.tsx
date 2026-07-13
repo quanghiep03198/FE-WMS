@@ -21,7 +21,7 @@ export enum RFIDInboundQueryKeys {
 
 export type FetchEpcQueryKey = [typeof RFIDInboundQueryKeys.INBOUND_EPC, number, string]
 
-export const useGetScanningInboundEpcsQuery = () => {
+export const useGetPaginatedScanningInboundEpcQuery = () => {
 	const queryClient = useQueryClient()
 
 	const { selectedDevice, currentPage, selectedOrder, scanningStatus } = usePageContext(
@@ -79,7 +79,7 @@ export const useSearchExchangableOrderQuery = (params: SearchCustOrderParams) =>
 
 	return useQuery({
 		queryKey: ['EXCHANGABLE_ORDER', user?.current_factory_code, params],
-		queryFn: async () => await FinishedGoodsInboundService.searchExchangableMo(params),
+		queryFn: async () => await FinishedGoodsSharedService.searchExchangableMo(params),
 		enabled: false,
 		select: (response) => response.metadata
 	})
@@ -177,7 +177,7 @@ export const useUpsertEpcInfoMutation = () => {
 }
 
 const useInvalidateQueries = (...invalidateQueryKeys: string[]) => {
-	const { refetch: refetchScannedEpcs } = useGetScanningInboundEpcsQuery()
+	const { refetch: refetchScannedEpcs } = useGetPaginatedScanningInboundEpcQuery()
 	const { refetch: refetchOrderDetail } = useGetInboundOrderDetail()
 	const queryClient = useQueryClient()
 

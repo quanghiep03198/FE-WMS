@@ -1,5 +1,5 @@
-import { useEffectOnce, useLayoutEffectOnce } from '@/hooks/use-effect-once'
 import trimCanvas from '@common/libs/trim-canvas'
+import { useEffectOnce, useLayoutEffectOnce } from '@hooks/use-effect-once'
 import { type RefObject, useCallback, useRef } from 'react'
 import SignaturePad, { type Options, type PointGroup } from 'signature_pad'
 

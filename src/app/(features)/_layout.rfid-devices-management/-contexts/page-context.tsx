@@ -2,7 +2,7 @@ import type { CommonActions } from '@common/constants/enums'
 import { useEventEmitter } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'
-import type { UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
+import type { UpdateRFIDReaderFormValues } from '../../../../features/rfid-device/schemas/rfid-device.schema'
 
 type EventPayload =
 	| { action: CommonActions.CREATE; defaultValues: null }

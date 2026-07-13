@@ -2,7 +2,6 @@ import HostCompatibleGuard from '@/components/guards/host-compatible-guard'
 import IpPolicyGuard from '@/components/guards/ip-policy-guard'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { Div, ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui'
-import useMediaQuery from '@/hooks/use-media-query'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import EpcDetailTable from '@features/defective-goods/components/defective-goods-inoutbound/epc-detail-table'
@@ -12,6 +11,7 @@ import { PageContextProvider } from '@features/defective-goods/contexts/page-con
 import { useInoutboundMethod } from '@features/defective-goods/hooks/use-select-inoutbound-method'
 import RfidReaderPlayground from '@features/rfid-agent/components/playground'
 import { ReaderPlaygroundProvider } from '@features/rfid-agent/contexts/rfid-reader-playground.context'
+import useMediaQuery from '@hooks/use-media-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useSize } from 'ahooks'
 import { Fragment, useEffect, useRef } from 'react'
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inoutbound/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inoutbound')({
 	component: RouteComponent
 })
 

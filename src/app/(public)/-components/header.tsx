@@ -12,10 +12,10 @@ import {
 	SheetTrigger,
 	buttonVariants
 } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
-import useMediaQuery from '@/hooks/use-media-query'
 import { PresetBreakPoints } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import useAuth from '@hooks/use-auth'
+import useMediaQuery from '@hooks/use-media-query'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'

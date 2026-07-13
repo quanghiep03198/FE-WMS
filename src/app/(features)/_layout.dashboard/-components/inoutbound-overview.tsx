@@ -19,8 +19,8 @@ import {
 	SelectValue,
 	Skeleton
 } from '@/components/ui'
-import { useDateLocale } from '@/hooks/use-date-locale'
 import formatIntlNumber from '@common/utils/format-intl-number'
+import { useDateLocale } from '@hooks/use-date-locale'
 import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'

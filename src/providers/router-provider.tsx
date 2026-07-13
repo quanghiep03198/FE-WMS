@@ -1,7 +1,7 @@
 import NotFoundPage from '@/components/errors/not-found'
-import useAuth from '@/hooks/use-auth'
 import { queryClient } from '@/integrations/tanstack-query'
 import { routeTree } from '@/route-tree.gen'
+import useAuth from '@hooks/use-auth'
 import type { RouterProps } from '@tanstack/react-router'
 import { RouterProvider as BrowserRouterProvider, createRouter } from '@tanstack/react-router'
 

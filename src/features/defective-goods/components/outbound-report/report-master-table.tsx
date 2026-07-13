@@ -6,7 +6,6 @@ import {
 	DefectiveGoodsOutboundPurpose,
 	TRANSLATED_DEFECTIVE_CATEGORY
 } from '@/features/defective-goods/constants/enums'
-import useMediaQuery from '@/hooks/use-media-query'
 import formatIntlNumber from '@common/utils/format-intl-number'
 import AutoRefreshToggle from '@components/shared/auto-refresh-toggle'
 import SizeTable from '@components/shared/size-table'
@@ -14,6 +13,7 @@ import ReportTableSummary from '@features/defective-goods/components/report-tabl
 import { useDefectiveCategoryList } from '@features/defective-goods/hooks/use-defective-category-list'
 import { useGetDefectiveGoodsOutboundReportQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import { useGetCategoriesQty } from '@features/defective-goods/hooks/use-get-category-qty'
+import useMediaQuery from '@hooks/use-media-query'
 import type { Table as TTable } from '@tanstack/react-table'
 import { createColumnHelper } from '@tanstack/react-table'
 import { lowerCase } from 'lodash-es'

@@ -27,9 +27,9 @@ import {
 	Tooltip,
 	Typography
 } from '@/components/ui'
-import { useEffectOnce } from '@/hooks/use-effect-once'
 import { cn } from '@common/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffectOnce } from '@hooks/use-effect-once'
 import { useUpdateEffect } from 'ahooks'
 import { isEmpty, isEqual, isNil } from 'lodash-es'
 import { useState } from 'react'

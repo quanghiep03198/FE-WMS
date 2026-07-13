@@ -10,7 +10,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-outbound-report/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-outbound-report')({
 	component: Page
 })
 

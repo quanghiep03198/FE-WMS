@@ -28,10 +28,10 @@ import {
 	useSidebar
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import useAuth from '@/hooks/use-auth'
-import useMediaQuery from '@/hooks/use-media-query'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import useAuth from '@hooks/use-auth'
+import useMediaQuery from '@hooks/use-media-query'
 import { CollapsibleTrigger } from '@radix-ui/react-collapsible'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useRouterState } from '@tanstack/react-router'

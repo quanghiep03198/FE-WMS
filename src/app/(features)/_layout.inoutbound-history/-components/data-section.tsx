@@ -1,5 +1,5 @@
 import { StockFlow } from '@/features/finished-goods/constants/enums'
-import useQueryParams from '@/hooks/use-query-params'
+import useQueryParams from '@hooks/use-query-params'
 import InboundHistoryTable from './inbound-history-table'
 import OutboundHistoryTable from './outbound-history-table'
 

@@ -1,5 +1,5 @@
-import { useDateLocale } from '@/hooks/use-date-locale'
 import { cn } from '@common/utils/cn'
+import { useDateLocale } from '@hooks/use-date-locale'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { addMonths, format } from 'date-fns'
 import { useTranslation } from 'react-i18next'

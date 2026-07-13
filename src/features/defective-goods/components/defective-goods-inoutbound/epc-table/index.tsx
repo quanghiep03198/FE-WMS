@@ -3,9 +3,9 @@ import TableCellText from '@/components/ui/@react-table/components/table-cell-te
 import { fuzzyFilter } from '@/components/ui/@react-table/utils'
 import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
 import { StockFlow } from '@/features/finished-goods/constants/enums'
-import useScrollToFn from '@/hooks/use-scroll-fn'
-import useVirtualScrollPadding from '@/hooks/use-virtual-scroll-padding'
 import { CommonActions } from '@common/constants/enums'
+import useScrollToFn from '@hooks/use-scroll-fn'
+import useVirtualScrollPadding from '@hooks/use-virtual-scroll-padding'
 import {
 	createColumnHelper,
 	getCoreRowModel,

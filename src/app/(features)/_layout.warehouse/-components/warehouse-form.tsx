@@ -13,13 +13,14 @@ import {
 	TextareaFieldControl,
 	Typography
 } from '@/components/ui'
+import { useGetDepartmentQuery } from '@/features/department/hooks/use-department-request'
 import { EmployeeService } from '@/features/employee/services/employee.service'
 import type { IEmployee } from '@/features/employee/types'
 import { type IWarehouse } from '@/features/warehouse/types'
-import useAuth from '@/hooks/use-auth'
 import { WarehouseService } from '@/services/warehouse.service'
 import { CommonActions } from '@common/constants/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useAuth from '@hooks/use-auth'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDeepCompareEffect } from 'ahooks'
 import { debounce } from 'lodash-es'
@@ -30,11 +31,9 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { warehouseTypes } from '../-constants/warehouse.const'
 import { usePageContext } from '../-contexts/page-context'
-
 import { WarehouseQueryKeys } from '../-hooks/use-warehouse-asm'
 import type { PartialWarehouseFormValue } from '../-schemas/warehouse.schema'
 import { warehouseFormSchema, type WarehouseFormValue } from '../-schemas/warehouse.schema'
-import { useGetDepartmentQuery } from '../../../(auth)/-hooks/use-department-asm'
 
 export type FormValues<T> = (T extends CommonActions.CREATE
 	? Required<WarehouseFormValue>
@@ -187,7 +186,6 @@ const WarehouseFormDialog: React.FC = () => {
 								name='remark'
 								label={t('ns_common:common_fields.remark')}
 								placeholder='Aditional remark ...'
-								control={form.control}
 								rows={5}
 							/>
 						</FormItem>

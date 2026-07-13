@@ -1,7 +1,7 @@
 import { Button, Icon } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
 import { TruckloadDeliveryService } from '@/services/truckload-delivery.service'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import useAuth from '@hooks/use-auth'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

@@ -8,7 +8,7 @@ import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inventory/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inventory')({
 	component: Page
 })
 

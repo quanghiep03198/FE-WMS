@@ -17,7 +17,7 @@ import {
 import DownloadExcelButton from '../../../../features/defective-goods/components/inbound-report/download-excel-button'
 import InboundReportMasterTable from '../../../../features/defective-goods/components/inbound-report/report-master-table'
 
-export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inbound-report/')({
+export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inbound-report')({
 	component: Page
 })
 

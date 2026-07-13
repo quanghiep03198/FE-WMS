@@ -6,16 +6,16 @@ import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
 import { DEFAULT_PROPS, usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-contenxt'
-import { useGetScanningInboundEpcsQuery } from '@/features/finished-goods/hooks/use-inbound-request'
+import { useGetPaginatedScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
 import type { IElectronicProductCode } from '@/features/finished-goods/types'
 import { type RFIDStreamEventData } from '@/features/finished-goods/types'
-import useAuth from '@/hooks/use-auth'
-import useMediaQuery from '@/hooks/use-media-query'
-import useScrollToFn from '@/hooks/use-scroll-fn'
 import { RequestHeaders, RequestMethod } from '@common/constants/enums'
 import { FatalError, RetriableError } from '@common/errors'
 import { cn } from '@common/utils/cn'
 import { Json } from '@common/utils/json'
+import useAuth from '@hooks/use-auth'
+import useMediaQuery from '@hooks/use-media-query'
+import useScrollToFn from '@hooks/use-scroll-fn'
 import type { EventSourceMessage } from '@microsoft/fetch-event-source'
 import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -95,7 +95,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
 	// * Manual fetch EPC
-	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetScanningInboundEpcsQuery()
+	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetPaginatedScanningInboundEpcQuery()
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {

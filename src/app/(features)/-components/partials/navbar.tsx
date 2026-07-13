@@ -1,6 +1,6 @@
 import { LanguageDropdown } from '@/components/shared/language-selector'
 import { Div, Separator } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
+import useAuth from '@hooks/use-auth'
 import { useKeyPress } from 'ahooks'
 import React from 'react'
 import ThemeToggle from '../../../../components/shared/theme-toggle'

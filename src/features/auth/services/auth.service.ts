@@ -1,4 +1,4 @@
-import type { LoginFormValues } from '@/app/(auth)/login/-schemas/login.schema'
+import type { LoginFormValues } from '@/features/auth/schemas/login.schema'
 // import { destroySharedSocket } from '@common/hooks/use-socket-io'
 import axiosInstance from '@/configs/axios.config'
 import { queryClient } from '@/integrations/tanstack-query'

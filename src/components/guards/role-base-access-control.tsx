@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
 import { UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import useAuth from '@hooks/use-auth'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

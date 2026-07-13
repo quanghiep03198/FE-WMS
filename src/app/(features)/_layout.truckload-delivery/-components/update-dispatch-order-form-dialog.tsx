@@ -24,9 +24,9 @@ import {
 	InputFieldControl,
 	TextareaFieldControl
 } from '@/components/ui'
-import useMediaQuery from '@/hooks/use-media-query'
 import { CommonActions } from '@common/constants/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useMediaQuery from '@hooks/use-media-query'
 import { capitalize } from 'lodash-es'
 import { Fragment, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'

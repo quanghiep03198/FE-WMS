@@ -33,7 +33,7 @@ import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/
 import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
 import {
 	useExchangeEpcMutation,
-	useGetScanningInboundEpcsQuery,
+	useGetPaginatedScanningInboundEpcQuery,
 	useSearchExchangableOrderQuery
 } from '../../../hooks/use-inbound-request'
 
@@ -58,7 +58,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
-	const { data: currentEpcData } = useGetScanningInboundEpcsQuery()
+	const { data: currentEpcData } = useGetPaginatedScanningInboundEpcQuery()
 
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)

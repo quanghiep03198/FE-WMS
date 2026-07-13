@@ -24,10 +24,10 @@ import {
 	SelectFieldControl,
 	Separator
 } from '@/components/ui'
-import useAuth from '@/hooks/use-auth'
 import { CommonActions, UserRole } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useAuth from '@hooks/use-auth'
 import { useResetState } from 'ahooks'
 import { capitalize, isNil } from 'lodash-es'
 import React, { memo, useState } from 'react'
@@ -35,10 +35,14 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { usePageContext } from '../-contexts/page-context'
-import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../-hooks/use-rfid-device-asm'
-import type { CreateRFIDReaderFormValues, UpdateRFIDReaderFormValues } from '../-schemas/rfid-device.schema'
-import { createRFIDReaderSchema, updateRFIDReaderSchema } from '../-schemas/rfid-device.schema'
+import { usePageContext } from '../../../app/(features)/_layout.rfid-devices-management/-contexts/page-context'
+import { useCreateRFIDDeviceMutation, useUpdateRFIDDeviceMutation } from '../hooks/use-rfid-device-request'
+import {
+	type CreateRFIDReaderFormValues,
+	createRFIDReaderSchema,
+	type UpdateRFIDReaderFormValues,
+	updateRFIDReaderSchema
+} from '../schemas/rfid-device.schema'
 
 const RFIDDeviceFormDialog: React.FC = () => {
 	const [open, setOpen] = useState<boolean>(false)

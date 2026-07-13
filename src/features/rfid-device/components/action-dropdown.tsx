@@ -14,7 +14,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import RoleBaseAccessControl from '@/components/guards/role-base-access-control'
-import { usePageContext } from '../-contexts/page-context'
+import { usePageContext } from '../../../app/(features)/_layout.rfid-devices-management/-contexts/page-context'
 
 type UpdateStatusHandler = (payload: { device_sn: string; is_active: RecordStatus }) =>
 	| (string & {

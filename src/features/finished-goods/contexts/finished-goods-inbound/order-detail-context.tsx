@@ -1,4 +1,4 @@
-import { createStoreSelector } from '@/hooks/use-store-selector'
+import { createStoreSelector } from '@hooks/use-store-selector'
 import { uniqBy } from 'lodash-es'
 import { createContext, useRef } from 'react'
 import type { StoreApi } from 'zustand'

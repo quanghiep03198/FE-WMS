@@ -15,8 +15,8 @@ import {
 	Typography
 } from '@/components/ui'
 import { Kbd, KbdKey } from '@/components/ui/@custom/kbd'
-import useMediaQuery from '@/hooks/use-media-query'
 import { PresetBreakPoints } from '@common/constants/enums'
+import useMediaQuery from '@hooks/use-media-query'
 import { Link } from '@tanstack/react-router'
 import { useKeyPress, useResetState } from 'ahooks'
 import { debounce } from 'lodash-es'

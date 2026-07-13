@@ -1,5 +1,5 @@
 import { MonthPicker } from '@/components/ui'
-import useQueryParams from '@/hooks/use-query-params'
+import useQueryParams from '@hooks/use-query-params'
 import { format, subYears } from 'date-fns'
 
 export const MonthPickerFilter: React.FC = () => {

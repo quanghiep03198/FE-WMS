@@ -25,6 +25,9 @@ export class FinishedGoodsInboundService {
 	}
 
 	static async processStockIn(payload: InoutboundPayload) {
-		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(`/rfid/inbound/stock-in`, payload)
+		return await axiosInstance.put<InoutboundPayload, ResponseBody<unknown>>(
+			`/finished-goods/inbound/stock-in`,
+			payload
+		)
 	}
 }

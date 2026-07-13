@@ -1,7 +1,7 @@
 import { Badge, Icon } from '@/components/ui'
-import useTheme from '@/hooks/use-theme'
 import { Theme } from '@common/constants/enums'
 import { cn } from '@common/utils/cn'
+import useTheme from '@hooks/use-theme'
 import { useEventListener } from 'ahooks'
 import React, { cloneElement, useRef, useState } from 'react'
 import { VisualCard } from './visual-card'
