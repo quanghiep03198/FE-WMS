@@ -2,11 +2,11 @@ import { Button, Icon } from '@/components/ui'
 import { DefectiveGoodsService } from '@/features/defective-goods/services/defective-goods.service'
 import { useGetTenantByFactory } from '@/features/tenancy/hooks/use-tenacy-request'
 import { TRANSLATED_FACTORY } from '@common/constants/constants'
+import { useGetDefectiveGoodsInventoryQuery } from '@features/defective-goods/hooks/use-defective-goods-request'
 import useAuth from '@hooks/use-auth'
 import { saveAs } from 'file-saver'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useGetDefectiveGoodsInventoryQuery } from '../../../../../features/defective-goods/hooks/use-defective-goods-request'
 
 const DownloadExcelButton: React.FC = () => {
 	const { user } = useAuth()

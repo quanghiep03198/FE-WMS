@@ -3,7 +3,7 @@ import useAuth from '@hooks/use-auth'
 import { useBlocker } from '@tanstack/react-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { usePageContext } from '../../contexts/finished-goods-inbound/page-contenxt'
+import { usePageContext } from '../../contexts/finished-goods-inbound/page-context'
 
 const PageNavigationBlocker: React.FC = () => {
 	const { isAuthenticated } = useAuth()

@@ -6,8 +6,8 @@ import type { VirtualItem } from '@tanstack/react-virtual'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { omit } from 'lodash-es'
 import { memo, useCallback, useEffect, useRef } from 'react'
-import { useReaderPlaygroundStore } from '../../../app/(features)/_layout.(defective-goods)/-contexts/rfid-reader-playground.context'
 import { usePageContext } from '../../defective-goods/contexts/page-context'
+import { useReaderPlaygroundStore } from '../contexts/rfid-reader-playground.context'
 
 const VIRTUAL_ITEM_SIZE = 40
 const PRERENDERED_ITEMS = 5

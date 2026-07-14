@@ -28,8 +28,8 @@ import type { CreateDefectiveGoodsFormValues } from '../../../schemas/defective-
 import { createDefectiveGoodsSchema, updateDefectiveGoodsSchema } from '../../../schemas/defective-goods.schema'
 
 import RoleBaseAccessControl, { ACTION_RESTRICTED_TOAST_ID } from '@/components/guards/role-base-access-control'
+import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
 import type { IDefectiveGoods } from '@features/defective-goods/types'
-import { useGetProductSpecificationQuery } from '../../../../../app/(features)/-hooks/use-product-specification-asm'
 import { MobileReaderPlaygroundTrigger } from '../../../../rfid-agent/components/mobile-playground'
 import PurchaseOrderFieldControl from '../../../../rfid-agent/components/purchase-order-field-control'
 import { DefectiveCategory, DefectiveGoodsSource, DefectiveLocation } from '../../../constants/enums'
@@ -86,7 +86,7 @@ const DefectiveGoodsForm: React.FC = () => {
 	const currentManufacturingOrder = useWatch({ control: form.control, name: 'mo_no' })
 	const currentCategory = useWatch({ control: form.control, name: 'defective_category' })
 
-	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
+	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
 	const { data: orderDetail } = useGetCommandNumberDetailQuery(currentManufacturingOrder)
 
 	const {

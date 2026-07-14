@@ -1,14 +1,13 @@
 import { Div, Label, Switch, Typography } from '@/components/ui'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
-import { FinishedGoodsInboundService } from '@/features/finished-goods/services/finished-goods-inbound.service'
 import { RequestHeaders, RequestMethod } from '@common/constants/enums'
 import { FatalError, RetriableError } from '@common/errors'
 import { Json } from '@common/utils/json'
+import axiosInstance from '@configs/axios.config'
 import useAuth from '@hooks/use-auth'
-
 import { EventStreamContentType, fetchEventSource, type EventSourceMessage } from '@microsoft/fetch-event-source'
-import { useAsyncEffect, useDebounce, useLocalStorageState, useUnmount, useUpdateEffect } from 'ahooks'
+import { useAsyncEffect, useDebounce, useLocalStorageState, useUnmount } from 'ahooks'
 import { HttpStatusCode } from 'axios'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +26,7 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 	useAsyncEffect(async () => {
 		abortControllerRef.current = new AbortController()
 
-		await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/inbound/enable_deduplicate_inbound_epc', {
+		await fetchEventSource(AppConfigs.BASE_API_URL + '/rfid/enable-deduplicate-inbound', {
 			method: RequestMethod.GET,
 			credentials: 'include',
 			headers: {
@@ -79,8 +78,10 @@ const EpcDeduplicationToggleBox: React.FC = () => {
 		})
 	}, [])
 
-	useUpdateEffect(() => {
-		FinishedGoodsInboundService.enableDeduplicationInboundEpc({ enabled: debouncedEnableValue })
+	useAsyncEffect(async () => {
+		await axiosInstance.put<unknown, ResponseBody<number>, { enabled: boolean }>('/rfid/enable-deduplicate-inbound', {
+			enabled: debouncedEnableValue
+		})
 	}, [debouncedEnableValue])
 
 	useUnmount(() => {

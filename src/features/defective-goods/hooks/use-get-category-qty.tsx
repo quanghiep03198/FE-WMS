@@ -1,4 +1,4 @@
-import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
+import type { IDefectiveGoods } from '@/features/defective-goods/types'
 import { groupBy } from 'lodash-es'
 import { useMemo } from 'react'
 import { DefectiveCategory } from '../constants/enums'

@@ -28,7 +28,7 @@ import { uniqBy } from 'lodash-es'
 import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { usePageContext } from '../../contexts/finished-goods-inbound/page-contenxt'
+import { usePageContext } from '../../contexts/finished-goods-inbound/page-context'
 import { useDeleteEpcMutation } from '../../hooks/use-inbound-request'
 import { GhostButton } from '../data-restoration/styled'
 

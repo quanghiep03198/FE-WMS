@@ -20,6 +20,7 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useUpsertEpcInfoMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
 import { useSocketContext } from '@/stores/socket.store'
 import { type ExchangeEpcFormValue, exchangeEpcSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@features/order/hooks/use-order-request'
@@ -34,8 +35,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/order-detail-context'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
-import { useUpsertEpcInfoMutation } from '../../../hooks/use-inbound-request'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
 
 const ExchangeEpcFormDialog: React.FC = () => {
 	const { t } = useTranslation()

@@ -17,7 +17,13 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
 import { FALLBACK_VALUE } from '@common/constants/constants'
+import { useOrderDetailContext } from '@features/finished-goods/contexts/finished-goods-inbound/order-detail-context'
+import {
+	useExchangeEpcMutation,
+	useSearchExchangableOrderQuery
+} from '@features/finished-goods/hooks/use-finished-goods-mo-request'
 import type { ExchangeOrderFormValue } from '@features/finished-goods/schemas/exchange-epc.schema'
 import { exchangeOrderSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,13 +35,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/order-detail-context'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
-import {
-	useExchangeEpcMutation,
-	useGetPaginatedScanningInboundEpcQuery,
-	useSearchExchangableOrderQuery
-} from '../../../hooks/use-inbound-request'
+import { useGetScanningInboundEpcQuery } from '../../../hooks/use-inbound-request'
 
 const ExchangeOrderFormDialog: React.FC = () => {
 	const { t } = useTranslation()
@@ -58,7 +58,7 @@ const ExchangeOrderFormDialog: React.FC = () => {
 	)
 
 	const { mutateAsync, isPending } = useExchangeEpcMutation()
-	const { data: currentEpcData } = useGetPaginatedScanningInboundEpcQuery()
+	const { data: currentEpcData } = useGetScanningInboundEpcQuery()
 
 	const form = useForm<ExchangeOrderFormValue>({
 		resolver: zodResolver(exchangeOrderSchema)

@@ -75,7 +75,8 @@ const DeleteSizePopover: React.FC<DeleteSizePopoverProps> = ({ data }) => {
 				onMouseEnter={() =>
 					queryClient.prefetchQuery({
 						queryKey: [
-							'OUTBOUND_EPC_BY_SIZE',
+							'SCANNING_EPCS',
+							StockFlow.OUTBOUND,
 							{
 								['mo_no:eq']: data.mo_no,
 								['size_numcode:eq']: data.size_numcode

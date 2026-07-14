@@ -5,8 +5,8 @@ import { Alert, AlertClose, AlertContent, AlertDescription, AlertTitle } from '@
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
 import { AppConfigs } from '@/configs/app.config'
 import { AuthService } from '@/features/auth/services/auth.service'
-import { DEFAULT_PROPS, usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-contenxt'
-import { useGetPaginatedScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
+import { DEFAULT_PROPS, usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
+import { useGetScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
 import type { IElectronicProductCode } from '@/features/finished-goods/types'
 import { type RFIDStreamEventData } from '@/features/finished-goods/types'
 import { RequestHeaders, RequestMethod } from '@common/constants/enums'
@@ -95,7 +95,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 	const isInvalidEpcDismissedRef = useRef<boolean>(false)
 
 	// * Manual fetch EPC
-	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetPaginatedScanningInboundEpcQuery()
+	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetScanningInboundEpcQuery()
 
 	// * Fetch server-sent event
 	const fetchServerEvent = async () => {

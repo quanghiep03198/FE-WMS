@@ -1,17 +1,13 @@
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { omitBy, uniqBy } from 'lodash-es'
-import { StockFlow } from '../constants/enums'
+import type { StockFlow } from '../constants/enums'
 import { FinishedGoodsSharedService } from '../services/finished-goods-shared.service'
-import { RFIDInboundQueryKeys } from './use-inbound-request'
-import { RFIDOutboundQueryKeys } from './use-outbound-request'
 import type { SearchFormValues } from './use-persistent-filter-state'
 
 export enum DeletedFinishedGoodsQueryKey {
-	DELETED_EPCS = 'DELETED_EPCS',
-	DELETED_EPCS_SPECS = 'DELETED_EPCS_FEATURES'
+	DELETED_EPCS = 'DELETED_FINISHED_GOODS_EPCS',
+	DELETED_EPCS_SPECS = 'DELETED_FINISHED_GOODS_SPECS'
 }
-
-type InvalidateQueryKeys = DeletedFinishedGoodsQueryKey | RFIDInboundQueryKeys | RFIDOutboundQueryKeys
 
 export const useGetDeletedEpcQuery = (type: StockFlow, params: SearchFormValues & { limit: number }) => {
 	return useInfiniteQuery({
@@ -59,30 +55,11 @@ export const useGetDeletedEpcSpecsQuery = () => {
 	})
 }
 
-export const useRestoreDeletedEpcsMutation = (stockFlow: StockFlow) => {
-	const invalidateQueries = useInvalidateQueries(stockFlow)
-
+export const useRestoreDeletedEpcsMutation = () => {
 	return useMutation({
-		mutationFn: async (epcs: Array<string>) => await FinishedGoodsSharedService.restoreDeletedEpcs(epcs),
-		onSettled: invalidateQueries
+		meta: {
+			invalidates: [[DeletedFinishedGoodsQueryKey.DELETED_EPCS, DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]]
+		},
+		mutationFn: async (epcs: Array<string>) => await FinishedGoodsSharedService.restoreDeletedEpcs(epcs)
 	})
-}
-
-const useInvalidateQueries = (type: StockFlow) => {
-	const queryClient = useQueryClient()
-
-	return () => {
-		queryClient.invalidateQueries({
-			predicate: (query) =>
-				query.queryKey.some((key) => {
-					const shouldInvalidateKeys = Object.values(DeletedFinishedGoodsQueryKey)
-					const potentialInvalidateKeys =
-						type === StockFlow.INBOUND
-							? [RFIDInboundQueryKeys.INBOUND_EPC, RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL]
-							: [RFIDOutboundQueryKeys.OUTBOUND_EPC, RFIDOutboundQueryKeys.OUTBOUND_EPC_BY_SIZE]
-
-					return [...shouldInvalidateKeys, ...potentialInvalidateKeys].includes(key as InvalidateQueryKeys)
-				})
-		})
-	}
 }

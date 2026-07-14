@@ -12,8 +12,8 @@ import {
 	SelectValue,
 	Typography
 } from '@/components/ui'
-import { useGetPaginatedScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
-import { usePageContext } from '@features/finished-goods/contexts/finished-goods-inbound/page-contenxt'
+import { usePageContext } from '@/features/finished-goods/contexts/finished-goods-inbound/page-context'
+import { useGetScanningInboundEpcQuery } from '@/features/finished-goods/hooks/use-inbound-request'
 import { useDeepCompareEffect, usePrevious } from 'ahooks'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +23,7 @@ const TOO_MANY_ORDER_TOAST = 'TOO_MANY_ORDERS'
 
 const OrderListSelect: React.FC = () => {
 	const { t } = useTranslation()
-	const { isLoading } = useGetPaginatedScanningInboundEpcQuery()
+	const { isLoading } = useGetScanningInboundEpcQuery()
 	const { selectedOrder, scannedOrders, scanningStatus, setCurrentPage, setSelectedOrder } = usePageContext(
 		'selectedOrder',
 		'scannedOrders',

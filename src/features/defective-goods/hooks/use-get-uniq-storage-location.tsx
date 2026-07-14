@@ -1,4 +1,4 @@
-import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
+import type { IDefectiveGoods } from '@/features/defective-goods/types'
 import { useMemo } from 'react'
 
 export const useGetUniqStorageLocation = <T extends Partial<IDefectiveGoods>>(data: T[]) => {

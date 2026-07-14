@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
 import { usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
-import { useProcessStockOutMutation } from '../../../hooks/use-outbound-request'
+import { useStockOutMutation } from '../../../hooks/use-outbound-request'
 import type { StandardOutboundFormValues } from '../../../schemas/outbound.schema'
 import { standardOutboundValidator } from '../../../schemas/outbound.schema'
 import FormSubmission from './form-submission'
@@ -32,7 +32,7 @@ const CentralizedPoOutboundForm: React.FC = () => {
 		mode: 'onChange'
 	})
 
-	const { mutateAsync, isPending, isError, error, reset } = useProcessStockOutMutation(form.reset)
+	const { mutateAsync, isPending, isError, error, reset } = useStockOutMutation(form.reset)
 
 	const filteredOrders = useMemo(() => {
 		if (!Array.isArray(scannedOrders)) return []

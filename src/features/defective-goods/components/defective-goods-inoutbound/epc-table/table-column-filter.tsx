@@ -2,11 +2,11 @@
 
 import { Div, DropdownSelect, Icon, Input } from '@/components/ui'
 import AutoComplete from '@/components/ui/@custom/auto-complete'
+import { useFilterQuery } from '@features/defective-goods/hooks/use-filter-query'
 import type { Column } from '@tanstack/react-table'
 import { useDebounceEffect } from 'ahooks'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFilterQuery } from '../../-hooks/use-filter-query'
 
 type ColumnFilterProps<TData, TValue> = {
 	column: Column<TData, TValue>

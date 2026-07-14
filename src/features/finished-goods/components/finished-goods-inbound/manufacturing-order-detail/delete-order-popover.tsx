@@ -16,7 +16,7 @@ import { useMemoizedFn } from 'ahooks'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
 import { useDeleteScanningMoMutation } from '../../../hooks/use-inbound-request'
 
 const DeleteOrderPopover: React.FC<{ data: { mo_no: string } }> = ({ data }) => {

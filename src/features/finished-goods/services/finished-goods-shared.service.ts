@@ -4,42 +4,9 @@ import axiosInstance from '@configs/axios.config'
 import type { AxiosRequestConfig } from 'axios'
 import { omitBy } from 'lodash-es'
 import type { StockFlow } from '../constants/enums'
-import type { ExchangeEpcPayload, ExchangeOrderFormValue } from '../schemas/exchange-epc.schema'
-import type {
-	FilterDeletedEpcParams,
-	IElectronicProductCode,
-	OrderItem,
-	SearchCustOrderParams,
-	SearchEpcParams
-} from '../types'
+import type { FilterDeletedEpcParams, IElectronicProductCode, OrderItem, SearchEpcParams } from '../types'
 
 export class FinishedGoodsSharedService {
-	static async searchExchangableMo(params: SearchCustOrderParams) {
-		return await axiosInstance.get<unknown, ResponseBody<Record<'mo_no', string>[]>>(
-			`/rfid/inbound/search-exchangable-order`,
-			{ params }
-		)
-	}
-
-	static async exchangeManufacturingOrder(
-		deviceSerialNumber: string,
-		payload: Omit<ExchangeOrderFormValue, 'maxExchangableQuantity'>
-	) {
-		return await axiosInstance.patch(`/finished-goods/exchange-manufacturing-order`, payload, {
-			headers: {
-				[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
-			}
-		})
-	}
-
-	static async upsertEpcInformation(deviceSerialNumber: string, payload: ExchangeEpcPayload) {
-		return await axiosInstance.put(`/finished-goods/upsert-epc-information`, payload, {
-			headers: {
-				[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
-			}
-		})
-	}
-
 	static async getPaginatedScanningEpcs(
 		stockFlow: StockFlow,
 		params: { _page: number; 'mo_no:eq'?: string },

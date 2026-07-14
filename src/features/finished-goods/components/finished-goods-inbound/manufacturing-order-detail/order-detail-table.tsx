@@ -30,8 +30,8 @@ import { useResetState } from 'ahooks'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/order-detail-context'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
-import { useGetInboundOrderDetail } from '../../../hooks/use-inbound-request'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
+import { useGetScanningInboundMoQuery } from '../../../hooks/use-inbound-request'
 import TableDataRow from './order-detail-row'
 
 const OrderDetailTable: React.FC = () => {
@@ -58,7 +58,7 @@ const OrderDetailTable: React.FC = () => {
 		factory_shoes_style: ''
 	})
 
-	const { data: retrievedOrderDetail, refetch: refetchOrderDetail } = useGetInboundOrderDetail()
+	const { data: retrievedOrderDetail, refetch: refetchOrderDetail } = useGetScanningInboundMoQuery()
 
 	useEffect(() => {
 		if (typeof scanningStatus === 'undefined') resetSelectedRows()

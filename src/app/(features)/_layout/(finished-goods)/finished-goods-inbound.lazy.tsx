@@ -16,7 +16,7 @@ import AlreadyScannedEpcsAlert from '@features/finished-goods/components/finishe
 import EpcListBox from '@features/finished-goods/components/finished-goods-inbound/epc-data-list'
 import ScannerToolbar from '@features/finished-goods/components/finished-goods-inbound/scanner-toolbar'
 import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
-import { PageProvider } from '../../../../features/finished-goods/contexts/finished-goods-inbound/page-contenxt'
+import { PageProvider } from '../../../../features/finished-goods/contexts/finished-goods-inbound/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(finished-goods)/finished-goods-inbound')({
 	component: Page
@@ -44,7 +44,7 @@ function Page() {
 
 			<RoleGuard authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}>
 				<HostCompatibleGuard>
-					<SocketProvider namespace='/rfid'>
+					<SocketProvider namespace='/finished-goods'>
 						<PageProvider>
 							<AlreadyScannedEpcsAlert />
 							<PageComposition.Container>

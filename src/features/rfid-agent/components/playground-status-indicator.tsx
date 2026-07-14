@@ -1,6 +1,6 @@
 import { StatusIndicator } from '@/components/ui/@custom/status-indicator'
 import { useTranslation } from 'react-i18next'
-import { useReaderPlaygroundStore } from '../../../app/(features)/_layout.(defective-goods)/-contexts/rfid-reader-playground.context'
+import { useReaderPlaygroundStore } from '../contexts/rfid-reader-playground.context'
 
 const PlaygroundStatusIndicator: React.FC = () => {
 	const { connectionStatus } = useReaderPlaygroundStore('connectionStatus')

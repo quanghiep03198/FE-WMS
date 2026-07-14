@@ -36,7 +36,7 @@ import { Fragment, useLayoutEffect, useRef, useState, useTransition } from 'reac
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { DEFAULT_PROPS, usePageContext } from '../../../contexts/finished-goods-outbound/page-context'
-import { useGetPaginatedScanningEpcQuery } from '../../../hooks/use-outbound-request'
+import { useGetScanningOutboundEpcQuery } from '../../../hooks/use-outbound-request'
 import DataRestorationSheet from '../../data-restoration'
 import OrderDetailTableDialog from '../manufacture-order-detail/order-detail-dialog'
 import ConnectionInsight from './connection-insight'
@@ -80,7 +80,7 @@ const ScannedEpcList: React.FC = () => {
 		)
 	const [incommingEpc, setIncommingEpc] = useState<Pagination<IElectronicProductCode>>(scannedEpc)
 	const previousEpc = usePrevious(incommingEpc)
-	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetPaginatedScanningEpcQuery()
+	const { data: retrievedEpcData, refetch: manualFetchEpc, isFetching } = useGetScanningOutboundEpcQuery()
 
 	// * Virtual list refs
 	const containerRef = useRef<HTMLDivElement>(null)

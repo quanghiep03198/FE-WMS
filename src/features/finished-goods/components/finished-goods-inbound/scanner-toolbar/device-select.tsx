@@ -5,8 +5,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { isNil } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
-import { RFIDInboundQueryKeys } from '../../../hooks/use-inbound-request'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
+import { FinishedGoodsInboundQueryKeys } from '../../../hooks/use-inbound-request'
 
 const DeviceSelect: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -21,12 +21,12 @@ const DeviceSelect: React.FC = () => {
 
 	const handleResetScanningAction = () => {
 		queryClient.removeQueries({
-			queryKey: [RFIDInboundQueryKeys.INBOUND_ORDER_DETAIL],
+			queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO],
 			exact: false,
 			type: 'all'
 		})
 		queryClient.removeQueries({
-			queryKey: [RFIDInboundQueryKeys.INBOUND_EPC],
+			queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS],
 			exact: false,
 			type: 'all'
 		})

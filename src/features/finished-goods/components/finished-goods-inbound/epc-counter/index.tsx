@@ -4,7 +4,7 @@ import { Separator } from '@radix-ui/react-context-menu'
 import { useInterval, useResetState, useUnmount } from 'ahooks'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
 
 const INTERVAL_TIME = 5 as const
 

@@ -1,4 +1,4 @@
-import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-specification-asm'
+import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-sepcs-request'
 import { GhostButton } from '@/components/shared/ghost-button'
 import {
 	Button,

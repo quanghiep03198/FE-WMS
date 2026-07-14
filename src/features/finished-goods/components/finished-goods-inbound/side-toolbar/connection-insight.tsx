@@ -7,7 +7,7 @@ import { useEventListener } from 'ahooks'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
 
 export const NetworkInsight: React.FC<React.ComponentProps<'div'>> = (props) => {
 	const { t } = useTranslation()

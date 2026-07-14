@@ -32,7 +32,7 @@ import {
 	DecentralizedPoFormContext,
 	DecentralizedPoFormProvider
 } from '../../../contexts/finished-goods-outbound/separated-form-context'
-import { useProcessStockOutMutation } from '../../../hooks/use-outbound-request'
+import { useStockOutMutation } from '../../../hooks/use-outbound-request'
 import type { DetailedOutBoundFormValues } from '../../../schemas/outbound.schema'
 import { detailedOutboundValidator } from '../../../schemas/outbound.schema'
 import DroppableFieldItem from './decentralized-po-field-item'
@@ -67,7 +67,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 
 	const { fields, append, remove, move } = useFieldArray({ control: form.control, name: 'sizes' })
 
-	const { mutateAsync, isPending, isError, error, reset } = useProcessStockOutMutation(form.reset)
+	const { mutateAsync, isPending, isError, error, reset } = useStockOutMutation(form.reset)
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),

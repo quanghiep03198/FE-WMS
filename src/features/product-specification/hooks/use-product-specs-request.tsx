@@ -6,7 +6,7 @@ export enum ProductSpecificationQueryKey {
 	PRODUCT_SPECIFICATION = 'PRODUCT_SPECIFICATION'
 }
 
-export const useGetProductSpecificationQuery = () => {
+export const useGetProductSpecsQuery = () => {
 	return useQuery({
 		queryKey: [ProductSpecificationQueryKey.PRODUCT_SPECIFICATION],
 		queryFn: async () =>

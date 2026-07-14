@@ -36,13 +36,10 @@ import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import {
-	PublishedTopics,
-	useReaderPlaygroundStore
-} from '../../../app/(features)/_layout.(defective-goods)/-contexts/rfid-reader-playground.context'
-import type { ReaderSettingsFormValues } from '../../../app/(features)/_layout.(defective-goods)/-schemas/reader-settings.schema'
-import { readerSettingsFormSchema } from '../../../app/(features)/_layout.(defective-goods)/-schemas/reader-settings.schema'
-import { ReaderAntenna } from '../../defective-goods/constants/enums'
+import { ReaderAntenna } from '../constants'
+import { PublishedTopics, useReaderPlaygroundStore } from '../contexts/rfid-reader-playground.context'
+import type { ReaderSettingsFormValues } from '../schemas/reader-settings.schema'
+import { readerSettingsFormSchema } from '../schemas/reader-settings.schema'
 
 const ReaderSettingSheet: React.FC = () => {
 	const { readerSettings, publishMessage } = useReaderPlaygroundStore('readerSettings', 'publishMessage')

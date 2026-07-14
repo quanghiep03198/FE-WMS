@@ -1,5 +1,5 @@
-import type { IDefectiveGoods } from '@/features/defective-goods/services/defective-goods.service'
 import type { CommonActions } from '@common/constants/enums'
+import type { IDefectiveGoods } from '@features/defective-goods/types'
 import { useEventEmitter } from 'ahooks'
 import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { createContext, use } from 'react'

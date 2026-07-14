@@ -21,6 +21,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
+import { useUpsertEpcInfoMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/features/order/hooks/use-order-request'
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
@@ -34,7 +35,6 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import { useOrderDetailContext } from '../../../contexts/finished-goods-inbound/order-detail-context'
-import { useUpsertEpcInfoMutation } from '../../../hooks/use-inbound-request'
 import type { UpdateEpcFormValues } from '../../../schemas/fill-epc-data.schema'
 import { updateEpcFormSchema } from '../../../schemas/fill-epc-data.schema'
 

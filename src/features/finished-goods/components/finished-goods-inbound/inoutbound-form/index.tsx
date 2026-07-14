@@ -37,8 +37,8 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { usePageContext } from '../../../contexts/finished-goods-inbound/page-contenxt'
-import { useGetPaginatedScanningInboundEpcQuery, useUpdateStockInMutation } from '../../../hooks/use-inbound-request'
+import { usePageContext } from '../../../contexts/finished-goods-inbound/page-context'
+import { useGetScanningInboundEpcQuery, useUpdateStockInMutation } from '../../../hooks/use-inbound-request'
 import type { FormValues, InoutboundPayload } from '../../../schemas/inoutbound.schema'
 import { inboundSchema, outboundSchema } from '../../../schemas/inoutbound.schema'
 
@@ -73,7 +73,7 @@ const InoutboundForm: React.FC = () => {
 	})
 
 	const { data: inoutboundDepts } = useGetShapingProductLineQuery()
-	const { data: currentEpcData } = useGetPaginatedScanningInboundEpcQuery()
+	const { data: currentEpcData } = useGetScanningInboundEpcQuery()
 	const { data: storageAreaOptions } = useGetWarehouseStorageQuery(warehouseNum, {
 		enabled: Boolean(warehouseNum),
 		select: (response) => response.metadata
