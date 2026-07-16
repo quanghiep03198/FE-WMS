@@ -1,11 +1,8 @@
 import { Button, buttonVariants, Div, Icon, Typography } from '@/components/ui'
 import { cn } from '@common/utils/cn'
+import { PublishedTopics, useReaderPlaygroundStore } from '@features/rfid-agent/contexts/rfid-reader-playground.context'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import {
-	PublishedTopics,
-	useReaderPlaygroundStore
-} from '../../../app/(features)/_layout.(defective-goods)/-contexts/rfid-reader-playground.context'
 
 const UnavailableConnection: React.FC = () => {
 	const { publishMessage } = useReaderPlaygroundStore('publishMessage')
