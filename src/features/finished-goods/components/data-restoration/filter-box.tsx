@@ -50,10 +50,10 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 		}
 		switch (stockFlow) {
 			case StockFlow.INBOUND:
-				values['scannable'] = 'all'
+				values['scannable'] = ScanCapability.SCANNABLE
 				break
 			case StockFlow.OUTBOUND:
-				values['scanned'] = 'all'
+				values['scanned'] = ScannedStatus.SCANNED
 				break
 			default:
 				break
@@ -247,8 +247,8 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 			color_sn: '',
 			mo_no: '',
 			size_numcode: '',
-			...(stockFlow === StockFlow.INBOUND && { scannable: 'all' }),
-			...(stockFlow === StockFlow.OUTBOUND && { scanned: 'all' })
+			...(stockFlow === StockFlow.INBOUND && { scannable: ScanCapability.SCANNABLE }),
+			...(stockFlow === StockFlow.OUTBOUND && { scanned: ScannedStatus.SCANNED })
 		}
 		form.reset(defaultValues)
 		setPersistentFormValues(defaultValues)
@@ -382,12 +382,6 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 											value={field.value}
 											onValueChange={field.onChange}
 											className='flex items-center gap-x-10'>
-											<FormItem className='flex items-center gap-x-3 space-y-0'>
-												<FormControl>
-													<RadioGroupItem value='all' />
-												</FormControl>
-												<FormLabel className='cursor-pointer'>{t('ns_common:others.all')}</FormLabel>
-											</FormItem>
 											<FormItem className='flex items-center gap-x-3 space-y-0'>
 												<FormControl>
 													<RadioGroupItem

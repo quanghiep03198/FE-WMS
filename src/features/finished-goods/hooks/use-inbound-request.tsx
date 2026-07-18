@@ -1,4 +1,3 @@
-import { InboundReportQueryKeys } from '@/app/(features)/_layout.inbound-report/-hooks/use-inbound-report-asm'
 import { FinishedGoodsStockService } from '@/features/finished-goods/services/finished-goods-stock.service'
 import type { DeleteScannedEpcsFormValues } from '@features/finished-goods/schemas/delete-epc.schema'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -81,13 +80,10 @@ export const useDeleteEpcMutation = () => {
 	return useMutation({
 		meta: {
 			invalidates: [
-				[
-					FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO,
-					FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS,
-					DeletedFinishedGoodsQueryKey.DELETED_EPCS,
-					DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS,
-					selectedDevice
-				]
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice],
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
+				[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
+				[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 			]
 		},
 		mutationFn: async ({ rescannable, epcs }: DeleteScannedEpcsFormValues) =>
@@ -109,13 +105,10 @@ export const useDeleteScanningMoMutation = () => {
 	return useMutation({
 		meta: {
 			invalidates: [
-				[
-					FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO,
-					FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS,
-					DeletedFinishedGoodsQueryKey.DELETED_EPCS,
-					DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS,
-					selectedDevice
-				]
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice],
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
+				[DeletedFinishedGoodsQueryKey.DELETED_EPCS],
+				[DeletedFinishedGoodsQueryKey.DELETED_EPCS_SPECS]
 			]
 		},
 		mutationFn: async ({ commandNumber, rescannable }: { commandNumber: string; rescannable: boolean }) =>
@@ -139,12 +132,8 @@ export const useUpdateStockInMutation = () => {
 	return useMutation({
 		meta: {
 			invalidates: [
-				[
-					InboundReportQueryKeys.DAILY_INBOUND,
-					FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO,
-					FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS,
-					selectedDevice
-				]
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice]
 			]
 		},
 		mutationFn: (payload: InoutboundPayload) => {

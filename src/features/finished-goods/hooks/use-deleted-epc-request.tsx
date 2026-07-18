@@ -25,8 +25,7 @@ export const useGetDeletedEpcQuery = (type: StockFlow, params: SearchFormValues 
 					'scanned:eq': params.scanned,
 					'scannable:eq': params.scannable
 				},
-				(value) =>
-					value === undefined || value === null || (typeof value === 'string' && (value === '' || value === 'all'))
+				(value) => value === undefined || value === null || (typeof value === 'string' && value === '')
 			)
 			return await FinishedGoodsSharedService.getDeletedEpcs(type, filterQueries)
 		},

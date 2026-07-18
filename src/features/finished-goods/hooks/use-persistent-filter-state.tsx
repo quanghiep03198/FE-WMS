@@ -1,5 +1,4 @@
-import type { ScanCapability, ScannedStatus } from '@/features/finished-goods/constants/enums'
-import { StockFlow } from '@/features/finished-goods/constants/enums'
+import { ScanCapability, ScannedStatus, StockFlow } from '@/features/finished-goods/constants/enums'
 import { useSessionStorageState } from 'ahooks'
 import { useMemo } from 'react'
 
@@ -10,8 +9,8 @@ export type SearchFormValues = {
 	color_sn: string
 	mo_no: string
 	size_numcode: string
-	scannable?: ScanCapability | 'all'
-	scanned?: ScannedStatus | 'all'
+	scannable?: ScanCapability
+	scanned?: ScannedStatus
 }
 
 export const usePersistentFilterState = (dataType: StockFlow) => {
@@ -26,8 +25,8 @@ export const usePersistentFilterState = (dataType: StockFlow) => {
 			color_sn: '',
 			mo_no: '',
 			size_numcode: '',
-			...(dataType === StockFlow.INBOUND && { scannable: 'all' }),
-			...(dataType === StockFlow.OUTBOUND && { scanned: 'all' })
+			...(dataType === StockFlow.INBOUND && { scannable: ScanCapability.SCANNABLE }),
+			...(dataType === StockFlow.OUTBOUND && { scanned: ScannedStatus.SCANNED })
 		}
 
 		return values
