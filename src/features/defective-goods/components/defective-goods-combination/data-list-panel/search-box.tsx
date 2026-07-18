@@ -1,4 +1,3 @@
-import { useGetProductSpecificationQuery } from '@/app/(features)/-hooks/use-product-sepcs-request'
 import { GhostButton } from '@/components/shared/ghost-button'
 import {
 	Button,
@@ -13,6 +12,7 @@ import {
 	Separator
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
+import { useGetProductSpecsQuery } from '@/features/product-specification/hooks/use-product-specs-request'
 import { cn } from '@common/utils/cn'
 import useQueryParams from '@hooks/use-query-params'
 import { PopoverClose } from '@radix-ui/react-popover'
@@ -59,7 +59,7 @@ const SearchBox: React.FC = () => {
 	)
 	const [epcSearchTerm, setEpcSearchTerm, resetEpcSearchTerm] = useResetState<string>(searchTerms.epc ?? '')
 	const { t } = useTranslation()
-	const { data: productSpecification, isLoading } = useGetProductSpecificationQuery()
+	const { data: productSpecification, isLoading } = useGetProductSpecsQuery()
 	const form = useForm<DefectiveGoodQueryParams>({
 		defaultValues: searchTerms
 	})
