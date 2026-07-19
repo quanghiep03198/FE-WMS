@@ -26,16 +26,19 @@ export const useGetScanningInboundEpcQuery = () => {
 		'currentPage'
 	)
 
-	useEffect(() => {
-		if (typeof scanningStatus === 'undefined') {
-			queryClient.removeQueries({ queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS] })
-		}
-	}, [scanningStatus])
-
 	const params = {
 		_page: currentPage,
 		'mo_no:eq': selectedOrder
 	}
+
+	useEffect(() => {
+		if (typeof scanningStatus === 'undefined') {
+			queryClient.removeQueries({
+				predicate: (query) =>
+					query.queryKey.some((key) => key === FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS)
+			})
+		}
+	}, [scanningStatus])
 
 	return useQuery({
 		queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice, params],
@@ -61,7 +64,7 @@ export const useGetScanningInboundMoQuery = () => {
 	}, [scanningStatus])
 
 	return useQuery({
-		queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, StockFlow.INBOUND, selectedDevice],
+		queryKey: [FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
 		queryFn: async () => await FinishedGoodsSharedService.getScanningMos(StockFlow.INBOUND, selectedDevice),
 		enabled: scanningStatus === 'disconnected',
 		refetchOnMount: false,
@@ -132,8 +135,8 @@ export const useUpdateStockInMutation = () => {
 	return useMutation({
 		meta: {
 			invalidates: [
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice],
-				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice]
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_EPCS, selectedDevice],
+				[FinishedGoodsInboundQueryKeys.SCANNING_INBOUND_MO, selectedDevice]
 			]
 		},
 		mutationFn: (payload: InoutboundPayload) => {
