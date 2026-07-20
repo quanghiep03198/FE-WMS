@@ -22,8 +22,8 @@ export class FinishedGoodsMoService {
 		})
 	}
 
-	static async upsertEpcInformation(deviceSerialNumber: string, payload: ExchangeEpcPayload) {
-		return await axiosInstance.put(`/finished-goods/upsert-epc-information`, payload, {
+	static async upsertEpcsMatch(deviceSerialNumber: string, payload: ExchangeEpcPayload) {
+		return await axiosInstance.put(`/finished-goods/upsert-epcs-match`, payload, {
 			headers: {
 				[RequestHeaders.RFID_READER_ID]: deviceSerialNumber
 			}

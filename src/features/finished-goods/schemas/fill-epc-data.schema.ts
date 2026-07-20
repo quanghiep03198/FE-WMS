@@ -21,9 +21,6 @@ export const updateEpcFormSchema = object({
 	size_qty: number({ message: 'ns_validation:required' })
 		.nonnegative({ message: 'ns_validation:nonnegative' })
 		.default(0)
-}).refine((values) => values.quantity <= values.size_qty, {
-	message: 'ns_validation:invalid_value',
-	path: ['quantity']
 })
 
 export type UpdateEpcFormValues = Infer<typeof updateEpcFormSchema>

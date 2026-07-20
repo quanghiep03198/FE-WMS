@@ -21,7 +21,7 @@ import {
 	Separator,
 	Typography
 } from '@/components/ui'
-import { useUpsertEpcInfoMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
+import { useUpsertEpcsMatchMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@/features/order/hooks/use-order-request'
 import { FALLBACK_VALUE } from '@common/constants/constants'
 import { cn } from '@common/utils/cn'
@@ -78,7 +78,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 
 	const { data: commandNumbers } = useSearchCommandNumberQuery(searchTerm)
 	const { data: orderDetail } = useGetCommandNumberDetailQuery(currCommandNumber)
-	const { mutateAsync } = useUpsertEpcInfoMutation()
+	const { mutateAsync } = useUpsertEpcsMatchMutation()
 
 	useEffect(() => {
 		if (orderDetail && orderDetail.orders && orderDetail.sizes) {
@@ -178,10 +178,7 @@ const FillEpcDataFormDialog: React.FC<any> = () => {
 							}}
 						/>
 						<InputFieldControl
-							label={t('ns_common:common_fields.quantity_with_limit', {
-								limit: currentSizeQty ?? 0,
-								defaultValue: null
-							})}
+							label={t('ns_common:common_fields.quantity')}
 							name='quantity'
 							type='number'
 							placeholder='0'

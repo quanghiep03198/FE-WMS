@@ -20,7 +20,7 @@ import {
 	Typography
 } from '@/components/ui'
 import ScrollShadow from '@/components/ui/@custom/scroll-shadow'
-import { useUpsertEpcInfoMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
+import { useUpsertEpcsMatchMutation } from '@/features/finished-goods/hooks/use-finished-goods-mo-request'
 import { useSocketContext } from '@/stores/socket.store'
 import { type ExchangeEpcFormValue, exchangeEpcSchema } from '@features/finished-goods/schemas/exchange-epc.schema'
 import { useGetCommandNumberDetailQuery, useSearchCommandNumberQuery } from '@features/order/hooks/use-order-request'
@@ -43,7 +43,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [availableCmdSequence, setAvailableCmdSequence] = useState([])
 	const [isExchangeAll, setIsExchangeAll] = useState<CheckedState>(false)
-	const { mutateAsync, isPending, isError } = useUpsertEpcInfoMutation()
+	const { mutateAsync, isPending, isError } = useUpsertEpcsMatchMutation()
 
 	const {
 		exchangeEpcDialogOpen: open,

@@ -39,7 +39,7 @@ export const useExchangeEpcMutation = () => {
 	})
 }
 
-export const useUpsertEpcInfoMutation = () => {
+export const useUpsertEpcsMatchMutation = () => {
 	const { selectedDevice, setSelectedOrder, setCurrentPage } = usePageContext(
 		'selectedDevice',
 		'setSelectedOrder',
@@ -53,7 +53,7 @@ export const useUpsertEpcInfoMutation = () => {
 			]
 		},
 		mutationFn: async (payload: ExchangeEpcPayload) =>
-			await FinishedGoodsMoService.upsertEpcInformation(selectedDevice, payload),
+			await FinishedGoodsMoService.upsertEpcsMatch(selectedDevice, payload),
 		onSuccess: () => {
 			setCurrentPage(null)
 			setSelectedOrder(DEFAULT_PROPS.selectedOrder)
