@@ -3,7 +3,7 @@ import React from 'react'
 
 const UnsupportedScreen: React.FC = () => {
 	return (
-		<Div className='fixed inset-0 z-[9999] hidden h-screen w-full items-center justify-center bg-background p-6 sm:flex sm:p-4'>
+		<Div className='fixed inset-0 z-9999 hidden h-screen w-full items-center justify-center bg-background p-6 sm:flex sm:p-4'>
 			<Div className='z-10 flex flex-row items-center justify-center gap-6 sm:flex-col'>
 				<Div className='duration-700 animate-in fade-in-0 slide-in-from-bottom-4 *:text-pretty'>
 					<Typography variant='h4' color='destructive' className='mb-2'>

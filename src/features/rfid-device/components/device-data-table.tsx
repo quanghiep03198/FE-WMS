@@ -155,7 +155,7 @@ const DeviceDataTable: React.FC = () => {
 					info.getValue() ? (
 						capitalize(formatRelative(new Date(info.getValue()!), new Date(Date.now()), { locale: dateLocale }))
 					) : (
-						<Icon name='AlarmClockOff' stroke='hsl(var(--muted-foreground))' />
+						<Icon name='AlarmClockOff' stroke='var(--muted-foreground)' />
 					),
 				sortDescFirst: true
 			}),

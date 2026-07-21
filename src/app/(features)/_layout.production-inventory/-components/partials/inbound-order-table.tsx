@@ -128,7 +128,7 @@ const DataTableFooter = memo(({ rows }: { rows: Row<IInboundInventory>[] }) => {
 	return (
 		<TableFooter className='sticky bottom-0 z-20'>
 			<TableRow className='bg-table-head [&_td:not(first-child)]:bg-table-head [&_td]:h-10 [&_td]:border-x-0 [&_td]:border-t'>
-				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 !bg-transparent font-semibold'>
+				<TableCell colSpan={3} align='left' className='sticky left-0 z-10 bg-transparent! font-semibold'>
 					{t('ns_common:common_fields.total')}
 				</TableCell>
 				<TableCell align='right' className='font-semibold'>

@@ -21,7 +21,7 @@ const DraggableCell: React.FC<DraggableCellProps> = ({ cell, style, children, ..
 			{...props}
 			key={cell.id}
 			ref={setNodeRef}
-			className={cn(isDragging && 'z-10 !border-x')}
+			className={cn(isDragging && 'z-10 border-x!')}
 			style={{
 				transform: CSS.Translate.toString(transform), // translate instead of transform to avoid squishing
 				transition: 'width transform 0.2s ease-in-out',

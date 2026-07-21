@@ -13,7 +13,7 @@ const DataTableLoading: React.FC<{ columns: ColumnDef<IDefectiveGoods>[] }> = ({
 		<TableBody className='min-h-[calc(var(--outlet-wrapper-height)-var(--header-height)-var(--row-height)*3)]'>
 			{Array.from({ length: isLargeScreen ? 15 : 10 }).map((_, rowId) => {
 				return (
-					<TableRow key={String(rowId)} className='h-[var(--row-height)]'>
+					<TableRow key={String(rowId)} className='h-(--row-height)'>
 						{columns.map((column) => {
 							return (
 								<TableCell key={`${rowId}.${String(column.id)}`} style={{ width: column.size }}>

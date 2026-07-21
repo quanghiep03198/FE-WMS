@@ -1,4 +1,4 @@
-import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '@/contexts/breadcrumb-context'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { Div } from '@/components/ui'
 import { UserRole } from '@common/constants/enums'

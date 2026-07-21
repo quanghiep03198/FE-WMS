@@ -13,7 +13,7 @@ const LicensePlateHoverCard: React.FC<{
 			<HoverCardTrigger
 				aria-disabled={disabled}
 				className={cn(
-					'inline-grid cursor-default grid-cols-[auto_1fr] items-center gap-x-2 !p-0 hover:underline hover:underline-offset-2 aria-disabled:hover:no-underline @5xl:grid-cols-1'
+					'inline-grid cursor-default grid-cols-[auto_1fr] items-center gap-x-2 p-0! hover:underline hover:underline-offset-2 aria-disabled:hover:no-underline @5xl:grid-cols-1'
 				)}>
 				<Icon name='Truck' className='@5xl:hidden' />
 				{licensePlate}

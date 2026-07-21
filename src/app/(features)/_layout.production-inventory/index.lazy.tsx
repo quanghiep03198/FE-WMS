@@ -4,7 +4,7 @@ import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../contexts/breadcrumb-context'
 import DataSection from './-components/partials/data-section'
 import PageHeader from './-components/partials/page-header'
 import SearchBox from './-components/partials/search-box'
@@ -29,7 +29,7 @@ function Page() {
 				UserRole.FG_WAREHOUSE_STAFF,
 				UserRole.INDUSTRIAL_ENGINEERING_STAFF
 			]}>
-			<Div as='section' className='pt-4 @container xxl:min-h-[var(--outlet-wrapper-height)]'>
+			<Div as='section' className='pt-4 @container xxl:min-h-(--outlet-wrapper-height)'>
 				<PageHeader />
 				<SearchBox />
 				<DataSection />

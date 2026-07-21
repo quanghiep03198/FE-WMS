@@ -18,7 +18,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 	if (isNotCompatible)
 		return (
-			<Div className='grid min-h-[var(--outlet-wrapper-height)] w-full place-items-center gap-y-3'>
+			<Div className='grid min-h-(--outlet-wrapper-height) w-full place-items-center gap-y-3'>
 				<Div>
 					<Div className='flex items-center gap-x-4'>
 						<Typography color='destructive' className='font-semibold'>
@@ -33,7 +33,7 @@ const IpPolicyGuard: React.FC<React.PropsWithChildren> = ({ children }) => {
 						color='muted'
 						dangerouslySetInnerHTML={{
 							__html: t('ns_common:errors.502_message', {
-								url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:hsl(var(--active));'>URL</a>`,
+								url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color:var(--active);'>URL</a>`,
 								factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
 									defaultValue: user?.current_factory_code
 								}),

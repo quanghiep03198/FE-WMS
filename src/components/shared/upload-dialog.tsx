@@ -151,7 +151,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 						className='hidden'
 						onChange={handleFileChange}
 					/>
-					<Icon name='CloudUpload' size={40} strokeWidth={1} stroke={'hsl(var(--active))'} />
+					<Icon name='CloudUpload' size={40} strokeWidth={1} stroke={'var(--active)'} />
 					<Typography color='muted'>{t('ns_common:actions.csv_upload')}</Typography>
 				</DroppableArea>
 				{files.length > 0 && (
@@ -180,7 +180,7 @@ const UploadDataFileDialog: React.FC<UploadDataFileDialogProps> = ({ station, ma
 				<Button size='lg' disabled={isPending || files.length === 0} onClick={() => mutateAsync()}>
 					<Icon
 						name={isPending ? 'LoaderCircle' : 'Upload'}
-						className={cn({ 'animate-[spin_1s_linear_infinite]': isPending })}
+						className={cn({ 'animate-spin': isPending })}
 					/>{' '}
 					Upload
 				</Button>
@@ -193,7 +193,7 @@ const FileItem: React.FC<{ file: File; disabled: boolean; onRemove: () => void }
 	return (
 		<Div
 			aria-disabled={disabled}
-			className='group flex flex-grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80 hover:bg-accent'>
+			className='group flex grow items-center gap-x-2 rounded px-3 py-1.5 transition-colors duration-200 aria-disabled:pointer-events-none aria-disabled:opacity-80 hover:bg-accent'>
 			<Icon name='File' />
 			<Typography variant='small' className='line-clamp-1 block flex-1'>
 				{file.name}

@@ -7,27 +7,27 @@ import React, { useEffect, useRef, useState } from 'react'
 import { usePageContext } from '../-contexts/page-context'
 
 const ACTIVE_STANDALONE_CUBE_CLASS =
-	'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-[var(--green)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
+	'translate-y-0 delay-500 ease-linear [&_path:first-child]:fill-(--green) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 const ACTIVE_CLUSTERED_CUBE_CLASS =
-	'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-[var(--yellow)] [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
+	'translate-y-0 delay-500 ease-linear [&_path:nth-child(odd)]:fill-(--yellow) [&_path]:transition-colors [&_path]:delay-700 [&_path]:duration-1000'
 const INACTIVE_CUBE_CLASS = '-translate-y-10 [&_path:nth-child(odd)]:fill-muted'
 const ACTIVE_WMS_CARD_CLASS =
 	'-translate-x-5 -translate-y-5 border-2 border-neutral-500 bg-primary text-primary-foreground shadow-[24px_24px_16px_#0a0a0a98] [transition:background-color_500ms_ease-in-out_1400ms,transform_350ms_cubic-bezier(0.68,-0.6,0.32,1.6)_1400ms,box-shadow_300ms_ease-out_1400ms] sm:-translate-x-2.5 sm:-translate-y-2.5 sm:border sm:shadow-[16px_16px_12px_#0a0a0a98]'
 const INACTIVE_WMS_CARD_CLASS =
-	'translate-x-0 translate-y-0 !border-neutral-600 bg-neutral-500 text-neutral-700 shadow-none'
+	'translate-x-0 translate-y-0 border-neutral-600! bg-neutral-500 text-neutral-700 shadow-none'
 const VISIBLE_GLOW_CLASS = 'opacity-100'
 const HIDDEN_GLOW_CLASS = 'opacity-0'
 
 const getClusteredConnectionColor = (renderCount: number) => {
 	if (renderCount === 1) return 'url(#right-to-left)'
 	if (renderCount > 1) return 'var(--green)'
-	return 'hsl(var(--border))'
+	return 'var(--border)'
 }
 
 const getStandaloneConnectionColor = (renderCount: number) => {
 	if (renderCount > 1) return 'var(--yellow)'
 	if (renderCount === 1) return 'url(#left-to-right)'
-	return 'hsl(var(--muted))'
+	return 'var(--muted)'
 }
 
 const BeamAnimated: React.FC = () => {
@@ -60,7 +60,7 @@ const BeamAnimated: React.FC = () => {
 					'--yellow': '#eab308'
 				} as React.CSSProperties
 			}
-			className='group/chip container relative mx-auto w-full sm:w-full sm:max-w-xs sm:[zoom:1.1] md:max-w-[650px] lg:max-w-3xl xl:max-w-3xl'>
+			className='group/chip container relative mx-auto w-full sm:w-full sm:max-w-xs sm:zoom-[1.1] md:max-w-[650px] lg:max-w-3xl xl:max-w-3xl'>
 			<svg
 				width='100%'
 				height='200'
@@ -71,7 +71,7 @@ const BeamAnimated: React.FC = () => {
 				ref={svgRef}>
 				<defs>
 					<linearGradient offset={1} id='right-to-left'>
-						<stop offset={1} stopColor='hsl(var(--muted))'>
+						<stop offset={1} stopColor='var(--muted)'>
 							<animate
 								dur={0.35}
 								attributeName='offset'
@@ -109,7 +109,7 @@ const BeamAnimated: React.FC = () => {
 								keySplines='0.45 0.35 1 1'
 							/>
 						</stop>
-						<stop offset={0} stopColor='hsl(var(--border))'>
+						<stop offset={0} stopColor='var(--border)'>
 							<animate
 								dur={0.35}
 								attributeName='offset'
@@ -149,7 +149,7 @@ const BeamAnimated: React.FC = () => {
 							isAnimated ? ACTIVE_STANDALONE_CUBE_CLASS : INACTIVE_CUBE_CLASS
 						)}>
 						<path
-							stroke='hsl(var(--border))'
+							stroke='var(--border)'
 							d='M573.798 105.165L573.684 96.2398L581.79 90.9291L590.029 96.0306L590.143 104.956L582.027 109.523L573.798 105.165Z'
 						/>
 						<path
@@ -226,8 +226,8 @@ const BeamAnimated: React.FC = () => {
 						)}>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
-							fill='hsl(var(--muted))'
-							stroke='hsl(var(--border))'
+							fill='var(--muted)'
+							stroke='var(--border)'
 						/>
 						<path
 							d='M99.902 97.3307L99.7304 90.3097L106.066 86.0571L112.601 89.995L112.773 97.016L106.423 100.684L99.902 97.3307Z'
@@ -236,8 +236,8 @@ const BeamAnimated: React.FC = () => {
 						/>
 						<path
 							d='M110.272 103.431L110.1 96.4099L116.435 92.1574L122.971 96.0953L123.143 103.116L116.793 106.784L110.272 103.431Z'
-							fill='hsl(var(--muted))'
-							stroke='hsl(var(--border))'
+							fill='var(--muted)'
+							stroke='var(--border)'
 						/>
 						<path
 							d='M110.272 103.431L110.1 96.4099L116.435 92.1574L122.971 96.0953L123.143 103.116L116.793 106.784L110.272 103.431Z'
@@ -246,8 +246,8 @@ const BeamAnimated: React.FC = () => {
 						/>
 						<path
 							d='M89.6627 103.976L89.491 96.9545L95.8263 92.7019L102.362 96.6398L102.533 103.661L96.1839 107.328L89.6627 103.976Z'
-							fill='hsl(var(--muted))'
-							stroke='hsl(var(--border))'
+							fill='var(--muted)'
+							stroke='var(--border)'
 						/>
 						<path
 							d='M89.6627 103.976L89.491 96.9545L95.8263 92.7019L102.362 96.6398L102.533 103.661L96.1839 107.328L89.6627 103.976Z'
@@ -256,8 +256,8 @@ const BeamAnimated: React.FC = () => {
 						/>
 						<path
 							d='M99.4817 109.323L99.31 102.302L105.645 98.0495L112.181 101.987L112.352 109.008L106.003 112.676L99.4817 109.323Z'
-							fill='hsl(var(--muted))'
-							stroke='hsl(var(--border))'
+							fill='var(--muted)'
+							stroke='var(--border)'
 						/>
 						<path
 							d='M99.4817 109.323L99.31 102.302L105.645 98.0495L112.181 101.987L112.352 109.008L106.003 112.676L99.4817 109.323Z'
@@ -274,11 +274,11 @@ const BeamAnimated: React.FC = () => {
 				}}
 				className={cn(
 					'absolute top-1/2 z-20 flex aspect-square w-full items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-700 sm:rounded-md',
-					'left-[calc(50%+2.5rem)] -translate-y-1/2 bg-gradient-to-br from-background to-accent to-[30%]',
-					'@xs:max-w-[96px] @sm:!max-w-[112px] sm:left-[calc(50%+6px)] sm:[zoom:0.85]',
-					'@[520px]:[zoom:0.85] @[620px]:[zoom:1] md:left-[calc(50%+0.5rem)] md:!max-w-[208px]',
-					'lg:left-[calc(50%+1rem)] lg:!max-w-[208px]',
-					'xl:left-[calc(50%+1rem)] xl:!max-w-[192px] xxl:!max-w-[216px]'
+					'left-[calc(50%+2.5rem)] -translate-y-1/2 bg-linear-to-br from-background to-accent to-30%',
+					'@xs:max-w-[96px] @sm:max-w-[112px]! sm:left-[calc(50%+6px)] sm:zoom-[0.85]',
+					'@[520px]:zoom-[0.85] @[620px]:zoom-[1] md:left-[calc(50%+0.5rem)] md:max-w-[208px]!',
+					'lg:left-[calc(50%+1rem)] lg:max-w-[208px]!',
+					'xl:left-[calc(50%+1rem)] xl:max-w-[192px]! xxl:max-w-[216px]!'
 				)}>
 				<div className='relative grid h-full w-full flex-1 place-content-center'>
 					<div
@@ -295,14 +295,14 @@ const BeamAnimated: React.FC = () => {
 			</div>
 			<div
 				className={cn(
-					'sm:size-18 absolute left-4 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-[var(--yellow)] opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
+					'sm:size-18 absolute left-4 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--yellow) opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
 					'transition-opacity delay-700 duration-500 ease-out',
 					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}
 			/>
 			<div
 				className={cn(
-					'sm:size-18 absolute right-5 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-[var(--green)] opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
+					'sm:size-18 absolute right-5 top-1/2 z-[-1] size-20 -translate-y-1/2 rounded-full bg-(--green) opacity-0 blur-3xl will-change-[opacity] sm:blur-2xl md:size-28 lg:size-32 lg:blur-[80px] xl:size-24 xxl:size-32 xxl:blur-[80px]',
 					'transition-opacity delay-700 duration-500 ease-out',
 					isAnimated ? VISIBLE_GLOW_CLASS : HIDDEN_GLOW_CLASS
 				)}

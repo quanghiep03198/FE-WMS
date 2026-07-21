@@ -25,7 +25,7 @@ const RFIDAgentConfiguration: React.FC = () => {
 						</figcaption>
 					</figure>
 				</DialogTrigger>
-				<DialogContent className='max-w-screen relative h-screen rounded-none !bg-background/50 backdrop-blur-sm'>
+				<DialogContent className='max-w-screen relative h-screen rounded-none bg-background/50! backdrop-blur-sm'>
 					<figure className='space-y-1'>
 						<img
 							src={RFIDAgentConfigImage}

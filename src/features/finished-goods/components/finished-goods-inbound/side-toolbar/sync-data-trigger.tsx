@@ -60,12 +60,12 @@ const SyncDataTrigger: React.FC = () => {
 	}, [data])
 
 	return (
-		<Div as='section' className='flex w-full flex-grow flex-col gap-y-3'>
+		<Div as='section' className='flex w-full grow flex-col gap-y-3'>
 			<Typography className='inline-flex items-center gap-x-2 text-lg font-semibold sm:text-base md:text-base'>
 				{t('ns_inoutbound:scanner_setting.synchronization')}
 			</Typography>
-			<Div className='flex h-full flex-1 flex-grow flex-col items-stretch gap-6'>
-				<Div className='grid grid-cols-[3fr,1fr] gap-x-6 gap-y-4'>
+			<Div className='flex h-full flex-1 grow flex-col items-stretch gap-6'>
+				<Div className='grid grid-cols-[3fr_1fr] gap-x-6 gap-y-4'>
 					<Div className='space-y-1'>
 						<Typography variant='small' className='inline-flex items-center gap-x-3 font-semibold'>
 							{t('ns_inoutbound:scanner_setting.decker_data_synchronization')}
@@ -117,11 +117,11 @@ const SyncDataTrigger: React.FC = () => {
 								SyncProcessState['status'],
 								{ icon: React.ComponentProps<typeof Icon>['name']; color: string }
 							> = {
-								processing: { icon: 'LoaderCircle', color: 'hsl(var(--foreground))' },
-								completed: { icon: 'CircleCheckBig', color: 'hsl(var(--success))' },
-								failed: { icon: 'CircleX', color: 'hsl(var(--destructive))' },
-								cancelled: { icon: 'CircleMinus', color: 'hsl(var(--muted-foreground))' },
-								waiting: { icon: 'CircleDot', color: 'hsl(var(--foreground))' }
+								processing: { icon: 'LoaderCircle', color: 'var(--foreground)' },
+								completed: { icon: 'CircleCheckBig', color: 'var(--success)' },
+								failed: { icon: 'CircleX', color: 'var(--destructive)' },
+								cancelled: { icon: 'CircleMinus', color: 'var(--muted-foreground)' },
+								waiting: { icon: 'CircleDot', color: 'var(--foreground)' }
 							}
 							return (
 								<StepItem
@@ -135,7 +135,7 @@ const SyncDataTrigger: React.FC = () => {
 											name={icon[item.status].icon}
 											stroke={icon[item.status].color}
 											className={cn({
-												'animate-[spin_1s_linear_infinite]': item.status === 'processing'
+												'animate-spin': item.status === 'processing'
 											})}
 											size={18}
 										/>
@@ -159,7 +159,7 @@ const SyncDataTrigger: React.FC = () => {
 	)
 }
 
-const StepList = tw.ul`bg-secondary p-4 flex h-48 will-change-contents @7xl/page-container:p-6 @7xl/page-container:gap-3 @7xl/page-container:h-full flex-col gap-y-2 overflow-y-auto transition-height duration-300 ease-out rounded-[var(--radius)]`
+const StepList = tw.ul`bg-secondary p-4 flex h-48 will-change-contents @7xl/page-container:p-6 @7xl/page-container:gap-3 @7xl/page-container:h-full flex-col gap-y-2 overflow-y-auto transition-height duration-300 ease-out rounded-(--radius)`
 const StepItem = tw.li`flex items-start text-sm gap-2 duration-300 ease-out animate-in fade-in-0`
 
 export default SyncDataTrigger

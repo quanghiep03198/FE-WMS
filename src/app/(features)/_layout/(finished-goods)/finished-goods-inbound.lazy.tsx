@@ -14,7 +14,7 @@ import { RoleGuard } from '@components/guards/role-guard'
 import AlreadyScannedEpcsAlert from '@features/finished-goods/components/finished-goods-inbound/already-scanned-epcs-alert'
 import EpcListBox from '@features/finished-goods/components/finished-goods-inbound/epc-data-list'
 import ScannerToolbar from '@features/finished-goods/components/finished-goods-inbound/scanner-toolbar'
-import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
 import { PageProvider } from '../../../../features/finished-goods/contexts/finished-goods-inbound/page-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(finished-goods)/finished-goods-inbound')({

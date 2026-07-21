@@ -199,7 +199,7 @@ const UserFormDialog: React.FC = () => {
 							placeholder='e.g., S000001'
 							onChange={(e) => form.setValue('employee_code', e.target.value.toUpperCase())}
 						/>
-						<Div className='col-span-full *:aria-[roledescription=selected-item]:!max-w-32'>
+						<Div className='col-span-full *:aria-[roledescription=selected-item]:max-w-32!'>
 							<MultiSelectFieldControl
 								name='roles'
 								label={t('ns_auth:fields.role')}
@@ -209,7 +209,7 @@ const UserFormDialog: React.FC = () => {
 										defaultValue: null
 									})
 								)}
-								classNames={{ selectedItem: '[&>:first-child]:max-w-40' }}
+								classNames={{ selectedItem: '*:first:max-w-40' }}
 								canSelectAll={false}
 								datalist={rolesDatalist}
 								labelField='label'
@@ -226,7 +226,7 @@ const UserFormDialog: React.FC = () => {
 										defaultValue: null
 									})
 								)}
-								classNames={{ selectedItem: '[&>:first-child]:max-w-24' }}
+								classNames={{ selectedItem: '*:first:max-w-24' }}
 								datalist={factoryCodesDatalist}
 								labelField='label'
 								maxCount={3}

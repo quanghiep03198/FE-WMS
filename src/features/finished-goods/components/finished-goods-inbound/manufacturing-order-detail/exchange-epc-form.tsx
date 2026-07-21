@@ -176,7 +176,7 @@ const ExchangeEpcFormDialog: React.FC = () => {
 				</DialogHeader>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleExchangeEpc)}>
-						<ScrollShadow className='grid max-h-[70vh] grid-cols-6 gap-x-2 gap-y-10 py-4 !scrollbar-none xxl:max-h-[90vh]'>
+						<ScrollShadow className='grid max-h-[70vh] grid-cols-6 gap-x-2 gap-y-10 py-4 scrollbar-none! xxl:max-h-[90vh]'>
 							<Fieldset as='fieldset'>
 								<Legend as='legend'>{t('ns_common:titles.original_data')}</Legend>
 								<InputFieldControl label={t('ns_erp:fields.mo_no')} name='mo_no' readOnly={true} />

@@ -154,7 +154,7 @@ const OrderDetailTable: React.FC = () => {
 					side='top'
 					align='start'
 					sideOffset={8}
-					className='w-[var(--radix-hover-card-trigger-width)] text-pretty'>
+					className='w-(--radix-hover-card-trigger-width) text-pretty'>
 					<Typography variant='small'>{t('ns_inoutbound:description.order_size_detail')}</Typography>
 				</HoverCardContent>
 			</HoverCard>
@@ -165,7 +165,7 @@ const OrderDetailTable: React.FC = () => {
 				</DialogHeader>
 				<Div className='static flex h-[calc(85vh-2rem)] flex-col items-stretch divide-y overflow-hidden rounded-lg border'>
 					<Div
-						className='relative h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20 @container [scrollbar-gutter:stable]'
+						className='relative h-[85vh] overflow-scroll rounded-lg scrollbar-track-accent/20 @container scrollbar-gutter-stable'
 						style={
 							{
 								'--row-selection-col-width': '50px',
@@ -178,10 +178,10 @@ const OrderDetailTable: React.FC = () => {
 							className={cn(
 								'w-full table-auto [&_span]:line-clamp-1',
 								'@5xl:[&_tr>:first-child]:sticky @5xl:[&_tr>:first-child]:left-0 @5xl:[&_tr>:first-child]:z-10',
-								'@5xl:[&_tr>:nth-child(2)]:sticky @5xl:[&_tr>:nth-child(2)]:left-[var(--row-selection-col-width)] @5xl:[&_tr>:nth-child(2)]:z-10',
+								'@5xl:[&_tr>:nth-child(2)]:sticky @5xl:[&_tr>:nth-child(2)]:left-(--row-selection-col-width) @5xl:[&_tr>:nth-child(2)]:z-10',
 								'@5xl:[&_tr>:nth-child(3)]:sticky @5xl:[&_tr>:nth-child(3)]:left-[calc(var(--row-selection-col-width)+var(--sticky-left-col-width))] @5xl:[&_tr>:nth-child(3)]:z-10',
-								'[&_tr>:nth-child(4)]:shadow-[1px_0px_hsl(var(--border))] @5xl:[&_tr>:nth-child(4)]:sticky @5xl:[&_tr>:nth-child(4)]:left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] @5xl:[&_tr>:nth-child(4)]:z-10',
-								'@5xl:[&_tr>:nth-last-child(2)]:sticky @5xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @5xl:[&_tr>:nth-last-child(2)]:z-10',
+								'[&_tr>:nth-child(4)]:shadow-[1px_0px_var(--border)] @5xl:[&_tr>:nth-child(4)]:sticky @5xl:[&_tr>:nth-child(4)]:left-[calc(var(--row-selection-col-width)+2*var(--sticky-left-col-width))] @5xl:[&_tr>:nth-child(4)]:z-10',
+								'@5xl:[&_tr>:nth-last-child(2)]:sticky @5xl:[&_tr>:nth-last-child(2)]:right-(--row-action-col-width) @5xl:[&_tr>:nth-last-child(2)]:z-10',
 								'@5xl:[&_tr>:last-child]:sticky @5xl:[&_tr>:last-child]:right-0 @5xl:[&_tr>:last-child]:z-10'
 							)}>
 							<colgroup>
@@ -257,7 +257,7 @@ const OrderDetailTable: React.FC = () => {
 									</TableHead>
 									<TableHead
 										align='right'
-										className='right-[var(--row-action-col-width)] z-20 w-[var(--sticky-right-col-width)] bg-background xl:sticky'>
+										className='right-(--row-action-col-width) z-20 w-(--sticky-right-col-width) bg-background xl:sticky'>
 										<span>{t('ns_common:common_fields.total')}</span>
 									</TableHead>
 									<TableHead>

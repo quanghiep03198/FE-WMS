@@ -53,7 +53,7 @@ const FeaturesSection: React.FunctionComponent = () => {
 			<Div className='space-y-1.5 text-center sm:mb-4 sm:text-xl xl:text-left'>
 				<Typography
 					variant='small'
-					className='w-full !text-base font-medium text-[var(--primary-alt)] sm:text-sm sm:font-normal'>
+					className='w-full text-base! font-medium text-(--primary-alt) sm:text-sm sm:font-normal'>
 					No more paperwork
 				</Typography>
 				<Typography variant='h1' className='text-pretty'>
@@ -99,9 +99,9 @@ const FeaturesSection: React.FunctionComponent = () => {
 				<Div className='grid w-full items-start gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
 					{features.map((feature, index) => (
 						// className={cn(
-						// 	'duration-500 before:absolute before:inset-0 before:z-0 before:-translate-y-px before:bg-[conic-gradient(from_120deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_220deg,hsl(var(--accent))_1turn)] before:opacity-0 before:transition-opacity before:duration-500 before:content-[""] hover:before:opacity-100 hover:before:animate-in hover:before:fade-in-0 hover:before:slide-in-from-left-10 xl:before:bg-[conic-gradient(from_130deg_at_50%_50%,hsl(var(--accent))_0deg,hsl(var(--accent))_175deg,var(--primary-alt)_190deg,hsl(var(--accent))_217deg,hsl(var(--accent))_1turn)]',
-						// 	'after:absolute after:inset-0 after:left-1/2 after:top-1/2 after:z-[10] after:h-[calc(100%-1px)] after:w-[calc(100%-1px)] after:-translate-x-1/2 after:-translate-y-[calc(50%-0.5px)] after:rounded-md after:bg-background after:content-[""]',
-						// 	'hover:after:bg-gradient-to-tr hover:after:from-background hover:after:from-[30%] hover:after:to-accent/60'
+						// 	'duration-500 before:absolute before:inset-0 before:z-0 before:-translate-y-px before:bg-[conic-gradient(from_120deg_at_50%_50%,var(--accent)_0deg,var(--accent)_175deg,var(--primary-alt)_190deg,var(--accent)_220deg,var(--accent)_1turn)] before:opacity-0 before:transition-opacity before:duration-500 before:content-[""] hover:before:opacity-100 hover:before:animate-in hover:before:fade-in-0 hover:before:slide-in-from-left-10 xl:before:bg-[conic-gradient(from_130deg_at_50%_50%,var(--accent)_0deg,var(--accent)_175deg,var(--primary-alt)_190deg,var(--accent)_217deg,var(--accent)_1turn)]',
+						// 	'after:absolute after:inset-0 after:left-1/2 after:top-1/2 after:z-10 after:h-[calc(100%-1px)] after:w-[calc(100%-1px)] after:-translate-x-1/2 after:-translate-y-[calc(50%-0.5px)] after:rounded-md after:bg-background after:content-[""]',
+						// 	'hover:after:bg-linear-to-tr hover:after:from-background hover:after:from-30% hover:after:to-accent/60'
 						// )}
 						<EffectCard key={index.toString()}>
 							<EffectCardIconWrapper className='z-20'>
@@ -134,10 +134,10 @@ const EffectCard = tw.div`
 	group/card relative overflow-hidden h-full border p-6 transition-colors bg-background
 	flex flex-col justify-start gap-4 rounded-md 
 	sm:p-4 sm:flex-row 
-	hover:bg-gradient-to-tr hover:from-background hover:from-[30%] hover:to-accent/60
+	hover:bg-linear-to-tr hover:from-background hover:from-30% hover:to-accent/60
 `
 const EffectCardIconWrapper = tw.div`inline-flex aspect-square size-12 mb-2 min-w-12 items-center justify-center rounded-md bg-secondary`
 const EffectCardContent = tw.div`z-10 flex flex-col space-y-1.5`
-const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-[var(--primary-alt)] duration-200 transition-colors`
+const EffectCardIcon = tw(Icon)<IconProps>`group-hover/card:stroke-(--primary-alt) duration-200 transition-colors`
 
 export default FeaturesSection

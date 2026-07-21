@@ -66,7 +66,7 @@ const AutoRefreshToggle: React.FC = () => {
 								/>
 								<Div className='flex items-baseline justify-between'>
 									{Array.from({ length: 6 }, (_, i) => (
-										<Typography key={i} variant='small' className='text-center !text-[10px]'>
+										<Typography key={i} variant='small' className='text-center text-[10px]!'>
 											{(i + 1) * 5}
 										</Typography>
 									))}

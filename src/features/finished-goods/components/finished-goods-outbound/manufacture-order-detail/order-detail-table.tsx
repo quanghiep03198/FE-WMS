@@ -73,7 +73,7 @@ const OrderSizeDetailTable: React.FC = () => {
 
 	return (
 		<Div
-			className='relative z-20 flex h-[var(--outlet-wrapper-height)] max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border @7xl/layout-wrapper:sticky @7xl/layout-wrapper:top-[calc(var(--header-height)+var(--outlet-padding))] xxl:top-[var(--header-height)]'
+			className='relative z-20 flex h-(--outlet-wrapper-height) max-w-full flex-1 flex-col justify-between gap-0 divide-y overflow-hidden rounded-lg border @7xl/layout-wrapper:sticky @7xl/layout-wrapper:top-[calc(var(--header-height)+var(--outlet-padding))] xxl:top-(--header-height)'
 			style={
 				{
 					'--table-footer-height': '2rem'
@@ -93,9 +93,9 @@ const OrderSizeDetailTable: React.FC = () => {
 					className={cn(
 						'w-auto table-fixed [&_span]:line-clamp-1',
 						'@3xl:[&_tr>:first-child]:sticky @3xl:[&_tr>:first-child]:left-0 @3xl:[&_tr>:first-child]:z-10',
-						'@3xl:[&_tr>:nth-child(2)]:sticky @3xl:[&_tr>:nth-child(2)]:left-[var(--sticky-left-col-width)] @3xl:[&_tr>:nth-child(2)]:z-10',
-						'@3xl:[&_tr>:nth-child(3)]:sticky @3xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width)+0.5rem)] @3xl:[&_tr>:nth-child(3)]:z-10 @3xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_hsl(var(--border))]',
-						'@3xl:[&_tr>:nth-last-child(2)]:sticky @3xl:[&_tr>:nth-last-child(2)]:right-[var(--row-action-col-width)] @3xl:[&_tr>:nth-last-child(2)]:z-10',
+						'@3xl:[&_tr>:nth-child(2)]:sticky @3xl:[&_tr>:nth-child(2)]:left-(--sticky-left-col-width) @3xl:[&_tr>:nth-child(2)]:z-10',
+						'@3xl:[&_tr>:nth-child(3)]:sticky @3xl:[&_tr>:nth-child(3)]:left-[calc(2*var(--sticky-left-col-width)+0.5rem)] @3xl:[&_tr>:nth-child(3)]:z-10 @3xl:[&_tr>:nth-child(3)]:shadow-[1px_0px_var(--border)]',
+						'@3xl:[&_tr>:nth-last-child(2)]:sticky @3xl:[&_tr>:nth-last-child(2)]:right-(--row-action-col-width) @3xl:[&_tr>:nth-last-child(2)]:z-10',
 						'@3xl:[&_tr>:last-child]:sticky @3xl:[&_tr>:last-child]:right-0 @3xl:[&_tr>:last-child]:z-10'
 					)}>
 					<colgroup>

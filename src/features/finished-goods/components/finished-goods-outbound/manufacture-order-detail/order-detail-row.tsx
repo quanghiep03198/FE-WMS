@@ -33,9 +33,9 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data, virtual
 			</TableCell>
 			<TableCell style={{ height: virtualRow.size }}>{data?.factory_shoes_style}</TableCell>
 			<TableCell style={{ height: virtualRow.size }}>{data?.color_sn}</TableCell>
-			<TableCell style={{ height: virtualRow.size }} className={cn('!p-0')}>
+			<TableCell style={{ height: virtualRow.size }} className={cn('p-0!')}>
 				<Div
-					className='flex flex-grow border-collapse flex-nowrap divide-x'
+					className='flex grow border-collapse flex-nowrap divide-x'
 					onContextMenu={(e) => e.preventDefault()}>
 					{Array.isArray(data?.sizes) &&
 						sortBy(data.sizes, 'size_numcode').map((size) => (

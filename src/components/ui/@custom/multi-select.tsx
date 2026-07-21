@@ -253,14 +253,14 @@ export function MultiSelect<D extends SelectItem>({
 				onClick={() => setIsPopoverOpen(!isPopoverOpen)}
 				className={cn(
 					buttonVariants({ variant: 'outline' }),
-					'grid w-full grid-cols-[1fr_auto] items-center overflow-hidden bg-background px-3 py-0 !scrollbar-none aria-[invalid=true]:!border-destructive hover:bg-inherit [&_svg]:pointer-events-auto',
+					'grid w-full grid-cols-[1fr_auto] items-center overflow-hidden bg-background px-3 py-0 scrollbar-none! aria-invalid:border-destructive! hover:bg-inherit [&_svg]:pointer-events-auto',
 					classNames?.popoverTrigger
 				)}>
 				{Array.isArray(datalist) && Array.isArray(selectedValues) && selectedValues?.length > 0 ? (
 					<>
 						<ScrollShadow
 							orientation='horizontal'
-							className='flex items-center gap-x-1 overflow-x-auto overflow-y-hidden !scrollbar-none'>
+							className='flex items-center gap-x-1 overflow-x-auto overflow-y-hidden scrollbar-none!'>
 							{Array.isArray(selectedValues) &&
 								selectedValues.slice(0, maxCount).map((value) => {
 									const option = datalist.find((item) => item?.[valueField] === value)
@@ -337,7 +337,7 @@ export function MultiSelect<D extends SelectItem>({
 			</PopoverTrigger>
 			<PopoverContent
 				ref={popoverContentRef}
-				className={cn('w-[var(--radix-popover-trigger-width)] p-0', classNames?.popoverContent)}
+				className={cn('w-(--radix-popover-trigger-width) p-0', classNames?.popoverContent)}
 				align='start'
 				onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				onOpenAutoFocus={(e) => e.preventDefault()}>
@@ -386,7 +386,7 @@ export function MultiSelect<D extends SelectItem>({
 														? 'bg-primary text-primary-foreground'
 														: 'opacity-50 [&_svg]:invisible'
 												)}>
-												<CheckIcon className='!size-3' />
+												<CheckIcon className='size-3!' />
 											</Div>
 											<Typography variant='small'>({t('ns_common:actions.select_all')})</Typography>
 										</CommandItem>
@@ -447,7 +447,7 @@ function Checkbox({ checked }: { checked: boolean }) {
 				'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all duration-100',
 				checked ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible'
 			)}>
-			<CheckIcon className='!size-3' />
+			<CheckIcon className='size-3!' />
 		</Div>
 	)
 }

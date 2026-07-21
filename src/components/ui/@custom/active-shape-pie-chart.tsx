@@ -13,8 +13,8 @@ export function ActiveShapePieChart<T>({ data, children }: { data: T[]; children
 					data={data}
 					innerRadius={64}
 					outerRadius={96}
-					fill='hsl(var(--primary))'
-					stroke='hsl(var(--border))'
+					fill='var(--primary)'
+					stroke='var(--border)'
 					dataKey='value'
 					onMouseEnter={(_, index) => setActiveIndex(index)}
 				/>
@@ -65,7 +65,7 @@ export const renderActiveShape = (props) => {
 			<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor}>
 				{`PV ${value}`}
 			</text>
-			<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill='hsl(var(--foreground))'>
+			<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill='var(--foreground)'>
 				{`(Rate ${(percent * 100).toFixed(2)}%)`}
 			</text>
 		</g>

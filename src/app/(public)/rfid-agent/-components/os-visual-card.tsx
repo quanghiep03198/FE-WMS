@@ -22,7 +22,7 @@ const OSVisualCard: React.FC = () => {
 			/>
 			<Typography
 				variant='h2'
-				className='mb-1 animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text text-transparent @md/visual-card:col-start-2 dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))] md:text-4xl'>
+				className='mb-1 animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,var(--foreground),45%,var(--muted-foreground),50%,var(--foreground))] bg-size-[200%_100%] bg-clip-text text-transparent @md/visual-card:col-start-2 dark:bg-[linear-gradient(75deg,var(--muted-foreground),45%,var(--foreground),50%,var(--muted-foreground))] md:text-4xl'>
 				Microsoft Windows
 			</Typography>
 			<Typography className='@xl/visual-card:col-start-2 @xl/visual-card:mb-6'>

@@ -164,7 +164,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 		<Div
 			className={cn(
 				className,
-				'flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-md border bg-background p-1 shadow-sm duration-200 aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+				'flex w-full flex-wrap items-center gap-1 overflow-hidden rounded-md border bg-background p-1 shadow-sm duration-200 aria-invalid:border-destructive aria-invalid:focus-within:border-destructive',
 				activeIndex === -1 && 'focus-within:border-primary'
 			)}
 			{...props}>
@@ -180,7 +180,7 @@ export const TagsInput: React.FC<TagsInputProps> = ({
 							aria-current={inputValue === item}
 							className={cn(
 								'relative flex items-center gap-2 truncate rounded px-1',
-								'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-[current=true]:animate-[pulse_1s_ease_forwards]',
+								'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-current:animate-[pulse_1s_ease_forwards]',
 								'data-[active=true]:ring-2 data-[active=true]:ring-primary'
 							)}>
 							<Typography variant='small' className='align-middle leading-none'>

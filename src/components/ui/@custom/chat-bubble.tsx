@@ -29,8 +29,8 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ children, variant, className })
 export default ChatBubble
 
 // side: {
-// 	left: '[--_p:_100%] !rounded-br-[0_0]',
-// 	right: '[--_p:_0] !rounded-bl-[0_0]'
+// 	left: '[--_p:100%] rounded-br-[0_0]!',
+// 	right: '[--_p:0] rounded-bl-[0_0]!'
 // }
 // style={{
 // 	...({

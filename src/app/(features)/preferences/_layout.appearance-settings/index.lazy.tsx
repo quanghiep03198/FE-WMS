@@ -25,7 +25,7 @@ function Page() {
 					<PageTitle>{t('ns_common:navigation.settings')}</PageTitle>
 					<PageDescription>{t('ns_preference:captions.appearance')}</PageDescription>
 				</PageHeader>
-				<PageSeparator className='!block' />
+				<PageSeparator className='block!' />
 				<Div className='max-w-sm space-y-8'>
 					<FontSelect />
 					<LanguageSelect />

@@ -30,7 +30,7 @@ const CTASection: React.FC = () => {
 			as='section'
 			ref={ref}
 			aria-current={isSectionInViewPort}
-			className='group/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 paused @container/cta aria-[current=true]:running sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:mt-32 xxl:max-w-8xl xxl:p-0'>
+			className='group/cta relative mx-auto grid w-full max-w-7xl grid-flow-col auto-rows-auto grid-cols-1 items-center gap-y-0 px-6 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 paused @container/cta aria-current:running sm:px-4 sm:py-4 md:grid-cols-1 xl:grid-cols-2 xl:px-0 xxl:mt-32 xxl:max-w-8xl xxl:p-0'>
 			<Div className='col-span-2 col-start-1 row-span-1 row-start-1 mb-4 flex justify-center @7xl/cta:col-span-1 @7xl/cta:justify-start'>
 				<Button
 					onClick={() => {
@@ -46,7 +46,7 @@ const CTASection: React.FC = () => {
 			<Typography
 				variant='h1'
 				className='col-start-1 row-span-1 row-start-2 mb-4 max-w-full text-pretty text-center duration-700 @7xl/cta:max-w-xl @7xl/cta:text-left lg:col-span-2 lg:max-w-full'>
-				Simplify Warehouse Management with <span className='text-[var(--primary-alt)]'>i-WMS</span>
+				Simplify Warehouse Management with <span className='text-(--primary-alt)'>i-WMS</span>
 			</Typography>
 			<Typography
 				variant='p'
@@ -58,7 +58,7 @@ const CTASection: React.FC = () => {
 				{outstandingFeatures.map((feature, index) => (
 					<ListItem key={index.toString()}>
 						<Icon name='Check' size={18} />{' '}
-						<Typography as='span' className='flex-1 !text-base'>
+						<Typography as='span' className='flex-1 text-base!'>
 							{feature}
 						</Typography>
 					</ListItem>

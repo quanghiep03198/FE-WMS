@@ -184,7 +184,7 @@ const DecentralizedPoOutboundForm: React.FC = () => {
 										<ArrayFieldControl fields={fields} onAppend={append} />
 									</Div>
 									<DragOverlay
-										className='min-w-[var(--draggable-item-width)] max-w-[var(--draggable-item-width)]'
+										className='min-w-(--draggable-item-width) max-w-(--draggable-item-width)'
 										dropAnimation={{
 											duration: 300,
 											easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
@@ -237,7 +237,7 @@ const ArrayFieldControl: React.FC<{
 					size='sm'
 					type='button'
 					aria-disabled={shouldAllowAdditionalSizes}
-					className='aria-disalbed:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:!opacity-50'
+					className='aria-disalbed:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:opacity-50!'
 					onClick={handleAppendField}>
 					<Icon name='Plus' /> {t('ns_common:actions.add')}
 				</Button>
@@ -266,7 +266,7 @@ const EmptyState: React.FC = () => {
 				name='CircleFadingPlus'
 				size={40}
 				strokeWidth={1}
-				stroke='hsl(var(--muted-foreground))'
+				stroke='var(--muted-foreground)'
 				className='mb-4'
 			/>
 			<Typography className='mb-1 font-medium'>{t('ns_inoutbound:description.no_added_size')}</Typography>

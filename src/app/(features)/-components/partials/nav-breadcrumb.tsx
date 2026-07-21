@@ -1,4 +1,4 @@
-import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '@/contexts/breadcrumb-context'
 import {
 	Breadcrumb,
 	BreadcrumbEllipsis,

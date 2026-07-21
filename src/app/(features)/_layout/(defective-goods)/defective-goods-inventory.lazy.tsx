@@ -6,7 +6,7 @@ import DefectiveGoodsInventoryTable from '@features/defective-goods/components/d
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inventory')({
 	component: Page

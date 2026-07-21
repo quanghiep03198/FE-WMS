@@ -26,7 +26,7 @@ import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { useGetAnnualInoutboundOverviewQuery } from '../-hooks/use-statistic-asm'
+import { useGetAnnualInoutboundOverviewQuery } from '../hooks/use-statistic-request'
 
 const InoutboundOverview: React.FC = () => {
 	const { t, i18n } = useTranslation()
@@ -38,11 +38,11 @@ const InoutboundOverview: React.FC = () => {
 		() => ({
 			inbound_qty: {
 				label: t('ns_dashboard:statistic.inbound_quantity'),
-				color: 'hsl(var(--chart-1))'
+				color: 'var(--chart-1)'
 			},
 			outbound_qty: {
 				label: t('ns_dashboard:statistic.outbound_quantity'),
-				color: 'hsl(var(--chart-2))'
+				color: 'var(--chart-2)'
 			}
 		}),
 		[i18n.language]
@@ -83,15 +83,15 @@ const InoutboundOverview: React.FC = () => {
 				</CardHeader>
 				<CardContent className='relative w-full'>
 					{isLoading ? (
-						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]' />
+						<Skeleton className='w-full place-content-center place-items-center @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-104' />
 					) : isEmpty ? (
-						<Div className='flex w-full items-center justify-center gap-x-2 rounded-lg bg-muted text-muted-foreground @xs:h-72 @xl:h-96 @3xl:min-h-[26rem]'>
+						<Div className='flex w-full items-center justify-center gap-x-2 rounded-lg bg-muted text-muted-foreground @xs:h-72 @xl:h-96 @3xl:min-h-104'>
 							<Icon name='ChartColumnBig' size={32} strokeWidth={1} />
 							{t('ns_common:table.no_data')}
 						</Div>
 					) : (
 						<ChartContainer
-							className='w-full @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-[26rem]'
+							className='w-full @xs:h-72 @xl:h-96 @3xl:max-h-full @3xl:min-h-104'
 							config={chartConfig}>
 							<BarChart
 								accessibilityLayer
@@ -107,7 +107,7 @@ const InoutboundOverview: React.FC = () => {
 									cursor={false}
 									content={<ChartTooltipContent indicator='dot' className='min-w-48' />}
 								/>
-								<YAxis stroke='hsl(var(--muted-foreground))' tickFormatter={formatIntlNumber} />
+								<YAxis stroke='var(--muted-foreground)' tickFormatter={formatIntlNumber} />
 								<Bar dataKey='inbound_qty' fill='var(--color-inbound_qty)' radius={3} />
 								<Bar dataKey='outbound_qty' fill='var(--color-outbound_qty)' radius={3} />
 								<ChartLegend content={<ChartLegendContent />} formatter={capitalize} />

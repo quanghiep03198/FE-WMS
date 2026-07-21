@@ -54,7 +54,7 @@ export const Editor: React.FC<EditorProps> = memo(
 					attributes: {
 						class: cn(
 							'p-4 rounded-lg max-w-full max-h-full overflow-auto scrollbar-none border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background',
-							'prose prose-li:p-0 prose-p:text-sm prose-strong:text-[inherit]'
+							'prose prose-li:p-0 prose-p:text-sm prose-strong:text-inherit'
 						)
 					}
 				},

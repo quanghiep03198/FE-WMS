@@ -175,7 +175,7 @@ const TruckloadDeliveryDetailRow: React.FC<TruckloadDeliveryDetailRowProps> = ({
 								{snapshotData?.created ? (
 									format(new Date(snapshotData?.created), 'yyyy-MM-dd HH:mm:ss', { locale: dateLocale })
 								) : (
-									<Icon name='CalendarClock' stroke='hsl(var(--muted-foreground))' />
+									<Icon name='CalendarClock' stroke='var(--muted-foreground)' />
 								)}
 							</Typography>
 						</Div>

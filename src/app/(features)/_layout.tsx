@@ -14,7 +14,7 @@ import UnsupportedScreen from '../../components/errors/unsupported-screen'
 import AuthGuard from '../../components/guards/auth-guard'
 import NavSidebar from './-components/partials/nav-sidebar'
 import Navbar from './-components/partials/navbar'
-import { BreadcrumbProvider } from './-contexts/breadcrumb-context'
+import { BreadcrumbProvider } from '../../contexts/breadcrumb-context'
 
 export const Route = createFileRoute('/(features)/_layout')({
 	component: Layout,
@@ -34,7 +34,7 @@ function Layout() {
 	})
 
 	const [font] = useLocalStorageState<string>('font', {
-		defaultValue: '*:!font-sans',
+		defaultValue: '*:font-sans!',
 		listenStorageChange: true
 	})
 
@@ -91,5 +91,5 @@ const LayoutWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
 `
 
 const OutletWrapper: React.FC<React.ComponentProps<'main'>> = tw.main`
-	relative flex-1 basis-full py-[--outlet-padding] xxl:px-6 xxl:pt-0 xl:px-4 lg:px-4 md:px-2 sm:px-2
+	relative flex-1 basis-full py-(--outlet-padding) xxl:px-6 xxl:pt-0 xl:px-4 lg:px-4 md:px-2 sm:px-2
 `

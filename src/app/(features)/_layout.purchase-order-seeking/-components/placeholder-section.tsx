@@ -22,7 +22,7 @@ const PlaceholderSection: React.FC = () => {
 			<CardGroup>
 				<Card>
 					<CardHeader className='gap-x-4'>
-						<CardAction className='col-start-1 !justify-self-start'>
+						<CardAction className='col-start-1 justify-self-start!'>
 							<Icon name='SearchCheck' size={32} strokeWidth={1.5} />
 						</CardAction>
 						<CardTitle className='col-start-2'>{t('ns_erp:titles.quick_po_search')}</CardTitle>
@@ -31,7 +31,7 @@ const PlaceholderSection: React.FC = () => {
 				</Card>
 				<Card>
 					<CardHeader className='gap-x-4'>
-						<CardAction className='col-start-1 !justify-self-start'>
+						<CardAction className='col-start-1 justify-self-start!'>
 							<Icon name='ReceiptText' size={32} strokeWidth={1.5} />
 						</CardAction>
 						<CardTitle className='col-start-2'>{t('ns_erp:titles.order_detail')}</CardTitle>
@@ -40,7 +40,7 @@ const PlaceholderSection: React.FC = () => {
 				</Card>
 				<Card>
 					<CardHeader className='gap-x-4'>
-						<CardAction className='col-start-1 !justify-self-start'>
+						<CardAction className='col-start-1 justify-self-start!'>
 							<Icon name='Ship' size={32} strokeWidth={1.5} />
 						</CardAction>
 						<CardTitle className='col-start-2'>{t('ns_erp:titles.shipping_detail')}</CardTitle>

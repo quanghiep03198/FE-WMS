@@ -24,7 +24,7 @@ export const QRScanner: React.FC<IScannerProps> = (props) => {
 	return (
 		<Scanner
 			classNames={{
-				container: '[&_svg]:!stroke-foreground'
+				container: '[&_svg]:stroke-foreground!'
 			}}
 			components={{
 				finder: true,

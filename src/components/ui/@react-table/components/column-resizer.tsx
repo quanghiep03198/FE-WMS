@@ -14,7 +14,7 @@ const ColumnResizer: React.FC<ColumnResizerProps> = ({ header }) => {
 			onTouchStart={header.getResizeHandler()}
 			onTouchMove={header.getResizeHandler()}
 			className={cn(
-				'absolute inset-y-0 right-0 z-0 w-1 !cursor-col-resize touch-none select-none bg-border opacity-0 transition-opacity duration-500 group-hover:opacity-100',
+				'absolute inset-y-0 right-0 z-0 w-1 cursor-col-resize! touch-none select-none bg-border opacity-0 transition-opacity duration-500 group-hover:opacity-100',
 				'group-data-[border=all]/data-grid-wrapper:h-full',
 				'group-data-[border=bottom-only]/data-grid-wrapper:top-1/2 group-data-[border=bottom-only]/data-grid-wrapper:h-2/3 group-data-[border=bottom-only]/data-grid-wrapper:-translate-y-1/2 group-data-[border=bottom-only]/data-grid-wrapper:rounded-md',
 				header.column.getCanResize() && 'hover:bg-primary',

@@ -58,13 +58,13 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 						{t('ns_common:actions.cancel')}
 					</AlertDialogCancel>
 					<AlertDialogAction
-						className='[&:has(svg)]:gap-x-2'
+						className='has-[svg]:gap-x-2'
 						disabled={isPending}
 						onClick={() => {
 							if (typeof onConfirm === 'function') onConfirm()
 						}}
 						{...dialogActionProps}>
-						{isPending && <Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />}
+						{isPending && <Icon name='LoaderCircle' className='animate-spin' />}
 						{isError
 							? t('ns_common:actions.retry')
 							: dialogActionProps?.children

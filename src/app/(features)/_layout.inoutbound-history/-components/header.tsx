@@ -10,7 +10,7 @@ const PageHeader: React.FC = () => {
 				name='FileSearch'
 				size={48}
 				strokeWidth={1}
-				stroke='hsl(var(--muted-foreground))'
+				stroke='var(--muted-foreground)'
 				className='inline-block'
 			/>
 			<Typography variant='h3' className='z-10 bg-background font-medium'>

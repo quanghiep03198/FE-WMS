@@ -107,7 +107,7 @@ const ToolbarColorPicker: React.FC<ColorPickerProps> = ({ label, icon, type }) =
 							<Icon name={icon} />
 							<Div
 								className={cn('mt-0.5 h-1.5 w-4/5 self-center rounded-l-full rounded-r-full border-[0.5px]', {
-									'!bg-foreground': !currentColor && type === 'textStyle',
+									'bg-foreground!': !currentColor && type === 'textStyle',
 									'bg-transparent': !currentColor && type === 'highlight'
 								})}
 								style={{ backgroundColor: currentColor }}

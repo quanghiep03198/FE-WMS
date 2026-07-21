@@ -130,7 +130,7 @@ const SignatureEditorDialog: React.FC = () => {
 			<DialogContent
 				className={cn(
 					'flex max-w-xl flex-col gap-6 overflow-auto md:max-h-screen lg:max-w-3xl xl:max-w-4xl',
-					'md:*:!transiton-none md:*:before:!transtion-none md:!animate-none md:!transition-none md:*:!animate-none md:*:after:!animate-none'
+					'md:*:!transiton-none md:*:before:!transtion-none md:animate-none! md:transition-none! md:*:animate-none! md:*:after:animate-none!'
 				)}>
 				<DialogHeader>
 					<DialogTitle>{dialogData.current.title}</DialogTitle>
@@ -183,12 +183,12 @@ const SignatureEditorDialog: React.FC = () => {
 						</Div>
 					)}
 					<Div className='group/signature flex h-full flex-col gap-y-3' aria-invalid={isMissingSignature}>
-						<Label htmlFor='signature' className='group-aria-[invalid=true]/signature:text-destructive'>
+						<Label htmlFor='signature' className='group-aria-invalid/signature:text-destructive'>
 							{t('ns_inoutbound:labels.signature')}
 						</Label>
 						<Div
 							id='signature'
-							className='relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 @container group-aria-[invalid=true]/signature:border-2 group-aria-[invalid=true]/signature:border-destructive'>
+							className='relative cursor-crosshair overflow-clip rounded-lg border bg-white duration-200 @container group-aria-invalid/signature:border-2 group-aria-invalid/signature:border-destructive'>
 							{isCompressing && <OptimizingLoader />}
 							<SignatureCanvas
 								ref={canvasRef}

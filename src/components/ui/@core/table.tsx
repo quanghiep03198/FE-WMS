@@ -32,7 +32,7 @@ TableFooter.displayName = 'TableFooter'
 const TableRow: React.FC<React.ComponentProps<'tr'>> = ({ className, ...props }) => (
 	<tr
 		className={cn(
-			'[&:has(td[aria-disabled=true])_td]:bg-muted [&:has(td[aria-disabled=true])_td]:text-muted-foreground [&:last-child>td]:border-b-0 [&>*:first-child]:border-l-0 [&>*]:border-b [&>*]:border-l',
+			'[&:has(td[aria-disabled=true])_td]:bg-muted [&:has(td[aria-disabled=true])_td]:text-muted-foreground [&:last-child>td]:border-b-0 [&>*:first-child]:border-l-0 *:border-b *:border-l',
 			className
 		)}
 		{...props}
@@ -44,7 +44,7 @@ TableRow.displayName = 'TableRow'
 const TableHead: React.FC<React.ComponentProps<'th'>> = ({ className, ...props }) => (
 	<th
 		className={cn(
-			'w-full bg-background px-4 py-2 font-semibold text-table-head-foreground group-hover:bg-secondary/50 data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
+			'w-full bg-background px-4 py-2 font-semibold text-table-head-foreground group-hover:bg-secondary/50 data-[type=number]:text-right has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0',
 			className
 		)}
 		{...props}
@@ -56,7 +56,7 @@ TableHead.displayName = 'TableHead'
 const TableCell: React.FC<React.ComponentProps<'td'>> = ({ className, ...props }) => (
 	<td
 		className={cn(
-			'bg-background px-4 py-2 first:border-l-0 last:border-r-0 group-hover:bg-table-row-active group-aria-expanded:bg-table-row-active group-aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0',
+			'bg-background px-4 py-2 first:border-l-0 last:border-r-0 group-hover:bg-table-row-active group-aria-expanded:bg-table-row-active group-aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0',
 			className
 		)}
 		{...props}

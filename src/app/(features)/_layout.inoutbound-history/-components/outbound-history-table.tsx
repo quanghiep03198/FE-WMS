@@ -100,7 +100,7 @@ const OutboundHistoryTable: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='w-[var(--column-width)] !bg-table-row-active capitalize text-table-head-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+								className='w-(--column-width) bg-table-row-active! capitalize text-table-head-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -110,7 +110,7 @@ const OutboundHistoryTable: React.FC = () => {
 						{columns.map((column) => (
 							<TableHead
 								key={column.accessorKey}
-								className='w-[var(--column-width)] font-normal text-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+								className='w-(--column-width) font-normal text-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>
 									{typeof column.cell === 'function'
@@ -120,19 +120,19 @@ const OutboundHistoryTable: React.FC = () => {
 							</TableHead>
 						))}
 					</TableRow>
-					<TableRow className='[&>*]:!bg-table-row-active [&>*]:capitalize'>
+					<TableRow className='*:bg-table-row-active! *:capitalize'>
 						<TableHead
 							align='left'
-							className='!sticky left-0 z-10'
-							style={{ boxShadow: '1px 0px hsl(var(--border))', maxWidth: 200, minWidth: 200 }}>
+							className='sticky! left-0 z-10'
+							style={{ boxShadow: '1px 0px var(--border)', maxWidth: 200, minWidth: 200 }}>
 							<span>{t('ns_erp:fields.outbound_date')}</span>
 						</TableHead>
 						<TableHead colSpan={7} align='left' className='p-0'>
-							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
+							<span className='sticky left-(--column-width) block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
 								{t('ns_erp:fields.daily_outbound_qty')}
 							</span>
 						</TableHead>
-						<TableHead align='left' className='!sticky right-0 z-10'>
+						<TableHead align='left' className='sticky! right-0 z-10'>
 							<span>{t('ns_common:common_fields.total')}</span>
 						</TableHead>
 					</TableRow>
@@ -154,7 +154,7 @@ const OutboundHistoryTable: React.FC = () => {
 										align='left'
 										colSpan={1}
 										className='sticky left-0 z-10'
-										style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+										style={{ boxShadow: '1px 0px var(--border)' }}>
 										<span>{date}</span>
 									</TableCell>
 									<TableCell colSpan={7} className='divide-y divide-border p-0'>
@@ -177,7 +177,7 @@ const OutboundHistoryTable: React.FC = () => {
 											</NestedTable>
 										))}
 									</TableCell>
-									<TableCell colSpan={1} align='left' className='!sticky right-0 z-10 font-medium'>
+									<TableCell colSpan={1} align='left' className='sticky! right-0 z-10 font-medium'>
 										<span>{formatIntlNumber(totalQty)}</span>
 									</TableCell>
 								</TableRow>
@@ -185,7 +185,7 @@ const OutboundHistoryTable: React.FC = () => {
 						})
 					) : (
 						<TableRow>
-							<TableCell colSpan={9} className='!border-b-0 p-0'>
+							<TableCell colSpan={9} className='border-b-0! p-0'>
 								<Div className='sticky left-0 flex max-w-[calc(100cqw-10px)] items-center justify-center gap-x-2'>
 									<EmptyHistory />
 								</Div>
@@ -198,7 +198,7 @@ const OutboundHistoryTable: React.FC = () => {
 						<TableCell
 							colSpan={9}
 							align='left'
-							className='!border-b-0 bg-table-row-active p-0 text-table-head-foreground'>
+							className='border-b-0! bg-table-row-active p-0 text-table-head-foreground'>
 							<Div className='sticky left-0 max-w-[calc(100cqw-10px)] px-4 py-2 text-center'>
 								{t('ns_common:titles.overall')}
 							</Div>
@@ -207,7 +207,7 @@ const OutboundHistoryTable: React.FC = () => {
 					<TableRow>
 						<TableCell colSpan={9} align='left' className='border-t p-0 font-normal'>
 							<NestedTable className='w-full'>
-								<NestedColumn className='sticky left-0 z-20 min-w-[var(--column-width)] shadow-[1px_0px_hsl(var(--border))] [&>*]:h-9 [&>*]:capitalize'>
+								<NestedColumn className='sticky left-0 z-20 min-w-(--column-width) shadow-[1px_0px_var(--border)] *:h-9 *:capitalize'>
 									<NestedCellHead>Size</NestedCellHead>
 									<NestedCellHead>
 										<span>{t('ns_erp:fields.mo_size_qty')}</span>
@@ -222,7 +222,7 @@ const OutboundHistoryTable: React.FC = () => {
 								{Array.isArray(data?.overall) &&
 									sortBy(data.overall, 'size_numcode').map((item) => {
 										return (
-											<NestedColumn key={item.size_numcode} className='w-full [&>*]:h-9'>
+											<NestedColumn key={item.size_numcode} className='w-full *:h-9'>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
 												<NestedCell>{formatIntlNumber(item?.po_size_qty)}</NestedCell>
 												<NestedCell>{formatIntlNumber(item?.acc_qty)}</NestedCell>

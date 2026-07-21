@@ -21,7 +21,7 @@ export const editorExtensions: Extension[] = [
 	StarterKit.configure({
 		heading: {
 			levels: [1, 2, 3],
-			HTMLAttributes: { class: 'font-bold !text-foreground' }
+			HTMLAttributes: { class: 'font-bold text-foreground!' }
 		},
 		bold: {
 			HTMLAttributes: {
@@ -78,7 +78,7 @@ export const editorExtensions: Extension[] = [
 		},
 		taskItem: {
 			HTMLAttributes: {
-				class: 'm-0 [&_p]:m-0 [&_label]:place-content-center [&_label]:place-items-center [&_p]:leading-relaxed [&_p]:align-middle flex items-baseline [&_label]:h-fit [&_input[type=checkbox]]:form-checkbox [&_input[type=checkbox]]:focus:ring-0 [&_input[type=checkbox]]:focus:ring-offset-0 [&_input[type=checkbox]]:text-active [&_input[type=checkbox]]:mr-2 [&_input[type=checkbox]]:rounded [&_input[type=checkbox]]:!size-4'
+				class: 'm-0 [&_p]:m-0 [&_label]:place-content-center [&_label]:place-items-center [&_p]:leading-relaxed [&_p]:align-middle flex items-baseline [&_label]:h-fit [&_input[type=checkbox]]:form-checkbox [&_input[type=checkbox]]:focus:ring-0 [&_input[type=checkbox]]:focus:ring-offset-0 [&_input[type=checkbox]]:text-active [&_input[type=checkbox]]:mr-2 [&_input[type=checkbox]]:rounded [&_input[type=checkbox]]:size-4!'
 			}
 		}
 	}),

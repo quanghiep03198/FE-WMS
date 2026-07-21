@@ -237,7 +237,7 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 						}
 					}}
 				/>
-				<Icon name={icon} stroke='hsl(var(--muted-foreground))' />
+				<Icon name={icon} stroke='var(--muted-foreground)' />
 				<span className='line-clamp-1' title={label}>
 					{label}
 				</span>
@@ -275,7 +275,7 @@ const FormItem: React.FC<FieldItemProps> = ({ index, name, label, icon, type }) 
 }
 
 const FieldLabel: React.FC<React.ComponentProps<'label'>> =
-	tw.label`text-sm flex items-center gap-x-2 [&_svg]:min-w-4 [&>:last-child]:flex-1`
+	tw.label`text-sm flex items-center gap-x-2 [&_svg]:min-w-4 *:last:flex-1`
 const Form: React.FC<React.ComponentProps<'form'>> = tw.form`space-y-2`
 const FieldGroup: React.FC<React.ComponentProps<'div'>> = tw.div`grid grid-cols-[1.5fr_1fr_2fr] gap-x-2`
 

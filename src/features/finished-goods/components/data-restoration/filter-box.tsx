@@ -259,7 +259,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 			<PopoverTrigger className='group relative flex h-10 items-center justify-between gap-x-3 rounded-md border bg-background px-3 py-1'>
 				<Icon
 					name='Search'
-					stroke='hsl(var(--muted-foreground))'
+					stroke='var(--muted-foreground)'
 					className='absolute left-3 top-1/2 -translate-y-1/2'
 					size={20}
 				/>
@@ -300,7 +300,7 @@ const ArchivedEpcFilter: React.FC<ArchivedEpcFilterProps> = ({ stockFlow }) => {
 			<PopoverContent
 				side='bottom'
 				sideOffset={8}
-				className='relative w-[var(--radix-popover-trigger-width)] p-6'
+				className='relative w-(--radix-popover-trigger-width) p-6'
 				onOpenAutoFocus={(e) => e.preventDefault()}
 				onWheel={(e) => e.stopPropagation()}>
 				<PopoverClose className='absolute right-3 top-3 text-muted-foreground transition-colors duration-200 hover:text-foreground'>

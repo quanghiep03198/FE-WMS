@@ -27,7 +27,7 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 
 	if (isNotCompatible)
 		return (
-			<Div className='flex min-h-[var(--outlet-wrapper-height)] w-full flex-1 flex-col items-center justify-center gap-y-3'>
+			<Div className='flex min-h-(--outlet-wrapper-height) w-full flex-1 flex-col items-center justify-center gap-y-3'>
 				<Typography variant='code' color='destructive' className='font-semibold'>
 					{HttpStatusCode.SeeOther}
 				</Typography>
@@ -37,7 +37,7 @@ const HostCompatibleGuard: React.FC<React.PropsWithChildren> = ({ children }) =>
 					color='muted'
 					dangerouslySetInnerHTML={{
 						__html: t('ns_common:errors.303_message', {
-							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color: hsl(var(--active));'>URL</a>`,
+							url: /* html */ `<a href='${movedPermanentlyURL}' style='font-weight: 600; color: var(--active);'>URL</a>`,
 							factoryCode: t(`ns_common:factory.${user?.current_factory_code}`, {
 								defaultValue: user?.current_factory_code
 							}),

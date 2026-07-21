@@ -164,7 +164,7 @@ const ReaderSettingSheet: React.FC = () => {
 															<Typography
 																key={i}
 																variant='small'
-																className='translate-x-0.5 text-center !text-[10px] first:translate-x-0 last:translate-x-0'>
+																className='translate-x-0.5 text-center text-[10px]! first:translate-x-0 last:translate-x-0'>
 																{(i + 1) * 5}
 															</Typography>
 														))}

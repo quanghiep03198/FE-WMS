@@ -115,7 +115,7 @@ const UserTable: React.FC = () => {
 							<Icon
 								name={isActive ? 'CircleCheck' : 'CircleMinus'}
 								aria-current={isActive}
-								className='stroke-muted-foreground aria-[current=true]:stroke-success'
+								className='stroke-muted-foreground aria-current:stroke-success'
 							/>
 							{t(isActive ? 'ns_common:status.active' : 'ns_common:status.deactivated')}
 						</Badge>

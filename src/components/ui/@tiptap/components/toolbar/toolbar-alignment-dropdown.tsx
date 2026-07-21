@@ -105,7 +105,7 @@ export const AlignmentDropdownMenu: React.FC = () => {
 			</Tooltip>
 			<DropdownMenuContent>
 				<DropdownMenuRadioGroup
-					className='flex list-none !flex-row gap-x-2'
+					className='flex list-none flex-row! gap-x-2'
 					value={alignmentState?.value}
 					onValueChange={(value) => {
 						editor.commands.setTextAlign(value)

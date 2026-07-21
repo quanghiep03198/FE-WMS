@@ -374,7 +374,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					aria-expanded={isExpanded}
 					className='grid h-0 place-items-center overflow-clip transition-height duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] aria-expanded:h-64 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
 					<Div className='inline-flex items-center gap-x-4'>
-						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
+						<Icon name='Inbox' stroke='var(--muted-foreground)' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>

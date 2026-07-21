@@ -9,7 +9,7 @@ const AppLogo: React.FC = () => {
 				<Separator className='h-[2px] w-full group-data-[state=expanded]:h-[3px]' />
 			</Div>
 			<Div className='transition-all duration-200 group-data-[state=expanded]:w-auto group-data-[state=collapsed]:scale-75 group-data-[state=expanded]:scale-100 group-data-[state=expanded]:opacity-100 xl:w-0 xl:opacity-0'>
-				<Typography className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,hsl(var(--foreground)),45%,hsl(var(--muted-foreground)),50%,hsl(var(--foreground)))] bg-[length:200%_100%] bg-clip-text font-jetbrains text-xs font-semibold leading-normal tracking-widest text-transparent dark:bg-[linear-gradient(75deg,hsl(var(--muted-foreground)),45%,hsl(var(--foreground)),50%,hsl(var(--muted-foreground)))]'>
+				<Typography className='animate-[shimmer_3s_linear_infinite_both] bg-[linear-gradient(75deg,var(--foreground),45%,var(--muted-foreground),50%,var(--foreground))] bg-size-[200%_100%] bg-clip-text font-jetbrains text-xs font-semibold leading-normal tracking-widest text-transparent dark:bg-[linear-gradient(75deg,var(--muted-foreground),45%,var(--foreground),50%,var(--muted-foreground))]'>
 					WAREHOUSE
 					<br />
 					MANAGEMENT

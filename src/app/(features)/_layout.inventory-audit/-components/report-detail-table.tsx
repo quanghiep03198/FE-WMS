@@ -139,14 +139,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
-													className='p-0 aria-[invalid=true]:bg-destructive'>
+													className='p-0 aria-invalid:bg-destructive'>
 													<InputFieldControl
 														name={`data.${index}.mn_ist_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
-															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none aria-[invalid=true]:bg-destructive/20 focus:outline-none',
+															'h-auto w-full whitespace-nowrap rounded-none border-none bg-transparent p-0 shadow-none aria-invalid:bg-destructive/20 focus:outline-none',
 															form.watch(`data.${index}.mn_ist_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
@@ -169,14 +169,14 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 												<TableCell
 													key={field.id}
 													aria-invalid={!!error}
-													className='p-0 aria-[invalid=true]:bg-destructive/20'>
+													className='p-0 aria-invalid:bg-destructive/20'>
 													<InputFieldControl
 														name={`data.${index}.mn_ost_qty`}
 														type='number'
 														errorMessageVariant='tooltip'
 														disabled={!isEditing || isLoading}
 														className={cn(
-															'h-auto w-full whitespace-nowrap rounded-none border-none p-0 shadow-none aria-[invalid=true]:bg-destructive/20 focus:outline-none',
+															'h-auto w-full whitespace-nowrap rounded-none border-none p-0 shadow-none aria-invalid:bg-destructive/20 focus:outline-none',
 															form.watch(`data.${index}.mn_ost_qty`) !== 0
 																? 'text-destructive disabled:text-destructive/80'
 																: 'text-foreground'
@@ -189,7 +189,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 								<TableRow>
 									<TableVerticalHeader>{t('ns_erp:fields.final_inventory_qty')}</TableVerticalHeader>
 									{data.map((item) => (
-										<TableCell key={item.size} className='hover:!ring-primary'>
+										<TableCell key={item.size} className='hover:ring-primary!'>
 											{item.final_stock_qty}
 										</TableCell>
 									))}
@@ -199,7 +199,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 							<Div className='p-10 font-medium'>{t('ns_common:table.no_data')}</Div>
 						)}
 						<TableRow className='*:border-none'>
-							<TableVerticalHeader className='sticky left-0 !w-full flex-1'>
+							<TableVerticalHeader className='sticky left-0 w-full! flex-1'>
 								<RoleBaseAccessControl
 									mode='fallback'
 									authorizedRoles={[UserRole.ADMIN, UserRole.MANAGER, UserRole.FG_WAREHOUSE_STAFF]}
@@ -207,7 +207,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 										<Typography
 											variant='small'
 											color='destructive'
-											className='inline-flex items-center gap-x-2 font-normal [text-transform:none]'>
+											className='inline-flex items-center gap-x-2 font-normal normal-case'>
 											<Icon name='TriangleAlert' />
 											{t('ns_auth:notification.viewonly')}
 										</Typography>
@@ -255,7 +255,7 @@ export const InventoryReportDetailTable: React.FC<InventoryReportDetailTableProp
 const ScrollArea = tw.div`relative h-fit max-w-full overflow-auto overflow-x-scroll rounded-md border bg-background`
 const Table = tw.div`[&>*>:first-child]:top-0 [&>*>:first-child]:font-medium [&>*>:first-child]:text-table-head-foreground`
 const TableVerticalHeader = tw.div`sticky left-0 z-10 lowercase first-letter:uppercase`
-const TableRow = tw.div`flex [&>*]:px-4 [&>*]:border-b [&>*]:bg-background [&>*]:py-2 [&>*]:whitespace-nowrap [&>*]:border-r [&>:last-child]:border-r-0 [&>:last-child]:flex-1 [&>:first-child]:basis-52 [&>:first-child]:min-w-52 [&>:not(:first-child)]:basis-24 [&>:not(:first-child)]:min-w-24`
+const TableRow = tw.div`flex *:px-4 *:border-b *:bg-background *:py-2 *:whitespace-nowrap *:border-r *:last:border-r-0 *:last:flex-1 *:first:basis-52 *:first:min-w-52 [&>:not(:first-child)]:basis-24 [&>:not(:first-child)]:min-w-24`
 const TableCell = tw.div`text-foreground text-left`
 const TableCellHead = tw.div`text-table-head-foreground font-medium text-left`
 

@@ -154,8 +154,8 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 			<Div className='relative'>
 				<FormProvider {...form}>
 					<Form onSubmit={form.handleSubmit(handleSaveChanges)}>
-						<FieldSet className='max-h-[28rem] overflow-scroll md:max-h-[500px]'>
-							<Table className='w-full table-auto border-separate border-spacing-0 [&_td:has(input)]:!p-0.5 [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
+						<FieldSet className='max-h-112 overflow-scroll md:max-h-[500px]'>
+							<Table className='w-full table-auto border-separate border-spacing-0 [&_td:has(input)]:p-0.5! [&_td>span]:line-clamp-1 [&_td]:h-12 [&_td]:border-x-0 [&_th>span]:line-clamp-1 [&_th]:border-x-0 [&_th]:bg-table-head'>
 								<TableHeader className='sticky top-0 z-10'>
 									<TableRow>
 										<TableHead colSpan={isLargeScreen ? 7 : 4} align='center' className='text-foreground'>
@@ -267,7 +267,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												format(new Date(container_sealing_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+													<Icon name='ClockAlert' stroke='var(--muted-foreground)' />
 													{t('ns_common:titles.unknown')}
 												</Typography>
 											)}
@@ -277,7 +277,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												format(new Date(factory_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+													<Icon name='ClockAlert' stroke='var(--muted-foreground)' />
 													{t('ns_common:titles.unknown')}
 												</Typography>
 											)}
@@ -287,7 +287,7 @@ const TruckloadDeliveryDetailTable: React.FC<TruckloadDeliveryDetailTableProps> 
 												format(new Date(actual_departure_time), 'yyyy-MM-dd HH:mm')
 											) : (
 												<Typography variant='small' color='muted' className='flex items-center gap-x-2'>
-													<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+													<Icon name='ClockAlert' stroke='var(--muted-foreground)' />
 													{t('ns_common:titles.unknown')}
 												</Typography>
 											)}
@@ -535,7 +535,7 @@ const Signature: React.FC<{
 						variant='secondary'
 						type='button'
 						onClick={handleUpdateSignature}>
-						<Icon name='PenTool' className='rotate-[-90deg]' />
+						<Icon name='PenTool' className='-rotate-90' />
 					</Button>
 				)}
 			</Div>

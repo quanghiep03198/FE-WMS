@@ -6,7 +6,7 @@ import useQueryParams from '@hooks/use-query-params'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBreadcrumbContext } from '../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../contexts/breadcrumb-context'
 import DataSection from './-components/data-section'
 import PageHeader from './-components/header'
 import SearchForm from './-components/search-form'
@@ -36,7 +36,7 @@ function RouteComponent() {
 					UserRole.FG_WAREHOUSE_STAFF,
 					UserRole.INDUSTRIAL_ENGINEERING_STAFF
 				]}>
-				<Div as='section' className='min-h-[var(--outlet-wrapper-height)] place-content-center space-y-6'>
+				<Div as='section' className='min-h-(--outlet-wrapper-height) place-content-center space-y-6'>
 					<PageHeader />
 					<SearchForm />
 					{searchParams.order && Object.values(StockFlow).includes(searchParams.type) && <DataSection />}

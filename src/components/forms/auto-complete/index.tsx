@@ -176,7 +176,7 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 												placeholder={placeholder}
 												aria-invalid={!!getFieldState(name).error}
 												className={cn(
-													'peer pr-9 transition-colors aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+													'peer pr-9 transition-colors aria-invalid:border-destructive aria-invalid:focus-within:border-destructive',
 													className
 												)}
 												data-icon={props['data-icon']}
@@ -195,11 +195,11 @@ export function AutoCompleteFieldControl<T, D>(props: AutoCompleteFieldControlPr
 								</FormControl>
 								<PopoverContent
 									ref={refCallback}
-									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto scroll-auto p-1'
+									className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto scroll-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{loading ? (
 										<Div className='flex items-center justify-center p-10 text-center'>
-											<Icon name='LoaderCircle' size={18} className='animate-[spin_1s_linear_infinite]' />
+											<Icon name='LoaderCircle' size={18} className='animate-spin' />
 										</Div>
 									) : virtualItems?.length > 0 ? (
 										<Div style={{ height: virtualizer.getTotalSize() }}>

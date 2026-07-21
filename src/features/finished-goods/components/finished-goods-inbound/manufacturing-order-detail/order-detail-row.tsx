@@ -68,7 +68,7 @@ const OrderDetailTableRow: React.FC<OrderDetailTableRowProps> = ({ data }) => {
 		<TableRow
 			className={cn(
 				'w-full transition-all duration-500',
-				!hasSomeRowMatch && selectedRows.length > 0 && '*:!text-muted-foreground/50'
+				!hasSomeRowMatch && selectedRows.length > 0 && '*:text-muted-foreground/50!'
 			)}>
 			<TableCell>
 				<Checkbox

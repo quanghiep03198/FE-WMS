@@ -58,9 +58,9 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 				<figure
 					ref={cardRef}
 					className={cn(
-						'group pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)] @2xl/visual-card:min-h-80 xl:-bottom-2 2xl:bottom-0 xxl:h-80',
-						"hover:!cursor-[url('/realtime-cursor-light.svg'),_auto]",
-						"dark:hover:!cursor-[url('/realtime-cursor-dark.svg'),_auto]",
+						'group pointer-events-auto relative z-0 h-full min-h-64 w-full overflow-hidden mask-[linear-gradient(to_bottom,transparent,var(--background)_10%,var(--background)_100%)] @2xl/visual-card:min-h-80 xl:-bottom-2 2xl:bottom-0 xxl:h-80',
+						"hover:cursor-[url('/realtime-cursor-light.svg'),auto]!",
+						"dark:hover:cursor-[url('/realtime-cursor-dark.svg'),auto]!",
 						className
 					)}
 					role='img'
@@ -95,13 +95,13 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						<svg width='30' height='38' viewBox='0 0 30 38' fill='none' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M3.58385 1.69742C2.57836 0.865603 1.05859 1.58076 1.05859 2.88572V35.6296C1.05859 37.1049 2.93111 37.7381 3.8265 36.5656L12.5863 25.0943C12.6889 24.96 12.8483 24.8812 13.0173 24.8812H27.3245C28.7697 24.8812 29.4211 23.0719 28.3076 22.1507L3.58385 1.69742Z'
-								fill='hsl(var(--muted))'
-								stroke='hsl(var(--border))'
+								fill='var(--muted)'
+								stroke='var(--border)'
 								strokeLinejoin='round'
 							/>
 						</svg>
 
-						<div className='absolute -top-6 left-full flex !h-[33.35px] !w-[66.70px] items-center justify-center gap-1 rounded-full border bg-muted/50'>
+						<div className='absolute -top-6 left-full flex h-[33.35px]! w-[66.70px]! items-center justify-center gap-1 rounded-full border bg-muted/50'>
 							<div className='pause group-hover:run h-1.5 w-1.5 rounded-full bg-muted-foreground group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite]' />
 							<div className='pause group-hover:run h-1.5 w-1.5 rounded-full bg-muted-foreground group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite]' />
 							<div className='pause group-hover:run h-1.5 w-1.5 rounded-full bg-muted-foreground group-hover:animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite]' />
@@ -120,13 +120,13 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						<svg width='20' height='28' viewBox='0 0 30 38' fill='none' xmlns='http://www.w3.org/2000/svg'>
 							<path
 								d='M3.58385 1.69742C2.57836 0.865603 1.05859 1.58076 1.05859 2.88572V35.6296C1.05859 37.1049 2.93111 37.7381 3.8265 36.5656L12.5863 25.0943C12.6889 24.96 12.8483 24.8812 13.0173 24.8812H27.3245C28.7697 24.8812 29.4211 23.0719 28.3076 22.1507L3.58385 1.69742Z'
-								fill='hsl(var(--muted))'
-								stroke='hsl(var(--border))'
+								fill='var(--muted)'
+								stroke='var(--border)'
 								strokeLinejoin='round'
 							/>
 						</svg>
 
-						<div className='absolute -top-6 left-full flex !h-[28px] !w-[55px] items-center justify-center gap-1 rounded-full border border-border bg-muted/50 opacity-0 transition-opacity group-hover:opacity-100'>
+						<div className='absolute -top-6 left-full flex h-[28px]! w-[55px]! items-center justify-center gap-1 rounded-full border border-border bg-muted/50 opacity-0 transition-opacity group-hover:opacity-100'>
 							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_infinite] rounded-full bg-muted-foreground' />
 							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_200ms_infinite] rounded-full bg-muted-foreground' />
 							<div className='pause group-hover:run h-1.5 w-1.5 animate-[pulse_600ms_cubic-bezier(0.4,0,0.6,1)_400ms_infinite] rounded-full bg-muted-foreground' />
@@ -149,7 +149,7 @@ const RealtimeVisualCard: React.FC<RealtimeVisualProps> = ({ className }) => {
 						</div>
 					</div>
 					{/* Gradient to hide animation under text to maintain readability */}
-					<div className='visual-overlay pointer-events-none absolute inset-0 top-auto h-full max-h-[400px] w-full bg-[linear-gradient(to_top,transparent_0%,transparent_50%,hsl(var(--background-surface-75))_85%)] lg:max-h-none' />
+					<div className='visual-overlay pointer-events-none absolute inset-0 top-auto h-full max-h-[400px] w-full bg-[linear-gradient(to_top,transparent_0%,transparent_50%,var(--background-surface-75)_85%)] lg:max-h-none' />
 				</figure>
 			</VisualCard.Content>
 		</VisualCard.Wrapper>

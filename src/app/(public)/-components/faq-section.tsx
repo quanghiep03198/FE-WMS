@@ -66,7 +66,7 @@ const FAQsSection: React.FunctionComponent = () => {
 	return (
 		<Div
 			ref={containerRef}
-			className='mx-auto flex w-full max-w-7xl flex-grow flex-col-reverse items-center gap-14 px-3 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0 xxl:max-w-8xl'
+			className='mx-auto flex w-full max-w-7xl grow flex-col-reverse items-center gap-14 px-3 py-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:flex-row-reverse xl:flex-row-reverse xl:gap-20 xl:px-0 xxl:max-w-8xl'
 			style={{
 				animationFillMode: 'both',
 				animationPlayState: containerInViewPort ? 'running' : 'paused'
@@ -87,13 +87,13 @@ const FAQsSection: React.FunctionComponent = () => {
 					))}
 				</Accordion>
 			</Div>
-			<Div className='flex w-full max-w-xl flex-grow basis-1/3 transform-gpu flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_hsl(var(--accent))] *:antialiased'>
+			<Div className='flex w-full max-w-xl grow basis-1/3 transform-gpu flex-col items-stretch rounded-lg border bg-background antialiased drop-shadow-[4px_4px_16px_var(--accent)] *:antialiased'>
 				<Div className='flex items-center gap-x-2 border-b bg-accent/50 px-3 py-1'>
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
 						width='24'
 						height='24'
-						fill='hsl(var(--muted-foreground))'
+						fill='var(--muted-foreground)'
 						className='bi bi-wechat'
 						viewBox='0 0 16 16'>
 						<path d='M11.176 14.429c-2.665 0-4.826-1.8-4.826-4.018 0-2.22 2.159-4.02 4.824-4.02S16 8.191 16 10.411c0 1.21-.65 2.301-1.666 3.036a.32.32 0 0 0-.12.366l.218.81a.6.6 0 0 1 .029.117.166.166 0 0 1-.162.162.2.2 0 0 1-.092-.03l-1.057-.61a.5.5 0 0 0-.256-.074.5.5 0 0 0-.142.021 5.7 5.7 0 0 1-1.576.22M9.064 9.542a.647.647 0 1 0 .557-1 .645.645 0 0 0-.646.647.6.6 0 0 0 .09.353Zm3.232.001a.646.646 0 1 0 .546-1 .645.645 0 0 0-.644.644.63.63 0 0 0 .098.356' />

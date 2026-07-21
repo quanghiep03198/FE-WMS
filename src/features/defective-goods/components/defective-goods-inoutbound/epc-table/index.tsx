@@ -324,6 +324,6 @@ const EpcTable: React.FC = () => {
 }
 
 const DataTableContainer = tw.div`flex h-[calc(var(--outlet-wrapper-height)-var(--header-height))] flex-col justify-between divide-y divide-border`
-const DataTableScrollArea = tw.div`flex-1 [container-type:size] overflow-scroll will-change-scroll contain-strict scrollbar-track-accent/20`
+const DataTableScrollArea = tw.div`flex-1 @container-size overflow-scroll will-change-scroll contain-strict scrollbar-track-accent/20`
 
 export default EpcTable

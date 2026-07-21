@@ -15,7 +15,7 @@ const PageComposition: React.FC = () => {
 			data-state='expanded'
 			style={
 				{
-					'--primary-alt': 'hsl(var(--success))'
+					'--primary-alt': 'var(--success)'
 				} as React.CSSProperties
 			}>
 			<Main ref={pageContext?.contentScrollRef}>

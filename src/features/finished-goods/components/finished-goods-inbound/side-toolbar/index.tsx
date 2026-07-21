@@ -18,7 +18,7 @@ const ScannerSettings: React.FC = () => {
 				<SheetTrigger id='side-toolbar-sheet-trigger' className='hidden' />
 				<SheetContent
 					side='left'
-					className='max-w-lg !overflow-y-scroll'
+					className='max-w-lg overflow-y-scroll!'
 					onOpenAutoFocus={(e) => e.preventDefault()}>
 					<ScrollShadow className='max-h-full flex-1 space-y-6'>
 						<Div className='space-y-3'>
@@ -37,7 +37,7 @@ const ScannerSettings: React.FC = () => {
 			<ToolbarWrapper>
 				<ScrollShadow
 					className={cn(
-						'flex max-h-[--outlet-wrapper-height] flex-grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 !scrollbar-none',
+						'flex max-h-(--outlet-wrapper-height) grow basis-full flex-col items-stretch gap-x-4 gap-y-6 p-4 scrollbar-none!',
 						'sm:px-0 xxl:p-6',
 						'@4xl:grid @4xl:grid-cols-12 @4xl:grid-rows-3 @4xl:gap-x-10'
 					)}>
@@ -68,7 +68,7 @@ const ScannerSettings: React.FC = () => {
 }
 
 const ToolbarWrapper = tw.div`
-	@container @[1366px]/page-container:block hidden sticky overflow-hidden xl:top-[var(--header-height)] top-auto group sm:rounded-none sm:border-none border rounded-lg bg-sidebar 
+	@container @[1366px]/page-container:block hidden sticky overflow-hidden xl:top-(--header-height) top-auto group sm:rounded-none sm:border-none border rounded-lg bg-sidebar 
 	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto
 `
 

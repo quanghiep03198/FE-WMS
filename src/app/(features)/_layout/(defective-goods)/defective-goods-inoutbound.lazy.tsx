@@ -17,7 +17,7 @@ import { useSize } from 'ahooks'
 import { Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
 
 export const Route = createLazyFileRoute('/(features)/_layout/(defective-goods)/defective-goods-inoutbound')({
 	component: RouteComponent
@@ -55,7 +55,7 @@ function RouteComponent() {
 									} as React.CSSProperties
 								}
 								className={cn(
-									'flex h-[var(--outlet-wrapper-height)] border-collapse flex-col divide-y divide-border rounded-md border @container',
+									'flex h-(--outlet-wrapper-height) border-collapse flex-col divide-y divide-border rounded-md border @container',
 									!isSmallScreen && 'overflow-hidden'
 								)}>
 								<InoutboundController />

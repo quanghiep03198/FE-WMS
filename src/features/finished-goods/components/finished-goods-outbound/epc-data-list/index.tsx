@@ -222,7 +222,7 @@ const ScannedEpcList: React.FC = () => {
 	})
 
 	return (
-		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md rounded-t-none border border-t-0 @4xl/playground:rounded-md @4xl/playground:border @4xl:sticky @4xl:top-[var(--header-height)] @4xl:h-[var(--outlet-wrapper-height)] @7xl/layout-wrapper:rounded-t-none @7xl/layout-wrapper:border-t-0'>
+		<Div className='relative flex flex-col items-stretch justify-between overflow-clip rounded-md rounded-t-none border border-t-0 @4xl/playground:rounded-md @4xl/playground:border @4xl:sticky @4xl:top-(--header-height) @4xl:h-(--outlet-wrapper-height) @7xl/layout-wrapper:rounded-t-none @7xl/layout-wrapper:border-t-0'>
 			{/* Datalist header */}
 			<Div className='grid w-full auto-cols-auto grid-flow-col items-center border-b @container/toolbar [&>*[role=button]]:rounded-none [&>button]:rounded-none'>
 				<ConnectionInsight />
@@ -283,7 +283,7 @@ const ScannedEpcList: React.FC = () => {
 					className={cn(
 						'linear relative z-10 h-0 divide-y bg-background p-0 transition-height will-change-transform contain-size',
 						'data-[mounted=true]:duration-100',
-						'aria-expanded:h-64 aria-expanded:p-2 @4xl/playground:aria-expanded:h-[var(--outlet-wrapper-height)]'
+						'aria-expanded:h-64 aria-expanded:p-2 @4xl/playground:aria-expanded:h-(--outlet-wrapper-height)'
 					)}>
 					{virtualizer.getVirtualItems().map((virtualItem) => {
 						const item = scannedEpc.data[virtualItem.index]
@@ -335,17 +335,17 @@ const ScannedEpcList: React.FC = () => {
 					className={cn(
 						'linear grid h-0 place-items-center',
 						'data-[mounted=true]:transition-height data-[mounted=true]:duration-200',
-						'aria-expanded:h-64 @4xl/playground:aria-expanded:h-[--outlet-wrapper-height]'
+						'aria-expanded:h-64 @4xl/playground:aria-expanded:h-(--outlet-wrapper-height)'
 					)}>
 					<Div className='inline-flex items-center gap-x-4'>
-						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
+						<Icon name='Inbox' stroke='var(--muted-foreground)' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
 					</Div>
 				</Div>
 			)}
 			{/* Datalist footer */}
 			<Div aria-expanded={isExpanded} className='basis-auto bg-background p-1.5 aria-expanded:border-t'>
-				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:!flex @7xl/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
+				<Div className='[&>button[aria-haspopup=dialog]]:hidden [&>button[aria-haspopup=dialog]]:w-full @4xl/playground:[&>button[aria-haspopup=dialog]]:flex! @7xl/layout-wrapper:[&>button[aria-haspopup=dialog]]:hidden md:[&>button[aria-haspopup=dialog]]:hidden'>
 					<OrderDetailTableDialog />
 				</Div>
 				<Button

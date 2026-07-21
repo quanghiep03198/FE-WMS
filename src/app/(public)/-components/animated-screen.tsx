@@ -73,15 +73,15 @@ const AnimatedScreen: React.FC = () => {
 					transformStyle: 'preserve-3d'
 				}}
 				className={cn(
-					'pointer-events-none relative grid aspect-square h-auto max-h-[60rem] rotate-45 select-none grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border bg-background antialiased *:pointer-events-none *:select-none',
-					'sm:[zoom:0.5] md:[zoom:0.8] lg:[zoom:0.6] xl:[zoom:0.8] xxl:[zoom:1]',
-					'[transform:perspective(1920px)_translateX(15%)_translateY(-20%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'lg:[transform:perspective(1920px)_translateX(10%)_translateY(-30%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'md:[transform:perspective(1920px)_translateX(10%)_translateY(-35%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'sm:[transform:perspective(1920px)_translateX(15%)_translateY(-40%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
-					'via-[25%] to-[50%] after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-gradient-to-l after:from-background after:via-background/80 after:to-transparent md:via-[65%] md:after:to-background/50 lg:after:via-background lg:after:via-[60%] lg:after:to-[70%]'
+					'pointer-events-none relative grid aspect-square h-auto max-h-240 rotate-45 select-none grid-cols-[18rem_auto] grid-rows-[80px_auto] gap-y-4 overflow-visible rounded-xl border bg-background antialiased *:pointer-events-none *:select-none',
+					'sm:zoom-[0.5] md:zoom-[0.8] lg:zoom-[0.6] xl:zoom-[0.8] xxl:zoom-[1]',
+					'transform-[perspective(1920px)_translateX(15%)_translateY(-20%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'lg:transform-[perspective(1920px)_translateX(10%)_translateY(-30%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'md:transform-[perspective(1920px)_translateX(10%)_translateY(-35%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'sm:transform-[perspective(1920px)_translateX(15%)_translateY(-40%)_rotateX(50deg)_rotateY(-20deg)_rotateZ(-35deg)]',
+					'via-25% to-50% after:absolute after:inset-0 after:z-10 after:h-[calc(100%+4px)] after:w-[200%] after:-translate-y-px after:bg-linear-to-l after:from-background after:via-background/80 after:to-transparent md:via-65% md:after:to-background/50 lg:after:via-background lg:after:via-60% lg:after:to-70%'
 				)}>
-				<aside className='z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm paused group-aria-[current=true]/cta:running'>
+				<aside className='z-0 col-start-1 row-span-full animate-[fly-down_0.7s_ease_forwards] space-y-10 border-r p-4 text-sm paused group-aria-current/cta:running'>
 					<div data-slot='sidebar-header'>
 						<AppLogo />
 					</div>
@@ -146,7 +146,7 @@ const AnimatedScreen: React.FC = () => {
 						</div>
 					</div>
 				</aside>
-				<header className='z-0 col-start-2 mb-4 animate-[fly-down_0.7s_ease_forwards] p-4 paused group-aria-[current=true]/cta:running'>
+				<header className='z-0 col-start-2 mb-4 animate-[fly-down_0.7s_ease_forwards] p-4 paused group-aria-current/cta:running'>
 					<nav className='flex items-center gap-x-2 rounded-md border px-4 py-3'>
 						<button>
 							<Icon name='Menu' />
@@ -164,7 +164,7 @@ const AnimatedScreen: React.FC = () => {
 					</nav>
 				</header>
 				<main className='z-0 col-start-2 h-fit space-y-6 p-4 pt-0'>
-					<div className='animate-[fly-down_0.7s_ease_forwards] space-y-1 paused group-aria-[current=true]/cta:running'>
+					<div className='animate-[fly-down_0.7s_ease_forwards] space-y-1 paused group-aria-current/cta:running'>
 						<h1 className='text-xl font-semibold'>Dashboard</h1>
 						<small className='line-clamp-1 leading-none text-muted-foreground'>
 							Providing an overview of key metrics including statistics, analysis, inbound/outbound operations
@@ -173,7 +173,7 @@ const AnimatedScreen: React.FC = () => {
 					</div>
 					<Separator />
 					<section className='flex items-stretch gap-x-4 [&>*[data-slot=card]]:min-w-72'>
-						<Card className='animate-[fly-down_0.8s_ease-in-out_forwards] paused group-aria-[current=true]/cta:running'>
+						<Card className='animate-[fly-down_0.8s_ease-in-out_forwards] paused group-aria-current/cta:running'>
 							<CardHeader>
 								<CardDescription>Inbound Quantity</CardDescription>
 								<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -195,7 +195,7 @@ const AnimatedScreen: React.FC = () => {
 								</Typography>
 							</CardFooter>
 						</Card>
-						<Card className='animate-[fly-down_0.9s_ease-in-out_forwards] paused group-aria-[current=true]/cta:running'>
+						<Card className='animate-[fly-down_0.9s_ease-in-out_forwards] paused group-aria-current/cta:running'>
 							<CardHeader>
 								<CardDescription>Outbound Quantity</CardDescription>
 								<CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
@@ -221,7 +221,7 @@ const AnimatedScreen: React.FC = () => {
 					<section>
 						<Card
 							data-role='card'
-							className='min-w-[32rem] animate-[fly-down_1s_ease-in-out_forwards] paused group-aria-[current=true]/cta:running'>
+							className='min-w-128 animate-[fly-down_1s_ease-in-out_forwards] paused group-aria-current/cta:running'>
 							<CardHeader>
 								<CardTitle>Inbound overview</CardTitle>
 								<CardDescription className='capitalize'>
@@ -236,11 +236,11 @@ const AnimatedScreen: React.FC = () => {
 									config={{
 										inbound_qty: {
 											label: 'Inbound Quantity',
-											color: 'hsl(var(--chart-1))'
+											color: 'var(--chart-1)'
 										},
 										outbound_qty: {
 											label: 'Outbound Quantity',
-											color: 'hsl(var(--chart-2))'
+											color: 'var(--chart-2)'
 										}
 									}}>
 									<BarChart
@@ -251,7 +251,7 @@ const AnimatedScreen: React.FC = () => {
 										}))}>
 										<CartesianGrid vertical={false} />
 										<XAxis dataKey='month' tickLine={false} tickMargin={10} axisLine={false} />
-										<YAxis stroke='hsl(var(--muted-foreground))' tickFormatter={formatIntlNumber} />
+										<YAxis stroke='var(--muted-foreground)' tickFormatter={formatIntlNumber} />
 										<Bar
 											dataKey='inbound_qty'
 											fill='var(--color-inbound_qty)'

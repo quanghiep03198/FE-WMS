@@ -18,7 +18,7 @@ const VisualBentoGrid: React.FC = () => {
 			<Div className='col-span-full sm:col-span-full md:col-span-full lg:col-span-3 xl:order-2 xl:col-span-2 xl:row-span-1'>
 				<RealtimeVisualCard />
 			</Div>
-			<Div className='col-span-full lg:order-last lg:col-span-full xl:order-last xl:col-span-4 xl:row-span-1 [&>*]:w-full'>
+			<Div className='col-span-full lg:order-last lg:col-span-full xl:order-last xl:col-span-4 xl:row-span-1 *:w-full'>
 				<StorageVisual />
 			</Div>
 		</Div>

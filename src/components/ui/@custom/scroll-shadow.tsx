@@ -98,16 +98,16 @@ const ScrollShadow: React.FC<ScrollShadowProps> = ({
 				// prettier-ignore
 				orientation==='vertical' && `
 					overflow-y-auto
-					data-[away-edge=true]:[mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
-					data-[top-scroll=true]:[mask-image:linear-gradient(to_bottom,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
-					data-[bottom-scroll=true]:[mask-image:linear-gradient(to_bottom,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)]
+					data-[away-edge=true]:mask-[linear-gradient(to_bottom,transparent,var(--background)_10%,var(--background)_90%,transparent)]
+					data-[top-scroll=true]:mask-[linear-gradient(to_bottom,var(--background)_10%,var(--background)_90%,transparent)]
+					data-[bottom-scroll=true]:mask-[linear-gradient(to_bottom,transparent,var(--background)_10%,var(--background)_100%)]
 				`,
 				// prettier-ignore
 				orientation==='horizontal' && `
 					overflow-x-auto
-					data-[away-edge=true]:[mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
-					data-[left-scroll=true]:[mask-image:linear-gradient(to_right,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)]
-					data-[right-scroll=true]:[mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_100%)]
+					data-[away-edge=true]:mask-[linear-gradient(to_right,transparent,var(--background)_10%,var(--background)_90%,transparent)]
+					data-[left-scroll=true]:mask-[linear-gradient(to_right,var(--background)_10%,var(--background)_90%,transparent)]
+					data-[right-scroll=true]:mask-[linear-gradient(to_right,transparent,var(--background)_10%,var(--background)_100%)]
 				`
 			)}
 			style={{

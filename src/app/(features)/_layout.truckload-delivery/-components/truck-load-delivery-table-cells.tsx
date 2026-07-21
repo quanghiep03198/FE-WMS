@@ -154,7 +154,7 @@ export const DateTimeCell: React.FC<
 
 	return (
 		<Typography variant='small' color='muted' className={cn('flex items-center gap-x-2', className)} {...props}>
-			<Icon name='ClockAlert' stroke='hsl(var(--muted-foreground))' />
+			<Icon name='ClockAlert' stroke='var(--muted-foreground)' />
 			{t('ns_common:titles.unknown')}
 		</Typography>
 	)

@@ -62,7 +62,7 @@ const NavSidebar: React.FC = () => {
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>{t('ns_common:navigation.main_menu_label')}</SidebarGroupLabel>
-					<ScrollShadow className='max-h-[40vh] overflow-y-auto overflow-x-hidden !scrollbar-none'>
+					<ScrollShadow className='max-h-[40vh] overflow-y-auto overflow-x-hidden scrollbar-none!'>
 						<SidebarMenu role='menu' aria-label='Main menu'>
 							{navigationConfig.main.map((item, index) => {
 								if (!Array.isArray(item.items))
@@ -84,7 +84,7 @@ const NavSidebar: React.FC = () => {
 													setOpen(true)
 												}}>
 												{item.icon && (
-													<Icon name={item.icon} size={18} className='!size-[18px]' strokeWidth={2} />
+													<Icon name={item.icon} size={18} className='size-[18px]!' strokeWidth={2} />
 												)}
 												<SidebarMenuTitle data-indice={index + 1}>
 													{t(item.title, { ns: 'ns_common', defaultValue: item.title })}
@@ -95,7 +95,7 @@ const NavSidebar: React.FC = () => {
 												/>
 											</SidebarMenuButton>
 										</CollapsibleTrigger>
-										<CollapsibleContent className='w-full overflow-auto transition-none !scrollbar-none data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
+										<CollapsibleContent className='w-full overflow-auto transition-none scrollbar-none! data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down'>
 											<SidebarMenuSub>
 												{item.items?.map((subItem, subIndex) => (
 													<SidebarMenuSubLink
@@ -195,10 +195,10 @@ const SidebarMenuLink: React.FC<NavLinkProps> = ({ indice, url, title, icon, vie
 					activeProps={{
 						className: 'text-primary hover:text-primary bg-primary/10 '
 					}}>
-					<Icon name={icon} size={18} className='!size-[18px]' />
+					<Icon name={icon} size={18} className='size-[18px]!' />
 					<SidebarMenuTitle data-indice={indice}>{t(title, { defaultValue: title })}</SidebarMenuTitle>
 					{!isLinkActive && (
-						<Icon name='Lock' size={14} className='ml-auto !size-[14px] stroke-muted-foreground' />
+						<Icon name='Lock' size={14} className='ml-auto size-[14px]! stroke-muted-foreground' />
 					)}
 				</Link>
 			</SidebarMenuButton>
@@ -293,7 +293,7 @@ const SwitchUserCompany: React.FC = () => {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent
-				className='w-[var(--radix-dropdown-menu-trigger-width)] min-w-60'
+				className='w-(--radix-dropdown-menu-trigger-width) min-w-60'
 				side={open ? 'top' : 'right'}
 				align='end'>
 				<DropdownMenuLabel>{t('ns_company:factory')}</DropdownMenuLabel>

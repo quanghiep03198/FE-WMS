@@ -36,7 +36,7 @@ const StorageVisual: React.FC<Props> = ({ className }) => {
 					while RFID Agent is running{' '}
 				</VisualCard.Description>
 			</VisualCard.Header>
-			<VisualCard.Content className='mt-6 flex-1 [mask-image:linear-gradient(to_right,transparent,hsl(var(--background))_10%,hsl(var(--background))_90%,transparent)] @xl:m-0'>
+			<VisualCard.Content className='mt-6 flex-1 mask-[linear-gradient(to_right,transparent,var(--background)_10%,var(--background)_90%,transparent)] @xl:m-0'>
 				<figure
 					className={cn('nowrap inset-0 flex overflow-hidden', className)}
 					role='img'

@@ -3,15 +3,15 @@ import { useLocalStorageState, useUpdateEffect } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 
 const fontOptions = [
-	{ label: 'System', value: '*:!font-sans' },
-	{ label: 'Roboto', value: '*:!font-roboto' }
+	{ label: 'System', value: '*:font-sans!' },
+	{ label: 'Roboto', value: '*:font-roboto!' }
 ]
 
 const FontSelect = () => {
 	const { t } = useTranslation()
 
 	const [font, setFont] = useLocalStorageState<string>('font', {
-		defaultValue: '*:!font-sans',
+		defaultValue: '*:font-sans!',
 		listenStorageChange: true
 	})
 

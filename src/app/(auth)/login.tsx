@@ -45,7 +45,7 @@ function LoginPage() {
 					<PageComposition.LanguageSelector />
 				</PageComposition.FormSection>
 			</PageComposition.Container>
-			<GridBackground className='[mask-image:radial-gradient(75%_100%_at_top_left,white,transparent)]' />
+			<GridBackground className='mask-[radial-gradient(75%_100%_at_top_left,white,transparent)]' />
 		</Fragment>
 	)
 }

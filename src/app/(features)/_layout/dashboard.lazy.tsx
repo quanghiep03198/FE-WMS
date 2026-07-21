@@ -1,4 +1,4 @@
-import { useBreadcrumbContext } from '@/app/(features)/-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '@/contexts/breadcrumb-context'
 import { RoleGuard } from '@/components/guards/role-guard'
 import { Div } from '@/components/ui'
 import { UserRole } from '@common/constants/enums'
@@ -6,13 +6,13 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageDescription, PageHeader, PageSeparator, PageTitle, PageWrapper } from '../../../components/shared/page'
-import { AssemblyProductivityOverview } from './-components/assembly-production-volumn-overview'
-import DefectiveGoodsInventoryOverview from './-components/defective-goods-inventory-composition'
-import InoutboundOverview from './-components/inoutbound-overview'
-import { NetFlowOverview } from './-components/net-flow-overview'
-import Statistics from './-components/statistics'
+import { AssemblyProductivityOverview } from '../../../features/dashboard/components/assembly-production-volumn-overview'
+import DefectiveGoodsInventoryOverview from '../../../features/dashboard/components/defective-goods-inventory-composition'
+import InoutboundOverview from '../../../features/dashboard/components/inoutbound-overview'
+import { NetFlowOverview } from '../../../features/dashboard/components/net-flow-overview'
+import Statistics from '../../../features/dashboard/components/statistics'
 
-export const Route = createLazyFileRoute('/(features)/_layout/dashboard/')({
+export const Route = createLazyFileRoute('/(features)/_layout/dashboard')({
 	component: Page
 })
 
@@ -43,7 +43,7 @@ function Page() {
 						<PageDescription>{t('ns_dashboard:dashboard_description')}</PageDescription>
 					</PageHeader>
 					<PageSeparator />
-					<Div className='grid grid-cols-12 gap-4 [&_div[data-slot=card-title]]:!capitalize'>
+					<Div className='grid grid-cols-12 gap-4 [&_div[data-slot=card-title]]:capitalize!'>
 						<Div className='col-span-full @container/statistics'>
 							<Statistics />
 						</Div>

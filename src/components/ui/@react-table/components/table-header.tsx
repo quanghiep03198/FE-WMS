@@ -46,7 +46,7 @@ const TableHeaderRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({ heade
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow data-role='data-grid-row' className='h-[var(--header-row-height,40px)] divide-x [&_th]:border-x-0'>
+		<TableRow data-role='data-grid-row' className='h-(--header-row-height,40px) divide-x [&_th]:border-x-0'>
 			{headerGroup.headers.map((header) => {
 				const rowSpan = header.column.columnDef.meta?.rowSpan
 				if (!header.isPlaceholder && rowSpan !== undefined && header.id === header.column.id) {
@@ -85,7 +85,7 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 	const computeStickyOffsetPosition = useMemoizedFn(getStickyOffsetPosition)
 
 	return (
-		<TableRow data-role='data-grid-row' className='max-h-[var(--header-row-height,40px)]'>
+		<TableRow data-role='data-grid-row' className='max-h-(--header-row-height,40px)'>
 			{headerGroup.headers.map((header) => {
 				if (header.column.columns.length === 0)
 					return (
@@ -104,9 +104,9 @@ const TableHeaderFilterRow: React.FC<{ headerGroup: HeaderGroup<RowData> }> = ({
 							<Div
 								data-state={filterOpen ? 'open' : 'closed'}
 								className={
-									'overflow-hidden transition-height duration-200 transition-allow-discrete data-[state=closed]:h-0 data-[state=open]:h-[var(--header-row-height)]'
+									'overflow-hidden transition-height duration-200 transition-allow-discrete data-[state=closed]:h-0 data-[state=open]:h-(--header-row-height)'
 								}>
-								<Div className='h-[var(--header-row-height)]'>
+								<Div className='h-(--header-row-height)'>
 									<TableColumnFilter column={header.column} />
 								</Div>
 							</Div>

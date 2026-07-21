@@ -22,7 +22,7 @@ const ThemeSelector: React.FC = () => {
 
 const HomeNavigator: React.FC = () => {
 	return (
-		<Div className='!fixed left-2 top-2 z-10'>
+		<Div className='fixed! left-2 top-2 z-10'>
 			<Tooltip message='Home' contentProps={{ side: 'right' }}>
 				<Link to='/' className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}>
 					<Icon name='ArrowLeft' />

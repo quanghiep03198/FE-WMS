@@ -314,10 +314,10 @@ const DataGrid: React.FC<DataTableProps> = ({
 
 const DataTableWrapper = tw.div`
 	group/data-grid-wrapper space-y-2 max-w-full w-full overflow-x-hidden
-	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:!border-x-0 
-	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:!shadow-none
-	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!border-x-0
-	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:!shadow-none
+	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:border-x-0! 
+	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_td]:shadow-none!
+	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:border-x-0!
+	[&[data-border=bottom-only]_tr[data-role=data-grid-row]_th]:shadow-none!
 `
 const FooterGroup = tw.div`flex items-center justify-between`
 

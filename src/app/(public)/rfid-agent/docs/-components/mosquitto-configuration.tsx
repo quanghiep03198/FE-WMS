@@ -56,7 +56,7 @@ const MosquittoConfiguration: React.FC = () => {
 						<br />
 						protocol websockets
 					</Terminal>
-					<Typography variant='blockquote' className='!mb-4'>
+					<Typography variant='blockquote' className='mb-4!'>
 						Replace &lt;your_ip_address&gt; with the actual IP address of your machine. Save the file after making
 						the changes.
 					</Typography>
@@ -98,7 +98,7 @@ const MosquittoConfiguration: React.FC = () => {
 						<br />
 						Default Gateway . . . . . . . . . : 10.xxx.xxx.xxx
 					</Terminal>
-					<Typography variant='blockquote' className='!mb-4'>
+					<Typography variant='blockquote' className='mb-4!'>
 						Look for the <code>IPv4 Address</code> under your active network connection. This is the IP address
 						you need to use in the <code>mosquitto.conf</code> file.
 					</Typography>

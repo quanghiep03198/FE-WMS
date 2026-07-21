@@ -211,7 +211,7 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 												name='CircleFadingPlus'
 												size={48}
 												strokeWidth={1}
-												stroke='hsl(var(--muted-foreground))'
+												stroke='var(--muted-foreground)'
 											/>
 										</EmptyMedia>
 										<EmptyTitle>{t('ns_inoutbound:description.no_dispatch_order_item_added')}</EmptyTitle>
@@ -265,10 +265,10 @@ const CreatePurchaseOrdersFormDialog: React.FC = () => {
 const Form = tw.form`flex flex-col gap-y-6 *:text-sm`
 const Table = tw.div`flex flex-col relative`
 const TableHeader = tw.div`sticky top-0 z-10 bg-accent text-accent-foreground`
-const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 [&>:first-child]:px-3`
+const TableRow = tw.div`grid grid-cols-[2.5rem_1fr_1fr_2.5rem] items-start gap-x-2 *:first:px-3`
 const TableHead = tw.div`py-2 h-9 font-medium bg-accent`
 const TableBody = tw(ScrollShadow)<ScrollShadowProps>`max-h-[40vh] flex-1`
-const TableCell = tw.div`py-2 min-h-9 [&:has(input)]:px-0`
+const TableCell = tw.div`py-2 min-h-9 has-[input]:px-0`
 const TableFooter = tw.div`rounded-md border border-dashed place-content-center place-items-center p-6 mt-6 flex flex-col justify-center items-center space-y-6`
 
 export default CreatePurchaseOrdersFormDialog

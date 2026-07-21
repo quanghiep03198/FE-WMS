@@ -90,7 +90,7 @@ function KeybindingsPage() {
 					<PageTitle>{t('ns_common:navigation.keyboard_shortcut')}</PageTitle>
 					<PageDescription>{t('ns_preference:captions.keybindings')}</PageDescription>
 				</PageHeader>
-				<PageSeparator className='!block' />
+				<PageSeparator className='block!' />
 				<DataTable
 					data={navigationCommands.concat(extendedCommands)}
 					columns={columns}

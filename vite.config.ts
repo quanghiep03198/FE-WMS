@@ -3,6 +3,7 @@
 
 import babel from '@rolldown/plugin-babel'
 import { sentryVitePlugin as sentry } from '@sentry/vite-plugin'
+import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { TanStackRouterVite as reactRouter } from '@tanstack/router-plugin/vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
@@ -11,6 +12,7 @@ import { defineConfig, loadEnv, normalizePath } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA as pwa, type VitePWAOptions } from 'vite-plugin-pwa'
 import { viteStaticCopy as staticCopy } from 'vite-plugin-static-copy'
+
 /**
  * @see https://vitejs.dev/config/
  */
@@ -27,6 +29,7 @@ export default defineConfig(({ mode }) => {
 		},
 		plugins: [
 			react(),
+			tailwindcss(),
 			devtools({ removeDevtoolsOnBuild: true, consolePiping: { enabled: mode === 'development' } }),
 			babel({ presets: [reactCompilerPreset()] }),
 			reactRouter(),

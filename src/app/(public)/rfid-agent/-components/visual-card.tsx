@@ -7,7 +7,7 @@ const Wrapper = tw.div<{
    ${(props) => (props.orientation === 'horizontal' ? 'flex-row' : 'flex-col')} 
    `
 const Header = tw.div`p-6 space-y-2`
-const Title = tw.h5`inline-flex items-center font-semibold [&_svg]:size-5 [&:has(svg)]:gap-x-2 text-lg text-foreground`
+const Title = tw.h5`inline-flex items-center font-semibold [&_svg]:size-5 has-[svg]:gap-x-2 text-lg text-foreground`
 const Description = tw.p`text-muted-foreground`
 const Content = tw.div`relative h-full w-full flex-1 place-content-center place-items-center overflow-hidden`
 const Footer = tw.div`p-6`

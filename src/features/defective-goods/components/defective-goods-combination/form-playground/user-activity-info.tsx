@@ -13,7 +13,7 @@ const UserActivityInfo: React.FC<UserActivityInfoProps> = ({ createdBy, createdA
 
 	return (
 		<ErrorBoundary fallbackRender={() => <Typography color='destructive'>Error</Typography>}>
-			<Div className='flex h-[var(--bar-height)] items-center gap-x-2 border-b px-6 py-2'>
+			<Div className='flex h-(--bar-height) items-center gap-x-2 border-b px-6 py-2'>
 				<Avatar className='size-9'>
 					<AvatarImage src={generateAvatar({ name: createdBy })} />
 				</Avatar>

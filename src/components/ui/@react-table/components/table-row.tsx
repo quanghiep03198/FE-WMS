@@ -30,7 +30,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, ind
 				data-role='data-grid-row'
 				aria-selected={isSelected}
 				aria-expanded={isExpanded}
-				className={cn('group h-[var(--row-height,40px)]', isScrolling && 'will-change-scroll')}>
+				className={cn('group h-(--row-height,40px)', isScrolling && 'will-change-scroll')}>
 				{row.getVisibleCells().map((cell) => {
 					return (
 						<TableCell
@@ -58,7 +58,7 @@ const VirtualTableRow: React.FC<VirtualTableRowProps> = ({ row, isScrolling, ind
 						aria-expanded={isExpanded}
 						className='border-none p-0 aria-expanded:border-b aria-expanded:shadow-[inset_0_0px_4px_#17171725]'>
 						<Collapsible open={isExpanded}>
-							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 [scrollbar-gutter:stable]'>
+							<CollapsibleContent className='group/detail sticky left-0 w-[100cqw] overflow-auto bg-secondary/50 scrollbar-gutter-stable'>
 								<Div className='p-3'>{renderSubComponent({ table, row })}</Div>
 							</CollapsibleContent>
 						</Collapsible>

@@ -103,7 +103,7 @@ const InfoCard: React.FC<{
 					<DropdownMenu modal>
 						<DropdownMenuTrigger
 							onClick={(e) => e.stopPropagation()}
-							className='!m-0 aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
+							className='m-0! aspect-square size-6 place-content-center place-items-center rounded hover:bg-accent'>
 							<Icon name='Ellipsis' />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align='start' side='left'>
@@ -126,7 +126,7 @@ const InfoCard: React.FC<{
 										<Icon name='PencilLine' /> {t('ns_common:actions.update')}
 									</DropdownMenuItem>
 									<DropdownMenuItem
-										className='gap-x-2 !text-destructive hover:!bg-destructive/20'
+										className='gap-x-2 text-destructive! hover:bg-destructive/20!'
 										onClick={(e) => {
 											e.stopPropagation()
 											event$.emit({ action: CommonActions.DELETE, payload: data.id })
@@ -138,7 +138,7 @@ const InfoCard: React.FC<{
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</CardAction>
-				<Div className='!mb-3 flex items-center gap-x-1'>
+				<Div className='mb-3! flex items-center gap-x-1'>
 					<RoleBaseAccessControl mode='invisible' authorizedRoles={[UserRole.DG_WAREHOUSE_STAFF]}>
 						<Checkbox
 							checked={isItemSelected(data.id)}
@@ -263,6 +263,6 @@ const InfoCard: React.FC<{
 }
 
 const DescriptionList = tw.ul`list-disc grid @lg/card:items-center grid-cols-1 gap-x-6 gap-y-3 @lg/card:grid-cols-2 items-start`
-const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm [&>:first-child]:text-nowrap [&>:last-child]:font-medium  [&>:last-child]:line-clamp-1 [&>:last-child]:overflow-ellipsis [&_svg]:stroke-muted-foreground`
+const DescriptionItem = tw.li`flex items-center gap-x-1 *:text-sm *:first:text-nowrap *:last:font-medium  *:last:line-clamp-1 *:last:text-ellipsis [&_svg]:stroke-muted-foreground`
 
 export default InfoCard

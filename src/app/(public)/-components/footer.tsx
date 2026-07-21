@@ -5,7 +5,7 @@ import { Separator } from '@radix-ui/react-context-menu'
 const Footer: React.FC = () => {
 	return (
 		<Div as='footer' className='relative border-t bg-background/90 bg-opacity-90 px-6 mix-blend-screen'>
-			{/* <Separator className='mx-auto h-px max-w-7xl rounded-full bg-success [mask-image:linear-gradient(90deg,transparent,white_50%,white_50%,transparent)]' /> */}
+			{/* <Separator className='mx-auto h-px max-w-7xl rounded-full bg-success mask-[linear-gradient(90deg,transparent,white_50%,white_50%,transparent)]' /> */}
 
 			<Div className='mx-auto max-w-7xl divide-y xxl:max-w-8xl'>
 				<Div className='flex flex-wrap items-start gap-y-10 py-12'>
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
 						<Label htmlFor='subscribe' className='text-lg'>
 							Subscribe to our updates
 						</Label>
-						<Typography variant='small' color='muted' className='!mb-6 block w-full max-w-96'>
+						<Typography variant='small' color='muted' className='mb-6! block w-full max-w-96'>
 							The latest updates, release, and resources from developer team, sent to your inbox weekly.
 						</Typography>
 						<form className='flex items-center gap-x-2'>

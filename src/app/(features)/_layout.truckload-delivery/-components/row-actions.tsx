@@ -37,7 +37,7 @@ const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => 
 					disabled={data.approval_status === TruckloadDeliveryStatus.CONFIRMED}
 					className='disabled:cursor-not-allowed'>
 					<GhostButton>
-						<Icon name='Ellipsis' className='!inline-block' />
+						<Icon name='Ellipsis' className='inline-block!' />
 					</GhostButton>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end' className='w-40'>
@@ -60,7 +60,7 @@ const RowActions: ColumnDefBase<ITruckloadDelivery, any>['cell'] = ({ row }) => 
 							{t('ns_common:actions.update')}
 						</DropdownMenuItem>
 						<DropdownMenuItem
-							className='text-destructive hover:!text-destructive'
+							className='text-destructive hover:text-destructive!'
 							onClick={() => event$.emit({ action: CommonActions.DELETE_MANY, payload: data.dispatch_order })}>
 							<Icon name='Trash2' className='hidden lg:inline-block xl:inline-block' />
 							{t('ns_common:actions.delete')}

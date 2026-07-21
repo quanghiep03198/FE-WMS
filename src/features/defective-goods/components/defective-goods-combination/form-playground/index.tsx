@@ -242,7 +242,7 @@ const DefectiveGoodsForm: React.FC = () => {
 				{/* Form controls */}
 				<Div
 					id='combination-form-header'
-					className='col-span-full flex h-max max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-6 bg-background px-2'>
+					className='col-span-full flex h-max max-h-full min-h-(--bar-height) items-center justify-between gap-x-6 bg-background px-2'>
 					<ListPanelToggle />
 					<DataListPanelSheetTrigger />
 					<RoleBaseAccessControl
@@ -299,7 +299,7 @@ const DefectiveGoodsForm: React.FC = () => {
 									)}>
 									<Icon
 										name={isPending ? 'LoaderCircle' : 'Check'}
-										className={isPending && 'animate-[spin_1s_linear_infinite]'}
+										className={isPending && 'animate-spin'}
 									/>{' '}
 									{isError ? t('ns_common:actions.retry') : t('ns_common:actions.save')}
 								</Button>
@@ -453,7 +453,7 @@ const DefectiveGoodsForm: React.FC = () => {
 					</Div>
 				</Div>
 				{/* Footer bar */}
-				<Div className='flex max-h-full min-h-[var(--bar-height)] items-center justify-between gap-x-2 bg-background px-4'>
+				<Div className='flex max-h-full min-h-(--bar-height) items-center justify-between gap-x-2 bg-background px-4'>
 					<MobileReaderPlaygroundTrigger />
 					<ToggleFullscreen />
 					<CombinationStrategySelect disabled={formAction === CommonActions.UPDATE} />

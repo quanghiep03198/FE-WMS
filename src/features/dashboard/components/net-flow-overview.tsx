@@ -20,8 +20,8 @@ import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getTrendingIcon, getTrendingPercentageChange } from '../-helpers'
-import { useGetLastSixMonthsNetFlow } from '../-hooks/use-statistic-asm'
+import { getTrendingIcon, getTrendingPercentageChange } from '../helpers'
+import { useGetLastSixMonthsNetFlow } from '../hooks/use-statistic-request'
 
 export function NetFlowOverview() {
 	const { t } = useTranslation('ns_dashboard')
@@ -57,7 +57,7 @@ export function NetFlowOverview() {
 						config={{
 							net_flow: {
 								label: t('ns_dashboard:statistic.net_flow'),
-								color: 'hsl(var(--chart-1))'
+								color: 'var(--chart-1)'
 							}
 						}}
 						className={isEmpty ? 'h-full max-w-full' : 'w-full @xs:h-72 @xl:h-80 @3xl:max-h-full @3xl:min-h-80'}>

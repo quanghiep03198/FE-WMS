@@ -77,7 +77,7 @@ const OrderListSelect: React.FC = () => {
 					<HoverCardContent
 						side='bottom'
 						sideOffset={10}
-						className='inline-grid w-[var(--radix-hover-card-trigger-width)] auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
+						className='inline-grid w-(--radix-hover-card-trigger-width) auto-cols-auto grid-flow-col gap-x-2 *:text-pretty'>
 						<Icon name='Info' className='my-0.5 stroke-active' size={18} />
 						<Typography variant='small'>{t('ns_inoutbound:description.select_order')}</Typography>
 					</HoverCardContent>
@@ -90,7 +90,7 @@ const OrderListSelect: React.FC = () => {
 								return acc + curr.count
 							}, 0)
 							return (
-								<SelectItem key={item.mo_no} value={item.mo_no} className='!flex items-center gap-x-2'>
+								<SelectItem key={item.mo_no} value={item.mo_no} className='flex! items-center gap-x-2'>
 									{item.mo_no} {`(${cmdQuantity} pairs)`}
 								</SelectItem>
 							)

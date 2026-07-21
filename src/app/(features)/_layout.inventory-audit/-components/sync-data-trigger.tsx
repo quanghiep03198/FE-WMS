@@ -57,7 +57,7 @@ const SyncDataTrigger: React.FC = () => {
 			<Icon
 				name={isInSyncProgress ? 'LoaderCircle' : 'DatabaseBackup'}
 				size={18}
-				className='group-aria-busy:animate-[spin_1s_linear_infinite]'
+				className='group-aria-busy:animate-spin'
 			/>
 			{t('ns_inoutbound:scanner_setting.synchronization')}
 		</Button>

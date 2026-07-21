@@ -32,25 +32,25 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 					{t('ns_common:titles.overall')}
 				</TableCell>
 			</TableRow>
-			<TableRow className='sticky bottom-0 z-10 *:shadow-[1px_-1px_0px_hsl(var(--border))]'>
+			<TableRow className='sticky bottom-0 z-10 *:shadow-[1px_-1px_0px_var(--border)]'>
 				<TableCell
 					align='left'
-					className='group/cell sticky left-0 z-10 w-[var(--sticky-left-col-width)] min-w-[var(--sticky-left-col-width)] space-y-1 !p-0 text-left text-table-head-foreground'>
-					<NestedColumn className='w-full !grid-rows-4 [&>*]:lowercase [&>*]:first-letter:uppercase'>
+					className='group/cell sticky left-0 z-10 w-(--sticky-left-col-width) min-w-(--sticky-left-col-width) space-y-1 p-0! text-left text-table-head-foreground'>
+					<NestedColumn className='w-full grid-rows-4! *:lowercase *:first-letter:uppercase'>
 						<NestedCell>Size</NestedCell>
 						<NestedCell>{t('ns_erp:fields.order_qty')}</NestedCell>
 						<NestedCell>{t('ns_erp:fields.daily_productivity')}</NestedCell>
 						<NestedCell>{t('ns_erp:fields.actual_missing_qty')}</NestedCell>
 					</NestedColumn>
 				</TableCell>
-				<TableCell className='!p-0'>
+				<TableCell className='p-0!'>
 					<Div
-						className='flex flex-grow border-collapse flex-nowrap divide-x'
+						className='flex grow border-collapse flex-nowrap divide-x'
 						onContextMenu={(e) => e.preventDefault()}>
 						{Array.isArray(data) &&
 							sortBy(data, 'size_numcode').map((size) => (
-								<NestedColumn key={size?.size_numcode} className='!grid-rows-3'>
-									<NestedCell className='px-4 py-2 font-medium text-table-head-foreground first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right [&:has([role=button])]:text-center [&:has([role=checkbox])]:text-center [&:has([role=combobox])]:p-0 [&:has([role=listbox])]:p-0 [&:has([role=textbox])]:p-0'>
+								<NestedColumn key={size?.size_numcode} className='grid-rows-3!'>
+									<NestedCell className='px-4 py-2 font-medium text-table-head-foreground first:border-l-0 last:border-r-0 group-hover:bg-table-row-active aria-selected:bg-table-row-selected data-[disabled=true]:bg-muted data-[type=number]:text-right has-[[role=button]]:text-center has-[[role=checkbox]]:text-center has-[[role=combobox]]:p-0 has-[[role=listbox]]:p-0 has-[[role=textbox]]:p-0'>
 										{size?.size_numcode}
 									</NestedCell>
 									<NestedCell className='font-normal'>{formatIntlNumber(size?.po_size_qty ?? 0)}</NestedCell>
@@ -60,8 +60,8 @@ const ReportDetailFooter: React.FC<{ data: IOutboundReport['overall'] }> = ({ da
 							))}
 					</Div>
 				</TableCell>
-				<TableCell className='sticky right-0 w-24 min-w-24 !p-0 font-medium' align='right'>
-					<NestedColumn className='w-full !grid-rows-4'>
+				<TableCell className='sticky right-0 w-24 min-w-24 p-0! font-medium' align='right'>
+					<NestedColumn className='w-full grid-rows-4!'>
 						<NestedCell className='row-span-2 flex h-full items-center justify-end text-table-head-foreground'>
 							{capitalize(t('ns_common:common_fields.total'))}
 						</NestedCell>

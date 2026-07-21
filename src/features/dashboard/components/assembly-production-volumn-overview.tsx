@@ -31,22 +31,22 @@ import { format, subDays, subMonths } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useGetDailyAssemblyProductivityQuery } from '../-hooks/use-statistic-asm'
+import { useGetDailyAssemblyProductivityQuery } from '../hooks/use-statistic-request'
 
 export const description = 'An interactive line chart'
 
 const chartConfig = {
 	UGG: {
 		label: 'UGG',
-		color: 'hsl(var(--chart-1))'
+		color: 'var(--chart-1)'
 	},
 	TEVA: {
 		label: 'TEVA',
-		color: 'hsl(var(--chart-2))'
+		color: 'var(--chart-2)'
 	},
 	KOOLABURRA: {
 		label: 'KOOLABURRA',
-		color: 'hsl(var(--chart-3))'
+		color: 'var(--chart-3)'
 	}
 } satisfies ChartConfig
 
@@ -85,7 +85,7 @@ export function AssemblyProductivityOverview() {
 
 	return (
 		<Card className='@container/card'>
-			<CardHeader className='flex flex-col items-stretch divide-y border-b !p-0 sm:flex-row'>
+			<CardHeader className='flex flex-col items-stretch divide-y border-b p-0! sm:flex-row'>
 				<Div className='flex items-center justify-between px-6 pb-3 sm:pb-0'>
 					<Div className='flex flex-1 flex-col justify-center gap-1'>
 						<CardTitle>{t('ns_dashboard:assembly_productivity_overview')}</CardTitle>
@@ -96,7 +96,7 @@ export function AssemblyProductivityOverview() {
 							value={activePeriod}
 							onValueChange={setActivePeriod}
 							className={cn(
-								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border @4xl/card:inline-grid [&_*]:!cursor-pointer',
+								'isolate hidden grid-cols-3 gap-0 divide-x overflow-clip rounded-lg border @4xl/card:inline-grid **:cursor-pointer!',
 								'[&>div:has([data-state=checked])]:bg-accent [&>div:has([data-state=checked])]:text-accent-foreground [&>div]:h-9 [&>div]:px-3 [&>div]:py-1.5 [&>div]:text-center [&_button[role=radio]]:hidden'
 							)}>
 							<Div role='radio'>

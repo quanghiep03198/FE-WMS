@@ -83,11 +83,11 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 					autoComplete='off'
 					placeholder={placeholder}
 					className={cn(
-						'peer rounded-md py-1 pl-3 pr-9 text-sm shadow-sm transition-colors duration-200 focus-within:!border-primary aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive',
+						'peer rounded-md py-1 pl-3 pr-9 text-sm shadow-sm transition-colors duration-200 focus-within:border-primary! aria-invalid:border-destructive aria-invalid:focus-within:border-destructive',
 						className
 					)}
 					style={{
-						border: '1px solid hsl(var(--border))'
+						border: '1px solid var(--border)'
 					}}
 					data-icon={props['data-icon']}
 					onKeyDown={handleKeyDown}
@@ -100,11 +100,11 @@ function AutoComplete<D extends object>(props: AutoCompleteProps<D>) {
 				<CaretSortIcon className='absolute right-3 top-1/2 ml-auto h-4 w-4 -translate-y-1/2 opacity-50 peer-data-[icon=false]:hidden' />
 			</PopoverTrigger>
 			<PopoverContent
-				className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
+				className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'
 				onOpenAutoFocus={(e) => e.preventDefault()}>
 				{loading ? (
 					<Div className='flex items-center justify-center p-10 text-center'>
-						<Icon name='LoaderCircle' size={18} className='animate-[spin_1s_linear_infinite]' />
+						<Icon name='LoaderCircle' size={18} className='animate-spin' />
 					</Div>
 				) : filteredDatalist?.length > 0 ? (
 					filteredDatalist?.map((item) => {

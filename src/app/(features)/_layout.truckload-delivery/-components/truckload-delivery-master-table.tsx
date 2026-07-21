@@ -176,7 +176,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					<DateTimeCell
 						{...props}
 						aria-invalid={props.row.original.possible_signing_late}
-						className='aria-[invalid=true]:!text-destructive'
+						className='aria-invalid:text-destructive!'
 					/>
 				)
 			}),
@@ -195,7 +195,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 					<DepartureTimeCell
 						{...props}
 						aria-invalid={props.row.original.possible_signing_late}
-						className='aria-[invalid=true]:!text-destructive'
+						className='aria-invalid:text-destructive!'
 					/>
 				)
 			}),
@@ -216,7 +216,7 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 							...props,
 							fallbackValue: props.row.original.actual_snap_time,
 							['aria-invalid']: props.row.original.possible_signing_late,
-							className: 'aria-[invalid=true]:!text-destructive'
+							className: 'aria-invalid:text-destructive!'
 						}}
 					/>
 				)
@@ -321,8 +321,8 @@ const TruckloadDeliveryMasterTable: React.FC = () => {
 				style: { height: 'calc(var(--outlet-wrapper-height) - 10.5rem)' },
 				className: cn(
 					'aria-busy:opacity-80 aria-busy:pointer-events-none ease-in-out transition-opacity duration-300',
-					'[&_tr[data-role=expandable-row]_*[data-state=open]]:!animate-none',
-					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:!animate-none'
+					'[&_tr[data-role=expandable-row]_*[data-state=open]]:animate-none!',
+					'[&_tr[data-role=expandable-row]_*[data-state=closed]]:animate-none!'
 				)
 			}}
 			renderSubComponent={renderSubTable as any}

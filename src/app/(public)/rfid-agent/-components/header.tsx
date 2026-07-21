@@ -85,10 +85,10 @@ export const Header: React.FC = () => {
 	return (
 		<Div as='header' className='sticky top-0 z-50 p-2 sm:p-2'>
 			<NavigationMenu className='mx-auto w-full list-none rounded-lg border bg-background/50 p-1 backdrop-blur-sm sm:w-full sm:max-w-full sm:rounded-none sm:border-none sm:bg-transparent sm:p-0'>
-				<NavigationMenuItem className='sm:!bg-transparent'>
+				<NavigationMenuItem className='sm:bg-transparent!'>
 					<Link to='/'>
 						<NavigationMenuLink
-							className={navigationMenuTriggerStyle({ className: 'gap-x-2 sm:!bg-transparent' })}>
+							className={navigationMenuTriggerStyle({ className: 'gap-x-2 sm:bg-transparent!' })}>
 							<Icon name='ArrowLeft' /> Go back
 						</NavigationMenuLink>
 					</Link>
@@ -103,7 +103,7 @@ export const Header: React.FC = () => {
 									<li className='row-span-3'>
 										<NavigationMenuLink asChild>
 											<a
-												className='flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md'
+												className='flex h-full w-full select-none flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md'
 												href='/'>
 												{/* <Icons. className="h-6 w-6" /> */}
 												<Icon name='Radio' size={40} strokeWidth={1.5} />
@@ -168,7 +168,7 @@ export const Header: React.FC = () => {
 							</SheetHeader>
 							<Separator className='my-4' />
 							<ScrollShadow className='flex flex-col overflow-y-auto scrollbar-none'>
-								<Typography className='!mb-2 font-medium'>Getting started</Typography>
+								<Typography className='mb-2! font-medium'>Getting started</Typography>
 								<ul>
 									{navigationGroup.rfidAgent.map((externalLink) => (
 										<ListItem

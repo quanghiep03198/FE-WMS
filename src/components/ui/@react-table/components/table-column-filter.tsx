@@ -70,7 +70,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 			return (
 				<DateRangePicker
 					triggerProps={{
-						className: 'border-none shadow-none hover:bg-background flex !text-xs font-medium'
+						className: 'border-none shadow-none hover:bg-background flex text-xs! font-medium'
 					}}
 					calendarProps={{
 						defaultMonth: date?.from ?? new Date(),
@@ -89,7 +89,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'min-w-[8rem] px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
+							'min-w-32 px-4 rounded-none border-none text-xs font-medium text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none ring-0',
 						tabIndex: 0,
 						style: { height: DEFAULT_ESTIMATE_SIZE }
 					}}

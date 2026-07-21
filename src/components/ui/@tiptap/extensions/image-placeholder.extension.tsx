@@ -135,7 +135,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
 				<Div className='relative'>
 					<img src={previewUrl} alt='Preview' className='mx-auto object-contain' />
 					<Div className='absolute inset-0 place-content-center place-items-center bg-neutral-950/50'>
-						<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+						<Icon name='LoaderCircle' className='animate-spin' />
 					</Div>
 					<Input
 						className='h-8 border-none text-center focus:border-none'

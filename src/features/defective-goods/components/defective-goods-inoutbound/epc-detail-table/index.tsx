@@ -105,7 +105,7 @@ const EpcDetailTable: React.FC = () => {
 	return (
 		<Div className='grid grid-rows-[auto_var(--bar-height)] divide-y divide-border overflow-hidden'>
 			<Div
-				className='!relative h-[calc(var(--detail-table-panel-height)-var(--bar-height))] w-full overflow-scroll scrollbar-track-accent/50 @container/1'
+				className='relative! h-[calc(var(--detail-table-panel-height)-var(--bar-height))] w-full overflow-scroll scrollbar-track-accent/50 @container/1'
 				style={
 					{
 						'--col-width': '160px'
@@ -127,7 +127,7 @@ const EpcDetailTable: React.FC = () => {
 							</TableHead>
 							<TableHead
 								align='left'
-								className='sticky left-[var(--col-width)] z-20 border-r-0 shadow-[1px_0px_0px_hsl(var(--border))]'>
+								className='sticky left-(--col-width) z-20 border-r-0 shadow-[1px_0px_0px_var(--border)]'>
 								<span>{t('ns_erp:fields.color_sn')}</span>
 							</TableHead>
 							<TableHead align='left' className='px-0'>
@@ -165,7 +165,7 @@ const EpcDetailTable: React.FC = () => {
 									</TableCell>
 									<TableCell
 										align='left'
-										className='sticky left-[var(--col-width)] z-20 border-r-0 shadow-[1px_0px_0px_hsl(var(--border))]'>
+										className='sticky left-(--col-width) z-20 border-r-0 shadow-[1px_0px_0px_var(--border)]'>
 										{item.color_sn === FALLBACK_VALUE ? t('ns_common:titles.unknown') : item.color_sn}
 									</TableCell>
 									<TableCell align='left' className='p-0'>
@@ -188,7 +188,7 @@ const EpcDetailTable: React.FC = () => {
 					</TableBody>
 				</Table>
 			</Div>
-			<Div className='bg-table-header flex h-[var(--bar-height)] basis-[var(--bar-height)] items-center justify-between p-4 text-table-head-foreground'>
+			<Div className='bg-table-header flex h-(--bar-height) basis-(--bar-height) items-center justify-between p-4 text-table-head-foreground'>
 				<Typography variant='small'>{t('ns_inoutbound:description.inoutbound_table_caption')}</Typography>
 				<Typography className='inline-flex items-center gap-x-1.5 font-medium text-foreground'>
 					<span>{t('ns_common:common_fields.total')}</span>

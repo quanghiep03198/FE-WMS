@@ -7,7 +7,7 @@ const UnavailableService: React.FC = () => {
 	const { t } = useTranslation('ns_common')
 
 	return (
-		<Div className='grid min-h-[var(--outlet-wrapper-height)] w-full place-items-center gap-y-3'>
+		<Div className='grid min-h-(--outlet-wrapper-height) w-full place-items-center gap-y-3'>
 			<Div>
 				<Div className='flex items-center gap-x-4'>
 					<Typography color='destructive' className='font-semibold'>

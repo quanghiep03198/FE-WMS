@@ -15,7 +15,7 @@ const CTA2Section: React.FC = () => {
 	})
 
 	return (
-		<Div className='w-full border-b bg-gradient-to-t from-accent/40 to-transparent to-[20%] px-3 py-10 xl:px-0'>
+		<Div className='w-full border-b bg-linear-to-t from-accent/40 to-transparent to-20% px-3 py-10 xl:px-0'>
 			<Div
 				ref={topSectionRef}
 				className='mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 duration-700 animate-in fade-in-0 slide-in-from-bottom-4 lg:grid-cols-[1fr_1.5fr] xl:grid-cols-[1fr_1.5fr] xxl:max-w-8xl'
@@ -24,7 +24,7 @@ const CTA2Section: React.FC = () => {
 					animationPlayState: isSectionInViewPort ? 'running' : 'paused'
 				}}>
 				<Div className='flex flex-col gap-y-6 sm:gap-y-3 sm:text-center md:text-center'>
-					<Typography variant='small' className='font-jetbrains text-[var(--primary-alt)]'>
+					<Typography variant='small' className='font-jetbrains text-(--primary-alt)'>
 						EDGE DEPLOYMENT
 					</Typography>
 					<Typography variant='h1' className='text-pretty'>
@@ -47,13 +47,13 @@ const CTA2Section: React.FC = () => {
 					animationFillMode: 'both',
 					animationPlayState: isSectionInViewPort ? 'running' : 'paused'
 				}}>
-				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
+				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row *:first:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
 							name='Rocket'
 							strokeWidth={1.5}
 							size={24}
-							className='transition-colors duration-200 group-hover/cta2:stroke-[var(--primary-alt)]'
+							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
@@ -66,13 +66,13 @@ const CTA2Section: React.FC = () => {
 						</Typography>
 					</Div>
 				</Div>
-				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
+				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row *:first:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
 							name='CloudCog'
 							strokeWidth={1.5}
 							size={24}
-							className='transition-colors duration-200 group-hover/cta2:stroke-[var(--primary-alt)]'
+							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
@@ -85,13 +85,13 @@ const CTA2Section: React.FC = () => {
 						</Typography>
 					</Div>
 				</Div>
-				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
+				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row *:first:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12'>
 						<Icon
 							name='Blocks'
 							strokeWidth={1.5}
 							size={24}
-							className='transition-colors duration-200 group-hover/cta2:stroke-[var(--primary-alt)]'
+							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>
@@ -110,13 +110,13 @@ const CTA2Section: React.FC = () => {
 						/>
 					</Div>
 				</Div>
-				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row [&>:first-child]:basis-1/6'>
+				<Div className='group/cta2 flex flex-col gap-x-4 gap-y-2 sm:flex-row *:first:basis-1/6'>
 					<AnimatedBorderCard className='aspect-square size-12 min-h-12 min-w-12 animate-shimmer bg-accent'>
 						<Icon
 							name='Server'
 							strokeWidth={1.5}
 							size={24}
-							className='transition-colors duration-200 group-hover/cta2:stroke-[var(--primary-alt)]'
+							className='transition-colors duration-200 group-hover/cta2:stroke-(--primary-alt)'
 						/>
 					</AnimatedBorderCard>
 					<Div className='space-y-2'>

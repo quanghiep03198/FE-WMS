@@ -65,7 +65,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 				<DropdownSelect
 					selectTriggerProps={{
 						className:
-							'w-full px-4 h-[var(--row-height)] bg-transparent rounded-none border-none text-sm font-normal text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none',
+							'w-full px-4 h-(--row-height) bg-transparent rounded-none border-none text-sm font-normal text-muted-foreground ring-0 focus:ring-0 outline-none shadow-none hover:text-foreground focus:border-none',
 						tabIndex: 0
 					}}
 					selectProps={{
@@ -95,7 +95,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 		case 'autocomplete': {
 			return (
 				<AutoComplete
-					className='h-[var(--row-height)] w-full rounded-none !border-none bg-transparent px-4 text-sm font-normal text-muted-foreground shadow-none outline-none ring-0 placeholder:text-sm hover:text-foreground focus:border-none focus:ring-0'
+					className='h-(--row-height) w-full rounded-none border-none! bg-transparent px-4 text-sm font-normal text-muted-foreground shadow-none outline-none ring-0 placeholder:text-sm hover:text-foreground focus:border-none focus:ring-0'
 					value={currentFilterValue ?? ''}
 					onInput={setCurrentFilterValue}
 					onSelect={setCurrentFilterValue}
@@ -124,7 +124,7 @@ export function TableColumnFilter<TData, TValue>({ column }: ColumnFilterProps<T
 					placeholder={t('ns_common:table.search_in_column')}
 					onChange={(e) => setCurrentFilterValue(e.currentTarget.value)}
 					autoComplete='off'
-					className='h-[var(--row-height)] border-none bg-transparent text-sm font-normal shadow-none focus:border-none'
+					className='h-(--row-height) border-none bg-transparent text-sm font-normal shadow-none focus:border-none'
 				/>
 			)
 		}

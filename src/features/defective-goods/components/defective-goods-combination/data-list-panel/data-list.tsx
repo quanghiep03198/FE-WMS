@@ -12,7 +12,7 @@ type DataListProps = Pick<UseQueryResult<Pagination<IDefectiveGoods>, AxiosError
 const DataList: React.FC<DataListProps> = ({ isLoading, data }) => {
 	return isLoading ? (
 		<Div className='h-full flex-1 place-content-center place-items-center'>
-			<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' size={18} />
+			<Icon name='LoaderCircle' className='animate-spin' size={18} />
 		</Div>
 	) : Array.isArray(data?.data) && data?.totalDocs > 0 ? (
 		<Div className='space-y-4 overflow-y-scroll p-4 group-data-[state=open]:p-0'>

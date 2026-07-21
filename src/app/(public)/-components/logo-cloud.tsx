@@ -21,9 +21,9 @@ const LogoCloud: React.FC = () => {
 				animationFillMode: 'both',
 				animationPlayState: inViewport ? 'running' : 'paused'
 			}}
-			className='relative w-full bg-gradient-to-t from-accent/40 to-transparent to-[30%] duration-700 animate-in fade-in-0 slide-in-from-bottom-4 sm:px-2'>
+			className='relative w-full bg-linear-to-t from-accent/40 to-transparent to-30% duration-700 animate-in fade-in-0 slide-in-from-bottom-4 sm:px-2'>
 			<Div className='mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center pb-20 text-center xxl:max-w-8xl'>
-				<Div className='inline-grid size-56 translate-y-12 place-items-center rounded-full border border-foreground/20 [mask-image:linear-gradient(to_bottom,hsl(var(--background))_50%,hsl(var(--background))_50%,transparent)]'>
+				<Div className='inline-grid size-56 translate-y-12 place-items-center rounded-full border border-foreground/20 mask-[linear-gradient(to_bottom,var(--background)_50%,var(--background)_50%,transparent)]'>
 					<Div className='inline-grid size-40 place-items-center rounded-full border-[1.5px] border-foreground/35'>
 						<Div className='relative inline-grid size-24 place-items-center rounded-full border border-foreground/50'>
 							<Icon
@@ -41,7 +41,7 @@ const LogoCloud: React.FC = () => {
 										y2='0'
 										gradientUnits='userSpaceOnUse'>
 										<stop stopColor='hsl(var(--muted-foreground)' />
-										<stop offset='1' stopColor='hsl(var(--foreground))' />
+										<stop offset='1' stopColor='var(--foreground)' />
 									</linearGradient>
 								</defs>
 							</Icon>
@@ -55,7 +55,7 @@ const LogoCloud: React.FC = () => {
 				<Typography className='text-pretty xl:text-lg'>
 					We use the latest and most reliable technologies to build i-WMS, ensuring a robust and scalable solution.
 				</Typography>
-				<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_5%,hsl(var(--sidebar-background))_15%_85%,transparent)]'>
+				<Div className='group/scroll flex w-full max-w-xl flex-nowrap items-center justify-around space-x-4 overflow-hidden mask-[linear-gradient(to_right,transparent_5%,var(--sidebar-background)_15%_85%,transparent)]'>
 					<LogoList />
 					{/* Clone element for infinite scroll effect */}
 					{cloneElement(<LogoList />, { 'aria-hidden': true })}

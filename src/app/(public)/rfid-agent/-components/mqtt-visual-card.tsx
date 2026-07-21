@@ -70,7 +70,7 @@ const MQTTVisualCard: React.FC<Props> = ({ className }) => {
 								gradientUnits='userSpaceOnUse'
 								gradientTransform={gradientTransform}>
 								<stop stopColor={theme === Theme.DARK ? 'hsl(var(--success)' : 'hsl(var(--success)/50%)'} />
-								<stop offset='1' stopColor='hsl(var(--border))' />
+								<stop offset='1' stopColor='var(--border)' />
 							</radialGradient>
 						</defs>
 					</svg>
@@ -150,7 +150,7 @@ const DashedLine: React.FC = () => {
 			xmlns='http://www.w3.org/2000/svg'>
 			<path
 				d='M0 0.5 L100 0.5'
-				stroke='hsl(var(--muted-foreground))'
+				stroke='var(--muted-foreground)'
 				strokeWidth='1'
 				strokeDasharray='4,2'
 				fill='none'

@@ -98,7 +98,7 @@ const WarehouseDataTypeFieldControl: React.FC = () => {
 }
 
 const StyledFormLabel = tw(FormLabel)<React.ComponentProps<typeof FormLabel>>`
-	h-full relative *:text-pretty cursor-pointer select-none grid items-start grid-cols-[3rem_auto] [&>svg]:place-self-start rounded-[var(--radius)] border px-6 py-4 font-medium transition-colors duration-200 aria-checked:bg-secondary aria-checked:text-secondary-foreground
+	h-full relative *:text-pretty cursor-pointer select-none grid items-start grid-cols-[3rem_auto] [&>svg]:place-self-start rounded-(--radius) border px-6 py-4 font-medium transition-colors duration-200 aria-checked:bg-secondary aria-checked:text-secondary-foreground
 `
 const CheckIcon = tw(Icon)<IconProps>`
 	ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200 aria-checked:opacity-100

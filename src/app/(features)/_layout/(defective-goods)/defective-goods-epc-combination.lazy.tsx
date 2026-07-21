@@ -17,7 +17,7 @@ import { Fragment, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import tw from 'tailwind-styled-components'
-import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
 import { useSwitchCombinationStrategy } from '../../../../features/defective-goods/hooks/use-switch-combination-strategy'
 import { useToggleListPanel } from '../../../../features/defective-goods/hooks/use-toggle-list-panel'
 
@@ -106,7 +106,7 @@ function RouteComponent() {
 }
 
 const Container = tw.div`
-	relative group/container bg-background h-[var(--outlet-wrapper-height)] @container/playground-wrapper overflow-hidden
+	relative group/container bg-background h-(--outlet-wrapper-height) @container/playground-wrapper overflow-hidden
 	has-[#toggle-fullscreen[data-state=checked]]:fixed
 	has-[#toggle-fullscreen[data-state=checked]]:p-6
 	has-[#toggle-fullscreen[data-state=checked]]:z-50

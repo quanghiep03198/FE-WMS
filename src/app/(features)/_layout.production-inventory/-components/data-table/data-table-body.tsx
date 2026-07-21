@@ -22,7 +22,7 @@ const DataTableBody: React.FC<DataTableBodyProps> = ({ virtualizer, rows, column
 	const { before, after } = useVirtualScrollPadding(virtualizer)
 
 	return (
-		<TableBody className='[&_tr:last-child_td]:!border-b-0 [&_tr>td]:border-b'>
+		<TableBody className='[&_tr:last-child_td]:border-b-0! [&_tr>td]:border-b'>
 			{virtualItems?.length > 0 ? (
 				<Fragment>
 					{before > 0 && <VirtualPlaceholderRow colSpan={columnCount} style={{ height: before }} />}

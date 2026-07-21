@@ -236,7 +236,7 @@ const InoutboundForm: React.FC = () => {
 						</Div>
 						{/* <Div className='col-span-full'>
 							<Div className='flex h-9 items-center gap-x-2 rounded border px-3 py-1'>
-								<Icon name='Database' size={20} stroke='hsl(var(--muted-foreground))' />
+								<Icon name='Database' size={20} stroke='var(--muted-foreground)' />
 								<Input
 									readOnly={true}
 									placeholder='Database'
@@ -356,7 +356,7 @@ const WarehouseComboboxSelection: React.FC<{ data: IWarehouseStorage }> = ({ dat
 
 const Form = tw.form`grid grid-cols-2 gap-x-2 gap-y-6 max-h-full`
 const StyledFormLabel = tw(FormLabel)<React.ComponentProps<typeof FormLabel>>`
-	flex cursor-pointer select-none items-center rounded-[var(--radius)] border p-6 font-medium transition-colors duration-200 sm:px-4 aria-checked:bg-secondary aria-checked:text-secondary-foreground
+	flex cursor-pointer select-none items-center rounded-(--radius) border p-6 font-medium transition-colors duration-200 sm:px-4 aria-checked:bg-secondary aria-checked:text-secondary-foreground
 `
 const CheckIcon = tw(Icon)<IconProps>`
 	ml-auto scale-75 opacity-0 transition-[scale,opacity] duration-200 aria-checked:opacity-100

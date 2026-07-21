@@ -81,7 +81,7 @@ export function OrderSearchFieldControl() {
 							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
 									<PopoverTrigger
-										className='relative flex w-full flex-1 flex-col items-stretch gap-6 rounded-lg border px-6 py-3 transition-colors duration-200 focus-within:border-primary aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
+										className='relative flex w-full flex-1 flex-col items-stretch gap-6 rounded-lg border px-6 py-3 transition-colors duration-200 focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive'
 										onClick={(e) => e.preventDefault()}>
 										<Div className='flex items-center gap-x-2'>
 											<Input
@@ -118,7 +118,7 @@ export function OrderSearchFieldControl() {
 												<GhostButton onClick={() => refetch()} disabled={isLoading}>
 													<Icon
 														name='RefreshCcw'
-														className={isLoading && 'animate-[spin_1s_linear_infinite]'}
+														className={isLoading && 'animate-spin'}
 													/>
 												</GhostButton>
 											</Tooltip>
@@ -140,7 +140,7 @@ export function OrderSearchFieldControl() {
 								</FormControl>
 								<PopoverContent
 									sideOffset={8}
-									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
+									className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
 										filteredDatalist?.map((item) => {

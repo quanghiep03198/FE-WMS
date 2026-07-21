@@ -10,7 +10,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 	'use no memo'
 
 	return (
-		<TableHeader className='sticky top-0 z-50 bg-background [&_tr]:h-[var(--row-height)]'>
+		<TableHeader className='sticky top-0 z-50 bg-background [&_tr]:h-(--row-height)'>
 			{table.getHeaderGroups().map((headerGroup) => (
 				<Fragment key={headerGroup.id}>
 					<TableRow>
@@ -32,7 +32,7 @@ export const DataTableHeader: React.FC<{ table: Table<IDefectiveGoods> }> = ({ t
 										onTouchStart={header.getResizeHandler()}
 										onTouchMove={header.getResizeHandler()}
 										className={cn(
-											'absolute inset-y-0 right-0 z-50 h-[var(--row-height)] w-1 cursor-col-resize touch-none select-none bg-border opacity-0 transition-opacity duration-500 group-hover:opacity-100',
+											'absolute inset-y-0 right-0 z-50 h-(--row-height) w-1 cursor-col-resize touch-none select-none bg-border opacity-0 transition-opacity duration-500 group-hover:opacity-100',
 											header.column.getCanResize() && 'hover:bg-primary',
 											header.column.getIsResizing() && 'bg-primary opacity-10'
 										)}

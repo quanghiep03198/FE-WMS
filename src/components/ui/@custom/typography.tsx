@@ -23,7 +23,7 @@ export const typographyVariants = cva('font-sans', {
 			small: 'text-sm leading-snug'
 		},
 		color: {
-			default: 'text-[inherit]',
+			default: 'text-inherit',
 			primary: 'text-primary',
 			accent: 'text-accent',
 			active: 'text-active',

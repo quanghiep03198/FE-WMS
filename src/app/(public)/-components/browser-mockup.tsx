@@ -11,7 +11,7 @@ const BrowserMockup: React.FC = () => {
 			</BrowserToolbar>
 			<Layout>
 				<LayoutSidebar className='sm:hidden'>
-					<Icon name='Boxes' stroke='hsl(var(--border))' strokeWidth={0.75} size={36} className='mb-4' />
+					<Icon name='Boxes' stroke='var(--border)' strokeWidth={0.75} size={36} className='mb-4' />
 					<Skeleton className='h-3 w-full' />
 					<Skeleton className='h-3 w-3/4' />
 					<Skeleton className='h-3 w-full' />
@@ -36,7 +36,7 @@ const BrowserMockup: React.FC = () => {
 							<Icon
 								name='ScanBarcode'
 								strokeWidth={0.75}
-								stroke='hsl(var(--border))'
+								stroke='var(--border)'
 								className='size-16 sm:size-12'
 							/>
 						</ContentGridItem>
@@ -44,7 +44,7 @@ const BrowserMockup: React.FC = () => {
 							<Icon
 								name='ChartNoAxesCombined'
 								strokeWidth={0.75}
-								stroke='hsl(var(--border))'
+								stroke='var(--border)'
 								className='size-16 sm:size-14'
 							/>
 						</ContentGridItem>
@@ -57,7 +57,7 @@ const BrowserMockup: React.FC = () => {
 							<Icon
 								name='ChartPie'
 								strokeWidth={0.75}
-								stroke='hsl(var(--border))'
+								stroke='var(--border)'
 								className='size-16 sm:size-14'
 							/>
 						</ContentGridItem>
@@ -68,7 +68,7 @@ const BrowserMockup: React.FC = () => {
 	)
 }
 
-const Browser = tw.div`grid h-[75vh]  overflow-hidden max-w-6xl w-full grid-rows-[40px_auto] shadow-2xl divide-y divide-border rounded-[var(--radius)] border bg-background relative`
+const Browser = tw.div`grid h-[75vh]  overflow-hidden max-w-6xl w-full grid-rows-[40px_auto] shadow-2xl divide-y divide-border rounded-(--radius) border bg-background relative`
 const BrowserToolbar = tw.div`relative z-10 flex items-center gap-x-2 bg-secondary p-4 h-full`
 const BrowserToolbarButton = tw.div`size-3 rounded-full relative z-10`
 const Layout = tw.div`grid flex-1 sm:grid-cols-1 grid-cols-[1fr_2.5fr] overflow-hidden items-stretch`

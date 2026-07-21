@@ -242,7 +242,7 @@ function TiptapImage(props: NodeViewProps) {
 			className={cn(
 				'relative flex flex-col rounded border-2 border-transparent transition-all duration-200',
 				selected ? 'border-active' : '',
-				node.attrs.align === 'left' && 'left-0 -translate-x-0',
+				node.attrs.align === 'left' && 'left-0 translate-x-0',
 				node.attrs.align === 'center' && 'left-1/2 -translate-x-1/2',
 				node.attrs.align === 'right' && 'left-full -translate-x-full'
 			)}

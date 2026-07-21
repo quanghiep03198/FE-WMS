@@ -97,7 +97,7 @@ export function OrderSearchFieldControl() {
 							<Popover open={open} onOpenChange={setOpen} modal={false}>
 								<FormControl>
 									<PopoverTrigger
-										className='relative flex h-10 w-full flex-1 items-center rounded-lg border px-3 py-1 transition-colors duration-200 focus-within:border-primary aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive'
+										className='relative flex h-10 w-full flex-1 items-center rounded-lg border px-3 py-1 transition-colors duration-200 focus-within:border-primary aria-invalid:border-destructive aria-invalid:focus-within:border-destructive'
 										onClick={(e) => e.preventDefault()}>
 										<Icon name='Search' size={20} className={cn('stroke-muted-foreground')} />
 										<Input
@@ -133,7 +133,7 @@ export function OrderSearchFieldControl() {
 								</FormControl>
 								<PopoverContent
 									sideOffset={8}
-									className='max-h-52 w-[var(--radix-popover-trigger-width)] overflow-auto p-1'
+									className='max-h-52 w-(--radix-popover-trigger-width) overflow-auto p-1'
 									onOpenAutoFocus={(e) => e.preventDefault()}>
 									{Array.isArray(filteredDatalist) && filteredDatalist?.length > 0 ? (
 										filteredDatalist?.map((item) => {

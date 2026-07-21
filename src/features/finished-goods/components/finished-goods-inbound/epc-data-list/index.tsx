@@ -28,15 +28,15 @@ const ListBoxWrapper: React.FC<React.ComponentProps<'div'>> = tw.div`
 	[--list-header-height:44px]
 	[--list-footer-height:52px]
 	relative flex flex-1 divide-y divide-border justify-between h-full flex-col items-stretch max-h-full bg-background
-	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto group-has-[#toggle-fullscreen[data-state=checked]]:!h-full
-	rounded-[var(--radius)] border md:order-2 
+	group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto group-has-[#toggle-fullscreen[data-state=checked]]:h-full!
+	rounded-(--radius) border md:order-2 
 	`
 
-const ListBoxHeader = tw.div`relative flex h-[var(--list-header-height)] items-center justify-between md:h-fit`
+const ListBoxHeader = tw.div`relative flex h-(--list-header-height) items-center justify-between md:h-fit`
 const ListBoxBody: React.FC<React.ComponentProps<'div'>> =
-	tw.div`flex flex-1 basis-full items-center justify-center has-[div[aria-expanded=false]]:basis-0 has-[div[aria-expanded=false]]:!border-transparent`
+	tw.div`flex flex-1 basis-full items-center justify-center has-[div[aria-expanded=false]]:basis-0 has-[div[aria-expanded=false]]:border-transparent!`
 const ListBoxFooter: React.FC<React.ComponentProps<'div'>> =
-	tw.div`relative flex justify-end items-center p-1.5 overflow-visible gap-x-2 max-w-full *:basis-full h-[--list-footer-height] 
+	tw.div`relative flex justify-end items-center p-1.5 overflow-visible gap-x-2 max-w-full *:basis-full h-(--list-footer-height) 
 	md:[&>button]:bg-transparent md:[&>button]:shadow-none md:[&>button:hover]:bg-accent md:auto-cols-fr md:grid-flow-col md:gap-0 md:grid md:[&>button]:rounded-none md:[&>button]:text-accent-foreground md:p-0 md:h-fit
 	@[920px]/page-container:[&>button#epc-data-upload-dialog-trigger]:bg-accent [&>button#epc-data-upload-dialog-trigger]:bg-transparent [&>button#epc-data-upload-dialog-trigger:hover]:bg-accent
 	`

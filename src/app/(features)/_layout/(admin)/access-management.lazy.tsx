@@ -7,7 +7,7 @@ import { UserRole } from '@common/constants/enums'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBreadcrumbContext } from '../../-contexts/breadcrumb-context'
+import { useBreadcrumbContext } from '../../../../contexts/breadcrumb-context'
 import {
 	PageAction,
 	PageDescription,

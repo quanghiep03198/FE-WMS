@@ -32,10 +32,10 @@ const DataTableRow: React.FC<DataTableRowProps> = ({ row, size }) => {
 								...getCanSticky(cell.column.id)
 							}}>
 							<Div
-								className={cn('w-full max-w-full place-content-center truncate overflow-ellipsis text-sm', {
-									'!text-left': meta?.align === 'left',
-									'!text-center': meta?.align === 'center',
-									'!text-right': meta?.align === 'right'
+								className={cn('w-full max-w-full place-content-center truncate text-ellipsis text-sm', {
+									'text-left!': meta?.align === 'left',
+									'text-center!': meta?.align === 'center',
+									'text-right!': meta?.align === 'right'
 								})}>
 								{flexRender(cell.column.columnDef.cell, cell.getContext())}
 							</Div>

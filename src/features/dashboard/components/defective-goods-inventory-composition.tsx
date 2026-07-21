@@ -27,10 +27,10 @@ import type { SelectProps } from '@radix-ui/react-select'
 import { capitalize } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDefectiveCategoryChartConfig } from '../-hooks/use-defective-category-chart-configs'
-import { useGetDefectiveGoodsInventoryCompositionQuery } from '../-hooks/use-statistic-asm'
-import { DefectiveCategory } from '../../../../features/defective-goods/constants/enums'
-import { useDefectiveCategoryList } from '../../../../features/defective-goods/hooks/use-defective-category-list'
+import { useDefectiveCategoryChartConfig } from '../hooks/use-defective-category-chart-configs'
+import { useGetDefectiveGoodsInventoryCompositionQuery } from '../hooks/use-statistic-request'
+import { DefectiveCategory } from '../../defective-goods/constants/enums'
+import { useDefectiveCategoryList } from '../../defective-goods/hooks/use-defective-category-list'
 
 const DefectiveGoodsInventoryOverview: React.FC = () => {
 	const { t } = useTranslation()
@@ -165,10 +165,10 @@ const PieCateogrySelect: React.FC<SelectProps> = ({ value, onValueChange }) => {
 			<SelectContent>
 				{defectiveCategoryList.map((category, index) => (
 					<SelectItem key={category.value} value={category.value}>
-						<Div className='flex flex-nowrap items-center gap-x-2 overflow-ellipsis'>
+						<Div className='flex flex-nowrap items-center gap-x-2 text-ellipsis'>
 							<Div
-								className='aspect-square !size-3 rounded'
-								style={{ backgroundColor: `hsl(var(--chart-${index + 1}))` }}
+								className='aspect-square size-3! rounded'
+								style={{ backgroundColor: `var(--chart-${index + 1})` }}
 							/>
 							{category.label}
 						</Div>

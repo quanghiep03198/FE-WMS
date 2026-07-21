@@ -123,7 +123,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 											variant='outline'
 											className={cn(
 												triggerProps?.className,
-												'w-full justify-between bg-background px-3 font-normal aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-within:border-destructive hover:bg-background focus:border-primary'
+												'w-full justify-between bg-background px-3 font-normal aria-invalid:border-destructive aria-invalid:focus-within:border-destructive hover:bg-background focus:border-primary'
 											)}>
 											<Typography variant='small' className='line-clamp-1'>
 												{field.value || placeholder}
@@ -132,7 +132,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										</Button>
 									</FormControl>
 								</PopoverTrigger>
-								<PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' {...popoverContentProps}>
+								<PopoverContent className='w-(--radix-popover-trigger-width) p-0' {...popoverContentProps}>
 									<Command value={field.value} shouldFilter={shouldFilter}>
 										<CommandInput
 											value={searchTerm ?? ''}
@@ -148,7 +148,7 @@ export function ComboboxFieldControl<T extends FieldValues, D extends Record<str
 										<CommandList>
 											{loading ? (
 												<CommandLoading className='h-12 cursor-wait place-content-center place-items-center'>
-													<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+													<Icon name='LoaderCircle' className='animate-spin' />
 												</CommandLoading>
 											) : (
 												<Fragment>

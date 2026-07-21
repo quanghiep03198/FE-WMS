@@ -25,7 +25,7 @@ export default function NetworkDetector() {
 					if (statusRef.current !== 'success') {
 						toastRef.current = toast.success('You are back to online.', {
 							id: toastRef.current,
-							icon: <Icon name='Wifi' stroke='hsl(var(--foreground))' />,
+							icon: <Icon name='Wifi' stroke='var(--foreground)' />,
 							description: null,
 							duration: 2000
 						})
@@ -38,7 +38,7 @@ export default function NetworkDetector() {
 						if (statusRef.current !== 'error') {
 							toastRef.current = toast.error('Network error', {
 								id: toastRef.current,
-								icon: <Icon name='WifiOff' stroke='hsl(var(--foreground))' />,
+								icon: <Icon name='WifiOff' stroke='var(--foreground)' />,
 								description: 'You are currently offline.',
 								duration: 2000
 							})

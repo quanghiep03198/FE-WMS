@@ -5,7 +5,7 @@ const GridBackground: React.FC<{ className?: ClassNameValue }> = ({ className })
 	return (
 		<svg
 			className={cn(
-				'fixed inset-0 z-0 h-full w-full stroke-border/50 [mask-image:radial-gradient(100%_100%_at_bottom_right,white,transparent)]',
+				'fixed inset-0 z-0 h-full w-full stroke-border/50 mask-[radial-gradient(100%_100%_at_bottom_right,white,transparent)]',
 				className
 			)}
 			aria-hidden='true'>

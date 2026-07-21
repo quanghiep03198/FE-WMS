@@ -14,7 +14,7 @@ const UnavailableConnection: React.FC = () => {
 			<Icon
 				name='ZapOff'
 				size={44}
-				stroke='hsl(var(--muted-foreground))'
+				stroke='var(--muted-foreground)'
 				strokeWidth={1}
 				className='mb-6 rotate-12 stroke-muted-foreground'
 			/>

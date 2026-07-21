@@ -5,7 +5,7 @@ const ProfileWallpaper: React.FC = () => {
 	const { user } = useAuth()
 
 	return (
-		<Div className='grid grid-cols-[128px_auto] items-center gap-x-10 rounded-xl bg-gradient-to-r from-secondary/50 to-secondary/25 p-4'>
+		<Div className='grid grid-cols-[128px_auto] items-center gap-x-10 rounded-xl bg-linear-to-r from-secondary/50 to-secondary/25 p-4'>
 			<Div className='relative row-span-full aspect-square w-full'>
 				<Avatar className='inset-0 h-full w-full'>
 					<AvatarImage src={user?.picture} />

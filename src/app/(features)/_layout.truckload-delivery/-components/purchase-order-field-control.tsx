@@ -64,7 +64,7 @@ const PurchaseOrderFieldControl: React.FC<PurchaseOrderFieldControlProps> = ({ n
 		<AutoCompleteFieldControl
 			name={name}
 			placeholder={t('ns_common:common_fields.quantiy_with_limit', { limit: 'PO', defaultValue: 'PO' })}
-			className='!bg-transparent'
+			className='bg-transparent!'
 			labelField='po'
 			valueField='po'
 			loading={isLoading}

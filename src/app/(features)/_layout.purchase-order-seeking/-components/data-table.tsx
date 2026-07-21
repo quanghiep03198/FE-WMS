@@ -80,7 +80,7 @@ const DataSection: React.FC = () => {
 	if (isLoading)
 		return (
 			<Div className='mx-auto flex h-80 max-w-4xl items-center justify-center gap-x-2'>
-				<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+				<Icon name='LoaderCircle' className='animate-spin' />
 				<Typography variant='small'>{t('ns_common:status.loading')}</Typography>
 			</Div>
 		)
@@ -142,7 +142,7 @@ const DataSection: React.FC = () => {
 							<TableHead
 								key={column.accessorKey}
 								title={column.header}
-								className='!bg-table-row-active capitalize text-table-head-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+								className='bg-table-row-active! capitalize text-table-head-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 								{...column.meta}>
 								<span>{column.header}</span>
 							</TableHead>
@@ -158,7 +158,7 @@ const DataSection: React.FC = () => {
 							return (
 								<TableHead
 									key={column.accessorKey}
-									className='font-normal text-foreground first:!sticky first:left-0 first:z-10 first:shadow-[1px_0px_hsl(var(--border))] last:sticky last:right-0 last:z-10'
+									className='font-normal text-foreground first:sticky! first:left-0 first:z-10 first:shadow-[1px_0px_var(--border)] last:sticky last:right-0 last:z-10'
 									{...column.meta}>
 									<span data-empty={!cellValue} className='data-[empty=true]:text-muted-foreground'>
 										{cellValue ?? t('ns_common:titles.unknown')}
@@ -167,19 +167,19 @@ const DataSection: React.FC = () => {
 							)
 						})}
 					</TableRow>
-					<TableRow className='[&>*]:!bg-table-row-active [&>*]:capitalize'>
+					<TableRow className='*:bg-table-row-active! *:capitalize'>
 						<TableHead
 							align='left'
-							className='!sticky left-0 z-10'
-							style={{ boxShadow: '1px 0px hsl(var(--border))', maxWidth: 200, minWidth: 200 }}>
+							className='sticky! left-0 z-10'
+							style={{ boxShadow: '1px 0px var(--border)', maxWidth: 200, minWidth: 200 }}>
 							<span>{t('ns_erp:fields.mo_no')}</span>
 						</TableHead>
 						<TableHead colSpan={5} align='left' className='p-0'>
-							<span className='sticky left-[var(--column-width)] block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
+							<span className='sticky left-(--column-width) block w-[calc(100cqw-10px-2*var(--column-width))] px-4 py-2 text-center'>
 								Size
 							</span>
 						</TableHead>
-						<TableHead align='left' className='!sticky right-0 z-10'>
+						<TableHead align='left' className='sticky! right-0 z-10'>
 							<span>{t('ns_common:common_fields.total')}</span>
 						</TableHead>
 					</TableRow>
@@ -193,20 +193,20 @@ const DataSection: React.FC = () => {
 									align='left'
 									colSpan={1}
 									className='sticky left-0 z-10'
-									style={{ boxShadow: '1px 0px hsl(var(--border))' }}>
+									style={{ boxShadow: '1px 0px var(--border)' }}>
 									<span>{date}</span>
 								</TableCell>
 								<TableCell colSpan={5} className='p-0'>
 									<NestedTable>
 										{sortBy(history, 'size_numcode').map((item) => (
-											<NestedColumn key={item.size_numcode} className='[&>*]:h-9'>
+											<NestedColumn key={item.size_numcode} className='*:h-9'>
 												<NestedCellHead>{item.size_numcode}</NestedCellHead>
 												<NestedCell>{formatIntlNumber(item.qty)}</NestedCell>
 											</NestedColumn>
 										))}
 									</NestedTable>
 								</TableCell>
-								<TableCell align='left' className='!sticky right-0 z-10 font-medium'>
+								<TableCell align='left' className='sticky! right-0 z-10 font-medium'>
 									<span>{formatIntlNumber(totalQty)}</span>
 								</TableCell>
 							</TableRow>

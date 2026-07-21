@@ -127,9 +127,9 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 						'--footer-height': '3rem'
 					} as React.CSSProperties
 				}>
-				<TableHeader className='sticky top-0 z-10 border-b [&_th]:h-[--header-height] [&_th]:bg-table-head [&_th]:text-table-head-foreground'>
+				<TableHeader className='sticky top-0 z-10 border-b [&_th]:h-(--header-height) [&_th]:bg-table-head [&_th]:text-table-head-foreground'>
 					<TableRow>
-						<TableHead className='w-[var(--row-selection-width)]'>
+						<TableHead className='w-(--row-selection-width)'>
 							<Checkbox
 								role='checkbox'
 								checked={(isAllItemsSelected || (isSomeItemsSelected && 'indeterminate')) as CheckedState}
@@ -139,7 +139,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								}}
 							/>
 						</TableHead>
-						<TableHead align='left' className='w-[var(--second-col-width)]'>
+						<TableHead align='left' className='w-(--second-col-width)'>
 							EPC
 						</TableHead>
 						<TableHead align='center'>{t('ns_common:common_fields.status')}</TableHead>
@@ -148,7 +148,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								<GhostButton onClick={() => handleRefetch()}>
 									<Icon
 										name={isFetching ? 'Loader' : 'RefreshCcw'}
-										className={cn('h-full', isFetching && 'animate-[spin_1s_linear_infinite]')}
+										className={cn('h-full', isFetching && 'animate-spin')}
 									/>
 								</GhostButton>
 							</Tooltip>
@@ -172,7 +172,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								colSpan={4}
 								className='h-[calc(100cqh-var(--header-height)-var(--footer-height)-2*var(--border-width,1px))]'>
 								<Div className='flex h-full items-center justify-center gap-x-3'>
-									<Icon name='PackageOpen' size={36} strokeWidth={1} stroke='hsl(var(--muted-foreground))' />
+									<Icon name='PackageOpen' size={36} strokeWidth={1} stroke='var(--muted-foreground)' />
 									<Typography variant='small' color='muted' className='font-medium'>
 										{t('ns_common:table.no_data')}
 									</Typography>
@@ -199,7 +199,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 								<TableRow>
 									<TableCell colSpan={4} align='center' className='h-10 text-muted-foreground'>
 										{isFetchingNextPage ? (
-											<Icon name='LoaderCircle' className='animate-[spin_1s_linear_infinite]' />
+											<Icon name='LoaderCircle' className='animate-spin' />
 										) : (
 											<Button
 												variant='link'
@@ -218,7 +218,7 @@ const DataRestorationTable: React.FC<DataRestorationTableProps> = ({ dataType })
 					)}
 				</TableBody>
 				<TableFooter>
-					<TableRow className='sticky bottom-0 z-10 [&_td]:h-[--footer-height] [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
+					<TableRow className='sticky bottom-0 z-10 [&_td]:h-(--footer-height) [&_td]:border-x-0 [&_td]:border-t [&_td]:bg-table-head'>
 						<TableCell colSpan={2}>
 							<DebouncedLimitInput dataType={dataType} />
 						</TableCell>
