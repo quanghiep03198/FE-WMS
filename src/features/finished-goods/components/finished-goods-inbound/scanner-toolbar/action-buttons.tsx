@@ -90,24 +90,10 @@ const ScannerActions: React.FC = () => {
 	})
 
 	return (
-		<Div className='ml-auto flex items-center gap-x-2'>
-			<Button
-				className='w-auto md:w-full'
-				variant='secondary'
-				disabled={scanningStatus === 'connected'}
-				onClick={handleResetScanningAction}>
-				<Icon name='Redo' />
-				{t('ns_common:actions.reset')}
-			</Button>
-			<Button
-				className='w-auto md:w-full'
-				disabled={!selectedDevice}
-				onClick={handleToggleScanning}
-				variant={scanningButtonProps.variant}>
-				<Icon name={scanningButtonProps.icon} />
-				{scanningButtonProps.children}
-			</Button>
-		</Div>
+		<Button disabled={!selectedDevice} onClick={handleToggleScanning} variant={scanningButtonProps.variant}>
+			<Icon name={scanningButtonProps.icon} />
+			{scanningButtonProps.children}
+		</Button>
 	)
 }
 

@@ -1,4 +1,4 @@
-import { buttonVariants, Div, Icon, Label, Separator, Tooltip } from '@/components/ui'
+import { buttonVariants, Div, Icon, Label, Tooltip } from '@/components/ui'
 import useMediaQuery from '@hooks/use-media-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,13 +7,12 @@ import DeviceSelect from './device-select'
 
 const ScannerToolbar: React.FC = () => {
 	const { t } = useTranslation()
-	const isLargeScreen = useMediaQuery('(min-width: 920px)')
+	const isLargeScreen = useMediaQuery('(min-width: 960px)')
 
 	return (
-		<Div className='flex h-[var(--toolbar-height)] items-start justify-between gap-2 bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto md:justify-end'>
+		<Div className='flex items-start justify-between gap-2 bg-background group-has-[#toggle-fullscreen[data-state=checked]]:relative group-has-[#toggle-fullscreen[data-state=checked]]:top-auto'>
 			<DeviceSelect />
 			<ScannerActions />
-			<Separator className='m-1.5 block h-6 w-0.5 @7xl/page-container:hidden md:hidden' />
 			<Tooltip
 				message={t('ns_common:navigation.settings')}
 				triggerProps={{
@@ -24,10 +23,10 @@ const ScannerToolbar: React.FC = () => {
 					htmlFor='side-toolbar-sheet-trigger'
 					className={buttonVariants({
 						variant: 'outline',
-						className: '@[1366px]/page-container:hidden md:order-first lg:size-9 lg:p-0 xl:size-9 xl:p-0'
+						className: '@[1366px]/page-container:hidden'
 					})}>
 					<Icon name='Settings2' />
-					<span className='lg:hidden xl:hidden'>{t('ns_common:navigation.settings')}</span>
+					<span>{t('ns_common:navigation.settings')}</span>
 				</Label>
 			</Tooltip>
 		</Div>

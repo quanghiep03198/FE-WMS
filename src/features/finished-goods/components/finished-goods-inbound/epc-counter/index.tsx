@@ -14,7 +14,7 @@ const ScannedEpcCounter: React.FC = () => {
 	return (
 		<Div
 			data-slot='epc-counter'
-			className='relative flex h-full flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 @5xl:py-8 lg:py-4'>
+			className='relative flex flex-col items-center justify-center overflow-clip rounded-lg border px-4 py-10 @5xl:py-8 lg:py-4'>
 			<ScanningSkeleton />
 			<ScanningCounter />
 			<Typography

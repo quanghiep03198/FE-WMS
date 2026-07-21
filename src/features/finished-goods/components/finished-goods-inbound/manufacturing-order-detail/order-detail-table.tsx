@@ -139,7 +139,13 @@ const OrderDetailTable: React.FC = () => {
 			<HoverCard openDelay={50} closeDelay={50}>
 				<HoverCardTrigger asChild>
 					<DialogTrigger
-						className={cn(buttonVariants({ variant: 'default', size: 'lg', className: 'items-center' }))}>
+						className={cn(
+							buttonVariants({
+								size: 'lg',
+								className:
+									'items-center bg-transparent text-accent-foreground hover:bg-accent @[920px]/page-container:bg-primary @[920px]/page-container:text-primary-foreground @[920px]/page-container:hover:bg-primary @[920px]/page-container:hover:opacity-80'
+							})
+						)}>
 						{t('ns_common:actions.detail')}
 						<Icon name='ArrowUpRight' />
 					</DialogTrigger>

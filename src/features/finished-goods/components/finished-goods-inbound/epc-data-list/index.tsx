@@ -38,7 +38,8 @@ const ListBoxBody: React.FC<React.ComponentProps<'div'>> =
 const ListBoxFooter: React.FC<React.ComponentProps<'div'>> =
 	tw.div`relative flex justify-end items-center p-1.5 overflow-visible gap-x-2 max-w-full *:basis-full h-[--list-footer-height] 
 	md:[&>button]:bg-transparent md:[&>button]:shadow-none md:[&>button:hover]:bg-accent md:auto-cols-fr md:grid-flow-col md:gap-0 md:grid md:[&>button]:rounded-none md:[&>button]:text-accent-foreground md:p-0 md:h-fit
-	[&>button#epc-data-upload-dialog-trigger]:order-last
+	@[920px]/page-container:[&>button#epc-data-upload-dialog-trigger]:bg-accent [&>button#epc-data-upload-dialog-trigger]:bg-transparent [&>button#epc-data-upload-dialog-trigger:hover]:bg-accent
 	`
+// [&>button#epc-data-upload-dialog-trigger]:order-last
 
 export default EpcListBox

@@ -319,8 +319,8 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 					aria-expanded={isExpanded}
 					className={cn(
 						'group/scrollable z-10 flex h-0 w-full flex-col items-stretch justify-start divide-y divide-border bg-background contain-size',
-						'transition-height aria-expanded:p-2 @3xl:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))] md:aria-expanded:h-72',
-						'group-has-[#toggle-fullscreen[data-state=checked]]:aria-expanded:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)]'
+						'transition-height aria-expanded:h-72 aria-expanded:p-2 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]',
+						'group-has-[#toggle-fullscreen[data-state=checked]]:aria-expanded:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)]'
 					)}>
 					<Div
 						className='relative w-full duration-200 ease-in group-aria-expanded/scrollable:animate-in group-aria-expanded/scrollable:fade-in-0 group-aria-[expanded=false]/scrollable:animate-out group-aria-[expanded=false]/scrollable:fade-out-0'
@@ -372,7 +372,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 			) : (
 				<Div
 					aria-expanded={isExpanded}
-					className='grid h-0 place-items-center overflow-clip transition-height duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] @3xl:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--toolbar-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))] md:aria-expanded:h-64'>
+					className='grid h-0 place-items-center overflow-clip transition-height duration-200 group-has-[#toggle-fullscreen[data-state=checked]]:h-[calc(100dvh-var(--list-header-height)-var(--list-footer-height)-4*var(--outlet-padding)-4px)] aria-expanded:h-64 @[920px]/page-container:aria-expanded:h-[calc(var(--outlet-wrapper-height)-var(--list-header-height)-var(--list-footer-height)-var(--outlet-padding))]'>
 					<Div className='inline-flex items-center gap-x-4'>
 						<Icon name='Inbox' stroke='hsl(var(--muted-foreground))' size={32} strokeWidth={1} />
 						<Typography color='muted'> {t('ns_common:table.no_data')}</Typography>
@@ -385,7 +385,7 @@ const EpcDataList: React.FC<{ listBoxFooterRef: RefObject<HTMLDivElement> }> = (
 						variant='ghost'
 						size='lg'
 						aria-expanded={isExpanded}
-						className='order-2 lg:hidden xl:hidden'
+						className='order-2 @[920px]/page-container:hidden'
 						onClick={() => setIsExpanded(!isExpanded)}>
 						<Icon name={isExpanded ? 'ChevronsUp' : 'ChevronsDown'} />{' '}
 						{isExpanded ? t('ns_common:actions.fold') : t('ns_common:actions.unfold')}

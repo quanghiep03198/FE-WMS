@@ -4,7 +4,6 @@ import InoutboundForm from '@features/finished-goods/components/finished-goods-i
 import PageComposition from '@features/finished-goods/components/finished-goods-inbound/page-composition'
 import RemindMessage from '@features/finished-goods/components/finished-goods-inbound/remind-message'
 import ScannerSettings from '@features/finished-goods/components/finished-goods-inbound/side-toolbar'
-import { ConnectionInsight } from '@features/finished-goods/components/finished-goods-inbound/side-toolbar/connection-insight'
 import { SocketProvider } from '@stores/socket.store'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { Fragment, useEffect } from 'react'
@@ -49,22 +48,19 @@ function Page() {
 							<AlreadyScannedEpcsAlert />
 							<PageComposition.Container>
 								<PageComposition.Wrapper>
-									<PageComposition.Main>
+									<div className='hidden @[920px]/page-container:block'>
+										<EpcListBox />
+									</div>
+									<div className='flex flex-col gap-6'>
 										<ScannerToolbar />
-										<PageComposition.InnerWrapper>
-											<PageComposition.ListBoxPanel>
-												<EpcListBox />
-											</PageComposition.ListBoxPanel>
-											<PageComposition.CounterPanel>
-												<ScannedEpcCounter />
-												<ConnectionInsight />
-												<RemindMessage />
-											</PageComposition.CounterPanel>
-											<PageComposition.FormPanel>
-												<InoutboundForm />
-											</PageComposition.FormPanel>
-										</PageComposition.InnerWrapper>
-									</PageComposition.Main>
+										<ScannedEpcCounter />
+										<RemindMessage />
+										<div className='block @[920px]/page-container:hidden'>
+											<EpcListBox />
+										</div>
+										<InoutboundForm />
+									</div>
+
 									<ScannerSettings />
 								</PageComposition.Wrapper>
 							</PageComposition.Container>

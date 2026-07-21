@@ -25,6 +25,7 @@ const ScannerSettings: React.FC = () => {
 							<Typography className='text-lg font-semibold sm:text-base md:text-base'>
 								{t('ns_common:titles.general_settings')}
 							</Typography>
+							<ConnectionInsight />
 							<EpcDeduplicationToggleBox />
 							<FullscreenToggleBox />
 						</Div>
@@ -44,7 +45,7 @@ const ScannerSettings: React.FC = () => {
 						<Typography className='text-lg font-semibold sm:text-base md:text-base'>
 							{t('ns_inoutbound:scanner_setting.network_status')}
 						</Typography>
-						<ConnectionInsight className='md:hidden' />
+						<ConnectionInsight />
 					</Div>
 
 					<Div className='w-full space-y-3 @4xl:col-span-5 @4xl:col-start-1 @4xl:row-span-1'>

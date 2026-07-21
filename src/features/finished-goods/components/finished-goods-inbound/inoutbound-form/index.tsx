@@ -324,7 +324,7 @@ const InoutboundForm: React.FC = () => {
 								type='submit'
 								size={isMobileScreen ? 'lg' : 'default'}
 								className='w-full'
-								disabled={scanningStatus !== 'disconnected' || selectedOrder === 'all'}>
+								disabled={selectedOrder === 'all'}>
 								<Icon name='Check' /> {t('ns_common:actions.save')}
 							</Button>
 							<Button
